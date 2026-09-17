@@ -73,12 +73,12 @@ export function BacteriaTrickSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 12, padding: 14, marginBottom: 12, textAlign: "center" }}>
         <div style={{ fontSize: 12, fontWeight: 800, color: "#065f46", marginBottom: 4 }}>
-          {t(E, "🔬 Try a walk — watch what changes", "🔬 워크 한 번 — 무엇이 바뀌는지 봐")}
+          {t(E, "🔬 Try a walk — watch what changes", "🔬 워크 한 번 — 무엇이 바뀌는지 봐요")}
         </div>
         <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.5 }}>
           {t(E,
             "Click a button. The top row a updates by a ramp. But look at the BOTTOM row diff(diff(a)) — only ONE cell flickers, by exactly ±1.",
-            "버튼을 눌러봐. 위쪽 a 는 ramp 만큼 바뀌어. 그런데 맨 아래 diff(diff(a)) 는 — 딱 한 칸만 ±1 만큼 깜빡여.")}
+            "버튼을 눌러 봐요. 위쪽 a 는 ramp 만큼 바뀌어요.\n그런데 맨 아래 diff(diff(a)) 는 딱 한 칸만 ±1 만큼 깜빡여요.")}
         </div>
       </div>
 
@@ -129,7 +129,7 @@ export function BacteriaTrickSim({ E }) {
       <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
         <div style={{ fontSize: 11, color: C.dim, lineHeight: 1.5, flex: 1 }}>
           {history.length === 0
-            ? t(E, "No walks yet — click a button above.", "아직 워크 없음 — 위 버튼을 눌러.")
+            ? t(E, "No walks yet — click a button above.", "아직 워크가 없어요 — 위 버튼을 눌러 봐요.")
             : (
               <span>
                 <b>{t(E, "Walks: ", "워크: ")}</b>
@@ -147,14 +147,14 @@ export function BacteriaTrickSim({ E }) {
         <button onClick={reset} style={{
           background: "#fff", color: "#059669", border: "1.5px solid #059669",
           borderRadius: 8, padding: "5px 12px", cursor: "pointer", fontSize: 11.5, fontWeight: 700,
-        }}>↺ {t(E, "Reset", "초기화")}</button>
+        }}>↺ {t(E, "Reset", "처음으로")}</button>
       </div>
 
       <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10, fontSize: 11.5, color: "#92400e", lineHeight: 1.6 }}>
         💡 <b>{t(E, "What you see:", "관찰:")}</b>{" "}
         {t(E,
           "One walk = one ±1 change in diff(diff(a)).  So the minimum number of walks to make diff(diff(a)) all zero (= a all zero) is the sum of |diff(diff(a))_i| for the input.",
-          "워크 1 회 = diff(diff(a)) 의 ±1 변화 1 회. 그러니까 diff(diff(a)) 를 전부 0 (= a 를 전부 0) 으로 만드는 최소 횟수 = |diff(diff(a))_i| 의 합.")}
+          "워크를 한 번 하면 diff(diff(a)) 의 한 칸이 1 만큼 움직여요.\ndiff(diff(a)) 가 전부 0 이면 a 도 전부 0 이에요.\n그래서 최소 횟수는 |diff(diff(a))_i| 를 다 더한 값이에요.")}
       </div>
     </div>
   );
@@ -223,19 +223,19 @@ export function getBacteriaSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 쪽은 Python 코드를 옮긴 거예요. 타입은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 (<iostream>, <vector>, ...) 넣으면 뜻이 또렷해요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -281,7 +281,7 @@ function highlightCode(lines, lang) {
 
 export function downloadBacteriaPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Bacteria — Full Study Guide", "Bacteria — 종합 풀이 노트");
@@ -304,7 +304,7 @@ export function downloadBacteriaPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

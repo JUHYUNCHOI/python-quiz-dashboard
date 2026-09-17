@@ -11,7 +11,7 @@ export function makePhotoshootCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has a row of N cows (N even), each Guernsey (G) or Holstein (H). He wants as many Guernseys as possible at EVEN positions (positions 2, 4, 6, ...).\nHis only allowed move: reverse an EVEN-LENGTH prefix of the row. He must first reach the maximum possible number of G's at even positions.\nPrint the MINIMUM number of reversals needed to do that.",
-        "FJ에게 한 줄로 선 N마리 소(N은 짝수)가 있고, 각 소는 건지(G) 또는 홀스타인(H)이에요. 짝수 위치(2, 4, 6, ...)에 건지를 최대한 많이 두고 싶어요.\nFJ가 쓸 수 있는 유일한 동작: 줄의 짝수 길이 접두사를 뒤집기. 먼저 짝수 위치 G 개수를 가능한 최대로 만들어야 해요.\n그렇게 하는 데 필요한 최소 뒤집기 횟수를 출력해요."),
+        "한 줄로 선 소들 중 짝수 자리에 건지(G)를 최대한 많이 두려고 해요.\n쓸 수 있는 동작은 앞쪽 짝수 마리를 통째로 뒤집는 것뿐이에요.\n최소 몇 번 뒤집어야 하는지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makePhotoshootCh1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum number of even-length prefix reversals to put the most possible Guernseys at even positions.",
-                "짝수 위치에 건지를 최대한 많이 두기 위한 짝수 길이 접두사 뒤집기 최소 횟수를 출력.")}
+                "짝수 위치에 건지를 가장 많이 두려면\n앞쪽을 최소 몇 번 뒤집어야 하는지 출력해요.")}
             </div>
           </div>
 
@@ -72,7 +72,7 @@ export function makePhotoshootCh1(E) {
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of reversals", "최소 뒤집기 횟수")}</b>
                   {t(E, " to reach the maximum possible G's at even positions.",
-                        " 를 출력해요. 짝수 위치 G 개수를 최대로 만드는 데 필요한.")}
+                        " 를 출력해요. 짝수 위치의 G 를 가장 많게 만드는 횟수예요.")}
                 </div>
               </div>
             </div>
@@ -95,7 +95,7 @@ export function makePhotoshootCh1(E) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
               {t(E,
                 "Reverse the first six cows: GGGHGH·HGHHHGHG → HGHGGG·HGHHHGHG. That lifts G's at even positions from 4 up to 6 — the most possible. So 1 reversal is enough.",
-                "앞 6마리를 뒤집어요: GGGHGH·HGHHHGHG → HGHGGG·HGHHHGHG. 짝수 위치 G가 4개에서 6개로 — 가능한 최대치. 그래서 1번 뒤집기면 충분.")}
+                "앞 6마리를 뒤집으면 GGGHGH·HGHHHGHG → HGHGGG·HGHHHGHG 가 돼요.\n짝수 위치의 G가 4개에서 6개로 늘어나요. 이게 가능한 최대치라서 한 번이면 충분해요.")}
             </div>
           </div>
         </div>),
@@ -104,10 +104,10 @@ export function makePhotoshootCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's check: in \"GHHG\", how many G's are at even positions (1-indexed, even = 2,4)?", "확인해보자: \"GHHG\"에서 짝수 위치(1-인덱스, 짝수=2,4)에 G가 몇 개예요?"),
+        "Let's check: in \"GHHG\", how many G's are at even positions (1-indexed, even = 2,4)?", "\"GHHG\" 에서 짝수 자리(2번, 4번)에 G가 몇 개인지 세어 봐요."),
       question: t(E,
         "\"GHHG\": pos 2 is H, pos 4 is G. How many G at even positions?",
-        "\"GHHG\": 위치2는 H, 위치4는 G. 짝수 위치의 G 개수는?"),
+        "\"GHHG\" 는 2번이 H, 4번이 G예요. 짝수 위치의 G는 몇 개일까요?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -116,19 +116,19 @@ export function makePhotoshootCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Position 2 has H, position 4 has G. Only 1 G at an even position.",
-        "맞아! 위치2는 H, 위치4는 G. 짝수 위치에 G는 1개뿐이에요."),
+        "맞아요! 2번은 H이고 4번은 G라서, 짝수 위치의 G는 1개뿐이에요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "In \"GHHG\", how many G's are at even 1-indexed positions?", "\"GHHG\"에서 1-인덱스 짝수 위치에 G가 몇 개예요?"),
+        "In \"GHHG\", how many G's are at even 1-indexed positions?", "\"GHHG\" 에서 짝수 자리에 G가 몇 개일까요?"),
       question: t(E,
         "\"GHHG\": How many G at even positions (2,4)?",
-        "\"GHHG\": 짝수 위치(2,4)에 G가 몇 개?"),
+        "\"GHHG\" 의 짝수 위치(2, 4)에 G가 몇 개 있나요?"),
       hint: t(E,
         "Walk through positions 2 and 4 and tally the G's only.",
-        "위치 2 와 4 만 보면서 G 의 개수만 세어 봐."),
+        "2번과 4번 자리만 보면서 G 의 개수를 세어 봐요."),
       answer: 1,
     },
   ];
@@ -145,7 +145,7 @@ export function makePhotoshootCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Scan the pairs from RIGHT to LEFT, keeping a flip flag. For each (odd-slot, even-slot) pair, the even slot's char is s[i] when flipped, else s[i+1]. If a G is already in the even slot, leave it; otherwise if the other cow is a G, do one reversal (count it and toggle flip). Sections build it one piece at a time.",
-        "쌍을 오른쪽에서 왼쪽으로 훑으면서 flip 플래그를 유지해요. 각 (홀수칸, 짝수칸) 쌍에서 짝수칸의 글자는 flip이면 s[i], 아니면 s[i+1]. 짝수칸에 이미 G가 있으면 그대로 두고, 아니면 다른 소가 G일 때 한 번 뒤집어요(횟수 +1, flip 토글). 아래 섹션이 한 단락씩 쌓아요."),
+        "두 마리씩 짝지어 오른쪽에서 왼쪽으로 훑어요.\n짝수 칸에 이미 G가 있으면 그대로 두고, 없는데 짝꿍이 G면 한 번 뒤집어요."),
       sections: getPhotoshootSections(E),
     },
   ];

@@ -109,21 +109,21 @@ export function getAcowdemia3Sections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "The trap: the SAME two cows can border two different grass cells. They still become friends only ONCE — so we keep cow pairs in a set to drop duplicates.",
-            "함정: 같은 두 소가 풀 칸 두 개에 인접할 수 있어. 그래도 우정은 1번뿐 — 그래서 소 쌍을 set 에 넣어 중복을 없애."),
+            "같은 두 소가 풀 칸 두 개에 나란히 붙을 수 있어요.\n그래도 친구가 되는 건 한 번뿐이라, 소 쌍을 set 에 넣어 겹치는 걸 지워요."),
         t(E, "If a grass cell touches 3+ cows, two of them must sit on opposite sides — that's a brand-new pair no other grass can repeat, so we add 1 right away.",
-            "풀 칸에 소가 3마리 이상이면 그중 둘은 반드시 반대편에 있어 — 다른 풀 칸이 못 만드는 새 쌍이라 바로 +1."),
+            "풀 칸에 소가 3마리 이상이면 그중 둘은 반드시 마주 보고 있어요.\n마주 본 두 소는 다른 풀 칸이 만들 수 없는 쌍이라 바로 하나 더해요."),
         t(E, "Answer = (opposite-side count) + (number of unique 2-cow pairs).",
-            "정답 = (반대편 쌍 개수) + (중복 없는 2-소 쌍 개수)."),
+            "정답은 마주 본 쌍의 개수에, 겹치지 않는 두 소 쌍의 개수를 더한 값이에요."),
       ],
       pyOnly: [
         t(E, "A set of sorted (cow, cow) tuples removes duplicate pairs automatically.",
-            "정렬된 (소, 소) 튜플 set 이 중복 쌍을 자동으로 제거해줘."),
+            "(소, 소) 를 순서대로 담은 튜플을 set 에 넣으면 겹치는 쌍이 저절로 하나만 남아요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, string, set).",
-            "#include 는 배운 헤더들로 (iostream, vector, string, set) 나눠 적어."),
+            "#include 는 배운 헤더(iostream, vector, string, set)를 하나씩 나눠 적어요."),
         t(E, "set<pair<pair<int,int>,pair<int,int>>> stores a cow pair as ((r1,c1),(r2,c2)); sort the two so duplicates collapse.",
-            "set<pair<pair<int,int>,pair<int,int>>> 로 소 쌍을 ((r1,c1),(r2,c2)) 로 저장; 둘을 정렬해야 중복이 하나로 합쳐져."),
+            "set<pair<pair<int,int>,pair<int,int>>> 로 소 쌍을 ((r1,c1),(r2,c2)) 로 담아요.\n두 소를 순서대로 넣어야 같은 쌍이 하나로 합쳐져요."),
       ],
     },
   ];
@@ -169,7 +169,7 @@ function highlightCode(lines, lang) {
 
 export function downloadAcowdemia3PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Acowdemia3 — Full Study Guide", "Acowdemia3 — 종합 풀이 노트");
@@ -192,7 +192,7 @@ export function downloadAcowdemia3PDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장'을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

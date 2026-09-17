@@ -11,7 +11,7 @@ export function makeSleepCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N class periods, each of some length a[i]. The only allowed operation: pick two ADJACENT periods and merge them into one whose length is the SUM. Repeat to reach a state where every remaining period has the SAME length.\nFor each test case, print the MINIMUM number of merges.",
-        "Bessie가 N 개의 수업을 들어야 하는데, 각 수업의 길이는 a[i] 예요. 허용된 연산: 인접한 두 시간을 골라 길이의 합으로 합치기. 반복해서 모든 남은 시간이 같은 길이가 되도록 만들어요.\n각 테스트 케이스마다 필요한 최소 합치기 횟수를 출력해요."),
+        "옆에 붙은 수업을 합쳐서 길이를 모두 똑같이 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeSleepCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "For each test case, output the minimum number of adjacent merges to make all periods equal length.",
-                "각 테스트 케이스마다 모든 시간을 같은 길이로 만드는 최소 합치기 횟수를 출력.")}
+                "모든 수업을 같은 길이로 만드는 데 드는 최소 합치기 횟수를 출력해요.")}
             </div>
           </div>
 
@@ -48,10 +48,10 @@ export function makeSleepCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One operation: ", "한 번의 연산: ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "merge two ADJACENT periods", "인접한 두 시간을 합치기")}</b>
+                  {t(E, "One operation: ", "한 번에 할 수 있는 건 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "merge two ADJACENT periods", "인접한 두 시간을 합치는 것")}</b>
                   {t(E, " into one whose length is the sum.",
-                        " — 길이가 둘의 합인 한 시간으로.")}
+                        " 하나예요. 새 길이는 둘을 더한 값이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -78,38 +78,38 @@ export function makeSleepCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "[1,2,3,1,1,1] total=9. Target 3 means merge into [3,3,3]. How many merges?", "[1,2,3,1,1,1] 총합=9. 목표 3이면 [3,3,3]으로 합치기. 합치기 몇 번?"),
+        "[1,2,3,1,1,1] total=9. Target 3 means merge into [3,3,3]. How many merges?", "[1,2,3,1,1,1] 을 [3,3,3] 으로 만들려면 몇 번 합칠까요?"),
       question: t(E,
         "[1,2,3,1,1,1] -> [3,3,3]. Merges needed?",
-        "[1,2,3,1,1,1] -> [3,3,3]. 합치기 횟수?"),
+        "[1,2,3,1,1,1] → [3,3,3]. 몇 번 합칠까요?"),
       options: [
-        t(E, "3 (6 periods -> 3 periods = 3 merges)", "3 (6개 -> 3개 = 3번 합치기)"),
+        t(E, "3 (6 periods -> 3 periods = 3 merges)", "3 (6개 → 3개 = 3번 합치기)"),
         t(E, "2", "2"),
         t(E, "4", "4"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! 6 periods become 3 periods. Each merge reduces count by 1, so 3 merges.",
-        "맞아! 6개가 3개로. 합치기 한 번에 개수가 1 줄어드니까 3번."),
+        "맞아요! 6개가 3개가 됐어요.\n한 번 합칠 때마다 1개씩 줄어드니까 3번이에요."),
     },
     // 1-3: Sim — divisor + greedy partition
     {
       type: "sim",
       narr: t(E,
         "Try a divisor d of the total. Walk left→right, accumulate; close a segment when sum = d. If you ever overshoot, that d fails.\nMerges = N − number of segments. Smallest across all working d is the answer.",
-        "총합의 약수 d 를 골라봐. 왼→오 누적, 합 = d 가 되면 한 구간 마감. 한번이라도 d 를 넘으면 그 d 는 실패.\n합치기 = N − 구간 수. 통과한 d 중 가장 작은 값이 답."),
+        "총합의 약수 d 를 골라 왼쪽부터 d 씩 묶어 봐요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "[2,2,3] total=7. Only divisor that works is 7 itself (merge all). How many merges?", "[2,2,3] 총합=7. 가능한 약수는 7뿐 (전부 합치기). 합치기 몇 번?"),
+        "[2,2,3] total=7. Only divisor that works is 7 itself (merge all). How many merges?", "[2,2,3] 은 총합이 7 이라 약수가 7 뿐이에요. 몇 번 합칠까요?"),
       question: t(E,
         "[2,2,3] total=7. Min merges?",
-        "[2,2,3] 총합=7. 최소 합치기?"),
+        "[2,2,3] 총합=7. 최소 몇 번 합칠까요?"),
       hint: t(E,
         "Which target lengths divide the total sum cleanly?",
-        "총합을 깔끔하게 나누는 목표 길이는 어떤 게 있을까?"),
+        "총합을 딱 나누어떨어지게 하는 길이는 뭐가 있을까요?"),
       answer: 2,
     },
   ];
@@ -126,7 +126,7 @@ export function makeSleepCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Final equal value must divide total sum S. For each divisor d of S, greedily walk the array accumulating — start a new segment when running sum == d. Smallest 'N − segments' wins. Sections build it one piece at a time.",
-        "최종 동일 값은 총합 S 의 약수여야 함. S 의 각 약수 d 에 대해 누적이 d 가 될 때마다 새 구간 — 가장 작은 'N − 구간 수' 가 답. 아래 섹션이 한 단락씩 쌓아요."),
+        "마지막에 남는 길이는 총합 S 의 약수예요."),
       sections: getSleepClassSections(E),
     },
   ];

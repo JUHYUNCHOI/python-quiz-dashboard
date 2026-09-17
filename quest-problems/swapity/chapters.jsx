@@ -52,7 +52,7 @@ export function makeSwapityCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows are in a line. Each ROUND consists of two reversal operations: reverse positions [a1, b1] then reverse [a2, b2]. This entire round is repeated K times (K can be up to 10^9).\nPrint the FINAL order of cows.",
-        "N 마리 소가 한 줄에 있어요. 한 라운드는 두 번의 뒤집기로 이루어져 있어요. 위치 [a1, b1] 을 뒤집고, 그 다음 [a2, b2] 를 뒤집어요. 이 라운드 전체를 K 번 반복해요 (K 는 최대 10^9).\n최종 줄을 출력해요."),
+        "뒤집기 두 번을 한 라운드로 묶어 K 번 반복하면 줄이 어떻게 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -69,7 +69,7 @@ export function makeSwapityCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "Output the final order after K rounds of the two-reversal sequence.",
-                "두 번의 뒤집기 라운드를 K 번 반복한 뒤의 최종 줄을 출력.")}
+                "뒤집기 두 번짜리 라운드를 K 번 되풀이한 뒤의 줄을 출력해요.")}
             </div>
           </div>
 
@@ -82,14 +82,14 @@ export function makeSwapityCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#8b5cf6" }}>{t(E, "N cows in a line", "한 줄에 N 마리 소")}</b>
-                  {t(E, " (initially in order 1..N).", " (초기 순서 1..N).")}
+                  {t(E, " (initially in order 1..N).", " 가 처음엔 1..N 순서로 서 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One ROUND: ", "한 라운드: ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "reverse positions [a1, b1], then reverse [a2, b2]", "위치 [a1, b1] 뒤집기, 그 후 [a2, b2] 뒤집기")}</b>
+                  {t(E, "One ROUND: ", "한 라운드에는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "reverse positions [a1, b1], then reverse [a2, b2]", "위치 [a1, b1] 을 뒤집고 이어서 [a2, b2] 를 뒤집어요")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -97,7 +97,7 @@ export function makeSwapityCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Repeat the round ", "이 라운드를 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "K times (up to 10^9)", "K 번 반복 (최대 10^9)")}</b>
+                  <b style={{ color: "#dc2626" }}>{t(E, "K times (up to 10^9)", "K 번 되풀이해요 (최대 10^9)")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -121,17 +121,17 @@ export function makeSwapityCh1(E) {
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "Before the quiz, watch a round play out. Reverse 1–3, then reverse 3–5. Keep clicking until the array returns to [1,2,3,4,5] — that count is the cycle length.",
-        "퀴즈 전에 한 라운드가 실행되는 걸 보자. 1–3 뒤집기, 그 다음 3–5 뒤집기. 배열이 [1,2,3,4,5] 로 돌아올 때까지 계속 눌러 봐 — 그 횟수가 순환 길이."),
+        "배열이 [1,2,3,4,5] 로 돌아올 때까지 눌러 봐요. 그 횟수가 순환 길이예요."),
       content: <SwapityRoundSim E={E} />,
     },
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "[1,2,3]: reverse 1-2 → [2,1,3], then reverse 2-3 → [2,3,1]. That is one round.", "[1,2,3]: 위치 1-2 뒤집기 → [2,1,3], 위치 2-3 뒤집기 → [2,3,1]. 여기까지가 1 라운드예요."),
+        "[1,2,3]: reverse 1-2 → [2,1,3], then reverse 2-3 → [2,3,1]. That is one round.", "[1,2,3] 에서 위치 1-2 를 뒤집으면 [2,1,3], 이어서 2-3 을 뒤집으면 [2,3,1] 이에요. 여기까지가 1 라운드예요."),
       question: t(E,
         "[1,2,3] with reversals at (1-2) then (2-3). Cycle length?",
-        "[1,2,3]에서 (1-2), (2-3) 뒤집기. 순환 길이?"),
+        "[1,2,3] 에서 (1-2) 와 (2-3) 을 뒤집어요. 순환 길이는 얼마일까요?"),
       options: [
         t(E, "3 rounds", "3 라운드"),
         t(E, "2 rounds", "2 라운드"),
@@ -140,19 +140,19 @@ export function makeSwapityCh1(E) {
       correct: 0,
       explain: t(E,
         "Round 1: [2,3,1]. Round 2: [3,1,2]. Round 3: [1,2,3]. Cycle = 3.",
-        "1라운드: [2,3,1]. 2라운드: [3,1,2]. 3라운드: [1,2,3]. 순환 = 3."),
+        "1라운드 뒤엔 [2,3,1], 2라운드 뒤엔 [3,1,2], 3라운드 뒤엔 [1,2,3] 으로 처음과 같아져요. 그래서 순환 길이가 3 이에요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "For the example [1,2,3] with reversals (1-2) then (2-3), what is the cycle length?", "예제 [1,2,3]에서 (1-2), (2-3) 뒤집기의 순환 길이는?"),
+        "For the example [1,2,3] with reversals (1-2) then (2-3), what is the cycle length?", "예제 [1,2,3] 에서 (1-2), (2-3) 을 뒤집으면 순환 길이가 얼마일까요?"),
       question: t(E,
         "[1,2,3], reverse(1-2) then reverse(2-3) each round. Cycle length?",
-        "[1,2,3], 매 라운드 reverse(1-2) 후 reverse(2-3). 순환 길이?"),
+        "[1,2,3] 에서 라운드마다 (1-2) 뒤에 (2-3) 을 뒤집어요. 순환 길이는 얼마일까요?"),
       hint: t(E,
         "Apply the round step by step until the array returns to start.",
-        "한 라운드씩 적용해 배열이 처음으로 되돌아올 때까지 세어 봐."),
+        "한 라운드씩 해 보면서 배열이 처음으로 돌아올 때까지 세어 봐요."),
       answer: 3,
     },
   ];
@@ -169,7 +169,7 @@ export function makeSwapityCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Apply one round to identity [1..N] → permutation P. Track each cow's cycle length in P; effective rounds = K mod cycle, apply that many. Sections build it one piece at a time.",
-        "단위 순열 [1..N] 에 한 라운드 적용해 순열 P 도출. P 에서 각 소의 순환 길이 — 실제 라운드 = K mod 순환. 아래 섹션이 한 단락씩 쌓아요."),
+        "소마다 순환 길이를 구하면 K 번 대신 K mod 순환 번만 하면 돼요."),
       sections: getSwapitySections(E),
     },
   ];

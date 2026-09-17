@@ -101,12 +101,12 @@ export function MilkFactoryBeltSim({ E }) {
     <div style={{ padding: 14 }}>
       <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "8px 12px", marginBottom: 10 }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5 }}>
-          🧪 {t(E, "Belt-Graph Sim", "벨트 그래프 시뮬")}
+          🧪 {t(E, "Belt-Graph Sim", "컨베이어 그래프 시뮬")}
         </div>
         <div style={{ fontSize: 12, color: "#1e3a8a", marginTop: 4, lineHeight: 1.5 }}>
           {t(E,
             "Type belts (one 'a b' per line, meaning a→b). Pick a candidate station — green = milk from that station can reach the candidate.",
-            "벨트를 한 줄에 'a b' (a→b 방향) 로 입력해. 후보 역을 골라 — 초록 = 그 역에서 후보 역으로 우유가 도달 가능.")}
+            "컨베이어를 한 줄에 'a b' (a→b 방향) 로 적어요. 후보 역을 고르면, 초록색 역은 거기서 후보 역까지 우유가 갈 수 있다는 뜻이에요.")}
         </div>
       </div>
 
@@ -139,7 +139,7 @@ export function MilkFactoryBeltSim({ E }) {
 
       <div style={{ marginBottom: 10 }}>
         <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
-          {t(E, "Belts (one 'a b' per line)", "벨트 (한 줄에 'a b')")}
+          {t(E, "Belts (one 'a b' per line)", "컨베이어 (한 줄에 'a b')")}
         </label>
         <textarea
           value={edgesText}
@@ -310,19 +310,19 @@ export function getMilkFactorySections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 을 옮긴 거예요. 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "queue<int> from <queue> is the standard BFS frontier container.",
-            "<queue>의 queue<int>가 BFS 프런티어의 표준 컨테이너."),
+            "<queue> 의 queue<int> 가 BFS 에서 다음에 갈 곳을 담는 그릇이에요."),
         t(E, "vector<vector<int>> radj(N + 1) sizes for 1-indexed nodes 1..N.",
-            "vector<vector<int>> radj(N + 1)으로 1-기반 노드 1..N 크기 확보."),
+            "vector<vector<int>> radj(N + 1) 로 1 부터 N 까지 쓸 자리를 잡아요."),
       ],
     },
   ];

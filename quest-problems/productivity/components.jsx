@@ -34,7 +34,7 @@ export function ProductivitySim({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", textAlign: "center", marginBottom: 8 }}>
-        🎚️ {t(E, "Slide wake-up time S", "기상 시간 S 슬라이드")}
+        🎚️ {t(E, "Slide wake-up time S", "일어나는 시각 S 를 밀어 보기")}
       </div>
 
       {/* Slider */}
@@ -63,7 +63,7 @@ export function ProductivitySim({ E }) {
               <th style={{ padding: 4 }}>t</th>
               <th style={{ padding: 4 }}>d=c−t</th>
               <th style={{ padding: 4 }}>t+S</th>
-              <th style={{ padding: 4 }}>{t(E, "reach?", "도달?")}</th>
+              <th style={{ padding: 4 }}>{t(E, "reach?", "갈 수 있나?")}</th>
             </tr>
           </thead>
           <tbody>
@@ -106,7 +106,7 @@ export function ProductivitySim({ E }) {
       {/* Result */}
       <div style={{ background: "#dcfce7", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
-          {t(E, "REACHABLE COUNT", "도달 가능 개수")}
+          {t(E, "REACHABLE COUNT", "갈 수 있는 농장 수")}
         </div>
         <div style={{ fontSize: 18, fontWeight: 800, color: "#166534", fontFamily: "'JetBrains Mono',monospace" }}>
           {reachable} / {N}
@@ -199,19 +199,19 @@ export function getProductivitySections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 에서 자동으로 옮긴 거예요.\n자료형과 표현 방식은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "upper_bound on a sorted vector — counts how many d[i] > S in O(log N).",
-            "정렬된 vector 의 upper_bound — d[i] > S 개수를 O(log N) 으로 셈."),
+            "정렬된 vector 에 upper_bound 를 쓰면 d[i] > S 인 농장이 몇 개인지 O(log N) 에 셀 수 있어요."),
         t(E, "long long for c, ti, d because values can reach ~10^9 and the difference still fits.",
-            "c, ti, d 는 long long — 값이 ~10^9 까지 가능."),
+            "c, ti, d 는 long long 으로 둬요. 값이 10^9 까지 커질 수 있거든요."),
       ],
     },
   ];
@@ -257,7 +257,7 @@ function highlightCode(lines, lang) {
 
 export function downloadProductivityPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Productivity — Full Study Guide", "Productivity — 종합 풀이 노트");
@@ -280,7 +280,7 @@ export function downloadProductivityPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

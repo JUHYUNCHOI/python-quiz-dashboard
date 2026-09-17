@@ -10,7 +10,7 @@ export function makeProdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie wants to visit as many farms as possible!\nEach farm closes at a certain time, and she needs travel time to get there.\nCan she visit enough?\n📊", "Bessie가 최대한 많은 농장을 방문하고 싶어! 각 농장은 특정 시간에 닫히고, 가는 데 이동 시간이 필요해요. 충분히 방문할 수 있을까? 📊"),
+        "Bessie wants to visit as many farms as possible!\nEach farm closes at a certain time, and she needs travel time to get there.\nCan she visit enough?\n📊", "Bessie 는 문 닫기 전에 농장을 몇 개나 돌 수 있을까요?"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>📊</div>
@@ -25,14 +25,14 @@ export function makeProdCh1(E) {
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
                 "For each (V, S) query, output YES if Bessie can reach ≥ V farms, else NO.",
-                "각 (V, S) 쿼리마다 Bessie 가 V 개 이상 농장에 갈 수 있으면 YES, 아니면 NO 출력.")}
+                "물음 (V, S) 마다, Bessie 가 농장 V 개 이상에 갈 수 있으면 YES 를, 아니면 NO 를 출력해요.")}
             </div>
           </div>
 
           <div style={{ background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N farms, each closes at time c_i. Bessie wakes at time S, arrives at farm i at time t_i + S. She can visit farm i only if t_i + S < c_i. Given Q queries (V, S): can she visit at least V farms?",
-              "N개 농장, 각각 시간 c_i에 닫혀.\nBessie는 시간 S에 일어나서, 농장 i에 t_i + S에 도착.\nt_i + S < c_i일 때만 방문 가능.\nQ개 쿼리 (V, S): V개 이상 방문 가능?")}
+              "농장이 N 개 있고, 농장 i 는 c_i 시각에 문을 닫아요.\nBessie 는 S 시각에 일어나서 농장 i 에 t_i + S 시각에 닿아요.\n닿은 시각이 닫는 시각보다 빨라야, 그러니까 t_i + S < c_i 여야 들어갈 수 있어요.\n물음이 Q 개 와요. 물음 (V, S) 는 '농장 V 개 이상에 갈 수 있나요?' 라는 뜻이에요.")}
           </div>
         </div>),
     },
@@ -41,7 +41,7 @@ export function makeProdCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input format: N Q, then N closing times, then N travel times, then Q queries each on its own line as 'V S'.",
-        "입력: 첫 줄 N Q, 그 다음 닫힘 시간 N 개, 이동 시간 N 개, 마지막에 'V S' 형식 쿼리 Q 줄."),
+        "첫 줄은 N Q, 다음은 닫는 시각과 이동 시간, 끝에 물음 Q 줄이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", textAlign: "center", marginBottom: 10 }}>
@@ -74,11 +74,11 @@ NO`}
           </div>
           <div style={{ background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>
-              🔍 {t(E, "Walkthrough — query 1: V=1, S=5", "풀이 — 1 번 쿼리: V=1, S=5")}
+              🔍 {t(E, "Walkthrough — query 1: V=1, S=5", "풀이 — 첫 번째 물음 (V=1, S=5)")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
               {t(E, "Reachable iff S + t[i] < c[i]:",
-                    "방문 가능 조건: S + t[i] < c[i]:")}
+                    "S + t[i] < c[i] 면 갈 수 있어요.")}
               <br/>
               {t(E, "farm 0: 5 + 4 = 9 < 3? NO.  farm 1: 5 + 2 = 7 < 5? NO.",
                     "농장 0: 5+4=9 < 3? NO.  농장 1: 5+2=7 < 5? NO.")}
@@ -96,12 +96,12 @@ NO`}
     {
       type: "reveal",
       narr: t(E,
-        "The trick is to rearrange the condition!\nt_i + S < c_i means S < c_i - t_i.\nSo precompute d_i = c_i - t_i!", "핵심 트릭은 조건을 변환하는 거예요! t_i + S < c_i는 S < c_i - t_i를 의미해요. d_i = c_i - t_i를 미리 계산하면 돼요!"),
+        "The trick is to rearrange the condition!\nt_i + S < c_i means S < c_i - t_i.\nSo precompute d_i = c_i - t_i!", "조건을 옮겨 쓰면 S 와 d 만 견주면 돼요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#f97316", marginBottom: 10 }}>
-              {t(E, "Transform the Condition", "조건 변환")}
+              {t(E, "Transform the Condition", "조건을 옮겨 쓰기")}
             </div>
             <div style={{ background: "#fff", border: "1px solid #fdba74", borderRadius: 10, padding: 12, marginBottom: 10 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: "#ea580c", fontFamily: "'JetBrains Mono',monospace", textAlign: "center", lineHeight: 2 }}>
@@ -112,7 +112,7 @@ NO`}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
-                "d_i = c_i - t_i is the latest Bessie can wake up and still visit farm i.\nSort d[], then for each query S, binary search to count how many d_i > S!", "d_i = c_i - t_i는 Bessie가 농장 i를 방문할 수 있는 가장 늦은 기상 시간이에요.\nd[]를 정렬한 후, 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 세!")}
+                "d_i = c_i - t_i is the latest Bessie can wake up and still visit farm i.\nOnce d[] is sorted, every d bigger than S sits together at the tail — so one binary search for the boundary tells us how many there are.", "d_i = c_i - t_i 는 Bessie 가 농장 i 에 갈 수 있는 가장 늦은 기상 시각이에요.\nd 를 정렬해 두면 S 보다 큰 d 들이 뒤쪽에 나란히 모여요.\n그래서 그 경계만 이분 탐색으로 찾으면 개수가 바로 나와요.")}
             </div>
           </div>
         </div>),
@@ -122,37 +122,37 @@ NO`}
       type: "sim",
       narr: t(E,
         "Deep audit time! Slide S left and right.\nWatch d[i] = c[i] − t[i] decide each farm — green when d[i] > S.\nThe answer is just 'how many d[i] are above the line.'",
-        "심층 점검! S 슬라이더를 좌우로 움직여 봐.\nd[i] = c[i] − t[i] 가 농장 도달 여부를 결정 — d[i] > S 면 초록.\n답은 '선 위의 d[i] 가 몇 개?' 그뿐이에요."),
+        "S 를 좌우로 밀어 보면 d[i] > S 인 농장이 초록이 돼요."),
     },
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "Let's check: c=[10,5,8], t=[3,2,4], S=3. Which farms can Bessie visit?", "확인해보자: c=[10,5,8], t=[3,2,4], S=3. Bessie가 어떤 농장을 방문할 수 있어요?"),
+        "Let's check: c=[10,5,8], t=[3,2,4], S=3. Which farms can Bessie visit?", "c=[10,5,8], t=[3,2,4], S=3 일 때 몇 곳에 갈 수 있을까요?"),
       question: t(E,
         "c=[10,5,8], t=[3,2,4], S=3. Farm 1: 3+3=6<10 OK. Farm 2: 2+3=5, NOT <5. Farm 3: 4+3=7<8 OK. How many farms?",
-        "c=[10,5,8], t=[3,2,4], S=3. 농장1: 3+3=6<10 OK. 농장2: 2+3=5, 5<5 아님. 농장3: 4+3=7<8 OK. 몇 개 농장?"),
+        "c=[10,5,8], t=[3,2,4], S=3 이에요.\n농장1 은 3+3=6 이고 6 < 10 이라 돼요.\n농장2 는 2+3=5 인데 5 < 5 가 아니라서 안 돼요.\n농장3 은 4+3=7 이고 7 < 8 이라 돼요.\n갈 수 있는 농장은 몇 개일까요?"),
       options: [
-        t(E, "1 farm", "1개 농장"),
-        t(E, "2 farms", "2개 농장"),
-        t(E, "3 farms (all)", "3개 농장 (전부)"),
+        t(E, "1 farm", "농장 1 개"),
+        t(E, "2 farms", "농장 2 개"),
+        t(E, "3 farms (all)", "농장 3 개 (전부)"),
       ],
       correct: 1,
       explain: t(E,
         "Correct! Farm 1 (6<10) and Farm 3 (7<8) are reachable. Farm 2 fails because 5 is NOT strictly less than 5. Answer: 2!",
-        "정답! 농장1 (6<10)과 농장3 (7<8)이 방문 가능. 농장2는 5가 5보다 엄격히 작지 않아서 실패. 답: 2개!"),
+        "정답이에요! 농장1 (6<10) 과 농장3 (7<8) 에는 갈 수 있어요.\n농장2 는 5 가 5 보다 작아야 하는데 딱 같아서 안 돼요.\n그래서 답은 2 개예요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "Now you try! Same example but count it yourself.", "이제 직접 해봐요! 같은 예제로 직접 세봐요."),
+        "Now you try! Same example but count it yourself.", "이제 직접 세어 봐요. 같은 예제예요."),
       question: t(E,
         "c=[10,5,8], t=[3,2,4], S=3. How many farms can Bessie visit? (strict inequality: t_i + S < c_i)",
-        "c=[10,5,8], t=[3,2,4], S=3. Bessie가 방문할 수 있는 농장 수는? (엄격한 부등식: t_i + S < c_i)"),
+        "c=[10,5,8], t=[3,2,4], S=3 이에요. Bessie 가 갈 수 있는 농장은 몇 개일까요?\n(딱 같으면 안 돼요 — t_i + S 가 c_i 보다 작아야 해요)"),
       hint: t(E,
         "Check each farm with the strict inequality and tally the yes's.",
-        "각 농장을 엄격한 부등식으로 확인하고 yes 인 것을 세어 봐."),
+        "농장마다 t_i + S < c_i 인지 따져 보고, 맞는 것만 세어 봐요."),
       answer: 2,
     },
   ];
@@ -168,7 +168,7 @@ export function makeProdCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Farm i reachable iff S < c[i] − t[i]. Precompute d[i] = c[i] − t[i], sort, and for each query do one binary search for 'how many d > S'. Sections build it one piece at a time.",
-        "농장 i 도달 가능 ↔ S < c[i] − t[i]. d[i] = c[i] − t[i] 계산·정렬, 쿼리마다 'd > S 개수' 이분탐색 한 번. 아래 섹션이 한 단락씩 쌓아요."),
+        "풀이 코드를 한 단락씩 읽어 봐요."),
       sections: getProductivitySections(E),
     },
   ];

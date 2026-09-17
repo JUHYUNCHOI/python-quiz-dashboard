@@ -91,7 +91,7 @@ export function getMcc15RectSections(E) {
         t(E, "int is plenty here: coordinates stay within −1,000 to 1,000.",
             "좌표가 −1,000 ~ 1,000 이라 int 로 충분해요."),
         t(E, "Print the space yourself: cout << x4 << \" \" << y4 — C++ does not insert one for you.",
-            "공백은 직접 넣어요: cout << x4 << \" \" << y4 — C++ 는 자동으로 넣어주지 않아요."),
+            "C++ 는 공백을 자동으로 넣어주지 않아요. 그래서 cout << x4 << \" \" << y4 처럼 직접 넣어요."),
       ],
     },
   ];
@@ -123,7 +123,7 @@ export function getMcc15RectWalk(E, lang = "py") {
       code: FULL_CPP, vars: _RECT_VARS, beats: [
         { hi: [3, 5], bubble: t(E,
           "Declare the three known corners and read them all with one cin statement.",
-          "알고 있는 꼭짓점 셋을 선언하고, cin 한 줄로 다 읽어요.") },
+          "알고 있는 꼭짓점 셋을 담을 변수를 만들고,\ncin 한 줄로 다 읽어요.") },
         { hi: [7, 14], bubble: t(E,
           "int is enough — coordinates stay within ±1,000. if / else if / else picks whichever x has no partner among the three.",
           "좌표가 ±1,000 이라 int 로 충분해요.\nif / else if / else 가 셋 중 짝 없는 x 를 골라요.") },

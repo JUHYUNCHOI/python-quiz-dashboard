@@ -20,7 +20,7 @@ export function makeMcc22GrammarCh1(E) {
       type: "reveal",
       narr: t(E,
         "A fixed 'grammar' lists 5 valid words and, for each word, which words are allowed to come right after it. A sentence is correct only if every word is one of the 5 AND every neighbor pair is allowed.\nFor each test case, print YES or NO.",
-        "고정된 '문법' 은 유효한 단어 5개를 정하고, 각 단어 뒤에 어떤 단어가 올 수 있는지를 알려줘요. 문장이 맞으려면 모든 단어가 5개 중 하나이고, 이웃한 모든 쌍이 허용돼야 해요.\n각 테스트 케이스마다 YES 또는 NO 를 출력해요."),
+        "문장이 문법에 맞는지 YES 나 NO 로 답해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -85,7 +85,7 @@ export function makeMcc22GrammarCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. The grammar itself is NOT in the input — only T, then per test the length n and the n words.",
-        "입력 형식과 공식 예제를 봐요. 문법 자체는 입력에 없어요 — T, 그다음 테스트마다 길이 n 과 단어 n 개만 들어와요."),
+        "문법은 입력에 안 들어오니 형식과 예제를 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* The fixed grammar, spelled out */}
@@ -119,7 +119,7 @@ export function makeMcc22GrammarCh1(E) {
               <div>• {t(E, "then per test: a line with ", "그다음 테스트마다: ")}<b>n</b>{t(E, ", then a line with ", " 한 줄, 그다음 ")}<b>n</b>{t(E, " space-separated words", " 개 단어가 공백으로 구분된 줄")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: 1 ≤ T ≤ 500, and the total of all n ≤ 100000.", "제약: 1 ≤ T ≤ 500, 모든 n 의 합 ≤ 100000.")}
+              {t(E, "Limits: 1 ≤ T ≤ 500, and the total of all n ≤ 100000.", "테스트는 1 ≤ T ≤ 500 개이고, 모든 n 을 더하면 100000 을 넘지 않아요.")}
             </div>
           </div>
 
@@ -163,7 +163,7 @@ export function makeMcc22GrammarCh1(E) {
       type: "sim",
       narr: t(E,
         "Feel the rule. Pick a sentence and step through it word by word — watch each word pass or fail the two checks, then read the YES/NO verdict.",
-        "규칙을 직접 느껴봐요. 문장을 골라 단어를 하나씩 확인하며 두 검사를 통과하는지 보고, YES/NO 판정을 읽어요."),
+        "문장을 골라 단어를 하나씩 확인해 봐요."),
     },
 
     // 1-4: understanding check
@@ -174,7 +174,7 @@ export function makeMcc22GrammarCh1(E) {
         "아래 화살표 목록과 맞춰봐요."),
       question: t(E,
         "Grammar: WE → {DONT, KNOW}, THEY → {DONT, KNOW}, DONT → {KNOW}, KNOW → {WE, THEY, THAT}, THAT → {WE, THEY}. Is the sentence \"WE THEY\" correct?",
-        "문법: WE → {DONT, KNOW}, THEY → {DONT, KNOW}, DONT → {KNOW}, KNOW → {WE, THEY, THAT}, THAT → {WE, THEY}. 문장 \"WE THEY\" 는 맞을까요?"),
+        "문법이 WE → {DONT, KNOW}, THEY → {DONT, KNOW}, DONT → {KNOW}, KNOW → {WE, THEY, THAT}, THAT → {WE, THEY} 예요. 문장 \"WE THEY\" 는 맞을까요?"),
       options: [
         t(E, "NO — there is no arrow WE → THEY", "NO — WE → THEY 화살표가 없어요"),
         t(E, "YES — both are valid words", "YES — 둘 다 유효한 단어예요"),
@@ -212,18 +212,18 @@ export function makeMcc22GrammarCh2(E, lang = "py") {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#475569", marginBottom: 4 }}>
-                📋 {t(E, "One way: scan the whole arrow list for every pair", "한 방법: 쌍마다 화살표 목록 전체를 훑기")}
+                📋 {t(E, "One way: scan the whole arrow list for every pair", "한 방법 — 쌍마다 화살표 목록을 전부 훑기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line" }}>
-                {t(E, "For each neighbor pair, walk through all 10 arrows to see if it is there. This works fine here — 100,000 pairs times 10 arrows is only a million steps.", "이웃한 쌍마다 화살표 10개를 다 훑어 있는지 봐요.\n여기선 이것도 충분히 빨라요 — 쌍 10만 개 × 화살표 10개면 100만 걸음이거든요.")}
+                {t(E, "For each neighbor pair, walk through all 10 arrows to see if it is there. This works fine here — 100,000 pairs times 10 arrows is only a million steps.", "이웃한 쌍마다 화살표 10개를 다 훑어 있는지 봐요.\n이 방법도 여기서는 충분히 빨라요 — 쌍 10만 개 × 화살표 10개면 100만 걸음이거든요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                ✨ {t(E, "Nicer: adj[word] = set of allowed successors", "더 나은 방법: adj[단어] = 허용 다음-단어 집합")}
+                ✨ {t(E, "Nicer: adj[word] = set of allowed successors", "더 나은 방법 — adj[단어] 에 올 수 있는 다음 단어를 모아 두기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Build the table once. Then 'word in adj' (check ①) and 'next in adj[word]' (check ②) are each one instant lookup — a single pass over each sentence.", "표를 한 번 만들어 둬요. 그러면 'word in adj' (검사 ①) 와 'next in adj[word]' (검사 ②) 가 각각 한 번의 즉시 조회 — 문장마다 한 번만 훑어요.")}
+                {t(E, "Build the table once. Then 'word in adj' (check ①) and 'next in adj[word]' (check ②) are each one instant lookup — a single pass over each sentence.", "표를 한 번 만들어 둬요. 그러면 'word in adj' (검사 ①) 와 'next in adj[word]' (검사 ②) 가 각각 한 번에 끝나요. 그래서 문장마다 한 번만 훑으면 돼요.")}
               </div>
             </div>
           </div>

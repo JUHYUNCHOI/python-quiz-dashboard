@@ -11,7 +11,7 @@ export function makeBackForthCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two barns each have 10 buckets of milk (1000 gallons total per barn). Over 4 days, FJ and his sister alternate carrying ONE bucket between barns: day 1 FJ moves one from barn 1 → 2, day 2 sister moves one from barn 2 → 1, day 3 FJ again, day 4 sister.\nCount the number of DISTINCT possible total milk amounts in barn 1 after the 4 days.",
-        "두 헛간에 각각 10개의 우유 양동이가 있어요 (헛간당 총 1000 갤런). 4일 동안 FJ 와 동생이 번갈아 양동이를 1개씩 옮겨요. 1일차 FJ 가 헛간 1 → 2 로 1개, 2일차 동생이 헛간 2 → 1 로 1개, 3일차 FJ, 4일차 동생.\n4일이 끝났을 때 헛간 1 에 들어 있을 수 있는 우유 총량의 서로 다른 값이 몇 가지인지 출력해요."),
+        "4 일이 끝나면 헛간 1 의 우유는 몇 가지 값이 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeBackForthCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "Output the number of distinct possible total milk amounts in barn 1 after 4 days of alternating bucket transfers.",
-                "4 일간 양동이 왕복 후 헛간 1 의 가능한 우유 총량 (서로 다른 값) 개수를 출력.")}
+                "4 일간 양동이를 주고받은 뒤, 헛간 1 의 우유 총량으로 나올 수 있는 값이 몇 가지인지 출력해요.")}
             </div>
           </div>
 
@@ -52,7 +52,7 @@ export function makeBackForthCh1(E) {
                   {t(E, "Over ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "4 days, FJ and his sister alternate", "4일 동안 FJ 와 동생이 번갈아")}</b>
                   {t(E, ": day 1 FJ moves a bucket 1→2, day 2 sister moves one 2→1, day 3 FJ, day 4 sister.",
-                        ": 1일차 FJ 가 양동이 1개 1→2, 2일차 동생이 1개 2→1, 3일차 FJ, 4일차 동생.")}
+                        " 옮겨요. 1일차 FJ 가 양동이 1개를 1→2, 2일차 동생이 1개를 2→1, 3일차 FJ, 4일차 동생 순이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
@@ -72,39 +72,39 @@ export function makeBackForthCh1(E) {
       type: "quiz",
       narr: t(E,
         "Imagine all buckets are the same size.  Walk through 4 days mentally — what could change?",
-        "모든 양동이가 같은 크기라고 상상. 4 일을 머릿속으로 따라가 봐 — 뭐가 변할 수 있어?"),
+        "양동이가 다 같은 크기라면 무엇이 달라질 수 있을까요?"),
       question: t(E,
         "All buckets same size s. After 4 days of back and forth, how many distinct outcomes for barn 1?",
-        "모든 양동이 크기 같으면 s. 4일간 왕복 후 헛간 1의 고유 결과 수?"),
+        "양동이 크기가 다 같을 때, 4일 뒤 헛간 1 의 값은 몇 가지일까요?"),
       options: [
-        t(E, "1 - always back to 1000", "1 - 항상 1000으로 돌아와"),
-        t(E, "4 - one per day", "4 - 하루에 하나"),
-        t(E, "10 - one per bucket", "10 - 양동이당 하나"),
+        t(E, "1 - always back to 1000", "1 — 항상 1000 으로 돌아와요"),
+        t(E, "4 - one per day", "4 — 하루에 하나씩"),
+        t(E, "10 - one per bucket", "10 — 양동이마다 하나씩"),
       ],
       correct: 0,
       explain: t(E,
-        "Correct! If all buckets are identical, every transfer moves the same amount. Barn 1 always ends at 1000. Only 1 distinct outcome.",
-        "맞아! 모든 양동이가 동일하면 매번 같은 양을 옮겨. 헛간 1은 항상 1000으로 끝나. 고유 결과 1개."),
+        "If all buckets are identical, the amount leaving is always the amount coming back, so barn 1 returns to 1000 after every round trip. That leaves only 1 possible value.",
+        "양동이가 다 같으면 나가는 양과 들어오는 양이 늘 같아요. 그래서 한 번 왕복할 때마다 헛간 1 은 다시 1000 이에요. 나올 수 있는 값이 하나뿐이에요."),
     },
     // 1-3: State-tree sim (toy version, 3 buckets, 1-2 days)
     {
       type: "tree",
       narr: t(E,
         "Before coding — *play* with the state tree.  Change the buckets, pick day-1, watch how every day-2 choice fans out.  The set at the bottom collects the distinct Barn 1 totals.",
-        "코딩 전에 — 상태 트리를 직접 *놀려* 봐. 양동이 값 바꾸고, 1 일차 선택을 골라 — 2 일차 분기들이 어떻게 펼쳐지는지 관찰. 아래 set 이 헛간 1 의 서로 다른 총량을 모아."),
+        "1 일차 선택을 바꾸면 2 일차가 어떻게 갈라지는지 봐요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
         "Now you say it — all 10 buckets identical, 4-day swap.  How many DIFFERENT final amounts can barn 1 have?",
-        "직접 — 양동이 10 개 동일, 4 일 왕복. 헛간 1 의 *서로 다른* 최종 양은 몇 가지?"),
+        "양동이 10 개가 다 같을 때 최종 값은 몇 가지일까요?"),
       question: t(E,
         "All identical buckets. Distinct outcomes for barn 1?",
-        "모든 양동이 동일. 헛간 1의 고유 결과 수?"),
+        "양동이가 다 같을 때 헛간 1 의 값은 몇 가지일까요?"),
       hint: t(E,
         "Each transfer moves the same amount.  Does the total in barn 1 ever change?",
-        "이동량이 매번 같음. 헛간 1 의 총량이 *바뀔 수* 있어?"),
+        "옮기는 양이 매번 같아요. 헛간 1 의 총량이 바뀔 수 있을까요?"),
       answer: 1,
     },
   ];
@@ -121,7 +121,7 @@ export function makeBackForthCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Try every choice across the 4 days — collect all distinct barn 1 totals into a set.  Sections build the recursion one piece at a time.",
-        "4 일간 모든 선택을 시도 — 헛간 1 의 모든 가능한 총량을 set 에 모음. 아래 섹션이 한 단락씩 쌓아요."),
+        "4 일간 모든 선택을 해 보고 나온 총량을 set 에 모아요."),
       sections: getBackForthSections(E),
     },
   ];

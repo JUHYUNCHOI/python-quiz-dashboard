@@ -57,7 +57,7 @@ export function HoneySim({ E }) {
       <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 12 }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
           {t(E, "🍯 Trip Yields — drag K to pick the best trips",
-                "🍯 왕복 수확량 — K 를 움직여 최고의 왕복을 골라봐")}
+                "🍯 왕복 수확량 — K 를 움직여 가장 좋은 왕복을 골라 봐요")}
         </div>
 
         {/* Per-hive rows: each hive shows its trip-blocks */}
@@ -153,7 +153,7 @@ export function HoneySim({ E }) {
       <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
           `M=${_SIM_M}. Each hive splits into trip-yields of M (last block = remainder). Sort all yields descending, take the K largest — that's the answer.`,
-          `M=${_SIM_M}. 각 벌집을 M 짜리 왕복 블록으로 쪼개요 (마지막 블록 = 나머지). 전부 내림차순 정렬해서 큰 것 K 개 = 정답.`)}
+          `M=${_SIM_M}. 각 벌집을 M 짜리 덩어리로 쪼개요 (마지막은 나머지).\n전부 큰 순서로 세운 뒤 위에서 K 개를 고르면 그게 답이에요.`)}
       </div>
     </div>
   );
@@ -220,17 +220,17 @@ export function getHoneySections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 가 있어서 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
+            "#include 는 배운 헤더로 (iostream, vector, string) 나눠 적어요."),
         t(E, "Each yield fits in int, but the running total can exceed 2×10^9 — keep total as long long.",
-            "수확량 하나하나는 int 로 되지만 합계는 2×10^9 을 넘을 수 있어요. total 만 long long 으로 둬요."),
+            "수확량 하나하나는 int 로 돼요.\n하지만 합계는 2×10^9 을 넘을 수 있어서 total 만 long long 으로 둬요."),
       ],
     },
   ];
@@ -276,7 +276,7 @@ function highlightCode(lines, lang) {
 
 export function downloadHoneyPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Honey — Full Study Guide", "Honey — 종합 풀이 노트");
@@ -299,7 +299,7 @@ export function downloadHoneyPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

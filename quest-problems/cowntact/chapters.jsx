@@ -11,7 +11,7 @@ export function makeCowntactCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N cows in a row. Some unknown cows started sick on day 0; each night, every sick cow infects her immediate neighbors.\nGiven the final state of who's sick (a string of 0s and 1s) after some number of nights, what's the SMALLEST number of cows that could have been sick on day 0?",
-        "FJ에게 한 줄로 선 N마리 소가 있어요. 0일차에 어떤 소들이 처음 감염됐고, 매일 밤 감염된 소가 양옆 이웃에게 병을 옮겨요.\n며칠이 지난 뒤의 최종 감염 상태(0과 1로 된 문자열)가 주어지면, 0일차에 감염됐던 소의 최소 수는 몇 마리일까요?"),
+        "0일차에 감염됐던 소가 최소 몇 마리였을지 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeCowntactCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "Output the smallest possible number of cows that could have been sick on day 0 to produce this final state.",
-                "이 최종 상태를 만들 수 있는 0 일차 감염 소의 최소 수를 출력.")}
+                "이 최종 상태가 나오려면 0일차에 몇 마리가 감염돼 있어야 했을까요? 그 최소 수를 출력해요.")}
             </div>
           </div>
 
@@ -81,14 +81,14 @@ export function makeCowntactCh1(E) {
       type: "reveal",
       narr: t(E,
         "Try it: pick Day-0 sources, press Play, watch the wave. Notice — one source can fill a whole connected stretch.",
-        "직접 해 봐: 0일차 감염원을 고르고 ▶ 재생. 파동이 퍼지는 걸 보면 — 한 마리가 연속된 한 덩어리를 다 채워."),
+        "0일차 감염원을 고르고 재생해서 어떻게 퍼지는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <InfectionSim E={E} />
           <div style={{ marginTop: 10, padding: "8px 12px", background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 8, fontSize: 12, color: "#9a3412" }}>
             🔑 {t(E,
-              "Key observation: no matter how long a connected run of 1s is, ONE source in the middle can produce it. So we just need to count separate runs.",
-              "핵심 관찰: 1 이 연속된 덩어리가 아무리 길어도, 가운데 한 마리만 있으면 만들 수 있어요. 그러니까 떨어진 덩어리 개수만 세면 돼요.")}
+              "Key observation: no matter how long a connected run of 1s is, ONE source in the middle can produce it. And a 0 in between was never reached, so one source can never cover two runs. So we just need to count separate runs.",
+              "핵심 관찰: 1 이 연속된 덩어리가 아무리 길어도, 가운데 한 마리만 있으면 만들 수 있어요. 반대로 사이에 있는 0 에는 병이 닿은 적이 없으니, 한 마리가 두 덩어리를 채울 수는 없어요. 그래서 떨어진 덩어리 개수만 세면 돼요.")}
           </div>
         </div>),
     },
@@ -97,10 +97,10 @@ export function makeCowntactCh1(E) {
       type: "quiz",
       narr: t(E,
         "Picture the spread in reverse — if 5 cows are sick now, how few could have started it?",
-        "거꾸로 상상해 봐 — 지금 5 마리가 감염이라면, 시작은 최소 몇 마리?"),
+        "지금 5 마리가 감염이라면 처음엔 최소 몇 마리였을까요?"),
       question: t(E,
         "\"11111\" — what is the minimum number initially infected?",
-        "\"11111\" — 처음에 감염된 최소 수는?"),
+        "\"11111\" 이 되려면 처음에 감염된 소는 최소 몇 마리일까요?"),
       options: [
         t(E, "5 (all of them)", "5 (전부)"),
         t(E, "1 (one in the middle)", "1 (가운데 하나)"),
@@ -109,14 +109,14 @@ export function makeCowntactCh1(E) {
       correct: 1,
       explain: t(E,
         "One cow in the middle can spread outward to infect all 5! A single continuous group needs only 1 initial source.",
-        "가운데 한 마리가 양옆으로 퍼져서 5마리 모두 감염시킬 수 있어요! 연속된 하나의 그룹은 초기 감염 1마리면 돼요."),
+        "가운데 한 마리가 양옆으로 퍼져서 5마리를 모두 감염시킬 수 있어요! 이어진 덩어리 하나는 처음 감염 1마리면 돼요."),
     },
     // 1-4: Visualize runs — eye-evident counting
     {
       type: "reveal",
       narr: t(E,
         "Each '0' is a wall. Look at \"01110110\" — colored groups show the answer at a glance.",
-        "0 은 벽. \"01110110\" — 색칠된 덩어리를 보면 답이 한눈에."),
+        "0 이 벽이 돼서 덩어리를 갈라 놓아요."),
       content: (
         <div style={{ padding: 16 }}>
           <RunsViz E={E} str="01110110" />
@@ -127,13 +127,13 @@ export function makeCowntactCh1(E) {
       type: "input",
       narr: t(E,
         "0s split the row.  Look at \"01110110\" and find the runs of 1s.",
-        "0 이 줄을 끊어. \"01110110\" 에서 1 이 이어지는 구간을 세 봐."),
+        "0 이 줄을 끊어요. \"01110110\" 에서 1 이 이어진 덩어리를 세 보세요."),
       question: t(E,
         "\"01110110\"\nHow many separate infected groups?",
-        "\"01110110\"\n감염된 그룹이 몇 개예요?"),
+        "\"01110110\"\n감염된 덩어리가 몇 개일까요?"),
       hint: t(E,
         "Each '0' breaks the chain.  Count how many separate runs of 1s appear.",
-        "0 은 끊어주는 역할. 1 이 연속된 덩어리가 몇 개?"),
+        "0 이 줄을 끊어 줘요. 1 이 이어진 덩어리가 몇 개일까요?"),
       answer: 2,
     },
   ];
@@ -150,7 +150,7 @@ export function makeCowntactCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Walk the string once and count runs of 1s.  Sections build the loop one piece at a time.",
-        "문자열을 한 번 훑으며 1 의 연속 구간 개수를 세요. 아래 섹션이 한 단락씩 쌓아요."),
+        "문자열을 한 번 훑으며 1 이 이어진 덩어리 수를 세요."),
       sections: getCowntactSections(E),
     },
   ];

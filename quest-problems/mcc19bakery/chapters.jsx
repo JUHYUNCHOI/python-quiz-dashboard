@@ -90,7 +90,7 @@ function BakeryGreedySim({ E }) {
             ? t(E, "The prices are sorted, small→big. Two ways of grouping are on the table — which one wins?",
                    "가격을 작은→큰 순으로 정렬해뒀어요.\n묶는 방법이 두 가지 놓여 있어요. 어느 쪽이 이길까요?")
             : t(E, "Each round: pay the two most-expensive, let the next one be FREE, then pay the cheapest that's left.",
-                   "한 라운드마다 제일 비싼 두 개를 지불하고, 그다음 하나를 무료로 받고,\n남은 것 중 제일 싼 것을 지불해요.")}
+                   "한 묶음마다 제일 비싼 두 개를 지불하고, 그다음 하나를 무료로 받고,\n남은 것 중 제일 싼 것을 지불해요.")}
         </div>
         {/* 2026-09-08 화면 담당: 미션은 "2번째로 싼 빵이 무료" 라고 하고
             여기선 "3번째로 비싼 것" 이라고 한다. 4개 묶음에선 같은 자리인데
@@ -121,9 +121,9 @@ function BakeryGreedySim({ E }) {
         {/* controls */}
         <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12 }}>
           <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} style={navBtn(step === 0)}>◀ {t(E, "back", "이전")}</button>
-          <button onClick={() => setStep(Math.min(ROUNDS.length, step + 1))} disabled={done} style={navBtn(done)}>{t(E, "next round", "다음 라운드")} ▶</button>
+          <button onClick={() => setStep(Math.min(ROUNDS.length, step + 1))} disabled={done} style={navBtn(done)}>{t(E, "next round", "다음 묶음")} ▶</button>
           <span style={{ fontSize: 12, color: "#92400e", fontWeight: 700 }}>
-            {t(E, "round ", "라운드 ")}{step}/{ROUNDS.length}
+            {t(E, "round ", "묶음 ")}{step}/{ROUNDS.length}
           </span>
         </div>
 
@@ -132,7 +132,7 @@ function BakeryGreedySim({ E }) {
           {shown.map((r, ri) => (
             <div key={ri} style={{ background: "#fff", border: "1px solid #fcd34d", borderRadius: 8, padding: "8px 10px" }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>
-                {t(E, "round ", "라운드 ")}{ri + 1}
+                {t(E, "round ", "묶음 ")}{ri + 1}
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
                 {r.map((p, pi) => (
@@ -175,7 +175,7 @@ function BakeryGreedySim({ E }) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, textWrap: "balance", whiteSpace: "pre-line" }}>
               {t(E,
                 "(A) Chop the big→small list into blocks: [10,9,8,7] and [6,3,2,1].\n(B) Put the cheap ones together with the expensive ones.\nPress through and see which total comes out smaller.",
-                "(A) 큰→작은 순으로 그냥 잘라 묶기: [10,9,8,7] 과 [6,3,2,1].\n(B) 싼 것을 비싼 것들과 함께 묶기.\n눌러서 어느 쪽 총액이 더 작게 나오는지 봐요.")}
+                "(A) 큰→작은 순으로 그냥 잘라 묶기 — [10,9,8,7] 과 [6,3,2,1].\n(B) 싼 것을 비싼 것들과 함께 묶기.\n눌러서 어느 쪽 총액이 더 작게 나오는지 봐요.")}
             </div>
           </div>
         )}
@@ -383,18 +383,18 @@ export function makeMcc19BakeryCh2(E, lang = "py") {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: try every grouping", "느림: 모든 묶음 방법 시도")}
+                🐢 {t(E, "Slow: try every grouping", "느린 방법 — 모든 묶음 방법 시도하기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "The number of ways to split N breads into batches of 4 blows up — impossible to check them all.", "N 개를 4 개씩 나누는 방법의 수가 폭발해요 — 전부 확인 불가능.")}
+                {t(E, "The number of ways to split N breads into batches of 4 blows up — impossible to check them all.", "N 개를 4 개씩 나누는 방법의 수가 어마어마하게 늘어나서 전부 확인할 수 없어요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: sort, then greedy with a deque", "빠름: 정렬 후 덱으로 그리디")}
+                🚀 {t(E, "Fast: sort, then greedy with a deque", "빠른 방법 — 정렬한 뒤 덱으로 그리디")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Sort once (N log N), then each round takes O(1) from both ends. Free the 3rd-most-expensive, pair the cheapest as a pay-slot.", "한 번 정렬 (N log N) 후, 라운드마다 양끝에서 O(1). 세 번째로 비싼 것을 무료로, 제일 싼 것을 지불 자리로 짝지어요.")}
+                {t(E, "Sort once (N log N), then each round takes O(1) from both ends. Free the 3rd-most-expensive, pair the cheapest as a pay-slot.", "한 번만 정렬하면 (N log N) 묶음마다 양끝에서 O(1) 로 꺼내요. 세 번째로 비싼 것을 무료로, 제일 싼 것을 지불 자리로 짝지어요.")}
               </div>
             </div>
           </div>

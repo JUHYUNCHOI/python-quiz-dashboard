@@ -105,22 +105,22 @@ function SuffixSortSim({ E }) {
     if (k === 0) {
       status = t(E,
         "Reached k = 0 — the entire array is already a sorted suffix. Answer = 0.",
-        "k = 0까지 도달 — 배열 전체가 이미 정렬된 접미사. 답 = 0.");
+        "k = 0 까지 왔어요. 배열 전체가 이미 정렬된 접미사라서 답은 0 이에요.");
     } else {
       status = t(E,
         `Stopped: a[${k - 1}] = ${compareLeft} ≥ a[${k}] = ${compareRight}. Suffix length = ${N - k}, answer K = ${N} − ${N - k} = ${k}.`,
-        `멈춤: a[${k - 1}] = ${compareLeft} ≥ a[${k}] = ${compareRight}. 접미사 길이 = ${N - k}, 답 K = ${N} − ${N - k} = ${k}.`);
+        `a[${k - 1}] = ${compareLeft} 가 a[${k}] = ${compareRight} 보다 작지 않아서 여기서 멈춰요.\n접미사 길이는 ${N - k} 이고, 답 K = ${N} − ${N - k} = ${k} 이에요.`);
     }
   } else {
     status = t(E,
       `Compare a[${k - 1}] = ${compareLeft} with a[${k}] = ${compareRight}. ${compareLeft} < ${compareRight} → suffix can grow!`,
-      `a[${k - 1}] = ${compareLeft} 와 a[${k}] = ${compareRight} 비교. ${compareLeft} < ${compareRight} → 접미사 확장 가능!`);
+      `a[${k - 1}] = ${compareLeft} 와 a[${k}] = ${compareRight} 를 견줘 봐요.\n${compareLeft} < ${compareRight} 이니까 접미사를 왼쪽으로 한 칸 늘릴 수 있어요!`);
   }
 
   return (
     <div style={{ background: "#fff", border: "1.5px dashed #cbd5e1", borderRadius: 10, padding: 14, marginTop: 6 }}>
       <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 8, letterSpacing: 0.4 }}>
-        🐮 {t(E, "TRY: step-through the suffix scan", "직접 해봐: 접미사 스캔 단계별로")}
+        🐮 {t(E, "TRY: step-through the suffix scan", "접미사를 한 칸씩 늘려 봐요")}
       </div>
 
       {/* Preset picker */}
@@ -149,7 +149,7 @@ function SuffixSortSim({ E }) {
         border: `1.5px solid ${done ? (k === 0 ? GREEN : RED) : A}`,
         borderRadius: 8, padding: "8px 12px", marginBottom: 10,
         fontSize: 12, color: done ? (k === 0 ? GREEN : "#9a3412") : "#1e3a8a",
-        lineHeight: 1.5, fontWeight: 600, textAlign: "center",
+        lineHeight: 1.5, fontWeight: 600, textAlign: "center", whiteSpace: "pre-line", wordBreak: "keep-all",
       }}>
         {status}
       </div>
@@ -170,7 +170,7 @@ function SuffixSortSim({ E }) {
           border: "1.5px solid #cbd5e1", borderRadius: 6,
           padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
         }}>
-          {t(E, "↻ reset", "↻ 처음부터")}
+          {t(E, "↻ reset", "↻ 처음으로")}
         </button>
       </div>
 
@@ -200,7 +200,7 @@ export function makeSleepySortCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows stand in a line with distinct IDs. The only allowed move: take the FRONT cow and reinsert her anywhere later in the line.\nFind the MINIMUM number of such moves needed to make the IDs sorted in increasing order.",
-        "한 줄로 선 N마리 소가 있고, 각자 서로 다른 ID를 가져요. 허용되는 움직임은 단 하나: 맨 앞 소를 빼서 줄의 더 뒤쪽 어딘가에 다시 끼워 넣기.\nID가 오름차순이 되도록 만드는 최소 움직임 횟수를 구해요."),
+        "맨 앞 소를 뒤로 옮겨서 ID 순으로 줄을 세워 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -217,7 +217,7 @@ export function makeSleepySortCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum number of front-pulls needed to sort the line by ID.",
-                "줄을 ID 오름차순으로 정렬하는 데 필요한 최소 움직임 수를 출력.")}
+                "줄을 ID 오름차순으로 만드는 데 필요한 최소 움직임 횟수를 출력해요.")}
             </div>
           </div>
 
@@ -237,9 +237,9 @@ export function makeSleepySortCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Each move: take the ", "한 번의 움직임: ")}
+                  {t(E, "Each move: take the ", "한 번 움직일 때는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "front cow and reinsert her anywhere later", "맨 앞 소를 빼서 더 뒤쪽 어디든 다시 끼워 넣기")}</b>
-                  {t(E, " in the line.", ".")}
+                  {t(E, " in the line.", " 를 해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -247,7 +247,7 @@ export function makeSleepySortCh1(E) {
                 <div>
                   {t(E, "Goal: ", "목표: ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "sort the line by ID in increasing order", "ID 오름차순으로 정렬")}</b>
-                  {t(E, ".", ".")}
+                  {t(E, ".", " 하는 거예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -267,7 +267,7 @@ export function makeSleepySortCh1(E) {
       type: "reveal",
       narr: t(E,
         "Look at the line from the RIGHT. Walk left as long as each cow is smaller than the next.\nThe green prefix from the right is already in order — those cows never have to move.\nEverything to the LEFT of the boundary must be pulled and reinserted.",
-        "줄을 오른쪽부터 봐요. 각 소가 다음 소보다 작은 동안 왼쪽으로 한 칸씩 가요.\n오른쪽부터 초록색 부분은 이미 정렬돼 있어 — 그 소들은 움직일 필요 없음.\n경계 왼쪽에 있는 소들은 모두 빼서 다시 끼워야 해요."),
+        "오른쪽부터 이미 정렬된 곳이 어디까지인지 찾아봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -277,7 +277,7 @@ export function makeSleepySortCh1(E) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
               {t(E,
                 "Pick an array, then press \"extend left\" to walk the boundary one cow at a time. The green block is the already-sorted suffix. The red boundary marks where the order finally breaks.",
-                "배열을 하나 골라서 \"왼쪽으로 확장\" 버튼을 눌러봐. 한 칸씩 경계를 옮기면서 초록 블록(이미 정렬된 접미사)이 자라나요. 순서가 깨지는 자리가 빨간 경계로 표시돼요.")}
+                "배열을 하나 골라서 \"왼쪽으로 확장\" 을 눌러 봐요. 경계를 한 칸씩 옮기면 이미 정렬된 뒷부분(접미사)이 초록색으로 자라나요. 순서가 깨지는 자리는 빨간 경계로 표시돼요.")}
             </div>
           </div>
           <SuffixSortSim E={E} />
@@ -287,10 +287,10 @@ export function makeSleepySortCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For [1, 2, 4, 3]: looking from the right, [3] is fine, but 4 > 3 breaks the order.\nThe sorted suffix has length 1.\nSo we move N - 1 = 3 cows.", "[1, 2, 4, 3]에서: 오른쪽부터 보면 [3]은 괜찮지만 4 > 3에서 순서가 깨져. 정렬된 접미사 길이는 1. 그래서 N - 1 = 3마리를 옮겨야 해요."),
+        "For [1, 2, 4, 3]: looking from the right, [3] is fine, but 4 > 3 breaks the order.\nThe sorted suffix has length 1.\nSo we move N - 1 = 3 cows.", "[1, 2, 4, 3] 은 접미사 길이가 1 이라 3 마리를 옮겨요."),
       question: t(E,
         "For [2, 1, 3, 4]: what is the length of the longest sorted suffix from the right?",
-        "[2, 1, 3, 4]에서: 오른쪽부터 가장 긴 정렬된 접미사 길이는?"),
+        "[2, 1, 3, 4] 에서 오른쪽부터 이어지는 가장 긴 정렬된 접미사는 몇 개일까요?"),
       options: [
         t(E, "1 - only [4]", "1 - [4]만"),
         t(E, "2 - [3, 4]", "2 - [3, 4]"),
@@ -299,19 +299,19 @@ export function makeSleepySortCh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! From the right: 4 ok, 3 < 4 ok, 1 < 3 ok, but 2 > 1 breaks. So suffix [1, 3, 4] has length 3. Answer = 4 - 3 = 1.",
-        "맞아! 오른쪽부터: 4 ok, 3 < 4 ok, 1 < 3 ok, 하지만 2 > 1에서 깨져. 접미사 [1, 3, 4] 길이는 3. 답 = 4 - 3 = 1."),
+        "맞아요! 오른쪽부터 보면 4, 3 < 4, 1 < 3 까지는 괜찮아요.\n그런데 2 > 1 에서 순서가 깨져요.\n접미사 [1, 3, 4] 의 길이가 3 이니 답은 4 - 3 = 1 이에요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "If the array is already sorted [1, 2, 3, 4], the entire array is a sorted suffix.\nHow many moves?", "배열이 이미 정렬된 [1, 2, 3, 4]이면, 전체가 정렬된 접미사예요. 이동 횟수는?"),
+        "If the array is already sorted [1, 2, 3, 4], the entire array is a sorted suffix.\nHow many moves?", "[1, 2, 3, 4] 는 배열 전체가 이미 정렬된 접미사예요."),
       question: t(E,
         "[1, 2, 3, 4] already sorted. How many moves needed?",
-        "[1, 2, 3, 4] 이미 정렬됨. 필요한 이동 횟수는?"),
+        "[1, 2, 3, 4] 는 이미 정렬돼 있어요. 몇 번 옮겨야 할까요?"),
       hint: t(E,
         "If everything is already sorted, no moves are required.",
-        "이미 다 정렬된 상태라면 굳이 움직일 필요가 있을까?"),
+        "이미 다 정렬돼 있으면 소를 옮길 일이 있을까요?"),
       answer: 0,
     },
   ];
@@ -328,7 +328,7 @@ export function makeSleepySortCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Cows in the longest already-sorted SUFFIX never need to move. Every cow in front of it needs at least 1 move. Answer = N − (sorted suffix length). Sections build it one piece at a time.",
-        "이미 정렬된 가장 긴 SUFFIX 소들은 움직일 필요 없음. 그 앞의 소들은 적어도 한 번 이동 필요. 답 = N − (SUFFIX 길이). 아래 섹션이 한 단락씩 쌓아요."),
+        "답은 N 에서 정렬된 접미사 길이를 뺀 값이에요."),
       sections: getSleepySortSections(E),
     },
   ];

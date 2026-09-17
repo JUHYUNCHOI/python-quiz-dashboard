@@ -128,7 +128,7 @@ export function SleepClassSim({ E }) {
       }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 8, letterSpacing: 0.4 }}>
           {t(E, `Walk left→right, accumulate. Close a segment when sum = ${target}.`,
-                `왼→오 누적. 합이 ${target} 가 되면 한 구간 마감.`)}
+                `왼쪽부터 더해 가요. 합이 ${target} 가 되면 한 구간을 닫아요.`)}
         </div>
         <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
           {a.map((v, i) => {
@@ -173,7 +173,7 @@ export function SleepClassSim({ E }) {
         {failed ? (
           <div style={{ fontSize: 13, fontWeight: 700, color: "#991b1b" }}>
             {t(E, `❌ d=${target} fails — running sum overshoots before resetting.`,
-                  `❌ d=${target} 실패 — 누적이 ${target} 를 넘겨서 안 맞아.`)}
+                  `❌ d=${target} 는 안 돼요. 더한 값이 ${target} 를 넘어 버려요.`)}
           </div>
         ) : (
           <>
@@ -201,7 +201,7 @@ export function SleepClassSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 10 }}>
         {t(E,
           "Try every divisor d of the total. The smallest 'N − segments' across all working d is the answer.",
-          "총합의 모든 약수 d 를 시도해. 통과한 d 들 중 'N − 구간 수' 가 가장 작은 게 답.")}
+          "총합의 약수 d 를 모두 해 봐요.\n되는 d 중에서 'N − 구간 수' 가 가장 작은 게 답이에요.")}
       </div>
     </div>
   );
@@ -306,19 +306,19 @@ export function getSleepClassSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 쪽은 Python 을 자동으로 옮긴 거예요. 타입은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 가 있어서 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣어요 (<iostream>, <vector>, ...). 뜻이 또렷해져요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 2×10^9 을 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -364,7 +364,7 @@ function highlightCode(lines, lang) {
 
 export function downloadSleepClassPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "SleepClass — Full Study Guide", "SleepClass — 종합 풀이 노트");
@@ -387,7 +387,7 @@ export function downloadSleepClassPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

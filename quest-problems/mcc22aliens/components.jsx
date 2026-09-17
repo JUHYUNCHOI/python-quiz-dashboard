@@ -89,9 +89,9 @@ export function getMcc22AliensSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Never search the n! permutations. Decode each sentence into the single type its target must have: a truth-teller (a[i]=='T') means b[i] as-is; a liar means the opposite.",
-            "n! 개의 지목표를 뒤지지 않아요. 각 말을 '지목당한 쪽이 가져야 할 타입' 하나로 해독: 진실쟁이 (a[i]=='T') 는 b[i] 그대로, 거짓말쟁이는 뒤집어요."),
+            "n! 가지 지목 순서를 뒤질 필요가 없어요. 각 말을 '지목당한 쪽이 가져야 할 타입' 하나로 바꾸면 돼요. 진실쟁이 (a[i]=='T') 는 b[i] 그대로, 거짓말쟁이는 뒤집어요."),
         t(E, "A valid permutation exists exactly when supply equals demand: the count of demanded T's (need_T) must equal the count of real T's (have_T). One O(n) pass over the strings, no permutations.",
-            "유효한 순열은 공급 = 수요일 때만 존재: 요구된 T 의 수 (need_T) 가 진짜 T 의 수 (have_T) 와 같아야 해요. 문자열을 O(n) 으로 한 번 훑을 뿐, 순열은 없음."),
+            "공급과 수요가 같을 때만 순서를 짤 수 있어요. 요구된 T 의 수 (need_T) 가 진짜 T 의 수 (have_T) 와 같아야 해요. 문자열을 O(n) 으로 한 번 훑을 뿐, 순열은 만들지 않아요."),
       ],
       pyOnly: [
         t(E, "Each test is 3 lines: n, then string a, then string b. Read them line by line.",
@@ -101,7 +101,7 @@ export function getMcc22AliensSections(E) {
         t(E, "cin >> n >> a >> b reads the count and two strings; while (T--) repeats for every test case.",
             "cin >> n >> a >> b 로 개수와 두 문자열을 읽고, while (T--) 로 매 테스트를 반복해요."),
         t(E, "req is a single char — the type this claim demands after decoding the speaker's honesty.",
-            "req 는 문자 하나 — 말하는 이의 정직함을 해독한 뒤 이 주장이 요구하는 타입이에요."),
+            "req 는 글자 하나예요. 말한 사람이 진실쟁이인지 따져 본 뒤, 이 주장이 요구하는 타입이에요."),
       ],
     },
   ];
@@ -162,7 +162,7 @@ export function AliensCountSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 14 }}>
           {t(E,
             "Real types a are fixed. Tap a claim to flip it. A truth-teller (T) demands the claim as-is; a liar (F) demands the opposite. When demand for T equals supply of T, some order works → YES.",
-            "진짜 타입 a 는 고정. 말을 눌러 뒤집어요. 진실쟁이 (T) 는 말 그대로, 거짓말쟁이 (F) 는 반대를 지목 대상에게 요구해요. T 의 수요가 T 의 공급과 같으면 지목표를 짤 수 있어요 → YES.")}
+            "진짜 타입 a 는 그대로예요. 말을 눌러 뒤집어 봐요. 진실쟁이 (T) 는 말 그대로를, 거짓말쟁이 (F) 는 그 반대를 지목 대상에게 요구해요. T 의 수요가 T 의 공급과 같으면 지목 순서를 짤 수 있어서 YES 예요.")}
         </div>
 
         {/* index header */}
@@ -207,7 +207,7 @@ export function AliensCountSim({ E }) {
           </div>
         </div>
         <div style={{ fontSize: 10.5, color: C.dim, marginBottom: 12, ...KA, paddingLeft: 104 }}>
-          {t(E, "a[i]=T keeps b[i]; a[i]=F flips it", "a[i]=T 는 b[i] 유지; a[i]=F 는 뒤집음")}
+          {t(E, "a[i]=T keeps b[i]; a[i]=F flips it", "a[i]=T 면 b[i] 그대로, a[i]=F 면 뒤집어요")}
         </div>
 
         {/* counts */}
@@ -238,7 +238,7 @@ export function AliensCountSim({ E }) {
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
           {t(E,
             "It's a counting/matching argument: each decoded claim asks for one T or one F alien. A perfect assignment (permutation) exists exactly when the T's asked for match the T's available — no ordering needs to be tried.",
-            "이건 개수 세기/매칭 논증이에요: 해독된 각 주장은 T 하나 또는 F 하나를 요청해요. 완벽한 배정 (순열) 은 요청된 T 가 가진 T 와 맞을 때만 존재 — 순서를 하나도 시도할 필요 없어요.")}
+            "결국 개수를 세서 짝을 맞추는 이야기예요. 바꿔 놓은 각 주장은 T 하나 또는 F 하나를 달라고 해요. 요청된 T 가 가진 T 와 딱 맞을 때만 모두에게 짝을 지어 줄 수 있어요. 순서를 하나도 시도할 필요가 없어요.")}
         </div>
       </div>
     </div>
@@ -281,7 +281,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc22AliensPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc22Aliens — Full Study Guide", "Mcc22Aliens — 종합 풀이 노트");
@@ -304,7 +304,7 @@ export function downloadMcc22AliensPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">MCC · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

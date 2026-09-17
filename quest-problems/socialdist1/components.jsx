@@ -77,7 +77,7 @@ export function SocDist1Sim({ E }) {
         </div>
         {isAnswer && (
           <div style={{ background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#92400e", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
-            {t(E, "★ best D", "★ 최적 D")}
+            {t(E, "★ best D", "★ 가장 좋은 D")}
           </div>
         )}
       </div>
@@ -167,7 +167,7 @@ export function SocDist1Sim({ E }) {
       {/* D slider */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
         <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "Drag to change minimum gap D", "최소 간격 D 를 바꿔봐")}
+          {t(E, "Drag to change minimum gap D", "끌어서 최소 간격 D 를 바꿔 봐요")}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ fontSize: 11, color: C.dim }}>1</span>
@@ -185,7 +185,7 @@ export function SocDist1Sim({ E }) {
         <b style={{ color: A }}>{t(E, "Why binary search?", "왜 이분 탐색?")}</b>{" "}
         {t(E,
           "Bigger D → fewer cows fit. So {D : N cows fit} is a downward-true range. The biggest such D is the answer — perfect for binary search.",
-          "D 가 커질수록 들어가는 소가 줄어요. 즉 {D : N 마리 들어감} 은 작은 쪽이 다 참인 구간. 그 중 가장 큰 D 가 답 — 이분 탐색에 딱 맞아요.")}
+          "D 가 커질수록 들어가는 소가 줄어요. 그래서 'N 마리가 들어가는 D' 는 작은 쪽이 모두 참이에요. 그중 가장 큰 D 가 답이라서 이분 탐색이 딱 맞아요.")}
       </div>
     </div>
   );
@@ -320,19 +320,19 @@ export function getSocDist1Sections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 을 옮긴 거예요. 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 (<iostream>, <vector>, ...) 넣으면 코드가 무엇을 쓰는지 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];

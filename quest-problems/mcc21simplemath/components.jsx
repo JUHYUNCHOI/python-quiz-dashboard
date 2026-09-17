@@ -206,10 +206,10 @@ export function getMcc21SimpleMathSections(E) {
       why: [
         t(E,
           "N numbers give 2^N − 1 nonempty subsets — up to 2^50000. We can NEVER list them all, so we count each part's contribution instead of enumerating subsets.",
-          "N 개의 수는 부분집합이 2^N − 1 개 — 최대 2^50000 개예요. 절대 다 나열할 수 없으니, 부분집합을 하나하나 만드는 대신 각 부분의 '기여'를 세요."),
+          "수가 N 개면 부분집합은 2^N − 1 개, 많으면 2^50000 개까지 가요.\n다 적어 보는 건 불가능해요.\n그래서 부분집합을 만들지 말고, 각 수가 몇 번 쓰이는지를 세요."),
         t(E,
           "MOD = 10^9 + 7: keep every running value mod MOD so numbers stay small.",
-          "MOD = 10^9 + 7: 계산 값을 항상 MOD 로 나눈 나머지로 유지해 수를 작게 지켜요."),
+          "MOD 는 10^9 + 7 이에요.\n계산할 때마다 MOD 로 나눈 나머지만 들고 있으면 수가 안 커져요."),
       ],
     },
     {
@@ -219,10 +219,10 @@ export function getMcc21SimpleMathSections(E) {
       why: [
         t(E,
           "Pin one number down. The other N−1 numbers are each either in or out, so it sits in 2^(N-1) different subsets.",
-          "수 하나를 고정해요. 나머지 N−1 개는 각각 있거나 없거나이니, 그 수는 2^(N-1) 개의 부분집합에 들어가요."),
+          "수 하나를 꼭 넣기로 해요.\n남은 N−1 개는 넣거나 빼거나 마음대로예요.\n그래서 그 수가 들어가는 부분집합은 2^(N-1) 개예요."),
         t(E,
           "So every number is added 2^(N-1) times → answer = 2^(N-1) · (sum of all numbers).",
-          "그래서 모든 수는 2^(N-1) 번 더해져요 → 답 = 2^(N-1) · (전체 합)."),
+          "어떤 수든 2^(N-1) 번 더해지니까\n답은 2^(N-1) × (모든 수를 더한 값) 이에요."),
       ],
     },
     {
@@ -232,10 +232,10 @@ export function getMcc21SimpleMathSections(E) {
       why: [
         t(E,
           "Expand (1+A₁)(1+A₂)…(1+Aₙ). Every way of picking '1 or Aᵢ' from each factor is one term — exactly one subset's product.",
-          "(1+A₁)(1+A₂)…(1+Aₙ) 를 펼쳐요. 각 괄호에서 '1 또는 Aᵢ' 를 고르는 모든 방법이 한 항 — 정확히 한 부분집합의 곱이에요."),
+          "(1+A₁)(1+A₂)…(1+Aₙ) 를 펼쳐 봐요.\n괄호마다 1 이나 Aᵢ 중 하나를 고르면 항이 하나 나와요.\n그 항이 바로 어떤 부분집합 하나를 곱한 값이에요."),
         t(E,
           "That covers ALL subsets including the empty one (all 1's → product 1). Subtract that 1 → sum over nonempty subsets.",
-          "그러면 빈 집합(모두 1 → 곱 1)까지 모든 부분집합이 나와요. 그 1 만 빼면 → 비어있지 않은 부분집합들의 합."),
+          "이러면 빈 집합까지 다 나와요. 괄호마다 1 을 고른 경우가 빈 집합이고 곱은 1 이에요.\n그 1 만 빼면 비어 있지 않은 부분집합들의 합이 남아요."),
       ],
     },
     {
@@ -245,10 +245,10 @@ export function getMcc21SimpleMathSections(E) {
       why: [
         t(E,
           "XOR works bit by bit, independently. A bit of the result is 1 only when an ODD number of chosen elements have that bit.",
-          "XOR 는 비트마다 따로 작동해요. 결과의 어떤 비트가 1 이 되려면, 그 비트를 가진 원소를 홀수 개 골라야 해요."),
+          "XOR 는 비트마다 따로 계산돼요.\n어떤 비트가 1 이 되려면 그 비트를 가진 수를 홀수 개 골라야 해요."),
         t(E,
           "If k elements have that bit: odd-count ways = 2^(k-1), and the other N−k elements are free = 2^(N-k). Multiply, times the bit's value, sum over bits.",
-          "그 비트를 가진 원소가 k 개면: 홀수 개 고르기 = 2^(k-1) 가지, 나머지 N−k 개는 자유 = 2^(N-k) 가지. 둘을 곱하고 비트 값을 곱해 모든 비트에 대해 더해요."),
+          "그 비트를 가진 수가 k 개라고 해요.\n그중 홀수 개를 고르는 방법은 2^(k-1) 가지예요.\n나머지 N−k 개는 마음대로라 2^(N-k) 가지예요.\n둘을 곱하고 그 비트의 값을 곱한 뒤, 모든 비트에 대해 더해요."),
       ],
     },
     {
@@ -258,10 +258,10 @@ export function getMcc21SimpleMathSections(E) {
       why: [
         t(E,
           "All three branches already keep ans mod 10^9+7, so we just print it.",
-          "세 분기 모두 ans 를 이미 10^9+7 로 나눈 나머지로 유지했으니, 그대로 출력해요."),
+          "세 갈래 모두 ans 를 이미 10^9+7 로 나눈 나머지로 들고 있어요.\n그래서 그대로 출력하면 돼요."),
         t(E,
           "Each branch is O(N) (XOR is O(31·N)) — fast even for N = 50000, while listing 2^N subsets would be impossible.",
-          "각 분기는 O(N) (XOR 은 O(31·N)) — N = 50000 도 빨라요. 2^N 개 부분집합을 나열하는 건 불가능하죠."),
+          "어느 갈래든 O(N) 이에요. XOR 만 비트 31 개를 도니까 O(31·N) 이에요.\nN 이 50000 이어도 금방 끝나요.\n부분집합 2^N 개를 다 적는 것과는 비교가 안 돼요."),
       ],
     },
   ];
@@ -327,7 +327,7 @@ export function Mcc21SimpleMathOpSim({ E }) {
     if (P === 1) {
       return t(E,
         "Each number sits in 2^(N-1) = 4 subsets → 4 × (1+2+3) = 4 × 6 = 24.",
-        "각 수는 2^(N-1) = 4 개의 부분집합에 등장 → 4 × (1+2+3) = 4 × 6 = 24.");
+        "수 하나가 2^(N-1) = 4 개의 부분집합에 들어가요.\n그래서 4 × (1+2+3) = 4 × 6 = 24 예요.");
     }
     if (P === 2) {
       return t(E,
@@ -336,19 +336,19 @@ export function Mcc21SimpleMathOpSim({ E }) {
     }
     return t(E,
       "Per bit: bit0(=1) is in {1,3}, k=2 → 2^(k-1)·2^(N-k)=2·2=4 subsets → 1×4=4. bit1(=2) is in {2,3}, k=2 → 4 subsets → 2×4=8. Total 4+8 = 12.",
-      "비트마다: 비트0(값 1)은 {1,3}에, k=2 → 2^(k-1)·2^(N-k)=2·2=4 개 → 1×4=4. 비트1(값 2)은 {2,3}에, k=2 → 4 개 → 2×4=8. 합 4+8 = 12.");
+      "비트마다 따로 세요.\n비트0(값 1)을 가진 수는 1 과 3 이라 k=2 예요.\n2^(k-1)·2^(N-k) = 2·2 = 4 개이고 1×4 = 4 예요.\n비트1(값 2)을 가진 수는 2 와 3 이라 역시 4 개이고 2×4 = 8 이에요.\n둘을 더하면 4+8 = 12 예요.");
   };
 
   return (
     <div style={{ padding: 14 }}>
       <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>
-          🧮 {t(E, "Set A = {1, 2, 3} — every nonempty subset", "집합 A = {1, 2, 3} — 비어있지 않은 모든 부분집합")}
+          🧮 {t(E, "Set A = {1, 2, 3} — every nonempty subset", "집합 A = {1, 2, 3} 의 비어 있지 않은 부분집합 전부")}
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "Combine each subset with the operator, then SUM those values over all subsets. Switch the operator and watch the total.",
-            "각 부분집합을 연산자로 합치고, 그 값들을 모든 부분집합에 대해 다 더해요. 연산자를 바꿔가며 합계를 봐요.")}
+            "부분집합마다 연산자로 합친 값을 구하고, 그 값들을 모두 더해요.\n연산자를 바꿔 보면 합이 어떻게 달라지는지 알 수 있어요.")}
         </div>
 
         {/* operator toggle */}
@@ -371,7 +371,7 @@ export function Mcc21SimpleMathOpSim({ E }) {
           <div style={{ display: "flex", fontSize: 10.5, color: C.dim, fontWeight: 800, letterSpacing: 0.3, padding: "0 8px", marginBottom: 2 }}>
             <span style={{ flex: 1 }}>{t(E, "subset", "부분집합")}</span>
             <span style={{ width: 96, textAlign: "right" }}>{t(E, "combined", "합친 값")}</span>
-            <span style={{ width: 88, textAlign: "right" }}>{t(E, "running sum", "누적 합")}</span>
+            <span style={{ width: 88, textAlign: "right" }}>{t(E, "running sum", "쌓인 합")}</span>
           </div>
           {rows.map((r, i) => (
             <div key={i} style={{
@@ -417,7 +417,7 @@ export function Mcc21SimpleMathOpSim({ E }) {
           {showShortcut && (
             <div style={{ marginTop: 10, background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", ...KA }}>
               <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "same total, no listing", "나열 없이 같은 합")}
+                🚀 {t(E, "same total, no listing", "다 적지 않고도 같은 합")}
               </div>
               <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, fontFamily: "'JetBrains Mono',monospace" }}>
                 {shortcut()}
@@ -429,7 +429,7 @@ export function Mcc21SimpleMathOpSim({ E }) {
         <div style={{ marginTop: 12, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
           {t(E,
             "With just 3 numbers we can list all 7 subsets. But N can be 50000 → 2^N subsets, far too many to list. So we count each number's / each bit's contribution instead.",
-            "수가 3 개뿐이면 7 개 부분집합을 다 적을 수 있어요. 하지만 N 은 50000 까지 → 2^N 개 부분집합, 도저히 나열 못 해요. 그래서 각 수 · 각 비트의 기여를 대신 세요.")}
+            "수가 3 개뿐이면 부분집합 7 개를 다 적을 수 있어요.\n그런데 N 은 50000 까지 가고, 그러면 부분집합이 2^N 개예요.\n적는 건 포기하고, 각 수와 각 비트가 몇 번 쓰이는지를 세요.")}
         </div>
       </div>
     </div>

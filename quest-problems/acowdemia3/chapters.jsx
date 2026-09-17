@@ -75,8 +75,8 @@ function DeepAuditSim({ E }) {
         </div>
         <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.55 }}>
           {t(E,
-            "Scan left-to-right, top-to-bottom. For every G cell, count its 4-direction cow neighbors. If that count is ≥ 2, this grass cell mediates exactly one friendship.",
-            "왼→오, 위→아래로 스캔. 각 G 칸마다 상하좌우 소 이웃을 세요. 2 이상이면 그 풀 칸이 우정 1쌍을 정확히 중재해요.")}
+            "Scan left-to-right, top-to-bottom. For every G cell, count its 4-direction cow neighbors. With 2 or more, this grass cell can make one friendship.",
+            "왼쪽에서 오른쪽, 위에서 아래로 훑어요.\nG 칸마다 위아래양옆에 붙은 소를 세요. 2마리 이상이면 우정을 하나 맺어 줄 수 있어요.")}
         </div>
       </div>
 
@@ -128,7 +128,7 @@ function DeepAuditSim({ E }) {
         <button onClick={reset} style={{
           padding: "6px 14px", borderRadius: 8, border: "1.5px solid #94a3b8",
           background: "#fff", color: "#475569", fontWeight: 700, fontSize: 12, cursor: "pointer",
-        }}>{t(E, "Reset", "초기화")}</button>
+        }}>{t(E, "Reset", "처음으로")}</button>
       </div>
 
       <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.6 }}>
@@ -149,13 +149,13 @@ function DeepAuditSim({ E }) {
               </>
             ) : (
               <div style={{ marginTop: 4, color: "#64748b" }}>
-                {t(E, "Skip — only grass cells can mediate friendships.", "건너뜀 — 풀 칸만 우정을 중재.")}
+                {t(E, "Skip — only grass cells can mediate friendships.", "건너뛰어요 — 우정을 이어 주는 건 풀 칸뿐이에요.")}
               </div>
             )}
           </>
         ) : (
           <div style={{ color: "#64748b" }}>
-            {t(E, "Press Step ▶ or Run all ⏩ to begin the audit.", "한 칸 ▶ 또는 전부 실행 ⏩ 을 눌러 점검을 시작.")}
+            {t(E, "Press Step ▶ or Run all ⏩ to begin the audit.", "한 칸 ▶ 이나 전부 실행 ⏩ 을 눌러 시작해요.")}
           </div>
         )}
         <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #cbd5e1" }}>
@@ -182,7 +182,7 @@ export function makeAcow3Ch1(E) {
       type: "reveal",
       narr: t(E,
         "On a grid, every cell is either a cow (C) or grass (G). Two cows become friends through a SHARED grass cell adjacent to both (up/down/left/right).\nEach grass cell can mediate AT MOST ONE friendship. Print the maximum number of friendships possible.",
-        "격자 위 각 칸은 소 (C) 또는 풀 (G) 이에요. 두 소 모두에게 상하좌우로 인접한 풀 칸이 있으면 그 풀 칸을 통해 두 소가 친구가 될 수 있어요.\n단, 풀 칸 하나는 최대 한 쌍의 우정만 중재해요. 만들 수 있는 우정의 최대 개수를 출력해요."),
+        "격자의 칸은 소(C) 아니면 풀(G) 이에요.\n두 소가 같은 풀 칸에 위아래양옆으로 붙어 있으면 그 풀을 사이에 두고 친구가 돼요.\n풀 칸 하나는 우정을 한 쌍까지만 이어 줘요. 우정이 최대 몇 쌍인지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -251,10 +251,10 @@ export function makeAcow3Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If 2 cows are both adjacent to 1 grass cell, what is the maximum number of friendships?", "2마리의 소가 모두 1개의 풀 칸에 인접하면, 최대 우정 수는?"),
+        "If 2 cows are both adjacent to 1 grass cell, what is the maximum number of friendships?", "소 두 마리가 같은 풀 칸에 붙어 있으면 우정은 최대 몇 쌍일까요?"),
       question: t(E,
         "2 cows adjacent to 1 grass cell. Max friendships?",
-        "2마리 소가 1개의 풀 칸에 인접. 최대 우정 수?"),
+        "소 두 마리가 풀 칸 하나에 붙어 있어요. 우정은 최대 몇 쌍인가요?"),
       options: [
         t(E, "0", "0"),
         t(E, "1", "1"),
@@ -263,27 +263,27 @@ export function makeAcow3Ch1(E) {
       correct: 1,
       explain: t(E,
         "The 2 cows can become friends through the shared grass cell. That grass cell is used up, so max = 1.",
-        "2마리 소가 공유 풀 칸을 통해 친구가 될 수 있어요. 그 풀 칸은 사용되어 최대 = 1."),
+        "두 소가 그 풀을 사이에 두고 친구가 돼요.\n그런데 풀 칸 하나는 우정을 한 쌍까지만 이어 주니까 최대 1쌍이에요."),
     },
     // 1-3: Deep-audit sim
     {
       type: "reveal",
       narr: t(E,
-        "Let's audit a 3×3 board cell-by-cell. We will visit every cell, and for each grass (G) cell count its 4-direction cow neighbors. Cells with ≥2 cow neighbors mediate exactly one friendship.",
-        "3×3 보드를 한 칸씩 점검해봐요. 모든 칸을 방문해서, 풀 (G) 칸이면 상하좌우 소 이웃 수를 세요. 2 이상이면 우정 1쌍을 정확히 중재."),
+        "Let's audit a 3×3 board cell-by-cell. We will visit every cell, and for each grass (G) cell count its 4-direction cow neighbors. A cell with 2 or more can make one friendship.",
+        "3×3 판을 한 칸씩 살펴봐요. 풀(G) 칸마다 위아래양옆에 붙은 소를 세요.\n2마리 이상이면 우정을 하나 맺어 줄 수 있어요."),
       content: <DeepAuditSim E={E} />,
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "2 cows adjacent to 1 grass cell. How many friendships at most?", "2마리 소가 1개의 풀 칸에 인접. 최대 우정 수?"),
+        "2 cows adjacent to 1 grass cell. How many friendships at most?", "소 두 마리가 풀 칸 하나에 붙어 있어요. 우정은 최대 몇 쌍일까요?"),
       question: t(E,
         "2 cows, 1 shared grass cell. Max friendships?",
-        "소 2마리, 공유 풀 칸 1개. 최대 우정 수?"),
+        "소 두 마리가 풀 칸 하나를 같이 쓰면 우정은 몇 쌍인가요?"),
       hint: t(E,
         "Each grass cell mediates exactly one friendship between two adjacent cows.",
-        "각 풀 칸은 인접한 두 소 사이의 정확히 하나의 우정을 중재."),
+        "풀 칸 하나는 붙어 있는 두 소를 딱 한 쌍만 이어 줘요."),
       answer: 1,
     },
   ];
@@ -300,7 +300,7 @@ export function makeAcow3Ch2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Scan grass cells left-to-right, top-to-bottom. A grass cell with exactly 2 adjacent cows offers ONE pair — but the same pair can show up at two grass cells, so we keep pairs in a set (counted once). A grass cell with 3+ cows always has two on opposite sides: a fresh pair, so add 1 immediately. Answer = opposite-side count + unique-pair count. Sections build it one piece at a time.",
-        "풀 칸을 왼→오, 위→아래로 스캔해요. 소가 정확히 2마리인 풀 칸은 한 쌍을 제안 — 그런데 같은 쌍이 풀 칸 두 곳에 나올 수 있으니 set 에 넣어 한 번만 세요. 소가 3마리 이상인 풀 칸은 항상 둘이 반대편에 있어 새 쌍이라 바로 +1. 정답 = 반대편 쌍 개수 + 중복 없는 쌍 개수. 아래 섹션이 한 단락씩 쌓아요."),
+        "소가 딱 2마리인 풀 칸은 그 한 쌍을 내놓아요.\n같은 쌍이 다른 풀 칸에서 또 나올 수 있으니 set 에 담아 한 번만 세요.\n소가 3마리 이상이면 마주 보는 둘이 꼭 있어서 새 쌍이라 바로 더해요."),
       sections: getAcowdemia3Sections(E),
     },
   ];

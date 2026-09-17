@@ -687,7 +687,7 @@ export function PhotoTraceSim({ E }) {
         <>값을 <b>어느 변수에 저장하고</b> 어떻게 꺼내 쓰는지<br />한 단계씩 봐요.<br />왼쪽이 <b>beauty</b>, 오른쪽이 <b>S</b> 예요. 처음엔 다 0 이고요.</>)
     : s.kind === "read" ? t(E,
         <><b>①</b> Read the query into <b>r, c, v</b> — the input says {q.r} {q.c}, and <b>r--, c--</b> makes them <b>{s.r0}, {s.c0}</b> (arrays count from 0). Then read the old value out of beauty[{s.r0}][{s.c0}] = <b>{s.old}</b>.</>,
-        <><b>①</b> 쿼리를 읽어 <b>r·c·v</b> 에 저장해요.<br />입력은 {q.r} {q.c} 인데 배열은 0 부터라서,<br /><b>r--, c--</b> 로 <b>{s.r0}, {s.c0}</b> 이 돼요.<br />그리고 beauty[{s.r0}][{s.c0}] 에서 옛 값 <b>{s.old}</b> 을 꺼내요.</>)
+        <><b>①</b> 업데이트를 읽어 <b>r·c·v</b> 에 저장해요.<br />입력은 {q.r} {q.c} 인데 배열은 0 부터라서,<br /><b>r--, c--</b> 로 <b>{s.r0}, {s.c0}</b> 이 돼요.<br />그리고 beauty[{s.r0}][{s.c0}] 에서 옛 값 <b>{s.old}</b> 을 꺼내요.</>)
     : s.kind === "delta" ? t(E,
         <><b>②</b> <b>delta</b> = v − old = {q.v} − {s.old} = <b>{s.delta}</b> — how much it <i>grew</i>.
           {s.old > 0
@@ -715,7 +715,7 @@ export function PhotoTraceSim({ E }) {
         <><b>⑤</b> <b>cur_max</b> 를 꺼내서 출력해요 → <b>{curMax}</b></>)
     : t(E,
         <>Store into variables, read them back — that's how each query is handled, touching only the cow's photos.</>,
-        <>값을 변수에 저장하고 다시 꺼내 쓰면서<br />쿼리를 하나씩 처리해요.<br />손대는 건 소를 품는 사진뿐이고요.</>);
+        <>값을 변수에 저장하고 다시 꺼내 쓰면서<br />업데이트를 하나씩 처리해요.<br />손대는 건 소를 품는 사진뿐이고요.</>);
 
   // 변수 상자 (저장=초록 ← / 꺼냄=파랑 →)
   const VarBox = ({ name, val, show }) => {

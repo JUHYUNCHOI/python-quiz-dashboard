@@ -80,11 +80,11 @@ function TarpAuditSim({ E }) {
 
   const caseLabel = {
     noOverlap: t(E, "No overlap → tarp = full billboard", "겹침 없음 → 타프 = 전체 광고판"),
-    fullCover: t(E, "Feed covers entire billboard → tarp = 0", "사료가 전체를 덮음 → 타프 = 0"),
-    leftStrip: t(E, "Feed covers FULL left side → strip on right", "사료가 왼쪽 변 전체를 덮음 → 오른쪽 띠"),
-    rightStrip: t(E, "Feed covers FULL right side → strip on left", "사료가 오른쪽 변 전체를 덮음 → 왼쪽 띠"),
-    topStrip: t(E, "Feed covers FULL top side → strip on bottom", "사료가 윗변 전체를 덮음 → 아래쪽 띠"),
-    bottomStrip: t(E, "Feed covers FULL bottom side → strip on top", "사료가 아랫변 전체를 덮음 → 위쪽 띠"),
+    fullCover: t(E, "Feed covers entire billboard → tarp = 0", "사료가 전체를 덮어요 → 타프 = 0"),
+    leftStrip: t(E, "Feed covers FULL left side → strip on right", "사료가 왼쪽 변 전체를 덮어요 → 오른쪽 띠"),
+    rightStrip: t(E, "Feed covers FULL right side → strip on left", "사료가 오른쪽 변 전체를 덮어요 → 왼쪽 띠"),
+    topStrip: t(E, "Feed covers FULL top side → strip on bottom", "사료가 윗변 전체를 덮어요 → 아래쪽 띠"),
+    bottomStrip: t(E, "Feed covers FULL bottom side → strip on top", "사료가 아랫변 전체를 덮어요 → 위쪽 띠"),
     fullArea: t(E, "Visible part is L-shaped → tarp = full billboard", "보이는 부분이 ㄴ자 → 타프 = 전체 광고판"),
   }[caseKey];
 
@@ -104,7 +104,7 @@ function TarpAuditSim({ E }) {
     <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 12 }}>
       <div style={{ fontSize: 12, fontWeight: 700, color: "#7f1d1d", marginBottom: 8, textAlign: "center" }}>
         🖱️ {t(E, "Drag the cyan feed billboard — tarp updates live",
-                  "사이안 사료 광고판을 드래그 — 타프가 실시간으로 갱신돼요")}
+                  "하늘색 사료 광고판을 끌어 보세요. 타프가 바로 다시 그려져요")}
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <svg
@@ -187,7 +187,7 @@ export function makeBillboard2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "There's a lawnmower billboard (an axis-aligned rectangle) and a cow-feed billboard (also axis-aligned) that may cover part of it.\nFind the area of the SMALLEST axis-aligned rectangle (a tarp) that covers every part of the lawnmower billboard NOT already hidden by the feed billboard.",
-        "잔디깎이 광고판과 소 사료 광고판이 있어요. 둘 다 변이 축에 평행한 직사각형이에요. 사료 광고판이 잔디깎이 광고판의 일부를 가릴 수 있어요.\n잔디깎이 광고판에서 가려지지 않은 모든 부분을 덮을 수 있는 가장 작은 직사각형 타프의 면적을 출력해요. 타프도 변이 축에 평행해야 해요."),
+        "가려지지 않은 부분을 다 덮는 가장 작은 타프의 면적은 얼마일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -204,7 +204,7 @@ export function makeBillboard2Ch1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "Output the area of the smallest axis-aligned tarp covering the visible part of the lawnmower billboard.",
-                "잔디깎이 광고판에서 보이는 부분을 덮는 가장 작은 축에 평행한 타프의 면적을 출력.")}
+                "잔디깎이 광고판에서 보이는 부분을 덮는, 축에 평행한 가장 작은 타프의 면적을 출력해요.")}
             </div>
           </div>
 
@@ -248,10 +248,10 @@ export function makeBillboard2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A 10x10 billboard (area 100).\nThe feed billboard covers the top half entirely.\nWhat is the tarp area?", "10x10 광고판(면적 100). 사료 광고판이 윗부분 절반을 완전히 덮어. 타프 면적은?"),
+        "A 10x10 billboard (area 100).\nThe feed billboard covers the top half entirely.\nWhat is the tarp area?", "사료 광고판이 윗절반을 통째로 덮으면 타프는 얼마일까요?"),
       question: t(E,
         "Billboard 10x10=100. Feed covers the entire top half. Tarp area?",
-        "광고판 10x10=100. 사료가 윗절반 전체를 덮음. 타프 면적은?"),
+        "광고판이 10x10=100 이고 사료가 윗절반 전체를 덮어요. 타프 면적은 얼마일까요?"),
       options: [
         t(E, "50 (bottom half rectangle)", "50 (아래 절반 직사각형)"),
         t(E, "100 (entire billboard)", "100 (전체 광고판)"),
@@ -260,19 +260,19 @@ export function makeBillboard2Ch1(E) {
       correct: 0,
       explain: t(E,
         "The feed covers the entire top side, so the exposed bottom half is a rectangle. Tarp = 10x5 = 50.",
-        "사료가 윗면 전체를 덮으니 노출된 아랫절반이 직사각형이에요. 타프 = 10x5 = 50."),
+        "사료가 윗변 전체를 덮으니 보이는 아랫절반이 직사각형이에요. 그래서 타프는 10x5 = 50 이에요."),
     },
     // 1-3: input
     {
       type: "input",
       narr: t(E,
-        "Billboard is 6 wide, 3 tall (area 18).\nThe feed billboard does NOT overlap at all.\nWhat is the tarp area?", "광고판이 가로 6, 세로 3 (면적 18). 사료 광고판이 전혀 겹치지 않아. 타프 면적은?"),
+        "Billboard is 6 wide, 3 tall (area 18).\nThe feed billboard does NOT overlap at all.\nWhat is the tarp area?", "사료 광고판이 전혀 겹치지 않으면 타프는 얼마일까요?"),
       question: t(E,
         "Billboard 6x3=18, no overlap with feed. Tarp area?",
-        "광고판 6x3=18, 사료와 겹침 없음. 타프 면적은?"),
+        "광고판이 6x3=18 이고 사료와 겹치지 않아요. 타프 면적은 얼마일까요?"),
       hint: t(E,
         "If nothing's covered, the tarp must cover the whole billboard.",
-        "가려진 게 없으면 타프가 광고판 전체를 덮어야 해."),
+        "가려진 게 없으면 타프가 광고판 전체를 덮어야 해요."),
       answer: 18,
     },
     // 1-4: deep-audit sim — drag feed, watch tarp & case label
@@ -280,14 +280,14 @@ export function makeBillboard2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Audit every case yourself. Drag the cyan feed corners (or the body) and watch the tarp area + case label change. Find: full cover, full-side strip (left/right/top/bottom), no overlap, and the tricky L-shape that forces tarp = full billboard.",
-        "모든 경우를 직접 감사해보자. 사이안 사료 광고판의 꼭짓점(또는 본체)을 드래그하면서 타프 면적과 경우 라벨이 어떻게 변하는지 봐. 전체 덮음, 한 변 전체 덮음 (왼/오른/위/아래), 겹침 없음, 그리고 타프=전체 광고판이 되는 까다로운 ㄴ자까지 모두 찾아봐."),
+        "하늘색 사료 광고판을 끌어 보며 타프 면적이 어떻게 변하는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <TarpAuditSim E={E} />
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
             {t(E,
               "Key insight: tarp shrinks ONLY when the feed covers a FULL side (left, right, top, or bottom edge of the billboard). Otherwise, the visible region is L-shaped or hole-shaped and the smallest covering rectangle is the entire billboard.",
-              "핵심: 사료가 광고판의 한 변 전체 (왼쪽/오른쪽/위/아래)를 덮을 때만 타프가 줄어들어요. 그 외엔 보이는 부분이 ㄴ자 또는 구멍 모양이라 덮는 최소 직사각형이 전체 광고판이 돼요.")}
+              "타프는 사료가 광고판의 한 변 전체(왼쪽·오른쪽·위·아래)를 덮을 때만 줄어들어요. 그 밖엔 보이는 부분이 ㄴ자나 구멍 모양이라, 그걸 다 덮는 가장 작은 직사각형이 결국 광고판 전체가 돼요.")}
           </div>
         </div>),
     },
@@ -305,7 +305,7 @@ export function makeBillboard2Ch2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Visible part is rectangular ONLY if the feed billboard fully covers one full side (left/right/top/bottom strip). Otherwise it's L-shaped/hole → smallest covering rectangle is the whole billboard. Sections build it one piece at a time.",
-        "보이는 부분이 직사각형 = 사료가 한 쪽 변 전체를 덮을 때뿐. 그 외엔 L 자/구멍 → 덮는 최소 직사각형은 전체 광고판. 아래 섹션이 한 단락씩 쌓아요."),
+        "보이는 부분이 직사각형이 되는 건 한 변 전체가 덮일 때뿐이에요."),
       sections: getBillboard2Sections(E),
     },
   ];

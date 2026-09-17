@@ -122,9 +122,9 @@ export function LostCowSim({ E }) {
 
       <div style={{ background: "#fef2f2", border: `1.5px solid #fca5a5`, borderRadius: 10, padding: "8px 12px", marginTop: 10, marginBottom: 10, textAlign: "center", fontSize: 13, color: A, fontWeight: 600 }}>
         {finalLeg.foundY
-          ? t(E, `🐄 Found! Total walked = ${totalSoFar}`, `🐄 찾음! 총 거리 = ${totalSoFar}`)
+          ? t(E, `🐄 Found! Total walked = ${totalSoFar}`, `🐄 찾았어요! 걸은 거리는 모두 ${totalSoFar}`)
           : t(E, `Leg ${cur + 1}: ${finalLeg.dir > 0 ? "+" : "−"}${finalLeg.step} → pos = ${finalLeg.to}, total = ${totalSoFar}`,
-                `${cur + 1}번째 다리: ${finalLeg.dir > 0 ? "+" : "−"}${finalLeg.step} → 위치 = ${finalLeg.to}, 누적 = ${totalSoFar}`)}
+                `${cur + 1}번째 다리예요. ${finalLeg.dir > 0 ? "+" : "−"}${finalLeg.step} 만큼 걸어서 위치는 ${finalLeg.to}, 여기까지 걸은 거리는 ${totalSoFar}`)}
       </div>
 
       {/* nav */}
@@ -170,11 +170,11 @@ export function LostCowDoublingSim({ E }) {
     <div style={{ padding: 14 }}>
       <div style={{ textAlign: "center", marginBottom: 10 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: A, marginBottom: 2 }}>
-          {t(E, "🔢 The Doubling Pattern", "🔢 두 배씩 커지는 패턴")}
+          {t(E, "🔢 The Doubling Pattern", "🔢 두 배씩 커지는 모양")}
         </div>
         <div style={{ fontSize: 11, color: C.dim }}>
           {t(E, "Each leg is twice as long as the one before. Watch the total explode.",
-                "다리마다 길이가 두 배. 합계가 폭발적으로 커지는 걸 봐요.")}
+                "다리마다 길이가 두 배가 돼요. 합계가 얼마나 빨리 커지는지 봐요.")}
         </div>
       </div>
 
@@ -233,7 +233,7 @@ export function LostCowDoublingSim({ E }) {
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
           "After 10 legs FJ has already walked 1023 steps — but he could be 512 away from x. The doubling guarantees he overshoots y in O(log) tries.",
-          "10개 다리 후엔 이미 1023칸 걸었지만 x에서 최대 512칸 거리까지 커버. 두 배 패턴 덕분에 O(log) 안에 y를 넘어가요.")}
+          "다리 10 개를 걸으면 걸은 거리는 1023 칸이고, x 에서 512 칸 떨어진 곳까지 닿아요.\n다리 길이가 두 배씩 늘어나니까, 소가 아무리 멀리 있어도 다리 몇 개면 지나쳐요.\n그래서 다리 수는 O(log) 만큼만 늘어요.")}
       </div>
     </div>
   );
@@ -256,7 +256,7 @@ export function LostCowRunner({ E }) {
     const x = parseInt(xInput);
     const y = parseInt(yInput);
     if (isNaN(x) || isNaN(y)) {
-      setResult({ error: t(E, "Invalid: x and y must be integers.", "잘못된 입력: x, y는 정수.") });
+      setResult({ error: t(E, "Invalid: x and y must be integers.", "x 와 y 는 정수로 넣어 주세요.") });
       return;
     }
     if (x === y) {
@@ -317,7 +317,7 @@ export function LostCowRunner({ E }) {
       </button>
       {(running || result?.done) && (
         <div style={{ background: "#fef2f2", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 13, color: A, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
-          {t(E, `Leg ${liveLeg} · pos = ${livePos} · total = ${liveTotal}`, `${liveLeg}번째 다리 · 위치 = ${livePos} · 누적 = ${liveTotal}`)}
+          {t(E, `Leg ${liveLeg} · pos = ${livePos} · total = ${liveTotal}`, `${liveLeg}번째 다리 · 위치 = ${livePos} · 여기까지 = ${liveTotal}`)}
         </div>
       )}
       {result?.error && (
@@ -515,18 +515,18 @@ export function getLostCowSections(E) {
       py: LC_INPUT_PY, cpp: LC_INPUT_CPP,
       why: [
         t(E, "x = FJ's start, y = the cow's position. Both can be very large — use 64-bit.",
-            "x = FJ 시작 위치, y = 소 위치. 둘 다 매우 클 수 있어 64비트 사용."),
+            "x 는 FJ 가 시작하는 자리, y 는 소가 있는 자리예요.\n둘 다 아주 클 수 있어서 64비트 정수를 써요."),
       ],
     },
     {
-      label: t(E, "🧭 2. Setup Walk State", "🧭 2. 걷기 상태 셋업"),
+      label: t(E, "🧭 2. Setup Walk State", "🧭 2. 걷기 준비하기"),
       color: "#0891b2",
       py: LC_STATE_PY, cpp: LC_STATE_CPP,
       why: [
         t(E, "We track 4 things: current position, current direction, leg length, total walked.",
-            "4가지 추적: 현재 위치, 방향, 다리 길이, 총 걸은 거리."),
+            "네 가지를 계속 적어 둬요. 지금 위치, 방향, 다리 길이, 걸은 총 거리예요."),
         t(E, "Direction starts +1 (right) and flips each leg. Step size doubles each leg.",
-            "방향은 +1 (오른쪽) 시작해 매 다리마다 반전. 스텝 크기는 매 다리마다 두 배."),
+            "방향은 +1 (오른쪽) 로 시작해서 다리마다 뒤집어요.\n다리 길이는 다리마다 두 배가 돼요."),
       ],
     },
     {
@@ -535,19 +535,19 @@ export function getLostCowSections(E) {
       py: LC_LOOP_PY, cpp: LC_LOOP_CPP,
       why: [
         t(E, "⚠️ target is computed from the starting x, NOT from pos. The zigzag pattern is 1, 2, 4, 8… measured from x, alternating direction.",
-            "⚠️ target 은 시작 x 기준으로 계산 — 지금 pos 가 아니라! 1, 2, 4, 8… 패턴이 항상 x 기준으로 방향 바꿔가며 커짐."),
+            "⚠️ target 은 지금 pos 가 아니라 시작점 x 를 기준으로 구해요.\n1, 2, 4, 8 … 이 늘 x 에서부터 방향을 바꿔 가며 커지거든요."),
         t(E, "If y lies between pos and target, FJ finds the cow on this leg — add |y - pos| and stop.",
-            "y가 pos와 target 사이면 이번 다리에서 소를 찾음 — |y - pos| 더하고 종료."),
+            "y 가 pos 와 target 사이에 있으면 이번 다리에서 소를 만나요.\n그러면 |y - pos| 만 더하고 끝내요."),
         t(E, "Otherwise walk the full leg distance (|target − pos|), then flip direction and double the step.",
-            "아니면 leg 전체 거리 (|target − pos|) 더하고, 방향 반전, step 두 배."),
+            "아니면 이 다리를 끝까지 걸어요.\n|target − pos| 를 더하고, 방향을 뒤집고, step 을 두 배로 해요."),
       ],
       pyOnly: [
         t(E, "if/else assigns lo, hi cleanly — both branches in 2 lines.",
-            "if/else 로 lo, hi 깔끔하게 — 두 줄로 끝."),
+            "if/else 로 lo 와 hi 를 두 줄에 정해요."),
       ],
       cppOnly: [
         t(E, "Ternary ? : keeps min/max inline without extra <algorithm> overhead.",
-            "삼항 ? : 으로 min/max 를 인라인 — <algorithm> 의존 없음."),
+            "? : 를 써서 min/max 를 그 자리에서 구해요. <algorithm> 을 안 써도 돼요."),
       ],
     },
     {
@@ -556,7 +556,7 @@ export function getLostCowSections(E) {
       py: LC_FULL_PY, cpp: LC_FULL_CPP,
       why: [
         t(E, "Step doubles each leg, so the loop runs O(log |x - y|) times — extremely fast.",
-            "스텝이 두 배씩 커지니 루프는 O(log |x - y|) — 매우 빠름."),
+            "다리 길이가 두 배씩 커지니까 반복은 O(log |x - y|) 번이면 끝나요. 아주 빨라요."),
       ],
     },
   ];
@@ -600,7 +600,7 @@ function highlightCode(lines, lang) {
 
 export function downloadLostCowPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "🐄 The Lost Cow — Full Study Guide", "🐄 The Lost Cow — 종합 풀이 노트");
@@ -623,7 +623,7 @@ export function downloadLostCowPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO 2017 Open Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

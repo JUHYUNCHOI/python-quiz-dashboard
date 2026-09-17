@@ -10,7 +10,7 @@ export function makeFebCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie texts using only the letters B, E, and F. The 'excitement' of a message is the number of adjacent same-letter pairs (e.g., BBE has 1: the BB). Each F is a wildcard — it can become either B or E.\nFor a given message, print how many DISTINCT excitement values are possible across all ways of assigning F's.",
-        "Bessie는 B, E, F 만 사용해 문자를 보내요. 메시지의 '흥분도' 는 인접한 같은 글자 쌍의 수예요 (예: BBE 의 흥분도는 1, BB 부분). 각 F 는 와일드카드 — B 또는 E 어느 쪽으로든 결정될 수 있어요.\n주어진 메시지에 대해 F 들의 모든 결정 방식에 걸쳐 만들어질 수 있는 서로 다른 흥분도 값의 개수를 출력해요."),
+        "F 를 B 나 E 로 바꿔 보면 흥분도는 몇 가지가 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -26,7 +26,7 @@ export function makeFebCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E, "Print 3 lines: count of distinct excitement values, then min, then max — across all F-assignments.",
-                    "3 줄을 출력해요: 모든 F 결정 방식에서 나오는 서로 다른 흥분도 값의 개수, 그 다음 최솟값, 최댓값.")}
+                    "F 를 정하는 모든 방법에서 나오는 흥분도를 모아요. 서로 다른 값의 개수, 최솟값, 최댓값을 세 줄로 출력해요.")}
             </div>
           </div>
 
@@ -84,7 +84,7 @@ export function makeFebCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input: N on line 1, string of length N on line 2.  Output: 3 lines (count, min, max).",
-        "입력: 1 줄에 N, 2 줄에 길이 N 문자열. 출력: 3 줄 (개수, 최솟값, 최댓값)."),
+        "첫 줄에 N, 둘째 줄에 길이 N 인 문자열이 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
@@ -128,7 +128,7 @@ BEEF`}
     {
       type: "reveal",
       narr: t(E,
-        "The excitement level is the number of positions where adjacent characters are the same.\nFor example, 'BEEB' has 1 pair (E,E at positions 2-3).", "흥분도는 인접한 문자가 같은 위치의 수예요. 예를 들어 'BEEB'은 1쌍 (위치 2-3의 E,E)이 있어요."),
+        "The excitement level is the number of positions where adjacent characters are the same.\nFor example, 'BEEB' has 1 pair (E,E at positions 2-3).", "흥분도는 옆에 붙은 두 글자가 같은 자리의 개수예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 14, padding: 14 }}>
@@ -155,9 +155,9 @@ BEEF`}
     {
       type: "quiz",
       narr: t(E,
-        "Let's think about 'BEEF'.\nIf F→B, we get 'BEEB' (excitement 1).\nIf F→E, we get 'BEEE' (excitement 2).\nGot it?", "'BEEF'를 생각해보자. F→B이면 'BEEB' (흥분도 1). F→E이면 'BEEE' (흥분도 2). 이해했지?"),
+        "Let's think about 'BEEF'.\nIf F→B, we get 'BEEB' (excitement 1).\nIf F→E, we get 'BEEE' (excitement 2).\nGot it?", "'BEEF' 의 F 를 E 로 바꾸면 'BEEE' 가 돼요."),
       question: t(E, "What is the excitement of 'BEEE'?", "'BEEE'의 흥분도는?"),
-      hint: t(E, "Count consecutive same pairs: B≠E, E=E, E=E", "연속 같은 쌍 세기: B≠E, E=E, E=E"),
+      hint: t(E, "Count consecutive same pairs: B≠E, E=E, E=E", "옆끼리 같은지 하나씩 세어 봐요. B≠E, E=E, E=E"),
       options: ["1", "2", "3"],
       correct: 1,
       explain: t(E, "B≠E, E=E ✅, E=E ✅ → 2 pairs!", "B≠E, E=E ✅, E=E ✅ → 2쌍!"),
@@ -165,15 +165,15 @@ BEEF`}
     {
       type: "input",
       narr: t(E,
-        "Now try this: for the string 'BF', F can be B or E.\nIf F→B: 'BB' has 1 match.\nIf F→E: 'BE' has 0 matches.\nHow many distinct excitement levels?", "이제 해보자: 문자열 'BF'에서 F는 B 또는 E. F→B: 'BB'는 1쌍. F→E: 'BE'는 0쌍. 서로 다른 흥분도는 몇 개?"),
+        "Now try this: for the string 'BF', F can be B or E.\nIf F→B: 'BB' has 1 match.\nIf F→E: 'BE' has 0 matches.\nHow many distinct excitement levels?", "'BF' 의 F 는 B 도 될 수 있고 E 도 될 수 있어요."),
       question: t(E, "How many possible excitement levels for 'BF'?", "'BF'의 가능한 흥분도 개수는?"),
-      hint: t(E, "Compute excitement for each F choice, then count how many distinct values appear.", "각 F 선택의 흥분도를 구하고, 서로 다른 값이 몇 개인지 세어봐요."),
+      hint: t(E, "Compute excitement for each F choice, then count how many distinct values appear.", "F 를 B 로 둘 때와 E 로 둘 때의 흥분도를 각각 구해 봐요."),
       answer: 2,
     },
     {
       type: "reveal",
       narr: t(E,
-        "The key insight: try all possible F assignments (2^count_of_F), compute excitement for each, then count distinct values!", "핵심: 가능한 모든 F 할당(2^F개수)을 시도하고, 각각의 흥분도를 계산한 후, 서로 다른 값의 개수를 세!"),
+        "The key insight: try all possible F assignments (2^count_of_F), compute excitement for each, then count distinct values!", "F 를 정하는 모든 방법을 다 해 보고 흥분도를 모아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 14, padding: 14 }}>
@@ -183,7 +183,7 @@ BEEF`}
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "1. Find all F positions\n2. Try all 2^abs(F) assignments (B or E)\n3. For each, count consecutive same pairs\n4. Collect distinct excitement values\n5. Answer = size of that set",
-                "1. F 위치 찾기\n2. 모든 2^abs(F) 할당 시도 (B 또는 E)\n3. 각각에서 연속 같은 쌍 세기\n4. 서로 다른 흥분도 모으기\n5. 답 = 집합의 크기")}
+                "1. F 가 어디에 있는지 찾아요\n2. 2^abs(F) 가지 방법을 모두 해 봐요 (B 또는 E)\n3. 각각에서 옆끼리 같은 쌍을 세어요\n4. 나온 흥분도를 모아요\n5. 답은 집합의 크기예요")}
             </div>
           </div>
         </div>),
@@ -193,7 +193,7 @@ BEEF`}
       type: "reveal",
       narr: t(E,
         "Time to feel the algorithm. Pick a string, flip each F by hand to see how excitement changes, then hit 'Audit all' to enumerate every 2^|F| assignment at once and watch the distinct set form.",
-        "직접 느껴보자. 문자열 골라서 F 를 손으로 토글하며 흥분도 변화 보고, '모두 점검' 누르면 2^|F| 가지를 한 번에 펼쳐서 서로 다른 값 집합이 만들어지는 걸 봐."),
+        "F 를 직접 바꿔 보면서 흥분도가 어떻게 변하는지 봐요."),
       content: (
         <div style={{ padding: 12 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#dc2626", textAlign: "center", marginBottom: 6 }}>
@@ -214,13 +214,13 @@ export function makeFebCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Each F is independently B or E — so 2^|F| total assignments. Enumerate them with a bitmask, count adjacent same-pairs each time, collect into a set, then print count/min/max. |F| ≤ ~20 in Bronze so brute is fine. Sections build it one piece at a time.",
-        "F 마다 B 또는 E 독립 — 총 2^|F| 조합. bitmask 로 순회하면서 인접 같은 쌍 세기, set 에 모으기, 그 다음 개수/최솟/최댓 출력. Bronze 에선 |F| 가 ~20 이하라 브루트로 충분. 아래 섹션이 한 단락씩 쌓아요."),
+        "코드를 한 단락씩 쌓으면서 모든 경우를 세어 볼게요."),
       sections: getFeb23Sections(E),
     },
     {
       type: "quiz",
       narr: t(E,
-        "Quick check: what data structure do we use to collect distinct excitement levels?", "퀴즈: 서로 다른 흥분도를 모으는 데 어떤 자료구조를 쓸까?"),
+        "Quick check: what data structure do we use to collect distinct excitement levels?", "서로 다른 흥분도를 모으려면 무엇을 쓰면 좋을까요?"),
       question: t(E, "Which data structure collects distinct values?", "서로 다른 값을 모으는 자료구조는?"),
       options: [t(E, "List", "리스트"), t(E, "Set", "집합"), t(E, "Dictionary", "딕셔너리")],
       correct: 1,
@@ -229,9 +229,9 @@ export function makeFebCh2(E, lang = "py") {
     {
       type: "input",
       narr: t(E,
-        "If the string has 3 F's, how many total assignments do we try?", "문자열에 F가 3개면, 총 몇 가지 할당을 시도할까?"),
+        "If the string has 3 F's, how many total assignments do we try?", "문자열에 F 가 3 개면 몇 가지를 해 봐야 할까요?"),
       question: t(E, "2^3 = ?", "2^3 = ?"),
-      hint: t(E, "Each F has 2 choices: B or E", "각 F는 2가지 선택: B 또는 E"),
+      hint: t(E, "Each F has 2 choices: B or E", "F 하나마다 B 아니면 E, 두 가지예요."),
       answer: 8,
     },
   ];

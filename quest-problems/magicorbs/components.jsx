@@ -114,7 +114,7 @@ export function MagicOrbsMergeSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
         {t(E, "Tap an orb for ", "구슬을 눌러 ")}
         <b style={{ color: A }}>x</b>{t(E, ", then another for ", ", 그다음 다른 구슬을 ")}
-        <b style={{ color: "#f59e0b" }}>y</b>{t(E, " (doubled). Fuse: ", " 로 (두 배). 융합: ")}
+        <b style={{ color: "#f59e0b" }}>y</b>{t(E, " (doubled). Fuse: ", " 로 골라요 (y 가 두 배). 융합하면 ")}
         <b style={{ color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>x + 2·y</b>
       </div>
 
@@ -158,14 +158,14 @@ export function MagicOrbsMergeSim({ E }) {
           <div style={{ fontSize: 12, color: hitBest ? "#166534" : "#7c3aed", marginTop: 4, fontWeight: 600 }}>
             {hitBest
               ? t(E, "🎉 You matched the best! You kept doubling the bigger cluster.", "🎉 최고 기록 달성! 큰 덩어리를 계속 두 배로 만들었어요.")
-              : t(E, "Not the max yet — try doubling the BIGGER orb each time (put it as y).", "아직 최댓값이 아니에요 — 매번 더 큰 구슬을 두 배로 (y 자리에) 해봐요.")}
+              : t(E, "Not the max yet — try doubling the BIGGER orb each time (put it as y).", "아직 최댓값이 아니에요. 매번 더 큰 구슬을 y 자리에 놓아 두 배로 만들어 봐요.")}
           </div>
         </div>
       ) : (
         <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim, ...KA }}>
-          {t(E, "Best possible for this set: ", "이 세트의 최댓값: ")}
+          {t(E, "Best possible for this set: ", "이 구슬들로 낼 수 있는 최댓값은 ")}
           <b style={{ color: A, fontFamily: "'JetBrains Mono',monospace" }}>{best}</b>
-          {t(E, ". Fuse down to one orb and try to reach it.", ". 구슬 하나까지 융합해서 도전해봐요.")}
+          {t(E, ". Fuse down to one orb and try to reach it.", " 예요. 구슬 하나가 남을 때까지 융합해서 도전해 봐요.")}
         </div>
       )}
 
@@ -175,7 +175,7 @@ export function MagicOrbsMergeSim({ E }) {
           padding: "5px 14px", borderRadius: 8, border: `1px solid ${C.border}`,
           background: "transparent", color: C.dim, fontSize: 12, fontWeight: 600, cursor: "pointer",
         }}>
-          ↺ {t(E, "Reset", "다시")}
+          ↺ {t(E, "Reset", "처음으로")}
         </button>
       </div>
     </div>
@@ -241,21 +241,21 @@ export function getMagicOrbsSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Fusing x, y → x + 2·y doubles y. Over the whole game, the orb that stays in the doubled slot the longest earns the most doublings — so we want the biggest orb doubled the most.",
-            "x, y → x + 2·y 는 y 를 두 배로 해요. 게임 전체로 보면, 두 배 자리에 가장 오래 남는 구슬이 가장 많이 두 배가 돼요 — 그래서 가장 큰 구슬을 가장 많이 두 배로 만들고 싶어요."),
+            "x, y → x + 2·y 는 y 를 두 배로 만들어요. 게임 전체로 보면 두 배 자리에 가장 오래 남는 구슬이 두 배를 가장 많이 받아요. 그러니 가장 큰 구슬을 가장 많이 두 배로 만들어야 해요."),
         t(E, "That optimum is exactly: sort ascending, and the k-th smallest orb is worth value × 2^k (coefficients 1, 2, 4, 8, …). One sort, one pass, mod 1e9+7.",
-            "그 최적해가 바로: 오름차순 정렬 후 k 번째로 작은 구슬은 값 × 2^k (계수 1, 2, 4, 8, …). 한 번 정렬, 한 번 훑기, 1e9+7 나머지."),
+            "제일 좋은 방법은 오름차순으로 정렬하는 거예요. 그러면 k 번째로 작은 구슬은 값 × 2^k 만큼 더해져요 (곱하는 수가 1, 2, 4, 8, …). 한 번 정렬하고 한 번 훑은 다음 1e9+7 로 나머지를 구해요."),
       ],
       pyOnly: [
         t(E, "a.sort() puts smallest first; p doubles each step so the LAST (biggest) value gets the largest coefficient.",
-            "a.sort() 로 작은 것부터; p 가 매 단계 두 배라 마지막(가장 큰) 값이 가장 큰 계수를 받아요."),
+            "a.sort() 로 작은 것부터 늘어놔요. p 가 한 걸음마다 두 배가 되니까 마지막에 오는 가장 큰 값이 제일 큰 수를 곱해요."),
         t(E, "Take % MOD every step — the coefficient p can grow to 2^200000, so keep it small.",
-            "매 단계 % MOD — 계수 p 가 2^200000 까지 커질 수 있으니 작게 유지해요."),
+            "한 걸음마다 % MOD 를 해요. p 가 2^200000 까지 커질 수 있어서 작게 눌러 둬야 해요."),
       ],
       cppOnly: [
         t(E, "a[i] can be up to 10^18, so store it as long long and reduce (a[i] % MOD) before multiplying.",
-            "a[i] 가 10^18 까지 가능하니 long long 에 담고, 곱하기 전에 (a[i] % MOD) 로 줄여요."),
+            "a[i] 가 10^18 까지 커질 수 있으니 long long 에 담고, 곱하기 전에 (a[i] % MOD) 로 줄여요."),
         t(E, "Multiply modded values so the product stays under ~10^18 and never overflows long long.",
-            "나머지끼리 곱하면 곱이 ~10^18 아래로 유지돼 long long 을 넘지 않아요."),
+            "나머지끼리만 곱하면 곱이 10^18 쯤 아래에 머물러서 long long 을 넘지 않아요."),
       ],
     },
   ];
@@ -301,7 +301,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMagicOrbsPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "MagicOrbs — Full Study Guide", "MagicOrbs — 종합 풀이 노트");
@@ -324,7 +324,7 @@ export function downloadMagicOrbsPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

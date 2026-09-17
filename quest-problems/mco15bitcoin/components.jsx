@@ -57,7 +57,7 @@ export function BitcoinPairInspector({ E }) {
       }}>
         <b>{t(E, "🔍 Pair Inspector", "🔍 쌍 검사기")}</b> — {t(E,
           "Click any two sites to see dx² + dy². Try all 6 pairs and watch the running max.",
-          "두 사이트를 클릭하면 dx² + dy² 가 보여요. 6개 쌍을 모두 시도하며 최댓값을 추적해봐요.")}
+          "두 사이트를 클릭하면 dx² + dy² 가 보여요. 6개 쌍을 모두 눌러 보며 가장 큰 값이 어떻게 바뀌는지 봐요.")}
       </div>
 
       <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-start" }}>
@@ -117,7 +117,7 @@ export function BitcoinPairInspector({ E }) {
               </div>
             ) : (
               <div style={{ color: C.dim }}>
-                {t(E, "Click two sites on the grid.", "그리드에서 두 사이트를 클릭하세요.")}
+                {t(E, "Click two sites on the grid.", "격자에서 두 사이트를 클릭하세요.")}
               </div>
             )}
           </div>
@@ -128,14 +128,14 @@ export function BitcoinPairInspector({ E }) {
             <b>{t(E, "Running max", "지금까지 최댓값")}:</b> {seenMax}
             <div style={{ fontSize: 11, color: "#166534", marginTop: 4 }}>
               {t(E, "This is what max_dist tracks across all 6 pairs.",
-                  "max_dist 가 6개 쌍 전체에서 추적하는 값이에요.")}
+                  "max_dist 가 6개 쌍을 보며 들고 있는 값이에요.")}
             </div>
           </div>
           <button onClick={reset} style={{
             marginTop: 8, background: "#fff", color: A, border: `1.5px solid ${A}`,
             borderRadius: 8, padding: "5px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
           }}>
-            {t(E, "Reset", "초기화")}
+            {t(E, "Reset", "다시 처음부터")}
           </button>
         </div>
       </div>
@@ -203,13 +203,13 @@ export function getBitcoinSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "Python and C++ do exactly the same thing here: read the points, check every pair, keep the biggest dx² + dy².",
-            "Python 과 C++ 이 하는 일은 똑같아요. 점을 읽고, 모든 쌍을 확인하고, 가장 큰 dx² + dy² 를 남겨요."),
+            "파이썬과 C++ 이 하는 일은 똑같아요. 점을 읽고, 모든 쌍을 확인하고, 가장 큰 dx² + dy² 를 남겨요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬의 list, map, sorted 덕분에 코드가 짧아요."),
       ],
       cppOnly: [
         t(E, "Include only the headers you actually use: iostream for cin/cout, vector and utility for vector<pair<...>>, algorithm for max.",

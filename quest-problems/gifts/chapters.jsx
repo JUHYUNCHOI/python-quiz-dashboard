@@ -38,7 +38,7 @@ export function makeGiftsCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#86198f", lineHeight: 1.6, wordBreak: "keep-all" }}>
               {t(E, "For each guest, print 1 if they receive a gift and 0 if they do not.",
-                    "손님마다 선물을 받으면 1, 못 받으면 0 을 출력하기.")}
+                    "손님마다 선물을 받으면 1 을, 못 받으면 0 을 출력해요.")}
             </div>
           </div>
 
@@ -67,7 +67,7 @@ export function makeGiftsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two lines in: the counts, then every guest's tier. One line out: n zeros and ones.",
-        "입력은 두 줄 — 개수, 그리고 손님들의 티어. 출력은 한 줄 — 0 과 1 이 n 개."),
+        "입력은 두 줄이에요. 개수가 한 줄, 손님들의 티어가 한 줄이에요.\n출력은 0 과 1 이 n 개 들어간 한 줄이에요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 12 }}>
@@ -96,7 +96,7 @@ export function makeGiftsCh1(E) {
                 자연스러운 의문에 답이 없고, 정렬이 "그냥 외우는 것" 이 된다. */}
             <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #ddd6fe", fontSize: 11.5, color: "#6d28d9", whiteSpace: "pre-line", lineHeight: 1.7 }}>
               📌 {t(E, "Limits: 1 <= m < n <= 100,000 and each tier is between 1 and 1,000,000,000. Tiers go up to a billion, so you cannot walk tier 1, tier 2, tier 3 one at a time.",
-                       "제약: 1 ≤ m < n ≤ 100,000 이고 티어는 1 부터 1,000,000,000 사이예요.\n티어가 10억까지 가니까 티어 1, 2, 3 … 을 하나씩 훑을 수는 없어요.")}
+                       "제약: 1 ≤ m < n ≤ 100,000 이고 티어는 1 부터 1,000,000,000 사이예요.\n티어가 10 억까지 가니까 티어 1, 2, 3 … 을 하나씩 훑을 수는 없어요.")}
             </div>
           </div>
         </div>),
@@ -152,7 +152,7 @@ export function makeGiftsCh1(E) {
       type: "reveal",
       narr: t(E,
         "So the whole problem is one line-up. Sort by (tier, arrival), hand gifts to the first m, and print in the original order.",
-        "결국 줄 세우기 하나예요. (티어, 도착 순) 으로 정렬하고, 앞에서 m 명에게 주고, 원래 번호 순으로 출력."),
+        "결국 줄 세우기 하나예요.\n(티어, 도착 순) 으로 줄을 세우고 앞에서 m 명에게 선물을 줘요.\n그리고 답은 원래 손님 번호 순으로 출력해요."),
       content: (
         <div style={{ padding: 18, wordBreak: "keep-all" }}>
           <div style={{ maxWidth: 470, margin: "0 auto 12px", background: "#fdf4ff", border: "1.5px solid #f0abfc", borderRadius: 12, padding: "13px 16px" }}>
@@ -161,8 +161,8 @@ export function makeGiftsCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.95 }}>
               <div>① {t(E, "line up by ", "줄 세우기 — ")}<b>{t(E, "(tier, arrival)", "(티어, 도착 순)")}</b></div>
-              <div>② {t(E, "the first ", "앞에서 ")}<b>m</b>{t(E, " in line get a gift", " 명이 선물을 받음")}</div>
-              <div>③ {t(E, "print in the ", "출력은 ")}<b>{t(E, "original guest order", "원래 손님 번호 순")}</b></div>
+              <div>② {t(E, "the first ", "앞에서 ")}<b>m</b>{t(E, " in line get a gift", " 명이 선물을 받아요")}</div>
+              <div>③ {t(E, "print in the ", "출력은 ")}<b>{t(E, "original guest order", "원래 손님 번호 순으로 해요")}</b></div>
             </div>
           </div>
 
@@ -171,7 +171,7 @@ export function makeGiftsCh1(E) {
               ⚠️ {t(E, "The easy mistake", "흔한 실수")}
             </div>
             {t(E, "Printing in the queue order. The queue is only for deciding WHO gets a gift — the answer still has to come out guest 1, guest 2, guest 3 …",
-                  "줄 순서대로 출력하는 것. 줄은 '누가 받나' 를 정하는 데만 쓰고, 답은 손님 1, 2, 3 … 순서로 나가야 해요.")}
+                  "줄 순서 그대로 출력하는 거예요.\n줄은 누가 받는지를 정할 때만 쓰고,\n답은 손님 1, 2, 3 … 순서로 나가야 해요.")}
           </div>
         </div>),
     },

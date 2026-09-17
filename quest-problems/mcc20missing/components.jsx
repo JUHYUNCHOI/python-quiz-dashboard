@@ -112,16 +112,16 @@ export function getMcc20MissingSections(E) {
           "주어진 수들 중 절대값이 가장 큰 것은 N 이에요 (버려진 게 N 이면 N−1). +K 하기 전에 그 값은 ±(그 값) 이었으니, +K 한 뒤에는 목록의 MAX (양수였다면) 또는 MIN (음수였다면) 자리에 놓여요."),
         t(E,
           "That pins K to just 4 possibilities: min+N, max−N, min+(N−1), max−(N−1). We test each instead of all 6N+1 values of K.",
-          "그래서 K 는 딱 4가지로 좁혀져요: min+N, max−N, min+(N−1), max−(N−1). 6N+1 개의 K 를 전부 보는 대신 이 4개만 확인해요."),
+          "그래서 K 는 min+N, max−N, min+(N−1), max−(N−1) 네 가지로 좁혀져요. 6N+1 개를 전부 보는 대신 이 4개만 확인해요."),
         t(E,
           "For a candidate K, undo it with |x−K| to recover the original magnitudes. It's a valid reconstruction only if we get N−1 DISTINCT magnitudes, all inside [1, N].",
           "후보 K 마다 |x−K| 로 되돌려 원래 크기들을 복원해요. N−1 개가 모두 서로 다르고, 전부 [1, N] 안에 있어야만 올바른 복원이에요."),
         t(E,
           "When valid, the one value of 1..N not among those magnitudes is the missing number: total − sum(mags). Add it up over every valid K (a repeat missing value counts again per K).",
-          "복원이 맞으면, 1..N 중 그 크기들에 없는 하나가 바로 빠진 숫자예요: total − sum(mags). 유효한 K 마다 이 값을 더해요 (같은 빠진 값이라도 K 가 다르면 다시 세요)."),
+          "복원이 맞으면, 1..N 중 그 크기들에 없는 하나가 바로 빠진 숫자예요. total − sum(mags) 로 구해요. 맞는 K 마다 이 값을 더해요 (같은 값이라도 K 가 다르면 다시 세어요)."),
         t(E,
           "Guard: K must stay in [−3N, 3N]; skip any candidate outside that range.",
-          "안전장치: K 는 반드시 [−3N, 3N] 안에 있어야 해요. 벗어난 후보는 건너뛰어요."),
+          "한 가지 더 확인해요. K 는 반드시 [−3N, 3N] 안에 있어야 하고, 벗어난 후보는 건너뛰어요."),
       ],
       pyOnly: [
         t(E, "len(set(mags)) == N − 1 checks 'all distinct' in one line; sum(mags) recovers the leftover value.",
@@ -129,7 +129,7 @@ export function getMcc20MissingSections(E) {
       ],
       cppOnly: [
         t(E, "A set<long long> gives both distinctness (size == N−1) and lets llabs(x − K) fill it; use long long since values reach ~4N.",
-            "set<long long> 하나로 '서로 다름'(size == N−1) 을 확인하고 llabs(x − K) 로 채워요; 값이 ~4N 까지 가니 long long 을 써요."),
+            "set<long long> 하나로 '서로 다름'(size == N−1) 을 확인하고 llabs(x − K) 로 채워요. 값이 ~4N 까지 가니 long long 을 써요."),
       ],
     },
   ];
@@ -175,7 +175,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc20MissingPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc20Missing — Full Study Guide", "Mcc20Missing — 종합 풀이 노트");
@@ -198,7 +198,7 @@ export function downloadMcc20MissingPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

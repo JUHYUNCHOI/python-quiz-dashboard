@@ -143,11 +143,11 @@ export function StampSimulator({ E }) {
     <div style={{ padding: 14 }}>
       <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
         <div style={{ fontSize: 14, fontWeight: 700, color: "#059669", marginBottom: 8, textAlign: "center" }}>
-          {t(E, "🧪 Stamp Simulator — Cover every ★", "🧪 도장 시뮬레이터 — 모든 ★ 덮기")}
+          {t(E, "🧪 Stamp Simulator — Cover every ★", "🧪 도장 찍어 보기 — ★ 을 모두 덮기")}
         </div>
         <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 10 }}>
           {t(E, "Pick a rotation + top-left, then press Stamp! Yellow ★ must turn green.",
-              "회전 + 좌상단 선택 후 도장 찍기! 노란 ★ 가 모두 초록이 되어야 해.")}
+              "방향과 왼쪽 위 자리를 고른 뒤 도장을 찍어요.\n노란 ★ 이 모두 초록이 되면 성공이에요.")}
         </div>
 
         <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 12 }}>
@@ -170,17 +170,17 @@ export function StampSimulator({ E }) {
         {/* Controls */}
         <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
           <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
-            <span style={{ fontSize: 11, color: "#065f46", fontWeight: 700 }}>{t(E, "Rotation:", "회전:")}</span>
+            <span style={{ fontSize: 11, color: "#065f46", fontWeight: 700 }}>{t(E, "Rotation:", "회전")}</span>
             {[0, 1, 2, 3].map(i => (
               <button key={i} onClick={() => setRot(i)} style={btn(rot === i)}>{i * 90}°</button>
             ))}
           </div>
           <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
-            <span style={{ fontSize: 11, color: "#065f46", fontWeight: 700 }}>{t(E, "Row:", "행:")}</span>
+            <span style={{ fontSize: 11, color: "#065f46", fontWeight: 700 }}>{t(E, "Row:", "행")}</span>
             {Array.from({ length: maxRC + 1 }).map((_, i) => (
               <button key={`r${i}`} onClick={() => setPos(p => ({ ...p, r: i }))} style={btn(pos.r === i)}>{i}</button>
             ))}
-            <span style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginLeft: 6 }}>{t(E, "Col:", "열:")}</span>
+            <span style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginLeft: 6 }}>{t(E, "Col:", "열")}</span>
             {Array.from({ length: maxRC + 1 }).map((_, i) => (
               <button key={`c${i}`} onClick={() => setPos(p => ({ ...p, c: i }))} style={btn(pos.c === i)}>{i}</button>
             ))}
@@ -193,7 +193,7 @@ export function StampSimulator({ E }) {
             <button onClick={reset} style={{
               background: "#fff", color: "#059669", border: "1.5px solid #059669",
               borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-            }}>↺ {t(E, "Reset", "초기화")}</button>
+            }}>↺ {t(E, "Reset", "처음부터 다시")}</button>
           </div>
         </div>
 
@@ -201,10 +201,10 @@ export function StampSimulator({ E }) {
         <div style={{ marginTop: 10, textAlign: "center", fontSize: 12, fontWeight: 700,
           color: bad ? "#dc2626" : (allCovered ? "#059669" : "#92400e") }}>
           {bad
-            ? t(E, "❌ Illegal! Stamp's ★ would land outside target ★.", "❌ 불가능! 도장의 ★ 이 비어있는 칸에 찍혀.")
+            ? t(E, "❌ Illegal! Stamp's ★ would land outside target ★.", "❌ 안 돼요! 도장의 ★ 이 비어 있는 칸에 찍혀요.")
             : (allCovered
-                ? t(E, "✅ All target ★ covered — pattern is reachable!", "✅ 모든 ★ 덮음 — 이 패턴은 만들 수 있어!")
-                : t(E, "Keep stamping… Yellow ★ still uncovered.", "계속 찍어봐… 노란 ★ 이 아직 남아 있어."))}
+                ? t(E, "✅ All target ★ covered — pattern is reachable!", "✅ ★ 을 모두 덮었어요 — 이 무늬는 만들 수 있어요!")
+                : t(E, "Keep stamping… Yellow ★ still uncovered.", "계속 찍어 봐요. 노란 ★ 이 아직 남아 있어요."))}
         </div>
       </div>
     </div>
@@ -349,19 +349,19 @@ export function getStampGridSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 에서 자동으로 옮긴 거예요.\n자료형과 표현 방식은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣어요 (<iostream>, <vector> …).\n그래야 코드가 무엇을 하려는지 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 2×10^9 을 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -407,7 +407,7 @@ function highlightCode(lines, lang) {
 
 export function downloadStampGridPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "StampGrid — Full Study Guide", "StampGrid — 종합 풀이 노트");
@@ -430,7 +430,7 @@ export function downloadStampGridPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

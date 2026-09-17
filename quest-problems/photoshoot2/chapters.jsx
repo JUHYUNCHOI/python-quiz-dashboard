@@ -11,7 +11,7 @@ export function makePhoto2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N cows in some current order, and a target order. The only allowed move: pick ONE cow and move her to ANY position farther LEFT in the line.\nPrint the MINIMUM number of moves to transform the current order into the target order.",
-        "Bessie에게 N 마리 소가 어떤 현재 순서로 있고, 목표 순서가 주어져요. 허용된 동작은 단 하나: 한 소를 골라 줄에서 더 왼쪽 어디든 옮기기.\n현재 순서를 목표 순서로 만드는 최소 동작 수를 출력해요."),
+        "현재 줄을 목표 순서로 만드는 가장 적은 이동 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makePhoto2Ch1(E) {
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum number of move-left operations to transform the current order into the target.",
-                "현재 순서를 목표 순서로 만드는 데 필요한 최소 왼쪽-이동 동작 수를 출력.")}
+                "현재 줄을 목표 순서로 만들려면 소를 왼쪽으로 최소 몇 번 옮겨야 할까요? 그 횟수를 출력해요.")}
             </div>
           </div>
 
@@ -70,13 +70,13 @@ export function makePhoto2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Try the algorithm by hand. Walk the TARGET order left → right. Track the largest current-position you have seen. Each cow whose current-position drops below that max must move LEFT.",
-        "알고리즘을 직접 굴려봐. 목표 순서를 왼쪽→오른쪽으로 훑어. 본 현재-위치의 최댓값을 기억해. 그보다 작은 위치의 소는 왼쪽으로 이동해야 함."),
+        "목표 순서를 왼쪽부터 훑으면서 언제 옮겨야 하는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, marginBottom: 10, textAlign: "center" }}>
             {t(E,
               "Example: current = [3, 1, 4, 2], target = [1, 2, 3, 4]. Press NEXT to step through.",
-              "예시: 현재 = [3, 1, 4, 2], 목표 = [1, 2, 3, 4]. 다음 버튼으로 한 단계씩 진행.")}
+              "예시: 현재 = [3, 1, 4, 2], 목표 = [1, 2, 3, 4]. 다음 버튼으로 한 단계씩 진행해요.")}
           </div>
           <Photoshoot2SwapSim E={E} />
         </div>),
@@ -85,10 +85,10 @@ export function makePhoto2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Current: [2,1], Target: [1,2]. Cow 1 needs to move left past cow 2. How many moves?", "현재: [2,1], 목표: [1,2]. 소1이 소2 왼쪽으로 이동해야 해요. 이동 횟수는?"),
+        "Current: [2,1], Target: [1,2]. Cow 1 needs to move left past cow 2. How many moves?", "소1 을 소2 왼쪽으로 옮기려면 몇 번 움직여야 할까요?"),
       question: t(E,
         "[2,1] -> [1,2]. How many moves?",
-        "[2,1] -> [1,2]. 이동 몇 번?"),
+        "[2,1] 을 [1,2] 로 만들려면 몇 번 옮겨야 할까요?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -97,19 +97,19 @@ export function makePhoto2Ch1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Move cow 1 to the left. Only 1 move needed.",
-        "맞아! 소 1을 왼쪽으로 이동. 1번만 필요해요."),
+        "맞아요! 소 1 을 왼쪽으로 옮기면 돼요. 한 번이면 충분해요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Current: [2,1], Target: [1,2]. How many moves to rearrange?", "현재: [2,1], 목표: [1,2]. 재배열하는 이동 횟수는?"),
+        "Current: [2,1], Target: [1,2]. How many moves to rearrange?", "[2,1] 을 [1,2] 로 만들려면 몇 번 옮겨야 할까요?"),
       question: t(E,
         "[2,1] -> [1,2]. Min moves?",
-        "[2,1] -> [1,2]. 최소 이동?"),
+        "[2,1] 을 [1,2] 로 만드는 최소 이동 횟수는 몇 번일까요?"),
       hint: t(E,
         "Count cows that are out of place relative to the target.",
-        "목표와 비교했을 때 자리가 틀린 소를 세어 봐."),
+        "목표와 견줘서 자리가 어긋난 소를 세어 보세요."),
       answer: 1,
     },
   ];
@@ -126,7 +126,7 @@ export function makePhoto2Ch2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Map each cow to her index in the CURRENT order. Walk the TARGET order; track running max of current-positions. Each cow with current-position < max must be moved left. Sections build it one piece at a time.",
-        "각 소를 현재 인덱스로 매핑. 목표 순서를 따라가며 본 현재-위치의 최댓값 추적. 현재-위치 < 최댓값 이면 왼쪽으로 이동해야 함. 아래 섹션이 한 단락씩 쌓아요."),
+        "목표 순서를 훑으며 지금까지 본 가장 오른쪽 자리와 견줘요."),
       sections: getPhotoshoot2Sections(E),
     },
   ];

@@ -39,7 +39,7 @@ export function makeStallingCh1(E) {
       type: "reveal",
       narr: t(E,
         "There are N cows (each with a height) and N stalls (each with a maximum height limit). Each stall can hold AT MOST ONE cow, and a cow can be assigned to a stall only if her height is ≤ the stall's limit.\nCount the number of valid one-to-one assignments of cows to stalls.",
-        "N마리 소(각자 키)와 N개 축사(각자 최대 키 제한)가 있어요. 각 축사에 한 마리만 배정할 수 있고, 소의 키가 축사 제한 이하일 때만 그 축사에 배정 가능해요.\n소를 축사에 한 마리씩 배정하는 방법의 수를 세요."),
+        "소 N 마리는 저마다 키가 있고, 축사 N 개는 저마다 들어갈 수 있는 키 제한이 있어요.\n축사 하나에는 소 한 마리만 들어가요.\n소의 키가 그 축사의 제한보다 크지 않아야 들어갈 수 있어요.\n소를 축사에 한 마리씩 넣는 방법이 몇 가지인지 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -56,7 +56,7 @@ export function makeStallingCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Output the number of valid one-to-one cow ↔ stall assignments.",
-                "유효한 소 ↔ 축사 일대일 배정의 수를 출력.")}
+                "소를 축사에 한 마리씩 넣는 방법이\n모두 몇 가지인지 세어서 출력해요.")}
             </div>
           </div>
 
@@ -73,23 +73,23 @@ export function makeStallingCh1(E) {
                   {t(E, " (each with a height) and ", "와 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "N stalls", "N개 축사")}</b>
                   {t(E, " (each with a maximum height limit).",
-                        " 가 있어요. 각자 키와 축사 최대 키 제한이 있어요.")}
+                        " 가 있어요.\n소는 저마다 키가 있고, 축사는 저마다 키 제한이 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Each stall holds ", "각 축사에 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "at most one cow", "최대 1마리만 배정")}</b>
+                  {t(E, "Each stall holds ", "축사 하나에는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "at most one cow", "소를 한 마리까지만")}</b>
                   {t(E, ", and a cow fits only if her height ≤ the stall limit.",
-                        " 가능해요. 소는 자기 키 ≤ 축사 제한 일 때만 그 축사에 들어가요.")}
+                        " 넣을 수 있어요.\n소의 키가 그 축사의 제한보다 크지 않아야 들어가요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of valid one-to-one assignments", "소를 축사에 한 마리씩 배정하는 방법의 수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "number of valid one-to-one assignments", "소를 축사에 한 마리씩 넣는 방법의 가짓수")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
@@ -103,30 +103,30 @@ export function makeStallingCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cows have heights [1,2] and stalls have limits [2,2]. How many valid arrangements?", "소 높이 [1,2], 축사 제한 [2,2]일 때 유효한 배정 수는?"),
+        "Cows have heights [1,2] and stalls have limits [2,2]. How many valid arrangements?", "소의 키가 [1, 2] 이고 축사 제한이 [2, 2] 예요. 방법은 몇 가지일까요?"),
       question: t(E,
         "Cows: [1,2], Stalls: [2,2]. How many valid arrangements?",
-        "소: [1,2], 축사: [2,2]. 유효한 배정 수?"),
+        "소의 키는 [1, 2], 축사 제한은 [2, 2] 예요.\n소를 넣는 방법은 몇 가지일까요?"),
       options: [
-        t(E, "2 (both cows fit in both stalls)", "2 (두 소 모두 두 축사에 가능)"),
-        t(E, "1 (only one way)", "1 (한 가지만 가능)"),
+        t(E, "2 (both cows fit in both stalls)", "2 가지 (두 소 다 두 축사에 들어가요)"),
+        t(E, "1 (only one way)", "1 가지 (한 가지밖에 없어요)"),
       ],
       correct: 0,
       explain: t(E,
-        "Correct! Cow 1 (height 1) fits both stalls, cow 2 (height 2) fits both. So 2 x 1 = 2 arrangements.",
-        "맞아! 소 1(높이 1)은 두 축사 모두 가능, 소 2(높이 2)도 두 축사 모두 가능. 2 x 1 = 2 배정."),
+        "Correct! Start with the taller cow 2 (height 2): both stalls fit her, so 2 choices. Cow 1 (height 1) then has only the one remaining stall, so 1 choice. 2 x 1 = 2 arrangements.",
+        "맞아요. 키가 큰 소 2 (키 2) 부터 넣어 봐요.\n축사 두 곳 다 들어갈 수 있으니 고를 곳이 2 군데예요.\n그러면 소 1 (키 1) 에게는 남은 축사 한 곳뿐이라 1 가지예요.\n그래서 2 × 1 = 2 가지예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Cows: [1,2], Stalls: [2,2]. How many valid arrangements?", "소: [1,2], 축사: [2,2]. 유효한 배정은 몇 가지?"),
+        "Cows: [1,2], Stalls: [2,2]. How many valid arrangements?", "소의 키는 [1, 2], 축사 제한은 [2, 2] 예요. 방법은 몇 가지일까요?"),
       question: t(E,
         "Cows: [1,2], Stalls: [2,2]. Number of valid arrangements?",
-        "소: [1,2], 축사: [2,2]. 유효한 배정 수?"),
+        "소의 키는 [1, 2], 축사 제한은 [2, 2] 예요.\n넣는 방법은 몇 가지일까요?"),
       hint: t(E,
         "Process the tallest cow first and multiply available choices.",
-        "가장 큰 소부터 처리하면서 가능한 축사 수를 곱해 봐."),
+        "키가 제일 큰 소부터 넣으면서\n그때그때 고를 수 있는 축사 수를 곱해 보세요."),
       answer: 2,
     },
   ];
@@ -143,7 +143,7 @@ export function makeStallingCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Sort cows and stalls ascending. Process the TALLEST cow first — she can use any stall with limit ≥ her height. Each next (smaller) cow has more stalls available minus those taken by taller cows. Sections build it one piece at a time.",
-        "소·축사 오름차순 정렬. 가장 큰 소부터 — 자기 키 ≥ 인 축사 사용 가능. 다음 (더 작은) 소는 추가 가능 축사 − 이미 배정된 수. 아래 섹션이 한 단락씩 쌓아요."),
+        "소와 축사를 작은 것부터 줄 세워요.\n키가 제일 큰 소부터 넣는데, 제한이 자기 키 이상인 축사면 다 들어갈 수 있어요.\n그다음 소는 키가 더 작아서 들어갈 수 있는 축사가 더 많지만\n큰 소가 이미 쓴 축사는 빼야 해요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
       sections: getStallingSections(E),
     },
   ];

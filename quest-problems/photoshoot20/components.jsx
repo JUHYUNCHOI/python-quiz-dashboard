@@ -87,7 +87,7 @@ export function Photo20AuditSim({ E }) {
     if (cand.valid) {
       return t(E,
         `a[0] = ${cand.a0} ✓ chain = [${cand.a.join(", ")}] is a valid permutation of 1..${N}. WINNER!`,
-        `a[0] = ${cand.a0} ✓ 사슬 = [${cand.a.join(", ")}] 는 1..${N} 의 유효한 순열. 정답!`);
+        `a[0] = ${cand.a0} ✓ 사슬 [${cand.a.join(", ")}] 은 1..${N} 을 한 번씩 쓴 순열이에요. 정답!`);
     }
     const arr = cand.a;
     let badIdx = -1;
@@ -99,16 +99,16 @@ export function Photo20AuditSim({ E }) {
     if (reason === "oob") {
       return t(E,
         `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} is outside 1..${N}. Reject, try next.`,
-        `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} 는 1..${N} 범위 밖. 탈락, 다음 시도.`);
+        `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} 라서 1..${N} 밖이에요. 다음 후보로 가요.`);
     }
     if (reason === "dup") {
       return t(E,
         `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} duplicates an earlier value. Reject, try next.`,
-        `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} 는 앞에 이미 등장한 값. 탈락, 다음 시도.`);
+        `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} 는 앞에서 이미 나온 수예요. 다음 후보로 가요.`);
     }
     return t(E,
       `a[0] = ${cand.a0} → chain not a permutation of 1..${N}. Reject.`,
-      `a[0] = ${cand.a0} → 1..${N} 의 순열 아님. 탈락.`);
+      `a[0] = ${cand.a0} → 1..${N} 의 순열이 아니에요. 탈락이에요.`);
   };
 
   return (
@@ -134,7 +134,7 @@ export function Photo20AuditSim({ E }) {
         <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4, textAlign: "center" }}>
           {cur
             ? t(E, `Trying a[0] = ${cur.a0}`, `시도 중: a[0] = ${cur.a0}`)
-            : t(E, "Press NEXT to start auditing.", "다음을 눌러 검증을 시작.")}
+            : t(E, "Press NEXT to start auditing.", "다음을 눌러 하나씩 살펴봐요.")}
         </div>
         {cur && renderChain(cur)}
       </div>
@@ -153,7 +153,7 @@ export function Photo20AuditSim({ E }) {
       }}>
         {!cur && t(E,
           "Each candidate gets audited: in-range? duplicates? sorted = 1..N?",
-          "후보마다 검증해요: 범위 안인가? 중복 있나? 정렬하면 1..N 인가?")}
+          "후보마다 세 가지를 봐요. 범위 안인가, 같은 수가 또 나오나, 정렬하면 1..N 인가.")}
         {cur && auditLine(cur)}
       </div>
 
@@ -194,7 +194,7 @@ export function Photo20AuditSim({ E }) {
         }}>
           ✅ {t(E,
             `Lex-smallest answer: a = [${candidates[winnerIdx].a.join(", ")}].`,
-            `사전순 최소 정답: a = [${candidates[winnerIdx].a.join(", ")}].`)}
+            `사전순으로 가장 작은 답은 a = [${candidates[winnerIdx].a.join(", ")}] 이에요.`)}
         </div>
       )}
     </div>
@@ -283,19 +283,19 @@ export function getPhoto20Sections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 쪽은 Python 코드를 옮긴 거예요. 타입은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Try each a0 ∈ [1, N], derive the rest, then sort and check it equals 1..N.",
-            "a0 를 1~N 다 시도, 나머지 유도 후 정렬해서 1~N 인지 확인."),
+            "a0 를 1~N 까지 넣어 보고, 나머지를 구해 정렬한 뒤 1~N 인지 봐요."),
         t(E, "a.back() returns the last element — handy when building the array step by step.",
-            "a.back() 으로 마지막 원소 — 배열을 한 칸씩 채울 때 편함."),
+            "a.back() 은 마지막 값이에요 — 배열을 한 칸씩 채울 때 편해요."),
       ],
     },
   ];
@@ -341,7 +341,7 @@ function highlightCode(lines, lang) {
 
 export function downloadPhoto20PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Photo20 — Full Study Guide", "Photo20 — 종합 풀이 노트");
@@ -364,7 +364,7 @@ export function downloadPhoto20PDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

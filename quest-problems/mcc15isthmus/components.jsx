@@ -111,13 +111,13 @@ export function getMcc15IsthmusSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "downL[i] = downL[i-1] + 1 is the whole trick. The left neighbour already knows how far the descent runs, so we never count the same stretch twice.",
-            "downL[i] = downL[i-1] + 1 이 핵심이에요. 왼쪽 이웃이 이미 답을 알고 있으니 세는 걸 반복하지 않아요."),
+            "downL[i] = downL[i-1] + 1 이 핵심이에요. 왼쪽 이웃이 몇 칸 내려왔는지 이미 알고 있어서, 같은 구간을 다시 세지 않아요."),
         t(E, "The right-hand lengths (downR, upR) are the same idea run from the back of the array.",
             "오른쪽 길이(downR, upR)는 같은 생각을 배열 뒤에서부터 돌린 것뿐이에요."),
         t(E, "The rule \"at least K pieces of land on both sides\" needs no separate check — if the land runs out, the run length simply cannot reach K.",
-            "양쪽에 K칸이 있어야 한다는 조건은 따로 확인할 필요가 없어요 — 칸이 모자라면 길이가 K 에 못 미치니까요."),
+            "양쪽에 K칸이 있어야 한다는 조건은 따로 확인하지 않아도 돼요. 칸이 모자라면 길이가 저절로 K 에 못 미치니까요."),
         t(E, "elif, not a second if: one piece of land can never be a peak and a valley at the same time, so it must not be counted twice.",
-            "if 를 하나 더 쓰지 않고 elif 인 이유: 한 위치가 봉우리이면서 동시에 골짜기일 수는 없어요. 두 번 세면 안 돼요."),
+            "한 땅이 봉우리이면서 동시에 골짜기일 수는 없어요. 그래서 봉우리로 세었으면 골짜기는 볼 필요가 없어요. if 를 하나 더 쓰지 않고 elif 를 쓰는 이유예요."),
       ],
       pyOnly: [
         t(E, "The whole input is just 3 lines: N, then K, then all N heights on one line.",
@@ -127,7 +127,7 @@ export function getMcc15IsthmusSections(E) {
       ],
       cppOnly: [
         t(E, "cin >> skips whitespace and newlines alike, so reading N, then K, then the N heights just works with the three-line format.",
-            "cin >> 는 공백과 줄바꿈을 똑같이 건너뛰어요. 그래서 N, K, 높이 N개를 차례로 읽으면 세 줄짜리 형식이 그대로 처리돼요."),
+            "cin >> 는 공백과 줄바꿈을 똑같이 건너뛰어요. 그래서 N, K, 높이를 차례로 읽기만 하면 세 줄짜리 입력이 그대로 읽혀요."),
         t(E, "int is enough everywhere: heights are at most 1,000,000 and the count is at most N.",
             "전부 int 로 충분해요. 높이는 최대 1,000,000, 개수는 최대 N 이에요."),
       ],

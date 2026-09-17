@@ -48,7 +48,7 @@ export function MexesSlider({ E }) {
       <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 8, padding: "9px 13px", marginBottom: 14, fontSize: 12, color: "#1e40af", lineHeight: 1.55, wordBreak: "keep-all", textAlign: "center" }}>
         👉 {t(E,
           "Your turn — click a “target mex” below (and try the array buttons too). Watch how “to add / to remove / min ops” change.",
-          "직접 해봐요 — 아래 ‘목표 mex’ 를 클릭해요 (위 배열 버튼도 바꿔보고). 그때마다 ‘추가해야 / 제거 / 최소 ops’ 가 어떻게 바뀌는지 봐요.")}
+          "직접 해봐요. 아래 ‘목표 mex’ 를 눌러 보고, 위 배열 버튼도 바꿔 봐요.\n그때마다 ‘채울 값 / 없앨 값 / 가장 적은 바꾸기 횟수’ 가 어떻게 달라지는지 보여요.")}
       </div>
       <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
         {MEX_PRESETS.map((p, i) => (
@@ -97,32 +97,32 @@ export function MexesSlider({ E }) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
         <div style={{ background: "#dcfce7", border: "1.5px solid #86efac", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#15803d", lineHeight: 1.55 }}>
           <div style={{ fontWeight: 600, marginBottom: 4 }}>
-            ✅ {t(E, "Need to ADD", "추가해야")}
+            ✅ {t(E, "Need to ADD", "채워야 할 값")}
           </div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
             {missing.length === 0
-              ? t(E, "(none — all of 0..mex−1 already present)", "(없음 — 0..mex−1 이미 모두 있음)")
-              : `{${missing.join(", ")}}  → ${missing.length} ${t(E, "ops", "ops")}`}
+              ? t(E, "(none — all of 0..mex−1 already present)", "(없어요 — 0..mex−1 이 이미 다 있어요)")
+              : `{${missing.join(", ")}}  → ${missing.length} ${t(E, "ops", "번 바꾸기")}`}
           </div>
         </div>
         <div style={{ background: "#fee2e2", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#7f1d1d", lineHeight: 1.55 }}>
           <div style={{ fontWeight: 600, marginBottom: 4 }}>
-            🚫 {t(E, `Need to REMOVE all ${cnt_target} of value ${safeTarget}`, `값 ${safeTarget} 의 ${cnt_target} 개 모두 제거`)}
+            🚫 {t(E, `Need to REMOVE all ${cnt_target} of value ${safeTarget}`, `값 ${safeTarget} 이 ${cnt_target} 개 있어요. 전부 없애야 해요`)}
           </div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
-            {cnt_target} {t(E, "ops", "ops")}
+            {cnt_target} {t(E, "ops", "번 바꾸기")}
           </div>
         </div>
       </div>
 
       <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 13, fontWeight: 600 }}>
-        {t(E, "Min ops = max(missing, count of target) = ", "최소 ops = max(빠진 수, 목표 개수) = ")}
+        {t(E, "Min ops = max(missing, count of target) = ", "가장 적은 바꾸기 = max(채울 값 수, 없앨 값 수) = ")}
         <span style={{ fontSize: 18 }}>max({missing.length}, {cnt_target}) = {ops}</span>
       </div>
       <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.55 }}>
         {t(E,
           "Removing target counts CAN double as adding missing values (one op covers both). So ops = max, not sum.",
-          "목표값 제거는 빠진 값 추가로 동시에 가능 (한 op 가 둘 다 커버). 그래서 ops = max, 합 아님.")}
+          "목표값을 없앨 때 그 자리에 빠진 값을 적으면 돼요.\n한 번 바꾸기로 두 일이 같이 끝나요.\n그래서 둘을 더하지 않고, 더 큰 쪽만큼만 바꾸면 돼요.")}
       </div>
     </div>
   );
@@ -277,11 +277,11 @@ export function getMexesSections(E) {
       py: MEX_S1_PY, cpp: MEX_S1_CPP,
       why: [
         t(E, "Read N (length) then N values into array a.",
-            "N (길이) 읽고, 그 다음 N 개 값을 배열 a 로."),
+            "먼저 N (길이) 을 읽고, 이어서 N 개의 값을 배열 a 에 담아요."),
       ],
       aside: <SampleInputAside E={E} sample={MEX_SAMPLE} highlight={[0, 1]} note={t(E,
         "Two lines: \"4\" (N=4), then \"2 2 2 0\" (the array).",
-        "두 줄: \"4\" (N=4), 그 다음 \"2 2 2 0\" (배열).")} />,
+        "첫 줄 \"4\" 가 N 이에요.\n둘째 줄 \"2 2 2 0\" 이 배열이고요.")} />,
     },
     {
       label: t(E, "2️⃣ Count value frequencies", "2️⃣ 값 빈도 세기"),
@@ -289,22 +289,22 @@ export function getMexesSections(E) {
       py: MEX_S2_PY, cpp: MEX_S2_CPP,
       why: [
         t(E, "cnt[v] = number of array elements equal to v.",
-            "cnt[v] = 배열에서 v 인 원소 개수."),
+            "cnt[v] 는 배열에서 값이 v 인 원소가 몇 개인지예요."),
         t(E, "Values are guaranteed in [0, N], so a length-(N+1) array works.",
-            "값은 [0, N] 보장 → 길이 (N+1) 배열로 충분."),
+            "값이 0 부터 N 사이라고 문제가 약속했어요.\n그래서 길이 N+1 짜리 배열이면 충분해요."),
       ],
     },
     {
-      label: t(E, "3️⃣ missing[i] — prefix of zeros in cnt", "3️⃣ missing[i] — cnt 의 0 prefix 카운트"),
+      label: t(E, "3️⃣ missing[i] — prefix of zeros in cnt", "3️⃣ missing[i] — 앞쪽에 빠진 값 세기"),
       color: "#16a34a",
       py: MEX_S3_PY, cpp: MEX_S3_CPP,
       why: [
         t(E, "missing[i] tells us: how many of the values {0, 1, ..., i−1} are NOT in the array.",
-            "missing[i] = 값 {0, 1, ..., i−1} 중 배열에 없는 것의 개수."),
+            "missing[i] 는 값 {0, 1, ..., i−1} 가운데 배열에 없는 것이 몇 개인지예요."),
         t(E, "We need every value in {0..i−1} to be present for mex = i. Each missing value costs 1 op (change some element to that value).",
-            "mex = i 가 되려면 {0..i−1} 의 모든 값이 있어야. 빠진 값마다 1 op (어떤 원소를 그 값으로 변경)."),
+            "mex 가 i 가 되려면 {0..i−1} 의 값이 하나도 빠짐없이 있어야 해요.\n빠진 값 하나를 채우려면 원소 하나를 그 값으로 바꿔야 하니, 한 번씩 바꾸기가 들어요."),
         t(E, "One pass of size N+1 builds the whole prefix array.",
-            "크기 N+1 패스 한 번으로 prefix 배열 완성."),
+            "길이 N+1 을 한 번만 훑으면 missing 배열이 다 채워져요."),
       ],
     },
     {
@@ -315,13 +315,13 @@ export function getMexesSections(E) {
       py: MEX_FULL_PY, cpp: MEX_FULL_CPP,
       why: [
         t(E, "For mex = i: must ADD `missing[i]` values, must REMOVE `cnt[i]` copies of i.",
-            "mex = i 를 만들려면: missing[i] 개 값을 추가, cnt[i] 개의 i 를 제거."),
+            "mex 를 i 로 만들려면 빠진 값 missing[i] 개를 채우고, 배열에 있는 i 를 cnt[i] 개 없애야 해요."),
         t(E, "Each i-element being removed CAN simultaneously be changed to a missing value — one op covers both jobs.",
-            "i 를 제거하면서 동시에 빠진 값으로 바꿀 수 있음 — 한 op 가 두 일을 함."),
+            "i 를 없앨 때 그 자리에 빠진 값을 적으면 돼요.\n한 번 바꾸기로 두 일이 같이 끝나요."),
         t(E, "So ops = max(missing[i], cnt[i]) — the bottleneck.",
-            "그래서 ops = max(missing[i], cnt[i]) — 병목 쪽."),
+            "그래서 둘을 더하지 않고 더 큰 쪽만큼만 바꾸면 돼요 — max(missing[i], cnt[i]) 예요."),
         t(E, "Total: O(N) input + O(N) cnt + O(N) prefix + O(N) output = O(N). Fast even at N = 2·10⁵.",
-            "총: O(N) 입력 + O(N) cnt + O(N) prefix + O(N) 출력 = O(N). N = 2·10⁵ 도 빠름."),
+            "입력·cnt·missing·출력 모두 O(N) 이라 다 합쳐도 O(N) 이에요.\nN 이 2·10⁵ 이어도 충분히 빨라요."),
       ],
     },
   ];
@@ -334,7 +334,7 @@ export function MexesProgressiveCode(props) {
 /* ─── CodeWalk (설명은 짧은 말풍선으로, 코드는 실행 줄만 깨끗이) — 페이지식 대체 ─── */
 const _MEX_VARS = [
   { v: "cnt[v]", ko: "값 v 의 개수", en: "count of value v" },
-  { v: "missing[i]", ko: "{0..i−1} 중 없는 값 수", en: "absent values in {0..i−1}" },
+  { v: "missing[i]", ko: "{0..i−1} 중 없는 값의 개수", en: "absent values in {0..i−1}" },
 ];
 
 // 화면용 깨끗한 코드 (주석 벽 없이 실행 줄만 — 설명은 말풍선). 로직은 검증본과 동일.
@@ -388,16 +388,16 @@ export function getMexesWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: _MEX_WALK_CPP, vars: _MEX_VARS, beats: [
       { hi: [0, 5], bubble: t(E, "Read N and the array a.", "N 과 배열 a 를 읽어요.") },
-      { hi: [7, 11], bubble: t(E, "cnt[v] = how many times v appears.", "cnt[v] = v 가 몇 번 나오나 세기.") },
-      { hi: [13, 21], bubble: t(E, "missing[i] = absent values in {0..i−1}. If i−1 is missing, +1; else keep.", "missing[i] = {0..i−1} 중 없는 값 수. i−1 이 없으면 +1, 있으면 그대로.") },
-      { hi: [22, 23], bubble: t(E, "Answer per mex i = the bigger of add (missing) and remove (cnt).", "mex i 답 = 추가(missing)와 제거(cnt) 중 큰 쪽.") },
+      { hi: [7, 11], bubble: t(E, "cnt[v] = how many times v appears.", "cnt[v] 에 v 가 몇 번 나오는지 세어 담아요.") },
+      { hi: [13, 21], bubble: t(E, "missing[i] = absent values in {0..i−1}. If i−1 is missing, +1; else keep.", "missing[i] 는 {0..i−1} 중 없는 값의 개수예요.\ni−1 이 없으면 하나 더하고, 있으면 그대로 둬요.") },
+      { hi: [22, 23], bubble: t(E, "Answer per mex i = the bigger of add (missing) and remove (cnt).", "mex 가 i 일 때의 답은 채우기(missing)와 없애기(cnt) 중 큰 쪽이에요.") },
     ] };
   }
   return { code: _MEX_WALK_PY, vars: _MEX_VARS, beats: [
     { hi: [0, 1], bubble: t(E, "Read N and the array a.", "N 과 배열 a 를 읽어요.") },
-    { hi: [3, 6], bubble: t(E, "cnt[v] = how many times value v appears.", "cnt[v] = 값 v 가 몇 번 나오나 세기.") },
-    { hi: [8, 13], bubble: t(E, "missing[i] = how many of {0..i−1} are absent. If i−1 is missing (cnt 0), add 1; else keep the same.", "missing[i] = {0..i−1} 중 없는 값 수. i−1 이 없으면(cnt 0) +1, 있으면 그대로.") },
-    { hi: [15, 16], bubble: t(E, "Answer for mex i = the bigger of add (missing[i]) and remove (cnt[i]).", "mex i 답 = 추가(missing[i])와 제거(cnt[i]) 중 큰 쪽.") },
+    { hi: [3, 6], bubble: t(E, "cnt[v] = how many times value v appears.", "cnt[v] 에 값 v 가 몇 번 나오는지 세어 담아요.") },
+    { hi: [8, 13], bubble: t(E, "missing[i] = how many of {0..i−1} are absent. If i−1 is missing (cnt 0), add 1; else keep the same.", "missing[i] 는 {0..i−1} 중 없는 값의 개수예요.\ni−1 이 없으면(cnt 가 0 이면) 하나 더하고, 있으면 그대로 둬요.") },
+    { hi: [15, 16], bubble: t(E, "Answer for mex i = the bigger of add (missing[i]) and remove (cnt[i]).", "mex 가 i 일 때의 답은 채우기(missing[i])와 없애기(cnt[i]) 중 큰 쪽이에요.") },
   ] };
 }
 
@@ -436,7 +436,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMexesPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Making Mexes — Full Study Guide", "🧮 Making Mexes — 종합 풀이 노트");
@@ -461,7 +461,7 @@ export function downloadMexesPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO February 2025 Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 <h2>${t(E, "Code (4 sections)", "코드 (4 섹션)")}</h2>

@@ -112,7 +112,7 @@ export function getMooHuntWalk(E, lang = "py") {
       { hi: [8, 15],  bubble: t(E, "Read the K moves into three lists.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.", "무브 K 개를 목록 셋에 담아요.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
       { hi: [17, 21], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 를 두고, 만들 수 있는 보드를 전부 해봐요 (2^N 개).") },
       { hi: [22, 31], bubble: t(E, "Score one board.\nBit 1 means M, bit 0 means O.\nA move scores when x is M and y, z are O.", "보드 하나를 채점해요.\n비트 1 은 M, 0 은 O 예요.\n무브의 x 가 M 이고 y·z 가 O 면 1 점이에요.") },
-      { hi: [33, 38], bubble: t(E, "Keep the best score, and count how many boards reach it.", "최고 점수를 갱신하고, 그 점수가 되는 보드 수를 세요.") },
+      { hi: [33, 38], bubble: t(E, "Keep the best score, and count how many boards reach it.", "최고 점수를 새로 고치고, 그 점수가 되는 보드가 몇 개인지 세요.") },
       { hi: [41, 41], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수를 출력해요.") },
     ] };
   }
@@ -121,7 +121,7 @@ export function getMooHuntWalk(E, lang = "py") {
     { hi: [5, 9],   bubble: t(E, "Read the K moves into a list.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.", "무브 K 개를 목록에 담아요.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
     { hi: [11, 15], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 를 두고, 만들 수 있는 보드를 전부 해봐요 (2^N 개).") },
     { hi: [16, 19], bubble: t(E, "Score one board.\nBit 1 means M, bit 0 means O.\nA move scores when x is M and y, z are O.", "보드 하나를 채점해요.\n비트 1 은 M, 0 은 O 예요.\n무브의 x 가 M 이고 y·z 가 O 면 1 점이에요.") },
-    { hi: [21, 25], bubble: t(E, "Keep the best score, and count how many boards reach it.", "최고 점수를 갱신하고, 그 점수가 되는 보드 수를 세요.") },
+    { hi: [21, 25], bubble: t(E, "Keep the best score, and count how many boards reach it.", "최고 점수를 새로 고치고, 그 점수가 되는 보드가 몇 개인지 세요.") },
     { hi: [27, 27], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수를 출력해요.") },
   ] };
 }
@@ -211,12 +211,12 @@ export function getMooHuntSections(E) {
         "cout << best << \" \" << ways << \"\\n\";",
       ],
       why: [
-        t(E, "Bit 1 means that cell reads M, bit 0 means O — so b is one whole board.",
-            "비트 1 은 그 칸이 M, 0 은 O 예요. 그래서 b 하나가 보드 하나예요."),
+        t(E, "Each of b's N bits stands for one cell. Bit 1 means that cell reads M, bit 0 means O — so one b spells out one whole board.",
+            "b 의 비트 N 개가 칸 하나씩을 맡아요.\n비트가 1 이면 그 칸은 M, 0 이면 O 예요.\n그래서 b 하나가 보드 하나를 통째로 적어 놓은 셈이에요."),
         t(E, "A move scores when x is M and both y and z are O.",
             "무브는 x 가 M 이고 y·z 가 둘 다 O 일 때 1 점이에요."),
         t(E, "Keep the best score, and count how many boards reach it — the answer is both.",
-            "최고 점수를 갱신하고, 그 점수가 되는 보드 수를 세요. 답이 그 둘이에요."),
+            "최고 점수를 새로 고치고, 그 점수가 되는 보드가 몇 개인지 세요. 답이 그 둘이에요."),
       ],
     },
   ];
@@ -262,7 +262,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMooHuntPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Moo Hunt — Full Study Guide", "무 헌트 — 종합 풀이 노트");
@@ -285,7 +285,7 @@ export function downloadMooHuntPDF(E, sections, lang = "py") {
   .hint { background: #fef2f2; border: 1px solid #dc2626; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #7f1d1d; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO 2026 Second Contest, Bronze #2 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

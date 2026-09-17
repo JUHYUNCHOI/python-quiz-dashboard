@@ -230,7 +230,7 @@ export function makeGuessAnimalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Animal X has traits {A, B, C}.\nAnimal Y has traits {A, B, D}.\nThey share A and B.\nAfter 2 'yes' answers, we still can't tell them apart.", "동물 X는 특성 {A, B, C}, 동물 Y는 {A, B, D}. A와 B를 공유해요. '예' 2번 후에도 구분 불가."),
+        "Animal X has traits {A, B, C}.\nAnimal Y has traits {A, B, D}.\nThey share A and B — and one more question settles it.", "특성 {A,B,C} 와 {A,B,D} 는 A 와 B 가 겹쳐요.\n한 번 더 물으면 누구인지 정해져요."),
       question: t(E,
         "Animals with traits {A,B,C} and {A,B,D}. Max 'yes' before unique ID?",
         "특성 {A,B,C}와 {A,B,D}인 동물. 유일하게 식별 전 최대 '예'?"),
@@ -241,8 +241,8 @@ export function makeGuessAnimalCh1(E) {
       ],
       correct: 1,
       explain: t(E,
-        "Correct! They share traits A and B (2 traits). After answering 'yes' to both, we still have 2 candidates. So max yes = 2.",
-        "맞아! 특성 A와 B를 공유해 (2개). 둘 다 '예'라고 답해도 후보가 2개. 최대 예 = 2."),
+        "They share A and B, so 'yes' twice — and we still can't tell X from Y.\nOne more 'yes', to C, is what pins it down to X.\nSo the most 'yes' answers is 2 + 1 = 3.",
+        "겹치는 A 와 B 에 '예' 를 두 번 해요. 여기까지는 둘 중 누구인지 몰라요.\n마지막으로 C 에 '예' 라고 해야 X 로 정해져요.\n그래서 '예' 는 2 + 1 = 3 번이에요."),
     },
     // 1-3: Pairwise trait intersection sim
     {

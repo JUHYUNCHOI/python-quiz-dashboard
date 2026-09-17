@@ -53,8 +53,8 @@ function Mcc20MissingAnchorSim({ E }) {
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
-            "We can't try every K. But the biggest ORIGINAL magnitude is N (or N−1 if N was discarded) — so after +K it must sit at the MAX or MIN of the list. That leaves only 4 possible K. Try each: subtract it back with |x−K| and check the result.",
-            "K 를 전부 시도할 순 없어요. 그런데 원래 절대값이 가장 큰 수는 N (N 을 버렸으면 N−1) 이라, +K 한 뒤엔 목록의 MAX 나 MIN 자리에 놓여야 해요. 그래서 가능한 K 는 4개뿐. 각각 |x−K| 로 되돌려서 결과를 확인해봐요.")}
+            "We can't try every K. But the biggest ORIGINAL magnitude is N (or N−1 if N was discarded), and adding the same K to everyone keeps the order — so that number lands on the MAX of the list if its sign was +, or on the MIN if it was −. Two choices for the magnitude times two for the sign gives just 4 possible K. Try each: subtract it back with |x−K| and check the result.",
+            "K 를 전부 시도할 순 없어요. 그런데 원래 절대값이 가장 큰 수는 N 이에요 (N 을 버렸으면 N−1). 모두에게 같은 K 를 더하면 순서가 그대로라, 그 수는 부호가 + 였으면 목록의 MAX, − 였으면 MIN 자리에 놓여요. 크기가 2가지, 부호가 2가지니까 가능한 K 는 4개뿐이에요. 각각 |x−K| 로 되돌려서 결과를 확인해봐요.")}
         </div>
 
         {/* given array */}
@@ -111,7 +111,7 @@ function Mcc20MissingAnchorSim({ E }) {
               fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, ...KA }}>
               {distinctInRange ? (
                 <span>
-                  ✅ {t(E, "valid — ", "유효 — ")}
+                  ✅ {t(E, "valid — ", "맞아요 — ")}
                   <span style={{ color: "#6ee7b7" }}>
                     {N - 1} {t(E, "distinct magnitudes in [1,", "개 크기가 모두 다르고 [1,")}{N}]
                   </span><br />
@@ -120,7 +120,7 @@ function Mcc20MissingAnchorSim({ E }) {
                 </span>
               ) : (
                 <span>
-                  ❌ {t(E, "not valid — ", "유효하지 않음 — ")}
+                  ❌ {t(E, "not valid — ", "안 맞아요 — ")}
                   <span style={{ color: "#fca5a5" }}>
                     {t(E,
                       "some magnitude is out of [1,N] or repeats (red). This K can't have produced the list.",
@@ -135,7 +135,7 @@ function Mcc20MissingAnchorSim({ E }) {
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
           {t(E,
             "Only K = 2 survives here → missing = 4. Sum the missing value over every valid K; different K can give different missing numbers (that's the second sample: 2 + 5 = 7).",
-            "여기선 K = 2 만 살아남아요 → 빠진 수 = 4. 유효한 K 마다 빠진 수를 더해요; K 가 다르면 빠진 수도 달라질 수 있어요 (두 번째 예제가 그래요: 2 + 5 = 7).")}
+            "여기선 K = 2 만 살아남아요 → 빠진 수 = 4. 맞는 K 마다 빠진 수를 더해요. K 가 다르면 빠진 수도 달라질 수 있어요 (두 번째 예제가 그래요. 2 + 5 = 7).")}
         </div>
       </div>
     </div>
@@ -177,7 +177,7 @@ export function makeMcc20MissingCh1(E) {
       type: "reveal",
       narr: t(E,
         "Start from a permutation of 1..N. One number is discarded, the rest are shuffled, some get negative signs, and a constant K is added to every number.\nGiven the N−1 results, print the sum of all possible missing numbers.",
-        "1..N 의 순열에서 시작해요. 한 숫자를 버리고, 나머지를 섞고, 일부에 음수 부호를 붙이고, 모든 수에 상수 K 를 더해요.\n결과 N−1 개가 주어졌을 때, 가능한 모든 빠진 숫자의 합을 출력해요."),
+        "빠진 숫자로 가능한 값을 모두 찾아 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -237,7 +237,7 @@ export function makeMcc20MissingCh1(E) {
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "sum of every possible missing number", "가능한 모든 빠진 숫자의 합")}</b>
-                  {t(E, " — a repeat counts again for each valid K.", " — 유효한 K 마다 다시 세요.")}
+                  {t(E, " — a repeat counts again for each valid K.", " — 맞는 K 마다 다시 세어요.")}
                 </div>
               </div>
             </div>
@@ -250,7 +250,7 @@ export function makeMcc20MissingCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the two official examples. Notice K is unknown — we only see the final numbers.",
-        "입력 형식과 두 공식 예제를 봐요. K 는 우리에게 안 보여요 — 우리는 최종 숫자들만 봐요."),
+        "입력 형식과 공식 예제 둘을 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -295,7 +295,7 @@ export function makeMcc20MissingCh1(E) {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
               "Example 2 has TWO valid K: K=10 makes the missing number 2, and K=7 makes it 5. The answer counts both: 2 + 5 = 7.",
-              "예제 2 는 유효한 K 가 둘이에요: K=10 이면 빠진 수가 2, K=7 이면 5. 답은 둘 다 세요: 2 + 5 = 7.")}
+              "예제 2 는 맞는 K 가 둘이에요. K=10 이면 빠진 수가 2, K=7 이면 5 예요. 둘 다 세니까 2 + 5 = 7 이에요.")}
           </div>
         </div>),
     },
@@ -305,7 +305,7 @@ export function makeMcc20MissingCh1(E) {
       type: "reveal",
       narr: t(E,
         "Feel the idea. Pick a candidate K, subtract it back with |x−K|, and see which K could have produced the list.",
-        "아이디어를 직접 느껴봐요. 후보 K 를 골라 |x−K| 로 되돌리고, 어떤 K 가 목록을 만들 수 있었는지 봐요."),
+        "후보 K 를 골라 되돌려 보고 어떤 K 가 맞는지 봐요."),
       content: <Mcc20MissingAnchorSim E={E} />,
     },
 
@@ -314,10 +314,10 @@ export function makeMcc20MissingCh1(E) {
       type: "quiz",
       narr: t(E,
         "We started from a permutation of 1..N and discarded ONE number. Think about the largest value that could still be present.",
-        "1..N 의 순열에서 한 개를 버렸어요. 아직 남아 있을 수 있는 가장 큰 값을 생각해봐요."),
+        "아직 남아 있을 수 있는 가장 큰 값은 무엇일까요?"),
       question: t(E,
         "Before signs and +K, what is the largest magnitude still in the list?",
-        "부호와 +K 를 붙이기 전, 목록에 남은 가장 큰 크기는?"),
+        "부호와 +K 를 붙이기 전, 목록에 남은 가장 큰 크기는 얼마일까요?"),
       options: [
         t(E, "N, or N−1 if N was the discarded one", "N, 버린 게 N 이면 N−1"),
         t(E, "always N", "항상 N"),
@@ -326,7 +326,7 @@ export function makeMcc20MissingCh1(E) {
       correct: 0,
       explain: t(E,
         "If N wasn't discarded the largest is N; if N was discarded it's N−1. After +K that biggest value sits at the MAX or MIN of the list — which pins K to just 4 candidates.",
-        "N 을 안 버렸으면 N, N 을 버렸으면 N−1. +K 뒤 그 가장 큰 값은 목록의 MAX 나 MIN 에 놓여서 K 를 4개 후보로 좁혀줘요."),
+        "N 을 안 버렸으면 N, N 을 버렸으면 N−1 이에요. +K 뒤 그 값은 부호에 따라 목록의 MAX 나 MIN 에 놓여요. 크기 2가지 × 부호 2가지라 K 후보가 4개로 줄어요."),
     },
   ];
 }
@@ -338,7 +338,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way tries every K in [−3N, 3N] and rebuilds the list each time. The fast way notices the biggest magnitude anchors K to only 4 candidates, so we test just those.",
-        "느린 방법은 [−3N, 3N] 의 모든 K 를 시도하며 매번 목록을 재구성해요. 빠른 방법은 가장 큰 크기가 K 를 4개 후보로 묶어준다는 걸 눈치채, 그 4개만 확인해요."),
+        "K 를 전부 보지 않고 4개만 보면 되는 이유를 찾아봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -347,7 +347,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: try every K in [−3N, 3N]", "느림: [−3N, 3N] 의 모든 K 시도")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "About 6N candidate K, each needs an O(N) rebuild → ~6N² ≈ 6×10^10. Times out.", "K 후보가 약 6N 개, 각각 O(N) 재구성 → ~6N² ≈ 6×10^10. 시간 초과.")}
+                {t(E, "About 6N candidate K, each needs an O(N) rebuild → ~6N² ≈ 6×10^10. Times out.", "K 후보가 약 6N 개이고 각각 O(N) 으로 다시 만들어요 → ~6N² ≈ 6×10^10 이라 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: "10px 14px" }}>
@@ -355,7 +355,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: anchor the biggest magnitude → only 4 K", "빠름: 가장 큰 크기를 붙잡아 → K 는 4개뿐")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "The largest magnitude (N or N−1) must land on MAX or MIN, giving 4 candidate K. Check each in O(N). Total ≈ 4N.", "가장 큰 크기(N 또는 N−1)는 MAX 나 MIN 에 놓여야 해서 후보 K 는 4개. 각각 O(N) 확인. 합계 ≈ 4N.")}
+                {t(E, "The largest magnitude (N or N−1) must land on MAX or MIN, giving 4 candidate K. Check each in O(N). Total ≈ 4N.", "가장 큰 크기(N 또는 N−1)는 MAX 나 MIN 에 놓여야 해서 후보 K 는 4개예요. 각각 O(N) 으로 확인하니 모두 합쳐 ≈ 4N 이에요.")}
               </div>
             </div>
           </div>

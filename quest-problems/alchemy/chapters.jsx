@@ -11,7 +11,7 @@ export function makeAlchemyCh1(E) {
       type: "reveal",
       narr: t(E,
         "There are N metals (1..N), and you start with a[i] units of metal i. Each recipe takes one unit each of several lower-numbered metals and turns them into ONE unit of a higher-numbered metal.\nUsing the recipes any number of times, what is the MAXIMUM number of units of metal N you can end up with?",
-        "1번부터 N번까지 N개의 금속이 있고, 금속 i 를 a[i] 개씩 가지고 시작해요. 각 레시피는 더 낮은 번호의 금속 여러 개를 1개씩 모아서 더 높은 번호의 금속 1개를 만들어요.\n레시피를 마음대로 여러 번 써서, 금속 N 을 최대 몇 개까지 만들 수 있을까요?"),
+        "레시피를 여러 번 써서 금속 N 을 최대 몇 개까지 만들 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -62,7 +62,7 @@ export function makeAlchemyCh1(E) {
                   {t(E, "You can ", "레시피는 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "apply any recipe any number of times", "원하는 만큼 여러 번 사용")}</b>
                   {t(E, ", as long as you have the ingredients.",
-                        "할 수 있어요. 재료가 있다면.")}
+                        "할 수 있어요. 재료만 있으면 돼요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -84,17 +84,17 @@ export function makeAlchemyCh1(E) {
       type: "reveal",
       narr: t(E,
         "Here is the exact input/output format and the official sample. Trace it once so the recipe-line format is clear.",
-        "정확한 입력/출력 형식과 공식 예제예요. 레시피 줄 형식이 헷갈리지 않게 한 번 따라가 봐요."),
+        "입출력 형식과 공식 예제를 한 번 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10, fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 700, color: "#92400e", marginBottom: 6 }}>📥 {t(E, "Input", "입력")}</div>
             <div>{t(E, "Line 1: N (number of metals).", "1번째 줄: 금속 개수 N.")}</div>
-            <div>{t(E, "Line 2: N integers a[1..N] — starting units (0 ≤ a[i] ≤ 10000).", "2번째 줄: 정수 N개 a[1..N] — 시작 개수 (0 ≤ a[i] ≤ 10000).")}</div>
+            <div>{t(E, "Line 2: N integers a[1..N] — starting units (0 ≤ a[i] ≤ 10000).", "2번째 줄: 정수 N 개 a[1..N] — 처음에 가진 개수예요 (0 ≤ a[i] ≤ 10000).")}</div>
             <div>{t(E, "Line 3: K (number of recipes, 1 ≤ K < N).", "3번째 줄: 레시피 개수 K (1 ≤ K < N).")}</div>
             <div>{t(E, "Next K lines: L M ing₁ … ing_M — make 1 of metal L from M ingredients.", "다음 K줄: L M 재료₁ … 재료_M — 재료 M개로 금속 L 1개를 만들어요.")}</div>
             <div style={{ fontWeight: 700, color: "#92400e", margin: "8px 0 6px" }}>📤 {t(E, "Output", "출력")}</div>
-            <div>{t(E, "The maximum number of units of metal N achievable.", "만들 수 있는 금속 N 의 최대 개수.")}</div>
+            <div>{t(E, "The maximum number of units of metal N achievable.", "만들 수 있는 금속 N 의 최대 개수를 써요.")}</div>
           </div>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             <div style={{ flex: 1, minWidth: 150 }}>
@@ -119,7 +119,7 @@ export function makeAlchemyCh1(E) {
             <div>{t(E, "\"3 1 2\" → make metal 3 from M=1 ingredient: metal 2.", "\"3 1 2\" → 재료 M=1개(금속 2)로 금속 3 을 만들어요.")}</div>
             <div style={{ marginTop: 6 }}>{t(E,
               "Start: metal 1 = 2, metal 4 = 1, rest 0. Turn 1→2→3, then 3 + 4 → 5. That makes one unit of metal 5. Only one metal-1 is left after, not enough for a second metal 5 → answer 1.",
-              "시작: 금속 1 = 2개, 금속 4 = 1개, 나머지 0. 1→2→3 으로 바꾸고, 3 + 4 → 5. 금속 5 가 1개 나와요. 그 뒤 금속 1 이 1개 남지만 금속 4 가 없어 두 번째 금속 5 는 못 만들어요 → 답 1.")}</div>
+              "처음에 금속 1 이 2개, 금속 4 가 1개 있고 나머지는 0 이에요. 1→2→3 으로 바꾸고 3 + 4 → 5 를 만들면 금속 5 가 1개 나와요. 그 뒤 금속 1 이 1개 남지만 금속 4 가 없어서 두 번째 금속 5 는 못 만들어요 → 답은 1 이에요.")}</div>
           </div>
         </div>
       ),
@@ -128,10 +128,10 @@ export function makeAlchemyCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Recipe: metal 1 + metal 2 = metal 3. You have 2 of metal 1 and 1 of metal 2. Max metal 3?", "레시피: 금속1 + 금속2 = 금속3. 금속1이 2개, 금속2가 1개. 최대 금속3은?"),
+        "Recipe: metal 1 + metal 2 = metal 3. You have 2 of metal 1 and 1 of metal 2. Max metal 3?", "레시피가 금속1 + 금속2 = 금속3 일 때 금속3 을 몇 개 만들까요?"),
       question: t(E,
         "Recipe: 1+2->3. Have: 2x metal 1, 1x metal 2. Max metal 3?",
-        "레시피: 1+2->3. 보유: 금속1 2개, 금속2 1개. 최대 금속3?"),
+        "레시피는 1+2->3 이에요. 금속1 이 2개, 금속2 가 1개일 때 금속3 은 최대 몇 개일까요?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -140,19 +140,19 @@ export function makeAlchemyCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! You need 1 of each ingredient. With 1x metal 2, you can only make 1x metal 3.",
-        "맞아! 각 재료가 1개씩 필요해요. 금속2가 1개뿐이니 금속3은 1개만 만들 수 있어요."),
+        "맞아요! 재료가 1개씩 필요해요. 금속2 가 1개뿐이라 금속3 은 1개만 만들 수 있어요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "Same setup: recipe 1+2->3, have 2x metal 1 and 1x metal 2. How many metal 3 can you make?", "같은 설정: 레시피 1+2->3, 금속1 2개, 금속2 1개. 금속3을 몇 개 만들 수 있어요?"),
+        "Same setup: recipe 1+2->3, have 2x metal 1 and 1x metal 2. How many metal 3 can you make?", "앞과 같아요. 금속3 을 몇 개 만들 수 있을까요?"),
       question: t(E,
         "Recipe: 1+2->3. Have 2x metal 1, 1x metal 2. Max metal 3?",
-        "레시피: 1+2->3. 금속1 2개, 금속2 1개. 최대 금속3?"),
+        "레시피는 1+2->3 이에요. 금속1 이 2개, 금속2 가 1개일 때 금속3 은 최대 몇 개일까요?"),
       hint: t(E,
         "You need both metal 1 and metal 2 for each metal 3. Limited by metal 2 count.",
-        "금속3 하나당 금속1과 금속2가 모두 필요. 금속2 개수에 제한됨."),
+        "금속3 하나를 만들려면 금속1 과 금속2 가 모두 있어야 해요. 그래서 금속2 개수에 막혀요."),
       answer: 1,
     },
   ];
@@ -169,7 +169,7 @@ export function makeAlchemyCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Recursively try to build 1 unit of metal N — for each ingredient: use stock if any, else build it recursively. If anything is missing, fail. Sections build it one piece at a time.",
-        "금속 N 1단위를 재귀적으로 만들기 — 재료마다 재고가 있으면 사용, 없으면 재귀 제작, 하나라도 못 구하면 실패. 아래 섹션이 한 단락씩 쌓아요."),
+        "금속 N 을 한 개 만드는 방법을 한 단락씩 쌓아 가요."),
       sections: getAlchemySections(E),
     },
   ];

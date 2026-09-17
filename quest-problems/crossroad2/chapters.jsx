@@ -11,7 +11,7 @@ export function makeCrossRd2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "26 cows labeled A..Z walk around a circular road, each crossing it EXACTLY TWICE. We're given the cyclic sequence of letters at the 52 crossing points (each letter appears exactly twice).\nTwo cows' paths intersect if their two crossing points INTERLEAVE around the circle (like A..B..A..B). Count the number of intersecting cow-pairs.",
-        "26마리 소 (A..Z) 가 원형 도로를 돌면서 각자 정확히 2번 횡단해요. 52개의 횡단 지점에 등장하는 글자의 원형 수열이 주어져요 (각 글자가 정확히 2번 등장).\n두 소의 경로가 '교차' 한다는 건, 두 횡단 지점이 원 위에서 서로 엇갈려 나타날 때 (예: A..B..A..B). 교차하는 소-쌍의 개수를 출력해요."),
+        "길이 서로 엇갈리는 소는 몇 쌍일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -40,16 +40,16 @@ export function makeCrossRd2Ch1(E) {
                 <div>
                   <b style={{ color: "#f97316" }}>{t(E, "26 cows (A..Z) walk around a circular road", "26마리 소 (A..Z) 가 원형 도로 위를 걸어요")}</b>
                   {t(E, " — each crosses it exactly twice (so 52 crossing points total).",
-                        " — 각자 정확히 2번 횡단해서 총 52개의 횡단 지점.")}
+                        " . 소마다 딱 두 번씩 건너니까 건너는 자리는 모두 52 군데예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given the ", "")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "cyclic sequence of 52 letters at the crossing points", "횡단 지점 52개의 글자 원형 수열")}</b>
+                  <b style={{ color: "#0891b2" }}>{t(E, "cyclic sequence of 52 letters at the crossing points", "원을 따라 늘어선 글자 52 개")}</b>
                   {t(E, " (each letter appears twice).",
-                        " 이 주어져요 (각 글자 2번씩).")}
+                        " 가 주어져요. 글자마다 두 번씩 나와요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -58,7 +58,7 @@ export function makeCrossRd2Ch1(E) {
                   {t(E, "Two cow paths ", "두 소의 경로가 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "intersect", "교차")}</b>
                   {t(E, " if their crossing points interleave around the circle (e.g., A..B..A..B), like two chords that cross.",
-                        " 한다는 건, 두 소의 횡단 지점이 원에서 엇갈리게 나타날 때 (A..B..A..B), 교차하는 두 현 같은 형태.")}
+                        " 한다는 건, 원을 돌며 읽을 때 두 소의 자리가 A..B..A..B 처럼 엇갈려 나온다는 뜻이에요. 원 안에 선을 그어 보면 두 선이 X 자로 만나요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
@@ -75,7 +75,7 @@ export function makeCrossRd2Ch1(E) {
             <div style={{ background: "#fff", border: `1.5px solid #fdba74`, borderRadius: 12, marginTop: 10 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", padding: "10px 14px 0" }}>
                 🔍 {t(E, "Walk through every pair — does it interleave?",
-                       "모든 쌍을 한 번씩 — 엇갈리는지 직접 확인")}
+                       "모든 쌍을 한 번씩 보며 엇갈리는지 직접 확인해요")}
               </div>
               <CrossRoad2Sim E={E} />
             </div>
@@ -127,7 +127,7 @@ export function makeCrossRd2Ch2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Record the TWO crossing positions of each of the 26 cows. For every pair (A, B), their paths intersect iff their positions INTERLEAVE: a1 < b1 < a2 < b2 (or rotated). Sections build it one piece at a time.",
-        "26 마리 소 각각의 두 횡단 위치를 기록. 모든 쌍 (A, B) 에 대해, 위치가 엇갈리면 (a1 < b1 < a2 < b2 또는 회전한 형태) 경로가 교차. 아래 섹션이 한 단락씩 쌓아요."),
+        "풀이 코드를 한 단락씩 읽어 봐요."),
       sections: getCrossRoad2Sections(E),
     },
   ];

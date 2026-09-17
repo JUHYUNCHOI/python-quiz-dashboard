@@ -43,7 +43,7 @@ function OddEvenPileSim({ E }) {
     <button
       key={i}
       onClick={() => bump(i)}
-      title={t(E, "click: +1 carrot", "클릭: 당근 +1")}
+      title={t(E, "click: +1 carrot", "누르면 당근이 1 개 늘어요")}
       style={{
         ...NW, cursor: "pointer",
         display: "inline-flex", flexDirection: "column", alignItems: "center",
@@ -82,7 +82,7 @@ function OddEvenPileSim({ E }) {
           {touched
             ? t(E,
             "A sum of 3 numbers is ODD in only two recipes: three odds, or one odd + two evens. So forget picking triples — just count odds and evens.",
-            "세 수의 합이 홀수가 되는 방법은 딱 두 가지뿐이에요: 홀수 3개, 또는 홀수 1개 + 짝수 2개. 그러니 조합을 고르지 말고 홀수·짝수 개수만 세면 돼요.")
+            "세 수의 합이 홀수가 되는 방법은 딱 두 가지뿐이에요.\n홀수 3 개이거나, 홀수 1 개 + 짝수 2 개예요.\n그러니 조합을 고르지 말고 홀수·짝수 개수만 세면 돼요.")
             : t(E,
                 "Click the baskets and watch the verdict flip. When does a sum of three become ODD?",
                 "바구니를 눌러보면서 판정이 언제 바뀌는지 봐요.\n세 수의 합은 어떨 때 홀수가 될까요?")}
@@ -120,7 +120,7 @@ function OddEvenPileSim({ E }) {
           </div>
         </div>
         <div style={{ fontSize: 10.5, color: C.dim, marginBottom: 12, ...KA }}>
-          {t(E, "Tip: click any basket to add 1 carrot and watch it hop piles.", "팁: 바구니를 누르면 당근이 1개 늘어 더미를 옮겨 다녀요.")}
+          {t(E, "Tip: click any basket to add 1 carrot and watch it hop piles.", "바구니를 누르면 당근이 1 개 늘어서 다른 더미로 옮겨 가요.")}
         </div>
 
         {/* the two winning recipes */}
@@ -147,7 +147,7 @@ function OddEvenPileSim({ E }) {
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
           {touched && t(E,
             "Only the counts matter, never the exact baskets — so one scan to count odds and evens answers each test case.",
-            "정확히 어떤 바구니인지는 중요하지 않고, 홀수·짝수 개수만 중요해요 — 그래서 한 번 훑어 개수만 세면 각 테스트를 답할 수 있어요.")}
+            "어떤 바구니를 고르는지는 중요하지 않고 홀수·짝수가 몇 개인지만 중요해요. 그래서 한 번 훑어 개수만 세면 테스트마다 답할 수 있어요.")}
         </div>
       </div>
     </div>
@@ -166,7 +166,7 @@ export function makeMcc21CarrotsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Kenneth the rabbit has N baskets, basket i holding C[i] carrots. Can he pick 3 baskets whose carrot total is ODD?\nFor each of T test cases, print YES or NO.",
-        "토끼 케네스에게 N 개의 바구니가 있고, i 번 바구니엔 C[i] 개의 당근이 있어요. 합이 홀수가 되는 바구니 3 개를 고를 수 있을까요?\nT 개의 테스트마다 YES 또는 NO 를 출력해요."),
+        "합이 홀수가 되는 바구니 3 개를 고를 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -237,7 +237,7 @@ export function makeMcc21CarrotsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. The first line is T; then each test case is a line with N followed by a line of N carrot counts.",
-        "입력 형식과 공식 예제를 봐요. 첫 줄은 T, 그다음 각 테스트는 N 한 줄과 당근 N 개가 담긴 한 줄로 이루어져요."),
+        "입력이 어떤 모양으로 들어오는지 공식 예제로 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -288,7 +288,7 @@ export function makeMcc21CarrotsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Feel the idea. Split the baskets into an ODD pile and an EVEN pile, and watch which winning recipe can be built.",
-        "아이디어를 직접 느껴봐요. 바구니를 홀수 더미와 짝수 더미로 나누고, 어떤 레시피를 만들 수 있는지 봐요."),
+        "바구니를 홀수 더미와 짝수 더미로 나눠서 봐요."),
       content: <OddEvenPileSim E={E} />,
     },
 
@@ -297,7 +297,7 @@ export function makeMcc21CarrotsCh1(E) {
       type: "quiz",
       narr: t(E,
         "odd+odd = even, and even+odd = odd. Build the parity up one step at a time and each combo's total parity is fixed.",
-        "홀+홀 = 짝, 짝+홀 = 홀. 한 단계씩 홀짝을 쌓아 보면 각 조합의 합의 홀짝이 정해져요."),
+        "홀 + 홀 은 짝, 짝 + 홀 은 홀이에요. 한 걸음씩 쌓아 봐요."),
       question: t(E,
         "A sum of 3 numbers is ODD in exactly two cases. Which mix is NOT one of them?",
         "세 수의 합이 홀수가 되는 경우는 딱 두 가지예요. 다음 중 그 두 가지가 아닌 것은?"),
@@ -309,7 +309,7 @@ export function makeMcc21CarrotsCh1(E) {
       correct: 2,
       explain: t(E,
         "two odds + one even = odd+odd+even = even+even = EVEN, so it can't make an odd sum. The two odd-sum recipes are three odds and one odd + two evens.",
-        "홀수 2개 + 짝수 1개 = 홀+홀+짝 = 짝+짝 = 짝수예요. 그래서 홀수 합을 못 만들어요. 홀수 합 레시피는 '홀수 3개' 와 '홀수 1개 + 짝수 2개' 두 가지뿐이에요."),
+        "홀수 2 개 + 짝수 1 개는 홀+홀 = 짝, 거기에 짝을 더해도 짝이에요.\n그래서 홀수 합을 못 만들어요.\n홀수 합이 되는 건 '홀수 3 개' 와 '홀수 1 개 + 짝수 2 개' 뿐이에요."),
     },
   ];
 }
@@ -321,7 +321,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way tries every triple of baskets: about N³/6 checks — with N up to 100000 that is astronomically slow. The fast way uses parity: count odds and evens once, then check the two recipes.",
-        "느린 방법은 바구니 3 개 조합을 모두 시도해요: 약 N³/6 번 — N 이 최대 100000 이면 천문학적으로 느려요. 빠른 방법은 홀짝을 써요: 홀수·짝수를 한 번만 세고 두 레시피만 확인해요."),
+        "조합을 다 뒤지는 대신 홀수·짝수 개수만 세면 돼요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -330,7 +330,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: try every triple of baskets", "느림: 바구니 3 개 조합을 모두 시도")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "About N³/6 triples. With N = 100000 that is ~10^14 — times out badly.", "약 N³/6 개 조합. N = 100000 이면 약 10^14 — 시간 초과.")}
+                {t(E, "About N³/6 triples. With N = 100000 that is ~10^14 — times out badly.", "조합이 약 N³/6 개예요. N = 100000 이면 약 10^14 번이라 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
@@ -338,7 +338,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: count odds & evens, check two recipes", "빠름: 홀수·짝수 세고 두 레시피 확인")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "One pass counts odd and even. YES if (odd ≥ 3) or (odd ≥ 1 and even ≥ 2). Just O(N) per test.", "한 번 훑어 홀수·짝수를 세요. (홀수 ≥ 3) 또는 (홀수 ≥ 1 이고 짝수 ≥ 2) 이면 YES. 테스트당 O(N).")}
+                {t(E, "One pass counts odd and even. YES if (odd ≥ 3) or (odd ≥ 1 and even ≥ 2). Just O(N) per test.", "한 번 훑어서 홀수와 짝수를 세요. 홀수 ≥ 3 이거나 (홀수 ≥ 1 이고 짝수 ≥ 2) 이면 YES 예요. 테스트마다 O(N) 이에요.")}
               </div>
             </div>
           </div>

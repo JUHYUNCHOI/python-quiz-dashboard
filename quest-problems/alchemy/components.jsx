@@ -156,7 +156,7 @@ export function RecipeSimulator({ E }) {
             cursor: "pointer",
           }}
         >
-          ↺ {t(E, "Reset", "초기화")}
+          ↺ {t(E, "Reset", "다시 처음부터")}
         </button>
         <div style={{
           background: "#fff",
@@ -310,21 +310,21 @@ export function getAlchemySections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 은 파이썬 코드를 옮긴 것이에요. 타입과 표현은 필요할 때 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬의 list, map, sorted 덕분에 코드가 짧아요."),
       ],
       cppOnly: [
         t(E, "Only <iostream> and <vector> needed — no bits/stdc++.h.",
-            "필요한 헤더는 <iostream>, <vector> 뿐 — bits/stdc++.h 안 써."),
+            "필요한 헤더는 <iostream> 과 <vector> 뿐이에요. bits/stdc++.h 는 안 써요."),
         t(E, "Pass stock by reference (vector<long long>&) so make() can consume it.",
-            "stock 을 참조로 전달 (vector<long long>&) 해야 make() 안에서 소비 가능."),
+            "stock 을 참조로 넘겨야 (vector<long long>&) make() 안에서 꺼내 쓸 수 있어요."),
         t(E, "Copy `have` into `trial` before each attempt; commit only on success.",
-            "시도 전마다 have 를 trial 로 복사하고, 성공할 때만 반영."),
+            "시도하기 전에 have 를 trial 로 복사해 둬요. 성공했을 때만 옮겨요."),
       ],
     },
   ];

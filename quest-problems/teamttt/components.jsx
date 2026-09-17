@@ -117,12 +117,12 @@ export function TeamLineChecker({ E }) {
         padding: "10px 14px", marginBottom: 12, textAlign: "center",
       }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
-          🎮 {t(E, "Try It — Line Checker", "직접 해봐 — 줄 검사기")}
+          🎮 {t(E, "Try It — Line Checker", "직접 해 봐요 — 줄 검사기")}
         </div>
         <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
           {t(E,
             "Edit any cell (A–Z) and the two team rosters. The 8 lines are judged live: solo win, 2-team win, or nothing.",
-            "어떤 칸이든 (A–Z) 바꿔봐 + 두 팀 명단도 바꿔봐. 8 개 줄을 실시간 판정 — 단독 / 2 명 팀 / 우승 없음.")}
+            "칸 글자(A–Z)와 두 팀 명단을 바꿔 볼 수 있어요. 8 개 줄이 단독 · 2 명 팀 · 우승 없음 중 무엇인지 바로 나와요.")}
         </div>
       </div>
 
@@ -220,7 +220,7 @@ export function TeamLineChecker({ E }) {
       }}>
         💡 {t(E,
           "Notice: the SET of 3 letters in a line tells you the answer. Size 1 → solo. Size 2 → 2-team. Size 3 → no win. That's the whole algorithm.",
-          "핵심: 한 줄의 3 글자 집합 크기로 판정. 크기 1 → 단독. 크기 2 → 2 명 팀. 크기 3 → 우승 없음. 이게 알고리즘 전부.")}
+          "한 줄에 서로 다른 글자가 몇 개인지만 보면 돼요. 1 개면 단독, 2 개면 2 명 팀, 3 개면 우승이 없어요.")}
       </div>
     </div>
   );
@@ -340,19 +340,19 @@ export function getTeamTttSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 쪽은 Python 코드를 옮긴 것이라 자료형은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "헤더는 필요한 것만 적어요 (<iostream>, <vector> …). 그래야 읽기 쉬워요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더하거나 곱한 값이 2×10^9 를 넘을 것 같으면 long long 을 써요."),
       ],
     },
   ];
@@ -398,7 +398,7 @@ function highlightCode(lines, lang) {
 
 export function downloadTeamTttPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혀 있어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "TeamTtt — Full Study Guide", "TeamTtt — 종합 풀이 노트");
@@ -421,7 +421,7 @@ export function downloadTeamTttPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

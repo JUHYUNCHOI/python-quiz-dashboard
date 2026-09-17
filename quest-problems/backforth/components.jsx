@@ -113,19 +113,19 @@ export function getBackForthSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 코드를 옮긴 거예요. 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 것만 적어요 (<iostream>, <vector>, ...). 그래야 코드가 뭘 쓰는지 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -235,7 +235,7 @@ export function BackForthStateTreeSim({ E }) {
         <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
           {t(E,
             "A toy version (3 buckets, 2 days) to see every branch.",
-            "축소판 (양동이 3 개, 2 일) — 모든 분기를 한눈에.")}
+            "축소판이에요 (양동이 3 개, 2 일). 모든 갈래를 한눈에 볼 수 있어요.")}
         </div>
       </div>
 
@@ -297,7 +297,7 @@ export function BackForthStateTreeSim({ E }) {
             "1 일차: 헛간 1 에서 1 개 골라 → 헛간 2 로 보내기")}
           {days === 2 && t(E,
             ".  Day 2: pick a bucket from the new Barn 2 to send back → Barn 1.",
-            ". 2 일차: 새 헛간 2 에서 1 개 골라 → 헛간 1 로 되보내기.")}
+            ". 2 일차: 새 헛간 2 에서 1 개 골라 → 헛간 1 로 돌려보내기.")}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -388,7 +388,7 @@ export function BackForthStateTreeSim({ E }) {
         <div style={{ fontSize: 10, color: C.dim, marginTop: 6, lineHeight: 1.4 }}>
           {t(E,
             "👉 The real problem is the same idea with 10 buckets and 4 days — that is 10 × 11 × 11 × 11 ≈ 13,000 branches. A set still keeps it simple.",
-            "👉 실제 문제는 양동이 10 개, 4 일로 같은 아이디어 — 10 × 11 × 11 × 11 ≈ 13,000 분기. set 으로 충분히 처리.")}
+            "👉 실제 문제도 같은 방법이에요. 양동이 10 개에 4 일이면 갈래가 10 × 11 × 11 × 11 ≈ 13,000 개라, set 하나면 충분해요.")}
         </div>
       </div>
     </div>
@@ -431,7 +431,7 @@ function highlightCode(lines, lang) {
 
 export function downloadBackForthPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "BackForth — Full Study Guide", "BackForth — 종합 풀이 노트");
@@ -454,7 +454,7 @@ export function downloadBackForthPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

@@ -46,12 +46,12 @@ function LifeguardsRemovalSim({ E }) {
   return (
     <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 12, padding: 14, marginBottom: 10 }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
-        🧪 {t(E, "Try it: remove a lifeguard", "직접 해봐: 인명구조원 한 명 빼기")}
+        🧪 {t(E, "Try it: remove a lifeguard", "직접 해봐요: 인명구조원 한 명 빼기")}
       </div>
       <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
         {t(E,
           "Click a button below to fire that lifeguard. Watch the timeline and find which removal keeps the MOST coverage.",
-          "아래 버튼을 눌러 그 인명구조원을 해고해 봐. 타임라인을 보고 어느 명을 해고할 때 커버 시간이 가장 많이 남는지 찾아봐.")}
+          "아래 버튼을 눌러 그 인명구조원을 해고해 봐요.\n어느 사람을 해고할 때 커버 시간이 가장 많이 남는지 찾아봐요.")}
       </div>
 
       {/* Buttons */}
@@ -152,14 +152,14 @@ function LifeguardsRemovalSim({ E }) {
         <div style={{ marginTop: 8, padding: "6px 10px", background: "#dcfce7", border: "1px solid #15803d", borderRadius: 6, fontSize: 12, color: "#14532d", fontWeight: 700 }}>
           ✅ {t(E,
             `Best choice! Firing #${bestSkip.idx + 1} keeps ${bestSkip.covered} covered seconds — the maximum among all 5 options.`,
-            `최고의 선택! #${bestSkip.idx + 1}을 해고하면 ${bestSkip.covered}초가 남아 — 5명 중 최댓값이야.`)}
+            `잘 골랐어요! #${bestSkip.idx + 1} 을 해고하면 ${bestSkip.covered} 초가 남아요 — 5 명 중 가장 많아요.`)}
         </div>
       )}
       {skip >= 0 && skip !== bestSkip.idx && (
         <div style={{ marginTop: 8, padding: "6px 10px", background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 6, fontSize: 12, color: "#78350f" }}>
           💡 {t(E,
             "Try other lifeguards — one of them gives bigger remaining coverage.",
-            "다른 인명구조원도 눌러봐 — 더 큰 남은 커버를 주는 사람이 있어.")}
+            "다른 인명구조원도 눌러 봐요 — 커버가 더 많이 남는 사람이 있어요.")}
         </div>
       )}
     </div>
@@ -176,7 +176,7 @@ export function makeLifeguardsCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N lifeguards, each working a half-open shift [s, t). The pool is 'covered' at any moment when at least one lifeguard is on duty.\nFJ must FIRE exactly one lifeguard. Print the MAXIMUM total coverage time (union of remaining intervals) he can keep.",
-        "FJ에게 N명의 인명구조원이 있고, 각자 반열린 구간 [s, t) 동안 근무해요. 어느 한 순간에 최소 1명이 근무 중이면 그 순간은 '커버됐다'고 해요.\nFJ가 정확히 1명을 해고해야 해요. 남은 인명구조원들의 근무 구간 합집합으로 얻을 수 있는 최대 커버 시간을 출력해요."),
+        "한 명을 해고한 뒤 커버되는 시간을 가장 길게 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -193,7 +193,7 @@ export function makeLifeguardsCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Output the maximum total covered time after firing exactly one lifeguard.",
-                "정확히 1명을 해고한 뒤 얻을 수 있는 최대 커버 시간을 출력.")}
+                "정확히 1명을 해고한 뒤 커버 시간을 가장 길게 만들어 출력해요.")}
             </div>
           </div>
 
@@ -246,7 +246,7 @@ export function makeLifeguardsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Time to play! Below are 5 lifeguards with overlapping shifts on a 0..30 timeline. Try firing each one and watch which seconds become uncovered. Find the lifeguard whose removal LOSES the LEAST — that's the one to fire.",
-        "직접 해볼 시간! 아래에 0..30 타임라인 위에서 겹쳐 일하는 5명의 인명구조원이 있어. 한 명씩 해고해 보면서 어느 초가 비게 되는지 관찰해 봐. '잃는 시간이 가장 적은' 해고가 정답이야."),
+        "한 명씩 해고해 보면서 어느 초가 비는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff", border: "1px solid #93c5fd", borderRadius: 12, padding: 12, marginBottom: 10 }}>
@@ -256,7 +256,7 @@ export function makeLifeguardsCh1(E) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
               {t(E,
                 "Each lifeguard's shift is a colored bar. The top bar shows the union of remaining coverage. Green = still covered. Red = newly uncovered after firing. Find the firing that keeps the MOST green.",
-                "각 인명구조원의 근무는 색깔 막대야. 맨 위 막대는 남은 근무들의 합집합 커버. 초록 = 여전히 커버됨. 빨강 = 해고 후 비어버린 초. 초록이 가장 많이 남는 해고를 찾아봐.")}
+                "인명구조원마다 근무가 색깔 막대예요. 맨 위 막대는 남은 근무를 다 합친 커버예요.\n초록은 그대로 커버되는 초, 빨강은 해고해서 비어 버린 초예요.\n초록이 가장 많이 남는 해고를 찾아봐요.")}
             </div>
           </div>
           <LifeguardsRemovalSim E={E} />
@@ -266,30 +266,30 @@ export function makeLifeguardsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Two shifts: [1,5] and [3,8].\nIf we fire the first guard, coverage = 3 to 8 = 5.\nIf we fire the second, coverage = 1 to 5 = 4.\nWhich gives max coverage?", "두 근무: [1,5]와 [3,8]. 첫째를 해고하면 커버리지 = 3~8 = 5. 둘째를 해고하면 커버리지 = 1~5 = 4. 어느 쪽이 최대 커버리지?"),
+        "Two shifts: [1,5] and [3,8].\nIf we fire the first guard, coverage = 3 to 8 = 5.\nIf we fire the second, coverage = 1 to 5 = 4.\nWhich gives max coverage?", "근무 [1,5] 와 [3,8] 중 누구를 해고할까요?"),
       question: t(E,
         "Shifts [1,5] and [3,8]. Fire which guard for max coverage?",
-        "근무 [1,5]와 [3,8]. 최대 커버리지를 위해 누구를 해고?"),
+        "근무 [1,5] 와 [3,8] 이에요. 커버 시간을 가장 길게 하려면 누구를 해고할까요?"),
       options: [
-        t(E, "Fire first guard (coverage = 5)", "첫째 해고 (커버리지 = 5)"),
-        t(E, "Fire second guard (coverage = 4)", "둘째 해고 (커버리지 = 4)"),
+        t(E, "Fire first guard (coverage = 5)", "첫째 해고 (커버 시간 5)"),
+        t(E, "Fire second guard (coverage = 4)", "둘째 해고 (커버 시간 4)"),
       ],
       correct: 0,
       explain: t(E,
         "Fire the first guard: remaining coverage [3,8] = 5, which is larger than [1,5] = 4.",
-        "첫째를 해고: 남은 커버리지 [3,8] = 5, 이게 [1,5] = 4보다 커."),
+        "첫째를 해고하면 [3,8] 이 남아 5 초예요.\n둘째를 해고하면 [1,5] 가 남아 4 초라서 더 짧아요."),
     },
     // 1-4: input
     {
       type: "input",
       narr: t(E,
-        "Shifts [1,5] and [3,8]. What is the maximum remaining coverage after firing one guard?", "근무 [1,5]와 [3,8]. 한 명 해고 후 최대 남은 커버리지는?"),
+        "Shifts [1,5] and [3,8]. What is the maximum remaining coverage after firing one guard?", "한 명을 해고한 뒤 남는 커버 시간은 얼마일까요?"),
       question: t(E,
         "Shifts [1,5] and [3,8]. Max coverage after firing one?",
-        "근무 [1,5]와 [3,8]. 한 명 해고 후 최대 커버리지?"),
+        "근무 [1,5] 와 [3,8] 이에요. 한 명 해고 후 커버 시간이 가장 길면 몇일까요?"),
       hint: t(E,
         "Try firing each guard one at a time and compare remaining coverage.",
-        "한 명씩 해고해 보면서 남은 커버리지를 비교해 봐."),
+        "한 명씩 해고해 보면서 남는 커버 시간을 견줘 봐요."),
       answer: 5,
     },
   ];
@@ -306,7 +306,7 @@ export function makeLifeguardsCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Brute force: fire each guard one at a time. For each removal, compute union coverage of remaining shifts via sweep line. Take the max across all N choices. Sections build it one piece at a time.",
-        "완전 탐색: 인명구조원을 한 명씩 해고. 매 시도마다 남은 근무의 합집합 커버를 스위프 라인으로 계산. N 가지 중 최댓값. 아래 섹션이 한 단락씩 쌓아요."),
+        "한 명씩 빼 보고 남은 커버 시간을 재서 가장 큰 값을 골라요."),
       sections: getLifeguardsSections(E),
     },
   ];

@@ -52,15 +52,15 @@ function buildSimSteps(counts, E) {
     if (prevI === null) {
       reason = E
         ? `${names[bestI]} has the most (${remaining[bestI]}) → place first!`
-        : `${names[bestI]}이(가) 가장 많아 (${remaining[bestI]}개) → 먼저 배치!`;
+        : `${names[bestI]}이(가) ${remaining[bestI]}개로 가장 많아요 → 먼저 놓아요!`;
     } else if (available.length === 1) {
       reason = E
         ? `Only ${names[bestI]} left (≠ prev ${names[prevI]}) → place it!`
-        : `${names[prevI]} 제외하면 ${names[bestI]}만 남음 → 배치!`;
+        : `${names[prevI]}을(를) 빼면 ${names[bestI]}만 남아요 → 이걸 놓아요!`;
     } else {
       reason = E
         ? `≠ prev ${names[prevI]}, ${names[bestI]} has most (${remaining[bestI]}) → place!`
-        : `이전(${names[prevI]}) 제외, ${names[bestI]}이(가) 최다 (${remaining[bestI]}개) → 배치!`;
+        : `직전 ${names[prevI]}을(를) 빼면 ${names[bestI]}이(가) ${remaining[bestI]}개로 가장 많아요 → 놓아요!`;
     }
 
     placed.push(bestI);
@@ -169,8 +169,8 @@ export function FanSimulator({ E }) {
           <br />
           min({total}, 2×{rest}+1) = min({total}, {2 * rest + 1}) = <span style={{ fontSize: 16, fontWeight: 700, color: A }}>{answer}</span>
         </div>
-        {allFit && <div style={{ fontSize: 11, color: "#059669", fontWeight: 600, textAlign: "center", marginTop: 4 }}>✅ {E ? "All sticks fit!" : "전부 사용 가능!"}</div>}
-        {!allFit && <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 600, textAlign: "center", marginTop: 4 }}>⚠️ {E ? `Too many of one color! ${total - answer} left over.` : `한 색이 너무 많아! ${total - answer}개 남음.`}</div>}
+        {allFit && <div style={{ fontSize: 11, color: "#059669", fontWeight: 600, textAlign: "center", marginTop: 4 }}>✅ {E ? "All sticks fit!" : "전부 쓸 수 있어요!"}</div>}
+        {!allFit && <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 600, textAlign: "center", marginTop: 4 }}>⚠️ {E ? `Too many of one color! ${total - answer} left over.` : `한 색이 너무 많아요! ${total - answer}개가 남아요.`}</div>}
       </div>
 
       {/* Remaining pool */}
@@ -195,7 +195,7 @@ export function FanSimulator({ E }) {
       }}>
         <div style={{ fontSize: 10, fontWeight: 700, color: C.dim, textAlign: "center", marginBottom: 6 }}>
           {E ? `Placed: ${s.placed.length}/${total}` : `배치: ${s.placed.length}/${total}`}
-          {s.done && s.leftover > 0 && <span style={{ color: "#dc2626", marginLeft: 6 }}>({E ? `${s.leftover} left!` : `${s.leftover}개 남음!`})</span>}
+          {s.done && s.leftover > 0 && <span style={{ color: "#dc2626", marginLeft: 6 }}>({E ? `${s.leftover} left!` : `${s.leftover}개 남았어요!`})</span>}
         </div>
         <div style={{ display: "flex", gap, justifyContent: "center", flexWrap: "wrap", padding: "0 4px", minHeight: stickH + 4 }}>
           {s.placed.map((colorIdx, i) => {
@@ -213,7 +213,7 @@ export function FanSimulator({ E }) {
           })}
           {s.placed.length === 0 && (
             <div style={{ fontSize: 12, color: C.dim, padding: 14, display: "flex", alignItems: "center" }}>
-              {E ? "Press ▶ to start!" : "▶ 눌러서 시작!"}
+              {E ? "Press ▶ to start!" : "▶ 를 눌러 시작해요!"}
             </div>
           )}
         </div>
@@ -230,7 +230,7 @@ export function FanSimulator({ E }) {
               ))
             )}
             <div style={{ display: "flex", alignItems: "center", fontSize: 10, fontWeight: 600, color: "#dc2626", marginLeft: 4 }}>
-              ← {E ? "can't place!" : "못 넣어!"}
+              ← {E ? "can't place!" : "못 넣어요!"}
             </div>
           </div>
         )}
@@ -244,8 +244,8 @@ export function FanSimulator({ E }) {
           }}>
             <div style={{ fontSize: 11, fontWeight: 600, color: s.leftover === 0 ? "#059669" : "#dc2626" }}>
               {s.leftover === 0
-                ? (E ? `✅ All ${s.answer} placed!` : `✅ ${s.answer}개 전부 배치 완료!`)
-                : (E ? `⚠️ ${s.answer}/${s.total} placed.` : `⚠️ ${s.total}개 중 ${s.answer}개만 배치.`)}
+                ? (E ? `✅ All ${s.answer} placed!` : `✅ ${s.answer}개를 전부 놓았어요!`)
+                : (E ? `⚠️ ${s.answer}/${s.total} placed.` : `⚠️ ${s.total}개 중 ${s.answer}개만 놓았어요.`)}
             </div>
           </div>
         )}
@@ -296,9 +296,9 @@ const PLACEMENT_CASES = [
   {
     counts: [3, 3, 3],
     tag_en: "max < rest", tag_ko: "max < rest",
-    title_en: "Plenty of separators", title_ko: "분리자 여유",
+    title_en: "Plenty of separators", title_ko: "사이 막대 넉넉",
     desc_en: "max(3) < rest(6) → all 9 sticks fit!",
-    desc_ko: "max(3) < rest(6) → 9개 전부 사용!",
+    desc_ko: "max(3) < rest(6) → 9개를 전부 써요!",
     color: "#059669", bg: "#ecfdf5", bd: "#6ee7b7", icon: "✅",
   },
   {
@@ -306,7 +306,7 @@ const PLACEMENT_CASES = [
     tag_en: "max = rest+1", tag_ko: "max = rest+1",
     title_en: "Exactly enough", title_ko: "딱 맞음",
     desc_en: "max(4) = rest(3)+1 → all 7 sticks fit, but barely!",
-    desc_ko: "max(4) = rest(3)+1 → 7개 전부 사용, 아슬아슬!",
+    desc_ko: "max(4) = rest(3)+1 → 아슬아슬하게 7개를 다 써요!",
     color: "#d97706", bg: "#fffbeb", bd: "#fbbf24", icon: "⚡",
   },
   {
@@ -314,7 +314,7 @@ const PLACEMENT_CASES = [
     tag_en: "max > rest+1", tag_ko: "max > rest+1",
     title_en: "Too many of one color", title_ko: "한 색이 너무 많음",
     desc_en: "max(7) > rest(4)+1 → only 9/11 used!",
-    desc_ko: "max(7) > rest(4)+1 → 11개 중 9개만!",
+    desc_ko: "max(7) > rest(4)+1 → 11개 중 9개만 써요!",
     color: "#dc2626", bg: "#fee2e2", bd: "#fca5a5", icon: "❌",
   },
 ];
@@ -441,7 +441,7 @@ export function FanPlacementViz({ E }) {
           {E ? `Placed: ${s.placed.length}/${total}` : `배치: ${s.placed.length}/${total}`}
           {s.done && s.leftover > 0 && (
             <span style={{ color: "#dc2626", marginLeft: 6 }}>
-              ({E ? `${s.leftover} left!` : `${s.leftover}개 남음!`})
+              ({E ? `${s.leftover} left!` : `${s.leftover}개 남았어요!`})
             </span>
           )}
         </div>
@@ -461,7 +461,7 @@ export function FanPlacementViz({ E }) {
           ))}
           {s.placed.length === 0 && (
             <div style={{ fontSize: 12, color: C.dim, padding: 14, display: "flex", alignItems: "center" }}>
-              {E ? "Press ▶ to start!" : "▶ 눌러서 시작!"}
+              {E ? "Press ▶ to start!" : "▶ 를 눌러 시작해요!"}
             </div>
           )}
         </div>
@@ -478,7 +478,7 @@ export function FanPlacementViz({ E }) {
               ))
             )}
             <div style={{ display: "flex", alignItems: "center", fontSize: 10, fontWeight: 600, color: "#dc2626", marginLeft: 4 }}>
-              ← {E ? "can't place!" : "못 넣어!"}
+              ← {E ? "can't place!" : "못 넣어요!"}
             </div>
           </div>
         )}
@@ -492,14 +492,14 @@ export function FanPlacementViz({ E }) {
           }}>
             {s.leftover === 0 ? (
               <div style={{ fontSize: 11, fontWeight: 600, color: "#059669" }}>
-                ✅ {E ? `All ${s.answer} placed!` : `${s.answer}개 전부 배치 완료!`}
+                ✅ {E ? `All ${s.answer} placed!` : `${s.answer}개를 전부 놓았어요!`}
                 {" "}{E ? "answer = total" : "답 = total"}
               </div>
             ) : (
               <div style={{ fontSize: 11, fontWeight: 600, color: "#dc2626" }}>
                 ⚠️ {E
                   ? `${s.answer}/${s.total} placed. answer = 2×rest+1 = ${2 * rest + 1}`
-                  : `${s.total}개 중 ${s.answer}개만. 답 = 2×rest+1 = ${2 * rest + 1}`}
+                  : `${s.total}개 중 ${s.answer}개만 놓여요. 답 = 2×rest+1 = ${2 * rest + 1}`}
               </div>
             )}
           </div>
@@ -514,7 +514,7 @@ export function FanPlacementViz({ E }) {
         }}>
           + {E ? STICK_NAMES_EN[s.action] : STICK_NAMES_KO[s.action]}
           <span style={{ color: C.dim, fontWeight: 600 }}>
-            {" "}({E ? "most remaining, ≠ prev" : "가장 많고 이전과 ≠"})
+            {" "}({E ? "most remaining, ≠ prev" : "가장 많고 직전 색과 달라요"})
           </span>
         </div>
       )}
@@ -573,7 +573,7 @@ export function SeparatorBuildViz({ E }) {
     <div style={{ padding: "12px 8px" }}>
       {/* Title */}
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 700, color: "#d97706", marginBottom: 10 }}>
-        {E ? "Why 2×rest + 1?" : "왜 2×rest + 1 일까?"}
+        {E ? "Why 2×rest + 1?" : "왜 2×rest + 1 일까요?"}
       </div>
 
       {/* No "core idea" prose box — the visual rows below (▶ button growing the row)
@@ -600,7 +600,7 @@ export function SeparatorBuildViz({ E }) {
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <span style={{ fontSize: 8, fontWeight: 700, color: "#fff" }}>
-                  {s.type === "max" ? (E ? "MAX" : "최대") : (E ? "SEP" : "분리")}
+                  {s.type === "max" ? (E ? "MAX" : "최대") : (E ? "SEP" : "사이")}
                 </span>
               </div>
             </div>
@@ -614,7 +614,7 @@ export function SeparatorBuildViz({ E }) {
         }}>
           <span style={{ color: "#dc2626" }}>{E ? "dominant" : "최대"}: {sepCount + 1}</span>
           {" + "}
-          <span style={{ color: "#3b82f6" }}>{E ? "separators" : "분리자"}: {sepCount}</span>
+          <span style={{ color: "#3b82f6" }}>{E ? "separators" : "사이 막대"}: {sepCount}</span>
           {" = "}
           <span style={{ color: "#d97706", fontSize: 15 }}>{totalSticks}</span>
         </div>
@@ -636,7 +636,7 @@ export function SeparatorBuildViz({ E }) {
               borderRadius: 4, padding: "0 6px",
               transition: "all .3s",
             }}>
-              {E ? "sep" : "분리"}={n} → 2×{n}+1 = <span style={{ color: isCurrent ? "#fbbf24" : "#e2e8f0", fontWeight: 700 }}>{2 * n + 1}</span>
+              {E ? "sep" : "사이"}={n} → 2×{n}+1 = <span style={{ color: isCurrent ? "#fbbf24" : "#e2e8f0", fontWeight: 700 }}>{2 * n + 1}</span>
               {E ? " sticks" : "개"}
             </div>
           );
@@ -663,7 +663,7 @@ export function SeparatorBuildViz({ E }) {
             border: "none", cursor: "pointer", color: "#fff",
             background: `linear-gradient(135deg,#b45309,${A})`,
             boxShadow: "0 3px 12px rgba(217,119,6,.3)",
-          }}>+ {E ? "Add separator" : "분리자 추가"}</button>
+          }}>+ {E ? "Add separator" : "사이 막대 넣기"}</button>
         ) : (
           <button onClick={reset} style={{
             padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
@@ -779,7 +779,7 @@ export function TryYourselfViz({ E }) {
       }}>
         🎯 {E
           ? `Goal: place ${optimal} of ${total} sticks (no two same touch)`
-          : `목표: ${total}개 중 ${optimal}개 배치 (같은 색 옆 금지)`}
+          : `${total}개 중 ${optimal}개를 놓아 봐요 (같은 색은 옆에 못 와요)`}
       </div>
 
       {/* Pool — clickable buttons */}
@@ -824,7 +824,7 @@ export function TryYourselfViz({ E }) {
         }}>
           ❌ {E
             ? `Same as previous! ${names[violation]} can't follow ${names[violation]}.`
-            : `이전과 같은 색! ${names[violation]} 다음에 ${names[violation]} 안 돼요.`}
+            : `직전과 같은 색이에요! ${names[violation]} 다음에 또 ${names[violation]}은(는) 안 돼요.`}
         </div>
       )}
 
@@ -853,7 +853,7 @@ export function TryYourselfViz({ E }) {
           ))}
           {placed.length === 0 && (
             <div style={{ fontSize: 11, color: C.dim, padding: 10, display: "flex", alignItems: "center" }}>
-              {E ? "↑ Tap a color above" : "↑ 위 색 눌러요"}
+              {E ? "↑ Tap a color above" : "↑ 위에서 색을 눌러요"}
             </div>
           )}
         </div>
@@ -867,8 +867,8 @@ export function TryYourselfViz({ E }) {
           }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: hitOptimal ? "#059669" : "#92400e" }}>
               {hitOptimal
-                ? (E ? `🎉 Optimal! You placed all ${optimal} sticks!` : `🎉 최적! ${optimal}개 전부 배치!`)
-                : (E ? `Stuck at ${reached}. Optimal is ${optimal} — try again!` : `${reached}개에서 막힘. 최적은 ${optimal}개 — 다시!`)}
+                ? (E ? `🎉 Optimal! You placed all ${optimal} sticks!` : `🎉 제일 좋아요! ${optimal}개를 전부 놓았어요!`)
+                : (E ? `Stuck at ${reached}. Optimal is ${optimal} — try again!` : `${reached}개에서 막혔어요. 제일 많이 놓으면 ${optimal}개예요 — 다시 해봐요!`)}
             </div>
           </div>
         )}
@@ -894,7 +894,7 @@ export function TryYourselfViz({ E }) {
       }}>
         💡 {E
           ? "Tip: place the most-common color whenever it's not blocked. That's the greedy idea!"
-          : "팁: 막히지 않을 때 가장 많은 색을 먼저 놓아봐요. 이게 그리디 아이디어!"}
+          : "막히지 않는 한 가장 많은 색을 먼저 놓아 봐요.\n많이 남은 색을 미루면 나중에 그 색만 남아 막혀요. 이게 그리디 생각이에요!"}
       </div>
     </div>
   );

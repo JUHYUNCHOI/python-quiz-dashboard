@@ -303,15 +303,15 @@ export function getExplodingArrowSections(E) {
         t(E, "We don't test damage — we test the ANSWER. 'Can arrows of power X finish the job with ≤ K arrows?' is easier: bigger X → easier, so the yes/no flips exactly once. Binary-search that boundary.",
             "데미지를 시험하는 게 아니라 정답 X 를 시험해요. '힘 X 짜리 화살로 K 개 안에 다 끝낼 수 있나?' 는 판단이 쉬워요 — X 가 커질수록 쉬워지니 '예/아니오' 가 딱 한 번 뒤집혀요. 그 경계를 이분 탐색해요."),
         t(E, "hi starts big enough: (a[j] + j*j + M - 1)//M is the smallest X that could kill target j all by itself — the true answer never exceeds the largest of these.",
-            "hi 는 충분히 크게: (a[j] + j*j + M - 1)//M 은 j 를 혼자서 없앨 최소 X 예요 — 정답은 이 값들 중 최댓값을 넘지 않아요."),
+            "hi 는 충분히 크게 잡아요. (a[j] + j*j + M - 1)//M 은 j 를 혼자서 없앨 최소 X 예요 — 정답은 이 값들 중 최댓값을 넘지 않아요."),
       ],
       pyOnly: [
         t(E, "feasible(mid) True → the answer is ≤ mid, so pull hi down; False → push lo up. lo == hi is the smallest feasible X.",
-            "feasible(mid) 가 True 면 정답 ≤ mid 이니 hi 를 내리고, False 면 lo 를 올려요. lo == hi 가 가능한 가장 작은 X."),
+            "feasible(mid) 가 True 면 정답 ≤ mid 이니 hi 를 내리고, False 면 lo 를 올려요. lo == hi 가 되면 그게 가능한 가장 작은 X 예요."),
       ],
       cppOnly: [
         t(E, "long long everywhere: M, K, a[i] reach 1e9 and M*X can overflow 32-bit ints.",
-            "전부 long long: M, K, a[i] 가 1e9 까지라 M*X 는 32비트를 넘칠 수 있어요."),
+            "전부 long long 으로 써요. M, K, a[i] 가 1e9 까지라 M*X 는 32비트를 넘칠 수 있어요."),
       ],
     },
     {
@@ -322,11 +322,11 @@ export function getExplodingArrowSections(E) {
         t(E, "Sweep left to right. A target still alive here MUST be finished by an arrow fired at or before it — and firing right HERE reaches the farthest to the right, so it's never worse. Fire exactly ⌈deficit / (M·X)⌉ arrows on the spot.",
             "왼쪽부터 훑어요. 지금 살아있는 표적은 반드시 여기(또는 그 전)에서 쏜 화살로 끝내야 해요 — 그런데 바로 여기서 쏘면 오른쪽으로 가장 멀리 닿으니 절대 손해가 아니에요. 그 자리에서 정확히 ⌈deficit / (M·X)⌉ 발을 쏴요."),
         t(E, "An arrow's damage max(0, M·X − d²) is a parabola in the distance d. Adding a parabola to a range is O(1) with a 2nd-order difference array: val/slope/accel roll it forward, and one cancellation event at p = x+L+1 clamps the tail to 0. Whole check: O(N).",
-            "화살의 데미지 max(0, M·X − d²) 는 거리 d 에 대한 포물선이에요. 포물선을 구간에 더하는 건 2차 차분 배열로 O(1): val/slope/accel 이 앞으로 굴려주고, p = x+L+1 에서 취소 이벤트 하나로 꼬리를 0 으로 잘라요. 검사 전체가 O(N)."),
+            "화살의 데미지 max(0, M·X − d²) 는 거리 d 에 대한 포물선이에요. 포물선을 구간에 더하는 건 2차 차분 배열을 쓰면 O(1) 이에요. val/slope/accel 이 앞으로 굴려주고, p = x+L+1 에서 취소 이벤트 하나로 꼬리를 0 으로 잘라요. 그래서 검사 전체가 O(N) 이에요."),
       ],
       pyOnly: [
         t(E, "used > K means even this greedy (which is optimal) can't do it → X is too small, return False.",
-            "used > K 면 최적인 이 그리디로도 안 된다는 뜻 → X 가 너무 작아요, False 반환."),
+            "used > K 면 제일 좋은 이 그리디로도 안 된다는 뜻이에요 → X 가 너무 작으니 False 를 돌려줘요."),
       ],
       cppOnly: [
         t(E, "isqrtll gives L = ⌊√(M·X−1)⌋, the largest distance where M·X − d² is still positive.",

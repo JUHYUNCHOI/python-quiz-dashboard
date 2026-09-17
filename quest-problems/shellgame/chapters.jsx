@@ -142,7 +142,7 @@ function ShellSim({ E: isE }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
-        {t(isE, "🎮 Try It: 3-Shell Tracker", "🎮 직접 해보기: 3-컵 추적기")}
+        {t(isE, "🎮 Try It: 3-Shell Tracker", "🎮 직접 해 보기 — 컵 세 개 따라가기")}
       </div>
       <div style={{
         background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10,
@@ -150,7 +150,7 @@ function ShellSim({ E: isE }) {
       }}>
         {t(isE,
           "Press Next to apply each swap to all 3 starts. Watch which start collects the most correct guesses.",
-          "Next 를 눌러 각 스왑을 3 가지 시작에 적용해봐. 어느 시작이 가장 많이 맞히는지 관찰해.")}
+          "Next 를 누르면 시작 위치 세 곳에 같은 바꾸기가 한 번씩 적용돼요. 어느 시작이 가장 많이 맞히는지 보세요.")}
       </div>
 
       {/* Swap timeline */}
@@ -273,7 +273,7 @@ export function makeShellCh1(E) {
       type: "reveal",
       narr: t(E,
         "The classic shell game: a pebble hides under one of 3 shells. There are N rounds; each round records (a, b, g) — Bessie swaps shells a and b, then Elsie guesses the pebble is under shell g.\nThe pebble's STARTING shell is unknown. Print the MAXIMUM possible number of correct Elsie guesses, taken over all 3 starting positions.",
-        "고전 컵 게임: 3개의 컵 중 하나에 조약돌이 숨겨져 있어요. N개의 라운드가 있고 각 라운드는 (a, b, g) — Bessie가 컵 a와 b를 바꿔놓고, Elsie가 컵 g 아래에 조약돌이 있다고 추측해요.\n조약돌의 시작 위치는 알 수 없어요. 시작 위치 3가지 중 Elsie가 가장 많이 맞히는 경우의 정답 수를 출력해요."),
+        "Elsie 가 가장 많이 맞히려면 조약돌이 어디서 시작해야 할까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -290,7 +290,7 @@ export function makeShellCh1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "Output the maximum possible number of correct Elsie guesses, taken over all 3 starting positions.",
-                "3 가지 시작 위치 중 Elsie 가 가장 많이 맞히는 경우의 정답 수를 출력.")}
+                "시작 위치 세 가지를 모두 해 보고, Elsie 가 가장 많이 맞힌 횟수를 출력해요.")}
             </div>
           </div>
 
@@ -322,8 +322,8 @@ export function makeShellCh1(E) {
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "The pebble's ", "조약돌의 ")}
-                  <b style={{ color: "#16a34a" }}>{t(E, "starting position is unknown", "시작 위치는 알 수 없음")}</b>
-                  {t(E, ".", ".")}
+                  <b style={{ color: "#16a34a" }}>{t(E, "starting position is unknown", "시작 위치는 알 수 없어요")}</b>
+                  {t(E, ".", "")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
@@ -359,7 +359,7 @@ export function makeShellCh1(E) {
           </div>
           <div style={{ marginTop: 10, background: "#fef2f2", borderRadius: 10, padding: 10, border: "1px solid #fca5a5", fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "The pebble was at 2.\nWe swapped 1 and 3. Since the pebble wasn't under 1 or 3, it doesn't move!", "조약돌은 2번에 있었어.\n1번과 3번을 교환했어. 조약돌이 1번이나 3번 아래에 없었으니 이동하지 않아!")}
+              "The pebble was at 2.\nWe swapped 1 and 3. Since the pebble wasn't under 1 or 3, it doesn't move!", "조약돌은 2 번에 있었어요.\n바꾼 건 1 번과 3 번이에요. 조약돌이 있던 2 번은 건드리지 않았으니 그대로예요!")}
           </div>
         </div>),
     },
@@ -367,7 +367,7 @@ export function makeShellCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Now a case where the pebble IS under one of the swapped shells.\nPebble at 1, swap 1 and 3.\nWhere does it go?", "이번엔 조약돌이 교환되는 컵 아래에 있는 경우예요. 조약돌이 1번에 있고, 1번과 3번을 교환. 어디로 가?"),
+        "Now a case where the pebble IS under one of the swapped shells.\nPebble at 1, swap 1 and 3.\nWhere does it go?", "이번엔 조약돌이 있는 컵을 바꿔요. 1 번과 3 번을 바꿉니다."),
       question: t(E,
         "Pebble at shell 1. Swap shells 1 ↔ 3. Where is the pebble now?",
         "조약돌이 1번 컵. 1번 ↔ 3번 스왑. 조약돌은 이제 어디?"),
@@ -379,17 +379,17 @@ export function makeShellCh1(E) {
       correct: 2,
       explain: t(E,
         "The pebble was at 1. We swapped 1 and 3, so the pebble moves from 1 to 3!",
-        "조약돌이 1번에 있었어. 1번과 3번을 교환했으니 조약돌은 1번에서 3번으로 이동!"),
+        "조약돌이 1번에 있었어요. 1번과 3번을 바꿨으니 조약돌은 3번으로 가요!"),
     },
     // 1-4: The key insight — try all 3 starts
     {
       type: "reveal",
       narr: t(E,
-        "We don't know where the pebble starts!\nBut there are only 3 possible positions: 1, 2, or 3.\nSo we try ALL 3 starting positions and take the best score!", "조약돌이 어디서 시작하는지 몰라! 하지만 가능한 위치는 1, 2, 3 단 3개예요. 그래서 3가지 시작 위치를 모두 시도하고 최고 점수를 구해요!"),
+        "We don't know where the pebble starts!\nBut there are only 3 possible positions: 1, 2, or 3.\nSo we try ALL 3 starting positions and take the best score!", "시작 위치는 1, 2, 3 중 하나뿐이니 셋 다 해 보면 돼요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
-            {t(E, "The Key Insight: Try All 3!", "핵심 아이디어: 3가지 모두 시도!")}
+            {t(E, "The Key Insight: Try All 3!", "핵심 아이디어 — 세 가지를 다 해 봐요")}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[1, 2, 3].map(start => {
@@ -407,10 +407,10 @@ export function makeShellCh1(E) {
                   }}>{"🐚"}</div>
                   <div>
                     <div style={{ fontSize: 13, fontWeight: 600, color: colors[start - 1] }}>
-                      {t(E, `Try start = ${start}`, `시작 위치 = ${start} 시도`)}
+                      {t(E, `Try start = ${start}`, `시작 위치 ${start} 번으로 해 보기`)}
                     </div>
                     <div style={{ fontSize: 11, color: C.dim }}>
-                      {t(E, "Simulate all swaps → count correct guesses", "모든 스왑 시뮬레이션 → 정답 수 세기")}
+                      {t(E, "Simulate all swaps → count correct guesses", "바꾸기를 끝까지 따라가며 맞힌 횟수를 세요")}
                     </div>
                   </div>
                 </div>
@@ -418,7 +418,7 @@ export function makeShellCh1(E) {
             })}
           </div>
           <div style={{ marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#dc2626" }}>
-            {t(E, "Answer = max of all 3 scores!", "답 = 3개 점수 중 최대값!")}
+            {t(E, "Answer = max of all 3 scores!", "답은 세 점수 중 제일 큰 값이에요!")}
           </div>
         </div>),
     },
@@ -426,19 +426,19 @@ export function makeShellCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Since there are exactly 3 shells, how many starting positions do we need to try?", "컵이 정확히 3개니까, 시작 위치를 몇 가지 시도해야 할까?"),
+        "Since there are exactly 3 shells, how many starting positions do we need to try?", "컵이 세 개니까 시작 위치를 몇 가지 해 봐야 할까요?"),
       question: t(E,
         "How many possible starting positions for the pebble?",
-        "조약돌의 가능한 시작 위치는 몇 가지?"),
+        "조약돌이 시작할 수 있는 자리는 몇 가지일까요?"),
       options: [
-        t(E, "1 — just pick the middle", "1 — 가운데만 선택"),
-        t(E, "3 — try all shell positions", "3 — 모든 컵 위치 시도"),
-        t(E, "N — depends on swap count", "N — 스왑 수에 따라"),
+        t(E, "1 — just pick the middle", "1 — 가운데만 골라요"),
+        t(E, "3 — try all shell positions", "3 — 컵 세 자리를 다 해 봐요"),
+        t(E, "N — depends on swap count", "N — 바꾼 횟수에 따라 달라요"),
       ],
       correct: 1,
       explain: t(E,
         "Only 3 shells, so only 3 possible starts. Try each, simulate, take the max!",
-        "컵이 3개뿐이니 시작 위치도 3가지. 각각 시뮬레이션하고 최대값 구하면 끝!"),
+        "컵이 세 개니 시작 위치도 세 가지예요. 각각 해 보고 제일 큰 값을 고르면 끝이에요!"),
     },
     // 1-6: Input practice
     {
@@ -467,7 +467,7 @@ export function makeShellCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace with an example!\n3 swaps: (1,2,guess=1), (3,2,guess=1), (1,3,guess=1).\nWe'll try starting position = 1.", "예시로 추적해보자! 스왑 3번: (1,2,추측=1), (3,2,추측=1), (1,3,추측=1). 시작 위치 = 1로 시도할 거예요."),
+        "Let's trace with an example!\n3 swaps: (1,2,guess=1), (3,2,guess=1), (1,3,guess=1).\nWe'll try starting position = 1.", "시작 위치를 1 로 놓고 세 번 바꿔 가며 따라가 볼게요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
@@ -565,14 +565,14 @@ export function makeShellCh2(E) {
       type: "reveal",
       narr: t(E,
         "Now try it yourself! Step through the swaps and watch all 3 starting positions in parallel.\nWhich one wins?",
-        "이제 직접 해봐! 스왑을 한 단계씩 밟으면서 3 가지 시작 위치를 동시에 봐. 어느 게 이길까?"),
+        "한 단계씩 넘기면서 시작 위치 세 곳을 같이 봐요."),
       content: <ShellSim E={E} />,
     },
     // 2-4: Quiz on simulation logic
     {
       type: "quiz",
       narr: t(E,
-        "When we swap shells A and B, what happens to the pebble position (pos)?", "컵 A와 B를 교환할 때, 조약돌 위치(pos)에 무슨 일이 일어나?"),
+        "When we swap shells A and B, what happens to the pebble position (pos)?", "컵 A 와 B 를 바꾸면 조약돌 위치 pos 는 어떻게 될까요?"),
       question: t(E,
         "Swap A↔B. If pos==A, then pos becomes...?",
         "A↔B 스왑. pos==A이면 pos는...?"),
@@ -584,19 +584,19 @@ export function makeShellCh2(E) {
       correct: 1,
       explain: t(E,
         "If the pebble is at A and we swap A↔B, the pebble moves to B! If pos==B, it moves to A. Otherwise, no change.",
-        "조약돌이 A에 있고 A↔B를 교환하면 조약돌은 B로 이동! pos==B이면 A로 이동. 아니면 변화 없음."),
+        "조약돌이 A 에 있을 때 A↔B 를 바꾸면 B 로 가요. pos 가 B 면 A 로 가고, 아니면 그대로예요."),
     },
     // 2-5: Complexity input
     {
       type: "input",
       narr: t(E,
-        "We try 3 starting positions, each simulating N swaps.\nWhat's the total number of operations?", "3가지 시작 위치를 시도하고 각각 N번의 스왑을 시뮬레이션해요. 총 연산 수는?"),
+        "We try 3 starting positions, each simulating N swaps.\nWhat's the total number of operations?", "시작 위치 세 가지를 각각 N 번씩 따라가 봐요."),
       question: t(E,
         "3 starts × N swaps each. If N=5, total operations?",
-        "3가지 시작 × N번 스왑. N=5이면 총 연산 수?"),
+        "시작 세 가지 × 바꾸기 N 번이에요. N=5 면 계산은 모두 몇 번일까요?"),
       hint: t(E,
         "Multiply the number of starts by the number of swaps per start.",
-        "시작 위치 수 × 시작당 스왑 수."),
+        "시작 위치 수에 한 번당 바꾸는 횟수를 곱해 봐요."),
       answer: 15,
     },
   ];
@@ -612,7 +612,7 @@ export function makeShellCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code!\nFirst read N and all the swap data.\nEach swap has: shell A, shell B, and guess G.", "코드를 만들어보자! 먼저 N과 모든 스왑 데이터를 읽어. 각 스왑에는: 컵 A, 컵 B, 추측 G가 있어요."),
+        "Let's build the code!\nFirst read N and all the swap data.\nEach swap has: shell A, shell B, and guess G.", "먼저 N 과 바꾸기 정보를 읽어요. 컵 A, 컵 B, 추측 G 예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
@@ -632,7 +632,7 @@ export function makeShellCh3(E, lang = "py") {
           />
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5, whiteSpace: "pre-line" }}>
             {t(E,
-              "Store all swaps as tuples (a, b, g) in a list.\nWe'll replay these for each starting position.", "모든 스왑을 튜플 (a, b, g)로 리스트에 저장.\n각 시작 위치마다 이걸 다시 재생할 거예요.")}
+              "Store all swaps as tuples (a, b, g) in a list.\nWe'll replay these for each starting position.", "바꾸기를 모두 튜플 (a, b, g) 로 리스트에 담아요.\n시작 위치마다 이걸 처음부터 다시 돌려 볼 거예요.")}
           </div>
         </div>),
     },
@@ -640,11 +640,11 @@ export function makeShellCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The outer loop tries all 3 starting positions.\nFor each, we track the pebble position and count correct guesses.", "바깥 루프에서 3가지 시작 위치를 모두 시도해요. 각각에 대해 조약돌 위치를 추적하고 정답 수를 세."),
+        "The outer loop tries all 3 starting positions.\nFor each, we track the pebble position and count correct guesses.", "바깥 반복에서 시작 위치 세 가지를 차례로 해 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
-            {t(E, "Step 2: Try all starting positions", "2단계: 모든 시작 위치 시도")}
+            {t(E, "Step 2: Try all starting positions", "2단계: 시작 위치를 모두 해 보기")}
           </div>
           <CodeSnippet
             lines={[
@@ -666,7 +666,7 @@ export function makeShellCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Inside, for each swap: update pebble position, then check if the guess matches.\nThis is the heart of the simulation!", "안쪽에서 각 스왑마다: 조약돌 위치 업데이트 후 추측이 맞는지 확인. 이게 시뮬레이션의 핵심!"),
+        "Inside, for each swap: update pebble position, then check if the guess matches.\nThis is the heart of the simulation!", "조약돌 자리를 옮긴 다음에 추측이 맞는지 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
@@ -686,10 +686,10 @@ export function makeShellCh3(E, lang = "py") {
           />
           <div style={{ marginTop: 8, fontSize: 12, lineHeight: 1.8, color: C.text }}>
             <div style={{ fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>
-              {t(E, "Two-part logic:", "2단계 로직:")}
+              {t(E, "Two-part logic:", "두 단계로 나뉘어요")}
             </div>
-            <div>1. {t(E, "Update pos: if pebble is at a, move to b (and vice versa)", "pos 업데이트: 조약돌이 a에 있으면 b로 이동 (반대도)")}</div>
-            <div>2. {t(E, "Check: if pos matches guess g, increment score", "확인: pos가 추측 g와 같으면 점수 +1")}</div>
+            <div>1. {t(E, "Update pos: if pebble is at a, move to b (and vice versa)", "조약돌이 a 에 있으면 b 로 옮겨요 (반대도 마찬가지예요)")}</div>
+            <div>2. {t(E, "Check: if pos matches guess g, increment score", "옮긴 pos 가 추측 g 와 같으면 점수를 1 올려요")}</div>
           </div>
         </div>),
     },
@@ -697,25 +697,25 @@ export function makeShellCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Notice: the swap uses if/elif, but the guess check is a SEPARATE if.\nWhy not elif for the guess check?", "주목: 스왑은 if/elif를 쓰지만 추측 확인은 별도의 if야. 왜 추측 확인에 elif를 쓰지 않을까?"),
+        "Notice: the swap uses if/elif, but the guess check is a SEPARATE if.\nWhy not elif for the guess check?", "자리 옮기기는 if/elif 인데 추측 확인만 따로 if 예요."),
       question: t(E,
         "Why is 'if pos == g' separate from the swap if/elif?",
-        "왜 'if pos == g'가 스왑 if/elif와 분리되어 있을까?"),
+        "'if pos == g' 는 왜 위의 if/elif 와 따로 떨어져 있을까요?"),
       options: [
-        t(E, "No reason, just style", "이유 없어, 그냥 스타일"),
-        t(E, "Guess check must happen AFTER the swap, using updated pos", "추측 확인은 스왑 이후에, 업데이트된 pos로 해야 하니까"),
-        t(E, "To save time", "시간을 절약하려고"),
+        t(E, "No reason, just style", "이유는 없고 그냥 모양이에요"),
+        t(E, "Guess check must happen AFTER the swap, using updated pos", "자리를 옮긴 뒤의 pos 로 확인해야 하니까요"),
+        t(E, "To save time", "시간을 아끼려고요"),
       ],
       correct: 1,
       explain: t(E,
         "The swap updates pos first. THEN we check the guess against the NEW pos. If it were elif, the guess check might be skipped!",
-        "스왑이 먼저 pos를 업데이트해요. 그 다음 새로운 pos로 추측을 확인해요. elif였다면 추측 확인이 건너뛸 수 있어요!"),
+        "먼저 pos 를 옮기고, 그 다음 새 pos 로 추측을 확인해요. elif 로 두면 확인을 건너뛸 수 있어요!"),
     },
     // 3-5: Complete code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 부분씩 읽어 봐요."),
       sections: getShellGameSections(E),
     },
   ];

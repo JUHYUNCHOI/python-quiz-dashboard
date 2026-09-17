@@ -73,12 +73,12 @@ function MobileGamePlan({ E }) {
         🧭 {t(E, "The whole idea, at a glance", "핵심 한눈에")}
       </div>
       <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 14, wordBreak: "keep-all" }}>
-        {t(E, "Power never drops, so beatable enemies only pile up — grab the biggest each time.", "파워는 줄지 않으니 먹을 수 있는 적은 늘기만 해요 — 매번 가장 큰 적을.")}
+        {t(E, "Power never drops, so beatable enemies only pile up — grab the biggest each time.", "파워는 줄지 않으니 먹을 수 있는 적은 늘기만 해요.")}
       </div>
       <div style={{ maxWidth: 500, margin: "0 auto", display: "grid", gap: 10 }}>
         <Row q={t(E, "Each round, among enemies weaker than me…", "매 라운드, 나보다 약한 적 중에서…")} res={t(E, "eat the biggest", "가장 큰 적")} col={A} bg="#fffbeb" />
-        <Row q={t(E, "Why biggest? Power only grows — grow fastest → fewest kills", "왜 가장 큰? 파워는 커지기만 → 빨리 크면 → 최소 처치")} res={t(E, "greedy + max-heap", "그리디 + 최대힙")} col="#059669" bg="#ecfdf5" />
-        <Row q={t(E, "Careful: strictly less (p < cur) — equal power can't be beaten", "주의: strictly less (p < cur) — 같은 파워는 못 먹어요")} res={t(E, "p < cur", "p < cur")} col="#0891b2" bg="#ecfeff" />
+        <Row q={t(E, "Why biggest? Power only grows — grow fastest → fewest kills", "왜 가장 큰 적일까요? 빨리 커질수록 처치 수가 줄어요")} res={t(E, "greedy + max-heap", "그리디 + 최대힙")} col="#059669" bg="#ecfdf5" />
+        <Row q={t(E, "Careful: strictly less (p < cur) — equal power can't be beaten", "조심해요 — 파워가 같으면 못 먹어요 (p < cur 여야 해요)")} res={t(E, "p < cur", "p < cur")} col="#0891b2" bg="#ecfeff" />
         <Row q={t(E, "No beatable enemy left but power < B", "먹을 적이 없는데 파워 < B")} res="-1" col="#dc2626" bg="#fef2f2" />
       </div>
       <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
@@ -100,7 +100,7 @@ export function makeMobileGameCh1(E) {
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
         "Alice starts with power A. There are N enemies with powers p₁..pₙ. She can beat an enemy weaker than her (adding its power to hers), each enemy once. Find the fewest kills to reach power ≥ B — or -1 if impossible.",
-        "Alice 는 파워 A 로 시작해요. 파워 p₁..pₙ 인 적이 N 명. 자기보다 약한 적을 처치할 수 있고(그 파워만큼 커짐), 각 적은 한 번씩. 파워 ≥ B 가 되는 최소 처치 수를 구해요 — 불가능하면 -1."),
+        "약한 적을 먹어 파워를 키워요. 가장 적게 먹는 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -116,7 +116,7 @@ export function makeMobileGameCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "Reach power ≥ B in the fewest kills — or report that it can't be done.",
-                "최소 처치로 파워 ≥ B 만들기 — 안 되면 불가능이라고 알리기.")}
+                "가장 적게 처치해서 파워 ≥ B 를 만들어요. 안 되면 -1 을 출력해요.")}
             </div>
           </div>
 
@@ -130,9 +130,9 @@ export function makeMobileGameCh1(E) {
                 <div>
                   {t(E, "Alice starts with power ", "Alice 는 파워 ")}
                   <b style={{ color: A }}>A</b>
-                  {t(E, ". There are ", " 로 시작. ")}
+                  {t(E, ". There are ", " 로 시작해요. ")}
                   <b style={{ color: A }}>{t(E, "N enemies", "적 N 명")}</b>
-                  {t(E, " with powers p₁..pₙ.", ", 각 파워 p₁..pₙ.")}
+                  {t(E, " with powers p₁..pₙ.", " 이 있고, 각자 파워는 p₁..pₙ 이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -156,9 +156,9 @@ export function makeMobileGameCh1(E) {
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "fewest kills to reach power ≥ B", "파워 ≥ B 까지의 최소 처치 수")}</b>
-                  {t(E, ". If impossible, print ", "를 출력. 불가능하면 ")}
+                  {t(E, ". If impossible, print ", "를 출력해요. 못 하면 ")}
                   <code>-1</code>
-                  {t(E, ".", " 출력.")}
+                  {t(E, ".", " 을 출력해요.")}
                 </div>
               </div>
             </div>
@@ -179,7 +179,7 @@ export function makeMobileGameCh1(E) {
       type: "reveal",
       label: t(E, "No tricks — greedy", "심술쟁이 없이 — 그리디"),
       narr: t(E, "Play it out: each round, eat the biggest enemy you can. Watch the power climb.",
-                 "직접 해봐요: 매 라운드, 먹을 수 있는 가장 큰 적을 먹기. 파워가 올라가는 걸 봐요."),
+                 "먹을 수 있는 가장 큰 적부터 먹으며 파워를 키워 봐요."),
       content: (<MobileSim E={E} />),
     },
   ];
@@ -198,7 +198,7 @@ export function makeMobileGameCh2(E, lang = "py") {
       label: t(E, "Plan", "계획"),
       narr: t(E,
         "Before the code — here's the rule (from the greedy sim) and the tool we'll use (a max-heap).",
-        "코드 전에 — 그리디 시뮬에서 알아낸 규칙과, 쓸 도구 (최대힙) 를 정리."),
+        "앞에서 찾은 규칙과 쓸 도구를 먼저 정리해요."),
       content: (<MobileGamePlan E={E} />),
     },
     // Run — 힙이 회차별로 어떻게 push/pop 되는지 (선생님 지적: "heap 이 어떻게 되는지 안 보임")
@@ -207,7 +207,7 @@ export function makeMobileGameCh2(E, lang = "py") {
       label: t(E, "Run · heap trace", "실행 · 힙 트레이스"),
       narr: t(E,
         "Before the code — watch the heap actually push and pop, round by round, on the sample enemies.",
-        "코드 보기 전에 — 힙이 회차마다 어떻게 push 하고 pop 하는지, 샘플에서 눈으로 따라가요."),
+        "힙이 회차마다 무엇을 넣고 꺼내는지 눈으로 따라가요."),
       content: (<HeapTraceSim E={E} />),
     },
     // Code — CodeWalk 로 말풍선이 구현 조각씩 이동
@@ -216,7 +216,7 @@ export function makeMobileGameCh2(E, lang = "py") {
       label: t(E, "Code", "코드"),
       narr: t(E,
         "Now the code — you just saw the heap in action. Each bubble sits on the lines it explains.",
-        "이제 코드예요 — 방금 힙이 움직이는 걸 봤죠. 말풍선이 설명하는 줄에 붙어 있어요."),
+        "말풍선을 따라 코드를 한 줄씩 읽어 봐요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#d97706" />
       ),

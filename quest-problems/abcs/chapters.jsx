@@ -34,7 +34,7 @@ export function makeAbcsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Three positive integers A ≤ B ≤ C exist somewhere. You're handed all 7 of these sums in SOME order: A, B, C, A+B, B+C, A+C, A+B+C.\nFigure out the original A, B, C.",
-        "세 양의 정수 A ≤ B ≤ C 가 있어요. 그리고 7가지 합이 순서가 섞인 채로 주어져요: A, B, C, A+B, B+C, A+C, A+B+C.\n원래 A, B, C를 찾아요."),
+        "섞여서 들어온 일곱 개의 합만 보고\n원래 세 수 A, B, C 를 찾아내요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -51,7 +51,7 @@ export function makeAbcsCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "Recover A B C from the 7 shuffled sums and output them in non-decreasing order.",
-                "섞인 7개 합에서 원래 A B C 를 복원해 오름차순으로 출력.")}
+                "섞인 7개 합에서 원래 A, B, C 를 찾아 작은 것부터 차례로 출력해요.")}
             </div>
           </div>
 
@@ -65,7 +65,7 @@ export function makeAbcsCh1(E) {
                 <div>
                   {t(E, "There are three positive integers ", "세 양의 정수 ")}
                   <b style={{ color: "#d97706" }}>{t(E, "A ≤ B ≤ C", "A ≤ B ≤ C")}</b>
-                  {t(E, " (hidden from you).", " 가 있어요 (숨겨져 있음).")}
+                  {t(E, " (hidden from you).", " 가 있어요. 우리에겐 안 보여요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -97,17 +97,17 @@ export function makeAbcsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Play with A, B, C and watch the 7 sums. What's always at the smallest spot? At the largest?",
-        "A, B, C 를 바꿔보면서 7개 합을 봐. 가장 작은 자리엔 항상 뭐가? 가장 큰 자리엔?"),
+        "A, B, C 를 바꿔 보면서\n가장 작은 자리와 가장 큰 자리를 지켜봐요."),
       content: <AbcsSumExplorer E={E} />,
     },
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "Among the 7 numbers, which one is always A+B+C?", "7개 숫자 중 항상 A+B+C인 것은?"),
+        "Among the 7 numbers, which one is always A+B+C?", "7개 숫자 중에서 항상 A+B+C 인 것은 무엇일까요?"),
       question: t(E,
         "Which of the 7 numbers is always A+B+C?",
-        "7개 숫자 중 항상 A+B+C인 것은?"),
+        "7개 숫자 중에서 항상 A+B+C 인 것은 무엇일까요?"),
       options: [
         t(E, "The largest number", "가장 큰 수"),
         t(E, "The median number", "중간 수"),
@@ -115,19 +115,19 @@ export function makeAbcsCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! A+B+C is the sum of all three, so it's always the largest of the 7 values.",
-        "맞아! A+B+C는 세 수의 합이므로 항상 7개 값 중 가장 커."),
+        "맞아요! A+B+C 는 세 수를 다 더한 값이라, 항상 7개 값 중에서 가장 커요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "Numbers: [2, 2, 4, 7, 9, 9, 11]. A+B+C = 11. What is A (the smallest)?", "숫자: [2, 2, 4, 7, 9, 9, 11]. A+B+C = 11. A(가장 작은 수)는?"),
+        "Numbers: [2, 2, 4, 7, 9, 9, 11]. A+B+C = 11. What is A (the smallest)?", "숫자가 [2, 2, 4, 7, 9, 9, 11] 이고 A+B+C = 11 이에요.\n가장 작은 수 A 는 얼마일까요?"),
       question: t(E,
         "Numbers: [2,2,4,7,9,9,11]. A+B+C=11. A = ?",
-        "숫자: [2,2,4,7,9,9,11]. A+B+C=11. A = ?"),
+        "숫자는 [2,2,4,7,9,9,11] 이고 A+B+C=11 이에요. A 는 얼마일까요?"),
       hint: t(E,
         "After sorting, which position holds A?",
-        "정렬 후 A 는 어느 위치에 올까?"),
+        "정렬하고 나면 A 는 어느 자리에 올까요?"),
       answer: 2,
     },
   ];
@@ -144,7 +144,7 @@ export function makeAbcsCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Sort the 7 numbers, then read A, B, C off known positions of the sorted list. Sections build it one piece at a time.",
-        "7개 숫자를 정렬한 뒤 A, B, C 를 정해진 위치에서 바로 읽어요. 아래 섹션이 한 단락씩 쌓아요."),
+        "7개 숫자를 정렬하면\nA, B, C 가 정해진 자리에서 바로 읽혀요."),
       sections: getAbcsSections(E),
     },
   ];

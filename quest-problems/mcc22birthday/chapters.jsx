@@ -66,7 +66,7 @@ export function makeMcc22BirthdayCh1(E) {
       type: "reveal",
       narr: t(E,
         "Cats starts with one 'p'-shaped cookie and follows a scroll of letters. Each letter A/B/C copies the whole cookie grid — doubling it — sometimes flipping the copy. Friends eat cookies numbered left→right, top→bottom.",
-        "Cats 는 'p' 모양 쿠키 한 개로 시작해서 두루마리의 글자를 따라가요. 글자 A/B/C 는 쿠키 격자 전체를 복사해 두 배로 늘리고, 때로는 복사본을 뒤집어요. 친구들은 왼→오, 위→아래 순으로 번호 매긴 쿠키를 먹어요."),
+        "글자 하나마다 쿠키 격자가 두 배로 늘어나요.\n몇 번째 쿠키가 어떤 모양일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -139,7 +139,7 @@ export function makeMcc22BirthdayCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. The grid can grow to 2^N cookies, so friend numbers are given as plain 1-based indices — never as coordinates.",
-        "입력 형식과 공식 예제를 봐요. 격자는 2^N 개까지 커질 수 있어서, 친구 번호는 좌표가 아니라 1부터 시작하는 순번 하나로 줘요."),
+        "친구 번호는 좌표가 아니라 1 부터 세는 순번 하나로 줘요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -192,7 +192,7 @@ export function makeMcc22BirthdayCh1(E) {
       type: "reveal",
       narr: t(E,
         "Grow the grid yourself. Add letters and watch it double + flip. Tap a cookie to read its number. Notice how fast it blows up.",
-        "격자를 직접 키워봐요. 글자를 더하면 두 배로 늘고 뒤집혀요. 쿠키를 눌러 번호를 확인해요. 얼마나 빨리 커지는지 느껴봐요."),
+        "격자를 직접 키워 보고, 얼마나 빨리 커지는지 느껴 봐요."),
       content: <Mcc22BirthdayCookieSim E={E} />,
     },
 
@@ -201,10 +201,10 @@ export function makeMcc22BirthdayCh1(E) {
       type: "quiz",
       narr: t(E,
         "Start: [p]. Apply A → [p p]. Apply B → the copy is flipped left↔right, so p becomes q: [p p q q]. Cookie #3 is the first of the flipped copy.",
-        "시작: [p]. A 적용 → [p p]. B 적용 → 복사본은 좌우로 뒤집혀 p 가 q 로: [p p q q]. 3번 쿠키는 뒤집힌 복사본의 첫 칸이에요."),
+        "B 가 붙인 복사본은 좌우로 뒤집혀 있어요."),
       question: t(E,
         "Grid [p]. Apply A, then B. What shape is cookie #3?",
-        "격자 [p]. A 를 적용하고 B 를 적용해요. 3번 쿠키의 모양은?"),
+        "격자 [p] 에 A 를 적용하고 B 를 적용해요. 3번 쿠키는 어떤 모양일까요?"),
       options: [
         t(E, "q", "q"),
         t(E, "p", "p"),
@@ -213,7 +213,7 @@ export function makeMcc22BirthdayCh1(E) {
       correct: 0,
       explain: t(E,
         "A gives [p p]; B appends a left↔right-flipped copy [q q], so the row is p p q q. Cookie #3 = q.",
-        "A → [p p]; B 는 좌우로 뒤집은 복사본 [q q] 를 붙여 p p q q. 3번 쿠키 = q."),
+        "A 가 [p p] 를 만들어요.\nB 는 좌우로 뒤집은 복사본 [q q] 를 붙여 p p q q 가 돼요.\n그래서 3번 쿠키는 q 예요."),
     },
   ];
 }
@@ -230,7 +230,7 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way builds the whole grid, then reads the cookie at each number. But after N letters the grid is 2^N cookies — with N up to 10000 it can't fit in any memory. The fast way never builds it: it traces each queried number BACKWARD through the scroll.",
-        "느린 방법은 격자를 전부 만들고 번호 위치의 쿠키를 읽어요. 하지만 N 글자 뒤 격자는 2^N 개 — N 이 최대 10000 이면 어떤 메모리에도 안 들어가요. 빠른 방법은 아예 만들지 않아요: 물어본 번호를 두루마리를 거꾸로 따라가며 추적해요."),
+        "격자는 2^N 개라 만들 수가 없어요.\n대신 물어본 번호 하나만 거꾸로 따라가요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -240,7 +240,7 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "After N letters the grid has 2^N cookies. N = 10000 means 2^10000 — impossibly huge to store. Times out (or runs out of memory) instantly.",
-                      "N 글자 뒤 격자는 2^N 개. N = 10000 이면 2^10000 — 저장 불가능할 만큼 커요. 곧바로 시간 초과(또는 메모리 초과).")}
+                      "N 글자 뒤 격자는 2^N 개예요. N = 10000 이면 2^10000 이라 저장할 수 없을 만큼 커요. 그래서 곧바로 시간 초과나 메모리 초과가 나요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
@@ -249,7 +249,7 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Turn the number into (row, col), then undo the scroll step by step. Each copy step is a flip, so track two on/off flips — that alone decides p/q/b/d. Just N steps per query.",
-                      "번호를 (행, 열) 로 바꾼 뒤 두루마리를 한 단계씩 되돌려요. 복사 단계마다 뒤집힘이 생기니 좌우·상하 두 스위치만 추적하면 p/q/b/d 가 정해져요. 한 번 물음에 N 단계면 끝.")}
+                      "번호를 (행, 열) 로 바꾼 뒤 두루마리를 한 단계씩 되돌려요. 복사 단계마다 뒤집힘이 생기니, 좌우·상하 두 스위치만 따라가면 p/q/b/d 가 정해져요. 한 번 물을 때 N 단계면 끝나요.")}
               </div>
             </div>
           </div>

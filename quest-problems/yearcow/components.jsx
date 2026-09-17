@@ -46,7 +46,7 @@ export function ZodiacCircleSim({ E }) {
   return (
     <div style={{ background: "#fff", border: "1.5px solid #fcd34d", borderRadius: 12, padding: 12, marginBottom: 10 }}>
       <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
-        🔮 {t(E, "Try it: click an animal, then Previous / Next", "직접 해 봐: 동물 클릭 후 직전 / 직후 누르기")}
+        🔮 {t(E, "Try it: click an animal, then Previous / Next", "동물을 누른 뒤 직전 / 직후 를 눌러 봐요")}
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
         <svg width="280" height="280" style={{ flexShrink: 0 }}>
@@ -97,7 +97,7 @@ export function ZodiacCircleSim({ E }) {
             </button>
           </div>
           <button onClick={reset} style={{ background: "#fff", border: "1px solid #d1d5db", color: C.dim, borderRadius: 6, padding: "4px", fontSize: 10, cursor: "pointer" }}>
-            ↺ {t(E, "Reset", "초기화")}
+            ↺ {t(E, "Reset", "처음으로")}
           </button>
         </div>
       </div>
@@ -200,19 +200,19 @@ export function getYearCowSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 에서 옮긴 거예요. 타입이나 표현은 필요하면 바꿔요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣어요 (<iostream>, <vector>, ...). 그래야 코드가 뭘 쓰는지 한눈에 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더하거나 곱한 값이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -258,7 +258,7 @@ function highlightCode(lines, lang) {
 
 export function downloadYearCowPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "YearCow — Full Study Guide", "YearCow — 종합 풀이 노트");
@@ -281,7 +281,7 @@ export function downloadYearCowPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

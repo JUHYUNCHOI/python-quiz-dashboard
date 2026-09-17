@@ -114,7 +114,7 @@ export function makeTricksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "It's Halloween! 🎃 Let's go trick-or-treating.", "할로윈이에요! 🎃 사탕 받으러 가볼까?"),
+        "It's Halloween! 🎃 Let's go trick-or-treating.", "할로윈이에요! 🎃 사탕 받으러 가 봐요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🎃</div>
@@ -123,7 +123,7 @@ export function makeTricksCh1(E) {
           <div style={{ marginTop: 12, background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "N bags (2 candies each) → pick 3 bags → 6 candies → success if exactly 2 colors, 3 each.\nHow many ways can you succeed?",
-              "봉지 N개 (각 2개씩) → 3개 고르기 → 사탕 6개 → 2가지 색 × 3개씩이면 성공!\n성공하는 방법이 몇 가지일까?")}
+              "봉지 N개 (각 2개씩) → 3개 고르기 → 사탕 6개 → 2가지 색 × 3개씩이면 성공이에요!\n성공하는 방법이 몇 가지일까요?")}
           </div>
         </div>),
     },
@@ -165,7 +165,7 @@ export function makeTricksCh1(E) {
             }}>
               💡 {t(E,
                 "1 bag = 2 candies. Pick 3 bags = 6 candies total!",
-                "봉지 1개 = 사탕 2개. 봉지 3개를 고르면 = 사탕 총 6개!")}
+                "봉지 1개에 사탕이 2개니까, 봉지 3개를 고르면 사탕은 모두 6개예요!")}
             </div>
           </div>
         );
@@ -178,7 +178,7 @@ export function makeTricksCh1(E) {
       type: "reveal",
       narr: t(E,
         "Now — how does the data arrive?\nFirst N (how many bags), then N lines: the 2 candy colours in each bag.\nOutput: how many valid ways to pick 3 bags.",
-        "그럼 데이터는 어떻게 들어올까?\n먼저 N (봉지 개수), 그 다음 N 줄에 각 봉지의 두 사탕 색.\n출력: 3봉지를 성공으로 고르는 방법이 몇 가지인지."),
+        "데이터가 어떻게 들어오고,\n무엇을 출력해야 하는지 봐요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           {/* INPUT */}
@@ -197,7 +197,7 @@ export function makeTricksCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "A single integer — the number of valid ways to choose 3 bags.",
-                  "정수 하나 — 3봉지를 고르는 성공 방법의 개수.")}
+                  "정수 하나를 내요. 3봉지를 성공으로 고르는 방법이 몇 가지인지예요.")}
             </div>
           </div>
           {/* 제약 */}
@@ -236,10 +236,10 @@ export function makeTricksCh1(E) {
       type: "quiz",
       narr: t(E,
         "Try this — count colors in the chosen bags and decide.",
-        "직접 — 고른 봉지에서 색을 세어 보고 판단해 봐."),
+        "고른 봉지에서 색을 세어 보고 직접 판단해 봐요."),
       question: t(E,
         "Bags (1,2), (1,1), (2,2) → colors: 1×3, 2×3. Success?",
-        "봉지 (1,2), (1,1), (2,2)를 골랐어. 사탕을 꺼내보면 색1이 3개, 색2가 3개. 성공일까요?"),
+        "봉지 (1,2), (1,1), (2,2) 를 골랐어요. 사탕을 꺼내보면 색1이 3개, 색2가 3개예요. 성공일까요?"),
       options: [
         t(E, "No, all 6 must be different colors", "아니, 6개 다 다른 색이어야 해"),
         t(E, "Yes! Exactly 2 colors, 3 each", "맞아! 딱 2색, 3개씩"),
@@ -254,7 +254,7 @@ export function makeTricksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's the trick!\nPick two colors x and y.\nEvery bag falls into one of 3 groups based on what's inside.", "여기가 핵심이에요! 색깔 2개를 골라서 x, y라고 부르자. 그러면 모든 봉지를 안에 든 사탕에 따라 3가지 그룹으로 나눌 수 있어요."),
+        "Here's the trick!\nPick two colors x and y.\nA bag that holds only x and y falls into one of 3 groups; any bag with another colour can't be used for this pair.", "색깔 2개를 골라 x, y 라고 불러요.\nx 와 y 만 든 봉지는 세 무리로 나뉘어요."),
       content: (() => {
         const types = [
           { label: "Type A", emoji: "🟠🟠", desc_en: "(x,x) → x color ×2", desc_ko: "(x,x) → x색 사탕만 2개", color: O, bg: "#fff7ed", bd: "#fdba74" },
@@ -264,7 +264,7 @@ export function makeTricksCh1(E) {
         return (
           <div style={{ padding: 16 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 8, textAlign: "center" }}>
-              {t(E, "Bag types for color pair (x, y)", "색 쌍 (x, y)로 봉지를 분류하면")}
+              {t(E, "Bag types for color pair (x, y)", "색 쌍 (x, y) 로 봉지를 나누면 (다른 색이 든 봉지는 이 쌍에선 못 써요)")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {types.map((tp, i) => (
@@ -301,7 +301,7 @@ export function makeTricksCh1(E) {
       type: "quiz",
       narr: t(E,
         "A = 2x, B = 2y, C = 1x+1y. Which 3-bag combos make exactly 3x and 3y?",
-        "A = 2x, B = 2y, C = 1x+1y. 봉지 3개로 x 3개·y 3개를 만들려면 어떤 조합?"),
+        "A 는 2x, B 는 2y, C 는 1x+1y 예요.\n봉지 3개로 x 3개·y 3개를 만들 조합은 무엇일까요?"),
       question: t(E,
         "Which combos of 3 bags give exactly 3x and 3y?",
         "봉지 3개를 어떻게 조합해야 x 3개, y 3개가 될까요?"),
@@ -313,7 +313,7 @@ export function makeTricksCh1(E) {
       correct: 2,
       explain: t(E,
         "Both work! 1A+1B+1C: 2+0+1=3x, 0+2+1=3y ✓. 3C: 1+1+1=3x, 1+1+1=3y ✓. No other combos give 3+3!",
-        "둘 다 돼요! A+B+C 하나씩: x가 2+0+1=3, y가 0+2+1=3 ✓. C 3개: x가 1+1+1=3, y가 1+1+1=3 ✓. 이 두 가지만 가능해요!"),
+        "둘 다 돼요!\nA+B+C 하나씩이면 x 가 2+0+1=3, y 가 0+2+1=3 이에요 ✓\nC 3개면 x 가 1+1+1=3, y 가 1+1+1=3 이에요 ✓\n이 두 가지만 가능해요!"),
     },
     // 1-5b: Deep audit sim — verify combos candy by candy
     {
@@ -326,7 +326,7 @@ export function makeTricksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "So the plan is: for each pair of colors (x,y), count A, B, C bags, apply two simple formulas, and add it all up!", "그래서 이렇게 풀어! 색깔 쌍 (x,y)마다 → A, B, C 봉지 몇 개인지 세고 → 공식 2개를 적용하고 → 전부 더하면 답이에요!"),
+        "So the plan is: for each pair of colors (x,y), count A, B, C bags, apply two simple formulas, and add it all up!", "색깔 쌍마다 A·B·C 봉지를 세고,\n공식 두 개를 적용해 전부 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{
@@ -367,7 +367,7 @@ export function makeTricksCh1(E) {
                       "A 고르는 법 countA가지 × B 고르는 법 countB가지 × C 고르는 법 countC가지 → 곱해요.")}
                 </div>
                 <div style={{ marginTop: 4, color: "#c2410c", fontWeight: 700 }}>
-                  {t(E, "e.g. A=2, B=1, C=2 → 2×1×2 = 4 ways", "예: A 2개, B 1개, C 2개 → 2×1×2 = 4가지")}
+                  {t(E, "e.g. A=2, B=1, C=2 → 2×1×2 = 4 ways", "예를 들어 A 2개, B 1개, C 2개면 2×1×2 = 4가지")}
                 </div>
               </div>
               <div style={{ background: "#fef3c7", borderRadius: 6, padding: "4px 8px", marginBottom: 4 }}>
@@ -380,10 +380,10 @@ export function makeTricksCh1(E) {
                 </div>
                 <div>
                   {t(E, "1st pick: countC ways · 2nd: countC−1 · 3rd: countC−2. But the same 3 bags get counted 3×2×1 = 6 times (order doesn't matter), so divide by 6.",
-                      "첫째: countC가지 · 둘째: countC−1 · 셋째: countC−2. 그런데 같은 3개를 3×2×1 = 6번 세니까(순서는 상관없음) 6으로 나눠.")}
+                      "첫째는 countC가지, 둘째는 countC−1가지, 셋째는 countC−2가지예요. 그런데 같은 3개를 3×2×1 = 6번 세니까(순서는 상관없어요) 6으로 나눠요.")}
                 </div>
                 <div style={{ marginTop: 4, color: "#7c3aed", fontWeight: 700 }}>
-                  {t(E, "e.g. countC = 4 → 4×3×2 ÷ 6 = 4 ways", "예: C봉지가 4개면 → 4×3×2 ÷ 6 = 4가지")}
+                  {t(E, "e.g. countC = 4 → 4×3×2 ÷ 6 = 4 ways", "예를 들어 C봉지가 4개면 4×3×2 ÷ 6 = 4가지")}
                 </div>
               </div>
               <div style={{ background: "#f0fdf4", borderRadius: 6, padding: "6px 8px", border: "1.5px solid #6ee7b7", fontSize: 14 }}>
@@ -394,7 +394,7 @@ export function makeTricksCh1(E) {
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
             {t(E,
               "For every pair of colors (x,y), classify the bags, apply formulas, and add up!",
-              "모든 색 쌍 (x,y)에 대해 봉지를 분류하고, 공식을 적용해서 전부 더하면 끝!")}
+              "모든 색 쌍 (x,y) 마다 봉지를 나누고, 공식을 적용해서 전부 더하면 끝이에요!")}
           </div>
         </div>),
     },
@@ -402,7 +402,7 @@ export function makeTricksCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Try calculating! If there are 2 A-bags, 1 B-bag, and 2 C-bags, what do you get?", "직접 계산해보자! A봉지 2개, B봉지 1개, C봉지 2개면 답은 얼마일까요?"),
+        "Try calculating! If there are 2 A-bags, 1 B-bag, and 2 C-bags, what do you get?", "A봉지 2개, B봉지 1개, C봉지 2개예요.\n답은 얼마일까요?"),
       question: t(E,
         "A=2, B=1, C=2.\nA×B×C + C(2,3) = ?",
         "A=2, B=1, C=2.\nA×B×C + C(2,3) = ?"),
@@ -421,40 +421,40 @@ export function makeTricksCh2(E) {
     {
       type: "packTypeClassifier",
       narr: t(E,
-        "Pick a color pair and watch the 9 sample bags get sorted into A, B, C types!\nTry different pairs.\n🎃", "색 쌍을 하나 골라봐요! 봉지 9개가 A, B, C 종류로 나뉘는 걸 볼 수 있어요. 다른 쌍도 눌러봐요! 🎃"),
+        "Pick a color pair and watch the 9 sample bags get sorted into A, B, C types!\nTry different pairs.\n🎃", "색 쌍을 골라 봉지 9개가\nA·B·C 로 나뉘는 걸 봐요. 🎃"),
     },
     // 2-2: Quiz — pack type
     {
       type: "quiz",
       narr: t(E,
-        "Quick check!\nBag (1,1) has two candies, both color 1.\nIf we're looking at color pair (1,2), what type is this bag?", "퀴즈! 봉지 (1,1)에는 사탕이 둘 다 색1이에요. 색 쌍 (1,2)에서 이 봉지는 어떤 종류?"),
+        "Quick check!\nBag (1,1) has two candies, both color 1.\nIf we're looking at color pair (1,2), what type is this bag?", "봉지 (1,1) 에는 사탕이 둘 다 색1 이에요.\n색 쌍 (1,2) 에서 이 봉지는 어떤 종류일까요?"),
       question: t(E,
         "Bag (1,1) for pair (1,2) is...?",
-        "봉지 (1,1)은 색 쌍 (1,2)에서 어떤 종류?"),
+        "봉지 (1,1) 은 색 쌍 (1,2) 에서 어떤 종류일까요?"),
       options: [
-        t(E, "Type A (both = x)", "A타입 (둘 다 x)"),
-        t(E, "Type B (both = y)", "B타입 (둘 다 y)"),
-        t(E, "Type C (mixed)", "C타입 (섞임)"),
+        t(E, "Type A (both = x)", "A종류 (둘 다 x)"),
+        t(E, "Type B (both = y)", "B종류 (둘 다 y)"),
+        t(E, "Type C (mixed)", "C종류 (섞임)"),
       ],
       correct: 0,
       explain: t(E,
         "Bag (1,1) = both candies are color 1 = x. That's Type A: (x,x)!",
-        "봉지 (1,1) = 사탕 둘 다 색1 = x색. 그래서 A종류(x,x)야!"),
+        "봉지 (1,1) 은 사탕이 둘 다 색1, 곧 x색이에요.\n둘 다 x 니까 A종류 (x,x) 예요."),
     },
     // 2-3: Pack picker simulator
     {
       type: "packPickerSim",
       narr: t(E,
-        "Now try picking 3 bags yourself!\nSee if you can get exactly 2 colors with 3 candies each.\n🎃", "이제 직접 봉지 3개를 골라봐요! 사탕 색이 딱 2가지 × 3개씩 나오는지 확인해보자! 🎃"),
+        "Now try picking 3 bags yourself!\nSee if you can get exactly 2 colors with 3 candies each.\n🎃", "직접 봉지 3개를 골라,\n사탕 색이 딱 2가지 × 3개씩 나오는지 봐요. 🎃"),
     },
     // 2-4: Final answer input
     {
       type: "input",
       narr: t(E,
-        "Now count it yourself — what's the total for the 9-bag sample?", "이제 직접 세어보자 — 봉지 9개짜리 예제의 최종 답은?"),
+        "Now count it yourself — what's the total for the 9-bag sample?", "이제 직접 세어 봐요.\n봉지 9개짜리 예제의 답은 얼마일까요?"),
       question: t(E,
         "Total valid ways for the sample?",
-        "예제에서 가능한 방법은 총 몇 가지?"),
+        "예제에서 가능한 방법은 모두 몇 가지일까요?"),
       answer: 7,
     },
   ];
@@ -470,7 +470,7 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code!\nFirst, read the bags and normalize: (2,1) → (1,2) so we don't double-count.", "코드를 짜보자! 먼저 봉지 정보를 읽고, (2,1)과 (1,2)를 같은 걸로 취급해서 중복을 없애."),
+        "Let's build the code!\nFirst, read the bags and normalize: (2,1) → (1,2) so we don't double-count.", "먼저 봉지 정보를 읽어요.\n(2,1) 과 (1,2) 는 같은 것으로 맞춰요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
@@ -499,7 +499,7 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Count how many of each bag type using Counter.\nThis lets us quickly look up A, B, C counts!", "Counter로 같은 종류의 봉지가 몇 개인지 세. 이러면 A, B, C 개수를 바로 알 수 있어요!"),
+        "Count how many of each bag type using Counter.\nThis lets us quickly look up A, B, C counts!", "Counter 로 같은 종류의 봉지를 세어 두면\nA·B·C 개수를 바로 알 수 있어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>

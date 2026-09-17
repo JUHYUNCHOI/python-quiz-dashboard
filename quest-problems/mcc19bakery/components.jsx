@@ -63,11 +63,11 @@ export function getMcc19BakerySections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Sort ascending and hold the prices in a deque so both ends are cheap to reach: the back is the most expensive, the front is the cheapest.",
-            "오름차순 정렬 후 덱에 담아 양끝을 빠르게 써요: 뒤쪽은 제일 비싼 것, 앞쪽은 제일 싼 것."),
+            "오름차순으로 정렬해 덱에 담으면 양끝을 빠르게 꺼낼 수 있어요. 뒤쪽은 제일 비싼 것, 앞쪽은 제일 싼 것이에요."),
         t(E, "Each round takes 4 breads: pay the two most-expensive, let the 3rd-most-expensive be FREE, then spend the CHEAPEST remaining as the last pay-slot.",
-            "한 라운드에 빵 4 개: 제일 비싼 두 개를 지불하고, 세 번째로 비싼 것을 무료로, 남은 것 중 제일 싼 것을 마지막 지불 자리로 써요."),
+            "한 묶음에 빵이 4 개예요. 제일 비싼 두 개를 지불하고, 세 번째로 비싼 것을 무료로 받고, 남은 것 중 제일 싼 것을 마지막 지불 자리로 써요."),
         t(E, "Why pair the cheapest with expensive ones? Only the 2nd-cheapest of a batch is free. Pairing a cheap bread as a pay-slot lets the free slot land on a pricier bread — naive 'chop into blocks of 4' wastes a cheap bread there and pays 36 instead of 35 on the sample.",
-            "왜 싼 것을 비싼 것과 짝지을까? 묶음에서 무료는 2 번째로 싼 것뿐이에요. 싼 빵을 지불 자리로 쓰면 무료 자리가 더 비싼 빵에 떨어져요 — 그냥 '4 개씩 자르기' 는 싼 빵을 거기에 낭비해서 예제에서 35 대신 36 을 지불해요."),
+            "왜 싼 것을 비싼 것과 짝지을까요? 묶음에서 무료가 되는 건 2 번째로 싼 것뿐이에요. 그래서 싼 빵을 지불 자리로 쓰면 무료 자리가 더 비싼 빵에 떨어져요. 그냥 '4 개씩 자르기' 는 무료 자리를 싼 빵에 써 버려서 예제에서 35 대신 36 을 지불해요."),
       ],
       pyOnly: [
         t(E, "collections.deque gives O(1) pop() from the right and popleft() from the left.",
@@ -77,7 +77,7 @@ export function getMcc19BakerySections(E) {
         t(E, "std::deque supports back()/pop_back() and front()/pop_front() in O(1) each.",
             "std::deque 는 back()/pop_back() 과 front()/pop_front() 가 각각 O(1) 이에요."),
         t(E, "Use long long for pay — many breads with large prices can exceed the int range.",
-            "합계 pay 는 long long 으로 — 빵이 많고 가격이 크면 int 범위를 넘을 수 있어요."),
+            "합계 pay 는 long long 으로 둬요. 빵이 많고 가격이 크면 int 범위를 넘을 수 있어요."),
       ],
     },
   ];
@@ -123,7 +123,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc19BakeryPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc19Bakery — Full Study Guide", "Mcc19Bakery — 종합 풀이 노트");
@@ -146,7 +146,7 @@ export function downloadMcc19BakeryPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

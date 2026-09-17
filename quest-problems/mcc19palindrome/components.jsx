@@ -306,7 +306,7 @@ export function getMcc19PalSections(E) {
         t(E, "Length L holds exactly K^⌈L/2⌉ palindromes — the front ⌈L/2⌉ digits are chosen freely, and the rest is their mirror. Add these counts length by length until you pass N; that tells you the answer's length c.",
             "길이 L 은 정확히 K^⌈L/2⌉ 개예요 — 앞 ⌈L/2⌉ 자리는 자유롭게 고르고, 나머지는 그 거울이에요. 이 개수를 길이별로 더해 N 을 넘기면, 그게 답의 길이 c 예요."),
         t(E, "Within length c, the 0-indexed rank r written in base K IS the front half. Left-pad it to ⌈c/2⌉ digits, then mirror to get the answer string — no need to list every palindrome.",
-            "길이 c 안에서, 0-인덱스 순위 r 을 K 진법으로 적으면 그게 바로 앞 절반이에요. ⌈c/2⌉ 자리로 앞을 0 채운 뒤 거울 대칭하면 정답 문자열 — 모든 회문을 나열할 필요가 없어요."),
+            "길이 c 안에서 0 부터 센 순위 r 을 K 진법으로 적으면 그게 바로 앞 절반이에요. ⌈c/2⌉ 자리가 되게 앞을 0 으로 채운 뒤 거울 대칭하면 정답이 나와요. 모든 회문을 나열할 필요가 없어요."),
       ],
       pyOnly: [
         t(E, "half[::-1] reverses the front half; half[-2::-1] mirrors it while skipping the shared middle digit (for odd lengths).",
@@ -316,7 +316,7 @@ export function getMcc19PalSections(E) {
       ],
       cppOnly: [
         t(E, "char('0' + digit) turns a digit 0…9 into its character; K ≤ 10 keeps every digit a single character.",
-            "char('0' + 숫자) 로 0…9 숫자를 문자로 바꿔요; K ≤ 10 이라 모든 자리가 한 글자예요."),
+            "char('0' + 숫자) 로 0…9 숫자를 글자로 바꿔요. K ≤ 10 이라 모든 자리가 한 글자예요."),
         t(E, "reverse(half.begin(), half.end()) mirrors the front half in place — the same trick as Python's slicing.",
             "reverse(half.begin(), half.end()) 로 앞 절반을 그 자리에서 뒤집어요 — 파이썬 슬라이싱과 같은 방법."),
       ],
@@ -364,7 +364,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc19PalPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc19Pal — Full Study Guide", "Mcc19Pal — 종합 풀이 노트");
@@ -387,7 +387,7 @@ export function downloadMcc19PalPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

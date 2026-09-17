@@ -11,7 +11,7 @@ export function makeLonelyPhotoCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N cows in a row, each Guernsey (G) or Holstein (H).\nA contiguous group of 3 or more is 'lonely' if exactly ONE cow has a different breed from all the others.\nCount how many lonely groups there are.",
-        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 건지(G) 또는 홀스타인(H)이에요.\n연속한 3마리 이상의 묶음에서 단 1마리만 다른 품종일 때 '외로운' 묶음이라고 해요.\n외로운 묶음이 몇 개 있는지 세요."),
+        "한 마리만 품종이 다른 사진이 몇 장이나 나올까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeLonelyPhotoCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Count contiguous groups of 3+ cows where exactly one cow's breed differs from all the rest.",
-                "\ud55c \ub9c8\ub9ac\ub9cc \ub098\uba38\uc9c0\uc640 \ud488\uc885\uc774 \ub2e4\ub978 \u2014 \uc5f0\uc18d 3 \ub9c8\ub9ac \uc774\uc0c1 \ubb36\uc74c\uc758 \uac1c\uc218\ub97c \ucd9c\ub825.")}
+                "\uc5f0\uc18d\ud55c 3 \ub9c8\ub9ac \uc774\uc0c1\uc758 \ubb36\uc74c \uc911\uc5d0\uc11c \ud55c \ub9c8\ub9ac\ub9cc \ud488\uc885\uc774 \ub2e4\ub978 \ubb36\uc74c\uc774 \uba87 \uac1c\uc778\uc9c0 \ucd9c\ub825\ud574\uc694.")}
             </div>
           </div>
 
@@ -83,45 +83,45 @@ export function makeLonelyPhotoCh1(E) {
       type: "quiz",
       narr: t(E,
         "Look at 'GHG' — count G's, count H's, decide.",
-        "'GHG' 보고 — G 몇 개, H 몇 개, 그래서 외로운 거 맞아?"),
+        "'GHG' 에서 G 가 몇 마리, H 가 몇 마리인지 세어 봐요."),
       question: t(E,
         "In 'GHG', is the H a lonely cow?",
-        "'GHG'에서 H는 외로운 소일까요?"),
+        "'GHG' 에서 H 는 외로운 소일까요?"),
       options: [
-        t(E, "Yes, it's the only H among 2 G's", "맞아, G 2마리 사이에 H가 유일해"),
-        t(E, "No, there must be exactly 1 G", "아니, G가 정확히 1마리여야 해"),
+        t(E, "Yes, it's the only H among 2 G's", "맞아요, G 두 마리 사이에 H 가 하나뿐이에요"),
+        t(E, "No, there must be exactly 1 G", "아니에요, G 가 한 마리여야 해요"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! A lonely photo has exactly 1 of one type. 'GHG' has 1 H among 2 G's, so H is lonely.",
-        "맞아! 외로운 사진은 한 타입이 정확히 1마리. 'GHG'에 H가 1마리이니 H가 외로워."),
+        "외로운 사진은 한쪽 품종이 딱 한 마리인 사진이에요. 'GHG' 는 G 두 마리에 H 한 마리라 H 가 외로워요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
         "Walk through every length-3, length-4, length-5 chunk of 'GHGHG' and count the lonely ones.",
-        "'GHGHG' 의 길이 3, 4, 5 묶음을 모두 훑어. 외로운 거 몇 개?"),
+        "'GHGHG' 에서 길이 3, 4, 5 묶음을 모두 살펴봐요."),
       question: t(E,
         "s = 'GHGHG'. How many lonely photos?",
-        "s = 'GHGHG'. 외로운 사진 수는?"),
+        "s = 'GHGHG' 일 때 외로운 사진은 몇 장일까요?"),
       hint: t(E,
         "Each length is its own family — count 1-only chunks separately for length 3, 4, 5.",
-        "길이별로 따로 — 3 짜리, 4 짜리, 5 짜리 각각 외로운 건 몇 개?"),
+        "길이별로 나눠서 세어 봐요. 3 짜리, 4 짜리, 5 짜리에 각각 몇 개가 있나요?"),
       answer: 3,
     },
     {
       type: "sim",
       narr: t(E,
         "Stand at each cow i and look around — how far does my breed stretch, and what's beyond?",
-        "각 소 i 자리에 서서 둘러봐 — 내 품종이 어디까지 이어지고, 그 너머는 어때?"),
+        "소 하나를 골라 왼쪽과 오른쪽에 무엇이 있는지 봐요."),
     },
     // 1-5: Window-scanner sim — change s and the window size, see every lonely window light up green.
     {
       type: "windowSim",
       narr: t(E,
         "Type your own G/H string and slide the window size — every length-w substring with exactly one minority breed lights up green. Watch the count change as you grow w.",
-        "G/H 문자열을 직접 입력하고 창 크기 슬라이더를 움직여봐 — 길이 w 묶음 중 한 품종만 1마리인 것이 초록으로 켜져. 창을 키워가며 개수가 어떻게 바뀌는지 관찰."),
+        "묶음 길이를 바꿔 가며 외로운 묶음이 켜지는 걸 봐요."),
     },
   ];
 }
@@ -137,13 +137,13 @@ export function makeLonelyPhotoCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Treat each cow i as the lonely one. Count the opposite-breed cows that touch i directly on its left and right, then a small formula combines those into the lonely count. Sections build it one piece at a time.",
-        "각 소 i 를 '외로운 1마리' 로 보고 — i 에 바로 붙은 반대 품종 소가 좌/우로 몇 마리인지 세고, 작은 공식으로 합쳐. 아래 섹션이 한 단락씩 쌓아요."),
+        "소 하나를 외로운 소로 정해 놓고 양옆을 세어 볼게요."),
       sections: getLonelyPhotoSections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Try your own G/H string.", "직접 G/H 문자열 시도."),
+        "Try your own G/H string.", "G 와 H 로 된 문자열을 직접 넣어 봐요."),
     },
   ];
 }

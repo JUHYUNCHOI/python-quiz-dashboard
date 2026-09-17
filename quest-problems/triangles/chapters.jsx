@@ -50,7 +50,7 @@ export function makeTrianglesCh1(E) {
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "FJ has N fence posts at integer (x, y) positions. He wants to choose three posts to form a RIGHT triangle whose two legs are parallel to the x and y axes.\nPrint TWICE the maximum area of such a triangle (to keep the answer integer).",
-        "FJ 한테 정수 좌표 (x, y) 의 N 개 울타리 기둥이 있어요. 그중 세 기둥으로 직각 삼각형 — 두 변이 각각 x 축과 y 축에 평행한 — 을 만들어요.\n그 삼각형의 최대 넓이의 2 배 (소수 없이 정수로) 를 출력해요."),
+        "울타리 기둥 세 개로 가장 큰 직각 삼각형을 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -67,7 +67,7 @@ export function makeTrianglesCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "Output TWICE the maximum area of an axis-aligned right triangle from the N posts.",
-                "축에 평행한 직각 삼각형의 최대 넓이의 2 배를 출력.")}
+                "축에 평행한 직각 삼각형의 최대 넓이의 2 배를 출력해요.")}
             </div>
           </div>
 
@@ -108,10 +108,10 @@ export function makeTrianglesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Points (0,0), (1,0), (0,2), with the right angle at (0,0). Measure the base and the height first.", "점: (0,0), (1,0), (0,2). 직각이 (0,0) 에 있어요. 밑변과 높이를 먼저 재봐요."),
+        "Points (0,0), (1,0), (0,2), with the right angle at (0,0). Measure the base and the height first.", "밑변과 높이를 먼저 재고 넓이를 구해 봐요."),
       question: t(E,
         "Points (0,0),(1,0),(0,2). Right angle at origin. 2 * area = ?",
-        "점 (0,0),(1,0),(0,2). 원점에서 직각. 2 * 넓이 = ?"),
+        "점 (0,0),(1,0),(0,2). 원점이 직각이에요. 2 × 넓이는?"),
       options: [
         t(E, "2", "2"),
         t(E, "1", "1"),
@@ -127,19 +127,19 @@ export function makeTrianglesCh1(E) {
       type: "sim",
       narr: t(E,
         "Click any post — it becomes the right-angle corner. The simulator picks the farthest post on the same row (base) and the same column (height), then shows 2 × area = base × height.",
-        "기둥을 클릭하면 그게 직각 꼭짓점이 돼요. 같은 행에서 가장 먼 기둥 (밑변), 같은 열에서 가장 먼 기둥 (높이) 을 자동으로 골라서 2 × 넓이 = 밑변 × 높이 를 보여줘요."),
+        "기둥을 클릭하면 그 기둥이 직각 꼭짓점이 돼요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "For points (0,0), (1,0), (0,2): what is 2 * max area?", "점 (0,0), (1,0), (0,2)에 대해: 최대 넓이 * 2는?"),
+        "For points (0,0), (1,0), (0,2): what is 2 * max area?", "점 세 개가 (0,0), (1,0), (0,2) 일 때 최대 넓이 × 2 는?"),
       question: t(E,
         "Points (0,0),(1,0),(0,2). Output 2 * max triangle area?",
-        "점 (0,0),(1,0),(0,2). 최대 삼각형 넓이 * 2 출력?"),
+        "점 (0,0),(1,0),(0,2) 일 때 최대 넓이 × 2 를 출력하면?"),
       hint: t(E,
         "Find the right-angle vertex, then 2 × area = base × height.",
-        "직각 꼭짓점을 찾고 2 × 넓이 = 밑변 × 높이."),
+        "직각 꼭짓점을 먼저 찾아요. 2 × 넓이 = 밑변 × 높이 예요."),
       answer: 2,
     },
   ];
@@ -156,7 +156,7 @@ export function makeTrianglesCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Treat each post as the right-angle CORNER. Find the farthest post sharing same x (height) and farthest sharing same y (base). 2 × area = base × height. Sections build it one piece at a time.",
-        "각 기둥을 직각 꼭짓점으로 — 같은 x 의 가장 먼 기둥 (높이), 같은 y 의 가장 먼 기둥 (밑변). 2 × 넓이 = 밑변 × 높이. 아래 섹션이 한 단락씩 쌓아요."),
+        "각 기둥을 직각 꼭짓점으로 두고 가장 큰 넓이를 찾아요."),
       sections: getTrianglesSections(E),
     },
   ];

@@ -11,7 +11,7 @@ export function makeMilkExCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a circle.\nEach minute, every cow passes 1 liter of milk left or right.\nLet's understand this exchange!\n🥛", "N마리 소가 원형으로 서 있어요. 매분 모든 소가 우유 1리터를 왼쪽 또는 오른쪽으로 전달해요. 이 교환을 이해해 봐요! 🥛"),
+        "N cows stand in a circle.\nEach minute, every cow passes 1 liter of milk left or right.\nLet's understand this exchange!\n🥛", "소들이 1분마다 우유 1리터를 옆으로 넘겨요. 🥛"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeMilkExCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "After M minutes of milk passing (with overflow lost), output the total milk left.",
-                "M 분 동안 우유를 전달하고 (넘침은 버림) 남은 총 우유 양을 출력.")}
+                "M 분 동안 우유를 주고받은 뒤 남은 우유의 총량을 출력해요.")}
             </div>
           </div>
 
@@ -36,7 +36,7 @@ export function makeMilkExCh1(E) {
           <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", textAlign: "center", marginBottom: 10 }}>
               {t(E, "Tiny example: 3 cows, directions RRL, all start with 1 L (cap 1)",
-                    "작은 예: 소 3 마리, 방향 RRL, 모두 1 L 로 시작 (용량 1)")}
+                    "작은 예예요. 소 3 마리, 방향 RRL, 모두 1 L 로 시작해요 (용량 1)")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 14 }}>
               {/* Before */}
@@ -76,7 +76,7 @@ export function makeMilkExCh1(E) {
             </div>
             <div style={{ marginTop: 10, fontSize: 11, color: C.text, textAlign: "center", lineHeight: 1.6 }}>
               {t(E, "Cow 1 received from BOTH sides → would have 2 L, but cap = 1 → 1 L lost (yellow). ",
-                    "소 1 이 양쪽에서 받음 → 2 L 가 됐어야 하지만 용량 1 → 1 L 버려짐 (노랑). ")}
+                    "소 1 이 양쪽에서 받아 2 L 가 될 뻔했지만 용량이 1 이라 1 L 를 버려요 (노랑). ")}
               <b style={{ color: "#059669" }}>{t(E, "Total milk = 0 + 1 + 1 = 2.", "총 우유 = 0 + 1 + 1 = 2.")}</b>
             </div>
           </div>
@@ -84,7 +84,7 @@ export function makeMilkExCh1(E) {
           <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N cows in a circle, each with milk and a capacity limit.\nEvery minute: pass 1L left or right. Overflow is lost! Find total milk after M minutes.",
-              "N 마리 소가 원형으로, 각각 우유와 용량 제한이 있어요.\n매분: 1L 를 왼쪽 또는 오른쪽으로 전달.\n넘치면 버려져!\nM 분 후 총 우유량을 구해요.")}
+              "N 마리 소가 동그랗게 서 있고, 소마다 우유와 용량이 있어요.\n1분마다 1L 를 왼쪽이나 오른쪽으로 넘겨요.\n용량을 넘은 우유는 버려져요.\nM 분 뒤 남은 우유의 총량을 구해요.")}
           </div>
         </div>),
     },
@@ -93,7 +93,7 @@ export function makeMilkExCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input format: N M, then a direction string (no spaces), then N capacities. Initial milk equals capacity.",
-        "입력: 첫 줄 N M, 두번째 줄 방향 문자열 (공백 없음), 세번째 줄 N 개 용량. 초기 우유 = 용량."),
+        "입력은 세 줄이에요. 처음 우유는 용량만큼 차 있어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", textAlign: "center", marginBottom: 10 }}>
@@ -121,13 +121,13 @@ RRL
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
               {t(E, "Cows: [1, 1, 1], directions R R L, caps [1, 1, 1].",
-                    "소: [1, 1, 1], 방향 R R L, 용량 [1, 1, 1].")}
+                    "소는 [1, 1, 1], 방향은 R R L, 용량은 [1, 1, 1] 이에요.")}
               <br/>
               {t(E, "Cow 0 → cow 1 (R). Cow 1 → cow 2 (R). Cow 2 → cow 1 (L).",
                     "소 0 → 소 1 (R). 소 1 → 소 2 (R). 소 2 → 소 1 (L).")}
               <br/>
               {t(E, "After transfers: cow 1 receives from both sides → over capacity → overflow lost.",
-                    "전달 후: 소 1 이 양쪽에서 받음 → 용량 초과 → 넘침은 사라짐.")}
+                    "넘긴 뒤 소 1 이 양쪽에서 받아 용량을 넘겨요. 넘친 우유는 사라져요.")}
             </div>
             <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
               {t(E, "→ total milk = 0 + 1 + 1 = 2.", "→ 총 우유 = 0 + 1 + 1 = 2.")}
@@ -139,7 +139,7 @@ RRL
     {
       type: "reveal",
       narr: t(E,
-        "Each cow simultaneously passes 1 liter.\nIf a cow has 0 milk, it passes nothing.\nIf receiving milk exceeds capacity, the overflow is lost forever!", "모든 소가 동시에 1리터를 전달해요. 우유가 0이면 아무것도 안 전달해요. 받는 우유가 용량을 초과하면 넘치는 건 영원히 사라져!"),
+        "Each cow simultaneously passes 1 liter.\nIf a cow has 0 milk, it passes nothing.\nIf receiving milk exceeds capacity, the overflow is lost forever!", "모두 동시에 1리터씩 넘겨요. 넘친 우유는 사라져요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 14, padding: 14, textAlign: "center" }}>
@@ -148,8 +148,8 @@ RRL
             </div>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10 }}>
               {[
-                [t(E, "Has milk?", "우유 있어요?"), t(E, "Pass 1L", "1L 전달")],
-                [t(E, "Over capacity?", "용량 초과?"), t(E, "Overflow lost!", "넘치면 버려!")],
+                [t(E, "Has milk?", "우유 있어요?"), t(E, "Pass 1L", "1L 넘겨요")],
+                [t(E, "Over capacity?", "용량 초과?"), t(E, "Overflow lost!", "넘치면 버려요!")],
               ].map(([q, a], i) => (
                 <div key={i} style={{ background: "#fff", border: "1px solid #6ee7b7", borderRadius: 10, padding: 10, flex: 1 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: "#059669" }}>{q}</div>
@@ -170,7 +170,7 @@ RRL
       type: "reveal",
       narr: t(E,
         "Press ▶ 1 minute and watch milk flow around the circle. Yellow cells lost overflow!",
-        "▶ 1 분 을 누르고 우유가 원을 따라 흐르는 걸 봐. 노란 칸은 넘쳐서 버려진 거야!"),
+        "▶ 1 분 을 눌러 우유가 도는 걸 봐요. 노란 칸은 넘쳐서 버려진 거예요."),
       content: <MilkCircleSim E={E} />,
     },
     // 1-4: Quiz
@@ -182,26 +182,26 @@ RRL
         "If cow A passes left and neighbor cow B passes right to cow A, what is cow A's net milk change from these two?",
         "소 A가 왼쪽으로, 이웃 소 B가 오른쪽으로 소 A에게 전달하면, 이 둘로 인한 소 A의 우유 순 변화는?"),
       options: [
-        t(E, "+1 (gains one)", "+1 (하나 받아)"),
-        t(E, "0 (gives one, receives one)", "0 (하나 주고 하나 받아)"),
-        t(E, "-1 (loses one)", "-1 (하나 잃어)"),
+        t(E, "+1 (gains one)", "+1 (하나 받아요)"),
+        t(E, "0 (gives one, receives one)", "0 (하나 주고 하나 받아요)"),
+        t(E, "-1 (loses one)", "-1 (하나 잃어요)"),
       ],
       correct: 1,
       explain: t(E,
-        "Right! A gives 1L left and receives 1L from B. Net change = 0. This insight helps find stable states!",
-        "맞아! A는 왼쪽으로 1L 주고 B에게서 1L 받아요. 순 변화 = 0. 이 통찰이 안정 상태를 찾는 데 도움돼요!"),
+        "Right! A gives 1L left and receives 1L from B, so the net change is 0. Milk only disappears when a bucket overflows.",
+        "맞아요! A는 왼쪽으로 1L 를 주고 B에게서 1L 를 받아요.\n주고받은 양이 같으니 변화는 0 이에요.\n우유는 넘칠 때만 줄어들어요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "Let's try a simple case!\n3 cows in a circle, all pass right, each starts with 2L, capacity 2.", "간단한 예시를 해보자! 3마리 소가 원형으로, 모두 오른쪽으로 전달, 각각 2L로 시작, 용량 2."),
+        "Let's try a simple case!\n3 cows in a circle, all pass right, each starts with 2L, capacity 2.", "간단한 예를 풀어 봐요.\n소 3마리가 모두 오른쪽으로 넘겨요. 우유도 용량도 2 예요."),
       question: t(E,
         "3 cows, all pass right, milk=[2,2,2], capacity=[2,2,2]. After 1 minute, what is the total milk?",
         "3마리 소, 모두 오른쪽 전달, 우유=[2,2,2], 용량=[2,2,2]. 1분 후 총 우유량은?"),
       hint: t(E,
         "Each cow gives 1 right AND receives 1 from the left.  Will any cow exceed its capacity?",
-        "각 소는 1 을 오른쪽으로 주고 왼쪽에서 1 받아. 용량 초과되는 소가 있을까?"),
+        "각 소는 오른쪽에 1을 주고 왼쪽에서 1을 받아요.\n용량을 넘는 소가 있을까요?"),
       answer: 6,
     },
   ];
@@ -217,7 +217,7 @@ export function makeMilkExCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Simulate one minute at a time: every cow with milk passes 1 L, then over-cap cells lose the overflow.  Sections build the loop one piece at a time.",
-        "한 분씩 시뮬레이션 — 우유 있는 소가 1 L 전달, 그 다음 용량 초과는 버림. 아래 섹션이 한 단락씩 쌓아요."),
+        "1분씩 차례대로 따라 해 봐요."),
       sections: getMilkExchangeSections(E),
     },
   ];

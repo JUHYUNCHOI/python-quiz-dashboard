@@ -169,7 +169,7 @@ export function makeMcc19RectCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E, "Pick any two numbers from the list. Print the smallest difference you can get.",
-                   "리스트에서 아무 두 수나 골랐을 때, 가장 작은 차이를 출력하기.")}
+                   "리스트에서 아무 두 수나 골라 봐요.\n그때 나올 수 있는 가장 작은 차이를 출력해요.")}
             </div>
           </div>
 
@@ -236,7 +236,7 @@ export function makeMcc19RectCh1(E) {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.65, wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
               "5 and 7 differ by 2. So do 10 and 12. No other pair is closer.",
-              "5 와 7 의 차이가 2 예요. 10 과 12 도 2 고요. 이보다 가까운 짝은 없어요.")}
+              "5 와 7 의 차이가 2 예요. 10 과 12 도 2 예요.\n이보다 더 가까운 두 수는 없어요.")}
           </div>
         </div>),
     },
@@ -245,7 +245,7 @@ export function makeMcc19RectCh1(E) {
       type: "reveal",
       narr: t(E,
         "Any two numbers? That is a lot of pairs. Let us look closer.",
-        "아무 두 수라면 짝이 많아요. 좀 더 들여다봐요."),
+        "아무 두 수나 고르면 경우가 아주 많아요. 좀 더 들여다봐요."),
       content: <WhyAdjacentSim E={E} />,
     },
 
@@ -253,10 +253,10 @@ export function makeMcc19RectCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For the sorted list [1, 3, 5, 6], which consecutive pair has the smallest difference?", "정렬된 리스트 [1, 3, 5, 6]에서 어떤 연속 쌍의 차이가 가장 작을까?"),
+        "For the sorted list [1, 3, 5, 6], which consecutive pair has the smallest difference?", "[1, 3, 5, 6] 에서 이웃한 두 수 중 차이가 가장 작은 건 어느 쪽일까요?"),
       question: t(E,
         "Sorted list [1, 3, 5, 6]. Which pair gives the minimum difference?",
-        "정렬된 리스트 [1, 3, 5, 6]. 어떤 쌍이 최소 차이를 줘요?"),
+        "[1, 3, 5, 6] 에서 이웃한 두 수 중\n차이가 가장 작은 것은 무엇일까요?"),
       options: [
         t(E, "(1,3) → diff 2", "(1,3) → 차이 2"),
         t(E, "(3,5) → diff 2", "(3,5) → 차이 2"),
@@ -265,14 +265,14 @@ export function makeMcc19RectCh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! 6-5 = 1 is the smallest difference among consecutive pairs.",
-        "맞아! 6-5 = 1이 연속 쌍 중 가장 작은 차이에요."),
+        "맞아요. 이웃한 두 수의 차이 중에서 6 − 5 = 1 이 가장 작아요."),
     },
     // 1-2b: Sim — deep audit of the consecutive scan
     {
       type: "reveal",
       narr: t(E,
         "Watch the scan crawl across the sorted list, comparing each pair and tracking the smallest diff so far.",
-        "정렬된 리스트를 한 칸씩 훑으면서 인접 쌍의 차이를 비교하고, 지금까지의 최솟값을 갱신해요."),
+        "줄지어 있는 수를 한 칸씩 훑으면서\n이웃한 두 수의 차이를 재고, 더 작은 값이 나오면 새로 적어 둬요."),
       content: (
         <div style={{ padding: 16 }}>
           <ConsecutiveDiffScanSim E={E} />
@@ -283,13 +283,13 @@ export function makeMcc19RectCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now compute it yourself! List = [1, 3, 5, 6]. What is the minimum difference?", "이제 직접 계산해봐요! 리스트 = [1, 3, 5, 6]. 최소 차이는?"),
+        "Now compute it yourself! List = [1, 3, 5, 6]. What is the minimum difference?", "이제 직접 구해 봐요. 수는 [1, 3, 5, 6] 이에요."),
       question: t(E,
         "Sorted list [1, 3, 5, 6]. Min difference = ?",
-        "정렬된 리스트 [1, 3, 5, 6]. 최소 차이 = ?"),
+        "[1, 3, 5, 6] 에서 가장 작은 차이는 얼마일까요?"),
       hint: t(E,
         "Compute each consecutive diff (3-1, 5-3, 6-5), then pick the smallest.",
-        "인접한 차이 (3-1, 5-3, 6-5) 를 각각 구한 뒤 가장 작은 걸 골라요."),
+        "이웃한 두 수의 차이 3−1, 5−3, 6−5 를 각각 구한 뒤\n그중 가장 작은 것을 고르세요."),
       answer: 1,
     },
   ];

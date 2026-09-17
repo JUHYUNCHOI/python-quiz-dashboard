@@ -47,7 +47,7 @@ export function makeComfyCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ adds N cows to an infinite 2D grid one at a time, each at a distinct cell.\nA cow is COMFORTABLE if it currently has exactly 3 of the 4 up/down/left/right neighbor cells occupied.\nAfter each addition, print the total number of comfortable cows on the grid.",
-        "FJ가 무한한 2D 격자에 N마리 소를 한 마리씩 서로 다른 칸에 추가해요.\n어떤 소가 상하좌우 이웃 칸 4개 중 정확히 3개가 채워져 있으면 그 소는 '편안'해요.\n각 추가 직후, 격자 위 편안한 소의 총 개수를 출력해요."),
+        "소를 한 마리씩 놓을 때마다 편안한 소가 몇 마리인지 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -64,7 +64,7 @@ export function makeComfyCh1(E) {
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
                 "After each cow is added, output the current count of comfortable cows (exactly 3 of 4 neighbors occupied).",
-                "각 추가 직후, 편안한 소 (이웃 4개 중 정확히 3개가 채워진 소) 의 현재 개수를 출력.")}
+                "소를 한 마리 놓을 때마다 편안한 소가 몇 마리인지 출력해요.")}
             </div>
           </div>
 
@@ -108,14 +108,14 @@ export function makeComfyCh1(E) {
       type: "reveal",
       narr: t(E,
         "Click empty cells to add cows one by one. Each cow shows her current neighbor count. When that number hits 3 the cell glows orange — she's comfortable. Try the presets, then think: adding one cow can only change the count for which cells?",
-        "빈 칸을 클릭해 소를 한 마리씩 추가. 각 소 위에 현재 이웃 수가 떠요. 그 숫자가 3 이 되는 순간 칸이 주황으로 빛나요 — 편안해진 거예요. 프리셋도 눌러보고 생각해 봐: 소 한 마리 추가가 영향을 주는 칸은 어디뿐일까?"),
+        "빈 칸을 클릭해 소를 한 마리씩 놓아 봐요."),
       content: (<ComfyCowsSim E={E} />),
     },
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "A cow at (1,1) has neighbors at (0,1), (2,1), (1,0).\nThat's 3 neighbors.\nIs it comfortable?", "소가 (1,1)에 있고 이웃이 (0,1), (2,1), (1,0)에 있어요. 이웃이 3마리예요. 편안할까?"),
+        "A cow at (1,1) has neighbors at (0,1), (2,1), (1,0).\nThat's 3 neighbors.\nIs it comfortable?", "(1,1) 의 소는 이웃이 3마리예요.\n이 소는 편안할까요?"),
       question: t(E,
         "Cow at (1,1) with 3 neighbors. Comfortable?",
         "(1,1)의 소, 이웃 3마리. 편안해요?"),
@@ -126,19 +126,19 @@ export function makeComfyCh1(E) {
       correct: 0,
       explain: t(E,
         "A cow is comfortable with exactly 3 neighbors. (1,1) has 3 occupied neighbors, so it's comfortable!",
-        "소는 정확히 이웃 3마리면 편안해요. (1,1)은 점유된 이웃이 3개이므로 편안해요!"),
+        "소는 이웃이 정확히 3마리일 때 편안해요.\n(1,1) 은 이웃 칸 3개가 차 있으니까 편안해요!"),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "A cow with exactly 3 neighbors is comfortable.\nEnter 1 for yes, 0 for no: is it comfortable?", "이웃이 정확히 3마리인 소는 편안해요. 편안하면 1, 아니면 0 입력:"),
+        "A cow with exactly 3 neighbors is comfortable.\nEnter 1 for yes, 0 for no: is it comfortable?", "이웃이 정확히 3마리인 소는 편안해요. 편안하면 1, 아니면 0 을 넣어요."),
       question: t(E,
         "Cow with exactly 3 neighbors: comfortable? (1=yes, 0=no)",
-        "이웃 3마리인 소: 편안? (1=예, 0=아니오)"),
+        "이웃이 3마리인 소는 편안할까요? (1=예, 0=아니오)"),
       hint: t(E,
         "Re-read the comfortable rule — exactly how many neighbors?",
-        "편안 조건을 다시 읽어 봐 — 이웃이 정확히 몇 마리?"),
+        "편안한 조건을 다시 읽어 봐요. 이웃이 정확히 몇 마리일까요?"),
       answer: 1,
     },
   ];
@@ -155,7 +155,7 @@ export function makeComfyCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Maintain a SET of cow positions and a current comfort count. When a new cow is added, only the new cow + her 4 neighbors can change status — recheck just those 5 cells. Sections build it one piece at a time.",
-        "소 위치 집합 (SET) 과 현재 편안한 소 수 유지. 새 소가 추가되면 그 소 + 4 이웃만 상태가 바뀔 수 있으니 그 5 칸만 재확인. 아래 섹션이 한 단락씩 쌓아요."),
+        "새 소와 그 이웃 4칸, 이 5칸만 다시 보면 돼요."),
       sections: getComfyCowsSections(E),
     },
   ];

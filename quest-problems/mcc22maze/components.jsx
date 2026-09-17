@@ -163,7 +163,7 @@ export function Mcc22MazeConnectSim({ E }) {
 
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10, ...KA }}>
         {t(E, "Tap a number to clear that row / column. Tap again to undo.",
-             "숫자를 누르면 그 행/열을 부숴요. 다시 누르면 취소.")}
+             "숫자를 누르면 그 행/열을 부숴요. 다시 누르면 되돌려요.")}
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
@@ -195,7 +195,7 @@ export function Mcc22MazeConnectSim({ E }) {
       <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
         {t(E,
           "You never need more than 2: clearing the TOP row and the LAST column always links the two corners. So the answer is only ever 0, 1, or 2.",
-          "2번을 넘길 일은 없어요: 맨 윗 행과 맨 오른쪽 열을 부수면 두 모서리는 언제나 이어져요. 그래서 정답은 늘 0, 1, 2 중 하나예요.")}
+          "2번을 넘길 일은 없어요. 맨 윗 행과 맨 오른쪽 열을 부수면 두 모서리는 언제나 이어져요. 그래서 정답은 늘 0, 1, 2 중 하나예요.")}
       </div>
     </div>
   );
@@ -445,7 +445,7 @@ export function getMcc22MazeSections(E) {
       py: S1_PY, cpp: S1_CPP,
       why: [
         t(E, "The problem asks 'can the two corners be connected?' — that's a CONNECTIVITY question, not a shortest-path one. Union-Find joins cells into groups; two corners in the same group means 'linked'.",
-            "이 문제는 '두 모서리가 이어지나?' 를 물어요 — 최단 거리가 아니라 '연결' 문제예요. 유니온-파인드는 칸들을 묶음으로 합쳐요; 두 모서리가 같은 묶음이면 '이어짐'."),
+            "이 문제는 '두 모서리가 이어지나?' 를 물어요 — 최단 거리가 아니라 '연결' 문제예요. 유니온-파인드는 칸들을 묶음으로 합쳐요. 두 모서리가 같은 묶음이면 이어진 거예요."),
         t(E, "We keep a history of every merge, so after test-clearing one row we can rollback_to and undo it — instead of rebuilding the whole structure for every row and column.",
             "합칠 때마다 기록을 남겨서, 한 행을 시험 삼아 부순 뒤 rollback_to 로 되돌릴 수 있어요 — 행·열마다 처음부터 다시 만들 필요가 없어요."),
       ],
@@ -458,7 +458,7 @@ export function getMcc22MazeSections(E) {
         t(E, "Give each cell a number cid(r,c), then union every pair of neighbouring open cells. That captures the maze's current connectivity.",
             "각 칸에 번호 cid(r,c) 를 붙이고, 인접한 두 통로를 union 해요. 이러면 지금 미로의 연결 상태가 담겨요."),
         t(E, "If S (top-left) and G (bottom-right) are already the same group with nothing cleared, the answer is 0.",
-            "아무것도 안 부쉈는데 S(왼위)와 G(오른아래)가 이미 같은 묶음이면 답은 0."),
+            "아무것도 안 부쉈는데 S(왼위)와 G(오른아래)가 이미 같은 묶음이면 답은 0이에요."),
       ],
     },
     {
@@ -467,11 +467,11 @@ export function getMcc22MazeSections(E) {
       py: S3_PY, cpp: S3_CPP,
       why: [
         t(E, "Clearing row i turns that whole row into a corridor: union its cells side-by-side, then union them with any open cell just above or below.",
-            "행 i 를 부수면 그 행 전체가 통로가 돼요: 옆칸끼리 union 하고, 바로 위·아래의 통로와도 union 해요."),
+            "행 i 를 부수면 그 행 전체가 통로가 돼요. 옆칸끼리 union 하고, 바로 위·아래의 통로와도 union 해요."),
         t(E, "Check S–G after each single row/column. rollback_to(mark) cleans it up before trying the next one, so every attempt starts fresh.",
             "행·열 하나마다 S–G 를 확인하고, rollback_to(mark) 로 깨끗이 되돌린 뒤 다음을 시험해요 — 매 시도가 새 출발이에요."),
         t(E, "If any single clear links them, the answer is 1. If none does, the answer is 2 — clearing the top row plus the last column always works, so it never exceeds 2.",
-            "하나라도 이어지면 답 1. 아무것도 안 되면 답 2 — 맨 윗 행+맨 오른쪽 열이면 늘 되니까 2를 넘지 않아요."),
+            "하나라도 이어지면 답은 1이에요. 아무것도 안 되면 답은 2예요 — 맨 윗 행+맨 오른쪽 열이면 늘 되니까 2를 넘지 않아요."),
       ],
     },
     {
@@ -480,9 +480,9 @@ export function getMcc22MazeSections(E) {
       py: S4_PY, cpp: S4_CPP,
       why: [
         t(E, "Each test is 1 + n lines: the size n, then n rows of the grid.",
-            "테스트 하나가 1 + n 줄이에요. 크기 n 한 줄, 그다음 격자 n 줄."),
+            "테스트 하나가 1 + n 줄이에요. 크기 n 이 한 줄, 그다음 격자가 n 줄이에요."),
         t(E, "For each test, solve_case returns 0, 1, or 2; collect them and print at the end.",
-            "각 테스트마다 solve_case 가 0/1/2 를 돌려줘요; 모아 두었다가 마지막에 출력."),
+            "각 테스트마다 solve_case 가 0/1/2 를 돌려줘요. 모아 두었다가 마지막에 한꺼번에 출력해요."),
       ],
       pyOnly: [
         t(E, "input() gives the line with a trailing newline, so rstrip() trims it before we use the row.",
@@ -534,7 +534,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc22MazePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc22Maze — Full Study Guide", "Mcc22Maze — 종합 풀이 노트");
@@ -557,7 +557,7 @@ export function downloadMcc22MazePDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">MCC · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

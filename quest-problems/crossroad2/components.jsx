@@ -87,7 +87,7 @@ export function CrossRoad2Sim({ E }) {
   );
 
   const eventBox = () => {
-    if (!cur) return t(E, "Press → to inspect the first pair of cows.", "→ 를 눌러 첫 소-쌍을 확인해요.");
+    if (!cur) return t(E, "Press → to inspect the first pair of cows.", "→ 를 눌러 첫 소 한 쌍을 봐요.");
     const { A: ca, B: cb, a1, a2, b1, b2, cross } = cur;
     const order = [
       { p: a1, c: ca, col: colorA },
@@ -107,10 +107,10 @@ export function CrossRoad2Sim({ E }) {
           {t(E, " (positions ", " (위치 ")}{b1},{b2}{")"}
         </div>
         <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "sorted order: ", "정렬된 순서: ")}<b>{orderStr}</b>{" → "}
+          {t(E, "sorted order: ", "자리를 순서대로 놓으면 ")}<b>{orderStr}</b>{" → "}
           {cross
-            ? <span style={{ color: "#16a34a", fontWeight: 800 }}>{t(E, "interleave! cross +1", "엇갈림! 교차 +1")}</span>
-            : <span style={{ color: C.dim }}>{t(E, "nested or apart — no cross", "포개지거나 떨어짐 — 교차 X")}</span>}
+            ? <span style={{ color: "#16a34a", fontWeight: 800 }}>{t(E, "interleave! cross +1", "엇갈려요! 교차 +1")}</span>
+            : <span style={{ color: C.dim }}>{t(E, "nested or apart — no cross", "한쪽이 다른 쪽을 감싸거나 아예 떨어져 있어요 — 안 엇갈려요")}</span>}
         </div>
       </>
     );
@@ -131,7 +131,7 @@ export function CrossRoad2Sim({ E }) {
       {/* String strip with highlighted positions */}
       <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "10px 8px", marginBottom: 10 }}>
         <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "string s (cow letters at each crossing point)", "문자열 s (각 횡단 지점의 소 글자)")}
+          {t(E, "string s (cow letters at each crossing point)", "문자열 s — 건너는 자리마다 적힌 소 글자")}
         </div>
         {strip()}
         {idxStrip()}
@@ -140,7 +140,7 @@ export function CrossRoad2Sim({ E }) {
       {/* Pair list — done so far, current, remaining */}
       <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "10px 8px", marginBottom: 10 }}>
         <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "all cow-pairs to check", "확인할 모든 소-쌍")}
+          {t(E, "all cow-pairs to check", "살펴볼 소 쌍 전부")}
         </div>
         <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
           {pairs.map((p, i) => {
@@ -188,7 +188,7 @@ export function CrossRoad2Sim({ E }) {
           background: "transparent", border: `1px solid ${C.border}`, borderRadius: 8,
           padding: "5px 10px", fontSize: 11, fontWeight: 600, color: C.dim,
           cursor: stepIdx === 0 ? "default" : "pointer",
-        }}>{t(E, "reset", "초기화")}</button>
+        }}>{t(E, "reset", "처음부터 다시")}</button>
       </div>
     </div>
   );
@@ -290,19 +290,19 @@ export function getCrossRoad2Sections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 에서 자동으로 옮긴 거예요.\n자료형과 표현 방식은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣어요 (<iostream>, <vector> …).\n그래야 코드가 무엇을 하려는지 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 2×10^9 을 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -348,7 +348,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCrossRoad2PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "CrossRoad2 — Full Study Guide", "CrossRoad2 — 종합 풀이 노트");
@@ -371,7 +371,7 @@ export function downloadCrossRoad2PDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

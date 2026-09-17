@@ -85,7 +85,7 @@ export function CollatzStepSim({ E }) {
 
   const say =
     s.kind === "intro" ? t(E, <>Here's the list <b>[1, 2, 3, 4, 5]</b>. Let's run <b>one pass</b> (k = 1): each number, if even <b>÷2</b>, if odd <b>×3+1</b>.</>,
-                            <>리스트 <b>[1, 2, 3, 4, 5]</b> 가 있어요. <b>한 바퀴</b>(k = 1) 돌려봐요: 숫자마다 짝수면 <b>÷2</b>, 홀수면 <b>×3+1</b>.</>)
+                            <>리스트 <b>[1, 2, 3, 4, 5]</b> 가 있어요. <b>한 바퀴</b>(k = 1) 돌려봐요. 숫자마다 짝수면 <b>÷2</b>, 홀수면 <b>×3+1</b> 이에요.</>)
     : s.kind === "elem"
       ? (isEven
           ? t(E, <><b>{cur}</b> is <b>even</b> → {cur} ÷ 2 = <b>{after[s.i]}</b>.</>,
@@ -93,7 +93,7 @@ export function CollatzStepSim({ E }) {
           : t(E, <><b>{cur}</b> is <b>odd</b> → 3 × {cur} + 1 = <b>{after[s.i]}</b>.</>,
                  <><b>{cur}</b> 은 <b>홀수</b> → 3 × {cur} + 1 = <b>{after[s.i]}</b>.</>))
     : t(E, <>After one pass the list is <b>[4, 1, 10, 2, 16]</b>. The answer is the <b>sum</b>: 4+1+10+2+16 = <b>33</b>. ✓</>,
-           <>한 바퀴 돌면 리스트는 <b>[4, 1, 10, 2, 16]</b>. 답은 전체 <b>합</b>: 4+1+10+2+16 = <b>33</b>. ✓</>);
+           <>한 바퀴 돌면 리스트는 <b>[4, 1, 10, 2, 16]</b> 이 돼요. 답은 전체 <b>합</b> 이니까 4+1+10+2+16 = <b>33</b> 이에요. ✓</>);
 
   return (
     <div style={{ padding: 16 }}>

@@ -98,19 +98,19 @@ export function getBadmintonSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "Four int counters carry the whole state: two for the current game, two for games won.",
-            "int 카운터 네 개가 상태를 전부 담아요. 두 개는 현재 게임 점수, 두 개는 이긴 게임 수예요."),
+            "세는 값 네 개가 상태를 전부 담아요. 두 개는 현재 게임 점수, 두 개는 이긴 게임 수예요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
+            "#include 는 배운 헤더로 (iostream, vector, string) 나눠 적어요."),
         t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+            "합계와 자리 번호는 int 로 충분해요. 합계가 2×10^9 을 넘을 때만 더 큰 타입을 써요."),
       ],
     },
   ];

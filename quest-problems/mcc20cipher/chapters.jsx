@@ -52,7 +52,7 @@ function CipherHopSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "The rule sends A[i] → B[i]. Applying it K times just means hopping along the arrow K times. Pick a letter and a K, and watch where it lands.",
-            "규칙은 A[i] → B[i] 로 보내요. K번 적용은 화살표를 K번 따라 뛰는 것뿐이에요. 글자와 K를 골라서 어디에 도착하는지 봐요.")}
+            "규칙은 A[i] 를 B[i] 로 바꿔요. K번 적용하면 화살표를 K번 따라 뛰는 셈이에요. 글자와 K를 골라서 어디에 도착하는지 봐요.")}
         </div>
 
         {/* the rule shown as arrows */}
@@ -110,8 +110,8 @@ function CipherHopSim({ E }) {
           {
             touched
               ? t(E,
-                  "So each letter has one final destination after K hops. Find that for all 26 letters once — then any message, however long, is a single lookup per letter.",
-                  "그러니 각 글자는 K번 뛴 뒤 도착지가 하나로 정해져요.\n26글자에 대해 이걸 한 번만 구해두면, 아무리 긴 메시지라도 글자마다 한 번의 조회로 끝나요.")
+                  "The rule never changes, so the same letter always hops the same path — its landing after K hops is fixed. Find that for all 26 letters once, and then any message, however long, is a single lookup per letter.",
+                  "규칙이 늘 같으니 같은 글자는 늘 같은 길로 뛰어요.\n그래서 K번 뛴 뒤 도착지도 글자마다 하나로 정해져요.\n26글자만 한 번 구해 두면, 메시지가 아무리 길어도\n글자마다 표를 한 번 보면 끝나요.")
               : t(E,
                   "Try another letter, or change K. Does each letter always land somewhere fixed?",
                   "다른 글자도 눌러보고 K 도 바꿔봐요.\n글자마다 도착지가 늘 하나로 정해질까요?")}
@@ -138,7 +138,7 @@ export function makeMcc20CipherCh1(E) {
       type: "reveal",
       narr: t(E,
         "A substitution rule sends each letter A[i] to B[i]. You apply that rule to the message K times in a row.\nPrint the message after K applications.",
-        "치환 규칙이 각 글자 A[i] 를 B[i] 로 보내요. 이 규칙을 메시지에 연달아 K번 적용해요.\nK번 적용한 뒤의 메시지를 출력해요."),
+        "글자를 바꾸는 규칙을 K번 되풀이하면 메시지가 어떻게 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -201,7 +201,7 @@ export function makeMcc20CipherCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. Notice A and B are read as two 26-letter lines — position i pairs them up.",
-        "입력 형식과 공식 예제를 봐요. A 와 B 는 26글자 줄 두 개로 들어오고, 같은 위치 i 끼리 짝을 지어요."),
+        "A 와 B 는 26글자 줄 두 개로 들어와 같은 자리끼리 짝을 지어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -211,7 +211,7 @@ export function makeMcc20CipherCh1(E) {
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               <div>• <b>S</b> — {t(E, "the message (lowercase)", "메시지 (소문자)")}</div>
               <div>• <b>K</b> — {t(E, "how many times to apply the rule", "규칙을 적용할 횟수")}</div>
-              <div>• <b>A</b>, <b>B</b> — {t(E, "two permutations of a–z; A[i] → B[i]", "a–z 의 순열 두 개; A[i] → B[i]")}</div>
+              <div>• <b>A</b>, <b>B</b> — {t(E, "two permutations of a–z; A[i] → B[i]", "a–z 의 순열 두 개예요. A[i] 가 B[i] 로 바뀌어요.")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: |S| (S 의 길이) ≤ 100000, 1 ≤ K ≤ 100000.", "제약: |S| ≤ 100000, 1 ≤ K ≤ 100000.")}
@@ -260,7 +260,7 @@ export function makeMcc20CipherCh1(E) {
         "화살표를 K번 따라가면 돼요. 그게 규칙 전부예요."),
       question: t(E,
         "Rule: a→b, b→c, c→a. Apply it to 'a' TWICE. What letter?",
-        "규칙: a→b, b→c, c→a. 'a' 에 2번 적용하면 어떤 글자?"),
+        "규칙은 a→b, b→c, c→a 예요. 'a' 에 2번 적용하면 어떤 글자가 될까요?"),
       options: [
         t(E, "c", "c"),
         t(E, "a", "a"),
@@ -281,7 +281,7 @@ export function makeMcc20CipherCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way rewrites the whole message K times: |S|×K work — up to 10^10, far too slow. The fast way asks each of the 26 letters where it lands after K hops (26×K work), then rewrites the message once.",
-        "느린 방법은 메시지 전체를 K번 다시 써요: |S|×K 연산 — 최대 10^10, 너무 느려요. 빠른 방법은 26글자에게 'K번 뛰면 어디 도착?' 을 물어(26×K 연산) 표를 만들고, 메시지는 한 번만 다시 써요."),
+        "메시지 전체를 K번 다시 쓰면 너무 느려요 — 더 빠른 길을 찾아봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -290,15 +290,15 @@ export function makeMcc20CipherCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: rewrite the whole message K times", "느림: 메시지 전체를 K번 다시 쓰기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "|S|×K ≈ 100000 × 100000 = 10^10 operations. Times out.", "|S|×K ≈ 100000 × 100000 = 10^10 연산. 시간 초과.")}
+                {t(E, "|S|×K ≈ 100000 × 100000 = 10^10 operations. Times out.", "|S|×K ≈ 100000 × 100000 = 10^10 번 계산해요. 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: precompute each letter's K-step landing", "빠름: 글자별 K-스텝 도착지 미리 계산")}
+                🚀 {t(E, "Fast: precompute each letter's K-step landing", "빠름: 글자마다 K번 뛴 도착지를 미리 계산")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "26×K to build the table, then one pass over S. Total ≈ 26×100000 + 100000.", "표 만들기 26×K, 그다음 S 한 번 훑기. 합계 ≈ 26×100000 + 100000.")}
+                {t(E, "26×K to build the table, then one pass over S. Total ≈ 26×100000 + 100000.", "표를 만드는 데 26×K, 그다음 S 를 한 번 훑어요. 합쳐서 ≈ 26×100000 + 100000 이에요.")}
               </div>
             </div>
           </div>

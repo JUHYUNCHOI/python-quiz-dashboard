@@ -88,7 +88,7 @@ export function CandyCaneSim({ E }) {
           }}>
             {t(E, "Cow", "소")} {ev.cowIdx + 1} {ev.ate > 0
               ? `${t(E, "ate", "먹음")} ${ev.ate} → h = ${ev.after}`
-              : t(E, "can't reach (skip)", "닿지 못함 (skip)")}
+              : t(E, "can't reach (skip)", "못 닿아서 건너뜀")}
           </div>
         )}
       </div>
@@ -169,7 +169,7 @@ export function CandyCaneSim({ E }) {
         <button onClick={reset} style={{
           background: "#fff", color: A, border: `1.5px solid ${A}`,
           borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer",
-        }}>↻ {t(E, "Reset", "초기화")}</button>
+        }}>↻ {t(E, "Reset", "다시 처음부터")}</button>
         <button onClick={next} disabled={done} style={{
           background: done ? "#cbd5e1" : A, color: "#fff",
           border: `1.5px solid ${done ? "#cbd5e1" : A}`,
@@ -183,7 +183,7 @@ export function CandyCaneSim({ E }) {
       {/* Final-state callout */}
       {done && (
         <div style={{ marginTop: 10, background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#166534", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "Final heights:", "최종 키:")} <b>{heights.join(", ")}</b> {t(E, "→ matches sample output 7, 2, 7", "→ 샘플 출력 7, 2, 7 와 일치")}
+          {t(E, "Final heights:", "마지막 키:")} <b>{heights.join(", ")}</b> {t(E, "→ matches sample output 7, 2, 7", "→ 예제 출력 7, 2, 7 과 같아요")}
         </div>
       )}
     </div>
@@ -265,19 +265,19 @@ export function getCandyCaneSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 은 파이썬 코드를 옮긴 것이에요. 타입과 표현은 필요할 때 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬의 list, map, sorted 덕분에 코드가 짧아요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, algorithm).",
-            "#include 는 배운 헤더들로 (iostream, vector, algorithm) 나눠 적어."),
+            "#include 는 배운 헤더로 하나씩 나눠 적어요 (iostream, vector, algorithm)."),
         t(E, "Heights can grow large after many bites — long long is the safe type.",
-            "여러 번 먹으면 키가 커질 수 있어 — long long 으로 안전하게."),
+            "여러 번 먹으면 키가 아주 커질 수 있어요. 그래서 long long 을 써요."),
       ],
     },
   ];

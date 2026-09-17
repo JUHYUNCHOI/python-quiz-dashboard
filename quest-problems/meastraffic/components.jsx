@@ -83,7 +83,7 @@ export function TrafficPropagateSim({ E }) {
       padding: 14, marginTop: 6, marginBottom: 6,
     }}>
       <div style={{ fontSize: 11, fontWeight: 700, color: A, letterSpacing: 0.5, marginBottom: 8 }}>
-        🧪 {t(E, "Try it: edit bounds, press Play to propagate", "직접 해보기: 값을 바꾸고 Play 로 전파해 봐")}
+        🧪 {t(E, "Try it: edit bounds, press Play to propagate", "직접 해보기 — 값을 바꾸고 Play 를 눌러 봐요")}
       </div>
 
       {/* Highway segments row */}
@@ -100,7 +100,7 @@ export function TrafficPropagateSim({ E }) {
               boxShadow: current ? `0 0 0 3px ${A}33` : "none",
               transition: "box-shadow 200ms, border-color 200ms",
             }}>
-              <button onClick={() => cycleType(i)} disabled={i === 0} title={t(E, "Click to change type", "클릭해서 타입 변경")} style={{
+              <button onClick={() => cycleType(i)} disabled={i === 0} title={t(E, "Click to change type", "눌러서 종류를 바꿔요")} style={{
                 background: "transparent", border: "none", padding: 0, cursor: i === 0 ? "default" : "pointer",
                 fontSize: 10, fontWeight: 800, color: c.fg, letterSpacing: 0.3,
               }}>
@@ -144,7 +144,7 @@ export function TrafficPropagateSim({ E }) {
           borderRadius: 8, padding: "5px 12px",
           fontSize: 12, fontWeight: 800, cursor: "pointer",
         }}>
-          ↺ {t(E, "Reset", "리셋")}
+          ↺ {t(E, "Reset", "처음부터")}
         </button>
         <div style={{ fontSize: 11, color: C.dim, marginLeft: 4 }}>
           {t(E, "Step", "단계")} {step}/{segs.length}
@@ -160,7 +160,7 @@ export function TrafficPropagateSim({ E }) {
         ) : (
           <span style={{ color: C.dim }}>
             {t(E, "Press Play to watch the range tighten as it travels right.",
-                  "Play 를 눌러 범위가 오른쪽으로 가며 좁아지는 걸 봐.")}
+                  "Play 를 눌러 범위가 오른쪽으로 가며 좁아지는 걸 봐요.")}
           </span>
         )}
       </div>
@@ -305,19 +305,19 @@ export function getMeasTrafficSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 코드를 옮긴 거예요. 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "tuple<string, int, int> bundles type + lo + hi into one row.",
-            "tuple<string, int, int>로 type + lo + hi를 한 행에 묶음."),
+            "tuple<string, int, int> 로 type + lo + hi 를 하나로 묶어요."),
         t(E, "Structured binding auto& [typ, lo, hi] reads each tuple slot like a field.",
-            "구조화 바인딩 auto& [typ, lo, hi]으로 각 튜플 값을 필드처럼 읽음."),
+            "auto& [typ, lo, hi] 로 묶어 둔 값을 이름으로 하나씩 꺼내 써요."),
       ],
     },
   ];
@@ -363,7 +363,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMeasTrafficPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "MeasTraffic — Full Study Guide", "MeasTraffic — 종합 풀이 노트");
@@ -386,7 +386,7 @@ export function downloadMeasTrafficPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

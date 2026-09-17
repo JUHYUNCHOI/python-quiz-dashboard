@@ -38,7 +38,7 @@ function SumKSample({ E }) {
           {/* 2026-09-10 학생: "998244353 로 나눈 나머지 라고 잘 쓰다가 갑자기 mod 998244353 이 나온다.
               mod 는 처음 보는 말이다." — 같은 화면에서 같은 뜻을 두 말로 쓰고 있었다. 한 말로 통일한다. */}
           {t(E, " = the sum of (subset sum)^K over every non-empty subset, then the remainder after dividing by 998244353.",
-               " = 모든 비어있지 않은 부분집합의 (합)^K 를 다 더한 뒤, 998244353 으로 나눈 나머지.")}
+               " = 모든 비어있지 않은 부분집합의 (합)^K 를 다 더한 뒤, 998244353 으로 나눈 나머지예요.")}
         </div>
       </div>
 
@@ -58,9 +58,9 @@ function SumKSample({ E }) {
           <code style={{ background: "#f5f3ff", padding: "1px 5px", borderRadius: 3 }}>2 1</code>
           {t(E, "  ← N = 2, K = 1", "  ← N = 2, K = 1")}<br />
           <code style={{ background: "#f5f3ff", padding: "1px 5px", borderRadius: 3 }}>3 3</code>
-          {t(E, "  ← the array: first 3, second 3", "  ← 배열: 첫 번째 3, 두 번째 3")}
+          {t(E, "  ← the array: first 3, second 3", "  ← 배열이에요. 첫 번째 3, 두 번째 3")}
         </span><br />
-        {t(E, "Subsets: {first}, {second}, {both} → 3 + 3 + 6 = ", "부분집합: {첫 번째}, {두 번째}, {둘 다} → 3 + 3 + 6 = ")}<b style={{ color: "#15803d" }}>12</b>
+        {t(E, "Subsets: {first}, {second}, {both} → 3 + 3 + 6 = ", "부분집합은 {첫 번째}, {두 번째}, {둘 다} 예요 → 3 + 3 + 6 = ")}<b style={{ color: "#15803d" }}>12</b>
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
@@ -70,7 +70,7 @@ function SumKSample({ E }) {
               N=10 K=1 / 10,2 / 18,2 / 1000,2 / 100000,2 / 100000,3 / 200,200 / 777,150,  1 ≤ aᵢ ≤ 10⁹
             즉 두 갈래다 — 큰 N·작은 K, 그리고 작은 N·큰 K. aᵢ 상한은 아예 빠져 있었다. */}
         {t(E, "📌 Constraints — two families: N up to 100,000 with K ≤ 3, or N up to 777 with K up to 200. Each aᵢ ≤ 10⁹. The answer is taken mod 998244353.",
-             "📌 제약 — 두 갈래예요: N 이 최대 10만이면 K 는 3 이하, N 이 777 이하면 K 가 200까지. 각 원소 aᵢ 는 10억 이하. 답은 998244353 로 나눈 나머지.")}
+             "📌 제약은 두 갈래예요. N 이 최대 10만이면 K 는 3 까지고, N 이 777 까지면 K 는 200 까지예요. 각 원소 aᵢ 는 10억보다 작거나 같아요. 답은 998244353 로 나눈 나머지로 내요.")}
       </div>
     </div>
   );
@@ -200,7 +200,7 @@ function SumKRecap({ E }) {
               <M>P[0]</M> · <M>P[1]</M> · <M>P[2]</M>
             </span>
             {t(E, "how many · each sum added up · each sum squared, added up.",
-                 "부분집합 개수 · 각 합을 더한 것 · 각 합을 제곱해서 더한 것.")}<br />
+                 "부분집합 개수, 각 합을 더한 것, 각 합을 제곱해서 더한 것이에요.")}<br />
             {t(E, "For a bigger K we write down P[0] … P[K].", "K 가 더 크면 P[0] 부터 P[K] 까지 적어둬요.")}
             <div style={{ marginTop: 12, background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
               padding: "10px 14px", fontSize: 13, fontWeight: 800, color: "#065f46", lineHeight: 1.85 }}>
@@ -225,7 +225,7 @@ function SumKRecap({ E }) {
             {t(E, " is row 2 of the triangle below.", " 이 아래 삼각형의 2 번째 줄이에요.")}<br />
             {t(E, "We write them ", "이 수를 ")}<M>C(t, j)</M>
             {t(E, ": row t of the triangle, the j-th number (counting from 0). So C(2,0)=1, C(2,1)=2, C(2,2)=1.",
-                 " 라고 써요 — 삼각형 t 번째 줄의, j 번째 수 (0 부터 셈). 그러니까 C(2,0)=1, C(2,1)=2, C(2,2)=1.")}
+                 " 라고 써요. 삼각형 t 번째 줄의 j 번째 수라는 뜻이에요 (0 부터 세요). 그러니까 C(2,0)=1, C(2,1)=2, C(2,2)=1 이에요.")}
           </Body>
 
           <div style={{ maxWidth: 340, margin: "12px auto 0", background: "#fff",
@@ -295,7 +295,7 @@ export function makeSumKCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5, wordBreak: "keep-all" }}>
               {t(E,
                 "Add up (subset sum)^K over ALL non-empty subsets of A, and print it modulo 998244353.",
-                "A 의 모든 비어있지 않은 부분집합에 대해 (합)^K 을 더한 값을 998244353 로 나눈 나머지로 출력.")}
+                "A 의 모든 비어있지 않은 부분집합에 대해 (합)^K 을 더한 값을 998244353 로 나눈 나머지로 출력해요.")}
             </div>
           </div>
 
@@ -329,7 +329,7 @@ export function makeSumKCh1(E) {
                 <div>
                   {t(E, "Look at ", "")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "every non-empty subset", "모든 비어있지 않은 부분집합")}</b>
-                  {t(E, " — there are 2ᴺ − 1 of them.", " — 총 2ᴺ − 1 개.")}
+                  {t(E, " — there are 2ᴺ − 1 of them.", " 을 봐요. 모두 2ᴺ − 1 개예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
@@ -350,7 +350,7 @@ export function makeSumKCh1(E) {
       type: "reveal",
       label: t(E, "Sample I/O", "샘플 입출력"),
       narr: t(E, "A concrete example — one array, and the answer we must print.",
-                 "구체적인 예 하나 — 배열 하나와, 우리가 출력할 답."),
+                 "배열 하나와, 우리가 출력할 답을 같이 봐요."),
       content: (<SumKSample E={E} />),
     },
 

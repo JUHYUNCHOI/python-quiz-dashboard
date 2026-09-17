@@ -116,7 +116,7 @@ export function ReflectionGrid({ E }) {
         return (
           <div style={{ background: "#ecfeff", border: `1.5px solid ${A}`, borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#155e75", marginBottom: 10, lineHeight: 1.55 }}>
             <b>{t(E, "Group", "묶음")} (rg={hi[0]}, cg={hi[1]}):</b>{" "}
-            {t(E, `${cnt} painted of 4 → flip ${Math.min(cnt, 4 - cnt)}.`, `4 중 ${cnt} 칠함 → ${Math.min(cnt, 4 - cnt)} 뒤집기.`)}
+            {t(E, `${cnt} painted of 4 → flip ${Math.min(cnt, 4 - cnt)}.`, `4 칸 중 ${cnt} 칸이 칠해졌어요 → ${Math.min(cnt, 4 - cnt)} 번 뒤집어요.`)}
           </div>
         );
       })()}
@@ -457,11 +457,11 @@ export function getReflectionSections(E) {
       py: RFL_S1_PY, cpp: RFL_S1_CPP,
       why: [
         t(E, "Read N (canvas size, even), U (number of updates), then N rows of '.' and '#'.",
-            "N (캔버스 크기, 짝수), U (update 개수), 그 다음 N 줄의 '.' 와 '#' 읽기."),
+            "그림 크기 N (짝수) 과 바꾸는 횟수 U 를 읽어요.\n그 다음 N 줄에 '.' 와 '#' 이 와요."),
       ],
       aside: <SampleInputAside E={E} sample={RFL_SAMPLE} highlight={[0, 1, 2, 3, 4]} note={t(E,
         "First 5 lines: \"4 5\" (N=4, U=5), then 4 grid rows.",
-        "처음 5 줄: \"4 5\" (N=4, U=5), 그 다음 4 줄의 그리드.")} />,
+        "첫 줄은 \"4 5\" 예요 (N=4, U=5). 이어서 4 줄이 그림이에요.")} />,
     },
     {
       label: t(E, "2️⃣ Cost of one group — compare the 3 mirrors", "2️⃣ 묶음 하나의 비용 — 거울짝 3 칸과 견주기"),
@@ -471,18 +471,18 @@ export function getReflectionSections(E) {
         t(E, "Cell (r, c) shares a group with (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c) — 4 cells total.",
             "칸 (r, c) 는 (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c) 와 같은 묶음이에요. 모두 4 칸."),
         t(E, "So we never need a separate table: from any cell we can reach its 3 mirrors by index.",
-            "그래서 따로 표를 만들 필요가 없어요. 아무 칸에서나 거울짝 3 칸을 번호로 바로 찾아가요."),
+            "번호만 알면 아무 칸에서나 거울짝 3 칸을 바로 찾아갈 수 있어요.\n그래서 따로 표를 만들 필요가 없어요."),
         t(E, "Count how many of the 3 differ from me. Repaint those, or repaint me and the rest — whichever is fewer.",
             "그중 나와 색이 다른 칸을 세요. 그 칸들을 고치거나, 나를 포함한 나머지를 고치거나 — 적은 쪽이 답이에요."),
       ],
     },
     {
-      label: t(E, "3️⃣ Initial total — sum of min(cnt, 4 − cnt)", "3️⃣ 초기 총합 — min(cnt, 4 − cnt) 합"),
+      label: t(E, "3️⃣ Initial total — sum of min(cnt, 4 − cnt)", "3️⃣ 처음 총합 — min(cnt, 4 − cnt) 더하기"),
       color: "#16a34a",
       py: RFL_S3_PY, cpp: RFL_S3_CPP,
       why: [
         t(E, "For a group of 4 cells with c painted: flip the c minority OR the (4 − c) minority. Min ops = min(c, 4 − c).",
-            "4 칸 중 c 칠함: 소수 쪽인 c 또는 (4 − c) 를 뒤집음. 최소 = min(c, 4 − c)."),
+            "4 칸 중 c 칸이 칠해져 있으면 c 칸이나 (4 − c) 칸을 뒤집어요.\n적은 쪽이 답이라 min(c, 4 − c) 예요."),
         t(E, "Every group has exactly one cell in the top-left quarter, so scanning that quarter visits each group once.",
             "묶음마다 왼쪽 위 1/4 에 칸이 딱 하나씩 있어요. 그래서 1/4 만 훑으면 모든 묶음을 한 번씩 보게 돼요."),
         t(E, "Total over all groups = answer BEFORE any update.",
@@ -490,14 +490,14 @@ export function getReflectionSections(E) {
       ],
     },
     {
-      label: t(E, "4️⃣ Naive update — rebuild every time", "4️⃣ 나이브 update — 매번 다시 만들기"),
+      label: t(E, "4️⃣ Naive update — rebuild every time", "4️⃣ 단순한 update — 매번 다시 만들기"),
       color: "#dc2626",
       py: RFL_BRUTE_PY, cpp: RFL_BRUTE_CPP,
       why: [
         t(E, "Simplest update: toggle the cell, then scan the whole quarter again. Easy to write but O(N²) per update.",
-            "가장 단순한 update: 칸을 뒤집고 1/4 을 통째로 다시 훑기. 쉽지만 update 마다 O(N²)."),
+            "가장 단순한 방법은 칸을 뒤집고 1/4 을 통째로 다시 훑는 거예요.\n쉽지만 한 번 바꿀 때마다 O(N²) 이 들어요."),
         t(E, "Total: O(U · N²). At U = 10⁵, N = 2000 → 4·10¹¹ ops — TLE.",
-            "총: O(U · N²). U = 10⁵, N = 2000 면 4·10¹¹ — TLE."),
+            "다 합치면 O(U · N²) 이에요.\nU = 10⁵, N = 2000 이면 4·10¹¹ 번이라 시간 초과예요."),
       ],
     },
     {
@@ -525,11 +525,11 @@ export function getReflectionSections(E) {
         t(E, "All other groups' contributions to total stay the same.",
             "나머지 묶음들이 더하는 값은 그대로예요."),
         t(E, "So we can update `total` in O(1): subtract the old group cost, add the new one.",
-            "그래서 total 을 O(1) 로 갱신: 옛 비용 빼고 새 비용 더하기."),
+            "그래서 total 은 옛 비용을 빼고 새 비용을 더하면 끝이에요."),
       ],
     },
     {
-      label: t(E, "6️⃣ Final fast code — incremental updates", "6️⃣ 최종 빠른 코드 — 증분 update"),
+      label: t(E, "6️⃣ Final fast code — incremental updates", "6️⃣ 빠른 코드 — 바뀐 곳만 고치기"),
       color: "#15803d",
       py: RFL_FAST_PY, cpp: RFL_FAST_CPP,
       why: [
@@ -538,7 +538,7 @@ export function getReflectionSections(E) {
         t(E, "Each update: subtract that group's old cost, flip, add the new one — O(1).",
             "뒤집을 때마다 그 묶음의 옛 비용을 빼고, 칸을 뒤집고, 새 비용을 더해요 — O(1)."),
         t(E, "Total: (N/2)² groups + U updates ≤ 10⁶ + 10⁵ ops. Fast enough in Python too.",
-            "총: 묶음 (N/2)² 개 + update U 번 ≤ 10⁶ + 10⁵. 파이썬으로도 넉넉해요."),
+            "다 합쳐도 묶음 (N/2)² 개에 update U 번이에요.\n10⁶ + 10⁵ 정도라서 파이썬으로도 넉넉해요."),
       ],
     },
   ];
@@ -583,7 +583,7 @@ function highlightCode(lines, lang) {
 
 export function downloadReflectionPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Reflection — Full Study Guide", "🪞 Reflection — 종합 풀이 노트");
@@ -608,7 +608,7 @@ export function downloadReflectionPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO February 2025 Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 <h2>${t(E, "Code (6 sections)", "코드 (6 섹션)")}</h2>

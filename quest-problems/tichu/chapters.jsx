@@ -72,7 +72,7 @@ function TichuSample({ E }) {
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
         {t(E, "📌 Constraints: N ≤ 10⁵ · each card value Cᵢ ≤ 10⁹\n· cards can be rearranged freely.",
-             "📌 제약: N ≤ 10⁵ · 각 카드 값 Cᵢ ≤ 10⁹ · 카드는 자유롭게 재배열.")}
+             "📌 제약: N ≤ 10⁵ · 각 카드 값 Cᵢ ≤ 10⁹ · 카드 순서는 마음대로 바꿔도 돼요.")}
       </div>
     </div>
   );
@@ -123,7 +123,7 @@ export function makeTichuCh1(E) {
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
         "You have N cards. N−K of them show integers; K of them are wildcards that can become any value. A 'run' is consecutive integers a, a+1, a+2, … You may rearrange freely. Print the length of the longest run you can build.",
-        "카드 N 장이 있어요. 그중 N−K 장엔 정수가 적혀 있고, K 장은 아무 수나 될 수 있는 와일드예요. 'run' 은 연속된 정수 a, a+1, a+2, … 예요. 카드는 자유롭게 재배열할 수 있어요. 만들 수 있는 가장 긴 run 의 길이를 출력해요."),
+        "와일드 카드를 써서 가장 긴 연속 숫자를 만들어 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -154,11 +154,11 @@ export function makeTichuCh1(E) {
                 <div>
                   {t(E, "You have ", "카드 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "N cards", "N 장")}</b>
-                  {t(E, ": ", " 이 있어요: ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "N−K show integers", "N−K 장엔 정수")}</b>
+                  {t(E, ": ", " 이 있어요. ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "N−K show integers", "N−K 장엔 정수가 적혀 있고")}</b>
                   {t(E, ", ", ", ")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "K are wildcards", "K 장은 와일드")}</b>
-                  {t(E, " (any value).", " (아무 수).")}
+                  {t(E, " (any value).", " 예요. 와일드는 아무 수나 될 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -168,7 +168,7 @@ export function makeTichuCh1(E) {
                   <b style={{ color: "#0891b2" }}>{t(E, "run", "run")}</b>
                   {t(E, " = consecutive integers ", " = 연속된 정수 ")}
                   <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>a, a+1, a+2, …</code>
-                  {t(E, ". Cards may be rearranged freely.", ". 카드는 자유롭게 재배열해요.")}
+                  {t(E, ". Cards may be rearranged freely.", " 예요. 카드 순서는 마음대로 바꿔도 돼요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
@@ -220,7 +220,7 @@ export function makeTichuCh1(E) {
       label: t(E, "Sample I/O", "샘플 입출력"),
       narr: t(E,
         "A concrete example — the cards, and the answer we must print.",
-        "구체적인 예 하나 — 카드들과, 우리가 출력해야 할 답."),
+        "실제 카드 한 벌과 그때의 답을 같이 볼게요."),
       content: (<TichuSample E={E} />),
     },
 
@@ -230,7 +230,7 @@ export function makeTichuCh1(E) {
       label: t(E, "Fill gaps with wildcards", "빈칸을 와일드로"),
       narr: t(E,
         "Watch the run grow: dedupe the hand, pick a window, fill the missing value with a wildcard, then extend an end.",
-        "run 이 자라는 걸 봐요: 중복 제거 → 창 잡기 → 빠진 값을 와일드로 메꾸기 → 끝을 확장."),
+        "빠진 값을 와일드로 메꾸면서 run 이 자라는 걸 봐요."),
       content: (<TichuSim E={E} />),
     },
 
@@ -242,7 +242,7 @@ export function makeTichuCh1(E) {
       label: t(E, "Why that formula?", "그 식은 왜?"),
       narr: t(E,
         "The code checks c[j] − c[i] − (j − i) > k. Let's count slots and cards and see where that comes from.",
-        "코드는 c[j] − c[i] − (j − i) > k 를 봐요.\n칸 수와 카드 수를 세어서 이 식이 어디서 나왔는지 봐요."),
+        "칸 수와 카드 수를 세면 코드의 그 식이 그대로 나와요."),
       content: (<GapFormulaSim E={E} />),
     },
 
@@ -270,7 +270,7 @@ export function makeTichuCh2(E, lang = "py") {
       label: t(E, "Code", "코드"),
       narr: t(E,
         "Read the solution top to bottom — each bubble sits on the lines it explains: read + dedupe + sort, then two-pointer for the widest window with gap ≤ K, then answer = window + K.",
-        "코드를 위에서 아래로 읽어봐요 — 말풍선이 설명하는 줄에 붙어 있어요: 읽기·중복제거·정렬 → 투포인터로 빈칸 ≤ K 최대 창 → 답 = 창 + K."),
+        "코드를 위에서 아래로 읽어 봐요. 말풍선이 그 줄에 붙어 있어요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#dc2626" />
       ),

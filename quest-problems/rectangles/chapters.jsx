@@ -66,7 +66,7 @@ function RectanglesSample({ E }) {
         <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2</code> — {t(E, "rect 3: height 1, width 2", "사각형 3: 높이 1, 폭 2")}</div>
         <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>2 1</code> — {t(E, "rect 4: height 2, width 1", "사각형 4: 높이 2, 폭 1")}</div>
         <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fdba74" }}>
-          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>11</code>{t(E, " = smallest total blue area. Group [1] → 1×1 = 1, group [2,3,4] → 2×5 = 10, total 11.", " = 최소 파랑 총면적. 구간 [1] → 1×1 = 1, 구간 [2,3,4] → 2×5 = 10, 합 11.")}
+          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>11</code>{t(E, " = smallest total blue area. Group [1] → 1×1 = 1, group [2,3,4] → 2×5 = 10, total 11.", " 은 가장 작은 파랑 총면적이에요. 구간 [1] 은 1×1 = 1, 구간 [2,3,4] 는 2×5 = 10 이라 합쳐서 11 이에요.")}
         </div>
         {/* 2026-09-10 — 공식 샘플을 **지우지 않았다.** 여기 그대로 남긴다.
             가르치는 예제만 빨강 4개로 올린 이유는 sims.jsx 의 REDS 주석에 적어뒀다:
@@ -82,7 +82,7 @@ function RectanglesSample({ E }) {
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
         {t(E, "📌 Constraints: N ≤ 200 · K ≤ 10⁹ · each h, w ≤ 1000. Areas add up to something huge.",
-             "📌 제약: N ≤ 200 · K ≤ 10⁹ · 각 h, w ≤ 1000. 면적을 다 더하면 아주 커져요.")}
+             "📌 제약: N ≤ 200 · K ≤ 10⁹ · 각 h, w ≤ 1000\n면적을 다 더하면 아주 큰 수가 나와요.")}
       </div>
     </div>
   );
@@ -179,7 +179,7 @@ export function makeRectanglesCh1(E) {
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
                 "Cover all N red rectangles with at most K blue ones so that each red is inside exactly one blue, minimizing the total blue area.",
-                "빨강 사각형 N개를 파랑 최대 K개로 덮되 각 빨강이 정확히 한 파랑 안에 들어가게, 파랑 총면적을 최소화.")}
+                "빨강 사각형 N 개를 파랑 많아야 K 개로 덮어요.\n빨강 하나는 파랑 하나 안에만 들어가야 해요.\n이때 파랑 총면적을 가장 작게 만들어요.")}
             </div>
           </div>
 
@@ -206,15 +206,15 @@ export function makeRectanglesCh1(E) {
                 <div>
                   {t(E, "Cover them with at most ", "이들을 최대 ")}
                   <b style={{ color: "#2563eb" }}>{t(E, "K blue rectangles", "파랑 사각형 K개")}</b>
-                  {t(E, " — each red must sit inside ", " 로 덮되 — 각 빨강은 ")}
-                  <b>{t(E, "exactly one blue.", "정확히 한 파랑 안.")}</b>
+                  {t(E, " — each red must sit inside ", " 로 덮어요. 빨강 하나는 ")}
+                  <b>{t(E, "exactly one blue.", "파랑 하나 안에만 들어가야 해요.")}</b>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
                 <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the ", "출력: ")}
-                  <b style={{ color: "#059669" }}>{t(E, "smallest possible total blue area.", "가능한 최소 파랑 총면적.")}</b>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "smallest possible total blue area.", "파랑 총면적이 가장 작을 때의 값을 출력해요.")}</b>
                 </div>
               </div>
             </div>
@@ -231,7 +231,7 @@ export function makeRectanglesCh1(E) {
       type: "reveal",
       label: t(E, "Sample I/O", "샘플 입출력"),
       narr: t(E, "A concrete example — the rectangles and the answer we must print.",
-                 "구체적인 예 하나 — 사각형들과, 우리가 출력해야 할 답."),
+                 "사각형들과 우리가 내놓아야 할 답을 예로 하나 봐요."),
       content: (<RectanglesSample E={E} />),
     },
 
@@ -267,7 +267,7 @@ export function makeRectanglesCh1(E) {
       question: t(E, "② is 2×2, ③ is 1×2 (height × width). Area of one blue over [②③]?",
                     "② 는 2×2, ③ 은 1×2 예요 (높이 × 폭). [②③] 를 덮는 파랑 하나의 면적은?"),
       hint: t(E, "Width = 2 + 2. Height = the taller of 2 and 1.",
-                 "폭 = 2 + 2. 높이 = 2 와 1 중 큰 쪽."),
+                 "폭은 2 + 2 예요. 높이는 2 와 1 중 큰 쪽이에요."),
       answer: 8,
     },
 
@@ -276,7 +276,7 @@ export function makeRectanglesCh1(E) {
       type: "reveal",
       label: t(E, "Split into groups", "나눠보기"),
       narr: t(E, "So try cutting the row in different places and compare the totals.",
-                 "그럼 줄을 여기저기서 잘라보고 총합을 비교해봐요."),
+                 "줄을 여기저기서 잘라 보고 총합을 견줘 봐요."),
       content: (<RectanglesSim E={E} />),
     },
 
@@ -334,7 +334,7 @@ export function makeRectanglesCh1(E) {
       type: "reveal",
       label: t(E, "Recap", "정리"),
       narr: t(E, "Everything boils down to one idea: split reds into ≤ K contiguous groups.",
-                 "결국 하나로 정리돼요: 빨강을 ≤ K개 연속 구간으로 분할."),
+                 "결국 빨강을 많아야 K 개의 연속 구간으로 나누는 문제예요."),
       content: (<RectanglesRecap E={E} />),
     },
   ];
@@ -409,7 +409,7 @@ export function makeRectanglesCh2(E, lang = "py") {
           <div style={{ textAlign: "center", marginTop: 12, fontSize: 13, fontWeight: 800,
             color: "#065f46", wordBreak: "keep-all" }}>
             {t(E, "Smallest among the allowed ones → 11 (the next is 12)",
-                 "규칙에 맞는 것 중 제일 작은 것 → 11 (그다음이 12)")}
+                 "규칙에 맞는 것 중에서 제일 작은 값은 11 이에요 (그다음이 12)")}
           </div>
         </div>
       ),
@@ -483,7 +483,7 @@ export function makeRectanglesCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "The table", "적어둘 표"),
       narr: t(E, "That is the whole trick. Here is what we write down.",
-                 "그게 전부예요. 무엇을 적어둘지 정해요."),
+                 "적어두고 꺼내 쓰는 게 전부예요. 무엇을 적어둘지 정해요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all", maxWidth: 540, margin: "0 auto" }}>
           <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 12 }}>
@@ -499,7 +499,7 @@ export function makeRectanglesCh2(E, lang = "py") {
               t(E, <>To fill one cell, ask: <b>where did the last blue start?</b><br />Try every start j — that blue covers reds j…i.</>,
                    <>한 칸을 채우려면 물어요 — <b>마지막 파랑이 어디서 시작했지?</b><br />시작점 j 를 다 해봐요. 그 파랑은 j…i 를 덮어요.</>),
               t(E, <>Cost = <b>dp[kk−1][j−1]</b> (the front part, already solved)<br />+ (widths of j…i added) × (tallest of j…i).</>,
-                   <>값 = <b>dp[kk−1][j−1]</b> (앞부분, 이미 풀어놨음)<br />+ (j…i 폭의 합) × (j…i 중 제일 높은 것).</>),
+                   <>값은 <b>dp[kk−1][j−1]</b> (앞부분은 이미 풀어 뒀어요)<br />더하기 (j…i 폭의 합) × (j…i 중 제일 높은 것) 이에요.</>),
               t(E, <>Take the smallest over all j. That's the cell.<br />The front part is looked up, never recomputed — that's the speedup.</>,
                    <>j 를 다 해보고 제일 작은 걸 그 칸에 적어요.<br />앞부분은 <b>꺼내 쓰기만</b> 하고 다시 안 계산해요 — 그게 빨라진 이유예요.</>),
             ].map((body, i) => (
@@ -513,7 +513,7 @@ export function makeRectanglesCh2(E, lang = "py") {
           </div>
           <div style={{ marginTop: 12, textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#15803d", textWrap: "balance" }}>
             {t(E, "2^199 → about 200 × 200 × 200 steps. Now it fits.",
-                 "2^199 → 200 × 200 × 200 번쯤. 이제 돌아가요.")}
+                 "2^199 번이 200 × 200 × 200 번쯤으로 줄어요. 이제 시간 안에 들어와요.")}
           </div>
         </div>
       ),

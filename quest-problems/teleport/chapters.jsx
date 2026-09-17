@@ -82,7 +82,7 @@ function TeleportRouteSim({ E }) {
       }}>
         {t(E,
           "a = 2 (start), b = 18 (goal). Move the sliders — the best route updates live.",
-          "a = 2 (출발), b = 18 (목표). 슬라이더를 움직이면 최적 경로가 실시간으로 갱신돼.")}
+          "a = 2 (출발), b = 18 (목표) 이에요. 슬라이더를 움직이면 제일 좋은 길이 바로 다시 그려져요.")}
       </div>
 
       {/* number line */}
@@ -173,7 +173,7 @@ function TeleportRouteSim({ E }) {
       }}>
         💡 {t(E,
           "Two teleporter routes exist because you can enter at x and exit at y, OR enter at y and exit at x. min(direct, via1, via2) is the answer.",
-          "텔레포터 경로가 2 가지인 이유 — x 로 들어가 y 로 나오기 / y 로 들어가 x 로 나오기. min(직접, 경로1, 경로2) 이 답.")}
+          "텔레포터로 가는 길이 두 가지인 까닭은, x 로 들어가 y 로 나오거나 y 로 들어가 x 로 나올 수 있기 때문이에요. 직접·길1·길2 중 가장 작은 값이 답이에요.")}
       </div>
     </div>
   );
@@ -189,7 +189,7 @@ export function makeTeleportCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ wants to go from position a to position b on a number line. There's a two-way teleporter linking positions x and y — using it instantly moves you between x and y at no walking cost.\nPrint the minimum total walking distance.",
-        "FJ 가 수직선의 위치 a 에서 b 로 가고 싶어요. 위치 x 와 y 를 잇는 양방향 텔레포터가 있어요 — 사용하면 걷는 거리 없이 즉시 x ↔ y 이동.\n걷는 거리의 최솟값을 출력해요."),
+        "x 와 y 를 잇는 텔레포터를 쓸 수 있어요.\na 에서 b 까지 가장 적게 걷는 거리를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -206,7 +206,7 @@ export function makeTeleportCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum total walking distance from a to b.",
-                "a 에서 b 까지 걷는 거리의 최솟값을 출력.")}
+                "a 에서 b 까지 걷는 거리의 최솟값을 출력해요.")}
             </div>
           </div>
 
@@ -231,7 +231,7 @@ export function makeTeleportCh1(E) {
                   {t(E, "There's a ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "two-way teleporter linking x and y", "x 와 y 를 잇는 양방향 텔레포터")}</b>
                   {t(E, " — using it costs ZERO walking distance.",
-                        " 가 있어요 — 사용하면 걷는 거리 0.")}
+                        " 가 있어요. 이걸 쓰면 걷는 거리가 0 이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -250,10 +250,10 @@ export function makeTeleportCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "a=0, b=10, teleporter 3<->8.\nDirect distance is 10.\nVia teleporter: 0->3 teleport->8->10 = 3+2=5.\nWhich is shorter?", "a=0, b=10, 텔레포터 3<->8. 직접 거리는 10. 텔레포터 경유: 0->3 텔레포트->8->10 = 3+2=5. 어느 게 짧아?"),
+        "a=0, b=10, teleporter 3<->8.\nDirect distance is 10.\nVia teleporter: 0->3 teleport->8->10 = 3+2=5.\nWhich is shorter?", "곧장 걸으면 10, 텔레포터를 거치면 3+2=5 예요.\n어느 쪽이 더 짧을까요?"),
       question: t(E,
         "a=0, b=10, teleporter 3<->8. Min distance?",
-        "a=0, b=10, 텔레포터 3<->8. 최소 거리는?"),
+        "a=0, b=10, 텔레포터는 3<->8 이에요. 걷는 거리의 최솟값은 얼마일까요?"),
       options: [
         t(E, "10 (direct)", "10 (직접)"),
         t(E, "5 (via teleporter)", "5 (텔레포터 경유)"),
@@ -262,27 +262,27 @@ export function makeTeleportCh1(E) {
       correct: 1,
       explain: t(E,
         "Via teleporter: |0-3| + |8-10| = 3 + 2 = 5, which is less than direct 10!",
-        "텔레포터 경유: |0-3| + |8-10| = 3 + 2 = 5, 직접 10보다 작아!"),
+        "텔레포터를 거치면 |0-3| + |8-10| = 3 + 2 = 5 예요.\n곧장 걷는 10 보다 작아요!"),
     },
     // 1-3: Bilingual route sim
     {
       type: "reveal",
       narr: t(E,
-        "Try sliding x and y. The same teleporter, with different endpoints, gives a totally different walking distance — and sometimes direct still wins!",
-        "x 와 y 를 움직여 봐. 같은 텔레포터라도 끝점에 따라 걷는 거리가 완전히 달라져 — 가끔은 직접이 이기기도 해!"),
+        "Try sliding x and y. When x and y sit far from a and b, walking to the teleporter costs more than the shortcut saves — so going straight wins.",
+        "x 와 y 를 움직여 봐요.\nx·y 가 a·b 에서 멀면 입구까지 걷는 값이 더 커서\n곧장 걷는 쪽이 이겨요."),
       content: <TeleportRouteSim E={E} />,
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "a=0, b=10, teleporter 3<->8. What's the minimum distance?", "a=0, b=10, 텔레포터 3<->8. 최소 거리는?"),
+        "a=0, b=10, teleporter 3<->8. What's the minimum distance?", "a=0, b=10 이고 텔레포터는 3<->8 이에요.\n걷는 거리의 최솟값은 얼마일까요?"),
       question: t(E,
         "a=0, b=10, teleporter 3<->8. Minimum distance?",
-        "a=0, b=10, 텔레포터 3<->8. 최소 거리?"),
+        "a=0, b=10, 텔레포터는 3<->8 이에요. 최소 거리는 얼마일까요?"),
       hint: t(E,
         "Compare three options: direct, teleport x→y, teleport y→x.",
-        "세 경로 비교 — 직접, x→y 텔레포트, y→x 텔레포트."),
+        "세 가지 길을 견줘 봐요. 곧장 걷기, x→y 텔레포트, y→x 텔레포트예요."),
       answer: 5,
     },
   ];
@@ -299,7 +299,7 @@ export function makeTeleportCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Three routes from a to b: 1) direct |a − b|, 2) |a − x| + |y − b|, 3) |a − y| + |x − b|. Take the min. Sections build it one piece at a time.",
-        "a → b 경로 3 가지: 1) 직접 |a − b|, 2) |a − x| + |y − b|, 3) |a − y| + |x − b|. 최솟값. 아래 섹션이 한 단락씩 쌓아요."),
+        "a 에서 b 로 가는 길은 세 가지예요.\n셋 중 가장 작은 값을 고르면 돼요."),
       sections: getTeleportSections(E),
     },
   ];

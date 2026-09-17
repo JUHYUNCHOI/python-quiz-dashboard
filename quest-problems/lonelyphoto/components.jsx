@@ -79,7 +79,7 @@ export function LonelyPhotoWindowSim({ E }) {
 
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
         <span style={{ fontSize: 12, fontWeight: 700, color: C.dim, fontFamily: "'JetBrains Mono',monospace", minWidth: 80 }}>
-          {t(E, "window size", "창 크기")}
+          {t(E, "window size", "묶음 길이")}
         </span>
         <input
           type="range" min={3} max={wMax} value={wClamped}
@@ -112,16 +112,16 @@ export function LonelyPhotoWindowSim({ E }) {
         padding: "10px 12px", marginBottom: 8, fontSize: 12,
         fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.7,
       }}>
-        N = {N}, {t(E, "window", "창")} = {wClamped}<br/>
-        {t(E, "windows scanned", "검사한 창")} = {Math.max(0, N - wClamped + 1)}<br/>
+        N = {N}, {t(E, "window", "묶음 길이")} = {wClamped}<br/>
+        {t(E, "windows scanned", "살펴본 묶음")} = {Math.max(0, N - wClamped + 1)}<br/>
         <b style={{ color: "#16a34a" }}>
-          {t(E, "lonely windows of this size", "이 크기의 외로운 창")} = {lonelyCount}
+          {t(E, "lonely windows of this size", "이 길이의 외로운 묶음")} = {lonelyCount}
         </b>
         {firstStart >= 0 && (
           <>
             <br/>
             <span style={{ color: C.dim }}>
-              {t(E, "first lonely window: ", "첫 외로운 창: ")}
+              {t(E, "first lonely window: ", "첫 외로운 묶음: ")}
               s[{firstStart}..{firstStart + wClamped - 1}] = '{s.slice(firstStart, firstStart + wClamped)}'
             </span>
           </>
@@ -131,7 +131,7 @@ export function LonelyPhotoWindowSim({ E }) {
       <div style={{ fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
           "Green = at least one lonely window covers this cell. Drag the slider to scan all sizes.",
-          "초록 = 이 칸을 포함하는 외로운 창이 하나라도 있음. 슬라이더로 모든 크기 훑어보기.")}
+          "초록은 이 소가 들어간 외로운 묶음이 하나라도 있다는 뜻이에요. 슬라이더로 길이를 바꿔 가며 봐요.")}
       </div>
     </div>
   );
@@ -240,7 +240,7 @@ export function LonelyPhotoRunner({ E }) {
   const run = () => {
     const s = sIn.trim().toUpperCase();
     if (!s.match(/^[GH]+$/)) {
-      setResult({ error: t(E, "Invalid: only G/H characters.", "잘못된 입력: G/H만.") });
+      setResult({ error: t(E, "Invalid: only G/H characters.", "G 와 H 만 넣을 수 있어요.") });
       return;
     }
     const N = s.length;
@@ -421,34 +421,34 @@ export function getLonelyPhotoSections(E) {
       py: LP_INPUT_PY, cpp: LP_INPUT_CPP,
       why: [
         t(E, "Read N (length) and the string of G/H characters.",
-            "N (길이)와 G/H 문자열 읽기."),
+            "길이 N 과 G/H 문자열을 읽어요."),
       ],
       pyOnly: [
         t(E, "input().strip() removes any trailing newline.",
-            "input().strip()으로 줄바꿈 제거."),
+            "input().strip() 을 쓰면 줄 끝의 줄바꿈이 지워져요."),
       ],
       cppOnly: [
         t(E, "cin >> string reads a whitespace-delimited token cleanly.",
-            "cin >> string으로 깔끔하게 읽기."),
+            "cin >> string 이면 문자열을 그대로 읽어 와요."),
       ],
     },
     {
-      label: t(E, "📏 2. Opposite Run Touching i", "📏 2. i에 닿은 반대 품종 길이"),
+      label: t(E, "📏 2. Opposite Run Touching i", "📏 2. i 에 붙은 반대 품종 길이"),
       color: "#0891b2",
       py: LP_RUN_PY, cpp: LP_RUN_CPP,
       why: [
         t(E, "Treat each cow i as the lonely one. Count opposite-breed cows that touch i directly on each side.",
-            "각 소 i를 '외로운 1마리'로 보고, i에 바로 붙은 반대 품종 소가 좌/우로 몇 마리인지 센다."),
+            "소 i 를 외로운 한 마리로 보고, i 에 바로 붙어 있는 반대 품종 소가 왼쪽·오른쪽에 몇 마리인지 세요."),
         t(E, "Stop the moment the breed changes — only the run immediately next to i can extend a substring where i stays the only one of its breed.",
-            "품종이 바뀌는 순간 멈춤 — i에 바로 붙은 구간만이 'i가 자기 품종 유일'을 유지하는 부분문자열을 늘릴 수 있음."),
+            "품종이 바뀌는 자리에서 멈춰요. i 에 바로 붙은 구간까지만 'i 만 자기 품종' 이 유지되거든요."),
       ],
       pyOnly: [
         t(E, "First check s[i-1] != s[i]; only then walk further left while the breed stays the same.",
-            "먼저 s[i-1] != s[i] 확인; 그 다음 같은 품종인 동안만 더 왼쪽으로."),
+            "먼저 s[i-1] != s[i] 인지 봐요. 맞으면 같은 품종이 이어지는 동안만 더 왼쪽으로 가요."),
       ],
       cppOnly: [
         t(E, "Combine the bound check with the equality check in the for-loop condition.",
-            "범위 체크와 동등성 체크를 for 조건에 함께."),
+            "범위를 벗어났는지와 품종이 같은지를 for 조건에 같이 적어요."),
       ],
     },
     {
@@ -457,19 +457,19 @@ export function getLonelyPhotoSections(E) {
       py: LP_COUNT_PY, cpp: LP_COUNT_CPP,
       why: [
         t(E, "left = opposite cows touching i on the left, right = opposite cows touching i on the right.",
-            "left = i 왼쪽에 닿은 반대 품종 수, right = i 오른쪽에 닿은 반대 품종 수."),
+            "left 는 i 왼쪽에 붙은 반대 품종 수, right 는 i 오른쪽에 붙은 반대 품종 수예요."),
         t(E, "We need length ≥ 3 with exactly one cow of i's breed. Three cases: ≥1 on each side, ≥2 on one side only.",
-            "길이 ≥ 3, i 품종이 정확히 1마리. 세 경우: 양쪽 ≥1, 한쪽만 ≥2."),
+            "묶음은 3 마리 이상이고 i 품종이 딱 한 마리여야 해요. 그래서 경우가 셋이에요. 양쪽에서 1 마리씩 가져오거나, 왼쪽에서만 2 마리, 오른쪽에서만 2 마리예요."),
         t(E, "Sum is left·right + max(0, left-1) + max(0, right-1).",
-            "합 = left·right + max(0, left-1) + max(0, right-1)."),
+            "그래서 합은 left·right + max(0, left-1) + max(0, right-1) 이에요."),
       ],
       pyOnly: [
         t(E, "max(0, x - 1) handles the case where there are < 2 cows available.",
-            "max(0, x - 1)이 < 2 마리인 경우 처리."),
+            "한쪽이 2 마리도 안 될 때는 max(0, x - 1) 이 0 이 되어 걸러 줘요."),
       ],
       cppOnly: [
         t(E, "Use 0LL to keep max() in long long territory and avoid narrowing.",
-            "max()를 long long으로 유지하기 위해 0LL 사용."),
+            "max() 결과를 long long 으로 두려고 0 대신 0LL 을 써요."),
       ],
     },
     {
@@ -478,9 +478,9 @@ export function getLonelyPhotoSections(E) {
       py: LP_FULL_PY, cpp: LP_FULL_CPP,
       why: [
         t(E, "Worst-case time per i is O(N) (scanning the full run), so overall O(N²) — fine for Bronze.",
-            "i당 최악 O(N) (구간 스캔), 전체 O(N²) — Bronze에 충분."),
+            "소 하나마다 길게는 N 칸까지 보니 모두 O(N²) 번 일해요. Bronze 문제에는 넉넉해요."),
         t(E, "An O(N) version exists by precomputing run lengths, but isn't needed.",
-            "구간 길이를 미리 계산하면 O(N)도 가능하지만 불필요."),
+            "구간 길이를 미리 구해 두면 O(N) 으로도 되지만 여기선 그럴 필요가 없어요."),
       ],
     },
   ];
@@ -524,7 +524,7 @@ function highlightCode(lines, lang) {
 
 export function downloadLonelyPhotoPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혀 있어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "📸 Lonely Photo — Full Study Guide", "📸 Lonely Photo — 종합 풀이 노트");
@@ -547,7 +547,7 @@ export function downloadLonelyPhotoPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO 2021 Dec Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

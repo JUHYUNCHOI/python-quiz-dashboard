@@ -13,7 +13,7 @@ export function makeMooin4Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie's keyboard has only M and O. Every time she types O, ALL letters typed so far flip first (M↔O), then O is appended. Can she type her favorite moo S?",
-        "베시의 키보드엔 M 과 O 만 있어요. O 를 칠 때마다 지금까지 친 모든 글자가 먼저 뒤집히고 (M↔O), 그 뒤에 O 가 붙어요. 원하는 무 소리 S 를 칠 수 있을까?"),
+        "베시가 원하는 무 소리 S 를 칠 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -30,7 +30,7 @@ export function makeMooin4Ch1(E) {
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
                 "Print YES — it is always possible.\nIf k=1, also print one keystroke string that produces S.",
-                "YES 를 출력하고 (항상 가능), k=1 이면 S 를 만드는 키 입력 한 가지를 출력.")}
+                "YES 를 출력해요 (항상 만들 수 있어요).\nk=1 이면 S 를 만드는 키 입력도 한 가지 출력해요.")}
             </div>
           </div>
 
@@ -75,7 +75,7 @@ export function makeMooin4Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Read the sample carefully. Same two test cases, but k changes whether we also print the keystroke string.",
-        "샘플을 잘 봐요. 같은 두 테스트케이스인데, k 값에 따라 키 입력 문자열도 출력할지 결정돼요."),
+        "k 값에 따라 키 입력 문자열까지 출력할지가 갈려요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 8 }}>
@@ -136,10 +136,10 @@ MOOMO`}
       type: "input",
       narr: t(E,
         "Suppose we want S = OOMOO and we already know t[2..4] = MMO. How many O's are in t[2..4]? (That's the parity that flips position 1.)",
-        "S = OOMOO 를 만들고 싶고, t[2..4] = MMO 인 것까지 정했어요. t[2..4] 안에 O 가 몇 개일까? (그 개수의 홀짝이 1번 자리 글자를 뒤집어요.)"),
+        "t[2..4] = MMO 안에 O 가 몇 개일까요?"),
       question: t(E,
         "How many O's are in 'MMO'?",
-        "'MMO' 안에 O 는 몇 개?"),
+        "'MMO' 안에 O 는 몇 개일까요?"),
       hint: t(E,
         "Just count the letter O in the string MMO.",
         "문자열 MMO 안의 O 글자 개수만 세면 돼요."),
@@ -160,7 +160,7 @@ MOOMO`}
       type: "reveal",
       narr: t(E,
         "We know the LAST key. How do we get the key before it… and the one before that? Here's the whole idea — in plain words, before any code.",
-        "마지막 키는 알아요. 그럼 그 앞 키는? 또 그 앞은? 코드 보기 전에, 핵심을 말로 먼저 잡아요."),
+        "마지막 키는 알아요. 그럼 그 앞 키는 어떻게 알까요?"),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 12, textWrap: "balance" }}>

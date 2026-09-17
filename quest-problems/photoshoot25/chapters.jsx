@@ -13,7 +13,7 @@ export function makePhotoshoot25Ch1(E) {
       type: "reveal",
       narr: t(E,
         "An N x N field of cows, all starting with beauty 0. Farmer John takes K x K square photos. After each beauty update, output the best possible photo.",
-        "N × N 들판에 소들이 있어요. 처음엔 아름다움이 모두 0 이에요.\n농부는 K × K 정사각형으로 사진을 찍어요.\n소 한 마리의 아름다움이 늘어날 때마다, 가장 멋진 사진의 점수를 출력해요."),
+        "아름다움이 늘어날 때마다 가장 멋진 K × K 사진의 점수를 알려줘요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -30,7 +30,7 @@ export function makePhotoshoot25Ch1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "After each beauty update, print the maximum sum over every K x K window of the grid.",
-                "매번 한 칸의 아름다움이 늘어날 때마다 모든 K x K 윈도우 중 최대 합을 출력.")}
+                "한 칸의 아름다움이 늘어날 때마다, 모든 K x K 사진 중 가장 큰 점수를 출력해요.")}
             </div>
           </div>
 
@@ -45,7 +45,7 @@ export function makePhotoshoot25Ch1(E) {
                   {t(E, "An ", "")}
                   <b style={{ color: "#5b21b6" }}>{t(E, "N x N grid", "N x N 격자")}</b>
                   {t(E, " of cows (1 ≤ N ≤ 500). Each cow has a beauty value, all starting at 0.",
-                       " 의 소들 (1 ≤ N ≤ 500). 각 소는 아름다움 값을 가지며 처음엔 모두 0.")}
+                       " 에 소들이 있어요 (1 ≤ N ≤ 500). 소마다 아름다움 값이 있고, 처음엔 모두 0 이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -54,7 +54,7 @@ export function makePhotoshoot25Ch1(E) {
                   {t(E, "A camera shot is any ", "사진은 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "K x K square", "K x K 정사각형")}</b>
                   {t(E, " (1 ≤ K ≤ min(N, 25)). Its score = sum of beauties inside.",
-                       " (1 ≤ K ≤ min(N, 25)). 점수 = 안에 든 아름다움의 합.")}
+                       " 이에요 (1 ≤ K ≤ min(N, 25)). 점수는 그 안에 든 아름다움을 모두 더한 값이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -69,7 +69,7 @@ export function makePhotoshoot25Ch1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "After each update, print the ", "각 업데이트 후 ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "maximum K x K window sum", "K x K 윈도우의 최대 합")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum K x K window sum", "K x K 사진 중 가장 큰 점수")}</b>
                   {t(E, ".", " 을 출력해요.")}
                 </div>
               </div>
@@ -82,7 +82,7 @@ export function makePhotoshoot25Ch1(E) {
       type: "reveal",
       narr: t(E,
         "How does the data arrive?  Grid size, then Q updates.  Print the best window after each one.",
-        "데이터는 어떻게 들어올까?  격자 크기, 그 다음 Q 개 업데이트.  매번 최고 창을 출력."),
+        "입력은 격자 크기 다음에 Q 개의 업데이트로 들어와요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           {/* INPUT */}
@@ -102,7 +102,7 @@ export function makePhotoshoot25Ch1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "After each update, the largest sum among all K×K windows (Q lines).",
-                  "각 업데이트 후, 모든 K×K 창 중 최대 합 (Q 줄).")}
+                  "업데이트마다 모든 K×K 사진 중 가장 큰 점수를 한 줄씩 출력해요 (Q 줄).")}
             </div>
           </div>
           {/* 제약 */}
@@ -112,7 +112,7 @@ export function makePhotoshoot25Ch1(E) {
               <div>1 ≤ N ≤ 500</div>
               <div>1 ≤ K ≤ min(N, 25)</div>
               <div>1 ≤ Q ≤ 30,000 (= 3 × 10⁴)</div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "1 ≤ v ≤ 10⁶  ·  updates only increase a cell's value", "1 ≤ v ≤ 10⁶  ·  업데이트는 값을 올리기만 함")}</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "1 ≤ v ≤ 10⁶  ·  updates only increase a cell's value", "1 ≤ v ≤ 10⁶  ·  업데이트는 값을 올리기만 해요")}</div>
             </div>
           </div>
         </div>),
@@ -124,7 +124,7 @@ export function makePhotoshoot25Ch1(E) {
       type: "reveal",
       narr: t(E,
         "First — what IS a photo's score?  Slide the K x K square everywhere and keep the best.",
-        "먼저 — 사진 점수가 뭔지부터.  K x K 정사각형을 다 밀어보고 제일 좋은 걸 기억해요."),
+        "K x K 정사각형을 다 밀어 보고 제일 좋은 사진을 찾아요."),
       content: (<PhotoWindowSim E={E} />),
     },
     /* [결-b 한계] — 브루트가 왜 안 되는지 숫자로. 원래 퀴즈에 있던 값인데
@@ -133,7 +133,7 @@ export function makePhotoshoot25Ch1(E) {
       type: "reveal",
       narr: t(E,
         "So we could just recompute every photo after every update.  Would that finish in time?",
-        "그럼 업데이트마다 모든 사진을 다시 더하면 되지 않을까?  시간 안에 끝날까?"),
+        "업데이트마다 모든 사진을 다시 더하면 시간 안에 끝날까요?"),
       content: (
         <div style={{ padding: 20, wordBreak: "keep-all" }}>
           <div style={{
@@ -158,7 +158,7 @@ export function makePhotoshoot25Ch1(E) {
           </div>
           <div style={{ maxWidth: 470, margin: "12px auto 0", fontSize: 12.5, color: "#5b21b6", textAlign: "center", fontWeight: 700 }}>
             {t(E, "→ So: don't recompute.  Only fix what actually changed.",
-                  "→ 그러니 다시 더하지 말고, 진짜 바뀐 것만 고치자.")}
+                  "→ 그러니 다시 더하지 말고, 진짜 바뀐 것만 고쳐요.")}
           </div>
         </div>),
     },
@@ -166,7 +166,7 @@ export function makePhotoshoot25Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Now the key: when ONE cow gets prettier, which photos change?  Only the ones containing her — and their top-left corners form a rectangle.",
-        "이제 핵심이에요. 소 한 마리가 예뻐지면 어떤 사진이 바뀔까요?\n그 소가 들어간 사진만 바뀌어요.\n그리고 그 사진들의 왼쪽위가 직사각형을 이뤄요."),
+        "소 한 마리가 예뻐지면 그 소가 들어간 사진만 바뀌어요."),
       content: (<PhotoUpdateSim E={E} />),
     },
     /* [전] 마지막 미묘한 고리 — 왜 '바뀐 사진만' cur_max 와 견줘도 되나.
@@ -176,7 +176,7 @@ export function makePhotoshoot25Ch1(E) {
       type: "reveal",
       narr: t(E,
         "One more link: we only compare the changed photos against cur_max. Why is that safe?",
-        "마지막 고리 하나: 바뀐 사진만 cur_max 와 견줘요. 그래도 괜찮은 이유는?"),
+        "바뀐 사진만 cur_max 와 견줘도 괜찮은 이유를 볼게요."),
       content: (<PhotoMonotoneSim E={E} />),
     },
   ];
@@ -215,23 +215,23 @@ function Photoshoot25Plan({ E }) {
       </div>
       <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
         <Insight icon="📊" color="#8b5cf6"
-          head={t(E, "Every photo has a score (its sum).", "사진마다 '점수(합)'가 있다.")}
+          head={t(E, "Every photo has a score (its sum).", "사진마다 점수(합)가 있어요.")}
           body={t(E, <>Keep each one in a table {codeTag("S")} — don't re-add from scratch every time.</>,
-                     <>각 점수를 표 {codeTag("S")} 에 저장해두자 — 매번 처음부터 다시 안 더하게.</>)} />
+                     <>각 점수를 표 {codeTag("S")} 에 저장해 둬요. 매번 처음부터 다시 안 더해도 돼요.</>)} />
         <Insight icon="🐄" color="#f97316"
-          head={t(E, "One cow changes → only the photos holding it change.", "소 하나가 바뀌면 → 그 소를 품는 사진만 바뀐다.")}
+          head={t(E, "One cow changes → only the photos holding it change.", "소 하나가 바뀌면 → 그 소를 품는 사진만 바뀌어요.")}
           body={t(E, "Those photos form a small rectangle — touch just them, not all of them.",
-                     "그 사진들은 작은 직사각형 — 전부 말고 그 몇 장만 손대자.")} />
+                     "그 사진들은 작은 직사각형을 이뤄요. 전부 말고 그 몇 장만 손대요.")} />
         <Insight icon="📈" color="#059669"
-          head={t(E, "Beauty only grows → the best score never drops.", "값은 커지기만 → 최고 점수는 줄지 않는다.")}
+          head={t(E, "Beauty only grows → the best score never drops.", "값은 커지기만 해요 → 최고 점수는 줄지 않아요.")}
           body={t(E, <>So only compare the changed photos against {codeTag("cur_max")}.</>,
-                     <>그러니 바뀐 사진만 {codeTag("cur_max")} 와 비교하면 돼.</>)} />
+                     <>그러니 바뀐 사진만 {codeTag("cur_max")} 와 견주면 돼요.</>)} />
       </div>
 
       <div style={{ ...box, background: "#f8fafc", fontSize: 13, lineHeight: 1.75, color: "#334155" }}>
         ⚙️ {t(E,
           <>So: keep table {codeTag("S")}. Each update — add {codeTag("delta")} to just the cow's photos, then lift {codeTag("cur_max")}.</>,
-          <>그래서: 표 {codeTag("S")} 를 유지. 업데이트마다 — 소를 품는 사진에만 {codeTag("delta")} 를 더하고, {codeTag("cur_max")} 를 갱신.</>)}
+          <>그래서 표 {codeTag("S")} 를 그대로 들고 가요. 업데이트마다 소를 품는 사진에만 {codeTag("delta")} 를 더하고, {codeTag("cur_max")} 를 새로 맞춰요.</>)}
       </div>
     </div>
   );
@@ -245,7 +245,7 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
       label: t(E, "Plan", "계획"),
       narr: t(E,
         "Before the code — here's what the sims told us, and the exact plan (with the variable names you'll see).",
-        "코드 전에 — 시뮬이 알려준 것과, 정확한 계획(곧 볼 변수 이름과 함께)."),
+        "시뮬이 알려준 것과 코드로 갈 계획을 정리해요."),
       content: (<Photoshoot25Plan E={E} />),
     },
     /* 코드 전: 값이 실제로 어떻게 변하는지 먼저 눈으로 (선생님 2026-08-11: '코드 시뮬을 코드 보여주기 전에'). */
@@ -254,7 +254,7 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
       label: t(E, "Run", "실행"),
       narr: t(E,
         "Before the code — watch the values change on a real example, so the code reads easy after.",
-        "코드를 보기 전에 — 값들이 실제 예제에서 어떻게 변하는지 먼저 눈으로 따라가요."),
+        "값들이 실제 예제에서 어떻게 변하는지 먼저 눈으로 따라가요."),
       content: (<PhotoTraceSim E={E} />),
     },
     /* 그 다음 실제 코드 — 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
@@ -265,14 +265,14 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
         label: t(E, "Code", "코드"),
         narr: t(E,
           "Now the code — you just saw these variables move. S keeps each photo's score; each update touches only the cow's rectangle.",
-          "이제 코드예요. 방금 이 변수들이 움직이는 걸 봤죠.\nS 는 각 사진의 점수고, 업데이트는 소가 든 사각형만 건드려요."),
+          "방금 움직임을 본 변수들이 코드에 그대로 나와요."),
         content: (
           <div>
             {lang === "py" && (
               <div style={{ margin: "0 16px 6px", padding: "9px 13px", borderRadius: 10, background: "#fffbeb", border: "1.5px solid #fbbf24", color: "#92400e", fontSize: 12.5, fontWeight: 700, lineHeight: 1.6, wordBreak: "keep-all", textAlign: "center" }}>
                 {t(E,
                   <>⚠️ This problem's data is large, so Python <b>times out on the later tests (12/18)</b>. The algorithm is identical — great for understanding — but submit in <b>C++</b> for full marks.</>,
-                  <>⚠️ 이 문제는 데이터가 커서 Python은 <b>뒷 테스트에서 시간초과 (12/18)</b>. 알고리즘은 똑같으니 이해용으론 완벽하지만, USACO 만점은 <b>C++</b>로 제출해요.</>)}
+                  <>⚠️ 이 문제는 데이터가 커서 파이썬은 <b>뒷 테스트에서 시간 초과가 나요 (12/18)</b>. 방법은 똑같으니 이해하기엔 좋지만, USACO 만점은 <b>C++</b> 로 내요.</>)}
               </div>
             )}
             <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />

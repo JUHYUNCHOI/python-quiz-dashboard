@@ -76,7 +76,7 @@ function KittyRemainderSim({ E }) {
           <button onClick={() => setN(Math.max(MIN, n - 1))} style={stepBtn}>−</button>
           <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800, color: A, minWidth: 24, textAlign: "center" }}>{n}</span>
           <button onClick={() => setN(Math.min(MAX, n + 1))} style={stepBtn}>+</button>
-          <button onClick={() => setN(7)} style={{ ...stepBtn, width: "auto", padding: "0 10px", fontSize: 12 }}>{t(E, "reset", "초기화")}</button>
+          <button onClick={() => setN(7)} style={{ ...stepBtn, width: "auto", padding: "0 10px", fontSize: 12 }}>{t(E, "reset", "처음으로")}</button>
         </div>
 
         {/* live counter */}
@@ -203,7 +203,7 @@ export function makeMcc20KittyCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               <div>• <b>N</b> — {t(E, "how many Kitty numbers to look at", "살펴볼 Kitty 수의 개수")}</div>
-              <div>• {t(E, "Output: the count divisible by 3.", "출력: 3의 배수인 항의 개수.")}</div>
+              <div>• {t(E, "Output: the count divisible by 3.", "3의 배수인 항이 몇 개인지 출력해요.")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limit: 2 ≤ N ≤ 10^15.", "제약: 2 ≤ N ≤ 10^15.")}
@@ -269,7 +269,7 @@ export function makeMcc20KittyCh1(E) {
         "11,9,20,20,25의 나머지는 2,0,2,2,1. 다음 나머지 = (2+0+2+2+1) mod 3."),
       question: t(E,
         "Remainders so far: 2, 0, 2, 2, 1. What is the next remainder (mod 3)?",
-        "지금까지 나머지: 2, 0, 2, 2, 1. 다음 나머지(mod 3)는?"),
+        "지금까지 나머지는 2, 0, 2, 2, 1 이에요.\n다음 나머지(mod 3)는 무엇일까요?"),
       options: [
         t(E, "1  (2+0+2+2+1 = 7, 7 mod 3 = 1)", "1  (2+0+2+2+1 = 7, 7 mod 3 = 1)"),
         t(E, "0", "0"),
@@ -293,7 +293,7 @@ export function makeMcc20KittyCh2(E) {
       type: "reveal",
       narr: t(E,
         "The obvious way: build every term up to N and count. But N can be 10^15 — no computer finishes that loop, and the real numbers would have trillions of digits.",
-        "당연한 방법: N까지 모든 항을 만들며 세기. 하지만 N이 10^15까지 가요 — 그 루프는 어떤 컴퓨터도 못 끝내고, 진짜 숫자는 자릿수가 조 단위가 돼요."),
+        "N까지 모든 항을 만들며 세면 되지만, N이 10^15까지 가요.\n그 반복은 어떤 컴퓨터도 못 끝내요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
@@ -317,7 +317,7 @@ export function makeMcc20KittyCh2(E) {
       type: "reveal",
       narr: t(E,
         "Insight 1: divisible-by-3 depends only on remainders. And a term's remainder = (sum of previous five remainders) mod 3. So drop the giant numbers entirely — keep only 0/1/2.",
-        "통찰 1: 3의 배수 여부는 나머지에만 달렸어요. 그리고 한 항의 나머지 = (직전 다섯 나머지의 합) mod 3. 그러니 거대한 숫자는 통째로 버리고 0/1/2만 남겨요."),
+        "첫 번째 열쇠예요. 3의 배수인지는 나머지에만 달렸어요.\n거대한 숫자는 버리고 0/1/2만 남겨요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ marginBottom: 10, textAlign: "center", fontSize: 11, fontWeight: 700, color: C.dim }}>
@@ -337,7 +337,7 @@ export function makeMcc20KittyCh2(E) {
       type: "reveal",
       narr: t(E,
         "Insight 2: the last five remainders form a 'window'. A window has only 3^5 = 243 possible patterns. With finitely many patterns, some window MUST repeat — and once a window repeats, everything after it repeats too. The sequence is eventually periodic.",
-        "통찰 2: 마지막 다섯 나머지가 '창'을 이뤄요. 창의 경우의 수는 3^5 = 243개뿐. 경우의 수가 유한하니 어떤 창이 반드시 다시 나오고, 창이 반복되면 그 뒤도 전부 똑같이 반복돼요. 수열은 결국 주기적이에요."),
+        "두 번째 열쇠예요. 마지막 다섯 나머지가 '창'을 이루는데,\n그 창은 243가지밖에 없어서 언젠가 꼭 다시 나와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
@@ -369,7 +369,7 @@ export function makeMcc20KittyCh2(E) {
       type: "quiz",
       narr: t(E,
         "This is the pigeonhole idea: more steps than possible window-patterns means a pattern has to reappear.",
-        "이건 비둘기집 원리예요: 가능한 창 패턴 수보다 단계가 많아지면, 어떤 패턴은 반드시 다시 나와요."),
+        "이건 비둘기집 원리예요. 창 패턴 수보다 단계가 많아지면\n어떤 패턴은 반드시 다시 나와요."),
       question: t(E,
         "Why is the remainder sequence guaranteed to repeat?",
         "나머지 수열이 반드시 반복되는 이유는?"),
@@ -390,7 +390,7 @@ export function makeMcc20KittyCh2(E) {
       type: "reveal",
       narr: t(E,
         "Insight 3: counting becomes arithmetic. Count the zeros in ONE cycle (35 of them). Then full cycles = N ÷ 104, and add the zeros in the leftover partial cycle. No giant loop needed.",
-        "통찰 3: 세기가 산수로 바뀌어요. 한 사이클 안의 0을 세요 (35개). 그다음 온전한 사이클 수 = N ÷ 104, 여기에 남는 조각 안의 0을 더해요. 거대한 루프가 필요 없어요."),
+        "세 번째 열쇠예요. 한 바퀴의 0만 세면 나머지는 곱셈과\n덧셈으로 끝나요. 큰 반복이 필요 없어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 12, padding: "14px 16px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.9, ...KA }}>
@@ -417,7 +417,7 @@ export function makeMcc20KittyCh2(E) {
         "길이 10짜리 사이클에 0이 4개 있고 N = 25라고 해봐요. 온전한 사이클 2개(20항)에 남는 5항이에요."),
       question: t(E,
         "Cycle length 10 with 4 zeros; N = 25; the first 5 terms of the cycle contain 2 zeros. Total count?",
-        "사이클 길이 10, 0이 4개; N = 25; 사이클 앞 5항에 0이 2개. 총 개수는?"),
+        "사이클 길이는 10이고 그 안에 0이 4개예요.\nN = 25이고 사이클 앞 5항에는 0이 2개예요. 총 개수는?"),
       options: [
         t(E, "2 × 4 + 2 = 10", "2 × 4 + 2 = 10"),
         t(E, "25", "25"),
@@ -474,7 +474,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
             <div><span style={{ color: "#e2e8f0" }}>    seen[st] = k; k += 1</span></div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center", ...KA }}>
-            {t(E, "For Kitty this stops fast: start = 1, period = 104.", "Kitty에서는 금방 멈춰요: start = 1, period = 104.")}
+            {t(E, "For Kitty this stops fast: start = 1, period = 104.", "Kitty에서는 금방 멈춰요. start = 1, period = 104 예요.")}
           </div>
         </div>),
     },
@@ -504,7 +504,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Phase 3: no big loop. Zeros in one cycle × number of whole cycles, plus zeros in the leftover. That gives the answer even for N = 10^15.",
-        "3단계: 큰 루프 없이. 한 사이클의 0 × 온전한 사이클 수, 거기에 남는 조각의 0을 더해요. N = 10^15이어도 답이 나와요."),
+        "3단계예요. 한 사이클의 0에 사이클 수를 곱하고\n남는 조각의 0을 더해요. 큰 반복은 필요 없어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>

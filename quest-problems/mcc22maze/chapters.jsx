@@ -19,7 +19,7 @@ export function makeMcc22MazeCh1(E) {
       type: "reveal",
       narr: t(E,
         "An n × n grid of open (.) and blocked (#) cells. You move between adjacent OPEN cells. One operation: pick a whole row or column and smash every wall in it.\nFind the MINIMUM operations so the bottom-right corner becomes reachable from the top-left.",
-        "n × n 격자, 통로(.) 와 벽(#). 인접한 통로 칸 사이를 오가요. 조작 한 번: 한 행이나 열을 골라 그 안의 벽을 전부 부숴요.\n좌상단에서 우하단에 닿을 수 있게 만드는 최소 조작 횟수를 구해요."),
+        "좌상단에서 우하단까지 닿게 만드는 최소 조작 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -126,7 +126,7 @@ export function makeMcc22MazeCh1(E) {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
               "Test 1 is already connected corner to corner → 0. In test 2 the middle column is all walls, splitting left from right; clear that one column → 1.",
-              "테스트 1 은 이미 모서리끼리 이어져 있어요 → 0. 테스트 2 는 가운데 열이 전부 벽이라 좌우가 나뉘어요; 그 열 하나만 부수면 → 1.")}
+              "테스트 1 은 이미 모서리끼리 이어져 있어요 → 0. 테스트 2 는 가운데 열이 전부 벽이라 좌우가 나뉘어요. 그 열 하나만 부수면 → 1.")}
           </div>
         </div>),
     },
@@ -144,8 +144,8 @@ export function makeMcc22MazeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Clearing the top row plus the last column always builds an L-shaped corridor that touches both corners — so two operations always suffice.",
-        "맨 윗 행 + 맨 오른쪽 열을 부수면 두 모서리에 모두 닿는 ㄱ자 통로가 생겨요 — 그래서 두 번이면 언제나 충분해요."),
+        "Clearing the top row plus the last column always links the two corners.",
+        "맨 윗 행 + 맨 오른쪽 열이면 두 모서리가 언제나 이어져요."),
       question: t(E,
         "Why can the answer NEVER be 3 or more?",
         "왜 정답이 절대 3 이상이 될 수 없을까요?"),
@@ -153,14 +153,14 @@ export function makeMcc22MazeCh1(E) {
         t(E, "Clearing the top row + the last column always links the two corners (2 ops).",
              "맨 윗 행 + 맨 오른쪽 열을 부수면 두 모서리가 항상 이어져요 (조작 2번)."),
         t(E, "The grid is always small enough to walk through.",
-             "격자가 항상 걸어서 지날 만큼 작기 때문."),
+             "격자가 늘 걸어서 지날 만큼 작기 때문이에요."),
         t(E, "There are at most 2 walls in any grid.",
-             "격자에 벽이 최대 2개뿐이라서."),
+             "격자에 벽이 최대 2개뿐이기 때문이에요."),
       ],
       correct: 0,
       explain: t(E,
-        "Right. That L-shaped corridor reaches (1,1) and (n,n), so 2 always works — the answer is only ever 0, 1, or 2.",
-        "맞아요. 그 ㄱ자 통로가 (1,1) 과 (n,n) 에 닿으니 2번이면 늘 돼요 — 정답은 항상 0, 1, 2 중 하나예요."),
+        "Right. The top row holds (1,1), the last column holds (n,n), and they meet at the top-right corner — so that L-shaped corridor links both, 2 always works, and the answer is only ever 0, 1, or 2.",
+        "맞아요. 맨 윗 행에는 (1,1) 이, 맨 오른쪽 열에는 (n,n) 이 들어 있고 둘은 오른쪽 위 모서리에서 만나요. 그래서 ㄱ자 통로 하나로 두 모서리가 이어지고, 정답은 항상 0, 1, 2 중 하나예요."),
     },
   ];
 }
@@ -186,7 +186,7 @@ export function makeMcc22MazeCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "2^(2n) combinations, each re-searching the whole maze. Hopeless.",
-                     "2^(2n) 가지 조합, 매번 미로 전체를 다시 탐색. 불가능해요.")}
+                     "2^(2n) 가지 조합마다 미로 전체를 다시 살펴봐야 해요. 불가능해요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>

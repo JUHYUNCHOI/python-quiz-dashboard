@@ -36,7 +36,7 @@ export function makeFavPerm2Ch2(E) {
     type: "reveal",
     narr: t(E,
       "The table above lists outcomes — now AUDIT them yourself. Pick a candidate p, then ▶ step Nhoj's process and check each produced hint against h. You'll see exactly where wrong candidates die and why [3, 1, 2, 4] survives all three checks.",
-      "위 표는 결과만 보여줘요 — 이제 직접 검증해 봐요. 후보 p 를 고르고 ▶ 으로 한 단계씩 Nhoj 과정을 돌리며 만들어진 힌트를 h 와 한 칸씩 대조. 틀린 후보가 어디서 죽는지, 왜 [3, 1, 2, 4] 만 끝까지 살아남는지 직접 확인."),
+      "후보 p 를 골라 나온 힌트를 목표 h 와 한 칸씩 맞춰 봐요."),
     content: (<DeepAuditSim E={E} />),
   };
   return [...base.slice(0, insertIdx), auditStep, ...base.slice(insertIdx)];

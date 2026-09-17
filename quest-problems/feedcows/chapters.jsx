@@ -11,7 +11,7 @@ export function makeFeedCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows of breed G or H stand at distinct positions on a number line. FJ places grass patches (each patch is type G or H) on integer positions. Each cow must have a SAME-BREED patch within distance K of her — and a single patch can satisfy any number of cows of its breed within K.\nFind the MINIMUM number of patches needed.",
-        "N마리 소가 G 또는 H 품종으로 수직선의 서로 다른 정수 위치에 서있어요. FJ 가 풀 패치 (G 종류 또는 H 종류) 를 정수 위치에 놓아요. 각 소는 자기 품종과 같은 패치가 거리 K 이내에 있어야 해요 — 한 패치는 거리 K 이내의 같은 품종 소들을 한꺼번에 처리해요.\n필요한 최소 패치 수를 출력해요."),
+        "소마다 가까이에 같은 품종 풀을 놓되, 풀을 가장 적게 써요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeFeedCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum number of grass patches so every cow has a same-breed patch within distance K.",
-                "모든 소가 거리 K 이내에 자기 품종 패치를 가지도록 하는 최소 패치 수를 출력.")}
+                "모든 소가 거리 K 안에 자기 품종 패치를 갖도록 패치를 가장 적게 놓아요.")}
             </div>
           </div>
 
@@ -62,7 +62,7 @@ export function makeFeedCh1(E) {
                   {t(E, "Each cow must have a ", "각 소는 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "same-breed patch within distance K", "자기 품종과 같은 패치가 거리 K 이내")}</b>
                   {t(E, " — one patch can serve many cows of its breed within K.",
-                        " 에 있어야 해요 — 한 패치가 K 이내의 같은 품종 소들을 모두 만족.")}
+                        " 에 있어야 해요 — 패치 하나가 K 안의 같은 품종 소를 다 먹여요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
@@ -71,7 +71,7 @@ export function makeFeedCh1(E) {
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of patches", "최소 패치 수")}</b>
                   {t(E, ", then one valid placement string ('.', 'G', 'H') — for each of the T test cases.",
-                        " 와 한 가지 유효한 배치 문자열 ('.', 'G', 'H') 을 출력해요 — T개의 테스트 케이스 각각에 대해.")}
+                        " 와 놓은 자리를 보여 주는 문자열 ('.', 'G', 'H') 을 출력해요 — 테스트 T 개마다요.")}
                 </div>
               </div>
             </div>
@@ -85,10 +85,10 @@ export function makeFeedCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "breeds = \"GH\", K = 0.\nEach cow can only reach its own position.\nHow many patches needed?", "breeds = \"GH\", K = 0. 각 소는 자기 위치만 도달 가능. 패치 몇 개 필요?"),
+        "breeds = \"GH\", K = 0.\nEach cow can only reach its own position.\nHow many patches needed?", "K = 0 이면 소는 자기 자리만 닿아요. 패치가 몇 개 필요할까요?"),
       question: t(E,
         "\"GH\", K = 0. How many patches?",
-        "\"GH\", K = 0. 패치 몇 개?"),
+        "\"GH\", K = 0 이면 패치가 몇 개 필요할까요?"),
       options: [
         t(E, "2 (one G at pos 0, one H at pos 1)", "2개 (G 하나 위치 0, H 하나 위치 1)"),
         t(E, "1 (one patch covers both)", "1개 (하나로 둘 다 커버)"),
@@ -96,19 +96,19 @@ export function makeFeedCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! K=0 means each patch only covers its own position, and patches must match breed. So we need 1 G patch and 1 H patch = 2 total.",
-        "맞아! K=0이면 패치는 자기 위치만 커버하고, 품종이 맞아야 해요. G 패치 1개 + H 패치 1개 = 총 2개."),
+        "맞아요! K = 0 이면 패치는 자기 자리만 덮고 품종도 같아야 해요.\n그래서 G 패치 1 개와 H 패치 1 개, 모두 2 개예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "breeds = \"GGG\", K = 1.\nA patch at position 1 covers positions 0, 1, 2.\nHow many patches minimum?", "breeds = \"GGG\", K = 1. 위치 1의 패치는 위치 0, 1, 2를 커버해요. 최소 패치 수는?"),
+        "breeds = \"GGG\", K = 1.\nA patch at position 1 covers positions 0, 1, 2.\nHow many patches minimum?", "위치 1 의 패치는 0, 1, 2 를 덮어요. 패치가 몇 개면 될까요?"),
       question: t(E,
         "\"GGG\", K = 1. Min patches?",
-        "\"GGG\", K = 1. 최소 패치 수?"),
+        "\"GGG\", K = 1 이면 패치가 가장 적게 몇 개일까요?"),
       hint: t(E,
         "Place a patch as far right as possible while still covering the leftmost uncovered cow of that breed.",
-        "그 품종의 가장 왼쪽 미커버 소를 여전히 커버하면서 패치를 가능한 한 오른쪽에 놓아 봐."),
+        "아직 못 먹은 가장 왼쪽 소가 닿는 한, 패치를 최대한 오른쪽에 놓아 봐요."),
       answer: 1,
     },
   ];
@@ -125,7 +125,7 @@ export function makeFeedCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Track per breed how far it is already satisfied (g_cover, h_cover). When a cow of breed B at position i is not yet covered, place a NEW patch as far right as it can still reach — at position i + K — which then covers same-breed cows up to i + 2K. There are T test cases, and each prints the count plus the patch string. Sections build it one piece at a time.",
-        "품종별로 어디까지 이미 만족됐는지 추적 (g_cover, h_cover). 품종 B 의 소가 i 에 있고 아직 미커버이면, 여전히 닿을 수 있는 가장 오른쪽 — 위치 i + K — 에 새 패치를 놓아. 그러면 같은 품종 소를 i + 2K 까지 커버해. 테스트 케이스가 T개이고, 각각 개수와 패치 문자열을 출력해. 아래 섹션이 한 단락씩 쌓아요."),
+        "못 먹은 소가 나오면 그 소가 닿는 가장 오른쪽에 패치를 놓아요."),
       sections: getFeedCowsSections(E),
     },
   ];

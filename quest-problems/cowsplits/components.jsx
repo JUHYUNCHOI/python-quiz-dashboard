@@ -60,18 +60,18 @@ export function getCowSplitsSections(E) {
         "        }",
       ],
       why: [
-        t(E, "Each operation removes Y+Y (even length). Total length 3N must be even, so N must be even.",
-            "각 연산은 Y+Y (같은 덩어리 두 번, 짝수 길이) 를 제거. 총 길이 3N 도 짝수여야 하므로 N 이 짝수여야 함."),
+        t(E, "Each operation removes Y+Y, which has even length. To get down to 0 by subtracting even numbers, the total length 3N must itself be even — so N must be even.",
+            "한 번 지울 때마다 Y+Y (같은 덩어리 두 번, 짝수 길이) 를 지워요. 짝수를 계속 빼서 0 이 되려면 처음 길이 3N 도 짝수여야 해요. 그러려면 N 이 짝수여야 하고요."),
         t(E, "If N is odd, immediately print -1 and skip to the next test case.",
-            "N 이 홀수면 즉시 -1 을 출력하고 다음 테스트로 넘어감."),
+            "N 이 홀수면 바로 -1 을 출력하고 다음 테스트로 넘어가요."),
       ],
       pyOnly: [
         t(E, "sys.stdin.readline speeds up reading when T can be up to 10^4.",
-            "T 가 최대 10^4 라 sys.stdin.readline 으로 입력 가속."),
+            "T 가 최대 10^4 라 sys.stdin.readline 으로 입력을 빠르게 읽어요."),
       ],
       cppOnly: [
         t(E, "Loop T times with a for-loop — clear count, no extra variable.",
-            "T 번 for-loop 로 반복 — 카운터 명시, 군더더기 없음."),
+            "T 번을 for 문으로 반복해요. 횟수가 눈에 보여서 군더더기가 없어요."),
       ],
     },
     {
@@ -97,17 +97,17 @@ export function getCowSplitsSections(E) {
       ],
       why: [
         t(E, "M=1 means S itself is already Y+Y. That happens iff first half == second half.",
-            "M=1 은 S 자체가 이미 Y+Y (같은 덩어리 두 번) 이라는 뜻. 앞 절반 == 뒤 절반일 때 성립."),
+            "M=1 은 S 자체가 이미 Y+Y (같은 덩어리 두 번) 라는 뜻이에요. 앞 절반 == 뒤 절반일 때만 그래요."),
         t(E, "Print 1, then label every character with operation 1.",
-            "1 을 출력하고 모든 문자에 연산 번호 1 을 부여."),
+            "1 을 출력하고 모든 글자에 지우기 번호 1 을 붙여요."),
       ],
       pyOnly: [
         t(E, "Slicing S[:half] vs S[half:] is O(n3) — fine for the input bounds.",
-            "S[:half], S[half:] 슬라이싱은 O(n3). 입력 한도 내에서 충분히 빠름."),
+            "S[:half], S[half:] 로 자르는 건 O(n3) 이에요. 입력 크기 안에서는 충분히 빨라요."),
       ],
       cppOnly: [
         t(E, "S.substr(0, half) returns a copy; comparison with S.substr(half) takes O(n3).",
-            "S.substr 은 복사본을 반환하고 비교는 O(n3)."),
+            "S.substr 은 복사본을 돌려주고, 비교하는 데 O(n3) 이 걸려요."),
       ],
     },
     {
@@ -157,21 +157,21 @@ export function getCowSplitsSections(E) {
       ],
       why: [
         t(E, "Pair each front block i with its back partner block (i + N/2). Start all letters in op 1.",
-            "각 앞쪽 블록 i 와 뒤쪽 파트너 블록 (i + N/2) 를 짝지어요. 모든 글자는 처음엔 op 1."),
+            "앞쪽 블록 i 와 뒤쪽 짝꿍 블록 (i + N/2) 를 짝지어요. 모든 글자는 처음엔 op 1 이에요."),
         t(E, "Any two of {COW, OWC, WCO} share a 2-letter overlap. If a[:2] == b[1:] → move a's last + b's first to op 2. Else a[1:] == b[:2] → move a's first + b's last to op 2.",
-            "COW/OWC/WCO 어떤 두 블록도 2 글자가 겹쳐요. a[:2] == b[1:] 면 → a 의 마지막 + b 의 첫 글자를 op 2. 아니면 a[1:] == b[:2] → a 의 첫 글자 + b 의 마지막을 op 2."),
+            "COW/OWC/WCO 어떤 두 블록도 2 글자가 겹쳐요. a[:2] == b[1:] 이면 a 의 마지막과 b 의 첫 글자를 op 2 로 옮겨요. 아니면 a[1:] == b[:2] 이니 a 의 첫 글자와 b 의 마지막을 op 2 로 옮겨요."),
         t(E, "Op 1 sequence: front-half 2-chars per pair = back-half 2-chars per pair → Y+Y ✓. Op 2 sequence: same 1 letter from front and back per pair → Y+Y ✓.",
-            "Op 1 수열: 쌍마다 앞쪽 2 글자 = 뒤쪽 2 글자 → Y+Y ✓. Op 2 수열: 쌍마다 앞쪽 1 글자 = 뒤쪽 1 글자 (같은 문자) → Y+Y ✓."),
+            "op 1 로 모은 글자는 쌍마다 앞쪽 2 글자와 뒤쪽 2 글자가 같아서 Y+Y 가 돼요 ✓. op 2 로 모은 글자도 쌍마다 앞뒤 1 글자가 같아서 Y+Y 가 돼요 ✓."),
         t(E, "If all pairs already matched (a == b) → M stays 1. Otherwise M = 2. Always minimal — passes both k = 0 and k = 1.",
-            "모든 쌍이 이미 일치 (a == b) 하면 → M = 1 그대로. 그렇지 않으면 M = 2. 항상 최소 — k = 0 · k = 1 둘 다 통과."),
+            "모든 쌍이 이미 같으면 (a == b) M 은 1 그대로예요. 아니면 M = 2 예요. 늘 가장 작은 값이라 k = 0 과 k = 1 둘 다 통과해요."),
       ],
       pyOnly: [
         t(E, "String slicing on 3-char blocks is O(1)-ish and reads naturally.",
-            "3 글자 블록 슬라이싱은 사실상 O(1), 읽기도 자연스러움."),
+            "3 글자 블록을 자르는 건 사실상 O(1) 이고 읽기도 자연스러워요."),
       ],
       cppOnly: [
         t(E, "vector<int> ans holds the operation label per position. Loop finds M with a running max.",
-            "vector<int> ans 가 위치별 연산 번호. 순회하며 최댓값으로 M 계산."),
+            "vector<int> ans 에 자리마다 지우기 번호를 담아요. 하나씩 보면서 가장 큰 값을 M 으로 삼아요."),
       ],
     },
   ];
@@ -193,13 +193,13 @@ export function getCowSplitsWalk(E, lang = "py") {
     const code = [...s[0].cpp, ...s[1].cpp, ...s[2].cpp];
     // s0=18 (0-17), s1=9 (18-26), s2=23 (27-49)
     return { code, vars: _CS_VARS, beats: [
-      { hi: [0, 4],   bubble: t(E, "Headers + main — the usual C++ start.", "헤더 + main 시작 — 평범한 C++ 준비.") },
-      { hi: [5, 8],   bubble: t(E, "Read T tests and mode k (k we can ignore). Loop T times.", "테스트 T개와 모드 k 읽기 (k는 신경 안 써도 됨). T번 반복.") },
-      { hi: [9, 13],  bubble: t(E, "Each test: read N and the length-3N string S. n3 = 3·N.", "각 테스트: N과 길이 3N 문자열 S 읽기. n3 = 3·N (전체 길이).") },
-      { hi: [14, 17], bubble: t(E, "If N is odd, 3N is odd too — but each move erases an even number, so we can never empty it → −1.", "N이 홀수면 3N도 홀수예요. 한 번에 짝수 개씩만 지워서 끝까지 못 비워요 → −1.") },
-      { hi: [18, 19], bubble: t(E, "First, can 1 move do it? Only if S is already a square — front half == back half.", "먼저 1번으로 될까? S가 통째로 제곱(앞 절반 == 뒤 절반)일 때만 돼요.") },
-      { hi: [20, 26], bubble: t(E, "If so → M = 1, mark every letter as move 1, next test.", "그러면 → M = 1, 모든 글자를 1번으로 찍고 다음 테스트로.") },
-      { hi: [27, 30], bubble: t(E, "Otherwise it's 2. Pair each front block a with its back partner b (the block pairs from the sim). Start every letter as move 1 (ans).", "아니면 2번이에요.\n앞 블록 a 와 뒤 파트너 블록 b 를 짝지어요.\n앞에서 본 그 블록쌍이에요.\n일단 모든 글자를 1번으로 시작해요 (ans).") },
+      { hi: [0, 4],   bubble: t(E, "Headers + main — the usual C++ start.", "헤더와 main 으로 평범하게 시작해요.") },
+      { hi: [5, 8],   bubble: t(E, "Read T tests and mode k (k we can ignore). Loop T times.", "테스트 T개와 모드 k 를 읽어요 (k 는 신경 안 써도 돼요). T번 반복해요.") },
+      { hi: [9, 13],  bubble: t(E, "Each test: read N and the length-3N string S. n3 = 3·N.", "테스트마다 N 과 길이 3N 인 문자열 S 를 읽어요. n3 = 3·N 이에요 (전체 길이).") },
+      { hi: [14, 17], bubble: t(E, "If N is odd, 3N is odd too — but each move erases an even number, and even + even is still even, so we can never empty it → −1.", "N이 홀수면 3N도 홀수예요.\n한 번에 짝수 개씩만 지우는데 짝수를 아무리 더해도 홀수가 안 돼요.\n그래서 끝까지 못 비워요 → −1.") },
+      { hi: [18, 19], bubble: t(E, "First, can 1 move do it? Only if S is already a square — front half == back half.", "먼저 1번으로 될까요? S 가 통째로 제곱(앞 절반 == 뒤 절반)일 때만 돼요.") },
+      { hi: [20, 26], bubble: t(E, "If so → M = 1, mark every letter as move 1, next test.", "그러면 M = 1 이에요. 모든 글자를 1번으로 찍고 다음 테스트로 넘어가요.") },
+      { hi: [27, 30], bubble: t(E, "Otherwise it's 2. Pair each front block a with its back partner b (the block pairs from the sim). Start every letter as move 1 (ans).", "아니면 2번이에요.\n앞 블록 a 와 뒤 짝꿍 블록 b 를 짝지어요.\n앞에서 본 그 블록쌍이에요.\n일단 모든 글자를 1번으로 시작해요 (ans).") },
       { hi: [31, 40], bubble: t(E, "Paired blocks always share 2 letters (e.g. COW·OWC → OW). Keep the shared 2 as move 1 (OW·OW); move the leftover 1 letter each side to move 2 (C·C). The a[:2]/b[1:] check just finds which side overlaps.", "짝지은 두 블록은 늘 2글자가 겹쳐요. COW·OWC 면 OW 예요.\n겹치는 2글자는 1번에 그대로 둬요 (OW·OW).\n남는 1글자씩만 2번으로 옮겨요 (C·C).\na[:2]/b[1:] 는 어느 쪽이 겹치는지 확인하는 거예요.") },
       { hi: [41, 49], bubble: t(E, "The biggest move number is M (1 or 2). Print M, then each letter's move → e.g. 2 then 2 1 1 1 1 2.", "지우기 번호 중 가장 큰 게 M 이에요 (1 또는 2).\nM 을 출력하고 글자별 번호를 출력해요.\n예를 들면 2, 그리고 2 1 1 1 1 2.") },
     ] };
@@ -207,13 +207,13 @@ export function getCowSplitsWalk(E, lang = "py") {
   const code = [...s[0].py, ...s[1].py, ...s[2].py];
   // s0=12 (0-11), s1=5 (12-16), s2=15 (17-31)
   return { code, vars: _CS_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input — sys.stdin.readline (T can hit 10⁴).", "빠른 입력 — sys.stdin.readline (T 최대 10⁴).") },
-    { hi: [3, 5],   bubble: t(E, "Read T tests and mode k (k we can ignore). Collect answers in out; loop T times.", "테스트 T개와 모드 k 읽기 (k는 신경 안 써도 됨). 답은 out에 모으고 T번 반복.") },
-    { hi: [6, 8],   bubble: t(E, "Each test: read N and the length-3N string S. n3 = 3·N.", "각 테스트: N과 길이 3N 문자열 S 읽기. n3 = 3·N (전체 길이).") },
-    { hi: [9, 11],  bubble: t(E, "If N is odd, 3N is odd too — but each move erases an even number, so we can never empty it → −1.", "N이 홀수면 3N도 홀수예요. 한 번에 짝수 개씩만 지워서 끝까지 못 비워요 → −1.") },
-    { hi: [12, 13], bubble: t(E, "First, can 1 move do it? Only if S is already a square — front half == back half.", "먼저 1번으로 될까? S가 통째로 제곱(앞 절반 == 뒤 절반)일 때만 돼요.") },
-    { hi: [14, 16], bubble: t(E, "If so → M = 1, mark every letter as move 1, next test.", "그러면 → M = 1, 모든 글자를 1번으로 찍고 다음 테스트로.") },
-    { hi: [17, 20], bubble: t(E, "Otherwise it's 2. Pair each front block a with its back partner b (the block pairs from the sim). Start every letter as move 1 (ans).", "아니면 2번이에요.\n앞 블록 a 와 뒤 파트너 블록 b 를 짝지어요.\n앞에서 본 그 블록쌍이에요.\n일단 모든 글자를 1번으로 시작해요 (ans).") },
+    { hi: [0, 1],   bubble: t(E, "Fast input — sys.stdin.readline (T can hit 10⁴).", "sys.stdin.readline 으로 빠르게 읽어요 (T 최대 10⁴).") },
+    { hi: [3, 5],   bubble: t(E, "Read T tests and mode k (k we can ignore). Collect answers in out; loop T times.", "테스트 T개와 모드 k 를 읽어요 (k 는 신경 안 써도 돼요). 답은 out 에 모으고 T번 반복해요.") },
+    { hi: [6, 8],   bubble: t(E, "Each test: read N and the length-3N string S. n3 = 3·N.", "테스트마다 N 과 길이 3N 인 문자열 S 를 읽어요. n3 = 3·N 이에요 (전체 길이).") },
+    { hi: [9, 11],  bubble: t(E, "If N is odd, 3N is odd too — but each move erases an even number, and even + even is still even, so we can never empty it → −1.", "N이 홀수면 3N도 홀수예요.\n한 번에 짝수 개씩만 지우는데 짝수를 아무리 더해도 홀수가 안 돼요.\n그래서 끝까지 못 비워요 → −1.") },
+    { hi: [12, 13], bubble: t(E, "First, can 1 move do it? Only if S is already a square — front half == back half.", "먼저 1번으로 될까요? S 가 통째로 제곱(앞 절반 == 뒤 절반)일 때만 돼요.") },
+    { hi: [14, 16], bubble: t(E, "If so → M = 1, mark every letter as move 1, next test.", "그러면 M = 1 이에요. 모든 글자를 1번으로 찍고 다음 테스트로 넘어가요.") },
+    { hi: [17, 20], bubble: t(E, "Otherwise it's 2. Pair each front block a with its back partner b (the block pairs from the sim). Start every letter as move 1 (ans).", "아니면 2번이에요.\n앞 블록 a 와 뒤 짝꿍 블록 b 를 짝지어요.\n앞에서 본 그 블록쌍이에요.\n일단 모든 글자를 1번으로 시작해요 (ans).") },
     { hi: [21, 27], bubble: t(E, "Paired blocks always share 2 letters (e.g. COW·OWC → OW). Keep the shared 2 as move 1 (OW·OW); move the leftover 1 letter each side to move 2 (C·C). The a[:2]/b[1:] check just finds which side overlaps.", "짝지은 두 블록은 늘 2글자가 겹쳐요. COW·OWC 면 OW 예요.\n겹치는 2글자는 1번에 그대로 둬요 (OW·OW).\n남는 1글자씩만 2번으로 옮겨요 (C·C).\na[:2]/b[1:] 는 어느 쪽이 겹치는지 확인하는 거예요.") },
     { hi: [28, 31], bubble: t(E, "The biggest move number is M (1 or 2). Print M, then each letter's move → e.g. 2 then 2 1 1 1 1 2.", "지우기 번호 중 가장 큰 게 M 이에요 (1 또는 2).\nM 을 출력하고 글자별 번호를 출력해요.\n예를 들면 2, 그리고 2 1 1 1 1 2.") },
   ] };

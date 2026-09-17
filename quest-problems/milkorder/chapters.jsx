@@ -55,7 +55,7 @@ function MilkOrderSim({ E }) {
   return (
     <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 12 }}>
       <div style={{ fontSize: 12, fontWeight: 700, color: "#1e3a8a", marginBottom: 10, textAlign: "center" }}>
-        🐄 {t(E, "Slide cow #1's position — constraints check live", "1번 소의 위치를 옮겨봐 — 제약이 실시간으로 검사돼요")}
+        🐄 {t(E, "Slide cow #1's position — constraints check live", "1번 소의 자리를 옮겨 봐요 — 규칙이 바로바로 검사돼요")}
       </div>
 
       {/* Constraint legend */}
@@ -129,7 +129,7 @@ function MilkOrderSim({ E }) {
       <div style={{ marginTop: 8, fontSize: 11, color: "#1e3a8a", textAlign: "center", lineHeight: 1.6 }}>
         {t(E,
           "Try p=3, p=4, p=5. The earliest p where both checks pass is the answer.",
-          "p=3, p=4, p=5 시도해봐. 둘 다 통과하는 가장 작은 p 가 답이에요.")}
+          "p=3, p=4, p=5 를 해 봐요. 둘 다 통과하는 가장 작은 p 가 답이에요.")}
       </div>
     </div>
   );
@@ -145,7 +145,7 @@ export function makeMilkOrderCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ wants a valid milking order of his N cows. Two kinds of rules exist: (1) hierarchy — a list saying these M cows must appear in this relative order, and (2) some cows have FIXED positions in the line.\nAmong all valid orders, print the EARLIEST possible position of cow #1.",
-        "FJ 가 N마리 소의 유효한 착유 순서를 정하려고 해요. 두 종류의 규칙이 있어요: (1) 순서 규칙 — 어떤 M마리 소는 이 상대 순서를 지켜야 해요, (2) 어떤 소들은 줄에서 정해진 위치를 가져요.\n모든 유효한 순서 중에서 1번 소가 가장 일찍 설 수 있는 위치를 출력해요."),
+        "1번 소가 설 수 있는 가장 이른 자리를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -182,7 +182,7 @@ export function makeMilkOrderCh1(E) {
                 <div>
                   <b style={{ color: "#7c3aed" }}>{t(E, "Hierarchy constraint", "순서 규칙")}</b>
                   {t(E, ": a list of M cows that must appear in this exact relative order in the line.",
-                        ": M마리 소의 목록이 주어지고, 이들은 줄에서 이 상대 순서로 등장해야 해요.")}
+                        ": M마리 소가 주어지고, 줄에서 이 소들의 앞뒤 순서가 이대로여야 해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -209,10 +209,10 @@ export function makeMilkOrderCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If cow 1 has no constraints at all, what's the earliest position it can be in?", "소 1번에 아무 제약이 없으면, 가능한 가장 빠른 위치는?"),
+        "If cow 1 has no constraints at all, what's the earliest position it can be in?", "소 1번에 아무 규칙이 없으면 가장 빠른 자리는 어디일까요?"),
       question: t(E,
         "Cow 1 has no constraints. Earliest position?",
-        "소 1번에 제약 없음. 가장 빠른 위치는?"),
+        "소 1번에 아무 규칙이 없어요. 가장 빠른 자리는 몇 번일까요?"),
       options: [
         t(E, "Position 1", "1번 위치"),
         t(E, "Position N", "N번 위치"),
@@ -221,19 +221,19 @@ export function makeMilkOrderCh1(E) {
       correct: 0,
       explain: t(E,
         "With no constraints, cow 1 can go first! Position 1.",
-        "제약이 없으면, 소 1번이 첫 번째로 갈 수 있어요! 1번 위치."),
+        "규칙이 없으면 소 1번이 맨 앞에 설 수 있어요! 1번 자리예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "If cow 1 has no constraints, what position can it be placed at earliest?", "소 1번에 제약이 없으면, 가장 일찍 배치할 수 있는 위치는?"),
+        "If cow 1 has no constraints, what position can it be placed at earliest?", "소 1번에 규칙이 없으면 가장 일찍 설 수 있는 자리는 어디일까요?"),
       question: t(E,
         "No constraints on cow 1. Earliest position number?",
-        "소 1번에 제약 없음. 가장 빠른 위치 번호는?"),
+        "소 1번에 아무 규칙이 없어요. 가장 빠른 자리 번호는 몇 번일까요?"),
       hint: t(E,
         "If nothing blocks cow 1, what's the smallest spot in a line of N?",
-        "소 1번을 막는 게 아무것도 없다면, N마리 줄에서 가장 작은 자리 번호는?"),
+        "소 1번을 막는 게 아무것도 없다면, N마리 줄에서 가장 작은 자리 번호는 몇 번일까요?"),
       answer: 1,
     },
     // 1-4: Interactive sim — slide cow #1's position, watch constraints
@@ -241,7 +241,7 @@ export function makeMilkOrderCh1(E) {
       type: "reveal",
       narr: t(E,
         "Try it yourself! N=7 cows. Hierarchy says 4 → 1 → 3 (in that relative order). Cow 4 is fixed at position 2, cow 3 at position 6. Slide cow #1's position — both constraint badges go green only when the lineup is valid. Find the earliest p that works.",
-        "직접 해봐! 소 7마리. 순서 규칙은 4 → 1 → 3 (이 상대 순서). 4번은 2번 자리, 3번은 6번 자리에 고정. 1번 소의 위치를 옮기면서 두 배지가 모두 초록이 되는 가장 작은 p 를 찾아봐."),
+        "1번 소의 자리를 옮기면서 배지가 둘 다 초록이 되는 자리를 찾아봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <MilkOrderSim E={E} />
@@ -261,7 +261,7 @@ export function makeMilkOrderCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Build a DAG from the hierarchy chain (a → b means a must come before b). Try every possible position for cow 1 (1..N) — for each, build the lineup using topological sort with cow 1 inserted there. Print the smallest valid position. Sections build it one piece at a time.",
-        "위계 체인으로 DAG 구축 (a → b 는 a 가 b 보다 먼저). 1번 소의 위치를 1..N 모두 시도해 — 각 위치에서 그 자리에 소 1번을 넣은 위상 정렬 라인업을 만들고, 가장 작은 유효 위치를 출력. 아래 섹션이 한 단락씩 쌓아요."),
+        "1번 소의 자리를 1부터 N까지 다 넣어 보고 되는 자리를 찾아요."),
       sections: getMilkOrderSections(E),
     },
   ];

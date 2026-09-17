@@ -21,9 +21,9 @@ const SIM_BLOCK_BGS    = ["#f5f3ff", "#ecfeff", "#fff7ed", "#fdf2f8"];
 
 const SIM_PRESETS = [
   { word: "COW",  hint_en: "C from B0, O from B0… wait, can't reuse!", hint_ko: "C는 B0, O도 B0... 잠깐, 같은 큐브 두 번 못 써요!" },
-  { word: "CUP",  hint_en: "Try B0→C, B2→U, B3→P.",                    hint_ko: "B0→C, B2→U, B3→P 시도." },
+  { word: "CUP",  hint_en: "Try B0→C, B2→U, B3→P.",                    hint_ko: "B0→C, B2→U, B3→P 로 해 봐요." },
   { word: "MICE", hint_en: "M is only on B0.",                         hint_ko: "M은 B0에만 있어요." },
-  { word: "ABLE", hint_en: "A on B1, B on B1… reuse blocked.",         hint_ko: "A는 B1, B도 B1... 재사용 안 돼요." },
+  { word: "ABLE", hint_en: "A on B1, B on B1… reuse blocked.",         hint_ko: "A 는 B1, B 도 B1 이에요... 두 번은 못 써요." },
 ];
 
 export default function BlockLetterSim({ E }) {
@@ -60,7 +60,7 @@ export default function BlockLetterSim({ E }) {
         </div>
         <div style={{ fontSize: 12, color: C.dim }}>
           {t(E, "Assign one cube to each letter — each cube used at most once.",
-                "각 글자에 큐브를 하나씩 배정 — 각 큐브는 최대 한 번만.")}
+                "글자마다 큐브를 하나씩 놓아요. 같은 큐브는 한 번만 쓸 수 있어요.")}
         </div>
       </div>
 
@@ -119,7 +119,7 @@ export default function BlockLetterSim({ E }) {
 
       <div style={{ marginBottom: 10 }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6, textAlign: "center" }}>
-          {t(E, "🎯 Pick a cube for each position", "🎯 각 위치에 큐브 선택")}
+          {t(E, "🎯 Pick a cube for each position", "🎯 자리마다 큐브를 골라요")}
         </div>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
           {[...word].map((ch, pos) => {
@@ -182,13 +182,13 @@ export default function BlockLetterSim({ E }) {
           `${word.length}개 자리를 모두 채우면 결과가 나와요.`)}
         {allFilled && !noDup && t(E,
           "✗ NO — same cube reused (one cube per position!).",
-          "✗ NO — 같은 큐브 재사용 (한 위치에 한 큐브!).")}
+          "✗ NO — 같은 큐브를 두 번 썼어요. 한 자리에 한 큐브만 쓸 수 있어요.")}
         {allFilled && noDup && allOk && t(E,
           `✓ YES — "${word}" can be spelled!`,
           `✓ YES — "${word}" 만들 수 있어요!`)}
         {allFilled && noDup && !allOk && t(E,
           "✗ NO — some letter is missing on its assigned cube.",
-          "✗ NO — 어떤 글자가 배정된 큐브에 없어요.")}
+          "✗ NO — 놓은 큐브에 그 글자가 없는 자리가 있어요.")}
       </div>
 
       <div style={{ marginTop: 8, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -198,7 +198,7 @@ export default function BlockLetterSim({ E }) {
         <button onClick={reset} style={{
           background: "#fff", color: A, border: `1.2px solid ${A}`,
           borderRadius: 6, padding: "3px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "초기화")}</button>
+        }}>↺ {t(E, "Reset", "처음부터")}</button>
       </div>
     </div>
   );

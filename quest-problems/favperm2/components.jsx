@@ -113,8 +113,8 @@ function buildAuditTrace(initial, targetH) {
 
 const CANDIDATES = [
   { key: "win",      p: [3, 1, 2, 4], label: { en: "[3, 1, 2, 4]  (lex-smallest match)", ko: "[3, 1, 2, 4]  (사전순 최소 정답)" } },
-  { key: "near",     p: [4, 1, 2, 3], label: { en: "[4, 1, 2, 3]  (close — fails late)", ko: "[4, 1, 2, 3]  (근접 — 후반 실패)" } },
-  { key: "wrong",    p: [1, 2, 3, 4], label: { en: "[1, 2, 3, 4]  (fails first hint)",  ko: "[1, 2, 3, 4]  (첫 힌트부터 실패)" } },
+  { key: "near",     p: [4, 1, 2, 3], label: { en: "[4, 1, 2, 3]  (close — fails late)", ko: "[4, 1, 2, 3]  (거의 맞지만 뒤에서 어긋나요)" } },
+  { key: "wrong",    p: [1, 2, 3, 4], label: { en: "[1, 2, 3, 4]  (fails first hint)",  ko: "[1, 2, 3, 4]  (첫 힌트부터 어긋나요)" } },
 ];
 
 export function DeepAuditSim({ E }) {
@@ -177,9 +177,9 @@ export function DeepAuditSim({ E }) {
         total={trace.length}
         isEn={E}
         title={t(E, "Deep audit: dismantle a candidate against target h",
-                    "딥 오딧: 후보 p 의 dismantle 을 목표 h 와 한 칸씩 대조")}
+                    "꼼꼼히 보기 — 후보 p 를 하나씩 없애며 나온 힌트를 목표 h 와 맞춰 봐요")}
         subtitle={t(E, `Pick a candidate, then ▶ to audit hint by hint. (${safe + 1} / ${trace.length})`,
-                       `후보를 고른 뒤 ▶ 으로 한 힌트씩 검증. (${safe + 1} / ${trace.length})`)}
+                       `후보를 고른 뒤 ▶ 으로 한 힌트씩 확인해요. (${safe + 1} / ${trace.length})`)}
       />
 
       {/* Candidate picker */}
@@ -247,7 +247,7 @@ export function DeepAuditSim({ E }) {
         })}
         {s.p.length === 0 && (
           <div style={{ fontSize: 12, color: C.dim, fontStyle: "italic" }}>
-            {t(E, "(p fully consumed)", "(p 모두 소진)")}
+            {t(E, "(p fully consumed)", "(p 를 다 썼어요)")}
           </div>
         )}
       </div>
@@ -258,7 +258,7 @@ export function DeepAuditSim({ E }) {
         fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: C.dim, fontWeight: 700,
       }}>
         <div>
-          {t(E, "produced ", "생성 ")}h ={" "}
+          {t(E, "produced ", "만들어진 ")}h ={" "}
           <b style={{ color: s.failed ? "#991b1b" : "#15803d" }}>
             [{(s.h || []).join(", ")}{s.sub === "mismatch" ? `, ${s.lastWritten}❌` : ""}]
           </b>
@@ -270,11 +270,11 @@ export function DeepAuditSim({ E }) {
         {s.sub === "init" && (
           <>
             <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>
-              📦 {t(E, "Initial state", "초기 상태")}
+              📦 {t(E, "Initial state", "처음 상태")}
             </div>
             <div>{t(E,
               `Candidate p = [${cand.p.join(", ")}]. Target h = [${targetH.join(", ")}]. Press ▶ to start auditing.`,
-              `후보 p = [${cand.p.join(", ")}]. 목표 h = [${targetH.join(", ")}]. ▶ 눌러서 검증 시작.`)}</div>
+              `후보 p 는 [${cand.p.join(", ")}] 이고 목표 h 는 [${targetH.join(", ")}] 이에요. ▶ 을 눌러 시작해요.`)}</div>
           </>
         )}
         {s.sub === "compare" && (
@@ -287,9 +287,9 @@ export function DeepAuditSim({ E }) {
               last = <b style={{ color: "#92400e" }}>{s.compareLast}</b>{" "}
               → {s.firstWins
                 ? t(E, "first is bigger → drop first, write 2nd from front.",
-                       "맨 앞이 더 커요 → 맨 앞 제거, 앞에서 둘째 적기.")
+                       "맨 앞이 더 커요 → 맨 앞을 없애고, 앞에서 둘째 값을 적어요.")
                 : t(E, "last is bigger (or equal) → drop last, write 2nd from back.",
-                       "맨 뒤가 더 (같거나) 커요 → 맨 뒤 제거, 끝에서 둘째 적기.")}
+                       "맨 뒤가 같거나 더 커요 → 맨 뒤를 없애고, 뒤에서 둘째 값을 적어요.")}
             </div>
           </>
         )}
@@ -305,7 +305,7 @@ export function DeepAuditSim({ E }) {
               {t(E, `Target says h[${s.hi}] = `, `목표는 h[${s.hi}] = `)}
               <b style={{ color: "#92400e", fontFamily: "'JetBrains Mono',monospace" }}>{targetH[s.hi]}</b>.
               {" "}
-              {t(E, "(▶ to audit.)", "(▶ 눌러서 검증.)")}
+              {t(E, "(▶ to audit.)", "(▶ 을 눌러 확인해요.)")}
             </div>
           </>
         )}
@@ -333,22 +333,22 @@ export function DeepAuditSim({ E }) {
               <b style={{ color: "#92400e" }}>{s.failedExpect}</b>.
               {" "}
               {t(E, "This candidate cannot be the answer — brute force will skip it.",
-                    "이 후보는 답이 될 수 없어요 — 브루트포스가 건너뛰어요.")}
+                    "여기서 어긋났으니 이 후보는 답이 될 수 없어요. 완전탐색이 건너뛰어요.")}
             </div>
           </>
         )}
         {s.sub === "done" && (
           <>
             <div style={{ fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
-              🎉 {t(E, "Audit passed — every hint matched", "모든 힌트 통과 — 검증 성공")}
+              🎉 {t(E, "Audit passed — every hint matched", "힌트가 하나도 안 어긋났어요")}
             </div>
             <div>
-              {t(E, "produced h = ", "생성 h = ")}
+              {t(E, "produced h = ", "만들어진 h = ")}
               <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>
                 [{s.h.join(", ")}]
               </b>
               {" "}
-              {t(E, "= target. Candidate p is valid.", "= 목표. 이 후보는 유효해요.")}
+              {t(E, "= target. Candidate p is valid.", "= 목표와 같아요. 이 후보는 답이 돼요.")}
             </div>
           </>
         )}

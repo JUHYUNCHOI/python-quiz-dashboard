@@ -79,7 +79,7 @@ function WhereAmISim({ E }) {
       {/* Window list */}
       {N === 0 ? (
         <div style={{ fontSize: 12, color: C.dim, textAlign: "center", padding: 8 }}>
-          {t(E, "Type some letters above.", "위에 글자를 입력해.")}
+          {t(E, "Type some letters above.", "위에 글자를 넣어 봐요.")}
         </div>
       ) : (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", marginBottom: 10 }}>
@@ -104,7 +104,7 @@ function WhereAmISim({ E }) {
       {/* Counter */}
       <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", fontSize: 12 }}>
         <span style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, padding: "4px 10px", fontWeight: 700, color: C.text }}>
-          {t(E, "Distinct", "고유")}: <b style={{ color: C.ok }}>{distinct}</b> / {total}
+          {t(E, "Distinct", "안 겹침")}: <b style={{ color: C.ok }}>{distinct}</b> / {total}
         </span>
         <span style={{
           background: allUnique ? C.okBg : C.noBg,
@@ -116,14 +116,14 @@ function WhereAmISim({ E }) {
             ? "—"
             : allUnique
               ? t(E, `K=${safeK} works! ✅`, `K=${safeK} 성공! ✅`)
-              : t(E, `K=${safeK} has duplicates ❌`, `K=${safeK} 중복 있음 ❌`)}
+              : t(E, `K=${safeK} has duplicates ❌`, `K=${safeK} 겹치는 게 있어요 ❌`)}
         </span>
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
         {t(E,
           "Slide K up until every window turns green. The smallest such K is the answer.",
-          "모든 윈도우가 초록이 될 때까지 K 를 올려. 그 가장 작은 K 가 답.")}
+          "모든 윈도우가 초록이 될 때까지 K 를 올려 봐요. 그때의 가장 작은 K 가 답이에요.")}
       </div>
     </div>
   );
@@ -243,7 +243,7 @@ export function makeWhereAmICh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie lives on a street whose N mailboxes are labeled with letters A..Z. She'd like to identify her location by looking at K consecutive mailboxes.\nFind the SMALLEST K such that every length-K window of N consecutive letters is unique in the street.",
-        "Bessie가 N개의 우편함이 줄지어 있는 길에 살고, 각 우편함은 A..Z 글자로 표시돼요. 그녀는 K 개의 연속한 우편함만 보고 자기 위치를 알아내고 싶어요.\n길이 K 인 모든 연속 부분 문자열이 길에서 유일해지는 가장 작은 K 를 출력해요."),
+        "우편함 K 개만 보고도 내 자리를 알 수 있는 가장 작은 K 는 얼마일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -260,7 +260,7 @@ export function makeWhereAmICh1(E) {
             <div style={{ fontSize: 13, color: C.carry, lineHeight: 1.5 }}>
               {t(E,
                 "Output the smallest K such that every length-K window in the street's letter string is unique.",
-                "길이 K 의 모든 연속 부분 문자열이 유일해지는 가장 작은 K 를 출력.")}
+                "길이 K 인 연속 부분문자열이 하나도 겹치지 않게 되는 가장 작은 K 를 출력해요.")}
             </div>
           </div>
 
@@ -275,7 +275,7 @@ export function makeWhereAmICh1(E) {
                   {t(E, "A street has ", "")}
                   <b style={{ color: C.carry }}>{t(E, "N mailboxes labeled A..Z", "A..Z 글자로 표시된 N 개의 우편함")}</b>
                   {t(E, " (a string of N letters).",
-                        " 이 길에 있어요 (길이 N 문자열).")}
+                        " 이 길에 있어요 (길이가 N 인 문자열).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -290,7 +290,7 @@ export function makeWhereAmICh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "smallest K such that every length-K window is unique", "길이 K 의 모든 연속 부분 문자열이 유일해지는 가장 작은 K")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "smallest K such that every length-K window is unique", "길이 K 인 연속 부분문자열이 하나도 겹치지 않는 가장 작은 K")}</b>
                   {t(E, ".", " 를 출력해요.")}
                 </div>
               </div>
@@ -302,7 +302,7 @@ export function makeWhereAmICh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, what IS a substring?\nIt's a consecutive chunk of characters from the string.\nLike a sliding window!", "먼저 부분문자열이 뭘까? 문자열에서 연속된 글자 묶음이에요. 슬라이딩 윈도우처럼!"),
+        "First, what IS a substring?\nIt's a consecutive chunk of characters from the string.\nLike a sliding window!", "부분문자열은 문자열에서 연속으로 이어진 글자 묶음이에요."),
       content: (() => {
         const str = "ABCBA";
         return (
@@ -365,7 +365,7 @@ export function makeWhereAmICh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Think of it like a window sliding across the string!\nThe window size is K, and it moves one position at a time.", "문자열 위를 슬라이드하는 창문이라고 생각해요! 창문 크기가 K이고, 한 칸씩 움직여."),
+        "Think of it like a window sliding across the string!\nThe window size is K, and it moves one position at a time.", "문자열 위를 한 칸씩 미끄러지는 창문이라고 생각해 봐요."),
       content: (() => {
         const str = "ABAB";
         const windows = [
@@ -406,7 +406,7 @@ export function makeWhereAmICh1(E) {
               background: C.noBg, border: `1px solid ${C.noBd}`, borderRadius: 10,
               padding: 10, textAlign: "center", fontSize: 13, fontWeight: 600, color: C.no,
             }}>
-              {t(E, "\"AB\" appears at position 0 AND position 2 -- duplicate! K=2 fails!", "\"AB\"가 위치 0과 위치 2에 -- 중복! K=2 실패!")}
+              {t(E, "\"AB\" appears at position 0 AND position 2 -- duplicate! K=2 fails!", "\"AB\" 가 위치 0 과 위치 2 에 두 번 나와요 — 겹쳤으니 K=2 는 실패!")}
             </div>
           </div>
         );
@@ -416,25 +416,25 @@ export function makeWhereAmICh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "We just saw that K=2 on \"ABAB\" has duplicates. Let's make sure you understand why!", "방금 \"ABAB\"에서 K=2가 중복이 있다는 걸 봤어. 왜 그런지 확인해보자!"),
+        "\"ABAB\" 에서 K=2 가 왜 안 되는지 확인해 봐요."),
       question: t(E,
         "\"ABAB\", K=2. Substrings: AB, BA, AB. Why does K=2 fail?",
-        "\"ABAB\", K=2. 부분문자열: AB, BA, AB. K=2가 왜 실패해요?"),
+        "\"ABAB\" 에서 K=2 의 부분문자열은 AB, BA, AB 예요.\nK=2 는 왜 실패할까요?"),
       options: [
-        t(E, "Because \"BA\" only appears once", "\"BA\"가 한 번만 나타나니까"),
-        t(E, "Because \"AB\" appears twice (duplicate!)", "\"AB\"가 두 번 나타나니까 (중복!)"),
-        t(E, "Because there are only 3 substrings", "부분문자열이 3개밖에 없으니까"),
+        t(E, "Because \"BA\" only appears once", "\"BA\" 가 한 번만 나와서요"),
+        t(E, "Because \"AB\" appears twice (duplicate!)", "\"AB\" 가 두 번 나와서요 (겹쳐요!)"),
+        t(E, "Because there are only 3 substrings", "부분문자열이 3 개밖에 없어서요"),
       ],
       correct: 1,
       explain: t(E,
         "Right! \"AB\" appears at positions 0-1 and 2-3. Duplicate means two different locations look the same -- Bessie can't tell where she is!",
-        "맞아! \"AB\"가 위치 0-1과 2-3에 나타나. 중복이면 두 위치가 같아 보여서 Bessie가 자기 위치를 모르게 돼요!"),
+        "맞아요! \"AB\" 가 위치 0-1 과 2-3 에 나와요.\n겹치면 두 자리가 똑같아 보여서 Bessie 는 자기가 어디 있는지 알 수 없어요!"),
     },
     // 1-5: Visual — K=3 on "ABAB" — all unique!
     {
       type: "reveal",
       narr: t(E,
-        "Now let's try K=3 on the same string \"ABAB\". Are all substrings unique this time?", "이제 같은 문자열 \"ABAB\"에서 K=3을 시도해보자. 이번엔 모든 부분문자열이 고유할까?"),
+        "Now let's try K=3 on the same string \"ABAB\". Are all substrings unique this time?", "이번엔 같은 \"ABAB\" 에서 K=3 으로 해봐요."),
       content: (() => {
         const str = "ABAB";
         const windows = [
@@ -473,7 +473,7 @@ export function makeWhereAmICh1(E) {
               background: C.okBg, border: `1px solid ${C.okBd}`, borderRadius: 10,
               padding: 10, textAlign: "center", fontSize: 13, fontWeight: 600, color: C.ok,
             }}>
-              {t(E, "\"ABA\" and \"BAB\" -- all different! K=3 works!", "\"ABA\"와 \"BAB\" -- 모두 다르다! K=3 성공!")}
+              {t(E, "\"ABA\" and \"BAB\" -- all different! K=3 works!", "\"ABA\" 와 \"BAB\" — 하나도 안 겹쳐요! K=3 성공!")}
             </div>
           </div>
         );
@@ -483,10 +483,10 @@ export function makeWhereAmICh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "We saw K=1 has duplicates (A appears twice), K=2 has duplicates (AB appears twice), K=3 is all unique.\nWhat's the minimum K?", "K=1은 중복(A가 두 번), K=2도 중복(AB가 두 번), K=3은 모두 고유. 최소 K는?"),
+        "We saw K=1 has duplicates (A appears twice), K=2 has duplicates (AB appears twice), K=3 is all unique.\nWhat's the minimum K?", "K=1 도 K=2 도 겹쳤어요. 가장 작은 K 는 얼마일까요?"),
       question: t(E,
         "\"ABAB\": what is the minimum K for all unique substrings?",
-        "\"ABAB\": 모든 부분문자열이 고유한 최소 K는?"),
+        "\"ABAB\" 에서 부분문자열이 하나도 안 겹치는 가장 작은 K 는 얼마일까요?"),
       options: [
         t(E, "K = 1", "K = 1"),
         t(E, "K = 2", "K = 2"),
@@ -496,20 +496,20 @@ export function makeWhereAmICh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! K=1 and K=2 have duplicates. K=3 is the first where all substrings are unique. Answer: 3.",
-        "정답! K=1과 K=2는 중복이 있어요. K=3이 모든 부분문자열이 고유한 첫 번째. 답: 3."),
+        "정답이에요! K=1 과 K=2 는 겹치는 게 있어요.\nK=3 에서 처음으로 하나도 안 겹쳐요. 그래서 답은 3 이에요."),
     },
     // 1-7: Input — try another string
     {
       type: "input",
       narr: t(E,
         "Try it on \"AABB\" yourself — start at K=1, see if any duplicate, bump up.",
-        "\"AABB\" 직접 — K=1 부터 시도해 중복 있으면 K 키워."),
+        "\"AABB\" 를 직접 해봐요. 겹치면 K 를 하나씩 키워요."),
       question: t(E,
         "\"AABB\" -> minimum K for unique substrings?",
-        "\"AABB\" -> 유일한 부분문자열을 위한 최소 K?"),
+        "\"AABB\" 에서 부분문자열이 안 겹치는 가장 작은 K 는 얼마일까요?"),
       hint: t(E,
         "List the windows of size 1 — any repeats?  If yes, try size 2.",
-        "크기 1 윈도우 나열 — 중복? 있으면 크기 2 시도."),
+        "크기 1 인 윈도우부터 적어 봐요.\n겹치는 게 있으면 크기 2 로 올려요."),
       answer: 2,
     },
   ];
@@ -525,11 +525,11 @@ export function makeWhereAmICh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The algorithm is simple: try K=1, then K=2, then K=3...\nFor each K, check if ALL substrings of that length are unique.\nStop at the first K that works!", "알고리즘은 간단해: K=1, K=2, K=3... 순서대로 시도. 각 K에서 그 길이의 모든 부분문자열이 고유한지 확인. 처음 성공하는 K에서 멈춰요!"),
+        "The algorithm is simple: try K=1, then K=2, then K=3...\nFor each K, check if ALL substrings of that length are unique.\nStop at the first K that works!", "K 를 1 부터 하나씩 키우다가 처음 되는 K 에서 멈춰요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
-            {t(E, "Algorithm: Try K = 1, 2, 3, ...", "알고리즘: K = 1, 2, 3, ... 시도")}
+            {t(E, "Algorithm: Try K = 1, 2, 3, ...", "알고리즘: K = 1, 2, 3, ... 을 차례로 해보기")}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[1, 2, 3].map(k => {
@@ -548,9 +548,9 @@ export function makeWhereAmICh2(E) {
                     background: ok ? C.ok : C.no, color: "#fff",
                   }}>K={k}</div>
                   <div style={{ fontSize: 12, color: C.text, fontWeight: 700 }}>
-                    {k === 1 && t(E, "A, B, A, B -- A repeats! FAIL", "A, B, A, B -- A 반복! 실패")}
-                    {k === 2 && t(E, "AB, BA, AB -- AB repeats! FAIL", "AB, BA, AB -- AB 반복! 실패")}
-                    {k === 3 && t(E, "ABA, BAB -- all unique! STOP!", "ABA, BAB -- 모두 고유! 멈춰요!")}
+                    {k === 1 && t(E, "A, B, A, B -- A repeats! FAIL", "A, B, A, B — A 가 겹쳐요! 실패")}
+                    {k === 2 && t(E, "AB, BA, AB -- AB repeats! FAIL", "AB, BA, AB — AB 가 겹쳐요! 실패")}
+                    {k === 3 && t(E, "ABA, BAB -- all unique! STOP!", "ABA, BAB — 하나도 안 겹쳐요! 멈춰요!")}
                   </div>
                   <div style={{ marginLeft: "auto", fontSize: 18 }}>
                     {ok ? "✅" : "❌"}
@@ -565,7 +565,7 @@ export function makeWhereAmICh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "How do we check if substrings are unique?\nUse a SET!\nA set only stores unique items.\nIf we try to add a substring that already exists, we found a duplicate!", "부분문자열이 고유한지 어떻게 확인할까? SET을 써요! 집합은 고유한 항목만 저장해요. 이미 있는 부분문자열을 추가하려고 하면 중복을 찾은 거예요!"),
+        "How do we check if substrings are unique?\nUse a SET!\nA set only stores unique items.\nIf we try to add a substring that already exists, we found a duplicate!", "겹치는지 어떻게 확인할까요? 집합(set)을 쓰면 돼요."),
       content: (() => {
         const trace = [
           { sub: "AB", set: ["AB"], dup: false },
@@ -575,7 +575,7 @@ export function makeWhereAmICh2(E) {
         return (
           <div style={{ padding: 16 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
-              {t(E, "Checking K=2 on \"ABAB\" with a Set", "\"ABAB\"에서 K=2를 Set으로 확인")}
+              {t(E, "Checking K=2 on \"ABAB\" with a Set", "\"ABAB\" 에서 K=2 를 집합으로 확인하기")}
             </div>
             <div style={{
               background: "#1e293b", borderRadius: 10, padding: 12, fontSize: 12,
@@ -593,15 +593,15 @@ export function makeWhereAmICh2(E) {
                   </span>
                   <span style={{ color: step.dup ? C.no : "#6ee7b7", fontWeight: 600 }}>
                     {step.dup
-                      ? t(E, "IN set! Duplicate!", "set에 있어요! 중복!")
-                      : t(E, "add to set", "set에 추가")}
+                      ? t(E, "IN set! Duplicate!", "집합에 이미 있어요! 겹쳐요!")
+                      : t(E, "add to set", "집합에 넣기")}
                   </span>
                 </div>
               ))}
             </div>
             <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
               {t(E,
-                "Set = {AB, BA}.\nWhen we try \"AB\" again, it's already there! So K=2 has duplicates.", "Set = {AB, BA}.\n\"AB\"를 다시 넣으려 하면 이미 있어요! 그래서 K=2는 중복이 있어요.")}
+                "A set never holds the same item twice.\nSet = {AB, BA}. When we try \"AB\" again it is already there — and that is exactly what 'already seen' means. So K=2 has duplicates.", "집합은 같은 것을 두 번 담지 않아요.\n집합 = {AB, BA} 인데 \"AB\" 를 다시 넣으려 하면 이미 있어요.\n이미 있다는 건 앞에서 한 번 나왔다는 뜻이에요.\n그래서 K=2 는 겹치는 게 있어요.")}
             </div>
           </div>
         );
@@ -611,11 +611,11 @@ export function makeWhereAmICh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace through the entire algorithm for \"ABAB\". We check K=1, K=2, K=3 one by one.", "\"ABAB\" 전체 알고리즘을 추적해보자. K=1, K=2, K=3을 하나씩 확인해요."),
+        "Let's trace through the entire algorithm for \"ABAB\". We check K=1, K=2, K=3 one by one.", "\"ABAB\" 로 K=1, K=2, K=3 을 하나씩 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
-            {t(E, "Full trace: \"ABAB\"", "전체 추적: \"ABAB\"")}
+            {t(E, "Full trace: \"ABAB\"", "전체 따라가기: \"ABAB\"")}
           </div>
           {/* Trace table */}
           <div style={{
@@ -629,7 +629,7 @@ export function makeWhereAmICh2(E) {
             }}>
               <span>K</span>
               <span>{t(E, "Substrings", "부분문자열")}</span>
-              <span>{t(E, "Unique?", "고유?")}</span>
+              <span>{t(E, "Unique?", "안 겹쳐요?")}</span>
             </div>
             {/* K=1 */}
             <div style={{
@@ -671,7 +671,7 @@ export function makeWhereAmICh2(E) {
       type: "reveal",
       narr: t(E,
         "Your turn — type any letters and slide K. Green windows are unique, red ones are duplicates. The smallest K with all-green is the answer.",
-        "직접 해보기 — 글자를 아무거나 입력하고 K 를 밀어봐. 초록은 유일, 빨강은 중복. 모두 초록이 되는 가장 작은 K 가 답."),
+        "글자를 아무거나 넣고 K 를 밀어 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
@@ -680,7 +680,7 @@ export function makeWhereAmICh2(E) {
           <div style={{ fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
               "Try \"ABCBABC\", \"AABB\", or \"AAAA\" — see how K grows when there are more repeats.",
-              "\"ABCBABC\", \"AABB\", \"AAAA\" 등 시도 — 반복이 많을수록 K 가 어떻게 커지는지 봐.")}
+              "\"ABCBABC\", \"AABB\", \"AAAA\" 를 넣어 봐요. 초록은 안 겹치는 것, 빨강은 겹치는 것이에요. 같은 글자가 많을수록 K 가 어떻게 커지는지 보여요.")}
           </div>
           <WhereAmISim E={E} />
         </div>),
@@ -689,7 +689,7 @@ export function makeWhereAmICh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "What's the time complexity?\nWe try up to N values of K.\nFor each K, we check N-K+1 substrings.\nTotal: O(N^2) with hashing.", "시간 복잡도는? K를 최대 N개 시도. 각 K에서 N-K+1개 부분문자열 확인. 총: 해싱으로 O(N^2)."),
+        "What's the time complexity?\nWe try up to N values of K.\nFor each K, we check N-K+1 substrings.\nTotal: O(N^2) with hashing.", "시간이 얼마나 걸릴까요? 다 합치면 O(N²) 쯤이에요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -698,7 +698,7 @@ export function makeWhereAmICh2(E) {
           </div>
           <div style={{ marginTop: 12, background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Outer loop: K from 1 to N (max N iterations).\nInner loop: check N-K+1 substrings. With hash set, each check is O(1). Total: O(N^2). N <= 100, so this is fast enough!", "바깥 반복: K를 1부터 N까지 (최대 N번).\n안쪽 반복: N-K+1개 부분문자열 확인. 해시 집합으로 각 확인 O(1). 총: O(N^2). N <= 100이라 충분히 빨라요!")}
+              "Outer loop: K from 1 to N (max N iterations).\nInner loop: check N-K+1 substrings. With hash set, each check is O(1). Total: O(N^2). N <= 100, so this is fast enough!", "바깥 반복문은 K 를 1 부터 N 까지 돌아요 (많아야 N 번).\n안쪽 반복문은 N-K+1 개의 부분문자열을 봐요.\n집합에서 한 번 찾는 데 O(1) 이니까, 다 합치면 O(N^2) 이에요.\nN 이 100 을 넘지 않아서 충분히 빨라요!")}
           </div>
         </div>),
     },
@@ -707,13 +707,13 @@ export function makeWhereAmICh2(E) {
       type: "input",
       narr: t(E,
         "Hand-trace \"AABBA\" — start with K=1 and bump until every window is unique.",
-        "\"AABBA\" 손으로 — K=1 부터 시작해 모든 윈도우가 유일해질 때까지 K 올려."),
+        "\"AABBA\" 를 손으로 해봐요. K 를 1 부터 올려요."),
       question: t(E,
         "\"AABBA\" -> minimum K?",
-        "\"AABBA\" -> 최소 K?"),
+        "\"AABBA\" 에서 가장 작은 K 는 얼마일까요?"),
       hint: t(E,
         "List the windows of each size and check for duplicates.",
-        "크기별 윈도우 나열하고 중복 있는지 확인."),
+        "크기마다 윈도우를 적어 보고 겹치는 게 있는지 봐요."),
       answer: 2,
     },
   ];
@@ -729,7 +729,7 @@ export function makeWhereAmICh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code step by step! First, read N and the string s from input.", "코드를 한 단계씩 만들어보자! 먼저 입력에서 N과 문자열 s를 읽어."),
+        "Let's build the code step by step! First, read N and the string s from input.", "코드를 한 단계씩 만들어요. 먼저 N 과 문자열 s 를 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
@@ -738,7 +738,7 @@ export function makeWhereAmICh3(E, lang = "py") {
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
             {t(E,
               "First line: N (number of mailboxes). Second line: the string of labels.",
-              "첫 줄: N (우편함 수). 둘째 줄: 라벨 문자열.")}
+              "첫 줄에 N (우편함 수) 이 있어요. 둘째 줄에 글자 문자열이 있어요.")}
           </div>
           <CodeSnippet lines={["with open('whereami.in') as file:", "    lines = file.readlines()", "N = int(lines[0])", "s = lines[1].strip()"]} highlight={[0, 1, 2, 3]} />
           <div style={{
@@ -755,11 +755,11 @@ export function makeWhereAmICh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Next, the outer loop: try K from 1 to N. We'll check each K value.", "다음은 바깥 반복: K를 1부터 N까지 시도. 각 K 값을 확인할 거예요."),
+        "Next, the outer loop: try K from 1 to N. We'll check each K value.", "이제 바깥 반복문에서 K 를 1 부터 N 까지 키워요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 2: Try each K", "2단계: 각 K 시도")}
+            {t(E, "Step 2: Try each K", "2단계: K 를 하나씩 해보기")}
           </div>
           <CodeSnippet
             lines={[
@@ -777,7 +777,7 @@ export function makeWhereAmICh3(E, lang = "py") {
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
               "For each K, we create a fresh empty set and assume unique=True until proven otherwise.",
-              "각 K마다 빈 집합을 새로 만들고 중복이 발견될 때까지 unique=True로 가정해요.")}
+              "K 마다 빈 집합을 새로 만들어요. 겹치는 게 나올 때까지는 unique 를 True 로 두고 시작해요.")}
           </div>
         </div>),
     },
@@ -785,11 +785,11 @@ export function makeWhereAmICh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Inside the K loop, we slide the window across the string.\nFor each substring, check if it's already in the set.", "K 반복 안에서 문자열을 따라 윈도우를 밀어. 각 부분문자열이 이미 집합에 있는지 확인해요."),
+        "Inside the K loop, we slide the window across the string.\nFor each substring, check if it's already in the set.", "윈도우를 한 칸씩 밀면서 집합에 이미 있는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 3: Check each substring", "3단계: 각 부분문자열 확인")}
+            {t(E, "Step 3: Check each substring", "3단계: 부분문자열 하나씩 확인하기")}
           </div>
           <CodeSnippet
             lines={[
@@ -813,7 +813,7 @@ export function makeWhereAmICh3(E, lang = "py") {
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
               "s[i:i+K] extracts K characters starting at position i. If it's already in the set, we found a duplicate!",
-              "s[i:i+K]는 위치 i에서 K글자를 추출해요. 이미 집합에 있으면 중복을 찾은 거예요!")}
+              "s[i:i+K] 는 i 번 자리에서 K 글자를 잘라 와요. 집합에 이미 있으면 겹치는 걸 찾은 거예요!")}
           </div>
         </div>),
     },
@@ -821,25 +821,25 @@ export function makeWhereAmICh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Quick check: in the inner loop, what does `range(N - K + 1)` represent?", "확인: 안쪽 반복에서 `range(N - K + 1)`은 무엇을 나타내?"),
+        "Quick check: in the inner loop, what does `range(N - K + 1)` represent?", "안쪽 반복문의 range(N - K + 1) 은 무엇일까요?"),
       question: t(E,
         "What does range(N - K + 1) give us?",
-        "range(N - K + 1)이 주는 건?"),
+        "range(N - K + 1) 은 무엇의 개수일까요?"),
       options: [
-        t(E, "The number of K-length substrings in the string", "문자열의 K길이 부분문자열 개수"),
+        t(E, "The number of K-length substrings in the string", "문자열 안에 있는 길이 K 부분문자열의 개수"),
         t(E, "The length of the string", "문자열의 길이"),
-        t(E, "The number of unique characters", "고유 문자의 수"),
+        t(E, "The number of unique characters", "서로 다른 글자의 개수"),
       ],
       correct: 0,
       explain: t(E,
-        "Correct! A string of length N has exactly N-K+1 substrings of length K. For example, \"ABAB\" (N=4) with K=2 has 4-2+1 = 3 substrings.",
-        "정답! 길이 N인 문자열에는 정확히 N-K+1개의 길이 K 부분문자열이 있어요. 예: \"ABAB\"(N=4)에서 K=2이면 4-2+1 = 3개."),
+        "Correct! A window of length K can start at position 0, 1, ... up to N-K — any further and it would run off the end. That is N-K+1 starting positions, so a string of length N has exactly N-K+1 substrings of length K. For example, \"ABAB\" (N=4) with K=2 has 4-2+1 = 3 substrings.",
+        "정답이에요! 길이 K 인 윈도우는 0 번 자리부터 N-K 번 자리까지에서 시작할 수 있어요.\n그보다 뒤에서 시작하면 끝을 넘어가 버리거든요.\n시작할 자리가 N-K+1 개니까 부분문자열도 딱 그만큼 있어요.\n\"ABAB\" (N=4) 에서 K=2 면 4-2+1 = 3 개예요."),
     },
     // 3-5: Step 4 — Print answer + full code
     {
       type: "reveal",
       narr: t(E,
-        "Finally, if all substrings were unique for this K, print it and stop!\nThat's the complete solution!", "마지막으로, 이 K에서 모든 부분문자열이 고유하면 출력하고 멈춰요! 이게 전체 풀이에요!"),
+        "Finally, if all substrings were unique for this K, print it and stop!\nThat's the complete solution!", "이 K 에서 하나도 안 겹치면 그 K 를 출력하고 멈춰요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
@@ -854,7 +854,7 @@ export function makeWhereAmICh3(E, lang = "py") {
             padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
-              {t(E, "Complete code! Just 11 lines!", "전체 코드 완성! 단 11줄!")}
+              {t(E, "Complete code! Just 11 lines!", "전체 코드 완성! 딱 11 줄이에요!")}
             </div>
           </div>
         </div>),

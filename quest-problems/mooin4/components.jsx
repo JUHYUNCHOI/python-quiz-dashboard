@@ -78,19 +78,19 @@ const _M4_VARS = [
 export function getMooin4Walk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _M4_VARS, beats: [
-      { hi: [4, 9],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 읽고, 테스트마다 N 과 화면 문자열 S.") },
+      { hi: [4, 9],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 를 읽고, 테스트마다 N 과 화면 문자열 S 를 읽어요.") },
       { hi: [10, 12], bubble: t(E, "Walk RIGHT→LEFT.\nflips = are the O's typed after this spot odd or even?", "오른쪽에서 왼쪽으로 훑어요.\nflips 는 이 자리보다 뒤에서 친 O 의 홀짝이에요.") },
       { hi: [13, 22], bubble: t(E, "For each character: if flips is odd, M and O are swapped.\nRecord what was really typed.\nIf that key is O, flip the parity.", "글자마다 봐요. flips 가 홀수면 M 과 O 가 뒤바뀐 거예요.\n실제로 친 글자를 기록해요.\n그 키가 O 면 홀짝을 뒤집어요.") },
-      { hi: [23, 26], bubble: t(E, "Always YES. If k==1, also print the actual typed string.", "항상 YES. k==1 이면 실제 친 문자열도 출력.") },
+      { hi: [23, 26], bubble: t(E, "Always YES. If k==1, also print the actual typed string.", "답은 항상 YES 예요. k==1 이면 실제 친 문자열도 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _M4_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
-    { hi: [3, 7],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 읽고, 테스트마다 N 과 화면 문자열 S.") },
+    { hi: [0, 1],   bubble: t(E, "Fast input.", "입력을 빠르게 읽어요.") },
+    { hi: [3, 7],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 를 읽고, 테스트마다 N 과 화면 문자열 S 를 읽어요.") },
     { hi: [8, 10],  bubble: t(E, "Walk RIGHT→LEFT.\nflips = are the O's typed after this spot odd or even?", "오른쪽에서 왼쪽으로 훑어요.\nflips 는 이 자리보다 뒤에서 친 O 의 홀짝이에요.") },
     { hi: [11, 17], bubble: t(E, "For each character: if flips is odd, M and O are swapped.\nRecord what was really typed.\nIf that key is O, flip the parity.", "글자마다 봐요. flips 가 홀수면 M 과 O 가 뒤바뀐 거예요.\n실제로 친 글자를 기록해요.\n그 키가 O 면 홀짝을 뒤집어요.") },
-    { hi: [18, 20], bubble: t(E, "Always YES. If k==1, also output the actual typed string.", "항상 YES. k==1 이면 실제 친 문자열도 출력.") },
-    { hi: [21, 21], bubble: t(E, "Print all results at once.", "결과를 한 번에 출력.") },
+    { hi: [18, 20], bubble: t(E, "Always YES. If k==1, also output the actual typed string.", "답은 항상 YES 예요. k==1 이면 실제 친 문자열도 출력해요.") },
+    { hi: [21, 21], bubble: t(E, "Print all results at once.", "결과를 한 번에 출력해요.") },
   ] };
 }
 
@@ -103,18 +103,18 @@ export function getMooin4Sections(E) {
       why: [
         t(E,
           "Key insight: the last typed key never gets flipped — it equals S[N-1] directly.",
-          "핵심: 마지막에 친 글자는 절대 뒤집히지 않으니 S[N-1] 과 같아요."),
+          "마지막에 친 글자는 뒤에 O 가 없어서 절대 안 뒤집혀요. 그래서 S[N-1] 과 같아요."),
         t(E,
           "Walking right→left, each later O flips the current character once. Track parity of later O's.",
-          "오른쪽→왼쪽으로 가면서, 나중에 친 O 하나마다 현재 글자가 한 번 뒤집혀요. 나중 O 의 홀짝만 추적."),
+          "오른쪽→왼쪽으로 가면서 봐요. 나중에 친 O 하나마다 지금 글자가 한 번 뒤집혀요. 두 번 뒤집으면 제자리니 홀짝만 따라가면 돼요."),
         t(E,
           "If parity is odd, flip the target letter to figure out what to type. The answer is always YES.",
-          "홀수면 목표 글자를 뒤집어서 무엇을 칠지 결정. 답은 항상 YES."),
+          "홀수면 목표 글자를 뒤집어서 무엇을 칠지 정해요. 답은 항상 YES 예요."),
       ],
       pyOnly: [
         t(E,
           "sys.stdin.readline keeps it fast across up to 10^4 test cases.",
-          "테스트케이스가 많으니 sys.stdin.readline 으로 빠르게."),
+          "테스트케이스가 많으니 sys.stdin.readline 으로 빠르게 읽어요."),
       ],
       cppOnly: [
         t(E,
@@ -165,7 +165,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMooin4PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "It's Mooin' Time IV — Full Study Guide", "무잉 타임 IV — 종합 풀이 노트");
@@ -188,7 +188,7 @@ export function downloadMooin4PDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO Jan 2026, Bronze #1 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

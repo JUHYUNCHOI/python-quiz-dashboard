@@ -37,7 +37,7 @@ export function makeMcc19DitcoinCh1(E) {
       type: "reveal",
       narr: t(E,
         "Each day for D days you earn 1 Ditcoin. You know each day's selling price p[i]. On any day you may sell ANY number of your accumulated Ditcoins at that day's price.\nPrint the MAXIMUM total money earnable over the D days.",
-        "D 일 동안 매일 Ditcoin 1 개씩 벌어요. 각 날의 판매 가격 p[i] 를 알아요. 어떤 날에든 그 날 가격으로 보유한 Ditcoin 을 원하는 만큼 팔 수 있어요.\nD 일 동안 벌 수 있는 최대 총액을 출력해요."),
+        "매일 코인을 1 개씩 벌어요. 언제 팔아야 가장 많이 벌 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -95,7 +95,7 @@ export function makeMcc19DitcoinCh1(E) {
       type: "reveal",
       narr: t(E,
         "How does the data arrive? First line D (days), second line D prices. Print one number — the max total.",
-        "데이터는 어떻게 들어올까? 첫 줄 D (일 수), 둘째 줄 D 개 가격. 한 줄로 최대 총액 출력."),
+        "첫 줄에 일 수 D 가 오고, 둘째 줄에 가격 D 개가 와요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           {/* INPUT */}
@@ -111,7 +111,7 @@ export function makeMcc19DitcoinCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "One line: the maximum total money earnable over the D days.",
-                    "한 줄: D 일 동안 벌 수 있는 최대 총액.")}
+                    "D 일 동안 벌 수 있는 최대 총액을 한 줄에 써요.")}
             </div>
           </div>
           {/* Sample */}
@@ -169,7 +169,7 @@ export function makeMcc19DitcoinCh1(E) {
           <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.75, whiteSpace: "pre-line", textWrap: "balance" }}>
             {t(E,
               "The most expensive day is day 5 (price 10). Sell the 5 coins you have by then: 5 × 10 = 50.\nBut 3 more days come after that, and 3 more coins.\nWhere do those go? Think before you turn the page.",
-              "제일 비싼 날은 5 일째(가격 10)예요. 그때까지 모은 코인 5 개를 팔면 5 × 10 = 50.\n그런데 그 뒤로 날이 3 일 더 남고, 코인도 3 개 더 생겨요.\n그건 어떻게 할까요? 넘기기 전에 먼저 생각해봐요.")}
+              "제일 비싼 날은 5 일째(가격 10)예요. 그때까지 모은 코인 5 개를 팔면 5 × 10 = 50 이에요.\n그런데 그 뒤로 날이 3 일 더 남고, 코인도 3 개 더 생겨요.\n그건 어떻게 할까요? 넘기기 전에 먼저 생각해봐요.")}
           </div>
         </div>),
     },
@@ -181,36 +181,36 @@ export function makeMcc19DitcoinCh1(E) {
         "Prices = [3, 1, 5]. You earn 1 coin/day. When should you sell?", "가격 = [3, 1, 5]. 하루에 코인을 1 개씩 벌어요. 언제 팔아야 할까요?"),
       question: t(E,
         "Prices [3, 1, 5]. Best strategy?",
-        "가격 [3, 1, 5]. 최적 전략은?"),
+        "가격이 [3, 1, 5] 예요. 어떻게 파는 게 제일 좋을까요?"),
       options: [
-        t(E, "Sell 1 coin at price 3 on day 1", "1일에 코인 1개를 가격 3에 판매"),
-        t(E, "Hold all and sell 3 coins at price 5 on day 3", "전부 모아서 3일에 코인 3개를 가격 5에 판매"),
-        t(E, "Sell each day", "매일 판매"),
+        t(E, "Sell 1 coin at price 3 on day 1", "1일에 코인 1개를 가격 3에 팔아요"),
+        t(E, "Hold all and sell 3 coins at price 5 on day 3", "전부 모았다가 3일에 코인 3개를 가격 5에 팔아요"),
+        t(E, "Sell each day", "매일 팔아요"),
       ],
       correct: 1,
       explain: t(E,
         "Correct! Day 3 price (5) is the highest. Hold all 3 coins and sell at 5 → profit = 15.",
-        "맞아! 3일 가격(5)이 최고예요. 코인 3개를 모아 5에 판매 → 수익 = 15."),
+        "맞아요! 3일 가격 5 가 제일 높아요. 코인 3개를 모아 5 에 팔면 수익이 15 예요."),
     },
     // 1-3: Deep-audit sim — toggle SELL days, watch coins/profit live
     {
       type: "reveal",
       narr: t(E,
         "Try it yourself. Toggle the sell days and watch the coins and profit change. Can you match the optimal profit?",
-        "직접 해봐요. 파는 날을 켰다 껐다 하면 코인과 수익이 바로 바뀌어요. 최적 수익과 같게 만들 수 있나요?"),
+        "파는 날을 켰다 껐다 해서 가장 많이 버는 방법을 찾아봐요."),
       content: <Mcc19DitcoinDeepAuditSim E={E} />,
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "Prices = [3, 1, 5]. Sell all 3 coins at price 5. Total profit?", "가격 = [3, 1, 5]. 코인 3개를 가격 5에 전부 판매. 총 수익은?"),
+        "Prices = [3, 1, 5]. Sell all 3 coins at price 5. Total profit?", "가격이 [3, 1, 5] 일 때 코인 3개를 5 에 다 팔면 얼마를 벌까요?"),
       question: t(E,
         "Prices [3, 1, 5]. Max profit = ?",
-        "가격 [3, 1, 5]. 최대 수익 = ?"),
+        "가격이 [3, 1, 5] 예요. 가장 많이 벌면 얼마일까요?"),
       hint: t(E,
         "Hold all 3 coins, then sell them together on the day with the highest price. Multiply count × that price.",
-        "코인 3개를 모았다가, 가격이 가장 높은 날에 전부 함께 팔아요. 개수 × 그 날 가격."),
+        "코인 3개를 모았다가 가격이 가장 높은 날에 한꺼번에 팔아요. 개수에 그 날 가격을 곱하면 돼요."),
       answer: 15,
     },
   ];

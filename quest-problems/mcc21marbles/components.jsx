@@ -44,7 +44,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
         <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
           {t(E,
             "Each box's D = A − B. Walk left → right: the running total MUST cross each boundary — that's exactly the marbles moved there.",
-            "각 상자의 D = A − B. 왼쪽 → 오른쪽으로: 누적 합은 반드시 그 경계를 건너야 해요 — 그게 그 자리에서 옮기는 구슬 수예요.")}
+            "각 상자의 D = A − B 예요. 왼쪽부터 쌓아 온 합은 반드시 그 경계를 건너요. 그게 그 자리에서 옮기는 구슬 수예요.")}
         </div>
       </div>
 
@@ -126,7 +126,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
         <button onClick={() => setStep(0)} style={{
           background: "#fff", color: "#64748b", border: "1.5px solid #cbd5e1", borderRadius: 8,
           padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "초기화")}</button>
+        }}>↺ {t(E, "Reset", "처음으로")}</button>
       </div>
 
       {done && (
@@ -139,7 +139,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
           <div style={{ fontSize: 11, color: "#b91c1c", marginTop: 4 }}>
             {t(E,
               "Each boundary must pass exactly the accumulated imbalance — one O(N) pass.",
-              "각 경계는 쌓인 불균형만큼을 정확히 넘겨야 해요 — O(N) 한 번 훑기.")}
+              "각 경계는 쌓인 차이만큼을 그대로 넘겨요. O(N) 으로 한 번만 훑어요.")}
           </div>
         </div>
       )}
@@ -203,23 +203,23 @@ export function getMcc21MarblesSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Reformulate with D[i] = A[i] − B[i]: box i has a surplus (D>0) or a shortage (D<0). Marbles only cross boundaries between neighbors.",
-            "D[i] = A[i] − B[i] 로 바꿔 생각해요: 상자 i 는 남거나(D>0) 모자라요(D<0). 구슬은 이웃 사이의 경계만 건너요."),
+            "D[i] = A[i] − B[i] 로 바꿔 생각해요. 상자 i 는 구슬이 남거나(D>0) 모자라요(D<0). 구슬은 이웃 사이의 경계만 건너요."),
         t(E, "Whatever imbalance sits to the LEFT of a boundary must cross it. That amount is the running prefix of D, so the answer = sum of |prefix| at every boundary — one left-to-right O(N) pass.",
-            "경계 왼쪽에 남은 불균형은 반드시 그 경계를 건너야 해요. 그 양이 D 의 누적(prefix) 이므로, 답 = 경계마다 |누적| 의 합 — 왼쪽부터 O(N) 한 번 훑기."),
+            "경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요. 그 양이 바로 D 를 쌓아 온 값이에요. 그래서 답은 경계마다 그 절댓값을 더한 것이고, 왼쪽부터 O(N) 으로 한 번만 훑어요."),
       ],
       pyOnly: [
         t(E, "Python ints are unbounded, so abs(carry) never overflows — no special type needed.",
-            "Python 정수는 크기 제한이 없어서 abs(carry) 가 넘칠 일이 없어요 — 특별한 타입 불필요."),
+            "Python 정수는 크기 제한이 없어서 abs(carry) 가 넘칠 일이 없어요. 특별한 타입을 쓰지 않아도 돼요."),
       ],
       cppOnly: [
         /* 2026-09-09: why(항상 보임)에 있던 C++ 타입 얘기를 여기로 옮겼다.
            MCC 는 codeLang="py" 고정이라 파이썬 학생이 볼 일이 없다. */
         t(E, "Use 64-bit (long long): sum(A) can reach 5·10¹¹, far beyond 32-bit range.",
-            "64비트(long long) 사용: sum(A) 가 5·10¹¹ 까지라 32비트 범위를 훌쩍 넘어요."),
+            "sum(A) 가 5·10¹¹ 까지라 32비트 범위를 훌쩍 넘어요. 그래서 64비트(long long)를 써요."),
         t(E, "Declare A, B, carry, ops as long long — totals up to 5·10¹¹ overflow a 32-bit int.",
-            "A, B, carry, ops 를 long long 으로 — 합이 5·10¹¹ 까지라 32비트 int 는 넘쳐요."),
+            "합이 5·10¹¹ 까지라 32비트 int 는 넘쳐요. A, B, carry, ops 를 모두 long long 으로 적어요."),
         t(E, "Read A fully, then B fully (two separate loops) — they arrive on two lines.",
-            "A 를 다 읽고 그다음 B 를 다 읽어요 (반복문 두 개) — 두 줄로 들어와요."),
+            "A 를 다 읽고 그다음 B 를 다 읽어요. 두 줄로 들어오니까 반복문을 두 개 써요."),
       ],
     },
   ];
@@ -265,7 +265,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc21MarblesPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc21Marbles — Full Study Guide", "Mcc21Marbles — 종합 풀이 노트");
@@ -288,7 +288,7 @@ export function downloadMcc21MarblesPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

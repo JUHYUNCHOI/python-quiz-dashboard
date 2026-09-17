@@ -107,19 +107,19 @@ export function PalindromeTwoPointerSim({ E }) {
       <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace", minHeight: 38, lineHeight: 1.5 }}>
         {cur === 0 ? (
           t(E, `Set L = 0, R = ${n - 1}.  Compare s[L] with s[R].`,
-                `L = 0, R = ${n - 1} 로 시작.  s[L] 와 s[R] 비교.`)
+                `L = 0, R = ${n - 1} 에서 시작해요. s[L] 와 s[R] 를 견줘요.`)
         ) : verdictReady ? (
           isPal
             ? t(E, `All pairs matched → "${s}" IS a palindrome.`,
-                  `모든 짝이 일치 → "${s}" 는 회문이에요.`)
+                  `모든 짝이 같아요 → "${s}" 는 회문이에요.`)
             : t(E, `s[${mismatchAt}]='${s[mismatchAt]}' ≠ s[${n - 1 - mismatchAt}]='${s[n - 1 - mismatchAt]}' → NOT a palindrome.`,
-                  `s[${mismatchAt}]='${s[mismatchAt]}' ≠ s[${n - 1 - mismatchAt}]='${s[n - 1 - mismatchAt]}' → 회문 아님.`)
+                  `s[${mismatchAt}]='${s[mismatchAt]}' ≠ s[${n - 1 - mismatchAt}]='${s[n - 1 - mismatchAt]}' 이라 달라요 → 회문이 아니에요.`)
         ) : lastCompareMatch ? (
           t(E, `s[${cur - 1}]='${s[cur - 1]}' == s[${n - cur}]='${s[n - cur]}' ✓  Move L→, R←.`,
-                `s[${cur - 1}]='${s[cur - 1]}' == s[${n - cur}]='${s[n - cur]}' ✓  L→, R← 이동.`)
+                `s[${cur - 1}]='${s[cur - 1]}' == s[${n - cur}]='${s[n - cur]}' ✓  L 은 오른쪽, R 은 왼쪽으로 옮겨요.`)
         ) : (
           t(E, `s[${cur - 1}] ≠ s[${n - cur}] — mismatch!`,
-                `s[${cur - 1}] ≠ s[${n - cur}] — 불일치!`)
+                `s[${cur - 1}] 와 s[${n - cur}] 가 달라요!`)
         )}
       </div>
 
@@ -132,8 +132,8 @@ export function PalindromeTwoPointerSim({ E }) {
           color: isPal ? "#15803d" : "#7f1d1d",
           fontSize: 14, fontWeight: 800, textAlign: "center",
         }}>
-          {isPal ? t(E, `✓ "${s}" is a palindrome`, `✓ "${s}" 는 회문`)
-                 : t(E, `✗ "${s}" is NOT a palindrome`, `✗ "${s}" 는 회문 아님`)}
+          {isPal ? t(E, `✓ "${s}" is a palindrome`, `✓ "${s}" 는 회문이에요`)
+                 : t(E, `✗ "${s}" is NOT a palindrome`, `✗ "${s}" 는 회문이 아니에요`)}
         </div>
       )}
 
@@ -158,7 +158,7 @@ export function PalindromeTwoPointerSim({ E }) {
           background: "transparent", border: `1px solid ${C.border}`,
           borderRadius: 8, padding: "5px 10px", fontSize: 11, fontWeight: 600, color: C.dim,
           cursor: "pointer", marginLeft: 4,
-        }}>{t(E, "↺ Reset", "↺ 초기화")}</button>
+        }}>{t(E, "↺ Reset", "↺ 처음으로")}</button>
       </div>
     </div>
   );
@@ -225,13 +225,13 @@ export function PalindromeSim({ E }) {
       <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
         {cur === 0 ? (
           t(E, "n = 0: empty pile, player to move LOSES. can_win[0] = E.",
-                "n = 0: 빈 더미, 둘 차례면 짐. can_win[0] = E.")
+                "n = 0 은 빈 더미예요. 둘 차례인 사람이 져요. can_win[0] = E.")
         ) : canWin[cur] ? (
           t(E, `n = ${cur}: take palindrome ${reasons[cur]} → leaves opponent at n = ${cur - reasons[cur]} (E). Bessie wins!`,
-                `n = ${cur}: 회문 ${reasons[cur]} 가져감 → 상대 n = ${cur - reasons[cur]} (E). Bessie 승!`)
+                `n = ${cur} 에서 회문 ${reasons[cur]} 을(를) 가져가면 상대는 n = ${cur - reasons[cur]} (E) 를 받아요. 그래서 이겨요!`)
         ) : (
           t(E, `n = ${cur}: every palindrome p ≤ ${cur} leaves opponent in B. Bessie LOSES.`,
-                `n = ${cur}: 모든 회문 p ≤ ${cur}이 상대 B 상태로. Bessie 패.`)
+                `n = ${cur} 에서는 어떤 회문을 빼도 상대가 이기는 자리(B)가 남아요. 그래서 져요.`)
         )}
       </div>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
@@ -261,7 +261,7 @@ export function PalindromeRunner({ E }) {
   const run = () => {
     const S = parseInt(sIn);
     if (!S || S < 1 || S > 100000) {
-      setResult({ error: t(E, "Invalid: S must be a positive integer ≤ 10⁵.", "잘못된 입력: S는 양의 정수, 최대 10⁵.") });
+      setResult({ error: t(E, "Invalid: S must be a positive integer ≤ 10⁵.", "S 는 1 부터 10⁵ 까지의 정수여야 해요.") });
       return;
     }
     setRunning(true); setResult(null); setLiveN(0);
@@ -498,17 +498,17 @@ export function getPalindromeSections(E) {
       py: PA_HELPER_PY, cpp: PA_HELPER_CPP,
       why: [
         t(E, "is_palindrome(n) checks if n reads the same backwards.",
-            "is_palindrome(n)이 n이 거꾸로 읽어도 같은지 확인."),
+            "is_palindrome(n) 은 n 을 거꾸로 읽어도 같은지 확인해요."),
         t(E, "Pre-compute every palindrome from 1 to S — these are the legal move sizes.",
-            "1부터 S까지 모든 회문을 미리 계산 — 합법적인 이동 크기."),
+            "1 부터 S 까지 회문을 미리 구해 둬요. 이게 가져갈 수 있는 개수예요."),
       ],
       pyOnly: [
         t(E, "s[::-1] reverses a string in one expression.",
-            "s[::-1]로 문자열을 한 줄에 뒤집기."),
+            "s[::-1] 로 문자열을 한 줄에 뒤집어요."),
       ],
       cppOnly: [
         t(E, "to_string + reverse(begin, end) is the standard idiom.",
-            "to_string + reverse(begin, end)이 표준 관용구."),
+            "C++ 에서는 to_string 으로 바꾸고 reverse(begin, end) 로 뒤집어요."),
       ],
     },
     {
@@ -517,19 +517,19 @@ export function getPalindromeSections(E) {
       py: PA_DP_PY, cpp: PA_DP_CPP,
       why: [
         t(E, "can_win[n] = true if the player to move with n stones can force a win.",
-            "can_win[n] = n개 돌에서 시작한 플레이어가 이길 수 있는지."),
+            "can_win[n] 은 돌이 n 개일 때 둘 차례인 사람이 이기는지를 담아요."),
         t(E, "Player wins iff there exists a palindrome p ≤ n with can_win[n - p] == false (opponent loses next).",
-            "p ≤ n인 회문 중 can_win[n - p] == false (상대 패배)인 것이 있으면 승리."),
+            "회문 p 를 뺐을 때 can_win[n - p] 가 false 면 상대가 지는 자리예요. 그런 p 가 하나라도 있으면 이겨요."),
         t(E, "Bottom-up fill from n = 1 to S — each state depends only on smaller ones.",
-            "n = 1부터 S까지 bottom-up — 각 상태는 더 작은 것에만 의존."),
+            "n = 1 부터 S 까지 작은 쪽부터 채워요. 각 칸은 더 작은 칸만 보면 되거든요."),
       ],
       pyOnly: [
         t(E, "break out of the inner loop as soon as any winning move is found.",
-            "이기는 수를 찾자마자 내부 루프 break."),
+            "이기는 수를 찾자마자 안쪽 반복을 break 로 빠져나와요."),
       ],
       cppOnly: [
         t(E, "vector<bool> is compact (1 bit per element) and fast enough here.",
-            "vector<bool>은 비트 단위로 압축, 충분히 빠름."),
+            "vector<bool> 은 한 칸을 1비트로 담아서 여기서는 충분히 빨라요."),
       ],
     },
     {
@@ -538,7 +538,7 @@ export function getPalindromeSections(E) {
       py: PA_OUT_PY, cpp: PA_OUT_CPP,
       why: [
         t(E, "Bessie moves first — she wins iff can_win[S] is true.",
-            "Bessie가 선공 — can_win[S]가 true면 Bessie 승리."),
+            "Bessie 가 먼저 두니까, can_win[S] 가 true 면 Bessie 가 이겨요."),
       ],
     },
     {
@@ -547,7 +547,7 @@ export function getPalindromeSections(E) {
       py: PA_FULL_PY, cpp: PA_FULL_CPP,
       why: [
         t(E, "Total work: O(S · |palindromes|) — well within limits since palindromes are sparse.",
-            "총 작업: O(S · |palindromes|) — 회문이 드문 분포라 충분히 빠름."),
+            "전체 계산량은 O(S · 회문 개수) 예요. 회문이 드물어서 충분히 빨라요."),
       ],
     },
   ];
@@ -591,7 +591,7 @@ function highlightCode(lines, lang) {
 
 export function downloadPalindromePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Palindrome Game — Full Study Guide", "🎲 Palindrome Game — 종합 풀이 노트");
@@ -615,7 +615,7 @@ export function downloadPalindromePDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장'을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO 2024 Feb Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

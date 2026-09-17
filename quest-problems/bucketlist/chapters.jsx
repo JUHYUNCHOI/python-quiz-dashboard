@@ -11,7 +11,7 @@ export function makeBucketListCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N cows. Cow i needs b[i] buckets each day during her time interval [s, t]. Buckets are SHARED between cows whose intervals don't overlap.\nPrint the MINIMUM number of buckets FJ must own to cover every cow on every day.",
-        "FJ 에게 N마리 소가 있어요. i번 소는 자기 시간 구간 [s, t] 동안 매일 b[i] 개의 양동이가 필요해요. 시간 구간이 겹치지 않는 소들끼리는 양동이를 공유할 수 있어요.\n모든 소를 매일 만족시키는 데 FJ 가 가져야 할 양동이의 최소 수를 출력해요."),
+        "소마다 양동이가 필요한 기간이 달라요.\n양동이는 몇 개만 있으면 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeBucketListCh1(E) {
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum number of buckets FJ must own to cover every cow on every day.",
-                "모든 소를 매일 만족시키기 위한 양동이의 최소 수를 출력.")}
+                "모든 소가 매일 쓸 수 있는 양동이의 최소 개수를 출력해요.")}
             </div>
           </div>
 
@@ -52,9 +52,9 @@ export function makeBucketListCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  <b style={{ color: "#0891b2" }}>{t(E, "Buckets can be reused across cows", "양동이는 소들 사이에 재사용 가능")}</b>
+                  <b style={{ color: "#0891b2" }}>{t(E, "Buckets can be reused across cows", "양동이는 소끼리 다시 쓸 수 있어요")}</b>
                   {t(E, " whose active intervals don't overlap (a cow that's done releases her buckets for someone else).",
-                        " — 활성 시간이 겹치지 않으면 (먼저 끝난 소의 양동이를 다음 소가 씀).")}
+                        " — 쓰는 기간이 겹치지 않을 때만요. 먼저 끝난 소가 내려놓은 양동이를 다음 소가 쓰거든요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
@@ -73,38 +73,38 @@ export function makeBucketListCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cow 1 needs 3 buckets from t=1-5, cow 2 needs 2 buckets from t=3-8.\nAt t=3, both are active: 3 + 2 = 5 buckets needed.", "소 1은 t=1-5에 양동이 3개, 소 2는 t=3-8에 양동이 2개 필요. t=3에 둘 다 활성: 3 + 2 = 5개 필요."),
+        "Cow 1 needs 3 buckets from t=1-5, cow 2 needs 2 buckets from t=3-8.\nAt t=3, both are active: 3 + 2 = 5 buckets needed.", "소 1 은 t=1~5 에 양동이 3개가, 소 2 는 t=3~8 에 2개가 필요해요.\nt=3 에는 둘 다 쓰고 있어요."),
       question: t(E,
         "Cow1: 3 buckets t=1-5, Cow2: 2 buckets t=3-8. Max buckets at any time?",
-        "소1: 양동이3개 t=1-5, 소2: 양동이2개 t=3-8. 어느 시점에서 최대?"),
+        "소1 은 t=1~5 에 3개, 소2 는 t=3~8 에 2개가 필요해요. 한 시점에 가장 많이 쓰는 양동이는 몇 개일까요?"),
       options: [
-        t(E, "3 - just cow 1", "3 - 소1만"),
-        t(E, "5 - both overlap at t=3-5", "5 - t=3-5에서 겹침"),
-        t(E, "8 - sum of all", "8 - 전부 합산"),
+        t(E, "3 - just cow 1", "3개 — 소1 만 쓸 때"),
+        t(E, "5 - both overlap at t=3-5", "5개 — t=3~5 에 둘이 겹칠 때"),
+        t(E, "8 - sum of all", "8개 — 전부 더한 값"),
       ],
       correct: 1,
       explain: t(E,
         "Correct! From t=3 to t=5, both cows need buckets: 3 + 2 = 5. That's the maximum.",
-        "맞아! t=3부터 t=5까지 두 소 모두 양동이 필요: 3 + 2 = 5. 그게 최대값이에요."),
+        "맞아요! t=3 부터 t=5 까지는 두 소가 함께 쓰니 3 + 2 = 5 개가 필요해요.\n그게 가장 큰 값이에요."),
     },
     // 1-3: Sim — drag the timeline, see active cows + bucket total live
     {
       type: "sim",
       narr: t(E,
         "Three cows, three intervals. Drag the slider — bars light up while a cow is active, and the total below sums their buckets right now. The peak you see is the answer.",
-        "세 마리, 세 구간. 슬라이더를 움직여봐 — 소가 활성일 때 막대가 진해지고, 아래 합계는 지금 필요한 양동이 수. 가장 큰 값이 정답이에요."),
+        "슬라이더를 움직이면 그 시점에 필요한 양동이 수가 보여요.\n그중 가장 큰 값이 정답이에요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "Cow 1: 3 buckets t=1-5, Cow 2: 2 buckets t=3-8.\nWhat's the max buckets needed at any time?", "소 1: 양동이 3개 t=1-5, 소 2: 양동이 2개 t=3-8. 어느 시점에서 최대 양동이 수?"),
+        "Cow 1: 3 buckets t=1-5, Cow 2: 2 buckets t=3-8.\nWhat's the max buckets needed at any time?", "소 1 은 t=1~5 에 3개, 소 2 는 t=3~8 에 2개예요.\n한 시점에 필요한 양동이는 최대 몇 개일까요?"),
       question: t(E,
         "Max buckets needed at any time?",
-        "어느 시점에서 최대 양동이 수?"),
+        "한 시점에 필요한 양동이는 최대 몇 개일까요?"),
       hint: t(E,
         "Find the time window where both cows overlap, then sum their buckets.",
-        "두 소가 모두 활성인 시간 구간을 찾고 양동이 수를 더해 봐."),
+        "두 소가 함께 쓰는 기간을 찾아 양동이 수를 더해 봐요."),
       answer: 5,
     },
   ];
@@ -121,7 +121,7 @@ export function makeBucketListCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Convert each cow's interval into two events: +b at s, −b at t+1. Sort by time, sweep accumulating active buckets, track the running max. Sections build it one piece at a time.",
-        "각 구간을 두 이벤트로: s 에 +b, t+1 에 −b. 시간순 정렬, 누적하면서 스윕, 최댓값 추적. 아래 섹션이 한 단락씩 쌓아요."),
+        "구간마다 시작에 +b, 끝난 다음 날에 −b 를 적어요.\n시간순으로 더해 가며 가장 큰 값을 기억해요."),
       sections: getBucketListSections(E),
     },
   ];

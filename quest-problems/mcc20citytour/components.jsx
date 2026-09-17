@@ -66,7 +66,7 @@ export function Mcc20CityTourBfsSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8 }}>
-          🐰 {t(E, "Where can Fluffy reach?", "Fluffy 는 어디까지 갈 수 있을까?")}
+          🐰 {t(E, "Where can Fluffy reach?", "Fluffy 는 어디까지 갈 수 있을까요?")}
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
@@ -105,8 +105,8 @@ export function Mcc20CityTourBfsSim({ E }) {
 
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
           {t(E,
-            "The rule is about the DIFFERENCE to a neighbor — not the height itself. Two tall buildings side by side is an easy hop; a tall one next to a short one can be a wall. So there is no fixed wall map: the same edge opens for a big D and closes for a small D.",
-            "규칙은 이웃과의 '차이' 예요 — 높이 자체가 아니라. 높은 건물 둘이 나란히 있으면 쉽게 건너지만, 높은 건물 옆 낮은 건물은 벽이 될 수 있어요. 그래서 고정된 벽 지도는 없어요: 같은 간선도 D 가 크면 열리고 작으면 막혀요.")}
+            "The rule is about the DIFFERENCE to a neighbor — not the height itself. Two tall buildings side by side differ little, so the hop is easy. A tall one next to a short one becomes a wall when that difference is D or more. So there is no fixed wall map: the same edge opens for a big D and closes for a small D.",
+            "중요한 건 높이 자체가 아니라 이웃과의 '차이' 예요. 높은 건물 둘이 나란히 있으면 차이가 작아서 쉽게 건너요. 높은 건물 옆 낮은 건물은 차이가 D 이상이면 벽이 돼요. 그래서 벽이 어디인지 미리 정해져 있지 않아요. 같은 자리도 D 가 크면 열리고 작으면 막혀요.")}
         </div>
       </div>
     </div>
@@ -205,23 +205,23 @@ export function getMcc20CityTourSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Flood-fill (BFS) from the start (1,1): pop a cell, then for each of its 4 neighbors, step in only if it hasn't been visited AND the height gap |H[nr][nc] − H[r][c]| < D.",
-            "시작 (1,1) 에서 플러드필 (BFS): 칸을 꺼내고, 4 이웃 각각에 대해 아직 방문 안 했고 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요."),
+            "시작 (1,1) 에서 플러드필 (BFS) 을 해요. 칸을 하나 꺼내서 이웃 4 개를 보고, 아직 안 간 칸이면서 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요."),
         t(E, "Mark visited AT PUSH time and bump count then — so every reachable cell is counted exactly once. The answer is how many cells got visited.",
-            "push 하는 순간 방문 표시하고 그때 count 를 올려요 — 그래야 갈 수 있는 칸이 정확히 한 번씩만 세어져요. 답은 방문된 칸의 개수예요."),
+            "큐에 넣는 순간 방문 표시를 하고 그때 count 를 올려요. 그래야 갈 수 있는 칸이 정확히 한 번씩만 세어져요. 답은 방문한 칸의 개수예요."),
         t(E, "There is no fixed wall map: whether an edge is open depends on the two heights AND D. The same neighbor can be open for a large D and blocked for a small D — adjacency is dynamic.",
-            "고정된 벽 지도는 없어요: 어떤 간선이 열리는지는 두 높이 와 D 에 따라 달라져요. 같은 이웃도 D 가 크면 열리고 작으면 막혀요 — 인접 관계가 D 에 따라 바뀌어요."),
+            "벽이 어디인지 미리 정해져 있지 않아요. 길이 열리는지는 두 높이와 D 에 따라 달라져요. 같은 이웃도 D 가 크면 열리고 작으면 막혀요."),
       ],
       pyOnly: [
         t(E, "deque.popleft() is O(1) — that is what makes this BFS, not a slow list.pop(0) each step.",
-            "deque 의 popleft() 는 O(1) — 그래서 매 스텝 느린 list.pop(0) 대신 진짜 BFS 가 돼요."),
+            "deque 의 popleft() 는 O(1) 이에요. 그래서 느린 list.pop(0) 대신 쓰면 진짜 BFS 가 돼요."),
         t(E, "abs(H[nr][nc] - H[r][c]) < D is the whole edge rule — the height DIFFERENCE, strictly less than D.",
-            "abs(H[nr][nc] - H[r][c]) < D 가 간선 규칙 전부예요 — 높이 '차이' 가 D 보다 엄격히 작을 때만."),
+            "abs(H[nr][nc] - H[r][c]) < D 한 줄이 규칙의 전부예요. 높이 '차이' 가 D 보다 작아야만 건너가요."),
       ],
       cppOnly: [
         t(E, "Use queue<pair<int,int>> and abs() from <cstdlib>; visited is a vector<vector<bool>>.",
-            "queue<pair<int,int>> 와 <cstdlib> 의 abs() 사용; visited 는 vector<vector<bool>>."),
+            "queue<pair<int,int>> 와 <cstdlib> 의 abs() 를 써요. visited 는 vector<vector<bool>> 이에요."),
         t(E, "int is plenty here: heights fit (|H| ≤ 10^6) and the cell count is small (M×N ≤ 10^5).",
-            "여기선 int 로 충분해요: 높이 (|H| ≤ 10^6) 와 칸 수 (M×N ≤ 10^5) 모두 int 범위."),
+            "여기선 int 로 충분해요. 높이 (|H| ≤ 10^6) 와 칸 수 (M×N ≤ 10^5) 모두 int 범위 안이에요."),
       ],
     },
   ];
@@ -267,7 +267,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc20CityTourPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc20CityTour — Full Study Guide", "Mcc20CityTour — 종합 풀이 노트");
@@ -290,7 +290,7 @@ export function downloadMcc20CityTourPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

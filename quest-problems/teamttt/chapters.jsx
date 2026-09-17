@@ -11,7 +11,7 @@ export function makeTttCh1(E) {
       type: "reveal",
       narr: t(E,
         "A 3×3 grid is filled with letters A..Z (each letter represents a cow). Eight 'lines' exist: 3 rows, 3 columns, 2 diagonals.\nA single cow WINS if her letter fills an entire line. A team of EXACTLY 2 cows wins if their two letters together fill a line.\nPrint (1) how many distinct cows win solo, (2) how many distinct 2-cow teams win.",
-        "3×3 격자에 A..Z 글자가 채워져 있어요 (각 글자가 소 1마리). 8개의 '줄' 이 있어요: 3행, 3열, 2대각선.\n한 소가 자기 글자로 한 줄 전체를 채우면 단독 우승. 정확히 2마리 소의 글자가 합쳐서 한 줄을 채우면 그 2명이 팀 우승.\n(1) 단독 우승하는 서로 다른 소의 수, (2) 우승한 서로 다른 2명 팀의 수를 출력해요."),
+        "한 줄을 혼자 채운 소와 둘이서 채운 팀을 세어 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeTttCh1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "Output two numbers: distinct solo winners, then distinct 2-cow team winners.",
-                "두 수를 출력 — 단독 우승 소 수, 그리고 2 명 팀 우승 수.")}
+                "혼자 우승한 소의 수와 2 명 팀으로 우승한 수, 두 개를 출력해요.")}
             </div>
           </div>
 
@@ -42,16 +42,16 @@ export function makeTttCh1(E) {
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "3×3 grid filled with letters A..Z", "A..Z 글자로 채워진 3×3 격자")}</b>
-                  {t(E, " — each letter is a cow.", " 가 있어요 — 각 글자가 소 1마리.")}
+                  {t(E, " — each letter is a cow.", " 가 있어요. 글자 하나가 소 한 마리예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Eight ", "")}
+                  {t(E, "Eight ", "모두 8 개의 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "lines exist", "줄이 있어요")}</b>
                   {t(E, ": 3 rows, 3 columns, 2 diagonals.",
-                        ": 3행, 3열, 2개의 대각선.")}
+                        " — 3 행, 3 열, 그리고 대각선 2 개예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -59,18 +59,18 @@ export function makeTttCh1(E) {
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "solo win", "단독 우승")}</b>
-                  {t(E, ": one cow's letter fills an entire line. A ", ": 한 소의 글자가 한 줄을 모두 채움. ")}
+                  {t(E, ": one cow's letter fills an entire line. A ", " 은 소 한 마리의 글자가 한 줄을 다 채운 거예요. ")}
                   <b style={{ color: "#16a34a" }}>{t(E, "2-team win", "2명 팀 우승")}</b>
                   {t(E, ": exactly two distinct letters together fill a line.",
-                        ": 정확히 2개의 다른 글자가 합쳐 한 줄을 채움.")}
+                        " 은 서로 다른 두 글자가 함께 한 줄을 채운 거예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print two numbers: ", "두 수를 출력: ")}
+                  {t(E, "Print two numbers: ", "출력할 두 수는 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "(1) distinct solo winners, (2) distinct 2-cow team winners", "(1) 단독 우승한 소의 수, (2) 우승한 2명 팀의 수")}</b>
-                  {t(E, ".", ".")}
+                  {t(E, ".", " 예요.")}
                 </div>
               </div>
             </div>
@@ -82,17 +82,17 @@ export function makeTttCh1(E) {
       type: "reveal",
       narr: t(E,
         "Before any code, play with the grid. Edit cells, edit team rosters, and watch the 8 lines get judged. The whole problem is just: take the SET of letters per line.",
-        "코드 보기 전에 직접 격자를 만져봐. 칸과 팀 명단을 바꾸면 8 개 줄이 실시간 판정돼. 핵심 원리는 한 줄의 글자 집합 크기 — 그게 전부."),
+        "칸을 직접 바꿔 보면 8 개 줄의 결과가 바로 나와요."),
       content: <TeamLineChecker E={E} />,
     },
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "Consider grid AAA / BBB / CCC.\nEach row is filled by one letter.\nHow many individual winners are there?", "격자 AAA / BBB / CCC를 생각해봐요. 각 행이 한 문자로 채워져 있어요. 개인 우승자는 몇 명이에요?"),
+        "Consider grid AAA / BBB / CCC.\nEach row is filled by one letter.\nHow many individual winners are there?", "격자 AAA / BBB / CCC 는 행마다 글자가 하나예요."),
       question: t(E,
         "Grid: AAA / BBB / CCC. How many individual winners?",
-        "격자: AAA / BBB / CCC. 개인 우승자 수는?"),
+        "격자 AAA / BBB / CCC 에서 개인 우승자는 몇 명일까요?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -102,19 +102,19 @@ export function makeTttCh1(E) {
       correct: 2,
       explain: t(E,
         "A wins row 1, B wins row 2, C wins row 3. That's 3 individual winners!",
-        "A가 1행, B가 2행, C가 3행 우승. 개인 우승자 3명이에요!"),
+        "A 는 1 행, B 는 2 행, C 는 3 행을 채웠어요. 개인 우승자는 3 명이에요!"),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "Same grid AAA / BBB / CCC. How many individual winners?", "같은 격자 AAA / BBB / CCC. 개인 우승자는 몇 명?"),
+        "Same grid AAA / BBB / CCC. How many individual winners?", "같은 격자예요. 개인 우승자는 몇 명일까요?"),
       question: t(E,
         "Grid AAA / BBB / CCC. Number of individual winners?",
-        "격자 AAA / BBB / CCC. 개인 우승자 수는?"),
+        "이 격자에서 개인 우승자는 몇 명인가요?"),
       hint: t(E,
         "Scan each row, column, and diagonal — count solo wins.",
-        "각 행, 열, 대각선을 살펴보면서 단독 우승을 세어 봐."),
+        "각 행, 열, 대각선을 하나씩 보면서 단독 우승을 세어 봐요."),
       answer: 3,
     },
   ];
@@ -131,7 +131,7 @@ export function makeTttCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Walk the 8 lines (3 rows + 3 cols + 2 diagonals). Take the SET of letters in its 3 cells: size 1 → solo win, size 2 → 2-cow team. Collect distinct winners. Sections build it one piece at a time.",
-        "8 개 줄 (3 행 + 3 열 + 2 대각선) 순회. 3 칸 글자 집합 — 크기 1 → 단독, 크기 2 → 2 명 팀. 중복 없는 우승자 수집. 아래 섹션이 한 단락씩 쌓아요."),
+        "8 개 줄을 하나씩 보면서 우승을 가려낼게요."),
       sections: getTeamTttSections(E),
     },
   ];

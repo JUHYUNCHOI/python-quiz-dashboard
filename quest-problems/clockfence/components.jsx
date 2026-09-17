@@ -93,7 +93,7 @@ export function ClockFenceDeepAuditSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
         {t(E,
           "Step through each consecutive pair. Watch (next − cur) mod 4 decide right / left / straight / U-turn.",
-          "연속한 쌍을 한 단계씩 살펴봐. (다음 − 현재) mod 4 가 오른쪽 / 왼쪽 / 직진 / U턴 을 결정해.")}
+          "이어진 방향을 두 개씩 한 걸음씩 봐요.\n(다음 − 지금) mod 4 가 오른쪽·왼쪽·직진·U턴 중 무엇인지 알려 줘요.")}
       </div>
 
       {/* direction row with arrow icons */}
@@ -125,12 +125,12 @@ export function ClockFenceDeepAuditSim({ E }) {
         fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.7,
       }}>
         <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 4, fontFamily: "inherit" }}>
-          {t(E, "Transitions revealed", "공개된 전환")} ({Math.min(step, n)} / {n})
+          {t(E, "Transitions revealed", "지금까지 본 꺾임")} ({Math.min(step, n)} / {n})
         </div>
         {step === 0 && (
           <div style={{ color: C.dim, fontStyle: "italic" }}>
             {t(E, "Tap 'Next step' to reveal the first transition.",
-                  "'다음 단계' 를 눌러 첫 전환을 공개해.")}
+                  "'다음 단계' 를 누르면 첫 꺾임부터 보여 줘요.")}
           </div>
         )}
         {transitions.slice(0, step).map((tr, k) => (
@@ -162,8 +162,8 @@ export function ClockFenceDeepAuditSim({ E }) {
         </div>
         <div style={{ fontSize: 12, color: "#5b21b6" }}>
           {step < n
-            ? t(E, "more to go…", "아직 남았어…")
-            : t(E, "all pairs counted ✓", "모든 쌍 세기 완료 ✓")}
+            ? t(E, "more to go…", "아직 남았어요…")
+            : t(E, "all pairs counted ✓", "다 세었어요 ✓")}
         </div>
       </div>
 
@@ -176,13 +176,13 @@ export function ClockFenceDeepAuditSim({ E }) {
         }}>
           {step < n
             ? t(E, "▶ Next step", "▶ 다음 단계")
-            : t(E, "🔍 Reveal verdict", "🔍 판정 공개")}
+            : t(E, "🔍 Reveal verdict", "🔍 답 보기")}
         </button>
         <button onClick={reset} style={{
           padding: "6px 14px", borderRadius: 8, border: `1px solid ${C.border}`,
           background: "transparent", color: C.dim, fontSize: 12, fontWeight: 600, cursor: "pointer",
         }}>
-          {t(E, "↻ Reset", "↻ 초기화")}
+          {t(E, "↻ Reset", "↻ 처음으로")}
         </button>
       </div>
 
@@ -201,9 +201,9 @@ export function ClockFenceDeepAuditSim({ E }) {
           <div style={{ fontSize: 12 }}>
             {verdict === "CW"
               ? t(E, "More right turns than left → fence is traced CLOCKWISE.",
-                    "오른쪽 회전이 왼쪽보다 많아 → 시계 방향(CW) 으로 그려졌어.")
+                    "오른쪽으로 꺾은 횟수가 더 많아요.\n그래서 이 울타리는 시계 방향(CW) 으로 그린 거예요.")
               : t(E, "More (or equal) left turns than right → fence is traced COUNTER-CLOCKWISE.",
-                    "왼쪽 회전이 오른쪽보다 많아 (또는 같아) → 반시계 방향(CCW) 으로 그려졌어.")}
+                    "오른쪽으로 꺾은 횟수가 더 많지 않아요.\n그래서 이 울타리는 반시계 방향(CCW) 으로 그린 거예요.")}
           </div>
         </div>
       )}
@@ -275,19 +275,19 @@ export function getClockFenceSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 파이썬에서 옮긴 것이라\n자료형과 표현은 필요하면 손봐야 해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣으면 (<iostream>, <vector>, ...)\n코드가 무엇을 하려는지 더 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더한 값이나 곱한 값이 2×10^9 쯤을 넘을 수 있으면\nlong long 을 써요."),
       ],
     },
   ];

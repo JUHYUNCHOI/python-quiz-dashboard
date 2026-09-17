@@ -132,19 +132,19 @@ export function getLeadersSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 에서 옮긴 거예요. 타입이나 표현은 필요하면 바꿔요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "We adjust arr[i]-- once on read to convert from 1-indexed to 0-indexed.",
-            "읽을 때 arr[i]--로 1-기반을 0-기반으로 한 번에 변환."),
+            "읽을 때 arr[i]-- 로 1부터 세던 자리를 0부터 세도록 한 번에 바꿔요."),
         t(E, "Two reverse/forward scans find the first/last G and H positions in O(N).",
-            "역방향/정방향 스캔 두 번으로 G/H의 처음/마지막 위치를 O(N)에 찾음."),
+            "앞뒤로 한 번씩 훑으면 G 와 H 의 처음·마지막 위치를 O(N) 에 찾아요."),
       ],
     },
   ];
@@ -190,7 +190,7 @@ function highlightCode(lines, lang) {
 
 export function downloadLeadersPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Leaders — Full Study Guide", "Leaders — 종합 풀이 노트");
@@ -213,7 +213,7 @@ export function downloadLeadersPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

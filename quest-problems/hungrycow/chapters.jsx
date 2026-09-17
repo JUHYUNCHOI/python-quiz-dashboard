@@ -10,7 +10,7 @@ export function makeHungryCowCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie eats 1 haybale per day if she has any in stock.\nThere are N hay deliveries — each on a specific day, each adding some bales to her stockpile.\nGiven the deliveries and a target day T, count how many of days 1..T Bessie actually eats on.",
-        "Bessie는 재고가 있으면 하루에 건초 1단을 먹어요.\n특정 날짜에 특정 양이 도착하는 N번의 건초 배달이 있어요.\n배달 정보와 마감일 T가 주어지면, 1~T일 중 Bessie가 실제로 먹는 날의 수를 구해요."),
+        "T 일까지 Bessie 가 건초를 먹는 날이 며칠일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -27,7 +27,7 @@ export function makeHungryCowCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "Output the number of days from 1 to T on which Bessie actually eats.",
-                "1일 ~ T일 중 Bessie 가 실제로 먹는 날의 수를 출력.")}
+                "1 일부터 T 일까지 중에서 Bessie 가 실제로 먹는 날이 며칠인지 출력해요.")}
             </div>
           </div>
 
@@ -40,9 +40,9 @@ export function makeHungryCowCh1(E) {
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie ", "Bessie는 ")}
-                  <b style={{ color: "#d97706" }}>{t(E, "eats 1 haybale per day", "재고가 있으면 하루에 건초 1단을 먹어요")}</b>
+                  <b style={{ color: "#d97706" }}>{t(E, "eats 1 haybale per day", "쌓아 둔 건초가 있으면 하루에 한 단을 먹어요")}</b>
                   {t(E, " if she has any in stock — otherwise she eats nothing that day.",
-                        " — 재고가 없으면 그 날은 못 먹어요.")}
+                        ". 쌓아 둔 건초가 없으면 그날은 못 먹어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -54,7 +54,7 @@ export function makeHungryCowCh1(E) {
                   <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>d</code>
                   {t(E, " and an amount ", " 일에 ")}
                   <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>b</code>
-                  {t(E, " bales added to her stockpile.", " 단의 건초가 재고에 추가돼요.")}
+                  {t(E, " bales added to her stockpile.", " 단을 쌓아 둔 건초에 더해 줘요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -63,14 +63,14 @@ export function makeHungryCowCh1(E) {
                   {t(E, "We're given a target day ", "마감일 ")}
                   <b style={{ color: "#7c3aed" }}>T</b>
                   {t(E, " (which can be huge — up to 10¹⁴).",
-                        " 가 주어져요 (10¹⁴까지 매우 큼).")}
+                        " 가 주어져요. T 는 10¹⁴ 까지 아주 커질 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of days from day 1 to day T on which Bessie actually eats", "1일~T일 중 Bessie가 실제로 먹는 날의 수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "number of days from day 1 to day T on which Bessie actually eats", "1 일부터 T 일까지 중에서 Bessie 가 실제로 먹는 날의 수")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
@@ -225,7 +225,7 @@ export function makeHungryCowCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Don't simulate every day (T can be huge). Process delivery events in order — between deliveries, eat at most (stockpile) days; stop at T. Sum eating days. Sections build it one piece at a time.",
-        "매일 시뮬 안 함 (T 가 매우 큼). 배달 이벤트를 순서대로 처리 — 배달 사이에 (재고) 일까지 먹고 T 에서 멈춤. 먹는 날을 합산. 아래 섹션이 한 단락씩 쌓아요."),
+        "하루씩 세는 대신 배달과 배달 사이를 한 번에 세어 볼게요."),
       sections: getHungryCowSections(E),
     },
     {

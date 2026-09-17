@@ -11,7 +11,7 @@ export function makeWalkHomeCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie walks from (1, 1) (top-left) to (N, N) (bottom-right) on an N×N grid; some cells are HAYSTACKS ('H') she can't enter. She moves only RIGHT or DOWN.\nShe's also lazy — she changes direction (R↔D) at most K times during the walk.\nFor each test case, print the number of valid paths.",
-        "Bessie가 N×N 격자에서 (1, 1) 좌상단부터 (N, N) 우하단까지 걸어요. 일부 칸은 H (건초더미) 라 못 들어가요. 이동은 오른쪽 또는 아래쪽만.\nBessie가 게을러서 — 걷는 도중 방향 (R 또는 D) 을 최대 K 번까지만 바꿔요.\n각 테스트 케이스마다 유효한 경로의 수를 출력해요."),
+        "방향을 K 번까지만 바꿔 갈 수 있는 길이 몇 개일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeWalkHomeCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "Output the number of valid (1,1) → (N,N) paths with at most K direction changes.",
-                "방향 전환을 최대 K 번까지만 쓰는 (1,1) → (N,N) 유효 경로 수를 출력.")}
+                "방향을 최대 K 번까지만 바꿔서 (1,1) 에서 (N,N) 까지 가는 길이 몇 개인지 출력해요.")}
             </div>
           </div>
 
@@ -79,10 +79,10 @@ export function makeWalkHomeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "2x2 empty grid, K=1.\nPaths from (0,0) to (1,1): 'DR' (down then right) and 'RD' (right then down).\nBoth have exactly 1 direction change.", "2x2 빈 격자, K=1. (0,0)에서 (1,1)까지: 'DR'(아래 후 오른쪽)과 'RD'(오른쪽 후 아래). 둘 다 방향 전환 1번."),
+        "2x2 empty grid, K=1.\nPaths from (0,0) to (1,1): 'DR' (down then right) and 'RD' (right then down).\nBoth have exactly 1 direction change.", "2x2 빈 격자에서 K=1 일 때 길이 몇 개일까요?"),
       question: t(E,
         "2x2 empty grid, K=1. How many valid paths?",
-        "2x2 빈 격자, K=1. 유효한 경로 수는?"),
+        "2x2 빈 격자에서 K=1 이에요. 갈 수 있는 길은 몇 개일까요?"),
       options: [
         t(E, "2 paths (DR and RD)", "2개 (DR과 RD)"),
         t(E, "1 path", "1개"),
@@ -91,19 +91,19 @@ export function makeWalkHomeCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! DR has 1 change (D->R), RD has 1 change (R->D). Both are <= K=1, so 2 paths.",
-        "맞아! DR은 1번 전환(D->R), RD도 1번 전환(R->D). 둘 다 K=1 이하이므로 2개 경로."),
+        "맞아요! DR 은 방향을 한 번 바꾸고(D→R), RD 도 한 번 바꿔요(R→D). 둘 다 K=1 을 넘지 않으니 길은 2개예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "2x2 empty grid, K=1. Count the paths!", "2x2 빈 격자, K=1. 경로 수를 세봐요!"),
+        "2x2 empty grid, K=1. Count the paths!", "2x2 빈 격자에서 K=1 일 때 길을 세어 봐요."),
       question: t(E,
         "2x2 grid, no obstacles, K=1. Number of paths?",
-        "2x2 격자, 장애물 없음, K=1. 경로 수?"),
+        "2x2 격자에 장애물이 없고 K=1 이에요. 길은 몇 개일까요?"),
       hint: t(E,
         "List the possible paths and count those with at most K direction changes.",
-        "가능한 경로를 다 적어 보고 방향 전환이 K 이하인 것만 세어 봐."),
+        "갈 수 있는 길을 다 적어 보고, 방향을 K 번까지만 바꾼 것을 세어 봐요."),
       answer: 2,
     },
   ];
@@ -120,7 +120,7 @@ export function makeWalkHomeCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "DP: dp[r][c][last_dir][changes] = paths to (r, c) arriving via last_dir with that many changes. Move right/down; +1 changes when direction flips; prune when changes > K. Sections build it one piece at a time.",
-        "DP: dp[r][c][last_dir][changes] = (r, c) 까지 last_dir 로 도착한 경로 수. 오른쪽/아래 이동, 방향 바뀌면 +1, > K 면 가지치기. 아래 섹션이 한 단락씩 쌓아요."),
+        "(r, c) 까지 오는 길의 수를 dp 로 쌓아 올려요."),
       sections: getWalkHomeSections(E),
     },
   ];

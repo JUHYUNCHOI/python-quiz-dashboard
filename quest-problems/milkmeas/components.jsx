@@ -16,7 +16,7 @@ const _COW_COLORS = ["#8b5cf6", "#0891b2", "#f97316"];
 
 const _MM_PRESETS = [
   {
-    label: { en: "Tiny (3 events)", ko: "초간단 (3 이벤트)" },
+    label: { en: "Tiny (3 events)", ko: "아주 짧게 (변화 3 번)" },
     events: [
       { day: 1, cow: 0, delta: +5 },  // Bessie 7->12
       { day: 2, cow: 1, delta: +6 },  // Elsie 7->13 (leader change)
@@ -24,7 +24,7 @@ const _MM_PRESETS = [
     ],
   },
   {
-    label: { en: "Tied leaders", ko: "공동 리더" },
+    label: { en: "Tied leaders", ko: "1등이 여럿" },
     events: [
       { day: 1, cow: 0, delta: +3 },  // Bessie 10
       { day: 2, cow: 1, delta: +3 },  // Elsie 10 -> tie {B,E}
@@ -131,7 +131,7 @@ export function MilkMeasSim({ E }) {
           })}
         </div>
         <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 6 }}>
-          {t(E, "Leader set", "리더 집합")}: <b style={{ color: A }}>
+          {t(E, "Leader set", "1등 소들")}: <b style={{ color: A }}>
             {"{" + cur.leaders.map(i => _COW_NAMES[i]).join(", ") + "}"}
           </b>
         </div>
@@ -143,7 +143,7 @@ export function MilkMeasSim({ E }) {
         padding: 8, marginBottom: 10, fontSize: 12,
       }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, padding: "2px 6px 6px", letterSpacing: 0.4 }}>
-          {t(E, "EVENT LOG (sorted by day)", "이벤트 로그 (날짜순 정렬)")}
+          {t(E, "EVENT LOG (sorted by day)", "변화 기록 (날짜순)")}
         </div>
         {events.map((ev, i) => {
           const applied = i < step;
@@ -173,7 +173,7 @@ export function MilkMeasSim({ E }) {
                   marginLeft: "auto", fontSize: 10, fontWeight: 800, color: "#92400e",
                   background: "#fde68a", padding: "2px 6px", borderRadius: 4,
                 }}>
-                  {t(E, "LEADER CHANGED", "리더 변경")}
+                  {t(E, "LEADER CHANGED", "1등이 바뀜")}
                 </span>
               )}
             </div>
@@ -203,7 +203,7 @@ export function MilkMeasSim({ E }) {
           color: step >= events.length ? C.dim : "#fff",
           fontSize: 12, fontWeight: 800, cursor: step >= events.length ? "default" : "pointer",
         }}>
-          {t(E, "Next event", "다음 이벤트")} ▶
+          {t(E, "Next event", "다음 변화")} ▶
         </button>
 
         <div style={{
@@ -212,7 +212,7 @@ export function MilkMeasSim({ E }) {
           padding: "6px 14px", textAlign: "center",
         }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.4 }}>
-            {t(E, "DISPLAY CHANGES", "표시 변경 횟수")}
+            {t(E, "DISPLAY CHANGES", "간판이 바뀐 횟수")}
           </div>
           <div style={{ fontSize: 20, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
             {changeCount}
@@ -223,7 +223,7 @@ export function MilkMeasSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 10 }}>
         {t(E,
           "Step through events. The crown 👑 marks current leaders. When the leader set differs from the previous one, the counter ticks up.",
-          "이벤트를 한 단계씩. 👑 는 지금 리더. 리더 집합이 이전과 다르면 카운터가 1 증가.")}
+          "변화를 한 걸음씩 따라가 보세요. 👑 이 붙은 소가 지금 1등이에요.\n1등 소들이 바로 앞과 달라지면 횟수가 1 올라가요.")}
       </div>
     </div>
   );
@@ -369,19 +369,19 @@ export function getMilkMeasSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 파이썬에서 옮긴 것이라\n자료형과 표현은 필요하면 손봐야 해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "tuple<int, string, int> sorts by day first because of the natural lex order.",
-            "tuple<int, string, int>는 사전식 순서 덕분에 day 기준으로 자연 정렬."),
+            "tuple<int, string, int> 는 앞자리부터 차례로 견주기 때문에\n따로 시키지 않아도 day 순서로 줄을 서요."),
         t(E, "set<string> top != newTop compares membership directly, no manual loop needed.",
-            "set<string> top != newTop으로 멤버십을 직접 비교, 수동 루프 불필요."),
+            "set<string> 끼리는 top != newTop 으로 바로 견줄 수 있어요.\n하나하나 도는 반복문을 쓸 필요가 없어요."),
       ],
     },
   ];

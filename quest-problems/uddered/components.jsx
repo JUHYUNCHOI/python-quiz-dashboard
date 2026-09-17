@@ -87,7 +87,7 @@ export function UdderedRecitalSim({ E }) {
       marginBottom: 10,
     }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 10 }}>
-        🐄 {t(E, "Try it: Recital Simulator", "직접 해보기: 외우기 시뮬레이터")}
+        🐄 {t(E, "Try it: Recital Simulator", "직접 해 보기 — 외우기 시뮬레이터")}
       </div>
 
       {/* Controls */}
@@ -148,7 +148,7 @@ export function UdderedRecitalSim({ E }) {
       {/* Order strip with position pointer */}
       <div style={{ marginBottom: 10 }}>
         <div style={{ fontSize: 10, color: C.dim, marginBottom: 4 }}>
-          {t(E, "Bessie's alphabet (custom order, position →)", "Bessie의 알파벳 (커스텀 순서, 위치 →)")}
+          {t(E, "Bessie's alphabet (custom order, position →)", "Bessie 만의 알파벳 순서 (왼쪽부터 0 번 자리)")}
         </div>
         <div style={{
           display: "flex", flexWrap: "wrap", gap: 2,
@@ -178,7 +178,7 @@ export function UdderedRecitalSim({ E }) {
       {/* Heard string with current/prev highlight */}
       <div style={{ marginBottom: 10 }}>
         <div style={{ fontSize: 10, color: C.dim, marginBottom: 4 }}>
-          {t(E, "Heard string (reading position)", "들은 문자열 (읽는 위치)")}
+          {t(E, "Heard string (reading position)", "들은 글자 (지금 읽는 자리)")}
         </div>
         <div style={{ display: "flex", gap: 4, fontFamily: "JetBrains Mono, monospace" }}>
           {cleanHeard.split("").map((ch, i) => {
@@ -220,7 +220,7 @@ export function UdderedRecitalSim({ E }) {
       }}>
         {step === 0 ? (
           <span>
-            {t(E, "Reading first letter — start with cycle 1.", "첫 글자 읽기 — cycle 1 시작.")}
+            {t(E, "Reading first letter — start with cycle 1.", "첫 글자를 읽어요. 외우기 1 번째로 시작해요.")}
           </span>
         ) : (() => {
           const a = cleanHeard[step - 1];
@@ -234,8 +234,8 @@ export function UdderedRecitalSim({ E }) {
               </b>
               {" — "}
               {back
-                ? t(E, `backward / equal → recite! cycles++`, `뒤로 / 같음 → 외워야! cycles++`)
-                : t(E, `forward → keep reading`, `앞으로 → 계속 읽기`)}
+                ? t(E, `backward / equal → recite! cycles++`, `앞이거나 같아요 → 다시 외워요 (cycles++)`)
+                : t(E, `forward → keep reading`, `뒤쪽이에요 → 그냥 계속 읽어요`)}
             </span>
           );
         })()}
@@ -259,7 +259,7 @@ export function UdderedRecitalSim({ E }) {
           background: "#fef2f2", color: "#7f1d1d",
           border: "1px solid #fca5a5", borderRadius: 6,
           padding: "4px 10px", fontSize: 11, fontWeight: 600, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "초기화")}</button>
+        }}>↺ {t(E, "Reset", "처음으로")}</button>
         <button
           onClick={stepOnce}
           disabled={step >= maxStep - 1 || playing}
@@ -282,7 +282,7 @@ export function UdderedRecitalSim({ E }) {
       <div style={{ fontSize: 10, color: C.dim, marginTop: 8, textAlign: "center" }}>
         {t(E,
           `Final answer for "${cleanHeard}" with this order: ${stepInfo.totalCycles} cycle(s)`,
-          `이 순서에서 "${cleanHeard}" 의 최종 답: ${stepInfo.totalCycles} 사이클`)}
+          `이 순서로 "${cleanHeard}" 를 읽으면 답은 ${stepInfo.totalCycles} 번이에요`)}
       </div>
     </div>
   );
@@ -337,19 +337,19 @@ export function getUdderedSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 쪽은 Python 코드를 옮긴 것이라 자료형은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "헤더는 필요한 것만 적어요 (<iostream>, <vector> …). 그래야 읽기 쉬워요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더하거나 곱한 값이 2×10^9 를 넘을 것 같으면 long long 을 써요."),
       ],
     },
   ];
@@ -395,7 +395,7 @@ function highlightCode(lines, lang) {
 
 export function downloadUdderedPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혀 있어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Uddered — Full Study Guide", "Uddered — 종합 풀이 노트");
@@ -418,7 +418,7 @@ export function downloadUdderedPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

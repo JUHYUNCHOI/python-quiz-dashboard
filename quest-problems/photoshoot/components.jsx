@@ -58,7 +58,7 @@ export function PhotoshootUnfoldSim({ E }) {
       background: "#fff", border: `1.5px solid ${A}`, borderRadius: 10,
     }}>
       <div style={{ fontSize: 12, fontWeight: 800, color: A, marginBottom: 8, letterSpacing: 0.3 }}>
-        🔬 {t(E, "Try it: guess a[0], watch the rest unfold", "직접 해봐: a[0] 추측, 나머지 자동 전개")}
+        🔬 {t(E, "Try it: guess a[0], watch the rest unfold", "직접 해봐요 — a[0] 을 정하면 나머지가 따라와요")}
       </div>
 
       <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
@@ -125,20 +125,20 @@ export function PhotoshootUnfoldSim({ E }) {
         color: ok ? "#15803d" : "#7f1d1d",
       }}>
         {ok ? (
-          <span><b>✅ {t(E, "Valid permutation!", "유효한 순열!")}</b> {t(E, "All values in 1..N, no duplicates.", "모든 값이 1..N 범위, 중복 없음.")} a = [{a.join(", ")}]</span>
+          <span><b>✅ {t(E, "Valid permutation!", "유효한 순열!")}</b> {t(E, "All values in 1..N, no duplicates.", "모든 값이 1..N 안에 있고 겹치는 값도 없어요.")} a = [{a.join(", ")}]</span>
         ) : (
           <span>
             <b>❌ {t(E, "Fails at", "실패 위치")} a[{firstFailIdx}] = {a[firstFailIdx]}.</b>{" "}
             {failReason === "range"
-              ? t(E, `Out of range 1..${N}.`, `1..${N} 범위 밖.`)
-              : t(E, "Duplicate (already used).", "이미 사용된 값(중복).")}
+              ? t(E, `Out of range 1..${N}.`, `1..${N} 범위를 벗어났어요.`)
+              : t(E, "Duplicate (already used).", "이미 쓴 값이에요.")}
           </span>
         )}
       </div>
       <div style={{ marginTop: 6, fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
         {t(E,
           "Rule: a[i+1] = b[i] − a[i]. Pick a[0], the rest is forced. Slide until you find a valid lineup.",
-          "규칙: a[i+1] = b[i] − a[i]. a[0] 만 정하면 나머지는 자동. 유효한 줄이 나올 때까지 슬라이더를 옮겨 봐.")}
+          "규칙은 a[i+1] = b[i] − a[i] 예요. a[0] 만 정하면 나머지는 저절로 정해져요.\n맞는 줄이 나올 때까지 슬라이더를 옮겨 봐요.")}
       </div>
     </div>
   );
@@ -224,19 +224,19 @@ export function getPhotoshootSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 역할이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 에서 옮겨 온 것이라, 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "`string s; cin >> s;` reads the breed string; index it like an array with s[i].",
-            "`string s; cin >> s;` 로 품종 문자열을 읽고 s[i] 로 배열처럼 인덱싱."),
+            "`string s` 와 `cin >> s` 로 품종 글자를 읽고, s[i] 로 배열처럼 꺼내 써요."),
         t(E, "The loop steps by 2 (i -= 2) so each iteration handles one (odd-slot, even-slot) pair.",
-            "루프가 2씩 감소(i -= 2)해서 한 번에 (홀수칸, 짝수칸) 한 쌍씩 처리."),
+            "반복이 2씩 줄어들어서(i -= 2) 한 번에 홀수 칸과 짝수 칸 한 쌍씩 다뤄요."),
       ],
     },
   ];
@@ -282,7 +282,7 @@ function highlightCode(lines, lang) {
 
 export function downloadPhotoshootPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Photoshoot — Full Study Guide", "Photoshoot — 종합 풀이 노트");
@@ -305,7 +305,7 @@ export function downloadPhotoshootPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장'을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

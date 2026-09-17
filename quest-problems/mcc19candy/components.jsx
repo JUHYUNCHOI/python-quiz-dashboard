@@ -233,7 +233,7 @@ export function getMcc19CandySections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Work backwards from the end: Bob must finish at position 1, so undo the rounds from last to first.",
-            "끝에서부터 거꾸로 봐요: Bob 은 자리 1 로 끝나야 하니, 마지막 라운드부터 하나씩 되돌려요."),
+            "끝에서부터 거꾸로 봐요. Bob 은 자리 1 로 끝나야 하니, 마지막 라운드부터 하나씩 되돌려요."),
         /* 2026-09-08: 설명은 "되돌리기" 인데 코드는 "정방향 비트합" 이라 서로 다른 방법이었다.
            학생: "설명은 거꾸로라는데 코드는 앞에서부터 돈다. 왜 안 맞는지 모르겠다."
            코드를 되돌리기로 바꾸고 설명도 같은 말로 맞췄다. 비트는 쓰지 않는다. */
@@ -244,7 +244,7 @@ export function getMcc19CandySections(E) {
       ],
       pyOnly: [
         t(E, "input().split() gives the shouts as a list of words; range(R - 1, -1, -1) walks the rounds backwards.",
-            "input().split() 은 외침을 단어 리스트로 줘요; range(R - 1, -1, -1) 은 라운드를 거꾸로 훑어요.",),
+            "input().split() 은 외침을 단어 리스트로 줘요. range(R - 1, -1, -1) 은 라운드를 거꾸로 훑어요.",),
       ],
       cppOnly: [
         t(E, "pos is a long long — the position doubles every round, so it grows fast.",
@@ -296,7 +296,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc19CandyPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc19Candy — Full Study Guide", "Mcc19Candy — 종합 풀이 노트");
@@ -319,7 +319,7 @@ export function downloadMcc19CandyPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

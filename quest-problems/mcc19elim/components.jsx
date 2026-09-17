@@ -77,17 +77,17 @@ export function getMcc19ElimSections(E) {
         t(E, "Slide one window across the string, keeping 'zero' and 'one' = the counts inside it. When a 0 enters and 'zero' passes K, shrink from the left until it fits again.",
             "창 하나를 문자열 위로 밀며 'zero' 와 'one' = 창 안의 개수를 유지해요. 0 이 들어와 'zero' 가 K 를 넘으면, 다시 맞을 때까지 왼쪽에서 줄여요."),
         t(E, "The key line is ans = max(ans, one): the answer is the number of 1s in the window, NOT its length. The ≤ K zeros inside get deleted, so they must not be counted.",
-            "핵심 줄은 ans = max(ans, one): 답은 창 안 1 의 개수예요, 창 길이가 아니에요. 안의 K 개 이하 0 은 지워지므로 세면 안 돼요."),
+            "핵심 줄은 ans = max(ans, one) 이에요.\n답은 창 길이가 아니라 창 안에 있는 1 의 개수예요.\n안에 있는 0 은 K 개까지 지우니까 세면 안 돼요."),
       ],
       pyOnly: [
         t(E, "s[right] and s[left] index the string directly — no list conversion needed.",
-            "s[right], s[left] 로 문자열을 바로 인덱싱해요 — 리스트 변환 필요 없어요."),
+            "s[right], s[left] 로 글자를 바로 꺼내요 — 리스트로 바꿀 필요 없어요."),
       ],
       cppOnly: [
         t(E, "cin >> s reads the binary string in one token; s[i] compares to the char '0'.",
-            "cin >> s 로 이진 문자열을 한 토큰으로 읽고, s[i] 는 문자 '0' 과 비교해요."),
+            "cin >> s 로 이진 문자열을 한 덩어리로 읽고, s[i] 는 글자 '0' 과 견줘요."),
         t(E, "int is plenty here — N ≤ 100000, so counts and the answer never overflow.",
-            "여기선 int 로 충분 — N ≤ 100000 이라 개수·답 모두 오버플로 없어요."),
+            "여기선 int 로 충분해요. N ≤ 100000 이라 개수도 답도 넘치지 않아요."),
       ],
     },
   ];
@@ -133,7 +133,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc19ElimPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc19Elim — Full Study Guide", "Mcc19Elim — 종합 풀이 노트");
@@ -156,7 +156,7 @@ export function downloadMcc19ElimPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

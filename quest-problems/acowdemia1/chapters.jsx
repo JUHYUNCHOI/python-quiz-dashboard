@@ -64,7 +64,7 @@ function HIndexSim({ E }) {
       <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
         {t(E,
           "Drag bars to change citations. Slide L to add bonus citations. The dashed line is the current h-index — bars at or above it count.",
-          "막대 +/-로 인용수를 바꾸고, L 슬라이더로 보너스 인용을 더해봐요. 점선이 현재 h-index — 점선 이상의 막대만 카운트돼요.")}
+          "막대 +/− 로 인용수를 바꾸고, L 슬라이더로 인용을 더해 봐요. 점선이 지금의 h-index 이고, 점선 위에 있는 막대만 세어요.")}
       </div>
 
       {/* Bars */}
@@ -117,7 +117,7 @@ function HIndexSim({ E }) {
           −{t(E, " paper", " 논문")}
         </button>
         <button onClick={reset} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 6, padding: "3px 8px", fontSize: 11, fontWeight: 700, color: C.dim, cursor: "pointer" }}>
-          ⟲ {t(E, "Reset", "초기화")}
+          ⟲ {t(E, "Reset", "처음으로")}
         </button>
       </div>
 
@@ -168,7 +168,7 @@ export function makeAcow1Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N papers with citation counts c[i]. Her h-index is the largest h such that at least h of her papers have ≥ h citations.\nShe can ADD a total of L extra citations distributed across her papers (each extra citation goes to one paper). What's the MAXIMUM h-index she can achieve?",
-        "Bessie에게 인용수 c[i] 인 N개의 논문이 있어요. h-index 는 어떤 수 h 에 대해, 인용수가 h 이상인 논문이 h편 이상 있을 때의 가장 큰 h 예요.\n추가 인용을 총 L개 까지 자유롭게 더할 수 있어요 (한 인용은 한 논문에). 만들 수 있는 h-index 의 최댓값을 출력해요."),
+        "인용을 L 개 더 줄 수 있다면 h-index 를 얼마나 올릴 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -238,9 +238,9 @@ export function makeAcow1Ch1(E) {
               📥 {t(E, "Input / Output", "입력 / 출력")}
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 8 }}>
-              <div>{t(E, "Line 1: N and L (1 ≤ N ≤ 10^5, 0 ≤ L ≤ 10^5)", "1행: N 과 L (1 ≤ N ≤ 10^5, 0 ≤ L ≤ 10^5)")}</div>
-              <div>{t(E, "Line 2: N citation counts c[1..N] (0 ≤ c[i] ≤ 10^5)", "2행: N개의 인용수 c[1..N] (0 ≤ c[i] ≤ 10^5)")}</div>
-              <div>{t(E, "Output: the maximum achievable h-index", "출력: 달성 가능한 h-index 최댓값")}</div>
+              <div>{t(E, "Line 1: N and L (1 ≤ N ≤ 10^5, 0 ≤ L ≤ 10^5)", "첫 줄 — N 과 L (1 ≤ N ≤ 10^5, 0 ≤ L ≤ 10^5)")}</div>
+              <div>{t(E, "Line 2: N citation counts c[1..N] (0 ≤ c[i] ≤ 10^5)", "둘째 줄 — N 개의 인용수 c[1..N] (0 ≤ c[i] ≤ 10^5)")}</div>
+              <div>{t(E, "Output: the maximum achievable h-index", "출력 — 만들 수 있는 h-index 의 최댓값")}</div>
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <div style={{ flex: "1 1 120px" }}>
@@ -264,7 +264,7 @@ export function makeAcow1Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Play with the bars and the L slider to feel how the h-index moves. Notice: the h-index is bounded by the count of papers above the dashed line. Every bonus citation poured into a low paper might not raise h — only when the SHORTEST top-h paper crosses h does h jump up.",
-        "막대와 L 슬라이더를 직접 움직여 h-index 가 어떻게 변하는지 느껴봐요. 점선 위 막대 개수가 곧 h-index. 낮은 논문에 인용을 부어도 — 상위 h 개 중 가장 짧은 막대가 h 를 넘는 순간에만 h 가 한 칸 올라가요."),
+        "상위 h 편 중 가장 짧은 막대가 h 를 넘어야 h 가 올라가요."),
       content: (
         <div style={{ padding: 16 }}>
           <HIndexSim E={E} />
@@ -286,7 +286,7 @@ export function makeAcow1Ch1(E) {
       correct: 1,
       explain: t(E,
         "3 papers have >= 3 citations (3, 3, 100), so h-index = 3. Only 1 paper has >= 4, so h=4 fails.",
-        "3개의 논문이 3 이상의 인용을 가져 (3, 3, 100), h-index = 3. 4 이상은 1개뿐이라 h=4는 실패."),
+        "인용이 3 이상인 논문이 (3, 3, 100) 로 3 개라서 h-index 는 3 이에요. 4 이상은 1 개뿐이라 h=4 는 안 돼요."),
     },
     // 1-3: Input
     {
@@ -298,7 +298,7 @@ export function makeAcow1Ch1(E) {
         "논문 [1, 3, 3, 100], L=0. H-index는?"),
       hint: t(E,
         "Try each h from largest down: how many papers meet ≥ h?",
-        "큰 h 부터 시도해봐요: 인용수가 h 이상인 논문이 몇 개?"),
+        "큰 h 부터 해 봐요. 인용수가 h 이상인 논문이 몇 개인가요?"),
       answer: 3,
     },
   ];
@@ -315,7 +315,7 @@ export function makeAcow1Ch2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Sort papers ascending. For a candidate h-index, the LAST h papers (top h cited) must each have ≥ h citations. Sum the deficits (max(0, h − c[i])) and check if ≤ L extra citations are needed. Binary search h. Sections build it one piece at a time.",
-        "논문 오름차순 정렬. 후보 h-index 에 대해, 인용수 상위 h 개 논문이 각자 ≥ h 인용 필요. 부족분 (max(0, h − c[i])) 의 합 ≤ L 인지 확인. h 를 이분 탐색. 아래 섹션이 한 단락씩 쌓아요."),
+        "논문을 정렬해 두고 h 를 이분 탐색으로 찾아봐요."),
       sections: getAcowdemia1Sections(E),
     },
   ];

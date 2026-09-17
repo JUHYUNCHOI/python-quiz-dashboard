@@ -53,7 +53,7 @@ export function makeSocDist2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Cows stand at known positions on a number line; each is currently sick or healthy. Disease spreads from a sick cow to any cow within distance R (some unknown constant). FJ wants to know the MINIMUM number of cows that could have started infected to explain the current state.\nFind the largest valid R (so spread is consistent with healthy cows) and print the corresponding minimum initial-infection count.",
-        "소들이 수직선의 정해진 위치에 있고, 지금 아프거나 건강한 상태예요. 병은 아픈 소한테서 거리 R 안에 있는 모든 소에게 옮았어요 (R 은 모르는 값). FJ 는 지금 상태가 나오게 하려면 처음에 몇 마리가 아팠어야 하는지 알고 싶어요.\n지금 상태와 안 맞지 않는 가장 큰 R 을 찾고, 그 R 일 때 처음 아팠던 소의 최소 수를 출력해요."),
+        "지금 상태가 나오려면 처음에 아팠던 소가 몇 마리였을지 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -70,7 +70,7 @@ export function makeSocDist2Ch1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum number of initially infected cows under the largest valid spread radius R.",
-                "데이터와 일치하는 가장 큰 R 에서 최초 감염 소의 최소 수를 출력.")}
+                "지금 상태와 어긋나지 않는 가장 큰 R 을 찾고, 그 R 일 때 처음 아팠던 소가 최소 몇 마리인지 출력해요.")}
             </div>
           </div>
 
@@ -94,7 +94,7 @@ export function makeSocDist2Ch1(E) {
                   {t(E, "The disease spreads from a sick cow to any cow ", "병은 감염된 소에서 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "within distance R (unknown)", "거리 R 이내 (R 은 미지수)")}</b>
                   {t(E, " — find the LARGEST R consistent with the data (no healthy cow within R of any sick cow).",
-                        " 의 모든 소에게 전파됐어요 — 데이터와 일치하는 가장 큰 R 을 찾아요 (감염 소의 R 이내에 건강 소 없음).")}
+                        " 의 모든 소에게 옮았어요. 건강한 소가 아픈 소의 R 안에 하나도 없어야 하니, 그런 R 중 가장 큰 값을 찾아요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -102,7 +102,7 @@ export function makeSocDist2Ch1(E) {
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of cows that could have started infected", "최초 감염 소의 최소 수")}</b>
-                  {t(E, " under that R.", "를 출력해요 (그 R 기준).")}
+                  {t(E, " under that R.", "를 출력해요. 그 R 일 때를 기준으로요.")}
                 </div>
               </div>
             </div>
@@ -111,7 +111,7 @@ export function makeSocDist2Ch1(E) {
           {/* 🦠 Deep-audit sim — pick R, see infection rings + clusters */}
           <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "10px 8px", marginTop: 6 }}>
             <div style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
-              🦠 {t(E, "See it: spread radius R vs clusters", "직접 봐: 전파 반경 R 과 클러스터")}
+              🦠 {t(E, "See it: spread radius R vs clusters", "직접 봐요 — 전파 반경 R 과 클러스터(이어진 감염 무리)")}
             </div>
             <SocDist2Sim E={E} />
           </div>
@@ -121,31 +121,31 @@ export function makeSocDist2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If all cows are sick and there are no healthy cows, what's the minimum number of initially infected cows?", "모든 소가 감염되고 건강한 소가 없으면, 최초 감염 소의 최소 수는?"),
+        "If all cows are sick and there are no healthy cows, what's the minimum number of initially infected cows?", "건강한 소가 하나도 없으면 처음 아팠던 소는 최소 몇 마리일까요?"),
       question: t(E,
         "All cows sick, no healthy cows. Min initially infected?",
-        "모든 소 감염, 건강한 소 없음. 최초 감염 최소 수?"),
+        "소가 전부 아프고 건강한 소는 없어요. 처음 아팠던 소는 최소 몇 마리일까요?"),
       options: [
-        t(E, "1 (one cow could infect all)", "1 (한 마리가 전부 감염 가능)"),
-        t(E, "N (each cow was independently infected)", "N (각 소가 독립적으로 감염)"),
+        t(E, "1 (one cow could infect all)", "1 (한 마리가 전부 옮길 수 있어요)"),
+        t(E, "N (each cow was independently infected)", "N (소마다 따로따로 아팠어요)"),
         t(E, "N/2", "N/2"),
       ],
       correct: 0,
       explain: t(E,
         "With no healthy cows, R can be arbitrarily large. One initially infected cow with huge R could infect everyone.",
-        "건강한 소가 없으면 R이 무한대 가능. 큰 R을 가진 한 마리가 모두 감염 가능."),
+        "R 을 막는 건 건강한 소뿐이에요. 건강한 소가 없으면 R 을 아주 크게 잡을 수 있고, 그러면 한 마리가 모두에게 옮겨요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "All cows are sick with no healthy cows.\nWhat is the minimum number of initially infected cows?", "모든 소가 감염, 건강한 소 없음. 최초 감염 소의 최소 수는?"),
+        "All cows are sick with no healthy cows.\nWhat is the minimum number of initially infected cows?", "건강한 소가 없을 때 처음 아팠던 소는 최소 몇 마리일까요?"),
       question: t(E,
         "5 cows, all sick, 0 healthy. Min initially infected?",
-        "소 5마리, 전부 감염, 건강 0마리. 최초 감염 최소 수?"),
+        "소 5마리가 전부 아프고 건강한 소는 0마리예요. 처음 아팠던 소는 최소 몇 마리일까요?"),
       hint: t(E,
         "Without healthy cows to bound R, how few starters can spread to all?",
-        "R 을 제한할 건강한 소가 없을 때 최초 감염은 얼마나 적을 수 있을까?"),
+        "R 을 막을 건강한 소가 없으면 처음 아팠던 소는 얼마나 적어질 수 있을까요?"),
       answer: 1,
     },
   ];
@@ -161,8 +161,8 @@ export function makeSocDist2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sort cows by position. Max valid R = (smallest distance from a healthy cow to a sick cow) − 1. Then count groups of sick cows where adjacent sick cows are within 2R. Sections build it one piece at a time.",
-        "소 위치순 정렬. 최대 R = (건강한 소 → 가장 가까운 감염 소 거리) − 1. 그 R 로 인접 감염 소가 2R 이내인 그룹 수 세기. 아래 섹션이 한 단락씩 쌓아요."),
+        "Take the largest R that never reaches a healthy cow, then count the clusters.",
+        "건강한 소에 닿지 않는 가장 큰 R 을 잡고 클러스터 수를 세요."),
       sections: getSocDist2Sections(E),
     },
   ];

@@ -11,7 +11,7 @@ export function makeCrossRd1Ch1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has 10 cows, each labeled 1..10. Over N observations he records (cow_id, side) where side ∈ {0, 1}. Each observation says which side of the road that cow was on at that moment.\nA 'crossing' happens between two consecutive observations of the SAME cow when her side changes. Count the total number of crossings across all cows.",
-        "FJ 에게 1..10 번호의 10마리 소가 있어요. N개의 관찰을 하는 동안 (소 번호, 쪽) 을 기록해요 — 쪽은 0 또는 1. 각 관찰은 그 시점에 그 소가 도로의 어느 쪽에 있었는지 알려줘요.\n같은 소를 연속으로 관찰했을 때 쪽이 바뀌면 '횡단' 1번. 모든 소를 합쳐 횡단 총 횟수를 출력해요."),
+        "소들이 도로를 건넌 횟수를 모두 합해서 세어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -52,7 +52,7 @@ export function makeCrossRd1Ch1(E) {
                   {t(E, "He logs ", "시간 순서대로 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "N observations in time order", "N개의 관찰")}</b>
                   {t(E, " — each is (cow_id, side).",
-                        " — 각 관찰은 (소 번호, 쪽).")}
+                        " 을 해요 — 관찰 하나는 (소 번호, 쪽) 이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -61,7 +61,7 @@ export function makeCrossRd1Ch1(E) {
                   {t(E, "A ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "crossing", "횡단")}</b>
                   {t(E, " happens when consecutive observations of the same cow show DIFFERENT sides.",
-                        " 은 같은 소의 연속된 두 관찰에서 쪽이 바뀔 때 1번.")}
+                        " 은 같은 소를 연달아 봤을 때 쪽이 바뀌면 1번으로 세요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -89,10 +89,10 @@ export function makeCrossRd1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A cow is seen at side 0, then later at side 1. How many crossings is that?", "소가 0번 쪽에서 보이고, 나중에 1번 쪽에서 보여요. 횡단 몇 번이에요?"),
+        "A cow is seen at side 0, then later at side 1. How many crossings is that?", "소가 0번 쪽에 있다가 1번 쪽에서 보여요. 몇 번 건넌 걸까요?"),
       question: t(E,
         "Cow seen at side 0, then side 1. How many crossings?",
-        "소가 0번 쪽, 그 다음 1번 쪽. 횡단 몇 번?"),
+        "소가 0번 쪽에 있다가 그 다음엔 1번 쪽에 있어요. 횡단은 몇 번일까요?"),
       options: [
         t(E, "1 crossing", "1번 횡단"),
         t(E, "2 crossings", "2번 횡단"),
@@ -101,16 +101,16 @@ export function makeCrossRd1Ch1(E) {
       correct: 0,
       explain: t(E,
         "Correct! The cow changed from side 0 to side 1, that's exactly 1 crossing.",
-        "맞아! 소가 0번 쪽에서 1번 쪽으로 바뀌었으니 정확히 1번 횡단이에요."),
+        "맞아요! 소가 0번 쪽에서 1번 쪽으로 바뀌었으니 딱 1번 건넌 거예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "A cow goes 0 -> 1. How many crossings?", "소가 0 -> 1. 횡단 몇 번?"),
+        "A cow goes 0 -> 1. How many crossings?", "소가 0번 쪽에서 1번 쪽으로 갔어요. 횡단은 몇 번일까요?"),
       question: t(E,
         "Cow: side 0 then side 1. Total crossings?",
-        "소: 0번 쪽 그 다음 1번 쪽. 총 횡단 횟수?"),
+        "소가 0번 쪽에 있다가 그 다음엔 1번 쪽에 있어요. 횡단은 모두 몇 번일까요?"),
       hint: t(E,
         "Count how many times the side actually changes between consecutive observations.",
         "연속된 관찰 사이에서 쪽이 실제로 몇 번 바뀌는지 세어봐요."),
@@ -130,7 +130,7 @@ export function makeCrossRd1Ch2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Maintain a dict last[cow_id] = last seen side. For each observation, if the cow has been seen before on a DIFFERENT side, count one crossing. Then update last[cow_id]. Sections build it one piece at a time.",
-        "딕셔너리 last[소 ID] = 마지막으로 본 쪽 을 유지. 각 관찰에서, 소가 이전에 다른 쪽에서 보였으면 횡단 1 카운트. 그 다음 last[소 ID] 갱신. 아래 섹션이 한 단락씩 쌓아요."),
+        "소마다 마지막으로 본 쪽을 적어 두고, 달라질 때만 세요."),
       sections: getCrossRoad1Sections(E),
     },
   ];

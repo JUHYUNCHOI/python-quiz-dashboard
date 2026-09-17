@@ -75,7 +75,7 @@ export function StallingAssignmentSim({ E }) {
       <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.5, marginBottom: 10, textAlign: "center" }}>
         {t(E,
           "Watch the algorithm: process the TALLEST cow first. Count how many stalls fit her, subtract already-used stalls, and multiply.",
-          "알고리즘 관찰: 가장 큰 소부터 처리. 자기 키 ≤ 인 축사 수에서 이미 쓴 축사를 빼고, 곱해.")}
+          "키가 제일 큰 소부터 넣어 봐요.\n제한이 그 소의 키 이상인 축사가 몇 개인지 세고,\n이미 쓴 축사를 뺀 뒤, 그 수를 곱해 나가요.")}
       </div>
 
       {/* Stalls row */}
@@ -110,7 +110,7 @@ export function StallingAssignmentSim({ E }) {
 
       {/* Cows row */}
       <div style={{ marginBottom: 6, fontSize: 11, fontWeight: 700, color: A }}>
-        🐄 {t(E, "Cows (heights, sorted)", "소 (키, 정렬됨)")}
+        🐄 {t(E, "Cows (heights, sorted)", "소 (키 순서대로)")}
       </div>
       <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
         {cows.map((c, i) => {
@@ -151,7 +151,7 @@ export function StallingAssignmentSim({ E }) {
         minHeight: 38,
       }}>
         {step === -1 && (
-          <span>{t(E, "Press Step or Auto to start.", "Step 또는 Auto를 눌러 시작.")}</span>
+          <span>{t(E, "Press Step or Auto to start.", "'한 단계' 나 '자동' 을 누르면 시작해요.")}</span>
         )}
         {step >= 0 && step < N && (() => {
           const h = history[step];
@@ -161,19 +161,19 @@ export function StallingAssignmentSim({ E }) {
               {" — "}
               {t(E,
                 `${h.fits} stalls fit, ${step} already used → choices = ${h.fits} − ${step} = ${h.choices}. ans × ${h.choices} = ${h.runningAns}.`,
-                `맞는 축사 ${h.fits}개, 이미 사용 ${step}개 → 선택 = ${h.fits} − ${step} = ${h.choices}. ans × ${h.choices} = ${h.runningAns}.`)}
+                `들어갈 수 있는 축사가 ${h.fits}개인데 이미 ${step}개를 썼어요.\n그래서 고를 수 있는 곳은 ${h.fits} − ${step} = ${h.choices}군데예요.\n답에 곱하면 ans × ${h.choices} = ${h.runningAns} 이에요.`)}
             </span>
           );
         })()}
         {step >= N && (
           <span>
             <b style={{ color: A }}>
-              {t(E, `Done! Final answer = ${finalAns}`, `완료! 최종 답 = ${finalAns}`)}
+              {t(E, `Done! Final answer = ${finalAns}`, `끝났어요. 답은 ${finalAns} 이에요.`)}
             </b>
             {" "}
             {t(E,
               "(multiply the choices from each step).",
-              "(각 단계 선택 수를 모두 곱한 값).")}
+              "(걸음마다 고를 수 있던 수를 모두 곱한 값이에요.)")}
           </span>
         )}
       </div>
@@ -210,7 +210,7 @@ export function StallingAssignmentSim({ E }) {
             borderRadius: 8,
             padding: "6px 14px", fontWeight: 700, fontSize: 12, cursor: "pointer",
           }}>
-          ↻ {t(E, "Reset", "초기화")}
+          ↻ {t(E, "Reset", "처음으로")}
         </button>
       </div>
     </div>
@@ -290,19 +290,19 @@ export function getStallingSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 파이썬에서 옮긴 것이라\n자료형과 표현은 필요하면 손봐야 해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣으면 (<iostream>, <vector>, ...)\n코드가 무엇을 하려는지 더 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더한 값이나 곱한 값이 2×10^9 쯤을 넘을 수 있으면\nlong long 을 써요."),
       ],
     },
   ];

@@ -22,7 +22,7 @@ export function makeCornerCoverCh1(E) {
       type: "reveal",
       narr: t(E,
         "A grid has four corner cells. You get one rectangular stamp of size A x B (you may lay it on its side). Can you place it so it covers at least TWO corner cells at once?",
-        "격자에는 코너 칸이 네 개 있어요. 크기가 A × B 인 도장 하나를 받아요 (눕혀서 놔도 돼요). 이 도장 하나로 코너 칸을 한 번에 두 개 이상 덮을 수 있을까요?"),
+        "도장 하나로 코너 칸을 두 개 이상 덮을 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -37,7 +37,7 @@ export function makeCornerCoverCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.6, wordBreak: "keep-all" }}>
               {t(E, "Can one A x B subgrid cover at least two corner cells?  Answer YES or NO.",
-                    "A × B 부분격자 하나로 코너 칸을 2 개 이상 덮을 수 있나?  YES 또는 NO 로 답하기.")}
+                    "A × B 부분격자 하나로 코너 칸을 2 개 이상 덮을 수 있을까요? YES 또는 NO 로 답해요.")}
             </div>
           </div>
 
@@ -86,7 +86,7 @@ export function makeCornerCoverCh1(E) {
       type: "reveal",
       narr: t(E,
         "Many test cases arrive at once. Read T, then four numbers per line, and print YES or NO for each.",
-        "테스트가 여러 개 한꺼번에 와요. T 를 읽고, 한 줄에 네 숫자씩 읽어서 각각 YES / NO 를 출력해요."),
+        "테스트가 여러 개 오니 줄마다 YES / NO 를 출력해요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 12 }}>
@@ -140,7 +140,7 @@ YES`}</pre>
       type: "reveal",
       narr: t(E,
         "Before any rule: put the stamp down yourself. Try to catch two corners — and notice when it becomes impossible.",
-        "아직 규칙은 안 알려줄게요. 직접 놓아보면서 — 어떤 크기는 코너 2 개를 잡고 어떤 크기는 아무리 옮겨도 못 잡아요. 그 차이를 찾아보세요."),
+        "코너 2 개를 잡는 크기와 못 잡는 크기, 뭐가 다를까요?"),
       content: (<CornerCoverSim E={E} reveal={false} />),
     },
 
@@ -149,7 +149,7 @@ YES`}</pre>
       type: "reveal",
       narr: t(E,
         "Did you see it? Two corner cells always sit at the two ends of one side. So the stamp has to reach that side end to end.",
-        "보셨나요? 코너 두 개는 언제나 한 변의 양 끝에 있어요. 그래서 도장이 그 변을 끝에서 끝까지 닿아야 해요."),
+        "코너 두 개는 한 변의 양 끝이라, 그 변을 끝까지 닿아야 해요."),
       content: (
         <div style={{ padding: 18, wordBreak: "keep-all" }}>
           <div style={{ maxWidth: 470, margin: "0 auto 12px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 12, padding: "13px 16px" }}>
@@ -240,7 +240,7 @@ export function makeCornerCoverCh2(E, lang = "py") {
          코드의 어느 줄인지만. (선생님 2026-07-30: "반복된건 없는지") */
       narr: t(E,
         "Those two checks are two lines of code. Find them — and notice the loop that lays the stamp on its side.",
-        "방금 그 두 검사가 코드에선 두 줄이에요. 어디인지 찾아보고, 도장을 눕히는 반복문도 같이 보세요."),
+        "방금 그 두 검사가 코드에선 어느 줄인지 찾아보세요."),
       sections: getCornerCoverSections(E),
     },
   ];

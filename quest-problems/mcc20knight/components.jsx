@@ -74,7 +74,7 @@ export function KnightExactSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "Click a square to pick a target. See its MINIMUM moves. Then change K and watch: green means the knight can land there in exactly K moves.",
-            "칸을 눌러 목표를 골라요. 그 칸까지 최소 이동이 나와요. 그다음 K를 바꿔봐요: 초록이면 정확히 K번에 도착할 수 있어요.")}
+            "칸을 눌러 목표를 골라요. 그 칸까지 최소 이동이 나와요. 그다음 K를 바꿔 봐요. 초록이면 정확히 K번에 도착할 수 있다는 뜻이에요.")}
         </div>
 
         {/* board */}
@@ -149,7 +149,7 @@ export function KnightExactSim({ E }) {
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
           {t(E,
             "The rule: reachable in exactly K  ⇔  K ≥ min AND (K − min) is even. Extra moves are wasted two at a time — step out and come right back.",
-            "규칙: 정확히 K번 도착  ⇔  K ≥ 최소 그리고 (K − 최소)가 짝수. 남는 이동은 두 번씩 낭비돼요 — 한 칸 나갔다 바로 돌아오기.")}
+            "정확히 K번에 도착  ⇔  K ≥ 최소 이고 (K − 최소) 가 짝수. 남는 이동은 한 칸 나갔다 바로 돌아오기라서 항상 2번씩 써요.")}
         </div>
       </div>
     </div>
@@ -269,21 +269,21 @@ export function getMcc20KnightSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Reaching (A,B) from (X,Y) is the same as covering the offset (dx,dy) = (|X−A|, |Y−B|) from (0,0) — so one BFS from the origin answers every query.",
-            "(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 오프셋 (dx,dy) = (|X−A|, |Y−B|) 를 덮는 것과 같아요 — 그래서 원점에서 BFS 한 번이면 모든 질문에 답해요."),
+            "(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 차이 (dx,dy) = (|X−A|, |Y−B|) 만큼 가는 것과 같아요. 그래서 (0,0) 에서 BFS 를 한 번만 돌리면 모든 질문에 답할 수 있어요."),
         t(E, "BFS gives the MINIMUM moves to each offset. Then the exact-K test is just: K ≥ min AND (K − min) is even — extra moves are wasted two at a time (out and back).",
-            "BFS 는 각 오프셋까지의 최소 이동을 줘요. 그다음 정확히-K 판정은 딱: K ≥ 최소 그리고 (K − 최소)가 짝수 — 남는 이동은 두 번씩(나갔다 돌아오기) 낭비돼요."),
+            "BFS 는 각 차이까지의 최소 이동을 알려줘요. 그다음은 K ≥ 최소 이고 (K − 최소) 가 짝수인지만 보면 돼요. 남는 이동은 나갔다 돌아오기라서 2번씩 쓰이니까요."),
         t(E, "Why parity is forced: a knight flips square color every move, so the number of moves and (dx+dy) always share the same parity. That's why the leftover must be even.",
-            "왜 홀짝이 강제될까: 나이트는 한 번 움직일 때마다 칸 색이 바뀌어서, 이동 횟수와 (dx+dy)는 항상 같은 홀짝이에요. 그래서 남는 값이 짝수여야 해요."),
+            "왜 홀짝을 따져야 할까요. 나이트는 한 번 움직일 때마다 칸 색이 바뀌어요. 그래서 이동 횟수와 (dx+dy) 는 항상 홀짝이 같아요. 남는 값이 짝수여야 하는 이유예요."),
       ],
       pyOnly: [
         t(E, "best[nx - LO][ny - LO] shifts coordinates by LO so negative cells fit into a normal 2D list.",
             "best[nx - LO][ny - LO] 는 좌표를 LO 만큼 밀어 음수 칸도 보통 2차원 리스트에 담아요."),
         t(E, "Collect answers in a list and print once with '\\n'.join — faster than printing T times.",
-            "답을 리스트에 모아 '\\n'.join 으로 한 번에 출력해요 — T 번 출력보다 빨라요."),
+            "답을 리스트에 모아 '\\n'.join 으로 한 번에 출력해요. T 번 나눠서 출력하는 것보다 빨라요."),
       ],
       cppOnly: [
         t(E, "dr[]/dc[] list the 8 L-moves; LO shifts coordinates so negatives index a plain vector.",
-            "dr[]/dc[] 는 8 개 L-이동; LO 로 좌표를 밀어 음수도 보통 vector 로 인덱싱해요."),
+            "dr[]/dc[] 는 8 가지 L자 이동이에요. LO 만큼 좌표를 밀면 음수 칸도 보통 vector 에 담을 수 있어요."),
       ],
     },
   ];

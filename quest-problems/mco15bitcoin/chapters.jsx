@@ -34,7 +34,7 @@ export function makeBitcoinCh1(E) {
       type: "reveal",
       narr: t(E,
         "N bitcoin mining sites at integer points on a 2D plane.\nPrint the MAXIMUM squared Euclidean distance between any two sites — i.e., max (x1−x2)^2 + (y1−y2)^2.",
-        "정수 좌표의 평면 위에 있는 N 개의 비트코인 채굴 사이트.\n임의 두 사이트 사이 유클리드 거리의 제곱 (x1−x2)^2 + (y1−y2)^2 의 최댓값을 출력해요."),
+        "두 사이트 사이 거리의 제곱 중 가장 큰 값을 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -82,37 +82,37 @@ export function makeBitcoinCh1(E) {
       type: "reveal",
       narr: t(E,
         "Before writing code, let's feel the brute force by hand. Pick any two sites, see dx² + dy², and watch the running max climb.",
-        "코드를 짜기 전에 완전 탐색을 손으로 느껴봐요. 두 사이트를 골라 dx² + dy² 를 보고, 최댓값이 올라가는 걸 확인해봐요."),
+        "두 사이트를 골라 dx² + dy² 가 어떻게 커지는지 봐요."),
       content: <BitcoinPairInspector E={E} />,
     },
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "Why do we use squared distance instead of regular distance?\nThink about what operations we can avoid.", "왜 일반 거리 대신 거리의 제곱을 사용할까? 어떤 연산을 피할 수 있는지 생각해봐요."),
+        "Why do we use squared distance instead of regular distance?\nThink about what operations we can avoid.", "왜 그냥 거리 대신 거리의 제곱을 쓸까요?"),
       question: t(E,
         "Why use squared Euclidean distance instead of regular distance?",
-        "왜 일반 유클리드 거리 대신 제곱 거리를 사용하나?"),
+        "왜 유클리드 거리 대신 거리의 제곱을 쓸까요?"),
       options: [
-        t(E, "Avoids square root, preserves comparison order", "제곱근을 피하고, 비교 순서가 유지돼"),
-        t(E, "Squared distance is always smaller", "제곱 거리가 항상 더 작아"),
+        t(E, "Avoids square root, preserves comparison order", "제곱근을 안 써도 되고, 큰 순서가 그대로예요"),
+        t(E, "Squared distance is always smaller", "거리의 제곱이 언제나 더 작아요"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! sqrt is monotonic, so max squared distance corresponds to max distance. We avoid floating point issues.",
-        "맞아! sqrt는 단조함수라서 최대 제곱 거리가 최대 거리에 대응해요. 부동소수점 문제도 피할 수 있어요."),
+        "맞아요! sqrt 는 커지기만 하는 함수라, 거리의 제곱이 가장 큰 쌍이 실제 거리도 가장 멀어요. 소수점 오차도 피할 수 있고요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "Points (0,0) and (3,4). What is their squared Euclidean distance?", "점 (0,0)과 (3,4). 유클리드 거리의 제곱은?"),
+        "Points (0,0) and (3,4). What is their squared Euclidean distance?", "점 (0,0) 과 (3,4) 사이 거리의 제곱은 얼마일까요?"),
       question: t(E,
         "Squared distance between (0,0) and (3,4)?",
-        "(0,0)과 (3,4) 사이의 제곱 거리?"),
+        "(0,0) 과 (3,4) 사이 거리의 제곱은 얼마일까요?"),
       hint: t(E,
         "dx = 3 − 0, dy = 4 − 0. Compute dx² + dy².",
-        "dx = 3 − 0, dy = 4 − 0. dx² + dy² 를 계산해봐요."),
+        "dx = 3 − 0 이고 dy = 4 − 0 이에요. dx² + dy² 를 계산해 봐요."),
       answer: 25,
     },
   ];
@@ -129,7 +129,7 @@ export function makeBitcoinCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Brute force: for every pair of sites (i, j), compute (xi − xj)² + (yi − yj)² and keep the running max. Sections build it one piece at a time.",
-        "완전 탐색: 모든 사이트 쌍 (i, j) 에 대해 (xi − xj)² + (yi − yj)² 계산, 최댓값 유지. 아래 섹션이 한 단락씩 쌓아요."),
+        "모든 쌍을 하나씩 다 재 보면서 가장 큰 값을 남겨요."),
       sections: getBitcoinSections(E),
     },
   ];

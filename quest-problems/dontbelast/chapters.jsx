@@ -11,7 +11,7 @@ export function makeDontBeLastCh1(E) {
       type: "reveal",
       narr: t(E,
         "Seven cows (Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta) produce milk. You're given a log of N entries, each saying how many gallons one cow produced on one occasion.\nFind the cow with the SECOND-lowest total production. If two or more cows are tied for second-lowest, print 'Tie'.",
-        "일곱 마리 소(Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta)가 우유를 생산해요. N개의 기록이 주어지고, 각 기록은 한 번에 한 소가 생산한 갤런 수예요.\n총 생산량이 두 번째로 적은 소를 찾아요. 두 마리 이상이 두 번째 자리를 동률로 차지하면 'Tie'를 출력해요."),
+"소 일곱 마리의 우유 기록이 들어와요.\n총 우유량이 두 번째로 적은 소는 누구일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeDontBeLastCh1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "Output the cow with the second-lowest total milk, or 'Tie' if multiple cows tie for second.",
-                "총 우유량이 두 번째로 적은 소의 이름을 출력 — 동률이면 'Tie'.")}
+                "총 우유량이 두 번째로 적은 소의 이름을 출력해요. 그 자리에 여러 마리가 함께 있으면 'Tie' 를 출력해요.")}
             </div>
           </div>
 
@@ -52,7 +52,7 @@ export function makeDontBeLastCh1(E) {
                   {t(E, "We're given a ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "log of N entries", "N개의 기록")}</b>
                   {t(E, " — each entry: a cow name and a gallon amount she produced that time.",
-                        "이 주어져요 — 각 기록은 (소 이름, 그때 생산한 갤런 수).")}
+                        "이 주어져요. 기록 하나에는 소 이름과, 그때 짠 갤런 수가 적혀 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -81,18 +81,18 @@ export function makeDontBeLastCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "All 7 cows produce 0 milk except Bessie who produces 5.\nThe minimum is 0 (six cows).\nThe second-lowest distinct value is 5.\nOnly Bessie has 5.\nWhat's the answer?", "Bessie만 5를 생산하고 나머지 6마리는 0이에요. 최솟값은 0 (6마리). 두 번째로 작은 고유값은 5. Bessie만 5를 가져요. 답은?"),
+        "All 7 cows produce 0 milk except Bessie who produces 5.\nThe minimum is 0 (six cows).\nThe second-lowest distinct value is 5.\nOnly Bessie has 5.\nWhat's the answer?", "Bessie 만 5 를 짜고 나머지 6마리는 0 이에요.\n서로 다른 값 중 두 번째로 작은 값은 5 예요."),
       question: t(E,
         "6 cows produce 0, Bessie produces 5. Who is second-lowest?",
-        "6마리는 0, Bessie는 5. 두 번째로 적은 소는?"),
+        "6마리는 0, Bessie 는 5 예요. 두 번째로 적은 소는 누구일까요?"),
       options: [
-        t(E, "Tie (6 cows at 0)", "Tie (0인 소 6마리)"),
+        t(E, "Tie (6 cows at 0)", "Tie — 0 인 소가 6마리라서"),
         t(E, "Bessie", "Bessie (Bessie)"),
       ],
       correct: 1,
       explain: t(E,
         "Correct! Min=0, second distinct value=5. Only Bessie has 5, so the answer is Bessie.",
-        "맞아! 최솟값=0, 두 번째 고유값=5. Bessie만 5이므로 답은 Bessie야."),
+        "맞아요! 가장 작은 값은 0 이고, 서로 다른 값 중 두 번째는 5 예요.\n5 를 가진 소가 Bessie 한 마리뿐이라 답은 Bessie 예요."),
     },
     // 1-3: Input
     {
@@ -101,10 +101,10 @@ export function makeDontBeLastCh1(E) {
         "The problem always uses exactly 7 named cows. How many cows are there in total?", "이 문제에서는 항상 정확히 7마리의 이름 있는 소를 사용해요. 총 몇 마리예요?"),
       question: t(E,
         "How many named cows are in this problem?",
-        "이 문제에서 이름 있는 소는 총 몇 마리?"),
+        "이 문제에서 이름 있는 소는 모두 몇 마리일까요?"),
       hint: t(E,
         "Re-read the problem statement — count the listed cow names.",
-        "문제를 다시 읽어 봐 — 적힌 소 이름의 수를 세어 봐."),
+        "문제를 다시 읽어 보고, 적힌 소 이름의 수를 세어 봐요."),
       answer: 7,
     },
     // 1-4: Interactive sim — milk-log playground
@@ -112,7 +112,7 @@ export function makeDontBeLastCh1(E) {
       type: "sim",
       narr: t(E,
         "Try different totals for each cow.\nWatch the ranking sort itself, and see who lands in second place.\nRemember: 'second-lowest' means the second distinct value — ties for second print 'Tie'.",
-        "각 소의 총량을 바꿔 봐.\n순위가 자동으로 정렬되고, 두 번째 자리에 누가 오는지 보여줘.\n주의: '두 번째로 적음' = 두 번째 고유값. 두 번째가 동률이면 'Tie'."),
+        "각 소의 총량을 바꿔 보면 순위가 저절로 정렬돼요.\n'두 번째로 적음' 은 서로 다른 값 중 두 번째를 뜻해요."),
     },
   ];
 }
@@ -128,7 +128,7 @@ export function makeDontBeLastCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Sum each named cow's milk in a dict (cows not in the log default to 0). Find the second-lowest distinct total. If exactly one cow has that total, print her name; otherwise 'Tie'. Sections build it one piece at a time.",
-        "딕셔너리로 각 소의 우유를 합산 (로그에 없는 소는 0). 두 번째로 낮은 서로 다른 총량을 찾아 — 그 값을 가진 소가 정확히 1 마리면 이름, 아니면 'Tie'. 아래 섹션이 한 단락씩 쌓아요."),
+        "사전에 소마다 우유를 더해 두고, 서로 다른 총량 중 두 번째로 작은 값을 찾아요.\n그 값을 가진 소가 한 마리면 이름을, 여럿이면 'Tie' 를 내요."),
       sections: getDontBeLastSections(E),
     },
   ];

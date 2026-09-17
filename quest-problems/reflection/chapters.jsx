@@ -120,7 +120,7 @@ export function makeReflectionCh1(E) {
           <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.65, wordBreak: "keep-all" }}>
             {t(E,
               "First 3 blocks in the input = N/U, the picture, the flips. Output = 1 answer per state (original + after each flip). Why 4? See the next picture 👇",
-              "입력 세 덩어리 = N·U / 그림 / 뒤집을 칸. 출력 = 상태마다 답 1 개 (처음 + 매번 뒤집은 뒤). 처음 답 4 인 이유는 다음 그림으로 봐요 👇")}
+              "입력은 N·U, 그림, 뒤집을 칸 세 덩어리예요.\n답은 처음 한 번, 그리고 뒤집을 때마다 한 번씩 나와요.\n처음 답이 4 인 이유는 다음 그림에서 봐요 👇")}
           </div>
           <div style={{ marginTop: 8, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
             📐 <b>{t(E, "Limits", "제약")}:</b>{" "}
@@ -135,7 +135,7 @@ export function makeReflectionCh1(E) {
       type: "reveal",
       narr: t(E,
         "Count the min flips — one mirror-group at a time.",
-        "묶음마다 최소 뒤집기 세기."),
+        "묶음마다 최소 몇 번 뒤집는지 세어 봐요."),
       content: (<ReflectionGroupSim E={E} />),
     },
 
@@ -144,7 +144,7 @@ export function makeReflectionCh1(E) {
       type: "reveal",
       narr: t(E,
         "Watch brute force in action — every flip rescans everything.",
-        "브루트포스 동작 확인 — 뒤집기마다 전부 다시 세요."),
+        "뒤집을 때마다 전부 다시 세는 모습을 봐요."),
       content: (<ReflectionBruteSim E={E} />),
     },
 
@@ -153,7 +153,7 @@ export function makeReflectionCh1(E) {
       type: "reveal",
       narr: t(E,
         "Watch it in action — each flip nudges the total ±1.",
-        "알고리즘 동작 확인 — 매 뒤집기마다 총합 ±1."),
+        "한 번 뒤집을 때마다 답이 1 씩만 움직여요."),
       content: (<ReflectionUpdateSim E={E} />),
     },
   ];
@@ -167,7 +167,7 @@ export function makeReflectionCh2(E, lang = "py") {
       narr: i === 0
         ? t(E,
             "Flips per group = the smaller of (cells unlike me) and (the rest).",
-            "뒤집는 횟수 = 나와 다른 칸과 나머지 중 적은 쪽.")
+            "나와 다른 칸과 나머지 중 적은 쪽만 뒤집어요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

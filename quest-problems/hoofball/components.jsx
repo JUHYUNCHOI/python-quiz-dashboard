@@ -124,19 +124,19 @@ export function getHoofballSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 쪽은 Python 코드를 옮긴 것이라, 자료형과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "INT_MAX as a sentinel lets boundary cows pick their only neighbor automatically.",
-            "INT_MAX를 표식으로 쓰면 끝 소들이 자동으로 유일한 이웃을 고름."),
+            "INT_MAX 를 표식으로 두면 양 끝 소가 저절로 하나뿐인 이웃을 고르게 돼요."),
         t(E, "vector<int> receives(N, 0) initializes every counter to zero in one line.",
-            "vector<int> receives(N, 0)으로 한 줄에 모든 카운터를 0으로 초기화."),
+            "vector<int> receives(N, 0) 한 줄로 세는 칸을 모두 0 으로 두고 시작해요."),
       ],
     },
   ];
@@ -182,7 +182,7 @@ function highlightCode(lines, lang) {
 
 export function downloadHoofballPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Hoofball — Full Study Guide", "Hoofball — 종합 풀이 노트");
@@ -205,7 +205,7 @@ export function downloadHoofballPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
@@ -357,7 +357,7 @@ export function HoofballPassSim({ E }) {
         <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
           {t(E,
             "Each cow's arrow points to her nearest neighbor (ties → right). Press ▶ to drop a ball and watch passes. Cows that no arrow points to are SOURCES — each needs its own ball.",
-            "각 소의 화살표 = 가장 가까운 이웃 (거리 같으면 오른쪽). ▶ 누르면 공을 떨어뜨려 패스 관찰. 아무 화살표도 안 가리키는 소가 SOURCE — 각자 공 하나씩 필요해.")}
+            "소의 화살표는 가장 가까운 이웃을 가리켜요 (거리가 같으면 오른쪽이에요). ▶ 를 누르면 공을 떨어뜨려 넘어가는 모습을 볼 수 있어요. 아무 화살표도 안 가리키는 소를 '시작 소' 라고 불러요. 시작 소는 공을 받을 데가 없으니 공을 하나씩 따로 줘야 해요.")}
         </div>
       </div>
 
@@ -448,7 +448,7 @@ export function HoofballPassSim({ E }) {
                 </text>
                 {isSrc && !hasBall && (
                   <text x={xOf(p)} y={cy - 24} textAnchor="middle" fontSize="9" fontWeight="700" fill="#dc2626">
-                    {t(E, "SOURCE", "소스")}
+                    {t(E, "SOURCE", "시작 소")}
                   </text>
                 )}
               </g>
@@ -479,7 +479,7 @@ export function HoofballPassSim({ E }) {
           border: `1.5px solid ${C.border}`, borderRadius: 8,
           padding: "6px 14px", fontSize: 13, fontWeight: 800, cursor: "pointer",
         }}>
-          {t(E, "↻ Reset", "↻ 초기화")}
+          {t(E, "↻ Reset", "↻ 처음부터 다시")}
         </button>
       </div>
 
@@ -489,17 +489,17 @@ export function HoofballPassSim({ E }) {
         fontSize: 12, color: C.text, lineHeight: 1.55, textAlign: "center",
       }}>
         <div>
-          <b style={{ color: "#dc2626" }}>{t(E, "Sources (red ring)", "소스 (빨강 테두리)")}: </b>
+          <b style={{ color: "#dc2626" }}>{t(E, "Sources (red ring)", "시작 소 (빨강 테두리)")}: </b>
           {sources.length === 0
             ? t(E, "none", "없음")
             : sources.map(i => pos[i]).join(", ")}
           {"  "}|{"  "}
-          <b style={{ color: A }}>{t(E, "Min balls (sources)", "최소 공 (소스 수)")}: </b>
+          <b style={{ color: A }}>{t(E, "Min balls (sources)", "최소 공 (시작 소 수)")}: </b>
           {Math.max(1, sources.length)}
         </div>
         <div style={{ color: C.dim, marginTop: 3, fontSize: 11 }}>
           {t(E, "Tip: a 'mutual pair' (two cows passing to each other) is a sink — the ball just bounces. Watch ▶ to feel why.",
-              "팁: 서로 패스하는 두 소(상호 쌍)는 싱크 — 공이 둘 사이만 왕복해. ▶로 직접 관찰.")}
+              "서로를 가리키는 두 소는 공을 둘 사이에서만 주고받아요. 그래서 공이 더 멀리 가지 못해요. ▶ 로 직접 봐요.")}
         </div>
       </div>
     </div>

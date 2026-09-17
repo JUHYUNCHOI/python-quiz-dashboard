@@ -11,7 +11,7 @@ export function makeHoofballCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows stand on a number line at distinct positions. When a cow has a ball, she immediately passes it to her closest neighbor (ties → pass right). Once a ball reaches a cow, she'll keep passing it forever.\nWe need to give out balls so EVERY cow eventually touches one. Print the MINIMUM number of starting balls needed.",
-        "N마리 소가 수직선 위 서로 다른 위치에 서있어요. 공을 가진 소는 즉시 가장 가까운 이웃에게 패스해요 (거리 같으면 오른쪽). 공이 어떤 소에 도달하면, 그 소도 영원히 패스를 이어가요.\n모든 소가 결국 공을 만지도록 처음에 공을 나눠줘요. 필요한 시작 공의 최소 개수를 출력해요."),
+        "소는 공을 받으면 가장 가까운 이웃에게 넘겨요.\n모두가 공을 만지려면 공이 몇 개 필요할까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -41,7 +41,7 @@ export function makeHoofballCh1(E) {
                 <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#f97316" }}>{t(E, "N cows stand on a number line", "N마리 소가 수직선 위에 서있어요")}</b>
-                  {t(E, " at distinct positions.", " (서로 다른 위치).")}
+                  {t(E, " at distinct positions.", ". 서 있는 자리는 모두 달라요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -59,7 +59,7 @@ export function makeHoofballCh1(E) {
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of starting balls", "필요한 시작 공의 최소 개수")}</b>
                   {t(E, " so every cow eventually touches one.",
-                        " 를 출력해요. 모든 소가 결국 공을 만지도록.")}
+                        " 를 출력해요. 모든 소가 언젠가는 공을 한 번씩 만져야 해요.")}
                 </div>
               </div>
             </div>
@@ -71,7 +71,7 @@ export function makeHoofballCh1(E) {
       type: "reveal",
       narr: t(E,
         "Try it: pick a sample, watch each cow's arrow point to her nearest neighbor, then press ▶. Cows nobody points to are SOURCES — count them.",
-        "직접 해 봐: 샘플 골라서 각 소가 가리키는 가장 가까운 이웃을 보고, ▶ 눌러 패스 관찰. 아무도 안 가리키는 소(소스)를 세어 봐."),
+        "▶ 를 눌러 공이 어떻게 넘어가는지 봐요.\n아무도 안 가리키는 소를 세어 봐요."),
       content: <HoofballPassSim E={E} />,
     },
     // 1-3: Quiz
@@ -79,10 +79,10 @@ export function makeHoofballCh1(E) {
       type: "quiz",
       narr: t(E,
         "3 cows at positions [1, 5, 10].  Trace each cow's pass — who ends up never receiving one?",
-        "3 마리 소 위치 [1, 5, 10]. 각 소의 패스 추적 — 결국 *받지 못하는* 소는?"),
+        "소 세 마리가 [1, 5, 10] 에 있어요.\n각 소가 어디로 넘기는지 따라가 봐요."),
       question: t(E,
         "Positions [1,5,10]. How many balls needed?",
-        "위치 [1,5,10]. 필요한 공 수는?"),
+        "위치가 [1,5,10] 일 때 공은 몇 개 필요할까요?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -98,13 +98,13 @@ export function makeHoofballCh1(E) {
       type: "input",
       narr: t(E,
         "Same setup, your turn — count cows that don't receive any pass.  Each needs its own ball.",
-        "같은 상황 — 패스 안 받는 소를 직접 세어 봐. 각자 공 하나씩 필요."),
+        "같은 상황이에요. 공을 못 받는 소를 직접 세어 봐요.\n그런 소는 각자 공이 하나씩 필요해요."),
       question: t(E,
         "3 cows at [1, 5, 10]. Min balls needed?",
-        "3마리 소 [1, 5, 10]. 최소 공 수?"),
+        "소 세 마리가 [1, 5, 10] 에 있어요. 공은 최소 몇 개 필요할까요?"),
       hint: t(E,
         "Find each cow's pass target.  Who is no one's target?",
-        "각 소의 패스 대상을 찾아. 아무도 안 가리키는 소는?"),
+        "각 소가 누구에게 넘기는지 찾아 봐요. 아무도 안 가리키는 소는 누구일까요?"),
       answer: 2,
     },
   ];
@@ -121,7 +121,7 @@ export function makeHoofballCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Sort positions, find each cow's pass target, count cows that no one targets ('sources'), plus +1 per mutual-passing pair.  Sections build it one piece at a time.",
-        "위치 정렬, 각 소의 패스 대상 찾고, 아무도 안 가리키는 소 ('소스') 카운트, 거기에 상호 패스 쌍마다 +1. 아래 섹션이 한 단락씩 쌓아요."),
+        "위치를 정렬하고 각 소가 누구에게 넘기는지 찾아요.\n아무도 안 가리키는 소를 세고, 서로만 주고받는 쌍마다 하나를 더해요."),
       sections: getHoofballSections(E),
     },
   ];

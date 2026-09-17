@@ -14,7 +14,7 @@ export function makeDroughtCh1(E) {
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "FJ has N cows in a row, each with some hunger level.\nIn one operation, you pick a pair of adjacent cows and reduce BOTH of their hunger levels by 1.\nYou want every cow to end at the SAME (non-negative) hunger level — find the minimum number of operations, or print -1 if impossible. There are T such test cases.",
-        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 배고픔 수치를 가져요.\n한 번의 연산으로 인접한 두 소를 골라 둘의 배고픔을 동시에 1씩 줄여요.\n모든 소를 같은 (음이 아닌) 배고픔 값으로 만드는 최소 연산 횟수를 출력해요. 불가능하면 -1. 이런 테스트 케이스가 T개 주어져요."),
+        "모든 소의 배고픔을 같게 만드는 가장 적은 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -31,7 +31,7 @@ export function makeDroughtCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum operations to make every cow's hunger EQUAL (any non-negative value), or -1 if impossible. Repeat for T test cases.",
-                "모든 소의 배고픔을 같은 값 (음이 아닌 아무 값) 으로 만드는 최소 연산 수 (불가능하면 -1) 를 출력. T개 테스트 케이스 반복.")}
+                "모든 소의 배고픔을 같은 값(0 이상이면 아무 값이나)으로 만들려면 먹이를 최소 몇 번 줘야 할까요? 못 만들면 -1 을 출력해요. 테스트 케이스 T개를 차례로 풀어요.")}
             </div>
           </div>
 
@@ -53,10 +53,10 @@ export function makeDroughtCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One operation: pick ", "한 번의 연산: ")}
+                  {t(E, "One operation: pick ", "먹이 한 번: ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "two adjacent cows i, i+1", "인접한 두 소 i, i+1")}</b>
                   {t(E, " and reduce ", "을 골라 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "both hungers by 1", "둘의 배고픔을 1씩 감소")}</b>
+                  <b style={{ color: "#0891b2" }}>{t(E, "both hungers by 1", "둘의 배고픔을 1씩 줄이기")}</b>
                   {t(E, " (allowed only if both are ≥ 1).",
                         " (둘 다 ≥ 1 일 때만 가능).")}
                 </div>
@@ -73,7 +73,7 @@ export function makeDroughtCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "최소 연산 횟수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "먹이를 주는 최소 횟수")}</b>
                   {t(E, ", or ", " 를 출력해요. 불가능하면 ")}
                   <b style={{ color: "#dc2626" }}>-1</b>
                   {t(E, " if impossible.", ".")}
@@ -92,7 +92,7 @@ export function makeDroughtCh1(E) {
         "Take [2, 2]. Feeding the pair (0,1) lowers both at once.", "[2, 2] 를 생각해봐요. 쌍(0,1)에 먹이를 주면 둘이 같이 줄어요."),
       question: t(E,
         "[2, 2]: feeding pair (0,1) twice gives [0, 0]. How many operations?",
-        "[2, 2]: 쌍(0,1)에 2번 먹이 주면 [0, 0]. 몇 번의 연산?"),
+        "[2, 2] 에서 쌍(0,1)에 2번 먹이를 주면 [0, 0] 이 돼요. 먹이를 몇 번 준 걸까요?"),
       options: [
         t(E, "2 operations", "2번"),
         t(E, "4 operations", "4번"),
@@ -101,19 +101,19 @@ export function makeDroughtCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Each feed of pair (0,1) is one operation. We need 2 to reach [0,0].",
-        "맞아! 쌍(0,1)에 먹이 주는 것이 1번 연산. [0,0]에 도달하려면 2번 필요해요."),
+        "맞아요! 쌍(0,1)에 먹이를 주는 게 한 번이에요. [0,0] 이 되려면 2번 줘야 해요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "[2, 2] needs how many operations to make all equal?", "[2, 2]를 모두 같게 만드는 최소 연산 횟수는?"),
+        "[2, 2] needs how many operations to make all equal?", "[2, 2] 를 모두 같게 만들려면 먹이를 몇 번 줘야 할까요?"),
       question: t(E,
         "a = [2, 2]. Min operations to make all equal?",
-        "a = [2, 2]. 모두 같게 만드는 최소 연산 횟수?"),
+        "a = [2, 2]. 모두 같게 만드는 데 드는 최소 먹이 횟수는 몇 번일까요?"),
       hint: t(E,
         "Feed the pair step by step until both reach 0 — count operations.",
-        "쌍에 한 단계씩 먹이 줘 둘 다 0 이 될 때까지 — 연산 수를 세 봐."),
+        "둘 다 0 이 될 때까지 쌍에 한 번씩 먹이를 줘 보세요. 그 횟수를 세면 돼요."),
       answer: 2,
     },
   ];
@@ -130,7 +130,7 @@ export function makeDroughtCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Walk left to right: pair (i, i+1) is fed o[i] times, and once you fix the final hunger f, each o[i] is forced — o[i] = h[i] − f − o[i-1]. f itself comes from the alternating sum (+ − + − …). Any o[i] < 0 means that case is impossible (-1). The answer is 2 × sum(o). Sections build it one piece at a time.",
-        "왼쪽부터 오른쪽으로: 쌍 (i, i+1) 은 o[i] 번 먹이고, 최종 배고픔 f 를 정하면 o[i] 는 자동으로 o[i] = h[i] − f − o[i-1] 로 정해져. f 는 교대합 (+ − + − …) 으로 구해. o[i] 가 음수면 그 케이스는 불가능 (-1). 답은 2 × sum(o). 아래 섹션이 한 단락씩 쌓아요."),
+        "왼쪽부터 차례로 보면 각 쌍에 몇 번 먹일지가 저절로 정해져요."),
       sections: getDroughtSections(E),
     },
   ];

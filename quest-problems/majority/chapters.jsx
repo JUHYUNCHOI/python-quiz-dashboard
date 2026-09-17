@@ -11,7 +11,7 @@ export function makeMajorityCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows stand in a row, each preferring some hay type.\nFJ runs 'focus groups' on any 3 adjacent cows: if 2+ agree, the third switches to the majority.\nWhich hay types could end up everywhere?",
-        "N마리 소가 한 줄로 서있고, 각자 좋아하는 건초 종류가 있어요.\nFJ가 인접한 3마리에게 '포커스 그룹'을 열면, 그중 2명 이상이 같은 의견이면 나머지 한 명이 그 의견으로 바꿔요.\n어떤 건초 종류가 결국 전체를 지배할 수 있을까요?"),
+        "결국 모든 소가 좋아하게 될 수 있는 건초를 찾아봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeMajorityCh1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "List every hay type that COULD become universal via repeated focus groups (or output -1 if none).",
-                "포커스 그룹을 반복해 전체를 지배할 수 있는 건초 종류를 모두 출력 (없으면 -1).")}
+                "포커스 그룹을 되풀이해서 전체로 퍼질 수 있는 건초 종류를 모두 출력해요 (없으면 -1).")}
             </div>
           </div>
 
@@ -53,7 +53,7 @@ export function makeMajorityCh1(E) {
                   {t(E, "FJ can repeatedly run a ", "FJ는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "focus group", "포커스 그룹")}</b>
                   {t(E, " on any 3 adjacent cows: if 2 agree on a type, the 3rd cow switches to that type.",
-                        "을 인접한 3마리 위에 반복해서 열 수 있어요: 그중 2명이 같은 종류를 좋아하면, 나머지 1명도 그 종류로 바꿔요.")}
+                        "을 인접한 3마리에게 되풀이해서 열 수 있어요. 그중 2명이 같은 종류를 좋아하면, 나머지 1명도 그 종류로 바꿔요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -62,16 +62,16 @@ export function makeMajorityCh1(E) {
                   {t(E, "A hay type ", "어떤 건초 종류가 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "becomes universal", "전체를 지배")}</b>
                   {t(E, " if FJ can use focus groups to make ALL cows prefer it.",
-                        "한다면 — FJ가 포커스 그룹을 잘 사용해서 모든 소가 그것을 좋아하게 만들 수 있어야 해요.")}
+                        "하려면, FJ 가 포커스 그룹을 잘 써서 모든 소가 그 종류를 좋아하게 만들 수 있어야 해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Multiple test cases. For each, print all valid hay types in increasing order separated by spaces — or ",
-                        "여러 테스트 케이스. 각 테스트마다 가능한 건초 종류를 오름차순 공백 구분으로 출력. 없으면 ")}
+                        "테스트마다 가능한 건초 종류를 작은 것부터 공백으로 띄워 출력해요. 하나도 없으면 ")}
                   <b style={{ color: "#15803d" }}>-1</b>
-                  {t(E, ".", ".")}
+                  {t(E, ".", " 을 출력해요.")}
                 </div>
               </div>
             </div>
@@ -83,7 +83,7 @@ export function makeMajorityCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input: T (test cases), then for each: N then N values on one line. Output one line per case (space-separated values, or -1).",
-        "입력: T (테스트 수), 각 테스트마다 N 줄과 값 N개 한 줄. 출력: 케이스마다 한 줄 (공백 구분 값 또는 -1)."),
+        "입력과 출력이 어떤 모양인지 공식 예제로 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
@@ -123,13 +123,13 @@ export function makeMajorityCh1(E) {
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
               {t(E, "Cows: 3, 2, 3. The two 3's sit at positions 0 and 2 — distance 2.",
-                    "소: 3, 2, 3. 양쪽 3 이 위치 0 과 2 — 거리 2.")}
+                    "소는 3, 2, 3 이에요. 3 두 마리가 0 번과 2 번에 있어서 거리가 2 예요.")}
               <br/>
               {t(E, "Focus group on cows 0, 1, 2: two 3's vs one 2 → cow 1 switches to 3.",
-                    "0, 1, 2 포커스 그룹: 3 두 명 vs 2 한 명 → 1번 소가 3 으로 변함.")}
+                    "0, 1, 2 번에 포커스 그룹을 열면 3 이 두 마리, 2 가 한 마리라 1 번 소가 3 으로 바뀌어요.")}
             </div>
             <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
-              {t(E, "→ type 3 takes over.  Output: 3.", "→ 3 이 전체 지배. 출력: 3.")}
+              {t(E, "→ type 3 takes over.  Output: 3.", "→ 세 마리가 모두 3 이 돼요. 그래서 3 을 출력해요.")}
             </div>
           </div>
         </div>),
@@ -139,17 +139,17 @@ export function makeMajorityCh1(E) {
       type: "focusSim",
       narr: t(E,
         "Run a focus group on 3 adjacent cows: 2 votes win, the minority cow flips. See it once before the quiz.",
-        "인접 3 마리 포커스 그룹: 2 표가 이기면 소수 1 명이 그쪽으로 바뀜. 퀴즈 전에 한 번 봐요."),
+        "인접한 3 마리 중 2 마리가 같으면 나머지 1 마리가 바뀌어요."),
     },
     // 1-3: Quiz — distance-2 case
     {
       type: "quiz",
       narr: t(E,
         "Two cows of the same type need to be CLOSE (distance 1 or 2) for the type to spread. Why distance 2 still works?",
-        "같은 타입 두 소가 가까이 있어야 (거리 1 또는 2) 그 타입이 퍼져요. 왜 거리 2도 가능할까?"),
+        "같은 종류 두 마리가 거리 1 이나 2 로 가까워야 퍼져요."),
       question: t(E,
         "Preferences: [3, 2, 3]. Which type can become universal?",
-        "선호도: [3, 2, 3]. 어떤 타입이 전체를 지배할 수 있어?"),
+        "소들이 좋아하는 건초가 [3, 2, 3] 이에요. 어떤 종류가 전체로 퍼질 수 있을까요?"),
       options: [
         t(E, "Only 2", "2 만"),
         t(E, "Only 3", "3 만"),
@@ -159,27 +159,27 @@ export function makeMajorityCh1(E) {
       correct: 1,
       explain: t(E,
         "Cows at 0 and 2 both like type 3. Focus group on (0, 1, 2): two 3's win → cow 1 becomes 3 too. Type 2 has no nearby duplicate, so it can't spread.",
-        "0번과 2번 소가 둘 다 3을 좋아. (0,1,2) 포커스 그룹: 3 두 명이 다수 → 1번도 3 됨. 2 는 가까이에 같은 게 없어서 못 퍼져."),
+        "0 번과 2 번 소가 둘 다 3 을 좋아해요.\n(0,1,2) 에 포커스 그룹을 열면 3 이 두 마리라 1 번도 3 이 돼요.\n2 는 가까이에 같은 종류가 없어서 퍼지지 못해요."),
     },
     // 1-4: Input — count valid types in [1,1,1,2,2,2]
     {
       type: "input",
       narr: t(E,
         "Count valid types in [1, 1, 1, 2, 2, 2]. Look for pairs at distance 1 OR 2 with the same value.",
-        "[1, 1, 1, 2, 2, 2]에서 가능한 타입 수. 거리 1 또는 2 의 같은 값 쌍을 찾아요."),
+        "거리 1 이나 2 안에 같은 값이 있는 종류를 세어 봐요."),
       question: t(E,
         "How many distinct hay types can become universal in [1, 1, 1, 2, 2, 2]?",
-        "[1, 1, 1, 2, 2, 2]에서 전체를 지배할 수 있는 타입 수?"),
+        "[1, 1, 1, 2, 2, 2] 에서 전체로 퍼질 수 있는 종류는 몇 가지일까요?"),
       hint: t(E,
         "Walk down the array — for each value, is there another nearby cow (distance 1 or 2) of the same value?",
-        "배열을 따라가면서 — 각 값이, 거리 1 또는 2 안에 같은 값을 가진 이웃이 있나?"),
+        "배열을 하나씩 보면서 물어봐요.\n이 값은 거리 1 이나 2 안에 같은 값을 가진 이웃이 있나요?"),
       answer: 2,
     },
     {
       type: "sim",
       narr: t(E,
         "Pick a preset and step through the distance-1 + distance-2 scan. Watch which values get added.",
-        "프리셋을 골라 거리 1 + 거리 2 스캔을 한 단계씩. 어떤 값이 추가되는지 봐요."),
+        "예시를 골라 한 단계씩 보며 어떤 값이 뽑히는지 봐요."),
     },
   ];
 }
@@ -195,14 +195,14 @@ export function makeMajorityCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Build the scan one piece at a time.  Each section explains why one short check (distance 1 + distance 2) decides whether each type can take over.",
-        "스캔을 한 단락씩. 거리 1 + 거리 2 짧은 검사 한 줄로 어떻게 결판나는지 섹션마다 설명."),
+        "코드를 한 단락씩 쌓으며 짧은 검사 하나로 답이 나는 걸 봐요."),
       sections: getMajoritySections(E),
     },
     {
       type: "runner",
       narr: t(E,
         "Try your own array. Enter space-separated values, see live scan and final output.",
-        "직접 배열 시도. 공백 구분 값 입력, 실시간 스캔과 최종 출력 확인."),
+        "값을 공백으로 띄워 넣고 결과가 어떻게 나오는지 봐요."),
     },
   ];
 }

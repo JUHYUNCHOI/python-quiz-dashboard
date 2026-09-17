@@ -83,7 +83,7 @@ export function makeMcc22LampCh1(E) {
       type: "reveal",
       narr: t(E,
         "n lamps sit on a number line. Lamp i at position p shines brightness b right under it, fading by 1 every step away. At a position x the brightnesses of all lamps add up.\nCount the integer positions where the total brightness is at least k.",
-        "수직선 위에 램프 n 개가 있어요. 위치 p 의 램프 i 는 바로 아래에서 밝기 b, 한 칸 멀어질수록 1씩 약해져요. 어떤 위치 x 에서는 모든 램프의 밝기가 더해져요.\n총 밝기가 k 이상인 정수 위치의 개수를 세요."),
+        "총 밝기가 k 이상인 정수 위치는 몇 개일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -148,7 +148,7 @@ export function makeMcc22LampCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. Positions p are strictly increasing; the answer counts x with total brightness ≥ k.",
-        "입력 형식과 공식 예제를 봐요. 위치 p 는 오름차순이고, 답은 총 밝기가 k 이상인 x 의 개수예요."),
+        "입력 형식과 공식 예제를 함께 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#faf5ff", border: "1px solid #e9d5ff", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -184,7 +184,7 @@ export function makeMcc22LampCh1(E) {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
               "Only x = −3 and x = 0 reach a total brightness of 6, so the answer is 2. The next step lets you feel why.",
-              "총 밝기가 6 에 닿는 곳은 x = −3 과 x = 0 뿐이라 답은 2. 다음 단계에서 직접 느껴봐요.")}
+              "총 밝기가 6 에 닿는 곳은 x = −3 과 x = 0 뿐이라 답은 2 예요. 다음 단계에서 직접 느껴 봐요.")}
           </div>
         </div>),
     },
@@ -194,7 +194,7 @@ export function makeMcc22LampCh1(E) {
       type: "deepAuditSim",
       narr: t(E,
         "Each lamp is a triangular tent; the bars show the SUMMED brightness at every integer x. Drag k up and down, and bump each lamp's brightness b — watch which positions stay above the line, and notice the hill only bends at the breakpoints p−b, p, p+b.",
-        "램프 하나하나가 삼각 텐트예요. 막대는 모든 정수 x 에서의 합쳐진 밝기예요. k 를 올리고 내려 보고, 각 램프의 밝기 b 도 바꿔 봐요 — 어떤 위치가 선 위에 남는지 보고, 언덕이 꺾이는 곳이 p−b, p, p+b 뿐임을 확인해요."),
+        "k 와 밝기 b 를 바꿔 보며 언덕이 어디서 꺾이는지 봐요."),
     },
 
     // 1-4: understanding check
@@ -202,10 +202,10 @@ export function makeMcc22LampCh1(E) {
       type: "quiz",
       narr: t(E,
         "One lamp at p=0 with b=6 shines 6 at x=0, then 5,4,3,… stepping away. A second lamp at p=−3 with b=2 shines 2 at x=−3, 1 at x=−2 and x=−4. Add them up at each x.",
-        "p=0, b=6 램프는 x=0 에서 6, 멀어지며 5,4,3,… 이에요. p=−3, b=2 램프는 x=−3 에서 2, x=−2 와 x=−4 에서 1 이에요. 각 x 에서 더해요."),
+        "램프 둘의 밝기를 같은 x 에서 더하면 총 밝기가 돼요."),
       question: t(E,
         "Two lamps: (p=0, b=6) and (p=−3, b=2). What is the total brightness at x = −3?",
-        "램프 둘: (p=0, b=6), (p=−3, b=2). x = −3 에서 총 밝기는?"),
+        "램프가 (p=0, b=6) 과 (p=−3, b=2) 둘 있어요. x = −3 에서 총 밝기는 얼마일까요?"),
       options: [
         t(E, "5", "5"),
         t(E, "6", "6"),
@@ -214,7 +214,7 @@ export function makeMcc22LampCh1(E) {
       correct: 0,
       explain: t(E,
         "The lamp at p=0 gives max(0, 6 − |0−(−3)|) = 6 − 3 = 3. The lamp at p=−3 gives max(0, 2 − 0) = 2. Add them: 3 + 2 = 5. Every position's total is just the sum of the tents.",
-        "p=0 램프는 max(0, 6 − |0−(−3)|) = 6 − 3 = 3. p=−3 램프는 max(0, 2 − 0) = 2. 더하면 3 + 2 = 5. 어느 위치든 총 밝기는 텐트들의 합이에요."),
+        "p=0 램프는 max(0, 6 − |0−(−3)|) = 6 − 3 = 3 이에요. p=−3 램프는 max(0, 2 − 0) = 2 예요. 더하면 3 + 2 = 5 예요. 어느 위치든 총 밝기는 텐트들의 합이에요."),
     },
   ];
 }
@@ -230,7 +230,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way visits every integer position and sums every lamp: with positions spanning up to 10^12 that is impossible. The fast way turns each lamp into three slope events (+1, −2, +1), sweeps only the breakpoints, and counts integers per straight segment with exact arithmetic.",
-        "느린 방법은 모든 정수 위치를 방문해 모든 램프를 더해요: 위치가 최대 10^12 까지 퍼지니 불가능해요. 빠른 방법은 램프마다 기울기 이벤트 3개(+1, −2, +1)로 바꿔 꺾인점만 훑고, 직선 구간마다 정수를 정확한 계산으로 세요."),
+        "위치를 하나씩 도는 대신 꺾인점만 훑는 방법을 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -241,7 +241,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "Positions can span 10^12 and there are up to 10^5 lamps — visiting each x is hopeless. Times out.",
-                  "위치는 10^12 까지 퍼지고 램프는 최대 10^5 개 — x 를 하나씩 방문하는 건 불가능. 시간 초과.")}
+                  "위치는 10^12 까지 퍼지고 램프는 최대 10^5 개예요. x 를 하나씩 방문하면 시간 초과가 나요.")}
               </div>
             </div>
             <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 14px" }}>
@@ -251,7 +251,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "Each tent = +1 at p−b, −2 at p, +1 at p+b. Sort the 3n breakpoints, sweep once, and count integers per segment. About n log n per test.",
-                  "각 텐트 = p−b 에 +1, p 에 −2, p+b 에 +1. 꺾인점 3n 개를 정렬해 한 번 훑고, 구간마다 정수를 세요. 테스트당 약 n log n.")}
+                  "텐트 하나는 p−b 에 +1, p 에 −2, p+b 에 +1 이에요. 꺾인점 3n 개를 정렬해 한 번 훑고, 구간마다 정수를 세요. 테스트 하나당 약 n log n 이에요.")}
               </div>
             </div>
           </div>
@@ -264,7 +264,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
+        "Solution code — read part by part.", "풀이 코드를 부분별로 읽어 봐요."),
       sections: getMcc22LampSections(E),
     },
   ];

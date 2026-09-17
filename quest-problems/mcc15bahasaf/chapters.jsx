@@ -66,7 +66,7 @@ function SyllableEchoSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "The slashes already split the sentence into syllables. Each syllable gets an echo glued right after it. Step through them one by one.",
-            "슬래시가 이미 문장을 음절로 나눠줬어요. 음절마다 바로 뒤에 메아리가 하나씩 붙어요. 한 음절씩 넘겨봐요.")}
+            "슬래시가 이미 문장을 음절로 나눠 놨어요. 음절마다 바로 뒤에 메아리가 하나씩 붙어요. 한 음절씩 넘겨 봐요.")}
         </div>
 
         {/* all syllables laid out, words separated by a gap */}
@@ -181,7 +181,7 @@ export function makeMcc15BahasaCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bahasa F is a Malay secret language. Every syllable gets an echo right after it: the first consonant of the syllable becomes 'f'.\nThe sentence arrives with its syllables already separated by slashes.",
-        "Bahasa F 는 말레이어에서 나온 비밀 언어예요. 음절마다 바로 뒤에 메아리가 붙어요: 그 음절의 첫 자음이 'f' 로 바뀐 소리예요.\n문장은 음절이 이미 슬래시로 나뉜 채로 들어와요."),
+        "음절마다 첫 자음을 'f' 로 바꾼 메아리를 뒤에 붙여요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -219,7 +219,7 @@ export function makeMcc15BahasaCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "For each syllable: change ", "음절마다: ")}
+                  {t(E, "For each syllable: change ", "음절마다 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "the first consonant to 'f'", "첫 자음을 'f' 로")}</b>
                   {t(E, " and add that right after the syllable.", " 바꾼 것을 음절 바로 뒤에 붙여요.")}
                 </div>
@@ -269,7 +269,7 @@ export function makeMcc15BahasaCh1(E) {
       type: "reveal",
       narr: t(E,
         "The input is ONE line — the whole sentence, slashes and spaces included. The output is one line too, with the slashes gone.",
-        "입력은 딱 한 줄이에요 — 슬래시와 공백까지 포함한 문장 전체. 출력도 한 줄이고, 슬래시는 사라져요."),
+        "입력도 출력도 한 줄이고, 출력에선 슬래시가 사라져요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -277,9 +277,9 @@ export function makeMcc15BahasaCh1(E) {
               📥 {t(E, "Input / Output", "입력 / 출력")}
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "One sentence, at most 5,000 characters — slashes and spaces included.", "문장 한 줄, 길이 최대 5,000 — 슬래시와 공백 포함.")}</div>
-              <div>• {t(E, "No dots or other special characters. All letters lowercase.", "마침표나 특수문자는 없어요. 글자는 전부 소문자.")}</div>
-              <div>• {t(E, "Output: the Bahasa F sentence, WITHOUT slashes, lowercase.", "출력: Bahasa F 문장 — 슬래시 없이, 소문자로.")}</div>
+              <div>• {t(E, "One sentence, at most 5,000 characters — slashes and spaces included.", "문장이 한 줄 들어와요. 길이는 최대 5,000 이고 슬래시와 공백도 들어가요.")}</div>
+              <div>• {t(E, "No dots or other special characters. All letters lowercase.", "마침표나 특수한 기호는 없어요. 글자는 전부 소문자예요.")}</div>
+              <div>• {t(E, "Output: the Bahasa F sentence, WITHOUT slashes, lowercase.", "출력은 Bahasa F 문장이에요. 슬래시 없이 소문자로 써요.")}</div>
             </div>
           </div>
 
@@ -345,7 +345,7 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Nothing here is slow — the sentence is at most 5,000 characters. The only thing that can go wrong is the rule itself. So cut the sentence down to single syllables, and get that one small rule exactly right.",
-        "여기서 느려질 건 없어요 — 문장은 길어야 5,000 글자니까요. 틀릴 수 있는 건 규칙 그 자체뿐이에요. 그러니 문장을 음절 하나까지 쪼개고, 그 작은 규칙 하나를 정확히 맞히면 돼요."),
+        "틀릴 수 있는 건 규칙 하나뿐이니 그것만 정확히 맞히면 돼요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -355,7 +355,7 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
                 {t(E, "Split the sentence by spaces → words. Split each word by '/' → syllables. Two splits and the sentence is in pieces.",
-                     "문장을 공백으로 쪼개면 → 단어. 단어를 '/' 로 쪼개면 → 음절. 나누기는 split 두 번이면 끝이에요.")}
+                     "문장을 공백으로 쪼개면 단어가 되고, 단어를 '/' 로 쪼개면 음절이 돼요. 나누기는 split 두 번이면 끝이에요.")}
               </div>
             </div>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
@@ -364,7 +364,7 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
                 {t(E, "Consonant start → echo = 'f' + the rest. Vowel start → echo = 'f' + the whole syllable. Then glue: syllable + echo. Everything else is just putting the pieces back together.",
-                     "자음으로 시작 → 메아리 = 'f' + 나머지. 모음으로 시작 → 메아리 = 'f' + 음절 전체. 그다음 붙이기: 음절 + 메아리. 나머지는 조각을 다시 이어 붙이는 일뿐이에요.")}
+                     "자음으로 시작하면 메아리 = 'f' + 나머지 예요. 모음으로 시작하면 메아리 = 'f' + 음절 전체고요. 그다음 음절 + 메아리 로 붙여요. 나머지는 조각을 다시 이어 붙이는 일뿐이에요.")}
               </div>
             </div>
           </div>
@@ -377,7 +377,7 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
+        "Solution code — read part by part.", "풀이 코드를 부분별로 읽어 봐요."),
       sections: getMcc15BahasaSections(E),
     },
   ];

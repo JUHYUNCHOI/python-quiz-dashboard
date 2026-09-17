@@ -126,8 +126,8 @@ function MismatchVisual({ E }) {
 
       <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
-          "Mismatches form one contiguous block — fix it with (length − 1) adjacent swaps.",
-          "불일치는 연속된 한 블록을 이뤄요 — (길이 − 1)번 인접 스왑으로 해결.")}
+          "The moved cow pushed the cows in between, so the mismatches sit in one block — sliding it back takes (length − 1) adjacent swaps.",
+          "옮겨진 소가 그 사이 소들을 밀어냈어요. 그래서 안 맞는 칸이 한 덩어리로 붙어 있고, 되밀려면 (길이 − 1)번 바꾸면 돼요.")}
       </div>
     </div>
   );
@@ -145,7 +145,7 @@ export function makeOutOfPlaceCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ had cows in a row, sorted by height. ONE cow was secretly moved out of her sorted position to a new spot — pushing the cows in between by 1.\nFind the MINIMUM number of adjacent-swaps needed to put the row back into sorted order.",
-        "FJ에게 키 순으로 정렬된 소 한 줄이 있었어요. 단 한 마리가 몰래 다른 위치로 옮겨졌고, 그 사이 소들은 한 칸씩 밀려났어요.\n다시 정렬된 상태로 만들기 위한 최소 인접 스왑 횟수를 출력해요."),
+        "소 한 마리가 자리를 옮겼어요. 몇 번 바꾸면 되돌릴까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -162,7 +162,7 @@ export function makeOutOfPlaceCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum number of adjacent swaps needed to restore the sorted order.",
-                "정렬 상태로 되돌리기 위한 최소 인접 스왑 횟수를 출력.")}
+                "정렬된 상태로 되돌리려면 이웃끼리 최소 몇 번 바꿔야 하는지 출력해요.")}
             </div>
           </div>
 
@@ -191,9 +191,9 @@ export function makeOutOfPlaceCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of adjacent swaps", "필요한 최소 인접 스왑 횟수")}</b>
-                  {t(E, " to restore the sorted order.", " 를 출력해요. 정렬 상태로 되돌리기 위한.")}
+                  {t(E, "Print the ", "정렬된 상태로 되돌리는 데 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of adjacent swaps", "이웃끼리 바꾸는 최소 횟수")}</b>
+                  {t(E, " to restore the sorted order.", " 를 출력해요.")}
                 </div>
               </div>
             </div>
@@ -204,31 +204,31 @@ export function makeOutOfPlaceCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Array [1, 3, 2]. Sorted = [1, 2, 3]. Positions 1 and 2 differ. How many swaps?", "배열 [1, 3, 2]. 정렬 = [1, 2, 3]. 위치 1과 2가 달라요. 스왑 몇 번?"),
+        "Array [1, 3, 2]. Sorted = [1, 2, 3]. Positions 1 and 2 differ. How many swaps?", "[1, 3, 2] 를 정렬하려면 몇 번 바꿔야 할까요?"),
       question: t(E,
         "[1, 3, 2] -> sorted [1, 2, 3]. How many adjacent swaps needed?",
-        "[1, 3, 2] -> 정렬 [1, 2, 3]. 인접 스왑 몇 번 필요?"),
+        "[1, 3, 2] 를 [1, 2, 3] 으로 만들려면 이웃끼리 몇 번 바꿔야 할까요?"),
       options: [
-        t(E, "1 swap (swap 3 and 2)", "1번 스왑 (3과 2를 교환)"),
-        t(E, "2 swaps", "2번 스왑"),
-        t(E, "0 swaps", "0번 스왑"),
+        t(E, "1 swap (swap 3 and 2)", "1번 (3과 2를 바꿔요)"),
+        t(E, "2 swaps", "2번"),
+        t(E, "0 swaps", "0번"),
       ],
       correct: 0,
       explain: t(E,
         "2 positions differ, so answer = 2 - 1 = 1. Swap indices 1 and 2 to get [1, 2, 3].",
-        "2개 위치가 다르니 답 = 2 - 1 = 1. 인덱스 1과 2를 교환하면 [1, 2, 3]."),
+        "다른 자리가 2개니까 답은 2 - 1 = 1 이에요. 1번 자리와 2번 자리를 바꾸면 [1, 2, 3] 이 돼요."),
     },
     // 1-3: input
     {
       type: "input",
       narr: t(E,
-        "[1, 3, 2] needs how many adjacent swaps to sort?", "[1, 3, 2]를 정렬하려면 인접 스왑이 몇 번 필요해요?"),
+        "[1, 3, 2] needs how many adjacent swaps to sort?", "[1, 3, 2] 를 정렬하려면 몇 번 바꿔야 할까요?"),
       question: t(E,
         "Min adjacent swaps to sort [1, 3, 2]?",
-        "[1, 3, 2] 정렬에 필요한 최소 인접 스왑 수?"),
+        "[1, 3, 2] 를 정렬하려면 이웃끼리 최소 몇 번 바꿔야 할까요?"),
       hint: t(E,
         "Compare to sorted; how many positions differ?",
-        "정렬된 결과와 비교해 봐 — 다른 위치가 몇 개?"),
+        "정렬된 결과와 비교해 봐요. 다른 자리가 몇 개인가요?"),
       answer: 1,
     },
     // 1-4: visual — see WHY the formula works
@@ -236,7 +236,7 @@ export function makeOutOfPlaceCh1(E) {
       type: "visual",
       narr: t(E,
         "Pick any example. The red ✗ cells form one contiguous block — that's exactly the cows pushed by the misplaced one. Answer = mismatches − 1.",
-        "예시를 골라봐. 빨간 ✗ 셀이 연속된 한 블록을 이뤄요 — 옮겨진 소가 밀어낸 자리들이에요. 답 = 불일치 − 1."),
+        "빨간 ✗ 칸이 왜 붙어 있는지 살펴봐요."),
     },
   ];
 }
@@ -252,7 +252,7 @@ export function makeOutOfPlaceCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Sort a copy and compare to original — the moved cow creates a CONTIGUOUS block of mismatches. Answer = (block length − 1). Sections build it one piece at a time.",
-        "사본을 정렬해 원본과 비교 — 옮겨진 소가 연속된 불일치 블록을 만들어요. 답 = (블록 길이 − 1). 아래 섹션이 한 단락씩 쌓아요."),
+        "사본을 정렬해서 원래 줄과 비교해 봐요."),
       sections: getOutOfPlaceSections(E),
     },
   ];

@@ -32,7 +32,7 @@ export function makeChapters(E) {
               ))}
             </div>
             <div style={{ fontSize: 11, color: "#64748b", textAlign: "center", marginBottom: 6 }}>
-              {t(E, "Check every contiguous slice — all 6 of them:", "연속 구간을 전부 확인 — 총 6개:")}
+              {t(E, "Check every contiguous slice — all 6 of them:", "붙어 있는 토막을 전부 확인해요 — 모두 6개예요.")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 5 }}>
               {[
@@ -252,7 +252,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Build the prefix-sum list, then one sweep with a dictionary — O(n) time and space. No nested loop.",
-        "누적합 리스트를 만들고, 딕셔너리로 한 번만 훑으면 끝 — 시간도 공간도 O(n). 이중 반복 없음."),
+        "누적합 리스트를 만들고 딕셔너리로 한 번만 훑으면 끝나요.\n안쪽 반복이 없어서 시간도 공간도 O(n) 이에요."),
       content: (
         <CodeJourney
           E={E}
@@ -261,10 +261,10 @@ export function makeChapters(E) {
               label: t(E, "1. Build the prefix-sum list", "1. 누적합 리스트 만들기"),
               color: TEAL,
               why: [
-                t(E, "prefix[0] = 0: the empty prefix — the sum before adding anything.", "prefix[0] = 0: 빈 누적합 — 아무것도 더하기 전의 합."),
-                t(E, "Each next cell = the previous one + the next number. So prefix[i] holds the sum of the first i numbers.", "다음 칸 = 이전 칸 + 다음 숫자. 그래서 prefix[i] 는 앞 i 개 숫자의 합."),
+                t(E, "prefix[0] = 0: the empty prefix — the sum before adding anything.", "prefix[0] = 0 은 빈 누적합이에요. 아무것도 더하기 전의 합이죠."),
+                t(E, "Each next cell = the previous one + the next number. So prefix[i] holds the sum of the first i numbers.", "다음 칸은 이전 칸에 다음 숫자를 더한 값이에요. 그래서 prefix[i] 는 앞 i 개 숫자의 합이에요."),
               ],
-              cppOnly: [t(E, "Use long long for prefix so a big sum can't overflow.", "합이 커질 수 있으니 prefix 는 long long 으로.")],
+              cppOnly: [t(E, "Use long long for prefix so a big sum can't overflow.", "합이 커질 수 있으니 prefix 는 long long 으로 둬요.")],
               py: [
                 "from collections import defaultdict",
                 "",
@@ -286,11 +286,11 @@ export function makeChapters(E) {
               color: TEAL,
               why: [
                 t(E, "A subarray sum = prefix[r] − prefix[l]. We want that difference to be k.", "토막 합 = prefix[r] − prefix[l]. 이 차이가 k 인 쌍을 찾는 거예요."),
-                t(E, "Sweep the list. For value p, the partner is p − k: how many earlier values equal it = how many valid slices end here.", "리스트를 훑어요. 값 p 의 짝은 p − k: 앞에서 이 값이 몇 번 나왔나 = 여기서 끝나는 유효한 토막 개수."),
-                t(E, "Look up first, then record p — so a value never pairs with itself.", "조회를 먼저 하고 그다음 p 를 기록 — 자기 자신과 짝지어지지 않게."),
+                t(E, "Sweep the list. For value p, the partner is p − k: how many earlier values equal it = how many valid slices end here.", "리스트를 훑어요. 값 p 의 짝은 p − k 예요.\n앞에서 이 값이 나온 횟수가 곧 여기서 끝나는 토막의 개수예요."),
+                t(E, "Look up first, then record p — so a value never pairs with itself.", "먼저 찾아보고 그다음에 p 를 적어요. 그래야 p 가 자기 자신과 짝지어지지 않아요."),
               ],
-              pyOnly: [t(E, "seen = defaultdict(int): a missing key reads as 0 automatically — no if-check needed before adding.", "seen = defaultdict(int): 없는 키를 읽으면 자동으로 0 — if 검사 없이 바로 더하고 셀 수 있어요.")],
-              cppOnly: [t(E, "Check seen.count first — reading a missing key would insert a 0.", "seen.count 로 먼저 확인 — 없는 키를 읽으면 0 이 삽입돼요.")],
+              pyOnly: [t(E, "seen = defaultdict(int): a missing key reads as 0 automatically — no if-check needed before adding.", "seen = defaultdict(int) 은 없는 키를 읽으면 0 을 돌려줘요. 그래서 if 검사 없이 바로 더할 수 있어요.")],
+              cppOnly: [t(E, "Check seen.count first — reading a missing key would insert a 0.", "seen.count 로 먼저 확인해요. 없는 키를 그냥 읽으면 0 이 저절로 들어가 버리거든요.")],
               py: [
                 "    count = 0",
                 "    seen = defaultdict(int)       # {prefix value: how many times}",
@@ -345,7 +345,7 @@ export function makeChapters(E) {
               "}",
             ],
           }}
-          doneNote={t(E, "O(n) time & space. [1,1,1],k=2 → 2; [1,2,3],k=3 → 2.", "시간·공간 O(n). [1,1,1],k=2 → 2; [1,2,3],k=3 → 2.")}
+          doneNote={t(E, "O(n) time & space. [1,1,1],k=2 → 2; [1,2,3],k=3 → 2.", "시간도 공간도 O(n) 이에요. [1,1,1], k=2 는 2 가 되고 [1,2,3], k=3 도 2 가 돼요.")}
         />
       ),
     },

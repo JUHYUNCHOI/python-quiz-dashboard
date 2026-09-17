@@ -30,18 +30,18 @@ const BAL_WALK_CPP = [
 function getBalancedWalk(E, lang) {
   if (lang === "cpp") {
     return { code: BAL_WALK_CPP, beats: [
-      { hi: [5, 6],   bubble: t(E, "Read T — how many test cases.", "T 읽기 — 풀 케이스가 몇 개인지.") },
-      { hi: [7, 7],   bubble: t(E, "Repeat for each test case.", "케이스마다 반복.") },
-      { hi: [8, 9],   bubble: t(E, "Read N (open '(') and M (close ')').  long long — the answer can get big.", "N (여는 '(') 과 M (닫는 ')') 읽기.  답이 커질 수 있어 long long.") },
-      { hi: [10, 10], bubble: t(E, "Pairs = the smaller side = min(N,M). Each pair = 2 chars → print 2 × min(N,M).", "짝은 적은 쪽만큼 = min(N,M) 개. 한 짝 = 2 글자 → 2 × min(N,M) 출력.") },
+      { hi: [5, 6],   bubble: t(E, "Read T — how many test cases.", "풀 문제가 몇 개인지 T 를 읽어요.") },
+      { hi: [7, 7],   bubble: t(E, "Repeat for each test case.", "문제 하나마다 이걸 반복해요.") },
+      { hi: [8, 9],   bubble: t(E, "Read N (open '(') and M (close ')').  long long — the answer can get big.", "여는 괄호 수 N 과 닫는 괄호 수 M 을 읽어요.\n답이 커질 수 있어서 long long 으로 받아요.") },
+      { hi: [10, 10], bubble: t(E, "Pairs = the smaller side = min(N,M). Each pair = 2 chars → print 2 × min(N,M).", "짝은 적은 쪽만큼만 만들 수 있으니 min(N,M) 개예요.\n한 짝이 글자 2 개라서 2 × min(N,M) 을 출력해요.") },
     ] };
   }
   return { code: BAL_WALK_PY, beats: [
-    { hi: [0, 1], bubble: t(E, "Fast input (there can be many test cases).", "빠른 입력 (케이스가 많을 수 있어서).") },
-    { hi: [3, 3], bubble: t(E, "Read T — how many test cases.", "T 읽기 — 풀 케이스가 몇 개인지.") },
-    { hi: [4, 4], bubble: t(E, "Repeat for each test case.", "케이스마다 반복.") },
-    { hi: [5, 5], bubble: t(E, "Read N (open '(') and M (close ')').", "N (여는 '(') 과 M (닫는 ')') 읽기.") },
-    { hi: [6, 6], bubble: t(E, "Pairs = the smaller side = min(N,M). Each pair = 2 chars → print 2 × min(N,M).", "짝은 적은 쪽만큼 = min(N,M) 개. 한 짝 = 2 글자 → 2 × min(N,M) 출력.") },
+    { hi: [0, 1], bubble: t(E, "Fast input (there can be many test cases).", "문제가 많을 수 있어서 입력을 빠르게 받아요.") },
+    { hi: [3, 3], bubble: t(E, "Read T — how many test cases.", "풀 문제가 몇 개인지 T 를 읽어요.") },
+    { hi: [4, 4], bubble: t(E, "Repeat for each test case.", "문제 하나마다 이걸 반복해요.") },
+    { hi: [5, 5], bubble: t(E, "Read N (open '(') and M (close ')').", "여는 괄호 수 N 과 닫는 괄호 수 M 을 읽어요.") },
+    { hi: [6, 6], bubble: t(E, "Pairs = the smaller side = min(N,M). Each pair = 2 chars → print 2 × min(N,M).", "짝은 적은 쪽만큼만 만들 수 있으니 min(N,M) 개예요.\n한 짝이 글자 2 개라서 2 × min(N,M) 을 출력해요.") },
   ] };
 }
 
@@ -67,7 +67,7 @@ export function makeBalancedCh1(E) {
       type: "reveal",
       narr: t(E,
         "Given N opening brackets followed by M closing brackets — find the longest balanced subsequence we can pull out.",
-        "N개의 여는 괄호 뒤에 M개의 닫는 괄호 — 그 안에서 뽑아낼 수 있는 가장 긴 균형 부분수열을 찾아요."),
+        "여는 괄호와 닫는 괄호로 짝을 최대 몇 개 만들 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -84,7 +84,7 @@ export function makeBalancedCh1(E) {
             <div style={{ fontSize: 13, color: "#7c2d12", lineHeight: 1.5 }}>
               {t(E,
                 "Given N opening brackets followed by M closing brackets, find the LONGEST balanced subsequence length.",
-                "여는 괄호 N 개 + 닫는 괄호 M 개 — 그 안에서 만들 수 있는 가장 긴 균형 부분수열의 길이.")}
+                "여는 괄호 N 개 뒤에 닫는 괄호 M 개가 붙어 있어요. 여기서 만들 수 있는 가장 긴 균형 부분수열의 길이를 출력해요.")}
             </div>
           </div>
 
@@ -109,9 +109,9 @@ export function makeBalancedCh1(E) {
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#f97316" }}>{t(E, "subsequence", "부분수열")}</b>
-                  {t(E, " keeps some characters in order — you can ", "은 원래 순서를 유지하며 ")}
-                  <b>{t(E, "skip", "건너뛰기")}</b>
-                  {t(E, " any.", " 가능.")}
+                  {t(E, " keeps some characters in order — you can ", "은 원래 순서를 그대로 두고 아무 글자나 ")}
+                  <b>{t(E, "skip", "건너뛴")}</b>
+                  {t(E, " any.", " 것이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -125,9 +125,9 @@ export function makeBalancedCh1(E) {
                   <code>)</code>
                   {t(E, " AFTER it. e.g. ", "이 뒤에 있어야 해요. 예: ")}
                   <code style={{ background: "#dcfce7", padding: "1px 5px", borderRadius: 3, color: "#15803d", fontWeight: 600 }}>{`(())`}</code>{" "}
-                  {t(E, "balanced, ", "균형, ")}
+                  {t(E, "balanced, ", "는 균형이고, ")}
                   <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 600 }}>{`(()`}</code>{" "}
-                  {t(E, "not.", "아님.")}
+                  {t(E, "not.", "는 아니에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
@@ -146,7 +146,7 @@ export function makeBalancedCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input: T test cases. Each is one line of N M. Output: one line per test case.",
-        "입력: T 개 케이스. 한 케이스는 N M 한 줄. 출력: 케이스마다 한 줄."),
+        "문제 하나가 N M 한 줄이고, 답도 한 줄씩 내보내요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
@@ -159,7 +159,7 @@ export function makeBalancedCh1(E) {
 100 42`}
               </div>
               <div style={{ fontSize: 10.5, color: "#9a3412", marginTop: 6, lineHeight: 1.5 }}>
-                {t(E, "Line 1: T = 3 cases. Then T lines of 'N M'.", "1 줄: T = 3 케이스. 그 다음 T 줄에 'N M'.")}
+                {t(E, "Line 1: T = 3 cases. Then T lines of 'N M'.", "첫 줄의 T = 3 은 문제가 세 개라는 뜻이에요. 그 아래 세 줄이 'N M' 이에요.")}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
@@ -170,7 +170,7 @@ export function makeBalancedCh1(E) {
 84`}
               </div>
               <div style={{ fontSize: 10.5, color: "#15803d", marginTop: 6, lineHeight: 1.5 }}>
-                {t(E, "One length per test case.", "케이스마다 균형 부분수열 길이 한 줄.")}
+                {t(E, "One length per test case.", "문제마다 균형 부분수열의 길이를 한 줄씩 적어요.")}
               </div>
             </div>
           </div>
@@ -238,16 +238,16 @@ export function makeBalancedCh1(E) {
       type: "auditSim",
       narr: t(E,
         "Your turn — tap brackets to skip them and audit the subsequence yourself.\nCan you make a balanced one as long as possible?",
-        "직접 — 괄호 탭해서 건너뛰고 부분수열을 감사해 봐.\n가장 긴 균형 부분수열을 만들 수 있어?"),
+        "괄호를 눌러 건너뛰면서 가장 긴 균형을 만들어 봐요."),
     },
     {
       type: "quiz",
       narr: t(E,
         "Try this — sketch out the brackets in your head and count how many pairs you can really form.",
-        "직접 — 머릿속에 괄호 그려보고 실제로 몇 쌍이 만들어지는지 세 봐."),
+        "괄호를 그려 보고 몇 쌍이 만들어지는지 세어 봐요."),
       question: t(E,
         "For N=5, M=3, what's the longest balanced subsequence length?",
-        "N=5, M=3이면, 가장 긴 균형 부분수열 길이는?"),
+        "N=5, M=3 이면 가장 긴 균형 부분수열의 길이는 얼마일까요?"),
       options: ["5", "6", "8", "3"],
       correct: 1,
       explain: t(E,
@@ -258,11 +258,11 @@ export function makeBalancedCh1(E) {
       type: "input",
       narr: t(E,
         "Same idea on a bigger case. Which side runs out first?",
-        "같은 아이디어 더 큰 케이스. 어느 쪽이 먼저 떨어져?"),
-      question: t(E, "N=100, M=42. Answer?", "N=100, M=42. 답은?"),
+        "같은 생각으로 더 큰 수를 풀어 봐요. 어느 쪽이 먼저 모자랄까요?"),
+      question: t(E, "N=100, M=42. Answer?", "N=100, M=42 일 때 답은 얼마일까요?"),
       hint: t(E,
         "The shorter side limits the pair count.",
-        "짧은 쪽이 쌍 개수의 한계."),
+        "적은 쪽 개수만큼만 짝을 지을 수 있어요."),
       answer: 84,
     },
   ];
@@ -278,14 +278,14 @@ export function makeBalancedCh2(E) {
       type: "reveal",
       narr: t(E,
         "Look at the two cases below. Which brackets get a partner — and which get left over?",
-        "아래 두 케이스 봐. 어떤 괄호가 짝을 찾고 — 어떤 게 남아?"),
+        "어떤 괄호가 짝을 찾고 어떤 괄호가 남는지 볼게요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* Bottleneck visualization: 2 cases */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10 }}>
             {[
-              { N: 5, M: 3, label: t(E, "More '(' than ')'", "'(' 가 ')' 보다 많음") },
-              { N: 2, M: 6, label: t(E, "More ')' than '('", "')' 가 '(' 보다 많음") },
+              { N: 5, M: 3, label: t(E, "More '(' than ')'", "'(' 가 ')' 보다 많아요") },
+              { N: 2, M: 6, label: t(E, "More ')' than '('", "')' 가 '(' 보다 많아요") },
             ].map((ex, i) => {
               const pairs = Math.min(ex.N, ex.M);
               return (
@@ -342,31 +342,31 @@ export function makeBalancedCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "What if the string were mixed like '())((' instead of all '(' first?\nWould the answer still be 2×min(N,M)?", "만약 문자열이 '()((' 처럼 섞여있다면? 답이 여전히 2×min(N,M)일까요?"),
+        "What if the string were mixed like '))((' instead of all '(' first?\nWould the answer still be 2×min(N,M)?", "'(' 가 먼저 오지 않고 '))((' 처럼 섞여 있다면 어떨까요?"),
       question: t(E,
         "For the string '))((' (N=2 open, M=2 close but mixed), is the longest balanced subseq still 4?",
-        "문자열 '))((' (N=2 열림, M=2 닫힘이지만 섞임)에서 가장 긴 균형 부분수열이 여전히 4?"),
+        "'))((' 은 여는 괄호 2 개, 닫는 괄호 2 개예요. 가장 긴 균형 부분수열이 그래도 4 일까요?"),
       options: [
-        t(E, "No, it's 0 — can't match any", "아니, 0 — 매칭 불가"),
-        t(E, "Yes, still 4", "맞아, 여전히 4"),
-        t(E, "It's 2", "2야"),
+        t(E, "No, it's 0 — can't match any", "아니에요, 0 이에요. 짝을 하나도 못 지어요"),
+        t(E, "Yes, still 4", "맞아요, 그래도 4 예요"),
+        t(E, "It's 2", "2 예요"),
       ],
       correct: 0,
       explain: t(E,
         "'))((': all ')' come first! No '(' is before any ')' so no matching possible. The ORDER matters — our problem guarantees all '(' first!",
-        "'))((': 모든 ')'가 먼저 와요! '('가 ')' 앞에 없어서 매칭 불가. 순서가 중요해 — 우리 문제는 모든 '('가 먼저!"),
+        "'))((' 은 ')' 가 먼저 나와요. 짝이 되려면 '(' 가 ')' 앞에 있어야 하는데 그런 자리가 없어요. 그래서 순서가 중요해요. 우리 문제는 '(' 가 모두 앞에 있어요."),
     },
     {
       type: "input",
       narr: t(E,
-        "N=0, M=100. All closing brackets, no opening ones. Answer?", "N=0, M=100. 닫는 괄호만, 여는 괄호 없음. 답은?"),
+        "N=0, M=100. All closing brackets, no opening ones. Answer?", "여는 괄호가 하나도 없고 닫는 괄호만 100 개예요."),
       question: t(E, "2 × min(0, 100) = ?", "2 × min(0, 100) = ?"),
       answer: 0,
     },
     {
       type: "sim",
       narr: t(E,
-        "Try different (N, M).\nColoured brackets show which ones get matched.\nGreyed-out are leftovers.", "다양한 (N, M) 시도. 색깔 괄호 = 매칭됨. 회색 = 남는 것."),
+        "Try different (N, M).\nColoured brackets show which ones get matched.\nGreyed-out are leftovers.", "(N, M) 을 바꿔 가며 어떤 괄호가 짝을 찾는지 봐요."),
     },
   ];
 }
@@ -381,7 +381,7 @@ export function makeBalancedCh3(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The whole solution is short — each part lights up with a note right above it.",
-        "풀이는 짧아요 — 각 부분이 밝아지며 바로 위에 설명 말풍선이 떠요."),
+        "풀이가 짧아요. 줄마다 설명 말풍선이 붙어 있어요."),
       content: (() => {
         const w = getBalancedWalk(E, lang);
         return <CodeWalk E={E} lang={lang} code={w.code} beats={w.beats} accent="#f97316" />;
@@ -391,7 +391,7 @@ export function makeBalancedCh3(E, lang = "py") {
       type: "runner",
       narr: t(E,
         "Run it on your own test cases. Format: T on line 1, then T lines of 'N M'.",
-        "직접 테스트 — 1 줄에 T, 그 다음 T 줄에 'N M'."),
+        "직접 넣어 봐요. 첫 줄에 T, 그 아래 T 줄에 'N M' 이에요."),
     },
   ];
 }

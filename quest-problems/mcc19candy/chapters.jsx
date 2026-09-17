@@ -35,7 +35,7 @@ export function makeMcc19CandyCh1(E) {
       type: "reveal",
       narr: t(E,
         "Students stand in a line at positions 1, 2, 3, …. Over R rounds, each round shouts \"odd\" or \"even\". An \"odd\" shout eliminates everyone at an odd position; an \"even\" shout eliminates the even positions. Survivors renumber from 1.\nBob wants to be the SOLE survivor — print the starting position he must take.",
-        "학생들이 1, 2, 3, … 자리에 한 줄로 서 있어요. R 번의 라운드 동안, 매 라운드마다 \"odd\" 또는 \"even\" 을 외쳐요. \"odd\" 외침은 홀수 자리의 모두를, \"even\" 외침은 짝수 자리의 모두를 탈락시켜요. 살아남은 사람은 1 부터 다시 번호를 매겨요.\nBob 은 혼자 남고 싶어요 — 처음에 서야 할 시작 위치를 출력해요."),
+        "라운드마다 홀수 자리나 짝수 자리가 탈락해요.\nBob 이 끝까지 남으려면 어디에 서야 할까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -80,8 +80,8 @@ export function makeMcc19CandyCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  <b style={{ color: "#7c3aed" }}>"odd"</b>{t(E, " → everyone at an ODD position is eliminated (evens survive). ", " → 홀수 자리의 모두가 탈락 (짝수 자리 생존). ")}
-                  <b style={{ color: "#7c3aed" }}>"even"</b>{t(E, " → the EVEN positions are eliminated (odds survive). Survivors keep order and renumber from 1.", " → 짝수 자리가 탈락 (홀수 자리 생존). 살아남은 사람은 순서를 유지한 채 1 부터 다시 번호를 매겨요.")}
+                  <b style={{ color: "#7c3aed" }}>"odd"</b>{t(E, " → everyone at an ODD position is eliminated (evens survive). ", " 면 홀수 자리가 모두 탈락하고 짝수 자리가 살아남아요. ")}
+                  <b style={{ color: "#7c3aed" }}>"even"</b>{t(E, " → the EVEN positions are eliminated (odds survive). Survivors keep order and renumber from 1.", " 이면 짝수 자리가 탈락하고 홀수 자리가 살아남아요. 살아남은 사람은 순서를 유지한 채 1 부터 다시 번호를 매겨요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
@@ -102,7 +102,7 @@ export function makeMcc19CandyCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. The shouts arrive in order: round 0 first, round R−1 last.",
-        "입력 형식과 공식 예제를 봐요. 외침은 순서대로 들어와요: 라운드 0 이 먼저, 라운드 R−1 이 마지막."),
+        "외침은 순서대로 들어와요.\n라운드 0 이 먼저고, 라운드 R−1 이 마지막이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -117,7 +117,7 @@ export function makeMcc19CandyCh1(E) {
               📤 {t(E, "Output", "출력")}
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              {t(E, "Bob's starting position.", "Bob 의 시작 위치.")}
+              {t(E, "Bob's starting position.", "Bob 이 서야 할 시작 자리를 출력해요.")}
             </div>
           </div>
 
@@ -179,7 +179,7 @@ export function makeMcc19CandyCh1(E) {
       correct: 1,
       explain: t(E,
         "\"odd\" eliminates the odd position, so position 2 survives. Undoing it: the last survivor stands at 1, and one round earlier that was 1 × 2 = 2.",
-        "\"odd\" 는 홀수 자리를 없애니 자리 2 가 살아남아요. 거꾸로 보면: 마지막에 남은 사람은 자리 1 이고, 한 라운드 전엔 1 × 2 = 2 였어요."),
+        "\"odd\" 는 홀수 자리를 없애니 자리 2 가 살아남아요.\n거꾸로 보면 마지막에 남은 사람은 자리 1 이고, 한 라운드 전엔 1 × 2 = 2 였어요."),
     },
   ];
 }
@@ -201,18 +201,18 @@ export function makeMcc19CandyCh2(E, lang = "py") {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: guess a position, simulate all rounds, check", "느림: 위치 하나 찍고, 모든 라운드 시뮬, 확인")}
+                🐢 {t(E, "Slow: guess a position, simulate all rounds, check", "느림 — 자리 하나를 찍고 모든 라운드를 돌려 확인하기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Try each starting spot and replay the eliminations — lots of repeated work as R grows.", "각 시작 자리를 시도하며 탈락을 다시 재생 — R 이 커지면 반복이 많아요.")}
+                {t(E, "Try each starting spot and replay the eliminations — lots of repeated work as R grows.", "시작 자리를 하나씩 넣어 보며 탈락을 다시 돌려요. R 이 커지면 같은 일을 너무 여러 번 하게 돼요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: undo the rounds, last one first", "빠름: 라운드를 마지막부터 되돌리기")}
+                🚀 {t(E, "Fast: undo the rounds, last one first", "빠름 — 라운드를 마지막부터 되돌리기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Start at pos = 1 and walk the rounds backwards: \"odd\" → ×2, \"even\" → ×2 − 1.", "pos = 1 에서 시작해 라운드를 거꾸로 훑어요: \"odd\" 면 ×2, \"even\" 이면 ×2 − 1.")}
+                {t(E, "Start at pos = 1 and walk the rounds backwards: \"odd\" → ×2, \"even\" → ×2 − 1.", "pos = 1 에서 시작해 라운드를 거꾸로 훑어요. \"odd\" 면 ×2, \"even\" 이면 ×2 − 1 을 해요.")}
               </div>
             </div>
           </div>

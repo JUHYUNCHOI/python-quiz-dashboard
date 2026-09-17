@@ -402,7 +402,7 @@ export function SpeedRaceSim({ E, nMax = 20000, nStart = 200, constraintN = 2000
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>
         <span style={{ color: "#334155" }}>{label}</span>
         <span style={{ fontFamily: "monospace", color: slow ? NO : OK }}>
-          {fmt(ops)} {t(E, "ops", "연산")} · {human(ops)}
+          {fmt(ops)} {t(E, "ops", "번 계산")} · {human(ops)}
         </span>
       </div>
       <div style={{ position: "relative", height: 24, background: "#f1f5f9", borderRadius: 6, overflow: "hidden", border: "1px solid #e2e8f0" }}>
@@ -438,7 +438,7 @@ export function SpeedRaceSim({ E, nMax = 20000, nStart = 200, constraintN = 2000
       <div style={{ marginTop: 6, fontSize: 11.5, color: "#475569", textAlign: "center", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "7px 10px" }}>
         {t(E,
           "Bars fill toward the ~2-second budget (≈2×10⁸ ops). Drag n up: brute shoots past it while the smart pass barely moves.",
-          "막대는 약 2초 예산(≈2×10⁸ 연산)까지 차요. n 을 키워보면 — 완전탐색은 예산을 훌쩍 넘기고, 똑똑한 스캔은 거의 안 움직여요.")}
+          "막대는 약 2초치(≈2×10⁸ 번 계산)까지 차요.\nn 을 키워 보면 완전탐색은 훌쩍 넘치는데, 똑똑한 방법은 거의 안 움직여요.")}
       </div>
     </div>
   );
@@ -452,7 +452,7 @@ export function CodeJourney({ E, sections, doneNote, fullCode }) {
   return (
     <div style={{ padding: 14 }}>
       <div style={{ fontSize: 11, color: "#94a3b8", marginBottom: 10, textAlign: "right" }}>
-        {t(E, "language: switch with 🐍 Py / 💻 C++ up top", "언어: 위쪽 🐍 Py / 💻 C++ 로 전환")}
+        {t(E, "language: switch with 🐍 Py / 💻 C++ up top", "위쪽 🐍 Py / 💻 C++ 로 언어를 바꿀 수 있어요")}
       </div>
 
       {sections.map((sec, i) => {

@@ -34,24 +34,24 @@ function CowSplitsPlan({ E }) {
         <Insight icon="🚫" color="#dc2626"
           head={t(E, "If N is odd → impossible.", "N 이 홀수면 → 불가능.")}
           body={t(E,
-            <>3N is odd, and each op removes an even count. Print −1 and move on.</>,
-            <>3N 이 홀수인데 각 연산은 짝수 개 지우기. −1 출력하고 다음으로.</>)} />
+            <>3N is odd, and each op removes an even count. Even + even is still even, so the odd total can never reach 0. Print −1.</>,
+            <>3N 이 홀수인데 한 번 지울 때마다 짝수 개씩 지워요. 짝수를 아무리 더해도 홀수가 안 되니 끝까지 다 못 비워요. 그래서 −1 을 출력해요.</>)} />
         <Insight icon="🎯" color="#059669"
           head={t(E, "If S itself is Y+Y → M = 1.", "S 자체가 Y+Y (같은 덩어리 두 번) 이면 → M = 1.")}
           body={t(E,
             <>front half == back half? Label every letter with 1.</>,
-            <>앞 절반 == 뒤 절반이면 모든 글자에 라벨 1.</>)} />
+            <>앞 절반 == 뒤 절반이면 모든 글자에 1번을 붙여요.</>)} />
         <Insight icon="🔀" color="#8b5cf6"
-          head={t(E, "Otherwise → pair blocks, share the overlap → M = 2.", "아니면 → 블록 짝짓기, 겹치는 부분 공유 → M = 2.")}
+          head={t(E, "Otherwise → pair blocks, share the overlap → M = 2.", "아니면 → 블록을 짝짓고 겹치는 부분을 나눠 써요 → M = 2.")}
           body={t(E,
             <>For each front block <b>a</b> ↔ back partner <b>b</b>: keep the 2 overlapping chars in op 1, move the leftover 1 char per side to op 2.</>,
-            <>앞 블록 <b>a</b> ↔ 뒤 파트너 <b>b</b> 마다: 겹치는 2 글자는 op 1, 양쪽에 남는 1 글자씩은 op 2.</>)} />
+            <>앞 블록 <b>a</b> 와 뒤 짝꿍 <b>b</b> 를 봐요. 겹치는 2 글자는 op 1 에 두고, 양쪽에 남는 1 글자씩은 op 2 로 옮겨요.</>)} />
       </div>
 
       <div style={{ ...box, background: "#f8fafc", fontSize: 13, lineHeight: 1.75, color: "#334155" , wordBreak: "keep-all", textWrap: "balance" }}>
         ⚙️ {t(E,
           <>So: build the labels list {codeTag("ans")} (start all 1). Loop front-half blocks, grab {codeTag("a")} and {codeTag("b")}, patch op 2 where needed. Finally {codeTag("M")} = max({codeTag("ans")}).</>,
-          <>그래서: 라벨 리스트 {codeTag("ans")} 를 만들어요 (처음엔 다 1).<br />앞 절반 블록을 돌며 {codeTag("a")}·{codeTag("b")} 를 꺼내<br />필요한 자리에 op 2 를 표시해요.<br />마지막에 {codeTag("M")} = 라벨의 최댓값.</>)}
+          <>그래서 번호 리스트 {codeTag("ans")} 를 만들어요 (처음엔 다 1).<br />앞 절반 블록을 돌며 {codeTag("a")}·{codeTag("b")} 를 꺼내<br />필요한 자리에 op 2 를 표시해요.<br />마지막 {codeTag("M")} 은 번호 중 가장 큰 값이에요.</>)}
       </div>
     </div>
   );
@@ -70,7 +70,7 @@ function CowSplitsInput({ E }) {
           <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
             <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— # of blocks (S has length 3N)", "— 블록 개수 (S 길이 = 3N)")}</span></div>
             <div><span style={{ color: "#92400e", fontWeight: 800 }}>S</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the string, N blocks of COW/OWC/WCO", "— N 개 블록을 이은 문자열 (COW/OWC/WCO)")}</span></div>
-            <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ these two lines repeat T times", "↑ 이 두 줄이 T 번 반복")}</div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ these two lines repeat T times", "↑ 이 두 줄이 T 번 되풀이돼요")}</div>
           </div>
         </div>
       </div>
@@ -80,7 +80,7 @@ function CowSplitsInput({ E }) {
         <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
           <div>1 ≤ T ≤ 10⁴</div>
           <div>1 ≤ N (Σ N ≤ 10⁵)</div>
-          <div style={{ color: C.dim, fontSize: 11, marginTop: 2 , wordBreak: "keep-all", textWrap: "balance" }}>{t(E, "S consists of characters C, O, W only", "S 는 C, O, W 로만 이루어짐")}</div>
+          <div style={{ color: C.dim, fontSize: 11, marginTop: 2 , wordBreak: "keep-all", textWrap: "balance" }}>{t(E, "S consists of characters C, O, W only", "S 는 C, O, W 로만 이루어져요")}</div>
         </div>
       </div>
 
@@ -88,7 +88,7 @@ function CowSplitsInput({ E }) {
       <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E,
           <><b>k</b> is a scoring mode: 0 = the exact minimum, 1 = minimum or one more.<br /><b>k = 1 is the looser of the two</b>, so anything that clears k = 0 clears k = 1 as well. Our solution always gives the true minimum, so it passes both and <b>never has to look at k</b>.</>,
-          <><b>k</b> 는 채점 모드예요: 0 = 정확한 최소, 1 = 최소 또는 최소+1.<br /><b>k=1 이 k=0 보다 느슨해요.</b> 그래서 k=0 을 통과하면 k=1 도 저절로 통과해요.<br />우리 풀이는 늘 진짜 최소를 내니 둘 다 통과 — <b>k 를 볼 일이 없어요</b>.</>)}
+          <><b>k</b> 는 채점 모드예요. 0 이면 정확한 최소, 1 이면 최소 또는 최소+1 이에요.<br /><b>k=1 이 k=0 보다 느슨해요.</b> 그래서 k=0 을 통과하면 k=1 도 저절로 통과해요.<br />우리 풀이는 늘 진짜 최소를 내니 둘 다 통과 — <b>k 를 볼 일이 없어요</b>.</>)}
       </div>
     </div>
   );
@@ -141,7 +141,7 @@ function CowSplitsOutput({ E }) {
           <div style={{ display: "flex", gap: 8 }}>
             <span style={{ color: "#059669", fontWeight: 700 }}>•</span>
             <div>{t(E, <><b>Line 2</b>: 3N numbers — the i-th says which move erased S's i-th letter.</>,
-                       <><b>2 줄</b>: 3N 개 숫자 — i 번째 숫자 = S 의 i 번째 글자가 몇 번째 지우기에 사라졌는지.</>)}</div>
+                       <><b>2 줄</b>: 3N 개 숫자 — i 번째 숫자는 S 의 i 번째 글자가 몇 번째 지우기에 사라졌는지를 알려줘요.</>)}</div>
           </div>
         </div>
       </div>
@@ -169,7 +169,7 @@ function CowSplitsOutput({ E }) {
         <div style={{ fontSize: 12, color: "#334155", textAlign: "center", lineHeight: 1.65, wordBreak: "keep-all", textWrap: "balance" }}>
           {t(E,
             <>The 4 <b style={{ color: OP1_COL }}>O W O W</b> letters were move <b style={{ color: OP1_COL }}>1</b>, the 2 <b style={{ color: OP2_COL }}>C … C</b> were move <b style={{ color: OP2_COL }}>2</b> → output <code>2</code>, then <code>2 1 1 1 1 2</code>.</>,
-            <>가운데 <b style={{ color: OP1_COL }}>O W O W</b> 4글자는 <b style={{ color: OP1_COL }}>1번</b> 지우기,<br />양끝 <b style={{ color: OP2_COL }}>C … C</b> 2글자는 <b style={{ color: OP2_COL }}>2번</b> 지우기.<br />→ 출력 <code>2</code>, 그리고 <code>2 1 1 1 1 2</code>.</>)}
+            <>가운데 <b style={{ color: OP1_COL }}>O W O W</b> 4글자는 <b style={{ color: OP1_COL }}>1번</b>에 지워요.<br />양끝 <b style={{ color: OP2_COL }}>C … C</b> 2글자는 <b style={{ color: OP2_COL }}>2번</b>에 지워요.<br />→ 출력은 <code>2</code>, 그리고 <code>2 1 1 1 1 2</code> 예요.</>)}
         </div>
       </div>
     </div>
@@ -210,7 +210,7 @@ function CowSplitsSampleThree({ E }) {
       <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 12, padding: "12px 15px", fontSize: 12.5, color: "#065f46", lineHeight: 1.85 }}>
         {t(E,
           <><b>Both are accepted.</b> The statement says "provide <i>a way</i> to do so" — a checker verifies your answer instead of matching it to the sample.<br />That sample runs with <b>k = 1</b>, which allows one extra move, so the author showed a 3 on purpose. The statement even spells it out: <i>"the optimal number of operations is two."</i><br />The very next sample gives the same string with <b>k = 0</b>, and there the answer is <b>2</b>.</>,
-          <><b>둘 다 정답이에요.</b> 문제가 "한 가지 방법을 제시하라" 고만 해서, 샘플과 맞춰보는 게 아니라 검사 프로그램이 유효한지만 봐요.<br />그 샘플은 <b>k = 1</b> 이라 한 번 더 써도 되거든요. 그래서 출제자가 일부러 3 짜리를 보여준 거예요.<br />문제에 대놓고 적혀 있어요 — <i>"이 테스트의 최적은 두 번"</i>.<br />바로 다음 샘플은 같은 문자열을 <b>k = 0</b> 으로 주는데, 거기선 답이 <b>2</b> 예요.</>)}
+          <><b>둘 다 정답이에요.</b> 문제가 "한 가지 방법을 제시하라" 고만 해서, 샘플과 맞춰보는 게 아니라 검사 프로그램이 유효한지만 봐요.<br />그 샘플은 <b>k = 1</b> 이라 한 번 더 써도 되거든요. 그래서 출제자가 일부러 3 짜리를 보여준 거예요.<br />문제에 대놓고 적혀 있어요 — <i>"이 테스트에서 가장 좋은 답은 두 번"</i>.<br />바로 다음 샘플은 같은 문자열을 <b>k = 0</b> 으로 주는데, 거기선 답이 <b>2</b> 예요.</>)}
       </div>
     </div>
   );
@@ -229,7 +229,7 @@ export function makeCowSplitsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has a string S made of COW-like pieces. Empty it in as few moves as possible — each move erases a group of letters that reads as 'the same block twice' (e.g. COWCOW, CC).",
-        "COW 조각들로 만든 S 를 최소 몇 번에 다 지울까요? 한 번에 지우는 건 '똑같은 게 두 번' 꼴이에요."),
+        "COW 조각으로 만든 S 를 몇 번 만에 다 지울 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -299,9 +299,9 @@ export function makeCowSplitsCh1(E) {
                 <div>
                   {t(E, "Call a string a ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "\"square string\"", "\"square string\"")}</b>
-                  {t(E, " when it looks like ", " 이란: 어떤 조각 Y 를 ")}
+                  {t(E, " when it looks like ", " 이란 어떤 조각 Y 를 ")}
                   <b>Y + Y</b>
-                  {t(E, " for some piece Y (i.e. same piece written twice).", " 로 두 번 이어 붙인 것 — 즉 같은 조각이 두 번.")}
+                  {t(E, " for some piece Y (i.e. same piece written twice).", " 로 두 번 이어 붙인 것이에요. 같은 조각을 두 번 쓴 거예요.")}
                   <div style={{ marginTop: 4, fontSize: 12, color: C.dim }}>
                     {t(E, "e.g. ", "예: ")}
                     <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>COW+COW = COWCOW</code>
@@ -309,7 +309,7 @@ export function makeCowSplitsCh1(E) {
                     <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>C+C = CC</code>
                     {t(E, ".  ", ".  ")}
                     <code style={{ background: "#fef2f2", padding: "1px 5px", borderRadius: 3, color: "#991b1b" }}>COWO</code>
-                    {t(E, " is not (front ≠ back).", " 는 아님 (앞 ≠ 뒤).")}
+                    {t(E, " is not (front ≠ back).", " 는 아니에요 (앞 ≠ 뒤).")}
                   </div>
                 </div>
               </div>
@@ -319,9 +319,9 @@ export function makeCowSplitsCh1(E) {
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "One move: pick some letters from S (keeping their order, need not be adjacent) so that the picked letters read as a ",
-                        "한 번의 지우기: S 에서 글자 몇 개를 순서대로 뽑아 (붙어 있지 않아도 OK) ")}
+                        "한 번 지울 때는 S 에서 글자 몇 개를 순서대로 뽑아요 (붙어 있지 않아도 돼요). 뽑은 글자가 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "square string", "square string")}</b>
-                  {t(E, ", then remove them.", " 을 만든 뒤 지워요.")}
+                  {t(E, ", then remove them.", " 이 되면 그걸 지워요.")}
                 </div>
               </div>
 
@@ -329,10 +329,10 @@ export function makeCowSplitsCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Output ", "출력 ")}
+                  {t(E, "Output ", "")}
                   <b style={{ color: "#15803d" }}>M</b>
                   {t(E, " (total moves) and label every letter with its move number. If impossible → ",
-                        " (총 지우기 횟수) 과 각 글자의 지우기 번호. 불가능하면 → ")}
+                        " (총 지우기 횟수) 과 글자마다 몇 번째 지우기였는지를 출력해요. 불가능하면 → ")}
                   <code>-1</code>.
                 </div>
               </div>
@@ -346,7 +346,7 @@ export function makeCowSplitsCh1(E) {
       type: "reveal",
       narr: t(E,
         "How does the data arrive? Read T tests; each gives N and the string S.",
-        "데이터는 어떻게 들어올까? T 개 테스트, 각각 N 과 문자열 S 예요."),
+        "데이터는 어떻게 들어올까요? 테스트마다 N 과 문자열 S 가 와요."),
       content: (<CowSplitsInput E={E} />),
     },
 
@@ -383,14 +383,14 @@ export function makeCowSplitsCh1(E) {
     {
       type: "reveal",
       narr: t(E, "Now the output makes sense: print M, then which move erased each letter — our COWOWC gives 2 1 1 1 1 2.",
-                 "이제 출력이 이해돼요: M 과 글자별 '몇 번째 지우기'를 출력 — COWOWC 는 2 1 1 1 1 2."),
+                 "이제 출력이 이해돼요. M 과 글자마다 몇 번째 지우기인지를 써요."),
       content: (<CowSplitsOutput E={E} />),
     },
     // [결] 원문 샘플이 3 인 이유 — 안 짚어주면 학생이 '우리가 틀렸나?' 로 끝난다
     {
       type: "reveal",
       narr: t(E, "One last thing: the official sample prints 3 for a string we answer 2 for. Here's why both are right.",
-                 "마지막 하나 — 우리가 2 라고 한 문자열을 원문 샘플은 3 이라고 해요. 둘 다 맞는 이유예요."),
+                 "우리가 2 라고 한 문자열을 원문 샘플은 3 이라고 해요. 왜 둘 다 맞을까요?"),
       content: (<CowSplitsSampleThree E={E} />),
     },
   ];
@@ -409,7 +409,7 @@ export function makeCowSplitsCh2(E, lang = "py") {
       label: t(E, "Plan", "계획"),
       narr: t(E,
         "Before the code — here's what the sims told us, and the exact plan (with the variable names you'll see).",
-        "코드 전에 — 앞에서 알아낸 것과 정확한 계획 (곧 볼 변수 이름과 함께)."),
+        "코드를 보기 전에 앞에서 알아낸 것과 계획을 정리해요."),
       content: (<CowSplitsPlan E={E} />),
     },
     // Run — 코드 앞에 ans 표가 채워지는 걸 눈으로 (photoshoot25 Run 단계처럼)

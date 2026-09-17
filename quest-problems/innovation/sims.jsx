@@ -114,7 +114,7 @@ export function InnovationSim({ E }) {
     : s.kind === "formula" ? t(E, <>So the visible sum = <b>every card's a+b</b>, <b>plus c+d of just ONE card</b> (the last one). To make it biggest, put the card with the <b>largest c+d</b> last.</>,
                                 <>그래서 보이는 합 = <b>모든 카드의 a+b</b>, 거기에 <b>딱 한 장의 c+d</b>(마지막 카드)만 더해요. 제일 크게 하려면 <b>c+d 가 가장 큰</b> 카드를 마지막에 두면 돼요.</>)
     : t(E, <>Sample: pick ②⑤④. a+b = <b>13+18+4 = 35</b>. Last card ④ has the biggest c+d = <b>17</b>. Total = <b>35 + 17 = 52</b> ✓</>,
-           <>샘플: ②⑤④ 를 골라요. a+b = <b>13+18+4 = 35</b>. 마지막 카드 ④의 c+d 가 가장 커요 = <b>17</b>. 합 = <b>35 + 17 = 52</b> ✓</>);
+           <>샘플에서 ②⑤④ 를 골라요. a+b = <b>13+18+4 = 35</b> 예요. 마지막 카드 ④의 c+d 가 가장 커서 <b>17</b> 을 더해요. 합은 <b>35 + 17 = 52</b> ✓</>);
 
   return (
     <div style={{ padding: 16 }}>

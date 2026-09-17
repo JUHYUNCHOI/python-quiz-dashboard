@@ -121,21 +121,21 @@ export function getExchangeSections(E) {
       py: EX_FULL_PY, cpp: EX_FULL_CPP,
       why: [
         t(E, "Read N, M, the direction string, then the N capacities. Each cow starts full.",
-            "N, M, 방향 문자열, 그 다음 용량 N개를 읽어. 각 소는 가득 찬 채로 시작."),
+            "N, M, 방향 문자열, 그 다음 용량 N개를 읽어요. 각 소는 가득 찬 채로 시작해요."),
         t(E, "Each minute: every cow with milk gives 1L to its L/R neighbor, then over-cap cells lose the overflow.",
-            "매분: 우유 있는 소가 이웃에게 1L 전달, 그 다음 용량 초과는 버림."),
+            "1분마다 우유가 있는 소가 이웃에게 1L 를 넘겨요. 그 다음 용량을 넘은 만큼 버려요."),
         t(E, "After M minutes, print the total milk left. This brute simulation is O(N·M).",
-            "M분 후 남은 총 우유를 출력. 이 단순 시뮬은 O(N·M)."),
+            "M분 뒤 남은 우유의 총량을 출력해요. 이렇게 그대로 따라 하면 O(N·M) 이에요."),
       ],
       pyOnly: [
         t(E, "sys.stdin.read().split() grabs every token at once — fast for big inputs.",
-            "sys.stdin.read().split()으로 모든 토큰을 한 번에 — 큰 입력에 빠름."),
+            "sys.stdin.read().split() 으로 입력을 한 번에 다 읽어요. 입력이 크면 이 편이 빨라요."),
       ],
       cppOnly: [
         t(E, "The C++ version skips the minute-by-minute simulation: it sums all milk, then for each 'R…RL…L' boundary subtracts min(chainSum, M) — the milk that chain leaks into the endless trade. O(N) overall, so N=2·10^5 / M=10^9 runs instantly.",
-            "C++ 버전은 분 단위 시뮬을 건너뛰어: 전체 우유를 더한 뒤, 'R…RL…L' 경계마다 그 체인이 무한 교환에 흘려보내는 양 min(chainSum, M)을 빼. 전체 O(N)이라 N=2·10^5 / M=10^9도 즉시 끝나."),
+            "C++ 쪽은 1분씩 따라 하지 않아요. 우유를 전부 더한 뒤 'R…RL…L' 경계마다 그 줄기가 끝없는 교환으로 흘려보내는 양 min(chainSum, M) 을 빼요. 전체가 O(N) 이라 N=2·10^5, M=10^9 도 바로 끝나요."),
         t(E, "Sums (and M) reach N·10^9, so cap/ans/M use long long; (j - 1 + N) % N keeps the chain walk index positive on a circle.",
-            "합계(와 M)가 N·10^9까지 가서 cap/ans/M은 long long; (j - 1 + N) % N으로 원형 체인 탐색에서 인덱스가 음수가 되지 않게."),
+            "합계와 M 이 N·10^9 까지 가서 cap, ans, M 은 long long 으로 둬요. 동그란 줄기를 따라갈 때는 (j - 1 + N) % N 으로 자리가 음수가 되지 않게 해요."),
       ],
     },
   ];
@@ -191,7 +191,7 @@ export function ExchangeSim({ E }) {
       <div style={{ marginTop: 10, fontSize: 11.5, color: C.text, lineHeight: 1.7, textAlign: "center" }}>
         {t(E,
           "Cow 0→1 (R), Cow 1→2 (R), Cow 2→1 (L). Cow 1 receives from BOTH sides but cap=1, so 1L overflows (yellow *). Total = 0 + 1 + 1 = 2.",
-          "소 0→1 (R), 소 1→2 (R), 소 2→1 (L). 소 1이 양쪽에서 받지만 용량 1 → 1L 넘침 (노랑 *). 합계 = 0 + 1 + 1 = 2.")}
+          "소 0→1 (R), 소 1→2 (R), 소 2→1 (L) 로 넘겨요. 소 1은 양쪽에서 받지만 용량이 1이라 1L 가 넘쳐요 (노랑 *). 합계 = 0 + 1 + 1 = 2.")}
       </div>
     </div>
   );
@@ -281,7 +281,7 @@ function highlightCode(lines, lang) {
 
 export function downloadExchangePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "🥛 Milk Exchange — Full Study Guide", "🥛 Milk Exchange — 종합 풀이 노트");
@@ -304,7 +304,7 @@ export function downloadExchangePDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO 2024 Feb Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

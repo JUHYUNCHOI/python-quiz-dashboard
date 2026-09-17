@@ -62,7 +62,7 @@ export function makeMcc19PalCh1(E) {
       type: "reveal",
       narr: t(E,
         "\"Book k\" lists every palindrome STRING made of the digits 0…k−1 (leading zeros allowed), ordered by length first, then alphabetically.\nPrint the N-th entry as its digit string.",
-        "\"책 k\" 는 숫자 0…k−1 로 만들 수 있는 모든 회문 문자열을 담아요 (앞자리 0 허용). 길이가 짧은 것부터, 같은 길이면 사전 순으로 나열해요.\nN 번째 항목을 숫자 문자열 그대로 출력해요."),
+        "숫자 0…k−1 로 만든 회문을 줄 세워 N 번째를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -104,13 +104,13 @@ export function makeMcc19PalCh1(E) {
                 <div>
                   <b style={{ color: "#dc2626" }}>{t(E, "Leading zeros ARE allowed", "앞자리 0 을 써도 돼요")}</b>
                   {t(E, " — so \"0\", \"00\", \"010\", \"0110\" all count as valid entries.",
-                        " — 그래서 \"0\", \"00\", \"010\", \"0110\" 전부 유효한 항목이에요.")}
+                        " — 그래서 \"0\", \"00\", \"010\", \"0110\" 도 모두 책에 들어가요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "\"Book k\" lists ALL of them, ordered by ", "\"책 k\" 는 그것들을 전부 ")}
+                  {t(E, "\"Book k\" lists ALL of them, ordered by ", "\"책 k\" 는 그런 회문을 전부 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "length first, then alphabetically", "길이 먼저, 같으면 사전 순")}</b>
                   {t(E, " (string order, ", " 으로 나열해요 (문자열 순서, ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "not numeric value", "숫자 값이 아님")}</b>
@@ -121,8 +121,8 @@ export function makeMcc19PalCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "N-th entry (1-indexed) as its literal digit string", "N 번째 (1-indexed) 항목을 숫자 문자열 그대로")}</b>
-                  {t(E, ".", "출력해요.")}
+                  <b style={{ color: "#15803d" }}>{t(E, "N-th entry (1-indexed) as its literal digit string", "N 번째 (1 부터 세요) 항목을 숫자 문자열 그대로")}</b>
+                  {t(E, ".", " 출력해요.")}
                 </div>
               </div>
             </div>
@@ -135,7 +135,7 @@ export function makeMcc19PalCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. Input is one line: n then k. Output is the digit string (keep the leading zeros).",
-        "입력 형식과 공식 예제를 봐요. 입력은 한 줄에 n 그리고 k. 출력은 숫자 문자열 (앞자리 0 그대로)."),
+        "입력 형식과 공식 예제를 같이 살펴봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -144,11 +144,11 @@ export function makeMcc19PalCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               <div>• {t(E, "One line: ", "한 줄: ")}<b>n</b> <b>k</b></div>
-              <div>• <b>n</b> — {t(E, "which entry to print (1-indexed)", "몇 번째 항목인지 (1-indexed)")}</div>
+              <div>• <b>n</b> — {t(E, "which entry to print (1-indexed)", "몇 번째 항목인지 (1 부터 세요)")}</div>
               <div>• <b>k</b> — {t(E, "the digits are 0…k−1", "쓸 수 있는 숫자는 0…k−1")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: 2 ≤ k ≤ 10. Output: the palindrome digit string.", "제약: 2 ≤ k ≤ 10. 출력: 회문 숫자 문자열.")}
+              {t(E, "Limits: 2 ≤ k ≤ 10. Output: the palindrome digit string.", "k 는 2 부터 10 까지예요. 답은 회문 숫자 문자열로 출력해요.")}
             </div>
           </div>
 
@@ -240,26 +240,26 @@ export function makeMcc19PalCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way generates every palindrome one by one until the N-th — if N is huge, that's far too many. The fast way COUNTS how many strings each length holds (k^⌈L/2⌉), skips whole lengths at once, then builds just the one answer directly.",
-        "느린 방법은 N 번째까지 회문을 하나씩 전부 만들어요 — N 이 크면 개수가 너무 많아요. 빠른 방법은 각 길이가 몇 개인지(k^⌈L/2⌉) 세어 길이 단위로 건너뛰고, 답 하나만 곧바로 만들어요."),
+        "회문을 다 만들지 말고 길이별 개수로 건너뛰어 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: generate every palindrome until the N-th", "느림: N 번째까지 회문을 하나씩 전부 만들기")}
+                🐢 {t(E, "Slow: generate every palindrome until the N-th", "느린 방법 — N 번째까지 회문을 하나씩 전부 만들기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Listing N strings one by one takes about N steps. When N is very large, you never finish.",
-                      "문자열을 하나씩 N 개 만들면 약 N 번. N 이 아주 크면 끝나지 않아요.")}
+                      "문자열을 하나씩 N 개 만들면 N 번쯤 걸려요. N 이 아주 크면 끝나지 않아요.")}
               </div>
             </div>
             <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: count per length, jump, then build one answer", "빠름: 길이별 개수로 건너뛰고 답 하나만 만들기")}
+                🚀 {t(E, "Fast: count per length, jump, then build one answer", "빠른 방법 — 길이별 개수로 건너뛰고 답 하나만 만들기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Length L holds k^⌈L/2⌉ strings (pick the front half freely, mirror it). Subtract counts length by length to land on the right length, then write the rank in base k and mirror.",
-                      "길이 L 은 k^⌈L/2⌉ 개 (앞 절반을 자유롭게 고르고 거울 대칭). 길이별 개수를 빼가며 맞는 길이를 찾고, 그 안 순위를 k 진법으로 적어 거울 대칭으로 완성.")}
+                      "길이 L 짜리는 k^⌈L/2⌉ 개예요. 앞 절반만 고르면 뒤는 거울처럼 따라오니까요. 길이별 개수를 빼 가며 맞는 길이를 찾고, 그 안에서의 순위를 k 진법으로 적어 거울 대칭으로 완성해요.")}
               </div>
             </div>
           </div>

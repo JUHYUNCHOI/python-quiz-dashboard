@@ -38,7 +38,7 @@ export function makeMagicOrbsCh1(E) {
       type: "reveal",
       narr: t(E,
         "You have N magical orbs. Over and over, you fuse two orbs x and y into one new orb worth x + 2·y — until a single orb is left.\nMake that last orb as powerful as possible, then print its power mod 1e9+7.",
-        "N 개의 마법 구슬이 있어요. 두 구슬 x, y 를 골라 하나의 새 구슬 x + 2·y 로 융합하기를 반복 — 구슬이 하나 남을 때까지 해요.\n마지막 구슬을 최대한 세게 만든 뒤, 그 파워를 1e9+7 로 나눈 나머지를 출력해요."),
+        "구슬을 융합하는 순서를 골라 마지막 파워를 가장 크게 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -111,7 +111,7 @@ export function makeMagicOrbsCh1(E) {
       type: "reveal",
       narr: t(E,
         "How does the data arrive? First a line with T (number of test cases). Each test has n on its own line, then a line with the n orb powers. Print one answer per test.",
-        "데이터는 어떻게 들어올까요? 먼저 T (테스트 개수) 한 줄. 각 테스트마다 n 한 줄, 그다음 n 개의 구슬 파워 한 줄이에요. 테스트마다 답 하나를 출력해요."),
+        "입력이 어떤 모양으로 들어오는지 먼저 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           {/* INPUT */}
@@ -161,7 +161,7 @@ export function makeMagicOrbsCh1(E) {
           <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, ...KA }}>
             {t(E,
               "For [1, 2, 1]: fuse smart and the last orb reaches 11. For [1, 2, 3, 2]: it reaches 37. The whole game is choosing the fusing order.",
-              "[1, 2, 1] 은 잘 융합하면 마지막 구슬이 11 이 돼요. [1, 2, 3, 2] 는 37 이 돼요. 핵심은 융합 순서를 고르는 거예요.")}
+              "[1, 2, 1] 은 잘 융합하면 마지막 구슬이 11 이 되고, [1, 2, 3, 2] 는 37 이 돼요. 답이 갈리는 건 융합하는 순서예요.")}
           </div>
         </div>),
     },
@@ -171,7 +171,7 @@ export function makeMagicOrbsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Feel the fusion. Pick x, then pick y (y gets doubled), and fuse — over and over. Try different orders and watch the final power. Can you reach the best?",
-        "융합을 직접 느껴봐요. x 를 고르고 y 를 고르면 (y 가 두 배) 융합돼요 — 계속 반복. 순서를 바꿔가며 마지막 파워를 봐요. 최고 기록에 닿을 수 있나요?"),
+        "순서를 바꿔 가며 마지막 파워가 어떻게 달라지는지 봐요."),
       content: (
         <div style={{ padding: 12 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
@@ -186,10 +186,10 @@ export function makeMagicOrbsCh1(E) {
       type: "quiz",
       narr: t(E,
         "Fusing x, y makes x + 2·y — the second orb is doubled. So the bigger an orb is, the more we want it in the doubled (y) slot, again and again.",
-        "x, y 를 융합하면 x + 2·y — 두 번째 구슬이 두 배예요. 그러니 큰 구슬일수록 두 배가 되는 y 자리에 여러 번 들어가면 좋아요."),
+        "x, y 를 융합하면 x + 2·y 라서 뒤쪽 구슬만 두 배가 돼요."),
       question: t(E,
         "Two orbs [3, 1], one fusion. What is the maximum final power?",
-        "구슬 두 개 [3, 1], 한 번 융합. 마지막 파워의 최댓값은?"),
+        "구슬 두 개 [3, 1] 을 한 번 융합하면 파워는 최대 얼마일까요?"),
       options: [
         t(E, "5  (x=3, y=1 → 3 + 2·1)", "5  (x=3, y=1 → 3 + 2·1)"),
         t(E, "7  (x=1, y=3 → 1 + 2·3)", "7  (x=1, y=3 → 1 + 2·3)"),
@@ -198,7 +198,7 @@ export function makeMagicOrbsCh1(E) {
       correct: 1,
       explain: t(E,
         "Put the bigger orb (3) in the doubled y slot: 1 + 2·3 = 7. Doubling the larger value always wins.",
-        "큰 구슬(3)을 두 배가 되는 y 자리에: 1 + 2·3 = 7. 큰 값을 두 배로 만드는 게 항상 유리해요."),
+        "큰 구슬 3 을 두 배가 되는 y 자리에 놓으면 1 + 2·3 = 7 이에요.\n반대로 놓으면 3 + 2·1 = 5 라서 더 작아요.\n그래서 큰 값을 두 배로 만드는 쪽이 이득이에요."),
     },
   ];
 }
@@ -214,7 +214,7 @@ export function makeMagicOrbsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Trying every possible fusing order explodes — with n orbs there are factorially many orders, hopeless past a handful. The fast way spots the pattern: sort ascending, and the k-th smallest orb is worth value × 2^k.",
-        "가능한 모든 융합 순서를 다 해보면 폭발해요 — 구슬 n 개면 순서가 팩토리얼로 많아, 조금만 커져도 불가능. 빠른 방법은 규칙을 찾아요: 오름차순 정렬하면 k 번째로 작은 구슬은 값 × 2^k 만큼 기여해요."),
+        "순서를 다 해보는 대신 정렬해서 규칙 하나로 끝내요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -224,7 +224,7 @@ export function makeMagicOrbsCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "The number of orders grows factorially. Even n = 15 is already billions of tries. Times out.",
-                     "순서의 개수가 팩토리얼로 늘어요. n = 15 만 돼도 벌써 수십억 번. 시간 초과.")}
+                     "순서의 개수가 1×2×3×… 처럼 빠르게 늘어요. n = 15 만 돼도 벌써 수십억 번이라 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 14px" }}>
@@ -233,7 +233,7 @@ export function makeMagicOrbsCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Sort once, then one pass: coefficient 1, 2, 4, 8, … for the smallest, next, next. Total O(n log n).",
-                     "한 번 정렬한 뒤 한 번 훑기: 가장 작은 구슬부터 계수 1, 2, 4, 8, … 총 O(n log n).")}
+                     "한 번 정렬한 뒤 한 번만 훑어요. 가장 작은 구슬부터 곱하는 수가 1, 2, 4, 8, … 로 커져요. 모두 합쳐 O(n log n) 이에요.")}
               </div>
             </div>
           </div>
@@ -251,7 +251,7 @@ export function makeMagicOrbsCh2(E, lang = "py") {
             </div>
             <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
               {t(E, "The biggest orb ends up doubled the most times, so it earns the biggest coefficient — that's why we sort ascending.",
-                   "가장 큰 구슬이 두 배를 가장 여러 번 받아서 가장 큰 계수를 얻어요 — 그래서 오름차순으로 정렬해요.")}
+                   "작은 것부터 정렬해 놓고 차례로 융합하면, 가장 큰 구슬이 두 배를 가장 여러 번 받아요. 그래서 곱하는 수도 제일 커져요.")}
             </div>
           </div>
 

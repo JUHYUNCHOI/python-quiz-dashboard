@@ -11,7 +11,7 @@ export function makeCandyCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N cows and hangs M candy canes from above, one at a time. For each cane, every cow walks up in order and eats the bottom of the cane up to her own height — and GROWS by the amount she ate.\nAfter all canes, print each cow's final height.",
-        "FJ에게 N마리 소가 있고, M개의 캔디 케인을 위에서 한 개씩 매달아요. 각 캔디마다 모든 소가 차례로 다가가, 자기 키까지 캔디 아랫부분을 먹고, 먹은 양만큼 키가 커져요.\n모든 캔디가 끝난 뒤 각 소의 최종 키를 출력해요."),
+        "소들이 캔디를 자기 키까지 먹고 먹은 만큼 자라요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeCandyCh1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "After all M canes are eaten, output each cow's final height (one per line).",
-                "M 개 캔디 케인을 모두 처리한 뒤 각 소의 최종 키를 한 줄씩 출력.")}
+                "캔디 케인 M 개를 다 처리한 뒤 각 소의 마지막 키를 한 줄씩 출력해요.")}
             </div>
           </div>
 
@@ -36,12 +36,12 @@ export function makeCandyCh1(E) {
           <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "center", marginBottom: 10 }}>
               {t(E, "Tiny example: cow heights [3, 2, 5], one cane of height 6 →",
-                    "작은 예: 소 키 [3, 2, 5], 캔디 케인 높이 6 →")}
+                    "작은 예를 볼게요. 소 키는 [3, 2, 5], 캔디 케인 높이는 6 이에요 →")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
               {[
                 { who: t(E, "Cow 1 (h=3)", "소 1 (키 3)"), reach: "0 → 3", ate: 3, newH: 6, hi: true },
-                { who: t(E, "Cow 2 (h=2)", "소 2 (키 2)"), reach: t(E, "can't reach 3", "3 에 못 닿음"), ate: 0, newH: 2, hi: false },
+                { who: t(E, "Cow 2 (h=2)", "소 2 (키 2)"), reach: t(E, "can't reach 3", "3 에 못 닿아요"), ate: 0, newH: 2, hi: false },
                 { who: t(E, "Cow 3 (h=5)", "소 3 (키 5)"), reach: "3 → 5", ate: 2, newH: 7, hi: true },
               ].map((c, i) => (
                 <div key={i} style={{ background: "#fff", border: `1px solid ${c.hi ? "#dc2626" : "#fca5a5"}`, borderRadius: 10, padding: 8, textAlign: "center" }}>
@@ -56,7 +56,7 @@ export function makeCandyCh1(E) {
             </div>
             <div style={{ marginTop: 10, fontSize: 11, color: C.text, lineHeight: 1.6, textAlign: "center" }}>
               {t(E, "After cow 1 eats 0 → 3, the next cow starts at the new bottom = 3.  Cow 2 is too short.  Cow 3 keeps eating from 3 → 5.  Cane top (6) reached only partially — the rest (5 → 6) is wasted.",
-                    "소 1 이 0 → 3 먹은 후 다음 소는 새 bottom = 3 부터. 소 2 는 너무 작음. 소 3 이 3 → 5 까지 먹음. 캔디 꼭대기 (6) 까지 다 못 먹어 5 → 6 부분은 버려짐.")}
+                    "소 1 이 0 → 3 을 먹으면 다음 소는 새 bottom 인 3 부터 먹어요. 소 2 는 키가 작아 3 에 못 닿아요. 소 3 이 3 → 5 까지 먹어요. 뒤에 소가 더 없어서 5 → 6 은 아무도 못 먹고 끝나요.")}
             </div>
           </div>
 
@@ -109,7 +109,7 @@ export function makeCandyCh1(E) {
       type: "reveal",
       narr: t(E,
         "Click 'Next bite' once per cow. Watch the cane shrink from the bottom and each cow grow by exactly what she ate.",
-        "'다음 한 입' 을 한 번씩 눌러봐. 캔디는 아래부터 줄어들고, 각 소는 자기가 먹은 만큼만 키가 커져."),
+        "'다음 한 입' 을 눌러 캔디가 줄고 소가 자라는 걸 봐요."),
       content: (
         <div style={{ padding: 12 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -118,7 +118,7 @@ export function makeCandyCh1(E) {
             </div>
             <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
               {t(E, "Active cow is glowing. Hatched part of the cane = already eaten.",
-                    "현재 소가 빛나고, 캔디의 빗금 부분 = 이미 먹힌 부분.")}
+                    "지금 차례인 소가 빛나고, 캔디의 빗금 부분은 이미 먹힌 곳이에요.")}
             </div>
           </div>
           <CandyCaneSim E={E} />
@@ -130,7 +130,7 @@ export function makeCandyCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input format: N M, then N cow heights on one line, then M cane heights on one line.",
-        "입력: 첫 줄 N M, 두 번째 줄 소 N 마리 키, 세 번째 줄 캔디 M 개 높이."),
+        "첫 줄에 N M, 둘째 줄에 소 키, 셋째 줄에 캔디 높이가 와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
@@ -160,10 +160,10 @@ export function makeCandyCh1(E) {
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
               {t(E, "Cane 1 (height 6).  Cows [3, 2, 5] → eat to [6, 2, 7].  (cow 2 can't reach 3.)",
-                    "캔디 1 (높이 6). 소 [3, 2, 5] → [6, 2, 7] 로 자라남. (소 2 는 3 에 못 닿음.)")}
+                    "캔디 1 은 높이 6 이에요. 소 [3, 2, 5] 가 [6, 2, 7] 로 자라요. (소 2 는 3 에 못 닿아요.)")}
               <br/>
               {t(E, "Cane 2 (height 1).  Cow 1 (height 6) eats 0 → 1, becomes 7.  Cane fully eaten.",
-                    "캔디 2 (높이 1). 소 1 (키 6) 이 0 → 1 먹음, 키 7 이 됨. 캔디 다 먹음.")}
+                    "캔디 2 는 높이 1 이에요. 소 1(키 6)이 0 → 1 을 먹어 키가 7 이 되고, 캔디는 다 없어져요.")}
             </div>
             <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
               {t(E, "→ final heights = 7, 2, 7.", "→ 최종 키 = 7, 2, 7.")}
@@ -175,32 +175,32 @@ export function makeCandyCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A cow has height 3 and faces a candy cane of height 6.\nThe candy hangs from 0 to 6.\nThe cow can reach up to height 3.\nHow much does it eat?", "키 3인 소가 높이 6짜리 캔디 케인을 만났어. 캔디는 0~6에 있어요. 소는 높이 3까지 닿아. 얼마나 먹을까?"),
+        "A cow has height 3 and faces a candy cane of height 6.\nThe candy hangs from 0 to 6.\nThe cow can reach up to height 3.\nHow much does it eat?", "키 3 인 소가 높이 6 짜리 캔디를 만나면 얼마나 먹을까요?"),
       question: t(E,
         "Cow height = 3, candy cane height = 6. How much does the cow eat?",
-        "소 키 = 3, 캔디 높이 = 6. 소가 얼마나 먹어?"),
+        "소 키가 3 이고 캔디 높이가 6 이에요. 소는 얼마나 먹을까요?"),
       options: [
-        t(E, "6 (eats everything)", "6 (다 먹음)"),
-        t(E, "3 (eats up to its height)", "3 (자기 키까지 먹음)"),
-        t(E, "0 (can't reach)", "0 (닿지 못함)"),
+        t(E, "6 (eats everything)", "6 (다 먹어요)"),
+        t(E, "3 (eats up to its height)", "3 (자기 키까지 먹어요)"),
+        t(E, "0 (can't reach)", "0 (못 닿아요)"),
       ],
       correct: 1,
       explain: t(E,
         "The cow can only reach up to height 3, so it eats the portion from 0 to 3 = 3 units!",
-        "소는 높이 3까지만 닿으니까 0~3 부분인 3만큼 먹어!"),
+        "소는 높이 3 까지만 닿으니까 0~3 부분, 그러니까 3 만큼 먹어요!"),
     },
     // 1-3: Input — multi-cow scenario
     {
       type: "input",
       narr: t(E,
         "Cow 1 ate first; the bottom of the cane has risen.  Now it's cow 2's turn.",
-        "소 1 이 먼저 먹어 캔디 bottom 이 올라갔어. 이제 소 2 차례."),
+        "소 1 이 먼저 먹어서 캔디 bottom 이 올라갔어요. 이제 소 2 차례예요."),
       question: t(E,
         "Cow heights [3,2,5], candy height 6.\nAfter cow1 eats 0→3, bottom=3.\nCow2 height=2, bottom=3.\nHow much does cow2 eat?",
-        "소 키 [3,2,5], 캔디 높이 6.\n소1이 0→3 먹고 bottom=3.\n소2 키=2, bottom=3.\n소2가 먹는 양은?"),
+        "소 키는 [3,2,5] 이고 캔디 높이는 6 이에요.\n소 1 이 0→3 을 먹어서 bottom 이 3 이 됐어요.\n소 2 는 키가 2 인데 bottom 은 3 이에요.\n소 2 는 얼마나 먹을까요?"),
       hint: t(E,
         "Can cow 2 reach the new bottom?  If not, she eats nothing.",
-        "소 2 가 새 bottom 에 닿을 수 있어? 안 닿으면 못 먹음."),
+        "소 2 가 새 bottom 에 닿을 수 있을까요? 안 닿으면 못 먹어요."),
       answer: 0,
     },
   ];
@@ -217,7 +217,7 @@ export function makeCandyCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "For each cane, walk the cows in order — track 'taken' = how much of this cane has been eaten so far.  Sections build the loop one piece at a time.",
-        "각 캔디마다 소를 순서대로 처리. 'taken' = 이 캔디에서 지금까지 먹은 양. 아래 섹션이 한 단락씩 쌓아요."),
+        "캔디마다 소를 순서대로 돌면서 먹은 양을 쌓아 가요."),
       sections: getCandyCaneSections(E),
     },
   ];

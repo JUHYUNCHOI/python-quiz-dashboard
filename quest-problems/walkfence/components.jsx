@@ -239,7 +239,7 @@ export function WalkFencePathSim({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <div style={{ fontSize: 12, fontWeight: 700, color: A, textAlign: "center", marginBottom: 8 }}>
-        🐄 {t(E, "Two cows race — one each way around the loop", "두 소가 경주 — 양쪽 방향으로 한 마리씩")}
+        🐄 {t(E, "Two cows race — one each way around the loop", "두 소가 서로 반대 방향으로 한 바퀴를 돌아요")}
       </div>
 
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10 }}>
@@ -307,7 +307,7 @@ export function WalkFencePathSim({ E }) {
           background: "#fff", border: `1px solid ${C.border}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: C.dim,
           cursor: "pointer",
-        }}>↺ {t(E, "reset", "리셋")}</button>
+        }}>↺ {t(E, "reset", "처음으로")}</button>
       </div>
     </div>
   );
@@ -501,36 +501,36 @@ export function getWalkFenceSections(E) {
       py: WF_INPUT_PY, cpp: WF_INPUT_CPP,
       why: [
         t(E, "Read N (cows) and P (corner posts), then the polygon corners in order.",
-            "N (소 수)와 P (코너 수)를 읽고, 다각형 코너를 순서대로 입력."),
+            "소의 수 N 과 코너의 수 P 를 읽고, 코너를 순서대로 받아요."),
         t(E, "Posts are listed clockwise (or counter-clockwise) around the rectilinear fence.",
-            "코너는 직각 울타리를 시계방향(또는 반시계방향)으로 나열."),
+            "코너는 울타리를 한 방향으로 돌면서 차례대로 적혀 있어요."),
       ],
       pyOnly: [
         t(E, "tuple(map(int, ...)) packs each (x, y) tightly.",
-            "tuple(map(int, ...))로 (x, y) 쌍 깔끔하게."),
+            "tuple(map(int, ...)) 을 쓰면 (x, y) 쌍을 한 번에 담을 수 있어요."),
       ],
       cppOnly: [
         t(E, "Two parallel vector<int> X, Y avoid struct overhead — coordinates fit in int.",
-            "int X, Y 평행 벡터로 구조체 오버헤드 방지 — 좌표 0~1000은 int로 충분."),
+            "X, Y 를 벡터 두 개로 따로 두면 구조체를 안 만들어도 돼요. 좌표가 0~1000 이라 int 면 넉넉해요."),
       ],
     },
     {
-      label: t(E, "📐 2. Cumulative Perimeter Distances", "📐 2. 누적 둘레 거리"),
+      label: t(E, "📐 2. Cumulative Perimeter Distances", "📐 2. 시작점에서 쌓아 온 둘레 거리"),
       color: "#0891b2",
       py: WF_CUM_PY, cpp: WF_CUM_CPP,
       why: [
         t(E, "cum[i] = how far along the fence post i is, measured from post 0.",
-            "cum[i] = 코너 i가 코너 0에서 울타리를 따라 얼마나 떨어졌는지."),
+            "cum[i] 는 코너 0 에서 울타리를 따라 코너 i 까지 간 거리예요."),
         t(E, "Total perimeter is just cum[P] — needed to choose the shorter side later.",
-            "총 둘레 = cum[P] — 나중에 짧은 쪽을 고르는 데 사용."),
+            "cum[P] 가 울타리 한 바퀴예요. 나중에 짧은 쪽을 고를 때 이 값이 필요해요."),
       ],
       pyOnly: [
         t(E, "abs() works on integers — Manhattan distance for axis-aligned edges.",
-            "abs()로 정수 처리 — 축에 평행한 변의 맨해튼 거리."),
+            "변이 가로나 세로뿐이라 abs() 로 뺀 값이 곧 그 변의 길이예요."),
       ],
       cppOnly: [
         t(E, "abs() from <cstdlib> on int — coordinates ≤ 1000 so int range is safe.",
-            "<cstdlib>의 abs() 사용 — 좌표 ≤ 1000이라 int 범위로 안전."),
+            "abs() 는 <cstdlib> 에 있어요. 좌표가 1000 을 넘지 않아 int 로 충분해요."),
       ],
     },
     {
@@ -539,17 +539,17 @@ export function getWalkFenceSections(E) {
       py: WF_QUERY_PY, cpp: WF_QUERY_CPP,
       why: [
         t(E, "For each (x, y), scan edges. Once we find which edge it sits on, we know its distance from post 0.",
-            "각 (x, y)에 대해 변을 스캔. 어느 변에 있는지 찾으면 코너 0에서의 거리를 알 수 있음."),
+            "점 (x, y) 마다 변을 하나씩 봐요. 어느 변 위에 있는지 찾으면 코너 0 에서의 거리를 알 수 있어요."),
         t(E, "Cow distance = |d1 - d2| one way, or perimeter - |d1 - d2| the other way. Take the min.",
-            "소 거리 = 한쪽 |d1 - d2|, 반대쪽 perimeter - |d1 - d2|. 더 짧은 쪽."),
+            "한쪽으로 가면 |d1 - d2|, 반대로 돌면 perimeter - |d1 - d2| 예요. 둘 중 작은 값이 답이에요."),
       ],
       pyOnly: [
         t(E, "Functions defined at module scope can read the closure (posts, cum) directly.",
-            "모듈 함수는 클로저 (posts, cum) 직접 접근."),
+            "바깥에 만든 함수는 posts 와 cum 을 그대로 읽을 수 있어요."),
       ],
       cppOnly: [
         t(E, "Capturing by reference [&] gives the lambda live access to X, Y, cum.",
-            "[&]로 참조 캡처해 람다에서 X, Y, cum 사용."),
+            "람다 앞에 [&] 를 적으면 X, Y, cum 을 그대로 쓸 수 있어요."),
       ],
     },
     {
@@ -558,9 +558,9 @@ export function getWalkFenceSections(E) {
       py: WF_FULL_PY, cpp: WF_FULL_CPP,
       why: [
         t(E, "Read posts → cumulative distances → for each cow, find both points on perimeter and pick shorter side.",
-            "코너 읽기 → 누적 거리 → 소마다 두 점을 둘레 위에서 찾고 짧은 쪽."),
+            "코너를 읽고, 쌓아 온 거리를 만들고, 소마다 두 점을 둘레에서 찾아 짧은 쪽을 골라요."),
         t(E, "Total work: O(N · P) — each query scans P edges.",
-            "총 작업: O(N · P) — 각 쿼리가 P개 변 스캔."),
+            "소 한 마리마다 변 P 개를 보니 모두 O(N · P) 번 일해요."),
       ],
     },
   ];
@@ -604,7 +604,7 @@ function highlightCode(lines, lang) {
 
 export function downloadWalkFencePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혀 있어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Walking Along a Fence — Full Study Guide", "🚶 Walking Along a Fence — 종합 풀이 노트");
@@ -628,7 +628,7 @@ export function downloadWalkFencePDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO 2024 Open Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

@@ -112,21 +112,21 @@ const _MD_VARS = [
 export function getMakeDistinctWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _MD_VARS, beats: [
-      { hi: [7, 17],  bubble: t(E, "Read T, then each test's n, k, and the array. m = |k|.", "T 읽고, 테스트마다 n, k, 배열. m = |k|.") },
-      { hi: [19, 24], bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "핵심: K 를 더해도 |K| 로 나눈 나머지는 안 변함 → 나머지별로 묶어요. 그룹끼리 독립!") },
-      { hi: [26, 35], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬 (K>0 오름차순, K<0 내림차순). 첫 값은 그대로.") },
-      { hi: [36, 50], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 연산 수를 더해요.") },
-      { hi: [51, 51], bubble: t(E, "Print this test's answer.", "이 테스트의 답 출력.") },
+      { hi: [7, 17],  bubble: t(E, "Read T, then each test's n, k, and the array. m = |k|.", "T 를 읽고, 테스트마다 n, k, 배열을 읽어요. m = |k| 예요.") },
+      { hi: [19, 24], bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "K 를 더해도 |K| 로 나눈 나머지는 안 바뀌어요.\n그래서 나머지끼리 묶으면 그룹끼리 서로 영향이 없어요!") },
+      { hi: [26, 35], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 둬요.") },
+      { hi: [36, 50], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 횟수를 더해요.") },
+      { hi: [51, 51], bubble: t(E, "Print this test's answer.", "이 테스트의 답을 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _MD_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input (sys.stdin.readline) — sum of N can reach 10^6.", "빠른 입력 (sys.stdin.readline) — N 합이 10^6 까지.") },
-    { hi: [3, 6],   bubble: t(E, "solve() handles ONE test: read n, k, the array. m = |k|.", "solve() 는 한 테스트: n, k, 배열 읽기. m = |k|.") },
-    { hi: [8, 11],  bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "핵심: K 를 더해도 |K| 로 나눈 나머지는 안 변함 → 나머지별로 묶어요. 그룹끼리 독립!") },
-    { hi: [13, 17], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬 (K>0 오름차순, K<0 내림차순). 첫 값은 그대로.") },
-    { hi: [18, 24], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 연산 수를 더해요.") },
-    { hi: [25, 25], bubble: t(E, "Print this test's answer.", "이 테스트의 답 출력.") },
-    { hi: [27, 29], bubble: t(E, "Run solve() for all T tests.", "T 개 테스트를 solve() 로 반복.") },
+    { hi: [0, 1],   bubble: t(E, "Fast input (sys.stdin.readline) — sum of N can reach 10^6.", "N 의 합이 10^6 까지라 sys.stdin.readline 으로 빠르게 읽어요.") },
+    { hi: [3, 6],   bubble: t(E, "solve() handles ONE test: read n, k, the array. m = |k|.", "solve() 는 테스트 하나를 맡아요. n, k, 배열을 읽고 m = |k| 예요.") },
+    { hi: [8, 11],  bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "K 를 더해도 |K| 로 나눈 나머지는 안 바뀌어요.\n그래서 나머지끼리 묶으면 그룹끼리 서로 영향이 없어요!") },
+    { hi: [13, 17], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 둬요.") },
+    { hi: [18, 24], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 횟수를 더해요.") },
+    { hi: [25, 25], bubble: t(E, "Print this test's answer.", "이 테스트의 답을 출력해요.") },
+    { hi: [27, 29], bubble: t(E, "Run solve() for all T tests.", "T 개 테스트를 solve() 로 반복해요.") },
   ] };
 }
 
@@ -138,23 +138,23 @@ export function getMakeDistinctSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Adding K never changes residue mod |K|, so groups are independent.",
-            "K 를 더해도 |K| 로 나눈 나머지는 변하지 않아 — 그래서 잔여류끼리는 서로 독립."),
+            "K 를 더해도 |K| 로 나눈 나머지는 변하지 않아요. 그래서 나머지가 같은 것끼리 묶으면 그룹끼리 서로 영향이 없어요."),
         t(E, "Within a group, sort then greedy: each element either stays or jumps to the next free slot.",
-            "한 무리 안에서는 정렬한 뒤 앞에서부터 — 그대로 두거나 다음 빈 칸으로 밀어요."),
+            "한 그룹 안에서는 정렬한 뒤 앞에서부터 봐요. 그대로 두거나 다음 빈 칸으로 밀어요."),
         t(E, "K > 0 sort ascending; K < 0 sort descending — same logic, mirrored direction.",
-            "K > 0 이면 오름차순, K < 0 이면 내림차순 — 같은 논리, 방향만 반대."),
+            "K > 0 이면 오름차순, K < 0 이면 내림차순으로 정렬해요. 방법은 같고 방향만 반대예요."),
       ],
       pyOnly: [
         t(E, "dict.setdefault makes residue grouping a one-liner.",
-            "dict.setdefault 로 잔여류 묶기가 한 줄."),
+            "dict.setdefault 를 쓰면 나머지별로 묶는 일을 한 줄에 끝내요."),
         t(E, "Python big ints handle answer overflow automatically.",
-            "Python 의 큰 정수로 답이 커져도 자동 처리."),
+            "Python 은 정수가 아무리 커져도 알아서 처리해 줘요."),
       ],
       cppOnly: [
         t(E, "long long is required — answer can exceed 2^31.",
-            "답이 2^31 을 넘을 수 있어 long long 필수."),
+            "답이 2^31 을 넘을 수 있어서 long long 을 꼭 써야 해요."),
         t(E, "((x % m) + m) % m gives a non-negative residue even for negative inputs (defensive).",
-            "((x % m) + m) % m 으로 음수 입력에도 안전한 잔여류 계산 (방어용)."),
+            "((x % m) + m) % m 으로 구하면 음수가 들어와도 나머지가 0 이상으로 나와요."),
       ],
     },
   ];
@@ -200,7 +200,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMakeDistinctPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Make All Distinct — Full Study Guide", "Make All Distinct — 종합 풀이 노트");
@@ -223,7 +223,7 @@ export function downloadMakeDistinctPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

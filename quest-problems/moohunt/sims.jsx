@@ -823,7 +823,7 @@ export function FasterIdeaSim({ E }) {
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Can we check fewer moves?", "무브를 더 적게 볼 수 없을까?")}
+        title={t(E, "Can we check fewer moves?", "무브를 더 적게 볼 수는 없을까요?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "waste" ? "stuck" : s.k === "gain" ? "aha" : "go"}>{say}</Say>

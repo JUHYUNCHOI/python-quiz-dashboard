@@ -80,13 +80,13 @@ export function getMcc21MenuSections(E) {
       ],
       why: [
         t(E, "Read N and the N layer sizes into a list. That's all the input — the whole problem is just deciding their order.",
-            "N 과 N 개의 층 크기를 리스트로 읽어요. 입력은 이게 전부 — 문제는 이 순서를 정하는 것뿐이에요."),
+            "N 과 N 개의 층 크기를 리스트로 읽어요.\n입력은 이게 전부예요. 이 순서를 정하는 게 문제의 전부거든요."),
         t(E, "MOD = 1e9+7: the line count can get huge (up to 10^4 multiplied 30 times), so the answer is asked modulo 1e9+7.",
-            "MOD = 1e9+7: 줄 수는 엄청 커질 수 있어요 (10^4 을 30번 곱함), 그래서 답을 1e9+7 로 나눈 나머지로 구해요."),
+            "줄 수는 엄청 커질 수 있어요. 10^4 을 30번까지 곱하니까요.\n그래서 답은 MOD = 1e9+7 로 나눈 나머지로 구해요."),
       ],
       cppOnly: [
         t(E, "Use long long so the products don't overflow before we take the remainder.",
-            "나머지를 취하기 전에 곱이 넘치지 않도록 long long 을 써요."),
+            "나머지를 구하기 전에 곱이 넘치지 않도록 long long 을 써요."),
       ],
     },
     {
@@ -102,9 +102,9 @@ export function getMcc21MenuSections(E) {
       ],
       why: [
         t(E, "The exchange argument: for two neighbours a and b (with product P before them), a-first adds P·a + P·a·b, b-first adds P·b + P·b·a. The P·a·b part is equal, so we only compare P·a vs P·b — put the smaller size first.",
-            "교환 논증: 이웃한 a, b (앞 곱 P) 에서 a 먼저면 P·a + P·a·b, b 먼저면 P·b + P·b·a 를 더해요. P·a·b 는 같으니 P·a 와 P·b 만 비교 — 더 작은 크기를 먼저 둬요."),
+            "이웃한 두 층 a, b 를 봐요. 그 앞 층들의 곱을 P 라고 할게요.\na 를 먼저 두면 P·a + P·a·b 가 늘고, b 를 먼저 두면 P·b + P·b·a 가 늘어요.\nP·a·b 는 어느 쪽이든 같으니 P·a 와 P·b 만 견주면 돼요.\n그래서 더 작은 크기를 먼저 둬요. 이걸 교환 논증이라고 불러요."),
         t(E, "Applied to every pair, that means the whole list should be sorted ascending. Sorting once gives the optimal order.",
-            "모든 쌍에 적용하면, 전체 리스트를 오름차순 정렬해야 한다는 뜻이에요. 한 번 정렬하면 최적 순서가 나와요."),
+            "모든 짝에 이걸 적용하면 리스트 전체를 오름차순으로 정렬해야 한다는 뜻이 돼요.\n한 번 정렬하면 제일 좋은 순서가 나와요."),
       ],
     },
     {
@@ -134,9 +134,9 @@ export function getMcc21MenuSections(E) {
       ],
       why: [
         t(E, "Each layer copies every existing line by its size, so after k layers the menu has (size1 × size2 × … × sizek) lines. That's the running product 'prod'; the total lines is the sum of prod after each layer.",
-            "각 층은 지금 모든 줄을 자기 크기만큼 복사하니, k 개 층 뒤엔 (크기1 × 크기2 × … × 크기k) 줄이 돼요. 그게 누적 곱 'prod'; 총 줄 수는 각 층 뒤 prod 들의 합이에요."),
+            "각 층은 지금 있는 모든 줄을 자기 크기만큼 복사해요.\n그래서 층을 k 개 쌓으면 (크기1 × 크기2 × … × 크기k) 줄이 돼요.\n그게 쌓아 온 곱 prod 예요.\n총 줄 수는 층마다의 prod 를 전부 더한 값이에요."),
         t(E, "We take % MOD after every multiply and add — because (a+b)%m = ((a%m)+(b%m))%m and (a·b)%m = ((a%m)·(b%m))%m, the modded running values give the same final remainder as the true huge numbers.",
-            "곱하고 더할 때마다 % MOD 를 취해요 — (a+b)%m = ((a%m)+(b%m))%m 이고 (a·b)%m = ((a%m)·(b%m))%m 이라서, 나머지로 계산해도 진짜 큰 수와 최종 나머지가 같아요."),
+            "곱하고 더할 때마다 % MOD 를 해 둬요.\n(a+b)%m = ((a%m)+(b%m))%m 이고 (a·b)%m = ((a%m)·(b%m))%m 이거든요.\n그래서 나머지로만 계산해도 진짜 큰 수와 마지막 나머지가 같아요."),
       ],
     },
   ];
@@ -182,7 +182,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc21MenuPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc21Menu — Full Study Guide", "Mcc21Menu — 종합 풀이 노트");
@@ -205,7 +205,7 @@ export function downloadMcc21MenuPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

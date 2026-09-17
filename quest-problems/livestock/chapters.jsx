@@ -11,7 +11,7 @@ export function makeLivestockCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has 8 named cows (Beatrice, Belinda, Bella, Bessie, Betsy, Blue, Buttercup, Sue). He wants to line them up with N constraints — each constraint says \"cow X must be ADJACENT to cow Y\".\nPrint the LEXICOGRAPHICALLY SMALLEST valid lineup, or 'IMPOSSIBLE'.",
-        "FJ 에게 이름이 정해진 8마리 소 (Beatrice, Belinda, Bella, Bessie, Betsy, Blue, Buttercup, Sue) 가 있어요. N개의 제약 — 각각 \"X 와 Y 는 옆에 있어야 함\" — 을 모두 만족하는 한 줄 배열을 만들어요.\n사전순으로 가장 작은 유효 배열을 출력해요. 불가능하면 'IMPOSSIBLE'."),
+        "제약을 다 지키면서 소 8마리를 사전순으로 가장 앞서게 세워요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeLivestockCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "Output the lexicographically smallest valid lineup, or 'IMPOSSIBLE'.",
-                "사전순으로 가장 작은 유효 배열을 출력. 불가능하면 'IMPOSSIBLE'.")}
+                "사전순으로 가장 앞선 배열을 출력해요. 못 만들면 'IMPOSSIBLE' 을 써요.")}
             </div>
           </div>
 
@@ -72,7 +72,7 @@ export function makeLivestockCh1(E) {
       type: "reveal",
       narr: t(E,
         "Click '+ Add constraint' to watch each adjacency rule connect two cows. Linked cows form a chain; free cows stay alone. Then build the final lineup alphabetically.",
-        "'+ 제약 추가' 를 눌러서 각 인접 규칙이 두 소를 어떻게 잇는지 봐요. 연결된 소는 체인, 외톨이는 그대로. 마지막에 알파벳 순으로 줄을 만들어요."),
+        "'+ 제약 추가' 를 눌러 규칙이 두 소를 어떻게 잇는지 봐요."),
       content: <ChainSim E={E} />,
     },
     // 1-3: Predict — chain count after the sim
@@ -80,10 +80,10 @@ export function makeLivestockCh1(E) {
       type: "quiz",
       narr: t(E,
         "From the sim above: 3 constraints linked Bella-Blue, Bella-Bessie, Buttercup-Sue.\nHow many separate groups (chains + lone cows) end up?",
-        "위 시뮬레이션에서 제약 3개: Bella-Blue, Bella-Bessie, Buttercup-Sue.\n결국 몇 개의 그룹 (체인 + 외톨이) 이 생겼나요?"),
+        "제약은 Bella-Blue, Bella-Bessie, Buttercup-Sue 예요.\n그러면 그룹 (체인 + 외톨이) 이 몇 개 생길까요?"),
       question: t(E,
         "Total groups (chains + singletons)?",
-        "총 그룹 수 (체인 + 외톨이)?"),
+        "그룹은 모두 몇 개일까요? (체인 + 외톨이)"),
       options: [
         t(E, "3", "3"),
         t(E, "5", "5"),
@@ -92,16 +92,16 @@ export function makeLivestockCh1(E) {
       correct: 1,
       explain: t(E,
         "5 groups: chain [Blue-Bella-Bessie], chain [Buttercup-Sue], plus singletons Beatrice, Belinda, Betsy.",
-        "5개 그룹: 체인 [Blue-Bella-Bessie], 체인 [Buttercup-Sue], 그리고 외톨이 Beatrice, Belinda, Betsy."),
+        "그룹은 5 개예요.\n체인 [Blue-Bella-Bessie], 체인 [Buttercup-Sue], 그리고 외톨이 Beatrice·Belinda·Betsy 예요."),
     },
     // 1-4: Quiz (original 1-2)
     {
       type: "quiz",
       narr: t(E,
-        "If there are 0 constraints, all 8 cows are free.\nThe lexicographically smallest ordering is simply alphabetical order!", "조건이 0개이면 8마리 소 모두 자유예요. 사전순 최소 순서는 단순히 알파벳 순서!"),
+        "If there are 0 constraints, all 8 cows are free.\nThe lexicographically smallest ordering is simply alphabetical order!", "제약이 하나도 없으면 그냥 알파벳 순서가 답이에요."),
       question: t(E,
         "0 constraints, 8 cows. How many cows in the lineup?",
-        "조건 0개, 소 8마리. 줄에 소가 몇 마리?"),
+        "제약이 0 개이고 소는 8 마리예요. 줄에는 몇 마리가 설까요?"),
       options: [
         t(E, "6", "6"),
         t(E, "7", "7"),
@@ -110,19 +110,19 @@ export function makeLivestockCh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! All 8 cows must appear in the lineup regardless of constraints.",
-        "정답! 조건과 상관없이 모든 8마리 소가 줄에 나와야 해요."),
+        "맞아요! 제약과 상관없이 8 마리가 모두 줄에 서야 해요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "With 0 constraints, the answer is just alphabetical order.\nHow many cows are there in total?", "조건 0개이면 답은 알파벳 순서. 총 소는 몇 마리?"),
+        "With 0 constraints, the answer is just alphabetical order.\nHow many cows are there in total?", "제약이 0 개면 답은 알파벳 순서예요. 소는 모두 몇 마리일까요?"),
       question: t(E,
         "How many cows total in Livestock Lineup?",
-        "Livestock Lineup에서 총 소는 몇 마리?"),
+        "Livestock Lineup 에는 소가 모두 몇 마리일까요?"),
       hint: t(E,
         "Re-read the problem statement — how many cow names are listed?",
-        "문제를 다시 읽어 봐 — 이름이 적힌 소가 몇 마리?"),
+        "문제를 다시 읽어 봐요 — 이름이 적힌 소가 몇 마리예요?"),
       answer: 8,
     },
   ];
@@ -138,8 +138,8 @@ export function makeLivestockCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Each adjacency constraint = an edge. The constraint graph has max degree 2, so it's a set of CHAINS. Sort cows alphabetically, then for each unvisited chain endpoint (or alone cow), output the chain in order. Sections build it one piece at a time.",
-        "각 인접 제약 = 간선. 제약 그래프는 최대 차수 2 라 체인들의 집합. 소를 알파벳 순 정렬 후, 미방문 체인 끝점 (또는 외톨이) 부터 체인 출력. 아래 섹션이 한 단락씩 쌓아요."),
+        "The cows are already sorted alphabetically, so the lineups come out in lexicographic order. The first lineup that satisfies every constraint is the answer. Sections build it one piece at a time.",
+        "줄 세우기를 알파벳 순으로 훑다가 제약을 다 지키는 첫 줄이 답이에요."),
       sections: getLivestockSections(E),
     },
   ];

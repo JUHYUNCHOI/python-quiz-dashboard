@@ -47,7 +47,7 @@ export function makeMcc20KnightCh1(E) {
       type: "reveal",
       narr: t(E,
         "A knight sits on an INFINITE chessboard (negative squares exist too) at (X, Y). It wants to be at (A, B) after EXACTLY K moves — not fewer, not more.\nFor each query, print YES if that's possible, otherwise NO.",
-        "나이트가 무한한 체스판 (음수 칸도 있어요) 의 (X, Y) 에 있어요. (A, B) 에 정확히 K번 움직인 뒤 있고 싶어요 — 더 적게도, 더 많게도 아니에요.\n질문마다 가능하면 YES, 아니면 NO 를 출력해요."),
+        "정확히 K번 움직여서 목표 칸에 닿을 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -118,7 +118,7 @@ export function makeMcc20KnightCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. Each query is 5 numbers: K X Y A B. The knight in question 2 can't cross a huge distance in only 5 moves, so it's NO.",
-        "입력 형식과 공식 예제를 봐요. 질문 하나는 숫자 5개: K X Y A B. 2번 질문은 나이트가 5번만에 아주 먼 거리를 못 건너서 NO 예요."),
+        "질문 하나는 숫자 다섯 개로 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -131,7 +131,7 @@ export function makeMcc20KnightCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ T ≤ 400,  −1000 ≤ X, Y, A, B ≤ 1000,  1 ≤ K ≤ 100000.",
-                    "제약: 1 ≤ T ≤ 400,  −1000 ≤ X, Y, A, B ≤ 1000,  1 ≤ K ≤ 100000.")}
+                    "크기는 1 ≤ T ≤ 400,  −1000 ≤ X, Y, A, B ≤ 1000,  1 ≤ K ≤ 100000 이에요.")}
             </div>
           </div>
 
@@ -154,7 +154,7 @@ export function makeMcc20KnightCh1(E) {
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             <div><b style={{ color: "#15803d" }}>{t(E, "Q1", "1번")}</b> {t(E, "(0,0)→(3,3) in 2: yes — e.g. (0,0)→(1,2)→(3,3). ", "(0,0)→(3,3) 를 2번: 가능 — 예: (0,0)→(1,2)→(3,3). ")}<b style={{ color: "#15803d" }}>YES</b></div>
             <div><b style={{ color: "#b91c1c" }}>{t(E, "Q2", "2번")}</b> {t(E, "(−2,−2)→(100,100): way too far for only 5 moves. ", "(−2,−2)→(100,100): 5번으론 너무 멀어요. ")}<b style={{ color: "#b91c1c" }}>NO</b></div>
-            <div><b style={{ color: "#b91c1c" }}>{t(E, "Q3", "3번")}</b> {t(E, "(0,0)→(1,2) needs 1 move; 2 has the wrong parity (2−1 is odd). ", "(0,0)→(1,2) 는 1번 필요; 2는 홀짝이 안 맞아요 (2−1 은 홀수). ")}<b style={{ color: "#b91c1c" }}>NO</b></div>
+            <div><b style={{ color: "#b91c1c" }}>{t(E, "Q3", "3번")}</b> {t(E, "(0,0)→(1,2) needs 1 move; 2 has the wrong parity (2−1 is odd). ", "(0,0)→(1,2) 는 1번이면 돼요. 2번은 홀짝이 안 맞아요 (2−1 은 홀수). ")}<b style={{ color: "#b91c1c" }}>NO</b></div>
           </div>
         </div>),
     },
@@ -164,7 +164,7 @@ export function makeMcc20KnightCh1(E) {
       type: "reveal",
       narr: t(E,
         "Play with it. Pick a target square to see its minimum moves, then nudge K. Green = reachable in exactly K.",
-        "직접 해봐요. 목표 칸을 골라 최소 이동을 보고, K를 조절해봐요. 초록 = 정확히 K번에 도착 가능."),
+        "목표 칸을 고르고 K 를 바꿔 봐요. 초록이면 도착할 수 있어요."),
       content: (<KnightExactSim E={E} />),
     },
 
@@ -193,7 +193,7 @@ export function makeMcc20KnightCh1(E) {
       type: "quiz",
       narr: t(E,
         "The minimum is 2. Leftover after that must come in pairs (out and back). 5 − 2 = 3 is odd, so no. 4 − 2 = 2 is even, so yes.",
-        "최소가 2예요. 그 뒤 남는 이동은 짝으로만 (나갔다 오기) 낭비돼요. 5 − 2 = 3 은 홀수라 불가, 4 − 2 = 2 는 짝수라 가능."),
+        "남는 이동은 나갔다 오기라서 항상 2번씩 써요."),
       question: t(E,
         "A square needs a MINIMUM of 2 moves. In which K can the knight land there in EXACTLY K moves?",
         "어떤 칸이 최소 2번 필요해요. 정확히 K번에 도착 가능한 K 는?"),
@@ -205,7 +205,7 @@ export function makeMcc20KnightCh1(E) {
       correct: 0,
       explain: t(E,
         "K must be ≥ 2 AND (K − 2) even. K = 4 works (4 − 2 = 2). K = 3 or 5 leave an odd leftover.",
-        "K 는 ≥ 2 이면서 (K − 2)가 짝수여야 해요. K = 4 는 가능 (4 − 2 = 2). K = 3, 5 는 남는 값이 홀수."),
+        "K 는 2 이상이면서 (K − 2) 가 짝수여야 해요.\nK = 4 는 4 − 2 = 2 라서 돼요.\nK = 3, 5 는 남는 값이 홀수라 안 돼요."),
     },
   ];
 }
@@ -217,7 +217,7 @@ export function makeMcc20KnightCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way explores every square the knight could be on after each of K moves — that region grows huge (up to ~K² squares), times 400 queries. The fast way finds the MINIMUM moves to each offset once with BFS, then each query is a tiny check: K ≥ min and (K − min) even.",
-        "느린 방법은 K번 움직이는 동안 나이트가 있을 수 있는 모든 칸을 펼쳐봐요 — 그 영역이 엄청 커져요 (최대 ~K² 칸), 그것도 400 질문. 빠른 방법은 각 오프셋까지의 최소 이동을 BFS 로 한 번만 구하고, 질문마다 작은 판정만 해요: K ≥ 최소, (K − 최소) 짝수."),
+        "BFS 로 최소 이동만 구해 두면 질문은 금방 답해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -227,7 +227,7 @@ export function makeMcc20KnightCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "The reachable region grows to ~K² squares (K up to 100000), and there are up to 400 queries. Times out.",
-                      "도달 영역이 ~K² 칸까지 커지고 (K 최대 100000), 질문은 최대 400 개. 시간 초과.")}
+                      "갈 수 있는 칸이 ~K² 개까지 커져요 (K 는 최대 100000). 질문도 최대 400 개라 시간 초과가 나요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
@@ -236,7 +236,7 @@ export function makeMcc20KnightCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Reduce (X,Y)→(A,B) to the offset (dx,dy). One BFS from (0,0) fills every minimum. Each query: K ≥ min AND (K − min) even.",
-                      "(X,Y)→(A,B) 를 오프셋 (dx,dy) 로 줄여요. (0,0) 에서 BFS 한 번으로 모든 최소를 채워요. 질문마다: K ≥ 최소 그리고 (K − 최소) 짝수.")}
+                      "(X,Y)→(A,B) 를 차이 (dx,dy) 로 줄여요. (0,0) 에서 BFS 를 한 번 돌려 모든 최소를 채워요. 질문마다 K ≥ 최소 이고 (K − 최소) 가 짝수인지만 보면 돼요.")}
               </div>
             </div>
           </div>

@@ -117,19 +117,19 @@ export function getRevEngSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 파이썬에서 옮긴 것이라\n자료형과 표현은 필요하면 손봐야 해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, <string>) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, <string>) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣으면 (<iostream>, <vector>, <string>)\n코드가 무엇을 하려는지 더 잘 보여요."),
         t(E, "Reading the binary string with cin >> gives a std::string; index it with [pos].",
-            "이진 문자열을 cin >> 로 받으면 std::string, [pos]로 한 글자씩 봐."),
+            "0 과 1 로 된 글을 cin >> 로 받으면 std::string 이 돼요.\n[pos] 로 한 글자씩 꺼내 보면 돼요."),
       ],
     },
   ];
@@ -185,7 +185,7 @@ export function RevEngDeepAuditSim({ E }) {
         <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
           {t(E,
             "Rule: if arr[pos]==0 return A, else return B. Pick (pos, A) and check every row.",
-            "규칙: arr[pos]==0이면 A, 아니면 B 반환. (pos, A)를 골라 모든 행을 확인.")}
+            "arr[pos]==0 이면 A 를, 아니면 B 를 돌려주는 규칙이에요.\n(pos, A) 를 골라서 모든 행이 맞는지 확인해 보세요.")}
         </div>
       </div>
 
@@ -244,8 +244,8 @@ export function RevEngDeepAuditSim({ E }) {
         textAlign: "center",
       }}>
         {allOk
-          ? t(E, "✓ All rows match — this rule works! Verdict: OK", "✓ 모든 행 일치 — 이 규칙이 통해요! 판정: OK")
-          : t(E, "Some rows fail. Try another (pos, A). If nothing works → LIE.", "일부 행 불일치. 다른 (pos, A)를 시도. 다 실패하면 → LIE.")}
+          ? t(E, "✓ All rows match — this rule works! Verdict: OK", "✓ 모든 행이 맞아요. 이 규칙이면 답은 OK 예요.")
+          : t(E, "Some rows fail. Try another (pos, A). If nothing works → LIE.", "안 맞는 행이 있어요. 다른 (pos, A) 를 골라 보세요.\n무엇을 골라도 안 되면 LIE 예요.")}
       </div>
     </div>
   );

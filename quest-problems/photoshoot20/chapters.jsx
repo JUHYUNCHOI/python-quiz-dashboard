@@ -11,7 +11,7 @@ export function makePhoto20Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie wrote down a permutation a of 1..N, then computed b[i] = a[i] + a[i+1] for i = 0 to N−2 — and only b survived.\nGiven b, recover the lexicographically SMALLEST permutation a that could have produced it.",
-        "Bessie가 1..N의 순열 a를 적은 뒤, b[i] = a[i] + a[i+1] (i = 0 ~ N−2) 을 계산했어요 — 그런데 a 는 사라지고 b 만 남았어요.\nb 를 보고, 그것을 만들 수 있었던 순열 a 중 사전순으로 가장 작은 것을 알아내요."),
+        "옆자리끼리 더한 값 b 만 보고 원래 순서 a 를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -71,13 +71,13 @@ export function makePhoto20Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Try the algorithm by hand. Pick a[0] = 1, chain a[i+1] = b[i] − a[i], then audit: are all values in 1..N with no duplicates? If not, bump a[0] up and retry. The first a[0] that passes is our lex-smallest answer.",
-        "알고리즘을 직접 굴려봐요. a[0] = 1 부터 시도해서, a[i+1] = b[i] − a[i] 로 사슬을 잇고, 검증해요: 모두 1..N 안에 있고 중복 없나? 안 되면 a[0] 을 한 칸 올려 재시도. 처음 통과한 a[0] 이 사전순 최소 정답."),
+        "a[0] 을 1 부터 넣어 보며 사슬이 이어지는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, marginBottom: 10, textAlign: "center" }}>
             {t(E,
               "Example: N = 4, b = [3, 4, 7]. Press NEXT to audit each a[0] candidate one at a time.",
-              "예시: N = 4, b = [3, 4, 7]. 다음 버튼으로 a[0] 후보를 하나씩 검증해 봐요.")}
+              "N = 4, b = [3, 4, 7] 이에요. 다음 버튼으로 a[0] 후보를 하나씩 봐요.")}
           </div>
           <Photo20AuditSim E={E} />
         </div>),
@@ -86,27 +86,27 @@ export function makePhoto20Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Example: b = [3], N = 2.\nWe need a[0] + a[1] = 3.\nIf a[0] = 1, then a[1] = 2.\nIs [1, 2] a valid permutation of {1, 2}?", "예시: b = [3], N = 2. a[0] + a[1] = 3이 필요해요. a[0] = 1이면, a[1] = 2. [1, 2]는 {1, 2}의 유효한 순열일까요?"),
+        "Example: b = [3], N = 2.\nWe need a[0] + a[1] = 3.\nIf a[0] = 1, then a[1] = 2.\nIs [1, 2] a valid permutation of {1, 2}?", "a[0] = 1 이면 a[1] = 2 예요. 이게 쓸 수 있는 순열일까요?"),
       question: t(E,
         "b = [3], N = 2. If a[0] = 1, a[1] = 2. Is [1, 2] valid?",
-        "b = [3], N = 2. a[0] = 1이면, a[1] = 2. [1, 2]는 유효할까?"),
+        "b = [3], N = 2 예요. a[0] = 1 이면 [1, 2] 를 쓸 수 있을까요?"),
       options: [
-        t(E, "Yes, it's a valid permutation", "맞아, 유효한 순열이야"),
-        t(E, "No, it's not valid", "아니, 유효하지 않아"),
+        t(E, "Yes, it's a valid permutation", "네, 쓸 수 있는 순열이에요"),
+        t(E, "No, it's not valid", "아니요, 쓸 수 없어요"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! [1, 2] is a permutation of {1, 2} and a[0]+a[1] = 1+2 = 3 = b[0]. Valid!",
-        "맞아! [1, 2]는 {1, 2}의 순열이고 a[0]+a[1] = 1+2 = 3 = b[0]. 유효해요!"),
+        "맞아요! [1, 2] 는 1 과 2 를 한 번씩 쓴 순열이에요.\n게다가 1+2 = 3 이라 b[0] 과도 딱 맞아요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "For b = [3], N = 2, what is a[0] in the lexicographically smallest permutation?", "b = [3], N = 2일 때, 사전순 최소 순열의 a[0]은?"),
+        "For b = [3], N = 2, what is a[0] in the lexicographically smallest permutation?", "사전순으로 가장 작은 순열의 a[0] 은 얼마일까요?"),
       question: t(E,
         "b = [3], N = 2. a[0] for lex-smallest permutation?",
-        "b = [3], N = 2. 사전순 최소 순열의 a[0]은?"),
+        "b = [3], N = 2 예요. 사전순 최소 순열의 a[0] 은 얼마일까요?"),
       hint: t(E,
         "For lex-smallest, try the tiniest a[0] first and check if it works.",
         "사전순 최소를 노리니, 가장 작은 a[0] 부터 시도해서 되는지 확인해 봐요."),
@@ -126,7 +126,7 @@ export function makePhoto20Ch2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Once you fix a[0], the entire array is determined: a[i+1] = b[i] − a[i]. So try a[0] = 1, 2, …, N and pick the SMALLEST that produces a valid permutation of 1..N (no duplicates, all in range). Sections build it one piece at a time.",
-        "a[0] 을 정하면 나머지가 자동으로 정해져요: a[i+1] = b[i] − a[i]. 그러므로 a[0] = 1, 2, …, N 을 시도해 보고, 1..N 의 유효한 순열 (중복 없음, 범위 내) 을 만드는 가장 작은 a[0] 을 채택. 아래 섹션이 한 단락씩 쌓아요."),
+        "a[0] 하나만 정하면 나머지 수는 저절로 따라와요."),
       sections: getPhoto20Sections(E),
     },
   ];

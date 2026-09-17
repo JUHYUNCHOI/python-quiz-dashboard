@@ -11,7 +11,7 @@ export function makeBlockGameCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N alphabet blocks; each block has a word printed on its FRONT face and a word on its BACK face. To 'spell' a word using a block, the block must contain enough letter cubes for that word.\nFor each letter A..Z, find the minimum number of letter cubes Bessie needs so that she can spell EITHER the front or back word of every block — the answer is one count per letter.",
-        "Bessie에게 N개의 알파벳 판이 있어요. 각 판의 앞면과 뒷면에 단어가 하나씩 적혀 있어요. 어떤 단어를 만들려면 그 단어에 들어 있는 글자만큼 글자 큐브가 있어야 해요.\n알파벳 A..Z 각각에 대해, 모든 판마다 앞면이나 뒷면 중 한 단어는 만들 수 있을 만큼 보유해야 할 큐브의 최소 개수를 출력해요."),
+        "글자별로 큐브가 몇 개씩 있어야 하는지 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -72,32 +72,32 @@ export function makeBlockGameCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Picture 1 board with 'AB' on front, 'CD' on back.  Only ONE side will be shown — so plan for the worst case.",
-        "판 1 개 — 앞 'AB', 뒤 'CD'. 한 면만 보일 테니 최악의 경우를 대비."),
+        "One board: 'AB' on the front, 'CD' on the back. Either side may be the one showing.",
+        "판 하나에 앞은 'AB', 뒤는 'CD' 예요.\n어느 쪽이 보일지 몰라요."),
       question: t(E,
         "1 board with 'AB' front and 'CD' back. How many total blocks needed?",
-        "앞면 'AB', 뒷면 'CD'인 판 1개. 총 몇 개 블록 필요?"),
+        "앞면 'AB', 뒷면 'CD' 인 판 1개. 큐브가 모두 몇 개 필요할까요?"),
       options: [
         t(E, "2 blocks", "2개"),
         t(E, "4 blocks", "4개"),
       ],
-      correct: 0,
+      correct: 1,
       explain: t(E,
-        "Correct! We need max(front needs, back needs) per letter. Since AB and CD share no letters, we need max(1,0) for each = 1 each for A,B,C,D. Wait - we only see ONE side. So we need enough for AB OR CD. That's max(2,2) = 2 blocks.",
-        "맞아! 한 면만 보이니까 AB 또는 CD에 충분한 블록이 필요해요. max(2,2) = 2블록이에요."),
+        "To spell 'AB' you need one A and one B. To spell 'CD' you need one C and one D.\nA block carries one letter, so they can't stand in for each other.\nSo it's 1 each for A, B, C, D — 4 blocks.",
+        "앞면 'AB' 를 만들려면 A 하나와 B 하나가 필요해요.\n뒷면 'CD' 를 만들려면 C 하나와 D 하나가 필요해요.\n큐브 하나에는 글자가 하나뿐이라 서로 대신 못 써요.\n그래서 A·B·C·D 각각 1개씩, 모두 4개예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
         "Same setup, your turn — 'AB' / 'CD' board, only one side seen.  Total blocks?",
-        "같은 상황 — 'AB' / 'CD' 판, 한 면만 보임. 총 몇 블록?"),
+        "같은 상황이에요. 이번엔 직접 큐브 개수를 세어 봐요."),
       question: t(E,
         "Total blocks for 1 board: front='AB', back='CD'?",
-        "판 1개 총 블록 수: 앞='AB', 뒤='CD'?"),
+        "앞='AB', 뒤='CD' 인 판 1개에 큐브가 몇 개 필요할까요?"),
       hint: t(E,
         "Each side needs its own count — the worst case wins.",
-        "양면 각자 필요 수 — 더 큰 쪽이 승."),
+        "양쪽 면에 필요한 수를 따로 세고 더 큰 쪽을 골라요."),
       answer: 2,
     },
     // 1-4: Deep-audit sim — per-letter MAX across two boards
@@ -105,7 +105,7 @@ export function makeBlockGameCh1(E) {
       type: "reveal",
       narr: t(E,
         "Deep audit: two boards. For EACH board take MAX(front, back) per letter — its worst case. Then SUM the per-board maxes across boards, letter by letter.",
-        "심층 감사: 판 2개. 각 판마다 글자별 MAX(앞, 뒤) — 그 판의 최악의 경우. 그다음 글자별로 모든 판의 max 를 합산."),
+        "판이 2개예요. 판마다 가장 나쁜 경우를 먼저 구해요."),
       content: <BlockGameDeepAuditSim E={E} />,
     },
   ];
@@ -147,7 +147,7 @@ function BlockGameDeepAuditSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "8px 12px", marginBottom: 12, fontSize: 12, color: "#9a3412", textAlign: "center", fontWeight: 600 }}>
-        🔍 {t(E, "Per-letter MAX, board by board → then SUM", "글자별 MAX, 판별로 → 그 다음 합산")}
+        🔍 {t(E, "Per-letter MAX, board by board → then SUM", "판마다 글자별 MAX 를 구한 뒤 더해요")}
       </div>
 
       {boards.map((b, i) => {
@@ -181,7 +181,7 @@ function BlockGameDeepAuditSim({ E }) {
       {/* Sum row */}
       <div style={{ background: "#fef3c7", border: "1.5px solid #f59e0b", borderRadius: 10, padding: 12, marginBottom: 8 }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: "#78350f", marginBottom: 6 }}>
-          ➕ {t(E, "Sum per-board maxes, letter by letter", "글자별로 판별 max 합산")}
+          ➕ {t(E, "Sum per-board maxes, letter by letter", "판마다 구한 max 를 글자별로 더해요")}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, fontSize: 12 }}>
           {letters.map(L => (
@@ -208,7 +208,7 @@ function BlockGameDeepAuditSim({ E }) {
       <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
           "Note: we do NOT take MAX across boards — we SUM. Each board needs its own cubes.",
-          "주의: 판 사이에는 MAX 가 아니라 SUM. 판마다 자기 큐브가 필요.")}
+          "조심해요. 판끼리는 MAX 가 아니라 더하기예요.\n판마다 자기 큐브가 따로 필요하니까요.")}
       </div>
     </div>
   );
@@ -225,7 +225,7 @@ export function makeBlockGameCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "For each board, take MAX(front-count, back-count) per letter — the board's worst case.  Sum those maxes across all boards.  Sections build it one piece at a time.",
-        "각 판마다 글자별 MAX(앞면 개수, 뒷면 개수) — 그 판의 worst. 모든 판의 max 를 글자별로 합산. 아래 섹션이 한 단락씩 쌓아요."),
+        "판마다 가장 나쁜 경우를 구한 뒤 글자별로 더해요."),
       sections: getBlockGameSections(E),
     },
   ];

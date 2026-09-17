@@ -35,12 +35,12 @@ function SecretDeepAuditSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
         <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 8 }}>
-          🔬 {t(E, "Deep-Audit: slide the window over a+a", "딥-오딧: a+a 위에서 창문 밀기")}
+          🔬 {t(E, "Deep-Audit: slide the window over a+a", "자세히 보기 — a+a 위에서 창문 밀기")}
         </div>
         <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "Pick a candidate b. Slide a length-N window across a+a. If the window equals b at any offset, b is a rotation of a.",
-            "후보 b를 골라봐. a+a 위에서 길이 N 창문을 슬라이드. 어느 위치에서든 창문이 b와 같으면, b는 a의 회전이야.")}
+            "후보 b 를 골라 봐요. a+a 위에서 길이 N 짜리 창문을 오른쪽으로 밀어요.\n어느 자리에서든 창문 안이 b 와 같으면, b 는 a 를 돌린 것이에요.")}
         </div>
 
         {/* b preset selector */}
@@ -82,7 +82,7 @@ function SecretDeepAuditSim({ E }) {
           </div>
           <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>
             {t(E, `offset i = ${offset} → window = doubled[${offset}:${offset + N}]`,
-                  `오프셋 i = ${offset} → 창문 = doubled[${offset}:${offset + N}]`)}
+                  `${offset} 칸 밀었어요 → 창문 = doubled[${offset}:${offset + N}]`)}
           </div>
         </div>
 
@@ -145,9 +145,9 @@ function SecretDeepAuditSim({ E }) {
         }}>
           {isMatch
             ? t(E, `✅ Match at offset ${offset} → b IS a rotation of a → print YES`,
-                  `✅ 오프셋 ${offset}에서 일치 → b는 a의 회전 → YES 출력`)
+                  `✅ ${offset} 칸 민 자리에서 같아요 → b 는 a 를 돌린 것이에요 → YES`)
             : t(E, `❌ No match at offset ${offset} — slide further (or all N offsets fail → NO)`,
-                  `❌ 오프셋 ${offset}에서 불일치 — 더 밀어보거나 (N개 다 실패하면 → NO)`)}
+                  `❌ ${offset} 칸 민 자리에서는 달라요. 더 밀어 봐요. N 자리가 다 다르면 NO 예요.`)}
         </div>
       </div>
     </div>
@@ -189,7 +189,7 @@ export function makeSecretCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two strings A and B of equal length are given.\nDetermine if B is a CIRCULAR ROTATION of A — i.e., B can be obtained by cyclically shifting A by some amount. Print YES or NO.",
-        "같은 길이의 두 문자열 A 와 B 가 주어져요.\nB 가 A 의 회전(한쪽 끝이 반대편으로)인지 — 즉 A 를 어떤 양만큼 돌려서 B 가 나오는지 — 판별해요. YES 또는 NO 를 출력해요."),
+        "같은 길이의 두 문자열 A 와 B 가 주어져요.\nA 를 몇 칸 돌려서 B 를 만들 수 있는지 가려내요.\n만들 수 있으면 YES, 없으면 NO 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -204,7 +204,7 @@ export function makeSecretCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
-              {t(E, "Decide if string B is a circular rotation of string A — print YES or NO.", "문자열 B 가 A 의 회전인지 판별 — YES 또는 NO 출력.")}
+              {t(E, "Decide if string B is a circular rotation of string A — print YES or NO.", "A 를 돌려서 B 가 되는지 가려내고, YES 또는 NO 를 출력해요.")}
             </div>
           </div>
 
@@ -224,7 +224,7 @@ export function makeSecretCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "YES if B is a circular rotation of A, else NO", "B 가 A 의 회전(한쪽 끝이 반대편으로)이면 YES, 아니면 NO")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "YES if B is a circular rotation of A, else NO", "A 를 몇 칸 돌려 B 가 되면 YES, 안 되면 NO 를 출력해요")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -236,38 +236,38 @@ export function makeSecretCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The classic rotation check: if we concatenate array a with itself (a+a), any rotation of a will appear as a contiguous subarray.\nWhy does this work?", "클래식 회전 검사: 배열 a를 자기 자신과 이어붙이면 (a+a), a의 모든 회전이 연속 부분 배열로 나타나. 왜 이게 되는 걸까요?"),
+        "The classic rotation check: if we concatenate array a with itself (a+a), any rotation of a will appear as a contiguous subarray.\nWhy does this work?", "배열 a 를 자기 자신과 이어 붙이면(a+a), a 를 돌린 모양이 모두 그 안에 붙어서 나타나요.\n왜 그럴까요?"),
       question: t(E,
         "Why does checking if b is in a+a work for rotation detection?",
-        "b가 a+a에 있는지 확인하는 것이 왜 회전 검출에 효과적인가?"),
+        "b 가 a+a 안에 있는지만 봐도 되는 이유는 무엇일까요?"),
       options: [
-        t(E, "a+a contains all rotations of a as subarrays", "a+a는 a의 모든 회전을 부분 배열로 포함해"),
-        t(E, "a+a doubles the length, making comparison easier", "a+a는 길이를 두 배로 해서 비교가 쉬워져"),
+        t(E, "a+a contains all rotations of a as subarrays", "a+a 안에 a 를 돌린 모양이 전부 들어 있어요"),
+        t(E, "a+a doubles the length, making comparison easier", "a+a 는 길이가 두 배라서 비교가 쉬워져요"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! For [1,2,3], a+a = [1,2,3,1,2,3]. Rotations [2,3,1] and [3,1,2] are both subarrays of a+a.",
-        "맞아! [1,2,3]이면, a+a = [1,2,3,1,2,3]. 회전 [2,3,1]과 [3,1,2] 모두 a+a의 부분 배열이에요."),
+        "맞아요! a = [1,2,3] 이면 a+a = [1,2,3,1,2,3] 이에요.\n돌린 모양인 [2,3,1] 과 [3,1,2] 가 둘 다 그 안에 붙어 있어요."),
     },
     // 1-3: Deep-Audit Sim — slide a window over a+a
     {
       type: "reveal",
       narr: t(E,
         "Let's audit the trick. Pick a candidate b, then slide a length-N window across a+a. The verdict turns green at the matching offset — or stays gray if no offset works.",
-        "트릭을 직접 살펴보자. 후보 b를 고른 다음, a+a 위에서 길이 N 창문을 슬라이드. 일치하는 오프셋에서 초록색 — 어디서도 안 맞으면 회색."),
+        "후보 b 를 고르고 a+a 위에서 창문을 밀어 봐요.\n같은 자리에서는 초록으로, 끝까지 안 맞으면 회색으로 보여요."),
       content: <SecretDeepAuditSim E={E} />,
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "[1,2,3] and [2,3,1] - is [2,3,1] a rotation of [1,2,3]? Answer 1 for Yes, 0 for No.", "[1,2,3]과 [2,3,1] - [2,3,1]은 [1,2,3]의 회전인가? Yes면 1, No면 0을 입력해요."),
+        "[1,2,3] and [2,3,1] - is [2,3,1] a rotation of [1,2,3]? Answer 1 for Yes, 0 for No.", "[1,2,3] 을 돌려서 [2,3,1] 을 만들 수 있을까요? 되면 1, 안 되면 0 을 넣어요."),
       question: t(E,
         "[1,2,3] and [2,3,1]: same rotation? (1=Yes, 0=No)",
-        "[1,2,3]과 [2,3,1]: 같은 회전? (1=Yes, 0=No)"),
+        "[1,2,3] 을 돌리면 [2,3,1] 이 나올까요? (1=예, 0=아니오)"),
       hint: t(E,
         "Try shifting [1,2,3] left by 1 step — what do you get? Compare with [2,3,1].",
-        "[1,2,3]을 왼쪽으로 1칸 밀면 무엇이 될까? [2,3,1]과 비교해봐요."),
+        "[1,2,3] 을 왼쪽으로 한 칸 밀면 무엇이 될까요? [2,3,1] 과 견줘 봐요."),
       answer: 1,
     },
   ];
@@ -284,7 +284,7 @@ export function makeSecretCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Classic trick: B is a circular rotation of A iff B is a substring of A+A. So just check 'B in A+A'. Sections build it one piece at a time.",
-        "고전 트릭: B 가 A 의 순환 회전 iff B 가 A+A 의 부분 문자열. 그러므로 'B in A+A' 만 확인. 아래 섹션이 한 단락씩 쌓아요."),
+        "A 를 돌려 B 가 되는 것과, B 가 A+A 안에 붙어 있는 것은 같은 말이에요.\n그래서 'B in A+A' 한 줄만 확인하면 돼요."),
       sections: getSecretSections(E),
     },
   ];

@@ -132,8 +132,8 @@ export function MooOpsLab({ E }) {
       <div style={{ background: middleOk ? "#ecfdf5" : "#fef2f2", border: `1.5px solid ${middleOk ? "#6ee7b7" : "#fca5a5"}`, borderRadius: 10, padding: 10, fontSize: 12, lineHeight: 1.7 }}>
         {!middleOk ? (
           <div style={{ color: "#991b1b" }}>
-            <b>{t(E, "Middle char", "가운데 문자")} s[i+1] = '{c1}'</b> ≠ 'O' →{" "}
-            {t(E, "skip (middle can't be flipped).", "건너뜀 (가운데는 뒤집기 불가).")}
+            <b>{t(E, "Middle char", "가운데 글자")} s[i+1] = '{c1}'</b> ≠ 'O' →{" "}
+            {t(E, "skip (middle can't be flipped).", "건너뛰어요 (가운데는 못 뒤집어요).")}
           </div>
         ) : (
           <div style={{ color: "#065f46", fontFamily: "JetBrains Mono, monospace", fontSize: 12 }}>
@@ -149,7 +149,7 @@ export function MooOpsLab({ E }) {
       </div>
 
       <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center" }}>
-        {t(E, "Best across all valid i for this string", "이 문자열에서 모든 유효 i 중 최솟값")}{" : "}
+        {t(E, "Best across all valid i for this string", "이 문자열에서 쓸 수 있는 i 중 가장 적은 비용")}{" : "}
         <b style={{ color: A, fontFamily: "JetBrains Mono, monospace" }}>{best == null ? "-1" : best}</b>
       </div>
     </div>
@@ -227,19 +227,19 @@ export function getMooOpsSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 쪽은 Python 코드를 옮긴 것이라, 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 (<iostream>, <vector>, ...) 적으면 코드 뜻이 또렷해져요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더하거나 곱한 값이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -285,7 +285,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMooOpsPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "MooOps — Full Study Guide", "MooOps — 종합 풀이 노트");
@@ -308,7 +308,7 @@ export function downloadMooOpsPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

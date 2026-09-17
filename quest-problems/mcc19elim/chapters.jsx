@@ -190,7 +190,7 @@ export function makeMcc19ElimCh1(E) {
       type: "reveal",
       narr: t(E,
         "You are given a binary string and a limit K. You may DELETE at most K zeros; the leftover characters squeeze back into one string.\nPrint the longest run of consecutive 1s you can make.",
-        "이진 문자열과 한계 K 가 주어져요. 최대 K 개의 0 을 지울 수 있어요; 남은 문자들은 다시 한 줄로 붙어요.\n만들 수 있는 가장 긴 연속 1 의 길이를 출력해요."),
+        "0 을 최대 K 개 지워서 1 을 가장 길게 이어 붙여요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -233,7 +233,7 @@ export function makeMcc19ElimCh1(E) {
                   {t(E, "You may ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "delete at most K zeros", "0 을 최대 K 개 지우기")}</b>
                   {t(E, ". The remaining characters close up into one string — the deleted zeros are gone for good.",
-                        " 가능. 남은 문자들이 한 줄로 붙어요 — 지운 0 은 완전히 사라져요.")}
+                        " 가능해요. 남은 글자들이 한 줄로 붙어요 — 지운 0 은 아주 사라져요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -266,7 +266,7 @@ export function makeMcc19ElimCh1(E) {
               <div>• {t(E, "line 2: ", "2번째 줄: ")}<b>{t(E, "the binary string", "이진 문자열")}</b> ({t(E, "only 0s and 1s", "0 과 1 만")})</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Output: the longest run of consecutive 1s achievable.", "출력: 만들 수 있는 가장 긴 연속 1 의 길이.")}
+              {t(E, "Output: the longest run of consecutive 1s achievable.", "출력은 만들 수 있는 가장 긴 연속 1 의 길이예요.")}
             </div>
           </div>
 
@@ -326,7 +326,7 @@ export function makeMcc19ElimCh1(E) {
       correct: 1,
       explain: t(E,
         "Delete the 0 at index 1 → \"1110\": three 1s in a row. Delete the 0 at index 4 → \"1011\": at most two. So 3 is the best. Note the window \"1011\" has length 4, but one of those characters was the deleted 0 — the deleted 0 does not count.",
-        "인덱스 1 의 0 을 지우면 \"1110\" — 1 이 세 개 연속.\n인덱스 4 의 0 을 지우면 \"1011\" — 많아야 두 개.\n그래서 3 이 최선이에요.\n창 \"1011\" 은 길이가 4 지만 그중 하나는 지운 0 이에요 — 지운 0 은 세지 않아요."),
+        "왼쪽 0 을 지우면 \"1110\" 이라 1 이 세 개 이어져요.\n오른쪽 0 을 지우면 \"1011\" 이라 많아야 두 개예요.\n그래서 3 이 가장 길어요.\n창 \"1011\" 은 길이가 4 지만 그중 하나는 지운 0 이에요 — 지운 0 은 세지 않아요."),
     },
   ];
 }
@@ -343,7 +343,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way tries every possible window and recounts each one: about N² work — too slow for a long string. The fast way slides one window across in a single pass, keeping the zero and one counts as it goes: N work.",
-        "느린 방법은 가능한 모든 구간을 골라 매번 다시 세요: 약 N² 연산 — 긴 문자열엔 너무 느려요. 빠른 방법은 창 하나를 한 번에 훑으며 0 과 1 의 개수를 계속 유지해요: N 연산."),
+        "느린 방법은 구간마다 다시 세고, 빠른 방법은 한 번만 훑어요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -352,7 +352,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: check every window and recount", "느림: 모든 구간을 골라 매번 다시 세기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Every start × every end ≈ N² pairs, and each recounts its zeros and ones. Times out when N is large.", "모든 시작 × 모든 끝 ≈ N² 쌍, 게다가 매번 0 과 1 을 다시 세요. N 이 크면 시간 초과.")}
+                {t(E, "Every start × every end ≈ N² pairs, and each recounts its zeros and ones. Times out when N is large.", "시작과 끝을 다 고르면 약 N² 쌍이고, 쌍마다 0 과 1 을 다시 세요.\nN 이 크면 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
@@ -360,7 +360,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: one sliding window, counts kept live", "빠름: 창 하나로 개수를 실시간 유지")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Move right forward; if the window holds more than K zeros, move left until it doesn't. Keep 'one' as you go and take its max. One pass ≈ N.", "right 를 앞으로; 창의 0 이 K 를 넘으면 넘지 않을 때까지 left 를 옮겨요. 지나가며 'one' 을 유지하고 그 최댓값을 취해요. 한 번 훑기 ≈ N.")}
+                {t(E, "Move right forward; if the window holds more than K zeros, move left until it doesn't. Keep 'one' as you go and take its max. One pass ≈ N.", "right 를 한 칸씩 앞으로 옮겨요. 창의 0 이 K 를 넘으면 넘지 않을 때까지 left 를 당겨요.\n지나가며 'one' 을 세고 그 최댓값이 답이에요. 한 번만 훑으니 약 N 번이에요.")}
               </div>
             </div>
           </div>
@@ -374,7 +374,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Solution code — read part by part. The key line counts ONES, not the window length.",
-        "풀이 코드 — 부분별로 읽어봐요. 핵심 줄은 창 길이가 아니라 1 의 개수를 세요."),
+        "풀이 코드를 한 부분씩 읽어 봐요."),
       sections: getMcc19ElimSections(E),
     },
   ];

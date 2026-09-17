@@ -53,9 +53,9 @@ const LINEUP = [
 function Known({ E, n }) {
   const FACTS = [
     t(E, "One pair changes the answer by a+b — that is (+a) minus (−b).",
-        "쌍 하나가 누구 손에 가느냐로 답이 a+b 만큼 달라진다"),
+        "쌍 하나가 누구 손에 가느냐로 답이 a+b 만큼 달라져요"),
     t(E, "So line the pairs up by a+b, biggest first.",
-        "그래서 a+b 가 큰 순서로 줄을 세운다"),
+        "그래서 a+b 가 큰 순서로 줄을 세워요"),
   ].slice(0, n);
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center",
@@ -328,7 +328,7 @@ function LineUpSim({ E }) {
               </div>
               <div style={{ fontSize: 15, fontWeight: 800, lineHeight: 1.5 }}>
                 {t(E, "Line the pairs up by a+b, biggest first.",
-                    "쌍을 a+b 가 큰 순서로 줄 세운다.")}
+                    "쌍을 a+b 가 큰 순서로 줄 세워요.")}
               </div>
             </div>
             {/* 정직하게: 짝수 자리(Evirir 차례)에서는 X−Y 가 커지고,
@@ -644,7 +644,7 @@ export function makeSimpleGameCh1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "Both players play optimally — print the final X−Y.",
-                "두 사람이 최적으로 둘 때의 최종 X−Y 를 출력해요.")}
+                "두 사람이 저마다 제일 좋은 수를 뒀을 때의 마지막 X−Y 를 출력해요.")}
             </div>
           </div>
 
@@ -684,7 +684,7 @@ export function makeSimpleGameCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "final X−Y under optimal play", "최적 플레이에서의 최종 X−Y")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "final X−Y under optimal play", "둘 다 제일 좋은 수를 뒀을 때의 마지막 X−Y")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
@@ -829,7 +829,7 @@ export function makeSimpleGameCh1(E) {
               <div style={{ fontSize: 11.5, color: "#b91c1c", marginTop: 8, lineHeight: 1.65, textWrap: "balance", ...KA }}>
                 {t(E,
                   "100 million tries a second → n = 20 alone takes 770 years.",
-                  "1초에 1억 번씩 세도 n = 20 하나에 770년.")}
+                  "1초에 1억 번씩 세도 n = 20 하나에 770년이 걸려요.")}
               </div>
             </div>
           <div style={{
@@ -882,7 +882,7 @@ export function makeSimpleGameCh1(E) {
           }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 4 }}>
               🧭 {t(E, "How we found it — and how to find it next time",
-                     "어떻게 찾았나 — 다음에도 이렇게 찾는다")}
+                     "어떻게 찾았나 — 다음에도 이렇게 찾아요")}
             </div>
             <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 12, lineHeight: 1.6 }}>
               {t(E, "Whenever a problem asks “in what order?”, walk these four.",
@@ -890,18 +890,18 @@ export function makeSimpleGameCh1(E) {
             </div>
             {[
               { g: t(E, "Put just TWO of them side by side and swap.",
-                        "딱 두 개만 놓고 순서를 바꿔본다."),
+                        "딱 두 개만 놓고 순서를 바꿔 봐요."),
                 m: t(E, "(5,1) first → −1 · (2,6) first → +1",
                         "(5,1) 먼저 → −1 · (2,6) 먼저 → +1") },
               { g: t(E, "Write down how much the answer moved.",
-                        "답이 얼마나 달라졌는지 적는다."),
+                        "답이 얼마나 달라졌는지 적어요."),
                 m: "1 − (−1) = 2" },
               { g: t(E, "Read the gap — it tells you what to compare by.",
-                        "그 차이를 읽는다. 무엇으로 견줄지가 거기 적혀 있다."),
+                        "그 차이를 읽어요. 무엇으로 견줄지가 거기 적혀 있어요."),
                 m: t(E, "2 = (2+6) − (5+1)  →  compare by a+b",
                         "2 = (2+6) − (5+1)  →  견줄 것은 a+b") },
               { g: t(E, "Swapping neighbours leaves the rest alone — so sort everything by it.",
-                        "이웃만 바꾸면 나머지는 그대로다 → 그 기준으로 전부 줄 세운다."),
+                        "이웃만 바꾸면 나머지는 그대로예요. 그러니 그 기준으로 전부 줄을 세워요."),
                 m: t(E, "line them up by a+b, biggest first",
                         "a+b 가 큰 순서로 줄 세우기") },
             ].map((r, i) => (
@@ -955,12 +955,12 @@ export function makeSimpleGameCh1(E) {
       narr: t(E, "Now pick it yourself.", "이제 직접 골라봐요."),
       question: t(E,
         "Pairs: (3, 1), (2, 6), (5, 2). Which pair does Evirir take on the first turn?",
-        "쌍: (3, 1), (2, 6), (5, 2). Evirir 가 첫 차례에 가져가는 쌍은?"),
+        "쌍이 (3, 1), (2, 6), (5, 2) 예요.\nEvirir 가 첫 차례에 어느 쌍을 가져갈까요?"),
       /* 퀴즈에는 content 가 없어서 '지금까지 알아낸 것' 띠를 못 붙인다.
          힌트 자리에 같은 것을 적어 둔다 — 앞으로 되돌아가지 않아도 되게. */
       hint: t(E,
         "So far: one pair changes the answer by a+b, so line them up by a+b, biggest first.",
-        "지금까지 — 쌍 하나로 답이 a+b 만큼 달라지니까, a+b 가 큰 순서로 줄을 세운다."),
+        "쌍 하나로 답이 a+b 만큼 달라지니까, a+b 가 큰 순서로 줄을 세워요."),
       options: [
         t(E, "(2, 6) — largest a+b = 8", "(2, 6) — a+b = 8 로 가장 큼"),
         t(E, "(5, 2) — largest a = 5", "(5, 2) — a = 5 로 가장 큼"),
@@ -969,7 +969,7 @@ export function makeSimpleGameCh1(E) {
       correct: 0,
       explain: t(E,
         "Sort by a+b: (2,6)=8, (5,2)=7, (3,1)=4. Evirir takes (2,6) first (+2 to X), then Rhae takes (5,2) (−2), then Evirir takes (3,1) (+3). X−Y = 2−2+3 = 3.",
-        "a+b 로 정렬: (2,6)=8, (5,2)=7, (3,1)=4. Evirir 가 (2,6) 을 먼저(X 에 +2), Rhae 가 (5,2)(−2), Evirir 가 (3,1)(+3). X−Y = 2−2+3 = 3."),
+        "a+b 로 줄을 세우면 (2,6)=8, (5,2)=7, (3,1)=4 예요.\nEvirir 가 (2,6) 을 먼저 가져가 X 에 +2 를 하고,\nRhae 가 (5,2) 를 가져가 −2 를 하고,\nEvirir 가 (3,1) 을 가져가 +3 을 해요.\n그래서 X−Y = 2−2+3 = 3 이에요."),
     },
   ];
 }

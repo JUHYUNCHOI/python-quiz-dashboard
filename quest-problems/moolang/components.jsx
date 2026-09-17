@@ -47,7 +47,7 @@ function buildMooLangAuditTrace() {
   trace.push({
     cur: -1, bestIdx,
     note_en: `Setup: N=${N} nouns, T=${T} transitive, I=${I} intransitive, P=${P} periods. We sweep n_tverb from 0..${T} and pick the row with the biggest word count.`,
-    note_ko: `세팅: 명사 ${N}개, 타동사 ${T}개, 자동사 ${I}개, 마침표 ${P}개. n_tverb 를 0..${T} 까지 훑어 단어 수가 최대인 줄을 골라요.`,
+    note_ko: `명사 ${N} 개, 타동사 ${T} 개, 자동사 ${I} 개, 마침표 ${P} 개예요.\nn_tverb 를 0 부터 ${T} 까지 훑어서 단어 수가 가장 많은 줄을 골라요.`,
     rows,
   });
   rows.forEach((r, i) => {
@@ -55,14 +55,14 @@ function buildMooLangAuditTrace() {
       ? `n_tverb=${r.nt}: would need ${r.sentences} sentences but P=${P}. Skip.`
       : `n_tverb=${r.nt}: uses ${2 * r.nt} nouns → ${r.nounsLeft} left. min(I, left) = ${r.ni} intransitive. Total = 3·${r.nt} + 2·${r.ni} = ${r.words} words.`;
     const ko = !r.fits
-      ? `n_tverb=${r.nt}: 문장 ${r.sentences}개 필요한데 P=${P}. 건너뜀.`
-      : `n_tverb=${r.nt}: 명사 ${2 * r.nt}개 사용 → ${r.nounsLeft}개 남음. min(I, 남음) = ${r.ni} 자동사 문장. 총 = 3·${r.nt} + 2·${r.ni} = ${r.words} 단어.`;
+      ? `n_tverb=${r.nt} 이면 문장이 ${r.sentences} 개 있어야 하는데 마침표는 ${P} 개뿐이에요. 그래서 건너뛰어요.`
+      : `n_tverb=${r.nt} 이면 명사를 ${2 * r.nt} 개 써서 ${r.nounsLeft} 개가 남아요. 자동사 문장은 min(I, 남은 명사) = ${r.ni} 개예요. 그래서 모두 3·${r.nt} + 2·${r.ni} = ${r.words} 단어예요.`;
     trace.push({ cur: i, bestIdx, note_en: en, note_ko: ko, rows });
   });
   trace.push({
     cur: -2, bestIdx,
     note_en: `Best row: n_tverb=${rows[bestIdx].nt}, n_iverb=${rows[bestIdx].ni}, words=${rows[bestIdx].words}. That is the answer.`,
-    note_ko: `최댓값 줄: n_tverb=${rows[bestIdx].nt}, n_iverb=${rows[bestIdx].ni}, 단어=${rows[bestIdx].words}. 이게 답.`,
+    note_ko: `가장 많은 줄은 n_tverb=${rows[bestIdx].nt}, n_iverb=${rows[bestIdx].ni}, 단어 ${rows[bestIdx].words} 개예요. 이게 답이에요.`,
     rows,
   });
   return trace;
@@ -80,11 +80,11 @@ export function MooLangDeepAudit({ E }) {
     <div style={{ padding: 14 }}>
       <div style={{ textAlign: "center", marginBottom: 8 }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: A, letterSpacing: 0.3 }}>
-          🔬 {t(E, "Deep Audit — sweep every n_tverb", "딥 오딧 — n_tverb 전부 훑기")}
+          🔬 {t(E, "Deep Audit — sweep every n_tverb", "n_tverb 를 하나도 빠짐없이 훑어 보기")}
         </div>
         <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
           {t(E, "Sample: 5 nouns, 1 transitive, 3 intransitive, P=4. Find the max words.",
-              "샘플: 명사 5, 타동사 1, 자동사 3, P=4. 최대 단어 찾기.")}
+              "샘플은 명사 5, 타동사 1, 자동사 3, P=4 예요.\n단어를 가장 많이 쓰는 방법을 찾아요.")}
         </div>
       </div>
 
@@ -111,7 +111,7 @@ export function MooLangDeepAudit({ E }) {
             t(E, "nouns used", "명사 사용"),
             t(E, "nouns left", "명사 남음"),
             t(E, "n_iverb", "n_iverb"),
-            t(E, "sentences ≤ P?", "문장 ≤ P?"),
+            t(E, "sentences ≤ P?", "문장 수가 P 이내?"),
             t(E, "words", "단어"),
           ].map((h, i) => (
             <div key={i} style={{ color: "#1e3a8a", fontWeight: 700, padding: "2px 4px", borderBottom: "1px solid #93c5fd" }}>{h}</div>
@@ -345,19 +345,19 @@ export function getMooLangSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "The C++ mirrors the Python step for step — same sweep, same sentence build.",
-            "C++ 는 Python 을 단계 그대로 옮긴 거야 — 같은 탐색, 같은 문장 조립."),
+            "C++ 는 Python 을 단계 그대로 옮긴 거예요. 찾는 방법도, 문장을 짜는 방법도 같아요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣어요 (<iostream>, <vector> …).\n그래야 코드가 무엇을 하려는지 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 2×10^9 을 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -403,7 +403,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMooLangPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "MooLang — Full Study Guide", "MooLang — 종합 풀이 노트");
@@ -426,7 +426,7 @@ export function downloadMooLangPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

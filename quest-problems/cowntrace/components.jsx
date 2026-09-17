@@ -164,19 +164,19 @@ export function getCowntraceSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 에서 자동으로 옮긴 거예요.\n자료형과 표현 방식은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, set, algorithm).",
-            "#include 는 배운 헤더들로 (iostream, vector, set, algorithm) 나눠 적어."),
+            "#include 는 배운 헤더만 (iostream, vector, set, algorithm) 하나씩 적어요."),
         t(E, "struct Event + custom byTime comparator — cleaner than tuples with structured bindings.",
-            "struct Event 와 byTime 비교자 — tuple + structured binding 보다 깔끔."),
+            "struct Event 와 byTime 비교 함수를 써요. tuple 로 묶는 것보다 읽기 쉬워요."),
       ],
     },
   ];
@@ -288,7 +288,7 @@ export function CowntraceSim({ E }) {
       {/* Final-infected panel */}
       <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 10, marginBottom: 10 }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", marginBottom: 6 }}>
-          🐄 {t(E, "Cows", "소")} (N = {N}) · {t(E, "Final infected (target)", "최종 감염 (목표)")}
+          🐄 {t(E, "Cows", "소")} (N = {N}) · {t(E, "Final infected (target)", "마지막에 감염된 소 (목표)")}
         </div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {Array.from({ length: N }, (_, i) => i + 1).map(c => {
@@ -310,7 +310,7 @@ export function CowntraceSim({ E }) {
       {/* Pickers */}
       <div style={{ display: "flex", gap: 10, alignItems: "center", justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
         <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
-          {t(E, "Patient zero:", "환자 제로:")}
+          {t(E, "Patient zero:", "환자 제로")}
           <select value={safePz} onChange={(e) => setPz(Number(e.target.value))} style={{
             marginLeft: 6, padding: "3px 6px", borderRadius: 6, border: `1px solid ${A}`,
             color: A, fontWeight: 700, fontSize: 11, background: "#fff",
@@ -319,7 +319,7 @@ export function CowntraceSim({ E }) {
           </select>
         </label>
         <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
-          {t(E, "K (max spreads/cow):", "K (소당 최대 전파):")}
+          {t(E, "K (max spreads/cow):", "K (소 한 마리가 옮길 수 있는 횟수)")}
           <select value={safeK} onChange={(e) => setK(Number(e.target.value))} style={{
             marginLeft: 6, padding: "3px 6px", borderRadius: 6, border: `1px solid ${A}`,
             color: A, fontWeight: 700, fontSize: 11, background: "#fff",
@@ -332,7 +332,7 @@ export function CowntraceSim({ E }) {
       {/* Event-by-event trace */}
       <div style={{ background: "#fff", border: `1.5px solid ${A}`, borderRadius: 10, padding: 10, marginBottom: 10 }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: A, marginBottom: 6, textAlign: "center" }}>
-          🔍 {t(E, `Replaying ${events.length} hoof-shake event(s)`, `발굽-맞댐 이벤트 ${events.length}개 재생`)}
+          🔍 {t(E, `Replaying ${events.length} hoof-shake event(s)`, `발굽 맞대기 기록 ${events.length} 개를 재생해요`)}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {trace.map((r, i) => {
@@ -345,9 +345,9 @@ export function CowntraceSim({ E }) {
                       : r.action === "both" ? "#818cf8"
                       : "#cbd5e1";
             const tag = r.action === "spread" ? t(E, `→ infect ${r.infectedNow}`, `→ ${r.infectedNow} 감염`)
-                       : r.action === "blocked" ? t(E, "blocked (K limit)", "차단 (K 한도)")
-                       : r.action === "both" ? t(E, "both already sick", "둘 다 이미 감염")
-                       : t(E, "skip (neither sick)", "건너뜀 (둘 다 건강)");
+                       : r.action === "blocked" ? t(E, "blocked (K limit)", "못 옮겨요 (K 를 다 썼어요)")
+                       : r.action === "both" ? t(E, "both already sick", "둘 다 이미 감염됐어요")
+                       : t(E, "skip (neither sick)", "그냥 넘어가요 (둘 다 건강해요)");
             return (
               <div key={i} style={{
                 display: "flex", justifyContent: "space-between", alignItems: "center",
@@ -371,13 +371,13 @@ export function CowntraceSim({ E }) {
       }}>
         {t(E,
           `Sim infected = { ${[...finalSick].sort((a,b) => a-b).join(", ")} }`,
-          `시뮬 감염 = { ${[...finalSick].sort((a,b) => a-b).join(", ")} }`)}
+          `이렇게 하면 감염된 소는 { ${[...finalSick].sort((a,b) => a-b).join(", ")} } 예요`)}
         <div style={{ marginTop: 4, fontSize: 11, fontWeight: 700 }}>
           {setsEqual
             ? t(E, `✓ Matches target → cow ${safePz} consistent with K=${safeK}`,
-                  `✓ 목표 일치 → 소 ${safePz} 가 K=${safeK} 와 일관됨`)
+                  `✓ 목표와 똑같아요 → 소 ${safePz} 가 환자 제로이고 K=${safeK} 일 수 있어요`)
             : t(E, `✗ Differs from target → cow ${safePz} not consistent with K=${safeK}`,
-                  `✗ 목표와 불일치 → 소 ${safePz} 는 K=${safeK} 와 불가능`)}
+                  `✗ 목표와 달라요 → 소 ${safePz} 와 K=${safeK} 는 될 수 없어요`)}
         </div>
       </div>
     </div>
@@ -420,7 +420,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCowntracePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Cowntrace — Full Study Guide", "Cowntrace — 종합 풀이 노트");
@@ -443,7 +443,7 @@ export function downloadCowntracePDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

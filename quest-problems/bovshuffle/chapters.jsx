@@ -47,7 +47,7 @@ function PermShuffleSim({ E }) {
         <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
           {t(E,
             "Watch the shuffle act. The cow at position i jumps to shuffle[i]. Click 'Apply shuffle' to advance one round.",
-            "셔플이 어떻게 움직이는지 봐요. 위치 i 의 소가 shuffle[i] 위치로 이동해요. 'Apply shuffle' 을 눌러 한 라운드씩 진행해요.")}
+            "셔플이 어떻게 움직이는지 봐요. 위치 i 의 소가 shuffle[i] 위치로 옮겨 가요. '셔플 적용' 을 누르면 한 라운드씩 나아가요.")}
         </div>
       </div>
 
@@ -111,7 +111,7 @@ function PermShuffleSim({ E }) {
             borderRadius: 8, padding: "6px 12px", fontWeight: 800,
             fontSize: 13, cursor: "pointer",
           }}>
-          ↺ {t(E, "Reset", "초기화")}
+          ↺ {t(E, "Reset", "처음으로")}
         </button>
       </div>
 
@@ -120,7 +120,7 @@ function PermShuffleSim({ E }) {
       }}>
         {t(E,
           "After 3 rounds, this is the lineup the problem GIVES you. To recover the original (round 0), apply the inverse shuffle 3 times.",
-          "3 라운드가 지난 모습이 문제에서 주어지는 줄이에요. 원래 줄(라운드 0)로 되돌리려면 역셔플을 3 번 적용해요.")}
+          "3 라운드가 지난 모습이 문제에서 주어지는 줄이에요. 원래 줄(라운드 0)로 되돌리려면 반대 셔플, 즉 셔플을 거꾸로 하는 것을 3 번 하면 돼요.")}
       </div>
     </div>
   );
@@ -136,7 +136,7 @@ export function makeShuffleCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows stand in a line. A 'shuffle' is a permutation that moves each cow at position i to position shuffle[i]. The shuffle has been applied THREE times in a row, and we're given the final lineup.\nRecover the original lineup before any shuffles.",
-        "한 줄로 선 N마리 소가 있어요. '셔플' 은 위치 i 의 소를 shuffle[i] 위치로 옮기는 순열이에요. 이 셔플이 연속으로 세 번 적용된 뒤의 줄이 주어져요.\n셔플이 일어나기 전 원래 줄을 복원해요."),
+        "셔플을 세 번 한 줄만 보고 원래 줄을 되찾아 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -153,7 +153,7 @@ export function makeShuffleCh1(E) {
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
                 "Recover the original lineup before any shuffles, given the lineup after 3 applications.",
-                "셔플 3 번 후의 줄에서 원래 줄을 복원해 출력.")}
+                "셔플을 3 번 한 줄을 보고 원래 줄을 되찾아 출력해요.")}
             </div>
           </div>
 
@@ -204,17 +204,17 @@ export function makeShuffleCh1(E) {
       type: "reveal",
       narr: t(E,
         "Before reading code, see the shuffle in motion. Click 'Apply shuffle' a few times — watch which cows land where, and notice how the lineup at round 3 is what the problem gives you.",
-        "코드를 읽기 전에 셔플이 움직이는 모습을 봐요. 'Apply shuffle' 을 몇 번 눌러서 어느 소가 어디로 가는지, 라운드 3 의 모습이 문제에서 주는 줄과 같다는 걸 확인해요."),
+        "'셔플 적용' 을 눌러 어느 소가 어디로 가는지 봐요."),
       content: <PermShuffleSim E={E} />,
     },
     // 1-3: quiz
     {
       type: "quiz",
       narr: t(E,
-        "Permutation [2,1] is self-inverse: applying it once swaps positions 1 and 2.\nHow many times is the shuffle applied in this problem?", "순열 [2,1]은 자기역순열이야: 한 번 적용하면 위치 1과 2를 교환해요. 이 문제에서 셔플을 몇 번 적용해요?"),
+        "Before we undo anything, pin down how many times the shuffle was applied.", "되돌리기 전에 셔플을 몇 번 했는지부터 확인해요."),
       question: t(E,
         "How many times is the shuffle applied in the problem?",
-        "문제에서 셔플을 몇 번 적용해요?"),
+        "문제에서 셔플을 몇 번 한다고 했나요?"),
       options: [
         t(E, "3 times", "3번"),
         t(E, "1 time", "1번"),
@@ -223,19 +223,19 @@ export function makeShuffleCh1(E) {
       correct: 0,
       explain: t(E,
         "The problem states the shuffle is applied exactly 3 times. So we undo it by applying the inverse 3 times.",
-        "문제에서 셔플을 정확히 3번 적용한다고 해요. 그래서 역순열을 3번 적용해서 되돌려."),
+        "문제에서 셔플을 정확히 3 번 한다고 했어요.\n그러니 반대 셔플도 3 번 해야 원래 줄로 돌아와요."),
     },
     // 1-4: input
     {
       type: "input",
       narr: t(E,
-        "The shuffle is applied exactly how many times? Enter the number.", "셔플은 정확히 몇 번 적용돼요? 숫자를 입력해요."),
+        "The shuffle is applied exactly how many times? Enter the number.", "셔플을 몇 번 하는지 숫자로 적어 봐요."),
       question: t(E,
         "How many times is the shuffle applied?",
-        "셔플은 몇 번 적용돼요?"),
+        "셔플을 몇 번 하나요?"),
       hint: t(E,
         "Re-read the problem statement — how many shuffles are applied?",
-        "문제를 다시 읽어 봐 — 셔플이 몇 번 적용돼?"),
+        "문제를 다시 읽어 봐요. 셔플을 몇 번 한다고 했나요?"),
       answer: 3,
     },
   ];
@@ -252,7 +252,7 @@ export function makeShuffleCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Given lineup AFTER 3 shuffles → recover original by building INVERSE shuffle and applying it 3 times. Sections build it one piece at a time.",
-        "셔플 3 번 후 줄이 주어짐 → 역셔플을 만들고 3 번 적용해 원래 줄 복원. 아래 섹션이 한 단락씩 쌓아요."),
+        "반대 셔플을 만들어 3 번 하면 원래 줄이 나와요."),
       sections: getBovShuffleSections(E),
     },
   ];

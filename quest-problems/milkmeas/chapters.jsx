@@ -11,7 +11,7 @@ export function makeMilkMeasCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has 3 cows (Bessie, Elsie, Mildred), each starting at 7 gallons of daily output. There are N daily change events: \"on day d, cow X's output changes by ±value\".\nA sign 'displays the leader(s)' — the set of cows currently producing the maximum. Print the number of times the displayed set changes over the whole period.",
-        "FJ 에게 3마리 소 (Bessie, Elsie, Mildred) 가 있고, 각자 매일 7 갤런 생산으로 시작해요. N 개의 날짜별 변동 이벤트가 있어요: \"d 일에 X 의 생산량이 ±값 만큼 바뀌어요\".\n간판이 '지금 가장 많이 만든 소들' 을 표시해요 — 즉 현재 최대 생산량인 소들이에요. 전체 기간 동안 표시되는 소들이 바뀐 횟수를 출력해요."),
+        "FJ 에게 소 세 마리 (Bessie, Elsie, Mildred) 가 있어요.\n셋 다 하루 7 갤런에서 시작해요.\n날짜마다 변화가 N 번 일어나요 — \"d 일에 소 X 의 우유량이 ±값 만큼 바뀐다\" 예요.\n간판에는 지금 우유를 제일 많이 만드는 소들, 즉 1등 소들이 적혀요.\n간판에 적힌 1등 소들이 몇 번 바뀌는지 세어서 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeMilkMeasCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "Output the number of times the displayed leader set changes over all events.",
-                "전체 기간 동안 표시되는 리더 집합이 바뀐 횟수를 출력.")}
+                "간판에 적힌 1등 소들이 처음부터 끝까지\n몇 번 바뀌는지 세어서 출력해요.")}
             </div>
           </div>
 
@@ -43,31 +43,31 @@ export function makeMilkMeasCh1(E) {
                   {t(E, "FJ has ", "FJ 에게 ")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "3 cows (Bessie, Elsie, Mildred)", "3마리 소 (Bessie, Elsie, Mildred)")}</b>
                   {t(E, " — each starts at 7 gallons of daily output.",
-                        " 가 있고, 매일 생산량이 7 갤런으로 시작.")}
+                        " 가 있어요. 셋 다 하루 7 갤런에서 시작해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "N change events: ", "N 개의 변동 이벤트: ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "on day d, cow X's output changes by ±value", "d 일에 X 의 생산량이 ±값 만큼 변함")}</b>
+                  {t(E, "N change events: ", "변화가 N 번 일어나요. ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "on day d, cow X's output changes by ±value", "d 일에 소 X 의 우유량이 ±값 만큼 바뀌어요")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "A sign displays the ", "간판은 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "set of current leaders", "지금 가장 많이 만든 소들")}</b>
+                  {t(E, "A sign displays the ", "간판에는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "set of current leaders", "1등 소들")}</b>
                   {t(E, " (cows tied for the maximum output).",
-                        " (현재 최대 생산량인 소들) 을 표시해요.")}
+                        " 이 적혀요.\n지금 우유를 제일 많이 만드는 소들이고, 같은 양이면 여럿일 수도 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of times the displayed set changes", "표시 집합이 바뀐 횟수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "number of times the displayed set changes", "간판에 적힌 1등 소들이 바뀐 횟수")}</b>
                   {t(E, " over the whole event sequence.", " 를 출력해요.")}
                 </div>
               </div>
@@ -80,37 +80,37 @@ export function makeMilkMeasCh1(E) {
       type: "sim",
       narr: t(E,
         "Replay a small event log.\nThe crown 👑 marks the current leader(s) — cows tied for the maximum.\nEach time the leader set differs from the previous one, the counter ticks up.",
-        "작은 이벤트 로그를 재생.\n👑 는 지금 리더(들) — 최대 생산량으로 동률인 소들.\n리더 집합이 이전과 달라질 때마다 카운터가 1씩 증가."),
+        "작은 변화 기록을 하나씩 따라가 봐요.\n👑 이 붙은 소가 지금 1등 소예요. 우유량이 같으면 여럿이 같이 1등이에요.\n1등 소들이 바로 앞과 달라질 때마다 숫자를 1 씩 올려요."),
     },
     // 1-3: quiz
     {
       type: "quiz",
       narr: t(E,
-        "All cows start at 7.\nDay 1: Bessie (cow 1) gets +5, now at 12.\nLeaders change from {all three} to {Bessie}.\nIs this 1 display change?", "모든 소가 7에서 시작. 1일차: Bessie(소 1)가 +5, 이제 12. 리더가 {전부}에서 {Bessie}로 변경. 디스플레이 변경 1번이에요?"),
+        "All cows start at 7.\nDay 1: Bessie (cow 1) gets +5, now at 12.\nLeaders change from {all three} to {Bessie}.\nIs this 1 display change?", "소 셋 다 7 에서 시작해요.\n1 일차에 Bessie 가 +5 되어 12 가 돼요.\n1등 소들이 {셋 다} 에서 {Bessie} 로 바뀌어요.\n이건 간판이 한 번 바뀐 걸까요?"),
       question: t(E,
         "Start: all at 7 (leaders = all). Bessie +5 -> 12. Leaders = {Bessie}. Display changes?",
-        "시작: 모두 7 (리더 = 전부). Bessie +5 -> 12. 리더 = {Bessie}. 디스플레이 변경 횟수?"),
+        "처음엔 모두 7 이라 셋 다 1등이에요.\nBessie 가 +5 되어 12 가 되면 1등은 {Bessie} 하나예요.\n간판은 몇 번 바뀌었을까요?"),
       options: [
-        t(E, "1 change", "1번 변경"),
-        t(E, "0 changes", "0번 변경"),
-        t(E, "3 changes", "3번 변경"),
+        t(E, "1 change", "한 번 바뀌었어요"),
+        t(E, "0 changes", "안 바뀌었어요"),
+        t(E, "3 changes", "세 번 바뀌었어요"),
       ],
       correct: 0,
       explain: t(E,
         "The leader set changed from {1,2,3} to {1}. That's 1 display change.",
-        "리더 집합이 {1,2,3}에서 {1}로 바뀜. 디스플레이 변경 1번."),
+        "1등 소들이 {1,2,3} 에서 {1} 로 바뀌었어요.\n그래서 간판이 한 번 바뀐 거예요."),
     },
     // 1-3: input
     {
       type: "input",
       narr: t(E,
-        "All start at 7. Only one change: Bessie +5 on day 1. How many display changes total?", "모두 7에서 시작. 변경 하나만: 1일차 Bessie +5. 총 디스플레이 변경 횟수는?"),
+        "All start at 7. Only one change: Bessie +5 on day 1. How many display changes total?", "셋 다 7 에서 시작하고 변화는 하나뿐이에요.\n1 일차에 Bessie 가 +5 돼요. 간판은 모두 몇 번 바뀔까요?"),
       question: t(E,
         "1 change: Bessie +5. Total display changes?",
-        "변경 1개: Bessie +5. 총 디스플레이 변경 횟수?"),
+        "변화가 Bessie +5 하나뿐일 때\n간판은 모두 몇 번 바뀔까요?"),
       hint: t(E,
         "Compare the leader set before and after the event.",
-        "이벤트 전과 후의 리더 집합을 비교해 봐."),
+        "변화가 일어나기 전과 후의 1등 소들을 견줘 보세요."),
       answer: 1,
     },
   ];
@@ -127,7 +127,7 @@ export function makeMilkMeasCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Sort events by day. Process each in order — update the cow's output, recompute leader set, compare with previous, count changes. Sections build it one piece at a time.",
-        "이벤트를 날짜순 정렬. 순서대로 — 생산량 갱신, 리더 집합 재계산, 이전과 비교, 변화 카운트. 아래 섹션이 한 단락씩 쌓아요."),
+        "변화를 날짜순으로 줄 세워요.\n앞에서부터 하나씩 우유량을 고치고, 1등 소들을 다시 찾고,\n바로 앞과 달라졌으면 횟수를 1 올려요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
       sections: getMilkMeasSections(E),
     },
   ];

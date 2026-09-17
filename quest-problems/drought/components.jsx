@@ -83,7 +83,7 @@ export function FeedPairSim({ E }) {
       {/* Status row */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, fontSize: 12 }}>
         <div style={{ color: "#92400e", fontWeight: 700 }}>
-          {t(E, "Ops:", "연산:")} <span style={{ color: A, fontSize: 14 }}>{ops}</span>
+          {t(E, "Ops:", "먹인 횟수:")} <span style={{ color: A, fontSize: 14 }}>{ops}</span>
         </div>
         {allZero && (
           <div style={{ color: "#15803d", fontWeight: 700 }}>
@@ -95,14 +95,14 @@ export function FeedPairSim({ E }) {
           border: `1px solid ${A}`, borderRadius: 6,
           padding: "3px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer",
         }}>
-          ↺ {t(E, "Reset", "초기화")}
+          ↺ {t(E, "Reset", "처음")}
         </button>
       </div>
 
       <div style={{ fontSize: 11, color: "#a16207", marginTop: 8, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
           "Start: [2, 3, 1, 2]. Each click feeds an adjacent pair (both must be ≥ 1). Can you make all zero?",
-          "시작: [2, 3, 1, 2]. 한 번 누르면 인접한 쌍을 먹여요 (둘 다 ≥ 1 일 때만). 모두 0 으로 만들 수 있을까?")}
+          "시작: [2, 3, 1, 2]. 한 번 누르면 인접한 쌍을 먹여요 (둘 다 ≥ 1 일 때만). 모두 0 으로 만들 수 있을까요?")}
       </div>
     </div>
   );
@@ -235,23 +235,23 @@ export function getDroughtSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read T test cases; solve each independently and print one answer per line.",
-            "T개의 테스트 케이스를 읽어 각각 따로 풀고, 한 줄에 하나씩 답을 출력."),
+            "T개의 테스트 케이스를 읽어 각각 따로 풀고, 한 줄에 하나씩 답을 출력해요."),
         t(E, "o[i] = bags spent on pair (i, i+1). Walking left to right, each o[i] is forced: o[i] = h[i] - f - o[i-1].",
-            "o[i] = 쌍 (i, i+1) 에 쓴 봉지 수. 왼쪽부터 보면 o[i] = h[i] - f - o[i-1] 로 강제됨."),
+            "o[i] 는 쌍 (i, i+1) 에 쓴 봉지 수예요. 왼쪽부터 보면 o[i] = h[i] - f - o[i-1] 로 저절로 정해져요."),
         t(E, "f (the final equal hunger) comes from the alternating sum; an o[i] < 0 means f is impossible -> -1.",
-            "f (최종 같은 배고픔) 는 교대합으로 정해짐; o[i] < 0 이면 그 f 는 불가능 -> -1."),
+            "f (마지막에 모두 같아지는 배고픔) 는 교대합으로 정해져요. o[i] 가 0 보다 작으면 그 f 는 만들 수 없으니 -1 이에요."),
         t(E, "Answer is 2 * sum(o): each bag lowers two cows, and o[i] counts bags per pair.",
-            "답은 2 * sum(o): 봉지 하나가 소 둘을 낮추고, o[i] 는 쌍별 봉지 수."),
+            "답은 2 * sum(o) 예요. 봉지 하나가 소 둘의 배고픔을 낮추고, o[i] 는 쌍마다 쓴 봉지 수거든요."),
       ],
       pyOnly: [
         t(E, "list(map(int, input().split())) reads one line of hunger values into a list.",
-            "list(map(int, input().split())) 로 한 줄의 배고픔 값을 리스트로 읽음."),
+            "list(map(int, input().split())) 로 한 줄의 배고픔 값을 리스트로 읽어요."),
       ],
       cppOnly: [
         t(E, "vector<long long> stores hunger values because they can be up to 1e9 and sums grow large.",
-            "vector<long long>로 배고픔 값 저장 — 값이 최대 1e9, 합이 커질 수 있음."),
+            "vector<long long> 에 배고픔 값을 담아요 — 값이 최대 1e9 라 합이 커질 수 있거든요."),
         t(E, "while (T--) loops over all test cases; solve() is called once per case.",
-            "while (T--) 로 모든 테스트 케이스 반복; 케이스마다 solve() 호출."),
+            "while (T--) 로 모든 테스트 케이스를 돌아요. 케이스마다 solve() 를 한 번씩 불러요."),
       ],
     },
   ];
@@ -297,7 +297,7 @@ function highlightCode(lines, lang) {
 
 export function downloadDroughtPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Drought — Full Study Guide", "Drought — 종합 풀이 노트");
@@ -320,7 +320,7 @@ export function downloadDroughtPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

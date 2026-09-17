@@ -11,7 +11,7 @@ export function makeLostCowCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ stands at position x on a number line. His cow is at position y, but he doesn't know which side.\nHe zigzags: 1 step right, 2 steps left, 4 steps right, 8 steps left... doubling each time.\nHow far does he walk before reaching y?",
-        "FJ가 수직선 위 위치 x에 있어요. 소는 위치 y에 있지만 어느 방향인지 몰라요.\n그래서 지그재그로 걸어요: 오른쪽 1, 왼쪽 2, 오른쪽 4, 왼쪽 8... 매번 두 배씩.\ny에 도달할 때까지 총 몇 칸을 걸을까요?"),
+        "소를 찾을 때까지 FJ 는 모두 몇 칸을 걸을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -45,7 +45,7 @@ export function makeLostCowCh1(E) {
                   {t(E, ". His cow is at position ", "에서 시작해요. 소는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "y", "위치 y")}</b>
                   {t(E, " — he doesn't know which side.",
-                        "에 있어요 — FJ는 어느 방향인지 몰라요.")}
+                        "에 있어요. 그런데 FJ 는 어느 쪽인지 몰라요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -54,7 +54,7 @@ export function makeLostCowCh1(E) {
                   {t(E, "He walks in a ", "그래서 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "zigzag pattern", "지그재그")}</b>
                   {t(E, ": +1, −2, +4, −8, +16, ... — doubling and switching direction each time.",
-                        "로 걸어요: +1, −2, +4, −8, +16, ... — 매번 두 배로 커지고 방향이 바뀌어요.")}
+                        "로 걸어요. +1, −2, +4, −8, +16 … 처럼 매번 두 배로 커지면서 방향이 바뀌어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -63,7 +63,7 @@ export function makeLostCowCh1(E) {
                   {t(E, "He stops the moment ", "걷는 도중 ")}
                   <b style={{ color: "#16a34a" }}>{t(E, "he passes through y", "y를 지나가는 순간")}</b>
                   {t(E, " (mid-segment counts).",
-                        " 멈춰요 (구간 중간에 도달해도 됨).")}
+                        " 멈춰요 (다리 중간에서 지나가도 돼요).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
@@ -83,10 +83,10 @@ export function makeLostCowCh1(E) {
       type: "quiz",
       narr: t(E,
         "Trace the zigzag yourself for x=3, y=6.  Add up each leg until you reach (or pass) y.",
-        "x=3, y=6 에서 지그재그를 직접 따라가. y 에 닿거나 지나갈 때까지 각 다리의 거리 합."),
+        "x=3, y=6 으로 지그재그를 직접 따라가 봐요."),
       question: t(E,
         "x=3, y=6. FJ goes 3->4 (1), 4->1 (3), 1->6 (5). Total distance?",
-        "x=3, y=6. FJ: 3->4 (1), 4->1 (3), 1->6 (5). 총 거리?"),
+        "x=3, y=6 이에요.\nFJ 는 3→4 (1칸), 4→1 (3칸), 1→6 (5칸) 으로 걸어요.\n걸은 거리는 모두 얼마일까요?"),
       options: [
         t(E, "9", "9"),
         t(E, "7", "7"),
@@ -96,33 +96,33 @@ export function makeLostCowCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! 3->4 (1) + 4->1 (3) + 1->6 (5) = 9. He walks past y=6 on the way from 1 to 7.",
-        "맞아! 3->4 (1) + 4->1 (3) + 1->6 (5) = 9. 1에서 7으로 가는 도중 y=6을 지나가."),
+        "맞아요! 1 + 3 + 5 = 9 예요.\n마지막 다리는 1 에서 7 까지 가는 다리인데, 그 도중에 y=6 을 지나가요.\n그래서 6 까지 걸은 5 칸만 세요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
         "Now you do it on your own — write down each leg, sum the distances.",
-        "이번엔 혼자서 — 다리 하나씩 적어보고 거리 다 더해."),
+        "이번엔 혼자서 다리를 하나씩 적어 보고 다 더해 봐요."),
       question: t(E,
         "x=3, y=6. Total distance walked?",
-        "x=3, y=6. 총 걸은 거리?"),
+        "x=3, y=6 이에요. 걸은 거리는 모두 얼마일까요?"),
       hint: t(E,
         "Each leg's distance is the doubling pattern (1, 2, 4, 8, …).  Stop when you've passed y.",
-        "다리마다 거리는 두 배씩 (1, 2, 4, 8, …). y 를 지난 다리까지 합산."),
+        "다리 길이는 1, 2, 4, 8 … 처럼 두 배씩 늘어요.\ny 를 지나가는 다리까지 다 더해요."),
       answer: 9,
     },
     {
       type: "doubling",
       narr: t(E,
         "Before walking, feel the leg sizes: 1, 2, 4, 8, 16…  Each one twice the last.  Add legs and watch the bars and total grow.",
-        "걷기 전에 다리 길이부터 느껴 봐: 1, 2, 4, 8, 16…  매번 두 배.  다리를 추가하며 막대와 합계가 커지는 걸 관찰."),
+        "다리 길이가 1, 2, 4, 8 … 처럼 두 배씩 늘어요."),
     },
     {
       type: "sim",
       narr: t(E,
         "Pick a (x, y) and walk FJ through one leg at a time on the number line below.",
-        "아래에서 (x, y) 골라 FJ 의 지그재그를 한 다리씩 직접 걸어 봐."),
+        "(x, y) 를 골라서 한 다리씩 직접 걸어 봐요."),
     },
   ];
 }
@@ -138,13 +138,13 @@ export function makeLostCowCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Simulate the zigzag — each leg doubles, alternates direction, stops the moment y is between current and next position.  Sections build it one piece at a time.",
-        "지그재그 시뮬 — 다리마다 두 배, 방향 교대, y 가 현재와 다음 사이에 있으면 거기서 멈춤. 아래 섹션이 한 단락씩 쌓아요."),
+        "풀이 코드를 한 단락씩 읽어 봐요."),
       sections: getLostCowSections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Run it yourself — enter x and y, watch the legs unfold.", "직접 실행 — x, y 입력하고 다리들이 펼쳐지는 걸 봐요."),
+        "Run it yourself — enter x and y, watch the legs unfold.", "x 와 y 를 넣고 다리가 펼쳐지는 걸 봐요."),
     },
   ];
 }

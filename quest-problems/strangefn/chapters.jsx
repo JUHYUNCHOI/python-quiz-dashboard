@@ -29,7 +29,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 , wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
                 "Output how many applications of f are needed to reach 0, mod 10⁹+7.",
-                "f 를 몇 번 적용해야 0 이 되는지 10⁹+7 로 나눈 나머지를 출력.")}
+                "f 를 몇 번 써야 0 이 되는지 10⁹+7 로 나눈 나머지를 출력해요.")}
             </div>
           </div>
 
@@ -69,9 +69,9 @@ export function makeStrangeFnCh1(E) {
                   {t(E, "Print how many ", "")}
                   <b style={{ color: "#15803d" }}>f</b>
                   {t(E, " applications make x become 0, mod ",
-                        " 를 몇 번 적용하면 x 가 0 이 되는지를 ")}
+                        " 를 몇 번 쓰면 x 가 0 이 되는지를 ")}
                   <b style={{ color: "#15803d" }}>10⁹+7</b>
-                  {t(E, ".", " 로 나눈 나머지로 출력.")}
+                  {t(E, ".", " 로 나눈 나머지를 출력해요.")}
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@ export function makeStrangeFnCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two sample cases. 24680 has even digits everywhere, so one op kills it. 210 takes 4 ops — let's trace.",
-        "샘플 두 개. 24680 은 짝수만 있어서 한 번이면 끝. 210 은 4 번 — 따라가 보기."),
+        "24680 은 한 번이면 끝나고, 210 은 4 번 걸려요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
@@ -146,7 +146,7 @@ export function makeStrangeFnCh1(E) {
       type: "reveal",
       narr: t(E,
         "Once x is a 0/1 string, view it as a binary number n. Watch what happens for small n.",
-        "x 가 0/1 만 남으면 이진수 n 으로 봐요. 작은 n 부터 어떻게 줄어드는지 보기."),
+        "x 가 0/1 만 남으면 이진수 n 으로 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
@@ -157,7 +157,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
                 "When x has only 0s and 1s, treat its decimal-string as a binary number n. f does x−1 each time, but 'subtract 1 in decimal-of-0/1' equals 'subtract 1 in binary' until the number breaks the 0/1 rule again.",
-                "x 가 0/1 만 가지면 그 문자열을 이진수 n 으로 봐요. f 는 x−1 을 하지만 '10진수 0/1 에서 1 빼기' 와 '이진수에서 1 빼기' 가 같다가 0/1 규칙이 깨지는 순간 다시 자리별 변환이 들어가요.")}
+                "x 가 0 과 1 만 가지면 그 문자열을 이진수 n 으로 봐요. 이때는 f 가 하는 x−1 이 이진수에서 1 을 빼는 것과 똑같아요. 그러다 0/1 규칙이 깨지는 순간 다시 자리별 변환이 일어나요.")}
             </div>
           </div>
 

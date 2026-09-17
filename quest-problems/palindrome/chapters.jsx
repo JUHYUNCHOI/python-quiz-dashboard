@@ -28,7 +28,7 @@ export function makePalindromeCh1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "Output 'B' if Bessie wins (going first, both playing optimally), else 'E'.",
-                "Bessie 가 먼저 두고 둘 다 최선이면 — Bessie 가 이기면 'B', Elsie 가 이기면 'E' 출력.")}
+                "Bessie 가 먼저 두고 둘 다 최선을 다할 때,\nBessie 가 이기면 'B', Elsie 가 이기면 'E' 를 출력해요.")}
             </div>
           </div>
 
@@ -81,7 +81,7 @@ export function makePalindromeCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input format: first a number T (test cases), then T values of S — one per line. Output one letter per line: B or E.",
-        "입력: 첫 줄에 T (테스트 케이스 수), 그 다음 T 줄에 각각 S 하나씩. 출력: 각 줄에 B 또는 E."),
+        "첫 줄에 테스트 케이스 수 T 가 오고, 다음 T 줄에 S 가 하나씩 와요.\n답은 줄마다 B 또는 E 로 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
@@ -114,13 +114,13 @@ B`}
               {t(E, "T = 3, then S = 8, 10, 12.", "T = 3, S 값은 8, 10, 12.")}
               <br/>
               {t(E, "S=8: 8 is a palindrome → Bessie takes all → B.",
-                    "S=8: 8 은 회문 → Bessie 가 다 가져감 → B.")}
+                    "S=8 이면 8 자체가 회문이라 Bessie 가 다 가져가요 → B.")}
               <br/>
               {t(E, "S=10: every move leaves a winning state for Elsie → E.",
-                    "S=10: 어떤 수를 빼도 Elsie 가 이길 수 있는 상태가 됨 → E.")}
+                    "S=10 이면 뺄 수 있는 회문이 1~9 뿐이라 남는 수가 1~9 예요. 모두 Elsie 가 이기는 자리라 → E.")}
               <br/>
-              {t(E, "S=12: Bessie can take 11 (palindrome) → leaves S=1 (losing for Elsie) → B.",
-                    "S=12: Bessie 가 11 (회문) 빼면 S=1 (Elsie 패) → B.")}
+              {t(E, "S=12: Bessie takes 2 → leaves S=10, and we just saw 10 loses → B.",
+                    "S=12 면 Bessie 가 2 를 가져가 S=10 을 넘겨요. 10 은 지는 자리라 답은 B 예요.")}
             </div>
           </div>
         </div>),
@@ -129,7 +129,7 @@ B`}
     {
       type: "reveal",
       narr: t(E,
-        "First, what's a palindrome number?\nIt reads the same forwards and backwards!\nLike 121 or 7.", "먼저, 회문 수가 뭘까? 앞에서 읽어도 뒤에서 읽어도 같은 수예요! 121이나 7처럼."),
+        "First, what's a palindrome number?\nIt reads the same forwards and backwards!\nLike 121 or 7.", "회문 수가 뭘까요? 앞에서 읽어도 뒤에서 읽어도 같은 수예요. 121 이나 7 처럼요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 14, padding: 14, textAlign: "center" }}>
@@ -143,7 +143,7 @@ B`}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
-                "All single digits (1-9) are palindromes. 10 is NOT (01 != 10).\nYou must remove at least 1 stone per turn.", "모든 한 자리 수(1-9)는 회문이에요.\n10은 아니야 (01 != 10). 매 턴 최소 1개는 가져가야 해요.")}
+                "All single digits (1-9) are palindromes. 10 is NOT (01 != 10).\nYou must remove at least 1 stone per turn.", "한 자리 수(1~9)는 모두 회문이에요.\n10 은 뒤집으면 01 이라 회문이 아니에요. 한 번에 최소 1개는 가져가야 해요.")}
             </div>
           </div>
         </div>),
@@ -153,44 +153,44 @@ B`}
       type: "twopointer",
       narr: t(E,
         "How does is_palindrome(n) actually work?  Compare the digits from both ends inward.  As long as every pair matches, it's a palindrome.",
-        "is_palindrome(n) 은 어떻게 동작할까?  양 끝 자리부터 가운데로 비교해.  모든 짝이 같으면 회문이야."),
+        "is_palindrome(n) 은 어떻게 돌아갈까요?\n양 끝 자리부터 가운데로 견줘 보고, 모든 짝이 같으면 회문이에요."),
     },
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "Quick check! Can you tell which numbers are palindromes?", "빠른 확인! 어떤 수가 회문인지 알 수 있어요?"),
+        "Quick check! Can you tell which numbers are palindromes?", "어떤 수가 회문인지 가려낼 수 있을까요?"),
       question: t(E,
         "Is 121 a palindrome?",
         "121은 회문일까요?"),
       options: [
-        t(E, "Yes, 121 reversed is 121", "맞아, 121을 뒤집으면 121"),
-        t(E, "No, 121 reversed is different", "아니, 121을 뒤집으면 달라"),
+        t(E, "Yes, 121 reversed is 121", "네, 121 을 뒤집어도 121 이에요"),
+        t(E, "No, 121 reversed is different", "아니요, 뒤집으면 달라져요"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! 121 reads the same forwards (1-2-1) and backwards (1-2-1). It's a palindrome!",
-        "정답! 121은 앞으로(1-2-1) 뒤로(1-2-1) 읽어도 같아요. 회문이에요!"),
+        "맞아요! 121 은 앞으로 읽어도 1-2-1, 뒤로 읽어도 1-2-1 이라 회문이에요."),
     },
     // 1-4: Key insight + input
     {
       type: "input",
       narr: t(E,
         "Imagine you're Bessie facing S = 8 stones.  What's the best move you can make?",
-        "Bessie 가 되어 봐. 돌 8 개 앞에서 가장 좋은 한 수는?"),
+        "Bessie 가 되어 봐요. 돌 8 개 앞에서 가장 좋은 한 수는 무엇일까요?"),
       question: t(E,
         "S=8. Bessie removes all 8 stones (8 is a palindrome!). Elsie faces 0 stones. Does Bessie win? (1=yes, 0=no)",
-        "S=8. Bessie 가 8 개 전부 가져가 (8 은 회문!). Elsie 는 0 개를 마주해요. Bessie 가 이겨? (1=예, 0=아니오)"),
+        "S=8 일 때 Bessie 가 8 개를 전부 가져가요 (8 은 회문이에요).\nElsie 는 빈 더미를 마주해요. Bessie 가 이길까요? (1=예, 0=아니오)"),
       hint: t(E,
         "Whoever faces an empty pile loses.  Where does Elsie stand here?",
-        "빈 더미 마주한 사람이 짐. 이 경우 Elsie 는 어디에 서 있나?"),
+        "빈 더미를 마주한 사람이 져요. 지금 Elsie 는 어느 쪽에 서 있나요?"),
       answer: 1,
     },
     {
       type: "sim",
       narr: t(E,
         "Build the answer bottom-up — start from S=0 and grow.  Green cells = the player to move wins; red = loses.",
-        "S=0 부터 위로 — 답을 한 칸씩 채워가. 초록 칸 = 두는 사람이 이김, 빨강 = 짐."),
+        "S=0 부터 한 칸씩 답을 채워 올라가요.\n초록 칸은 둘 차례인 사람이 이기고, 빨강 칸은 져요."),
     },
   ];
 }
@@ -205,14 +205,14 @@ export function makePalindromeCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Build can_win[n] from 0 upward — it answers 'does the player to move at n stones win?'.  Sections build the DP one piece at a time.",
-        "can_win[n] 을 0 부터 위로 채워가 — 'n 개 남았을 때 두는 사람이 이기나?' 답이 나와. 아래 섹션이 한 단락씩 쌓아요."),
+        "can_win[n] 을 0 부터 차례로 채워요.\n'돌이 n 개 남았을 때 둘 차례인 사람이 이기나?' 에 답하는 표예요."),
       sections: getPalindromeSections(E),
     },
     {
       type: "runner",
       narr: t(E,
         "Try your own S. Watch the DP build to find the winner.",
-        "직접 S 시도. DP 가 만들어지면서 승자를 찾는 걸 봐요."),
+        "S 를 직접 넣어 봐요. 표가 채워지면서 승자가 정해지는 걸 볼 수 있어요."),
     },
   ];
 }

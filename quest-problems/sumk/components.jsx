@@ -39,17 +39,17 @@ export function getSumKSections(E) {
       ],
       why: [
         t(E, "Answers get huge, so everything is done modulo 998244353 (% MOD on every step).",
-            "답이 매우 커질 수 있어서 모든 계산을 998244353 로 나눈 나머지로 (매 단계 % MOD)."),
+            "답이 매우 커질 수 있어서 모든 계산을 998244353 로 나눈 나머지로 해요. 매 단계마다 % MOD 를 붙여요."),
         t(E, "Precompute binomial coefficients C(t,j) with Pascal's triangle — we need them to expand (old sum + a)^t.",
-            "이항계수 C(t,j) 를 파스칼의 삼각형으로 미리 계산 — (옛합 + a)^t 를 펼칠 때 필요."),
+            "이항계수 C(t,j) 를 파스칼의 삼각형으로 미리 계산해 둬요. (옛합 + a)^t 를 펼칠 때 필요하거든요."),
       ],
       pyOnly: [
         t(E, "A 2-D list holds the C table; slicing/indexing keeps it readable.",
-            "2차원 리스트로 C 표를 만들어요 — 인덱싱이 그대로 읽혀요."),
+            "2차원 리스트로 C 표를 만들어요 — 자리를 찾는 모양이 그대로 읽혀요."),
       ],
       cppOnly: [
         t(E, "vector<vector<long long>> for the C table; long long avoids overflow before the mod.",
-            "vector<vector<long long>> 로 C 표, long long 으로 나머지 전 오버플로 방지."),
+            "vector<vector<long long>> 로 C 표를 만들어요. long long 이라 나머지를 구하기 전에 값이 넘치지 않아요."),
       ],
     },
     {
@@ -66,21 +66,21 @@ export function getSumKSections(E) {
       ],
       why: [
         t(E, "P[t] = the sum of (subset sum)^t over every subset made so far. Getting this definition exactly right is the whole trick.",
-            "P[t] = 지금까지 만든 모든 부분집합의 (합)^t 의 합. 이 정의를 정확히 잡는 게 핵심."),
+            "P[t] 는 지금까지 만든 모든 부분집합의 (합)^t 를 더한 값이에요. 이 뜻을 정확히 잡는 게 핵심이에요."),
         t(E, "With zero elements there's only the empty subset (sum 0). Treat 0^0 = 1, so P[0] = 1 to start.",
-            "원소가 0개면 공집합 하나뿐 (합 0). 0^0 = 1 로 봐서 P[0] = 1 로 시작."),
+            "원소가 0개면 공집합 하나뿐이고 그 합은 0 이에요. 0^0 = 1 로 보고 P[0] = 1 로 시작해요."),
       ],
       pyOnly: [
         t(E, "A flat list of size K+1 is all the state we ever carry.",
-            "크기 K+1 리스트 하나가 우리가 적어두는 것 전부."),
+            "크기 K+1 짜리 리스트 하나가 우리가 적어 두는 것 전부예요."),
       ],
       cppOnly: [
         t(E, "One vector<long long> of size K+1 — tiny memory even for big N.",
-            "크기 K+1 vector<long long> 하나 — N 이 커도 메모리 아주 작음."),
+            "크기 K+1 짜리 vector<long long> 하나뿐이라, N 이 커도 메모리를 아주 조금만 써요."),
       ],
     },
     {
-      label: t(E, "➕ Update per element (binomial theorem)", "➕ 원소마다 갱신 (이항정리)"),
+      label: t(E, "➕ Update per element (binomial theorem)", "➕ 원소마다 새로 고치기 (이항정리)"),
       color: A,
       py: [
         "for a in A:",
@@ -114,21 +114,21 @@ export function getSumKSections(E) {
       ],
       why: [
         t(E, "Add one element a. Each existing subset splits two ways: without a (old P[t] stays) or with a (its sum becomes old sum + a).",
-            "원소 a 를 추가. 기존 각 부분집합은 'a 없이'(옛 P[t] 그대로) 와 'a 포함'(합이 옛합+a) 두 갈래."),
+            "원소 a 를 하나 넣어요. 기존 부분집합은 'a 없이'(옛 P[t] 그대로) 와 'a 포함'(합이 옛합+a) 두 갈래로 갈려요."),
         /* 2026-09-10 학생: "Σ (시그마) 기호가 여기서 처음 나오는데, 이게 반복해서 더하라는
            뜻이라고 아무도 안 알려줬다. 짐작으로 넘어감." — 안 배운 기호다. 말로 푼다. */
         t(E, "Expand (old sum + a)^t the way we split (1+2)² by hand. Run j from 0 to t and add up every piece C(t,j)·a^(t-j)·P[j].",
             "(옛합+a)^t 를 아까 (1+2)² 펼치던 것처럼 갈라요. j 를 0부터 t 까지 바꿔가며 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요."),
         t(E, "So new P[t] = old P[t] + (contribution of subsets that include a). Take % MOD on every product.",
-            "그래서 새 P[t] = 옛 P[t] + (a 포함 부분집합 기여). 매 곱마다 % MOD."),
+            "그래서 새 P[t] 는 옛 P[t] 에 'a 를 포함한 부분집합' 몫을 더한 값이에요. 곱할 때마다 % MOD 를 해요."),
       ],
       pyOnly: [
         t(E, "pw caches a^0 … a^K so the inner loop just reuses them.",
-            "pw 로 a^0 … a^K 를 미리 계산해 안쪽 루프에서 재사용."),
+            "pw 에 a^0 … a^K 를 미리 계산해 두고 안쪽 반복문에서 다시 써요."),
       ],
       cppOnly: [
         t(E, "Three factors are multiplied in with_a, so mod in the middle even with long long.",
-            "with_a 에서 곱이 세 개라 long long 이라도 중간에 % MOD 필수."),
+            "with_a 에서 곱이 세 개라, long long 이라도 중간에 % MOD 를 꼭 해야 해요."),
       ],
     },
     {
@@ -144,19 +144,19 @@ export function getSumKSections(E) {
       ],
       why: [
         t(E, "After adding all N elements, P[K] is the answer.",
-            "N 개 원소를 다 넣은 뒤 P[K] 가 정답."),
+            "N 개 원소를 다 넣고 나면 P[K] 가 정답이에요."),
         t(E, "For K ≥ 1 the empty subset scores 0^K = 0, so it drops out of the total on its own.",
-            "K ≥ 1 이면 공집합 점수는 0^K = 0 → 답에서 자동 제외."),
+            "K 가 1 이상이면 공집합 점수는 0^K = 0 이라, 따로 빼지 않아도 답에 안 들어가요."),
         t(E, "Complexity O(N·K²) — fits both subtasks (N up to 10⁵ with small K, or N,K up to 200).",
-            "복잡도 O(N·K²) — 두 서브태스크 모두 여유 (N 최대 10⁵·K 작음, 또는 N·K 최대 200)."),
+            "복잡도는 O(N·K²) 라 두 서브태스크 모두 넉넉해요 (N 최대 10⁵ 에 K 가 작거나, N·K 가 최대 200)."),
       ],
       pyOnly: [
         t(E, "One final print — no extra formatting needed.",
-            "마지막 print 한 줄 — 추가 포맷 필요 없음."),
+            "마지막 print 한 줄이면 끝이에요. 모양을 따로 맞출 필요가 없어요."),
       ],
       cppOnly: [
         t(E, "One cout with a trailing newline; return 0.",
-            "cout 한 줄 + 개행, return 0."),
+            "cout 한 줄에 줄바꿈을 붙이고 return 0 으로 끝내요."),
       ],
     },
   ];
@@ -178,9 +178,9 @@ export function getSumkWalk(E, lang = "py") {
     return { code, vars: _SK_VARS, beats: [
       { hi: [0, 7],   bubble: t(E, "Read n numbers and the exponent K. Set MOD = 998244353 — the whole answer is taken modulo this.", "숫자 n개와 지수 K를 읽어요. MOD = 998244353 — 답 전체를 이 값으로 나눈 나머지로 다뤄요.") },
       { hi: [8, 14],  bubble: t(E, "Precompute the binomial coefficients C(t,j) with Pascal's triangle — we'll need them to expand (old sum + a)^t.", "이항계수 C(t,j)를 파스칼의 삼각형으로 미리 만들어요 — (옛합+a)^t 를 펼칠 때 써요.") },
-      { hi: [15, 16], bubble: t(E, "P[t] = the sum of (subset sum)^t over all subsets so far. With zero elements only the empty subset exists → P[0] = 1.", "P[t] = 지금까지 부분집합들의 (합)^t 합. 원소 0개면 공집합뿐이라 P[0] = 1로 시작.") },
-      { hi: [17, 30], bubble: t(E, "Add element a. The skip side keeps old P[t]; the take side is (old sum + a)^t — split it and add every piece C(t,j)·a^(t-j)·P[j] for j = 0..t. Add both sides → new P[t].", "원소 a를 넣어요. 빼는 쪽은 옛 P[t] 그대로, 넣는 쪽은 (옛합+a)^t — 갈라서 j = 0..t 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요. 두 쪽을 합치면 새 P[t].") },
-      { hi: [31, 33], bubble: t(E, "After all N elements, P[K] is the answer. For K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N개를 다 넣으면 P[K]가 답. K ≥ 1이면 공집합(0^K=0)은 저절로 빠져요.") },
+      { hi: [15, 16], bubble: t(E, "P[t] = the sum of (subset sum)^t over all subsets so far. With zero elements only the empty subset exists → P[0] = 1.", "P[t] 는 지금까지 만든 부분집합들의 (합)^t 를 더한 값이에요. 원소가 0개면 공집합뿐이라 P[0] = 1 로 시작해요.") },
+      { hi: [17, 30], bubble: t(E, "Add element a. The skip side keeps old P[t]; the take side is (old sum + a)^t — split it and add every piece C(t,j)·a^(t-j)·P[j] for j = 0..t. Add both sides → new P[t].", "원소 a를 넣어요. 빼는 쪽은 옛 P[t] 그대로, 넣는 쪽은 (옛합+a)^t — 갈라서 j = 0..t 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요. 두 쪽을 합치면 새 P[t] 가 돼요.") },
+      { hi: [31, 33], bubble: t(E, "After all N elements, P[K] is the answer. For K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N개를 다 넣으면 P[K] 가 답이에요. K 가 1 이상이면 공집합(0^K=0)은 저절로 빠져요.") },
     ] };
   }
   const code = [...s[0].py, ...s[1].py, ...s[2].py, ...s[3].py];
@@ -188,9 +188,9 @@ export function getSumkWalk(E, lang = "py") {
   return { code, vars: _SK_VARS, beats: [
     { hi: [0, 2],   bubble: t(E, "Read n numbers and the exponent K. Set MOD = 998244353 — the whole answer is taken modulo this.", "숫자 n개와 지수 K를 읽어요. MOD = 998244353 — 답 전체를 이 값으로 나눈 나머지로 다뤄요.") },
     { hi: [3, 8],   bubble: t(E, "Precompute the binomial coefficients C(t,j) with Pascal's triangle — we'll need them to expand (old sum + a)^t.", "이항계수 C(t,j)를 파스칼의 삼각형으로 미리 만들어요 — (옛합+a)^t 를 펼칠 때 써요.") },
-    { hi: [9, 11],  bubble: t(E, "P[t] = the sum of (subset sum)^t over all subsets so far. With zero elements only the empty subset exists → P[0] = 1.", "P[t] = 지금까지 부분집합들의 (합)^t 합. 원소 0개면 공집합뿐이라 P[0] = 1로 시작.") },
-    { hi: [12, 23], bubble: t(E, "Add element a. The skip side keeps old P[t]; the take side is (old sum + a)^t — split it and add every piece C(t,j)·a^(t-j)·P[j] for j = 0..t. Add both sides → new P[t].", "원소 a를 넣어요. 빼는 쪽은 옛 P[t] 그대로, 넣는 쪽은 (옛합+a)^t — 갈라서 j = 0..t 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요. 두 쪽을 합치면 새 P[t].") },
-    { hi: [24, 24], bubble: t(E, "After all N elements, P[K] is the answer. For K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N개를 다 넣으면 P[K]가 답. K ≥ 1이면 공집합(0^K=0)은 저절로 빠져요.") },
+    { hi: [9, 11],  bubble: t(E, "P[t] = the sum of (subset sum)^t over all subsets so far. With zero elements only the empty subset exists → P[0] = 1.", "P[t] 는 지금까지 만든 부분집합들의 (합)^t 를 더한 값이에요. 원소가 0개면 공집합뿐이라 P[0] = 1 로 시작해요.") },
+    { hi: [12, 23], bubble: t(E, "Add element a. The skip side keeps old P[t]; the take side is (old sum + a)^t — split it and add every piece C(t,j)·a^(t-j)·P[j] for j = 0..t. Add both sides → new P[t].", "원소 a를 넣어요. 빼는 쪽은 옛 P[t] 그대로, 넣는 쪽은 (옛합+a)^t — 갈라서 j = 0..t 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요. 두 쪽을 합치면 새 P[t] 가 돼요.") },
+    { hi: [24, 24], bubble: t(E, "After all N elements, P[K] is the answer. For K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N개를 다 넣으면 P[K] 가 답이에요. K 가 1 이상이면 공집합(0^K=0)은 저절로 빠져요.") },
   ] };
 }
 
@@ -234,7 +234,7 @@ function highlightCode(lines, lang) {
 
 export function downloadSumKPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "SumK — Full Study Guide", "SumK — 종합 풀이 노트");
@@ -257,7 +257,7 @@ export function downloadSumKPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

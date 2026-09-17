@@ -90,7 +90,7 @@ function ZigzagSim({ E }) {
       <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
         {t(E,
           "Tap letters to cycle a→b→…→z. Click a slot to pick it for the subsequence. The arrows light up if neighbors strictly alternate up/down.",
-          "글자를 눌러 a→b→…→z 로 바꿔봐요. 슬롯을 클릭해 부분수열에 골라요. 인접 두 항이 엄격히 위/아래를 번갈아 가면 화살표가 켜져요.")}
+          "글자를 눌러 a→b→…→z 로 바꿔봐요. 칸을 눌러 부분수열에 골라요. 이웃한 두 글자가 위아래로 번갈아 가면 화살표가 켜져요.")}
       </div>
 
       {/* String row */}
@@ -137,7 +137,7 @@ function ZigzagSim({ E }) {
           {t(E, "Clear pick", "선택 비우기")}
         </button>
         <button onClick={reset} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 6, padding: "3px 8px", fontSize: 11, fontWeight: 700, color: C.dim, cursor: "pointer" }}>
-          ⟲ {t(E, "Reset", "초기화")}
+          ⟲ {t(E, "Reset", "처음부터")}
         </button>
       </div>
 
@@ -155,11 +155,11 @@ function ZigzagSim({ E }) {
       {/* Candidate display */}
       <div style={{ background: C.bg, border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "8px 10px", marginBottom: 8 }}>
         <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-          {t(E, "Your candidate (sorted by index)", "선택한 부분수열 (인덱스 순)")}
+          {t(E, "Your candidate (sorted by index)", "선택한 부분수열 (자리 순)")}
         </div>
         {candidate.length === 0 ? (
           <div style={{ fontSize: 12, color: C.dim, fontStyle: "italic" }}>
-            {t(E, "Click slots above to pick.", "위 슬롯을 클릭해 골라요.")}
+            {t(E, "Click slots above to pick.", "위의 칸을 눌러 골라요.")}
           </div>
         ) : (
           <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
@@ -246,7 +246,7 @@ export function makeMcc20ZigzagCh1(E) {
       type: "reveal",
       narr: t(E,
         "Given a sequence of characters and an integer K, count the number of length-K subsequences that 'zig-zag' — values strictly alternating between going UP and going DOWN at each consecutive step.\nPrint the count modulo 1000.",
-        "문자 수열과 정수 K 가 주어져요. 길이 K 의 부분수열 중 인접한 두 항이 매번 한 번 올라갔다 한 번 내려갔다 하며 엄격하게 번갈아 가는 '지그재그' 의 개수를 세요.\n그 개수를 1000 으로 나눈 나머지를 출력해요."),
+        "길이 K 인 지그재그가 몇 개인지 세어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -274,7 +274,7 @@ export function makeMcc20ZigzagCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
-                  <b style={{ color: "#8b5cf6" }}>{t(E, "sequence of characters and an integer K", "문자 수열과 정수 K")}</b>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "sequence of characters and an integer K", "글자 수열과 정수 K")}</b>
                   {t(E, " are given.", " 가 주어져요.")}
                 </div>
               </div>
@@ -327,7 +327,7 @@ export function makeMcc20ZigzagCh1(E) {
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               <div>• 1 ≤ |S| ≤ 20000, {t(E, "lowercase letters", "소문자")}</div>
               <div>• 1 ≤ K ≤ 100</div>
-              <div>• {t(E, "answer printed modulo 1000", "정답은 1000 으로 나눈 나머지로 출력")}</div>
+              <div>• {t(E, "answer printed modulo 1000", "정답은 1000 으로 나눈 나머지로 출력해요")}</div>
             </div>
             <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap", fontSize: 12.5 }}>
               <div style={{ background: "#fff", border: "1px solid #e9d5ff", borderRadius: 8, padding: "6px 10px", fontFamily: "monospace" }}>
@@ -340,7 +340,7 @@ export function makeMcc20ZigzagCh1(E) {
                 <div>5</div>
               </div>
               <div style={{ flex: 1, minWidth: 140, color: C.dim, fontSize: 11.5, lineHeight: 1.5, alignSelf: "center" }}>
-                {t(E, "bca, bad, bae, cad, cae — 5 length-3 zig-zags.", "bca, bad, bae, cad, cae — 길이 3 지그재그 5 개.")}
+                {t(E, "bca, bad, bae, cad, cae — 5 length-3 zig-zags.", "bca, bad, bae, cad, cae — 길이 3 지그재그가 5 개예요.")}
               </div>
             </div>
           </div>
@@ -354,7 +354,7 @@ export function makeMcc20ZigzagCh1(E) {
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "Tweak the string and slide K to feel zig-zag in your bones. Pick slots in order to test a candidate — green arrows mean each step flips direction; red means two same-direction steps in a row, so it isn't zig-zag.",
-        "문자열을 바꾸고 K 를 옮겨가며 지그재그를 직접 느껴봐요. 슬롯을 골라 후보를 만들어보면, 매 칸 방향이 뒤집히면 초록 화살표 — 같은 방향이 두 번 나오면 빨강이라 지그재그가 아니에요."),
+        "지그재그가 무엇인지 직접 만들어 보며 느껴봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <ZigzagSim E={E} />
@@ -366,7 +366,7 @@ export function makeMcc20ZigzagCh1(E) {
         "From the string 'abc', pick two letters keeping their order.", "문자열 'abc' 에서 글자 두 개를 순서대로 골라봐요."),
       question: t(E,
         "String 'abc'. How many subsequences of length 2?",
-        "문자열 'abc'. 길이 2 부분수열 몇 개?"),
+        "문자열 'abc' 의 길이 2 부분수열은 몇 개일까요?"),
       options: [
         t(E, "3", "3"),
         t(E, "2", "2"),
@@ -375,12 +375,12 @@ export function makeMcc20ZigzagCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! C(3,2) = 3 subsequences: ab, ac, bc.",
-        "맞아! C(3,2) = 3개 부분수열: ab, ac, bc."),
+        "C(3,2) = 3 이에요. ab, ac, bc 세 개예요."),
     },
     {
       type: "input",
       narr: t(E,
-        "How many length-2 subsequences of 'abc'?", "'abc'의 길이 2 부분수열 개수?"),
+        "How many length-2 subsequences of 'abc'?", "'abc' 의 길이 2 부분수열은 몇 개일까요?"),
       question: t(E,
         "C(3, 2) = ?",
         "C(3, 2) = ?"),
@@ -396,7 +396,7 @@ export function makeMcc20ZigzagCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "DP: dp[i][j] = number of zig-zag subsequences of length j ending at position i. Transition: extend from earlier i' with the right comparison (up if j is even, down if j is odd, or vice versa). Sections build it one piece at a time.",
-        "DP: dp[i][j] = 위치 i 에서 끝나는 길이 j 의 지그재그 부분수열 수. 전이: 이전 i' 에서 적절한 비교 (j 홀짝에 따라 상승/하강) 로 확장. 아래 섹션이 한 단락씩 쌓아요."),
+        "dp[i][j] 는 i 에서 끝나는 길이 j 짜리 지그재그의 개수예요.\n앞 글자에서 방향을 뒤집으며 이어붙여 세어 나가요."),
       sections: getMcc20ZigzagSections(E),
     },
   ];

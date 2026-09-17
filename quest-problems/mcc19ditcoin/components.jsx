@@ -198,7 +198,7 @@ export function Mcc19DitcoinDeepAuditSim({ E }) {
       }}>
         {t(E, "Your profit: ", "내 수익: ")}<b>{finalProfit}</b>
         {"  ·  "}
-        {t(E, "Optimal: ", "최적: ")}<b>{optProfit}</b>
+        {t(E, "Optimal: ", "제일 좋은 값: ")}<b>{optProfit}</b>
         {isOptimal && finalProfit > 0 ? t(E, "  ✓ Matched!", "  ✓ 일치!") : ""}
       </div>
 
@@ -208,13 +208,13 @@ export function Mcc19DitcoinDeepAuditSim({ E }) {
           padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
           background: "transparent", color: C.dim, fontSize: 12, fontWeight: 700, cursor: "pointer",
         }}>
-          {t(E, "Reset", "초기화")}
+          {t(E, "Reset", "처음으로")}
         </button>
         <button onClick={showAnswer} style={{
           padding: "6px 12px", borderRadius: 8, border: `1px solid ${A}`,
           background: A, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer",
         }}>
-          {t(E, "Show optimal", "최적 보기")}
+          {t(E, "Show optimal", "제일 좋은 답 보기")}
         </button>
       </div>
 
@@ -309,13 +309,13 @@ export function getMcc19DitcoinSections(E) {
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
             "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어요."),
         t(E, "Indices fit in int, but the profit does NOT: D ≤ 10^5 days × p ≤ 10^9 reaches 10^14, so it needs long long.",
-            "인덱스는 int 로 되지만 수익은 안 돼요. D ≤ 10^5 일 × p ≤ 10^9 이면 10^14 까지 가서 long long 이 필요해요."),
+            "자리 번호는 int 로 되지만 수익은 안 돼요. D ≤ 10^5 일 × p ≤ 10^9 이면 10^14 까지 가서 long long 이 필요해요."),
       ],
     },
   ];

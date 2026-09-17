@@ -56,7 +56,7 @@ function PositionTableSim({ E }) {
         <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
           {t(E,
             "Click any column to compare spotted vs plain letters at that position. A position is valid only when the two sets share NO letter.",
-            "어떤 칸이든 눌러봐. 그 위치의 점박이 글자들과 무늬 없는 글자들을 비교해줘. 두 집합이 한 글자도 안 겹쳐야 유효한 위치예요.")}
+            "칸을 아무거나 눌러 봐요. 그 자리의 점박이 글자와 무늬 없는 글자를 나란히 보여줘요.\n두 쪽이 한 글자도 안 겹쳐야 쓸 수 있는 자리예요.")}
         </div>
       </div>
 
@@ -65,7 +65,7 @@ function PositionTableSim({ E }) {
         marginBottom: 10, fontSize: 13, color: C.text,
       }}>
         <span style={{ fontWeight: 700, color: "#15803d" }}>
-          ✅ {t(E, "Valid positions", "유효한 위치")}: {validCount} / {M}
+          ✅ {t(E, "Valid positions", "구별할 수 있는 칸")}: {validCount} / {M}
         </span>
         <span style={{ color: C.dim }}>·</span>
         <span style={{ color: C.dim }}>
@@ -187,8 +187,8 @@ function PositionTableSim({ E }) {
             </div>
             <div style={{ marginTop: 6, fontWeight: 700, color: selInfo.valid ? "#15803d" : "#b91c1c" }}>
               {selInfo.valid
-                ? t(E, "✓ No overlap → distinguishing position!", "✓ 겹침 없음 → 구별 가능한 위치!")
-                : t(E, "✗ Sets share at least one letter → NOT distinguishing.", "✗ 두 집합에 같은 글자가 있어요 → 구별 불가능.")}
+                ? t(E, "✓ No overlap → distinguishing position!", "✓ 겹치는 글자가 없어요 → 구별할 수 있는 자리예요!")
+                : t(E, "✗ Sets share at least one letter → NOT distinguishing.", "✗ 같은 글자가 양쪽에 있어요 → 구별할 수 없어요.")}
             </div>
           </div>
         )}
@@ -207,7 +207,7 @@ export function makeGenomicsCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N spotted cows and N plain cows; each cow has an M-letter genome over {A, C, G, T}.\nA position j is 'distinguishing' if the set of letters appearing at column j among spotted cows DOES NOT INTERSECT the set among plain cows.\nCount how many positions are distinguishing.",
-        "FJ 에게 점박이 소 N마리와 무늬 없는 소 N마리가 있어요. 각 소는 A, C, G, T 로 된 M글자 유전체를 가져요.\n어떤 위치 j 가 '구별 가능' 이려면, j 번째 칸에서 점박이 소들이 가진 글자와 무늬 없는 소들이 가진 글자가 한 글자도 겹치지 않아야 해요. 구별 가능한 위치가 몇 개인지 출력해요."),
+        "점박이 소 N마리와 무늬 없는 소 N마리가 A·C·G·T 로 된 M글자 유전체를 가져요.\n어떤 칸에서 두 무리의 글자가 한 글자도 안 겹치면, 그 칸만 봐도 무리를 구별할 수 있어요.\n그런 칸이 몇 개인지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -224,7 +224,7 @@ export function makeGenomicsCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Output the number of distinguishing positions — columns where spotted-cow letters and plain-cow letters never overlap.",
-                "구별 가능한 위치의 개수 — 점박이와 무늬 없는 소들의 글자가 한 번도 겹치지 않는 칸의 수 — 를 출력.")}
+                "점박이 소 글자와 무늬 없는 소 글자가 한 글자도 겹치지 않는\n칸이 몇 개인지 출력해요.")}
             </div>
           </div>
 
@@ -245,17 +245,17 @@ export function makeGenomicsCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Position j is ", "위치 j 가 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "distinguishing", "'구별 가능'")}</b>
+                  {t(E, "Position j is ", "칸 j 는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "distinguishing", "'구별할 수 있는 칸'")}</b>
                   {t(E, " if the set of letters at column j across spotted cows does NOT intersect the set across plain cows.",
-                        " 인 건, j 번째 칸의 점박이 소 글자들과 무늬 없는 소 글자들이 한 글자도 겹치지 않을 때예요.")}
+                        " 이에요. 그 칸의 점박이 소 글자와 무늬 없는 소 글자가 한 글자도 안 겹칠 때 그래요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of distinguishing positions", "구별 가능한 위치의 개수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "number of distinguishing positions", "구별할 수 있는 칸의 개수")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
@@ -268,37 +268,37 @@ export function makeGenomicsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Let's see distinguishing positions in action. Click any column — we compare the spotted set vs the plain set at that position. A position counts only when the two sets share NO letter.",
-        "구별 가능한 위치를 직접 봐요. 칸을 누르면 그 위치에서 점박이 집합과 무늬 없는 집합을 비교해줘. 두 집합이 한 글자도 안 겹쳐야 그 위치를 세요."),
+        "칸을 누르면 그 자리의 점박이 글자와 무늬 없는 글자를 나란히 보여줘요.\n한 글자도 안 겹치는 칸만 세면 돼요."),
       content: <PositionTableSim E={E} />,
     },
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "At a certain position, spotted cows have {A, A} and plain cows have {C, C}.\nIs this position a valid distinguishing position?", "어떤 위치에서 점박이 소는 {A, A}, 무늬 없는 소는 {C, C}야. 이 위치는 유효한 구별 위치예요?"),
+        "At a certain position, spotted cows have {A, A} and plain cows have {C, C}.\nIs this position a valid distinguishing position?", "어떤 자리에서 점박이 소는 {A, A}, 무늬 없는 소는 {C, C} 예요.\n이 자리로 두 무리를 구별할 수 있을까요?"),
       question: t(E,
         "Spotted = {A, A}, Plain = {C, C}. No overlap, so valid?",
-        "점박이 = {A, A}, 무늬 없음 = {C, C}. 겹침 없으니 유효?"),
+        "점박이는 {A, A}, 무늬 없음은 {C, C} 예요. 구별할 수 있을까요?"),
       options: [
-        t(E, "Yes, sets {A} and {C} don't overlap", "맞아, 집합 {A}와 {C}는 안 겹쳐"),
-        t(E, "No, we need more characters", "아니, 더 많은 문자가 필요해"),
+        t(E, "Yes, sets {A} and {C} don't overlap", "네, {A} 와 {C} 는 안 겹쳐요"),
+        t(E, "No, we need more characters", "아니요, 글자가 더 있어야 해요"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! The spotted set is {A} and the plain set is {C}. They have no intersection, so this position can distinguish the two groups.",
-        "맞아! 점박이 집합은 {A}, 무늬 없는 집합은 {C}. 교집합이 없으니 이 위치로 두 그룹을 구별할 수 있어요."),
+        "맞아요! 점박이 쪽은 {A} 뿐이고 무늬 없는 쪽은 {C} 뿐이에요.\n겹치는 글자가 없으니 이 자리만 봐도 두 무리를 가려낼 수 있어요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "If there's exactly 1 valid distinguishing position, what is the answer?", "유효한 구별 위치가 정확히 1개라면 답은 뭐예요?"),
+        "If there's exactly 1 valid distinguishing position, what is the answer?", "구별할 수 있는 자리가 딱 1개라면 답은 무엇일까요?"),
       question: t(E,
         "How many valid positions if only 1 position has no overlap?",
-        "겹침 없는 위치가 1개뿐이면 유효한 위치 수는?"),
+        "겹치는 글자가 없는 자리가 1개뿐이면 답은 몇일까요?"),
       hint: t(E,
         "Just count distinguishing positions directly.",
-        "구별 가능한 위치를 직접 세면 돼."),
+        "구별할 수 있는 자리를 직접 세어 보면 돼요."),
       answer: 1,
     },
   ];
@@ -315,7 +315,7 @@ export function makeGenomicsCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "For each column j (1..M): gather the SET of letters from spotted cows and the SET from plain cows. If the two sets don't intersect, that column distinguishes the breeds. Sections build it one piece at a time.",
-        "각 열 j (1..M) 마다: 점박이 소들의 글자 집합과 무늬 없는 소들의 글자 집합을 모아요. 두 집합이 안 겹치면 그 열은 구별 가능. 아래 섹션이 한 단락씩 쌓아요."),
+        "칸 j 마다 점박이 소들의 글자와 무늬 없는 소들의 글자를 따로 모아요.\n두 쪽이 안 겹치면 그 칸은 구별할 수 있는 자리예요."),
       sections: getBovGenomicsSections(E),
     },
   ];

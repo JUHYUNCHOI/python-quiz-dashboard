@@ -10,7 +10,7 @@ export function makeMooLangCh1(E) {
       type: "reveal",
       narr: t(E,
         "The Moo Language has nouns, intransitive verbs, transitive verbs, and conjunctions. Sentences are either 'noun + intransitive verb' (2 words) or 'noun + transitive verb + noun + ...' (with extra nouns separated by commas, transitive needs ≥1 object).\nGiven word counts and a sentence-period budget P plus a comma budget C, MAXIMIZE the total number of words used.",
-        "무 언어에는 명사, 자동사, 타동사, 접속사가 있어요. 문장은 두 가지: '명사 + 자동사' (2단어) 또는 '명사 + 타동사 + 명사 + ...' (목적어를 쉼표로 추가, 타동사 1개당 목적어 ≥ 1).\n각 종류 단어 개수와 마침표 P개, 쉼표 C개 가 주어졌을 때, 사용 단어 수의 최댓값을 출력해요."),
+        "단어를 가장 많이 쓰려면 문장을 어떻게 짜야 할까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -25,7 +25,7 @@ export function makeMooLangCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
-              {t(E, "Given word counts and period/comma budgets, output the maximum total words usable.", "단어 개수와 마침표·쉼표 한도가 주어졌을 때, 사용 가능한 단어 수의 최댓값을 출력해요.")}
+              {t(E, "Given word counts and period/comma budgets, output the maximum total words usable.", "단어 개수와 쓸 수 있는 마침표·쉼표 수가 주어져요.\n문장을 만들 때 쓸 수 있는 단어 수의 최댓값을 출력해요.")}
             </div>
           </div>
 
@@ -46,7 +46,7 @@ export function makeMooLangCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Each sentence is either:", "각 문장은 다음 중 하나:")}
+                  {t(E, "Each sentence is either:", "문장은 둘 중 하나예요.")}
                   <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
                     <b style={{ color: "#7c3aed" }}>{t(E, "(A)", "(A)")}</b> {t(E, " noun + intransitive verb  (2 words)", " 명사 + 자동사  (2 단어)")}<br/>
                     <b style={{ color: "#dc2626" }}>{t(E, "(B)", "(B)")}</b> {t(E, " noun + transitive verb + noun (+ ',' + noun ...)  (3+ words)", " 명사 + 타동사 + 명사 (+ ',' + 명사 ...)  (3 단어 이상)")}
@@ -58,11 +58,11 @@ export function makeMooLangCh1(E) {
                 <div>
                   {t(E, "Two sentences can be ", "두 문장을 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "joined by a conjunction", "접속사로 연결")}</b>
-                  {t(E, " (counts as 1 sentence using 1 conjunction). At most ", " 가능 (한 문장으로 셈, 접속사 1개 사용). 마침표는 ")}
+                  {t(E, " (counts as 1 sentence using 1 conjunction). At most ", " 할 수 있어요. 그러면 한 문장으로 세고 접속사 하나를 써요. 마침표는 ")}
                   <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>P</code>
                   {t(E, " periods and ", " 개, 쉼표는 ")}
                   <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>C</code>
-                  {t(E, " commas may be used.", " 개까지 사용 가능.")}
+                  {t(E, " commas may be used.", " 개까지 쓸 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -80,7 +80,7 @@ export function makeMooLangCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Each word can only be used once!\nA transitive sentence uses 2 nouns, while an intransitive sentence uses 1 noun.\nWe need to balance them.", "\uac01 \ub2e8\uc5b4\ub294 \ud55c \ubc88\ub9cc \uc4f8 \uc218 \uc788\uc5b4!\n\ud0c0\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 2\uac1c, \uc790\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 1\uac1c\ub97c \uc4f0\uc9c0.\n\uade0\ud615\uc744 \ub9de\ucdb0\uc57c \ud574."),
+        "Each word can only be used once!\nA transitive sentence uses 2 nouns, while an intransitive sentence uses 1 noun.\nWe need to balance them.", "\ud0c0\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac\ub97c 2 \uac1c, \uc790\ub3d9\uc0ac \ubb38\uc7a5\uc740 1 \uac1c \uc368\uc694."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 14, padding: 14 }}>
@@ -101,24 +101,24 @@ export function makeMooLangCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Is 'noun intransitive_verb' a valid sentence?", "'명사 자동사'는 유효한 문장일까요?"),
-      question: t(E, "Is 'noun intransitive_verb' valid?", "'\uba85\uc0ac \uc790\ub3d9\uc0ac'\ub294 \uc720\ud6a8\ud55c \ubb38\uc7a5\uc778\uac00?"),
+        "Is 'noun intransitive_verb' a valid sentence?", "'명사 자동사' 는 문장이 될까요?"),
+      question: t(E, "Is 'noun intransitive_verb' valid?", "'\uba85\uc0ac \uc790\ub3d9\uc0ac' \ub294 \ubb38\uc7a5\uc774 \ub420\uae4c\uc694?"),
       options: [t(E, "Yes", "\ub124"), t(E, "No", "\uc544\ub2c8\uc624")],
       correct: 0,
-      explain: t(E, "Correct! It matches Type 1: noun + intransitive_verb.", "\ub9de\uc544! \uc720\ud615 1: \uba85\uc0ac + \uc790\ub3d9\uc0ac\uc5d0 \ud574\ub2f9\ud574."),
+      explain: t(E, "Correct! It matches Type 1: noun + intransitive_verb.", "\ub9de\uc544\uc694! \uc720\ud615 1 \uc778 '\uba85\uc0ac + \uc790\ub3d9\uc0ac' \uc608\uc694."),
     },
     {
       type: "input",
       narr: t(E,
-        "3 nouns, 0 transitive verbs, 2 intransitive verbs.\nWe can only make Type 1 sentences.\nEach needs 1 noun + 1 intransitive verb.\nLimited by 2 intransitive verbs = 2 sentences = 4 words!", "명사 3개, 타동사 0개, 자동사 2개. 유형 1 문장만 가능. 각각 명사 1개 + 자동사 1개. 자동사 2개로 제한 = 2문장 = 4단어!"),
-      question: t(E, "3 nouns, 2 intransitive, 0 transitive → max words?", "\uba85\uc0ac 3, \uc790\ub3d9\uc0ac 2, \ud0c0\ub3d9\uc0ac 0 \u2192 \ucd5c\ub300 \ub2e8\uc5b4?"),
-      hint: t(E, "No transitive verbs \u2192 only Type 1. The bottleneck is the smaller of nouns / intransitive verbs.", "\ud0c0\ub3d9\uc0ac 0 \u2192 \uc720\ud615 1\ub9cc \uac00\ub2a5. \uba85\uc0ac\uc640 \uc790\ub3d9\uc0ac \uc911 \ub354 \uc801\uc740 \ucabd\uc774 \ubcd1\ubaa9\uc774\uc5d0\uc694."),
+        "3 nouns, 0 transitive verbs, 2 intransitive verbs.\nWe can only make Type 1 sentences.\nEach needs 1 noun + 1 intransitive verb.\nLimited by 2 intransitive verbs = 2 sentences = 4 words!", "명사 3 개, 타동사 0 개, 자동사 2 개예요. 몇 단어까지 쓸 수 있을까요?"),
+      question: t(E, "3 nouns, 2 intransitive, 0 transitive → max words?", "\uba85\uc0ac 3 \uac1c, \uc790\ub3d9\uc0ac 2 \uac1c, \ud0c0\ub3d9\uc0ac 0 \uac1c\uc608\uc694.\n\uc4f8 \uc218 \uc788\ub294 \ub2e8\uc5b4\ub294 \ub9ce\uc544\uc57c \uba87 \uac1c\uc77c\uae4c\uc694?"),
+      hint: t(E, "No transitive verbs \u2192 only Type 1. The bottleneck is the smaller of nouns / intransitive verbs.", "\ud0c0\ub3d9\uc0ac\uac00 \uc5c6\uc73c\ub2c8 \uc720\ud615 1 \ubb38\uc7a5\ub9cc \ub9cc\ub4e4 \uc218 \uc788\uc5b4\uc694.\n\uc720\ud615 1 \uc740 \uba85\uc0ac \ud558\ub098\uc640 \uc790\ub3d9\uc0ac \ud558\ub098\ub97c \uc4f0\ub2c8\uae4c,\n\uba85\uc0ac\uc640 \uc790\ub3d9\uc0ac \uc911 \ub354 \uc801\uc740 \ucabd\ub9cc\ud07c\ub9cc \ubb38\uc7a5\uc744 \ub9cc\ub4e4 \uc218 \uc788\uc5b4\uc694."),
       answer: 4,
     },
     {
       type: "reveal",
       narr: t(E,
-        "The greedy approach: try all possible numbers of transitive sentences, use remaining nouns for intransitive sentences, pick the maximum!", "그리디 접근: 가능한 타동사 문장 수를 모두 시도하고, 남은 명사로 자동사 문장을 만들고, 최댓값을 선택!"),
+        "The greedy approach: try all possible numbers of transitive sentences, use remaining nouns for intransitive sentences, pick the maximum!", "타동사 문장 수를 하나씩 다 해보고 제일 좋은 걸 골라요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 14, padding: 14 }}>
@@ -128,7 +128,7 @@ export function makeMooLangCh1(E) {
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "For each possible # of transitive sentences t2:\n1. Uses 2*t2 nouns + t2 transitive verbs\n2. Remaining nouns: n - 2*t2\n3. Intransitive sentences: min(k, remaining nouns)\n4. Total words = t2*3 + t1*2\n5. Take max over all t2!",
-                "\uac00\ub2a5\ud55c \ud0c0\ub3d9\uc0ac \ubb38\uc7a5 \uc218 t2\ub9c8\ub2e4:\n1. \uba85\uc0ac 2*t2 + \ud0c0\ub3d9\uc0ac t2 \uc0ac\uc6a9\n2. \ub0a8\uc740 \uba85\uc0ac: n - 2*t2\n3. \uc790\ub3d9\uc0ac \ubb38\uc7a5: min(k, \ub0a8\uc740 \uba85\uc0ac)\n4. \ucd1d \ub2e8\uc5b4 = t2*3 + t1*2\n5. \ubaa8\ub4e0 t2\uc5d0\uc11c \ucd5c\ub300!")}
+                "\ud0c0\ub3d9\uc0ac \ubb38\uc7a5 \uc218 t2 \ub97c 0 \ubd80\ud130 \ud558\ub098\uc529 \ub298\ub824 \uac00\uba70 \uc774\ub807\uac8c \ud574\uc694.\n1. \uba85\uc0ac\ub97c 2*t2 \uac1c, \ud0c0\ub3d9\uc0ac\ub97c t2 \uac1c \uc368\uc694\n2. \ub0a8\ub294 \uba85\uc0ac\ub294 n - 2*t2 \uac1c\uc608\uc694\n3. \uc790\ub3d9\uc0ac \ubb38\uc7a5\uc740 min(k, \ub0a8\uc740 \uba85\uc0ac) \uac1c \ub9cc\ub4e4 \uc218 \uc788\uc5b4\uc694\n4. \uc4f4 \ub2e8\uc5b4\ub294 t2*3 + t1*2 \uac1c\uc608\uc694\n5. \ubaa8\ub4e0 t2 \uc911\uc5d0\uc11c \uac00\uc7a5 \ud070 \uac12\uc744 \uace8\ub77c\uc694")}
             </div>
           </div>
         </div>),
@@ -137,7 +137,7 @@ export function makeMooLangCh1(E) {
       type: "reveal",
       narr: t(E,
         "Let's run the strategy on a real sample. Step through every candidate n_tverb and watch the word count swing \u2014 the green row at the end is the answer.",
-        "\uc804\ub7b5\uc744 \uc2e4\uc81c \uc0d8\ud50c\uc5d0 \ub3cc\ub824\ubd10\uc694. \ud6c4\ubcf4 n_tverb \ub97c \ud558\ub098\uc529 \ubc1f\uc73c\uba74\uc11c \ub2e8\uc5b4 \uc218\uac00 \uc5b4\ub5bb\uac8c \ub2ec\ub77c\uc9c0\ub294\uc9c0 \ubcf4\uace0, \ub9c8\uc9c0\ub9c9\uc5d0 \ucd08\ub85d \uc904\uc774 \ub2f5\uc774\uc5d0\uc694."),
+        "n_tverb \ub97c \ud558\ub098\uc529 \ubc1f\uc73c\uba74 \ub2e8\uc5b4 \uc218\uac00 \uc5b4\ub5bb\uac8c \ub2ec\ub77c\uc9c0\ub294\uc9c0 \ubcf4\uc5ec\uc694."),
       content: (<MooLangDeepAudit E={E} />),
     },
   ];
@@ -151,7 +151,7 @@ export function makeMooLangCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 단락씩 읽어 봐요."),
       sections: getMooLangSections(E),
     },
     {

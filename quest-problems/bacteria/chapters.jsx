@@ -11,7 +11,7 @@ export function makeBacteriaCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N patches in a row with deviation values a[1..N].  A type-1 walk starting at h adds the linear ramp 1, 2, 3, ... to a[h], a[h+1], ..., a[N].  A type-2 walk subtracts the same ramp.  Each walk = 1 operation.  Find the minimum number of walks to zero out every a[i].",
-        "FJ 의 N 개 패치, 편차 a[1..N]. 타입 1 워크 (시작 h): a[h] += 1, a[h+1] += 2, ..., a[N] += (N-h+1) 의 선형 ramp 추가. 타입 2 워크: 같은 ramp 를 빼기. 워크 한 번 = 1 회. 모든 a[i] 가 0 이 되는 최소 워크 수."),
+        "워크를 써서 편차를 모두 0 으로 만드는 최소 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -57,10 +57,10 @@ export function makeBacteriaCh1(E) {
             </div>
             <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6, textAlign: "center" }}>
               {t(E, "Linear ramp 1, 2, 3, 4 added to a[2..5].  Position 1 unchanged.",
-                    "1, 2, 3, 4 의 선형 ramp 가 a[2..5] 에 더해짐. 위치 1 은 그대로.")}
+                    "1, 2, 3, 4 가 차례로 a[2..5] 에 더해져요. 위치 1 은 그대로예요.")}
               <br/>
               <b style={{ color: "#059669" }}>{t(E, "Type-2 walk = same ramp, but subtracted.",
-                                                       "타입 2 워크 = 같은 ramp 를 빼기.")}</b>
+                                                       "타입 2 워크는 같은 ramp 를 빼요.")}</b>
             </div>
           </div>
 
@@ -105,7 +105,7 @@ export function makeBacteriaCh1(E) {
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of walks", "필요한 워크의 최소 횟수")}</b>
-                  {t(E, " to make every a[i] equal 0.", "를 출력해요. 모든 a[i] 가 0 이 되도록.")}
+                  {t(E, " to make every a[i] equal 0.", ", 곧 모든 a[i] 를 0 으로 만드는 횟수를 출력해요.")}
                 </div>
               </div>
             </div>
@@ -117,7 +117,7 @@ export function makeBacteriaCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input: N on line 1, then N values on line 2.  Output: minimum walks.",
-        "입력: 1 줄에 N, 2 줄에 N 개 값. 출력: 최소 워크 수."),
+        "첫 줄에 N, 둘째 줄에 값 N 개가 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", textAlign: "center", marginBottom: 10 }}>
@@ -144,13 +144,13 @@ export function makeBacteriaCh1(E) {
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
               {t(E, "a = [-1, 3]. To zero out a[1]=-1, do 1 type-1 walk starting at h=1: it adds (1, 2) → a = [0, 5].",
-                    "a = [-1, 3]. a[1]=-1 을 지우려면 h=1 에서 타입 1 워크 1 회: (1, 2) 더함 → a = [0, 5].")}
+                    "a = [-1, 3] 이에요. a[1]=-1 을 없애려면 h=1 에서 타입 1 워크를 한 번 해요.\n(1, 2) 가 더해져서 a = [0, 5] 가 돼요.")}
               <br/>
               {t(E, "Now a[2]=5. A type-2 walk at h=2 subtracts (1) from a[2] only.  Need 5 such walks.",
-                    "a[2]=5. h=2 에서 타입 2 워크는 a[2] 에서 (1) 만 빼요. 5 회 필요.")}
+                    "이제 a[2]=5 예요. h=2 의 타입 2 워크는 a[2] 에서 1 만 빼니까 5 번이 필요해요.")}
             </div>
             <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
-              {t(E, "Total walks: 1 + 5 = 6.", "총 워크 수: 1 + 5 = 6.")}
+              {t(E, "Total walks: 1 + 5 = 6.", "총 워크 수는 1 + 5 = 6 이에요.")}
             </div>
           </div>
         </div>),
@@ -160,7 +160,7 @@ export function makeBacteriaCh1(E) {
       type: "reveal",
       narr: t(E,
         "Try walks. Watch diff(diff(a)) — only ONE cell flickers ±1 per walk. That's the whole trick.",
-        "워크를 눌러봐. diff(diff(a)) 를 봐 — 워크 1 회당 딱 한 칸이 ±1 만큼 깜빡여. 이게 트릭의 전부."),
+        "워크를 눌러 diff(diff(a)) 가 어떻게 바뀌는지 봐요."),
       content: (<BacteriaTrickSim E={E} />),
     },
     // 1-4: Quiz — single-position walk
@@ -171,7 +171,7 @@ export function makeBacteriaCh1(E) {
         "h=N 에서 시작하는 워크는 a[N] 한 칸만 건드려요 (길이 1 ramp)."),
       question: t(E,
         "If a = [0, 5] (N=2), how many type-2 walks at h=2 do we need to make a[2] = 0?",
-        "a = [0, 5] (N=2) 이면, h=2 에서 타입 2 워크 몇 번 해야 a[2] = 0?"),
+        "a = [0, 5] (N=2) 일 때 h=2 타입 2 워크를 몇 번 해야 a[2] 가 0 이 될까요?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -180,20 +180,20 @@ export function makeBacteriaCh1(E) {
       correct: 2,
       explain: t(E,
         "A type-2 walk at h=2 subtracts a 1-length ramp (just 1) from a[2].  Need 5 walks to drop a[2] from 5 → 0.",
-        "h=2 의 타입 2 워크는 a[2] 에서 1 만 빼요. a[2] 를 5 → 0 만들려면 5 번."),
+        "h=2 의 타입 2 워크는 a[2] 에서 1 만 빼요.\n5 를 0 으로 만들려면 5 번 해야 해요."),
     },
     // 1-5: Input — second-difference intuition (now backed by sim above)
     {
       type: "input",
       narr: t(E,
         "Practice the arithmetic — given the two diffs already computed, what does the formula give?",
-        "산수 연습 — 두 diff 이 이미 계산돼 있어. 공식대로 답을 내 봐."),
+        "diff 는 이미 구해 뒀어요. 식대로 답을 내 봐요."),
       question: t(E,
         "a = [-1, 3].  diff(a) = [-1, 4].  diff(diff(a)) = [-1, 5].  Sum of absolute values?",
-        "a = [-1, 3]. diff(a) = [-1, 4]. diff(diff(a)) = [-1, 5]. 절댓값 합?"),
+        "diff(diff(a)) = [-1, 5] 예요. 절댓값을 더하면 얼마일까요?"),
       hint: t(E,
         "Sum the absolute values of the two entries.",
-        "두 항의 절댓값을 더해 봐."),
+        "두 값의 절댓값을 더해 봐요."),
       answer: 6,
     },
   ];
@@ -210,7 +210,7 @@ export function makeBacteriaCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Build the diff-of-diff trick step by step.  Each section explains why one walk only changes ONE position of diff(diff(a)) by ±1, so the answer = sum of absolute values.",
-        "diff-of-diff 트릭을 한 단락씩. 워크 1 회가 왜 diff(diff(a)) 의 한 위치만 ±1 변경하는지, 그래서 왜 답이 절댓값 합인지 섹션별로 설명."),
+        "워크 한 번이 왜 한 칸만 바꾸는지 한 단락씩 봐요."),
       sections: getBacteriaSections(E),
     },
   ];

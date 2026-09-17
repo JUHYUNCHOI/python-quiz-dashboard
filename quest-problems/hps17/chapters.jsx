@@ -11,7 +11,7 @@ export function makeHps17Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Two cows play Hoof-Paper-Scissors for N rounds. Each round, both cows show a gesture labeled 1, 2, or 3 — but we DON'T know which number stands for Hoof, Paper, or Scissors. Try every assignment of {1, 2, 3} → (H, P, S) and find the one where cow 1 wins the most rounds.",
-        "두 소가 가위바위보를 N라운드 해요. 매 라운드 두 소 모두 1, 2, 3 중 하나로 라벨된 제스처를 내요 — 그런데 어느 숫자가 H, P, S 인지는 몰라요. {1, 2, 3} → (H, P, S) 의 모든 배정을 시도해서 cow 1 이 가장 많이 이기는 경우를 찾아요."),
+        "숫자 1, 2, 3 이 무슨 손 모양인지 몰라요. 다 해 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -27,7 +27,7 @@ export function makeHps17Ch1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E, "Try every assignment of numbers 1, 2, 3 to (H, P, S) and output the max wins for cow 1.",
-                    "숫자 1, 2, 3 을 (H, P, S) 에 배정하는 모든 경우를 시도해서 cow 1 의 최대 승수를 출력.")}
+                    "숫자 1, 2, 3 을 (H, P, S) 에 짝지어 보고 cow 1 이 가장 많이 이기는 횟수를 출력해요.")}
             </div>
           </div>
 
@@ -44,21 +44,21 @@ export function makeHps17Ch1(E) {
                   {t(E, ". Each round both cows show a gesture labeled ",
                         " 를 해요. 매 라운드 두 소 모두 라벨이 ")}
                   <b>1, 2, 3</b>
-                  {t(E, ".", " 중 하나인 제스처를 내요.")}
+                  {t(E, ".", " 중 하나인 손 모양을 내요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#dc2626" }}>{t(E, "We don't know which number is Hoof, Paper, or Scissors", "어느 숫자가 H, P, S 인지 몰라요")}</b>
-                  {t(E, " — try every possible assignment.", " — 모든 배정을 시도.")}
+                  {t(E, " — try every possible assignment.", ". 그래서 짝짓는 방법을 모두 해 봐요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Win rules: H beats S, P beats H, S beats P.",
-                        "승리 규칙: H는 S를 이기고, P는 H를 이기고, S는 P를 이겨요.")}
+                        "H 는 S 를 이기고, P 는 H 를 이기고, S 는 P 를 이겨요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -66,7 +66,7 @@ export function makeHps17Ch1(E) {
                 <div>
                   <b style={{ color: "#15803d" }}>{t(E, "Print the maximum wins cow 1 can get", "cow 1 의 최대 승수")}</b>
                   {t(E, " over all 6 ways to assign {1,2,3} to (H, P, S).",
-                        "를 출력 — {1,2,3} → (H, P, S) 6 가지 배정 중 최선.")}
+                        "를 출력해요. 짝짓는 방법 6 가지 중에서 가장 좋은 것을 고르면 돼요.")}
                 </div>
               </div>
             </div>
@@ -89,7 +89,7 @@ export function makeHps17Ch1(E) {
             </div>
             <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
               {t(E, "Each line: cow 1 gesture, cow 2 gesture. First line N = number of rounds.",
-                    "각 줄: cow 1 제스처, cow 2 제스처. 첫 줄 N = 라운드 수.")}
+                    "첫 줄의 N 은 라운드 수예요. 그다음 줄마다 cow 1 과 cow 2 의 손 모양이 나와요.")}
             </div>
           </div>
         </div>),
@@ -99,7 +99,7 @@ export function makeHps17Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Let's try one assignment. Suppose 1 = H, 2 = P, 3 = S. Then run through the rounds and count cow 1's wins. Repeat for all 6 assignments; the max is the answer.",
-        "한 배정을 시도해 봐요. 1 = H, 2 = P, 3 = S 라고 하자. 그 다음 라운드별로 cow 1 의 승수를 세요. 6 가지 배정 다 시도하고 최댓값이 답."),
+        "1 = H, 2 = P, 3 = S 로 정해 놓고 한 번 세어 봐요."),
       content: (() => {
         // Try assignment: 1=H, 2=P, 3=S on input rounds (1,2),(2,3),(1,3),(3,1),(3,1)
         // Round 1: H vs P → H loses (P beats H)
@@ -140,17 +140,17 @@ export function makeHps17Ch1(E) {
           <div style={{ padding: 16 }}>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14 }}>
               <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 6 }}>
-                🔍 {t(E, "Try one of the 6 assignments — best case: 1=H, 2=S, 3=P", "6 가지 중 한 배정 시도 — 최선: 1=H, 2=S, 3=P")}
+                🔍 {t(E, "Try one of the 6 assignments — best case: 1=H, 2=S, 3=P", "6 가지 중 하나로 해 봐요 (가장 좋은 짝: 1=H, 2=S, 3=P)")}
               </div>
               <div style={{ fontSize: 12, color: C.dim, marginBottom: 8, lineHeight: 1.6 }}>
                 {t(E,
                   "Translate each number to its gesture, then apply H>S, P>H, S>P.",
-                  "각 숫자를 제스처로 변환한 뒤 H>S, P>H, S>P 규칙 적용.")}
+                  "숫자를 손 모양으로 바꾼 다음 H>S, P>H, S>P 규칙으로 따져 봐요.")}
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "30px 1fr 1fr 70px", gap: "4px 8px", fontSize: 12, alignItems: "center" }}>
                 <div style={{ fontWeight: 600, color: "#1e3a8a" }}>r</div>
                 <div style={{ fontWeight: 600, color: "#1e3a8a" }}>{t(E, "input (a, b)", "입력 (a, b)")}</div>
-                <div style={{ fontWeight: 600, color: "#1e3a8a" }}>{t(E, "as gesture", "제스처 변환")}</div>
+                <div style={{ fontWeight: 600, color: "#1e3a8a" }}>{t(E, "as gesture", "손 모양으로")}</div>
                 <div style={{ fontWeight: 600, color: "#1e3a8a", textAlign: "right" }}>{t(E, "cow1 win?", "cow1 승?")}</div>
                 {trace.map((row) => (
                   <div key={row.r} style={{ display: "contents" }}>
@@ -167,7 +167,7 @@ export function makeHps17Ch1(E) {
               </div>
               <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #93c5fd", fontWeight: 600, color: "#15803d" }}>
                 {t(E, "Wins for this assignment = 4 → check other 5 assignments, max is the answer.",
-                      "이 배정의 승수 = 4 → 나머지 5 가지 배정도 확인, 최댓값이 답.")}
+                      "이렇게 짝지으면 4 번 이겨요. 나머지 5 가지도 세어 보고 가장 큰 값이 답이에요.")}
               </div>
             </div>
           </div>
@@ -179,10 +179,10 @@ export function makeHps17Ch1(E) {
       type: "quiz",
       narr: t(E,
         "How many distinct ways can we assign {1, 2, 3} to (H, P, S)? Just one-to-one mappings.",
-        "{1, 2, 3} 을 (H, P, S) 에 일대일로 배정하는 방법은 몇 가지?"),
+        "1, 2, 3 을 H, P, S 에 하나씩 짝지으면 몇 가지일까요?"),
       question: t(E,
         "Number of one-to-one assignments of {1, 2, 3} to (H, P, S)?",
-        "{1, 2, 3} → (H, P, S) 일대일 배정의 수?"),
+        "1, 2, 3 을 H, P, S 에 하나씩 짝짓는 방법은 몇 가지일까요?"),
       options: [
         t(E, "3", "3"),
         t(E, "6 (3! permutations)", "6 (3! 순열)"),
@@ -191,20 +191,20 @@ export function makeHps17Ch1(E) {
       correct: 1,
       explain: t(E,
         "Right! 3! = 6 permutations. Tiny enough to try them all and pick the best — that's brute force on the assignment.",
-        "정답! 3! = 6 가지 순열. 작아서 다 시도하고 최고를 고를 수 있어요 — 배정에 대해 brute force."),
+        "정답이에요! 3! = 6 가지 순열이에요.\n6 가지밖에 안 되니까 완전탐색으로 다 해 보고 제일 좋은 것을 고르면 돼요."),
     },
     // 1-4: Input — single assignment computation
     {
       type: "input",
       narr: t(E,
         "Quick hand calc. Rounds (1,2), (2,3), (3,1). Try assignment 1=H, 2=S, 3=P. Walk through and count cow 1's wins.",
-        "직접: 라운드 (1,2), (2,3), (3,1). 배정 1=H, 2=S, 3=P 로 cow 1 의 승수 계산."),
+        "1=H, 2=S, 3=P 로 놓고 cow 1 이 몇 번 이기는지 세어 봐요."),
       question: t(E,
         "Rounds (1,2),(2,3),(3,1) with 1=H, 2=S, 3=P. How many wins for cow 1?",
-        "라운드 (1,2),(2,3),(3,1), 배정 1=H, 2=S, 3=P. cow 1 의 승수?"),
+        "라운드가 (1,2), (2,3), (3,1) 이고 1=H, 2=S, 3=P 예요. cow 1 은 몇 번 이길까요?"),
       hint: t(E,
         "R1: H vs S → H wins. R2: S vs P → S wins. R3: P vs H → P wins. All three.",
-        "R1: H vs S → H 승. R2: S vs P → S 승. R3: P vs H → P 승. 세 라운드 다 승."),
+        "1 라운드는 H 와 S 라서 H 가 이겨요.\n2 라운드는 S 와 P 라서 S 가 이겨요.\n3 라운드는 P 와 H 라서 P 가 이겨요."),
       answer: 3,
     },
   ];
@@ -221,7 +221,7 @@ export function makeHps17Ch2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Try every assignment of {1, 2, 3} to (H, P, S) — only 6 permutations. For each, walk through all rounds and count cow 1's wins via the rule (a beats b) ∈ {(H,S), (P,H), (S,P)}. Take the max. Sections build it one piece at a time.",
-        "{1, 2, 3} 을 (H, P, S) 에 배정하는 모든 경우를 시도 — 단 6 가지 순열. 각 배정마다 라운드를 돌며 (a 가 b 를 이김) ∈ {(H,S), (P,H), (S,P)} 규칙으로 cow 1 의 승수를 세어 최댓값을 뽑아요. 아래 섹션이 한 단락씩 쌓아요."),
+        "6 가지 짝을 모두 세어 보고 가장 큰 승수를 뽑아요."),
       sections: getHps17Sections(E),
     },
   ];

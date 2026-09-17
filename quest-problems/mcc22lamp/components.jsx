@@ -176,20 +176,20 @@ export function getMcc22LampSections(E) {
       why: [
         t(E,
           "Between two breakpoints the brightness is a straight line: F, F+s, F+2s, … So counting positions with brightness ≥ k is just: how many steps d keep F + s·d above k?",
-          "두 꺾인점 사이에서 밝기는 직선이에요: F, F+s, F+2s, … 그러니 밝기 ≥ k 인 위치를 세는 건 'F + s·d 가 k 이상인 걸음 d 가 몇 개?' 를 묻는 거예요."),
+          "두 꺾인점 사이에서 밝기는 F, F+s, F+2s, … 처럼 한 걸음에 s 씩 일정하게 바뀌어요. 그래서 밝기 ≥ k 인 위치를 세는 건 'F + s·d 가 k 이상인 걸음 d 가 몇 개?' 를 묻는 것과 같아요."),
         t(E,
           "Rising line (s>0): solve d ≥ ceil((k−F)/s). Falling line (s<0): solve d ≤ floor((k−F)/s). We use exact integer ceil/floor because k can be up to 10^18 — floats would lose precision.",
-          "올라가는 직선(s>0): d ≥ ceil((k−F)/s). 내려가는 직선(s<0): d ≤ floor((k−F)/s). k 가 최대 10^18 이라 실수(float)는 오차가 나므로 정수 올림/내림으로 정확히 계산해요."),
+          "올라가는 직선(s>0)이면 d ≥ ceil((k−F)/s) 이고, 내려가는 직선(s<0)이면 d ≤ floor((k−F)/s) 예요. k 가 최대 10^18 이라 실수(float)로 하면 오차가 나요. 그래서 정수 올림·내림으로 정확히 계산해요."),
       ],
       pyOnly: [
         t(E,
           "-(-num // s) is Python's trick for ceil division of positive integers; num // s already floors toward −∞.",
-          "-(-num // s) 는 양수 올림나눗셈 파이썬 관용구예요; num // s 는 이미 −∞ 방향으로 내림해요."),
+          "-(-num // s) 는 양수를 올림해서 나누는 파이썬 손버릇이에요. num // s 는 이미 −∞ 쪽으로 내림하거든요."),
       ],
       cppOnly: [
         t(E,
           "C++ integer / truncates toward zero, so we add a floordiv helper to match Python's floor behavior for negatives.",
-          "C++ 의 정수 / 는 0 방향으로 잘라서, 음수에서 파이썬 내림과 맞추려고 floordiv 도우미를 둬요."),
+          "C++ 의 정수 나눗셈은 0 쪽으로 잘라요. 그래서 음수에서 파이썬 내림과 맞추려고 floordiv 도우미를 따로 둬요."),
       ],
     },
     {
@@ -199,10 +199,10 @@ export function getMcc22LampSections(E) {
       why: [
         t(E,
           "One lamp's tent goes up by 1 per step from p−b, peaks at p, then down by 1 to p+b. As a slope, that's +1 at p−b, −2 at p (up→down), +1 at p+b (down→flat). Adding all tents = adding these events.",
-          "한 램프의 텐트는 p−b 부터 한 칸에 +1 씩 올라가 p 에서 꼭대기, 그 뒤 p+b 까지 −1 씩 내려가요. 기울기로 보면 p−b 에서 +1, p 에서 −2 (오름→내림), p+b 에서 +1 (내림→평평). 모든 텐트를 더하는 건 이 이벤트들을 더하는 거예요."),
+          "한 램프의 텐트는 p−b 부터 한 칸에 +1 씩 올라가 p 에서 꼭대기가 되고, 그 뒤 p+b 까지 −1 씩 내려가요. 기울기로 보면 p−b 에서 +1, p 에서 −2(오름→내림), p+b 에서 +1(내림→평평) 이에요. 그래서 모든 텐트를 더하는 건 이 이벤트들을 더하는 것과 같아요."),
         t(E,
           "The summed profile only bends at those breakpoints. Sort them, walk left→right updating slope s and value F, and count integers on each flat/linear segment — no need to visit every x (positions span up to 10^12).",
-          "합친 밝기 곡선은 그 꺾인점에서만 꺾여요. 꺾인점을 정렬해 왼쪽→오른쪽으로 기울기 s 와 값 F 를 갱신하며 각 구간의 정수만 세요 — 모든 x 를 방문할 필요 없어요 (위치는 최대 10^12 까지 퍼져요)."),
+          "합친 밝기 곡선은 그 꺾인점에서만 꺾여요. 그러니 꺾인점을 정렬해 왼쪽에서 오른쪽으로 기울기 s 와 값 F 를 새로 맞추며 구간마다 정수를 세면 돼요. 모든 x 를 방문할 필요가 없어요 (위치는 최대 10^12 까지 퍼져요)."),
       ],
     },
     {
@@ -212,7 +212,7 @@ export function getMcc22LampSections(E) {
       why: [
         t(E,
           "Up to 2×10^5 tests, so read all input at once and index through it. Collect answers and print them together — one integer per test.",
-          "테스트가 최대 2×10^5 개라 입력을 한 번에 읽고 인덱스로 훑어요. 답을 모아 한꺼번에 출력해요 — 테스트마다 정수 하나."),
+          "테스트가 최대 2×10^5 개라 입력을 한 번에 읽고 자리 번호로 훑어요. 답을 모아 한꺼번에 출력해요. 테스트마다 정수 하나예요."),
       ],
       pyOnly: [
         t(E,
@@ -284,7 +284,7 @@ export function Mcc22LampDeepAuditSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65 }}>
           {t(E,
             "Lamp i shines max(0, b − |p − x|) at position x: brightest right under it, fading 1 per step. Overlapping tents add up into a bumpy hill. We only care where the total reaches k — and that hill only bends at p−b, p, p+b.",
-            "램프 i 는 위치 x 에서 max(0, b − |p − x|) 만큼 밝아요: 바로 아래가 제일 밝고 한 칸에 1씩 약해져요. 텐트가 겹치면 울퉁불퉁한 언덕이 돼요. 우리는 합이 k 에 닿는 곳만 궁금하고, 그 언덕은 p−b, p, p+b 에서만 꺾여요.")}
+            "램프 i 는 위치 x 에서 max(0, b − |p − x|) 만큼 밝아요. 바로 아래가 제일 밝고 한 칸 멀어질 때마다 1씩 약해져요. 텐트가 겹치면 울퉁불퉁한 언덕이 돼요. 우리는 합이 k 에 닿는 곳만 궁금한데, 그 언덕은 p−b, p, p+b 에서만 꺾여요.")}
         </div>
       </div>
 
@@ -295,7 +295,7 @@ export function Mcc22LampDeepAuditSim({ E }) {
         <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 800, color: A, minWidth: 22, textAlign: "center" }}>{k}</span>
         <button onClick={() => setK(Math.min(10, k + 1))} style={ctrlBtn}>+</button>
         <button onClick={reset} style={{ ...ctrlBtn, width: "auto", padding: "0 10px", fontSize: 12, fontWeight: 700 }}>
-          {t(E, "↺ Reset", "↺ 초기화")}
+          {t(E, "↺ Reset", "↺ 다시 처음부터")}
         </button>
       </div>
 
@@ -351,7 +351,7 @@ export function Mcc22LampDeepAuditSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 10.5, color: C.dim, marginTop: 6, ...KA }}>
         {t(E,
           "Amber bars ≥ k. Purple ticks below = breakpoints (p−b, p, p+b) — the only x where the hill bends.",
-          "노란 막대 = k 이상. 아래 보라색 눈금 = 꺾인점 (p−b, p, p+b) — 언덕이 꺾이는 유일한 x.")}
+          "노란 막대는 k 이상이에요. 아래 보라색 눈금은 꺾인점(p−b, p, p+b)이고, 언덕은 여기서만 꺾여요.")}
       </div>
 
       {/* lamp controls */}

@@ -150,7 +150,7 @@ export function ConsecutiveDiffScanSim({ E }) {
       {diffs.length > 0 && (
         <div style={{ marginBottom: 10 }}>
           <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>
-            {t(E, "Diffs seen:", "지금까지의 차이:")}
+            {t(E, "Diffs seen:", "지금까지 본 차이")}
           </div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {diffs.map((x, idx) => (
@@ -231,13 +231,13 @@ export function getMcc19RectSections(E) {
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
             "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어요."),
         t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+            "합계와 자리 번호는 int 로 충분해요.\n합이 2×10^9 를 넘을 때만 더 큰 자료형을 쓰면 돼요."),
       ],
     },
   ];

@@ -11,7 +11,7 @@ export function makeSleepyHerdCh1(E) {
       type: "reveal",
       narr: t(E,
         "Three cows stand at distinct positions on a number line. The only allowed move: take ONE of the two ENDPOINT cows and place her at any unoccupied position STRICTLY BETWEEN the other two. The goal is to make all three positions CONSECUTIVE integers.\nPrint two numbers: the MIN and MAX possible number of moves to reach a consecutive configuration.",
-        "세 마리 소가 수직선의 서로 다른 위치에 있어요. 한 번에 할 수 있는 일: 양 끝에 있는 두 소 중 한 마리를 골라서, 다른 두 소 사이의 비어있는 자리에 옮기기. 세 소의 위치가 연속된 정수가 될 때까지 반복해요.\n끝낼 때까지 걸리는 이동 횟수의 최솟값과 최댓값을 출력해요."),
+        "세 소가 나란히 붙을 때까지 몇 번 옮기게 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeSleepyHerdCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "Output the MIN and MAX moves to make the three cow positions consecutive integers.",
-                "세 소 위치가 연속한 정수가 될 때까지 이동 횟수의 최솟값과 최댓값을 출력.")}
+                "세 소가 연속한 정수 자리에 놓일 때까지 걸리는 이동 횟수의 최솟값과 최댓값을 출력해요.")}
             </div>
           </div>
 
@@ -47,7 +47,7 @@ export function makeSleepyHerdCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One move: take one of the ", "한 번의 이동: 양 끝에 있는 ")}
+                  {t(E, "One move: take one of the ", "한 번 옮길 때는 양 끝에 있는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "two endpoint cows", "두 소 중 한 마리")}</b>
                   {t(E, " and place her at any unoccupied integer ", "를 골라서 다른 두 소 사이의 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "STRICTLY BETWEEN the other two", "비어있는 자리")}</b>
@@ -80,10 +80,10 @@ export function makeSleepyHerdCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Positions [4, 7, 9]. Move 4 to 8, getting [7, 8, 9]. How many moves was that?", "위치 [4, 7, 9]. 4를 8로 옮기면 [7, 8, 9]. 몇 번 이동했을까?"),
+        "Positions [4, 7, 9]. Move 4 to 8, getting [7, 8, 9]. How many moves was that?", "[4, 7, 9] 를 나란히 만들려면 몇 번 옮겨야 할까요?"),
       question: t(E,
         "Positions [4,7,9]. Min moves to make consecutive?",
-        "위치 [4,7,9]. 연속으로 만드는 최소 이동 횟수?"),
+        "[4,7,9] 를 연속으로 만드는 최소 이동 횟수는 몇 번일까요?"),
       options: [
         t(E, "0", "0"),
         t(E, "1", "1"),
@@ -92,20 +92,20 @@ export function makeSleepyHerdCh1(E) {
       ],
       correct: 1,
       explain: t(E,
-        "Move cow at 4 to position 8: [7,8,9] are consecutive. Just 1 move! Gap between 7 and 9 is 2, so min = 1.",
-        "4에 있는 소를 8로 이동: [7,8,9] 연속. 1번만! 7과 9 사이 간격이 2라서 최소 = 1."),
+        "7 and 9 are 2 apart, so there is exactly one empty spot between them: 8. Move the endpoint cow at 4 into it and you get [7,8,9] — consecutive in just 1 move.",
+        "7 과 9 사이 간격이 2 라서 그 사이에 빈 자리가 딱 하나 있어요. 바로 8 이에요. 끝에 있는 4 를 거기로 옮기면 [7,8,9] 가 되니까 한 번이면 끝나요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "For positions [4,7,9], what is the minimum number of moves?", "위치 [4,7,9]에서 최소 이동 횟수는?"),
+        "For positions [4,7,9], what is the minimum number of moves?", "[4,7,9] 에서 최소 이동 횟수는 몇 번일까요?"),
       question: t(E,
         "Positions [4,7,9]. Minimum moves?",
-        "위치 [4,7,9]. 최소 이동 횟수?"),
+        "[4,7,9] 의 최소 이동 횟수는 몇 번일까요?"),
       hint: t(E,
         "Look at the gaps — can one move land an endpoint into the slot?",
-        "간격을 봐 — 한 번의 이동으로 끝점 소를 빈 자리에 넣을 수 있을까?"),
+        "간격을 봐요. 한 번에 끝점 소를 빈 자리에 넣을 수 있을까요?"),
       answer: 1,
     },
   ];
@@ -121,8 +121,8 @@ export function makeSleepyHerdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sort a < b < c. MAX = (c − a) − 2 (one step at a time). MIN = 0 if already consecutive, 1 if one gap ≤ 2, else 2. Sections build it one piece at a time.",
-        "정렬 a < b < c. 최대 = (c − a) − 2 (한 칸씩). 최소 = 이미 연속이면 0, 한쪽 간격 ≤ 2 면 1, 아니면 2. 아래 섹션이 한 단락씩 쌓아요."),
+        "Sort a < b < c, then read the two gaps.\nMAX comes from shuffling one step at a time inside the bigger gap; MIN is 0 if they are already consecutive, 1 if a gap is exactly 2, else 2.",
+        "a < b < c 로 정렬한 다음 두 간격을 봐요.\n최대는 큰 쪽 간격 안에서 한 칸씩 좁혀 갈 때예요. 최소는 이미 연속이면 0, 한쪽 간격이 2 면 1, 아니면 2 예요."),
       sections: getSleepyHerdSections(E),
     },
   ];

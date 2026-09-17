@@ -51,9 +51,9 @@ export function getGiftsSections(E) {
          어떻게 담았는지* 만 — 안 그러면 같은 말이 네 번 나온다. */
       why: [
         t(E, "zip(t, range(n)) pairs each tier with its guest number. Tuples compare front to back, so tier decides first and the guest number breaks ties — the two rules land in one sort.",
-            "zip(t, range(n)) 은 티어와 손님 번호를 짝지어요. 튜플은 앞에서부터 비교하니 티어가 먼저 정하고, 같으면 번호가 작은 사람이 앞 — 규칙 두 개가 정렬 한 번에 들어가요."),
+            "zip(t, range(n)) 은 티어와 손님 번호를 짝지어요.\n튜플은 앞에서부터 견주니까 티어가 먼저 순서를 정해요.\n티어가 같으면 번호가 작은 사람이 앞에 서요.\n규칙 두 개가 정렬 한 번에 다 들어가요."),
         t(E, "order[:m] is 'the first m in line'. Slicing does the counting for us — no need to track how many gifts are left.",
-            "order[:m] 이 '줄 앞에서 m 명' 이에요. 슬라이싱이 세는 일을 대신해 줘서, 선물이 몇 개 남았는지 따로 셀 필요가 없어요."),
+            "order[:m] 이 바로 '줄 앞에서 m 명' 이에요.\n앞에서 잘라 오는 것만으로 세는 일이 끝나니까\n선물이 몇 개 남았는지 따로 세지 않아도 돼요."),
         t(E, "x[i] = 1 writes the mark at the guest's own spot, so printing x gives guest order for free.",
             "x[i] = 1 은 그 손님의 원래 자리에 표시를 남겨요. 그래서 x 를 그냥 출력하면 손님 번호 순이 저절로 맞아요."),
       ],
@@ -61,7 +61,7 @@ export function getGiftsSections(E) {
         t(E, "for _, i in order[:m] — the _ means 'we do not need the tier here, only the guest number'.",
             "for _, i in order[:m] 에서 _ 는 '여기선 티어는 안 쓰고 손님 번호만 쓴다' 는 뜻이에요."),
         t(E, "print(*x) prints the list separated by spaces — same as ' '.join(map(str, x)).",
-            "print(*x) 는 리스트를 공백으로 띄워 출력해요 — ' '.join(map(str, x)) 와 같아요."),
+            "print(*x) 는 리스트를 빈칸으로 띄워서 출력해요.\n' '.join(map(str, x)) 와 결과가 같아요."),
       ],
     },
   ];

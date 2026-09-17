@@ -85,7 +85,7 @@ export function getSimpleGameSections(E) {
         t(E, "So the answer changes most on the pairs with the biggest a+b. Swapping two neighbours in the row leaves everyone else's turn untouched, so it is enough to compare neighbours — and when no neighbour is worth swapping, the row is in a+b order.",
             "그래서 a+b 가 큰 쌍일수록 답이 많이 달라져요. 줄에서 이웃 둘만 바꾸면 나머지 쌍들의 차례는 그대로라, 이웃끼리만 견주면 돼요. 바꿀 이웃이 하나도 없을 때가 곧 a+b 큰 순서로 선 줄이에요."),
         t(E, "Then walk the row from the front: turn 0, 2, 4 … is Evirir so add a; turn 1, 3, 5 … is Rhae so subtract b. The running total is the final X−Y.",
-            "그다음엔 줄을 앞에서부터 훑어요. 0, 2, 4 … 번째는 Evirir 차례라 a 를 더하고, 1, 3, 5 … 번째는 Rhae 차례라 b 를 빼요. 누적 합이 최종 X−Y 예요."),
+            "그다음엔 줄을 앞에서부터 훑어요. 0, 2, 4 … 번째는 Evirir 차례라 a 를 더하고, 1, 3, 5 … 번째는 Rhae 차례라 b 를 빼요. 그렇게 쌓아 온 값이 마지막 X−Y 예요."),
       ],
       pyOnly: [
         t(E, "Putting the sum first means a plain items.sort(reverse=True) already lines them up by the sum.",
@@ -97,7 +97,7 @@ export function getSimpleGameSections(E) {
         t(E, "Use long long — a_i, b_i reach 1e9 and n reaches 1e4, so the sum can exceed a 32-bit int.",
             "long long 을 써요 — a_i, b_i 가 1e9, n 이 1e4 까지라 합이 32비트 int 를 넘을 수 있어요."),
         t(E, "The comparator returns x.first+x.second > y.first+y.second to sort by a+b descending.",
-            "비교 함수가 x.first+x.second > y.first+y.second 를 반환해 a+b 내림차순으로 정렬해요."),
+            "비교 함수가 x.first+x.second > y.first+y.second 를 돌려주니까 a+b 가 큰 것부터 줄이 서요."),
       ],
     },
   ];
@@ -138,7 +138,7 @@ export function getSimpleGameWalk(E, lang = "py") {
           "줄을 위에서부터 훑어요.\n0, 2, 4 … 번째는 Evirir 차례라 a 를 더하고,\n1, 3, 5 … 번째는 Rhae 차례라 b 를 빼요.") },
         { hi: [30, 32], bubble: t(E,
           "That running total is the final X−Y — one line-up, one pass.",
-          "그 누적 합이 최종 X−Y 예요.\n줄 세우기 한 번 + 훑기 한 번이면 끝이에요.") },
+          "그렇게 쌓아 온 값이 마지막 X−Y 예요.\n줄 세우기 한 번 + 훑기 한 번이면 끝이에요.") },
       ],
     };
   }
@@ -158,7 +158,7 @@ export function getSimpleGameWalk(E, lang = "py") {
         "줄을 위에서부터 훑어요. turn 이 몇 번째 차례인지 세요.\n0, 2, 4 … 번째는 Evirir 차례라 a 를 더하고,\n1, 3, 5 … 번째는 Rhae 차례라 b 를 빼요.") },
       { hi: [19, 19], bubble: t(E,
         "That running total is the final X−Y — one line-up, one pass.",
-        "그 누적 합이 최종 X−Y 예요.\n줄 세우기 한 번 + 훑기 한 번이면 끝이에요.") },
+        "그렇게 쌓아 온 값이 마지막 X−Y 예요.\n줄 세우기 한 번 + 훑기 한 번이면 끝이에요.") },
     ],
   };
 }
@@ -203,7 +203,7 @@ function highlightCode(lines, lang) {
 
 export function downloadSimpleGamePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "SimpleGame — Full Study Guide", "SimpleGame — 종합 풀이 노트");
@@ -226,7 +226,7 @@ export function downloadSimpleGamePDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

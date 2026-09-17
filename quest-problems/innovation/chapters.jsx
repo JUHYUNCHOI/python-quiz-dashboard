@@ -47,7 +47,7 @@ function InnovationSample({ E }) {
 
       <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
         {t(E, <>Best pick here: cards <b>②⑤④</b> → a+b of all three = 13+18+4 = <b>35</b>, plus the biggest c+d (card ④) = <b>17</b> → <b style={{ color: "#15803d" }}>52</b>.</>,
-             <>여기 최선의 선택: <b>②⑤④</b> 카드 → 세 장의 a+b = 13+18+4 = <b>35</b>, 거기에 가장 큰 c+d (④ 카드) = <b>17</b> → <b style={{ color: "#15803d" }}>52</b>.</>)}
+             <>여기서 제일 좋은 선택은 <b>②⑤④</b> 예요. 세 장의 a+b = 13+18+4 = <b>35</b>, 거기에 가장 큰 c+d (④ 카드) = <b>17</b> 을 더해 <b style={{ color: "#15803d" }}>52</b> 예요.</>)}
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
@@ -74,12 +74,12 @@ function InnovationRecap({ E }) {
         🧭 {t(E, "The whole idea, at a glance", "핵심 한눈에")}
       </div>
       <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 14, wordBreak: "keep-all" }}>
-        {t(E, "Don't be fooled by the picture — c·d only counts for ONE card.", "그림에 속지 말 것 — c·d 는 딱 한 장만 세요.")}
+        {t(E, "Don't be fooled by the picture — c·d only counts for ONE card.", "그림에 속지 마세요 — c·d 는 딱 한 장만 세요.")}
       </div>
       <div style={{ maxWidth: 480, margin: "0 auto", display: "grid", gap: 10 }}>
         <Row q={t(E, "Every chosen card contributes a+b", "고른 카드마다 a+b 는 다 더해요")} res="Σ(a+b)" col="#2563eb" bg="#eff6ff" />
         <Row q={t(E, "Only the last (rightmost) card also shows c+d", "마지막(맨 오른쪽) 카드만 c+d 도 보여요")} res="+ max(c+d)" col="#d97706" bg="#fffbeb" />
-        <Row q={t(E, "So: fix 'the special one' by sorting on c+d", "그래서: c+d 로 정렬해 '특별한 한 장' 고정")} res={t(E, "sort ↑", "정렬 ↑")} col="#059669" bg="#ecfdf5" />
+        <Row q={t(E, "Sort by c+d, so each card can be tried as the last one", "c+d 로 정렬하면 카드마다 마지막 장으로 세워 볼 수 있어요")} res={t(E, "sort ↑", "정렬 ↑")} col="#059669" bg="#ecfdf5" />
         <Row q={t(E, "Keep the top m−1 of a+b in a min-heap", "나머지는 a+b 상위 m−1개를 min-heap 으로")} res={t(E, "top m−1", "상위 m−1")} col="#7c3aed" bg="#f5f3ff" />
       </div>
       <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
@@ -101,7 +101,7 @@ export function makeInnovationCh1(E) {
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
         "You have n cards, each with four numbers a, b, c, d. Choose m of them and lay them left-to-right, overlapping. Every card then shows only a and b — except the last card, which shows all four. Maximize the total visible sum.",
-        "카드가 n장 있고, 각 카드엔 네 숫자 a, b, c, d 가 있어요. 그중 m장을 골라 왼쪽부터 겹쳐 놓아요. 그러면 각 카드는 a·b만 보이고, 맨 마지막 카드만 네 개 다 보여요. 보이는 수의 합을 최대로 만들어요."),
+        "카드를 겹쳐 놓았을 때 보이는 수의 합을 크게 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -117,7 +117,7 @@ export function makeInnovationCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Pick m cards and overlap them so the total of the visible numbers is as large as possible.",
-                "m장을 골라 겹쳐 놓아 보이는 숫자들의 합을 가능한 크게 만들기.")}
+                "m장을 골라 겹쳐 놓고, 보이는 숫자들의 합을 가장 크게 만들어요.")}
             </div>
           </div>
 
@@ -187,7 +187,7 @@ export function makeInnovationCh1(E) {
       label: t(E, "What's visible", "무엇이 보이나"),
       narr: t(E,
         "Overlap the cards and look: front cards show only a·b, the last shows all four. So the total is Σ(a+b) plus just one c+d.",
-        "카드를 겹쳐 놓고 봐요: 앞 카드는 a·b만, 마지막 카드만 네 개 다. 그래서 합은 Σ(a+b) 에 c+d 한 개만 더한 값이에요."),
+        "겹쳐 놓으면 마지막 카드만 네 숫자가 다 보여요."),
       content: (<InnovationSim E={E} />),
     },
 
@@ -214,7 +214,7 @@ export function makeInnovationCh2(E, lang = "py") {
       label: t(E, "Code", "코드"),
       narr: t(E,
         "Read the solution top to bottom — each bubble sits on the lines it explains: store (c+d, a+b) and sort, keep the top m−1 of a+b, and try each card as the special last one.",
-        "코드를 위에서 아래로 읽어봐요 — 말풍선이 설명하는 줄에 붙어 있어요: (c+d, a+b) 로 저장·정렬 → a+b 상위 m−1개 유지 → 각 카드를 특별한 마지막 장으로 시도."),
+        "말풍선을 따라 코드를 위에서 아래로 읽어 봐요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
       ),

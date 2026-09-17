@@ -130,7 +130,7 @@ export function FocusGroupSim({ E }) {
       }}>
         {phase === 0 && (
           <span style={{ color: C.dim }}>
-            {t(E, "Press ▶ to run the focus group.", "▶ 를 눌러 포커스 그룹 진행.")}
+            {t(E, "Press ▶ to run the focus group.", "▶ 를 눌러 포커스 그룹을 열어 봐요.")}
           </span>
         )}
         {phase === 1 && majority != null && (
@@ -140,7 +140,7 @@ export function FocusGroupSim({ E }) {
         )}
         {phase === 1 && majority == null && (
           <span style={{ color: "#7f1d1d", fontWeight: 700 }}>
-            {t(E, "No 2 cows agree → nothing happens.", "2 명이 동의 안 함 → 변화 없음.")}
+            {t(E, "No 2 cows agree → nothing happens.", "같은 종류가 2 마리가 안 돼서 아무도 안 바뀌어요.")}
           </span>
         )}
         {phase === 2 && majority != null && (
@@ -258,7 +258,7 @@ export function MajoritySim({ E }) {
               </div>
             </div>
           ) : (
-            <div style={{ color: "#7f1d1d", fontWeight: 600 }}>{t(E, "❌ No close pair → output -1", "❌ 가까운 쌍 없음 → -1 출력")}</div>
+            <div style={{ color: "#7f1d1d", fontWeight: 600 }}>{t(E, "❌ No close pair → output -1", "❌ 가까운 짝이 없어서 -1 을 출력해요")}</div>
           )
         ) : (
           <div>
@@ -302,7 +302,7 @@ export function MajorityRunner({ E }) {
   const run = () => {
     const arr = input.trim().split(/\s+/).map(Number);
     if (arr.some(isNaN) || arr.length < 2) {
-      setResult({ error: t(E, "Invalid: enter integers, at least 2.", "잘못된 입력: 정수 2개 이상.") });
+      setResult({ error: t(E, "Invalid: enter integers, at least 2.", "정수를 2 개 이상 넣어 주세요.") });
       return;
     }
     setRunning(true); setResult(null); setLiveI(-1); setLiveFound([]);
@@ -515,17 +515,17 @@ export function getMajoritySections(E) {
       py: MJ_INPUT_PY, cpp: MJ_INPUT_CPP,
       why: [
         t(E, "First line: T (number of test cases). For each case: N then N preferences.",
-            "첫 줄: T (테스트 수). 각 케이스: N 줄과 선호도 N개."),
+            "첫 줄에 테스트 수 T 가 있어요. 케이스마다 N 한 줄과 선호도 N 개가 와요."),
         t(E, "Reading everything via sys.stdin.read().split() avoids per-line parsing overhead and handles values that are space-OR-newline separated.",
-            "sys.stdin.read().split() 로 한 번에 읽으면 줄 단위 파싱 오버헤드 없고 공백/줄바꿈 다 처리."),
+            "sys.stdin.read().split() 로 한 번에 읽으면 줄마다 쪼개는 일이 없고, 공백과 줄바꿈을 다 알아서 처리해요."),
       ],
       pyOnly: [
         t(E, "Index pointer `idx` walks through the token list one at a time.",
-            "포인터 `idx` 가 토큰 리스트를 하나씩 진행."),
+            "`idx` 가 자리를 가리키면서 값을 하나씩 꺼내요."),
       ],
       cppOnly: [
         t(E, "vector<int> a(N) sized exactly to N keeps memory tight.",
-            "vector<int> a(N)로 메모리 정확하게."),
+            "vector<int> a(N) 으로 딱 N 칸만 잡아요."),
       ],
     },
     {
@@ -534,17 +534,17 @@ export function getMajoritySections(E) {
       py: MJ_SCAN_PY, cpp: MJ_SCAN_CPP,
       why: [
         t(E, "Editorial fact: a type x is achievable iff some pair of cows at distance 1 OR distance 2 both like x.",
-            "Editorial 핵심: 어떤 타입 x 가 가능 ↔ 거리 1 또는 거리 2 의 두 소가 둘 다 x 를 좋아함."),
+            "어떤 종류 x 가 전체로 퍼질 수 있는 건, 거리 1 이나 2 로 떨어진 두 소가 둘 다 x 를 좋아할 때예요."),
         t(E, "Why distance 2? Cows at i and i+2 with cow i+1 between → focus group of 3 → cow i+1 switches to that type.",
-            "왜 거리 2? i 와 i+2 두 소 사이에 i+1 → 3 명 포커스 그룹 → 가운데 소가 그 타입으로 바뀜."),
+            "거리 2 도 되는 이유는 i 와 i+2 사이에 i+1 이 끼어 있기 때문이에요. 이 셋으로 포커스 그룹을 열면 가운데 소가 그 종류로 바뀌어요."),
       ],
       pyOnly: [
         t(E, "set() automatically dedupes — adding the same value twice is harmless.",
-            "set()이 자동 중복 제거 — 같은 값 두 번 add 해도 괜찮음."),
+            "set() 은 같은 값을 두 번 넣어도 하나만 남겨요."),
       ],
       cppOnly: [
         t(E, "set<int> dedupes AND keeps sorted order — perfect for this output format.",
-            "set<int>이 중복 제거 + 정렬 유지 — 출력 형식에 딱 맞음."),
+            "set<int> 는 같은 값을 지우고 작은 것부터 정렬해 둬요. 출력 형식에 딱 맞아요."),
       ],
     },
     {
@@ -553,17 +553,17 @@ export function getMajoritySections(E) {
       py: MJ_OUT_PY, cpp: MJ_OUT_CPP,
       why: [
         t(E, "If no near-pair was found for this case, print -1.",
-            "이 케이스에서 가까운 쌍을 못 찾으면 -1 출력."),
+            "이 케이스에서 가까운 짝을 하나도 못 찾으면 -1 을 출력해요."),
         t(E, "Otherwise print the valid hay types in ascending order, separated by spaces (one line per case).",
-            "있으면 가능한 건초 종류를 오름차순으로 공백 구분 한 줄 (케이스마다 한 줄)."),
+            "찾았으면 가능한 건초 종류를 작은 것부터 공백으로 띄워 한 줄에 출력해요."),
       ],
       pyOnly: [
         t(E, "sorted(result) yields the values in order without mutating the set.",
-            "sorted(result)로 set 변경 없이 정렬 값 얻기."),
+            "sorted(result) 는 set 을 건드리지 않고 정렬된 값만 돌려줘요."),
       ],
       cppOnly: [
         t(E, "Range-for over set<int> already iterates in sorted order.",
-            "set<int>의 range-for은 이미 정렬 순서로 순회."),
+            "set<int> 를 range-for 로 돌면 이미 정렬된 차례로 나와요."),
       ],
     },
     {
@@ -572,7 +572,7 @@ export function getMajoritySections(E) {
       py: MJ_FULL_PY, cpp: MJ_FULL_CPP,
       why: [
         t(E, "Single O(N) pass — extremely efficient for the constraints.",
-            "단일 O(N) 패스 — 제약 조건에 매우 효율적."),
+            "배열을 한 번만 훑어서 O(N) 이라 이 문제 크기에 충분히 빨라요."),
       ],
     },
   ];
@@ -616,7 +616,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMajorityPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Majority Opinion — Full Study Guide", "🗳️ Majority Opinion — 종합 풀이 노트");
@@ -640,7 +640,7 @@ export function downloadMajorityPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO 2024 Jan Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

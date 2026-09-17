@@ -33,7 +33,7 @@ function CollatzSample({ E }) {
         <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>5 1</code> — {t(E, "n = 5 numbers, k = 1 repeat", "n = 5 (개수), k = 1 (반복 횟수)")}</div>
         <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2 3 4 5</code> — {t(E, "the list of numbers", "숫자 리스트")}</div>
         <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #6ee7b7" }}>
-          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>33</code>{t(E, " = the sum of the list after k passes.", " = 한 바퀴를 k번 돈 뒤 리스트의 합.")}
+          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>33</code>{t(E, " = the sum of the list after k passes.", " = 한 바퀴를 k번 돈 뒤 리스트의 합이에요.")}
         </div>
       </div>
 
@@ -46,7 +46,7 @@ function CollatzSample({ E }) {
       <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #6ee7b7", borderRadius: 10, padding: "10px 12px" }}>
         <div style={{ fontSize: 12, color: "#065f46", textAlign: "center", wordBreak: "keep-all", whiteSpace: "pre-line", lineHeight: 1.75 }}>
           {t(E, "One pass (k = 1): even /2, odd *3+1.\nSo what does [1 2 3 4 5] turn into, and why 33?\nThe next page walks it one number at a time.",
-                "한 바퀴(k = 1): 짝수 ÷2, 홀수 ×3+1.\n그러면 [1 2 3 4 5] 는 무엇이 되고, 왜 합이 33 일까요?\n다음 쪽에서 숫자 하나씩 따라가봐요.")}
+                "한 바퀴(k = 1) 는 짝수면 ÷2, 홀수면 ×3+1 이에요.\n그러면 [1 2 3 4 5] 는 무엇이 되고, 왜 합이 33 일까요?\n다음 쪽에서 숫자 하나씩 따라가봐요.")}
         </div>
       </div>
 
@@ -58,7 +58,7 @@ function CollatzSample({ E }) {
       <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #cbd5e1", borderRadius: 10, padding: "10px 12px" }}>
         <div style={{ fontSize: 11.5, fontWeight: 700, color: "#334155", marginBottom: 7, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
           {t(E, "The other official sample: 6 3 / 3 1 4 1 5 9 — three passes, not 'until it reaches 1'",
-                "다른 공식 샘플: 6 3 / 3 1 4 1 5 9 — 세 바퀴예요. '1이 될 때까지' 가 아니에요")}
+                "다른 공식 샘플: 6 3 / 3 1 4 1 5 9 — 세 바퀴예요. '1이 될 때까지' 가 아니에요.")}
         </div>
         <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.95, textAlign: "center", color: "#475569" }}>
           <div>[3 1 4 1 5 9]</div>
@@ -99,11 +99,11 @@ function CollatzRecap({ E }) {
         🧭 {t(E, "The whole plan", "전체 계획 한눈에")}
       </div>
       <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 14, wordBreak: "keep-all" }}>
-        {t(E, "No trick needed — just do exactly what's asked.", "특별한 트릭 필요 없어요 — 시키는 대로만 하면 돼요.")}
+        {t(E, "No trick needed — just do exactly what's asked.", "특별한 방법이 필요 없어요 — 시키는 대로만 하면 돼요.")}
       </div>
       <div style={{ maxWidth: 470, margin: "0 auto", display: "grid", gap: 10 }}>
-        <Row q={t(E, "For each number: even?", "숫자마다: 짝수면?")} res={t(E, "÷ 2", "÷ 2")} />
-        <Row q={t(E, "For each number: odd?", "숫자마다: 홀수면?")} res={t(E, "× 3 + 1", "× 3 + 1")} />
+        <Row q={t(E, "For each number: even?", "숫자가 짝수면?")} res={t(E, "÷ 2", "÷ 2")} />
+        <Row q={t(E, "For each number: odd?", "숫자가 홀수면?")} res={t(E, "× 3 + 1", "× 3 + 1")} />
         <Row q={t(E, "Do the whole pass ...", "이 한 바퀴를 ...")} res={t(E, "k times", "k번")} />
         <Row q={t(E, "Finally", "마지막에")} res={t(E, "sum", "합")} />
       </div>
@@ -115,7 +115,7 @@ function CollatzRecap({ E }) {
             돌려보면 9663 이 48번째에 27,114,424 로 최고점을 찍는다. 리스트 1000칸이
             전부 9663 이면 그 순간 합은 271억이다. */}
         {t(E, "n · k <= 10^6, so a plain simulation is fast enough. But the numbers get big: 9663 becomes 27,114,424 after 48 rounds, and 1000 of those add up to 27 billion.",
-             "n · k ≤ 10⁶ 라 그냥 시뮬로 충분히 빨라요.\n단 값이 꽤 커져요 — 9663 은 48번 만에 27,114,424 가 되고, 그런 수가 1000개면 합이 271억이에요.")}
+             "n · k ≤ 10⁶ 라 시키는 대로 해도 충분히 빨라요.\n단 값이 꽤 커져요 — 9663 은 48번 만에 27,114,424 가 되고, 그런 수가 1000개면 합이 271억이에요.")}
       </div>
       <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
         {t(E, "Now let's read the code that does exactly this →", "이제 이걸 그대로 하는 코드를 봐요 →")}
@@ -152,7 +152,7 @@ export function makeCollatzCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Apply the even/odd rule to every number, repeat the whole thing k times, then print the sum of the list.",
-                "모든 숫자에 짝/홀 규칙을 적용하고 그 전체를 k번 반복한 뒤, 리스트의 합을 출력.")}
+                "모든 숫자에 짝/홀 규칙을 적용하고, 그 한 바퀴를 k번 반복한 뒤 리스트의 합을 출력해요.")}
             </div>
           </div>
 
@@ -172,7 +172,7 @@ export function makeCollatzCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One pass: replace ", "한 바퀴: 각 ")}
+                  {t(E, "One pass: replace ", "한 바퀴에서는 각 ")}
                   <b>aᵢ</b>
                   {t(E, " with ", " 를 — ")}
                   <code style={{ background: "#eff6ff", padding: "1px 5px", borderRadius: 4 }}>aᵢ / 2</code>
@@ -186,7 +186,7 @@ export function makeCollatzCh1(E) {
                 <div>
                   {t(E, "Repeat the whole pass ", "이 한 바퀴 전체를 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "exactly k times", "정확히 k번")}</b>
-                  {t(E, " (not 'until it reaches 1' — always k passes).", " 반복 ('1이 될 때까지'가 아니라 — 무조건 k번).")}
+                  {t(E, " (not 'until it reaches 1' — always k passes).", " 반복해요 ('1이 될 때까지' 가 아니라 무조건 k번이에요).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
@@ -208,7 +208,7 @@ export function makeCollatzCh1(E) {
       label: t(E, "Sample I/O", "샘플 입출력"),
       narr: t(E,
         "A concrete example — one list, and the number we must print.",
-        "구체적인 예 하나 — 리스트 하나와, 우리가 출력해야 할 숫자."),
+        "예를 하나 보면서 무엇을 출력할지 확인해요."),
       content: (<CollatzSample E={E} />),
     },
 
@@ -257,7 +257,7 @@ export function makeCollatzCh1(E) {
       label: t(E, "Recap", "정리"),
       narr: t(E,
         "It all comes down to: do the pass k times, then sum.",
-        "결국 정리하면: 한 바퀴를 k번 돌리고, 합을 구해요."),
+        "결국 한 바퀴를 k번 돌리고 합을 구하면 돼요."),
       content: (<CollatzRecap E={E} />),
     },
   ];

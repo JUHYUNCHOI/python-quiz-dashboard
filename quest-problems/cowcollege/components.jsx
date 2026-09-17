@@ -39,12 +39,12 @@ export function TuitionSlider({ E, sorted = [1, 2, 3, 4, 5] }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8 }}>
-        {t(E, "Drag the slider — try each price!", "슬라이더를 움직여 — 가격을 시도해봐!")}
+        {t(E, "Drag the slider — try each price!", "슬라이더를 움직여서 가격을 하나씩 바꿔 봐요!")}
       </div>
       <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.6 }}>
         {t(E,
           "Sorted c = [1, 2, 3, 4, 5]. Green bars = cows paying (c[i] ≥ price). Gray = skip.",
-          "정렬된 c = [1, 2, 3, 4, 5]. 초록 막대 = 내는 소 (c[i] ≥ 가격). 회색 = 안 냄.")}
+          "정렬된 c = [1, 2, 3, 4, 5] 예요. 초록 막대는 내는 소(c[i] ≥ 가격), 회색은 안 내는 소예요.")}
       </div>
 
       {/* Bar chart with horizontal cut-line */}
@@ -229,19 +229,19 @@ export function getCowCollegeSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 은 Python 코드를 자동으로 옮긴 것이라 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, algorithm).",
-            "#include 는 배운 헤더들로 (iostream, vector, algorithm) 나눠 적어."),
+            "#include 는 배운 헤더(iostream, vector, algorithm)를 하나씩 나눠 적어요."),
         t(E, "tuition * cows can overflow int — long long with explicit cast keeps it safe.",
-            "tuition * cows 는 int 범위 초과 가능 — long long 캐스팅으로 안전하게."),
+            "tuition * cows 는 int 범위를 넘을 수 있어서 long long 으로 바꿔 줘요."),
       ],
     },
   ];
@@ -287,7 +287,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCowCollegePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "CowCollege — Full Study Guide", "CowCollege — 종합 풀이 노트");
@@ -310,7 +310,7 @@ export function downloadCowCollegePDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

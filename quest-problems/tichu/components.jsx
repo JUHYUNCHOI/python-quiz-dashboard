@@ -58,21 +58,21 @@ export function getTichuSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Duplicate values are useless in a run — sort and dedupe first (sorted(set(...))).",
-            "같은 값 중복은 run에 쓸모없어요 — 먼저 정렬 + 중복 제거 (sorted(set(...)))."),
+            "같은 값이 두 장 있어도 run 은 안 길어져요. 그래서 먼저 정렬하고 중복을 없애요."),
         t(E, "Two pointers: keep the widest window [left..right]\nwhose inner gap (value diff − count diff) ≤ k.",
-            "투포인터: 내부 빈칸(값차 − 개수차)이 k 이하인\n가장 넓은 창 [left..right] 을 유지해요."),
+            "투포인터로 훑어요.\n안쪽 빈칸(값차 − 개수차)이 k 를 넘지 않는\n가장 넓은 창 [left..right] 을 잡아요."),
         t(E, "Answer = window size + k (fill inner gaps, extend the ends), capped at n.",
-            "답 = 창 크기 + k (내부 빈칸 메꾸고 양끝 확장), 최대 n."),
+            "답은 창 크기 + k 예요. 안쪽 빈칸을 메꾸고 남는 와일드로 양끝을 늘리는데, n 을 넘을 순 없어요."),
       ],
       pyOnly: [
         t(E, "sorted(set(...)) sorts and dedupes in one line — perfect for the distinct values.",
-            "sorted(set(...)) 한 줄로 정렬 + 중복 제거 — 서로 다른 값 만들기에 딱."),
+            "sorted(set(...)) 한 줄이면 정렬과 중복 제거가 같이 돼요."),
       ],
       cppOnly: [
         t(E, "sort then erase(unique(...)) is the C++ way to get distinct sorted values.",
             "C++ 에선 sort 후 erase(unique(...)) 로 서로 다른 값을 정렬해 얻어요."),
         t(E, "Cᵢ can reach 10⁹ and N up to 10⁵ — use long long to be safe.",
-            "Cᵢ 는 10⁹, N 은 최대 10⁵ — 안전하게 long long."),
+            "Cᵢ 가 10⁹ 까지, N 이 10⁵ 까지라서 long long 을 써요."),
       ],
     },
   ];
@@ -97,7 +97,7 @@ export function getTichuWalk(E, lang = "py") {
         "win = 지금까지 찾은 최대 창 크기예요.\nleft 는 창의 왼쪽 끝이에요.") },
       { hi: [19, 24], bubble: t(E,
         "Slide right to the right.\nThe inner gap of window [left..right] is (value diff) − (count diff),\nthat is c[right]−c[left] − (right−left).\nIf it exceeds K we cannot fill it, so move left forward.\nKeep the biggest window size.",
-        "right 를 오른쪽으로 밀어요.\n창 [left..right] 의 내부 빈칸은 (값차) − (개수차) 예요.\n즉 c[right]−c[left] − (right−left) 예요.\nK 를 넘으면 못 메꾸니 left 를 오른쪽으로 옮겨요.\n제일 큰 창 크기를 계속 갱신해요.") },
+        "right 를 오른쪽으로 밀어요.\n창 [left..right] 의 내부 빈칸은 (값차) − (개수차) 예요.\n즉 c[right]−c[left] − (right−left) 예요.\nK 를 넘으면 못 메꾸니 left 를 오른쪽으로 옮겨요.\n제일 큰 창 크기를 계속 새로 적어요.") },
       { hi: [25, 25], bubble: t(E,
         "Answer = window + K (fill inner gaps, spend leftover wildcards on the ends), capped at N.",
         "답 = 창 + K (내부 빈칸 메꾸고, 남는 와일드는 양끝에). 최대 N.") },
@@ -159,7 +159,7 @@ function highlightCode(lines, lang) {
 
 export function downloadTichuPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혀 있어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Tichu — Full Study Guide", "Tichu — 종합 풀이 노트");
@@ -182,7 +182,7 @@ export function downloadTichuPDF(E, sections, lang = "py") {
   .hint { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #7f1d1d; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">MCC 2023 P4 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

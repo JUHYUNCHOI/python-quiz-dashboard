@@ -118,18 +118,18 @@ export function getXorStringSections(E) {
           "이웃한 두 글자(한 쌍)는 서로 간섭 없이 각자 변신해요. 그래서 정답 = s 의 모든 이웃 쌍에 대해 'k번 변신한 뒤의 beauty' 를 더한 값이에요."),
         t(E,
           "We never build the transformed string. After k steps its length is about 2^k — with k up to 10^18 that's astronomically huge. Instead a pair's beauty has a closed form: it depends only on the pair type (0,0 / 1,1 / 0,1) and on 2^k and (-1)^k. That is a Jacobsthal-like recurrence solved in one shot with modular powers.",
-          "변신한 문자열을 실제로 만들지 않아요. k번 뒤 길이는 약 2^k — k 가 10^18 까지라 상상도 못할 크기예요. 대신 한 쌍의 beauty 는 닫힌 공식으로 나와요: 쌍의 종류(0,0 / 1,1 / 0,1) 와 2^k, (-1)^k 에만 의존해요. Jacobsthal 형 점화식을 거듭제곱으로 한 번에 계산."),
+          "변신한 문자열을 실제로 만들지는 않아요. k번 뒤 길이가 약 2^k 인데, k 가 10^18 까지라 상상도 못할 크기예요. 대신 한 쌍의 beauty 는 공식으로 바로 나와요. 쌍의 종류(0,0 / 1,1 / 0,1) 와 2^k, (-1)^k 만 있으면 돼요. Jacobsthal 형 점화식을 거듭제곱으로 한 번에 계산해요."),
         t(E,
           "A pair sitting between positions i and i+1 belongs to every substring that starts at or before i and ends at or after i+1 — that's exactly i*(n-i) substrings. So we weight each pair by i*(n-i) and add. One pass over s: O(n).",
-          "위치 i 와 i+1 사이의 쌍은 'i 이하에서 시작하고 i+1 이상에서 끝나는' 모든 부분문자열에 들어가요 — 정확히 i*(n-i) 개예요. 그래서 각 쌍에 i*(n-i) 를 곱해 더해요. s 를 한 번만 훑어요: O(n)."),
+          "위치 i 와 i+1 사이의 쌍은 'i 번째나 그 앞에서 시작하고, i+1 번째나 그 뒤에서 끝나는' 부분문자열에 모두 들어가요. 그런 부분문자열이 정확히 i*(n-i) 개예요. 그래서 각 쌍에 i*(n-i) 를 곱해 더해요. s 를 한 번만 훑으니 O(n) 이에요."),
         t(E,
           "Be honest: this is a very hard (Div-1) problem. The code is short, but the closed form for the pair's beauty is the whole difficulty — that's why we lean on the formula instead of simulating.",
-          "솔직히 말하면 아주 어려운(Div-1) 문제예요. 코드는 짧지만, 쌍의 beauty 를 주는 닫힌 공식이 핵심 난관이에요 — 그래서 시뮬레이션 대신 공식에 기대요."),
+          "솔직히 아주 어려운(Div-1) 문제예요. 코드는 짧지만 쌍의 beauty 를 주는 공식을 찾아내는 게 제일 어려워요. 그래서 하나씩 따라 해 보는 대신 공식에 기대요."),
       ],
       pyOnly: [
         t(E,
           "pow(3, MOD-2, MOD) is Fermat's little theorem: the modular inverse of 3, so we can 'divide by 3' under the modulus.",
-          "pow(3, MOD-2, MOD) 는 페르마 소정리로 구한 3 의 모듈러 역원 — 나눗셈 '÷3' 을 모듈러 안에서 할 수 있어요."),
+          "pow(3, MOD-2, MOD) 는 페르마 소정리로 구한 3 의 모듈러 역원이에요. 이걸로 '÷3' 을 모듈러 안에서 할 수 있어요."),
         t(E,
           "pow(2, k, MOD) computes 2^k mod p fast even when k is 10^18.",
           "pow(2, k, MOD) 는 k 가 10^18 이어도 2^k mod p 를 빠르게 계산해요."),
@@ -251,7 +251,7 @@ export function TransformSim({ E }) {
         <div style={{ fontSize: 12, color: "#1e3a8a", lineHeight: 1.5 }}>
           {t(E,
             "\"Transform\" inserts (a XOR b) between every pair of neighbors. Press it and watch the string grow, and count beauty = equal-adjacent pairs (the green =).",
-            "\"변신\"은 이웃한 두 글자 사이에 (a XOR b) 를 끼워 넣어요. 눌러서 문자열이 커지는 걸 보고, beauty = 이웃이 같은 쌍의 수(초록 =)를 세어봐요.")}
+            "\"변신\"은 이웃한 두 글자 사이에 (a XOR b) 를 끼워 넣어요. 눌러서 문자열이 커지는 걸 보고, 이웃이 같은 쌍(초록 =)이 몇 개인지 세어 봐요.")}
         </div>
       </div>
 
@@ -288,7 +288,7 @@ export function TransformSim({ E }) {
           {t(E, "⚡ Transform once", "⚡ 한 번 변신")}
         </button>
         <button onClick={() => setSteps(0)} style={btn(false, false)}>
-          {t(E, "Reset", "초기화")}
+          {t(E, "Reset", "처음부터")}
         </button>
       </div>
 
@@ -296,14 +296,14 @@ export function TransformSim({ E }) {
         <div style={{ fontSize: 12, color: "#b45309", textAlign: "center", marginBottom: 8, ...KA }}>
           {t(E,
             "Stopped at 4 transforms — see how fast it grows? The real k can be 10^18, so the string is impossibly long.",
-            "4번에서 멈췄어요 — 얼마나 빨리 커지는지 보이죠? 실제 k 는 10^18 까지라 문자열이 도저히 만들 수 없을 만큼 길어져요.")}
+            "4번에서 멈췄어요. 얼마나 빨리 커지는지 보이죠? 실제 k 는 10^18 까지라 문자열이 도저히 만들 수 없을 만큼 길어져요.")}
         </div>
       )}
 
       <div style={{ background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
         {t(E,
           "The string roughly doubles each transform (length 2m-1), so it explodes as 2^k — we can never build it for big k. The way out: each ORIGINAL adjacent pair (00, 11, or 01) transforms on its own, and its beauty after k steps follows a fixed formula. Then a pair between positions i and i+1 counts inside i*(n-i) substrings — weight it and add.",
-          "문자열은 변신할 때마다 대략 두 배(길이 2m-1)라 2^k 로 폭발해요 — 큰 k 에선 절대 만들 수 없어요. 탈출구: 원래의 각 이웃 쌍(00, 11, 01)은 따로따로 변신하고, k번 뒤 beauty 는 고정된 공식을 따라요. 그리고 위치 i, i+1 사이 쌍은 i*(n-i) 개의 부분문자열에 들어가니 그만큼 가중치를 곱해 더해요.")}
+          "문자열은 변신할 때마다 대략 두 배(길이 2m-1)가 돼요. 그래서 2^k 로 커져서 k 가 크면 아예 만들 수 없어요. 빠져나갈 길은 이거예요. 원래의 이웃 쌍(00, 11, 01)은 따로따로 변신하고, k번 뒤 beauty 는 정해진 공식을 따라요. 그리고 위치 i, i+1 사이 쌍은 부분문자열 i*(n-i) 개에 들어가니 그만큼 곱해서 더해요.")}
       </div>
     </div>
   );

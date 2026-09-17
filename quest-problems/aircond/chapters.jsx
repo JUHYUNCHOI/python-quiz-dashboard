@@ -11,7 +11,7 @@ export function makeAirCondCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N cows, each in a stall range [s, t] needing at least some cooling power c.\nThere are M ≤ 10 AC units; each AC covers a stall range with some cooling power and a fixed cost. ACs stack — overlapping ACs add their power.\nPick a subset of ACs whose stacked power meets every cow's need, with minimum total cost.",
-        "FJ에게 N마리 소가 있어요. 각 소는 축사 범위 [s, t] 에 살고, 최소 c 의 냉방력이 필요해요.\n에어컨은 M ≤ 10 개 있어요. 각 에어컨은 덮는 축사 범위, 냉방력, 비용이 정해져 있어요. 같은 칸을 덮는 에어컨은 냉방력이 서로 더해져요.\n모든 소의 요구를 만족시키는 에어컨 조합 중 비용이 가장 적은 것을 찾아요."),
+        "모든 소가 시원해지게 하면서 에어컨을 가장 싸게 골라요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeAirCondCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum total cost of an AC subset that satisfies every cow.",
-                "모든 소의 냉방 요구를 만족시키는 에어컨 조합 중 최소 총 비용을 출력.")}
+                "모든 소가 바라는 냉방력을 채우는 에어컨 조합 중에서 가장 싼 비용을 출력해요.")}
             </div>
           </div>
 
@@ -63,7 +63,7 @@ export function makeAirCondCh1(E) {
                 <div>
                   <b style={{ color: "#0891b2" }}>{t(E, "ACs stack additively", "에어컨은 효과가 더해져요")}</b>
                   {t(E, " — at any stall, the cooling is the sum of powers of all chosen ACs covering that stall.",
-                        " — 한 축사의 냉방력은 그 축사를 덮는 선택된 에어컨들의 파워 합이에요.")}
+                        " — 한 축사의 냉방력은 그 축사를 덮는 에어컨들의 냉방력을 다 더한 값이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -72,7 +72,7 @@ export function makeAirCondCh1(E) {
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum total cost", "최소 총 비용")}</b>
                   {t(E, " of an AC subset that satisfies every cow.",
-                        "을 출력해요. 모든 소의 요구를 만족시키는 에어컨 조합 중 가장 싼 것.")}
+                        "을 출력해요. 모든 소의 요구를 채우는 에어컨 조합 중 가장 싼 것이에요.")}
                 </div>
               </div>
             </div>
@@ -83,7 +83,7 @@ export function makeAirCondCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If M = 10, how many subsets do we need to check in the worst case?", "M = 10이면, 최악의 경우 몇 개의 부분집합을 확인해야 할까?"),
+        "If M = 10, how many subsets do we need to check in the worst case?", "M = 10 이면 부분집합을 몇 개나 확인해야 할까요?"),
       question: t(E,
         "M = 10 air conditioners. How many subsets to check?",
         "M = 10개의 에어컨. 확인할 부분집합 수는?"),
@@ -95,14 +95,14 @@ export function makeAirCondCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! 2^10 = 1024. Each AC is either included or not, giving 2^M subsets. This is very manageable!",
-        "맞아! 2^10 = 1024. 각 에어컨을 포함하거나 안 하거나, 2^M개의 부분집합이에요. 충분히 처리 가능해요!"),
+        "맞아요! 에어컨마다 켜거나 끄거나 두 가지라서 2^10 = 1024 가지예요. 이 정도는 전부 확인해도 괜찮아요."),
     },
     // 1-3: Sim — toggle AC subsets, see stall coverage
     {
       type: "reveal",
       narr: t(E,
         "Same scenario as the next question — toggle AC1 / AC2 and watch the bars stack on each stall. The dashed red line is the cow's need (3). All cells must clear that line.",
-        "다음 문제와 같은 상황이야 — AC1, AC2를 켜고 끄면서 각 축사의 막대가 어떻게 쌓이는지 봐. 빨간 점선이 소가 필요한 양 (3). 모든 칸이 그 선을 넘어야 OK."),
+        "AC1, AC2 를 켜고 끄면서 축사마다 막대가 얼마나 쌓이는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{
@@ -112,7 +112,7 @@ export function makeAirCondCh1(E) {
             🔍 <b>{t(E, "Scenario", "상황")}:</b>{" "}
             {t(E,
               "1 cow in stalls 1-5 needs cooling ≥ 3. AC1 covers stalls 1-5 with power 3, cost 10. AC2 covers stalls 1-3 with power 5, cost 20.",
-              "축사 1-5에 소 1마리, 냉방 ≥ 3 필요. AC1: 범위 1-5, 파워 3, 비용 10. AC2: 범위 1-3, 파워 5, 비용 20.")}
+              "축사 1-5 에 소 1 마리가 있고 냉방력이 3 이상 필요해요. AC1 은 범위 1-5, 냉방력 3, 비용 10 이에요. AC2 는 범위 1-3, 냉방력 5, 비용 20 이에요.")}
           </div>
           <ACSubsetSim E={E} />
         </div>
@@ -123,13 +123,13 @@ export function makeAirCondCh1(E) {
       type: "input",
       narr: t(E,
         "Same numbers as the sim above. Click each subset and read the cost — what's the cheapest one where every stall ✓?",
-        "위 시뮬과 같은 숫자야. 각 부분집합을 눌러보고 비용을 봐 — 모든 축사가 ✓인 것 중 가장 싼 비용은?"),
+        "모든 축사가 ✓ 인 것 중에서 가장 싼 비용은 얼마일까요?"),
       question: t(E,
         "1 cow needs cooling 3 in stalls 1-5. AC1: range 1-5, power 3, cost 10. AC2: range 1-3, power 5, cost 20. Min cost?",
-        "소 1마리 냉방 3 필요 (축사 1-5). AC1: 범위 1-5, 파워 3, 비용 10. AC2: 범위 1-3, 파워 5, 비용 20. 최소 비용?"),
+        "소 1 마리가 축사 1-5 에서 냉방력 3 이 필요해요. AC1 은 범위 1-5, 냉방력 3, 비용 10. AC2 는 범위 1-3, 냉방력 5, 비용 20. 가장 싼 비용은?"),
       hint: t(E,
         "AC1 alone covers all stalls 1-5 with power 3 — exactly meets the need at cost 10. AC2 alone misses stalls 4-5.",
-        "AC1만 켜도 축사 1-5에 파워 3 — 딱 필요한 만큼, 비용 10. AC2만 켜면 축사 4-5는 비어."),
+        "AC1 만 켜도 축사 1-5 에 냉방력 3 이 들어와 딱 필요한 만큼이고, 비용은 10 이에요. AC2 만 켜면 축사 4-5 가 비어서 안 돼요."),
       answer: 10,
     },
   ];
@@ -146,7 +146,7 @@ export function makeAirCondCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "M ≤ 10, so only 2^M ≤ 1024 AC subsets exist — try every subset, build cooling per stall, check every cow, track the cheapest valid one. Sections build it one piece at a time.",
-        "M ≤ 10 이라 가능한 에어컨 부분집합은 2^M ≤ 1024 개뿐 — 전부 시도하면서 축사별 냉방을 만들고 모든 소를 확인, 가장 싼 유효 조합 기록. 아래 섹션이 한 단락씩 쌓아요."),
+        "M ≤ 10 이라 조합이 1024 가지뿐이니 전부 해 봐도 돼요."),
       sections: getAirCondSections(E),
     },
   ];

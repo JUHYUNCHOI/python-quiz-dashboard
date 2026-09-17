@@ -122,21 +122,21 @@ export function getFeedCowsSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 있어요."),
         t(E, "There are T test cases. For each, print TWO lines: the patch count, then a string showing where each patch goes ('.', 'G', or 'H').",
-            "테스트 케이스가 T개. 각각 두 줄 출력: 패치 개수, 그리고 각 위치의 패치를 보여주는 문자열 ('.', 'G', 'H')."),
+            "테스트가 T 개예요. 테스트마다 두 줄을 출력해요.\n첫 줄은 패치 개수, 둘째 줄은 자리마다 무엇을 놓았는지예요 ('.', 'G', 'H')."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Compare s[i] with the chars 'G' and 'H' directly.",
-            "s[i]를 문자 'G', 'H'와 직접 비교."),
+            "s[i] 를 글자 'G', 'H' 와 바로 견줘요."),
         t(E, "Track gCover and hCover separately — the index up to which each breed is already satisfied.",
-            "gCover, hCover를 따로 추적 — 각 품종이 이미 만족된 인덱스까지."),
+            "gCover 와 hCover 를 따로 두어, 품종마다 어디까지 먹였는지 기억해요."),
         t(E, "Read T first, then loop T times reading N, K and the breed string.",
-            "T를 먼저 읽고, N·K·품종 문자열을 T번 반복해서 읽어."),
+            "T 를 먼저 읽고, N·K·품종 문자열을 T 번 되풀이해 읽어요."),
       ],
     },
   ];
@@ -192,7 +192,7 @@ export function FeedCowsNumberLineViz({ E }) {
       <div style={{ fontSize: 11, color: C.dim, marginBottom: 10 }}>
         {t(E,
           "Cows: G H G H G   ·   K = 1   ·   Example: place ONE G patch at position 1 → it reaches [0..2].",
-          "소: G H G H G   ·   K = 1   ·   예: G 패치 한 개를 위치 1 에 놓으면 → [0..2] 까지 도달.")}
+          "소는 G H G H G, K = 1 이에요. G 패치를 위치 1 에 놓으면 [0..2] 까지 닿아요.")}
       </div>
 
       <div style={{ overflowX: "auto", paddingBottom: 4 }}>

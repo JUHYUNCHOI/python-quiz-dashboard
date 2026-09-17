@@ -119,7 +119,7 @@ function RallyAuditSim({ E }) {
   return (
     <div style={{ background: "#f0fdf4", border: "1.5px dashed #10b981", borderRadius: 12, padding: 12, marginTop: 10 }}>
       <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
-        🔬 {t(E, "Deep audit — step through the rally string", "딥 오딧 — 랠리 문자열 한 칸씩 따라가기")}
+        🔬 {t(E, "Deep audit — step through the rally string", "자세히 보기 — 랠리 문자열을 한 칸씩 따라가요")}
       </div>
 
       {/* Preset chooser */}
@@ -137,7 +137,7 @@ function RallyAuditSim({ E }) {
       {/* Rally tape */}
       {ralliesWindow()}
       <div style={{ fontSize: 11, color: C.dim, marginTop: 4, textAlign: "center" }}>
-        {t(E, "char ", "문자 ")}<b>{cur.i}</b>{t(E, " of ", " / ")}<b>{scores.length}</b>
+        {t(E, "char ", "글자 ")}<b>{cur.i}</b>{t(E, " of ", " / ")}<b>{scores.length}</b>
         {cur.ch && <> · {t(E, "just read: ", "방금 읽음: ")}<b style={{ color: cur.ch === "A" ? "#059669" : "#db2777" }}>{cur.ch}</b></>}
       </div>
 
@@ -182,7 +182,7 @@ function RallyAuditSim({ E }) {
 
       {/* Controls */}
       <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap" }}>
-        {btn(t(E, "⏮ Reset", "⏮ 초기화"), reset, false, safeStep === 0)}
+        {btn(t(E, "⏮ Reset", "⏮ 처음으로"), reset, false, safeStep === 0)}
         {btn(t(E, "◀ Back", "◀ 뒤로"), back, false, safeStep === 0)}
         {btn(t(E, "Step ▶", "한 칸 ▶"), fwd, true, safeStep === trace.length - 1)}
         {btn(t(E, "⏭ Next event", "⏭ 다음 이벤트"), jumpEvent, false, safeStep === trace.length - 1)}
@@ -234,7 +234,7 @@ export function makeBadmintonCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two players A and B play badminton: best-of-3 games, each game won by the first to 21 points. You're given a string of A/B characters in order — each character is who won that rally.\nPrint each game's final score and the overall match winner.",
-        "두 선수 A 와 B 가 배드민턴: 3전 2선승제, 각 게임은 21 점 먼저 따면 승. 랠리 순서대로 A/B 가 적힌 문자열이 주어져요 — 각 문자는 그 랠리의 승자.\n각 게임의 최종 점수와 매치의 최종 승자를 출력해요."),
+        "랠리 기록을 보고 게임 점수와 매치 승자를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -264,7 +264,7 @@ export function makeBadmintonCh1(E) {
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#059669" }}>{t(E, "Two players A and B play badminton", "두 선수 A 와 B 가 배드민턴")}</b>
-                  {t(E, " — best-of-3 games; each game won by the first to ", " — 3전 2선승제; 각 게임은 ")}
+                  {t(E, " — best-of-3 games; each game won by the first to ", " — 3전 2선승제예요. 각 게임은 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "21 points", "21 점")}</b>
                   {t(E, " (no win-by-2).", " 먼저 (2 점 차 규칙 없음).")}
                 </div>
@@ -293,30 +293,30 @@ export function makeBadmintonCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In best-of-3, one player needs to win 2 games to win the match.\nIf Player A wins the first two games, is a third game played?", "3전 2선승제에서 한 선수가 매치를 이기려면 2게임을 이겨야 해요. A가 처음 두 게임을 이기면 세 번째 게임을 하나?"),
+        "In best-of-3, one player needs to win 2 games to win the match.\nIf Player A wins the first two games, is a third game played?", "3전 2선승제는 2게임을 먼저 이기면 끝나요."),
       question: t(E,
         "A wins first 2 games. Is a 3rd game played?",
-        "A가 처음 2게임을 이김. 3번째 게임을 하나?"),
+        "A 가 처음 2게임을 이겼어요. 3번째 게임을 할까요?"),
       options: [
-        t(E, "No, A already won the match", "아니, A가 이미 매치를 이겼어"),
-        t(E, "Yes, all 3 must be played", "응, 3게임 모두 해야 해"),
+        t(E, "No, A already won the match", "아니요, A 가 이미 매치를 이겼어요"),
+        t(E, "Yes, all 3 must be played", "네, 3게임을 모두 해야 해요"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! Once a player reaches 2 wins, the match is over immediately.",
-        "맞아! 한 선수가 2승에 도달하면 매치는 즉시 끝나."),
+        "맞아요! 한 선수가 2승을 하면 매치는 바로 끝나요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "If 42 consecutive A's are scored ('AAA...A'), A wins 21-0 twice.\nHow many games are played?", "42개의 연속 A가 입력되면 ('AAA...A'), A가 21-0으로 두 번 이겨. 총 몇 게임이 진행될까요?"),
+        "If 42 consecutive A's are scored ('AAA...A'), A wins 21-0 twice.\nHow many games are played?", "A 가 42번 연속으로 이기면 게임을 몇 번 할까요?"),
       question: t(E,
         "Input: 42 A's in a row. How many games are played total?",
-        "입력: A가 42개 연속. 총 몇 게임이 진행되나?"),
+        "A 가 42개 연속으로 들어와요. 게임은 모두 몇 번 할까요?"),
       hint: t(E,
         "Each game ends at 21 points. How many full games of 21 A's fit, and when does the match end?",
-        "각 게임은 21 점에서 끝나. 21 개씩 끊어서 몇 게임이 들어가고, 매치는 언제 끝나는지 생각해봐."),
+        "각 게임은 21 점에서 끝나요. 21 개씩 끊으면 몇 게임이 들어가는지, 매치는 언제 끝나는지 생각해 봐요."),
       answer: 2,
     },
     // 1-4: Deep audit sim — step through the state machine
@@ -324,28 +324,28 @@ export function makeBadmintonCh1(E) {
       type: "reveal",
       narr: t(E,
         "Now let's audit the whole state machine — char by char.\nPick a preset, then press Step ▶ to feed one rally at a time. Watch game_a / game_b climb, and see when a 21 triggers a save+reset, when wins_a or wins_b hits 2, and how the loop should stop.",
-        "이제 상태 기계를 한 글자씩 감사해보자.\n프리셋을 고르고 'Step ▶' 으로 랠리를 한 개씩 먹여봐. game_a / game_b 가 올라가다가 21 이 되면 저장+리셋, wins_a 나 wins_b 가 2 되면 루프가 멈춰야 하는 순간을 직접 봐."),
+        "랠리를 한 개씩 넣으면서 점수가 어떻게 변하는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>
-            🔬 {t(E, "State-machine deep audit", "상태 기계 딥 오딧")}
+            🔬 {t(E, "State-machine deep audit", "상태 기계를 한 글자씩 자세히 보기")}
           </div>
           <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 8 }}>
             {t(E,
               "Four counters tell the whole story: ",
-              "4 개의 카운터가 모든 걸 말해줘: ")}
+              "세는 값 4 개가 모든 걸 말해줘요 — ")}
             <b style={{ color: "#059669" }}>game_a</b>, <b style={{ color: "#db2777" }}>game_b</b>
             {t(E, " (current game), ", " (현재 게임), ")}
             <b style={{ color: "#059669" }}>wins_a</b>, <b style={{ color: "#db2777" }}>wins_b</b>
             {t(E, " (games won). The ", " (이긴 게임 수). 노란 ")}
             <b>{t(E, "yellow cursor", "커서")}</b>
-            {t(E, " is the char being processed.", " 가 지금 처리 중인 문자야.")}
+            {t(E, " is the char being processed.", " 가 지금 보고 있는 글자예요.")}
           </div>
           <RallyAuditSim E={E} />
           <div style={{ fontSize: 11, color: C.dim, marginTop: 8, lineHeight: 1.5 }}>
             💡 {t(E,
               "Notice: after a 21, both game scores reset to 0 — but wins_a/wins_b carry over. The match-end check happens right after a game ends, not on every char.",
-              "관찰: 21 점 후 두 게임 점수는 0 으로 리셋 — 하지만 wins_a/wins_b 는 그대로 유지. 매치 종료 체크는 매 문자마다가 아니라 게임이 끝난 직후에만 일어나.")}
+              "21 점이 나오면 두 게임 점수는 0 으로 돌아가요. 하지만 wins_a/wins_b 는 그대로 남아요. 매치가 끝났는지는 글자마다가 아니라 게임이 끝난 직후에만 확인해요.")}
           </div>
         </div>
       ),
@@ -364,7 +364,7 @@ export function makeBadmintonCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Walk through the rally string char by char, tracking each game's score. When one player hits 21, save the score, reset, and bump that player's game count. Stop at 2 game wins. Sections build it one piece at a time.",
-        "랠리 문자열을 한 글자씩 순회하며 각 게임 점수 추적. 한 쪽이 21 점 도달 시 점수 저장, 초기화, 그 쪽 게임 승수 증가. 2 게임 승 달성 시 종료. 아래 섹션이 한 단락씩 쌓아요."),
+        "랠리 문자열을 한 글자씩 보면서 점수를 따라가요."),
       sections: getBadmintonSections(E),
     },
   ];

@@ -96,7 +96,7 @@ function RectCornerSim({ E }) {
     t(E, "Three corners of an axis-aligned rectangle. Where is the fourth?",
         "축에 평행한 직사각형의 꼭짓점 3개예요. 네 번째는 어디일까요?"),
     t(E, "Look only at the x-coordinates: two of them are the same side, so one is lonely.",
-        "x 좌표만 봐요: 두 개는 같은 변이라 짝이고, 하나만 짝이 없어요."),
+        "x 좌표만 봐요. 두 개는 같은 변이라 짝이고, 하나만 짝이 없어요."),
     t(E, "Now the y-coordinates, exactly the same way.",
         "이번엔 y 좌표를 똑같은 방법으로 봐요."),
     t(E, "The lonely x and the lonely y together are the missing corner.",
@@ -369,7 +369,7 @@ export function makeMcc15RectCh1(E) {
         "좌표가 음수여도 달라지는 건 없어요 — 두 값이 같은지만 보니까요."),
       question: t(E,
         "Corners: (−2, −1), (3, −1), (−2, 4). What is the 4th corner?",
-        "꼭짓점: (−2, −1), (3, −1), (−2, 4). 4번째 꼭짓점은?"),
+        "꼭짓점이 (−2, −1), (3, −1), (−2, 4) 예요. 4번째 꼭짓점은 어디일까요?"),
       options: [
         "(−2, 4)",
         "(3, 4)",
@@ -379,7 +379,7 @@ export function makeMcc15RectCh1(E) {
       correct: 1,
       explain: t(E,
         "The x's are −2, 3, −2 — the −2's pair up, so the lonely x is 3. The y's are −1, −1, 4 — the −1's pair up, so the lonely y is 4. The 4th corner is (3, 4).",
-        "x 는 −2 가 두 번 → 짝 없는 3. y 는 −1 이 두 번 → 짝 없는 4. 그래서 4번째 꼭짓점은 (3, 4) 예요."),
+        "x 는 −2 가 두 번 나와 짝이 되고 3 이 짝 없이 남아요. y 는 −1 이 두 번 나와 짝이 되고 4 가 남아요. 그래서 4번째 꼭짓점은 (3, 4) 예요."),
     },
   ];
 }
@@ -394,7 +394,7 @@ export function makeMcc15RectCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "No sorting, no searching, no formula. Two words in the statement — 'parallel to the axes' — hand you the whole answer.",
-        "정렬도, 탐색도, 공식도 필요 없어요. 문제의 '축에 평행' 이라는 말 한마디가 답을 다 알려줘요."),
+        "'축에 평행' 이라는 말 한마디가 답을 다 알려줘요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

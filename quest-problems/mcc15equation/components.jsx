@@ -70,17 +70,17 @@ export function getMcc15EqSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "There are only 8 candidates — '=' in the first gap or the second gap, times 4 operators — so trying every one of them is the surest way. The problem guarantees the answer is unique, so we stop at the first match.",
-            "경우가 8가지뿐이라 — '=' 가 앞칸이냐 뒷칸이냐 2가지 × 연산자 4가지 — 전부 해보는 게 가장 확실해요. 답은 하나뿐이라고 문제가 보장하니까 처음 맞는 데서 멈춰요."),
+            "경우가 8가지뿐이라 — '=' 가 앞칸이냐 뒷칸이냐 2가지 × 기호 4가지 — 전부 해보는 게 가장 확실해요. 답은 하나뿐이라고 문제가 약속했으니까 처음 맞는 데서 멈춰요."),
         t(E, "One check function handles all four operators, and the same function is reused for both places the '=' can go: check(a, op, b, c) tests a op b = c, and check(b, op, c, a) tests a = b op c.",
-            "check 함수 하나로 네 연산을 다 처리하고, 같은 함수를 '=' 위치 두 가지에 재사용해요. check(a, op, b, c) 는 a op b = c 를, check(b, op, c, a) 는 a = b op c 를 확인해요."),
+            "check 함수 하나로 네 가지 기호를 다 처리하고, 같은 함수를 '=' 자리 두 가지에 다시 써요. check(a, op, b, c) 는 a op b = c 를, check(b, op, c, a) 는 a = b op c 를 확인해요."),
         t(E, "Division is turned into multiplication: x / y == z is rewritten as x == y * z. '/' is real division here, so comparing decimals could be off by a tiny amount — this way the whole check stays between whole numbers.",
-            "나눗셈은 곱셈으로 뒤집어요: x / y == z 를 x == y * z 로 바꿔요. 여기서 '/' 는 실수 나눗셈이라 소수로 비교하면 아주 작은 오차가 날 수 있는데, 이렇게 하면 확인이 전부 정수끼리 이뤄져요."),
+            "나눗셈은 곱셈으로 뒤집어요. x / y == z 를 x == y * z 로 바꾸는 거예요. '/' 는 실수 나눗셈이라 소수로 비교하면 아주 작은 오차가 날 수 있는데, 이렇게 하면 확인이 전부 정수끼리 이뤄져요."),
         t(E, "That same rule explains why 3/2=1 is not a valid equation: 3/2 is 1.5, and 1.5 is not 1.",
-            "3/2=1 이 올바른 등식이 아닌 이유도 같은 맥락이에요: 3/2 는 1.5 이고, 1.5 는 1 이 아니니까요."),
+            "3/2=1 이 올바른 등식이 아닌 이유도 똑같아요. 3/2 는 1.5 이고, 1.5 는 1 이 아니니까요."),
       ],
       pyOnly: [
         t(E, "for op in \"+-*/\" walks a string one character at a time, so op becomes '+', then '-', then '*', then '/'.",
-            "for op in \"+-*/\" 는 문자열을 한 글자씩 순회해요. op 가 '+', '-', '*', '/' 순서로 들어와요."),
+            "for op in \"+-*/\" 는 문자열을 한 글자씩 훑어요. op 에 '+', '-', '*', '/' 가 차례로 들어와요."),
         t(E, "str(a) + op + str(b) + \"=\" + str(c) glues the numbers and symbols into one string with no spaces, exactly as the output format asks.",
             "str(a) + op + str(b) + \"=\" + str(c) 로 숫자와 기호를 공백 없이 하나의 문자열로 이어 붙여요. 출력 형식이 요구하는 그대로예요."),
       ],
@@ -133,7 +133,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc15EqPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc15Eq — Full Study Guide", "Mcc15Eq — 종합 풀이 노트");
@@ -156,7 +156,7 @@ export function downloadMcc15EqPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

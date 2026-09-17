@@ -299,14 +299,14 @@ export function GapFormulaSim({ E }) {
               <>cards up to <b>{C[j]}</b> → <b>{j + 1}</b> &nbsp;(index {j} + 1)<br />
                 cards below <b>{C[i]}</b> → <b>{i}</b> &nbsp;(index {i})<br />
                 <b>{j + 1} − {i} = {j - i + 1}</b> — the same number as before.</>,
-              <><b>{C[j]}</b> 이하인 내 카드 → <b>{j + 1}장</b> &nbsp;(index {j} + 1)<br />
-                <b>{C[i]}</b> 앞의 내 카드 → <b>{i}장</b> &nbsp;(index {i})<br />
+              <><b>{C[j]}</b> 보다 작거나 같은 내 카드 → <b>{j + 1}장</b> &nbsp;(자리 {j} + 1)<br />
+                <b>{C[i]}</b> 앞의 내 카드 → <b>{i}장</b> &nbsp;(자리 {i})<br />
                 <b>{j + 1} − {i} = {j - i + 1}</b> — 아까 그 수예요.</>)}
           </div>
           <div style={{ marginTop: 9, fontSize: 11.5, color: "#94a3b8", textAlign: "center",
             lineHeight: 1.8, wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E, <>Sorting and deduping made the index itself the running count.<br />So we never build a separate table.<br />Card values reach 10<sup>9</sup>, and a count array over values would not fit.</>,
-                  <>정렬하고 중복을 없앴더니 인덱스가 곧 그 개수가 됐어요.<br />그래서 표를 따로 안 만들어도 돼요.<br />카드 값이 10<sup>9</sup> 까지라 값마다 세는 표는 못 만들거든요.</>)}
+                  <>정렬하고 중복을 없앴더니 자리 번호가 곧 그 개수가 됐어요.<br />그래서 표를 따로 안 만들어도 돼요.<br />카드 값이 10<sup>9</sup> 까지라 값마다 세는 표는 못 만들거든요.</>)}
           </div>
         </div>
       )}

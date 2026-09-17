@@ -12,7 +12,7 @@ export function makeFjFarmsCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N plants — plant i starts at height h[i] and grows by a[i] per day.  We're given target counts t[i] meaning 'after some day x, plant i should have exactly t[i] OTHER plants strictly taller than it'.  Find the smallest x ≥ 0 that makes ALL counts match — or -1.",
-        "FJ 의 N 개 식물 — i 번 식물은 h[i] 에서 시작해 하루 a[i] 씩 자라요. 목표 t[i] 는 '어떤 날 x 후에 i 번 식물보다 키가 큰 식물이 정확히 t[i] 개' 라는 뜻. 모든 i 의 카운트가 맞는 가장 작은 x ≥ 0 을 찾아요. 없으면 -1."),
+        "식물이 자라다 보면 목표와 딱 맞는 날이 올까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -29,7 +29,7 @@ export function makeFjFarmsCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Output the smallest day x ≥ 0 on which every t[i] matches (or -1 if no such day).",
-                "모든 t[i] 가 맞는 가장 작은 날 x ≥ 0 (없으면 -1) 를 출력.")}
+                "모든 t[i] 가 맞아떨어지는 가장 이른 날 x 를 출력해요. 그런 날이 없으면 -1 을 출력해요.")}
             </div>
           </div>
 
@@ -63,7 +63,7 @@ export function makeFjFarmsCh1(E) {
                 <div>
                   <b style={{ color: "#7c3aed" }}>{t(E, "Target t[i]", "목표 t[i]")}</b>
                   {t(E, " is the number of OTHER plants we want to be strictly taller than plant i on the answer day.  (Same heights don't count as 'taller'.)",
-                        " 는 정답 날에 i 번 식물보다 키가 큰 다른 식물의 수예요. (키가 같으면 '큼' 으로 안 침.)")}
+                        " 는 정답인 날에 i 번 식물보다 키가 큰 식물이 몇 개여야 하는지예요. 키가 같으면 '더 크다' 로 세지 않아요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
@@ -72,7 +72,7 @@ export function makeFjFarmsCh1(E) {
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "smallest day x ≥ 0", "가장 작은 x ≥ 0")}</b>
                   {t(E, " on which every t[i] matches, or -1 if it can never happen.",
-                        " 를 출력해요. 모든 t[i] 가 맞는 첫 날, 절대 안 되면 -1.")}
+                        " 을 출력해요. 모든 t[i] 가 맞는 첫날이에요. 끝내 그런 날이 없으면 -1 을 출력해요.")}
                 </div>
               </div>
             </div>
@@ -84,12 +84,12 @@ export function makeFjFarmsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Before the formula sinks in, let's compute two plants' heights day by day with real numbers.",
-        "공식이 익기 전에, 식물 2개 키를 날짜별로 실제 숫자로 계산해봐요."),
+        "식물 두 개의 키를 날마다 숫자로 직접 구해 볼게요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
-              🔢 {t(E, "Heights grow every day — with numbers", "키는 매일 자란다 — 숫자로")}
+              🔢 {t(E, "Heights grow every day — with numbers", "키는 날마다 자라요 — 숫자로 보기")}
             </div>
             <div style={{ marginBottom: 6 }}>
               {t(E, "Plant 0: height 8, +1/day → ", "0번 식물: 키 8, 하루 +1 → ")}<code>8 + 1·d</code><br/>
@@ -103,10 +103,10 @@ export function makeFjFarmsCh1(E) {
             </div>
             <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
               👉 {t(E, "Plants taller than plant 0: ", "0번보다 큰 식물 수: ")}
-              <b>{t(E, "0 on days 0–2, then 1 from day 3.", "d=0~2 → 0개, d=3부터 → 1개.")}</b>
+              <b>{t(E, "0 on days 0–2, then 1 from day 3.", "d=0~2 에는 0 개, d=3 부터는 1 개예요.")}</b>
               <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
                 {t(E, "That 'taller-than count' changes over time — we hunt the day it matches every t[i].",
-                     "이 '더 큰 식물 수'가 날마다 변해요 — 모든 t[i]와 맞는 날을 찾는 거예요.")}
+                     "이 '더 큰 식물 수' 는 날마다 달라져요. 우리는 모든 t[i] 와 맞아떨어지는 날을 찾아요.")}
               </div>
             </div>
           </div>
@@ -117,7 +117,7 @@ export function makeFjFarmsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Watch two plants grow.  Drag the slider or press Play — see plant 1 (purple, faster) catch up and overtake plant 0 (cyan).",
-        "두 식물이 자라는 걸 봐요. 슬라이더를 끌거나 재생 — 식물 1 (보라, 빠름) 이 식물 0 (시안) 을 따라잡아 추월."),
+        "더 빨리 자라는 식물 1 이 식물 0 을 따라잡는 걸 봐요."),
       content: <GrowthSim E={E} />,
     },
     // 1-3: Official sample I/O
@@ -125,7 +125,7 @@ export function makeFjFarmsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input: T cases.  Each case: N, then N heights, N growth rates, N targets — each on its own line.",
-        "입력: T 케이스. 각 케이스: N, 그 다음 N 개 키, N 개 성장률, N 개 목표 — 각자 한 줄."),
+        "한 문제마다 N, 키, 성장률, 목표가 한 줄씩 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", textAlign: "center", marginBottom: 10 }}>
@@ -180,10 +180,10 @@ export function makeFjFarmsCh1(E) {
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
               {t(E, "Case 5: h = [7, 7], a = [8, 8] — same growth, same start → plants stay tied forever → t = [0, 0] forever.  Target [0, 1] never reached.",
-                    "5 번: h = [7, 7], a = [8, 8] — 시작과 성장률 같음 → 영원히 동점 → t = [0, 0] 만. 목표 [0, 1] 영원히 안 됨.")}
+                    "5 번은 h = [7, 7], a = [8, 8] 이에요. 시작 키도 성장률도 같아서 둘은 늘 같은 키예요. 그래서 t 는 언제나 [0, 0] 이고, 목표 [0, 1] 은 영영 안 나와요.")}
               <br/>
               {t(E, "Case 6: h = [7, 3], a = [8, 8] — same growth → gap stays 4 → plant 0 always taller → t = [0, 1] forever.  Target [1, 0] never reached.",
-                    "6 번: h = [7, 3], a = [8, 8] — 성장률 같음 → 차이 4 유지 → 식물 0 항상 더 큼 → t = [0, 1] 만. 목표 [1, 0] 영원히 안 됨.")}
+                    "6 번은 h = [7, 3], a = [8, 8] 이에요. 성장률이 같아서 키 차이 4 가 그대로 남아요. 식물 0 이 늘 더 커서 t 는 언제나 [0, 1] 이고, 목표 [1, 0] 은 영영 안 나와요.")}
             </div>
           </div>
         </div>),
@@ -193,10 +193,10 @@ export function makeFjFarmsCh1(E) {
       type: "quiz",
       narr: t(E,
         "Each plant's height on day d is h[i] + a[i] · d.",
-        "d 일에 식물 i 의 키 = h[i] + a[i] · d."),
+        "d 일째 식물 i 의 키는 h[i] + a[i] · d 예요."),
       question: t(E,
         "Plant: h=2, a=3.  After 2 days, height = 2 + 3 × 2 = ?",
-        "식물: h=2, a=3. 2 일 후 키 = 2 + 3 × 2 = ?"),
+        "h=2, a=3 인 식물의 2 일 후 키는 2 + 3 × 2 = ?"),
       options: [
         t(E, "6", "6"),
         t(E, "8", "8"),
@@ -205,20 +205,20 @@ export function makeFjFarmsCh1(E) {
       correct: 1,
       explain: t(E,
         "2 + 3 × 2 = 2 + 6 = 8.  The plant grows 3 units per day for 2 days.",
-        "2 + 3 × 2 = 2 + 6 = 8. 식물이 하루에 3 씩 2 일 동안 자라."),
+        "2 + 3 × 2 = 2 + 6 = 8 이에요. 하루에 3 씩 이틀을 자란 거예요."),
     },
     // 1-5: Input — confirm understanding
     {
       type: "input",
       narr: t(E,
         "Now compute count: at d=0, h = [7, 3].  How many plants are strictly TALLER than plant 0?",
-        "이제 카운트: d=0 일 때 h = [7, 3]. 식물 0 보다 키가 큰 식물 수?"),
+        "이번엔 세어 봐요. d=0 일 때 키는 h = [7, 3] 이에요."),
       question: t(E,
         "h = [7, 3] at d = 0.  Number of plants strictly taller than plant 0?",
-        "h = [7, 3], d = 0. 식물 0 보다 큰 식물 수?"),
+        "식물 0 보다 키가 큰 식물은 몇 개일까요?"),
       hint: t(E,
         "Compare heights side by side — is plant 1 taller, shorter, or equal to plant 0?",
-        "키를 나란히 비교 — 식물 1 이 식물 0 보다 큰가, 작은가, 같은가?"),
+        "키를 나란히 놓고 봐요. 식물 1 이 식물 0 보다 큰가요, 작은가요?"),
       answer: 0,
     },
   ];
@@ -235,7 +235,7 @@ export function makeFjFarmsCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Try every day x = 0, 1, …, 1000.  At each x compute heights, count strictly-taller plants per i, return the first x matching t.  Sections build the loop one piece at a time.",
-        "x = 0, 1, …, 1000 모두 시도. 각 x 에서 키 계산하고 i 마다 더 큰 식물 수를 세서 t 와 일치하는 첫 x 반환. 아래 섹션이 한 단락씩 쌓아요."),
+        "날 x 를 0 부터 하나씩 넣어 보며 맞는 첫날을 찾을게요."),
       sections: getFjFarmsSections(E),
     },
   ];

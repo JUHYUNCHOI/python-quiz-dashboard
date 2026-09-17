@@ -71,9 +71,9 @@ export function RevegSim({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <div style={{ background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 12.5, color: "#9a3412", lineHeight: 1.55 }}>
-        <b>🎮 {t(E, "Try it", "직접 해봐")}:</b>{" "}
+        <b>🎮 {t(E, "Try it", "직접 해보기")}:</b>{" "}
         {t(E, "Click each pasture to cycle through grass types 1→2→3→4. Edges that connect SAME-color pastures glow red — that's a violation. Try to find the lexicographically smallest valid assignment (lowest digits first), then press \"Greedy auto\" to compare.",
-              "각 목초지를 클릭해서 잔디 종류 1→2→3→4 로 순환. 같은 색끼리 연결된 간선은 빨갛게 빛나요 — 그게 위반. 사전순 가장 작은 유효 배색을 직접 찾아본 뒤 \"그리디 자동\" 으로 비교해봐.")}
+              "각 목초지를 누르면 잔디 종류가 1→2→3→4 로 바뀌어요. 같은 색끼리 이어진 선이 빨갛게 빛나면 규칙을 어긴 거예요. 사전순으로 가장 작은 배색을 직접 찾아본 뒤 \"그리디 자동\" 과 견줘 봐요.")}
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "flex-start" }}>
@@ -124,16 +124,16 @@ export function RevegSim({ E }) {
               ? <>❌ {t(E, "Violations", "위반")}: {violations.map(([a,b]) => `P${a}–P${b}`).join(", ")}</>
               : (allFilled
                 ? (isLexSmallest
-                    ? <>✅ {t(E, "Valid AND lexicographically smallest!", "유효하고 사전순 최소!")}</>
-                    : <>✅ {t(E, "Valid — but not the smallest. Greedy gives", "유효 — 그러나 최소는 아님. 그리디:")} <code style={{ color: A }}>{greedyStr}</code></>)
-                : <>⏳ {t(E, "Filled", "채움")}: {filled}/{SIM_N}</>)
+                    ? <>✅ {t(E, "Valid AND lexicographically smallest!", "규칙도 지키고 사전순으로도 가장 작아요!")}</>
+                    : <>✅ {t(E, "Valid — but not the smallest. Greedy gives", "규칙은 지켰지만 가장 작지는 않아요. 그리디는 이렇게 해요:")} <code style={{ color: A }}>{greedyStr}</code></>)
+                : <>⏳ {t(E, "Filled", "채운 곳")}: {filled}/{SIM_N}</>)
             }
           </div>
 
           <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 10px", fontSize: 11.5, color: C.dim, marginBottom: 8 }}>
             <b style={{ color: C.text }}>{t(E, "Constraints", "제약")}:</b>{" "}
             {SIM_EDGES.map(([a,b]) => `(${a},${b})`).join(" ")}
-            <div style={{ marginTop: 4 }}>{t(E, "Each pair → DIFFERENT grass types.", "각 쌍은 서로 다른 잔디 종류여야 함.")}</div>
+            <div style={{ marginTop: 4 }}>{t(E, "Each pair → DIFFERENT grass types.", "각 쌍은 서로 다른 잔디 종류여야 해요.")}</div>
           </div>
 
           <div style={{ display: "flex", gap: 6 }}>
@@ -141,7 +141,7 @@ export function RevegSim({ E }) {
               ▶ {t(E, "Greedy auto", "그리디 자동")}
             </button>
             <button onClick={reset} style={{ flex: 1, padding: "8px 0", borderRadius: 8, border: `1.5px solid ${C.border}`, cursor: "pointer", fontSize: 12.5, fontWeight: 700, background: "#fff", color: C.text }}>
-              ↺ {t(E, "Reset", "초기화")}
+              ↺ {t(E, "Reset", "처음부터 다시")}
             </button>
           </div>
         </div>
@@ -239,19 +239,19 @@ export function getRevegSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 쪽은 Python 코드를 옮긴 것이라, 자료형과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더(<iostream>, <vector>, ...)만 적어요. 그러면 코드가 무엇을 쓰는지 한눈에 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -297,7 +297,7 @@ function highlightCode(lines, lang) {
 
 export function downloadRevegPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Reveg — Full Study Guide", "Reveg — 종합 풀이 노트");
@@ -320,7 +320,7 @@ export function downloadRevegPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

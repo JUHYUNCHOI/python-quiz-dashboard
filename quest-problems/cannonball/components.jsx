@@ -95,19 +95,19 @@ export function getCannonballSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 에서 옮긴 거예요. 타입이나 표현은 필요하면 바꿔요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector).",
-            "#include 는 배운 헤더들로 (iostream, vector) 나눠 적어."),
+            "#include 는 배운 헤더들로 (iostream, vector) 나눠 적어요."),
         t(E, "power grows multiplicatively — long long avoids overflow on x and power.",
-            "power 가 곱셈으로 커져 — x 와 power 는 long long 으로 안전하게."),
+            "power 가 점점 빠르게 커져요. 그래서 x 와 power 는 long long 으로 두면 안전해요."),
       ],
     },
   ];
@@ -153,7 +153,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCannonballPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Cannonball — Full Study Guide", "Cannonball — 종합 풀이 노트");
@@ -176,7 +176,7 @@ export function downloadCannonballPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
@@ -212,39 +212,39 @@ const TRAJECTORY = [
   // 0 — start
   { x: 2, dir: 1, power: 1, ans: 0, broken: [],   active: 2, fromX: null, toX: null,
     note: { en: "Start: x=2, power=1, direction=→ (right). ans=0.",
-            ko: "시작: x=2, 파워=1, 방향=→ (오른쪽). ans=0." } },
+            ko: "x=2, 파워=1, 방향은 오른쪽(→) 으로 시작해요. ans=0." } },
   // 1 — at x=2 (target v=1): power 1 ≥ 1 → break
   { x: 2, dir: 1, power: 1, ans: 1, broken: [2],  active: 2, fromX: null, toX: null,
     note: { en: "x=2 is a target with value 1. power 1 ≥ 1 → break! ans=1.",
-            ko: "x=2 는 값 1 인 타겟. 파워 1 ≥ 1 → 부숨! ans=1." } },
+            ko: "x=2 는 값 1 인 타겟이에요. 파워 1 ≥ 1 이라 부숴요! ans=1." } },
   // 2 — move: x ← 2 + 1·1 = 3
   { x: 3, dir: 1, power: 1, ans: 1, broken: [2],  active: 3, fromX: 2, toX: 3,
     note: { en: "Move by direction × power = +1. x: 2 → 3.",
-            ko: "direction × power = +1 만큼 이동. x: 2 → 3." } },
+            ko: "direction × power = +1 만큼 움직여요. x: 2 → 3." } },
   // 3 — at x=3 (target v=2): power 1 < 2 → can't break
   { x: 3, dir: 1, power: 1, ans: 1, broken: [2],  active: 3, fromX: null, toX: null,
     note: { en: "x=3 is a target with value 2. power 1 < 2 → too weak, no break.",
-            ko: "x=3 은 값 2 인 타겟. 파워 1 < 2 → 부족, 못 부숨." } },
+            ko: "x=3 은 값 2 인 타겟이에요. 파워 1 < 2 라 못 부숴요." } },
   // 4 — move: x ← 3 + 1·1 = 4
   { x: 4, dir: 1, power: 1, ans: 1, broken: [2],  active: 4, fromX: 3, toX: 4,
     note: { en: "Move by +1. x: 3 → 4.",
-            ko: "+1 만큼 이동. x: 3 → 4." } },
+            ko: "+1 만큼 움직여요. x: 3 → 4." } },
   // 5 — at x=4 (jump v=1): flip dir, power += 1
   { x: 4, dir: -1, power: 2, ans: 1, broken: [2], active: 4, fromX: null, toX: null,
     note: { en: "x=4 is a jump pad. Flip direction → ←, power += 1 → power=2.",
-            ko: "x=4 는 점프 패드. 방향 뒤집고 → ←, 파워 += 1 → 파워=2." } },
+            ko: "x=4 는 점프 패드예요. 방향이 → 에서 ← 로 뒤집히고 파워가 2 가 돼요." } },
   // 6 — move: x ← 4 + (-1)·2 = 2
   { x: 2, dir: -1, power: 2, ans: 1, broken: [2], active: 2, fromX: 4, toX: 2,
     note: { en: "Move by direction × power = -2. x: 4 → 2 (a big leap left!).",
-            ko: "direction × power = -2 만큼 이동. x: 4 → 2 (왼쪽으로 크게 점프!)." } },
+            ko: "direction × power = -2 만큼 움직여요. x: 4 → 2 (왼쪽으로 크게 뛰어요!)." } },
   // 7 — at x=2 (already broken; no effect)
   { x: 2, dir: -1, power: 2, ans: 1, broken: [2], active: 2, fromX: null, toX: null,
     note: { en: "x=2 is already broken — no effect this time.",
-            ko: "x=2 는 이미 부서졌음 — 이번엔 아무 일도 안 일어남." } },
+            ko: "x=2 는 이미 부서졌어요. 그래서 이번엔 아무 일도 안 일어나요." } },
   // 8 — move: x ← 2 + (-1)·2 = 0  → out of [1, 5]
   { x: 0, dir: -1, power: 2, ans: 1, broken: [2], active: null, fromX: 2, toX: 0,
     note: { en: "Move by -2. x: 2 → 0. 0 < 1 → out of [1, 5]. STOP. Final ans = 1.",
-            ko: "-2 만큼 이동. x: 2 → 0. 0 < 1 → [1, 5] 벗어남. 종료. 최종 ans = 1." } },
+            ko: "-2 만큼 움직여요. x: 2 → 0 이고 0 < 1 이라 [1, 5] 를 벗어나요. 여기서 끝, 최종 ans = 1 이에요." } },
 ];
 
 const PADX = (i) => 60 + (i - 1) * 80; // x-coord on SVG number line
@@ -265,7 +265,7 @@ export function CannonballTrajectorySim({ E }) {
         total={ts.total}
         isEn={E}
         title={t(E, "Watch Bessie bounce — sample 1, step by step",
-                    "Bessie 가 튕기는 모습 — 샘플 1, 한 단계씩")}
+                    "Bessie 가 튕기는 모습을 샘플 1 로 한 걸음씩 봐요")}
       />
 
       {/* State chips: power / direction / ans */}

@@ -29,7 +29,7 @@ export function makeMakeDistinctCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 , wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
                 "Print the minimum number of `+= K` operations to make every element distinct.",
-                "모든 원소가 서로 달라지게 만드는 `+= K` 연산의 최소 횟수를 출력.")}
+                "모든 원소가 서로 달라지게 만들려면 `+= K` 를 적어도 몇 번 해야 하는지 출력해요.")}
             </div>
           </div>
 
@@ -50,7 +50,7 @@ export function makeMakeDistinctCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "In one operation: pick any index i and do ", "한 연산으로 — 아무 인덱스 i 를 골라 ")}
+                  {t(E, "In one operation: pick any index i and do ", "한 번 할 때 — 아무 자리 i 를 골라 ")}
                   <b style={{ color: "#0891b2" }}>a[i] += K</b>.
                 </div>
               </div>
@@ -65,7 +65,7 @@ export function makeMakeDistinctCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "최소 연산 횟수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "더하기를 한 가장 적은 횟수")}</b>
                   {t(E, ".", " 를 출력해요.")}
                 </div>
               </div>
@@ -149,7 +149,7 @@ export function makeMakeDistinctCh1(E) {
           <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: C.dim, lineHeight: 1.6 , wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
               <>💡 Each value either stays, or moves up to (previous + K).<br />Sorting first makes this the best possible.</>,
-              <>💡 각 값은 그대로 두거나 이전값 + K 로 밀려요.<br />정렬을 먼저 하면 이 방법이 항상 최적이에요.</>)}
+              <>💡 각 값은 그대로 두거나 이전값 + K 로 밀려요.<br />정렬을 먼저 하면 이 방법이 언제나 제일 좋아요.</>)}
           </div>
         </div>
       ),

@@ -258,7 +258,7 @@ export function getMcc19Rect2Sections(E) {
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
             "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어요."),
         t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+            "합계와 자리 번호는 int 로 충분해요. 2×10^9 를 넘는 큰 합계만 더 큰 타입을 생각해요."),
       ],
     },
   ];

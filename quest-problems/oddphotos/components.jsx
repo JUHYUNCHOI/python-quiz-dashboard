@@ -99,7 +99,7 @@ export function OddPhotosSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
         {t(E,
           "Click two cows. If their ID sum is ODD → ODD-sum pair. EVEN → EVEN-sum pair.",
-          "소 두 마리를 클릭. ID 합이 홀수면 → 홀수합 쌍. 짝수면 → 짝수합 쌍.")}
+          "소 두 마리를 눌러 보세요. ID 를 더한 값이 홀수면 홀수합 쌍, 짝수면 짝수합 쌍이에요.")}
       </div>
 
       {/* cow row */}
@@ -174,7 +174,7 @@ export function OddPhotosSim({ E }) {
         <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
           {t(E,
             "Rule: odd + odd = even, odd + even = odd, even + even = even.",
-            "규칙: 홀+홀=짝, 홀+짝=홀, 짝+짝=짝.")}
+            "더하기 규칙은 이래요. 홀+홀=짝, 홀+짝=홀, 짝+짝=짝.")}
         </div>
       </div>
     </div>
@@ -265,19 +265,19 @@ export function getOddPhotosSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 쪽은 Python 코드를 옮긴 것이라 자료형은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Read IDs one at a time and tally even vs odd with x % 2 — no array needed.",
-            "ID 를 하나씩 읽으며 x % 2 로 짝/홀 개수만 세요 — 배열 필요 없음."),
+            "ID 를 하나씩 읽으면서 x % 2 로 짝수·홀수 개수만 세면 돼요. 배열은 필요 없어요."),
         t(E, "Just loop k from 0..N and keep the largest k that satisfies the two checks.",
-            "k 를 0~N 으로 돌리며 두 조건을 만족하는 가장 큰 k 를 답으로."),
+            "k 를 0 부터 N 까지 넣어 보고, 두 조건을 만족하는 가장 큰 k 를 답으로 삼아요."),
       ],
     },
   ];
@@ -323,7 +323,7 @@ function highlightCode(lines, lang) {
 
 export function downloadOddPhotosPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혀 있어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "OddPhotos — Full Study Guide", "OddPhotos — 종합 풀이 노트");
@@ -346,7 +346,7 @@ export function downloadOddPhotosPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

@@ -95,19 +95,19 @@ export function getMobileGameSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Alice's power only grows, so the set of beatable enemies only grows too — eating the biggest beatable enemy each time gives the fewest kills.",
-            "Alice 파워는 커지기만 하니 먹을 수 있는 적도 늘기만 해요 — 매번 가장 큰 적을 먹으면 최소 처치."),
+            "Alice 파워는 커지기만 하니 먹을 수 있는 적도 늘기만 해요.\n가장 큰 적을 먹으면 파워가 제일 많이 오르고, 아까 먹을 수 있던 적도 그대로 남아요.\n그래서 매번 가장 큰 적을 먹는 게 처치 수가 가장 적어요."),
         t(E, "Sort enemies, push each one that becomes beatable (p < cur) into a max-heap, then pop the biggest to eat.",
             "적을 정렬하고, 먹을 수 있게 된(p < cur) 적을 최대힙에 넣은 뒤, 가장 큰 것을 꺼내 먹어요."),
         t(E, "Strictly less (p < cur): equal power can't be beaten. Stop and print -1 when the heap is empty but power < B.",
-            "strictly less (p < cur): 같은 파워는 못 먹어요. 힙이 비었는데 파워 < B 면 멈추고 -1 출력."),
+            "파워가 같으면 못 먹어요. p < cur 여야 해요.\n힙이 비었는데 파워가 B 보다 작으면 멈추고 -1 을 출력해요."),
       ],
       pyOnly: [
         t(E, "Python's heapq is a min-heap, so store -p to pop the largest. sorted() gives ascending powers.",
-            "파이썬 heapq 는 최소힙이라 -p 로 넣어 가장 큰 걸 꺼내요. sorted() 로 파워 오름차순."),
+            "파이썬 heapq 는 최소힙이라 -p 로 넣어 가장 큰 걸 꺼내요.\nsorted() 로 파워를 오름차순으로 놓아요."),
       ],
       cppOnly: [
         t(E, "priority_queue<long long> is a max-heap by default — pq.top() is the biggest. Use long long since powers add up.",
-            "priority_queue<long long> 는 기본이 최대힙 — pq.top() 이 가장 큼. 파워가 쌓이니 long long."),
+            "priority_queue<long long> 는 기본이 최대힙이라 pq.top() 이 가장 커요.\n파워가 쌓이니 long long 을 써요."),
       ],
     },
   ];
@@ -131,13 +131,13 @@ export function getMobileGameWalk(E, lang = "py") {
           "T개 테스트마다 N·A·B(적 수·시작 파워·목표)와 적 파워들을 읽고, 파워를 오름차순으로 정렬해요.") },
         { hi: [19, 22], bubble: t(E,
           "pq = beatable enemies as a max-heap. ptr = how far we've added, kills = kill count, cur = current power (starts at A).",
-          "pq = 먹을 수 있는 적(최대힙). ptr = 어디까지 후보에 넣었나, kills = 처치 수, cur = 지금 파워(A로 시작).") },
+          "pq 는 먹을 수 있는 적을 담는 최대힙이에요.\nptr 은 어디까지 넣었나, kills 는 처치 수, cur 는 지금 파워예요 (A 로 시작해요).") },
         { hi: [23, 27], bubble: t(E,
           "While power is below the goal: first push every enemy weaker than cur (p[ptr] < cur) into the heap.",
-          "파워가 목표에 못 미치는 동안: 먼저 지금 파워보다 약한 적(p[ptr] < cur)을 전부 힙에 넣어요.") },
+          "파워가 목표에 못 미치는 동안 이렇게 해요.\n먼저 지금 파워보다 약한 적 (p[ptr] < cur) 을 전부 힙에 넣어요.") },
         { hi: [28, 34], bubble: t(E,
           "If none are beatable, stop. Otherwise eat the biggest (pq.top) to grow the most, and count one kill.",
-          "먹을 적이 없으면 멈춰요. 있으면 가장 큰 적(pq.top)을 먹어 최대로 성장하고, 처치 하나 세요.") },
+          "먹을 적이 없으면 멈춰요.\n있으면 가장 큰 적 (pq.top) 을 먹어 제일 많이 크고, 처치 하나를 세요.") },
         { hi: [35, 39], bubble: t(E,
           "Reached B → print kills. Never reached it → print -1.",
           "목표 B 에 닿았으면 kills, 끝내 못 닿았으면 -1 을 출력해요.") },
@@ -151,13 +151,13 @@ export function getMobileGameWalk(E, lang = "py") {
         "T개 테스트마다 N·A·B(적 수·시작 파워·목표)와 적 파워들을 읽고, 파워를 오름차순으로 정렬해요.") },
       { hi: [7, 10], bubble: t(E,
         "heap = beatable enemies (Python's heapq is a min-heap, so store -p to pop the largest). ptr, kills, and cur (starts at A).",
-        "heap = 먹을 수 있는 적(파이썬 heapq 는 최소힙이라 -p 로 넣어 가장 큰 걸 꺼냄). ptr, kills, cur(A로 시작).") },
+        "heap 은 먹을 수 있는 적을 담아요 (heapq 는 최소힙이라 -p 로 넣어 가장 큰 걸 꺼내요).\nptr, kills, cur 도 준비해요 (cur 는 A 로 시작해요).") },
       { hi: [11, 14], bubble: t(E,
         "While power is below the goal: first push every enemy weaker than cur (p[ptr] < cur) into the heap.",
-        "파워가 목표에 못 미치는 동안: 먼저 지금 파워보다 약한 적(p[ptr] < cur)을 전부 힙에 넣어요.") },
+        "파워가 목표에 못 미치는 동안 이렇게 해요.\n먼저 지금 파워보다 약한 적 (p[ptr] < cur) 을 전부 힙에 넣어요.") },
       { hi: [15, 18], bubble: t(E,
         "If none are beatable, stop. Otherwise eat the biggest to grow the most, and count one kill.",
-        "먹을 적이 없으면 멈춰요. 있으면 가장 큰 적을 먹어 최대로 성장하고, 처치 하나 세요.") },
+        "먹을 적이 없으면 멈춰요.\n있으면 가장 큰 적을 먹어 제일 많이 크고, 처치 하나를 세요.") },
       { hi: [19, 22], bubble: t(E,
         "Reached B → print kills. Never reached it → print -1.",
         "목표 B 에 닿았으면 kills, 끝내 못 닿았으면 -1 을 출력해요.") },
@@ -205,7 +205,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMobileGamePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mobile Game — Full Study Guide", "Mobile Game — 종합 풀이 노트");
@@ -228,7 +228,7 @@ export function downloadMobileGamePDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">MCC 2023 P2 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

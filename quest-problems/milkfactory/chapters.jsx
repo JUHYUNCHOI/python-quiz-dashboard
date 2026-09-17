@@ -11,7 +11,7 @@ export function makeFactoryCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has a milk factory with N stations connected by N−1 one-way conveyor belts (so the underlying graph is a tree).\nFind a single station that EVERY other station can reach by following the conveyors. Print that station's number, or −1 if none exists.",
-        "FJ 에게 N개의 역과 N−1개의 한 방향 컨베이어로 이뤄진 우유 공장이 있어요 (연결 구조가 트리 모양이에요).\n다른 모든 역에서 컨베이어를 따라 도달할 수 있는 단 하나의 역을 찾아요. 그 번호를 출력하고, 없으면 −1."),
+        "다른 모든 역에서 갈 수 있는 역 하나를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeFactoryCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Output the central station every other station can reach, or −1 if none exists.",
-                "다른 모든 역에서 도달 가능한 중심 역의 번호 (없으면 −1) 를 출력.")}
+                "다른 모든 역에서 갈 수 있는 중심 역의 번호를 출력해요. 그런 역이 없으면 −1 을 출력해요.")}
             </div>
           </div>
 
@@ -74,39 +74,39 @@ export function makeFactoryCh1(E) {
       type: "reveal",
       narr: t(E,
         "Try it yourself! Edit the belts, pick a candidate station, and watch which stations turn green (reach the candidate). The sim also shows the auto-detected central station.",
-        "직접 해봐! 벨트를 수정하고 후보 역을 골라봐. 어떤 역이 초록 (후보로 도달) 인지 보여주고, 자동으로 중심 역도 알려줘."),
+        "컨베이어를 고치고 후보 역을 골라 봐요."),
       content: <MilkFactoryBeltSim E={E} />,
     },
     // 1-3: Quiz (uses example student just simulated)
     {
       type: "quiz",
       narr: t(E,
-        "Consider: edges 1->2 and 3->2. Which station is reachable from all others?", "간선 1->2, 3->2가 있어요. 모든 스테이션에서 도달 가능한 곳은?"),
+        "Consider: edges 1->2 and 3->2. Which station is reachable from all others?", "컨베이어가 1→2, 3→2 일 때 우유는 어디로 모일까요?"),
       question: t(E,
         "Edges: 1->2, 3->2. Which station can all others reach?",
-        "간선: 1->2, 3->2. 모든 스테이션이 도달 가능한 곳은?"),
+        "컨베이어가 1→2, 3→2 예요. 다른 모든 역에서 갈 수 있는 역은 어디일까요?"),
       options: [
-        t(E, "Station 1", "스테이션 1"),
-        t(E, "Station 2", "스테이션 2"),
-        t(E, "Station 3", "스테이션 3"),
-        t(E, "No such station (-1)", "없음 (-1)"),
+        t(E, "Station 1", "역 1"),
+        t(E, "Station 2", "역 2"),
+        t(E, "Station 3", "역 3"),
+        t(E, "No such station (-1)", "그런 역이 없어요 (-1)"),
       ],
       correct: 1,
       explain: t(E,
         "Station 2 is reachable from 1 (via 1->2) and from 3 (via 3->2). Station 2 can reach itself.",
-        "스테이션 2는 1에서 (1->2), 3에서 (3->2) 도달 가능. 자기 자신도 도달 가능."),
+        "역 2 는 1 에서 (1→2), 3 에서 (3→2) 갈 수 있어요. 자기 자신에게도 갈 수 있고요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "In the example above, what station number is the answer?", "위 예제에서 답은 몇 번 스테이션일까요?"),
+        "In the example above, what station number is the answer?", "답이 몇 번 역인지 적어 봐요."),
       question: t(E,
         "Edges: 1->2, 3->2. Answer station number?",
-        "간선: 1->2, 3->2. 답 스테이션 번호는?"),
+        "컨베이어가 1→2, 3→2 예요. 답은 몇 번 역일까요?"),
       hint: t(E,
         "Where do all the conveyor arrows point toward?",
-        "컨베이어 화살표가 모두 어디로 향하고 있어?"),
+        "컨베이어 화살표가 모두 어디를 향하고 있나요?"),
       answer: 2,
     },
   ];
@@ -123,7 +123,7 @@ export function makeFactoryCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "C reachable from all ↔ in the REVERSE graph C reaches all. Build the reverse graph, BFS/DFS from each candidate — print the first whose reverse-BFS reaches all N stations. Sections build it one piece at a time.",
-        "C 가 모두에서 도달 가능 ↔ 역방향 그래프에서 C 가 모두에 도달. 역방향 그래프 → 후보마다 BFS/DFS → N 개 모두 도달하면 출력. 아래 섹션이 한 단락씩 쌓아요."),
+        "화살표를 거꾸로 뒤집으면 한 역에서 다 갈 수 있는지만 보면 돼요."),
       sections: getMilkFactorySections(E),
     },
   ];

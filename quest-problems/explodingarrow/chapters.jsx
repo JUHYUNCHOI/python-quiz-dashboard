@@ -139,7 +139,7 @@ function BinarySearchXSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "4 targets in a row with hp [3, 3, 2, 4]. You have K = 2 arrows (M = 1). An arrow of power X fired at target i deals max(0, M·X − d²) to the target d steps to its right. Pick X, place arrows greedily, and see if everyone dies.",
-            "일렬의 표적 4개, 체력 [3, 3, 2, 4]. 화살은 K = 2개 (M = 1). 힘 X 짜리 화살을 표적 i 에 쏘면, 오른쪽으로 d 칸 떨어진 표적에게 max(0, M·X − d²) 데미지를 줘요. X 를 골라 화살을 놓고, 다 쓰러지는지 봐요.")}
+            "표적 4개가 일렬로 있고 체력은 [3, 3, 2, 4] 예요. 화살은 K = 2개 (M = 1). 힘 X 짜리 화살을 표적 i 에 쏘면, 오른쪽으로 d 칸 떨어진 표적이 max(0, M·X − d²) 만큼 데미지를 받아요. X 를 골라 화살을 놓고, 다 쓰러지는지 봐요.")}
         </div>
 
         {/* X control */}
@@ -263,7 +263,7 @@ export function makeExplodingArrowCh1(E) {
       type: "reveal",
       narr: t(E,
         "N targets stand in a row with health a[0..N-1]. You have K arrows. Firing an arrow of power X at target i drops the health of every target j ≥ i by max(0, M·X − (j−i)²) — strong up close, fading with distance, then nothing.\nFind the SMALLEST power X so that, placing arrows optimally, every target reaches health ≤ 0.",
-        "표적 N개가 일렬로 서 있고 체력은 a[0..N-1]. 화살은 K개. 힘 X 짜리 화살을 표적 i 에 쏘면, i 오른쪽의 모든 표적 j 의 체력이 max(0, M·X − (j−i)²) 만큼 줄어요 — 가까울수록 세고, 멀수록 약해지다 0.\n화살을 잘 배치해서 모든 표적을 체력 ≤ 0 으로 만드는 가장 작은 힘 X 를 구해요."),
+        "표적을 모두 쓰러뜨릴 가장 작은 화살 힘 X 를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -336,7 +336,7 @@ export function makeExplodingArrowCh1(E) {
       type: "reveal",
       narr: t(E,
         "How does the data arrive?\nLine 1: N M K. Line 2: the N health values.\nOutput: one integer — the minimum power X.",
-        "데이터는 어떻게 들어올까요?\n1번 줄: N M K. 2번 줄: 체력 N개.\n출력: 정수 하나 — 최소 힘 X."),
+        "입력이 어떻게 들어오고 무엇을 내보낼지 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 12, padding: 14, marginBottom: 12 }}>
@@ -354,7 +354,7 @@ export function makeExplodingArrowCh1(E) {
                   실제로 계산하면 이 문제에서 제일 커지는 값은 `a[j] + j²` 이고,
                   a[j] ≤ 10^9 · j ≤ 2·10^5 이면 10^9 + (2·10^5)² ≈ 410억이다. 그 숫자를 쓴다. */}
               {t(E, "Limits: N <= 2*10^5; M, K, a[i] <= 10^9. Health plus distance squared can reach about 41 billion.",
-                  "제약: N ≤ 2·10^5; M, K, a[i] ≤ 10^9.\n체력 + 거리² 가 410억까지 커져요 — 아주 큰 수예요.")}
+                  "표적은 N ≤ 2·10^5 개예요. M 과 K 와 a[i] 는 10^9 을 넘지 않아요.\n체력 + 거리² 가 410억까지 커져요 — 아주 큰 수예요.")}
             </div>
           </div>
 
@@ -367,7 +367,7 @@ export function makeExplodingArrowCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.75 }}>
               {t(E, <>One line: <b>the minimum power X</b> that clears every target within K arrows.</>,
-                   <>한 줄: 화살 K개로 모든 표적을 없앨 수 있는 <b>최소 힘 X</b>.</>)}
+                   <>화살 K개로 모든 표적을 없앨 수 있는 <b>최소 힘 X</b> 를 한 줄에 써요.</>)}
             </div>
           </div>
 
@@ -389,7 +389,7 @@ export function makeExplodingArrowCh1(E) {
           <div style={{ fontSize: 11.5, color: C.dim, marginTop: 10, lineHeight: 1.6, ...KA }}>
             {t(E,
               "N=4 targets with hp [3,3,2,4], M=1, K=2 arrows. With X=5 (so M·X=5) one arrow at target 0 and one at target 2 clears everyone. No smaller X works — the answer is 5.",
-              "표적 4개, 체력 [3,3,2,4], M=1, 화살 K=2개. X=5 (M·X=5) 이면 표적 0 에 한 발, 표적 2 에 한 발로 전부 제거돼요. 더 작은 X 는 안 되니 정답은 5.")}
+              "표적 4개의 체력이 [3,3,2,4] 이고 M=1, 화살은 K=2개예요. X=5 (M·X=5) 이면 표적 0 에 한 발, 표적 2 에 한 발을 쏴서 전부 쓰러져요. 더 작은 X 로는 안 되니 정답은 5예요.")}
           </div>
         </div>),
     },
@@ -399,7 +399,7 @@ export function makeExplodingArrowCh1(E) {
       type: "reveal",
       narr: t(E,
         "Play with the answer directly. Pick a power X, watch the arrow's splash and whether K arrows finish everyone — then notice the feasibility flips exactly once.",
-        "정답을 직접 만져봐요. 힘 X 를 골라 화살의 퍼짐과 K개로 다 끝나는지 보고 — 가능 여부가 딱 한 번 뒤집히는 걸 확인해요."),
+        "힘 X 를 직접 골라서 표적이 다 쓰러지는지 봐요."),
       content: <BinarySearchXSim E={E} />,
     },
 
@@ -408,19 +408,19 @@ export function makeExplodingArrowCh1(E) {
       type: "quiz",
       narr: t(E,
         "Stronger arrows can only help: any target a weak arrow kills, a stronger one kills too. So once some X works, every larger X works.",
-        "더 센 화살은 손해가 없어요: 약한 화살이 없앤 표적은 센 화살도 없애요. 그러니 어떤 X 가 되면, 더 큰 X 는 모두 돼요."),
+        "약한 화살이 없앤 표적은 센 화살도 없애요."),
       question: t(E,
         "Suppose X = 5 clears every target within K arrows. What can we say about X = 6?",
         "X = 5 로 K개 안에 모든 표적을 없앨 수 있다고 해요. X = 6 은 어떨까요?"),
       options: [
         t(E, "X = 6 also works — bigger power is never worse", "X = 6 도 돼요 — 더 큰 힘은 절대 손해가 아니에요"),
-        t(E, "X = 6 might fail — too much damage wastes arrows", "X = 6 은 실패할 수 있어요 — 데미지가 너무 커서 화살 낭비"),
+        t(E, "X = 6 might fail — too much damage wastes arrows", "X = 6 은 안 될 수도 있어요 — 데미지가 너무 커서 화살이 낭비돼요"),
         t(E, "We can't tell without recomputing", "다시 계산하지 않으면 알 수 없어요"),
       ],
       correct: 0,
       explain: t(E,
         "Feasibility is monotonic: works at 5 ⇒ works at 6, 7, 8, … It flips from ✗ to ✓ exactly once. That single flip is what lets binary search find the smallest working X in log steps.",
-        "가능 여부는 단조로워요: 5 에서 되면 6, 7, 8, … 에서도 돼요. ✗ 에서 ✓ 로 딱 한 번 뒤집혀요. 이 한 번의 전환 덕분에 이분 탐색이 log 번 만에 가장 작은 X 를 찾아요."),
+        "5 에서 되면 6, 7, 8, … 에서도 돼요. ✗ 에서 ✓ 로 딱 한 번만 뒤집혀요. 이렇게 한 번만 뒤집히니까 이분 탐색이 log 번 만에 가장 작은 X 를 찾아요."),
     },
   ];
 }
@@ -436,35 +436,35 @@ export function makeExplodingArrowCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Trying every X and re-simulating every arrow is far too slow. Instead: binary-search the answer X (each guess is a yes/no), and answer each yes/no in O(N) with a greedy sweep that stamps parabola-shaped damage using a difference array.",
-        "모든 X 를 시도하며 화살을 매번 다시 시뮬레이션하면 너무 느려요. 대신: 정답 X 를 이분 탐색하고 (각 추측은 예/아니오), 각 예/아니오를 그리디 훑기 + 차분 배열로 O(N) 에 답해요."),
+        "X 를 하나씩 다 해보면 너무 느려요. 정답 X 를 이분 탐색해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: try each X, re-place arrows from scratch", "느림: X 마다 화살을 처음부터 다시 배치")}
+                🐢 {t(E, "Slow: try each X, re-place arrows from scratch", "느림 — X 마다 화살을 처음부터 다시 놓기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "X can be up to ~10^9 and each check touches N ≤ 2·10^5 targets with a parabola each. Way past the time limit.",
-                  "X 는 최대 ~10^9, 매 검사가 표적 N ≤ 2·10^5 개에 포물선을 하나씩 그려요. 시간 제한을 한참 초과.")}
+                  "X 는 최대 ~10^9 이고, 한 번 검사할 때마다 표적 N ≤ 2·10^5 개에 포물선을 하나씩 그려요. 시간 제한을 한참 넘어요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: binary-search X, O(N) feasibility check", "빠름: X 이분 탐색 + O(N) 가능성 검사")}
+                🚀 {t(E, "Fast: binary-search X, O(N) feasibility check", "빠름 — X 를 이분 탐색하고 O(N) 로 되는지 검사")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "Because feasibility flips only once, ~log(10^9) ≈ 30 guesses suffice. Each guess is an O(N) greedy sweep. Total ≈ 30 × N.",
-                  "가능 여부가 한 번만 뒤집히니 ~log(10^9) ≈ 30번 추측이면 충분해요. 각 추측은 O(N) 그리디 훑기. 합계 ≈ 30 × N.")}
+                  "되는지 아닌지가 한 번만 뒤집히니 ~log(10^9) ≈ 30번만 물어보면 충분해요. 한 번 물어볼 때마다 O(N) 로 그리디하게 훑어요. 다 합치면 ≈ 30 × N 이에요.")}
               </div>
             </div>
             <div style={{ background: "#faf5ff", border: "1px solid #d8b4fe", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12, color: "#6b21a8", lineHeight: 1.55, ...KA }}>
                 {t(E,
                   "The two hard ideas: (1) binary-search the ANSWER, not the damage; (2) add a whole parabola of damage to a range in O(1) with a 2nd-order difference array. Honest heads-up: this is a Division-1 problem — read each note twice.",
-                  "어려운 두 아이디어: (1) 데미지가 아니라 정답을 이분 탐색; (2) 2차 차분 배열로 포물선 데미지를 구간에 O(1) 로 더하기. 솔직히 말하면 디비전 1 문제예요 — 각 노트를 두 번씩 읽어요.")}
+                  "어려운 아이디어가 둘 있어요. 하나는 데미지가 아니라 정답을 이분 탐색하는 것이고, 다른 하나는 2차 차분 배열로 포물선 데미지를 구간에 O(1) 로 더하는 것이에요. 솔직히 디비전 1 문제예요 — 각 노트를 두 번씩 읽어요.")}
               </div>
             </div>
           </div>

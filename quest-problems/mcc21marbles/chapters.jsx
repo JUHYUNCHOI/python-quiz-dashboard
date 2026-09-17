@@ -30,7 +30,7 @@ export function makeMcc21MarblesCh1(E) {
       type: "reveal",
       narr: t(E,
         "N boxes in a row. Box i starts with A[i] marbles and must end with B[i] marbles. One operation: move ONE marble from a box to an adjacent box (left or right).\nPrint the MINIMUM number of operations. (It is guaranteed that sum(A) = sum(B).)",
-        "한 줄로 늘어선 N 개의 상자. 상자 i 는 A[i] 개로 시작해서 B[i] 개로 끝나야 해요. 한 번의 연산: 구슬 1 개를 인접한 상자 (왼쪽 또는 오른쪽) 로 옮기기.\n필요한 최소 연산 횟수를 출력해요. (sum(A) = sum(B) 가 보장돼요.)"),
+        "구슬을 옆 상자로 옮겨서 A 를 B 로 만들어 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -66,16 +66,16 @@ export function makeMcc21MarblesCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One operation: ", "한 번의 연산: ")}
+                  {t(E, "One operation: ", "한 번 할 수 있는 일은 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "move 1 marble to an adjacent box", "구슬 1 개를 인접한 상자로 옮기기")}</b>
-                  {t(E, " (box i−1 or i+1).", " (상자 i−1 또는 i+1).")}
+                  {t(E, " (box i−1 or i+1).", " 예요 (상자 i−1 또는 i+1).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum operations to turn A into B", "A 를 B 로 만드는 최소 연산 횟수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum operations to turn A into B", "A 를 B 로 만드는 최소 이동 횟수")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
@@ -89,7 +89,7 @@ export function makeMcc21MarblesCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. Three lines come in: N, then array A, then array B — position i pairs them up (box i goes from A[i] to B[i]).",
-        "입력 형식과 공식 예제를 봐요. 세 줄이 들어와요: N, 배열 A, 배열 B — 같은 위치 i 끼리 짝을 지어요 (상자 i 는 A[i] 에서 B[i] 로)."),
+        "입력은 N, 배열 A, 배열 B 이렇게 세 줄로 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff1f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -121,7 +121,7 @@ export function makeMcc21MarblesCh1(E) {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
               "A = [2,2,2,6,3] → B = [1,2,3,4,5]. One optimal way: 1→2, 2→3, then twice 4→5. That's 4 single-marble moves.",
-              "A = [2,2,2,6,3] → B = [1,2,3,4,5]. 한 가지 최적: 1→2, 2→3, 그다음 4→5 를 두 번. 총 4 번의 이동.")}
+              "A = [2,2,2,6,3] → B = [1,2,3,4,5] 예요. 제일 좋은 방법 하나는 1→2, 2→3, 그다음 4→5 를 두 번 옮기는 거예요. 모두 4 번 옮기면 돼요.")}
           </div>
         </div>),
     },
@@ -131,7 +131,7 @@ export function makeMcc21MarblesCh1(E) {
       type: "reveal",
       narr: t(E,
         "Feel the idea. Look at each box's surplus/shortage D = A − B, then carry the running total across each boundary. The answer piles up as |carry| at every boundary.",
-        "아이디어를 느껴봐요. 각 상자의 남음/모자람 D = A − B 를 보고, 누적 합을 각 경계로 넘겨요. 정답은 경계마다 |carry| 로 쌓여요."),
+        "상자마다 남거나 모자란 양 D = A − B 를 봐요."),
       content: <Mcc21MarblesBoundarySim E={E} />,
     },
 
@@ -140,7 +140,7 @@ export function makeMcc21MarblesCh1(E) {
       type: "quiz",
       narr: t(E,
         "2 boxes. A = [5, 1], B = [3, 3]. Box 1 has 2 too many, box 2 is 2 short. Those 2 extra marbles must cross the single boundary.",
-        "상자 2개. A = [5, 1], B = [3, 3]. 상자 1 은 2 개 많고, 상자 2 는 2 개 모자라요. 남는 2 개가 하나뿐인 경계를 건너야 해요."),
+        "상자 1 은 2 개 많고 상자 2 는 2 개 모자라요."),
       question: t(E,
         "A = [5, 1], target B = [3, 3]. Minimum moves?",
         "A = [5, 1], 목표 B = [3, 3]. 최소 이동?"),
@@ -152,7 +152,7 @@ export function makeMcc21MarblesCh1(E) {
       correct: 1,
       explain: t(E,
         "D = [+2, −2]. Prefix after box 1 = +2, so 2 marbles cross the boundary. |+2| = 2 moves.",
-        "D = [+2, −2]. 상자 1 까지의 누적 = +2, 그래서 2 개가 경계를 건너요. |+2| = 2 번."),
+        "D = [+2, −2] 예요.\n상자 1 까지 쌓아 온 값이 +2 라서 구슬 2 개가 경계를 건너요.\n|+2| = 2 번이에요."),
     },
 
     // 1-5: hand-computed input
@@ -160,11 +160,11 @@ export function makeMcc21MarblesCh1(E) {
       type: "input",
       narr: t(E,
         "Now three boxes. A = [3, 0, 3], B = [1, 4, 1]. Walk the prefix of D across both boundaries and add up |carry|.",
-        "이번엔 상자 3개. A = [3, 0, 3], B = [1, 4, 1]. D 의 누적을 두 경계로 넘기며 |carry| 를 더해요."),
+        "이번엔 상자 3 개예요. 경계 두 곳을 건너는 양을 더해 봐요."),
       question: t(E,
         "A = [3, 0, 3], B = [1, 4, 1]. Min moves?",
         "A = [3, 0, 3], B = [1, 4, 1]. 최소 이동?"),
-      hint: t(E, "D = [+2, −4, +2]. Prefix after box 1 = +2, after box 2 = −2. Add |+2| + |−2|.", "D = [+2, −4, +2]. 상자 1 까지 누적 = +2, 상자 2 까지 = −2. |+2| + |−2| 를 더해요."),
+      hint: t(E, "D = [+2, −4, +2]. Prefix after box 1 = +2, after box 2 = −2. Add |+2| + |−2|.", "D = [+2, −4, +2] 예요.\n상자 1 까지 쌓아 온 값은 +2, 상자 2 까지는 −2 예요.\n|+2| + |−2| 를 더해요."),
       answer: 4,
     },
   ];
@@ -177,7 +177,7 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way actually simulates marbles hopping one box at a time until A matches B — the number of hops can be enormous. The fast way never moves a marble: it reformulates the problem as a prefix-carry over D = A − B and gets the answer in one pass.",
-        "느린 방법은 A 가 B 와 같아질 때까지 구슬을 한 칸씩 실제로 옮겨요 — 이동 횟수가 어마어마해질 수 있어요. 빠른 방법은 구슬을 하나도 옮기지 않아요: 문제를 D = A − B 의 누적(carry) 으로 바꿔 한 번 훑기로 답을 구해요."),
+        "느린 방법은 구슬을 하나씩 옮기고, 빠른 방법은 세기만 해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -186,15 +186,15 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: simulate every single-marble hop", "느림: 구슬 한 칸 이동을 하나씩 시뮬")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Marbles can travel far, and totals reach 5·10¹¹ — the number of hops is astronomically large. Times out.", "구슬이 멀리 이동할 수 있고 합이 5·10¹¹ 까지 — 이동 횟수가 천문학적으로 커요. 시간 초과.")}
+                {t(E, "Marbles can travel far, and totals reach 5·10¹¹ — the number of hops is astronomically large. Times out.", "구슬이 멀리 갈 수 있고 합이 5·10¹¹ 까지라 이동 횟수가 어마어마해요. 그래서 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#fff1f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: prefix-carry over D = A − B", "빠름: D = A − B 의 누적(carry)")}
+                🚀 {t(E, "Fast: prefix-carry over D = A − B", "빠름: D = A − B 를 쌓아 가며 세기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Whatever imbalance sits left of a boundary MUST cross it. Sum |running prefix of D| over all N boxes — one O(N) pass.", "경계 왼쪽에 남은 불균형은 반드시 그 경계를 건너요. D 의 누적 |prefix| 를 N 개 상자에 걸쳐 더해요 — O(N) 한 번 훑기.")}
+                {t(E, "Marbles only hop between neighbours, so whatever imbalance sits left of a boundary MUST cross it. Sum |running prefix of D| over all N boxes — one O(N) pass.", "구슬은 옆 상자로만 갈 수 있어요. 그래서 경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요. D 를 쌓아 온 값의 절댓값을 상자마다 더하면 돼요. O(N) 으로 한 번만 훑어요.")}
               </div>
             </div>
           </div>

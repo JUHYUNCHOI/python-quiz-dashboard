@@ -54,21 +54,21 @@ export function getCollatzSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Just simulate: repeat the whole pass exactly k times (not 'until it reaches 1'), then print the sum.",
-            "그냥 시뮬: 한 바퀴 전체를 정확히 k번 반복 ('1이 될 때까지'가 아님) 하고 합을 출력."),
+            "시키는 대로 그대로 해요. 한 바퀴 전체를 정확히 k번 반복하고 ('1이 될 때까지' 가 아니에요) 합을 출력해요."),
         t(E, "For each number: even → divide by 2, odd → times 3 plus 1.",
-            "각 숫자마다: 짝수 → 2로 나눔, 홀수 → 3배하고 1을 더함."),
+            "숫자마다 짝수면 2로 나누고, 홀수면 3배한 뒤 1을 더해요."),
         t(E, "n·k ≤ 10⁶, so a plain double loop is fast enough.",
-            "n·k ≤ 10⁶ 라서 그냥 이중 반복문으로 충분히 빠름."),
+            "n·k ≤ 10⁶ 라서 이중 반복문만으로도 충분히 빨라요."),
       ],
       pyOnly: [
         t(E, "Update in place with a[i] = ... inside the k-loop; sum(a) gives the final answer.",
-            "k 반복 안에서 a[i] = ... 로 제자리 갱신하고, 마지막에 sum(a) 로 답."),
+            "k번 도는 동안 a[i] = ... 로 그 자리에서 바꾸고, 마지막에 sum(a) 로 답을 구해요."),
       ],
       cppOnly: [
         t(E, "3·x + 1 can grow, so store the list as long long (not int) to stay safe.",
-            "3·x + 1 로 값이 커질 수 있으니 리스트를 int 말고 long long 으로 저장."),
+            "3·x + 1 로 값이 커질 수 있으니 리스트를 int 말고 long long 으로 저장해요."),
         t(E, "for (auto& x : a) with a reference lets you modify each element in place.",
-            "for (auto& x : a) 처럼 참조로 돌면 각 원소를 제자리에서 수정 가능."),
+            "for (auto& x : a) 처럼 참조로 돌면 각 원소를 그 자리에서 바꿀 수 있어요."),
       ],
     },
   ];
@@ -84,14 +84,14 @@ export function getCollatzWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _COLL_VARS, beats: [
       { hi: [0, 11],  bubble: t(E, "Read n and k, then read the n numbers into the list a (long long — 3·x+1 can grow).", "n과 k를 읽고, 숫자 n개를 리스트 a에 읽어와요 (3·x+1로 커질 수 있어 long long).") },
-      { hi: [13, 19], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every number, if even ÷2, if odd ×3+1 — updated in place (auto& x is a reference).", "한 바퀴 전체를 정확히 k번 반복. 매 바퀴: 숫자마다 짝수면 ÷2, 홀수면 ×3+1 — 참조(auto& x)로 제자리 수정.") },
-      { hi: [21, 25], bubble: t(E, "After all k passes, add up the whole list and print the sum. That's the answer.", "k번을 다 돌린 뒤 리스트 전체를 더해 합을 출력. 그게 답이에요.") },
+      { hi: [13, 19], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every number, if even ÷2, if odd ×3+1 — updated in place (auto& x is a reference).", "한 바퀴 전체를 정확히 k번 반복해요. 바퀴마다 숫자가 짝수면 ÷2, 홀수면 ×3+1 로 바꿔요. 참조(auto& x) 라서 그 자리에서 바뀌어요.") },
+      { hi: [21, 25], bubble: t(E, "After all k passes, add up the whole list and print the sum. That's the answer.", "k번을 다 돌린 뒤 리스트 전체를 더해 합을 출력해요. 그게 답이에요.") },
     ] };
   }
   return { code: FULL_PY, vars: _COLL_VARS, beats: [
     { hi: [0, 1], bubble: t(E, "Read n and k on the first line, then read the list a of n numbers.", "첫 줄에서 n과 k를 읽고, 다음 줄에서 숫자 n개 리스트 a를 읽어요.") },
-    { hi: [2, 7], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every index i, if a[i] is even ÷2, if odd ×3+1 — replaced in place.", "한 바퀴 전체를 정확히 k번 반복. 매 바퀴: 각 i마다 a[i]가 짝수면 ÷2, 홀수면 ×3+1 — 제자리 교체.") },
-    { hi: [8, 8], bubble: t(E, "After all k passes, print(sum(a)) — the sum of the final list. Done.", "k번을 다 돌린 뒤 print(sum(a)) — 최종 리스트의 합. 끝이에요.") },
+    { hi: [2, 7], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every index i, if a[i] is even ÷2, if odd ×3+1 — replaced in place.", "한 바퀴 전체를 정확히 k번 반복해요. 바퀴마다 a[i] 가 짝수면 ÷2, 홀수면 ×3+1 로 그 자리에서 바꿔요.") },
+    { hi: [8, 8], bubble: t(E, "After all k passes, print(sum(a)) — the sum of the final list. Done.", "k번을 다 돌린 뒤 print(sum(a)) 로 마지막 리스트의 합을 출력해요. 끝이에요.") },
   ] };
 }
 
@@ -135,7 +135,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCollatzPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Collatz — Full Study Guide", "Collatz — 종합 풀이 노트");
@@ -158,7 +158,7 @@ export function downloadCollatzPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

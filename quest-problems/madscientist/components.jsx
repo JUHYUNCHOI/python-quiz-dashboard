@@ -42,7 +42,7 @@ export function MismatchRunsSim({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: A, marginBottom: 8, textAlign: "center" }}>
-        🔬 {t(E, "Scan the rows — count mismatch runs", "행을 스캔 — 다른 구간 묶음 세기")}
+        🔬 {t(E, "Scan the rows — count mismatch runs", "한 칸씩 보며 다른 구간을 세요")}
       </div>
 
       {/* preset selector */}
@@ -152,7 +152,7 @@ export function MismatchRunsSim({ E }) {
         <button onClick={() => setI(0)} style={{
           padding: "6px 12px", borderRadius: 8, border: `1.5px solid ${C.border}`,
           background: "#fff", color: C.dim, fontSize: 12, fontWeight: 700, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "리셋")}</button>
+        }}>↺ {t(E, "Reset", "처음으로")}</button>
       </div>
 
       {/* counter */}
@@ -167,10 +167,10 @@ export function MismatchRunsSim({ E }) {
         <div style={{ fontSize: 22, fontWeight: 900, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
           {t(E, "mismatch runs", "다른 구간 수")} = <span style={{ color: "#b91c1c" }}>{runs}</span>
         </div>
-        <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+        <div style={{ fontSize: 11, color: C.dim, marginTop: 4, whiteSpace: "pre-line", wordBreak: "keep-all" }}>
           {i < N
-            ? t(E, "Each run of consecutive ✗ becomes one flip.", "연속된 ✗ 묶음 하나가 한 번의 뒤집기.")
-            : t(E, "Answer = number of mismatch runs = minimum flips.", "답 = 다른 구간 수 = 최소 뒤집기 수.")}
+            ? t(E, "Each run of consecutive ✗ becomes one flip.", "✗ 가 이어진 구간 하나를 한 번에 뒤집을 수 있어요.")
+            : t(E, "Answer = number of mismatch runs = minimum flips.", "구간 하나는 한 번이면 되고, 떨어진 두 구간은 한 번에 못 고쳐요.\n그래서 다른 구간 수가 그대로 최소 뒤집기 횟수예요.")}
         </div>
       </div>
     </div>
@@ -242,19 +242,19 @@ export function getMadSciSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 은 Python 코드를 자동으로 옮긴 것이라 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "A bool flag inBlock tracks whether we're currently inside a mismatch run.",
-            "bool 플래그 inBlock으로 현재 불일치 구간 안인지 추적."),
+            "bool 값 inBlock 이 지금 다른 구간 안에 있는지를 기억해요."),
         t(E, "Compare strings char-by-char: A[i] != B[i] for direct character mismatch.",
-            "A[i] != B[i]로 문자별 직접 비교."),
+            "A[i] != B[i] 로 글자를 하나씩 맞대어 봐요."),
       ],
     },
   ];
@@ -300,7 +300,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMadSciPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "MadSci — Full Study Guide", "MadSci — 종합 풀이 노트");
@@ -323,7 +323,7 @@ export function downloadMadSciPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

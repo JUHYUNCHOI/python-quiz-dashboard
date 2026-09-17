@@ -64,17 +64,17 @@ export function CrossRoad3Sim({ E }) {
           <b>{cur.before}</b>{" → "}
           {cur.waited
             ? <span style={{ color: colorWait, fontWeight: 800 }}>
-                {t(E, `gate idle, wait until t=${cur.arr}`, `문 놀고 있음, t=${cur.arr} 까지 대기`)}
+                {t(E, `gate idle, wait until t=${cur.arr}`, `문이 비어 있어서 t=${cur.arr} 까지 기다려요`)}
               </span>
             : <span style={{ color: "#9a3412", fontWeight: 800 }}>
-                {t(E, `cow queues — gate busy past her arrival`, `소가 대기 — 문이 도착시각 이후까지 사용 중`)}
+                {t(E, `cow queues — gate busy past her arrival`, `소가 기다려요 — 문이 도착 시각 뒤까지 차 있어요`)}
               </span>}
         </div>
         <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
           {t(E, "start ", "시작 ")}<b>{cur.start}</b>
           {t(E, " + dur ", " + 소요 ")}<b>{cur.dur}</b>{" → "}
           <span style={{ color: colorPass, fontWeight: 800 }}>
-            {t(E, `finishes at t=${cur.finish}`, `t=${cur.finish} 에 끝남`)}
+            {t(E, `finishes at t=${cur.finish}`, `t=${cur.finish} 에 끝나요`)}
           </span>
         </div>
       </>
@@ -182,7 +182,7 @@ export function CrossRoad3Sim({ E }) {
       {/* Timeline */}
       <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "10px 8px", marginBottom: 10 }}>
         <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "gate timeline (each cell = 1 sec)", "문 사용 타임라인 (한 칸 = 1초)")}
+          {t(E, "gate timeline (each cell = 1 sec)", "문을 쓰는 시간표 (한 칸 = 1초)")}
         </div>
         {timeline()}
       </div>
@@ -208,7 +208,7 @@ export function CrossRoad3Sim({ E }) {
           background: "transparent", border: `1px solid ${C.border}`, borderRadius: 8,
           padding: "5px 10px", fontSize: 11, fontWeight: 600, color: C.dim,
           cursor: stepIdx === 0 ? "default" : "pointer",
-        }}>{t(E, "reset", "초기화")}</button>
+        }}>{t(E, "reset", "처음으로")}</button>
       </div>
     </div>
   );
@@ -288,19 +288,19 @@ export function getCrossRoad3Sections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 에서 옮긴 거예요. 타입이나 표현은 필요하면 바꿔요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣어요 (<iostream>, <vector>, ...). 그래야 코드가 뭘 쓰는지 한눈에 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더하거나 곱한 값이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -346,7 +346,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCrossRoad3PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "CrossRoad3 — Full Study Guide", "CrossRoad3 — 종합 풀이 노트");
@@ -369,7 +369,7 @@ export function downloadCrossRoad3PDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

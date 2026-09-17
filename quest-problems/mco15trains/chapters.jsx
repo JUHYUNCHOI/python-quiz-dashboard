@@ -56,7 +56,7 @@ export function makeTrainsCh1(E) {
       type: "reveal",
       narr: t(E,
         "An N × N grid has a population count in each cell (or −1 if blocked). Build a train path from cell A to cell B moving up/down/left/right between non-blocked cells. The cost of the path is the SUM of populations along it (every cell visited displaces its population).\nPrint the MINIMUM total displaced population.",
-        "N × N 격자에 각 칸의 인구 수가 있어요 (또는 −1 = 막힘). 막혀있지 않은 칸 사이에서 상하좌우로 칸 A 에서 칸 B 까지 철도 경로를 놓아요. 경로 비용 = 지나는 칸들의 인구 합 (방문한 모든 칸이 옮겨와요).\n옮긴 인구 총합의 최솟값을 출력해요."),
+        "A 에서 B 까지 철도를 놓을 때 옮기는 인구가 가장 적은 길을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -113,10 +113,10 @@ export function makeTrainsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "On a grid, you can move up, down, left, or right.\nHow many directions of movement are allowed?", "격자에서 위, 아래, 왼쪽, 오른쪽으로 이동 가능해요. 몇 방향으로 이동할 수 있나?"),
+        "On a grid, you can move up, down, left, or right.\nHow many directions of movement are allowed?", "격자에서는 몇 방향으로 움직일 수 있을까요?"),
       question: t(E,
         "How many directions can tracks be laid? (up/down/left/right)",
-        "철도를 놓을 수 있는 방향은 몇 개? (상/하/좌/우)"),
+        "철도를 놓을 수 있는 방향은 몇 개일까요? (상/하/좌/우)"),
       options: [
         t(E, "4 directions", "4방향"),
         t(E, "8 directions (including diagonals)", "8방향 (대각선 포함)"),
@@ -124,16 +124,16 @@ export function makeTrainsCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Only 4-directional movement (up, down, left, right) is allowed on the grid.",
-        "맞아! 격자에서는 4방향(상, 하, 좌, 우)만 이동 가능해요."),
+        "맞아요! 격자에서는 4방향(상, 하, 좌, 우)으로만 움직일 수 있어요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "On a grid, we move in 4 directions. How many directions?", "격자에서 4방향으로 이동해요. 몇 방향?"),
+        "On a grid, we move in 4 directions. How many directions?", "격자에서 움직일 수 있는 방향은 몇 개일까요?"),
       question: t(E,
         "Number of movement directions on the grid?",
-        "격자에서 이동 가능한 방향 수?"),
+        "격자에서 움직일 수 있는 방향은 몇 개일까요?"),
       hint: t(E,
         "Count the directions listed: up, down, left, right.",
         "나열된 방향을 세어 봐요: 상, 하, 좌, 우."),
@@ -144,7 +144,7 @@ export function makeTrainsCh1(E) {
       type: "auditSim",
       narr: t(E,
         "Build your own train path A→B on a small grid. Live: cost is summed and compared against Dijkstra's minimum. Many valid paths exist — only the lowest-cost one wins.",
-        "작은 격자에서 직접 A→B 철도 경로를 놓아 봐요. 비용이 합산되고 다익스트라의 최솟값과 비교돼요. 유효한 경로는 많지만, 비용이 최소인 경로만 정답이에요."),
+        "작은 격자에서 A→B 철도를 직접 놓아 봐요."),
     },
   ];
 }
@@ -160,7 +160,7 @@ export function makeTrainsCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Dijkstra on the N×N grid: start at A with cost grid[A], expand to non-blocked neighbors, accumulate population costs in a min-heap. Stop at B. Sections build it one piece at a time.",
-        "N×N 격자 다익스트라: A 에서 비용 grid[A] 로 시작, 차단되지 않은 이웃으로 확장, 인구 비용을 최소 힙에 누적. B 에서 중단. 아래 섹션이 한 단락씩 쌓아요."),
+        "다익스트라로 비용이 가장 적은 길부터 차근차근 넓혀 가요."),
       sections: getTrainsSections(E),
     },
   ];

@@ -71,7 +71,7 @@ export function SleepyHerdSim({ E }) {
       marginTop: 12,
     }}>
       <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", letterSpacing: 0.5, marginBottom: 8 }}>
-        🐮 {t(E, "TRY IT — move an endpoint cow", "직접 해보기 — 끝점 소를 옮겨봐")}
+        🐮 {t(E, "TRY IT — move an endpoint cow", "직접 해보기 — 끝점 소를 옮겨봐요")}
       </div>
 
       {/* Scenario picker */}
@@ -172,11 +172,11 @@ export function SleepyHerdSim({ E }) {
         ) : picked ? (
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: "3px 9px", fontSize: 11, color: "#9a3412" }}>
             {t(E, `Picked ${picked === "L" ? "left" : "right"} endpoint — click a slot`,
-                  `${picked === "L" ? "왼쪽" : "오른쪽"} 끝점 선택됨 — 빈 자리 클릭`)}
+                  `${picked === "L" ? "왼쪽" : "오른쪽"} 끝점을 골랐어요 — 빈 자리를 눌러요`)}
           </div>
         ) : (
           <div style={{ background: "#f1f5f9", border: "1px solid #cbd5e1", borderRadius: 8, padding: "3px 9px", fontSize: 11, color: C.dim }}>
-            {t(E, "Click an endpoint cow (left or right)", "끝점 소(왼쪽 또는 오른쪽)를 클릭")}
+            {t(E, "Click an endpoint cow (left or right)", "끝점 소(왼쪽 또는 오른쪽)를 눌러요")}
           </div>
         )}
         <button
@@ -192,13 +192,13 @@ export function SleepyHerdSim({ E }) {
             fontWeight: 700,
             cursor: "pointer",
           }}
-        >↺ {t(E, "Reset", "초기화")}</button>
+        >↺ {t(E, "Reset", "처음부터")}</button>
       </div>
 
       <div style={{ fontSize: 11, color: "#92400e", lineHeight: 1.5 }}>
         {t(E,
           "Only the LEFTMOST or RIGHTMOST cow can move, and only into an empty slot strictly between the other two. Try to reach a consecutive triple in as few — or as many — moves as you can.",
-          "왼쪽 끝 또는 오른쪽 끝 소만 움직일 수 있어, 그것도 다른 두 소 사이의 빈 자리로만. 연속 세 칸을 만드는 데 몇 번이 최소이고 몇 번이 최대인지 직접 시도해봐.")}
+          "왼쪽 끝이나 오른쪽 끝 소만 움직일 수 있어요. 그것도 다른 두 소 사이의 빈 자리로만요. 연속 세 칸을 만드는 데 몇 번이 최소이고 몇 번이 최대인지 직접 해봐요.")}
       </div>
     </div>
   );
@@ -290,19 +290,19 @@ export function getSleepyHerdSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 코드를 옮긴 거예요. 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 것만 적어요 (<iostream>, <vector>, ...). 그래야 코드가 뭘 쓰는지 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -348,7 +348,7 @@ function highlightCode(lines, lang) {
 
 export function downloadSleepyHerdPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "SleepyHerd — Full Study Guide", "SleepyHerd — 종합 풀이 노트");
@@ -371,7 +371,7 @@ export function downloadSleepyHerdPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

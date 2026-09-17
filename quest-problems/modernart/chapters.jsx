@@ -11,7 +11,7 @@ export function makeModernArtCh1(E) {
       type: "reveal",
       narr: t(E,
         "An N×N canvas was painted by stacking 9 axis-aligned rectangles of colors 1..9, one painting on top of another (later paintings cover earlier ones).\nWe see the FINAL canvas. Print which colors COULD have been the very first painting (i.e., are NOT forced to be painted over a different visible color).",
-        "N × N 캔버스에 1..9 색의 9개 축에 평행한 직사각형 페인트가 한 번씩 차례로 칠해져요 (나중 페인트가 앞 페인트를 덮음).\n최종 캔버스가 주어졌을 때, 가장 먼저 칠해졌을 수 있는 색들 — 즉 다른 보이는 색 위에 칠해질 필요가 없는 색들 — 을 출력해요."),
+        "가장 먼저 칠해졌을 수 있는 색이 무엇인지 찾아봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeModernArtCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Output the count of colors that could have been painted first.",
-                "가장 먼저 칠해졌을 수 있는 색의 수를 출력.")}
+                "가장 먼저 칠해졌을 수 있는 색이 몇 개인지 출력해요.")}
             </div>
           </div>
 
@@ -73,36 +73,36 @@ export function makeModernArtCh1(E) {
       type: "sim",
       narr: t(E,
         "Pick a 4×4 or 5×5 canvas, then paint rectangles one by one. Watch which colors stay visible and which get fully covered. The counter on the right is the answer for this preset.",
-        "4×4 또는 5×5 캔버스를 골라 직사각형을 하나씩 칠해봐. 어떤 색이 보이고 어떤 색이 완전히 덮이는지 봐요. 오른쪽 숫자가 이 프리셋의 정답이에요."),
+        "직사각형을 하나씩 칠해 보며 어떤 색이 덮이는지 봐요."),
     },
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "If only 1 color is visible on the entire canvas, could it have been painted first?", "캔버스에 1가지 색만 보이면, 그 색이 처음에 칠해졌을 수 있을까?"),
+        "If only 1 color is visible on the entire canvas, could it have been painted first?", "캔버스에 색이 하나만 보이면 그 색이 처음일 수 있을까요?"),
       question: t(E,
         "Only 1 color visible on canvas. Could it be the first painted?",
         "캔버스에 1가지 색만 보여요. 처음에 칠해졌을 수 있어요?"),
       options: [
-        t(E, "Yes, nothing is on top of it", "맞아, 위에 아무것도 없으니까"),
-        t(E, "No, it must be last", "아니, 마지막이어야 해"),
+        t(E, "Yes, nothing is on top of it", "네, 위에 덮인 색이 없으니까요"),
+        t(E, "No, it must be last", "아니요, 마지막에 칠해야 해요"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! If only 1 color is visible, its bounding box isn't inside any other visible color's box. It can be first (and also last, since it's the only one).",
-        "맞아! 1가지 색만 보이면 그 바운딩 박스가 다른 보이는 색의 박스 안에 없어요. 처음일 수 있어 (유일하니까 마지막이기도 하고)."),
+        "맞아요! 색이 하나뿐이면 그 색을 덮은 다른 색이 없어요.\n그러니 처음에 칠했다고 해도 아무 문제가 없어요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "If only 1 color is visible, answer 1 for 'yes it can be first'.", "1가지 색만 보이면 '처음일 수 있다'에 대해 1로 답해요."),
+        "If only 1 color is visible, answer 1 for 'yes it can be first'.", "보이는 색이 하나뿐일 때 답이 몇 개인지 적어 봐요."),
       question: t(E,
         "Can 1 visible color be first? (1=yes, 0=no)",
         "보이는 색 1개가 처음일 수 있어요? (1=예, 0=아니오)"),
       hint: t(E,
         "If nothing else is visible, what could be on top of it?",
-        "다른 색이 안 보이면 그 위에 뭐가 있을 수 있을까?"),
+        "다른 색이 하나도 안 보이면 그 위에 무엇이 덮여 있을까요?"),
       answer: 1,
     },
   ];
@@ -119,7 +119,7 @@ export function makeModernArtCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "For each color, find its bounding box. A color cannot be first if its bounding box sits entirely inside another color's bounding box (it must have been painted on top). Otherwise it can be first. Sections build it one piece at a time.",
-        "각 색의 바운딩 박스 찾기. 어떤 색의 박스가 다른 색의 박스 안에 완전히 들어가면 첫 번째 불가 (그 위에 칠해진 거). 아니면 첫 번째 가능. 아래 섹션이 한 단락씩 쌓아요."),
+        "색마다 바운딩 박스를 구해서 서로 안에 들어가는지 봐요."),
       sections: getModernArtSections(E),
     },
   ];

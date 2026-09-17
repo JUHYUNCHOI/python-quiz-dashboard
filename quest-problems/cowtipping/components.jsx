@@ -57,7 +57,7 @@ export function CowTipSim({ E }) {
         background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 12,
         padding: "10px 14px", marginBottom: 12, fontSize: 12.5, color: "#065f46", lineHeight: 1.55,
       }}>
-        <b>🐄 {t(E, "Try it!", "직접 해봐!")}</b>{" "}
+        <b>🐄 {t(E, "Try it!", "직접 해봐요!")}</b>{" "}
         {t(E,
           "Click any cell (i, j) — every cow inside the rectangle (0, 0) to (i, j) flips. Make all cows face DOWN (0) in the fewest tips.",
           "어떤 칸 (i, j) 든 클릭하면 (0, 0) ~ (i, j) 직사각형 안 모든 소가 뒤집혀요. 가장 적은 횟수로 모두 0 (엎드림) 으로 만들어 봐요.")}
@@ -99,7 +99,7 @@ export function CowTipSim({ E }) {
             cursor: "pointer",
           }}
         >
-          ↻ {t(E, "Reset", "초기화")}
+          ↻ {t(E, "Reset", "처음으로")}
         </button>
       </div>
 
@@ -163,7 +163,7 @@ export function CowTipSim({ E }) {
             textAlign: "center",
           }}>
             {allDown
-              ? t(E, "✅ All down! Nice work.", "✅ 모두 엎드림! 잘했어.")
+              ? t(E, "✅ All down! Nice work.", "✅ 모두 엎드렸어요! 잘했어요.")
               : t(E, "🐄 Standing cows remain", "🐄 아직 서있는 소가 있어요")}
           </div>
 
@@ -271,20 +271,20 @@ export function getCowTipSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Go from bottom-right to top-left. The only flip that can clear a 1 at (i, j) is the rectangle (0,0)–(i,j) — a bigger one would also touch cells we already fixed. So that flip is forced.",
+            "오른쪽 아래부터 왼쪽 위로 가요. (i, j) 의 1 을 없앨 수 있는 뒤집기는 (0,0)~(i,j) 직사각형뿐이에요. 더 큰 직사각형은 이미 맞춰 둔 칸까지 건드리거든요. 그래서 이 뒤집기는 반드시 해야 해요."),
+        t(E, "Because every flip is forced, just counting them gives the minimum.",
+            "뒤집기가 전부 강제로 정해지니까, 세기만 하면 그게 가장 적은 횟수예요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "vector<vector<int>> stores the grid as integers (0/1).",
-            "vector<vector<int>>로 격자를 0/1 정수로 저장."),
+            "vector<vector<int>> 로 격자를 0/1 정수로 담아요."),
         t(E, "Walk from bottom-right back to top-left, flipping each 1 we hit.",
-            "오른쪽-아래에서 왼쪽-위로 훑으며 1을 만나면 뒤집기."),
+            "오른쪽 아래에서 왼쪽 위로 훑으면서 1 을 만나면 뒤집어요."),
       ],
     },
   ];

@@ -112,7 +112,7 @@ export function makeMcc19Rect2Ch1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "One line: the 4th corner's coordinates x y (space-separated).",
-                    "한 줄: 4 번째 꼭짓점의 좌표 x y (공백으로 구분).")}
+                    "한 줄에 4 번째 꼭짓점의 좌표 x y 를 공백으로 띄어 적어요.")}
             </div>
           </div>
           {/* Sample */}
@@ -153,10 +153,10 @@ export function makeMcc19Rect2Ch1(E) {
       type: "quiz",
       narr: t(E,
         "Corners: (5,1), (5,4), (2,1). Where must the 4th one be?",
-        "꼭짓점: (5,1), (5,4), (2,1). 4 번째는 어디에 있어야 할까요?"),
+        "꼭짓점이 (5,1), (5,4), (2,1) 이에요. 4 번째는 어디일까요?"),
       question: t(E,
         "3 corners: (5,1), (5,4), (2,1). 4th corner?",
-        "3개 꼭짓점: (5,1), (5,4), (2,1). 4번째 꼭짓점은?"),
+        "꼭짓점 3개가 (5,1), (5,4), (2,1) 이에요. 4번째 꼭짓점은?"),
       options: [
         t(E, "(2, 4)", "(2, 4)"),
         t(E, "(5, 4)", "(5, 4)"),
@@ -171,7 +171,7 @@ export function makeMcc19Rect2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Corners: (7,2), (3,2), (3,6). What is the x-coordinate of the 4th corner?", "꼭짓점: (7,2), (3,2), (3,6). 4번째 꼭짓점의 x좌표는?"),
+        "Corners: (7,2), (3,2), (3,6). What is the x-coordinate of the 4th corner?", "꼭짓점이 (7,2), (3,2), (3,6) 이에요. 4번째 꼭짓점의 x좌표는?"),
       question: t(E,
         "4th corner x-coordinate = ?",
         "4번째 꼭짓점의 x좌표 = ?"),

@@ -57,7 +57,7 @@ export default function MilkCircleSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 14, padding: 14 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", textAlign: "center", marginBottom: 8 }}>
-          {t(E, "🎮 Try it: 4 cows, directions R R L L, caps all 2", "🎮 직접 해보기: 소 4 마리, 방향 R R L L, 용량 모두 2")}
+          {t(E, "🎮 Try it: 4 cows, directions R R L L, caps all 2", "🎮 직접 해보기 — 소 4 마리, 방향 R R L L, 용량 모두 2")}
         </div>
 
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
@@ -124,7 +124,7 @@ export default function MilkCircleSim({ E }) {
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.text, lineHeight: 1.6, textAlign: "center" }}>
           {t(E,
             "Watch how the totals drop only when a cow goes over capacity (yellow). Once the flow stabilizes, the total stops shrinking.",
-            "용량 초과 (노랑) 가 생긴 분에만 총 우유가 줄어요. 흐름이 안정되면 총합도 더 안 줄어요.")}
+            "넘침 (노랑) 이 생긴 분에만 총 우유가 줄어요. 아무도 넘치지 않게 되면 총합은 더 줄지 않아요.")}
         </div>
       </div>
     </div>

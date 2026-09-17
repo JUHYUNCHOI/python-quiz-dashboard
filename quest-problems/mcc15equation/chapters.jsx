@@ -240,7 +240,7 @@ export function makeMcc15EqCh1(E) {
       type: "reveal",
       narr: t(E,
         "Three positive integers are written on the ground with two spaces between them. Put symbols in those two spaces so the whole thing becomes a valid equation.",
-        "땅에 양의 정수 3개가 적혀 있고 사이에 빈칸이 2개 있어요. 그 두 칸에 기호를 넣어서 전체가 올바른 등식이 되게 만들어요."),
+        "땅에 적힌 수 3개 사이 빈칸에 기호를 넣어 등식을 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -332,7 +332,7 @@ export function makeMcc15EqCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8, lineHeight: 1.6 }}>
               {t(E, "Limits: 1 ≤ x, y, z ≤ 1,000,000. The inputs provided will guarantee that a unique solution exists.",
-                   "제약: 1 ≤ x, y, z ≤ 1,000,000. 주어지는 입력은 답이 유일하게 존재하도록 보장돼요.")}
+                   "x, y, z 는 1 부터 1,000,000 까지예요. 답이 딱 하나만 나오는 입력만 주어져요.")}
             </div>
           </div>
 
@@ -368,7 +368,7 @@ export function makeMcc15EqCh1(E) {
       type: "quiz",
       narr: t(E,
         "Count it: the '=' can sit in the first gap or the second gap, and whichever gap is left over holds one of + - * /.",
-        "세어봐요: '=' 는 앞칸이나 뒷칸에 놓일 수 있고, 남은 칸에는 + - * / 중 하나가 들어가요."),
+        "넣을 수 있는 기호 조합이 모두 몇 가지인지 세어 볼까요?"),
       question: t(E,
         "There are two gaps and exactly one '='. How many candidates do we need to check?",
         "빈칸이 2개이고 '=' 는 정확히 1개일 때, 확인해야 하는 경우의 수는?"),
@@ -380,7 +380,7 @@ export function makeMcc15EqCh1(E) {
       correct: 1,
       explain: t(E,
         "If '=' is in the first gap the shape is a=b op c; if it is in the second gap the shape is a op b=c. Each has 4 operators → 2 × 4 = 8.",
-        "'=' 가 앞칸이면 a=b op c, 뒷칸이면 a op b=c. 각각 연산자 4개 → 2×4 = 8."),
+        "'=' 가 앞칸이면 a=b op c, 뒷칸이면 a op b=c 예요. 각각 기호가 4개씩이라 2×4 = 8 가지예요."),
     },
 
     // 1-4: 시뮬로 확인 — 방금 세어본 8가지를 하나씩 넘겨본다
@@ -402,7 +402,7 @@ export function makeMcc15EqCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Two things to hold on to: there are only 8 candidates, so checking all of them is fine; and division has to be checked without decimals.",
-        "기억할 건 두 가지예요. 후보가 8가지뿐이라 전부 확인해도 되고, 나눗셈은 소수 없이 확인해야 해요."),
+        "후보는 8가지뿐이고, 나눗셈은 소수 없이 확인해야 해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -423,7 +423,7 @@ export function makeMcc15EqCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "'/' is real division, so a / b comes out as a decimal like 6.5 and comparing decimals can go wrong by a tiny amount. Flip it instead: a / b == c is the same as a == b * c, and that is a comparison between whole numbers.",
-                  "'/' 는 실수 나눗셈이라 a / b 가 6.5 같은 소수로 나오고, 소수끼리 비교하면 아주 작은 오차가 생길 수 있어요. 대신 뒤집어요: a / b == c 는 a == b * c 와 같은 말이고, 이건 정수끼리의 비교예요.")}
+                  "'/' 는 실수 나눗셈이라 a / b 가 6.5 같은 소수로 나오고, 소수끼리 비교하면 아주 작은 오차가 생길 수 있어요. 그래서 식을 뒤집어요. a / b == c 는 a == b * c 와 같은 말이고, 이건 정수끼리 비교하는 거예요.")}
               </div>
             </div>
           </div>

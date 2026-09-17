@@ -103,7 +103,7 @@ function IsthmusPeakSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "This is the isthmus from the problem statement: 4 4 0 2 3 5 3 1. Pick K, then move the marker. From the marked land we walk K steps to the left and K steps to the right — and ask whether we are always going strictly down (peak) or always strictly up (valley).",
-            "문제 설명에 나온 지협이에요: 4 4 0 2 3 5 3 1. K를 고르고 표시를 옮겨봐요. 표시된 땅에서 왼쪽으로 K칸, 오른쪽으로 K칸 걸어가면서 계속 엄격하게 내려가는지(봉우리), 계속 엄격하게 올라가는지(골짜기) 확인해요.")}
+            "문제 설명에 나온 지협이에요 — 4 4 0 2 3 5 3 1.\nK를 고르고 표시를 옮겨 봐요.\n표시된 땅에서 왼쪽으로 K칸, 오른쪽으로 K칸 걸어가요.\n계속 내려가면 봉우리, 계속 올라가면 골짜기예요.")}
         </div>
 
         {/* controls */}
@@ -215,7 +215,7 @@ function IsthmusPeakSim({ E }) {
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
           {t(E,
             "Try the three cases from the statement: height 5 is a peak for both K=1 and K=2; height 0 is a valley for K=1 but not for K=2 (its second step to the left is 4 → 4, not strictly up); the last piece has no land on its right, so it is nothing.",
-            "문제 설명의 세 장면을 눌러봐요. 높이 5는 K=1에서도 K=2에서도 봉우리예요. 높이 0은 K=1에서는 골짜기지만 K=2에서는 아니에요 (왼쪽 두 번째 걸음이 4 → 4 라서 엄격하게 올라가지 않아요). 마지막 땅은 오른쪽에 땅이 없어서 아무것도 아니에요.")}
+            "문제 설명의 세 장면을 눌러 봐요.\n높이 5는 K=1에서도 K=2에서도 봉우리예요.\n높이 0은 K=1에서는 골짜기지만 K=2에서는 아니에요.\n왼쪽 두 번째 걸음이 4 → 4 라서 올라가지 않거든요.\n마지막 땅은 오른쪽에 땅이 없어서 아무것도 아니에요.")}
         </div>
       </div>
     </div>
@@ -246,7 +246,7 @@ export function makeMcc15IsthmusCh1(E) {
       type: "reveal",
       narr: t(E,
         "An isthmus is split into N pieces of land, each with a height. An order-K peak is a piece from which you always go strictly downwards walking K steps to the left and K steps to the right; an order-K valley is the same with upwards.\nCount how many pieces are order-K peaks or order-K valleys.",
-        "지협이 N개의 땅으로 나뉘어 있고 각 땅에 높이가 있어요. order-K 봉우리는 그 땅에서 왼쪽으로 K칸, 오른쪽으로 K칸 걸어가는 동안 계속 엄격하게 내려가는 땅이고, order-K 골짜기는 계속 올라가는 땅이에요.\norder-K 봉우리와 골짜기가 몇 개인지 세요."),
+        "order-K 봉우리와 골짜기가 몇 개인지 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -327,7 +327,7 @@ export function makeMcc15IsthmusCh1(E) {
       type: "reveal",
       narr: t(E,
         "Careful: N, K and the heights come on three separate lines. N can be as large as 1,000,000.",
-        "주의해요: N, K, 높이 배열이 각각 다른 줄로 들어와요. N은 최대 1,000,000까지 커요."),
+        "N, K, 높이가 각각 다른 줄로 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0f9ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -342,7 +342,7 @@ export function makeMcc15IsthmusCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 8, lineHeight: 1.6 }}>
               {t(E,
                 "Note: about 50% of the total score comes from tests with 1 ≤ N ≤ 10,000.",
-                "참고: 전체 배점의 약 50%는 1 ≤ N ≤ 10,000 인 테스트에서 나와요.")}
+                "전체 배점의 약 50%는 1 ≤ N ≤ 10,000 인 테스트에서 나와요.")}
             </div>
             <div style={{ fontSize: 12.5, color: C.text, marginTop: 8, lineHeight: 1.6 }}>
               📤 {t(E, "Output — a single integer, the number of settlements built.",
@@ -365,7 +365,7 @@ export function makeMcc15IsthmusCh1(E) {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
             {t(E,
               "With K = 1 there is one order-1 peak (height 5) and two order-1 valleys (heights 0 and 1), so 3 settlements.",
-              "K = 1 일 때 order-1 봉우리가 1개(높이 5), order-1 골짜기가 2개(높이 0, 높이 1) 있어요. 그래서 마을은 3개예요.")}
+              "K = 1 일 때 order-1 봉우리가 1개(높이 5) 있어요.\norder-1 골짜기는 2개(높이 0, 높이 1) 있어요.\n그래서 마을은 3개예요.")}
           </div>
         </div>),
     },
@@ -384,7 +384,7 @@ export function makeMcc15IsthmusCh1(E) {
       type: "quiz",
       narr: t(E,
         "In 4 4 0 2 3 5 3 1, the height 0 is an order-1 valley. Now check order-2: walking left it goes 0 → 4 → 4.",
-        "4 4 0 2 3 5 3 1 에서 높이 0은 order-1 골짜기예요. 이제 order-2를 확인해봐요. 왼쪽으로 걸어가면 0 → 4 → 4 예요."),
+        "이번엔 order-2 를 확인해 봐요. 왼쪽은 0 → 4 → 4 예요."),
       question: t(E,
         "In 4 4 0 2 3 5 3 1, is the piece of height 0 an order-2 valley?",
         "4 4 0 2 3 5 3 1 에서 높이 0인 땅은 order-2 골짜기일까요?"),
@@ -396,7 +396,7 @@ export function makeMcc15IsthmusCh1(E) {
       correct: 0,
       explain: t(E,
         "Walking left, the first step 0 → 4 goes up, but the next step is 4 → 4, which is not strictly up. So it cannot cover 2 steps to the left.",
-        "왼쪽으로 한 칸(4)은 올라가지만, 그 다음 칸도 4 라서 엄격하게 올라가지 않아요. 왼쪽으로 2칸을 못 채워요."),
+        "왼쪽으로 한 칸(4)은 올라가요.\n그런데 그 다음 칸도 4 라서 더 올라가지 않아요.\n왼쪽으로 2칸을 못 채워요."),
     },
   ];
 }
@@ -411,7 +411,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Checking K steps on both sides of every position is N×K work — up to about 10^12. Instead, carry the answer over from the neighbour: the run length at i is the run length at i−1 plus one.",
-        "위치마다 양쪽 K칸을 다 확인하면 N×K 연산이에요 — 최대 약 10^12. 대신 옆 칸의 답을 이어받아요. i 의 길이는 i−1 의 길이에 1을 더한 값이에요."),
+        "매번 K칸을 다시 세지 말고 옆 칸의 답을 이어받아요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -422,7 +422,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
                 {t(E,
                   "For each of the N pieces, walk K steps left and K steps right. That is N × K work. With N = 1,000,000 and K almost as large, that is up to about 10^12 operations — time limit exceeded.",
-                  "N개의 땅마다 왼쪽 K칸, 오른쪽 K칸을 걸어가요. N × K 연산이에요. N = 1,000,000 이고 K도 그만큼 크면 최대 약 10^12 연산 — 시간 초과예요.")}
+                  "N개의 땅마다 왼쪽 K칸, 오른쪽 K칸을 걸어가요. 그러면 N × K 번 계산해요. N = 1,000,000 이고 K도 그만큼 크면 약 10^12 번이에요. 시간 초과가 나요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
@@ -432,7 +432,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 6 }}>
                 {t(E,
                   "\"How far can I keep going down to the left from i?\" — do not count it again. If H[i] > H[i−1], the answer is the neighbour's answer plus one; otherwise it is 0.",
-                  "\"i 에서 왼쪽으로 계속 내려가며 몇 칸 갈 수 있나?\" — 다시 세지 않아요. H[i] > H[i−1] 이면 옆 칸의 답에 1을 더하고, 아니면 0이에요.")}
+                  "\"i 에서 왼쪽으로 몇 칸이나 계속 내려갈 수 있나?\" 이걸 다시 세지 않아요. H[i] > H[i−1] 이면 옆 칸의 답에 1을 더하고, 아니면 0이에요.")}
               </div>
               <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: "8px 12px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7 }}>
                 <div>downL[i] = downL[i-1] + 1 <span style={{ color: "#8b949e" }}>if H[i] &gt; H[i-1] else 0</span></div>
@@ -441,7 +441,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginTop: 8 }}>
                 {t(E,
                   "Do the same from the back for the right side (downR, upR). One sweep each — N steps per direction, 4N in total.",
-                  "오른쪽 방향(downR, upR)은 뒤에서부터 똑같이 해요. 방향마다 한 번씩만 훑으니 N번, 방향이 4개라 모두 합쳐 4N번이에요.")}
+                  "오른쪽 방향(downR, upR)은 뒤에서부터 똑같이 해요. 방향마다 한 번씩만 훑으니 N번이에요. 방향이 4개라 모두 합쳐 4N번이에요.")}
               </div>
             </div>
             <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 10, padding: "10px 14px" }}>

@@ -11,7 +11,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "LeetCode #1480 — Running Sum of 1d Array. Given nums, return an array where output[i] = nums[0] + nums[1] + … + nums[i]. This is the simplest prefix sum problem — and the foundation for the next three.",
-        "LeetCode #1480 — Running Sum of 1d Array. nums 가 주어지면 output[i] = nums[0] + nums[1] + … + nums[i] 인 배열을 반환. 가장 간단한 누적합 문제 — 다음 세 문제의 기초예요."),
+        "output[i] 가 nums[0] 부터 nums[i] 까지의 합인 배열을 만들어요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: TEAL_L, border: `2px solid ${TEAL}`, borderRadius: 10, padding: "12px 16px", marginBottom: 14 }}>
@@ -49,14 +49,14 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Watch how the running sum builds: start from index 1 and add the previous running total to the current element.",
-        "누계가 쌓이는 과정: 인덱스 1 부터, 이전 누계 + 현재 원소를 더해요."),
+        "1 번 자리부터 앞까지의 합에 지금 값을 더해 나가요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#374151", marginBottom: 12, textAlign: "center" }}>
             nums = [1, 2, 3, 4]
           </div>
           {[
-            { active: 0, vals: [1, "—", "—", "—"], note: t(E, "index 0: copy as-is → 1", "인덱스 0: 그대로 → 1") },
+            { active: 0, vals: [1, "—", "—", "—"], note: t(E, "index 0: copy as-is → 1", "0 번 자리는 그대로 → 1") },
             { active: 1, vals: [1, 3, "—", "—"], note: t(E, "1 + 2 = 3", "1 + 2 = 3") },
             { active: 2, vals: [1, 3, 6, "—"], note: t(E, "3 + 3 = 6", "3 + 3 = 6") },
             { active: 3, vals: [1, 3, 6, 10], note: t(E, "6 + 4 = 10 ✓", "6 + 4 = 10 ✓") },
@@ -96,7 +96,7 @@ export function makeChapters(E) {
       type: "quiz",
       narr: t(E,
         "nums = [3, 1, 4, 1, 5]. What is running_sum[3]?",
-        "nums = [3, 1, 4, 1, 5]. running_sum[3] 은?"),
+        "nums = [3, 1, 4, 1, 5] 일 때 running_sum[3] 은 얼마일까요?"),
       question: t(E,
         "nums = [3, 1, 4, 1, 5]\nrunning_sum[3] = ?",
         "nums = [3, 1, 4, 1, 5]\nrunning_sum[3] = ?"),
@@ -109,15 +109,15 @@ export function makeChapters(E) {
       correct: 1,
       explain: t(E,
         "running_sum[3] = nums[0]+nums[1]+nums[2]+nums[3] = 3+1+4+1 = 9. Always sum from index 0 through i.",
-        "running_sum[3] = nums[0]+nums[1]+nums[2]+nums[3] = 3+1+4+1 = 9. 항상 인덱스 0 부터 i 까지 더해요."),
+        "running_sum[3] = nums[0]+nums[1]+nums[2]+nums[3] = 3+1+4+1 = 9 예요. 언제나 0 번 자리부터 i 번 자리까지 더해요."),
     },
 
     /* ── 4. Why it matters ───────────────────────────────────── */
     {
       type: "reveal",
       narr: t(E,
-        "Once you have the prefix array, you can answer range sum queries in O(1) — without looping. That's the magic unlocked in problem #303.",
-        "누적합 배열이 있으면 구간 합을 O(1) 에 — 루프 없이 — 계산할 수 있어요. 그게 #303 에서 열리는 마법이에요."),
+        "Once you have the prefix array, a range sum becomes a single subtraction — so you answer it in O(1), without looping. That's the magic unlocked in problem #303.",
+        "누적합 배열이 있으면 구간 합을 뺄셈 한 번으로 구할 수 있어요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: "#eff6ff", border: "2px solid #3b82f6", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
@@ -126,7 +126,7 @@ export function makeChapters(E) {
             </div>
             {[
               { id: "#1480", desc: t(E, "Build the prefix array (this problem)", "누적합 배열 만들기 (지금 문제)"), active: true },
-              { id: "#303",  desc: t(E, "Use prefix to answer range sum in O(1)", "누적합으로 구간 합 O(1) 조회"), active: false },
+              { id: "#303",  desc: t(E, "Use prefix to answer range sum in O(1)", "누적합으로 구간 합을 O(1) 에 구하기"), active: false },
               { id: "#560",  desc: t(E, "Prefix + hashmap → count subarrays", "누적합 + 해시맵 → 부분 배열 세기"), active: false },
               { id: "#974",  desc: t(E, "Same idea + modulo", "같은 아이디어 + 나머지"), active: false },
             ].map((item, i) => (
@@ -149,7 +149,7 @@ export function makeChapters(E) {
       type: "code",
       narr: t(E,
         "In-place: walk from index 1, add the previous element. O(n) time, O(1) extra space.",
-        "In-place: 인덱스 1 부터 걸으면서 이전 원소를 더해요. 시간 O(n), 추가 공간 O(1)."),
+        "1 번 자리부터 걸으며 앞 원소를 더해요. 배열을 새로 만들지 않아서 시간 O(n), 추가 공간 O(1) 이에요."),
       code: [
         "def runningSum(nums: list[int]) -> list[int]:",
         "    for i in range(1, len(nums)):",

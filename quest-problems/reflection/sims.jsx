@@ -15,7 +15,7 @@ function _buildReflSteps(E) {
     grp: null, k: null, contrib: null, total: 0, final: false,
     bubble: t(E,
       "4-cell mirror groups must be ONE color. Flip only the minority color — that's the fewest.",
-      "묶음 4 칸이 다 같은 색이어야 대칭. 적은 쪽 색만 뒤집으면 최소예요."),
+      "묶음 4 칸이 다 같은 색이어야 대칭이에요.\n적은 쪽만 뒤집으면 제일 적게 바꿔요."),
   }];
   let total = 0;
   for (let r = 0; r < RN / 2; r++) {
@@ -40,7 +40,7 @@ function _buildReflSteps(E) {
   steps.push({
     grp: null, k: null, contrib: null, total, final: true,
     bubble: t(E, `Sum of all groups = ${total} — that's the answer!`,
-                `묶음마다 더하면 ${total} — 이게 답!`),
+                `묶음마다 더하면 ${total} 이에요 — 이게 답이에요!`),
   });
   return steps;
 }
@@ -52,22 +52,22 @@ function _buildRuleSteps(E) {
   return [
     { lit: [], focus: null,
       bubble: t(E, "Split the canvas with a vertical + horizontal center line → 4 quadrants. Paint one quadrant; the rest must MIRROR it.",
-                   "캔버스를 가로·세로 가운데 선으로 → 4분면으로 나눠요. 한 분면을 칠하면, 나머지는 거울처럼 따라와야 해요.") },
+                   "그림을 가운데 선 두 개로 네 조각으로 나눠요.\n한 조각을 칠하면 나머지도 거울처럼 따라와야 해요.") },
     { lit: [TR], focus: TR,
       bubble: t(E, "Paint cell (1, 4) — top-right.",
                    "칸 (1, 4) 을 칠해요 — 오른쪽 위.") },
     { lit: [TR, TL], focus: TL,
       bubble: t(E, "Vertical mirror: column 4 ↔ column 1 → (1, 1) must match too.",
-                   "세로 거울: 열 4 ↔ 열 1 → (1, 1) 도 같아야 해요.") },
+                   "세로 거울이라 왼쪽·오른쪽이 짝이에요 → (1, 1) 도 같아야 해요.") },
     { lit: [TR, TL, BR], focus: BR,
       bubble: t(E, "Horizontal mirror: row 1 ↔ row 4 → (4, 4) too.",
-                   "가로 거울: 행 1 ↔ 행 4 → (4, 4) 도.") },
+                   "가로 거울이라 위·아래가 짝이에요 → (4, 4) 도 같아야 해요.") },
     { lit: [TR, TL, BR, BL], focus: BL,
       bubble: t(E, "Both mirrors → (4, 1). So (1,4)·(1,1)·(4,4)·(4,1) are ONE group — all the same color!",
-                   "둘 다 거울 → (4, 1). 그래서 (1,4)·(1,1)·(4,4)·(4,1) 이 한 묶음 — 다 같은 색이어야 해요!") },
+                   "두 거울을 다 거치면 (4, 1) 이에요.\n그래서 (1,4)·(1,1)·(4,4)·(4,1) 이 한 묶음이고 색이 다 같아야 해요!") },
     { lit: [TR, TL, BR, BL], focus: null, done: true,
       bubble: t(E, "Bessie messed up some cells, so groups don't match. Goal: fix it with the FEWEST flips. (count next →)",
-                   "Bessie 가 칸을 바꿔놔서 묶음이 안 맞을 수 있어요. 그걸 최소 횟수로 고치는 게 문제예요. (다음 화면에서 세요 →)") },
+                   "Bessie 가 칸을 바꿔 놓으면 묶음이 안 맞을 수 있어요.\n그걸 가장 적은 횟수로 고치는 게 문제예요. (다음 화면에서 세어 봐요 →)") },
   ];
 }
 
@@ -259,7 +259,7 @@ function _buildUpdateSteps(E) {
   const steps = [{
     kind: "init", phase: "init", fi: 0, grid: grid.map(r => r.join("")), toggle: null, group: null, total, delta: null, prev: null,
     bubble: t(E, `Find the first answer once: sum of each group's smaller side = ${total}. Now when a cell flips — only its ONE group changes.`,
-                 `처음 답을 한 번만 구해요: 묶음마다 적은 쪽 합 = ${total}. 이제 칸이 바뀔 때마다 — 건드린 묶음 하나만 다시 보면 돼요.`),
+                 `처음 답은 한 번만 구해요. 묶음마다 적은 쪽을 더하면 ${total} 이에요.\n이제 칸이 바뀌면 건드린 묶음 하나만 다시 보면 돼요.`),
   }];
   let fi = 0;
   _UPDATES.forEach(([r1, c1]) => {
@@ -274,7 +274,7 @@ function _buildUpdateSteps(E) {
       fi, before, costB, total, delta: null, prev: null, wasPainted,
       bubble: t(E,
         `About to flip (${r1}, ${c1})${wasPainted ? " (erase #)" : " (paint #)"}. Right now this group is #${before}, cost ${costB}. Press ▶.`,
-        `(${r1}, ${c1}) 칸을 바꿀 거예요${wasPainted ? " (# 지우기)" : " (# 칠하기)"}. 지금 이 묶음은 #${before}, 비용 ${costB}. ▶ 눌러봐요.`),
+        `(${r1}, ${c1}) 칸을 바꿀 거예요${wasPainted ? " (# 지우기)" : " (# 칠하기)"}.\n지금 이 묶음은 # 가 ${before} 개라서 비용이 ${costB} 예요. ▶ 눌러 봐요.`),
     });
     // ── 토글 ──
     grid[r][c] = wasPainted ? "." : "#";
@@ -285,7 +285,7 @@ function _buildUpdateSteps(E) {
       fi, before, after, costB, costA, delta, total, prev,
       bubble: t(E,
         `Flipped! This group #${before}→${after}, cost ${costB}→${costA}. Answer ${prev} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`,
-        `바뀌었어요! 이 묶음 #${before}→${after}, 비용 ${costB}→${costA}. 답 ${prev} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`),
+        `바뀌었어요! 이 묶음은 # 가 ${before}→${after}, 비용은 ${costB}→${costA} 예요.\n답도 ${prev} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total} 이 돼요.`),
     });
   });
   return steps;
@@ -425,7 +425,7 @@ function _buildBruteSteps(E) {
     { phase: "flip", grid: after, flipCell: [0, 2],
       bubble: t(E,
         "Bessie flipped (1, 3). New answer = ? Brute force: recount every group from scratch.",
-        "Bessie 가 (1, 3) 을 뒤집었어요. 새 답 = ? 브루트포스: 4 묶음 다 처음부터 다시 세요.") },
+        "Bessie 가 (1, 3) 을 뒤집었어요. 새 답은 얼마일까요?\n브루트포스는 4 묶음을 다 처음부터 다시 세요.") },
   ];
   let cumul = 0;
   groups.forEach((cells, gi) => {
@@ -444,7 +444,7 @@ function _buildBruteSteps(E) {
     phase: "done", grid: after, flipCell: null, cumul, scanned: 16,
     bubble: t(E,
       `Answer = ${cumul}. But we re-scanned ALL 16 cells for just ONE flip. At the real limits U = 10⁵ and N² = 4,000,000 that is 4×10¹¹ operations — far too slow.`,
-      `답 = ${cumul}. 근데 뒤집기 1 번에 16 칸을 다 훑었어요.\n실제 제약인 U = 10⁵, N² = 4,000,000 이면 4×10¹¹ 번이에요 — 너무 느려요.`),
+      `답은 ${cumul} 이에요. 그런데 뒤집기 한 번에 16 칸을 다 훑었어요.\n실제 제약인 U = 10⁵, N² = 4,000,000 이면 4×10¹¹ 번이라 너무 느려요.`),
   });
   return steps;
 }

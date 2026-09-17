@@ -68,21 +68,21 @@ export function getMcc21CarrotsSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Key insight: a sum of three numbers is ODD only two ways — three odds, or one odd + two evens. Every other mix gives an even sum.",
-            "핵심 통찰: 세 수의 합이 홀수가 되는 건 딱 두 가지예요 — 홀수 3개, 또는 홀수 1개 + 짝수 2개. 나머지 조합은 모두 짝수 합이에요."),
+            "세 수의 합이 홀수가 되는 건 딱 두 가지예요. 홀수 3 개이거나, 홀수 1 개 + 짝수 2 개예요. 나머지 조합은 모두 짝수 합이에요."),
         t(E, "So the exact carrot counts don't matter — only how many are ODD and how many are EVEN. One pass counts them.",
-            "그래서 정확한 당근 수는 중요하지 않고, 홀수가 몇 개·짝수가 몇 개인지만 중요해요. 한 번 훑어 개수만 세요."),
+            "그래서 당근이 정확히 몇 개인지는 중요하지 않고, 홀수가 몇 개이고 짝수가 몇 개인지만 중요해요. 한 번 훑어 개수만 세요."),
         t(E, "Answer YES when odd ≥ 3 (recipe 🟠🟠🟠) or when odd ≥ 1 and even ≥ 2 (recipe 🟠⚪⚪). This is O(N) per test — no triples.",
-            "홀수 ≥ 3 (레시피 🟠🟠🟠) 이거나 홀수 ≥ 1 이고 짝수 ≥ 2 (레시피 🟠⚪⚪) 이면 YES 예요. 테스트당 O(N) — 조합을 돌지 않아요."),
+            "홀수 ≥ 3 (🟠🟠🟠) 이거나 홀수 ≥ 1 이고 짝수 ≥ 2 (🟠⚪⚪) 이면 YES 예요. 조합을 하나도 돌지 않아서 테스트마다 O(N) 이에요."),
       ],
       pyOnly: [
         t(E, "Each test is 2 lines: N, then the N carrot counts on one line.",
-            "테스트 하나가 2 줄이에요. N 한 줄, 그리고 당근 N 개가 한 줄에."),
+            "테스트 하나가 2 줄이에요. N 이 한 줄, 당근 N 개가 다음 한 줄에 와요."),
         t(E, "x % 2 == 1 checks oddness; collect answers in a list and join with '\\n' so printing happens once.",
             "x % 2 == 1 로 홀수를 확인해요. 답을 리스트에 모아 '\\n' 로 이어 붙여 한 번에 출력해요."),
       ],
       cppOnly: [
         t(E, "while (T--) loops over the test cases; the count fits in int, but long long is a safe habit.",
-            "while (T--) 로 테스트를 반복해요. 개수는 int 로도 되지만 long long 이 안전한 습관이에요."),
+            "while (T--) 로 테스트를 되풀이해요. 개수는 int 로도 되지만 long long 을 쓰면 더 안전해요."),
       ],
     },
   ];
@@ -128,7 +128,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc21CarrotsPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc21Carrots — Full Study Guide", "Mcc21Carrots — 종합 풀이 노트");
@@ -151,7 +151,7 @@ export function downloadMcc21CarrotsPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

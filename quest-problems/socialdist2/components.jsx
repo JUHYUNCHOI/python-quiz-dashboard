@@ -46,7 +46,7 @@ export function SocDist2Sim({ E }) {
       <div style={{ textAlign: "center", marginBottom: 8, fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
         {t(E,
           "Try it · sick = {3,5,12,14}, healthy = {8}",
-          "직접 해봐 · 감염 = {3,5,12,14}, 건강 = {8}")}
+          "직접 해봐요 · 감염 = {3,5,12,14}, 건강 = {8}")}
       </div>
 
       {/* Status row */}
@@ -72,7 +72,7 @@ export function SocDist2Sim({ E }) {
         )}
         {isBest && (
           <div style={{ background: "#fce7f3", border: "1px solid #db2777", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#9d174d", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
-            {t(E, "★ best R", "★ 최적 R")}
+            {t(E, "★ best R", "★ 제일 좋은 R")}
           </div>
         )}
       </div>
@@ -166,14 +166,14 @@ export function SocDist2Sim({ E }) {
               </span>
             );
           })}
-          <span style={{ color: C.dim }}>· {t(E, "gap > 2R = new cluster", "간격 > 2R = 새 클러스터")}</span>
+          <span style={{ color: C.dim }}>· {t(E, "gap > R = new cluster", "간격 > R 이면 새 클러스터")}</span>
         </div>
       </div>
 
       {/* R slider */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
         <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "Drag to change spread radius R", "전파 반경 R 을 바꿔봐")}
+          {t(E, "Drag to change spread radius R", "전파 반경 R 을 바꿔 봐요")}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ fontSize: 11, color: C.dim }}>0</span>
@@ -191,7 +191,7 @@ export function SocDist2Sim({ E }) {
         <b style={{ color: A }}>{t(E, "Two questions, one answer", "질문 둘, 답 하나")}</b>{" "}
         {t(E,
           "Bigger R → infection rings reach healthy cows (invalid). Smaller R → sick cows fall into separate clusters (more seeds). The largest valid R minimises the cluster count.",
-          "R 이 커지면 감염 범위가 건강 소까지 닿음 (무효). R 이 작으면 감염 소들이 다른 클러스터로 갈라져요 (씨앗 ↑). 유효한 가장 큰 R 이 클러스터 (= 최초 감염) 최소.")}
+          "R 이 커지면 감염 범위가 건강한 소까지 닿아서 안 돼요. R 이 작으면 아픈 소들이 여러 클러스터로 갈라져서 처음 아팠던 소가 늘어나요. 그래서 건강한 소에 안 닿는 가장 큰 R 일 때 클러스터 수가 가장 적어요.")}
       </div>
     </div>
   );
@@ -339,19 +339,19 @@ export function getSocDist2Sections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 에서 자동으로 옮긴 거예요. 타입과 표현은 필요할 때 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 (<iostream>, <vector>, ...) 적어요 — 코드가 하려는 일이 또렷해져요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -397,7 +397,7 @@ function highlightCode(lines, lang) {
 
 export function downloadSocDist2PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "SocDist2 — Full Study Guide", "SocDist2 — 종합 풀이 노트");
@@ -420,7 +420,7 @@ export function downloadSocDist2PDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

@@ -88,7 +88,7 @@ export function NonTransDeepAuditSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
         {t(E,
           "Step through every (x, y) outcome. Each pair is x > y, x < y, or x = y. Tally to decide whether X beats Y.",
-          "모든 (x, y) 결과를 한 쌍씩 살펴봐. 각 쌍은 x > y, x < y, 또는 x = y. 합산해서 X 가 Y 를 이기는지 판정해.")}
+          "모든 (x, y) 결과를 한 쌍씩 살펴봐요. 각 쌍은 x > y, x < y, x = y 중 하나예요. 다 더해서 X 가 Y 를 이기는지 가려내요.")}
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", gap: 12, marginBottom: 8, flexWrap: "wrap" }}>
@@ -140,7 +140,7 @@ export function NonTransDeepAuditSim({ E }) {
         {step === 0 && (
           <div style={{ color: C.dim, fontStyle: "italic" }}>
             {t(E, "Tap 'Next pair' to reveal the first (x, y) outcome.",
-                  "'다음 쌍' 을 눌러 첫 (x, y) 결과를 공개해.")}
+                  "'다음 쌍' 을 눌러 첫 (x, y) 결과를 열어 봐요.")}
           </div>
         )}
         {step > 0 && pairs.slice(Math.max(0, step - 3), step).map((p, k) => (
@@ -173,7 +173,7 @@ export function NonTransDeepAuditSim({ E }) {
         </div>
         <div style={{ fontSize: 12, color: "#7f1d1d" }}>
           {step < n
-            ? t(E, "more to go…", "아직 남았어…")
+            ? t(E, "more to go…", "아직 남았어요…")
             : t(E, "all 16 pairs counted ✓", "16 쌍 모두 세기 완료 ✓")}
         </div>
       </div>
@@ -192,7 +192,7 @@ export function NonTransDeepAuditSim({ E }) {
           padding: "6px 14px", borderRadius: 8, border: `1px solid ${C.border}`,
           background: "transparent", color: C.dim, fontSize: 12, fontWeight: 600, cursor: "pointer",
         }}>
-          {t(E, "↻ Reset", "↻ 초기화")}
+          {t(E, "↻ Reset", "↻ 다시 처음부터")}
         </button>
       </div>
 
@@ -210,9 +210,9 @@ export function NonTransDeepAuditSim({ E }) {
           <div style={{ fontSize: 12 }}>
             {verdict === "BEATS"
               ? t(E, "More x > y outcomes than x < y — X beats Y. beats(X, Y) returns True.",
-                    "x > y 가 x < y 보다 많음 — X 가 Y 를 이김. beats(X, Y) 는 True.")
+                    "x > y 가 x < y 보다 많아요. 그래서 X 가 Y 를 이기고, beats(X, Y) 는 True 예요.")
               : t(E, "win is not strictly greater than lose — X does NOT beat Y. beats(X, Y) returns False.",
-                    "win 이 lose 보다 엄격히 크지 않음 — X 가 Y 를 이기지 못함. beats(X, Y) 는 False.")}
+                    "win 이 lose 보다 크지 않아요. 그래서 X 는 Y 를 이기지 못하고, beats(X, Y) 는 False 예요.")}
           </div>
         </div>
       )}
@@ -354,19 +354,19 @@ export function getNonTransSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 은 파이썬 코드를 옮긴 것이에요. 타입과 표현은 필요할 때 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬의 list, map, sorted 덕분에 코드가 짧아요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣어요 (<iostream>, <vector>, …). 그래야 코드가 뭘 하려는지 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더한 값이나 곱한 값이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];

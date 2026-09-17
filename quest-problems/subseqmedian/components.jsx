@@ -138,7 +138,7 @@ export function SubseqMedianSim({ E }) {
           {t(E, "Center", "가운데")} <b style={{ color: A, fontFamily: "'JetBrains Mono',monospace" }}>v = {v}</b>.{" "}
           {t(E,
             "To make v the median, pick the SAME number k of increasing values on each side — k smaller-and-before, k larger-and-after. That's a good subsequence of length 2k+1 with v in the middle.",
-            "v 를 중앙값으로 만들려면 양쪽에서 같은 개수 k 만큼 증가하는 값을 골라요 — 왼쪽 작은 값 k 개, 오른쪽 큰 값 k 개. 그러면 길이 2k+1 의 좋은 부분수열, 가운데가 v 예요.")}
+            "v 를 중앙값으로 만들려면 양쪽에서 같은 개수 k 만큼 증가하는 값을 골라요 — 왼쪽은 작은 값 k 개, 오른쪽은 큰 값 k 개예요. 그러면 길이 2k+1 의 좋은 부분수열이 되고 가운데가 v 예요.")}
         </div>
         {/* per-k table: L_k · R_k */}
         <div style={{ background: "#fff", borderRadius: 8, padding: "6px 8px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
@@ -339,21 +339,21 @@ export function getSubseqMedianSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "For each element v = A[i], count k strictly-increasing values < v BEFORE it and k > v AFTER it. Pair them up → v is the median of a length-(2k+1) good subsequence. So v's contribution is v · Σ_k L_k·R_k.",
-            "각 원소 v = A[i] 마다, 앞쪽에서 v 보다 작은 증가값 k 개, 뒤쪽에서 v 보다 큰 증가값 k 개를 세요. 짝지으면 v 가 길이 2k+1 좋은 부분수열의 중앙값이에요. 그래서 v 의 기여 = v · Σ_k L_k·R_k."),
+            "원소 v = A[i] 마다 앞쪽에서 v 보다 작은 증가값 k 개와 뒤쪽에서 v 보다 큰 증가값 k 개를 세어요. 둘을 짝지으면 v 가 길이 2k+1 인 좋은 부분수열의 중앙값이 돼요. 그래서 v 가 보태는 값은 v · Σ_k L_k·R_k 예요."),
         t(E, "L_k and R_k are built level by level: a Fenwick tree adds up the previous level's counts over 'smaller-and-earlier' (for L) or 'larger-and-later' (for R). Level 0 = every element on its own.",
-            "L_k, R_k 는 레벨별로 쌓아요: 펜윅 트리로 이전 레벨 값을 '작고-앞선'(L) 또는 '크고-뒤선'(R) 범위에서 합해요. 레벨 0 = 원소 각각 하나씩."),
+            "L_k, R_k 는 레벨마다 쌓아 올려요. 펜윅 트리로 바로 앞 레벨의 값을 '작고 앞선'(L) 또는 '크고 뒤선'(R) 범위에서 합해요. 레벨 0 은 원소 하나하나예요."),
         t(E, "⚠️ Honest note: this is CORRECT, but worst case is O(N² log N) — it comfortably passes the small subtasks (N up to a few hundred), yet TIMES OUT at the full N = 8000. The full-constraints solution needs CDQ divide-and-conquer + NTT, which is beyond this quest. Here we learn the correct idea and a correct implementation for small inputs.",
-            "⚠️ 솔직히 말하면: 이 코드는 정답이 맞지만 최악의 경우 O(N² log N) 이에요 — 작은 서브태스크(N 수백 정도)는 넉넉히 통과하지만, 전체 N = 8000 에서는 시간 초과예요. 전체 제약 만점 풀이는 CDQ 분할정복 + NTT 가 필요한데, 이 퀘스트 범위 밖이에요. 여기서는 올바른 아이디어와 작은 입력용 올바른 구현을 배워요."),
+            "⚠️ 솔직히 말할게요. 이 코드는 답이 맞지만 최악의 경우 O(N² log N) 이에요. 작은 서브태스크(N 수백 정도)는 넉넉히 통과하지만, 전체 N = 8000 에서는 시간 초과예요. 전체 제약에서 만점을 받으려면 CDQ 분할정복 + NTT 가 필요한데, 이 퀘스트 범위 밖이에요. 여기서는 올바른 아이디어와 작은 입력에서 맞게 도는 코드를 배워요."),
       ],
       pyOnly: [
         t(E, "sys.stdin.buffer.read().split() reads all input at once — much faster than line-by-line for big arrays.",
-            "sys.stdin.buffer.read().split() 로 입력을 한 번에 읽어요 — 큰 배열에서 줄단위보다 훨씬 빨라요."),
+            "sys.stdin.buffer.read().split() 로 입력을 한 번에 읽어요. 배열이 크면 한 줄씩 읽는 것보다 훨씬 빨라요."),
       ],
       cppOnly: [
         t(E, "Coordinate-compress with sort + unique + lower_bound so the Fenwick tree is sized by distinct values, not 1e9.",
-            "sort + unique + lower_bound 로 좌표압축해서 펜윅 트리를 값 1e9 이 아닌 '서로 다른 값 수' 만큼만 잡아요."),
+            "sort + unique + lower_bound 로 좌표를 눌러 담아요. 그러면 펜윅 트리를 1e9 이 아니라 '서로 다른 값의 수' 만큼만 잡으면 돼요."),
         t(E, "Keep counts in long long and take % MOD after every add/multiply.",
-            "카운트는 long long 으로, 더하고 곱할 때마다 % MOD 를 취해요."),
+            "세는 값은 long long 으로 두고, 더하거나 곱할 때마다 % MOD 를 해요."),
       ],
     },
   ];

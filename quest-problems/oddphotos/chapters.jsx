@@ -44,7 +44,7 @@ export function makeOddPhotosCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N cows, each with an ID number. He wants to put every cow into exactly one group, then line the groups up so the sum of IDs in group 1 is EVEN, group 2 is ODD, group 3 is EVEN, ... alternating.\nPrint the MAXIMUM number of groups possible.",
-        "FJ에게 N마리 소가 있고, 각자 ID 번호를 가져요. 모든 소를 정확히 한 묶음에 넣은 뒤, 묶음들을 줄 세워 1번 묶음의 ID 합은 짝수, 2번은 홀수, 3번은 짝수 ... 처럼 번갈아 가게 해요.\n만들 수 있는 묶음의 최대 수를 출력해요."),
+        "묶음의 합이 짝수, 홀수, 짝수 … 로 번갈아 가게 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -61,7 +61,7 @@ export function makeOddPhotosCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Output the maximum number of groups whose sums alternate EVEN, ODD, EVEN, ODD, ...",
-                "합이 EVEN, ODD, EVEN, ODD ... 로 번갈아 가는 묶음의 최대 개수를 출력.")}
+                "합이 짝수, 홀수, 짝수, 홀수 … 로 번갈아 가게 묶어요. 묶음을 최대 몇 개 만들 수 있는지 출력해요.")}
             </div>
           </div>
 
@@ -84,7 +84,7 @@ export function makeOddPhotosCh1(E) {
                   {t(E, "Put every cow into ", "모든 소를 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "exactly one group", "정확히 한 묶음")}</b>
                   {t(E, " (any cow can go in any group), then line the groups up 1, 2, 3, ...",
-                        "에 넣어요 (어느 소든 어느 묶음에나 가능), 그다음 묶음들을 1, 2, 3, ... 순으로 줄 세워요.")}
+                        "에 넣어요. 어느 소든 어느 묶음에나 들어갈 수 있어요. 그다음 묶음을 1, 2, 3, … 순으로 줄 세워요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -92,7 +92,7 @@ export function makeOddPhotosCh1(E) {
                 <div>
                   {t(E, "Sum of IDs must be ", "각 묶음의 ID 합은 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "EVEN, ODD, EVEN, ODD, ... alternating", "짝수, 홀수, 짝수, 홀수 ... 로 번갈아")}</b>
-                  {t(E, " (group 1 must be EVEN).", " (1번 묶음은 짝수).")}
+                  {t(E, " (group 1 must be EVEN).", " 가야 해요. 1 번 묶음은 짝수예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -115,7 +115,7 @@ export function makeOddPhotosCh1(E) {
       type: "reveal",
       narr: t(E,
         "Let's read the official sample. IDs = [11, 2, 17, 13, 1, 15, 3] → the answer is 5. Notice we only care about how many IDs are EVEN vs ODD.",
-        "공식 예제를 읽어보자. IDs = [11, 2, 17, 13, 1, 15, 3] → 답은 5. 우리가 신경 쓸 건 ID 중 짝수가 몇 개, 홀수가 몇 개인지 뿐이야."),
+        "ID 가 짝수인지 홀수인지만 보면 돼요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -141,12 +141,12 @@ export function makeOddPhotosCh1(E) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginTop: 8 }}>
               {t(E,
                 "One way to make 5 groups: [2] (even), [11] (odd), [13,1] (even), [15] (odd), [17,3] (even). Sums alternate even, odd, even, odd, even ✓",
-                "5묶음 만드는 한 방법: [2] (짝), [11] (홀), [13,1] (짝), [15] (홀), [17,3] (짝). 합이 짝, 홀, 짝, 홀, 짝 으로 번갈아 ✓")}
+                "5 묶음을 만드는 한 가지 방법이에요. [2](짝), [11](홀), [13,1](짝), [15](홀), [17,3](짝) — 합이 짝, 홀, 짝, 홀, 짝 으로 번갈아 가요 ✓")}
             </div>
             <div style={{ fontSize: 12, color: C.dim, lineHeight: 1.6, marginTop: 8, paddingTop: 8, borderTop: "1px dashed #86efac" }}>
               {t(E,
                 "Key rule: odd + odd = even, odd + even = odd, even + even = even. So an even-sum group can be 1 even cow or 2 odd cows; an odd-sum group needs an odd number of odd cows.",
-                "핵심 규칙: 홀+홀=짝, 홀+짝=홀, 짝+짝=짝. 그래서 짝수합 묶음은 짝수 1마리 또는 홀수 2마리, 홀수합 묶음은 홀수 마리가 홀수 개 필요해.")}
+                "홀+홀=짝, 홀+짝=홀, 짝+짝=짝 이에요. 그래서 합이 짝수인 묶음은 짝수 소 1 마리나 홀수 소 2 마리로 만들 수 있어요. 합이 홀수인 묶음에는 홀수 소가 홀수 마리 들어가야 해요.")}
             </div>
           </div>
         </div>),
@@ -155,30 +155,30 @@ export function makeOddPhotosCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If all IDs are even like [2,4,6,8], the first group needs even sum.\nBut the second group needs odd sum.\nCan we make an odd sum from even numbers?", "모든 ID가 짝수인 [2,4,6,8]이면, 첫 그룹은 짝수 합이 필요해요. 하지만 두 번째 그룹은 홀수 합이 필요해요. 짝수만으로 홀수 합을 만들 수 있을까?"),
+        "If all IDs are even like [2,4,6,8], the first group needs even sum.\nBut the second group needs odd sum.\nCan we make an odd sum from even numbers?", "ID 가 모두 짝수인 [2,4,6,8] 을 볼게요."),
       question: t(E,
         "IDs = [2,4,6,8]. Max groups with alternating even/odd sums?",
-        "IDs = [2,4,6,8]. 짝수/홀수 합 번갈아하는 최대 그룹 수?"),
+        "IDs = [2,4,6,8] 일 때 묶음을 최대 몇 개 만들 수 있을까요?"),
       options: [
-        t(E, "1 (can't make odd sum from even numbers)", "1 (짝수만으로 홀수 합 불가)"),
-        t(E, "4 (each cow is a group)", "4 (각 소가 한 그룹)"),
+        t(E, "1 (can't make odd sum from even numbers)", "1 개 (짝수만으로는 홀수 합을 못 만들어요)"),
+        t(E, "4 (each cow is a group)", "4 개 (소마다 한 묶음씩)"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! Group 1 has even sum, but group 2 needs odd sum which is impossible with only even numbers. Max: 1 group.",
-        "맞아! 그룹 1은 짝수 합이지만 그룹 2는 홀수 합이 필요한데 짝수만으로는 불가능해요. 최대: 1 그룹."),
+        "1 번 묶음은 짝수 합이라 괜찮아요. 그런데 2 번 묶음은 홀수 합이어야 하는데, 짝수만 더하면 늘 짝수예요. 그래서 최대 1 묶음이에요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "With IDs = [2,4,6,8], what is the maximum number of groups?", "IDs = [2,4,6,8]일 때, 최대 그룹 수는?"),
+        "With IDs = [2,4,6,8], what is the maximum number of groups?", "같은 [2,4,6,8] 로 한 번 더 세어 봐요."),
       question: t(E,
         "IDs = [2,4,6,8]. Maximum groups?",
-        "IDs = [2,4,6,8]. 최대 그룹 수?"),
+        "IDs = [2,4,6,8] 의 최대 묶음 수는 몇 개일까요?"),
       hint: t(E,
         "Group 2 needs an odd sum — can you build that from only even numbers?",
-        "2번 그룹은 홀수 합이 필요해 — 짝수만으로 만들 수 있을까?"),
+        "2 번 묶음은 홀수 합이어야 해요. 짝수만 더해서 홀수가 될까요?"),
       answer: 1,
     },
   ];
@@ -195,7 +195,7 @@ export function makeOddPhotosCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Only the even-count and odd-count matter. Try every possible number of groups k, and keep the largest k that we can actually build: enough odds for the odd-sum groups, leftover odds in pairs, and enough fillers for the even-sum groups. Sections build it one piece at a time.",
-        "짝수 개수와 홀수 개수만 중요해. 가능한 묶음 수 k 를 다 시도해서, 실제로 만들 수 있는 가장 큰 k 를 답으로: 홀수합 묶음에 쓸 홀수가 충분하고, 남는 홀수는 짝으로 떨어지고, 짝수합 묶음을 채울 재료가 충분한지. 아래 섹션이 한 단락씩 쌓아요."),
+        "묶음 수 k 를 하나씩 넣어 보고 되는 것 중 제일 큰 값을 골라요."),
       sections: getOddPhotosSections(E),
     },
   ];

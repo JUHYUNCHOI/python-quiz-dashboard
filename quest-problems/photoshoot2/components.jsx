@@ -136,13 +136,13 @@ export function Photoshoot2SwapSim({ E }) {
       }}>
         {!lastEv && t(E,
           "Click NEXT to walk the target order one cow at a time.",
-          "다음 버튼을 눌러 목표 순서를 한 마리씩 훑어봐.")}
+          "다음 버튼을 눌러 목표 순서를 한 마리씩 훑어봐요.")}
         {lastEv && lastEv.needMove && t(E,
           `Cow ${lastEv.cow} sits at pos ${lastEv.p}, but max-seen is ${walk[visited-2]?.maxPosAfter ?? -1}. It must move LEFT → moves +1.`,
-          `소 ${lastEv.cow}는 위치 ${lastEv.p}, 그런데 본 위치 최대는 ${walk[visited-2]?.maxPosAfter ?? -1}. 왼쪽으로 이동 필요 → 이동 +1.`)}
+          `소 ${lastEv.cow} 는 위치 ${lastEv.p} 인데 지금까지 본 최대 위치는 ${walk[visited-2]?.maxPosAfter ?? -1} 이에요. 왼쪽으로 옮겨야 해요 → 이동 +1.`)}
         {lastEv && !lastEv.needMove && t(E,
           `Cow ${lastEv.cow} sits at pos ${lastEv.p} ≥ max-seen. It is already in order — no move.`,
-          `소 ${lastEv.cow}는 위치 ${lastEv.p} ≥ 본 위치 최대. 이미 순서대로 — 이동 없음.`)}
+          `소 ${lastEv.cow} 는 위치 ${lastEv.p} 로 지금까지 본 최대 위치보다 크거나 같아요. 이미 순서대로라 안 옮겨도 돼요.`)}
       </div>
 
       {/* Controls */}
@@ -167,7 +167,7 @@ export function Photoshoot2SwapSim({ E }) {
         }}>
           ✅ {t(E,
             `Done! Total moves = ${movesShown}.`,
-            `완료! 총 이동 = ${movesShown}.`)}
+            `다 했어요! 총 이동은 ${movesShown} 번이에요.`)}
         </div>
       )}
     </div>
@@ -251,19 +251,19 @@ export function getPhotoshoot2Sections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 에서 자동으로 옮긴 거예요. 타입과 표현은 필요할 때 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "std::map<int,int> mirrors Python's dict for the cow→position lookup.",
-            "std::map<int,int> 가 Python dict 역할 — 소→위치 조회."),
+            "std::map<int,int> 가 Python 의 dict 역할을 해요 — 소로 위치를 찾아요."),
         t(E, "long long for the answer: with N up to 1e5 the move count can exceed int range.",
-            "정답은 long long — N 이 최대 1e5 라 이동 수가 int 범위를 넘을 수 있어."),
+            "정답은 long long 으로 둬요 — N 이 최대 1e5 라 이동 수가 int 를 넘을 수 있거든요."),
       ],
     },
   ];
@@ -309,7 +309,7 @@ function highlightCode(lines, lang) {
 
 export function downloadPhotoshoot2PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Photoshoot2 — Full Study Guide", "Photoshoot2 — 종합 풀이 노트");
@@ -332,7 +332,7 @@ export function downloadPhotoshoot2PDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

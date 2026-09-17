@@ -81,17 +81,17 @@ export function getInnovationSections(E) {
       cpp: FULL_CPP.slice(0, 14),
       why: [
         t(E, "For each card we only ever need two totals: a+b (always visible) and c+d (visible only if this card is last).",
-            "카드마다 필요한 건 두 합뿐이에요: a+b (항상 보임), c+d (이 카드가 마지막일 때만 보임)."),
+            "카드마다 필요한 건 두 합뿐이에요.\na+b 는 늘 보이고, c+d 는 이 카드가 마지막일 때만 보여요."),
         t(E, "Store each card as (c+d, a+b) and sort by c+d ascending. Then any card, together with the cards before it, can be its group's 'last (largest c+d)' card.",
-            "각 카드를 (c+d, a+b) 로 저장하고 c+d 오름차순 정렬. 그러면 어떤 카드든 그 앞의 카드들과 함께 '마지막(c+d 최대)' 카드가 될 수 있어요."),
+            "각 카드를 (c+d, a+b) 로 저장하고 c+d 오름차순으로 정렬해요.\n그러면 어떤 카드든 자기 앞 카드들보다 c+d 가 커요.\n그래서 앞 카드들과 함께 놓으면 그 카드가 마지막 장이 돼요."),
       ],
       pyOnly: [
         t(E, "sys.stdin.readline speeds up reading when n is up to 20000.",
-            "n 이 최대 20000 이라 sys.stdin.readline 으로 입력 가속."),
+            "n 이 최대 20000 이라 sys.stdin.readline 으로 빠르게 읽어요."),
       ],
       cppOnly: [
         t(E, "pair sorts by .first (c+d) automatically. Use long long — values reach 10^9.",
-            "pair 는 .first(c+d) 기준으로 자동 정렬. 값이 10^9 까지라 long long 사용."),
+            "pair 는 .first(c+d) 기준으로 알아서 정렬돼요.\n값이 10^9 까지라 long long 을 써요."),
       ],
     },
     {
@@ -107,11 +107,11 @@ export function getInnovationSections(E) {
       ],
       pyOnly: [
         t(E, "heapq is a min-heap, so heap[0] / heappop remove the smallest a+b — exactly what we discard.",
-            "heapq 는 min-heap 이라 heappop 이 가장 작은 a+b 를 빼요 — 우리가 버릴 것과 정확히 일치."),
+            "heapq 는 min-heap 이라 heappop 이 가장 작은 a+b 를 빼요.\n딱 우리가 버리려던 값이에요."),
       ],
       cppOnly: [
         t(E, "greater<> turns priority_queue into a min-heap so top()/pop() drop the smallest a+b.",
-            "greater<> 로 priority_queue 를 min-heap 으로 만들면 top()/pop() 이 가장 작은 a+b 를 버림."),
+            "greater<> 로 priority_queue 를 min-heap 으로 만들면\ntop()/pop() 이 가장 작은 a+b 를 버려요."),
       ],
     },
     {
@@ -121,19 +121,19 @@ export function getInnovationSections(E) {
       cpp: FULL_CPP.slice(17),
       why: [
         t(E, "Walk cards in c+d order. Once we have m−1 candidates in front, using this card as the last gives: topsum (m−1 best a+b) + this card's a+b + its c+d.",
-            "c+d 순서로 카드를 훑어요. 앞에 후보 m−1개가 있으면, 이 카드를 마지막으로 두면: topsum(상위 m−1개 a+b) + 이 카드 a+b + 이 카드 c+d."),
+            "c+d 순서로 카드를 하나씩 봐요. 앞에 후보 m−1개가 있으면\n이 카드를 마지막에 두고 topsum + 이 카드 a+b + 이 카드 c+d 를 재요."),
         t(E, "Then push this card's a+b into the pool and, if it now exceeds m−1, drop the smallest — the pool always stays the best m−1.",
-            "그다음 이 카드의 a+b 를 풀에 넣고, m−1개를 넘으면 가장 작은 걸 버려요 — 풀은 항상 상위 m−1개 유지."),
+            "그다음 이 카드의 a+b 를 넣고, m−1개를 넘으면 가장 작은 걸 버려요.\n그래야 늘 상위 m−1개만 남아요."),
         t(E, "m = 1 works too: with 0 candidates, every card alone gives a+b+c+d, so best = max single card.",
-            "m = 1 도 자동 처리: 후보 0개라 각 카드 혼자 a+b+c+d → best = 카드 하나 최댓값."),
+            "m = 1 도 그대로 돼요. 후보가 0개라 카드 한 장이 a+b+c+d 를 다 보여요."),
       ],
       pyOnly: [
         t(E, "The whole loop is O(n log n) from the heap operations — fast for n ≤ 20000.",
-            "heap 연산으로 전체가 O(n log n) — n ≤ 20000 에 충분히 빠름."),
+            "heap 덕분에 전체가 O(n log n) 이라 n ≤ 20000 에는 충분히 빨라요."),
       ],
       cppOnly: [
         t(E, "One linear pass with O(log n) heap ops per card = O(n log n) total.",
-            "카드마다 O(log n) heap 연산의 선형 패스 = 전체 O(n log n)."),
+            "카드마다 heap 계산이 O(log n) 이라 전체는 O(n log n) 이에요."),
       ],
     },
   ];
@@ -143,7 +143,7 @@ export function getInnovationSections(E) {
 const _INNO_VARS = [
   { v: "n", ko: "카드 수", en: "# of cards" },
   { v: "m", ko: "고를 카드 수", en: "cards to choose" },
-  { v: "cards", ko: "(c+d, a+b) 목록", en: "list of (c+d, a+b)" },
+  { v: "cards", ko: "(c+d, a+b) 리스트", en: "list of (c+d, a+b)" },
   { v: "best", ko: "최대 보이는 합(답)", en: "max visible sum (answer)" },
 ];
 export function getInnovationWalk(E, lang = "py") {
@@ -152,19 +152,19 @@ export function getInnovationWalk(E, lang = "py") {
     const code = [...s[0].cpp, ...s[1].cpp, ...s[2].cpp];
     // s0=14 (0-13), s1=3 (14-16), s2=9 (17-25)
     return { code, vars: _INNO_VARS, beats: [
-      { hi: [0, 13],  bubble: t(E, "Read each card and keep just two totals: (c+d, a+b). Sort by c+d ascending so any card can act as the 'last (largest c+d)' one.", "카드마다 두 합 (c+d, a+b) 만 저장. c+d 오름차순 정렬해서, 어떤 카드든 '마지막(c+d 최대)' 역할을 할 수 있게 해요.") },
-      { hi: [14, 16], bubble: t(E, "Prepare a min-heap holding the top m−1 a+b values, their sum sumTop, and the running answer best.", "a+b 상위 m−1개를 담는 min-heap, 그 합 sumTop, 정답 best 를 준비해요.") },
-      { hi: [17, 22], bubble: t(E, "For each card, if m−1 candidates are already in front, use THIS card as the special last one: sumTop + this a+b + this c+d. Update best.", "각 카드마다, 앞에 후보 m−1개가 있으면 이 카드를 특별한 마지막 장으로: sumTop + 이 a+b + 이 c+d. best 갱신.") },
-      { hi: [23, 30], bubble: t(E, "Push this card's a+b into the pool; if the pool grows past m−1, drop the smallest so it always keeps the best m−1. Finally print best.", "이 카드의 a+b 를 풀에 넣고, m−1개를 넘으면 가장 작은 걸 버려 항상 상위 m−1개 유지. 마지막에 best 출력.") },
+      { hi: [0, 13],  bubble: t(E, "Read each card and keep just two totals: (c+d, a+b). Sort by c+d ascending so any card can act as the 'last (largest c+d)' one.", "카드마다 두 합 (c+d, a+b) 만 저장해요.\nc+d 오름차순으로 정렬하면 앞 카드들은 c+d 가 더 작아요.\n그래서 어느 카드든 마지막 장으로 세워 볼 수 있어요.") },
+      { hi: [14, 16], bubble: t(E, "Prepare a min-heap holding the top m−1 a+b values, their sum sumTop, and the running answer best.", "a+b 상위 m−1개를 담는 min-heap, 그 합 sumTop, 답 best 를 준비해요.") },
+      { hi: [17, 22], bubble: t(E, "For each card, if m−1 candidates are already in front, use THIS card as the special last one: sumTop + this a+b + this c+d. Update best.", "앞에 후보 m−1개가 있으면 이 카드를 마지막 장으로 놓아 봐요.\n합은 sumTop + 이 카드 a+b + 이 카드 c+d 이고, best 를 새로 고쳐요.") },
+      { hi: [23, 30], bubble: t(E, "Push this card's a+b into the pool; if the pool grows past m−1, drop the smallest so it always keeps the best m−1. Finally print best.", "이 카드의 a+b 를 넣고, m−1개를 넘으면 가장 작은 걸 버려요.\n그래야 늘 상위 m−1개만 남아요. 마지막에 best 를 출력해요.") },
     ] };
   }
   const code = [...s[0].py, ...s[1].py, ...s[2].py];
   // s0=8 (0-7), s1=3 (8-10), s2=8 (11-18)
   return { code, vars: _INNO_VARS, beats: [
-    { hi: [0, 7],   bubble: t(E, "Read each card and keep just two totals: (c+d, a+b). Sort by c+d ascending so any card can act as the 'last (largest c+d)' one.", "카드마다 두 합 (c+d, a+b) 만 저장. c+d 오름차순 정렬해서, 어떤 카드든 '마지막(c+d 최대)' 역할을 할 수 있게 해요.") },
-    { hi: [8, 10],  bubble: t(E, "Prepare a min-heap holding the top m−1 a+b values, their sum topsum, and the running answer best.", "a+b 상위 m−1개를 담는 min-heap, 그 합 topsum, 정답 best 를 준비해요.") },
-    { hi: [11, 13], bubble: t(E, "For each card, if m−1 candidates are already in front, use THIS card as the special last one: topsum + this a+b + this c+d. Update best.", "각 카드마다, 앞에 후보 m−1개가 있으면 이 카드를 특별한 마지막 장으로: topsum + 이 a+b + 이 c+d. best 갱신.") },
-    { hi: [14, 18], bubble: t(E, "Push this card's a+b into the pool; if the pool grows past m−1, drop the smallest so it always keeps the best m−1. Finally print best.", "이 카드의 a+b 를 풀에 넣고, m−1개를 넘으면 가장 작은 걸 버려 항상 상위 m−1개 유지. 마지막에 best 출력.") },
+    { hi: [0, 7],   bubble: t(E, "Read each card and keep just two totals: (c+d, a+b). Sort by c+d ascending so any card can act as the 'last (largest c+d)' one.", "카드마다 두 합 (c+d, a+b) 만 저장해요.\nc+d 오름차순으로 정렬하면 앞 카드들은 c+d 가 더 작아요.\n그래서 어느 카드든 마지막 장으로 세워 볼 수 있어요.") },
+    { hi: [8, 10],  bubble: t(E, "Prepare a min-heap holding the top m−1 a+b values, their sum topsum, and the running answer best.", "a+b 상위 m−1개를 담는 min-heap, 그 합 topsum, 답 best 를 준비해요.") },
+    { hi: [11, 13], bubble: t(E, "For each card, if m−1 candidates are already in front, use THIS card as the special last one: topsum + this a+b + this c+d. Update best.", "앞에 후보 m−1개가 있으면 이 카드를 마지막 장으로 놓아 봐요.\n합은 topsum + 이 카드 a+b + 이 카드 c+d 이고, best 를 새로 고쳐요.") },
+    { hi: [14, 18], bubble: t(E, "Push this card's a+b into the pool; if the pool grows past m−1, drop the smallest so it always keeps the best m−1. Finally print best.", "이 카드의 a+b 를 넣고, m−1개를 넘으면 가장 작은 걸 버려요.\n그래야 늘 상위 m−1개만 남아요. 마지막에 best 를 출력해요.") },
   ] };
 }
 
@@ -208,7 +208,7 @@ function highlightCode(lines, lang) {
 
 export function downloadInnovationPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Innovation — Full Study Guide", "Innovation — 종합 풀이 노트");
@@ -231,7 +231,7 @@ export function downloadInnovationPDF(E, sections, lang = "py") {
   .hint { background: #eff6ff; border: 1px solid #93c5fd; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #1e3a8a; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">MCC 2023 P3 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

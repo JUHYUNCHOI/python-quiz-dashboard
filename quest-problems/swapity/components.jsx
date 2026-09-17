@@ -116,7 +116,7 @@ export function SwapityRoundSim({ E }) {
   // Highlight which range is "active" based on phase.
   const activeRange = phase === 0 ? null : REV[phase === 1 ? 0 : 1];
   const phaseLabel = (() => {
-    if (phase === 0) return t(E, "Start of round (identity)", "라운드 시작 (원래 줄)");
+    if (phase === 0) return t(E, "Start of round (identity)", "라운드 시작 — 아직 원래 줄이에요");
     if (phase === 1) return t(E, `Step 1: reversed positions ${REV[0][0] + 1}–${REV[0][1] + 1}`, `1단계: 위치 ${REV[0][0] + 1}–${REV[0][1] + 1} 뒤집기 완료`);
     return t(E, `Step 2: reversed positions ${REV[1][0] + 1}–${REV[1][1] + 1}  →  round complete`, `2단계: 위치 ${REV[1][0] + 1}–${REV[1][1] + 1} 뒤집기 완료  →  라운드 끝`);
   })();
@@ -129,12 +129,12 @@ export function SwapityRoundSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 12 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>
-          🎬 {t(E, "Watch one round, then keep going", "한 라운드를 본 다음, 계속 돌려봐")}
+          🎬 {t(E, "Watch one round, then keep going", "한 라운드를 본 다음 계속 돌려 봐요")}
         </div>
         <div style={{ fontSize: 12, color: "#5b21b6", lineHeight: 1.5 }}>
           {t(E,
             "Array [1..5]. Each round = reverse positions 1–3, then reverse 3–5. Step or play to see the cycle close.",
-            "배열 [1..5]. 한 라운드 = 위치 1–3 뒤집기 → 위치 3–5 뒤집기. 단계로 넘기거나 재생을 눌러 순환이 닫히는 걸 확인.")}
+            "배열은 [1..5] 예요. 한 라운드는 위치 1–3 을 뒤집고 이어서 3–5 를 뒤집는 거예요. 단계로 넘기거나 재생을 눌러 순환이 닫히는 걸 봐요.")}
         </div>
       </div>
 
@@ -201,7 +201,7 @@ export function SwapityRoundSim({ E }) {
         <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 14px", marginBottom: 12, fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
           💡 {t(E,
             `The array returned to [1..5] after ${cycleLen} rounds. So K rounds is the same as K mod ${cycleLen} rounds — that's how 10^9 becomes manageable.`,
-            `${cycleLen} 라운드 후 배열이 [1..5] 로 돌아왔어요. 즉 K 라운드 = K mod ${cycleLen} 라운드 — 10^9 가 다룰 만한 수가 되는 이유.`)}
+            `${cycleLen} 라운드 만에 배열이 [1..5] 로 돌아왔어요. 여기서부터는 똑같은 게 되풀이되니 K 라운드는 K mod ${cycleLen} 라운드와 같아요. 그래서 K 가 10^9 여도 몇 번만 하면 돼요.`)}
         </div>
       )}
 
@@ -330,19 +330,19 @@ export function getSwapitySections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 에서 옮긴 거예요. 타입이나 표현은 필요하면 바꿔요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣어요 (<iostream>, <vector>, ...). 그래야 코드가 뭘 쓰는지 한눈에 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더하거나 곱한 값이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -388,7 +388,7 @@ function highlightCode(lines, lang) {
 
 export function downloadSwapityPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Swapity — Full Study Guide", "Swapity — 종합 풀이 노트");
@@ -411,7 +411,7 @@ export function downloadSwapityPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

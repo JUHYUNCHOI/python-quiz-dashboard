@@ -12,7 +12,7 @@ export function makeBlocksCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has 4 cubes; each cube has 6 letters (one per face).\nFor each query word, decide whether you can spell it by lining up the 4 cubes left-to-right, choosing which cube goes in each position and which face shows.\nFor each query, print YES or NO.",
-        "FJ에게 4개의 큐브가 있고, 각 큐브의 6개 면에 글자가 한 개씩 있어요.\n각 단어 쿼리에 대해, 4개 큐브를 왼쪽부터 오른쪽으로 나란히 놓고 — 어느 큐브를 어디에, 어느 면을 위로 — 선택해서 그 단어를 만들 수 있는지 판단해요.\n각 쿼리마다 YES 또는 NO를 출력해요."),
+        "큐브 4개를 늘어놓아 그 단어를 만들 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -29,7 +29,7 @@ export function makeBlocksCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "For each query word, print YES if it can be spelled with the 4 cubes, else NO.",
-                "각 단어 쿼리에 대해 4개 큐브로 만들 수 있으면 YES, 아니면 NO를 출력해요.")}
+                "단어마다 큐브 4개로 만들 수 있으면 YES, 없으면 NO 를 출력해요.")}
             </div>
           </div>
 
@@ -69,7 +69,7 @@ export function makeBlocksCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "For each query word, print ", "각 단어 쿼리에 대해 ")}
+                  {t(E, "For each query word, print ", "단어마다 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "YES if it can be spelled, else NO", "만들 수 있으면 YES, 아니면 NO")}</b>
                   {t(E, ".", " 를 출력해요.")}
                 </div>
@@ -83,16 +83,16 @@ export function makeBlocksCh1(E) {
       type: "reveal",
       narr: t(E,
         "Here is the exact input/output format and the official sample. Read it once — your program must reproduce this output exactly.",
-        "정확한 입력/출력 형식과 공식 예제예요. 한 번 읽어봐요 — 프로그램은 이 출력을 그대로 만들어내야 해요."),
+        "입력과 출력이 어떤 모양인지 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10, fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>📥 {t(E, "Input", "입력")}</div>
             <div>{t(E, "Line 1: N (1 ≤ N ≤ 10), the number of words.", "1번째 줄: 단어 개수 N (1 ≤ N ≤ 10).")}</div>
-            <div>{t(E, "Next 4 lines: each is 6 uppercase letters — the faces of one block.", "다음 4줄: 각 줄은 대문자 6개 — 블록 하나의 6개 면.")}</div>
+            <div>{t(E, "Next 4 lines: each is 6 uppercase letters — the faces of one block.", "다음 4줄: 각 줄에 대문자 6개 — 블록 하나의 여섯 면이에요.")}</div>
             <div>{t(E, "Next N lines: a word (1–4 letters) to try to spell.", "다음 N줄: 만들어볼 단어 (1~4글자).")}</div>
             <div style={{ fontWeight: 700, color: "#5b21b6", margin: "8px 0 6px" }}>📤 {t(E, "Output", "출력")}</div>
-            <div>{t(E, "For each word, print YES if it can be spelled, else NO.", "각 단어마다 만들 수 있으면 YES, 아니면 NO 출력.")}</div>
+            <div>{t(E, "For each word, print YES if it can be spelled, else NO.", "단어마다 만들 수 있으면 YES, 없으면 NO 를 출력해요.")}</div>
           </div>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             <div style={{ flex: 1, minWidth: 140 }}>
@@ -121,8 +121,8 @@ NO`}</pre>
           </div>
           <div style={{ fontSize: 11.5, color: C.dim, marginTop: 10, lineHeight: 1.6 }}>
             💡 {t(E,
-              "MOO is NO: the M is only on block 1, but spelling MOO would need block 1 to show M and an O at the same time. CODE is NO: C, D, E all live on the same block (ABCDEF), so they can't show at once.",
-              "MOO 가 NO 인 이유: M 은 블록 1 에만 있는데, MOO 를 만들려면 블록 1 이 M 과 O 를 동시에 보여줘야 해요. CODE 가 NO 인 이유: C, D, E 가 모두 같은 블록(ABCDEF)에 있어 한꺼번에 보일 수 없어요.")}
+              "MOO is NO: M lives only on block 1, and O lives only on blocks 1 and 2, so the two O's would have to use blocks 1 and 2 — but block 1 is already taken by the M. CODE is NO: C, D, E all live on the same block (ABCDEF), and one block shows only one face.",
+              "MOO 는 왜 NO 일까요. M 은 블록 1 에만 있고, O 는 블록 1 과 2 에만 있어요. O 두 개가 블록 1 과 2 를 써야 하는데, 블록 1 은 이미 M 이 차지했어요. CODE 도 NO 예요. C, D, E 가 모두 같은 블록(ABCDEF)에 있는데 한 블록은 한 면만 보여줄 수 있어요.")}
           </div>
         </div>
       ),
@@ -132,17 +132,17 @@ NO`}</pre>
       type: "reveal",
       narr: t(E,
         "Try the simulator. Pick a target word, assign one cube to each letter, and see whether each face matches. Notice that reusing the same cube is blocked.",
-        "시뮬레이터로 직접 해봐요. 목표 단어를 고르고, 각 글자에 큐브를 배정해서 면이 맞는지 확인해요. 같은 큐브 재사용은 막혀 있어요."),
+        "직접 큐브를 골라 단어를 만들어 봐요."),
       content: <BlockLetterSim E={E} />,
     },
     // 1-4: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "4 blocks, word length 3. Pick 3 blocks from 4 and arrange them. How many ways?", "4개 블록, 단어 길이 3. 4개 중 3개를 골라 배열. 몇 가지 방법?"),
+        "4 blocks, word length 3. Pick 3 blocks from 4 and arrange them. How many ways?", "블록 4개 중 3개를 골라 늘어놓는 방법은 몇 가지일까요?"),
       question: t(E,
         "C(4,3) * 3! = how many permutations?",
-        "C(4,3) * 3! = 몇 가지 순열?"),
+        "C(4,3) * 3! 은 몇 가지일까요?"),
       options: [
         t(E, "24", "24"),
         t(E, "12", "12"),
@@ -151,19 +151,19 @@ NO`}</pre>
       correct: 0,
       explain: t(E,
         "Correct! C(4,3)=4 ways to choose 3 blocks, times 3!=6 arrangements = 24 total.",
-        "맞아! C(4,3)=4가지로 3개 블록 선택, 곱하기 3!=6 배열 = 총 24가지."),
+        "블록 3개를 고르는 방법이 C(4,3)=4 가지, 늘어놓는 방법이 3!=6 가지예요. 4 × 6 = 24 가지예요."),
     },
     // 1-5: Input
     {
       type: "input",
       narr: t(E,
-        "Block 1 has faces \"COWMOO\" (C,O,W,M,O,O). Can it show the letter 'C'? Yes=1, No=0", "블록1의 면이 \"COWMOO\" (C,O,W,M,O,O). 글자 'C'를 보여줄 수 있어요? 예=1, 아니오=0"),
+        "Block 1 has faces \"COWMOO\" (C,O,W,M,O,O). Can it show the letter 'C'? Yes=1, No=0", "블록 \"COWMOO\" 가 글자 'C' 를 보여줄 수 있을까요?"),
       question: t(E,
         "Block \"COWMOO\": can it show 'C'? (1=yes, 0=no)",
         "블록 \"COWMOO\": 'C'를 보여줄 수 있어요? (1=예, 0=아니오)"),
       hint: t(E,
         "Scan the 6 faces of \"COWMOO\" — does any face show 'C'?",
-        "\"COWMOO\"의 6개 면을 훑어봐요 — 'C'가 보이는 면이 있나요?"),
+        "\"COWMOO\" 의 여섯 면을 하나씩 봐요. 'C' 가 있는 면이 있나요?"),
       answer: 1,
     },
   ];
@@ -180,7 +180,7 @@ export function makeBlocksCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Only 4! = 24 ways to assign the 4 cubes to positions. For each query word, try every assignment and check that the required letter at each position exists on the assigned cube's faces. Sections build it one piece at a time.",
-        "4 개 큐브를 위치에 배정하는 방법은 4! = 24 가지뿐. 각 단어 쿼리에 대해 모든 배정을 시도하고, 각 위치에 필요한 글자가 배정된 큐브의 면에 있는지 확인. 아래 섹션이 한 단락씩 쌓아요."),
+        "큐브를 자리에 놓는 방법은 4! = 24 가지뿐이에요.\n24 가지를 다 놓아 보고, 자리마다 필요한 글자가 그 큐브 면에 있는지 확인해요."),
       sections: getBlocksSections(E),
     },
   ];

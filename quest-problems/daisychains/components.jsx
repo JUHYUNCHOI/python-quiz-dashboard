@@ -65,19 +65,19 @@ export function getDaisyChainsSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 파이썬에서 옮긴 것이라\n자료형과 표현은 필요하면 손봐야 해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Outer for-loop fixes the start; inner for-loop grows the window.",
-            "바깥 for문이 시작점, 안쪽 for문이 구간을 키움."),
+            "바깥 for 문이 시작점을 정하고, 안쪽 for 문이 구간을 늘려요."),
         t(E, "Use long long for running sums so 100k * 1e9 cannot overflow int.",
-            "누적 합은 long long으로 받아 int 오버플로 방지."),
+            "쌓아 온 합은 long long 에 담아야\n100k × 1e9 가 int 를 넘치는 일을 막을 수 있어요."),
       ],
     },
   ];

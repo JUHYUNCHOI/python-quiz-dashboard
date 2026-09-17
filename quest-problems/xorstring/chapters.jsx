@@ -40,7 +40,7 @@ export function makeXorStringCh1(E) {
       type: "reveal",
       narr: t(E,
         "\"Transforming\" a string inserts (neighbor XOR neighbor) between every adjacent pair. Its \"beauty\" counts equal-adjacent pairs. Sum the beauty-after-k-transforms over ALL substrings of s.",
-        "문자열을 \"변신\"시키면 이웃한 두 글자마다 그 사이에 (이웃 XOR 이웃) 을 끼워 넣어요. \"beauty\" 는 이웃이 같은 쌍의 개수예요. s 의 모든 부분문자열에 대해 'k번 변신 후의 beauty' 를 더해요."),
+        "k번 변신한 뒤의 beauty 를 모두 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -57,7 +57,7 @@ export function makeXorStringCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Add up g(substring) over every substring of s (length ≥ 2), then print it mod 998244353.",
-                "s 의 모든 부분문자열(길이 ≥ 2)에 대해 g(부분문자열) 을 더해서 998244353 으로 나눈 나머지를 출력해요.")}
+                "s 의 모든 부분문자열(길이 ≥ 2)에 대해 g(부분문자열) 을 더해요.\n그 합을 998244353 으로 나눈 나머지를 출력해요.")}
             </div>
           </div>
 
@@ -133,7 +133,7 @@ export function makeXorStringCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 2 ≤ n ≤ 2·10^5, 0 ≤ k ≤ 10^18. Output the sum mod 998244353.",
-                  "제약: 2 ≤ n ≤ 2·10^5, 0 ≤ k ≤ 10^18. 합을 998244353 으로 나눈 나머지를 출력.")}
+                  "크기는 2 ≤ n ≤ 2·10^5, 0 ≤ k ≤ 10^18 이에요.\n합을 998244353 으로 나눈 나머지를 출력해요.")}
             </div>
           </div>
 
@@ -160,7 +160,7 @@ export function makeXorStringCh1(E) {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
             {t(E,
               "In sample 2 the answer is a huge number taken mod 998244353 — a hint that even for tiny input the true count is astronomically large, because transforming 30 times blows the string up.",
-              "예제 2 의 답이 998244353 으로 나눈 큰 수인 것만 봐도, 입력이 작아도 실제 값은 어마어마하게 크다는 걸 알 수 있어요 — 30번 변신하면 문자열이 폭발하니까요.")}
+              "예제 2 는 k = 30 이에요. 30번 변신하면 문자열이 어마어마하게 길어져요.\n그래서 입력이 짧아도 실제 답은 엄청나게 커요.\n예제 2 의 답이 998244353 으로 나눈 나머지로 적혀 있는 이유예요.")}
           </div>
         </div>),
     },
@@ -179,10 +179,10 @@ export function makeXorStringCh1(E) {
       type: "quiz",
       narr: t(E,
         "Transform '10' once: insert 1 XOR 0 = 1 between them → '110'.",
-        "'10' 을 한 번 변신: 사이에 1 XOR 0 = 1 을 끼워요 → '110'."),
+        "'10' 을 한 번 변신하면 사이에 1 XOR 0 = 1 이 들어가요."),
       question: t(E,
         "Transforming '10' once gives '110'. What is its beauty (equal-adjacent pairs)?",
-        "'10' 을 한 번 변신하면 '110' 이에요. 이것의 beauty (이웃이 같은 쌍의 수)는?"),
+        "'10' 을 한 번 변신하면 '110' 이에요. '110' 의 beauty (이웃이 같은 쌍의 수) 는?"),
       options: [
         t(E, "1  (the '11' pair)", "1  ('11' 쌍 하나)"),
         t(E, "0  (no equal pairs)", "0  (같은 쌍 없음)"),
@@ -191,7 +191,7 @@ export function makeXorStringCh1(E) {
       correct: 0,
       explain: t(E,
         "'110' has pairs (1,1) equal and (1,0) different → beauty = 1. Counting equal neighbors is exactly f(t).",
-        "'110' 의 쌍은 (1,1) 같음, (1,0) 다름 → beauty = 1. 이웃이 같은 걸 세는 게 바로 f(t) 예요."),
+        "'110' 의 쌍은 (1,1) 은 같고 (1,0) 은 달라요.\n그래서 beauty = 1 이에요.\n이웃이 같은 쌍을 세는 게 바로 f(t) 예요."),
     },
   ];
 }
@@ -207,7 +207,7 @@ export function makeXorStringCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way actually transforms every substring k times — impossible: the string grows like 2^k and k reaches 10^18. The fast way treats each adjacent pair on its own, uses a closed formula for its beauty, and weights it by how many substrings contain it.",
-        "느린 방법은 모든 부분문자열을 실제로 k번 변신시켜요 — 불가능해요: 문자열은 2^k 로 커지고 k 는 10^18 까지예요. 빠른 방법은 각 이웃 쌍을 따로 보고, beauty 를 닫힌 공식으로 구한 뒤, 그 쌍을 담은 부분문자열 개수만큼 가중치를 곱해요."),
+        "만들지 말고, 쌍마다 공식으로 바로 구해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -218,7 +218,7 @@ export function makeXorStringCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "Two walls at once: there are ~n²/2 substrings (up to 2·10^10), AND each transformed string is length ~2^k — for k = 10^18 it can never be built. Hopeless.",
-                  "벽이 두 개예요: 부분문자열이 ~n²/2 개(최대 2·10^10)인 데다, 변신한 문자열은 길이 ~2^k — k = 10^18 이면 절대 만들 수 없어요. 가망 없어요.")}
+                  "막히는 곳이 두 군데예요. 부분문자열이 ~n²/2 개(최대 2·10^10) 나 돼요. 게다가 변신한 문자열은 길이가 ~2^k 라, k = 10^18 이면 아예 만들 수가 없어요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
@@ -228,7 +228,7 @@ export function makeXorStringCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "Each adjacent pair transforms independently. Its beauty after k steps has a closed form from the pair type (00 / 11 / 01) and 2^k, (-1)^k. Weight the pair at i by i·(n−i) substrings. One pass: O(n).",
-                  "이웃 쌍은 각자 독립으로 변신해요. k번 뒤 beauty 는 쌍 종류(00 / 11 / 01) 와 2^k, (-1)^k 로 닫힌 공식이 돼요. 위치 i 쌍에 i·(n−i) 개의 부분문자열만큼 가중치. 한 번 훑기: O(n).")}
+                  "이웃 쌍은 서로 상관없이 따로 변신해요. 그래서 k번 뒤 beauty 는 쌍 종류(00 / 11 / 01) 와 2^k, (-1)^k 만으로 공식이 나와요. 위치 i 의 쌍은 부분문자열 i·(n−i) 개에 들어가니 그만큼 곱해 더해요. 한 번만 훑으면 되니 O(n) 이에요.")}
               </div>
             </div>
           </div>

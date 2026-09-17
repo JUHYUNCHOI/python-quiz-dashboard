@@ -219,7 +219,7 @@ export function getMooHuntFastWalk(E, lang = "py") {
     return { code: FAST_CPP, vars: _FAST_VARS, beats: [
       { hi: [0, 6],   bubble: t(E, "Headers we need, then read N (cells) and K (moves).", "필요한 헤더를 적고, N (칸 수) 와 K (무브 수) 를 읽어요.") },
       { hi: [8, 18],  bubble: t(E, "This is the table you built a page ago.\nThe same table as a page ago — that cell was slot **7** in the array.\nTwo cells into one number: smaller * N + larger.",
-                                   "앞 쪽에서 만든 그 표예요.\n무브를 여기에 한 번만 세어 넣어요.\n앞 쪽 표 그대로예요 — 거기서 본 그 칸이 배열에선 **7번**이었죠.\n두 칸을 한 번호로: 작은 쪽 * N + 큰 쪽.") },
+                                   "앞 쪽에서 만든 그 표예요.\n무브를 여기에 한 번만 세어 넣어요.\n앞 쪽 표 그대로예요 — 거기서 본 그 칸이 배열에선 **7번**이었죠.\n두 칸은 번호 하나로 합쳐요. 작은 쪽 * N + 큰 쪽 이에요.") },
       { hi: [20, 25], bubble: t(E, "The board is just a list: 1 means M, 0 means O. Start from all O.", "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.") },
       { hi: [26, 35], bubble: t(E, "For this board, split the cells: which are M, which are O.", "이 보드에서 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
       { hi: [36, 45], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nOs was filled from cell 1 upward, so earlier entries are always smaller cells.\nj starts after i, so Os[i] is the smaller one — matching the smaller-first rule we used for the keys.",

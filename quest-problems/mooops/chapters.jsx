@@ -11,7 +11,7 @@ export function makeMooOpsCh1(E) {
       type: "reveal",
       narr: t(E,
         "You're given a string of M's and O's. In one operation you can flip the FIRST char (M↔O), flip the LAST char, delete the FIRST char, or delete the LAST char.\nFind the minimum number of operations to turn the string into exactly \"MOO\". If impossible, print -1.",
-        "M과 O로 된 문자열이 주어져요. 한 번의 연산으로 맨 앞 문자를 뒤집거나(M↔O), 맨 뒤 문자를 뒤집거나, 맨 앞 문자를 지우거나, 맨 뒤 문자를 지울 수 있어요.\n문자열을 정확히 \"MOO\"로 만드는 데 필요한 최소 연산 횟수를 구해요. 불가능하면 -1."),
+        "문자열을 딱 \"MOO\" 로 바꾸는 가장 적은 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,7 +28,7 @@ export function makeMooOpsCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Output the minimum operations to turn the string into 'MOO', or -1 if impossible.",
-                "문자열을 'MOO' 로 만드는 최소 연산 수 (불가능하면 -1) 를 출력.")}
+                "문자열을 'MOO' 로 만드는 데 드는 가장 적은 횟수를 출력해요. 못 만들면 -1 을 출력해요.")}
             </div>
           </div>
 
@@ -48,10 +48,10 @@ export function makeMooOpsCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Each operation costs 1 and lets you do ONE of:", "한 번의 연산(비용 1) 으로 다음 중 하나를 할 수 있어요:")}
+                  {t(E, "Each operation costs 1 and lets you do ONE of:", "한 번에(비용 1) 다음 중 하나를 할 수 있어요:")}
                   <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
-                    {t(E, "↳ flip the first char (M↔O)  /  flip the last char", "↳ 맨 앞 문자 뒤집기 (M↔O) / 맨 뒤 문자 뒤집기")}<br/>
-                    {t(E, "↳ delete the first char  /  delete the last char", "↳ 맨 앞 문자 삭제 / 맨 뒤 문자 삭제")}
+                    {t(E, "↳ flip the first char (M↔O)  /  flip the last char", "↳ 맨 앞 글자 뒤집기 (M↔O) / 맨 뒤 글자 뒤집기")}<br/>
+                    {t(E, "↳ delete the first char  /  delete the last char", "↳ 맨 앞 글자 지우기 / 맨 뒤 글자 지우기")}
                   </div>
                 </div>
               </div>
@@ -67,7 +67,7 @@ export function makeMooOpsCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "최소 연산 횟수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "가장 적은 횟수")}</b>
                   {t(E, " — or ", " 를 출력해요. 불가능하면 ")}
                   <b style={{ color: "#dc2626" }}>-1</b>
                   {t(E, " if impossible.", ".")}
@@ -81,10 +81,10 @@ export function makeMooOpsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The string \"MOO\" already matches. How many operations are needed?", "문자열 \"MOO\"는 이미 일치해요. 몇 번의 연산이 필요할까?"),
+        "The string \"MOO\" already matches. How many operations are needed?", "문자열이 이미 \"MOO\" 예요. 몇 번이면 될까요?"),
       question: t(E,
         "String is \"MOO\". How many operations needed?",
-        "문자열이 \"MOO\"일 때. 필요한 연산 수는?"),
+        "문자열이 \"MOO\" 일 때 필요한 횟수는?"),
       options: [
         t(E, "0 operations", "0번"),
         t(E, "1 operation", "1번"),
@@ -93,27 +93,27 @@ export function makeMooOpsCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! \"MOO\" is already the target, so 0 operations needed.",
-        "맞아! \"MOO\"가 이미 목표이므로 0번의 연산이 필요해요."),
+        "맞아요! \"MOO\" 가 이미 목표라서 한 번도 안 바꿔도 돼요."),
     },
     // 1-3: Lab — visualize the candidate-MOO scan
     {
       type: "reveal",
       narr: t(E,
         "Pick a position i and watch the cost break down: left deletes + right deletes + flips. The middle char must already be 'O' (we can't flip the middle).",
-        "위치 i 를 골라봐 — 비용이 (왼쪽 삭제) + (오른쪽 삭제) + (뒤집기) 로 쪼개져. 가운데 글자는 이미 'O' 여야 해 (가운데는 뒤집기 불가)."),
+        "가운데 글자는 뒤집을 수 없어서 처음부터 'O' 여야 해요."),
       content: <MooOpsLab E={E} />,
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "String is \"MOOO\". We need to reduce it to \"MOO\". How many operations?", "문자열이 \"MOOO\"야. \"MOO\"로 줄여야 해요. 몇 번의 연산이 필요할까?"),
+        "String is \"MOOO\". We need to reduce it to \"MOO\". How many operations?", "\"MOOO\" 를 \"MOO\" 로 줄이려면 몇 번이 필요할까요?"),
       question: t(E,
         "String \"MOOO\". Min operations to make it \"MOO\"?",
-        "문자열 \"MOOO\". \"MOO\"로 만드는 최소 연산 수?"),
+        "문자열 \"MOOO\" 를 \"MOO\" 로 만드는 가장 적은 횟수는?"),
       hint: t(E,
         "Try keeping the first 3 chars and removing extras with deletes / flips.",
-        "앞 3 글자를 살리고 나머지를 삭제/뒤집기로 처리하는 걸 시도해 봐."),
+        "앞 3 글자를 살리고 나머지는 지우거나 뒤집어 봐요."),
       answer: 1,
     },
   ];
@@ -130,7 +130,7 @@ export function makeMooOpsCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Final 'MOO' middle char can never be flipped (only first/last). Scan every i with s[i+1]='O' and compute (left deletes) + (right deletes) + (flips needed for s[i] and s[i+2]). Sections build it one piece at a time.",
-        "최종 'MOO' 의 가운데는 절대 뒤집기 불가 (앞/뒤만 가능). s[i+1]='O' 인 모든 i 를 스캔, (왼쪽 삭제) + (오른쪽 삭제) + (s[i], s[i+2] 뒤집기) 계산. 아래 섹션이 한 단락씩 쌓아요."),
+        "가운데는 못 뒤집으니 s[i+1]='O' 인 자리만 살펴봐요."),
       sections: getMooOpsSections(E),
     },
   ];

@@ -10,7 +10,7 @@ export function makeRotShiftCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows stand at positions 0..N−1 in a circle. K of those positions are 'active'.\nEach minute: (1) all cows currently AT active positions cyclically rotate by 1 (within the active set), (2) every active position then shifts by +1 (mod N).\nAfter T minutes, where does each cow end up?",
-        "N마리 소가 원형의 위치 0..N−1에 서있고, 그중 K개의 위치가 '활성'이에요.\n매분: (1) 활성 위치에 있는 소들이 활성 집합 안에서 순환 회전(1칸), (2) 그 다음 활성 위치들이 +1 만큼 이동 (N 으로 나눈 나머지).\nT분 후 각 소는 어디에 있을까요?"),
+        "매분 소들이 한 칸 돌고 활성 위치도 옮겨가요. T분 뒤엔 어디 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -27,7 +27,7 @@ export function makeRotShiftCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "After T minutes, output for each position p (0..N−1) which cow ends up there.",
-                "T 분 후 각 위치 p (0..N−1) 에 어느 소가 있는지 출력.")}
+                "T 분 후 각 위치 p (0..N−1) 에 어느 소가 있는지 출력해요.")}
             </div>
           </div>
 
@@ -88,7 +88,7 @@ export function makeRotShiftCh1(E) {
       type: "reveal",
       narr: t(E,
         "Input: N K T then K active positions on the next line.  Output: one line with N space-separated values.",
-        "\uc785\ub825: \uccab \uc904 N K T, \ub2e4\uc74c \uc904\uc5d0 K \uac1c \ud65c\uc131 \uc704\uce58. \ucd9c\ub825: \uacf5\ubc31 \uad6c\ubd84 N \uac1c \uac12 \ud55c \uc904."),
+        "\uccab \uc904\uc5d0 N K T \uac00 \uc624\uace0, \ub2e4\uc74c \uc904\uc5d0 \ud65c\uc131 \uc704\uce58 K \uac1c\uac00 \uc640\uc694."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#8b5cf6", textAlign: "center", marginBottom: 10 }}>
@@ -116,11 +116,11 @@ export function makeRotShiftCh1(E) {
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
               {t(E, "After 4 minutes of rotate-then-shift, the cows end up cyclically shifted: cow 0 \u2192 pos 4, cow 1 \u2192 pos 0, cow 2 \u2192 pos 1, ...",
-                    "4 \ubd84 \ud6c4 \ud68c\uc804+\uc774\ub3d9 \uacb0\uacfc: \uc18c 0 \u2192 \uc704\uce58 4, \uc18c 1 \u2192 \uc704\uce58 0, \uc18c 2 \u2192 \uc704\uce58 1, ...")}
+                    "4 \ubd84 \ub3d9\uc548 \ud68c\uc804\uacfc \uc774\ub3d9\uc744 \ub418\ud480\uc774\ud558\uba74 \uc18c 0 \uc740 \uc704\uce58 4, \uc18c 1 \uc740 \uc704\uce58 0, \uc18c 2 \ub294 \uc704\uce58 1 \ub85c \uac00\uc694.")}
             </div>
             <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
               {t(E, "Output by position p:  p=0 has cow 1,  p=1 has cow 2, ...,  p=4 has cow 0  \u2192  '1 2 3 4 0'.",
-                    "\uc704\uce58 p \uae30\uc900: p=0 \uc5d0 \uc18c 1, p=1 \uc5d0 \uc18c 2, ..., p=4 \uc5d0 \uc18c 0 \u2192 '1 2 3 4 0'.")}
+                    "\uc704\uce58 p \ub97c \uae30\uc900\uc73c\ub85c \ubcf4\uba74 p=0 \uc5d0 \uc18c 1, p=1 \uc5d0 \uc18c 2, ..., p=4 \uc5d0 \uc18c 0 \uc774\uc5d0\uc694 \u2192 '1 2 3 4 0'.")}
             </div>
           </div>
         </div>),
@@ -128,7 +128,7 @@ export function makeRotShiftCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's visualize with N=4, K=2, active=[0,1].\nRotation means: cow at pos 0 goes to pos 1, cow at pos 1 goes to pos 0 (swap for K=2).", "N=4, K=2, active=[0,1]\uc73c\ub85c \uc2dc\uac01\ud654.\n\ud68c\uc804: \uc704\uce58 0\uc758 \uc18c\uac00 \uc704\uce58 1\ub85c, \uc704\uce58 1\uc758 \uc18c\uac00 \uc704\uce58 0\uc73c\ub85c (K=2\uc774\uba74 \uad50\ud658)."),
+        "Let's visualize with N=4, K=2, active=[0,1].\nRotation means: cow at pos 0 goes to pos 1, cow at pos 1 goes to pos 0 (swap for K=2).", "\ud65c\uc131 \uc704\uce58\uac00 \ub458\ubfd0\uc774\uba74 \ud68c\uc804\uc740 \ub450 \uc18c\uac00 \uc790\ub9ac\ub97c \ub9de\ubc14\uafb8\ub294 \uac70\uc608\uc694."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
@@ -147,7 +147,7 @@ export function makeRotShiftCh1(E) {
               ))}
             </div>
             <div style={{ fontSize: 12, color: "#8b5cf6", fontWeight: 700, textAlign: "center" }}>
-              {t(E, "Purple = active positions. They rotate, then shift right!", "\ubcf4\ub77c = \ud65c\uc131 \uc704\uce58.\n\ud68c\uc804 \ud6c4 \uc624\ub978\ucabd\uc73c\ub85c \uc774\ub3d9!")}
+              {t(E, "Purple = active positions. They rotate, then shift right!", "\ubcf4\ub77c\uc0c9\uc774 \ud65c\uc131 \uc704\uce58\uc608\uc694.\n\ud68c\uc804\ud55c \ub4a4 \uc624\ub978\ucabd\uc73c\ub85c \uc62e\uaca8\uac00\uc694!")}
             </div>
           </div>
         </div>),
@@ -156,7 +156,7 @@ export function makeRotShiftCh1(E) {
       type: "reveal",
       narr: t(E,
         "Drive the simulation yourself. Press Step to advance one minute (rotate then shift). Sample 1 reaches '1 2 3 4 0' after 4 steps.",
-        "\uc9c1\uc811 \uc2dc\ubbac\ub808\uc774\uc158\uc744 \uad74\ub824\ubd10\uc694. Step \uc744 \ub20c\ub7ec 1 \ubd84 \uc9c4\ud589 (\ud68c\uc804 \ud6c4 \uc774\ub3d9). \uc0d8\ud50c 1 \uc740 4 \ubd84 \ud6c4 '1 2 3 4 0' \uc774 \ub3fc\uc694."),
+        "Step \uc744 \ub20c\ub7ec 1 \ubd84\uc529 \uad74\ub824 \ubd10\uc694 \u2014 \ud68c\uc804\ud55c \ub4a4 \uc62e\uaca8\uac00\uc694."),
       content: (
         <div style={{ padding: 16 }}>
           <RotShiftSim E={E} />
@@ -165,34 +165,34 @@ export function makeRotShiftCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In the rotation step, cows cycle: A1\u2192A2\u2192...\u2192AK\u2192A1. Is this correct?", "\ud68c\uc804 \ub2e8\uacc4\uc5d0\uc11c \uc18c\ub4e4\uc774 \uc21c\ud658: A1\u2192A2\u2192...\u2192AK\u2192A1.\n\ub9de\ub098?"),
-      question: t(E, "Rotation means A1\u2192A2\u2192...\u2192AK\u2192A1?", "\ud68c\uc804\uc740 A1\u2192A2\u2192...\u2192AK\u2192A1\uc744 \uc758\ubbf8?"),
-      options: [t(E, "Yes", "\ub124"), t(E, "No", "\uc544\ub2c8\uc624")],
+        "In the rotation step, cows cycle: A1\u2192A2\u2192...\u2192AK\u2192A1. Is this correct?", "\ud68c\uc804 \ub2e8\uacc4\uc5d0\uc11c \uc18c\ub4e4\uc740 A1\u2192A2\u2192...\u2192AK\u2192A1 \ub85c \ub3cc\uc544\uc694."),
+      question: t(E, "Rotation means A1\u2192A2\u2192...\u2192AK\u2192A1?", "\ud68c\uc804\uc740 A1\u2192A2\u2192...\u2192AK\u2192A1 \uc744 \ub73b\ud560\uae4c\uc694?"),
+      options: [t(E, "Yes", "\ub124"), t(E, "No", "\uc544\ub2c8\uc694")],
       correct: 0,
-      explain: t(E, "Correct! Cows at active positions cycle forward by one.", "\ub9de\uc544! \ud65c\uc131 \uc704\uce58\uc758 \uc18c\ub4e4\uc774 \ud558\ub098\uc529 \uc55e\uc73c\ub85c \uc21c\ud658\ud574."),
+      explain: t(E, "Correct! Cows at active positions cycle forward by one.", "\ub9de\uc544\uc694! \ud65c\uc131 \uc704\uce58\uc758 \uc18c\ub4e4\uc774 \ud558\ub098\uc529 \uc55e\uc73c\ub85c \ub3cc\uc544\uc694."),
     },
     {
       type: "input",
       narr: t(E,
-        "N=4, K=2, active=[0,1]. After 1 step:\n1. Rotate: cow0\u2192pos1, cow1\u2192pos0 (swap)\n2. Shift: active becomes [1,2]\nWhere is cow 0 now?", "N=4, K=2, active=[0,1]. 1\ub2e8\uacc4 \ud6c4:\n1. \ud68c\uc804: cow0\u2192pos1, cow1\u2192pos0 (\uad50\ud658)\n2. \uc774\ub3d9: active\uac00 [1,2]\ub85c\nCow 0\uc740 \uc9c0\uae08 \uc5b4\ub514?"),
-      question: t(E, "After 1 step, cow 0 is at position...?", "1\ub2e8\uacc4 \ud6c4 cow 0\uc758 \uc704\uce58\ub294?"),
-      hint: t(E, "Cow 0 was at pos 0 (active), rotates to pos 1", "Cow 0\uc740 pos 0(\ud65c\uc131)\uc5d0 \uc788\uc5c8\uace0, pos 1\ub85c \ud68c\uc804"),
+        "N=4, K=2, active=[0,1]. After 1 step:\n1. Rotate: cow0\u2192pos1, cow1\u2192pos0 (swap)\n2. Shift: active becomes [1,2]\nWhere is cow 0 now?", "N=4, K=2, active=[0,1] \uc774\uc5d0\uc694. 1\ub2e8\uacc4\uac00 \uc9c0\ub098\uba74\n1. \ud68c\uc804\uc73c\ub85c cow0\u2192pos1, cow1\u2192pos0 \uc774 \ub418\uace0 (\ub9de\ubc14\uafb8\uae30)\n2. \uc774\ub3d9\uc73c\ub85c active \uac00 [1,2] \uac00 \ub3fc\uc694.\nCow 0 \uc740 \uc9c0\uae08 \uc5b4\ub514\uc5d0 \uc788\uc744\uae4c\uc694?"),
+      question: t(E, "After 1 step, cow 0 is at position...?", "1\ub2e8\uacc4 \ub4a4 cow 0 \uc740 \uc5b4\ub290 \uc704\uce58\uc5d0 \uc788\uc744\uae4c\uc694?"),
+      hint: t(E, "Cow 0 was at pos 0 (active), rotates to pos 1", "Cow 0 \uc740 \ud65c\uc131 \uc704\uce58\uc778 pos 0 \uc5d0 \uc788\uc5c8\uc73c\ub2c8 pos 1 \ub85c \ub3cc\uc544\uc694."),
       answer: 1,
     },
     {
       type: "reveal",
       narr: t(E,
-        "Algorithm: Simply simulate each step.\nFor large T, you can detect cycles, but for Bronze, direct simulation works!", "\uc54c\uace0\ub9ac\uc998: \uac01 \ub2e8\uacc4\ub97c \ub2e8\uc21c\ud788 \uc2dc\ubbac\ub808\uc774\uc158.\n\ud070 T\uc5d0\ub294 \uc21c\ud658 \uac10\uc9c0\ub97c \ud560 \uc218 \uc788\uc9c0\ub9cc, \ube0c\ub860\uc988\ub294 \uc9c1\uc811 \uc2dc\ubbac\ub808\uc774\uc158\uc73c\ub85c \ucda9\ubd84!"),
+        "Algorithm: Simply simulate each step.\nFor large T, you can detect cycles, but for Bronze, direct simulation works!", "\uc5ec\uae30\uc11c\ub294 \ud55c \ubd84\uc529 \uadf8\ub300\ub85c \ub530\ub77c\uac00 \ubcfc \uac70\uc608\uc694.\nT \uac00 \uc544\uc8fc \ud06c\uba74 \uac19\uc740 \ubaa8\uc591\uc774 \ub418\ud480\uc774\ub418\ub294 \uac78 \ucc3e\ub294 \ubc29\ubc95\ub3c4 \uc788\uc5b4\uc694."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#8b5cf6", marginBottom: 10 }}>
-              {t(E, "Simulation Steps", "\uc2dc\ubbac\ub808\uc774\uc158 \ub2e8\uacc4")}
+              {t(E, "Simulation Steps", "\ub530\ub77c \ud558\ub294 \uc21c\uc11c")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "For each of T steps:\n1. Find which cow is at each active position\n2. Move each cow to the next active position (cyclic)\n3. Shift all active positions by +1 (mod N)\n4. After all steps, output each cow's position",
-                "T\ubc88 \ubc18\ubcf5:\n1. \uac01 \ud65c\uc131 \uc704\uce58\uc5d0 \uc5b4\ub5a4 \uc18c\uac00 \uc788\ub294\uc9c0 \ucc3e\uae30\n2. \uac01 \uc18c\ub97c \ub2e4\uc74c \ud65c\uc131 \uc704\uce58\ub85c \uc774\ub3d9 (\uc21c\ud658)\n3. \ubaa8\ub4e0 \ud65c\uc131 \uc704\uce58\ub97c +1 \uc774\ub3d9 (mod N)\n4. \ubaa8\ub4e0 \ub2e8\uacc4 \ud6c4 \uac01 \uc18c\uc758 \uc704\uce58 \ucd9c\ub825")}
+                "T \ubc88 \ub418\ud480\uc774\ud574\uc694.\n1. \uac01 \ud65c\uc131 \uc704\uce58\uc5d0 \uc5b4\ub5a4 \uc18c\uac00 \uc788\ub294\uc9c0 \ucc3e\uc544\uc694\n2. \uac01 \uc18c\ub97c \ub2e4\uc74c \ud65c\uc131 \uc704\uce58\ub85c \uc62e\uaca8\uc694 (\uc21c\ud658)\n3. \ubaa8\ub4e0 \ud65c\uc131 \uc704\uce58\ub97c +1 \uc62e\uaca8\uc694 (mod N)\n4. \ub2e4 \ub05d\ub098\uba74 \uac01 \uc18c\uc758 \uc704\uce58\ub97c \ucd9c\ub825\ud574\uc694")}
             </div>
           </div>
         </div>),
@@ -210,39 +210,39 @@ export function makeRotShiftCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Just simulate T minutes directly.  Each minute: rotate cows on active positions one step around the cycle, then shift every active position +1 mod N.",
-        "그냥 T 분을 그대로 시뮬레이션. 매 분: 활성 위치 소들 순환 한 칸, 그 다음 모든 활성 위치 +1 mod N."),
+        "T 분을 한 분씩 그대로 따라가요. 회전한 뒤 활성 위치를 옮겨요."),
       content: (
         <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
           {t(E,
             "After T minutes, output (for each position p) which cow ended up there.  Code section by section.",
-            "T 분 후 각 위치 p 에 어느 소가 있는지 출력. 코드 한 단락씩.")}
+            "T 분 후 각 위치 p 에 어느 소가 있는지 출력해요. 코드를 한 단락씩 봐요.")}
         </div>),
     },
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 부분씩 읽어봐요. 위에서 Python ↔ C++ 을 바꿔 볼 수 있어요."),
       sections: getRotShiftSections(E),
     },
     {
       type: "quiz",
       narr: t(E,
-        "After the rotation, what happens to the active positions?", "\ud68c\uc804 \ud6c4 \ud65c\uc131 \uc704\uce58\ub294 \uc5b4\ub5bb\uac8c \ub420\uae4c?"),
-      question: t(E, "After rotation, active positions...?", "\ud68c\uc804 \ud6c4 \ud65c\uc131 \uc704\uce58\ub294?"),
+        "After the rotation, what happens to the active positions?", "\ud68c\uc804\uc774 \ub05d\ub098\uba74 \ud65c\uc131 \uc704\uce58\ub294 \uc5b4\ub5bb\uac8c \ub420\uae4c\uc694?"),
+      question: t(E, "After rotation, active positions...?", "\ud68c\uc804 \ub4a4 \ud65c\uc131 \uc704\uce58\ub294 \uc5b4\ub5bb\uac8c \ub420\uae4c\uc694?"),
       options: [
-        t(E, "Stay the same", "\uadf8\ub300\ub85c"),
-        t(E, "Shift by +1 (mod N)", "+1 \uc774\ub3d9 (mod N)"),
-        t(E, "Reverse order", "\uc5ed\uc21c"),
+        t(E, "Stay the same", "\uadf8\ub300\ub85c \uc788\uc5b4\uc694"),
+        t(E, "Shift by +1 (mod N)", "+1 \ub9cc\ud07c \uc62e\uaca8\uac00\uc694 (mod N)"),
+        t(E, "Reverse order", "\uc21c\uc11c\uac00 \uac70\uafb8\ub85c \ub3fc\uc694"),
       ],
       correct: 1,
-      explain: t(E, "Each active position shifts by +1 modulo N!", "\uac01 \ud65c\uc131 \uc704\uce58\uac00 +1 (mod N)\ub9cc\ud07c \uc774\ub3d9!"),
+      explain: t(E, "Each active position shifts by +1 modulo N!", "\ud65c\uc131 \uc704\uce58\uac00 \ud558\ub098\uc529 +1 (mod N) \ub9cc\ud07c \uc62e\uaca8\uac00\uc694!"),
     },
     {
       type: "input",
       narr: t(E,
-        "If N=6 and active position is currently 5, after shifting by +1 mod 6, what is its new position?", "N=6\uc774\uace0 \ud65c\uc131 \uc704\uce58\uac00 \ud604\uc7ac 5\uc774\uba74, +1 mod 6 \uc774\ub3d9 \ud6c4 \uc0c8 \uc704\uce58\ub294?"),
+        "If N=6 and active position is currently 5, after shifting by +1 mod 6, what is its new position?", "N=6 \uc774\uace0 \ud65c\uc131 \uc704\uce58\uac00 \uc9c0\uae08 5 \uc608\uc694. +1 mod 6 \ub9cc\ud07c \uc62e\uae30\uba74 \uc5b4\ub514\ub85c \uac08\uae4c\uc694?"),
       question: t(E, "(5 + 1) mod 6 = ?", "(5 + 1) mod 6 = ?"),
-      hint: t(E, "6 mod 6 = 0, wraps around!", "6 mod 6 = 0, \uc21c\ud658!"),
+      hint: t(E, "6 mod 6 = 0, wraps around!", "6 mod 6 = 0 \uc774\ub77c \ucc98\uc74c\uc73c\ub85c \ub3cc\uc544\uc640\uc694!"),
       answer: 0,
     },
   ];

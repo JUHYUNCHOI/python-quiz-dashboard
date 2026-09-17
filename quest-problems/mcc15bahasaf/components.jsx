@@ -77,11 +77,11 @@ export function getMcc15BahasaSections(E) {
         t(E, "Cut the problem twice — sentence → words → syllables — and all that is left is one tiny rule about a single syllable.",
             "문제를 '문장 → 단어 → 음절' 로 두 번 쪼개면, 남는 건 음절 하나짜리 규칙 하나뿐이에요."),
         t(E, "That rule: consonant start → echo = 'f' + the rest of the syllable; vowel start → echo = 'f' + the whole syllable. Then write syllable + echo.",
-            "그 규칙: 자음으로 시작하면 메아리 = 'f' + 음절의 나머지, 모음으로 시작하면 메아리 = 'f' + 음절 전체. 그다음 음절 + 메아리 로 적어요."),
+            "규칙은 이래요. 자음으로 시작하면 메아리 = 'f' + 음절의 나머지 이고, 모음으로 시작하면 메아리 = 'f' + 음절 전체예요. 그다음 음절 + 메아리 로 적어요."),
         t(E, "You never need to list all 21 consonants — anything that is not one of the 5 vowels (a e i o u) is a consonant. Note that 'y' is a consonant too.",
             "자음 21개를 다 적을 필요 없어요. 모음 5개(a e i o u)가 아니면 전부 자음이니까요. 'y' 도 자음이에요."),
         t(E, "The slashes only mark where syllables end — they must not appear in the output.",
-            "슬래시는 음절이 끝나는 자리를 표시할 뿐이에요 — 출력에는 나오면 안 돼요."),
+            "슬래시는 음절이 끝나는 자리를 표시할 뿐이라 출력에는 나오면 안 돼요."),
       ],
       pyOnly: [
         t(E, "word.split(\"/\") hands you the syllables, and \" \".join(...) puts the spaces between words back at the end.",
@@ -97,7 +97,7 @@ export function getMcc15BahasaSections(E) {
         t(E, "The loop runs to i == size() so the last syllable (which has no '/' or space after it) also gets flushed.",
             "반복을 i == size() 까지 돌려서, 뒤에 '/' 나 공백이 없는 마지막 음절도 빠짐없이 처리해요."),
         t(E, "syl.substr(1) is C++'s version of syl[1:] — the syllable without its first letter.",
-            "syl.substr(1) 이 C++ 의 syl[1:] 이에요 — 첫 글자를 뺀 음절."),
+            "syl.substr(1) 이 C++ 의 syl[1:] 이에요. 첫 글자를 뺀 음절이죠."),
       ],
     },
   ];

@@ -39,14 +39,14 @@ export function makeFansCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "Output the maximum number of sticks usable in a row, given no two adjacent sticks may share a color.",
-                "인접한 두 막대가 같은 색이면 안 된다는 조건 아래 일렬로 배치할 수 있는 최대 막대 수 출력.")}
+                "옆에 같은 색이 오지 않게 한 줄로 세울 때,\n막대를 최대 몇 개까지 쓸 수 있는지 출력해요.")}
             </div>
           </div>
 
           <div style={{ marginTop: 10, background: "#fffbeb", border: "1px solid #fbbf24", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "N colors of sticks → line them up → no two adjacent same color → maximize length!",
-              "N가지 색 막대 → 한 줄로 배치 → 인접한 같은 색 금지 → 최대 길이!")}
+              "N가지 색 막대 → 한 줄로 세우기 → 옆에 같은 색 금지 → 가장 길게!")}
           </div>
         </div>),
     },
@@ -54,7 +54,7 @@ export function makeFansCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The rule is simple: no two sticks next to each other can be the same color!\nLet's see what's OK and what's NOT.", "규칙은 간단해: 옆에 같은 색 막대가 오면 안 돼요! 뭐가 되고 뭐가 안 되는지 보자."),
+        "The rule is simple: no two sticks next to each other can be the same color!\nLet's see what's OK and what's NOT.", "규칙은 간단해요. 옆에 같은 색 막대가 오면 안 돼요.\n뭐가 되고 뭐가 안 되는지 볼까요?"),
       content: (() => {
         const colors = ["#ef4444", "#3b82f6", "#ef4444", "#22c55e", "#3b82f6"];
         const bad = ["#ef4444", "#ef4444", "#3b82f6", "#22c55e", "#3b82f6"];
@@ -78,8 +78,8 @@ export function makeFansCh1(E) {
         );
         return (
           <div style={{ padding: 16 }}>
-            {renderSticks(colors, t(E, "OK! All neighbors differ", "OK! 옆 색이 다 다름"), true)}
-            {renderSticks(bad, t(E, "NO! Red-Red adjacent!", "안 돼요! 빨강-빨강 인접!"), false)}
+            {renderSticks(colors, t(E, "OK! All neighbors differ", "좋아요! 옆 색이 다 달라요"), true)}
+            {renderSticks(bad, t(E, "NO! Red-Red adjacent!", "안 돼요! 빨강이 나란히 있어요"), false)}
             <div style={{
               background: "#fef3c7", borderRadius: 8, padding: "8px 10px",
               border: "1.5px solid #fbbf24", fontSize: 12, color: "#92400e",
@@ -100,7 +100,7 @@ export function makeFansCh1(E) {
       type: "reveal",
       narr: t(E,
         "Now — how does the data actually arrive?\nFirst T (how many test cases), then each case gives N and the N counts.",
-        "그럼 데이터는 어떻게 들어올까?\n먼저 T (문제 개수), 그 다음 케이스마다 N 과 막대 개수 N 개."),
+        "그럼 데이터는 어떻게 들어올까요?\n먼저 문제 개수 T 가 오고, 케이스마다 N 과 막대 개수가 이어져요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           {/* INPUT */}
@@ -111,7 +111,7 @@ export function makeFansCh1(E) {
               <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
                 <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— how many colours", "— 색이 몇 가지")}</span></div>
                 <div><span style={{ color: "#92400e", fontWeight: 800 }}>c₁ c₂ … c<sub>N</sub></span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— sticks of each colour", "— 색깔별 막대 개수")}</span></div>
-                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ these 2 lines repeat T times", "↑ 이 2 줄이 T 번 반복")}</div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ these 2 lines repeat T times", "↑ 이 두 줄이 T 번 되풀이돼요")}</div>
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@ export function makeFansCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "T lines — for each case, the length of the longest row you can make.",
-                  "T 줄 — 케이스마다, 만들 수 있는 가장 긴 줄의 길이 하나씩.")}
+                  "케이스마다 한 줄씩, 만들 수 있는 가장 긴 줄의 길이를 출력해요.")}
             </div>
           </div>
           {/* 제약 */}
@@ -153,8 +153,8 @@ export function makeFansCh1(E) {
             </div>
           </div>
           <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
-            {t(E, "First case: colours 3, 7, 2 → answer 11. Second: only one colour with 4 sticks → you can place just 1.",
-                "첫 케이스: 3, 7, 2 개 → 답 11. 둘째: 색이 하나(4개)뿐이라 → 1개밖에 못 놔요.")}
+            {t(E, "First case: colours 3, 7, 2 → answer 11. Second: only one colour, so a 2nd stick would touch the same colour — you can place just 1.",
+                "첫 케이스는 3, 7, 2 개라서 답이 11이에요.\n둘째는 색이 하나뿐이라 두 개만 놓아도 옆에 같은 색이 와요. 그래서 1개예요.")}
           </div>
         </div>),
     },
@@ -162,10 +162,10 @@ export function makeFansCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Quick check! Which arrangement follows the rule?", "확인! 어떤 배치가 규칙을 따를까?"),
+        "Quick check! Which arrangement follows the rule?", "어떤 줄이 규칙을 지키고 있을까요?"),
       question: t(E,
         "4 sticks: 2 red, 2 blue. Which is valid?",
-        "막대 4개: 빨강 2, 파랑 2. 어떤 게 맞아?"),
+        "막대 4개 중 빨강이 2개, 파랑이 2개예요. 어떤 게 맞을까요?"),
       options: [
         t(E, "Red Red Blue Blue", "빨빨파파"),
         t(E, "Red Blue Blue Red", "빨파파빨"),
@@ -174,61 +174,61 @@ export function makeFansCh1(E) {
       correct: 2,
       explain: t(E,
         "Red Blue Red Blue — every neighbor is different! The other two have same-color neighbors.",
-        "빨파빨파 — 모든 이웃이 다른 색! 나머지는 같은 색이 붙어 있어요."),
+        "빨파빨파는 옆끼리 색이 다 달라요. 나머지 둘은 같은 색이 붙어 있어요."),
     },
     // 1-4: Hands-on — student places sticks themselves
     {
       type: "tryYourselfViz",
       narr: t(E,
-        "Before we see the algorithm, YOU try first!\nTap colors to place sticks. Same-color neighbors are blocked.\nCan you reach the optimal length?", "알고리즘을 보기 전에 먼저 직접 해봐요! 색을 눌러 막대를 놓아요. 같은 색 옆은 막혀요. 최적 길이까지 갈 수 있어?"),
+        "Before we see the algorithm, YOU try first!\nTap colors to place sticks. Same-color neighbors are blocked.\nCan you reach the optimal length?", "풀이를 보기 전에 먼저 직접 해봐요.\n색을 눌러 막대를 놓아요. 가장 길게까지 갈 수 있을까요?"),
     },
     // 1-5: Three cases — watch sticks get placed one by one
     {
       type: "fanPlacementViz",
       narr: t(E,
-        "Now let's watch the algorithm.\nWhen can we use all sticks? It depends on how many of the most common color we have!\nTry all three cases.", "이제 알고리즘을 봐요. 언제 막대를 전부 쓸 수 있을까? 가장 많은 색이 얼마나 많은지에 달려있어요! 세 가지 경우를 확인해봐요."),
+        "Now let's watch the algorithm.\nWhen can we use all sticks? It depends on how many of the most common color we have!\nTry all three cases.", "언제 막대를 전부 쓸 수 있을까요?\n가장 많은 색이 나머지보다 얼마나 많은지에 달렸어요. 세 경우를 봐요."),
     },
     // 1-5: Why 2×rest+1?
     {
       type: "separatorBuildViz",
       narr: t(E,
-        "Why 2×rest+1?\nAdd separators one by one and watch the pattern emerge!\nEach separator lets you place one more dominant stick.", "왜 2×rest+1일까요? 분리자를 하나씩 추가하면서 패턴을 직접 확인해봐요! 분리자 1개 = 가장 많은 색 1개를 더 놓을 수 있어요."),
+        "Why 2×rest+1?\nAdd separators one by one and watch the pattern emerge!\nEach separator lets you place one more dominant stick.", "왜 2×rest+1 일까요? 사이 막대를 하나씩 늘려 봐요.\n하나 끼울 때마다 가장 많은 색을 하나 더 놓을 수 있어요."),
     },
     // 1-6: Quiz — apply the formula
     {
       type: "quiz",
       narr: t(E,
-        "Let's verify! Counts = [3, 7, 2]. Total = 12, max = 7, rest = 5. What's the answer?", "확인해보자! 개수 = [3, 7, 2]. 합계 = 12, 최대 = 7, 나머지 = 5. 답은?"),
+        "Let's verify! Counts = [3, 7, 2]. Total = 12, max = 7, rest = 5. What's the answer?", "개수가 [3, 7, 2] 예요. 합계는 12, 최대는 7, 나머지는 5예요. 답은 얼마일까요?"),
       question: t(E,
         "min(12, 2×5+1) = min(12, 11) = ?",
         "min(12, 2×5+1) = min(12, 11) = ?"),
       options: [
-        t(E, "12 (use all)", "12 (전부 사용)"),
+        t(E, "12 (use all)", "12 (전부 쓰기)"),
         t(E, "11", "11"),
         t(E, "10", "10"),
       ],
       correct: 1,
       explain: t(E,
         "min(12, 11) = 11! The dominant color (7) is too many — we can only use 11 sticks.",
-        "min(12, 11) = 11! 가장 많은 색(7)이 너무 많아서 11개만 쓸 수 있어요."),
+        "min(12, 11) = 11 이에요. 나머지 5개로는 가장 많은 색 7개를 다 떼어 놓지 못해서 11개까지만 써요."),
     },
     // 1-7: Quiz — when all fit
     {
       type: "quiz",
       narr: t(E,
-        "Another example! Counts = [3, 3, 3]. Total = 9, max = 3, rest = 6. Can we use all 9?", "다른 예시! 개수 = [3, 3, 3]. 합계 = 9, 최대 = 3, 나머지 = 6. 9개 다 쓸 수 있을까?"),
+        "Another example! Counts = [3, 3, 3]. Total = 9, max = 3, rest = 6. Can we use all 9?", "이번엔 [3, 3, 3] 이에요. 합계 9, 최대 3, 나머지 6이에요. 9개를 다 쓸 수 있을까요?"),
       question: t(E,
         "min(9, 2×6+1) = min(9, 13) = ?",
         "min(9, 2×6+1) = min(9, 13) = ?"),
       options: [
         t(E, "13", "13"),
-        t(E, "9 (use all!)", "9 (전부 사용!)"),
+        t(E, "9 (use all!)", "9 (전부 쓰기!)"),
         t(E, "7", "7"),
       ],
       correct: 1,
       explain: t(E,
         "min(9, 13) = 9! rest (6) is large enough, so all sticks fit. ABCABCABC works!",
-        "min(9, 13) = 9! 나머지(6)가 충분해서 전부 사용 가능. ABCABCABC로 배치!"),
+        "min(9, 13) = 9 예요. 나머지 6개가 충분해서 ABCABCABC 처럼 다 떼어 놓을 수 있어요."),
     },
   ];
 }
@@ -243,7 +243,7 @@ export function makeFansCh2(E) {
     {
       type: "fanSimulator",
       narr: t(E,
-        "Try it!\nAdjust the stick counts and see how the formula works.\nWatch the sticks arrange themselves!\n🪭", "해봐요! 막대 수를 조정하고 공식이 어떻게 작동하는지 봐요. 막대가 배치되는 걸 봐요! 🪭"),
+        "Try it!\nAdjust the stick counts and see how the formula works.\nWatch the sticks arrange themselves!\n🪭", "막대 개수를 바꿔 가며 공식이 어떻게 맞아떨어지는지 봐요. 🪭"),
     },
     // 2-2: Observation quiz
     {
@@ -252,22 +252,22 @@ export function makeFansCh2(E) {
         "When the biggest group has fewer sticks than all other groups combined (plus 1), what happens?", "가장 큰 그룹이 나머지 그룹 합(+1)보다 적으면 어떻게 될까요?"),
       question: t(E,
         "If max_c <= rest + 1, the answer is...?",
-        "max_c <= rest + 1이면 답은...?"),
+        "max_c <= rest + 1 이면 답은 무엇일까요?"),
       options: [
         t(E, "2 × rest + 1", "2 × rest + 1"),
         t(E, "max_c only", "max_c만"),
-        t(E, "total (use everything!)", "total (전부 사용!)"),
+        t(E, "total (use everything!)", "total (전부 쓰기!)"),
       ],
       correct: 2,
       explain: t(E,
         "When the dominant color isn't too greedy, we can use ALL sticks! The rest provides enough separators.",
-        "가장 많은 색이 너무 많지 않으면 전부 사용 가능! 나머지가 충분한 분리자 역할을 해요."),
+        "나머지 막대가 가장 많은 색 사이사이를 모두 갈라 줄 만큼 있어서, 막대를 전부 쓸 수 있어요."),
     },
     // 2-3: Hand calculation 1
     {
       type: "input",
       narr: t(E,
-        "Try it yourself! Counts = [5, 1, 1]. Total = 7, max = 5, rest = 2.", "직접 해봐요! 개수 = [5, 1, 1]. 합계 = 7, 최대 = 5, 나머지 = 2."),
+        "Try it yourself! Counts = [5, 1, 1]. Total = 7, max = 5, rest = 2.", "직접 해봐요. 개수는 [5, 1, 1] 이고 합계 7, 최대 5, 나머지 2예요."),
       question: t(E,
         "min(7, 2×2+1) = ?",
         "min(7, 2×2+1) = ?"),
@@ -277,7 +277,7 @@ export function makeFansCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "One more! Counts = [4, 4, 4]. Total = 12, max = 4, rest = 8.", "하나 더! 개수 = [4, 4, 4]. 합계 = 12, 최대 = 4, 나머지 = 8."),
+        "One more! Counts = [4, 4, 4]. Total = 12, max = 4, rest = 8.", "하나 더 해봐요. 개수는 [4, 4, 4] 이고 합계 12, 최대 4, 나머지 8이에요."),
       question: t(E,
         "min(12, 2×8+1) = ?",
         "min(12, 2×8+1) = ?"),
@@ -369,7 +369,7 @@ export function makeFansCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code! First, we have T test cases. We read T and loop through each one.", "코드를 만들어보자! 먼저 T개의 테스트 케이스가 있어요. T를 읽고 반복해요."),
+        "Let's build the code! First, we have T test cases. We read T and loop through each one.", "코드를 만들어 봐요. 테스트 케이스가 T개니까 T를 읽고 T번 반복해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
@@ -378,7 +378,7 @@ export function makeFansCh3(E) {
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
             {t(E,
               "Input starts with T (number of test cases). We loop T times.",
-              "입력 첫 줄에 T(테스트 케이스 수). T번 반복해요.")}
+              "입력 첫 줄에 테스트 케이스 수 T 가 와요. 그래서 T번 반복해요.")}
           </div>
           <CodeSnippet
             lines={["T = int(input())", "for _ in range(T):"]}
@@ -387,7 +387,7 @@ export function makeFansCh3(E) {
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
             {t(E,
               "The _ means we don't need the loop variable — we just repeat T times.",
-              "_ 는 루프 변수가 필요 없다는 뜻 — 그냥 T번 반복해요.")}
+              "_ 는 반복 변수를 안 쓴다는 뜻이에요. 그냥 T번 반복하면 돼요.")}
           </div>
         </div>),
     },
@@ -395,7 +395,7 @@ export function makeFansCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "For each test case, read N (number of colors) and then the list of stick counts.", "각 테스트 케이스마다 N(색 수)을 읽고, 막대 수 리스트를 읽어."),
+        "For each test case, read N (number of colors) and then the list of stick counts.", "케이스마다 색이 몇 가지인지(N)를 읽고, 색깔별 막대 개수를 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
@@ -429,7 +429,7 @@ export function makeFansCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now compute the three key values: total, max_c, and rest!", "이제 세 가지 핵심 값을 계산해: total, max_c, rest!"),
+        "Now compute the three key values: total, max_c, and rest!", "이제 핵심 값 세 개를 구해요. total, max_c, rest 예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
@@ -470,7 +470,7 @@ export function makeFansCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Finally, apply the formula and print! Just one line: min(total, 2*rest+1).", "마지막으로 공식 적용하고 출력! 한 줄이면 돼: min(total, 2*rest+1)."),
+        "Finally, apply the formula and print! Just one line: min(total, 2*rest+1).", "마지막으로 공식을 써서 출력해요. min(total, 2*rest+1) 한 줄이면 돼요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
@@ -494,7 +494,7 @@ export function makeFansCh3(E) {
             padding: "8px 12px", border: "1px solid #6ee7b7", textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#059669" }}>
-              {t(E, "That's the complete code! Just 8 lines! 🎉", "이게 전체 코드! 단 8줄! 🎉")}
+              {t(E, "That's the complete code! Just 8 lines! 🎉", "이게 전체 코드예요. 딱 8줄이에요! 🎉")}
             </div>
           </div>
         </div>),
@@ -503,7 +503,7 @@ export function makeFansCh3(E) {
     {
       type: "formulaTrace",
       narr: t(E,
-        "Let's trace through sample inputs step by step!\nWatch how the formula computes the answer.", "샘플 입력을 하나씩 따라가 보자! 공식이 어떻게 답을 계산하는지 봐요."),
+        "Let's trace through sample inputs step by step!\nWatch how the formula computes the answer.", "샘플 입력을 하나씩 따라가며 공식이 답을 어떻게 내는지 봐요."),
     },
     // 3-6: Full code reveal
     {

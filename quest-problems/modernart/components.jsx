@@ -117,7 +117,7 @@ export function ModernArtPaintSim({ E }) {
         <button onClick={reset} style={{
           background: "#fff", color: "#475569", border: "1.5px solid #cbd5e1",
           borderRadius: 6, padding: "4px 10px", fontSize: 12, fontWeight: 700, cursor: "pointer",
-        }}>{t(E, "Reset", "초기화")}</button>
+        }}>{t(E, "Reset", "처음으로")}</button>
         <button onClick={stepBack} disabled={count === 0} style={{
           background: count === 0 ? "#f1f5f9" : "#fff", color: "#475569",
           border: "1.5px solid #cbd5e1", borderRadius: 6, padding: "4px 10px",
@@ -149,7 +149,7 @@ export function ModernArtPaintSim({ E }) {
                   `색 ${nextRect.color}, 행 ${nextRect.r1}–${nextRect.r2}, 열 ${nextRect.c1}–${nextRect.c2}`)}
           </>
         ) : (
-          <b>{t(E, "All rectangles painted. Look at which colors survived.", "모든 직사각형 칠 완료. 어떤 색이 살아남았는지 봐요.")}</b>
+          <b>{t(E, "All rectangles painted. Look at which colors survived.", "직사각형을 모두 칠했어요. 어떤 색이 남았는지 봐요.")}</b>
         )}
       </div>
 
@@ -184,7 +184,7 @@ export function ModernArtPaintSim({ E }) {
         {/* Side panel */}
         <div style={{ flex: 1, minWidth: 240 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>
-            {t(E, "Bounding boxes & status", "바운딩 박스 & 상태")}
+            {t(E, "Bounding boxes & status", "바운딩 박스(그 색이 딱 들어가는 네모)와 상태")}
           </div>
           <div style={{
             background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8,
@@ -218,7 +218,7 @@ export function ModernArtPaintSim({ E }) {
             {hiddenColors.length > 0 && (
               <div style={{ borderTop: "1px dashed #cbd5e1", marginTop: 6, paddingTop: 6 }}>
                 <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>
-                  {t(E, "Fully hidden (painted over):", "완전히 가려짐 (덮였음):")}
+                  {t(E, "Fully hidden (painted over):", "다른 색에 완전히 덮여서 안 보여요")}
                 </div>
                 {hiddenColors.map(col => (
                   <div key={col} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
@@ -252,7 +252,7 @@ export function ModernArtPaintSim({ E }) {
             <div style={{ fontSize: 11, color: "#065f46", marginTop: 4, lineHeight: 1.45 }}>
               {t(E,
                 "Each visible color was the LAST rectangle painted in its bbox region. Hidden colors got fully covered by later rectangles.",
-                "보이는 색은 그 바운딩 박스 영역에서 마지막에 칠해진 색. 숨겨진 색은 나중 직사각형에 완전히 덮인 거예요.")}
+                "보이는 색은 자기 바운딩 박스 안에서 마지막에 칠해진 색이에요. 숨겨진 색은 나중에 칠한 직사각형에 완전히 덮인 거예요.")}
             </div>
           </div>
         </div>
@@ -414,19 +414,19 @@ export function getModernArtSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 은 Python 코드를 자동으로 옮긴 것이라 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Colors are only 1..9 — use plain vectors indexed by color, not map.",
-            "색깔이 1~9 뿐 — map 대신 색깔로 인덱싱하는 평범한 vector 사용."),
+            "색이 1~9 뿐이라 map 없이 색 번호로 자리를 찾는 vector 면 충분해요."),
         t(E, "Track bbox via four parallel vectors (minr/maxr/minc/maxc) — each comparison is one explicit line.",
-            "bbox 를 네 개의 병렬 vector (minr/maxr/minc/maxc) 로 관리 — 비교마다 명시적 한 줄."),
+            "bbox 를 vector 네 개(minr/maxr/minc/maxc)로 나눠 두면 비교가 한 줄씩 또렷해져요."),
       ],
     },
   ];
@@ -472,7 +472,7 @@ function highlightCode(lines, lang) {
 
 export function downloadModernArtPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "ModernArt — Full Study Guide", "ModernArt — 종합 풀이 노트");

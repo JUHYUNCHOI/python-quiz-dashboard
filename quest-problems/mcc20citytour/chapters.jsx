@@ -43,7 +43,7 @@ export function makeMcc20CityTourCh1(E) {
       type: "reveal",
       narr: t(E,
         "The city is a grid of building HEIGHTS. Fluffy starts at the top-left (1,1) and hops to an adjacent cell only when the two heights differ by less than D.\nPrint how many cells Fluffy can reach (counting the start).",
-        "도시는 건물 높이 격자예요. Fluffy 는 왼쪽 위 (1,1) 에서 시작해 이웃 칸과 높이 차이가 D 보다 작을 때만 건너가요.\nFluffy 가 도달할 수 있는 칸의 수 (시작 포함) 를 출력해요."),
+        "Fluffy 가 건너갈 수 있는 칸은 모두 몇 개일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -106,7 +106,7 @@ export function makeMcc20CityTourCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read the input format and the official example. The heights come as an M×N grid, and D is a single number read last.",
-        "입력 형식과 공식 예제를 봐요. 높이는 M×N 격자로 들어오고, D 는 맨 마지막에 한 숫자로 읽어요."),
+        "입력이 어떤 모양으로 들어오는지 먼저 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -116,7 +116,7 @@ export function makeMcc20CityTourCh1(E) {
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               <div>• {t(E, "Line 1: ", "1번째 줄: ")}<b style={{ whiteSpace: "nowrap" }}>M N</b> — {t(E, "rows and columns", "행 수와 열 수")}</div>
               <div>• {t(E, "Next M lines: ", "다음 M 줄: ")}<b>{t(E, "N heights each", "각 줄에 N 개의 높이")}</b></div>
-              <div>• {t(E, "Last line: ", "마지막 줄: ")}<b>D</b> — {t(E, "the jump threshold", "점프 기준값")}</div>
+              <div>• {t(E, "Last line: ", "마지막 줄: ")}<b>D</b> — {t(E, "the jump threshold", "건너가기 기준값")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ M, N; M×N ≤ 100000; 1 ≤ D ≤ 100000; −10^6 ≤ H ≤ 10^6.", "제약: 1 ≤ M, N; M×N ≤ 100000; 1 ≤ D ≤ 100000; −10^6 ≤ H ≤ 10^6.")}
@@ -151,7 +151,7 @@ export function makeMcc20CityTourCh1(E) {
       type: "reveal",
       narr: t(E,
         "Feel the rule. Slide D up and down and watch the reachable region flood-fill out from Fluffy's start.",
-        "규칙을 직접 느껴봐요. D 를 올리고 내리면서 Fluffy 시작점에서 갈 수 있는 영역이 번져 나가는 걸 봐요."),
+        "D 를 바꾸면 갈 수 있는 곳이 어떻게 달라지는지 봐요."),
       content: <Mcc20CityTourBfsSim E={E} />,
     },
 
@@ -160,7 +160,7 @@ export function makeMcc20CityTourCh1(E) {
       type: "quiz",
       narr: t(E,
         "The edge rule is strict: the height gap must be LESS than D, not equal. A gap exactly equal to D is blocked.",
-        "간선 규칙은 엄격해요: 높이 차가 D 보다 '작아야' 해요, 같으면 안 돼요. 차이가 정확히 D 면 막혀요."),
+        "높이 차가 D 보다 작아야만 건너갈 수 있어요."),
       question: t(E,
         "Fluffy is on a building of height 10 with D = 3. Which neighbor can Fluffy hop to?",
         "Fluffy 가 높이 10 인 건물에 있고 D = 3 이에요. 어느 이웃으로 건너갈 수 있을까요?"),
@@ -172,7 +172,7 @@ export function makeMcc20CityTourCh1(E) {
       correct: 0,
       explain: t(E,
         "|10 − 12| = 2 < 3, so yes. |10 − 7| = 3 is NOT less than 3 (the rule is strict), and |10 − 15| = 5 is too big. Only height 12 works.",
-        "|10 − 12| = 2 < 3 이라 가능해요. |10 − 7| = 3 은 3 보다 작지 않아서 (규칙이 엄격) 안 되고, |10 − 15| = 5 는 너무 커요. 높이 12 만 가능해요."),
+        "|10 − 12| = 2 는 3 보다 작으니 건너갈 수 있어요. |10 − 7| = 3 은 3 보다 작지 않아서 안 되고, |10 − 15| = 5 는 너무 커요. 높이 12 만 가능해요."),
     },
   ];
 }
@@ -184,7 +184,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "A naive idea: sweep the whole grid over and over, each pass marking any cell reachable from an already-reachable neighbor, until nothing new appears — up to M×N passes over M×N cells, (10^5)² = 10^10. Flood-fill (BFS) instead visits each cell just once: pop it, check its 4 neighbors, push the new ones. About 4×M×N ≈ 4×10^5.",
-        "단순한 생각: 격자 전체를 몇 번이고 훑으면서, 이미 갈 수 있는 이웃 옆의 칸을 표시하고, 더 안 생길 때까지 반복 — 최대 M×N 번 훑기 × M×N 칸, (10^5)² = 10^10. 대신 플러드필 (BFS) 은 각 칸을 딱 한 번만 봐요: 꺼내고, 4 이웃 확인하고, 새 칸만 넣기. 약 4×M×N ≈ 4×10^5."),
+        "격자를 몇 번이고 훑는 대신, 한 번만 훑는 방법을 찾아봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -193,7 +193,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: sweep the whole grid until nothing changes", "느림: 변화가 없을 때까지 격자 전체를 반복해서 훑기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Up to (M×N) passes × (M×N) cells = (10^5)² = 10^10 operations. Times out.", "최대 (M×N) 번 × (M×N) 칸 = (10^5)² = 10^10 연산. 시간 초과.")}
+                {t(E, "Up to (M×N) passes × (M×N) cells = (10^5)² = 10^10 operations. Times out.", "최대 (M×N) 번 × (M×N) 칸 = (10^5)² = 10^10 번 계산해요. 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
@@ -201,12 +201,12 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: flood-fill (BFS) — visit each cell once", "빠름: 플러드필 (BFS) — 각 칸을 한 번만 방문")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Each cell enters the queue once; we check its 4 neighbors once. Total ≈ 4×M×N ≈ 4×10^5.", "각 칸은 큐에 한 번 들어가고, 4 이웃을 한 번 확인. 합계 ≈ 4×M×N ≈ 4×10^5.")}
+                {t(E, "Each cell enters the queue once; we check its 4 neighbors once. Total ≈ 4×M×N ≈ 4×10^5.", "각 칸은 큐에 한 번만 들어가고, 이웃 4 개를 한 번씩 확인해요. 모두 합쳐 ≈ 4×M×N ≈ 4×10^5 번이에요.")}
               </div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", ...KA }}>
-            {t(E, "The edge rule stays the same: step to a neighbor only if |Δheight| < D.", "간선 규칙은 그대로: 이웃과 높이 차 |Δheight| < D 일 때만 건너기.")}
+            {t(E, "The edge rule stays the same: step to a neighbor only if |Δheight| < D.", "건너가기 규칙은 그대로예요. 이웃과 높이 차가 D 보다 작을 때만 건너가요.")}
           </div>
           <div style={{ marginTop: 6, fontSize: 12, color: C.dim, textAlign: "center" }}>
             {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}

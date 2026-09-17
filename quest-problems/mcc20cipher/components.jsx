@@ -70,9 +70,9 @@ export function getMcc20CipherSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "step[A[i]] = B[i] stores ONE application of the rule as a lookup table.",
-            "step[A[i]] = B[i] 는 규칙 한 번 적용을 조회표 하나로 저장해요."),
+            "step[A[i]] = B[i] 는 규칙을 한 번 적용한 결과를 표 하나에 적어 둬요."),
         t(E, "The trick: instead of rewriting the long message K times, ask each of the 26 letters where it lands after K hops — build 'after' once, then rewrite S in a single pass.",
-            "핵심: 긴 메시지를 K번 다시 쓰는 대신, 26글자에게 'K번 뛰면 어디 도착?' 을 물어 'after' 표를 한 번만 만들고, S 는 한 번만 훑어 바꿔요."),
+            "긴 메시지를 K번 다시 쓰지 않아요. 대신 26글자마다 'K번 뛰면 어디에 도착하나?' 를 물어 'after' 표를 한 번만 만들어요. 그다음 S 를 한 번만 훑어 바꿔요."),
       ],
       pyOnly: [
         t(E, "''.join(after[c] for c in S) rewrites the whole message in one line.",
@@ -80,9 +80,9 @@ export function getMcc20CipherSections(E) {
       ],
       cppOnly: [
         t(E, "Map letters to indices with A[i] - 'a' (0–25) so the table is a plain int[26].",
-            "A[i] - 'a' (0–25) 로 글자를 인덱스로 바꿔 표를 int[26] 하나로 써요."),
+            "A[i] - 'a' (0–25) 로 글자를 자리 번호로 바꾸면 표를 int[26] 하나로 쓸 수 있어요."),
         t(E, "for (char &ch : S) edits S in place — the & means we change each character.",
-            "for (char &ch : S) 는 S 를 그 자리에서 고쳐요 — & 가 각 글자를 바꾼다는 뜻."),
+            "for (char &ch : S) 는 S 를 그 자리에서 고쳐요. & 가 각 글자를 바꾼다는 뜻이에요."),
       ],
     },
   ];

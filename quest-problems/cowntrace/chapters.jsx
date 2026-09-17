@@ -72,7 +72,7 @@ export function makeCowntraceCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows attended events; T timestamps recorded that two specific cows shook hooves at that time. EXACTLY ONE cow started infected ('patient zero') and infects others on hoof-shake — but each infected cow only infects others up to K more times.\nGiven the final infected/healthy state, count how many cows could possibly be patient zero, and find the minimum / maximum K consistent with the data.",
-        "N마리 소가 행사에 참석했고, 두 소가 발굽을 맞댔다는 기록이 시각별로 T개 있어요. 정확히 1마리만 처음 감염된 '환자 제로' 이고, 발굽을 맞대면 감염을 옮길 수 있어요. 단, 한 번 감염된 소는 다른 소에게 최대 K 번까지만 옮겨요.\n최종 감염/건강 상태가 주어졌을 때, 환자 제로가 될 수 있는 소의 수와 데이터에 맞는 K 의 최솟값·최댓값을 출력해요."),
+        "처음 감염된 소는 누구이고, K 는 얼마였을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -89,7 +89,7 @@ export function makeCowntraceCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Output (1) patient-zero candidates, (2) min consistent K, (3) max consistent K (or 'Infinity').",
-                "(1) 환자 제로 후보 수, (2) 일관된 K 최솟값, (3) K 최댓값 (또는 'Infinity') 을 출력.")}
+                "세 가지를 출력해요.\n(1) 환자 제로가 될 수 있는 소의 수,\n(2) 기록에 들어맞는 K 의 가장 작은 값,\n(3) K 의 가장 큰 값 (끝없이 커도 되면 'Infinity').")}
             </div>
           </div>
 
@@ -102,9 +102,9 @@ export function makeCowntraceCh1(E) {
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
-                  <b style={{ color: "#059669" }}>{t(E, "N cows and T timestamped hoof-shakes", "N마리 소와 T개의 시각별 발굽-맞댐 기록")}</b>
+                  <b style={{ color: "#059669" }}>{t(E, "N cows and T timestamped hoof-shakes", "소 N 마리와 발굽 맞대기 기록 T 개")}</b>
                   {t(E, " (each says: at time t, cows i and j shook hooves).",
-                        " 이 있어요 (각 기록: 시각 t 에 i 와 j 가 맞댐).")}
+                        " 가 있어요. 기록 하나는 '시각 t 에 소 i 와 소 j 가 발굽을 맞댔다' 는 뜻이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -112,9 +112,9 @@ export function makeCowntraceCh1(E) {
                 <div>
                   {t(E, "Exactly one cow is ", "정확히 1마리가 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "patient zero", "환자 제로")}</b>
-                  {t(E, " (started infected). Infected cows can pass it on through hoof-shakes, but each infected cow infects others ", " (처음 감염). 감염된 소는 발굽-맞댐으로 전파 가능하지만, 각 감염된 소는 최대 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "at most K more times", "K번까지만 전파")}</b>
-                  {t(E, ".", " 가능.")}
+                  {t(E, " (started infected). Infected cows can pass it on through hoof-shakes, but each infected cow infects others ", " 예요. 처음부터 감염돼 있었던 소죠. 감염된 소는 발굽을 맞대면 병을 옮길 수 있는데, 소 한 마리가 옮길 수 있는 건 많아야 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "at most K more times", "K 번")}</b>
+                  {t(E, ".", " 이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -128,8 +128,8 @@ export function makeCowntraceCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print three numbers: ", "세 수를 출력: ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "(1) candidates for patient zero, (2) min K consistent, (3) max K consistent (or 'Infinity')", "(1) 환자 제로 후보 수, (2) 가능한 K 최솟값, (3) K 최댓값 (또는 'Infinity')")}</b>
+                  {t(E, "Print three numbers: ", "세 수를 출력해요. ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "(1) candidates for patient zero, (2) min K consistent, (3) max K consistent (or 'Infinity')", "(1) 환자 제로 후보 수, (2) K 의 가장 작은 값, (3) K 의 가장 큰 값 (또는 'Infinity')")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -141,31 +141,31 @@ export function makeCowntraceCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If there's only 1 infected cow and no interactions happened, how many possible patient zeros are there?", "감염 소가 1마리이고 상호작용이 없었다면, 환자 제로 후보는 몇 마리?"),
+        "If there's only 1 infected cow and no interactions happened, how many possible patient zeros are there?", "발굽을 한 번도 안 맞댔다면 환자 제로는 누구일까요?"),
       question: t(E,
         "1 infected cow, 0 interactions. How many possible patient zeros?",
-        "감염 소 1마리, 상호작용 0번. 환자 제로 후보 수?"),
+        "감염된 소가 1 마리이고 발굽 맞대기는 한 번도 없었어요.\n환자 제로가 될 수 있는 소는 몇 마리일까요?"),
       options: [
-        t(E, "1 (the infected cow itself)", "1 (감염된 소 자신)"),
-        t(E, "0 (impossible scenario)", "0 (불가능한 상황)"),
-        t(E, "N (any cow could be)", "N (아무 소나 가능)"),
+        t(E, "1 (the infected cow itself)", "1 마리 (감염된 그 소)"),
+        t(E, "0 (impossible scenario)", "0 마리 (있을 수 없는 일이에요)"),
+        t(E, "N (any cow could be)", "N 마리 (어느 소든 될 수 있어요)"),
       ],
       correct: 0,
       explain: t(E,
         "With no interactions, the only way a cow is infected is if it's patient zero. So exactly 1 candidate.",
-        "상호작용이 없으니, 감염된 소가 환자 제로. 후보는 정확히 1마리."),
+        "발굽을 한 번도 안 맞댔으면 병이 옮을 길이 없어요.\n그러니 지금 감염된 그 소가 처음부터 감염돼 있었던 거예요.\n후보는 딱 1 마리예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "1 cow infected, no interactions. How many patient zero candidates?", "감염 소 1마리, 상호작용 없음. 환자 제로 후보 수?"),
+        "1 cow infected, no interactions. How many patient zero candidates?", "이번엔 직접 세어 봐요. 발굽 맞대기가 없을 때예요."),
       question: t(E,
         "1 infected cow, 0 handshakes. Number of patient zero candidates?",
-        "감염 소 1마리, 악수 0번. 환자 제로 후보 수?"),
+        "감염된 소가 1 마리이고 발굽 맞대기가 0 번이에요.\n환자 제로 후보는 몇 마리일까요?"),
       hint: t(E,
         "Without any handshakes, who must have started infected?",
-        "악수가 한 번도 없었다면 누가 처음부터 감염됐어야 할까?"),
+        "발굽을 한 번도 안 맞댔다면, 누가 처음부터 감염돼 있어야 할까요?"),
       answer: 1,
     },
     // 1-4: Deep-audit sim — pick patient-zero + K, replay events, watch spread.
@@ -173,7 +173,7 @@ export function makeCowntraceCh1(E) {
       type: "sim",
       narr: t(E,
         "Hands-on audit. Pick a patient-zero cow and a K (max spreads per infected cow). Replay every hoof-shake event one by one and watch infection spread, get blocked by K, or skip. The verdict tells you whether (cow, K) matches the target final infected set.",
-        "직접 검사해 봐요. 환자 제로 소와 K (감염된 소 1마리당 최대 전파 횟수) 를 골라요. 발굽-맞댐 이벤트를 하나씩 재생하며 감염 전파/K 차단/건너뜀 을 관찰. 마지막 판정으로 (소, K) 가 목표 감염 집합과 맞는지 확인."),
+        "환자 제로와 K 를 골라서 기록을 하나씩 재생해 봐요."),
     },
   ];
 }
@@ -189,7 +189,7 @@ export function makeCowntraceCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Brute force: for each cow as patient zero (N) and each K (0..T), simulate all T hoof-shake events and check the final infected set. Track which K values are consistent. Sections build it one piece at a time.",
-        "완전 탐색: 각 소를 환자 제로 (N) × 각 K (0..T) 로 T 개 이벤트 시뮬, 최종 감염 집합 일치 여부 확인. 일관된 K 추적. 아래 섹션이 한 단락씩 쌓아요."),
+        "풀이 코드를 한 단락씩 읽어 봐요."),
       sections: getCowntraceSections(E),
     },
   ];

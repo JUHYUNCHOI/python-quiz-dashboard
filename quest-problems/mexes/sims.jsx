@@ -21,27 +21,27 @@ export function MexesIntroSim({ E }) {
     { ex: null, c0: false, c1: false, mex: false, goal: 3,
       bubble: t(E,
         "First — what is 'mex'?\nWe'll figure it out together, one step at a time.\n(Then we'll see what this problem actually asks.)",
-        "우선 'mex' 가 뭔지부터 알아볼게요.\n한 단계씩 같이 확인.\n(그러고 나서 이 문제가 뭘 시키는지 볼게요.)") },
+        "우선 'mex' 가 뭔지부터 알아볼게요.\n한 단계씩 같이 따라가요.\n그러고 나서 이 문제가 뭘 시키는지 볼게요.") },
     { ex: null, c0: false, c1: false, mex: false, goal: 0,
       bubble: t(E,
         "These are the number boxes.\nmex = starting from 0, the FIRST number NOT in the boxes.",
-        "숫자 상자들이에요.\nmex = 0 부터 세서 '상자에 없는 첫 번째' 번호.") },
+        "숫자 상자들이에요.\nmex 는 0 부터 세어 올라가며 상자에 없는 첫 번째 수예요.") },
     { ex: 0, c0: true, c1: false, mex: false, goal: 0,
       bubble: t(E,
         "Check 0 first — is 0 in the boxes?\nYes ✔ (there's a 0). Keep going.",
-        "먼저 0 확인 — 상자에 0 이 있어?\n있음 ✔ (0 하나). 계속.") },
+        "먼저 0 을 볼게요. 상자에 0 이 있나요?\n있어요 ✔ (0 이 하나 있어요). 그럼 다음 수로 넘어가요.") },
     { ex: 1, c0: true, c1: true, mex: true, goal: 0,
       bubble: t(E,
         "Now check 1 — is 1 in the boxes?\nNo ✘. So the first missing = 1.\n→ mex = 1.",
-        "이제 1 확인 — 상자에 1 이 있어?\n없음 ✘. 처음으로 없는 게 1.\n→ mex = 1.") },
+        "이제 1 을 볼게요. 상자에 1 이 있나요?\n없어요 ✘. 처음으로 없는 수가 1 이에요.\n그래서 mex = 1 이에요.") },
     { ex: null, c0: true, c1: true, mex: true, goal: 1,
       bubble: t(E,
         "Just now: boxes → we computed mex.\nThis problem is the OPPOSITE!\nWe pick the mex we want, then CHANGE boxes to make it happen.\nOne box change = 1 operation. Fewest operations?",
-        "방금: 상자 → mex 를 구했어요.\n이 문제는 거꾸로!\n우리가 원하는 mex 를 먼저 정하고, 상자를 바꿔서 그 mex 로 만들기.\n상자 1 개 바꿈 = 연산 1 번. 최소 몇 번?") },
+        "방금은 상자를 보고 mex 를 구했어요.\n이 문제는 거꾸로예요.\n원하는 mex 를 먼저 정하고, 상자를 바꿔서 그 mex 가 되게 만들어요.\n상자 하나를 바꾸면 한 번 바꾸기예요. 가장 적게는 몇 번일까요?") },
     { ex: null, c0: true, c1: true, mex: true, goal: 2,
       bubble: t(E,
         "Example — say we want mex = 2.\nThat means: 0 must be present, 1 must be present, 2 must be ABSENT.\nHow do we do it? Next screen shows step by step.",
-        "예: mex = 2 를 원한다면?\n0 있어야, 1 있어야, 2 는 없어야.\n어떻게 만들지 다음 화면에서 한 단계씩 봐요.") },
+        "예를 들어 mex = 2 를 만들고 싶다고 해요.\n0 도 있어야 하고 1 도 있어야 하고, 2 는 없어야 해요.\n어떻게 만드는지 다음 화면에서 한 단계씩 봐요.") },
   ];
   const { idx, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(idx, steps.length - 1)];
@@ -68,7 +68,7 @@ export function MexesIntroSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10, wordBreak: "keep-all" }}>
-        🧮 {t(E, "What is mex, and what does this problem want?", "mex 가 뭐고, 이 문제는 뭘 시키나?")}
+        🧮 {t(E, "What is mex, and what does this problem want?", "mex 가 뭐고, 이 문제는 뭘 시킬까요?")}
       </div>
 
       {/* 말풍선(위) — 상자가 주인공인 스텝 */}
@@ -94,7 +94,7 @@ export function MexesIntroSim({ E }) {
 
       {/* 0 부터 확인하는 줄 */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 12 }}>
-        <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>{t(E, "check from 0", "0 부터 확인")}</div>
+        <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>{t(E, "check from 0", "0 부터 살펴보기")}</div>
         <div style={{ display: "flex", gap: 6 }}>
           {CHECK.map((v) => {
             const shown = (v === 0 && st.c0) || (v === 1 && st.c1);
@@ -123,7 +123,7 @@ export function MexesIntroSim({ E }) {
       {/* mex 결과 */}
       {st.mex && (
         <div style={{ textAlign: "center", fontSize: 15, fontWeight: 800, color: A, marginBottom: 4, wordBreak: "keep-all" }}>
-          {t(E, "first missing = 1  ⟹  mex = 1", "처음 없는 게 1  ⟹  mex = 1")}
+          {t(E, "first missing = 1  ⟹  mex = 1", "처음으로 없는 수가 1 이에요  ⟹  mex = 1")}
         </div>
       )}
 
@@ -152,15 +152,15 @@ export function MexesSampleSim({ E }) {
   const steps = [{ hi: -1,
     bubble: t(E,
       `Input: the array [${_A.join(", ")}] (N=${_N}). Output: N+1 = ${_N + 1} lines — the min changes for target mex 0, 1, …, ${_N}.`,
-      `입력: 배열 [${_A.join(", ")}] (N=${_N}). 출력: N+1 = ${_N + 1}줄 — 목표 mex 0, 1, …, ${_N} 각각의 최소 변경 수.`) }];
+      `입력은 배열 [${_A.join(", ")}] 이에요 (N=${_N}).\n출력은 N+1 = ${_N + 1} 줄이에요.\n목표 mex 0, 1, …, ${_N} 마다 가장 적은 바꾸기 횟수를 한 줄씩 적어요.`) }];
   _TARGETS.forEach((m, k) => {
     const info = _buildTarget(m);
     steps.push({ hi: k,
       bubble: m === 0
         ? t(E, `Line ${k + 1} → target mex 0: 0 must be ABSENT. There ${info.copies === 1 ? "is" : "are"} ${info.copies} zero${info.copies === 1 ? "" : "s"} → erase ${info.copies} → ${info.ops}.`,
-              `${k + 1}번째 줄 → 목표 mex 0: 배열에 0 이 없어야 해요. 지금 0 이 ${info.copies}개 → ${info.copies}번 지우면 → ${info.ops}.`)
+              `${k + 1}번째 줄은 목표 mex 0 이에요.\n배열에 0 이 하나도 없어야 해요. 지금 0 이 ${info.copies} 개 있으니 ${info.copies} 번 바꾸면 돼요. 그래서 ${info.ops} 이에요.`)
         : t(E, `Line ${k + 1} → target mex ${m}: 0…${m - 1} present, ${m} absent. Fill ${info.missing}, remove ${info.copies} → max = ${info.ops}.`,
-              `${k + 1}번째 줄 → 목표 mex ${m}: 0…${m - 1} 다 있고 ${m} 은 없어야. 채울 값 ${info.missing}개 / 없앨 ${m} ${info.copies}개 → max = ${info.ops}.`) });
+              `${k + 1}번째 줄은 목표 mex ${m} 이에요.\n0…${m - 1} 이 다 있어야 하고 ${m} 은 없어야 해요.\n채울 값이 ${info.missing} 개, 없앨 ${m} 이 ${info.copies} 개예요. 더 큰 쪽인 ${info.ops} 번이면 돼요.`) });
   });
   const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
@@ -195,7 +195,7 @@ export function MexesSampleSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 12, wordBreak: "keep-all" }}>
-        📤 {t(E, "What each output line means", "출력 각 줄이 뭔지")}
+        📤 {t(E, "What each output line means", "출력 한 줄씩 무슨 뜻일까요")}
       </div>
 
       {/* 말풍선 — 스텝별로 Y 이동. 첫 스텝은 위, 목표 강조 시엔 배열/출력 옆으로 슥. */}
@@ -209,8 +209,8 @@ export function MexesSampleSim({ E }) {
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
           <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700, wordBreak: "keep-all" }}>
             {m < 0 ? t(E, "input array a", "입력 배열 a")
-                   : (opsNow === 0 ? t(E, "array a — already there", "배열 a — 이미 됨")
-                                   : t(E, "array a — change these", "배열 a — 이렇게 바꾸면"))}
+                   : (opsNow === 0 ? t(E, "array a — already there", "배열 a — 벌써 다 돼 있어요")
+                                   : t(E, "array a — change these", "배열 a — 이렇게 바꾸면 돼요"))}
           </div>
           <div style={{ display: "flex", gap: 6 }}>
             {_A.map((v, i) => {
@@ -232,8 +232,8 @@ export function MexesSampleSim({ E }) {
           {m >= 0 && (
             <div style={{ fontSize: 11.5, color: opsNow === 0 ? "#15803d" : A, fontWeight: 700, marginTop: 3, wordBreak: "keep-all" }}>
               {opsNow === 0
-                ? t(E, "0 changes — already mex " + m, "0 번 바꿈 — 이미 mex " + m)
-                : t(E, `${opsNow} change${opsNow === 1 ? "" : "s"} → mex ${m}`, `${opsNow}번 바꿈 → mex ${m}`)}
+                ? t(E, "0 changes — already mex " + m, "안 바꿔도 돼요 — 이미 mex " + m)
+                : t(E, `${opsNow} change${opsNow === 1 ? "" : "s"} → mex ${m}`, `${opsNow} 번 바꾸면 → mex ${m}`)}
             </div>
           )}
         </div>
@@ -276,26 +276,26 @@ export function MexesMaxSim({ E }) {
   steps.push({ kind: "need", reveal: { need: true },
     bubble: m === 0
       ? t(E, `Target mex=0: NO value needs to be present, but 0 must be ABSENT.`,
-            `목표 mex=0: 꼭 있어야 할 값은 없고, 0 은 없어야 해요.`)
+            `목표 mex 가 0 이에요. 꼭 있어야 할 값은 없고, 0 만 없으면 돼요.`)
       : t(E, `Target mex=${m}: 0…${m - 1} must ALL be present, and ${m} must be ABSENT.`,
-            `목표 mex=${m}: 0…${m - 1} 은 다 있어야 하고, ${m} 은 없어야 해요.`) });
+            `목표 mex 가 ${m} 이에요. 0…${m - 1} 은 다 있어야 하고, ${m} 은 없어야 해요.`) });
   steps.push({ kind: "fill", reveal: { need: true, fill: true },
     bubble: t(E,
       `Fill: which of 0…${m - 1} are missing? ${info.missing ? info.missingVals.join(", ") : "none"} → ${info.missing} to add.`,
-      `채우기: 0…${m - 1} 중 빠진 값? ${info.missing ? info.missingVals.join(", ") : "없음"} → ${info.missing}개 채워야.`) });
+      `채우기예요. 0…${m - 1} 중에 빠진 값은 ${info.missing ? info.missingVals.join(", ") : "없어요"} 예요.\n${info.missing} 개를 채워야 해요.`) });
   steps.push({ kind: "remove", reveal: { need: true, fill: true, remove: true },
     bubble: t(E,
       `Remove: ${m} appears ${info.copies} time${info.copies === 1 ? "" : "s"} in the array → change them all to something else.`,
-      `제거: ${m} 이 배열에 ${info.copies}개 → 전부 다른 값으로 바꿔야.`) });
+      `없애기예요. ${m} 이 배열에 ${info.copies} 개 있어요.\n전부 다른 값으로 바꿔야 해요.`) });
   steps.push({ kind: "max", reveal: { need: true, fill: true, remove: true, ops: true },
     bubble: (info.missing > 0 && info.copies > 0)
       ? t(E, `Adding gives ${info.missing}+${info.copies}=${info.missing + info.copies}. But changing one ${m} INTO a missing value does BOTH jobs at once → max(${info.missing}, ${info.copies}) = ${info.ops}.`,
-            `더하면 ${info.missing}+${info.copies}=${info.missing + info.copies}. 근데 ${m} 하나를 빠진 값으로 바꾸면 두 일을 동시에! → max(${info.missing}, ${info.copies}) = ${info.ops}.`)
+            `그냥 더하면 ${info.missing}+${info.copies}=${info.missing + info.copies} 예요.\n그런데 ${m} 하나를 빠진 값으로 바꾸면 없애기와 채우기가 한 번에 끝나요.\n그래서 더 큰 쪽만큼만 하면 돼요. max(${info.missing}, ${info.copies}) = ${info.ops} 예요.`)
       : t(E, `Only one side has work → max(${info.missing}, ${info.copies}) = ${info.ops}.`,
-            `한 쪽만 일이 있어요 → max(${info.missing}, ${info.copies}) = ${info.ops}.`) });
+            `한쪽만 할 일이 있어요. max(${info.missing}, ${info.copies}) = ${info.ops} 예요.`) });
   steps.push({ kind: "done", reveal: { need: true, fill: true, remove: true, ops: true, done: true },
     bubble: t(E, `Min operations for mex=${m} = max(fill ${info.missing}, remove ${info.copies}) = ${info.ops}.`,
-                 `mex=${m} 최소 연산 = max(채우기 ${info.missing}, 제거 ${info.copies}) = ${info.ops}.`) });
+                 `mex 를 ${m} 로 만드는 가장 적은 바꾸기는 max(채우기 ${info.missing}, 없애기 ${info.copies}) = ${info.ops} 예요.`) });
 
   const { idx, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(idx, steps.length - 1)];
@@ -342,7 +342,7 @@ export function MexesMaxSim({ E }) {
         {/* 2026-09-04: 제목이 첫 스텝부터 정답 공식을 띄워서 아래 관찰 순서를 무력화했다.
             마지막 스텝에 닿기 전엔 질문만 보여준다. */}
         🎯 {rv.ops
-              ? t(E, "Min ops for a target mex = max(fill, remove)", "목표 mex 최소 연산 = max(채우기, 제거)")
+              ? t(E, "Min ops for a target mex = max(fill, remove)", "목표 mex 로 만들기 = max(채우기, 없애기)")
               : t(E, "What do we need to do to reach a target mex?", "목표 mex 를 만들려면 뭘 해야 할까요?")}
       </div>
 
@@ -368,7 +368,7 @@ export function MexesMaxSim({ E }) {
       {/* 필요한 값 (present/missing) */}
       {rv.need && m > 0 && (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 12 }}>
-          <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>{t(E, `must be present: 0…${m - 1}`, `있어야 함: 0…${m - 1}`)}</div>
+          <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>{t(E, `must be present: 0…${m - 1}`, `있어야 해요: 0…${m - 1}`)}</div>
           <div style={{ display: "flex", gap: 6 }}>
             {info.needVals.map((v) => {
               const present = _cnt(v) > 0;
@@ -390,9 +390,9 @@ export function MexesMaxSim({ E }) {
       {/* 채우기 + 제거 = max */}
       <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center", marginTop: 6, flexWrap: "wrap" }}>
         {chip(t(E, "fill", "채우기"), info.missing, "#15803d", "#dcfce7", "#86efac", rv.fill)}
-        {chip(t(E, "remove", "제거"), info.copies, "#9a3412", "#fff7ed", "#fdba74", rv.remove)}
+        {chip(t(E, "remove", "없애기"), info.copies, "#9a3412", "#fff7ed", "#fdba74", rv.remove)}
         <span style={{ fontWeight: 800, color: C.dim }}>→ max =</span>
-        {chip(t(E, "ops", "연산"), info.ops, A, "#f5f3ff", "#c4b5fd", rv.ops)}
+        {chip(t(E, "ops", "바꾸기"), info.ops, A, "#f5f3ff", "#c4b5fd", rv.ops)}
       </div>
 
       {/* 말풍선(아래) — max/done 결론 스텝: 결과 칩을 가리킴 (배열 안 가림) */}

@@ -134,19 +134,19 @@ export function getCowEvolutionSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 코드를 옮긴 거예요. 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, string, set).",
-            "#include 는 배운 헤더들로 (iostream, vector, string, set) 나눠 적어."),
+            "#include 는 배운 것들로 (iostream, vector, string, set) 나눠 적어요."),
         t(E, "set<string>::count returns 1 / 0 — useful for membership checks.",
-            "set<string>::count 는 1/0 반환 — 멤버십 확인에 유용."),
+            "set<string>::count 는 1 이나 0 을 돌려줘요. 들어 있는지 볼 때 편해요."),
       ],
     },
   ];
@@ -341,9 +341,9 @@ export function CowEvolutionSim({ E }) {
 
         {/* Three flags summary */}
         <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 10, flexWrap: "wrap" }}>
-          <FlagPill on={aOnly} label={t(E, "∃ A-only", "A 만 ∃")} />
-          <FlagPill on={bOnly} label={t(E, "∃ B-only", "B 만 ∃")} />
-          <FlagPill on={both}  label={t(E, "∃ A∧B",   "A∧B ∃")} />
+          <FlagPill on={aOnly} label={t(E, "∃ A-only", "A 만 있음")} />
+          <FlagPill on={bOnly} label={t(E, "∃ B-only", "B 만 있음")} />
+          <FlagPill on={both}  label={t(E, "∃ A∧B",   "둘 다 있음")} />
         </div>
 
         {/* Verdict for this pair */}
@@ -355,9 +355,9 @@ export function CowEvolutionSim({ E }) {
         }}>
           {cross
             ? t(E, `Pair (${A_char},${B_char}) CROSSES → no valid tree for this pair.`,
-                  `( ${A_char}, ${B_char} ) 쌍 교차 → 이 쌍 때문에 트리 불가.`)
+                  `( ${A_char}, ${B_char} ) 쌍이 교차해요 → 이 쌍 때문에 트리를 못 만들어요.`)
             : t(E, `Pair (${A_char},${B_char}) is fine (one flag missing).`,
-                  `( ${A_char}, ${B_char} ) 쌍은 OK (플래그 하나 빠짐).`)}
+                  `( ${A_char}, ${B_char} ) 쌍은 괜찮아요 (세 가지 중 하나가 없어요).`)}
         </div>
       </div>
 
@@ -370,9 +370,9 @@ export function CowEvolutionSim({ E }) {
       }}>
         {presetValid
           ? t(E, "Whole input → print 'yes' (no pair crosses).",
-                "전체 입력 → 'yes' 출력 (교차 쌍 없음).")
+                "교차하는 쌍이 하나도 없어요 → 'yes' 를 출력해요.")
           : t(E, `Whole input → print 'no' (pair (${crossingPair?.[0]},${crossingPair?.[1]}) crosses).`,
-                `전체 입력 → 'no' 출력 ( ( ${crossingPair?.[0]}, ${crossingPair?.[1]} ) 쌍 교차 ).`)}
+                `( ${crossingPair?.[0]}, ${crossingPair?.[1]} ) 쌍이 교차해요 → 'no' 를 출력해요.`)}
       </div>
     </div>
   );
@@ -429,7 +429,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCowEvolutionPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "CowEvolution — Full Study Guide", "CowEvolution — 종합 풀이 노트");
@@ -452,7 +452,7 @@ export function downloadCowEvolutionPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 선택해요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

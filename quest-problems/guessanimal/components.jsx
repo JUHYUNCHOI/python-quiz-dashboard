@@ -95,19 +95,19 @@ export function getGuessAnimalSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 을 옮긴 거예요. 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "vector<set<string>> stores each animal's traits as a set.",
-            "vector<set<string>>로 동물별 특성을 set으로 저장."),
+            "vector<set<string>> 로 동물마다 특성을 set 에 담아요."),
         t(E, "Nested for-loops compare every pair of animals.",
-            "이중 for문으로 모든 동물 쌍을 비교."),
+            "for 문을 두 겹으로 써서 모든 동물 쌍을 비교해요."),
       ],
     },
   ];

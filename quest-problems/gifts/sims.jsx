@@ -77,21 +77,21 @@ export function GiftQueueSim({ E }) {
   const bubble = (() => {
     if (s.kind === "raw") return t(E,
       <>8 guests, only <b>6</b> gifts. The number on each card is that guest's <b>tier</b>.</>,
-      <>손님 8 명인데 선물은 <b>6</b> 개뿐. 카드의 숫자가 그 손님의 <b>티어</b> 예요.</>);
+      <>손님은 8 명인데 선물은 <b>6</b> 개뿐이에요.<br />카드에 적힌 숫자가 그 손님의 <b>티어</b> 예요.</>);
     if (s.kind === "lined") return t(E,
       <>Line them up: <b>lower tier first</b>, and if the tier ties, <b>whoever came earlier</b>.</>,
-      <>줄을 세워요: <b>티어가 낮은 사람 먼저</b>, 티어가 같으면 <b>먼저 온 사람</b> 먼저.</>);
+      <><b>티어가 낮은 사람</b>부터 줄을 세워요.<br />티어가 같으면 <b>먼저 온 사람</b>이 앞에 서요.</>);
     if (s.kind === "give") {
       const g = s.guest + 1;
       return s.got
         ? t(E, <>guest {g} (tier {tier[s.guest]}) gets one — <b>{s.left - 1}</b> gifts left</>,
-              <>손님 {g} (티어 {tier[s.guest]}) 받았어요 — 남은 선물 <b>{s.left - 1}</b>개</>)
+              <>손님 {g} (티어 {tier[s.guest]}) 이 받았어요. 남은 선물은 <b>{s.left - 1}</b> 개예요.</>)
         : t(E, <>guest {g} (tier {tier[s.guest]}) — <b>no gifts left</b></>,
-              <>손님 {g} (티어 {tier[s.guest]}) — <b>선물이 없어요</b></>);
+              <>손님 {g} (티어 {tier[s.guest]}) 차례인데 <b>선물이 다 떨어졌어요.</b></>);
     }
     return t(E,
       <>Print in the <b>original</b> guest order — not the queue order.</>,
-      <>출력은 줄 순서가 아니라 <b>원래 손님 번호 순</b> 이에요.</>);
+      <>출력은 줄 선 순서가 아니라 <b>원래 손님 번호 순</b>으로 해요.</>);
   })();
 
   return (

@@ -11,7 +11,7 @@ export function makeTrafficCh1(E) {
       type: "reveal",
       narr: t(E,
         "A highway has N consecutive segments. Each segment is one of: a SENSOR with min/max measured car flow, an ON-RAMP that adds k cars to the flow, or an OFF-RAMP that removes k cars.\nGiven the segments in order, print the tightest [min, max] flow range that's POSSIBLE at the highway's START and at its END.",
-        "고속도로에 N 개의 연속된 구간이 있어요. 각 구간은: 측정된 최소/최대 차량 유량을 알려주는 센서, 유량에 k 대를 더하는 진입로, 또는 유량에서 k 대를 빼는 출구로 중 하나.\n순서대로 구간들이 주어졌을 때 고속도로 시작과 끝의 가장 좁은 가능한 [min, max] 유량 범위를 출력해요."),
+        "고속도로 시작과 끝의 유량 범위를 얼마나 좁힐 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -39,20 +39,20 @@ export function makeTrafficCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#8b5cf6" }}>{t(E, "N consecutive highway segments", "N 개의 연속된 고속도로 구간")}</b>
-                  {t(E, "; each is one of three types:",
-                        ". 각 구간은 세 가지 중 하나:")}
+                  {t(E, "; each is one of three types.",
+                        "이 있어요. 각 구간은 아래 세 가지 중 하나예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#0891b2" }}>{t(E, "SENSOR (low, high)", "센서 (low, high)")}</b>
-                  {t(E, " — measured flow is in [low, high]. ", " — 측정된 유량은 [low, high]. ")}
-                  <b style={{ color: "#16a34a" }}>{t(E, "ON-RAMP (k)", "진입로 (k)")}</b>
-                  {t(E, " adds k cars. ", " 는 k 대 추가. ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "OFF-RAMP (k)", "출구로 (k)")}</b>
-                  {t(E, " removes up to k cars (clamped at 0).",
-                        " 는 최대 k 대 제거 (0 미만 X).")}
+                  {t(E, " — measured flow is in [low, high]. ", " — 그 자리 유량이 [low, high] 안에 있어요. ")}
+                  <b style={{ color: "#16a34a" }}>{t(E, "ON-RAMP (low, high)", "진입로 (low, high)")}</b>
+                  {t(E, " lets between low and high cars in. ", " — low 대에서 high 대 사이가 들어와요. ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "OFF-RAMP (low, high)", "출구로 (low, high)")}</b>
+                  {t(E, " lets between low and high cars out (flow never drops below 0).",
+                        " — low 대에서 high 대 사이가 빠져나가요 (0 아래로는 안 내려가요).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
@@ -74,7 +74,7 @@ export function makeTrafficCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If highway flow is [10,20] and an on-ramp adds [5,10] cars, what's the flow after?", "고속도로 유량이 [10,20]이고 진입로가 [5,10]대를 추가하면 이후 유량은?"),
+        "If highway flow is [10,20] and an on-ramp adds [5,10] cars, what's the flow after?", "진입로를 지난 뒤 유량 범위는 어떻게 될까요?"),
       question: t(E,
         "Flow [10,20] + on-ramp [5,10] = ?",
         "유량 [10,20] + 진입로 [5,10] = ?"),
@@ -86,20 +86,20 @@ export function makeTrafficCh1(E) {
       ],
       correct: 0,
       explain: t(E,
-        "On-ramp adds to both bounds: [10+5, 20+10] = [15, 30].",
-        "진입로는 양쪽 경계에 더해: [10+5, 20+10] = [15, 30]."),
+        "The smallest case is the smallest flow plus the fewest new cars, and the largest is the largest plus the most, so [10+5, 20+10] = [15, 30].",
+        "가장 적을 때는 제일 적은 유량에 제일 적게 들어온 경우, 가장 많을 때는 그 반대예요. 그래서 [10+5, 20+10] = [15, 30] 이에요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "If the initial flow range is [10, 20], what is the maximum flow?", "초기 유량 범위가 [10, 20]이면 최대 유량은?"),
+        "If the initial flow range is [10, 20], what is the maximum flow?", "유량 범위가 [10, 20] 이면 가장 많을 때는 몇 대일까요?"),
       question: t(E,
         "Flow range [10, 20]. Maximum?",
-        "유량 범위 [10, 20]. 최대값?"),
+        "유량 범위가 [10, 20] 일 때 제일 큰 값은 얼마일까요?"),
       hint: t(E,
         "[low, high] — which side is the maximum?",
-        "[low, high] — 최대값은 어느 쪽?"),
+        "[low, high] 에서 제일 큰 값은 어느 쪽에 있나요?"),
       answer: 20,
     },
   ];
@@ -116,7 +116,7 @@ export function makeTrafficCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Constraint propagation in two passes. Forward: start with [0, ∞), apply on-ramps (+k) and off-ramps (−k clamped), intersect with each sensor range to get end-flow range. Backward: reverse the whole thing. Sections build it one piece at a time.",
-        "두 번 패스로 제약 전파. 순방향: [0, ∞) 에서 시작, 진입로 (+k) 와 출구로 (−k, 0 으로 클램프) 적용, 각 센서 범위와 교차해 끝 유량 범위. 역방향: 반대로. 아래 섹션이 한 단락씩 쌓아요."),
+        "한 번은 앞에서 뒤로, 한 번은 뒤에서 앞으로 훑으며 범위를 좁혀요."),
       sections: getMeasTrafficSections(E),
     },
   ];

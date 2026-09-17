@@ -42,7 +42,7 @@ function GlassStackSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "All plates share the same center; the biggest sits at the bottom. A spot is BLACK when an ODD number of plates cover it, colorless when EVEN. So the rings flip black / colorless from the outside in.",
-            "모든 유리판은 중심이 같고, 제일 큰 판이 맨 아래예요. 한 지점을 덮는 판이 홀수 개면 검은색, 짝수 개면 무색이에요. 그래서 바깥부터 안으로 고리가 검정 / 무색으로 번갈아 바뀌어요.")}
+            "유리판은 모두 중심이 같고 제일 큰 판이 맨 아래에 있어요.\n한 지점을 덮는 판이 홀수 개면 검은색, 짝수 개면 무색이에요.\n그래서 바깥에서 안으로 갈수록 고리가 검정과 무색으로 번갈아 나와요.")}
         </div>
 
         {/* plate-count selector */}
@@ -96,7 +96,7 @@ function GlassStackSim({ E }) {
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.5, ...KA }}>
               {t(E,
                 "Each black ring is (outer² − inner²)π. The colorless rings cancel the middle terms, so only the plain alternating sum survives.",
-                "검은 고리 하나는 (바깥² − 안²)π 예요. 무색 고리가 가운데 항을 지워서, 결국 번갈아 더하고 빼는 합만 남아요.")}
+                "검은 고리 하나의 넓이는 (바깥² − 안²)π 예요.\n무색 고리가 가운데 항을 지워 주니까\n번갈아 더하고 빼는 합만 남아요.")}
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@ function MissingRadiusSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "We know three radii: 4, 2, 1. The black area must be 10π. Slide the broken plate's radius x — the whole set is re-sorted (largest first) and the alternating sum updates. Make it equal 10.",
-            "우리가 아는 반지름은 4, 2, 1 이에요. 검은 넓이는 10π 여야 해요. 깨진 판의 반지름 x 를 바꾸면 전체가 다시 정렬(큰 것부터)되고 번갈아 합이 갱신돼요. 10 이 되게 만들어봐요.")}
+            "아는 반지름은 4, 2, 1 이고 검은 넓이는 10π 가 되어야 해요.\n깨진 판의 반지름 x 를 바꾸면 전체가 큰 것부터 다시 줄을 서고\n번갈아 합도 새로 계산돼요. 10 이 되게 맞춰 보세요.")}
         </div>
 
         <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
@@ -170,7 +170,7 @@ function MissingRadiusSim({ E }) {
         </div>
         {ok && (
           <div style={{ marginTop: 8, fontSize: 12, fontWeight: 700, color: "#16a34a", textAlign: "center", ...KA }}>
-            {t(E, "x = 3 works! Radii 4,3,2,1 → 16−9+4−1 = 10.", "x = 3 이 정답! 반지름 4,3,2,1 → 16−9+4−1 = 10.")}
+            {t(E, "x = 3 works! Radii 4,3,2,1 → 16−9+4−1 = 10.", "x = 3 이 맞아요. 반지름 4,3,2,1 로 16−9+4−1 = 10 이에요.")}
           </div>
         )}
       </div>
@@ -192,7 +192,7 @@ export function makeMcc21GlassCh1(E) {
       type: "reveal",
       narr: t(E,
         "A dragon stacks N glass plates by their center, biggest at the bottom. A spot turns black only when an ODD number of plates cover it. One plate broke — find its radius.",
-        "용이 유리판 N 개를 중심을 맞춰 큰 것부터 아래로 쌓아요. 한 지점은 그 위를 덮는 판이 홀수 개일 때만 검게 보여요. 판 하나가 깨졌어요 — 그 반지름을 찾아요."),
+        "판이 홀수 개 덮인 자리만 검게 보여요. 깨진 판의 반지름을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -209,7 +209,7 @@ export function makeMcc21GlassCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "Given the N−1 known radii and the black area A·π, output any valid integer radius for the broken plate.",
-                "아는 반지름 N−1 개와 검은 넓이 A·π 가 주어지면, 깨진 판의 유효한 정수 반지름 하나를 출력해요.")}
+                "아는 반지름 N−1 개와 검은 넓이 A·π 를 보고\n깨진 판의 반지름이 될 수 있는 정수 하나를 출력해요.")}
             </div>
           </div>
 
@@ -222,25 +222,25 @@ export function makeMcc21GlassCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: A, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "N glass plates share one center, stacked ", "유리판 N 개가 중심을 공유하며 ")}
-                  <b style={{ color: A }}>{t(E, "biggest radius at the bottom", "큰 반지름이 아래")}</b>
-                  {t(E, ", smallest on top.", ", 작은 반지름이 위로 쌓여요.")}
+                  {t(E, "N glass plates share one center, stacked ", "유리판 N 개가 중심을 맞춰 쌓여 있어요. ")}
+                  <b style={{ color: A }}>{t(E, "biggest radius at the bottom", "제일 큰 판이 맨 아래")}</b>
+                  {t(E, ", smallest on top.", "에, 제일 작은 판이 맨 위에 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: A, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "A region is ", "한 영역은 ")}
-                  <b style={{ color: BLACK }}>{t(E, "black if an ODD", "홀수 개가 덮으면 검정")}</b>
+                  {t(E, "A region is ", "어떤 자리를 덮는 판이 ")}
+                  <b style={{ color: BLACK }}>{t(E, "black if an ODD", "홀수 개면 검정")}</b>
                   {t(E, " number of plates cover it, ", ", ")}
                   <b style={{ color: "#64748b" }}>{t(E, "colorless if EVEN", "짝수 개면 무색")}</b>
-                  {t(E, ".", " 이에요.")}
+                  {t(E, ".", " 이 돼요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: A, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One plate broke; its radius is unknown. The total black area is ", "판 하나가 깨져 반지름을 몰라요. 전체 검은 넓이는 ")}
+                  {t(E, "One plate broke; its radius is unknown. The total black area is ", "판 하나가 깨져서 그 반지름만 몰라요. 검은 넓이를 다 더하면 ")}
                   <b style={{ color: A }}>A·π</b>
                   {t(E, ". All radii are positive integers.", " 이고, 모든 반지름은 양의 정수예요.")}
                 </div>
@@ -249,8 +249,8 @@ export function makeMcc21GlassCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Output ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "any valid radius for the broken plate", "깨진 판의 유효한 반지름 하나")}</b>
-                  {t(E, " (at least one is guaranteed).", "를 출력해요 (하나 이상 존재함이 보장돼요).")}
+                  <b style={{ color: "#15803d" }}>{t(E, "any valid radius for the broken plate", "깨진 판의 반지름이 될 수 있는 값 하나")}</b>
+                  {t(E, " (at least one is guaranteed).", "를 출력해요.\n답은 적어도 하나는 꼭 있어요.")}
                 </div>
               </div>
             </div>
@@ -263,7 +263,7 @@ export function makeMcc21GlassCh1(E) {
       type: "reveal",
       narr: t(E,
         "Read N and A, then the N−1 known radii. Study the official sample: with 4,2,1 known and A=10, the broken radius is 3.",
-        "N 과 A 를 읽고, 이어서 아는 반지름 N−1 개를 읽어요. 공식 예제를 봐요: 아는 값 4,2,1 과 A=10 이면 깨진 반지름은 3 이에요."),
+        "N 과 A 를 읽고 아는 반지름 N−1 개를 읽어요. 예제를 같이 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0f9ff", border: "1px solid #7dd3fc", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -272,12 +272,12 @@ export function makeMcc21GlassCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               <div>• <b>N</b> — {t(E, "total number of plates", "판의 전체 개수")}</div>
-              <div>• <b>A</b> — {t(E, "black area is A·π (read A, not the area)", "검은 넓이는 A·π (넓이가 아니라 A 를 읽어요)")}</div>
+              <div>• <b>A</b> — {t(E, "black area is A·π (read A, not the area)", "검은 넓이는 A·π 예요. 넓이가 아니라 A 를 읽어요")}</div>
               <div>• <b>R</b> — {t(E, "the N−1 known radii", "아는 반지름 N−1 개")}</div>
             </div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: N ≤ 5·10⁴, A ≤ 10¹⁸, Rᵢ ≤ 10⁹ → squares overflow 32-bit; use big integers.",
-                   "제약: N ≤ 5·10⁴, A ≤ 10¹⁸, Rᵢ ≤ 10⁹ → 제곱이 32비트를 넘어요; 큰 정수를 써요.")}
+                   "제약: N ≤ 5·10⁴, A ≤ 10¹⁸, Rᵢ ≤ 10⁹\n제곱하면 32비트를 넘으니까 큰 정수를 써야 해요.")}
             </div>
           </div>
 
@@ -296,7 +296,7 @@ export function makeMcc21GlassCh1(E) {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
               "With the broken radius 3, all four radii sorted are 4,3,2,1. Black area = (4²−3²+2²−1²)π = 10π. ✅",
-              "깨진 반지름이 3 이면 네 반지름은 4,3,2,1 로 정렬돼요. 검은 넓이 = (4²−3²+2²−1²)π = 10π. ✅")}
+              "깨진 반지름이 3 이면 네 반지름이 4,3,2,1 순으로 줄을 서요.\n검은 넓이는 (4²−3²+2²−1²)π = 10π 예요. ✅")}
           </div>
         </div>),
     },
@@ -306,7 +306,7 @@ export function makeMcc21GlassCh1(E) {
       type: "reveal",
       narr: t(E,
         "Feel the stack. Add plates one at a time and watch which rings turn black — and how the black area becomes an alternating sum of squares.",
-        "쌓기를 직접 느껴봐요. 판을 하나씩 더하며 어느 고리가 검게 되는지, 그리고 검은 넓이가 어떻게 '번갈아 더하고 빼는 제곱의 합'이 되는지 봐요."),
+        "판을 하나씩 더하면서 어느 고리가 검게 되는지 직접 봐요."),
       content: <GlassStackSim E={E} />,
     },
 
@@ -315,19 +315,19 @@ export function makeMcc21GlassCh1(E) {
       type: "quiz",
       narr: t(E,
         "A point covered by an ODD number of plates is black. The outermost ring is covered by just 1 plate → odd → black.",
-        "홀수 개의 판이 덮는 지점은 검정이에요. 가장 바깥 고리는 판 1 개만 덮으니 → 홀수 → 검정."),
+        "판이 홀수 개 덮은 자리가 검정이에요. 맨 바깥 고리는 1 개라 검정이에요."),
       question: t(E,
         "Radii sorted 5,3,2. The ring between 3 and 2 is covered by how many plates, and is it black?",
-        "반지름 정렬 5,3,2. 3 과 2 사이 고리는 몇 개의 판이 덮고, 검은색인가요?"),
+        "반지름이 5, 3, 2 순이에요.\n3 과 2 사이 고리는 판 몇 개가 덮고, 검은색일까요?"),
       options: [
-        t(E, "2 plates → even → colorless", "2 개 → 짝수 → 무색"),
-        t(E, "1 plate → odd → black", "1 개 → 홀수 → 검정"),
-        t(E, "3 plates → odd → black", "3 개 → 홀수 → 검정"),
+        t(E, "2 plates → even → colorless", "2 개라서 짝수, 그래서 무색이에요"),
+        t(E, "1 plate → odd → black", "1 개라서 홀수, 그래서 검정이에요"),
+        t(E, "3 plates → odd → black", "3 개라서 홀수, 그래서 검정이에요"),
       ],
       correct: 0,
       explain: t(E,
         "That ring lies inside radius 5 and radius 3, but outside radius 2 → covered by 2 plates → even → colorless.",
-        "그 고리는 반지름 5 와 3 안쪽, 2 바깥쪽이에요 → 2 개가 덮음 → 짝수 → 무색."),
+        "그 고리는 반지름 5 와 3 안쪽이면서 2 바깥쪽이에요.\n덮는 판이 2 개라 짝수이고, 그래서 무색이에요."),
     },
   ];
 }
@@ -342,12 +342,12 @@ export function makeMcc21GlassCh2(E) {
       type: "reveal",
       narr: t(E,
         "Sort every radius largest first. Each black ring is (outer² − inner²)π, and because black / colorless alternate, the middle terms cancel — the black area is just r1² − r2² + r3² − r4² + … (×π).",
-        "모든 반지름을 큰 것부터 정렬해요. 검은 고리 하나는 (바깥² − 안²)π 이고, 검정 / 무색이 번갈아 나오니 가운데 항이 서로 지워져요 — 검은 넓이는 그냥 r1² − r2² + r3² − r4² + … (×π) 예요."),
+        "가운데 항이 서로 지워져서 번갈아 더하고 빼는 합만 남아요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 16, textAlign: "center" }}>
             <div style={{ fontSize: 12, color: C.dim, marginBottom: 8 }}>
-              {t(E, "radii sorted largest → smallest", "반지름을 큰 것부터 작은 것까지 정렬")}
+              {t(E, "radii sorted largest → smallest", "반지름을 큰 것부터 작은 것 순으로 줄 세워요")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 800, letterSpacing: 1, marginBottom: 12 }}>
               <span style={{ color: "#16a34a" }}>+r₁²</span>{" "}
@@ -363,7 +363,7 @@ export function makeMcc21GlassCh2(E) {
           <div style={{ marginTop: 12, fontSize: 12.5, color: C.text, lineHeight: 1.6 }}>
             {t(E,
               "Why the signs? The outermost ring is covered by 1 plate (black, +). The next by 2 (colorless, skipped). The next by 3 (black, +)… Adding each black ring's (outer²−inner²) and lining them up gives the plain alternating pattern above.",
-              "왜 부호가 그럴까요? 가장 바깥 고리는 판 1 개가 덮어요 (검정, +). 다음은 2 개 (무색, 건너뜀). 다음은 3 개 (검정, +)… 검은 고리마다 (바깥²−안²) 을 더해 나란히 쓰면 위의 번갈아 패턴이 그대로 나와요.")}
+              "부호는 왜 이럴까요?\n맨 바깥 고리는 판 1 개가 덮어서 검정이라 더해요.\n다음은 2 개라서 무색이니 건너뛰고, 그다음은 3 개라서 또 더해요.\n검은 고리마다 (바깥²−안²) 을 더해 나란히 적으면\n위처럼 번갈아 가는 모양이 그대로 나와요.")}
           </div>
         </div>),
     },
@@ -373,7 +373,7 @@ export function makeMcc21GlassCh2(E) {
       type: "reveal",
       narr: t(E,
         "Now the twist: one radius is missing. Choose x so that, once everything is re-sorted, the alternating sum lands exactly on A.",
-        "이제 반전: 반지름 하나가 비어 있어요. 모두 다시 정렬했을 때 번갈아 합이 정확히 A 가 되도록 x 를 골라봐요."),
+        "반지름 하나가 비어 있어요. 번갈아 합이 A 가 되는 x 를 골라 봐요."),
       content: <MissingRadiusSim E={E} />,
     },
 
@@ -382,18 +382,18 @@ export function makeMcc21GlassCh2(E) {
       type: "reveal",
       narr: t(E,
         "We can't guess x forever (it may be up to 10⁹). Instead: the missing radius slots into ONE position p in the sorted order. Fix p, and the equation 'alternating sum = A' has a single unknown x², which we solve directly.",
-        "x 를 무한정 추측할 순 없어요 (최대 10⁹). 대신: 깨진 반지름은 정렬된 순서에서 어떤 위치 p 하나에 들어가요. p 를 정하면 '번갈아 합 = A' 는 미지수가 x² 하나뿐인 식이라 바로 풀려요."),
+        "x 는 10⁹ 까지 커서 다 넣어 볼 수 없어요.\n대신 깨진 반지름이 줄 서는 자리 p 를 먼저 정해 봐요.\np 를 정하면 '번갈아 합 = A' 에 모르는 값이 x² 하나뿐이라 바로 풀려요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
-                1️⃣ {t(E, "Split the known radii by position p", "위치 p 로 아는 반지름을 나눠요")}
+                1️⃣ {t(E, "Split the known radii by position p", "자리 p 를 기준으로 아는 반지름을 나눠요")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "The p−1 larger known radii keep their signs (a prefix sum). The ones below x all sit one slot later, so every one of their signs flips.",
-                  "x 보다 큰 아는 반지름 p−1 개는 부호를 유지해요 (앞부분 합). x 아래에 있는 것들은 한 칸씩 밀려서 부호가 모두 뒤집혀요.")}
+                  "x 보다 큰 반지름 p−1 개는 부호가 그대로예요.\nx 보다 작은 것들은 한 칸씩 밀려서 부호가 전부 뒤집혀요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
@@ -406,7 +406,7 @@ export function makeMcc21GlassCh2(E) {
               </div>
               <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
                 {t(E, "S = full alternating sum of known radii, pre = prefix up to p−1.",
-                     "S = 아는 반지름의 전체 번갈아 합, pre = p−1 까지의 앞부분 합.")}
+                     "S 는 아는 반지름 전체의 번갈아 합이고\npre 는 p−1 까지 앞쪽만 더한 합이에요.")}
               </div>
             </div>
             <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 10, padding: "10px 14px" }}>
@@ -416,7 +416,7 @@ export function makeMcc21GlassCh2(E) {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "x² ≥ 0, x must be a perfect square's root (integer), positive, and fit between its neighbors at slot p. First p that passes → answer.",
-                  "x² ≥ 0, x 는 완전제곱근(정수)이고 양수여야 하며, 슬롯 p 의 이웃들 사이에 들어맞아야 해요. 통과하는 첫 p → 정답.")}
+                  "x² 가 0 이상이고, x 가 정수인 제곱근이면서 양수여야 해요.\n그리고 자리 p 의 양옆 반지름 사이에 들어와야 해요.\n이걸 다 통과하는 첫 p 에서 나온 x 가 답이에요.")}
               </div>
             </div>
           </div>
@@ -428,19 +428,19 @@ export function makeMcc21GlassCh2(E) {
       type: "quiz",
       narr: t(E,
         "For a chosen position the formula might give x² = 20. Since 20 is not a perfect square, no integer radius fits there — we move to the next position.",
-        "어떤 위치에서 식이 x² = 20 을 줄 수 있어요. 20 은 완전제곱수가 아니라 그 자리에 맞는 정수 반지름이 없어요 — 다음 위치로 넘어가요."),
+        "20 은 완전제곱수가 아니라서 그 자리엔 정수 반지름이 없어요."),
       question: t(E,
         "A position gives x² = 49. What do we do?",
-        "어떤 위치에서 x² = 49 가 나왔어요. 어떻게 하나요?"),
+        "어떤 자리에서 x² = 49 가 나왔어요. 어떻게 할까요?"),
       options: [
-        t(E, "x = 7 (perfect square) — check it fits between neighbors, then accept", "x = 7 (완전제곱) — 이웃 사이에 맞는지 확인 후 채택"),
-        t(E, "Reject: 49 is too big", "거부: 49 는 너무 커요"),
+        t(E, "x = 7 (perfect square) — check it fits between neighbors, then accept", "x = 7 이니까 양옆 사이에 들어가는지 보고 받아들여요"),
+        t(E, "Reject: 49 is too big", "49 는 너무 크니까 버려요"),
         t(E, "x = 49", "x = 49"),
       ],
       correct: 0,
       explain: t(E,
         "√49 = 7 is an integer, so x = 7 is a candidate. If it also lies between its neighbors in the sorted order, it's a valid answer.",
-        "√49 = 7 은 정수라 x = 7 이 후보예요. 정렬 순서에서 이웃 사이에도 들어가면 유효한 정답이에요."),
+        "√49 = 7 은 정수라서 x = 7 이 후보가 돼요.\n줄 세운 순서에서 양옆 사이에도 들어가면 진짜 답이에요."),
     },
 
     // 2-5 practice input (sample 2)
@@ -448,8 +448,8 @@ export function makeMcc21GlassCh2(E) {
       type: "input",
       narr: t(E,
         "Sample 2: known radii 2,3,6 with A = 16. Sorted with the answer they become 6,5,3,2 → 36−25+9−4 = 16. What is the broken radius?",
-        "예제 2: 아는 반지름 2,3,6 과 A = 16. 정답과 함께 정렬하면 6,5,3,2 → 36−25+9−4 = 16. 깨진 반지름은?"),
-      question: t(E, "Broken radius for R=[2,3,6], A=16 = ?", "R=[2,3,6], A=16 일 때 깨진 반지름 = ?"),
+        "아는 반지름은 2, 3, 6 이고 A 는 16 이에요.\n답을 넣고 줄 세우면 6, 5, 3, 2 가 되어 36−25+9−4 = 16 이에요.\n깨진 반지름은 얼마일까요?"),
+      question: t(E, "Broken radius for R=[2,3,6], A=16 = ?", "R=[2,3,6] 이고 A=16 일 때 깨진 반지름은?"),
       answer: 5,
     },
   ];
@@ -465,26 +465,26 @@ export function makeMcc21GlassCh3(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The slow way tries every possible x (up to 10⁹) and re-checks — far too slow. The fast way tests each of the N slots the missing radius could occupy, solving x² directly in O(1) each.",
-        "느린 방법은 가능한 x 를 전부(최대 10⁹) 넣어보고 다시 확인해요 — 너무 느려요. 빠른 방법은 깨진 반지름이 들어갈 수 있는 N 개의 자리마다 x² 를 O(1) 로 바로 풀어요."),
+        "x 를 다 넣어 보면 너무 느려요. 자리마다 x² 를 바로 풀면 빨라요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: try every radius x", "느림: 가능한 반지름 x 를 전부 시도")}
+                🐢 {t(E, "Slow: try every radius x", "느린 방법: 반지름 x 를 하나씩 다 넣어 보기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "x can be up to 10⁹, each try re-sorts / re-sums → far past the time limit.",
-                     "x 는 최대 10⁹, 매 시도마다 다시 정렬 / 합산 → 제한 시간을 크게 초과.")}
+                     "x 는 10⁹ 까지 커요.\n한 번 넣을 때마다 다시 줄 세우고 다시 더하니까\n시간이 한참 모자라요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: one closed-form per slot", "빠름: 자리마다 닫힌 식 하나")}
+                🚀 {t(E, "Fast: one closed-form per slot", "빠른 방법: 자리마다 식 하나로 바로 풀기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Sort once (N log N), build a prefix of the alternating sum, then O(1) per slot → O(N log N) total.",
-                     "한 번 정렬(N log N)하고 번갈아 합의 앞부분을 만든 뒤, 자리당 O(1) → 전체 O(N log N).")}
+                     "한 번만 줄 세우고 (N log N) 번갈아 합의 앞부분을 만들어 둬요.\n그러면 자리마다 O(1) 이라 전체가 O(N log N) 이에요.")}
               </div>
             </div>
           </div>
@@ -498,7 +498,7 @@ export function makeMcc21GlassCh3(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
+        "Solution code — read part by part.", "풀이 코드를 한 부분씩 읽어 봐요."),
       sections: getMcc21GlassSections(E),
     },
   ];

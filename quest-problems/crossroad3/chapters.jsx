@@ -11,7 +11,7 @@ export function makeCrossRd3Ch1(E) {
       type: "reveal",
       narr: t(E,
         "N cows arrive at a single gate, each with an arrival time a[i] and a passage duration d[i]. The gate processes cows in arrival order (FIFO) — one at a time. If a cow arrives while the gate is busy, she queues; once it's her turn, she takes d[i] seconds to pass through.\nPrint the time the LAST cow finishes passing.",
-        "N마리 소가 한 개의 문에 도착해요. 각자 도착 시각 a[i] 와 통과 시간 d[i] 를 가져요. 문은 도착 순서 (FIFO) 로 한 마리씩 처리해요. 문이 사용 중일 때 도착한 소는 줄을 서고, 자기 차례에 d[i] 초 걸려 통과해요.\n마지막 소가 통과를 끝내는 시각을 출력해요."),
+        "문 하나로 소들이 한 마리씩 지나가요. 마지막 소는 언제 끝날까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -53,7 +53,7 @@ export function makeCrossRd3Ch1(E) {
                   {t(E, "The gate processes cows ", "문은 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "FIFO (first come, first served)", "FIFO (선착순)")}</b>
                   {t(E, " — one at a time, taking d[i] seconds for cow i.",
-                        " 로 한 마리씩 처리, i번 소는 d[i] 초 걸려요.")}
+                        " 로 한 마리씩 보내요. i번 소는 지나가는 데 d[i] 초 걸려요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -79,7 +79,7 @@ export function makeCrossRd3Ch1(E) {
           <div style={{ background: "#fff", border: `1.5px solid #c4b5fd`, borderRadius: 12, marginTop: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", padding: "10px 14px 0" }}>
               🔍 {t(E, "Walk each cow through the gate — see current_time grow",
-                     "소를 한 마리씩 문에 통과시키며 — current_time 이 어떻게 커지는지 확인")}
+                     "소를 한 마리씩 문에 통과시키며 current_time 이 어떻게 커지는지 봐요")}
             </div>
             <CrossRoad3Sim E={E} />
           </div>
@@ -89,31 +89,31 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cow A arrives at t=0, takes 5 sec.\nCow B arrives at t=3, takes 2 sec.\nA finishes at t=5.\nB has to wait (arrived at 3 but gate busy until 5).\nWhen does B finish?", "소 A는 t=0에 도착, 5초 소요.\n소 B는 t=3에 도착, 2초 소요.\nA는 t=5에 끝나.\nB는 기다려야 해 (3에 도착했지만 문은 5까지 사용 중).\nB는 언제 끝나?"),
+        "Cow A arrives at t=0, takes 5 sec.\nCow B arrives at t=3, takes 2 sec.\nA finishes at t=5.\nB has to wait (arrived at 3 but gate busy until 5).\nWhen does B finish?", "소 A 는 t=0 에 도착해 5초가 걸려요.\n소 B 는 t=3 에 도착해 2초가 걸려요.\nA 는 t=5 에 끝나요.\nB 는 t=3 에 도착했지만 문이 t=5 까지 차 있어서 기다려요.\nB 는 언제 끝날까요?"),
       question: t(E,
         "A: arrive=0, dur=5. B: arrive=3, dur=2. When does B finish?",
-        "A: 도착=0, 소요=5. B: 도착=3, 소요=2. B는 언제 끝나?"),
+        "A 는 도착 0 에 5초, B 는 도착 3 에 2초예요. B 는 언제 끝날까요?"),
       options: [
-        t(E, "t=7 (waits until 5, then 2 sec)", "t=7 (5까지 기다리고, 그 다음 2초)"),
-        t(E, "t=5 (finishes with A)", "t=5 (A와 함께 끝남)"),
+        t(E, "t=7 (waits until 5, then 2 sec)", "t=7 (5까지 기다렸다가 2초 걸려요)"),
+        t(E, "t=5 (finishes with A)", "t=5 (A 와 같이 끝나요)"),
         t(E, "t=10", "t=10"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! B arrives at t=3 but the gate is busy until t=5. B starts at t=5, takes 2 sec, finishes at t=7.",
-        "맞아! B는 t=3에 도착하지만 문은 t=5까지 사용 중. B는 t=5에 시작해서 2초 걸려 t=7에 끝나."),
+        "맞아요! B 는 t=3 에 도착하지만 문이 t=5 까지 차 있어요. 그래서 t=5 에 시작해 2초 걸려 t=7 에 끝나요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Same example: A(0,5), B(3,2). When does the last cow finish?", "같은 예시: A(0,5), B(3,2). 마지막 소가 끝나는 시간?"),
+        "Same example: A(0,5), B(3,2). When does the last cow finish?", "같은 예시 A(0,5), B(3,2) 에서 마지막 소는 언제 끝날까요?"),
       question: t(E,
         "A arrives t=0, 5 sec. B arrives t=3, 2 sec. Last finish time?",
-        "A 도착 t=0, 5초. B 도착 t=3, 2초. 마지막 끝나는 시간?"),
+        "A 는 t=0 에 도착해 5초, B 는 t=3 에 도착해 2초예요. 마지막은 언제 끝날까요?"),
       hint: t(E,
         "When does A finish? B has to wait until then, then add B's duration.",
-        "A는 언제 끝날까? B는 그때까지 기다렸다가 B의 소요시간을 더해요."),
+        "A 는 언제 끝날까요? B 는 그때까지 기다렸다가 자기 시간을 더하면 돼요."),
       answer: 7,
     },
   ];
@@ -130,7 +130,7 @@ export function makeCrossRd3Ch2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Sort cows by arrival time. Walk through them: track when the gate becomes free. If a cow arrives BEFORE the gate is free, she waits — gate-free advances by her duration. If after, she starts at her arrival. Sections build it one piece at a time.",
-        "도착 시간 순으로 정렬. 순회: 문이 비는 시간을 추적. 소가 문이 빈 시간 전에 도착하면 대기 — 문 비는 시간이 그녀의 소요시간 만큼 진행. 후에 도착하면 도착 시각에 시작. 아래 섹션이 한 단락씩 쌓아요."),
+        "도착 순서대로 보면서 문이 비는 시각을 계속 따라가요."),
       sections: getCrossRoad3Sections(E),
     },
   ];

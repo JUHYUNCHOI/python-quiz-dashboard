@@ -73,7 +73,7 @@ export function InfectionSim({ E }) {
           🦠 {t(E, "Spread Simulator", "감염 시뮬레이터")}
         </div>
         <div style={{ fontSize: 11, color: C.dim }}>
-          {t(E, "Click cows to mark Day 0 sources, then play.", "소를 눌러 0일차 감염 표시 후 재생.")}
+          {t(E, "Click cows to mark Day 0 sources, then play.", "소를 눌러 0일차 감염을 표시한 뒤 재생해요.")}
         </div>
       </div>
 
@@ -138,7 +138,7 @@ export function InfectionSim({ E }) {
         </button>
         <button onClick={reset}
           style={{ background: "#fff", color: C.dim, border: `1.5px solid ${C.border}`, borderRadius: 6, padding: "5px 10px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
-          ↺ {t(E, "Reset", "리셋")}
+          ↺ {t(E, "Reset", "처음")}
         </button>
         <button onClick={() => setPreset("one")}
           style={{ background: "#f5f3ff", color: A, border: `1px dashed ${A}`, borderRadius: 6, padding: "5px 10px", fontSize: 11, cursor: "pointer" }}>
@@ -155,7 +155,7 @@ export function InfectionSim({ E }) {
         <div style={{ marginTop: 10, padding: "8px 12px", background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, fontSize: 12, color: "#15803d" }}>
           💡 {t(E,
             `${sourceCount} source(s) → ${countRuns(cur)} connected run(s) of 1s. Each run = 1 source needed.`,
-            `${sourceCount}개 감염원 → 1이 이어진 덩어리 ${countRuns(cur)}개. 덩어리 1개 = 감염원 1마리면 충분.`)}
+            `감염원 ${sourceCount}개 → 1 이 이어진 덩어리 ${countRuns(cur)}개예요. 덩어리 하나는 감염원 한 마리면 충분해요.`)}
         </div>
       )}
     </div>
@@ -280,19 +280,19 @@ export function getCowntactSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 에서 자동으로 옮긴 거예요. 타입과 표현은 필요할 때 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, string).",
-            "#include 는 배운 헤더들로 (iostream, string) 나눠 적어."),
+            "#include 는 배운 헤더(iostream, string)를 하나씩 나눠 적어요."),
         t(E, "Inner while skips one whole run of 1s — outer while moves past one block at a time.",
-            "안쪽 while 이 1 의 연속을 한꺼번에 건너뜀 — 바깥 while 은 한 블록씩 진행."),
+            "안쪽 while 이 1 이 이어진 구간을 한꺼번에 건너뛰어요. 그래서 바깥 while 은 덩어리 하나마다 한 번씩만 돌아요."),
       ],
     },
   ];
@@ -338,7 +338,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCowntactPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Cowntact — Full Study Guide", "Cowntact — 종합 풀이 노트");
@@ -361,7 +361,7 @@ export function downloadCowntactPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

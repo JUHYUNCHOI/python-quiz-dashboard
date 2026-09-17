@@ -111,10 +111,10 @@ export function MobileSim({ E }) {
   const say =
     s.k === "intro" ? t(E,
       <>Alice's power is <b>3</b>, the goal is <b>10</b>. Rule: she can only beat an enemy <b>weaker than her</b>, and eating it <b>adds that power</b>. To use the <b>fewest</b> kills — eat the <b>biggest</b> enemy she can!</>,
-      <>Alice 파워는 <b>3</b>, 목표는 <b>10</b>. 규칙: 지금 파워보다 <b>작은</b> 적만 처치할 수 있고, 먹으면 <b>그 파워만큼</b> 커져요. 처치 수를 <b>가장 적게</b> 하려면 — 먹을 수 있는 적 중 <b>가장 큰 놈</b>부터!</>)
+      <>Alice 파워는 <b>3</b>, 목표는 <b>10</b> 이에요. 지금 파워보다 <b>작은</b> 적만 먹을 수 있고, 먹으면 <b>그 파워만큼</b> 커져요. 처치 수를 <b>가장 적게</b> 하려면 먹을 수 있는 적 중 <b>가장 큰 적</b>부터 먹어요!</>)
     : s.k === "eat" && s.kills === 1 ? t(E,
       <>Beatable now (power &lt; 3): <b>1, 2</b>. Eat the biggest, <b>2</b> → power <b>3 + 2 = 5</b>. (1 kill)</>,
-      <>지금 먹을 수 있는 적(파워 3 미만): <b>1, 2</b>. 가장 큰 <b>2</b>를 먹어요 → 파워 <b>3 + 2 = 5</b>. (1처치)</>)
+      <>지금 먹을 수 있는 적은 파워 3 보다 작은 <b>1, 2</b> 예요. 가장 큰 <b>2</b> 를 먹어요 → 파워 <b>3 + 2 = 5</b>. (1처치)</>)
     : s.k === "eat" && s.kills === 2 ? t(E,
       <>Power is <b>5</b> now — <b>3, 4, 4</b> are beatable too. Eat the biggest <b>4</b> → <b>5 + 4 = 9</b>. (2 kills)</>,
       <>이제 파워 <b>5</b> — <b>3, 4, 4</b>도 먹을 수 있어요. 가장 큰 <b>4</b> → <b>5 + 4 = 9</b>. (2처치)</>)
@@ -221,15 +221,15 @@ export function HeapTraceSim({ E }) {
         if (s.pushed.length === 0) {
           return t(E,
             <>Power is <b>{s.cur}</b>. Nothing new to push (no unpushed enemy is smaller than {s.cur}).</>,
-            <>파워 <b>{s.cur}</b>. 새로 push 할 게 없어요 (남은 적 중 {s.cur} 보다 작은 게 없음).</>);
+            <>파워 <b>{s.cur}</b>. 새로 push 할 게 없어요 (남은 적 중에 {s.cur} 보다 작은 적이 없어요).</>);
         }
         return t(E,
           <>Power is <b>{s.cur}</b>. Every enemy with p &lt; {s.cur} that we haven't added yet → <b>push into the heap</b>. Added this round: <b>{s.pushed.join(", ")}</b>. Biggest in heap now: <b>{s.heap[0]}</b>.</>,
-          <>파워 <b>{s.cur}</b>. p &lt; {s.cur} 인 적 중 아직 안 넣은 것을 <b>힙에 push</b>. 이번에 추가: <b>{s.pushed.join(", ")}</b>. 힙의 최대: <b>{s.heap[0]}</b>.</>);
+          <>파워 <b>{s.cur}</b>. p &lt; {s.cur} 인 적 중 아직 안 넣은 것을 <b>힙에 push</b> 해요. 이번에 넣은 건 <b>{s.pushed.join(", ")}</b> 이고, 힙에서 가장 큰 건 <b>{s.heap[0]}</b> 이에요.</>);
       case "pop":
         return t(E,
           <><b>Pop</b> the biggest from the heap ({s.popped}) → eat it. Power: <b>{s.prevCur} + {s.ate} = {s.cur}</b>. kills = <b>{s.kills}</b>. {s.reached ? <>Power ≥ goal ✓</> : null}</>,
-          <>힙에서 최대(<b>{s.popped}</b>) 를 <b>pop</b> → 먹기. 파워: <b>{s.prevCur} + {s.ate} = {s.cur}</b>. kills = <b>{s.kills}</b>. {s.reached ? <>파워 ≥ 목표 ✓</> : null}</>);
+          <>힙에서 가장 큰 <b>{s.popped}</b> 을 <b>pop</b> 해서 먹어요. 파워는 <b>{s.prevCur} + {s.ate} = {s.cur}</b> 이 돼요. kills = <b>{s.kills}</b>. {s.reached ? <>파워 ≥ 목표 ✓</> : null}</>);
       default:
         return null;
     }
@@ -319,7 +319,7 @@ export function HeapTraceSim({ E }) {
 
       <div style={{ maxWidth: 520, margin: "16px auto 0", fontSize: 10.5, color: "#94a3b8", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.5 }}>
         {t(E, "Each round: push all newly-beatable enemies, then pop the max and eat it.",
-             "매 라운드: 새로 먹을 수 있게 된 적을 전부 push, 그중 최대를 pop 해서 먹기.")}
+             "라운드마다 새로 먹을 수 있게 된 적을 전부 push 하고, 그중 최대를 pop 해서 먹어요.")}
       </div>
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />

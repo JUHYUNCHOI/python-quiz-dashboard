@@ -102,20 +102,20 @@ export function TameHerdSim({ E }) {
   const cell = audit.steps[cur] || { i: cur, v: log[cur], note: "", breakout: false, ok: true };
 
   const noteText = (s) => {
-    if (s.note === "day0-zero") return t(E, "day 1 starts after a breakout (counter=0)", "1일차는 탈출 직후 (counter=0)");
-    if (s.note === "day0-missing") return t(E, "day 1 unknown — counter=0 either way", "1일차 누락 — 어쨌든 counter=0");
-    if (s.note === "day0-bad") return t(E, "day 1 ≠ 0 — impossible, answer −1", "1일차가 0 아님 — 불가능, 답 −1");
-    if (s.note === "missing") return t(E, "−1 — both options allowed (continue or breakout)", "−1 — 두 가지 다 가능 (이어가기 / 탈출)");
-    if (s.note === "force-zero") return t(E, "log=0 → breakout happened today", "log=0 → 오늘 탈출");
-    if (s.note === "force-counter") return t(E, `log=${s.v} → counter must equal ${s.v}`, `log=${s.v} → counter 는 ${s.v} 이어야 함`);
-    if (s.note === "impossible") return t(E, "constraint not reachable from any prior state — answer −1", "어떤 이전 상태에서도 도달 불가 — 답 −1");
+    if (s.note === "day0-zero") return t(E, "day 1 starts after a breakout (counter=0)", "1 일차는 탈출 바로 다음이라 카운터가 0 이에요");
+    if (s.note === "day0-missing") return t(E, "day 1 unknown — counter=0 either way", "1 일차는 안 적혀 있지만 어차피 카운터는 0 이에요");
+    if (s.note === "day0-bad") return t(E, "day 1 ≠ 0 — impossible, answer −1", "1 일차가 0 이 아니에요. 있을 수 없으니 답은 −1 이에요");
+    if (s.note === "missing") return t(E, "−1 — both options allowed (continue or breakout)", "−1 이라서 이어가도 되고 탈출로 봐도 돼요");
+    if (s.note === "force-zero") return t(E, "log=0 → breakout happened today", "기록이 0 이니까 오늘 탈출이 있었어요");
+    if (s.note === "force-counter") return t(E, `log=${s.v} → counter must equal ${s.v}`, `기록이 ${s.v} 라서 카운터도 ${s.v} 여야 해요`);
+    if (s.note === "impossible") return t(E, "constraint not reachable from any prior state — answer −1", "앞의 어떤 경우에서도 여기까지 올 수 없어요. 답은 −1 이에요");
     return "";
   };
 
   return (
     <div style={{ padding: 14 }}>
       <div style={{ fontSize: 11, fontWeight: 700, color: A, textAlign: "center", marginBottom: 8, letterSpacing: 0.4 }}>
-        🔍 {t(E, "DEEP AUDIT — walk the log day by day", "딥 오딧 — 로그를 하루씩 따라가요")}
+        🔍 {t(E, "DEEP AUDIT — walk the log day by day", "꼼꼼히 보기 — 기록을 하루씩 따라가요")}
       </div>
 
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
@@ -182,7 +182,7 @@ export function TameHerdSim({ E }) {
         }}>
           {audit.ok
             ? <>MIN = {audit.minB}, MAX = {audit.maxB}</>
-            : <>{t(E, "answer = −1 (impossible)", "답 = −1 (불가능)")}</>}
+            : <>{t(E, "answer = −1 (impossible)", "답 = −1 (그런 경우가 없어요)")}</>}
         </div>
       )}
 
@@ -356,19 +356,19 @@ export function getTameHerdSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 파이썬에서 옮긴 것이라\n자료형과 표현은 필요하면 손봐야 해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 넣으면 (<iostream>, <vector>, ...)\n코드가 무엇을 하려는지 더 잘 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "더한 값이나 곱한 값이 2×10^9 쯤을 넘을 수 있으면\nlong long 을 써요."),
       ],
     },
   ];

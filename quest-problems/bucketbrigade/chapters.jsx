@@ -11,7 +11,7 @@ export function makeBrigadeCh1(E) {
       type: "reveal",
       narr: t(E,
         "On a 10×10 grid there's exactly one lake L, one barn B, and one rock R; every other cell is empty.\nCows stand on empty cells, holding hands in a chain that connects L to B (each adjacent step in the chain shares an edge — up/down/left/right). Cows can NOT stand on the rock.\nFind the MINIMUM number of cows needed.",
-        "10×10 격자에 호수 L, 헛간 B, 바위 R 이 정확히 하나씩 있고 나머지 칸은 비어있어요.\n소들이 빈 칸에 서서 손을 잡고 L 과 B 를 이어요 (체인의 인접한 두 소는 상하좌우로 붙어있어야 함). 바위 위에는 설 수 없어요.\n필요한 소의 최소 수를 출력해요."),
+        "소들이 손을 잡고 L 과 B 를 이으려면 몇 마리가 필요할까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -55,9 +55,9 @@ export function makeBrigadeCh1(E) {
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Cows form a ", "소들이 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "chain of empty cells from L to B", "L 과 B 를 잇는 빈 칸들의 체인")}</b>
+                  <b style={{ color: "#0891b2" }}>{t(E, "chain of empty cells from L to B", "L 과 B 를 잇는 빈 칸들의 줄")}</b>
                   {t(E, " (each adjacent pair in the chain shares an up/down/left/right edge).",
-                        " 을 만들어요 (체인의 인접한 두 소는 상하좌우로 붙어있음).")}
+                        " 을 만들어요 (줄에서 이웃한 두 소는 상하좌우로 붙어 있어야 해요).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -66,14 +66,14 @@ export function makeBrigadeCh1(E) {
                   {t(E, "Cows ", "소는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "cannot stand on the rock", "바위 위에 설 수 없어요")}</b>
                   {t(E, " (and don't stand on L or B themselves).",
-                        " (L, B 위에도 안 섬).")}
+                        " (L 과 B 위에도 서지 않아요).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of cows", "필요한 최소 소 수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of cows", "줄에 필요한 소의 최소 마릿수")}</b>
                   {t(E, " in the chain.", " 를 출력해요.")}
                 </div>
               </div>
@@ -130,7 +130,7 @@ export function makeBrigadeCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "BFS from L to B on the 10×10 grid, blocking R.  Shortest path length minus 2 (L and B don't count as cows).  Sections build it one piece at a time.",
-        "10×10 격자에서 L 부터 B 까지 BFS, R 은 통과 불가. 최단 경로 길이 − 2 (L, B 는 소 아님). 아래 섹션이 한 단락씩 쌓아요."),
+        "최단 경로에서 L 과 B 를 뺀 칸 수가 소의 마릿수예요."),
       sections: getBucketBrigadeSections(E),
     },
   ];

@@ -85,7 +85,7 @@ export function Mcc22BirthdayCookieSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "Start with one 'p' cookie. Add a letter and watch the grid DOUBLE: A copies right, B copies right + flips left↔right, C copies down + flips up↔down.",
-            "'p' 쿠키 한 개로 시작해요. 글자를 더하면 격자가 두 배로 늘어나요: A 는 오른쪽 복사, B 는 오른쪽 복사 + 좌우 뒤집기, C 는 아래쪽 복사 + 위아래 뒤집기.")}
+            "'p' 쿠키 한 개로 시작해요. 글자를 더하면 격자가 두 배로 늘어나요. A 는 오른쪽에 복사하고, B 는 오른쪽에 복사한 뒤 좌우로 뒤집어요. C 는 아래쪽에 복사한 뒤 위아래로 뒤집어요.")}
         </div>
 
         {/* scroll so far */}
@@ -165,7 +165,7 @@ export function Mcc22BirthdayCookieSim({ E }) {
             padding: "5px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
             background: "transparent", color: scroll.length ? C.dim : "#d1d5db",
             fontSize: 11, fontWeight: 700, cursor: scroll.length ? "pointer" : "not-allowed",
-          }}>{t(E, "↻ Reset", "↻ 초기화")}</button>
+          }}>{t(E, "↻ Reset", "↻ 처음부터 다시")}</button>
         </div>
 
         {(!canGrowRight || !canGrowDown) && (
@@ -327,19 +327,19 @@ export function getMcc22BirthdaySections(E) {
         t(E, "The grid after N letters is 2^N cookies (N up to 10000) — never build it. We answer each queried NUMBER on its own.",
             "N 글자 뒤 격자는 2^N 개 (N 최대 10000) — 절대 만들지 않아요. 물어본 번호 하나하나를 따로 풀어요."),
         t(E, "rows[i] / cols[i] hold the grid size after each step. A and B double the width; C doubles the height. We cap at CAP so huge sizes stay safe integers.",
-            "rows[i] / cols[i] 는 각 단계 뒤의 격자 크기예요. A·B 는 가로를, C 는 세로를 두 배로. 너무 커지지 않게 CAP 으로 상한을 둬요."),
+            "rows[i] / cols[i] 는 각 단계 뒤의 격자 크기예요. A·B 는 가로를, C 는 세로를 두 배로 늘려요. 너무 커지지 않게 CAP 으로 가장 큰 값을 정해 둬요."),
         t(E, "Turn the number into (row, col), then walk the scroll BACKWARD. At each step ask: was I in the ORIGINAL half or the COPIED half? A copy made by B/C is flipped, so a copied step toggles the flip parity.",
-            "번호를 (행, 열) 로 바꾼 뒤 두루마리를 거꾸로 따라가요. 매 단계 물어요: 나는 원본 쪽이었나, 복사본 쪽이었나? B·C 로 만든 복사본은 뒤집혀 있으니, 복사본 쪽이면 뒤집힘 상태를 토글해요."),
+            "번호를 (행, 열) 로 바꾼 뒤 두루마리를 거꾸로 따라가요. 매 단계마다 내가 원본 쪽이었는지 복사본 쪽이었는지 물어요. B·C 로 만든 복사본은 뒤집혀 있으니, 복사본 쪽이면 뒤집힘 상태를 반대로 바꿔요."),
         t(E, "Two on/off flips (left↔right, up↔down) give exactly four shapes: (no,no)=p, (H,no)=q, (no,V)=b, (H,V)=d. That's the whole p/q/b/d family.",
-            "좌우·상하 두 뒤집힘(켜짐/꺼짐)이 정확히 네 모양을 만들어요: (안,안)=p, (좌우,안)=q, (안,상하)=b, (좌우,상하)=d. 이게 p/q/b/d 한 묶음이에요."),
+            "좌우·상하 두 뒤집힘(켜짐/꺼짐)이 정확히 네 모양을 만들어요. (안,안)=p, (좌우,안)=q, (안,상하)=b, (좌우,상하)=d 예요. 이게 p/q/b/d 한 묶음이에요."),
       ],
       pyOnly: [
         t(E, "shape[(flip_h, flip_v)] reads the final cookie straight from the two flip switches — no if/elif ladder needed.",
-            "shape[(flip_h, flip_v)] 로 두 스위치에서 바로 모양을 읽어요 — if/elif 사다리 없이."),
+            "shape[(flip_h, flip_v)] 로 두 스위치에서 바로 모양을 읽어요. if/elif 를 길게 쌓지 않아도 돼요."),
       ],
       cppOnly: [
         t(E, "Use long long for indices and sizes: capped sizes reach ~2×10^9, past the int limit.",
-            "인덱스·크기는 long long 으로 — 상한이 약 2×10^9 라 int 범위를 넘어요."),
+            "자리 번호와 크기는 long long 으로 둬요. 가장 큰 값이 약 2×10^9 라 int 범위를 넘어요."),
         t(E, "The nested ?: picks the shape from flipV/flipH, matching the Python dict.",
             "중첩 삼항 ?: 로 flipV/flipH 에서 모양을 골라 Python dict 와 똑같이 동작해요."),
       ],
@@ -387,7 +387,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc22BirthdayPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc22Birthday — Full Study Guide", "Mcc22Birthday — 종합 풀이 노트");
@@ -410,7 +410,7 @@ export function downloadMcc22BirthdayPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">MCC · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

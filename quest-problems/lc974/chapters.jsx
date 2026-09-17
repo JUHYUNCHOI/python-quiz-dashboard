@@ -11,7 +11,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "LeetCode #974 — Subarray Sums Divisible by K. Count subarrays whose sum is divisible by k. This is #560 with a twist: instead of sum = k, we want sum % k = 0.",
-        "LeetCode #974 — Subarray Sums Divisible by K. 합이 k 로 나누어 떨어지는 부분 배열 개수. 이건 #560 의 변형: sum = k 대신 sum % k = 0 이에요."),
+        "합이 k 로 나누어떨어지는 부분 배열이 몇 개인지 세어요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: TEAL_L, border: `2px solid ${TEAL}`, borderRadius: 10, padding: "12px 16px", marginBottom: 14 }}>
@@ -24,13 +24,13 @@ export function makeChapters(E) {
             <div style={{ fontSize: 11.5, color: "#374151", lineHeight: 1.6 }}>
               {t(E,
                 "7 subarrays have sum divisible by 5. Examples: [4,5,0,−2,−3,1] sum=5, [5] sum=5, [5,0,−2,−3] sum=0, [0] sum=0, ...",
-                "합이 5 의 배수인 부분 배열이 7개. 예: [4,5,0,−2,−3,1] 합=5, [5] 합=5, [5,0,−2,−3] 합=0, [0] 합=0, ...")}
+                "합이 5 의 배수인 부분 배열이 7개예요. 예를 들어 [4,5,0,−2,−3,1] 합=5, [5] 합=5, [5,0,−2,−3] 합=0, [0] 합=0, ...")}
             </div>
           </div>
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#1d4ed8" }}>
             {t(E,
-              "Key difference from #560: not a fixed target value — any multiple of k counts. We need a different insight.",
-              "#560 과 핵심 차이: 고정 목표값이 아님 — k 의 배수면 모두 해당. 다른 인사이트가 필요해요.")}
+              "Key difference from #560: not a fixed target value — any multiple of k counts. So we cannot just look up one number, and we need a different insight.",
+              "#560 과 가장 다른 점이에요. 목표값이 하나로 정해진 게 아니라 k 의 배수면 모두 해당돼요. 그래서 '이 값을 본 적 있나' 하고 하나만 찾아볼 수가 없어요. 새로운 생각이 필요해요.")}
           </div>
         </div>
       ),
@@ -41,7 +41,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Key insight: (prefix[j] − prefix[i]) % k = 0  means  prefix[j] % k = prefix[i] % k. Two prefix sums with the SAME remainder → their difference is divisible by k.",
-        "핵심 인사이트: (prefix[j] − prefix[i]) % k = 0  →  prefix[j] % k = prefix[i] % k. 나머지가 같은 두 누계 → 차이가 k 로 나누어 떨어져요."),
+        "나머지가 같은 두 누계를 찾으면 그 차이가 k 로 나누어떨어져요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: TEAL_L, border: `2px solid ${TEAL}`, borderRadius: 10, padding: "12px 16px", marginBottom: 12, textAlign: "center" }}>
@@ -78,7 +78,7 @@ export function makeChapters(E) {
           <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.6 }}>
             {t(E,
               "So instead of tracking prefix sums directly, we track prefix sums MOD k. Two positions with the same mod = valid subarray.",
-              "그러니까 누계 자체 대신 누계 mod k 를 추적해요. 나머지가 같은 두 위치 = 유효 부분 배열.")}
+              "그러니까 누계 자체 대신 누계 mod k 를 따라가요. 나머지가 같은 두 위치가 바로 우리가 찾는 부분 배열이에요.")}
           </div>
         </div>
       ),
@@ -89,7 +89,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Walk-through with nums=[4,5,0,−2,−3,1], k=5. Track prefix mod k in a hashmap {remainder: count}.",
-        "nums=[4,5,0,−2,−3,1], k=5 로 단계별. 해시맵 {나머지: 횟수} 에 prefix mod k 를 추적."),
+        "nums=[4,5,0,−2,−3,1], k=5 를 한 걸음씩 따라가 봐요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ overflowX: "auto" }}>
@@ -137,10 +137,10 @@ export function makeChapters(E) {
       type: "quiz",
       narr: t(E,
         "nums=[2,3,4], k=3. At index 2 (nums[2]=4), prefix=9, prefix%3=0. How many valid subarrays END at index 2?",
-        "nums=[2,3,4], k=3. 인덱스 2 (nums[2]=4) 에서 prefix=9, prefix%3=0. 인덱스 2 에서 끝나는 유효 부분 배열이 몇 개?"),
+        "2번 자리에서 끝나면서 3 으로 나누어떨어지는 부분 배열은 몇 개일까요?"),
       question: t(E,
         "nums=[2,3,4], k=3\nprefix at i=2 is 9, mod 3 = 0\nseen = {0:1, 2:2}  (init + i=0 mod=2 + i=1 mod=2)\nHow many subarrays ending at i=2 are divisible by 3?",
-        "nums=[2,3,4], k=3\ni=2 에서 prefix=9, mod 3=0\nseen = {0:1, 2:2}  (init + i=0 mod=2 + i=1 mod=2)\n인덱스 2 에서 끝나는 유효 부분 배열 수?"),
+        "nums=[2,3,4], k=3\ni=2 에서 prefix=9, mod 3=0\nseen = {0:1, 2:2}  (처음 + i=0 mod=2 + i=1 mod=2)\n2번 자리에서 끝나면서 3 으로 나누어떨어지는 부분 배열은 몇 개일까요?"),
       options: [
         t(E, "1  (only the full array [2,3,4])", "1  (전체 배열 [2,3,4] 만)"),
         t(E, "2  (seen[0]=1 + seen[2]=2 somehow)", "2  (seen[0]=1 에다 뭔가 더)"),
@@ -148,8 +148,8 @@ export function makeChapters(E) {
       ],
       correct: 0,
       explain: t(E,
-        "prefix sums so far: 0 (init), 2 (i=0), 5 (i=1). seen after i=1: {0:1, 2:1, 5:1}. At i=2, mod=0. seen[0]=1 → counts [2,3,4]. Also prefix at i=1 is 5, 5%3=2, not 0. Actually seen[0]=1 only. Wait: prefix at i=0 is 2 (mod=2), at i=1 is 5 (mod=2). seen = {0:1, 2:2}. At i=2 mod=0, seen[0]=1 → 1 subarray ending here. Hmm, let me recalculate. Actually [3,4] sum=7 not div by 3, [4] sum=4 not div by 3, [2,3,4] sum=9 div by 3. Just 1.",
-        "누계들: 0(init), 2(i=0), 5(i=1). seen after i=1: {0:1, 2:2}. i=2 에서 mod=0. seen[0]=1 → [2,3,4] 만. 정답 1."),
+        "Prefix sums: 0 (init), 2 (i=0), 5 (i=1). After i=1, seen = {0:1, 2:2}. At i=2 the prefix is 9, mod 3 = 0, and seen[0] = 1 — so only [2,3,4] counts. The answer is 1.",
+        "누계는 0(처음), 2(i=0), 5(i=1) 이에요. i=1 까지 모은 seen 은 {0:1, 2:2} 예요. i=2 에서 mod=0 이고 seen[0]=1 이니 [2,3,4] 하나뿐이에요. 정답은 1이에요."),
     },
 
     /* ── 5. Python negative mod note ─────────────────────────── */
@@ -157,7 +157,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "One detail: Python's % operator always returns a non-negative result for positive divisors. So (-7) % 5 = 3 in Python (not -2). This means we can use remainder directly as a hashmap key without any adjustment.",
-        "한 가지 주의: Python 의 % 연산자는 양수 제수에 대해 항상 0 이상을 반환해요. 그래서 Python 에서 (-7) % 5 = 3 (−2 가 아니에요). 해시맵 키로 나머지를 그대로 써도 돼요."),
+        "Python 의 % 는 나누는 수가 양수면 항상 0 이상을 돌려줘요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 10, padding: "10px 14px", marginBottom: 10 }}>
@@ -173,7 +173,7 @@ export function makeChapters(E) {
           <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#78350f" }}>
             {t(E,
               "In C++ or Java, % can return negative for negative dividends. In those languages you'd write: (prefix_mod + k) % k to normalize. Python doesn't need this.",
-              "C++ 나 Java 에서 % 는 음수 피제수에 음수를 반환할 수 있어요. 그럴 때는 (prefix_mod + k) % k 로 정규화해요. Python 은 필요 없어요.")}
+              "C++ 나 Java 에서는 음수를 나눌 때 % 가 음수를 돌려줄 수 있어요. 그럴 때는 (prefix_mod + k) % k 로 0 이상으로 맞춰 줘요. Python 은 그럴 필요가 없어요.")}
           </div>
         </div>
       ),
@@ -184,7 +184,7 @@ export function makeChapters(E) {
       type: "code",
       narr: t(E,
         "Identical structure to #560 — just replace (prefix − k) lookup with prefix % k lookup. O(n) time and space.",
-        "#560 과 구조 동일 — (prefix − k) 조회 대신 prefix % k 조회. 시간/공간 O(n)."),
+        "#560 과 구조가 같고 prefix % k 를 찾아보는 것만 달라요."),
       code: [
         "def subarraysDivByK(nums: list[int], k: int) -> int:",
         "    count = 0",

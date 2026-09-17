@@ -145,7 +145,7 @@ export function GrowthSim({ E }) {
       }}>
         {t(E,
           "Plant 1 starts shorter but grows faster.  Day 4 they tie — 'strictly taller' fails for both.  Day 5 plant 1 overtakes → t = [1, 0] matches → answer = 5.",
-          "식물 1 은 더 작게 시작하지만 더 빨리 자라요. 4 일에 동점 — 둘 다 '큼' 아님. 5 일에 식물 1 이 추월 → t = [1, 0] 일치 → 답 = 5.")}
+          "식물 1 은 더 작게 시작하지만 더 빨리 자라요. 4 일째엔 키가 같아서 둘 다 '더 큼' 이 아니에요. 5 일째에 식물 1 이 앞질러서 t = [1, 0] 과 맞아떨어져요. 그래서 답은 5 예요.")}
       </div>
     </div>
   );

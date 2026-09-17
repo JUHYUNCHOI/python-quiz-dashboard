@@ -65,7 +65,7 @@ export function CrossRoad1Sim({ E }) {
         <>
           <b>cow {cow}</b> {t(E, "first seen on side", "처음 봤어요 — 쪽")} <b style={{ color: sideColor(side) }}>{sideLabel(side)}</b>
           {" → "}
-          <span style={{ color: C.dim }}>{t(E, "no crossing (no previous side).", "횡단 없음 (이전 쪽 기록 없음).")}</span>
+          <span style={{ color: C.dim }}>{t(E, "no crossing (no previous side).", "아직 건넌 게 아니에요 (앞서 본 쪽이 없어요).")}</span>
         </>
       );
     }
@@ -74,7 +74,7 @@ export function CrossRoad1Sim({ E }) {
         <>
           <b>cow {cow}</b>: {t(E, "still on side", "여전히")} <b style={{ color: sideColor(side) }}>{sideLabel(side)}</b>
           {" → "}
-          <span style={{ color: C.dim }}>{t(E, "no crossing (same side as before).", "횡단 없음 (이전과 같은 쪽).")}</span>
+          <span style={{ color: C.dim }}>{t(E, "no crossing (same side as before).", "건너지 않았어요 (앞서 본 쪽과 같아요).")}</span>
         </>
       );
     }
@@ -225,19 +225,19 @@ export function getCrossRoad1Sections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 버전은 Python 에서 자동으로 옮긴 거예요. 타입과 표현은 필요할 때 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+            "필요한 헤더만 (<iostream>, <vector>, ...) 적어요 — 코드가 하려는 일이 또렷해져요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+            "합이나 곱이 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];
@@ -283,7 +283,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCrossRoad1PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "CrossRoad1 — Full Study Guide", "CrossRoad1 — 종합 풀이 노트");
@@ -306,7 +306,7 @@ export function downloadCrossRoad1PDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

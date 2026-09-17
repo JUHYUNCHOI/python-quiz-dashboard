@@ -241,9 +241,9 @@ export function PackPickerSim({ E }) {
 
   const reason = () => {
     if (sel.size < 3) return null;
-    if (distinctColors.length !== 2) return E ? `${distinctColors.length} colors (need exactly 2)` : `색이 ${distinctColors.length}가지야 (2가지여야 해)`;
+    if (distinctColors.length !== 2) return E ? `${distinctColors.length} colors (need exactly 2)` : `색이 ${distinctColors.length}가지예요 (2가지여야 해요)`;
     const vals = Object.values(colorCount);
-    if (!vals.every(v => v === 3)) return E ? `Not 3+3: ${vals.join("+")}` : `3+3이 안 돼: ${vals.join("+")}`;
+    if (!vals.every(v => v === 3)) return E ? `Not 3+3: ${vals.join("+")}` : `3+3 이 아니에요 — ${vals.join("+")}`;
     return null;
   };
 
@@ -473,7 +473,7 @@ export function ColorPairCounter({ E }) {
       {done && (
         <div style={{ textAlign: "center", marginBottom: 8 }}>
           <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-            {t(E, "All pairs checked!", "모든 색 쌍 확인 완료!")}
+            {t(E, "All pairs checked!", "모든 색 쌍을 다 봤어요!")}
           </div>
           <div style={{
             display: "inline-block", padding: "8px 28px", borderRadius: 12,
@@ -490,7 +490,7 @@ export function ColorPairCounter({ E }) {
       {/* Not started */}
       {pairIdx < 0 && (
         <div style={{ textAlign: "center", fontSize: 12, color: C.dim, marginBottom: 8 }}>
-          {t(E, "Press ▶ to check color pairs!", "▶ 눌러서 색 쌍 확인 시작!")}
+          {t(E, "Press ▶ to check color pairs!", "▶ 를 누르면 색 쌍을 하나씩 봐요!")}
         </div>
       )}
 
@@ -585,8 +585,8 @@ export function DeepAuditSim({ E }) {
 
   const verdict = () => {
     if (!done) return null;
-    if (distinctCount !== 2) return E ? `${distinctCount} colors found (need 2)` : `색이 ${distinctCount}가지야 (2가지 필요)`;
-    if (!counts.every(v => v === 3)) return E ? `Not 3+3: ${counts.join("+")}` : `3+3이 안 돼: ${counts.join("+")}`;
+    if (distinctCount !== 2) return E ? `${distinctCount} colors found (need 2)` : `색이 ${distinctCount}가지예요 (2가지여야 해요)`;
+    if (!counts.every(v => v === 3)) return E ? `Not 3+3: ${counts.join("+")}` : `3+3 이 아니에요 — ${counts.join("+")}`;
     return E ? "Exactly 2 colors × 3 each" : "딱 2가지 색 × 3개씩";
   };
 
@@ -714,7 +714,7 @@ export function DeepAuditSim({ E }) {
         <button onClick={() => reset()} style={{
           padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
           border: `1px solid ${C.border}`, background: "#fff", color: C.dim, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "초기화")}</button>
+        }}>↺ {t(E, "Reset", "처음부터 다시")}</button>
       </div>
     </div>
   );

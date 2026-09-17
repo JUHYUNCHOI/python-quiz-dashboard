@@ -9,7 +9,7 @@ export function makeStampCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We have an N\u00d7N canvas and a K\u00d7K stamp that can be rotated 4 ways.\nCan we recreate the desired pattern by stamping?\n\ud83d\udcee", "N\u00d7N \uce94\ubc84\uc2a4\uc640 4\ubc29\ud5a5 \ud68c\uc804 \uac00\ub2a5\ud55c K\u00d7K \ub3c4\uc7a5\uc774 \uc788\uc5b4.\n\ub3c4\uc7a5\uc744 \ucc0d\uc5b4\uc11c \uc6d0\ud558\ub294 \ud328\ud134\uc744 \ub9cc\ub4e4 \uc218 \uc788\uc744\uae4c?\n\ud83d\udcee"),
+        "We have an N\u00d7N canvas and a K\u00d7K stamp that can be rotated 4 ways.\nCan we recreate the desired pattern by stamping?\n\ud83d\udcee", "\ub3c4\uc7a5\uc744 \ucc0d\uc5b4\uc11c \uc774 \ubb34\ub2ac\ub97c \uadf8\ub300\ub85c \ub9cc\ub4e4 \uc218 \uc788\uc744\uae4c\uc694?\ud83d\udcee"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcee"}</div>
@@ -21,20 +21,20 @@ export function makeStampCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
-              {t(E, "Decide if a K×K stamp (rotatable 4 ways) can recreate the N×N pattern exactly.", "K×K 도장(4방향 회전 가능)으로 N×N 패턴을 정확히 만들 수 있는지 판단하기.")}
+              {t(E, "Decide if a K×K stamp (rotatable 4 ways) can recreate the N×N pattern exactly.", "네 방향으로 돌릴 수 있는 K×K 도장으로 N×N 무늬를 똑같이 만들 수 있는지 가려내요.")}
             </div>
           </div>
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N\u00d7N grid (desired pattern).\nK\u00d7K stamp (can rotate 0/90/180/270\u00b0). Place stamp at any valid position, any rotation. Can we match the pattern exactly?",
-              "N\u00d7N \uadf8\ub9ac\ub4dc (\uc6d0\ud558\ub294 \ud328\ud134). K\u00d7K \ub3c4\uc7a5 (0/90/180/270\u00b0 \ud68c\uc804 \uac00\ub2a5). \uc5b4\ub5a4 \uc704\uce58,\n\uc5b4\ub5a4 \ud68c\uc804\uc73c\ub85c\ub4e0 \ubc30\uce58. \ud328\ud134\uc744 \uc815\ud655\ud788 \ub9cc\ub4e4 \uc218 \uc788\ub098?")}
+              "N\u00d7N \uaca9\uc790\uc5d0 \ub9cc\ub4e4\uace0 \uc2f6\uc740 \ubb34\ub2ac\uac00 \uc788\uc5b4\uc694.\n\ub3c4\uc7a5\uc740 K\u00d7K \uc774\uace0 0/90/180/270\u00b0 \ub85c \ub3cc\ub9b4 \uc218 \uc788\uc5b4\uc694.\n\uc5b4\ub290 \uc790\ub9ac\uc5d0 \uc5b4\ub290 \ubc29\ud5a5\uc73c\ub85c\ub4e0 \ucc0d\uc744 \uc218 \uc788\uc5b4\uc694.\n\uc774 \ubb34\ub2ac\ub97c \ub611\uac19\uc774 \ub9cc\ub4e4 \uc218 \uc788\uc744\uae4c\uc694?")}
           </div>
         </div>),
     },
     {
       type: "reveal",
       narr: t(E,
-        "The stamp can be rotated 4 ways (0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0).\nEach placement covers a K\u00d7K area on the canvas.", "\ub3c4\uc7a5\uc740 4\ubc29\ud5a5 \ud68c\uc804 \uac00\ub2a5 (0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0).\n\uac01 \ubc30\uce58\ub294 \uce94\ubc84\uc2a4\uc758 K\u00d7K \uc601\uc5ed\uc744 \ucee4\ubc84."),
+        "The stamp can be rotated 4 ways (0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0).\nEach placement covers a K\u00d7K area on the canvas.", "\ub3c4\uc7a5\uc740 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0 \ub85c \ub3cc\ub9b4 \uc218 \uc788\uc5b4\uc694.\n\ud55c \ubc88 \ucc0d\uc73c\uba74 \uce94\ubc84\uc2a4\uc758 K\u00d7K \ub113\uc774\ub97c \ub36e\uc5b4\uc694."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
@@ -52,7 +52,7 @@ export function makeStampCh1(E) {
               ))}
             </div>
             <div style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: "#059669", marginTop: 10 }}>
-              {t(E, "Same stamp, 4 orientations!", "\uac19\uc740 \ub3c4\uc7a5,\n4\uac00\uc9c0 \ubc29\ud5a5!")}
+              {t(E, "Same stamp, 4 orientations!", "\uac19\uc740 \ub3c4\uc7a5\uc778\ub370 \ubc29\ud5a5\uc740 \ub124 \uac00\uc9c0\uc608\uc694!")}
             </div>
           </div>
         </div>),
@@ -60,41 +60,41 @@ export function makeStampCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A stamp can be rotated 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0.\nThat's 4 orientations total, right?", "\ub3c4\uc7a5\uc740 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0 \ud68c\uc804 \uac00\ub2a5.\n\ucd1d 4\uac00\uc9c0 \ubc29\ud5a5\uc774\uc9c0?"),
-      question: t(E, "How many orientations does the stamp have?", "\ub3c4\uc7a5\uc758 \ubc29\ud5a5\uc740 \uba87 \uac00\uc9c0?"),
+        "A stamp can be rotated 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0.\nThat's 4 orientations total, right?", "\ub3c4\uc7a5\uc744 \ub3cc\ub9b4 \uc218 \uc788\ub294 \ubc29\ud5a5\uc740 \uba87 \uac00\uc9c0\uc77c\uae4c\uc694?"),
+      question: t(E, "How many orientations does the stamp have?", "\ub3c4\uc7a5\uc758 \ubc29\ud5a5\uc740 \ubaa8\ub450 \uba87 \uac00\uc9c0\uc77c\uae4c\uc694?"),
       options: ["2", "4", "8"],
       correct: 1,
-      explain: t(E, "4 rotations: 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0!", "4\ubc29\ud5a5: 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0!"),
+      explain: t(E, "4 rotations: 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0!", "0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0 \u2014 \ubaa8\ub450 \ub124 \uac00\uc9c0\uc608\uc694."),
     },
     {
       type: "input",
       narr: t(E,
-        "If canvas is 3\u00d73 and stamp is 2\u00d72, valid top-left positions are (0,0), (0,1), (1,0), (1,1).\nThat's (3-2+1)\u00b2 = 4 positions!", "\uce94\ubc84\uc2a4 3\u00d73, \ub3c4\uc7a5 2\u00d72\uba74, \uc720\ud6a8\ud55c \uc88c\uc0c1\ub2e8 \uc704\uce58\ub294 (0,0), (0,1), (1,0), (1,1).\n(3-2+1)\u00b2 = 4\uac1c!"),
-      question: t(E, "Canvas 3\u00d73, stamp 2\u00d72 \u2192 max positions?", "\uce94\ubc84\uc2a4 3\u00d73, \ub3c4\uc7a5 2\u00d72 \u2192 \ucd5c\ub300 \uc704\uce58?"),
-      hint: t(E, "Top-left rows: 0, 1. Top-left cols: 0, 1. Count the pairs.", "\uc88c\uc0c1\ub2e8 \ud589: 0, 1. \uc88c\uc0c1\ub2e8 \uc5f4: 0, 1. \uc30d\uc758 \uac1c\uc218\ub97c \uc138\ubd10."),
+        "If canvas is 3\u00d73 and stamp is 2\u00d72, valid top-left positions are (0,0), (0,1), (1,0), (1,1).\nThat's (3-2+1)\u00b2 = 4 positions!", "\ub3c4\uc7a5\uc744 \uc5b4\ub514\uc5d0 \ub193\uc744 \uc218 \uc788\ub294\uc9c0 \uc138\uc5b4 \ubd10\uc694."),
+      question: t(E, "Canvas 3\u00d73, stamp 2\u00d72 \u2192 max positions?", "\uce94\ubc84\uc2a4\uac00 3\u00d73, \ub3c4\uc7a5\uc774 2\u00d72 \uc608\uc694.\n\ub3c4\uc7a5\uc744 \ub193\uc744 \uc218 \uc788\ub294 \uc790\ub9ac\ub294 \uba87 \uad70\ub370\uc77c\uae4c\uc694?"),
+      hint: t(E, "Top-left rows: 0, 1. Top-left cols: 0, 1. Count the pairs.", "\uc67c\ucabd \uc704 \uce78\uc774 \uc62c \uc218 \uc788\ub294 \ud589\uc740 0, 1 \uc774\uc5d0\uc694.\n\uc5f4\ub3c4 0, 1 \uc774\uace0\uc694. \uadf8 \uc9dd\uc774 \uba87 \uac1c\uc778\uc9c0 \uc138\uc5b4 \ubd10\uc694."),
       answer: 4,
     },
     {
       type: "reveal",
       narr: t(E,
         "Try it yourself! Pick a rotation and position, then stamp. The legality rule: every '*' of the stamp must land on a '*' of the target.",
-        "\uc9c1\uc811 \ud574\ubd10! \ud68c\uc804\uacfc \uc704\uce58\ub97c \uace0\ub978 \ub4a4 \ub3c4\uc7a5\uc744 \ucc0d\uc5b4. \uaddc\uce59\uc740: \ub3c4\uc7a5\uc758 '*' \uc740 \ubc18\ub4dc\uc2dc \ubaa9\ud45c\uc758 '*' \uc704\uc5d0 \ub5a8\uc5b4\uc838\uc57c \ud574."),
+        "\ubc29\ud5a5\uacfc \uc790\ub9ac\ub97c \uace8\ub77c \ub3c4\uc7a5\uc744 \uc9c1\uc811 \ucc0d\uc5b4 \ubd10\uc694."),
       content: <StampSimulator E={E} />,
     },
     {
       type: "reveal",
       narr: t(E,
-        "Approach: Try all positions and rotations.\nFor each combination, check if the stamped cells match the desired pattern!", "\uc811\uadfc\ubc95: \ubaa8\ub4e0 \uc704\uce58\uc640 \ud68c\uc804\uc744 \uc2dc\ub3c4.\n\uac01 \uc870\ud569\uc5d0\uc11c \ub3c4\uc7a5 \ucc0d\ud78c \uc140\uc774 \uc6d0\ud558\ub294 \ud328\ud134\uacfc \uc77c\uce58\ud558\ub294\uc9c0 \ud655\uc778!"),
+        "Approach: Try all positions and rotations.\nFor each combination, check if the stamped cells match the desired pattern!", "\ubaa8\ub4e0 \uc790\ub9ac\uc640 \ubaa8\ub4e0 \ubc29\ud5a5\uc744 \ub2e4 \ud574\ubcf4\uba74 \ub3fc\uc694."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
-              {t(E, "Brute Force Strategy", "\ube0c\ub8e8\ud2b8 \ud3ec\uc2a4 \uc804\ub7b5")}
+              {t(E, "Brute Force Strategy", "\uc644\uc804\ud0d0\uc0c9 \u2014 \ub2e4 \ud574\ubcf4\uae30")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "1. Generate 4 rotations of the stamp\n2. For each rotation, try all (N-K+1)\u00b2 positions\n3. For each placement, check if stamp cells match canvas\n4. Output YES if any combination works",
-                "1. \ub3c4\uc7a5\uc758 4\uac00\uc9c0 \ud68c\uc804 \uc0dd\uc131\n2. \uac01 \ud68c\uc804\uc5d0 \ub300\ud574 (N-K+1)\u00b2 \uc704\uce58 \uc2dc\ub3c4\n3. \uac01 \ubc30\uce58\uc5d0\uc11c \ub3c4\uc7a5 \uc140\uc774 \uce94\ubc84\uc2a4\uc640 \uc77c\uce58\ud558\ub294\uc9c0 \ud655\uc778\n4. \uc5b4\ub5a4 \uc870\ud569\uc774 \ub418\uba74 YES \ucd9c\ub825")}
+                "1. \ub3c4\uc7a5\uc744 \ub124 \ubc29\ud5a5\uc73c\ub85c \ub3cc\ub824 \ub194\uc694\n2. \ubc29\ud5a5\ub9c8\ub2e4 (N-K+1)\u00b2 \uad70\ub370 \uc790\ub9ac\ub97c \ub2e4 \ud574\ubd10\uc694\n3. \ucc0d\uc744 \ub54c\ub9c8\ub2e4 \ub3c4\uc7a5 \uce78\uc774 \uce94\ubc84\uc2a4\uc640 \ub9de\ub294\uc9c0 \ubd10\uc694\n4. \ub9de\ub294 \ubc29\ubc95\uc774 \ud558\ub098\ub77c\ub3c4 \uc788\uc73c\uba74 YES \ub97c \ucd9c\ub825\ud574\uc694")}
             </div>
           </div>
         </div>),
@@ -110,22 +110,22 @@ export function makeStampCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 단락씩 읽어 봐요."),
       sections: getStampGridSections(E),
     },
     {
       type: "quiz",
       narr: t(E,
-        "To rotate a grid 90\u00b0 clockwise, what transformation do we apply?", "\uadf8\ub9ac\ub4dc\ub97c 90\u00b0 \uc2dc\uacc4\ubc29\ud5a5\uc73c\ub85c \ud68c\uc804\ud558\ub824\uba74 \uc5b4\ub5a4 \ubcc0\ud658\uc744 \uc801\uc6a9\ud560\uae4c?"),
-      question: t(E, "90\u00b0 clockwise rotation: new[c][R-1-r] = old[r][c]?", "90\u00b0 \uc2dc\uacc4\ubc29\ud5a5 \ud68c\uc804: new[c][R-1-r] = old[r][c]?"),
+        "To rotate a grid 90\u00b0 clockwise, what transformation do we apply?", "\uaca9\uc790\ub97c 90\u00b0 \uc2dc\uacc4 \ubc29\ud5a5\uc73c\ub85c \ub3cc\ub9ac\ub824\uba74 \uc5b4\ub5bb\uac8c \ud560\uae4c\uc694?"),
+      question: t(E, "90\u00b0 clockwise rotation: new[c][R-1-r] = old[r][c]?", "90\u00b0 \uc2dc\uacc4 \ubc29\ud5a5\uc73c\ub85c \ub3cc\ub9ac\uba74 new[c][R-1-r] = old[r][c] \uac00 \ub9de\uc744\uae4c\uc694?"),
       options: [t(E, "Yes", "\ub124"), t(E, "No", "\uc544\ub2c8\uc624")],
       correct: 0,
-      explain: t(E, "Correct! Row r, col c maps to row c, col R-1-r.", "\ub9de\uc544! \ud589 r, \uc5f4 c\uac00 \ud589 c, \uc5f4 R-1-r\ub85c \ub9e4\ud551!"),
+      explain: t(E, "Correct! Row r, col c maps to row c, col R-1-r.", "\ub9de\uc544\uc694! r \ud589 c \uc5f4\uc5d0 \uc788\ub358 \uac83\uc774 c \ud589 R-1-r \uc5f4\ub85c \uac00\uc694."),
     },
     {
       type: "input",
       narr: t(E,
-        "If N=5 and K=3, how many positions can we place the stamp in a single rotation?", "N=5, K=3\uc774\uba74 \ud55c \ud68c\uc804\uc5d0\uc11c \ub3c4\uc7a5\uc744 \uba87 \uac1c \uc704\uce58\uc5d0 \ub193\uc744 \uc218 \uc788\uc744\uae4c?"),
+        "If N=5 and K=3, how many positions can we place the stamp in a single rotation?", "N=5, K=3 \uc77c \ub54c \ub3c4\uc7a5\uc744 \ub193\uc744 \uc790\ub9ac\ub294 \uba87 \uad70\ub370\uc77c\uae4c\uc694?"),
       question: t(E, "(5-3+1)\u00b2 = ?", "(5-3+1)\u00b2 = ?"),
       hint: t(E, "3\u00b2 = 9", "3\u00b2 = 9"),
       answer: 9,

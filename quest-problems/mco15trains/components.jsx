@@ -136,7 +136,7 @@ export function TrainsAuditSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8, lineHeight: 1.5 }}>
         {t(E,
           "Tap a cell adjacent to the path's head to extend. Tap the head to undo. -1 = blocked.",
-          "경로 끝과 인접한 칸 탭 = 이어붙이기. 끝 칸 다시 탭 = 되돌리기. -1 = 막힘.")}
+          "경로 끝에 붙은 칸을 누르면 이어져요. 끝 칸을 다시 누르면 되돌아가요. -1 은 막힌 칸이에요.")}
       </div>
 
       {/* grid */}
@@ -197,8 +197,8 @@ export function TrainsAuditSim({ E }) {
       }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: reachedB ? (isOptimal ? "#15803d" : "#9a3412") : "#991b1b" }}>
           {reachedB
-            ? (isOptimal ? t(E, "🎯 Optimal!", "🎯 최적!") : t(E, "✓ Reached B", "✓ B 도달"))
-            : t(E, "… not at B yet", "… 아직 B 아님")}
+            ? (isOptimal ? t(E, "🎯 Optimal!", "🎯 제일 좋아요!") : t(E, "✓ Reached B", "✓ B 에 닿았어요"))
+            : t(E, "… not at B yet", "… 아직 B 가 아니에요")}
         </div>
         <div style={{ fontSize: 12, fontWeight: 700, color: reachedB ? (isOptimal ? "#15803d" : "#9a3412") : "#991b1b", fontFamily: "'JetBrains Mono',monospace" }}>
           {t(E, `cost = ${cost}`, `비용 = ${cost}`)} · {t(E, `min = ${optimal}`, `최소 = ${optimal}`)}
@@ -211,7 +211,7 @@ export function TrainsAuditSim({ E }) {
           padding: "5px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
           background: "transparent", color: C.dim, fontSize: 11, fontWeight: 600, cursor: "pointer",
         }}>
-          {t(E, "↻ Reset path", "↻ 경로 초기화")}
+          {t(E, "↻ Reset path", "↻ 경로 지우기")}
         </button>
       </div>
 
@@ -223,14 +223,14 @@ export function TrainsAuditSim({ E }) {
         {!reachedB
           ? t(E,
               `Extend the path 4-directionally until you reach B. Optimal Dijkstra cost = ${optimal}.`,
-              `4 방향으로 경로를 이어 B 까지 가요. 다익스트라 최적 비용 = ${optimal}.`)
+              `4 방향으로 경로를 이어 B 까지 가요. 다익스트라가 찾은 가장 적은 비용은 ${optimal} 이에요.`)
           : (isOptimal
               ? t(E,
                   `Perfect — your path ties the minimum (${optimal}). That's exactly what dist[B] in the code stores.`,
-                  `완벽! 경로 비용이 최솟값 (${optimal}) 과 같아요. 코드의 dist[B] 가 저장하는 값이에요.`)
+                  `잘했어요! 경로 비용이 최솟값 (${optimal}) 과 같아요. 코드의 dist[B] 에 담기는 값이에요.`)
               : t(E,
                   `Reached B with cost ${cost}, but min = ${optimal}. Try another route — Dijkstra finds the lowest-cost route automatically.`,
-                  `B 에 도달했지만 비용 ${cost}, 최솟값은 ${optimal}. 다른 경로를 시도해 봐요 — 다익스트라는 최소 비용 경로를 자동으로 찾아요.`))}
+                  `B 에 닿긴 했는데 비용이 ${cost} 예요. 최솟값은 ${optimal} 이에요. 다른 길도 해 봐요 — 다익스트라는 가장 적은 비용의 길을 스스로 찾아요.`))}
       </div>
     </div>
   );
@@ -348,19 +348,19 @@ export function getTrainsSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "The C++ version does exactly the same thing: heapq becomes priority_queue with greater<>, and the (dist, x, y) tuple stays a tuple.",
             "C++ 버전도 하는 일이 똑같아요. heapq 자리에 greater<> 를 준 priority_queue 가 오고, (거리, x, y) 묶음은 tuple 그대로예요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into the specific headers this code needs (iostream, vector, queue, tuple).",
-            "#include 는 이 코드에 필요한 헤더들로 (iostream, vector, queue, tuple) 나눠 적어."),
+            "#include 는 이 코드에 필요한 헤더(iostream, vector, queue, tuple)를 하나씩 나눠 적어요."),
         t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+            "합계와 자리 번호는 int 로 충분해요 — 2×10^9 을 넘는 큰 합계일 때만 더 큰 타입을 써요."),
       ],
     },
   ];
@@ -406,7 +406,7 @@ function highlightCode(lines, lang) {
 
 export function downloadTrainsPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Trains — Full Study Guide", "Trains — 종합 풀이 노트");
@@ -429,7 +429,7 @@ export function downloadTrainsPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

@@ -126,7 +126,7 @@ export function makeWordProcCh1(E) {
       type: "reveal",
       narr: t(E,
         "A word processor receives N words in order. Each line can hold at most K LETTERS of words (spaces don't count). Each word, in order, is added to the current line if it still fits — otherwise it goes onto a NEW line.\nPrint the document one line per row, words separated by single spaces.",
-        "워드 프로세서가 N개 단어를 순서대로 받아요. 각 줄에는 단어의 글자 수 합이 최대 K까지 들어갈 수 있어요 (공백은 안 셈). 각 단어는 순서대로, 현재 줄에 들어가면 그 줄에 추가, 안 들어가면 새 줄을 시작해요.\n결과 문서를 한 줄씩 출력해요 (단어 사이는 공백 1개)."),
+        "단어를 순서대로 줄에 담다가 넘치면 새 줄로 넘어가요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -143,7 +143,7 @@ export function makeWordProcCh1(E) {
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
                 "Print the resulting document — each line at most K letters of words, words separated by single spaces.",
-                "결과 문서를 출력 — 각 줄은 단어 글자 수 합이 최대 K, 단어 사이는 공백 1 개.")}
+                "각 줄의 글자 수 합이 K 를 넘지 않게 문서를 출력해요.")}
             </div>
           </div>
 
@@ -194,11 +194,11 @@ export function makeWordProcCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The rule: when adding the next word would push the total character count past K, start a new line.\nSpaces DON'T count!\nOnly the sum of word lengths matters.", "규칙: 다음 단어를 추가하면 총 글자 수가 K를 초과할 때 새 줄을 시작해요. 공백은 세지 않아! 단어 길이의 합만 중요해요."),
+        "The rule: when adding the next word would push the total character count past K, start a new line.\nSpaces DON'T count!\nOnly the sum of word lengths matters.", "공백은 세지 않아요. 단어 글자 수의 합만 보면 돼요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
-            {t(E, "The Key Rule: Count Characters, Not Spaces!", "핵심 규칙: 글자만 세고, 공백은 안 세!")}
+            {t(E, "The Key Rule: Count Characters, Not Spaces!", "핵심 규칙: 글자만 세고 공백은 세지 않아요")}
           </div>
           <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "1px solid #fca5a5" }}>
             <div style={{ fontSize: 12, lineHeight: 2, color: C.text }}>
@@ -238,19 +238,19 @@ export function makeWordProcCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Important detail: when counting characters per line, do spaces between words count?", "중요한 세부사항: 줄당 글자 수를 셀 때, 단어 사이의 공백도 세나?"),
+        "Important detail: when counting characters per line, do spaces between words count?", "한 줄의 글자 수를 셀 때 공백도 같이 셀까요?"),
       question: t(E,
         "Do spaces between words count toward the K character limit?",
-        "단어 사이의 공백이 K글자 제한에 포함되나?"),
+        "단어 사이의 공백도 K 에 포함될까요?"),
       options: [
-        t(E, "Yes, spaces count too", "네, 공백도 포함"),
-        t(E, "No, only word characters count", "아니요, 단어 글자만 포함"),
-        t(E, "Depends on the line", "줄에 따라 다름"),
+        t(E, "Yes, spaces count too", "네, 공백도 세요"),
+        t(E, "No, only word characters count", "아니요, 단어 글자만 세요"),
+        t(E, "Depends on the line", "줄에 따라 달라요"),
       ],
       correct: 1,
       explain: t(E,
         "Only word characters count! The K limit is the sum of word lengths, NOT counting spaces. This is explicitly stated in the problem!",
-        "단어 글자만 세! K 제한은 단어 길이의 합이고, 공백은 세지 않아. 이건 문제에서 명시적으로 나와 있어요!"),
+        "단어 글자만 세요. K 는 단어 길이의 합이고 공백은 빼요.\n문제에 그렇게 적혀 있어요."),
     },
     // 1-4: Line fitting example
     {
@@ -259,7 +259,7 @@ export function makeWordProcCh1(E) {
          narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
-        "Let's trace a bigger example!\nWords: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5.\nWe add words greedily until the next one doesn't fit.", "더 큰 예시를 추적해보자! 단어: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5. 다음 단어가 안 들어갈 때까지 그리디하게 추가해요."),
+        "Let's trace a bigger example!\nWords: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5.\nWe add words greedily until the next one doesn't fit.", "단어 네 개를 K=5 로 한 줄씩 담아 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
@@ -272,7 +272,7 @@ export function makeWordProcCh1(E) {
                   <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626", textAlign: "left" }}>{t(E, "Word", "단어")}</th>
                   <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>len</th>
                   <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>cur+len</th>
-                  <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>{t(E, "Fits?", "들어감?")}</th>
+                  <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>{t(E, "Fits?", "들어가요?")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -305,7 +305,7 @@ export function makeWordProcCh1(E) {
         "Words [\"ab\",\"cd\",\"ef\"], K=5. Fill a line from the front.", "단어 [\"ab\",\"cd\",\"ef\"], K=5. 앞에서부터 한 줄에 담아봐요."),
       question: t(E,
         "Words [\"ab\",\"cd\",\"ef\"], K=5. How many lines?",
-        "단어 [\"ab\",\"cd\",\"ef\"], K=5. 몇 줄?"),
+        "단어 [\"ab\",\"cd\",\"ef\"], K=5 면 몇 줄이 될까요?"),
       options: [
         t(E, "1 line", "1줄"),
         t(E, "2 lines", "2줄"),
@@ -314,20 +314,20 @@ export function makeWordProcCh1(E) {
       correct: 1,
       explain: t(E,
         "ab(2)+cd(2)=4 <= 5. Add ef: 4+2=6 > 5, new line. Line 1: [ab, cd]. Line 2: [ef]. Total: 2 lines!",
-        "ab(2)+cd(2)=4 <= 5. ef 추가: 4+2=6 > 5, 새 줄. 1줄: [ab, cd]. 2줄: [ef]. 총: 2줄!"),
+        "ab(2)+cd(2)=4 라서 5 안에 들어가요.\nef 를 더하면 6 이 되어 넘치니 새 줄이에요. 그래서 2줄이에요."),
     },
     // 1-6: Input practice
     {
       type: "input",
       narr: t(E,
         "Walk through the words yourself, packing each into the current line until it overflows.",
-        "단어를 직접 따라가며 — 현재 줄에 넣다가 K 를 넘기면 새 줄."),
+        "현재 줄에 넣다가 K 를 넘으면 새 줄로 가요."),
       question: t(E,
         "Words [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. How many output lines?",
-        "단어 [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. 출력 줄 수?"),
+        "단어 [\"aaa\",\"bb\",\"cc\",\"d\"], K=4 면 몇 줄이 나올까요?"),
       hint: t(E,
         "Try adding each word in order. When the running sum would pass K, start a new line.",
-        "단어를 순서대로 더해. 합이 K 를 넘기면 새 줄."),
+        "단어를 순서대로 더해요. 합이 K 를 넘으면 새 줄이에요."),
       answer: 3,
     },
   ];
@@ -344,7 +344,7 @@ export function makeWordProcCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The greedy strategy: scan words left to right.\nTrack cur_len (total chars on current line).\nIf adding the next word exceeds K, flush the current line and start fresh!", "그리디 전략: 단어를 왼쪽에서 오른쪽으로 스캔.\ncur_len (현재 줄의 총 글자 수)을 추적.\n다음 단어를 추가하면 K를 초과하면 현재 줄을 출력하고 새로 시작!"),
+        "The greedy strategy: scan words left to right.\nTrack cur_len (total chars on current line).\nIf adding the next word exceeds K, flush the current line and start fresh!", "현재 줄의 글자 수만 들고 왼쪽부터 하나씩 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
@@ -358,11 +358,11 @@ export function makeWordProcCh2(E) {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>2</span>
-                {t(E, "For each word: check if cur_len + len(word) > K", "각 단어마다: cur_len + len(word) > K 확인")}
+                {t(E, "For each word: check if cur_len + len(word) > K", "단어마다 cur_len + len(word) > K 인지 확인해요")}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>3</span>
-                {t(E, "If yes → flush current line, start new", "초과하면 → 현재 줄 출력, 새 줄 시작")}
+                {t(E, "If yes → flush current line, start new", "넘치면 현재 줄을 출력하고 새 줄을 시작해요")}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>4</span>
@@ -376,7 +376,7 @@ export function makeWordProcCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6.", "추적해보자: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6."),
+        "Let's trace: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6.", "단어 여섯 개를 K=6 으로 한 줄씩 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
@@ -425,39 +425,39 @@ export function makeWordProcCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now play with it yourself.\nDrag K, edit each word's length, add or remove words — watch the lines re-pack live.", "이제 직접 가지고 놀아봐. K를 움직이고, 단어 길이를 바꾸고, 추가/삭제 — 줄이 즉시 다시 묶여요."),
+        "Now play with it yourself.\nDrag K, edit each word's length, add or remove words — watch the lines re-pack live.", "K 와 단어 길이를 바꾸면 줄이 바로 다시 묶여요."),
       content: <WordProcLineWrapSim E={E} />,
     },
     // 2-3: Quiz on edge case
     {
       type: "quiz",
       narr: t(E,
-        "Edge case: what if a single word is exactly K characters long?\nIt fills the entire line by itself!", "엣지 케이스: 단어 하나가 정확히 K글자라면? 혼자서 한 줄을 전부 채워!"),
+        "Edge case: what if a single word is exactly K characters long?\nIt fills the entire line by itself!", "단어 하나가 딱 K 글자면 어떻게 될까요?"),
       question: t(E,
         "Words [\"abcde\", \"fg\"], K=5. Word 1 is exactly 5 chars. What happens?",
-        "단어 [\"abcde\", \"fg\"], K=5. 단어 1이 정확히 5글자. 무슨 일이 일어나?"),
+        "단어 [\"abcde\", \"fg\"], K=5 예요. 첫 단어가 딱 5글자면 어떻게 될까요?"),
       options: [
         t(E, "Both words on line 1", "두 단어 모두 1줄"),
         t(E, "abcde on line 1, fg on line 2", "abcde는 1줄, fg는 2줄"),
-        t(E, "Error — word too long", "에러 — 단어가 너무 길어"),
+        t(E, "Error — word too long", "에러 — 단어가 너무 길어요"),
       ],
       correct: 1,
       explain: t(E,
         "abcde(5)=5 <= 5, fits! Then 5+fg(2)=7 > 5, new line. Line 1: [abcde], Line 2: [fg].",
-        "abcde(5)=5 <= 5, 들어감! 그다음 5+fg(2)=7 > 5, 새 줄. 1줄: [abcde], 2줄: [fg]."),
+        "abcde 는 5글자라서 딱 들어가요.\n여기에 fg 를 더하면 7 이 되어 넘치니 fg 는 새 줄이에요."),
     },
     // 2-4: Practice input
     {
       type: "input",
       narr: t(E,
         "Try this packing yourself.  How many words fit per line, and how many lines total?",
-        "이 묶음 직접 — 한 줄에 몇 단어, 총 몇 줄?"),
+        "한 줄에 몇 단어가 들어가는지 세어 봐요."),
       question: t(E,
         "Words [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. How many lines?",
-        "단어 [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. 몇 줄?"),
+        "단어 [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4 면 몇 줄이 될까요?"),
       hint: t(E,
         "Each word is 2 letters; line cap is 4.  How many fit per line?",
-        "단어마다 2 글자, 줄 한도 4. 한 줄에 몇 개 들어가?"),
+        "단어마다 2 글자이고 한 줄 한도는 4 예요.\n한 줄에 몇 개가 들어갈까요?"),
       answer: 3,
     },
   ];
@@ -473,7 +473,7 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Read N (word count) and K (max chars per line), then read all the words.", "1단계: N(단어 수)과 K(줄당 최대 글자)를 읽고, 모든 단어를 읽어."),
+        "Step 1: Read N (word count) and K (max chars per line), then read all the words.", "단어 수 N 과 한 줄 한도 K 를 읽고 단어를 받아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
@@ -491,7 +491,7 @@ export function makeWordProcCh3(E, lang = "py") {
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
             {t(E,
               "All N words are on a single line, separated by spaces. split() breaks them apart.",
-              "N개 단어가 한 줄에 공백으로 구분. split()으로 나눠.")}
+              "N 개 단어가 한 줄에 공백으로 붙어 와요. split() 으로 나눠요.")}
           </div>
         </div>),
     },
@@ -499,11 +499,11 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: We need to track the current line (list of words) and its total character count.\nPlus a list to collect all finished lines.", "2단계: 현재 줄(단어 리스트)과 총 글자 수를 추적해야 해요. 완성된 줄을 모을 리스트도 필요해요."),
+        "Step 2: We need to track the current line (list of words) and its total character count.\nPlus a list to collect all finished lines.", "현재 줄과 글자 수, 그리고 완성된 줄을 담을 곳이 필요해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
-            {t(E, "Step 2: Initialize variables", "2단계: 변수 초기화")}
+            {t(E, "Step 2: Initialize variables", "2단계: 변수를 처음 값으로")}
           </div>
           <CodeSnippet
             lines={[
@@ -529,11 +529,11 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 3: The main loop!\nFor each word: check if adding it would exceed K.\nIf so, flush the current line first.\nThen add the word.", "3단계: 메인 루프! 각 단어마다: 추가하면 K를 초과하는지 확인. 초과하면 현재 줄을 먼저 출력. 그 다음 단어를 추가."),
+        "Step 3: The main loop!\nFor each word: check if adding it would exceed K.\nIf so, flush the current line first.\nThen add the word.", "넣기 전에 넘치는지 보고, 넘치면 줄을 먼저 내보내요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
-            {t(E, "Step 3: The greedy loop", "3단계: 그리디 루프")}
+            {t(E, "Step 3: The greedy loop", "3단계: 그리디 반복")}
           </div>
           <CodeSnippet
             lines={[
@@ -550,10 +550,10 @@ export function makeWordProcCh3(E, lang = "py") {
           />
           <div style={{ marginTop: 8, fontSize: 12, lineHeight: 1.8, color: C.text }}>
             <div style={{ fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>
-              {t(E, "Key logic:", "핵심 로직:")}
+              {t(E, "Key logic:", "핵심 방법:")}
             </div>
-            <div>{t(E, "Check BEFORE adding: if overflow → flush", "추가 전에 확인: 초과하면 → 출력")}</div>
-            <div>{t(E, "Then ALWAYS add the word to current line", "그 다음 항상 현재 줄에 단어 추가")}</div>
+            <div>{t(E, "Check BEFORE adding: if overflow → flush", "넣기 전에 확인하고, 넘치면 줄을 출력해요")}</div>
+            <div>{t(E, "Then ALWAYS add the word to current line", "그 다음에는 언제나 현재 줄에 단어를 넣어요")}</div>
           </div>
         </div>),
     },
@@ -561,25 +561,25 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we check 'and cur_line' in the if condition? What if cur_line is empty?", "if 조건에서 'and cur_line'을 왜 확인할까? cur_line이 비어있으면?"),
+        "Why do we check 'and cur_line' in the if condition? What if cur_line is empty?", "if 조건에 'and cur_line' 이 왜 붙어 있을까요?"),
       question: t(E,
         "Why 'and cur_line' in the overflow check?",
-        "초과 확인에서 'and cur_line'이 왜 필요할까?"),
+        "넘침을 확인할 때 'and cur_line' 이 왜 필요할까요?"),
       options: [
-        t(E, "No reason, just extra safety", "이유 없음, 그냥 추가 안전장치"),
-        t(E, "Don't flush an empty line — always add at least one word", "빈 줄을 출력하지 않기 위해 — 최소 한 단어는 추가"),
-        t(E, "To check if K is positive", "K가 양수인지 확인하려고"),
+        t(E, "No reason, just extra safety", "이유 없어요, 그냥 안전장치예요"),
+        t(E, "Don't flush an empty line — always add at least one word", "빈 줄을 출력하지 않으려고 — 한 단어는 꼭 넣어요"),
+        t(E, "To check if K is positive", "K 가 양수인지 확인하려고요"),
       ],
       correct: 1,
       explain: t(E,
         "If cur_line is empty, we haven't added any word yet. We must add the current word even if it alone exceeds K (guaranteed not to happen by constraints, but good practice)!",
-        "cur_line이 비어있으면 아직 단어를 추가하지 않은 거예요. 현재 단어를 반드시 추가해야 해요!"),
+        "cur_line 이 비어 있으면 아직 아무 단어도 안 넣은 거예요.\n그럴 때는 지금 단어를 꼭 넣어야 해요."),
     },
     // 3-5: Complete code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 부분씩 읽어 봐요."),
       sections: getWordProcSections(E),
     },
   ];
