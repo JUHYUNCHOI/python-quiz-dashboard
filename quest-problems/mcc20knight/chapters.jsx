@@ -27,10 +27,11 @@ export const SOLUTION_CODE = [
   "            best[nx - LO][ny - LO] = best[x - LO][y - LO] + 1",
   "            q.append((nx, ny))",
   "",
-  "T = int(input())",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "T = 3",
+  "cases = [[2, 0, 0, 3, 3], [5, -2, -2, 100, 100], [2, 0, 0, 1, 2]]",
   "out = []",
-  "for _ in range(T):",
-  "    K, X, Y, A, B = map(int, input().split())",
+  "for K, X, Y, A, B in cases:",
   "    dx, dy = abs(X - A), abs(Y - B)",
   "    need = best[dx - LO][dy - LO]",
   "    if K >= need and (K - need) % 2 == 0:",
@@ -127,21 +128,32 @@ export function makeMcc20KnightCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               <div>• <b>T</b> — {t(E, "number of queries", "질문 개수")}</div>
-              <div>• {t(E, "then T lines, each: ", "그다음 T 줄, 각 줄: ")}<b style={{ fontFamily: "'JetBrains Mono',monospace" }}>K X Y A B</b></div>
+              <div>• <b>cases</b> — {t(E, "T queries; one query is five numbers K, X, Y, A, B", "질문 T 개예요. 질문 하나는 숫자 다섯 개 K, X, Y, A, B 로 돼 있어요")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ T ≤ 400,  −1000 ≤ X, Y, A, B ≤ 1000,  1 ≤ K ≤ 100000.",
-                    "크기는 1 ≤ T ≤ 400,  −1000 ≤ X, Y, A, B ≤ 1000,  1 ≤ K ≤ 100000 이에요.")}
+                    "제약: 1 ≤ T ≤ 400,  −1000 ≤ X, Y, A, B ≤ 1000,  1 ≤ K ≤ 100000.")}
+            </div>
+            {/* 2026-09-17: 여기가 "그다음 T 줄, 각 줄: K X Y A B" 라고 **원문에 없는 줄 형식**을
+                원문인 것처럼 적어 두던 자리다. 원문(public/problems/mcc20knight.pdf)은
+                T = 3 / cases = [[2,0,0,3,3], ...] 처럼 값을 변수로 준다. 지어낸 형식을 지우고
+                판정(/decide): 교육 담당과 학생이 서로 안 보고 둘 다 '원문대로 변수형' 을 골랐다.
+                코드도 원문 모양으로 바꿨다. 학생만 말한 걱정('그럼 input() 은 언제 배워요?')
+                때문에 2022년 문제를 가리키는 다리 한 줄이 붙었다. */}
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: T = 3 and cases = [[K, X, Y, A, B], …].\nOur code writes those same values down and starts from there.\nReading them line by line with input() shows up in the 2022 problems.",
+                "원문은 T = 3, cases = [[K, X, Y, A, B], ...] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
             </div>
           </div>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 170 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>3</div>
-              <div>2 0 0 3 3</div>
-              <div>5 -2 -2 100 100</div>
-              <div>2 0 0 1 2</div>
+              <div>T = 3</div>
+              <div style={{ overflowX: "auto" }}>cases = [[2, 0, 0, 3, 3],</div>
+              <div style={{ overflowX: "auto" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5, -2, -2, 100, 100],</div>
+              <div style={{ overflowX: "auto" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2, 0, 0, 1, 2]]</div>
             </div>
             <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
@@ -235,9 +247,11 @@ export function makeMcc20KnightCh2(E, lang = "py") {
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
                 🚀 {t(E, "Fast: BFS once, then min + parity", "빠름: BFS 한 번, 그다음 최소 + 홀짝")}
               </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Reduce (X,Y)→(A,B) to the offset (dx,dy). One BFS from (0,0) fills every minimum. Each query: K ≥ min AND (K − min) even.",
-                      "(X,Y)→(A,B) 를 차이 (dx,dy) 로 줄여요. (0,0) 에서 BFS 를 한 번 돌려 모든 최소를 채워요. 질문마다 K ≥ 최소 이고 (K − 최소) 가 짝수인지만 보면 돼요.")}
+              {/* 2026-09-17: 104 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55,
+                whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
+                {t(E, "Reduce (X,Y)→(A,B) to the gap (dx,dy).\nOne BFS from (0,0) fills in every minimum.\nEach query: K ≥ min AND (K − min) even.",
+                      "(X,Y)→(A,B) 를 차이 (dx,dy) 로 줄여요.\n(0,0) 에서 BFS 를 한 번 돌려 모든 최소를 채워요.\n질문마다 K ≥ 최소 이고 (K − 최소) 가 짝수인지만 보면 돼요.")}
               </div>
             </div>
           </div>

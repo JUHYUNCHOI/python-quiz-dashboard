@@ -205,8 +205,9 @@ function ZigzagSim({ E }) {
 }
 
 export const SOLUTION_CODE = [
-  "s = input().strip()",
-  "K = int(input())",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "s = \"bcade\"",
+  "K = 3",
   "N = len(s)",
   "",
   "MOD = 1000   # answer is printed modulo 1000",
@@ -305,9 +306,12 @@ export function makeMcc20ZigzagCh1(E) {
             <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {/* 2026-09-17: 여기가 "첫 줄 / 둘째 줄" 이라고 **원문에 없는 줄 형식**을 적어 두던
+                    자리다. 원문(public/problems/mcc20zigzag.pdf)은 S = "bcade" / K = 3 처럼
+                    값을 변수로 준다. 값의 이름만 남긴다. */}
                 {t(E,
-                  <>Line 1: string s (lowercase)<br/>Line 2: integer K</>,
-                  <>첫 줄: 문자열 s (소문자)<br/>둘째 줄: 정수 K</>)}
+                  <>S — the string (lowercase)<br/>K — the subsequence length</>,
+                  <>S — 문자열 (소문자)<br/>K — 뽑을 길이</>)}
               </div>
             </div>
             <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
@@ -330,11 +334,18 @@ export function makeMcc20ZigzagCh1(E) {
               <div>• 1 ≤ K ≤ 100</div>
               <div>• {t(E, "answer printed modulo 1000", "정답은 1000 으로 나눈 나머지로 출력해요")}</div>
             </div>
+            {/* 2026-09-17: 원문(public/problems/mcc20zigzag.pdf)은 S = "bcade" / K = 3 처럼
+                값을 변수로 준다. 아래 예시 상자의 두 줄은 우리 연습 방식이라고 밝힌다. */}
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: S = \"bcade\" and K = 3.\nOur code writes those same values down and starts from there.\nReading them line by line with input() shows up in the 2022 problems.",
+                "원문은 S = \"bcade\", K = 3 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
+            </div>
             <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap", fontSize: 12.5 }}>
               <div style={{ background: "#fff", border: "1px solid #e9d5ff", borderRadius: 8, padding: "6px 10px", fontFamily: "monospace" }}>
                 <div style={{ color: C.dim, fontSize: 11 }}>{t(E, "input", "입력")}</div>
-                <div>bcade</div>
-                <div>3</div>
+                <div>S = &quot;bcade&quot;</div>
+                <div>K = 3</div>
               </div>
               <div style={{ background: "#fff", border: "1px solid #e9d5ff", borderRadius: 8, padding: "6px 10px", fontFamily: "monospace" }}>
                 <div style={{ color: C.dim, fontSize: 11 }}>{t(E, "output", "출력")}</div>

@@ -7,9 +7,10 @@ const KA = { wordBreak: "keep-all" };
    SOLUTION CODE  (fast: one prefix-carry pass over D = A - B)
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N = int(input())",
-  "A = list(map(int, input().split()))",
-  "B = list(map(int, input().split()))",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "N = 5",
+  "A = [2, 2, 2, 6, 3]",
+  "B = [1, 2, 3, 4, 5]",
   "",
   "# D[i] = A[i] - B[i] : surplus (+) or shortage (-) at box i.",
   "# The running prefix of D is how many marbles must cross each",
@@ -88,8 +89,8 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. Three lines come in: N, then array A, then array B — position i pairs them up (box i goes from A[i] to B[i]).",
-        "입력은 N, 배열 A, 배열 B 이렇게 세 줄로 들어와요."),
+        "Read the input format and the official example. Three values come in: N, array A, array B — position i pairs them up (box i goes from A[i] to B[i]).",
+        "입력은 N, 배열 A, 배열 B 이렇게 셋이에요. 같은 자리끼리 짝이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff1f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -104,24 +105,33 @@ export function makeMcc21MarblesCh1(E) {
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ N ≤ 5·10⁴, sum(A) ≤ 5·10¹¹, sum(A) = sum(B).", "제약: 1 ≤ N ≤ 5·10⁴, sum(A) ≤ 5·10¹¹, sum(A) = sum(B).")}
             </div>
+            {/* 2026-09-17: 원문(public/problems/mcc21marbles.pdf)은 N = 5 / A = [2,2,2,6,3] /
+                B = [1,2,3,4,5] 처럼 값을 변수로 준다. 줄 형식은 우리 연습 방식이다. */}
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: N = 5, A = [2,2,2,6,3], B = [1,2,3,4,5].\nOur code writes those same values down and starts from there.\nReading them line by line with input() shows up in the 2022 problems.",
+                "원문은 N = 5, A = [2,2,2,6,3], B = [1,2,3,4,5] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
+            </div>
           </div>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>5</div>
-              <div>2 2 2 6 3</div>
-              <div>1 2 3 4 5</div>
+              <div>N = 5</div>
+              <div>A = [2, 2, 2, 6, 3]</div>
+              <div>B = [1, 2, 3, 4, 5]</div>
             </div>
             <div style={{ background: "#0f172a", color: "#fca5a5", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
               <div style={{ fontWeight: 800 }}>4</div>
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {/* 2026-09-17: 98 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55,
+            whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
             {t(E,
-              "A = [2,2,2,6,3] → B = [1,2,3,4,5]. One optimal way: 1→2, 2→3, then twice 4→5. That's 4 single-marble moves.",
-              "A = [2,2,2,6,3] → B = [1,2,3,4,5] 예요. 제일 좋은 방법 하나는 1→2, 2→3, 그다음 4→5 를 두 번 옮기는 거예요. 모두 4 번 옮기면 돼요.")}
+              "A = [2,2,2,6,3] → B = [1,2,3,4,5].\nOne optimal way: 1→2, 2→3, then twice 4→5.\nThat's 4 single-marble moves.",
+              "A = [2,2,2,6,3] → B = [1,2,3,4,5] 예요.\n제일 좋은 방법 하나는 1→2, 2→3, 그다음 4→5 를 두 번 옮기는 거예요.\n모두 4 번 옮기면 돼요.")}
           </div>
         </div>),
     },
@@ -130,7 +140,7 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Feel the idea. Look at each box's surplus/shortage D = A − B, then carry the running total across each boundary. The answer piles up as |carry| at every boundary.",
+        "Feel the idea. Look at each box's surplus/shortage D = A − B, then walk the edges one at a time.",
         "상자마다 남거나 모자란 양 D = A − B 를 봐요."),
       content: <Mcc21MarblesBoundarySim E={E} />,
     },
@@ -185,16 +195,24 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
                 🐢 {t(E, "Slow: move the marbles one hop at a time", "느림: 구슬을 한 칸씩 진짜로 옮겨 보기")}
               </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "We did NOT try this one in the sim — here is why. Marbles can travel far and totals reach 5·10¹¹, so the number of hops is astronomically large. Times out.", "이 방법은 앞 시뮬에서 해 보지 않았어요. 왜 안 하는지만 보고 넘어가요. 구슬이 멀리 갈 수 있고 합이 5·10¹¹ 까지라 옮기는 횟수가 어마어마해요. 그래서 시간 초과예요.")}
+              {/* 2026-09-17: 98 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55,
+                whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
+                {t(E,
+                  "We did NOT try this one in the sim — here is why.\nMarbles can travel far and the totals reach 5·10¹¹,\nso the number of hops is astronomically large. It times out.",
+                  "이 방법은 앞 시뮬에서 해 보지 않았어요. 왜 안 하는지만 보고 넘어가요.\n구슬이 멀리 갈 수 있고 합이 5·10¹¹ 까지라 옮기는 횟수가 어마어마해요.\n그래서 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#fff1f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>
                 🚀 {t(E, "Fast: prefix-carry over D = A − B", "빠름: D = A − B 를 쌓아 가며 세기")}
               </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "This is the one you walked through in the sim. Marbles only hop between neighbours, so whatever imbalance sits left of a boundary MUST cross it. Sum |carry| over all N boxes — one O(N) pass.", "앞 시뮬에서 경계를 하나씩 건너며 해 본 게 이 방법이에요. 구슬은 옆 상자로만 갈 수 있어요. 그래서 경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요. |누적| 을 상자마다 더하면 돼요. O(N) 으로 한 번만 훑어요.")}
+              {/* 2026-09-17: 화면에서 124 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55,
+                whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
+                {t(E,
+                  "This is the one you walked through in the sim.\nMarbles only hop between neighbours,\nso whatever gap sits left of an edge MUST cross it.\nAdd up those crossings over all N boxes — one O(N) pass.",
+                  "앞 시뮬에서 경계를 하나씩 건너며 해 본 게 이 방법이에요.\n구슬은 옆 상자로만 갈 수 있어요.\n그래서 경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요.\n경계마다 건넌 구슬을 상자 N 개에 걸쳐 더하면 돼요.\nO(N) 으로 한 번만 훑어요.")}
               </div>
             </div>
           </div>

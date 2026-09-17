@@ -138,9 +138,10 @@ function OddEvenPileSim({ E }) {
           {t(E, "verdict: ", "결과: ")}
           <span style={{ color: verdict ? "#34d399" : "#fb7185" }}>{verdict ? "YES" : "NO"}</span>
           <span style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", marginLeft: 8 }}>
+            {/* 2026-09-17: "레시피" 는 화면에서 뜻을 밝힌 적 없는 비유였다. 지우면 더 쉬워진다. */}
             {verdict
-              ? t(E, "(a recipe fits)", "(레시피 하나가 맞아요)")
-              : t(E, "(neither recipe fits)", "(두 레시피 다 안 맞아요)")}
+              ? t(E, "(one of the two ways works)", "(두 방법 중 하나가 돼요)")
+              : t(E, "(neither of the two ways works)", "(두 방법 다 안 돼요)")}
           </span>
         </div>
 
@@ -236,7 +237,7 @@ export function makeMcc21CarrotsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. The first line is T; then each test case is a line with N followed by a line of N carrot counts.",
+        "Read the input format and the official example. T test cases; test case i has N[i] baskets holding C[i] carrots.",
         "입력이 어떤 모양으로 들어오는지 공식 예제로 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -245,24 +246,31 @@ export function makeMcc21CarrotsCh1(E) {
               📥 {t(E, "Input", "입력")}
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
+              {/* 2026-09-17: 여기가 "N 한 줄, 그다음 … 한 줄" 이라고 **원문에 없는 줄 형식**을 적어
+                  두던 자리다. 원문(public/problems/mcc21carrots.pdf)은 T = 3 / N = [3,4,5] /
+                  C = [[3,5,2], ...] 처럼 값을 변수로 준다. 값의 이름만 남긴다. */}
               <div>• <b>T</b> — {t(E, "number of test cases", "테스트 케이스 개수")}</div>
-              <div>• {t(E, "for each test case: a line with ", "각 테스트마다: ")}<b>N</b>{t(E, ", then a line of N carrot counts C[i]", " 한 줄, 그다음 당근 N 개 C[i] 한 줄")}</div>
+              <div>• <b>N</b> — {t(E, "test case i has N[i] baskets", "테스트 i 의 바구니 개수 N[i]")}</div>
+              <div>• <b>C</b> — {t(E, "C[i] holds that test case's N[i] carrot counts", "테스트 i 의 바구니에 든 당근 수 N[i] 개")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ T ≤ 200, 3 ≤ N ≤ 100000, 1 ≤ C[i] ≤ 10^9.", "제약: 1 ≤ T ≤ 200, 3 ≤ N ≤ 100000, 1 ≤ C[i] ≤ 10^9.")}
+            </div>
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: T = 3, N = [3, 4, 5], C = [[3,5,2], …].\nOur code writes those same values down and starts from there.\nReading them line by line with input() shows up in the 2022 problems.",
+                "원문은 T = 3, N = [3, 4, 5], C = [[3,5,2], ...] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
             </div>
           </div>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>3</div>
-              <div>3</div>
-              <div>3 5 2</div>
-              <div>4</div>
-              <div>4 6 2 3</div>
-              <div>5</div>
-              <div>4 8 10 5 2</div>
+              <div>T = 3</div>
+              <div>N = [3, 4, 5]</div>
+              <div style={{ overflowX: "auto" }}>C = [[3, 5, 2],</div>
+              <div style={{ overflowX: "auto" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4, 6, 2, 3],</div>
+              <div style={{ overflowX: "auto" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4, 8, 10, 5, 2]]</div>
             </div>
             <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
@@ -335,7 +343,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: count odds & evens, check two recipes", "빠름: 홀수·짝수 세고 두 레시피 확인")}
+                🚀 {t(E, "Fast: count odds & evens, check the two ways", "빠름: 홀수·짝수 세고 두 방법 확인")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "One pass counts odd and even. YES if (odd ≥ 3) or (odd ≥ 1 and even ≥ 2). Just O(N) per test.", "한 번 훑어서 홀수와 짝수를 세요. 홀수 ≥ 3 이거나 (홀수 ≥ 1 이고 짝수 ≥ 2) 이면 YES 예요. 테스트마다 O(N) 이에요.")}

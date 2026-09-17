@@ -5,16 +5,14 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "T = int(input())                     # 테스트 케이스 개수",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "T = 3                                # 테스트 케이스 개수",
+  "N = [3, 4, 5]                        # 케이스마다 바구니 개수",
+  "C = [[3, 5, 2], [4, 6, 2, 3], [4, 8, 10, 5, 2]]",
   "out = []",
-  "for _ in range(T):",
-  "    N = int(input())",
-  "    C = list(map(int, input().split()))",
+  "for basket in C:                     # 케이스마다 바구니 하나씩",
   "    odd = even = 0                   # 홀수·짝수 바구니 개수",
-  "    for c in C:",
+  "    for c in basket:",
   "        if c % 2 == 1:",
   "            odd += 1",
   "        else:",
@@ -32,16 +30,19 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    int T;",
-  "    cin >> T;",
-  "    while (T--) {",
-  "        int N;",
-  "        cin >> N;",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "    int T = 3;",
+  "    int N[3] = {3, 4, 5};",
+  "    long long C[3][5] = {",
+  "        {3, 5, 2},",
+  "        {4, 6, 2, 3},",
+  "        {4, 8, 10, 5, 2},",
+  "    };",
+  "    for (int c = 0; c < T; c++) {",
   "        long long odd = 0;             // 홀수 바구니 개수",
   "        long long even = 0;             // 짝수 바구니 개수",
-  "        for (int i = 0; i < N; i++) {",
-  "            long long x;",
-  "            cin >> x;",
+  "        for (int i = 0; i < N[c]; i++) {",
+  "            long long x = C[c][i];",
   "            if (x % 2 == 1) {",
   "                odd++;",
   "            } else {",
@@ -67,12 +68,18 @@ export function getMcc21CarrotsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Key insight: a sum of three numbers is ODD only two ways — three odds, or one odd + two evens. Every other mix gives an even sum.",
-            "세 수의 합이 홀수가 되는 건 딱 두 가지예요. 홀수 3 개이거나, 홀수 1 개 + 짝수 2 개예요. 나머지 조합은 모두 짝수 합이에요."),
+        /* 2026-09-17: 76·85 자가 한 덩어리였다. Stepper 는 \n 을 뭉개니 항목을 나눈다.
+           "레시피" 는 뜻을 밝힌 적 없는 비유라 화면 말과 맞춰 "방법" 으로 쓴다. */
+        t(E, "Key insight: a sum of three numbers is ODD only two ways — three odds, or one odd + two evens.",
+            "세 수의 합이 홀수가 되는 건 딱 두 가지예요. 홀수 3 개이거나, 홀수 1 개 + 짝수 2 개예요."),
+        t(E, "Every other mix gives an even sum.",
+            "나머지 섞임은 모두 짝수 합이에요."),
         t(E, "So the exact carrot counts don't matter — only how many are ODD and how many are EVEN. One pass counts them.",
             "그래서 당근이 정확히 몇 개인지는 중요하지 않고, 홀수가 몇 개이고 짝수가 몇 개인지만 중요해요. 한 번 훑어 개수만 세요."),
-        t(E, "Answer YES when odd ≥ 3 (recipe 🟠🟠🟠) or when odd ≥ 1 and even ≥ 2 (recipe 🟠⚪⚪). This is O(N) per test — no triples.",
-            "홀수 ≥ 3 (🟠🟠🟠) 이거나 홀수 ≥ 1 이고 짝수 ≥ 2 (🟠⚪⚪) 이면 YES 예요. 조합을 하나도 돌지 않아서 테스트마다 O(N) 이에요."),
+        t(E, "Answer YES when odd ≥ 3 (way 🟠🟠🟠) or when odd ≥ 1 and even ≥ 2 (way 🟠⚪⚪).",
+            "홀수 ≥ 3 (🟠🟠🟠) 이거나, 홀수 ≥ 1 이고 짝수 ≥ 2 (🟠⚪⚪) 이면 YES 예요."),
+        t(E, "We never look at a single triple, so it is O(N) per test.",
+            "조합을 하나도 돌지 않아서 테스트마다 O(N) 이에요."),
       ],
       pyOnly: [
         t(E, "Each test is 2 lines: N, then the N carrot counts on one line.",
@@ -128,7 +135,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc21CarrotsPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc21Carrots — Full Study Guide", "Mcc21Carrots — 종합 풀이 노트");

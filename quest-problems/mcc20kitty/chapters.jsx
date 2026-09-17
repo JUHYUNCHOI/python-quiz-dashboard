@@ -63,10 +63,12 @@ function KittyRemainderSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 8 }}>
           🔁 {t(E, "Only the remainder (mod 3) matters", "나머지(mod 3)만 중요해요")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        {/* 2026-09-17: 이 문단이 줄바꿈 없이 148 자였다. 절 단위로 끊는다. */}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12,
+          whiteSpace: "pre-line", textWrap: "balance" }}>
           {t(E,
-            "We only ask 'is this term divisible by 3?', so we can throw away the huge numbers and keep just their remainder 0/1/2. A new term's remainder = (sum of the previous FIVE remainders) mod 3. Zeros (✓) are the terms divisible by 3.",
-            "우리가 궁금한 건 '이 항이 3의 배수인가?' 뿐이에요. 그래서 거대한 숫자는 버리고 나머지 0/1/2만 들고 다녀요. 새 항의 나머지 = (직전 다섯 나머지의 합) mod 3. 0(✓)인 항이 3의 배수예요.")}
+            "We only ask 'is this term divisible by 3?',\nso we throw the huge numbers away and keep just the remainder 0/1/2.\nA new term's remainder = the previous FIVE remainders added up, mod 3.\nA 0 (✓) means that term is divisible by 3.",
+            "우리가 궁금한 건 '이 항이 3 의 배수인가?' 뿐이에요.\n그래서 거대한 숫자는 버리고 나머지 0/1/2 만 들고 다녀요.\n새 항의 나머지는 바로 앞 다섯 나머지를 더해서 3 으로 나눈 나머지예요.\n0 (✓) 인 항이 3 의 배수예요.")}
         </div>
 
         {/* chip row */}
@@ -319,10 +321,12 @@ export function makeMcc20KittyCh2(E) {
             <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
               🐢 {t(E, "Slow: loop all the way to N", "느림: N까지 전부 반복")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+            {/* 2026-09-17: 95 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6,
+              whiteSpace: "pre-line", textWrap: "balance" }}>
               {t(E,
-                "A computer does ~10^8–10^9 steps per second. N = 10^15 steps would take weeks — and each Kitty number grows so fast it soon has trillions of digits. Impossible.",
-                "컴퓨터는 초당 약 10^8–10^9 단계를 해요. N = 10^15 단계면 몇 주가 걸려요 — 게다가 Kitty 수는 너무 빨리 커져서 곧 자릿수가 조 단위예요. 불가능.")}
+                "A computer does about 10^8–10^9 steps per second.\nN = 10^15 steps would take weeks.\nAnd each Kitty number grows so fast it soon has trillions of digits.",
+                "컴퓨터는 1 초에 10^8–10^9 단계쯤 해요.\nN = 10^15 단계면 몇 주가 걸려요.\n게다가 Kitty 수는 너무 빨리 커져서 곧 자릿수가 조 단위예요.")}
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>

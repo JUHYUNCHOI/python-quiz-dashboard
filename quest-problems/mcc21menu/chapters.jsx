@@ -54,9 +54,12 @@ function MenuOrderSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
           🍽️ {t(E, "Order the layers, count the lines", "층 순서를 정하고 줄 수를 세어 봐요")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        {/* 2026-09-17: 소스에는 \n 이 있는데 pre-line 이 없어서 화면에서는 125 자가 한 덩어리로
+            붙어 나왔다. 절 단위로 끊어 보이게 한다. */}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12,
+          whiteSpace: "pre-line", textWrap: "balance" }}>
           {t(E,
-            "Three layers of sizes 2, 3, 4. Each new layer copies the whole menu so far, once per option — so a layer of size s multiplies every current line by s. Total lines = the running total of these products. Try both orders.",
+            "Three layers of sizes 2, 3, 4.\nEach new layer copies the whole menu so far, once per option,\nso a layer of size s multiplies every current line by s.\nTotal lines = the running total of these products. Try both orders.",
             "크기가 2, 3, 4 인 층 세 개예요.\n새 층은 지금까지의 메뉴 전체를 옵션 수만큼 복사해요.\n그래서 크기 s 인 층은 지금 줄 수를 s 배로 늘려요.\n총 줄 수는 이 곱들을 쌓아 가며 더한 값이에요. 두 순서를 다 눌러봐요.")}
         </div>
 
@@ -85,11 +88,13 @@ function MenuOrderSim({ E }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
           {rows.map((r, i) => (
             <div key={i} style={{ ...NW, display: "flex", alignItems: "center", gap: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: "#5b21b6", flexWrap: "wrap" }}>
+              {/* 2026-09-17: "층 추가 4" · "새 줄 = 4" 는 그 4 가 무엇인지 안 말한다 (⑤).
+                  크기인지 줄 수인지를 숫자 옆에 붙인다. */}
               <span style={{ background: "#ede9fe", borderRadius: 6, padding: "2px 8px" }}>
-                {t(E, "add layer ", "층 추가 ")}<b>{r.size}</b>
+                {t(E, "add a size-", "크기 ")}<b>{r.size}</b>{t(E, " layer", " 인 층을 더해요")}
               </span>
-              <span style={{ color: "#7c3aed" }}>→ {t(E, "new lines = ", "새 줄 = ")}<b>{r.prod}</b></span>
-              <span style={{ color: C.dim }}>| {t(E, "running total = ", "여기까지 합 = ")}<b style={{ color: "#5b21b6" }}>{r.running}</b></span>
+              <span style={{ color: "#7c3aed" }}>→ {t(E, "lines it adds = ", "새로 생기는 줄 = ")}<b>{r.prod}</b>{t(E, "", " 줄")}</span>
+              <span style={{ color: C.dim }}>| {t(E, "running total = ", "여기까지 모두 = ")}<b style={{ color: "#5b21b6" }}>{r.running}</b>{t(E, "", " 줄")}</span>
             </div>
           ))}
         </div>
@@ -130,8 +135,9 @@ const orderBtnOn = { border: "2px solid #7c3aed", background: "#ede9fe" };
 export const SOLUTION_CODE = [
   "MOD = 10**9 + 7",
   "",
-  "N = int(input())",
-  "layers = list(map(int, input().split()))",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "N = 2",
+  "layers = [3, 2]",
   "",
   "# smallest layer first keeps the running product small (exchange argument)",
   "order = sorted(layers)",
@@ -212,13 +218,13 @@ export function makeMcc21MenuCh1(E) {
           </div>
 
           {/* aside: dual-output subtlety */}
-          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: "#92400e", lineHeight: 1.55, ...KA }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: "#92400e", lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
             {/* 2026-09-17: 여기서 "정렬한 차례가 곧 제일 좋은 순서" 라고 답을 먼저 말하고 있었다.
                 그 뒤 3 쪽(시뮬 비교 → 퀴즈 → 교환 논증)이 찾아낼 것을 첫 쪽이 통보한 셈이다.
                 출력이 두 가지라는 사실만 남기고 결론은 뺐다. */}
             {t(E,
-              "ℹ️ The original problem has two output modes: some cases want the best ARRANGEMENT printed, others want the minimum line COUNT (mod 1e9+7). We'll teach the count.",
-              "ℹ️ 원래 문제는 출력이 두 가지예요. 어떤 때는 제일 좋은 순서를 물어보고, 어떤 때는 최소 줄 수(mod 1e9+7)를 물어봐요. 우리는 줄 수를 배울 거예요.")}
+              "ℹ️ The original problem has two output modes.\nSome cases want the best ARRANGEMENT printed,\nothers want the minimum line COUNT (mod 1e9+7). We'll teach the count.",
+              "ℹ️ 원래 문제는 출력이 두 가지예요.\n어떤 때는 제일 좋은 순서를 물어보고,\n어떤 때는 최소 줄 수(mod 1e9+7)를 물어봐요.\n우리는 줄 수를 배울 거예요.")}
           </div>
         </div>),
     },
@@ -242,23 +248,31 @@ export function makeMcc21MenuCh1(E) {
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ N ≤ 30, 1 ≤ layer[i] ≤ 10^4.", "제약: 1 ≤ N ≤ 30, 1 ≤ layer[i] ≤ 10^4.")}
             </div>
+            {/* 2026-09-17: 원문(public/problems/mcc21menu.pdf)은 N = 2 / layers = [3, 2] 처럼
+                값을 변수로 준다. 아래 예제 상자의 두 줄은 우리 연습 방식이라고 밝힌다. */}
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: N = 2 and layers = [3, 2].\nOur code writes those same values down and starts from there.\nReading them line by line with input() shows up in the 2022 problems.",
+                "원문은 N = 2, layers = [3, 2] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
+            </div>
           </div>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 130 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>2</div>
-              <div>3 2</div>
+              <div>N = 2</div>
+              <div>layers = [3, 2]</div>
             </div>
             <div style={{ background: "#0f172a", color: "#c4b5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
               <div style={{ fontWeight: 800, fontSize: 18 }}>8</div>
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55,
+            whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
             {t(E,
-              "Best order 2 → 3: the size-2 layer makes 2 lines, then the size-3 layer copies those into 2×3 = 6 lines. Total = 2 + 6 = 8. (Order 3 → 2 would give 3 + 6 = 9 — worse.)",
-              "가장 좋은 순서는 2 → 3 이에요. 크기 2 층이 2 줄을 만들고, 크기 3 층이 그 2 줄을 2×3 = 6 줄로 늘려요. 그래서 모두 2 + 6 = 8 줄이에요. 순서를 3 → 2 로 하면 3 + 6 = 9 줄이라서 더 나빠요.")}
+              "Best order 2 → 3: the size-2 layer makes 2 lines,\nthen the size-3 layer copies those into 2×3 = 6 lines.\nTotal = 2 + 6 = 8. (Order 3 → 2 would give 3 + 6 = 9 — worse.)",
+              "가장 좋은 순서는 2 → 3 이에요.\n크기 2 층이 2 줄을 만들고, 크기 3 층이 그 2 줄을 2×3 = 6 줄로 늘려요.\n그래서 모두 2 + 6 = 8 줄이에요.\n순서를 3 → 2 로 하면 3 + 6 = 9 줄이라서 더 나빠요.")}
           </div>
         </div>),
     },
@@ -345,10 +359,12 @@ export function makeMcc21MenuCh2(E, lang = "py") {
             <div style={{ fontSize: 12, fontWeight: 700, color: "#4338ca", marginBottom: 4 }}>
               {t(E, "Why ascending? (exchange argument)", "왜 오름차순? (교환 논증)")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+            {/* 2026-09-17: 화면에서 185 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6,
+              whiteSpace: "pre-line", textWrap: "balance" }}>
               {t(E,
-                "Look at two neighbours a and b. Whatever the product P of the layers before them, the two lines they add are P·a + P·a·b if a comes first, versus P·b + P·b·a if b comes first. The P·a·b term is the same either way, so we compare P·a vs P·b — the smaller one should go first. So the smallest layer belongs at the front, always.",
-                "이웃한 두 층 a, b 만 봐요. 그 앞 층들의 곱을 P 라고 할게요. a 를 먼저 두면 P·a + P·a·b 가 늘어나고, b 를 먼저 두면 P·b + P·b·a 가 늘어나요. P·a·b 는 어느 쪽이든 똑같으니 P·a 와 P·b 만 견주면 돼요. 더 작은 쪽을 먼저 두는 게 이득이죠. 그래서 가장 작은 층이 항상 맨 앞이에요.")}
+                "Look at two neighbours a and b, with P as the product of the layers before them.\nPut a first and the lines grow by P·a + P·a·b.\nPut b first and they grow by P·b + P·b·a.\nThe P·a·b part is the same either way, so only P·a and P·b differ.\nThe smaller one should go first — so the smallest layer belongs at the front, always.",
+                "이웃한 두 층 a, b 만 봐요. 그 앞 층들의 곱을 P 라고 할게요.\na 를 먼저 두면 P·a + P·a·b 가 늘어나요.\nb 를 먼저 두면 P·b + P·b·a 가 늘어나요.\nP·a·b 는 어느 쪽이든 똑같으니 P·a 와 P·b 만 견주면 돼요.\n더 작은 쪽을 먼저 두는 게 이득이에요.\n그래서 가장 작은 층이 항상 맨 앞이에요.")}
             </div>
           </div>
 

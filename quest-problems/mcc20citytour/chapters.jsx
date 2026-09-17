@@ -10,11 +10,16 @@ const KA = { wordBreak: "keep-all" };
 export const SOLUTION_CODE = [
   "from collections import deque",
   "",
-  "M, N = map(int, input().split())",
-  "H = []",
-  "for _ in range(M):",
-  "    H.append(list(map(int, input().split())))",
-  "D = int(input())",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "M = 4",
+  "N = 5",
+  "D = 5",
+  "H = [",
+  "    [1, 3, 7, 9, 16],",
+  "    [6, 2, 4, 1, 8],",
+  "    [8, 9, 10, 12, 14],",
+  "    [7, 5, 1, 4, 11],",
+  "]",
   "",
   "visited = []",
   "for _ in range(M):            # 줄마다 [False, False, …] 하나씩",
@@ -113,26 +118,36 @@ export function makeMcc20CityTourCh1(E) {
             <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
               📥 {t(E, "Input", "입력")}
             </div>
+            {/* 2026-09-17: 여기가 "1번째 줄 / 다음 M 줄 / 마지막 줄" 이라고 **원문에 없는 줄 형식**을
+                원문인 것처럼 적어 두던 자리다. 원문(public/problems/mcc20citytour.pdf)은
+                M = 4 / N = 5 / D = 5 / H = [[1,3,7,9,16], ...] 처럼 값을 변수로 준다.
+                값의 이름만 남기고, 표준 입력은 우리 연습 방식이라고 밝힌다. */}
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "Line 1: ", "1번째 줄: ")}<b style={{ whiteSpace: "nowrap" }}>M N</b> — {t(E, "rows and columns", "행 수와 열 수")}</div>
-              <div>• {t(E, "Next M lines: ", "다음 M 줄: ")}<b>{t(E, "N heights each", "각 줄에 N 개의 높이")}</b></div>
-              <div>• {t(E, "Last line: ", "마지막 줄: ")}<b>D</b> — {t(E, "the jump threshold", "건너가기 기준값")}</div>
+              <div>• <b>M</b>, <b>N</b> — {t(E, "rows and columns", "행 수와 열 수")}</div>
+              <div>• <b>H</b> — {t(E, "the M×N grid of building heights", "M×N 격자에 담긴 건물 높이")}</div>
+              <div>• <b>D</b> — {t(E, "the jump threshold", "건너가기 기준값")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {/* 2026-09-17: 세미콜론 3개를 쉼표로. 형제 quest(mcc20kitty:209·mcc20cipher:217)가 쉼표를 쓴다. */}
               {t(E, "Limits: 1 ≤ M, N, M×N ≤ 100000, 1 ≤ D ≤ 100000, −10^6 ≤ H ≤ 10^6.", "제약: 1 ≤ M, N, M×N ≤ 100000, 1 ≤ D ≤ 100000, −10^6 ≤ H ≤ 10^6.")}
+            </div>
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: M = 4, N = 5, D = 5, H = [[1,3,7,9,16], …].\nHere we read them from standard input, like the other problems — in the order shown below.",
+                "원문은 M = 4, N = 5, D = 5, H = [[1,3,7,9,16], ...] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
             </div>
           </div>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 170 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>4 5</div>
-              <div>1 3 7 9 16</div>
-              <div>6 2 4 1 8</div>
-              <div>8 9 10 12 14</div>
-              <div>7 5 1 4 11</div>
-              <div>5</div>
+              <div>M = 4</div>
+              <div>N = 5</div>
+              <div>D = 5</div>
+              <div style={{ overflowX: "auto" }}>H = [[1, 3, 7, 9, 16],</div>
+              <div style={{ overflowX: "auto" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6, 2, 4, 1, 8],</div>
+              <div style={{ overflowX: "auto" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[8, 9, 10, 12, 14],</div>
+              <div style={{ overflowX: "auto" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7, 5, 1, 4, 11]]</div>
             </div>
             <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>

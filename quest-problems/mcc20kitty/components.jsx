@@ -132,10 +132,19 @@ export function getMcc20KittySections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "We only care about divisibility by 3, so we keep just each term's remainder (0/1/2). A new remainder = (sum of the previous five remainders) mod 3 — the giant numbers never appear.",
-            "우리는 3의 배수 여부만 궁금하니, 각 항의 나머지(0/1/2)만 들고 다녀요. 새 나머지 = (직전 다섯 나머지의 합) mod 3 — 거대한 숫자는 아예 안 나와요."),
-        t(E, "A 5-window of remainders has only 3^5 = 243 possible states, so the sequence must become periodic. We detect where it repeats, then count zeros as tail + full_cycles × zeros_per_cycle + leftover — instant even for N = 10^15.",
-            "나머지 5칸 창은 상태가 3^5 = 243개뿐이라 수열이 반드시 주기적이 돼요. 반복 지점을 찾아, 0의 개수를 꼬리 + 온전한 사이클 수 × 사이클당 0 + 나머지 조각으로 세요 — N = 10^15이어도 즉시 끝나요."),
+        /* 2026-09-17: 두 줄 다 화면에서 93·123 자가 한 덩어리였다.
+           ⚠️ ProgressiveCodeStepper 는 why 줄을 pre-line 없이 그린다 — 문자열 안의 \n 은
+           공백으로 뭉개진다. 그래서 \n 을 넣지 말고 **항목을 나눠서** 줄을 만든다. */
+        t(E, "We only care about divisibility by 3, so we keep just each term's remainder (0/1/2).",
+            "우리는 3 의 배수인지만 궁금해요. 그래서 각 항의 나머지 0/1/2 만 들고 다녀요."),
+        t(E, "A new remainder = the previous five remainders added up, mod 3. The giant numbers never appear.",
+            "새 나머지는 바로 앞 다섯 나머지를 더해서 3 으로 나눈 나머지예요. 거대한 숫자는 아예 안 나와요."),
+        t(E, "A 5-window of remainders has only 3^5 = 243 possible patterns, so the sequence has to start repeating.",
+            "나머지 5 칸 창은 모양이 3^5 = 243 가지뿐이에요. 그래서 수열이 반드시 되풀이되기 시작해요."),
+        t(E, "We find where it repeats, then count the zeros as tail + (whole loops × zeros per loop) + leftover.",
+            "어디서 되풀이되는지 찾은 뒤, 0 의 개수를 앞쪽 조각 + (한 바퀴의 0 × 바퀴 수) + 남는 조각 으로 세요."),
+        t(E, "That is instant even for N = 10^15.",
+            "N 이 10^15 이어도 바로 끝나요."),
       ],
       pyOnly: [
         t(E, "tuple(r[k-1:k+4]) makes the 5-window hashable so it can be a dict key in `seen`.",
@@ -193,7 +202,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc20KittyPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc20Kitty — Full Study Guide", "Mcc20Kitty — 종합 풀이 노트");

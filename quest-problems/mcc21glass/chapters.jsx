@@ -22,7 +22,13 @@ const CLEAR = "#f1f5f9";
    ───────────────────────────────────────────────────────────── */
 function GlassStackSim({ E }) {
   const ALL = [4, 3, 2, 1];          // demo radii, largest first
-  const [n, setN] = useState(4);
+  /* 2026-09-17: 이 시뮬은 판을 1 → 4 개로 늘리는 **걸음**이 있는데, 열자마자 4 개가 다 쌓인
+     끝 그림이 떠 있었고 맨 아래 글이 "무색 고리가 가운데 항을 지워서 번갈아 합만 남는다" 는
+     결론까지 먼저 말했다. 그러면 걸음이 할 말이 남지 않는다.
+     판 1 개에서 시작하고, 정리는 한 번이라도 눌러 본 뒤에 나온다
+     (mcc20cipher·mcc21carrots 가 쓰는 touched 방식). */
+  const [n, setN] = useState(1);
+  const [touched, setTouched] = useState(false);
   const radii = ALL.slice(0, n);
   const size = 200, cx = size / 2, cy = size / 2, scale = 78 / ALL[0];
 
@@ -39,16 +45,17 @@ function GlassStackSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
           🥛 {t(E, "Stack the plates and watch the black area", "유리판을 쌓으며 검은 넓이를 봐요")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12,
+          whiteSpace: "pre-line", textWrap: "balance" }}>
           {t(E,
-            "All plates share the same center; the biggest sits at the bottom. A spot is BLACK when an ODD number of plates cover it, colorless when EVEN. So the rings flip black / colorless from the outside in.",
-            "유리판은 모두 중심이 같고 제일 큰 판이 맨 아래에 있어요.\n한 지점을 덮는 판이 홀수 개면 검은색, 짝수 개면 무색이에요.\n그래서 바깥에서 안으로 갈수록 고리가 검정과 무색으로 번갈아 나와요.")}
+            "All plates share the same center; the biggest sits at the bottom.\nA spot is BLACK when an ODD number of plates cover it, colorless when EVEN.\nAdd the plates one at a time and watch which rings turn black.",
+            "유리판은 모두 중심이 같고 제일 큰 판이 맨 아래에 있어요.\n한 지점을 덮는 판이 홀수 개면 검은색, 짝수 개면 무색이에요.\n판을 1 개부터 하나씩 늘리면서 어느 고리가 검게 되는지 봐요.")}
         </div>
 
         {/* plate-count selector */}
         <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 10 }}>
           {[1, 2, 3, 4].map((v) => (
-            <button key={v} onClick={() => setN(v)} style={{
+            <button key={v} onClick={() => { setTouched(true); setN(v); }} style={{
               padding: "4px 12px", borderRadius: 6,
               background: n === v ? A : "#fff", color: n === v ? "#fff" : A,
               border: `1.5px solid ${A}`, fontSize: 12, fontWeight: 700, cursor: "pointer",
@@ -93,10 +100,15 @@ function GlassStackSim({ E }) {
               fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, textAlign: "center" }}>
               = <span style={{ color: "#6ee7b7" }}>{sum}</span> π
             </div>
-            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.5, ...KA }}>
-              {t(E,
-                "Each black ring is (outer² − inner²)π. The colorless rings cancel the middle terms, so only the plain alternating sum survives.",
-                "검은 고리 하나의 넓이는 (바깥² − 안²)π 예요.\n무색 고리가 가운데 항을 지워 주니까\n번갈아 더하고 빼는 합만 남아요.")}
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.5,
+              whiteSpace: "pre-line", ...KA }}>
+              {touched
+                ? t(E,
+                    "Each black ring is (outer² − inner²)π. The colorless rings cancel the middle terms, so only the plain alternating sum survives.",
+                    "검은 고리 하나의 넓이는 (바깥² − 안²)π 예요.\n무색 고리가 가운데 항을 지워 주니까\n번갈아 더하고 빼는 합만 남아요.")
+                : t(E,
+                    "Press 1, 2, 3, 4 in turn and watch the sum above.\nWhy does a + turn into a − each time you add a plate?",
+                    "1, 2, 3, 4 를 차례로 눌러 위의 식을 봐요.\n판을 하나 더할 때마다 + 가 − 로 바뀌는 건 왜일까요?")}
             </div>
           </div>
         </div>
@@ -275,14 +287,26 @@ export function makeMcc21GlassCh1(E) {
               <div>• <b>A</b> — {t(E, "black area is A·π (read A, not the area)", "검은 넓이는 A·π 예요. 넓이가 아니라 A 를 읽어요")}</div>
               <div>• <b>R</b> — {t(E, "the N−1 known radii", "아는 반지름 N−1 개")}</div>
             </div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: N ≤ 5·10⁴, A ≤ 10¹⁸, Rᵢ ≤ 10⁹ → squares overflow 32-bit; use big integers.",
-                   "제약: N ≤ 5·10⁴, A ≤ 10¹⁸, Rᵢ ≤ 10⁹\n제곱하면 32비트를 넘으니까 큰 정수를 써야 해요.")}
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 8, whiteSpace: "pre-line", ...KA }}>
+              {/* 2026-09-17: "32비트" 는 학생 말이 아니다. 답이 커서 큰 수를 담아야 한다는
+                  뜻으로 바꿔 쓴다. 제약 숫자는 PDF 그대로다 (case 8 은 N = 10⁵, A ≤ 10¹⁰). */}
+              {t(E, "Limits: N ≤ 5·10⁴, A ≤ 10¹⁸, Rᵢ ≤ 10⁹ — squaring these gets huge, so Python's big integers matter.",
+                   "제약: N ≤ 5·10⁴, A ≤ 10¹⁸, Rᵢ ≤ 10⁹\n반지름을 제곱하면 아주 큰 수가 돼요. 파이썬 정수는 아무리 커져도 괜찮아요.")}
+            </div>
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: N = 4, A = 10, R = [1, 4, 2].\nOur code writes those same values down and starts from there.\nReading them line by line with input() shows up in the 2022 problems.",
+                "원문은 N = 4, A = 10, R = [1, 4, 2] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
             </div>
           </div>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
+              {/* 2026-09-17 — 두 번 바뀐 자리다.
+                  ① 처음엔 원문 모양("N = 4 / A = 10 / R = [1, 4, 2]")인데 코드는 표준 입력을 읽어서 어긋났다.
+                  ② 그래서 상자를 표준 입력 모양으로 바꿨는데, 그 뒤 판정(/decide)이
+                     **코드를 원문 모양으로** 바꾸는 쪽으로 났다. 그래서 상자를 되돌린다.
+                  ⚠️ 상자와 코드는 **항상 같은 모양이어야 한다.** 한쪽만 고치면 또 어긋난다. */}
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
               <div>N = 4</div>
               <div>A = 10</div>
@@ -305,7 +329,7 @@ export function makeMcc21GlassCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Feel the stack. Add plates one at a time and watch which rings turn black — and how the black area becomes an alternating sum of squares.",
+        "Feel the stack. Add plates one at a time and watch which rings turn black.",
         "판을 하나씩 더하면서 어느 고리가 검게 되는지 직접 봐요."),
       content: <GlassStackSim E={E} />,
     },

@@ -49,10 +49,12 @@ function CipherHopSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
           🔁 {t(E, "Follow one letter K times", "한 글자를 K번 따라가기")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        {/* 2026-09-17: 75 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12,
+          whiteSpace: "pre-line", textWrap: "balance" }}>
           {t(E,
-            "The rule sends A[i] → B[i]. Applying it K times just means hopping along the arrow K times. Pick a letter and a K, and watch where it lands.",
-            "규칙은 A[i] 를 B[i] 로 바꿔요. K번 적용하면 화살표를 K번 따라 뛰는 셈이에요. 글자와 K를 골라서 어디에 도착하는지 봐요.")}
+            "The rule sends A[i] → B[i].\nApplying it K times just means hopping along the arrow K times.\nPick a letter and a K, and watch where it lands.",
+            "규칙은 A[i] 를 B[i] 로 바꿔요.\nK 번 적용하면 화살표를 K 번 따라 뛰는 셈이에요.\n글자와 K 를 골라서 어디에 도착하는지 봐요.")}
         </div>
 
         {/* the rule shown as arrows */}
@@ -200,8 +202,8 @@ export function makeMcc20CipherCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. Notice A and B are read as two 26-letter lines — position i pairs them up.",
-        "A 와 B 는 26글자 줄 두 개로 들어와 같은 자리끼리 짝을 지어요."),
+        "Read the input format and the official example. Notice A and B are two 26-letter strings — position i pairs them up.",
+        "A 와 B 는 26 글자짜리 문자열 두 개예요. 같은 자리끼리 짝을 지어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -211,20 +213,27 @@ export function makeMcc20CipherCh1(E) {
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               <div>• <b>S</b> — {t(E, "the message (lowercase)", "메시지 (소문자)")}</div>
               <div>• <b>K</b> — {t(E, "how many times to apply the rule", "규칙을 적용할 횟수")}</div>
-              <div>• <b>A</b>, <b>B</b> — {t(E, "two permutations of a–z; A[i] → B[i]", "a–z 의 순열 두 개예요. A[i] 가 B[i] 로 바뀌어요.")}</div>
+              <div>• <b>A</b>, <b>B</b> — {t(E, "two strings that use each of a–z exactly once; A[i] → B[i]", "a–z 를 한 번씩 섞어 놓은 문자열 두 개예요. A[i] 가 B[i] 로 바뀌어요.")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: |S| (S 의 길이) ≤ 100000, 1 ≤ K ≤ 100000.", "제약: |S| ≤ 100000, 1 ≤ K ≤ 100000.")}
+              {t(E, "Limits: |S| (the length of S) ≤ 100000, 1 ≤ K ≤ 100000.", "제약: |S| (S 의 길이) ≤ 100000, 1 ≤ K ≤ 100000.")}
+            </div>
+            {/* 2026-09-17: 원문(public/problems/mcc20cipher.pdf)은 S = "ctej" / K = 2 / A = … / B = …
+                처럼 값을 변수로 준다. 줄 형식은 우리 연습 방식이니 그렇게 밝힌다. */}
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: S = \"ctej\", K = 2, A = \"zyx…\", B = \"cba…\".\nOur code writes those same values down and starts from there.\nReading them line by line with input() shows up in the 2022 problems.",
+                "원문은 S = \"ctej\", K = 2, A = \"zyx...\", B = \"cba...\" 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
             </div>
           </div>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>ctej</div>
-              <div>2</div>
-              <div style={{ overflowX: "auto" }}>zyxwvutsrqponmlkjihgfedcba</div>
-              <div style={{ overflowX: "auto" }}>cbafedihglkjonmrqputsxwvzy</div>
+              <div>S = &quot;ctej&quot;</div>
+              <div>K = 2</div>
+              <div style={{ overflowX: "auto" }}>A = &quot;zyxwvutsrqponmlkjihgfedcba&quot;</div>
+              <div style={{ overflowX: "auto" }}>B = &quot;cbafedihglkjonmrqputsxwvzy&quot;</div>
             </div>
             <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>

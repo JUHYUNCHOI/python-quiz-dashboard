@@ -35,16 +35,49 @@ export function Mcc21MarblesBoundarySim({ E }) {
   const liveCarry = done ? carry(N - 2) : carry(cur);
   const liveOps = done ? opsUpTo(N - 1) : opsUpTo(cur) + Math.abs(liveCarry);
 
+  /* 2026-09-17: 이 시뮬은 경계를 하나씩 건너는 **걸음**이 4 개인데, 맨 위 상자가
+     걸음을 밟기도 전에 결론("누적은 반드시 그 경계를 건너요. 그게 옮기는 구슬 수예요")을
+     이미 말하고 있었다. 그러면 걸음이 할 말이 남지 않는다.
+     맨 위는 "무엇을 할지" 만 말하고, 설명은 걸음마다 아래 말풍선이 한다 —
+     되는 쪽을 먼저 보이고 → 값을 견주고 → 결론 순서로. */
+  const stepNote = (i) => {
+    const d = diff(i);
+    const c = carry(i);
+    const have = START[i], want = TARGET[i];
+    // 숫자 뒤에 조사가 붙지 않게 "에는 / 에서" 로 쓴다 (상자 2 는 ❌ / 상자 2 에는 ⭕).
+    const amount = (v) => E
+      ? (v > 0 ? `${v} too many` : v < 0 ? `${-v} short` : "exactly right")
+      : (v > 0 ? `${v} 개가 남아요` : v < 0 ? `${-v} 개가 모자라요` : "딱 맞아요");
+    const boxLine = E
+      ? `Box ${i} holds ${have} marbles and must end up with ${want}.`
+      : `상자 ${i} 에는 구슬이 ${have} 개 있는데 ${want} 개가 되어야 해요.`;
+    const selfLine = E
+      ? `Looking at box ${i} alone, it is ${amount(d)}.`
+      : `상자 ${i} 만 보면 ${amount(d)}.`;
+    const sumLine = i === 0 ? null : (E
+      ? `Adding up box 0 through box ${i}, the left side is ${amount(c)}.`
+      : `상자 0 부터 상자 ${i} 까지 더하면 왼쪽 전체는 ${amount(c)}.`);
+    const endLine = c > 0
+      ? (E ? `Those ${c} extra marbles have nowhere to go but right — ${c} cross edge ${i}.`
+           : `남는 ${c} 개는 오른쪽으로 갈 수밖에 없어요. 경계 ${i} 에서 ${c} 개가 건너가요.`)
+      : c < 0
+        ? (E ? `Those ${-c} missing marbles can only come from the right — ${-c} cross edge ${i}.`
+             : `모자란 ${-c} 개는 오른쪽에서 올 수밖에 없어요. 경계 ${i} 에서 ${-c} 개가 건너와요.`)
+        : (E ? `So nothing has to cross edge ${i}.`
+             : `그래서 경계 ${i} 에서는 건너가는 구슬이 없어요.`);
+    return [boxLine, selfLine, sumLine, endLine].filter(Boolean).join("\n");
+  };
+
   return (
     <div style={{ padding: 14 }}>
       <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center", ...KA }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
           🔍 {t(E, "Carry-across Sim", "경계 넘기기 시뮬")}
         </div>
-        <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5, whiteSpace: "pre-line" }}>
           {t(E,
-            "Each box's D = A − B. The running total of D is the carry.\nThe carry MUST cross each boundary — that is the marbles moved there.",
-            "각 상자의 D = A − B 예요.\nD 를 왼쪽부터 더해 온 값을 누적(carry)이라고 해요.\n누적은 반드시 그 경계를 건너요. 그게 옮기는 구슬 수예요.")}
+            "Each box's D = A − B: plus when it has too many, minus when it is short.\nWe walk the edges between the boxes one at a time, left to right,\nand count how many marbles must cross each one.",
+            "각 상자의 D = A − B 예요. 남으면 +, 모자라면 − 예요.\n상자 사이의 경계를 왼쪽부터 하나씩 건너가 볼게요.\n경계마다 구슬이 몇 개 건너야 하는지 세어요.")}
         </div>
       </div>
 
@@ -90,19 +123,32 @@ export function Mcc21MarblesBoundarySim({ E }) {
       </div>
       </div>
 
+      {/* 걸음마다 하는 말 — 되는 쪽을 먼저 보이고 → 값을 견주고 → 결론 (2026-09-17) */}
+      {!done && (
+        <div style={{
+          background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10,
+          padding: "10px 12px", marginBottom: 12, fontSize: 12, lineHeight: 1.7,
+          color: "#7f1d1d", whiteSpace: "pre-line", textWrap: "balance", ...KA,
+        }}>
+          {stepNote(cur)}
+        </div>
+      )}
+
       {/* Live state */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
         <div style={{ background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 10px", ...KA }}>
           <div style={{ fontSize: 10, color: C.dim, textTransform: "uppercase", letterSpacing: 0.5 }}>
-            {t(E, "Carry across edge", "경계 통과 누적")} {done ? N - 2 : cur}
+            {/* 2026-09-17: "경계 통과 누적 0" 은 0 이 경계 번호인지 구슬 수인지 안 말한다.
+                번호를 말 안쪽에 넣어 뜻이 갈리게 한다. */}
+            {E ? `Crossing edge ${done ? N - 2 : cur}` : `경계 ${done ? N - 2 : cur} 에서 건너는 구슬`}
           </div>
           <div style={{ fontSize: 20, fontWeight: 800, color: "#dc2626", fontFamily: "JetBrains Mono, monospace" }}>
             {liveCarry >= 0 ? "+" : ""}{liveCarry}
           </div>
           <div style={{ fontSize: 10, color: C.dim }}>
-            {liveCarry > 0 && t(E, "→ surplus flows right", "→ 남는 구슬이 오른쪽으로")}
-            {liveCarry < 0 && t(E, "← marbles pulled left", "← 구슬이 왼쪽으로 당겨짐")}
-            {liveCarry === 0 && t(E, "balanced — no crossing", "균형 — 통과 없음")}
+            {liveCarry > 0 && t(E, "→ extras move right", "→ 남는 구슬이 오른쪽으로 가요")}
+            {liveCarry < 0 && t(E, "← marbles come from the right", "← 오른쪽에서 구슬이 건너와요")}
+            {liveCarry === 0 && t(E, "already balanced — nothing crosses", "딱 맞아서 건너는 구슬이 없어요")}
           </div>
         </div>
         <div style={{ background: "#fff1f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "8px 10px", ...KA }}>
@@ -113,7 +159,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
             {liveOps}
           </div>
           <div style={{ fontSize: 10, color: "#b91c1c" }}>
-            {t(E, "= sum of |carry|", "= |누적| 의 합")}
+            {t(E, "= the crossings added up", "= 경계마다 건넌 구슬을 다 더한 값")}
           </div>
         </div>
       </div>
@@ -140,13 +186,13 @@ export function Mcc21MarblesBoundarySim({ E }) {
         <div style={{ marginTop: 12, background: "#fff1f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", textAlign: "center", ...KA }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#b91c1c" }}>
             ✅ {t(E,
-              `Answer = sum of |carry| at each boundary = ${liveOps}`,
-              `정답 = 각 경계에서 |누적| 의 합 = ${liveOps}`)}
+              `Answer = every edge's crossings added up = ${liveOps}`,
+              `정답 = 경계마다 건넌 구슬을 다 더한 값 = ${liveOps}`)}
           </div>
-          <div style={{ fontSize: 11, color: "#b91c1c", marginTop: 4 }}>
+          <div style={{ fontSize: 11, color: "#b91c1c", marginTop: 4, whiteSpace: "pre-line", lineHeight: 1.6 }}>
             {t(E,
-              "Each boundary must pass exactly the accumulated imbalance — one O(N) pass.",
-              "각 경계는 누적만큼을 그대로 넘겨요. O(N) 으로 한 번만 훑어요.")}
+              "At each edge there was only ever one choice — the left side's total gap had to cross it.\nSo we never move a marble: one left-to-right pass over N boxes is the whole answer.",
+              "경계마다 고를 것이 없었어요.\n왼쪽에 쌓인 차이가 그대로 건너야만 했으니까요.\n그래서 구슬을 실제로 옮길 필요가 없어요.\n상자 N 개를 왼쪽부터 한 번 훑으면 답이 나와요.")}
           </div>
         </div>
       )}
@@ -155,9 +201,10 @@ export function Mcc21MarblesBoundarySim({ E }) {
 }
 
 const FULL_PY = [
-  "N = int(input())",
-  "A = list(map(int, input().split()))",
-  "B = list(map(int, input().split()))",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "N = 5",
+  "A = [2, 2, 2, 6, 3]",
+  "B = [1, 2, 3, 4, 5]",
   "",
   "# D[i] = A[i] - B[i] : surplus (+) or shortage (-) at box i.",
   "# 경계마다 넘겨야 하는 구슬 = D 의 누적(prefix). 답 = 그 |누적| 의 합.",
@@ -176,15 +223,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    int N;",
-  "    cin >> N;",
-  "    vector<long long> A(N), B(N);",
-  "    for (int i = 0; i < N; i++) {",
-  "        cin >> A[i];",
-  "    }",
-  "    for (int i = 0; i < N; i++) {",
-  "        cin >> B[i];",
-  "    }",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "    int N = 5;",
+  "    vector<long long> A = {2, 2, 2, 6, 3};",
+  "    vector<long long> B = {1, 2, 3, 4, 5};",
   "",
   "    // carry = running prefix of D = A - B; answer = sum of |carry|.",
   "    long long ops = 0;",
@@ -227,10 +269,12 @@ export function getMcc21MarblesSections(E) {
       cppOnly: [
         /* 2026-09-09: why(항상 보임)에 있던 C++ 타입 얘기를 여기로 옮겼다.
            MCC 는 codeLang="py" 고정이라 파이썬 학생이 볼 일이 없다. */
-        t(E, "Use 64-bit (long long): sum(A) can reach 5·10¹¹, far beyond 32-bit range.",
-            "sum(A) 가 5·10¹¹ 까지라 32비트 범위를 훌쩍 넘어요. 그래서 64비트(long long)를 써요."),
-        t(E, "Declare A, B, carry, ops as long long — totals up to 5·10¹¹ overflow a 32-bit int.",
-            "합이 5·10¹¹ 까지라 32비트 int 는 넘쳐요. A, B, carry, ops 를 모두 long long 으로 적어요."),
+        /* 2026-09-17: "64비트 정수" 는 학생 말이 아니다 — 답이 커서 큰 수를 담는 칸이
+           필요하다는 뜻으로 바꿔 쓴다. (\n 은 쓰지 않는다 — Stepper 가 뭉갠다) */
+        t(E, "Use long long: sum(A) can reach 5·10¹¹, which is far more than a plain int can hold.",
+            "sum(A) 가 5·10¹¹ 까지 커져요. 보통 int 칸에는 안 들어가요. 그래서 더 큰 수를 담는 long long 을 써요."),
+        t(E, "Declare A, B, carry and ops as long long — an int would silently wrap around.",
+            "A, B, carry, ops 를 모두 long long 으로 적어요. int 로 두면 값이 조용히 망가져요."),
         t(E, "Read A fully, then B fully (two separate loops) — they arrive on two lines.",
             "A 를 다 읽고 그다음 B 를 다 읽어요. 두 줄로 들어오니까 반복문을 두 개 써요."),
       ],
@@ -278,7 +322,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc21MarblesPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc21Marbles — Full Study Guide", "Mcc21Marbles — 종합 풀이 노트");

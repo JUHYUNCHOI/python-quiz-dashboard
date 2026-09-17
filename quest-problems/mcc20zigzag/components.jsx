@@ -5,8 +5,9 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#8b5cf6";
 
 const FULL_PY = [
-  "s = input().strip()",
-  "K = int(input())",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "s = \"bcade\"",
+  "K = 3",
   "N = len(s)",
   "MOD = 1000   # answer is printed modulo 1000",
   "",
@@ -47,10 +48,9 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    string s;",
-  "    cin >> s;",
-  "    int K;",
-  "    cin >> K;",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "    string s = \"bcade\";",
+  "    int K = 3;",
   "    int N = s.size();",
   "    const long long MOD = 1000;   // answer is printed modulo 1000",
   "",
@@ -215,7 +215,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc20ZigzagPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc20Zigzag — Full Study Guide", "Mcc20Zigzag — 종합 풀이 노트");

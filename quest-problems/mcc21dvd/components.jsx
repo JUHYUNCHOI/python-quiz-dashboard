@@ -196,10 +196,11 @@ export function Mcc21DvdBounceSim({ E }) {
    SOLUTION CODE  (fast: each axis is an independent triangle wave)
    ================================================================ */
 const READ_PY = [
-  "Q = int(input())",
-  "H = list(map(int, input().split()))",
-  "W = list(map(int, input().split()))",
-  "T = list(map(int, input().split()))",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "Q = 4",
+  "H = [3, 2, 7, 36]",
+  "W = [5, 2, 2, 28]",
+  "T = [5, 5, 0, 127]",
 ];
 const ONE_PY = [
   "def one(N, t):",
@@ -215,18 +216,11 @@ const LOOP_PY = [
 const FULL_PY = [...READ_PY, "", ...ONE_PY, "", ...LOOP_PY];
 
 const READ_CPP = [
-  "int Q;",
-  "cin >> Q;",
-  "vector<long long> H(Q), W(Q), T(Q);",
-  "for (int i = 0; i < Q; i++) {",
-  "    cin >> H[i];",
-  "}",
-  "for (int i = 0; i < Q; i++) {",
-  "    cin >> W[i];",
-  "}",
-  "for (int i = 0; i < Q; i++) {",
-  "    cin >> T[i];",
-  "}",
+  "// 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "int Q = 4;",
+  "vector<long long> H = {3, 2, 7, 36};",
+  "vector<long long> W = {5, 2, 2, 28};",
+  "vector<long long> T = {5, 5, 0, 127};",
 ];
 const ONE_CPP = [
   "long long one(long long N, long long t) {",
@@ -268,8 +262,11 @@ export function getMcc21DvdSections(E) {
       color: A,
       py: READ_PY, cpp: READ_CPP,
       why: [
-        t(E, "There are Q independent test cases. Read H, W, T as three arrays — H[i], W[i], T[i] describe query i.",
-            "서로 상관없는 물음이 Q 개 있어요. H, W, T 를 배열 세 개로 읽으면 i 번째 물음이 H[i], W[i], T[i] 가 돼요."),
+        t(E, "There are Q independent test cases.",
+            "서로 상관없는 물음이 Q 개 있어요."),
+        /* 2026-09-17: 74 자가 한 덩어리였다. Stepper 는 \n 을 뭉개니 항목을 나눈다. */
+        t(E, "Read H, W and T as three arrays, and query i is H[i], W[i], T[i].",
+            "H, W, T 를 배열 세 개로 읽으면 i 번째 물음이 H[i], W[i], T[i] 가 돼요."),
         t(E, "Q ≤ 1000, so reading and answering each query in O(1) is plenty fast.",
             "Q ≤ 1000 이라서 물음 하나를 O(1) 에 답하면 충분히 빨라요."),
       ],

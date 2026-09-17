@@ -106,12 +106,22 @@ export function makeMcc21DvdCh1(E) {
               {t(E, "Output: for each query, 'r c' (one space) on its own line, in the original order.",
                     "출력은 물음마다 한 줄이에요. 두 수 사이에 공백 하나를 두고 'r c' 처럼 쓰고, 물음이 들어온 순서 그대로 내보내요.")}
             </div>
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: Q = 4, H = [3,2,7,36], W = [5,2,2,28], T = [5,5,0,127].\nOur code writes those same values down and starts from there.\nReading them line by line with input() shows up in the 2022 problems.",
+                "원문은 Q = 4, H = [3,2,7,36], W = [5,2,2,28], T = [5,5,0,127] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
+            </div>
           </div>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 170 }}>
+              {/* 2026-09-17 — 두 번 바뀐 자리다.
+                  ① 처음엔 원문 모양("Q = 4 / H = [...]")인데 코드는 표준 입력을 읽어서 어긋났다.
+                  ② 그래서 상자를 표준 입력 모양으로 바꿨는데, 그 뒤 판정(/decide)이
+                     **코드를 원문 모양으로** 바꾸는 쪽으로 났다. 그래서 상자를 되돌린다.
+                  ⚠️ 상자와 코드는 **항상 같은 모양이어야 한다.** 한쪽만 고치면 또 어긋난다. */}
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div style={{ color: "#94a3b8" }}>Q = 4</div>
+              <div>Q = 4</div>
               <div>H = [3, 2, 7, 36]</div>
               <div>W = [5, 2, 2, 28]</div>
               <div>T = [5, 5, 0, 127]</div>
@@ -124,10 +134,12 @@ export function makeMcc21DvdCh1(E) {
               <div style={{ fontWeight: 800 }}>14 20</div>
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {/* 2026-09-17: 81 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55,
+            whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
             {t(E,
-              "Query 1 (H=3, W=5, T=5) → row 2, col 4. Query 3 has T=0, so the logo is still at its start (1 1).",
-              "첫 번째 물음 (H=3, W=5, T=5) 의 답은 행 2, 열 4 예요. 세 번째 물음은 T=0 이라 로고가 아직 출발점 (1 1) 에 있어요.")}
+              "Query 1 (H=3, W=5, T=5) → row 2, col 4.\nQuery 3 has T=0, so the logo is still at its start (1 1).",
+              "첫 번째 물음 (H=3, W=5, T=5) 의 답은 행 2, 열 4 예요.\n세 번째 물음은 T=0 이라 로고가 아직 출발점 (1 1) 에 있어요.")}
           </div>
         </div>),
     },
@@ -185,9 +197,11 @@ export function makeMcc21DvdCh2(E, lang = "py") {
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
                 🚀 {t(E, "Fast: the row and the column repeat", "빠름: 행 따로, 열 따로 — 되풀이를 이용해요")}
               </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Row (from H) and column (from W) never interact. Each bounces with period 2(N−1), so r = N − |(N−1) − (T mod 2(N−1))|. O(1) per query.",
-                      "행은 H 만, 열은 W 만 보면 돼요. 둘은 서로 영향을 주지 않아요. 둘 다 2(N−1) 초마다 똑같이 되풀이돼서 r = N − |(N−1) − (T mod 2(N−1))| 로 바로 구해요. 물음 하나를 O(1) 에 끝내요.")}
+              {/* 2026-09-17: 화면에서 126 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55,
+                whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
+                {t(E, "Row (from H) and column (from W) never interact.\nEach bounces with period 2(N−1),\nso r = N − |(N−1) − (T mod 2(N−1))|. O(1) per query.",
+                      "행은 H 만, 열은 W 만 보면 돼요. 둘은 서로 영향을 주지 않아요.\n둘 다 2(N−1) 초마다 똑같이 되풀이돼요.\n그래서 r = N − |(N−1) − (T mod 2(N−1))| 로 바로 구해요.\n물음 하나를 O(1) 에 끝내요.")}
               </div>
             </div>
           </div>

@@ -8,9 +8,10 @@ const FULL_PY = [
   "import sys, math",
   "input = sys.stdin.readline",
   "",
-  "N = int(input())",
-  "A = int(input())",
-  "R = list(map(int, input().split()))",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "N = 4",
+  "A = 10",
+  "R = [1, 4, 2]",
   "",
   "b = sorted(R, reverse=True)   # known radii, largest first",
   "m = N - 1",
@@ -61,14 +62,11 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    int N;",
-  "    long long A;",
-  "    cin >> N >> A;",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "    int N = 4;",
+  "    long long A = 10;",
+  "    vector<long long> b = {1, 4, 2};",
   "    int m = N - 1;",
-  "    vector<long long> b(m);",
-  "    for (auto &v : b) {",
-  "        cin >> v;",
-  "    }",
   "    sort(b.rbegin(), b.rend());          // largest first",
   "",
   "    // prefix alternating sum of squares (use __int128 — sums exceed 10^18)",
@@ -273,7 +271,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc21GlassPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc21Glass — Full Study Guide", "Mcc21Glass — 종합 풀이 노트");

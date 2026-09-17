@@ -191,7 +191,11 @@ def jsx_text(src, holes):
 
 
 def main():
-    args = [a for a in sys.argv[1:] if not a.startswith("-")]
+    # ⚠️ 셸에서 "$Q" 처럼 따옴표째 넘기면 quest 열 개가 **한 덩어리 문자열**로 들어온다.
+    #    그러면 어느 quest 와도 안 맞아 **0건** 이 나온다 — 거짓 깨끗함이다.
+    #    2026-09-17 에 실제로 그렇게 속았다. 공백이 있으면 쪼갠다.
+    raw = [a for a in sys.argv[1:] if not a.startswith("-")]
+    args = [x for a in raw for x in a.split()]
     want = set(args) if args else None
 
     files = sorted(glob.glob("quest-problems/*/*.jsx"))

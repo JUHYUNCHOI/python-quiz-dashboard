@@ -136,11 +136,16 @@ const dBtn = {
 const FULL_PY = [
   "from collections import deque",
   "",
-  "M, N = map(int, input().split())",
-  "H = []",
-  "for _ in range(M):",
-  "    H.append(list(map(int, input().split())))",
-  "D = int(input())",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "M = 4",
+  "N = 5",
+  "D = 5",
+  "H = [",
+  "    [1, 3, 7, 9, 16],",
+  "    [6, 2, 4, 1, 8],",
+  "    [8, 9, 10, 12, 14],",
+  "    [7, 5, 1, 4, 11],",
+  "]",
   "",
   "visited = []",
   "for _ in range(M):            # 줄마다 [False, False, …] 하나씩",
@@ -170,16 +175,16 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    int M, N;",
-  "    cin >> M >> N;",
-  "    vector<vector<int>> H(M, vector<int>(N));",
-  "    for (int i = 0; i < M; i++) {",
-  "        for (int j = 0; j < N; j++) {",
-  "            cin >> H[i][j];",
-  "        }",
-  "    }",
-  "    int D;",
-  "    cin >> D;",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "    int M = 4;",
+  "    int N = 5;",
+  "    int D = 5;",
+  "    vector<vector<int>> H = {",
+  "        {1, 3, 7, 9, 16},",
+  "        {6, 2, 4, 1, 8},",
+  "        {8, 9, 10, 12, 14},",
+  "        {7, 5, 1, 4, 11},",
+  "    };",
   "",
   "    vector<vector<bool>> visited(M, vector<bool>(N, false));",
   "    visited[0][0] = true;          // start at (1,1) = index (0,0)",
@@ -215,12 +220,20 @@ export function getMcc20CityTourSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Flood-fill (BFS) from the start (1,1): pop a cell, then for each of its 4 neighbors, step in only if it hasn't been visited AND the height gap |H[nr][nc] − H[r][c]| < D.",
-            "시작 (1,1) 에서 플러드필 (BFS) 을 해요. 칸을 하나 꺼내서 이웃 4 개를 보고, 아직 안 간 칸이면서 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요."),
-        t(E, "Mark visited AT PUSH time and bump count then — so every reachable cell is counted exactly once. The answer is how many cells got visited.",
-            "큐에 넣는 순간 방문 표시를 하고 그때 count 를 올려요. 그래야 갈 수 있는 칸이 정확히 한 번씩만 세어져요. 답은 방문한 칸의 개수예요."),
-        t(E, "There is no fixed wall map: whether an edge is open depends on the two heights AND D. The same neighbor can be open for a large D and blocked for a small D — adjacency is dynamic.",
-            "벽이 어디인지 미리 정해져 있지 않아요. 길이 열리는지는 두 높이와 D 에 따라 달라져요. 같은 이웃도 D 가 크면 열리고 작으면 막혀요."),
+        /* 2026-09-17: 104·80 자가 한 덩어리였다. Stepper 는 \n 을 뭉개니 항목을 나눈다.
+           "플러드필" 은 뜻을 안 밝힌 음차어라 우리말로 먼저 말하고 이름을 뒤에 붙인다. */
+        t(E, "Start at (1,1) and let the reachable area spread outwards — this is BFS (flood fill).",
+            "시작 칸 (1,1) 에서 갈 수 있는 곳을 바깥으로 번져 나가게 해요. 이 방법을 BFS(번져 나가며 채우기)라고 불러요."),
+        t(E, "Pop a cell, then for each of its 4 neighbors step in only if it hasn't been visited AND the height gap |H[nr][nc] − H[r][c]| < D.",
+            "칸을 하나 꺼내서 이웃 4 개를 봐요. 아직 안 간 칸이면서 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요."),
+        t(E, "Mark visited AT PUSH time and bump count then — so every reachable cell is counted exactly once.",
+            "큐에 넣는 순간 방문 표시를 하고 그때 count 를 올려요. 그래야 갈 수 있는 칸이 정확히 한 번씩만 세어져요."),
+        t(E, "The answer is how many cells got visited.",
+            "답은 방문한 칸의 개수예요."),
+        t(E, "There is no fixed wall map: whether an edge is open depends on the two heights AND D.",
+            "벽이 어디인지 미리 정해져 있지 않아요. 길이 열리는지는 두 높이와 D 에 따라 달라져요."),
+        t(E, "The same neighbour can be open for a large D and blocked for a small one.",
+            "같은 이웃도 D 가 크면 열리고 작으면 막혀요."),
       ],
       pyOnly: [
         t(E, "deque.popleft() is O(1) — that is what makes this BFS, not a slow list.pop(0) each step.",
@@ -278,7 +291,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc20CityTourPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc20CityTour — Full Study Guide", "Mcc20CityTour — 종합 풀이 노트");

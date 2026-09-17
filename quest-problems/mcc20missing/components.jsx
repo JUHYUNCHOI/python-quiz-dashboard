@@ -10,8 +10,9 @@ const A = "#f97316";
    0/20000 mismatches vs an exhaustive brute over all K in [−3N,3N].
    ================================================================ */
 const FULL_PY = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "N = 5",
+  "a = [-1, 7, 4, 1]",
   "",
   "if N == 1:",
   "    print(1)",
@@ -45,17 +46,14 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    int N;",
-  "    cin >> N;",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "    int N = 5;",
   "    if (N == 1) {",
   "        cout << 1 << \"\\n\";",
   "        return 0;",
   "    }",
   "",
-  "    vector<long long> a(N - 1);",
-  "    for (int i = 0; i < N - 1; i++) {",
-  "        cin >> a[i];",
-  "    }",
+  "    vector<long long> a = {-1, 7, 4, 1};",
   "",
   "    long long total = (long long)N * (N + 1) / 2;   // sum of 1..N",
   "    long long mn = a[0];",
@@ -110,14 +108,28 @@ export function getMcc20MissingSections(E) {
         /* 2026-09-17: 앞 쪽에서 그림으로 유도한 것을 여기서 다시 글로 풀어 쓰고 있었다.
            같은 결론이 네 번째였다. 여기서는 그 결론을 코드 한 줄로만 가리킨다. */
         t(E,
-          "The four candidate K we worked out on the previous page become one line: {mn+N, mx−N, mn+(N−1), mx−(N−1)}. Instead of all 6N+1 values of K, we test these.",
-          "앞 쪽에서 찾은 후보 네 개가 코드에서는 한 줄이에요. {mn+N, mx−N, mn+(N−1), mx−(N−1)} 이에요. K 를 6N+1 개 다 보는 대신 이 넷만 확인해요."),
+          "The four candidate K we worked out on the previous page become one line: {mn+N, mx−N, mn+(N−1), mx−(N−1)}.",
+          "앞 쪽에서 찾은 후보 네 개가 코드에서는 한 줄이에요. {mn+N, mx−N, mn+(N−1), mx−(N−1)} 이에요."),
+        /* 2026-09-17: 98·80 자가 한 덩어리였다. Stepper 는 \n 을 뭉개니 항목을 나눈다. */
         t(E,
-          "For a candidate K, undo it with |x−K| to recover the original magnitudes. It's a valid reconstruction only if we get N−1 DISTINCT magnitudes, all inside [1, N].",
-          "후보 K 마다 |x−K| 로 되돌려 원래 크기들을 복원해요. N−1 개가 모두 서로 다르고, 전부 [1, N] 안에 있어야만 올바른 복원이에요."),
+          "Instead of all 6N+1 values of K, we test just these four.",
+          "K 를 6N+1 개 다 보는 대신 이 넷만 확인해요."),
         t(E,
-          "When valid, the one value of 1..N not among those magnitudes is the missing number: total − sum(mags). Add it up over every valid K (a repeat missing value counts again per K).",
-          "복원이 맞으면, 1..N 중 그 크기들에 없는 하나가 바로 빠진 숫자예요. total − sum(mags) 로 구해요. 맞는 K 마다 이 값을 더해요 (같은 값이라도 K 가 다르면 다시 세어요)."),
+          "For a candidate K, undo it with |x−K| to recover the original magnitudes.",
+          "후보 K 마다 |x−K| 로 되돌려 원래 크기들을 복원해요."),
+        t(E,
+          "It is a valid reconstruction only if the N−1 magnitudes are all different and all inside [1, N].",
+          "N−1 개가 모두 서로 다르고, 전부 [1, N] 안에 있어야만 올바른 복원이에요."),
+        /* 2026-09-17: 109 자가 한 덩어리였다 + "total" 이 무엇인지 안 말했다. 항목을 나눈다. */
+        t(E,
+          "When valid, the one value of 1..N not among those magnitudes is the missing number.",
+          "복원이 맞으면, 1..N 중 그 크기들에 없는 하나가 바로 빠진 숫자예요."),
+        t(E,
+          "We get it as (sum of 1..N) − (sum of the recovered magnitudes) = total − sum(mags).",
+          "그 수는 (1..N 의 합) − (되돌린 크기들의 합) 이에요. 코드에서는 total − sum(mags) 예요."),
+        t(E,
+          "Add it up over every valid K — a repeated missing value counts again for each K.",
+          "맞는 K 마다 이 값을 더해요. 같은 값이라도 K 가 다르면 다시 세어요."),
         t(E,
           "Guard: K must stay in [−3N, 3N]; skip any candidate outside that range.",
           "한 가지 더 확인해요. K 는 반드시 [−3N, 3N] 안에 있어야 하고, 벗어난 후보는 건너뛰어요."),
@@ -174,7 +186,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc20MissingPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc20Missing — Full Study Guide", "Mcc20Missing — 종합 풀이 노트");

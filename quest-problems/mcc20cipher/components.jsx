@@ -5,10 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 const FULL_PY = [
-  "S = input().strip()",
-  "K = int(input())",
-  "A = input().strip()",
-  "B = input().strip()",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "S = \"ctej\"",
+  "K = 2",
+  "A = \"zyxwvutsrqponmlkjihgfedcba\"",
+  "B = \"cbafedihglkjonmrqputsxwvzy\"",
   "",
   "# one application of the rule: A[i] turns into B[i]",
   "step = {}",
@@ -33,9 +34,11 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    string S, A, B;",
-  "    int K;",
-  "    cin >> S >> K >> A >> B;",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "    string S = \"ctej\";",
+  "    int K = 2;",
+  "    string A = \"zyxwvutsrqponmlkjihgfedcba\";",
+  "    string B = \"cbafedihglkjonmrqputsxwvzy\";",
   "",
   "    // one application of the rule: A[i] turns into B[i]",
   "    int step[26];",
@@ -71,8 +74,13 @@ export function getMcc20CipherSections(E) {
       why: [
         t(E, "step[A[i]] = B[i] stores ONE application of the rule as a lookup table.",
             "step[A[i]] = B[i] 는 규칙을 한 번 적용한 결과를 표 하나에 적어 둬요."),
-        t(E, "The trick: instead of rewriting the long message K times, ask each of the 26 letters where it lands after K hops — build 'after' once, then rewrite S in a single pass.",
-            "긴 메시지를 K번 다시 쓰지 않아요. 대신 26글자마다 'K번 뛰면 어디에 도착하나?' 를 물어 'after' 표를 한 번만 만들어요. 그다음 S 를 한 번만 훑어 바꿔요."),
+        /* 2026-09-17: 96 자가 한 덩어리였다. Stepper 는 \n 을 뭉개니 항목을 나눈다. */
+        t(E, "The trick: don't rewrite the long message K times.",
+            "긴 메시지를 K 번 다시 쓰지 않아요."),
+        t(E, "Ask each of the 26 letters where it lands after K hops, and build the 'after' table once.",
+            "대신 26 글자마다 'K 번 뛰면 어디에 도착하나?' 를 물어 'after' 표를 한 번만 만들어요."),
+        t(E, "Then rewrite S in a single pass.",
+            "그다음 S 를 한 번만 훑어 바꿔요."),
       ],
       pyOnly: [
         t(E, "''.join(after[c] for c in S) rewrites the whole message in one line.",
@@ -128,7 +136,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc20CipherPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc20Cipher — Full Study Guide", "Mcc20Cipher — 종합 풀이 노트");

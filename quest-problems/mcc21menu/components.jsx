@@ -7,8 +7,9 @@ const A = "#8b5cf6";
 const FULL_PY = [
   "MOD = 10**9 + 7",
   "",
-  "N = int(input())",
-  "layers = list(map(int, input().split()))",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "N = 2",
+  "layers = [3, 2]",
   "",
   "# smallest layer first keeps the running product small (exchange argument)",
   "order = sorted(layers)",
@@ -31,12 +32,9 @@ const FULL_CPP = [
   "const long long MOD = 1000000007;",
   "",
   "int main() {",
-  "    int N;",
-  "    cin >> N;",
-  "    vector<long long> layers(N);",
-  "    for (int i = 0; i < N; i++) {",
-  "        cin >> layers[i];",
-  "    }",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "    int N = 2;",
+  "    vector<long long> layers = {3, 2};",
   "",
   "    // smallest layer first keeps the running product small",
   "    sort(layers.begin(), layers.end());",
@@ -62,8 +60,9 @@ export function getMcc21MenuSections(E) {
       py: [
         "MOD = 10**9 + 7",
         "",
-        "N = int(input())",
-        "layers = list(map(int, input().split()))",
+        "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+        "N = 2",
+        "layers = [3, 2]",
       ],
       cpp: [
         "#include <iostream>",
@@ -73,10 +72,10 @@ export function getMcc21MenuSections(E) {
         "const long long MOD = 1000000007;",
         "",
         "int main() {",
-        "    int N;",
-        "    cin >> N;",
+        "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+        "    int N = 2;",
         "    vector<long long> layers(N);",
-        "    for (int i = 0; i < N; i++) cin >> layers[i];",
+        "    layers = {3, 2};",
       ],
       why: [
         t(E, "Read N and the N layer sizes into a list. That's all the input — the whole problem is just deciding their order.",
@@ -182,7 +181,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc21MenuPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc21Menu — Full Study Guide", "Mcc21Menu — 종합 풀이 노트");

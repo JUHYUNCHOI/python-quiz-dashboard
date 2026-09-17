@@ -71,10 +71,12 @@ export function KnightExactSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
           ♞ {t(E, "Can it arrive in EXACTLY K moves?", "정확히 K번에 도착할 수 있을까?")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        {/* 2026-09-17: 75 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12,
+          whiteSpace: "pre-line", textWrap: "balance" }}>
           {t(E,
-            "Click a square to pick a target. See its MINIMUM moves. Then change K and watch: green means the knight can land there in exactly K moves.",
-            "칸을 눌러 목표를 골라요. 그 칸까지 최소 이동이 나와요. 그다음 K를 바꿔 봐요. 초록이면 정확히 K번에 도착할 수 있다는 뜻이에요.")}
+            "Click a square to pick a target. Its MINIMUM number of moves appears.\nThen change K and watch:\ngreen means the knight can land there in exactly K moves.",
+            "칸을 눌러 목표를 골라요. 그 칸까지 최소 이동이 나와요.\n그다음 K 를 바꿔 봐요.\n초록이면 정확히 K 번에 도착할 수 있다는 뜻이에요.")}
         </div>
 
         {/* board */}
@@ -118,7 +120,9 @@ export function KnightExactSim({ E }) {
 
         {/* offset + min readout */}
         <div style={{ textAlign: "center", fontSize: 12.5, color: C.text, marginBottom: 10, ...KA }}>
-          {t(E, "target offset ", "목표 오프셋 ")}
+          {/* 2026-09-17: "오프셋" 은 화면에서 한 번도 뜻을 안 밝힌 음차어였다.
+              무엇에서 무엇을 뺀 값인지를 그 자리에서 말한다. */}
+          {t(E, "gap from the knight to the target (rows, cols) ", "나이트에서 목표까지의 차이 (세로, 가로) ")}
           <b style={{ color: A, fontFamily: "'JetBrains Mono',monospace" }}>({dx}, {dy})</b>
           {t(E, "  ·  minimum moves = ", "  ·  최소 이동 = ")}
           <b style={{ color: A }}>{need}</b>
@@ -192,10 +196,11 @@ const FULL_PY = [
   "            best[nx - LO][ny - LO] = best[x - LO][y - LO] + 1",
   "            q.append((nx, ny))",
   "",
-  "T = int(input())",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "T = 3",
+  "cases = [[2, 0, 0, 3, 3], [5, -2, -2, 100, 100], [2, 0, 0, 1, 2]]",
   "out = []",
-  "for _ in range(T):",
-  "    K, X, Y, A, B = map(int, input().split())",
+  "for K, X, Y, A, B in cases:",
   "    dx, dy = abs(X - A), abs(Y - B)",
   "    need = best[dx - LO][dy - LO]",
   "    # exactly K  <=>  K >= need and leftover (K - need) is even",
@@ -242,11 +247,19 @@ const FULL_CPP = [
   "        }",
   "    }",
   "",
-  "    int T;",
-  "    cin >> T;",
-  "    while (T--) {",
-  "        int K, X, Y, A, B;",
-  "        cin >> K >> X >> Y >> A >> B;",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "    int T = 3;",
+  "    int cases[3][5] = {",
+  "        {2, 0, 0, 3, 3},",
+  "        {5, -2, -2, 100, 100},",
+  "        {2, 0, 0, 1, 2},",
+  "    };",
+  "    for (int c = 0; c < T; c++) {",
+  "        int K = cases[c][0];",
+  "        int X = cases[c][1];",
+  "        int Y = cases[c][2];",
+  "        int A = cases[c][3];",
+  "        int B = cases[c][4];",
   "        int dx = abs(X - A);",
   "        int dy = abs(Y - B);",
   "        int need = best[dx - LO][dy - LO];",
@@ -278,10 +291,15 @@ export function getMcc20KnightSections(E) {
       color: "#0891b2",
       py: PY_SETUP, cpp: CPP_SETUP,
       why: [
-        t(E, "Reaching (A,B) from (X,Y) is the same as covering the offset (dx,dy) = (|X−A|, |Y−B|) from (0,0). So we never store a query's actual coordinates — one table of offsets serves all 400 queries.",
-            "(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 차이 (dx,dy) = (|X−A|, |Y−B|) 만큼 가는 것과 같아요. 그래서 질문에 나온 좌표 자체는 저장하지 않아요. 차이만 담은 표 하나면 질문 400 개를 전부 처리해요."),
-        t(E, "−1 means 'not reached yet'. The table is a little bigger than 2000 on purpose: the shortest way to a near square sometimes steps backwards past 0 first.",
-            "−1 은 '아직 도착 못 했다' 는 뜻이에요. 표를 2000 보다 조금 크게 잡은 건 일부러예요. 가까운 칸으로 가는 가장 짧은 길이 0 뒤쪽으로 한 번 나갔다 오는 경우가 있거든요."),
+        t(E, "Reaching (A,B) from (X,Y) is the same as covering the gap (dx,dy) = (|X−A|, |Y−B|) from (0,0).",
+            "(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 차이 (dx,dy) = (|X−A|, |Y−B|) 만큼 가는 것과 같아요."),
+        /* 2026-09-17: 132 자가 한 덩어리였다. Stepper 가 \n 을 뭉개니 항목을 나눈다. */
+        t(E, "So we never store a query's actual coordinates — one table of gaps serves all 400 queries.",
+            "그래서 질문에 나온 좌표 자체는 저장하지 않아요. 차이만 담은 표 하나면 질문 400 개를 전부 처리해요."),
+        t(E, "−1 means 'not reached yet'.",
+            "−1 은 '아직 도착 못 했다' 는 뜻이에요."),
+        t(E, "The table is a little bigger than 2000 on purpose: the shortest way to a near square sometimes steps backwards past 0 first.",
+            "표를 2000 보다 조금 크게 잡은 건 일부러예요. 가까운 칸으로 가는 가장 짧은 길이 0 뒤쪽으로 한 번 나갔다 오는 경우가 있거든요."),
       ],
       pyOnly: [
         t(E, "best[nx - LO][ny - LO] shifts coordinates by LO so negative cells fit into a normal 2D list.",
@@ -363,7 +381,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc20KnightPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc20Knight — Full Study Guide", "Mcc20Knight — 종합 풀이 노트");

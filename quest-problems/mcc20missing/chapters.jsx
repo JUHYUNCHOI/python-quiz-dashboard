@@ -87,10 +87,12 @@ function Mcc20MissingAnchorSim({ E }) {
         <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 4 }}>
           {t(E, "candidate K — pick one", "후보 K — 하나 골라요")}
         </div>
-        <div style={{ fontSize: 11, color: C.dim, marginBottom: 6, ...KA }}>
+        {/* 2026-09-17: 98 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+        <div style={{ fontSize: 11, color: C.dim, marginBottom: 6,
+          whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
           {t(E,
-            `Four formulas — min+N, max−N, min+(N−1), max−(N−1) — but two of them land on the same number here, so there are ${candidates.length} buttons. Why only these? That is the next page.`,
-            `식은 min+N, max−N, min+(N−1), max−(N−1) 네 개인데 여기서는 둘이 같은 값이라 버튼이 ${candidates.length} 개예요. 왜 이 식들만 보면 되는지는 다음 쪽에서 찾아봐요.`)}
+            `Four formulas — min+N, max−N, min+(N−1), max−(N−1).\nTwo of them land on the same number here, so there are ${candidates.length} buttons.\nWhy only these? That is the next page.`,
+            `식은 min+N, max−N, min+(N−1), max−(N−1) 네 개예요.\n여기서는 그중 둘이 같은 값이라 버튼이 ${candidates.length} 개예요.\n왜 이 식들만 보면 되는지는 다음 쪽에서 찾아봐요.`)}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
           {candidates.map((c) => (
@@ -130,7 +132,9 @@ function Mcc20MissingAnchorSim({ E }) {
                   <span style={{ color: "#6ee7b7" }}>
                     {N - 1} {t(E, "distinct magnitudes in [1,", "개 크기가 모두 다르고 [1,")}{N}]
                   </span><br />
-                  {t(E, "missing = total − sum = ", "빠진 수 = total − 합 = ")}
+                  {/* 2026-09-17: "total − 합" 에서 total 이 무엇인지 화면에 없었다 (⑤).
+                      위 칸에 이미 "1..N 의 합" 이라고 적어 두었으니 같은 이름을 쓴다. */}
+                  {t(E, "missing = (sum of 1..N) − (sum of the undone values) = ", "빠진 수 = (1..N 의 합) − (되돌린 값들의 합) = ")}
                   <b style={{ color: "#fbbf24" }}>{total}</b> − <b style={{ color: "#fbbf24" }}>{mags.reduce((s, m) => s + m, 0)}</b> = <b style={{ color: "#34d399" }}>{missing}</b>
                 </span>
               ) : (
@@ -166,8 +170,9 @@ function Mcc20MissingAnchorSim({ E }) {
    VERIFIED: official samples N=5→4, N=6→7; 0/20000 vs brute (N≥2).
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
+  "N = 5",
+  "a = [-1, 7, 4, 1]",
   "",
   "if N == 1:",
   "    print(1)",
@@ -276,12 +281,20 @@ export function makeMcc20MissingCh1(E) {
             <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 8 }}>
               📥 {t(E, "Input", "입력")}
             </div>
+            {/* 2026-09-17: 여기가 "1번째 줄 / 2번째 줄" 이라고 **원문에 없는 줄 형식**을 원문인 것처럼
+                적어 두던 자리다. 원문(public/problems/mcc20missing.pdf)은
+                N = 5 / Numbers = [-1, 7, 4, 1] 처럼 값을 변수로 준다. */}
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "line 1: ", "1번째 줄: ")}<b>N</b></div>
-              <div>• {t(E, "line 2: the ", "2번째 줄: ")}<b>N−1</b> {t(E, "resulting integers", "개의 결과 정수")}</div>
+              <div>• <b>N</b> — {t(E, "the permutation was 1..N", "원래 수는 1 부터 N 까지였어요")}</div>
+              <div>• <b>Numbers</b> — {t(E, "the N−1 numbers that are left", "남아 있는 수 N−1 개")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ N ≤ 100000, −3N ≤ K ≤ 3N.", "제약: 1 ≤ N ≤ 100000, −3N ≤ K ≤ 3N.")}
+            </div>
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The original problem hands the data over as values: N = 5 and Numbers = [-1, 7, 4, 1].\nOur code writes those same values down and starts from there.\nReading them line by line with input() shows up in the 2022 problems.",
+                "원문은 N = 5, Numbers = [-1, 7, 4, 1] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
             </div>
           </div>
 
@@ -289,8 +302,8 @@ export function makeMcc20MissingCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 10, ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example 1 input", "예제 1 입력")}</div>
-              <div>5</div>
-              <div>-1 7 4 1</div>
+              <div>N = 5</div>
+              <div>Numbers = [-1, 7, 4, 1]</div>
             </div>
             <div style={{ background: "#0f172a", color: "#fdba74", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
@@ -302,8 +315,8 @@ export function makeMcc20MissingCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example 2 input", "예제 2 입력")}</div>
-              <div>6</div>
-              <div>4 5 13 6 11</div>
+              <div>N = 6</div>
+              <div>Numbers = [4, 5, 13, 6, 11]</div>
             </div>
             <div style={{ background: "#0f172a", color: "#fdba74", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
@@ -311,10 +324,12 @@ export function makeMcc20MissingCh1(E) {
             </div>
           </div>
 
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {/* 2026-09-17: 72 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55,
+            whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
             {t(E,
-              "Example 2 has TWO valid K: K=10 makes the missing number 2, and K=7 makes it 5. The answer counts both: 2 + 5 = 7.",
-              "예제 2 는 맞는 K 가 둘이에요. K=10 이면 빠진 수가 2, K=7 이면 5 예요. 둘 다 세니까 2 + 5 = 7 이에요.")}
+              "Example 2 has TWO valid K.\nK=10 makes the missing number 2, and K=7 makes it 5.\nThe answer counts both: 2 + 5 = 7.",
+              "예제 2 는 맞는 K 가 둘이에요.\nK=10 이면 빠진 수가 2, K=7 이면 5 예요.\n둘 다 세니까 2 + 5 = 7 이에요.")}
           </div>
         </div>),
     },
