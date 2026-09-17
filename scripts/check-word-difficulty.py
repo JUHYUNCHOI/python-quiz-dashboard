@@ -52,7 +52,7 @@ SYNONYMS = [
 INSIDE = {
     "글":   ["글자", "한글", "글씨", "글쓰기"],
     "문자": ["문자열"],
-    "열":   ["문자열", "배열", "나열", "열다", "열어", "열고", "열린", "열리", "열기", "열쇠",
+    "열":   ["문자열", "배열", "나열", "열다", "열어", "열고", "열린", "열리", "열기", "열림", "열려", "열쇠",
              "열심", "계열", "서열", "열째", "열번", "열혈"],
     "줄":   ["줄이", "줄어", "줄기", "줄자"],
     "행":   ["행동", "행복", "실행", "진행", "은행", "여행", "수행", "시행", "행렬",
@@ -99,15 +99,44 @@ HARD = {
 TRANSLATIONESE = [
     ("세미콜론 — 한국어엔 `;` 를 안 쓴다",
      re.compile(r";")),
-    ("콜론으로 문장을 이어붙였다",
-     # 콜론 뒤가 한글이 아니어도 잡는다 — "가격은 엄격 증가: a_1 < a_2" 처럼
-     # **수식이 뒤에 오는 자리**를 2026-09-17 에 놓쳤다 (선생님이 화면에서 먼저 보셨다).
-     re.compile(r"[가-힣]\s*:\s*\S")),
+    # ⚠️ **제목의 콜론은 한국어에서 자연스럽다** ("1단계: 입력 받기").
+    #    어색한 건 콜론으로 **문장**을 이어붙인 것이다 ("관찰: 48 은 모두 4 로 시작해요").
+    #    그래서 콜론 뒤가 **길고 한글이 많을 때만** 잡는다.
+    ("콜론으로 문장을 이어붙였다", None),
     ("조사를 빼고 명사만 늘어놨다",
      re.compile(r"[가-힣]{2,}\s+[가-힣]{2,}\s+(?:필요|출력|초기화|계산|저장|반복)\.")),
     ("영어를 음만 옮겼다 (쿼리·버킷…)",
      re.compile(r"쿼리|버킷|루프|인덱스|테이블|스택|딜(?![러리])")),
 ]
+
+# ── **코드 줄은 학생 글이 아니다.**
+#    quest 파일은 코드도 `t(E, "영어 주석", "한국어 주석")` 으로 담는다
+#    (예: `"    int answer = 0;  // 풀 칸에 소 3마리+"`).
+#    이걸 학생 글로 세면 "세미콜론을 쓰지 마라" 가 **코드에게 말하는** 꼴이 된다.
+#    2026-09-17 실측: 한국어 문장 10,276개 중 697개(6%)가 코드 줄이었다.
+#    ⚠️ `c[i]`·`nums[0]` 같은 건 **설명문에도 나온다** — 그것만으로 코드로 치면 안 된다.
+#    파이썬 코드 줄은 `#` 로 주석을 단다 — `xy = defaultdict(int)  # z-방향` 처럼.
+CODE_LINE = re.compile(r"//|/\*|;\s*$|\s#\s|^#\s")
+INDENTED_CODE = re.compile(r"^\s{4,}\S")
+
+
+COLON = re.compile(r"[가-힣]\s*:\s*(\S.*)$")
+
+
+def colon_joins_sentences(s):
+    """콜론 뒤가 12자 이상이고 한글이 4자 이상이면 '문장을 이어붙인' 것으로 본다."""
+    for m in COLON.finditer(s):
+        tail = m.group(1)
+        if len(tail) >= 12 and len(re.findall(r"[가-힣]", tail)) >= 4:
+            return True
+    return False
+
+
+def is_code_line(s):
+    if CODE_LINE.search(s):
+        return True
+    return bool(INDENTED_CODE.match(s) and re.search(r"[=(){}]", s))
+
 
 # 화면에 나가는 한국어만 본다 — t(E, "영어", "한국어") 의 **두 번째** 자리
 T_CALL = re.compile(r't\(\s*E\s*,\s*"((?:[^"\\]|\\.)*)"\s*,\s*"((?:[^"\\]|\\.)*)"\s*\)')
@@ -165,10 +194,11 @@ def scan(quest_dir):
 
     # 번역 티 — 문장 단위로 센다
     sents = [w for v in text_by_file.values() for w in v
-             if len(w) > 8 and re.search(r"[가-힣]", w)]
+             if len(w) > 8 and re.search(r"[가-힣]", w) and not is_code_line(w)]
     trans = {}
     for label, pat in TRANSLATIONESE:
-        bad = [x for x in sents if pat.search(x)]
+        test = colon_joins_sentences if pat is None else pat.search
+        bad = [x for x in sents if test(x)]
         if bad:
             trans[label] = (len(bad), bad[0][:64])
     return mixed, hard, trans, text_by_file
