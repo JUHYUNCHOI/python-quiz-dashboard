@@ -236,11 +236,28 @@ const BRUTE_COMBINE_PY = [
   "    total = total + value",
 ];
 const BRUTE_OUT_PY = [
+  "# MOD 는 0 번 걸음에서 정해 둔 10**9 + 7 이에요",
   "print(total % MOD)",
 ];
 
 export function getMcc21SimpleMathBruteSections(E) {
   return [
+    /* ⚠️ 2026-09-17 project-lead 재판정에서 잡혔다 —
+       처음엔 이 '주어진 값' 걸음이 없었다. 그래서 다음 걸음의 `for x in a:` 가
+       **화면 안에 없는 `a`** 를 쓰고 있었다. `ProgressiveCodeStepper` 는
+       한 번에 그 걸음의 코드만 보여준다 — 앞 걸음 코드가 안 남는다.
+       바로 뒤 빠른 코드 스테퍼는 이미 PY_SETUP 으로 이 걸음을 갖고 있었는데
+       새로 만든 쪽만 빠뜨렸다. memory/feedback_screen_must_not_rely_on_memory.md */
+    {
+      label: t(E, "\u{1F4E5} 0. The values we are given", "\u{1F4E5} 0. 주어진 값"),
+      color: A,
+      py: PY_SETUP, cpp: PY_SETUP,
+      why: [
+        t(E,
+          "Same three values the examples used: N numbers in a, and P picking the operator.\nMOD keeps the running total small.",
+          "예제에서 쓰던 값 그대로예요. 수 N 개가 a 에 있고, P 가 연산자를 골라요.\nMOD 는 총합이 너무 커지지 않게 해 줘요."),
+      ],
+    },
     {
       label: t(E, "\u{1F422} 1. Make every subset", "\u{1F422} 1. 부분집합을 전부 만들기"),
       color: A,
