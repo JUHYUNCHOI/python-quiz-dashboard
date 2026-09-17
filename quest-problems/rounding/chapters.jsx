@@ -151,7 +151,7 @@ export function makeCh1(E) {
         </div>
       ),
     },
-    { type: "reveal", narr: t(E, "Example: x=48. Click → to step through Bessie's and Elsie's reasoning.", "예시: x=48. 아래에서 → 버튼을 눌러가며 Bessie / Elsie 의 과정을 단계별로 따라가봐요."),
+    { type: "reveal", narr: t(E, "Example: x=48. Click → to step through Bessie's and Elsie's reasoning.", "x=48 로 해봐요.\n아래 → 버튼을 눌러 Bessie 와 Elsie 의 생각을 한 걸음씩 따라가요."),
       content: (
         <div style={{ padding: 12 }}>
           <InlineSim x={48} E={E} />
@@ -214,12 +214,12 @@ export function makeCh1(E) {
           <Multi6Sim E={E} />
           <div style={{ marginTop: 10, padding: "8px 10px", background: C.accentBg, border: `1.5px dashed ${C.accentBd}`, borderRadius: 10, fontSize: 12, color: C.accent, fontWeight: 700, textAlign: "center", lineHeight: 1.6 }}>
             🔍 {t(E, "Notice: ❌ ones (48, 445, 4459) all start with 4. Coincidence?",
-                  "관찰: ❌ 인 수 (48, 445, 4459) 는 모두 4 로 시작해요. 우연일까요?")}
+                  "❌ 인 수 48, 445, 4459 는 모두 4 로 시작해요.\n우연일까요?")}
           </div>
         </div>
       ),
     },
-    { type: "reveal", narr: t(E, "Concrete example: N=100. Check x=2,3,...,100 (99 values total). Answer is 5.", "구체적 예시: N=100이면 x=2부터 100까지 (총 99개) 모두 확인. 답은 5개!"),
+    { type: "reveal", narr: t(E, "Concrete example: N=100. Check x=2,3,...,100 (99 values total). Answer is 5.", "N=100 으로 해봐요.\nx=2 부터 100 까지 99 개를 다 확인해요. 답은 5 개예요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
@@ -345,7 +345,7 @@ export function makePatternSteps(E) {
     { type: "quiz",
       narr: t(E,
         "Look at only ❌: 48, 445, 4459. Time to find what these three have in common.",
-        "❌ 인 수만 모아봐요: 48, 445, 4459. 이 세 수의 공통점을 찾아봐요."),
+        "❌ 인 수만 모으면 48, 445, 4459 예요.\n이 셋의 닮은 점을 찾아봐요."),
       question: t(E, "What do these three have in common?", "이 세 수의 공통점은?"),
       hint: t(E, "Look at the first digit!", "첫째 자리를 봐요!"),
       options: t(E,
@@ -384,7 +384,7 @@ export function makePatternSteps(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, marginBottom: 8 }}>
-            {t(E, "Compare: Bessie (first digit only) vs Elsie (after carry)", "비교: Bessie (첫째 자리 그대로) vs Elsie (carry 받은 후)")}
+            {t(E, "Compare: Bessie (first digit only) vs Elsie (after carry)", "Bessie 는 첫째 자리를 그대로 보고, Elsie 는 올림을 받은 뒤에 봐요")}
           </div>
           <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
             <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 60px", padding: "8px 10px", background: "#f8f9fc", borderBottom: `1.5px solid ${C.border}`, fontSize: 11, fontWeight: 800, color: C.dim }}>
@@ -595,7 +595,7 @@ export function makePatternSteps(E) {
 
     { type: "input",
       narr: t(E,
-        "Try it: how many 2-digit numbers? (s_2=45, e_2=49)", "직접 세보기: 2자리는 몇 개? (s_2=45, e_2=49)"),
+        "Try it: how many 2-digit numbers? (s_2=45, e_2=49)", "직접 세어 봐요 — 두 자리 수는 몇 개일까요? (s_2=45, e_2=49)"),
       question: "49 − 45 + 1 = ?",
       hint: t(E, "Just subtract and add 1.", "그냥 빼고 1 더해요."),
       answer: 5,
@@ -1138,7 +1138,7 @@ export function makeBruteSteps(E, lang = "py") {
   return [
     { type: "reveal",
       narr: t(E,
-        "Step 1: read the input. T test cases, each gives one N.", "1단계: 입력부터 받아요. T 개의 테스트케이스, 각각 N 이 하나씩."),
+        "Step 1: read the input. T test cases, each gives one N.", "1단계 — 먼저 입력을 받아요.\n문제가 T 개 오고, 하나마다 N 이 하나씩 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 1: Input", "1단계: 입력 받기")} />
@@ -1149,10 +1149,10 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Step 2: for each x from 2 to N, get both answers and count where they differ.", "2단계: 결국엔 Bessie / Elsie 의 계산법이 필요해요. 두 값을 비교해서 다르면 카운트!"),
+        "Step 2: for each x from 2 to N, get both answers and count where they differ.", "2단계 — 결국 Bessie 와 Elsie 의 계산법이 필요해요.\n두 값을 견줘서 다르면 세요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <Label text={t(E, "Step 2: Compare and count", "2단계: 두 값 비교 → 카운트")} />
+          <Label text={t(E, "Step 2: Compare and count", "2단계 — 두 값을 견주고 세기")} />
           <CodeBlock lines={pick(MAIN_SNIPPET_PY, MAIN_SNIPPET_CPP)} />
           <div style={{ marginTop: 10, padding: "8px 10px", background: C.carryBg, border: `1.5px solid ${C.carryBd}`, borderRadius: 8, fontSize: 12, color: C.carry, fontWeight: 700, lineHeight: 1.6 }}>
             🤔 {t(E, "But Bessie() and Elsie() don't exist yet. Time to build them — though first…",
@@ -1181,7 +1181,7 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Step 3: P = len(str(x)). Both functions will start with this line.", "3단계: P = len(str(x)). 두 함수 모두 이 한 줄로 시작해요."),
+        "Step 3: P = len(str(x)). Both functions will start with this line.", "3단계 — P = len(str(x)) 로 자릿수를 구해요.\n두 함수 모두 이 한 줄로 시작해요."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 3: Compute P", "3단계: P 구하기")} />
@@ -1193,7 +1193,7 @@ export function makeBruteSteps(E, lang = "py") {
     { type: "reveal",
       narr: t(E,
         "Step 4: Bessie looks at just the first digit. If it's ≥ 5, round up to 10ᴾ; otherwise round down to 0.\n(Quick note: 'first digit' here means the leftmost one — which is also the P-th digit counting from the right, since x has P digits.)",
-        "4단계: Bessie 는 첫째 자리 하나만 봐요. ≥5 면 10ᴾ, 아니면 0.\n(참고: '첫째 자리' = 가장 왼쪽 = 1자리부터 세서 P번째 — x 가 P 자리니까 둘이 같은 거예요.)"),
+        "4단계 — Bessie 는 첫째 자리 하나만 봐요.\n그 숫자가 5 이상이면 10ᴾ 이고, 아니면 0 이에요.\n('첫째 자리' 는 가장 왼쪽이에요. x 가 P 자리니까 P 번째와 같아요.)"),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 4: Bessie 🐄", "4단계: Bessie 구하기 🐄")} />
@@ -1205,10 +1205,10 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Step 5: Elsie checks each digit from 1st to P-th. First trick — extract the pos-th digit.", "5단계: Elsie 는 1자리부터 P자리까지 하나씩 봐요. 트릭 1 — pos 번째 자리 숫자 뽑기."),
+        "Step 5: Elsie checks each digit from 1st to P-th. First trick — extract the pos-th digit.", "5단계 — Elsie 는 1 자리부터 P 자리까지 하나씩 봐요.\n먼저 pos 번째 자리 숫자를 뽑는 방법부터 봐요."),
       content: (
         <div style={{ padding: 16 }}>
-          <Label text={t(E, "Step 5: Elsie 🐮 — Trick 1: extract digit", "5단계: Elsie 🐮 — 트릭 1: 자리 숫자 추출")} />
+          <Label text={t(E, "Step 5: Elsie 🐮 — Trick 1: extract digit", "5단계 — Elsie 🐮 ① 자리 숫자 뽑기")} />
           <CodeBlock lines={pick(BF_ELSIE_DIGIT, BF_ELSIE_DIGIT_CPP)} />
         </div>
       ),
@@ -1219,7 +1219,7 @@ export function makeBruteSteps(E, lang = "py") {
         "Trick 2 — if digit ≥5, carry up. Then zero out that position.", "트릭 2 — 그 자리가 ≥5 면 위로 +1 올림. 그리고 그 자리 이하는 0 으로."),
       content: (
         <div style={{ padding: 16 }}>
-          <Label text={t(E, "Step 5: Elsie 🐮 — Trick 2: carry + clear", "5단계: Elsie 🐮 — 트릭 2: 올림 + 자리 이하 0")} />
+          <Label text={t(E, "Step 5: Elsie 🐮 — Trick 2: carry + clear", "5단계 — Elsie 🐮 ② 올리고 아랫자리 0 으로")} />
           <CodeBlock lines={pick(BF_ELSIE_CARRY, BF_ELSIE_CARRY_CPP)} />
         </div>
       ),
@@ -1230,7 +1230,7 @@ export function makeBruteSteps(E, lang = "py") {
         "Combine the tricks into Elsie. Loop pos = 1 to P.", "두 트릭을 합쳐서 Elsie 함수 완성. pos 를 1 부터 P 까지 반복."),
       content: (
         <div style={{ padding: 16 }}>
-          <Label text={t(E, "Step 5: Elsie 🐮 — full function", "5단계: Elsie 🐮 — 함수 완성")} />
+          <Label text={t(E, "Step 5: Elsie 🐮 — full function", "5단계 — Elsie 🐮 ③ 함수 완성")} />
           <CodeBlock lines={pick(BF_ELSIE, BF_ELSIE_CPP)} />
           {lang !== "py" && <Pw10Explainer E={E} />}
         </div>
@@ -1239,7 +1239,7 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Step 6: put it all together — input + loop + Bessie + Elsie.", "6단계: 다 합쳐요 — 입력 + 루프 + Bessie + Elsie."),
+        "Step 6: put it all together — input + loop + Bessie + Elsie.", "6단계 — 다 합쳐요.\n입력 받기, 반복, Bessie, Elsie 순서예요."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 6: Full code", "6단계: 전체 코드")} />
@@ -1271,11 +1271,11 @@ export function makeBruteSteps(E, lang = "py") {
             <div style={{ whiteSpace: "pre-line", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
               {t(E,
                 "Per query: O(N) — scan numbers 2..N\nTotal:     T queries × N = O(T·N)\n\nMax case (T up to 10⁴, N up to 10⁹):\n  10⁴ × 10⁹ = 10¹³ ops\n\nAt 10⁸ ops/sec → 10⁵ seconds ≈ 28 hours",
-                "쿼리당: O(N) — 2..N 스캔\n전체:    T 쿼리 × N = O(T·N)\n\n최악 (T 최대 10⁴, N 최대 10⁹):\n  10⁴ × 10⁹ = 10¹³ 연산\n\n10⁸ ops/sec 기준 → 10⁵ 초 ≈ 28 시간")}
+                "한 번 물을 때  2 부터 N 까지 훑어서 O(N)\n모두 합치면  T × N = O(T·N)\n\n제일 나쁠 때 (T 는 10⁴, N 은 10⁹)\n  10⁴ × 10⁹ = 10¹³ 번 계산\n\n1초에 1억 번 계산해도 10⁵ 초, 그러니까 약 28 시간")}
             </div>
           </div>
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
-            ❌ {t(E, "USACO time limit: 2 seconds. Brute needs ~28 hours for max case.", "USACO 시간 제한: 2 초. Brute 는 최악 약 28 시간 필요.")}
+            ❌ {t(E, "USACO time limit: 2 seconds. Brute needs ~28 hours for max case.", "USACO 가 주는 시간은 2 초예요.\n이 방법은 제일 나쁠 때 약 28 시간이 걸려요.")}
           </div>
           <div style={{ marginTop: 10, padding: "12px 14px", background: "linear-gradient(135deg,#fef3c7,#fde68a)", border: "2px solid #f59e0b", borderRadius: 10, fontSize: 13, color: "#78350f", lineHeight: 1.7 }}>
             <div style={{ fontWeight: 800, marginBottom: 4 }}>
@@ -1298,7 +1298,7 @@ export function makeBruteSteps(E, lang = "py") {
     { type: "reveal",
       narr: t(E,
         "Wait — why does each of the T queries redo the work for 2 ~ N from scratch? If two queries cover overlapping ranges, we're doing the same arithmetic twice.\nSo: build the answer array ONCE, then every query just reads from it. That's the prefix sum idea.",
-        "잠깐 — T 번 쿼리마다 2 ~ N 까지 또 계산? 두 쿼리가 같은 구간을 공유하면 똑같은 일을 반복하는 거잖아요.\n그래서: 답을 *한 번만* 배열에 채워두고, 매 쿼리는 거기서 lookup. 이게 누적합 (prefix sum) 아이디어."),
+        "잠깐만요. 물을 때마다 2 부터 N 까지 또 계산하나요?\n두 물음이 같은 구간을 겹쳐 쓰면 똑같은 일을 두 번 하는 거예요.\n그러니 답을 딱 한 번만 표에 채워 두고, 물을 때는 표에서 꺼내요.\n이게 쌓아 더하기(prefix sum) 생각이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: 10, marginBottom: 14, textAlign: "center" }}>
@@ -1317,7 +1317,7 @@ export function makeBruteSteps(E, lang = "py") {
     { type: "reveal",
       narr: t(E,
         "Prefix sum reduces query cost — but does it fit within time?",
-        "누적합으로 쿼리 비용 줄음 — 근데 시간 안에 들어갈까?"),
+        "쌓아 더하기로 물음 한 번의 값은 싸졌어요.\n그런데 이걸로 시간 안에 들어갈까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ padding: "12px 14px", background: "#fff", border: `2px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
@@ -1327,11 +1327,11 @@ export function makeBruteSteps(E, lang = "py") {
             <div style={{ whiteSpace: "pre-line", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
               {t(E,
                 "Preprocess: O(N) — build prefix array\nQuery:      O(1) — single lookup\nTotal:      O(N + T)\n\nMax case (N up to 10⁹):\n  Building array of size 10⁹ takes ~10⁹ ops + 4 GB memory\n\nProblem: even O(N) is too slow when N = 10⁹",
-                "전처리: O(N) — prefix 배열 만들기\n쿼리:   O(1) — lookup 1 번\n전체:   O(N + T)\n\n최악 (N 최대 10⁹):\n  크기 10⁹ 배열 만드는 데 약 10⁹ 연산 + 4 GB 메모리\n\n문제: N = 10⁹ 면 O(N) 도 너무 느림")}
+                "미리 만들기  표를 채우는 데 O(N)\n물음 한 번    표에서 꺼내니 O(1)\n모두 합치면  O(N + T)\n\n제일 나쁠 때 (N 은 10⁹)\n  크기 10⁹ 짜리 표를 만드는 데 약 10⁹ 번 계산하고 메모리 4 GB\n\n그래서 N = 10⁹ 이면 O(N) 도 너무 느려요")}
             </div>
           </div>
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
-            ❌ {t(E, "Even prefix sum can't handle N = 10⁹. Need a math approach that doesn't iterate 1..N.", "누적합도 N = 10⁹ 못 다룸. 1..N 안 도는 수학적 접근 필요.")}
+            ❌ {t(E, "Even prefix sum can't handle N = 10⁹. Need a math approach that doesn't iterate 1..N.", "쌓아 더하기로도 N = 10⁹ 은 못 해요.\n1 부터 N 까지 돌지 않는 셈법이 필요해요.")}
           </div>
           <div style={{ marginTop: 10, padding: "12px 14px", background: "linear-gradient(135deg,#fef3c7,#fde68a)", border: "2px solid #f59e0b", borderRadius: 10, fontSize: 13, color: "#78350f", lineHeight: 1.7 }}>
             <div style={{ fontWeight: 800, marginBottom: 4 }}>
@@ -1475,19 +1475,19 @@ export function getOptSections(E) {
       ],
     },
     {
-      label: t(E, "🔁 2. Per-digit-count loop", "🔁 2. 자릿수별 루프"),
+      label: t(E, "🔁 2. Per-digit-count loop", "🔁 2. 자릿수마다 반복하기"),
       color: C.ok, bgColor: C.okBg,
       py: OPT_LOOP(E), cpp: OPT_LOOP_CPP(E),
       why: [
         t(E,
           "For each digit count ≥ 2: build the smallest (lots of 4's + ending 5) and largest (leading 4 + lots of 9's).",
-          "자릿수 ≥ 2 마다: 가장 작은 수 (4 가 잔뜩 + 끝에 5) 와 가장 큰 수 (앞에 4 + 9 가 잔뜩) 만들기."),
+          "자릿수가 2 이상인 경우마다 두 수를 만들어요.\n가장 작은 수는 4 가 잔뜩에 끝이 5 이고,\n가장 큰 수는 앞이 4 에 뒤가 9 가 잔뜩이에요."),
         t(E,
           "If smallest > N, no number in this digit-count fits → stop.",
-          "가장 작은 수 > N 이면 그 자릿수 중 N 이하가 하나도 없음 → 멈춤."),
+          "가장 작은 수가 N 보다 크면\n그 자릿수에는 N 보다 작거나 같은 수가 하나도 없어요.\n그러니 거기서 멈춰요."),
         t(E,
           "Otherwise add min(N, largest) − smallest + 1: the block length, clipped at N.",
-          "그렇지 않으면 min(N, largest) − smallest + 1 더하기: 구간 길이를 N 에서 자른 값."),
+          "아니면 min(N, largest) − smallest + 1 을 더해요.\n구간 길이를 N 에서 잘라 낸 값이에요."),
         t(E,
           "C++ caps digits ≤ 9 (10-digit smallest = 4444444445 already exceeds N ≤ 10⁹).",
           "C++ 은 자릿수 ≤ 9 로 캡 (10자리 smallest = 4444444445 가 이미 10⁹ 넘음)."),
@@ -1513,16 +1513,16 @@ export function getOptSections(E) {
       why: [
         t(E,
           "Per query: at most ~10 iterations (one per digit count). O(log N) per query.",
-          "쿼리당 최대 ~10 번 반복 (자릿수만큼). O(log N) per query."),
+          "한 번 물을 때 많아야 10 번쯤 반복해요. 자릿수만큼이에요.\n그래서 물음 하나에 O(log N) 이에요."),
         t(E,
           "Brute was O(T · N). For N = 10⁹: ~10 ops vs ~10⁹ ops per query — speedup ≈ 10⁸×.",
-          "브루트는 O(T · N). N = 10⁹ 면: 쿼리당 ~10 연산 vs ~10⁹. 약 10⁸ 배 빠름."),
+          "느린 방법은 O(T · N) 이에요.\nN = 10⁹ 이면 한 번 물을 때 10 번쯤과 10⁹ 번의 차이예요.\n약 1억 배 빨라요."),
         t(E,
           "Verify: N=1 → 0, N=100 → 5, N=4567 → 183, N=3366 → 60. All sample outputs match.",
-          "확인: N=1 → 0, N=100 → 5, N=4567 → 183, N=3366 → 60. 샘플 출력과 일치."),
+          "확인해 봐요.\nN=1 은 0, N=100 은 5, N=4567 은 183, N=3366 은 60 이에요.\n예제 답과 똑같아요."),
         t(E,
           "Tip: download as PDF (button above) for offline study.",
-          "팁: 위 PDF 버튼 눌러서 다운받으면 오프라인에서도 공부 가능."),
+          "위 PDF 버튼을 누르면 내려받을 수 있어요.\n인터넷이 없어도 공부할 수 있어요."),
       ],
     },
   ];
@@ -1688,7 +1688,7 @@ export function makeOptSteps(E) {
       ),
     },
     { type: "input",
-      narr: t(E, "Verify: total for N=4567?", "확인: N=4567 의 합계는?"),
+      narr: t(E, "Verify: total for N=4567?", "N=4567 의 합계는 얼마일까요?"),
       question: "5 + 55 + 123 = ?",
       answer: 183,
     },

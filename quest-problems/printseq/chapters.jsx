@@ -146,7 +146,7 @@ export function makePrintseqCh1(E) {
       correct: 2,
       explain: t(E,
         "All same? No (3≠1). One block repeating? No — (3 3) then (1 1) are different. So cut: [3 3] ✂️ [1 1] — each piece is all-same. Trick ③!",
-        "다 같나? 아니요 (3≠1). 블록 반복? 아니요 — (3 3) 다음 (1 1), 서로 달라요. 그러니 자르기: [3 3] ✂️ [1 1] — 조각마다 '다 같음'이 돼요. ③번 요령!"),
+        "다 같나? 아니요 (3≠1). 블록 반복? 아니요 — (3 3) 다음 (1 1), 서로 달라요.\n그러니 잘라요. [3 3] ✂️ [1 1] — 조각마다 '다 같음'이 돼요. ③번 요령!"),
     },
 
     /* 1-2d — 섞인 예제: "진짜 1111·1212·1122 같은 것만 있어?" 의문 해소 (선생님 2026-07-18).
@@ -223,7 +223,7 @@ export function makePrintseqCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Before writing code — the whole plan on one screen: a TO-DO list, solving only the pieces we actually need.",
-        "코드 짜기 전에 — 전체 계획을 한 화면에: '할 일 목록' 에서 필요한 조각만 꺼내 푸는 그림."),
+        "코드 짜기 전에 전체 계획을 봐요. 필요한 조각만 꺼내서 풀어요."),
       content: (<PrintseqTodoPlanSim E={E} />),
     },
 
@@ -328,7 +328,7 @@ export function makePrintseqCh2(E, lang = "py") {
             <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 12, padding: "10px 14px", textAlign: "center" }}>
               <div style={{ fontSize: 12.5, fontWeight: 800, color: "#065f46", wordBreak: "keep-all" }}>
                 {t(E, "A computer has no friends — so the function asks ITSELF: can() calls can().",
-                     "컴퓨터엔 친구가 없으니 — 함수가 자기 자신에게 물어요: can() 이 can() 을 부름.")}
+                     "컴퓨터엔 친구가 없으니 — 함수가 자기 자신에게 물어요. can() 이 can() 을 불러요.")}
               </div>
             </div>
 

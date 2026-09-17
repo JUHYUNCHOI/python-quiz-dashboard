@@ -118,7 +118,7 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's a cube made of cheese cubes, like a Rubik's cube!\nWhat happens if you keep removing blocks one by one?\nLet's find out!\n👀", "치즈 조각으로 만든 큐브가 있어요! 루빅큐브처럼! 여기서 블록을 계속 빼면 무슨 일이 생길까요? 같이 알아봐요! 👀"),
+        "Here's a cube made of cheese cubes, like a Rubik's cube!\nWhat happens if you keep removing blocks one by one?\nLet's find out!\n👀", "루빅큐브처럼 생긴 치즈 큐브예요.\n블록을 계속 빼면 무슨 일이 생길까요? 👀"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 12, padding: 14, fontSize: 14, color: C.text, lineHeight: 1.9, textAlign: "center" }}>

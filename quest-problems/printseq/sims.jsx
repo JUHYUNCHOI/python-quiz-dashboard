@@ -19,7 +19,7 @@ function _buildIntroSteps(E) {
     { focus: "target",
       bubble: t(E,
         "This is what must appear on screen:\n1 1 1 1 — four numbers.",
-        "우리가 화면에 찍어내야 할 것:\n1 1 1 1 — 숫자 4 개예요.") },
+        "화면에 이런 게 찍혀야 해요.\n1 1 1 1 — 숫자 4 개예요.") },
     { focus: "N",
       bubble: t(E,
         "N = 4.\nJust the length of the target.",
@@ -27,7 +27,7 @@ function _buildIntroSteps(E) {
     { focus: "K",
       bubble: t(E,
         "K = 1.\nThe program may have only ONE written PRINT line.\nRemember this word: WRITTEN.",
-        "K = 1.\n프로그램에 '적을 수 있는' PRINT 줄이 딱 1 개.\n이 말 기억해요: '적힌' 줄 수!") },
+        "K = 1.\n프로그램에 '적을 수 있는' PRINT 줄이 딱 1 개예요.\n이 말을 기억해요 — '적힌' 줄 수!") },
     { focus: "commands",
       bubble: t(E,
         "To build the target we can use just 2 commands.\nHere they are 👇",
@@ -35,15 +35,15 @@ function _buildIntroSteps(E) {
     { focus: "naive",
       bubble: t(E,
         "First try — write PRINT 1 four times.\nLook at the program: 4 written PRINT lines.\nBut K = 1 → over budget ❌",
-        "일단 그냥 — PRINT 1 을 네 줄 적어봐요.\n프로그램을 보면: 적힌 PRINT 가 4 줄.\n근데 K = 1 → 예산 초과 ❌") },
+        "일단 그냥 — PRINT 1 을 네 줄 적어봐요.\n프로그램을 보면 적힌 PRINT 가 4 줄이에요.\n근데 K = 1 → 예산 초과 ❌") },
     { focus: "write",
       bubble: t(E,
         "Now with REP: write PRINT 1 only ONCE,\nwrapped in REP 4.\nThe program has just 1 written PRINT line.",
-        "이번엔 REP: PRINT 1 을 딱 한 줄만 적고\nREP 4 로 감싸요.\n프로그램에 적힌 PRINT 는 1 줄뿐.") },
+        "이번엔 REP 를 써요. PRINT 1 을 딱 한 줄만 적고\nREP 4 로 감싸요.\n프로그램에 적힌 PRINT 는 1 줄뿐이에요.") },
     { focus: "run",
       bubble: t(E,
         "Run it ▶ — REP spins that one line 4 times.\nWatch the screen: 1 1 1 1 appears. Target complete!",
-        "실행하면? REP 가 그 한 줄을 4 번 돌려요.\n화면을 봐요: 1 1 1 1 이 찍혔어요. 목표 완성!") },
+        "실행하면? REP 가 그 한 줄을 4 번 돌려요.\n화면을 봐요. 1 1 1 1 이 찍혔어요. 목표 완성!") },
     { focus: "verdict",
       bubble: t(E,
         "\"But it printed 4 numbers — isn't that 4 PRINTs?\"\nNo! K counts the WRITTEN lines, not the screen.\nWritten = 1 ≤ K = 1 → YES ✓",
@@ -254,7 +254,7 @@ function _buildShapeSteps(E) {
     { si: 0, show: "seq",
       bubble: t(E,
         "Sequence #1: 2 2 2.\nHow would you build this?\nLook — every number is the SAME.",
-        "수열 1번: 2 2 2.\n이건 어떻게 만들까요?\n잘 보면 — 숫자가 전부 같아요.") },
+        "1번 수열은 2 2 2 예요.\n이건 어떻게 만들까요?\n잘 보면 — 숫자가 전부 같아요.") },
     { si: 0, show: "prog",
       bubble: t(E,
         "All same → write PRINT 2 once, wrap it in REP 3.\nPRINT count = 1. Cheapest possible!",
@@ -263,7 +263,7 @@ function _buildShapeSteps(E) {
     { si: 1, show: "seq",
       bubble: t(E,
         "Sequence #2: 1 2 1 2.\nNot all same… but look closer.\nThe pair (1 2) appears twice!",
-        "수열 2번: 1 2 1 2.\n다 같진 않은데… 자세히 봐요.\n(1 2) 짝이 두 번 반복돼요!") },
+        "2번 수열은 1 2 1 2 예요.\n다 같진 않은데… 자세히 봐요.\n(1 2) 짝이 두 번 반복돼요!") },
     { si: 1, show: "prog",
       bubble: t(E,
         "A repeating block → write the block ONCE (PRINT 1; PRINT 2), wrap in REP 2.\nPRINT count = 2.",
@@ -272,20 +272,20 @@ function _buildShapeSteps(E) {
     { si: 2, show: "seq",
       bubble: t(E,
         "Sequence #3: 1 1 2 2.\nAll same? No (1≠2).\nOne block repeating? No — (1 1) then (2 2), different.",
-        "수열 3번: 1 1 2 2.\n다 같나? 아니요 (1≠2).\n한 블록 반복인가? 아니요 — (1 1) 다음 (2 2), 서로 달라요.") },
+        "3번 수열은 1 1 2 2 예요.\n다 같나? 아니요 (1≠2).\n한 블록 반복인가? 아니요 — (1 1) 다음 (2 2), 서로 달라요.") },
     { si: 2, show: "cut",
       bubble: t(E,
         "Neither trick works on the WHOLE thing…\nso CUT it in two: [1 1] and [2 2].\nNow each piece is 'all same' — we know how to do that!",
-        "통째로는 두 방법 다 안 되니까…\n둘로 잘라요: [1 1] 과 [2 2].\n이제 조각마다 '다 같음' — 우리가 아는 모양!") },
+        "통째로는 두 방법 다 안 되니까…\n[1 1] 과 [2 2] 둘로 잘라요.\n이제 조각마다 '다 같음' — 우리가 아는 모양!") },
     { si: 2, show: "prog",
       bubble: t(E,
         "Left piece: REP 2 (PRINT 1) → 1 PRINT.\nRight piece: REP 2 (PRINT 2) → 1 PRINT.\nTotal = 2 PRINTs.",
-        "왼쪽 조각: REP 2 (PRINT 1) → PRINT 1 개.\n오른쪽 조각: REP 2 (PRINT 2) → PRINT 1 개.\n합계 = PRINT 2 개.") },
+        "왼쪽 조각은 REP 2 (PRINT 1) → PRINT 1 개.\n오른쪽 조각은 REP 2 (PRINT 2) → PRINT 1 개.\n합계 = PRINT 2 개.") },
     /* 정리 */
     { si: -1, show: "recap",
       bubble: t(E,
         "That's ALL the moves!\nEvery sequence is one of 3 shapes:\n① all same ② repeating block ③ cut in two.\nOur code will simply try these three.",
-        "이게 전부예요!\n모든 수열은 3 가지 모양 중 하나:\n① 다 같음 ② 블록 반복 ③ 둘로 자르기.\n코드는 이 셋을 차례로 시도하면 돼요.") },
+        "이게 전부예요!\n모든 수열은 3 가지 모양 중 하나예요.\n① 다 같음 ② 블록 반복 ③ 둘로 자르기.\n코드는 이 셋을 차례로 해보면 돼요.") },
   ];
 }
 
@@ -402,7 +402,7 @@ function _buildMixSteps(E) {
   return [
     { cut: null, bubble: t(E,
       "Wait — are sequences always neat like 1111, 1212, 1122?\nLook at THIS one: 1 1 1 1 1 2 1 2.\nWhich of the three tricks is it??",
-      "잠깐 — 수열이 진짜 1111·1212·1122 처럼 '딱 떨어지는' 것만 있을까요?\n이걸 봐요: 1 1 1 1 1 2 1 2.\n셋 중 어느 요령이지??") },
+      "잠깐 — 수열이 진짜 1111·1212·1122 처럼 '딱 떨어지는' 것만 있을까요?\n이걸 봐요. 1 1 1 1 1 2 1 2.\n셋 중 어느 요령이지??") },
     { cut: null, bubble: t(E,
       "All same? No — there are 1s AND 2s.\nOne repeating block over the whole thing? No either.\nSo the only move left is ③ CUT it in two!",
       "다 같나? 아니요 — 1도 있고 2도 있어요.\n통째로 한 블록의 반복? 그것도 아니요.\n그럼 남은 건 ③ 둘로 자르기뿐!") },
@@ -435,7 +435,7 @@ function _buildMixSteps(E) {
         "그리고 [1 2 1 2] 안에서도 — 블록 [1 2] 가 또 [1] + [2] 로.\n요령이 요령 안에 겹쳐요 — 마트료시카처럼 🪆.") },
     { recap: true, bubble: t(E,
       "The lesson: we couldn't KNOW the smart cut ahead of time —\nso the code tries EVERY cut and keeps the cheapest.\nThree tricks, nested, solve ANY sequence.",
-      "교훈: 똑똑한 컷을 미리 알 순 없었어요 —\n그래서 코드는 '모든 자르는 자리'를 다 해보고 제일 싼 걸 골라요.\n세 요령이 겹쳐서 — 어떤 수열도 풀려요.") },
+      "여기서 배울 건 이거예요 — 똑똑하게 자르는 자리를 미리 알 순 없었어요.\n그래서 코드는 '모든 자르는 자리'를 다 해보고 제일 싼 걸 골라요.\n세 요령이 겹쳐서 — 어떤 수열도 풀려요.") },
   ];
 }
 
@@ -550,22 +550,22 @@ function _buildTodoPlanSteps(E) {
   return [
     { bracket: null, todo: ["[1 1 2 2] 예산2"], memo: [], bubble: t(E,
       "Before we code — the plan. We keep a TO-DO list and an answer notebook.\nStart by putting just ONE thing on the list: the whole [1 1 2 2] with budget 2.",
-      "코드 짜기 전 계획 — '할 일 목록' 과 '답 공책' 을 씁니다.\n목록엔 딱 하나만 올려요: 전체 [1 1 2 2], 예산 2.") },
+      "코드 짜기 전 계획이에요 — '할 일 목록' 과 '답 공책' 을 써요.\n목록엔 딱 하나만 올려요. 전체 [1 1 2 2], 예산 2.") },
     { bracket: [0, 4], todo: ["[1 1 2 2] 예산2"], memo: [], bubble: t(E,
       "Take the top item and look at it: [1 1 2 2].\nAll same? No. One repeating block? No.\n→ So we must CUT it: [1 1] + [2 2]. But we don't know those answers yet!",
-      "목록 맨 위를 꺼내 봐요: [1 1 2 2].\n다 같나? 아니요. 한 블록의 반복? 아니요.\n→ 그럼 잘라야죠: [1 1] + [2 2]. 근데 그 답을 아직 모르잖아요!") },
+      "목록 맨 위를 꺼내 봐요. [1 1 2 2] 네요.\n다 같나? 아니요. 한 블록의 반복? 아니요.\n→ 그럼 잘라야죠. [1 1] + [2 2] 로요. 근데 그 답을 아직 모르잖아요!") },
     { bracket: [0, 2], todo: ["[1 1] 예산1", "[1 1 2 2] 예산2"], memo: [], bubble: t(E,
       "So we put the unknown piece on the list FIRST and come back later.\nNow [1 1] is on top — all same! → 1 PRINT.",
       "그래서 모르는 조각을 목록에 '먼저' 올리고 나중에 다시 와요.\n이제 [1 1] 이 맨 위 — 다 같네요! → PRINT 1 개.") },
     { bracket: [2, 4], todo: ["[2 2] 예산1", "[1 1 2 2] 예산2"], memo: ["[1 1] → 1개 ✓"], bubble: t(E,
       "Write it in the notebook: [1 1] = 1 PRINT. Done, remove it.\nSame story for [2 2] — all same → 1 PRINT.",
-      "공책에 적어요: [1 1] = 1 개. 끝났으니 목록에서 치우고요.\n[2 2] 도 똑같아요 — 다 같음 → PRINT 1 개.") },
+      "공책에 적어요. [1 1] = 1 개. 끝났으니 목록에서 치우고요.\n[2 2] 도 똑같아요 — 다 같음 → PRINT 1 개.") },
     { bracket: [0, 4], todo: ["[1 1 2 2] 예산2"], memo: ["[1 1] → 1개 ✓", "[2 2] → 1개 ✓"], answer: true, bubble: t(E,
       "Back to [1 1 2 2] — and now BOTH answers are in the notebook 📖\n1 + 1 = 2 PRINTs, and our budget is 2 → 2 ≤ 2 → YES! ⭐",
       "다시 [1 1 2 2] 차례 — 이제 둘 다 공책에 있어요 📖\n1 + 1 = PRINT 2 개, 예산이 2 죠 → 2 ≤ 2 → YES! ⭐") },
     { bracket: null, todo: [], memo: ["[1 1] → 1개 ✓", "[2 2] → 1개 ✓", "[1 1 2 2] → 2개 ⭐"], done: true, bubble: t(E,
       "Notice: we only ever looked at 3 pieces — the ones we actually needed.\nFilling a whole table for N=100 would be 15,150 cells. That's why this is fast.",
-      "보세요: 우리가 본 조각은 딱 3 개 — 실제로 필요했던 것만요.\nN=100 에서 표를 전부 채우면 15,150 칸이에요. 그래서 이 방법이 빠른 거예요.") },
+      "보세요. 우리가 본 조각은 딱 3 개 — 실제로 필요했던 것만요.\nN=100 에서 표를 전부 채우면 15,150 칸이에요. 그래서 이 방법이 빠른 거예요.") },
   ];
 }
 
@@ -645,7 +645,7 @@ function _buildPlanSteps(E) {
     { root: "ask", kids: null,
       bubble: t(E,
         "The plan: ONE question-note — can(sequence, budget).\nIt asks: \"can you make this sequence with ≤ budget PRINTs?\" → YES/NO.\nWe start by asking it about the whole thing: can([1 1 2 2], 2)?",
-        "계획: '질문 쪽지' 하나만 만들어요 — can(수열, 예산).\n\"이 수열, PRINT 예산 개 이하로 만들 수 있어?\" → YES/NO.\n먼저 전체를 물어봐요: can([1 1 2 2], 2)?") },
+        "계획은 이래요. '질문 쪽지' 하나만 만들어요 — can(수열, 예산).\n\"이 수열, PRINT 를 예산 개까지만 써서 만들 수 있어?\" → YES/NO.\n먼저 전체를 물어봐요. can([1 1 2 2], 2)?") },
     { root: "no1", kids: null,
       bubble: t(E,
         "can([1 1 2 2], 2) — try trick ① first.\nAll same? No (1 ≠ 2). Next trick.",
@@ -661,7 +661,7 @@ function _buildPlanSteps(E) {
     { root: "no2", kids: "ask", focusKid: 0,
       bubble: t(E,
         "Left note: \"can you make [1 1] with budget 1?\"\nSame question as ours — just smaller!\nAnd a computer has no friends → can() asks ITSELF. That's the recursion.",
-        "왼쪽 쪽지: \"[1 1] 을 예산 1 로 만들 수 있어?\"\n우리 질문이랑 똑같아요 — 크기만 작아졌죠!\n컴퓨터엔 친구가 없으니 → can() 이 자기 자신에게 물어요. 이게 재귀.") },
+        "왼쪽 쪽지엔 이렇게 써요. \"[1 1] 을 예산 1 로 만들 수 있어?\"\n우리 질문이랑 똑같아요 — 크기만 작아졌죠!\n컴퓨터엔 친구가 없으니 → can() 이 자기 자신에게 물어요. 이게 재귀예요.") },
     { root: "no2", kids: "left", focusKid: 0,
       bubble: t(E,
         "can([1 1], 1): all same → trick ① → answers YES right away ✓\n(the friend who just answers — no more passing! ✋)",
@@ -677,7 +677,7 @@ function _buildPlanSteps(E) {
     { root: "yes", kids: "both", memo: true,
       bubble: t(E,
         "One catch: trying ALL cut points, the SAME question-note — like can([1 1], 1) — keeps arriving.\nRe-solving it every time → slow.\nSmart friend: writes the answer down ONCE, then just shows the note. = MEMOIZATION (top-down DP). 👇",
-        "한 가지 문제 — 자를 곳을 전부 시도하다 보면 같은 질문 쪽지(예: can([1 1], 1))가 자꾸 또 와요.\n그때마다 처음부터 다시 풀면 → 느림.\n똑똑한 친구는 답을 한 번 적어두고, 다음엔 그냥 보여줘요. = 메모이제이션 (top-down DP). 👇") },
+        "한 가지 문제가 있어요. 자를 곳을 전부 해보다 보면\n같은 질문 쪽지(can([1 1], 1) 같은 것)가 자꾸 또 와요.\n그때마다 처음부터 다시 풀면 느려요.\n똑똑한 친구는 답을 한 번 적어두고, 다음엔 그냥 보여줘요. = 메모이제이션 (top-down DP). 👇") },
   ];
 }
 
@@ -755,7 +755,7 @@ export function PrintseqPlanSim({ E }) {
         {st.memo && (
           <div style={{ marginTop: 14, background: "#f5f3ff", border: "1.5px dashed #c4b5fd", borderRadius: 10, padding: "10px 14px", wordBreak: "keep-all", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#6d28d9", fontWeight: 700, marginBottom: 6 }}>
-              {t(E, "Across the full search, the SAME question repeats:", "전체 탐색에서 같은 질문이 자꾸자꾸 나와요:")}
+              {t(E, "Across the full search, the SAME question repeats:", "전부 다 찾아보는 동안 같은 질문이 자꾸자꾸 나와요")}
             </div>
             <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 8 }}>
               {[0, 1, 2].map(i => (
@@ -766,15 +766,15 @@ export function PrintseqPlanSim({ E }) {
             </div>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
               <div style={{ fontSize: 11, color: "#b91c1c", background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 8, padding: "5px 10px", fontWeight: 700 }}>
-                🐢 {t(E, "plain recursion: re-solve each time → slow", "그냥 재귀: 매번 다시 풀기 → 느림")}
+                🐢 {t(E, "plain recursion: re-solve each time → slow", "그냥 재귀 — 매번 다시 풀어서 느려요")}
               </div>
               <div style={{ fontSize: 11, color: "#15803d", background: "#dcfce7", border: "1px solid #86efac", borderRadius: 8, padding: "5px 10px", fontWeight: 700 }}>
-                ⚡ {t(E, "memo: solve once, reuse → fast", "memo: 한 번만 풀고 재사용 → 빠름")}
+                ⚡ {t(E, "memo: solve once, reuse → fast", "memo — 한 번만 풀고 다시 써서 빨라요")}
               </div>
             </div>
             <div style={{ fontSize: 10.5, color: "#5b21b6", fontWeight: 600, marginTop: 8 }}>
               📓 {t(E, "answer store: { ([1 1],1): YES,  ([2 2],1): YES,  ([1 1 2 2],2): YES }",
-                      "답 저장소: { ([1 1],1): YES,  ([2 2],1): YES,  ([1 1 2 2],2): YES }")}
+                      "답 공책 안은 이렇게 생겼어요 — { ([1 1],1): YES,  ([2 2],1): YES,  ([1 1 2 2],2): YES }")}
             </div>
           </div>
         )}
@@ -809,7 +809,7 @@ function _buildBlockSteps(E) {
       "copies = 2 → 블록 길이 6 ÷ 2 = 3. 블록 = 1 2 1.\n목표 아래에 두 번 늘어놔요 👇") },
     { copies: 2, phase: "cmp", bubble: t(E,
       "Compare spot by spot… spot 4: target 2 vs block 1 → MISMATCH ✗.\nNot this block size.",
-      "한 칸씩 비교… 4번 칸: 목표 2 vs 블록 1 → 안 맞음 ✗.\n이 블록 크기는 아니에요.") },
+      "한 칸씩 비교해요… 4번 칸을 보면 목표는 2, 블록은 1 → 안 맞음 ✗.\n이 블록 크기는 아니에요.") },
     { copies: 3, phase: "lay", bubble: t(E,
       "copies = 3 → block length 6 ÷ 3 = 2. Block = 1 2.\nLay it out three times 👇",
       "copies = 3 → 블록 길이 6 ÷ 3 = 2. 블록 = 1 2.\n세 번 늘어놔요 👇") },
@@ -818,7 +818,7 @@ function _buildBlockSteps(E) {
       "한 칸씩 비교… 전부 맞아요 ✓✓✓✓✓✓!\n그러니 1 2 1 2 1 2 = 블록 (1 2) 이 3 번 반복.") },
     { copies: 3, phase: "done", bubble: t(E,
       "So wrap it: REP 3 ( … block … ) END.\nWe only need to solve the block (1 2) — that's the recursion in trick ②!",
-      "그러니 감싸요: REP 3 ( … 블록 … ) END.\n블록 (1 2) 만 풀면 돼요 — 이게 요령 ②의 재귀예요!") },
+      "그러니 REP 3 ( … 블록 … ) END 로 감싸요.\n블록 (1 2) 만 풀면 돼요 — 이게 요령 ②의 재귀예요!") },
   ];
 }
 

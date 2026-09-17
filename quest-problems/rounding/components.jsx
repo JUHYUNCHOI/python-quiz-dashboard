@@ -116,7 +116,7 @@ export function CodeCompare3({ E }) {
     { label: t(E, "📝 Original", "📝 원본"), lines: BRUTE_CODE_ORIG,
       note: t(E, "Passed all 13 USACO test cases! ✅", "USACO 13개 테스트 전부 통과! ✅") },
     { label: t(E, "✨ Cleaned", "✨ 정리"), lines: BRUTE_CODE_CLEAN,
-      note: t(E, "Same logic, ~1.5x faster. Math instead of str().", "같은 로직, ~1.5배 빠름. str() 대신 수학 연산.") },
+      note: t(E, "Same logic, ~1.5x faster. Math instead of str().", "같은 방법인데 1.5배쯤 빨라요.\nstr() 대신 계산으로 해요.") },
   ];
 
   return (
@@ -612,7 +612,7 @@ export function IntervalSim({ E }) {
       }}>
         💡 {t(E,
           "Read top to bottom: count FULL rows whole, take just the left portion of the CLIPPED row (up to N), then STOP. That's the entire algorithm.",
-          "표를 위에서 아래로 읽어요: 전체 (FULL) 행은 통째로 더하고, 잘림 (CLIPPED) 행은 N 까지만, 그 다음은 멈춤 (STOP). 이게 알고리즘 전체예요.")}
+          "표를 위에서 아래로 읽어요.\n전체(FULL) 줄은 통째로 더하고, 잘림(CLIPPED) 줄은 N 까지만 더해요.\n그 뒤로는 멈춰요(STOP). 이게 알고리즘 전부예요.")}
       </div>
     </div>
   );
@@ -769,7 +769,7 @@ export function BruteRunner({ E }) {
             </div>
             <div style={{ fontSize: 10, color: C.dim, textAlign: "right", lineHeight: 1.5, maxWidth: 180 }}>
               {t(E, "JS animation overhead included — actual brute work is faster.",
-                  "setTimeout 애니메이션 시간 포함 — 순수 brute 연산은 더 빠름.")}
+                  "화면이 움직이는 시간까지 넣은 값이에요.\n움직임을 빼면 실제 계산은 더 빨라요.")}
             </div>
           </div>
 
@@ -807,7 +807,7 @@ export function BruteRunner({ E }) {
             <div style={{ marginTop: 6, fontSize: 10, color: C.dim, lineHeight: 1.5 }}>
               {t(E,
                 "Estimate: ~10 ops per x × 10 queries / 10⁸ ops/sec (typical C++ throughput).",
-                "추정: x 당 ~10 연산 × 10 쿼리 / 1억 ops/sec (C++ 대략 처리량).")}
+                "x 하나에 10 번쯤 계산하고 그게 10 번이에요.\n1초에 1억 번 계산하는 C++ 기준으로 어림잡은 값이에요.")}
             </div>
           </div>
 
@@ -1081,7 +1081,7 @@ export function downloadFullPDF(E, optSections, lang = "py") {
   2. ${t(E, "Worked Examples", "예제 풀이")} ·
   3. ${t(E, "Brute Force", "브루트 포스")} ·
   4. ${t(E, "Pattern Discovery", "패턴 발견")} ·
-  5. ${t(E, "Optimization", "최적화")}
+  5. ${t(E, "Optimization", "더 빠르게")}
 </div>
 
 <h2>1. ${t(E, "Problem", "문제")}</h2>
@@ -1119,14 +1119,14 @@ export function downloadFullPDF(E, optSections, lang = "py") {
 
 <p>${t(E,
   "Direct approach: for every x in [2, N], compute Bessie(x) and Elsie(x), compare.",
-  "직접 풀이: 2~N 의 모든 x 에 대해 Bessie(x), Elsie(x) 계산해서 비교.")}</p>
+  "그대로 푸는 방법이에요.\n2 부터 N 까지 모든 x 에서 Bessie(x) 와 Elsie(x) 를 구해 견줘요.")}</p>
 
 ${codeBlock(bruteCode)}
 
 <div class="box no">
   <b>${t(E, "Why TLE?", "왜 시간초과?")}</b> ${t(E,
     "Time complexity O(T · N). For N = 10⁹: ~10⁹ operations per query × 10 queries = 10¹⁰. Way too slow (limit ~10⁸/sec).",
-    "시간복잡도 O(T · N). N = 10⁹ 면: 쿼리당 ~10⁹ 연산 × 10 쿼리 = 10¹⁰. 너무 느림 (한계 ~10⁸/초).")}
+    "시간은 O(T · N) 이에요.\nN = 10⁹ 이면 한 번에 10⁹ 번씩 10 번이라 10¹⁰ 번이에요.\n1초에 10⁸ 번이 한계니까 너무 느려요.")}
 </div>
 
 <h2>4. ${t(E, "Pattern Discovery", "패턴 발견")}</h2>
@@ -1154,11 +1154,11 @@ ${codeBlock(bruteCode)}
   <tr><td>5</td><td>44445</td><td>49999</td><td><b>5555</b></td></tr>
 </table>
 
-<h2>5. ${t(E, "Optimization — O(log N)", "최적화 — O(log N)")}</h2>
+<h2>5. ${t(E, "Optimization — O(log N)", "더 빠르게 — O(log N)")}</h2>
 
 <p>${t(E,
   "Strategy: for each digit count d (2, 3, 4, ...), the disagreeing x form one contiguous interval [s_d, e_d]. Clip to N and sum the lengths.",
-  "전략: 각 자릿수 d (2, 3, 4, ...) 마다 답이 다른 x 는 연속 구간 [s_d, e_d]. N 으로 자르고 길이 합산.")}</p>
+  "이렇게 풀어요.\n자릿수 d 마다 답이 갈리는 x 들이 [s_d, e_d] 로 붙어 있어요.\n그 구간을 N 에서 자르고 길이를 더하면 돼요.")}</p>
 
 <div class="box ok">
   <b>${t(E, "Per query:", "쿼리당:")}</b>
@@ -1180,7 +1180,7 @@ ${optSections.map(s => `
   <b>${t(E, "Time complexity", "시간복잡도")}:</b>
   ${t(E,
     "Per query O(D) = O(log₁₀ N). Total O(T · log N). For N = 10⁹: ~10 ops/query vs brute's ~10⁹. Speedup ≈ 10⁸×.",
-    "쿼리당 O(D) = O(log₁₀ N). 전체 O(T · log N). N = 10⁹: 쿼리당 ~10 연산 vs 브루트 ~10⁹. 약 10⁸ 배 빠름.")}
+    "한 번 물을 때 O(D) = O(log₁₀ N) 이고, 다 합치면 O(T · log N) 이에요.\nN = 10⁹ 이면 10 번쯤과 느린 방법의 10⁹ 번을 견주는 셈이에요.\n약 1억 배 빨라요.")}
 </div>
 
 <div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">

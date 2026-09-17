@@ -52,7 +52,7 @@ SYNONYMS = [
 INSIDE = {
     "글":   ["글자", "한글", "글씨", "글쓰기"],
     "문자": ["문자열"],
-    "열":   ["문자열", "배열", "나열", "열다", "열어", "열고", "열린", "열리", "열기", "열림", "열려", "열쇠",
+    "열":   ["문자열", "수열", "배열", "나열", "열다", "열어", "열고", "열린", "열리", "열기", "열림", "열려", "열쇠",
              "열심", "계열", "서열", "열째", "열번", "열혈"],
     "줄":   ["줄이", "줄어", "줄기", "줄자"],
     "행":   ["행동", "행복", "실행", "진행", "은행", "여행", "수행", "시행", "행렬",
@@ -120,6 +120,7 @@ CODE_LINE = re.compile(r"//|/\*|;\s*$|\s#\s|^#\s")
 INDENTED_CODE = re.compile(r"^\s{4,}\S")
 
 
+ENTITY = re.compile(r"&(?:[a-zA-Z]+|#\d+);")
 COLON = re.compile(r"[가-힣]\s*:\s*(\S.*)$")
 
 
@@ -193,7 +194,8 @@ def scan(quest_dir):
             hard[word] = (n, easy)
 
     # 번역 티 — 문장 단위로 센다
-    sents = [w for v in text_by_file.values() for w in v
+    # HTML 엔티티(`&lt;` `&amp;`)의 `;` 는 한국어 문장부호가 아니다 — 지우고 본다.
+    sents = [ENTITY.sub("", w) for v in text_by_file.values() for w in v
              if len(w) > 8 and re.search(r"[가-힣]", w) and not is_code_line(w)]
     trans = {}
     for label, pat in TRANSLATIONESE:

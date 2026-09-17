@@ -58,7 +58,7 @@ export default function RoundingApp(props = {}) {
   // --- Tab order: 0=Problem, 1=Try Solving (brute), 2=Pattern, 3=Optimize ---
   const TABS = E
     ? ["📋 Problem", "🤔 Try Solving", "💡 Pattern", "⚡ Optimize"]
-    : ["📋 문제", "🤔 풀어보기", "💡 패턴", "⚡ 최적화"];
+    : ["📋 문제", "🤔 풀어보기", "💡 패턴", "⚡ 더 빠르게"];
 
   const ch1 = makeCh1(E);
   const all = [ch1, bruteQ, patternQ, optQ];

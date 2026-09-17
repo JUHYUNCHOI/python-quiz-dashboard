@@ -82,7 +82,7 @@ export function AstralComposite({ E }) {
 
       <div style={{ fontSize: 12, color: C.dim, marginBottom: 8, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
         N = {N},  right = {right},  down = {down}
-        {(right !== 0 || down !== 0) && <span> · {t(E, "click a cell to trace its star path", "칸 클릭해서 별 길 따라가기")}</span>}
+        {(right !== 0 || down !== 0) && <span> · {t(E, "click a cell to trace its star path", "칸을 눌러서 별 길을 따라가 봐요")}</span>}
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
@@ -147,10 +147,10 @@ function dpRun(chain, E) {
     comp: c0,
     min_stars: [...min_stars],
     note: c0 === "W"
-      ? t(E, "W: no star, no pass-out", "W: 별 없음, 보낼 것도 없음")
+      ? t(E, "W: no star, no pass-out", "W 는 별이 없어요. 보낼 것도 없어요.")
       : c0 === "G"
-        ? t(E, "G: 1 ★ here, can keep OR pass on", "G: 별 1 개, 안 보냄/보냄 둘 다 가능")
-        : t(E, "❌ B as first cell needs a ★ sent from a previous cell, but there's none", "❌ B 가 첫 칸 — 앞 칸이 보낸 별이 필요한데 앞 칸이 없음")
+        ? t(E, "G: 1 ★ here, can keep OR pass on", "G 는 별이 1 개예요. 안 보냄·보냄 둘 다 돼요.")
+        : t(E, "❌ B as first cell needs a ★ sent from a previous cell, but there's none", "❌ B 가 첫 칸이에요 — 앞 칸이 보낸 별이 필요한데 앞 칸이 없어요.")
   });
 
   for (let k = 1; k < chain.length; k++) {
@@ -161,16 +161,16 @@ function dpRun(chain, E) {
     if (c === "W") {
       if (s0 !== EMPTY) ns[0] = s0;
       note = t(E, "W = empty. If the cell before SENT a star it wouldn't be empty → continues only from the prev 'don't send' (min_stars[0]). W can't send → 'send' is ❌.",
-                  "W = 빈 칸. 앞 칸이 별 보냈으면 안 비어 있음 → 앞 칸 '안 보냄'(min_stars[0])에서만 이어짐. W는 보낼 것도 없으니 '보냄'은 ❌.");
+                  "W 는 빈 칸이에요. 앞 칸이 별을 보냈다면 비어 있을 수가 없어요 → 앞 칸의 '안 보냄'(min_stars[0])에서만 이어져요. W 는 보낼 것도 없으니 '보냄'은 ❌.");
     } else if (c === "B") {
       if (s1 !== EMPTY) { ns[0] = s1 + 1; ns[1] = s1 + 1; }
       note = t(E, "B = ★ here AND a ★ sent from the cell before must arrive → needs prev 'send' → +1 star.",
-                  "B = 여기 별 + 앞 칸이 보낸 별 도착 둘 다 → 앞 칸 '보냄' 필요 → 별 +1.");
+                  "B 는 여기 별도 있고, 앞 칸이 보낸 별도 도착해야 해요 → 앞 칸이 '보냄' 이어야 해요 → 별 +1.");
     } else {
       if (s0 !== EMPTY) { ns[0] = Math.min(ns[0], s0 + 1); ns[1] = Math.min(ns[1], s0 + 1); }
       if (s1 !== EMPTY) { ns[0] = Math.min(ns[0], s1); }
       note = t(E, "G = star in one photo. Two cases — a NEW star here (+1), or the cell before SENT one that arrives (no new ★).",
-                  "G = 한 사진에만 별. 두 갈래 — 여기 새 별(+1), 또는 앞 칸이 보낸 별이 도착(새 별 0).");
+                  "G 는 한 사진에만 별이 있어요. 두 갈래예요 — 여기에 새 별(+1), 또는 앞 칸이 보낸 별이 도착(새 별 0).");
     }
     min_stars = ns;
     trace.push({ comp: c, min_stars: [...min_stars], note });
@@ -308,8 +308,8 @@ export function AstralDpSim({ E }) {
         border: `2px solid ${impossible ? "#dc2626" : "#16a34a"}`,
       }}>
         {impossible
-          ? t(E, "❌ Chain min = ❌ (impossible) → can't be made (-1)", "❌ 별 길 가장 적은 = ❌ (못 만듦) → -1")
-          : t(E, `✅ Chain min = min(min_stars[0], min_stars[1]) = ${final}`, `✅ 별 길 가장 적은 = min(min_stars[0], min_stars[1]) = ${final}`)}
+          ? t(E, "❌ Chain min = ❌ (impossible) → can't be made (-1)", "❌ 별 길에서 가장 적은 수 = ❌ (못 만듦) → -1")
+          : t(E, `✅ Chain min = min(min_stars[0], min_stars[1]) = ${final}`, `✅ 별 길에서 가장 적은 수 = min(min_stars[0], min_stars[1]) = ${final}`)}
       </div>
     </div>
   );
@@ -414,7 +414,7 @@ export function AstralChainDiscovery({ E }) {
       <div style={{ marginTop: 12, background: "#eef2ff", border: `1.5px solid ${A_COLOR}`, borderRadius: 8, padding: "10px 12px", fontSize: 12, color: "#312e81", lineHeight: 1.6 }}>
         {moves && inside ? (
           <>
-            <b>👀 {t(E, "Look!", "여기 봐!")}:</b>{" "}
+            <b>👀 {t(E, "Look!", "여기 봐요!")}:</b>{" "}
             {t(E, `The star moved (0,0) → (${endR},${endC}), so the composite now shows G in TWO cells.`,
                   `별이 (0,0) → (${endR},${endC}) 로 움직였더니, 합성에 G 가 두 칸 생겼어요!`)}
           </>
@@ -422,13 +422,13 @@ export function AstralChainDiscovery({ E }) {
           <>
             <b>{t(E, "Star went off-grid", "별이 격자 밖으로")}:</b>{" "}
             {t(E, "It left the grid, so the composite shows G in just one cell.",
-                  "격자 밖으로 나가서, 합성엔 G 가 한 칸만.")}
+                  "별이 격자 밖으로 나가서, 합성에는 G 가 한 칸만 남아요.")}
           </>
         ) : (
           <>
             <b>{t(E, "Star disappeared", "별 사라짐")}:</b>{" "}
             {t(E, "The composite shows G in just one cell.",
-                  "합성엔 G 가 한 칸만.")}
+                  "합성에는 G 가 한 칸만 있어요.")}
           </>
         )}
       </div>
@@ -484,11 +484,11 @@ export function AstralCellPlayground({ E }) {
     <div style={{ padding: 14 }}>
       <div style={{ textAlign: "center", marginBottom: 10 }}>
         <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
-          🔬 {t(E, "One cell — try every combination", "한 칸 — 모든 조합 시도해봐")}
+          🔬 {t(E, "One cell — try every combination", "한 칸 — 모든 조합을 눌러 봐요")}
         </div>
         <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
           {t(E, "👇 Click the two switches below to flip ON/OFF",
-                "👇 아래 스위치 두 개 눌러서 켜기/끄기")}
+                "👇 아래 스위치 두 개를 눌러서 켰다 껐다 해봐요")}
         </div>
       </div>
 
@@ -601,7 +601,7 @@ export function AstralCellPlayground({ E }) {
       <div style={{ background: "#eef2ff", border: "1.5px solid #a5b4fc", borderRadius: 8, padding: "10px 12px", fontSize: 12, color: "#312e81", lineHeight: 1.65, textAlign: "center" }}>
         💡 {t(E,
           "Try all 4 combinations: (s=0, in=0), (s=1, in=0), (s=0, in=1), (s=1, in=1). You'll see W appears once, G appears twice, B appears once.",
-          "조합 4 가지 다 시도: (s=0, in=0), (s=1, in=0), (s=0, in=1), (s=1, in=1). W 1 번, G 2 번, B 1 번 나타나는 것 보일 거예요.")}
+          "네 가지 조합을 다 눌러 보세요 — (s=0, in=0), (s=1, in=0), (s=0, in=1), (s=1, in=1). W 는 1 번, G 는 2 번, B 는 1 번 나오는 게 보일 거예요.")}
       </div>
     </div>
   );
@@ -754,9 +754,9 @@ export function AstralAlgoTrace({ E }) {
 
   // Per-letter thinking prompt — what to think about when seeing this letter
   const letterPrompt = (letter) => {
-    if (letter === "W") return t(E, "W = empty — no star here at all.", "W = 빈 칸. 아예 별 없음.");
-    if (letter === "G") return t(E, "G = star in ONE of the two photos. Two ways this could happen.", "G = 두 사진 중 하나에만 별. 만들어지는 길이 두 가지.");
-    return t(E, "B = star in BOTH photos. Needs original star AND an arriving star.", "B = 두 사진 모두 별. 처음 별 + 들어온 별 둘 다 있어야.");
+    if (letter === "W") return t(E, "W = empty — no star here at all.", "W 는 빈 칸이에요. 별이 아예 없어요.");
+    if (letter === "G") return t(E, "G = star in ONE of the two photos. Two ways this could happen.", "G 는 두 사진 중 하나에만 별이 있어요. 만들어지는 길이 두 가지예요.");
+    return t(E, "B = star in BOTH photos. Needs original star AND an arriving star.", "B 는 두 사진 모두 별이에요. 처음 별과 들어온 별이 둘 다 있어야 해요.");
   };
 
   // Bubble STACK — derives the chronological list of bubbles for the CURRENT cell
@@ -779,10 +779,10 @@ export function AstralAlgoTrace({ E }) {
       sub: letter === "W"
         ? t(E, "just skip ▶", "그냥 다음 →")
         : letter === "G"
-          ? t(E, "Original ★? Moved-in ★? ↖ check", "원래 별? 들어온 별? ↖ 살펴!")
+          ? t(E, "Original ★? Moved-in ★? ↖ check", "원래 별? 들어온 별? ↖ 살펴봐요")
           // B → photo1 star at THIS cell AND photo1 star at predecessor (so it moves IN to form photo2 star)
           : t(E, "Need ★ HERE and ★ at ↖ trace-back spot",
-                 "여기 별 있어야 + 거꾸로 간 자리에도 별 있어야!"),
+                 "여기도 별이 있어야 하고, 거꾸로 간 자리에도 별이 있어야 해요!"),
     });
 
     if (letter === "W") return list;
@@ -791,10 +791,10 @@ export function AstralAlgoTrace({ E }) {
     // Helper — describes the destination of a move: outside / star here / empty here
     const describeDest = (destR, destC) => {
       const insideGrid = destR >= 0 && destR < N && destC >= 0 && destC < N;
-      if (!insideGrid) return { kind: "outside", text: t(E, "Outside!", "밖이야!") };
+      if (!insideGrid) return { kind: "outside", text: t(E, "Outside!", "밖이에요!") };
       const m = marks[`${destR},${destC}`];
-      if (m?.kind === "chain") return { kind: "star", text: t(E, "Star here! ✨", "여기 별 있어! ✨") };
-      return { kind: "empty", text: t(E, "Empty here — no star", "여기 별 없어 (빈 칸)") };
+      if (m?.kind === "chain") return { kind: "star", text: t(E, "Star here! ✨", "여기 별 있어요! ✨") };
+      return { kind: "empty", text: t(E, "Empty here — no star", "여기 별 없어요 (빈 칸)") };
     };
 
     if (tracer) {
@@ -835,9 +835,9 @@ export function AstralAlgoTrace({ E }) {
             color: "#16a34a",
             head: t(E, "★★ Both confirmed!", "★★ 둘 다 확인!"),
             sub: t(E, `★ here at (${r},${c}) ✓ + ★ at ${predCoord} ✓ → same star path 🌟`,
-                     `여기 (${r},${c}) 별 있음 ✓ + 거기 ${predCoord} 도 별 있음 ✓ → 같은 별 길 🌟`),
+                     `여기 (${r},${c}) 에 별이 있어요 ✓ 거기 ${predCoord} 에도 별이 있어요 ✓ → 같은 별 길 🌟`),
             note: t(E, `If EITHER spot had no star, this B would be EMPTY!`,
-                       `둘 중 하나라도 별 없었으면 이 B 는 불가능했음!`),
+                       `둘 중 하나라도 별이 없었으면 이 B 는 불가능했어요!`),
           });
         } else {
           list.push({
@@ -845,9 +845,9 @@ export function AstralAlgoTrace({ E }) {
             color: "#16a34a",
             head: t(E, "★ Star moved in here!", "★ 별이 여기로 옴!"),
             sub: t(E, `Star came IN from ${predCoord} → same star path 🌟`,
-                     `${predCoord} 에서 별이 들어옴 → 같은 별 길 🌟`),
+                     `${predCoord} 에서 별이 들어왔어요 → 같은 별 길 🌟`),
             note: t(E, `If ${predCoord} had no star, this G would be the ORIGINAL star here.`,
-                       `만약 ${predCoord} 에 별 없었으면 이 G 는 원래 여기 있던 별이었을 거야.`),
+                       `만약 ${predCoord} 에 별이 없었으면 이 G 는 원래 여기 있던 별이었을 거예요.`),
           });
         }
       } else if (dest.kind === "outside") {
@@ -858,9 +858,9 @@ export function AstralAlgoTrace({ E }) {
             color: "#dc2626",
             head: t(E, "❌ Impossible!", "❌ 불가능한 입력!"),
             sub: t(E, `B needs ★ at BOTH spots, but ${predCoord} is OUTSIDE the grid`,
-                     `B 는 양쪽 다 별 있어야 하는데 ${predCoord} 는 격자 밖!`),
+                     `B 는 양쪽 다 별이 있어야 하는데 ${predCoord} 는 격자 밖이에요!`),
             note: t(E, "No way for a star to move IN here → contradiction",
-                       "별이 여기로 옮겨올 방법 없음 → 모순"),
+                       "별이 여기로 옮겨올 방법이 없어요 → 모순"),
           });
         } else {
           list.push({
@@ -868,9 +868,9 @@ export function AstralAlgoTrace({ E }) {
             color: "#dc2626",
             head: t(E, "★ Original star here", "★ 원래 여기 있던 별"),
             sub: t(E, "Outside → no star came in → NEW star path ✨",
-                     "밖이라 들어온 별 없음 → 새 별 길 ✨"),
+                     "밖이라 들어온 별이 없어요 → 새 별 길 ✨"),
             note: t(E, "If it had been inside the grid with a star, this G would be a MOVED-IN star.",
-                       "만약 격자 안이고 거기 별 있었으면 이 G 는 들어온 별이었을 거야."),
+                       "만약 격자 안이고 거기에 별이 있었으면 이 G 는 들어온 별이었을 거예요."),
           });
         }
       } else { // empty there (inside grid but predecessor W)
@@ -880,9 +880,9 @@ export function AstralAlgoTrace({ E }) {
             color: "#dc2626",
             head: t(E, "❌ Impossible!", "❌ 불가능한 입력!"),
             sub: t(E, `B needs ★ at BOTH spots, but ${predCoord} is empty (W)`,
-                     `B 는 양쪽 다 별 있어야 하는데 ${predCoord} 는 빈 칸!`),
+                     `B 는 양쪽 다 별이 있어야 하는데 ${predCoord} 는 빈 칸이에요!`),
             note: t(E, "No star to move IN here → contradiction",
-                       "여기로 옮겨올 별이 없음 → 모순"),
+                       "여기로 옮겨올 별이 없어요 → 모순"),
           });
         } else {
           list.push({
@@ -890,9 +890,9 @@ export function AstralAlgoTrace({ E }) {
             color: "#dc2626",
             head: t(E, "★ Original star here", "★ 원래 여기 있던 별"),
             sub: t(E, "Empty there → no star came in → NEW star path ✨",
-                     "거기 빈 칸이라 들어온 별 없음 → 새 별 길 ✨"),
+                     "거기가 빈 칸이라 들어온 별이 없어요 → 새 별 길 ✨"),
             note: t(E, `If ${predCoord} had a star, this G would be a MOVED-IN star.`,
-                       `만약 ${predCoord} 에 별 있었으면 이 G 는 들어온 별이었을 거야.`),
+                       `만약 ${predCoord} 에 별이 있었으면 이 G 는 들어온 별이었을 거예요.`),
           });
         }
       }
@@ -904,9 +904,9 @@ export function AstralAlgoTrace({ E }) {
   const bubbles = bubbleStack();
 
   const statusText = () => {
-    if (step === -1) return t(E, "Press ▶ to start, then 'Next' for each cell.", "▶ 눌러서 시작, 그 다음 '다음' 으로 한 칸씩.");
+    if (step === -1) return t(E, "Press ▶ to start, then 'Next' for each cell.", "▶ 를 눌러서 시작하고, 그 다음엔 '다음' 으로 한 칸씩 봐요.");
     if (phase === "done") return t(E, `Done — ${chainCount} different star paths in this ${N}×${N} grid.`,
-                                         `끝 — 이 ${N}×${N} 격자에 별 길 ${chainCount} 개.`);
+                                         `끝났어요 — 이 ${N}×${N} 격자에 별 길이 ${chainCount} 개 있어요.`);
     if (phase === "tracing" && tracer) {
       const origR = Math.floor(step / N), origC = step % N;
       const origLetter = cellLetter(origR, origC);
@@ -921,16 +921,16 @@ export function AstralAlgoTrace({ E }) {
       const inGrid = tracer.r >= 0 && tracer.r < N && tracer.c >= 0 && tracer.c < N;
       if (inGrid) {
         return t(E, `Arrived at (${tracer.r},${tracer.c}) — inside! So this ${origLetter} cell continues the same star's path.`,
-                    `(${tracer.r},${tracer.c}) 도착 — 격자 안! 그러니까 이 ${origLetter} 칸은 위 별 길에 이어져.`);
+                    `(${tracer.r},${tracer.c}) 에 도착 — 격자 안이에요! 그러니까 이 ${origLetter} 칸은 위 별 길에 이어져요.`);
       }
       return t(E, `Arrived at (${tracer.r},${tracer.c}) — outside! This ${origLetter} cell is the start of a NEW star path.`,
-                  `(${tracer.r},${tracer.c}) 도착 — 격자 밖! 이 ${origLetter} 칸이 새 별 길의 시작점.`);
+                  `(${tracer.r},${tracer.c}) 에 도착 — 격자 밖이에요! 이 ${origLetter} 칸이 새 별 길의 시작점이에요.`);
     }
     if (!currentCell) return "";
     const [r, c] = currentCell;
     const letter = cellLetter(r, c);
     return t(E, `Next: (${r},${c}) = ${letter}. ${letterPrompt(letter)}`,
-                `다음: (${r},${c}) = ${letter}. ${letterPrompt(letter)}`);
+                `다음은 (${r},${c}) = ${letter} 이에요. ${letterPrompt(letter)}`);
   };
 
   return (
@@ -941,7 +941,7 @@ export function AstralAlgoTrace({ E }) {
         </div>
         <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
           {t(E, "Star moves right 1, down 2. ▶ Press start to color the grid one cell at a time.",
-                "별은 오른쪽 1, 아래 2 로 움직여. ▶ 누르면 한 칸씩 색깔이 칠해져.")}
+                "별은 오른쪽 1, 아래 2 로 움직여요. ▶ 를 누르면 한 칸씩 색깔이 칠해져요.")}
         </div>
       </div>
 
@@ -971,7 +971,7 @@ export function AstralAlgoTrace({ E }) {
           padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 700,
           border: `2px solid ${C.border}`, background: "#fff", color: C.dim, cursor: "pointer",
         }}>
-          ↺ {t(E, "Reset", "초기화")}
+          ↺ {t(E, "Reset", "처음으로")}
         </button>
       </div>
 
@@ -1938,19 +1938,19 @@ export function getAstralWalk(E, lang = "py") {
           "이 칸이 B면 — 두 사진 다 별이라 원래도 무조건 별.\npossibles에 넣어요.") },
         { hi: [24, 35], bubble: t(E,
           "A B also FORCES its 'predecessor' (one star-step back: r-down, c-right) to have been a star too.\nIf that cell is off the grid, or a W (blank) → it can't be made → -1.",
-          "그리고 B는 '직전 칸'(별 한 걸음 거꾸로: r-down, c-right)에도 원래 별이 있었어야 해요.\n그 칸이 사진 밖이거나 W(빈칸)면 → 만들 수 없음 → -1.") },
+          "그리고 B는 '직전 칸'에도 원래 별이 있었어야 해요.\n직전 칸은 별을 한 걸음 거꾸로 간 칸이에요 (r-down, c-right).\n그 칸이 사진 밖이거나 W(빈칸)면 만들 수 없어요 → -1.") },
         { hi: [37, 40], bubble: t(E,
           "This cell is G (a star in ONE photo).\nIf it's already in possibles — handled earlier — just skip it (continue).",
           "이 칸이 G(한 사진에만 별)?\n이미 possibles에 찍혀 있으면 — 앞에서 처리된 거라 그냥 넘어가요(continue).") },
         { hi: [41, 46], bubble: t(E,
           "Otherwise decide where the star was:\npredecessor off-grid → put it HERE.\npredecessor is G or B → put it THERE (the surer spot).\notherwise → HERE.",
-          "아직이면 별을 어디에 둘지 정해요:\n직전 칸이 사진 밖 → 여기.\n직전 칸이 G나 B → 거기(그쪽이 더 확실).\n둘 다 아니면 → 여기.") },
+          "아직이면 별을 어디에 둘지 정해요.\n직전 칸이 사진 밖이면 → 여기에.\n직전 칸이 G나 B면 → 거기에 (그쪽이 더 확실해요).\n둘 다 아니면 → 여기에.") },
         { hi: [48, 48], bubble: t(E,
           "W (blank in both photos) → no star was here, so do nothing.",
           "W(두 사진 다 빈칸)면 — 원래 별이 없었으니 아무것도 안 해요.") },
         { hi: [51, 51], bubble: t(E,
           "After the whole puzzle: print -1 if impossible,\notherwise possibles.size() (= how many original stars). Done!",
-          "한 퍼즐 다 훑으면: 불가능이면 -1,\n아니면 possibles 개수(= 원래 별 수)를 출력. 끝!") },
+          "한 퍼즐을 다 훑었어요.\n불가능이면 -1 을, 아니면 possibles 개수(= 원래 별 수)를 출력해요. 끝!") },
       ],
     };
   }
@@ -1963,7 +1963,7 @@ export function getAstralWalk(E, lang = "py") {
         "언제나 시작은 입력부터.\nT(퍼즐 개수)를 읽고, out에 퍼즐마다 답 하나씩 모을 거예요.") },
       { hi: [8, 16], bubble: t(E,
         "Take one puzzle: N (grid size), the star moves right by `right` and down by `down`, then read the N grid rows.",
-        "퍼즐 하나 꺼내기: N(격자 크기), 별이 오른쪽 right칸·아래 down칸, 그리고 격자 N줄.") },
+        "퍼즐 하나를 꺼내요.\nN(격자 크기)과 별 이동(오른쪽 right 칸·아래 down 칸), 그리고 격자 N 줄을 읽어요.") },
       { hi: [18, 19], bubble: t(E,
         "Here's the KEY idea.\nCollect into `possibles` every cell that MUST have had a star in photo 1 — the answer is just how many.\nA set auto-dedupes repeats.",
         "여기가 핵심 아이디어예요.\n'원래(사진1)에 별이 있어야 하는 칸'을 possibles에 모아요 — 답은 그 칸 개수.\nset이라 같은 칸 중복은 알아서 하나로.") },
@@ -1975,19 +1975,19 @@ export function getAstralWalk(E, lang = "py") {
         "이 칸이 B면 — 두 사진 다 별이라 원래도 무조건 별.\npossibles에 넣어요.") },
       { hi: [27, 36], bubble: t(E,
         "A B also FORCES its 'predecessor' (one star-step back: r-down, c-right) to have been a star too.\nIf that cell is off the grid, or a W (blank) → it can't be made → -1.",
-        "그리고 B는 '직전 칸'(별 한 걸음 거꾸로: r-down, c-right)에도 원래 별이 있었어야 해요.\n그 칸이 사진 밖이거나 W(빈칸)면 → 만들 수 없음 → -1.") },
+        "그리고 B는 '직전 칸'에도 원래 별이 있었어야 해요.\n직전 칸은 별을 한 걸음 거꾸로 간 칸이에요 (r-down, c-right).\n그 칸이 사진 밖이거나 W(빈칸)면 만들 수 없어요 → -1.") },
       { hi: [37, 39], bubble: t(E,
         "This cell is G (a star in ONE photo).\nIf it's already in possibles — handled earlier — just skip it (continue).",
         "이 칸이 G(한 사진에만 별)?\n이미 possibles에 찍혀 있으면 — 앞에서 처리된 거라 그냥 넘어가요(continue).") },
       { hi: [40, 45], bubble: t(E,
         "Otherwise decide where the star was:\npredecessor off-grid → put it HERE.\npredecessor is G or B → put it THERE (the surer spot).\notherwise → HERE.",
-        "아직이면 별을 어디에 둘지 정해요:\n직전 칸이 사진 밖 → 여기.\n직전 칸이 G나 B → 거기(그쪽이 더 확실).\n둘 다 아니면 → 여기.") },
+        "아직이면 별을 어디에 둘지 정해요.\n직전 칸이 사진 밖이면 → 여기에.\n직전 칸이 G나 B면 → 거기에 (그쪽이 더 확실해요).\n둘 다 아니면 → 여기에.") },
       { hi: [46, 46], bubble: t(E,
         "W (blank in both photos) → no star was here, so do nothing.",
         "W(두 사진 다 빈칸)면 — 원래 별이 없었으니 아무것도 안 해요.") },
       { hi: [48, 49], bubble: t(E,
         "After the whole puzzle: print -1 if impossible,\notherwise len(possibles) (= how many original stars). Done!",
-        "한 퍼즐 다 훑으면: 불가능이면 -1,\n아니면 possibles 개수(= 원래 별 수)를 출력. 끝!") },
+        "한 퍼즐을 다 훑었어요.\n불가능이면 -1 을, 아니면 possibles 개수(= 원래 별 수)를 출력해요. 끝!") },
     ],
   };
 }
@@ -2000,26 +2000,26 @@ export function getAstralSections(E) {
       py: AST_S1_PY, cpp: AST_S1_CPP,
       why: [
         t(E, "First line: number of puzzles (T). Each puzzle: N (grid size), right & down (the shift), then N lines of W/G/B. (See the sample on the right.)",
-            "맨 첫 줄: 퍼즐 개수 (T). 각 퍼즐: N (격자 크기), right·down (이동량), 그 다음 W/G/B 격자 N 줄. (오른쪽 샘플 참고.)"),
+            "맨 첫 줄에 퍼즐 개수 T 가 나와요. 퍼즐 하나마다 N (격자 크기) 과 right·down (이동량) 이 오고, 그 다음 W/G/B 격자가 N 줄 이어져요. (오른쪽 샘플 참고.)"),
       ],
       pyOnly: [
         t(E, "Read all the input at once, then take it piece by piece — fast and simple.",
-            "입력을 한 번에 다 읽어서 앞에서부터 하나씩 꺼내 써요 — 빠르고 간단."),
+            "입력을 한 번에 다 읽어서 앞에서부터 하나씩 꺼내 써요 — 빠르고 간단해요."),
       ],
       cppOnly: [],
       aside: <SampleInputAside E={E} sample={AST_SAMPLE} highlight={[0, 1, 2, 3, 4]} note={t(E,
         "Sample 1: \"1\" (1 puzzle), \"3 0 0\" (3×3 grid, stars don't move), then 3 grid rows.",
-        "샘플 1: \"1\" (퍼즐 1 개), \"3 0 0\" (3×3 격자, 별 안 움직임), 그 다음 격자 3 줄.")} />,
+        "샘플 1 이에요 — \"1\" (퍼즐 1 개), \"3 0 0\" (3×3 격자, 별 안 움직임), 그 다음 격자 3 줄.")} />,
     },
     {
-      label: t(E, "2️⃣ Easy case: stars don't move", "2️⃣ 쉬운 경우: 별이 안 움직일 때"),
+      label: t(E, "2️⃣ Easy case: stars don't move", "2️⃣ 쉬운 경우 — 별이 안 움직일 때"),
       color: "#16a34a",
       py: AST_S2_PY, cpp: AST_S2_CPP,
       why: [
         t(E, "Stars don't move → every cell stands alone. Each G and B contributes exactly 1 star.",
-            "별 이동량 둘 다 0 → 모든 칸이 따로따로. G 와 B 한 칸마다 별 1 개씩."),
+            "별 이동량이 둘 다 0 이면 모든 칸이 따로따로예요. G 와 B 한 칸마다 별이 1 개씩이에요."),
         t(E, "Answer = count(G) + count(B). Never -1.",
-            "답 = G 개수 + B 개수. -1 절대 없음."),
+            "답은 G 개수 + B 개수예요. -1 은 절대 안 나와요."),
       ],
       pyOnly: [],
       cppOnly: [],
@@ -2041,7 +2041,7 @@ export function getAstralSections(E) {
       py: AST_S4A_PY, cpp: AST_S4A_CPP,
       why: [
         t(E, "Line's first cell: read its two numbers (don't-send / send) from the letter — exactly like step 1 of the walk.",
-            "줄 첫 칸: 글자 보고 두 숫자(안 보냄 / 보냄) 시작값을 적어요 — 워크 1 번 칸이랑 똑같아요."),
+            "줄의 첫 칸은 글자를 보고 두 숫자(안 보냄 / 보냄)의 시작값을 적어요 — 워크 1 번 칸이랑 똑같아요."),
         t(E, "W → [0, ✕].  G → [1, 1].  (B can't be a line's first cell.)  In the code these two numbers are min_stars[0] (don't-send) and min_stars[1] (send).",
             "W → [안 보냄 0, 보냄 ✕].  G → [1, 1].  (B 는 줄 첫 칸이 될 수 없어요.)  코드에선 이 두 숫자가 min_stars[0](안 보냄), min_stars[1](보냄)."),
       ],
@@ -2054,7 +2054,7 @@ export function getAstralSections(E) {
       py: AST_S4B_PY, cpp: AST_S4B_CPP,
       why: [
         t(E, "Each next cell: previous cell's two numbers + this letter → this cell's two numbers — exactly like pressing Next in the walk.",
-            "각 다음 칸: 앞 칸 두 숫자 + 이 칸 글자 → 이 칸 두 숫자 — 워크에서 '다음 ▶' 누른 거랑 똑같아요."),
+            "그 다음 칸부터는 앞 칸의 두 숫자와 이 칸 글자를 보고 이 칸의 두 숫자를 정해요 — 워크에서 '다음 ▶' 누른 거랑 똑같아요."),
         t(E, "The if-else just handles each letter (W / G / B) the way the walk did, cell by cell.",
             "if-else 는 글자(W / G / B)마다 워크에서 한 그대로 한 칸씩 처리하는 거예요."),
       ],
@@ -2067,11 +2067,11 @@ export function getAstralSections(E) {
       py: AST_FULL_PY, cpp: AST_FULL_CPP,
       why: [
         t(E, "📖 Putting it all together — same chunks you've seen, now stitched into one main():",
-            "📖 전부 합치기 — 방금까지 본 덩어리들을 main() 하나에 이어 붙인 거야:"),
+            "📖 전부 합치기 — 방금까지 본 덩어리들을 main() 하나에 이어 붙인 거예요."),
         t(E, "(a) read input → (b) shortcut if stars don't move → (c) for each line, fill its two numbers cell by cell → (d) that line's answer = the smaller number → (e) add up every line's answer.",
             "(가) 입력 받기 → (나) 별 안 움직이면 지름길 → (다) 줄마다 한 칸씩 두 숫자 채우기 → (라) 줄 답 = 더 작은 수 → (마) 줄 답 다 더하기."),
         t(E, "Add up all the line answers = total. If any line is impossible (✕) → print -1 instead.",
-            "줄 답을 다 더하면 총합. 한 줄이라도 불가능(✕)하면 총합 대신 -1 출력."),
+            "줄 답을 다 더하면 총합이에요. 한 줄이라도 불가능(✕)하면 총합 대신 -1 을 출력해요."),
       ],
       pyOnly: [],
       cppOnly: [],
@@ -2090,11 +2090,11 @@ export function getAstralSections(E) {
       pyOnly: [],
       cppOnly: [
         t(E, "set<pair<int,int>> mirrors the Python set. {r, c} inserts a coordinate; .count({r,c}) checks membership.",
-            "set<pair<int,int>> 가 파이썬 set 역할. {r, c} 로 좌표 넣고, .count({r,c}) 로 들어있는지 확인."),
+            "set<pair<int,int>> 가 파이썬 set 역할을 해요. {r, c} 로 좌표를 넣고, .count({r,c}) 로 들어 있는지 확인해요."),
       ],
       aside: <SampleInputAside E={E} sample={AST_SAMPLE} highlight={[]} note={t(E,
         "Tip: a 'predecessor' = the cell one star-step back: (r - down, c - right).",
-        "팁: '직전 칸' = 별 한 걸음 거꾸로 간 칸: (r - down, c - right).")} />,
+        "팁 — '직전 칸' 은 별을 한 걸음 거꾸로 간 칸이에요 (r - down, c - right).")} />,
     },
     /* ── index 7: full backward-greedy program (teacher's verified Python) ── */
     {
@@ -2107,7 +2107,7 @@ export function getAstralSections(E) {
       ],
       pyOnly: [
         t(E, "This is the teacher's actual USACO-accepted Python (logic verbatim; input switched to the fast sys.stdin read).",
-            "선생님이 USACO 통과시킨 실제 파이썬 (로직 그대로, 입력만 빠른 sys.stdin 으로)."),
+            "선생님이 USACO 를 통과시킨 실제 파이썬이에요 (풀이는 그대로, 입력만 빠른 sys.stdin 으로 바꿨어요)."),
       ],
       cppOnly: [],
     },
