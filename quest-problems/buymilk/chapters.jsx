@@ -167,8 +167,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Sometimes two half-blocks cost less than the deal itself.",
-        "절반짜리 둘이 거래보다 쌀 때가 있어요."),
+        "7 buckets: the 8-bucket deal is 45, but two 4-bucket blocks are 40.",
+        "7통을 살 때 8통 묶음은 45, 4통 두 개는 40 이에요."),
       content: (<NormalizeSim E={E} />),
     },
 
@@ -274,7 +274,7 @@ function BuyMilkPlan({ E }) {
       </div>
       <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
         <Insight icon="💰" color="#d97706"
-          head={t(E, "Two half-blocks can beat the deal.", "절반짜리 둘이 거래보다 쌀 때가 있다.")}
+          head={t(E, "Two half-blocks can beat the deal.", "4통 두 개(40)가 8통 묶음(45)보다 싸다.")}
           body={t(E, <>So each block gets its own real price {codeTag("c[i]")} — the deal, or two half-blocks, whichever is cheaper.</>,
                      <>그래서 묶음마다 진짜 값 {codeTag("c[i]")} 를 따로 구해요.<br />거래 값과 반쪽 묶음 두 개 값 중 싼 쪽이에요.</>)} />
         <Insight icon="🧱" color="#0891b2"

@@ -69,8 +69,8 @@ export function NormalizeSim({ E }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>There are <b>two ways</b> to get a block.<br />Buy that deal — or buy <b>two half-blocks</b>.<br /><span style={{ fontWeight: 600 }}>The cheaper one is what the block really costs.</span></>,
-      <>한 묶음을 사는 방법은 <b>두 가지</b>예요.<br />그 거래를 사거나, <b>절반짜리 묶음을 두 번</b> 사거나.<br /><span style={{ fontWeight: 600 }}>둘 중 싼 쪽이 이 묶음의 진짜 값이에요.</span></>)
+      <>Say we need <b>7 buckets</b>.<br />The 8-bucket deal costs <b>45</b>.<br />But two 4-bucket blocks (20 each) cost <b>40</b> — cheaper!<br /><span style={{ fontWeight: 600 }}>So first, find what each block really costs.</span></>,
+      <><b>7통</b>을 사야 한다고 해 봐요.<br />8통 묶음은 <b>45</b> 예요.<br />그런데 4통 묶음(20)을 두 번 사면 <b>40</b> 이에요. 더 싸요!<br /><span style={{ fontWeight: 600 }}>그러니 묶음마다 진짜 값부터 구해 둬요.</span></>)
     : s.k === "row" ? (() => {
         const i = s.i, size = 1 << i;
         if (i === 0) return t(E,
