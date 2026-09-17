@@ -62,7 +62,8 @@ export function makeMcc21SimpleMathCh1(E) {
       type: "reveal",
       narr: t(E,
         "You get N numbers and an operator selector P. For EVERY nonempty subset, combine that subset with the operator — then sum those values over all 2^N − 1 subsets.",
-        "수 N 개와, 어떤 연산자를 쓸지 정하는 P 를 받아요.\n비어 있지 않은 부분집합마다 그 안의 수를 그 연산자로 합쳐요.\n그렇게 나온 2^N − 1 개의 값을 전부 더해요."),
+        /* 2026-09-17: 77자·세 문장이었다. 아래 미션·문제 카드가 같은 말을 다시 한다. */
+        "부분집합마다 수를 합친 값을 전부 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -212,7 +213,7 @@ export function makeMcc21SimpleMathCh1(E) {
         "이번엔 P = 2(곱셈)예요. 수는 {2, 3} 둘뿐이에요."),
       question: t(E,
         "P = 2, numbers {2, 3}. Add up the values of all 3 nonempty subsets.",
-        "P = 2 이고 수가 {2, 3} 이에요.\n비어 있지 않은 부분집합 3 개의 값을 다 더하면 얼마일까요?"),
+        "P = 2(곱셈), 수는 {2, 3} 이에요.\n비어 있지 않은 부분집합 3 개의 값을 다 더하면?"),
       hint: t(E,
         "The subsets are {2}, {3}, {2,3} — worth 2, 3 and 2×3. Shortcut: expand (1+2)(1+3) and drop the 1 that comes from the empty set.",
         "부분집합은 {2}, {3}, {2,3} 이고 값은 2, 3, 2×3 이에요.\n지름길로는 (1+2)(1+3) 을 펼친 뒤\n빈 집합에서 온 1 만 빼면 돼요."),
@@ -227,7 +228,7 @@ export function makeMcc21SimpleMathCh1(E) {
         "이번엔 P = 3(XOR)이에요. 수는 {1, 2} 예요."),
       question: t(E,
         "P = 3, numbers {1, 2}. Add up the values of all 3 nonempty subsets.",
-        "P = 3 이고 수가 {1, 2} 예요.\n비어 있지 않은 부분집합 3 개의 값을 다 더하면 얼마일까요?"),
+        "P = 3(XOR), 수는 {1, 2} 예요.\n비어 있지 않은 부분집합 3 개의 값을 다 더하면?"),
       hint: t(E,
         "XOR compares bit by bit: a bit is 1 when exactly one side has it. So 1 ⊕ 2 = 3. The three subsets are worth 1, 2 and 1⊕2.",
         "XOR 는 비트끼리 견줘서 한쪽에만 있을 때 1 이 돼요.\n그래서 1 ⊕ 2 = 3 이에요.\n부분집합 3 개의 값은 1, 2, 그리고 1⊕2 예요."),

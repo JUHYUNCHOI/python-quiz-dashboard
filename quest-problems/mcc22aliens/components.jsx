@@ -85,14 +85,14 @@ const FULL_CPP = [
    세기 · 비교/출력이 한 덩어리였다. 네 단계로 나눈다.
    ⚠️ 코드 **내용**은 한 글자도 안 바꾼다. 그래서 새로 적지 않고 slice 로 자른다. */
 const PY_READ    = FULL_PY.slice(0, 10);
-const PY_DECODE  = FULL_PY.slice(10, 21);
-const PY_COUNT   = FULL_PY.slice(21, 23);
-const PY_VERDICT = FULL_PY.slice(23);
+const PY_DECODE  = FULL_PY.slice(10, 23);
+const PY_VERDICT = FULL_PY.slice(23, 27);
+const PY_OUT     = FULL_PY.slice(27);
 
 const CPP_READ    = FULL_CPP.slice(0, 12);
-const CPP_DECODE  = FULL_CPP.slice(12, 28);
-const CPP_COUNT   = FULL_CPP.slice(28, 32);
-const CPP_VERDICT = FULL_CPP.slice(32);
+const CPP_DECODE  = FULL_CPP.slice(12, 32);
+const CPP_VERDICT = FULL_CPP.slice(32, 37);
+const CPP_OUT     = FULL_CPP.slice(37);
 
 export function getMcc22AliensSections(E) {
   return [
@@ -116,7 +116,7 @@ export function getMcc22AliensSections(E) {
       ],
     },
     {
-      label: t(E, "🔀 2. Turn each claim into the type it demands", "🔀 2. 각 말을 '요구하는 타입' 으로 바꾸기"),
+      label: t(E, "🔀 2. Decode each claim, count the T's", "🔀 2. 각 말을 '요구하는 타입' 으로 바꾸고 세기"),
       color: A,
       py: PY_DECODE, cpp: CPP_DECODE,
       why: [
@@ -124,8 +124,10 @@ export function getMcc22AliensSections(E) {
             "n! 가지 지목 순서를 뒤질 필요가 없어요.\n말 하나가 정해 주는 건 딱 하나예요 —\n지목당한 쪽이 가져야 할 타입이에요."),
         t(E, "A truth-teller (a[i]=='T') means b[i] as-is; a liar says the opposite, so flip b[i]. Either way req is the demanded type.",
             "진실쟁이(a[i]=='T')가 말하면 b[i] 그대로예요.\n거짓말쟁이가 말하면 반대니까 b[i] 를 뒤집어요.\n어느 쪽이든 req 가 '요구된 타입' 이에요."),
-        t(E, "While we are here, count the real T's (have_T) — that's the supply we will compare against.",
-            "온 김에 진짜 T 가 몇 개인지(have_T)도 같이 세요.\n나중에 견줄 '공급' 이에요."),
+        t(E, "Two counters ride along in the same pass: need_T (how many T's the sentences demand) and have_T (how many real T's exist).",
+            "같은 한 바퀴에서 세는 것이 둘이에요.\nneed_T 는 말들이 요구한 T 의 개수,\nhave_T 는 진짜 T 의 개수예요."),
+        t(E, "Demanded F's need no counter: everyone who isn't demanded as T is demanded as F.",
+            "F 를 요구한 말은 따로 안 세도 돼요.\nT 가 아닌 나머지가 곧 F 니까요."),
       ],
       cppOnly: [
         t(E, "req is a single char — the type this claim demands after decoding the speaker's honesty.",
@@ -133,18 +135,7 @@ export function getMcc22AliensSections(E) {
       ],
     },
     {
-      label: t(E, "🔢 3. Count the demanded T's", "🔢 3. 요구된 T 가 몇 개인지 세기"),
-      color: A,
-      py: PY_COUNT, cpp: CPP_COUNT,
-      why: [
-        t(E, "We don't care WHICH alien each sentence demands — only how many T's are demanded in total. That single number is need_T.",
-            "어떤 외계인을 가리켰는지는 알 필요가 없어요.\nT 를 요구한 말이 모두 몇 개인지만 세면 돼요.\n그 수 하나가 need_T 예요."),
-        t(E, "Demanded F's need no counter: everyone who isn't demanded as T is demanded as F.",
-            "F 를 요구한 말은 따로 안 세도 돼요.\nT 가 아닌 나머지가 곧 F 니까요."),
-      ],
-    },
-    {
-      label: t(E, "⚖️ 4. Compare supply and demand → YES / NO", "⚖️ 4. 공급과 수요를 견줘 YES / NO"),
+      label: t(E, "⚖️ 3. Compare supply and demand", "⚖️ 3. 공급과 수요를 견주기"),
       color: A,
       py: PY_VERDICT, cpp: CPP_VERDICT,
       why: [
@@ -153,9 +144,24 @@ export function getMcc22AliensSections(E) {
         t(E, "That is possible exactly when the two counts match: need_T == have_T → YES, otherwise NO. One O(n) pass, no permutations.",
             "그게 되는 건 두 개수가 딱 맞을 때뿐이에요.\nneed_T == have_T 면 YES, 아니면 NO 예요.\n문자열을 O(n) 으로 한 번 훑을 뿐, 순서는 만들지 않아요."),
       ],
+    },
+    {
+      label: t(E, "🖨️ 4. Send the answers out", "🖨️ 4. 답 내보내기"),
+      color: A,
+      py: PY_OUT, cpp: CPP_OUT,
+      why: [
+        t(E, "One line per test, in the order the tests came in.",
+            "테스트 하나에 한 줄씩,\n들어온 순서 그대로 내보내요."),
+      ],
       pyOnly: [
-        t(E, "Answers are collected in a list and printed once at the end — printing inside the loop is slower.",
-            "답을 리스트에 모아 두었다가 끝에 한 번에 출력해요.\n반복문 안에서 매번 출력하면 더 느려요."),
+        t(E, "Answers were collected in the list `out` and printed once at the end — printing inside the loop is slower.",
+            "답을 out 리스트에 모아 두었다가 끝에 한 번에 출력해요.\n반복문 안에서 매번 출력하면 더 느려요."),
+        t(E, "The code lives inside def main(), so the last line calls main() to start it.",
+            "코드가 def main() 안에 들어 있어요.\n그래서 맨 끝에서 main() 을 불러 시작해요."),
+      ],
+      cppOnly: [
+        t(E, "C++ printed each verdict right away, so here the loop just closes and the program ends.",
+            "C++ 은 판정이 날 때마다 바로 출력했어요.\n그래서 여기서는 반복문을 닫고 프로그램이 끝나요."),
       ],
     },
   ];

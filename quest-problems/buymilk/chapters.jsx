@@ -49,7 +49,7 @@ export function makeBuyMilkCh1(E) {
                   <b style={{ color: "#0891b2" }}>2^(i-1)</b>
                   {t(E, " buckets at price ", " 통을 ")}
                   <b style={{ color: "#0891b2" }}>a_i</b>
-                  {t(E, ". Prices strictly increase: a_1 < a_2 < ... < a_N.", " 무니에 팔아요.\n뒤로 갈수록 값이 꼭 더 비싸요 — a_1 < a_2 < ... < a_N 이에요.")}
+                  {t(E, ". Prices strictly increase: a_1 < a_2 < ... < a_N.", " 무니(이 나라 돈)에 팔아요.\n뒤 거래일수록 값이 꼭 더 비싸요 — a_1 < a_2 < ... < a_N 이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -129,8 +129,8 @@ export function makeBuyMilkCh1(E) {
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ N ≤ 100,000 (= 10⁵)</div>
               <div>1 ≤ Q ≤ 10,000 (= 10⁴)</div>
-              <div>1 ≤ a<sub>i</sub> ≤ 10⁹ <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(strictly increasing)", "(순증가)")}</span></div>
-              <div>1 ≤ x ≤ 10⁹ <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "· use 64-bit ints", "· 64비트 정수 필요")}</span></div>
+              <div>1 ≤ a<sub>i</sub> ≤ 10⁹ <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(strictly increasing)", "(뒤로 갈수록 커져요)")}</span></div>
+              <div>1 ≤ x ≤ 10⁹ <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "· use 64-bit ints", "· 답이 커서 큰 정수를 써요")}</span></div>
             </div>
           </div>
         </div>),
@@ -173,8 +173,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "7 buckets: the 8-bucket deal is 45, but two 4-bucket blocks are 40.",
-        "7통을 살 때 8통 묶음은 45, 4통 두 개는 40 이에요."),
+        "Blocks come in 1, 2, 4, 8 only — and there are two ways to get 8.",
+        "묶음은 1·2·4·8통짜리뿐이에요. 같은 8통도 사는 길이 둘이에요."),
       content: (<NormalizeSim E={E} />),
     },
 
@@ -185,20 +185,20 @@ export function makeBuyMilkCh1(E) {
       type: "quiz",
       narr: t(E,
         "Sometimes buying MORE buckets than you need is cheaper. Why?",
-        "필요한 양보다 더 많이 사는 게 더 쌀 수도 있어요. 왜?"),
+        "필요한 것보다 더 많이 사는 게 쌀 때도 있어요. 왜 그럴까요?"),
       question: t(E,
         "When can over-buying (getting > x buckets) be cheaper than buying exactly x?",
-        "정확히 x 통을 사는 것보다 더 많이 사는 게 쌀 때는 언제?"),
+        "딱 x 통만 사는 것보다 더 많이 사는 게 쌀 때는 언제일까요?"),
       options: [
         t(E, "When one big deal already covers x and is cheaper than combining smaller deals",
-            "큰 거래 하나로 x 를 덮을 수 있고, 그게 작은 거래들을 합한 것보다 쌀 때"),
+            "큰 거래 하나면 x 통이 되고, 그게 작은 거래를 여러 번 사는 것보다 쌀 때"),
         t(E, "Never — buying more is always more expensive",
-            "절대 — 더 많이 사면 항상 더 비쌈"),
+            "그런 일은 없어요. 많이 살수록 늘 더 비싸요"),
       ],
       correct: 0,
       explain: t(E,
         "Exactly. The minimum cost answer might over-shoot x. So at each deal, we also try 'buy one extra of this size and stop'.",
-        "맞아요. 최소 비용이 x 통을 넘겨 사는 경우일 수도 있어요.\n그래서 묶음마다 '올림해서 사고 끝내기' 도 같이 따져봐요."),
+        "맞아요. 제일 싼 방법이 x 통보다 많이 사는 것일 수도 있어요.\n그래서 묶음마다 '넉넉히 사고 끝내기' 도 같이 따져봐요."),
     },
 
 
@@ -218,7 +218,7 @@ export function makeBuyMilkCh1(E) {
       type: "reveal",
       narr: t(E,
         "Same deals, x = 7 this time. Watch the 'round up and stop' branch actually win.",
-        "같은 거래로 이번엔 x = 7 이에요.\n'올림해서 사고 끝내기' 갈래가 실제로 이기는 걸 봐요."),
+        "같은 거래로 이번엔 x = 7 이에요.\n'넉넉히 사고 끝내기' 가 실제로 이기는 걸 봐요."),
       content: (<GreedySim key="greedy7" E={E} x={7} />),
     },
 
@@ -282,11 +282,11 @@ function BuyMilkPlan({ E }) {
         <Insight icon="💰" color="#d97706"
           head={t(E, "Two half-blocks can beat the deal.", "4통 두 개(40)가 8통 묶음(45)보다 싸다.")}
           body={t(E, <>So each block gets its own real price {codeTag("c[i]")} — the deal, or two half-blocks, whichever is cheaper.</>,
-                     <>그래서 묶음마다 진짜 값 {codeTag("c[i]")} 를 따로 구해요.<br />거래 값과 반쪽 묶음 두 개 값 중 싼 쪽이에요.</>)} />
+                     <>그래서 묶음마다 진짜 값 {codeTag("c[i]")} 를 따로 구해요.<br />거래를 그대로 사는 값과, 작은 묶음을 두 번 사는 값 중 싼 쪽이에요.</>)} />
         <Insight icon="🧱" color="#0891b2"
           head={t(E, "At each block there are only two choices.", "묶음마다 고를 건 두 가지뿐이다.")}
           body={t(E, <>Round up and stop, or take the floor and carry {codeTag("rem")} down to smaller blocks.</>,
-                     <>올림해서 사고 끝내거나,<br />내림만큼만 사고 남은 {codeTag("rem")} 을 작은 묶음으로 넘겨요.</>)} />
+                     <>넉넉히 사고 끝내거나,<br />모자라게 사고 남은 {codeTag("rem")} 을 작은 묶음으로 넘겨요.</>)} />
         <Insight icon="📉" color="#059669"
           head={t(E, "One pass, big to small — no searching.", "큰 것부터 한 번만 훑으면 끝 — 찾아 헤맬 일이 없다.")}
           body={t(E, <>Every block gives one candidate; {codeTag("ans")} just keeps the smallest.</>,
@@ -303,7 +303,7 @@ function BuyMilkPlan({ E }) {
         <Line n={3}>{t(E, <>Per query: {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = ∞")}.</>,
                          <>x 마다 {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = 무한대")} 로 시작해요.</>)}</Line>
         <Line n={4}>{t(E, <>Big block → small block — this is the second sim&apos;s table.<br />“round up → cost” is the {codeTag("ans")} candidate;<br />“take / carry” updates {codeTag("cost")} and {codeTag("rem")}.</>,
-                         <>큰 묶음부터 작은 묶음까지 훑어요 — 두 번째 시뮬의 표예요.<br />‘올림하면 값’ 칸이 {codeTag("ans")} 후보고,<br />‘내림 / 넘김’ 칸이 {codeTag("cost")} 와 {codeTag("rem")} 이에요.</>)}</Line>
+                         <>큰 묶음부터 작은 묶음까지 훑어요 — 두 번째 시뮬의 표예요.<br />‘넉넉히 사면’ 칸이 {codeTag("ans")} 후보고,<br />‘모자라게 사고 남은 통’ 칸이 {codeTag("cost")} 와 {codeTag("rem")} 이에요.</>)}</Line>
         <Line n={5}>{t(E, <>Print {codeTag("ans")}.</>, <>{codeTag("ans")} 를 출력해요.</>)}</Line>
       </div>
       {/* ⚠️ 2026-09-16: 여기 있던 노란 마무리 박스를 지웠다. 같은 아이디어를 인사이트 카드 →

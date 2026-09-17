@@ -266,9 +266,10 @@ export function makeMcc21MenuCh1(E) {
     // 1-3: concept sim
     {
       type: "reveal",
+      /* 2026-09-17: 이 narr 이 시뮬을 만지기 전에 결론을 말하고 있었다. */
       narr: t(E,
-        "Feel it. Flip the order and watch the running total — smallest layer first wins.",
-        "순서를 바꿔 보면 작은 층을 먼저 둔 쪽이 줄 수가 적어요."),
+        "Flip the order and watch the running total.",
+        "두 버튼을 눌러 순서를 바꿔 봐요."),
       content: <MenuOrderSim E={E} />,
     },
 

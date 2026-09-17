@@ -69,8 +69,8 @@ export function NormalizeSim({ E }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>Say we need <b>7 buckets</b>.<br />The 8-bucket deal costs <b>45</b>.<br />But two 4-bucket blocks (20 each) cost <b>40</b> — cheaper!<br /><span style={{ fontWeight: 600 }}>So first, find what each block really costs.</span></>,
-      <><b>7통</b>을 사야 한다고 해 봐요.<br />8통 묶음은 가격이 <b>45</b> 예요.<br />4통 묶음은 가격이 20 이라, 두 번 사면 <b>40</b> 이에요. 더 싸요!<br /><span style={{ fontWeight: 600 }}>그러니 묶음마다 진짜 값부터 구해 둬요.</span></>)
+      <>We need <b>7 buckets</b>. Blocks come in 1, 2, 4 and 8 only — there is no 3.<br />Buying more than you need is fine, so 8 works too.<br />And there are <b>two ways</b> to get 8 — buy the 8-block, or buy the 4-block twice.<br /><span style={{ fontWeight: 600 }}>The table below works out which one is cheaper.</span></>,
+      <><b>7통</b>이 필요해요. 묶음은 1통·2통·4통·8통짜리뿐이에요. 3통짜리는 없어요.<br />모자라지만 않으면 되니까 8통을 사도 돼요.<br />그런데 8통을 얻는 길이 <b>둘</b>이에요 — 8통 묶음을 사거나, 4통 묶음을 두 번 사거나.<br /><span style={{ fontWeight: 600 }}>어느 쪽이 싼지 아래 표에서 구해요.</span></>)
     : s.k === "row" ? (() => {
         const i = s.i, size = 1 << i;
         if (i === 0) return t(E,
@@ -79,7 +79,7 @@ export function NormalizeSim({ E }) {
         const two = 2 * C[i - 1], cheaper = two < DEALS[i];
         return cheaper
           ? t(E, <>The <b>{size}-bucket</b> deal costs <b>{DEALS[i]}</b>,<br />but two {size / 2}-bucket blocks cost <b>{two}</b> — cheaper!<br />So this block is really worth <b>{C[i]}</b>.</>,
-                <><b>{size}통</b> 거래는 <b>{DEALS[i]}</b> 인데<br />{size / 2}통 묶음 두 개면 <b>{two}</b> 예요. 더 싸요!<br />그래서 이 묶음은 <b>{C[i]}</b> 에 살 수 있어요.</>)
+                <><b>{size}통</b> 거래는 <b>{DEALS[i]}</b> 인데<br />{size / 2}통 묶음을 두 번 사면 <b>{two}</b> 예요. 더 싸요!<br />그래서 이 묶음은 <b>{C[i]}</b> 에 살 수 있어요.</>)
           : t(E, <>The <b>{size}-bucket</b> deal costs <b>{DEALS[i]}</b>,<br />and two {size / 2}-bucket blocks cost <b>{two}</b>.<br />The deal wins, so it stays <b>{C[i]}</b>.</>,
                 <><b>{size}통</b> 거래는 <b>{DEALS[i]}</b> 이고<br />{size / 2}통 묶음 두 개는 <b>{two}</b> 예요.<br />거래가 더 싸니 그대로 <b>{C[i]}</b> 예요.</>);
       })()
@@ -106,7 +106,7 @@ export function NormalizeSim({ E }) {
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 11px" }}>
           <span>{t(E, "block", "묶음")}</span>
           <span>{t(E, "deal a[i]", "거래값 a[i]")}</span>
-          <span>{t(E, "two halves", "절반짜리 둘")}</span>
+          <span>{t(E, "two halves", "작은 묶음 두 번")}</span>
           <span>{t(E, "cheapest c[i]", "제일 싼 값 c[i]")}</span>
         </div>
         {DEALS.map((d, i) => {
@@ -181,10 +181,10 @@ export function GreedySim({ E, x = 5 }) {
       <><b>{X}통 이상</b>이 필요해요.<br />큰 묶음이 손해가 아니니 큰 것부터 봐요.<br />묶음마다 고를 수 있는 건 <b>두 가지</b>뿐이에요.</>)
     : s.k === "row" ? t(E,
       <>Block <b>{cur.size}</b>: <b>{cur.rem}</b> buckets still needed.<br />Round <b>up</b> → buy {cur.need} and stop → <b>{cur.cand}</b>.<br />Or take <b>{cur.take}</b> and carry <b>{cur.rem - cur.take * cur.size}</b> to smaller blocks.</>,
-      <><b>{cur.size}통</b> 묶음이에요. 아직 <b>{cur.rem}통</b> 필요해요.<br /><b>올림</b>하면 {cur.need}개 사고 끝 → <b>{cur.cand}</b>.<br />아니면 <b>{cur.take}개</b>만 쓰고 <b>{cur.rem - cur.take * cur.size}통</b>을 작은 묶음으로 넘겨요.</>)
+      <><b>{cur.size}통</b> 묶음이에요. 아직 <b>{cur.rem}통</b> 필요해요.<br /><b>넉넉히</b> 사면 {cur.need}개로 끝나요 → <b>{cur.cand}</b>.<br />아니면 <b>{cur.take}개</b>만 사고 남은 <b>{cur.rem - cur.take * cur.size}통</b>은 작은 묶음에 맡겨요.</>)
     : best < exact ? t(E,
       <>The cheapest is <b>{best}</b> — and it <b>over-buys</b>.<br />Buying exactly {X} costs <b>{exact}</b>. Rounding up wins.<br />One pass from big to small — no searching.</>,
-      <>제일 싼 게 <b>{best}</b> 인데, <b>{X}통을 넘겨 사는</b> 쪽이에요.<br />딱 {X}통만 사면 <b>{exact}</b>. 올림이 이겼어요.<br />큰 것부터 한 번만 훑었어요. 찾아 헤매지 않았어요.</>)
+      <>제일 싼 게 <b>{best}</b> 인데, <b>{X}통보다 많이 사는</b> 쪽이에요.<br />딱 {X}통만 사면 <b>{exact}</b> 이라, 넉넉히 산 쪽이 이겼어요.<br />큰 것부터 한 번만 훑었어요. 찾아 헤매지 않았어요.</>)
     : t(E,
       <>Every block checked, and the cheapest is <b>{best}</b>.<br />That is <b>one pass</b> from big to small — no searching.</>,
       <>묶음을 다 봤고 제일 싼 게 <b>{best}</b> 예요.<br />큰 것부터 <b>한 번만</b> 훑었어요. 찾아 헤매지 않았어요.</>);
@@ -208,8 +208,8 @@ export function GreedySim({ E, x = 5 }) {
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 11px" }}>
           <span>{t(E, "block", "묶음")}</span>
           <span>{t(E, "still need", "남은 통")}</span>
-          <span>{t(E, "round up → cost", "올림하면 값")}</span>
-          <span>{t(E, "take / carry", "내림 / 넘김")}</span>
+          <span>{t(E, "round up → cost", "넉넉히 사면")}</span>
+          <span>{t(E, "take / carry", "모자라게 사고 남은 통")}</span>
         </div>
         {trace.map((r, n) => {
           const shown = s.k === "done" || (s.k === "row" && n <= s.n);
