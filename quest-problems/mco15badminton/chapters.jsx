@@ -5,15 +5,21 @@ import { getBadmintonSections } from "./components";
 /* ================================================================
    Deep-Audit Sim: step through an A/B string, watch the state machine
    ================================================================ */
-function RallyAuditSim({ E }) {
+/* `afterFirstGame` 는 **한 게임이 실제로 끝난 뒤에만** 나온다.
+   2026-09-17: 정리 문단이 시뮬 아래에 늘 떠 있어서, 학생이 한 번도 안 눌러 보고
+   "21 점이면 0 으로 돌아간다" 를 먼저 읽었다. 시뮬이 보여줄 것을 글이 먼저 말하면
+   시뮬을 누를 이유가 없어진다 (mcc20cipher·mcc21carrots 가 쓰는 touched 방식). */
+function RallyAuditSim({ E, afterFirstGame }) {
   const PRESETS = [
-    { id: "short", label: t(E, "Short (A 21-0, A 21-0)", "짧음 (A 21-0, A 21-0)"), s: "A".repeat(42) },
-    { id: "mix",   label: t(E, "Mixed: A wins 2-1", "혼합: A 2-1 승"),
+    { id: "short", label: t(E, "The sample (42 A's)", "앞쪽 샘플 (A 가 42 개)"), s: "A".repeat(42) },
+    { id: "mix",   label: t(E, "A wins 2-1", "A 가 2-1 로 이겨요"),
       s: "B".repeat(21) + "A".repeat(21) + "BABABABABABABABABABABA".slice(0, 41) },
-    { id: "tight", label: t(E, "B wins 2-1 tight", "B 2-1 접전"),
+    { id: "tight", label: t(E, "B wins 2-1", "B 가 2-1 로 이겨요"),
       s: "A".repeat(21) + "B".repeat(21) + "B".repeat(21) },
   ];
-  const [presetId, setPresetId] = useState("tight");
+  /* 2026-09-17: 앞 쪽이 "왜 점수 줄이 두 개뿐일까 — 다음 쪽에서 따라가 보자" 로 끝나는데
+     시뮬은 엉뚱하게 'B 2-1 접전' 으로 열려 있었다. 약속한 그 기록으로 열어 준다. */
+  const [presetId, setPresetId] = useState("short");
   const preset = PRESETS.find(p => p.id === presetId) || PRESETS[0];
   const scores = preset.s;
 
@@ -188,6 +194,8 @@ function RallyAuditSim({ E }) {
         {btn(t(E, "⏭ Next event", "⏭ 다음 이벤트"), jumpEvent, false, safeStep === trace.length - 1)}
         {btn(t(E, "Finish ⏭⏭", "끝까지 ⏭⏭"), finish, false, safeStep === trace.length - 1)}
       </div>
+
+      {cur.results.length > 0 && afterFirstGame}
     </div>
   );
 }
@@ -233,8 +241,8 @@ export function makeBadmintonCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two players A and B play badminton: best-of-3 games, each game won by the first to 21 points. You're given a string of A/B characters in order — each character is who won that rally.\nPrint each game's final score and the overall match winner.",
-        "랠리 기록을 보고 게임 점수와 매치 승자를 구해요."),
+        "Read the match record, then work out each game's score and the winner.",
+        "경기 기록을 보고 게임 점수와 매치 승자를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -264,17 +272,17 @@ export function makeBadmintonCh1(E) {
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#059669" }}>{t(E, "Two players A and B play badminton", "두 선수 A 와 B 가 배드민턴")}</b>
-                  {t(E, " — best-of-3 games; each game won by the first to ", " — 3전 2선승제예요. 각 게임은 ")}
+                  {t(E, " — best-of-3 games. Whoever wins 2 games wins the match. A game goes to the first to ", "을 쳐요. 2 게임을 먼저 이긴 쪽이 매치 승자예요. 한 게임은 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "21 points", "21 점")}</b>
-                  {t(E, " (no win-by-2).", " 먼저 (2 점 차 규칙 없음).")}
+                  {t(E, " — 20-20 does not need a 2-point lead; 21 ends it.", "을 먼저 낸 쪽이 이겨요 — 20-20 이 돼도 21 점이면 바로 끝나요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "We're given the rally winners as a ", "랠리 승자가 ")}
+                  {t(E, "One point being scored is called one rally. For every rally we're given the winner as a ", "한 점이 나는 것을 랠리 한 번이라고 해요. 랠리마다 이긴 사람을 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "string of A/B characters in order", "순서대로 A/B 문자열")}</b>
-                  {t(E, ".", " 로 주어져요.")}
+                  {t(E, ".", "로 줘요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
@@ -282,7 +290,7 @@ export function makeBadmintonCh1(E) {
                 <div>
                   {t(E, "Print ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "each game's final score and the overall match winner", "각 게임의 최종 점수와 매치 최종 승자")}</b>
-                  {t(E, ".", " 를 출력해요.")}
+                  {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
             </div>
@@ -311,8 +319,8 @@ export function makeBadmintonCh1(E) {
           <div style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
-              {t(E, "One line per game, written as A's points − B's points.\nThen one more line with the match winner's letter.",
-                    "게임마다 한 줄씩, A 의 점수−B 의 점수 로 적어요.\n마지막 한 줄엔 매치를 이긴 선수의 글자를 적어요.")}
+              {t(E, "One line per game: A's points, a dash, then B's points.\nThen one more line with the match winner's letter.",
+                    "게임마다 한 줄씩, A 의 점수와 B 의 점수를 - 로 이어 적어요.\n마지막 한 줄엔 매치를 이긴 선수의 글자를 적어요.")}
             </div>
           </div>
           {/* Sample */}
@@ -346,7 +354,7 @@ A`}
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
               {/* 2026-09-17: 원문 길이 상한을 못 찾았다. 지어내지 않고 이 방법이 감당하는 크기를 적는다. */}
               {t(E, "The line holds only the letters A and B. We could not find the original limit on its length. What we can say: this method reads each letter once and stops as soon as the match is decided, so even a very long record is fine.",
-                    "줄에는 A 와 B 글자만 들어 있어요.\n원문의 길이 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 글자를 한 번씩만 읽고,\n매치가 끝나면 남은 글자는 아예 안 봐요. 기록이 아무리 길어도 괜찮아요.")}
+                    "줄에는 A 와 B 글자만 들어 있어요.\n기록이 길어야 몇 글자까지인지는 원문에서 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 글자를 한 번씩만 읽고,\n매치가 끝나면 남은 글자는 아예 안 봐요. 기록이 아무리 길어도 괜찮아요.")}
             </div>
           </div>
         </div>),
@@ -355,30 +363,31 @@ A`}
     {
       type: "reveal",
       narr: t(E,
-        "Now let's audit the whole state machine — char by char.\nPick a preset, then press Step ▶ to feed one rally at a time. Watch game_a / game_b climb, and see when a 21 triggers a save+reset, when wins_a or wins_b hits 2, and how the loop should stop.",
+        "Feed one rally at a time and watch the scores change.",
         "랠리를 한 개씩 넣으면서 점수가 어떻게 변하는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>
             🔬 {t(E, "State-machine deep audit", "상태 기계를 한 글자씩 자세히 보기")}
           </div>
-          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 8 }}>
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 8, wordBreak: "keep-all" }}>
             {t(E,
-              "Four counters tell the whole story: ",
-              "세는 값 4 개가 모든 걸 말해줘요 — ")}
+              "Let's find out why the sample printed only two score lines. We watch four counters: ",
+              "앞쪽 샘플이 왜 점수 줄을 두 개만 찍었는지 여기서 확인해요. 보는 값은 네 개예요 — ")}
             <b style={{ color: "#059669" }}>game_a</b>, <b style={{ color: "#db2777" }}>game_b</b>
-            {t(E, " (current game), ", " (현재 게임), ")}
+            {t(E, " are the points in the game being played, ", " 는 지금 하는 게임의 점수, ")}
             <b style={{ color: "#059669" }}>wins_a</b>, <b style={{ color: "#db2777" }}>wins_b</b>
-            {t(E, " (games won). The ", " (이긴 게임 수). 노란 ")}
-            <b>{t(E, "yellow cursor", "커서")}</b>
-            {t(E, " is the char being processed.", " 가 지금 보고 있는 글자예요.")}
+            {t(E, " are the games each player has won. The yellow ", " 는 이긴 게임 수예요. 노란 ")}
+            <b>{t(E, "cursor", "커서")}</b>
+            {t(E, " is the letter being read right now.", "가 지금 읽고 있는 글자예요.")}
           </div>
-          <RallyAuditSim E={E} />
-          <div style={{ fontSize: 11, color: C.dim, marginTop: 8, lineHeight: 1.5 }}>
-            💡 {t(E,
-              "Notice: after a 21, both game scores reset to 0 — but wins_a/wins_b carry over. The match-end check happens right after a game ends, not on every char.",
-              "21 점이 나오면 두 게임 점수는 0 으로 돌아가요. 하지만 wins_a/wins_b 는 그대로 남아요. 매치가 끝났는지는 글자마다가 아니라 게임이 끝난 직후에만 확인해요.")}
-          </div>
+          <RallyAuditSim E={E} afterFirstGame={
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 8, lineHeight: 1.5, wordBreak: "keep-all" }}>
+              💡 {t(E,
+                "What just happened: at 21 both game scores went back to 0, but wins_a/wins_b stayed. So the match-end check only has to run right after a game ends — not on every letter.",
+                "방금 본 것 — 21 점이 되자 두 게임 점수가 0 으로 돌아갔어요. 그런데 wins_a/wins_b 는 그대로 남았어요. 그래서 매치가 끝났는지는 글자마다 볼 필요가 없어요. 게임이 끝난 직후에만 보면 돼요.")}
+            </div>
+          } />
         </div>
       ),
     },
@@ -392,15 +401,15 @@ A`}
         "이번엔 직접 답해 볼 차례예요."),
       question: t(E,
         "A wins first 2 games. Is a 3rd game played?",
-        "A 가 처음 2게임을 이겼어요. 3번째 게임을 할까요?"),
+        "A 가 처음 2 게임을 이겼어요. 3 번째 게임을 할까요?"),
       options: [
         t(E, "No, A already won the match", "아니요, A 가 이미 매치를 이겼어요"),
-        t(E, "Yes, all 3 must be played", "네, 3게임을 모두 해야 해요"),
+        t(E, "Yes, all 3 must be played", "네, 3 게임을 모두 해야 해요"),
       ],
       correct: 0,
       explain: t(E,
         "Correct! Once a player reaches 2 wins, the match is over immediately.",
-        "맞아요! 한 선수가 2승을 하면 매치는 바로 끝나요."),
+        "맞아요! 한 선수가 2 승을 하면 매치는 바로 끝나요."),
     },
     // 1-5: Input
     {
@@ -410,7 +419,7 @@ A`}
         "샘플 기록에서 게임이 몇 번인지 세어 봐요."),
       question: t(E,
         "Input: 42 A's in a row. How many games are played total?",
-        "A 가 42개 연속으로 들어와요. 게임은 모두 몇 번 할까요?"),
+        "A 가 42 개 연속으로 들어와요. 게임은 모두 몇 번 할까요?"),
       hint: t(E,
         "Each game ends at 21 points. When does the match stop?",
         "각 게임은 21 점에서 끝나요. 매치는 언제 멈출까요?"),
@@ -429,7 +438,7 @@ export function makeBadmintonCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Walk through the rally string char by char, tracking each game's score. When one player hits 21, save the score, reset, and bump that player's game count. Stop at 2 game wins. Sections build it one piece at a time.",
+        "Walk the record one letter at a time, tracking the score.",
         "랠리 문자열을 한 글자씩 보면서 점수를 따라가요."),
       sections: getBadmintonSections(E),
     },

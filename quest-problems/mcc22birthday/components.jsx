@@ -85,8 +85,8 @@ export function Mcc22BirthdayCookieSim({ E }) {
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
-            "Start with one 'p' cookie. Add a letter and watch the grid DOUBLE: A copies right, B copies right + flips left↔right, C copies down + flips up↔down.",
-            "'p' 쿠키 한 개로 시작해요. 글자를 더하면 격자가 두 배로 늘어나요. A 는 오른쪽에 복사하고, B 는 오른쪽에 복사한 뒤 좌우로 뒤집어요. C 는 아래쪽에 복사한 뒤 위아래로 뒤집어요.")}
+            "Two things are worth seeing with your own eyes: how fast the grid doubles, and where a given cookie number lands. So start from one 'p' cookie, add letters with the buttons below, and tap a cookie to read its number.",
+            "여기서 눈으로 볼 것은 두 가지예요. 격자가 얼마나 빨리 두 배가 되는지, 그리고 몇 번 쿠키가 어디에 앉는지예요. 'p' 쿠키 한 개로 시작해서, 아래 버튼으로 글자를 더하고, 쿠키를 눌러 번호를 봐요.")}
         </div>
 
         {/* scroll so far */}
@@ -178,8 +178,8 @@ export function Mcc22BirthdayCookieSim({ E }) {
 
         <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: "#92400e", lineHeight: 1.55, ...KA }}>
           {t(E,
-            "💡 Each letter DOUBLES the grid. After N letters it is 2^N cookies — with N up to 10000 that's astronomically huge. So we can never build it. Instead, for a queried number, we'll trace it BACKWARD through the scroll.",
-            "💡 글자 하나가 격자를 두 배로 늘려요. N 글자 뒤엔 2^N 개 — N 이 최대 10000 이면 천문학적으로 커요. 그래서 절대 직접 만들 수 없어요. 대신 물어본 번호 하나를 두루마리를 거꾸로 따라가며 추적할 거예요.")}
+            "💡 Each letter DOUBLES the grid. After N letters there are 2^N cookies, and N can be 10000 — far too many to ever build. So how do we answer without the grid? Let's think about that next.",
+            "💡 글자 하나가 격자를 두 배로 늘려요. N 글자 뒤엔 쿠키가 2^N 개예요. N 이 최대 10000 이니 이 격자는 만들어 볼 수조차 없어요. 그럼 격자 없이 어떻게 답할 수 있을까요? 다음 쪽에서 같이 생각해 봐요.")}
         </div>
       </div>
     </div>
@@ -284,8 +284,8 @@ export function Mcc22BirthdayBackwardWalkSim({ E }) {
       const val = s.op === "C" ? s.before.r : s.before.c;
       if (!s.copied) {
         return t(E,
-          `Undo letter ${s.i}, '${s.op}'. Just before it, the grid was ${gRows} × ${gCols}.\n${axis}: ${val} ≤ ${s.half} — our cookie was in the original half.\nNothing moves, nothing flips.`,
-          `${s.i}번째 글자 '${s.op}' 를 되돌려요.\n그 직전 격자는 ${gRows} × ${gCols} 크기였어요.\n${axis}: ${val} ≤ ${s.half} — 우리 쿠키는 원본 쪽에 있었어요.\n자리도 그대로, 뒤집힘도 그대로예요.`);
+          `Undo letter ${s.i}, '${s.op}'. Just before it, the grid was ${gRows} × ${gCols}.\nOur cookie sits at ${axis} ${val}, and that grid went up to ${axis} ${s.half}.\nSo our cookie was in the original half.\nNothing moves, nothing flips.`,
+          `${s.i}번째 글자 '${s.op}' 를 되돌려요.\n그 직전 격자는 ${gRows} × ${gCols} 크기였어요.\n우리 칸은 ${axis} ${val} 번인데, 직전 격자는 ${axis}이 ${s.half} 번까지예요.\n번호가 그 안이니 우리 쿠키는 원본 쪽이에요.\n자리도 그대로, 뒤집힘도 그대로예요.`);
       }
       const newVal = s.op === "C" ? s.r : s.c;
       const flipWord = s.op === "B" ? t(E, "left↔right", "좌우")
@@ -296,12 +296,12 @@ export function Mcc22BirthdayBackwardWalkSim({ E }) {
         : t(E, "'A' copies without flipping, so no switch moves.",
               "'A' 는 안 뒤집고 복사해요. 그래서 스위치는 그대로예요.");
       return t(E,
-        `Undo letter ${s.i}, '${s.op}'. Just before it, the grid was ${gRows} × ${gCols}.\n${axis}: ${val} > ${s.half} — our cookie was in the copied ${dir} half.\nback to ${axis} ${val} − ${s.half} = ${newVal}\n${flipLine}`,
-        `${s.i}번째 글자 '${s.op}' 를 되돌려요.\n그 직전 격자는 ${gRows} × ${gCols} 크기였어요.\n${axis}: ${val} > ${s.half} — 우리 쿠키는 ${dir}에 복사된 쪽이었어요.\n원본 자리 → ${axis} ${val} − ${s.half} = ${newVal}\n${flipLine}`);
+        `Undo letter ${s.i}, '${s.op}'. Just before it, the grid was ${gRows} × ${gCols}.\nOur cookie sits at ${axis} ${val}, and that grid went up to ${axis} ${s.half}.\nSo our cookie was in the copy joined on the ${dir}.\nBack to the original spot: ${axis} ${val} − ${s.half} = ${newVal}\n${flipLine}`,
+        `${s.i}번째 글자 '${s.op}' 를 되돌려요.\n그 직전 격자는 ${gRows} × ${gCols} 크기였어요.\n우리 칸은 ${axis} ${val} 번인데, 직전 격자는 ${axis}이 ${s.half} 번까지예요.\n번호가 그 밖이니 우리 쿠키는 ${dir}에 붙은 복사본 쪽이에요.\n복사본에서 원본 자리로: ${axis} ${val} − ${s.half} = ${newVal}\n${flipLine}`);
     }
     return t(E,
       `Back at the very start: one cookie, 'p'.\nAlong the way we flicked ${s.fh ? "the left↔right switch" : "no left↔right switch"} and ${s.fv ? "the up↔down switch" : "no up↔down switch"}.\nApply them to 'p' → '${finalShape}'. That is cookie #${WALK_FRIEND}.`,
-      `맨 처음으로 돌아왔어요. 쿠키 한 개, 'p' 예요.\n오는 동안 좌우 스위치는 ${s.fh ? "켜졌고" : "안 켜졌고"}, 상하 스위치는 ${s.fv ? "켜졌어요" : "안 켜졌어요"}.\n그걸 'p' 에 적용하면 '${finalShape}' 예요. 이게 ${WALK_FRIEND}번 쿠키예요.`);
+      `맨 처음으로 돌아왔어요. 쿠키 한 개, 'p' 예요.\n오는 동안 좌우 스위치는 ${s.fh ? "켜졌고" : "안 켜졌고"}, 위아래 스위치는 ${s.fv ? "켜졌어요" : "안 켜졌어요"}.\n켜진 스위치대로 'p' 를 뒤집으면 '${finalShape}' 예요.\n이게 ${WALK_FRIEND}번 쿠키예요.`);
   })();
 
   const switchChip = (on, label) => (
@@ -533,12 +533,12 @@ export function getMcc22BirthdaySections(E) {
       why: [
         t(E, "The grid after N letters is 2^N cookies (N up to 10000) — never build it. We answer each queried NUMBER on its own.",
             "N 글자 뒤 격자는 2^N 개 (N 최대 10000) — 절대 만들지 않아요. 물어본 번호 하나하나를 따로 풀어요."),
-        t(E, "rows[i] / cols[i] hold the grid size after each step. A and B double the width; C doubles the height. We cap at CAP so huge sizes stay safe integers.",
-            "rows[i] / cols[i] 는 각 단계 뒤의 격자 크기예요. A·B 는 가로를, C 는 세로를 두 배로 늘려요. 너무 커지지 않게 CAP 으로 가장 큰 값을 정해 둬요."),
+        t(E, "rows[i] / cols[i] hold the grid size after each step. A and B double the width; C doubles the height. Once a size passes CAP = 2×10^9 we just leave it at CAP: a friend number is at most 10^9, so anything bigger than that compares the same way.",
+            "rows[i] / cols[i] 는 각 단계 뒤의 격자 크기예요. A·B 는 가로를, C 는 세로를 두 배로 늘려요. 크기가 CAP = 2×10^9 을 넘으면 그냥 CAP 으로 둬요. 친구 번호가 최대 10^9 이라, 그보다 크기만 하면 어느 쪽이 큰지는 똑같이 나오거든요."),
         t(E, "Turn the number into (row, col), then walk the scroll BACKWARD. At each step ask: was I in the ORIGINAL half or the COPIED half? A copy made by B/C is flipped, so a copied step toggles the flip parity.",
-            "번호를 (행, 열) 로 바꾼 뒤 두루마리를 거꾸로 따라가요. 매 단계마다 내가 원본 쪽이었는지 복사본 쪽이었는지 물어요. B·C 로 만든 복사본은 뒤집혀 있으니, 복사본 쪽이면 뒤집힘 상태를 반대로 바꿔요."),
+            "번호를 (행, 열) 로 바꾼 뒤 두루마리를 거꾸로 따라가요. 매 단계마다 우리 쿠키가 원본 쪽이었는지 복사본 쪽이었는지 물어요. B·C 로 만든 복사본은 뒤집혀 있으니, 복사본 쪽이면 뒤집힘 상태를 반대로 바꿔요."),
         t(E, "Two on/off flips (left↔right, up↔down) give exactly four shapes: (no,no)=p, (H,no)=q, (no,V)=b, (H,V)=d. That's the whole p/q/b/d family.",
-            "좌우·상하 두 뒤집힘(켜짐/꺼짐)이 정확히 네 모양을 만들어요. (안,안)=p, (좌우,안)=q, (안,상하)=b, (좌우,상하)=d 예요. 이게 p/q/b/d 한 묶음이에요."),
+            "좌우·위아래 두 뒤집힘(켜짐/꺼짐)이 정확히 네 모양을 만들어요. (안,안)=p, (좌우,안)=q, (안,위아래)=b, (좌우,위아래)=d 예요. 이게 p/q/b/d 한 묶음이에요."),
       ],
       pyOnly: [
         t(E, "shape[(flip_h, flip_v)] reads the final cookie straight from the two flip switches — no if/elif ladder needed.",
@@ -547,8 +547,8 @@ export function getMcc22BirthdaySections(E) {
       cppOnly: [
         t(E, "Use long long for indices and sizes: capped sizes reach ~2×10^9, past the int limit.",
             "자리 번호와 크기는 long long 으로 둬요. 가장 큰 값이 약 2×10^9 라 int 범위를 넘어요."),
-        t(E, "The nested ?: picks the shape from flipV/flipH, matching the Python dict.",
-            "중첩 삼항 ?: 로 flipV/flipH 에서 모양을 골라 Python dict 와 똑같이 동작해요."),
+        t(E, "The nested if/else picks the shape from flipV/flipH — the same four cases the Python dict holds.",
+            "중첩 if/else 로 flipV·flipH 에서 모양을 골라요. Python 의 dict 가 담은 네 경우와 똑같아요."),
       ],
     },
   ];

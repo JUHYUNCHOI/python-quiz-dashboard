@@ -55,7 +55,9 @@ export function makeTrainsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An N × N grid has a population count in each cell (or −1 if blocked). Build a train path from cell A to cell B moving up/down/left/right between non-blocked cells. The cost of the path is the SUM of populations along it (every cell visited displaces its population).\nPrint the MINIMUM total displaced population.",
+        /* 2026-09-17: 한국어는 55자로 줄였는데 영어만 4문장 313자짜리 벽으로 남아 있었다
+           (check-bilingual-drift.py 가 잡은 자리). 자세한 내용은 바로 아래 📖 카드가 한다. */
+        "Find the path from A to B that displaces the fewest people.",
         "A 에서 B 까지 철도를 놓을 때 옮기는 인구가 가장 적은 길을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -125,7 +127,8 @@ export function makeTrainsCh1(E) {
             <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
               <div><span style={{ color: "#1e3a8a", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— side of the grid", "— 격자 한 변의 길이")}</span></div>
               <div><span style={{ color: "#1e3a8a", fontWeight: 800 }}>N × N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— N lines, N populations each (−1 = blocked)", "— N 줄, 줄마다 인구 N 개 (−1 은 막힌 칸)")}</span></div>
-              <div><span style={{ color: "#1e3a8a", fontWeight: 800 }}>ax ay bx by</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— row/col of A, then of B (counted from 1)", "— A 의 행·열, B 의 행·열 (1 부터 셈)")}</span></div>
+              <div><span style={{ color: "#1e3a8a", fontWeight: 800 }}>ax ay bx by</span> <span style={{ color: C.dim, fontSize: 11 }}>{/* 2026-09-17 (잣대 ⑥): '행·열' 을 뜻풀이 없이 썼다. 코드 쪽에서 또 나오는 말이라 여기서 한 번 푼다. */}
+{t(E, "— row/col of A, then of B (row from the top, col from the left, counted from 1)", "— A 의 행·열, B 의 행·열 (행 = 위에서 몇 번째, 열 = 왼쪽에서 몇 번째. 1 부터 셈)")}</span></div>
             </div>
           </div>
           {/* OUTPUT */}
@@ -156,8 +159,8 @@ export function makeTrainsCh1(E) {
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic", whiteSpace: "pre-line" }}>
-              {t(E, "A is the top-left cell, B the top-right. Why 7? — lay the path yourself on the next page.",
-                    "A 는 왼쪽 위, B 는 오른쪽 위 칸이에요.\n왜 7 일까? — 다음 쪽에서 직접 놓아 봐요.")}
+              {t(E, "A is the top-left cell, B the top-right. Why is the answer 7? — lay the path yourself on the next page.",
+                    "A 는 왼쪽 위, B 는 오른쪽 위 칸이에요.\n왜 답이 7 일까? — 다음 쪽에서 직접 길을 놓아 봐요.")}
             </div>
           </div>
           {/* CONSTRAINTS */}
@@ -166,7 +169,7 @@ export function makeTrainsCh1(E) {
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
               {/* 2026-09-17: 원문 N 상한을 못 찾았다. 지어내지 않고 이 방법이 감당하는 크기를 적는다. */}
               {t(E, "Each cell holds a population of 0 or more, or −1 for blocked. We could not find the original limit on N. What we can say: this method looks at each cell only a few times, so a 1000 × 1000 grid (a million cells) is within reach.",
-                    "칸마다 인구는 0 이상이고, −1 은 막힌 칸이에요.\n원문의 N 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 칸 하나를 몇 번씩만 보기 때문에\n1000 × 1000 격자(칸 100 만 개)까지도 닿아요.")}
+                    "칸마다 인구는 0 이상이고, −1 은 막힌 칸이에요.\n원문에서 N 이 얼마까지인지는 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 칸 하나를 몇 번씩만 보기 때문에\n1000 × 1000 격자(칸 100 만 개)까지도 감당할 수 있어요.")}
             </div>
           </div>
         </div>),
@@ -185,9 +188,11 @@ export function makeTrainsCh1(E) {
       narr: t(E,
         "Now answer it yourself.",
         "이번엔 직접 답해 볼 차례예요."),
+      /* 2026-09-17: 질문 뒤 괄호가 "(상/하/좌/우)" 라서 **문제가 답을 그대로 말하고**
+         있었다. 보기가 '4방향' 하나뿐인 셈이라 아무것도 안 묻는 퀴즈였다. */
       question: t(E,
-        "How many directions can tracks be laid? (up/down/left/right)",
-        "철도를 놓을 수 있는 방향은 몇 개일까요? (상/하/좌/우)"),
+        "How many directions can tracks be laid on the grid?",
+        "격자에서 철도를 놓을 수 있는 방향은 몇 개일까요?"),
       options: [
         t(E, "4 directions", "4방향"),
         t(E, "8 directions (including diagonals)", "8방향 (대각선 포함)"),
@@ -207,8 +212,8 @@ export function makeTrainsCh1(E) {
         "Add up the cost of going straight across.",
         "곧장 가로지르는 길의 비용을 직접 더해 봐요."),
       question: t(E,
-        "A row of cells reads 1 9 1. You start on the left cell and walk straight to the right cell. Cost?",
-        "한 줄이 1 9 1 이에요. 맨 왼쪽 칸에서 출발해 맨 오른쪽 칸까지 곧장 가면 비용은 얼마일까요?"),
+        "Three cells in a row hold populations 1, 9 and 1. You start on the left cell and lay track straight to the right cell. Cost?",
+        "칸 세 개가 나란히 있고, 사는 사람이 차례로 1 명 · 9 명 · 1 명이에요.\n맨 왼쪽 칸에서 출발해 맨 오른쪽 칸까지 곧장 가면 비용은 얼마일까요?"),
       hint: t(E,
         "Add the population of every cell the track sits on — the starting cell counts too.",
         "철도가 놓이는 칸의 인구를 모두 더해요. 출발 칸도 함께 세요."),
@@ -227,8 +232,8 @@ export function makeTrainsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Four steps: read the grid, make a cost table, spread, stop at B.",
-        "네 걸음으로 나눠요 — 읽기 · 표 만들기 · 넓히기 · 멈추기."),
+        "Four steps: read the grid, make a cost table, take the cheapest, spread.",
+        "싼 칸부터 넓혀 가는 코드를 네 걸음으로 나눠 읽어요."),
       sections: getTrainsSections(E),
     },
   ];

@@ -100,7 +100,7 @@ function IsthmusPeakSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
           ⛰️ {t(E, "Walk K steps to each side", "양쪽으로 K칸 걸어보기")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12, whiteSpace: "pre-line" }}>
           {t(E,
             "This is the isthmus from the problem statement: 4 4 0 2 3 5 3 1. Pick K, then move the marker. From the marked land we walk K steps to the left and K steps to the right — and ask whether we are always going strictly down (peak) or always strictly up (valley).",
             "문제 설명에 나온 지협이에요 — 4 4 0 2 3 5 3 1.\nK를 고르고 표시를 옮겨 봐요.\n표시된 땅에서 왼쪽으로 K칸, 오른쪽으로 K칸 걸어가요.\n계속 내려가면 봉우리, 계속 올라가면 골짜기예요.")}
@@ -274,10 +274,10 @@ export function makeMcc15IsthmusCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
-                "The tribe built a settlement on every order-K peak and every order-K valley. Count the settlements.",
-                "양옆으로 K칸 계속 내려가는 땅을 order-K 봉우리, 계속 올라가는 땅을 order-K 골짜기라고 불러요. 부족은 그런 땅마다 마을을 지었어요. 마을 수를 세요.")}
+                "A piece you always walk strictly down from, K steps each way, is an order-K peak;\nstrictly up is an order-K valley.\nThe tribe built a settlement on every one of them. Count the settlements.",
+                "양옆으로 K칸 계속 내려가는 땅을 order-K 봉우리,\n계속 올라가는 땅을 order-K 골짜기라고 불러요.\n부족은 그런 땅마다 마을을 지었어요. 마을 수를 세요.")}
             </div>
           </div>
 
@@ -290,7 +290,7 @@ export function makeMcc15IsthmusCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "The isthmus is divided into ", "지협은 ")}
+                  {t(E, "The isthmus is divided into ", "지협(바다 사이에 좁고 길게 이어진 땅)은 ")}
                   <b style={{ color: "#2563eb" }}>{t(E, "N pieces of land", "N개의 땅")}</b>
                   {t(E, "; piece i has height ", "으로 나뉘고, i번째 땅의 높이는 ")}
                   <b style={{ color: "#2563eb" }}>H<sub>i</sub></b>

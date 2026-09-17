@@ -310,7 +310,7 @@ export function makeSecretCh1(E) {
               {/* 2026-09-17 2차: N 상한은 원문 PDF 가 없어 그대로 둔다(지어내지 않는다).
                   낱말만 손본다 — 여기만 "창" 이고 시뮬·코드 설명은 "창문" 이었다. */}
               {t(E, "a and b always have the same length N. We could not find the original limit on N. What we can say: this method compares N windows of N numbers, so N up to a few thousand is fine.",
-                    "a 와 b 는 길이가 N 으로 같아요.\n원문의 N 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — N 칸짜리 창문을 N 번 견주니까\nN 이 수천 정도까지는 괜찮아요.")}
+                    "a 와 b 는 길이가 N 으로 같아요.\nN 이 얼마까지 커지는지는 원문에서 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — N 칸짜리 창문을 N 번 견주니까\nN 이 수천 정도까지는 괜찮아요.")}
             </div>
           </div>
         </div>),

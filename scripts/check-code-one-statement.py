@@ -128,6 +128,19 @@ def findings_for(raw, lang):
                 and re.search(r"=[^=;]+,[^;]*=", cmp_gone)
                 and "for" not in code):
             hits.append(("선언·대입 여러 개가 한 줄", body))
+        # ⚠️ 2026-09-17 6~7묶음 담당자가 잡았다 — **함수 본문 통째로 한 줄**을 못 봤다.
+        #    `int find(int x){ while(p[x]!=x) x=p[x]; return x; }` (mcc22maze)
+        #    위 검사들이 다 비켜간다: 줄이 `int` 로 시작해 제어문 규칙에 안 걸리고,
+        #    `;` 가 전부 `{ }` 안(깊이 1)이라 split_top_level 도 안 자른다.
+        #    CodeWalk 는 이 줄 하나에 말풍선 하나만 붙일 수 있는데 문장은 셋이다.
+        if not hits:
+            ob, cb = code.find("{"), code.rfind("}")
+            if 0 <= ob < cb:
+                inner = code[ob + 1:cb]
+                inner_stmts = [x.strip() for x in split_top_level(inner) if x.strip()]
+                if len(inner_stmts) >= 2:
+                    hits.append(("함수·블록 본문이 한 줄에 다 들어감",
+                                 " ; ".join(inner_stmts[:3])))
     else:
         stmts = [s.strip() for s in split_top_level(code) if s.strip()]
         if len(stmts) >= 2:
@@ -136,7 +149,11 @@ def findings_for(raw, lang):
         #    2026-09-16 A-3 담당자가 잡았다 — `if doubled[i:i+N] == b:` 를
         #    "본문이 헤더에 붙었다" 로 오탐했다. `[i:i+N]` 의 콜론이 먼저 걸린 것이다.
         #    제어문의 콜론은 **괄호 밖(깊이 0)에 있는 마지막 콜론**이다.
-        kw = re.match(r"^\s*(if|elif|for|while|else|with|try|except|finally)\b", code)
+        # ⚠️ 2026-09-17 6~7묶음 담당자가 잡았다 — `def` 와 `class` 가 목록에 없어서
+        #    `def snapshot(self): return ...` (mcc22maze) 가 그냥 통과했다.
+        kw = re.match(
+            r"^\s*(?:async\s+)?(def|class|if|elif|for|while|else|with|try|except|finally)\b",
+            code)
         if kw:
             depth, colon = 0, -1
             for i, ch in enumerate(code):
@@ -149,7 +166,10 @@ def findings_for(raw, lang):
             if colon >= 0:
                 rest = code[colon + 1:].strip()
                 if rest:
-                    hits.append(("제어문 본문이 헤더와 같은 줄", body))
+                    what = ("함수·클래스 본문이 헤더와 같은 줄"
+                            if kw.group(1) in ("def", "class")
+                            else "제어문 본문이 헤더와 같은 줄")
+                    hits.append((what, body))
 
     if re.search(r"\?[^?:]+:", code) and lang == "cpp" and "://" not in code:
         hits.append(("삼항 연산자", body))

@@ -102,8 +102,8 @@ export function getBadmintonSections(E) {
       why: [
         t(E, "Four counters hold the whole match: two for the points in the game being played, two for how many games each player has already won.",
             "세는 값 네 개가 경기 전체를 담아요.\n두 개는 지금 하는 게임의 점수, 두 개는 이미 이긴 게임 수예요."),
-        t(E, "results keeps each finished game's score, because the answer has to print them all at the end — not as they happen.",
-            "results 에는 끝난 게임의 점수를 모아 둬요.\n답은 끝난 뒤에 한꺼번에 찍어야 해서, 그때그때 찍으면 안 돼요."),
+        t(E, "results keeps each finished game's score. Both points go back to 0 for the next game, so the score has to be written down before that happens.",
+            "results 에는 끝난 게임의 점수를 모아 둬요.\n다음 게임을 하려면 두 점수를 0 으로 되돌려야 해서,\n그 전에 적어 두지 않으면 점수가 사라져요."),
       ],
     },
     {
@@ -122,8 +122,8 @@ export function getBadmintonSections(E) {
       why: [
         t(E, "Check for 21 right after a point goes up — that's the only moment a game can end, so checking anywhere else would be wasted work.",
             "21 점인지는 점수가 오른 직후에만 봐요.\n게임이 끝날 수 있는 순간이 거기뿐이라, 다른 데서 보는 건 헛일이에요."),
-        t(E, "Save the score first, then add the win, then clear both points to 0 for the next game. The games-won counters are the ones that carry over.",
-            "점수를 먼저 저장하고, 이긴 게임 수를 올리고, 두 점수를 0 으로 비워요.\n다음 게임으로 넘어가는 건 이긴 게임 수뿐이에요."),
+        t(E, "Order matters: save the score first, because clearing the points to 0 wipes it. Then add the win, then clear. The games-won counters are the ones that carry over.",
+            "순서가 중요해요 — 점수를 먼저 저장해요. 0 으로 비우고 나면 점수가 사라지니까요.\n그다음 이긴 게임 수를 올리고, 두 점수를 0 으로 비워요.\n다음 게임으로 넘어가는 건 이긴 게임 수뿐이에요."),
         t(E, "At 2 wins the match is decided, so break out — the rest of the letters are not played at all.",
             "2 승이 되면 매치가 정해져요. 그래서 빠져나와요 — 남은 글자는 아예 치지도 않은 거예요."),
       ],
@@ -135,16 +135,16 @@ export function getBadmintonSections(E) {
       why: [
         t(E, "Print one line per finished game, then one last line with the winner's letter — that is exactly the shape the sample showed.",
             "끝난 게임마다 한 줄씩 찍고, 마지막에 승자 글자를 한 줄 찍어요.\n샘플에서 본 그 모양 그대로예요."),
-        t(E, "The loop only stops at 2 wins, so whoever has more wins at the end is the match winner — no tie is possible.",
-            "반복은 2 승에서만 멈춰요.\n그래서 끝에 이긴 게임이 더 많은 쪽이 매치 승자예요. 비기는 경우는 없어요."),
+        t(E, "The loop stops the moment someone reaches 2 wins, and at that moment the other player has at most 1. So the bigger win count is the match winner, and a tie can never happen.",
+            "반복은 누군가 2 승을 한 순간 멈춰요.\n그때 상대는 많아야 1 승이에요.\n그래서 이긴 게임이 더 많은 쪽이 매치 승자고, 비기는 일은 생기지 않아요."),
       ],
       pyOnly: [
-        t(E, "f'{ga}-{gb}' drops the two numbers into the text with the dash already between them.",
-            "f'{ga}-{gb}' 는 두 수를 글자 사이에 끼워 넣어요. 가운데 − 도 같이 붙어 나와요."),
+        t(E, "In f'{ga}-{gb}', each { } is replaced by that number, and the - between them is printed just as it is written.",
+            "f'{ga}-{gb}' 에서 { } 자리에 두 수가 그대로 들어가요.\n사이의 - 는 적은 그대로 찍혀요."),
       ],
       cppOnly: [
-        t(E, "C++ has no f-string, so the dash is printed as its own piece between the two numbers.",
-            "C++ 에는 f-문자열이 없어서, 가운데 − 를 두 수 사이에 따로 찍어요."),
+        t(E, "C++ has no f-string, so the - is printed as its own piece between the two numbers.",
+            "C++ 에는 f-문자열이 없어서, - 를 두 수 사이에 따로 한 번 찍어요."),
       ],
     },
   ];
@@ -190,7 +190,7 @@ function highlightCode(lines, lang) {
 
 export function downloadBadmintonPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Badminton — Full Study Guide", "Badminton — 종합 풀이 노트");

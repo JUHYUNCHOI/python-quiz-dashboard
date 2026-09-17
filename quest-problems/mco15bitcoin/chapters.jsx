@@ -49,7 +49,7 @@ export function makeBitcoinCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
-              {t(E, "Find the largest squared distance between any two mining sites.", "두 채굴 사이트 사이의 제곱 거리 중 최댓값을 찾아요.")}
+              {t(E, "Find the largest squared distance between any two mining sites.", "두 채굴 사이트 사이의 거리의 제곱 중 가장 큰 값을 찾아요.")}
             </div>
           </div>
 
@@ -71,6 +71,10 @@ export function makeBitcoinCh1(E) {
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM (x1−x2)^2 + (y1−y2)^2 over all pairs", "모든 쌍 중 (x1−x2)^2 + (y1−y2)^2 의 최댓값")}</b>
                   {t(E, ".", "을 출력해요.")}
+                  <div style={{ marginTop: 6, fontSize: 12, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all" }}>
+                    {t(E, "(x1, y1) and (x2, y2) are the coordinates of the two sites in that pair.",
+                          "(x1, y1) 과 (x2, y2) 는 그 쌍에 든 두 사이트의 좌표예요.")}
+                  </div>
                 </div>
               </div>
             </div>
@@ -91,7 +95,7 @@ export function makeBitcoinCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
             <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
               <div><span style={{ color: "#9a3412", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— how many sites", "— 사이트 개수")}</span></div>
-              <div><span style={{ color: "#9a3412", fontWeight: 800 }}>x1 y1</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— site 1", "— 1 번 사이트")}</span></div>
+              <div><span style={{ color: "#9a3412", fontWeight: 800 }}>x1 y1</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— site 1: its x and its y", "— 1 번 사이트의 x 좌표와 y 좌표")}</span></div>
               <div style={{ color: C.dim }}>…</div>
               <div><span style={{ color: "#9a3412", fontWeight: 800 }}>xN yN</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— site N", "— N 번 사이트")}</span></div>
             </div>
@@ -101,7 +105,7 @@ export function makeBitcoinCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "One line: the largest squared distance found between two sites.",
-                    "한 줄에, 두 사이트 사이에서 찾은 가장 큰 제곱 거리를 적어요.")}
+                    "한 줄에, 두 사이트 사이에서 찾은 가장 큰 거리의 제곱을 적어요.")}
             </div>
           </div>
           {/* Sample */}
@@ -136,7 +140,7 @@ export function makeBitcoinCh1(E) {
                   감당하는 크기를 적는다. N 범위를 모르면 "모든 쌍 보기" 가 최종
                   풀이인지도 판정할 수 없다 — 검토자가 남긴 말이다. */}
               {t(E, "Coordinates are whole numbers. We could not find the original limits on N or on the coordinates. What we can say: this method looks at every pair, and the number of pairs is N × (N − 1) ÷ 2 — about 2 million when N is 2000.",
-                    "좌표는 정수예요.\n원문의 N 과 좌표 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 모든 쌍을 다 보고,\n쌍의 개수는 N × (N − 1) ÷ 2 예요. N 이 2000 이면 약 200 만 쌍이에요.")}
+                    "좌표는 정수예요.\n원문에서 N 과 좌표가 얼마까지인지는 찾지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 모든 쌍을 다 보고,\n쌍의 개수는 N × (N − 1) ÷ 2 예요. N 이 2000 이면 약 200 만 쌍이에요.")}
             </div>
           </div>
         </div>),
@@ -145,8 +149,8 @@ export function makeBitcoinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Before writing code, let's feel the brute force by hand. Pick any two sites, see dx² + dy², and watch the running max climb.",
-        "두 사이트를 골라 dx² + dy² 가 어떻게 커지는지 봐요."),
+        "These are the four sites from the sample. Find by hand which pair gives 41.",
+        "앞 쪽 샘플의 네 사이트예요. 41 이 어느 쌍에서 나오는지 찾아봐요."),
       content: <BitcoinPairInspector E={E} />,
     },
     // 1-4: Quiz
@@ -163,8 +167,8 @@ export function makeBitcoinCh1(E) {
       ],
       correct: 0,
       explain: t(E,
-        "Correct! sqrt is monotonic, so max squared distance corresponds to max distance. We avoid floating point issues.",
-        "맞아요! sqrt 는 커지기만 하는 함수라, 거리의 제곱이 가장 큰 쌍이 실제 거리도 가장 멀어요. 소수점 오차도 피할 수 있고요."),
+        "Correct! A bigger squared distance always means a bigger distance, so the pair with the largest squared distance is also the farthest pair. And the value stays a whole number, so there is no decimal error.",
+        "맞아요! 제곱근(√)을 쓰지 않아도 돼요.\n거리가 클수록 거리의 제곱도 크니까,\n제곱이 가장 큰 쌍이 실제로도 가장 먼 쌍이에요.\n게다가 값이 정수로 남아서 소수점 오차도 안 생겨요."),
     },
     // 1-5: Input
     {

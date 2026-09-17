@@ -186,9 +186,10 @@ export function makeMcc22LampCh1(E) {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+            {/* 2026-09-17: 6 이 무엇인지 안 밝히고 썼다 — 둘째 줄 "4 6" 의 k 다. */}
             {t(E,
-              "Only x = −3 and x = 0 reach a total brightness of 6, so the answer is 2. The next step lets you feel why.",
-              "총 밝기가 6 에 닿는 곳은 x = −3 과 x = 0 뿐이라 답은 2 예요. 다음 단계에서 직접 느껴 봐요.")}
+              "In this example the threshold k is 6. Only x = −3 and x = 0 reach a total brightness of 6 or more, so the answer is 2. The next page lets you try it yourself.",
+              "이 예제는 기준값 k 가 6 이에요. 총 밝기가 6 이상인 곳은 x = −3 과 x = 0 뿐이라 답은 2 예요. 다음 쪽에서 직접 만져 봐요.")}
           </div>
         </div>),
     },

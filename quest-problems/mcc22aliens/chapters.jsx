@@ -22,7 +22,7 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Each alien has a real type — T (truth-teller) or F (liar) — given by the string a. At the meeting, alien i said \"Alien p_i is of type b_i\". The list p — who pointed at whom — is lost.\nDecide whether SOME p makes every sentence consistent — print YES or NO.",
+        "Can every sentence hold even though we lost who pointed at whom?",
         "누가 누구를 지목했는지 몰라도 모든 말이 맞을 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -55,8 +55,8 @@ export function makeMcc22AliensCh1(E) {
                 <div>
                   {t(E, "String ", "문자열 ")}
                   <b style={{ color: "#2563eb" }}>a</b>
-                  {t(E, " gives each alien's real type: ", " 는 각 외계인의 진짜 타입: ")}
-                  <b style={{ color: "#15803d" }}>T</b>{t(E, " = truth-teller, ", " = 진실, ")}<b style={{ color: "#991b1b" }}>F</b>{t(E, " = liar.", " = 거짓말쟁이.")}
+                  {t(E, " gives each alien's real type. ", " 는 각 외계인의 진짜 타입이에요. ")}
+                  <b style={{ color: "#15803d" }}>T</b>{t(E, " always tells the truth, ", " 는 늘 진실만 말하고, ")}<b style={{ color: "#991b1b" }}>F</b>{t(E, " always lies.", " 는 늘 거짓말을 해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -68,9 +68,9 @@ export function makeMcc22AliensCh1(E) {
                   <b style={{ color: "#dc2626" }}>p<sub>i</sub></b>
                   {t(E, " is of type ", " 번은 ")}
                   <b style={{ color: "#7c3aed" }}>b<sub>i</sub></b>
-                  {t(E, "\". So b is fixed to the speaker; ", " 타입이야\". 즉 ")}
+                  {t(E, "\". ", " 타입이야\". ")}
                   <b style={{ color: "#7c3aed" }}>b</b>
-                  {t(E, "", " 는 말한 사람에게 붙어 있어요. ")}
+                  {t(E, " is written per speaker, so we already know it. ", " 는 누가 말했는지에 맞춰 적혀 있어서 그대로 알 수 있어요. ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "p — who pointed at whom — is what we lost", "잃어버린 건 p, 누가 누구를 지목했는지")}</b>
                   {t(E, ".", "예요.")}
                 </div>
@@ -79,9 +79,9 @@ export function makeMcc22AliensCh1(E) {
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#dc2626" }}>p</b>
-                  {t(E, " is a permutation of 1…n — each alien is pointed at exactly once. ",
-                       " 는 1…n 의 순열이에요 — 모든 외계인이 정확히 한 번씩 지목돼요. ")}
-                  {t(E, "p", "p")}<sub>i</sub>{t(E, " = i is allowed (talking about yourself).", " = i 도 돼요 (자기 얘기).")}
+                  {t(E, " points every alien at exactly one alien, and each alien is pointed at exactly once. That kind of list is called a permutation. ",
+                       " 에서는 모든 외계인이 정확히 한 번씩 지목돼요. 이런 줄을 순열이라고 불러요. ")}
+                  {t(E, "p", "p")}<sub>i</sub>{t(E, " = i is allowed too — an alien may point at itself.", " = i 도 돼요. 자기 자신을 지목해도 괜찮아요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -101,7 +101,7 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. There are T test cases. Each gives n, then the type string a, then the string b of what each alien said. The output is one YES/NO per test.",
+        "Read the input format together with the official example.",
         "입력 형식과 공식 예제를 같이 살펴봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -142,9 +142,11 @@ export function makeMcc22AliensCh1(E) {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+            {/* 2026-09-17: 여기서 "개수가 맞지 않아" 라고 결론을 먼저 말하고 있었다.
+                세는 이야기는 바로 다음 쪽 시뮬이 할 일이다. 형식 쪽은 형식만 말한다. */}
             {t(E,
-              "In the third test, a=TT (two truth-tellers) but b=TF: no matter who points at whom, the counts can't line up — NO.",
-              "세 번째 테스트는 a=TT (진실 둘) 인데 b=TF: 누가 누구를 지목하든 개수가 맞지 않아 — NO.")}
+              "Only the third test answers NO. There a=TT and b=TF, and no choice of who points at whom makes every sentence hold. The next page lets you find out why for yourself.",
+              "세 번째 테스트만 답이 NO 예요. a=TT 이고 b=TF 인데, 어떻게 지목해도 모든 말을 앞뒤 맞게 만들 수 없어요. 왜 안 되는지는 다음 쪽에서 직접 찾아봐요.")}
           </div>
         </div>),
     },
@@ -153,7 +155,7 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Feel the rule. Each claim, once decoded through its speaker's honesty, DEMANDS a T or an F. A valid order exists exactly when the demand for T's equals the supply of T's. Toggle the claims and watch the verdict flip.",
+        "Toggle the claims and watch when the verdict flips.",
         "주장을 눌러 바꾸면 판정이 어떻게 뒤집히는지 봐요."),
       content: <AliensCountSim E={E} />,
     },
@@ -162,20 +164,20 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A truth-teller (T) repeats a claim as-is; a liar (F) flips it. So a claim 'F' spoken by a liar really demands a 'T'.",
-        "거짓말쟁이가 말한 'F' 는 사실 'T' 를 요구하는 말이에요."),
+        "Check the rule you just found in the sim.",
+        "방금 시뮬에서 찾은 규칙을 확인해 봐요."),
       question: t(E,
         "The verdict is YES exactly when...",
         "판정이 YES 가 되는 정확한 조건은...?"),
       options: [
-        t(E, "the number of demanded T's equals the number of real T's in a", "요구된 T 의 수 = a 안의 진짜 T 의 수"),
+        t(E, "the number of needed T's equals the number of real T's in a", "필요한 T 의 수 = a 안에 있는 진짜 T 의 수"),
         t(E, "the claim string b equals the type string a", "주장 문자열 b 가 타입 문자열 a 와 같을 때"),
         t(E, "every alien is a truth-teller", "모든 외계인이 진실쟁이일 때"),
       ],
       correct: 0,
       explain: t(E,
-        "Right. Decode each claim to the type it demands, count the demanded T's, and compare to how many real T's exist. Equal supply and demand → a valid order exists → YES.",
-        "맞아요. 각 주장을 '상대가 가져야 할 타입' 으로 바꿔서 요구된 T 가 몇 개인지 세고, 진짜 T 의 개수와 비교해요. 둘이 같으면 지목 순서를 짤 수 있으니 YES 예요."),
+        "Right. Turn each claim into the type its target needs, count the needed T's, and compare with how many real T's exist. Same number → a valid order exists → YES.",
+        "맞아요. 각 주장을 '상대에게 필요한 타입' 으로 바꿔서 필요한 T 가 몇 개인지 세고, 있는 T 의 개수와 비교해요. 둘이 같으면 지목 순서를 짤 수 있으니 YES 예요."),
     },
 
     /* 2026-09-17: 이 묶음에서 유일하게 손으로 세어 보는 칸이 비어 있었다.
@@ -184,14 +186,14 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now count it yourself: a = TFTF, b = TFTT.",
-        "이번엔 직접 세어 봐요. a = TFTF, b = TFTT 예요."),
+        "Now count it yourself.",
+        "이번엔 직접 세어 봐요."),
       question: t(E,
-        "a = TFTF, b = TFTT. How many T's are demanded?",
-        "a = TFTF, b = TFTT 일 때 요구된 T 는 몇 개일까요?"),
+        "a = TFTF, b = TFTT. How many T's are needed?",
+        "a = TFTF, b = TFTT 일 때 필요한 T 는 몇 개일까요?"),
       hint: t(E,
-        "A truth-teller (T) demands b as-is; a liar (F) demands the opposite of b. Write the four demanded types left to right, then count the T's.",
-        "진실쟁이(T)가 말하면 b 그대로를 요구하고,\n거짓말쟁이(F)가 말하면 b 를 뒤집은 걸 요구해요.\n네 자리를 왼쪽부터 하나씩 적어 보고 T 를 세요."),
+        "A truth-teller (T) needs b as-is; a liar (F) needs the opposite of b. Write the four needed types left to right, then count the T's.",
+        "진실쟁이(T)가 말하면 b 그대로가 필요하고,\n거짓말쟁이(F)가 말하면 b 를 뒤집은 게 필요해요.\n네 자리를 왼쪽부터 하나씩 적어 보고 T 를 세요."),
       answer: 3,
     },
   ];
@@ -208,7 +210,7 @@ export function makeMcc22AliensCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every p — who points at whom: n! permutations, hopeless even for small n. The fast way notices it's just counting: decode each sentence into the type its target must have, then check that demand for T equals supply of T.",
+        "Don't search every order — just count the T's.",
         "지목 순서를 다 뒤지지 말고 T 의 개수만 세어 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -218,15 +220,15 @@ export function makeMcc22AliensCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: try every p (who points at whom)", "느린 방법 — 지목 순서 p 를 전부 시도하기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "n! permutations. For n = 10000 that's astronomically huge. Times out instantly.", "n! 개의 순열이에요. n = 10000 이면 어마어마하게 커져서 바로 시간 초과예요.")}
+                {t(E, "There are n! orders. At n = 10 that is already 3.62 million, and n goes up to 10000. Trying them all is impossible.", "지목 순서는 n! 가지예요. n 이 10 일 때 벌써 362만 가지고, n 은 10000 까지 가요. 전부 해 보는 건 불가능해요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: count supply vs demand", "빠른 방법 — 공급과 수요 세기")}
+                🚀 {t(E, "Fast: count the T's needed and the T's that exist", "빠른 방법 — 필요한 T 와 있는 T 세기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "One pass over the string: decode each claim to the type it demands, count demanded T's and real T's, compare. O(n).", "문자열을 한 번만 훑으면 돼요. 각 주장이 요구하는 타입을 구하고, 요구된 T 와 진짜 T 를 세서 비교해요. O(n) 이에요.")}
+                {t(E, "One pass over the string: turn each claim into the type it needs, count the needed T's and the real T's, compare. O(n).", "문자열을 한 번만 훑으면 돼요. 각 주장에 필요한 타입을 구하고, 필요한 T 와 있는 T 를 세서 비교해요. O(n) 이에요.")}
               </div>
             </div>
           </div>

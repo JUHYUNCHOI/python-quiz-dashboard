@@ -15,7 +15,7 @@ const _BLK = -1;
 const _TRAIN_PRESETS = [
   // 3×3 introductory: small populations, optional detour
   {
-    name: "3×3 easy",
+    name: "3×3 easy", ko: "3×3 쉬움",
     grid: [
       [1, 9, 1],
       [1, 9, 1],
@@ -25,7 +25,7 @@ const _TRAIN_PRESETS = [
   },
   // 3×3 with a -1 wall forcing a detour
   {
-    name: "3×3 wall",
+    name: "3×3 wall", ko: "3×3 막힌 칸",
     grid: [
       [2, _BLK, 5],
       [3,    1, 4],
@@ -35,7 +35,7 @@ const _TRAIN_PRESETS = [
   },
   // 4×4 trickier: greedy fails, Dijkstra wins
   {
-    name: "4×4 trap",
+    name: "4×4 trap", ko: "4×4 어려움",
     grid: [
       [1, 1, 1, 1],
       [9, 9, 9, 1],
@@ -128,15 +128,18 @@ export function TrainsAuditSim({ E }) {
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>
-            {p.name}
+            {E ? p.name : p.ko}
           </button>
         ))}
       </div>
 
-      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8, lineHeight: 1.5 }}>
+      {/* 2026-09-17 (잣대 ①·⑥): 여기가 **누르는 법만** 알려주고 있었다.
+          "무엇을 만들면 잘 만든 건가" 를 한 번도 안 말해서, 학생은 B 에 닿기만 하면
+          끝난 줄 알았다. 목표를 맨 앞에 두고, 말 없이 무시되던 규칙(지나온 칸)도 적는다. */}
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8, lineHeight: 1.5, whiteSpace: "pre-line", wordBreak: "keep-all" }}>
         {t(E,
-          "Tap a cell adjacent to the path's head to extend. Tap the head to undo. -1 = blocked.",
-          "경로 끝에 붙은 칸을 누르면 이어져요. 끝 칸을 다시 누르면 되돌아가요. -1 은 막힌 칸이에요.")}
+          "Goal: reach B with the smallest cost.\nTap a cell next to the end of the path to extend it, tap the end again to step back.\nCells already on the path and −1 cells cannot be used.",
+          "비용이 가장 적은 길로 B 까지 가는 게 목표예요.\n길 끝에 붙은 칸을 누르면 이어지고, 끝 칸을 다시 누르면 한 칸 되돌아가요.\n이미 지나온 칸과 −1 칸은 밟을 수 없어요.")}
       </div>
 
       {/* grid */}
@@ -206,7 +209,7 @@ export function TrainsAuditSim({ E }) {
             최소값은 B 에 닿은 **뒤에만** 드러나고, 이름은 코드 쪽에서 붙인다. */}
         <div style={{ fontSize: 12, fontWeight: 700, color: reachedB ? (isOptimal ? "#15803d" : "#9a3412") : "#991b1b", fontFamily: "'JetBrains Mono',monospace" }}>
           {t(E, `cost = ${cost}`, `비용 = ${cost}`)}
-          {reachedB && <> · {t(E, `best = ${optimal}`, `가장 적은 값 = ${optimal}`)}</>}
+          {reachedB && <> · {t(E, `best cost = ${optimal}`, `가장 적은 비용 = ${optimal}`)}</>}
         </div>
       </div>
 
@@ -226,17 +229,20 @@ export function TrainsAuditSim({ E }) {
         fontSize: 11, color: "#1e3a8a", textAlign: "center", lineHeight: 1.5,
         whiteSpace: "pre-line", wordBreak: "keep-all",
       }}>
+        {/* 2026-09-17 (잣대 ⑤): 숫자만 던지던 자리에 "무엇의 숫자인지" 를 붙였다.
+            그리고 닿기 전 말풍선이 "싸 보이는 칸을 밟아도 소용없다" 는 **결론을
+            먼저** 말하고 있었다 — 만지기 전에 답을 주는 자리라 지웠다. */}
         {!reachedB
           ? t(E,
-              "Extend the path 4-directionally until you reach B. Cheap-looking cells are not always the cheap route.",
-              "4 방향으로 경로를 이어 B 까지 가 봐요.\n싸 보이는 칸을 밟는다고 길 전체가 싸지는 건 아니에요.")
+              "Extend the path 4-directionally until you reach B. Once you get there, your cost is compared with the smallest one possible.",
+              "4 방향으로 길을 이어 B 까지 가 봐요.\nB 에 닿으면 내 비용을 가장 적은 비용과 견줘 볼 수 있어요.")
           : (isOptimal
               ? t(E,
-                  `Nothing beats ${optimal} on this grid — you found the cheapest route. Now: could a program find it without trying every path?`,
-                  `이 격자에서는 ${optimal} 보다 적게는 갈 수 없어요. 가장 싼 길을 찾았어요.\n그럼 컴퓨터는 길을 전부 그려 보지 않고도 이걸 찾을 수 있을까요?`)
+                  `No path on this grid costs less than ${optimal} — you found the cheapest one. Now: could a program find it without drawing every path?`,
+                  `이 격자에서는 비용 ${optimal} 보다 적게는 갈 수 없어요. 가장 싼 길을 찾았어요.\n그럼 컴퓨터는 길을 전부 그려 보지 않고도 이걸 찾을 수 있을까요?`)
               : t(E,
-                  `You reached B with ${cost}, but some route costs only ${optimal}. Try again — where did the extra go?`,
-                  `B 에 닿았는데 비용이 ${cost} 예요. ${optimal} 로 가는 길이 있어요.\n다시 놓아 봐요 — 더 든 만큼은 어디서 났을까요?`))}
+                  `Your path costs ${cost}, but there is a path that costs only ${optimal}. Try again — where did the extra go?`,
+                  `B 에 닿았는데 내 길은 비용이 ${cost} 예요.\n비용이 ${optimal} 인 길도 있어요. 다시 놓아 봐요 — 더 든 만큼은 어디서 났을까요?`))}
       </div>
     </div>
   );
@@ -382,8 +388,8 @@ export function getTrainsSections(E) {
             "dist[x][y] 는 '지금까지 아는, 그 칸까지 가는 가장 적은 비용' 이에요.\n아직 아는 게 없으니 모든 칸을 INF(아주 큰 수)로 시작해요."),
         t(E, "The people living on the starting cell get displaced too — so dist[A] starts at grid[A], not at 0.",
             "출발 칸에 사는 사람도 옮겨야 해요.\n그래서 dist[A] 는 0 이 아니라 grid[A] 로 시작해요."),
-        t(E, "pq holds the cells we still have to look at. Because the cost sits first in each tuple, whatever we pull out of pq is always the cheapest one waiting.",
-            "pq 에는 아직 봐야 할 칸을 넣어 둬요.\n묶음의 맨 앞이 비용이라, pq 에서 꺼내면 늘 기다리던 것 중 가장 싼 칸이 나와요."),
+        t(E, "pq holds the cells we still have to look at. Each one goes in as (cost, x, y). Because the cost sits first, whatever we pull out of pq is always the cheapest one waiting.",
+            "pq 에는 아직 봐야 할 칸을 넣어 둬요. 칸 하나를 (비용, x, y) 로 묶어서 넣어요.\n맨 앞이 비용이라, pq 에서 꺼내면 늘 기다리던 것 중 가장 싼 칸이 나와요."),
       ],
       pyOnly: [
         t(E, "float('inf') is Python's 'bigger than any number' value, so the first real cost always wins the comparison.",
@@ -419,7 +425,7 @@ export function getTrainsSections(E) {
         t(E, "Reaching a neighbour costs 'what it cost to get here' plus 'who lives there'. Write it into the table only when it beats what's already written, and push it so it can be taken later.",
             "이웃까지의 비용은 '여기까지 든 비용 + 그 칸 인구' 예요.\n표에 적힌 값보다 작을 때만 고쳐 적고, 나중에 꺼낼 수 있게 pq 에 넣어요."),
         t(E, "When the loop ends, the table's B slot holds the answer — the same number you were trying to beat on the grid.",
-            "반복이 끝나면 표의 B 자리에 답이 남아 있어요.\n앞에서 격자로 이겨 보려 했던 바로 그 값이에요."),
+            "반복이 끝나면 표의 B 자리에 답이 남아 있어요.\n앞에서 격자에 길을 놓으며 찾아보려 했던 '가장 적은 비용' 이 바로 이 값이에요."),
       ],
       cppOnly: [
         t(E, "Split #include into the specific headers this code needs (iostream, vector, queue, tuple).",

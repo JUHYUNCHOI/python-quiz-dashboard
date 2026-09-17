@@ -30,8 +30,11 @@ export function makeHoneyCh1(E) {
     // 1-1: Title reveal
     {
       type: "reveal",
+      /* 2026-09-17: 영어 narr 이 문제 원문 전체(265자·6문장)를 파란 바에 그대로
+         쏟아붓고 있었다. 바로 아래 🎯 미션 · 📖 문제 카드가 같은 말을 또 한다.
+         한국어 쪽은 이미 짧다 — 영어도 같은 몫만 하게 맞춘다. */
       narr: t(E,
-        "A squirrel collects honey using a pot of capacity M ml. There are N beehives with given honey amounts h[1..N]. The squirrel can make AT MOST K trips. Each trip: visit ONE hive and take min(remaining honey there, M) into the pot.\nMaximize the TOTAL honey collected.",
+        "You get at most K trips. Collect as much honey as you can.",
         "K 번만 오갈 수 있어요. 꿀을 가장 많이 모아 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -149,7 +152,7 @@ export function makeHoneyCh1(E) {
                   물어 놓고, 답을 여기서 먼저 말해 버린 셈이다. 조각 = 왕복 한 번이므로,
                   뜻은 그대로 두고 **학생이 이미 아는 말(왕복)** 로 바꿔 적는다. */}
               {t(E, "We could not find the original limits on N, M, K. What we can say is how big this quest's solution can go: a few hundred thousand trips in total — counting every trip it would take to empty all the hives — is comfortable.",
-                    "원문의 N · M · K 상한은 확인하지 못했어요.\n대신 이 quest 의 풀이가 감당하는 크기를 적어요.\n모든 벌집을 다 비우는 데 드는 왕복이 수십만 번까지는 넉넉해요.")}
+                    "N · M · K 가 얼마까지 커질 수 있는지는 원문에서 확인하지 못했어요.\n대신 이 quest 의 풀이가 감당하는 크기를 적어요.\n모든 벌집을 다 비우는 데 드는 왕복이 수십만 번까지는 넉넉해요.")}
             </div>
           </div>
         </div>),

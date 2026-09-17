@@ -29,7 +29,11 @@ function altSum(cards) {
    ───────────────────────────────────────────────────────────── */
 function StackOrderSim({ E }) {
   // order = permutation of indices into DEMO_STACKS
-  const [order, setOrder] = useState([0, 1, 2]);
+  /* 2026-09-17: 처음 순서가 A→B→C 였는데 그게 하필 **최댓값 6 인 순서**였다.
+     "어떤 순서가 가장 크게 만드나요?" 라고 물어놓고, 누르기도 전에 이미 답을
+     보여주고 있었다 (화살표를 눌러봐야 점수가 내려가기만 한다).
+     C→B→A 로 열면 −2 에서 시작하니, 눌러서 6 을 찾아낼 수 있다. */
+  const [order, setOrder] = useState([2, 1, 0]);
   /* 2026-09-17: 시뮬 맨 아래가 **화살표를 한 번도 누르기 전부터** 최종 그리디 해법을
      통째로 말하고 있었다 ("D 를 정렬해 위쪽 절반에 + 를 줘라"). 같은 말이 Ch2 계획과
      코드 why 에서 세 번 더 나온다. 여기서는 **관찰까지만** 남기고, 정렬 결론은
@@ -73,13 +77,13 @@ function StackOrderSim({ E }) {
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
-            "You pick the ORDER of the stacks, glue them into one big pile (each stack keeps its own order), then deal from the top: 1st→P1, 2nd→P2, 3rd→P1, … We want score1 − score2 as big as possible.",
-            "묶음들의 순서를 골라 하나의 큰 더미로 이어 붙여요. 묶음 안의 카드 순서는 그대로예요. 그다음 맨 위부터 번갈아 나눠줘요. 1번째→P1, 2번째→P2, 3번째→P1, … 이렇게요. score1 − score2 를 최대한 크게 만들고 싶어요.")}
+            "Here you find out how much the ORDER alone can change the gap. Press ◀ ▶ to move a stack: the big pile is glued together again (each stack keeps its own order) and dealt from the top — 1st→P1, 2nd→P2, 3rd→P1, …",
+            "순서만 바꿔도 점수 차이가 얼마나 달라지는지 여기서 직접 알아봐요. ◀ ▶ 로 묶음을 옮기면 큰 더미가 다시 만들어져요. 묶음 안의 카드 순서는 그대로예요. 그다음 맨 위부터 번갈아 나눠줘요. 1번째→P1, 2번째→P2, 3번째→P1, … 이렇게요.")}
         </div>
 
         {/* each stack + its alternating sum D */}
         <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 4 }}>
-          {t(E, "each stack's alternating sum  D = c1 − c2 + c3 − …", "각 묶음의 교대 합  D = c1 − c2 + c3 − …")}
+          {t(E, "D = add the cards from the top with the signs +, −, +, … (the stack's alternating sum)", "D = 맨 위 카드부터 +, −, +, … 로 번갈아 더한 값 (이걸 묶음의 교대 합이라고 불러요)")}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 14 }}>
           {DEMO_STACKS.map((st, si) => {
@@ -154,7 +158,7 @@ function StackOrderSim({ E }) {
         <div style={{ background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
           fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, ...KA }}>
           score1 − score2 = <b style={{ color: diff >= 0 ? "#34d399" : "#f87171" }}>{diff}</b>
-          <span style={{ color: "#8b949e", fontSize: 11 }}>  ({t(E, "best possible = 6", "가능한 최댓값 = 6")})</span>
+          <span style={{ color: "#8b949e", fontSize: 11 }}>  ({t(E, "the best these three stacks can reach = 6", "이 세 묶음으로 낼 수 있는 가장 큰 값 = 6")})</span>
         </div>
 
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
@@ -233,8 +237,8 @@ export function makeMcc22CardSharkCh1(E) {
       narr: t(E,
         /* 2026-09-17: 원래 여기 다섯 줄(82자)이 문제 설명 전부를 미리 말했다.
            파란 내레이션은 55자 한 문장이고, 자세한 것은 바로 아래 미션·문제 카드가 한다. */
-        "Choose the order of the stacks so score1 − score2 is as big as possible.",
-        "묶음 순서를 정해 score1 − score2 를 최대로 만들어요."),
+        "Deal the cards so player 1 beats player 2 by as much as possible.",
+        "카드를 나눠줄 때 1번이 2번보다 가장 많이 앞서게 해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -249,7 +253,7 @@ export function makeMcc22CardSharkCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
-              {t(E, "Order the stacks to maximize score1 − score2, then print that maximum.", "score1 − score2 가 최대가 되도록 묶음 순서를 정하고, 그 최댓값을 출력해요.")}
+              {t(E, "Two players are dealt the cards one after the other. Order the stacks so player 1 beats player 2 by as much as possible, then print that gap, score1 − score2.", "카드를 두 사람에게 번갈아 나눠줘요. 1번이 2번보다 가장 많이 앞서도록 묶음 순서를 정하고, 그 점수 차이 score1 − score2 를 출력해요.")}
             </div>
           </div>
 
@@ -263,7 +267,7 @@ export function makeMcc22CardSharkCh1(E) {
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "카드 묶음이 ")}<b style={{ color: "#d97706" }}>{t(E, "n small stacks", "n 개")}</b>
-                  {t(E, ". Stack i has ", " 있어요. i 번 묶음은 카드가 ")}<b>m_i</b>{t(E, " cards, listed top → bottom.", " 장이고, 위 → 아래 순으로 주어져요.")}
+                  {t(E, ". Stack i has ", " 있어요. i 번 묶음은 카드가 ")}<b>m_i</b>{t(E, " cards. Every card has one number written on it, and that number can be negative. The cards are listed top → bottom.", " 장이에요. 카드마다 수가 하나씩 적혀 있고, 그 수는 음수일 수도 있어요. 카드는 위 → 아래 순으로 주어져요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -300,8 +304,8 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. There are T test cases; each stack line is 'm c1 c2 … c_m' with the cards top → bottom.",
-        "입력 형식과 공식 예제를 봐요.\n테스트 케이스가 T 개예요.\n묶음 한 줄은 'm c1 c2 … c_m' 이고, 카드는 위 → 아래 순이에요."),
+        "Read the input format, then the official example.",
+        "입력 형식을 보고, 공식 예제를 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -314,7 +318,7 @@ export function makeMcc22CardSharkCh1(E) {
               <div>• {t(E, "then n stack lines: ", "그다음 묶음마다 한 줄씩 n 줄 — ")}<b>m c1 c2 … c_m</b> {t(E, "(top → bottom)", "(위 → 아래)")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: T ≤ 10, n ≤ 10^5, |c| ≤ 10^9, total cards ≤ 2·10^5.", "제약은 T ≤ 10, n ≤ 10^5, |c| ≤ 10^9 이고, 전체 카드 수는 2·10^5 까지예요.")}
+              {t(E, "Limits: at most T = 10 test cases, at most n = 10^5 stacks. Each card's number is between −10^9 and 10^9, and all the test cases together hold at most 2·10^5 cards.", "제약은 이래요. 테스트 케이스는 T ≤ 10 개, 묶음은 n ≤ 10^5 개예요. 카드에 적힌 수는 −10^9 부터 10^9 까지예요. 모든 케이스의 카드를 합쳐도 2·10^5 장을 넘지 않아요.")}
             </div>
           </div>
 
@@ -334,8 +338,8 @@ export function makeMcc22CardSharkCh1(E) {
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
-              "One optimal ordering deals [8, 5, 2, 1, 5] to P1 (score1 = 21) and [4, 6, 3, 2, 0] to P2 (score2 = 15), so score1 − score2 = 6 — the best possible.",
-              "제일 좋은 순서 하나를 예로 들면, P1 이 [8, 5, 2, 1, 5] 를 받아 score1 = 21 이고, P2 가 [4, 6, 3, 2, 0] 을 받아 score2 = 15 예요. 그래서 score1 − score2 = 6 이고, 이게 가능한 최댓값이에요.")}
+              "Stack them in this order: [8] → [4, 5] → [6, 2, 3] → [1, 2, 5, 0]. The big pile becomes 8, 4, 5, 6, 2, 3, 1, 2, 5, 0. Dealing from the top, P1 gets 8, 5, 2, 1, 5 so score1 = 21, and P2 gets 4, 6, 3, 2, 0 so score2 = 15. So score1 − score2 = 6, and that is the best you can do.",
+              "묶음을 [8] → [4, 5] → [6, 2, 3] → [1, 2, 5, 0] 순으로 이어 붙여 봐요. 큰 더미는 8, 4, 5, 6, 2, 3, 1, 2, 5, 0 이 돼요. 맨 위부터 번갈아 나눠주면 P1 은 8, 5, 2, 1, 5 를 받아 score1 = 21 이고, P2 는 4, 6, 3, 2, 0 을 받아 score2 = 15 예요. 그래서 score1 − score2 = 6 이고, 이게 낼 수 있는 가장 큰 값이에요.")}
           </div>
         </div>),
     },
@@ -353,11 +357,11 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A stack's alternating sum is D = c1 − c2 + c3 − c4 + …, using the cards top → bottom. It is the ± amount that whole stack contributes.",
-        "묶음의 교대 합은 D = c1 − c2 + c3 − c4 + … 예요.\n카드는 위 → 아래 순으로 넣어요.\n묶음 하나가 통째로 더하거나 빼는 값이에요."),
+        "Now work out one stack's D by hand.",
+        "이번엔 묶음 하나의 D 를 직접 구해 봐요."),
       question: t(E,
-        "Stack (top → bottom) = [6, 2, 3]. Its alternating sum D = 6 − 2 + 3 = ?",
-        "묶음 (위 → 아래) = [6, 2, 3]. 교대 합 D = 6 − 2 + 3 = ?"),
+        "Stack (top → bottom) = [6, 2, 3]. Adding from the top with +, −, +: D = 6 − 2 + 3 = ?",
+        "묶음 (위 → 아래) = [6, 2, 3]. 맨 위부터 +, −, + 로 더하면 D = 6 − 2 + 3 = ?"),
       options: [
         t(E, "7", "7"),
         t(E, "11", "11"),
@@ -381,14 +385,14 @@ export function makeMcc22CardSharkCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every ordering of the stacks: n! permutations — hopeless past n ≈ 11. The fast way collapses each stack to one number D, then decides its sign greedily.",
-        "느린 방법은 묶음의 모든 순서를 다 해봐요.\n순서가 n! 가지라, n 이 11 만 넘어도 끝나지 않아요.\n빠른 방법은 묶음마다 수 D 하나로 줄이고, 부호를 그리디하게 정해요."),
+        "Why trying every ordering is hopeless, and what to do instead.",
+        "모든 순서를 다 해보면 왜 안 되는지, 대신 뭘 할지 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: try every ordering of the stacks", "느림: 묶음의 모든 순서를 다 해 보기")}
+                🐢 {t(E, "Slow way — try every ordering of the stacks", "느린 방법 — 묶음의 모든 순서를 다 해 보기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "n! permutations. Even n = 15 is over 10^12 orderings. Times out.", "순서가 n! 가지예요. n = 15 만 해도 10^12 개가 넘어요. 그래서 시간 초과가 나요.")}
@@ -396,10 +400,10 @@ export function makeMcc22CardSharkCh2(E, lang = "py") {
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: one number D per stack, then a greedy split", "빠름: 묶음마다 수 D 하나, 그다음 그리디로 부호 나누기")}
+                🚀 {t(E, "Fast way — shrink each stack to one number D, then pick its sign", "빠른 방법 — 묶음마다 수 D 하나로 줄이고, 그다음 부호를 골라주기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Each stack contributes ±D. Even-length stacks can take +|D| freely; odd-length stacks alternate sign, so sort their D and give + to the top half. O(total cards + n log n).", "각 묶음은 +D 또는 −D 를 더해요. 길이가 짝수인 묶음은 +|D| 를 자유롭게 챙겨요. 길이가 홀수인 묶음은 부호가 번갈아 나오니, D 를 정렬해 위쪽 절반에 + 를 줘요. O(전체 카드 + n log n).")}
+                {t(E, "A stack adds either +D or −D to the gap, and which one depends on the position it starts at. An odd-length stack pushes everything after it along by one place, so it flips odd into even. That means if even one odd-length stack exists, an even-length stack can be moved before or after it to choose its own sign — so it always takes the adding side. Among the odd-length stacks the signs come out +, −, +, … in a row, so give + to the biggest D's. O(total cards + n log n).", "묶음 하나는 점수 차이에 +D 아니면 −D 를 더해요. 어느 쪽이 될지는 그 묶음이 몇 번째 자리에서 시작하느냐가 정해요. 길이가 홀수인 묶음은 뒤에 오는 카드의 자리를 한 칸씩 밀어서 홀짝을 뒤집어요. 그래서 그런 묶음이 하나라도 있으면, 길이가 짝수인 묶음은 그 앞이나 뒤로 옮겨 부호를 골라잡을 수 있어요. 그러니 늘 더하는 쪽을 챙겨요. 길이가 홀수인 묶음끼리는 부호가 +, −, +, … 로 번갈아 나와요. 그러니 D 가 큰 것부터 + 를 줘요. O(전체 카드 + n log n).")}
               </div>
             </div>
           </div>

@@ -117,8 +117,10 @@ export function getSecretSections(E) {
       color: A,
       py: FULL_PY.slice(8, 13), cpp: FULL_CPP.slice(30, 38),
       why: [
-        t(E, "Rotating a means cutting it somewhere and swapping the two pieces. Write a twice in a row and every one of those cuts is already sitting there, side by side.",
-            "a 를 돌린다는 건 어딘가에서 잘라 앞뒤를 바꾼다는 뜻이에요.\na 를 두 번 이어 적어 두면, 그 잘린 모양들이 이미 나란히 놓여 있어요."),
+        /* 2026-09-17 2차: 1-1 은 "앞쪽 몇 개를 떼어 뒤에 붙인다" 로 돌리기를 정의했는데
+           여기만 "잘라 앞뒤를 바꾼다" 였다. 같은 일을 두 가지 말로 부르고 있었다. */
+        t(E, "Rotating a means taking some numbers off the front and putting them on the back. Write a twice in a row and every one of those rotations is already sitting there, side by side.",
+            "a 를 돌린다는 건 앞쪽 몇 개를 떼어 뒤에 붙인다는 뜻이에요.\na 를 두 번 이어 적어 두면, 그렇게 돌린 모양들이 이미 나란히 놓여 있어요."),
         /* 2026-09-17 2차: 문제는 "a 와 b 는 길이가 같다" 고 했는데 코드는 길이를 비교한다.
            학생이 "같은 길이라면서요?" 에서 멈춘다. 왜 그래도 확인하는지를 먼저 말한다. */
         t(E, "The problem says a and b are the same length, but the code checks anyway — it costs one line. If the lengths ever differed, no amount of rotating could make them match, so the answer would be NO right away.",

@@ -109,10 +109,24 @@ export function makeMcc21SimpleMathCh1(E) {
                   <b>★</b>{t(E, ":", " 로 합쳐요.")}
                 </div>
               </div>
+              {/* 2026-09-17: 미션·문제가 "부분집합" 에 전부 기대는데 그게 무엇인지 한 번도
+                  안 말했다. 학생이 처음 만나는 자리에서 한 번 풀어 준다. */}
+              <div style={{ paddingLeft: 22, fontSize: 12, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line", textWrap: "balance" }}>
+                {t(E,
+                  "A subset is any group you make by picking some of the numbers. \"Nonempty\" means the group that picks nothing doesn't count. With 3 numbers you get 7 such groups.",
+                  "부분집합은 주어진 수 중에서 몇 개를 골라 만든 묶음이에요.\n아무것도 안 고른 묶음은 세지 않아요.\n수가 3 개면 이런 묶음이 7 개 나와요.")}
+              </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingLeft: 22, fontSize: 12.5 }}>
                 <div><b style={{ color: "#7c3aed" }}>P=1</b> → {t(E, "addition (+)", "덧셈 (+)")}</div>
                 <div><b style={{ color: "#7c3aed" }}>P=2</b> → {t(E, "multiplication (×)", "곱셈 (×)")}</div>
                 <div><b style={{ color: "#7c3aed" }}>P=3</b> → {t(E, "bitwise XOR (⊕)", "비트 XOR (⊕)")}</div>
+                {/* 2026-09-17: ⊕ 가 무엇인지 안 밝힌 채로 2 쪽 예제에서 바로 쓰였다.
+                    뒤 문제(1-6)의 수 {1,2} 와 겹치지 않는 예로 든다. */}
+                <div style={{ fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+                  {t(E,
+                    "A bit is one digit of a number written in base 2. XOR compares the two numbers digit by digit and puts a 1 where exactly one side has a 1. So 6 ⊕ 3 = 5.",
+                    "비트는 수를 2 진수로 적었을 때의 한 자리예요.\nXOR 는 두 수를 자리마다 견줘서\n한쪽에만 1 이 있는 자리를 1 로 놓아요.\n그래서 6 ⊕ 3 = 5 예요.")}
+                </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
@@ -133,9 +147,10 @@ export function makeMcc21SimpleMathCh1(E) {
     // 1-2: I/O format + official samples
     {
       type: "reveal",
+      /* 2026-09-17: 79자·세 문장이었다. 바로 아래 입력 카드와 예제 카드가 같은 말을 다시 한다. */
       narr: t(E,
-        "Input is two lines: N and P, then the N numbers. Here are the three official examples — same numbers {1,2,3}, one for each operator.",
-        "입력은 두 줄이에요.\n첫 줄에 N 과 P 가 있고, 둘째 줄에 수 N 개가 있어요.\n아래 예제 셋은 수가 {1,2,3} 로 같고 연산자만 달라요."),
+        "The input format, and the three official examples.",
+        "입력이 어떻게 들어오는지, 공식 예제 셋을 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 12, ...KA }}>
@@ -177,18 +192,22 @@ export function makeMcc21SimpleMathCh1(E) {
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       /* 2026-09-17: 이 narr 이 81 자·세 문장이었고, 바로 아래 카드가 같은 말을 또 했다.
          파란 바는 "지금 뭘 볼 차례" 만 말한다. */
+      /* 2026-09-17: "직접 적어 봐요" 라고 했는데 시뮬이 7 개를 이미 다 적어서 보여준다.
+         글과 화면이 다른 말을 하고 있었다. 화면이 맞고 글이 틀렸다. */
       narr: t(E,
-        "Try it on {1,2,3} — list all 7 subsets yourself.",
-        "{1,2,3} 의 부분집합 7 개를 직접 적어 봐요."),
+        "Switch the operator and watch all 7 subsets.",
+        "연산자를 바꿔 가며 부분집합 7 개를 봐요."),
       content: null,
     },
 
     // 1-4: understanding check
     {
       type: "quiz",
+      /* 2026-09-17: 이 narr 이 세는 방법을 통째로 알려줘서(2 와 3 이 각각 넣거나 빼거나 → 2×2)
+         답 4 가 그냥 나왔다. 파란 바는 "지금 뭘 볼 차례" 만 말한다. */
       narr: t(E,
-        "Fix the number 1 in {1,2,3}. Each of the other two (2 and 3) is either in or out.",
-        "1 을 꼭 넣기로 하면, 남은 2 와 3 은 각각 넣거나 빼거나예요."),
+        "Your turn — count them yourself.",
+        "이번엔 직접 세어 볼 차례예요."),
       question: t(E,
         "Among the 7 nonempty subsets of {1,2,3}, how many contain the number 1?",
         "{1,2,3} 의 부분집합 7 개 중에서\n수 1 이 들어 있는 것은 몇 개일까요?"),
@@ -224,7 +243,8 @@ export function makeMcc21SimpleMathCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Same two numbers, but P = 3 (XOR) this time: {1, 2}.",
+        /* 2026-09-17: 영어가 "Same two numbers" 라고 했는데 앞 쪽은 {2,3}, 여기는 {1,2} 다. */
+        "This time P = 3 (XOR), with the numbers {1, 2}.",
         "이번엔 P = 3(XOR)이에요. 수는 {1, 2} 예요."),
       question: t(E,
         "P = 3, numbers {1, 2}. Add up the values of all 3 nonempty subsets.",
@@ -253,7 +273,8 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: enumerate every subset", "느린 방법: 부분집합을 하나하나 다 적기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "2^N − 1 subsets. At N=50000 that's 2^50000 — the universe can't hold that many. Times out instantly.", "부분집합이 2^N − 1 개예요.\nN 이 25 만 넘어도 벌써 손을 못 대요.\nN 이 50000 이면 2^50000 개라서 세상에 다 적어 둘 수도 없어요.")}
+                {/* 2026-09-17: "N 이 25 만 넘어도 손을 못 댄다" 에서 25 가 어디서 온 수인지 안 말했다. */}
+                {t(E, "2^N − 1 subsets. At N=25 that's already over 30 million. At N=50000 that's 2^50000 — the universe can't hold that many.", "부분집합이 2^N − 1 개예요.\nN 이 25 면 벌써 3 천만 개가 넘어요.\nN 이 50000 이면 2^50000 개라서 세상에 다 적어 둘 수도 없어요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
@@ -261,9 +282,11 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: count each contribution", "빠른 방법: 각각이 몇 번 쓰이는지 세기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-                <div>• <b>P=1</b> {t(E, "each number lands in 2^(N-1) subsets → ", "수 하나는 2^(N-1) 개의 부분집합에 들어가요 → ")}<span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412" }}>2^(N-1)·ΣA</span></div>
-                <div>• <b>P=2</b> {t(E, "sum of all subset products → ", "부분집합마다 곱한 값을 다 더하면 → ")}<span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412" }}>∏(1+Aᵢ) − 1</span></div>
-                <div>• <b>P=3</b> {t(E, "per bit, odd-count subsets → ", "비트마다 그 비트가 홀수 개 뽑힌 경우만 세면 → ")}<span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412" }}>2^(k-1)·2^(N-k)</span></div>
+                {/* 2026-09-17: Σ 와 ∏ 를 아무 데서도 안 가르치고 썼고, k 도 여기서 처음 나오는데
+                    무엇인지 안 밝혔다. 기호를 풀어 쓰고 k 를 문장 안에서 정의한다. */}
+                <div>• <b>P=1</b> {t(E, "each number lands in 2^(N-1) subsets → ", "수 하나는 2^(N-1) 개의 부분집합에 들어가요 → ")}<span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412" }}>2^(N-1) × (A₁+A₂+…+Aₙ)</span></div>
+                <div>• <b>P=2</b> {t(E, "sum of all subset products → ", "부분집합마다 곱한 값을 다 더하면 → ")}<span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412" }}>(1+A₁)(1+A₂)…(1+Aₙ) − 1</span></div>
+                <div>• <b>P=3</b> {t(E, "if k numbers have that bit, count the odd picks → ", "그 비트를 가진 수가 k 개일 때, 홀수 개 뽑은 경우만 세면 → ")}<span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412" }}>2^(k-1) × 2^(N-k)</span></div>
               </div>
             </div>
           </div>

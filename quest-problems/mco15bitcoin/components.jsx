@@ -53,11 +53,12 @@ export function BitcoinPairInspector({ E }) {
     <div style={{ padding: 14 }}>
       <div style={{
         background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 10,
-        padding: "8px 12px", marginBottom: 10, fontSize: 12, color: "#9a3412", lineHeight: 1.5,
+        padding: "8px 12px", marginBottom: 10, fontSize: 12, color: "#9a3412", lineHeight: 1.6,
+        wordBreak: "keep-all", whiteSpace: "pre-line", textWrap: "balance",
       }}>
         <b>{t(E, "🔍 Pair Inspector", "🔍 쌍 검사기")}</b> — {t(E,
-          "Click any two sites to see dx² + dy². Try all 6 pairs and watch the running max.",
-          "두 사이트를 클릭하면 dx² + dy² 가 보여요. 6개 쌍을 모두 눌러 보며 가장 큰 값이 어떻게 바뀌는지 봐요.")}
+          "From four sites there are 6 pairs to pick.\nClick two sites to see that pair's squared distance, then try all 6.",
+          "네 사이트에서 고를 수 있는 쌍은 모두 6개예요.\n두 사이트를 누르면 그 쌍의 거리의 제곱이 나와요. 6개를 다 눌러 봐요.")}
       </div>
 
       <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-start" }}>
@@ -114,6 +115,10 @@ export function BitcoinPairInspector({ E }) {
                 <div>dx = {a.x} − {b.x} = <b style={{ color: A }}>{dx}</b></div>
                 <div>dy = {a.y} − {b.y} = <b style={{ color: A }}>{dy}</b></div>
                 <div>dx² + dy² = {dx * dx} + {dy * dy} = <b style={{ color: "#15803d" }}>{distSq}</b></div>
+                <div style={{ fontFamily: "system-ui, sans-serif", fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.6, wordBreak: "keep-all" }}>
+                  {t(E, "dx is the two x's subtracted, dy the two y's. dx² + dy² is this pair's squared distance.",
+                        "dx 는 x 좌표끼리, dy 는 y 좌표끼리 뺀 값이에요. dx² + dy² 가 이 쌍의 거리의 제곱이에요.")}
+                </div>
               </div>
             ) : (
               <div style={{ color: C.dim }}>
@@ -125,10 +130,10 @@ export function BitcoinPairInspector({ E }) {
             background: "#dcfce7", border: "1px solid #86efac", borderRadius: 10,
             padding: 10, fontSize: 12, color: "#15803d",
           }}>
-            <b>{t(E, "Running max", "지금까지 최댓값")}:</b> {seenMax}
-            <div style={{ fontSize: 11, color: "#166534", marginTop: 4 }}>
-              {t(E, "This is what max_dist tracks across all 6 pairs.",
-                  "max_dist 가 6개 쌍을 보며 들고 있는 값이에요.")}
+            <b>{t(E, "Biggest squared distance so far", "지금까지 가장 큰 거리의 제곱")}:</b> {seenMax}
+            <div style={{ fontSize: 11, color: "#166534", marginTop: 4, lineHeight: 1.6, wordBreak: "keep-all" }}>
+              {t(E, "Only the biggest of the pairs you have clicked stays here. Click all 6 and 41 is what is left — later the code keeps it in max_dist.",
+                  "지금까지 누른 쌍 중 가장 큰 것만 여기 남아요. 6개를 다 누르면 41 이 남고, 나중에 코드에서는 max_dist 가 이 값을 들고 있어요.")}
             </div>
           </div>
           <button onClick={reset} style={{
@@ -205,10 +210,10 @@ export function getBitcoinSections(E) {
       color: A,
       py: FULL_PY.slice(0, 8), cpp: FULL_CPP.slice(0, 18),
       why: [
-        t(E, "Every pair has to be compared with every other, so the points have to stay around — read them all into a list first.",
-            "모든 쌍을 서로 견줘야 해서 점이 계속 남아 있어야 해요.\n그래서 먼저 전부 목록에 담아 둬요."),
+        t(E, "Every pair has to be compared with every other, so the sites have to stay around — read them all into a list first.",
+            "모든 쌍을 서로 견줘야 해서 사이트가 계속 남아 있어야 해요.\n그래서 먼저 전부 목록에 담아 둬요."),
         t(E, "max_dist starts at 0. A squared distance is never negative, so 0 is a safe 'nothing found yet'.",
-            "max_dist 는 0 에서 시작해요.\n제곱 거리는 음수가 될 수 없어서, 0 은 '아직 아무것도 못 찾음' 자리로 안전해요."),
+            "max_dist 는 0 에서 시작해요.\n거리의 제곱은 음수가 될 수 없어서, 0 은 '아직 아무것도 못 찾음' 자리로 안전해요."),
       ],
       cppOnly: [
         t(E, "A Python tuple (x, y) becomes a pair — read the two values with .first and .second.",
@@ -223,7 +228,7 @@ export function getBitcoinSections(E) {
         t(E, "j starts at i + 1, not at 0. That way each pair is measured once instead of twice, and a site is never compared with itself.",
             "j 를 0 이 아니라 i + 1 에서 시작해요.\n그래야 쌍마다 한 번씩만 재고, 자기 자신과 견주는 일도 없어요."),
         t(E, "We keep dx² + dy² and never take a square root. The pair with the biggest squared distance is also the pair that is farthest apart, so the answer is the same — and it stays a whole number, with no decimal error.",
-            "dx² + dy² 만 쓰고 제곱근은 쓰지 않아요.\n제곱 거리가 가장 큰 쌍이 실제로도 가장 먼 쌍이라 답이 같아요.\n게다가 값이 정수로 남아서 소수점 오차가 아예 없어요."),
+            "dx² + dy² 만 쓰고 제곱근은 쓰지 않아요.\n거리가 클수록 거리의 제곱도 커요.\n그래서 제곱이 가장 큰 쌍이 실제로도 가장 먼 쌍이라 답이 같아요.\n게다가 값이 정수로 남아서 소수점 오차가 아예 없어요."),
         t(E, "max_dist just remembers the biggest one seen so far, so when the loops end it already holds the answer.",
             "max_dist 는 지금까지 본 것 중 가장 큰 값만 기억해요.\n그래서 반복이 끝나면 이미 답이 들어 있어요."),
       ],
@@ -231,7 +236,7 @@ export function getBitcoinSections(E) {
         t(E, "Include only the headers you actually use: iostream for cin/cout, vector and utility for vector<pair<...>>, algorithm for max.",
             "쓰는 헤더만 적어요. cin/cout 은 iostream, vector<pair<...>> 는 vector 와 utility, max 는 algorithm."),
         t(E, "dx and dy are long long, so dx * dx cannot overflow. In int, a squared distance past 2×10^9 would wrap around and give a wrong answer.",
-            "dx 와 dy 를 long long 으로 두면 dx * dx 가 넘치지 않아요.\nint 였다면 제곱 거리가 2×10^9 을 넘는 순간 값이 뒤집혀 오답이 돼요."),
+            "dx 와 dy 를 long long 으로 두면 dx * dx 가 넘치지 않아요.\nint 였다면 거리의 제곱이 2×10^9 을 넘는 순간 값이 뒤집혀 오답이 돼요."),
       ],
     },
   ];
@@ -277,7 +282,7 @@ function highlightCode(lines, lang) {
 
 export function downloadBitcoinPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Bitcoin — Full Study Guide", "Bitcoin — 종합 풀이 노트");

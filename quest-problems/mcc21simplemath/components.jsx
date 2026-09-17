@@ -231,8 +231,10 @@ export function getMcc21SimpleMathSections(E) {
       py: PY_MUL, cpp: CPP_MUL,
       why: [
         t(E,
-          "Expand (1+A₁)(1+A₂)…(1+Aₙ). Every way of picking '1 or Aᵢ' from each factor is one term — exactly one subset's product.",
-          "(1+A₁)(1+A₂)…(1+Aₙ) 를 펼쳐 봐요.\n괄호마다 1 이나 Aᵢ 중 하나를 고르면 항이 하나 나와요.\n그 항이 바로 어떤 부분집합 하나를 곱한 값이에요."),
+          /* 2026-09-17: "1 이나 Aᵢ 를 고르면 항이 나온다" 와 "그 항이 부분집합의 곱이다" 사이에
+             고리가 빠져 있었다 — Aᵢ 를 고른 수들이 곧 그 부분집합이라는 말이 없었다. */
+          "Expand (1+A₁)(1+A₂)…(1+Aₙ). From each bracket you pick either 1 or Aᵢ. The numbers where you picked Aᵢ are exactly one subset, and the term is that subset's product.",
+          "(1+A₁)(1+A₂)…(1+Aₙ) 를 펼쳐 봐요.\n괄호마다 1 이나 Aᵢ 중 하나를 고르면 항이 하나 나와요.\nAᵢ 를 고른 수들만 모으면 그게 부분집합 하나예요.\n그 항은 바로 그 부분집합을 곱한 값이에요."),
         t(E,
           "That covers ALL subsets including the empty one (all 1's → product 1). Subtract that 1 → sum over nonempty subsets.",
           "이러면 빈 집합까지 다 나와요. 괄호마다 1 을 고른 경우가 빈 집합이고 곱은 1 이에요.\n그 1 만 빼면 비어 있지 않은 부분집합들의 합이 남아요."),
@@ -244,11 +246,13 @@ export function getMcc21SimpleMathSections(E) {
       py: PY_XOR, cpp: CPP_XOR,
       why: [
         t(E,
-          "XOR works bit by bit, independently. A bit of the result is 1 only when an ODD number of chosen elements have that bit.",
-          "XOR 는 비트마다 따로 계산돼요.\n어떤 비트가 1 이 되려면 그 비트를 가진 수를 홀수 개 골라야 해요."),
+          /* 2026-09-17: "비트" 가 무엇인지 한 번도 안 말하고 썼다. */
+          "A bit is one digit of the number written in base 2 — the digits are worth 1, 2, 4, 8 … XOR works on each digit separately: a digit of the answer is 1 only when an ODD number of the chosen numbers have a 1 there.",
+          "비트는 수를 2 진수로 적었을 때의 한 자리예요. 자리값이 1, 2, 4, 8 … 이에요.\nXOR 는 자리마다 따로 계산돼요.\n어떤 자리가 1 이 되려면 그 자리에 1 이 있는 수를 홀수 개 골라야 해요."),
         t(E,
-          "If k elements have that bit: odd-count ways = 2^(k-1), and the other N−k elements are free = 2^(N-k). Multiply, times the bit's value, sum over bits.",
-          "그 비트를 가진 수가 k 개라고 해요.\n그중 홀수 개를 고르는 방법은 2^(k-1) 가지예요.\n나머지 N−k 개는 마음대로라 2^(N-k) 가지예요.\n둘을 곱하고 그 비트의 값을 곱한 뒤, 모든 비트에 대해 더해요."),
+          /* 2026-09-17: 2^(k-1) 이 어디서 나온 수인지 안 말했다. */
+          "Say k numbers have that bit. Picking from those k has 2^k ways, split exactly half odd and half even — so odd picks = 2^(k-1). The other N−k numbers are free = 2^(N-k). Multiply the two, times the bit's value, and sum over bits.",
+          "그 자리에 1 이 있는 수가 k 개라고 해요.\nk 개 중에서 고르는 방법은 2^k 가지인데, 홀수 개인 경우와 짝수 개인 경우가 딱 반반이에요.\n그래서 홀수 개를 고르는 방법은 2^(k-1) 가지예요.\n나머지 N−k 개는 마음대로라 2^(N-k) 가지예요.\n둘을 곱하고 그 자리값을 곱한 뒤, 모든 자리에 대해 더해요."),
       ],
     },
     {
@@ -326,17 +330,22 @@ export function Mcc21SimpleMathOpSim({ E }) {
   const shortcut = () => {
     if (P === 1) {
       return t(E,
-        "Each number sits in 2^(N-1) = 4 subsets → 4 × (1+2+3) = 4 × 6 = 24.",
-        "수 하나가 2^(N-1) = 4 개의 부분집합에 들어가요.\n그래서 4 × (1+2+3) = 4 × 6 = 24 예요.");
+        /* 2026-09-17: 여기 N 은 3 인데 식만 N 으로 두어서 4 가 어디서 나왔는지 안 보였다. */
+        "Each number sits in 2^(3-1) = 4 subsets → 4 × (1+2+3) = 4 × 6 = 24.",
+        "수 하나가 들어가는 부분집합은 2^(3-1) = 4 개예요.\n그래서 4 × (1+2+3) = 4 × 6 = 24 예요.");
     }
     if (P === 2) {
+      /* 2026-09-17: ∏ 를 아무 데서도 안 가르치고 썼다. 그리고 24 가 무엇인지 안 밝혔다 —
+         P=1 의 답도 24 라서 같은 화면에서 두 뜻으로 읽힌다. */
       return t(E,
-        "∏(1+Aᵢ) − 1 = (1+1)(1+2)(1+3) − 1 = 2·3·4 − 1 = 24 − 1 = 23.",
-        "∏(1+Aᵢ) − 1 = (1+1)(1+2)(1+3) − 1 = 2·3·4 − 1 = 24 − 1 = 23.");
+        "(1+1)(1+2)(1+3) = 2 × 3 × 4 = 24 — that counts the empty subset too. Drop the 1 it contributes: 24 − 1 = 23.",
+        "(1+1)(1+2)(1+3) = 2 × 3 × 4 = 24 는 빈 집합까지 넣은 합이에요.\n빈 집합이 보탠 1 을 빼면 24 − 1 = 23 이에요.");
     }
+    /* 2026-09-17: k=2 · 4 개 · 1×4 — 숫자만 늘어놓고 무엇을 센 값인지 하나도 안 말했다.
+       괄호로 숨긴 "비트0(값 1)" 도 자리 이름으로 편다. */
     return t(E,
-      "Per bit: bit0(=1) is in {1,3}, k=2 → 2^(k-1)·2^(N-k)=2·2=4 subsets → 1×4=4. bit1(=2) is in {2,3}, k=2 → 4 subsets → 2×4=8. Total 4+8 = 12.",
-      "비트마다 따로 세요.\n비트0(값 1)을 가진 수는 1 과 3 이라 k=2 예요.\n2^(k-1)·2^(N-k) = 2·2 = 4 개이고 1×4 = 4 예요.\n비트1(값 2)을 가진 수는 2 와 3 이라 역시 4 개이고 2×4 = 8 이에요.\n둘을 더하면 4+8 = 12 예요.");
+      "Count each digit separately. The 1s digit is set in 1 and 3 — 2 numbers. Subsets where that digit ends up 1: 2^(2-1) × 2^(3-2) = 4 of them, each worth 1, so 1 × 4 = 4. The 2s digit is set in 2 and 3 — also 2 numbers, also 4 subsets, each worth 2, so 2 × 4 = 8. Together 4 + 8 = 12.",
+      "자리마다 따로 세요.\n1 의 자리에 1 이 있는 수는 1 과 3, 이렇게 2 개예요.\n이 자리가 1 이 되는 부분집합은 2^(2-1) × 2^(3-2) = 4 개예요.\n자리값이 1 이니까 1 × 4 = 4 를 보태요.\n2 의 자리에 1 이 있는 수는 2 와 3, 역시 2 개라 부분집합도 4 개예요.\n자리값이 2 니까 2 × 4 = 8 을 보태요.\n4 + 8 = 12 예요.");
   };
 
   return (
@@ -345,7 +354,9 @@ export function Mcc21SimpleMathOpSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>
           🧮 {t(E, "Set A = {1, 2, 3} — every nonempty subset", "집합 A = {1, 2, 3} 의 비어 있지 않은 부분집합 전부")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        {/* 2026-09-17: 이 시뮬 안의 글들은 \n 을 넣어 두고도 pre-line 이 없어서
+            한 문단으로 뭉개져 나왔다. 절 단위로 끊어 보이게 한다. */}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12, whiteSpace: "pre-line", textWrap: "balance" }}>
           {t(E,
             "Combine each subset with the operator, then SUM those values over all subsets. Switch the operator and watch the total.",
             "부분집합마다 연산자로 합친 값을 구하고, 그 값들을 모두 더해요.\n연산자를 바꿔 보면 합이 어떻게 달라지는지 알 수 있어요.")}
@@ -401,8 +412,9 @@ export function Mcc21SimpleMathOpSim({ E }) {
         {/* total */}
         <div style={{ marginTop: 10, background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
           fontFamily: "'JetBrains Mono',monospace", fontSize: 13, ...KA }}>
+          {/* 2026-09-17: opName 이 이미 "더하기 (+)" 라서 "합 (더하기 (+))" 처럼 괄호가 겹쳤다. */}
           {t(E, "sum over all 7 subsets ", "7 개 부분집합의 합 ")}
-          (<b style={{ color: "#fdba74" }}>{opName}</b>) = <b style={{ color: "#fb923c", fontSize: 15 }}>{finalTotal}</b>
+          · <b style={{ color: "#fdba74" }}>{opName}</b> = <b style={{ color: "#fb923c", fontSize: 15 }}>{finalTotal}</b>
         </div>
 
         {/* shortcut */}
@@ -419,17 +431,18 @@ export function Mcc21SimpleMathOpSim({ E }) {
               <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 4 }}>
                 🚀 {t(E, "same total, no listing", "다 적지 않고도 같은 합")}
               </div>
-              <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, whiteSpace: "pre-line", ...KA }}>
                 {shortcut()}
               </div>
             </div>
           )}
         </div>
 
-        <div style={{ marginTop: 12, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+        <div style={{ marginTop: 12, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
           {t(E,
-            "With just 3 numbers we can list all 7 subsets. But N can be 50000 → 2^N subsets, far too many to list. So we count each number's / each bit's contribution instead.",
-            "수가 3 개뿐이면 부분집합 7 개를 다 적을 수 있어요.\n그런데 N 은 50000 까지 가고, 그러면 부분집합이 2^N 개예요.\n적는 건 포기하고, 각 수와 각 비트가 몇 번 쓰이는지를 세요.")}
+            /* 2026-09-17: 같은 화면의 지름길은 "자리" 라고 부르는데 여기만 "비트" 였다. */
+            "With just 3 numbers we can list all 7 subsets. But N can be 50000 → 2^N subsets, far too many to list. So we count each number's / each digit's contribution instead.",
+            "수가 3 개뿐이면 부분집합 7 개를 다 적을 수 있어요.\n그런데 N 은 50000 까지 가고, 그러면 부분집합이 2^N 개예요.\n적는 건 포기하고, 각 수와 각 자리가 몇 번 쓰이는지를 세요.")}
         </div>
       </div>
     </div>

@@ -46,6 +46,38 @@ const prog = args[args.indexOf('--progress') + 1]
 const shot = args.includes('--shot') ? args[args.indexOf('--shot') + 1] : null
 const vp = mobile ? { width: 375, height: 812 } : { width: 1280, height: 900 }
 
+
+/* 화면이 **실제로 그려질 때까지** 기다린다.
+   ⚠️ 왜 (2026-09-17): 여러 명이 동시에 돌려 dev 서버가 밀리면 렌더가 고정 대기(4.5초)보다
+      늦어진다. 그러면 이 도구가 **빈 화면을 읽고** "1쪽 / 겹침 0개 / 55자 초과 0개" 를
+      찍는다. 그날 담당자 여럿이 각자 참을성 있는 워커를 따로 짜서야 알아챘다.
+      고정 대기는 **조용히 틀린 답**을 만든다 — 글자 수가 멈출 때까지 기다리고,
+      끝내 안 뜨면 **크게 떠들고 exit 3** 으로 끝낸다. */
+async function waitForRender(p, label = '') {
+  const DEADLINE = 90000, MIN_CHARS = 160, STABLE_NEEDED = 3
+  const t0 = Date.now()
+  let last = -1, stable = 0
+  while (Date.now() - t0 < DEADLINE) {
+    let n = 0
+    try {
+      n = await p.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').trim().length)
+    } catch { n = 0 }
+    if (n >= MIN_CHARS && n === last) {
+      if (++stable >= STABLE_NEEDED) return n
+    } else {
+      stable = 0
+    }
+    last = n
+    await p.waitForTimeout(400)
+  }
+  console.error(`\n🚨 ${label || '화면'}이 ${DEADLINE / 1000}초 안에 안 떴다 (읽힌 글자 ${last}자).`)
+  console.error('   이 도구가 지금 읽는 것은 **빈 화면**이다.')
+  console.error('   여기서 나온 "0건 / 1쪽" 은 결백의 증거가 아니라 **도구가 못 본 것**이다.')
+  console.error('   dev 서버가 밀렸을 수 있다 — 동시에 도는 작업을 줄이고 다시 돌려라.')
+  process.exitCode = 3
+  return last
+}
+
 const b = await chromium.launch()
 const ctx = await b.newContext({ viewport: vp })
 const p = await ctx.newPage()
@@ -58,14 +90,14 @@ if (args.includes('--progress')) {
   await p.evaluate(([k, c, s]) => localStorage.setItem(k, JSON.stringify({ chapter: +c, step: +s, completed: [] })), [progKey, ch, st])
   await p.reload({ waitUntil: 'domcontentloaded' })
 }
-await p.waitForTimeout(4500)
+await waitForRender(p, url)
 await settleTyping(p)
 
 // --lang ko|en: 화면 언어를 정해서 연다 (모바일은 언어 버튼이 메뉴 안이라 못 누른다)
 if (args.includes('--lang')) {
   const L = args[args.indexOf('--lang') + 1]
   await p.evaluate(l => localStorage.setItem('language', l), L)
-  await p.reload({ waitUntil: 'domcontentloaded' }); await p.waitForTimeout(3000)
+  await p.reload({ waitUntil: 'domcontentloaded' }); await waitForRender(p, url)
 }
 
 // 내레이션은 한 글자씩 타이핑된다 (components/quest/shared.tsx useTyping, 28ms/글자).

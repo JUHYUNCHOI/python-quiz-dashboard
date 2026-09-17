@@ -116,31 +116,31 @@ export function getMcc22AliensSections(E) {
       ],
     },
     {
-      label: t(E, "🔀 2. Decode each claim, count the T's", "🔀 2. 각 말을 '요구하는 타입' 으로 바꾸고 세기"),
+      label: t(E, "🔀 2. Decode each claim, count the T's", "🔀 2. 각 말을 '필요한 타입' 으로 바꾸고 세기"),
       color: A,
       py: PY_DECODE, cpp: CPP_DECODE,
       why: [
         t(E, "Never search the n! permutations. Each sentence only pins down ONE thing: the type its target must have.",
-            "n! 가지 지목 순서를 뒤질 필요가 없어요.\n말 하나가 정해 주는 건 딱 하나예요 —\n지목당한 쪽이 가져야 할 타입이에요."),
+            "n! 가지 지목 순서를 뒤질 필요가 없어요.\n말 하나가 정해 주는 건 딱 하나예요 —\n지목당한 쪽에게 필요한 타입이에요."),
         t(E, "A truth-teller (a[i]=='T') means b[i] as-is; a liar says the opposite, so flip b[i]. Either way req is the demanded type.",
-            "진실쟁이(a[i]=='T')가 말하면 b[i] 그대로예요.\n거짓말쟁이가 말하면 반대니까 b[i] 를 뒤집어요.\n어느 쪽이든 req 가 '요구된 타입' 이에요."),
+            "진실쟁이(a[i]=='T')가 말하면 b[i] 그대로예요.\n거짓말쟁이가 말하면 반대니까 b[i] 를 뒤집어요.\n어느 쪽이든 req 가 '필요한 타입' 이에요."),
         t(E, "Two counters ride along in the same pass: need_T (how many T's the sentences demand) and have_T (how many real T's exist).",
-            "같은 한 바퀴에서 세는 것이 둘이에요.\nneed_T 는 말들이 요구한 T 의 개수,\nhave_T 는 진짜 T 의 개수예요."),
+            "같은 한 바퀴에서 세는 것이 둘이에요.\nneed_T 는 말들이 필요로 하는 T 의 개수,\nhave_T 는 진짜로 있는 T 의 개수예요."),
         t(E, "Demanded F's need no counter: everyone who isn't demanded as T is demanded as F.",
-            "F 를 요구한 말은 따로 안 세도 돼요.\nT 가 아닌 나머지가 곧 F 니까요."),
+            "F 가 필요한 말은 따로 안 세도 돼요.\nT 가 아닌 나머지가 곧 F 니까요."),
       ],
       cppOnly: [
         t(E, "req is a single char — the type this claim demands after decoding the speaker's honesty.",
-            "req 는 글자 하나예요. 말한 사람이 진실쟁이인지 따져 본 뒤, 이 주장이 요구하는 타입이에요."),
+            "req 는 글자 하나예요.\n말한 사람이 진실쟁이인지 따져 본 뒤에\n이 말이 필요로 하는 타입을 담아요."),
       ],
     },
     {
-      label: t(E, "⚖️ 3. Compare supply and demand", "⚖️ 3. 공급과 수요를 견주기"),
+      label: t(E, "⚖️ 3. Compare what exists with what is needed", "⚖️ 3. 있는 T 와 필요한 T 를 견주기"),
       color: A,
       py: PY_VERDICT, cpp: CPP_VERDICT,
       why: [
         t(E, "Everyone is pointed at exactly once, so the demanded types have to be handed out to the real aliens one for one.",
-            "모두가 정확히 한 번씩 지목돼요.\n그러니 요구된 타입을 진짜 외계인들에게\n하나씩 짝지어 나눠 줄 수 있어야 해요."),
+            "모두가 정확히 한 번씩 지목돼요.\n그러니 필요한 타입을 진짜 외계인들에게\n하나씩 짝지어 나눠 줄 수 있어야 해요."),
         t(E, "That is possible exactly when the two counts match: need_T == have_T → YES, otherwise NO. One O(n) pass, no permutations.",
             "그게 되는 건 두 개수가 딱 맞을 때뿐이에요.\nneed_T == have_T 면 YES, 아니면 NO 예요.\n문자열을 O(n) 으로 한 번 훑을 뿐, 순서는 만들지 않아요."),
       ],
@@ -184,6 +184,11 @@ const SIM_A = ["T", "F", "T", "F"];   // fixed real types
 
 export function AliensCountSim({ E }) {
   const [b, setB] = useState(["F", "T", "T", "F"]);   // sample 1 claims → YES
+  /* 2026-09-17: 누르기 **전에** 규칙과 결론이 다 적혀 있었다 — 맨 위 설명이
+     "진실쟁이는 그대로, 거짓말쟁이는 반대, 수가 같으면 YES" 를 통째로 말했고
+     맨 아래 요약이 한 번 더 말했다. 주장을 한 번이라도 누르면 그때 드러낸다.
+     mcc21carrots 가 같은 자리를 이렇게 고쳤다. */
+  const [touched, setTouched] = useState(false);
 
   const n = SIM_A.length;
   // decode claim b[i] to the type it demands
@@ -192,7 +197,10 @@ export function AliensCountSim({ E }) {
   const needT = req.filter((x) => x === "T").length;        // demand
   const ok = needT === haveT;
 
-  const toggle = (i) => setB((prev) => prev.map((v, j) => (j === i ? (v === "T" ? "F" : "T") : v)));
+  const toggle = (i) => {
+    setTouched(true);
+    setB((prev) => prev.map((v, j) => (j === i ? (v === "T" ? "F" : "T") : v)));
+  };
 
   const chip = (typ, opts = {}) => {
     const isT = typ === "T";
@@ -217,12 +225,16 @@ export function AliensCountSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
-          🧮 {t(E, "Supply vs demand of truth-tellers", "진실쟁이의 공급 vs 수요")}
+          🧮 {t(E, "How many T's exist, how many T's are needed", "T 가 몇 개 있고, 몇 개 필요한가")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 14 }}>
-          {t(E,
-            "Real types a are fixed. Tap a claim to flip it. A truth-teller (T) demands the claim as-is; a liar (F) demands the opposite. When demand for T equals supply of T, some order works → YES.",
-            "진짜 타입 a 는 그대로예요. 말을 눌러 뒤집어 봐요. 진실쟁이 (T) 는 말 그대로를, 거짓말쟁이 (F) 는 그 반대를 지목 대상에게 요구해요. T 의 수요가 T 의 공급과 같으면 지목 순서를 짤 수 있어서 YES 예요.")}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 14, whiteSpace: "pre-line" }}>
+          {touched
+            ? t(E,
+                "A truth-teller (T) needs the claim as-is. A liar (F) needs the opposite. When the needed T's and the real T's come out the same, the answer is YES.",
+                "진실쟁이(T)가 말하면 그 말 그대로가 필요해요.\n거짓말쟁이(F)가 말하면 반대가 필요해요.\n필요한 T 가 있는 T 와 같은 수가 되면 YES 예요.")
+            : t(E,
+                "Can these four aliens' sentences all hold together? Tap a claim to flip it and watch when the verdict changes.",
+                "이 네 외계인의 말이 모두 앞뒤 맞을 수 있을까요?\n주장을 하나씩 눌러 뒤집으면서\n판정이 언제 바뀌는지 봐요.")}
         </div>
 
         {/* index header */}
@@ -261,24 +273,27 @@ export function AliensCountSim({ E }) {
 
         {/* decoded demand req */}
         <div style={{ display: "flex", alignItems: "center", marginBottom: 4, paddingTop: 6, borderTop: "1px dashed #93c5fd" }}>
-          {rowLabel(t(E, "demands →", "요구 →"))}
+          {rowLabel(t(E, "needed type →", "필요한 타입 →"))}
           <div style={{ display: "flex", gap: 10 }}>
             {req.map((r, i) => <div key={i}>{chip(r)}</div>)}
           </div>
         </div>
+        {/* 2026-09-17: 이 한 줄이 곧 규칙이다. 누르기 전에 읽히면 시뮬이 할 일이 없다. */}
         <div style={{ fontSize: 10.5, color: C.dim, marginBottom: 12, ...KA, paddingLeft: 104 }}>
-          {t(E, "a[i]=T keeps b[i]; a[i]=F flips it", "a[i]=T 면 b[i] 그대로, a[i]=F 면 뒤집어요")}
+          {touched
+            ? t(E, "a[i]=T keeps b[i]; a[i]=F flips it", "a[i]=T 면 b[i] 그대로, a[i]=F 면 뒤집어요")
+            : t(E, "what does this row follow?", "이 줄은 무엇을 따라 바뀔까요?")}
         </div>
 
         {/* counts */}
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
           <div style={{ flex: 1, minWidth: 120, background: "#fff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "8px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 2, ...KA }}>{t(E, "supply: real T's in a", "공급: a 의 진짜 T")}</div>
+            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 2, ...KA }}>{t(E, "T's that exist — the a[i] row", "있는 T — a[i] 줄")}</div>
             <div style={{ fontSize: 22, fontWeight: 800, color: "#1e3a8a", fontFamily: "'JetBrains Mono',monospace" }}>{haveT}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", fontSize: 20, fontWeight: 800, color: ok ? "#15803d" : "#991b1b" }}>{ok ? "=" : "≠"}</div>
           <div style={{ flex: 1, minWidth: 120, background: "#fff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "8px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 2, ...KA }}>{t(E, "demand: T's required", "수요: 요구된 T")}</div>
+            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 2, ...KA }}>{t(E, "T's needed — the needed-type row", "필요한 T — 필요한 타입 줄")}</div>
             <div style={{ fontSize: 22, fontWeight: 800, color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>{needT}</div>
           </div>
         </div>
@@ -291,15 +306,19 @@ export function AliensCountSim({ E }) {
           color: ok ? "#15803d" : "#991b1b",
         }}>
           {ok
-            ? t(E, "✅ supply = demand → YES", "✅ 공급 = 수요 → YES")
-            : t(E, "❌ supply ≠ demand → NO", "❌ 공급 ≠ 수요 → NO")}
+            ? t(E, "✅ needed T = existing T → YES", "✅ 필요한 T = 있는 T → YES")
+            : t(E, "❌ needed T ≠ existing T → NO", "❌ 필요한 T ≠ 있는 T → NO")}
         </div>
 
-        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+        {/* 2026-09-17: 이 요약도 누른 뒤에만 나온다. + 빠져 있던 전제(모두 한 번씩
+            지목된다)를 여기서 말한다 — 이게 없으면 "왜 개수만 맞으면 되나" 가 뜬다. */}
+        {touched && (
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA, whiteSpace: "pre-line" }}>
           {t(E,
-            "It's a counting/matching argument: each decoded claim asks for one T or one F alien. A perfect assignment (permutation) exists exactly when the T's asked for match the T's available — no ordering needs to be tried.",
-            "결국 개수를 세서 짝을 맞추는 이야기예요. 바꿔 놓은 각 주장은 T 하나 또는 F 하나를 달라고 해요. 요청된 T 가 가진 T 와 딱 맞을 때만 모두에게 짝을 지어 줄 수 있어요. 순서를 하나도 시도할 필요가 없어요.")}
+            "Every alien is pointed at exactly once, so the needed types get handed out one per alien. That works out exactly when the needed T's match the T's that exist — so no ordering ever has to be tried.",
+            "모든 외계인은 정확히 한 번씩 지목돼요.\n그래서 필요한 타입이 외계인 한 명당 하나씩 돌아가요.\n그게 되는 건 필요한 T 가 있는 T 와 같은 수일 때예요.\n그러니 지목 순서는 하나도 만들어 볼 필요가 없어요.")}
         </div>
+        )}
       </div>
     </div>
   );
@@ -341,7 +360,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc22AliensPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc22Aliens — Full Study Guide", "Mcc22Aliens — 종합 풀이 노트");

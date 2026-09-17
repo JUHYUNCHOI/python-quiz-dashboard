@@ -107,6 +107,42 @@ export function Mcc22GrammarSim({ E }) {
         : t(E, `no arrow ${sentence[bad - 1]} → ${sentence[bad]} in the grammar`, `문법에 ${sentence[bad - 1]} → ${sentence[bad]} 화살표가 없어요`))
     : null;
 
+  // 걸음마다 하는 말. 순서를 지킨다 — 되는 쪽(앞 단어에서 갈 수 있는 곳)을 먼저
+  // 보이고 → 이번 단어와 견주고 → 결론. 결론부터 말하지 않는다.
+  const allowedFrom = fromW && _ADJ[fromW] ? _ADJ[fromW].join(", ") : null;
+  let stepMsg;
+  if (checked === 0) {
+    stepMsg = t(E,
+      "Press the button to check the first word.",
+      "버튼을 눌러 첫 단어부터 확인해요.");
+  } else if (bad !== -1 && curIdx > bad) {
+    // 이미 막힌 뒤에도 계속 누를 수 있다. 그때 "이 쌍은 괜찮아요" 라고만 하면
+    // 학생이 문장이 살아 있는 줄 안다. 어디서 막혔는지를 다시 말해준다.
+    stepMsg = t(E,
+      `This sentence already broke at "${sentence[bad]}", so whatever comes later cannot save it.`,
+      `이 문장은 이미 "${sentence[bad]}" 에서 막혔어요. 뒤가 아무리 멀쩡해도 살아나지 않아요.`);
+  } else if (toW && !toKnown) {
+    stepMsg = t(E,
+      `This word is "${toW}".\nThe grammar has only 5 words, and "${toW}" is not one of them — so the sentence is stuck here.`,
+      `이번 단어는 "${toW}" 예요.\n문법에 있는 단어는 5개뿐인데 "${toW}" 는 거기에 없어요 — 그래서 문장이 여기서 막혀요.`);
+  } else if (curIdx === 0) {
+    stepMsg = t(E,
+      `The first word is "${toW}", and it is one of the 5 grammar words.\nNothing comes before it, so there is no arrow to look at yet.`,
+      `첫 단어는 "${toW}" 예요. 5개 단어 안에 있어요.\n앞에 아무 단어도 없으니 화살표는 아직 볼 게 없어요.`);
+  } else if (fromW && !_KNOWN.has(fromW)) {
+    stepMsg = t(E,
+      `The word before this one is "${fromW}", which the grammar does not have.\nSo there are no arrows leaving it to follow.`,
+      `이번 단어 앞은 "${fromW}" 인데 문법에 없는 단어예요.\n그래서 거기서 나가는 화살표 자체가 없어요.`);
+  } else if (edgeExists) {
+    stepMsg = t(E,
+      `After "${fromW}" the grammar allows ${allowedFrom}.\nThis word is "${toW}", and it is in that list — so this pair is fine.`,
+      `"${fromW}" 다음에 올 수 있는 단어는 ${allowedFrom} 예요.\n이번 단어는 "${toW}" 이고 그 안에 있어요 — 이 쌍은 괜찮아요.`);
+  } else {
+    stepMsg = t(E,
+      `After "${fromW}" the grammar allows ${allowedFrom}.\nThis word is "${toW}", and it is not in that list — so the sentence is stuck here.`,
+      `"${fromW}" 다음에 올 수 있는 단어는 ${allowedFrom} 예요.\n이번 단어는 "${toW}" 인데 그 안에 없어요 — 그래서 문장이 여기서 막혀요.`);
+  }
+
   return (
     <div style={{ padding: 14 }}>
       {/* Two-failure-mode bubble */}
@@ -114,14 +150,17 @@ export function Mcc22GrammarSim({ E }) {
         <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 8, textAlign: "center" }}>
           {t(E, "🔎 Pick a sentence — check it one word at a time", "🔎 문장을 골라 — 한 단어씩 확인해요")}
         </div>
-        <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 10 }}>
+        {/* 2026-09-17: 여기에 두 검사를 다 풀어 쓴 문단이 있었다.
+            걸음이 있는 시뮬인데 **첫 말풍선이 결론을 요약**하고 있었고,
+            정작 걸음마다는 색깔과 숫자만 바뀔 뿐 아무 말도 안 했다.
+            첫 말풍선은 "무엇을 할지" 만 남기고, 설명은 아래 걸음 말풍선이 한다. */}
+        <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, whiteSpace: "pre-line" }}>
           {t(E,
-            "The grammar is fixed (below) — the 5 words and the arrows never change. A sentence is YES only if every word survives two checks: ",
-            "문법은 아래로 고정돼 있어요 — 5개 단어와 화살표는 변하지 않아요. 문장이 YES 이려면 모든 단어가 두 가지 검사를 통과해야 해요: ")}
-          <b style={{ color: "#dc2626" }}>①</b> {t(E, "the word is one of the 5", "5개 단어 중 하나")}
-          {t(E, ", ", ", ")}
-          <b style={{ color: "#dc2626" }}>②</b> {t(E, "there is an arrow from the word before it", "바로 앞 단어에서 오는 화살표가 있음")}
-          {t(E, ".", ".")}
+            "The grammar in the picture below never changes — only the sentence does.\nPick a sentence and press the button to walk it one word at a time.\nFor each word we ask two things: ",
+            "아래 그림의 문법은 늘 같아요 — 바뀌는 건 문장뿐이에요.\n문장을 하나 고르고 버튼을 눌러 단어를 하나씩 짚어가요.\n단어마다 묻는 것은 둘이에요: ")}
+          <b style={{ color: "#dc2626" }}>①</b> {t(E, "is this word one of the 5?", "이 단어가 5개 중에 있나?")}
+          {"  "}
+          <b style={{ color: "#dc2626" }}>②</b> {t(E, "is there an arrow from the word before it?", "앞 단어에서 오는 화살표가 있나?")}
         </div>
 
         {/* Sentence pickers */}
@@ -255,6 +294,17 @@ export function Mcc22GrammarSim({ E }) {
             );
           })}
         </div>
+      </div>
+
+      {/* 걸음 말풍선 — 바뀌는 자리(그림·문장) 바로 아래에 둔다.
+          한 걸음에 눈이 쫓아야 할 자리를 한 군데로 모으기 위해서다. */}
+      <div style={{
+        background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12,
+        padding: "10px 14px", marginBottom: 10, textAlign: "center",
+        fontSize: 12.5, color: "#4c1d95", lineHeight: 1.75,
+        whiteSpace: "pre-line", ...KA,
+      }}>
+        {stepMsg}
       </div>
 
       {/* Step controls */}
@@ -407,12 +457,12 @@ export function getMcc22GrammarSections(E) {
       why: [
         t(E, "The grammar never changes, so we hard-code adj[x] = the set of words allowed after x. Membership in a set/map is one instant lookup — no scanning a list of edges each time.",
             "문법은 변하지 않으니 adj[x] 에 x 다음에 올 수 있는 단어를 코드에 그대로 적어 둬요. 집합이나 맵에서 찾기는 한 번에 끝나서, 매번 화살표 목록을 훑을 필요가 없어요."),
-        t(E, "Two failure checks: ① every word must be a key of adj (one of the 5), and ② for each neighbor pair, words[i+1] must be in adj[words[i]]. Fail either one → NO.",
-            "걸러내는 검사가 둘이에요. ① 모든 단어가 adj 의 키 (5개 중 하나) 여야 하고, ② 이웃한 쌍마다 words[i+1] 이 adj[words[i]] 안에 있어야 해요. 하나라도 어기면 NO 예요."),
+        t(E, "Two failure checks: ① every word must be a key of adj, that is, one of the 5, and ② for each neighbor pair, words[i+1] must be in adj[words[i]]. Fail either one → NO.",
+            "걸러내는 검사가 둘이에요. ① 모든 단어가 adj 의 키, 그러니까 5개 단어 중 하나여야 하고, ② 이웃한 쌍마다 words[i+1] 이 adj[words[i]] 안에 있어야 해요. 하나라도 어기면 NO 예요."),
       ],
       pyOnly: [
-        t(E, "'w in adj' checks the keys (the 5 words); 'words[i+1] in adj[words[i]]' checks the arrow — both are O(1) set lookups.",
-            "'w in adj' 는 키 (5개 단어) 를, 'words[i+1] in adj[words[i]]' 는 화살표를 확인해요. 둘 다 집합에서 O(1) 로 찾아요."),
+        t(E, "'w in adj' asks whether the word is one of the 5; 'words[i+1] in adj[words[i]]' asks whether the arrow is there. Both find the answer in one step, however big the input gets.",
+            "'w in adj' 는 그 단어가 5개 중에 있는지를, 'words[i+1] in adj[words[i]]' 는 화살표가 있는지를 물어요. 둘 다 입력이 아무리 커져도 한 번에 찾아요."),
       ],
       cppOnly: [
         t(E, "The C++ version uses map<string,set<string>> for the same instant lookup; cin >> reads T, then n and n words per test.",
@@ -466,7 +516,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc22GrammarPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc22Grammar — Full Study Guide", "Mcc22Grammar — 종합 풀이 노트");

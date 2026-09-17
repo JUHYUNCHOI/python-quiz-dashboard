@@ -123,14 +123,14 @@ export function getMcc22CardSharkSections(E) {
       color: A,
       py: SEC1_PY, cpp: SEC1_CPP,
       why: [
-        t(E, "A whole stack keeps its internal order, so its effect on score1 − score2 is fixed up to a sign: the alternating sum D = c1 − c2 + c3 − … (cards top → bottom).",
-            "묶음은 안의 카드 순서가 그대로예요. 그래서 score1 − score2 에 주는 효과도 부호만 빼면 이미 정해져 있어요. 그 값이 교대 합 D = c1 − c2 + c3 − … 예요 (카드는 위 → 아래)."),
+        t(E, "A stack keeps its internal order, so the only thing left to choose is its sign: the stack adds either +D or −D, where D is the cards added from the top with the signs +, −, +, … (the alternating sum).",
+            "묶음은 안의 카드 순서가 그대로예요. 그래서 고를 수 있는 건 부호 하나뿐이에요. 묶음 하나는 +D 아니면 −D 를 더해요. D 는 맨 위 카드부터 +, −, +, … 로 번갈아 더한 값이에요."),
         t(E, "Split stacks by length parity: even-length and odd-length behave differently, because odd-length stacks FLIP the position parity of everything placed after them.",
             "묶음을 길이의 홀짝으로 나눠요. 길이가 홀수인 묶음은 뒤에 오는 모든 카드의 위치 홀짝을 뒤집어요. 그래서 길이가 짝수인 묶음과 다르게 다뤄야 해요."),
       ],
       pyOnly: [
-        t(E, "(even_D if m % 2 == 0 else odd_D).append(D) picks the right bucket in one line.",
-            "(even_D if m % 2 == 0 else odd_D).append(D) 라고 쓰면 한 줄로 알맞은 통에 넣을 수 있어요."),
+        t(E, "sys.stdin.buffer.read().split() grabs the whole input at once. With up to 2·10^5 cards, reading line by line is too slow.",
+            "sys.stdin.buffer.read().split() 는 입력을 한 번에 다 읽어와요. 카드가 20만 장까지 나오니까 한 줄씩 읽으면 너무 느려요."),
       ],
       cppOnly: [
         t(E, "Cards can be ±10^9 and there can be 2·10^5 of them — keep D and the answer in long long.",
@@ -142,15 +142,15 @@ export function getMcc22CardSharkSections(E) {
       color: A,
       py: SEC2_PY, cpp: SEC2_CPP,
       why: [
-        t(E, "Each stack contributes +D (if it starts on an odd, P1 position) or −D (even, P2). If any odd-length stack exists, both parities are reachable, so every EVEN stack can grab +|D|.",
-            "각 묶음은 홀수 위치(P1)에서 시작하면 +D 를, 짝수 위치(P2)에서 시작하면 −D 를 더해요. 길이가 홀수인 묶음이 하나라도 있으면 두 홀짝을 다 만들 수 있어요. 그래서 길이가 짝수인 묶음은 모두 +|D| 를 챙길 수 있어요."),
-        t(E, "Odd-length stacks flip the parity, so along the order their signs alternate +, −, +, … — exactly ceil(k/2) get +. Sort their D descending and give + to the top half to maximize.",
-            "길이가 홀수인 묶음은 홀짝을 뒤집어요. 그래서 늘어놓은 순서를 따라 부호가 +, −, +, … 로 번갈아요. k 개 중에서 정확히 ceil(k/2) 개가 + 를 받아요. D 를 큰 것부터 정렬해 위쪽 절반에 + 를 주면 최댓값이 돼요."),
+        t(E, "A stack adds +D when it starts on an odd position (P1) and −D when it starts on an even one (P2). If any odd-length stack exists, you can move an even-length stack before or after it and land on either kind of position — so every even-length stack takes whichever of D and −D is the bigger one.",
+            "묶음은 홀수 자리(P1)에서 시작하면 +D 를, 짝수 자리(P2)에서 시작하면 −D 를 더해요. 길이가 홀수인 묶음이 하나라도 있으면, 길이가 짝수인 묶음을 그 앞이나 뒤로 옮겨서 두 자리 중 어느 쪽에서든 시작하게 만들 수 있어요. 그래서 길이가 짝수인 묶음은 D 와 −D 중 큰 쪽을 골라 챙겨요."),
+        t(E, "Odd-length stacks flip odd into even, so reading them in order their signs come out +, −, +, … If there are k of them, exactly (k+1)//2 get a +. So sort their D from biggest to smallest and hand the + to the first (k+1)//2 of them.",
+            "길이가 홀수인 묶음은 홀짝을 뒤집어요. 그래서 이 묶음들만 순서대로 보면 부호가 +, −, +, … 로 번갈아 나와요. 이런 묶음이 k 개면 그중 (k+1)//2 개가 + 를 받아요. 그러니 D 를 큰 것부터 줄 세우고, 앞쪽 (k+1)//2 개에 + 를 주면 돼요."),
         t(E, "Edge case: if NO stack is odd-length, every stack is forced to start on an odd position → all contribute +D, so just sum the D's.",
             "길이가 홀수인 묶음이 하나도 없을 때가 예외예요. 이때는 모든 묶음이 홀수 위치에서 시작할 수밖에 없어요. 그래서 전부 +D 가 되고, D 를 그냥 다 더하면 돼요."),
       ],
       pyOnly: [
-        t(E, "sum('\\n'.join(out)) once at the end is faster than printing inside the loop.",
+        t(E, "Printing '\\n'.join(out) once at the end is faster than printing inside the loop.",
             "마지막에 '\\n'.join(out) 로 한 번에 출력하는 게 반복문 안에서 print 하는 것보다 빨라요."),
       ],
       cppOnly: [
@@ -201,7 +201,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc22CardSharkPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc22CardShark — Full Study Guide", "Mcc22CardShark — 종합 풀이 노트");

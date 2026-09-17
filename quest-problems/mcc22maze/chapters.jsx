@@ -185,8 +185,10 @@ export function makeMcc22MazeCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: try every subset of rows/columns", "느림: 행/열의 모든 조합 시도")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "2^(2n) combinations, each re-searching the whole maze. Hopeless.",
-                     "2^(2n) 가지 조합마다 미로 전체를 다시 살펴봐야 해요. 불가능해요.")}
+                {/* 2026-09-17: 2^(2n) 이 어디서 나온 수인지 안 말했다. 행 n 개 + 열 n 개를
+                    각각 부술지 말지 고르는 경우의 수다. */}
+                {t(E, "There are n rows and n columns, and each is either cleared or not — 2^(2n) combinations, each one re-searching the whole maze. Hopeless.",
+                     "행 n 개와 열 n 개를 하나씩 부술지 말지 고르면 2^(2n) 가지예요. 그 하나하나마다 미로 전체를 다시 살펴봐야 해요. 불가능해요.")}
               </div>
             </div>
             <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: "10px 14px" }}>
@@ -204,8 +206,11 @@ export function makeMcc22MazeCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: just three questions", "빠름: 물어볼 것은 세 가지")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-                {t(E, "① already connected? → 0.  ② any single row or column clear connects? → 1.  ③ otherwise → 2.",
-                     "① 이미 이어졌나? → 0.  ② 행 하나·열 하나로 이어지나? → 1.  ③ 아니면 → 2.")}
+                {/* 2026-09-17: 여기 ①②③ 은 **질문 번호**인데 다음 쪽 코드의 ①②③④ 는
+                    **단락 번호**다. 한 화면 건너 같은 기호가 두 뜻으로 쓰였다.
+                    질문 쪽 번호를 말로 바꿔서 겹침을 없앤다. */}
+                {t(E, "Already connected? → 0.  If not, does clearing one row or one column connect them? → 1.  If not even that → 2.",
+                     "이미 이어졌나? → 0.  아니면, 행 하나나 열 하나로 이어지나? → 1.  그것도 아니면 → 2.")}
               </div>
             </div>
           </div>

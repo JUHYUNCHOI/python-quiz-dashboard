@@ -92,7 +92,7 @@ export function Mcc19CandyShoutSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12, whiteSpace: "pre-line" }}>
           {t(E,
             "\"odd\" removes the odd positions, \"even\" removes the even ones.\nSurvivors renumber from 1.\nThe line holds exactly as many people as it takes to leave one standing — each round halves it, so 3 rounds means 8 people.\nWhich STARTING number is the last one left (in red)?",
-            "\"odd\" 는 홀수 자리를, \"even\" 은 짝수 자리를 없애요.\n살아남은 사람은 1 부터 다시 번호를 매겨요.\n줄에는 딱 한 명만 남도록 꼭 맞는 인원을 세워뒀어요. 라운드마다 절반이 되니까 라운드가 3 번이면 8 명이에요.\n마지막까지 남는 시작 번호(빨간색)는 어느 것일까요?")}
+            "\"odd\" 는 홀수 자리를, \"even\" 은 짝수 자리를 없애요.\n살아남은 사람은 1 부터 다시 번호를 매겨요.\n줄에는 딱 한 명만 남도록 꼭 맞는 인원을 세워뒀어요.\n라운드마다 절반이 되니까 라운드가 3 번이면 8 명이에요.\n마지막까지 남는 시작 번호(빨간색)는 어느 것일까요?")}
         </div>
 
         {/* round shout toggles */}
@@ -165,7 +165,7 @@ export function Mcc19CandyShoutSim({ E }) {
           </div>
         </div>
 
-        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
           {t(E,
             "Why? \"odd\" wipes out the odd positions, so a survivor now standing at p was at 2p before. \"even\" wipes out the even ones, so p was at 2p − 1. Undo the rounds backwards and you never have to line the people up at all.",
             "왜 그럴까요? \"odd\" 는 홀수 자리를 지우니, 지금 p 번째인 사람은 그전엔 2p 번째에 있었어요.\n\"even\" 은 짝수 자리를 지우니 2p − 1 번째였고요.\n라운드를 거꾸로 되돌리면 사람을 한 줄로 세울 필요가 아예 없어요.")}
