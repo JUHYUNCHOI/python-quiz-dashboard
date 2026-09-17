@@ -341,7 +341,19 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           >
             <span>{big ? "📘" : "🧠"}</span>
             <span>
-              {t("이 문제 핵심", "Core idea")}: <b>{lang === "en" ? qa.en : qa.ko}</b> — {t("막히면 배우기", "stuck? learn it")} →
+              {/* ⚠️ 2026-09-17 — **문제를 읽기도 전에 알고리즘 이름을 말하면 안 된다.**
+                  학생 둘이 서로 안 보고 같은 말을 했다:
+                    *"맨 위 '이 문제 핵심: 누적 합' 링크가 문제 읽기도 전에 떠 있어서 뜬금없었다.
+                      풀기 전에 답의 이름을 알려주는 느낌."*  (mcc21marbles·mcc21menu)
+                  선생님(2026-07-02)이 이미 "코드/빠른풀이 챕터에서만 크게" 라고 정하셨고
+                  그걸 위한 `quest-algohint` 이벤트까지 만들어 뒀다. 그런데 **180개 중 2개만**
+                  그 이벤트를 쏜다(checkups·printseq). 나머지 178개는 `algoHint === null` 이라
+                  배지가 처음부터 이름을 달고 떠 있었다. **만들어 놓고 연결을 안 한 것이다.**
+                  → 앱이 "지금 코드 쪽이다" 라고 알려줄 때만 이름을 보인다.
+                    안 알려주면 이름을 감추고 길만 남긴다 — 도움은 그대로, 답은 안 샌다. */}
+              {big
+                ? <>{t("이 문제 핵심", "Core idea")}: <b>{lang === "en" ? qa.en : qa.ko}</b> — {t("막히면 배우기", "stuck? learn it")} →</>
+                : <>{t("막히면 알고리즘 배우러 가기", "Stuck? Go learn the algorithm")} →</>}
               {/* 이 문제 등급보다 위 단계 토픽이면, 눌러보기 **전에** 무엇만 필요한지 알려준다.
                   안 그러면 Bronze 학생이 클릭하고 "심화 (Gold~Platinum)" 라벨을 보고 물러선다. */}
               {qa.note && (

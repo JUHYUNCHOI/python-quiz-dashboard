@@ -54,7 +54,11 @@ export const QUEST_ALGO: Record<string, string> = {
   mcc20knight: "graph", mcc20zigzag: "dp", mcc21marbles: "prefixsum",
   // mcc20missing: 제거 — 핵심은 "가장 큰 크기(N/N-1)가 극단에 온다"는 anchor 경우나눔(ad-hoc). set 은 부수적. 표준 토픽 없음.
   mcc21menu: "greedy", mcc22cardshark: "sorting", mcc22grammar: "graph", mcc22lamp: "prefixsum",
-  mcc22maze: "graph", mco15honey: "greedy", mco15secret: "string", mco15trains: "shortestpath",
+  // ⚠️ 2026-09-17 — 학생이 잡았다: *"'이 문제 핵심: 그래프 (BFS/DFS)' 배지가 붙어 있는데
+  //    실제 코드에 BFS 나 DFS 는 하나도 없었다. 배지가 틀렸다고 느껴졌다."*
+  //    세어 보니 맞다 — `bfs|dfs|deque|queue` 0건, `union` 15·`find` 19·`rollback` 12건이다.
+  //    유니온 파인드(되돌리기)다. 배지대로 /algo/graph 로 가면 안 배워도 되는 걸 배우게 된다.
+  mcc22maze: "unionfind", mco15honey: "greedy", mco15secret: "string", mco15trains: "shortestpath",
   milkfactory: "graph", milkorder: "topologicalsort",
   moo: "string",
   // moohunt: 제거 (2026-09-07) — 비트 연산은 **핵심 아이디어가 아니라 표현 수단**이다.
