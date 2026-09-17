@@ -84,13 +84,15 @@ export function Mcc19CandyShoutSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, ...KA }}>
+        {/* 2026-09-17: 제목·부제가 쪽 내레이션과 거의 같은 말을 반복하고 있었다.
+            제목은 "할 일" 만, 부제는 화면 어디에도 없는 규칙만 남긴다. */}
         <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 8 }}>
-          🗣️ {t(E, "Set each round's shout, watch the line thin out", "라운드마다 외침을 정하고, 줄이 줄어드는 걸 봐요")}
+          🗣️ {t(E, "Set the shouts", "외침을 정해보세요")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12, whiteSpace: "pre-line" }}>
           {t(E,
-            "A full line of 2^R people stands here. \"odd\" removes everyone at an odd position; \"even\" removes the even positions. Survivors renumber from 1. Toggle the shouts and find which STARTING number is the last one left (shown in red).",
-            "여기 2^R 명이 한 줄로 서 있어요. \"odd\" 는 홀수 자리를, \"even\" 은 짝수 자리를 없애요. 살아남은 사람은 1 부터 다시 번호를 매겨요. 외침을 바꿔가며, 마지막까지 남는 시작 번호(빨간색)를 찾아봐요.")}
+            "\"odd\" removes the odd positions, \"even\" removes the even ones.\nSurvivors renumber from 1. Which STARTING number is the last one left (in red)?",
+            "\"odd\" 는 홀수 자리를, \"even\" 은 짝수 자리를 없애요.\n살아남은 사람은 1 부터 다시 번호를 매겨요.\n마지막까지 남는 시작 번호(빨간색)는 어느 것일까요?")}
         </div>
 
         {/* round shout toggles */}

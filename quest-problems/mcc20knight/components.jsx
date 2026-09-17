@@ -47,14 +47,14 @@ export function KnightExactSim({ E }) {
   const [k, setK] = useState(need);
 
   const reachable = k >= need && (k - need) % 2 === 0;
+  /* 2026-09-17: 여기가 규칙을 먼저 말해 버리던 자리다. 시뮬은 판정과 **사실**만 보여준다
+     (K, 최소, 남는 이동이 몇인지). "왜 짝수여야 하나" 는 바로 다음 퀴즈에서
+     학생이 스스로 찾고, explain 에서 처음 밝힌다. */
   const reason = k < need
-    ? t(E, "K is smaller than the minimum — you can't even get there yet.",
-          "K가 최소 이동보다 작아요 — 아직 도착조차 못 해요.")
-    : ((k - need) % 2 === 1
-        ? t(E, "Leftover K − min is ODD — those wasted moves can't pair up.",
-              "남는 K − 최소가 홀수예요 — 낭비할 이동이 짝을 못 지어요.")
-        : t(E, "Leftover K − min is EVEN — waste it as go-and-come-back pairs.",
-              "남는 K − 최소가 짝수예요 — 갔다 오기 짝으로 딱 낭비돼요."));
+    ? t(E, `K = ${k}, minimum = ${need} — K is smaller than the minimum.`,
+          `K = ${k}, 최소 = ${need} — K 가 최소보다 작아요.`)
+    : t(E, `K = ${k}, minimum = ${need}, left over = ${k - need}.`,
+          `K = ${k}, 최소 = ${need}, 남는 이동 = ${k - need}.`);
 
   const cellSize = 40;
 
@@ -146,10 +146,10 @@ export function KnightExactSim({ E }) {
           <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>{reason}</div>
         </div>
 
-        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
           {t(E,
-            "The rule: reachable in exactly K  ⇔  K ≥ min AND (K − min) is even. Extra moves are wasted two at a time — step out and come right back.",
-            "정확히 K번에 도착  ⇔  K ≥ 최소 이고 (K − 최소) 가 짝수. 남는 이동은 한 칸 나갔다 바로 돌아오기라서 항상 2번씩 써요.")}
+            "Keep the same target and push K up one at a time. Which K turn green, and which stay red?",
+            "목표 칸을 그대로 두고 K 를 하나씩 올려 봐요.\n어떤 K 에서 초록이 되고, 어떤 K 에서 빨강인가요?")}
         </div>
       </div>
     </div>
@@ -261,29 +261,63 @@ const FULL_CPP = [
   "}",
 ];
 
+/* 2026-09-17: 섹션이 1 개라 "한 부분씩 읽어 봐요" 라고 해 놓고 읽을 데가 없었다.
+   코드 글자는 한 자도 안 바꾸고 FULL_PY / FULL_CPP 를 잘라 세 부분으로 나눈다. */
+const PY_SETUP = FULL_PY.slice(0, 15);   // L자 이동 목록 + 빈 표 만들기
+const PY_BFS = FULL_PY.slice(15, 24);    // BFS 로 표 채우기
+const PY_QUERY = FULL_PY.slice(25, 37);  // 질문마다 확인하기
+
+const CPP_SETUP = FULL_CPP.slice(0, 14);
+const CPP_BFS = FULL_CPP.slice(15, 34);
+const CPP_QUERY = FULL_CPP.slice(35, 52);
+
 export function getMcc20KnightSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
-      color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      label: t(E, "① The 8 moves and an empty table", "① L자 이동 8 가지 · 빈 표 만들기"),
+      color: "#0891b2",
+      py: PY_SETUP, cpp: CPP_SETUP,
       why: [
-        t(E, "Reaching (A,B) from (X,Y) is the same as covering the offset (dx,dy) = (|X−A|, |Y−B|) from (0,0) — so one BFS from the origin answers every query.",
-            "(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 차이 (dx,dy) = (|X−A|, |Y−B|) 만큼 가는 것과 같아요. 그래서 (0,0) 에서 BFS 를 한 번만 돌리면 모든 질문에 답할 수 있어요."),
-        t(E, "BFS gives the MINIMUM moves to each offset. Then the exact-K test is just: K ≥ min AND (K − min) is even — extra moves are wasted two at a time (out and back).",
-            "BFS 는 각 차이까지의 최소 이동을 알려줘요. 그다음은 K ≥ 최소 이고 (K − 최소) 가 짝수인지만 보면 돼요. 남는 이동은 나갔다 돌아오기라서 2번씩 쓰이니까요."),
-        t(E, "Why parity is forced: a knight flips square color every move, so the number of moves and (dx+dy) always share the same parity. That's why the leftover must be even.",
-            "왜 홀짝을 따져야 할까요. 나이트는 한 번 움직일 때마다 칸 색이 바뀌어요. 그래서 이동 횟수와 (dx+dy) 는 항상 홀짝이 같아요. 남는 값이 짝수여야 하는 이유예요."),
+        t(E, "Reaching (A,B) from (X,Y) is the same as covering the offset (dx,dy) = (|X−A|, |Y−B|) from (0,0). So we never store a query's actual coordinates — one table of offsets serves all 400 queries.",
+            "(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 차이 (dx,dy) = (|X−A|, |Y−B|) 만큼 가는 것과 같아요. 그래서 질문에 나온 좌표 자체는 저장하지 않아요. 차이만 담은 표 하나면 질문 400 개를 전부 처리해요."),
+        t(E, "−1 means 'not reached yet'. The table is a little bigger than 2000 on purpose: the shortest way to a near square sometimes steps backwards past 0 first.",
+            "−1 은 '아직 도착 못 했다' 는 뜻이에요. 표를 2000 보다 조금 크게 잡은 건 일부러예요. 가까운 칸으로 가는 가장 짧은 길이 0 뒤쪽으로 한 번 나갔다 오는 경우가 있거든요."),
       ],
       pyOnly: [
         t(E, "best[nx - LO][ny - LO] shifts coordinates by LO so negative cells fit into a normal 2D list.",
             "best[nx - LO][ny - LO] 는 좌표를 LO 만큼 밀어 음수 칸도 보통 2차원 리스트에 담아요."),
-        t(E, "Collect answers in a list and print once with '\\n'.join — faster than printing T times.",
-            "답을 리스트에 모아 '\\n'.join 으로 한 번에 출력해요. T 번 나눠서 출력하는 것보다 빨라요."),
       ],
       cppOnly: [
         t(E, "dr[]/dc[] list the 8 L-moves; LO shifts coordinates so negatives index a plain vector.",
             "dr[]/dc[] 는 8 가지 L자 이동이에요. LO 만큼 좌표를 밀면 음수 칸도 보통 vector 에 담을 수 있어요."),
+      ],
+    },
+    {
+      label: t(E, "② Fill the table once with BFS", "② BFS 로 표를 한 번에 채우기"),
+      color: "#2563eb",
+      py: PY_BFS, cpp: CPP_BFS,
+      why: [
+        t(E, "BFS spreads out in rings: every square one move away, then every square two moves away, and so on. The first time a square is written is the shortest way to it, so we never overwrite it.",
+            "BFS 는 동그라미가 퍼지듯 나아가요. 한 번에 갈 수 있는 칸을 모두 적고, 그다음 두 번에 갈 수 있는 칸을 모두 적어요. 어떤 칸에 처음 적히는 값이 그 칸까지의 가장 짧은 횟수라, 한 번 적은 값은 다시 고치지 않아요."),
+        t(E, "We run this once, before reading any query. After it finishes, every offset already knows its minimum.",
+            "이 일은 질문을 읽기 전에 딱 한 번만 해요. 끝나고 나면 모든 차이가 자기 최소 횟수를 이미 알고 있어요."),
+      ],
+    },
+    {
+      label: t(E, "③ Answer each query", "③ 질문마다 확인하기"),
+      color: "#15803d",
+      py: PY_QUERY, cpp: CPP_QUERY,
+      why: [
+        t(E, "Each query is now two checks: is K at least the minimum, and is the leftover (K − min) even?",
+            "이제 질문 하나는 두 가지만 보면 돼요. K 가 최소 이상인가, 그리고 남는 이동 (K − 최소) 이 짝수인가."),
+        t(E, "Why must the leftover be even? Colour the board like a chessboard. An L-move is 1 in one direction and 2 in the other, so 1+2 = 3 squares — an odd step always lands on the opposite colour. So after an even number of moves the knight is on its starting colour, after an odd number on the other one. The target's colour is fixed, so the number of moves can only change by 2 at a time.",
+            "남는 이동이 왜 짝수여야 할까요. 판을 체스판처럼 두 색으로 칠해 봐요. L자 이동은 한 쪽으로 1, 다른 쪽으로 2 니까 합쳐서 3 칸이에요. 홀수 칸을 움직이면 색이 반드시 반대가 돼요. 그래서 짝수 번 움직이면 출발한 색으로 돌아오고, 홀수 번 움직이면 반대 색에 있어요. 목표 칸의 색은 정해져 있으니 이동 횟수는 2 씩만 달라질 수 있어요."),
+        t(E, "And the leftover is always usable: step out to any square and come straight back — that burns exactly 2 moves and changes nothing.",
+            "남는 이동은 언제나 쓸 수 있어요. 아무 칸으로나 한 번 나갔다 바로 돌아오면 2 번을 쓰고 제자리로 와요."),
+      ],
+      pyOnly: [
+        t(E, "Collect answers in a list and print once with '\\n'.join — faster than printing T times.",
+            "답을 리스트에 모아 '\\n'.join 으로 한 번에 출력해요. T 번 나눠서 출력하는 것보다 빨라요."),
       ],
     },
   ];

@@ -3,26 +3,10 @@ import { getMcc15ChocoSections, Mcc15ChocoStackSim } from "./components";
 
 const KA = { wordBreak: "keep-all" };
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "bars = list(map(int, input().split()))",
-  "",
-  "stack = []      # 아직 짝을 못 찾은 바들",
-  "total = 0       # 지금까지 가져간 초콜릿 길이",
-  "",
-  "for bar in bars:",
-  "    if stack and stack[-1] == bar:",
-  "        # 맨 위 바와 길이가 같아요 → 둘을 가져가요",
-  "        total += 2 * bar",
-  "        stack.pop()",
-  "    else:",
-  "        stack.append(bar)",
-  "",
-  "print(total)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도 import 되지
+   않는 죽은 복제본이었다. 화면이 쓰는 살아 있는 코드는 components.jsx 의 FULL_PY /
+   FULL_CPP 다. 둘을 같이 두면 조용히 어긋나고, 다음 사람이 이쪽을 고치느라 시간을 쓴다.
+   형제 quest mcc15isthmus 가 같은 이유로 먼저 지웠다. */
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -34,8 +18,8 @@ export function makeMcc15ChocoCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A row of N chocolate bars with sizes a[1..N]. You can repeatedly remove ADJACENT pairs of equal-size bars (after removal, the remaining bars become adjacent).\nPrint the TOTAL chocolate length removed.",
-        "N 개 초콜릿 바가 한 줄에 있고, 크기는 각각 a[i] 예요. 같은 크기의 인접한 두 바를 반복해서 제거할 수 있어요 (제거 후 남은 바가 인접하게 돼요).\n제거한 초콜릿 총 길이를 출력해요."),
+        "A row of chocolate bars — how much can we take away?",
+        "초콜릿 바 한 줄에서 얼마나 가져갈 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -73,7 +57,7 @@ export function makeMcc15ChocoCh1(E) {
                   {t(E, "Repeatedly remove ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "adjacent pairs of equal-size bars", "같은 크기의 인접한 두 바")}</b>
                   {t(E, " — after removal, the remaining bars become adjacent and may form new equal pairs.",
-                        " 를 반복해서 제거 — 제거 후 남은 바들이 인접해 새로운 짝이 생길 수 있음.")}
+                        " 를 반복해서 제거해요. 제거하고 나면 남은 바들이 붙어서 새 짝이 생길 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
@@ -92,8 +76,8 @@ export function makeMcc15ChocoCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. Notice how removing the 9s lets the two 5s meet — that chain reaction is the whole problem.",
-        "입력 형식과 공식 예제를 봐요. 9 두 개를 가져가면 5 와 5 가 만나요 — 이 연쇄가 이 문제의 전부예요."),
+        "What the input and the output look like.",
+        "입력과 출력이 어떤 모양인지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#faf5ff", border: "1px solid #d8b4fe", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -122,47 +106,36 @@ export function makeMcc15ChocoCh1(E) {
             </div>
           </div>
 
-          <div style={{ marginTop: 10, background: "#fff", border: "1px solid #e9d5ff", borderRadius: 10, padding: "10px 12px", ...KA }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>
-              {t(E, "the official walkthrough", "공식 풀이 과정")}
-            </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.75, fontFamily: "'JetBrains Mono',monospace" }}>
-              <div>3 <b style={{ color: "#7c3aed" }}>4 4</b> 5 9 9 5 2 &nbsp;→&nbsp; +8</div>
-              <div>3 5 <b style={{ color: "#7c3aed" }}>9 9</b> 5 2 &nbsp;→&nbsp; +18</div>
-              <div>3 <b style={{ color: "#7c3aed" }}>5 5</b> 2 &nbsp;→&nbsp; +10</div>
-              <div>3 2 &nbsp;→&nbsp; {t(E, "no pair left", "더 이상 짝 없음")}</div>
-            </div>
-            <div style={{ fontSize: 12, color: "#5b21b6", marginTop: 8, lineHeight: 1.6 }}>
-              {t(E, "8 + 18 + 10 = 36. The two 5s were never adjacent at the start — they only met after the 9s were taken.",
-                    "8 + 18 + 10 = 36. 처음엔 5 와 5 가 붙어 있지 않았어요. 9 두 개를 가져간 뒤에야 만났어요.")}
-            </div>
-          </div>
+          {/* 2026-09-17: 여기 있던 "공식 풀이 과정"(+8 / +18 / +10 = 36, 그리고 "두 5는
+             9를 가져간 뒤에야 만났다") 을 지웠다. 형식 쪽이 답과 이유를 먼저 말해 버려서
+             뒤의 세 쪽(시뮬·퀴즈·직접 풀기)이 확인 작업이 되고 있었다.
+             형식 쪽은 형식만 — 풀어 보는 건 1-3 시뮬과 1-4 퀴즈 몫이다. */}
         </div>),
     },
     // 1-3: Stack walkthrough sim (bilingual, step-by-step)
     {
       type: "reveal",
       narr: t(E,
-        "Now the same example one bar at a time. Bars with no partner yet are parked on a stack; the top of the stack is always the current left neighbour.",
-        "이제 같은 예제를 한 바씩 따라가요. 아직 짝을 못 찾은 바는 스택에 세워두고, 스택 맨 위가 늘 지금의 왼쪽 이웃이에요."),
+        "Now the same example one bar at a time, using a stack.",
+        "짝을 못 찾은 바를 쌓아두는 '스택' 으로 따라가 봐요."),
       content: <Mcc15ChocoStackSim E={E} />,
     },
     // 1-4: Quiz — the chain reaction
     {
       type: "quiz",
       narr: t(E,
-        "In [3, 4, 4, 5, 9, 9, 5, 2], why can the two 5s be taken even though they are not next to each other at the start?",
-        "[3, 4, 4, 5, 9, 9, 5, 2] 에서, 처음엔 붙어 있지도 않은 5 와 5 를 왜 가져갈 수 있을까요?"),
+        "One moment from that walkthrough is worth a second look.",
+        "방금 본 장면 하나를 다시 짚어 볼게요."),
       question: t(E,
-        "Why can the two 5s be taken?",
-        "5 와 5 를 왜 가져갈 수 있을까요?"),
+        "In [3, 4, 4, 5, 9, 9, 5, 2], the two 5s are not next to each other at the start. Why can they still be taken?",
+        "[3, 4, 4, 5, 9, 9, 5, 2] 에서 5 와 5 는 처음엔 붙어 있지 않아요.\n그런데 왜 가져갈 수 있을까요?"),
       options: [
         t(E, "Once the 9s between them are taken, the gap closes and the 5s become adjacent.",
              "사이에 있던 9 두 개를 가져가면 빈틈이 메워져서 5 와 5 가 붙어요."),
         t(E, "Bars of equal length can always be taken, adjacent or not.",
              "길이가 같으면 붙어 있든 말든 언제나 가져갈 수 있어요."),
-        t(E, "Because 5 is smaller than 9.",
-             "5 가 9 보다 작아서요."),
+        t(E, "Because 5 is smaller than 9, so shorter bars get taken first.",
+             "5 가 9 보다 작아서, 짧은 바부터 먼저 가져가요."),
       ],
       correct: 0,
       explain: t(E,
@@ -172,16 +145,18 @@ export function makeMcc15ChocoCh1(E) {
     // 1-5: numeric check on the official sample
     {
       type: "input",
+      // 2026-09-17: 예전엔 공식 샘플의 답 36 을 그대로 다시 물었다. 그 값은 앞 쪽
+      // 출력 칸에 이미 있어서 문제가 아니었다. 처음 보는 줄로 바꿨다.
       narr: t(E,
-        "For the official sample [3, 4, 4, 5, 9, 9, 5, 2], what is the total length taken?",
-        "공식 샘플 [3, 4, 4, 5, 9, 9, 5, 2] 에서 가져간 총 길이는?"),
+        "Now try a row you have not seen yet.",
+        "이번엔 처음 보는 줄로 직접 해봐요."),
       question: t(E,
-        "Bars [3,4,4,5,9,9,5,2]. Total length taken = ?",
-        "바 [3,4,4,5,9,9,5,2]. 가져간 총 길이 = ?"),
+        "Bars [1, 4, 4, 1, 5]. Total length taken = ?",
+        "바 [1, 4, 4, 1, 5]. 가져간 총 길이 = ?"),
       hint: t(E,
-        "Three pairs are taken: (4,4), (9,9), (5,5). Each pair is worth 2 × its length.",
-        "짝을 세 번 가져가요 — (4,4), (9,9), (5,5) 예요.\n짝 하나는 길이의 2 배만큼이에요."),
-      answer: 36,
+        "Take the 4s first — then the two 1s become neighbours. A pair is worth 2 × its length.",
+        "4 와 4 를 먼저 가져가면 1 과 1 이 이웃이 돼요.\n짝 하나는 길이의 2 배만큼이에요."),
+      answer: 10,
     },
   ];
 }
@@ -196,8 +171,8 @@ export function makeMcc15ChocoCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The obvious way is to scan the row for a pair, remove it, and start over. That re-scan is what makes it slow. The stack does the same thing without ever going back.",
-        "떠오르는 방법은 줄을 훑어 짝을 찾고, 지우고, 처음부터 다시 훑는 거예요. 이 '다시 훑기' 가 느림의 원인이에요. 스택은 되돌아가지 않고 같은 일을 해요."),
+        "Why is the obvious way too slow?",
+        "쉽게 떠오르는 방법은 왜 느릴까요?"),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -227,7 +202,7 @@ export function makeMcc15ChocoCh2(E, lang = "py") {
           </div>
 
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the code, section by section.", "↓ 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

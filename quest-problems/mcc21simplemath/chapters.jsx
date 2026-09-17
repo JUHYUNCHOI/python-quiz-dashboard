@@ -233,7 +233,7 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, one operator at a time.", "↓ 아래에 빠른 코드가 연산자별로 하나씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, one operator at a time.", "↓ 다음 쪽에서 빠른 코드를 연산자별로 하나씩 봐요.")}
           </div>
         </div>),
     },

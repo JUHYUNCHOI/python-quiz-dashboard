@@ -212,7 +212,7 @@ export function makeSubseqMedianCh2(E, lang = "py") {
           </div>
 
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the code, section by section.", "↓ 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

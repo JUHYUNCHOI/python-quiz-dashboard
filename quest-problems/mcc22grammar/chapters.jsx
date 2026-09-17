@@ -172,17 +172,21 @@ export function makeMcc22GrammarCh1(E) {
       narr: t(E,
         "Check it against the arrow list below.",
         "아래 화살표 목록과 맞춰봐요."),
+      /* 2026-09-17: 원래 물어보던 문장이 공식 샘플 3번째 줄("WE THEY")과 같았다.
+         출력표만 기억하면 화살표를 한 번도 안 보고 맞힐 수 있었다.
+         샘플에 없는 문장으로 바꾸고, 첫 쌍은 통과하게 만들어서
+         **이웃한 쌍을 끝까지** 확인해야 답이 나오게 했다. */
       question: t(E,
-        "Grammar: WE → {DONT, KNOW}, THEY → {DONT, KNOW}, DONT → {KNOW}, KNOW → {WE, THEY, THAT}, THAT → {WE, THEY}. Is the sentence \"WE THEY\" correct?",
-        "문법이 WE → {DONT, KNOW}, THEY → {DONT, KNOW}, DONT → {KNOW}, KNOW → {WE, THEY, THAT}, THAT → {WE, THEY} 예요. 문장 \"WE THEY\" 는 맞을까요?"),
+        "Grammar: WE → {DONT, KNOW}, THEY → {DONT, KNOW}, DONT → {KNOW}, KNOW → {WE, THEY, THAT}, THAT → {WE, THEY}. Is the sentence \"KNOW THAT DONT\" correct?",
+        "문법이 WE → {DONT, KNOW}, THEY → {DONT, KNOW}, DONT → {KNOW}, KNOW → {WE, THEY, THAT}, THAT → {WE, THEY} 예요. 문장 \"KNOW THAT DONT\" 는 맞을까요?"),
       options: [
-        t(E, "NO — there is no arrow WE → THEY", "NO — WE → THEY 화살표가 없어요"),
-        t(E, "YES — both are valid words", "YES — 둘 다 유효한 단어예요"),
+        t(E, "NO — there is no arrow THAT → DONT", "NO — THAT → DONT 화살표가 없어요"),
+        t(E, "YES — all three are valid words", "YES — 셋 다 유효한 단어예요"),
       ],
       correct: 0,
       explain: t(E,
-        "Both words are valid, but a sentence also needs an arrow for every neighbor pair. WE points only to DONT and KNOW, so WE → THEY is missing → NO.",
-        "두 단어 모두 유효하지만, 문장은 이웃한 모든 쌍에 화살표도 필요해요. WE 는 DONT 와 KNOW 로만 가리키니 WE → THEY 는 없어요 → NO."),
+        "KNOW → THAT does exist, so the first pair passes. But a sentence needs an arrow for EVERY neighbor pair, and THAT points only to WE and THEY — so THAT → DONT is missing → NO.",
+        "KNOW → THAT 는 있어서 첫 쌍은 통과해요. 하지만 문장은 이웃한 모든 쌍에 화살표가 있어야 해요. THAT 는 WE 와 THEY 로만 가리키니 THAT → DONT 가 없어요 → NO."),
     },
   ];
 }
@@ -228,7 +232,7 @@ export function makeMcc22GrammarCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the code, section by section.", "↓ 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

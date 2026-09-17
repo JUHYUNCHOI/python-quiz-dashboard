@@ -17,9 +17,14 @@ const SIZES = [2, 3, 4];
 function MenuOrderSim({ E }) {
   // order is an array of the three sizes; start with a "bad" order
   const [order, setOrder] = useState([4, 3, 2]);
+  /* 2026-09-17: 맨 아래 정리글이 **버튼을 누르기 전부터** 두 순서의 합(32·40)과
+     결론("가장 작은 층을 맨 앞에")을 다 말하고 있었다. 이 쪽이 발견하는 자리인데
+     읽기만 해도 끝나 버린다. mcc20cipher·mcc21carrots 와 같은 touched 방식으로
+     한 번이라도 눌러본 뒤에 드러나게 한다. */
+  const [touched, setTouched] = useState(false);
 
-  const sorted = () => setOrder([...SIZES].sort((a, b) => a - b));      // ascending
-  const reversed = () => setOrder([...SIZES].sort((a, b) => b - a));    // descending
+  const sorted = () => { setTouched(true); setOrder([...SIZES].sort((a, b) => a - b)); };    // ascending
+  const reversed = () => { setTouched(true); setOrder([...SIZES].sort((a, b) => b - a)); };  // descending
 
   // prefix products + running total
   const rows = [];
@@ -99,9 +104,13 @@ function MenuOrderSim({ E }) {
         </div>
 
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
-          {t(E,
-            "Notice: small → big gives 2 + 6 + 24 = 32; big → small gives 4 + 12 + 24 = 40. Every term in that sum IS the running product, so keeping the product small for as long as possible makes every later term smaller too — that is why the smallest layer goes first.",
-            "작은 → 큰 은 2 + 6 + 24 = 32 예요.\n큰 → 작은 은 4 + 12 + 24 = 40 이고요.\n더하는 값 하나하나가 바로 그때까지의 곱이에요.\n그러니 곱을 오래 작게 두면 뒤에 더하는 값도 전부 작아져요.\n그래서 가장 작은 층을 맨 앞에 둬요.")}
+          {touched
+            ? t(E,
+                "Every term in that sum IS the running product, so keeping the product small for as long as possible makes every later term smaller too.",
+                "더하는 값 하나하나가 바로 그때까지의 곱이에요.\n그러니 곱을 오래 작게 두면 뒤에 더하는 값도 전부 작아져요.")
+            : t(E,
+                "Press both buttons and compare the two totals. Which order ends up smaller, and why?",
+                "두 버튼을 다 눌러 총 줄 수를 견줘 봐요.\n어느 순서가 더 적게 나오나요? 왜 그럴까요?")}
         </div>
       </div>
     </div>
@@ -204,9 +213,12 @@ export function makeMcc21MenuCh1(E) {
 
           {/* aside: dual-output subtlety */}
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: "#92400e", lineHeight: 1.55, ...KA }}>
+            {/* 2026-09-17: 여기서 "정렬한 차례가 곧 제일 좋은 순서" 라고 답을 먼저 말하고 있었다.
+                그 뒤 3 쪽(시뮬 비교 → 퀴즈 → 교환 논증)이 찾아낼 것을 첫 쪽이 통보한 셈이다.
+                출력이 두 가지라는 사실만 남기고 결론은 뺐다. */}
             {t(E,
-              "ℹ️ The original problem has two output modes: some cases want the best ARRANGEMENT printed, others want the minimum line COUNT (mod 1e9+7). We'll teach the count — and to get the count you first have to sort the layers small → big, so that sorted order IS the best arrangement.",
-              "ℹ️ 원래 문제는 출력이 두 가지예요. 어떤 때는 제일 좋은 순서를 물어보고, 어떤 때는 최소 줄 수(mod 1e9+7)를 물어봐요. 우리는 줄 수를 배울 거예요. 줄 수를 구하려면 층을 작은 것부터 정렬해야 하는데, 그 정렬된 차례가 바로 제일 좋은 순서예요.")}
+              "ℹ️ The original problem has two output modes: some cases want the best ARRANGEMENT printed, others want the minimum line COUNT (mod 1e9+7). We'll teach the count.",
+              "ℹ️ 원래 문제는 출력이 두 가지예요. 어떤 때는 제일 좋은 순서를 물어보고, 어떤 때는 최소 줄 수(mod 1e9+7)를 물어봐요. 우리는 줄 수를 배울 거예요.")}
           </div>
         </div>),
     },
@@ -263,8 +275,10 @@ export function makeMcc21MenuCh1(E) {
     // 1-4: understanding quiz
     {
       type: "quiz",
+      /* 2026-09-17: 영어 narr 이 두 순서를 다 계산해서 답(12)을 미리 말하고 있었다.
+         한국어는 이미 상황만 말한다 — 영어를 한국어 쪽에 맞췄다. */
       narr: t(E,
-        "Two layers of sizes 5 and 2. Order 2 → 5 gives 2 + (2×5) = 12. Order 5 → 2 gives 5 + (5×2) = 15. Smaller first wins.",
+        "Two layers of sizes 5 and 2. Which order gives fewer lines?",
         "크기 5, 2 인 층 두 개예요. 어느 순서가 더 적을까요?"),
       question: t(E,
         "Layers of sizes 5 and 2. What is the MINIMUM number of lines?",
@@ -283,12 +297,14 @@ export function makeMcc21MenuCh1(E) {
     // 1-5: input warmup
     {
       type: "input",
+      /* 2026-09-17: 질문 문장이 "(순서 1 → 2 → 3: 1 + 2 + 6)" 로 계산을 다 해 놓고
+         덧셈만 남겨 두었다. 계산은 힌트(눌러야 열림)에만 남긴다. */
       narr: t(E,
-        "One more, three layers this time. Sort them small → big, then add up the prefix products.",
-        "하나 더 해봐요. 작은 → 큰 으로 정렬한 뒤 앞부분 곱을 더해요."),
+        "One more, three layers this time.",
+        "하나 더 해봐요. 이번엔 층이 세 개예요."),
       question: t(E,
-        "Layers of sizes 3, 1, 2. Minimum number of lines? (order 1 → 2 → 3: 1 + 2 + 6)",
-        "크기 3, 1, 2 인 층 세 개예요. 최소 줄 수는 얼마일까요?\n(순서 1 → 2 → 3 이면 1 + 2 + 6)"),
+        "Layers of sizes 3, 1, 2. Minimum number of lines?",
+        "크기 3, 1, 2 인 층 세 개예요. 최소 줄 수는 얼마일까요?"),
       hint: t(E, "Sort to 1, 2, 3. Prefix products: 1, 1×2=2, 1×2×3=6. Add them.", "1, 2, 3 으로 정렬해요.\n앞부분 곱은 1, 1×2=2, 1×2×3=6 이에요. 다 더해요."),
       answer: 9,
     },
@@ -336,7 +352,7 @@ export function makeMcc21MenuCh2(E, lang = "py") {
           </div>
 
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

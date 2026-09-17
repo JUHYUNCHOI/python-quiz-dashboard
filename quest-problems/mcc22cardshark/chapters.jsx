@@ -30,10 +30,16 @@ function altSum(cards) {
 function StackOrderSim({ E }) {
   // order = permutation of indices into DEMO_STACKS
   const [order, setOrder] = useState([0, 1, 2]);
+  /* 2026-09-17: 시뮬 맨 아래가 **화살표를 한 번도 누르기 전부터** 최종 그리디 해법을
+     통째로 말하고 있었다 ("D 를 정렬해 위쪽 절반에 + 를 줘라"). 같은 말이 Ch2 계획과
+     코드 why 에서 세 번 더 나온다. 여기서는 **관찰까지만** 남기고, 정렬 결론은
+     Ch2 에서 한 번만 말한다. (mcc20cipher · mcc21carrots 와 같은 수법) */
+  const [touched, setTouched] = useState(false);
 
   const move = (pos, dir) => {
     const np = pos + dir;
     if (np < 0 || np >= order.length) return;
+    setTouched(true);
     const o = [...order];
     [o[pos], o[np]] = [o[np], o[pos]];
     setOrder(o);
@@ -151,10 +157,15 @@ function StackOrderSim({ E }) {
           <span style={{ color: "#8b949e", fontSize: 11 }}>  ({t(E, "best possible = 6", "가능한 최댓값 = 6")})</span>
         </div>
 
-        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
-          {t(E,
-            "Notice each stack contributes exactly +D or −D — plus if it STARTS on an odd position (its first card goes to P1), minus if it starts on an even one. An even-length stack keeps the position parity after it, so it can slot in either way (take +|D|). Odd-length stacks flip the parity, so along the arrangement they alternate + , − , + , … — sort their D from big to small and give + to the top half.",
-            "각 묶음은 +D 아니면 −D 를 더해요. 홀수 위치에서 시작하면 첫 카드가 P1 에게 가서 + 이고, 짝수 위치에서 시작하면 − 예요. 길이가 짝수인 묶음은 뒤쪽 위치의 홀짝을 바꾸지 않아요. 그래서 어느 자리에 넣어도 되고, +|D| 를 챙길 수 있어요. 길이가 홀수인 묶음은 홀짝을 뒤집어요. 그래서 늘어놓은 순서를 따라 부호가 + , − , + , … 로 번갈아요. D 를 큰 것부터 정렬해 위쪽 절반에 + 를 줘요.")}
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+          {
+            touched
+              ? t(E,
+                  "Look at the row above: every stack contributed exactly +D or −D — nothing in between.\nCompare each stack's starting position with the sign it got.\nWhich starting positions give +, and which give −?",
+                  "바로 위 줄을 봐요. 어느 묶음도 +D 아니면 −D 만 더했어요.\n그 사이 값은 없어요.\n묶음마다 시작 위치와 부호를 나란히 비교해 봐요.\n어떤 시작 위치가 + 를 받고, 어떤 위치가 − 를 받나요?")
+              : t(E,
+                  "Move the stacks with ◀ ▶ and watch the bottom number change.\nWhich order makes score1 − score2 the biggest?",
+                  "◀ ▶ 로 묶음 순서를 바꾸면서 맨 아래 수가 어떻게 변하는지 봐요.\n어떤 순서가 score1 − score2 를 가장 크게 만드나요?")}
         </div>
       </div>
     </div>
@@ -331,8 +342,8 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Feel the mechanism. Reorder the stacks and watch how each one contributes +D or −D to score1 − score2.",
-        "원리를 직접 느껴봐요.\n묶음 순서를 바꾸면서, 각 묶음이 score1 − score2 에\n+D 를 더하는지 −D 를 더하는지 봐요."),
+        "Reorder the stacks and watch what happens to score1 − score2.",
+        "묶음 순서를 바꾸면서 점수 차이가 어떻게 변하는지 봐요."),
       content: <StackOrderSim E={E} />,
     },
 
@@ -391,7 +402,7 @@ export function makeMcc22CardSharkCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

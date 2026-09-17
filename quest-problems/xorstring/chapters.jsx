@@ -233,7 +233,7 @@ export function makeXorStringCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", ...KA }}>
-            {t(E, "↓ the fast code below — read the why-notes first.", "↓ 아래에 빠른 코드 — 먼저 '왜 이렇게?' 노트를 읽어요.")}
+            {t(E, "↓ Next page: the fast code — read the why-notes first.", "↓ 다음 쪽에 빠른 코드 — 먼저 '왜 이렇게?' 노트를 읽어요.")}
           </div>
         </div>),
     },

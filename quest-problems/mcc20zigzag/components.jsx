@@ -100,25 +100,76 @@ const FULL_CPP = [
   "}",
 ];
 
+/* 2026-09-17: 섹션이 1 개였다. why 는 "한 부분씩 읽어 봐요" 한 줄뿐인데
+   정작 쪼갤 부분이 없어서 말과 화면이 어긋났다. 게다가 up/dn 표가 무엇을
+   세는지 아무 데도 안 적혀 있어서 학생이 여기서 그만뒀다.
+   코드 글자는 한 자도 안 바꾸고 FULL_PY / FULL_CPP 를 잘라 쓴다. */
+const PY_READ = FULL_PY.slice(0, 9);    // 입력 + 바로 답이 나오는 경우
+const PY_TABLE = FULL_PY.slice(9, 14);  // up / dn 표 만들기
+const PY_FILL = FULL_PY.slice(15, 30);  // 표 채우기
+const PY_SUM = FULL_PY.slice(31, 33);   // 답 모으기
+
+const CPP_READ = FULL_CPP.slice(0, 21);
+const CPP_TABLE = FULL_CPP.slice(22, 25);
+const CPP_FILL = FULL_CPP.slice(26, 48);
+const CPP_SUM = FULL_CPP.slice(49, 57);
+
 export function getMcc20ZigzagSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
-      color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      label: t(E, "① Read the input, answer the easy cases", "① 입력 읽기 · 바로 답이 나오는 경우"),
+      color: "#0891b2",
+      py: PY_READ, cpp: CPP_READ,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
-      ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "If K is longer than the string there is nothing to pick, so the answer is 0. If K is 1 every single letter is a zig-zag by itself, so the answer is N.",
+            "고를 글자 수 K 가 문자열보다 길면 만들 수 없으니 답은 0 이에요. K 가 1 이면 글자 하나하나가 그대로 답이 되니까 N 개예요."),
+        t(E, "The answer is printed modulo 1000, so we keep every count small as we go.",
+            "답은 1000 으로 나눈 나머지만 쓰면 되니까, 세는 동안 수를 계속 작게 줄여 둬요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
             "#include 는 배운 것들로 (iostream, vector, string) 나눠 적어요."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계와 자리 번호는 int 로 충분해요. 2×10^9 를 넘는 큰 합계만 더 큰 타입을 써요."),
+      ],
+    },
+    {
+      label: t(E, "② Two tables: last step up, last step down", "② 표 두 개 — 마지막이 오름 / 마지막이 내림"),
+      color: "#8b5cf6",
+      why: [
+        t(E, "up[i][j] = how many zig-zags of length j end at letter i with the last step going UP. dn[i][j] is the same but the last step went DOWN.",
+            "up[i][j] 는 i 번째 글자에서 끝나는 길이 j 짜리 지그재그 중에서 마지막 걸음이 '오름' 인 것의 개수예요. dn[i][j] 는 마지막 걸음이 '내림' 인 것의 개수예요."),
+        t(E, "Why two tables instead of one? Because zig-zag means the next step must go the opposite way. To know what is allowed next, we have to know which way the last step went.",
+            "왜 표를 두 개로 나눌까요. 지그재그는 다음 걸음이 반드시 반대 방향이어야 해요. 그러니 다음에 무엇이 되는지 알려면 마지막 걸음이 어느 쪽이었는지를 알아야 해요. 개수만 세면 그걸 잃어버려요."),
+        t(E, "The two numbers i and j are different things: i is a place in the string, j is how many letters we have picked so far.",
+            "i 와 j 는 서로 다른 것을 가리켜요. i 는 문자열에서 몇 번째 글자인지이고, j 는 지금까지 몇 글자를 골랐는지예요."),
+      ],
+      py: PY_TABLE, cpp: CPP_TABLE,
+    },
+    {
+      label: t(E, "③ Fill the tables, short ones first", "③ 짧은 것부터 표 채우기"),
+      color: "#d97706",
+      py: PY_FILL, cpp: CPP_FILL,
+      why: [
+        t(E, "Length 2 is the starting point: any earlier letter p smaller than s[i] makes one up-ending pair, any bigger one makes one down-ending pair.",
+            "길이 2 가 출발점이에요. 앞쪽 글자 p 가 s[i] 보다 작으면 오름으로 끝나는 짝이 하나 생기고, 크면 내림으로 끝나는 짝이 하나 생겨요."),
+        t(E, "For longer ones we glue a new letter onto something already counted. If s[p] < s[i] the new step goes up, so what came before it must have ended going down — that is exactly dn[p][j−1].",
+            "더 긴 것은 이미 세어 둔 것에 글자 하나를 이어 붙여 만들어요. s[p] < s[i] 면 새 걸음은 오름이니까, 그 앞은 내림으로 끝났어야 해요. 그게 바로 dn[p][j−1] 이에요."),
+        t(E, "This is why we never look back past p: dn[p][j−1] already counts every way to reach p. We add one number instead of walking the whole string again.",
+            "그래서 p 보다 앞을 다시 들여다보지 않아요. dn[p][j−1] 안에 p 까지 오는 모든 방법이 이미 다 세어져 있거든요. 문자열을 처음부터 다시 훑는 대신 그 수 하나만 더해요."),
+        t(E, "We fill j from small to large, so everything a longer one needs is already finished.",
+            "j 를 작은 것부터 채워 나가요. 그러면 긴 것을 만들 때 필요한 값이 이미 다 구해져 있어요."),
+      ],
+    },
+    {
+      label: t(E, "④ Add up every ending place", "④ 끝나는 자리를 모두 더하기"),
+      color: "#15803d",
+      py: PY_SUM, cpp: CPP_SUM,
+      why: [
+        t(E, "A length-K zig-zag has to end somewhere, and its last step went either up or down. So the answer is the sum of up[i][K] + dn[i][K] over every i — no zig-zag is counted twice.",
+            "길이 K 짜리 지그재그는 어딘가에서 끝나고, 마지막 걸음은 오름이거나 내림이거나 둘 중 하나예요. 그러니 모든 i 에 대해 up[i][K] + dn[i][K] 를 더하면 돼요. 같은 것을 두 번 세는 일은 없어요."),
+      ],
+      cppOnly: [
+        t(E, "Use long long for the running sum so the additions before the modulo cannot overflow.",
+            "더해 나가는 합은 long long 으로 둬요. 나머지를 취하기 전 덧셈에서 넘치지 않게요."),
       ],
     },
   ];

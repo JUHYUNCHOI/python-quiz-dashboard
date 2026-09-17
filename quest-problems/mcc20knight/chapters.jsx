@@ -154,7 +154,7 @@ export function makeMcc20KnightCh1(E) {
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             <div><b style={{ color: "#15803d" }}>{t(E, "Q1", "1번")}</b> {t(E, "(0,0)→(3,3) in 2: yes — e.g. (0,0)→(1,2)→(3,3). ", "(0,0)→(3,3) 를 2번: 가능 — 예: (0,0)→(1,2)→(3,3). ")}<b style={{ color: "#15803d" }}>YES</b></div>
             <div><b style={{ color: "#b91c1c" }}>{t(E, "Q2", "2번")}</b> {t(E, "(−2,−2)→(100,100): way too far for only 5 moves. ", "(−2,−2)→(100,100): 5번으론 너무 멀어요. ")}<b style={{ color: "#b91c1c" }}>NO</b></div>
-            <div><b style={{ color: "#b91c1c" }}>{t(E, "Q3", "3번")}</b> {t(E, "(0,0)→(1,2) needs 1 move; 2 has the wrong parity (2−1 is odd). ", "(0,0)→(1,2) 는 1번이면 돼요. 2번은 홀짝이 안 맞아요 (2−1 은 홀수). ")}<b style={{ color: "#b91c1c" }}>NO</b></div>
+            <div><b style={{ color: "#b91c1c" }}>{t(E, "Q3", "3번")}</b> {t(E, "(0,0)→(1,2) takes 1 move, yet 2 moves cannot do it. Why not? ", "(0,0)→(1,2) 는 1 번이면 가요. 그런데 2 번으로는 못 가요. 왜 그럴까요? ")}<b style={{ color: "#b91c1c" }}>NO</b></div>
           </div>
         </div>),
     },
@@ -172,8 +172,8 @@ export function makeMcc20KnightCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "(0,0) to (1,2) is one L-shaped move. So the minimum is 1.",
-        "(0,0) 에서 (1,2) 는 L자 이동 한 번. 그래서 최소는 1."),
+        "Now count it yourself, on paper if you like.",
+        "이번엔 직접 세어 봐요."),
       question: t(E,
         "Knight at (0,0). What is the MINIMUM number of moves to reach (1,2)?",
         "나이트 (0,0). (1,2) 에 도달하는 최소 이동 횟수는?"),
@@ -192,8 +192,8 @@ export function makeMcc20KnightCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The minimum is 2. Leftover after that must come in pairs (out and back). 5 − 2 = 3 is odd, so no. 4 − 2 = 2 is even, so yes.",
-        "남는 이동은 나갔다 오기라서 항상 2번씩 써요."),
+        "This time it has to be EXACTLY K moves, not at least K.",
+        "이번엔 K 번 이상이 아니라 정확히 K 번이어야 해요."),
       question: t(E,
         "A square needs a MINIMUM of 2 moves. In which K can the knight land there in EXACTLY K moves?",
         "어떤 칸이 최소 2번 필요해요. 정확히 K번에 도착 가능한 K 는?"),
@@ -204,8 +204,8 @@ export function makeMcc20KnightCh1(E) {
       ],
       correct: 0,
       explain: t(E,
-        "K must be ≥ 2 AND (K − 2) even. K = 4 works (4 − 2 = 2). K = 3 or 5 leave an odd leftover.",
-        "K 는 2 이상이면서 (K − 2) 가 짝수여야 해요.\nK = 4 는 4 − 2 = 2 라서 돼요.\nK = 3, 5 는 남는 값이 홀수라 안 돼요."),
+        "K = 4 works: two extra moves are spent by stepping out and coming right back. K = 3 or 5 leave one move over, and one move can never be undone. Why? Colour the board like a chessboard — an L-move covers 1 + 2 = 3 squares, an odd number, so every move flips the colour. Even move counts land on one colour, odd counts on the other, so the number of moves can only change by 2.",
+        "K = 4 는 돼요. 남는 2 번은 한 칸 나갔다 바로 돌아오면서 쓰면 되니까요.\nK = 3, 5 는 1 번이 남는데, 1 번은 되돌릴 방법이 없어요.\n왜 그럴까요. 판을 체스판처럼 두 색으로 칠해 봐요.\nL자 이동은 1 칸 + 2 칸 = 3 칸, 홀수라서 움직일 때마다 색이 반드시 바뀌어요.\n그래서 짝수 번이면 출발한 색, 홀수 번이면 반대 색에 있어요.\n목표 칸의 색은 정해져 있으니 이동 횟수는 2 씩만 달라질 수 있어요."),
     },
   ];
 }
@@ -223,11 +223,12 @@ export function makeMcc20KnightCh2(E, lang = "py") {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: spread out all squares over K moves", "느림: K번 동안 모든 칸을 펼치기")}
+                🐢 {t(E, "Slow: spread the knight out K moves, for every query", "느림: 질문마다 K 번씩 직접 펼쳐 보기")}
               </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "The reachable region grows to ~K² squares (K up to 100000), and there are up to 400 queries. Times out.",
-                      "갈 수 있는 칸이 ~K² 개까지 커져요 (K 는 최대 100000). 질문도 최대 400 개라 시간 초과가 나요.")}
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+                {t(E,
+                  "The first idea is simple: for one query, mark every square reachable in 1 move, then in 2, and keep going K times, then look at (A,B). It is easy to write and it is correct. But K goes up to 100000, and after K moves the marked area has grown to about K² squares — far more than 10^9 for a single query. There are up to 400 queries, and we would start over from scratch for each one.",
+                  "제일 먼저 떠오르는 방법은 간단해요.\n질문 하나를 잡고 1 번에 갈 수 있는 칸을 전부 표시하고,\n그다음 2 번에 갈 수 있는 칸을 표시하고, K 번까지 반복한 뒤\n목표 칸이 표시됐는지 보는 거예요. 짜기 쉽고 답도 맞아요.\n그런데 K 가 최대 100000 이에요.\nK 번 펼치면 표시한 칸이 K² 개쯤 되니까 질문 하나에 10^9 개가 넘어요.\n게다가 질문이 400 개인데 질문마다 처음부터 다시 펼쳐야 해요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
@@ -241,7 +242,7 @@ export function makeMcc20KnightCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

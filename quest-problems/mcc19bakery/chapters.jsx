@@ -296,42 +296,70 @@ export function makeMcc19BakeryCh1(E) {
         </div>),
     },
 
-    // 1-2: I/O format + official sample
+    // 1-2: 입출력 형식 (4-박스 — ditcoin 템플릿과 같은 모양)
     {
       type: "reveal",
       narr: t(E,
-        "The input format and the official example.",
-        "입력 형식과 공식 예제를 봐요."),
+        "How does the data arrive? First line N, second line N prices. Print one number.",
+        "첫 줄에 빵 개수 N, 둘째 줄에 가격 N 개가 와요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
-              📥 {t(E, "Input", "입력")}
-            </div>
-            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "line 1: ", "1줄: ")}<b>N</b> — {t(E, "number of breads (a multiple of 4)", "빵 개수 (4 의 배수)")}</div>
-              <div>• {t(E, "line 2: ", "2줄: ")}<b>{t(E, "N prices", "N 개의 가격")}</b></div>
-            </div>
-            <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Output: the minimum total cost.", "출력: 최소 총 비용.")}
+        <div style={{ padding: 16, ...KA }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of breads (a multiple of 4)", "— 빵 개수 (4 의 배수)")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>p₁ p₂ … p_N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the price of each bread", "— 각 빵의 가격")}</span></div>
             </div>
           </div>
-
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
-            <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
-              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>8</div>
-              <div style={{ overflowX: "auto" }}>3 2 6 8 10 1 7 9</div>
-            </div>
-            <div style={{ background: "#0f172a", color: "#fbbf24", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
-              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>35</div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the smallest total cost you can pay.",
+                    "가장 적게 낼 수 있는 총 비용을 한 줄에 써요.")}
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
-            {t(E,
-              "8 breads make two batches of 4. The best grouping frees breads worth 8 and 3 (saving 11), so you pay 46 − 11 = 35.",
-              "빵 8 개는 4 개짜리 묶음 두 개예요. 가장 좋은 묶음은 8 과 3 짜리 빵을 무료로 만들어 (11 절약), 46 − 11 = 35 를 지불해요.")}
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#92400e", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre", overflowX: "auto" }}>
+{`8
+3 2 6 8 10 1 7 9`}
+                </div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`35`}</div>
+              </div>
+            </div>
+            {/* 2026-09-17: 여기 있던 "8 과 3 이 무료라 46 − 11 = 35" 를 뺐다.
+                바로 다음 쪽 시뮬이 "먼저 추측해봐요 — 어느 쪽이 더 쌀까요?" 라고 묻는데
+                이 줄이 답과 이유를 다 말해버려서 추측할 게 없었다.
+                형식 쪽은 형식만. 35 가 어떻게 나오는지는 시뮬 몫이다. */}
+            <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, lineHeight: 1.55 }}>
+              {t(E, "8 breads make two batches of 4. Why 35? That is the next page.",
+                    "빵 8 개는 4 개짜리 묶음 두 개예요.\n왜 35 일까요? 그건 다음 쪽에서 봐요.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>N {t(E, "is a multiple of 4", "은 4 의 배수")}</div>
+              <div>{t(E, "prices are positive whole numbers", "가격은 양의 정수")}</div>
+              {/* 2026-09-17: 원문(ioimalaysia 2019 editorial)에는 N 의 정확한 상한이 없다.
+                  없는 숫자를 "공식 상한" 인 척 지어내지 않는다. 대신 이 풀이가 감당하는
+                  크기를 정직하게 적는다. 근거: 정렬 한 번 + 양끝에서 한 번 훑기. */}
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2, fontFamily: "inherit", ...KA, whiteSpace: "pre-line" }}>
+                {t(E,
+                  "The original statement gives no exact upper bound for N.\nThis solution sorts once and scans once, so N in the hundreds of thousands is fine.",
+                  "원문에 N 이 얼마까지 커지는지는 적혀 있지 않아요.\n이 풀이는 한 번 정렬하고 한 번 훑어서, N 이 수십만이어도 괜찮아요.")}
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -399,7 +427,7 @@ export function makeMcc19BakeryCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

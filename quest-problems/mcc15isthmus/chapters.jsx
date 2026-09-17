@@ -174,29 +174,9 @@ function IsthmusPeakSim({ E }) {
           </svg>
         </div>
 
-        {/* the two judgements */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
-          <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, padding: "8px 10px", ...KA }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#7c3aed", marginBottom: 6 }}>
-              🏔️ {t(E, "peak? always going DOWN", "봉우리? 계속 내려가나요")}
-            </div>
-            <div style={{ fontSize: 10.5, color: C.dim, marginBottom: 3 }}>← {t(E, "left K steps", "왼쪽 K칸")}</div>
-            <div>{peakL.map(stepChip)}</div>
-            <div style={{ fontSize: 10.5, color: C.dim, margin: "3px 0" }}>→ {t(E, "right K steps", "오른쪽 K칸")}</div>
-            <div>{peakR.map(stepChip)}</div>
-          </div>
-          <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, padding: "8px 10px", ...KA }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#0891b2", marginBottom: 6 }}>
-              🏕️ {t(E, "valley? always going UP", "골짜기? 계속 올라가나요")}
-            </div>
-            <div style={{ fontSize: 10.5, color: C.dim, marginBottom: 3 }}>← {t(E, "left K steps", "왼쪽 K칸")}</div>
-            <div>{valL.map(stepChipUp)}</div>
-            <div style={{ fontSize: 10.5, color: C.dim, margin: "3px 0" }}>→ {t(E, "right K steps", "오른쪽 K칸")}</div>
-            <div>{valR.map(stepChipUp)}</div>
-          </div>
-        </div>
-
-        {/* verdict */}
+        {/* verdict — 2026-09-17: 그래프 바로 아래로 올렸다. 전에는 두 판정 박스 뒤,
+           그래프에서 451px 떨어진 자리에 있어서 한 걸음 옮길 때마다 눈이 두 군데를
+           쫓아야 했다. 바뀌는 자리는 한 곳에 모은다. */}
         <div style={{
           padding: "8px 12px", borderRadius: 10, textAlign: "center", fontSize: 13, fontWeight: 800,
           background: verdict.bg, border: `1px solid ${verdict.bd}`, color: verdict.fg, ...KA,
@@ -212,10 +192,44 @@ function IsthmusPeakSim({ E }) {
           </div>
         )}
 
-        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
+        {/* 판정의 근거 — 걸음마다의 비교.
+           2026-09-17: 전에는 봉우리·골짜기 두 박스가 늘 같이 떠서 절반은 언제나 ✗ 였다.
+           판정이 난 자리에서는 그 판정의 근거만 펴고, 둘 다 아닐 때만 둘을 같이 편다. */}
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, margin: "10px 0 4px", ...KA }}>
+          {t(E, "why — one step at a time", "왜 그런가요 — 한 걸음씩 확인")}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: isPeak || isValley ? "1fr" : "1fr 1fr", gap: 8 }}>
+          {!isValley && (
+            <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, padding: "8px 10px", ...KA }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#7c3aed", marginBottom: 6 }}>
+                🏔️ {t(E, "peak? always going DOWN", "봉우리? 계속 내려가나요")}
+              </div>
+              <div style={{ fontSize: 10.5, color: C.dim, marginBottom: 3 }}>← {t(E, "left K steps", "왼쪽 K칸")}</div>
+              <div>{peakL.map(stepChip)}</div>
+              <div style={{ fontSize: 10.5, color: C.dim, margin: "3px 0" }}>→ {t(E, "right K steps", "오른쪽 K칸")}</div>
+              <div>{peakR.map(stepChip)}</div>
+            </div>
+          )}
+          {!isPeak && (
+            <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, padding: "8px 10px", ...KA }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#0891b2", marginBottom: 6 }}>
+                🏕️ {t(E, "valley? always going UP", "골짜기? 계속 올라가나요")}
+              </div>
+              <div style={{ fontSize: 10.5, color: C.dim, marginBottom: 3 }}>← {t(E, "left K steps", "왼쪽 K칸")}</div>
+              <div>{valL.map(stepChipUp)}</div>
+              <div style={{ fontSize: 10.5, color: C.dim, margin: "3px 0" }}>→ {t(E, "right K steps", "오른쪽 K칸")}</div>
+              <div>{valR.map(stepChipUp)}</div>
+            </div>
+          )}
+        </div>
+
+        {/* 2026-09-17: 여기 있던 고정 문단이 바로 다음 1-4 퀴즈의 답("높이 0은 K=2에서는
+           골짜기가 아니다 — 왼쪽 두 번째 걸음이 4 → 4 라서")을 버튼을 누르기도 전에
+           그대로 말하고 있었다. 퀴즈 해설과 문장까지 같았다. 지우고, 눌러 볼 이유만 남긴다. */}
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
           {t(E,
-            "Try the three cases from the statement: height 5 is a peak for both K=1 and K=2; height 0 is a valley for K=1 but not for K=2 (its second step to the left is 4 → 4, not strictly up); the last piece has no land on its right, so it is nothing.",
-            "문제 설명의 세 장면을 눌러 봐요.\n높이 5는 K=1에서도 K=2에서도 봉우리예요.\n높이 0은 K=1에서는 골짜기지만 K=2에서는 아니에요.\n왼쪽 두 번째 걸음이 4 → 4 라서 올라가지 않거든요.\n마지막 땅은 오른쪽에 땅이 없어서 아무것도 아니에요.")}
+            "Press the case buttons, then flip K between 1 and 2. Some verdicts change.",
+            "장면 버튼을 눌러 보고 K도 1과 2로 바꿔 봐요.\n판정이 달라지는 땅이 있어요.")}
         </div>
       </div>
     </div>
@@ -456,7 +470,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

@@ -200,8 +200,13 @@ export function TrainsAuditSim({ E }) {
             ? (isOptimal ? t(E, "🎯 Optimal!", "🎯 제일 좋아요!") : t(E, "✓ Reached B", "✓ B 에 닿았어요"))
             : t(E, "… not at B yet", "… 아직 B 가 아니에요")}
         </div>
+        {/* 2026-09-17: 여기가 "다익스트라가 찾은 최소값" 을 **처음부터** 보여주고 있었다.
+            다익스트라가 뭔지 한 줄도 설명 안 된 상태에서 이름부터 나왔고, 정답을
+            오라클처럼 던져 줘서 학생이 스스로 시도할 이유가 사라졌다.
+            최소값은 B 에 닿은 **뒤에만** 드러나고, 이름은 코드 쪽에서 붙인다. */}
         <div style={{ fontSize: 12, fontWeight: 700, color: reachedB ? (isOptimal ? "#15803d" : "#9a3412") : "#991b1b", fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, `cost = ${cost}`, `비용 = ${cost}`)} · {t(E, `min = ${optimal}`, `최소 = ${optimal}`)}
+          {t(E, `cost = ${cost}`, `비용 = ${cost}`)}
+          {reachedB && <> · {t(E, `best = ${optimal}`, `가장 적은 값 = ${optimal}`)}</>}
         </div>
       </div>
 
@@ -219,18 +224,19 @@ export function TrainsAuditSim({ E }) {
       <div style={{
         background: "#eff6ff", border: `1px solid #93c5fd`, borderRadius: 8, padding: "8px 12px",
         fontSize: 11, color: "#1e3a8a", textAlign: "center", lineHeight: 1.5,
+        whiteSpace: "pre-line", wordBreak: "keep-all",
       }}>
         {!reachedB
           ? t(E,
-              `Extend the path 4-directionally until you reach B. Optimal Dijkstra cost = ${optimal}.`,
-              `4 방향으로 경로를 이어 B 까지 가요. 다익스트라가 찾은 가장 적은 비용은 ${optimal} 이에요.`)
+              "Extend the path 4-directionally until you reach B. Cheap-looking cells are not always the cheap route.",
+              "4 방향으로 경로를 이어 B 까지 가 봐요.\n싸 보이는 칸을 밟는다고 길 전체가 싸지는 건 아니에요.")
           : (isOptimal
               ? t(E,
-                  `Perfect — your path ties the minimum (${optimal}). That's exactly what dist[B] in the code stores.`,
-                  `잘했어요! 경로 비용이 최솟값 (${optimal}) 과 같아요. 코드의 dist[B] 에 담기는 값이에요.`)
+                  `Nothing beats ${optimal} on this grid — you found the cheapest route. Now: could a program find it without trying every path?`,
+                  `이 격자에서는 ${optimal} 보다 적게는 갈 수 없어요. 가장 싼 길을 찾았어요.\n그럼 컴퓨터는 길을 전부 그려 보지 않고도 이걸 찾을 수 있을까요?`)
               : t(E,
-                  `Reached B with cost ${cost}, but min = ${optimal}. Try another route — Dijkstra finds the lowest-cost route automatically.`,
-                  `B 에 닿긴 했는데 비용이 ${cost} 예요. 최솟값은 ${optimal} 이에요. 다른 길도 해 봐요 — 다익스트라는 가장 적은 비용의 길을 스스로 찾아요.`))}
+                  `You reached B with ${cost}, but some route costs only ${optimal}. Try again — where did the extra go?`,
+                  `B 에 닿았는데 비용이 ${cost} 예요. ${optimal} 로 가는 길이 있어요.\n다시 놓아 봐요 — 더 든 만큼은 어디서 났을까요?`))}
       </div>
     </div>
   );
@@ -340,21 +346,80 @@ const FULL_CPP = [
   "}",
 ];
 
+/* 2026-09-17: 여기가 **코드 38 줄 + heapq 가 섹션 1 개로 통째로** 나오는 자리였다.
+   게다가 why 는 "코드를 한 부분씩 읽어봐요" 라고 했는데 섹션이 하나라 한 부분씩
+   읽을 데가 없었다 — 말과 화면이 어긋나 있었다.
+   "왜 제일 싼 곳부터 꺼내면 되는지", "왜 우선순위 큐가 필요한지" 도 한 문장이 없었다.
+   네 걸음으로 쪼갠다. 코드 배열은 FULL_PY / FULL_CPP 를 slice 만 한다 —
+   한 글자도 바뀌지 않는다. */
 export function getTrainsSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "① Read the grid", "① 격자 읽기"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 13), cpp: FULL_CPP.slice(0, 22),
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
-        t(E, "The C++ version does exactly the same thing: heapq becomes priority_queue with greater<>, and the (dist, x, y) tuple stays a tuple.",
-            "C++ 버전도 하는 일이 똑같아요. heapq 자리에 greater<> 를 준 priority_queue 가 오고, (거리, x, y) 묶음은 tuple 그대로예요."),
+        t(E, "Read N first, then N lines of N numbers into grid. grid[x][y] is the population of one cell.",
+            "먼저 N 을 읽고, 그다음 N 줄을 grid 에 담아요.\ngrid[x][y] 는 그 칸 하나에 사는 사람 수예요."),
+        t(E, "The last line gives A and B. The problem counts rows and columns from 1, but a list counts from 0 — so subtract 1 from all four.",
+            "마지막 줄에 A 와 B 의 자리가 와요.\n문제는 행·열을 1 부터 세는데 리스트는 0 부터 세요.\n그래서 네 값에서 1 씩 빼 둬요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
+        t(E, "map(int, input().split()) turns one line of text into numbers.",
+            "map(int, input().split()) 는 글자 한 줄을 숫자들로 바꿔 줘요."),
+      ],
+      cppOnly: [
+        t(E, "cin >> reads numbers one at a time, so the grid needs two nested loops.",
+            "cin >> 은 숫자를 하나씩 읽어요. 그래서 격자는 for 문 두 겹으로 채워요."),
+      ],
+    },
+    {
+      label: t(E, "② Make a cost table", "② 비용 표 만들기"),
+      color: A,
+      py: FULL_PY.slice(13, 22), cpp: FULL_CPP.slice(22, 31),
+      why: [
+        t(E, "dist[x][y] means: the cheapest cost we know so far for reaching that cell. We don't know any of them yet, so every cell starts at INF (a huge number).",
+            "dist[x][y] 는 '지금까지 아는, 그 칸까지 가는 가장 적은 비용' 이에요.\n아직 아는 게 없으니 모든 칸을 INF(아주 큰 수)로 시작해요."),
+        t(E, "The people living on the starting cell get displaced too — so dist[A] starts at grid[A], not at 0.",
+            "출발 칸에 사는 사람도 옮겨야 해요.\n그래서 dist[A] 는 0 이 아니라 grid[A] 로 시작해요."),
+        t(E, "pq holds the cells we still have to look at. Because the cost sits first in each tuple, whatever we pull out of pq is always the cheapest one waiting.",
+            "pq 에는 아직 봐야 할 칸을 넣어 둬요.\n묶음의 맨 앞이 비용이라, pq 에서 꺼내면 늘 기다리던 것 중 가장 싼 칸이 나와요."),
+      ],
+      pyOnly: [
+        t(E, "float('inf') is Python's 'bigger than any number' value, so the first real cost always wins the comparison.",
+            "float('inf') 는 파이썬에서 '어떤 수보다도 큰 값' 이에요.\n그래서 진짜 비용이 처음 들어올 때 무조건 더 작아요."),
+      ],
+      cppOnly: [
+        t(E, "greater<> is what turns priority_queue from a max-heap into a min-heap — without it you would pull the most expensive cell first.",
+            "priority_queue 는 기본이 가장 큰 것부터예요.\ngreater<> 를 줘야 가장 작은 것부터 나와요. 안 주면 제일 비싼 칸부터 꺼내게 돼요."),
+      ],
+    },
+    {
+      label: t(E, "③ Always take the cheapest first", "③ 제일 싼 칸부터 꺼내기"),
+      color: A,
+      py: FULL_PY.slice(22, 29), cpp: FULL_CPP.slice(31, 42),
+      why: [
+        t(E, "Why is taking the cheapest one safe? Populations are never negative, so a path only ever gets more expensive as it grows. The cheapest cell waiting in pq can never be reached more cheaply by some longer detour — its cost is already final.",
+            "왜 가장 싼 것부터 꺼내도 될까요?\n인구는 음수가 없어서, 길이 길어지면 비용은 절대 줄지 않아요.\n그러니 pq 에서 가장 싼 칸은 다른 길로 돌아와도 더 싸질 수 없어요.\n그 값이 이미 그 칸의 최종 답이에요."),
+        t(E, "The same cell can get pushed into pq more than once. If what we pulled out is bigger than what the table already says, a better route got there first — skip it.",
+            "같은 칸이 pq 에 여러 번 들어갈 수 있어요.\n꺼낸 값이 표에 적힌 값보다 크면, 더 좋은 길이 먼저 다녀간 칸이에요. 건너뛰어요."),
+        t(E, "The moment B comes out of pq, B's cost is final — so we stop right there instead of walking the rest of the grid.",
+            "B 가 pq 에서 나오는 순간이 곧 B 의 최종 답이에요.\n그래서 남은 칸을 다 보지 않고 거기서 멈춰요."),
+        t(E, "This way of spreading — always from the cheapest place you know — has a name: Dijkstra's algorithm.",
+            "이렇게 '아는 것 중 가장 싼 곳에서부터 넓혀 가는' 방법에는 이름이 있어요 — 다익스트라예요."),
+      ],
+    },
+    {
+      label: t(E, "④ Spread to neighbours, then answer", "④ 이웃으로 넓히고 답 내기"),
+      color: A,
+      py: FULL_PY.slice(29, 38), cpp: FULL_CPP.slice(42, 59),
+      why: [
+        t(E, "From the cell we just took, look at its four neighbours. Skip anything outside the grid or marked −1.",
+            "방금 꺼낸 칸에서 이웃 네 칸을 봐요.\n격자 밖이거나 −1 인 칸은 건너뛰어요."),
+        t(E, "Reaching a neighbour costs 'what it cost to get here' plus 'who lives there'. Write it into the table only when it beats what's already written, and push it so it can be taken later.",
+            "이웃까지의 비용은 '여기까지 든 비용 + 그 칸 인구' 예요.\n표에 적힌 값보다 작을 때만 고쳐 적고, 나중에 꺼낼 수 있게 pq 에 넣어요."),
+        t(E, "When the loop ends, the table's B slot holds the answer — the same number you were trying to beat on the grid.",
+            "반복이 끝나면 표의 B 자리에 답이 남아 있어요.\n앞에서 격자로 이겨 보려 했던 바로 그 값이에요."),
       ],
       cppOnly: [
         t(E, "Split #include into the specific headers this code needs (iostream, vector, queue, tuple).",

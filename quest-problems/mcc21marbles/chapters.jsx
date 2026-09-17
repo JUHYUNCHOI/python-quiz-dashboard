@@ -152,7 +152,7 @@ export function makeMcc21MarblesCh1(E) {
       correct: 1,
       explain: t(E,
         "D = [+2, −2]. Prefix after box 1 = +2, so 2 marbles cross the boundary. |+2| = 2 moves.",
-        "D = [+2, −2] 예요.\n상자 1 까지 쌓아 온 값이 +2 라서 구슬 2 개가 경계를 건너요.\n|+2| = 2 번이에요."),
+        "D = [+2, −2] 예요.\n상자 1 까지의 누적이 +2 라서 구슬 2 개가 경계를 건너요.\n|+2| = 2 번이에요."),
     },
 
     // 1-5: hand-computed input
@@ -164,7 +164,7 @@ export function makeMcc21MarblesCh1(E) {
       question: t(E,
         "A = [3, 0, 3], B = [1, 4, 1]. Min moves?",
         "A = [3, 0, 3], B = [1, 4, 1]. 최소 이동?"),
-      hint: t(E, "D = [+2, −4, +2]. Prefix after box 1 = +2, after box 2 = −2. Add |+2| + |−2|.", "D = [+2, −4, +2] 예요.\n상자 1 까지 쌓아 온 값은 +2, 상자 2 까지는 −2 예요.\n|+2| + |−2| 를 더해요."),
+      hint: t(E, "D = [+2, −4, +2]. Carry after box 1 = +2, after box 2 = −2. Add |+2| + |−2|.", "D = [+2, −4, +2] 예요.\n상자 1 까지의 누적은 +2, 상자 2 까지는 −2 예요.\n|+2| + |−2| 를 더해요."),
       answer: 4,
     },
   ];
@@ -183,10 +183,10 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: simulate every single-marble hop", "느림: 구슬 한 칸 이동을 하나씩 시뮬")}
+                🐢 {t(E, "Slow: move the marbles one hop at a time", "느림: 구슬을 한 칸씩 진짜로 옮겨 보기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Marbles can travel far, and totals reach 5·10¹¹ — the number of hops is astronomically large. Times out.", "구슬이 멀리 갈 수 있고 합이 5·10¹¹ 까지라 이동 횟수가 어마어마해요. 그래서 시간 초과예요.")}
+                {t(E, "We did NOT try this one in the sim — here is why. Marbles can travel far and totals reach 5·10¹¹, so the number of hops is astronomically large. Times out.", "이 방법은 앞 시뮬에서 해 보지 않았어요. 왜 안 하는지만 보고 넘어가요. 구슬이 멀리 갈 수 있고 합이 5·10¹¹ 까지라 옮기는 횟수가 어마어마해요. 그래서 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#fff1f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
@@ -194,12 +194,12 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: prefix-carry over D = A − B", "빠름: D = A − B 를 쌓아 가며 세기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Marbles only hop between neighbours, so whatever imbalance sits left of a boundary MUST cross it. Sum |running prefix of D| over all N boxes — one O(N) pass.", "구슬은 옆 상자로만 갈 수 있어요. 그래서 경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요. D 를 쌓아 온 값의 절댓값을 상자마다 더하면 돼요. O(N) 으로 한 번만 훑어요.")}
+                {t(E, "This is the one you walked through in the sim. Marbles only hop between neighbours, so whatever imbalance sits left of a boundary MUST cross it. Sum |carry| over all N boxes — one O(N) pass.", "앞 시뮬에서 경계를 하나씩 건너며 해 본 게 이 방법이에요. 구슬은 옆 상자로만 갈 수 있어요. 그래서 경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요. |누적| 을 상자마다 더하면 돼요. O(N) 으로 한 번만 훑어요.")}
               </div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

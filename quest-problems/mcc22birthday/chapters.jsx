@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc22BirthdaySections, Mcc22BirthdayCookieSim } from "./components";
+import { getMcc22BirthdaySections, Mcc22BirthdayCookieSim, Mcc22BirthdayBackwardWalkSim } from "./components";
 
 const KA = { wordBreak: "keep-all" };
 const NW = { whiteSpace: "nowrap" };
@@ -191,8 +191,8 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Grow the grid yourself. Add letters and watch it double + flip. Tap a cookie to read its number. Notice how fast it blows up.",
-        "격자를 직접 키워 보고, 얼마나 빨리 커지는지 느껴 봐요."),
+        "Add letters to grow the grid, and tap a cookie to read its number.",
+        "글자를 더해 격자를 키우고, 쿠키를 눌러 번호를 봐요."),
       content: <Mcc22BirthdayCookieSim E={E} />,
     },
 
@@ -200,7 +200,7 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Start: [p]. Apply A → [p p]. Apply B → the copy is flipped left↔right, so p becomes q: [p p q q]. Cookie #3 is the first of the flipped copy.",
+        "The copy that B appends is flipped left↔right.",
         "B 가 붙인 복사본은 좌우로 뒤집혀 있어요."),
       question: t(E,
         "Grid [p]. Apply A, then B. What shape is cookie #3?",
@@ -254,11 +254,21 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    /* 2-2: 거꾸로 따라가기를 손으로 한 번 (2026-09-17 에 새로 넣은 자리)
+       여기가 없어서 계획 문단 두 개 다음에 바로 40줄 코드가 나왔다.
+       이 문제에서 제일 어려운 절차를, 번호 하나로 끝까지 눈으로 따라간다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Walk one cookie number backward, one letter at a time.",
+        "쿠키 번호 하나를 글자 하나씩 거꾸로 따라가 봐요."),
+      content: <Mcc22BirthdayBackwardWalkSim E={E} />,
+    },
+    // 2-3: progressive code
     {
       type: "progressive",
       narr: t(E,

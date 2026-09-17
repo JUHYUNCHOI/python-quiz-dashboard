@@ -193,7 +193,7 @@ export function makeMcc22LampCh1(E) {
     {
       type: "deepAuditSim",
       narr: t(E,
-        "Each lamp is a triangular tent; the bars show the SUMMED brightness at every integer x. Drag k up and down, and bump each lamp's brightness b — watch which positions stay above the line, and notice the hill only bends at the breakpoints p−b, p, p+b.",
+        "Change k and each lamp's b, and see where the hill bends.",
         "k 와 밝기 b 를 바꿔 보며 언덕이 어디서 꺾이는지 봐요."),
     },
 
@@ -201,8 +201,8 @@ export function makeMcc22LampCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "One lamp at p=0 with b=6 shines 6 at x=0, then 5,4,3,… stepping away. A second lamp at p=−3 with b=2 shines 2 at x=−3, 1 at x=−2 and x=−4. Add them up at each x.",
-        "램프 둘의 밝기를 같은 x 에서 더하면 총 밝기가 돼요."),
+        "A lamp's brightness at x is max(0, b − |p − x|). Work out each lamp's share first.",
+        "램프 하나의 밝기는 max(0, b − |p − x|) 예요."),
       question: t(E,
         "Two lamps: (p=0, b=6) and (p=−3, b=2). What is the total brightness at x = −3?",
         "램프가 (p=0, b=6) 과 (p=−3, b=2) 둘 있어요. x = −3 에서 총 밝기는 얼마일까요?"),
@@ -256,7 +256,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

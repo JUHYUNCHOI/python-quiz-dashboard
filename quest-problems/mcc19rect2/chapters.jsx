@@ -37,9 +37,10 @@ export function makeMcc19Rect2Ch1(E) {
     // 1-1: Title reveal
     {
       type: "reveal",
+      /* 2026-09-17: 파란 바가 56자였다. 아래 🎯 미션 카드가 같은 말을 이미 한다. */
       narr: t(E,
-        "An axis-aligned rectangle has 4 corners; 3 are given.\nPrint the COORDINATES of the 4th (missing) corner.",
-        "축에 평행한 직사각형의 꼭짓점 4 개 중 3 개가 주어져요.\n누락된 4 번째 꼭짓점의 좌표를 출력해요."),
+        "Three corners of a rectangle are given. Find the fourth.",
+        "직사각형의 꼭짓점 3 개가 주어져요. 네 번째를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -148,12 +149,28 @@ export function makeMcc19Rect2Ch1(E) {
         </div>),
     },
 
-    // 1-3: Quiz
+    /* 1-3: 숨은 꼭짓점 찾기 시뮬
+       2026-09-17: 이 시뮬이 원래 퀴즈·입력칸 **뒤**에 있었다. 그래서 퀴즈 explain 이
+       "x 가 두 번 나오는 쪽은 짝, 짝 없는 하나가 답" 이라는 규칙을 글로 먼저 다 말했고,
+       정작 그 규칙을 눈으로 보여주는 시뮬은 그다음에 왔다.
+       형제 quest(mcc20cipher: 제목 → 형식 → 시뮬 → 퀴즈)와 같은 순서로 올린다.
+       앞 쪽 형식 카드의 "아래 시뮬이 하나씩 짚어줘요" 도 이제 말이 맞는다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Pick a rectangle and find the fourth corner.",
+        "직사각형을 골라 네 번째 꼭짓점을 찾아봐요."),
+      content: <Mcc19Rect2AuditSim E={E} />,
+    },
+
+    // 1-4: Quiz
     {
       type: "quiz",
+      /* 2026-09-17: narr 이 question 을 좌표까지 그대로 다시 말하고 있었다.
+         형제 quest(mcc20cipher:258)처럼 narr 은 "지금 뭘 볼 차례" 만 말한다. */
       narr: t(E,
-        "Corners: (5,1), (5,4), (2,1). Where must the 4th one be?",
-        "꼭짓점이 (5,1), (5,4), (2,1) 이에요. 4 번째는 어디일까요?"),
+        "Now try it without the sim's help.",
+        "이번엔 시뮬 없이 직접 찾아볼 차례예요."),
       question: t(E,
         "3 corners: (5,1), (5,4), (2,1). 4th corner?",
         "꼭짓점 3개가 (5,1), (5,4), (2,1) 이에요. 4번째 꼭짓점은?"),
@@ -167,14 +184,17 @@ export function makeMcc19Rect2Ch1(E) {
         "The x values are 5, 5, 2 — the 5 appears twice, so the lonely 2 is the missing x. The y values are 1, 4, 1 — so the missing y is 4. The 4th corner is (2, 4).",
         "x 값은 5, 5, 2 예요 — 5 가 두 번 나오니 짝이 없는 2 가 빠진 x 예요.\ny 값은 1, 4, 1 이니 빠진 y 는 4 고요.\n4 번째 꼭짓점은 (2, 4) 예요."),
     },
-    // 1-3: Input
+    // 1-5: Input
     {
       type: "input",
+      /* 2026-09-17: 좌표가 narr 에만 있고 question 은 "x좌표 = ?" 뿐이었다.
+         파란 바가 문제의 일부를 지고 있던 셈이라 좌표를 question 으로 내렸다. */
       narr: t(E,
-        "Corners: (7,2), (3,2), (3,6). What is the x-coordinate of the 4th corner?", "꼭짓점이 (7,2), (3,2), (3,6) 이에요. 4번째 꼭짓점의 x좌표는?"),
+        "One number this time — just the x.",
+        "이번엔 x 좌표 하나만 구해볼 차례예요."),
       question: t(E,
-        "4th corner x-coordinate = ?",
-        "4번째 꼭짓점의 x좌표 = ?"),
+        "Corners (7,2), (3,2), (3,6).\n4th corner x-coordinate = ?",
+        "꼭짓점이 (7,2), (3,2), (3,6) 이에요.\n4번째 꼭짓점의 x좌표 = ?"),
       /* 2026-09-09: 힌트에 "x4 = 0 XOR 2 XOR 0 = 2" 라고 **답이 그대로** 있었다.
          NumInput 은 힌트를 버튼 뒤가 아니라 입력칸 밑에 **항상** 그린다
          (components/quest/shared.tsx). 그러니 힌트에 답 자체를 넣으면 안 된다. */
@@ -182,14 +202,6 @@ export function makeMcc19Rect2Ch1(E) {
         "Three x values are given. Which one has no partner?",
         "x 값이 셋 있어요. 그중 짝 없는 값은 무엇일까요?"),
       answer: 7,
-    },
-    // 1-4: 숨은 꼭짓점 찾기 시뮬
-    {
-      type: "reveal",
-      narr: t(E,
-        "Pick a rectangle, look at the three corners you know, and find the fourth.",
-        "직사각형을 골라 아는 세 꼭짓점을 보고, 네 번째를 찾아봐요."),
-      content: <Mcc19Rect2AuditSim E={E} />,
     },
   ];
 }
@@ -208,7 +220,7 @@ export function makeMcc19Rect2Ch2(E, lang = "py") {
         "x 값 셋 중 짝 없는 하나가 답이에요. y 도 똑같고요."),
       content: (
         <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
+          {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
         </div>),
 
     },

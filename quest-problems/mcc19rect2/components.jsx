@@ -170,9 +170,16 @@ export function Mcc19Rect2AuditSim({ E }) {
         color: "#92400e", lineHeight: 1.7,
         whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance",
       }}>
-        💡 {t(E,
-          "In a rectangle the same x value shows up at two corners. Among your three, one x appears twice and one appears alone — the one left without a partner belongs to the missing corner. Same for y.",
-          "직사각형에서는 같은 x 값이 두 꼭짓점에 나와요.\n가진 셋 중 둘은 짝이 되고, 하나는 짝이 없어요.\n짝 없는 그 값이 빠진 꼭짓점의 x 예요. y 도 똑같아요.")}
+        {/* 2026-09-17: 이 시뮬이 퀴즈 뒤에서 앞으로 올라오면서 '학생이 눈치채는 자리' 가 됐다.
+            그런데 이 💡 가 규칙을 처음부터 다 말하고 있어서 눈치챌 것이 남지 않았다.
+            시뮬에 이미 있는 "🔓 답 보기" 뒤로 미룬다 (mcc20cipher 의 touched 와 같은 생각). */}
+        {reveal
+          ? <>💡 {t(E,
+              "In a rectangle the same x value shows up at two corners. Among your three, one x appears twice and one appears alone — the one left without a partner belongs to the missing corner. Same for y.",
+              "직사각형에서는 같은 x 값이 두 꼭짓점에 나와요.\n가진 셋 중 둘은 짝이 되고, 하나는 짝이 없어요.\n짝 없는 그 값이 빠진 꼭짓점의 x 예요. y 도 똑같아요.")}</>
+          : <>🤔 {t(E,
+              "Look at the three x values above. Do any two of them match?\nTry the other presets — does the same thing happen every time?",
+              "위의 x 값 셋을 봐요. 그중 둘이 같나요?\n다른 프리셋도 눌러봐요 — 매번 같은 일이 일어나나요?")}</>}
       </div>
     </div>
   );

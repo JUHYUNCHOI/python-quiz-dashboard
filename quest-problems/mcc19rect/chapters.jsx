@@ -151,9 +151,11 @@ export function makeMcc19RectCh1(E) {
            "find the minimum differences between **any two numbers**"
          이고, "정렬돼 있으니 인접만 보면 된다" 는 **풀이의 관찰**이지 문제가 아니다.
          우리는 그 관찰을 1쪽 미션에 적어놔서 이 문제의 유일한 생각거리를 지웠다. */
+      /* 2026-09-17: 파란 바가 62자였다. 55자 이하 한 문장으로 줄인다.
+         "작은 수부터 큰 수 순서" 는 바로 아래 📖 문제 카드가 이미 말한다. */
       narr: t(E,
-        "You get a list of numbers, small to large.\nFind the smallest difference between ANY two of them.",
-        "작은 수부터 큰 수 순서로 놓인 수들이 주어져요.\n그중 아무 두 수나 골랐을 때, 차이가 가장 작은 값을 찾아요."),
+        "Find the smallest difference between ANY two of the numbers.",
+        "아무 두 수를 골랐을 때 차이가 가장 작은 값을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -252,8 +254,10 @@ export function makeMcc19RectCh1(E) {
     // 1-3: Quiz
     {
       type: "quiz",
+      /* 2026-09-17: narr 이 question 을 그대로 다시 말하고 있었다 (좌표·리스트까지 똑같이).
+         형제 quest(mcc20cipher:258)처럼 narr 은 "지금 뭘 볼 차례" 만 말한다. */
       narr: t(E,
-        "For the sorted list [1, 3, 5, 6], which consecutive pair has the smallest difference?", "[1, 3, 5, 6] 에서 이웃한 두 수 중 차이가 가장 작은 건 어느 쪽일까요?"),
+        "Check the idea: neighbours are all we need.", "이웃한 두 수만 보면 되는지 직접 확인해봐요."),
       question: t(E,
         "Sorted list [1, 3, 5, 6]. Which pair gives the minimum difference?",
         "[1, 3, 5, 6] 에서 이웃한 두 수 중\n차이가 가장 작은 것은 무엇일까요?"),
@@ -270,9 +274,10 @@ export function makeMcc19RectCh1(E) {
     // 1-2b: Sim — deep audit of the consecutive scan
     {
       type: "reveal",
+      /* 2026-09-17: 57자였다. 무엇을 하는지는 시뮬이 화면에서 보여준다. */
       narr: t(E,
-        "Watch the scan crawl across the sorted list, comparing each pair and tracking the smallest diff so far.",
-        "줄지어 있는 수를 한 칸씩 훑으면서\n이웃한 두 수의 차이를 재고, 더 작은 값이 나오면 새로 적어 둬요."),
+        "Step through the scan yourself, one neighbour at a time.",
+        "이웃끼리 한 칸씩 훑는 걸 직접 넘겨봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <ConsecutiveDiffScanSim E={E} />
@@ -282,15 +287,19 @@ export function makeMcc19RectCh1(E) {
     // 1-3: Input
     {
       type: "input",
+      /* 2026-09-17: 바로 위 퀴즈가 같은 리스트 [1,3,5,6] 을 쓰고 explain 에서
+         "6 − 5 = 1 이 가장 작아요" 라고 답까지 말한 뒤, 이 칸이 또 1 을 물었다.
+         계산이 아니라 방금 읽은 숫자를 다시 치는 문제가 된다.
+         다른 수로 바꾼다 — [2, 9, 11, 16, 19] 의 이웃 차이는 7, 2, 5, 3 이고 답은 2. */
       narr: t(E,
-        "Now compute it yourself! List = [1, 3, 5, 6]. What is the minimum difference?", "이제 직접 구해 봐요. 수는 [1, 3, 5, 6] 이에요."),
+        "Your turn — new numbers this time.", "이번엔 새 수들로 직접 구해볼 차례예요."),
       question: t(E,
-        "Sorted list [1, 3, 5, 6]. Min difference = ?",
-        "[1, 3, 5, 6] 에서 가장 작은 차이는 얼마일까요?"),
+        "Sorted list [2, 9, 11, 16, 19]. Min difference = ?",
+        "[2, 9, 11, 16, 19] 에서 가장 작은 차이는 얼마일까요?"),
       hint: t(E,
-        "Compute each consecutive diff (3-1, 5-3, 6-5), then pick the smallest.",
-        "이웃한 두 수의 차이 3−1, 5−3, 6−5 를 각각 구한 뒤\n그중 가장 작은 것을 고르세요."),
-      answer: 1,
+        "Only neighbours can win. Take each neighbour pair's difference, then pick the smallest.",
+        "이웃한 두 수끼리만 차이를 구해 보세요.\n그중 가장 작은 것이 답이에요."),
+      answer: 2,
     },
   ];
 }

@@ -78,6 +78,10 @@ export function getMcc19ElimSections(E) {
             "창 하나를 문자열 위로 밀며 'zero' 와 'one' = 창 안의 개수를 유지해요. 0 이 들어와 'zero' 가 K 를 넘으면, 다시 맞을 때까지 왼쪽에서 줄여요."),
         t(E, "The key line is ans = max(ans, one): the answer is the number of 1s in the window, NOT its length. The ≤ K zeros inside get deleted, so they must not be counted.",
             "핵심 줄은 ans = max(ans, one) 이에요.\n답은 창 길이가 아니라 창 안에 있는 1 의 개수예요.\n안에 있는 0 은 K 개까지 지우니까 세면 안 돼요."),
+        /* 2026-09-17: 학생이 "이 줄이 왜 else 안에만 있지?" 에서 막혔다.
+           `one` 이 늘어나는 순간이 딱 여기뿐이라는 게 답인데 화면에 없었다. */
+        t(E, "Why is that line only in the else branch? Because 'one' grows in exactly one place — when the new character is a 1. If the new character is a 0, 'one' either stays the same or drops while the window shrinks from the left. It can never set a new record there, so there is nothing to check.",
+            "그 줄이 왜 else 안에만 있을까요?\n'one' 이 늘어나는 순간은 딱 한 군데, 새 글자가 1 일 때예요.\n새 글자가 0 이면 'one' 은 그대로거나, 창을 왼쪽에서 줄이는 동안 오히려 줄어요.\n거기선 새 기록이 나올 수 없으니 확인할 것도 없어요."),
       ],
       pyOnly: [
         t(E, "s[right] and s[left] index the string directly — no list conversion needed.",
@@ -86,8 +90,10 @@ export function getMcc19ElimSections(E) {
       cppOnly: [
         t(E, "cin >> s reads the binary string in one token; s[i] compares to the char '0'.",
             "cin >> s 로 이진 문자열을 한 덩어리로 읽고, s[i] 는 글자 '0' 과 견줘요."),
-        t(E, "int is plenty here — N ≤ 100000, so counts and the answer never overflow.",
-            "여기선 int 로 충분해요. N ≤ 100000 이라 개수도 답도 넘치지 않아요."),
+        /* 2026-09-17: 여기 "N ≤ 100000" 은 원문에 없는 숫자였다 (지어낸 상한).
+           개수도 답도 문자열 길이를 못 넘는다는 사실만으로 충분하다. */
+        t(E, "int is plenty here — every count and the answer stay at or below the string length.",
+            "여기선 int 로 충분해요.\n개수도 답도 문자열 길이를 넘지 않으니까요."),
       ],
     },
   ];

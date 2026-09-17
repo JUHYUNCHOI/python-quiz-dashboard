@@ -135,8 +135,8 @@ export function makeMcc22MazeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Feel it. Clear rows/columns and watch the reachable area (shaded) grow from S — try each preset and find the fewest operations.",
-        "직접 느껴봐요. 행/열을 부수면 S 에서 닿는 영역(색칠)이 넓어져요 — 각 예시에서 최소 조작을 찾아봐요."),
+        "Clear rows and columns yourself, and find the fewest that works.",
+        "행과 열을 직접 부수면서 최소 몇 번이면 되는지 찾아봐요."),
       content: <Mcc22MazeConnectSim E={E} />,
     },
 
@@ -144,14 +144,14 @@ export function makeMcc22MazeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Clearing the top row plus the last column always links the two corners.",
-        "맨 윗 행 + 맨 오른쪽 열이면 두 모서리가 언제나 이어져요."),
+        "Your turn to think it through.",
+        "이번엔 직접 생각해 볼 차례예요."),
       question: t(E,
         "Why can the answer NEVER be 3 or more?",
         "왜 정답이 절대 3 이상이 될 수 없을까요?"),
       options: [
-        t(E, "Clearing the top row + the last column always links the two corners (2 ops).",
-             "맨 윗 행 + 맨 오른쪽 열을 부수면 두 모서리가 항상 이어져요 (조작 2번)."),
+        t(E, "Two clears — one row, one column — are always enough.",
+             "행 하나 열 하나, 두 번이면 언제나 충분하기 때문이에요."),
         t(E, "The grid is always small enough to walk through.",
              "격자가 늘 걸어서 지날 만큼 작기 때문이에요."),
         t(E, "There are at most 2 walls in any grid.",
@@ -175,8 +175,8 @@ export function makeMcc22MazeCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every combination of row/column clears — that explodes. The fast way uses the fact that the answer is only 0, 1, or 2, and checks connectivity with Union-Find.",
-        "느린 방법은 행/열 부수기의 모든 조합을 시도해요 — 폭발해요. 빠른 방법은 '정답은 0, 1, 2 뿐' 이라는 사실을 쓰고, 연결 여부는 유니온-파인드로 확인해요."),
+        "First see why the slow way explodes, then find a faster one.",
+        "느린 방법이 왜 터지는지 보고, 더 빠른 길을 찾아봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -189,9 +189,19 @@ export function makeMcc22MazeCh2(E, lang = "py") {
                      "2^(2n) 가지 조합마다 미로 전체를 다시 살펴봐야 해요. 불가능해요.")}
               </div>
             </div>
+            <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
+                🤔 {t(E, "So how do we solve it? Let's think.", "그럼 어떻게 해결하면 될까요? 생각해 봐요.")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
+                {t(E,
+                  "We already know the answer can only be 0, 1, or 2.\nSo we do not have to search — we only have to ask three questions in order.",
+                  "정답이 0, 1, 2 중 하나라는 건 이미 알아냈어요.\n그러니 찾아 헤맬 필요가 없어요 — 물어볼 것이 세 가지뿐이에요.")}
+              </div>
+            </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: the answer is only 0, 1, or 2", "빠름: 정답은 0, 1, 2 뿐")}
+                🚀 {t(E, "Fast: just three questions", "빠름: 물어볼 것은 세 가지")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
                 {t(E, "① already connected? → 0.  ② any single row or column clear connects? → 1.  ③ otherwise → 2.",
@@ -200,7 +210,7 @@ export function makeMcc22MazeCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

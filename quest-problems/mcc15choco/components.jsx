@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
+import { SimNav } from "@/components/quest/TraceStepper";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
@@ -48,8 +49,6 @@ export function Mcc15ChocoStackSim({ E }) {
   const [f, setF] = useState(0);
   const frame = SIM_FRAMES[f];
   const action = E ? frame.actionEN : frame.actionKO;
-  const atEnd = f >= SIM_FRAMES.length - 1;
-  const atStart = f <= 0;
 
   return (
     <div style={{ padding: 16 }}>
@@ -126,28 +125,10 @@ export function Mcc15ChocoStackSim({ E }) {
         {action}
       </div>
 
-      {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
-        <button onClick={() => setF(Math.max(0, f - 1))} disabled={atStart} style={{
-          padding: "6px 14px", fontSize: 12, fontWeight: 700,
-          background: atStart ? "#e5e7eb" : "#fff",
-          color: atStart ? "#9ca3af" : A,
-          border: `1.5px solid ${atStart ? "#e5e7eb" : A}`,
-          borderRadius: 8, cursor: atStart ? "not-allowed" : "pointer",
-        }}>← {t(E, "Prev", "이전")}</button>
-        <button onClick={() => setF(0)} style={{
-          padding: "6px 14px", fontSize: 12, fontWeight: 700,
-          background: "#fff", color: "#6b7280",
-          border: "1.5px solid #d1d5db", borderRadius: 8, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "처음")}</button>
-        <button onClick={() => setF(Math.min(SIM_FRAMES.length - 1, f + 1))} disabled={atEnd} style={{
-          padding: "6px 14px", fontSize: 12, fontWeight: 700,
-          background: atEnd ? "#e5e7eb" : A,
-          color: atEnd ? "#9ca3af" : "#fff",
-          border: `1.5px solid ${atEnd ? "#e5e7eb" : A}`,
-          borderRadius: 8, cursor: atEnd ? "not-allowed" : "pointer",
-        }}>{t(E, "Next", "다음")} →</button>
-      </div>
+      {/* Controls — 2026-09-17: 여기 "이전 / 처음 / 다음 →" 글자 버튼이 있었다.
+         바로 아래 챕터 넘김 버튼과 글자까지 같아서 학생이 시뮬을 통째로 건너뛰었다.
+         형제 quest(isthmus·equation)와 같은 ◀ ▶ 아이콘형으로 바꿨다. */}
+      <SimNav idx={f} total={SIM_FRAMES.length} onIdx={setF} accent={A} isEn={E} />
     </div>
   );
 }

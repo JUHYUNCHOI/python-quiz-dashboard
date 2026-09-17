@@ -12,8 +12,8 @@ export function makeMcc21DvdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A DVD logo starts at cell (1,1) of an H×W grid and moves one row up and one column right each second, reflecting off the walls.\nFor each query (H, W, T), print where it is after T seconds.",
-        "DVD 로고가 (1,1) 칸에서 출발해 매 초 위로 한 칸, 오른쪽으로 한 칸 움직여요.\n벽에 닿으면 튕겨요. T 초 뒤에 로고는 어느 칸에 있을까요?"),
+        "A DVD logo bounces around an H×W grid. Where is it after T seconds?",
+        "벽에서 튕기는 DVD 로고가 T 초 뒤에 어느 칸에 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -136,16 +136,16 @@ export function makeMcc21DvdCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Feel the motion. Step T and watch the row and the column bounce on their own — the formula reads the position straight off T.",
-        "T 를 하나씩 넘기면서 행과 열이 따로 튕기는 모습을 봐요."),
+        "Step T one second at a time and watch what the row does.",
+        "T 를 한 초씩 넘기면서 행이 어떻게 움직이는지 봐요."),
     },
 
     // 1-4: understanding check
     {
       type: "quiz",
       narr: t(E,
-        "On a grid 3 rows tall, the row starts at 1 (bottom) and goes up: 1→2→3, then bounces back down 3→2→1.",
-        "높이가 3 인 격자에서 행은 1→2→3 으로 올라갔다가 3→2→1 로 내려와요."),
+        "Now try it yourself — the row only, without the column.",
+        "이번엔 행 하나만 떼어 놓고 직접 세어 봐요."),
       question: t(E,
         "Grid height H=3. The row starts at 1 and moves up, bouncing at the walls. Which row (from the bottom) after 4 seconds?",
         "격자 높이가 H=3 이에요. 행이 1 에서 출발해 위로 가다 벽에서 튕겨요. 4 초 뒤에는 아래에서 몇 번째 행일까요?"),
@@ -168,8 +168,8 @@ export function makeMcc21DvdCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Stepping second by second is hopeless: T can be 10^16 and there are up to 1000 queries — around 10^19 steps. The fast way sees the row and the column as two independent triangle waves, each repeating every 2(N−1) seconds, so one modulo gives each answer.",
-        "한 초씩 세는 건 가망이 없어요. 행과 열을 따로 보면 나머지 계산 한 번으로 끝나요."),
+        "Why stepping second by second never finishes, and what to do instead.",
+        "한 초씩 세면 왜 못 끝나는지, 대신 무엇을 볼지 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -183,7 +183,7 @@ export function makeMcc21DvdCh2(E, lang = "py") {
             </div>
             <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: two independent triangle waves", "빠름: 따로 노는 삼각파 두 개")}
+                🚀 {t(E, "Fast: the row and the column repeat", "빠름: 행 따로, 열 따로 — 되풀이를 이용해요")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Row (from H) and column (from W) never interact. Each bounces with period 2(N−1), so r = N − |(N−1) − (T mod 2(N−1))|. O(1) per query.",
@@ -192,7 +192,7 @@ export function makeMcc21DvdCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

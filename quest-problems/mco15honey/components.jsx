@@ -46,6 +46,10 @@ export function HoneySim({ E }) {
 
   const totalBlocks = allBlocks.length;
   const [K, setK] = useState(4);
+  /* 2026-09-17: 아래 설명이 "큰 순서로 세운 뒤 K 개를 고르면 그게 답" 이라고
+     **만지기 전에** 결론을 말하고 있었다. mcc20cipher·mcc21carrots 와 같게
+     슬라이더를 움직인 뒤에만 열리도록 바꾼다. */
+  const [touched, setTouched] = useState(false);
   const pickedKey = new Set(sortedDesc.slice(0, K).map(b => `${b.hive}-${b.partOrder}`));
 
   const total = sortedDesc.slice(0, K).reduce((s, b) => s + b.take, 0);
@@ -112,7 +116,7 @@ export function HoneySim({ E }) {
             max={totalBlocks}
             step={1}
             value={K}
-            onChange={e => setK(Number(e.target.value))}
+            onChange={e => { setK(Number(e.target.value)); setTouched(true); }}
             style={{ width: "100%", accentColor: A }}
           />
         </div>
@@ -150,10 +154,14 @@ export function HoneySim({ E }) {
         </div>
       </div>
 
-      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
-        {t(E,
-          `M=${_SIM_M}. Each hive splits into trip-yields of M (last block = remainder). Sort all yields descending, take the K largest — that's the answer.`,
-          `M=${_SIM_M}. 각 벌집을 M 짜리 덩어리로 쪼개요 (마지막은 나머지).\n전부 큰 순서로 세운 뒤 위에서 K 개를 고르면 그게 답이에요.`)}
+      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5, whiteSpace: "pre-line", wordBreak: "keep-all" }}>
+        {touched
+          ? t(E,
+              `M=${_SIM_M}. The blocks that light up are always the biggest ones left — which hive they came from never mattered.`,
+              `M=${_SIM_M}. 불이 켜지는 조각은 늘 남은 것 중 가장 큰 조각이에요.\n어느 벌집에서 나온 조각인지는 한 번도 따지지 않았어요.`)
+          : t(E,
+              `M=${_SIM_M}. Each hive is cut into blocks of at most ${_SIM_M}. Drag K — which blocks light up first?`,
+              `M=${_SIM_M}. 각 벌집을 ${_SIM_M} 이하의 조각으로 쪼갰어요.\nK 를 움직여 봐요 — 어떤 조각부터 불이 켜질까요?`)}
       </div>
     </div>
   );
@@ -218,9 +226,17 @@ export function getHoneySections(E) {
       label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
+      /* 2026-09-17: why 가 "코드를 한 부분씩 읽어 봐요" 한 줄이었다.
+         섹션이 1 개라 '한 부분씩' 읽을 데가 없었고, 다섯 quest 에 같은 문장이
+         그대로 복붙돼 있었다. 파이썬 14 줄은 안 쪼개도 되는 길이라(문턱 15 줄)
+         섹션은 하나로 두고, 대신 **왜 이 코드가 답을 내는지**를 적는다. */
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "A trip to a hive carries min(M, what's left). So a hive with 25 and M=10 is really three separate trips: 10, 10, 5.",
+            "한 번 다녀오면 min(M, 남은 꿀) 만큼 담아요.\n그래서 꿀 25 짜리 벌집은 사실 10 · 10 · 5 세 번의 왕복이에요."),
+        t(E, "Once every hive is cut into trip blocks, the hives stop mattering. K trips = pick K blocks, so pick the K biggest.",
+            "모든 벌집을 왕복 조각으로 쪼개고 나면 어느 벌집인지는 이제 상관없어요.\nK 번 다녀온다는 건 조각 K 개를 고른다는 뜻이라, 큰 것부터 K 개를 골라요."),
+        t(E, "Sorting puts every full-M block ahead of every leftover block, so a leftover is never taken before the full trips that come before it.",
+            "정렬하면 M 을 꽉 채운 조각이 자투리 조각보다 늘 앞에 서요.\n그래서 자투리가 그 앞의 꽉 찬 왕복보다 먼저 뽑히는 일은 없어요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

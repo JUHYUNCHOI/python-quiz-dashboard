@@ -88,6 +88,10 @@ function EqTrySim({ E }) {
   const rightVal = cur.eqFirst ? applyOp(b, cur.op, c) : c;
   const ok = cur.eqFirst ? isOk(b, cur.op, c, a) : isOk(a, cur.op, b, c);
 
+  // ÷ 후보일 때, 지금 화면에서 나눗셈이 일어나는 쪽과 그 값
+  const divExpr = cur.eqFirst ? `${b} ÷ ${c}` : `${a} ÷ ${b}`;
+  const divVal = cur.eqFirst ? rightVal : leftVal;
+
   // first candidate that works, so we can say "here it stops"
   let firstHit = -1;
   for (let k = 0; k < CANDS.length; k++) {
@@ -194,11 +198,20 @@ function EqTrySim({ E }) {
                 "이 후보는 아니에요. ▶ 를 눌러 다음 후보를 확인해봐요.")}
         </div>
 
-        <div style={{ marginTop: 8, fontSize: 11.5, color: "#b45309", lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
-          {t(E,
-            "Watch the ÷ candidates. Take the example 13 2 15: the candidate 13÷2=15 gives 6.5 on the left. Since ÷ here is real division, writing 13÷2=6 would be wrong — 6.5 is not 6.",
-            "÷ 후보를 잘 봐요. 예제 13 2 15 로 보면, 후보 13÷2=15 의 왼쪽 값이 6.5 예요.\n여기서 ÷ 는 실수 나눗셈이라 13÷2=6 이라고 쓰면 틀려요 — 6.5 는 6 이 아니니까요.")}
-        </div>
+        {/* 2026-09-17: 이 노란 노트가 **조건 없이 늘** 떠서, 학생이 예제 2 3 6 을 보고
+           있어도 "예제 13 2 15 … 왼쪽 값이 6.5" 라고 말했다. 화면엔 없는 숫자였다.
+           이제 지금 보고 있는 ÷ 후보일 때만 뜨고, 값도 그 후보에서 계산해 쓴다. */}
+        {cur.op === "/" && (
+          <div style={{ marginTop: 8, fontSize: 11.5, color: "#b45309", lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+            {Number.isInteger(divVal)
+              ? t(E,
+                  `÷ is real division here.\n${divExpr} = ${fmt(divVal)}\nThis time it came out whole.`,
+                  `÷ 는 소수까지 그대로 계산해요.\n${divExpr} = ${fmt(divVal)}\n이번엔 딱 떨어졌어요.`)
+              : t(E,
+                  `÷ is real division here.\n${divExpr} = ${fmt(divVal)}\nA decimal can never match, so this candidate fails.`,
+                  `÷ 는 소수까지 그대로 계산해요.\n${divExpr} = ${fmt(divVal)}\n소수라서 정답이 될 수 없어요.`)}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -210,28 +223,10 @@ const navBtn = (disabled) => ({
   fontSize: 14, fontWeight: 800, cursor: disabled ? "default" : "pointer", lineHeight: 1,
 });
 
-/* ================================================================
-   SOLUTION CODE
-   Try all 8 placements; division is checked as a == b * c so we
-   never compare decimals.
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "a, b, c = map(int, input().split())",
-  "",
-  "def check(x, op, y, z):      # x op y == z 인가?",
-  "    if op == \"+\": return x + y == z",
-  "    if op == \"-\": return x - y == z",
-  "    if op == \"*\": return x * y == z",
-  "    return x == y * z        # x / y == z  ⟺  x == y * z",
-  "",
-  "for op in \"+-*/\":",
-  "    if check(a, op, b, c):",
-  "        print(str(a) + op + str(b) + \"=\" + str(c))",
-  "        break",
-  "    if check(b, op, c, a):",
-  "        print(str(a) + \"=\" + str(b) + op + str(c))",
-  "        break",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도 import 되지
+   않는 죽은 복제본이었다. 화면이 쓰는 살아 있는 코드는 components.jsx 쪽이다.
+   둘을 같이 두면 조용히 어긋나고, 다음 사람이 이쪽을 고치느라 시간을 쓴다.
+   형제 quest mcc15isthmus 가 같은 이유로 먼저 지웠다. */
 
 export function makeMcc15EqCh1(E) {
   return [
@@ -428,7 +423,7 @@ export function makeMcc15EqCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the code, section by section.", "↓ 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

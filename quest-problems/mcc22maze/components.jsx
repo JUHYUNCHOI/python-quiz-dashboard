@@ -52,6 +52,12 @@ export function Mcc22MazeConnectSim({ E }) {
   const [pi, setPi] = useState(1); // start on the "needs 1" case
   const [rows, setRows] = useState(() => new Set());
   const [cols, setCols] = useState(() => new Set());
+  /* 2026-09-17: 시뮬 맨 아래가 **누르기 전부터** "2번을 넘길 일은 없다" 는 결론을
+     통째로 말하고 있었다. 바로 다음 쪽 퀴즈가 묻는 것이 그것이고, 정답 보기도
+     같은 문장이라 학생은 세 번 읽은 문장을 고르기만 하면 맞았다.
+     행/열을 한 번이라도 눌러야 다음 글이 나오고, 결론은 퀴즈 explain 에서 처음 밝힌다.
+     (mcc20cipher · mcc21carrots 와 같은 수법) */
+  const [touched, setTouched] = useState(false);
 
   const grid = PRESETS[pi].grid;
   const n = grid.length;
@@ -63,6 +69,7 @@ export function Mcc22MazeConnectSim({ E }) {
 
   const loadPreset = (idx) => { setPi(idx); setRows(new Set()); setCols(new Set()); };
   const toggle = (set, setter, k) => {
+    setTouched(true);
     const nx = new Set(set);
     if (nx.has(k)) nx.delete(k); else nx.add(k);
     setter(nx);
@@ -192,10 +199,15 @@ export function Mcc22MazeConnectSim({ E }) {
         </div>
       </div>
 
-      <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
-        {t(E,
-          "You never need more than 2: clearing the TOP row and the LAST column always links the two corners. So the answer is only ever 0, 1, or 2.",
-          "2번을 넘길 일은 없어요. 맨 윗 행과 맨 오른쪽 열을 부수면 두 모서리는 언제나 이어져요. 그래서 정답은 늘 0, 1, 2 중 하나예요.")}
+      <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+        {
+          touched
+            ? t(E,
+                "Now try all three presets and write down the fewest operations for each.\nCan you build a grid that needs 3?",
+                "세 예시를 모두 해보고 각각 최소 몇 번이었는지 적어 봐요.\n3번이 필요한 격자를 만들 수 있을까요?")
+            : t(E,
+                "Tap a row or column number to smash it.\nWhat is the fewest number of operations for this grid?",
+                "행이나 열 숫자를 눌러서 부숴 봐요.\n이 격자는 최소 몇 번이면 이어질까요?")}
       </div>
     </div>
   );

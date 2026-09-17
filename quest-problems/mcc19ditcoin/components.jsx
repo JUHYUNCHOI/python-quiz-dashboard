@@ -12,11 +12,15 @@ const A = "#f97316";
    so students can feel why selling on the highest-future-price
    day is optimal.
    ═══════════════════════════════════════════════════════════════ */
+/* 2026-09-17: 앞 쪽에서 8 일 예제 [3,2,6,8,10,1,7,9] 로 "나머지 3 일은 어떻게 할까?"
+   라고 물어놓고, 시뮬 프리셋에는 그 값이 아예 없었다. 학생이 던져진 질문을
+   직접 만져볼 자리가 없던 것이다. 그 예제를 프리셋으로 넣는다 (맨 끝 = 8 일). */
 const _DEEP_PRESETS = [
-  { label: "[3,1,5]",        prices: [3, 1, 5] },
-  { label: "[2,4,1,5,3]",    prices: [2, 4, 1, 5, 3] },
-  { label: "[1,2,3,4,5]",    prices: [1, 2, 3, 4, 5] },
-  { label: "[5,4,3,2,1]",    prices: [5, 4, 3, 2, 1] },
+  { label: "[3,1,5]",              prices: [3, 1, 5] },
+  { label: "[2,4,1,5,3]",          prices: [2, 4, 1, 5, 3] },
+  { label: "[1,2,3,4,5]",          prices: [1, 2, 3, 4, 5] },
+  { label: "[5,4,3,2,1]",          prices: [5, 4, 3, 2, 1] },
+  { label: "[3,2,6,8,10,1,7,9]",   prices: [3, 2, 6, 8, 10, 1, 7, 9] },
 ];
 
 export function Mcc19DitcoinDeepAuditSim({ E }) {

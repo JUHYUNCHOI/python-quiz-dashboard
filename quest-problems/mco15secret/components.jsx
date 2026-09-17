@@ -90,27 +90,58 @@ const FULL_CPP = [
   "}",
 ];
 
+/* 2026-09-17: 섹션이 1 개인데 why 는 "코드를 한 부분씩 읽어 봐요" 라고 했다 —
+   한 부분씩 읽을 데가 없었고, 같은 문장이 다섯 quest 에 그대로 복붙돼 있었다.
+   파이썬 21 줄이라 세 걸음으로 쪼갠다. 코드 배열은 slice 만 한다 — 한 글자도 안 바뀐다. */
 export function getSecretSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "① Read a and b", "① a 와 b 읽기"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 8), cpp: FULL_CPP.slice(0, 30),
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 역할이 있어요."),
-        t(E, "Both versions do the same thing: build a+a, then slide a length-N window and compare with b.",
-            "두 버전이 하는 일은 같아요. a+a 를 만들고,\n길이 N 짜리 창문을 밀면서 b 와 비교해요."),
+        t(E, "Three lines come in: the length N, then a, then b. Each of a and b becomes a list of numbers.",
+            "세 줄이 들어와요 — 길이 N, 그다음 a, 그다음 b.\na 와 b 는 각각 숫자 목록이 돼요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "list(map(int, input().split())) turns one line of text into a list of numbers.",
+            "list(map(int, input().split())) 는 글자 한 줄을 숫자 목록으로 바꿔 줘요."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더(iostream, vector, string)를 하나씩 나눠 적어요."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합과 자리 번호는 int 로 충분해요. 합이 2×10^9 을 넘을 때만 더 큰 타입을 써요."),
+        t(E, "readInts is pulled out as its own function because the same work happens twice — once for a, once for b.",
+            "readInts 를 따로 함수로 뺀 건 같은 일을 두 번 하기 때문이에요 — a 한 번, b 한 번."),
+      ],
+    },
+    {
+      label: t(E, "② Lay a down twice", "② a 를 두 번 이어 놓기"),
+      color: A,
+      py: FULL_PY.slice(8, 13), cpp: FULL_CPP.slice(30, 38),
+      why: [
+        t(E, "Rotating a means cutting it somewhere and swapping the two pieces. Write a twice in a row and every one of those cuts is already sitting there, side by side.",
+            "a 를 돌린다는 건 어딘가에서 잘라 앞뒤를 바꾼다는 뜻이에요.\na 를 두 번 이어 적어 두면, 그 잘린 모양들이 이미 나란히 놓여 있어요."),
+        t(E, "If the lengths differ there is nothing to rotate into — answer NO right away.",
+            "길이가 다르면 아무리 돌려도 같아질 수 없어요. 바로 NO 예요."),
+      ],
+    },
+    {
+      label: t(E, "③ Slide the window, then answer", "③ 창을 밀며 찾고 답 내기"),
+      color: A,
+      py: FULL_PY.slice(13, 21), cpp: FULL_CPP.slice(38, 59),
+      why: [
+        t(E, "Take a window of length N on a+a and compare it with b. Slide it one step at a time.",
+            "a+a 위에 길이 N 짜리 창을 놓고 b 와 견줘요. 한 칸씩 밀어요."),
+        t(E, "N slides is enough. Sliding N steps brings the window back to where it started, so anything further only repeats.",
+            "N 번만 밀면 충분해요.\nN 칸을 밀면 창이 처음 자리로 돌아오니, 더 밀어 봐야 같은 것만 또 나와요."),
+        t(E, "The moment one window matches, we are done — break out and print YES. If none of them match, print NO.",
+            "한 자리에서 같아지는 순간 끝이에요. 빠져나와서 YES 를 적어요.\n끝까지 한 자리도 안 같으면 NO 예요."),
+      ],
+      pyOnly: [
+        t(E, "doubled[i:i+N] cuts out the window, and == compares the whole list at once.",
+            "doubled[i:i+N] 이 창을 잘라 내고, == 가 목록 전체를 한 번에 견줘요."),
+      ],
+      cppOnly: [
+        t(E, "C++ has no list-to-list ==, so the inner loop compares the numbers one by one and gives up early on the first mismatch.",
+            "C++ 에는 목록끼리 == 로 견주는 게 없어서 안쪽 for 문이 하나씩 견줘요.\n하나라도 다르면 그 자리에서 바로 그만둬요."),
       ],
     },
   ];

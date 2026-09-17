@@ -2,6 +2,7 @@ import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { useTraceStep, SimShell, StepHeader } from "@/components/quest/TraceStepper";
 
 const A = "#f97316";
 const KA = { wordBreak: "keep-all" };
@@ -182,6 +183,212 @@ export function Mcc22BirthdayCookieSim({ E }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Mcc22BirthdayBackwardWalkSim — 2026-09-17 에 새로 만든 자리.
+
+   왜 만들었나: Ch1 시뮬은 격자를 **키우는** 것만 보여주는데, 풀이 코드가 하는 일은
+   그 반대다 — 번호 하나를 **거꾸로 되짚으며** 좌우/상하 뒤집힘을 모은다.
+   그 역방향 절차를 손으로 따라가는 자리가 어디에도 없었고, 계획 쪽 문단 두 개 뒤에
+   바로 40줄짜리 코드가 나왔다. **이 문제에서 제일 어려운 곳이 제일 적게 설명된 곳**이었다.
+
+   걸음 목록 (각 걸음이 답하는 질문 / 화면에 뜨는 것):
+     0  이 격자에서 12번 쿠키는 어디?      → 최종 격자 + 12번 칸 강조
+     1  번호를 (행, 열) 로 어떻게 바꾸지?  → 나눗셈·나머지 식
+     2~ 글자 하나를 되돌리면?             → 한 단계 작아진 격자 + 원본/복사본 판정 + 스위치
+     끝 그래서 모양은?                    → 처음 'p' + 스위치 둘 → 답
+
+   걸음마다 **바로 위 격자 그림에서 노란 칸 하나만** 움직인다 (한 걸음에 바뀌는 자리는 한 곳).
+   숫자는 하나도 손으로 적지 않는다 — 아래 buildTrace 가 풀이 코드와 같은 규칙으로 만든다.
+   ═══════════════════════════════════════════════════════════════ */
+const WALK_SCROLL = "ABCA";   // 공식 예제의 첫 두루마리
+const WALK_FRIEND = 12;       // 공식 예제의 마지막 친구 → 답 'd'
+
+function buildWalkTrace(scroll, friend) {
+  const N = scroll.length;
+  // 각 단계 뒤의 격자 크기 (풀이 코드의 rows[] / cols[] 와 같은 것)
+  const rows = [1];
+  const cols = [1];
+  for (let i = 1; i <= N; i++) {
+    const op = scroll[i - 1];
+    if (op === "A" || op === "B") {
+      cols[i] = cols[i - 1] * 2;
+      rows[i] = rows[i - 1];
+    } else {
+      rows[i] = rows[i - 1] * 2;
+      cols[i] = cols[i - 1];
+    }
+  }
+  const width = cols[N];
+  let r = Math.floor((friend - 1) / width) + 1;
+  let c = ((friend - 1) % width) + 1;
+  let fh = 0;
+  let fv = 0;
+
+  const steps = [];
+  steps.push({ kind: "intro", stage: N, r, c, fh, fv });
+  steps.push({ kind: "toRC", stage: N, r, c, fh, fv, width });
+
+  for (let i = N; i >= 1; i--) {
+    const op = scroll[i - 1];
+    const before = { r, c };
+    let copied = false;
+    if (op === "A" || op === "B") {
+      if (c > cols[i - 1]) {
+        c -= cols[i - 1];
+        copied = true;
+        if (op === "B") fh ^= 1;
+      }
+    } else if (r > rows[i - 1]) {
+      r -= rows[i - 1];
+      copied = true;
+      fv ^= 1;
+    }
+    steps.push({
+      kind: "undo", i, op, copied, stage: i - 1,
+      half: op === "C" ? rows[i - 1] : cols[i - 1],
+      before, r, c, fh, fv,
+    });
+  }
+  steps.push({ kind: "done", stage: 0, r, c, fh, fv });
+  return steps;
+}
+
+export function Mcc22BirthdayBackwardWalkSim({ E }) {
+  const steps = buildWalkTrace(WALK_SCROLL, WALK_FRIEND);
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  const grid = buildGrid(WALK_SCROLL.slice(0, s.stage));
+  const gRows = grid.length;
+  const gCols = grid[0].length;
+  const cell = gCols >= 8 ? 26 : gCols >= 4 ? 32 : 38;
+  const finalShape = { "0,0": "p", "1,0": "q", "0,1": "b", "1,1": "d" }[`${s.fh},${s.fv}`];
+
+  const say = (() => {
+    if (s.kind === "intro") {
+      return t(E,
+        `The scroll ${WALK_SCROLL} ends with a ${gRows} × ${gCols} grid.\nWe want cookie #${WALK_FRIEND} — the yellow one.\nThis time we walk BACKWARD, one letter at a time.`,
+        `두루마리 ${WALK_SCROLL} 를 다 읽으면 ${gRows} × ${gCols} 격자가 돼요.\n우리가 찾는 건 ${WALK_FRIEND}번 쿠키, 노란 칸이에요.\n이번엔 글자를 하나씩 거꾸로 되돌려 볼게요.`);
+    }
+    if (s.kind === "toRC") {
+      return t(E,
+        `Numbering goes left→right, top→bottom, and the width is ${s.width}.\nrow = (${WALK_FRIEND} − 1) ÷ ${s.width} + 1 = ${s.r}\ncol = (${WALK_FRIEND} − 1) mod ${s.width} + 1 = ${s.c}`,
+        `번호는 왼→오, 위→아래 순이고 가로가 ${s.width} 칸이에요.\n행 = (${WALK_FRIEND} − 1) ÷ ${s.width} 의 몫 + 1 = ${s.r}\n열 = (${WALK_FRIEND} − 1) ÷ ${s.width} 의 나머지 + 1 = ${s.c}`);
+    }
+    if (s.kind === "undo") {
+      const dir = s.op === "C" ? t(E, "bottom", "아래쪽") : t(E, "right", "오른쪽");
+      const axis = s.op === "C" ? t(E, "row", "행") : t(E, "col", "열");
+      const val = s.op === "C" ? s.before.r : s.before.c;
+      if (!s.copied) {
+        return t(E,
+          `Undo letter ${s.i}, '${s.op}'. Just before it, the grid was ${gRows} × ${gCols}.\n${axis}: ${val} ≤ ${s.half} — our cookie was in the original half.\nNothing moves, nothing flips.`,
+          `${s.i}번째 글자 '${s.op}' 를 되돌려요.\n그 직전 격자는 ${gRows} × ${gCols} 크기였어요.\n${axis}: ${val} ≤ ${s.half} — 우리 쿠키는 원본 쪽에 있었어요.\n자리도 그대로, 뒤집힘도 그대로예요.`);
+      }
+      const newVal = s.op === "C" ? s.r : s.c;
+      const flipWord = s.op === "B" ? t(E, "left↔right", "좌우")
+        : s.op === "C" ? t(E, "up↔down", "위아래") : null;
+      const flipLine = flipWord
+        ? t(E, `'${s.op}' flips its copy ${flipWord}, so flick that switch.`,
+              `'${s.op}' 는 복사본을 ${flipWord}로 뒤집어요. 그래서 그 스위치를 하나 켜요.`)
+        : t(E, "'A' copies without flipping, so no switch moves.",
+              "'A' 는 안 뒤집고 복사해요. 그래서 스위치는 그대로예요.");
+      return t(E,
+        `Undo letter ${s.i}, '${s.op}'. Just before it, the grid was ${gRows} × ${gCols}.\n${axis}: ${val} > ${s.half} — our cookie was in the copied ${dir} half.\nback to ${axis} ${val} − ${s.half} = ${newVal}\n${flipLine}`,
+        `${s.i}번째 글자 '${s.op}' 를 되돌려요.\n그 직전 격자는 ${gRows} × ${gCols} 크기였어요.\n${axis}: ${val} > ${s.half} — 우리 쿠키는 ${dir}에 복사된 쪽이었어요.\n원본 자리 → ${axis} ${val} − ${s.half} = ${newVal}\n${flipLine}`);
+    }
+    return t(E,
+      `Back at the very start: one cookie, 'p'.\nAlong the way we flicked ${s.fh ? "the left↔right switch" : "no left↔right switch"} and ${s.fv ? "the up↔down switch" : "no up↔down switch"}.\nApply them to 'p' → '${finalShape}'. That is cookie #${WALK_FRIEND}.`,
+      `맨 처음으로 돌아왔어요. 쿠키 한 개, 'p' 예요.\n오는 동안 좌우 스위치는 ${s.fh ? "켜졌고" : "안 켜졌고"}, 상하 스위치는 ${s.fv ? "켜졌어요" : "안 켜졌어요"}.\n그걸 'p' 에 적용하면 '${finalShape}' 예요. 이게 ${WALK_FRIEND}번 쿠키예요.`);
+  })();
+
+  const switchChip = (on, label) => (
+    <span style={{
+      ...NW, display: "inline-flex", alignItems: "center", gap: 5,
+      border: `1.5px solid ${on ? A : "#e5e7eb"}`, borderRadius: 8, padding: "4px 10px",
+      background: on ? "#fff7ed" : "#f9fafb", color: on ? "#9a3412" : "#9ca3af",
+      fontSize: 11.5, fontWeight: 700,
+    }}>
+      <span style={{ fontSize: 13 }}>{on ? "🔛" : "⚪"}</span>{label}
+    </span>
+  );
+
+  return (
+    <SimShell idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, `Trace cookie #${WALK_FRIEND} backward`, `${WALK_FRIEND}번 쿠키를 거꾸로 따라가기`)}
+        subtitle={`${ts.safe + 1} / ${steps.length}`} />
+
+      {/* the scroll, with the letter being undone marked */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 5, marginBottom: 10, flexWrap: "wrap" }}>
+        {WALK_SCROLL.split("").map((op, i) => {
+          const done = i + 1 > s.stage;          // 이미 되돌린 글자
+          const here = s.kind === "undo" && s.i === i + 1;
+          return (
+            <span key={i} style={{
+              ...NW, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800,
+              borderRadius: 6, padding: "2px 9px",
+              border: `1.5px solid ${here ? "#111827" : done ? "#e5e7eb" : "#fdba74"}`,
+              background: here ? "#111827" : done ? "#f9fafb" : "#fff",
+              color: here ? "#fde68a" : done ? "#d1d5db" : "#9a3412",
+            }}>{op}</span>
+          );
+        })}
+      </div>
+
+      {/* the grid at this stage, with our cookie highlighted */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10, overflowX: "auto" }}>
+        <div style={{ display: "inline-block" }}>
+          {grid.map((row, r) => (
+            <div key={r} style={{ display: "flex", gap: 3, marginBottom: 3 }}>
+              {row.map((ch, c) => {
+                const mine = s.kind !== "intro" && r + 1 === s.r && c + 1 === s.c;
+                const byNumber = s.kind === "intro" && r * gCols + c + 1 === WALK_FRIEND;
+                const on = mine || byNumber;
+                return (
+                  <div key={c} style={{
+                    width: cell, height: cell, borderRadius: 7,
+                    border: `2px solid ${on ? "#b45309" : "#fde4c8"}`,
+                    background: on ? "#fde68a" : "#fff",
+                    color: on ? "#7c2d12" : SHAPE_COLOR[ch],
+                    fontFamily: "'JetBrains Mono',monospace",
+                    fontSize: cell <= 26 ? 15 : 18, fontWeight: 800,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>{ch}</div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* where we are + the two switches */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
+        <span style={{
+          ...NW, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
+          border: "1.5px solid #fdba74", borderRadius: 8, padding: "4px 10px",
+          background: "#fff7ed", color: "#9a3412",
+        }}>
+          {s.kind === "intro" ? t(E, `cookie #${WALK_FRIEND}`, `${WALK_FRIEND}번 쿠키`)
+            : `${t(E, "row", "행")} ${s.r}, ${t(E, "col", "열")} ${s.c}`}
+        </span>
+        {switchChip(s.fh === 1, t(E, "left↔right", "좌우 뒤집기"))}
+        {switchChip(s.fv === 1, t(E, "up↔down", "위아래 뒤집기"))}
+      </div>
+
+      {/* what this step says */}
+      <div style={{
+        background: s.kind === "done" ? "#ecfdf5" : "#fffbeb",
+        border: `1px solid ${s.kind === "done" ? "#6ee7b7" : "#fde68a"}`,
+        borderRadius: 10, padding: "10px 14px", maxWidth: 470, margin: "0 auto",
+        fontSize: 12.5, lineHeight: 1.75, color: s.kind === "done" ? "#065f46" : "#92400e",
+        whiteSpace: "pre-line", ...KA,
+      }}>
+        {say}
+      </div>
+    </SimShell>
   );
 }
 

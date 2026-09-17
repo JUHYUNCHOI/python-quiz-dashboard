@@ -180,16 +180,18 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (4 steps)
+   Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeSecretCh1(E) {
   return [
     // 1-1: Title reveal
     {
       type: "reveal",
+      /* 2026-09-17: narr 이 3 문장 86 자였고, 바로 아래 미션 박스와 같은 말이었다.
+         파란 바는 한 문장 55 자 이하. 나머지는 미션 박스가 이미 하고 있다. */
       narr: t(E,
-        "Two strings A and B of equal length are given.\nDetermine if B is a CIRCULAR ROTATION of A — i.e., B can be obtained by cyclically shifting A by some amount. Print YES or NO.",
-        "같은 길이의 두 문자열 A 와 B 가 주어져요.\nA 를 몇 칸 돌려서 B 를 만들 수 있는지 가려내요.\n만들 수 있으면 YES, 없으면 NO 를 출력해요."),
+        "Can A be turned into B just by rotating it?",
+        "A 를 돌려서 B 가 되는지 가려내요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -232,11 +234,82 @@ export function makeSecretCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    /* 1-2: 입출력 형식 (mcc19rect2 4-박스 표준)
+       2026-09-17: 형식 카드가 없어서 학생이 코드까지 가서야 형식을 역추론했다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "N on one line, then a, then b.",
+        "N 한 줄, 그다음 a 한 줄, b 한 줄이 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#5b21b6", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— how many numbers in each line", "— 각 줄에 들어 있는 수의 개수")}</span></div>
+              <div><span style={{ color: "#5b21b6", fontWeight: 800 }}>a1 a2 … aN</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the original a", "— 원래 것 a")}</span></div>
+              <div><span style={{ color: "#5b21b6", fontWeight: 800 }}>b1 b2 … bN</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the one to check, b", "— 확인할 것 b")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: YES if b is a rotation of a, otherwise NO.",
+                    "한 줄에, a 를 돌려 b 가 되면 YES, 안 되면 NO 를 적어요.")}
+            </div>
+          </div>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#4c1d95", whiteSpace: "pre" }}>
+{`5
+1 2 3 4 5
+3 4 5 1 2`}
+                </div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`YES`}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
+              {t(E, "Why YES? — the sim on the next page lets you check it yourself.",
+                    "왜 YES 일까? — 다음 쪽 시뮬에서 직접 확인해 봐요.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+              {/* 2026-09-17: 원문 N 상한을 못 찾았다. 지어내지 않고 이 방법이 감당하는 크기를 적는다. */}
+              {t(E, "a and b always have the same length N. We could not find the original limit on N. What we can say: this method compares N windows of N numbers, so N up to a few thousand is fine.",
+                    "a 와 b 는 길이가 N 으로 같아요.\n원문의 N 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 길이 N 짜리 창을 N 번 견주니까\nN 이 수천 정도까지는 괜찮아요.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Deep-Audit Sim — slide a length-N window over a+a
+    {
+      type: "reveal",
+      narr: t(E,
+        "Pick a candidate b and slide the window yourself.",
+        "후보 b 를 고르고 창문을 직접 밀어 봐요."),
+      content: <SecretDeepAuditSim E={E} />,
+    },
+    /* 1-4: Quiz
+       2026-09-17: 이 퀴즈가 시뮬 **앞**에 있었고, narr 이 정답 보기와 사실상 같은
+       문장이었다("a+a 안에 a 를 돌린 모양이 전부 들어 있어요"). 읽고 그대로 찍으면 됐다.
+       시뮬 뒤로 옮기고, narr 은 "지금 뭘 볼 차례" 만 남긴다. */
     {
       type: "quiz",
       narr: t(E,
-        "The classic rotation check: if we concatenate array a with itself (a+a), any rotation of a will appear as a contiguous subarray.\nWhy does this work?", "배열 a 를 자기 자신과 이어 붙이면(a+a), a 를 돌린 모양이 모두 그 안에 붙어서 나타나요.\n왜 그럴까요?"),
+        "Now say why it works, without the sim.",
+        "이번엔 시뮬 없이 이유를 말해 볼 차례예요."),
       question: t(E,
         "Why does checking if b is in a+a work for rotation detection?",
         "b 가 a+a 안에 있는지만 봐도 되는 이유는 무엇일까요?"),
@@ -249,15 +322,7 @@ export function makeSecretCh1(E) {
         "Correct! For [1,2,3], a+a = [1,2,3,1,2,3]. Rotations [2,3,1] and [3,1,2] are both subarrays of a+a.",
         "맞아요! a = [1,2,3] 이면 a+a = [1,2,3,1,2,3] 이에요.\n돌린 모양인 [2,3,1] 과 [3,1,2] 가 둘 다 그 안에 붙어 있어요."),
     },
-    // 1-3: Deep-Audit Sim — slide a window over a+a
-    {
-      type: "reveal",
-      narr: t(E,
-        "Let's audit the trick. Pick a candidate b, then slide a length-N window across a+a. The verdict turns green at the matching offset — or stays gray if no offset works.",
-        "후보 b 를 고르고 a+a 위에서 창문을 밀어 봐요.\n같은 자리에서는 초록으로, 끝까지 안 맞으면 회색으로 보여요."),
-      content: <SecretDeepAuditSim E={E} />,
-    },
-    // 1-4: Input
+    // 1-5: Input
     {
       type: "input",
       narr: t(E,
@@ -282,9 +347,13 @@ export function makeSecretCh2(E, lang = "py") {
     // 2-1: Code
     {
       type: "progressive",
+      /* 2026-09-17: narr 이 "'B in A+A' 한 줄만 확인하면 돼요" 라고 했는데
+         아래 코드는 한 줄이 아니라 슬라이딩 윈도우 반복문이다. 게다가 파이썬
+         **리스트**에서 `in` 은 부분수열 검사를 못 한다 — 실행되지 않는 코드를
+         암시하고 있었다. 실제 코드가 하는 일로 바꾼다. */
       narr: t(E,
-        "Classic trick: B is a circular rotation of A iff B is a substring of A+A. So just check 'B in A+A'. Sections build it one piece at a time.",
-        "A 를 돌려 B 가 되는 것과, B 가 A+A 안에 붙어 있는 것은 같은 말이에요.\n그래서 'B in A+A' 한 줄만 확인하면 돼요."),
+        "Slide a length-N window across a+a and look for b.",
+        "a+a 위에서 길이 N 짜리 창을 밀며 b 와 같은 자리를 찾아요."),
       sections: getSecretSections(E),
     },
   ];

@@ -44,6 +44,7 @@ function reachableMask(H, D) {
 
 export function Mcc20CityTourBfsSim({ E }) {
   const [D, setD] = useState(5);
+  const [touched, setTouched] = useState(false);
   const vis = useMemo(() => reachableMask(SIM_H, D), [D]);
   const R = SIM_H.length, Cn = SIM_H[0].length;
   const count = vis.flat().filter(Boolean).length;
@@ -68,18 +69,20 @@ export function Mcc20CityTourBfsSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8 }}>
           🐰 {t(E, "Where can Fluffy reach?", "Fluffy 는 어디까지 갈 수 있을까요?")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        {/* 2026-09-17: 100자가 줄바꿈 없이 한 덩어리였다. 절 단위로 끊는다. */}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12,
+          whiteSpace: "pre-line", textWrap: "balance" }}>
           {t(E,
-            "Each cell shows a building HEIGHT. Fluffy hops to a neighbor only when the HEIGHT DIFFERENCE is less than D. Change D and watch the reachable region (green) grow or shrink from the start 🐰.",
-            "각 칸은 건물 높이예요. Fluffy 는 이웃과의 높이 차이가 D 보다 작을 때만 건너가요. D 를 바꿔서 시작 🐰 에서 갈 수 있는 영역 (초록) 이 커지고 작아지는 걸 봐요.")}
+            "Each cell shows a building HEIGHT.\nFluffy hops to a neighbor only when the height DIFFERENCE is less than D.\nChange D and watch the green region grow or shrink from the start 🐰.",
+            "각 칸은 건물 높이예요.\nFluffy 는 이웃과의 높이 차이가 D 보다 작을 때만 건너가요.\nD 를 바꿔서 시작 🐰 에서 갈 수 있는 곳(초록)이\n어떻게 달라지는지 봐요.")}
         </div>
 
         {/* D stepper */}
         <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12, flexWrap: "wrap" }}>
           <span style={{ fontSize: 12, color: "#92400e", fontWeight: 700 }}>D =</span>
-          <button onClick={() => setD(Math.max(1, D - 1))} style={dBtn}>−</button>
+          <button onClick={() => { setTouched(true); setD(Math.max(1, D - 1)); }} style={dBtn}>−</button>
           <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 800, color: A, minWidth: 22, textAlign: "center" }}>{D}</span>
-          <button onClick={() => setD(Math.min(16, D + 1))} style={dBtn}>+</button>
+          <button onClick={() => { setTouched(true); setD(Math.min(16, D + 1)); }} style={dBtn}>+</button>
           <span style={{ fontSize: 11.5, color: C.dim, ...KA }}>
             {t(E, "(hop allowed if |Δheight| < D)", "(높이 차이 < D 이면 건너기 가능)")}
           </span>
@@ -103,10 +106,18 @@ export function Mcc20CityTourBfsSim({ E }) {
           <span style={{ color: "#64748b" }}> / {R * Cn}</span>
         </div>
 
-        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
-          {t(E,
-            "The rule is about the DIFFERENCE to a neighbor — not the height itself. Two tall buildings side by side differ little, so the hop is easy. A tall one next to a short one becomes a wall when that difference is D or more. So there is no fixed wall map: the same edge opens for a big D and closes for a small D.",
-            "중요한 건 높이 자체가 아니라 이웃과의 '차이' 예요. 높은 건물 둘이 나란히 있으면 차이가 작아서 쉽게 건너요. 높은 건물 옆 낮은 건물은 차이가 D 이상이면 벽이 돼요. 그래서 벽이 어디인지 미리 정해져 있지 않아요. 같은 자리도 D 가 크면 열리고 작으면 막혀요.")}
+        {/* 2026-09-17: 150자가 한 덩어리였다 + D 를 만지기도 전에 결론이 다 떠 있었다.
+            (mcc20cipher:27,109-118 의 touched 수법을 그대로 가져왔다.) */}
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55,
+          whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
+          {
+            touched
+              ? t(E,
+                  "The rule is about the DIFFERENCE to a neighbor — not the height itself.\nTwo tall buildings side by side differ little, so the hop is easy.\nA tall one next to a short one becomes a wall once that difference reaches D.\nSo no wall is fixed: the same edge opens for a big D and closes for a small one.",
+                  "중요한 건 높이 자체가 아니라 이웃과의 '차이' 예요.\n높은 건물 둘이 나란히 있으면 차이가 작아서 쉽게 건너요.\n높은 건물 옆 낮은 건물은 차이가 D 이상이면 벽이 돼요.\n그래서 벽이 어디인지 미리 정해져 있지 않아요.\n같은 자리도 D 가 크면 열리고 작으면 막혀요.")
+              : t(E,
+                  "Try a bigger D, then a smaller one.\nDoes the same edge stay a wall every time?",
+                  "D 를 키웠다 줄였다 해봐요.\n같은 자리가 늘 벽으로 남아 있나요?")}
         </div>
       </div>
     </div>

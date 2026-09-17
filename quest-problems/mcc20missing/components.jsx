@@ -107,12 +107,11 @@ export function getMcc20MissingSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
+        /* 2026-09-17: 앞 쪽에서 그림으로 유도한 것을 여기서 다시 글로 풀어 쓰고 있었다.
+           같은 결론이 네 번째였다. 여기서는 그 결론을 코드 한 줄로만 가리킨다. */
         t(E,
-          "The biggest MAGNITUDE among the numbers is N (or N−1 if N itself was the discarded one). Before +K that element was ±(that value), so AFTER +K it lands on the MAX (if it was positive) or the MIN (if it was negative) of the list.",
-          "주어진 수들 중 절대값이 가장 큰 것은 N 이에요 (버려진 게 N 이면 N−1). +K 하기 전에 그 값은 ±(그 값) 이었으니, +K 한 뒤에는 목록의 MAX (양수였다면) 또는 MIN (음수였다면) 자리에 놓여요."),
-        t(E,
-          "That pins K to just 4 possibilities: min+N, max−N, min+(N−1), max−(N−1). We test each instead of all 6N+1 values of K.",
-          "그래서 K 는 min+N, max−N, min+(N−1), max−(N−1) 네 가지로 좁혀져요. 6N+1 개를 전부 보는 대신 이 4개만 확인해요."),
+          "The four candidate K we worked out on the previous page become one line: {mn+N, mx−N, mn+(N−1), mx−(N−1)}. Instead of all 6N+1 values of K, we test these.",
+          "앞 쪽에서 찾은 후보 네 개가 코드에서는 한 줄이에요. {mn+N, mx−N, mn+(N−1), mx−(N−1)} 이에요. K 를 6N+1 개 다 보는 대신 이 넷만 확인해요."),
         t(E,
           "For a candidate K, undo it with |x−K| to recover the original magnitudes. It's a valid reconstruction only if we get N−1 DISTINCT magnitudes, all inside [1, N].",
           "후보 K 마다 |x−K| 로 되돌려 원래 크기들을 복원해요. N−1 개가 모두 서로 다르고, 전부 [1, N] 안에 있어야만 올바른 복원이에요."),

@@ -23,7 +23,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeHoneyCh1(E) {
   return [
@@ -88,41 +88,117 @@ export function makeHoneyCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    /* 1-2: 입출력 형식 (mcc19rect2 4-박스 표준)
+       2026-09-17: 이 quest 에는 형식 카드가 아예 없었다. 학생이 코드까지 가서야
+       input() 을 보고 "몇 줄에 뭐가 들어오나" 를 역추론하고 있었다. */
     {
-      type: "quiz",
+      type: "reveal",
       narr: t(E,
-        "Why do we sort the hives in descending order? Think about maximizing honey per trip.", "한 번 다녀올 때 꿀을 얼마나 가져오는지 생각해 봐요."),
-      question: t(E,
-        "Why sort hives descending by honey amount?",
-        "왜 꿀이 많은 벌집부터 정렬할까요?"),
-      options: [
-        t(E, "Larger hives can fill the pot completely", "큰 벌집은 항아리를 가득 채울 수 있어요"),
-        t(E, "Smaller hives are easier to empty", "작은 벌집이 비우기 쉬워요"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Correct! Each trip collects at most M ml. Visiting larger hives first ensures each trip collects as close to M as possible.",
-        "맞아요! 한 번 다녀올 때 최대 M ml 을 가져와요.\n꿀이 적은 벌집부터 가면 항아리를 못 채우고 한 번을 써 버려요.\n큰 벌집부터 가면 갈 때마다 M 에 가깝게 채울 수 있어요."),
+        "First line N M K, then one hive per line.",
+        "첫 줄에 N M K, 그다음 줄마다 벌집의 꿀이 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N M K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— hives, pot size, trips", "— 벌집 수, 항아리 용량, 왕복 횟수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>h1</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— honey in hive 1", "— 1 번 벌집의 꿀")}</span></div>
+              <div style={{ color: C.dim }}>…</div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>hN</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— honey in hive N", "— N 번 벌집의 꿀")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the largest total honey you can carry home.",
+                    "한 줄에 집으로 가져올 수 있는 꿀의 총량 최댓값을 적어요.")}
+            </div>
+          </div>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#92400e", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
+{`3 10 4
+25
+12
+8`}
+                </div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`38`}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
+              {t(E, "Why 38? — drag K in the sim below.",
+                    "왜 38 일까? — 아래 시뮬에서 K 를 움직여 봐요.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+              {/* 2026-09-17: 원문 상한을 못 찾았다. 지어내지 않고, 이 방법이 감당하는 크기를 적는다. */}
+              {t(E, "We could not find the original limits on N, M, K. What we can say: this method turns every hive into pieces of at most M, then sorts them. Up to a few hundred thousand pieces is comfortable.",
+                    "원문의 N · M · K 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 벌집을 M 짜리 조각으로 쪼갠 뒤 정렬해요.\n조각이 수십만 개까지는 넉넉해요.")}
+            </div>
+          </div>
+        </div>),
     },
     // 1-3: Sim — drag K, watch which trip-yields the squirrel picks
     {
       type: "sim",
       narr: t(E,
-        "Three hives, M=10. Each hive splits into trip-yields (M ml, last block = remainder). Drag K — the K largest yields light up and sum into the live total. That sorted-descending pick IS the algorithm.",
-        "K 를 움직여 보면 큰 것부터 K 개가 골라져요."),
+        "Which blocks light up first as you drag K?",
+        "K 를 움직이면 어떤 조각부터 골라질까요?"),
     },
-    // 1-4: Input
+    /* 1-4: Quiz
+       2026-09-17: 여기 퀴즈가 **틀린 전략**을 가르치고 있었다.
+       "왜 꿀이 많은 벌집부터 정렬할까요?" → "큰 벌집부터 가면 갈 때마다 M 에 가깝게 채울 수 있어요".
+       이건 "벌집 하나를 다 비우고 다음 벌집으로" 라고 읽힌다. 반례로 검산했다:
+         H1=15, H2=15, M=10, K=2
+         · 벌집 하나를 먼저 다 비우면  → 10 + 5 = 15
+         · 왕복 조각으로 쪼개 큰 것부터 → 10 + 10 = 20   ← 정답 코드가 내는 값
+       15 ≠ 20. 그 위 HoneySim 도 "조각 단위로 쪼개 정렬" 을 보여주고 있어서
+       바로 앞 쪽과도 앞뒤가 안 맞았다. 시뮬이 보여준 관찰을 그대로 퀴즈로 바꾼다. */
+    {
+      type: "quiz",
+      narr: t(E,
+        "Now try it without the sim's help.",
+        "이번엔 시뮬 없이 직접 골라 볼 차례예요."),
+      question: t(E,
+        "Two hives with 15 each, M=10, K=2. Which way collects more?",
+        "벌집 두 개에 꿀이 15 씩, M=10, K=2 예요. 어느 쪽이 더 많이 모을까요?"),
+      options: [
+        t(E, "10 from one hive, 10 from the other — 20 total",
+            "한 벌집에서 10, 다른 벌집에서 10 — 모두 20"),
+        t(E, "Empty one hive first: 10 then 5 — 15 total",
+            "한 벌집을 끝까지 비우기: 10 다음 5 — 모두 15"),
+      ],
+      correct: 0,
+      explain: t(E,
+        "Right. A hive's leftover 5 is a small trip. Each trip should carry the biggest block still available — across all hives, not one hive at a time.",
+        "맞아요. 한 벌집을 끝까지 비우면 마지막 왕복은 5 밖에 못 담아요.\n왕복마다 남은 조각 중 가장 큰 것을 담아야 해요.\n벌집 하나씩이 아니라, 모든 벌집의 조각을 한데 놓고 고르는 거예요."),
+    },
+    // 1-5: Input
     {
       type: "input",
+      /* 2026-09-17: question 이 "(10+10+5)" 로 답 구하는 식을 미리 다 풀어 줬다.
+         학생은 항 개수만 세면 끝이었다. 괄호를 지우고 필요한 말은 hint 로 내린다. */
       narr: t(E,
-        "If the pot holds M=10 ml and a hive has 25 ml of honey, how many trips are needed to collect all the honey from that hive?", "항아리가 10 ml, 벌집에 꿀이 25 ml 있어요. 몇 번 다녀와야 할까요?"),
+        "One hive this time. How many trips does it take to empty it?",
+        "벌집 하나만 볼게요. 다 비우려면 몇 번 다녀와야 할까요?"),
       question: t(E,
-        "Pot M=10, hive has 25 honey. Trips to empty it? (10+10+5)",
-        "항아리 M=10, 벌집에 꿀 25. 몇 번 다녀올까요? (10+10+5)"),
+        "Pot M=10, hive has 25 honey. Trips to empty it?",
+        "항아리 M=10, 벌집에 꿀 25. 몇 번 다녀올까요?"),
       hint: t(E,
-        "Each trip takes up to 10. Subtract 10 each time until honey hits 0 — count the trips.",
-        "한 번에 최대 10 씩 가져와요. 꿀이 0 이 될 때까지 10 씩 빼면서 횟수를 세어봐요."),
+        "Each trip takes up to 10. Subtract 10 each time until the hive is empty.",
+        "한 번에 최대 10 씩 가져와요. 벌집이 빌 때까지 10 씩 빼 봐요."),
       answer: 3,
     },
   ];
@@ -137,9 +213,11 @@ export function makeHoneyCh2(E, lang = "py") {
     // 2-1: Code (greedy strategy + progressive sections)
     {
       type: "progressive",
+      /* 2026-09-17: 이 narr 도 1-2 퀴즈와 같은 틀린 전략("벌집 단위로 정렬해
+         ceil(honey/M) 번씩")을 적고 있었다. 아래 코드는 그렇게 하지 않는다. */
       narr: t(E,
-        "Greedy: sort hives by honey amount DESCENDING. For each hive in order, use trips = ceil(honey / M) — capped by remaining trips. Sections build it one piece at a time. Toggle Python ↔ C++ in header.",
-        "꿀이 많은 벌집부터 차례로 다녀와요."),
+        "Split every hive into trip-sized blocks, then take the K biggest.",
+        "모든 벌집을 왕복 조각으로 쪼갠 뒤 큰 것부터 K 개를 골라요."),
       sections: getHoneySections(E),
     },
   ];

@@ -47,7 +47,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeTrainsCh1(E) {
   return [
@@ -109,11 +109,82 @@ export function makeTrainsCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    /* 1-2: 입출력 형식 (mcc19rect2 4-박스 표준)
+       2026-09-17: 형식 카드가 없어서, 학생이 코드의 input() 을 보고서야
+       "몇 줄에 뭐가 들어오나" 를 역추론하고 있었다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "N, then N rows of the grid, then A and B.",
+        "N 한 줄, 격자 N 줄, 그다음 A 와 B 의 자리가 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#1e3a8a", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— side of the grid", "— 격자 한 변의 길이")}</span></div>
+              <div><span style={{ color: "#1e3a8a", fontWeight: 800 }}>N × N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— N lines, N populations each (−1 = blocked)", "— N 줄, 줄마다 인구 N 개 (−1 은 막힌 칸)")}</span></div>
+              <div><span style={{ color: "#1e3a8a", fontWeight: 800 }}>ax ay bx by</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— row/col of A, then of B (counted from 1)", "— A 의 행·열, B 의 행·열 (1 부터 셈)")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the smallest total population a path from A to B can displace.",
+                    "한 줄에 A 에서 B 까지 옮기게 되는 인구의 최솟값을 적어요.")}
+            </div>
+          </div>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#1e3a8a", whiteSpace: "pre" }}>
+{`3
+1 9 1
+1 9 1
+1 1 1
+1 1 1 3`}
+                </div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`7`}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic", whiteSpace: "pre-line" }}>
+              {t(E, "A is the top-left cell, B the top-right. Why 7? — lay the path yourself on the next page.",
+                    "A 는 왼쪽 위, B 는 오른쪽 위 칸이에요.\n왜 7 일까? — 다음 쪽에서 직접 놓아 봐요.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+              {/* 2026-09-17: 원문 N 상한을 못 찾았다. 지어내지 않고 이 방법이 감당하는 크기를 적는다. */}
+              {t(E, "Each cell holds a population of 0 or more, or −1 for blocked. We could not find the original limit on N. What we can say: this method looks at each cell only a few times, so a 1000 × 1000 grid (a million cells) is within reach.",
+                    "칸마다 인구는 0 이상이고, −1 은 막힌 칸이에요.\n원문의 N 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 칸 하나를 몇 번씩만 보기 때문에\n1000 × 1000 격자(칸 100 만 개)까지도 닿아요.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Audit sim — build a path on the grid, then see whether it can be beaten
+    {
+      type: "auditSim",
+      narr: t(E,
+        "Lay your own track from A to B and watch the cost add up.",
+        "A 에서 B 까지 철도를 직접 놓아 봐요."),
+    },
+    // 1-4: Quiz
     {
       type: "quiz",
+      /* 2026-09-17: narr 이 question 을 그대로 다시 말했다. narr 은 "지금 뭘 볼 차례" 만. */
       narr: t(E,
-        "On a grid, you can move up, down, left, or right.\nHow many directions of movement are allowed?", "격자에서는 몇 방향으로 움직일 수 있을까요?"),
+        "Now answer it yourself.",
+        "이번엔 직접 답해 볼 차례예요."),
       question: t(E,
         "How many directions can tracks be laid? (up/down/left/right)",
         "철도를 놓을 수 있는 방향은 몇 개일까요? (상/하/좌/우)"),
@@ -126,25 +197,22 @@ export function makeTrainsCh1(E) {
         "Correct! Only 4-directional movement (up, down, left, right) is allowed on the grid.",
         "맞아요! 격자에서는 4방향(상, 하, 좌, 우)으로만 움직일 수 있어요."),
     },
-    // 1-3: Input
+    /* 1-5: Input
+       2026-09-17: 여기 입력칸이 바로 위 퀴즈와 **똑같은 질문**("몇 방향?", 답 4)이었다.
+       방금 정답과 이유까지 들은 걸 한 쪽 넘겨서 또 답하는, 새 정보가 0 인 쪽이었다.
+       대신 아직 아무도 말해주지 않은 것을 묻는다 — **출발 칸도 비용에 들어간다**. */
     {
       type: "input",
       narr: t(E,
-        "On a grid, we move in 4 directions. How many directions?", "격자에서 움직일 수 있는 방향은 몇 개일까요?"),
+        "Add up the cost of going straight across.",
+        "곧장 가로지르는 길의 비용을 직접 더해 봐요."),
       question: t(E,
-        "Number of movement directions on the grid?",
-        "격자에서 움직일 수 있는 방향은 몇 개일까요?"),
+        "A row of cells reads 1 9 1. You start on the left cell and walk straight to the right cell. Cost?",
+        "한 줄이 1 9 1 이에요. 맨 왼쪽 칸에서 출발해 맨 오른쪽 칸까지 곧장 가면 비용은 얼마일까요?"),
       hint: t(E,
-        "Count the directions listed: up, down, left, right.",
-        "나열된 방향을 세어 봐요: 상, 하, 좌, 우."),
-      answer: 4,
-    },
-    // 1-4: Audit sim — build a path on the grid, audit cost vs. Dijkstra optimum
-    {
-      type: "auditSim",
-      narr: t(E,
-        "Build your own train path A→B on a small grid. Live: cost is summed and compared against Dijkstra's minimum. Many valid paths exist — only the lowest-cost one wins.",
-        "작은 격자에서 A→B 철도를 직접 놓아 봐요."),
+        "Add the population of every cell the track sits on — the starting cell counts too.",
+        "철도가 놓이는 칸의 인구를 모두 더해요. 출발 칸도 함께 세요."),
+      answer: 11,
     },
   ];
 }
@@ -159,8 +227,8 @@ export function makeTrainsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Dijkstra on the N×N grid: start at A with cost grid[A], expand to non-blocked neighbors, accumulate population costs in a min-heap. Stop at B. Sections build it one piece at a time.",
-        "다익스트라로 비용이 가장 적은 길부터 차근차근 넓혀 가요."),
+        "Four steps: read the grid, make a cost table, spread, stop at B.",
+        "네 걸음으로 나눠요 — 읽기 · 표 만들기 · 넓히기 · 멈추기."),
       sections: getTrainsSections(E),
     },
   ];

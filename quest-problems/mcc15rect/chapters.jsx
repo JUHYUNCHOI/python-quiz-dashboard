@@ -14,7 +14,10 @@ const A = "#059669";
 const PRESETS = [
   { corners: [[0, 0], [0, 3], [3, 3]], missing: [3, 0] },   // official sample
   { corners: [[1, 1], [5, 1], [1, 4]], missing: [5, 4] },
-  { corners: [[-2, -1], [3, -1], [-2, 4]], missing: [3, 4] }, // negatives
+  /* 2026-09-17: 여기가 [[-2,-1],[3,-1],[-2,4]] → (3,4) 였다. 그런데 1-4 퀴즈가
+     **바로 그 좌표**를 묻는다. 시작이 pi=1 이라 "다른 예제" 한 번이면 답이 뜬다.
+     퀴즈는 그대로 두고 이 프리셋만 다른 음수 예제로 갈았다. */
+  { corners: [[-4, 1], [2, 1], [-4, -3]], missing: [2, -3] }, // negatives
   { corners: [[-5, 2], [-5, -3], [0, 2]], missing: [0, -3] }, // negatives
 ];
 
@@ -203,26 +206,11 @@ function RectCornerSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE  (pick the coordinate that has no partner)
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "x1, y1 = map(int, input().split())",
-  "x2, y2 = map(int, input().split())",
-  "x3, y3 = map(int, input().split())",
-  "",
-  "# 축에 평행한 직사각형 → x 좌표는 왼쪽 변에 2번, 오른쪽 변에 2번 등장해요.",
-  "# 주어진 3개 중 짝이 있는 두 개를 빼면, 짝 없는 하나가 답이에요.",
-  "if x1 == x2: x4 = x3",
-  "elif x1 == x3: x4 = x2",
-  "else: x4 = x1",
-  "",
-  "if y1 == y2: y4 = y3",
-  "elif y1 == y3: y4 = y2",
-  "else: y4 = y1",
-  "",
-  "print(x4, y4)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도 import 되지
+   않는 죽은 복제본이었다. 화면이 쓰는 살아 있는 코드는 components.jsx 의 FULL_PY 다.
+   둘을 같이 두면 조용히 어긋나고, 다음 사람이 이쪽을 고치느라 시간을 쓴다.
+   형제 quest mcc15isthmus 가 같은 이유로 먼저 지웠다.
+   (지운 사본은 한 줄에 문장이 여러 개인 `if x1 == x2: x4 = x3` 모양이기도 했다.) */
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)
@@ -233,8 +221,8 @@ export function makeMcc15RectCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Kumar picks four points that form a rectangle with sides parallel to the axes.\nYou get 3 of the corners — print the coordinates of the fourth.",
-        "Kumar 가 축에 평행한 직사각형을 이루는 네 점을 골라요.\n그중 꼭짓점 3개가 주어져요 — 네 번째 꼭짓점의 좌표를 출력해요."),
+        "Three corners of a rectangle are given — find the fourth.",
+        "직사각형의 꼭짓점 3개를 보고 네 번째를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -420,7 +408,7 @@ export function makeMcc15RectCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the code, section by section.", "↓ 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

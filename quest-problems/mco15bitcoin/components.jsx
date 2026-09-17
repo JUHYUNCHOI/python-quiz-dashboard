@@ -195,27 +195,41 @@ const FULL_CPP = [
   "}",
 ];
 
+/* 2026-09-17: 섹션이 1 개인데 why 는 "코드를 한 부분씩 읽어 봐요" 라고 했다 —
+   한 부분씩 읽을 데가 없었고, 같은 문장이 다섯 quest 에 그대로 복붙돼 있었다.
+   파이썬 16 줄이라 두 걸음으로 쪼갠다. 코드 배열은 slice 만 한다 — 한 글자도 안 바뀐다. */
 export function getBitcoinSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "① Read the sites", "① 사이트 읽어 두기"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 8), cpp: FULL_CPP.slice(0, 18),
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
-        t(E, "Python and C++ do exactly the same thing here: read the points, check every pair, keep the biggest dx² + dy².",
-            "파이썬과 C++ 이 하는 일은 똑같아요. 점을 읽고, 모든 쌍을 확인하고, 가장 큰 dx² + dy² 를 남겨요."),
+        t(E, "Every pair has to be compared with every other, so the points have to stay around — read them all into a list first.",
+            "모든 쌍을 서로 견줘야 해서 점이 계속 남아 있어야 해요.\n그래서 먼저 전부 목록에 담아 둬요."),
+        t(E, "max_dist starts at 0. A squared distance is never negative, so 0 is a safe 'nothing found yet'.",
+            "max_dist 는 0 에서 시작해요.\n제곱 거리는 음수가 될 수 없어서, 0 은 '아직 아무것도 못 찾음' 자리로 안전해요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬의 list, map, sorted 덕분에 코드가 짧아요."),
+      cppOnly: [
+        t(E, "A Python tuple (x, y) becomes a pair — read the two values with .first and .second.",
+            "Python 의 튜플 (x, y) 은 pair 가 돼요. 두 값은 .first 와 .second 로 꺼내요."),
+      ],
+    },
+    {
+      label: t(E, "② Measure every pair", "② 모든 쌍을 재 보기"),
+      color: A,
+      py: FULL_PY.slice(8, 16), cpp: FULL_CPP.slice(18, 30),
+      why: [
+        t(E, "j starts at i + 1, not at 0. That way each pair is measured once instead of twice, and a site is never compared with itself.",
+            "j 를 0 이 아니라 i + 1 에서 시작해요.\n그래야 쌍마다 한 번씩만 재고, 자기 자신과 견주는 일도 없어요."),
+        t(E, "We keep dx² + dy² and never take a square root. The pair with the biggest squared distance is also the pair that is farthest apart, so the answer is the same — and it stays a whole number, with no decimal error.",
+            "dx² + dy² 만 쓰고 제곱근은 쓰지 않아요.\n제곱 거리가 가장 큰 쌍이 실제로도 가장 먼 쌍이라 답이 같아요.\n게다가 값이 정수로 남아서 소수점 오차가 아예 없어요."),
+        t(E, "max_dist just remembers the biggest one seen so far, so when the loops end it already holds the answer.",
+            "max_dist 는 지금까지 본 것 중 가장 큰 값만 기억해요.\n그래서 반복이 끝나면 이미 답이 들어 있어요."),
       ],
       cppOnly: [
         t(E, "Include only the headers you actually use: iostream for cin/cout, vector and utility for vector<pair<...>>, algorithm for max.",
             "쓰는 헤더만 적어요. cin/cout 은 iostream, vector<pair<...>> 는 vector 와 utility, max 는 algorithm."),
-        t(E, "A Python tuple (x, y) becomes a pair — read the two values with .first and .second.",
-            "Python 의 튜플 (x, y) 은 pair 가 돼요. 두 값은 .first 와 .second 로 꺼내요."),
         t(E, "dx and dy are long long, so dx * dx cannot overflow. In int, a squared distance past 2×10^9 would wrap around and give a wrong answer.",
             "dx 와 dy 를 long long 으로 두면 dx * dx 가 넘치지 않아요.\nint 였다면 제곱 거리가 2×10^9 을 넘는 순간 값이 뒤집혀 오답이 돼요."),
       ],

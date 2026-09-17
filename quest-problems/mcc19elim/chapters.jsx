@@ -73,10 +73,22 @@ function ElimWindowSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 8 }}>
           🪟 {t(E, "Window of 1s (delete the zeros inside)", "1들의 창 (안의 0은 지워요)")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 8, whiteSpace: "pre-line" }}>
           {t(E,
             "Pick a stretch of the string. The zeros inside (up to K) get deleted, so the 1s squeeze together. What is left?",
             "문자열에서 한 구간을 골라요. 안의 0 은 (K 개까지) 지워지고, 1 들이 서로 붙어요.\n무엇이 남을까요?")}
+        </div>
+        {/* 2026-09-17: 시뮬은 "시작/끝", 코드는 left/right 라 이름이 달랐다.
+            같은 것을 두 이름으로 부르면 학생이 혼자 이어 붙여야 한다.
+            시뮬 쪽을 코드 이름에 맞추고, 무슨 뜻인지 한 줄로 붙여둔다. */}
+        <div style={{
+          fontSize: 11.5, color: "#1e3a8a", lineHeight: 1.65, marginBottom: 12,
+          background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8,
+          padding: "7px 10px", whiteSpace: "pre-line", ...KA,
+        }}>
+          {t(E,
+            "The window's left edge is called left, its right edge right — the same names the code uses.",
+            "창의 왼쪽 끝을 left, 오른쪽 끝을 right 라고 불러요.\n코드에서도 똑같은 이름을 써요.")}
         </div>
 
         {/* the string with the window */}
@@ -87,13 +99,13 @@ function ElimWindowSim({ E }) {
         {/* controls */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center", alignItems: "center", marginBottom: 14 }}>
           <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-            <span style={{ fontSize: 12, color: "#1e3a8a", fontWeight: 700 }}>{t(E, "start", "시작")}</span>
+            <span style={{ fontSize: 12, color: "#1e3a8a", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>left</span>
             {stepBtn(() => setLeft(Math.max(0, lo - 1)), lo === 0, "−")}
             <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800, color: "#2563eb", minWidth: 16, textAlign: "center" }}>{lo}</span>
             {stepBtn(() => setLeft(Math.min(hi, lo + 1)), lo === hi, "+")}
           </div>
           <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-            <span style={{ fontSize: 12, color: "#1e3a8a", fontWeight: 700 }}>{t(E, "end", "끝")}</span>
+            <span style={{ fontSize: 12, color: "#1e3a8a", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>right</span>
             {stepBtn(() => setRight(Math.max(lo, hi - 1)), hi === lo, "−")}
             <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800, color: "#2563eb", minWidth: 16, textAlign: "center" }}>{hi}</span>
             {stepBtn(() => setRight(Math.min(L - 1, hi + 1)), hi === L - 1, "+")}
@@ -253,43 +265,68 @@ export function makeMcc19ElimCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. The first line gives N and K; the second line is the binary string.",
-        "입력 형식과 공식 예제를 봐요. 첫 줄에 N 과 K, 둘째 줄에 이진 문자열이 들어와요."),
+        "First line N and K, second line the binary string. Print one number.",
+        "첫 줄에 N 과 K, 둘째 줄에 이진 문자열이 와요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#f0f9ff", border: "1px solid #7dd3fc", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
-              📥 {t(E, "Input", "입력")}
-            </div>
-            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "line 1: ", "1번째 줄: ")}<b>N K</b> — {t(E, "string length and delete limit", "문자열 길이와 삭제 한계")}</div>
-              <div>• {t(E, "line 2: ", "2번째 줄: ")}<b>{t(E, "the binary string", "이진 문자열")}</b> ({t(E, "only 0s and 1s", "0 과 1 만")})</div>
-            </div>
-            <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Output: the longest run of consecutive 1s achievable.", "출력은 만들 수 있는 가장 긴 연속 1 의 길이예요.")}
+        <div style={{ padding: 16, ...KA }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#1e3a8a", fontWeight: 800 }}>N K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— string length, delete limit", "— 문자열 길이, 지울 수 있는 0 의 개수")}</span></div>
+              <div><span style={{ color: "#1e3a8a", fontWeight: 800 }}>s</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the binary string (0s and 1s only)", "— 이진 문자열 (0 과 1 만)")}</span></div>
             </div>
           </div>
-
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
-            <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 160 }}>
-              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>15 1</div>
-              <div style={{ overflowX: "auto" }}>101111001110111</div>
-            </div>
-            <div style={{ background: "#0f172a", color: "#93c5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
-              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>6</div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the longest run of consecutive 1s you can make.",
+                    "만들 수 있는 가장 긴 연속 1 의 길이를 한 줄에 써요.")}
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#1e3a8a", whiteSpace: "pre", overflowX: "auto" }}>
+{`15 1
+101111001110111`}
+                </div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`6`}</div>
+              </div>
+            </div>
             {/* 2026-09-08: 여기 계산이 **틀려 있었다.**
                 "101111" 은 0 이 하나, 1 이 다섯이라 지워도 5 다 (6 이 아니다).
                 6 이 나오는 구간은 "1110111" 이다 — 원문 설명("두 111 사이의 0 하나")과도 이쪽이 맞다.
                 검산: s[8..14] = "1110111", 0 한 개, 1 여섯 개 → 6.
                 전수 확인: 이 문자열·K=1 의 정답은 6, 그 구간은 s[8..14] 뿐이다. */}
-            {t(E,
-              "Look at the stretch \"1110111\" near the end. It holds one 0; delete it and six 1s line up: 6.",
-              "뒤쪽의 \"1110111\" 을 봐요. 그 안에 0 이 하나 있어요.\n그 0 을 지우면 1 이 여섯 개 이어져요: 6.")}
+            <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line" }}>
+              {t(E,
+                "Look at the stretch \"1110111\" near the end. It holds one 0; delete it and six 1s line up: 6.",
+                "뒤쪽의 \"1110111\" 을 봐요. 그 안에 0 이 하나 있어요.\n그 0 을 지우면 1 이 여섯 개 이어져요: 6.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>0 ≤ K ≤ N</div>
+              <div>{t(E, "s holds only the characters 0 and 1", "s 에는 글자 0 과 1 만 들어 있어요")}</div>
+              {/* 2026-09-17: 원문(ioimalaysia 2019 editorial)에 N 의 정확한 상한이 없다.
+                  없는 숫자를 "공식 상한" 인 척 지어내지 않는다. 대신 이 풀이가 감당하는
+                  크기를 정직하게 적는다 — Ch2 의 "N 이 크면 시간 초과" 가 여기에 기댄다. */}
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2, fontFamily: "inherit", ...KA, whiteSpace: "pre-line" }}>
+                {t(E,
+                  "The original statement gives no exact upper bound for N.\nThink of N in the hundreds of thousands: one pass over the string is fine, but checking every stretch (about N × N of them) is not.",
+                  "원문에 N 이 얼마까지 커지는지는 적혀 있지 않아요.\nN 이 수십만이라고 생각해봐요. 한 번 훑는 건 괜찮지만,\n구간을 전부 보는 건 (약 N × N 개) 안 돼요.")}
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -365,7 +402,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

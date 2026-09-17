@@ -3,6 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { getMcc20ZigzagSections } from "./components";
 
 const PURPLE = "#8b5cf6";
+const KA = { wordBreak: "keep-all" };
 const PURPLE_DARK = "#5b21b6";
 const PURPLE_BG = "#f5f3ff";
 const PURPLE_BD = "#c4b5fd";
@@ -374,29 +375,70 @@ export function makeMcc20ZigzagCh1(E) {
       ],
       correct: 0,
       explain: t(E,
-        "Correct! C(3,2) = 3 subsequences: ab, ac, bc.",
-        "C(3,2) = 3 이에요. ab, ac, bc 세 개예요."),
+        "ab, ac, bc — three of them. Note this counts every pick, zig-zag or not.",
+        "ab, ac, bc 세 개예요. 지그재그인지는 아직 따지지 않고, 고르는 방법을 전부 센 거예요."),
     },
+    /* 2026-09-17: 여기가 C(n, k) = n! / (k!(n−k)!) 를 정의 없이 던지던 자리였다.
+       앞 세 쪽이 모두 '직접 세기' 인데 여기서만 갑자기 공식으로 뛰어서
+       초6 학생이 막혔다. 글자 수만 하나 늘려 '직접 세기' 를 그대로 잇는다. */
     {
       type: "input",
       narr: t(E,
-        "How many length-2 subsequences of 'abc'?", "'abc' 의 길이 2 부분수열은 몇 개일까요?"),
+        "One more letter — now count them yourself.", "글자를 하나 늘려서 직접 세어 봐요."),
       question: t(E,
-        "C(3, 2) = ?",
-        "C(3, 2) = ?"),
-      hint: t(E, "C(n, k) = n! / (k! · (n−k)!).", "C(n, k) = n! / (k! · (n−k)!)."),
-      answer: 3,
+        "String 'abcd'. How many ways to pick 2 letters in order?",
+        "문자열 'abcd' 에서 글자 두 개를 순서대로 고르는 방법은 몇 가지일까요?"),
+      hint: t(E, "Group them by the first letter: the ones starting with a, then b, then c.",
+                 "첫 글자로 나눠서 세어 봐요. a 로 시작하는 것, b 로 시작하는 것, c 로 시작하는 것."),
+      answer: 6,
     },
   ];
 }
 
 export function makeMcc20ZigzagCh2(E, lang = "py") {
   return [
+    /* 2026-09-17: 이 쪽이 통째로 없었다. 앞 세 쪽은 손으로 세는 이야기인데
+       다음 쪽이 바로 up/dn 표였다 — 초6 학생이 "세 쪽이 서로 다른 얘기 같다" 고 했다.
+       형제 quest(mcc21dvd·mcc20missing·mcc20knight)에는 다 있는 '느림 → 빠름' 다리를 놓는다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Why counting them one by one cannot work, and what to do instead.",
+        "하나씩 세면 왜 안 되는지, 대신 무엇을 할지 봐요."),
+      content: (
+        <div style={{ padding: 16, ...KA }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
+                🐢 {t(E, "Slow: make every pick and check it", "느림: 고를 수 있는 것을 다 만들어서 확인하기")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line" }}>
+                {t(E,
+                  "That is what we just did by hand, and it works for 'abcd'. But the string can be 20000 letters long and K can be 100. Picking 100 letters out of 20000 is a number with hundreds of digits — we could not finish writing them down, let alone check them.",
+                  "방금 손으로 한 방법이에요. 'abcd' 처럼 짧으면 잘 돼요.\n그런데 문자열은 20000 글자까지, K 는 100 까지 커져요.\n20000 글자에서 100 글자를 고르는 방법은 자릿수가 수백 개인 수예요.\n확인은커녕 적어 내려가는 것조차 끝낼 수 없어요.")}
+              </div>
+            </div>
+            <div style={{ background: "#f5f3ff", border: `1px solid ${PURPLE_BD}`, borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: PURPLE_DARK, marginBottom: 4 }}>
+                🚀 {t(E, "Fast: count without making them", "빠름: 만들지 않고 개수만 세기")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line" }}>
+                {t(E,
+                  "We never write a zig-zag down. For each letter we only remember two numbers: how many zig-zags of each length end here going up, and how many end here going down. A longer one is then made by gluing one letter onto a number we already have.",
+                  "지그재그를 하나도 적지 않아요.\n글자마다 숫자 두 개만 기억해요.\n여기서 끝나면서 마지막이 오름인 것이 몇 개인지,\n여기서 끝나면서 마지막이 내림인 것이 몇 개인지예요.\n더 긴 것은 이미 가진 그 숫자에 글자 하나를 붙여서 만들어요.")}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
+            {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
+          </div>
+        </div>),
+    },
     {
       type: "progressive",
       narr: t(E,
-        "DP: dp[i][j] = number of zig-zag subsequences of length j ending at position i. Transition: extend from earlier i' with the right comparison (up if j is even, down if j is odd, or vice versa). Sections build it one piece at a time.",
-        "dp[i][j] 는 i 에서 끝나는 길이 j 짜리 지그재그의 개수예요.\n앞 글자에서 방향을 뒤집으며 이어붙여 세어 나가요."),
+        "Instead of listing every zig-zag, we count them with two tables.",
+        "지그재그를 하나씩 적는 대신 표 두 개로 세어 볼게요."),
       sections: getMcc20ZigzagSections(E),
     },
   ];

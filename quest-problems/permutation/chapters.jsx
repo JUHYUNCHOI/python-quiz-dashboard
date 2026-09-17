@@ -443,7 +443,7 @@ export function makePermCh2(E) {
         "p 를 어떻게 되살릴까요?\ndismantle 규칙을 거꾸로 푸는 건 까다로워요.\n가장 쉬운 방법은 1..N 의 모든 순열을 사전순으로 해 보는 거예요.\n하나씩 dismantle 해서 h 와 맞는 첫 번째에서 멈춰요."),
       content: (
         <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
+          {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
         </div>),
 
     },
@@ -543,7 +543,7 @@ export function makePermCh3(E, lang = "py") {
         "테스트 하나에 걸리는 시간은 O(N! · N) 이에요.\n순열이 N! 개고, 하나를 dismantle 하는 데 O(N) 이 들어요.\nBronze 문제는 보통 N 이 작아요."),
       content: (
         <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
+          {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
         </div>),
 
     },

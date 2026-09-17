@@ -25,7 +25,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (4 steps)
+   Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeBitcoinCh1(E) {
   return [
@@ -77,7 +77,71 @@ export function makeBitcoinCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Pair Inspector sim — feel the brute force
+    /* 1-2: 입출력 형식 (mcc19rect2 4-박스 표준)
+       2026-09-17: 형식 카드가 없어서 학생이 코드까지 가서야 형식을 역추론했다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "N on the first line, then one site per line.",
+        "첫 줄에 N, 그다음 줄마다 사이트 하나가 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#9a3412", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— how many sites", "— 사이트 개수")}</span></div>
+              <div><span style={{ color: "#9a3412", fontWeight: 800 }}>x1 y1</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— site 1", "— 1 번 사이트")}</span></div>
+              <div style={{ color: C.dim }}>…</div>
+              <div><span style={{ color: "#9a3412", fontWeight: 800 }}>xN yN</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— site N", "— N 번 사이트")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the largest squared distance found between two sites.",
+                    "한 줄에, 두 사이트 사이에서 찾은 가장 큰 제곱 거리를 적어요.")}
+            </div>
+          </div>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#9a3412", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#9a3412", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
+{`4
+1 1
+5 2
+2 6
+6 5`}
+                </div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`41`}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
+              {t(E, "Which pair gives 41? — the sim on the next page uses these four sites.",
+                    "어느 쌍이 41 일까? — 다음 쪽 시뮬이 이 네 사이트를 그대로 써요.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+              {/* 2026-09-17: 원문 N·좌표 상한을 못 찾았다. 지어내지 않고 이 방법이
+                  감당하는 크기를 적는다. N 범위를 모르면 "모든 쌍 보기" 가 최종
+                  풀이인지도 판정할 수 없다 — 검토자가 남긴 말이다. */}
+              {t(E, "Coordinates are whole numbers. We could not find the original limits on N or on the coordinates. What we can say: this method looks at every pair, and the number of pairs is N × (N − 1) ÷ 2 — about 2 million when N is 2000.",
+                    "좌표는 정수예요.\n원문의 N 과 좌표 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 모든 쌍을 다 보고,\n쌍의 개수는 N × (N − 1) ÷ 2 예요. N 이 2000 이면 약 200 만 쌍이에요.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Pair Inspector sim — feel the brute force
     {
       type: "reveal",
       narr: t(E,
@@ -85,7 +149,7 @@ export function makeBitcoinCh1(E) {
         "두 사이트를 골라 dx² + dy² 가 어떻게 커지는지 봐요."),
       content: <BitcoinPairInspector E={E} />,
     },
-    // 1-3: Quiz
+    // 1-4: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -102,7 +166,7 @@ export function makeBitcoinCh1(E) {
         "Correct! sqrt is monotonic, so max squared distance corresponds to max distance. We avoid floating point issues.",
         "맞아요! sqrt 는 커지기만 하는 함수라, 거리의 제곱이 가장 큰 쌍이 실제 거리도 가장 멀어요. 소수점 오차도 피할 수 있고요."),
     },
-    // 1-4: Input
+    // 1-5: Input
     {
       type: "input",
       narr: t(E,

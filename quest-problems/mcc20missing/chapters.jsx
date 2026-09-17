@@ -25,6 +25,16 @@ function Mcc20MissingAnchorSim({ E }) {
   ).sort((x, y) => x - y);
 
   const [K, setK] = useState(null);
+  /* 2026-09-17: 시뮬 상자가 클릭 전부터 "왜 후보 K 가 4 개뿐인지" 를 문단으로 다 말하고,
+     맨 아래는 이 예제의 답(K=2 → 빠진 수 4)까지 미리 알려주고 있었다.
+     '왜 4 개뿐인가' 는 다음 쪽 퀴즈에서 학생이 찾고, 그림 설명은 '더 빠르게' 쪽으로 옮겼다.
+     여기서는 후보를 다 눌러 본 뒤에만 정리가 나온다. */
+  const [tried, setTried] = useState([]);
+  const pickK = (c) => {
+    setK(c);
+    setTried((prev) => (prev.includes(c) ? prev : [...prev, c]));
+  };
+  const triedAll = tried.length >= candidates.length;
 
   const mags = K == null ? [] : a.map((x) => Math.abs(x - K));
   const counts = {};
@@ -49,12 +59,12 @@ function Mcc20MissingAnchorSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 8 }}>
-          ⚓ {t(E, "Grab the biggest number to pin down K", "가장 큰 수를 붙잡아 K 를 좁혀요")}
+          ⚓ {t(E, "Undo a candidate K and see what comes back", "후보 K 를 되돌려서 무엇이 나오는지 봐요")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12, whiteSpace: "pre-line", ...KA }}>
           {t(E,
-            "We can't try every K. But the biggest ORIGINAL magnitude is N (or N−1 if N was discarded), and adding the same K to everyone keeps the order — so that number lands on the MAX of the list if its sign was +, or on the MIN if it was −. Two choices for the magnitude times two for the sign gives just 4 possible K. Try each: subtract it back with |x−K| and check the result.",
-            "K 를 전부 시도할 순 없어요. 그런데 원래 절대값이 가장 큰 수는 N 이에요 (N 을 버렸으면 N−1). 모두에게 같은 K 를 더하면 순서가 그대로라, 그 수는 부호가 + 였으면 목록의 MAX, − 였으면 MIN 자리에 놓여요. 크기가 2가지, 부호가 2가지니까 가능한 K 는 4개뿐이에요. 각각 |x−K| 로 되돌려서 결과를 확인해봐요.")}
+            "Pick a candidate K below and we subtract it back with |x−K|. The original numbers were all different and all in 1..N — so if any result repeats or falls outside 1..N, that K is impossible.",
+            "아래 후보 K 를 하나 고르면 |x−K| 로 되돌려 볼게요.\n원래 수들은 모두 달랐고 전부 1..N 안에 있었어요.\n그러니 되돌린 값이 겹치거나 1..N 을 벗어나면\n그 K 로는 이 목록을 만들 수 없어요.")}
         </div>
 
         {/* given array */}
@@ -75,11 +85,16 @@ function Mcc20MissingAnchorSim({ E }) {
 
         {/* candidate K buttons */}
         <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 4 }}>
-          {t(E, "4 candidate K (min±N, max±(N−1) …) — pick one", "후보 K 4개 (min+N, max−N, min+(N−1), max−(N−1)) — 하나 골라요")}
+          {t(E, "candidate K — pick one", "후보 K — 하나 골라요")}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim, marginBottom: 6, ...KA }}>
+          {t(E,
+            `Four formulas — min+N, max−N, min+(N−1), max−(N−1) — but two of them land on the same number here, so there are ${candidates.length} buttons. Why only these? That is the next page.`,
+            `식은 min+N, max−N, min+(N−1), max−(N−1) 네 개인데 여기서는 둘이 같은 값이라 버튼이 ${candidates.length} 개예요. 왜 이 식들만 보면 되는지는 다음 쪽에서 찾아봐요.`)}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
           {candidates.map((c) => (
-            <button key={c} onClick={() => setK(c)} style={{
+            <button key={c} onClick={() => pickK(c)} style={{
               padding: "6px 12px", borderRadius: 8, cursor: "pointer",
               fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800,
               border: K === c ? "2px solid #ea580c" : "1px solid #fdba74",
@@ -132,10 +147,14 @@ function Mcc20MissingAnchorSim({ E }) {
           </>
         )}
 
-        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
-          {t(E,
-            "Only K = 2 survives here → missing = 4. Sum the missing value over every valid K; different K can give different missing numbers (that's the second sample: 2 + 5 = 7).",
-            "여기선 K = 2 만 살아남아요 → 빠진 수 = 4. 맞는 K 마다 빠진 수를 더해요. K 가 다르면 빠진 수도 달라질 수 있어요 (두 번째 예제가 그래요. 2 + 5 = 7).")}
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+          {triedAll
+            ? t(E,
+                "Only one K survived here, so the answer is its missing number. When more than one K survives we add every one of their missing numbers together — that is what the second example does.",
+                "여기서는 K 하나만 살아남았으니 그 K 의 빠진 수가 답이에요.\n살아남는 K 가 여럿이면 각각의 빠진 수를 모두 더해요.\n두 번째 예제가 바로 그런 경우예요.")
+            : t(E,
+                "Try every candidate. How many of them survive?",
+                "후보를 하나씩 다 눌러 봐요. 몇 개가 살아남나요?")}
         </div>
       </div>
     </div>
@@ -313,20 +332,20 @@ export function makeMcc20MissingCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "We started from a permutation of 1..N and discarded ONE number. Think about the largest value that could still be present.",
-        "아직 남아 있을 수 있는 가장 큰 값은 무엇일까요?"),
+        "Now find out why those few candidates are enough.",
+        "후보가 왜 몇 개뿐인지 이제 직접 찾아봐요."),
       question: t(E,
         "Before signs and +K, what is the largest magnitude still in the list?",
         "부호와 +K 를 붙이기 전, 목록에 남은 가장 큰 크기는 얼마일까요?"),
       options: [
-        t(E, "N, or N−1 if N was the discarded one", "N, 버린 게 N 이면 N−1"),
-        t(E, "always N", "항상 N"),
-        t(E, "always N−1", "항상 N−1"),
+        t(E, "N or N−1", "N 또는 N−1"),
+        t(E, "always N", "언제나 N"),
+        t(E, "always N−1", "언제나 N−1"),
       ],
       correct: 0,
       explain: t(E,
-        "If N wasn't discarded the largest is N; if N was discarded it's N−1. After +K that biggest value sits at the MAX or MIN of the list — which pins K to just 4 candidates.",
-        "N 을 안 버렸으면 N, N 을 버렸으면 N−1 이에요. +K 뒤 그 값은 부호에 따라 목록의 MAX 나 MIN 에 놓여요. 크기 2가지 × 부호 2가지라 K 후보가 4개로 줄어요."),
+        "If N wasn't discarded the largest is N; if N was discarded it's N−1. Adding the same K to everyone keeps the order, so that biggest one ends up at the MAX of the list when its sign was + and at the MIN when it was −. Two sizes × two signs = 4 candidate K.",
+        "N 을 안 버렸으면 N, N 을 버렸으면 N−1 이에요. 모두에게 같은 K 를 더하면 순서가 그대로라, 가장 큰 그 수는 부호가 + 였으면 목록의 MAX 자리에, − 였으면 MIN 자리에 놓여요. 크기 2 가지 × 부호 2 가지 = 후보 K 4 개예요."),
     },
   ];
 }
@@ -354,13 +373,46 @@ export function makeMcc20MissingCh2(E, lang = "py") {
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#9a3412", marginBottom: 4 }}>
                 🚀 {t(E, "Fast: anchor the biggest magnitude → only 4 K", "빠름: 가장 큰 크기를 붙잡아 → K 는 4개뿐")}
               </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "The largest magnitude (N or N−1) must land on MAX or MIN, giving 4 candidate K. Check each in O(N). Total ≈ 4N.", "가장 큰 크기(N 또는 N−1)는 MAX 나 MIN 에 놓여야 해서 후보 K 는 4개예요. 각각 O(N) 으로 확인하니 모두 합쳐 ≈ 4N 이에요.")}
+              {/* 2026-09-17: 여기는 같은 결론이 세 번째로 되풀이되던 자리였다.
+                  문장 대신 작은 예 하나를 그림으로 보여준다 — 학생이 "왜 그 자리에 놓이는지"
+                  를 못 봤다고 했다. 크기 1·2·3 에 부호를 붙이고 K=10 을 더해 본다. */}
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, marginBottom: 8, ...KA }}>
+                {t(E, "A tiny example: magnitudes 1, 2, 3 with K = 10.", "작은 예로 봐요. 크기 1, 2, 3 에 K = 10 을 더해요.")}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 8 }}>
+                {[
+                  { sign: "+", row: ["−1", "+2", "+3"], out: ["9", "12", "13"], hitIdx: 2, tag: t(E, "biggest is MAX", "가장 큰 수가 MAX"), eq: "13 = 3 + K" },
+                  { sign: "−", row: ["−1", "+2", "−3"], out: ["9", "12", "7"], hitIdx: 2, tag: t(E, "biggest is MIN", "가장 큰 수가 MIN"), eq: "7 = −3 + K" },
+                ].map((r) => (
+                  <div key={r.sign} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                    <span style={{ color: C.dim, minWidth: 70, whiteSpace: "nowrap", fontSize: 11 }}>
+                      {t(E, "sign of 3: ", "3 의 부호: ")}<b style={{ color: "#9a3412" }}>{r.sign}</b>
+                    </span>
+                    <span style={{ color: C.dim }}>{r.row.join("  ")}</span>
+                    <span style={{ color: "#9a3412" }}>+10 →</span>
+                    {r.out.map((v, i) => (
+                      <span key={i} style={{
+                        display: "inline-flex", alignItems: "center", justifyContent: "center",
+                        minWidth: 28, height: 24, borderRadius: 6, fontWeight: 800,
+                        border: i === r.hitIdx ? "1.5px solid #ea580c" : "1px solid #fdba74",
+                        background: i === r.hitIdx ? "#ea580c" : "#fff",
+                        color: i === r.hitIdx ? "#fff" : "#9a3412",
+                      }}>{v}</span>
+                    ))}
+                    <span style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, whiteSpace: "nowrap" }}>{r.tag}</span>
+                    <span style={{ fontSize: 11, color: C.dim, whiteSpace: "nowrap" }}>{r.eq}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+                {t(E,
+                  "Adding the same K to everyone keeps the order, so the biggest magnitude always ends up at one end. Solve each equation for K: 4 candidates, each checked in O(N) — about 4N in total.",
+                  "모두에게 같은 K 를 더하면 순서가 바뀌지 않아요.\n그래서 가장 큰 크기는 늘 양 끝 중 한 곳에 놓여요.\n이 식을 K 에 대해 풀면 후보가 4 개 나와요.\n각각 O(N) 으로 확인하니 다 합쳐 약 4N 이에요.")}
               </div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

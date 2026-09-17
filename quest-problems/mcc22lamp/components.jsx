@@ -239,21 +239,25 @@ export function getMcc22LampSections(E) {
    how overlapping tents build a piecewise-linear hill — and that only
    the breakpoints p-b, p, p+b ever matter.
    ═══════════════════════════════════════════════════════════════ */
+/* 2026-09-17: 원래 기본값이 **바로 앞 쪽에서 답(2)까지 풀어 준 공식 예제와 똑같았다.**
+   학생이 시뮬을 열면 새로 알아낼 게 없었다. 그래서 다른 램프 배치로 연다.
+   (공식 예제는 앞 쪽 1-2 에 그대로 있으니 사라지지 않는다.) */
 const _INIT_LAMPS = [
-  { p: -5, b: 3 },
-  { p: -3, b: 2 },
-  { p: 0, b: 6 },
-  { p: 7, b: 1 },
+  { p: -4, b: 3 },
+  { p: -1, b: 4 },
+  { p: 3, b: 2 },
+  { p: 6, b: 3 },
 ];
+const _INIT_K = 4;
 
 export function Mcc22LampDeepAuditSim({ E }) {
   const [lamps, setLamps] = useState(_INIT_LAMPS);
-  const [k, setK] = useState(6);
+  const [k, setK] = useState(_INIT_K);
 
   const bump = (i, d) => {
     setLamps((prev) => prev.map((l, j) => (j === i ? { ...l, b: Math.max(1, Math.min(9, l.b + d)) } : l)));
   };
-  const reset = () => { setLamps(_INIT_LAMPS); setK(6); };
+  const reset = () => { setLamps(_INIT_LAMPS); setK(_INIT_K); };
 
   const bright = (x) => lamps.reduce((s, l) => s + Math.max(0, l.b - Math.abs(l.p - x)), 0);
 
@@ -283,8 +287,8 @@ export function Mcc22LampDeepAuditSim({ E }) {
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65 }}>
           {t(E,
-            "Lamp i shines max(0, b − |p − x|) at position x: brightest right under it, fading 1 per step. Overlapping tents add up into a bumpy hill. We only care where the total reaches k — and that hill only bends at p−b, p, p+b.",
-            "램프 i 는 위치 x 에서 max(0, b − |p − x|) 만큼 밝아요. 바로 아래가 제일 밝고 한 칸 멀어질 때마다 1씩 약해져요. 텐트가 겹치면 울퉁불퉁한 언덕이 돼요. 우리는 합이 k 에 닿는 곳만 궁금한데, 그 언덕은 p−b, p, p+b 에서만 꺾여요.")}
+            "Lamp i shines max(0, b − |p − x|) at position x: brightest right under it, fading 1 per step. Overlapping tents add up into a bumpy hill. We only care where the total reaches k. Where does that hill bend?",
+            "램프 i 는 위치 x 에서 max(0, b − |p − x|) 만큼 밝아요. 바로 아래가 제일 밝고 한 칸 멀어질 때마다 1씩 약해져요. 텐트가 겹치면 울퉁불퉁한 언덕이 돼요. 우리는 합이 k 에 닿는 곳만 궁금해요. 그 언덕은 어디에서 꺾일까요?")}
         </div>
       </div>
 
@@ -303,13 +307,24 @@ export function Mcc22LampDeepAuditSim({ E }) {
       <div style={{ overflowX: "auto", paddingBottom: 4 }}>
         <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-start", margin: "0 auto" }}>
           <div style={{ position: "relative", display: "flex", gap: 3, alignItems: "flex-end", height: CHART_H, borderBottom: `2px solid ${C.border}` }}>
-            {/* threshold line */}
+            {/* threshold line
+                2026-09-17: 이 선과 k 라벨이 화면에 **안 보였다.**
+                ① 선 높이를 CHART_H 로 재서 k 가 최댓값일 때 bottom 이 정확히 차트 위
+                   경계에 얹혔고, 바깥 div 의 overflowX:auto 가 overflow-y 도 auto 로
+                   만들어 잘라 버렸다. → 막대와 **같은 잣대**(CHART_H − 16)로 재고
+                   Math.min 으로 한 번 더 막는다.
+                ② k=N 라벨은 top:-16 이라 차트 밖으로 밀려 위쪽 'k = − 4 +' 버튼 줄과
+                   같은 자리에 겹쳐 가려졌다. → 차트 안으로 넣는다. */}
             <div style={{
-              position: "absolute", left: 0, right: 0,
-              bottom: Math.min(CHART_H, (k / scaleMax) * CHART_H),
+              position: "absolute", left: 0, right: 0, zIndex: 3,
+              bottom: Math.min(CHART_H - 16, (k / scaleMax) * (CHART_H - 16)),
               borderTop: "2px dashed #dc2626", pointerEvents: "none",
             }}>
-              <span style={{ position: "absolute", right: 0, top: -16, fontSize: 10.5, fontWeight: 800, color: "#dc2626" }}>
+              <span style={{
+                position: "absolute", right: 0, top: -14,
+                fontSize: 10.5, fontWeight: 800, color: "#dc2626",
+                background: "#fff", padding: "0 3px", borderRadius: 3, lineHeight: 1.2,
+              }}>
                 k={k}
               </span>
             </div>

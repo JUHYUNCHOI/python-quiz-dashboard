@@ -225,7 +225,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeBadmintonCh1(E) {
   return [
@@ -289,37 +289,69 @@ export function makeBadmintonCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    /* 1-2: 입출력 형식 (mcc19rect2 4-박스 표준)
+       2026-09-17: 이 quest 는 **출력 모양을 한 번도 안 보여줬다.** 시뮬은 결과 칩
+       (21-0)만 띄우고, 학생은 코드의 print 를 보고서야 "아, 21-0 을 줄마다 찍고
+       마지막에 승자를 찍는구나" 를 알았다. 샘플로 그 모양을 먼저 보여준다. */
     {
-      type: "quiz",
+      type: "reveal",
       narr: t(E,
-        "In best-of-3, one player needs to win 2 games to win the match.\nIf Player A wins the first two games, is a third game played?", "3전 2선승제는 2게임을 먼저 이기면 끝나요."),
-      question: t(E,
-        "A wins first 2 games. Is a 3rd game played?",
-        "A 가 처음 2게임을 이겼어요. 3번째 게임을 할까요?"),
-      options: [
-        t(E, "No, A already won the match", "아니요, A 가 이미 매치를 이겼어요"),
-        t(E, "Yes, all 3 must be played", "네, 3게임을 모두 해야 해요"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Correct! Once a player reaches 2 wins, the match is over immediately.",
-        "맞아요! 한 선수가 2승을 하면 매치는 바로 끝나요."),
+        "How does the data arrive — and what should come out?",
+        "무엇이 들어오고, 무엇을 내보내야 할까요?"),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#065f46", fontWeight: 800 }}>ABBA…</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— one line of A/B letters, in rally order", "— 한 줄에 A/B 글자, 랠리 순서대로")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line per game, written as A's points − B's points. Then one more line: the letter of the player who won the match.",
+                    "게임마다 한 줄씩, A 의 점수−B 의 점수 로 적어요.\n그리고 마지막 한 줄에 매치를 이긴 선수의 글자를 적어요.")}
+            </div>
+          </div>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#14532d", wordBreak: "break-all" }}>
+                  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </div>
+                <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>{t(E, "42 A's, all on one line", "A 가 42 개, 한 줄이에요")}</div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
+{`21-0
+21-0
+A`}
+                </div>
+              </div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
+              {t(E, "Why only two lines of score? — step through it on the next page.",
+                    "왜 점수 줄이 두 개뿐일까? — 다음 쪽에서 한 칸씩 따라가 봐요.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+              {/* 2026-09-17: 원문 길이 상한을 못 찾았다. 지어내지 않고 이 방법이 감당하는 크기를 적는다. */}
+              {t(E, "The line holds only the letters A and B. We could not find the original limit on its length. What we can say: this method reads each letter once and stops as soon as the match is decided, so even a very long record is fine.",
+                    "줄에는 A 와 B 글자만 들어 있어요.\n원문의 길이 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 글자를 한 번씩만 읽고,\n매치가 끝나면 남은 글자는 아예 안 봐요. 기록이 아무리 길어도 괜찮아요.")}
+            </div>
+          </div>
+        </div>),
     },
-    // 1-3: Input
-    {
-      type: "input",
-      narr: t(E,
-        "If 42 consecutive A's are scored ('AAA...A'), A wins 21-0 twice.\nHow many games are played?", "A 가 42번 연속으로 이기면 게임을 몇 번 할까요?"),
-      question: t(E,
-        "Input: 42 A's in a row. How many games are played total?",
-        "A 가 42개 연속으로 들어와요. 게임은 모두 몇 번 할까요?"),
-      hint: t(E,
-        "Each game ends at 21 points. How many full games of 21 A's fit, and when does the match end?",
-        "각 게임은 21 점에서 끝나요. 21 개씩 끊으면 몇 게임이 들어가는지, 매치는 언제 끝나는지 생각해 봐요."),
-      answer: 2,
-    },
-    // 1-4: Deep audit sim — step through the state machine
+    // 1-3: Deep audit sim — step through the state machine
     {
       type: "reveal",
       narr: t(E,
@@ -349,6 +381,40 @@ export function makeBadmintonCh1(E) {
           </div>
         </div>
       ),
+    },
+    // 1-4: Quiz
+    {
+      type: "quiz",
+      /* 2026-09-17: 퀴즈·입력칸이 시뮬 **앞**에 있었다. 시뮬이 보여주는 것을
+         글로 먼저 다 말하는 순서였다. 형제 quest(mcc19rect2)처럼 시뮬 뒤로 옮긴다. */
+      narr: t(E,
+        "Now answer it yourself.",
+        "이번엔 직접 답해 볼 차례예요."),
+      question: t(E,
+        "A wins first 2 games. Is a 3rd game played?",
+        "A 가 처음 2게임을 이겼어요. 3번째 게임을 할까요?"),
+      options: [
+        t(E, "No, A already won the match", "아니요, A 가 이미 매치를 이겼어요"),
+        t(E, "Yes, all 3 must be played", "네, 3게임을 모두 해야 해요"),
+      ],
+      correct: 0,
+      explain: t(E,
+        "Correct! Once a player reaches 2 wins, the match is over immediately.",
+        "맞아요! 한 선수가 2승을 하면 매치는 바로 끝나요."),
+    },
+    // 1-5: Input
+    {
+      type: "input",
+      narr: t(E,
+        "Count the games in the sample record.",
+        "샘플 기록에서 게임이 몇 번인지 세어 봐요."),
+      question: t(E,
+        "Input: 42 A's in a row. How many games are played total?",
+        "A 가 42개 연속으로 들어와요. 게임은 모두 몇 번 할까요?"),
+      hint: t(E,
+        "Each game ends at 21 points. When does the match stop?",
+        "각 게임은 21 점에서 끝나요. 매치는 언제 멈출까요?"),
+      answer: 2,
     },
   ];
 }

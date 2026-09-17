@@ -43,17 +43,23 @@ export function Mcc21MarblesBoundarySim({ E }) {
         </div>
         <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
           {t(E,
-            "Each box's D = A − B. Walk left → right: the running total MUST cross each boundary — that's exactly the marbles moved there.",
-            "각 상자의 D = A − B 예요. 왼쪽부터 쌓아 온 합은 반드시 그 경계를 건너요. 그게 그 자리에서 옮기는 구슬 수예요.")}
+            "Each box's D = A − B. Walking left → right, the running total of D is the carry.\nThe carry MUST cross each boundary — that is exactly the marbles moved there.",
+            "각 상자의 D = A − B 예요.\n왼쪽부터 D 를 더해 온 값을 누적이라고 불러요 (코드에서는 carry).\n누적은 반드시 그 경계를 건너요. 그게 그 자리에서 옮기는 구슬 수예요.")}
         </div>
       </div>
 
       {/* Boxes: A (start) row, B (target) row, boundaries between */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "stretch", gap: 0, marginBottom: 12, fontFamily: "JetBrains Mono, monospace" }}>
+      {/* 2026-09-17: 375px 모바일에서 상자 0 과 상자 4 가 카드 밖으로 잘려 안 보였다.
+          (카드에 overflow:hidden 이 걸려 있어서 잘린 채로 끝났다.)
+          ① 폭·간격을 clamp 로 줄여 좁은 화면에서도 5 칸이 다 들어오게 하고
+          ② 그래도 모자라면 가로 스크롤로 넘어가게 한다. 양 끝 상자가 D 의 시작과 끝이라
+          하나라도 안 보이면 이 시뮬이 하려는 말이 안 된다. */}
+      <div style={{ overflowX: "auto", marginBottom: 12, paddingBottom: 4 }}>
+      <div style={{ display: "flex", alignItems: "stretch", gap: 0, width: "min-content", margin: "0 auto", fontFamily: "JetBrains Mono, monospace" }}>
         {START.map((v, i) => (
           <div key={i} style={{ display: "flex", alignItems: "stretch" }}>
             <div style={{
-              minWidth: 60, padding: "8px 6px", borderRadius: 8,
+              minWidth: "clamp(40px, 10.5vw, 60px)", padding: "8px clamp(2px, 1vw, 6px)", borderRadius: 8,
               border: `2px solid ${i <= cur ? "#dc2626" : "#e5e7eb"}`,
               background: i <= cur ? "#fef2f2" : "#fff",
               textAlign: "center",
@@ -68,7 +74,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
             </div>
             {i < N - 1 && (
               <div style={{
-                width: 40, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                width: "clamp(22px, 6vw, 40px)", flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                 color: i === cur && !done ? "#dc2626" : "#cbd5e1",
                 fontWeight: 800, fontSize: 11,
                 transform: i === cur && !done ? "scale(1.15)" : "scale(1)",
@@ -82,12 +88,13 @@ export function Mcc21MarblesBoundarySim({ E }) {
           </div>
         ))}
       </div>
+      </div>
 
       {/* Live state */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
         <div style={{ background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 10px", ...KA }}>
           <div style={{ fontSize: 10, color: C.dim, textTransform: "uppercase", letterSpacing: 0.5 }}>
-            {t(E, "Carry across edge", "경계 통과 carry")} {done ? N - 2 : cur}
+            {t(E, "Carry across edge", "경계 통과 누적")} {done ? N - 2 : cur}
           </div>
           <div style={{ fontSize: 20, fontWeight: 800, color: "#dc2626", fontFamily: "JetBrains Mono, monospace" }}>
             {liveCarry >= 0 ? "+" : ""}{liveCarry}
@@ -106,7 +113,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
             {liveOps}
           </div>
           <div style={{ fontSize: 10, color: "#b91c1c" }}>
-            {t(E, "= sum of |carry|", "= |carry| 의 합")}
+            {t(E, "= sum of |carry|", "= |누적| 의 합")}
           </div>
         </div>
       </div>
@@ -134,12 +141,12 @@ export function Mcc21MarblesBoundarySim({ E }) {
           <div style={{ fontSize: 12, fontWeight: 700, color: "#b91c1c" }}>
             ✅ {t(E,
               `Answer = sum of |carry| at each boundary = ${liveOps}`,
-              `정답 = 각 경계에서 |carry| 의 합 = ${liveOps}`)}
+              `정답 = 각 경계에서 |누적| 의 합 = ${liveOps}`)}
           </div>
           <div style={{ fontSize: 11, color: "#b91c1c", marginTop: 4 }}>
             {t(E,
               "Each boundary must pass exactly the accumulated imbalance — one O(N) pass.",
-              "각 경계는 쌓인 차이만큼을 그대로 넘겨요. O(N) 으로 한 번만 훑어요.")}
+              "각 경계는 누적만큼을 그대로 넘겨요. O(N) 으로 한 번만 훑어요.")}
           </div>
         </div>
       )}
@@ -202,10 +209,16 @@ export function getMcc21MarblesSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
+        t(E, "Three lines come in: N, then A, then B. Position i pairs them — box i must go from A[i] to B[i].",
+            "입력은 세 줄이에요. N, 그다음 A, 그다음 B 예요.\n같은 자리 i 끼리 짝이라, 상자 i 는 A[i] 에서 B[i] 로 가야 해요."),
         t(E, "Reformulate with D[i] = A[i] − B[i]: box i has a surplus (D>0) or a shortage (D<0). Marbles only cross boundaries between neighbors.",
-            "D[i] = A[i] − B[i] 로 바꿔 생각해요. 상자 i 는 구슬이 남거나(D>0) 모자라요(D<0). 구슬은 이웃 사이의 경계만 건너요."),
-        t(E, "Whatever imbalance sits to the LEFT of a boundary must cross it. That amount is the running prefix of D, so the answer = sum of |prefix| at every boundary — one left-to-right O(N) pass.",
-            "경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요. 그 양이 바로 D 를 쌓아 온 값이에요. 그래서 답은 경계마다 그 절댓값을 더한 것이고, 왼쪽부터 O(N) 으로 한 번만 훑어요."),
+            "D[i] = A[i] − B[i] 로 바꿔 생각해요.\n상자 i 는 구슬이 남거나(D>0) 모자라요(D<0).\n구슬은 이웃 사이의 경계만 건너요."),
+        t(E, "Whatever imbalance sits to the LEFT of a boundary must cross it. That amount is the carry — the running total of D — so the answer = sum of |carry| at every boundary.",
+            "경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요.\n그 양이 바로 누적(carry), 곧 D 를 더해 온 값이에요.\n그래서 답은 경계마다 |누적| 을 더한 값이에요."),
+        t(E, "No array is needed: carry adds A[i]−B[i] as it walks, and ops adds |carry| at the same moment — one O(N) pass, no extra memory.",
+            "배열을 따로 만들 필요가 없어요.\ncarry 가 A[i]−B[i] 를 더해 가고, 그 자리에서 ops 에 |carry| 를 더해요.\n한 번만 훑으니 O(N) 이고 여분 메모리도 안 써요."),
+        t(E, "Why abs()? A carry of +3 sends 3 marbles right, −3 pulls 3 left. Either way it costs 3 moves.",
+            "왜 abs 냐면, 누적이 +3 이면 구슬 3 개가 오른쪽으로,\n−3 이면 3 개가 왼쪽으로 가요.\n어느 쪽이든 옮기는 횟수는 3 번이라 절댓값을 더해요."),
       ],
       pyOnly: [
         t(E, "Python ints are unbounded, so abs(carry) never overflows — no special type needed.",

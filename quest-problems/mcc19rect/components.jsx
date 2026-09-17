@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
+import { SimNav } from "@/components/quest/TraceStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
@@ -14,45 +15,12 @@ const SIM_LIST = [1, 3, 5, 6, 10, 11];
 
 export function ConsecutiveDiffScanSim({ E }) {
   const [i, setI] = useState(-1);
-  const [running, setRunning] = useState(false);
-  const timerRef = useRef(null);
   const N = SIM_LIST.length;
 
-  const stop = () => {
-    setRunning(false);
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-
-  const reset = () => {
-    stop();
-    setI(-1);
-  };
-
-  useEffect(() => {
-    if (!running) return;
-    if (i >= N - 2) {
-      setRunning(false);
-      return;
-    }
-    timerRef.current = setTimeout(() => setI(i + 1), 850);
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [i, running, N]);
-
-  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
-
-  const start = () => {
-    if (i >= N - 2) setI(-1);
-    setRunning(true);
-  };
-
-  const stepOnce = () => {
-    stop();
-    if (i >= N - 2) setI(0);
-    else setI(i + 1);
-  };
+  /* 2026-09-17: "▶ 재생 / ■ 정지" 자동재생을 지웠다.
+     우리 시뮬 스타일은 학생이 한 칸씩 넘기는 것이다 (feedback_sim_style_consistency.md).
+     5개 MCC 중 이 시뮬만 setTimeout 루프로 혼자 넘어갔다.
+     이제 형제 시뮬과 같은 SimNav(⏮ ◀ ▶) 를 쓴다. i 는 -1 에서 시작하므로 idx = i + 1. */
 
   // Compute diffs scanned so far and current min
   const diffs = [];
@@ -79,18 +47,6 @@ export function ConsecutiveDiffScanSim({ E }) {
       boxShadow: inWindow ? `0 4px 10px ${A}33` : "none",
     };
   };
-
-  const btn = (label, onClick, primary) => (
-    <button onClick={onClick} style={{
-      background: primary ? A : "#fff",
-      color: primary ? "#fff" : A,
-      border: `1.5px solid ${A}`,
-      borderRadius: 8,
-      padding: "6px 14px",
-      fontSize: 12, fontWeight: 800,
-      cursor: "pointer",
-    }}>{label}</button>
-  );
 
   const curDiff = i >= 0 && i + 1 < N ? SIM_LIST[i + 1] - SIM_LIST[i] : null;
 
@@ -167,14 +123,15 @@ export function ConsecutiveDiffScanSim({ E }) {
         </div>
       )}
 
-      {/* Controls */}
-      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-        {!running
-          ? btn(i >= N - 2 ? t(E, "▶ Replay", "▶ 다시") : t(E, "▶ Play", "▶ 재생"), start, true)
-          : btn(t(E, "■ Stop", "■ 정지"), stop, true)}
-        {btn(t(E, "Step", "한 칸"), stepOnce, false)}
-        {btn(t(E, "Reset", "처음으로"), reset, false)}
-      </div>
+      {/* Controls — 학생이 한 칸씩 넘긴다 (자동재생 없음) */}
+      <SimNav
+        idx={i + 1}
+        total={N}
+        onIdx={(n) => setI(n - 1)}
+        accent={A}
+        showLabels
+        isEn={E}
+      />
     </div>
   );
 }

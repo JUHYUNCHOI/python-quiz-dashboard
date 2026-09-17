@@ -104,58 +104,78 @@ export function makeMcc19CandyCh1(E) {
         "Read the input format and the official example. The shouts arrive in order: round 0 first, round R−1 last.",
         "외침은 순서대로 들어와요.\n라운드 0 이 먼저고, 라운드 R−1 이 마지막이에요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
-              📥 {t(E, "Input", "입력")}
-            </div>
-            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "Line 1: ", "1번째 줄: ")}<b>R</b> — {t(E, "the number of rounds", "라운드 수")}</div>
-              <div>• {t(E, "Line 2: ", "2번째 줄: ")}<b>R</b> {t(E, "shout words (\"odd\"/\"even\"), space-separated", "개의 외침 단어 (\"odd\"/\"even\"), 공백으로 구분")}</div>
-            </div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", margin: "10px 0 4px" }}>
-              📤 {t(E, "Output", "출력")}
-            </div>
-            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              {t(E, "Bob's starting position.", "Bob 이 서야 할 시작 자리를 출력해요.")}
+        <div style={{ padding: 16, ...KA }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#7f1d1d", fontWeight: 800 }}>R</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of rounds", "— 라운드 수")}</span></div>
+              <div><span style={{ color: "#7f1d1d", fontWeight: 800 }}>s₁ s₂ … s_R</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— each shout: \"odd\" or \"even\"", "— 각 라운드의 외침: \"odd\" 또는 \"even\"")}</span></div>
             </div>
           </div>
-
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
-            <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
-              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>3</div>
-              <div>even even odd</div>
-            </div>
-            <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
-              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>5</div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the starting position Bob must take.",
+                    "Bob 이 서야 할 시작 자리를 한 줄에 써요.")}
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#7f1d1d", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7f1d1d", whiteSpace: "pre", overflowX: "auto" }}>
+{`3
+even even odd`}
+                </div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`5`}</div>
+              </div>
+            </div>
             {/* 2026-09-08: 여기서 이미 푸는 방법(되돌리기·두배·−1)을 통째로 줬다.
                 학생: "아직 문제도 다 안 읽었는데 벌써 답 구하는 방법이 통째로 나왔다."
                 답만 남기고 방법은 시뮬(다음 쪽) 몫으로 넘긴다. */}
-            {t(E,
-              "Rounds are even, even, odd — and Bob must start at position 5. How would you find that?",
-              "라운드는 even, even, odd 이고, Bob 은 5 번 자리에서 시작해야 해요.\n그걸 어떻게 찾을까요?")}
+            <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line" }}>
+              {t(E,
+                "Shouts are even, even, odd — and Bob must start at position 5. How would you find that?",
+                "외침은 even, even, odd 이고, Bob 은 5 번 자리에서 시작해요.\n그걸 어떻게 찾을까요?")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>R ≥ 1</div>
+              <div>{t(E, "every shout is \"odd\" or \"even\"", "외침은 \"odd\" 아니면 \"even\"")}</div>
+              {/* 2026-09-17: 원문(ioimalaysia 2019 editorial)에 R 의 정확한 상한이 없다.
+                  없는 숫자를 "공식 상한" 인 척 지어내지 않는다. 대신 이 문제가 커지는
+                  크기를 정직하게 적는다 — Ch2 의 "R 이 커지면" 이 여기에 기댄다. */}
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2, fontFamily: "inherit", ...KA, whiteSpace: "pre-line" }}>
+                {t(E,
+                  "The original statement gives no exact upper bound for R.\nBut one round halves the line, so for one person to be left the line needs about 2^R people. R = 40 already means over a trillion.",
+                  "원문에 R 이 얼마까지 커지는지는 적혀 있지 않아요.\n다만 한 라운드마다 줄이 절반이 되니, 한 명만 남으려면\n줄에 2^R 명쯤 서 있어야 해요. R 이 40 이면 벌써 1 조가 넘어요.")}
+              </div>
+            </div>
           </div>
         </div>),
     },
 
     // 1-3: concept sim
+    /* 2026-09-17: narr · 겉 제목 · 시뮬 안 제목 셋이 거의 같은 문장이라
+       모바일에서 파란 바 → 보라 제목 → 회색 부제가 세로로 3 줄 쌓였다.
+       겉 제목을 없애고(시뮬 안에 이미 제목이 있다), 역할을 나눴다 —
+       narr 은 상황, 시뮬 안 제목은 할 일. */
     {
       type: "reveal",
       narr: t(E,
-        "Set each round's shout and watch the line thin out — who is the last one left?",
-        "라운드마다 외침을 정하고 줄이 줄어드는 걸 봐요. 마지막에 누가 남을까요?"),
-      content: (
-        <div style={{ padding: 4 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#dc2626", textAlign: "center", marginBottom: 6 }}>
-            🗣️ {t(E, "Shout Sim — set the shouts, find the survivor", "외침 시뮬 — 외침을 정하고 생존자 찾기")}
-          </div>
-          <Mcc19CandyShoutSim E={E} />
-        </div>),
+        "The students are lined up. The first round is about to start.",
+        "학생들이 한 줄로 서 있어요. 이제 첫 라운드가 시작돼요."),
+      content: <Mcc19CandyShoutSim E={E} />,
     },
 
     // 1-4: understanding check
@@ -200,11 +220,15 @@ export function makeMcc19CandyCh2(E, lang = "py") {
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
+              {/* 2026-09-17: 여기 적힌 "느린 방법" 이 학생이 시뮬에서 해 본 것과 달랐다.
+                  시뮬은 줄을 한 번 세우고 라운드마다 지운다. 화면에 한 번도 안 나온
+                  "자리마다 다시 돌리기" 를 느리다고 부르면 기댈 경험이 없다.
+                  시뮬이 한 그대로를 느린 방법으로 적는다. */}
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: guess a position, simulate all rounds, check", "느림 — 자리 하나를 찍고 모든 라운드를 돌려 확인하기")}
+                🐢 {t(E, "Slow: line everyone up and cross them out, round by round", "느림 — 시뮬처럼 줄을 실제로 세우고 라운드마다 지우기")}
               </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Try each starting spot and replay the eliminations — lots of repeated work as R grows.", "시작 자리를 하나씩 넣어 보며 탈락을 다시 돌려요. R 이 커지면 같은 일을 너무 여러 번 하게 돼요.")}
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line" }}>
+                {t(E, "That is exactly what the sim did. But the line holds about 2^R people.\nAt R = 40 you would have to lay out over a trillion of them — you cannot even start.", "방금 시뮬이 한 그대로예요.\n그런데 줄에는 2^R 명이 서 있어요.\nR 이 40 이면 1 조 명을 늘어놓아야 해서 시작조차 못 해요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
@@ -217,7 +241,7 @@ export function makeMcc19CandyCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },

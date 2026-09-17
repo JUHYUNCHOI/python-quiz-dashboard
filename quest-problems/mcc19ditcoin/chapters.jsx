@@ -196,22 +196,66 @@ export function makeMcc19DitcoinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Try it yourself. Toggle the sell days and watch the coins and profit change. Can you match the optimal profit?",
-        "파는 날을 켰다 껐다 해서 가장 많이 버는 방법을 찾아봐요."),
+        "Toggle the sell days. The last preset is the 8-day example from before.",
+        "파는 날을 켰다 껐다 해봐요. 맨 끝 프리셋이 아까 그 8 일 예제예요."),
       content: <Mcc19DitcoinDeepAuditSim E={E} />,
     },
+
+    /* 2026-09-17: 앞에서 "8 일 예제의 나머지 3 일은 어떻게 할까?" 라고 물어놓고
+       그 질문을 어디에서도 닫지 않았다. 시뮬도 퀴즈도 전부 다른 값으로 돌아갔다.
+       여기서 회수한다. 그리고 학생이 실제로 한 생각("코인마다 각각 최고가 날에
+       판다")이 코드의 모양("구간을 묶어 한 번에 판다")과 왜 같은 답을 내는지도
+       여기서 이어 붙인다 — 그게 화면에 한 번도 없었다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Back to the 8-day example — let us close it.",
+        "아까 8 일 예제로 돌아가 마무리해요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#9a3412", marginBottom: 8 }}>
+              ✅ {t(E, "The 8-day example: 77", "8 일 예제의 답은 77")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: "#7c2d12", lineHeight: 1.8 }}>
+              <div>3 2 6 8 <b style={{ color: "#dc2626" }}>10</b> 1 7 <b style={{ color: "#dc2626" }}>9</b></div>
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.75, marginTop: 8, whiteSpace: "pre-line", textWrap: "balance" }}>
+              {t(E,
+                "Day 5 (price 10): sell the 5 coins you hold → 50.\nDay 8 (price 9): sell the 3 coins from the days after → 27.\n50 + 27 = 77.",
+                "5 일째 (가격 10): 그때까지 모은 코인 5 개를 팔아 50.\n8 일째 (가격 9): 그 뒤에 생긴 코인 3 개를 팔아 27.\n50 + 27 = 77 이에요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 12, padding: "12px 14px", wordBreak: "keep-all" }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1d4ed8", marginBottom: 8 }}>
+              🤔 {t(E, "\"I was thinking coin by coin\" — that works too", "\"난 코인 하나씩 생각했는데?\" — 그것도 맞아요")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.75, whiteSpace: "pre-line", textWrap: "balance" }}>
+              {t(E,
+                "Take one coin at a time: the coin earned on day i should be sold on the priciest day from day i onward.\nCoins from days 1–5 all point at day 5 (price 10) — that is 5 coins × 10.\nCoins from days 6–8 all point at day 8 (price 9) — that is 3 coins × 9.\nCoins that point at the same day are sold on that day together. Counting them one by one and selling them in a bunch give the same number.",
+                "코인을 하나씩 봐요. i 일에 번 코인은 i 일부터 끝까지 중 가장 비싼 날에 팔면 돼요.\n1~5 일에 번 코인은 모두 5 일째 (가격 10) 를 가리켜요 — 코인 5 개 × 10.\n6~8 일에 번 코인은 모두 8 일째 (가격 9) 를 가리켜요 — 코인 3 개 × 9.\n같은 날을 가리키는 코인들은 그날 함께 팔려요.\n그래서 하나씩 세든 한 번에 묶어 팔든 답은 똑같아요.")}
+            </div>
+          </div>
+        </div>),
+    },
+
     // 1-4: Input
+    /* 2026-09-17: 여기가 [3,1,5] 였다 — 한 번만 팔면 끝나는 자명한 경우다.
+       이 문제의 핵심은 "여러 번 팔아야 할 때도 있다" 인데 그걸 확인하는 자리가
+       한 군데도 없었다. 두 번 파는 경우로 바꾼다.
+       검산 [2,4,1,5,3]: 4 일째(5) 에 코인 4 개 = 20, 5 일째(3) 에 코인 1 개 = 3 → 23. */
     {
       type: "input",
       narr: t(E,
-        "Prices = [3, 1, 5]. Sell all 3 coins at price 5. Total profit?", "가격이 [3, 1, 5] 일 때 코인 3개를 5 에 다 팔면 얼마를 벌까요?"),
+        "Prices = [2, 4, 1, 5, 3]. One sell day may not be enough.", "가격 = [2, 4, 1, 5, 3]. 파는 날이 하루로는 모자랄 수 있어요."),
       question: t(E,
-        "Prices [3, 1, 5]. Max profit = ?",
-        "가격이 [3, 1, 5] 예요. 가장 많이 벌면 얼마일까요?"),
+        "Prices [2, 4, 1, 5, 3]. Max profit = ?",
+        "가격이 [2, 4, 1, 5, 3] 예요. 가장 많이 벌면 얼마일까요?"),
       hint: t(E,
-        "Hold all 3 coins, then sell them together on the day with the highest price. Multiply count × that price.",
-        "코인 3개를 모았다가 가격이 가장 높은 날에 한꺼번에 팔아요. 개수에 그 날 가격을 곱하면 돼요."),
-      answer: 15,
+        "The priciest day is day 4 — sell the coins you hold by then. But one more day comes after it, and one more coin: day 5 still pays 3.",
+        "제일 비싼 날은 4 일째예요. 그때까지 모은 코인을 팔아요.\n그런데 그 뒤로 하루가 더 남고 코인도 하나 더 생겨요.\n5 일째에도 가격 3 은 받을 수 있어요."),
+      answer: 23,
     },
   ];
 }

@@ -28,11 +28,22 @@ const SIM_TMAX = 16;
 
 export function Mcc21DvdBounceSim({ E }) {
   const [tt, setTt] = useState(0);
+  /* 2026-09-17: 시뮬을 열면 T=0 에서, 아무것도 누르기 전에 닫힌 공식 박스
+     (r = H − |(H−1) − (T mod 2(H−1))|) 와 "행은 4 초마다 되풀이돼요" 가 이미 떠 있었다.
+     학생이 격자를 한 번도 안 넘겨 보고 답을 먼저 읽었다.
+     mcc21carrots 와 같은 방식으로 `touched` 뒤로 미룬다 — T 를 한 번이라도 넘기면
+     그때 공식과 주기가 드러난다. 그 전엔 격자와 1 줄 띠만 보인다. */
+  const [maxT, setMaxT] = useState(0);
+  const go = (v) => { setTt(v); setMaxT((m) => Math.max(m, v)); };
 
   const r = oneAxis(SIM_H, tt); // row from the bottom, 1..H
   const c = oneAxis(SIM_W, tt); // col from the left, 1..W
   const hPeriod = 2 * (SIM_H - 1);
   const wPeriod = 2 * (SIM_W - 1);
+  /* 한 바퀴(행이 1 로 되돌아오는 데 걸리는 시간)를 직접 넘겨 본 뒤에야 공식을 연다.
+     첫 클릭에 바로 열면 "되풀이되네?" 를 느낄 틈이 없다. */
+  const cycled = maxT >= hPeriod;
+  const rowTrail = Array.from({ length: maxT + 1 }, (_, i) => oneAxis(SIM_H, i));
 
   // grid: draw top→bottom, so display row index dr maps to r-value (H - dr)
   const gridRows = [];
@@ -87,22 +98,26 @@ export function Mcc21DvdBounceSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8 }}>
-          🎞️ {t(E, "The row and the column bounce on their own", "행과 열은 따로따로 튕겨요")}
+          🎞️ {t(E, "Follow the logo one second at a time", "로고를 한 초씩 따라가 봐요")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
-          {t(E,
-            "Each second the logo moves one row up and one column right, turning back at the walls. The row (height H) and the column (width W) never affect each other — each is just a dot bouncing 1→N→1→N on its own line.",
-            "로고는 매 초 한 행 위로, 한 열 오른쪽으로 움직이다가 벽에서 되돌아와요. 행(높이 H)과 열(너비 W)은 서로 전혀 영향을 주지 않아요. 각각 자기 선 위에서 1→N→1→N 으로 튕기는 점 하나일 뿐이에요.")}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12, whiteSpace: "pre-line", ...KA }}>
+          {cycled
+            ? t(E,
+                "The row (height H) and the column (width W) never affect each other. Each is just a dot bouncing 1→N→1→N on its own line, and each one repeats.",
+                "행(높이 H)과 열(너비 W)은 서로 영향을 주지 않아요.\n각각 자기 축 위에서 1→N→1→N 으로 튕기는 점 하나예요.\n그리고 둘 다 일정한 간격으로 똑같이 되풀이돼요.")
+            : t(E,
+                "Step T and watch the two strips below the grid. When does the row come back to where it was?",
+                "T 를 하나씩 넘기면서 격자 아래 '행 축' 을 봐요.\n행은 언제 원래 자리로 돌아올까요?")}
         </div>
 
         {/* T stepper */}
         <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-          {btn("⏮", () => setTt(0), tt === 0)}
-          {btn("◀ T−1", () => setTt((v) => Math.max(0, v - 1)), tt === 0)}
+          {btn("⏮", () => go(0), tt === 0)}
+          {btn("◀ T−1", () => go(Math.max(0, tt - 1)), tt === 0)}
           <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800, color: A, minWidth: 74, textAlign: "center" }}>
             T = {tt}
           </span>
-          {btn("T+1 ▶", () => setTt((v) => Math.min(SIM_TMAX, v + 1)), tt === SIM_TMAX)}
+          {btn("T+1 ▶", () => go(Math.min(SIM_TMAX, tt + 1)), tt === SIM_TMAX)}
         </div>
 
         {/* grid */}
@@ -128,25 +143,50 @@ export function Mcc21DvdBounceSim({ E }) {
           </div>
         </div>
 
-        {/* closed-form readout */}
+        {/* 걸어온 행 발자취 — 공식보다 먼저, 되풀이가 눈에 보이게 */}
         <div style={{ background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
           fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, ...KA }}>
-          <div>
-            r = H − |(H−1) − (T mod 2(H−1))| = 3 − |2 − ({tt} mod {hPeriod})| = <b style={{ color: "#22d3ee" }}>{r}</b>
+          <div style={{ color: "#94a3b8", fontSize: 11, marginBottom: 4 }}>
+            {t(E, "row so far (t = 0 →)", "지금까지 지나온 행 (t = 0 부터)")}
           </div>
           <div>
-            c = W − |(W−1) − (T mod 2(W−1))| = 5 − |4 − ({tt} mod {wPeriod})| = <b style={{ color: "#c4b5fd" }}>{c}</b>
+            {rowTrail.map((v, i) => (
+              <span key={i}>
+                {i > 0 ? <span style={{ color: "#475569" }}> → </span> : null}
+                <b style={{ color: i === tt ? "#fbbf24" : "#22d3ee" }}>{v}</b>
+              </span>
+            ))}
           </div>
           <div style={{ marginTop: 6, color: "#fbbf24", fontWeight: 800 }}>
-            {t(E, "answer: ", "정답: ")}{r} {c}
+            {t(E, "now: ", "지금: ")}r = {r}, c = {c}
           </div>
         </div>
 
-        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
-          {t(E,
-            "The row repeats every 2(H−1) = 4 seconds and the column every 2(W−1) = 8 seconds. So even T = 10^16 needs no stepping — one modulo folds T back into the first cycle and the formula gives the answer instantly.",
-            "행은 2(H−1) = 4 초마다, 열은 2(W−1) = 8 초마다 똑같이 되풀이돼요. 그래서 T = 10^16 이라도 한 칸씩 세지 않아도 돼요. 나머지 계산 한 번이면 T 가 첫 주기 안으로 접혀 들어가고, 공식이 곧바로 답을 줘요.")}
-        </div>
+        {/* 2026-09-17: 여기부터는 **한 바퀴를 직접 넘겨 본 뒤에만** 보인다. */}
+        {cycled ? (
+          <>
+            <div style={{ marginTop: 10, background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
+              fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, ...KA }}>
+              <div>
+                r = H − |(H−1) − (T mod 2(H−1))| = 3 − |2 − ({tt} mod {hPeriod})| = <b style={{ color: "#22d3ee" }}>{r}</b>
+              </div>
+              <div>
+                c = W − |(W−1) − (T mod 2(W−1))| = 5 − |4 − ({tt} mod {wPeriod})| = <b style={{ color: "#c4b5fd" }}>{c}</b>
+              </div>
+            </div>
+            <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
+              {t(E,
+                "The row repeats every 2(H−1) = 4 seconds and the column every 2(W−1) = 8 seconds. So even T = 10^16 needs no stepping — one modulo folds T back into the first cycle.",
+                "행은 2(H−1) = 4 초마다, 열은 2(W−1) = 8 초마다 되풀이돼요.\n그래서 T 가 아무리 커도 한 칸씩 셀 필요가 없어요.\n나머지 계산 한 번이면 T 가 첫 바퀴 안으로 접혀 들어가요.")}
+            </div>
+          </>
+        ) : (
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
+            {t(E,
+              "Keep stepping until the row comes back to 1. How many seconds did that take?",
+              "행이 1 로 돌아올 때까지 계속 넘겨 봐요.\n몇 초가 걸렸나요?")}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -239,14 +279,16 @@ export function getMcc21DvdSections(E) {
       ],
     },
     {
-      label: t(E, "② One axis = a triangle wave", "② 한 축 = 삼각파"),
+      label: t(E, "② One axis on its own (1→N→1)", "② 한 축만 떼어 보기 (1→N→1)"),
       color: "#0891b2",
       py: ONE_PY, cpp: ONE_CPP,
       why: [
         t(E, "Key idea: the row and the column move independently. Each is a dot bouncing 1→N→1 on a line of length N.",
             "여기가 핵심이에요. 행과 열은 서로 상관없이 움직여요. 각각은 길이가 N 인 선 위에서 1→N→1 로 튕기는 점 하나예요."),
-        t(E, "That bounce repeats every 2(N−1) seconds, so t mod 2(N−1) folds any time into the first cycle. Then N − |(N−1) − p| reads off the position — no stepping.",
-            "이렇게 1→N→1 로 오르내리는 모양을 삼각파라고 불러요. 삼각파는 2(N−1) 초마다 똑같이 되풀이돼요. 그래서 t mod 2(N−1) 로 어떤 시각이든 첫 주기 안으로 접어 넣은 다음, N − |(N−1) − p| 로 위치를 바로 읽어요. 한 칸씩 세지 않아도 돼요."),
+        t(E, "Going up takes N−1 seconds and coming back down takes N−1 more, so the whole trip repeats every 2(N−1) seconds. p = t mod 2(N−1) is 'how far into this trip we are'.",
+            "올라가는 데 N−1 초, 다시 내려오는 데 N−1 초가 걸려요. 그래서 한 바퀴는 2(N−1) 초예요. p = t mod 2(N−1) 은 '이번 바퀴에서 몇 초가 지났나' 를 알려줘요."),
+        t(E, "Inside one trip the dot is at the top exactly when p = N−1. So (N−1) − p is the gap to the top: positive on the way up, negative on the way down. We only care how far from the top it is, so take the absolute value and subtract it from N: N − |(N−1) − p|.",
+            "한 바퀴 안에서 점이 꼭대기 N 에 있는 때는 p = N−1 인 순간이에요. 그러니 (N−1) − p 는 꼭대기에서 얼마나 떨어져 있는지예요. 올라가는 중이면 +, 내려가는 중이면 − 로 나오는데 우리는 떨어진 거리만 알면 되니까 절댓값을 씌워요. 그 거리만큼 꼭대기 N 에서 빼면 N − |(N−1) − p| 가 돼요."),
         t(E, "Why we can't just step T: T ≤ 10^16 and Q ≤ 1000 means up to 10^19 steps. The formula answers each query in O(1).",
             "T 를 한 초씩 세면 왜 안 될까요. T ≤ 10^16 에 Q ≤ 1000 이면 많게는 10^19 번을 세야 해요. 공식은 물음 하나를 O(1) 에 끝내요."),
       ],

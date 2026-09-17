@@ -119,7 +119,8 @@ export function makeMcc20CityTourCh1(E) {
               <div>• {t(E, "Last line: ", "마지막 줄: ")}<b>D</b> — {t(E, "the jump threshold", "건너가기 기준값")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: 1 ≤ M, N; M×N ≤ 100000; 1 ≤ D ≤ 100000; −10^6 ≤ H ≤ 10^6.", "제약: 1 ≤ M, N; M×N ≤ 100000; 1 ≤ D ≤ 100000; −10^6 ≤ H ≤ 10^6.")}
+              {/* 2026-09-17: 세미콜론 3개를 쉼표로. 형제 quest(mcc20kitty:209·mcc20cipher:217)가 쉼표를 쓴다. */}
+              {t(E, "Limits: 1 ≤ M, N, M×N ≤ 100000, 1 ≤ D ≤ 100000, −10^6 ≤ H ≤ 10^6.", "제약: 1 ≤ M, N, M×N ≤ 100000, 1 ≤ D ≤ 100000, −10^6 ≤ H ≤ 10^6.")}
             </div>
           </div>
 
@@ -138,10 +139,14 @@ export function makeMcc20CityTourCh1(E) {
               <div style={{ fontWeight: 800 }}>18</div>
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+            {/* 2026-09-17: 여기가 "(1,5)=16 과 (2,5)=8 만 막혀서 20칸 중 18칸" 이라고
+                답과 이유를 통째로 말했다. 바로 다음 쪽 시뮬의 기본값이 정확히 D = 5 라서
+                (components.jsx:47), 학생은 슬라이더를 만지기도 전에 결론을 다 알았다.
+                형제 mcc19rect2 처럼 답을 다음 쪽으로 미룬다. */}
             {t(E,
-              "With D = 5, every cell is reachable except (1,5)=16 and (2,5)=8 — both are cut off by too-big height gaps to their neighbors. That leaves 18 of the 20 cells.",
-              "D = 5 일 때 (1,5)=16 과 (2,5)=8 만 빼고 모든 칸에 갈 수 있어요 — 둘 다 이웃과의 높이 차가 너무 커서 막혀요. 그래서 20 칸 중 18 칸이에요.")}
+              "20 cells in the grid, but the answer is 18. Which two are cut off, and why?\nThe next page lets you slide D and watch.",
+              "칸은 20 개인데 답은 18 이에요. 어느 두 칸이 막힌 걸까요?\n다음 쪽에서 D 를 움직이며 직접 확인해요.")}
           </div>
         </div>),
     },
@@ -209,7 +214,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
             {t(E, "The edge rule stays the same: step to a neighbor only if |Δheight| < D.", "건너가기 규칙은 그대로예요. 이웃과 높이 차가 D 보다 작을 때만 건너가요.")}
           </div>
           <div style={{ marginTop: 6, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>
         </div>),
     },
