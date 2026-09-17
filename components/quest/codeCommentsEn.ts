@@ -2129,4 +2129,82 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "odd length - skip the middle one",
   "홀수 바구니 개수":
     "how many baskets hold an odd count",
+
+  /* 2026-09-17 (3) — 자유 quest 의 남은 영어 주석을 마저 옮기며 생긴 짝. 영어는 옛 원문 그대로. */
+  "(0,0) 에서 한 번만 퍼뜨려요. 가장자리를 조금 음수까지 두면":
+    "BFS once from (0,0); a small negative margin lets a short path",
+  "0 아래로 살짝 도는 짧은 길도 잡혀요 ((1,1) 을 두 번에 가려면 필요해요)":
+    "dip below 0 (needed to reach (1,1) in 2 moves).",
+  "0 을 세요 (3 으로 나누어떨어지는 항이에요)":
+    "count the zeros (terms divisible by 3)",
+  "D[i] = A[i] - B[i] — 상자 i 에 남는 양(+) 이나 모자란 양(-) 이에요":
+    "D[i] = A[i] - B[i] : surplus (+) or shortage (-) at box i.",
+  "K 번 쓰고 나면 글자마다 어디로 가나요?":
+    "where does each letter land after K applications?",
+  "Kitty_1 부터 5 까지를 3 으로 나눈 나머지만 남겨요":
+    "keep only remainders mod 3 of Kitty_1..5",
+  "carry 는 D = A - B 를 앞에서부터 더해 온 값이고, 답은 |carry| 를 다 더한 값이에요":
+    "carry = running prefix of D = A - B; answer = sum of |carry|.",
+  "prefix[i] = b1² - b2² + b3² - ...  (제곱을 번갈아 더하고 뺀 값)":
+    "prefix[i] = b1^2 - b2^2 + b3^2 - ...  (alternating sum of squares)",
+  "up[i][j] · dn[i][j] = i 에서 끝나는 길이 j 짜리 지그재그 개수":
+    "up[i][j] / dn[i][j] = # length-j zig-zags ending at i",
+  "up[i][j] · dn[i][j] — i 에서 끝나는 길이 j 짜리, 마지막 걸음이 위 · 아래":
+    "up[i][j] / dn[i][j]: length-j zig-zags ending at i, last step up / down",
+  "거기에 K 를 더하면 목록의 제일 큰 값이나 제일 작은 값 자리에 와요.":
+    "and after +K it sits at the MAX or MIN of the list.",
+  "규칙을 한 번 쓰면 A[i] 가 B[i] 로 바뀌어요":
+    "one application of the rule: A[i] turns into B[i]",
+  "그래서 K 는 이 넷 중 하나예요:":
+    "so K can only be one of these 4 values:",
+  "나이트가 갈 수 있는 여덟 가지 (한쪽 2 칸, 다른 쪽 1 칸)":
+    "8 knight L-moves (2 in one axis, 1 in the other)",
+  "다섯 칸짜리 묶음이 되풀이될 때까지 늘려요":
+    "grow the list until a 5-window repeats",
+  "딱 K 번이 되려면 — K 가 need 이상이고, 남는 (K - need) 가 짝수예요":
+    "exactly K  <=>  K >= need and leftover (K - need) is even",
+  "마지막 걸음이 올라간 것 · 내려간 것. 시작 방향은 둘 다 세요.":
+    "whose LAST step went up / down. Counts BOTH start directions.",
+  "맞는 경우 — 크기가 서로 다른 N-1 개이고 전부 1 부터 N 사이예요":
+    "valid: N-1 distinct magnitudes, all in [1, N]",
+  "메시지를 한 번만 훑으며 새로 써요":
+    "rewrite the message in one pass",
+  "목록의 제일 큰 값이나 제일 작은 값 자리에 와요 — 그래서 K 후보는 넷뿐이에요":
+    "the MAX or MIN of the list -> only 4 candidate K values.",
+  "벌집에 한 번 갈 때마다 min(M, 남은 꿀) 만큼 가져와요":
+    "Each trip to a hive collects min(M, remaining honey).",
+  "빠진 반지름이 들어갈 자리를 p (1 부터 N) 로 놓아요":
+    "the missing radius slots into one position p (1..N)",
+  "세로는 H, 가로는 W 를 써요 — 같은 t 인데 따로 움직여요":
+    "row uses H, column uses W — the same t, two separate waves",
+  "앞꼬리 + 되풀이 한 바퀴만큼은 꼭 있게 해요":
+    "make sure we have the tail + one full cycle",
+  "원래 값 중 제일 큰 크기는 N (또는 N-1) 이고, K 를 더하면":
+    "biggest original magnitude is N (or N-1); after +K it sits at",
+  "원래 값 중 제일 큰 크기는 N 이에요 (N 이 버려졌으면 N-1),":
+    "the biggest original magnitude is N (or N-1 if N was discarded),",
+  "작은 층을 먼저 놓으면 곱이 작게 유지돼요":
+    "smallest layer first keeps the running product small",
+  "작은 층을 먼저 놓으면 곱이 작게 유지돼요 (둘을 바꿔 보면 알 수 있어요)":
+    "smallest layer first keeps the running product small (exchange argument)",
+  "제곱을 번갈아 더하고 뺀 값 (__int128 을 써요 — 합이 10^18 을 넘어요)":
+    "prefix alternating sum of squares (use __int128 — sums exceed 10^18)",
+  "차이 (dx, dy) 마다 최소 몇 번 움직이면 되나를 미리 구해요":
+    "minimum moves to cover any offset (dx, dy), 0 <= dx, dy <= 2000.",
+  "총 줄 수 = 앞에서부터 곱한 값들을 다 더한 것":
+    "total lines = sum of prefix products",
+  "총 줄 수 = 앞에서부터 곱한 값들을 다 더한 것 (계속 MOD 로 나눈 나머지만 들고 있어요)":
+    "total lines = sum of prefix products (keep everything mod MOD)",
+  "한 방향은 1 과 N 사이를 오가요. 2*(N-1) 마다 되풀이돼요":
+    "one axis bounces between 1 and N, repeating every 2*(N-1)",
+  "한 번만 퍼뜨려서 차이마다 최소 이동 횟수를 구해요":
+    "BFS once: minimum knight moves to every offset",
+  "한 번에 얻을 수 있는 양을 전부 모은 다음, 큰 것부터 K 개를 골라요":
+    "Build the list of all possible per-trip yields, then take the K largest.",
+  "이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)":
+    "this contest has no line-by-line input format - it hands you the values (official sample)",
+  "케이스마다 바구니 개수":
+    "how many baskets in each case",
+  "케이스마다 바구니 하나씩":
+    "one case's baskets at a time",
 };

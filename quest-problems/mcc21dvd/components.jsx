@@ -204,13 +204,13 @@ const READ_PY = [
 ];
 const ONE_PY = [
   "def one(N, t):",
-  "    # one axis bounces between 1 and N, repeating every 2*(N-1)",
+  "    # 한 방향은 1 과 N 사이를 오가요. 2*(N-1) 마다 되풀이돼요",
   "    p = t % (2 * (N - 1))",
   "    return N - abs((N - 1) - p)",
 ];
 const LOOP_PY = [
   "for i in range(Q):",
-  "    # row uses H, column uses W — the same t, two separate waves",
+  "    # 세로는 H, 가로는 W 를 써요 — 같은 t 인데 따로 움직여요",
   "    print(one(H[i], T[i]), one(W[i], T[i]))",
 ];
 const FULL_PY = [...READ_PY, "", ...ONE_PY, "", ...LOOP_PY];
@@ -224,7 +224,7 @@ const READ_CPP = [
 ];
 const ONE_CPP = [
   "long long one(long long N, long long t) {",
-  "    // one axis bounces between 1 and N, repeating every 2*(N-1)",
+  "    // 한 방향은 1 과 N 사이를 오가요. 2*(N-1) 마다 되풀이돼요",
   "    long long p = t % (2 * (N - 1));",
   "    long long d = (N - 1) - p;",
   "    if (d < 0) {",
@@ -235,7 +235,7 @@ const ONE_CPP = [
 ];
 const LOOP_CPP = [
   "for (int i = 0; i < Q; i++) {",
-  "    // row uses H, column uses W — the same t, two separate waves",
+  "    // 세로는 H, 가로는 W 를 써요 — 같은 t 인데 따로 움직여요",
   "    cout << one(H[i], T[i]) << ' ' << one(W[i], T[i]) << '\\n';",
   "}",
 ];
