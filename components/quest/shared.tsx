@@ -155,11 +155,26 @@ export function NumInput({ question, hint, answer, E, onSolve }: NumInputProps) 
   const [val, setVal] = useState("")
   const [wrong, setWrong] = useState(false)
   const [correct, setCorrect] = useState(false)
+  // 💡 힌트는 **눌러야 열린다.** 한 번 틀리면 저절로 열린다.
+  //
+  //   왜 — 2026-09-17 MCC 전원 검토에서 담당자 둘이 각각 독립으로 짚었다.
+  //   힌트가 질문과 함께 늘 떠 있었고, 그 내용이 이런 식이었다:
+  //     mcc21menu    "정렬하면 1, 2, 3. 앞부분 곱: 1, 1×2=2, 1×2×3=6. 이걸 더해요."
+  //     mcc21marbles "D = [+2, −4, +2]. 1번 상자 뒤 +2, 2번 상자 뒤 −2. |+2| + |−2| 를 더해요."
+  //   **계산을 다 해 주고 덧셈만 남긴다.** '직접 풀어 보는' 스텝이 아니게 된다.
+  //
+  //   `memory/feedback_students_copy_the_answer.md` 와 같은 병이다 —
+  //   선생님(2026-09-05) *"결국 뒤로 가서 배끼던데?"*. 그때는 `blank-code-runner`
+  //   의 힌트2가 정답 전문이었다. 같은 병이 다른 부품에서 또 나왔다.
+  //
+  //   실측: `type: "input"` 스텝이 있는 quest 130개, 힌트가 붙은 자리 92건.
+  //   공용 부품이라 여기 한 곳을 고치면 그 전부가 같이 바뀐다.
+  const [hintOpen, setHintOpen] = useState(false)
 
   const submit = () => {
     const n = parseInt(val, 10)
     if (n === answer) { setCorrect(true); setWrong(false); onSolve?.() }
-    else setWrong(true)
+    else { setWrong(true); setHintOpen(true) }   // 막힌 학생은 그때 도움을 받는다
   }
 
   const inputBorder = correct ? "border-green-200 bg-green-50" : wrong ? "border-red-200 bg-red-50" : "border-gray-200 bg-white"
@@ -169,7 +184,15 @@ export function NumInput({ question, hint, answer, E, onSolve }: NumInputProps) 
       <div className="text-sm font-bold mb-2.5 text-gray-800">{question}</div>
       {/* whitespace-pre-line: hint 안의 \n 이 공백으로 뭉개지고 있었다 (2026-09-04).
           같은 파일 Quiz 의 explain 은 오늘 고쳤는데 여기만 빠져 있었다. */}
-      {hint && (
+      {hint && !hintOpen && !correct && (
+        <button
+          onClick={() => setHintOpen(true)}
+          className="text-xs font-semibold mb-2 text-amber-600 underline cursor-pointer bg-transparent border-0 p-0"
+        >
+          💡 {E ? "Show hint" : "힌트 보기"}
+        </button>
+      )}
+      {hint && (hintOpen || correct) && (
         <div
           className="text-xs font-semibold mb-2 text-amber-600 whitespace-pre-line"
           style={{ wordBreak: "keep-all" }}

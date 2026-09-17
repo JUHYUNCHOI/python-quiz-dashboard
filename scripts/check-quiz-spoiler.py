@@ -17,6 +17,24 @@ narr 은 질문과 무관하게 항상 먼저 렌더된다 — 안 풀어도 읽
 """
 import glob, io, re, sys
 
+
+# ⚠️ 2026-09-17 — **이 검사기는 quest 이름을 받아도 무시하고 전부 훑고 있었다.**
+#    MCC 전원 검토에서 담당자 **셋이 각각** "quest 를 넣어도 출력이 똑같다,
+#    이 도구로는 개별 quest 를 못 본다" 고 돌려보냈다.
+#    그래서 셋 다 검사기를 못 쓰고 손으로 대조했다 — 그 김에 진짜 결함을 찾긴 했지만,
+#    **도구가 거짓으로 '같은 결과' 를 내주는 건 0건보다 나쁘다.**
+def quest_files():
+    """`python3 scripts/check-quiz-spoiler.py mcc20kitty` 처럼 이름을 주면 그것만 본다."""
+    want = [a for a in sys.argv[1:] if not a.startswith("-")]
+    files = sorted(glob.glob("quest-problems/*/chapters.jsx"))
+    if not want:
+        return files
+    picked = [f for f in files if f.split("/")[1] in want]
+    if not picked:
+        print(f"그런 quest 가 없다: {', '.join(want)}", file=sys.stderr)
+        sys.exit(2)
+    return picked
+
 QUIZ = re.compile(r"\{\s*(?:/\*.*?\*/\s*)?type:\s*\"quiz\"(.*?)\n    \},", re.S)
 def ko(m):
     """t(E, "영어", "한국어") 에서 한국어만."""
@@ -47,7 +65,7 @@ ALLOW = {
 }
 
 hits = []
-for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
+for f in quest_files():
     s = io.open(f, encoding="utf-8").read()
     for blk in QUIZ.findall(s):
         n = re.search(r'narr: t\(E,\s*"(?:[^"\\]|\\.)*"\s*,\s*"((?:[^"\\]|\\.)*)"', blk)
@@ -93,7 +111,7 @@ for q, a, nr in hits:
 # 그러면 모르고도 제일 긴 걸 고르면 맞는다. 스포일러와 같은 병이다:
 # 학생이 생각하지 않고도 답을 안다.
 long_ans = []
-for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
+for f in quest_files():
     s2 = io.open(f, encoding="utf-8").read()
     for blk in QUIZ.findall(s2):
         o = re.search(r"options:\s*\[(.*?)\]", blk, re.S)
@@ -133,7 +151,7 @@ def steps(src):
     return parts
 
 prev_hits = []
-for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
+for f in quest_files():
     s3 = io.open(f, encoding="utf-8").read()
     parts = steps(s3)
     for i, p in enumerate(parts):
@@ -180,7 +198,7 @@ for q, a in prev_hits:
 EXPLAIN_SEQ = re.compile(r"(?:-?\d+\s*,\s*){3,}-?\d+")
 
 seq_hits = []
-for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
+for f in quest_files():
     s4 = io.open(f, encoding="utf-8").read()
     for blk in QUIZ.findall(s4):
         m = re.search(r'explain:\s*t\(E,\s*"(?:[^"\\]|\\.)*"\s*,\s*"((?:[^"\\]|\\.)*)"', blk)
