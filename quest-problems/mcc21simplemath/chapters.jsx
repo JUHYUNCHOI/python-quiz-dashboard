@@ -64,7 +64,7 @@ export function makeMcc21SimpleMathCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You get N numbers and an operator selector P. For EVERY nonempty subset, combine that subset with the operator — then sum those values over all 2^N − 1 subsets.",
+        "You get N numbers and an operator selector P. For EVERY nonempty subset, combine that subset with the operator — then sum all of those values.",
         /* 2026-09-17: 77자·세 문장이었다. 아래 미션·문제 카드가 같은 말을 다시 한다. */
         "부분집합마다 수를 합친 값을 전부 더해요."),
       content: (
@@ -279,7 +279,7 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way lists all 2^N − 1 subsets and combines each — impossible past ~N=25. The fast way never lists a subset: it counts how much each number (or each bit) contributes to the total.",
+        "The slow way lists every subset and combines each — impossible past ~N=25. The fast way never lists a subset: it counts how much each number (or each bit) contributes to the total.",
         "부분집합을 다 적지 않고, 각 수가 총합에 몇 번 쓰이는지만 세요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

@@ -257,8 +257,8 @@ export function getMcc21MarblesSections(E) {
             "D[i] = A[i] − B[i] 로 바꿔 생각해요.\n상자 i 는 구슬이 남거나(D>0) 모자라요(D<0).\n구슬은 이웃 사이의 경계만 건너요."),
         t(E, "Whatever imbalance sits to the LEFT of a boundary must cross it. That amount is the carry — the running total of D — so the answer = sum of |carry| at every boundary.",
             "경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요.\n그 양이 바로 누적(carry), 곧 D 를 더해 온 값이에요.\n그래서 답은 경계마다 |누적| 을 더한 값이에요."),
-        t(E, "No array is needed: carry adds A[i]−B[i] as it walks, and ops adds |carry| at the same moment — one O(N) pass, no extra memory.",
-            "배열을 따로 만들 필요가 없어요.\ncarry 가 A[i]−B[i] 를 더해 가고, 그 자리에서 ops 에 |carry| 를 더해요.\n한 번만 훑으니 O(N) 이고 여분 메모리도 안 써요."),
+        t(E, "No array is needed: carry adds A[i]−B[i] as it walks, and ops adds |carry| at the same moment — one pass, no extra memory.",
+            "배열을 따로 만들 필요가 없어요.\ncarry 가 A[i]−B[i] 를 더해 가고, 그 자리에서 ops 에 |carry| 를 더해요.\n한 번만 훑고 여분 메모리도 안 써요."),
         t(E, "Why abs()? A carry of +3 sends 3 marbles right, −3 pulls 3 left. Either way it costs 3 moves.",
             "왜 abs 냐면, 누적이 +3 이면 구슬 3 개가 오른쪽으로,\n−3 이면 3 개가 왼쪽으로 가요.\n어느 쪽이든 옮기는 횟수는 3 번이라 절댓값을 더해요."),
       ],
@@ -271,8 +271,8 @@ export function getMcc21MarblesSections(E) {
            MCC 는 codeLang="py" 고정이라 파이썬 학생이 볼 일이 없다. */
         /* 2026-09-17: "64비트 정수" 는 학생 말이 아니다 — 답이 커서 큰 수를 담는 칸이
            필요하다는 뜻으로 바꿔 쓴다. (\n 은 쓰지 않는다 — Stepper 가 뭉갠다) */
-        t(E, "Use long long: sum(A) can reach 5·10¹¹, which is far more than a plain int can hold.",
-            "sum(A) 가 5·10¹¹ 까지 커져요. 보통 int 칸에는 안 들어가요. 그래서 더 큰 수를 담는 long long 을 써요."),
+        t(E, "Use long long: sum(A) can reach 5·10¹¹ (500 billion), which is far more than a plain int can hold.",
+            "sum(A) 가 5·10¹¹(5000억)까지 커져요. 보통 int 칸에는 안 들어가요. 그래서 더 큰 수를 담는 long long 을 써요."),
         t(E, "Declare A, B, carry and ops as long long — an int would silently wrap around.",
             "A, B, carry, ops 를 모두 long long 으로 적어요. int 로 두면 값이 조용히 망가져요."),
         t(E, "Read A fully, then B fully (two separate loops) — they arrive on two lines.",

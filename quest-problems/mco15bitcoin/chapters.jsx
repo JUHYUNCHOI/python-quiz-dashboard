@@ -196,7 +196,7 @@ export function makeBitcoinCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Brute force: for every pair of sites (i, j), compute (xi − xj)² + (yi − yj)² and keep the running max. Sections build it one piece at a time.",
+        "Brute force: for every pair of sites, compute their squared distance and keep the running max. Sections build it one piece at a time.",
         "모든 쌍을 하나씩 다 재 보면서 가장 큰 값을 남겨요."),
       sections: getBitcoinSections(E),
     },

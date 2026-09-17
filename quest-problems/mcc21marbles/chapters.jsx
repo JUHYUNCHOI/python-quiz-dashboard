@@ -103,7 +103,7 @@ export function makeMcc21MarblesCh1(E) {
               <div>• <b>B</b> — {t(E, "N integers: the TARGET count of each box", "N 개 정수: 각 상자의 목표 개수")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: 1 ≤ N ≤ 5·10⁴, sum(A) ≤ 5·10¹¹, sum(A) = sum(B).", "제약: 1 ≤ N ≤ 5·10⁴, sum(A) ≤ 5·10¹¹, sum(A) = sum(B).")}
+              {t(E, "Limits: 1 ≤ N ≤ 5·10⁴ (50,000), sum(A) ≤ 5·10¹¹ (500 billion), sum(A) = sum(B).", "제약: 1 ≤ N ≤ 5·10⁴(5만), sum(A) ≤ 5·10¹¹(5000억), sum(A) = sum(B).")}
             </div>
             {/* 2026-09-17: 원문(public/problems/mcc21marbles.pdf)은 N = 5 / A = [2,2,2,6,3] /
                 B = [1,2,3,4,5] 처럼 값을 변수로 준다. 줄 형식은 우리 연습 방식이다. */}
@@ -199,8 +199,8 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55,
                 whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
                 {t(E,
-                  "We did NOT try this one in the sim — here is why.\nMarbles can travel far and the totals reach 5·10¹¹,\nso the number of hops is astronomically large. It times out.",
-                  "이 방법은 앞 시뮬에서 해 보지 않았어요. 왜 안 하는지만 보고 넘어가요.\n구슬이 멀리 갈 수 있고 합이 5·10¹¹ 까지라 옮기는 횟수가 어마어마해요.\n그래서 시간 초과예요.")}
+                  "We did NOT try this one in the sim — here is why.\nMarbles can travel far and the totals reach 5·10¹¹ (500 billion),\nso the number of hops is astronomically large. It times out.",
+                  "이 방법은 앞 시뮬에서 해 보지 않았어요. 왜 안 하는지만 보고 넘어가요.\n구슬이 멀리 갈 수 있고 합이 5·10¹¹(5000억)까지라 옮기는 횟수가 어마어마해요.\n그래서 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#fff1f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
@@ -211,8 +211,8 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55,
                 whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
                 {t(E,
-                  "This is the one you walked through in the sim.\nMarbles only hop between neighbours,\nso whatever gap sits left of an edge MUST cross it.\nAdd up those crossings over all N boxes — one O(N) pass.",
-                  "앞 시뮬에서 경계를 하나씩 건너며 해 본 게 이 방법이에요.\n구슬은 옆 상자로만 갈 수 있어요.\n그래서 경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요.\n경계마다 건넌 구슬을 상자 N 개에 걸쳐 더하면 돼요.\nO(N) 으로 한 번만 훑어요.")}
+                  "This is the one you walked through in the sim.\nMarbles only hop between neighbours,\nso whatever gap sits left of an edge MUST cross it.\nAdd up those crossings over all N boxes — one pass, no matter how big N is.",
+                  "앞 시뮬에서 경계를 하나씩 건너며 해 본 게 이 방법이에요.\n구슬은 옆 상자로만 갈 수 있어요.\n그래서 경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요.\n경계마다 건넌 구슬을 상자 N 개에 걸쳐 더하면 돼요.\nN 이 커도 한 번만 훑으면 끝나요.")}
               </div>
             </div>
           </div>

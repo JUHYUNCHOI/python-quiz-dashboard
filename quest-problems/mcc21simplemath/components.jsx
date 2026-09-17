@@ -268,8 +268,8 @@ export function getMcc21SimpleMathSections(E) {
           "All three branches already keep ans mod 10^9+7, so we just print it.",
           "세 갈래 모두 ans 를 이미 10^9+7 로 나눈 나머지로 들고 있어요.\n그래서 그대로 출력하면 돼요."),
         t(E,
-          "Each branch is O(N) (XOR is O(31·N)) — fast even for N = 50000, while listing 2^N subsets would be impossible.",
-          "어느 갈래든 O(N) 이에요. XOR 만 비트 31 개를 도니까 O(31·N) 이에요.\nN 이 50000 이어도 금방 끝나요.\n부분집합 2^N 개를 다 적는 것과는 비교가 안 돼요."),
+          "Each branch touches every number about once (XOR loops through the 31 bits too, so about 31 times as much) — fast even for N = 50000, while listing 2^N subsets would be impossible.",
+          "어느 갈래든 수를 한 번씩만 훑어요. XOR 는 비트 31 개도 도니까 그만큼 더 걸려요.\nN 이 50000 이어도 금방 끝나요.\n부분집합 2^N 개를 다 적는 것과는 비교가 안 돼요."),
       ],
     },
   ];
@@ -445,8 +445,8 @@ export function Mcc21SimpleMathOpSim({ E }) {
         <div style={{ marginTop: 12, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
           {t(E,
             /* 2026-09-17: 같은 화면의 지름길은 "자리" 라고 부르는데 여기만 "비트" 였다. */
-            "With just 3 numbers we can list all 7 subsets. But N can be 50000 → 2^N subsets, far too many to list. So we count each number's / each digit's contribution instead.",
-            "수가 3 개뿐이면 부분집합 7 개를 다 적을 수 있어요.\n그런데 N 은 50000 까지 가고, 그러면 부분집합이 2^N 개예요.\n적는 건 포기하고, 각 수와 각 자리가 몇 번 쓰이는지를 세요.")}
+            "With just 3 numbers we can list all 7 subsets. But N can be 50000 → 2^N subsets (2 multiplied by itself N times), far too many to list. So we count each number's / each digit's contribution instead.",
+            "수가 3 개뿐이면 부분집합 7 개를 다 적을 수 있어요.\n그런데 N 은 50000 까지 가고, 그러면 부분집합이 2^N 개(2 를 N 번 곱한 수)예요.\n적는 건 포기하고, 각 수와 각 자리가 몇 번 쓰이는지를 세요.")}
         </div>
       </div>
     </div>
