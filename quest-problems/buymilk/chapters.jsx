@@ -129,8 +129,8 @@ export function makeBuyMilkCh1(E) {
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ N ≤ 100,000 (= 10⁵)</div>
               <div>1 ≤ Q ≤ 10,000 (= 10⁴)</div>
-              <div>1 ≤ a<sub>i</sub> ≤ 10⁹ <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(strictly increasing)", "(뒤로 갈수록 커져요)")}</span></div>
-              <div>1 ≤ x ≤ 10⁹ <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "· use 64-bit ints", "· 답이 커서 큰 정수를 써요")}</span></div>
+              <div>1 ≤ a<sub>i</sub> ≤ 1,000,000,000 <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(strictly increasing)", "(뒤로 갈수록 커져요)")}</span></div>
+              <div>1 ≤ x ≤ 1,000,000,000 <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "· use 64-bit ints", "· 답이 커서 큰 정수를 써요")}</span></div>
             </div>
           </div>
         </div>),
@@ -300,8 +300,8 @@ function BuyMilkPlan({ E }) {
         <Line n={1}>{t(E, <>Read the deal prices {codeTag("deal_price")}.</>, <>거래 가격 {codeTag("deal_price")} 를 읽어요.</>)}</Line>
         <Line n={2}>{t(E, <>Build {codeTag("block_cost")}: {codeTag("min(buy_the_deal, buy_two_halves)")} — the first sim.</>,
                          <>{codeTag("block_cost")} 를 만들어요. {codeTag("min(buy_the_deal, buy_two_halves)")} — 첫 시뮬이 한 일이에요.</>)}</Line>
-        <Line n={3}>{t(E, <>Per query: {codeTag("left = want")}, {codeTag("paid = 0")}, {codeTag("best = ∞")}.</>,
-                         <>물음마다 {codeTag("left = want")}, {codeTag("paid = 0")}, {codeTag("best = 무한대")} 로 시작해요.</>)}</Line>
+        <Line n={3}>{t(E, <>Per query: the problem&apos;s x is called {codeTag("want")} in the code.<br />Start with {codeTag("left = want")}, {codeTag("paid = 0")}, {codeTag("best = not found yet")}.</>,
+                         <>물음마다 — 문제의 x 가 코드에서는 {codeTag("want")} 예요.<br />{codeTag("left = want")}, {codeTag("paid = 0")}, {codeTag("best = 아직 없음")} 으로 시작해요.</>)}</Line>
         <Line n={4}>{t(E, <>Big block → small block — this is the second sim&apos;s table.<br />“round up → cost” is the {codeTag("best")} candidate;<br />“buy less / carry” updates {codeTag("paid")} and {codeTag("left")}.</>,
                          <>큰 묶음부터 작은 묶음까지 훑어요 — 두 번째 시뮬의 표예요.<br />‘넉넉히 사면’ 칸이 {codeTag("best")} 후보고,<br />‘모자라게 사고 남은 통’ 칸이 {codeTag("paid")} 와 {codeTag("left")} 이에요.</>)}</Line>
         <Line n={5}>{t(E, <>Print {codeTag("best")}.</>, <>{codeTag("best")} 를 출력해요.</>)}</Line>

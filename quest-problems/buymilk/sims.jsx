@@ -93,9 +93,9 @@ export function NormalizeSim({ E }) {
         title={t(E, "Turn deals into block prices", "묶음마다 제일 싼 값을 구해요")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Carry E={E}>
-        {t(E, <>A new, bigger example — <b>4 deals</b> now: a = [10, 15, 20, 45].<br />
+        {t(E, <>A new, bigger example — <b>4 deals</b> now: deal_price = [10, 15, 20, 45].<br />
                  (Sample 1 back on page 2 had only two: [10, 15].)</>,
-             <>새 예제예요. 이제 <b>거래가 4개</b>예요 — a = [10, 15, 20, 45]<br />
+             <>새 예제예요. 이제 <b>거래가 4개</b>예요 — deal_price = [10, 15, 20, 45]<br />
                (2쪽 예제 1 은 두 개였어요. [10, 15])</>)}
       </Carry>
       <StepFade fast k={ts.safe}>
@@ -195,10 +195,10 @@ export function GreedySim({ E, x = 5 }) {
         title={t(E, `Buy at least ${X} buckets, as cheap as possible`, `${X}통 이상을 제일 싸게 사요`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Carry E={E}>
-        {t(E, <>Same 4 deals a = [10, 15, 20, 45].<br />
-                 Block prices we just worked out: c = [{C.join(", ")}]</>,
-             <>같은 거래 4개예요. a = [10, 15, 20, 45]<br />
-               방금 구한 묶음 값은 c = [{C.join(", ")}] 이에요.</>)}
+        {t(E, <>Same 4 deals deal_price = [10, 15, 20, 45].<br />
+                 Block prices we just worked out: block_cost = [{C.join(", ")}]</>,
+             <>같은 거래 4개예요. deal_price = [10, 15, 20, 45]<br />
+               방금 구한 묶음 값은 block_cost = [{C.join(", ")}] 이에요.</>)}
       </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "done" ? "aha" : "go"}>{say}</Say>
