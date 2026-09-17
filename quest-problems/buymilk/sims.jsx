@@ -223,7 +223,15 @@ export function GreedySim({ E, x = 5 }) {
               <span style={{ fontWeight: 800, color: "#334155" }}>{r.size}{t(E, "", "통")}</span>
               <span style={{ color: "#64748b" }}>{shown ? r.rem : "?"}</span>
               <span style={{ fontWeight: 800, color: isBest ? "#15803d" : "#0e7490" }}>
-                {shown ? `${r.need}×${C[r.i]} = ${r.cand}` : "?"}
+                {/* ⚠️ 2026-09-17 학생이 잡았다 — 전엔 `1×15 = 35` 처럼 **식이 안 맞았다.**
+                    `cand = costBefore + need×C[i]` 인데 화면은 뒷항만 보여줬다.
+                    학생: *"1×15는 15지 35가 아니다. 식이 안 맞아 보여서 못 믿게 됐다."*
+                    → **앞에서 쓴 돈을 식에 같이 보여준다.** 첫 줄(0원)은 군더더기라 뺀다. */}
+                {shown
+                  ? (r.costBefore > 0
+                      ? `${r.costBefore} + ${r.need}×${C[r.i]} = ${r.cand}`
+                      : `${r.need}×${C[r.i]} = ${r.cand}`)
+                  : "?"}
               </span>
               <span style={{ color: "#94a3b8" }}>
                 {shown ? `${r.take} / ${r.rem - r.take * r.size}` : "?"}

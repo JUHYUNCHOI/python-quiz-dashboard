@@ -136,21 +136,29 @@ export function makeBuyMilkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Prices go up, but bucket counts double. Which deal is cheapest per bucket?",
-        "가격은 오르는데 통 수는 두 배씩 늘어요. 통당 제일 싼 건 어디일까요?"),
+        "Deal 2 costs more — but it also gives more buckets.",
+        "거래 2 는 더 비싼데, 통은 더 많이 줘요."),
+      // ⚠️ 2026-09-17 선생님이 이 쪽을 보시고 *"못알아보겠어"*.
+      //    네 가지가 겹쳐 있었다:
+      //    ① `a = [10, 15]` 만 주고 **거래 1·2 가 각각 몇 통인지는 이 쪽에 없었다.**
+      //       그게 없으면 7.5 를 계산할 수가 없다 — 앞 쪽으로 되돌아가야 했다.
+      //    ② "통당 단가" — 초6 에게 어려운 말. "한 통에 얼마" 로.
+      //    ③ 파란 바는 "제일 싼 건 어디?" 를 묻는데 문제는 "단가는?" 을 물었다. 서로 다른 질문.
+      //    ④ 보기가 **계산 결과 + 결론**을 같이 줘서, 학생이 계산 안 하고 결론만 보고 골랐다.
+      //    근거: feedback_screen_must_not_rely_on_memory · feedback_no_invented_terms
       question: t(E,
-        "If a = [10, 15], what is the price per bucket for each deal?",
-        "a = [10, 15] 일 때 각 거래의 통당 단가는?"),
+        "Deal 1 gives 1 bucket for 10.\nDeal 2 gives 2 buckets for 15.\nSo how much is ONE bucket from each?",
+        "거래 1 은 1통에 10 이에요.\n거래 2 는 2통에 15 예요.\n그럼 한 통으로 치면 각각 얼마일까요?"),
       options: [
-        t(E, "Deal 1: 10/bucket · Deal 2: 7.5/bucket — bigger deal is cheaper",
-            "거래 1: 10/통 · 거래 2: 7.5/통 — 큰 거래가 더 쌈"),
-        t(E, "Deal 1: 10/bucket · Deal 2: 15/bucket — smaller deal is always best",
-            "거래 1: 10/통 · 거래 2: 15/통 — 작은 거래가 항상 최선"),
+        t(E, "Deal 1 → 10 per bucket · Deal 2 → 7.5 per bucket",
+            "거래 1 은 한 통에 10 · 거래 2 는 한 통에 7.5"),
+        t(E, "Deal 1 → 10 per bucket · Deal 2 → 15 per bucket",
+            "거래 1 은 한 통에 10 · 거래 2 는 한 통에 15"),
       ],
       correct: 0,
       explain: t(E,
         "Right. Deal 2 sells 2 buckets for 15, so 7.5 per bucket — cheaper than Deal 1's 10 per bucket. Greedy 'always use the smallest deal' would be wrong.",
-        "맞아요. 거래 2 는 2통에 15 니까 통당 7.5 예요.\n거래 1 의 통당 10 보다 싸요.\n그래서 '항상 작은 거래만 쓰면 된다' 는 생각은 틀려요."),
+        "맞아요. 15 를 2통으로 나누면 7.5 예요.\n거래 1 의 10 보다 싸죠.\n**큰 거래가 한 통당 더 쌀 수 있어요.**\n그래서 '작은 거래만 쓰면 된다' 는 생각은 틀려요."),
     },
 
 
