@@ -21,7 +21,11 @@ import { t } from "@/components/quest/theme";
 import { makePermCh1, makePermCh2, makePermCh3 } from "../permutation/chapters";
 import { DeepAuditSim } from "./components";
 
-export { SOLUTION_CODE } from "../permutation/chapters";
+/* 2026-09-17: 여기 `export { SOLUTION_CODE } from "../permutation/chapters";` 가 있었다.
+   permutation 쪽의 죽은 사본을 지우면서 **이 줄이 없는 이름을 가리키게 됐다.**
+   favperm2 안에서도 쓰지 않는다(0곳). 그래서 같이 지운다.
+   ⚠️ 교훈 — 죽은 export 를 지울 때는 **다른 quest 가 다시 내보내는지**도 봐야 한다.
+      quest 폴더 안만 보면 이 줄을 못 본다. */
 
 export const makeFavPerm2Ch1 = makePermCh1;
 
