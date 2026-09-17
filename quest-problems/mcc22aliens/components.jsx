@@ -81,27 +81,81 @@ const FULL_CPP = [
   "}",
 ];
 
+/* 2026-09-17: 섹션 한 개에 30 줄을 통째로 펼치고 있었다 — 읽기 · 참/거짓 풀기 ·
+   세기 · 비교/출력이 한 덩어리였다. 네 단계로 나눈다.
+   ⚠️ 코드 **내용**은 한 글자도 안 바꾼다. 그래서 새로 적지 않고 slice 로 자른다. */
+const PY_READ    = FULL_PY.slice(0, 10);
+const PY_DECODE  = FULL_PY.slice(10, 21);
+const PY_COUNT   = FULL_PY.slice(21, 23);
+const PY_VERDICT = FULL_PY.slice(23);
+
+const CPP_READ    = FULL_CPP.slice(0, 12);
+const CPP_DECODE  = FULL_CPP.slice(12, 28);
+const CPP_COUNT   = FULL_CPP.slice(28, 32);
+const CPP_VERDICT = FULL_CPP.slice(32);
+
 export function getMcc22AliensSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "📥 1. Read each test's three lines", "📥 1. 테스트마다 세 줄 읽기"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: PY_READ, cpp: CPP_READ,
       why: [
-        t(E, "Never search the n! permutations. Decode each sentence into the single type its target must have: a truth-teller (a[i]=='T') means b[i] as-is; a liar means the opposite.",
-            "n! 가지 지목 순서를 뒤질 필요가 없어요. 각 말을 '지목당한 쪽이 가져야 할 타입' 하나로 바꾸면 돼요. 진실쟁이 (a[i]=='T') 는 b[i] 그대로, 거짓말쟁이는 뒤집어요."),
-        t(E, "A valid permutation exists exactly when supply equals demand: the count of demanded T's (need_T) must equal the count of real T's (have_T). One O(n) pass over the strings, no permutations.",
-            "공급과 수요가 같을 때만 순서를 짤 수 있어요. 요구된 T 의 수 (need_T) 가 진짜 T 의 수 (have_T) 와 같아야 해요. 문자열을 O(n) 으로 한 번 훑을 뿐, 순열은 만들지 않아요."),
+        t(E, "T tests arrive one after another. Each one is three lines: n, the real types a, and the claims b.",
+            "테스트가 T 개 줄줄이 들어와요.\n하나가 세 줄이에요. n, 진짜 타입 a, 주장 b 예요."),
+        t(E, "a and b line up by position: a[i] is alien i's own type, b[i] is what alien i said about whoever they pointed at.",
+            "a 와 b 는 자리끼리 짝이에요.\na[i] 는 i 번 자신의 타입이고,\nb[i] 는 i 번이 지목한 상대에게 붙인 타입이에요."),
       ],
       pyOnly: [
-        t(E, "Each test is 3 lines: n, then string a, then string b. Read them line by line.",
-            "테스트 하나가 3 줄이에요. n, 문자열 a, 문자열 b — 줄 순서 그대로 읽어요."),
+        t(E, "rstrip() drops the newline that readline leaves at the end of each string.",
+            "readline 은 줄 끝의 줄바꿈까지 같이 줘요.\nrstrip() 으로 그 줄바꿈을 떼어 내요."),
       ],
       cppOnly: [
         t(E, "cin >> n >> a >> b reads the count and two strings; while (T--) repeats for every test case.",
             "cin >> n >> a >> b 로 개수와 두 문자열을 읽고, while (T--) 로 매 테스트를 반복해요."),
+      ],
+    },
+    {
+      label: t(E, "🔀 2. Turn each claim into the type it demands", "🔀 2. 각 말을 '요구하는 타입' 으로 바꾸기"),
+      color: A,
+      py: PY_DECODE, cpp: CPP_DECODE,
+      why: [
+        t(E, "Never search the n! permutations. Each sentence only pins down ONE thing: the type its target must have.",
+            "n! 가지 지목 순서를 뒤질 필요가 없어요.\n말 하나가 정해 주는 건 딱 하나예요 —\n지목당한 쪽이 가져야 할 타입이에요."),
+        t(E, "A truth-teller (a[i]=='T') means b[i] as-is; a liar says the opposite, so flip b[i]. Either way req is the demanded type.",
+            "진실쟁이(a[i]=='T')가 말하면 b[i] 그대로예요.\n거짓말쟁이가 말하면 반대니까 b[i] 를 뒤집어요.\n어느 쪽이든 req 가 '요구된 타입' 이에요."),
+        t(E, "While we are here, count the real T's (have_T) — that's the supply we will compare against.",
+            "온 김에 진짜 T 가 몇 개인지(have_T)도 같이 세요.\n나중에 견줄 '공급' 이에요."),
+      ],
+      cppOnly: [
         t(E, "req is a single char — the type this claim demands after decoding the speaker's honesty.",
             "req 는 글자 하나예요. 말한 사람이 진실쟁이인지 따져 본 뒤, 이 주장이 요구하는 타입이에요."),
+      ],
+    },
+    {
+      label: t(E, "🔢 3. Count the demanded T's", "🔢 3. 요구된 T 가 몇 개인지 세기"),
+      color: A,
+      py: PY_COUNT, cpp: CPP_COUNT,
+      why: [
+        t(E, "We don't care WHICH alien each sentence demands — only how many T's are demanded in total. That single number is need_T.",
+            "어떤 외계인을 가리켰는지는 알 필요가 없어요.\nT 를 요구한 말이 모두 몇 개인지만 세면 돼요.\n그 수 하나가 need_T 예요."),
+        t(E, "Demanded F's need no counter: everyone who isn't demanded as T is demanded as F.",
+            "F 를 요구한 말은 따로 안 세도 돼요.\nT 가 아닌 나머지가 곧 F 니까요."),
+      ],
+    },
+    {
+      label: t(E, "⚖️ 4. Compare supply and demand → YES / NO", "⚖️ 4. 공급과 수요를 견줘 YES / NO"),
+      color: A,
+      py: PY_VERDICT, cpp: CPP_VERDICT,
+      why: [
+        t(E, "Everyone is pointed at exactly once, so the demanded types have to be handed out to the real aliens one for one.",
+            "모두가 정확히 한 번씩 지목돼요.\n그러니 요구된 타입을 진짜 외계인들에게\n하나씩 짝지어 나눠 줄 수 있어야 해요."),
+        t(E, "That is possible exactly when the two counts match: need_T == have_T → YES, otherwise NO. One O(n) pass, no permutations.",
+            "그게 되는 건 두 개수가 딱 맞을 때뿐이에요.\nneed_T == have_T 면 YES, 아니면 NO 예요.\n문자열을 O(n) 으로 한 번 훑을 뿐, 순서는 만들지 않아요."),
+      ],
+      pyOnly: [
+        t(E, "Answers are collected in a list and printed once at the end — printing inside the loop is slower.",
+            "답을 리스트에 모아 두었다가 끝에 한 번에 출력해요.\n반복문 안에서 매번 출력하면 더 느려요."),
       ],
     },
   ];

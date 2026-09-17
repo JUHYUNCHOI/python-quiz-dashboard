@@ -174,9 +174,11 @@ export function makeMcc21SimpleMathCh1(E) {
       /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
          narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
+      /* 2026-09-17: 이 narr 이 81 자·세 문장이었고, 바로 아래 카드가 같은 말을 또 했다.
+         파란 바는 "지금 뭘 볼 차례" 만 말한다. */
       narr: t(E,
-        "Feel it on {1,2,3}. List all 7 subsets, watch the running total, then reveal the shortcut that reaches the same total without listing.",
-        "{1,2,3} 로 직접 해 봐요.\n부분집합 7 개를 하나씩 적으면서 합이 쌓이는 걸 보고,\n다 적지 않고도 같은 합에 닿는 지름길을 찾아봐요."),
+        "Try it on {1,2,3} — list all 7 subsets yourself.",
+        "{1,2,3} 의 부분집합 7 개를 직접 적어 봐요."),
       content: null,
     },
 

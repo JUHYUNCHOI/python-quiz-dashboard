@@ -14,6 +14,7 @@ const KA = { wordBreak: "keep-all" };
      1-2  📥 input + official sample card
      1-3  concept sim (supply vs demand counting)
      1-4  understanding quiz
+     1-5  hand-computed input (count the demanded T's)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22AliensCh1(E) {
   return [
@@ -175,6 +176,23 @@ export function makeMcc22AliensCh1(E) {
       explain: t(E,
         "Right. Decode each claim to the type it demands, count the demanded T's, and compare to how many real T's exist. Equal supply and demand → a valid order exists → YES.",
         "맞아요. 각 주장을 '상대가 가져야 할 타입' 으로 바꿔서 요구된 T 가 몇 개인지 세고, 진짜 T 의 개수와 비교해요. 둘이 같으면 지목 순서를 짤 수 있으니 YES 예요."),
+    },
+
+    /* 2026-09-17: 이 묶음에서 유일하게 손으로 세어 보는 칸이 비어 있었다.
+       "관찰 → 퀴즈 → 직접 계산 → 코드" 사다리의 한 칸을 채운다. */
+    // 1-5: hand-computed input
+    {
+      type: "input",
+      narr: t(E,
+        "Now count it yourself: a = TFTF, b = TFTT.",
+        "이번엔 직접 세어 봐요. a = TFTF, b = TFTT 예요."),
+      question: t(E,
+        "a = TFTF, b = TFTT. How many T's are demanded?",
+        "a = TFTF, b = TFTT 일 때 요구된 T 는 몇 개일까요?"),
+      hint: t(E,
+        "A truth-teller (T) demands b as-is; a liar (F) demands the opposite of b. Write the four demanded types left to right, then count the T's.",
+        "진실쟁이(T)가 말하면 b 그대로를 요구하고,\n거짓말쟁이(F)가 말하면 b 를 뒤집은 걸 요구해요.\n네 자리를 왼쪽부터 하나씩 적어 보고 T 를 세요."),
+      answer: 3,
     },
   ];
 }

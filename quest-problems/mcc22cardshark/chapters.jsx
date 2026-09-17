@@ -231,8 +231,10 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are n small stacks of cards. You glue them into one big pile in ANY order (each stack keeps its internal order), then deal from the top alternately: 1st card→P1, 2nd→P2, 3rd→P1, …\nMaximize score1 − score2.",
-        "카드 묶음이 n 개 있어요.\n원하는 순서로 이어 붙여 하나의 큰 더미를 만들어요.\n묶음 안의 카드 순서는 그대로예요.\n그다음 맨 위부터 번갈아 나눠줘요. 1번째 카드→P1, 2번째→P2, 3번째→P1, …\nscore1 − score2 를 최대로 만들어요."),
+        /* 2026-09-17: 원래 여기 다섯 줄(82자)이 문제 설명 전부를 미리 말했다.
+           파란 내레이션은 55자 한 문장이고, 자세한 것은 바로 아래 미션·문제 카드가 한다. */
+        "Choose the order of the stacks so score1 − score2 is as big as possible.",
+        "묶음 순서를 정해 score1 − score2 를 최대로 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
