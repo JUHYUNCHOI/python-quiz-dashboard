@@ -144,6 +144,28 @@ T_CALL = re.compile(r't\(\s*E\s*,\s*"((?:[^"\\]|\\.)*)"\s*,\s*"((?:[^"\\]|\\.)*)
 KO_STR = re.compile(r'"((?:[^"\\]|\\.)*[가-힣][^"\\]*)"')
 
 
+# 따옴표 **밖**의 한국어 — JSX 사이에 그냥 적힌 글이다.
+#   `<>붙어 있으면 점수가 작아요 (1×1=1).</>` 처럼.
+# 2026-09-17: mooin3 담당이 찾았다. 검사기는 문자열만 보고 있어서
+# **한 건도 안 잡히는데 화면에는 그대로 나오는** 말풍선이 15곳 있었다.
+STRIP_STR = re.compile(r'"(?:[^"\\]|\\.)*"|\'(?:[^\'\\]|\\.)*\'|`(?:[^`\\]|\\.)*`')
+JSX_CHUNK = re.compile(r"[^<>{}]*[가-힣][^<>{}]*")
+
+
+def jsx_text(raw):
+    """그 줄에서 따옴표 밖에 적힌 한국어 덩어리를 뽑는다."""
+    rest = STRIP_STR.sub(" ", raw)
+    # 줄 끝에 달린 `// 주석` 은 우리끼리 보는 글이다 (`const DEALS = [...];  // 딜 가격`).
+    # 문자열을 먼저 지웠으니 여기 남은 `//` 는 진짜 주석이다.
+    rest = rest.split("//")[0]
+    out = []
+    for m in JSX_CHUNK.finditer(rest):
+        t = m.group(0).strip()
+        if len(t) > 8 and len(re.findall(r"[가-힣]", t)) >= 3:
+            out.append(t)
+    return out
+
+
 def screen_text(path):
     """그 파일에서 **학생 화면에 나가는 한국어**만 모은다 (주석·코드 제외)."""
     out = []
@@ -157,16 +179,18 @@ def screen_text(path):
             if "*/" in raw:
                 in_block = False
             continue
-        if line.startswith("/*") and "*/" not in line:
+        # JSX 주석은 `{/* … */}` 로 시작한다 — 이것도 우리끼리 보는 글이다.
+        if (line.startswith("/*") or line.startswith("{/*")) and "*/" not in line:
             in_block = True
             continue
-        if line.startswith("//") or line.startswith("*") or line.startswith("/*"):
+        if line.startswith("//") or line.startswith("*") or line.startswith("/*") or line.startswith("{/*"):
             continue                       # 우리끼리 보는 주석은 뺀다
         for m in T_CALL.finditer(raw):
             out.append(m.group(2))         # 한국어 쪽
         if "t(E," not in raw:
             for m in KO_STR.finditer(raw):
                 out.append(m.group(1))
+        out += jsx_text(raw)
     return out
 
 
