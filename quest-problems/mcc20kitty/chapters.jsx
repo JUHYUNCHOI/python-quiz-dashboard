@@ -563,12 +563,12 @@ export function makeMcc20KittyCh3(E, lang = "py") {
           <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
             <div style={{ background: "#dbeafe", borderRadius: 12, padding: 12 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#2563eb" }}>{t(E, "Time", "시간")}</div>
-              <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(period)</div>
+              <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>~period</div>
               <div style={{ fontSize: 10, color: "#2563eb" }}>{t(E, "≈ 104, not N", "≈ 104, N 아님")}</div>
             </div>
             <div style={{ background: "#dcfce7", borderRadius: 12, padding: 12 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#16a34a" }}>{t(E, "Space", "공간")}</div>
-              <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>O(period)</div>
+              <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>~period</div>
               <div style={{ fontSize: 10, color: "#16a34a" }}>{t(E, "one cycle of 0/1/2", "0/1/2 한 사이클")}</div>
             </div>
           </div>

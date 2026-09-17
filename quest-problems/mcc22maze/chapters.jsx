@@ -98,8 +98,8 @@ export function makeMcc22MazeCh1(E) {
               <div>• {t(E, "corners (1,1) and (n,n) are always open (.)", "모서리 (1,1) 과 (n,n) 은 항상 통로 (.)")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: T ≤ 100000, n ≤ 1000, and the total of all n² ≤ 1000000.",
-                   "제약: T ≤ 100000, n ≤ 1000, 모든 n² 의 합 ≤ 1000000.")}
+              {t(E, "Limits: T ≤ 100000, n ≤ 1000, and the total of all n×n (grid cells) ≤ 1000000.",
+                   "제약: T ≤ 100000, n ≤ 1000, 모든 n×n(격자 칸 수)의 합 ≤ 1000000.")}
             </div>
           </div>
 

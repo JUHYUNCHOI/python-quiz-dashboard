@@ -236,8 +236,8 @@ export function getMcc20CityTourSections(E) {
             "같은 이웃도 D 가 크면 열리고 작으면 막혀요."),
       ],
       pyOnly: [
-        t(E, "deque.popleft() is O(1) — that is what makes this BFS, not a slow list.pop(0) each step.",
-            "deque 의 popleft() 는 O(1) 이에요. 그래서 느린 list.pop(0) 대신 쓰면 진짜 BFS 가 돼요."),
+        t(E, "deque.popleft() finishes instantly no matter how big the deque is — that is what makes this real BFS, not a slow list.pop(0) each step.",
+            "deque 의 popleft() 는 크기와 상관없이 바로 끝나는 연산이에요. 그래서 느린 list.pop(0) 대신 쓰면 진짜 BFS 가 돼요."),
         t(E, "abs(H[nr][nc] - H[r][c]) < D is the whole edge rule — the height DIFFERENCE, strictly less than D.",
             "abs(H[nr][nc] - H[r][c]) < D 한 줄이 규칙의 전부예요. 높이 '차이' 가 D 보다 작아야만 건너가요."),
       ],

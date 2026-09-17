@@ -228,7 +228,7 @@ export function makeMcc19CandyCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: line everyone up and cross them out, round by round", "느림 — 시뮬처럼 줄을 실제로 세우고 라운드마다 지우기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line" }}>
-                {t(E, "That is exactly what the sim did. But the line holds about 2^R people.\nAt R = 40 you would have to lay out over a trillion of them — you cannot even start.", "방금 시뮬이 한 그대로예요.\n그런데 줄에는 2^R 명이 서 있어요.\nR 이 40 이면 1 조 명을 늘어놓아야 해서 시작조차 못 해요.")}
+                {t(E, "That is exactly what the sim did. But the line holds about 2^R people (2 multiplied by itself R times).\nAt R = 40 you would have to lay out over a trillion of them — you cannot even start.", "방금 시뮬이 한 그대로예요.\n그런데 줄에는 2^R(2 를 R 번 곱한 수) 명이 서 있어요.\nR 이 40 이면 1 조 명을 늘어놓아야 해서 시작조차 못 해요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>

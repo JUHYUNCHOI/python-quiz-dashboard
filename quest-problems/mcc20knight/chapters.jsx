@@ -228,7 +228,7 @@ export function makeMcc20KnightCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way explores every square the knight could be on after each of K moves — that region grows huge (up to ~K² squares), times 400 queries. The fast way finds the MINIMUM moves to each offset once with BFS, then each query is a tiny check: K ≥ min and (K − min) even.",
+        "The slow way explores every square the knight could be on after each of K moves — that region grows huge (up to ~K×K squares), times 400 queries. The fast way finds the MINIMUM moves to each offset once with BFS, then each query is a tiny check: K ≥ min and (K − min) even.",
         "BFS 로 최소 이동만 구해 두면 질문은 금방 답해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -239,8 +239,8 @@ export function makeMcc20KnightCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
                 {t(E,
-                  "The first idea is simple: for one query, mark every square reachable in 1 move, then in 2, and keep going K times, then look at (A,B). It is easy to write and it is correct. But K goes up to 100000, and after K moves the marked area has grown to about K² squares — far more than 10^9 for a single query. There are up to 400 queries, and we would start over from scratch for each one.",
-                  "제일 먼저 떠오르는 방법은 간단해요.\n질문 하나를 잡고 1 번에 갈 수 있는 칸을 전부 표시하고,\n그다음 2 번에 갈 수 있는 칸을 표시하고, K 번까지 반복한 뒤\n목표 칸이 표시됐는지 보는 거예요. 짜기 쉽고 답도 맞아요.\n그런데 K 가 최대 100000 이에요.\nK 번 펼치면 표시한 칸이 K² 개쯤 되니까 질문 하나에 10^9 개가 넘어요.\n게다가 질문이 400 개인데 질문마다 처음부터 다시 펼쳐야 해요.")}
+                  "The first idea is simple: for one query, mark every square reachable in 1 move, then in 2, and keep going K times, then look at (A,B). It is easy to write and it is correct. But K goes up to 100000, and after K moves the marked area has grown to about K×K squares — far more than 10^9 for a single query. There are up to 400 queries, and we would start over from scratch for each one.",
+                  "제일 먼저 떠오르는 방법은 간단해요.\n질문 하나를 잡고 1 번에 갈 수 있는 칸을 전부 표시하고,\n그다음 2 번에 갈 수 있는 칸을 표시하고, K 번까지 반복한 뒤\n목표 칸이 표시됐는지 보는 거예요. 짜기 쉽고 답도 맞아요.\n그런데 K 가 최대 100000 이에요.\nK 번 펼치면 표시한 칸이 K×K 개쯤(가로 K, 세로 K 만큼) 되니까 질문 하나에 10^9 개가 넘어요.\n게다가 질문이 400 개인데 질문마다 처음부터 다시 펼쳐야 해요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>

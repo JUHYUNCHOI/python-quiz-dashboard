@@ -203,7 +203,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "A naive idea: sweep the whole grid over and over, each pass marking any cell reachable from an already-reachable neighbor, until nothing new appears — up to M×N passes over M×N cells, (10^5)² = 10^10. Flood-fill (BFS) instead visits each cell just once: pop it, check its 4 neighbors, push the new ones. About 4×M×N ≈ 4×10^5.",
+        "A naive idea: sweep the whole grid over and over, each pass marking any cell reachable from an already-reachable neighbor, until nothing new appears — up to M×N passes over M×N cells, 10^5 × 10^5 = 10^10. Flood-fill (BFS) instead visits each cell just once: pop it, check its 4 neighbors, push the new ones. About 4×M×N ≈ 4×10^5.",
         "격자를 몇 번이고 훑는 대신, 한 번만 훑는 방법을 찾아봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -213,7 +213,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: sweep the whole grid until nothing changes", "느림: 변화가 없을 때까지 격자 전체를 반복해서 훑기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Up to (M×N) passes × (M×N) cells = (10^5)² = 10^10 operations. Times out.", "최대 (M×N) 번 × (M×N) 칸 = (10^5)² = 10^10 번 계산해요. 시간 초과예요.")}
+                {t(E, "Up to (M×N) passes × (M×N) cells = 10^5 × 10^5 = 10^10 operations. Times out.", "최대 (M×N) 번 × (M×N) 칸 = 10^5 × 10^5 = 10^10 번 계산해요. 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>

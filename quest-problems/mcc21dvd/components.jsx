@@ -267,8 +267,8 @@ export function getMcc21DvdSections(E) {
         /* 2026-09-17: 74 자가 한 덩어리였다. Stepper 는 \n 을 뭉개니 항목을 나눈다. */
         t(E, "Read H, W and T as three arrays, and query i is H[i], W[i], T[i].",
             "H, W, T 를 배열 세 개로 읽으면 i 번째 물음이 H[i], W[i], T[i] 가 돼요."),
-        t(E, "Q ≤ 1000, so reading and answering each query in O(1) is plenty fast.",
-            "Q ≤ 1000 이라서 물음 하나를 O(1) 에 답하면 충분히 빨라요."),
+        t(E, "Q ≤ 1000, so answering each query directly with a formula (no loop) is plenty fast.",
+            "Q ≤ 1000 이라서 물음 하나를 반복 없이 식으로 답하면 충분히 빨라요."),
       ],
       cppOnly: [
         t(E, "H, W ≤ 10^12 and T ≤ 10^16 overflow int — use long long.",
@@ -286,8 +286,8 @@ export function getMcc21DvdSections(E) {
             "올라가는 데 N−1 초, 다시 내려오는 데 N−1 초가 걸려요. 그래서 한 바퀴는 2(N−1) 초예요. p = t mod 2(N−1) 은 '이번 바퀴에서 몇 초가 지났나' 를 알려줘요."),
         t(E, "Inside one trip the dot is at the top exactly when p = N−1. So (N−1) − p is the gap to the top: positive on the way up, negative on the way down. We only care how far from the top it is, so take the absolute value and subtract it from N: N − |(N−1) − p|.",
             "한 바퀴 안에서 점이 꼭대기 N 에 있는 때는 p = N−1 인 순간이에요. 그러니 (N−1) − p 는 꼭대기에서 얼마나 떨어져 있는지예요. 올라가는 중이면 +, 내려가는 중이면 − 로 나오는데 우리는 떨어진 거리만 알면 되니까 절댓값을 씌워요. 그 거리만큼 꼭대기 N 에서 빼면 N − |(N−1) − p| 가 돼요."),
-        t(E, "Why we can't just step T: T ≤ 10^16 and Q ≤ 1000 means up to 10^19 steps. The formula answers each query in O(1).",
-            "T 를 한 초씩 세면 왜 안 될까요. T ≤ 10^16 에 Q ≤ 1000 이면 많게는 10^19 번을 세야 해요. 공식은 물음 하나를 O(1) 에 끝내요."),
+        t(E, "Why we can't just step T: T ≤ 10^16 and Q ≤ 1000 means up to 10^19 steps. The formula answers each query directly, with no loop.",
+            "T 를 한 초씩 세면 왜 안 될까요. T ≤ 10^16 에 Q ≤ 1000 이면 많게는 10^19 번을 세야 해요. 공식은 반복 없이 물음 하나를 끝내요."),
       ],
       cppOnly: [
         t(E, "abs on long long: subtract and flip the sign by hand (or use llabs / <cstdlib>).",

@@ -141,8 +141,8 @@ export function getMcc22AliensSections(E) {
       why: [
         t(E, "Everyone is pointed at exactly once, so the demanded types have to be handed out to the real aliens one for one.",
             "모두가 정확히 한 번씩 지목돼요.\n그러니 필요한 타입을 진짜 외계인들에게\n하나씩 짝지어 나눠 줄 수 있어야 해요."),
-        t(E, "That is possible exactly when the two counts match: need_T == have_T → YES, otherwise NO. One O(n) pass, no permutations.",
-            "그게 되는 건 두 개수가 딱 맞을 때뿐이에요.\nneed_T == have_T 면 YES, 아니면 NO 예요.\n문자열을 O(n) 으로 한 번 훑을 뿐, 순서는 만들지 않아요."),
+        t(E, "That is possible exactly when the two counts match: need_T == have_T → YES, otherwise NO. Just one sweep through the string, no permutations.",
+            "그게 되는 건 두 개수가 딱 맞을 때뿐이에요.\nneed_T == have_T 면 YES, 아니면 NO 예요.\n문자열을 딱 한 번만 훑을 뿐, 순서는 만들지 않아요."),
       ],
     },
     {

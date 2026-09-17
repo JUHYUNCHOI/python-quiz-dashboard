@@ -200,8 +200,8 @@ export function makeMcc21DvdCh2(E, lang = "py") {
               {/* 2026-09-17: 화면에서 126 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55,
                 whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
-                {t(E, "Row (from H) and column (from W) never interact.\nEach bounces with period 2(N−1),\nso r = N − |(N−1) − (T mod 2(N−1))|. O(1) per query.",
-                      "행은 H 만, 열은 W 만 보면 돼요. 둘은 서로 영향을 주지 않아요.\n둘 다 2(N−1) 초마다 똑같이 되풀이돼요.\n그래서 r = N − |(N−1) − (T mod 2(N−1))| 로 바로 구해요.\n물음 하나를 O(1) 에 끝내요.")}
+                {t(E, "Row (from H) and column (from W) never interact.\nEach bounces with period 2(N−1),\nso r = N − |(N−1) − (T mod 2(N−1))| answers each query with one formula, no loop needed.",
+                      "행은 H 만, 열은 W 만 보면 돼요. 둘은 서로 영향을 주지 않아요.\n둘 다 2(N−1) 초마다 똑같이 되풀이돼요.\n그래서 r = N − |(N−1) − (T mod 2(N−1))| 로 바로 구해요.\n반복 없이 식 하나로 물음 하나를 끝내요.")}
               </div>
             </div>
           </div>

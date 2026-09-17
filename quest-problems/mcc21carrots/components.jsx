@@ -78,8 +78,8 @@ export function getMcc21CarrotsSections(E) {
             "그래서 당근이 정확히 몇 개인지는 중요하지 않고, 홀수가 몇 개이고 짝수가 몇 개인지만 중요해요. 한 번 훑어 개수만 세요."),
         t(E, "Answer YES when odd ≥ 3 (way 🟠🟠🟠) or when odd ≥ 1 and even ≥ 2 (way 🟠⚪⚪).",
             "홀수 ≥ 3 (🟠🟠🟠) 이거나, 홀수 ≥ 1 이고 짝수 ≥ 2 (🟠⚪⚪) 이면 YES 예요."),
-        t(E, "We never look at a single triple, so it is O(N) per test.",
-            "조합을 하나도 돌지 않아서 테스트마다 O(N) 이에요."),
+        t(E, "We never look at a single triple, so we just sweep through once per test.",
+            "조합을 하나도 돌지 않고 테스트마다 딱 한 번만 훑어요."),
       ],
       pyOnly: [
         t(E, "Each test is 2 lines: N, then the N carrot counts on one line.",

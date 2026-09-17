@@ -328,7 +328,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every triple of baskets: about N³/6 checks — with N up to 100000 that is astronomically slow. The fast way uses parity: count odds and evens once, then check the two recipes.",
+        "The slow way tries every triple of baskets: about N×N×N/6 checks (picking any 3 out of N) — with N up to 100000 that is astronomically slow. The fast way uses parity: count odds and evens once, then check the two recipes.",
         "조합을 다 뒤지는 대신 홀수·짝수 개수만 세면 돼요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -338,7 +338,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: try every triple of baskets", "느림: 바구니 3 개 조합을 모두 시도")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "About N³/6 triples. With N = 100000 that is ~10^14 — times out badly.", "조합이 약 N³/6 개예요. N = 100000 이면 약 10^14 번이라 시간 초과예요.")}
+                {t(E, "About N×N×N/6 triples (choosing any 3 baskets). With N = 100000 that is ~10^14 — times out badly.", "바구니 3 개를 고르는 조합이 약 N×N×N/6 개예요. N = 100000 이면 약 10^14 번이라 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
@@ -346,7 +346,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: count odds & evens, check the two ways", "빠름: 홀수·짝수 세고 두 방법 확인")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "One pass counts odd and even. YES if (odd ≥ 3) or (odd ≥ 1 and even ≥ 2). Just O(N) per test.", "한 번 훑어서 홀수와 짝수를 세요. 홀수 ≥ 3 이거나 (홀수 ≥ 1 이고 짝수 ≥ 2) 이면 YES 예요. 테스트마다 O(N) 이에요.")}
+                {t(E, "One pass counts odd and even. YES if (odd ≥ 3) or (odd ≥ 1 and even ≥ 2). Just one sweep per test.", "한 번 훑어서 홀수와 짝수를 세요. 홀수 ≥ 3 이거나 (홀수 ≥ 1 이고 짝수 ≥ 2) 이면 YES 예요. 테스트마다 딱 한 번만 훑어요.")}
               </div>
             </div>
           </div>

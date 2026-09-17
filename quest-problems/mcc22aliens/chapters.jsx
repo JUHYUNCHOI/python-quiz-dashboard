@@ -228,7 +228,7 @@ export function makeMcc22AliensCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: count the T's needed and the T's that exist", "빠른 방법 — 필요한 T 와 있는 T 세기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "One pass over the string: turn each claim into the type it needs, count the needed T's and the real T's, compare. O(n).", "문자열을 한 번만 훑으면 돼요. 각 주장에 필요한 타입을 구하고, 필요한 T 와 있는 T 를 세서 비교해요. O(n) 이에요.")}
+                {t(E, "One pass over the string: turn each claim into the type it needs, count the needed T's and the real T's, compare.", "문자열을 한 번만 훑으면 돼요. 각 주장에 필요한 타입을 구하고, 필요한 T 와 있는 T 를 세서 비교해요.")}
               </div>
             </div>
           </div>

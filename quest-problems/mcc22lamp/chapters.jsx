@@ -167,8 +167,8 @@ export function makeMcc22LampCh1(E) {
             </div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 8 }}>
               {t(E,
-                "Limits: T ≤ 2×10⁵, n ≤ 2×10⁵ (Σn ≤ 10⁵), k ≤ 10¹⁸, |p| ≤ 10¹², b ≤ 10¹².",
-                "제약: T ≤ 2×10⁵, n ≤ 2×10⁵ (Σn ≤ 10⁵), k ≤ 10¹⁸, |p| ≤ 10¹², b ≤ 10¹².")}
+                "Limits: T ≤ 2×10^5, n ≤ 2×10^5 (n added up over all test cases ≤ 10^5), k ≤ 10^18, |p| ≤ 10^12, b ≤ 10^12.",
+                "제약: T ≤ 2×10^5, n ≤ 2×10^5 (모든 테스트케이스의 n 을 더한 값 ≤ 10^5), k ≤ 10^18, |p| ≤ 10^12, b ≤ 10^12.")}
             </div>
           </div>
 

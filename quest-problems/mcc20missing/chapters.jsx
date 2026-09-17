@@ -381,7 +381,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: try every K in [−3N, 3N]", "느림: [−3N, 3N] 의 모든 K 시도")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "About 6N candidate K, each needs an O(N) rebuild → ~6N² ≈ 6×10^10. Times out.", "K 후보가 약 6N 개이고 각각 O(N) 으로 다시 만들어요 → ~6N² ≈ 6×10^10 이라 시간 초과예요.")}
+                {t(E, "About 6N candidate K, each needs rebuilding the whole array once (~N steps) → ~6N×N ≈ 6×10^10. Times out.", "K 후보가 약 6N 개이고 각각 배열을 통째로 한 번씩(약 N 번) 다시 만들어요 → ~6N×N ≈ 6×10^10 이라 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: "10px 14px" }}>
@@ -421,8 +421,8 @@ export function makeMcc20MissingCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
                 {t(E,
-                  "Adding the same K to everyone keeps the order, so the biggest magnitude always ends up at one end. Solve each equation for K: 4 candidates, each checked in O(N) — about 4N in total.",
-                  "모두에게 같은 K 를 더하면 순서가 바뀌지 않아요.\n그래서 가장 큰 크기는 늘 양 끝 중 한 곳에 놓여요.\n이 식을 K 에 대해 풀면 후보가 4 개 나와요.\n각각 O(N) 으로 확인하니 다 합쳐 약 4N 이에요.")}
+                  "Adding the same K to everyone keeps the order, so the biggest magnitude always ends up at one end. Solve each equation for K: 4 candidates, each checked with one pass through the array — about 4N steps in total.",
+                  "모두에게 같은 K 를 더하면 순서가 바뀌지 않아요.\n그래서 가장 큰 크기는 늘 양 끝 중 한 곳에 놓여요.\n이 식을 K 에 대해 풀면 후보가 4 개 나와요.\n각각 배열을 한 번씩 훑어 확인하니 다 합쳐 약 4N 이에요.")}
               </div>
             </div>
           </div>
