@@ -6,23 +6,10 @@ const KA = { wordBreak: "keep-all" };
 /* ================================================================
    SOLUTION CODE  (fast: one prefix-carry pass over D = A - B)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
-  "N = 5",
-  "A = [2, 2, 2, 6, 3]",
-  "B = [1, 2, 3, 4, 5]",
-  "",
-  "# D[i] = A[i] - B[i] : surplus (+) or shortage (-) at box i.",
-  "# The running prefix of D is how many marbles must cross each",
-  "# boundary, so the answer is the sum of |prefix| at every boundary.",
-  "ops = 0",
-  "carry = 0",
-  "for i in range(N):",
-  "    carry += A[i] - B[i]",
-  "    ops += abs(carry)",
-  "",
-  "print(ops)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 export function makeMcc21MarblesCh1(E) {
   return [

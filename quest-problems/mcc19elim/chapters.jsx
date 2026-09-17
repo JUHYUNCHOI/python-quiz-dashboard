@@ -168,30 +168,10 @@ function ElimWindowSim({ E }) {
 /* ================================================================
    SOLUTION CODE  (sliding window; answer = ones in window)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "N, K = map(int, input().split())",
-  "s = input().strip()",
-  "",
-  "left = 0",
-  "zero = 0     # zeros currently inside the window",
-  "one = 0      # ones currently inside the window",
-  "ans = 0",
-  "",
-  "for right in range(N):",
-  "    if s[right] == '0':",
-  "        zero += 1",
-  "        while zero > K:          # too many zeros to delete",
-  "            if s[left] == '0':",
-  "                zero -= 1",
-  "            else:",
-  "                one -= 1",
-  "            left += 1",
-  "    else:",
-  "        one += 1",
-  "        ans = max(ans, one)      # count ONES, not length",
-  "",
-  "print(ans)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

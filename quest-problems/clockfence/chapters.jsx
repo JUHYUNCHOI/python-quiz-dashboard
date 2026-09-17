@@ -4,30 +4,10 @@ import { getClockFenceSections, ClockFenceDeepAuditSim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "s = input().strip()",
-  "",
-  "# 방향 번호: N=0, E=1, S=2, W=3",
-  "dir_map = {'N': 0, 'E': 1, 'S': 2, 'W': 3}",
-  "",
-  "right_turns = 0",
-  "left_turns = 0",
-  "",
-  "for i in range(len(s)):",
-  "    cur = dir_map[s[i]]",
-  "    nxt = dir_map[s[(i+1) % len(s)]]",
-  "    diff = (nxt - cur) % 4",
-  "    if diff == 1:",
-  "        right_turns += 1",
-  "    elif diff == 3:",
-  "        left_turns += 1",
-  "    # diff == 2 면 U턴, diff == 0 이면 직진이에요",
-  "",
-  "if right_turns > left_turns:",
-  "    print('CW')",
-  "else:",
-  "    print('CCW')",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

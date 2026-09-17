@@ -4,29 +4,10 @@ import { getMcc19Rect2Sections, Mcc19Rect2AuditSim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "x1, y1 = map(int, input().split())",
-  "x2, y2 = map(int, input().split())",
-  "x3, y3 = map(int, input().split())",
-  "",
-  "# 세 x 좌표 중 둘은 같아요. 짝 없는 하나가 네 번째 점의 x 예요.",
-  "if x1 == x2:",
-  "    x4 = x3",
-  "elif x1 == x3:",
-  "    x4 = x2",
-  "else:",
-  "    x4 = x1",
-  "",
-  "# y 도 똑같이 해요.",
-  "if y1 == y2:",
-  "    y4 = y3",
-  "elif y1 == y3:",
-  "    y4 = y2",
-  "else:",
-  "    y4 = y1",
-  "",
-  "print(x4, y4)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

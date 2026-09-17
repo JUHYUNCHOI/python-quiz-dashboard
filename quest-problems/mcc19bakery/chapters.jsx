@@ -218,20 +218,10 @@ function navBtn(disabled) {
 /* ================================================================
    SOLUTION CODE  (deque greedy — kept for any external reference)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import collections",
-  "N = int(input())",
-  "prices = list(map(int, input().split()))",
-  "prices.sort()",
-  "dq = collections.deque(prices)",
-  "pay = 0",
-  "while dq:",
-  "    pay += dq.pop()      # 제일 비싼 것",
-  "    pay += dq.pop()      # 2 번째로 비싼 것",
-  "    dq.pop()             # 3 번째로 비싼 것 -> 무료",
-  "    pay += dq.popleft()  # 남은 것 중 제일 싼 것",
-  "print(pay)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해

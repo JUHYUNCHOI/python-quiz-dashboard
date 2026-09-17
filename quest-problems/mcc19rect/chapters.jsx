@@ -5,18 +5,10 @@ import { getMcc19RectSections, ConsecutiveDiffScanSim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
-  "",
-  "# 리스트는 이미 정렬돼 있어요 (오름차순)",
-  "min_diff = float('inf')",
-  "for i in range(N - 1):",
-  "    diff = a[i + 1] - a[i]",
-  "    min_diff = min(min_diff, diff)",
-  "",
-  "print(min_diff)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 const KA = { wordBreak: "keep-all" };

@@ -6,28 +6,10 @@ const KA = { wordBreak: "keep-all" };
 /* ================================================================
    SOLUTION CODE (full program — verified 4 and 75497471)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "MOD = 998244353",
-  "inv3 = pow(3, MOD - 2, MOD)",
-  "n, k = map(int, input().split())",
-  "s = input().strip()",
-  "pow2k = pow(2, k, MOD)",
-  "if k % 2 == 0:",
-  "    sign  = 1",
-  "else:",
-  "    sign  = MOD - 1",
-  "f00 = pow2k % MOD",
-  "f11 = (pow2k + 2 * sign) % MOD * inv3 % MOD",
-  "f01 = (pow2k - sign) % MOD * inv3 % MOD",
-  "total = 0",
-  "for j in range(n - 1):",
-  "    i = j + 1",
-  "    w = i * (n - i) % MOD",
-  "    x, y = s[j], s[j + 1]",
-  "    f = f00 if (x == '0' and y == '0') else (f11 if (x == '1' and y == '1') else f01)",
-  "    total = (total + w * f) % MOD",
-  "print(total % MOD)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

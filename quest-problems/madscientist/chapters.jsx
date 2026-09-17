@@ -4,27 +4,10 @@ import { getMadSciSections } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N = int(input())",
-  "A = input().strip()",
-  "B = input().strip()",
-  "",
-  "# A[i] != B[i] 인 연속 구간 개수를 세요",
-  "flips = 0",
-  "in_diff = False",
-  "for i in range(N):",
-  "    if A[i] != B[i]:",
-  "        if not in_diff:",
-  "            flips += 1",
-  "            in_diff = True",
-  "    else:",
-  "        in_diff = False",
-  "",
-  "print(flips)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ---------------------------------------------------------------

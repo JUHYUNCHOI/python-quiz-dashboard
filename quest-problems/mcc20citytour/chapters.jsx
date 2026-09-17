@@ -7,39 +7,10 @@ const KA = { wordBreak: "keep-all" };
    SOLUTION CODE  (flood-fill / BFS with the |Δheight| < D edge rule)
    Input format:  line 1 = "M N",  then M lines of N heights,  last = "D".
    ================================================================ */
-export const SOLUTION_CODE = [
-  "from collections import deque",
-  "",
-  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
-  "M = 4",
-  "N = 5",
-  "D = 5",
-  "H = [",
-  "    [1, 3, 7, 9, 16],",
-  "    [6, 2, 4, 1, 8],",
-  "    [8, 9, 10, 12, 14],",
-  "    [7, 5, 1, 4, 11],",
-  "]",
-  "",
-  "visited = []",
-  "for _ in range(M):            # 줄마다 [False, False, …] 하나씩",
-  "    visited.append([False] * N)",
-  "visited[0][0] = True          # start at (1,1) = index (0,0)",
-  "q = deque([(0, 0)])",
-  "count = 1",
-  "",
-  "while q:",
-  "    r, c = q.popleft()",
-  "    for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:",
-  "        nr, nc = r+dr, c+dc",
-  "        if 0<=nr<M and 0<=nc<N and not visited[nr][nc] \\",
-  "                and abs(H[nr][nc]-H[r][c]) < D:",
-  "            visited[nr][nc] = True",
-  "            q.append((nr, nc))",
-  "            count += 1",
-  "",
-  "print(count)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 export function makeMcc20CityTourCh1(E) {
   return [

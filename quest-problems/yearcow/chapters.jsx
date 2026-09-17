@@ -4,34 +4,10 @@ import { getYearCowSections, ZodiacCircleSim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "# 십이지 동물 순서 (12년 주기)",
-  "animals = ['Ox','Tiger','Rabbit','Dragon','Snake',",
-  "           'Horse','Goat','Monkey','Rooster','Dog',",
-  "           'Pig','Rat']",
-  "",
-  "N = int(input())",
-  "year = 0  # Bessie 의 출생 연도 (상대값)",
-  "",
-  "for _ in range(N):",
-  "    line = input().split()",
-  "    # 'X는 Y의 직전/직후 <동물> 해에 태어났다' 형식이에요",
-  "    direction = line[2]  # 값은 'previous' 또는 'next'",
-  "    animal = line[3]",
-  "    idx = animals.index(animal)",
-  "    # 지금 연도의 동물이에요",
-  "    cur_idx = year % 12",
-  "    if direction == 'previous':",
-  "        diff = (cur_idx - idx) % 12",
-  "        if diff == 0: diff = 12",
-  "        year -= diff",
-  "    else:",
-  "        diff = (idx - cur_idx) % 12",
-  "        if diff == 0: diff = 12",
-  "        year += diff",
-  "",
-  "print(abs(year))",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

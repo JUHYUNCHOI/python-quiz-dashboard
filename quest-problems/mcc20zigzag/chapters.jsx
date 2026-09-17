@@ -204,43 +204,10 @@ function ZigzagSim({ E }) {
   );
 }
 
-export const SOLUTION_CODE = [
-  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
-  "s = \"bcade\"",
-  "K = 3",
-  "N = len(s)",
-  "",
-  "MOD = 1000   # answer is printed modulo 1000",
-  "",
-  "if K > N:",
-  "    print(0)",
-  "elif K == 1:",
-  "    print(N % MOD)",
-  "else:",
-  "    # up[i][j] / dn[i][j] = # length-j zig-zags ending at i",
-  "    # whose LAST step went up / down. Counts BOTH start directions.",
-  "    up = [[0] * (K + 1) for _ in range(N)]",
-  "    dn = [[0] * (K + 1) for _ in range(N)]",
-  "",
-  "    for j in range(2, K + 1):",
-  "        for i in range(N):",
-  "            for p in range(i):",
-  "                if j == 2:",
-  "                    if s[p] < s[i]:",
-  "                        up[i][j] += 1",
-  "                    if s[p] > s[i]:",
-  "                        dn[i][j] += 1",
-  "                else:",
-  "                    if s[p] < s[i]:",
-  "                        up[i][j] += dn[p][j - 1]",
-  "                    if s[p] > s[i]:",
-  "                        dn[i][j] += up[p][j - 1]",
-  "            up[i][j] %= MOD",
-  "            dn[i][j] %= MOD",
-  "",
-  "    ans = sum(up[i][K] + dn[i][K] for i in range(N)) % MOD",
-  "    print(ans)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 export function makeMcc20ZigzagCh1(E) {
   return [

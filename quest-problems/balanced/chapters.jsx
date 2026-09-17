@@ -45,18 +45,10 @@ function getBalancedWalk(E, lang) {
   ] };
 }
 
-export const SOLUTION_CODE = [
-  "T = int(input())",
-  "for _ in range(T):",
-  "    N, M = map(int, input().split())",
-  "    # N개의 여는 괄호, M개의 닫는 괄호예요",
-  "    # 균형 부분수열 = min(N, M) 쌍",
-  "    # 문자열 '(' * N + ')' * M 에서",
-  "    # 가장 긴 균형 부분수열을 구해요",
-  "    # '(' 가 모두 ')' 보다 앞에 있어서",
-  "    # 최댓값은 2 * min(N, M) 이에요",
-  "    print(2 * min(N, M))",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해

@@ -4,27 +4,10 @@ import { getMcc19DitcoinSections, Mcc19DitcoinDeepAuditSim } from "./components"
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "prices = list(map(int, input().split()))",
-  "",
-  "# suffix_max: i 일부터 끝까지 중 가장 비싼 가격",
-  "suffix_max = [0] * N",
-  "suffix_max[N - 1] = prices[N - 1]",
-  "for i in range(N - 2, -1, -1):",
-  "    suffix_max[i] = max(prices[i], suffix_max[i + 1])",
-  "",
-  "profit = 0",
-  "coins = 0",
-  "for i in range(N):",
-  "    coins += 1  # 매일 코인 1 개씩 벌어요",
-  "    # 오늘이 최고가면 코인을 전부 팔아요",
-  "    if prices[i] == suffix_max[i]:",
-  "        profit += coins * prices[i]",
-  "        coins = 0",
-  "",
-  "print(profit)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

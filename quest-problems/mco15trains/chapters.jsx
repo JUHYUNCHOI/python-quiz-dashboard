@@ -4,46 +4,10 @@ import { getTrainsSections } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import heapq",
-  "",
-  "N = int(input())",
-  "grid = []",
-  "for i in range(N):",
-  "    row = list(map(int, input().split()))",
-  "    grid.append(row)",
-  "",
-  "ax, ay, bx, by = map(int, input().split())",
-  "ax -= 1  # 0-indexed",
-  "ay -= 1",
-  "bx -= 1",
-  "by -= 1",
-  "",
-  "INF = float('inf')",
-  "dist = []",
-  "for _ in range(N):            # 줄마다 [INF, INF, …] 하나씩",
-  "    dist.append([INF] * N)",
-  "dist[ax][ay] = grid[ax][ay]",
-  "",
-  "pq = [(grid[ax][ay], ax, ay)]",
-  "dirs = [(0,1),(0,-1),(1,0),(-1,0)]",
-  "",
-  "while pq:",
-  "    d, x, y = heapq.heappop(pq)",
-  "    if d > dist[x][y]:",
-  "        continue",
-  "    if x == bx and y == by:",
-  "        break",
-  "    for dx, dy in dirs:",
-  "        nx, ny = x + dx, y + dy",
-  "        if 0 <= nx < N and 0 <= ny < N and grid[nx][ny] != -1:",
-  "            nd = d + grid[nx][ny]",
-  "            if nd < dist[nx][ny]:",
-  "                dist[nx][ny] = nd",
-  "                heapq.heappush(pq, (nd, nx, ny))",
-  "",
-  "print(dist[bx][by])",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

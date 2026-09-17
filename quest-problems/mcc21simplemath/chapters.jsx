@@ -7,36 +7,10 @@ const KA = { wordBreak: "keep-all" };
    SOLUTION CODE (counting per element / per bit — never enumerate
    the 2^N − 1 subsets). Verified on samples 24 / 23 / 12.
    ================================================================ */
-export const SOLUTION_CODE = [
-  "MOD = 10**9 + 7",
-  "",
-  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (예제 1)",
-  "N = 3",
-  "P = 1",
-  "a = [1, 2, 3]",
-  "",
-  "if P == 1:                       # ➕ 더하기",
-  "    ans = pow(2, N - 1, MOD) * (sum(a) % MOD) % MOD",
-  "",
-  "elif P == 2:                     # ✖️ 곱하기",
-  "    prod = 1",
-  "    for x in a:",
-  "        prod = prod * (1 + x) % MOD",
-  "    ans = (prod - 1) % MOD",
-  "",
-  "else:                            # ⊕ XOR",
-  "    ans = 0",
-  "    for bit in range(31):",
-  "        place = 2 ** bit            # 그 자리의 값 — 1, 2, 4, 8, ...",
-  "        k = sum(1 for x in a if (x // place) % 2 == 1)",
-  "        if k == 0:",
-  "            continue",
-  "        factor = pow(2, k - 1, MOD) * pow(2, N - k, MOD) % MOD",
-  "        ans = (ans + place % MOD * factor) % MOD",
-  "    ans %= MOD",
-  "",
-  "print(ans)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 /* small sample card used in the input step */
 function SampleCard({ E, p, out, note }) {

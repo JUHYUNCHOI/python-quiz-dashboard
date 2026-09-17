@@ -203,33 +203,10 @@ function RallyAuditSim({ E, afterFirstGame }) {
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "scores = input()  # string of A/B",
-  "",
-  "game_a, game_b = 0, 0  # points in current game",
-  "wins_a, wins_b = 0, 0  # games won",
-  "results = []",
-  "",
-  "for ch in scores:",
-  "    if ch == 'A':",
-  "        game_a += 1",
-  "    else:",
-  "        game_b += 1",
-  "",
-  "    if game_a == 21 or game_b == 21:",
-  "        results.append((game_a, game_b))",
-  "        if game_a == 21:",
-  "            wins_a += 1",
-  "        else:",
-  "            wins_b += 1",
-  "        game_a, game_b = 0, 0",
-  "        if wins_a == 2 or wins_b == 2:",
-  "            break",
-  "",
-  "for ga, gb in results:",
-  "    print(f'{ga}-{gb}')",
-  "print('A' if wins_a > wins_b else 'B')",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

@@ -9,46 +9,10 @@ const NW = { whiteSpace: "nowrap" };
    ordered by length then lexicographically)
    count of length-l palindromes = k^ceil(l/2)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import math",
-  "",
-  "def nth_palindrome(n, k):",
-  "    # 길이 l 짜리 회문 개수는 k ** ceil(l/2) 예요",
-  "    # 길이를 늘리며 개수를 더해 n 에 닿을 때까지 가요",
-  "    s, c = 0, 0",
-  "    while s < n:",
-  "        c += 1",
-  "        s += k ** math.ceil(c / 2)",
-  "",
-  "    # 길이 c 안에서 0 부터 센 순위 r 을 구해요",
-  "    r = n",
-  "    for i in range(1, c):",
-  "        r -= k ** math.ceil(i / 2)",
-  "    r -= 1",
-  "",
-  "    # r 을 k 진법으로 적어요 -> 앞 절반 (아래 자리부터)",
-  "    half = ''",
-  "    rr = r",
-  "    if rr == 0:",
-  "        half = '0'",
-  "    while rr > 0:",
-  "        half += str(rr % k)",
-  "        rr //= k",
-  "",
-  "    # ceil(c/2) 자리로 0 을 채우고 앞자리부터 오게 뒤집어요",
-  "    while len(half) * 2 < c:",
-  "        half += '0'",
-  "    half = half[::-1]",
-  "",
-  "    # 앞 절반을 거울 대칭해 회문 문자열을 완성해요",
-  "    if c % 2 == 0:",
-  "        return half + half[::-1]",
-  "    else:",
-  "        return half + half[-2::-1]",
-  "",
-  "N, K = map(int, input().split())",
-  "print(nth_palindrome(N, K))",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

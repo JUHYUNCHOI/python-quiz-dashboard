@@ -169,30 +169,10 @@ function Mcc20MissingAnchorSim({ E }) {
    SOLUTION CODE  (anchor the largest magnitude → only 4 K to test)
    VERIFIED: official samples N=5→4, N=6→7; 0/20000 vs brute (N≥2).
    ================================================================ */
-export const SOLUTION_CODE = [
-  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
-  "N = 5",
-  "a = [-1, 7, 4, 1]",
-  "",
-  "if N == 1:",
-  "    print(1)",
-  "else:",
-  "    total = N * (N + 1) // 2   # sum of 1..N",
-  "    mn, mx = min(a), max(a)",
-  "    lim = 3 * N",
-  "",
-  "    # biggest magnitude is N (or N-1); after +K it lands at MAX or MIN",
-  "    candidates = {mn + N, mx - N, mn + (N - 1), mx - (N - 1)}",
-  "",
-  "    ans = 0",
-  "    for K in candidates:",
-  "        if not (-lim <= K <= lim):",
-  "            continue",
-  "        mags = [abs(x - K) for x in a]",
-  "        if all(1 <= m <= N for m in mags) and len(set(mags)) == N - 1:",
-  "            ans += total - sum(mags)",
-  "    print(ans)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 export function makeMcc20MissingCh1(E) {
   return [

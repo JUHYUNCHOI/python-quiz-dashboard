@@ -8,28 +8,10 @@ const A = "#f97316";
 /* ================================================================
    SOLUTION CODE (구간 분할 DP — 최소 파랑 총면적)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "n, k = map(int, input().split())",
-  "h = [0] * n",
-  "w = [0] * n",
-  "for i in range(n):",
-  "    h[i], w[i] = map(int, input().split())",
-  "if k > n:",
-  "    k = n",
-  "INF = float('inf')",
-  "dp = [[INF] * (n + 1) for _ in range(k + 1)]",
-  "dp[0][0] = 0",
-  "for kk in range(1, k + 1):",
-  "    for i in range(1, n + 1):",
-  "        sw = 0",
-  "        mh = 0",
-  "        for j in range(i, 0, -1):",
-  "            sw += w[j - 1]",
-  "            mh = max(mh, h[j - 1])",
-  "            if dp[kk - 1][j - 1] < INF:",
-  "                dp[kk][i] = min(dp[kk][i], dp[kk - 1][j - 1] + sw * mh)",
-  "print(min(dp[kk][n] for kk in range(1, k + 1)))",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* 샘플 입출력 — 구체 숫자 INPUT/OUTPUT + 한 줄씩 (cowsplits/chipxchg 모양). */

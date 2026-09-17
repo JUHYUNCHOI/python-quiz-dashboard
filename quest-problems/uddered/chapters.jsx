@@ -4,21 +4,10 @@ import { getUdderedSections, UdderedRecitalSim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "order = input().strip()",
-  "heard = input().strip()",
-  "",
-  "pos = {}",
-  "for i, ch in enumerate(order):",
-  "    pos[ch] = i",
-  "",
-  "cycles = 1",
-  "for i in range(1, len(heard)):",
-  "    if pos[heard[i]] <= pos[heard[i-1]]:",
-  "        cycles += 1",
-  "",
-  "print(cycles)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

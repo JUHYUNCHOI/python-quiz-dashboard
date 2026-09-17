@@ -56,21 +56,10 @@ function getPresentsWalk(E, lang) {
   ] };
 }
 
-export const SOLUTION_CODE = [
-  "N, Q = map(int, input().split())",
-  "stack = list(map(int, input().split()))  # 위에서 아래 순서",
-  "",
-  "# 요청마다 찾을 선물을 정해요",
-  "# 그 위에 있는 선물을 모두 치워야 해요",
-  "for _ in range(Q):",
-  "    target = int(input())",
-  "    # target 의 스택 안 위치를 찾아요",
-  "    pos = stack.index(target)",
-  "    # 위에 있는 선물 pos 개를 치워야 해요 (0부터 pos-1 까지)",
-  "    print(pos)",
-  "    # target 을 스택에서 치워요 (꺼낸 거예요)",
-  "    del stack[:pos + 1]  # target 과 그 위에 있는 것 모두 영영 사라져요",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 export function makePresentsCh1(E) {
   return [

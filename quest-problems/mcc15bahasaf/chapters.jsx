@@ -153,23 +153,10 @@ const navBtn = (disabled) => ({
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "sentence = input()",
-  "vowels = \"aeiou\"",
-  "",
-  "new_words = []",
-  "for word in sentence.split(\" \"):",
-  "    new_word = \"\"",
-  "    for syl in word.split(\"/\"):",
-  "        if syl[0] in vowels:",
-  "            echo = \"f\" + syl        # 자음이 없어요 → f 를 앞에 붙여요",
-  "        else:",
-  "            echo = \"f\" + syl[1:]    # 첫 자음을 f 로 갈아끼워요",
-  "        new_word += syl + echo      # 음절 + 메아리",
-  "    new_words.append(new_word)",
-  "",
-  "print(\" \".join(new_words))",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)

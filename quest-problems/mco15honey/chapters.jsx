@@ -4,22 +4,10 @@ import { getHoneySections } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "N, M, K = map(int, input().split())",
-  "hives = [int(input()) for _ in range(N)]",
-  "",
-  "# 한 번 왕복마다 M 과 벌집에 남은 꿀 중 작은 값을 가져와요",
-  "# 모든 왕복 결과를 모아 큰 것부터 K개를 더해요",
-  "yields = []",
-  "for h in hives:",
-  "    while h > 0:",
-  "        take = min(M, h)",
-  "        yields.append(take)",
-  "        h -= take",
-  "",
-  "yields.sort(reverse=True)",
-  "print(sum(yields[:K]))",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

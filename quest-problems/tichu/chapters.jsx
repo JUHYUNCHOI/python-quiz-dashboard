@@ -6,18 +6,10 @@ import { TichuSim, GapFormulaSim } from "./sims";
 const A = "#dc2626";
 
 /* 정답 코드 (참고용 export — 정렬+중복제거+투포인터). */
-export const SOLUTION_CODE = [
-  "n, k = map(int, input().split())",
-  "c = sorted(set(map(int, input().split())))",
-  "m = len(c)",
-  "win = 0",
-  "i = 0",
-  "for j in range(m):",
-  "    while c[j] - c[i] - (j - i) > k:",
-  "        i += 1",
-  "    win = max(win, j - i + 1)",
-  "print(min(n, win + k))",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 /* 샘플 입출력 — 시즌 표준 (구체 숫자 INPUT/OUTPUT + 한 줄씩). */
 function TichuSample({ E }) {

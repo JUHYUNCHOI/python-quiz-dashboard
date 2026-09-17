@@ -4,24 +4,10 @@ import { getAbcsSections, AbcsSumExplorer } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "nums = list(map(int, input().split()))",
-  "nums.sort()",
-  "",
-  "# 가장 큰 수가 A+B+C예요",
-  "abc = nums[6]",
-  "",
-  "# 가장 작은 수가 A예요 (A <= B <= C 라서)",
-  "A = nums[0]",
-  "",
-  "# 두 번째로 작은 수가 B예요",
-  "B = nums[1]",
-  "",
-  "# C는 (A+B+C) - A - B 로 구해요",
-  "C_val = abc - A - B",
-  "",
-  "print(A, B, C_val)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

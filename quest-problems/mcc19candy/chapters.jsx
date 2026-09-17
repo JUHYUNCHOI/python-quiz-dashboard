@@ -6,23 +6,10 @@ const KA = { wordBreak: "keep-all" };
 /* ================================================================
    SOLUTION CODE  (fast: sum a bit per "odd" round)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "R = int(input())",
-  "shouts = input().split()",
-  "",
-  "# 마지막 라운드부터 거꾸로 되돌려요.",
-  "# 지금 자리가 pos 라면, 한 라운드 전에는",
-  "#   \"odd\" 를 외쳤으면  pos * 2      자리에 있었고",
-  "#   \"even\" 을 외쳤으면 pos * 2 - 1  자리에 있었어요",
-  "pos = 1",
-  "for i in range(R - 1, -1, -1):",
-  "    if shouts[i] == \"odd\":",
-  "        pos = pos * 2",
-  "    else:",
-  "        pos = pos * 2 - 1",
-  "",
-  "print(pos)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

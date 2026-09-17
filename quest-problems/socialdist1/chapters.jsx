@@ -4,45 +4,10 @@ import { getSocDist1Sections, SocDist1Sim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N, M = map(int, input().split())",
-  "intervals = []",
-  "for _ in range(M):",
-  "    a, b = map(int, input().split())",
-  "    intervals.append((a, b))",
-  "intervals.sort()",
-  "",
-  "# 소 N 마리를 이웃 간격 D 이상으로 다 놓을 수 있나?",
-  "# 그리디: 각 구간에서 last+D 자리(또는 구간 시작)에 놓고,",
-  "# 같은 구간 안에서 +D 씩 계속 옮겨요",
-  "def can_place(D):",
-  "    count = 0",
-  "    last = -10**18",
-  "    for a, b in intervals:",
-  "        x = max(a, last + D)",
-  "        while x <= b:",
-  "            count += 1",
-  "            last = x",
-  "            if count >= N:",
-  "                return True",
-  "            x += D",
-  "    return False",
-  "",
-  "# 답 D 를 이분 탐색해요",
-  "lo, hi = 1, intervals[-1][1] - intervals[0][0]",
-  "ans = 1",
-  "while lo <= hi:",
-  "    mid = (lo + hi) // 2",
-  "    if can_place(mid):",
-  "        ans = mid",
-  "        lo = mid + 1",
-  "    else:",
-  "        hi = mid - 1",
-  "print(ans)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ---------------------------------------------------------------

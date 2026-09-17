@@ -5,41 +5,10 @@ const KA = { wordBreak: "keep-all" };
 
 // Full solution (Python) — precompute min knight moves with one BFS,
 // then answer each query with:  exactly K  <=>  K >= min and (K - min) even.
-export const SOLUTION_CODE = [
-  "from collections import deque",
-  "",
-  "MOVES = [(-2,-1),(-2,1),(-1,-2),(-1,2),",
-  "         (1,-2),(1,2),(2,-1),(2,1)]",
-  "",
-  "M = 4",
-  "LO, HI = -M, 2000 + M",
-  "SIZE = HI - LO + 1",
-  "best = []",
-  "for _ in range(SIZE):         # 줄마다 [-1, -1, …] 하나씩",
-  "    best.append([-1] * SIZE)",
-  "best[0 - LO][0 - LO] = 0",
-  "q = deque([(0, 0)])",
-  "while q:",
-  "    x, y = q.popleft()",
-  "    for dx, dy in MOVES:",
-  "        nx, ny = x + dx, y + dy",
-  "        if LO <= nx <= HI and LO <= ny <= HI and best[nx - LO][ny - LO] == -1:",
-  "            best[nx - LO][ny - LO] = best[x - LO][y - LO] + 1",
-  "            q.append((nx, ny))",
-  "",
-  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
-  "T = 3",
-  "cases = [[2, 0, 0, 3, 3], [5, -2, -2, 100, 100], [2, 0, 0, 1, 2]]",
-  "out = []",
-  "for K, X, Y, A, B in cases:",
-  "    dx, dy = abs(X - A), abs(Y - B)",
-  "    need = best[dx - LO][dy - LO]",
-  "    if K >= need and (K - need) % 2 == 0:",
-  "        out.append('YES')",
-  "    else:",
-  "        out.append('NO')",
-  "print('\\n'.join(out))",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 export function makeMcc20KnightCh1(E) {
   return [

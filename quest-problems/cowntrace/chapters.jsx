@@ -4,62 +4,10 @@ import { getCowntraceSections } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N, T = map(int, input().split())",
-  "events = []",
-  "for _ in range(T):",
-  "    t_i, a, b = map(int, input().split())",
-  "    events.append((t_i, a, b))",
-  "events.sort()",
-  "",
-  "infected_end = set()",
-  "x = list(map(int, input().split()))  # 마지막 감염 상태",
-  "infected_end = set(x)",
-  "",
-  "# 소마다 환자 제로로 놓고 시도해요",
-  "# K 를 0부터 T까지 다 시도해요",
-  "results = []",
-  "for pz in range(1, N + 1):",
-  "    min_k = None",
-  "    max_k = None",
-  "    for K in range(T + 1):",
-  "        sick = {pz}",
-  "        count = {pz: 0}  # 옮긴 횟수",
-  "        for t_i, a, b in events:",
-  "            a_sick = a in sick",
-  "            b_sick = b in sick",
-  "            if a_sick and not b_sick:",
-  "                if count.get(a, 0) < K:",
-  "                    sick.add(b)",
-  "                    count[b] = 0",
-  "                    count[a] = count.get(a, 0) + 1",
-  "            elif b_sick and not a_sick:",
-  "                if count.get(b, 0) < K:",
-  "                    sick.add(a)",
-  "                    count[a] = 0",
-  "                    count[b] = count.get(b, 0) + 1",
-  "            elif a_sick and b_sick:",
-  "                count[a] = count.get(a, 0) + 1",
-  "                count[b] = count.get(b, 0) + 1",
-  "        if sick == infected_end:",
-  "            if min_k is None:",
-  "                min_k = K",
-  "            max_k = K",
-  "    if min_k is not None:",
-  "        results.append((pz, min_k, max_k))",
-  "",
-  "# 출력",
-  "print(len(results))",
-  "for pz, mn, mx in results:",
-  "    if mx >= T:",
-  "        inf = 'Infinity'",
-  "    else:",
-  "        inf = str(mx)",
-  "    print(pz, mn, inf)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ---------------------------------------------------------------

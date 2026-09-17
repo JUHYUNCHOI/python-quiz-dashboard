@@ -7,51 +7,10 @@ const NW = { whiteSpace: "nowrap" };
 /* ================================================================
    SOLUTION CODE  (verified → pqpdppdd; see components.jsx FULL_PY)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "def solve():",
-  "    data = sys.stdin.read().split('\\n')",
-  "    N, S, Q = map(int, data[0].split())",
-  "    scrolls = [data[1 + i].strip() for i in range(S)]",
-  "    friends = list(map(int, data[1 + S].split()))",
-  "",
-  "    CAP = 2 * 10**9",
-  "    shape = {(0, 0): 'p', (1, 0): 'q', (0, 1): 'b', (1, 1): 'd'}",
-  "    answer = []",
-  "",
-  "    for scroll in scrolls:",
-  "        rows = [1] * (N + 1)",
-  "        cols = [1] * (N + 1)",
-  "        for i in range(1, N + 1):",
-  "            if scroll[i - 1] in 'AB':",
-  "                cols[i] = min(cols[i - 1] * 2, CAP)",
-  "                rows[i] = rows[i - 1]",
-  "            else:",
-  "                rows[i] = min(rows[i - 1] * 2, CAP)",
-  "                cols[i] = cols[i - 1]",
-  "        width = cols[N]",
-  "",
-  "        for f in friends:",
-  "            r = (f - 1) // width + 1",
-  "            c = (f - 1) % width + 1",
-  "            flip_h = flip_v = 0",
-  "            for i in range(N, 0, -1):",
-  "                if scroll[i - 1] in 'AB':",
-  "                    if c > cols[i - 1]:",
-  "                        c -= cols[i - 1]",
-  "                        if scroll[i - 1] == 'B':",
-  "                            flip_h ^= 1",
-  "                else:",
-  "                    if r > rows[i - 1]:",
-  "                        r -= rows[i - 1]",
-  "                        flip_v ^= 1",
-  "            answer.append(shape[(flip_h, flip_v)])",
-  "",
-  "    print(''.join(answer))",
-  "",
-  "solve()",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

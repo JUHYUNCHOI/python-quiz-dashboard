@@ -184,47 +184,10 @@ const arrowBtn = (disabled) => ({
 /* ================================================================
    SOLUTION CODE  (fast: per-stack alternating sum + greedy split)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "def solve():",
-  "    data = sys.stdin.buffer.read().split()",
-  "    idx = 0",
-  "    T = int(data[idx])",
-  "    idx += 1",
-  "    out = []",
-  "    for _ in range(T):",
-  "        n = int(data[idx])",
-  "        idx += 1",
-  "        even_D = []",
-  "        odd_D = []",
-  "        for _ in range(n):",
-  "            m = int(data[idx])",
-  "            idx += 1",
-  "            D = 0",
-  "            sign = 1",
-  "            for j in range(m):",
-  "                D += sign * int(data[idx + j])",
-  "                sign = -sign",
-  "            idx += m",
-  "            if m % 2 == 0:",
-  "                even_D.append(D)",
-  "            else:",
-  "                odd_D.append(D)",
-  "        if odd_D:",
-  "            ans = sum(abs(x) for x in even_D)",
-  "            odd_D.sort(reverse=True)",
-  "            plus = (len(odd_D) + 1) // 2",
-  "            for i, d in enumerate(odd_D):",
-  "                if i < plus:",
-  "                    ans += d",
-  "                else:",
-  "                    ans += -d",
-  "        else:",
-  "            ans = sum(even_D)",
-  "        out.append(str(ans))",
-  "    print('\\n'.join(out))",
-  "solve()",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem

@@ -4,37 +4,10 @@ import { getTrianglesSections } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N = int(input())",
-  "points = []",
-  "for _ in range(N):",
-  "    x, y = map(int, input().split())",
-  "    points.append((x, y))",
-  "",
-  "# 점들을 x좌표와 y좌표로 묶어요",
-  "from collections import defaultdict",
-  "by_x = defaultdict(list)",
-  "by_y = defaultdict(list)",
-  "for x, y in points:",
-  "    by_x[x].append(y)",
-  "    by_y[y].append(x)",
-  "",
-  "ans = 0",
-  "# 각 점을 직각 꼭짓점으로 두고 봐요",
-  "for x, y in points:",
-  "    # 세로 방향 이웃 (같은 x, 다른 y)",
-  "    heights = [abs(y2 - y) for y2 in by_x[x] if y2 != y]",
-  "    # 가로 방향 이웃 (같은 y, 다른 x)",
-  "    widths = [abs(x2 - x) for x2 in by_y[y] if x2 != x]",
-  "    for h in heights:",
-  "        for w in widths:",
-  "            ans = max(ans, h * w)",
-  "",
-  "print(ans)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ---------------------------------------------------------------

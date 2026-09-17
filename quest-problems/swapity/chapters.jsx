@@ -4,42 +4,10 @@ import { getSwapitySections, SwapityRoundSim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N, M, K = map(int, input().split())",
-  "swaps = []",
-  "for _ in range(M):",
-  "    l, r = map(int, input().split())",
-  "    swaps.append((l - 1, r - 1))  # 0부터 시작하는 인덱스로 바꿔요",
-  "",
-  "# 한 라운드의 순열을 만들어요",
-  "perm = list(range(N))",
-  "for l, r in swaps:",
-  "    # perm[l..r] 을 뒤집어요",
-  "    perm[l:r+1] = perm[l:r+1][::-1]",
-  "",
-  "# 반복 적용으로 순환 길이를 찾아요",
-  "# (perm 을 처음 배열이 될 때까지 적용해요)",
-  "cur = list(range(N))",
-  "cycle = 0",
-  "while True:",
-  "    cur = [cur[perm[i]] for i in range(N)]",
-  "    cycle += 1",
-  "    if cur == list(range(N)):",
-  "        break",
-  "",
-  "# K mod 순환 길이가 실제 라운드 수예요",
-  "eff = K % cycle",
-  "result = list(range(N))",
-  "for _ in range(eff):",
-  "    result = [result[perm[i]] for i in range(N)]",
-  "",
-  "# 1부터 시작하는 인덱스로 출력해요",
-  "for i in range(N):",
-  "    print(result[i] + 1)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ---------------------------------------------------------------

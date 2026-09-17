@@ -594,37 +594,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
 }
 
 /* backward-compatible export used by chapters/App metadata */
-export const SOLUTION_CODE = [
-  "def count_kitty_div3(N):",
-  "    r = [11 % 3, 9 % 3, 20 % 3, 20 % 3, 25 % 3]  # remainders of Kitty_1..5",
-  "    seen = {}",
-  "    start = period = None",
-  "    k = 1",
-  "    while True:",
-  "        while len(r) < k + 4:",
-  "            r.append(sum(r[-5:]) % 3)",
-  "        st = tuple(r[k-1:k+4])",
-  "        if st in seen:",
-  "            start = seen[st]",
-  "            period = k - start",
-  "            break",
-  "        seen[st] = k",
-  "        k += 1",
-  "    needed = start - 1 + period",
-  "    while len(r) < needed:",
-  "        r.append(sum(r[-5:]) % 3)",
-  "    tail = r[:start-1]",
-  "    cycle = r[start-1:start-1+period]",
-  "    if N <= start - 1:",
-  "        return sum(1 for x in r[:N] if x == 0)",
-  "    tail_zeros = sum(1 for x in tail if x == 0)",
-  "    remaining = N - (start - 1)",
-  "    full = remaining // period",
-  "    partial = remaining % period",
-  "    cycle_zeros = sum(1 for x in cycle if x == 0)",
-  "    partial_zeros = sum(1 for x in cycle[:partial] if x == 0)",
-  "    return tail_zeros + full * cycle_zeros + partial_zeros",
-  "",
-  "N = int(input())",
-  "print(count_kitty_div3(N))",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */

@@ -4,43 +4,10 @@ import { getSocDist2Sections, SocDist2Sim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N = int(input())",
-  "cows = []",
-  "for _ in range(N):",
-  "    x, s = input().split()",
-  "    cows.append((int(x), int(s)))",
-  "cows.sort()",
-  "",
-  "# 건강한 소들로부터 가장 큰 R 을 구해요",
-  "sick = [x for x, s in cows if s == 1]",
-  "healthy = [x for x, s in cows if s == 0]",
-  "",
-  "if not healthy:",
-  "    # 모두 아픔 — 초기 감염 1마리로 전파 가능",
-  "    print(1)",
-  "else:",
-  "    # R 은 건강한 소와 가장 가까운 아픈 소 사이 거리보다 작아야 해요",
-  "    max_R = float('inf')",
-  "    for h in healthy:",
-  "        for s in sick:",
-  "            max_R = min(max_R, abs(h - s) - 1)",
-  "    if max_R < 0:",
-  "        max_R = 0",
-  "",
-  "    # 간격이 max_R 보다 큰 곳마다 클러스터를 세요",
-  "    if not sick:",
-  "        print(0)",
-  "    else:",
-  "        clusters = 1",
-  "        for i in range(1, len(sick)):",
-  "            if sick[i] - sick[i-1] > max_R:",
-  "                clusters += 1",
-  "        print(clusters)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ---------------------------------------------------------------

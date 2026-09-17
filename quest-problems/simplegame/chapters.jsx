@@ -592,28 +592,10 @@ function navBtn(disabled) {
 /* ================================================================
    SOLUTION CODE  (sort by a+b desc, alternate +a / -b)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "n = int(input())",
-  "",
-  "items = []",
-  "for _ in range(n):",
-  "    a, b = map(int, input().split())",
-  "    # 합을 맨 앞에 둬요 — 그러면 그냥 정렬해도 합 기준으로 줄이 서요",
-  "    items.append((a + b, a, b))",
-  "",
-  "items.sort(reverse=True)   # 합이 큰 것부터",
-  "",
-  "res = 0",
-  "turn = 0",
-  "for sum_ab, a, b in items:",
-  "    if turn % 2 == 0:",
-  "        res += a",
-  "    else:",
-  "        res -= b",
-  "    turn += 1",
-  "",
-  "print(res)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem

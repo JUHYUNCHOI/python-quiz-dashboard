@@ -132,25 +132,10 @@ const orderBtnOn = { border: "2px solid #7c3aed", background: "#ede9fe" };
    SOLUTION CODE (kept exported for parity; the taught answer is the
    minimum number of lines, mod 1e9+7, from the ascending order).
    ================================================================ */
-export const SOLUTION_CODE = [
-  "MOD = 10**9 + 7",
-  "",
-  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
-  "N = 2",
-  "layers = [3, 2]",
-  "",
-  "# smallest layer first keeps the running product small (exchange argument)",
-  "order = sorted(layers)",
-  "",
-  "# total lines = sum of prefix products",
-  "total = 0",
-  "prod = 1",
-  "for x in order:",
-  "    prod = (prod * x) % MOD",
-  "    total = (total + prod) % MOD",
-  "",
-  "print(total)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 export function makeMcc21MenuCh1(E) {
   return [
