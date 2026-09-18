@@ -132,7 +132,7 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
 
       {/* 변수 뜻 범례 — 늘 보이게 (코드 깊이 들어가도 "n이 뭐였지?" 안 하게) */}
       {vars && vars.length > 0 && (
-        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, maxWidth: 740, margin: "0 auto 8px" }}>
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, maxWidth: 1040, margin: "0 auto 8px" }}>
           {vars.map((vr, i) => (
             <span key={i} style={{
               display: "inline-flex", alignItems: "center", gap: 5,
@@ -150,20 +150,23 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
       {/* 코드 — 고정 높이 창, 밝아진 줄로 자동 스크롤.
           배경/글자색은 다른 레슨(CodeBlock)과 동일한 gray-900. 흐림 없이 전부 또렷,
           강조는 '밝은 왼쪽 막대 + 살짝 밝은 배경'만 (선생님 2026-07-13: 어둡지 않게). */}
-      <div ref={boxRef} className="qcode-scroll" style={{
+      <div ref={boxRef} className="qcode-scroll qcode-wide" style={{
         background: "#111827", borderRadius: 12, padding: "12px 10px",
         overflowY: "auto", overflowX: "auto",
         // 기본은 적당한 높이, 그런데 학생·선생님이 아래 모서리를 끌어서 늘릴 수 있게.
         // (선생님 2026-07-21: "에디터 크기를 조절할 수가 없네" — 큰 화면에선 좁은 창에
         //  갇혀 스크롤만 하게 됨. resize 로 원하는 만큼 펼쳐서 코드 전체를 보게.)
-        height: "min(48vh, 380px)",
+        // ⚠️ 2026-09-18 선생님: *"코드 보는 곳에 너무 좁다는 생각은 나만 하는건가?"*
+        // 740px · 380px 이었다. 수업은 노트북·패드(큰 화면)에서 하는데 코드가 한가운데
+        // 좁은 칸에 갇혀 세로로만 흘렀다. 넓히고 키운다. (끌어서 더 늘리는 건 그대로.)
+        height: "min(64vh, 560px)",
         maxHeight: "none",
         minHeight: 140,
         resize: "vertical",
         fontFamily: "'JetBrains Mono',monospace",
         // ligature 끄기 — != 를 ≠ 로 합치지 말고 그대로 (선생님 2026-07-13)
         fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0',
-        fontSize: 13.5, lineHeight: 1.85, maxWidth: 740, margin: "0 auto",
+        fontSize: 14.5, lineHeight: 1.8, maxWidth: 1040, margin: "0 auto",
         position: "relative",
         // 아래에 더 있다 / **오른쪽에 더 있다** 는 힌트. 오른쪽은 2026-09-11 추가 —
         // pre 로 바꾼 뒤 긴 줄이 표시 없이 잘리고 있었다(ux 가 checkups 에서 잡음).

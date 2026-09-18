@@ -280,13 +280,13 @@ export function makeCheeseCh2(E) {
     {
       type: "cheeseSim2",
       narr: t(E,
-        "Try it yourself!\nPress 🧀 Carve to remove blocks one by one.\nWatch the number change.\nSomething surprising will happen!\n👀", "직접 해봐요! 🧀 제거 버튼을 눌러서 블록을 하나씩 빼봐요. 숫자가 어떻게 바뀌는지 봐요. 뭔가 놀라운 일이 생길 거예요! 👀"),
+        "Try it yourself!\nPress 🧀 Carve to remove blocks one by one.\nWatch the number change.\nSomething surprising will happen!\n👀", "직접 해봐요! 블록을 하나씩 빼면서 숫자가 어떻게 바뀌는지 봐요."),
     },
     // 2-2: 놀라움 포착 → 질문
     {
       type: "quiz",
       narr: t(E,
-        "Did you notice?\nThe answer was 0, 0, 1, 2...\nthen suddenly jumped to 5!\nThree rods fit at once!\nWhy?", "봤지? 답이 0, 0, 1, 2... 였다가 갑자기 5로 뛰었어! 막대 3개가 한꺼번에 들어갔어! 왜 그런 걸까요?"),
+        "Did you notice?\nThe answer was 0, 0, 1, 2...\nthen suddenly jumped to 5!\nThree rods fit at once!\nWhy?", "답이 0, 0, 1, 2 였다가 갑자기 5 로 뛰었어요. 왜 그럴까요?"),
       question: t(E,
         "Why did 3 rods suddenly fit at the same time?",
         "왜 갑자기 막대 3개가 동시에 들어간 거예요?"),
@@ -698,7 +698,7 @@ export function makeCheeseCh4(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Wait — every carve, we re-check ALL 3N² rows.\nBut only ONE block changed.\nDid all rows really change?", "잠깐 — 매번 carve 마다 모든 3N² 줄을 다시 검사해요. 근데 변한 건 블록 1 개뿐이에요. 정말 모든 줄이 바뀌었을까?"),
+        "Wait — every carve, we re-check ALL 3N² rows.\nBut only ONE block changed.\nDid all rows really change?", "블록 하나를 뺐을 뿐인데 모든 줄을 다시 봐요. 정말 다 바뀌었을까요?"),
       question: t(E,
         "When you carve 1 block, how many rows could possibly change their state?",
         "블록 1 개를 빼면, 상태가 바뀔 수 있는 줄은 최대 몇 개?"),
@@ -720,7 +720,7 @@ export function makeCheeseCh4(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Great — only check the 3 affected rows.\nBut to know if a row is empty, we still need its current state.\nHow do we remember each row's state without re-scanning?", "좋아 — 영향받는 3 줄만 검사. 근데 줄이 비었는지 알려면 그 줄의 현재 상태가 필요해요. 매번 다시 스캔하지 않고 줄별 상태를 어떻게 기억?"),
+        "Great — only check the 3 affected rows.\nBut to know if a row is empty, we still need its current state.\nHow do we remember each row's state without re-scanning?", "3 줄만 보면 돼요. 그럼 줄 상태는 어떻게 기억해 둘까요?"),
       question: t(E,
         "What's the smallest piece of info per row that tells us 'is this row empty yet?'",
         "줄마다 '이 줄 다 비었나?' 를 알려주는 가장 작은 정보는?"),
@@ -742,7 +742,7 @@ export function makeCheeseCh4(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You just designed the algorithm yourself!\nTwo insights chained: (1) only 3 rows change per carve, (2) one number per row is enough.", "방금 알고리즘을 직접 만든 거예요!\n알아낸 두 가지를 이은 거예요.\n(1) 한 번에 3 줄만 바뀐다 (2) 줄마다 숫자 하나면 된다."),
+        "You just designed the algorithm yourself!\nTwo insights chained: (1) only 3 rows change per carve, (2) one number per row is enough.", "방금 알고리즘을 직접 만든 거예요!\n알아낸 두 가지를 이은 거예요.\n(1) 한 번에 3 줄만 바뀌어요 (2) 줄마다 숫자 하나면 돼요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "linear-gradient(135deg,#fef3c7,#fde68a)", border: "2px solid #f59e0b", borderRadius: 14, padding: 16, marginBottom: 12 }}>
@@ -800,7 +800,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We need to store counters for each row.\nThink of it like a notebook — for each row, write down how many blocks are gone.", "각 줄의 세는 숫자를 저장해야 해요. 공책이라고 생각해 — 각 줄마다 '빠진 블록 수'를 적어두는 거예요."),
+        "We need to store counters for each row.\nThink of it like a notebook — for each row, write down how many blocks are gone.", "줄마다 '빠진 블록 수' 를 공책에 적어 두는 거예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 14 }}>
@@ -922,7 +922,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Trace: how the code's xy/yz/xz variables change as the sample input runs through.\nMatch this to the Sim tab!", "trace: 샘플 입력이 들어오면 코드의 xy/yz/xz 변수가 어떻게 바뀌는지. 시뮬 탭에서 본 거랑 같아요!"),
+        "Trace: how the code's xy/yz/xz variables change as the sample input runs through.\nMatch this to the Sim tab!", "샘플 입력에서 xy · yz · xz 가 어떻게 바뀌는지 따라가요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center" }}>

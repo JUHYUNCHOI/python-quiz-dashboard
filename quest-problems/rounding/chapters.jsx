@@ -50,7 +50,7 @@ export const SIM_CASES = [
 // ═══════════════════════════════════════════════
 export function makeCh1(E) {
   return [
-    { type: "reveal", narr: t(E, "Two cows (Bessie and Elsie) have different rounding methods.\nThe same number can give different answers — and we count how many such numbers exist.", "두 소 (Bessie 와 Elsie) 의 반올림 방식이 서로 달라서, 같은 수에 대해 답이 다르게 나올 수 있어요. 그런 수가 몇 개인지 세는 문제예요."),
+    { type: "reveal", narr: t(E, "Two cows (Bessie and Elsie) have different rounding methods.\nThe same number can give different answers — and we count how many such numbers exist.", "두 소의 반올림 방식이 달라요. 답이 갈리는 수가 몇 개인지 세는 문제예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: `2px solid #fdba74`, borderRadius: 12, padding: 14, marginBottom: 14 }}>
@@ -89,7 +89,7 @@ export function makeCh1(E) {
         </div>
       ),
     },
-    { type: "reveal", narr: t(E, "Input is one number N.\nOutput is the count of numbers in 2..N where Bessie and Elsie disagree.", "입력은 숫자 N 하나. 출력은 2 부터 N 까지 중에서 Bessie 와 Elsie 의 답이 다른 수의 개수예요."),
+    { type: "reveal", narr: t(E, "Input is one number N.\nOutput is the count of numbers in 2..N where Bessie and Elsie disagree.", "입력은 N 하나예요. 출력은 답이 갈리는 수의 개수예요."),
       content: (
         <div style={{ padding: 16, fontSize: 14, lineHeight: 1.8 }}>
           <div style={{ marginBottom: 14 }}>
@@ -208,7 +208,7 @@ export function makeCh1(E) {
     },
 
     { type: "reveal", narr: t(E,
-      "48 isn't the only one. Try other numbers: some agree, some disagree. Spot anything?", "48 만 그런 게 아니에요. 다른 숫자도 골라봐요. ✅ 같은 것도 있고 ❌ 다른 것도 있어요. 뭔가 보이나요?"),
+      "48 isn't the only one. Try other numbers: some agree, some disagree. Spot anything?", "48 만 그런 게 아니에요. 다른 숫자도 골라봐요."),
       content: (
         <div style={{ padding: 12 }}>
           <Multi6Sim E={E} />
@@ -331,7 +331,7 @@ export function makePatternSteps(E) {
   return [
     { type: "reveal",
       narr: t(E, "We saw all 6 cases. Let's find the pattern! ✅ = same answer, ❌ = different.",
-                "시뮬레이터에서 6 개 다 해봤죠. 이제 규칙을 찾아봐요! ✅ 는 답이 같은 것, ❌ 는 답이 다른 것."),
+                "여섯 개를 다 봤죠. 이제 규칙을 찾아봐요."),
       content: (
         <div><div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14 }}>
           {[[48,"❌"],[67,"✅"],[38,"✅"],[445,"❌"],[435,"✅"],[4459,"❌"]].map(([n,r],i) => (
@@ -367,7 +367,7 @@ export function makePatternSteps(E) {
     { type: "reveal",
       narr: t(E,
         "So Bessie rounds 4 down to 0. But wait — Elsie does it differently! Let's see what she gets for 48.",
-        "그러니까 Bessie 는 4 를 버려서 0. 근데 — Elsie 는 다른 방식이잖아요! Elsie 가 48 을 어떻게 계산하는지 봐요."),
+        "Bessie 는 4 를 버려서 0 이에요. Elsie 는 어떻게 할까요?"),
       content: (
         <div style={{ padding: 4 }}>
           <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:13, lineHeight:2.2, padding:10, background:C.elsieBg, borderRadius:10, border:`1.5px solid ${C.elsieBd}` }}>
@@ -421,7 +421,7 @@ export function makePatternSteps(E) {
 
     { type: "reveal",
       narr: t(E,
-        "But first=4 alone isn't enough!\nCarry must REACH the first digit.\nCompare 445 vs 435 side by side.", "근데 첫째=4 만으로는 부족해요! carry 가 첫째까지 도달해야 해요. 445 와 435 를 나란히 비교해봐요."),
+        "But first=4 alone isn't enough!\nCarry must REACH the first digit.\nCompare 445 vs 435 side by side.", "첫째 자리가 4 인 것만으로는 부족해요. 445 와 435 를 나란히 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 }}>
@@ -477,7 +477,7 @@ export function makePatternSteps(E) {
     { type: "reveal",
       narr: t(E,
         "Each digit count d has its own contiguous block of disagreeing numbers — from the SMALLEST (s_d) to the LARGEST (e_d). Look at the digit boxes — see the pattern?",
-        "각 자릿수 d 마다 답이 다른 수의 *연속 구간* 이 있어요 — 가장 작은 수 (s_d) 부터 가장 큰 수 (e_d) 까지. 아래 숫자 박스를 봐요. 패턴 보이나요?"),
+        "자릿수마다 답이 갈리는 수가 한 덩어리로 붙어 있어요."),
       content: (() => {
         // Digit-box helper — Optimize 탭과 같은 색감
         const SBox = ({ ch, kind }) => {
@@ -1255,7 +1255,7 @@ export function makeBruteSteps(E, lang = "py") {
     { type: "runner",
       narr: t(E,
         "Below: enter a value for N (start with 100, then 10000, then 100000) and hit Run. Watch the time. What happens as N grows?",
-        "아래에서 N 값 입력 (100 → 10000 → 100000 순으로) 후 Run 누르세요. 걸리는 시간 봐요. N 이 커질수록 어떻게 되나요?"),
+        "아래에서 N 을 100, 10000, 100000 으로 바꿔 가며 눌러 봐요?"),
     },
 
     { type: "reveal",
@@ -1533,7 +1533,7 @@ export function makeOptSteps(E) {
     { type: "reveal",
       narr: t(E,
         "Recap from the Pattern tab: for each digit count, the disagreeing numbers sit in ONE contiguous block. So we just count block lengths and add them up!",
-        "복습 (패턴 탭에서 봤죠): 각 자릿수마다 답이 다른 수가 하나의 연속 구간을 이뤘어요. 그래서 구간 길이만 세서 더하면 끝!"),
+        "자릿수마다 답이 갈리는 수가 한 덩어리였죠. 그 길이만 더하면 끝이에요."),
       content: (() => {
         // Digit-box helper
         const Box = ({ ch, kind }) => {
@@ -1633,13 +1633,13 @@ export function makeOptSteps(E) {
     { type: "interval-sim",
       narr: t(E,
         "Click the d buttons (2, 3, 4, …) to see each digit count's interval [s_d, e_d]. Then drag the N slider — watch the rightmost interval get CLIPPED when N falls inside.",
-        "d 버튼 (2, 3, 4, …) 을 눌러서 각 자릿수의 구간 [s_d, e_d] 를 봐요. 그 다음 N 슬라이더 끌어보세요 — N 이 마지막 구간 안에 떨어지면 그 구간이 잘려요."),
+        "자릿수 버튼을 눌러 덩어리를 보고, N 슬라이더도 끌어 봐요."),
     },
 
     { type: "scale",
       narr: t(E,
         "Drag the N slider all the way to 10⁹ (the right edge). Watch the brute bar shoot past the time limit while the formula stays a tiny dot. THIS is why we still need the formula, even with brute + cache already in place.",
-        "N 슬라이더를 오른쪽 끝 (10⁹) 까지 끌어봐요. 브루트 막대는 시간 제한 *꽉 차고*, 공식은 작은 점 그대로. 브루트랑 캐시 있어도 *공식이 필요한 이유* — 이게 보이는 페이지예요."),
+        "N 슬라이더를 끝까지 끌어 봐요. 브루트와 공식이 얼마나 다른지 보여요."),
     },
 
     { type: "reveal",

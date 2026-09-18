@@ -805,3 +805,18 @@ code, pre, .font-mono, [class*="font-mono"] {
 .qcode-scroll::-webkit-scrollbar-track { background: transparent; }
 .qcode-scroll::-webkit-scrollbar-thumb { background: #64748b; border-radius: 4px; }
 .qcode-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* 코드창만 글보다 넓게 — 2026-09-18 선생님: *"코드 보는 곳에 너무 좁다는 생각은 나만 하는건가?"*
+   quest 본문 틀은 880px 다. 글은 그 안에서 짧게 유지해야 읽힌다(한 줄 60자 규칙).
+   그런데 **코드는 짧게 접으면 안 된다** — 가로로 밀어 보게 된다.
+   그래서 본문 틀은 그대로 두고 코드창만 큰 화면에서 틀 밖으로 넓힌다.
+   1200px 미만(노트북 작은 화면·패드·모바일)에서는 아무것도 안 바뀐다. */
+@media (min-width: 1200px) {
+  .qcode-wide {
+    width: min(1180px, calc(100vw - 300px));
+    max-width: none !important;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
