@@ -216,14 +216,35 @@ const FULL_CPP = [
 export function getMcc20CityTourSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "1️⃣ Take in the map", "1️⃣ 지도를 받아요"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 13), cpp: FULL_CPP.slice(0, 18),
       why: [
-        /* 2026-09-17: 104·80 자가 한 덩어리였다. Stepper 는 \n 을 뭉개니 항목을 나눈다.
-           "플러드필" 은 뜻을 안 밝힌 음차어라 우리말로 먼저 말하고 이름을 뒤에 붙인다. */
-        t(E, "Why not sweep the whole grid over and over? That could take up to M×N passes over M×N cells — 10^10. So instead we visit each cell just once, starting at (1,1) and letting the reachable area spread outwards — this is BFS (flood fill).",
-            "왜 그리드를 몇 번씩 다시 훑지 않을까요?\n그러면 최대 M×N 번을 M×N 칸에 반복해서 10^10 이 될 수 있어요.\n그래서 각 칸을 딱 한 번만 방문하기로 해요.\n시작 칸 (1,1) 에서 갈 수 있는 곳을 바깥으로 번져 나가게 하는 방법을 BFS(번져 나가며 채우기)라고\n불러요."),
+        t(E, "What do we have to hand back? How many cells you can reach from (1,1).\nSo first take in the map: its size, the gap limit D, and every height.",
+            "무엇을 내놓아야 하나요? (1,1) 에서 갈 수 있는 칸이 몇 개인지예요.\n그러니 먼저 지도를 받아요 — 크기와 높이 차 한계 D, 그리고 높이들이에요."),
+      ],
+    },
+    {
+      label: t(E, "2️⃣ Stand at the start", "2️⃣ 시작 칸에 서요"),
+      color: "#0891b2",
+      py: FULL_PY.slice(13, 20), cpp: FULL_CPP.slice(18, 24),
+      why: [
+        t(E, "Why not sweep the whole grid over and over?\nThat could take M×N passes over M×N cells — 10^10.\nSo we visit each cell just once and let the reachable area spread outwards.",
+            "왜 지도를 몇 번씩 다시 훑지 않을까요?\n그러면 최대 M×N 번을 M×N 칸에 되풀이해서 10^10 이 될 수 있어요.\n그래서 칸마다 딱 한 번만 가고, 갈 수 있는 곳이 바깥으로 번져 나가게 해요."),
+        t(E, "To do that we need two things — a note of where we have been, and a line of cells waiting their turn.\n(1,1) goes into both, and the count starts at 1.",
+            "그러려면 둘이 필요해요 — 어디를 다녀왔는지 적을 곳과,\n차례를 기다리는 칸들의 줄이에요.\n(1,1) 을 둘 다에 넣고, 센 수는 1 에서 시작해요."),
+      ],
+    },
+    {
+      label: t(E, "3️⃣ Let it spread", "3️⃣ 번져 나가게 해요"),
+      color: "#16a34a",
+      py: FULL_PY.slice(20), cpp: FULL_CPP.slice(24),
+      why: [
+        /* ⚠️ 2026-09-19: 여기 있던 "왜 다시 안 훑나" 는 **2번 조각으로 옮겼다.**
+           그 결정이 일어나는 자리가 거기다. 같은 말을 두 번 하지 않는다.
+           이 조각의 이름은 "번져 나가며 채우기(BFS)" 다 — 음차어를 먼저 쓰지 않는다. */
+        t(E, "This spreading is called BFS (flood fill).\nPop a cell, look at its 4 neighbours, and step in only where you may.",
+            "이렇게 번져 나가며 채우는 방법을 BFS 라고 불러요.\n칸을 하나 꺼내서 이웃 넷을 보고, 갈 수 있는 곳에만 들어가요."),
         t(E, "Pop a cell, then for each of its 4 neighbors step in only if it hasn't been visited AND the height gap |H[nr][nc] − H[r][c]| < D.",
             "칸을 하나 꺼내서 이웃 4 개를 봐요.\n아직 안 간 칸이면서 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요."),
         t(E, "Mark visited AT PUSH time and bump count then — so every reachable cell is counted exactly once.",
