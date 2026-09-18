@@ -1,3 +1,10 @@
+/* ⚠️ 2026-09-18 선생님: *"아직 갑자기 읽으면 뭔말인가해"*
+   화면을 차갑게 읽어 보니 첫 네 줄이 **서로 다른 네 가지**를 말하고 있었다 —
+   파란 줄은 '넉넉히 사도 된다', 제목은 '묶음마다 제일 싼 값', 노란 상자는 '새 예제',
+   말풍선은 '적힌 값이 진짜 값이 아니다'. 넷 다 맞는 말인데 **이어지지 않는다.**
+   그리고 **문제 챕터인데 `deal_price` · `block_cost` 라는 코드 이름이 먼저 나온다.**
+   (이 세션에서 코드 변수를 고치며 그 이름을 화면까지 밀어 넣은 게 원인이다.
+    코드 이름은 9쪽 Plan 카드에서 처음 만나야 한다 — 거기가 이름을 붙이는 자리다.) */
 "use client";
 
 /* Purchasing Milk (Jan 2026 Bronze #3) 용 시뮬 — 🔒 USACO_VERIFIED components.jsx 는
@@ -33,14 +40,34 @@ function normalize() {
 }
 const C = normalize();
 
+/* PER[i] = 2^i 통 묶음에서 **한 통에 드는 값**. 10 · 7.5 · 5 · 5.
+   ⚠️ 2026-09-18 선생님: *"아까전에는 1통씩 계산하더니 왜 갑자기 큰 묶음이 손해가
+      아니니 큰것부터 봐요라고 그러는거지?"* → 고친 뒤에도 *"위에 적힌? 아직도 뭔말인지 모르겠어"*.
+   두 번 걸린 자리다. 배운 것 둘 —
+   ① **"위에 적힌" 처럼 가리키지 마라.** 가리킬 것이 화면에 있어도 학생은 못 찾는다.
+      숫자를 그 문장 안에 그대로 써라.
+   ② **`10 → 7.5 → 5 → 5` 처럼 값만 늘어놓지 마라.** 무엇의 값인지 이름표를 붙여야
+      읽힌다 — `1통 묶음 10 · 2통 묶음 7.5 · …`.
+   앞 시뮬 마지막 걸음이 이 값을 구해 놓고 "그래서 큰 묶음부터 사도 손해 볼 일이 없어요"
+   로 끝나는데, 쪽을 넘기면 그 근거가 사라졌다.
+   memory/feedback_screen_must_not_rely_on_memory.md · feedback_sentence_must_follow.md */
+const PER = C.map((v, i) => +(v / (1 << i)).toFixed(2));
+
 function Say({ children, tone = "go" }) {
   const s = tone === "stuck" ? { bg: "#fffbeb", bd: "#fbbf24", fg: "#92400e" }
           : tone === "aha"   ? { bg: "#eff6ff", bd: "#60a5fa", fg: "#1e40af" }
           : { bg: "#ecfeff", bd: "#67e8f9", fg: "#155e75" };
   return (
+    /* ⚠️ 2026-09-18 선생님: *"원래 강조할때는 색을 다르게 하거나 bold를 안해서 그런가? 안읽혀"*
+       말풍선 **전체가 fontWeight 700** 이었다. 그래서 글쓴이가 `<b>` 로 짚어 둔 자리가
+       주변과 똑같아 보였다 — **다 굵으면 아무것도 강조가 아니다.**
+       본문을 보통 굵기로 내리고, `<b>` 만 굵게·진한 색으로 튀게 한다. */
     <div style={{ maxWidth: 470, margin: "6px auto 14px", padding: "11px 16px", borderRadius: 12,
-      background: s.bg, border: `1.5px solid ${s.bd}`, color: s.fg, fontSize: 13.5, fontWeight: 700,
-      textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.75 }}>{children}</div>
+      background: s.bg, border: `1.5px solid ${s.bd}`, color: s.fg, fontSize: 13.5, fontWeight: 500,
+      textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.75 }}>
+      <style>{`.qsay b{font-weight:800;color:${s.fg};filter:brightness(.72)}`}</style>
+      <span className="qsay">{children}</span>
+    </div>
   );
 }
 const mono = { fontFamily: "'JetBrains Mono',monospace" };
@@ -69,8 +96,8 @@ export function NormalizeSim({ E }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>There can be more than one way to buy a block.<br /><span style={{ fontWeight: 600 }}>Let's walk them, starting from 1 bucket.</span></>,
-      <>묶음 하나를 사는 방법은 여러 가지예요.<br /><span style={{ fontWeight: 600 }}>1통부터 하나씩 해볼게요.</span></>)
+      <>Same 8 buckets, two ways to buy them.<br />One 8-pack costs <b>45</b>. Two 4-packs cost <b>40</b>.<br />For each size we keep the cheaper way. Let's go from 1 bucket up.</>,
+      <>같은 8통이어도 사는 방법이 둘이에요.<br />8통 묶음을 한 번 사면 <b>45</b>, 4통 묶음을 두 번 사면 <b>40</b>.<br />묶음마다 이렇게 싼 쪽을 골라 둘게요. 1통부터 차례로요.</>)
     : s.k === "row" ? (() => {
         const i = s.i, size = 1 << i;
         if (i === 0) return t(E,
@@ -84,8 +111,8 @@ export function NormalizeSim({ E }) {
                 <>{size / 2}통 묶음을 <b>두 번</b> 사면 {size}통이 되는데 <b>{two}</b> 이에요.<br />{size}통 묶음을 한 번에 사면 <b>{DEALS[i]}</b> 이에요.<br />이번엔 한 번에 사는 쪽이 싸요. 그대로 <b>{C[i]}</b> 예요.</>);
       })()
     : t(E,
-      <>Divide each cheapest price by its bucket count — the <b>price per bucket</b>.<br />10 → 7.5 → 5 → 5. It only goes down, never back up.<br /><b>So you can safely take the biggest blocks first.</b></>,
-      <>제일 싼 값을 통 수로 나눠 봐요 — <b>한 통에 얼마</b>인지요.<br />10 → 7.5 → 5 → 5. 묶음이 커질수록 싸지고, 다시 비싸지지 않아요.<br /><b>그래서 큰 묶음부터 사도 손해 볼 일이 없어요.</b><br /><span style={{ fontWeight: 600 }}>다음 쪽에서 이 값으로 x 통을 사 볼 거예요.</span></>);
+      <><b>Can we just grab the biggest packs first?</b><br />The bigger the pack, the cheaper one bucket — <b>10, 7.5, 5, 5</b>.<br />So taking the big ones first is fine.</>,
+      <><b>큰 묶음부터 집어도 될까요?</b><br />묶음이 클수록 한 통이 싸요. <b>10, 7.5, 5, 5</b> 이렇게요.<br />그러니 큰 걸 먼저 집어도 괜찮아요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -93,9 +120,9 @@ export function NormalizeSim({ E }) {
         title={t(E, "Turn deals into block prices", "묶음마다 제일 싼 값을 구해요")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Carry E={E}>
-        {t(E, <>A new, bigger example — <b>4 deals</b> now: deal_price = [10, 15, 20, 45].<br />
+        {t(E, <>A new, bigger example — <b>4 deals</b> now: 10, 15, 20, 45.<br />
                  (Sample 1 back on page 2 had only two: [10, 15].)</>,
-             <>새 예제예요. 이제 <b>거래가 4개</b>예요 — deal_price = [10, 15, 20, 45]<br />
+             <>새 예제예요. 이제 <b>거래가 4개</b>예요 — 10, 15, 20, 45<br />
                (2쪽 예제 1 은 두 개였어요. [10, 15])</>)}
       </Carry>
       <StepFade fast k={ts.safe}>
@@ -105,9 +132,9 @@ export function NormalizeSim({ E }) {
         <div style={{ display: "grid", gridTemplateColumns: "70px 1fr 1fr 1fr", gap: 8,
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 11px" }}>
           <span>{t(E, "block", "묶음")}</span>
-          <span>{t(E, "deal price", "거래값 deal_price")}</span>
+          <span>{t(E, "listed price", "거래값")}</span>
           <span>{t(E, "two halves", "작은 묶음 두 번")}</span>
-          <span>{t(E, "cheapest block_cost", "제일 싼 값 block_cost")}</span>
+          <span>{t(E, "cheaper way", "싼 쪽")}</span>
         </div>
         {DEALS.map((d, i) => {
           const shown = i < upto, size = 1 << i;
@@ -132,9 +159,19 @@ export function NormalizeSim({ E }) {
           <div style={{ marginTop: 8, padding: "10px 14px", borderRadius: 10, background: "#ecfeff",
             border: "1.5px solid #67e8f9", fontSize: 12.5, color: "#155e75", lineHeight: 1.9,
             textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-            <div style={{ fontWeight: 800, marginBottom: 4 }}>{t(E, "price per bucket", "한 통에 얼마")}</div>
-            <div style={mono}>
-              {C.map((v, i) => `${v} \u00f7 ${1 << i}${t(E, "", "통")} = ${(v / (1 << i)).toFixed(2)}`).join("   ·   ")}
+            {/* ⚠️ 2026-09-18 선생님: *"자연스러운 말이라면 **한통 묶음 살때의 가격 10,
+                2통 묶음 살때 한통 가격은 7.5**.. 뭐 이래야 한국말 아닌가?"*
+                `10 ÷ 1통 = 10.00` 처럼 식만 늘어놓으면 **한국말이 아니다.** 문장으로 쓴다.
+                그리고 넷을 한 줄에 `·` 로 이어 붙이면 **줄바꿈이 낱말 가운데를 자른다**
+                (선생님: *"다음줄로 가얒"*) — 한 줄에 하나씩 놓는다. */}
+            <div style={{ fontWeight: 800, marginBottom: 6 }}>{t(E, "What one bucket costs", "한 통에 얼마씩인가")}</div>
+            <div style={{ display: "grid", gap: 3, justifyItems: "center" }}>
+              {C.map((v, i) => (
+                <div key={i} style={{ whiteSpace: "nowrap" }}>
+                  {t(E, <>Buying the {1 << i}-pack, one bucket costs <b style={mono}>{+(v / (1 << i)).toFixed(2)}</b></>,
+                        <>{1 << i}통 묶음을 사면 한 통에 <b style={mono}>{+(v / (1 << i)).toFixed(2)}</b></>)}
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -177,8 +214,8 @@ export function GreedySim({ E, x = 5 }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>We need <b>at least {X}</b> buckets.<br />Bigger blocks are never worse, so start big.<br />At each block there are only <b>two</b> choices.</>,
-      <><b>{X}통 이상</b>이 필요해요.<br />큰 묶음이 손해가 아니니 큰 것부터 봐요.<br />묶음마다 고를 수 있는 건 <b>두 가지</b>뿐이에요.</>)
+      <>Big packs are cheaper per bucket, so we look at the big ones first.<br />At each pack there are only two moves — <b>buy enough and stop</b>, or <b>buy less and leave the rest to smaller packs</b>.<br />We just have to reach <b>at least {X}</b> buckets.</>,
+      <>큰 묶음일수록 한 통이 싸니까 큰 것부터 봐요.<br />묶음마다 할 수 있는 건 둘뿐이에요 — <b>넉넉히 사고 끝내거나</b>, <b>모자라게 사고 남은 통을 작은 묶음에 넘기거나</b>.<br /><b>{X}통 이상</b>만 채우면 돼요.</>)
     : s.k === "row" ? t(E,
       <>Block <b>{cur.size}</b>: <b>{cur.rem}</b> buckets still needed.<br />Round <b>up</b> → buy {cur.need} and stop → <b>{cur.cand}</b>.<br />Or take <b>{cur.take}</b> and carry <b>{cur.rem - cur.take * cur.size}</b> to smaller blocks.</>,
       <><b>{cur.size}통</b> 묶음이에요. 아직 <b>{cur.rem}통</b> 필요해요.<br /><b>넉넉히</b> 사면 {cur.need}개로 끝나요 → <b>{cur.cand}</b>.<br />아니면 <b>{cur.take}개</b>만 사고 남은 <b>{cur.rem - cur.take * cur.size}통</b>은 작은 묶음에 맡겨요.</>)
@@ -195,10 +232,16 @@ export function GreedySim({ E, x = 5 }) {
         title={t(E, `Buy at least ${X} buckets, as cheap as possible`, `${X}통 이상을 제일 싸게 사요`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Carry E={E}>
-        {t(E, <>Same 4 deals deal_price = [10, 15, 20, 45].<br />
-                 Block prices we just worked out: block_cost = [{C.join(", ")}]</>,
-             <>같은 거래 4개예요. deal_price = [10, 15, 20, 45]<br />
-               방금 구한 묶음 값은 block_cost = [{C.join(", ")}] 이에요.</>)}
+        {/* ⚠️ 2026-09-18 선생님: *"아까전에는 1통씩 계산하더니 왜 갑자기
+            큰 묶음이 손해가 아니니 큰것부터 봐요라고 그러는거지?"*
+            앞 시뮬 마지막 걸음이 '한 통에 얼마' 를 10 → 7.5 → 5 → 5 로 보여주고
+            "그래서 큰 묶음부터 사도 손해 볼 일이 없어요" 로 끝난다. 그런데 **쪽을 넘기면
+            그 근거가 사라지고** 여기서는 결론만 다시 주장하고 있었다.
+            근거를 이 화면으로 가져온다 — memory/feedback_screen_must_not_rely_on_memory.md */}
+        {t(E, <>Same 4 deals: 10, 15, 20, 45.<br />
+                 The cheaper way for each pack: {C.join(", ")}</>,
+             <>같은 거래 4개예요 — 10, 15, 20, 45<br />
+               묶음마다 고른 싼 값은 {C.join(", ")} 이에요.</>)}
       </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "done" ? "aha" : "go"}>{say}</Say>

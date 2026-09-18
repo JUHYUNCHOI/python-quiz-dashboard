@@ -77,8 +77,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Sample 1 has just two deals. Watch which one is cheaper per bucket.",
-        "예제 1 은 거래가 둘뿐이에요. 어느 쪽이 통당 싼지 봐요."),
+        "Sample 1. Look at what the input and the output look like.",
+        "예제 1 이에요. 입력과 출력이 어떻게 생겼는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -173,8 +173,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "7 buckets needed — but buying 8 is allowed, and may be cheaper.",
-        "7통이 필요한데 8통을 사도 돼요. 모자라지만 않으면 되니까요."),
+        "The same buckets can often be bought cheaper. Let's find those ways first.",
+        "같은 통 수도 더 싸게 사는 방법이 있어요. 그것부터 찾아요."),
       content: (<NormalizeSim E={E} />),
     },
 
@@ -280,15 +280,15 @@ function BuyMilkPlan({ E }) {
       </div>
       <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
         <Insight icon="💰" color="#d97706"
-          head={t(E, "Two half-blocks can beat the deal.", "4통 두 개(40)가 8통 묶음(45)보다 싸다.")}
+          head={t(E, "Two half-blocks can beat the deal.", "4통 두 개(40)가 8통 묶음(45)보다 싸요.")}
           body={t(E, <>So each block gets its own real price {codeTag("block_cost[i]")} — the deal, or two half-blocks, whichever is cheaper.</>,
                      <>그래서 묶음마다 진짜 값 {codeTag("block_cost[i]")} 를 따로 구해요.<br />거래를 그대로 사는 값과, 작은 묶음을 두 번 사는 값 중 싼 쪽이에요.</>)} />
         <Insight icon="🧱" color="#0891b2"
-          head={t(E, "At each block there are only two choices.", "묶음마다 고를 건 두 가지뿐이다.")}
+          head={t(E, "At each block there are only two choices.", "묶음마다 고를 건 두 가지뿐이에요.")}
           body={t(E, <>Round up and stop, or buy less and carry {codeTag("left")} down to smaller blocks.</>,
                      <>넉넉히 사고 끝내거나,<br />모자라게 사고 남은 통 {codeTag("left")} 를 작은 묶음으로 넘겨요.</>)} />
         <Insight icon="📉" color="#059669"
-          head={t(E, "One pass, big to small — no searching.", "큰 것부터 한 번만 훑으면 끝 — 찾아 헤맬 일이 없다.")}
+          head={t(E, "One pass, big to small — no searching.", "큰 것부터 한 번만 훑으면 끝이에요 — 찾아 헤맬 일이 없어요.")}
           body={t(E, <>Every block gives one candidate; {codeTag("best")} just keeps the smallest.</>,
                      <>묶음마다 후보가 하나씩 나와요.<br />{codeTag("best")} 는 그중 제일 작은 값만 들고 있으면 돼요.</>)} />
       </div>
