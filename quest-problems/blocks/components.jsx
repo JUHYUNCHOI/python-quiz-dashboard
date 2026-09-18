@@ -102,8 +102,14 @@ export function getBlocksSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
+        t(E, "What should we output? YES or NO for each word — can it be spelled?",
+            "무엇을 답으로 내야 하나요?\n단어마다 만들 수 있으면 YES, 아니면 NO 예요."),
+        t(E, "Each letter needs its own distinct block, so we have to try every way of handing out the 4 blocks.",
+            "글자마다 서로 다른 블록을 하나씩 배정해야 해서,\n블록 4개를 나눠주는 방법을 전부 시도해봐야 해요."),
+        t(E, "So permutations(range(4), len(word)) builds every such assignment. Check if each letter is on its assigned block's face.",
+            "그래서 permutations(range(4), len(word)) 로 배정을\n전부 만들고, 글자가 배정받은 블록 면에 있는지 확인해요."),
+        t(E, "One working assignment means YES. If none works — including words longer than 4 letters, which have no assignment at all — it's NO.",
+            "하나라도 성공하면 YES, 다 실패하면 NO 예요.\n5글자 이상 단어는 배정 자체가 없어서 항상 NO 예요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

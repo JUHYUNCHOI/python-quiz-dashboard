@@ -79,8 +79,14 @@ export function getAirCond1Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+        t(E, "What should we output? The fewest AC commands to bring every stall to its target temperature.",
+            "무엇을 답으로 내야 하나요?\n모든 축사를 목표 온도로 맞추는 최소 명령 횟수예요."),
+        t(E, "One command changes a whole range by +1/-1, so we can't count stall by stall — we need to look at where the needed change jumps up or down.",
+            "명령 한 번이 구간 전체를 +1 또는 -1 하는 것뿐이라,\n칸마다 따로 세면 안 되고 '변화량이 바뀌는 지점' 을 봐야 해요."),
+        t(E, "So compute d[i] = target - current, pad both ends with 0, and sum |difference| between neighbors.",
+            "그래서 d[i] = 목표 - 현재 를 구하고, 양 끝에 0 을 붙여서\n이웃한 d 값의 차이(절댓값)를 다 더해요."),
+        t(E, "Divide that sum by 2 — since both ends are 0, every rise in d is matched by a fall, so we counted each command twice.",
+            "그 합을 2 로 나누면 답이 나와요 — 양 끝이 0 이라\n값이 오른 만큼 내린 곳도 있어서, 명령을 두 번씩 센 셈이거든요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

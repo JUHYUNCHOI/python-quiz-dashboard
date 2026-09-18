@@ -353,8 +353,14 @@ export function getNonTransSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What should we output? yes/no — is there a die C that makes a beats-cycle with A and B?",
+            "무엇을 답으로 내야 하나요?\nA, B 와 순환(누가 누굴 이기는)을 만드는 주사위 C 가 있는지예요."),
+        t(E, "We can't compute C directly, so we have to build every possible C and test it.",
+            "C 의 눈금을 계산으로 바로 구할 수는 없어서,\n가능한 C 를 하나씩 만들어 순환이 되는지 봐야 해요."),
+        t(E, "So try every C with 4 faces from 1..10 (sorted, to skip duplicate orderings) — that covers every distinct die.",
+            "그래서 눈금 1~10 중 4개를 고르는 경우를 다 만들어요.\n오름차순으로만 골라 중복된 조합은 건너뛰어요."),
+        t(E, "For each C, check both cycle directions (A beats B beats C beats A, or the reverse). Either one working means yes.",
+            "만든 C 로 두 순환 방향을 둘 다 확인해요.\n한 방향이라도 성립하면 yes, 다 안 되면 no 예요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

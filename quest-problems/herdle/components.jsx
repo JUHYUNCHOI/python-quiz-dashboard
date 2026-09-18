@@ -95,8 +95,14 @@ export function getHerdleSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 역할이 있어요."),
+        t(E, "What should we output? The green count (exact matches) and the yellow count (right breed, wrong spot).",
+            "무엇을 답으로 내야 하나요?\n초록(정확히 맞은 칸) 개수와 노랑(자리만 다른 칸) 개수예요."),
+        t(E, "Yellow only counts cells that aren't already green, so we must find all the greens first and set them aside.",
+            "노랑은 초록이 아닌 자리만 대상이라,\n먼저 초록을 다 찾아내고 남은 자리만 봐야 해요."),
+        t(E, "So pass 1 compares same positions to count green, and saves the leftover breeds from both grids.",
+            "그래서 1차로 같은 자리를 견줘 초록을 세고,\n초록이 아닌 자리의 품종만 따로 남겨 둬요."),
+        t(E, "Pass 2 matches leftover breeds and takes the smaller count on each side — that's how many can actually be paired up as yellow.",
+            "2차에서는 남은 품종끼리 짝짓고, 정답·추측 개수 중\n작은 값만큼만 노랑으로 세요 — 실제로 짝지을 수 있는 만큼만요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

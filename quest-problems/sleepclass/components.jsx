@@ -305,8 +305,14 @@ export function getSleepClassSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "What should we output? The fewest merges to make every period equal length.",
+            "무엇을 답으로 내야 하나요?\n모든 시간을 같은 길이로 만드는 최소 합치기 횟수예요."),
+        t(E, "Merges = N minus the final piece count, so fewer merges means more equal pieces — as many as possible.",
+            "합치기 횟수는 N 에서 최종 조각 수를 뺀 값이에요.\n그러니 조각이 많을수록 합치기는 줄어요."),
+        t(E, "So try every divisor d of the total as the piece length. Walk the array once: hit d exactly → close a piece, go past it → this d fails.",
+            "그래서 총합의 약수 d 를 조각 길이로 하나씩 시도해요.\n배열을 훑다가 딱 d 가 되면 조각을 끊고, 넘치면 그 d 는 실패예요."),
+        t(E, "For every d that works, pieces = total/d. Keep the d that gives the most pieces — that's the fewest merges.",
+            "성공하는 d 마다 조각 수(총합/d)가 나와요.\n조각이 가장 많이 나오는 경우를 답으로 남겨요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

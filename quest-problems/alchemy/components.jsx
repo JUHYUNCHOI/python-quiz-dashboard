@@ -309,8 +309,12 @@ export function getAlchemySections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What should we print? The most units of metal N we can craft.",
+            "무엇을 출력해야 하나요?\n금속 N 을 최대 몇 개까지 만들 수 있는지예요."),
+        t(E, "First idea: just spend stock while crafting one N. But if the recipe fails halfway, we already spent stock other ingredients still needed.",
+            "재고를 바로 깎으며 만들면 어떨까요?\n레시피 중간에 실패하면, 다른 곳에 쓸 재료까지 이미 써버려요."),
+        t(E, "So make() tries on a copy of the stock. We only commit the changes when the whole craft succeeds — then repeat until it fails.",
+            "그래서 make() 는 재고 복사본에서 먼저 시도해요.\n성공했을 때만 진짜 재고에 반영하고, 실패할 때까지 반복해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -108,8 +108,14 @@ export function getAcowdemia2Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 뚜렷해요."),
+        t(E, "What should we output? An N×N grid marking, for every pair, who is definitely senior.",
+            "무엇을 답으로 내야 하나요?\n두 연구원마다 선임(1)·후임(0)·판단 불가(?) 를 적은 N×N 격자예요."),
+        t(E, "Names could just be listed alphabetically because effort was tied, so order alone doesn't prove a real effort gap.",
+            "이름이 알파벳순으로 나열된 건 노력이 같아서일 수도 있어서,\n순서만 보고는 노력이 진짜 다른지 알 수 없어요."),
+        t(E, "So look for the point where the order breaks alphabetically — that's proof of a real gap, and everyone after it is more senior than the one before.",
+            "그래서 순서가 알파벳을 깨는 지점을 찾아요 — 그건 노력이\n진짜 다르다는 증거고, 그 뒤에 온 사람은 더 선임이에요."),
+        t(E, "Once it breaks, everyone further right is also senior to x — record that for every publication, then fill the grid from what we've learned.",
+            "한 번 깨진 뒤로는 그 뒤 사람 전부가 x 보다 선임이라\n기록하고, 논문 K 편에서 알아낸 걸 다 모아 표를 채워요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

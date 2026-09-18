@@ -89,8 +89,14 @@ export function getAcowdemia1Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What should we output? The biggest h-index reachable after adding L extra citations.",
+            "무엇을 답으로 내야 하나요?\n인용 L 개를 더했을 때 만들 수 있는 h-index 의 최댓값이에요."),
+        t(E, "Checking one h at a time from 0 up would be slow, and a bigger h always needs at least as many extra citations as a smaller one.",
+            "h 를 0 부터 하나씩 다 확인하면 느리고,\nh 가 커질수록 필요한 추가 인용도 늘기만 해요."),
+        t(E, "So binary search on h. check(h) sums how many citations the top h papers are still short of h — that's how many we'd need to spend.",
+            "그래서 h 를 이분탐색으로 찾아요. check(h) 는 상위 h편의\n논문이 h 에서 부족한 인용수를 다 더해서, 필요한 인용 수를 구해요."),
+        t(E, "If that need fits within L, h is reachable, so search higher; otherwise search lower — that finds the biggest working h.",
+            "그 필요량이 L 이하면 h 를 만들 수 있으니 더 큰 h 를 찾고,\n넘으면 더 작은 h 를 찾아요 — 이렇게 최댓값을 찾아요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

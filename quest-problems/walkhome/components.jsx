@@ -129,8 +129,14 @@ export function getWalkHomeSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What should we output? The number of paths from start to home with at most K direction changes.",
+            "무엇을 답으로 내야 하나요?\n출발지에서 집까지, 방향을 K 번까지만 바꿔 가는 길의 수예요."),
+        t(E, "Listing every path would be too slow, so store 'how many paths remain from here' for each cell instead.",
+            "길을 하나씩 다 세면 너무 느려서,\n칸마다 '여기서 집까지 남은 길의 수' 를 미리 저장해 둬요."),
+        t(E, "That count depends on which direction we arrived from and how many changes we've used, so the table needs those two extra dimensions too.",
+            "그런데 그 수는 '어느 방향으로 왔는지' 와 '지금까지 몇 번\n바꿨는지' 에 따라 달라서, dp[r][c][방향][바꾼횟수] 로 나눠 저장해요."),
+        t(E, "Fill the table backward starting from home — the right and below cells are already done, so no recursion is needed.",
+            "집(오른아래 끝)에서부터 거꾸로 채우면 오른쪽·아래 칸이\n이미 채워져 있어서, 재귀 없이 표만 보고 더할 수 있어요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

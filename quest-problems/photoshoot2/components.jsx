@@ -250,8 +250,14 @@ export function getPhotoshoot2Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What should we output? The fewest move-left ops to reach the target order.",
+            "무엇을 답으로 내야 하나요?\n목표 순서를 맞추는 데 필요한 최소 이동 횟수예요."),
+        t(E, "The only move is 'to anywhere farther left', so cows already in the right relative order can stay — only the rest need to move.",
+            "동작이 '왼쪽 어디로든 옮기기' 뿐이라\n이미 순서가 맞는 소는 그대로 두고 나머지만 옮기면 돼요."),
+        t(E, "So walk the target order and track the largest current-position seen so far. A cow whose current-position falls below that max is out of order — count her.",
+            "그래서 목표 순서대로 훑으며 지금까지 본 위치의 최댓값을 기억해요.\n그보다 왼쪽에 있는 소는 순서가 어긋난 소예요 — 그 소를 세요."),
+        t(E, "Every counted cow needs exactly one move; the rest are already fine, so the count itself is the answer.",
+            "센 소들만 한 번씩 옮기면 나머지는 이미 순서가 맞아요.\n그래서 그 개수가 곧 정답이에요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
