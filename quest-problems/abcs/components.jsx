@@ -188,8 +188,12 @@ export function getAbcsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 뚜렷해요."),
+        t(E, "What do we print? The original A, B, C in increasing order.",
+            "무엇을 출력해야 하나요?\n원래 A, B, C 를 작은 것부터 차례로예요."),
+        t(E, "We don't know which of the 7 shuffled numbers is which sum. But sorting fixes that: the largest must be the total A+B+C, and the smallest must be A itself — no sum of two positive numbers can be smaller than the smallest single one.",
+            "섞인 7개 중 어느 게 무슨 합인지는 몰라요.\n그런데 정렬하면 답이 보여요 —\n가장 큰 값은 항상 A+B+C 예요.\n가장 작은 값은 항상 A 예요\n(두 수를 더한 값이 한 수보다 작을 수는 없으니까요)."),
+        t(E, "Once we have A and the total, B is just the next smallest value, and C is whatever the total has left.",
+            "A 와 전체 합을 알면\nB 는 그다음 작은 값이고,\nC 는 전체 합에서 A, B 를 뺀 나머지예요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

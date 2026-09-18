@@ -319,8 +319,12 @@ export function getSocDist1Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we print? The largest minimum distance guaranteed between any two of the N cows once we add 2 more.",
+            "무엇을 출력해야 하나요?\n소 2마리를 더 놓았을 때\n어떤 두 소든 보장되는 최소 거리의\n가장 큰 값이에요."),
+        t(E, "Trying every distance D one by one is slow. But 'can 2 more cows fit with gaps of at least D?' gets harder as D grows and easier as D shrinks — it flips exactly once, so we can binary-search for that flip point.",
+            "거리 D 를 하나씩 다 시도하면 느려요.\n그런데 'D 이상 거리로 2마리를 더 놓을 수 있나?'\n라는 질문은 D 가 커질수록 어려워지고\n작아질수록 쉬워져요 — 딱 한 번만 뒤집혀요.\n그 지점을 이분 탐색으로 찾아요."),
+        t(E, "So the code binary-searches D, and for each candidate D checks the gaps between existing cows and how many new cows still fit.",
+            "그래서 코드는 D 를 이분 탐색하면서\n기존 소들 사이 간격과\n새로 몇 마리를 더 넣을 수 있는지 확인해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

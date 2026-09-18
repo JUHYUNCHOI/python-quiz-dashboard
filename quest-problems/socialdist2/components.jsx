@@ -338,8 +338,14 @@ export function getSocDist2Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we print? The fewest cows that could have been infected at the very start, given the largest spread radius R consistent with today's pattern.",
+            "무엇을 출력해야 하나요?\n지금 상태와 어긋나지 않는\n가장 큰 전파 거리 R 을 정했을 때,\n처음에 아팠던 소가 최소 몇 마리였는지예요."),
+        t(E, "First we need R: it's the largest radius where no healthy cow ends up within R of a sick one — otherwise that cow would already be sick. So R is the smallest (distance - 1) over every healthy-sick pair.",
+            "먼저 R 을 구해야 해요 —\n건강한 소가 아픈 소로부터 R 이내에 있으면\n안 되니까요 (그랬다면 이미 옮았을 거예요).\nR 은 건강-아픈 소 쌍의 (거리-1) 중\n가장 작은 값이에요."),
+        t(E, "Once R is fixed, sick cows within R of each other could have spread from one cow, so each cluster of close-enough sick cows only needs one original infection.",
+            "R 이 정해지면, R 이내로 붙어 있는 아픈 소들은\n한 마리에서 옮았을 수 있으니\n무리 하나마다 처음 감염은 한 마리면 충분해요."),
+        t(E, "So the code finds max R from every healthy/sick distance, then counts clusters of sick cows more than R apart as separate outbreaks.",
+            "그래서 코드는 먼저 R 을 구하고,\n정렬된 소를 순서대로 훑으며\nR 보다 멀리 떨어진 아픈 소 무리를\n새로운 발병으로 세요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

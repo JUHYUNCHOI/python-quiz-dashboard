@@ -199,8 +199,12 @@ export function getYearCowSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we print? How many years apart the query cow is from Bessie.\nEach statement gives a cow's animal year relative to a cow we already know.",
+            "무엇을 출력해야 하나요?\nBessie 와 물어본 소 사이의 연도 차이예요.\n소들의 말은 이미 아는 소를 기준으로\n앞/뒤 동물해가 몇 걸음 떨어져 있는지 알려줘요."),
+        t(E, "So we take the known cow's year, shift it by the animal's position in the 12-year cycle, and that becomes the new cow's year.",
+            "그래서 아는 소의 연도에\n12가지 동물 순서 중 몇 걸음 차이인지를\n더하거나 빼서 새 소의 연도를 구해요."),
+        t(E, "So the code reads statements in order, updates each new cow's year from an already-known one, then prints the absolute year gap.",
+            "그래서 코드는 진술을 순서대로 읽으며\n이미 아는 연도를 기준으로 새 소의 연도를 구하고,\n마지막에 두 소의 연도차를 절댓값으로 출력해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

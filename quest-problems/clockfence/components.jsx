@@ -274,8 +274,12 @@ export function getClockFenceSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we print? Whether the fence loop turns clockwise (CW) or counterclockwise (CCW).",
+            "무엇을 출력해야 하나요?\n울타리를 시계 방향(CW)으로 그렸는지\n반시계 방향(CCW)으로 그렸는지예요."),
+        t(E, "One corner alone doesn't tell you the loop's overall direction. But going all the way around, right turns and left turns can't tie — one side always wins.",
+            "모퉁이 하나만 보면 전체 방향은 몰라요.\n그런데 한 바퀴를 다 돌면\n오른쪽으로 꺾은 횟수와 왼쪽으로 꺾은 횟수가\n똑같을 수는 없어요 — 한쪽이 항상 더 많아요."),
+        t(E, "So the code counts right vs left turns at every corner and prints whichever direction happened more.",
+            "그래서 코드는 모퉁이마다\n오른쪽인지 왼쪽인지 세어서\n더 많이 나온 쪽을 방향으로 출력해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

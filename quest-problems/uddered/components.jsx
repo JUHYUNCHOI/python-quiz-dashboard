@@ -336,8 +336,12 @@ export function getUdderedSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "What do we print? The fewest full alphabet recitations needed to say every letter of S in order.",
+            "무엇을 출력해야 하나요?\nS 의 글자를 순서대로 말하려면\n알파벳을 최소 몇 번 외워야 하는지예요."),
+        t(E, "Within one recitation you only ever move forward. So whenever the next letter isn't further along than the last one, the old recitation couldn't have reached it — a new one must have started.",
+            "한 번 외우는 동안엔 항상 앞으로만 가요.\n그런데 다음 글자가 앞선 글자보다\n뒤에 있지 않다면, 지금 외우던 걸로는\n닿을 수 없으니 새로 한 번 더 외운 거예요."),
+        t(E, "So the code looks up each letter's alphabet position and starts a new recitation whenever the position doesn't increase.",
+            "그래서 코드는 글자마다 알파벳 순서를 찾아 두고,\n순서가 앞으로 가지 않을 때마다\n외운 횟수를 하나씩 늘려요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -289,8 +289,12 @@ export function getStallingSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we print? How many different ways every cow can be matched to a stall.",
+            "무엇을 출력해야 하나요?\n소를 축사에 한 마리씩 넣는\n방법의 개수예요."),
+        t(E, "Assigning the shortest cow first leaves us unsure how many stalls will remain for the tall cows later. Assigning the tallest cow first tells us exactly how many stalls fit her, and each pick removes one option for everyone after.",
+            "작은 소부터 배정하면, 큰 소한테\n맞는 축사가 몇 개 남을지 알 수 없어요.\n그런데 큰 소부터 배정하면\n맞는 축사 수를 바로 알 수 있고,\n하나를 고를 때마다 다음 소의 선택지가\n하나씩 줄어들어요."),
+        t(E, "So the code sorts cows tallest-first and stalls smallest-first, and multiplies in how many still-open stalls fit each cow.",
+            "그래서 코드는 소는 키 큰 순서로,\n축사는 작은 순서로 정렬한 뒤,\n소마다 아직 남은 선택지 수를 곱해 나가요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

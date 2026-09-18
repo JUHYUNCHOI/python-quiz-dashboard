@@ -64,8 +64,12 @@ export function getDaisyChainsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we print? How many contiguous subarrays have an average that exactly matches one of the petal counts inside that same subarray.",
+            "무엇을 출력해야 하나요?\n연속 부분 배열 중에서 평균 꽃잎 수가\n그 안의 어떤 꽃 꽃잎 수와\n정확히 같은 배열의 개수예요."),
+        t(E, "We can't tell in advance which subarrays will work, so we check every start and growing end. But a non-integer average can never match a whole petal count, so we only test the average once the running sum divides evenly by the length.",
+            "어떤 구간이 답이 될지 미리 알 수 없어\n시작점과 끝점을 다 늘려가며 봐야 해요.\n그런데 합이 구간 길이로 나누어지지 않으면\n평균이 정수가 아니라서 답이 될 수 없어요.\n나누어질 때만 확인하면 돼요."),
+        t(E, "So the code fixes a start i, grows the window with j, and only checks membership in the window once the sum divides evenly.",
+            "그래서 코드는 시작점 i 를 고정하고\nj 로 구간을 늘려가며,\n먼저 나누어지는지 보고\n그다음에만 구간 안에서 평균을 찾아요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -241,8 +241,12 @@ export function getComfyCowsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "What do we print after each cow is placed? The running count of comfortable cows (exactly 3 of 4 neighbors filled).",
+            "매번 무엇을 출력해야 하나요?\n지금까지 편안한 소가 몇 마리인지예요\n(이웃 4칸 중 정확히 3칸에 소가 있어야 편안해요)."),
+        t(E, "Re-scanning every cow each time is slow, but adding one cow can only flip comfort for that cow and its 4 neighbors.",
+            "매번 전체를 다시 세면 느려요.\n그런데 새 소 한 마리가 놓여도\n편안함이 바뀔 수 있는 건\n그 소와 이웃 4칸뿐이에요."),
+        t(E, "So the code checks only those 5 spots after each placement and keeps a running set of comfortable cows.",
+            "그래서 코드는 새 소와 이웃 4칸만 다시 확인해서\n편안한 소 집합을 갱신하고,\n그 크기를 결과로 남겨요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

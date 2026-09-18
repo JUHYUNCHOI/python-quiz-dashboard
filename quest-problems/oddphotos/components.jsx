@@ -264,8 +264,12 @@ export function getOddPhotosSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "What do we print? The largest number of groups whose sums alternate even, odd, even, odd, ...",
+            "무엇을 출력해야 하나요?\n합이 짝수, 홀수, 짝수, 홀수 … 로 번갈아 가도록\n나눌 수 있는 묶음의 최대 개수예요."),
+        t(E, "Trying every way to actually group the cows would explode. But we don't need the groups themselves — an even-sum group needs 1 even cow or 2 odd cows, and an odd-sum group needs 1 odd cow. Only the counts matter.",
+            "실제로 어떻게 나누는지 다 시도하면 너무 많아요.\n그런데 몇 개씩 나눌지는 개수만 알면 돼요 —\n짝수합 묶음은 짝수 소 1마리 또는 홀수 소 2마리,\n홀수합 묶음은 홀수 소 1마리면 충분해요."),
+        t(E, "So the code counts even/odd cows once, then tries every group count k and keeps the largest k the counts can cover.",
+            "그래서 코드는 짝수·홀수 소 개수를 먼저 세고,\n묶음 개수 k 를 0부터 다 넣어 보며\n그 개수로 만들 수 있는 가장 큰 k 를 답으로 남겨요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
