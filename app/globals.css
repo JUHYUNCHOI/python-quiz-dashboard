@@ -809,14 +809,10 @@ code, pre, .font-mono, [class*="font-mono"] {
 /* 코드창만 글보다 넓게 — 2026-09-18 선생님: *"코드 보는 곳에 너무 좁다는 생각은 나만 하는건가?"*
    quest 본문 틀은 880px 다. 글은 그 안에서 짧게 유지해야 읽힌다(한 줄 60자 규칙).
    그런데 **코드는 짧게 접으면 안 된다** — 가로로 밀어 보게 된다.
-   그래서 본문 틀은 그대로 두고 코드창만 큰 화면에서 틀 밖으로 넓힌다.
-   1200px 미만(노트북 작은 화면·패드·모바일)에서는 아무것도 안 바뀐다. */
-@media (min-width: 1200px) {
-  .qcode-wide {
-    width: min(1180px, calc(100vw - 300px));
-    max-width: none !important;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
+
+   ⚠️ 처음엔 `left:50% + translateX(-50%)` 로 틀 **밖으로** 빼냈다. 그게 틀렸다 —
+      선생님 화면에서 `from collections import` 의 앞이 잘려 `ons import` 로 보였다.
+      옮겨 놓은 상자는 레이아웃상 제자리에 있어서, 가로 스크롤과 어긋난다.
+   지금은 **틀 밖으로 안 나간다.** 틀이 주는 너비를 끝까지 쓸 뿐이다
+   (740px 고정 → 틀 전체). 그래도 380 → 560 높이와 14.5px 글자는 그대로 남는다. */
+.qcode-wide { max-width: 100% !important; }

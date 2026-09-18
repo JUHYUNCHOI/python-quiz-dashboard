@@ -137,7 +137,7 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
 
       {/* 변수 뜻 범례 — 늘 보이게 (코드 깊이 들어가도 "n이 뭐였지?" 안 하게) */}
       {vars && vars.length > 0 && (
-        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, maxWidth: 1040, margin: "0 auto 8px" }}>
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, maxWidth: "100%", margin: "0 auto 8px" }}>
           {vars.map((vr, i) => (
             <span key={i} style={{
               display: "inline-flex", alignItems: "center", gap: 5,
@@ -171,7 +171,7 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
         fontFamily: "'JetBrains Mono',monospace",
         // ligature 끄기 — != 를 ≠ 로 합치지 말고 그대로 (선생님 2026-07-13)
         fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0',
-        fontSize: 14.5, lineHeight: 1.8, maxWidth: 1040, margin: "0 auto",
+        fontSize: 14.5, lineHeight: 1.8, maxWidth: "100%", margin: "0 auto",
         position: "relative",
         // 아래에 더 있다 / **오른쪽에 더 있다** 는 힌트. 오른쪽은 2026-09-11 추가 —
         // pre 로 바꾼 뒤 긴 줄이 표시 없이 잘리고 있었다(ux 가 checkups 에서 잡음).
