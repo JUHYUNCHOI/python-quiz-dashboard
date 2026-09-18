@@ -78,8 +78,8 @@ export function getMcc21MenuSections(E) {
         "    layers = {3, 2};",
       ],
       why: [
-        t(E, "Read N and the N layer sizes into a list. That's all the input — the whole problem is just deciding their order.",
-            "N 과 N 개의 층 크기를 리스트로 읽어요.\n입력은 이게 전부예요. 이 순서를 정하는 게 문제의 전부거든요."),
+        t(E, "What do we need to produce? The minimum number of lines after choosing the best order for the layers.\nTo even start, we need every layer's size — so read N and the N layer sizes into a list first.",
+            "무엇을 구해야 할까요? 층을 가장 좋은 순서로 쌓았을 때 나오는 최소 줄 수예요.\n그러려면 먼저 층이 몇 개(N)이고 크기가 얼마인지 알아야 해요.\n그래서 N 과 층 크기 리스트부터 읽어요."),
         t(E, "MOD = 1e9+7: the line count can get huge (up to 10^4 multiplied 30 times), so the answer is asked modulo 1e9+7.",
             "줄 수는 엄청 커질 수 있어요. 10^4 을 30번까지 곱하니까요.\n그래서 답은 MOD = 1e9+7 로 나눈 나머지로 구해요."),
       ],

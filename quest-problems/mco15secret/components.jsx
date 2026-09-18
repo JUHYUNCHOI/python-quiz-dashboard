@@ -100,8 +100,8 @@ export function getSecretSections(E) {
       color: A,
       py: FULL_PY.slice(0, 8), cpp: FULL_CPP.slice(0, 30),
       why: [
-        t(E, "Three lines come in: the length N, then a, then b. Each of a and b becomes a list of numbers.",
-            "세 줄이 들어와요 — 길이 N, 그다음 a, 그다음 b.\na 와 b 는 각각 숫자 목록이 돼요."),
+        t(E, "What do we need to answer? Whether b is some rotation of a — YES or NO.\nSo first read the three lines that come in: the length N, then a, then b.",
+            "무엇을 답해야 할까요? b 가 a 를 돌린 것인지 YES 인지 NO 인지예요.\n그래서 먼저 세 줄을 읽어요 — 길이 N, 그다음 a, 그다음 b."),
       ],
       pyOnly: [
         t(E, "list(map(int, input().split())) turns one line of text into a list of numbers.",
@@ -123,8 +123,8 @@ export function getSecretSections(E) {
             "a 를 돌린다는 건 앞쪽 몇 개를 떼어 뒤에 붙인다는 뜻이에요.\na 를 두 번 이어 적어 두면, 그렇게 돌린 모양들이 이미 나란히 놓여 있어요."),
         /* 2026-09-17 2차: 문제는 "a 와 b 는 길이가 같다" 고 했는데 코드는 길이를 비교한다.
            학생이 "같은 길이라면서요?" 에서 멈춘다. 왜 그래도 확인하는지를 먼저 말한다. */
-        t(E, "The problem says a and b are the same length, but the code checks anyway — it costs one line. If the lengths ever differed, no amount of rotating could make them match, so the answer would be NO right away.",
-            "문제는 a 와 b 의 길이가 같다고 했지만, 코드는 한 줄로 확인하고 넘어가요.\n혹시 길이가 다르면 아무리 돌려도 같아질 수 없으니 바로 NO 예요."),
+        t(E, "The problem says a and b are the same length, but the code checks anyway — it costs one line. If the lengths ever differed, no amount of rotating could make them match. So in that case we already know the answer is NO.",
+            "문제는 a 와 b 의 길이가 같다고 했지만, 코드는 한 줄로 확인하고 넘어가요.\n혹시 길이가 다르면 아무리 돌려도 같아질 수 없어요.\n그래서 그럴 땐 바로 NO 예요."),
       ],
     },
     {

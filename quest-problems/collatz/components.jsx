@@ -53,12 +53,12 @@ export function getCollatzSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Just simulate: repeat the whole pass exactly k times (not 'until it reaches 1'), then print the sum.",
-            "시키는 대로 그대로 해요. 한 바퀴 전체를 정확히 k번 반복하고 ('1이 될 때까지' 가 아니에요) 합을 출력해요."),
-        t(E, "For each number: even → divide by 2, odd → times 3 plus 1.",
-            "숫자마다 짝수면 2로 나누고, 홀수면 3배한 뒤 1을 더해요."),
-        t(E, "n·k ≤ 10⁶, so a plain double loop is fast enough.",
-            "n·k ≤ 10⁶ 라서 이중 반복문만으로도 충분히 빨라요."),
+        t(E, "What are we printing? The sum of the list after doing the flip-or-halve step exactly k times. So first read n, k, and the n numbers.",
+            "무엇을 출력해야 하나요? 짝수면 반으로, 홀수면 3배+1 하는 걸 k번 다 돈 뒤의 리스트 합이에요.\n그러니 먼저 n, k, 숫자 n개를 읽어요."),
+        t(E, "Why exactly k passes, not 'until it reaches 1'? Because the problem asks for exactly k. Each pass: even → divide by 2, odd → times 3 plus 1.",
+            "왜 딱 k번만 돌까요? '1이 될 때까지' 가 아니에요.\n문제가 정확히 k번만 하라고 했으니, 숫자마다 짝수면 2로 나누고 홀수면 3배한 뒤 1을 더해요."),
+        t(E, "So after all k passes, print the sum. n·k ≤ 10⁶, so a plain double loop is fast enough.",
+            "그래서 k번을 다 돈 뒤 합을 출력해요.\nn·k ≤ 10⁶ 라서 이중 반복문만으로도 충분히 빨라요."),
       ],
       pyOnly: [
         t(E, "Update in place with a[i] = ... inside the k-loop; sum(a) gives the final answer.",

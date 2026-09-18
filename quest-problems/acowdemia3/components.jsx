@@ -108,12 +108,12 @@ export function getAcowdemia3Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "The trap: the SAME two cows can border two different grass cells. They still become friends only ONCE — so we keep cow pairs in a set to drop duplicates.",
-            "같은 두 소가 풀 칸 두 개에 나란히 붙을 수 있어요.\n그래도 친구가 되는 건 한 번뿐이라, 소 쌍을 set 에 넣어 겹치는 걸 지워요."),
-        t(E, "If a grass cell touches 3+ cows, two of them must sit on opposite sides — that's a brand-new pair no other grass can repeat, so we add 1 right away.",
-            "풀 칸에 소가 3마리 이상이면 그중 둘은 반드시 마주 보고 있어요.\n마주 본 두 소는 다른 풀 칸이 만들 수 없는 쌍이라 바로 하나 더해요."),
-        t(E, "Answer = (opposite-side count) + (number of unique 2-cow pairs).",
-            "정답은 마주 본 쌍의 개수에, 겹치지 않는 두 소 쌍의 개수를 더한 값이에요."),
+        t(E, "What do we need to count? Every friendship — but if the SAME two cows border two different grass cells, they still count only ONCE. So we keep cow pairs in a set to drop duplicates.",
+            "무엇을 세야 하나요? 친구가 된 소 쌍의 개수예요.\n그런데 같은 두 소가 풀 칸 두 개에 나란히 붙을 수 있어요. 그래도 친구가 되는 건 한 번뿐이라, 소 쌍을 set 에 넣어 겹치는 걸 지워요."),
+        t(E, "A grass cell can touch up to 4 cows — why is 3+ special? Directions come in opposite pairs, so 3 present forces one full opposite pair. That pair can never repeat at another cell, so we add 1 for it right away, skipping the set.",
+            "풀 칸은 소를 최대 4마리까지 붙일 수 있어요. 그럼 3마리 이상은 왜 특별할까요?\n방향은 위아래·양옆으로 짝을 이루니, 3마리가 있으면 그중 반드시 마주 보는 한 쌍이 생겨요. 이 쌍은 다른 풀 칸이 다시 만들 수 없으니, set 을 거치지 않고 바로 1을 더해요."),
+        t(E, "So the answer = (opposite-side count) + (number of unique 2-cow pairs).",
+            "그래서 정답은 마주 본 쌍의 개수에, set 에 남은 겹치지 않는 두 소 쌍의 개수를 더한 값이에요."),
       ],
       pyOnly: [
         t(E, "A set of sorted (cow, cow) tuples removes duplicate pairs automatically.",

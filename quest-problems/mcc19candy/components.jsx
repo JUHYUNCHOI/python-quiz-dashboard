@@ -236,15 +236,15 @@ export function getMcc19CandySections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Work backwards from the end: Bob must finish at position 1, so undo the rounds from last to first.",
-            "끝에서부터 거꾸로 봐요. Bob 은 자리 1 로 끝나야 하니, 마지막 라운드부터 하나씩 되돌려요."),
+        t(E, "Why not simulate forward? Lining everyone up every round is slow. So start at Bob's final position — 1 — and undo the rounds from last to first.",
+            "왜 앞으로 따라가지 않고 거꾸로 볼까요? 앞으로 가려면 매 라운드마다 사람을 줄로 세워야 해서 느려요.\n그래서 Bob 이 끝나는 자리 1 에서 시작해, 마지막 라운드부터 거꾸로 되돌려요."),
         /* 2026-09-08: 설명은 "되돌리기" 인데 코드는 "정방향 비트합" 이라 서로 다른 방법이었다.
            학생: "설명은 거꾸로라는데 코드는 앞에서부터 돈다. 왜 안 맞는지 모르겠다."
            코드를 되돌리기로 바꾸고 설명도 같은 말로 맞췄다. 비트는 쓰지 않는다. */
         t(E, "\"odd\" wipes out the odd positions, so someone now standing at p was at 2p one round earlier. \"even\" wipes out the even ones, so p was at 2p − 1.",
-            "\"odd\" 는 홀수 자리를 지우니, 지금 p 번째인 사람은 한 라운드 전엔 2p 번째에 있었어요. \"even\" 은 짝수 자리를 지우니 2p − 1 번째였고요.",),
+            "\"odd\" 는 홀수 자리를 지우니, 지금 p 번째인 사람은 한 라운드 전엔 2p 번째에 있었어요. \"even\" 은 짝수 자리를 지우니 2p − 1 번째였고요."),
         t(E, "So start at pos = 1 (the last survivor) and undo the rounds from last to first. No line of people is ever built.",
-            "그래서 pos = 1 (마지막에 남은 사람)에서 시작해, 라운드를 마지막부터 거꾸로 되돌려요. 사람을 한 줄로 세울 일이 없어요.",),
+            "그래서 pos = 1 (마지막에 남은 사람)에서 시작해, 라운드를 마지막부터 거꾸로 되돌려요. 사람을 한 줄로 세울 일이 없어요."),
       ],
       pyOnly: [
         t(E, "input().split() gives the shouts as a list of words; range(R - 1, -1, -1) walks the rounds backwards.",

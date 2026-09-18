@@ -855,8 +855,8 @@ export function getCowPhotosSections(E) {
       color: "#d97706",
       py: cx(E, CP_STEP1_PY), cpp: cx(E, CP_STEP1_CPP),
       why: [
-        t(E, "T independent test cases. For each: read N, then N heights as a list.",
-            "따로따로인 문제가 T 개 와요.\n하나마다 N 을 읽고, 다음 줄에서 키 N 개를 목록으로 받아요."),
+        t(E, "What do we have to hand back? The length of the longest possible photo — how many cows can line up.\nSo first take in the T independent cases, and for each one, N and the N heights.",
+            "무엇을 내놓아야 할까요? 사진 한 장에 세울 수 있는 소의 최대 수, 즉 가장 긴 사진의 길이예요.\n그러니 먼저 서로 독립인 문제가 T 개 온다는 걸 받고, 하나마다 N 과 키 N 개를 받아요."),
       ],
       aside: <CpAside E={E} highlight={[0, 1, 2]} note={t(E, "First case (after T): N = 4, heights = [1, 1, 2, 3].", "첫 케이스 (T 다음): N = 4, 키 = [1, 1, 2, 3].")} />,
     },

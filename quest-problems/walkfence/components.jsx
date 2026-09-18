@@ -500,8 +500,8 @@ export function getWalkFenceSections(E) {
       color: A,
       py: WF_INPUT_PY, cpp: WF_INPUT_CPP,
       why: [
-        t(E, "Read N (cows) and P (corner posts), then the polygon corners in order.",
-            "소의 수 N 과 코너의 수 P 를 읽고, 코너를 순서대로 받아요."),
+        t(E, "Goal: for each cow, print the shorter of the two routes around the fence loop.\nTo find that fast, we'll first turn the loop into a straight number line — each post's distance from post 0.\nSo start by reading N (cows), P (posts), then the corners in order.",
+            "목표는 소마다 울타리 한 바퀴를 도는 두 길 중 짧은 쪽을 출력하는 거예요.\n빠르게 구하려면 둘레를 곧게 펼친 수직선으로 먼저 바꿔요 — 코너 0 에서부터의 거리로요.\n그러니 먼저 소의 수 N 과 코너의 수 P 를 읽고, 코너를 순서대로 받아요."),
         t(E, "Posts are listed clockwise (or counter-clockwise) around the rectilinear fence.",
             "코너는 울타리를 한 방향으로 돌면서 차례대로 적혀 있어요."),
       ],
@@ -540,8 +540,8 @@ export function getWalkFenceSections(E) {
       why: [
         t(E, "For each (x, y), scan edges. Once we find which edge it sits on, we know its distance from post 0.",
             "점 (x, y) 마다 변을 하나씩 봐요. 어느 변 위에 있는지 찾으면 코너 0 에서의 거리를 알 수 있어요."),
-        t(E, "Cow distance = |d1 - d2| one way, or perimeter - |d1 - d2| the other way. Take the min.",
-            "한쪽으로 가면 |d1 - d2|, 반대로 돌면 perimeter - |d1 - d2| 예요. 둘 중 작은 값이 답이에요."),
+        t(E, "Why compute both directions? We can't tell which way is shorter in advance — one way is |d1 - d2|, the other is perimeter - |d1 - d2|. Take the min.",
+            "왜 두 방향을 다 구할까요? 어느 쪽이 짧은지 미리 알 수 없어서예요 — 한쪽은 |d1 - d2|, 반대쪽은 perimeter - |d1 - d2| 예요. 둘 중 작은 값이 답이에요."),
       ],
       pyOnly: [
         t(E, "Functions defined at module scope can read the closure (posts, cum) directly.",

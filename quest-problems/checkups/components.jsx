@@ -1634,8 +1634,8 @@ export function getCheckupsSections(E) {
       color: A,
       py: CK_BRUTE_S1_PY, cpp: CK_BRUTE_S1_CPP,
       why: [
-        t(E, "Read N, then arrays cow and want. Initialize counts[0..N] = 0.",
-            "N 을 읽고 cow 와 want 를 읽어요. counts[0..N] 은 전부 0 으로 채워요."),
+        t(E, "What do we need to find? For every possible checkup count c = 0..N, how many (l, r) reversals give exactly c.\nSo first read N, cow, and want, and set counts[0..N] all to 0 — one slot per possible count.",
+            "무엇을 알아내야 할까요? 검진 수가 정확히 c 인 (l, r) 뒤집기가 c = 0..N 마다 몇 개인지예요.\n그러려면 먼저 N, cow, want 를 읽고 counts[0..N] 을 전부 0 으로 채워요. 있을 수 있는 검진 수마다 자리 하나씩이에요."),
         t(E, "counts[checks] will hold the number of (l, r) pairs that result in exactly checks checkups.",
             "counts[checks] 에는 검진 수가 딱 checks 인 (l, r) 쌍이 몇 개인지 담겨요."),
       ],

@@ -2910,8 +2910,8 @@ export function getMooin3Sections(E) {
       color: A,
       py: M3_INPUT_PY, cpp: M3_INPUT_CPP,
       why: [
-        t(E, "Read N, Q, then the whole string s.",
-            "N 과 Q 를 읽고, 이어서 글자 줄 s 를 읽어요."),
+        t(E, "First, a simple version that's easy to get right: for each query, just check every middle letter j one by one.\nSo read N, Q, then the whole string s.",
+            "먼저 확실하게 맞는 간단한 방법부터 볼게요. 물음마다 가운데 글자 j 를 하나씩 다 확인해요.\n그러니 N 과 Q 를 읽고, 이어서 글자 줄 s 를 읽어요."),
         t(E, "Each query line: l r — both 1-INDEXED. The code converts to 0-indexed (l--, r--) before processing.",
             "물음 한 줄은 l r 이에요. 둘 다 1 부터 세는 번호라, 코드에서 0 부터로 바꿔요 (l--, r--)."),
       ],

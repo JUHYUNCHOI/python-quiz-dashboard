@@ -222,8 +222,8 @@ export function getMcc20CityTourSections(E) {
       why: [
         /* 2026-09-17: 104·80 자가 한 덩어리였다. Stepper 는 \n 을 뭉개니 항목을 나눈다.
            "플러드필" 은 뜻을 안 밝힌 음차어라 우리말로 먼저 말하고 이름을 뒤에 붙인다. */
-        t(E, "Start at (1,1) and let the reachable area spread outwards — this is BFS (flood fill).",
-            "시작 칸 (1,1) 에서 갈 수 있는 곳을 바깥으로 번져 나가게 해요. 이 방법을 BFS(번져 나가며 채우기)라고 불러요."),
+        t(E, "Why not sweep the whole grid over and over? That could take up to M×N passes over M×N cells — 10^10. So instead we visit each cell just once, starting at (1,1) and letting the reachable area spread outwards — this is BFS (flood fill).",
+            "왜 그리드를 몇 번씩 다시 훑지 않을까요? 그러면 최대 M×N 번을 M×N 칸에 반복해서 10^10 이 될 수 있어요.\n그래서 각 칸을 딱 한 번만 방문하기로 해요. 시작 칸 (1,1) 에서 갈 수 있는 곳을 바깥으로 번져 나가게 하는 방법을 BFS(번져 나가며 채우기)라고 불러요."),
         t(E, "Pop a cell, then for each of its 4 neighbors step in only if it hasn't been visited AND the height gap |H[nr][nc] − H[r][c]| < D.",
             "칸을 하나 꺼내서 이웃 4 개를 봐요. 아직 안 간 칸이면서 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요."),
         t(E, "Mark visited AT PUSH time and bump count then — so every reachable cell is counted exactly once.",

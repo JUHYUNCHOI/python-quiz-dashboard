@@ -283,8 +283,8 @@ export function getSwapToWinSections(E) {
       color: A,
       py: SECTION_READ_PY, cpp: SECTION_READ_CPP,
       why: [
-        t(E, "Multiple test cases — wrap everything in a loop over T.",
-            "테스트 케이스 여러 개 — 전체를 T 반복 안에 넣어요."),
+        t(E, "Goal: turn s_1 into target using at most 2M swaps.\nWe'll fix it one position at a time and show each position costs at most 2 ops.\nSo start by reading the test cases — T of them, each with N, M, target, and N strings.",
+            "목표는 s_1 을 최대 2M 번의 swap 으로 target 과 똑같이 만드는 거예요.\n자리를 하나씩 고쳐 가면서, 자리마다 최대 2번이면 충분함을 보일 거예요.\n그러니 먼저 입력을 읽어요 — 테스트 케이스 T 개, 각각 N, M, target, 문자열 N 개."),
         t(E, "Store strings as lists of characters so we can swap in place.",
             "문자열은 글자 리스트로 저장 — 제자리에서 swap 하기 위함."),
       ],
@@ -302,10 +302,12 @@ export function getSwapToWinSections(E) {
       color: A,
       py: SECTION_SAME_PY, cpp: SECTION_SAME_CPP,
       why: [
+        t(E, "Why fix positions left to right? Every fix only touches column k or later, so once a position is right, it stays right.",
+            "왜 왼쪽부터 고칠까요? 고칠 때는 항상 k 번째나 그 뒤 칸만 건드리니, 한 번 맞춘 자리는 계속 맞아 있어요."),
         t(E, "Walk position k from 0 to M-1. If s_1 already matches there, skip.",
             "k 를 0부터 M-1 까지 훑어요. 이미 맞으면 건너뜀."),
-        t(E, "If the wanted letter exists later inside s_1 itself, one within-string swap is enough.",
-            "필요한 글자가 s_1 의 뒤쪽에 있다면 같은 줄 안에서 한 번만 swap 하면 끝."),
+        t(E, "Cheapest fix first: if the wanted letter exists later inside s_1 itself, one within-string swap is enough.",
+            "제일 싼 방법부터 봐요. 필요한 글자가 s_1 의 뒤쪽에 있다면 같은 줄 안에서 한 번만 swap 하면 끝."),
       ],
     },
     {
@@ -319,8 +321,8 @@ export function getSwapToWinSections(E) {
             "Step A: 그 글자를 자기 줄 안에서 k 번째 칸으로 옮겨요."),
         t(E, "Step B: type-2 swap exchanges column k between s_1 and s_y.",
             "Step B: type-2 swap 으로 s_1 과 s_y 의 k 번째 칸을 교환."),
-        t(E, "Worst case 2 ops per position × M positions = 2M total. ✓",
-            "최악 한 자리당 2 ops × M 자리 = 2M 개. ✓"),
+        t(E, "Why does this stay within 2M? Each position costs at most 2 ops (Step A + Step B), so M positions cost at most 2M total.",
+            "왜 2M 을 안 넘을까요? 자리마다 최대 2 ops (Step A + Step B) 니까, M 자리를 다 더해도 2M 을 안 넘어요."),
       ],
     },
     {

@@ -120,12 +120,12 @@ export function getExchangeSections(E) {
       color: A,
       py: EX_FULL_PY, cpp: EX_FULL_CPP,
       why: [
-        t(E, "Read N, M, the direction string, then the N capacities. Each cow starts full.",
-            "N, M, 방향 문자열, 그 다음 용량 N개를 읽어요. 각 소는 가득 찬 채로 시작해요."),
-        t(E, "Each minute: every cow with milk gives 1L to its L/R neighbor, then over-cap cells lose the overflow.",
-            "1분마다 우유가 있는 소가 이웃에게 1L 를 넘겨요. 그 다음 용량을 넘은 만큼 버려요."),
-        t(E, "After M minutes, print the total milk left. This brute simulation is O(N·M).",
-            "M분 뒤 남은 우유의 총량을 출력해요. 이렇게 그대로 따라 하면 O(N·M) 이에요."),
+        t(E, "What do we need before we can follow the minutes? N, M, the direction string, and each cow's capacity. So read those first — each cow starts full.",
+            "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 각 소의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 가득 찬 채로 시작해요."),
+        t(E, "Why hand off milk every single minute? Because that's exactly what the problem does — each cow with milk passes 1L to its neighbor, then anything over cap overflows.",
+            "왜 매분 우유를 넘겨줄까요? 문제가 그렇게 하라고 했으니까요.\n우유가 있는 소가 이웃에게 1L 를 넘기고, 그다음 용량을 넘은 만큼은 버려요."),
+        t(E, "So after M minutes, print what's left. Walking minute by minute like this is O(N·M) — the faster way is in the C++ note below.",
+            "그래서 M분 뒤 남은 우유의 총량을 출력해요.\n한 분씩 그대로 따라가니 O(N·M) 이에요 — 더 빠르게 가는 방법은 아래 C++ 설명에 있어요."),
       ],
       pyOnly: [
         t(E, "sys.stdin.read().split() grabs every token at once — fast for big inputs.",

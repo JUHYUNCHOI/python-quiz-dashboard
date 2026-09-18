@@ -764,8 +764,8 @@ export function getMooBruteSections(E) {
       color: "#94a3b8",
       py: BR_INPUT_PY, cpp: BR_INPUT_CPP,
       why: [
-        t(E, "Read n, f, the string, and start an empty set for distinct moos.",
-            "n, f, 문자열을 읽고, 서로 다른 moo 를 모을 빈 set 을 만들어요."),
+        t(E, "The goal: find every moo pattern that can reach count ≥ f by changing at most one letter.\nThe simplest way to check that is to literally try every position and every letter.\nSo start by reading n, f, the string, and opening an empty set for the results.",
+            "목표는 최대 1글자를 바꿔서 f 번 이상 나오는 moo 패턴을 다 찾는 거예요.\n가장 단순한 방법은 위치와 글자를 하나씩 다 바꿔 보며 확인하는 거예요.\n그러니 먼저 n, f, 문자열을 읽고, 결과를 모을 빈 set 을 만들어요."),
       ],
       pyOnly: [
         t(E, "list() so we can swap letters later (strings are immutable).",
@@ -780,8 +780,8 @@ export function getMooBruteSections(E) {
       why: [
         t(E, "Two helpers: is_moo (1st ≠ 2nd, 2nd = 3rd) and count_all (scan once, return {moo: count}).",
             "도우미 함수가 둘이에요.\nis_moo 는 1번째 ≠ 2번째, 2번째 = 3번째 인지 봐요.\ncount_all 은 한 번 훑어서 {moo: 개수} 를 돌려줘요."),
-        t(E, "count_all costs O(N) per call — that's what next section will call 26N times. The bottleneck.",
-            "count_all 은 한 번 부를 때마다 O(N) 이에요.\n다음 섹션이 이걸 26N 번이나 불러요. 그게 병목이에요."),
+        t(E, "Why does count_all's cost matter? Because the next section will call it 26N times — that's the whole slow part.",
+            "count_all 의 값이 왜 중요할까요? 다음 섹션이 이 함수를 26N 번이나 부르기 때문이에요.\n그게 느려지는 이유예요."),
       ],
       pyOnly: [],
       cppOnly: [],
@@ -793,8 +793,8 @@ export function getMooBruteSections(E) {
       why: [
         t(E, "For every position × every letter: swap, re-scan the whole string, restore.",
             "모든 위치와 모든 글자에 대해 글자를 바꾸고, 문자열 전체를 다시 훑고, 원래대로 되돌려요."),
-        t(E, "26N trials × O(N) scan = O(26N²). At N=20,000 → ~10¹⁰ ops → TLE.",
-            "26N 번 시도 × O(N) 훑기 = O(26N²) 예요.\nN=20,000 이면 약 10¹⁰ 번 계산이라 TLE 예요."),
+        t(E, "Why is this slow? 26N trials × O(N) scan = O(26N²). At N=20,000 that's ~10¹⁰ ops → TLE.",
+            "왜 느릴까요? 26N 번 시도 × O(N) 훑기 = O(26N²) 예요.\nN=20,000 이면 약 10¹⁰ 번 계산이라 TLE 예요."),
       ],
       pyOnly: [],
       cppOnly: [],
@@ -969,7 +969,8 @@ export function getMooSections(E) {
       color: A,
       py: MOO_INPUT_PY, cpp: MOO_INPUT_CPP,
       why: [
-        t(E, "Read n, f, then the string.", "n 과 f 를 읽고, 그다음 문자열도 읽어요."),
+        t(E, "Same goal — but this time, don't re-scan the whole string on every trial.\nOnly the 3 windows touched by a change need updating.\nSo start the same way: read n, f, then the string.",
+            "목표는 같아요. 이번엔 시도마다 문자열 전체를 다시 훑지 않아요.\n바뀐 글자가 걸치는 3개 윈도우만 고치면 되거든요.\n그러니 이번에도 먼저 n 과 f, 문자열을 읽어요."),
       ],
       pyOnly: [
         t(E, "list() so we can swap letters later (strings are immutable).",

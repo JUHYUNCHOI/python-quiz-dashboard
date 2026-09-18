@@ -420,8 +420,8 @@ export function getLonelyPhotoSections(E) {
       color: A,
       py: LP_INPUT_PY, cpp: LP_INPUT_CPP,
       why: [
-        t(E, "Read N (length) and the string of G/H characters.",
-            "길이 N 과 G/H 문자열을 읽어요."),
+        t(E, "What do we need to produce? The total count of lonely photos.\nWe'll get there by standing at each cow — so first read N and the G/H string.",
+            "무엇을 내놓아야 할까요? 외로운 사진의 총 개수예요.\n소 하나하나에 서서 양옆을 세는 방법으로 구할 거예요. 그러니 먼저 길이 N 과 G/H 문자열을 읽어요."),
       ],
       pyOnly: [
         t(E, "input().strip() removes any trailing newline.",

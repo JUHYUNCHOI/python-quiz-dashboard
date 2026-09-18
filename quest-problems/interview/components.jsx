@@ -462,8 +462,10 @@ export function getInterviewSections(E) {
       color: A,
       py: IV_INPUT_PY, cpp: IV_INPUT_CPP,
       why: [
-        t(E, "N cows lined up, K counters available. times[i] = how long cow i takes.", "소 N 마리가 줄을 서고 카운터는 K 개예요. times[i] 는 소 i 가 걸리는 시간이에요."),
-        t(E, "First K cows immediately go to counters 0..K-1.", "처음 K 마리 소는 바로 카운터 0..K-1 로 가요."),
+        t(E, "What are we trying to find? Which counters Bessie could end up at.\nSo first read N, K, and how long each cow takes.",
+            "무엇을 알아내야 할까요? Bessie 가 갈 수 있는 카운터가 몇 번인지예요.\n그러려면 먼저 N, K, 그리고 소마다 걸리는 시간을 읽어요."),
+        t(E, "The first K cows immediately go to counters 0..K-1 — every counter is still empty, so there's nothing to compare yet.",
+            "처음 K 마리 소는 바로 카운터 0..K-1 로 가요. 아직 모든 카운터가 비어 있어서 견줄 게 없거든요."),
       ],
       pyOnly: [
         t(E, "import heapq for the priority queue (min-heap).", "import heapq 로 우선순위 큐(min-heap)를 써요."),
@@ -478,10 +480,10 @@ export function getInterviewSections(E) {
       color: "#16a34a",
       py: IV_SIMULATE_PY, cpp: IV_SIMULATE_CPP,
       why: [
-        t(E, "min-heap pop = next free counter; push it back with new finish_time = old + this cow's processing time.",
-            "min-heap 에서 pop 한 것이 다음에 비는 카운터예요. 그 카운터를 새 종료 시간(이전 + 이 소가 걸리는 시간)으로 다시 push 해요."),
-        t(E, "Stop just BEFORE Bessie (cow N-1) — she's what we're solving for.",
-            "Bessie (소 N-1) 바로 앞에서 멈춰요. Bessie 가 어디로 가는지가 우리가 찾는 답이거든요."),
+        t(E, "Each remaining cow should go to whichever counter frees up earliest. That's exactly what popping the min-heap gives us — so pop it, then push it back with new finish_time = old + this cow's processing time.",
+            "남은 소는 가장 먼저 비는 카운터로 가야 해요. min-heap 에서 pop 하면 바로 그 카운터가 나와요.\n그래서 pop 한 카운터를 새 종료 시간(이전 + 이 소가 걸리는 시간)으로 다시 push 해요."),
+        t(E, "We stop just BEFORE Bessie (cow N-1), because where SHE ends up is the answer we're solving for — not something to simulate away.",
+            "Bessie (소 N-1) 바로 앞에서 멈추는 이유는, Bessie 가 어디로 가는지가 바로 우리가 찾는 답이기 때문이에요."),
       ],
       pyOnly: [
         t(E, "heapq.heappop / heappush — log K each.", "heapq.heappop 과 heappush 는 각각 log K 만큼 걸려요."),
@@ -495,9 +497,10 @@ export function getInterviewSections(E) {
       color: A,
       py: IV_OUTPUT_PY, cpp: IV_OUTPUT_CPP,
       why: [
-        t(E, "After K..N-2 cows are processed, the heap shows current finish times of all K counters.", "K..N-2 번 소까지 처리하면 heap 에 카운터 K 개의 지금 종료 시간이 들어 있어요."),
-        t(E, "Bessie goes to the EARLIEST FREE counter — but tied counters are all valid choices.", "Bessie 는 가장 먼저 비는 카운터로 가요. 시간이 같으면 그 카운터가 모두 답이에요."),
-        t(E, "Find min_free = heap[0][0]. Collect all counters with that exact free time.", "min_free = heap[0][0] 을 찾아요. 그 시간과 똑같은 카운터를 모두 모아요."),
+        t(E, "Why could there be more than one answer? Because if two counters are tied for earliest-free, Bessie could go to either — both are correct.\nAfter K..N-2 cows are processed, the heap holds the current finish time of all K counters, so that's where we look.",
+            "왜 답이 하나가 아닐 수 있을까요? 가장 먼저 비는 카운터가 둘 이상이면 Bessie 는 그중 어디로 가도 되기 때문이에요.\nK..N-2 번 소까지 처리하면 heap 에 카운터 K 개의 지금 종료 시간이 들어 있어요. 그걸 여기서 봐요."),
+        t(E, "So: find min_free = heap[0][0], then collect every counter with exactly that free time.",
+            "그래서 min_free = heap[0][0] 을 찾고, 그 시간과 똑같은 카운터를 모두 모아요."),
         t(E, "Output sorted (1-indexed): count + the counter list.", "번호 순으로 정렬해서 출력해요 (1 부터 세요). 개수를 먼저 쓰고 카운터 번호를 이어서 써요."),
       ],
       pyOnly: [

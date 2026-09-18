@@ -456,8 +456,8 @@ export function getReflectionSections(E) {
       color: A,
       py: RFL_S1_PY, cpp: RFL_S1_CPP,
       why: [
-        t(E, "Read N (canvas size, even), U (number of updates), then N rows of '.' and '#'.",
-            "그림 크기 N (짝수) 과 바꾸는 횟수 U 를 읽어요.\n그 다음 N 줄에 '.' 와 '#' 이 와요."),
+        t(E, "We need the minimum flips to make the grid mirror-symmetric — and again after each single-cell change.\nSo read N (canvas size, even), U (number of updates), then N rows of '.' and '#'.",
+            "거울 대칭을 만드는 최소 뒤집기 수를 구해야 해요 — 칸을 하나씩 바꿀 때마다 또 구해야 해요.\n그러니 그림 크기 N (짝수) 과 바꾸는 횟수 U 를 읽어요.\n그 다음 N 줄에 '.' 와 '#' 이 와요."),
       ],
       aside: <SampleInputAside E={E} sample={RFL_SAMPLE} highlight={[0, 1, 2, 3, 4]} note={t(E,
         "First 5 lines: \"4 5\" (N=4, U=5), then 4 grid rows.",
