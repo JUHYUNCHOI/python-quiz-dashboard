@@ -41,6 +41,10 @@ BEAT = re.compile(
     r'hi:\s*\[\s*\d+\s*,\s*\d+\s*\]\s*,\s*bubble:\s*t\(\s*E\s*,\s*'
     r'"((?:[^"\\]|\\.)*)"\s*,\s*"((?:[^"\\]|\\.)*)"\s*\)'
 )
+# 두 언어 문자열 하나 — `why: [...]` 안에서 쓴다
+PAIR = re.compile(
+    r't\(\s*E\s*,\s*"((?:[^"\\]|\\.)*)"\s*,\s*"((?:[^"\\]|\\.)*)"\s*\)'
+)
 
 # ① 첫 걸음이 이것'만' 하고 끝나면 목적지가 없다
 MECHANICS = re.compile(
@@ -96,6 +100,57 @@ def walks(src):
     return out
 
 
+def why_blocks(src):
+    """`why: [ t(E, 영어, 한국어), ... ]` 한 덩어리씩 끊어 낸다.
+
+    CodeWalk `beats` 는 quest 24개만 쓴다. 나머지는 **ProgressiveCodeStepper 의
+    `sections`** 로 코드를 설명한다 (168개) — 거기 `why` 가 곧 말풍선이다.
+    같은 잣대를 여기에도 대야 한다. 안 그러면 quest 156개가 그물 밖에 남는다.
+    """
+    out = []
+    for m in re.finditer(r"why:\s*\[", src):
+        i, depth = m.end() - 1, 0
+        while i < len(src):
+            if src[i] == "[":
+                depth += 1
+            elif src[i] == "]":
+                depth -= 1
+                if depth == 0:
+                    break
+            i += 1
+        rows = []
+        for b in PAIR.finditer(src[m.end():i]):
+            try:
+                rows.append((json.loads('"%s"' % b.group(1)),
+                             json.loads('"%s"' % b.group(2))))
+            except Exception:
+                continue
+        if rows:
+            out.append((m.start(), rows))
+    return out
+
+
+def steppers(src):
+    """한 파일 안의 `getXSections` 하나를 **한 덩어리**로 묶는다.
+
+    `why` 는 조각마다 하나씩 있으므로, 함수 단위로 모아야
+    '첫 조각이 목적지를 말하나' 와 'walk 전체에 왜가 있나' 를 물을 수 있다.
+    """
+    marks = [(m.start(), m.group(1))
+             for m in re.finditer(r"export function (get\w*Sections)\s*\(", src)]
+    if not marks:
+        return []
+    marks.append((len(src), None))
+    out = []
+    for k in range(len(marks) - 1):
+        a, name = marks[k]
+        z = marks[k + 1][0]
+        rows = [r for _, rs in why_blocks(src[a:z]) for r in rs]
+        if rows:
+            out.append((name, rows))
+    return out
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
     want = set(x for a in args for x in a.split()) or None
@@ -111,7 +166,9 @@ def main():
             src = io.open(f, encoding="utf-8", errors="replace").read()
         except OSError:
             continue
-        for lang, beats in walks(src):
+        found = [("walk:" + lang, beats) for lang, beats in walks(src)]
+        found += [("스테퍼:" + name, rows) for name, rows in steppers(src)]
+        for lang, beats in found:
             total_walks += 1
             first_ko = beats[0][1]
             head = first_ko.split("\n")[0]
@@ -120,7 +177,7 @@ def main():
                 problems.append(("첫 걸음에 목적지가 없다", head))
             body = "\n".join(k for _, k in beats)
             if not WHY.search(body):
-                problems.append((f"walk 전체({len(beats)}걸음)에 '왜' 가 한 번도 없다", head))
+                problems.append((f"전체({len(beats)}걸음)에 '왜' 가 한 번도 없다", head))
             if problems:
                 hits.setdefault(quest, []).append((os.path.basename(f), lang, problems))
 
@@ -131,7 +188,7 @@ def main():
 
     n = sum(len(v) for v in hits.values())
     print(f"파일 순서로 읊는 코드 설명 — walk {n}개 · quest {len(hits)}개 "
-          f"(전체 walk {total_walks}개)\n")
+          f"(전체 {total_walks}개 — CodeWalk + 코드 스테퍼)\n")
     for q in sorted(hits, key=lambda x: (-len(hits[x]), x)):
         print(f"  ■ {q}")
         for fname, lang, problems in hits[q]:

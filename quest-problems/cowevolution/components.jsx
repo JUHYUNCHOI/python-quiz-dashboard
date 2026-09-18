@@ -135,8 +135,6 @@ export function getCowEvolutionSections(E) {
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
             "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 코드는 Python 코드를 옮긴 거예요. 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

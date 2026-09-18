@@ -131,8 +131,6 @@ export function getWalkHomeSections(E) {
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
             "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python 을 옮긴 거예요. 타입과 표현은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

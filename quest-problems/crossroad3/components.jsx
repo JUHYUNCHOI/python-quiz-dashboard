@@ -289,8 +289,6 @@ export function getCrossRoad3Sections(E) {
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
             "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 코드는 Python 에서 옮긴 거예요. 타입이나 표현은 필요하면 바꿔요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -307,8 +307,6 @@ export function getSleepClassSections(E) {
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
             "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 쪽은 Python 을 자동으로 옮긴 거예요. 타입은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

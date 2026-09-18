@@ -87,8 +87,6 @@ export function getCountLiarsSections(E) {
       why: [
         t(E, "A claim only flips between true and false at its own x, so those x values are the only positions worth testing.",
             "주장이 참에서 거짓으로 갈리는 자리는 그 주장에 적힌 x 뿐이에요. 그래서 x 값들만 후보로 놓고 세어 보면 돼요."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python 에서 자동으로 옮긴 거예요. 타입과 표현은 필요할 때 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
