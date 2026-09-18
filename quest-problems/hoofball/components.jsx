@@ -356,7 +356,7 @@ export function HoofballPassSim({ E }) {
         <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
           {t(E,
             "Each cow's arrow points to her nearest neighbor (ties → right). Press ▶ to drop a ball and watch passes. Cows that no arrow points to are SOURCES — each needs its own ball.",
-            "소의 화살표는 가장 가까운 이웃을 가리켜요 (거리가 같으면 오른쪽이에요). ▶ 를 누르면 공을 떨어뜨려 넘어가는 모습을 볼 수 있어요. 아무 화살표도 안 가리키는 소를 '시작 소' 라고 불러요. 시작 소는 공을 받을 데가 없으니 공을 하나씩 따로 줘야 해요.")}
+            "소의 화살표는 가장 가까운 이웃을 가리켜요 (거리가 같으면 오른쪽이에요). ▶ 를 누르면 공을 떨어뜨려 넘어가는 모습을 볼 수 있어요.\n아무 화살표도 안 가리키는 소를 '시작 소' 라고 불러요.\n시작 소는 공을 받을 데가 없으니 공을 하나씩 따로 줘야 해요.")}
         </div>
       </div>
 
@@ -498,7 +498,7 @@ export function HoofballPassSim({ E }) {
         </div>
         <div style={{ color: C.dim, marginTop: 3, fontSize: 11 }}>
           {t(E, "Tip: a 'mutual pair' (two cows passing to each other) is a sink — the ball just bounces. Watch ▶ to feel why.",
-              "서로를 가리키는 두 소는 공을 둘 사이에서만 주고받아요. 그래서 공이 더 멀리 가지 못해요. ▶ 로 직접 봐요.")}
+              "서로를 가리키는 두 소는 공을 둘 사이에서만 주고받아요. 그래서 공이 더 멀리 가지 못해요.\n▶ 로 직접 봐요.")}
         </div>
       </div>
     </div>

@@ -387,7 +387,7 @@ export function BackForthStateTreeSim({ E }) {
         <div style={{ fontSize: 10, color: C.dim, marginTop: 6, lineHeight: 1.4 }}>
           {t(E,
             "👉 The real problem is the same idea with 10 buckets and 4 days — that is 10 × 11 × 11 × 11 ≈ 13,000 branches. A set still keeps it simple.",
-            "👉 실제 문제도 같은 방법이에요. 양동이 10 개에 4 일이면 갈래가 10 × 11 × 11 × 11 ≈ 13,000 개라, set 하나면 충분해요.")}
+            "👉 실제 문제도 같은 방법이에요.\n양동이 10 개에 4 일이면 갈래가 10 × 11 × 11 × 11 ≈ 13,000 개라,\nset 하나면 충분해요.")}
         </div>
       </div>
     </div>

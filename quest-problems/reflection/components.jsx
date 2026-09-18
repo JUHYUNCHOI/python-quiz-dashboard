@@ -469,11 +469,11 @@ export function getReflectionSections(E) {
       py: RFL_S2_PY, cpp: RFL_S2_CPP,
       why: [
         t(E, "Cell (r, c) shares a group with (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c) — 4 cells total.",
-            "칸 (r, c) 는 (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c) 와 같은 묶음이에요. 모두 4 칸."),
+            "칸 (r, c) 는 세 칸과 같은 묶음이에요.\n좌우로 뒤집은 칸, 위아래로 뒤집은 칸, 둘 다 뒤집은 칸이에요.\n모두 4 칸."),
         t(E, "So we never need a separate table: from any cell we can reach its 3 mirrors by index.",
             "번호만 알면 아무 칸에서나 거울짝 3 칸을 바로 찾아갈 수 있어요.\n그래서 따로 표를 만들 필요가 없어요."),
         t(E, "Count how many of the 3 differ from me. Repaint those, or repaint me and the rest — whichever is fewer.",
-            "그중 나와 색이 다른 칸을 세요. 그 칸들을 고치거나, 나를 포함한 나머지를 고치거나 — 적은 쪽이 답이에요."),
+            "그중 나와 색이 다른 칸을 세요.\n그 칸들을 고치거나, 나를 포함한 나머지를 고치거나 — 적은 쪽이 답이에요."),
       ],
     },
     {
@@ -484,7 +484,7 @@ export function getReflectionSections(E) {
         t(E, "For a group of 4 cells with c painted: flip the c minority OR the (4 − c) minority. Min ops = min(c, 4 − c).",
             "4 칸 중 c 칸이 칠해져 있으면 c 칸이나 (4 − c) 칸을 뒤집어요.\n적은 쪽이 답이라 min(c, 4 − c) 예요."),
         t(E, "Every group has exactly one cell in the top-left quarter, so scanning that quarter visits each group once.",
-            "묶음마다 왼쪽 위 1/4 에 칸이 딱 하나씩 있어요. 그래서 1/4 만 훑으면 모든 묶음을 한 번씩 보게 돼요."),
+            "묶음마다 왼쪽 위 1/4 에 칸이 딱 하나씩 있어요.\n그래서 1/4 만 훑으면 모든 묶음을 한 번씩 보게 돼요."),
         t(E, "Total over all groups = answer BEFORE any update.",
             "모든 묶음을 더하면 뒤집기 전 답이에요."),
       ],

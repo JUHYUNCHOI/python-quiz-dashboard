@@ -252,7 +252,7 @@ export function ModernArtPaintSim({ E }) {
             <div style={{ fontSize: 11, color: "#065f46", marginTop: 4, lineHeight: 1.45 }}>
               {t(E,
                 "Each visible color was the LAST rectangle painted in its bbox region. Hidden colors got fully covered by later rectangles.",
-                "보이는 색은 자기 바운딩 박스 안에서 마지막에 칠해진 색이에요. 숨겨진 색은 나중에 칠한 직사각형에 완전히 덮인 거예요.")}
+                "보이는 색은 자기 바운딩 박스 안에서 마지막에 칠해진 색이에요.\n숨겨진 색은 나중에 칠한 직사각형에 완전히 덮인 거예요.")}
             </div>
           </div>
         </div>
@@ -431,7 +431,7 @@ export function getModernArtSections(E) {
         t(E, "Colors are only 1..9 — use plain vectors indexed by color, not map.",
             "색이 1~9 뿐이라 map 없이 색 번호로 자리를 찾는 vector 면 충분해요."),
         t(E, "Track bbox via four parallel vectors (minr/maxr/minc/maxc) — each comparison is one explicit line.",
-            "bbox 를 vector 네 개(minr/maxr/minc/maxc)로 나눠 두면 비교가 한 줄씩 또렷해져요."),
+            "bbox 를 vector 네 개(minr/maxr/minc/maxc)로 나눠 두면\n비교가 한 줄씩 또렷해져요."),
       ],
     },
   ];

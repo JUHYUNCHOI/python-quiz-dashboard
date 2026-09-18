@@ -303,7 +303,7 @@ export function getSwapToWinSections(E) {
       py: SECTION_SAME_PY, cpp: SECTION_SAME_CPP,
       why: [
         t(E, "Why fix positions left to right? Every fix only touches column k or later, so once a position is right, it stays right.",
-            "왜 왼쪽부터 고칠까요? 고칠 때는 항상 k 번째나 그 뒤 칸만 건드리니, 한 번 맞춘 자리는 계속 맞아 있어요."),
+            "왜 왼쪽부터 고칠까요?\n고칠 때는 항상 k 번째나 그 뒤 칸만 건드리니, 한 번 맞춘 자리는 계속 맞아 있어요."),
         t(E, "Walk position k from 0 to M-1. If s_1 already matches there, skip.",
             "k 를 0부터 M-1 까지 훑어요. 이미 맞으면 건너뜀."),
         t(E, "Cheapest fix first: if the wanted letter exists later inside s_1 itself, one within-string swap is enough.",
@@ -322,7 +322,7 @@ export function getSwapToWinSections(E) {
         t(E, "Step B: type-2 swap exchanges column k between s_1 and s_y.",
             "Step B: type-2 swap 으로 s_1 과 s_y 의 k 번째 칸을 교환."),
         t(E, "Why does this stay within 2M? Each position costs at most 2 ops (Step A + Step B), so M positions cost at most 2M total.",
-            "왜 2M 을 안 넘을까요? 자리마다 최대 2 ops (Step A + Step B) 니까, M 자리를 다 더해도 2M 을 안 넘어요."),
+            "왜 2M 을 안 넘을까요?\n자리마다 최대 2 ops (Step A + Step B) 니까, M 자리를 다 더해도 2M 을 안 넘어요."),
       ],
     },
     {

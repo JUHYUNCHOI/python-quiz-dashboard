@@ -83,7 +83,7 @@ export function getTeleportSections(E) {
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더(<iostream>, <vector>, ...)만 적어요. 그러면 코드가 무엇을 쓰는지 한눈에 보여요."),
+            "필요한 헤더(<iostream>, <vector>, ...)만 적어요.\n그러면 코드가 무엇을 쓰는지 한눈에 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
             "합이나 곱이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],

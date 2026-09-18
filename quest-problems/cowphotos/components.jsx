@@ -183,7 +183,7 @@ export function TrickySimulator({ E }) {
     { kind: "build", arr: [2, 3, 2], ok: false, why: t(E, "[2, 3, 2] is a valid mountain shape, BUT input has only one 2 — need 2.",
                                                               "[2, 3, 2] 모양은 OK 인데, 입력에 2 가 하나뿐.") },
     { kind: "build", arr: [3, 1, 3], ok: false, why: t(E, "Even if we had two 3s, peak must be GREATER than rings (mountain top is highest). 1 < 3 means 1 can't be the peak. INVALID shape.",
-                                                              "3 이 두 마리 있다고 가정해도, peak 는 ring 보다 커야 함 (mountain 꼭대기 = 최대). 1 < 3 이면 1 은 peak 못 됨. 모양 자체 INVALID.") },
+                                                              "3 이 두 마리 있다고 가정해도,\npeak 는 ring 보다 커야 함 (mountain 꼭대기 = 최대). 1 < 3 이면\n1 은 peak 못 됨. 모양 자체 INVALID.") },
     { kind: "build", arr: [3, 2, 3], ok: false, why: t(E, "Same — 2 < 3 means 2 can't be the peak. INVALID shape.",
                                                               "같음 — 2 < 3 이면 2 는 peak 못 됨. 모양 자체 INVALID.") },
     { kind: "verdict" },
@@ -220,7 +220,7 @@ export function TrickySimulator({ E }) {
               🔢 {t(E, "Frequency: 3 appears 2×, 2 appears 1×, 1 appears 1×", "몇 번 나오는지 세면 3 이 두 번, 2 가 한 번, 1 이 한 번이에요")}
             </div>
             <div>
-              {t(E, "Apply our formula: rings = (values with freq ≥ 2) = {3} → 1 ring. So length = 2·1 + 1 = ", "식에 넣어 봐요. 두 번 이상 나온 값은 {3} 하나뿐이라 ring 이 1 개예요. 길이는 2·1 + 1 = ")}
+              {t(E, "Apply our formula: rings = (values with freq ≥ 2) = {3} → 1 ring. So length = 2·1 + 1 = ", "식에 넣어 봐요. 두 번 이상 나온 값은 {3} 하나뿐이라 ring 이 1 개예요.\n길이는 2·1 + 1 = ")}
               <b style={{ color: "#16a34a", fontSize: 16 }}>3</b>
               {t(E, ".", ".")}
             </div>
@@ -877,7 +877,7 @@ export function getCowPhotosSections(E) {
       py: cx(E, CP_STEP3_PY), cpp: cx(E, CP_STEP3_CPP),
       why: [
         t(E, "A value v can sit on both sides of the peak only if (a) at least 2 cows have height v AND (b) v < M (peak must be strictly higher).",
-            "값 v 가 양옆에 들어가려면 (a) 그 키의 소가 2 마리 이상 AND (b) v < M (peak 가 더 커야)."),
+            "값 v 가 양옆에 들어가려면\n(a) 그 키의 소가 2 마리 이상 AND (b) v < M (peak 가 더 커야)."),
         t(E, "This is the constraint the naive '2·pairs+1' formula MISSED — it's why [3,3,2,1] gives 1, not 3.",
             "단순 '2·페어+1' 공식이 놓친 제약 — [3,3,2,1] 의 답이 3 이 아니라 1 인 이유."),
         t(E, "⚠️ Count frequencies ONCE (Counter / freq array) → O(N). Using h.count(v) inside the loop re-scans everything → O(N²) → TLE at N = 100,000.",

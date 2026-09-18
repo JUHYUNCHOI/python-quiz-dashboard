@@ -202,7 +202,7 @@ export function RecipeSimulator({ E }) {
       <div style={{ fontSize: 11, color: "#92400e", marginTop: 8, lineHeight: 1.5 }}>
         💡 {t(E,
           "Click ▶ until it fails — that's the greedy answer. Notice: stock of metal 3 is used first (depth 1), then we fall back to combining 1+2.",
-          "▶ 를 실패할 때까지 눌러봐요 — 그게 탐욕 답이에요. 금속3 재고가 먼저 쓰이고(깊이 1), 다음에 1+2 조합으로 넘어가요.")}
+          "▶ 를 실패할 때까지 눌러봐요 — 그게 탐욕 답이에요.\n금속3 재고가 먼저 쓰이고(깊이 1), 다음에 1+2 조합으로 넘어가요.")}
       </div>
     </div>
   );

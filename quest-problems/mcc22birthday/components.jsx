@@ -86,7 +86,7 @@ export function Mcc22BirthdayCookieSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "Two things are worth seeing with your own eyes: how fast the grid doubles, and where a given cookie number lands. So start from one 'p' cookie, add letters with the buttons below, and tap a cookie to read its number.",
-            "여기서 눈으로 볼 것은 두 가지예요. 격자가 얼마나 빨리 두 배가 되는지, 그리고 몇 번 쿠키가 어디에 앉는지예요. 'p' 쿠키 한 개로 시작해서, 아래 버튼으로 글자를 더하고, 쿠키를 눌러 번호를 봐요.")}
+            "여기서 눈으로 볼 것은 두 가지예요.\n격자가 얼마나 빨리 두 배가 되는지, 그리고 몇 번 쿠키가 어디에 앉는지예요.\n'p' 쿠키 한 개로 시작해서, 아래 버튼으로 글자를 더하고, 쿠키를 눌러 번호를 봐요.")}
         </div>
 
         {/* scroll so far */}
@@ -179,7 +179,7 @@ export function Mcc22BirthdayCookieSim({ E }) {
         <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: "#92400e", lineHeight: 1.55, ...KA }}>
           {t(E,
             "💡 Each letter DOUBLES the grid. After N letters there are 2^N cookies, and N can be 10000 — far too many to ever build. So how do we answer without the grid? Let's think about that next.",
-            "💡 글자 하나가 격자를 두 배로 늘려요. N 글자 뒤엔 쿠키가 2^N 개예요. N 이 최대 10000 이니 이 격자는 만들어 볼 수조차 없어요. 그럼 격자 없이 어떻게 답할 수 있을까요? 다음 쪽에서 같이 생각해 봐요.")}
+            "💡 글자 하나가 격자를 두 배로 늘려요. N 글자 뒤엔 쿠키가 2^N 개예요.\nN 이 최대 10000 이니 이 격자는 만들어 볼 수조차 없어요.\n그럼 격자 없이 어떻게 답할 수 있을까요? 다음 쪽에서 같이 생각해 봐요.")}
         </div>
       </div>
     </div>
@@ -532,23 +532,23 @@ export function getMcc22BirthdaySections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Why can't we build the grid? After N letters it has 2^N cookies, and N can be up to 10000 — far too many. So we answer each queried number on its own instead.",
-            "왜 격자를 실제로 만들면 안 될까요? N 글자 뒤 격자는 2^N 개인데 N 이 최대 10000 이라 절대 만들 수 없어요.\n그래서 물어본 번호 하나하나를 따로 풀어요."),
+            "왜 격자를 실제로 만들면 안 될까요?\nN 글자 뒤 격자는 2^N 개인데 N 이 최대 10000 이라 절대 만들 수 없어요.\n그래서 물어본 번호 하나하나를 따로 풀어요."),
         t(E, "So how do we know where a number sits? rows[i] / cols[i] hold the grid size after each step — A and B double the width, C doubles the height. Past CAP = 2×10^9 we just leave it at CAP, since a friend number is at most 10^9 anyway.",
-            "그럼 그 번호가 어디 있는지 어떻게 알까요? rows[i] / cols[i] 에 각 단계 뒤의 격자 크기를 저장해요. A·B 는 가로를, C 는 세로를 두 배로 늘려요.\n크기가 CAP = 2×10^9 을 넘으면 그냥 CAP 으로 둬요. 친구 번호가 최대 10^9 이라 그보다 크기만 하면 어느 쪽이 큰지는 똑같이 나오거든요."),
+            "그럼 그 번호가 어디 있는지 어떻게 알까요?\nrows[i] / cols[i] 에 각 단계 뒤의 격자 크기를 저장해요.\nA·B 는 가로를, C 는 세로를 두 배로 늘려요.\n크기가 CAP = 2×10^9 을 넘으면 그냥 CAP 으로 둬요.\n친구 번호가 최대 10^9 이라 그보다 크기만 하면 어느 쪽이 큰지는 똑같이 나오거든요."),
         t(E, "Then how do we find its shape? Turn the number into (row, col), then walk the scroll BACKWARD — each step needs to know: was I in the ORIGINAL half or the COPIED half? A copy made by B/C is flipped, so a copied step toggles the flip parity.",
-            "그럼 그 번호의 모양은 어떻게 구할까요? 번호를 (행, 열) 로 바꾼 뒤 두루마리를 거꾸로 따라가요.\n매 단계마다 원본 쪽이었는지 복사본 쪽이었는지 알아야 하거든요. B·C 로 만든 복사본은 뒤집혀 있으니, 복사본 쪽이면 뒤집힘 상태를 반대로 바꿔요."),
+            "그럼 그 번호의 모양은 어떻게 구할까요? 번호를 (행, 열) 로 바꾼 뒤 두루마리를 거꾸로 따라가요.\n매 단계마다 원본 쪽이었는지 복사본 쪽이었는지 알아야 하거든요.\nB·C 로 만든 복사본은 뒤집혀 있으니, 복사본 쪽이면 뒤집힘 상태를 반대로 바꿔요."),
         t(E, "So two on/off flips (left↔right, up↔down) give exactly four shapes: (no,no)=p, (H,no)=q, (no,V)=b, (H,V)=d. That's the whole p/q/b/d family.",
-            "그래서 좌우·위아래 두 뒤집힘(켜짐/꺼짐)이 정확히 네 모양을 만들어요.\n(안,안)=p, (좌우,안)=q, (안,위아래)=b, (좌우,위아래)=d — 이게 p/q/b/d 한 묶음이에요."),
+            "그래서 좌우·위아래 두 뒤집힘(켜짐/꺼짐)이 정확히 네 모양을 만들어요.\n(안,안)=p, (좌우,안)=q, (안,위아래)=b, (좌우,위아래)=d —\n이게 p/q/b/d 한 묶음이에요."),
       ],
       pyOnly: [
         t(E, "shape[(flip_h, flip_v)] reads the final cookie straight from the two flip switches — no if/elif ladder needed.",
-            "shape[(flip_h, flip_v)] 로 두 스위치에서 바로 모양을 읽어요. if/elif 를 길게 쌓지 않아도 돼요."),
+            "shape[(flip_h, flip_v)] 로 두 스위치에서 바로 모양을 읽어요.\nif/elif 를 길게 쌓지 않아도 돼요."),
       ],
       cppOnly: [
         t(E, "Use long long for indices and sizes: capped sizes reach ~2×10^9, past the int limit.",
             "자리 번호와 크기는 long long 으로 둬요. 가장 큰 값이 약 2×10^9 라 int 범위를 넘어요."),
         t(E, "The nested if/else picks the shape from flipV/flipH — the same four cases the Python dict holds.",
-            "중첩 if/else 로 flipV·flipH 에서 모양을 골라요. Python 의 dict 가 담은 네 경우와 똑같아요."),
+            "중첩 if/else 로 flipV·flipH 에서 모양을 골라요.\nPython 의 dict 가 담은 네 경우와 똑같아요."),
       ],
     },
   ];

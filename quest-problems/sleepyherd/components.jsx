@@ -198,7 +198,7 @@ export function SleepyHerdSim({ E }) {
       <div style={{ fontSize: 11, color: "#92400e", lineHeight: 1.5 }}>
         {t(E,
           "Only the LEFTMOST or RIGHTMOST cow can move, and only into an empty slot strictly between the other two. Try to reach a consecutive triple in as few — or as many — moves as you can.",
-          "왼쪽 끝이나 오른쪽 끝 소만 움직일 수 있어요. 그것도 다른 두 소 사이의 빈 자리로만요. 연속 세 칸을 만드는 데 몇 번이 최소이고 몇 번이 최대인지 직접 해봐요.")}
+          "왼쪽 끝이나 오른쪽 끝 소만 움직일 수 있어요. 그것도 다른 두 소 사이의 빈 자리로만요.\n연속 세 칸을 만드는 데 몇 번이 최소이고 몇 번이 최대인지 직접 해봐요.")}
       </div>
     </div>
   );

@@ -122,7 +122,7 @@ export function TeamLineChecker({ E }) {
         <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
           {t(E,
             "Edit any cell (A–Z) and the two team rosters. The 8 lines are judged live: solo win, 2-team win, or nothing.",
-            "칸 글자(A–Z)와 두 팀 명단을 바꿔 볼 수 있어요. 8 개 줄이 단독 · 2 명 팀 · 우승 없음 중 무엇인지 바로 나와요.")}
+            "칸 글자(A–Z)와 두 팀 명단을 바꿔 볼 수 있어요.\n8 개 줄이 단독 · 2 명 팀 · 우승 없음 중 무엇인지 바로 나와요.")}
         </div>
       </div>
 
@@ -220,7 +220,7 @@ export function TeamLineChecker({ E }) {
       }}>
         💡 {t(E,
           "Notice: the SET of 3 letters in a line tells you the answer. Size 1 → solo. Size 2 → 2-team. Size 3 → no win. That's the whole algorithm.",
-          "한 줄에 서로 다른 글자가 몇 개인지만 보면 돼요. 1 개면 단독, 2 개면 2 명 팀, 3 개면 우승이 없어요.")}
+          "한 줄에 서로 다른 글자가 몇 개인지만 보면 돼요.\n1 개면 단독, 2 개면 2 명 팀, 3 개면 우승이 없어요.")}
       </div>
     </div>
   );

@@ -121,7 +121,7 @@ export function getBlocksSections(E) {
         t(E, "s.find(c) != string::npos checks whether character c is on a face.",
             "s.find(c) != string::npos 로 글자 c 가 그 면에 있는지 확인해요."),
         t(E, "next_permutation walks every ordering of {0,1,2,3} — an iterative way to try all block assignments, no recursion.",
-            "next_permutation 은 {0,1,2,3} 의 모든 순서를 하나씩 봐요. 재귀 없이 반복문만으로 블록 놓는 방법을 다 시도해요."),
+            "next_permutation 은 {0,1,2,3} 의 모든 순서를 하나씩 봐요.\n재귀 없이 반복문만으로 블록 놓는 방법을 다 시도해요."),
       ],
     },
   ];

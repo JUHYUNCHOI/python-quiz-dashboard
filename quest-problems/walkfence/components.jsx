@@ -511,7 +511,7 @@ export function getWalkFenceSections(E) {
       ],
       cppOnly: [
         t(E, "Two parallel vector<int> X, Y avoid struct overhead — coordinates fit in int.",
-            "X, Y 를 벡터 두 개로 따로 두면 구조체를 안 만들어도 돼요. 좌표가 0~1000 이라 int 면 넉넉해요."),
+            "X, Y 를 벡터 두 개로 따로 두면 구조체를 안 만들어도 돼요.\n좌표가 0~1000 이라 int 면 넉넉해요."),
       ],
     },
     {
@@ -541,7 +541,7 @@ export function getWalkFenceSections(E) {
         t(E, "For each (x, y), scan edges. Once we find which edge it sits on, we know its distance from post 0.",
             "점 (x, y) 마다 변을 하나씩 봐요. 어느 변 위에 있는지 찾으면 코너 0 에서의 거리를 알 수 있어요."),
         t(E, "Why compute both directions? We can't tell which way is shorter in advance — one way is |d1 - d2|, the other is perimeter - |d1 - d2|. Take the min.",
-            "왜 두 방향을 다 구할까요? 어느 쪽이 짧은지 미리 알 수 없어서예요 — 한쪽은 |d1 - d2|, 반대쪽은 perimeter - |d1 - d2| 예요. 둘 중 작은 값이 답이에요."),
+            "왜 두 방향을 다 구할까요? 어느 쪽이 짧은지 미리 알 수 없어서예요 —\n한쪽은 |d1 - d2|, 반대쪽은 perimeter - |d1 - d2| 예요.\n둘 중 작은 값이 답이에요."),
       ],
       pyOnly: [
         t(E, "Functions defined at module scope can read the closure (posts, cum) directly.",

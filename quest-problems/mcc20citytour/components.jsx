@@ -223,11 +223,11 @@ export function getMcc20CityTourSections(E) {
         /* 2026-09-17: 104·80 자가 한 덩어리였다. Stepper 는 \n 을 뭉개니 항목을 나눈다.
            "플러드필" 은 뜻을 안 밝힌 음차어라 우리말로 먼저 말하고 이름을 뒤에 붙인다. */
         t(E, "Why not sweep the whole grid over and over? That could take up to M×N passes over M×N cells — 10^10. So instead we visit each cell just once, starting at (1,1) and letting the reachable area spread outwards — this is BFS (flood fill).",
-            "왜 그리드를 몇 번씩 다시 훑지 않을까요? 그러면 최대 M×N 번을 M×N 칸에 반복해서 10^10 이 될 수 있어요.\n그래서 각 칸을 딱 한 번만 방문하기로 해요. 시작 칸 (1,1) 에서 갈 수 있는 곳을 바깥으로 번져 나가게 하는 방법을 BFS(번져 나가며 채우기)라고 불러요."),
+            "왜 그리드를 몇 번씩 다시 훑지 않을까요?\n그러면 최대 M×N 번을 M×N 칸에 반복해서 10^10 이 될 수 있어요.\n그래서 각 칸을 딱 한 번만 방문하기로 해요.\n시작 칸 (1,1) 에서 갈 수 있는 곳을 바깥으로 번져 나가게 하는 방법을 BFS(번져 나가며 채우기)라고\n불러요."),
         t(E, "Pop a cell, then for each of its 4 neighbors step in only if it hasn't been visited AND the height gap |H[nr][nc] − H[r][c]| < D.",
-            "칸을 하나 꺼내서 이웃 4 개를 봐요. 아직 안 간 칸이면서 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요."),
+            "칸을 하나 꺼내서 이웃 4 개를 봐요.\n아직 안 간 칸이면서 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요."),
         t(E, "Mark visited AT PUSH time and bump count then — so every reachable cell is counted exactly once.",
-            "큐에 넣는 순간 방문 표시를 하고 그때 count 를 올려요. 그래야 갈 수 있는 칸이 정확히 한 번씩만 세어져요."),
+            "큐에 넣는 순간 방문 표시를 하고 그때 count 를 올려요.\n그래야 갈 수 있는 칸이 정확히 한 번씩만 세어져요."),
         t(E, "The answer is how many cells got visited.",
             "답은 방문한 칸의 개수예요."),
         t(E, "There is no fixed wall map: whether an edge is open depends on the two heights AND D.",
@@ -237,15 +237,15 @@ export function getMcc20CityTourSections(E) {
       ],
       pyOnly: [
         t(E, "deque.popleft() finishes instantly no matter how big the deque is — that is what makes this real BFS, not a slow list.pop(0) each step.",
-            "deque 의 popleft() 는 크기와 상관없이 바로 끝나는 연산이에요. 그래서 느린 list.pop(0) 대신 쓰면 진짜 BFS 가 돼요."),
+            "deque 의 popleft() 는 크기와 상관없이 바로 끝나는 연산이에요.\n그래서 느린 list.pop(0) 대신 쓰면 진짜 BFS 가 돼요."),
         t(E, "abs(H[nr][nc] - H[r][c]) < D is the whole edge rule — the height DIFFERENCE, strictly less than D.",
-            "abs(H[nr][nc] - H[r][c]) < D 한 줄이 규칙의 전부예요. 높이 '차이' 가 D 보다 작아야만 건너가요."),
+            "abs(H[nr][nc] - H[r][c]) < D 한 줄이 규칙의 전부예요.\n높이 '차이' 가 D 보다 작아야만 건너가요."),
       ],
       cppOnly: [
         t(E, "Use queue<pair<int,int>> and abs() from <cstdlib>; visited is a vector<vector<bool>>.",
-            "queue<pair<int,int>> 와 <cstdlib> 의 abs() 를 써요. visited 는 vector<vector<bool>> 이에요."),
+            "queue<pair<int,int>> 와 <cstdlib> 의 abs() 를 써요.\nvisited 는 vector<vector<bool>> 이에요."),
         t(E, "int is plenty here: heights fit (|H| ≤ 10^6) and the cell count is small (M×N ≤ 10^5).",
-            "여기선 int 로 충분해요. 높이 (|H| ≤ 10^6) 와 칸 수 (M×N ≤ 10^5) 모두 int 범위 안이에요."),
+            "여기선 int 로 충분해요.\n높이 (|H| ≤ 10^6) 와 칸 수 (M×N ≤ 10^5) 모두 int 범위 안이에요."),
       ],
     },
   ];

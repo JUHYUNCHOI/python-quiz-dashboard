@@ -149,7 +149,7 @@ export function BucketListSim({ E }) {
       <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
           "Drag the slider. The answer is the largest sum you ever see — that's the minimum buckets FJ must own.",
-          "슬라이더를 움직여 봐요. 여기서 본 가장 큰 합이 정답이고, 그게 FJ 가 가져야 할 양동이의 최소 개수예요.")}
+          "슬라이더를 움직여 봐요.\n여기서 본 가장 큰 합이 정답이고, 그게 FJ 가 가져야 할 양동이의 최소 개수예요.")}
       </div>
     </div>
   );
@@ -235,7 +235,7 @@ export function getBucketListSections(E) {
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더(<iostream>, <vector>, ...)만 적어요. 그러면 코드가 무엇을 쓰는지 한눈에 보여요."),
+            "필요한 헤더(<iostream>, <vector>, ...)만 적어요.\n그러면 코드가 무엇을 쓰는지 한눈에 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
             "합이나 곱이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],

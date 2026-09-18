@@ -237,11 +237,11 @@ export function getDroughtSections(E) {
         t(E, "Why solve cases one at a time? Each test case is a completely different row of cows. So read T, then solve and print exactly one answer per case.",
             "왜 케이스마다 따로 풀까요? 각 테스트 케이스는 서로 다른 소들의 줄이라서예요.\n그래서 T 를 읽고, 케이스마다 따로 풀어 한 줄에 하나씩 답을 출력해요."),
         t(E, "What decides how many times we feed pair (i, i+1)? Once the final hunger f is fixed, walking left to right forces it: o[i] = h[i] - f - o[i-1].",
-            "쌍 (i, i+1) 에 몇 번 먹일지는 무엇이 정할까요? 마지막 배고픔 f 가 정해지면, 왼쪽부터 볼 때 o[i] = h[i] - f - o[i-1] 로 저절로 정해져요."),
+            "쌍 (i, i+1) 에 몇 번 먹일지는 무엇이 정할까요? 마지막 배고픔 f 가 정해지면,\n왼쪽부터 볼 때 o[i] = h[i] - f - o[i-1] 로 저절로 정해져요."),
         t(E, "And where does f come from? The alternating sum (+ - + - ...). If that forces some o[i] negative, this f is impossible, so we return -1.",
             "그럼 f 는 어디서 나올까요? 교대합(+ − + − …) 으로 정해져요.\n그 f 때문에 o[i] 가 음수로 나오면 불가능하다는 뜻이라 -1 을 돌려줘요."),
         t(E, "So the answer is 2 * sum(o): each bag lowers two cows, and o[i] counts bags spent on that pair.",
-            "그래서 답은 2 * sum(o) 예요. 봉지 하나가 소 둘의 배고픔을 낮추고, o[i] 는 쌍마다 쓴 봉지 수거든요."),
+            "그래서 답은 2 * sum(o) 예요.\n봉지 하나가 소 둘의 배고픔을 낮추고, o[i] 는 쌍마다 쓴 봉지 수거든요."),
       ],
       pyOnly: [
         t(E, "list(map(int, input().split())) reads one line of hunger values into a list.",

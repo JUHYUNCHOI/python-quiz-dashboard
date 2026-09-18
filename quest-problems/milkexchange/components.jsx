@@ -122,7 +122,7 @@ export function getMilkExchangeSections(E) {
       ],
       cppOnly: [
         t(E, "Capacities ≤ 10^9 fit in int; only the final sum (up to N·10^9) needs long long.",
-            "용량이 10^9 을 넘지 않아서 int 로 충분해요. 마지막 합계만 long long 이 필요해요 (N·10^9 까지 가요)."),
+            "용량이 10^9 을 넘지 않아서 int 로 충분해요.\n마지막 합계만 long long 이 필요해요 (N·10^9 까지 가요)."),
         t(E, "(i + step + N) % N keeps the index positive when stepping left.",
             "(i + step + N) % N 을 쓰면 왼쪽으로 갈 때도 자리가 음수가 되지 않아요."),
       ],

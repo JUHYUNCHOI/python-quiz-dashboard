@@ -246,7 +246,7 @@ const TRAJECTORY = [
   // 8 — move: x ← 2 + (-1)·2 = 0  → out of [1, 5]
   { x: 0, dir: -1, power: 2, ans: 1, broken: [2], active: null, fromX: 2, toX: 0,
     note: { en: "Move by -2. x: 2 → 0. 0 < 1 → out of [1, 5]. STOP. Final ans = 1.",
-            ko: "-2 만큼 움직여요. x: 2 → 0 이고 0 < 1 이라 [1, 5] 를 벗어나요. 여기서 끝, 최종 ans = 1 이에요." } },
+            ko: "-2 만큼 움직여요. x: 2 → 0 이고 0 < 1 이라 [1, 5] 를 벗어나요.\n여기서 끝, 최종 ans = 1 이에요." } },
 ];
 
 const PADX = (i) => 60 + (i - 1) * 80; // x-coord on SVG number line

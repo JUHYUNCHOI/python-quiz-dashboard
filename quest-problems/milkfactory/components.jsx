@@ -106,7 +106,7 @@ export function MilkFactoryBeltSim({ E }) {
         <div style={{ fontSize: 12, color: "#1e3a8a", marginTop: 4, lineHeight: 1.5 }}>
           {t(E,
             "Type belts (one 'a b' per line, meaning a→b). Pick a candidate station — green = milk from that station can reach the candidate.",
-            "컨베이어를 한 줄에 'a b' (a→b 방향) 로 적어요. 후보 역을 고르면, 초록색 역은 거기서 후보 역까지 우유가 갈 수 있다는 뜻이에요.")}
+            "컨베이어를 한 줄에 'a b' (a→b 방향) 로 적어요.\n후보 역을 고르면, 초록색 역은 거기서 후보 역까지 우유가 갈 수 있다는 뜻이에요.")}
         </div>
       </div>
 
@@ -312,7 +312,7 @@ export function getMilkFactorySections(E) {
         t(E, "What should we print? The station that every other station's milk can reach, or -1 if none does. So first read N and the N-1 belts.",
             "무엇을 출력해야 하나요? 모든 역의 우유가 도달할 수 있는 역, 없으면 -1 이에요.\n그러니 먼저 N 과 컨베이어(간선) N-1 개를 읽어요."),
         t(E, "\"Every station reaches candidate c\" is the same question as \"walking backward along belts from c, do we touch every station?\" — so build the reverse graph.",
-            "\"모든 역에서 후보 c 로 갈 수 있다\" 는 \"c 에서 거꾸로 컨베이어를 타면 모든 역에 닿는다\" 와 같은 말이에요.\n그래서 방향을 뒤집은 그래프(radj)를 만들어요."),
+            "\"모든 역에서 후보 c 로 갈 수 있다\" 는 \"c 에서 거꾸로 컨베이어를 타면\n모든 역에 닿는다\" 와 같은 말이에요.\n그래서 방향을 뒤집은 그래프(radj)를 만들어요."),
         t(E, "So try each candidate c = 1..N in order, BFS backward from c, and print the first c that reaches all N stations — or -1 if none does.",
             "그래서 후보 c 를 1 부터 N 까지 차례로 시도해요.\nc 에서 역방향 BFS 로 N 개 전부에 닿으면 그 c 를 출력하고, 없으면 -1 을 출력해요."),
       ],

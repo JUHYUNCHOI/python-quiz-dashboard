@@ -88,7 +88,7 @@ export function NonTransDeepAuditSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
         {t(E,
           "Step through every (x, y) outcome. Each pair is x > y, x < y, or x = y. Tally to decide whether X beats Y.",
-          "모든 (x, y) 결과를 한 쌍씩 살펴봐요. 각 쌍은 x > y, x < y, x = y 중 하나예요. 다 더해서 X 가 Y 를 이기는지 가려내요.")}
+          "모든 (x, y) 결과를 한 쌍씩 살펴봐요. 각 쌍은 x > y, x < y, x = y 중 하나예요.\n다 더해서 X 가 Y 를 이기는지 가려내요.")}
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", gap: 12, marginBottom: 8, flexWrap: "wrap" }}>
@@ -210,9 +210,9 @@ export function NonTransDeepAuditSim({ E }) {
           <div style={{ fontSize: 12 }}>
             {verdict === "BEATS"
               ? t(E, "More x > y outcomes than x < y — X beats Y. beats(X, Y) returns True.",
-                    "x > y 가 x < y 보다 많아요. 그래서 X 가 Y 를 이기고, beats(X, Y) 는 True 예요.")
+                    "x > y 가 x < y 보다 많아요.\n그래서 X 가 Y 를 이기고, beats(X, Y) 는 True 예요.")
               : t(E, "win is not strictly greater than lose — X does NOT beat Y. beats(X, Y) returns False.",
-                    "win 이 lose 보다 크지 않아요. 그래서 X 는 Y 를 이기지 못하고, beats(X, Y) 는 False 예요.")}
+                    "win 이 lose 보다 크지 않아요.\n그래서 X 는 Y 를 이기지 못하고, beats(X, Y) 는 False 예요.")}
           </div>
         </div>
       )}

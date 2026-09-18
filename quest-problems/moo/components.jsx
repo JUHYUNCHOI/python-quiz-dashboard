@@ -90,7 +90,7 @@ export function MooSim({ E }) {
         }}>
           🔍 {t(E,
             "Same letter repeated! The 3-letter windows pile up and overlap here. Click a square inside the run — watch how ONE change lights up several windows at once.",
-            "같은 글자가 연달아 있어요! 여기선 3글자 윈도우가 빽빽이 겹쳐요. 연속 구간 안의 칸을 하나 눌러봐 — 한 번의 변경이 여러 윈도우를 한꺼번에 밝히는 게 보여요.")}
+            "같은 글자가 연달아 있어요! 여기선 3글자 윈도우가 빽빽이 겹쳐요.\n연속 구간 안의 칸을 하나 눌러봐 — 한 번의 변경이 여러 윈도우를 한꺼번에 밝히는 게 보여요.")}
         </div>
       )}
 
@@ -984,11 +984,11 @@ export function getMooSections(E) {
       py: MOO_PRECOUNT_PY, cpp: MOO_PRECOUNT_CPP,
       why: [
         t(E, "Scan the string once and count every moo into a dictionary — so the trial loop later only updates what changed.",
-            "문자열을 한 번 훑어서 모든 moo 를 dict 에 세어 둬요 — 그러면 나중에 시도 반복은 *바뀌는 부분만* 고쳐요."),
+            "문자열을 한 번 훑어서 모든 moo 를 dict 에 세어 둬요 —\n그러면 나중에 시도 반복은 *바뀌는 부분만* 고쳐요."),
       ],
       pyOnly: [
         t(E, "defaultdict(int) auto-starts new keys at 0 — no `if key in dict` check.",
-            "defaultdict(int) 는 새 키를 자동으로 0 에서 시작해요 — `if key in dict` 로 검사하지 않아도 돼요."),
+            "defaultdict(int) 는 새 키를 자동으로 0 에서 시작해요 —\n`if key in dict` 로 검사하지 않아도 돼요."),
       ],
       cppOnly: [
         t(E, "map<string,int> auto-inits to 0 on first []; bonus: iterates keys in sorted order.",
@@ -1001,7 +1001,7 @@ export function getMooSections(E) {
       py: MOO_TRY_PY(E), cpp: MOO_TRY_CPP,
       why: [
         t(E, "For each position: subtract its 3 windows, try 26 letters, restore. (We already played this in Ch4's simulator.)",
-            "각 위치에서 그 위치의 3 윈도우를 빼고, 26 글자를 넣어 보고, 다시 복원해요. (Ch4 시뮬에서 해 본 그 동작이에요.)"),
+            "각 위치에서 그 위치의 3 윈도우를 빼고, 26 글자를 넣어 보고, 다시 복원해요.\n(Ch4 시뮬에서 해 본 그 동작이에요.)"),
         t(E, "+1 → check → -1 between trials is required — without -1, counts leak into the next letter.",
             "시도마다 +1 → 확인 → -1 을 꼭 해야 해요 — -1 을 빼먹으면 개수가 다음 글자로 새어 나가요."),
       ],
@@ -1121,7 +1121,7 @@ export function downloadMooPDF(E, sections, lang = "py") {
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 <p>${t(E,
   "A length-N string of lowercase letters contains 'moo'-like patterns: 3-letter ABB where A≠B (e.g., 'moo', 'baa', 'tee'). Bessie says the recording may have AT MOST 1 typo. Find all moo patterns that appear ≥ F times — either in the original string OR after changing exactly one letter somewhere.",
-  "길이 N 인 소문자 문자열 안에서 'moo' 같은 패턴을 찾아요. 패턴은 ABB (A≠B) 모양의 3 글자예요 (예를 들어 'moo', 'baa', 'tee'). Bessie 는 녹음에 오타가 많아야 1 글자 있을 수 있대요. 원래 문자열 그대로이거나 딱 1 글자를 바꾼 뒤에 F 번 이상 나오는 moo 패턴을 모두 찾으면 돼요.")}</p>
+  "길이 N 인 소문자 문자열 안에서 'moo' 같은 패턴을 찾아요.\n패턴은 ABB (A≠B) 모양의 3 글자예요 (예를 들어 'moo', 'baa', 'tee'). Bessie 는 녹음에 오타가 많아야 1 글자 있을 수 있대요.\n원래 문자열 그대로이거나 딱 1 글자를 바꾼 뒤에 F 번 이상 나오는 moo 패턴을 모두 찾으면 돼요.")}</p>
 
 <h3>${t(E, "Input / Output", "입출력")}</h3>
 <table>
@@ -1140,7 +1140,7 @@ moo</pre></td></tr>
 <p>${t(E, "'moo' appears twice (≥ F=2). Even with 1 letter change, no other pattern reaches 2.", "'moo' 가 2 번 나와요 (≥ F=2). 1 글자를 바꿔도 새로 2 번에 도달하는 패턴은 없어요.")}</p>
 
 <h2>2. ${t(E, "Brute Force (TLE)", "브루트 포스 (TLE)")}</h2>
-<p>${t(E, "Direct: for each of N positions, try all 26 letters, then re-scan the entire string for moos. O(26N²).", "가장 곧이곧대로 하면 N 개 위치마다 26 글자를 넣어 보고, 그때마다 전체를 다시 훑어요. O(26N²) 예요.")}</p>
+<p>${t(E, "Direct: for each of N positions, try all 26 letters, then re-scan the entire string for moos. O(26N²).", "가장 곧이곧대로 하면 N 개 위치마다 26 글자를 넣어 보고, 그때마다 전체를 다시 훑어요.\nO(26N²) 예요.")}</p>
 
 ${codeBlock([
   "import sys",
@@ -1176,18 +1176,18 @@ ${codeBlock([
 
 <div class="box no">
   <b>${t(E, "Why TLE?", "왜 TLE?")}</b>
-  ${t(E, "N=20,000: 26 × 4×10⁸ = ~10¹⁰ ops. At 10⁸ ops/sec → ~100 sec. TLE.", "N=20,000 이면 26 × 4×10⁸ = 약 10¹⁰ 번 계산이에요. 1초에 1억 번이면 약 100 초라 TLE 예요.")}
+  ${t(E, "N=20,000: 26 × 4×10⁸ = ~10¹⁰ ops. At 10⁸ ops/sec → ~100 sec. TLE.", "N=20,000 이면 26 × 4×10⁸ = 약 10¹⁰ 번 계산이에요.\n1초에 1억 번이면 약 100 초라 TLE 예요.")}
 </div>
 
 <h2>3. ${t(E, "Pattern: Remove → Try → Restore", "빼기 → 시도 → 복원 패턴")}</h2>
 
 <div class="box ok">
   <b>💡 ${t(E, "Key insight", "핵심 통찰")}</b>:
-  ${t(E, "Changing 1 letter at position pos affects ONLY 3 windows (those containing pos). The other N-3 windows don't change.", "위치 pos 의 1 글자를 바꾸면 영향받는 윈도우는 정확히 3 개예요 (pos 가 들어 있는 것). 나머지 N-3 윈도우는 안 변해요.")}
+  ${t(E, "Changing 1 letter at position pos affects ONLY 3 windows (those containing pos). The other N-3 windows don't change.", "위치 pos 의 1 글자를 바꾸면\n영향받는 윈도우는 정확히 3 개예요 (pos 가 들어 있는 것). 나머지 N-3 윈도우는 안 변해요.")}
 </div>
 
 <h3>${t(E, "Why exactly 3?", "왜 정확히 3 개일까요?")}</h3>
-<p>${t(E, "Position pos can be the 1st, 2nd, or 3rd letter of a 3-letter window. So 3 windows include pos: starting at idx = pos-2, pos-1, pos.", "위치 pos 는 윈도우의 1번째, 2번째, 3번째 글자가 될 수 있어요. 그래서 idx = pos-2, pos-1, pos 에서 시작하는 윈도우 3 개예요.")}</p>
+<p>${t(E, "Position pos can be the 1st, 2nd, or 3rd letter of a 3-letter window. So 3 windows include pos: starting at idx = pos-2, pos-1, pos.", "위치 pos 는 윈도우의 1번째, 2번째, 3번째 글자가 될 수 있어요.\n그래서 idx = pos-2, pos-1, pos 에서 시작하는 윈도우 3 개예요.")}</p>
 
 <h3>${t(E, "Strategy", "전략")}</h3>
 <ol>

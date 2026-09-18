@@ -133,9 +133,9 @@ export function getExchangeSections(E) {
       ],
       cppOnly: [
         t(E, "The C++ version skips the minute-by-minute simulation: it sums all milk, then for each 'R…RL…L' boundary subtracts min(chainSum, M) — the milk that chain leaks into the endless trade. O(N) overall, so N=2·10^5 / M=10^9 runs instantly.",
-            "C++ 쪽은 1분씩 따라 하지 않아요. 우유를 전부 더한 뒤 'R…RL…L' 경계마다 그 줄기가 끝없는 교환으로 흘려보내는 양 min(chainSum, M) 을 빼요. 전체가 O(N) 이라 N=2·10^5, M=10^9 도 바로 끝나요."),
+            "C++ 쪽은 1분씩 따라 하지 않아요.\n우유를 전부 더한 뒤 'R…RL…L' 경계마다 그 줄기가 끝없는 교환으로 흘려보내는 양 min(chainSum, M) 을 빼요.\n전체가 O(N) 이라 N=2·10^5, M=10^9 도 바로 끝나요."),
         t(E, "Sums (and M) reach N·10^9, so cap/ans/M use long long; (j - 1 + N) % N keeps the chain walk index positive on a circle.",
-            "합계와 M 이 N·10^9 까지 가서 cap, ans, M 은 long long 으로 둬요. 동그란 줄기를 따라갈 때는 (j - 1 + N) % N 으로 자리가 음수가 되지 않게 해요."),
+            "합계와 M 이 N·10^9 까지 가서 cap, ans, M 은 long long 으로 둬요.\n동그란 줄기를 따라갈 때는 (j - 1 + N) % N 으로 자리가 음수가 되지 않게 해요."),
       ],
     },
   ];
@@ -191,7 +191,7 @@ export function ExchangeSim({ E }) {
       <div style={{ marginTop: 10, fontSize: 11.5, color: C.text, lineHeight: 1.7, textAlign: "center" }}>
         {t(E,
           "Cow 0→1 (R), Cow 1→2 (R), Cow 2→1 (L). Cow 1 receives from BOTH sides but cap=1, so 1L overflows (yellow *). Total = 0 + 1 + 1 = 2.",
-          "소 0→1 (R), 소 1→2 (R), 소 2→1 (L) 로 넘겨요. 소 1은 양쪽에서 받지만 용량이 1이라 1L 가 넘쳐요 (노랑 *). 합계 = 0 + 1 + 1 = 2.")}
+          "소 0→1 (R), 소 1→2 (R), 소 2→1 (L) 로 넘겨요.\n소 1은 양쪽에서 받지만 용량이 1이라 1L 가 넘쳐요 (노랑 *). 합계 = 0 + 1 + 1 = 2.")}
       </div>
     </div>
   );

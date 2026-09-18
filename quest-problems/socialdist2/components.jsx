@@ -191,7 +191,7 @@ export function SocDist2Sim({ E }) {
         <b style={{ color: A }}>{t(E, "Two questions, one answer", "질문 둘, 답 하나")}</b>{" "}
         {t(E,
           "Bigger R → infection rings reach healthy cows (invalid). Smaller R → sick cows fall into separate clusters (more seeds). The largest valid R minimises the cluster count.",
-          "R 이 커지면 감염 범위가 건강한 소까지 닿아서 안 돼요. R 이 작으면 아픈 소들이 여러 클러스터로 갈라져서 처음 아팠던 소가 늘어나요. 그래서 건강한 소에 안 닿는 가장 큰 R 일 때 클러스터 수가 가장 적어요.")}
+          "R 이 커지면 감염 범위가 건강한 소까지 닿아서 안 돼요.\nR 이 작으면 아픈 소들이 여러 클러스터로 갈라져서 처음 아팠던 소가 늘어나요.\n그래서 건강한 소에 안 닿는 가장 큰 R 일 때 클러스터 수가 가장 적어요.")}
       </div>
     </div>
   );

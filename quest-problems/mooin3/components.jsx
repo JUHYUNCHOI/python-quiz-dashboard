@@ -270,7 +270,7 @@ export function TripletEnumSimulator({ E }) {
           }}>
             {t(E,
               "Rule of thumb: ~100M (1e8) ops fit in the time limit.  ✓ fine · △ risky · ✗ way too slow.  And this is PER query — with many queries, brute is hopeless → we need a faster idea.",
-              "대략 1 억(1e8) 번 계산까지가 제한 시간 안이에요.  ✓ 여유 · △ 위험 · ✗ 한참 초과.  게다가 이건 물음 하나당이에요.  물음이 많으면 이 방법으로는 어림없어요 → 더 빠른 방법이 필요해요.")}
+              "대략 1 억(1e8) 번 계산까지가 제한 시간 안이에요.\n✓ 여유 · △ 위험 · ✗ 한참 초과.  게다가 이건 물음 하나당이에요.\n물음이 많으면 이 방법으로는 어림없어요 → 더 빠른 방법이 필요해요.")}
           </div>
         </div>
       )}
@@ -999,8 +999,8 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         <div style={{ maxWidth: 500, margin: "0 auto 12px", background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "11px 14px", fontSize: 11.5, lineHeight: 1.7, color: "#1e3a8a", wordBreak: "keep-all" }}>
           <div style={{ fontWeight: 800, marginBottom: 5, color: "#1d4ed8" }}>⚡ {t(E, "Why is this faster? (the technique)", "왜 빨라졌나 — 기법")}</div>
           <div>• {t(E, "Triple loop tries every i, j, k → N³.", "3중 for 는 i·j·k 를 다 시도해요 → N³.")}</div>
-          <div>• {t(E, "Fix j: the two gaps (j−i) and (k−j) are INDEPENDENT → put i as far LEFT as possible, k as far RIGHT as possible.  No middle values to try.", "j 를 고정하면 두 거리 (j−i) 와 (k−j) 가 서로 상관없어져요.  그래서 i 는 최대한 왼쪽, k 는 최대한 오른쪽에 두면 돼요.  중간값은 볼 필요가 없어요.")}</div>
-          <div style={{ fontWeight: 700, marginTop: 2 }}>→ {t(E, "one left scan + one right scan per j → N².  Technique: fix the middle + greedy extremes.", "j 마다 왼쪽 한 번, 오른쪽 한 번만 보면 돼요 → N².  가운데를 고정하고 양 끝을 최대한 벌리는 방법이에요.")}</div>
+          <div>• {t(E, "Fix j: the two gaps (j−i) and (k−j) are INDEPENDENT → put i as far LEFT as possible, k as far RIGHT as possible.  No middle values to try.", "j 를 고정하면 두 거리 (j−i) 와 (k−j) 가 서로 상관없어져요.\n그래서 i 는 최대한 왼쪽, k 는 최대한 오른쪽에 두면 돼요. 중간값은 볼 필요가 없어요.")}</div>
+          <div style={{ fontWeight: 700, marginTop: 2 }}>→ {t(E, "one left scan + one right scan per j → N².  Technique: fix the middle + greedy extremes.", "j 마다 왼쪽 한 번,\n오른쪽 한 번만 보면 돼요 → N².  가운데를 고정하고 양 끝을 최대한 벌리는 방법이에요.")}</div>
         </div>
       )}
 
@@ -1217,7 +1217,7 @@ export function Mooin3FastSim({ E }) {
         <div style={{ textAlign: "center", fontSize: 10.5, color: "#6b21a8", marginBottom: 10, fontWeight: 700, wordBreak: "keep-all" }}>
           {t(E,
             "Why here: push the ends far apart (i leftmost · k rightmost), j in the middle → (j−i)×(k−j) is biggest.",
-            "왜 이 자리일까요? 양 끝을 최대한 벌리고 (i 는 왼쪽 끝 · k 는 오른쪽 끝) j 를 가운데에 두면 (j−i)×(k−j) 가 가장 커져요.")}
+            "왜 이 자리일까요? 양 끝을 최대한 벌리고 (i 는 왼쪽 끝 · k 는 오른쪽 끝) j 를 가운데에 두면\n(j−i)×(k−j) 가 가장 커져요.")}
         </div>
       )}
 
@@ -2933,7 +2933,7 @@ export function getMooin3Sections(E) {
       py: M3_LOOP_PY(E), cpp: M3_LOOP_CPP(E),
       why: [
         t(E, "For each middle j in [l+1, r−1], we want the BEST i to its left and BEST k to its right.",
-            "가운데 j 를 [l+1, r−1] 에서 하나씩 잡고, 왼쪽에서 가장 좋은 i 와 오른쪽에서 가장 좋은 k 를 찾아요."),
+            "가운데 j 를 [l+1, r−1] 에서 하나씩 잡고,\n왼쪽에서 가장 좋은 i 와 오른쪽에서 가장 좋은 k 를 찾아요."),
         t(E, "Best i = SMALLEST index with s[i] ≠ s[j] (smaller i → bigger j−i).",
             "가장 좋은 i 는 s[i] ≠ s[j] 인 가장 작은 자리예요. i 가 작을수록 j−i 가 커져요."),
         t(E, "Best k = LARGEST index with s[k] == s[j] (bigger k → bigger k−j).",
@@ -2945,7 +2945,7 @@ export function getMooin3Sections(E) {
       ],
       cppOnly: [
         t(E, "Inner loop with break — uses only cpp-7 (loops) + cpp-11 (string indexing).",
-            "안쪽 반복문에서 for 와 break 만 써요 — cpp-7 (반복문) 과 cpp-11 (글자 줄에서 한 글자 꺼내기) 만 필요해요."),
+            "안쪽 반복문에서 for 와 break 만 써요 —\ncpp-7 (반복문) 과 cpp-11 (글자 줄에서 한 글자 꺼내기) 만 필요해요."),
       ],
     },
     {
@@ -2960,7 +2960,7 @@ export function getMooin3Sections(E) {
       ],
       cppOnly: [
         t(E, "Why long long? With N up to 10⁵, (j−i) and (k−j) can each be up to 10⁵ → product up to 10¹⁰, larger than int's max (~2·10⁹). Casting one operand to long long forces the multiplication to use long long.",
-            "왜 long long 일까요? N 이 최대 10⁵ 라서 (j−i) 와 (k−j) 도 각각 최대 10⁵ 예요. 그러면 곱이 최대 10¹⁰ 이라, int 가 담을 수 있는 가장 큰 값(~2·10⁹)을 넘어요. 한쪽을 long long 으로 바꿔 주면 곱도 long long 으로 계산돼요."),
+            "왜 long long 일까요? N 이 최대 10⁵ 라서 (j−i) 와 (k−j) 도 각각 최대 10⁵ 예요.\n그러면 곱이 최대 10¹⁰ 이라, int 가 담을 수 있는 가장 큰 값(~2·10⁹)을 넘어요.\n한쪽을 long long 으로 바꿔 주면 곱도 long long 으로 계산돼요."),
       ],
     },
     {
@@ -2986,9 +2986,9 @@ export function getMooin3Sections(E) {
         t(E, "Outer j loop runs O(N) times per query → O(N²) per query.",
             "바깥 j 반복이 물음마다 O(N) 번 돌아요 → 물음 하나당 O(N²) 이에요."),
         t(E, "Q queries → total O(Q · N²). At N = 10⁵ and Q = 3·10⁴ that's ~3·10¹⁴ — way too slow.",
-            "물음이 Q 개면 전부 합쳐 O(Q · N²) 이에요.  N = 10⁵, Q = 3·10⁴ 이면 ~3·10¹⁴ 이라 너무 느려요."),
+            "물음이 Q 개면 전부 합쳐 O(Q · N²) 이에요.\nN = 10⁵, Q = 3·10⁴ 이면 ~3·10¹⁴ 이라 너무 느려요."),
         t(E, "So small-N test cases pass, but large-N cases TLE.  The next steps (6-8) turn this into a truly fast O(26 · (N + Q)) solution.",
-            "그래서 N 이 작은 테스트는 통과하지만 N 이 큰 테스트는 시간 초과가 나요.  다음 단계 (6-8) 에서 진짜 빠른 O(26 · (N + Q)) 풀이로 바꿔요."),
+            "그래서 N 이 작은 테스트는 통과하지만 N 이 큰 테스트는 시간 초과가 나요.\n다음 단계 (6-8) 에서 진짜 빠른 O(26 · (N + Q)) 풀이로 바꿔요."),
       ],
     },
     /* ── 6️⃣ Stage A: 외곽 루프를 j → c (26 개) 로 ── */
@@ -2999,11 +2999,11 @@ export function getMooin3Sections(E) {
       py: M3_STAGE_A_PY, cpp: M3_STAGE_A_CPP,
       why: [
         t(E, "Key observation: every j with s[j] = c asks the SAME left/right scan question (find leftmost i with s[i] ≠ c, rightmost k with s[k] = c).",
-            "여기서 중요한 걸 하나 발견해요.  s[j] = c 인 j 들은 왼쪽·오른쪽에 똑같은 질문을 해요.  s[i] ≠ c 인 가장 왼쪽 i 와, s[k] = c 인 가장 오른쪽 k 를 찾는 거예요."),
+            "여기서 중요한 걸 하나 발견해요. s[j] = c 인 j 들은 왼쪽·오른쪽에 똑같은 질문을 해요.\ns[i] ≠ c 인 가장 왼쪽 i 와, s[k] = c 인 가장 오른쪽 k 를 찾는 거예요."),
         t(E, "So loop the OUTER over c (just 26 letters) instead of j (N positions).  Inside each c, iterate positions_of[c] to find the best j.",
-            "그래서 바깥 반복을 j (N 개) 대신 c (글자 26 개) 로 바꿔요.  글자 c 마다 positions_of[c] 를 돌면서 가장 좋은 j 를 찾아요."),
+            "그래서 바깥 반복을 j (N 개) 대신 c (글자 26 개) 로 바꿔요.\n글자 c 마다 positions_of[c] 를 돌면서 가장 좋은 j 를 찾아요."),
         t(E, "Per query still O(26·N) because we scan to find left_pointer / right_pointer each time. Conceptual win, not yet a speed win — but the next step plugs that hole.",
-            "아직 물음마다 O(26·N) 이에요.  매번 left_pointer 와 right_pointer 를 훑어서 찾기 때문이에요.  생각은 줄였으니 속도는 다음 단계에서 줄여요."),
+            "아직 물음마다 O(26·N) 이에요.\n매번 left_pointer 와 right_pointer 를 훑어서 찾기 때문이에요.\n생각은 줄였으니 속도는 다음 단계에서 줄여요."),
       ],
     },
 
@@ -3015,11 +3015,11 @@ export function getMooin3Sections(E) {
       py: M3_STAGE_B_PY, cpp: M3_STAGE_B_CPP,
       why: [
         t(E, "Build two tables ONCE before any query: nearest_diff[c][i] (smallest idx ≥ i with s[idx] ≠ c) and latest_same[c][i] (largest idx ≤ i with s[idx] = c).",
-            "물음을 받기 전에 표 두 개를 한 번만 만들어요.  nearest_diff[c][i] 는 idx ≥ i 중 s[idx] ≠ c 인 가장 작은 idx 이고, latest_same[c][i] 는 idx ≤ i 중 s[idx] = c 인 가장 큰 idx 예요."),
+            "물음을 받기 전에 표 두 개를 한 번만 만들어요.\nnearest_diff[c][i] 는 idx ≥ i 중 s[idx] ≠ c 인 가장 작은 idx 이고,\nlatest_same[c][i] 는 idx ≤ i 중 s[idx] = c 인 가장 큰 idx 예요."),
         t(E, "Precompute is O(26·N).  Per query, getting (left_pointer, right_pointer) for each c is now a single table lookup — no scan.",
-            "표를 만드는 데 O(26·N) 이 들어요.  물음에서는 글자 c 마다 (left_pointer, right_pointer) 를 표에서 한 번 꺼내면 끝이라, 훑지 않아도 돼요."),
+            "표를 만드는 데 O(26·N) 이 들어요.\n물음에서는 글자 c 마다 두 끝을 표에서 한 번 꺼내면 끝이에요.\n훑지 않아도 돼요."),
         t(E, "But we still iterate every position in positions_of[c] to find best j — per query O(N) total. One more leap to go.",
-            "그래도 가장 좋은 j 를 찾으려고 positions_of[c] 를 다 도는 건 그대로예요.  물음마다 O(N) 이라 한 걸음이 더 남았어요."),
+            "그래도 가장 좋은 j 를 찾으려고 positions_of[c] 를 다 도는 건 그대로예요.\n물음마다 O(N) 이라 한 걸음이 더 남았어요."),
       ],
       aside: <M3InsightAside E={E} />,
     },
@@ -3032,19 +3032,19 @@ export function getMooin3Sections(E) {
       py: M3_FAST_PY(E), cpp: M3_FAST_CPP(E),
       why: [
         t(E, "With c fixed, i = leftmost different char and k = rightmost c are fixed too.  f(j) = (j − i)·(k − j) is an upward-convex (∩) parabola, biggest at the vertex (i + k) / 2.",
-            "c 가 정해지면 i (가장 왼쪽 다른 글자) 와 k (가장 오른쪽 c) 도 정해져요.  f(j) = (j − i)·(k − j) 는 위로 볼록한(∩) 포물선이라, 꼭짓점 (i + k) / 2 에서 가장 커요."),
+            "c 가 정해지면 i (가장 왼쪽 다른 글자) 와 k (가장 오른쪽 c) 도 정해져요.\nf(j) = (j − i)·(k − j) 는 위로 볼록한(∩) 포물선이라,\n꼭짓점 (i + k) / 2 에서 가장 커요."),
         t(E, "So the best j is the c nearest the vertex.  The 2 nearest c (one on each side) come STRAIGHT from the tables — latest_same[c][m] and earliest_same[c][m] — O(1), no binary search.",
-            "그래서 가장 좋은 j 는 꼭짓점에 가장 가까운 c 예요.  꼭짓점 양옆의 c 두 개는 표에서 바로 나와요 — latest_same[c][m] 과 earliest_same[c][m] 이에요.  O(1) 이라 이분탐색이 필요 없어요."),
+            "그래서 가장 좋은 j 는 꼭짓점에 가장 가까운 c 예요.\n꼭짓점 양옆의 c 두 개는 표에서 바로 나와요 —\nlatest_same[c][m] 과 earliest_same[c][m] 이에요.\nO(1) 이라 이분탐색이 필요 없어요."),
         t(E, "Per query: 26 chars × O(1) ≈ 52 ops.  Build 26·N + queries → total O(26 · (N + Q)).  Same as the official table solution (no bisect).",
-            "물음 하나당 글자 26 개 × O(1) 이라 계산이 52 번쯤이에요.  표 만들기 26·N 에 물음까지 더하면 전부 O(26 · (N + Q)) 예요.  공식 표 풀이와 같아요 (bisect 없이)."),
+            "물음 하나당 글자 26 개 × O(1) 이라 계산이 52 번쯤이에요.\n표 만들기 26·N 에 물음까지 더하면 전부 O(26 · (N + Q)) 예요.\n공식 표 풀이와 같아요 (bisect 없이)."),
       ],
       pyOnly: [
         t(E, "The only new table vs Step 7 is earliest_same (leftmost c at/after i) — built in the same right-to-left pass.  No bisect, no positions_of list.",
-            "7 단계에 비해 새로 생긴 표는 earliest_same (i 다음에 오는 c 중 가장 왼쪽) 하나뿐이에요.  오른쪽에서 왼쪽으로 훑는 같은 차례에 함께 만들어요.  bisect 도, positions_of 목록도 없어요."),
+            "7 단계에 비해 새로 생긴 표는 earliest_same (i 다음에 오는 c 중 가장 왼쪽) 하나뿐이에요.\n오른쪽에서 왼쪽으로 훑는 같은 차례에 함께 만들어요.\nbisect 도, positions_of 목록도 없어요."),
       ],
       cppOnly: [
         t(E, "Only <iostream> / <vector> / <string> — no <bits/stdc++.h>, no binary search, no STL algorithm.  Just three tables and O(1) lookups.",
-            "<iostream> / <vector> / <string> 만 써요.  <bits/stdc++.h> 도, 이분탐색도, STL algorithm 도 안 써요.  표 세 개와 O(1) 로 꺼내기가 전부예요."),
+            "<iostream> / <vector> / <string> 만 써요.\n<bits/stdc++.h> 도, 이분탐색도, STL algorithm 도 안 써요.\n표 세 개와 O(1) 로 꺼내기가 전부예요."),
       ],
       aside: <M3PerfFastAside E={E} />,
     },
@@ -3107,7 +3107,7 @@ const M3InsightAside = ({ E }) => (
     <div>
       {t(E,
         "If s[j] = 'b' for many j, all those j's ask the SAME left/right scan question. Compute once per character.",
-        "여러 j 에서 s[j] = 'b' 이면, 그 j 들이 왼쪽·오른쪽에 똑같은 질문을 해요. 글자마다 한 번만 계산하면 돼요.")}
+        "여러 j 에서 s[j] = 'b' 이면, 그 j 들이 왼쪽·오른쪽에 똑같은 질문을 해요.\n글자마다 한 번만 계산하면 돼요.")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #6ee7b7", fontSize: 11 }}>
       {t(E, "Per query work: O(N²) → O(N).", "물음 하나당 하는 일이 O(N²) 에서 O(N) 으로 줄어요.")}
@@ -3135,7 +3135,7 @@ const M3PeakAside = ({ E }) => (
     <div style={{ paddingTop: 6, borderTop: "1px dashed #fbbf24", fontSize: 11 }}>
       {t(E,
         "Constraint: s[j] = c.  The two c nearest the vertex come straight from the tables — latest_same[c][m] (left side) and earliest_same[c][m] (right side).  Just two candidates, O(1).",
-        "조건은 s[j] = c 예요.  꼭짓점 양옆에서 가장 가까운 c 두 개는 표에서 바로 나와요 — latest_same[c][m] (왼쪽) 과 earliest_same[c][m] (오른쪽).  후보가 둘뿐이라 O(1) 이에요.")}
+        "조건은 s[j] = c 예요.\n꼭짓점 양옆에서 가장 가까운 c 두 개는 표에서 바로 나와요 —\nlatest_same[c][m] (왼쪽) 과 earliest_same[c][m] (오른쪽).  후보가 둘뿐이라\nO(1) 이에요.")}
     </div>
   </div>
 );
@@ -3156,7 +3156,7 @@ const M3FastAside = ({ E }) => (
     <div style={{ marginBottom: 4 }}>
       <b>latest_same / earliest_same</b>{" "}
       {t(E, "→ at the vertex m = (i+k)/2, give the 2 nearest c directly — O(1), no binary search.",
-            "→ 꼭짓점 m = (i+k)/2 에서 가장 가까운 c 두 개를 바로 알려줘요 — O(1) 이라 이분탐색이 없어요.")}
+            "→ 꼭짓점 m = (i+k)/2 에서 가장 가까운 c 두 개를 바로 알려줘요 —\nO(1) 이라 이분탐색이 없어요.")}
     </div>
     <div>
       <b>{t(E, "parabola", "포물선")}</b>{" "}
@@ -3165,7 +3165,7 @@ const M3FastAside = ({ E }) => (
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
       {t(E, "Total: O(26·N) build + O(Q · 26) queries = O(26·(N+Q)). Both Python and C++ comfortable.",
-            "모두 합치면 표 만들기 O(26·N) 에 물음 O(Q · 26) 이라 O(26·(N+Q)) 예요.  Python 도 C++ 도 여유로워요.")}
+            "모두 합치면 표 만들기 O(26·N) 에 물음 O(Q · 26) 이라 O(26·(N+Q)) 예요.\nPython 도 C++ 도 여유로워요.")}
     </div>
   </div>
 );

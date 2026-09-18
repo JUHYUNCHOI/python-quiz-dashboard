@@ -229,7 +229,7 @@ export function Mcc19DitcoinDeepAuditSim({ E }) {
       {revealed && (
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center", lineHeight: 1.6, wordBreak: "keep-all" }}>
           {t(E, "The rule: sell on day i exactly when prices[i] is the biggest price from day i to the end — no better day is coming.",
-                "규칙은 이거예요 — i 일의 가격이 i 일부터 마지막 날까지 중에서 가장 클 때 그날 팔아요. 앞으로 더 좋은 날이 없다는 뜻이니까요.")}
+                "규칙은 이거예요 — i 일의 가격이 i 일부터 마지막 날까지 중에서 가장 클 때 그날 팔아요.\n앞으로 더 좋은 날이 없다는 뜻이니까요.")}
         </div>
       )}
     </div>
@@ -311,7 +311,7 @@ export function getMcc19DitcoinSections(E) {
            그리고 suffix_max 가 코드 쪽에서 처음 영어 이름으로만 나와서, 4쪽 힌트의
            풀어쓴 말과 연결이 안 됐다. 두 가지를 같이 고친다. */
         t(E, "suffix_max is a table of \"the best price from today to the end\". Build it once, then walk the days once.",
-            "suffix_max 는 \"오늘부터 마지막 날까지 중 가장 비싼 가격\" 을 미리 적어둔 표예요. 한 번 만들어 두고 날짜를 한 번만 훑으면 끝이라, 날이 며칠이든 그만큼만 일해요."),
+            "suffix_max 는 \"오늘부터 마지막 날까지 중 가장 비싼 가격\" 을 미리 적어둔 표예요.\n한 번 만들어 두고 날짜를 한 번만 훑으면 끝이라, 날이 며칠이든 그만큼만 일해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
@@ -321,7 +321,7 @@ export function getMcc19DitcoinSections(E) {
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
             "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어요."),
         t(E, "Indices fit in int, but the profit does NOT: D ≤ 10^5 days × p ≤ 10^9 reaches 10^14, so it needs long long.",
-            "자리 번호는 int 로 되지만 수익은 안 돼요. 날이 100,000 일이고 가격이 10 억이면 수익이 100 조까지 가서, 더 큰 정수인 long long 이 필요해요."),
+            "자리 번호는 int 로 되지만 수익은 안 돼요.\n날이 100,000 일이고 가격이 10 억이면 수익이 100 조까지 가서,\n더 큰 정수인 long long 이 필요해요."),
       ],
     },
   ];

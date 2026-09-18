@@ -178,7 +178,7 @@ export function ACSubsetSim({ E }) {
       <div style={{ fontSize: 11, color: C.dim, marginTop: 8, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
           "Try {AC1}, {AC2}, {AC1+AC2}, {} — only valid subsets count, pick the cheapest.",
-          "{AC1만}, {AC2만}, {둘 다}, {아무것도 안} 을 눌러 봐요. 모든 소가 시원해진 것 중 가장 싼 것이 답이에요.")}
+          "{AC1만}, {AC2만}, {둘 다}, {아무것도 안} 을 눌러 봐요.\n모든 소가 시원해진 것 중 가장 싼 것이 답이에요.")}
       </div>
     </div>
   );

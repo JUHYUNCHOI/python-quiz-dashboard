@@ -91,7 +91,7 @@ export function getOutOfPlaceSections(E) {
       ],
       cppOnly: [
         t(E, "Copy then sort: `vector<int> sorted_a = a;` then sort(sorted_a.begin(), sorted_a.end()).",
-            "먼저 복사한 뒤 정렬해요. `vector<int> sorted_a = a;` 다음에 sort(...) 를 불러요."),
+            "먼저 복사한 뒤 정렬해요.\n`vector<int> sorted_a = a;` 다음에 sort(...) 를 불러요."),
         t(E, "Count mismatched positions with a plain int counter — cpp-9 form.",
             "안 맞는 자리 개수는 그냥 int 변수 하나로 세어요. cpp-9 에서 배운 모양이에요."),
       ],

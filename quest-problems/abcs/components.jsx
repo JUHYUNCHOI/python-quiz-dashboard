@@ -60,7 +60,7 @@ export function AbcsSumExplorer({ E }) {
         <div style={{ fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
           {t(E,
             "Pick any A, B, C. Watch the 7 sums get computed, then see where A, B, A+B+C land after sorting.",
-            "A, B, C 를 골라 봐요. 7개 합이 계산되고, 정렬한 뒤 A, B, A+B+C 가 어느 자리로 가는지 볼 수 있어요.")}
+            "A, B, C 를 골라 봐요.\n7개 합이 계산되고, 정렬한 뒤 A, B, A+B+C 가 어느 자리로 가는지 볼 수 있어요.")}
         </div>
       </div>
 
@@ -132,7 +132,7 @@ export function AbcsSumExplorer({ E }) {
         💡 <b>{t(E, "Notice", "관찰")}</b>:{" "}
         {t(E,
           "no matter what A, B, C you pick, nums[0] = A, nums[1] = B, and nums[6] = A+B+C. That's the whole trick.",
-          "어떤 A, B, C 를 골라도 nums[0] = A, nums[1] = B, nums[6] = A+B+C 예요. 이게 핵심이에요.")}
+          "어떤 A, B, C 를 골라도 nums[0] = A,\nnums[1] = B, nums[6] = A+B+C 예요.\n이게 핵심이에요.")}
       </div>
     </div>
   );

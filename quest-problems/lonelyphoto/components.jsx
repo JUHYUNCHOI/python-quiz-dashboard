@@ -459,7 +459,7 @@ export function getLonelyPhotoSections(E) {
         t(E, "left = opposite cows touching i on the left, right = opposite cows touching i on the right.",
             "left 는 i 왼쪽에 붙은 반대 품종 수, right 는 i 오른쪽에 붙은 반대 품종 수예요."),
         t(E, "We need length ≥ 3 with exactly one cow of i's breed. Three cases: ≥1 on each side, ≥2 on one side only.",
-            "묶음은 3 마리 이상이고 i 품종이 딱 한 마리여야 해요. 그래서 경우가 셋이에요. 양쪽에서 1 마리씩 가져오거나, 왼쪽에서만 2 마리, 오른쪽에서만 2 마리예요."),
+            "묶음은 3 마리 이상이고 i 품종이 딱 한 마리여야 해요. 그래서 경우가 셋이에요.\n양쪽에서 1 마리씩 가져오거나, 왼쪽에서만 2 마리, 오른쪽에서만 2 마리예요."),
         t(E, "Sum is left·right + max(0, left-1) + max(0, right-1).",
             "그래서 합은 left·right + max(0, left-1) + max(0, right-1) 이에요."),
       ],

@@ -242,13 +242,13 @@ export function getMcc19CandySections(E) {
            학생: "설명은 거꾸로라는데 코드는 앞에서부터 돈다. 왜 안 맞는지 모르겠다."
            코드를 되돌리기로 바꾸고 설명도 같은 말로 맞췄다. 비트는 쓰지 않는다. */
         t(E, "\"odd\" wipes out the odd positions, so someone now standing at p was at 2p one round earlier. \"even\" wipes out the even ones, so p was at 2p − 1.",
-            "\"odd\" 는 홀수 자리를 지우니, 지금 p 번째인 사람은 한 라운드 전엔 2p 번째에 있었어요. \"even\" 은 짝수 자리를 지우니 2p − 1 번째였고요."),
+            "\"odd\" 는 홀수 자리를 지우니, 지금 p 번째인 사람은 한 라운드 전엔 2p 번째에 있었어요.\n\"even\" 은 짝수 자리를 지우니 2p − 1 번째였고요."),
         t(E, "So start at pos = 1 (the last survivor) and undo the rounds from last to first. No line of people is ever built.",
-            "그래서 pos = 1 (마지막에 남은 사람)에서 시작해, 라운드를 마지막부터 거꾸로 되돌려요. 사람을 한 줄로 세울 일이 없어요."),
+            "그래서 pos = 1 (마지막에 남은 사람)에서 시작해, 라운드를 마지막부터 거꾸로 되돌려요.\n사람을 한 줄로 세울 일이 없어요."),
       ],
       pyOnly: [
         t(E, "input().split() gives the shouts as a list of words; range(R - 1, -1, -1) walks the rounds backwards.",
-            "input().split() 은 외침을 단어 리스트로 줘요. range(R - 1, -1, -1) 은 라운드를 거꾸로 훑어요.",),
+            "input().split() 은 외침을 단어 리스트로 줘요.\nrange(R - 1, -1, -1) 은 라운드를 거꾸로 훑어요.",),
       ],
       cppOnly: [
         t(E, "pos is a long long — the position doubles every round, so it grows fast.",

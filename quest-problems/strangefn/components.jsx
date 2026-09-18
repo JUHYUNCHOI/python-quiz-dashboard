@@ -128,11 +128,11 @@ export function getStrangeFnSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "What are we finding? How many times f applies until x hits 0, mod 10⁹+7. There are two phases: an optional binarize (1 op), then the closed form g(n) = floor(3n/2).",
-            "무엇을 구해야 하나요? f 를 몇 번 써야 x 가 0 이 되는지를 mod 10⁹+7 로 구해요.\n단계는 둘이에요 — 필요하면 먼저 이진화(1번)를 하고, 그다음 닫힌 식 g(n) = floor(3n/2) 를 써요."),
+            "무엇을 구해야 하나요? f 를 몇 번 써야 x 가 0 이 되는지를 mod 10⁹+7 로 구해요.\n단계는 둘이에요 — 필요하면 먼저 이진화(1번)를 하고,\n그다음 닫힌 식 g(n) = floor(3n/2) 를 써요."),
         t(E, "Why binarize first? f only steps x → x−1 while x is pure 0/1 — any other digit forces one binarize pass. And n can grow up to 10^100000, so we keep it mod 10⁹+7 while reading digits.",
-            "왜 이진화가 먼저 필요할까요? f 는 x 가 0/1 로만 있을 때만 x−1 로 움직여요.\n다른 자리가 있으면 한 번 이진화해야 해요. n 은 최대 10^100000 까지 커질 수 있어서 자릿수를 읽으며 mod 10⁹+7 로 계속 줄여요."),
+            "왜 이진화가 먼저 필요할까요? f 는 x 가 0/1 로만 있을 때만 x−1 로 움직여요.\n다른 자리가 있으면 한 번 이진화해야 해요.\nn 은 최대 10^100000 까지 커질 수 있어서 자릿수를 읽으며 mod 10⁹+7 로 계속 줄여요."),
         t(E, "So how do we compute floor(3n/2)? Under a prime mod, dividing by 2 becomes multiplying by the modular inverse of 2.",
-            "그럼 floor(3n/2) 는 어떻게 계산할까요? 소수 mod 에서 나누기 2 는 2 의 모듈러 역원을 곱하는 것과 같아요."),
+            "그럼 floor(3n/2) 는 어떻게 계산할까요?\n소수 mod 에서 나누기 2 는 2 의 모듈러 역원을 곱하는 것과 같아요."),
       ],
       pyOnly: [
         t(E, "pow(2, MOD-2, MOD) gives the modular inverse via Fermat's little theorem.",

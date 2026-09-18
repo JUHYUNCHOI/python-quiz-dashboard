@@ -185,7 +185,7 @@ export function SocDist1Sim({ E }) {
         <b style={{ color: A }}>{t(E, "Why binary search?", "왜 이분 탐색?")}</b>{" "}
         {t(E,
           "Bigger D → fewer cows fit. So {D : N cows fit} is a downward-true range. The biggest such D is the answer — perfect for binary search.",
-          "D 가 커질수록 들어가는 소가 줄어요. 그래서 'N 마리가 들어가는 D' 는 작은 쪽이 모두 참이에요. 그중 가장 큰 D 가 답이라서 이분 탐색이 딱 맞아요.")}
+          "D 가 커질수록 들어가는 소가 줄어요. 그래서 'N 마리가 들어가는 D' 는 작은 쪽이 모두 참이에요.\n그중 가장 큰 D 가 답이라서 이분 탐색이 딱 맞아요.")}
       </div>
     </div>
   );

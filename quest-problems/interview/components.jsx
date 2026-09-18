@@ -472,7 +472,7 @@ export function getInterviewSections(E) {
       ],
       cppOnly: [
         t(E, "priority_queue with greater<> for min-heap (default is max-heap).", "priority_queue 에 greater<> 를 넣어 min-heap 을 만들어요 (기본은 max-heap)."),
-        t(E, "Cumulative finish times can exceed int (N·max time). Use long long in the heap.", "쌓아 온 종료 시간은 N·시간 까지 커져서 int 를 넘을 수 있어요. heap 에 long long 을 써요."),
+        t(E, "Cumulative finish times can exceed int (N·max time). Use long long in the heap.", "쌓아 온 종료 시간은 N·시간 까지 커져서 int 를 넘을 수 있어요.\nheap 에 long long 을 써요."),
       ],
     },
     {
@@ -483,13 +483,13 @@ export function getInterviewSections(E) {
         t(E, "Each remaining cow should go to whichever counter frees up earliest. That's exactly what popping the min-heap gives us — so pop it, then push it back with new finish_time = old + this cow's processing time.",
             "남은 소는 가장 먼저 비는 카운터로 가야 해요. min-heap 에서 pop 하면 바로 그 카운터가 나와요.\n그래서 pop 한 카운터를 새 종료 시간(이전 + 이 소가 걸리는 시간)으로 다시 push 해요."),
         t(E, "We stop just BEFORE Bessie (cow N-1), because where SHE ends up is the answer we're solving for — not something to simulate away.",
-            "Bessie (소 N-1) 바로 앞에서 멈추는 이유는, Bessie 가 어디로 가는지가 바로 우리가 찾는 답이기 때문이에요."),
+            "Bessie (소 N-1) 바로 앞에서 멈추는 이유는,\nBessie 가 어디로 가는지가 바로 우리가 찾는 답이기 때문이에요."),
       ],
       pyOnly: [
         t(E, "heapq.heappop / heappush — log K each.", "heapq.heappop 과 heappush 는 각각 log K 만큼 걸려요."),
       ],
       cppOnly: [
-        t(E, "heap.top().first / .second access the pair components — no structured bindings needed.", "heap.top().first 와 .second 로 pair 를 꺼내요. structured bindings 없이도 충분해요."),
+        t(E, "heap.top().first / .second access the pair components — no structured bindings needed.", "heap.top().first 와 .second 로 pair 를 꺼내요.\nstructured bindings 없이도 충분해요."),
       ],
     },
     {
@@ -498,7 +498,7 @@ export function getInterviewSections(E) {
       py: IV_OUTPUT_PY, cpp: IV_OUTPUT_CPP,
       why: [
         t(E, "Why could there be more than one answer? Because if two counters are tied for earliest-free, Bessie could go to either — both are correct.\nAfter K..N-2 cows are processed, the heap holds the current finish time of all K counters, so that's where we look.",
-            "왜 답이 하나가 아닐 수 있을까요? 가장 먼저 비는 카운터가 둘 이상이면 Bessie 는 그중 어디로 가도 되기 때문이에요.\nK..N-2 번 소까지 처리하면 heap 에 카운터 K 개의 지금 종료 시간이 들어 있어요. 그걸 여기서 봐요."),
+            "왜 답이 하나가 아닐 수 있을까요?\n가장 먼저 비는 카운터가 둘 이상이면 Bessie 는 그중 어디로 가도 되기 때문이에요.\nK..N-2 번 소까지 처리하면 heap 에 카운터 K 개의 지금 종료 시간이 들어 있어요.\n그걸 여기서 봐요."),
         t(E, "So: find min_free = heap[0][0], then collect every counter with exactly that free time.",
             "그래서 min_free = heap[0][0] 을 찾고, 그 시간과 똑같은 카운터를 모두 모아요."),
         t(E, "Output sorted (1-indexed): count + the counter list.", "번호 순으로 정렬해서 출력해요 (1 부터 세요). 개수를 먼저 쓰고 카운터 번호를 이어서 써요."),
@@ -515,9 +515,9 @@ export function getInterviewSections(E) {
       color: A,
       py: IV_FULL_PY, cpp: IV_FULL_CPP,
       why: [
-        t(E, "Time: O(N log K). For N=2×10⁵, K=2×10⁵: ~3.5×10⁶ ops. Fast.", "시간은 O(N log K) 예요. N=2×10⁵, K=2×10⁵ 이면 계산이 약 3.5×10⁶ 번이라 빨라요."),
+        t(E, "Time: O(N log K). For N=2×10⁵, K=2×10⁵: ~3.5×10⁶ ops. Fast.", "시간은 O(N log K) 예요.\nN=2×10⁵, K=2×10⁵ 이면 계산이 약 3.5×10⁶ 번이라 빨라요."),
         t(E, "Space: O(K) for heap.", "메모리는 heap 에 O(K) 만큼 써요."),
-        t(E, "Insight: 'first idea' would simulate cow-by-cow with full counter scan — that'd be O(NK). Heap reduces K → log K per cow.", "첫 아이디어는 소마다 카운터 K 개를 다 훑는 것이라 O(NK) 예요. heap 을 쓰면 소 한 마리에 K 가 log K 로 줄어요."),
+        t(E, "Insight: 'first idea' would simulate cow-by-cow with full counter scan — that'd be O(NK). Heap reduces K → log K per cow.", "첫 아이디어는 소마다 카운터 K 개를 다 훑는 것이라 O(NK) 예요.\nheap 을 쓰면 소 한 마리에 K 가 log K 로 줄어요."),
       ],
     },
   ];
@@ -604,7 +604,7 @@ export function downloadInterviewPDF(E, sections, lang = "py") {
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 <p>${t(E,
   "N cows queue up for K interview counters. Cow i takes time times[i] at any counter. When a counter becomes free, the next cow in line takes it. Bessie is the last cow (index N-1). Which counter(s) could she end up at?",
-  "소 N 마리가 인터뷰 카운터 K 개 앞에 줄을 서요. 소 i 는 어느 카운터에서든 times[i] 만큼 걸려요. 카운터가 비면 다음 소가 들어가요. Bessie 는 맨 마지막 소예요 (자리 번호 N-1). Bessie 는 어느 카운터로 갈 수 있을까요?")}</p>
+  "소 N 마리가 인터뷰 카운터 K 개 앞에 줄을 서요.\n소 i 는 어느 카운터에서든 times[i] 만큼 걸려요. 카운터가 비면 다음 소가 들어가요.\nBessie 는 맨 마지막 소예요 (자리 번호 N-1). Bessie 는 어느 카운터로 갈 수 있을까요?")}</p>
 
 <h3>${t(E, "Constraints", "제약")}</h3>
 <p>1 ≤ K ≤ N ≤ 2×10⁵, 1 ≤ times[i] ≤ 10⁹.</p>
@@ -617,7 +617,7 @@ export function downloadInterviewPDF(E, sections, lang = "py") {
 </div>
 <p>${t(E,
   "Each entry in the heap = (free_time, counter_id). Pop the smallest free_time, push it back with new free_time = old + new cow's time.",
-  "heap 의 각 항목은 (free_time, counter_id) 예요. 가장 작은 free_time 을 pop 하고, 새 free_time = 이전 + 새 소 시간으로 다시 push 해요.")}</p>
+  "heap 의 각 항목은 (free_time, counter_id) 예요.\n가장 작은 free_time 을 pop 하고,\n새 free_time = 이전 + 새 소 시간으로 다시 push 해요.")}</p>
 
 <div class="box">
   <b>${t(E, "Tied counters = Bessie's choices", "같은 시간에 비는 카운터 = Bessie 의 선택지")}</b>:

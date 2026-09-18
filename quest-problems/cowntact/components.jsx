@@ -294,7 +294,7 @@ export function getCowntactSections(E) {
         t(E, "Split #include into specific headers (iostream, string).",
             "#include 는 배운 헤더(iostream, string)를 하나씩 나눠 적어요."),
         t(E, "Inner while skips one whole run of 1s — outer while moves past one block at a time.",
-            "안쪽 while 이 1 이 이어진 구간을 한꺼번에 건너뛰어요. 그래서 바깥 while 은 덩어리 하나마다 한 번씩만 돌아요."),
+            "안쪽 while 이 1 이 이어진 구간을 한꺼번에 건너뛰어요.\n그래서 바깥 while 은 덩어리 하나마다 한 번씩만 돌아요."),
       ],
     },
   ];

@@ -747,7 +747,7 @@ const CkInsightAside = ({ E }) => (
     <div>
       {t(E,
         "After reverse, position i holds cow[l+r−i]. Two pairs (l₁, r₁) and (l₂, r₂) with l₁+r₁ = l₂+r₂ ask the SAME match question per i. Compute it once.",
-        "뒤집고 나면 자리 i 에는 cow[l+r−i] 가 와요. l+r 가 같은 두 쌍은 자리마다 똑같은 것을 물어봐요. 그러니 한 번만 계산하면 돼요.")}
+        "뒤집고 나면 자리 i 에는 cow[l+r−i] 가 와요.\nl+r 가 같은 두 쌍은 자리마다 똑같은 것을 물어봐요. 그러니 한 번만 계산하면 돼요.")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #6ee7b7", fontSize: 11 }}>
       <div>{t(E, "Per value of s: O(N) to build Q.", "s 가 같은 구간마다 Q 만들기 O(N).")}</div>
@@ -970,7 +970,7 @@ export function DiagonalSim({ E }) {
         }}>
           {t(E,
             "Same s = l + r → same cow-value at each position i. Precompute once per value of s.",
-            "s = l + r 가 같으면 자리 i 에 오는 소도 같아요. 그래서 s 가 같은 구간마다 한 번만 미리 계산해요.")}
+            "s = l + r 가 같으면 자리 i 에 오는 소도 같아요.\n그래서 s 가 같은 구간마다 한 번만 미리 계산해요.")}
         </div>
       </div>
     </div>
@@ -1239,7 +1239,7 @@ export function MatchUpToSim({ E }) {
         }}>
           {t(E,
             "Outside-window matches = matchUpTo[l−1] + (matchUpTo[N] − matchUpTo[r]). One prefix array, O(1) lookup.",
-            "창 밖에서 맞는 수 = matchUpTo[l−1] + (matchUpTo[N] − matchUpTo[r]) 예요. prefix 배열 하나로 한 번에 구해요 (O(1)).")}
+            "창 밖에서 맞는 수 = matchUpTo[l−1] + (matchUpTo[N] − matchUpTo[r]) 예요.\nprefix 배열 하나로 한 번에 구해요 (O(1)).")}
         </div>
       </div>
     </div>
@@ -1562,7 +1562,7 @@ const CkDiagonalAside = ({ E }) => {
       <div style={{ marginBottom: 8, fontSize: 11.2, lineHeight: 1.55 }}>
         {t(E,
           "After reversing cow[l..r], position i holds whatever was at cow[l+r−i].  So if you fix s = l+r, position i ALWAYS gets cow[s−i] — no matter how you split l and r.",
-          "cow[l..r] 를 뒤집으면 i 자리 값은 cow[l+r−i] 예요. s = l+r 만 같으면 i 자리에는 *항상* cow[s−i] 가 와요. l 과 r 을 어떻게 나누든 상관없어요.")}
+          "cow[l..r] 를 뒤집으면 i 자리 값은 cow[l+r−i] 예요.\ns = l+r 만 같으면 i 자리에는 *항상* cow[s−i] 가 와요.\nl 과 r 을 어떻게 나누든 상관없어요.")}
       </div>
 
       {/* Original a row */}
@@ -1591,7 +1591,7 @@ const CkDiagonalAside = ({ E }) => {
         </div>
         <div style={{ fontSize: 10, color: "#64748b", marginBottom: 4 }}>
           {t(E, "pos 1 ← cow[4]=2, pos 2 ← cow[3]=3, pos 3 ← cow[2]=1, pos 4 ← cow[1]=4",
-                "1자리 ← cow[4]=2, 2자리 ← cow[3]=3, 3자리 ← cow[2]=1, 4자리 ← cow[1]=4")}
+                "1자리 ← cow[4]=2, 2자리 ← cow[3]=3,\n3자리 ← cow[2]=1, 4자리 ← cow[1]=4")}
         </div>
         <Row label={t(E, "cow (after)", "cow (후)")} cells={[
           { v: 2, kind: "x-only" }, { v: 3, kind: "match" }, { v: 1, kind: "match" },
@@ -1621,7 +1621,7 @@ const CkDiagonalAside = ({ E }) => {
       }}>
         🟨 {t(E,
           "Look at positions 2 and 3 (yellow): BOTH pairs land on values 3 and 1.  That's the same-s trick — comparison work at any position i depends only on s = l+r, not on l and r individually.  Compute it once per s.",
-          "2, 3 자리(노랑)를 봐요. 쌍 X 와 Y 모두 값 3, 1 이 들어와요. 이게 s 가 같은 구간이에요. 자리 i 의 비교는 s = l+r 로만 정해지고, l 과 r 이 각각 뭔지는 상관없어요. 그래서 s 마다 한 번만 계산해요.")}
+          "2, 3 자리(노랑)를 봐요. 쌍 X 와 Y 모두 값 3, 1 이 들어와요. 이게 s 가 같은 구간이에요.\n자리 i 의 비교는 s = l+r 로만 정해지고, l 과 r 이 각각 뭔지는 상관없어요.\n그래서 s 마다 한 번만 계산해요.")}
       </div>
     </div>
   );
@@ -1635,7 +1635,7 @@ export function getCheckupsSections(E) {
       py: CK_BRUTE_S1_PY, cpp: CK_BRUTE_S1_CPP,
       why: [
         t(E, "What do we need to find? For every possible checkup count c = 0..N, how many (l, r) reversals give exactly c.\nSo first read N, cow, and want, and set counts[0..N] all to 0 — one slot per possible count.",
-            "무엇을 알아내야 할까요? 검진 수가 정확히 c 인 (l, r) 뒤집기가 c = 0..N 마다 몇 개인지예요.\n그러려면 먼저 N, cow, want 를 읽고 counts[0..N] 을 전부 0 으로 채워요. 있을 수 있는 검진 수마다 자리 하나씩이에요."),
+            "무엇을 알아내야 할까요? 검진 수가 정확히 c 인 (l, r) 뒤집기가 c = 0..N 마다 몇 개인지예요.\n그러려면 먼저 N, cow, want 를 읽고 counts[0..N] 을 전부 0 으로 채워요.\n있을 수 있는 검진 수마다 자리 하나씩이에요."),
         t(E, "counts[checks] will hold the number of (l, r) pairs that result in exactly checks checkups.",
             "counts[checks] 에는 검진 수가 딱 checks 인 (l, r) 쌍이 몇 개인지 담겨요."),
       ],
@@ -1660,7 +1660,7 @@ export function getCheckupsSections(E) {
       py: CK_BRUTE_S3_PY, cpp: CK_BRUTE_S3_CPP,
       why: [
         t(E, "After reversing [l, r], position i holds the value that was at l + r − i (still cow's value, just relocated).",
-            "[l, r] 을 뒤집으면 자리 i 에는 원래 l + r − i 자리에 있던 값이 와요 (소는 그대로고 자리만 바뀌어요)."),
+            "[l, r] 을 뒤집으면\n자리 i 에는 원래 l + r − i 자리에 있던 값이 와요 (소는 그대로고 자리만 바뀌어요)."),
         t(E, "Outside [l, r], positions are unchanged — keep using cow[i].",
             "[l, r] 바깥은 그대로라서 cow[i] 를 그대로 써요."),
         t(E, "Compare to want[i]; tally if equal.",
@@ -1677,7 +1677,7 @@ export function getCheckupsSections(E) {
         t(E, "Output N + 1 lines: counts[0], counts[1], …, counts[N].",
             "counts[0], counts[1], …, counts[N] 을 N + 1 줄로 출력해요."),
         t(E, "Submit this — passes small tests, times out around N ≈ 1000.  Pages 5–8 below build a faster O(N²) version, one idea at a time.",
-            "이 코드를 제출하면 작은 테스트는 통과하지만 N ≈ 1000 부터 시간 초과예요. 5–8 페이지에서 더 빠른 O(N²) 풀이를 한 단계씩 만들어요."),
+            "이 코드를 제출하면 작은 테스트는 통과하지만 N ≈ 1000 부터 시간 초과예요.\n5–8 페이지에서 더 빠른 O(N²) 풀이를 한 단계씩 만들어요."),
       ],
     },
     {
@@ -1686,7 +1686,7 @@ export function getCheckupsSections(E) {
       py: CK_SMART_S5_PY, cpp: CK_SMART_S5_CPP,
       why: [
         t(E, "Reversing an interval is symmetric about its center. Widen both sides equally and the middle cows keep their spots — only the two new ends swap in.",
-            "구간 뒤집기는 가운데를 기준으로 대칭이에요. 양쪽을 똑같이 넓혀도 가운데 소는 자리가 그대로고, 새로 들어온 두 끝만 서로 바뀌어요."),
+            "구간 뒤집기는 가운데를 기준으로 대칭이에요.\n양쪽을 똑같이 넓혀도 가운데 소는 자리가 그대로고, 새로 들어온 두 끝만 서로 바뀌어요."),
         t(E, "So a bigger interval's checkup count = the smaller one's, adjusted by only the two new ends.",
             "그래서 큰 구간의 검진 수는 작은 구간의 검진 수에서 두 끝만 고치면 나와요."),
         t(E, "Plan: from each center, widen one step at a time, updating in O(1) → total O(N²).",
@@ -1710,7 +1710,7 @@ export function getCheckupsSections(E) {
       py: CK_SMART_S7_PY, cpp: CK_SMART_S7_CPP,
       why: [
         t(E, "matches starts at baseMatches. Each widen touches only left,right: remove the old in-place match (−), add the new flipped match (+).",
-            "matches 는 baseMatches 에서 시작해요. 한 번 넓힐 때 건드리는 건 left, right 두 자리뿐이에요. 원래 맞던 건 빼고(−), 뒤집혀 새로 맞으면 더해요(+)."),
+            "matches 는 baseMatches 에서 시작해요.\n한 번 넓힐 때 건드리는 건 left, right 두 자리뿐이에요.\n원래 맞던 건 빼고(−), 뒤집혀 새로 맞으면 더해요(+)."),
         t(E, "answer[matches] += 1 records this interval's checkup count. Each step is O(1).",
             "answer[matches] += 1 로 이 구간의 검진 수를 기록해요. 한 걸음은 O(1) 이에요."),
       ],
@@ -1721,7 +1721,7 @@ export function getCheckupsSections(E) {
       py: CK_SMART_S8_PY, cpp: CK_SMART_S8_CPP,
       why: [
         t(E, "Odd center [i,i] = one spot (no flip). Even center [i,i+1] = two spots. Both for every i → every interval exactly once.",
-            "홀수 중심 [i,i] 는 한 칸이라 안 뒤집혀요. 짝수 중심 [i,i+1] 은 두 칸이에요. i 마다 둘 다 돌면 모든 구간을 딱 한 번씩 봐요."),
+            "홀수 중심 [i,i] 는 한 칸이라 안 뒤집혀요. 짝수 중심 [i,i+1] 은 두 칸이에요.\ni 마다 둘 다 돌면 모든 구간을 딱 한 번씩 봐요."),
         t(E, "Finally print answer[0..N], one per line.",
             "마지막으로 answer[0..N] 을 한 줄씩 출력해요."),
       ],
@@ -1733,7 +1733,7 @@ export function getCheckupsSections(E) {
       py: CK_SMART_FULL_PY, cpp: CK_SMART_FULL_CPP,
       why: [
         t(E, "All pieces: input → baseMatches → expand (widen from centers, fix 2 ends) → answer → print.",
-            "조각을 다 모으면 입력 → baseMatches → expand(중심에서 넓히며 두 끝 고치기) → answer → 출력이에요."),
+            "조각을 다 모으면 이 순서가 돼요.\n입력 → baseMatches → expand → answer → 출력.\n(expand 는 중심에서 넓히며 두 끝을 고치는 부분이에요.)"),
         t(E, "Total O(N²): each center widens up to N/2 times, and there are ~N centers.",
             "중심마다 최대 N/2 번 넓히고 중심이 ~N 개니까 다 합쳐 O(N²) 예요."),
       ],
@@ -1814,13 +1814,13 @@ export function downloadCheckupsPDF(E, sections, lang = "py") {
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 <p>${t(E,
   "FJ has N cows with species cow[i]. The vet checks cow i if cow[i] == want[i]. FJ performs ONE operation: reverse a subarray [l, r]. For each c = 0..N, count operations leaving exactly c cows checked.",
-  "FJ 에게 소 N 마리가 있고, i 번 자리 소의 종은 cow[i] 예요. 수의사는 cow[i] == want[i] 일 때만 그 소를 검진해요. FJ 는 구간 [l, r] 을 딱 한 번 뒤집어요. c = 0..N 마다 정확히 c 마리가 검진되는 뒤집기가 몇 개인지 세는 문제예요.")}</p>
+  "FJ 에게 소 N 마리가 있고, i 번 자리 소의 종은 cow[i] 예요.\n수의사는 cow[i] == want[i] 일 때만 그 소를 검진해요.\nFJ 는 구간 [l, r] 을 딱 한 번 뒤집어요.\nc = 0..N 마다 정확히 c 마리가 검진되는 뒤집기가 몇 개인지 세는 문제예요.")}</p>
 <h2>2. ${t(E, "Insight: reversing is symmetric", "핵심 — 뒤집기는 대칭이에요")}</h2>
 <div class="box">
   <b>💡 ${t(E, "Why only two ends change", "왜 두 끝만 바뀌나")}</b>
   ${t(E,
     "Reversing an interval is symmetric about its center. Widen both sides equally and the middle cows keep their spots — only the two new ends swap in. So a bigger interval's checkup count = the smaller one's, fixed at just the two ends (O(1)). Sweep every center → O(N²).",
-    "구간 뒤집기는 가운데를 기준으로 대칭이에요. 양쪽을 똑같이 넓혀도 가운데 소는 자리가 그대로고, 새로 들어온 두 끝만 서로 바뀌어요. 그래서 큰 구간의 검진 수는 작은 구간에서 두 끝만 고치면 나와요 (O(1)). 모든 중심을 훑으면 O(N²) 예요.")}
+    "구간 뒤집기는 가운데를 기준으로 대칭이에요.\n양쪽을 똑같이 넓혀도 가운데 소는 자리가 그대로고, 새로 들어온 두 끝만 서로 바뀌어요.\n그래서 큰 구간의 검진 수는 작은 구간에서 두 끝만 고치면\n나와요 (O(1)). 모든 중심을 훑으면 O(N²) 예요.")}
 </div>
 <h2>3. ${t(E, "Code", "코드")}</h2>
 ${sections.map(s => `

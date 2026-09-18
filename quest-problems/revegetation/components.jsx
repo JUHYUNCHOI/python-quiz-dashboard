@@ -73,7 +73,7 @@ export function RevegSim({ E }) {
       <div style={{ background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 12.5, color: "#9a3412", lineHeight: 1.55 }}>
         <b>🎮 {t(E, "Try it", "직접 해보기")}:</b>{" "}
         {t(E, "Click each pasture to cycle through grass types 1→2→3→4. Edges that connect SAME-color pastures glow red — that's a violation. Try to find the lexicographically smallest valid assignment (lowest digits first), then press \"Greedy auto\" to compare.",
-              "각 목초지를 누르면 잔디 종류가 1→2→3→4 로 바뀌어요. 같은 색끼리 이어진 선이 빨갛게 빛나면 규칙을 어긴 거예요. 사전순으로 가장 작은 배색을 직접 찾아본 뒤 \"그리디 자동\" 과 견줘 봐요.")}
+              "각 목초지를 누르면 잔디 종류가 1→2→3→4 로 바뀌어요.\n같은 색끼리 이어진 선이 빨갛게 빛나면 규칙을 어긴 거예요.\n사전순으로 가장 작은 배색을 직접 찾아본 뒤 \"그리디 자동\" 과 견줘 봐요.")}
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "flex-start" }}>
@@ -251,7 +251,7 @@ export function getRevegSections(E) {
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더(<iostream>, <vector>, ...)만 적어요. 그러면 코드가 무엇을 쓰는지 한눈에 보여요."),
+            "필요한 헤더(<iostream>, <vector>, ...)만 적어요.\n그러면 코드가 무엇을 쓰는지 한눈에 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
             "합이나 곱이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],

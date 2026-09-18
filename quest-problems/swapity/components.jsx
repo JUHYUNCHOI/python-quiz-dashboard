@@ -134,7 +134,7 @@ export function SwapityRoundSim({ E }) {
         <div style={{ fontSize: 12, color: "#5b21b6", lineHeight: 1.5 }}>
           {t(E,
             "Array [1..5]. Each round = reverse positions 1–3, then reverse 3–5. Step or play to see the cycle close.",
-            "배열은 [1..5] 예요. 한 라운드는 위치 1–3 을 뒤집고 이어서 3–5 를 뒤집는 거예요. 단계로 넘기거나 재생을 눌러 순환이 닫히는 걸 봐요.")}
+            "배열은 [1..5] 예요. 한 라운드는 위치 1–3 을 뒤집고 이어서 3–5 를 뒤집는 거예요.\n단계로 넘기거나 재생을 눌러 순환이 닫히는 걸 봐요.")}
         </div>
       </div>
 

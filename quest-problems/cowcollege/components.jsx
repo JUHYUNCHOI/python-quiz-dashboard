@@ -44,7 +44,7 @@ export function TuitionSlider({ E, sorted = [1, 2, 3, 4, 5] }) {
       <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.6 }}>
         {t(E,
           "Sorted c = [1, 2, 3, 4, 5]. Green bars = cows paying (c[i] ≥ price). Gray = skip.",
-          "정렬된 c = [1, 2, 3, 4, 5] 예요. 초록 막대는 내는 소(c[i] ≥ 가격), 회색은 안 내는 소예요.")}
+          "정렬된 c = [1, 2, 3, 4, 5] 예요.\n초록 막대는 내는 소(c[i] ≥ 가격), 회색은 안 내는 소예요.")}
       </div>
 
       {/* Bar chart with horizontal cut-line */}
