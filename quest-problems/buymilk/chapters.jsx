@@ -228,21 +228,26 @@ export function makeBuyMilkCh1(E) {
       content: (<GreedySim key="greedy7" E={E} x={7} />),
     },
 
-    // [결] 배운 걸로 직접 확인 — 시뮬과 다른 x 로 (x=9 → 50)
-
+    // [결] 배운 걸로 직접 확인 — 시뮬과 **다른 답이 나오는** x 로 (x=3 → 20)
+    /* ⚠️ 2026-09-18: 여기가 x=9 였는데 답이 50 이고, 그건 6쪽(x=5 → 30)과 **같은 이야기**다
+       (딱 맞게 산 쪽이 이긴다). 7쪽에서 어렵게 세운 "넉넉히 사는 쪽이 이길 때가 있다" 를
+       한 번도 다시 안 물었다 — 7쪽을 놓친 학생도 그냥 풀 수 있었다.
+       x=3 은 셋 다 다르다: 8통짜리로 넉넉히(40) 도, 딱 맞추기(25) 도 아니고
+       **4통짜리 하나로 넉넉히(20)** 가 이긴다. "제일 큰 것 아니면 딱 맞추기" 로
+       잘못 줄여 외운 학생을 정확히 걸러낸다. 값은 손이 아니라 알고리즘으로 확인했다. */
     // 1-4: Input — sample tracing
     {
       type: "input",
       narr: t(E,
-        "Same deals, but x = 9 this time — do it yourself.",
-        "같은 거래로 x = 9 를 직접 해봐요."),
+        "Same deals, but x = 3 this time — do it yourself.",
+        "같은 거래로 x = 3 을 직접 해봐요."),
       question: t(E,
-        "a=[10,15,20,45], deal sizes 1,2,4,8. Min cost for x=9?",
-        "거래 값이 10, 15, 20, 45 예요. 9통일 때 얼마가 제일 쌀까요?"),
+        "a=[10,15,20,45], deal sizes 1,2,4,8. Min cost for x=3?",
+        "거래 값이 10, 15, 20, 45 예요. 3통일 때 얼마가 제일 쌀까요?"),
       hint: t(E,
         "Use the block prices you found: 10, 15, 20, 40.\nStart from the biggest block and compare the two choices.",
         "아까 구한 묶음 값을 써요. 10, 15, 20, 40 이에요.\n제일 큰 묶음부터 두 갈래를 비교해 봐요."),
-      answer: 50,
+      answer: 20,
     },
   ];
 }
