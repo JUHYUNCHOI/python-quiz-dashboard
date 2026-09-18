@@ -151,6 +151,35 @@ def steppers(src):
     return out
 
 
+def handmade(src):
+    """세 번째 모양 — `chapters.jsx` 안에 **손으로 짠 코드 조각**으로 설명하는 quest.
+
+    `CodeWalk` 도 `ProgressiveCodeStepper` 도 안 쓰고, `reveal` 스텝마다
+    `narr` + 설명 글 + `<CodeSnippet lines={…} />` 을 손으로 늘어놓는다.
+    quest 10개가 이 모양이다 (cowcollege · daisychains · fans · fences · hps ·
+    mooin2 · reach · tricks · whereami · word).
+    여기서는 **코드 조각이 든 스텝들의 `narr` 이 곧 말풍선**이다 — 같은 잣대를 댄다.
+
+    ⚠️ 2026-09-18 에 이 모양을 못 봐서, whereami 의 `why` 를 고쳐 놓고
+       **학생 화면에는 안 뜨는 줄 몰랐다.** ux 가 화면에서 잡아 줬다.
+    """
+    # `narr: t(E, "…", "…")` 하나와, 그 뒤 `content:` 안에 CodeSnippet 이 있나
+    out = []
+    for m in re.finditer(
+            r'narr:\s*t\(\s*E\s*,\s*"((?:[^"\\]|\\.)*)"\s*,\s*"((?:[^"\\]|\\.)*)"\s*\)', src):
+        tail = src[m.end():m.end() + 2500]
+        nxt = tail.find("narr:")
+        if nxt >= 0:
+            tail = tail[:nxt]
+        if "CodeSnippet" not in tail:
+            continue
+        try:
+            out.append((json.loads('"%s"' % m.group(1)), json.loads('"%s"' % m.group(2))))
+        except Exception:
+            continue
+    return [("손코딩", out)] if len(out) >= 2 else []
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
     want = set(x for a in args for x in a.split()) or None
@@ -168,6 +197,8 @@ def main():
             continue
         found = [("walk:" + lang, beats) for lang, beats in walks(src)]
         found += [("스테퍼:" + name, rows) for name, rows in steppers(src)]
+        if f.endswith("chapters.jsx"):
+            found += handmade(src)
         for lang, beats in found:
             total_walks += 1
             first_ko = beats[0][1]
@@ -230,13 +261,15 @@ def self_check(want):
             continue                      # 이 검사기가 보는 모양이다
         if not re.search(r"CodeSnippet|CodeBlock|<pre", src):
             continue                      # 코드를 화면에 안 보여주는 quest
+        if handmade(src):
+            continue                      # 2026-09-19: 손코딩 모양도 이제 본다
         unseen.append(quest)
     print()
     print(f"🔎 자기진단 — **이 검사기가 못 보는** 코드 설명: quest {len(unseen)}개")
     if unseen:
         print("   " + " ".join(unseen))
-        print("   이 quest 들은 chapters.jsx 안에 손으로 짠 코드 조각으로 설명한다.")
-        print("   `sections.why` 를 고쳐도 **화면엔 안 뜬다** (PDF 에서만 쓰인다).")
+        print("   이 quest 들은 chapters.jsx 안에 코드를 보여주는데,")
+        print("   말풍선을 붙일 `narr` 이 코드 조각 옆에 없거나 한 걸음뿐이다.")
         print("   **여기의 0건은 결백이 아니다** — 화면을 직접 열어 읽어라.")
 
 
