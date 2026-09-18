@@ -2809,7 +2809,7 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
                               "그런데 j 는 c 여야 해요. 그래서 m 양옆에서 제일 가까운 c 둘만 후보로 잡아요.") },
       { hi: [49, 55], bubble: t(E, "If a candidate sits between i and k, score it: (j−i)(k−j). Keep the max.",
                               "후보가 i 와 k 사이에 있으면 점수를 내요. (j−i)(k−j) 예요. 더 크면 최댓값을 바꿔요.") },
-      { hi: [57, 57], bubble: t(E, "Every letter has been tried. Print the answer.",
+      { hi: [57, 57], bubble: t(E, "All 26 letters have been tried. Print the answer.",
                               "26 글자를 다 봤어요. 답을 출력해요.") },
     ] };
   }
@@ -2869,7 +2869,7 @@ export function getMooin3MapWalk(E, lang = "py") {
                               "i 는 c 와 다른 가장 왼쪽 글자예요.\nL 자체이거나, s[L] 이 c 이면 nextDiff[L] 이에요.") },
         { hi: [51, 55], bubble: t(E, "(j−i)(k−j) is biggest near the midpoint m, and j has to be a c.\nSo binary-search the list and check just the two c's around m. Keep the max.",
                               "(j−i)(k−j) 는 한가운데 m 근처에서 제일 크고, j 는 c 여야 해요.\n그래서 목록을 이분탐색해 m 양옆 c 둘만 보면 돼요. 더 크면 최댓값을 바꿔요.") },
-        { hi: [57, 61], bubble: t(E, "Every letter has been tried. Collect the answer and print all at once.",
+        { hi: [57, 61], bubble: t(E, "All 26 letters have been tried. Collect the answer and print all at once.",
                               "26 글자를 다 봤어요. 답을 모아서 한 번에 출력해요.") },
       ],
     };
@@ -2897,7 +2897,7 @@ export function getMooin3MapWalk(E, lang = "py") {
                               "i 는 c 와 다른 가장 왼쪽 글자예요.\nL 자체이거나, s[L] 이 c 이면 next_diff[L] 이에요.") },
       { hi: [35, 47], bubble: t(E, "(j−i)(k−j) is biggest near the midpoint m, and j has to be a c.\nSo binary-search the list and check just the two c's around m. Keep the max.",
                               "(j−i)(k−j) 는 한가운데 m 근처에서 제일 크고, j 는 c 여야 해요.\n그래서 목록을 이분탐색해 m 양옆 c 둘만 보면 돼요. 더 크면 최댓값을 바꿔요.") },
-      { hi: [48, 50], bubble: t(E, "Every letter has been tried. Collect the answer and print all at once.",
+      { hi: [48, 50], bubble: t(E, "All 26 letters have been tried. Collect the answer and print all at once.",
                               "26 글자를 다 봤어요. 답을 모아서 한 번에 출력해요.") },
     ],
   };
