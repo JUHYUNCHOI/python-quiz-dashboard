@@ -81,8 +81,15 @@ export function getBovShuffleSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 있어요."),
+        t(E,
+            "What should we output? The lineup BEFORE 3 shuffles happened.\nSo first read the shuffle rule and the lineup we see now.",
+            "무엇을 출력해야 하나요? 셔플을 3번 하기 전의 원래 줄이에요.\n그러니 먼저 셔플 규칙과 지금(after) 줄을 읽어요."),
+        t(E,
+            "The rule moves forward: the cow at spot i goes to spot\nshuffle[i]. To undo it, follow that arrow backward one step —\ntemp[i] = result[shuffle[i]].",
+            "규칙은 앞으로만 알려줘요: 자리 i 의 소가 shuffle[i] 자리로\n가요. 되돌리려면 이 화살표를 거꾸로 따라가야 해요 —\ntemp[i] = result[shuffle[i]] 로 한 칸 되돌려요."),
+        t(E,
+            "The lineup we're given is after 3 shuffles, so undoing it\n3 times in a row gets back to the original lineup.",
+            "지금 줄은 셔플을 3번 한 결과라서, 되돌리기도 3번\n반복하면 원래 줄이 나와요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

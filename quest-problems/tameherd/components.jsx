@@ -355,8 +355,9 @@ export function getTameHerdSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "What should we print? The min and max breakouts that fit the log.\nA missing day (-1) could be any counter value, so possibilities branch.\nSo keep a table of counter value → best breakout count, and update\nit day by day — narrowing it whenever that day's value is known.",
+          "무엇을 출력해야 하나요? 기록과 맞는 탈출 횟수의 최소·최대예요.\n−1 인 날은 카운터가 무엇이든 될 수 있어 경우가 여러 갈래로 갈려요.\n그래서 '카운터 값 → 그때까지 최소·최대 탈출 횟수' 표를 두고\n하루씩 갱신하며, 값이 적힌 날엔 그 값만 남기고 나머지는 지워요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

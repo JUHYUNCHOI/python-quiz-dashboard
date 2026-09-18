@@ -96,8 +96,12 @@ export function getBlockGameSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "What do we output? The minimum cubes needed for each letter A..Z.",
+            "무엇을 내놓아야 하나요? 알파벳 A~Z 마다 필요한 최소 큐브 수예요."),
+        t(E, "We don't know if a board will show its front or back word.",
+            "판마다 앞면과 뒷면 중 어느 쪽이 보일지 몰라요."),
+        t(E, "So for each letter, each board, take max(front count, back count) and add it up.",
+            "그래서 글자마다, 판마다 앞면·뒷면 개수 중 큰 쪽을 더해요.\n어느 쪽이 보여도 부족하지 않게요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

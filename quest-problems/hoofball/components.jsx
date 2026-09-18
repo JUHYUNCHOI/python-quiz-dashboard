@@ -123,8 +123,9 @@ export function getHoofballSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 뚜렷해요."),
+        t(E,
+          "What should we print? The minimum starting balls so every cow is touched.\nFirst find who each cow passes to (nearest neighbor) and how many passes\neach cow receives.\nA cow with zero passes needs her own ball — so does a mutual pair that\nonly throws to each other, since no ball from outside ever reaches them.",
+          "무엇을 출력해야 하나요? 모두가 공을 만지는 데 필요한 시작 공의 최소 개수예요.\n먼저 소마다 누구에게 던지는지(가장 가까운 이웃) 정하고, 몇 번 받는지 세요.\n아무도 안 던져주는 소는 공을 따로 줘야 해요.\n서로한테만 던지는 짝도 바깥에서 오는 공이 없어 공을 하나 더 줘야 해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

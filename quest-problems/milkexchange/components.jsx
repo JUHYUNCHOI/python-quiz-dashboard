@@ -109,8 +109,12 @@ export function getMilkExchangeSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "What do we need before we can follow the minutes? N, M, the direction string, and each cow's capacity.\nSo read those first — each cow starts full.",
+            "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 소마다의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 용량만큼 가득 차 시작해요."),
+        t(E, "Why hand off milk every minute? Because that's what the problem does —\neach cow with milk passes 1L to its neighbor, then overflow is lost.",
+            "왜 매분 우유를 넘길까요? 문제가 그렇게 하니까요.\n우유가 있는 소가 이웃에게 1L 를 넘기고, 용량을 넘은 만큼은 버려요."),
+        t(E, "So after M minutes, print what's left. Walking minute by minute is O(N·M) —\nthe faster way (chasing leaks between R→L pairs) is in the C++ note below.",
+            "그래서 M분 뒤 남은 우유의 총량을 출력해요.\n한 분씩 따라가면 O(N·M) 이라 M 이 클 때 느려요.\n더 빠른 길(R→L 사이 새는 곳만 찾기)은 아래 C++ 설명에 있어요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

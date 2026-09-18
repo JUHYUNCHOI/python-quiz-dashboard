@@ -112,8 +112,9 @@ export function getBackForthSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
+        t(E,
+          "What should we count? How many distinct barn 1 totals are possible after 4 days.\nEach day's transfer is a free choice, so every branch matters.\nSo try every combination — 10 choices, then 11, then 10, then 11 —\nand collect every resulting total into a set to drop duplicates.",
+          "무엇을 세야 하나요? 4일 뒤 헛간1 합이 될 수 있는 값의 개수예요.\n날마다 어느 양동이를 옮길지 선택이 갈리니, 모든 갈래를 다 봐야 해요.\n그래서 1일차 10가지, 2일차 11가지, 3일차 10가지, 4일차 11가지를 다 시도하고,\n나온 합을 set 에 모아 중복을 지우면 그 개수가 답이에요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

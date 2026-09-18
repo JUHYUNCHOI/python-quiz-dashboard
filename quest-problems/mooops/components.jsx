@@ -226,8 +226,9 @@ export function getMooOpsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "The answer is the fewest ops to turn the string into \"MOO\"\n(or -1 if impossible).\nThe middle char can never be flipped, so the position that\nends up in the middle must already be 'O'.\nSo we scan every i with s[i+1]='O', add up the deletes on\nboth sides plus any flips needed for s[i] and s[i+2], and\nkeep the smallest total.",
+          "답은 문자열을 \"MOO\" 로 만드는 가장 적은 횟수예요 (안 되면 -1).\n가운데 글자는 못 뒤집어서, 가운데가 될 자리는\n이미 'O' 여야 해요.\n그래서 s[i+1]='O' 인 자리마다 양쪽 지우기 비용과\ns[i]·s[i+2] 뒤집기 비용을 더해 가장 작은 값을 찾아요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

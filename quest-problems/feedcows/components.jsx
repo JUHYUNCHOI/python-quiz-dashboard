@@ -121,8 +121,9 @@ export function getFeedCowsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 있어요."),
+        t(E,
+          "The answer is the fewest patches, plus a string showing\nwhere each one goes.\nWhen we hit an unfed cow, place a NEW patch as far right\nas it can still reach her — at i+K — which then feeds\nthe same breed up to i+2K.\nSo we scan left to right, placing patches by this rule.",
+          "답은 필요한 최소 패치 수와 어디에 놓았는지 보여주는 문자열이에요.\n못 먹은 소를 만나면, 그 소가 아직 닿는 가장 오른쪽\n자리 i+K 에 새 패치를 놓아요.\n그러면 같은 품종을 i+2K 까지 먹여요.\n그래서 왼쪽부터 훑으며 이 규칙으로 패치를 놓고 세요."),
         t(E, "There are T test cases. For each, print TWO lines: the patch count, then a string showing where each patch goes ('.', 'G', or 'H').",
             "테스트가 T 개예요. 테스트마다 두 줄을 출력해요.\n첫 줄은 패치 개수, 둘째 줄은 자리마다 무엇을 놓았는지예요 ('.', 'G', 'H')."),
       ],

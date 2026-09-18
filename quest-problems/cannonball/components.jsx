@@ -94,8 +94,12 @@ export function getCannonballSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we need? How many targets break before Bessie leaves [1, N].\nSo track her position x, her direction, and her growing power.",
+            "무엇을 내놓아야 하나요? Bessie 가 [1, N] 을 벗어나기 전 부순 타겟 수예요.\n그러니 위치 x, 방향, 점점 커지는 파워를 그대로 따라가요."),
+        t(E, "Why simulate step by step instead of jumping ahead? Because a jump pad\nchanges both direction and power — the next move depends on this one.",
+            "왜 건너뛰지 않고 한 걸음씩 따라갈까요? 점프 패드가 방향과 파워를 둘 다 바꿔서,\n다음 걸음이 이번 걸음에 달려 있기 때문이에요."),
+        t(E, "So each step: check the target/pad at x, then move by direction × power.\nStop once x leaves [1, N] (or the step limit is hit).",
+            "그래서 걸음마다 x 의 타겟·패드를 확인하고, direction × power 만큼 움직여요.\nx 가 [1, N] 을 벗어나면 (또는 걸음 한도에 닿으면) 멈춰요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

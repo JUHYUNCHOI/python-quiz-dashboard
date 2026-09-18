@@ -116,8 +116,9 @@ export function getRevEngSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "The answer is OK or LIE — could such a program exist?\nAn if-statement on 'variable=value' only works if every\nremaining row matching it shares the same output.\nSo we find such a condition, peel those rows off, and\nrepeat on what's left. Everything peels away → OK;\nstuck → LIE.",
+          "답은 OK 나 LIE 예요 — 그런 프로그램을 만들 수 있는지예요.\n'변수=값' 을 거는 if 문은, 그 조건에 맞는 남은 행의\n출력이 전부 같을 때만 쓸 수 있어요.\n그래서 그런 조건을 찾아 그 행들을 떼어내고, 남은 행으로\n다시 찾기를 되풀이해요. 다 떼어지면 OK, 막히면 LIE 예요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

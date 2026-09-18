@@ -238,8 +238,12 @@ export function getRevegSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 뚜렷해요."),
+        t(E, "What should we print? A digit (1-4) per pasture so every constrained pair differs — and the smallest such string. So first read each pasture's \"must differ from\" list.",
+            "무엇을 출력해야 하나요? 목초지마다 잔디 종류(1~4)를 정해, 이어진 쌍은 다르게.\n그 중에서도 사전순으로 가장 작은 배열이에요.\n그러니 먼저 목초지마다 '달라야 하는' 이웃 목록을 읽어요."),
+        t(E, "To get the smallest string, pasture 1 should be as small as possible, then pasture 2, and so on — so go in order and skip only colors the already-colored neighbors used.",
+            "가장 작은 배열을 만들려면 목초지 1 부터 최대한 작게, 그다음 2, 이런 순서로 가요.\n그래서 순서대로 가면서 이미 정해진 이웃이 쓴 색만 피해요."),
+        t(E, "So for each pasture, pick the smallest unused color (1-4) among its colored neighbors, and print the digits.",
+            "그래서 목초지마다 이웃이 안 쓴 가장 작은 색(1~4)을 골라 배정하고, 숫자들을 이어서 출력해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

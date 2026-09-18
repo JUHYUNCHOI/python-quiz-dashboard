@@ -102,8 +102,12 @@ export function getHps17Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 있어요."),
+        t(E, "What do we output? Cow 1's max wins over N rounds.",
+            "무엇을 내놓아야 하나요? cow 1 의 최대 승수예요."),
+        t(E, "We don't know which of 1, 2, 3 is H, P, S — only 6 assignments exist.",
+            "1, 2, 3 중 뭐가 H, P, S 인지 몰라요.\n그래도 배정은 6 가지뿐이에요."),
+        t(E, "So try all 6, count cow 1's wins each time, and keep the biggest.",
+            "그래서 6 가지를 다 해 보고,\n매번 cow 1 이 이긴 수를 세서 가장 큰 값을 남겨요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

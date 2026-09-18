@@ -75,8 +75,15 @@ export function getOutOfPlaceSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
+        t(E,
+            "What should we output? The fewest adjacent swaps needed\nto restore the sorted order.\nSo first read the row a, and also build the sorted row b.",
+            "무엇을 출력해야 하나요? 정렬된 순서로 되돌리는 데 필요한\n최소 이웃 교환 횟수예요.\n그러니 먼저 줄 a 를 읽고, 정렬한 줄 b 도 만들어요."),
+        t(E,
+            "So count the mismatched spots — every i where a[i] != b[i].\nThat count is diff.",
+            "그래서 자리가 어긋난 칸을 세요 — a[i] 와 b[i] 가 다른 칸마다\n하나씩 세면, 그 값이 diff 예요."),
+        t(E,
+            "But diff isn't the answer yet. Only one cow is truly out of\nplace — the rest just shifted by one seat, so they get counted\nin diff too. The real number of swaps is diff - 1 (0 if diff is 0).",
+            "그런데 diff 가 그대로 답은 아니에요. 실제로 자리를 벗어난\n소는 한 마리뿐이고, 나머지는 그 소 때문에 한 칸씩 밀려서\ndiff 에 같이 잡혀요. 그래서 진짜 답은 diff - 1 이에요\n(diff 가 0 이면 0 으로 둬요)."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

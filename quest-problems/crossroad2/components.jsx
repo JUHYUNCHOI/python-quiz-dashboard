@@ -289,8 +289,15 @@ export function getCrossRoad2Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+            "What should we output? The number of cow-pairs whose paths\ncross. So first find where each cow crosses the road for the\nfirst time (first) and the second time (second).",
+            "무엇을 출력해야 하나요? 경로가 서로 엇갈리는 소-쌍의\n개수예요. 그러니 먼저 소마다 처음 건넌 자리(first)와\n두 번째로 건넌 자리(second)를 찾아요."),
+        t(E,
+            "Two cows A and B cross each other only if their positions\ninterleave going around the circle — a1 < b1 < a2 < b2\n(or the same pattern starting from B).",
+            "두 소 A, B 가 서로 엇갈리려면 원을 따라 읽을 때 자리가\n번갈아 나와야 해요 — a1 < b1 < a2 < b2 처럼요\n(B 부터 시작해도 같은 모양이면 마찬가지예요)."),
+        t(E,
+            "So check this interleaving condition for every pair of cows,\nand count how many pairs satisfy it.",
+            "그래서 모든 소 쌍을 하나씩 견주면서 이 번갈아 나오는\n조건을 만족하는지 확인하고, 만족하는 쌍의 수를 세요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -329,8 +329,24 @@ export function getSwapitySections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "What do we need? The final order after K rounds.\n"
+          + "K can be up to 10^9, so replaying the round K times\n"
+          + "is far too slow.\n"
+          + "But one round always moves each position the same\n"
+          + "way, so every position sits in a cycle that returns\n"
+          + "to itself after some fixed number of rounds.\n"
+          + "So we find each cycle, then jump ahead by\n"
+          + "K mod (cycle length) — one shift, not K of them.",
+          "무엇을 내놔야 하나요? 라운드를 K 번 반복한 뒤의\n"
+          + "최종 줄이에요.\n"
+          + "K 가 10억까지 가서 라운드를 K 번 그대로 되풀이하면\n"
+          + "너무 느려요.\n"
+          + "그런데 한 라운드가 자리를 옮기는 방식은 항상 똑같아서,\n"
+          + "각 자리는 몇 라운드마다 원래 자리로 돌아오는\n"
+          + "사이클 안에 있어요.\n"
+          + "그래서 사이클을 찾아 K 를 사이클 길이로 나눈\n"
+          + "나머지만큼만 옮기면, 한 번에 답이 나와요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -294,8 +294,21 @@ export function getLivestockSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 있어요."),
+        t(E,
+          "What do we need? The lexicographically smallest\n"
+          + "lineup that satisfies every constraint.\n"
+          + "There are only 8 cows, so there are just 8! = 40320\n"
+          + "possible orders — trying them all is fast enough.\n"
+          + "We start the cows in alphabetical order and step\n"
+          + "through orders in that same lex order, so the first\n"
+          + "one that satisfies every constraint is our answer.",
+          "무엇을 내놔야 하나요? 모든 제약을 지키면서\n"
+          + "사전순으로 가장 앞선 배열이에요.\n"
+          + "소가 8마리뿐이라 나올 수 있는 배열은 8! = 40320 가지고,\n"
+          + "그 정도는 다 세어 봐도 충분히 빨라요.\n"
+          + "소 이름을 알파벳순으로 두고 사전순으로 하나씩\n"
+          + "배열을 만들어 가니까, 제약을 처음 만족하는 배열이\n"
+          + "바로 답이에요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

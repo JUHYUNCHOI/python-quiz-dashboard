@@ -130,8 +130,15 @@ export function getBillboardSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+            "What should we output? The billboard area NOT hidden by the\ntruck. So first read the two billboards and the truck's corners.",
+            "무엇을 출력해야 하나요? 트럭에 가려지지 않은 광고판 넓이예요.\n그러니 먼저 두 광고판과 트럭의 좌표를 읽어요."),
+        t(E,
+            "To subtract the hidden part, we need rect_area — the area two\nrectangles share. If they don't overlap, width or height goes\nnegative, so clamp it to 0.",
+            "가려진 부분을 빼려면, 두 직사각형이 겹치는 넓이를 재는\nrect_area 가 필요해요. 안 겹치면 가로나 세로가 음수가\n되니 0 으로 막아요."),
+        t(E,
+            "So for each billboard, find how much the truck overlaps it\n(overlap), subtract that from its area, and add the two results.",
+            "그래서 광고판마다 트럭과 겹치는 넓이(overlap)를 구해\n전체 넓이에서 빼고, 둘을 더하면 답이에요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

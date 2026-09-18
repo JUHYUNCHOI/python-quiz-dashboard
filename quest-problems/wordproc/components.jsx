@@ -266,8 +266,19 @@ export function getWordProcSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 있어요."),
+        t(E,
+          "What do we need? The document, filled line by line.\n"
+          + "The rule is already given: if adding this word still\n"
+          + "keeps the line's letter count at or below K, put it\n"
+          + "on the current line. Otherwise start a new line.\n"
+          + "So we just walk the words in order and follow that\n"
+          + "rule for each one — no extra thinking needed.",
+          "무엇을 답으로 내놔야 하나요? 줄마다 채워진 문서예요.\n"
+          + "규칙은 문제에 이미 나와 있어요 — 이 단어를 더해도\n"
+          + "글자 수 합이 K 를 넘지 않으면 지금 줄에 넣고,\n"
+          + "넘으면 새 줄을 시작해요.\n"
+          + "그래서 단어를 순서대로 보면서 그 규칙만 그대로\n"
+          + "따라가면 답이 나와요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

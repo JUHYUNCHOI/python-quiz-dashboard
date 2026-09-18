@@ -106,8 +106,20 @@ export function getRaceSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "What do we need? The fastest time to cover K meters\n"
+          + "while ending at speed <= X.\n"
+          + "Once we pick a peak speed p (how fast the cow gets\n"
+          + "before slowing down), the accelerate / cruise /\n"
+          + "decelerate distance and time are fixed by formula.\n"
+          + "So we just try different peak speeds p and keep\n"
+          + "the smallest time that covers K meters.",
+          "무엇을 내놔야 하나요? K 미터를 채우면서 도착 속도가\n"
+          + "X 이하가 되는 가장 빠른 시간이에요.\n"
+          + "정점 속도 p (얼마까지 올렸다가 내리는지) 하나만\n"
+          + "정해지면 가속·정속·감속 거리와 시간이 공식으로 나와요.\n"
+          + "그래서 정점 속도 p 를 이것저것 바꿔 보면서\n"
+          + "K 미터를 채우는 가장 짧은 시간을 찾아요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

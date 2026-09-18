@@ -348,8 +348,9 @@ export function getStampGridSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "The answer is YES or NO — can we recreate the pattern?\nThe grid is small, so trying every rotation and position\nis still fast enough.\nSo we rotate the stamp 4 ways, try every position, and\ncheck: does it cover every ★ without landing outside?",
+          "답은 테스트마다 무늬를 만들 수 있는지 YES 나 NO 예요.\n격자가 작아서 회전과 자리를 다 해봐도 충분히 빨라요.\n그래서 도장을 4방향으로 돌려 자리마다 찍어 보면서,\n★ 을 벗어나지 않고 전부 덮이는지 확인해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

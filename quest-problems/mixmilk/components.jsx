@@ -77,8 +77,12 @@ export function getMixMilkSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What should we print? How much milk sits in each of the 3 buckets after all the pouring. So first read each bucket's capacity and current milk.",
+            "무엇을 출력해야 하나요? 붓기가 다 끝난 뒤 세 양동이에 남은 우유량이에요.\n그러니 먼저 양동이마다 용량과 현재 우유량을 읽어요."),
+        t(E, "The problem fixes the cycle 1→2, 2→3, 3→1, ... for exactly 100 pours — so just follow that order and repeat it 100 times.",
+            "문제가 1→2, 2→3, 3→1, ... 순서를 정확히 100 번 반복하라고 정했어요.\n그러니 그 순서를 그대로 100 번 따라가요."),
+        t(E, "Each pour moves as much milk as fits — limited by the source's milk or the destination's free space, whichever is smaller.",
+            "한 번의 붓기는 원래 양동이의 우유량과, 받는 양동이의 남은 자리 중 더 작은 만큼만 옮겨요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

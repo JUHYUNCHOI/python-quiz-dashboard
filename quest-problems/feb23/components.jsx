@@ -271,8 +271,12 @@ export function getFeb23Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "What do we need? Across every way to set the F's, the count of\ndistinct excitement values, plus the min and max.",
+            "무엇을 내놓아야 하나요? F 를 정하는 모든 방법에서 나오는 흥분도 중\n서로 다른 값의 개수, 그리고 최솟값과 최댓값이에요."),
+        t(E, "Each F can be B or E, so there are only 2^|F| ways — few enough\nto just try every one and record the excitement each gives.",
+            "F 하나마다 B 또는 E, 두 가지뿐이라 경우의 수는 2^|F| 예요.\n다 해봐도 충분히 적어서, 모든 경우의 흥분도를 그대로 구해요."),
+        t(E, "So: loop over every bitmask, build that assignment, count adjacent\nmatches, and collect the results into a set.",
+            "그래서 모든 비트마스크를 돌며 그 조합을 만들고, 옆칸이 같은 개수를\n세어 결과를 모아요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

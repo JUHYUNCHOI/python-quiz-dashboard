@@ -61,8 +61,12 @@ export function getSleepySortSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 있어요."),
+        t(E, "What should we print? The fewest front-pulls needed to sort the line by ID. So first read N and the list of IDs.",
+            "무엇을 출력해야 하나요? 줄을 ID 순으로 만드는 데 필요한 최소 앞당김 횟수예요.\n그러니 먼저 N 과 ID 목록을 읽어요."),
+        t(E, "Cows already sitting in a rising run at the back never need to move — only the ones in front of that run do.",
+            "뒤쪽에서부터 이미 오름차순으로 이어진 소들은 움직일 필요가 없어요.\n그 앞에 있는 소들만 옮겨야 해요."),
+        t(E, "So scan from the right and find how far that sorted suffix reaches; the answer is how many cows sit before it.",
+            "그래서 오른쪽부터 훑어서 그 정렬된 접미사가 어디까지 이어지는지 찾아요.\n그 앞에 남은 소의 수가 곧 답이에요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

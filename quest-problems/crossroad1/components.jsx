@@ -224,8 +224,15 @@ export function getCrossRoad1Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+            "What should we output? The total number of crossings, summed\nover every cow. So walk through the observations in order, and\nfor each cow, remember the side we last saw her on (last_side).",
+            "무엇을 출력해야 하나요? 모든 소를 합친 횡단 총 횟수예요.\n그러니 관찰을 순서대로 하나씩 보면서, 소마다 마지막으로\n본 쪽(last_side)을 적어 둬요."),
+        t(E,
+            "If we've seen this cow before AND her side is different from\nlast time, she just crossed — add 1 to crossings.",
+            "이 소를 전에도 본 적이 있고, 그때 쪽이 지금과 다르면\n방금 건넌 거예요 — crossings 를 1 늘려요."),
+        t(E,
+            "Then update last_side for this cow to her current side, so the\nnext observation can be compared correctly.",
+            "그리고 이 소의 last_side 를 지금 쪽으로 갱신해서,\n다음 관찰과 제대로 비교할 수 있게 해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

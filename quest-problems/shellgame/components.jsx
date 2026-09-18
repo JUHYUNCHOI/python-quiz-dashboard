@@ -95,8 +95,12 @@ export function getShellGameSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "What should we print? The best possible number of correct guesses, over all 3 choices of where the shell truly started. So first read N and the N swaps (a, b, guess).",
+            "무엇을 출력해야 하나요? 조개가 실제로 어디서 시작했든, 가장 많이 맞힐 수 있는 정답 수예요.\n그러니 먼저 N 과 N 번의 (a, b, 추측) 을 읽어요."),
+        t(E, "We don't know which cup is real, so try all 3 starting positions separately and replay the same swaps for each — the guesses might match a different number of times.",
+            "실제 조개가 어디 있었는지 모르니, 시작 위치 1, 2, 3 을 각각 가정해요.\n같은 뒤섞기를 그대로 따라가면서 추측이 맞은 횟수를 세요."),
+        t(E, "So for each start, track the shell's position through every swap, count matching guesses, and keep the best score across all 3 starts.",
+            "그래서 시작마다 조개 위치를 뒤섞기 순서대로 따라가며 추측이 맞은 횟수를 세고,\n세 시작 중 가장 좋은 점수를 남겨요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -163,8 +163,19 @@ export function getCowntraceSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "What do we need? How many cows could be patient zero,\n"
+          + "and the smallest / largest K that fits the record.\n"
+          + "Pick one cow and one K, then replay every hoof-shake\n"
+          + "from scratch and see if the final sick set matches.\n"
+          + "So we just try every (patient-zero, K) pair — N and T\n"
+          + "are small enough that trying them all is fast enough.",
+          "무엇을 답으로 내놔야 하나요? 환자 제로가 몇 명일 수 있는지,\n"
+          + "그리고 K 의 가장 작은 값과 가장 큰 값이에요.\n"
+          + "소 하나와 K 하나를 정해서 기록을 처음부터 재생해 보면\n"
+          + "실제 감염 상태와 같은지 알 수 있어요.\n"
+          + "그래서 (환자 제로, K) 조합을 하나씩 다 해 봐요.\n"
+          + "N 과 T 가 작아서 다 해 봐도 충분히 빨라요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

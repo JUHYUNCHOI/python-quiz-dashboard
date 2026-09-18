@@ -289,8 +289,12 @@ export function getSleepyHerdSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
+        t(E, "What should we print? The fewest AND the most moves to make the three positions consecutive. So first sort the positions and find the two gaps between them.",
+            "무엇을 출력해야 하나요? 세 위치를 연속으로 만드는 최소·최대 이동 수예요.\n그러니 먼저 위치를 정렬해 두 간격(gap1, gap2)을 구해요."),
+        t(E, "Only the leftmost or rightmost cow can move, and only into the gap — so the bigger gap can be closed one step at a time, which is exactly the max.",
+            "왼쪽·오른쪽 끝 소만 움직일 수 있고, 그것도 가운데 빈 자리로만 가요.\n그러니 큰 간격을 한 칸씩 좁히는 횟수가 곧 최대 이동 수예요."),
+        t(E, "For the minimum: if both gaps are already 1, it's 0 moves; if one gap is 2, one move fills it; otherwise it always takes 2.",
+            "최소는 다르게 봐요: 두 간격이 다 1 이면 0 번, 하나가 2 면 1 번이면 끝나요.\n그 외 나머지 경우는 항상 2 번이 필요해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

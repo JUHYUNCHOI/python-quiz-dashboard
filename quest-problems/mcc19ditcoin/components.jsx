@@ -302,8 +302,10 @@ export function getMcc19DitcoinSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 있어요."),
+        t(E, "What do we output? The most profit we can earn selling coins.",
+            "무엇을 내놓아야 하나요? 코인을 팔아 얻을 수 있는 최대 수익이에요."),
+        t(E, "We can't tell if today is the best day to sell just by looking at today.",
+            "오늘이 팔기 좋은 날인지는 오늘 가격만 봐서는 몰라요."),
         /* 2026-09-08: "두 버전 모두" 라고 했는데 이 quest 는 Python 전용이다
            (Mcc19DitcoinApp.jsx:23 `codeLang = "py"`). 학생이 걸렸다: "다른 버전은 안 보였다."
            그리고 suffix_max 가 코드 쪽에서 처음 영어 이름으로만 나와서, 4쪽 힌트의

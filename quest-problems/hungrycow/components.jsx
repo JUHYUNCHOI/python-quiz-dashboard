@@ -82,8 +82,9 @@ export function getHungryCowSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E,
+          "The answer is how many days Bessie actually eats by day T.\nT can reach 10^14, so checking day by day is too slow.\nSo we sort deliveries by day and count eaten days for each\ngap between deliveries at once.",
+          "답은 T 일까지 Bessie 가 실제로 먹은 날의 수예요.\nT 가 10^14 까지 커서 하루씩 세면 너무 느려요.\n그래서 배달을 날짜순으로 세우고, 배달 사이 간격만큼\n한 번에 먹은 날을 세요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

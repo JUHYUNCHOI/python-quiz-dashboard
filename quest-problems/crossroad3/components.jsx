@@ -287,8 +287,15 @@ export function getCrossRoad3Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+            "What should we output? The time the LAST cow finishes passing\nthrough the gate. So first sort the cows by arrival time — the\ngate only lets them through in the order they arrive.",
+            "무엇을 출력해야 하나요? 마지막 소가 문을 통과해 끝나는\n시각이에요. 그러니 먼저 도착 순서대로 소들을 정렬해요 —\n문은 도착한 순서로만 통과시켜서예요."),
+        t(E,
+            "Track when the gate becomes free (current_time). If a cow\narrives before the gate is free, she waits — she starts at\ncurrent_time instead of her own arrival time.",
+            "문이 비는 시각(current_time)을 계속 따라가요. 소가\n문이 비기 전에 도착하면 기다려야 해요 — 자기 도착\n시각이 아니라 current_time 부터 시작해요."),
+        t(E,
+            "Either way, add her duration to get when she finishes, and\nthat becomes the new current_time. Whatever's left at the end\nis the last cow's finish time.",
+            "어느 경우든 그 소의 통과 시간(duration)을 더하면 끝나는\n시각이 되고, 그게 새로운 current_time 이에요. 마지막에\n남는 값이 바로 답이에요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

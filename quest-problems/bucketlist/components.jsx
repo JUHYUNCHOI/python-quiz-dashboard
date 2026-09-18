@@ -225,8 +225,9 @@ export function getBucketListSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 뚜렷해요."),
+        t(E,
+          "What should we print? The biggest bucket total needed at once.\nChecking every minute for every cow is too slow.\nSo mark +buckets at each start, and −buckets right after each end.\nSort those marks by time and sweep once, tracking the running max.",
+          "무엇을 답으로 내야 하나요? 언제든 동시에 필요한 양동이의 최댓값이에요.\n분마다 소를 다 훑으면 너무 느려요.\n그래서 시작에는 +양동이, 끝난 다음 날에는 −양동이로 적어 둬요.\n시간순으로 정렬해 한 번만 훑으며 최댓값을 기억해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

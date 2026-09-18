@@ -226,8 +226,9 @@ export function getMoolooSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+        t(E,
+          "The answer is the minimum total cost to cover every day.\nIf the gap between two days is ≤ K, extending the current\nsubscription is cheaper than starting a new one.\nSo we sort the days and scan left to right — extend when\nthe gap is small, start a new subscription otherwise.",
+          "답은 모든 시청일을 덮는 구독의 최소 총 비용이에요.\n두 날의 간격이 K 이하면 새로 구독하는 것보다\n지금 구독을 늘리는 게 더 싸요.\n그래서 날짜를 정렬해 왼쪽부터 훑으며, 간격이 K 이하면\n늘리고 아니면 새로 시작해서 비용을 더해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

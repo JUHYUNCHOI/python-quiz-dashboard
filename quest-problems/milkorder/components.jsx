@@ -188,8 +188,9 @@ export function getMilkOrderSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "What should we print? The earliest position cow 1 can take.\nA position must satisfy both the fixed spots and the hierarchy order.\nSo try p = 1, 2, 3, ... in order — place the fixed cows, then lay\nout the hierarchy from the front, and stop at the first p that works.",
+          "무엇을 출력해야 하나요? 1번 소가 설 수 있는 가장 이른 자리예요.\n한 자리가 되려면 고정 위치와 순서 규칙을 둘 다 만족해야 해요.\n그래서 p 를 1부터 차례로 시도해요 — 고정 위치를 먼저 놓고,\n순서 규칙대로 소들을 앞에서부터 채워 처음 맞는 p 에서 멈춰요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

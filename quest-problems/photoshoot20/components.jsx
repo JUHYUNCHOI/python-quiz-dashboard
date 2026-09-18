@@ -282,8 +282,19 @@ export function getPhoto20Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 있어요."),
+        t(E,
+          "What do we need? The lexicographically smallest a.\n"
+          + "Once a[0] is fixed, the rule b[i] = a[i] + a[i+1]\n"
+          + "decides every other value by itself. So we try\n"
+          + "a[0] = 1, 2, 3, ... in order, build the chain,\n"
+          + "and check it's a permutation of 1..N.\n"
+          + "The first a[0] that works gives the smallest answer.",
+          "무엇을 내놔야 하나요? 사전순으로 가장 작은 순열 a예요.\n"
+          + "a[0] 하나만 정해지면 b[i]=a[i]+a[i+1] 규칙으로\n"
+          + "나머지가 전부 정해져요.\n"
+          + "그래서 a[0] 을 1부터 차례로 넣어서 사슬을 만들고,\n"
+          + "1..N 이 한 번씩 다 나오는지 확인해요.\n"
+          + "제일 먼저 맞는 a[0] 이 사전순으로 가장 작은 답이에요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

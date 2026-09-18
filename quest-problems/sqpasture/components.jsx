@@ -243,8 +243,12 @@ export function getSqPastureSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we output? The area of the smallest square covering both pastures.",
+            "무엇을 내놓아야 하나요? 두 목장을 다 덮는 가장 작은 정사각형의 넓이예요."),
+        t(E, "First find the bounding box: min/max x, min/max y over both pastures.",
+            "먼저 두 목장을 감싸는 바운딩 박스를 구해요.\nx, y 각각 가장 작은 값과 가장 큰 값이에요."),
+        t(E, "The square's side must cover the wider gap, so side = max(width, height).",
+            "정사각형은 더 넓게 벌어진 쪽까지 덮어야 해요.\n그래서 한 변 = max(가로, 세로) 예요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

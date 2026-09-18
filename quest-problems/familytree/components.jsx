@@ -427,8 +427,9 @@ export function getFamilyTreeSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 역할이 있어요."),
+        t(E,
+          "What should we print? The family relationship between cows A and B.\nThat relationship depends on their nearest shared ancestor.\nSo follow each cow's mother-chain all the way up, find the first\nancestor the two chains share, and use the distances to name it.",
+          "무엇을 출력해야 하나요? 소 A 와 B 의 가계 관계 이름이에요.\n관계는 둘의 가장 가까운 공통 조상으로 정해져요.\n그래서 A, B 각각 엄마 쪽으로 끝까지 올라가 조상 목록을 만들고,\n두 목록에서 처음 겹치는 조상을 찾아 그 거리로 관계를 가려요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

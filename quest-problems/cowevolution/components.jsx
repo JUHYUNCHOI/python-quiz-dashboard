@@ -133,8 +133,12 @@ export function getCowEvolutionSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
+        t(E, "What should we print? \"yes\" if the traits can form one nested family tree, \"no\" if they can't. So first read N and each population's trait set.",
+            "무엇을 출력해야 하나요? 특성들로 하나의 진화 트리를 만들 수 있으면 yes, 아니면 no 예요.\n그러니 먼저 N 과 집단마다의 특성 집합을 읽어요."),
+        t(E, "A pair of traits (a,b) breaks the tree only when some population has only a, some has only b, and some has both — that's exactly what \"crossing\" means.",
+            "두 특성 a, b 는 어떤 집단은 a 만, 어떤 집단은 b 만, 어떤 집단은 둘 다 가질 때만 트리를 깨요.\n이게 바로 '교차' 예요."),
+        t(E, "So test every pair of traits for that crossing pattern. If any pair crosses, print \"no\" — otherwise print \"yes\".",
+            "그래서 모든 특성 쌍이 교차하는지 검사해요.\n하나라도 교차하면 no, 하나도 없으면 yes 를 출력해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

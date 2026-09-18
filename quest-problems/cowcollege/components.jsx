@@ -228,8 +228,9 @@ export function getCowCollegeSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 있어요."),
+        t(E,
+          "The answer is the max revenue and the price that makes it.\nOnce sorted, picking c[i] as the price means exactly N-i\ncows can afford it.\nSo we sort, then check the revenue at every c[i] and keep\nthe best one.",
+          "답은 최대 총 수입과 그 수입을 만드는 등록금이에요.\n정렬하면 c[i] 를 등록금으로 할 때 딱 N-i 마리가\n낼 수 있어요.\n그래서 정렬한 뒤 c[i] 마다 수입을 계산해\n가장 큰 값을 찾아요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

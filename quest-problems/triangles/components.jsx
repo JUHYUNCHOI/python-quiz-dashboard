@@ -205,8 +205,20 @@ export function getTrianglesSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E,
+          "What do we need? Twice the biggest right-triangle area.\n"
+          + "The right angle sits at one post, with both legs\n"
+          + "parallel to the x and y axes. So for each post, find\n"
+          + "the farthest post with the same y (horizontal leg) and\n"
+          + "the farthest post with the same x (vertical leg),\n"
+          + "then multiply them — that's twice the area from that\n"
+          + "post. Take the max over all posts.",
+          "무엇을 내놔야 하나요? 가장 큰 직각 삼각형 넓이의 2배예요.\n"
+          + "직각은 기둥 하나에서 생기고 두 다리는 x축·y축과 나란해요.\n"
+          + "그래서 기둥마다 같은 y 중 가장 먼 점(가로 다리)과\n"
+          + "같은 x 중 가장 먼 점(세로 다리)을 찾아 곱해요.\n"
+          + "그 값이 이 기둥에서 나오는 2배 넓이라,\n"
+          + "모든 기둥 중 가장 큰 값을 답으로 내요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

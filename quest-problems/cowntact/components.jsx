@@ -279,8 +279,12 @@ export function getCowntactSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we need? The smallest number of cows sick on day 0 to reach\nthis final string of 0s and 1s.",
+            "무엇을 내놓아야 하나요? 이 최종 문자열이 나오려면 0일차에 감염돼\n있어야 했던 소의 최소 수예요."),
+        t(E, "Key observation: one connected run of 1s can always come from ONE source\nin the middle, and a 0 breaks the chain — one source can't cover two runs.",
+            "핵심 관찰: 1 이 이어진 덩어리 하나는 감염원 하나로도 다 채울 수 있어요.\n0 은 사슬을 끊어서, 감염원 하나가 덩어리 두 개를 채울 수는 없어요."),
+        t(E, "So: just scan the string and count how many separate runs of 1s there are.",
+            "그래서 문자열을 훑으며 1 이 이어진 덩어리가 몇 번 나오는지만 세요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

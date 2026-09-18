@@ -99,8 +99,12 @@ export function getFjFarmsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E, "What do we need? The smallest day x where every t[i] matches\n(or -1 if none does).",
+            "무엇을 내놓아야 하나요? t[i] 가 전부 맞아떨어지는 가장 이른 날 x 예요.\n(그런 날이 없으면 -1)"),
+        t(E, "Under Bronze limits the answer day is never too large, so trying\nx = 0, 1, 2, … one by one is fast enough — no need to be clever.",
+            "Bronze 제약에서는 답이 되는 날이 그리 크지 않아서,\nx = 0, 1, 2, … 를 하나씩 다 시도해도 충분히 빨라요."),
+        t(E, "So: for each day x, compute every height, count how many plants are\ntaller than i, and check it against t. Stop at the first match.",
+            "그래서 날마다 키를 다시 계산하고, i 보다 큰 식물 수를 세어\nt 와 같은지 확인해요. 처음 맞는 날에서 멈춰요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -241,8 +241,21 @@ export function getMadSciSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 있어요."),
+        t(E,
+          "What do we need? The fewest flips to make B equal A.\n"
+          + "One flip swaps H<->G across a whole chosen range, so\n"
+          + "if the mismatched spots between A and B form one\n"
+          + "connected run, a single flip over that run fixes\n"
+          + "every mismatch inside it at once.\n"
+          + "So we just count how many separate runs of mismatches\n"
+          + "there are — that count is the answer.",
+          "무엇을 답으로 내놔야 하나요? B 를 A 와 같게 만드는\n"
+          + "최소 뒤집기 횟수예요.\n"
+          + "한 번 뒤집으면 고른 구간 안의 H·G 가 통째로 바뀌니까,\n"
+          + "A 와 B 가 다른 자리들이 쭉 이어져 있으면 그 구간을\n"
+          + "한 번만 뒤집어도 안에 있는 다른 자리가 전부 맞아요.\n"
+          + "그래서 다른 자리가 이어진 덩어리가 몇 개인지 세면\n"
+          + "그게 바로 답이에요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

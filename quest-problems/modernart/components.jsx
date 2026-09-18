@@ -413,8 +413,15 @@ export function getModernArtSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 있어요."),
+        t(E,
+            "What should we output? How many colors COULD have been painted\nfirst. So first re-read the canvas and find each color's actual\nbounding box.",
+            "무엇을 출력해야 하나요? 가장 먼저 칠해졌을 수 있는 색의\n개수예요. 그러니 먼저 캔버스를 다시 읽어서, 색마다\n실제로 칠해진 네모(bounding box)를 찾아요."),
+        t(E,
+            "Color C could be first only if none of C's remaining cells sit\ninside another color Y's bbox — if one does, that means C was\npainted AFTER Y, so C isn't the first one.",
+            "색 C 가 가장 먼저였을 수 있으려면, C 가 남은 칸이 다른\n색 Y 의 네모 안에 있으면 안 돼요. 안에 있다면 C 가\nY 보다 나중에 칠해졌다는 뜻이라, C 는 첫 번째가 아니에요."),
+        t(E,
+            "So check this condition for every color and count how many\npass it.",
+            "그래서 색마다 이 조건(is_first)을 확인하고,\n만족하는 색의 수를 답에 더해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

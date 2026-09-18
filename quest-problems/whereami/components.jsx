@@ -79,8 +79,21 @@ export function getWhereAmISections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "What do we need? The smallest K where every window\n"
+          + "of K letters is unique.\n"
+          + "A smaller K means Bessie needs to see fewer boxes,\n"
+          + "so we try K = 1, 2, 3, ... in order and stop at the\n"
+          + "first one that works.\n"
+          + "For each K, we collect every length-K window; if two\n"
+          + "windows match, that K isn't enough yet.",
+          "무엇을 내놔야 하나요? 어느 K 개짜리 창을 봐도\n"
+          + "겹치지 않는 가장 작은 K예요.\n"
+          + "K 가 작을수록 우편함을 덜 보고도 위치를 알 수 있으니\n"
+          + "K = 1 부터 하나씩 늘려가며 확인해요.\n"
+          + "각 K 마다 길이 K 인 부분문자열을 전부 모아서,\n"
+          + "똑같은 게 하나라도 있으면 그 K 는 아직 부족한 거예요.\n"
+          + "처음으로 다 다른 K 가 나오면 그게 답이에요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

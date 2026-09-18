@@ -223,8 +223,12 @@ export function getRotShiftSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we need? After T minutes, which cow ends up at each\nposition p (0..N−1).",
+            "무엇을 내놓아야 하나요? T 분 뒤 각 위치 p (0..N−1) 에\n있는 소예요."),
+        t(E, "Each minute does two things in order: cows on the K active\npositions rotate one slot, then those active positions shift +1.",
+            "매 분 두 가지 일이 순서대로 일어나요. 먼저 활성 위치 K 개의 소들이\n한 칸씩 돌고, 그다음 그 활성 위치들이 +1 씩 옮겨가요."),
+        t(E, "So: repeat rotate-then-shift for T minutes, tracking each cow's\nposition — the C++ note below covers what to do when T is huge.",
+            "그래서 회전 → 이동을 T 분만큼 그대로 반복하며 소의 위치를 따라가요.\nT 가 아주 클 때는 아래 C++ 설명을 봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

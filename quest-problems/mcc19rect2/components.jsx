@@ -250,8 +250,12 @@ export function getMcc19Rect2Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 있어요."),
+        t(E, "What do we output? The x, y of the missing fourth corner.",
+            "무엇을 내놓아야 하나요? 빠진 네 번째 꼭짓점의 x, y 예요."),
+        t(E, "In a rectangle, each x value shows up at two of the four corners — same for y.",
+            "직사각형은 같은 x 값이 네 꼭짓점 중 두 곳에 나와요.\ny 도 마찬가지예요."),
+        t(E, "So among the 3 known x's, the one left without a partner is the 4th corner's x. Same for y.",
+            "그래서 아는 x 셋 중 짝 없는 값이 네 번째 점의 x 예요.\ny 도 똑같이 구해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

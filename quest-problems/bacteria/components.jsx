@@ -222,8 +222,12 @@ export function getBacteriaSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 있어요."),
+        t(E, "What do we need? The minimum number of walks to zero out every a[i].\nBut one walk changes many cells at once — hard to count directly.",
+            "무엇을 내놓아야 하나요? a[i] 를 전부 0 으로 만드는 최소 워크 수예요.\n그런데 워크 한 번이 여러 칸을 한꺼번에 바꿔서 그대로 세기 어려워요."),
+        t(E, "So look at diff(diff(a)) instead. One walk changes exactly ONE cell\nof diff(diff(a)) by ±1 — that's what the sim above shows.",
+            "그래서 diff(diff(a)) 를 봐요. 워크 한 번은 diff(diff(a)) 의 딱 한 칸만\n±1 만큼 바꿔요 — 위 시뮬에서 본 모습이에요."),
+        t(E, "So: compute diff(diff(a)) once, then sum |x| over it — that's the answer.",
+            "그러니 diff(diff(a)) 를 한 번 구하고, 그 절댓값을 다 더하면 답이 나와요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

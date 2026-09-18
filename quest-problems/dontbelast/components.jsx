@@ -307,8 +307,15 @@ export function getDontBeLastSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 뚜렷해요."),
+        t(E,
+            "What should we output? The name of the cow with the\nsecond-lowest total milk (or 'Tie'). So first add up each\ncow's total milk.",
+            "무엇을 출력해야 하나요? 우유 총량이 두 번째로 적은 소의\n이름이에요(같은 값이 여러 마리면 Tie). 그러니 먼저\n소 7마리의 우유 총량을 다 더해요."),
+        t(E,
+            "Then collect only the DISTINCT totals and sort them — several\ncows can share a total, so we need the value itself, not a rank.",
+            "그다음 서로 다른 총량 값들만 모아 정렬해요 — 값이\n같은 소가 여러 마리일 수 있어서, 순위가 아니라 값\n자체로 두 번째를 찾아야 해요."),
+        t(E,
+            "Fewer than 2 distinct totals means there's no second place —\n'Tie'. Otherwise, find every cow at the second value: exactly\none means that cow's name, more than one means 'Tie'.",
+            "고유한 값이 2개 미만이면 두 번째 자리가 없으니 Tie 예요.\n있으면 두 번째 값을 가진 소를 모두 찾아요 — 딱 한\n마리면 그 이름을, 여러 마리면 Tie 를 출력해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

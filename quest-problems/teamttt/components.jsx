@@ -339,8 +339,9 @@ export function getTeamTttSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 정해져 있어요."),
+        t(E,
+          "What should we print? Two counts — solo line winners, then 2-cow team winners.\nEach of the 8 lines (rows, columns, diagonals) must be checked.\nSo collect each line's letters into a set: 1 distinct letter means\na solo win, 2 distinct letters means those two form a team win.",
+          "무엇을 출력해야 하나요? 혼자 우승한 소 수와 2명 팀 우승 수예요.\n8개 줄(가로 3 + 세로 3 + 대각선 2)을 하나씩 봐야 해요.\n그래서 줄마다 글자를 set 에 모아요 — 서로 다른 글자가 1개면\n혼자 우승, 2개면 그 두 글자를 팀으로 세요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

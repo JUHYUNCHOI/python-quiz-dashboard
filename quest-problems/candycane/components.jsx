@@ -264,8 +264,12 @@ export function getCandyCaneSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we need? The cows' final heights after every cane is eaten.\nFor each cane, cows eat in order, from the bottom up.",
+            "무엇을 내놓아야 하나요? 캔디를 다 먹인 뒤 소들의 최종 키예요.\n캔디마다 소들이 순서대로, 아래부터 먹어요."),
+        t(E, "Why track a 'bottom' per cane? Once part of a cane is eaten, no cow can\nreach that part again — so we never need to recheck it.",
+            "왜 캔디마다 bottom 을 기록할까요? 캔디의 아래쪽이 한 번 먹히면 다시\n먹을 소가 없어서, 그 부분을 또 확인할 필요가 없어요."),
+        t(E, "So: for each cane, keep bottom = eaten-so-far, and only feed cows\ntaller than bottom, growing them and bottom together.",
+            "그래서 캔디마다 bottom(먹힌 높이)을 두고, 키가 bottom 보다 큰 소만 먹여요.\n소가 자라면 bottom 도 같이 올라가요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

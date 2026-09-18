@@ -103,8 +103,9 @@ export function getLifeguardsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 있어요."),
+        t(E,
+          "What should we print? The most coverage left after firing one lifeguard.\nN is small, so we can just try firing each lifeguard in turn.\nSo for each candidate, sweep the remaining shifts by time to merge\nthem into total covered time, and keep the largest result.",
+          "무엇을 출력해야 하나요? 한 명을 해고한 뒤 남는 최대 커버 시간이에요.\nN 이 작아서 누구를 해고할지 한 명씩 다 시도해 볼 수 있어요.\n그래서 사람마다 그 한 명만 빼고 나머지 구간을 시간순으로 훑어\n합쳐진 커버 시간을 구하고, 그중 가장 큰 값을 답으로 골라요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -198,8 +198,12 @@ export function getProductivitySections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What do we need for each query? Just one thing — how many farms have d[i] > S,\nwhere d[i] = c[i] − t[i] is the latest wake-up time that still reaches farm i.",
+            "물음마다 무엇을 알아야 하나요? d[i] = c[i] − t[i] (농장 i 에 갈 수 있는 가장 늦은 기상 시각) 보다\nS 가 작은 농장이 몇 개인지만 알면 돼요."),
+        t(E, "Checking every farm for every query is Q·N — too slow if both are large.\nSo sort d[] once, then binary-search the boundary for each query.",
+            "물음마다 농장을 다 훑으면 Q·N 이라 둘 다 크면 느려요.\n그래서 d[] 를 한 번만 정렬해 두고, 물음마다 경계를 이분 탐색으로 찾아요."),
+        t(E, "So: precompute d[], sort it, then for (V, S) count d[i] > S and compare to V.",
+            "그래서 d[] 를 미리 구해 정렬하고, 물음 (V, S) 마다 d[i] > S 인 개수를 세어 V 와 견줘요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

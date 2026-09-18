@@ -368,8 +368,15 @@ export function getMilkMeasSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 보세요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+            "What should we output? How many times the leader set changes.\nSo first sort the events by day — they may not arrive in order.",
+            "무엇을 출력해야 하나요? 1등 소들의 조합이 바뀐 횟수예요.\n그러니 먼저 변화들을 날짜(day) 순서로 정렬해요 —\n기록이 날짜순으로 안 들어올 수 있어서예요."),
+        t(E,
+            "Then apply the events one at a time. After each one, find who\nthe leaders are now (get_leaders_str) — everyone with the max milk.",
+            "그다음 변화를 하나씩 적용해요. 그때마다 지금 1등인\n소들을 다시 구해요(get_leaders_str) — 우유가 가장 많은\n소 전부예요."),
+        t(E,
+            "If this leader set differs from the one right before it, that's\na change — bump display_changes by 1.",
+            "바로 앞의 1등 조합과 지금 조합이 다르면 바뀐 걸로 세고,\ndisplay_changes 를 1 늘려요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

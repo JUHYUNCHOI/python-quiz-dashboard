@@ -244,8 +244,12 @@ export function getBucketBrigadeSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What should we print? The fewest cows needed to link L to B. So first scan the grid for L, B, and R's positions.",
+            "무엇을 출력해야 하나요? L 과 B 를 잇는 데 필요한 소의 최소 마릿수예요.\n그러니 먼저 격자를 훑어 L, B, R 의 위치를 찾아요."),
+        t(E, "Since every other cell is empty, the shortest path length is just the Manhattan distance between L and B — minus 2, because L and B themselves aren't cows.",
+            "L, B, R 말고는 다 빈 칸이라, 최단 길이는 L 과 B 의 맨해튼 거리와 같아요.\nL 과 B 는 소가 아니니 거기서 2 를 빼요."),
+        t(E, "But if R sits exactly on the straight line between L and B (same row or column, in between), that path is blocked — so we detour, adding 2 more cows.",
+            "그런데 R 이 L 과 B 를 잇는 직선 위(같은 행이나 열, 그 사이)에 있으면 그 길이 막혀요.\n그래서 돌아가야 하고, 소가 2 마리 더 필요해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

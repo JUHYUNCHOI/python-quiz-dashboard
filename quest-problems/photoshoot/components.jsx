@@ -223,8 +223,9 @@ export function getPhotoshootSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 역할이 있어요."),
+        t(E,
+          "The answer is the fewest reversals to get the most G's\nat even positions.\nOne reversal flips the whole even-length prefix, so it\nflips not just this pair but every pair further left too.\nSo we scan pairs right to left: if the even slot has no G\nbut its partner does, reverse once and remember the flip.",
+          "답은 짝수 위치에 G 를 가장 많이 두는 최소 뒤집기 횟수예요.\n뒤집기 한 번은 앞쪽 짝수 마리를 통째로 뒤집어서, 이 쌍뿐\n아니라 왼쪽에 있는 모든 쌍의 방향도 같이 바뀌어요.\n그래서 오른쪽 쌍부터 왼쪽으로 훑으며, 짝수 칸에 G 가\n없고 짝꿍이 G 면 한 번 뒤집고 '뒤집힘' 표시를 남겨요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

@@ -189,8 +189,12 @@ export function getMcc19RectSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 있어요."),
+        t(E, "What do we output? The smallest difference between any two numbers.",
+            "무엇을 내놓아야 하나요? 아무 두 수의 차이 중 가장 작은 값이에요."),
+        t(E, "Checking every pair is slow. But the numbers are sorted —",
+            "짝을 다 확인하면 느려요.\n그런데 수가 작은 것부터 순서대로 있어요 —"),
+        t(E, "a far pair's gap is always the sum of steps between, so only neighbours can win.",
+            "멀리 떨어진 두 수의 차이는 사이 칸들을 더한 것이라,\n이웃한 두 수만 보면 충분해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

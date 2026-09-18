@@ -94,8 +94,12 @@ export function getGuessAnimalSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What should we print? The most 'yes' answers Bessie could give before you must know the animal. So first read each animal's trait set.",
+            "무엇을 출력해야 하나요? 동물을 확실히 알기 전까지 나올 수 있는 최대 '예' 답변 수예요.\n그러니 먼저 동물마다 특성 집합을 읽어요."),
+        t(E, "Two animals only stay confused as long as their traits overlap — so the worst case is the largest shared-trait count between any two animals.",
+            "두 동물은 특성이 겹치는 동안만 구분이 안 돼요.\n그러니 최악의 경우는 어떤 두 동물 사이의 공통 특성 수 중 가장 큰 값이에요."),
+        t(E, "So for every pair, count shared traits and add 1 for the question that finally tells them apart — then keep the largest.",
+            "그래서 모든 동물 쌍의 공통 특성 수를 세고, 마지막에 구별해 주는 질문 1 개를 더해요.\n그중 가장 큰 값을 답으로 남겨요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

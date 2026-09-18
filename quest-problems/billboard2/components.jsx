@@ -113,8 +113,9 @@ export function getBillboard2Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E,
+          "What should we print? The smallest tarp's area.\nThe tarp is one rectangle, so an L-shaped gap is a problem.\nSo check: does the feed span a full side, touching one edge?\nThen only a strip is left.\nOtherwise the gap is L-shaped, so cover the whole billboard.",
+          "무엇을 출력해야 하나요? 가장 작은 타프의 넓이예요.\n타프는 직사각형 하나뿐이라 L자 모양의 빈틈이 곤란해요.\n그래서 확인해요 — 사료 광고판이 한쪽 끝까지 덮고 한 변 전체를 가리나요?\n그러면 남는 부분이 띠 모양이에요.\n아니면 빈틈이 L자라서 광고판 전체를 다 덮어야 해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

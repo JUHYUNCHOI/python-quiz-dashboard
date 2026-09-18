@@ -95,8 +95,15 @@ export function getBovGenomicsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 역할이 있어요."),
+        t(E,
+            "What should we output? The number of columns where spotted-cow\nletters and plain-cow letters never share a letter.\nSo first read both groups of genome strings.",
+            "무엇을 출력해야 하나요? 점박이 소와 무늬 없는 소의 글자가\n한 번도 안 겹치는 칸(열)의 개수예요.\n그러니 먼저 두 무리의 유전자 문자열을 각각 읽어요."),
+        t(E,
+            "For each column j, collect the letters spotted cows have there\n(s_chars) and the letters plain cows have there (p_chars).",
+            "칸 j 마다 점박이 소들이 그 칸에 쓴 글자들(s_chars)과\n무늬 없는 소들이 쓴 글자들(p_chars)을 모아요."),
+        t(E,
+            "If any letter appears in both sets, that column can't tell the\ntwo groups apart. Only count columns with zero overlap.",
+            "두 집합에 겹치는 글자가 하나라도 있으면 그 칸은 둘을\n구별해 주지 못해요. 겹치는 게 없을 때만 답에 1을 더해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

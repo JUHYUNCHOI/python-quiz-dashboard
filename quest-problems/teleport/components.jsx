@@ -73,8 +73,9 @@ export function getTeleportSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 맡은 일이 뚜렷해요."),
+        t(E,
+          "What should we print? The shortest walking distance from a to b.\nWe can walk straight there, or walk to one end of the teleporter\nand pop out the other side.\nSo compute all three routes — direct, via x, via y — and keep the smallest.",
+          "무엇을 출력해야 하나요? a 에서 b 까지 걷는 최소 거리예요.\n곧장 걸어갈 수도, 텔레포터 한쪽으로 가서 반대쪽으로 나올 수도 있어요.\n그래서 세 가지 경로 — 직접, x 경유, y 경유 — 의 거리를 각각 구해\n가장 짧은 값을 답으로 골라요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

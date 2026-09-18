@@ -304,8 +304,12 @@ export function getMeasTrafficSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐요. 줄마다 맡은 일이 있어요."),
+        t(E, "What should we print? Two ranges — the traffic possible at the very start, and at the very end, consistent with every sensor. So first read each segment's type and lo/hi.",
+            "무엇을 출력해야 하나요? 모든 센서 값과 맞아떨어지는, 맨 처음과 맨 끝의 가능한 유량 범위예요.\n그러니 먼저 구간마다 종류(센서/진입/출구)와 lo, hi 를 읽어요."),
+        t(E, "A sensor's [lo,hi] only tells us the flow right there — to push that info to the end we sweep forward (applying ramps), and to the start we sweep backward (undoing them).",
+            "센서의 [lo, hi] 는 그 자리의 유량만 알려줘요.\n끝쪽 범위를 구하려면 앞에서 뒤로(진입로는 더하고 출구는 뺌), 시작쪽 범위를 구하려면 뒤에서 앞으로(반대로) 훑어요."),
+        t(E, "So run two sweeps, narrowing [lo,hi] at every sensor and clamping at 0 — forward for the end range, backward for the start.",
+            "그래서 두 번 훑어요. 센서를 지날 때마다 [lo, hi] 를 좁히고 0 밑으로는 못 내려가게 해요.\n앞에서 훑으면 끝쪽 범위, 뒤에서 훑으면 시작쪽 범위가 나와요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

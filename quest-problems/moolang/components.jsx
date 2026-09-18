@@ -344,10 +344,14 @@ export function getMooLangSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
-        t(E, "The C++ mirrors the Python step for step — same sweep, same sentence build.",
-            "C++ 는 Python 을 단계 그대로 옮긴 거예요. 찾는 방법도, 문장을 짜는 방법도 같아요."),
+        t(E, "What do we need? The max total words usable, and the sentences\nthat use them.",
+            "무엇을 내놓아야 하나요? 쓸 수 있는 단어 수의 최댓값과,\n그 단어들로 만든 문장이에요."),
+        t(E, "Once we pick how many transitive sentences (n_tverb) to build, the rest\n(intransitive, conjunctions) follows — so sweep n_tverb from 0 up.",
+            "타동사 문장 개수(n_tverb)를 정하면 나머지(자동사·접속사 개수)가\n따라 정해져요. 그래서 n_tverb 를 0부터 다 훑어요."),
+        t(E, "If that uses too many sentences for the period budget P, trim\nintransitive sentences until it fits, then compute the word total.",
+            "그 개수가 마침표 예산 P 를 넘으면 자동사 문장을 줄여서 맞추고,\n그다음 단어 총합을 계산해요."),
+        t(E, "So: keep the best-scoring n_tverb, then build the sentences from it.\nThe C++ mirrors the Python step for step.",
+            "그래서 단어 수가 가장 많은 n_tverb 를 골라 문장을 짜요.\nC++ 는 Python 을 단계 그대로 옮긴 거예요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

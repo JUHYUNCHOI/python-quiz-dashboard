@@ -216,8 +216,12 @@ export function getCowSignalSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 따로 있어요."),
+        t(E, "What do we output? The M×N grid scaled up to an M*K by N*K grid.",
+            "무엇을 내놓아야 하나요? M×N 격자를 K배로 키운 M*K × N*K 격자예요."),
+        t(E, "Each original cell must become a K×K block of the same character.",
+            "원래 한 칸이 그대로 K×K 블록이 돼야 해요."),
+        t(E, "So repeat each row K times, and inside a row repeat each character K times.",
+            "그래서 각 행을 K번 출력하고,\n그 행 안에서 글자 하나도 K번씩 늘려요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",

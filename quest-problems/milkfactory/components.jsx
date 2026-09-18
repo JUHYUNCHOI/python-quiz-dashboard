@@ -309,8 +309,12 @@ export function getMilkFactorySections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
+        t(E, "What should we print? The station that every other station's milk can reach, or -1 if none does. So first read N and the N-1 belts.",
+            "무엇을 출력해야 하나요? 모든 역의 우유가 도달할 수 있는 역, 없으면 -1 이에요.\n그러니 먼저 N 과 컨베이어(간선) N-1 개를 읽어요."),
+        t(E, "\"Every station reaches candidate c\" is the same question as \"walking backward along belts from c, do we touch every station?\" — so build the reverse graph.",
+            "\"모든 역에서 후보 c 로 갈 수 있다\" 는 \"c 에서 거꾸로 컨베이어를 타면 모든 역에 닿는다\" 와 같은 말이에요.\n그래서 방향을 뒤집은 그래프(radj)를 만들어요."),
+        t(E, "So try each candidate c = 1..N in order, BFS backward from c, and print the first c that reaches all N stations — or -1 if none does.",
+            "그래서 후보 c 를 1 부터 N 까지 차례로 시도해요.\nc 에서 역방향 BFS 로 N 개 전부에 닿으면 그 c 를 출력하고, 없으면 -1 을 출력해요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
