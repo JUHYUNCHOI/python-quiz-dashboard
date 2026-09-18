@@ -193,7 +193,7 @@ export function getCowSplitsWalk(E, lang = "py") {
     const code = [...s[0].cpp, ...s[1].cpp, ...s[2].cpp];
     // s0=18 (0-17), s1=9 (18-26), s2=23 (27-49)
     return { code, vars: _CS_VARS, beats: [
-      { hi: [0, 4],   bubble: t(E, "Headers + main — the usual C++ start.", "헤더와 main 으로 평범하게 시작해요.") },
+      { hi: [0, 4],   bubble: t(E, "What do we need to output per test? The fewest moves M, and which move erases each letter.\nSo start with the usual C++ setup.", "무엇을 출력해야 하나요?\n테스트마다 최소 지우기 횟수 M 과, 글자마다 어떤 번호로 지우는지예요.\n그러니 먼저 C++ 를 평범하게 시작해요.") },
       { hi: [5, 8],   bubble: t(E, "Read T tests and mode k (k we can ignore). Loop T times.", "테스트 T개와 모드 k 를 읽어요 (k 는 신경 안 써도 돼요). T번 반복해요.") },
       { hi: [9, 13],  bubble: t(E, "Each test: read N and the length-3N string S. n3 = 3·N.", "테스트마다 N 과 길이 3N 인 문자열 S 를 읽어요. n3 = 3·N 이에요 (전체 길이).") },
       { hi: [14, 17], bubble: t(E, "If N is odd, 3N is odd too — but each move erases an even number, and even + even is still even, so we can never empty it → −1.", "N이 홀수면 3N도 홀수예요.\n한 번에 짝수 개씩만 지우는데 짝수를 아무리 더해도 홀수가 안 돼요.\n그래서 끝까지 못 비워요 → −1.") },
@@ -207,7 +207,7 @@ export function getCowSplitsWalk(E, lang = "py") {
   const code = [...s[0].py, ...s[1].py, ...s[2].py];
   // s0=12 (0-11), s1=5 (12-16), s2=15 (17-31)
   return { code, vars: _CS_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input — sys.stdin.readline (T can hit 10⁴).", "sys.stdin.readline 으로 빠르게 읽어요 (T 최대 10⁴).") },
+    { hi: [0, 1],   bubble: t(E, "What do we need to output per test? The fewest moves M, and which move erases each letter.\nT can hit 10⁴, so read fast first.", "무엇을 출력해야 하나요?\n테스트마다 최소 지우기 횟수 M 과, 글자마다 어떤 번호로 지우는지예요.\nT 가 최대 10⁴ 라 입력부터 빠르게 받아요.") },
     { hi: [3, 5],   bubble: t(E, "Read T tests and mode k (k we can ignore). Collect answers in out; loop T times.", "테스트 T개와 모드 k 를 읽어요 (k 는 신경 안 써도 돼요). 답은 out 에 모으고 T번 반복해요.") },
     { hi: [6, 8],   bubble: t(E, "Each test: read N and the length-3N string S. n3 = 3·N.", "테스트마다 N 과 길이 3N 인 문자열 S 를 읽어요. n3 = 3·N 이에요 (전체 길이).") },
     { hi: [9, 11],  bubble: t(E, "If N is odd, 3N is odd too — but each move erases an even number, and even + even is still even, so we can never empty it → −1.", "N이 홀수면 3N도 홀수예요.\n한 번에 짝수 개씩만 지우는데 짝수를 아무리 더해도 홀수가 안 돼요.\n그래서 끝까지 못 비워요 → −1.") },

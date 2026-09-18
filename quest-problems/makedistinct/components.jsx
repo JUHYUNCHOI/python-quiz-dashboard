@@ -112,7 +112,7 @@ const _MD_VARS = [
 export function getMakeDistinctWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _MD_VARS, beats: [
-      { hi: [7, 17],  bubble: t(E, "Read T, then each test's n, k, and the array. m = |k|.", "T 를 읽고, 테스트마다 n, k, 배열을 읽어요. m = |k| 예요.") },
+      { hi: [7, 17],  bubble: t(E, "What are we solving for? One number per test — the fewest operations needed.\nFirst read T, then each test's n, k, and the array. m = |k|.", "무엇을 구해야 하나요?\n테스트마다 최소 연산 횟수 하나예요.\n먼저 T 를 읽고, 테스트마다 n, k, 배열을 읽어요. m = |k| 예요.") },
       { hi: [19, 24], bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "K 를 더해도 |K| 로 나눈 나머지는 안 바뀌어요.\n그래서 나머지끼리 묶으면 그룹끼리 서로 영향이 없어요!") },
       { hi: [26, 35], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 둬요.") },
       { hi: [36, 50], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 횟수를 더해요.") },
@@ -120,7 +120,7 @@ export function getMakeDistinctWalk(E, lang = "py") {
     ] };
   }
   return { code: FULL_PY, vars: _MD_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input (sys.stdin.readline) — sum of N can reach 10^6.", "N 의 합이 10^6 까지라 sys.stdin.readline 으로 빠르게 읽어요.") },
+    { hi: [0, 1],   bubble: t(E, "What are we solving for? One number per test — the fewest operations needed.\nSum of N can reach 10^6, so read fast first.", "무엇을 구해야 하나요?\n테스트마다 최소 연산 횟수 하나예요.\nN 의 합이 10^6 까지라 입력부터 빠르게 받아요.") },
     { hi: [3, 6],   bubble: t(E, "solve() handles ONE test: read n, k, the array. m = |k|.", "solve() 는 테스트 하나를 맡아요. n, k, 배열을 읽고 m = |k| 예요.") },
     { hi: [8, 11],  bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "K 를 더해도 |K| 로 나눈 나머지는 안 바뀌어요.\n그래서 나머지끼리 묶으면 그룹끼리 서로 영향이 없어요!") },
     { hi: [13, 17], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 둬요.") },

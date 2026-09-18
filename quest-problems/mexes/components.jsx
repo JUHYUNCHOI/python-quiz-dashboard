@@ -387,17 +387,17 @@ const _MEX_WALK_CPP = [
 export function getMexesWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: _MEX_WALK_CPP, vars: _MEX_VARS, beats: [
-      { hi: [0, 5], bubble: t(E, "Read N and the array a.", "N 과 배열 a 를 읽어요.") },
-      { hi: [7, 11], bubble: t(E, "cnt[v] = how many times v appears.", "cnt[v] 에 v 가 몇 번 나오는지 세어 담아요.") },
-      { hi: [13, 21], bubble: t(E, "missing[i] = absent values in {0..i−1}. If i−1 is missing, +1; else keep.", "missing[i] 는 {0..i−1} 중 없는 값의 개수예요.\ni−1 이 없으면 하나 더하고, 있으면 그대로 둬요.") },
-      { hi: [22, 23], bubble: t(E, "Answer per mex i = the bigger of add (missing) and remove (cnt).", "mex 가 i 일 때의 답은 채우기(missing)와 없애기(cnt) 중 큰 쪽이에요.") },
+      { hi: [0, 5], bubble: t(E, "What do we need to output? For every possible mex value i (0 to N), the fewest changes needed.\nFirst read N and the array a.", "무엇을 구해야 하나요?\n가능한 mex 값 i 마다(0부터 N까지) 최소 바꾸기 횟수예요.\n먼저 N 과 배열 a 를 읽어요.") },
+      { hi: [7, 11], bubble: t(E, "For mex to be i, every value in {0..i−1} must be present.\nSo first count how many times each value appears — cnt[v].", "mex 가 i 가 되려면 {0..i−1} 값이 다 있어야 해요.\n그러니 값마다 몇 번 나오는지 먼저 세어 둬요 — cnt[v].") },
+      { hi: [13, 21], bubble: t(E, "How many are missing? Add up how many values in {0..i−1} have cnt 0, into missing[i].\nIf i−1 is absent, add 1; otherwise carry the same count forward.", "몇 개가 없을까요? {0..i−1} 중 cnt 가 0 인 값의 개수를 missing[i] 에 쌓아요.\ni−1 이 없으면 하나 더하고, 있으면 그대로 이어가요.") },
+      { hi: [22, 23], bubble: t(E, "We must add missing[i] values and remove cnt[i] copies of i —\nbut removing an i and writing a missing value there does both in one move.\nSo the answer isn't the sum — it's whichever is bigger.", "채워야 할 missing[i] 개와 없애야 할 cnt[i] 개가 있는데,\ni 를 없애면서 그 자리에 빠진 값을 적으면 한 번에 둘 다 끝나요.\n그래서 더하지 않고, 더 큰 쪽만 답으로 남겨요.") },
     ] };
   }
   return { code: _MEX_WALK_PY, vars: _MEX_VARS, beats: [
-    { hi: [0, 1], bubble: t(E, "Read N and the array a.", "N 과 배열 a 를 읽어요.") },
-    { hi: [3, 6], bubble: t(E, "cnt[v] = how many times value v appears.", "cnt[v] 에 값 v 가 몇 번 나오는지 세어 담아요.") },
-    { hi: [8, 13], bubble: t(E, "missing[i] = how many of {0..i−1} are absent. If i−1 is missing (cnt 0), add 1; else keep the same.", "missing[i] 는 {0..i−1} 중 없는 값의 개수예요.\ni−1 이 없으면(cnt 가 0 이면) 하나 더하고, 있으면 그대로 둬요.") },
-    { hi: [15, 16], bubble: t(E, "Answer for mex i = the bigger of add (missing[i]) and remove (cnt[i]).", "mex 가 i 일 때의 답은 채우기(missing[i])와 없애기(cnt[i]) 중 큰 쪽이에요.") },
+    { hi: [0, 1], bubble: t(E, "What do we need to output? For every possible mex value i (0 to N), the fewest changes needed.\nFirst read N and the array a.", "무엇을 구해야 하나요?\n가능한 mex 값 i 마다(0부터 N까지) 최소 바꾸기 횟수예요.\n먼저 N 과 배열 a 를 읽어요.") },
+    { hi: [3, 6], bubble: t(E, "For mex to be i, every value in {0..i−1} must be present.\nSo first count how many times each value appears — cnt[v].", "mex 가 i 가 되려면 {0..i−1} 값이 다 있어야 해요.\n그러니 값마다 몇 번 나오는지 먼저 세어 둬요 — cnt[v].") },
+    { hi: [8, 13], bubble: t(E, "How many are missing? Add up how many values in {0..i−1} have cnt 0, into missing[i].\nIf i−1 is absent (cnt 0), add 1; otherwise carry the same count forward.", "몇 개가 없을까요? {0..i−1} 중 cnt 가 0 인 값의 개수를 missing[i] 에 쌓아요.\ni−1 이 없으면(cnt 가 0 이면) 하나 더하고, 있으면 그대로 이어가요.") },
+    { hi: [15, 16], bubble: t(E, "We must add missing[i] values and remove cnt[i] copies of i —\nbut removing an i and writing a missing value there does both in one move.\nSo the answer isn't the sum — it's whichever is bigger.", "채워야 할 missing[i] 개와 없애야 할 cnt[i] 개가 있는데,\ni 를 없애면서 그 자리에 빠진 값을 적으면 한 번에 둘 다 끝나요.\n그래서 더하지 않고, 더 큰 쪽만 답으로 남겨요.") },
   ] };
 }
 
