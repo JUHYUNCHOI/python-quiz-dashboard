@@ -80,6 +80,7 @@ python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장
 python3 scripts/check-undefined-symbol.py <id>               # 뜻 안 밝힌 기호 (10⁹ · N² · ⌈⌉ · Σ · O(N))
 python3 scripts/check-stepper-first-step.py <id>             # 코드 스테퍼 **첫 걸음**이 화면 밖 이름을 쓰나
 python3 scripts/check-code-names-in-prose.py <id>            # 코드 보기 전에 코드 이름이 나오나 (deal_price…)
+python3 scripts/check-codewalk-thinking-order.py <id>        # 코드 설명이 파일 순서를 읊나, 생각의 순서로 이끄나
 node scripts/check-emphasis.mjs http://localhost:3000/quest/<id>  # 강조가 **보이나** (다 굵으면 강조가 아니다)
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
 ```
@@ -89,6 +90,14 @@ node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55�
 > 뜻을 밝힌 적 없이 시뮬 표에 박혀 있었다. 그런데 `check-word-difficulty` 는
 > **12개 전부 0건**이었다. 기호는 한글도 아니고 어려운 낱말도 아니라서
 > **어느 그물에도 안 걸렸다.** 선생님이 매번 먼저 찾으신 이유가 이것이다.
+> 🆕 **`check-codewalk-thinking-order.py` 가 2026-09-18 에 생긴 이유:** 선생님이 코드 쪽을 보시고
+> *"코드 설명을 생각의 순서대로 설명해줘"*. 첫 말풍선이 **"필요한 헤더를 적고, N 과 K 를 읽어요"**
+> 였다 — 생각이 0 이다. 학생은 코드를 끝까지 보고도 **왜 그렇게 짰는지**는 모른 채 나간다.
+> ⚠️ 이건 **2026-07-14 에 이미 받은 규칙**이다(`feedback_quest_code_codewalk.md` — "생각 순서").
+>   규칙은 있었는데 **검사 항목이 아니어서** 새로 쓴 말풍선이 매번 파일 순서로 돌아갔다.
+>   실측 walk 61개 중 **46개 · quest 21개**가 그랬다. 그날 전부 0 으로 만들었다.
+>   말풍선은 **지금 마주한 질문**으로 열어라 — "무엇을 내놓아야 하나요?" · "이건 왜 필요할까요?"
+
 > 🆕 **2026-09-18, 선생님이 `buymilk` 한 quest 에서 여섯 번 막히셨다.** 마지막에 잣대를
 > 한 줄로 주셨다 — **"그냥 자연스러운 말. 한국말. 쉽게"**. 그날 나온 원인 아홉 가지와
 > 고친 예는 `memory/feedback_plain_korean.md` 에 있다. **학생용 글을 쓰면 그걸 먼저 읽어라.**
