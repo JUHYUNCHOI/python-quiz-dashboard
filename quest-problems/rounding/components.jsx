@@ -1032,7 +1032,8 @@ export function downloadFullPDF(E, optSections, lang = "py") {
        background: #4f46e5; color: white; }
   h3 { font-size: 14px; margin: 14px 0 6px; color: #4f46e5; }
   .why { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px;
-         margin: 8px 0; font-size: 12px; page-break-inside: avoid; }
+         margin: 8px 0; font-size: 12px; page-break-inside: avoid;
+         white-space: pre-line; word-break: keep-all; }
   .why b { color: #4f46e5; }
   .why ul { margin: 4px 0 0; padding-left: 18px; }
   .why li { margin-bottom: 3px; }

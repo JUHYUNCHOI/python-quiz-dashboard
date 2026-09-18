@@ -201,7 +201,43 @@ def main():
     print("   좋은 첫 걸음: \"무엇을 내놓아야 하나요? → 그러니 이렇게 할 거예요\"")
     print("   나쁜 첫 걸음: \"필요한 헤더를 적고, N 과 K 를 읽어요\"  (생각이 0 이다)")
     print("   근거: memory/feedback_quest_code_codewalk.md (2026-07-14)")
+
+    self_check(want)
     return 1 if n else 0
+
+
+def self_check(want):
+    """**이 검사기가 못 보는 자리**를 스스로 찍는다.
+
+    2026-09-18 에 두 번 당했다 — 처음엔 `beats:` 만 봐서 quest 156개를 놓쳤고,
+    `sections.why` 를 넣고 나서도 **손으로 짠 `CodeSnippet`** 으로 코드를 설명하는
+    quest 셋(cowcollege·daisychains·whereami)은 여전히 못 봤다.
+    거기선 `why` 를 고쳐도 **학생 화면에 안 뜬다** (PDF 에서만 쓰인다).
+
+    **"0건" 을 말하기 전에 이 숫자부터 봐라** — `.claude/WORK.md` 의 규칙이다.
+    """
+    import glob as _g
+    unseen = []
+    for ch in sorted(_g.glob("quest-problems/*/chapters.jsx")):
+        quest = ch.split("/")[1]
+        if want and quest not in want:
+            continue
+        src = io.open(ch, encoding="utf-8", errors="replace").read()
+        # ⚠️ sections 는 `type: "progressive"` 스텝으로 넘겨져 App 이 그린다.
+        #    chapters.jsx 에서 `sections: getXSections(E)` 만 봐도 화면에 뜬다는 뜻이다.
+        #    (처음엔 이걸 안 봐서 mixmilk 처럼 멀쩡한 quest 를 '못 본다' 고 찍었다.)
+        if re.search(r"CodeWalk|ProgressiveCode|Stepper|sections:\s*get\w*Sections", src):
+            continue                      # 이 검사기가 보는 모양이다
+        if not re.search(r"CodeSnippet|CodeBlock|<pre", src):
+            continue                      # 코드를 화면에 안 보여주는 quest
+        unseen.append(quest)
+    print()
+    print(f"🔎 자기진단 — **이 검사기가 못 보는** 코드 설명: quest {len(unseen)}개")
+    if unseen:
+        print("   " + " ".join(unseen))
+        print("   이 quest 들은 chapters.jsx 안에 손으로 짠 코드 조각으로 설명한다.")
+        print("   `sections.why` 를 고쳐도 **화면엔 안 뜬다** (PDF 에서만 쓰인다).")
+        print("   **여기의 0건은 결백이 아니다** — 화면을 직접 열어 읽어라.")
 
 
 if __name__ == "__main__":

@@ -606,7 +606,7 @@ export function downloadPalindromePDF(E, sections, lang = "py") {
   .sub { color: #6b7280; font-size: 12px; margin-bottom: 18px; }
   h2 { font-size: 17px; padding: 8px 12px; border-radius: 8px; margin: 22px 0 10px; background: ${A}; color: white; }
   h3 { font-size: 14px; margin: 14px 0 6px; color: ${A}; }
-  .why { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; margin: 8px 0; font-size: 12px; page-break-inside: avoid; }
+  .why { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; margin: 8px 0; font-size: 12px; page-break-inside: avoid; white-space: pre-line; word-break: keep-all; }
   .why b { color: ${A}; }
   .why ul { margin: 4px 0 0; padding-left: 18px; }
   pre { background: #0f172a; padding: 10px 14px; border-radius: 8px; font-family: "JetBrains Mono", monospace; font-size: 11.5px; overflow-x: auto; white-space: pre; word-break: keep-all; page-break-inside: avoid; margin: 8px 0 12px; line-height: 1.55; }

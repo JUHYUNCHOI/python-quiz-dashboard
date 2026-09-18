@@ -1152,7 +1152,8 @@ export function downloadCheesePDF(E, sections, lang = "py") {
        background: #d97706; color: white; }
   h3 { font-size: 14px; margin: 14px 0 6px; color: #d97706; }
   .why { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px;
-         margin: 8px 0; font-size: 12px; page-break-inside: avoid; }
+         margin: 8px 0; font-size: 12px; page-break-inside: avoid;
+         white-space: pre-line; word-break: keep-all; }
   .why b { color: #d97706; }
   .why ul { margin: 4px 0 0; padding-left: 18px; }
   .why li { margin-bottom: 3px; }
