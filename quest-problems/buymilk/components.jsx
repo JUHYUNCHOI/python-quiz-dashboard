@@ -182,22 +182,35 @@ const _BM_VARS = [
 export function getBuyMilkWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _BM_VARS, beats: [
-      { hi: [7, 13], bubble: t(E, "Read N, Q and the deal prices.\nDeal 1 in the problem is dealPrice[0] in the code.\nSo dealPrice[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "거래 개수·질문 개수·거래 가격을 읽어요.\n문제의 1번 거래가 코드에서는 dealPrice[0] 이에요.") },
-      { hi: [15, 21], bubble: t(E, "Give every block its own real price.\nbuyTheDeal = pay for that deal directly.\nbuyTwoHalves = buy the half-size block twice.\nblockCost[i] keeps the cheaper one.\nAfter this a bigger block is never worse per bucket,\nso we sweep big-to-small with no recursion.", "묶음마다 싼 쪽을 골라 담아요.\n거래를 그대로 사는 값과, 절반짜리를 두 번 사는 값 중에서요.\n이렇게 해 두면 큰 묶음일수록 한 통 값이 싸요.\n그래서 큰 것부터 한 번만 훑으면 돼요 — 재귀가 필요 없어요.") },
-      { hi: [23, 28], bubble: t(E, "Write down how many buckets each block holds.\nStart at 1 and keep doubling: 1, 2, 4, 8, ...\nwant is at most 1,000,000,000, and block 30 holds 1,073,741,824 — already past it.\nSo blocks 0 through 30 are enough, which is 31 slots.\nC++ has no ** operator, so we build the table once.", "묶음마다 몇 통인지 미리 적어둬요. 1 에서 두 배씩 커져요.\n30번이면 벌써 10억을 넘어서, 0번부터 30번까지면 충분해요.") },
-      { hi: [30, 37], bubble: t(E, "One question at a time. The three names below are set up fresh for each question.", "질문이 하나 올 때마다 want 통을 사야 해요.\n아래 세 값은 질문마다 새로 놓아요.") },
-      { hi: [39, 50], bubble: t(E, "Sweep from the biggest useful block down to block 0.\n(A) buyUp — buy enough with this block and stop.\n(B) buyDown — buy less and leave the rest to smaller blocks.", "큰 묶음부터 내려와요. 묶음마다 둘 중 하나예요.\nbuyUp 은 넉넉히 사고 끝내기, buyDown 은 모자라게 사고 남은 통 넘기기.") },
-      { hi: [53, 54], bubble: t(E, "Covering it exactly is a candidate too. Print the cheapest.", "딱 맞게 산 경우도 후보예요.\n제일 싼 값을 출력해요.") },
+      { hi: [7, 13], bubble: t(E, "First, just take in what we are given — nothing is worked out yet.\nDeal 1 in the problem is dealPrice[0] in the code.",
+                                 "먼저 주어진 것을 받아만 둬요. 아직 아무것도 계산하지 않아요.\n문제의 1번 거래가 코드에서는 dealPrice[0] 이에요.") },
+      { hi: [15, 21], bubble: t(E, "Before answering anything: is the price on a pack its real price?\nNo — two half-size packs can be cheaper. So fix that first.\nAfter this a bigger pack is never worse per bucket,\nwhich is why one big-to-small sweep is enough — no recursion.",
+                                 "질문에 답하기 전에 물어요. 묶음에 붙은 값이 진짜 값일까요?\n아니에요. 절반짜리를 두 번 사는 게 쌀 수 있어요. 그것부터 정해요.\n이렇게 해 두면 큰 묶음일수록 한 통 값이 싸요.\n그래서 큰 것부터 한 번만 훑으면 돼요 — 재귀가 필요 없어요.") },
+      { hi: [23, 28], bubble: t(E, "We will need 'how many buckets is this pack?' over and over.\nC++ has no ** operator, so write the sizes down once.\n30 doublings already pass a billion, so 0 through 30 is enough.",
+                                 "'이 묶음이 몇 통이지?' 를 계속 묻게 돼요.\nC++ 에는 ** 가 없으니 미리 한 번 적어 둬요.\n30번만 두 배 하면 벌써 10억을 넘어서, 0번부터 30번까지면 충분해요.") },
+      { hi: [30, 37], bubble: t(E, "A question arrives: buy want buckets.\nTo walk the packs we need three things —\nhow much is still missing, how much we have paid, and the cheapest so far.",
+                                 "질문이 왔어요. want 통을 사야 해요.\n묶음을 훑으려면 세 가지가 필요해요 —\n아직 못 채운 통, 여기까지 낸 값, 지금까지 제일 싼 값.") },
+      { hi: [39, 50], bubble: t(E, "Now the real work. At each pack there are only two things to do —\n(A) buyUp: buy enough with this pack and stop. That is a price to keep.\n(B) buyDown: buy less and hand the rest to smaller packs.",
+                                 "이제 진짜 할 일이에요. 묶음마다 할 수 있는 건 둘뿐이에요 —\nbuyUp 은 넉넉히 사고 끝내기. 여기서 값 하나가 나와요.\nbuyDown 은 모자라게 사고 남은 통을 작은 묶음에 넘기기.") },
+      { hi: [53, 54], bubble: t(E, "Reaching the bottom means we covered it exactly. That is a candidate too.\nPrint whichever is cheapest.",
+                                 "끝까지 내려왔다는 건 딱 맞게 샀다는 뜻이에요. 그것도 후보예요.\n그중 제일 싼 값을 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _BM_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input.", "입력을 빠르게 받아요.") },
-    { hi: [3, 4],   bubble: t(E, "Read N, Q and the deal prices.\nDeal 1 in the problem is deal_price[0] in the code.\nSo deal_price[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "거래 개수·질문 개수·거래 가격을 읽어요.\n문제의 1번 거래가 코드에서는 deal_price[0] 이에요.") },
-    { hi: [6, 11], bubble: t(E, "Give every block its own real price.\nbuy_the_deal = pay for that deal directly.\nbuy_two_halves = buy the half-size block twice.\nblock_cost[i] keeps the cheaper one.\nAfter this a bigger block is never worse per bucket,\nso we sweep big-to-small with no recursion.", "묶음마다 싼 쪽을 골라 담아요.\n거래를 그대로 사는 값과, 절반짜리를 두 번 사는 값 중에서요.\n이렇게 해 두면 큰 묶음일수록 한 통 값이 싸요.\n그래서 큰 것부터 한 번만 훑으면 돼요 — 재귀가 필요 없어요.") },
-    { hi: [13, 18], bubble: t(E, "One question at a time. The three names below are set up fresh for each question.", "질문이 하나 올 때마다 want 통을 사야 해요.\n아래 세 값은 질문마다 새로 놓아요.") },
-    { hi: [20, 31], bubble: t(E, "want is at most 1,000,000,000.\nDoubling 30 times already passes it: 1,073,741,824.\nSo blocks past number 30 never need looking at.\n(A) buy_up — buy enough with this block and stop.\n(B) buy_down — buy less and leave the rest to smaller blocks.", "x 는 많아야 10억이라, 2 를 30번 곱하면 벌써 넘어요.\n그래서 30번보다 큰 묶음은 볼 필요가 없어요.\n묶음마다 둘 중 하나예요.\nbuy_up 은 넉넉히 사고 끝내기, buy_down 은 모자라게 사고 남은 통 넘기기.") },
-    { hi: [33, 34], bubble: t(E, "Covering it exactly is a candidate too; keep the cheapest.", "딱 맞게 산 경우도 후보예요.\n제일 싼 값을 남겨요.") },
-    { hi: [36, 36], bubble: t(E, "Print all answers at once.", "답을 한 번에 출력해요.") },
+    { hi: [0, 1], bubble: t(E, "Up to 10,000 questions arrive, so reading has to be quick.\nThat is all this line is for.",
+                                 "질문이 1만 개까지 올 수 있어요. 읽는 것부터 빨라야 해요.\n이 줄은 그것뿐이에요.") },
+    { hi: [3, 4], bubble: t(E, "First, just take in what we are given — nothing is worked out yet.\nDeal 1 in the problem is deal_price[0] in the code.",
+                                 "먼저 주어진 것을 받아만 둬요. 아직 아무것도 계산하지 않아요.\n문제의 1번 거래가 코드에서는 deal_price[0] 이에요.") },
+    { hi: [6, 11], bubble: t(E, "Before answering anything: is the price on a pack its real price?\nNo — two half-size packs can be cheaper. So fix that first.\nAfter this a bigger pack is never worse per bucket,\nwhich is why one big-to-small sweep is enough — no recursion.",
+                                 "질문에 답하기 전에 물어요. 묶음에 붙은 값이 진짜 값일까요?\n아니에요. 절반짜리를 두 번 사는 게 쌀 수 있어요. 그것부터 정해요.\n이렇게 해 두면 큰 묶음일수록 한 통 값이 싸요.\n그래서 큰 것부터 한 번만 훑으면 돼요 — 재귀가 필요 없어요.") },
+    { hi: [13, 18], bubble: t(E, "A question arrives: buy want buckets.\nTo walk the packs we need three things —\nhow much is still missing, how much we have paid, and the cheapest so far.",
+                                 "질문이 왔어요. want 통을 사야 해요.\n묶음을 훑으려면 세 가지가 필요해요 —\n아직 못 채운 통, 여기까지 낸 값, 지금까지 제일 싼 값.") },
+    { hi: [20, 31], bubble: t(E, "Now the real work. At each pack there are only two things to do —\n(A) buy_up: buy enough with this pack and stop. That is a price to keep.\n(B) buy_down: buy less and hand the rest to smaller packs.\nWhy start at 30? want is at most a billion, and 30 doublings already pass it.",
+                                 "이제 진짜 할 일이에요. 묶음마다 할 수 있는 건 둘뿐이에요 —\nbuy_up 은 넉넉히 사고 끝내기. 여기서 값 하나가 나와요.\nbuy_down 은 모자라게 사고 남은 통을 작은 묶음에 넘기기.\n왜 30부터냐면, x 가 많아야 10억인데 2 를 30번 곱하면 벌써 넘어서예요.") },
+    { hi: [33, 34], bubble: t(E, "Reaching the bottom means we covered it exactly. That is a candidate too.\nKeep whichever is cheapest.",
+                                 "끝까지 내려왔다는 건 딱 맞게 샀다는 뜻이에요. 그것도 후보예요.\n그중 제일 싼 값을 남겨요.") },
+    { hi: [36, 36], bubble: t(E, "Every question is answered. Print them all in one go — one line each.",
+                                 "질문에 다 답했어요. 한 번에 출력해요. 한 줄에 하나씩이에요.") },
   ] };
 }
 
