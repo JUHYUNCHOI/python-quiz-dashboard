@@ -1925,8 +1925,8 @@ export function getAstralWalk(E, lang = "py") {
       vars,
       beats: [
         { hi: [6, 15], bubble: t(E,
-          "Always start with the INPUT.\nT puzzles; each has N (grid size), right & down (the star's move), then the W/G/B grid.",
-          "언제나 시작은 입력부터.\nT개 퍼즐, 각 퍼즐마다 N(격자 크기)·right·down(별 이동)·W/G/B 격자를 읽어요.") },
+          "What are we solving for?\nHow many stars were in the original photo — or -1 if that's impossible.\nSo start with the input: T puzzles.\nEach has N (grid size), right & down (the star's move), then the W/G/B grid.",
+          "무엇을 구해야 하나요?\n원래 사진에 별이 몇 개 있었는지예요. 불가능하면 -1 이에요.\n그러니 입력부터 읽어요. T개 퍼즐이에요.\n퍼즐마다 N(격자 크기)·right·down(별 이동)·W/G/B 격자를 읽어요.") },
         { hi: [17, 18], bubble: t(E,
           "Here's the KEY idea.\nCollect into `possibles` every cell that MUST have had a star in photo 1 — the answer is just how many.\nA set auto-dedupes repeats.",
           "여기가 핵심 아이디어예요.\n'원래(사진1)에 별이 있어야 하는 칸'을 possibles에 모아요 — 답은 그 칸 개수.\nset이라 같은 칸 중복은 알아서 하나로.") },
@@ -1959,8 +1959,8 @@ export function getAstralWalk(E, lang = "py") {
     vars,
     beats: [
       { hi: [0, 7], bubble: t(E,
-        "Always start with the INPUT.\nRead T (how many puzzles); `out` will collect one answer per puzzle.",
-        "언제나 시작은 입력부터.\nT(퍼즐 개수)를 읽고, out에 퍼즐마다 답 하나씩 모을 거예요.") },
+        "What are we solving for?\nHow many stars were in the original photo — or -1 if that's impossible.\nSo start with the input: read T (how many puzzles); `out` will collect one answer per puzzle.",
+        "무엇을 구해야 하나요?\n원래 사진에 별이 몇 개 있었는지예요. 불가능하면 -1 이에요.\n그러니 입력부터 읽어요. T(퍼즐 개수)를 읽고, out 에 퍼즐마다 답을 하나씩 모을 거예요.") },
       { hi: [8, 16], bubble: t(E,
         "Take one puzzle: N (grid size), the star moves right by `right` and down by `down`, then read the N grid rows.",
         "퍼즐 하나를 꺼내요.\nN(격자 크기)과 별 이동(오른쪽 right 칸·아래 down 칸), 그리고 격자 N 줄을 읽어요.") },

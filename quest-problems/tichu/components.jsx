@@ -90,32 +90,32 @@ export function getTichuWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _TICHU_VARS, beats: [
       { hi: [5, 15], bubble: t(E,
-        "Read N and K, read the N-K numbered cards, then sort and dedupe them — duplicates never help a run.",
-        "N 과 K 를 읽고, 수 카드 N-K개를 읽어요. 그다음 정렬 + 중복 제거 — 중복은 run에 소용없어요.") },
+        "What are we looking for? The longest run of consecutive integers\nwe can build using wildcards. Duplicate values never help a run,\nso read N and K, then sort and erase(unique(...)) to dedupe.",
+        "무엇을 찾아야 하나요?\n와일드로 메꿔 만들 수 있는 가장 긴 연속 run 이에요.\n같은 값은 run 에 소용없으니,\nN·K 를 읽고 정렬 후 erase(unique(...)) 로 중복을 없애요.") },
       { hi: [17, 18], bubble: t(E,
-        "win = the biggest window found so far.\nleft = the left end of the sliding window.",
-        "win = 지금까지 찾은 최대 창 크기예요.\nleft 는 창의 왼쪽 끝이에요.") },
+        "We'll slide a window over these values and track the widest one.\nwin = biggest window so far, left = its left end.",
+        "이 값들 위에서 창을 움직이며 가장 넓은 걸 찾을 거예요.\nwin = 지금까지 최대 창, left = 창의 왼쪽 끝이에요.") },
       { hi: [19, 24], bubble: t(E,
-        "Slide right to the right.\nThe inner gap of window [left..right] is (value diff) − (count diff),\nthat is c[right]−c[left] − (right−left).\nIf it exceeds K we cannot fill it, so move left forward.\nKeep the biggest window size.",
-        "right 를 오른쪽으로 밀어요.\n창 [left..right] 의 내부 빈칸은 (값차) − (개수차) 예요.\n즉 c[right]−c[left] − (right−left) 예요.\nK 를 넘으면 못 메꾸니 left 를 오른쪽으로 옮겨요.\n제일 큰 창 크기를 계속 새로 적어요.") },
+        "Slide right to extend the window.\nThe window's holes = (value gap) − (count gap)\n= c[right]−c[left] − (right−left).\nIf K wildcards can't fill it, shrink from the left. Track the biggest window.",
+        "right 를 오른쪽으로 밀며 창을 넓혀요.\n창의 빈칸 수는 (값차) − (개수차)\n= c[right]−c[left] − (right−left) 예요.\nK 개로 못 메우면 left 를 옮겨 창을 줄여요. 제일 큰 창 크기를 기록해요.") },
       { hi: [25, 25], bubble: t(E,
-        "Answer = window + K (fill inner gaps, spend leftover wildcards on the ends), capped at N.",
-        "답 = 창 + K (내부 빈칸 메꾸고, 남는 와일드는 양끝에). 최대 N.") },
+        "Fill the window's holes with K wildcards, then use whatever's left\nto extend the ends. The answer is win + K, capped at N cards.",
+        "창 안의 빈칸을 K 로 메우고 남는 와일드는 양끝에 붙여요.\n답은 win + K, 단 카드 수 N 을 넘을 순 없어요.") },
     ] };
   }
   return { code: FULL_PY, vars: _TICHU_VARS, beats: [
     { hi: [0, 1], bubble: t(E,
-      "Read N and K on the first line.\nOn the second line, read the numbered cards.\nUse set(...) to drop duplicates and sorted(...) to sort.\nDuplicates never help a run.",
-      "첫 줄에서 N 과 K 를 읽어요.\n둘째 줄의 수 카드를 읽어요.\nset(...) 으로 중복을 없애고 sorted(...) 로 정렬해요.\n중복은 run 을 늘리는 데 도움이 안 되거든요.") },
+      "What are we looking for? The longest run of consecutive integers\nwe can build using wildcards. Duplicate values never help a run,\nso read N and K, then sort and dedupe the values.",
+      "무엇을 찾아야 하나요?\n와일드로 메꿔 만들 수 있는 가장 긴 연속 run 이에요.\n같은 값은 run 에 소용없으니, N·K 를 읽고 값을 정렬+중복제거해요.") },
     { hi: [2, 4], bubble: t(E,
-      "m = how many distinct values there are.\nwin = the biggest window so far.\ni = the left end of the window.",
-      "m 은 서로 다른 값 개수예요.\nwin 은 지금까지 최대 창 크기,\nleft 는 창의 왼쪽 끝이에요.") },
+      "We'll slide a window over these values and track the widest one.\nm = distinct value count, win = biggest window so far, left = its left end.",
+      "이 값들 위에서 창을 움직이며 가장 넓은 걸 찾을 거예요.\nm = 서로 다른 값 개수, win = 지금까지 최대 창, left = 창의 왼쪽 끝이에요.") },
     { hi: [5, 8], bubble: t(E,
-      "Slide right to the right.\nThe inner gap of window [left..right] is c[right]−c[left] − (right−left).\nIf k wildcards cannot fill it, move left forward (left += 1).\nTrack the biggest window size right−left+1.",
-      "right 를 오른쪽으로 밀어요.\n창 [left..right] 의 내부 빈칸은 c[right]−c[left] − (right−left) 예요.\n와일드 k개로 못 메꿀 만큼 크면 left 를 오른쪽으로 옮겨요.\n제일 큰 창 크기를 기록해요.") },
+      "Slide right to extend the window.\nThe window's holes = (value gap) − (count gap)\n= c[right]−c[left] − (right−left).\nIf K wildcards can't fill it, shrink from the left. Track the biggest window.",
+      "right 를 오른쪽으로 밀며 창을 넓혀요.\n창의 빈칸 수는 (값차) − (개수차)\n= c[right]−c[left] − (right−left) 예요.\nK 개로 못 메우면 left 를 옮겨 창을 줄여요. 제일 큰 창 크기를 기록해요.") },
     { hi: [9, 9], bubble: t(E,
-      "Answer = window + k.\nFill the inner gaps, then spend leftover wildcards on the ends.\nIt can never exceed the card count n.",
-      "답 = 창 + k 예요.\n내부 빈칸을 메꾸고 남는 와일드로 양끝을 늘려요.\n단, 카드 수 n 을 넘을 순 없어요.") },
+      "Fill the window's holes with K wildcards, then use whatever's left\nto extend the ends. The answer is win + k, capped at n cards.",
+      "창 안의 빈칸을 k 로 메우고 남는 와일드는 양끝에 붙여요.\n답은 win + k, 단 카드 수 n 을 넘을 순 없어요.") },
   ] };
 }
 

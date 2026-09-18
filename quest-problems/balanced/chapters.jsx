@@ -30,18 +30,25 @@ const BAL_WALK_CPP = [
 function getBalancedWalk(E, lang) {
   if (lang === "cpp") {
     return { code: BAL_WALK_CPP, beats: [
-      { hi: [5, 6],   bubble: t(E, "Read T — how many test cases.", "풀 문제가 몇 개인지 T 를 읽어요.") },
-      { hi: [7, 7],   bubble: t(E, "Repeat for each test case.", "문제 하나마다 이걸 반복해요.") },
-      { hi: [8, 9],   bubble: t(E, "Read N (open '(') and M (close ')').  long long — the answer can get big.", "여는 괄호 수 N 과 닫는 괄호 수 M 을 읽어요.\n답이 커질 수 있어서 long long 으로 받아요.") },
-      { hi: [10, 10], bubble: t(E, "Pairs = the smaller side = min(N,M). Each pair = 2 chars → print 2 × min(N,M).", "짝은 적은 쪽만큼만 만들 수 있으니 min(N,M) 개예요.\n한 짝이 글자 2 개라서 2 × min(N,M) 을 출력해요.") },
+      { hi: [5, 6],   bubble: t(E, "What are we printing?\nThe number of matched bracket characters — twice the number of pairs.\nSo first find out how many test cases: read T.",
+                                    "무엇을 출력해야 하나요?\n짝이 맞은 괄호 글자 수예요 — 짝 개수의 두 배예요.\n그러니 문제가 몇 개인지부터 알아야 해요. T 를 읽어요.") },
+      { hi: [7, 7],   bubble: t(E, "Each test case has its own answer. So repeat this T times.",
+                                    "문제마다 답이 따로예요. 그러니 T 번 반복해요.") },
+      { hi: [8, 9],   bubble: t(E, "To count pairs in this case we need the bracket counts.\nRead N (open '(') and M (close ')'). long long — the answer can get big.",
+                                    "이번 문제의 짝을 세려면 괄호 개수가 필요해요.\n여는 괄호 수 N 과 닫는 괄호 수 M 을 읽어요.\n답이 커질 수 있어서 long long 으로 받아요.") },
+      { hi: [10, 10], bubble: t(E, "A pair needs one open and one close.\nSo we can only make as many pairs as the smaller side —\nthe extra brackets on the bigger side match nothing.\nSo pairs = min(N,M). Each pair is 2 chars → print 2 × min(N,M).",
+                                    "짝은 여는 것과 닫는 것이 하나씩 있어야 해요.\n그래서 적은 쪽 수만큼만 짝을 만들 수 있어요 —\n많은 쪽의 남는 괄호는 짝지을 상대가 없어요.\n그래서 짝 수는 min(N,M), 짝 하나는 글자 2 개라 2 × min(N,M) 을 출력해요.") },
     ] };
   }
   return { code: BAL_WALK_PY, beats: [
-    { hi: [0, 1], bubble: t(E, "Fast input (there can be many test cases).", "문제가 많을 수 있어서 입력을 빠르게 받아요.") },
-    { hi: [3, 3], bubble: t(E, "Read T — how many test cases.", "풀 문제가 몇 개인지 T 를 읽어요.") },
-    { hi: [4, 4], bubble: t(E, "Repeat for each test case.", "문제 하나마다 이걸 반복해요.") },
-    { hi: [5, 5], bubble: t(E, "Read N (open '(') and M (close ')').", "여는 괄호 수 N 과 닫는 괄호 수 M 을 읽어요.") },
-    { hi: [6, 6], bubble: t(E, "Pairs = the smaller side = min(N,M). Each pair = 2 chars → print 2 × min(N,M).", "짝은 적은 쪽만큼만 만들 수 있으니 min(N,M) 개예요.\n한 짝이 글자 2 개라서 2 × min(N,M) 을 출력해요.") },
+    { hi: [0, 1], bubble: t(E, "What are we printing?\nThe number of matched bracket characters — twice the number of pairs.\nThere can be many test cases, so read input fast.",
+                                "무엇을 출력해야 하나요?\n짝이 맞은 괄호 글자 수예요 — 짝 개수의 두 배예요.\n문제가 많을 수 있어서 입력을 빠르게 받아요.") },
+    { hi: [3, 3], bubble: t(E, "First find out how many test cases there are: read T.", "먼저 문제가 몇 개인지 알아야 해요. T 를 읽어요.") },
+    { hi: [4, 4], bubble: t(E, "Each test case has its own answer. So repeat this T times.", "문제마다 답이 따로예요. 그러니 T 번 반복해요.") },
+    { hi: [5, 5], bubble: t(E, "To count pairs in this case we need the bracket counts.\nRead N (open '(') and M (close ')').",
+                                "이번 문제의 짝을 세려면 괄호 개수가 필요해요.\n여는 괄호 수 N 과 닫는 괄호 수 M 을 읽어요.") },
+    { hi: [6, 6], bubble: t(E, "A pair needs one open and one close.\nSo we can only make as many pairs as the smaller side —\nthe extra brackets on the bigger side match nothing.\nSo pairs = min(N,M). Each pair is 2 chars → print 2 × min(N,M).",
+                                "짝은 여는 것과 닫는 것이 하나씩 있어야 해요.\n그래서 적은 쪽 수만큼만 짝을 만들 수 있어요 —\n많은 쪽의 남는 괄호는 짝지을 상대가 없어요.\n그래서 짝 수는 min(N,M), 짝 하나는 글자 2 개라 2 × min(N,M) 을 출력해요.") },
   ] };
 }
 

@@ -83,15 +83,15 @@ const _COLL_VARS = [
 export function getCollatzWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _COLL_VARS, beats: [
-      { hi: [0, 11],  bubble: t(E, "Read n and k, then read the n numbers into the list a (long long — 3·x+1 can grow).", "n과 k를 읽고, 숫자 n개를 리스트 a에 읽어와요 (3·x+1로 커질 수 있어 long long).") },
-      { hi: [13, 19], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every number, if even ÷2, if odd ×3+1 — updated in place (auto& x is a reference).", "한 바퀴 전체를 정확히 k번 반복해요. 바퀴마다 숫자가 짝수면 ÷2, 홀수면 ×3+1 로 바꿔요. 참조(auto& x) 라서 그 자리에서 바뀌어요.") },
-      { hi: [21, 25], bubble: t(E, "After all k passes, add up the whole list and print the sum. That's the answer.", "k번을 다 돌린 뒤 리스트 전체를 더해 합을 출력해요. 그게 답이에요.") },
+      { hi: [0, 11],  bubble: t(E, "What are we printing?\nThe sum of the list after doing the flip-or-halve step k times.\nSo first read n, k, and the n numbers into a.\n3x+1 can grow, so a is long long.", "무엇을 출력해야 하나요?\n짝수면 반으로, 홀수면 3배+1 하는 걸 k번 다 돈 뒤의 리스트 합이에요.\n그러니 먼저 n, k, 숫자 n개를 리스트 a 에 읽어요.\n3·x+1 로 커질 수 있어 a 는 long long 으로 받아요.") },
+      { hi: [13, 19], bubble: t(E, "Why exactly k passes, not 'until it reaches 1'?\nBecause the problem asks for exactly k — nothing more.\nEach pass: if even ÷2, if odd ×3+1.\nauto& x is a reference, so it changes right in place.", "왜 딱 k번만 돌까요? '1이 될 때까지'가 아니에요.\n문제가 정확히 k번만 하라고 했으니까요.\n바퀴마다 숫자가 짝수면 ÷2, 홀수면 ×3+1 로 바꿀 뿐이에요.\n참조(auto& x) 라서 그 자리에서 바로 바뀌어요.") },
+      { hi: [21, 25], bubble: t(E, "After all k passes, add up the whole list and print the sum.\nn·k ≤ 10^6, so this plain double loop is fast enough.", "k번을 다 돌린 뒤 리스트 전체를 더해 합을 출력해요.\nn·k ≤ 10⁶ 라서 이렇게 그대로 돌려도 충분히 빨라요.") },
     ] };
   }
   return { code: FULL_PY, vars: _COLL_VARS, beats: [
-    { hi: [0, 1], bubble: t(E, "Read n and k on the first line, then read the list a of n numbers.", "첫 줄에서 n과 k를 읽고, 다음 줄에서 숫자 n개 리스트 a를 읽어요.") },
-    { hi: [2, 7], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every index i, if a[i] is even ÷2, if odd ×3+1 — replaced in place.", "한 바퀴 전체를 정확히 k번 반복해요. 바퀴마다 a[i] 가 짝수면 ÷2, 홀수면 ×3+1 로 그 자리에서 바꿔요.") },
-    { hi: [8, 8], bubble: t(E, "After all k passes, print(sum(a)) — the sum of the final list. Done.", "k번을 다 돌린 뒤 print(sum(a)) 로 마지막 리스트의 합을 출력해요. 끝이에요.") },
+    { hi: [0, 1], bubble: t(E, "What are we printing?\nThe sum of the list after doing the flip-or-halve step k times.\nSo read n and k on the first line,\nthen read the list a of n numbers on the next line.", "무엇을 출력해야 하나요?\n짝수면 반으로, 홀수면 3배+1 하는 걸 k번 다 돈 뒤의 리스트 합이에요.\n그러니 첫 줄에서 n 과 k 를 읽고,\n다음 줄에서 숫자 n 개 리스트 a 를 읽어요.") },
+    { hi: [2, 7], bubble: t(E, "Why exactly k passes, not 'until it reaches 1'?\nBecause the problem asks for exactly k — nothing more.\nEach pass: if a[i] is even ÷2, if odd ×3+1.\nReplaced right in place.", "왜 딱 k번만 돌까요? '1이 될 때까지'가 아니에요.\n문제가 정확히 k번만 하라고 했으니까요.\n바퀴마다 a[i] 가 짝수면 ÷2, 홀수면 ×3+1 로 바꿀 뿐이에요.\n그 자리에서 바로 바꿔요.") },
+    { hi: [8, 8], bubble: t(E, "After all k passes, print(sum(a)) — the sum of the final list.\nn·k ≤ 10^6, so this plain double loop is fast enough.", "k번을 다 돌린 뒤 print(sum(a)) 로 리스트 합을 출력해요.\nn·k ≤ 10⁶ 라서 이렇게 그대로 돌려도 충분히 빨라요.") },
   ] };
 }
 

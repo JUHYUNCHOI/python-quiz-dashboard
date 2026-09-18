@@ -259,20 +259,20 @@ const _SW_VARS = [
 export function getSwapToWinWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _SW_VARS, beats: [
-      { hi: [5, 16],  bubble: t(E, "Each test: read N, M, the target string, and the N strings s.", "문제마다 N 과 M, 목표 글자 줄 target, 그리고 글자 줄 N 개 s 를 읽어요.") },
-      { hi: [18, 22], bubble: t(E, "Fix s[0] one position at a time, left to right. If it already matches target, skip.", "s[0] 를 왼쪽부터 한 칸씩 target 에 맞춰요. 이미 맞으면 넘어감.") },
-      { hi: [24, 36], bubble: t(E, "Case 1: if target[k] sits further right in s[0], one swap fixes it (1 op).", "Case 1: target[k] 가 s[0] 뒤쪽에 있으면 → 한 번 스왑으로 해결 (1 op).") },
-      { hi: [38, 57], bubble: t(E, "Case 2: not in s[0] — borrow it from another string s_y (at most 2 ops: line it up, then swap the column).", "Case 2: s[0] 에 없으면 다른 문자열 s_y 에서 빌려옴 (최대 2 op: 자리 맞추고 열 스왑).") },
-      { hi: [60, 63], bubble: t(E, "Print how many operations, then the operations.", "먼저 바꾼 횟수를 출력하고,\n그다음 바꾼 기록을 하나씩 출력해요.") },
+      { hi: [5, 16],  bubble: t(E, "What must we hand back? The swaps that turn s_1 into target —\nup to 2M of them are allowed.\nFor each test, read N, M, target, and the N strings.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요. 최대 2M 번까지 써도 돼요.\n테스트마다 N, M, target, 문자열 N 개를 읽어요.") },
+      { hi: [18, 22], bubble: t(E, "How do we build the moves? Fix s_1 left to right, one column\nat a time — once a column matches we never touch it again.\nAlready equal? Nothing to do.", "바꾸기를 어떻게 만들까요? s_1 을 왼쪽부터 한 칸씩 맞춰요.\n한 번 맞춘 칸은 다시 안 건드려요. 이미 같으면 할 일이 없어요.") },
+      { hi: [24, 36], bubble: t(E, "If not, look for the cheapest fix first.\nIf the letter we need already sits further right in s_1 itself,\none swap inside s_1 is enough (1 op).", "다르다면 가장 싼 방법부터 찾아요.\n필요한 글자가 s_1 뒤쪽에 이미 있으면,\n같은 줄 안에서 한 번만 바꾸면 끝이에요 (1 op).") },
+      { hi: [38, 57], bubble: t(E, "If s_1 has it nowhere, we must borrow it.\nFind the letter in some string s_y — if needed, line it up\nto column k there first (1 op), then swap that column with s_1 (1 op).\nAt most 2 ops total.", "s_1 어디에도 없으면 빌려야 해요.\n다른 줄 s_y 에서 그 글자를 찾아, 필요하면 먼저\nk 번째 칸으로 옮기고(1 op), 그다음 s_1 과 그 칸을 맞바꿔요(1 op).\n합쳐서 최대 2 op.") },
+      { hi: [60, 63], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _SW_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
-    { hi: [3, 9],   bubble: t(E, "Each test: read N, M, the target string, the N strings s. ops = list of moves.", "문제마다 N 과 M, 목표 글자 줄 target, 글자 줄 N 개 s 가 와요.\nops 에는 바꾼 기록을 모아요.") },
-    { hi: [10, 13], bubble: t(E, "Fix s[0] one position at a time, left to right. If it already matches, skip.", "s[0] 를 왼쪽부터 한 칸씩 target 에 맞춰요. 이미 맞으면 넘어감.") },
-    { hi: [15, 25], bubble: t(E, "Case 1: if target[k] sits further right in s[0], one swap fixes it (1 op).", "Case 1: target[k] 가 s[0] 뒤쪽에 있으면 → 한 번 스왑으로 해결 (1 op).") },
-    { hi: [27, 45], bubble: t(E, "Case 2: not in s[0] — borrow it from another string s_y (at most 2 ops: line it up, then swap the column).", "Case 2: s[0] 에 없으면 다른 문자열 s_y 에서 빌려옴 (최대 2 op: 자리 맞추고 열 스왑).") },
-    { hi: [47, 48], bubble: t(E, "Print how many operations, then the operations.", "먼저 바꾼 횟수를 출력하고,\n그다음 바꾼 기록을 하나씩 출력해요.") },
+    { hi: [0, 1],   bubble: t(E, "What must we hand back? The swaps that turn s_1 into target —\nup to 2M of them are allowed.\nStrings can be long, so read input fast.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요. 최대 2M 번까지 써도 돼요.\n문자열이 길 수 있으니 입력을 빠르게 받아요.") },
+    { hi: [3, 9],   bubble: t(E, "For each test, read N, M, target, and the N strings.\nops will collect every swap we make, in order.", "테스트마다 N, M, target, 문자열 N 개를 읽어요.\nops 에 우리가 쓴 바꾸기를 순서대로 모아 둘 거예요.") },
+    { hi: [10, 13], bubble: t(E, "How do we build the moves? Fix s_1 left to right, one column\nat a time — once a column matches we never touch it again.\nAlready equal? Nothing to do.", "바꾸기를 어떻게 만들까요? s_1 을 왼쪽부터 한 칸씩 맞춰요.\n한 번 맞춘 칸은 다시 안 건드려요. 이미 같으면 할 일이 없어요.") },
+    { hi: [15, 25], bubble: t(E, "If not, look for the cheapest fix first.\nIf the letter we need already sits further right in s_1 itself,\none swap inside s_1 is enough (1 op).", "다르다면 가장 싼 방법부터 찾아요.\n필요한 글자가 s_1 뒤쪽에 이미 있으면,\n같은 줄 안에서 한 번만 바꾸면 끝이에요 (1 op).") },
+    { hi: [27, 45], bubble: t(E, "If s_1 has it nowhere, we must borrow it.\nFind the letter in some string s_y — if needed, line it up\nto column k there first (1 op), then swap that column with s_1 (1 op).\nAt most 2 ops total.", "s_1 어디에도 없으면 빌려야 해요.\n다른 줄 s_y 에서 그 글자를 찾아, 필요하면 먼저\nk 번째 칸으로 옮기고(1 op), 그다음 s_1 과 그 칸을 맞바꿔요(1 op).\n합쳐서 최대 2 op.") },
+    { hi: [47, 48], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.") },
   ] };
 }
 

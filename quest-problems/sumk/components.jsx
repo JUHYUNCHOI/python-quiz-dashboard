@@ -176,21 +176,21 @@ export function getSumkWalk(E, lang = "py") {
     const code = [...s[0].cpp, ...s[1].cpp, ...s[2].cpp, ...s[3].cpp];
     // s0=15 (0-14), s1=2 (15-16), s2=14 (17-30), s3=3 (31-33)
     return { code, vars: _SK_VARS, beats: [
-      { hi: [0, 7],   bubble: t(E, "Read n numbers and the exponent K. Set MOD = 998244353 — the whole answer is taken modulo this.", "숫자 n개와 지수 K를 읽어요. MOD = 998244353 — 답 전체를 이 값으로 나눈 나머지로 다뤄요.") },
-      { hi: [8, 14],  bubble: t(E, "Precompute the binomial coefficients C(t,j) with Pascal's triangle — we'll need them to expand (old sum + a)^t.", "이항계수 C(t,j)를 파스칼의 삼각형으로 미리 만들어요 — (옛합+a)^t 를 펼칠 때 써요.") },
-      { hi: [15, 16], bubble: t(E, "P[t] = the sum of (subset sum)^t over all subsets so far. With zero elements only the empty subset exists → P[0] = 1.", "P[t] 는 지금까지 만든 부분집합들의 (합)^t 를 더한 값이에요. 원소가 0개면 공집합뿐이라 P[0] = 1 로 시작해요.") },
-      { hi: [17, 30], bubble: t(E, "Add element a. The skip side keeps old P[t]; the take side is (old sum + a)^t — split it and add every piece C(t,j)·a^(t-j)·P[j] for j = 0..t. Add both sides → new P[t].", "원소 a를 넣어요. 빼는 쪽은 옛 P[t] 그대로, 넣는 쪽은 (옛합+a)^t — 갈라서 j = 0..t 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요. 두 쪽을 합치면 새 P[t] 가 돼요.") },
-      { hi: [31, 33], bubble: t(E, "After all N elements, P[K] is the answer. For K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N개를 다 넣으면 P[K] 가 답이에요. K 가 1 이상이면 공집합(0^K=0)은 저절로 빠져요.") },
+      { hi: [0, 7],   bubble: t(E, "What must we hand back? The sum of (subset sum)^K over every subset,\nmod 998244353. There are 2ᴺ subsets — too many to list — so we grow\nthe answer one number at a time instead. Fix MOD, then read N and K.", "무엇을 내놓아야 하나요?\n부분집합마다 (합)^K 를 더해 998244353 로 나눈 값이에요.\n2ᴺ 개라 나열은 못 하니, 숫자를 하나씩 담으며 답을 키워요.\n먼저 MOD 를 정하고 N, K 를 읽어요.") },
+      { hi: [8, 14],  bubble: t(E, "We'll need C(t,j) later to expand with the binomial theorem.\nBuild it now with Pascal's triangle —\neach cell is the two cells above it, added.", "이따가 이항정리로 펼칠 때 C(t,j) 가 필요해요.\n미리 파스칼의 삼각형으로 만들어 둬요.\n한 칸은 바로 위 두 칸을 더한 값이에요.") },
+      { hi: [15, 16], bubble: t(E, "Define P[t] = the sum of (subset sum)^t over every subset made\nso far — the answer we want in the end is P[K].\nWith zero elements only the empty subset exists (sum 0, 0⁰=1),\nso start with P[0] = 1.", "P[t] 를 지금까지 담은 부분집합들의 (합)^t 합으로 정해요.\n우리가 구할 답은 결국 P[K] 예요.\n원소가 0개면 공집합(합 0)뿐이고 0⁰=1 이라, P[0] = 1 로 시작해요.") },
+      { hi: [17, 30], bubble: t(E, "Add one element a at a time. Subsets split two ways —\nwithout a (old P[t] stays), with a (sum becomes old sum + a).\nExpand (old sum + a)^t via the binomial theorem: add every\npiece C(t,j)·a^(t-j)·P[j] for j = 0..t (pw caches a's powers).", "원소 a 를 하나씩 담아요. 부분집합은 두 갈래로 갈려요.\na 를 안 담은 쪽은 옛 P[t] 그대로, 담은 쪽은 합이 옛합+a 예요.\n(옛합+a)^t 를 이항정리로 펼쳐 j=0..t 조각을 다 더해요.\npw 로 a 의 거듭제곱을 미리 구해두고, 두 쪽을 합치면 새 P[t].") },
+      { hi: [31, 33], bubble: t(E, "After all N elements are in, P[K] is the answer.\nFor K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N 개를 다 담으면 P[K] 가 답이에요.\nK 가 1 이상이면 공집합(0^K=0)은 저절로 빠져요.") },
     ] };
   }
   const code = [...s[0].py, ...s[1].py, ...s[2].py, ...s[3].py];
   // s0=9 (0-8), s1=3 (9-11), s2=12 (12-23), s3=1 (24)
   return { code, vars: _SK_VARS, beats: [
-    { hi: [0, 2],   bubble: t(E, "Read n numbers and the exponent K. Set MOD = 998244353 — the whole answer is taken modulo this.", "숫자 n개와 지수 K를 읽어요. MOD = 998244353 — 답 전체를 이 값으로 나눈 나머지로 다뤄요.") },
-    { hi: [3, 8],   bubble: t(E, "Precompute the binomial coefficients C(t,j) with Pascal's triangle — we'll need them to expand (old sum + a)^t.", "이항계수 C(t,j)를 파스칼의 삼각형으로 미리 만들어요 — (옛합+a)^t 를 펼칠 때 써요.") },
-    { hi: [9, 11],  bubble: t(E, "P[t] = the sum of (subset sum)^t over all subsets so far. With zero elements only the empty subset exists → P[0] = 1.", "P[t] 는 지금까지 만든 부분집합들의 (합)^t 를 더한 값이에요. 원소가 0개면 공집합뿐이라 P[0] = 1 로 시작해요.") },
-    { hi: [12, 23], bubble: t(E, "Add element a. The skip side keeps old P[t]; the take side is (old sum + a)^t — split it and add every piece C(t,j)·a^(t-j)·P[j] for j = 0..t. Add both sides → new P[t].", "원소 a를 넣어요. 빼는 쪽은 옛 P[t] 그대로, 넣는 쪽은 (옛합+a)^t — 갈라서 j = 0..t 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요. 두 쪽을 합치면 새 P[t] 가 돼요.") },
-    { hi: [24, 24], bubble: t(E, "After all N elements, P[K] is the answer. For K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N개를 다 넣으면 P[K] 가 답이에요. K 가 1 이상이면 공집합(0^K=0)은 저절로 빠져요.") },
+    { hi: [0, 2],   bubble: t(E, "What must we hand back? The sum of (subset sum)^K over every subset,\nmod 998244353. There are 2ᴺ subsets — too many to list — so we grow\nthe answer one number at a time instead. Fix MOD, then read n, K, the array.", "무엇을 내놓아야 하나요?\n부분집합마다 (합)^K 를 더해 998244353 로 나눈 값이에요.\n2ᴺ 개라 나열은 못 하니, 숫자를 하나씩 담으며 답을 키워요.\n먼저 MOD 를 정하고 n, K, 배열을 읽어요.") },
+    { hi: [3, 8],   bubble: t(E, "We'll need C(t,j) later to expand with the binomial theorem.\nBuild it now with Pascal's triangle —\neach cell is the two cells above it, added.", "이따가 이항정리로 펼칠 때 C(t,j) 가 필요해요.\n미리 파스칼의 삼각형으로 만들어 둬요.\n한 칸은 바로 위 두 칸을 더한 값이에요.") },
+    { hi: [9, 11],  bubble: t(E, "Define P[t] = the sum of (subset sum)^t over every subset made\nso far — the answer we want in the end is P[K].\nWith zero elements only the empty subset exists (sum 0, 0⁰=1),\nso start with P[0] = 1.", "P[t] 를 지금까지 담은 부분집합들의 (합)^t 합으로 정해요.\n우리가 구할 답은 결국 P[K] 예요.\n원소가 0개면 공집합(합 0)뿐이고 0⁰=1 이라, P[0] = 1 로 시작해요.") },
+    { hi: [12, 23], bubble: t(E, "Add one element a at a time. Subsets split two ways —\nwithout a (old P[t] stays), with a (sum becomes old sum + a).\nExpand (old sum + a)^t via the binomial theorem: add every\npiece C(t,j)·a^(t-j)·P[j] for j = 0..t (pw caches a's powers).", "원소 a 를 하나씩 담아요. 부분집합은 두 갈래로 갈려요.\na 를 안 담은 쪽은 옛 P[t] 그대로, 담은 쪽은 합이 옛합+a 예요.\n(옛합+a)^t 를 이항정리로 펼쳐 j=0..t 조각을 다 더해요.\npw 로 a 의 거듭제곱을 미리 구해두고, 두 쪽을 합치면 새 P[t].") },
+    { hi: [24, 24], bubble: t(E, "After all n elements are in, P[K] is the answer.\nFor K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "n 개를 다 담으면 P[K] 가 답이에요.\nK 가 1 이상이면 공집합(0^K=0)은 저절로 빠져요.") },
   ] };
 }
 
