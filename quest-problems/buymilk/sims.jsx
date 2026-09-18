@@ -184,6 +184,45 @@ export function NormalizeSim({ E }) {
   );
 }
 
+/* 띠 그림 — 길이 X 짜리 띠를 묶음 타일로 덮는다.
+   `covered` 는 앞 묶음들로 이미 덮은 칸, `tiles`×`size` 는 이번에 놓는 타일.
+   **끝을 넘어가는 칸(덤)** 을 점선으로 보여 주는 게 이 그림의 전부다 —
+   "x 통 이상" 이라는 말이 눈에 보이게 된다. */
+function Strip({ E, X, covered, tiles, size, color }) {
+  const laid = tiles * size;
+  const total = covered + laid;
+  const cells = Math.max(X, total);
+  const W = cells > 12 ? 17 : 23;
+  const box = [];
+  for (let k = 0; k < cells; k++) {
+    const isNeed = k < X;                    // 꼭 채워야 하는 칸
+    const isOld = k < covered;               // 앞 묶음이 채운 칸
+    const isNew = k >= covered && k < total; // 이번 타일이 채운 칸
+    const startsTile = isNew && (k - covered) % size === 0;
+    box.push(
+      <span key={k} style={{
+        width: W, height: W, borderRadius: 4, flexShrink: 0,
+        background: isOld ? "#cbd5e1" : isNew ? color : "#fff",
+        border: isNeed ? "1px solid #94a3b8" : "1px dashed #cbd5e1",
+        marginLeft: startsTile && k !== 0 ? 3 : 0,
+        opacity: isNeed ? 1 : 0.55,
+      }} />);
+  }
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "nowrap", overflowX: "auto" }}>
+      {box}
+      {total > X && (
+        <span style={{ marginLeft: 6, fontSize: 10.5, color: "#64748b", whiteSpace: "nowrap" }}>
+          {t(E, `${total - X} extra`, `${total - X}통 덤`)}
+        </span>)}
+      {total < X && (
+        <span style={{ marginLeft: 6, fontSize: 10.5, color: "#64748b", whiteSpace: "nowrap" }}>
+          {t(E, `${X - total} to go`, `${X - total}통 남음`)}
+        </span>)}
+    </div>
+  );
+}
+
 /* ═══ ② 그리디 — 큰 블록부터 올림/내림 두 갈래만 ═══ */
 export function GreedySim({ E, x = 5 }) {
   const X = x;
@@ -255,6 +294,37 @@ export function GreedySim({ E, x = 5 }) {
       </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "done" ? "aha" : "go"}>{say}</Say>
+
+      {/* ⚠️ 2026-09-19 선생님: *"이것이 이해하는데 좋은 방식은 아닌것 같아.
+          그림이 있어야하나? 애들한테 설명할때는 결국 그림으로 설명할것 같아서"*
+          표는 **결과를 적는 장부**라 왜 그렇게 되는지는 안 보인다.
+          이 문제의 핵심은 **"x 통 이상"** — 덮고 남아도 된다는 것이고,
+          그건 그림이면 한눈에 보인다. 길이 x 짜리 띠를 묶음 타일로 덮는다.
+          **넉넉히 = 타일이 끝을 넘어간다 · 모자라게 = 타일이 모자라 다음으로 넘긴다.**
+          표는 아래에 그대로 두되, 그림이 먼저 오게 한다. */}
+      {cur && (
+        <div style={{ maxWidth: 470, margin: "0 auto 12px", display: "grid", gap: 9,
+          padding: "11px 13px", borderRadius: 11, background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#475569" }}>
+            🧱 {t(E, `Cover ${X} buckets — ${cur.size}-pack`, `${X}통을 덮어요 — ${cur.size}통짜리`)}
+          </div>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7c2d12", marginBottom: 3 }}>
+              {t(E, "buy enough", "넉넉히 사면")} · {cur.need}{t(E, "", "개")} · <b style={mono}>{cur.cand}</b>
+            </div>
+            <Strip E={E} X={X} covered={X - cur.rem} tiles={cur.need} size={cur.size} color="#fdba74" />
+          </div>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#3730a3", marginBottom: 3 }}>
+              {t(E, "buy fewer", "모자라게 사면")} · {cur.take}{t(E, "", "개")} · <b style={mono}>{cur.costBefore + cur.take * C[cur.i]}</b>
+            </div>
+            <Strip E={E} X={X} covered={X - cur.rem} tiles={cur.take} size={cur.size} color="#a5b4fc" />
+          </div>
+          <div style={{ fontSize: 10.5, color: "#64748b" }}>
+            {t(E, "grey = bought by bigger packs · dashed = past what we need",
+                  "회색 = 앞의 큰 묶음이 산 것 · 점선 = 필요한 통을 넘어선 칸")}
+          </div>
+        </div>)}
 
       <div style={{ maxWidth: 470, margin: "0 auto", display: "grid", gap: 5 }}>
         <div style={{ display: "grid", gridTemplateColumns: "76px 52px 1fr 92px", gap: 10,
