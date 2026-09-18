@@ -32,6 +32,32 @@
 | 2차 | 코드 스테퍼, 조각은 나뉘었는데 글만 파일 순서인 quest 20개 | `완료` `4435b29a` |
 | 3차 | **한 덩어리 quest 87개** — 글만 먼저 (담당자 9명 병렬, 카탈로그 순서로 10개씩) | `진행` |
 | 4차 | 코드를 진짜 단계로 쪼개기 — **재저작**. 비동결 15개로 방법 확립 후 넓힌다 | `대기` |
+| — | 화면 확인 — 1·2차를 **아무도 브라우저로 안 봤다** | `완료` (ux 3명 · 결함 셋 찾음) |
+
+### 3차 배포 뒤에도 남은 것 (PM 판정 — 배포를 막을 사유는 아니다)
+
+- **whereami — PDF 만 고쳐지고 화면은 그대로다.** `chapters.jsx` 의 `CodeSnippet` 은
+  손코딩이라 `getWhereAmISections`(방금 고친 `why`)를 안 쓴다. 화면에 닿으려면
+  `chapters.jsx` 를 `WhereAmIProgressiveCode` 쪽으로 옮기거나 같은 글을 손코딩 쪽에도
+  넣어야 한다. **지금은 "고쳤다" 고 말할 수 없다.** `대기`
+- **exchange — C++ 트랙에 다리가 없다.** 브루트는 계획을 주는데 실제 C++ 은 완전히 다른
+  O(N) 알고리즘이고, 그 통찰이 `cppOnly` 문단 한 개(`components.jsx:134`)로만 나온다.
+  왜 다른 알고리즘이 필요한지 설명이 빠졌다. `대기`
+- **다섯 quest 섹션 쪼개기 — drought · mcc22birthday · mcc20citytour · exchange · swapity.**
+  화면 글이 "부분별로 읽어봐요" 라고 약속하는데 **섹션이 하나뿐**이다.
+  pedagogy 4차 구조 작업으로 처리. `대기`
+- **검사기가 못 보는 quest 10개** — cowcollege · daisychains · fans · fences · hps ·
+  mooin2 · reach · tricks · whereami · word. chapters.jsx 안에 손으로 짠 코드 조각으로
+  설명해서 `sections.why` 를 고쳐도 화면엔 안 뜬다. 검사기 자기진단이 매번 찍는다. `대기`
+
+### 오늘 같은 실패를 **세 번** 했다 — 한 자리만 고치고 "같은 자리가 더 있나" 를 안 물었다
+
+1. 검사기가 `beats:` 만 봐서 quest **156개**를 못 봤다 (`sections.why` 가 있었다).
+2. 줄바꿈 수정(2026-09-17)이 **네 자리 중 한 자리만** 고쳐져 있었다.
+3. 화면은 고쳤는데 **PDF 쪽 CSS 169개**는 그대로였다 — ux 가 잡았다.
+
+처방 둘을 넣었다 — `check-linebreak-rendered.py`(같은 모양을 기계로 찾는다) 와
+`check-codewalk-thinking-order.py` 의 **자기진단**("0건" 뒤에 못 보는 자리를 찍는다).
 | — | 화면 확인 — 1·2차를 **아무도 브라우저로 안 봤다** | `진행` |
 
 **3차·4차 완료 기준 (PM 판정):** 검사기 0건 + pedagogy 통과 +
