@@ -110,6 +110,11 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
     const lineH = lineRow ? lineRow.offsetHeight : 27;     // 실측 줄 높이(px), 못 재면 대략값
     const margin = lineH * 3;                              // 위로 대략 3줄 여유
     box.scrollTop = Math.max(0, bub.offsetTop - margin);
+    // ⚠️ 2026-09-18: 학생이 코드 왼쪽이 잘려 보인다고 했다 — 줄 번호도, 말풍선 첫 낱말도.
+    //    `import sys` 가 `mport sys` 로. 세로만 맞추고 **가로는 그대로 뒀기** 때문이다.
+    //    긴 줄을 보려고 오른쪽으로 민 상태에서 다음 조각으로 넘어가면 그대로 밀린 채 남는다.
+    //    조각이 바뀌면 줄 머리부터 보여야 한다.
+    box.scrollLeft = 0;
   }, [safeIdx, lo]);
 
   return (

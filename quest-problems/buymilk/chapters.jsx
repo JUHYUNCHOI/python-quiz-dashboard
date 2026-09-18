@@ -193,8 +193,8 @@ export function makeBuyMilkCh1(E) {
         "Sometimes buying MORE buckets than you need is cheaper. Why?",
         "필요한 것보다 더 많이 사는 게 쌀 때도 있어요. 왜 그럴까요?"),
       question: t(E,
-        "7 buckets needed. One 8-pack costs 40. Buying exactly 7 costs 45. How can buying MORE be cheaper?",
-        "7통이 필요해요. 8통짜리는 40 이에요. 딱 7통만 맞춰 사면 45 예요.\n더 많이 사는데 어떻게 더 쌀 수 있을까요?"),
+        "7 buckets needed. Exactly 7 = 4-pack + 2-pack + 1-pack = 20 + 15 + 10 = 45.\nBut one 8-pack costs 40. How can buying MORE be cheaper?",
+        "7통이 필요해요. 딱 7통을 맞추면 4통짜리 + 2통짜리 + 1통짜리,\n20 + 15 + 10 = 45 예요. 그런데 8통짜리 하나는 40 이에요.\n더 많이 사는데 어떻게 더 쌀 수 있을까요?"),
       options: [
         t(E, "A bigger pack is cheaper per bucket, so even with leftovers it can cost less",
             "큰 묶음이 한 통 가격이 더 싸서, 통이 남아도 값은 더 쌀 수 있어요"),
