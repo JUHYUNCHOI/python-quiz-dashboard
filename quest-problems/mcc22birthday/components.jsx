@@ -527,16 +527,36 @@ const FULL_CPP = [
 export function getMcc22BirthdaySections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "1️⃣ Size the grid ahead of time", "1️⃣ 크기부터 계산해요"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 24), cpp: FULL_CPP.slice(0, 33),
       why: [
-        t(E, "Why can't we build the grid? After N letters it has 2^N cookies, and N can be up to 10000 — far too many. So we answer each queried number on its own instead.",
-            "왜 격자를 실제로 만들면 안 될까요?\nN 글자 뒤 격자는 2^N 개인데 N 이 최대 10000 이라 절대 만들 수 없어요.\n그래서 물어본 번호 하나하나를 따로 풀어요."),
-        t(E, "So how do we know where a number sits? rows[i] / cols[i] hold the grid size after each step — A and B double the width, C doubles the height. Past CAP = 2×10^9 we just leave it at CAP, since a friend number is at most 10^9 anyway.",
-            "그럼 그 번호가 어디 있는지 어떻게 알까요?\nrows[i] / cols[i] 에 각 단계 뒤의 격자 크기를 저장해요.\nA·B 는 가로를, C 는 세로를 두 배로 늘려요.\n크기가 CAP = 2×10^9 을 넘으면 그냥 CAP 으로 둬요.\n친구 번호가 최대 10^9 이라 그보다 크기만 하면 어느 쪽이 큰지는 똑같이 나오거든요."),
-        t(E, "Then how do we find its shape? Turn the number into (row, col), then walk the scroll BACKWARD — each step needs to know: was I in the ORIGINAL half or the COPIED half? A copy made by B/C is flipped, so a copied step toggles the flip parity.",
-            "그럼 그 번호의 모양은 어떻게 구할까요? 번호를 (행, 열) 로 바꾼 뒤 두루마리를 거꾸로 따라가요.\n매 단계마다 원본 쪽이었는지 복사본 쪽이었는지 알아야 하거든요.\nB·C 로 만든 복사본은 뒤집혀 있으니, 복사본 쪽이면 뒤집힘 상태를 반대로 바꿔요."),
+        t(E, "Why not build the grid? After N letters it holds 2^N cookies, and N can be up to 10000 — far too many to build. So we handle each queried number on its own, using only its final position.",
+            "왜 격자를 안 만들까요?\nN 글자 뒤 격자는 2^N 개인데 N 이 최대 10000 이라 만들 수조차 없어요.\n그래서 물어본 번호마다 최종 위치만 갖고 따로 풀어요."),
+        t(E, "To find that position we first need the grid's final width. rows[i] / cols[i] store the size after each step — A/B double the width, C doubles the height. Past CAP = 2×10^9 we just leave it at CAP, since a friend number never passes 10^9 anyway.",
+            "그 위치를 알려면 먼저 격자의 최종 가로 길이를 알아야 해요.\nrows[i], cols[i] 에 각 단계 뒤 크기를 저장해요.\nA·B 는 가로를, C 는 세로를 두 배로 늘려요.\n크기가 CAP = 2×10^9 를 넘으면 그냥 CAP 으로 둬요.\n친구 번호는 최대 10^9 라 어차피 그보다 작거든요."),
+      ],
+      cppOnly: [
+        t(E, "Sizes can reach ~2×10^9, past int's limit — so rows/cols/width use long long.",
+            "자리 크기가 최대 약 2×10^9 까지 가서 int 범위를 넘어요.\nrows·cols·width 는 long long 으로 둬요."),
+      ],
+    },
+    {
+      label: t(E, "2️⃣ Walk the number backward", "2️⃣ 번호를 거꾸로 따라가요"),
+      color: "#0891b2",
+      py: FULL_PY.slice(24, 39), cpp: FULL_CPP.slice(33, 53),
+      why: [
+        t(E, "So how do we find a number's shape? Turn it into (row, col) using the final width, then walk the scroll BACKWARD, one letter at a time.",
+            "그럼 번호의 모양은 어떻게 구할까요?\n최종 가로 값으로 번호를 (행, 열) 로 바꾼 뒤,\n두루마리를 한 글자씩 거꾸로 따라가요."),
+        t(E, "Each backward step asks: was this cell in the ORIGINAL half or the COPIED half? A copy made by B/C is flipped, so landing in a copied half flips the parity — otherwise nothing changes.",
+            "거꾸로 가는 한 걸음마다 물어요 — 이 칸이 원본 쪽이었나, 복사본 쪽이었나?\nB·C 로 만든 복사본은 뒤집혀 있어서, 복사본 쪽이면 뒤집힘 상태를 반대로 바꾸고 원본 쪽이면 그대로 둬요."),
+      ],
+    },
+    {
+      label: t(E, "3️⃣ Decide the shape and print", "3️⃣ 모양 정해 출력해요"),
+      color: "#16a34a",
+      py: FULL_PY.slice(39), cpp: FULL_CPP.slice(53),
+      why: [
         t(E, "So two on/off flips (left↔right, up↔down) give exactly four shapes: (no,no)=p, (H,no)=q, (no,V)=b, (H,V)=d. That's the whole p/q/b/d family.",
             "그래서 좌우·위아래 두 뒤집힘(켜짐/꺼짐)이 정확히 네 모양을 만들어요.\n(안,안)=p, (좌우,안)=q, (안,위아래)=b, (좌우,위아래)=d —\n이게 p/q/b/d 한 묶음이에요."),
       ],
@@ -545,8 +565,6 @@ export function getMcc22BirthdaySections(E) {
             "shape[(flip_h, flip_v)] 로 두 스위치에서 바로 모양을 읽어요.\nif/elif 를 길게 쌓지 않아도 돼요."),
       ],
       cppOnly: [
-        t(E, "Use long long for indices and sizes: capped sizes reach ~2×10^9, past the int limit.",
-            "자리 번호와 크기는 long long 으로 둬요. 가장 큰 값이 약 2×10^9 라 int 범위를 넘어요."),
         t(E, "The nested if/else picks the shape from flipV/flipH — the same four cases the Python dict holds.",
             "중첩 if/else 로 flipV·flipH 에서 모양을 골라요.\nPython 의 dict 가 담은 네 경우와 똑같아요."),
       ],

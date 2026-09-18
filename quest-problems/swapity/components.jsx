@@ -325,28 +325,12 @@ const FULL_CPP = [
 export function getSwapitySections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "1️⃣ Take in the values", "1️⃣ 값 받기"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 8), cpp: FULL_CPP.slice(0, 16),
       why: [
-        t(E,
-          "What do we need? The final order after K rounds.\n"
-          + "K can be up to 10^9, so replaying the round K times\n"
-          + "is far too slow.\n"
-          + "But one round always moves each position the same\n"
-          + "way, so every position sits in a cycle that returns\n"
-          + "to itself after some fixed number of rounds.\n"
-          + "So we find each cycle, then jump ahead by\n"
-          + "K mod (cycle length) — one shift, not K of them.",
-          "무엇을 내놔야 하나요? 라운드를 K 번 반복한 뒤의\n"
-          + "최종 줄이에요.\n"
-          + "K 가 10억까지 가서 라운드를 K 번 그대로 되풀이하면\n"
-          + "너무 느려요.\n"
-          + "그런데 한 라운드가 자리를 옮기는 방식은 항상 똑같아서,\n"
-          + "각 자리는 몇 라운드마다 원래 자리로 돌아오는\n"
-          + "사이클 안에 있어요.\n"
-          + "그래서 사이클을 찾아 K 를 사이클 길이로 나눈\n"
-          + "나머지만큼만 옮기면, 한 번에 답이 나와요."),
+        t(E, "What do we need to hand back? The final order after K rounds. So first read N, K, and the two reversal ranges A1–A2, B1–B2.",
+            "무엇을 내놔야 하나요? 라운드를 K 번 반복한 뒤의 최종 줄이에요.\n그러니 먼저 N, K 와 두 뒤집기 범위 A1–A2, B1–B2 를 읽어요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
@@ -357,6 +341,33 @@ export function getSwapitySections(E) {
             "필요한 헤더만 넣어요 (<iostream>, <vector>, ...). 그래야 코드가 뭘 쓰는지 한눈에 보여요."),
         t(E, "Use long long when sums or products may exceed ~2×10^9.",
             "더하거나 곱한 값이 약 2×10^9 를 넘을 수 있으면 long long 을 써요."),
+      ],
+    },
+    {
+      label: t(E, "2️⃣ Build one round's shuffle", "2️⃣ 한 라운드의 자리바꿈 만들기"),
+      color: "#0891b2",
+      py: FULL_PY.slice(8, 15), cpp: FULL_CPP.slice(16, 24),
+      why: [
+        t(E, "First we need to know how one round moves things. Apply the two reversals to the identity order [0..N-1] — the result IS one round's move rule, perm.",
+            "먼저 한 라운드가 자리를 어떻게 옮기는지 알아야 해요.\n항등 순서 [0..N-1] 에 두 번의 뒤집기를 그대로 적용하면,\n그 결과가 바로 한 라운드의 이동 규칙 perm 이에요."),
+      ],
+    },
+    {
+      label: t(E, "3️⃣ Find cycles, shift by K mod L", "3️⃣ 사이클 찾기 + K mod 시프트"),
+      color: "#16a34a",
+      py: FULL_PY.slice(15, 34), cpp: FULL_CPP.slice(24, 45),
+      why: [
+        t(E, "K can be up to 10^9, so replaying the round K times is far too slow. But one round always moves each position the same way, so every position sits in a cycle that returns to itself after some fixed number of rounds. So we find each cycle, then jump ahead by K mod (cycle length) — one shift, not K of them.",
+            "K 가 10억까지 가서 라운드를 K 번 그대로 되풀이하면 너무 느려요.\n그런데 한 라운드가 자리를 옮기는 방식은 항상 똑같아서,\n각 자리는 몇 라운드마다 원래 자리로 돌아오는 사이클 안에 있어요.\n그래서 사이클을 찾아 K 를 사이클 길이로 나눈\n나머지만큼만 옮기면, 한 번에 답이 나와요."),
+      ],
+    },
+    {
+      label: t(E, "4️⃣ Print the result", "4️⃣ 출력"),
+      color: "#7c3aed",
+      py: FULL_PY.slice(34), cpp: FULL_CPP.slice(45),
+      why: [
+        t(E, "Every position now knows which cow ends up there. Just print them out in order, one per line.",
+            "이제 모든 자리에 어떤 소가 오는지 다 정해졌어요.\n순서대로 한 줄에 하나씩 출력해요."),
       ],
     },
   ];

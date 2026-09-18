@@ -21,7 +21,7 @@ const A = "#2563eb";
    Full solution — brute simulation of M minutes
    Real Milk Exchange (USACO 2024 Feb Bronze #2).
    ────────────────────────────────────────────────────────────── */
-const EX_FULL_PY = [
+const FULL_PY = [
   "import sys",
   "",
   "data = sys.stdin.read().split()",
@@ -51,7 +51,7 @@ const EX_FULL_PY = [
   "print(sum(cur))",
 ];
 
-const EX_FULL_CPP = [
+const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
   "#include <string>",
@@ -116,24 +116,43 @@ const EX_FULL_CPP = [
 export function getExchangeSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "1️⃣ Take in the values", "1️⃣ 값 받기"),
       color: A,
-      py: EX_FULL_PY, cpp: EX_FULL_CPP,
+      py: FULL_PY.slice(0, 15), cpp: FULL_CPP.slice(0, 22),
       why: [
-        t(E, "What do we need before we can follow the minutes? N, M, the direction string, and each cow's capacity. So read those first — each cow starts full.",
+        t(E, "What do we need before we can follow the milk? N, M, the direction string, and each cow's capacity. So read those first — each cow starts full.",
             "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 각 소의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 가득 찬 채로 시작해요."),
-        t(E, "Why hand off milk every single minute? Because that's exactly what the problem does — each cow with milk passes 1L to its neighbor, then anything over cap overflows.",
-            "왜 매분 우유를 넘겨줄까요? 문제가 그렇게 하라고 했으니까요.\n우유가 있는 소가 이웃에게 1L 를 넘기고, 그다음 용량을 넘은 만큼은 버려요."),
-        t(E, "So after M minutes, print what's left. Walking minute by minute like this is O(N·M) — the faster way is in the C++ note below.",
-            "그래서 M분 뒤 남은 우유의 총량을 출력해요.\n한 분씩 그대로 따라가니 O(N·M) 이에요 — 더 빠르게 가는 방법은 아래 C++ 설명에 있어요."),
       ],
       pyOnly: [
         t(E, "sys.stdin.read().split() grabs every token at once — fast for big inputs.",
             "sys.stdin.read().split() 으로 입력을 한 번에 다 읽어요. 입력이 크면 이 편이 빨라요."),
       ],
+    },
+    {
+      label: t(E, "2️⃣ Python: replay each minute / C++: find the leaking chains",
+                  "2️⃣ 파이썬: 1분씩 따라가요 / C++: 새는 줄기부터 찾아요"),
+      color: "#0891b2",
+      py: FULL_PY.slice(15, 25), cpp: FULL_CPP.slice(22, 35),
+      why: [
+        t(E, "Why hand off milk every single minute? Because that's exactly what the problem does — each cow with milk passes 1L to its neighbor, then anything over cap overflows. Doing this for all M minutes is O(N·M), and M can be 10^9 — for C++, that's far too slow, so it needs a different plan.",
+            "왜 매분 우유를 넘겨줄까요? 문제가 그렇게 하라고 했으니까요.\n우유가 있는 소가 이웃에게 1L 를 넘기고, 그다음 용량을 넘은 만큼은 버려요.\n이걸 M분 내내 반복하면 O(N·M) 인데 M 이 최대 10^9 라\nC++ 에서는 이대로 두면 너무 느려서 다른 방법이 필요해요."),
+      ],
       cppOnly: [
-        t(E, "The C++ version skips the minute-by-minute simulation: it sums all milk, then for each 'R…RL…L' boundary subtracts min(chainSum, M) — the milk that chain leaks into the endless trade. O(N) overall, so N=2·10^5 / M=10^9 runs instantly.",
-            "C++ 쪽은 1분씩 따라 하지 않아요.\n우유를 전부 더한 뒤 'R…RL…L' 경계마다 그 줄기가 끝없는 교환으로 흘려보내는 양 min(chainSum, M) 을 빼요.\n전체가 O(N) 이라 N=2·10^5, M=10^9 도 바로 끝나요."),
+        t(E, "Where does milk actually get lost forever? Only at a boundary 'R…RL…L' — an 'R' cow next to an 'L' cow. Those two keep trading milk back and forth forever, and each minute 1L of it leaks into that endless trade. So mark every such boundary first.",
+            "우유가 영영 사라지는 곳은 딱 한 군데예요 — 'R…RL…L' 경계, 즉 'R' 소 바로 옆에 'L' 소가 있는 자리예요.\n이 둘은 우유를 끝없이 주고받으며 매분 1L 씩 그 교환 속으로 흘려보내요.\n그러니 그런 경계를 먼저 전부 찾아 표시해요."),
+      ],
+    },
+    {
+      label: t(E, "3️⃣ Add it up", "3️⃣ 합산 출력"),
+      color: "#16a34a",
+      py: FULL_PY.slice(25), cpp: FULL_CPP.slice(35),
+      why: [
+        t(E, "So after M minutes, print what's left.",
+            "그래서 M분 뒤 남은 우유의 총량을 출력해요."),
+      ],
+      cppOnly: [
+        t(E, "Start from the total milk, then for each boundary walk its 'R' run (or 'L' run) and subtract min(chainSum, M) — the milk that chain leaks in M minutes, capped at what it actually has. O(N) overall, so N=2·10^5 / M=10^9 runs instantly.",
+            "전체 우유량에서 시작해서, 경계마다 그 'R' 줄기(또는 'L' 줄기)를 따라가며\nmin(chainSum, M) 을 빼요 — M분 동안 그 줄기가 흘려보내는 양인데,\n가진 양을 넘을 순 없으니 M 과 비교해 작은 쪽을 써요.\n전체가 O(N) 이라 N=2·10^5, M=10^9 도 바로 끝나요."),
         t(E, "Sums (and M) reach N·10^9, so cap/ans/M use long long; (j - 1 + N) % N keeps the chain walk index positive on a circle.",
             "합계와 M 이 N·10^9 까지 가서 cap, ans, M 은 long long 으로 둬요.\n동그란 줄기를 따라갈 때는 (j - 1 + N) % N 으로 자리가 음수가 되지 않게 해요."),
       ],
