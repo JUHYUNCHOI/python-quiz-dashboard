@@ -79,6 +79,8 @@ python3 scripts/check-word-difficulty.py <id>                # 어려운 말 · 
 python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장 여러 개
 python3 scripts/check-undefined-symbol.py <id>               # 뜻 안 밝힌 기호 (10⁹ · N² · ⌈⌉ · Σ · O(N))
 python3 scripts/check-stepper-first-step.py <id>             # 코드 스테퍼 **첫 걸음**이 화면 밖 이름을 쓰나
+python3 scripts/check-code-names-in-prose.py <id>            # 코드 보기 전에 코드 이름이 나오나 (deal_price…)
+node scripts/check-emphasis.mjs http://localhost:3000/quest/<id>  # 강조가 **보이나** (다 굵으면 강조가 아니다)
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
 ```
 
@@ -87,6 +89,14 @@ node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55�
 > 뜻을 밝힌 적 없이 시뮬 표에 박혀 있었다. 그런데 `check-word-difficulty` 는
 > **12개 전부 0건**이었다. 기호는 한글도 아니고 어려운 낱말도 아니라서
 > **어느 그물에도 안 걸렸다.** 선생님이 매번 먼저 찾으신 이유가 이것이다.
+> 🆕 **2026-09-18, 선생님이 `buymilk` 한 quest 에서 여섯 번 막히셨다.** 마지막에 잣대를
+> 한 줄로 주셨다 — **"그냥 자연스러운 말. 한국말. 쉽게"**. 그날 나온 원인 아홉 가지와
+> 고친 예는 `memory/feedback_plain_korean.md` 에 있다. **학생용 글을 쓰면 그걸 먼저 읽어라.**
+> 기계가 잡는 건 둘뿐이다 — 코드 이름이 먼저 나오나(`check-code-names-in-prose.py`),
+> 강조가 보이나(`check-emphasis.mjs`). 나머지 일곱은 **화면을 열어 차갑게 읽어야** 잡힌다.
+> ⚠️ 제일 큰 것: **지어낸 말로 설명하지 마라. 그 화면의 숫자로 말해라.**
+>   `적힌 값`·`진짜 값` 같은 말을 만들면 그 말부터 설명해야 한다.
+
 > 🆕 **`check-stepper-first-step.py` 가 2026-09-17 에 생긴 이유:** MCC 마무리로
 > `mcc21simplemath` 에 브루트 코드 쪽을 새로 만들었는데, **첫 걸음이 `for x in a:` 로 시작했다.**
 > `a` 도 `P` 도 `MOD` 도 그 화면에 없었다 — `ProgressiveCodeStepper` 는 **그 걸음의 코드만**
