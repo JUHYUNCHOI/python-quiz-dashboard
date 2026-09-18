@@ -914,10 +914,10 @@ export function getCowPhotosWalk(E, lang = "py", mode = "fast") {
       code: cx(E, CP_FAST_CPP),
       vars,
       beats: [
-        { hi: [4, 9], bubble: t(E, "Input first — read T, then per case read N.", "입력부터 — T 읽고, 케이스마다 N.") },
-        { hi: [10, 19], bubble: t(E, "The key idea: a freq array indexed by the height itself (heights are 1..N). While reading input, tally freq[h] and track the peak M — all in one pass, O(N).  ⚠️ Re-counting each value by scanning h instead would be O(N²) → TLE.", "키 값을 그대로 자리 번호로 쓰는 freq 배열이 핵심이에요. 키가 1 부터 N 까지니까요.\n입력을 받으면서 freq[h] 를 올리고 가장 큰 키 M 도 같이 갱신해요.\n한 번만 훑으면 끝이라 O(N) 이에요.\n⚠️ 값마다 h 를 다시 훑어 세면 O(N²) 이라 시간 초과예요.") },
-        { hi: [20, 25], bubble: t(E, "Count rings: for each value below M, freq[v] ≥ 2 is an instant lookup (no re-scan).", "ring 을 셀 때는 M 보다 작은 값마다 freq[v] 가 2 이상인지만 바로 봐요.\n다시 훑지 않아요.") },
-        { hi: [26, 26], bubble: t(E, "Answer = 2·rings + 1. Print it.", "답 = 2·rings + 1. 출력!") },
+        { hi: [4, 9], bubble: t(E, "What do we have to hand back? How many cows are in the photo.\nIt turns out we only need to know how often each height appears.\nSo start by taking in T, and N for each case.", "무엇을 내놓아야 하나요? 사진에 있는 소가 몇 마리인지예요.\n알고 보면 키가 몇 번씩 나오는지만 알면 돼요.\n그러니 먼저 T 와, 케이스마다 N 을 받아요.") },
+        { hi: [10, 19], bubble: t(E, "How do we count how often a height appears?\nHeights run from 1 to N, so the height itself can be the slot number.\nTally freq[h] while reading, and keep the tallest M as we go — one pass.\n⚠️ Re-scanning h for every value instead would be O(N²) → too slow.", "키가 몇 번 나오는지 어떻게 셀까요?\n키가 1 부터 N 까지라, 키 값을 그대로 자리 번호로 쓸 수 있어요.\n받으면서 freq[h] 를 올리고, 제일 큰 키 M 도 같이 기억해요. 한 번만 훑어요.\n⚠️ 값마다 h 를 다시 훑어 세면 N 이 클 때 너무 느려요.") },
+        { hi: [20, 25], bubble: t(E, "Now count the rings. A height makes a ring when two cows share it,\nand the tallest one stands alone in the middle — so skip M.\nfreq answers each question straight away, with no re-scan.", "이제 고리를 세요. 같은 키인 소가 둘 있으면 고리 하나예요.\n제일 큰 키는 가운데 혼자 서 있으니 M 은 빼요.\nfreq 가 바로 답해 주니 다시 훑지 않아요.") },
+        { hi: [26, 26], bubble: t(E, "One cow in the middle, two cows per ring.\nSo the answer is 2 × rings + 1.", "가운데 한 마리, 고리마다 두 마리예요.\n그래서 답은 2 × 고리 + 1 이에요.") },
       ],
     };
   }
@@ -925,11 +925,11 @@ export function getCowPhotosWalk(E, lang = "py", mode = "fast") {
     code: cx(E, CP_FAST_PY),
     vars,
     beats: [
-      { hi: [0, 0], bubble: t(E, "We'll use Counter — it counts frequencies in one line.", "Counter 를 씀 — 빈도를 한 줄로 세요.") },
-      { hi: [2, 6], bubble: t(E, "Input first — read T, then per case read N and the heights, and take the peak M = max(h).", "입력부터 — T 읽고, 케이스마다 N 과 키를 읽고, peak M = max(h).") },
-      { hi: [8, 8], bubble: t(E, "The key line: Counter(h) builds the WHOLE frequency table in one pass → O(N).  ⚠️ If you wrote h.count(v) instead, it re-scans all of h every time → O(N²) → TLE on big N.", "Counter(h) 한 줄이면 몇 번 나오는지 표가 한 번에 만들어져요. O(N) 이에요.\n⚠️ 여기서 h.count(v) 를 쓰면 매번 h 전체를 훑어 O(N²) 가 돼요.\nN 이 크면 시간 초과예요.") },
-      { hi: [9, 12], bubble: t(E, "Count rings: v is a ring key if v < M and cnt[v] ≥ 2 — an instant O(1) lookup.", "ring 을 셀 때는 v 가 M 보다 작고 cnt[v] 가 2 이상이면 ring 키예요.\n바로 꺼내 보니 O(1) 이에요.") },
-      { hi: [14, 14], bubble: t(E, "Answer = 1 peak + 2 per ring = 2·rings + 1. Print it.", "답 = peak 1 마리 + ring 마다 2 마리 = 2·rings + 1. 출력!") },
+      { hi: [0, 0], bubble: t(E, "What do we have to hand back? How many cows are in the photo.\nIt turns out we only need to know how often each height appears.\nCounter does exactly that, in one line.", "무엇을 내놓아야 하나요? 사진에 있는 소가 몇 마리인지예요.\n알고 보면 키가 몇 번씩 나오는지만 알면 돼요.\nCounter 가 딱 그걸 한 줄로 해 줘요.") },
+      { hi: [2, 6], bubble: t(E, "First just take in what we are given: T, then N and the heights per case.\nThe tallest cow stands alone in the middle, so pull M = max(h) out now.", "먼저 주어진 것을 받아만 둬요. T 와, 케이스마다 N 과 키 목록이에요.\n제일 큰 소는 가운데 혼자 서 있으니, M = max(h) 를 지금 따로 빼 둬요.") },
+      { hi: [8, 8], bubble: t(E, "We are about to ask 'how many cows have this height?' again and again.\nCounter(h) answers all of them at once, from a single pass.\n⚠️ Ask with h.count(v) instead and it re-scans all of h every time — too slow when N is big.", "이제 '이 키인 소가 몇 마리지?' 를 계속 묻게 돼요.\nCounter(h) 한 줄이면 그 답이 한 번에 다 만들어져요.\n⚠️ h.count(v) 로 물으면 그때마다 h 전체를 다시 훑어서, N 이 크면 너무 느려요.") },
+      { hi: [9, 12], bubble: t(E, "Now count the rings. A height makes a ring when two cows share it,\nand the tallest one stands alone in the middle — so skip M.\ncnt answers each question straight away.", "이제 고리를 세요. 같은 키인 소가 둘 있으면 고리 하나예요.\n제일 큰 키는 가운데 혼자 서 있으니 M 은 빼요.\ncnt 가 바로 답해 줘요.") },
+      { hi: [14, 14], bubble: t(E, "One cow in the middle, two cows per ring.\nSo the answer is 2 × rings + 1.", "가운데 한 마리, 고리마다 두 마리예요.\n그래서 답은 2 × 고리 + 1 이에요.") },
     ],
   };
 }

@@ -222,7 +222,8 @@ const VIEW_CPP = [
 export function getPhotoshoot25Walk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: VIEW_CPP, vars: _PS_VARS, beats: [
-      { hi: [0, 3],   bubble: t(E, "Include the tools we need.", "필요한 도구를 include 해요.") },
+      { hi: [0, 3],   bubble: t(E, "What do we need after each update? The best photo score at that moment.\nAdding every photo sum from scratch each time would be slow.\nSo we keep the sums in a table and fix only what changed. First, the tools we need.",
+                                   "업데이트마다 무엇을 구해야 하나요?\n그 순간의 최고 사진 점수예요.\n매번 처음부터 다 더하면 느리니, 표에 저장해두고 바뀐 만큼만 고쳐요.\n먼저 필요한 도구를 include 해요.") },
       { hi: [5, 9],   bubble: t(E, "Start main → read N, K, and the number of updates Q.", "main 을 시작하고 N, K, 업데이트 수 Q 를 읽어요.") },
       { hi: [11, 11], bubble: t(E, "beauty = each cell's value (all 0 at first). Exactly N×N — no spare slot, because we already shifted r and c to start at 0.", "beauty = 각 칸의 값이에요 (처음엔 다 0).\n크기는 딱 N×N 이에요.\nr, c 를 0 부터로 이미 옮겼으니 여분 칸이 필요 없어요.") },
       { hi: [13, 13], bubble: t(E, "W = how many photos fit in a row (N−K+1).", "W = 한 줄에 들어가는 사진 수 (N−K+1).") },
@@ -237,7 +238,8 @@ export function getPhotoshoot25Walk(E, lang = "py") {
     ] };
   }
   return { code: VIEW_PY, vars: _PS_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input.", "입력을 빠르게 읽어요.") },
+    { hi: [0, 1],   bubble: t(E, "What do we need after each update? The best photo score at that moment.\nAdding every photo sum from scratch each time would be slow, so we keep a table and fix only what changed.\nUp to 30,000 updates can arrive, so reading has to be fast.",
+                                 "업데이트마다 무엇을 구해야 하나요?\n그 순간의 최고 사진 점수예요.\n매번 처음부터 다 더하면 느리니, 표에 저장해두고 바뀐 만큼만 고쳐요.\n업데이트가 최대 3만 번이라 읽기부터 빨라야 해요.") },
     { hi: [3, 4],   bubble: t(E, "Read N, K, and the number of updates Q.", "N, K, 업데이트 수 Q 를 읽어요.") },
     { hi: [6, 6],   bubble: t(E, "beauty = each cell's value (all 0 at first). Exactly N×N — no spare slot, because we already shifted r and c to start at 0.", "beauty = 각 칸의 값이에요 (처음엔 다 0).\n크기는 딱 N×N 이에요.\nr, c 를 0 부터로 이미 옮겼으니 여분 칸이 필요 없어요.") },
     { hi: [8, 8],   bubble: t(E, "W = how many photos fit in a row (N−K+1).", "W = 한 줄에 들어가는 사진 수 (N−K+1).") },

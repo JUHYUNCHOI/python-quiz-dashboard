@@ -78,19 +78,29 @@ const _M4_VARS = [
 export function getMooin4Walk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _M4_VARS, beats: [
-      { hi: [4, 9],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 를 읽고, 테스트마다 N 과 화면 문자열 S 를 읽어요.") },
-      { hi: [10, 12], bubble: t(E, "Walk RIGHT→LEFT.\nflips = are the O's typed after this spot odd or even?", "오른쪽에서 왼쪽으로 훑어요.\nflips 는 이 자리보다 뒤에서 친 O 의 홀짝이에요.") },
-      { hi: [13, 22], bubble: t(E, "For each character: if flips is odd, M and O are swapped.\nRecord what was really typed.\nIf that key is O, flip the parity.", "글자마다 봐요. flips 가 홀수면 M 과 O 가 뒤바뀐 거예요.\n실제로 친 글자를 기록해요.\n그 키가 O 면 홀짝을 뒤집어요.") },
-      { hi: [23, 26], bubble: t(E, "Always YES. If k==1, also print the actual typed string.", "답은 항상 YES 예요. k==1 이면 실제 친 문자열도 출력해요.") },
+      { hi: [4, 9],   bubble: t(E, "What do we need to know? What key was really pressed at each spot.\nThe very last character is never flipped — nothing comes after it — so it equals S's last letter exactly.\nSo we can work backward. First read T, k, N, S.",
+                                   "무엇을 알아야 하나요?\n각 자리마다 실제로 어떤 키를 눌렀는지예요.\n마지막 글자는 뒤에 아무것도 없어서 절대 안 뒤집혀요 — S 의 마지막 글자 그대로예요.\n그래서 뒤에서부터 거슬러 올라가요. 먼저 T·k·N·S 를 읽어요.") },
+      { hi: [10, 12], bubble: t(E, "Each later O flips the current key once.\nTwo flips cancel out, so only the parity matters — that's flips.",
+                                   "글자 하나가 뒤집히는 건 그 뒤에서 친 O 키 하나마다 한 번씩이에요.\n두 번 뒤집으면 제자리로 돌아오니까 홀짝만 알면 돼요 — 그게 flips 예요.") },
+      { hi: [13, 22], bubble: t(E, "What should this spot actually press?\nIf flips is odd, the screen letter is flipped, so the real key is the opposite.\nRecord what was really typed, and bump flips if that key was O.",
+                                   "이 자리는 무엇을 쳐야 할까요?\nflips 가 홀수면 화면 글자가 뒤집혀 보인 거라, 원래 친 키는 반대예요.\n실제로 친 글자를 기록하고, 그 키가 O 였다면 flips 를 하나 늘려요.") },
+      { hi: [23, 26], bubble: t(E, "So it's always possible — the answer is always YES.\nIf k==1, also print the actual typed string we found.",
+                                   "그래서 항상 만들 수 있어요 — 답은 늘 YES 예요.\nk==1 이면 지금까지 알아낸 실제 문자열도 같이 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _M4_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input.", "입력을 빠르게 읽어요.") },
-    { hi: [3, 7],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 를 읽고, 테스트마다 N 과 화면 문자열 S 를 읽어요.") },
-    { hi: [8, 10],  bubble: t(E, "Walk RIGHT→LEFT.\nflips = are the O's typed after this spot odd or even?", "오른쪽에서 왼쪽으로 훑어요.\nflips 는 이 자리보다 뒤에서 친 O 의 홀짝이에요.") },
-    { hi: [11, 17], bubble: t(E, "For each character: if flips is odd, M and O are swapped.\nRecord what was really typed.\nIf that key is O, flip the parity.", "글자마다 봐요. flips 가 홀수면 M 과 O 가 뒤바뀐 거예요.\n실제로 친 글자를 기록해요.\n그 키가 O 면 홀짝을 뒤집어요.") },
-    { hi: [18, 20], bubble: t(E, "Always YES. If k==1, also output the actual typed string.", "답은 항상 YES 예요. k==1 이면 실제 친 문자열도 출력해요.") },
-    { hi: [21, 21], bubble: t(E, "Print all results at once.", "결과를 한 번에 출력해요.") },
+    { hi: [0, 1],   bubble: t(E, "What do we need to know? What key was really pressed at each spot.\nUp to 10^4 tests can arrive, so reading has to be fast.",
+                                 "무엇을 알아야 하나요?\n각 자리마다 실제로 어떤 키를 눌렀는지예요.\n테스트가 최대 만 개까지 오니 읽기부터 빨라야 해요.") },
+    { hi: [3, 7],   bubble: t(E, "First read T, k, N, S.\nThe very last character is never flipped — nothing comes after it — so it equals S's last letter exactly.",
+                                 "먼저 T·k·N·S 를 읽어요.\n마지막 글자는 뒤에 아무것도 없어서 절대 안 뒤집혀요 — S 의 마지막 글자 그대로예요.") },
+    { hi: [8, 10],  bubble: t(E, "So we work backward, right to left.\nEach later O flips the current key once; two flips cancel out, so only the parity matters — that's flips.",
+                                 "그래서 뒤에서부터 거슬러 올라가요.\n글자 하나가 뒤집히는 건 뒤에서 친 O 키 하나마다 한 번씩이라, 두 번 뒤집히면 제자리로 돌아오니까 홀짝만 알면 돼요 — 그게 flips 예요.") },
+    { hi: [11, 17], bubble: t(E, "What should this spot actually press?\nIf flips is odd, the screen letter is flipped, so the real key is the opposite.\nRecord what was really typed, and bump flips if that key was O.",
+                                 "이 자리는 무엇을 쳐야 할까요?\nflips 가 홀수면 화면 글자가 뒤집혀 보인 거라, 원래 친 키는 반대예요.\n실제로 친 글자를 기록하고, 그 키가 O 였다면 flips 를 하나 늘려요.") },
+    { hi: [18, 20], bubble: t(E, "So it's always possible — the answer is always YES.\nIf k==1, also keep the actual typed string found so far.",
+                                 "그래서 항상 만들 수 있어요 — 답은 늘 YES 예요.\nk==1 이면 지금까지 알아낸 실제 문자열도 같이 남겨요.") },
+    { hi: [21, 21], bubble: t(E, "Every test is solved. Print all results at once.",
+                                 "테스트를 다 풀었어요. 결과를 한 번에 출력해요.") },
   ] };
 }
 

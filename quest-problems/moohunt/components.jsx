@@ -108,21 +108,21 @@ const _MH_VARS = [
 export function getMooHuntWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _MH_VARS, beats: [
-      { hi: [4, 6],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
-      { hi: [8, 15],  bubble: t(E, "Read the K moves into three lists.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.", "무브 K 개를 목록 셋에 담아요.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
-      { hi: [17, 21], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 를 두고, 만들 수 있는 보드를 전부 해봐요 (2^N 개).") },
-      { hi: [22, 31], bubble: t(E, "Score one board.\nBit 1 means M, bit 0 means O.\nA move scores when x is M and y, z are O.", "보드 하나를 채점해요.\n비트 1 은 M, 0 은 O 예요.\n무브의 x 가 M 이고 y·z 가 O 면 1 점이에요.") },
-      { hi: [33, 38], bubble: t(E, "Keep the best score, and count how many boards reach it.", "최고 점수를 새로 고치고, 그 점수가 되는 보드가 몇 개인지 세요.") },
-      { hi: [41, 41], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수를 출력해요.") },
+      { hi: [4, 6],   bubble: t(E, "What do we need? The best score among all boards, and how many boards reach it.\nWithout a smarter idea yet, we'll have to build every board and score it.\nFirst read N (cells) and K (moves).", "무엇을 구해야 하나요?\n가능한 보드 중 최고 점수와, 그 점수를 내는 보드 개수예요.\n더 똑똑한 방법이 아직 없으니 보드를 전부 만들어 점수를 매겨야 해요.\n먼저 N(칸 수)과 K(무브 수)를 읽어요.") },
+      { hi: [8, 15],  bubble: t(E, "Scoring one move needs all three cells x, y, z.\nSo read all K moves first.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.", "무브 하나를 채점하려면 x·y·z 셋을 다 알아야 해요.\n그래서 먼저 K 개를 다 읽어 둬요.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
+      { hi: [17, 21], bubble: t(E, "No smarter idea in sight, so try EVERY possible board (2^N of them).\nEach of N cells is M or O, so one bitmask spells out one whole board.\nSet up best and ways.", "더 똑똑한 방법이 안 보이니, 만들 수 있는 보드를 전부 해봐요 (2^N 개).\nN 개 칸마다 M 아니면 O 니까, 비트마스크 하나가 보드 하나예요.\nbest, ways 도 준비해요.") },
+      { hi: [22, 31], bubble: t(E, "How do we score one board?\nFor each move, check by bit whether x is M and y, z are O — add 1 point if so.", "보드 하나를 어떻게 채점할까요?\n무브마다 x 가 M 이고 y·z 가 O 인지 비트로 확인해서, 맞으면 1점씩 더해요.") },
+      { hi: [33, 38], bubble: t(E, "This board has a score. Compare it with the best so far.\nHigher → new best. Same → one more board reaches it.", "이 보드의 점수가 나왔어요. 지금까지 최고 점수와 견줘요.\n더 높으면 새 최고로 바꾸고, 같으면 보드 수를 하나 늘려요.") },
+      { hi: [41, 41], bubble: t(E, "Every board has been checked. Print the best score and how many boards reach it.", "보드를 다 봤어요. 최고 점수와 그 보드 수를 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _MH_VARS, beats: [
-    { hi: [3, 3],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
-    { hi: [5, 9],   bubble: t(E, "Read the K moves into a list.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.", "무브 K 개를 목록에 담아요.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
-    { hi: [11, 15], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 를 두고, 만들 수 있는 보드를 전부 해봐요 (2^N 개).") },
-    { hi: [16, 19], bubble: t(E, "Score one board.\nBit 1 means M, bit 0 means O.\nA move scores when x is M and y, z are O.", "보드 하나를 채점해요.\n비트 1 은 M, 0 은 O 예요.\n무브의 x 가 M 이고 y·z 가 O 면 1 점이에요.") },
-    { hi: [21, 25], bubble: t(E, "Keep the best score, and count how many boards reach it.", "최고 점수를 새로 고치고, 그 점수가 되는 보드가 몇 개인지 세요.") },
-    { hi: [27, 27], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수를 출력해요.") },
+    { hi: [3, 3],   bubble: t(E, "What do we need? The best score among all boards, and how many boards reach it.\nWithout a smarter idea yet, we'll have to build every board and score it.\nFirst read N (cells) and K (moves).", "무엇을 구해야 하나요?\n가능한 보드 중 최고 점수와, 그 점수를 내는 보드 개수예요.\n더 똑똑한 방법이 아직 없으니 보드를 전부 만들어 점수를 매겨야 해요.\n먼저 N(칸 수)과 K(무브 수)를 읽어요.") },
+    { hi: [5, 9],   bubble: t(E, "Scoring one move needs all three cells x, y, z.\nSo read all K moves first into a list.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.", "무브 하나를 채점하려면 x·y·z 셋을 다 알아야 해요.\n그래서 먼저 K 개를 목록 하나에 다 읽어 둬요.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
+    { hi: [11, 15], bubble: t(E, "No smarter idea in sight, so try EVERY possible board (2^N of them).\nEach of N cells is M or O, so one bitmask spells out one whole board.\nSet up best and ways.", "더 똑똑한 방법이 안 보이니, 만들 수 있는 보드를 전부 해봐요 (2^N 개).\nN 개 칸마다 M 아니면 O 니까, 비트마스크 하나가 보드 하나예요.\nbest, ways 도 준비해요.") },
+    { hi: [16, 19], bubble: t(E, "How do we score one board?\nFor each move, check by bit whether x is M and y, z are O — add 1 point if so.", "보드 하나를 어떻게 채점할까요?\n무브마다 x 가 M 이고 y·z 가 O 인지 비트로 확인해서, 맞으면 1점씩 더해요.") },
+    { hi: [21, 25], bubble: t(E, "This board has a score. Compare it with the best so far.\nHigher → new best. Same → one more board reaches it.", "이 보드의 점수가 나왔어요. 지금까지 최고 점수와 견줘요.\n더 높으면 새 최고로 바꾸고, 같으면 보드 수를 하나 늘려요.") },
+    { hi: [27, 27], bubble: t(E, "Every board has been checked. Print the best score and how many boards reach it.", "보드를 다 봤어요. 최고 점수와 그 보드 수를 출력해요.") },
   ] };
 }
 

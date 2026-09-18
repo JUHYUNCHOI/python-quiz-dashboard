@@ -124,8 +124,8 @@ export function getRectanglesWalk(E, lang = "py") {
     return {
       code: FULL_CPP, vars: _RECT_VARS, beats: [
         { hi: [5, 11], bubble: t(E,
-          "Read n reds and k. For each rect i, read its height h[i] and width w[i].",
-          "빨강 n개와 k를 읽어요. 각 사각형 i마다 높이 h[i]·폭 w[i]를 읽어요.") },
+          "What are we solving for?\nThe smallest total blue area that covers every red,\nusing at most K blues. Start by reading n, k,\nand each rect's height h[i] and width w[i].",
+          "무엇을 구해야 하나요?\n빨강을 전부 덮는 파랑 총면적 중 가장 작은 값이에요.\n파랑은 최대 K개까지 쓸 수 있어요.\n먼저 n, k 와 사각형마다 높이 h[i]·폭 w[i]를 읽어요.") },
         { hi: [12, 14], bubble: t(E,
           "k can be up to 10⁹, but you never need more than n blues (one per red). Cap k = min(k, n).",
           "k 는 10⁹ 까지 커질 수 있어요.\n그런데 빨강 하나에 파랑 하나씩 씌워도 n 개면 충분해요.\n그래서 k = min(k, n) 으로 줄여요.") },
@@ -144,8 +144,8 @@ export function getRectanglesWalk(E, lang = "py") {
   return {
     code: FULL_PY, vars: _RECT_VARS, beats: [
       { hi: [0, 4], bubble: t(E,
-        "Read n reds and k. For each rect i, read its height h[i] and width w[i].",
-        "빨강 n개와 k를 읽어요. 각 사각형 i마다 높이 h[i]·폭 w[i]를 읽어요.") },
+        "What are we solving for?\nThe smallest total blue area that covers every red,\nusing at most K blues. Start by reading n, k,\nand each rect's height h[i] and width w[i].",
+        "무엇을 구해야 하나요?\n빨강을 전부 덮는 파랑 총면적 중 가장 작은 값이에요.\n파랑은 최대 K개까지 쓸 수 있어요.\n먼저 n, k 와 사각형마다 높이 h[i]·폭 w[i]를 읽어요.") },
       { hi: [5, 6], bubble: t(E,
         "k can be up to 10⁹, but you never need more than n blues (one per red). Cap k = min(k, n).",
         "k 는 10⁹ 까지 커질 수 있어요.\n그런데 빨강 하나에 파랑 하나씩 씌워도 n 개면 충분해요.\n그래서 k = min(k, n) 으로 줄여요.") },

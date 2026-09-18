@@ -125,8 +125,8 @@ export function getSimpleGameWalk(E, lang = "py") {
     return {
       code: FULL_CPP, vars: _SG_VARS, beats: [
         { hi: [5, 7], bubble: t(E,
-          "Read n — how many pairs there are.",
-          "n 을 읽어요. 쌍이 몇 개인지예요.") },
+          "What are we computing? The final X−Y once both play\noptimally. We already found the rule — line pairs up by a+b,\nbiggest first, then alternate +a/−b. Start by reading n.",
+          "무엇을 구하나요? 둘 다 최선을 뒀을 때의 마지막 X−Y예요.\n규칙은 이미 찾았어요 — a+b 가 큰 순서로 줄 세우고\n앞에서부터 +a, −b 를 번갈아요. 먼저 n 을 읽어요.") },
         { hi: [9, 13], bubble: t(E,
           "Read each pair a b into pairs. Use long long — a and b reach 1e9 and there are up to 1e4 pairs, so the total can pass a 32-bit int.",
           "쌍 a b 를 하나씩 pairs 에 담아요.\nlong long 을 써요 — a, b 가 10억까지고 쌍이 1만 개라\n합이 32비트 int 를 넘을 수 있어요.") },
@@ -145,8 +145,8 @@ export function getSimpleGameWalk(E, lang = "py") {
   return {
     code: fullPy(E), vars: _SG_VARS, beats: [
       { hi: [0, 0], bubble: t(E,
-        "First line: n — how many pairs there are.",
-        "첫 줄에서 n 을 읽어요. 쌍이 몇 개인지예요.") },
+        "What are we computing? The final X−Y once both play\noptimally. We already found the rule — line pairs up by a+b,\nbiggest first, then alternate +a/−b. Start by reading n.",
+        "무엇을 구하나요? 둘 다 최선을 뒀을 때의 마지막 X−Y예요.\n규칙은 이미 찾았어요 — a+b 가 큰 순서로 줄 세우고\n앞에서부터 +a, −b 를 번갈아요. 먼저 n 을 읽어요.") },
       { hi: [2, 6], bubble: t(E,
         "Read one line, split it on spaces, turn the pieces into numbers a and b. Then store (a+b, a, b) — the sum goes in FRONT, because that is what we line them up by.",
         "한 줄을 읽어 공백으로 쪼개고 숫자로 바꿔 a, b 에 담아요.\n그리고 (a+b, a, b) 로 넣어요 — 합을 맨 앞에 둬요.\n우리가 줄 세울 기준이 합이니까, 그걸 앞에 놓는 거예요.") },

@@ -41,18 +41,18 @@ const PR_WALK_CPP = [
 function getPresentsWalk(E, lang) {
   if (lang === "cpp") {
     return { code: PR_WALK_CPP, beats: [
-      { hi: [5, 10],  bubble: t(E, "Read N presents and Q queries, then the stack (top → bottom).", "선물 N개와 요청 Q개를 읽고, stack 에 위→아래 순서로 담아요.") },
-      { hi: [12, 14], bubble: t(E, "For each query, read which present (target) to grab.", "요청마다 찾을 선물 target 을 읽어요.") },
-      { hi: [15, 18], bubble: t(E, "Count from the top until target — pos = how many presents sit above it.", "맨 위부터 세어요. pos 는 target 위에 쌓인 선물 수예요.") },
-      { hi: [19, 19], bubble: t(E, "Print pos — you must lift off that many to reach it.", "pos 를 출력해요. 그만큼 치워야 target 을 꺼낼 수 있으니까요.") },
-      { hi: [20, 20], bubble: t(E, "Take the target out of the stack.", "그 선물을 stack 에서 빼내요.") },
+      { hi: [5, 10],  bubble: t(E, "What do we need to output? For each query, how many\npresents sat above the target. Start by reading N presents,\nQ queries, and the stack from top to bottom.", "무엇을 출력해야 하나요?\n요청마다, 그 선물 위에 몇 개가 있었는지예요.\n먼저 선물 N개, 요청 Q개, 스택을 위→아래로 읽어요.") },
+      { hi: [12, 14], bubble: t(E, "For each query, read which present (target) to find.", "요청마다 찾을 선물 target 을 읽어요.") },
+      { hi: [15, 18], bubble: t(E, "Why scan from the top? Everything above the target must\nbe removed first — so its position from the top (pos)\nis exactly that count.", "왜 맨 위부터 셀까요?\ntarget 위에 있는 선물을 먼저 다 치워야 하니까요.\n그래서 맨 위부터 target 까지의 자리 수(pos)가\n곧 위에 있던 선물 수예요.") },
+      { hi: [19, 19], bubble: t(E, "Print pos — that is the answer for this query.", "pos 를 출력해요. 이번 요청의 답이에요.") },
+      { hi: [20, 20], bubble: t(E, "Then remove target and everything above it — gone forever, so the next query starts from what remains.", "그다음 target 과 그 위를 모두 stack 에서 빼내요.\n한번 나간 선물은 다시 안 돌아오니,\n다음 요청은 남은 것에서 다시 시작해요.") },
     ] };
   }
   return { code: PR_WALK_PY, beats: [
-    { hi: [0, 1], bubble: t(E, "Read N presents & Q queries; stack is listed top → bottom.", "선물 N개와 요청 Q개를 읽어요. stack 은 위→아래 순서예요.") },
-    { hi: [3, 4], bubble: t(E, "For each query, read which present (target) to grab.", "요청마다 찾을 선물 target 을 읽어요.") },
-    { hi: [5, 6], bubble: t(E, "pos = target's index = how many presents sit above it → print it.", "pos 는 target 의 위치예요.\n위에 쌓인 선물 수라서 그대로 출력해요.") },
-    { hi: [7, 7], bubble: t(E, "Take the target out of the stack.", "그 선물을 stack 에서 빼내요.") },
+    { hi: [0, 1], bubble: t(E, "What do we need to output? For each query, how many\npresents sat above the target. Start by reading N, Q,\nand the stack from top to bottom.", "무엇을 출력해야 하나요?\n요청마다, 그 선물 위에 몇 개가 있었는지예요.\n먼저 N, Q 와 스택을 위→아래로 읽어요.") },
+    { hi: [3, 4], bubble: t(E, "For each query, read which present (target) to find.", "요청마다 찾을 선물 target 을 읽어요.") },
+    { hi: [5, 6], bubble: t(E, "Why is pos the answer? stack.index(target) finds target's\nposition counting from the top — everything above it must\nbe removed first, so pos IS that count. Print it.", "왜 pos 가 답일까요?\nstack.index(target) 은 맨 위부터 target 까지 자리를 찾아요.\n그 위 선물을 먼저 다 치워야 하니, pos 가 곧\n치울 선물 수예요. 그대로 출력해요.") },
+    { hi: [7, 7], bubble: t(E, "Then remove target and everything above it — gone forever, so the next query starts from what remains.", "그다음 target 과 그 위를 모두 stack 에서 지워요.\n한번 사라진 선물은 다시 안 돌아오니,\n다음 요청은 남은 것에서 다시 시작해요.") },
   ] };
 }
 

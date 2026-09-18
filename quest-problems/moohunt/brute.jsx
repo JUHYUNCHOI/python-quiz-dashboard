@@ -152,8 +152,8 @@ export function getMooHuntBruteWalk(E, lang = "py") {
      안 된다 (memory/feedback_screen_must_not_rely_on_memory.md). */
   if (lang === "cpp") {
     return { code: BRUTE_CPP, vars: _BRUTE_VARS, beats: [
-      { hi: [0, 15],  bubble: t(E, "Read the input: N (cells), K (moves), then the K moves.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.",
-                                   "입력을 읽어요 — N (칸 수), K (무브 수), 그리고 무브 K 개.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
+      { hi: [0, 15],  bubble: t(E, "What do we need to find? The best score, and how many boards reach it.\nWe don't have a fast trick yet, so we'll just build every board there is.\nStart by reading N (cells), K (moves), then the K moves — subtract 1 since code counts from 0.",
+                                   "무엇을 구해야 하나요?\n최고 점수와, 그 점수를 내는 보드 개수예요.\n아직 빠른 방법을 모르니 만들 수 있는 보드를 전부 만들어 봐요.\n먼저 N·K 와 무브 K 개를 읽어요 — 코드는 0번부터 세니까 1 을 빼요.") },
       { hi: [17, 21], bubble: t(E, "The board is just a list: 1 means M, 0 means O. Start from all O.\nScores are never negative, so 0 is a safe starting best.",
                                    "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
       { hi: [23, 30], bubble: t(E, "Score this board — the same way you did by hand on MOOOM on page 2.\nA move scores when x reads M and y, z read O. Walk all K of them.",
@@ -166,8 +166,8 @@ export function getMooHuntBruteWalk(E, lang = "py") {
     ] };
   }
   return { code: BRUTE_PY, vars: _BRUTE_VARS, beats: [
-    { hi: [0, 9],   bubble: t(E, "Read the input: N (cells), K (moves), then the K moves.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.",
-                                 "입력을 읽어요 — N (칸 수), K (무브 수), 그리고 무브 K 개.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
+    { hi: [0, 9],   bubble: t(E, "What do we need to find? The best score, and how many boards reach it.\nWe don't have a fast trick yet, so we'll just build every board there is.\nStart by reading N (cells), K (moves), then the K moves — subtract 1 since code counts from 0.",
+                                 "무엇을 구해야 하나요?\n최고 점수와, 그 점수를 내는 보드 개수예요.\n아직 빠른 방법을 모르니 만들 수 있는 보드를 전부 만들어 봐요.\n먼저 N·K 와 무브 K 개를 읽어요 — 코드는 0번부터 세니까 1 을 빼요.") },
     { hi: [11, 15], bubble: t(E, "The board is just a list: 1 means M, 0 means O. Start from all O.\nScores are never negative, so 0 is a safe starting best.",
                                  "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
     { hi: [17, 22], bubble: t(E, "Score this board — the same way you did by hand on MOOOM on page 2.\nA move scores when x reads M and y, z read O. Walk all K of them.",
