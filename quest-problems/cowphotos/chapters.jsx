@@ -434,8 +434,8 @@ export function makeCowPhotosCh2(E, lang = "py") {
     {
       section: "build",
       type: "reveal",
-      narr: t(E, "Formula's settled.  Write it with Counter from the start — count every height's frequency in one pass.  Walk it line by line, input first.",
-                 "공식 확정. 처음부터 Counter 로 — 각 키의 빈도를 한 번에 세는 방식으로 짜요. 입력부터 한 줄씩 따라가요."),
+      narr: t(E, "The formula is settled. Now write it with Counter from the start.",
+                 "공식이 정해졌어요. 이제 처음부터 Counter 로 짜 봐요."),
       content: (<CodeWalk E={E} lang={lang} {...getCowPhotosWalk(E, lang, "fast")} accent="#d97706" />),
     },
     // 2-2: ⚠️ 왜 Counter? — 안 쓰면 TLE (짧은 경고, 브루트 먼저 짜보게 하지 않음)

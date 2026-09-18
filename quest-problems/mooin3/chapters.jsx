@@ -356,8 +356,8 @@ export function makeMooin3Ch2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Idea: check by letter", "아이디어 — 글자로 확인"),
       narr: t(E,
-        "The fast solution turns on one idea: go letter by letter instead of spot by spot. Walk through it here first — then the code will read easily.",
-        "빠른 풀이는 생각 하나만 바꾸면 돼요. 자리 하나씩이 아니라 글자 하나씩 보는 거예요. 여기서 먼저 천천히 따라가 보면, 코드가 훨씬 쉽게 읽혀요."),
+        "The fast solution turns on one idea — go letter by letter, not spot by spot.",
+        "빠른 풀이는 생각 하나만 바꾸면 돼요. 자리가 아니라 글자로 봐요."),
       content: (<Mooin3FastSim E={E} />),
     },
 
