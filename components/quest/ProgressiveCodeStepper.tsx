@@ -214,7 +214,8 @@ export function ProgressiveCodeStepper({
                   >
                     ▸
                   </span>
-                  <span>{line}</span>
+                  {/* ⚠️ 2026-09-18: why 만 고치고 이 전용 노트는 빠뜨렸다 (2026-09-17). */}
+                  <span style={{ whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>{line}</span>
                 </div>
               ))}
             </div>

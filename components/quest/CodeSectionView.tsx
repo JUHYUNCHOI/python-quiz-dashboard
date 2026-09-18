@@ -131,7 +131,11 @@ export function CodeSectionView({
                     }}
                   >
                     <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span>
-                    <span>{line}</span>
+                    {/* ⚠️ 2026-09-18: 여기 `pre-line` 이 없어서 글쓴이가 넣은 줄바꿈이
+                        하나도 안 나왔다. 세 문장이 한 문단으로 뭉쳐 보였다.
+                        ProgressiveCodeStepper 는 2026-09-17 에 같은 걸 고쳤는데
+                        이 컴포넌트는 그때 빠졌다. memory/feedback_korean_linebreak.md */}
+                    <span style={{ whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>{line}</span>
                   </div>
                 ))}
               </>
@@ -176,7 +180,7 @@ export function CodeSectionView({
                     >
                       ▸
                     </span>
-                    <span>{line}</span>
+                    <span style={{ whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>{line}</span>
                   </div>
                 ))}
               </div>
