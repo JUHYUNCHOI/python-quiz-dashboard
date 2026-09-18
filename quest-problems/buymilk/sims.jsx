@@ -238,10 +238,20 @@ export function GreedySim({ E, x = 5 }) {
             "그래서 큰 묶음부터 사도 손해 볼 일이 없어요" 로 끝난다. 그런데 **쪽을 넘기면
             그 근거가 사라지고** 여기서는 결론만 다시 주장하고 있었다.
             근거를 이 화면으로 가져온다 — memory/feedback_screen_must_not_rely_on_memory.md */}
+        {/* ⚠️ 2026-09-19 선생님: *"8통짜리 샀을때 40은 4통짜리 2개샀을때 40인거잖아.
+            이게 이해가 안되는데?"*
+            표에 40 이 **두 줄에** 나온다 — 8통짜리 넉넉히 1개(40) 와 4통짜리 2개(40).
+            둘은 다른 두 방법이 아니라 **글자 그대로 같은 구매**다.
+            8통짜리의 40 은 붙은 값 45 가 아니라, 4통짜리 두 개로 사는 값이기 때문이다.
+            그런데 이 화면은 그 이야기를 **다시 안 했다.** 앞 쪽 기억에 기대고 있었다
+            (`memory/feedback_screen_must_not_rely_on_memory.md`).
+            45 → 40 이 어디서 왔는지를 이 자리에 적는다. */}
         {t(E, <>Same 4 deals: 10, 15, 20, 45.<br />
-                 The cheaper way for each pack: {C.join(", ")}</>,
+                 The cheaper way for each pack: {C.join(", ")}<br />
+                 <span style={{ color: "#166534" }}>The 8-pack says 45, but two 4-packs cost 20 + 20 = 40 — so we use 40.</span></>,
              <>같은 거래 4개예요. 값은 10, 15, 20, 45 예요.<br />
-               묶음마다 제일 싸게 사는 값은 {C.join(", ")} 이에요.</>)}
+               묶음마다 제일 싸게 사는 값은 {C.join(", ")} 이에요.<br />
+               <span style={{ color: "#166534" }}>8통짜리는 붙은 값이 45 인데, 4통짜리 두 개면 20 + 20 = 40 이라 40 으로 정했어요.</span></>)}
       </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "done" ? "aha" : "go"}>{say}</Say>
@@ -279,8 +289,15 @@ export function GreedySim({ E, x = 5 }) {
               background: isBest ? "#f0fdf4" : "#fff", opacity: shown ? 1 : 0.3 }}>
               <span style={{ fontWeight: 800, color: "#334155", lineHeight: 1.3 }}>
                 {r.size}{t(E, "-pack", "통짜리")}
+                {/* ⚠️ 2026-09-19 선생님: *"8통짜리 샀을때 40은 4통짜리 2개샀을때 40인거잖아."*
+                    이 칸이 **정한 값**만 보여줘서, 붙은 값 45 가 어디 갔는지 알 수가 없었다.
+                    바꾼 줄에만 `45 40` 을 같이 보인다 — 40 이 어디서 왔는지가 그 자리에 있게. */}
                 <span style={{ display: "block", fontWeight: 600, fontSize: 10.5, color: "#94a3b8" }}>
-                  {t(E, "one = ", "한 개 ")}{C[r.i]}
+                  {t(E, "one = ", "한 개 ")}
+                  {DEALS[r.i] !== C[r.i] && (
+                    <s style={{ color: "#cbd5e1" }}>{DEALS[r.i]}</s>
+                  )}{DEALS[r.i] !== C[r.i] ? " " : ""}
+                  <b style={{ color: DEALS[r.i] !== C[r.i] ? "#15803d" : "#94a3b8" }}>{C[r.i]}</b>
                 </span>
               </span>
               <span style={{ color: "#64748b", textAlign: "center" }}>{shown ? r.rem : "?"}</span>
