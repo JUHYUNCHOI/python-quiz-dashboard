@@ -11,7 +11,7 @@ export function makePalindromeCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie and Elsie share a pile of S stones. On her turn, a player removes a palindrome-number of stones (1, 2, 3, ..., 9, 11, 22, 121...).\nIf you can't move (the pile is empty on your turn), you LOSE.\nWho wins if Bessie goes first and both play perfectly?",
-        "Bessie와 Elsie가 S개의 돌이 있는 더미를 나눠가져요. 자기 차례마다 회문 수만큼(1, 2, 3, ..., 9, 11, 22, 121...) 돌을 가져가요.\n자기 차례에 더미가 비어있으면 져요.\nBessie가 먼저 두고 둘 다 최선을 다하면 누가 이길까요?"),
+        "Bessie 와 Elsie 가 돌 더미를 나눠 가져요.\n차례마다 회문 수(1, 2, 3, ..., 9, 11, 22, 121...)만큼 돌을 가져가요.\n차례에 더미가 비어 있으면 져요.\nBessie 가 먼저 두고 둘 다 최선을 다하면 누가 이길까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -152,8 +152,8 @@ B`}
     {
       type: "twopointer",
       narr: t(E,
-        "How does is_palindrome(n) actually work?  Compare the digits from both ends inward.  As long as every pair matches, it's a palindrome.",
-        "is_palindrome(n) 은 어떻게 돌아갈까요?\n양 끝 자리부터 가운데로 견줘 보고, 모든 짝이 같으면 회문이에요."),
+        "How does checking for a palindrome actually work?  Compare the digits from both ends inward.  As long as every pair matches, it's a palindrome.",
+        "숫자가 회문인지는 어떻게 확인할까요?\n양 끝 자리부터 가운데로 견줘 보고, 모든 짝이 같으면 회문이에요."),
     },
     // 1-3: Quiz
     {

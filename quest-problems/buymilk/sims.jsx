@@ -97,22 +97,22 @@ export function NormalizeSim({ E }) {
   const say =
     s.k === "why" ? t(E,
       <>Same 8 buckets, two ways to buy them.<br />One 8-pack costs <b>45</b>. Two 4-packs cost <b>40</b>.<br />For each size we keep the cheaper way. Let's go from 1 bucket up.</>,
-      <>같은 8통이어도 사는 방법이 둘이에요.<br />8통 묶음을 한 번 사면 <b>45</b>, 4통 묶음을 두 번 사면 <b>40</b>.<br />묶음마다 이렇게 싼 쪽을 골라 둘게요. 1통부터 차례로요.</>)
+      <>같은 8통이어도 사는 방법이 둘이에요.<br />8통짜리를 한 번 사면 <b>45</b> 예요. 4통짜리를 두 번 사면 <b>40</b> 이에요.<br />묶음마다 이렇게 싼 쪽으로 정해 둘게요. 1통짜리부터 차례로 볼게요.</>)
     : s.k === "row" ? (() => {
         const i = s.i, size = 1 << i;
         if (i === 0) return t(E,
           <>The <b>1-bucket</b> block has only one way to buy it: <b>{DEALS[0]}</b>.</>,
-          <><b>1통</b> 묶음은 사는 방법이 하나뿐이에요. <b>{DEALS[0]}</b> 이에요.</>);
+          <><b>1통짜리</b>는 사는 방법이 하나뿐이에요. <b>{DEALS[0]}</b> 이에요.</>);
         const two = 2 * C[i - 1], cheaper = two < DEALS[i];
         return cheaper
           ? t(E, <>The <b>{size}-bucket</b> deal costs <b>{DEALS[i]}</b>,<br />but two {size / 2}-bucket blocks cost <b>{two}</b> — cheaper!<br />So this block is really worth <b>{C[i]}</b>.</>,
-                <>{size / 2}통 묶음을 <b>두 번</b> 사면 {size}통이 돼요.<br />{size}통 묶음을 한 번에 살 수도 있어요 — 거래값 <b>{DEALS[i]}</b>.<br />그런데 두 번 사면 <b>{two}</b> 이라 더 싸요!<br />그래서 {size}통은 <b>{C[i]}</b> 에 살 수 있어요.</>)
+                <>{size / 2}통짜리를 <b>두 번</b> 사면 {size}통이 돼요.<br />{size}통짜리를 한 번에 사면 <b>{DEALS[i]}</b> 예요.<br />그런데 두 번 사면 <b>{two}</b> 이라 더 싸요!<br />그래서 {size}통은 <b>{C[i]}</b> 에 살 수 있어요.</>)
           : t(E, <>The <b>{size}-bucket</b> deal costs <b>{DEALS[i]}</b>,<br />and two {size / 2}-bucket blocks cost <b>{two}</b>.<br />The deal wins, so it stays <b>{C[i]}</b>.</>,
-                <>{size / 2}통 묶음을 <b>두 번</b> 사면 {size}통이 되는데 <b>{two}</b> 이에요.<br />{size}통 묶음을 한 번에 사면 <b>{DEALS[i]}</b> 이에요.<br />이번엔 한 번에 사는 쪽이 싸요. 그대로 <b>{C[i]}</b> 예요.</>);
+                <>{size / 2}통짜리를 <b>두 번</b> 사면 {size}통이 되는데 <b>{two}</b> 이에요.<br />{size}통짜리를 한 번에 사면 <b>{DEALS[i]}</b> 이에요.<br />이번엔 한 번에 사는 쪽이 싸요. 그대로 <b>{C[i]}</b> 예요.</>);
       })()
     : t(E,
-      <><b>Can we just grab the biggest packs first?</b><br />The bigger the pack, the cheaper one bucket — <b>10, 7.5, 5, 5</b>.<br />So taking the big ones first is fine.</>,
-      <><b>큰 묶음부터 집어도 될까요?</b><br />묶음이 클수록 한 통이 싸요. <b>10, 7.5, 5, 5</b> 이렇게요.<br />그러니 큰 걸 먼저 집어도 괜찮아요.</>);
+      <><b>Can we just grab the biggest packs first?</b><br /><b>The more you buy at once, the cheaper one bucket gets</b>, as the table below shows.<br />So taking the big ones first is fine.</>,
+      <><b>큰 묶음부터 집어도 될까요?</b><br /><b>많이 살수록 한 통 가격이 싸져요.</b> 아래 표에서 볼 수 있어요.<br />그러니 큰 걸 먼저 집어도 괜찮아요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -122,8 +122,8 @@ export function NormalizeSim({ E }) {
       <Carry E={E}>
         {t(E, <>A new, bigger example — <b>4 deals</b> now: 10, 15, 20, 45.<br />
                  (Sample 1 back on page 2 had only two: [10, 15].)</>,
-             <>새 예제예요. 이제 <b>거래가 4개</b>예요 — 10, 15, 20, 45<br />
-               (2쪽 예제 1 은 두 개였어요. [10, 15])</>)}
+             <>새 예제예요. 이제 <b>거래가 4개</b>예요. 값은 10, 15, 20, 45 예요.<br />
+               (2쪽 예제 1 은 값이 10, 15 두 개뿐이었어요.)</>)}
       </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "unit" ? "aha" : s.k === "why" ? "go" : "go"}>{say}</Say>
@@ -164,12 +164,12 @@ export function NormalizeSim({ E }) {
                 `10 ÷ 1통 = 10.00` 처럼 식만 늘어놓으면 **한국말이 아니다.** 문장으로 쓴다.
                 그리고 넷을 한 줄에 `·` 로 이어 붙이면 **줄바꿈이 낱말 가운데를 자른다**
                 (선생님: *"다음줄로 가얒"*) — 한 줄에 하나씩 놓는다. */}
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>{t(E, "What one bucket costs", "한 통에 얼마씩인가")}</div>
+            <div style={{ fontWeight: 800, marginBottom: 6 }}>{t(E, "What one bucket costs", "한 통 가격")}</div>
             <div style={{ display: "grid", gap: 3, justifyItems: "center" }}>
               {C.map((v, i) => (
                 <div key={i} style={{ whiteSpace: "nowrap" }}>
                   {t(E, <>Buying the {1 << i}-pack, one bucket costs <b style={mono}>{+(v / (1 << i)).toFixed(2)}</b></>,
-                        <>{1 << i}통 묶음을 사면 한 통에 <b style={mono}>{+(v / (1 << i)).toFixed(2)}</b></>)}
+                        <>{1 << i}통짜리로 사면 한 통 가격이 <b style={mono}>{+(v / (1 << i)).toFixed(2)}</b></>)}
                 </div>
               ))}
             </div>
@@ -214,17 +214,17 @@ export function GreedySim({ E, x = 5 }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>Big packs are cheaper per bucket, so we look at the big ones first.<br />At each pack there are only two moves — <b>buy enough and stop</b>, or <b>buy less and leave the rest to smaller packs</b>.<br />We just have to reach <b>at least {X}</b> buckets.</>,
-      <>큰 묶음일수록 한 통이 싸니까 큰 것부터 봐요.<br />묶음마다 할 수 있는 건 둘뿐이에요 — <b>넉넉히 사고 끝내거나</b>, <b>모자라게 사고 남은 통을 작은 묶음에 넘기거나</b>.<br /><b>{X}통 이상</b>만 채우면 돼요.</>)
+      <>Let's work through needing <b>{X}</b> buckets.<br />The more you buy at once, the cheaper one bucket gets, so we start with the biggest — the <b>8-pack</b>.<br />One 8-pack already covers {X}, so we could stop right there.<br />Or instead of the 8-pack we could buy <b>two 4-packs</b>.<br />We work out <b>both</b> and take the cheaper one.</>,
+      <><b>{X}통</b>이 필요할 때를 살펴봐요.<br />많이 살수록 한 통 가격이 싸니까, 제일 큰 <b>8통짜리</b>부터 봐요.<br />8통짜리 하나면 {X}통을 채우고도 남아요. 그걸로 끝낼 수도 있고,<br />8통짜리 대신 <b>4통짜리 2개</b>를 살 수도 있어요.<br /><b>두 가지</b>를 구해서 싼 걸 사면 되니까요.</>)
     : s.k === "row" ? t(E,
-      <>Block <b>{cur.size}</b>: <b>{cur.rem}</b> buckets still needed.<br />Round <b>up</b> → buy {cur.need} and stop → <b>{cur.cand}</b>.<br />Or take <b>{cur.take}</b> and carry <b>{cur.rem - cur.take * cur.size}</b> to smaller blocks.</>,
-      <><b>{cur.size}통</b> 묶음이에요. 아직 <b>{cur.rem}통</b> 필요해요.<br /><b>넉넉히</b> 사면 {cur.need}개로 끝나요 → <b>{cur.cand}</b>.<br />아니면 <b>{cur.take}개</b>만 사고 남은 <b>{cur.rem - cur.take * cur.size}통</b>은 작은 묶음에 맡겨요.</>)
+      <>The <b>{cur.size}-pack</b>. Coming into this row we still needed <b>{cur.rem}</b> buckets.<br />Round <b>up</b> → buy {cur.need} and stop → <b>{cur.cand}</b>.<br />Or take <b>{cur.take}</b> and carry <b>{cur.rem - cur.take * cur.size}</b> to smaller blocks.</>,
+      <><b>{cur.size}통짜리</b> 묶음이에요. 여기 오기 전까지 <b>{cur.rem}통</b>이 필요했어요.<br /><b>넉넉히</b> 사면 {cur.need}개로 끝나요. {cur.costBefore > 0 ? <>앞에서 이미 <b>{cur.costBefore}</b> 을 썼으니 {cur.costBefore} + {cur.need}×{C[cur.i]} = <b>{cur.cand}</b> 이에요.</> : <>값은 <b>{cur.cand}</b> 이에요.</>}<br />아니면 <b>{cur.take}개</b>만 사고 남은 <b>{cur.rem - cur.take * cur.size}통</b>은 작은 묶음으로 넘겨요.</>)
     : best < exact ? t(E,
       <>The cheapest is <b>{best}</b> — and it <b>over-buys</b>.<br />Buying exactly {X} costs <b>{exact}</b>. Rounding up wins.<br />One pass from big to small — no searching.</>,
-      <>제일 싼 게 <b>{best}</b> 인데, <b>{X}통보다 많이 사는</b> 쪽이에요.<br />딱 {X}통만 사면 <b>{exact}</b> 이라, 넉넉히 산 쪽이 이겼어요.<br />큰 것부터 한 번만 훑었어요. 찾아 헤매지 않았어요.</>)
+      <>제일 싼 게 <b>{best}</b> 인데, <b>{X}통보다 많이 사는</b> 쪽이에요.<br />딱 {X}통만 사면 <b>{exact}</b> 이라, 넉넉히 산 쪽이 이겼어요.<br />큰 것부터 한 번만 보고 끝냈어요.</>)
     : t(E,
-      <>Every block checked, and the cheapest is <b>{best}</b>.<br />That is <b>one pass</b> from big to small — no searching.</>,
-      <>묶음을 다 봤고 제일 싼 게 <b>{best}</b> 예요.<br />큰 것부터 <b>한 번만</b> 훑었어요. 찾아 헤매지 않았어요.</>);
+      <>Every pack checked, and the cheapest is <b>{best}</b>.<br />This time buying <b>exactly {X}</b> won. Over-buying came out dearer.<br />That is <b>one pass</b> from big to small.</>,
+      <>묶음을 다 봤어요. 제일 싼 게 <b>{best}</b> 이에요.<br />이번엔 <b>딱 {X}통만 산 쪽</b>이 제일 쌌어요. 넉넉히 사는 쪽은 더 비쌌고요.<br />큰 것부터 <b>한 번만</b> 보고 끝냈어요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -240,32 +240,51 @@ export function GreedySim({ E, x = 5 }) {
             근거를 이 화면으로 가져온다 — memory/feedback_screen_must_not_rely_on_memory.md */}
         {t(E, <>Same 4 deals: 10, 15, 20, 45.<br />
                  The cheaper way for each pack: {C.join(", ")}</>,
-             <>같은 거래 4개예요 — 10, 15, 20, 45<br />
-               묶음마다 고른 싼 값은 {C.join(", ")} 이에요.</>)}
+             <>같은 거래 4개예요. 값은 10, 15, 20, 45 예요.<br />
+               묶음마다 제일 싸게 사는 값은 {C.join(", ")} 이에요.</>)}
       </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "done" ? "aha" : "go"}>{say}</Say>
 
       <div style={{ maxWidth: 470, margin: "0 auto", display: "grid", gap: 5 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "62px 1fr 1fr 1fr", gap: 8,
+        <div style={{ display: "grid", gridTemplateColumns: "76px 52px 1fr 92px", gap: 10,
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 11px" }}>
-          <span>{t(E, "block", "묶음")}</span>
-          <span>{t(E, "still need", "남은 통")}</span>
-          <span>{t(E, "round up → cost", "넉넉히 사면")}</span>
-          <span>{t(E, "take / carry", "모자라게 사고 남은 통")}</span>
+          {/* ⚠️ 2026-09-18 선생님: *"남은 통? 모자라게 사고 남은통? 뭔말이지?"*
+              **같은 말이 두 칸에 있는데 뜻이 달랐다.**
+              둘째 칸은 '이 줄에 오기 전에 아직 사야 할 통', 넷째 칸은 '모자라게 산 뒤 남는 통'.
+              같은 화면에 같은 이름이 두 뜻으로 있으면 안 된다
+              (`memory/feedback_same_number_two_meanings.md`).
+              그리고 넷째 칸은 값이 `0 / 5` 처럼 **두 개**인데 이름은 하나였다 — 무엇이 무엇인지
+              알 수가 없다. 이름에 둘 다 적는다. */}
+          {/* ⚠️ 2026-09-18 선생님: *"8통짜리 하나 사면 5통 넘는건데 왜 아직 살통이 5개야?"*
+              둘째 칸은 **이 줄을 보기 전** 상태인데 이름이 그걸 안 말했다.
+              8통짜리를 사기 **전**에 5통이 필요했다는 뜻인데, 산 **뒤**로 읽혔다.
+              그리고 *"8통은 수량으로 해야지"* — `8통` 은 묶음 크기인데 우유 양처럼 읽힌다.
+              칸 안을 `8통짜리` 로 바꾼다. */}
+          {/* ⚠️ 2026-09-18 선생님: *"이쁘게"* — 머리글이 두 줄로 접히고 칸마다 줄 수가 달라
+              표가 들쭉날쭉했다. 머리글을 한 줄로 줄이고, 칸을 가운데로 맞춘다. */}
+          <span>{t(E, "pack", "묶음")}</span>
+          <span style={{ textAlign: "center" }}>{t(E, "need", "아직 필요")}</span>
+          <span style={{ textAlign: "center" }}>{t(E, "buy enough", "넉넉히 사면")}</span>
+          <span style={{ textAlign: "center" }}>{t(E, "buy fewer", "모자라게 사면")}</span>
         </div>
         {trace.map((r, n) => {
           const shown = s.k === "done" || (s.k === "row" && n <= s.n);
           const isCur = s.k === "row" && n === s.n;
           const isBest = shown && r.cand === best;
           return (
-            <div key={n} style={{ display: "grid", gridTemplateColumns: "62px 1fr 1fr 1fr", gap: 8,
+            <div key={n} style={{ display: "grid", gridTemplateColumns: "76px 52px 1fr 92px", gap: 10,
               alignItems: "center", padding: "8px 11px", borderRadius: 9, fontSize: 12.5, ...mono,
               border: `${isCur ? 2 : 1}px solid ${isCur ? A : isBest ? "#86efac" : "#e2e8f0"}`,
               background: isBest ? "#f0fdf4" : "#fff", opacity: shown ? 1 : 0.3 }}>
-              <span style={{ fontWeight: 800, color: "#334155" }}>{r.size}{t(E, "", "통")}</span>
-              <span style={{ color: "#64748b" }}>{shown ? r.rem : "?"}</span>
-              <span style={{ fontWeight: 800, color: isBest ? "#15803d" : "#0e7490" }}>
+              <span style={{ fontWeight: 800, color: "#334155", lineHeight: 1.3 }}>
+                {r.size}{t(E, "-pack", "통짜리")}
+                <span style={{ display: "block", fontWeight: 600, fontSize: 10.5, color: "#94a3b8" }}>
+                  {t(E, "one = ", "한 개 ")}{C[r.i]}
+                </span>
+              </span>
+              <span style={{ color: "#64748b", textAlign: "center" }}>{shown ? r.rem : "?"}</span>
+              <span style={{ fontWeight: 800, textAlign: "center", color: isBest ? "#15803d" : "#0e7490" }}>
                 {/* ⚠️ 2026-09-17 학생이 잡았다 — 전엔 `1×15 = 35` 처럼 **식이 안 맞았다.**
                     `cand = costBefore + need×C[i]` 인데 화면은 뒷항만 보여줬다.
                     학생: *"1×15는 15지 35가 아니다. 식이 안 맞아 보여서 못 믿게 됐다."*
@@ -276,8 +295,13 @@ export function GreedySim({ E, x = 5 }) {
                       : `${r.need}×${C[r.i]} = ${r.cand}`)
                   : "?"}
               </span>
-              <span style={{ color: "#94a3b8" }}>
-                {shown ? `${r.take} / ${r.rem - r.take * r.size}` : "?"}
+              <span style={{ color: "#94a3b8", lineHeight: 1.3, textAlign: "center", fontSize: 11 }}>
+                {shown ? (
+                  <>
+                    {r.take}{t(E, " for ", "개 · ")}<b style={{ color: "#64748b" }}>{r.take * C[r.i]}</b>
+                    <span style={{ display: "block" }}>{r.rem - r.take * r.size}{t(E, " left", "통 남음")}</span>
+                  </>
+                ) : "?"}
               </span>
             </div>
           );

@@ -319,8 +319,8 @@ export function getExplodingArrowSections(E) {
       color: "#7c3aed",
       py: SEC2_PY, cpp: SEC2_CPP,
       why: [
-        t(E, "Sweep left to right. A target still alive here MUST be finished by an arrow fired at or before it — and firing right HERE reaches the farthest to the right, so it's never worse. Fire exactly ⌈deficit / (M·X)⌉ arrows on the spot.",
-            "왼쪽부터 훑어요. 지금 살아있는 표적은 반드시 여기(또는 그 전)에서 쏜 화살로 끝내야 해요 — 그런데 바로 여기서 쏘면 오른쪽으로 가장 멀리 닿으니 절대 손해가 아니에요. 그 자리에서 정확히 ⌈deficit / (M·X)⌉ 발을 쏴요."),
+        t(E, "Sweep left to right. A target still alive here MUST be finished by an arrow fired at or before it — and firing right HERE reaches the farthest to the right, so it's never worse. Fire as many arrows as deficit ÷ (M·X) rounded up — one more if there is any remainder.",
+            "왼쪽부터 훑어요. 지금 살아있는 표적은 반드시 여기(또는 그 전)에서 쏜 화살로 끝내야 해요 — 그런데 바로 여기서 쏘면 오른쪽으로 가장 멀리 닿으니 절대 손해가 아니에요. 그 자리에서 deficit ÷ (M·X) 를 올림한 수만큼 쏴요 — 나머지가 있으면 한 발 더예요."),
         t(E, "An arrow's damage max(0, M·X − d²) is a parabola in the distance d. Adding a parabola to a range is O(1) with a 2nd-order difference array: val/slope/accel roll it forward, and one cancellation event at p = x+L+1 clamps the tail to 0. Whole check: O(N).",
             "화살의 데미지 max(0, M·X − d²) 는 거리 d 에 대한 포물선이에요. 포물선을 구간에 더하는 건 2차 차분 배열을 쓰면 O(1) 이에요. val/slope/accel 이 앞으로 굴려주고, p = x+L+1 에서 취소 이벤트 하나로 꼬리를 0 으로 잘라요. 그래서 검사 전체가 O(N) 이에요."),
       ],
@@ -330,7 +330,7 @@ export function getExplodingArrowSections(E) {
       ],
       cppOnly: [
         t(E, "isqrtll gives L = ⌊√(M·X−1)⌋, the largest distance where M·X − d² is still positive.",
-            "isqrtll 이 L = ⌊√(M·X−1)⌋ 을 줘요 — M·X − d² 이 아직 양수인 가장 먼 거리예요."),
+            "isqrtll 이 M·X−1 의 제곱근을 소수점 버려서 L 로 줘요 — M·X − d² 이 아직 양수인 가장 먼 거리예요."),
       ],
     },
   ];

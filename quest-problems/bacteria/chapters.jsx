@@ -190,7 +190,7 @@ export function makeBacteriaCh1(E) {
         "diff 는 이미 구해 뒀어요. 식대로 답을 내 봐요."),
       question: t(E,
         "a = [-1, 3].  diff(a) = [-1, 4].  diff(diff(a)) = [-1, 5].  Sum of absolute values?",
-        "diff(diff(a)) = [-1, 5] 예요. 절댓값을 더하면 얼마일까요?"),
+        "a = [-1, 3] 이에요. diff(a) = [-1, 4], diff(diff(a)) = [-1, 5] 예요.\n절댓값을 더하면 얼마일까요?"),
       hint: t(E,
         "Sum the absolute values of the two entries.",
         "두 값의 절댓값을 더해 봐요."),

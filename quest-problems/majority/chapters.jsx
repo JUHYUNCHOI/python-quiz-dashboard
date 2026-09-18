@@ -60,7 +60,7 @@ export function makeMajorityCh1(E) {
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A hay type ", "어떤 건초 종류가 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "becomes universal", "전체를 지배")}</b>
+                  <b style={{ color: "#0891b2" }}>{t(E, "becomes universal", "전체로 퍼지다")}</b>
                   {t(E, " if FJ can use focus groups to make ALL cows prefer it.",
                         "하려면, FJ 가 포커스 그룹을 잘 써서 모든 소가 그 종류를 좋아하게 만들 수 있어야 해요.")}
                 </div>

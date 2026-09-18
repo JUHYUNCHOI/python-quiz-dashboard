@@ -382,11 +382,18 @@ export function makePermCh1(E) {
               💡 {t(E, "We need to be cleverer", "더 똑똑해져야 해요")}
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-              {t(E, "For N = 10⁵ we need O(N) or O(N log N). That's a HUGE jump from O(N! · N²). The next chapter shows how to think ",
-                    "N = 10⁵ 에서는 O(N) 이나 O(N log N) 가 필요해요. O(N! · N²) 에서 아주 크게 뛰어야 하죠. 다음 챕터에서는 ")}
-              <b style={{ color: "#7c3aed" }}>{t(E, "BACKWARDS from the hints", "힌트로부터 거꾸로 생각")}</b>
-              {t(E, " (using a deque) — building the permutation in reverse is the key insight.",
-                    " 하는 방법을 봐요 (deque 를 써요). 거꾸로 만드는 게 핵심 생각이에요.")}
+              {/* ⚠️ 2026-09-18 — 여기 "다음 챕터에서 deque 로 거꾸로 만드는 법을 봐요" 라고
+                  **없는 챕터를 약속하고** 있었다. Ch2·Ch3 은 끝까지 브루트포스뿐이다.
+                  학생은 더 빠른 방법이 나온다고 믿고 넘어갔다가 안 나온다
+                  (`memory/feedback_sentence_must_follow.md` — 가리키는 말이 화면에 있나).
+                  ⚠️ 그리고 `components.jsx` 의 `PermSim`·`PermRunner` 는 **이미 만들어진
+                     O(N) 그리디 풀이인데 어느 스텝에도 연결돼 있지 않다.** 죽은 코드다.
+                     그걸 붙이는 건 글이 아니라 조립 + 재검증이라 `.claude/WORK.md` 에 올렸다.
+                  지금은 **거짓 약속만 걷어낸다.** */}
+              {t(E, "For N = 10⁵ we need O(N) or O(N log N). That's a HUGE jump from O(N! · N²).",
+                    "N = 10⁵ 에서는 O(N) 이나 O(N log N) 가 필요해요. O(N! · N²) 에서 아주 크게 뛰어야 하죠.")}{" "}
+              {t(E, "Next, let's code this brute-force idea itself — knowing where it breaks is the first step toward a faster one.",
+                    "일단 다음 쪽에서 이 브루트포스 생각을 코드로 짜 봐요. 어디서 막히는지 알아야 더 빠른 방법으로 갈 수 있어요.")}
             </div>
           </div>
         </div>),

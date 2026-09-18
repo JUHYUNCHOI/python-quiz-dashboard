@@ -78,7 +78,7 @@ export function BacteriaTrickSim({ E }) {
         <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.5 }}>
           {t(E,
             "Click a button. The top row a updates by a ramp. But look at the BOTTOM row diff(diff(a)) — only ONE cell flickers, by exactly ±1.",
-            "버튼을 눌러 봐요. 위쪽 a 는 ramp 만큼 바뀌어요.\n그런데 맨 아래 diff(diff(a)) 는 딱 한 칸만 ±1 만큼 깜빡여요.")}
+            "버튼을 눌러 봐요. diff(a) 는 옆 자리끼리 뺀 값을 적은 새 줄이에요.\n위쪽 a 는 ramp 만큼 바뀌어요.\n그런데 맨 아래 diff(diff(a)) 는 딱 한 칸만 ±1 만큼 깜빡여요.")}
         </div>
       </div>
 

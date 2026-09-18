@@ -403,63 +403,27 @@ export function makeHpsCh2(E, lang = "py") {
         : "",
       // beats 규칙 상시 표시 — 코드가 beats[a][b] 를 다뤄도 '어떤 카드가 어떤 카드
       // 이기는지' 를 눈으로 (선생님 2026-07-21: 머리로 기억 안 하게).
-      content: (<><WinningRulesBanner E={E} /><CodeSectionView section={sec} lang={lang} E={E} /></>),
+      /* ⚠️ 2026-09-18 — 첫 걸음에 '골라 갈 수 있다' 는 안내 한 줄.
+         선생님: *"브루트포스를 보고싶은 애도 있을거고 … 긴건 알고 어떻게푸는지부터
+         보고싶은애들도 있을것 같아"*
+         담당 둘·학생 둘이 서로 안 보고 **같은 결론**에 닿았다 —
+         **갈림길 화면은 만들지 않는다.** 아끼는 게 세 쪽뿐인데 150개 quest 에 없는
+         새 구조를 발명하게 된다(`memory/quest_season_shape_consistency.md`).
+         대신 **이미 있는 진도바**를 쓴다. 이 quest 는 보너스 구간에서 이미 같은 안내를 쓴다.
+         ⚠️ 말은 "브루트포스" 로 하지 않는다 — 그게 뭔지 모르는 학생은 고를 수가 없다. */
+      content: (<>
+        {i === 0 && (
+          <div style={{ maxWidth: 520, margin: "0 auto 10px", padding: "8px 13px", borderRadius: 10,
+            background: "#f8fafc", border: "1px dashed #cbd5e1", fontSize: 11.5, color: "#475569",
+            lineHeight: 1.7, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              "Want to write the slow one yourself? Keep going. Already know it's slow and want the fast idea first? Jump ahead with the bar at the top.",
+              "느린 방법도 직접 짜 보고 싶으면 그대로 계속 가요.\n느리다는 건 알겠고 푸는 법부터 보고 싶으면, 위쪽 진도바에서 뒤쪽으로 건너뛰어도 돼요.")}
+          </div>
+        )}
+        <WinningRulesBanner E={E} /><CodeSectionView section={sec} lang={lang} E={E} />
+      </>),
     })),
-    // Reality check: submit brute force → TLE on harder cases.
-    // The "why both languages fail" math comes on the NEXT page; here we
-    // just show the raw result.
-    {
-      section: "build",
-      type: "reveal",
-      narr: t(E,
-        "Brute is done — submit it.  The judge runs 12 test inputs against it.",
-        "brute 코드를 다 짰어요. 이제 제출해볼게요."),
-      // (2026-07-14 검토: 이 스텝이 낡은 안내문 하나만 있는 '빈 화면'이었음 → 제출 순간 도식으로 채움.
-      //  구체적 테스트 번호/시간은 확인된 바 없어 지어내지 않음 — 작은 입력 ✓ / 큰 입력 ⏰ 만.)
-      content: (
-        <div style={{ padding: 20 }}>
-          <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: C.text, marginBottom: 14 }}>
-            📮 {t(E, "Submitted — the judge starts running…", "제출 완료 — 채점기가 돌기 시작…")}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 480, margin: "0 auto" }}>
-            <div style={{
-              display: "flex", alignItems: "center", gap: 12, padding: "12px 16px",
-              background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 12,
-            }}>
-              <span style={{ fontSize: 22 }}>✅</span>
-              <div style={{ wordBreak: "keep-all" }}>
-                <div style={{ fontSize: 13, fontWeight: 800, color: "#166534" }}>
-                  {t(E, "Small inputs — pass", "작은 입력 — 통과")}
-                </div>
-                <div style={{ fontSize: 11.5, color: "#15803d", fontWeight: 600 }}>
-                  {t(E, "Sample and small N finish instantly. Answers correct!",
-                        "샘플·작은 N 은 순식간에 끝나요. 답도 다 맞아요!")}
-                </div>
-              </div>
-            </div>
-            <div style={{ textAlign: "center", fontSize: 16, color: C.dim }}>↓</div>
-            <div style={{
-              display: "flex", alignItems: "center", gap: 12, padding: "12px 16px",
-              background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 12,
-            }}>
-              <span style={{ fontSize: 22 }}>⏰</span>
-              <div style={{ wordBreak: "keep-all" }}>
-                <div style={{ fontSize: 13, fontWeight: 800, color: "#991b1b" }}>
-                  {t(E, "Big inputs — Time Limit Exceeded", "큰 입력 — 시간 초과 (TLE)")}
-                </div>
-                <div style={{ fontSize: 11.5, color: "#b91c1c", fontWeight: 600 }}>
-                  {t(E, "When N and M get big, the judge cuts us off — too slow.",
-                        "N 과 M 이 커지면 채점기가 끊어버려요 — 너무 느려서.")}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style={{ textAlign: "center", fontSize: 12, color: C.dim, fontWeight: 600, marginTop: 14, wordBreak: "keep-all" }}>
-            {t(E, "Answers are right… speed is the problem. WHERE is it slow? →",
-                  "답은 맞는데… 속도가 문제예요. 어디가 느린 걸까요? →")}
-          </div>
-        </div>),
-    },
     // Why brute force fails — show the actual nested-for code with the
     // N² loop highlighted, then count operations.  Previously this page
     // was empty narration only, so students had no concrete pin for
@@ -467,9 +431,16 @@ export function makeHpsCh2(E, lang = "py") {
     {
       section: "optimize",
       type: "reveal",
+      /* ⚠️ 2026-09-18: 여기 있던 '제출 도식' 쪽과 이 쪽을 **한 쪽으로 합쳤다.**
+         선생님: *"브루트포스에 대한 설명이 너무 길어. 굳이 오래 걸린다만 보여줘도 될것 같은데."*
+         `memory/feedback_why_and_how_over_slowness.md` 가 이미 못박아 둔 것 —
+         **한계는 한 화면이면 충분하다.** 두 쪽이 같은 결론("느리다")을 향하고 있었다.
+         ⚠️ 다만 **제출 결과(✅/⏰) 자체는 없애지 않았다.** 담당 둘·학생 둘이 서로 안 보고
+            **그 자리를 제일 좋아했다**고 했다 — 학생: *"시험 결과 보는 것 같았다."*
+            그래서 도식을 줄여 이 쪽 맨 위에 띠로 남긴다. */
       narr: t(E,
-        "…and the bigger inputs time out.  Where is brute spending all its work?  Look at the nested loop.",
-        "큰 입력에서 시간이 초과됐어요. 어디서 일이 많아졌을까요?"),
+        "Submit it — small inputs pass, big ones time out. Where is all the work going?",
+        "제출해 봐요. 작은 입력은 통과하는데 큰 입력이 시간 초과예요. 어디서 일이 많아졌을까요?"),
       content: (() => {
         const codeLines = [
           "for _ in range(M):              # M queries (Elsie's hands)",
@@ -485,6 +456,19 @@ export function makeHpsCh2(E, lang = "py") {
         ];
         return (
           <div style={{ padding: 16 }}>
+            {/* 제출 결과 — 옛 '제출 도식' 쪽을 한 줄 띠로 줄여 옮긴 것 */}
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "7px 13px",
+                background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 999,
+                fontSize: 12.5, color: "#166534", fontWeight: 700, wordBreak: "keep-all" }}>
+                ✅ {t(E, "small inputs — pass", "작은 입력 — 통과")}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "7px 13px",
+                background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 999,
+                fontSize: 12.5, color: "#991b1b", fontWeight: 700, wordBreak: "keep-all" }}>
+                ⏰ {t(E, "big inputs — too slow", "큰 입력 — 시간 초과")}
+              </div>
+            </div>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
               🔍 {t(E, "Where N² hides", "N² 가 숨어있는 곳")}
             </div>
