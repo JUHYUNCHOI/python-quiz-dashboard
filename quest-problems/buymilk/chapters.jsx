@@ -212,7 +212,7 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now bigger blocks are never worse. So walk from the biggest block down, comparing just two choices.",
+        "Now bigger packs are never worse. So walk from the biggest pack down, comparing just two choices.",
         "이제 둘째 걸음이에요. 큰 묶음부터 차례로 사 봐요. 먼저 5통으로 연습해요."),
       content: (<GreedySim key="greedy5" E={E} x={5} />),
     },
@@ -245,7 +245,7 @@ export function makeBuyMilkCh1(E) {
         "a=[10,15,20,45], deal sizes 1,2,4,8. Min cost for x=3?",
         "거래 값이 10, 15, 20, 45 예요. 3통일 때 얼마가 제일 쌀까요?"),
       hint: t(E,
-        "Use the block prices you found: 10, 15, 20, 40.\nStart from the biggest block and compare the two choices.",
+        "Use the pack prices you found: 10, 15, 20, 40.\nStart from the biggest pack and compare the two choices.",
         "아까 구한 묶음 값을 써요. 10, 15, 20, 40 이에요.\n제일 큰 묶음부터 두 갈래를 비교해 봐요."),
       answer: 20,
     },
@@ -413,7 +413,7 @@ export function makeBuyMilkCh2(E, lang = "py") {
         type: "reveal",
         label: t(E, "Code", "코드"),
         narr: t(E,
-          "No recursion — one sweep from the biggest block down.",
+          "No recursion — one sweep from the biggest pack down.",
           "재귀 없이 큰 묶음부터 한 번만 훑어요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };

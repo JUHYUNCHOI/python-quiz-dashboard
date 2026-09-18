@@ -217,7 +217,7 @@ const _FAST_VARS = [
 export function getMooHuntFastWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FAST_CPP, vars: _FAST_VARS, beats: [
-      { hi: [0, 6],   bubble: t(E, "What do we have to hand back?\nThe best score, and how many boards reach it.\nSo we will build every board and score it. Start by reading N and K.",
+      { hi: [0, 6],   bubble: t(E, "What do we need to find?\nThe best score, and how many boards reach it.\nSo we will build every board and score it. Start by reading N and K.",
                                    "무엇을 내놓아야 하나요?\n최고 점수와, 그 점수가 나오는 보드 개수예요.\n그러니 보드를 전부 만들어 점수를 매길 거예요. 먼저 N 과 K 를 읽어요.") },
       { hi: [8, 18],  bubble: t(E, "Re-reading all K moves for every board would be far too slow.\nThe moves never change — so count them once, right here.\nThe key is (M cell, smaller O cell, larger O cell).",
                                    "보드마다 무브 K 개를 다시 훑으면 너무 느려요.\n무브는 바뀌지 않으니 여기서 **한 번만** 세어 둬요.\n열쇠는 (M 자리, 작은 O 자리, 큰 O 자리) 예요.") },
@@ -236,7 +236,7 @@ export function getMooHuntFastWalk(E, lang = "py") {
     ] };
   }
   return { code: FAST_PY, vars: _FAST_VARS, beats: [
-    { hi: [0, 4],   bubble: t(E, "What do we have to hand back?\nThe best score, and how many boards reach it.\nSo we will build every board and score it. Start by reading N and K.",
+    { hi: [0, 4],   bubble: t(E, "What do we need to find?\nThe best score, and how many boards reach it.\nSo we will build every board and score it. Start by reading N and K.",
                                  "무엇을 내놓아야 하나요?\n최고 점수와, 그 점수가 나오는 보드 개수예요.\n그러니 보드를 전부 만들어 점수를 매길 거예요. 먼저 N 과 K 를 읽어요.") },
     { hi: [6, 14],  bubble: t(E, "Re-reading all K moves for every board would be far too slow.\nThe moves never change — so count them once, right here.\nThe key is (M cell, smaller O cell, larger O cell).",
                                  "보드마다 무브 K 개를 다시 훑으면 너무 느려요.\n무브는 바뀌지 않으니 여기서 **한 번만** 세어 둬요.\n열쇠는 (M 자리, 작은 O 자리, 큰 O 자리) 예요.") },

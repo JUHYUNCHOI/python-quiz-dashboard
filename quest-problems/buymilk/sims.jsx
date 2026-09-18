@@ -117,7 +117,7 @@ export function NormalizeSim({ E }) {
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Turn deals into block prices", "묶음마다 제일 싼 값을 구해요")}
+        title={t(E, "Turn deals into pack prices", "묶음마다 제일 싼 값을 구해요")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Carry E={E}>
         {t(E, <>A new, bigger example — <b>4 deals</b> now: 10, 15, 20, 45.<br />
@@ -131,7 +131,7 @@ export function NormalizeSim({ E }) {
       <div style={{ maxWidth: 460, margin: "0 auto", display: "grid", gap: 5 }}>
         <div style={{ display: "grid", gridTemplateColumns: "70px 1fr 1fr 1fr", gap: 8,
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 11px" }}>
-          <span>{t(E, "block", "묶음")}</span>
+          <span>{t(E, "pack", "묶음")}</span>
           <span>{t(E, "listed price", "거래값")}</span>
           <span>{t(E, "two halves", "작은 묶음 두 번")}</span>
           <span>{t(E, "cheaper way", "싼 쪽")}</span>
