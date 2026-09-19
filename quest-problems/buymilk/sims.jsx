@@ -188,7 +188,7 @@ export function NormalizeSim({ E }) {
    `covered` 는 앞 묶음들로 이미 덮은 칸, `tiles`×`size` 는 이번에 놓는 타일.
    **끝을 넘어가는 칸(덤)** 을 점선으로 보여 주는 게 이 그림의 전부다 —
    "x 통 이상" 이라는 말이 눈에 보이게 된다. */
-function Strip({ E, X, covered, tiles, size, color }) {
+function Strip({ E, X, covered, tiles, size, color, color2 }) {
   const laid = tiles * size;
   const total = covered + laid;
   const cells = Math.max(X, total);
@@ -198,13 +198,16 @@ function Strip({ E, X, covered, tiles, size, color }) {
     const isNeed = k < X;                    // 꼭 채워야 하는 칸
     const isOld = k < covered;               // 앞 묶음이 채운 칸
     const isNew = k >= covered && k < total; // 이번 타일이 채운 칸
+    const nth = isNew ? Math.floor((k - covered) / size) : -1;   // 이번에 놓은 **몇 번째** 타일인가
     const startsTile = isNew && (k - covered) % size === 0;
     box.push(
       <span key={k} style={{
         width: W, height: W, borderRadius: 4, flexShrink: 0,
-        background: isOld ? "#cbd5e1" : isNew ? color : "#fff",
+        /* ⚠️ 2026-09-19 pedagogy: 8통짜리 한 개와 4통짜리 두 개가 **그림에서 똑같아 보였다.**
+           묶음마다 색을 번갈아 주고 사이를 벌려, 몇 개를 샀는지가 보이게 한다. */
+        background: isOld ? "#cbd5e1" : isNew ? (nth % 2 ? color2 : color) : "#fff",
         border: isNeed ? "1px solid #94a3b8" : "1px dashed #cbd5e1",
-        marginLeft: startsTile && k !== 0 ? 3 : 0,
+        marginLeft: startsTile && k !== 0 ? 7 : 0,
         opacity: isNeed ? 1 : 0.55,
       }} />);
   }
@@ -285,12 +288,10 @@ export function GreedySim({ E, x = 5 }) {
             그런데 이 화면은 그 이야기를 **다시 안 했다.** 앞 쪽 기억에 기대고 있었다
             (`memory/feedback_screen_must_not_rely_on_memory.md`).
             45 → 40 이 어디서 왔는지를 이 자리에 적는다. */}
-        {t(E, <>Same 4 deals: 10, 15, 20, 45.<br />
-                 The cheaper way for each pack: {C.join(", ")}<br />
-                 <span style={{ color: "#166534" }}>The 8-pack says 45, but two 4-packs cost 20 + 20 = 40 — so we use 40.</span></>,
-             <>같은 거래 4개예요. 값은 10, 15, 20, 45 예요.<br />
-               묶음마다 제일 싸게 사는 값은 {C.join(", ")} 이에요.<br />
-               <span style={{ color: "#166534" }}>8통짜리는 붙은 값이 45 인데, 4통짜리 두 개면 20 + 20 = 40 이라 40 으로 정했어요.</span></>)}
+        {t(E, <>Deals 10, 15, 20, 45 → cheapest per pack <b>{C.join(", ")}</b><br />
+                 <span style={{ color: "#166534" }}>Only the 8-pack changed — two 4-packs cost 20 + 20 = 40.</span></>,
+             <>거래 값 10, 15, 20, 45 → 묶음마다 제일 싼 값 <b>{C.join(", ")}</b><br />
+               <span style={{ color: "#166534" }}>8통짜리만 바뀌었어요 — 4통짜리 두 개면 20 + 20 = 40 이라서요.</span></>)}
       </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "done" ? "aha" : "go"}>{say}</Say>
@@ -304,95 +305,58 @@ export function GreedySim({ E, x = 5 }) {
           표는 아래에 그대로 두되, 그림이 먼저 오게 한다. */}
       {cur && (
         <div style={{ maxWidth: 470, margin: "0 auto 12px", display: "grid", gap: 9,
-          padding: "11px 13px", borderRadius: 11, background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+          padding: "9px 13px", borderRadius: 11, background: "#f8fafc", border: "1px solid #e2e8f0" }}>
           <div style={{ fontSize: 11, fontWeight: 800, color: "#475569" }}>
             🧱 {t(E, `Cover ${X} buckets — ${cur.size}-pack`, `${X}통을 덮어요 — ${cur.size}통짜리`)}
           </div>
+          {/* ⚠️ 2026-09-19 pedagogy: **회색의 뜻이 화면에 없었다.**
+              회색은 앞 걸음에서 **실제로 산** 칸이고, '넉넉히' 줄은 사지 않은 **가정**이다.
+              다음 걸음에서 그 주황이 사라지니 "방금 다 채운 거 아니었나?" 가 생긴다.
+              두 줄에 각각 무엇인지 적는다. */}
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#7c2d12", marginBottom: 3 }}>
-              {t(E, "buy enough", "넉넉히 사면")} · {cur.need}{t(E, "", "개")} · <b style={mono}>{cur.cand}</b>
+              {t(E, "if we stop here", "여기서 끝내면")} · {cur.need}{t(E, "", "개")} · <b style={mono}>{cur.cand}</b>
+              <span style={{ fontWeight: 500, color: "#a16207" }}>{t(E, " (just a candidate)", " (값만 적어 둬요)")}</span>
             </div>
-            <Strip E={E} X={X} covered={X - cur.rem} tiles={cur.need} size={cur.size} color="#fdba74" />
+            <Strip E={E} X={X} covered={X - cur.rem} tiles={cur.need} size={cur.size} color="#fdba74" color2="#fb923c" />
           </div>
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#3730a3", marginBottom: 3 }}>
-              {t(E, "buy fewer", "모자라게 사면")} · {cur.take}{t(E, "", "개")} · <b style={mono}>{cur.costBefore + cur.take * C[cur.i]}</b>
+              {t(E, "what we actually buy", "실제로 사는 쪽")} · {cur.take}{t(E, "", "개")} · <b style={mono}>{cur.costBefore + cur.take * C[cur.i]}</b>
             </div>
-            <Strip E={E} X={X} covered={X - cur.rem} tiles={cur.take} size={cur.size} color="#a5b4fc" />
+            <Strip E={E} X={X} covered={X - cur.rem} tiles={cur.take} size={cur.size} color="#a5b4fc" color2="#818cf8" />
           </div>
-          <div style={{ fontSize: 10.5, color: "#64748b" }}>
-            {t(E, "grey = bought by bigger packs · dashed = past what we need",
-                  "회색 = 앞의 큰 묶음이 산 것 · 점선 = 필요한 통을 넘어선 칸")}
+          <div style={{ fontSize: 10.5, color: "#64748b", lineHeight: 1.6 }}>
+            {t(E, "grey = already bought · dashed = past what we need · each tile is one pack",
+                  "회색 = 이미 산 칸 · 점선 = 필요한 통을 넘어선 칸 · 색이 갈리면 묶음 하나")}
           </div>
         </div>)}
 
+      {/* ⚠️ 2026-09-19: 여기 있던 **네 칸짜리 표를 걷어냈다.**
+          선생님: *"이것이 이해하는데 좋은 방식은 아닌것 같아."*
+          ux 실측: 같은 숫자가 세 번(말풍선·그림 캡션·표 활성 줄) 나오고,
+          화면이 길어져 **시뮬의 ◀▶ 버튼이 화면 밖**으로 나갔다(1280×900).
+          모바일에선 둘째 칩도 안 보였다. 걸음마다 바뀌는 자리가 619px 떨어진 네 곳으로 흩어졌다.
+          그림이 '지금 이 묶음' 을 말하니, 남은 표의 할 일은 **나온 값을 모아 두는 것**뿐이다.
+          한 줄로 줄인다 — 숫자가 두 번 나오지 않고, 화면도 짧아진다. */}
       <div style={{ maxWidth: 470, margin: "0 auto", display: "grid", gap: 5 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "76px 52px 1fr 92px", gap: 10,
-          fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 11px" }}>
-          {/* ⚠️ 2026-09-18 선생님: *"남은 통? 모자라게 사고 남은통? 뭔말이지?"*
-              **같은 말이 두 칸에 있는데 뜻이 달랐다.**
-              둘째 칸은 '이 줄에 오기 전에 아직 사야 할 통', 넷째 칸은 '모자라게 산 뒤 남는 통'.
-              같은 화면에 같은 이름이 두 뜻으로 있으면 안 된다
-              (`memory/feedback_same_number_two_meanings.md`).
-              그리고 넷째 칸은 값이 `0 / 5` 처럼 **두 개**인데 이름은 하나였다 — 무엇이 무엇인지
-              알 수가 없다. 이름에 둘 다 적는다. */}
-          {/* ⚠️ 2026-09-18 선생님: *"8통짜리 하나 사면 5통 넘는건데 왜 아직 살통이 5개야?"*
-              둘째 칸은 **이 줄을 보기 전** 상태인데 이름이 그걸 안 말했다.
-              8통짜리를 사기 **전**에 5통이 필요했다는 뜻인데, 산 **뒤**로 읽혔다.
-              그리고 *"8통은 수량으로 해야지"* — `8통` 은 묶음 크기인데 우유 양처럼 읽힌다.
-              칸 안을 `8통짜리` 로 바꾼다. */}
-          {/* ⚠️ 2026-09-18 선생님: *"이쁘게"* — 머리글이 두 줄로 접히고 칸마다 줄 수가 달라
-              표가 들쭉날쭉했다. 머리글을 한 줄로 줄이고, 칸을 가운데로 맞춘다. */}
-          <span>{t(E, "pack", "묶음")}</span>
-          <span style={{ textAlign: "center" }}>{t(E, "need", "아직 필요")}</span>
-          <span style={{ textAlign: "center" }}>{t(E, "buy enough", "넉넉히 사면")}</span>
-          <span style={{ textAlign: "center" }}>{t(E, "buy fewer", "모자라게 사면")}</span>
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6 }}>
+          {trace.map((r, n) => {
+            const shown = s.k === "done" || (s.k === "row" && n <= s.n);
+            const isCur = s.k === "row" && n === s.n;
+            const isBest = shown && r.cand === best;
+            return (
+              <span key={n} style={{
+                display: "inline-flex", alignItems: "baseline", gap: 5, ...mono,
+                fontSize: 12, padding: "4px 9px", borderRadius: 999,
+                border: `${isCur ? 2 : 1}px solid ${isCur ? A : isBest ? "#86efac" : "#e2e8f0"}`,
+                background: isBest ? "#f0fdf4" : "#fff", opacity: shown ? 1 : 0.35,
+              }}>
+                <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{r.size}{t(E, "", "통")}</span>
+                <b style={{ color: isBest ? "#15803d" : "#334155" }}>{shown ? r.cand : "?"}</b>
+              </span>);
+          })}
         </div>
-        {trace.map((r, n) => {
-          const shown = s.k === "done" || (s.k === "row" && n <= s.n);
-          const isCur = s.k === "row" && n === s.n;
-          const isBest = shown && r.cand === best;
-          return (
-            <div key={n} style={{ display: "grid", gridTemplateColumns: "76px 52px 1fr 92px", gap: 10,
-              alignItems: "center", padding: "8px 11px", borderRadius: 9, fontSize: 12.5, ...mono,
-              border: `${isCur ? 2 : 1}px solid ${isCur ? A : isBest ? "#86efac" : "#e2e8f0"}`,
-              background: isBest ? "#f0fdf4" : "#fff", opacity: shown ? 1 : 0.3 }}>
-              <span style={{ fontWeight: 800, color: "#334155", lineHeight: 1.3 }}>
-                {r.size}{t(E, "-pack", "통짜리")}
-                {/* ⚠️ 2026-09-19 선생님: *"8통짜리 샀을때 40은 4통짜리 2개샀을때 40인거잖아."*
-                    이 칸이 **정한 값**만 보여줘서, 붙은 값 45 가 어디 갔는지 알 수가 없었다.
-                    바꾼 줄에만 `45 40` 을 같이 보인다 — 40 이 어디서 왔는지가 그 자리에 있게. */}
-                <span style={{ display: "block", fontWeight: 600, fontSize: 10.5, color: "#94a3b8" }}>
-                  {t(E, "one = ", "한 개 ")}
-                  {DEALS[r.i] !== C[r.i] && (
-                    <s style={{ color: "#cbd5e1" }}>{DEALS[r.i]}</s>
-                  )}{DEALS[r.i] !== C[r.i] ? " " : ""}
-                  <b style={{ color: DEALS[r.i] !== C[r.i] ? "#15803d" : "#94a3b8" }}>{C[r.i]}</b>
-                </span>
-              </span>
-              <span style={{ color: "#64748b", textAlign: "center" }}>{shown ? r.rem : "?"}</span>
-              <span style={{ fontWeight: 800, textAlign: "center", color: isBest ? "#15803d" : "#0e7490" }}>
-                {/* ⚠️ 2026-09-17 학생이 잡았다 — 전엔 `1×15 = 35` 처럼 **식이 안 맞았다.**
-                    `cand = costBefore + need×C[i]` 인데 화면은 뒷항만 보여줬다.
-                    학생: *"1×15는 15지 35가 아니다. 식이 안 맞아 보여서 못 믿게 됐다."*
-                    → **앞에서 쓴 돈을 식에 같이 보여준다.** 첫 줄(0원)은 군더더기라 뺀다. */}
-                {shown
-                  ? (r.costBefore > 0
-                      ? `${r.costBefore} + ${r.need}×${C[r.i]} = ${r.cand}`
-                      : `${r.need}×${C[r.i]} = ${r.cand}`)
-                  : "?"}
-              </span>
-              <span style={{ color: "#94a3b8", lineHeight: 1.3, textAlign: "center", fontSize: 11 }}>
-                {shown ? (
-                  <>
-                    {r.take}{t(E, " for ", "개 · ")}<b style={{ color: "#64748b" }}>{r.take * C[r.i]}</b>
-                    <span style={{ display: "block" }}>{r.rem - r.take * r.size}{t(E, " left", "통 남음")}</span>
-                  </>
-                ) : "?"}
-              </span>
-            </div>
-          );
-        })}
         <div style={{ marginTop: 6, textAlign: "center", fontSize: 13.5, fontWeight: 800,
           color: s.k === "done" ? "#15803d" : "#0e7490" }}>
           {t(E, "cheapest so far", "지금까지 제일 싼 값")} {Number.isFinite(bestSoFar) ? bestSoFar : "—"}
