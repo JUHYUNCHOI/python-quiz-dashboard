@@ -260,6 +260,51 @@ export function makeBuyMilkCh1(E) {
    왜 생겼나 (선생님 2026-09-03 검토): Ch2 가 시뮬 → 코드로 곧장 점프해서
    c / rem / cost / ans 라는 이름을 학생이 코드에서 처음 만났음.
    photoshoot25 의 Plan 카드와 같은 자리·같은 모양. */
+/* 올림 나눗셈이 어디서 나왔나 — 7통을 4통짜리로 덮는 그림 하나로.
+   ⚠️ 트릭(`+ 묶음−1`)을 **먼저** 보여주지 않는다. 그건 마지막에 나온다. */
+function CeilWhy({ E }) {
+  const Row = ({ n, note, ok }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 5 }}>
+      <span style={{ display: "flex", gap: 1 }}>
+        {Array.from({ length: Math.max(7, n * 4) }, (_, k) => (
+          <span key={k} style={{
+            width: 17, height: 17, borderRadius: 3, flexShrink: 0,
+            background: k < n * 4 ? (Math.floor(k / 4) % 2 ? "#fb923c" : "#fdba74") : "#fff",
+            border: k < 7 ? "1px solid #94a3b8" : "1px dashed #cbd5e1",
+            marginLeft: k % 4 === 0 && k !== 0 && k < n * 4 ? 5 : 0,
+            opacity: k < 7 ? 1 : 0.55,
+          }} />))}
+      </span>
+      <span style={{ fontSize: 11.5, color: ok ? "#15803d" : "#b91c1c", fontWeight: 700 }}>{note}</span>
+    </div>
+  );
+  const eq = { fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#0f172a" };
+  return (
+    <div style={{ fontSize: 12.5, color: "#334155", lineHeight: 1.7, wordBreak: "keep-all" }}>
+      <div style={{ marginBottom: 7 }}>
+        {t(E, <>Say <b>7 buckets</b> are still missing and we hold <b>4-packs</b>.</>,
+             <><b>7통</b>이 아직 모자라고, 손에 든 건 <b>4통짜리</b>예요.</>)}
+      </div>
+      <Row n={1} ok={false} note={t(E, "1 pack — 3 still missing", "1개로는 3통이 모자라요")} />
+      <Row n={2} ok={true} note={t(E, "2 packs — covered (1 extra)", "2개면 덮여요 (1통 덤)")} />
+      <div style={{ marginTop: 8 }}>
+        {t(E, <>So the rule is simple: <b>divide, and if anything is left over, add one more pack.</b></>,
+             <>그러니 규칙은 간단해요. <b>나눠 보고, 남는 게 있으면 하나 더.</b></>)}
+      </div>
+      <div style={{ marginTop: 7, padding: "7px 11px", borderRadius: 8, background: "#fff", border: "1px solid #fcd34d" }}>
+        {t(E, <>Written as one line: <span style={eq}>(7 + 3) // 4 = 2</span><br />
+                 The <b>3</b> is one less than a pack — just enough to push a leftover up, never more.</>,
+             <>이걸 한 줄로 쓰면 <span style={eq}>(7 + 3) // 4 = 2</span> 예요.<br />
+               <b>3</b> 은 묶음보다 하나 작은 수예요. 남는 게 있을 때만 딱 하나 밀어 올려요.</>)}
+        <div style={{ marginTop: 5, color: "#15803d" }}>
+          {t(E, <>Divides evenly? <span style={eq}>(8 + 3) // 4 = 2</span> — it does not go up.</>,
+               <>딱 떨어질 때는? <span style={eq}>(8 + 3) // 4 = 2</span> — 안 늘어나요.</>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function BuyMilkPlan({ E }) {
   const box = { background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, padding: "12px 14px", wordBreak: "keep-all" };
   const Insight = ({ icon, head, body, color }) => (
@@ -387,6 +432,18 @@ function BuyMilkPlan({ E }) {
             </Fragment>
           ))}
         </div>
+      </div>
+      {/* ⚠️ 2026-09-19 선생님: *"buyup formula가 어떻게 생겼는지?"* →
+          *"아직 공식이 어떻게 나왔는지 정확히 이해가 안돼"* → *"좀 더 쉽게"*
+          `(left + 묶음크기 − 1) // 묶음크기` 가 코드에 그냥 떠 있고 **유도가 없었다.**
+          `+ (묶음−1)` 은 트릭이라 보고 알 수가 없다.
+          순서를 뒤집는다 — **트릭을 먼저 보여주지 않는다.**
+          ① 모자란다(그림) → ② 나눠 보고 남으면 하나 더(진짜 규칙) → ③ 한 줄로 줄이면 → ④ 딱 떨어지면 */}
+      <div style={{ ...box, background: "#fffbeb", borderColor: "#fcd34d", marginTop: 10 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 8 }}>
+          🔎 {t(E, "That one line: how many packs to cover what's left?", "이 한 줄만 따로 봐요 — 덮으려면 몇 개?")}
+        </div>
+        <CeilWhy E={E} />
       </div>
       {/* ⚠️ 2026-09-16: 여기 있던 노란 마무리 박스를 지웠다. 같은 아이디어를 인사이트 카드 →
           번호 목록 → 마무리 박스로 **세 번** 말하고 있었고, 이 쪽이 10쪽 중 제일 무거웠다
