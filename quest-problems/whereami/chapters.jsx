@@ -729,7 +729,7 @@ export function makeWhereAmICh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code step by step! First, read N and the string s from input.", "코드를 한 단계씩 만들어요. 먼저 N 과 문자열 s 를 읽어요."),
+        "The answer is the smallest K with no repeats. So first, read N and s.", "답은 겹치지 않는 가장 작은 K예요. 먼저 N 과 문자열 s 를 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
@@ -755,7 +755,7 @@ export function makeWhereAmICh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Next, the outer loop: try K from 1 to N. We'll check each K value.", "이제 바깥 반복문에서 K 를 1 부터 N 까지 키워요."),
+        "A smaller K is better, so try K = 1, 2, 3, ... in order.", "K 가 작을수록 좋으니까, 1부터 늘려가며 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
@@ -785,7 +785,7 @@ export function makeWhereAmICh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Inside the K loop, we slide the window across the string.\nFor each substring, check if it's already in the set.", "윈도우를 한 칸씩 밀면서 집합에 이미 있는지 봐요."),
+        "To see if this K works, check every substring for a repeat.", "이 K 로 될지 보려면, 부분문자열이 겹치는지 하나씩 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
@@ -839,7 +839,7 @@ export function makeWhereAmICh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Finally, if all substrings were unique for this K, print it and stop!\nThat's the complete solution!", "이 K 에서 하나도 안 겹치면 그 K 를 출력하고 멈춰요."),
+        "The first K with no repeats is the answer — print it and stop.", "다 다른 K 가 나오면 그게 답이니, 출력하고 멈춰요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>

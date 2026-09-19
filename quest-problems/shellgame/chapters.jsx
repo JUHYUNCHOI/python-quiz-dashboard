@@ -612,7 +612,7 @@ export function makeShellCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code!\nFirst read N and all the swap data.\nEach swap has: shell A, shell B, and guess G.", "먼저 N 과 바꾸기 정보를 읽어요. 컵 A, 컵 B, 추측 G 예요."),
+        "The answer is the most guesses right, over all 3 starts. So first, read N and the swaps.", "답은 세 시작 위치 중 가장 많이 맞힌 값이에요. 먼저 N 과 바꾸기 정보를 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
@@ -640,7 +640,7 @@ export function makeShellCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The outer loop tries all 3 starting positions.\nFor each, we track the pebble position and count correct guesses.", "바깥 반복에서 시작 위치 세 가지를 차례로 해 봐요."),
+        "We don't know the true start, so try all 3 and keep the best score.", "시작 위치를 모르니까, 셋 다 해보고 제일 좋은 값을 골라요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
@@ -666,7 +666,7 @@ export function makeShellCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Inside, for each swap: update pebble position, then check if the guess matches.\nThis is the heart of the simulation!", "조약돌 자리를 옮긴 다음에 추측이 맞는지 확인해요."),
+        "For each start, move the pebble first — then check the guess against its new spot.", "조약돌 자리를 먼저 옮기고, 그 자리로 추측을 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>

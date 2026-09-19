@@ -470,7 +470,7 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code!\nFirst, read the bags and normalize: (2,1) → (1,2) so we don't double-count.", "먼저 봉지 정보를 읽어요.\n(2,1) 과 (1,2) 는 같은 것으로 맞춰요."),
+        "The answer sums a value over every color pair. So first, read the bags and normalize.", "답은 색 쌍마다 구한 값을 다 더한 거예요. 먼저 봉지를 읽어 (1,2)로 맞춰요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
@@ -499,7 +499,7 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Count how many of each bag type using Counter.\nThis lets us quickly look up A, B, C counts!", "Counter 로 같은 종류의 봉지를 세어 두면\nA·B·C 개수를 바로 알 수 있어요."),
+        "We'll need A, B, C counts for every pair, so count bag types once with Counter.", "A·B·C 봉지 개수가 필요하니까, Counter 로 미리 세어 둬요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
@@ -532,7 +532,7 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Collect all the colors that appear, then go through every pair of colors.", "나오는 색깔을 전부 모은 다음, 2개씩 짝을 지어 확인해요."),
+        "We check every pair of colors, so first collect all the colors that appear.", "색 쌍마다 계산해야 하니, 나온 색을 모아 짝을 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
@@ -569,7 +569,7 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The main loop!\nFor each pair (x,y), look up how many A, B, C bags exist, then apply the formulas.", "핵심 반복문! 색 쌍 (x,y)마다 A, B, C 봉지가 몇 개인지 찾고, 공식 두 개를 적용해요."),
+        "For each pair, look up A, B, C and add the formulas — that total is the answer.", "색 쌍마다 A·B·C 를 찾아 공식대로 더하면, 그게 곧 답이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>

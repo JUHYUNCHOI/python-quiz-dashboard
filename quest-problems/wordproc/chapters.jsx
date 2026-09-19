@@ -473,7 +473,7 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Read N (word count) and K (max chars per line), then read all the words.", "단어 수 N 과 한 줄 한도 K 를 읽고 단어를 받아요."),
+        "The answer is the document, filled line by line. So first, read N, K and the words.", "답은 줄마다 채운 문서예요. 먼저 N, K 와 단어들을 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
@@ -499,7 +499,7 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: We need to track the current line (list of words) and its total character count.\nPlus a list to collect all finished lines.", "현재 줄과 글자 수, 그리고 완성된 줄을 담을 곳이 필요해요."),
+        "We need to remember the line so far, so set up three tracking variables.", "줄 상태를 저장해야 하니까, 변수 셋을 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
@@ -529,7 +529,7 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 3: The main loop!\nFor each word: check if adding it would exceed K.\nIf so, flush the current line first.\nThen add the word.", "넣기 전에 넘치는지 보고, 넘치면 줄을 먼저 내보내요."),
+        "Before adding each word, check if it would overflow — if so, flush the line first.", "단어를 넣기 전에 규칙대로 넘치는지부터 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
