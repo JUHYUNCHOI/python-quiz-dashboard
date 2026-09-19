@@ -644,7 +644,7 @@ export function makeMixMilkCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code step by step!\nFirst, we read 3 lines of input.\nEach has capacity and initial milk for one bucket.", "코드를 한 단계씩 만들어 봐요!\n먼저 입력 3줄을 읽어요.\n각 줄에는 양동이 하나의 용량과 처음 우유량이 들어 있어요."),
+        "The answer is milk left in each bucket after pouring.\nFirst read the values.", "답은 붓기가 다 끝난 뒤 세 양동이에 남은 우유량이에요.\n먼저 값을 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
@@ -677,7 +677,7 @@ export function makeMixMilkCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Next, we loop 100 times.\nEach step, we figure out which bucket pours into which using modular arithmetic!", "다음으로 100번 반복해요.\n단계마다 어느 양동이에서 어느 양동이로 부을지를\n나머지 계산으로 정해요!"),
+        "The order 1→2, 2→3, 3→1 repeats 100 times.\nSo loop that fixed cycle.", "정해진 순서 1→2, 2→3, 3→1 이 100번 반복돼요.\n그래서 그 순서대로 돌아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
@@ -719,7 +719,7 @@ export function makeMixMilkCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The core: calculate how much to pour, then update both buckets.\nThis is just one line of math plus two updates!", "제일 중요한 부분이에요. 얼마나 부을지 계산하고 양쪽 양동이 값을 고쳐요.\n계산 한 줄에 값 바꾸는 두 줄이면 끝이에요!"),
+        "Each pour moves as much as fits —\nlimited by the source's milk or the space left.", "한 번의 붓기는 이만큼만 옮겨요 —\n출발지 우유량과 받는 쪽 남은 자리 중 작은 값."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>

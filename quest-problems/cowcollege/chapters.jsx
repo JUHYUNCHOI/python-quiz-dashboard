@@ -504,7 +504,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code! First, read N and the array of max tuitions.", "먼저 N 과 최대 등록금 배열을 입력으로 읽어요."),
+        "The answer is the max revenue and its tuition.\nFirst read the values.", "답은 최고 수입과 그때 등록금이에요.\n먼저 값부터 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
@@ -535,11 +535,16 @@ export function makeCowCollegeCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Next, sort the array!\nThis is the key insight: after sorting, c[i] as tuition means N-i cows can pay.", "정렬하면 c[i] 를 등록금으로 할 때 N-i 마리가 낼 수 있어요."),
+        "How fast can we count how many cows afford each price?", "가격마다 낼 수 있는 소 수를 어떻게 빠르게 셀까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 2: Sort the array", "2단계: 배열 정렬")}
+          </div>
+          <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
+            {t(E,
+              "Checking every cow for every price is slow — O(N^2).\nSorting fixes that: cows that can pay c[i] all sit after index i.",
+              "후보마다 모든 소를 다시 세면 느려요 (O(N²)).\n정렬해두면 c[i] 를 낼 수 있는 소가 i 번 뒤에 모여요.")}
           </div>
           <CodeSnippet
             lines={[
@@ -592,7 +597,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Now sweep through the sorted array.\nFor each index i, compute revenue = c[i] x (N-i) and track the best.", "자리마다 수입 = c[i] x (N-i) 를 구해 가장 큰 값을 기억해요."),
+        "So sweep the sorted array:\nrevenue = c[i] x (N-i) at each i, track the best.", "그래서 정렬된 배열을 훑어요.\n수입 = c[i] x (N-i) 를 구해 최댓값을 기억해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>

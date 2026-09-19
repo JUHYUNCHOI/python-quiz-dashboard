@@ -681,7 +681,7 @@ export function makeDaisyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code! First, read N and the petal counts.", "이제 코드를 만들어요. 먼저 N 과 꽃잎 수를 읽어요."),
+        "The answer is how many ranges match their own average.\nFirst read the values.", "답은 평균과 같은 꽃잎 수를 가진 구간의 개수예요.\n먼저 값을 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
@@ -712,7 +712,7 @@ export function makeDaisyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Now the outer loop fixes start index i.\nFor each i, we reset the running sum to 0 and extend j forward.", "바깥 반복이 시작 자리 i 를 정하고, 안쪽에서 j 를 늘려 가요."),
+        "Recomputing the sum from scratch each time is slow.\nSo keep a running sum as j grows.", "합을 매번 처음부터 다시 더하면 느려요.\n그래서 s 에 쌓아 가며 j 를 늘려요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>

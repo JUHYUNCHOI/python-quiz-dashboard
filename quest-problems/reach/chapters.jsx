@@ -415,8 +415,8 @@ export function makeReachCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Time to turn the plan into code — exactly the 3 pieces from last chapter: read input → Dijkstra with the red-road check → count per query.\nFirst: read the input.",
-        "앞 챕터에서 세운 계획을 그대로 코드로 옮겨요.\n입력 읽기 → 빨간 다리 검사를 붙인 다익스트라 →\n질문마다 세기. 딱 세 조각이에요.\n먼저 입력부터 읽어요."),
+        "The answer is cities reached by time K.\nFirst read the graph.",
+        "답은 시각 K 안에 갈 수 있는 도시 수예요.\n먼저 그래프부터 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
@@ -486,7 +486,7 @@ export function makeReachCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The core: Dijkstra with the weak-road check.\nSafe roads always usable.\nWeak roads only if start_time < K and arrive_time ≤ K.", "여기가 핵심이에요!\n다익스트라에 약한 다리 검사를 하나 걸어요.\n안전한 다리는 언제나 쓸 수 있어요.\n약한 다리는 출발 < K, 도착 ≤ K 일 때만 쓸 수 있어요."),
+        "Why add this check?\nSafe roads always work.\nWeak roads need start<K, arrive<=K.", "왜 이 검사가 필요할까요?\n안전한 다리는 그냥 쓰고,\n약한 다리는 출발<K, 도착≤K 일 때만 써요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>

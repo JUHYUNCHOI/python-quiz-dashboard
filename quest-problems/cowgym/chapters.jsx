@@ -467,7 +467,7 @@ export function makeCowGymCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Read K sessions.\nFor each, convert the order list into a rank array.\nrank[s][cow] = position of cow in session s.", "1단계예요. 세션 K 개를 읽어요.\n세션마다 순서 목록을 순위 목록으로 바꿔요.\nrank[s][cow] 는 세션 s 에서 그 소가 있던 자리예요."),
+        "The answer is how many pairs stay consistent.\nFirst turn each order into a rank.", "답은 일관된 쌍의 개수예요.\n먼저 순서를 순위로 바꿔요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
@@ -507,7 +507,7 @@ export function makeCowGymCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: Check all pairs (i, j) where i < j.\nFor each pair, verify if the relative order is consistent across all K sessions.", "2단계예요. i < j 인 쌍 (i, j) 을 모두 확인해요.\n쌍마다 앞뒤 순서가 세션 K 개에서 모두 같은지 따져 봐요."),
+        "So check every pair (i, j):\ndoes their order agree in all K sessions?", "그래서 쌍 (i, j) 마다 확인해요.\n세션 K 개에서 순서가 다 같은가요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
