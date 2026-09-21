@@ -35,7 +35,7 @@ export function FeedPairSim({ E }) {
     setLastPair(i);
   };
   const reset = () => { setHunger(START); setOps(0); setLastPair(-1); };
-  const allZero = hunger.every(h => h === 0);
+  const allEqual = hunger.every(h => h === hunger[0]);
 
   return (
     <div style={{ background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 12, padding: "12px 14px", marginBottom: 10 }}>
@@ -83,11 +83,14 @@ export function FeedPairSim({ E }) {
       {/* Status row */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, fontSize: 12 }}>
         <div style={{ color: "#92400e", fontWeight: 700 }}>
-          {t(E, "Ops:", "먹인 횟수:")} <span style={{ color: A, fontSize: 14 }}>{ops}</span>
+          {t(E, "Feedings:", "먹인 횟수:")} <span style={{ color: A, fontSize: 14 }}>{ops}</span>
+          <span style={{ fontWeight: 600, color: "#a16207", marginLeft: 6 }}>
+            {t(E, ` = ${ops * 2} bags`, ` = 봉지 ${ops * 2}개`)}
+          </span>
         </div>
-        {allZero && (
+        {allEqual && (
           <div style={{ color: "#15803d", fontWeight: 700 }}>
-            ✅ {t(E, "All zero!", "모두 0!")}
+            ✅ {t(E, `All equal at ${hunger[0]}!`, `모두 ${hunger[0]} 으로 같아요!`)}
           </div>
         )}
         <button onClick={reset} style={{
@@ -101,8 +104,8 @@ export function FeedPairSim({ E }) {
 
       <div style={{ fontSize: 11, color: "#a16207", marginTop: 8, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
-          "Start: [2, 3, 1, 2]. Each click feeds an adjacent pair (both must be ≥ 1). Can you make all zero?",
-          "시작: [2, 3, 1, 2]. 한 번 누르면 인접한 쌍을 먹여요 (둘 다 ≥ 1 일 때만). 모두 0 으로 만들 수 있을까요?")}
+          "Start: [2, 3, 1, 2]. Each click feeds an adjacent pair (both must be ≥ 1). Can you make them all equal? (It does not have to be zero.)",
+          "시작: [2, 3, 1, 2]. 한 번 누르면 인접한 쌍을 먹여요 (둘 다 ≥ 1 일 때만). 모두 같게 만들 수 있을까요? (꼭 0이 아니어도 돼요.)")}
       </div>
     </div>
   );
@@ -256,8 +259,8 @@ export function getDroughtSections(E) {
       why: [
         t(E, "Why adjust when N is even? f was free to pick, so we may lower every even-indexed o[i] by the same amount without breaking anything — so subtract their minimum to spend as few bags as possible.",
             "왜 N 이 짝수일 때 더 손봐야 할까요?\nf 를 자유롭게 고를 수 있어서, 짝수 자리 o[i] 를 전부 같은 만큼 줄여도 문제없어요.\n그래서 그중 최솟값만큼 다 같이 빼서 봉지를 최대한 적게 써요."),
-        t(E, "So the answer is 2 * sum(o): each bag lowers two cows, and o[i] counts bags spent on that pair.",
-            "그래서 답은 2 * sum(o) 예요.\n봉지 하나가 소 둘의 배고픔을 낮추고, o[i] 는 쌍마다 쓴 봉지 수거든요."),
+        t(E, "So the answer is 2 * sum(o): one feeding costs 2 bags (one cow each), and o[i] is how many times we fed the pair (i, i+1).",
+            "그래서 답은 2 * sum(o) 예요.\n한 번 먹일 때마다 봉지 2개(소 한 마리씩)가 쓰이고,\no[i] 는 쌍 (i, i+1) 에 먹인 횟수거든요."),
       ],
     },
     {

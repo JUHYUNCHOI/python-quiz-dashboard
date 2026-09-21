@@ -13,8 +13,8 @@ export function makeDroughtCh1(E) {
          narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
-        "FJ has N cows in a row, each with some hunger level.\nIn one operation, you pick a pair of adjacent cows and reduce BOTH of their hunger levels by 1.\nYou want every cow to end at the SAME (non-negative) hunger level — find the minimum number of operations, or print -1 if impossible. There are T such test cases.",
-        "모든 소의 배고픔을 같게 만드는 가장 적은 횟수를 구해요."),
+        "Make all the cows' hunger equal with the fewest bags.",
+        "모든 소의 배고픔을 같게 만드는 데 드는 최소 봉지 수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -30,8 +30,8 @@ export function makeDroughtCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
-                "Output the minimum operations to make every cow's hunger EQUAL (any non-negative value), or -1 if impossible. Repeat for T test cases.",
-                "모든 소의 배고픔을 같은 값(0 이상이면 아무 값이나)으로 만들려면 먹이를 최소 몇 번 줘야 할까요? 못 만들면 -1 을 출력해요. 테스트 케이스 T개를 차례로 풀어요.")}
+                "Output the minimum number of bags of corn to make every cow's hunger EQUAL (any non-negative value), or -1 if impossible. Repeat for T test cases.",
+                "모든 소의 배고픔을 같은 값(0 이상이면 아무 값이나)으로 만들려면 옥수수 봉지가 최소 몇 개 필요할까요? 못 만들면 -1 을 출력해요. 테스트 케이스 T개를 차례로 풀어요.")}
             </div>
           </div>
 
@@ -53,12 +53,12 @@ export function makeDroughtCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One operation: pick ", "먹이 한 번: ")}
+                  {t(E, "One feeding: pick ", "먹이 한 번: ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "two adjacent cows i, i+1", "인접한 두 소 i, i+1")}</b>
-                  {t(E, " and reduce ", "을 골라 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "both hungers by 1", "둘의 배고픔을 1씩 줄이기")}</b>
-                  {t(E, " (allowed only if both are ≥ 1).",
-                        " (둘 다 ≥ 1 일 때만 가능).")}
+                  {t(E, " and give each one bag of corn, so ", "을 골라 한 마리에 옥수수 한 봉지씩 줘요 — ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "both hungers drop by 1", "둘의 배고픔이 1씩 줄어요")}</b>
+                  {t(E, " (allowed only if both are ≥ 1). One feeding uses 2 bags.",
+                        " (둘 다 ≥ 1 일 때만 가능). 한 번 먹일 때 봉지 2개를 써요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -73,7 +73,7 @@ export function makeDroughtCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "먹이를 주는 최소 횟수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of bags of corn", "필요한 최소 봉지 수")}</b>
                   {t(E, ", or ", " 를 출력해요. 불가능하면 ")}
                   <b style={{ color: "#dc2626" }}>-1</b>
                   {t(E, " if impossible.", ".")}
@@ -87,9 +87,12 @@ export function makeDroughtCh1(E) {
     },
     // 1-2: 예제 줄 형식 카드 — 형식만, 풀이 없음.
     //   ⚠️ 원문 PDF 가 없다(public/problems/ 에 drought 없음) — 새 숫자를 지어서
-    //   solve() 로 직접 검증했다([3,5,2]→10, [1,4,1]→-1). 기존에 쓰인 [2,2]·[2,3,1,2]
-    //   는 재사용하지 않았다 — [2,2] 는 뒤 퀴즈/입력 스텝의 답과 겹쳐 스포일러가 되고,
-    //   solve([2,2])=0 인데 그 스텝은 답을 2 로 두고 있어(기존 버그, 손대지 않음) 혼선만 커진다.
+    //   solve() 로 직접 검증했다([3,5,2]→10, [1,4,1]→-1).
+    //   2026-09-21: 이 화면이 말하던 "먹이 횟수" 가 원문(usaco.org cpid=1181)과 달랐다 —
+    //   원문의 답은 **옥수수 봉지 수**이고, 한 번 먹이면 소 두 마리에 한 봉지씩 = 2개다.
+    //   코드는 처음부터 2*sum(o) 로 맞게 짜여 있었고(공식 샘플 재현) **글만 틀렸다.**
+    //   같은 이유로 퀴즈·입력 스텝의 [2,2] 도 버렸다 — solve([2,2])=0 인데 답을 2 로
+    //   두고 있었다. 지금은 [1,2,1]→봉지 4개 · [2,4,2]→봉지 8개 (둘 다 solve() 로 확인).
     {
       type: "reveal",
       narr: t(E,
@@ -129,32 +132,32 @@ export function makeDroughtCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Take [2, 2]. Feeding the pair (0,1) lowers both at once.", "[2, 2] 를 생각해봐요. 쌍(0,1)에 먹이를 주면 둘이 같이 줄어요."),
+        "Take [1, 2, 1]. Feeding a pair lowers both of those cows at once.", "[1, 2, 1] 을 생각해봐요. 한 쌍에 먹이면 둘이 같이 줄어요."),
       question: t(E,
-        "[2, 2]: feeding pair (0,1) twice gives [0, 0]. How many operations?",
-        "[2, 2] 에서 쌍(0,1)에 2번 먹이를 주면 [0, 0] 이 돼요. 먹이를 몇 번 준 걸까요?"),
+        "[1, 2, 1]: feed pair (0,1) once, then pair (1,2) once — now it is [0, 0, 0]. How many bags of corn did that use?",
+        "[1, 2, 1] 에서 쌍(0,1)에 한 번, 쌍(1,2)에 한 번 먹이면 [0, 0, 0] 이 돼요. 옥수수 봉지를 몇 개 쓴 걸까요?"),
       options: [
-        t(E, "2 operations", "2번"),
-        t(E, "4 operations", "4번"),
-        t(E, "1 operation", "1번"),
+        t(E, "2 bags", "봉지 2개"),
+        t(E, "4 bags", "봉지 4개"),
+        t(E, "8 bags", "봉지 8개"),
       ],
-      correct: 0,
+      correct: 1,
       explain: t(E,
-        "Correct! Each feed of pair (0,1) is one operation. We need 2 to reach [0,0].",
-        "맞아요! 쌍(0,1)에 먹이를 주는 게 한 번이에요. [0,0] 이 되려면 2번 줘야 해요."),
+        "Right — we fed 2 times, and each feeding uses 2 bags (one per cow), so 4 bags.",
+        "맞아요! 먹인 건 2번이고, 한 번에 봉지 2개(소 한 마리씩)를 쓰니까 봉지 4개예요."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "[2, 2] needs how many operations to make all equal?", "[2, 2] 를 모두 같게 만들려면 먹이를 몇 번 줘야 할까요?"),
+        "[2, 4, 2] — how many bags of corn does it take to make all equal?", "[2, 4, 2] 를 모두 같게 만들려면 봉지가 몇 개 필요할까요?"),
       question: t(E,
-        "a = [2, 2]. Min operations to make all equal?",
-        "a = [2, 2]. 모두 같게 만드는 데 드는 최소 먹이 횟수는 몇 번일까요?"),
+        "a = [2, 4, 2]. Minimum bags of corn to make all hungers equal?",
+        "a = [2, 4, 2]. 모두 같게 만드는 데 필요한 최소 봉지 수는 몇 개일까요?"),
       hint: t(E,
-        "Feed the pair step by step until both reach 0 — count operations.",
-        "둘 다 0 이 될 때까지 쌍에 한 번씩 먹이를 줘 보세요. 그 횟수를 세면 돼요."),
-      answer: 2,
+        "Feed pair (0,1) twice, then pair (1,2) twice. Count the feedings, then double it — 2 bags per feeding.",
+        "쌍(0,1)에 두 번, 쌍(1,2)에 두 번 먹여 보세요.\n먹인 횟수를 세고 2배 하면 봉지 수예요."),
+      answer: 8,
     },
   ];
 }
@@ -169,7 +172,7 @@ export function makeDroughtCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Walk left to right: pair (i, i+1) is fed o[i] times, and once you fix the final hunger f, each o[i] is forced — o[i] = h[i] − f − o[i-1]. f itself comes from the alternating sum (+ − + − …). Any o[i] < 0 means that case is impossible (-1). The answer is 2 × sum(o). Sections build it one piece at a time.",
+        "Going left to right, how many times we feed each pair is decided for us.",
         "왼쪽부터 차례로 보면 각 쌍에 몇 번 먹일지가 저절로 정해져요."),
       sections: getDroughtSections(E),
     },
