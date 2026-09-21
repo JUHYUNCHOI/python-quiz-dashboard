@@ -96,11 +96,14 @@ export function makeChapters(E) {
                 "# best 가 답이에요",
               ],
               cpp: [
-                "int best = 0, n = s.size();",
+                "int best = 0;",
+                "int n = s.size();",
                 "for (int i = 0; i < n; i++) {        // 창문 시작",
                 "    set<char> seen;                 // i 부터 쓴 글자들",
                 "    for (int j = i; j < n; j++) {   // 창문 끝",
-                "        if (seen.count(s[j])) break; // 겹치면 → 멈춤",
+                "        if (seen.count(s[j])) {   // 겹치면 → 멈춤",
+                "            break;",
+                "        }",
                 "        seen.insert(s[j]);",
                 "        best = max(best, j - i + 1);",
                 "    }",
@@ -217,7 +220,8 @@ export function makeChapters(E) {
               cpp: [
                 "int lengthOfLongestSubstring(string s) {",
                 "    unordered_map<char,int> last;  // 글자 -> 마지막으로 본 자리",
-                "    int left = 0, best = 0;",
+                "    int left = 0;",
+                "    int best = 0;",
               ],
             },
             {
@@ -283,7 +287,8 @@ export function makeChapters(E) {
             cpp: [
               "int lengthOfLongestSubstring(string s) {",
               "    unordered_map<char,int> last;  // 글자 -> 마지막으로 본 자리",
-              "    int left = 0, best = 0;",
+              "    int left = 0;",
+              "    int best = 0;",
               "    for (int right = 0; right < (int)s.size(); right++) {",
               "        char ch = s[right];",
               "        if (last.count(ch) && last[ch] >= left)",
