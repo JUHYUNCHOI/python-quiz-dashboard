@@ -5,15 +5,15 @@ import { t } from "@/components/quest/theme";
 /* makedistinct 시뮬.
 
    왜 생겼나 (2026-09-21) — 선생님:
-     *"내가 굳이 필요없는 퀴즈는 없애고 주절히 설명하기보다는 **눈에 보이게끔 시뮬로 쉽게**
+     *"내가 굳이 필요없는 퀴즈는 없애고 주절히 설명하기보다는 눈에 보이게끔 시뮬로 쉽게
        보여달라 했는데 전혀 안그런데"*
-   그때까지 이 quest 는 **시뮬이 0개**였다. `sims.jsx` 파일 자체가 없었고,
-   3쪽은 여섯 단계를 **글로 나열**했고, 4·5쪽은 퀴즈와 입력칸이었다.
+   그때까지 이 quest 는 시뮬이 0개였다. `sims.jsx` 파일 자체가 없었고,
+   3쪽은 여섯 단계를 글로 나열했고, 4·5쪽은 퀴즈와 입력칸이었다.
    검토자 넷을 붙였지만 **아무에게도 "여기가 시뮬 자리인가" 를 안 물어서** 다 지나갔다.
 
    모양은 형제 quest 를 베꼈다 (`moohunt/sims.jsx`) — SimNav 단계(◀▶) + 말풍선,
    자동재생 없음. 근거: `memory/feedback_sim_style_consistency.md`
-   말풍선은 **지금 바뀌는 자리 바로 위**에 둔다 — `memory/feedback_one_thing_changes_at_a_time.md`
+   말풍선은 지금 바뀌는 자리 바로 위에 둔다 — `memory/feedback_one_thing_changes_at_a_time.md`
 */
 
 const A = "#2563eb";
@@ -126,7 +126,7 @@ export function PlaceOneByOneSim({ E }) {
 /* ═══ K 가 2 면 누가 누구와 부딪히나 — 4쪽 퀴즈를 대신한다 ═══ */
 export function WhoCanMeetSim({ E }) {
   /* 4쪽은 객관식 퀴즈였다. 선생님: "굳이 필요없는 퀴즈는 없애고 … 눈에 보이게끔".
-     같은 것을 보여주되 **답을 고르는 게 아니라 눈으로 보게** 한다.
+     같은 것을 보여주되 답을 고르는 게 아니라 눈으로 보게 한다.
      `a = [5, 3, 5, 4], K = 2` — 2 를 더하면 홀수는 계속 홀수, 짝수는 계속 짝수다. */
   const nums = [5, 3, 5, 4];
   const steps = [

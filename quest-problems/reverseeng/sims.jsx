@@ -63,9 +63,16 @@ export function PeelSim({ E }) {
     { st: [0, 0, 0, 0], mark: ["", "", "", ""], rule: null,
       ko: "표가 네 줄이에요. 왼쪽이 입력, 오른쪽이 그 입력에 프로그램이 낸 답이에요.",
       en: "Four rows. Left is the input, right is what the program answered." },
+    /* 2026-09-21: 여기서 바로 "첫 글자가 1 인 줄" 로 들어갔더니 학생이 막혔다 —
+       *"왜 첫 번째로 변수[0]==1 을 시도했는지 이유가 없었다. 순서는 상관없어요,
+       아무 조합이나 다 시도해서 되는 걸 떼면 돼요 라고 한 줄만 먼저 알려줬으면."*
+       그래서 **고르는 방법**을 먼저 한 걸음으로 넣는다. */
+    { st: [0, 0, 0, 0], mark: ["", "", "", ""], rule: null, tone: "go",
+      ko: "어디부터 볼지는 정해져 있지 않아요. 첫 글자든 둘째 글자든, 0 이든 1 이든 — 되는 걸 찾을 때까지 다 해봐요.",
+      en: "There is no fixed place to start. First letter or second, 0 or 1 — just try them until one works." },
     { st: [0, 0, 1, 1], mark: ["", "", "", ""], rule: null, tone: "go",
-      ko: "첫 글자가 1 인 줄만 볼게요 — 10 과 11 이에요.",
-      en: "Look only at the rows whose first letter is 1 — that is 10 and 11." },
+      ko: "여기서는 첫 글자가 1 인 줄부터 해볼게요 — 10 과 11 이에요.",
+      en: "Here we try the rows whose first letter is 1 — that is 10 and 11." },
     { st: [0, 0, 1, 1], mark: ["", "", "답 1", "답 1"], rule: null, tone: "aha",
       ko: "둘 다 답이 1 이에요. 답이 같으니 if 하나로 묶을 수 있어요.",
       en: "Both answer 1. Same answer, so one if can cover them." },
@@ -84,6 +91,9 @@ export function PeelSim({ E }) {
     { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: "else → 0", ruleEn: "else → 0", tone: "aha",
       ko: "마지막 00 한 줄은 else 로 받아요. 표가 비었어요 — 이런 프로그램이 정말 있어요. OK!",
       en: "The last row, 00, goes to else. The table is empty — such a program really exists. OK!" },
+    { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: null, tone: "go",
+      ko: "다른 순서로 떼어도 괜찮아요. 뗄 수 있는 줄은 나중에 떼도 그대로 뗄 수 있거든요. 그래서 되는 걸 아무거나 먼저 떼면 돼요.",
+      en: "A different order is fine too. A group that can be peeled now can still be peeled later — so peel whichever one works first." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];

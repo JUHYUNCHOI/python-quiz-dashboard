@@ -11,8 +11,8 @@ export function makeRevEngCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Elsie's program is a chain of if / else-if / else statements. Each statement looks at ONE variable and returns 0 or 1, like:\n  if (b[1]==1) return 1;\n  else if (b[0]==0) return 0;\n  else return 1;\nWe are given M inputs (each a length-N string of 0/1) with their claimed outputs. Decide whether SOME such program could produce all of them: print OK, otherwise LIE.",
-        "Elsie 의 프로그램은 if / else-if / else 가 줄줄이 이어진 모습이에요.\n문장 하나가 변수 하나만 보고 0 이나 1 을 돌려줘요.\n  if (b[1]==1) return 1;\n  else if (b[0]==0) return 0;\n  else return 1;\n입력 M 개와 이렇게 나왔다는 출력이 주어져요.\n그런 프로그램으로 다 만들 수 있으면 OK, 아니면 LIE 를 출력해요."),
+        "Elsie's program is a chain of if / else-if / else statements. Each statement looks at ONE variable and returns 0 or 1, like:\n  if (arr[1]==1) return 1;\n  else if (arr[0]==0) return 0;\n  else return 1;\nWe are given M inputs (each a length-N string of 0/1) with their claimed outputs. Decide whether SOME such program could produce all of them: print OK, otherwise LIE.",
+        "Elsie 의 프로그램은 if / else-if / else 가 줄줄이 이어진 모습이에요.\n문장 하나가 변수 하나만 보고 0 이나 1 을 돌려줘요.\n  if (arr[1]==1) return 1;\n  else if (arr[0]==0) return 0;\n  else return 1;\n입력 M 개와 이렇게 나왔다는 출력이 주어져요.\n그런 프로그램으로 다 만들 수 있으면 OK, 아니면 LIE 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
