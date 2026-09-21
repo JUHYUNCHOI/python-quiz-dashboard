@@ -406,7 +406,15 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
               <span className="hidden sm:inline">{t("같은 대회", "Same contest")}</span>
               <span className="sm:hidden">{t("대회", "Contest")}</span>
             </span>
-            <div className="flex items-center gap-1">
+            {/* 2026-09-21 PM 판정: 두 번째 재발 — client.tsx:398 주석의 2026-09-09 사고와
+                같은 원인이다. 형제문제 배지가 `ProgressiveCodeStepper`(원형+숫자, 28px)와
+                똑같은 "원형 배지 + 숫자" 모양이라, 라벨을 항상 보이게 해도 학생이 또
+                코드 챕터로 착각해 눌렀다("옆 문제로 튕겨 나갔다"). 라벨은 이미 실패한
+                처방이라 **모양 자체를 다르게** 만든다 — 원형(rounded-full) 대신
+                알약형(rounded-md), 코드 스테퍼 쪽은 그대로 둔다(그쪽이 이 저장소의
+                "단계 표시" 표준). 크기도 20×20 → 28px 높이로 키우고 간격을 넓혀
+                1·2·3 사이 오클릭도 줄인다. */}
+            <div className="flex items-center gap-1.5">
               {contestSiblings.map((p) => {
                 const isCurrent = p.id === problemId
                 const numMatch = p.sub.match(/#(\d+)$/) || p.sub.match(/P(\d+)$/)
@@ -415,9 +423,9 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                   <button
                     key={p.id}
                     onClick={() => router.push(`/quest/${p.id}`)}
-                    className={`w-5 h-5 rounded-full text-[10px] font-black transition-colors ${
+                    className={`h-7 min-w-[28px] px-2 rounded-md text-[11px] font-black transition-colors ${
                       isCurrent
-                        ? "bg-amber-500 text-white"
+                        ? "bg-amber-700 text-white"
                         : "bg-white border border-amber-300 text-amber-700 hover:bg-amber-100"
                     }`}
                     title={`${t("문제", "Problem")} #${num} — ${p.title}`}
