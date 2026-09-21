@@ -18,6 +18,21 @@
 
 ⚠️ 판정이 아니라 **볼 자리 표시**다. 문제 원문이 `a_i` · `N` 처럼 기호를 쓰는 건 정상이다.
    잡는 것은 **여러 낱말을 이어 붙인 코드투 이름**뿐이다 — `deal_price` · `blockCost` · `suffix_max`.
+
+🆕 2026-09-21 — **이름만 보고 문법은 안 봤다.** `makedistinct` 미션 첫 문장이
+   *"모든 원소가 서로 달라지게 만들려면 `+= K` 를 적어도 몇 번"* 이었는데 **0건**이었다.
+   `+= K` 는 낱말이 아니라 **코드 문법**이라 위 그물에 안 걸렸다.
+   선생님: *"뭔말인지 모르겠는데. 읽는게 넘 힘든데?"*
+   그래서 문법도 본다 — `+=` · `a[i]` · `a[0..N-1]` · `->` · `==` · `//`.
+   그리고 **코드 말인 한국어 낱말**(`배열` · `원소` · `인덱스`)도 같이 본다.
+   `moohunt` 는 "칸", `buymilk` 는 "거래" 라고 부른다 — 그게 이 저장소의 모양이다.
+   근거: `memory/quest_season_shape_consistency.md`
+
+⚠️ **두 층이 섞여 있다. 같은 무게로 읽지 마라** (실측 2026-09-21: 문법 63 · 코드말 낱말 77) —
+   · **문법**(`+= K` · `a[i]` · `a[0..N-1]`)은 거의 다 진짜다. 학생이 코드를 안 봤으면 읽을 수 없다.
+   · **코드말 낱말**(`배열` · `원소` · `리스트`)은 **판단이 필요하다.**
+     `lc560` 의 *"부분 배열"* 은 그 문제의 이름 자체라 바꾸면 오히려 틀린다.
+     이 줄은 "바꿔라" 가 아니라 **"형제 quest 는 뭐라고 부르나 한 번 보라"** 는 표시다.
 """
 import glob
 import io
@@ -92,6 +107,36 @@ def strip_comments(src):
     return "".join(out)
 
 
+
+# 코드 **문법** — 이름이 아니라 모양으로 잡는다 (2026-09-21)
+CODE_SYNTAX = [
+    (re.compile(r"(?<![<>!=+\-*/])[+\-*/]=(?!=)"), "+= 같은 대입"),
+    (re.compile(r"\b[a-z]\s*\[\s*[a-z0-9]"), "a[i] 같은 첨자"),
+    (re.compile(r"\[\s*0\s*\.\."), "a[0..N-1] 같은 범위"),
+    (re.compile(r"(?<![-<>])->(?!>)"), "-> 화살표"),
+    (re.compile(r"(?<![<>!=])==(?!=)"), "== 비교"),
+]
+# 코드 말인 한국어 낱말 — 형제 quest 는 이렇게 안 부른다
+CODE_WORDS = {
+    "배열": "수들 · 칸 · 목록",
+    "원소": "값 · 수 하나",
+    "인덱스": "자리 · 번째",
+    "리스트": "목록",
+}
+
+
+def syntax_hits(text):
+    """이 글에 코드 문법이나 코드 말이 있나 — [(무엇, 어떻게 부를까)]"""
+    out = []
+    for rx, what in CODE_SYNTAX:
+        if rx.search(text):
+            out.append((what, "말로 풀어 쓴다"))
+    for w, better in CODE_WORDS.items():
+        if w in text:
+            out.append((f"'{w}'", better))
+    return out
+
+
 def main():
     raw = [a for a in sys.argv[1:] if not a.startswith("-")]
     want = set(x for a in raw for x in a.split()) or None
@@ -114,6 +159,8 @@ def main():
             if not re.search(r"[가-힣]", v):
                 continue
             names = [n for n in (SNAKE.findall(v) + CAMEL.findall(v)) if n not in SKIP]
+            # 이름 말고 **문법·코드 말**도 본다 (2026-09-21 — `+= K` 가 0건으로 샜다)
+            names += [f"{what} → {better}" for what, better in syntax_hits(v)]
             if not names:
                 continue
             ctx = src[max(0, sm.start() - 300): sm.start()]
