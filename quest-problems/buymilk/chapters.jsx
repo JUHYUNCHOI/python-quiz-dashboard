@@ -14,7 +14,7 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John sells milk in bundles. Buy x buckets as cheaply as you can.",
+        "Buy x buckets of milk for the least money.",
         "농부 존이 우유를 묶음으로 팔아요. x 통을 제일 싸게 사요."),
       content: (
         <div style={{ padding: 16 }}>

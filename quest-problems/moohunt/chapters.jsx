@@ -14,7 +14,7 @@ export function makeMooHuntCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Best score on a row of M / O — and how many boards reach it.",
+        "Best score on a row of M/O — and how many boards.",
         "M / O 한 줄에서 최고 점수와, 그 점수가 되는 보드 개수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
