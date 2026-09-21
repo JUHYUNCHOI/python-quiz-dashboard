@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getRevEngSections } from "./components";
+import { PeelSim, StuckSim } from "./sims";
 
 /* ===============================================================
    Chapter 1: Problem (3 steps)
@@ -86,38 +87,36 @@ export function makeRevEngCh1(E) {
     // 1-3: Worked example of the greedy peel
     // TODO: sim redesign — RevEngDeepAuditSim models a SINGLE-variable if/else, which is
     // NOT the real problem (a chain of if/else-if/else). Replaced with a static worked
-    // example of the correct greedy peel. A new interactive peel sim should be built later.
+    /* 1-3: **중복이 없어도 LIE 일 수 있다** — 이 문제의 진짜 함정 (2026-09-21 추가).
+       pedagogy 검토: *"1-2 퀴즈는 '같은 입력이면 같은 출력' 만 가르친다. 그런데
+       입력이 **전부 달라도** LIE 일 수 있다는 걸 quest 어디에서도 안 보여준다.
+       그러니 학생은 '이미 퀴즈에서 다 배운 거 아닌가?' 인 채로 다음 알고리즘을 받아 적는다."*
+       원문 샘플 4번이 바로 그 반례다. */
     {
       type: "reveal",
       narr: t(E,
-        "The real idea: an if-statement keyed on one variable=value works only if EVERY remaining row with that variable=value shares the same output. Peel those rows off, then repeat on what's left. If everything peels away → OK. If you ever get stuck → LIE.",
-        "'변수=값' 으로 거는 if 문은 그 조건에 맞는 남은 행의 출력이\n전부 같을 때만 쓸 수 있어요.\n그런 행을 떼어내고 남은 것으로 다시 해 봐요.\n전부 떼어지면 OK, 도중에 막히면 LIE 예요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
-              {t(E, "Worked example (sample case 2)", "예제 풀이 (샘플 2번)")}
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8, padding: 10, marginBottom: 10 }}>
-              00 → 0{"\n"}01 → 1{"\n"}10 → 1{"\n"}11 → 1
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <div>① {t(E, "Rows with variable[0]==1: \"10\"→1, \"11\"→1 — both output 1. Peel them off.", "변수[0]==1 인 행은 \"10\"→1 과 \"11\"→1 이에요.\n둘 다 출력이 1 이라서 떼어낼 수 있어요.")}</div>
-              <div>② {t(E, "Left: \"00\"→0, \"01\"→1. Rows with variable[1]==1: just \"01\"→1. Peel it.", "이제 \"00\"→0 과 \"01\"→1 이 남았어요.\n변수[1]==1 인 행은 \"01\"→1 하나뿐이라 떼어내요.")}</div>
-              <div>③ {t(E, "Left: \"00\"→0. One row, peel it (e.g. else return 0).", "마지막으로 \"00\"→0 한 행이 남아요.\nelse return 0 으로 떼어내면 돼요.")}</div>
-              <div style={{ color: "#15803d", fontWeight: 700, marginTop: 4 }}>
-                ✓ {t(E, "Everything peeled away → OK", "전부 떼어냈으니 OK 예요")}
-              </div>
-            </div>
-          </div>
-        </div>
-      ),
+        "All four inputs are different — is that enough?",
+        "입력이 네 개 다 달라요. 그러면 된 걸까요?"),
+      content: <StuckSim E={E} />,
     },
+    /* 1-4: 떼어내기를 **눈으로**.
+       그전에는 같은 것을 정적인 글로 설명했다. 선생님: *"주절히 설명하기보다는
+       눈에 보이게끔 시뮬로 쉽게 보여달라"*. 파일에 남아 있던
+       `RevEngDeepAuditSim` 은 "문제와 안 맞는 모델" 이라 아무 데서도 안 쓰이는
+       **죽은 코드**였다 — 그래서 이 quest 는 시뮬이 0개였다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "So how do we check? Peel the rows off, one if at a time.",
+        "그럼 어떻게 가려낼까요? if 하나씩 만들며 줄을 떼어내 봐요."),
+      content: <PeelSim E={E} />,
+    },
+
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "Input [0]->1 and [1]->0.\nCan a program do this?\nCheck: if arr[0]==0 return 1 else return 0.\nWorks!\nEnter 1 for OK, 0 for LIE.", "입력 [0] 은 1, 입력 [1] 은 0 이에요.\n이런 프로그램을 만들 수 있을까요?\nif arr[0]==0 return 1 else return 0 을 넣어 보면 잘 맞아요.\nOK 이면 1, LIE 이면 0 을 넣으세요."),
+        "Input [0] answers 1, input [1] answers 0.\nCan one program do both?\nEnter 1 for OK, 0 for LIE.", "입력 [0] 은 1, 입력 [1] 은 0 이에요.\n이런 프로그램을 만들 수 있을까요?\nOK 면 1, LIE 면 0 을 넣어요."),
       question: t(E,
         "[0]->1, [1]->0. Is it OK? (1=OK, 0=LIE)",
         "[0] 은 1, [1] 은 0 이에요. OK 일까요? (1=OK, 0=LIE)"),
