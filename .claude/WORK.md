@@ -142,6 +142,36 @@ project-lead: *"지금 상태는 문서 네 번째를 하나 더 쓴 것과 다�
 
 ---
 
+## 🔒 `reverseeng` — **선생님 판정 셋** (2026-09-21, PM 이 하나로 묶으라고 함)
+
+`components.jsx` 는 `USACO_VERIFIED` 다(C++ 재제출 AC 12/12, cpid=1253).
+아래 셋은 **코드 배열을 실제로 바꿔야** 해서 손대지 않았다.
+
+- [ ] **① `FULL_PY` 가 원문 입력 형식에서 죽는다** `선생님` ← **제일 급하다**
+      원문(usaco.org cpid=1253)은 *"Consecutive test cases are separated by newlines"* 이고
+      `<pre class='in'>` 샘플에도 **케이스 사이 빈 줄**이 literal 하게 있다.
+      `input().split()` 이 그 빈 줄을 못 건너뛰어 **`ValueError`** 로 멈춘다.
+      화면의 코드를 그대로 떼어 원문 샘플로 돌려 재현했다 —
+      ```
+      빈 줄 그대로 → ValueError: not enough values to unpack
+      빈 줄 없이  → OK OK LIE LIE   (원문 정답과 일치)
+      C++        → OK OK LIE LIE   (cin >> 가 빈 줄을 건너뛴다)
+      ```
+      **알고리즘은 맞다. stdin 읽는 데서만 죽는다.** 한 줄이면 고쳐진다.
+      ⚠️ 뜻: **학생이 이 코드를 그대로 USACO 에 내면 런타임 에러가 난다.**
+      (Python 은 애초에 채점기 제출 이력이 없다 — 로컬 확인만.)
+- [ ] **② 학생이 못 읽는 리스트 컴프리헨션** `선생님`
+      `idx = [i for i in range(M) if alive[i] and rows[i][0][pos] == val]` ·
+      `set(rows[i][1] for i in idx)`
+      학생: *"배운 적 없어 짐작만 하고 넘어갔다. `for i in range(M):` 로 풀어 썼으면 훨씬 편했을 것."*
+      `check-quest-code-idiom` 은 0건이다 — **이 문법은 그 그물에 없다.**
+- [ ] **③ 삼항 연산자** `선생님` — `components.jsx:30` `print('OK' if remaining == 0 else 'LIE')`.
+      `check-code-one-statement` 1건. 사소해서 위 둘에 묶는다.
+
+**바꾸면 USACO 재제출이 필요하다**(C++ 은 안 건드리면 그대로 유효).
+
+---
+
 ## 🌅 **내일 아침 여기서 시작한다** — 2015~2022 quest 108개 (2026-09-21 밤)
 
 선생님: *"다른 quest도 이런식으로 검토 수정 진행해"* → *"2024-2025 검토를 많이 했었지"*.
