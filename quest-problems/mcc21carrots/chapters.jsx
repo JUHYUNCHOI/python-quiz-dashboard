@@ -166,7 +166,7 @@ export function makeMcc21CarrotsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Kenneth the rabbit has N baskets, basket i holding C[i] carrots. Can he pick 3 baskets whose carrot total is ODD?\nFor each of T test cases, print YES or NO.",
+        "Can Kenneth pick 3 baskets whose carrot total is odd?",
         "합이 홀수가 되는 바구니 3 개를 고를 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -328,7 +328,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every triple of baskets: about N×N×N/6 checks (picking any 3 out of N) — with N up to 100000 that is astronomically slow. The fast way uses parity: count odds and evens once, then check the two recipes.",
+        "Instead of trying every triple, just count odd and even baskets.",
         "조합을 다 뒤지는 대신 홀수·짝수 개수만 세면 돼요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

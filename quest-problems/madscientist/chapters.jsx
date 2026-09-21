@@ -19,7 +19,7 @@ export function makeMadSciCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two strings A and B of length N over {H, G} are given. In one 'flip' operation you choose any contiguous substring of B and swap H↔G inside it.\nPrint the MINIMUM number of flip operations to make B equal A.",
+        "Find the minimum number of flips to turn B into A.",
         "B 를 뒤집어서 A 와 같게 만드는 최소 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -111,7 +111,7 @@ export function makeMadSciCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Now play with it. Pick a preset, then click 'Scan next' to walk through one position at a time. Watch the ✗ marks light up — each contiguous run of ✗ is exactly one flip.",
+        "Scan position by position and watch the ✗ marks cluster into blocks.",
         "한 칸씩 살펴보며 ✗ 가 몇 구간으로 뭉치는지 봐요."),
     },
   ];

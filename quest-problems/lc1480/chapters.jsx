@@ -10,7 +10,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "LeetCode #1480 — Running Sum of 1d Array. Given nums, return an array where output[i] = nums[0] + nums[1] + … + nums[i]. This is the simplest prefix sum problem — and the foundation for the next three.",
+        "Given nums, build an array where output[i] is the sum of nums[0] through nums[i].",
         "output[i] 가 nums[0] 부터 nums[i] 까지의 합인 배열을 만들어요."),
       content: (
         <div style={{ padding: 14 }}>
@@ -116,7 +116,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Once you have the prefix array, a range sum becomes a single subtraction — so you answer it in O(1), without looping. That's the magic unlocked in problem #303.",
+        "Once you have the prefix array, a range sum becomes a single subtraction.",
         "누적합 배열이 있으면 구간 합을 뺄셈 한 번으로 구할 수 있어요."),
       content: (
         <div style={{ padding: 14 }}>
@@ -149,7 +149,7 @@ export function makeChapters(E) {
       type: "code",
       narr: t(E,
         "In-place: walk from index 1, add the previous element. O(n) time, O(1) extra space.",
-        "1 번 자리부터 걸으며 앞 원소를 더해요. 배열을 새로 만들지 않아서 시간 O(n), 추가 공간 O(1) 이에요."),
+        "1번 자리부터 앞 원소를 더해가요. 시간 O(n), 추가 공간 O(1)."),
       code: [
         "def runningSum(nums: list[int]) -> list[int]:",
         "    for i in range(1, len(nums)):",

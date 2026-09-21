@@ -19,7 +19,7 @@ export function makeYearCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Chinese zodiac assigns one of 12 animals to each year, repeating in the fixed cycle Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig, Rat (then Ox again).\nBessie was born in the Year of the Cow (Ox). Cows make statements like \"X was born in the previous/next Dragon year relative to Y\". Chain the statements to compute, for each query cow, how many years APART she is from Bessie.",
+        "Chain the cows' statements to find how many years apart each one is from Bessie.",
         "소들이 한 말을 이어 붙여 Bessie 와 몇 살 차이인지 알아내요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -129,7 +129,7 @@ export function makeYearCowCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Track a year-offset per cow (Bessie = 0). For each statement 'X was born in the previous/next ANIMAL year relative to Y', compute modular distance to that animal in the 12-cycle (0 → 12). Sections build it one piece at a time.",
+        "Track each cow's year-offset from Bessie, building the code piece by piece.",
         "소마다 Bessie 를 0 으로 놓은 연도 차이를 적어 두며 코드를 쌓아요."),
       sections: getYearCowSections(E),
     },

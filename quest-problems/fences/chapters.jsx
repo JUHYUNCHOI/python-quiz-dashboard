@@ -26,7 +26,7 @@ export function makeFencesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An N × M grid is filled with grass (.) and fences (#). FJ wants to pick ONE column and convert every cell in that column to a fence (#). Each grass-to-fence conversion costs 1.\nPrint the minimum total cost over all possible column choices.",
+        "Pick one column to make entirely fence, and find the cheapest way to do it.",
         "열 하나를 골라 그 열을 전부 울타리로 바꿔요.\n가장 싸게 드는 값은 얼마일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -87,7 +87,7 @@ export function makeFencesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The field is a grid with N rows and M columns.\nEach cell is either grass (.) or already a fence (#).\nWe pick ONE column (vertical!) and make it ALL fences!", "밭은 N행 M열 그리드예요. 각 칸은 풀(.) 또는 이미 울타리(#). 열(세로줄!) 하나를 골라서 전부 울타리로 만들어야 해요!"),
+        "The field is an N-by-M grid where each cell is grass (.) or fence (#).", "밭은 N행 M열 그리드이고, 칸은 풀(.)이거나 울타리(#)예요."),
       content: (() => {
         const demo = [
           [".",".","#","."],
@@ -173,7 +173,7 @@ export function makeFencesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now — how does the data arrive?\nFirst line: N M (rows, columns). Then N lines of the grid, each a string of '.' and '#'.\nOutput: one integer — the minimum fences to build a full vertical wall.",
+        "Now, how does the input and output actually look?",
         "그럼 자료는 어떻게 들어올까요?\n첫 줄에 행 수 N 과 열 수 M 이 와요.\n그다음 N 줄에 격자가 오는데, 한 줄은 '.' 과 '#' 로 돼 있어요.\n세로 울타리를 끝까지 만드는 가장 싼 값을 정수 하나로 출력해요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
@@ -254,7 +254,7 @@ export function makeFencesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Converting grass to fence costs effort!\nEach '.' you convert to '#' counts as 1.\nCells already '#' are free!", "풀을 울타리로 바꾸는 건 비용이 들어! '.' → '#' 변환 1개당 비용 1. 이미 '#'인 칸은 공짜!"),
+        "Converting grass to fence costs 1; already-fence cells are free.", "풀을 울타리로 바꾸면 비용 1, 이미 울타리면 공짜예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 24, alignItems: "flex-start" }}>
@@ -533,7 +533,7 @@ export function makeFencesCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code step by step!\nFirst, we need to know the grid size.\nThe input gives us N (rows) and M (columns) on the first line.", "코드를 한 줄씩 만들어보자! 먼저 그리드 크기를 알아야 해요. 입력 첫 줄에 N(행 수)과 M(열 수)이 주어져."),
+        "Let's build the code step by step, starting by reading N and M.", "코드를 한 줄씩 만들자! 먼저 입력 첫 줄에서 N과 M을 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
@@ -588,7 +588,7 @@ export function makeFencesCh3(E) {
     {
       type: "rowColumnFillViz",
       narr: t(E,
-        "Watch how the code reads row by row, but counts are accumulated per column!\nPress ▶ to step through.", "코드가 행을 하나씩 읽으면서 열별 카운터가 어떻게 채워지는지 봐요! ▶를 눌러서 한 스텝씩 진행해봐요."),
+        "Watch how the code fills the column counters, row by row.", "코드가 행마다 열 카운터를 채우는 과정을 한 스텝씩 봐요."),
     },
     // 3-4: Step 3 quiz — understanding the loop
     {

@@ -19,7 +19,7 @@ export function makeSubseqMedianCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A 'good' subsequence is strictly increasing AND has odd length. Its median is the middle element.\nAdd up the medians of ALL good subsequences, mod 998244353.",
+        "Add up the medians of every good (odd-length, strictly increasing) subsequence.",
         "'좋은' 부분수열의 중앙값을 모두 더해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -127,7 +127,7 @@ export function makeSubseqMedianCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's the key trick: instead of listing every subsequence, look at each element as the MIDDLE. Pick a center, and count how it can be the median.",
+        "Instead of listing every subsequence, count how each element can be the median.",
         "부분수열을 나열하지 말고 각 원소를 가운데로 놓고 세어 봐요."),
       content: <SubseqMedianSim E={E} />,
     },
@@ -136,7 +136,7 @@ export function makeSubseqMedianCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In a good (odd-length, strictly increasing) subsequence, the median is the middle element. For v to be that middle, you need the SAME count of increasing values below-and-before v as above-and-after v.",
+        "For v to be the median, both sides need the same count of increasing picks.",
         "v 가 가운데가 되려면 양쪽 개수가 같아야 해요."),
       question: t(E,
         "For A[i]=v to be the median of a good subsequence, what must be true?",
@@ -169,7 +169,7 @@ export function makeSubseqMedianCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The brute way lists every subsequence — 2^N of them, hopeless past N≈25. The smarter way counts each element as a median with a Fenwick-tree DP. It's correct, but still only fast enough for the small subtasks — the full N=8000 needs a heavier method (out of scope).",
+        "Listing every subsequence is 2^N — far too slow.",
         "모든 부분수열을 나열하면 2^N 개라 너무 느려요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

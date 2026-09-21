@@ -289,7 +289,7 @@ export function makeMcc20CipherCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way rewrites the whole message K times: |S|×K work — up to 10^10, far too slow. The fast way asks each of the 26 letters where it lands after K hops (26×K work), then rewrites the message once.",
+        "Instead of rewriting the message K times, precompute where each letter lands.",
         "메시지 전체를 K번 다시 쓰면 너무 느려요 — 더 빠른 길을 찾아봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

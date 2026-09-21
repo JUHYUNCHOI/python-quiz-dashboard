@@ -21,7 +21,7 @@ export function makeCornerCoverCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A grid has four corner cells. You get one rectangular stamp of size A x B (you may lay it on its side). Can you place it so it covers at least TWO corner cells at once?",
+        "Can one A×B stamp cover at least two of the grid's four corners?",
         "도장 하나로 코너 칸을 두 개 이상 덮을 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>

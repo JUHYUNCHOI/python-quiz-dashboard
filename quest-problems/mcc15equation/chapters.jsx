@@ -234,7 +234,7 @@ export function makeMcc15EqCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three positive integers are written on the ground with two spaces between them. Put symbols in those two spaces so the whole thing becomes a valid equation.",
+        "Fill the two blanks between three numbers with symbols to make a valid equation.",
         "땅에 적힌 수 3개 사이 빈칸에 기호를 넣어 등식을 만들어요."),
       content: (
         <div style={{ padding: 16 }}>

@@ -18,7 +18,7 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The city is a grid of building HEIGHTS. Fluffy starts at the top-left (1,1) and hops to an adjacent cell only when the two heights differ by less than D.\nPrint how many cells Fluffy can reach (counting the start).",
+        "How many cells can Fluffy reach by hopping only where the height gap is under D?",
         "Fluffy 가 건너갈 수 있는 칸은 모두 몇 개일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -174,7 +174,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "A naive idea: sweep the whole grid over and over, each pass marking any cell reachable from an already-reachable neighbor, until nothing new appears — up to M×N passes over M×N cells, 10^5 × 10^5 = 10^10. Flood-fill (BFS) instead visits each cell just once: pop it, check its 4 neighbors, push the new ones. About 4×M×N ≈ 4×10^5.",
+        "Instead of sweeping the grid over and over, flood-fill visits each cell just once.",
         "격자를 몇 번이고 훑는 대신, 한 번만 훑는 방법을 찾아봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

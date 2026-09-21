@@ -23,7 +23,7 @@ export function makeMcc22LampCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "n lamps sit on a number line. Lamp i at position p shines brightness b right under it, fading by 1 every step away. At a position x the brightnesses of all lamps add up.\nCount the integer positions where the total brightness is at least k.",
+        "Count the integer positions where the total brightness of all lamps is at least k.",
         "총 밝기가 k 이상인 정수 위치는 몇 개일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -175,7 +175,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way visits every integer position and sums every lamp: with positions spanning up to 10^12 that is impossible. The fast way turns each lamp into three slope events (+1, −2, +1), sweeps only the breakpoints, and counts integers per straight segment with exact arithmetic.",
+        "Instead of checking every position, sweep only where the brightness slope changes.",
         "위치를 하나씩 도는 대신 꺾인점만 훑는 방법을 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

@@ -19,7 +19,7 @@ export function makeSocDist2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows stand at known positions on a number line; each is currently sick or healthy. Disease spreads from a sick cow to any cow within distance R (some unknown constant). FJ wants to know the MINIMUM number of cows that could have started infected to explain the current state.\nFind the largest valid R (so spread is consistent with healthy cows) and print the corresponding minimum initial-infection count.",
+        "Find the minimum number of cows that could have started infected to explain the current state.",
         "지금 상태가 나오려면 처음에 아팠던 소가 몇 마리였을지 구해요."),
       content: (
         <div style={{ padding: 16 }}>

@@ -68,7 +68,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, the idea you'd reach for right away: try every starting point. From each start, keep adding letters to the right until you hit one you've already seen — that's the longest clean run from that start. Take the best.",
+        "The first idea: from every start, stretch right until a letter repeats, then take the longest.",
         "누구나 먼저 떠올릴 방법부터 해봐요.\n각 시작점에서 오른쪽으로 글자를 계속 더하다가,\n이미 본 글자를 만나면 멈춰요.\n그렇게 나온 구간 중 제일 긴 걸 답으로 골라요."),
       content: (
         <CodeJourney
@@ -121,7 +121,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "It works on \"abcabcbb\". But the string can be 50,000 letters long, and trying \"every start × every end\" is about n × n ÷ 2 steps. Drag the slider — watch how slow that gets when the input grows.",
+        "It works on small inputs, but with 50,000 letters, every-start-times-every-end is far too slow.",
         "\"abcabcbb\" 같은 작은 입력은 잘 돼요.\n그런데 문자열은 5만 글자까지 길어질 수 있어요.\n모든 시작 × 모든 끝을 다 해보면 대략 n × n ÷ 2 번이에요.\n슬라이더를 끌어 보세요. 입력이 커질수록 얼마나 느려지는지 보여요."),
       content: <SpeedRaceSim E={E} nMax={50000} nStart={200} constraintN={50000} />,
     },
@@ -130,7 +130,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The waste: every time brute restarts at a new start, it re-checks letters it already knew were fine. What if we never restart — keep ONE window that always has no repeats, and only slide its edges? Try it: push \"Next step\", then switch to \"abba\" — that case hides a subtle trap.",
+        "Brute force rechecks letters it already verified — instead, slide one window's edges, never restarting.",
         "낭비는 여기예요.\n완전탐색은 새 시작점마다, 이미 괜찮다고 확인한 글자를 또 검사해요.\n아예 다시 시작하지 말고, 겹침 없는 창문(window) 하나만 두고\n그 양 끝만 밀면 어떨까요?\n\"다음\" 을 눌러 보고 \"abba\" 도 눌러 봐요. 거기에 함정 하나가 숨어 있어요."),
       content: <SlidingWindowSim E={E} />,
     },
@@ -171,8 +171,8 @@ export function makeChapters(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In \"abba\", when right reaches the second 'a' (index 3), last['a'] is 0. But left is already 2. Why do we NOT move left back to 1?",
-        "\"abba\" 에서 right 가 두 번째 'a'(3번 자리)에 닿을 때 last['a'] 는 0 이에요.\n근데 left 는 이미 2 예요.\n왜 left 를 1 로 되돌리지 않을까요?"),
+        "In \"abba\", when right reaches the second 'a', why don't we move left back to 1?",
+        "\"abba\" 에서 right 가 두 번째 'a'에 닿아도, left 를 1로 왜 안 돌릴까요?"),
       question: t(E,
         "Why guard the jump with `if last[ch] >= left` instead of always doing `left = last[ch] + 1`?",
         "왜 `left = last[ch] + 1` 을 항상 하지 않고 `if last[ch] >= left` 로 막을까요?"),
