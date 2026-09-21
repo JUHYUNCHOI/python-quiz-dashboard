@@ -142,6 +142,34 @@ project-lead: *"지금 상태는 문서 네 번째를 하나 더 쓴 것과 다�
 
 ---
 
+## 📏 공용 `Narration` 에 `textWrap: balance` 가 없다 (2026-09-21, ux 가 발견 · **범위 미확인**)
+
+`components/quest/shared.tsx` 의 `Narration` — **quest 180개 전부가 쓰는 파란 내레이션 바**.
+`break-keep`(keep-all) 과 `whitespace-pre-line` 은 있는데 **`textWrap: balance` 가 없다.**
+
+형제 컴포넌트는 셋 다 갖고 있다:
+```
+CodeSectionView.tsx:130,138,183   textWrap: "balance"
+ProgressiveCodeStepper.tsx:188,234
+CodeWalk.jsx:196
+shared.tsx:243                    (같은 파일의 다른 자리엔 있다)
+```
+
+`memory/feedback_korean_linebreak.md` 의 **4종 세트 중 하나가 빠진 것**이다 —
+*"balance 없으면 마지막 줄만 짧게 남아 '똑같은/게' 처럼 갈린다."*
+
+**한 줄짜리 narr 에서는 티가 안 난다.** 문제가 되는 건 **두 줄 이상으로 넘어가는 narr** 인데,
+영어 narr 중에는 **287자 4문장**짜리도 있다(wordproc 1쪽).
+
+**⚠️ 범위를 안 셌다.** "실제로 두 줄 이상으로 넘어가는 narr 가 몇 개 quest 에 있나" 를
+**아무도 세지 않았다.** ux: *"wordproc 이 쓰는 narr 들은 지금 전부 1줄 폭 안에 들어가서
+이 화면에서 실제로 어정쩡하게 갈리는 건 못 봤다 — 하지만 이 컴포넌트를 quest 180개가
+다 쓰므로 다른 quest 에서 이미 나 있을 수 있다."*
+
+고치는 건 **한 줄**이다. 다만 180개에 한꺼번에 닿으므로 **세고 나서** 붙인다.
+
+---
+
 ## 🔢 `Code 1 / 1` 이 뭘 세는지 모르겠다 (2026-09-21, **새 항목 · 아무도 안 붙었다**)
 
 학생이 `reverseeng` 7쪽에서 **묻지도 않았는데** 짚었다.

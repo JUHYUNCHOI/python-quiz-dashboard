@@ -212,6 +212,43 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         .sort((a, b) => problemNum(a.sub) - problemNum(b.sub))
     : []
 
+  // 2026-09-21 회귀 수정 ②: 형제 배지를 가로 스크롤로 바꾸면서(회귀 수정 ①) 정작
+  // "지금 어느 문제에 있는지" 가 스크롤 밖으로 밀려 안 보이게 됐다(375px 실측 5곳 중 4곳).
+  // — 기획 의도 1번: "자기가 어디 있는지 보인다". 마운트/문제 전환마다 지금 배지를
+  // 스크롤 컨테이너 안으로 당겨 온다.
+  const siblingsScrollRef = useRef<HTMLDivElement>(null)
+  const currentSiblingRef = useRef<HTMLButtonElement>(null)
+  const [siblingFade, setSiblingFade] = useState({ left: false, right: false })
+
+  useEffect(() => {
+    // ⚠️ block 을 빼면 scrollIntoView 가 가까운 세로 스크롤 조상(=페이지 자체)도
+    // 같이 움직여서 화면이 통째로 점프한다. "nearest" 로 세로는 건드리지 않는다.
+    currentSiblingRef.current?.scrollIntoView({ inline: "nearest", block: "nearest" })
+  }, [problemId])
+
+  // 스크롤바를 숨겨 놔서(아래 [&::-webkit-scrollbar]:hidden) 옆으로 더 있다는 단서가
+  // 없었다 — 좌우 옅은 페이드로 대신 알려준다. 스크롤 위치가 바뀔 때마다 갱신.
+  useEffect(() => {
+    const el = siblingsScrollRef.current
+    if (!el) { setSiblingFade({ left: false, right: false }); return }
+    const update = () => {
+      setSiblingFade({
+        left: el.scrollLeft > 2,
+        right: el.scrollLeft + el.clientWidth < el.scrollWidth - 2,
+      })
+    }
+    update()
+    el.addEventListener("scroll", update, { passive: true })
+    window.addEventListener("resize", update)
+    // 위 scrollIntoView 가 DOM 반영된 다음 프레임에 실제 scrollLeft 가 바뀌므로 한 번 더 확인
+    const raf = requestAnimationFrame(update)
+    return () => {
+      el.removeEventListener("scroll", update)
+      window.removeEventListener("resize", update)
+      cancelAnimationFrame(raf)
+    }
+  }, [problemId, contestSiblings.length])
+
   if (!meta) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -386,15 +423,35 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
 
         <div className="flex-1" />
 
-        {/* Current problem title — biggest visual element of this row */}
-        <div className="flex items-center gap-1.5 flex-shrink min-w-0 px-2">
+        {/* Current problem title — biggest visual element of this row.
+            min-w: 320px 에서도 제목이 최소 몇 글자는 남게(회귀 수정 — 아래 형제 배지
+            묶음과 flex-shrink 를 동일하게 두면 "Re…" 두 글자까지 눌린다). */}
+        <div className="flex items-center gap-1.5 flex-shrink min-w-[70px] px-2">
           {meta.emoji && <span className="text-[16px] leading-none flex-shrink-0">{meta.emoji}</span>}
           <span className="text-[14px] font-bold text-gray-900 truncate">{meta.title}</span>
         </div>
 
         {/* Same-contest dots: nested next to title, with label */}
         {contestSiblings.length > 1 && (
-          <div className="flex items-center gap-1.5 flex-shrink-0 border-l border-gray-200 pl-2 ml-1">
+          <div
+            className="flex items-center gap-1.5 min-w-[100px] overflow-hidden border-l border-gray-200 pl-2 ml-1"
+            style={{ flexShrink: 2 }}
+          >
+            {/* 2026-09-21 회귀 수정 ②-보강: `min-w-0` 로 뒀더니(수정① 직후) 형제가
+                2~3개뿐인 quest(presents 등)에서 **라벨 첫 글자가 잘렸다** — "C"ontest
+                가 빠진 "ontest" 로 렌더됨(실측). 이유: 라벨(flex-shrink:0, ~40px)+배지
+                최소폭(38px)+gap+padding 을 합치면 최소 ~93px 인데, 바깥 컨테이너가
+                `min-w-0` 라서 그보다 더 눌릴 수 있었고, 자식이 못 들어갈 만큼 눌리면
+                크로미움이 라벨을 오른쪽이 아니라 **왼쪽으로** 넘치게 그렸다(음수 여유
+                공간에서의 flex 렌더링 특이 동작 — 재현 확인, 원인의 CSS 사양 조항까지는
+                못 밝힘). `overflow-hidden` 을 빼서 고치려 했더니 이번엔 형제가 많은
+                quest 62개에서 **원래 크기 그대로 넘침이 돌아왔다**(320/375 전수
+                43→105개, 되돌림). 그래서 라벨+배지 최소 1개가 항상 들어갈 만큼의
+                **고정 최소폭(100px)** 을 직접 준다 — 형제 개수와 무관하게 상수라
+                배지가 많아도 넘침을 다시 부르지 않는다. */}
+            {/* 회귀 수정: 제목(위)보다 **먼저·더 많이** 줄어들게 flex-shrink 가중치를 준다 —
+                이 배지 묶음은 안에 가로 스크롤이 있어(아래) 잘려도 정보가 사라지지 않지만,
+                제목은 한 줄 truncate 라 너무 줄면 "Re…" 두 글자만 남는다. */}
             {/* 2026-09-09: 라벨이 `hidden lg:inline` 이라 1024px 미만에서 사라졌다.
                 그러면 동그란 숫자만 남는데, 그게 챕터 진행점과 똑같이 생겼다.
                 학생 **셋이 각각 독립으로** 이걸 챕터인 줄 알고 눌렀다가
@@ -402,7 +459,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                 "한 번은 화면이 처음으로 되돌아갔고 한 번은 아예 안 바뀌었다",
                 "실수로 4를 눌렀다가 완전히 다른 문제로 넘어가 버렸다".
                 라벨을 항상 보이게 한다 — 좁은 화면에서는 짧게. */}
-            <span className="text-[10px] font-semibold text-gray-400 whitespace-nowrap">
+            <span className="text-[10px] font-semibold text-gray-400 whitespace-nowrap flex-shrink-0">
               <span className="hidden sm:inline">{t("같은 대회", "Same contest")}</span>
               <span className="sm:hidden">{t("대회", "Contest")}</span>
             </span>
@@ -414,26 +471,55 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                 알약형(rounded-md), 코드 스테퍼 쪽은 그대로 둔다(그쪽이 이 저장소의
                 "단계 표시" 표준). 크기도 20×20 → 28px 높이로 키우고 간격을 넓혀
                 1·2·3 사이 오클릭도 줄인다. */}
-            <div className="flex items-center gap-1.5">
-              {contestSiblings.map((p) => {
-                const isCurrent = p.id === problemId
-                const numMatch = p.sub.match(/#(\d+)$/) || p.sub.match(/P(\d+)$/)
-                const num = numMatch?.[1] ?? "•"
-                return (
-                  <button
-                    key={p.id}
-                    onClick={() => router.push(`/quest/${p.id}`)}
-                    className={`h-7 min-w-[28px] px-2 rounded-md text-[11px] font-black transition-colors ${
-                      isCurrent
-                        ? "bg-amber-700 text-white"
-                        : "bg-white border border-amber-300 text-amber-700 hover:bg-amber-100"
-                    }`}
-                    title={`${t("문제", "Problem")} #${num} — ${p.title}`}
-                  >
-                    {num}
-                  </button>
-                )
-              })}
+            {/* 2026-09-21 회귀 수정: 배지를 28px 로 키운 채로 형제 6~8개가 있으면
+                (mcc19rect·rectangles·fans 등) 이 줄 하나만으로도 320px 을 넘는다
+                (실측 scrollWidth 349~383px, 20px 로 되돌리면 320 으로 떨어짐 — 원인 확정).
+                배지를 다시 줄이거나 라벨을 숨기면 각각 2026-09-21·2026-09-09 사고가
+                재발하므로 둘 다 손대지 않는다. 대신 **배지 묶음만** 가로 스크롤 컨테이너에
+                넣어 화면 폭을 넘지 않게 하고, 넘치는 배지는 옆으로 스와이프해서 본다. */}
+            {/* 2026-09-21 회귀 수정 ②: 가로 스크롤만 넣었더니 "지금 문제" 배지가
+                스크롤 밖으로 밀려 375px 실측 5곳 중 4곳에서 안 보였다(기획 의도 1번
+                "어디 있는지 보인다" 위반). relative 래퍼 하나 더 둬서 — 안쪽은
+                스크롤 컨테이너, 바깥 테두리에 "더 있다" 를 알려주는 페이드.
+                ⚠️ min-w-[38px] — 형제가 2~3개뿐인 quest(presents·balanced·mooin4)는
+                이 컨테이너가 경쟁할 다른 요소가 적어 min-w-0 이면 **배지 하나보다도
+                좁게** 눌렸다(실측: scroller 19.5px < 배지 28px, 스크롤을 해도 영원히
+                다 안 보임). 배지 하나는 항상 들어갈 최소폭을 floor 로 둔다. */}
+            <div className="relative min-w-[38px]">
+              <div
+                ref={siblingsScrollRef}
+                className="flex items-center gap-1.5 overflow-x-auto min-w-0 [&::-webkit-scrollbar]:hidden"
+                style={{ scrollbarWidth: "none" }}
+              >
+                {contestSiblings.map((p) => {
+                  const isCurrent = p.id === problemId
+                  const numMatch = p.sub.match(/#(\d+)$/) || p.sub.match(/P(\d+)$/)
+                  const num = numMatch?.[1] ?? "•"
+                  return (
+                    <button
+                      key={p.id}
+                      ref={isCurrent ? currentSiblingRef : undefined}
+                      onClick={() => router.push(`/quest/${p.id}`)}
+                      className={`h-7 min-w-[28px] px-2 rounded-md text-[11px] font-black transition-colors flex-shrink-0 ${
+                        isCurrent
+                          ? "bg-amber-700 text-white"
+                          : "bg-white border border-amber-300 text-amber-700 hover:bg-amber-100"
+                      }`}
+                      title={`${t("문제", "Problem")} #${num} — ${p.title}`}
+                    >
+                      {num}
+                    </button>
+                  )
+                })}
+              </div>
+              {/* 옅은 페이드 — 옆으로 더 있다는 단서. 스크롤바를 숨겨서(위) 이게 없으면
+                  단서가 화면에 하나도 없다. 배경(흰색)과 같은 색으로 바래게 한다. */}
+              {siblingFade.left && (
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-white to-transparent" />
+              )}
+              {siblingFade.right && (
+                <div className="pointer-events-none absolute inset-y-0 right-0 w-4 bg-gradient-to-l from-white to-transparent" />
+              )}
             </div>
           </div>
         )}
