@@ -43,8 +43,8 @@ export function makeMakeDistinctCh1(E) {
                 <div>
                   {t(E, "Given an array ", "배열 ")}
                   <b style={{ color: "#2563eb" }}>a[0..N-1]</b>
-                  {t(E, " and an integer K (K can be negative, but K ≠ 0).",
-                       " 와 정수 K 가 주어져요 (K 는 음수도 가능, 단 K ≠ 0).")}
+                  {t(E, " and an integer K — K may be negative, but it is never 0.",
+                       " 와 정수 K 가 주어져요. K 는 음수여도 되지만 0 은 절대 아니에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -57,8 +57,8 @@ export function makeMakeDistinctCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "You want every element to be ", "모든 원소가 서로 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "distinct (no duplicates)", "다르게 (중복 없이)")}</b>.
+                  {t(E, "You want every element to be ", "모든 원소를 서로 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "distinct (no duplicates)", "다르게 만들어야 해요 (같은 값이 하나도 없게)")}</b>.
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -101,8 +101,8 @@ export function makeMakeDistinctCh1(E) {
 
           <div style={{ background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.6 , wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              <>Array [4, 1, 4, 1], K = 1.<br />The two 4s and the two 1s collide.<br />Push one 1 → 2, push one 4 → 5 → [4, 2, 5, 1], all distinct.<br />Total = 1 + 1 = 2.</>,
-              <>배열 [4, 1, 4, 1]. K = 1.<br />4 두 개, 1 두 개가 겹쳐요.<br />1 하나를 → 2 로, 4 하나를 → 5 로 밀면 [4, 2, 5, 1] — 모두 달라요.<br />합 = 1 + 1 = 2 회.</>)}
+              <>Array [4, 1, 4, 1], K = 1.<br />The two 4s collide, and so do the two 1s.<br />Why the answer is 2 — that's the next page.</>,
+              <>배열 [4, 1, 4, 1]. K = 1.<br />4 두 개가 겹치고, 1 두 개도 겹쳐요.<br />답이 왜 2 인지는 다음 쪽에서 봐요.</>)}
           </div>
 
           <div style={{ marginTop: 8, fontSize: 11, color: C.dim }}>
@@ -116,7 +116,7 @@ export function makeMakeDistinctCh1(E) {
               <div>1 ≤ T ≤ 10</div>
               <div>1 ≤ N ≤ 200,000 (= 2 × 10⁵)</div>
               <div>−N ≤ K ≤ N,  K ≠ 0</div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "array values in [1, N]  ·  sum of N ≤ 10⁶", "배열 값 [1, N]  ·  N 합 ≤ 10⁶")}</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "array values in [1, N]  ·  all N added together ≤ 1,000,000", "배열 값 [1, N]  ·  N 을 다 더해도 1,000,000 이하")}</div>
             </div>
           </div>
         </div>
@@ -137,10 +137,10 @@ export function makeMakeDistinctCh1(E) {
 
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
             <div><b>{t(E, "Step 1.", "1.")}</b> {t(E, "Sort the group: ", "그룹 정렬: ")}<code style={{ color: "#2563eb" }}>[1, 1, 4, 4]</code></div>
-            <div><b>{t(E, "Step 2.", "2.")}</b> {t(E, "First slot stays: ", "첫 칸은 그대로: ")} <code>m₀ = 1</code> {t(E, " (0 ops)", " (0 회)")}</div>
-            <div><b>{t(E, "Step 3.", "3.")}</b> {t(E, "Next is 1, not > 1, so push to ", "다음이 1, > 1 이 아니니 밀어요 → ")}<code>m₁ = 2</code> ({t(E, "1 op", "1 회")})</div>
-            <div><b>{t(E, "Step 4.", "4.")}</b> {t(E, "Next is 4 > 2, keep it: ", "다음 4 > 2, 그대로: ")}<code>m₂ = 4</code> {t(E, " (0 ops)", " (0 회)")}</div>
-            <div><b>{t(E, "Step 5.", "5.")}</b> {t(E, "Next is 4, not > 4, push to ", "다음 4, > 4 가 아니니 밀어요 → ")}<code>m₃ = 5</code> ({t(E, "1 op", "1 회")})</div>
+            <div><b>{t(E, "Step 2.", "2.")}</b> {t(E, "The first one stays where it is: ", "첫 값은 그 자리에 그대로 놓아요: ")} <code>1</code> {t(E, " (0 ops)", " (0 회)")}</div>
+            <div><b>{t(E, "Step 3.", "3.")}</b> {t(E, "Next is 1, not past 1, so push it to ", "다음이 1, 방금 놓은 1 을 넘지 못하니 밀어요 → ")}<code>2</code> ({t(E, "1 op", "1 회")})</div>
+            <div><b>{t(E, "Step 4.", "4.")}</b> {t(E, "Next is 4, already past 2, so keep it: ", "다음 4 는 방금 놓은 2 를 이미 넘었으니 그대로: ")}<code>4</code> {t(E, " (0 ops)", " (0 회)")}</div>
+            <div><b>{t(E, "Step 5.", "5.")}</b> {t(E, "Next is 4, not past 4, so push it to ", "다음 4 는 방금 놓은 4 를 넘지 못하니 밀어요 → ")}<code>5</code> ({t(E, "1 op", "1 회")})</div>
             <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #93c5fd" }}>
               <b style={{ color: "#15803d" }}>{t(E, "Total: 0 + 1 + 0 + 1 = 2 ops", "합계: 0 + 1 + 0 + 1 = 2 회")}</b>
             </div>
