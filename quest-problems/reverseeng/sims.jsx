@@ -94,11 +94,32 @@ export function PeelSim({ E }) {
     { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: "else → 0", ruleEn: "else → 0", tone: "aha",
       ko: "마지막 00 한 줄은 else 로 받아요. 표가 비었어요 — 이런 프로그램이 정말 있어요. OK!",
       en: "The last row, 00, goes to else. The table is empty — such a program really exists. OK!" },
-    /* 2026-09-21 학생 지적: "왜 순서 상관없는지 이유가 없다" — 주장만 하지 말고
-       교환 논증을 한 줄 붙인다. (⚠️ 이 문구는 pedagogy-reviewer 확인 대기중) */
-    { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: null, tone: "go",
-      ko: "왜 그래도 될까요? 지금 뗄 수 있는 줄은, 다른 줄을 먼저 떼어도 조건이 그대로라 여전히 뗄 수 있어요. 그래서 순서를 따지지 않고 지금 되는 걸 바로 떼면 돼요.",
-      en: "Why is that safe? A group we can peel now stays peelable even if other rows are peeled first — nothing about it changes. So there's no need to plan an order; just peel whatever works right now." },
+    /* 2026-09-21 학생 지적: "왜 순서 상관없는지 이유가 없다".
+       처음엔 교환 논증을 **한 문장**으로만 붙였는데 pedagogy 가 물렀다 —
+       그 걸음에 닿으면 표가 이미 전부 회색이라 *"다른 줄을 먼저 떼어도"* 가
+       **가리킬 대상이 화면에 하나도 없다.** 말로만 하면 "그렇다고 치자" 가 된다.
+       선생님 지시("주절히 설명하지 말고 눈에 보이게 시뮬로")대로
+       **순서를 실제로 바꿔서 다시 떼어 보이는** 걸음 셋으로 바꾼다.
+       ⚠️ pedagogy 가 준 예문은 틀렸다 — *"01 은 그래도 혼자 답 1"* 이라고 했는데
+       둘째 글자가 1 인 줄은 01 **과 11 둘 다**다(00·01·10·11 중). 그래서
+       *"결국 같은 묶음이 나와요"* 도 틀렸다 — 묶음은 **달라진다**.
+       달라지지 않는 건 "끝까지 떼어지느냐" 다. 그게 이 문제의 진짜 요점이라
+       예문을 안 쓰고 표로 직접 보인다. */
+    { st: [0, 1, 0, 1], mark: ["", "", "", ""], rule: null, tone: "go", badge: true,
+      ko: "표를 처음으로 되돌리고 순서를 바꿔볼게요. 이번엔 둘째 글자가 1 인 줄 — 01 과 11 이에요.",
+      en: "Let's put the table back and change the order. This time, rows whose second letter is 1 — 01 and 11." },
+    { st: [0, 1, 0, 1], mark: ["", "답 1", "", "답 1"], rule: null, tone: "aha", badge: true,
+      ko: "둘 다 답이 1 이에요. 아까는 따로 떼었던 줄인데 이번엔 같이 묶여요.",
+      en: "Both answer 1. These two were peeled separately before — this time they group together." },
+    { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: "else → 0", ruleEn: "else → 0", tone: "aha", badge: true,
+      ko: "떼어내요. 남은 10 은 첫 글자로, 00 은 else 로 — 이번에도 표가 비었어요.",
+      en: "Peel them. The remaining 10 goes by its first letter and 00 by else — the table empties again." },
+    /* 2026-09-21 pedagogy 재검토: 둘째 문장("지금 뗄 수 있는 줄은 나중에 떼도 그대로
+       떼어지거든요")은 예 두 개로는 증명 안 되는 메커니즘 주장이라 뺀다. 본 것(두 번
+       다 끝까지 비었다)까지만 말하고, 그 다음은 실용적 결론으로 남긴다. */
+    { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: null, tone: "go", badge: true,
+      ko: "묶음은 달라졌는데, 두 번 다 표가 끝까지 비었어요 — 순서를 바꿔도 답은 똑같이 OK 예요. 그래서 순서를 미리 정하지 않고, 지금 뗄 수 있는 걸 바로 떼면 돼요.",
+      en: "The groups came out different, but both times the table emptied — a different order still answers OK. So there's no need to plan an order; just peel whatever works right now." },
     /* 2026-09-21 학생 지적: 코드 주석 `# 탐욕적으로 벗겨내기` 가 quest 어디서도
        설명 없이 등장한다 — 코드를 보기 전, 이 시뮬 안에서 먼저 이름을 붙인다. */
     { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: null, tone: "aha",
@@ -124,6 +145,18 @@ export function PeelSim({ E }) {
             padding: "7px 12px", maxWidth: 330, margin: "0 auto 10px",
             fontFamily: "'JetBrains Mono',monospace" }}>
             {t(E, s.ruleEn, s.rule)}
+          </div>
+        )}
+        {/* 2026-09-21 pedagogy: 순서를 바꿔 다시 떼는 구간(idx 8~11) 내내 "지금 재확인
+            중" 임을 표 바로 위에 상시로 남긴다 — 한 걸음에서만 말하고 사라지면
+            9/13 에서 표가 되살아나는 게 "방금 답이 틀렸었나?" 로 읽힐 수 있다. */}
+        {s.badge && (
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <span style={{ display: "inline-block", fontSize: 11.5, fontWeight: 800,
+              padding: "4px 13px", borderRadius: 999, wordBreak: "keep-all",
+              background: "#ecfeff", border: "1.5px solid #67e8f9", color: "#0e7490" }}>
+              {t(E, "↺ Same table, different order", "↺ 순서만 바꿔 다시 확인")}
+            </span>
           </div>
         )}
         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "center", marginBottom: 10 }}>

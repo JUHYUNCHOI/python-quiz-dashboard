@@ -56,26 +56,42 @@ export function ProgressiveCodeStepper({
           gap: 8,
         }}
       >
-        <div style={{ display: "flex", gap: 4 }}>
-          {sections.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIdx(i)}
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: "50%",
-                background: i === safeIdx ? accentColor : "#fff",
-                border: `1.5px solid ${i === safeIdx ? accentColor : C.border}`,
-                color: i === safeIdx ? "#fff" : C.dim,
-                fontSize: 12,
-                fontWeight: 800,
-                cursor: "pointer",
-              }}
-            >
-              {i + 1}
-            </button>
-          ))}
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          {/* 2026-09-21 PM 판정: 형제문제 배지(원형+숫자)와 이 배지(원형+숫자)가
+              같은 모양이라 학생이 둘을 헷갈렸다 — 형제 쪽엔 "같은 대회" 라벨이
+              붙어 있는데 이쪽엔 아무 라벨이 없어서 "이 숫자들이 뭔지 화면에서
+              못 읽었다"(학생 인터뷰). 형제 라벨 모양을 그대로 복사한다
+              (client.tsx:405-408 — text-[10px] font-semibold whitespace-nowrap +
+              hidden sm:inline / sm:hidden). 색은 형제의 노랑과 겹치지 않게
+              스테퍼 자신의 accentColor(보라 계열)를 쓴다. */}
+          <span
+            className="text-[10px] font-semibold whitespace-nowrap"
+            style={{ color: accentColor }}
+          >
+            <span className="hidden sm:inline">{t(E, "In this problem", "이 문제 안에서")}</span>
+            <span className="sm:hidden">{t(E, "This problem", "이 문제")}</span>
+          </span>
+          <div style={{ display: "flex", gap: 4 }}>
+            {sections.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIdx(i)}
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: "50%",
+                  background: i === safeIdx ? accentColor : "#fff",
+                  border: `1.5px solid ${i === safeIdx ? accentColor : C.border}`,
+                  color: i === safeIdx ? "#fff" : C.dim,
+                  fontSize: 12,
+                  fontWeight: 800,
+                  cursor: "pointer",
+                }}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {s.aside && (
