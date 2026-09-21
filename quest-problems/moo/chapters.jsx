@@ -7,7 +7,7 @@ export { isMoo, findAllMoos, bruteSolve } from "./helpers";
 export function makeMooCh1(E) {
   return [
     { type: "reveal",
-      narr: t(E, "Bessie mooed a LOT at a contest.\nBut the recording might have 1 typo...\ncan we still figure out what she said?\n🐄", "Bessie 의 울음을 녹음했는데 1글자가 틀렸을 수 있어요.\n뭐라고 울었는지 알아낼까요? 🐄"),
+      narr: t(E, "The recording of Bessie's moos might have 1 typo — can we still tell what she said? 🐄", "Bessie 의 울음을 녹음했는데 1글자가 틀렸을 수 있어요.\n뭐라고 울었는지 알아낼까요? 🐄"),
       content: (<div style={{ padding: 16, textAlign: "center" }}>
         <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
         <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>It's Mooin' Time</div>
