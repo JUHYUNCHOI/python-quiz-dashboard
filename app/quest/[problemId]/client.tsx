@@ -453,8 +453,10 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           className={splitView ? "min-w-0 overflow-auto" : "flex-1 min-w-0"}
           style={splitView ? { flex: `0 0 calc(${splitRatio * 100}% - 4px)` } : undefined}
         >
-          {/* Phase 0 quest-health banner — additive, only renders for flagged quests */}
-          <QuestHealthBanner questId={problemId} isEn={lang === "en"} />
+          {/* Phase 0 quest-health banner — 선생님 전용 (내부 QA 메모라 학생에겐 맥락이 없음).
+              2026-09-21: `isTeacher` 게이트가 없어 학생 화면에도 그대로 떴다(180개 전체).
+              같은 줄 위의 UsacoVerifiedBadge 와 같은 패턴. */}
+          {isTeacher && <QuestHealthBanner questId={problemId} isEn={lang === "en"} />}
           {/* Phase 5 release-stage banner — only renders for internal/beta */}
           <ReleaseStageBanner questId={problemId} isEn={lang === "en"} />
           {LazyComp ? (
