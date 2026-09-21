@@ -259,8 +259,9 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
             {t(E,
               "N can be 200,000. One value may be pushed almost N times, and each push looks through everything placed so far — that is about 200,000 × 200,000 = 40,000,000,000 steps.",
               "N 이 200,000 까지예요. 값 하나가 거의 N 번 밀릴 수 있고, 밀 때마다 지금까지 놓은 값을 전부 훑어요. 200,000 × 200,000 = 400억 번쯤 돼요.")}<br />
-            {t(E, "A computer does about a billion simple steps per second, so this would take minutes.",
-                  "컴퓨터가 1초에 10억 번쯤 하니까, 이건 몇 분이 걸려요.")}
+            {/* "몇 분" 이었다 → 실측값으로. project-lead 가 N=200,000·K=1 을 끝까지 돌렸다: 1179초. */}
+            {t(E, "We actually ran it at N = 200,000 — it took about 20 minutes. The contest gives seconds.",
+                  "실제로 N = 200,000 으로 돌려봤어요. 약 20분이 걸렸어요. 대회가 주는 시간은 몇 초예요.")}
           </div>
 
           <div style={{ marginTop: 10, background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
