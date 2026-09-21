@@ -135,7 +135,13 @@ const orderBtnOn = { border: "2px solid #7c3aed", background: "#ede9fe" };
 /* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
    import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
    FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
-   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'.
+
+   2026-09-21: 그런데 이 줄이 **그때는 거짓말이었다.** 화면 조각은 손으로 다시
+   타이핑한 사본이었고 FULL_PY / FULL_CPP 는 아무도 안 쓰는 죽은 코드였다.
+   실제로 갈라져 있었다 (`layers = {3, 2}` ↔ `layers(N)`, 17줄 ↔ 15줄).
+   지금은 조각을 `FULL_*.slice()` 로 잘라서 **원본이 한 벌뿐**이다.
+   증명: `python3 scripts/prove-sections-cover-code.py mcc21menu` */
 
 export function makeMcc21MenuCh1(E) {
   return [
