@@ -41,6 +41,58 @@ VALUE = re.compile(r"\[[^\]]{2,}\]|(?<![\w.])\d+(?![\w.])")
 STEP = re.compile(r'^\s*\{\s*$|^\s*(type|narr):', re.M)
 
 
+def component_text(quest, name, _seen=None):
+    """`<PlaceOneByOneSim/>` 처럼 쪽 내용이 **컴포넌트 안에** 있을 때 그 글을 읽어 온다.
+
+    ⚠️ 2026-09-21: 이걸 안 하니 **내가 방금 고친 자리**를 이 검사기가 오탐으로 물었다.
+       `makedistinct` 3쪽의 글을 시뮬로 옮겼더니, 그 쪽 chunk 에 남은 건
+       `content: <PlaceOneByOneSim E={E} />` 한 줄뿐이라 "다음 쪽에 값이 없다" 가 됐다.
+       시뮬 안에는 "모두 2 회" 가 분명히 있었다. **글이 옮겨간 곳까지 따라가야 한다.**
+    """
+    _seen = _seen or set()
+    if name in _seen:
+        return ""
+    _seen.add(name)
+    out = []
+    for f in glob.glob(f"quest-problems/{quest}/*.jsx"):
+        src = io.open(f, encoding="utf-8", errors="replace").read()
+        m = re.search(r"(?:export\s+)?function\s+%s\s*\(" % re.escape(name), src)
+        if not m:
+            continue
+        # ⚠️ 매개변수의 중괄호부터 세면 안 된다 — `function Sim({ E }) {` 에서
+        #    `{ E }` 를 본문으로 읽고 바로 끝나 **글자 0개**가 나온다(실제로 그랬다).
+        #    여는 괄호의 짝을 먼저 찾고, **그 뒤 첫 `{`** 부터 센다.
+        i, par = m.end(), 1
+        while i < len(src) and par:
+            if src[i] == "(":
+                par += 1
+            elif src[i] == ")":
+                par -= 1
+            i += 1
+        i = src.find("{", i)
+        if i < 0:
+            continue
+        depth, start = 0, i
+        while i < len(src):
+            if src[i] == "{":
+                depth += 1
+            elif src[i] == "}":
+                depth -= 1
+                if depth == 0:
+                    break
+            i += 1
+        body = src[start:i]
+        for sm in re.finditer(r'"((?:[^"\\]|\\.)*)"', body):
+            try:
+                out.append(json.loads('"' + sm.group(1) + '"'))
+            except ValueError:
+                pass
+        # 이 컴포넌트가 또 다른 컴포넌트를 쓰면 한 겹 더 따라간다
+        for cm in re.finditer(r"<([A-Z]\w+)", body):
+            out.append(component_text(quest, cm.group(1), _seen))
+    return " ".join(out)
+
+
 def steps_of(src):
     """`type: "..."` 을 경계로 쪽을 나눈다 — 쪽마다의 글 뭉치."""
     marks = [m.start() for m in re.finditer(r'type:\s*"(reveal|quiz|input|progressive|code)"', src)]
@@ -58,7 +110,9 @@ def steps_of(src):
                 continue
             if re.search(r"[가-힣]", t) or len(t) > 20:
                 text.append(t)
-        out.append(" ".join(text))
+        # ⚠️ 글만 돌려주면 `<PlaceOneByOneSim/>` 을 못 찾는다 — 그건 문자열이 아니라 JSX 다.
+        #    원본 덩어리도 같이 돌려줘서 컴포넌트 이름을 찾을 수 있게 한다.
+        out.append((" ".join(text), chunk))
     return out
 
 
@@ -69,7 +123,7 @@ def check(quest):
             continue
         src = io.open(f, encoding="utf-8", errors="replace").read()
         pages = steps_of(src)
-        for i, page in enumerate(pages[:-1]):
+        for i, (page, _raw) in enumerate(pages[:-1]):
             for sent in re.split(r"[.!?\n]", page):
                 if not POINTER.search(sent):
                     continue
@@ -79,7 +133,10 @@ def check(quest):
                         and not re.fullmatch(r"\[\s*[a-zA-Z]\s*[+-]?\s*\d?\s*\]", v)]
                 if not vals:
                     continue
-                nxt = pages[i + 1]
+                nxt, nxt_raw = pages[i + 1]
+                # 다음 쪽 내용이 컴포넌트면 그 안의 글까지 본다
+                for cm in re.finditer(r"<([A-Z]\w+)", nxt_raw):
+                    nxt += " " + component_text(quest, cm.group(1))
                 missing = [v for v in vals if v not in nxt]
                 if missing and len(missing) == len(vals):
                     hits.append((os.path.basename(f), i + 1, sent.strip()[:70], missing))
