@@ -142,6 +142,64 @@ project-lead: *"지금 상태는 문서 네 번째를 하나 더 쓴 것과 다�
 
 ---
 
+## 🔎 quest 한 개 전면 검토 — **makedistinct 에서 굳힌 절차** (2026-09-21)
+
+선생님: *"모두 모여서 검토 토론 수정"* → *"다른 quest도 이런식으로 검토 수정 진행해"*.
+`makedistinct` 를 이 절차로 끝까지 돌렸다. **다음 quest 도 이대로 한다.**
+
+### 0. 시작 전 — 기계부터 (사람에게 물어볼 것을 줄인다)
+```bash
+node scripts/see-flow.mjs http://localhost:3000/quest/<id>     # 쪽과 쪽 사이
+python3 scripts/check-word-difficulty.py <id>
+python3 scripts/check-undefined-symbol.py <id>
+python3 scripts/check-code-one-statement.py <id>
+python3 scripts/check-stepper-first-step.py <id>
+python3 scripts/check-code-names-in-prose.py <id>
+python3 scripts/check-codewalk-thinking-order.py <id>
+python3 scripts/check-narr-length.py <id>
+python3 scripts/check-quiz-spoiler.py <id>
+node scripts/see-screen.mjs http://localhost:3000/quest/<id>
+```
+**이 결과를 검토자에게 미리 주고 "다시 세지 마라" 고 못박는다.** 안 그러면 넷이 같은 걸 센다.
+
+### 1. 넷을 **서로 안 보게** 동시에 — 범위를 갈라준다
+| 누구 | 보는 것 | 넘기라고 적어 줄 것 |
+|---|---|---|
+| `ux-reviewer` | 겹침·정보량·줄바꿈·같은 숫자 두 뜻·기억 의존 | 흐름·원문·막히는 곳 |
+| `pedagogy-reviewer` | 기승전결, "이 쪽이 앞의 어떤 질문에 답하나" 표 | 겹침·원문·막히는 곳 |
+| `quest-auditor` | **원문 대조**(PDF 없으면 `curl` 로 usaco.org) · 지어낸 수치 | 겹침·흐름·막히는 곳 |
+| `student-*` | 직접 따라가며 **막히는 곳** | 나머지 전부 |
+⚠️ 학생에게는 품질 문서를 읽히지 마라. 그리고 **"이해했나" 를 묻지 마라** —
+   "그만두고 싶었던 쪽 / 짐작으로 읽은 기호 / 화면에 없는데 알아야 했던 것" 을 물어라.
+
+### 2. **겹치는 지적부터** 고친다
+makedistinct 에서 둘 이상이 독립적으로 짚은 것 = 전부 진짜 결함이었다.
+한 명만 짚은 것은 판정이 필요했다. 실제로 나온 것 —
+- 입출력 형식 카드가 **답을 미리 다 말했다** (교육·감사)
+- 기호 `m` 이 **두 뜻**이었다 (UX·교육)
+- 기호를 말로 안 풀었다 (UX·감사)
+
+### 3. 갈린 지점은 `project-lead` 가 종합한다
+makedistinct 에서 **같은 병에 처방이 갈렸다**(교육은 1-5, 학생은 1-3).
+PM 판정: **셋 다, 쪽은 안 늘린다.** 혼자 고르지 마라.
+
+### 4. 고친 뒤 **새 학생에게 다시 읽힌다** — 한 바퀴가 아니라 고리다
+`memory/feedback_new_text_needs_a_reader.md`. **새로 쓴 문장이 없을 때** 멈춘다.
+
+### 5. 끝났다고 말하기 전에
+- 브라우저로 **쪽을 직접 넘기며** 확인 (검사기 0건은 결백이 아니다)
+- ⚠️ **글자 수가 안 변한다고 다 뜬 게 아니다** — `"튜토리얼 로딩 중…"` 에서 멈춘 채
+  5쪽을 다 읽었다고 찍은 적이 있다. **조건**(`text=미션`)을 기다려라.
+- 🔒 이면 `git diff` 로 **코드 배열 0줄**을 대조하고 커밋 메시지에 적는다
+
+### makedistinct 결과 — `완료`
+`1310cd81`(1차) · `24ba09ac`(2차) · `554ab27c`(사다리 첫 칸).
+5쪽 → **6쪽**(브루트+한계 한 쪽 추가). 기호 6건 → 0건.
+남은 것: 새 학생 재검증 보고 대기. **그 학생은 6쪽이 생기기 전에 출발했다** —
+5쪽 기준 보고일 수 있으니 새 쪽은 따로 한 번 더 읽혀라.
+
+---
+
 ## 🇬🇧 내레이션 바 — 한국어만 줄이고 **영어는 안 줄였다** (2026-09-21)
 
 > 검사기: `python3 scripts/check-narr-length.py [id | --all]`
