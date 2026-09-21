@@ -115,7 +115,7 @@ export function getMakeDistinctWalk(E, lang = "py") {
       { hi: [7, 17],  bubble: t(E, "What are we solving for? One number per test — the fewest operations needed.\nFirst read T, then each test's n, k, and the array. m = |k|.", "무엇을 구해야 하나요?\n테스트마다 최소 횟수 하나예요.\n먼저 T 를 읽고, 테스트마다 n, k, 배열을 읽어요. m = |k| 예요.") },
       { hi: [19, 24], bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "K 를 더해도 |K| 로 나눈 나머지는 안 바뀌어요.\n그래서 나머지끼리 묶으면 그룹끼리 서로 영향이 없어요!") },
       { hi: [26, 35], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 둬요.") },
-      { hi: [36, 50], bubble: t(E, "cur is what the earlier page called 'the one we just placed'.\nIf the next value is already past cur, keep it; otherwise push it to cur+K and count the operations.", "cur 는 앞 쪽에서 '방금 놓은 값' 이라고 부른 그것이에요.\n다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 횟수를 더해요.") },
+      { hi: [36, 50], bubble: t(E, "cur is not how many times we pushed — it is the spot that is taken.\nIf the next value is already past cur, keep it; otherwise it must move to cur+K.\nEvery spot sits K apart, so how many pushes that takes comes straight out of one division.", "cur 는 **몇 번 밀었는지가 아니라 이미 차지한 자리**예요.\n자리들은 K 씩 떨어져 있어서, 원래 값에서 그 자리까지 몇 번 뛰는지는 나눗셈 한 번으로 나와요.\n다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 횟수를 더해요.") },
       { hi: [51, 51], bubble: t(E, "Print this test's answer.", "이 테스트의 답을 출력해요.") },
     ] };
   }
@@ -124,7 +124,7 @@ export function getMakeDistinctWalk(E, lang = "py") {
     { hi: [3, 6],   bubble: t(E, "solve() handles ONE test: read n, k, the array. m = |k|.", "solve() 는 테스트 하나를 맡아요. n, k, 배열을 읽고 m = |k| 예요.") },
     { hi: [8, 11],  bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "K 를 더해도 |K| 로 나눈 나머지는 안 바뀌어요.\n그래서 나머지끼리 묶으면 그룹끼리 서로 영향이 없어요!") },
     { hi: [13, 17], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 둬요.") },
-    { hi: [18, 24], bubble: t(E, "cur is what the earlier page called 'the one we just placed'.\nIf the next value is already past cur, keep it; otherwise push it to cur+K and count the operations.", "cur 는 앞 쪽에서 '방금 놓은 값' 이라고 부른 그것이에요.\n다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 횟수를 더해요.") },
+    { hi: [18, 24], bubble: t(E, "cur is not how many times we pushed — it is the spot that is taken.\nIf the next value is already past cur, keep it; otherwise it must move to cur+K.\nEvery spot sits K apart, so how many pushes that takes comes straight out of one division.", "cur 는 **몇 번 밀었는지가 아니라 이미 차지한 자리**예요.\n자리들은 K 씩 떨어져 있어서, 원래 값에서 그 자리까지 몇 번 뛰는지는 나눗셈 한 번으로 나와요.\n다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 횟수를 더해요.") },
     { hi: [25, 25], bubble: t(E, "Print this test's answer.", "이 테스트의 답을 출력해요.") },
     { hi: [27, 29], bubble: t(E, "Run solve() for all T tests.", "T 개 테스트를 solve() 로 반복해요.") },
   ] };

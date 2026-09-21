@@ -88,6 +88,29 @@ export function QuestProgressBar({
   };
   const hideHover = () => setHoverInfo(null);
 
+  /* 탭 이름표를 눌러 그 탭의 **첫 걸음**으로. (2026-09-21)
+     왜 — 재검증 학생: *"⚡ 코드를 누르면 코드로 안 가고 문제 탭으로 되돌아간다.
+     탭처럼 보이는데 탭처럼 동작 안 해서 헷갈렸다."* 확인해 보니 이름표는 그냥 `<span>`
+     이었다. 탭을 바꾸는 건 **위 진행 막대 조각**뿐이었다.
+     왜 첫 걸음인가 — 탭별 '마지막으로 보던 자리' 는 이 저장소 어디에도 없다
+     (`si` 하나를 두 탭이 같이 쓴다). 그 기억을 새로 만드는 것보다,
+     흔한 탭 관례대로 **그 구역 처음부터** 가 새 개념이 제일 적다. project-lead 판정.
+     ⚠️ 공용 부품이라 quest 180개가 같이 바뀐다. 막대 조각 동작은 **안 건드렸다.** */
+  const goTab = (tabIdx) => {
+    if (tabIdx !== tab) {
+      setVisitedTabs(prev => { const n = new Set(prev); n.add(tabIdx); return n; });
+      setTab(tabIdx);
+    }
+    setSi(0);
+    hideHover();
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const labelBtn = (isOn, hue) => ({
+    background: "none", border: 0, padding: "2px 4px", margin: "-2px -4px",
+    font: "inherit", color: isOn ? hue : C.dim, cursor: "pointer",
+    display: "flex", alignItems: "center", gap: 5, borderRadius: 6,
+  });
+
   return (
     <>
       <div style={{ marginTop: 10, marginBottom: 6, position: "relative" }}>
@@ -265,19 +288,22 @@ export function QuestProgressBar({
               marginTop: 4, fontSize: 10.5, fontWeight: 700,
               display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
             }}>
-              <span style={{ color: tab === 0 ? tabHue(0) : C.dim, display: "flex", alignItems: "center", gap: 5 }}>
+              <button type="button" onClick={() => goTab(0)} style={labelBtn(tab === 0, tabHue(0))}
+                      title={tabs[0]} aria-label={tabs[0]}>
                 {tabs[0]}{tab === 0 ? count : null}
-              </span>
+              </button>
               {/* middle-tab fallback (3+ tabs): name + count in the center */}
               {tabs.length > 2 && tab !== 0 && tab !== last && (
-                <span style={{ color: tabHue(tab), display: "flex", alignItems: "center", gap: 5 }}>
+                <button type="button" onClick={() => goTab(tab)} style={labelBtn(true, tabHue(tab))}
+                        title={tabs[tab]} aria-label={tabs[tab]}>
                   {tabs[tab]}{count}
-                </span>
+                </button>
               )}
               {tabs.length > 1 && (
-                <span style={{ color: tab === last ? tabHue(last) : C.dim, display: "flex", alignItems: "center", gap: 5 }}>
+                <button type="button" onClick={() => goTab(last)} style={labelBtn(tab === last, tabHue(last))}
+                        title={tabs[last]} aria-label={tabs[last]}>
                   {tabs[last]}{tab === last ? count : null}
-                </span>
+                </button>
               )}
             </div>
           );

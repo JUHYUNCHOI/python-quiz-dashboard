@@ -101,7 +101,7 @@ export default function MakeDistinctApp(props = {}) {
 
   const renderContent = () => {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
-    if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
+    if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} explain={step.explain} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <MakeDistinctProgressiveCode E={E} lang={codeLang} sections={step.sections} />;

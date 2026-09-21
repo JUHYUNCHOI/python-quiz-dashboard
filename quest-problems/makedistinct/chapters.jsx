@@ -147,8 +147,8 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
                 한 번도 안 보여줬고, 학생이 그 조각에서 멈췄다 ("그만두고 싶었다").
                 예제에 4 를 하나 더 붙여 **한 번에 두 번 미는 경우**를 눈으로 보게 했다. */}
             <div style={{ background: "#fef9c3", borderRadius: 6, padding: "3px 6px", margin: "3px -6px" }}>
-              <b>{t(E, "Step 6.", "6.")}</b> {t(E, "Last 4 is not past 5 — one push only reaches 5, so it takes ", "마지막 4 는 방금 놓은 5 를 넘지 못해요. 한 번 밀면 5 라 아직 겹쳐요 → ")}
-              <code>6</code> ({t(E, "2 ops at once", "한 번에 2 회")})
+              <b>{t(E, "Step 6.", "6.")}</b> {t(E, "Last 4 is not past 5 — pushing it once only reaches 5, which is taken, so it goes to ", "마지막 4 는 방금 놓은 5 를 넘지 못해요. 한 칸 밀면 5 라 아직 겹쳐요 → ")}
+              <code>6</code> ({t(E, "2 ops in this one step", "이 걸음에서만 2 회")})
             </div>
             <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #93c5fd" }}>
               <b style={{ color: "#15803d" }}>{t(E, "Total: 0 + 1 + 0 + 1 + 2 = 4 ops", "합계: 0 + 1 + 0 + 1 + 2 = 4 회")}</b>
@@ -197,6 +197,11 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
         "K is negative — which way does a push move a value? And which of these four can ever meet?",
         "K 가 음수면 밀 때 값이 어느 쪽으로 갈까요? 그리고 이 넷 중 어떤 수끼리 만날 수 있을까요?"),
       answer: 2,
+      /* 2026-09-21: 맞혀도 ✅ 만 뜨고 **왜 2 인지**가 없었다 (재검증 학생 지적).
+         `NumInput` 에 explain 을 새로 달아 이 자리부터 쓴다. */
+      explain: t(E,
+        "2 is right.\nK = -2, so each push lowers a value by 2 — and a value keeps its remainder when divided by 2.\nSo the two 3s are one pile and the two 4s are another; the piles never meet.\nIn each pile the second one has to move down once: 3 → 1 and 4 → 2. One push each, 2 in total.",
+        "2 가 맞아요.\nK = -2 라서 밀면 값이 2 씩 작아져요. 2 로 나눈 나머지는 그대로예요.\n그래서 3 두 개가 한 묶음, 4 두 개가 다른 묶음이고 서로 만나지 않아요.\n묶음마다 두 번째 값만 한 번씩 내려가면 돼요 — 3 → 1, 4 → 2. 합해서 2 회예요."),
     },
 
     /* 1-6: 쉬운 첫 코드와 그 한계 (2026-09-21 추가)

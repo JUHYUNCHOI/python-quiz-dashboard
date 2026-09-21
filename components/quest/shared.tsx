@@ -149,9 +149,16 @@ interface NumInputProps {
   answer: number
   E?: boolean
   onSolve?: () => void
+  /* 맞힌 뒤 보여줄 풀이 (2026-09-21).
+     왜 — 학생이 `makedistinct` 1-5 에서 답을 맞혔는데 ✅ 만 뜨고 **왜 그 답인지**는
+     끝까지 안 나왔다. 같은 파일의 `Quiz` 는 `explain` 을 이미 갖고 있는데
+     `NumInput` 에만 없었다 — "직접 풀어봐요" 스텝은 맞히든 틀리든 설명이 없다.
+     ⚠️ **선택 prop 이다.** 안 넘기면 지금과 똑같이 아무것도 안 뜬다
+     (`type: "input"` 을 쓰는 quest 130개는 영향 없음). */
+  explain?: string
 }
 
-export function NumInput({ question, hint, answer, E, onSolve }: NumInputProps) {
+export function NumInput({ question, hint, answer, E, onSolve, explain }: NumInputProps) {
   const [val, setVal] = useState("")
   const [wrong, setWrong] = useState(false)
   const [correct, setCorrect] = useState(false)
@@ -226,6 +233,14 @@ export function NumInput({ question, hint, answer, E, onSolve }: NumInputProps) 
           </span>
         )}
       </div>
+      {correct && explain && (
+        <div
+          className="mt-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-xs leading-relaxed text-green-900 whitespace-pre-line"
+          style={{ wordBreak: "keep-all", textWrap: "balance" }}
+        >
+          {explain}
+        </div>
+      )}
     </div>
   )
 }
