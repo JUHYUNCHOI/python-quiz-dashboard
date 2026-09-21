@@ -16,138 +16,24 @@ const A = "#2563eb";
 
 
 export function getChipXchgSections(E) {
+  /* ⚠️ 이건 **PDF 내려받기에만** 쓰인다 (구식 downloadChipXchgPDF 용 — 2026-09-21 확인 결과
+     화면에서 실제로 쓰는 버튼은 pdf.jsx 의 downloadChipXchgStudyPDF 로, 화면을 그대로 렌더해서
+     이 함수와 downloadChipXchgPDF 는 이제 어디서도 안 불린다. 죽은 코드다.
+     그런데도 여기 손타이핑된 코드는 **화면이 이미 걷어낸 이분 탐색 방식**이었고
+     `#include`/`int main`/`using namespace` 도 없어 그대로 내려받으면 컴파일이 안 됐다
+     (moohunt 와 같은 결함 모양). 다시 살아날 경우를 대비해 화면과 같은 소스
+     getChipXchgWalk() 를 `.slice()` 없이 그대로 써서 — 화면·PDF 가 구조적으로 갈라질 수
+     없게 한다. 🔒 SOLUTION_CODE 문자 하나 안 바꿨다: getChipXchgWalk 의 code 배열을
+     그대로 재사용만 한다. */
+  const py = getChipXchgWalk(E, "py");
+  const cpp = getChipXchgWalk(E, "cpp");
   return [
     {
-      label: t(E, "🧩 Step 1 — Model one round", "🧩 1단계 — 한 시도 모델링"),
+      label: t(E, "⚡ The O(1) formula", "⚡ O(1) 공식"),
       color: A,
-      py: [
-        "# After getting x random chips, adversary splits them as (a, b) with a+b=x.",
-        "# Bessie keeps a chips of type A, gets b chips of type B,",
-        "# and converts B -> A as many times as possible.",
-        "#",
-        "# final_A(a, b) = A + a + ((B + b) // cB) * cA",
-        "# Adversary picks (a, b) to MINIMIZE final_A.",
-        "# We want: the smallest x with min over a+b=x of final_A >= fA.",
-      ],
-      cpp: [
-        "// After getting x random chips, adversary splits them as (a, b) with a+b=x.",
-        "// Bessie keeps a chips of type A, gets b chips of type B,",
-        "// and converts B -> A as many times as possible.",
-        "//",
-        "// final_A(a, b) = A + a + ((B + b) / cB) * cA",
-        "// Adversary picks (a, b) to MINIMIZE final_A.",
-        "// We want: the smallest x with min over a+b=x of final_A >= fA.",
-      ],
-      why: [
-        t(E, "Each extra chip the adversary sends to type B might be wasted: it only counts when it completes another c_B group.",
-            "여분 칩을 B로 주면 c_B 묶음을 채워야만 환전 1회로 이어져요. 자투리는 그냥 버려져요."),
-        t(E, "So the adversary plays the remainder game — leave as many B chips just below the next c_B threshold as possible.",
-            "그래서 제일 나쁜 경우에는 b 를 다음 c_B 문턱 바로 아래에서 멈춰요. 그러면 자투리가 가장 많이 남아요."),
-      ],
-    },
-    {
-      label: t(E, "🔍 Step 2 — Try only a handful of b's", "🔍 2단계 — b 후보 몇 개만 시도"),
-      color: A,
-      py: [
-        "def min_final_A(A, B, cA, cB, x):",
-        "    if x == 0:",
-        "        return A + (B // cB) * cA",
-        "    cands = {0, x}",
-        "    # b that maximizes (B+b) % cB  ->  worst case for Bessie",
-        "    r1 = (cB - 1 - (B % cB)) % cB",
-        "    if r1 <= x:",
-        "        cands.add(r1)",
-        "        cands.add(r1 + ((x - r1) // cB) * cB)",
-        "    # b that makes (B+b) % cB == 0  ->  best case (full groups)",
-        "    r0 = (-B) % cB",
-        "    if r0 <= x:",
-        "        cands.add(r0)",
-        "        cands.add(r0 + ((x - r0) // cB) * cB)",
-        "    return min(A + (x - b) + ((B + b) // cB) * cA for b in cands)",
-      ],
-      cpp: [
-        "ll minFinalA(ll A, ll B, ll cA, ll cB, ll x) {",
-        "    if (x == 0) {",
-        "        return A + (B / cB) * cA;",
-        "    }",
-        "    vector<ll> cands;",
-        "    cands.push_back(0);",
-        "    cands.push_back(x);",
-        "    ll r1 = ((cB - 1 - (B % cB)) % cB + cB) % cB;",
-        "    if (r1 <= x) {",
-        "        cands.push_back(r1);",
-        "        cands.push_back(r1 + ((x - r1) / cB) * cB);",
-        "    }",
-        "    ll r0 = ((-B) % cB + cB) % cB;",
-        "    if (r0 <= x) {",
-        "        cands.push_back(r0);",
-        "        cands.push_back(r0 + ((x - r0) / cB) * cB);",
-        "    }",
-        "    ll best = LLONG_MAX;",
-        "    for (int i = 0; i < (int)cands.size(); i++) {",
-        "        ll b = cands[i];",
-        "        ll v = A + (x - b) + ((B + b) / cB) * cA;",
-        "        if (v < best) {",
-        "            best = v;",
-        "        }",
-        "    }",
-        "    return best;",
-        "}",
-      ],
-      why: [
-        t(E, "Inside one residue class mod c_B, increasing b by c_B trades 'lose c_B raw A' for 'gain c_A from one more swap'.",
-            "같은 c_B 나머지 안에서 b 를 c_B 만큼 늘리면, A 를 c_B 개 손해 보는 대신 환전 한 번으로 c_A 개를 얻어요."),
-        t(E, "So the optimum is monotone in q (the number of complete groups). Checking the smallest and largest valid b in each useful residue class is enough.",
-            "그래서 완성된 묶음 수 q 에 따라 한 방향으로만 움직여요. 쓸모 있는 나머지마다 가장 작은 b 와 가장 큰 b 만 확인하면 돼요."),
-        t(E, "Two residue classes matter: 'remainder = c_B − 1' (max waste) and 'remainder = 0' (no waste).",
-            "쓸모 있는 나머지는 두 가지예요. 나머지가 c_B-1 일 때 (자투리 최대) 와 나머지가 0 일 때 (자투리 없음) 예요."),
-      ],
-      pyOnly: [
-        t(E, "Python ints are arbitrary precision — no overflow worries when fA up to 10^9 and answers up to 10^18.",
-            "파이썬 정수는 자릿수 제한이 없어요. fA 가 10^9 이고 답이 10^18 까지 가도 오버플로 걱정이 없어요."),
-      ],
-      cppOnly: [
-        t(E, "All values must be `long long`. Mixing `int` and `long long` in (B + b) / cB will silently overflow.",
-            "모든 값을 `long long` 으로 써야 해요. (B + b) / cB 에 `int` 가 섞이면 조용히 오버플로가 나요."),
-      ],
-    },
-    {
-      label: t(E, "🎯 Step 3 — Binary search on x", "🎯 3단계 — x 에 대한 이분 탐색"),
-      color: A,
-      py: [
-        "def solve(A, B, cA, cB, fA):",
-        "    # f(x) = min adversary outcome at chip count x  is non-decreasing in x",
-        "    # because the adversary can always pretend the extra chip never came.",
-        "    lo, hi = 0, 2 * 10**18",
-        "    while lo < hi:",
-        "        mid = (lo + hi) // 2",
-        "        if min_final_A(A, B, cA, cB, mid) >= fA:",
-        "            hi = mid",
-        "        else:",
-        "            lo = mid + 1",
-        "    return lo",
-      ],
-      cpp: [
-        "ll solve(ll A, ll B, ll cA, ll cB, ll fA) {",
-        "    ll lo = 0;",
-        "    ll hi = (ll)2e18;",
-        "    while (lo < hi) {",
-        "        ll mid = lo + (hi - lo) / 2;",
-        "        if (minFinalA(A, B, cA, cB, mid) >= fA) {",
-        "            hi = mid;",
-        "        } else {",
-        "            lo = mid + 1;",
-        "        }",
-        "    }",
-        "    return lo;",
-        "}",
-      ],
-      why: [
-        t(E, "More chips can never hurt Bessie — adversary can copy any worse split and dump the extra on type A. So the predicate 'guaranteed to reach fA' flips at most once as x grows.",
-            "x 가 늘어나도 결과가 나빠질 수는 없어요. 어떤 나눔이든 그대로 두고 늘어난 칩을 A 에 얹으면 되니까요. 그래서 '목표 fA 에 꼭 닿는다' 는 조건은 많아야 한 번만 거짓에서 참으로 바뀌어요."),
-        t(E, "Binary search range: 0 to 2×10^18 — that comfortably covers the worst sample (fA = 10^9, c_B = 10^9).",
-            "이분 탐색 범위는 0 부터 2×10^18 까지예요. 가장 큰 샘플 (fA=10^9, c_B=10^9) 도 넉넉히 들어가요."),
-      ],
+      py: py.code,
+      cpp: cpp.code,
+      why: py.beats.map((b) => b.bubble),
     },
   ];
 }
