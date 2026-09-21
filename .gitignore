@@ -72,6 +72,12 @@ _*.mjs
 # 2026-09-09: 주석이 두 줄로 잘려 "*-check-tmp.mjs 15개를 루트에 남겼다." 가
 #             패턴처럼 들어가 있었다. 고쳤다.
 scratchpad_*.mjs
+# 2026-09-22: 위 두 무늬가 **거의** 덮었는데 둘이 새어 나갔다 —
+#   scratch2.mjs      (밑줄이 없어서 `scratch_*` 에 안 걸림)
+#   scratchpad_*.png  (`.mjs` 만 막고 있었다. 7장 1MB 가 2026-09-13 부터 들어 있었다)
+# 확장자를 묻지 말고 이름으로 막는다.
+scratch*
+scratchpad*
 scroll-check-tmp.mjs
 *-check-tmp.mjs
 .chk-tmp.mjs
