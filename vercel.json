@@ -5,5 +5,5 @@
       "dev": false
     }
   },
-  "ignoreCommand": "if [ -n \"$VERCEL_GIT_COMMIT_REF\" ] && [ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ]; then exit 0; fi; BASE=\"$VERCEL_GIT_PREVIOUS_SHA\"; if [ -z \"$BASE\" ]; then exit 1; fi; git diff --quiet \"$BASE\" HEAD -- . ':!.claude' ':!*.md' ':!docs/**' ':!scripts/**' ':!vercel.json' || exit 1; exit 0"
+  "ignoreCommand": "echo \"[ignore] REF=$VERCEL_GIT_COMMIT_REF SHA=$VERCEL_GIT_COMMIT_SHA PREV=[$VERCEL_GIT_PREVIOUS_SHA]\"; if [ -n \"$VERCEL_GIT_COMMIT_REF\" ] && [ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ]; then echo \"[ignore] main 이 아니라 건너뜀\"; exit 0; fi; BASE=\"$VERCEL_GIT_PREVIOUS_SHA\"; if [ -z \"$BASE\" ]; then echo \"[ignore] PREV 가 비었다 → 빌드한다(안전쪽)\"; exit 1; fi; CHANGED=$(git diff --name-only \"$BASE\" HEAD -- . ':!.claude' ':!*.md' ':!docs/**' ':!scripts/**' ':!vercel.json' 2>&1); if [ $? -ne 0 ]; then echo \"[ignore] git diff 실패 → 빌드한다(안전쪽)\"; exit 1; fi; if [ -z \"$CHANGED\" ]; then echo \"[ignore] 화면에 닿는 변화 없음 → 건너뜀\"; exit 0; fi; echo \"[ignore] 바뀐 화면 파일:\"; echo \"$CHANGED\" | head -20; exit 1"
 }
