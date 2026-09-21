@@ -138,7 +138,7 @@ export function BruteLimitSim({ E }) {
   const fmt = (n) => n.toLocaleString("en-US");
 
   const rows = [
-    { key: "boards", ko: "보드 개수 (2²⁰)", en: "boards (2²⁰)", v: fmt(BOARDS) },
+    { key: "boards", ko: "보드 개수 (칸마다 2가지 × 20칸)", en: "boards (2 choices × 20 cells)", v: fmt(BOARDS) },
     { key: "triples", ko: "서로 다른 무브 (20×19×18)", en: "distinct moves (20×19×18)", v: fmt(TRIPLES) },
     { key: "mult", ko: "곱하면 검사 횟수", en: "multiply → checks", v: "≈ 7×10⁹", bad: true },
   ];
@@ -149,6 +149,9 @@ export function BruteLimitSim({ E }) {
     s.k === "mult" ? t(E,
       <>You counted both numbers already.<br />Scoring one board means checking every move —<br />so the work is <b>1,000,000 × 6,840 ≈ 7×10⁹</b>.</>,
       <>두 수는 방금 직접 셌어요.<br />보드 하나를 채점하려면 무브를 다 봐야 하니까 —<br />일의 양은 <b>100만 × 6,840 ≈ 7×10⁹</b> 이에요.</>)
+    /* ⚠️ 여기 10⁹ 은 `check-undefined-symbol.py` 가 매번 찍지만 **의도한 것**이다 —
+       바로 앞 문장이 "간단한 계산 10억 번 = 1초" 라고 그 자리에서 뜻을 밝힌다.
+       기호를 지우면 오히려 10억과 10⁹ 을 잇는 다리가 사라진다. 2026-09-21 판정. */
     : t(E,
       <>A computer does about <b>a billion simple steps</b> in one second — that is <b>10⁹</b>.<br /><b>7×10⁹</b> is <b>seven times</b> more.<br />Is it really too slow? Let's run it and see.</>,
       <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 — 그게 <b>10⁹</b> 이에요.<br /><b>7×10⁹</b> 은 그보다 <b>일곱 배</b> 많아요.<br />정말 느린지, 직접 돌려서 봐요.</>);
@@ -1017,7 +1020,7 @@ export function BruteRunSim({ E }) {
         </div>
         <div style={{ display: "grid", gap: 6, marginBottom: 10 }}>
           {[
-            { l: t(E, "boards to make (2^N)", "만들 보드 (2^N)"), v: fmt(totalBoards) },
+            { l: t(E, "boards to make (2 per cell)", "만들 보드 (칸마다 2가지)"), v: fmt(totalBoards) },
             { l: t(E, "distinct moves", "서로 다른 무브"), v: fmt(moveCount) },
             { l: t(E, "checks in total", "검사 횟수"), v: fmt(totalChecks), bad: totalChecks > 1e9 },
           ].map((r, i) => (

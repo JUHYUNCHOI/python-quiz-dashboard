@@ -112,7 +112,7 @@ export function getMooHuntWalk(E, lang = "py") {
     return { code: FULL_CPP, vars: _MH_VARS, beats: [
       { hi: [4, 6],   bubble: t(E, "What do we need to find? The best score among all boards, and how many boards reach it.\nWithout a smarter idea yet, we'll have to build every board and score it.\nFirst read N (cells) and K (moves).", "무엇을 구해야 하나요?\n가능한 보드 중 최고 점수와, 그 점수를 내는 보드 개수예요.\n더 똑똑한 방법이 아직 없으니 보드를 전부 만들어 점수를 매겨야 해요.\n먼저 N(칸 수)과 K(무브 수)를 읽어요.") },
       { hi: [8, 15],  bubble: t(E, "Scoring one move needs all three cells x, y, z.\nSo read all K moves first.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.", "무브 하나를 채점하려면 x·y·z 셋을 다 알아야 해요.\n그래서 먼저 K 개를 다 읽어 둬요.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
-      { hi: [17, 21], bubble: t(E, "No smarter idea in sight, so try EVERY possible board (2^N of them).\nEach of N cells is M or O, so one bitmask spells out one whole board.\nSet up best and ways.", "더 똑똑한 방법이 안 보이니, 만들 수 있는 보드를 전부 해봐요 (2^N 개).\nN 개 칸마다 M 아니면 O 니까, 비트마스크 하나가 보드 하나예요.\nbest, ways 도 준비해요.") },
+      { hi: [17, 21], bubble: t(E, "No smarter idea in sight, so try EVERY possible board — two choices per cell, N cells, so 2 multiplied by itself N times (about a million boards when N = 20).\nEach of N cells is M or O, so one bitmask spells out one whole board.\nSet up best and ways.", "더 똑똑한 방법이 안 보이니, 만들 수 있는 보드를 전부 해봐요 — 칸마다 M/O 두 가지니까 2 를 N 번 곱한 만큼 있어요 (N=20 이면 약 100만 개).\nN 개 칸마다 M 아니면 O 니까, 비트마스크 하나가 보드 하나예요.\nbest, ways 도 준비해요.") },
       { hi: [22, 31], bubble: t(E, "How do we score one board?\nFor each move, check by bit whether x is M and y, z are O — add 1 point if so.", "보드 하나를 어떻게 채점할까요?\n무브마다 x 가 M 이고 y·z 가 O 인지 비트로 확인해서, 맞으면 1점씩 더해요.") },
       { hi: [33, 38], bubble: t(E, "This board has a score. Compare it with the best so far.\nHigher → new best. Same → one more board reaches it.", "이 보드의 점수가 나왔어요. 지금까지 최고 점수와 견줘요.\n더 높으면 새 최고로 바꾸고, 같으면 보드 수를 하나 늘려요.") },
       { hi: [41, 41], bubble: t(E, "Every board has been checked. Print the best score and how many boards reach it.", "보드를 다 봤어요. 최고 점수와 그 보드 수를 출력해요.") },
@@ -121,7 +121,7 @@ export function getMooHuntWalk(E, lang = "py") {
   return { code: FULL_PY, vars: _MH_VARS, beats: [
     { hi: [3, 3],   bubble: t(E, "What do we need to find? The best score among all boards, and how many boards reach it.\nWithout a smarter idea yet, we'll have to build every board and score it.\nFirst read N (cells) and K (moves).", "무엇을 구해야 하나요?\n가능한 보드 중 최고 점수와, 그 점수를 내는 보드 개수예요.\n더 똑똑한 방법이 아직 없으니 보드를 전부 만들어 점수를 매겨야 해요.\n먼저 N(칸 수)과 K(무브 수)를 읽어요.") },
     { hi: [5, 9],   bubble: t(E, "Scoring one move needs all three cells x, y, z.\nSo read all K moves first into a list.\nCells are numbered from 1 in the input but from 0 in code, so subtract 1.", "무브 하나를 채점하려면 x·y·z 셋을 다 알아야 해요.\n그래서 먼저 K 개를 목록 하나에 다 읽어 둬요.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
-    { hi: [11, 15], bubble: t(E, "No smarter idea in sight, so try EVERY possible board (2^N of them).\nEach of N cells is M or O, so one bitmask spells out one whole board.\nSet up best and ways.", "더 똑똑한 방법이 안 보이니, 만들 수 있는 보드를 전부 해봐요 (2^N 개).\nN 개 칸마다 M 아니면 O 니까, 비트마스크 하나가 보드 하나예요.\nbest, ways 도 준비해요.") },
+    { hi: [11, 15], bubble: t(E, "No smarter idea in sight, so try EVERY possible board — two choices per cell, N cells, so 2 multiplied by itself N times (about a million boards when N = 20).\nEach of N cells is M or O, so one bitmask spells out one whole board.\nSet up best and ways.", "더 똑똑한 방법이 안 보이니, 만들 수 있는 보드를 전부 해봐요 — 칸마다 M/O 두 가지니까 2 를 N 번 곱한 만큼 있어요 (N=20 이면 약 100만 개).\nN 개 칸마다 M 아니면 O 니까, 비트마스크 하나가 보드 하나예요.\nbest, ways 도 준비해요.") },
     { hi: [16, 19], bubble: t(E, "How do we score one board?\nFor each move, check by bit whether x is M and y, z are O — add 1 point if so.", "보드 하나를 어떻게 채점할까요?\n무브마다 x 가 M 이고 y·z 가 O 인지 비트로 확인해서, 맞으면 1점씩 더해요.") },
     { hi: [21, 25], bubble: t(E, "This board has a score. Compare it with the best so far.\nHigher → new best. Same → one more board reaches it.", "이 보드의 점수가 나왔어요. 지금까지 최고 점수와 견줘요.\n더 높으면 새 최고로 바꾸고, 같으면 보드 수를 하나 늘려요.") },
     { hi: [27, 27], bubble: t(E, "Every board has been checked. Print the best score and how many boards reach it.", "보드를 다 봤어요. 최고 점수와 그 보드 수를 출력해요.") },
@@ -168,8 +168,8 @@ export function getMooHuntSections(E) {
       why: [
         t(E, "Move to the next board — adding 1, with cell 1 as the ones place.\nOnce every board has been tried, print the best score and how many boards reach it.",
             "다음 보드로 넘어가요 — 1번 칸을 일의 자리로 보고 1 을 더해요.\n보드를 다 봤으면 최고 점수와 그 보드 수를 출력해요."),
-        t(E, "This works, but it tries every one of the 2^N boards and rescans all K moves each time — too slow for large N. The next code fixes that.",
-            "이 코드는 맞지만 2^N 개 보드를 다 만들고 그때마다 무브 K 개를 다시 훑어요 — N 이 크면 너무 느려요. 다음 코드에서 이걸 고쳐요."),
+        t(E, "This works, but it builds every board — 2 multiplied by itself N times — and rescans all K moves each time — too slow for large N. The next code fixes that.",
+            "이 코드는 맞지만 보드를 전부(2 를 N 번 곱한 만큼) 만들고 그때마다 무브 K 개를 다시 훑어요 — N 이 크면 너무 느려요. 다음 코드에서 이걸 고쳐요."),
       ],
     },
     // ── 2부 — 더 빠른 풀이: 표를 미리 만들어 두기 (fast.jsx) ──────────────
