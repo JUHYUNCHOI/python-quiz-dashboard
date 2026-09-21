@@ -28,7 +28,7 @@
  */
 import { t } from "@/components/quest/theme";
 
-const BRUTE_PY = [
+export const BRUTE_PY = [
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -71,7 +71,7 @@ const BRUTE_PY = [
   "print(best, ways)",
 ];
 
-const BRUTE_CPP = [
+export const BRUTE_CPP = [
   "#include <iostream>",
   "#include <vector>",
   "using namespace std;",

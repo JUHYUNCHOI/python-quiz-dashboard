@@ -17,6 +17,8 @@
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { BRUTE_PY, BRUTE_CPP } from "./brute";
+import { FAST_PY, FAST_CPP } from "./fast";
 
 const A = "#dc2626";
 
@@ -127,96 +129,77 @@ export function getMooHuntWalk(E, lang = "py") {
 }
 
 export function getMooHuntSections(E) {
-  /* ⚠️ 이건 **PDF 내려받기에만** 쓰인다 (MooHuntApp.jsx:121). 화면 CodeWalk 은 getMooHuntWalk 다.
-     2026-09-11: 화면 코드를 usaco.org 공식 Subtask 모양으로 바꾸면서 여기도 같이 맞췄다.
-     둘을 따로 두면 **PDF 가 화면과 다른 코드를 준다.** 실제로 그럴 뻔했다. */
+  /* ⚠️ 이건 **PDF 내려받기에만** 쓰인다 (MooHuntApp.jsx:121).
+     화면 CodeWalk 은 첫 코드 = getMooHuntBruteWalk (brute.jsx),
+                      최종 코드 = getMooHuntFastWalk (fast.jsx).
+     둘을 따로 두면 **PDF 가 화면과 다른 코드를 준다** — 실제로 그랬다
+     (2026-09-21: PDF 가 화면에서 이미 걷어낸 비트마스크를, 그것도 컴파일 안 되는
+     조각으로 주고 있었다). 그래서 여기도 **같은 두 배열을 `.slice()` 로만** 잘라 쓴다.
+     BRUTE_PY/BRUTE_CPP·FAST_PY/FAST_CPP 를 다시 타이핑하지 않는다 — 줄이 조용히
+     사라질 수 없게. 🔒 FULL_PY/FULL_CPP(비트마스크, USACO_VERIFIED)는 이제 이 PDF가
+     안 쓴다 — 화면이 2026-09-12 에 비트를 걷어냈기 때문이다. 한 글자도 안 건드렸다. */
+  const F = "#059669"; // fast(더 빠른 풀이) 계열 색 — chapters.jsx 의 CodeWalk accent 와 동일
   return [
+    // ── 1부 — 첫 코드: 비트 없는 완전탐색 (brute.jsx) ─────────────────────
     {
-      label: t(E, "🔢 Step 1 — Read the moves", "🔢 1단계 — 무브 읽기"),
+      label: t(E, "🐢 1️⃣ First code — read the moves", "🐢 1️⃣ 첫 코드 — 무브 읽기"),
       color: A,
-      py: [
-        "import sys",
-        "input = sys.stdin.readline",
-        "",
-        "N, K = map(int, input().split())",
-        "",
-        "moves = []",
-        "for _ in range(K):",
-        "    x, y, z = map(int, input().split())",
-        "    moves.append((x - 1, y - 1, z - 1))",
-      ],
-      cpp: [
-        "int N, K;",
-        "cin >> N >> K;",
-        "",
-        "vector<int> mx(K), my(K), mz(K);",
-        "for (int i = 0; i < K; i++) {",
-        "    cin >> mx[i] >> my[i] >> mz[i];",
-        "    mx[i]--;",
-        "    my[i]--;",
-        "    mz[i]--;",
-        "}",
-      ],
+      py: BRUTE_PY.slice(0, 10), cpp: BRUTE_CPP.slice(0, 16),
       why: [
-        t(E, "Just keep the K moves as they come — no extra table.",
-            "무브 K 개를 들어온 그대로 담아둬요. 따로 만들 표가 없어요."),
-        t(E, "The input numbers cells from 1, but the code counts from 0, so subtract 1.",
-            "입력은 칸을 1번부터 세고 코드는 0번부터 세요. 그래서 1 을 빼요."),
+        t(E, "What do we need to find? The best score, and how many boards reach it.\nWe don't have a fast trick yet, so we'll just build every board there is.\nStart by reading N (cells), K (moves), then the K moves — subtract 1 since code counts from 0.",
+            "무엇을 구해야 하나요?\n최고 점수와, 그 점수를 내는 보드 개수예요.\n아직 빠른 방법을 모르니 만들 수 있는 보드를 전부 만들어 봐요.\n먼저 N·K 와 무브 K 개를 읽어요 — 코드는 0번부터 세니까 1 을 빼요."),
       ],
     },
     {
-      label: t(E, "🧮 Step 2 — Try every board (bitmask)", "🧮 2단계 — 보드를 전부 해보기 (비트마스크)"),
-      color: A,
-      py: [
-        "best = 0",
-        "ways = 0",
-        "",
-        "for b in range(1 << N):",
-        "    score = 0",
-        "    for x, y, z in moves:",
-        "        if (b >> x) & 1 and not (b >> y) & 1 and not (b >> z) & 1:",
-        "            score += 1",
-        "",
-        "    if score > best:",
-        "        best = score",
-        "        ways = 1",
-        "    elif score == best:",
-        "        ways += 1",
-        "",
-        "print(best, ways)",
-      ],
-      cpp: [
-        "int best = 0;",
-        "int ways = 0;",
-        "",
-        "for (int b = 0; b < (1 << N); b++) {",
-        "    int score = 0;",
-        "    for (int i = 0; i < K; i++) {",
-        "        bool xIsM = (b >> mx[i]) & 1;",
-        "        bool yIsO = !((b >> my[i]) & 1);",
-        "        bool zIsO = !((b >> mz[i]) & 1);",
-        "        if (xIsM && yIsO && zIsO) {",
-        "            score++;",
-        "        }",
-        "    }",
-        "",
-        "    if (score > best) {",
-        "        best = score;",
-        "        ways = 1;",
-        "    } else if (score == best) {",
-        "        ways++;",
-        "    }",
-        "}",
-        "",
-        "cout << best << \" \" << ways << \"\\n\";",
-      ],
+      label: t(E, "🐢 2️⃣ Score every board", "🐢 2️⃣ 보드를 하나씩 채점"),
+      color: "#ea580c",
+      py: BRUTE_PY.slice(10, 29), cpp: BRUTE_CPP.slice(16, 38),
       why: [
-        t(E, "Each of b's N bits stands for one cell. Bit 1 means that cell reads M, bit 0 means O — so one b spells out one whole board.",
-            "b 의 비트 N 개가 칸 하나씩을 맡아요.\n비트가 1 이면 그 칸은 M, 0 이면 O 예요.\n그래서 b 하나가 보드 하나를 통째로 적어 놓은 셈이에요."),
-        t(E, "A move scores when x is M and both y and z are O.",
-            "무브는 x 가 M 이고 y·z 가 둘 다 O 일 때 1 점이에요."),
-        t(E, "Keep the best score, and count how many boards reach it — the answer is both.",
-            "최고 점수를 새로 고치고, 그 점수가 되는 보드가 몇 개인지 세요. 답이 그 둘이에요."),
+        t(E, "The board is just a list: 1 means M, 0 means O. Start from all O.\nScores are never negative, so 0 is a safe starting best.",
+            "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요."),
+        t(E, "Score this board: a move scores when x reads M and y, z read O. Walk all K of them.\nThen keep the best score, and how many boards reach it.",
+            "이 보드를 채점해요. x 자리가 M, y·z 자리가 O 면 1점 — 무브 K 개를 다 훑어요.\n그리고 최고 점수와, 그 점수에 이르는 보드 개수를 남겨요."),
+      ],
+    },
+    {
+      label: t(E, "🐢 3️⃣ Next board, then print", "🐢 3️⃣ 다음 보드로, 그리고 출력"),
+      color: "#b45309",
+      py: BRUTE_PY.slice(29), cpp: BRUTE_CPP.slice(38),
+      why: [
+        t(E, "Move to the next board — adding 1, with cell 1 as the ones place.\nOnce every board has been tried, print the best score and how many boards reach it.",
+            "다음 보드로 넘어가요 — 1번 칸을 일의 자리로 보고 1 을 더해요.\n보드를 다 봤으면 최고 점수와 그 보드 수를 출력해요."),
+        t(E, "This works, but it tries every one of the 2^N boards and rescans all K moves each time — too slow for large N. The next code fixes that.",
+            "이 코드는 맞지만 2^N 개 보드를 다 만들고 그때마다 무브 K 개를 다시 훑어요 — N 이 크면 너무 느려요. 다음 코드에서 이걸 고쳐요."),
+      ],
+    },
+    // ── 2부 — 더 빠른 풀이: 표를 미리 만들어 두기 (fast.jsx) ──────────────
+    {
+      label: t(E, "🚀 4️⃣ Faster code — count moves once", "🚀 4️⃣ 더 빠른 코드 — 무브를 미리 세어 두기"),
+      color: F,
+      py: FAST_PY.slice(0, 15), cpp: FAST_CPP.slice(0, 20),
+      why: [
+        t(E, "Re-reading all K moves for every board is too slow.\nThe moves never change, so count them once, right here.\nThe key is (M cell, smaller O cell, larger O cell) — y and z only need to both be O, so order doesn't matter.",
+            "보드마다 무브 K 개를 다시 훑으면 너무 느려요.\n무브는 바뀌지 않으니 여기서 한 번만 세어 둬요.\n열쇠는 (M 자리, 작은 O 자리, 큰 O 자리) 예요 — y·z 는 둘 다 O 면 되니 순서는 상관없어요."),
+      ],
+    },
+    {
+      label: t(E, "🚀 5️⃣ Split each board into M / O", "🚀 5️⃣ 보드를 M / O 로 가르기"),
+      color: "#0d9488",
+      py: FAST_PY.slice(15, 31), cpp: FAST_CPP.slice(20, 37),
+      why: [
+        t(E, "Each cell is either M or O, so a board is just 0s and 1s — start from all O.\nTo score it we first need to know which cells are M and which are O.",
+            "칸마다 M 아니면 O 니까, 보드는 0 과 1 로 적으면 돼요 — 전부 O 에서 시작해요.\n점수를 내려면 먼저 어느 칸이 M 이고 어느 칸이 O 인지 갈라 놔야 해요."),
+      ],
+    },
+    {
+      label: t(E, "🚀 6️⃣ Look up the score, then finish", "🚀 6️⃣ 표에서 점수를 꺼내고 마무리"),
+      color: "#047857",
+      py: FAST_PY.slice(31), cpp: FAST_CPP.slice(37),
+      why: [
+        t(E, "Only 'one M cell + two O cells' can ever score — so ask the table for exactly those combinations instead of walking every move again.",
+            "'M 한 자리 + O 두 자리' 조합만 득점할 수 있어요 — 그러니 무브를 다시 훑지 않고 그 조합만 표에서 꺼내요."),
+        t(E, "Keep the best score and how many boards reach it, then move to the next board the same way as before, and print the answer when every board has been seen.",
+            "최고 점수와 그 보드 수를 남기고, 앞서와 같은 방법으로 다음 보드로 넘어가요. 보드를 다 봤으면 답을 출력해요."),
       ],
     },
   ];
