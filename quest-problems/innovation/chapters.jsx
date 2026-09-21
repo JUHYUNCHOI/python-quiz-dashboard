@@ -100,7 +100,7 @@ export function makeInnovationCh1(E) {
       type: "reveal",
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "You have n cards, each with four numbers a, b, c, d. Choose m of them and lay them left-to-right, overlapping. Every card then shows only a and b — except the last card, which shows all four. Maximize the total visible sum.",
+        "Choose and overlap m cards to maximize the total of the visible numbers.",
         "카드를 겹쳐 놓았을 때 보이는 수의 합을 크게 만들어요."),
       content: (
         <div style={{ padding: 16 }}>

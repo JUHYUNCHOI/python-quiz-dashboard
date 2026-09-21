@@ -19,7 +19,7 @@ export function makeUdderedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has a custom 26-letter alphabet order. She hears a string S; each character must be read in order, but she has to FULLY recite the alphabet at least once between any two characters that move backward in her order (or stay the same).\nPrint the MINIMUM number of full alphabet recitations she needs to read all of S.",
+        "Find the minimum number of times Bessie must fully recite her alphabet to read all of S.",
         "알파벳을 몇 번 외워야 S 를 다 읽을 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -121,7 +121,7 @@ export function makeUdderedCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Map each letter to its position in Bessie's custom alphabet. Scan S — when next letter's custom-position ≤ current's, recite again. Start cycle = 1. Sections build it one piece at a time.",
+        "Map each letter to its position in Bessie's custom order, then scan S one letter at a time.",
         "글자마다 자리 번호를 붙여 두고 S 를 하나씩 볼게요."),
       sections: getUdderedSections(E),
     },

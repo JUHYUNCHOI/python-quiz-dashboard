@@ -19,7 +19,7 @@ export function makeBitcoinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N bitcoin mining sites at integer points on a 2D plane.\nPrint the MAXIMUM squared Euclidean distance between any two sites — i.e., max (x1−x2)^2 + (y1−y2)^2.",
+        "Find the maximum squared distance between any two of the N mining sites.",
         "두 사이트 사이 거리의 제곱 중 가장 큰 값을 구해요."),
       content: (
         <div style={{ padding: 16 }}>

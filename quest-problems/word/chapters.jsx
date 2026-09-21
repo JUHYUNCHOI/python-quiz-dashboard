@@ -120,7 +120,7 @@ export function makeWordCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Word Distance!\nYou have N words, all length M.\nFind a new word that is 'closest' to all of them combined.\nBut distance here isn't about spelling — it's about having the same letters!\n📝", "단어 거리 문제예요!\n단어가 여러 개 있는데, 이 단어들 모두와 최대한 비슷한 새 단어 하나를 만들어야 해요.\n'비슷하다'는 건 같은 글자를 많이 갖고 있다는 뜻이에요!\n📝"),
+        "Word Distance: build a length-M word that shares as many letters as possible with all N words.", "단어 거리 문제예요!\n단어가 여러 개 있는데, 이 단어들 모두와 최대한 비슷한 새 단어 하나를 만들어야 해요.\n'비슷하다'는 건 같은 글자를 많이 갖고 있다는 뜻이에요!\n📝"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>📝</div>
@@ -220,7 +220,7 @@ export function makeWordCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, what's an anagram?\nTwo words are anagrams if they use the exact same letters, just in different order.\n'ade' and 'aed' are anagrams!", "먼저 '애너그램'을 알아보자. 글자를 섞어서 똑같이 만들 수 있으면 애너그램이에요. 예를 들어 'ade'의 글자를 섞으면 'aed'가 되지? 둘은 애너그램!"),
+        "First, what's an anagram?\nTwo words are anagrams if they use the exact same letters, just in different order.\n'ade' and 'aed' are anagrams!", "글자만 섞으면 같아지는 게 애너그램이에요. 'ade'와 'aed'가 그 예예요."),
       content: (() => {
         const pairs = [
           { a: "ade", b: "aed", ok: true },
@@ -334,7 +334,7 @@ export function makeWordCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "To minimize total distance, we maximize total shared letters.\nThink of it as: we have M slots to fill with letters.\nEach slot, pick the letter that is shared with the most words!", "거리를 줄이려면 겹치는 글자를 최대한 많이 만들면 돼요!\n방법은 간단해요.\n빈칸 M 개에 글자를 하나씩 넣는데,\n'이 글자를 넣으면 몇 단어랑 겹칠까?' 를 세어 보고\n가장 많이 겹치는 글자를 골라요!"),
+        "To minimize total distance, fill each of the M slots with the letter shared by the most words.", "거리를 줄이려면 겹치는 글자를 최대한 많이 만들면 돼요!\n방법은 간단해요.\n빈칸 M 개에 글자를 하나씩 넣는데,\n'이 글자를 넣으면 몇 단어랑 겹칠까?' 를 세어 보고\n가장 많이 겹치는 글자를 골라요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>
@@ -371,7 +371,7 @@ export function makeWordCh1(E) {
     {
       type: "marginalGainSim",
       narr: t(E,
-        "Try it yourself!\nTap any letter and watch its gain (+N) shrink as you add more.\nThat's the key insight — gains only go down, so picking the highest gain each step is safe.",
+        "Tap a letter and watch its gain shrink — picking the highest gain each time is always safe.",
         "직접 해봐요!\n글자를 눌러서 추가하면 그 글자의 +N (새로 겹치는 수)이 줄어들어요.\n이게 핵심이에요 — 매번 가장 큰 +N을 고르면 항상 최선이에요!"),
     },
     // 1-6: Quiz — greedy pick
@@ -415,7 +415,7 @@ export function makeWordCh2(E) {
     {
       type: "distanceCalc",
       narr: t(E,
-        "Try typing two words and see how their anagram distance is calculated!\nWatch how shared letters are matched up.\n📝", "두 단어를 직접 입력해봐요! 각 글자가 몇 번 나오는지 세고, 겹치는 글자를 찾아서 거리를 계산하는 과정을 보여줄게. 📝"),
+        "Try typing two words and see how their anagram distance is calculated!\nWatch how shared letters are matched up.\n📝", "두 단어를 입력하면 겹치는 글자를 세어 거리를 계산해줘요."),
     },
     // 2-2: Quiz — shared letters
     {
@@ -439,13 +439,13 @@ export function makeWordCh2(E) {
     {
       type: "greedySim",
       narr: t(E,
-        "Watch the greedy algorithm fill M slots one by one!\nEach word is shown as a fixed dictionary — count how many words have each letter to find the best pick!", "이제 직접 봐요!\n단어마다 글자가 몇 개씩 있는지 사전으로 보여 줄게요.\n▶ 를 누르면 어떤 글자가 가장 많이 겹치는지 세는 과정이 나와요!"),
+        "Watch the greedy algorithm fill each of the M slots by picking the letter shared by the most words.", "이제 직접 봐요!\n단어마다 글자가 몇 개씩 있는지 사전으로 보여 줄게요.\n▶ 를 누르면 어떤 글자가 가장 많이 겹치는지 세는 과정이 나와요!"),
     },
     // 2-4: Word builder
     {
       type: "wordBuilder",
       narr: t(E,
-        "Now build the final answer!\nOnce we know the letter frequencies, sort them to get the lexicographically smallest word.", "그리디로 골라서 a 1개, d 1개, e 1개를 넣었어. 이걸 abc 순으로 줄 세우면 정답 단어가 나와요! 아래에서 각 단어와의 거리도 확인해봐요."),
+        "Now build the final answer!\nOnce we know the letter frequencies, sort them to get the lexicographically smallest word.", "고른 글자를 abc 순으로 세우면 정답 단어가 나와요."),
     },
     // 2-5: Final answer input
     {
@@ -470,7 +470,7 @@ export function makeWordCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's code it!\nFirst, read the words and count each word's letter frequencies using Counter.", "코드를 짜보자! 먼저 단어들을 읽고, 각 단어에 어떤 글자가 몇 번 나오는지 세. 파이썬의 Counter가 이걸 한 줄로 해줘요!"),
+        "Let's code it!\nFirst, read the words and count each word's letter frequencies using Counter.", "코드를 짜볼게요. 먼저 단어를 읽고 글자 수를 Counter로 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 6 }}>
@@ -500,7 +500,7 @@ export function makeWordCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The core: fill M slots greedily.\nFor each slot, try all 26 letters and pick the one with highest marginal gain.", "핵심 부분이에요! 빈칸 M개를 하나씩 채우는데, 매번 a~z 26개를 다 시도해봐요. '이걸 넣으면 새로 몇 개 단어랑 겹칠까?' 세서 가장 큰 걸 골라!"),
+        "The core: fill M slots greedily.\nFor each slot, try all 26 letters and pick the one with highest marginal gain.", "빈칸마다 a~z 를 다 시도해 가장 많이 겹치는 글자를 골라요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 6 }}>
@@ -540,7 +540,7 @@ export function makeWordCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Finally, build the word!\nJust line up the letters in alphabetical order — that's automatically the lexicographically smallest.", "마지막으로 글자들을 abc순으로 이어붙이면 끝! 이렇게 하면 자동으로 사전에서 가장 앞에 오는 단어가 돼요."),
+        "Finally, build the word!\nJust line up the letters in alphabetical order — that's automatically the lexicographically smallest.", "글자들을 abc 순으로 이어붙이면 정답 단어가 완성돼요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 6 }}>
@@ -575,7 +575,7 @@ export function makeWordCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Why does greedy work?\nBecause each letter is independent!\nAdding one more 'a' doesn't affect the gain from 'b'.\nSo we can pick optimally one slot at a time.", "왜 이렇게 하나씩 골라도 될까요?\n'a' 를 넣든 말든 'd' 가 겹치는 수는 그대로예요.\n글자끼리 서로 영향을 안 주니까,\n매번 가장 좋은 걸 고르면 전체도 가장 좋아져요."),
+        "Greedy works because each letter's gain is independent, so picking the best letter each slot is always optimal.", "왜 이렇게 하나씩 골라도 될까요?\n'a' 를 넣든 말든 'd' 가 겹치는 수는 그대로예요.\n글자끼리 서로 영향을 안 주니까,\n매번 가장 좋은 걸 고르면 전체도 가장 좋아져요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>
@@ -601,7 +601,7 @@ export function makeWordCh3(E) {
     {
       type: "greedyTrace",
       narr: t(E,
-        "Let's trace the greedy algorithm on our sample, slot by slot!", "예제에서 빈칸을 하나씩 채우는 과정을 따라가보자! 매 칸마다 어떤 글자가 몇 개 단어와 겹치는지 보여줄게."),
+        "Let's trace the greedy algorithm on our sample, slot by slot!", "예제에서 빈칸을 하나씩 채우는 과정을 따라가 봐요."),
     },
     // 3-6: Full code reveal
     {

@@ -24,7 +24,7 @@ export function makeFansCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's make a colorful fan!\nWe have sticks of different colors and need to line them up so no two same-color sticks touch.\nHow many can we use?\n🪭", "알록달록 부채를 만들어 봐요! 여러 색깔의 막대를 같은 색끼리 안 닿게 줄 세워야 해요. 최대 몇 개 쓸 수 있을까요? 🪭"),
+        "Let's make a colorful fan!\nWe have sticks of different colors and need to line them up so no two same-color sticks touch.\nHow many can we use?\n🪭", "같은 색끼리 안 닿게 막대를 최대한 많이 줄 세워요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🪭</div>
@@ -216,7 +216,7 @@ export function makeFansCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Another example! Counts = [3, 3, 3]. Total = 9, max = 3, rest = 6. Can we use all 9?", "이번엔 [3, 3, 3] 이에요. 합계 9, 최대 3, 나머지 6이에요. 9개를 다 쓸 수 있을까요?"),
+        "Another example! Counts = [3, 3, 3]. Total = 9, max = 3, rest = 6. Can we use all 9?", "이번엔 [3, 3, 3]이에요. 9개를 다 쓸 수 있을까요?"),
       question: t(E,
         "min(9, 2×6+1) = min(9, 13) = ?",
         "min(9, 2×6+1) = min(9, 13) = ?"),

@@ -25,7 +25,7 @@ export function makeMcc19PalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "\"Book k\" lists every palindrome STRING made of the digits 0…k−1 (leading zeros allowed), ordered by length first, then alphabetically.\nPrint the N-th entry as its digit string.",
+        "Line up palindromes made of digits 0 to k-1 and print the N-th one.",
         "숫자 0…k−1 로 만든 회문을 줄 세워 N 번째를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -227,7 +227,7 @@ export function makeMcc19PalCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way generates every palindrome one by one until the N-th — if N is huge, that's far too many. The fast way COUNTS how many strings each length holds (choose the front half, mirror it), skips whole lengths at once, then builds just the one answer directly.",
+        "Instead of generating every palindrome, count them by length and jump straight to the N-th.",
         "회문을 다 만들지 말고 길이별 개수로 건너뛰어 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

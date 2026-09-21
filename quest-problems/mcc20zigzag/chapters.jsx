@@ -214,7 +214,7 @@ export function makeMcc20ZigzagCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a sequence of characters and an integer K, count the number of length-K subsequences that 'zig-zag' — values strictly alternating between going UP and going DOWN at each consecutive step.\nPrint the count modulo 1000.",
+        "Count how many length-K zig-zag subsequences the string contains.",
         "길이 K 인 지그재그가 몇 개인지 세어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -332,7 +332,7 @@ export function makeMcc20ZigzagCh1(E) {
          narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
-        "Tweak the string and slide K to feel zig-zag in your bones. Pick slots in order to test a candidate — green arrows mean each step flips direction; red means two same-direction steps in a row, so it isn't zig-zag.",
+        "Tweak the string and pick letters to feel what makes a subsequence zig-zag.",
         "지그재그가 무엇인지 직접 만들어 보며 느껴봐요."),
       content: (
         <div style={{ padding: 16 }}>

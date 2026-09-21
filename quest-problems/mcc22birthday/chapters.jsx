@@ -24,7 +24,7 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cats starts with one 'p'-shaped cookie and follows a scroll of letters. Each letter A/B/C copies the whole cookie grid — doubling it — sometimes flipping the copy. Friends eat cookies numbered left→right, top→bottom.",
+        "Each letter doubles the cookie grid — what shape is the Nth cookie?",
         "글자 하나마다 쿠키 격자가 두 배로 늘어나요.\n몇 번째 쿠키가 어떤 모양일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -98,7 +98,7 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. The grid can grow to 2^N cookies (2 multiplied by itself N times), so friend numbers are given as plain 1-based indices — never as coordinates.",
+        "The grid can grow to 2^N cookies, so friend numbers are given as plain 1-based indices, not coordinates.",
         "격자는 글자마다 두 배로 커져서 2^N(2 를 N 번 곱한 수) 개까지 갈 수 있어요.\n그래서 친구 번호는 좌표가 아니라 1 부터 세는 순번 하나로 줘요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -189,7 +189,7 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way builds the whole grid, then reads the cookie at each number. But after N letters the grid is 2^N cookies — with N up to 10000 it can't fit in any memory. The fast way never builds it: it traces each queried number BACKWARD through the scroll.",
+        "The grid has 2^N cookies, so instead of building it, trace each queried number backward.",
         "쿠키가 2^N 개라 격자를 만들 수가 없어요.\n대신 물어본 번호 하나만 거꾸로 따라가요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

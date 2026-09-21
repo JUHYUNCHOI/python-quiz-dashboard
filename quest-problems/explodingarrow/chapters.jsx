@@ -205,7 +205,7 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N targets stand in a row with health a[0..N-1]. You have K arrows. Firing an arrow of power X at target i drops the health of every target j ≥ i by max(0, M·X − (j−i)²) — strong up close, fading with distance, then nothing.\nFind the SMALLEST power X so that, placing arrows optimally, every target reaches health ≤ 0.",
+        "Find the smallest arrow power X that clears every target within K arrows.",
         "표적을 모두 쓰러뜨릴 가장 작은 화살 힘 X 를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -341,7 +341,7 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Play with the answer directly. Pick a power X, watch the arrow's splash and whether K arrows finish everyone — then notice the feasibility flips exactly once.",
+        "Pick a power X yourself and see whether every target's health drops to zero.",
         "힘 X 를 직접 골라서 표적이 다 쓰러지는지 봐요."),
       content: <BinarySearchXSim E={E} />,
     },
@@ -378,7 +378,7 @@ export function makeExplodingArrowCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Trying every X and re-simulating every arrow is far too slow. Instead: binary-search the answer X (each guess is a yes/no), and answer each yes/no in O(N) with a greedy sweep that stamps parabola-shaped damage using a difference array.",
+        "Trying every X directly is far too slow, so binary-search the answer X instead.",
         "X 를 하나씩 다 해보면 너무 느려요. 정답 X 를 이분 탐색해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

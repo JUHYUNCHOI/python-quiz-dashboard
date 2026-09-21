@@ -149,7 +149,7 @@ export function makeMcc21MenuCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Fluffy is building a nested menu out of layers. A layer of size s takes every line of the menu so far and copies it s times.\nGiven the layer sizes, arrange them so the finished menu has as FEW lines as possible.",
+        "Find the layer order that makes the finished menu have the fewest lines.",
         "층을 어떤 순서로 쌓아야 메뉴 줄 수가 가장 적을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -323,7 +323,7 @@ export function makeMcc21MenuCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every order of the N layers — N! orders, and 30! is astronomically large. The fast way proves one rule: sort the sizes ascending, then the answer is just the sum of prefix products.",
+        "Compare the slow way (try every order) with the fast way (sort ascending, sum prefix products).",
         "느린 방법과 빠른 방법을 나란히 놓고 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

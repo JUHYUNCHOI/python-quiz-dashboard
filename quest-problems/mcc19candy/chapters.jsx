@@ -21,7 +21,7 @@ export function makeMcc19CandyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Students stand in a line at positions 1, 2, 3, …. Over R rounds, each round shouts \"odd\" or \"even\". An \"odd\" shout eliminates everyone at an odd position; an \"even\" shout eliminates the even positions. Survivors renumber from 1.\nBob wants to be the SOLE survivor — print the starting position he must take.",
+        "Each round eliminates everyone at odd or even positions; find the starting spot where Bob survives every round.",
         "라운드마다 홀수 자리나 짝수 자리가 탈락해요.\nBob 이 끝까지 남으려면 어디에 서야 할까요?"),
       content: (
         <div style={{ padding: 16 }}>

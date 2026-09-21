@@ -19,7 +19,7 @@ export function makeAbcsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three positive integers A ≤ B ≤ C exist somewhere. You're handed all 7 of these sums in SOME order: A, B, C, A+B, B+C, A+C, A+B+C.\nFigure out the original A, B, C.",
+        "You're given 7 shuffled sums of A, B, and C — figure out the three original numbers.",
         "섞여서 들어온 일곱 개의 합만 보고\n원래 세 수 A, B, C 를 찾아내요."),
       content: (
         <div style={{ padding: 16 }}>
