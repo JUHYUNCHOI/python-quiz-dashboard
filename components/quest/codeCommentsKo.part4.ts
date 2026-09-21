@@ -102,7 +102,7 @@ export const PART4: Record<string, string> = {
   "distinct blocks in order — one block per letter. No recursion.":
     "순서대로 서로 다른 블록 — 글자 하나에 블록 하나. 재귀 없이.",
   "dp[r][c][direction][changes] = # of ways from (r, c) to home":
-    "dp[r][c][방향][changes] = (r, c) 에서 집까지 가는 방법의 수",
+    "dp[r][c][direction][changes] = (r, c) 에서 집까지 가는 방법의 수",
   "eat from stock during gap": "사이 기간 동안 재고에서 먹어요",
   "even N: f is free, push even-indexed o[] down by their minimum":
     "N 이 짝수면 f 는 자유롭게 정할 수 있어요. 짝수 번째 o[] 를 최솟값만큼 낮춰요",
