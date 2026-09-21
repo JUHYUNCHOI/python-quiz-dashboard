@@ -2,6 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getMakeDistinctSections, getMakeDistinctWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { CodeBlock } from "@/components/quest/shared";
+import { PlaceOneByOneSim, WhoCanMeetSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMakeDistinctCh1 (6 steps: reveal / reveal / reveal / quiz / input / reveal)
@@ -127,67 +128,30 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
       ),
     },
 
-    // 1-3: Worked example with residues
+    /* 1-3: 작은 수부터 놓아 보기 — **시뮬**.
+       2026-09-21 선생님: *"굳이 필요없는 퀴즈는 없애고 주절히 설명하기보다는
+       **눈에 보이게끔 시뮬로 쉽게** 보여달라 했는데 전혀 안그런데"*
+       그전까지 이 쪽은 여섯 단계를 **글로 나열**했다. 시뮬이 이 quest 에 하나도 없었다.
+       글로 있던 것(정렬 → 하나씩 놓기 → 합계 2 회 → "하나 더 있었다면")을
+       그대로 걸음으로 옮겼다. 샘플 `[4,1,4,1]` 은 **안 바꾼다** —
+       2쪽이 "답이 왜 2 인지는 다음 쪽에서" 라고 약속했기 때문이다. */
     {
       type: "reveal",
       narr: t(E,
-        "The sample again — [4, 1, 4, 1] with K = 1, smallest first.",
-        "앞 쪽 샘플 그대로예요. [4, 1, 4, 1] 에 K = 1. 작은 수부터 따라가 봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
-            🔬 {t(E, "Walk through it", "직접 따라가요")}
-          </div>
-
-          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
-            <div><b>{t(E, "Step 1.", "1.")}</b> {t(E, "Line them up from the smallest: ", "작은 수부터 줄 세워요: ")}<code style={{ color: "#2563eb" }}>[1, 1, 4, 4]</code></div>
-            <div><b>{t(E, "Step 2.", "2.")}</b> {t(E, "The first one stays where it is: ", "첫 값은 그 자리에 그대로 놓아요: ")} <code>1</code> {t(E, " (0 ops)", " (0 회)")}</div>
-            <div><b>{t(E, "Step 3.", "3.")}</b> {t(E, "Next is 1, not past 1, so push it to ", "다음이 1, 방금 놓은 1 을 넘지 못하니 밀어요 → ")}<code>2</code> ({t(E, "1 op", "1 회")})</div>
-            <div><b>{t(E, "Step 4.", "4.")}</b> {t(E, "Next is 4, already past 2, so keep it: ", "다음 4 는 방금 놓은 2 를 이미 넘었으니 그대로: ")}<code>4</code> {t(E, " (0 ops)", " (0 회)")}</div>
-            <div><b>{t(E, "Step 5.", "5.")}</b> {t(E, "Next is 4, not past 4, so push it to ", "다음 4 는 방금 놓은 4 를 넘지 못하니 밀어요 → ")}<code>5</code> ({t(E, "1 op", "1 회")})</div>
-            <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #93c5fd" }}>
-              <b style={{ color: "#15803d" }}>{t(E, "Total: 0 + 1 + 0 + 1 = 2 moves — that is the sample answer.", "합계: 0 + 1 + 0 + 1 = 2 회 — 앞 쪽 샘플의 답이 이거예요.")}</b>
-            </div>
-          </div>
-
-          {/* 2026-09-21: 샘플을 `[4,1,4,4,1]` 로 **바꿔치웠다가** 앞 쪽의
-              "답이 왜 2 인지는 다음 쪽에서 봐요" 가 거짓말이 됐다.
-              선생님: *"뭔말인지 모르겠는데. 읽는게 넘 힘든데?"*
-              샘플은 그대로 두고, 한 칸 더 붙인 경우를 **따로** 보여준다 —
-              학생이 코드의 `(cur - vals[i]) // k` 나눗셈에서 멈춘 자리다. */}
-          <div style={{ marginTop: 10, background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 8, padding: "9px 12px", fontSize: 12.5, color: "#92400e", lineHeight: 1.65, wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E,
-              <>🤔 What if there were <b>one more 4</b>? Then [1, 1, 4, 4, <b>4</b>].<br />1 and 2 and 4 and 5 are all taken, so the last 4 has to go to <b>6</b> — pushing it once only reaches 5, so it takes <b>2 moves at once</b>. Total 4.<br />Later, in the fast code, this case is what one division counts in a single line.</>,
-              <>🤔 4 가 <b>하나 더</b> 있었다면? [1, 1, 4, 4, <b>4</b>] 가 돼요.<br />1 도 2 도 4 도 5 도 이미 찼으니 마지막 4 는 <b>6</b> 까지 가야 해요 — 한 칸 밀면 5 라 아직 겹쳐서 <b>한 걸음에 2 회</b>예요. 합계는 4 회고요.<br />나중에 빠른 코드를 짤 때, 이 경우를 나눗셈 한 줄로 세게 돼요.</>)}
-          </div>
-
-          <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: C.dim, lineHeight: 1.6 , wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E,
-              <>💡 Each value either stays, or moves just past the one before it.<br />Why start from the smallest? If you moved a bigger one first, the smaller one would still have to climb over it later — the same work, or more.</>,
-              <>💡 각 값은 그대로 두거나, 바로 앞에 놓은 값을 막 넘을 만큼만 밀려요.<br />왜 작은 것부터 할까요? 큰 것을 먼저 옮겨 두면 작은 것이 나중에 그 위를 또 넘어야 해서, 일이 같거나 더 늘어나기 때문이에요.</>)}
-          </div>
-        </div>
-      ),
+        "Place them one by one, smallest first.",
+        "작은 수부터 하나씩 놓아 봐요."),
+      content: <PlaceOneByOneSim E={E} />,
     },
 
-    // 1-4: Quiz
+    /* 1-4: K = 2 면 누가 누구와 부딪히나 — **시뮬**(전에는 객관식 퀴즈였다).
+       선생님: *"굳이 필요없는 퀴즈는 없애고 … 눈에 보이게끔"*.
+       고르게 하는 대신 **2 를 계속 더하면 홀수는 홀수, 짝수는 짝수**인 것을 눈으로 보게 한다. */
     {
-      type: "quiz",
+      type: "reveal",
       narr: t(E,
-        "Now K = 2. Which numbers can ever collide?",
-        "이번엔 K = 2 예요. 어떤 수끼리 부딪힐 수 있을까요?"),
-      question: t(E,
-        "a = [5, 3, 5, 4], K = 2. Which numbers can ever land on each other?",
-        "a = [5, 3, 5, 4], K = 2. 어떤 수끼리 같은 값이 될 수 있을까요?"),
-      options: [
-        t(E, "Only 5, 3, 5 — the 4 is on its own", "5, 3, 5 끼리만. 4 는 혼자예요"),
-        t(E, "4 and 5 can meet too", "4 와 5 도 만날 수 있어요"),
-        t(E, "All four can meet each other", "네 수 모두 서로 만날 수 있어요"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Right.\nAdding 2 keeps odd numbers odd and even numbers even, so 4 can never become 5, 3 or 5.\nSame remainder when divided by 2 = they can meet. Different remainder = they never can.\nSo we split the numbers by that remainder and solve each pile on its own.",
-        "맞아요.\n2 를 더하면 홀수는 계속 홀수, 짝수는 계속 짝수예요. 그래서 4 는 5·3·5 가 될 수 없어요.\n2 로 나눈 나머지가 같으면 만날 수 있고, 나머지가 다르면 영영 못 만나요.\n그래서 나머지끼리 따로 묶어서, 묶음마다 따로 풀면 돼요."),
+        "Now K = 2. Which numbers can ever meet?",
+        "이번엔 K = 2 예요. 어떤 수끼리 만날 수 있을까요?"),
+      content: <WhoCanMeetSim E={E} />,
     },
 
     // 1-5: Input — direction-only hint
