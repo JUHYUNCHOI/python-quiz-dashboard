@@ -1138,7 +1138,7 @@ export function makeBruteSteps(E, lang = "py") {
   return [
     { type: "reveal",
       narr: t(E,
-        "Step 1: read the input. T test cases, each gives one N.", "1단계 — 먼저 입력을 받아요.\n문제가 T 개 오고, 하나마다 N 이 하나씩 들어와요."),
+        "What do we need to output? How many numbers in 2..N the two cows disagree on.\nSo start by reading the input — T test cases, each giving one N.", "무엇을 내놓아야 하나요? 2 부터 N 사이에서 두 소의 답이 갈리는 수가 몇 개인지예요.\n그러니 먼저 입력을 받아요. 문제가 T 개 오고, 하나마다 N 이 하나씩 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 1: Input", "1단계: 입력 받기")} />
