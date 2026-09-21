@@ -12,6 +12,33 @@ model: sonnet
 
 # Algo Chapter Builder
 
+## 0. 시작 전 — 먼저 배우고 온다 (건너뛰지 말 것)
+
+코드를 쓰기 **전에** 아래를 읽어라. 새로 발명하지 않기 위한 기준이다.
+
+1. `app/algo/sorting/page.tsx`
+   → **이미 잘 된 챕터식 페이지.** 네가 만들 것의 모양이다. 먼저 이것부터 읽어라.
+2. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_first_concept_scaffolding.md`
+   → 새 개념의 첫 챕터는 **아는 문제를 새 생각법으로 다시 푸는 것**으로 연다.
+     추상적 정당화("왜 필요한가")로 시작하지 마라. "왜 배워요?" 는 **맨 끝**이다.
+3. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_sim_style_consistency.md` 와 `quest-problems/checkups/sims.jsx`
+   → 시뮬은 SimNav 단계(◀▶) + 말풍선. **자동재생 금지.**
+4. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_korean_linebreak.md`
+   → 한글 줄바꿈 4종 세트(keep-all · textWrap balance · 60자 이하 · 절 단위 `<br />`).
+     새로 쓰는 모든 한글 문장에 **쓰면서** 적용해라. 나중에 훑어 고치는 게 아니다.
+5. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_no_invented_terms.md`
+   → 용어는 **처음 쓰기 전에** 정의한다. 음차어는 뜻 한 줄이 없으면 버려라.
+
+읽었으면 **체크리스트 5~10줄**로 정리하고 시작해라.
+
+만들고 나서 **반드시 직접 돌려 봐라** (메인 세션이 `preview_start` 로 띄워 준다):
+```bash
+node scripts/see-flow.mjs http://localhost:3000/algo/<topic>     # 쪽과 쪽 사이
+node scripts/see-screen.mjs http://localhost:3000/algo/<topic>   # 가려짐 · 55자 초과
+python3 scripts/check-undefined-symbol.py                        # 뜻 안 밝힌 기호
+```
+⚠️ **"만들었다" 는 완료가 아니다.** 화면에서 돌아가는 것을 본 것이 완료다.
+
 ## 🎯 우리가 무엇을 만들고 있나 — 판단 전에 이걸 먼저 봐라
 
 **핵심 비전 (선생님 직접, 2026-05-26·27):**
@@ -39,33 +66,30 @@ model: sonnet
 
 You build chapter-style React pages for algorithm topics, matching the established pattern in `app/algo/sorting/page.tsx` and `app/algo/prefixsum/page.tsx`.
 
-## Template to follow
+## 만들 모양 (형제 페이지를 베낀다 — 발명하지 마라)
 
-Required structure for each topic:
+토픽 하나는 이 골격을 따른다.
 
-1. **5 chapters** (or 4 if simpler topic) — slide-based, one card per slide
-2. **Friendly tutor tone** (Korean primary, English secondary):
-   - Chapter 1: 👋 인사 ("안녕! 같이 배워봐요 😊")
-   - Real-world analogy (도서관, 저금통, etc.)
-   - Why this matters (concrete examples)
-3. **Per chapter**: 3-4 slides
-   - Intro slide
-   - Interactive viz or explanation
-   - Code (with HighlightedCode component)
-   - Mini quiz (gate to advance)
-4. **Shared helpers** (already in sorting/page.tsx):
-   - `useSlideChapter()` — step state + scrollIntoView
-   - `SlideNav` — fixed bottom-[76px] z-40 nav
-   - `MiniQuiz` — multiple choice with hint
-   - `CodeBlock` — uses HighlightedCode (no internal toggle)
-   - Language toggle at PAGE TOP only (not per CodeBlock)
+1. **챕터 5개** (쉬운 토픽이면 4개) — 슬라이드식, 한 슬라이드에 카드 하나
+2. **말투는 다정한 선생님** (한국어가 먼저, 영어가 보조)
+   - 1챕터: 👋 인사 ("안녕! 같이 배워봐요 😊")
+   - 일상 비유 하나 (도서관 · 저금통 …) — 단, **지우면 더 쉬워지는 비유는 지운다**
+   - 이게 왜 쓸모 있나를 **구체적인 예**로
+3. **챕터마다 슬라이드 3~4장**
+   - 여는 슬라이드 → 움직이는 그림이나 설명 → 코드(`HighlightedCode`) → 작은 퀴즈(통과해야 다음)
+4. **공용 도구는 이미 `sorting/page.tsx` 안에 있다** — 새로 만들지 마라
+   - `useSlideChapter()` — 걸음 상태 + `scrollIntoView`
+   - `SlideNav` — 아래 고정 내비 (`bottom-[76px]` · `z-40`)
+   - `MiniQuiz` — 힌트 있는 객관식
+   - `CodeBlock` — 안에서 `HighlightedCode` 를 쓴다 (자체 토글 없음)
+   - 언어 토글은 **페이지 맨 위에 하나만** (코드 블록마다 두지 않는다)
 
-## Required reading before building
+### 만들기 전에 열어 볼 파일
 
-- `app/algo/sorting/page.tsx` — gold standard
-- `app/algo/prefixsum/page.tsx` — second example
-- `data/algo/topics.ts` — find topic metadata (lessonId, title)
-- `public/algo/topics/<topicId>.js` — source content to convert
+- `app/algo/sorting/page.tsx` — **기준이 되는 페이지**
+- `app/algo/prefixsum/page.tsx` — 두 번째 예
+- `data/algo/topics.ts` — 토픽 메타데이터 (`lessonId` · 제목)
+- `public/algo/topics/<topicId>.js` — 옮겨 올 원본 내용
 
 ## 새 개념 첫 도입 (제일 자주 틀리는 곳)
 
@@ -87,17 +111,20 @@ Required structure for each topic:
 - 판정: "이 비유를 지우면 더 쉬워지나?" → 쉬워지면 지운다.
 근거: `memory/feedback_no_invented_terms.md` (선생님 2026-09-04)
 
-## Constraints
+## 지켜야 할 것
 
-1. **Bronze-level focus** — don't try to cover everything; pick essentials
-2. **Static route** `/app/algo/<topicId>/page.tsx` — overrides dynamic `/algo/[topicId]`
-3. **localStorage key** `algo-<topicId>-chapter` for progress
-4. **Mastered → save** `algo-<topicId>` to `lesson_progress` Supabase
-5. **TypeScript** typecheck must pass
+1. **Bronze 수준에 맞춘다** — 다 담으려 하지 말고 꼭 필요한 것만 고른다
+2. **정적 경로** `app/algo/<topicId>/page.tsx` — 동적 `/algo/[topicId]` 보다 우선한다
+3. **localStorage 키** `algo-<topicId>-chapter` 로 진도를 저장한다
+   ⚠️ 이미 쓰이는 키 이름은 **절대 바꾸지 마라** — 학생 진도가 사라진다
+4. **다 익히면** `algo-<topicId>` 를 Supabase `lesson_progress` 에 저장한다
+5. **타입 검사를 통과해야 한다** (`npm run build:check`)
 
-## Output
+## 보고 형식
 
-Write the full `app/algo/<topicId>/page.tsx` file. Don't modify vanilla JS source. Return summary of chapters built.
+`app/algo/<topicId>/page.tsx` 를 다 쓰고, **어떤 챕터를 무엇으로 채웠는지** 요약해라.
+원본 바닐라 JS 파일은 고치지 않는다.
+⚠️ 화면에서 돌려 본 결과(무엇을 눌러 봤고 무엇이 보였나)를 **같이** 적어라.
 
 ## ⚠️ 학생이 읽을 코드는 한 줄에 한 문장 (2026-09-08)
 

@@ -189,6 +189,11 @@ def main():
 
     hits = {}
     total_walks = 0
+    # ⚠️ 2026-09-21: 전에는 합계 하나만 찍었다. 그래서 "CodeWalk 20개 · 스테퍼 87개" 를
+    #    **사람이 손으로 갈라 세고** 있었다. 모양별로 몇 개를 봤는지 기계가 찍는다 —
+    #    한 모양이 갑자기 0 이 되면 그게 검사기가 조용히 망가진 신호다.
+    by_shape = {"CodeWalk(beats)": 0, "코드 스테퍼(sections.why)": 0, "손코딩(chapters)": 0}
+    quests_seen = set()
     for f in sorted(glob.glob("quest-problems/*/*.jsx")):
         quest = f.split("/")[1]
         if want and quest not in want:
@@ -203,6 +208,13 @@ def main():
             found += handmade(src)
         for lang, beats in found:
             total_walks += 1
+            quests_seen.add(quest)
+            if lang.startswith("walk:"):
+                by_shape["CodeWalk(beats)"] += 1
+            elif lang.startswith("스테퍼:"):
+                by_shape["코드 스테퍼(sections.why)"] += 1
+            else:
+                by_shape["손코딩(chapters)"] += 1
             first_ko = beats[0][1]
             head = first_ko.split("\n")[0]
             problems = []
@@ -221,7 +233,8 @@ def main():
 
     n = sum(len(v) for v in hits.values())
     print(f"파일 순서로 읊는 코드 설명 — walk {n}개 · quest {len(hits)}개 "
-          f"(전체 {total_walks}개 — CodeWalk + 코드 스테퍼)\n")
+          f"(전체 {total_walks}개 · quest {len(quests_seen)}개)")
+    print("   본 것: " + " · ".join(f"{k} {v}개" for k, v in by_shape.items()) + "\n")
     for q in sorted(hits, key=lambda x: (-len(hits[x]), x)):
         print(f"  ■ {q}")
         for fname, lang, problems in hits[q]:
