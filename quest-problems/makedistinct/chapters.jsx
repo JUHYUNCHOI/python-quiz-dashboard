@@ -1,11 +1,12 @@
 import { C, t } from "@/components/quest/theme";
 import { getMakeDistinctSections, getMakeDistinctWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
+import { CodeBlock } from "@/components/quest/shared";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makeMakeDistinctCh1 (5 steps: reveal / reveal / reveal / quiz / input)
+   Chapter 1: makeMakeDistinctCh1 (6 steps: reveal / reveal / reveal / quiz / input / reveal)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMakeDistinctCh1(E) {
+export function makeMakeDistinctCh1(E, codeLang = "py") {
   return [
     // 1-1: Title reveal
     {
@@ -196,6 +197,74 @@ export function makeMakeDistinctCh1(E) {
         "K is negative — which way does a push move a value? And which of these four can ever meet?",
         "K 가 음수면 밀 때 값이 어느 쪽으로 갈까요? 그리고 이 넷 중 어떤 수끼리 만날 수 있을까요?"),
       answer: 2,
+    },
+
+    /* 1-6: 쉬운 첫 코드와 그 한계 (2026-09-21 추가)
+       왜 생겼나 — 교육 검토: **[기][승][전] 다음이 바로 최종 코드**여서
+       "쉬운 방법 → 왜 안 되나 → 그래서 이 방법" 사다리의 첫 칸이 비어 있었다.
+       project-lead 가 실측해서 판정했다 — 브루트는 **답은 맞고**(무작위 3000 케이스
+       최적해와 전부 일치) **느리다**(파이썬 N=10,000 에 2.3초, 깨끗한 O(N²)).
+       그래서 한 쪽만 넣는다. `feedback_why_and_how_over_slowness.md` 처방대로
+       느림을 체감시키는 데 쪽을 쓰지 않고 **제약 숫자 + 연산량 한 줄**로 끝낸다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "What if we just push whenever two values collide?",
+        "겹칠 때마다 그 자리에서 바로 밀면 안 될까요?"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
+            🐣 {t(E, "The first idea — just push on collision", "제일 먼저 떠오르는 방법 — 겹치면 바로 밀기")}
+          </div>
+
+          <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, marginBottom: 8, wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              "Keep the values we have already placed. For each new value, push it by K until it lands somewhere free.",
+              "이미 놓은 값들을 들고 있다가, 새 값이 겹치면 빈 자리를 만날 때까지 K 씩 밀어요.")}
+          </div>
+
+          <CodeBlock lang={codeLang} isEn={E} lines={codeLang === "cpp" ? [
+            "vector<long long> used;   // 이미 놓인 값들",
+            "long long total = 0;",
+            "",
+            "for (long long x : a) {",
+            "    while (find(used.begin(), used.end(), x) != used.end()) {",
+            "        x += k;           // 한 번 밀고 다시 본다",
+            "        total++;",
+            "    }",
+            "    used.push_back(x);",
+            "}",
+            "",
+            "cout << total << \"\\n\";",
+          ] : [
+            "used = []          # 이미 놓인 값들",
+            "total = 0",
+            "",
+            "for x in a:",
+            "    while x in used:   # 겹치면",
+            "        x += k         # 한 번 밀고 다시 본다",
+            "        total += 1",
+            "    used.append(x)",
+            "",
+            "print(total)",
+          ]} />
+
+          <div style={{ marginTop: 10, background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#7f1d1d", lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
+            <b>{t(E, "It gives the right answer — but it is too slow.", "답은 맞아요. 그런데 너무 느려요.")}</b><br />
+            {t(E,
+              "N can be 200,000. One value may be pushed almost N times, and each push looks through everything placed so far — that is about 200,000 × 200,000 = 40,000,000,000 steps.",
+              "N 이 200,000 까지예요. 값 하나가 거의 N 번 밀릴 수 있고, 밀 때마다 지금까지 놓은 값을 전부 훑어요. 200,000 × 200,000 = 400억 번쯤 돼요.")}<br />
+            {t(E, "A computer does about a billion simple steps per second, so this would take minutes.",
+                  "컴퓨터가 1초에 10억 번쯤 하니까, 이건 몇 분이 걸려요.")}
+          </div>
+
+          <div style={{ marginTop: 10, background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
+            👉 {t(E,
+              "We already know something this code does not use: values only collide when they share the same remainder. Split them by that remainder first, and each pile becomes small and easy. That is the next code.",
+              "우리는 이 코드가 안 쓰는 걸 하나 알고 있어요 — 나머지가 같은 값끼리만 부딪힌다는 것. 나머지로 먼저 나눠 두면 묶음마다 작아져요. 다음 코드가 그거예요.")}
+          </div>
+        </div>
+      ),
     },
   ];
 }

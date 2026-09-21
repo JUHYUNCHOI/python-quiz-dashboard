@@ -31,10 +31,13 @@ export default function MakeDistinctApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeMakeDistinctCh1(lang === "en"));
+  const [ch1Q, setCh1Q] = useState(() => makeMakeDistinctCh1(lang === "en", "py"));
   const [ch2Q, setCh2Q] = useState(() => makeMakeDistinctCh2(lang === "en", "py"));
 
   useEffect(() => {
+    /* 2026-09-21: Ch1 도 codeLang 을 받는다 — 1-6 에 브루트 코드가 생겼다.
+       답한 상태(answered/solved)는 언어를 바꿔도 남겨야 한다. */
+    setCh1Q(prev => makeMakeDistinctCh1(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
     setCh2Q(prev => makeMakeDistinctCh2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   }, [codeLang, E]);
 
@@ -51,7 +54,7 @@ export default function MakeDistinctApp(props = {}) {
   const TABS = E ? ["📋 Problem", "⚡ Code"] : ["📋 문제", "⚡ 코드"];
   const setters = { 0: setCh1Q, 1: setCh2Q };
   const states  = { 0: ch1Q,    1: ch2Q };
-  const makers  = { 0: makeMakeDistinctCh1, 1: (e) => makeMakeDistinctCh2(e, codeLang) };
+  const makers  = { 0: (e) => makeMakeDistinctCh1(e, codeLang), 1: (e) => makeMakeDistinctCh2(e, codeLang) };
 
   const switchLang = nl => {
     const ne = nl === "en"; setLang(nl);
