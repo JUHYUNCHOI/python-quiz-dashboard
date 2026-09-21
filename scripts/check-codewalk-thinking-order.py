@@ -171,7 +171,9 @@ def handmade(src):
         nxt = tail.find("narr:")
         if nxt >= 0:
             tail = tail[:nxt]
-        if "CodeSnippet" not in tail:
+        # ⚠️ 2026-09-21: `CodeSnippet` 만 봤더니 `CodeBlock` 을 쓰는 quest(hps·mooin2)를
+        #    못 봤다. **또 같은 일을 하는 다른 문법이다.** 셋 다 본다.
+        if not re.search(r"CodeSnippet|CodeBlock|<pre", tail):
             continue
         try:
             out.append((json.loads('"%s"' % m.group(1)), json.loads('"%s"' % m.group(2))))
