@@ -6,7 +6,11 @@ import { localizeCode } from "@/components/quest/localizeCode"
 
 // ── Typing animation hook ─────────────────────────────────────────────────────
 
-export function useTyping(text: string, speed = 28): string {
+// 2026-09-21: 학생 둘이 "새 쪽으로 넘어갈 때마다 몇 초간 문장이 중간에 잘려
+// 보인다" 고 독립적으로 보고했다. 28ms/글자면 영어 narr 중앙값(98자)도 2.7초,
+// 최장값(434자, acowdemia2)은 12초 넘게 걸렸다 — 그 구간 동안 문장이 실제로
+// 끊긴 것처럼 보였다. 8ms 로 올려 같은 텍스트가 0.8초·3.5초로 줄어들게 한다.
+export function useTyping(text: string, speed = 8): string {
   const [shown, setShown] = useState("")
   useEffect(() => {
     setShown("")
