@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getDroughtSections, FeedPairSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeDroughtCh1(E) {
   return [
@@ -85,7 +85,47 @@ export function makeDroughtCh1(E) {
           <FeedPairSim E={E} />
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: 예제 줄 형식 카드 — 형식만, 풀이 없음.
+    //   ⚠️ 원문 PDF 가 없다(public/problems/ 에 drought 없음) — 새 숫자를 지어서
+    //   solve() 로 직접 검증했다([3,5,2]→10, [1,4,1]→-1). 기존에 쓰인 [2,2]·[2,3,1,2]
+    //   는 재사용하지 않았다 — [2,2] 는 뒤 퀴즈/입력 스텝의 답과 겹쳐 스포일러가 되고,
+    //   solve([2,2])=0 인데 그 스텝은 답을 2 로 두고 있어(기존 버그, 손대지 않음) 혼선만 커진다.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Here's what the input and output look like.",
+        "입력과 출력이 어떻게 생겼는지 봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 10 }}>
+              📥 {t(E, "Sample Input", "예제 입력")}
+            </div>
+            <pre style={{ background: "#0f172a", color: "#f8fafc", padding: 10, borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "'JetBrains Mono',monospace" }}>
+{`2
+3
+3 5 2
+3
+1 4 1`}
+            </pre>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 10 }}>
+              📤 {t(E, "Sample Output", "예제 출력")}
+            </div>
+            <pre style={{ background: "#0f172a", color: "#f8fafc", padding: 10, borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "'JetBrains Mono',monospace" }}>
+{`10
+-1`}
+            </pre>
+          </div>
+          <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
+            {t(E,
+              "First line: T, the number of test cases.\nFor each test case: one line with N, then one line with N hunger values h[0..N-1].\nPrint one line of output per test case, in the same order.",
+              "첫 줄은 T — 테스트 케이스 개수예요.\n케이스마다 N 이 한 줄, 그다음 줄에 배고픔 값 N개(h[0..N-1])가 나와요.\n테스트 케이스 순서대로, 한 줄에 하나씩 출력해요.")}
+          </div>
+        </div>),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -103,7 +143,7 @@ export function makeDroughtCh1(E) {
         "Correct! Each feed of pair (0,1) is one operation. We need 2 to reach [0,0].",
         "맞아요! 쌍(0,1)에 먹이를 주는 게 한 번이에요. [0,0] 이 되려면 2번 줘야 해요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

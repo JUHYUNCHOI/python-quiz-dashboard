@@ -136,7 +136,7 @@ function MilkOrderSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMilkOrderCh1(E) {
   return [
@@ -205,7 +205,44 @@ export function makeMilkOrderCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: 예제 줄 형식 카드 — 형식만, 풀이 없음.
+    //   ⚠️ 원문 PDF 없음(public/problems/ 에 milkorder 없음). 뒤 시뮬(1-4, N=7)과
+    //   겹치면 그 시뮬의 "p=3,4,5 를 찾아라" 를 스포일러하게 돼서, 새 작은 예제를
+    //   만들고 코드(FULL_PY)와 같은 알고리즘으로 직접 손으로 검증했다:
+    //   N=5,M=2,K=1, 순서규칙 [3,1](3번이 1번보다 앞), 고정 3번@2 → 답 3.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Here's what the input and output look like.",
+        "입력과 출력이 어떻게 생겼는지 봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 10 }}>
+              📥 {t(E, "Sample Input", "예제 입력")}
+            </div>
+            <pre style={{ background: "#0f172a", color: "#f8fafc", padding: 10, borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "'JetBrains Mono',monospace" }}>
+{`5 2 1
+3 1
+3 2`}
+            </pre>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 10 }}>
+              📤 {t(E, "Sample Output", "예제 출력")}
+            </div>
+            <pre style={{ background: "#0f172a", color: "#f8fafc", padding: 10, borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "'JetBrains Mono',monospace" }}>
+{`3`}
+            </pre>
+          </div>
+          <div style={{ background: "#eff6ff", border: "1px dashed #93c5fd", borderRadius: 10, padding: 12, fontSize: 12, color: "#1e3a8a", lineHeight: 1.6 }}>
+            {t(E,
+              "First line: N, M, K.\nSecond line: the M cow numbers of the hierarchy, in order.\nThen K lines, each with a cow number and its fixed position.\nOutput: one number — cow #1's position in that answer.",
+              "첫 줄: N, M, K.\n둘째 줄: 순서 규칙에 쓰인 M마리 소 번호를 순서대로 적어요.\n그다음 K줄: 소 번호와 그 소의 고정 위치.\n출력: 숫자 하나 — 그 답에서 1번 소가 선 위치예요.")}
+          </div>
+        </div>),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -223,7 +260,7 @@ export function makeMilkOrderCh1(E) {
         "With no constraints, cow 1 can go first! Position 1.",
         "규칙이 없으면 소 1번이 맨 앞에 설 수 있어요! 1번 자리예요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
@@ -236,7 +273,7 @@ export function makeMilkOrderCh1(E) {
         "소 1번을 막는 게 아무것도 없다면, N마리 줄에서 가장 작은 자리 번호는 몇 번일까요?"),
       answer: 1,
     },
-    // 1-4: Interactive sim — slide cow #1's position, watch constraints
+    // 1-5: Interactive sim — slide cow #1's position, watch constraints
     {
       type: "reveal",
       narr: t(E,
