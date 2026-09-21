@@ -19,7 +19,7 @@ export function makeCowntraceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows attended events; T timestamps recorded that two specific cows shook hooves at that time. EXACTLY ONE cow started infected ('patient zero') and infects others on hoof-shake — but each infected cow only infects others up to K more times.\nGiven the final infected/healthy state, count how many cows could possibly be patient zero, and find the minimum / maximum K consistent with the data.",
+        "Find who could be patient zero, and the min/max K consistent with the final infected states.",
         "처음 감염된 소는 누구이고, K 는 얼마였을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -120,7 +120,7 @@ export function makeCowntraceCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Hands-on audit. Pick a patient-zero cow and a K (max spreads per infected cow). Replay every hoof-shake event one by one and watch infection spread, get blocked by K, or skip. The verdict tells you whether (cow, K) matches the target final infected set.",
+        "Pick a patient-zero cow and a K, then replay every hoof-shake to test the match.",
         "환자 제로와 K 를 골라서 기록을 하나씩 재생해 봐요."),
     },
   ];
@@ -136,7 +136,7 @@ export function makeCowntraceCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Brute force: for each cow as patient zero (N) and each K (0..T), simulate all T hoof-shake events and check the final infected set. Track which K values are consistent. Sections build it one piece at a time.",
+        "Brute force: try every (patient zero, K) pair and simulate all events to check the final state.",
         "풀이 코드를 한 단락씩 읽어 봐요."),
       sections: getCowntraceSections(E),
     },

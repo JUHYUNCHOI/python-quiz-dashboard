@@ -99,7 +99,7 @@ export function makeMobileGameCh1(E) {
       type: "reveal",
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "Alice starts with power A. There are N enemies with powers p₁..pₙ. She can beat an enemy weaker than her (adding its power to hers), each enemy once. Find the fewest kills to reach power ≥ B — or -1 if impossible.",
+        "Find the fewest enemies Alice must beat to reach power B, or -1 if impossible.",
         "약한 적을 먹어 파워를 키워요. 가장 적게 먹는 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>

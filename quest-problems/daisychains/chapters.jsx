@@ -296,8 +296,8 @@ export function makeDaisyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has N flowers in a row, each with a petal count p[i]. For every contiguous subarray, compute the average petal count; the subarray is 'photogenic' if at least one flower in it has petal count exactly equal to the average.\nCount how many of the N·(N+1)/2 contiguous subarrays are photogenic.",
-        "Bessie에게 한 줄로 놓인 N개의 꽃이 있고, 각 꽃의 꽃잎 수 p[i]가 주어져요. 연속한 부분 배열을 고를 때마다 그 안의 평균 꽃잎 수를 계산해요. 그 부분 배열에 평균과 정확히 같은 꽃잎 수의 꽃이 1개라도 있으면 '예쁜' 부분 배열이에요.\nN·(N+1)/2 개의 연속 부분 배열 중 예쁜 것의 개수를 출력해요."),
+        "Count contiguous subarrays where the average petal count matches some flower's.",
+        "평균과 같은 꽃잎 수를 가진 꽃이 있는 부분 배열의 개수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -410,7 +410,7 @@ export function makeDaisyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Not every subarray works!\nThe average must be an integer AND some flower must have exactly that many petals.", "모든 부분 배열이 되는 건 아니에요! 평균이 정수여야 하고 그 개수의 꽃잎을 가진 꽃이 있어야 해요."),
+        "The average must be an integer, and some flower must have exactly that many petals.", "평균이 정수이고, 그 개수의 꽃잎을 가진 꽃이 있어야 해요."),
       content: (() => {
         const flowers = [1, 1, 2];
         return (
@@ -741,7 +741,7 @@ export function makeDaisyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each (i, j) pair: length = j-i+1.\nIf sum is divisible by length, the average is an integer.\nThen check if any flower in the range equals the average.", "합이 길이로 나누어지면 평균이 정수예요. 그때만 꽃을 찾아봐요."),
+        "If the sum divides evenly by the length, look for a flower matching the average.", "합이 길이로 나누어지면 평균이 정수예요. 그때만 꽃을 찾아봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>

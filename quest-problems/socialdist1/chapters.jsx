@@ -19,7 +19,7 @@ export function makeSocDist1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a number line with M disjoint segments where cows can stand. He must place exactly N cows on integer positions inside those segments.\nMaximize the MINIMUM distance between any two cows.",
+        "Place N cows in M segments to maximize the minimum distance between any two.",
         "소 N 마리를 놓아서 서로 사이가 가장 멀어지게 해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -127,7 +127,7 @@ export function makeSocDist1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Binary search the answer D. For each candidate, greedily place cows — first at the earliest available, then leftmost spot ≥ D from the last. Check if all N fit. Sections build it one piece at a time.",
+        "Binary search the answer D, then greedily place cows to check if all N fit.",
         "답 D 를 이분 탐색하고, D 마다 소를 그리디로 놓아 봐요."),
       sections: getSocDist1Sections(E),
     },

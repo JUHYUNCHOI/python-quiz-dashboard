@@ -203,7 +203,7 @@ export function makeMcc21GlassCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A dragon stacks N glass plates by their center, biggest at the bottom. A spot turns black only when an ODD number of plates cover it. One plate broke — find its radius.",
+        "A spot turns black only when an odd number of plates cover it — find the broken plate's radius.",
         "판이 홀수 개 덮인 자리만 검게 보여요. 깨진 판의 반지름을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -365,7 +365,7 @@ export function makeMcc21GlassCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Sort every radius largest first. Each black ring is (outer² − inner²)π, and because black / colorless alternate, the middle terms cancel — the black area is just r1² − r2² + r3² − r4² + … (×π).",
+        "Sorted largest first, the black area telescopes into r1² − r2² + r3² − … (×π).",
         "가운데 항이 서로 지워져서 번갈아 더하고 빼는 합만 남아요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

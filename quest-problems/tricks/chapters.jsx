@@ -254,7 +254,7 @@ export function makeTricksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's the trick!\nPick two colors x and y.\nA bag that holds only x and y falls into one of 3 groups; any bag with another colour can't be used for this pair.", "색깔 2개를 골라 x, y 라고 불러요.\nx 와 y 만 든 봉지는 세 무리로 나뉘어요."),
+        "For colors x and y, a bag holding only those two falls into one of 3 groups.", "색깔 2개를 골라 x, y 라고 불러요.\nx 와 y 만 든 봉지는 세 무리로 나뉘어요."),
       content: (() => {
         const types = [
           { label: "Type A", emoji: "🟠🟠", desc_en: "(x,x) → x color ×2", desc_ko: "(x,x) → x색 사탕만 2개", color: O, bg: "#fff7ed", bd: "#fdba74" },

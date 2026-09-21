@@ -19,7 +19,7 @@ export function makeMcc19DitcoinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Each day for D days you earn 1 Ditcoin. You know each day's selling price p[i]. On any day you may sell ANY number of your accumulated Ditcoins at that day's price.\nPrint the MAXIMUM total money earnable over the D days.",
+        "Earn 1 Ditcoin per day, then sell any amount on any day — maximize total money earned.",
         "매일 코인을 1 개씩 벌어요. 언제 팔아야 가장 많이 벌 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>

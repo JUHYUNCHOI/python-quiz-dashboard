@@ -339,7 +339,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Insight 1: divisible-by-3 depends only on remainders. And a term's remainder = (sum of previous five remainders) mod 3. So drop the giant numbers entirely — keep only 0/1/2.",
+        "A term's remainder depends only on the sum of the previous five remainders, mod 3.",
         "첫 번째 열쇠예요. 3의 배수인지는 나머지에만 달렸어요.\n거대한 숫자는 버리고 0/1/2만 남겨요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -417,7 +417,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Insight 3: counting becomes arithmetic. Count the zeros in ONE cycle (35 of them). Then full cycles = N ÷ 104, and add the zeros in the leftover partial cycle. No giant loop needed.",
+        "Count the zeros in one cycle, then use full cycles plus the leftover partial cycle.",
         "세 번째 열쇠예요. 한 바퀴의 0만 세면 나머지는 곱셈과\n덧셈으로 끝나요. 큰 반복이 필요 없어요."),
       content: (
         <div style={{ padding: 16 }}>

@@ -135,7 +135,7 @@ export function makeReachCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Reachability Queries!\nA dragon starts in city 1.\nSome roads are weak — they all collapse at minute K.\nFor each K, how many cities can the dragon reach?\n🐉", "어디까지 갈 수 있는지 묻는 문제!\n용이 도시 1 에서 출발해요.\n약한 다리는 K분에 전부 무너져요.\nK 마다 용이 갈 수 있는 도시는 몇 개일까요?\n🐉"),
+        "For each K, count the cities the dragon can reach from city 1 before weak roads collapse.", "어디까지 갈 수 있는지 묻는 문제!\n용이 도시 1 에서 출발해요.\n약한 다리는 K분에 전부 무너져요.\nK 마다 용이 갈 수 있는 도시는 몇 개일까요?\n🐉"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🐉</div>
@@ -527,14 +527,14 @@ export function makeReachCh3(E) {
     {
       type: "dijkstraKAudit",
       narr: t(E,
-        "Deep audit time! Pick K=6, 11, or 12, then click Next to walk through every edge the algorithm checks.\nWatch which damaged edges get blocked by `not(d < K and arrive <= K)` and which slip through.\nThis is exactly what the inner loop does — line by line.",
+        "Pick K = 6, 11, or 12, then step through every edge to see which weak roads get blocked.",
         "꼼꼼히 들여다볼 시간이에요!\nK = 6, 11, 12 중 하나를 골라요.\n다음 버튼을 누를 때마다 알고리즘이 검사하는 도로를 하나씩 따라가요.\n약한 다리 중 어떤 것이 `not(d < K and arrive <= K)` 에 걸려 막히고\n어떤 것이 통과하는지 봐요.\n코드 안쪽 반복문이 그대로 한 줄씩 펼쳐지는 거예요!"),
     },
     // 3-4: Why it works
     {
       type: "reveal",
       narr: t(E,
-        "Why does this work?\nDijkstra always locks in the earliest city first.\nSo when a city gets its time, it IS the fastest arrival.\nFor weak roads, we just add the K check.", "왜 이게 맞을까요?\n다익스트라는 항상 제일 이른 도시부터 확정해요.\n그래서 시각이 매겨지면 그게 가장 빠른 도착이에요.\n약한 다리는 K 검사만 더하면 끝이에요!"),
+        "Dijkstra locks in the earliest city first, so adding a K check keeps weak roads correct.", "왜 이게 맞을까요?\n다익스트라는 항상 제일 이른 도시부터 확정해요.\n그래서 시각이 매겨지면 그게 가장 빠른 도착이에요.\n약한 다리는 K 검사만 더하면 끝이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -574,7 +574,7 @@ export function makeReachCh3(E) {
     {
       type: "code",
       narr: t(E,
-        "The clear, understand-first version: read → Dijkstra per query → count reachable.  It's correct; for full score on the biggest inputs, use the sort-by-K offline trick from the last slide. 🐉",
+        "This clear version runs Dijkstra per query — correct, but use the sort-by-K trick for full score. 🐉",
         "먼저 이해하기 좋은, 명확한 코드예요.\n입력 읽기 → 질문마다 다익스트라 → 갈 수 있는 도시 세기.\n답은 맞아요. 큰 입력에서 만점을 받으려면\n앞 쪽의 'K 순서로 줄 세우기' 방법을 쓰면 돼요. 🐉"),
       code: SOLUTION_CODE,
       label: t(E, "Show the clear version", "명확한 코드 보기"),

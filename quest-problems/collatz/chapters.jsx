@@ -135,7 +135,7 @@ export function makeCollatzCh1(E) {
       type: "reveal",
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "You have a list of n numbers. Repeat this whole pass k times: each number, if even halve it, if odd triple-plus-one. At the end, print the sum of the list.",
+        "Apply the halve-or-triple-plus-one rule to every number, k times, then print the sum.",
         "리스트에 한 바퀴를 k번 돌리고, 마지막에 합을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>

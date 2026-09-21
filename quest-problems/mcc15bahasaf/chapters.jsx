@@ -167,7 +167,7 @@ export function makeMcc15BahasaCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bahasa F is a Malay secret language. Every syllable gets an echo right after it: the first consonant of the syllable becomes 'f'.\nThe sentence arrives with its syllables already separated by slashes.",
+        "Each syllable gets an echo right after it, with its first consonant swapped for 'f'.",
         "음절마다 첫 자음을 'f' 로 바꾼 메아리를 뒤에 붙여요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -331,7 +331,7 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Nothing here is slow — the sentence is at most 5,000 characters. The only thing that can go wrong is the rule itself. So cut the sentence down to single syllables, and get that one small rule exactly right.",
+        "Nothing here is slow, so just get the one small echo rule exactly right.",
         "틀릴 수 있는 건 규칙 하나뿐이니 그것만 정확히 맞히면 돼요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

@@ -16,7 +16,7 @@ export function makeMcc20KnightCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A knight sits on an INFINITE chessboard (negative squares exist too) at (X, Y). It wants to be at (A, B) after EXACTLY K moves — not fewer, not more.\nFor each query, print YES if that's possible, otherwise NO.",
+        "Can a knight reach (A, B) from (X, Y) in exactly K moves — not fewer, not more?",
         "정확히 K번 움직여서 목표 칸에 닿을 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -87,7 +87,7 @@ export function makeMcc20KnightCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. Each query is 5 numbers: K X Y A B. The knight in question 2 can't cross a huge distance in only 5 moves, so it's NO.",
+        "Each query is 5 numbers: K X Y A B.",
         "질문 하나는 숫자 다섯 개로 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -197,7 +197,7 @@ export function makeMcc20KnightCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way explores every square the knight could be on after each of K moves — that region grows huge (up to ~K×K squares), times 400 queries. The fast way finds the MINIMUM moves to each offset once with BFS, then each query is a tiny check: K ≥ min and (K − min) even.",
+        "BFS finds the minimum moves to each offset once, so every query becomes a quick check.",
         "BFS 로 최소 이동만 구해 두면 질문은 금방 답해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

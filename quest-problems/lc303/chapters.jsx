@@ -10,7 +10,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "LeetCode #303 — Range Sum Query - Immutable. Build a NumArray class that answers sumRange(left, right) queries. The array never changes — but queries can be called up to 10^4 times.",
+        "Answer up to 10^4 sumRange(left, right) queries fast on an array that never changes.",
         "안 바뀌는 배열에서 구간 합을 1만 번 빠르게 답해야 해요."),
       content: (
         <div style={{ padding: 14 }}>

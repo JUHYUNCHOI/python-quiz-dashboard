@@ -19,7 +19,7 @@ export function makeSwapityCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows are in a line. Each ROUND consists of two reversal operations: reverse positions [a1, b1] then reverse [a2, b2]. This entire round is repeated K times (K can be up to 10^9).\nPrint the FINAL order of cows.",
+        "One round reverses [a1,b1] then [a2,b2]; find the order after K rounds (K up to 10^9).",
         "뒤집기 두 번을 한 라운드로 묶어 K 번 반복하면 줄이 어떻게 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -88,7 +88,7 @@ export function makeSwapityCh1(E) {
          narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
-        "Before the quiz, watch a round play out. Reverse 1–3, then reverse 3–5. Keep clicking until the array returns to [1,2,3,4,5] — that count is the cycle length.",
+        "Reverse 1-3, then 3-5, repeatedly, until the array returns to [1,2,3,4,5].",
         "배열이 [1,2,3,4,5] 로 돌아올 때까지 눌러 봐요. 그 횟수가 순환 길이예요."),
       content: <SwapityRoundSim E={E} />,
     },
@@ -96,7 +96,7 @@ export function makeSwapityCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "[1,2,3]: reverse 1-2 → [2,1,3], then reverse 2-3 → [2,3,1]. That is one round.", "[1,2,3] 에서 위치 1-2 를 뒤집으면 [2,1,3], 이어서 2-3 을 뒤집으면 [2,3,1] 이에요. 여기까지가 1 라운드예요."),
+        "[1,2,3]: reverse (1-2) then (2-3) to get [2,3,1] — that's one round.", "[1,2,3] 에서 (1-2), (2-3) 순서로 뒤집으면 [2,3,1] 이 돼요."),
       question: t(E,
         "[1,2,3] with reversals at (1-2) then (2-3). Cycle length?",
         "[1,2,3] 에서 (1-2) 와 (2-3) 을 뒤집어요. 순환 길이는 얼마일까요?"),
@@ -136,7 +136,7 @@ export function makeSwapityCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Apply one round to identity [1..N] → permutation P. Track each cow's cycle length in P; effective rounds = K mod cycle, apply that many. Sections build it one piece at a time.",
+        "Track each cow's cycle length, then apply only K mod cycle rounds.",
         "소마다 순환 길이를 구하면 K 번 대신 K mod 순환 번만 하면 돼요."),
       sections: getSwapitySections(E),
     },
