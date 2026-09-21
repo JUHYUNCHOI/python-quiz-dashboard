@@ -282,7 +282,7 @@ function CeilWhy({ E }) {
   return (
     <div style={{ fontSize: 12.5, color: "#334155", lineHeight: 1.7, wordBreak: "keep-all" }}>
       <div style={{ marginBottom: 7 }}>
-        {t(E, <>Say <b>7 buckets</b> are still missing and we hold <b>4-packs</b>.</>,
+        {t(E, <>Suppose <b>7 buckets</b> are still missing, and the pack we have holds <b>4</b>.</>,
              <><b>7통</b>이 아직 모자라고, 손에 든 건 <b>4통짜리</b>예요.</>)}
       </div>
       <Row n={1} ok={false} note={t(E, "1 pack — 3 still missing", "1개로는 3통이 모자라요")} />
@@ -292,13 +292,18 @@ function CeilWhy({ E }) {
              <>그러니 규칙은 간단해요. <b>나눠 보고, 남는 게 있으면 하나 더.</b></>)}
       </div>
       <div style={{ marginTop: 7, padding: "7px 11px", borderRadius: 8, background: "#fff", border: "1px solid #fcd34d" }}>
-        {t(E, <>Written as one line: <span style={eq}>(7 + 3) // 4 = 2</span><br />
+        {/* ⚠️ 2026-09-21: 여기 `//` 만 적혀 있었다. 이 상자는 9쪽에 있어 Py/C++ 토글과
+            상관없이 똑같이 뜨는데, **C++ 에서 `//` 는 주석**이다.
+            C++ 로 보는 학생은 `// 4 = 2` 를 주석으로 읽는다. 두 언어를 다 적는다. */}
+        {t(E, <>Written as one line: <span style={eq}>(7 + 3) ÷ 4 = 2</span>, dropping the decimal.<br />
+                 (Python writes that <span style={eq}>//</span>, C++ writes it <span style={eq}>/</span>.)<br />
                  The <b>3</b> is one less than a pack — just enough to push a leftover up, never more.</>,
-             <>이걸 한 줄로 쓰면 <span style={eq}>(7 + 3) // 4 = 2</span> 예요.<br />
+             <>이걸 한 줄로 쓰면 <span style={eq}>(7 + 3) ÷ 4 = 2</span> 예요. 소수점은 버려요.<br />
+               (파이썬은 <span style={eq}>//</span>, C++ 은 <span style={eq}>/</span> 로 써요.)<br />
                <b>3</b> 은 묶음보다 하나 작은 수예요. 남는 게 있을 때만 딱 하나 밀어 올려요.</>)}
         <div style={{ marginTop: 5, color: "#15803d" }}>
-          {t(E, <>Divides evenly? <span style={eq}>(8 + 3) // 4 = 2</span> — it does not go up.</>,
-               <>딱 떨어질 때는? <span style={eq}>(8 + 3) // 4 = 2</span> — 안 늘어나요.</>)}
+          {t(E, <>Divides evenly? <span style={eq}>(8 + 3) ÷ 4 = 2</span> — the count does not go up.</>,
+               <>딱 떨어질 때는? <span style={eq}>(8 + 3) ÷ 4 = 2</span> — 개수가 안 늘어나요.</>)}
         </div>
       </div>
     </div>

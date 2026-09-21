@@ -453,8 +453,10 @@ export function makeMcc20KittyCh2(E) {
       ],
       correct: 0,
       explain: t(E,
-        "full = 25 // 10 = 2, partial = 5. answer = 2 × 4 (full cycles) + 2 (zeros in the leftover 5) = 10.",
-        "full = 25 // 10 = 2, partial = 5. answer = 2 × 4 (온전한 사이클) + 2 (남는 5항의 0) = 10."),
+        /* ⚠️ 2026-09-21: `25 // 10` 이라고 적혀 있었다. 이 quest 는 C++ 도 보여주는데
+           **C++ 에서 `//` 는 주석**이라 그쪽 학생에겐 식이 안 읽힌다. 말로 적는다. */
+        "25 ÷ 10 = 2 full cycles, with 5 left over. answer = 2 × 4 (from the full cycles) + 2 (zeros in the leftover 5) = 10.",
+        "25 ÷ 10 = 2, 온전한 사이클이 2번이고 5항이 남아요.\n답은 2 × 4 (온전한 사이클) + 2 (남는 5항의 0) = 10 이에요."),
     },
   ];
 }
