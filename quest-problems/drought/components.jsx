@@ -20,7 +20,14 @@ const A = "#d97706";
    Counter tracks ops; reset returns to start.
    ========================================================== */
 export function FeedPairSim({ E }) {
-  const START = [2, 3, 1, 2];
+  /* ⚠️ 2026-09-21: 시작값이 [2, 3, 1, 2] 였다 — **어떻게 눌러도 성공할 수 없는 값**이다.
+     번갈아 더하고 빼면 2-3+1-2 = -2 ≠ 0 이라 균등 상태에 도달 자체가 안 된다
+     (solve([2,3,1,2]) = -1, 도달 가능한 9개 상태 중 균등은 0개).
+     배지가 "모두 0" 이던 시절부터 있던 버그라, 글만 "모두 같게" 로 고쳐도 안 풀렸다.
+     project-lead 가 BFS 로 잡았다.
+     [1, 3, 3, 1] 은 **두 가지 답**에 닿는다 — (1,1,1,1) 과 (0,0,0,0).
+     "꼭 0이 아니어도 돼요" 를 학생이 손으로 확인할 수 있는 값이다. */
+  const START = [1, 3, 3, 1];
   const [hunger, setHunger] = useState(START);
   const [ops, setOps] = useState(0);
   const [lastPair, setLastPair] = useState(-1);
@@ -90,7 +97,7 @@ export function FeedPairSim({ E }) {
         </div>
         {allEqual && (
           <div style={{ color: "#15803d", fontWeight: 700 }}>
-            ✅ {t(E, `All equal at ${hunger[0]}!`, `모두 ${hunger[0]} 으로 같아요!`)}
+            ✅ {t(E, `All equal at ${hunger[0]}!`, `모두 같아요! (값 ${hunger[0]})`)}
           </div>
         )}
         <button onClick={reset} style={{
@@ -104,8 +111,8 @@ export function FeedPairSim({ E }) {
 
       <div style={{ fontSize: 11, color: "#a16207", marginTop: 8, textAlign: "center", lineHeight: 1.5 }}>
         {t(E,
-          "Start: [2, 3, 1, 2]. Each click feeds an adjacent pair (both must be ≥ 1). Can you make them all equal? (It does not have to be zero.)",
-          "시작: [2, 3, 1, 2]. 한 번 누르면 인접한 쌍을 먹여요 (둘 다 ≥ 1 일 때만). 모두 같게 만들 수 있을까요? (꼭 0이 아니어도 돼요.)")}
+          "Start: [1, 3, 3, 1]. Each click feeds an adjacent pair (both must be ≥ 1). Can you make them all equal? (It does not have to be zero — try landing on all 1s.)",
+          "시작: [1, 3, 3, 1]. 한 번 누르면 인접한 쌍을 먹여요 (둘 다 ≥ 1 일 때만). 모두 같게 만들 수 있을까요? (꼭 0이 아니어도 돼요 — 모두 1 로 만드는 길도 있어요.)")}
       </div>
     </div>
   );
