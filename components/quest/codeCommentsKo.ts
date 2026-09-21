@@ -22,6 +22,15 @@
  * 늘리는 법 — 키는 **주석 기호(`#`/`//`)를 뗀 뒤 trim 한 그대로**.
  *   남은 목록: `python3 scripts/list-english-comments.py`
  */
+import { PART1 } from "./codeCommentsKo.part1";
+import { PART2 } from "./codeCommentsKo.part2";
+import { PART3 } from "./codeCommentsKo.part3";
+import { PART4 } from "./codeCommentsKo.part4";
+
+/* 435개는 네 조각에 나눠 담았다 (2026-09-21, frontend-engineer 넷이 병렬로).
+   한 파일에 435개를 넣으면 다음에 고칠 때 충돌이 잦다. 아래 다섯은 이 파일에 직접 둔다 —
+   `makedistinct` 를 고치며 손으로 먼저 넣은 것이고, 같은 키가 조각에 또 있으면
+   **조각 쪽이 이긴다**(아래 spread 순서). 지금은 겹치는 키가 없다. */
 export const CODE_COMMENT_KO: Record<string, string> = {
   // ── makedistinct (USACO Feb 2026 Bronze #1) ───────────────────────────────
   "Group indices by residue mod |K| (a += K never changes residue)":
@@ -32,4 +41,8 @@ export const CODE_COMMENT_KO: Record<string, string> = {
   "first slot stays put": "첫 값은 그 자리에 그대로 둬요",
   "If next value already past cur, keep it; else push cur + K":
     "다음 값이 이미 앞서 있으면 그대로, 아니면 cur + K 로 밀어요",
+  ...PART1,
+  ...PART2,
+  ...PART3,
+  ...PART4,
 };
