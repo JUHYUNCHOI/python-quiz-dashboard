@@ -15,6 +15,13 @@
    0건인 quest 에도 그런 결함은 남아 있을 수 있다 — 속도와 맞바꾸는 것이고,
    **학생이 먼저 찾을 위험을 안고 가는 것**이다. 숨기지 않는다.
 
+⚠️ **과목마다 점수를 3점에서 자른다.** 처음엔 안 잘랐더니 순위가 뒤집혔다 —
+   `mcc21glass` 가 35점으로 1위였는데 **34점이 전부 '기호'** 였다.
+   같은 미정의 기호가 34번 **반복된 한 가지 결함**이, 서로 다른 결함 셋이 걸린 quest 를 이겼다.
+   전면 검토(넷+학생)가 필요한 건 **여러 층에 동시에 걸린 quest** 다 — `makedistinct` 가 그랬다.
+   한 종류가 여러 번인 건 보통 **정의 한 줄을 넣으면 한꺼번에 풀린다**(moohunt 의 `2^N` 이 그랬다).
+   project-lead 판정(2026-09-21).
+
   python3 scripts/quest-signal-table.py                 # 전부
   python3 scripts/quest-signal-table.py --years 2015-2022
   python3 scripts/quest-signal-table.py --free          # 동결 아닌 것만
@@ -102,6 +109,20 @@ def main():
     count(run(f"python3 scripts/check-codewalk-thinking-order.py {names}"),
           r"■ (\S+)\D+(\d+)", "생각순서")
 
+    # 어려운 말·번역 티 — 출력 모양이 달라서 처음엔 뺐는데, project-lead 가
+    # **근거가 약하다**고 했다. 이 검사기는 다른 다섯과 **안 겹치는 층**을 본다
+    # (MCC 12개에서 기호 검사기와 완전히 갈렸던 전례). 빼면 "말이 어려운데
+    # 기호·내레이션엔 안 걸리는 quest" 가 통째로 0점이 된다. 그래서 파서를 붙였다.
+    cur = None
+    for line in run(f"python3 scripts/check-word-difficulty.py {names}").splitlines():
+        m = re.match(r"^  (\S+)$", line)
+        if m:
+            cur = m.group(1)
+            continue
+        if cur and cur in sig and re.match(r"^\s+(🔀|📖|🗣️)", line):
+            m2 = re.search(r"(\d+)건", line)
+            sig[cur]["말"] = sig[cur].get("말", 0) + (int(m2.group(1)) if m2 else 1)
+
     for q, _, _ in rows:
         f = os.path.join(ROOT, f"quest-problems/{q}")
         src = "".join(io.open(x, encoding="utf-8", errors="replace").read()
@@ -109,13 +130,20 @@ def main():
         if "beats:" not in src:
             sig[q]["말풍선없음"] = 1
 
-    KEYS = ["기호", "내레이션", "한줄", "스테퍼", "코드이름", "생각순서", "말풍선없음"]
-    rows.sort(key=lambda r: -sum(sig[r[0]].values()))
-    print(f"{'quest':<18}{'연도':>5}{'합':>4}  " + " ".join(f"{k:>4}" for k in KEYS) + "   잠금")
-    print("-" * 82)
+    KEYS = ["기호", "내레이션", "한줄", "스테퍼", "코드이름", "생각순서", "말", "말풍선없음"]
+
+    CAP = 3   # 과목당 최대 점수 — 위 머리말 참고
+
+    def score(q):
+        return sum(min(v, CAP) for v in sig[q].values())
+
+    rows.sort(key=lambda r: (-score(r[0]), r[0]))
+    print(f"{'quest':<18}{'연도':>5}{'점수':>4}  " + " ".join(f"{k:>4}" for k in KEYS) + "   잠금")
+    print(f"{'':<18}{'':>5}{'':>4}  (점수는 과목당 {CAP}점에서 자른 합 · 아래 숫자는 실제 건수)")
+    print("-" * 86)
     zero = 0
     for q, y, lk in rows:
-        tot = sum(sig[q].values())
+        tot = score(q)
         if tot == 0:
             zero += 1
             continue

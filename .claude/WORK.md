@@ -157,15 +157,28 @@ project-lead: *"지금 상태는 문서 네 번째를 하나 더 쓴 것과 다�
 - [ ] **2단계(사람)** — 신호 있는 quest 만 makedistinct 급 전체 절차.
       신호 0건은 **묶음 리뷰**(검토자 1~2명이 5~10개씩). `대기`
 
-### 기계 패스 결과 (2015~2022, quest 117개)
+### 기계 패스 결과 (2015~2022, quest 117개) — **가중치를 고친 뒤의 표다**
+
+⚠️ 처음 표는 **왜곡돼 있었다.** 과목마다 자릿수가 다른데 그냥 더해서,
+`mcc21glass` 가 35점 1위였는데 **34점이 전부 '기호'** 였다.
+**같은 결함이 34번 반복된 quest**가, **서로 다른 결함 셋이 걸린 quest**를 이겼다.
+전면 검토(넷+학생)가 필요한 건 **여러 층에 동시에 걸린 quest** 다 — `makedistinct` 가 그랬다.
+한 종류가 여러 번인 건 보통 **정의 한 줄이면 한꺼번에 풀린다**(moohunt 의 `2^N`).
+→ **과목당 3점에서 자른다**(PM 판정). `check-word-difficulty` 도 파서를 붙여 넣었다 —
+   다른 다섯과 **안 겹치는 층**이라 빼면 "말이 어려운데 기호엔 안 걸리는 quest" 가 0점이 된다.
+
 ```
-mcc21glass 35 · mcc22birthday 12 · wordproc 10 · mcc21simplemath 9 · guessanimal 8
-mco15bitcoin 8 · feedcows 7 · billboard 7 · sqpasture 7 · lonelyphoto 6 · stuckinrut 6 …
-신호 0건 — 3개
+wordproc 9 · backforth 8 · cowsignal 8 · whereami 8 · acowdemia2 7 · blocks 7 ·
+guessanimal 7 · mcc21glass 7 · mcc22birthday 7 · reverseeng 7 · …     신호 0건 3개
 ```
-**동결 아닌 것만 보면 53개**고, 상위는 `mcc21glass`(기호 34) · `mcc22birthday`(기호 11) ·
-`mcc21simplemath`(기호 8) · `mco15bitcoin`(기호 7). **기호(뜻 안 밝힌 `10⁹`·`2^R` 류)가 압도적**이다.
+**순위가 뒤집혔다.** `wordproc`(내레이션 3 + 코드이름 6 + 어려운 말 2 + 말풍선없음 = **네 층**)이 1위,
+`mcc21glass`(기호만 34) 는 1위 → **8위**. 노린 대로다.
+**동결 아닌 것은 53개**, 그 상위는 `mcc21glass` · `mcc22birthday` · `lc303` · `lc560` · `mcc21simplemath`.
 나머지 64개는 🔒 라 사람이 한 줄씩 Edit 해야 한다.
+
+⚠️ **문턱은 아직 안 건드렸다.** "0건은 묶음 리뷰" 인데 0건이 3개뿐이라 그 판정이 사실상
+   안 쓰인다. 다만 **왜곡된 표로 문턱을 올리면 왜곡을 한 번 더 쌓는 것**이라(PM),
+   가중치를 고친 지금 표로 내일 다시 본다.
 
 **순서(PM)**: **비동결부터, 신호 순.** 연도순은 근거가 약하다 — 신호가 이미 있는데
 연도를 우선하면 결함 많은 quest 를 뒤로 미루는 꼴이다.
@@ -184,6 +197,8 @@ mco15bitcoin 8 · feedcows 7 · billboard 7 · sqpasture 7 · lonelyphoto 6 · s
 - [x] **합본 빌드** — 커밋 44개를 합친 상태로 `next build` 통과. `tsconfig.json` 되돌리고 `.next-check` 지웠다.
 - [ ] **내일 밀 때** Vercel 빌드 로그의 `[ignore]` 줄 확인 (아래 절) `대기`
 - [ ] `astral` 코드 상자 아래 끝이 고정 버튼 띠 **아래로 38px** 들어가 있다 — 확인 필요 `대기`
+- [x] `OrbitGridStepSim`(말풍선 시뮬)은 **`astral` 전용**이다 — 다른 quest 는 안 쓴다(grep 확인).
+      쓰이는 자리 둘 다 **5×5 고정**이라 말풍선이 가로로 멀어져도 최대 ~220px. **다시 셀 필요 없다.**
 
 ---
 
