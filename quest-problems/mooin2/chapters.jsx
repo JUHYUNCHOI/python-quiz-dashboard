@@ -268,17 +268,17 @@ export function makeMooin2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's write it one piece at a time. Piece 1: read N, then the N numbers into the list a.",
-        "코드를 한 조각씩 써요. 첫 조각은 N 을 읽고 숫자 N 개를 배열 a 에 담아요."),
+        "To check any moo, we need the numbers in front of us — so first, read N and the list a.",
+        "moo 인지 확인하려면 숫자부터 봐야겠죠? 그래서 먼저 N 과 배열 a 를 읽어요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
-            🐢 {t(E, "Brute — piece 1: read the input", "브루트 — 1조각: 입력 읽기")}
+            🐢 {t(E, "Brute — piece 1: read the input", "브루트 — 1조각: 먼저 값부터 읽기")}
           </div>
           <CodeBlock lines={isCpp ? bruteReadCpp : bruteReadPy} lang={isCpp ? "cpp" : "py"} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E, "Nothing clever yet — just get the numbers into a so we can look at them.",
-                  "아직 영리한 건 없어요. 그냥 숫자를 a 에 담아 들여다볼 준비를 해요.")}
+            {t(E, "No judging yet — just load the numbers into a so the next piece can inspect them.",
+                  "아직 판단은 안 해요. moo 인지 보려면 값부터 배열 a 에 담아야 하니까요.")}
           </div>
         </div>),
     },
@@ -286,20 +286,22 @@ export function makeMooin2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Piece 2: a moo is 3 positions i < j < k. So loop all three — every i, every j after it, every k after that.",
-        "moo 는 자리 3개 i < j < k 예요. 이 세 자리를 모두 돌려요."),
+        "A moo needs 3 spots — x, y, y. So how do we check every possible triple? Nest three loops for i, j, k.",
+        "moo 를 확인하려면 자리 3개(x, y, y)가 필요해요. 그래서 반복문을 3겹으로 겹쳐요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
-            🐢 {t(E, "Brute — piece 2: three nested loops", "브루트 — 2조각: 3중 반복")}
+            🐢 {t(E, "Brute — piece 2: three loops for the 3 spots", "브루트 — 2조각: 세 자리를 모두 도는 반복문")}
           </div>
           <CodeBlock
             lines={isCpp ? [...bruteReadCpp, ...bruteLoopCpp] : [...bruteReadPy, ...bruteLoopPy]}
             dimUntil={isCpp ? bruteReadCpp.length : bruteReadPy.length}
             lang={isCpp ? "cpp" : "py"} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E, "Gray = already written; colored = the new lines. seen is a set — it auto-drops duplicates, so its size = the count of DISTINCT moos.",
-                  "회색은 이미 짠 줄이고, 색이 있는 게 새로 추가한 줄이에요. seen 은 집합이라 중복을 알아서 버려요. 그래서 크기가 곧 서로 다른 moo 개수예요.")}
+            {t(E, "seen collects (x, y) pairs.",
+                  "seen 은 (x, y) 짝을 모으는 집합이에요.")}<br/>
+            {t(E, "A set drops duplicates on its own — so its size is exactly our answer.",
+                  "집합은 중복을 저절로 버려서, 크기가 곧 우리가 구할 답이에요.")}
           </div>
         </div>),
     },
@@ -307,12 +309,12 @@ export function makeMooin2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Piece 3: inside, keep only real moos — a[j] = a[k] (the y-pair) and a[i] ≠ a[j] (a real x). Then print how many distinct ones we found.",
-        "안에서 진짜 moo 만 골라 세고, 그 개수를 출력해요."),
+        "But not every i, j, k is a real moo — only when the back two match and the front differs.",
+        "그런데 아무 i, j, k 나 다 moo 는 아니죠? 뒤 둘은 같고 앞은 달라야 진짜 moo 예요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
-            🐢 {t(E, "Brute — piece 3: check & count", "브루트 — 3조각: 판정 후 집계")}
+            🐢 {t(E, "Brute — piece 3: keep only real moos", "브루트 — 3조각: 진짜 moo 만 골라 세기")}
           </div>
           <CodeBlock
             lines={isCpp ? [...bruteReadCpp, ...bruteLoopCpp, ...bruteBodyCpp] : [...bruteReadPy, ...bruteLoopPy, ...bruteBodyPy]}

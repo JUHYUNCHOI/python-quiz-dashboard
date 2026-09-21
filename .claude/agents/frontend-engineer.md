@@ -58,8 +58,12 @@ node scripts/see-screen.mjs <url> --shot /tmp/x.png     # 스크린샷
 1. `CLAUDE.md` 의 `## 기술 스택` 과 `## ⚠️ 핵심 제약사항`
    → 무엇을 건드리면 학생 진도가 날아가는지. 이걸 모르고 손대면 안 된다.
 2. `next.config.mjs`
-   → `output: export` (정적 빌드) 라 **동적 라우트를 못 쓴다.** query params 로 해결한다.
-     `distDir` 이 `NEXT_DIST_DIR` 로 갈리는 이유도 주석에 있다.
+   → ⚠️ **여기 "`output: export` 라 동적 라우트를 못 쓴다" 고 적혀 있었다. 틀린 말이다.**
+     2026-04-05 (`8c794fbf`) 에 `output: export` 를 **뺐다.** 지금은 일반 Next.js 서버
+     배포라 `middleware.ts` 와 `app/api/**` 가 돌고, 동적 라우트(`[problemId]` ·
+     `[lessonId]`)를 **정상적으로 쓴다.** query params 로 우회할 이유가 없다.
+     (`/parent?t=TOKEN` 같은 건 제약 때문이 아니라 그냥 그 화면의 설계다.)
+     `distDir` 이 `NEXT_DIST_DIR` 로 갈리는 이유는 주석에 있다.
 3. `app/quest/[problemId]/client.tsx` 와 아무 quest 의 `*App.jsx` 하나
    → quest 화면이 어떻게 조립되는지 (chapters / sims / components 3분할, 챕터 탭, 스텝 상태)
 4. `components/python/blank-code-runner.tsx`
