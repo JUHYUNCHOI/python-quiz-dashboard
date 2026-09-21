@@ -33,6 +33,13 @@ CODE_VAR = re.compile(
 )
 STR_LINE = re.compile(r'^\s*"((?:[^"\\]|\\.)*)"\s*,?\s*$')
 
+# ⚠️ 2026-09-21: 위 CODE_VAR 은 **맨 바깥 const 배열만** 본다.
+#    그런데 학생이 보는 코드가 `get*Sections()` 안에 **인라인 배열**로 들어 있는
+#    quest 가 있다 (`py: [ "...", ... ]`). 그건 이 검사기 눈에 아예 안 띄었다.
+#    실측 45개 배열 · quest 9개 — mcc21menu 의 `long long total = 0, prod = 1;`
+#    이 "0건" 으로 통과한 이유가 이것이다. 규칙이 없어서가 아니라 **안 읽어서**다.
+INLINE_VAR = re.compile(r"^\s*(py|cpp|code|lines)\s*:\s*\[\s*$")
+
 
 def strip_noise(line, lang):
     """주석과 문자열 리터럴을 지운다 — 그 안의 ; 는 문장 구분이 아니다."""
@@ -184,14 +191,20 @@ def scan_file(path):
     out, i = {}, 0
     while i < len(text):
         m = CODE_VAR.match(text[i])
-        if not m:
+        inline = None if m else INLINE_VAR.match(text[i])
+        if not m and not inline:
             i += 1
             continue
-        name = m.group(1)
-        lang = "cpp" if re.search(r"CPP|_cpp", name) else "py"
+        if m:
+            name = m.group(1)
+            lang = "cpp" if re.search(r"CPP|_cpp", name) else "py"
+        else:
+            key = inline.group(1)
+            name = f"{key}: (줄 {i + 1})"
+            lang = "cpp" if key == "cpp" else "py"
         i += 1
         lineno, rows = 0, []
-        while i < len(text) and not re.match(r"^\s*\];", text[i]):
+        while i < len(text) and not re.match(r"^\s*\]\s*[;,]?\s*$", text[i]):
             sm = STR_LINE.match(text[i])
             if sm:
                 lineno += 1
@@ -201,7 +214,7 @@ def scan_file(path):
                     rows.append((lineno, raw, f))
             i += 1
         if rows:
-            out[name] = rows
+            out.setdefault(name, []).extend(rows)
     return out
 
 
