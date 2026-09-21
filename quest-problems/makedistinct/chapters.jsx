@@ -68,8 +68,8 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "the fewest moves that does it", "그렇게 만드는 가장 적은 횟수를")}</b>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "the fewest moves that do it", "그렇게 만드는 가장 적은 횟수를")}</b>
                   {t(E, ".", " 출력해요.")}
                 </div>
               </div>
@@ -157,8 +157,8 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
               학생이 코드의 `(cur - vals[i]) // k` 나눗셈에서 멈춘 자리다. */}
           <div style={{ marginTop: 10, background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 8, padding: "9px 12px", fontSize: 12.5, color: "#92400e", lineHeight: 1.65, wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              <>🤔 What if there were <b>one more 4</b>? Then [1, 1, 4, 4, <b>4</b>].<br />1 and 2 and 4 and 5 are all taken, so the last 4 has to go to <b>6</b> — pushing it once only reaches 5, so it takes <b>2 moves at once</b>. Total 4.<br />That is the case the code counts with a division.</>,
-              <>🤔 4 가 <b>하나 더</b> 있었다면? [1, 1, 4, 4, <b>4</b>] 가 돼요.<br />1 도 2 도 4 도 5 도 이미 찼으니 마지막 4 는 <b>6</b> 까지 가야 해요 — 한 칸 밀면 5 라 아직 겹쳐서 <b>한 걸음에 2 회</b>예요. 합계는 4 회고요.<br />코드가 나눗셈으로 세는 게 바로 이 경우예요.</>)}
+              <>🤔 What if there were <b>one more 4</b>? Then [1, 1, 4, 4, <b>4</b>].<br />1 and 2 and 4 and 5 are all taken, so the last 4 has to go to <b>6</b> — pushing it once only reaches 5, so it takes <b>2 moves at once</b>. Total 4.<br />Later, in the fast code, this case is what one division counts in a single line.</>,
+              <>🤔 4 가 <b>하나 더</b> 있었다면? [1, 1, 4, 4, <b>4</b>] 가 돼요.<br />1 도 2 도 4 도 5 도 이미 찼으니 마지막 4 는 <b>6</b> 까지 가야 해요 — 한 칸 밀면 5 라 아직 겹쳐서 <b>한 걸음에 2 회</b>예요. 합계는 4 회고요.<br />나중에 빠른 코드를 짤 때, 이 경우를 나눗셈 한 줄로 세게 돼요.</>)}
           </div>
 
           <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: C.dim, lineHeight: 1.6 , wordBreak: "keep-all", textWrap: "balance" }}>
