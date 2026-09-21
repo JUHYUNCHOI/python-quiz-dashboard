@@ -33,7 +33,7 @@ function Say({ children, tone = "go" }) {
   );
 }
 
-/* 행 한 줄 — 입력 글자들 + 출력. 떼어낸 행은 흐리게, 지금 보는 행은 노랑. */
+/* 표의 한 줄 — 입력 글자들 + 출력. 떼어낸 줄은 흐리게, 지금 보는 줄은 노랑. */
 function Row({ bits, out, state, mark }) {
   const c = state === "peeled" ? { bg: "#f1f5f9", bd: "#e2e8f0", fg: "#94a3b8" }
           : state === "hit" ? { bg: "#fef9c3", bd: "#f59e0b", fg: "#92400e" }
@@ -80,8 +80,11 @@ export function PeelSim({ E }) {
       ruleEn: "if first letter == 1 → 1", tone: "aha",
       ko: "if 를 하나 만들고 그 두 줄을 표에서 떼어냈어요.",
       en: "We made one if and peeled those two rows off the table." },
-    { st: [1, 1, 2, 2], mark: ["", "", "", ""], rule: "if 첫 글자 == 1 → 1",
-      ruleEn: "if first letter == 1 → 1", tone: "go",
+    /* 2026-09-21 ux 실측(--sim): 여기서 규칙 상자가 **직전 걸음과 같은 글**을 그대로
+       보여주면서(고침 전: rule="if 첫 글자==1→1") 표는 이미 새 후보(00·01)를 가리켜
+       "바뀐 자리가 2군데로 흩어짐"(221px) 이 났다. 지금은 탐색 중이라 아직 규칙이
+       없다 — 다른 탐색 걸음(idx2·3)처럼 null 로 되돌린다. */
+    { st: [1, 1, 2, 2], mark: ["", "", "", ""], rule: null, tone: "go",
       ko: "남은 건 00 과 01 이에요. 이번엔 둘째 글자가 1 인 줄 — 01 하나예요.",
       en: "00 and 01 are left. Now the rows whose second letter is 1 — just 01." },
     { st: [1, 2, 2, 2], mark: ["", "", "", ""], rule: "if 둘째 글자 == 1 → 1",
@@ -91,9 +94,16 @@ export function PeelSim({ E }) {
     { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: "else → 0", ruleEn: "else → 0", tone: "aha",
       ko: "마지막 00 한 줄은 else 로 받아요. 표가 비었어요 — 이런 프로그램이 정말 있어요. OK!",
       en: "The last row, 00, goes to else. The table is empty — such a program really exists. OK!" },
+    /* 2026-09-21 학생 지적: "왜 순서 상관없는지 이유가 없다" — 주장만 하지 말고
+       교환 논증을 한 줄 붙인다. (⚠️ 이 문구는 pedagogy-reviewer 확인 대기중) */
     { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: null, tone: "go",
-      ko: "다른 순서로 떼어도 괜찮아요. 뗄 수 있는 줄은 나중에 떼도 그대로 뗄 수 있거든요. 그래서 되는 걸 아무거나 먼저 떼면 돼요.",
-      en: "A different order is fine too. A group that can be peeled now can still be peeled later — so peel whichever one works first." },
+      ko: "왜 그래도 될까요? 지금 뗄 수 있는 줄은, 다른 줄을 먼저 떼어도 조건이 그대로라 여전히 뗄 수 있어요. 그래서 순서를 따지지 않고 지금 되는 걸 바로 떼면 돼요.",
+      en: "Why is that safe? A group we can peel now stays peelable even if other rows are peeled first — nothing about it changes. So there's no need to plan an order; just peel whatever works right now." },
+    /* 2026-09-21 학생 지적: 코드 주석 `# 탐욕적으로 벗겨내기` 가 quest 어디서도
+       설명 없이 등장한다 — 코드를 보기 전, 이 시뮬 안에서 먼저 이름을 붙인다. */
+    { st: [2, 2, 2, 2], mark: ["", "", "", ""], rule: null, tone: "aha",
+      ko: "이렇게 지금 당장 되는 것을 그때그때 바로 고르는 방법을 탐욕적(그리디) 방법이라고 불러요. 코드에서도 이 이름을 만나요.",
+      en: "Always picking whatever works right now, without planning ahead, is called a greedy method — you'll meet that name in the code too." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -104,6 +114,18 @@ export function PeelSim({ E }) {
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
+        {/* 2026-09-21 ux 실측(--sim): 규칙 상자가 표 **아래**(약 560~580px)에 있어서
+            말풍선(약 300px)과 늘 220px 이상 떨어져 있었다 — 상자 글이 바뀌든 안 바뀌든
+            둘 사이 거리 자체가 "바뀐 자리가 흩어짐" 경고를 계속 냈다. 말풍선 바로 아래,
+            표보다 **위**로 옮겨서 "이번에 새로 나온 것"이 한 자리에 모이게 한다. */}
+        {s.rule && (
+          <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#5b21b6",
+            background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10,
+            padding: "7px 12px", maxWidth: 330, margin: "0 auto 10px",
+            fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, s.ruleEn, s.rule)}
+          </div>
+        )}
         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "center", marginBottom: 10 }}>
           {rows.map(([b, o], i) => (
             <Row key={i} bits={b} out={o}
@@ -111,14 +133,6 @@ export function PeelSim({ E }) {
               mark={s.mark[i]} />
           ))}
         </div>
-        {s.rule && (
-          <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#5b21b6",
-            background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10,
-            padding: "7px 12px", maxWidth: 330, margin: "0 auto 8px",
-            fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, s.ruleEn, s.rule)}
-          </div>
-        )}
       </StepFade>
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
@@ -136,8 +150,8 @@ export function StuckSim({ E }) {
       ko: "이번 표예요. 입력 네 개가 전부 달라요 — 앞의 검사는 통과해요.",
       en: "A new table. All four inputs are different — it passes the earlier check." },
     { hit: [2, 3], mark: ["", "", "답 1", "답 0"], tone: "stuck",
-      ko: "첫 글자가 1 인 줄: 10 은 답이 1, 11 은 답이 0. 답이 갈려요. if 로 못 묶어요.",
-      en: "Rows with first letter 1: 10 answers 1, but 11 answers 0. They disagree — one if cannot cover them." },
+      ko: "첫 글자가 1 인 줄을 볼게요 — 10 은 답이 1, 11 은 답이 0. 답이 갈려서 if 하나로 못 묶어요.",
+      en: "Look at the rows starting with 1 — 10 answers 1, but 11 answers 0. They disagree, so one if cannot cover them." },
     { hit: [0, 1], mark: ["답 0", "답 1", "", ""], tone: "stuck",
       ko: "첫 글자가 0 인 줄도 마찬가지예요 — 00 은 0, 01 은 1.",
       en: "Same for the rows with first letter 0 — 00 answers 0, 01 answers 1." },

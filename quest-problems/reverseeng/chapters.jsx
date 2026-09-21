@@ -10,9 +10,12 @@ export function makeRevEngCh1(E) {
     // 1-1: Title reveal
     {
       type: "reveal",
+      /* 2026-09-21 ux: 내레이션이 367자·5문장에 코드 스니펫(`if (arr[1]==1)...`)까지
+         있었다 — 학생이 코드를 한 번도 못 본 시점이라 읽어도 그림이 안 그려진다.
+         한 줄로 줄이고, 코드는 말로 풀어 아래 🎯 미션 박스에서 설명한다. */
       narr: t(E,
-        "Elsie's program is a chain of if / else-if / else statements. Each statement looks at ONE variable and returns 0 or 1, like:\n  if (arr[1]==1) return 1;\n  else if (arr[0]==0) return 0;\n  else return 1;\nWe are given M inputs (each a length-N string of 0/1) with their claimed outputs. Decide whether SOME such program could produce all of them: print OK, otherwise LIE.",
-        "Elsie 의 프로그램은 if / else-if / else 가 줄줄이 이어진 모습이에요.\n문장 하나가 변수 하나만 보고 0 이나 1 을 돌려줘요.\n  if (arr[1]==1) return 1;\n  else if (arr[0]==0) return 0;\n  else return 1;\n입력 M 개와 이렇게 나왔다는 출력이 주어져요.\n그런 프로그램으로 다 만들 수 있으면 OK, 아니면 LIE 를 출력해요."),
+        "Can one rule explain every claimed answer — or is it a LIE?",
+        "한 규칙으로 답을 다 설명할 수 있을까요, 거짓말(LIE)일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -26,10 +29,13 @@ export function makeRevEngCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.7,
+              whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
+              {/* ①학생이 보는 것(입력·답 쌍) → ②규칙을 그 자리에서 말로 → ③구할 것은
+                  마지막에. 형제 quest `moohunt` 미션 모양을 따랐다(코드 기호 0개). */}
               {t(E,
-                "Output OK if a chain of if / else-if / else (each testing one variable) could produce all the outputs, else LIE.",
-                "문장마다 변수 하나만 보는 if / else-if / else 를 이어 붙여서\n출력을 모두 만들 수 있으면 OK, 아니면 LIE 를 출력해요.")}
+                "Each input comes with the answer it claims to give.\nIf a rule — check one spot at a time, then answer 0 or 1 — can explain every one of them, print OK. If not, print LIE.",
+                "입력마다 나왔다는 답이 짝지어져 있어요.\n한 번에 자리 하나만 보고 0 이나 1 로 답을 정하는 규칙으로\n그 답들을 전부 설명할 수 있으면 OK, 아니면 LIE 를 출력해요.")}
             </div>
           </div>
 
@@ -42,8 +48,10 @@ export function makeRevEngCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#8b5cf6" }}>{t(E, "M test cases", "M 개의 테스트 케이스")}</b>
-                  {t(E, "; each has a binary input array of length N and an expected boolean output.",
-                        " 가 있어요. 케이스마다 0 과 1 로 된 길이 N 의 입력 배열과\n나와야 하는 출력 (0 또는 1) 이 짝지어져 있어요.")}
+                  {/* 2026-09-21 ux: '배열' 이 코드를 보기 전(챕터1)에 나와 있었다.
+                      이 quest 가 이미 쓰는 말 — '줄'(sims.jsx) — 로 바꾼다. */}
+                  {t(E, "; each has a length-N row of 0/1 and an expected boolean output.",
+                        " 가 있어요. 케이스마다 0 과 1 로 된 길이 N 의 줄과\n나와야 하는 출력 (0 또는 1) 이 짝지어져 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -55,14 +63,9 @@ export function makeRevEngCh1(E) {
                         " 으로 저 출력을 전부 만들어 낼 수 있을까요?")}
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
-                <div>
-                  {t(E, "Print ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "OK if such a program exists, else LIE", "그런 프로그램을 만들 수 있으면 OK, 없으면 LIE")}</b>
-                  {t(E, ".", ".")}
-                </div>
-              </div>
+              {/* 2026-09-21 ux: 여기(👉 결론)와 🎯 미션 박스가 같은 문장을 반복했다.
+                  이 OK/LIE 출력 형식은 바로 다음 쪽(입출력 형식 카드 OUTPUT)에도 있어서
+                  여기서는 지운다 — 미션 박스 쪽을 남긴다. */}
             </div>
           </div>
         </div>),
@@ -187,16 +190,22 @@ LIE`}</div>
     },
 
     // 1-6: Input
+    /* 2026-09-21 ux: 앞의 시뮬·퀴즈는 입력을 "00"·"01" 문자열로 보여주는데 여기만
+       [0]·[1] 대괄호였다 — 코드의 배열 첨자(arr[0])처럼 읽혀서, 같은 화면에 있는
+       "OK=1, LIE=0"(정답 코드) 과 겹쳐 0·1 이 세 가지 뜻으로 보였다.
+       앞과 같은 문자열 표기로 맞추고, OK/LIE 라벨을 굵게 따로 뗀다. */
     {
       type: "input",
       narr: t(E,
-        "Input [0] answers 1, input [1] answers 0.\nCan one program do both?\nEnter 1 for OK, 0 for LIE.", "입력 [0] 은 1, 입력 [1] 은 0 이에요.\n이런 프로그램을 만들 수 있을까요?\nOK 면 1, LIE 면 0 을 넣어요."),
+        "Input \"0\" answers 1, input \"1\" answers 0.\nCan one program do both?\nEnter 1 for OK, 0 for LIE.", "입력 \"0\" 은 1, 입력 \"1\" 은 0 이 나왔어요.\n한 프로그램으로 이 둘을 다 설명할 수 있을까요?\nOK 면 1, LIE 면 0 을 넣어요."),
+      /* ⚠️ NumInput 은 `**bold**` 마크다운을 못 그린다(components/quest/shared.tsx:195
+         — Quiz 와 달리 renderInline 을 안 거친다). 그래서 괄호로만 라벨을 뗀다. */
       question: t(E,
-        "[0]->1, [1]->0. Is it OK? (1=OK, 0=LIE)",
-        "[0] 은 1, [1] 은 0 이에요. OK 일까요? (1=OK, 0=LIE)"),
+        "\"0\"->1, \"1\"->0. Is it OK?  (OK = 1, LIE = 0)",
+        "\"0\" 은 1, \"1\" 은 0 이에요. OK 일까요?  (OK = 1, LIE = 0)"),
       hint: t(E,
-        "Try a tiny if/else on arr[0] and see if it matches both cases.",
-        "arr[0] 을 보는 짧은 if/else 를 만들어서\n두 경우가 다 맞는지 보세요."),
+        "Try a rule that only checks the first letter, and see if it matches both cases.",
+        "첫 글자만 보는 규칙을 만들어서\n두 경우가 다 맞는지 보세요."),
       answer: 1,
     },
   ];

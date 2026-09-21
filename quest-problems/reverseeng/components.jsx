@@ -128,7 +128,7 @@ export function getRevEngSections(E) {
         t(E, "Use specific includes (<iostream>, <vector>, <string>) — keeps code clear.",
             "필요한 헤더만 넣으면 (<iostream>, <vector>, <string>)\n코드가 무엇을 하려는지 더 잘 보여요."),
         t(E, "Reading the binary string with cin >> gives a std::string; index it with [pos].",
-            "0 과 1 로 된 글을 cin >> 로 받으면 std::string 이 돼요.\n[pos] 로 한 글자씩 꺼내 보면 돼요."),
+            "0 과 1 로 된 문자열을 cin >> 로 받으면 std::string 이 돼요.\n[pos] 로 한 글자씩 꺼내 보면 돼요."),
       ],
     },
     {
