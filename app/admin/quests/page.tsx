@@ -21,6 +21,7 @@ import { ALL_PROBLEMS } from "@/app/quest/[problemId]/data"
 const CATEGORY_META: Record<QuestHealthStatus["category"], { label: string; color: string; bg: string }> = {
   "stub-cpp":         { label: "Stub C++",         color: "#1e3a8a", bg: "#dbeafe" },
   "py-cpp-mismatch":  { label: "Py↔C++ 다름",      color: "#7c2d12", bg: "#ffedd5" },
+  "input-format":     { label: "입력 형식에서 멈춤", color: "#713f12", bg: "#fef9c3" },
   "algorithm-bug":    { label: "알고리즘 버그",     color: "#7f1d1d", bg: "#fee2e2" },
   "logic-bug":        { label: "Logic 버그",        color: "#7f1d1d", bg: "#fee2e2" },
 }

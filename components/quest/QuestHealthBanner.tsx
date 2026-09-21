@@ -50,6 +50,21 @@ const STYLES: Record<QuestHealthStatus["category"], {
       ko: "Python 과 C++ 가 다른 알고리즘을 구현 — 챕터 설명과 맞는 언어를 골라 보세요",
     },
   },
+  /* 2026-09-21 추가 — `reverseeng` 에서 나왔다.
+     네 분류 중 맞는 게 없었다: 알고리즘은 **맞고**(공식 샘플 OK OK LIE LIE),
+     두 언어가 **같은 방법**을 쓰는데, 파이썬만 **원문 입력 형식에서 멈춘다**.
+     `py-cpp-mismatch` 를 쓰니 "다른 알고리즘을 구현" 이라는 제목이 또 거짓말이 됐다.
+     **분류가 없다고 비슷한 걸 갖다 쓰면 제목이 거짓말을 한다.** */
+  "input-format": {
+    bg: "#fefce8",
+    border: "#fde047",
+    text: "#713f12",
+    icon: "📥",
+    label: {
+      en: "One language stops on the official input format — read the note before you submit",
+      ko: "한쪽 언어가 원문 입력 형식에서 멈춰요 — 제출 전에 아래를 읽어 보세요",
+    },
+  },
   "algorithm-bug": {
     bg: "#fef2f2",
     border: "#fca5a5",

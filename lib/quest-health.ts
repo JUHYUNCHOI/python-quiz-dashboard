@@ -26,7 +26,7 @@
  */
 
 export type QuestHealthStatus = {
-  category: "algorithm-bug" | "stub-cpp" | "logic-bug" | "py-cpp-mismatch";
+  category: "algorithm-bug" | "stub-cpp" | "logic-bug" | "py-cpp-mismatch" | "input-format";
   severity: "critical" | "minor";
   detail: string; // one-line description (Korean)
   detailEn?: string;
@@ -188,11 +188,24 @@ export const QUEST_HEALTH: Record<string, QuestHealthStatus> = {
     detail: "C++ 미완성. Python 사용 권장.",
     detailEn: "C++ incomplete. Use Python.",
   },
+  /* 2026-09-21: 이 배너가 **정반대**를 말하고 있었다. quest-auditor 가 잡았다.
+     적혀 있던 말: "C++ scaffold 만 있음. Python 사용 권장." (severity: critical)
+     실제:
+       · C++  — 2026-06-16 채점기 재제출 **AC 12/12** (cpid=1253).
+                `components.jsx:1` 헤더와 `USACO_VERIFICATION.md:75` 둘 다 그렇게 적고 있다.
+       · Python — 채점기 제출 이력 **없음**(로컬 확인만). 게다가 **원문 입력 형식에서 죽는다** —
+                원문은 테스트 케이스 사이에 빈 줄이 있는데(`pre class='in'` 에서 직접 확인)
+                `input().split()` 이 그 빈 줄을 못 건너뛰어 `ValueError` 로 멈춘다.
+                내가 화면의 코드를 그대로 떼어 원문 샘플로 돌려 재현했다.
+                알고리즘 자체는 맞다 — 빈 줄만 걸러 주면 `OK OK LIE LIE` 로 정답이다.
+     2026-06-15 재작성 전의 기록이 그대로 남아 있었던 것으로 보인다.
+     학생에게 **검증된 쪽(C++)을 피하고 안 되는 쪽(Python)을 쓰라**고 말하고 있었다.
+     ⚠️ Python 코드 자체는 🔒 `USACO_VERIFIED` 파일이라 손대지 않았다 — 선생님 판정 대기. */
   reverseeng: {
-    category: "stub-cpp",
+    category: "input-format",
     severity: "critical",
-    detail: "C++ scaffold 만 있음. Python 사용 권장.",
-    detailEn: "C++ is scaffold only. Use Python.",
+    detail: "Python 이 원문 입력 형식(케이스 사이 빈 줄)에서 멈춰요. C++ 은 채점기 AC 12/12.",
+    detailEn: "The Python here stops on the official input format (blank lines between cases). The C++ is judge-verified 12/12.",
   },
   socialdist2: {
     category: "stub-cpp",
