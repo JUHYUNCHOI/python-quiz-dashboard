@@ -5,5 +5,5 @@
       "dev": false
     }
   },
-  "ignoreCommand": "if [ -n \"$VERCEL_GIT_COMMIT_REF\" ] && [ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ]; then exit 0; fi; exit 1"
+  "ignoreCommand": "if [ -n \"$VERCEL_GIT_COMMIT_REF\" ] && [ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ]; then exit 0; fi; BASE=\"$VERCEL_GIT_PREVIOUS_SHA\"; if [ -z \"$BASE\" ]; then exit 1; fi; git diff --quiet \"$BASE\" HEAD -- . ':!.claude' ':!*.md' ':!docs/**' ':!scripts/**' ':!vercel.json' || exit 1; exit 0"
 }
