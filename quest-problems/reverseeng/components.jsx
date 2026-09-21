@@ -5,7 +5,6 @@
 //   USACO re-submit PENDING. Prior scaffold echoed N (WA); prior Python only tried a single
 //   decision variable (wrong for multi-if programs) — both replaced.
 
-import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -112,17 +111,18 @@ const FULL_CPP = [
 export function getRevEngSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      /* 1️⃣ 입력 읽기 — T, 케이스마다 N M, 그리고 M 개의 (문자열, 출력) 행. */
+      label: t(E, "1️⃣ Read the input", "1️⃣ 입력을 읽어요"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 7), cpp: FULL_CPP.slice(0, 16),
       why: [
         t(E,
-          "The answer is OK or LIE — could such a program exist?\nAn if-statement on 'variable=value' only works if every\nremaining row matching it shares the same output.\nSo we find such a condition, peel those rows off, and\nrepeat on what's left. Everything peels away → OK;\nstuck → LIE.",
-          "답은 OK 나 LIE 예요 — 그런 프로그램을 만들 수 있는지예요.\n'변수=값' 을 거는 if 문은, 그 조건에 맞는 남은 행의\n출력이 전부 같을 때만 쓸 수 있어요.\n그래서 그런 조건을 찾아 그 행들을 떼어내고, 남은 행으로\n다시 찾기를 되풀이해요. 다 떼어지면 OK, 막히면 LIE 예요."),
+          "What do we need for one test case? N (string length), M (row count), then M rows — each a length-N string with its claimed output.",
+          "한 케이스에 뭐가 필요할까요? N(문자열 길이), M(줄 개수),\n그리고 길이 N 문자열과 그 출력이 짝지어진 줄 M 개예요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "s, o = input().split() reads one row's string and output digit at once.",
+            "s, o = input().split() 로 한 줄의 문자열과 출력을 한 번에 읽어요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, <string>) — keeps code clear.",
@@ -131,123 +131,26 @@ export function getRevEngSections(E) {
             "0 과 1 로 된 글을 cin >> 로 받으면 std::string 이 돼요.\n[pos] 로 한 글자씩 꺼내 보면 돼요."),
       ],
     },
+    {
+      /* 2️⃣ 떼어내기 반복 — 앞 시뮬(PeelSim/StuckSim)에서 본 것을 코드로. */
+      label: t(E, "2️⃣ Peel rows off, one if at a time", "2️⃣ if 하나씩 만들며 줄을 떼어내요"),
+      color: "#7c3aed",
+      py: FULL_PY.slice(7), cpp: FULL_CPP.slice(16),
+      why: [
+        t(E,
+          "The answer is OK or LIE — could such a program exist?\nAn if-statement on 'variable=value' only works if every\nremaining row matching it shares the same output.\nSo we find such a condition, peel those rows off, and\nrepeat on what's left. Everything peels away → OK;\nstuck → LIE.",
+          "답은 OK 나 LIE 예요 — 그런 프로그램을 만들 수 있는지예요.\n'변수=값' 을 거는 if 문은, 그 조건에 맞는 남은 줄의\n출력이 전부 같을 때만 쓸 수 있어요.\n그래서 그런 조건을 찾아 그 줄들을 떼어내고, 남은 줄로\n다시 찾기를 되풀이해요. 다 떼어지면 OK, 막히면 LIE 예요."),
+      ],
+      pyOnly: [
+        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
+            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
+      ],
+    },
   ];
 }
 
 export function RevEngProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
-}
-
-
-/* ===============================================================
-   Deep Audit Sim — manually try every (pos, A, B) on 4 test cases
-   The rule: if arr[pos]==0 return A, else return B.
-   A green check on every row means OK; any red X on any row fails.
-   =============================================================== */
-const AUDIT_CASES = [
-  { arr: [0, 1, 0], out: 1 },
-  { arr: [1, 1, 0], out: 0 },
-  { arr: [0, 0, 1], out: 1 },
-  { arr: [1, 0, 1], out: 0 },
-];
-
-export function RevEngDeepAuditSim({ E }) {
-  const [pos, setPos] = useState(0);
-  const [A, setA] = useState(1);
-  const N = AUDIT_CASES[0].arr.length;
-  const B = 1 - A;
-
-  const rows = AUDIT_CASES.map((tc) => {
-    const expected = tc.arr[pos] === 0 ? A : B;
-    const ok = expected === tc.out;
-    return { ...tc, expected, ok };
-  });
-  const allOk = rows.every(r => r.ok);
-
-  const btn = (active) => ({
-    background: active ? "#8b5cf6" : "#fff",
-    color: active ? "#fff" : "#5b21b6",
-    border: "1.5px solid #8b5cf6",
-    borderRadius: 8,
-    padding: "5px 12px",
-    fontSize: 13,
-    fontWeight: 800,
-    cursor: "pointer",
-  });
-
-  return (
-    <div style={{ padding: 16 }}>
-      <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
-          🔎 {t(E, "Deep Audit", "심층 감사")}
-        </div>
-        <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
-          {t(E,
-            "Rule: if arr[pos]==0 return A, else return B. Pick (pos, A) and check every row.",
-            "arr[pos]==0 이면 A 를, 아니면 B 를 돌려주는 규칙이에요.\n(pos, A) 를 골라서 모든 행이 맞는지 확인해 보세요.")}
-        </div>
-      </div>
-
-      <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", marginBottom: 10 }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color: C.dim }}>{t(E, "pos", "위치")}:</span>
-        {Array.from({ length: N }, (_, i) => (
-          <button key={i} onClick={() => setPos(i)} style={btn(pos === i)}>{i}</button>
-        ))}
-        <span style={{ width: 8 }} />
-        <span style={{ fontSize: 12, fontWeight: 700, color: C.dim }}>A:</span>
-        <button onClick={() => setA(0)} style={btn(A === 0)}>0</button>
-        <button onClick={() => setA(1)} style={btn(A === 1)}>1</button>
-        <span style={{ fontSize: 12, color: C.dim, marginLeft: 4 }}>
-          (B = {B})
-        </span>
-      </div>
-
-      <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", color: "#f8fafc", fontFamily: "JetBrains Mono, monospace", fontSize: 13, marginBottom: 10 }}>
-        <span style={{ color: "#c084fc" }}>if</span> arr[<span style={{ color: "#fbbf24" }}>{pos}</span>] == <span style={{ color: "#fbbf24" }}>0</span>: <span style={{ color: "#34d399" }}>return {A}</span> <span style={{ color: "#8b949e" }}>else</span>: <span style={{ color: "#34d399" }}>return {B}</span>
-      </div>
-
-      <div style={{ border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 10 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 80px 100px 60px", background: "#ede9fe", padding: "8px 12px", fontSize: 12, fontWeight: 800, color: "#5b21b6" }}>
-          <div>arr</div>
-          <div style={{ textAlign: "center" }}>arr[{pos}]</div>
-          <div style={{ textAlign: "center" }}>{t(E, "expected → got", "기대 → 결과")}</div>
-          <div style={{ textAlign: "center" }}>{t(E, "match", "일치")}</div>
-        </div>
-        {rows.map((r, i) => (
-          <div key={i} style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 80px 100px 60px",
-            padding: "8px 12px",
-            fontSize: 13,
-            borderTop: `1px solid ${C.border}`,
-            background: r.ok ? C.okBg : C.noBg,
-            color: r.ok ? "#166534" : "#991b1b",
-            fontFamily: "JetBrains Mono, monospace",
-          }}>
-            <div>[{r.arr.join(", ")}]</div>
-            <div style={{ textAlign: "center", fontWeight: 700 }}>{r.arr[pos]}</div>
-            <div style={{ textAlign: "center" }}>{r.out} → {r.expected}</div>
-            <div style={{ textAlign: "center", fontSize: 16 }}>{r.ok ? "✓" : "✗"}</div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{
-        background: allOk ? C.okBg : "#fff7ed",
-        border: `1.5px solid ${allOk ? C.okBd : C.carryBd}`,
-        borderRadius: 10,
-        padding: "10px 14px",
-        fontSize: 13,
-        color: allOk ? "#166534" : "#9a3412",
-        fontWeight: 700,
-        textAlign: "center",
-      }}>
-        {allOk
-          ? t(E, "✓ All rows match — this rule works! Verdict: OK", "✓ 모든 행이 맞아요. 이 규칙이면 답은 OK 예요.")
-          : t(E, "Some rows fail. Try another (pos, A). If nothing works → LIE.", "안 맞는 행이 있어요. 다른 (pos, A) 를 골라 보세요.\n무엇을 골라도 안 되면 LIE 예요.")}
-      </div>
-    </div>
-  );
 }
 
 

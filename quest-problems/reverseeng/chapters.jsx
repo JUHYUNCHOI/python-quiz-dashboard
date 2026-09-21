@@ -67,11 +67,87 @@ export function makeRevEngCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    /* 1-2: 입출력 형식 카드 — mcc19rect2 형태 그대로(INPUT / OUTPUT / Sample / CONSTRAINTS).
+       2026-09-21 quest-auditor: 지금까지 이 quest 어디에도 입출력 형식이 없어서 학생이
+       코드 쪽에 가서야 T, N, M 을 처음 봤다. 제약·형식은 usaco.org cpid=1253 원문 대조 확인.
+       ⚠️ 원문은 케이스 사이에 빈 줄이 있다(Consecutive test cases are separated by
+       newlines) — 샘플에도 그대로 보여준다. 샘플 값은 PeelSim(OK)·StuckSim(LIE) 과
+       같은 행을 재사용했다 — 새 숫자를 만들지 않기 위해서다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? First T, then each case's rows.",
+        "데이터가 어떻게 들어올까요? T 부터, 그다음 케이스마다 줄이 와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of test cases", "— 테스트 케이스 개수")}</span></div>
+              <div style={{ marginTop: 4 }}>{t(E, "For each test case:", "각 테스트 케이스마다:")}</div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N M</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— string length, row count", "— 문자열 길이, 줄 개수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>{"s₁ o₁"}</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— row 1: a length-N 0/1 string, then its output", "— 1번째 줄: 길이 N 인 0/1 문자열과 그 출력")}</span></div>
+              <div>{t(E, "⋮ (M rows in total)", "⋮ (총 M 개 줄)")}</div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line per test case: OK or LIE.",
+                    "테스트 케이스마다 한 줄에 OK 또는 LIE 를 출력해요.")}
+            </div>
+          </div>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
+{`2
+2 4
+00 0
+01 1
+10 1
+11 1
+
+2 4
+00 0
+01 1
+10 1
+11 0`}
+                </div>
+              </div>
+              <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#5b21b6", whiteSpace: "pre" }}>{`OK
+LIE`}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
+              {t(E, "The blank line between cases is part of the input. Why these two verdicts differ comes next.",
+                    "케이스 사이의 빈 줄도 입력의 일부예요. 왜 둘의 답이 다른지는 다음 쪽부터 봐요.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 10</div>
+              <div>1 ≤ N ≤ 100</div>
+              <div>1 ≤ M ≤ 100</div>
+            </div>
+          </div>
+        </div>),
+    },
+
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "Input \"01\" gives output 1.\nInput \"01\" gives output 0.\nSame input, different output.\nWhat's the verdict?", "같은 입력 \"01\" 이 한 번은 1, 한 번은 0 을 냈어요. 답은 뭘까요?"),
+        "The same input \"01\" gave 1 once and 0 once. What's the verdict?", "같은 입력 \"01\" 이 한 번은 1, 한 번은 0 을 냈어요. 답은 뭘까요?"),
       question: t(E,
         "Input [0,1]->1 and [0,1]->0. Same input, different output. Result?",
         "입력 [0,1] 이 1 도 되고 0 도 됐어요.\n같은 입력인데 출력이 달라요. 답은 무엇일까요?"),
@@ -84,10 +160,7 @@ export function makeRevEngCh1(E) {
         "Correct! If the same input produces different outputs, no deterministic program can be consistent. It's a LIE.",
         "맞아요. 같은 입력을 넣으면 프로그램은 늘 같은 답을 내요.\n그런데 출력이 다르니까 이건 LIE 예요."),
     },
-    // 1-3: Worked example of the greedy peel
-    // TODO: sim redesign — RevEngDeepAuditSim models a SINGLE-variable if/else, which is
-    // NOT the real problem (a chain of if/else-if/else). Replaced with a static worked
-    /* 1-3: **중복이 없어도 LIE 일 수 있다** — 이 문제의 진짜 함정 (2026-09-21 추가).
+    /* 1-4: **중복이 없어도 LIE 일 수 있다** — 이 문제의 진짜 함정 (2026-09-21 추가).
        pedagogy 검토: *"1-2 퀴즈는 '같은 입력이면 같은 출력' 만 가르친다. 그런데
        입력이 **전부 달라도** LIE 일 수 있다는 걸 quest 어디에서도 안 보여준다.
        그러니 학생은 '이미 퀴즈에서 다 배운 거 아닌가?' 인 채로 다음 알고리즘을 받아 적는다."*
@@ -99,11 +172,12 @@ export function makeRevEngCh1(E) {
         "입력이 네 개 다 달라요. 그러면 된 걸까요?"),
       content: <StuckSim E={E} />,
     },
-    /* 1-4: 떼어내기를 **눈으로**.
+    /* 1-5: 떼어내기를 **눈으로**.
        그전에는 같은 것을 정적인 글로 설명했다. 선생님: *"주절히 설명하기보다는
        눈에 보이게끔 시뮬로 쉽게 보여달라"*. 파일에 남아 있던
        `RevEngDeepAuditSim` 은 "문제와 안 맞는 모델" 이라 아무 데서도 안 쓰이는
-       **죽은 코드**였다 — 그래서 이 quest 는 시뮬이 0개였다. */
+       **죽은 코드**였다 — 그래서 이 quest 는 시뮬이 0개였다.
+       2026-09-21: 죽은 코드는 components.jsx 에서 완전히 지웠다. */
     {
       type: "reveal",
       narr: t(E,
@@ -112,7 +186,7 @@ export function makeRevEngCh1(E) {
       content: <PeelSim E={E} />,
     },
 
-    // 1-4: Input
+    // 1-6: Input
     {
       type: "input",
       narr: t(E,
@@ -134,12 +208,14 @@ export function makeRevEngCh1(E) {
    =============================================================== */
 export function makeRevEngCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    /* 2-1: 이 narr 이 예전엔 전체 알고리즘을 통째로 다시 말했다 — 1-4/1-5 시뮬 narr,
+       그리고 아래 섹션의 `why` 와 네 번째로 겹쳤다. 이제 알고리즘 설명은 2번째 섹션의
+       `why` 한 곳에만 두고, 여기서는 두 섹션이 무엇을 하는지만 가리킨다. */
     {
       type: "progressive",
       narr: t(E,
-        "Repeatedly find a variable=value whose remaining rows ALL share one output, peel them off, and loop. If every row peels away → OK, otherwise LIE. Sections build it one piece at a time.",
-        "남은 행의 출력이 전부 같아지는 '변수=값' 을 찾아 떼어내기를 되풀이해요.\n전부 떼어지면 OK, 아니면 LIE 예요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
+        "Two parts: read the input, then peel rows off.",
+        "두 부분으로 봐요 — 입력을 읽는 부분, 그다음 줄을 떼어내는 부분."),
       sections: getRevEngSections(E),
     },
   ];
