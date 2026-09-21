@@ -114,7 +114,7 @@ export function makeTichuCh1(E) {
       type: "reveal",
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "You have N cards. N−K of them show integers; K of them are wildcards that can become any value. A 'run' is consecutive integers a, a+1, a+2, … You may rearrange freely. Print the length of the longest run you can build.",
+        "Use wildcards to build the longest run of consecutive numbers.",
         "와일드 카드를 써서 가장 긴 연속 숫자를 만들어 봐요."),
       content: (
         <div style={{ padding: 16 }}>

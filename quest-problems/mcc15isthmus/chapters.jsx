@@ -259,7 +259,7 @@ export function makeMcc15IsthmusCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An isthmus is split into N pieces of land, each with a height. An order-K peak is a piece from which you always go strictly downwards walking K steps to the left and K steps to the right; an order-K valley is the same with upwards.\nCount how many pieces are order-K peaks or order-K valleys.",
+        "Count pieces that strictly rise or fall for K steps on both sides.",
         "양옆으로 K칸 계속 내려가는 땅과 계속 올라가는 땅을 세요."),
       content: (
         <div style={{ padding: 16 }}>

@@ -180,7 +180,7 @@ export function makeMcc20MissingCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Start from a permutation of 1..N. One number is discarded, the rest are shuffled, some get negative signs, and a constant K is added to every number.\nGiven the N−1 results, print the sum of all possible missing numbers.",
+        "Find every number that could be the missing one, and add them up.",
         "빠진 숫자로 가능한 값을 모두 찾아 더해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -351,7 +351,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every K in [−3N, 3N] and rebuilds the list each time. The fast way notices the biggest magnitude anchors K to only 4 candidates, so we test just those.",
+        "Find out why only 4 values of K need checking, not all of them.",
         "K 를 전부 보지 않고 4개만 보면 되는 이유를 찾아봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

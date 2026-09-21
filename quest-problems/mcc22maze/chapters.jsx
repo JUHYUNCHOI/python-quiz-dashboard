@@ -18,7 +18,7 @@ export function makeMcc22MazeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An n × n grid of open (.) and blocked (#) cells. You move between adjacent OPEN cells. One operation: pick a whole row or column and smash every wall in it.\nFind the MINIMUM operations so the bottom-right corner becomes reachable from the top-left.",
+        "Find the minimum operations to connect the top-left corner to the bottom-right.",
         "좌상단에서 우하단까지 닿게 만드는 최소 조작 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>

@@ -11,8 +11,8 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "LeetCode #560 — Subarray Sum Equals K. Count the number of subarrays (contiguous) with sum exactly equal to k.",
-        "LeetCode #560 — Subarray Sum Equals K. 합이 정확히 k 인 연속 부분 배열의 개수를 세세요."),
+        "LeetCode #560 — count the number of subarrays whose sum is exactly k.",
+        "LeetCode #560 — 합이 정확히 k 인 연속 부분 배열의 개수를 구해요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: TEAL_L, border: `2px solid ${TEAL}`, borderRadius: 10, padding: "12px 16px", marginBottom: 14 }}>
@@ -89,8 +89,8 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, the idea anyone would try: pick a start, then add numbers to the right one at a time. Every time the running sum lands exactly on k, count one. Move the start over and do it all again.",
-        "가장 먼저 떠오르는 방법부터. 시작 칸을 하나 정하고, 거기서 오른쪽으로 숫자를 하나씩 더해 가요. 더한 값이 딱 k 가 되면 하나 세고요. 시작 칸을 옆으로 옮겨가며 전부 다시 해봐요."),
+        "Try every start, add rightward, and count each time the sum hits k.",
+        "모든 시작 칸에서 오른쪽으로 더해가며, 합이 k 가 되는 순간을 세요."),
       content: (
         <CodeJourney
           E={E}
@@ -140,8 +140,8 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A tiny input like [1,1,1] is fine. But there can be 20,000 numbers, and trying \"every start × every end\" is about n × n ÷ 2 steps. Drag the slider — watch how slow that gets when the input grows.",
-        "[1,1,1] 같은 작은 입력은 잘 돼요. 그런데 숫자가 2만 개까지 들어올 수 있어요. \"모든 시작 × 모든 끝\" 을 다 해보면 대략 n × n ÷ 2 번이에요. 슬라이더를 끌어보세요 — 입력이 커지면 얼마나 느려지는지 보세요."),
+        "Drag the slider to feel how slow this gets as the input grows toward 20,000.",
+        "슬라이더를 끌어서, 숫자가 2만 개까지 늘면 얼마나 느려지는지 느껴보세요."),
       content: <SpeedRaceSim E={E} nMax={20000} nStart={200} constraintN={20000} />,
     },
 
@@ -219,8 +219,8 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, ① Build the prefix list.\nAdd nums left to right, appending each running sum to prefix = [0, …].\nThen switch to ② Count the pairs: sweep the list and count values that differ by k, using a dictionary.\nTry the negatives example — you'll see the same prefix value show up twice.",
-        "먼저 ① 누적합 리스트 만들기.\nnums 를 왼쪽부터 더해 prefix = [0, …] 리스트를 한 칸씩 채워요.\n그다음 ② 차이가 k 인 쌍 세기 로 바꿔서, 리스트를 훑으며 차이가 k 인 값들을 딕셔너리로 세요.\n음수 예제도 눌러봐요 — 같은 누적합 값이 두 번 나오는 걸 보게 돼요."),
+        "Build the prefix list, then count pairs that differ by k.",
+        "누적합 리스트를 만들고, 차이가 k 인 쌍을 세어 답을 구해요."),
       content: <SubarraySumSim E={E} />,
     },
 

@@ -17,7 +17,7 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N boxes in a row. Box i starts with A[i] marbles and must end with B[i] marbles. One operation: move ONE marble from a box to an adjacent box (left or right).\nPrint the MINIMUM number of operations. (It is guaranteed that sum(A) = sum(B).)",
+        "Move marbles one step at a time to turn box counts A into target counts B.",
         "구슬을 옆 상자로 옮겨서 A 를 B 로 만들어 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -173,7 +173,7 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way actually simulates marbles hopping one box at a time until A matches B — the number of hops can be enormous. The fast way never moves a marble: it reformulates the problem as a prefix-carry over D = A − B and gets the answer in one pass.",
+        "The slow way moves marbles one by one; the fast way just counts.",
         "느린 방법은 구슬을 하나씩 옮기고, 빠른 방법은 세기만 해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

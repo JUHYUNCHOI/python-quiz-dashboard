@@ -21,7 +21,7 @@ export function makeXorStringCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "\"Transforming\" a string inserts (neighbor XOR neighbor) between every adjacent pair. Its \"beauty\" counts equal-adjacent pairs. Sum the beauty-after-k-transforms over ALL substrings of s.",
+        "Sum the beauty after k transforms over every substring of s.",
         "k번 변신한 뒤의 beauty 를 모두 더해요."),
       content: (
         <div style={{ padding: 16 }}>

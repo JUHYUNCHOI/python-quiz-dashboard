@@ -191,7 +191,7 @@ export function makeGiftsCh2(E, lang = "py") {
          *코드의 어느 줄* 인지만 짚어준다. (선생님 2026-07-30: "반복된건 없는지") */
       narr: t(E,
         "Those three moves are three lines of code. Find them: the sort, the slice, the print.",
-        "방금 그 세 동작이 코드에선 딱 세 줄이에요. 어느 줄인지 찾아보세요 — 정렬, 앞에서 자르기, 출력."),
+        "방금 그 세 동작이 코드에선 딱 세 줄이에요.\n어느 줄인지 찾아보세요 — 정렬, 앞에서 자르기, 출력."),
       sections: getGiftsSections(E),
     },
   ];

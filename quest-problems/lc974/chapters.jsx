@@ -10,7 +10,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "LeetCode #974 — Subarray Sums Divisible by K. Count subarrays whose sum is divisible by k. This is #560 with a twist: instead of sum = k, we want sum % k = 0.",
+        "LeetCode #974 — count subarrays whose sum is divisible by k.",
         "합이 k 로 나누어떨어지는 부분 배열이 몇 개인지 세어요."),
       content: (
         <div style={{ padding: 14 }}>
@@ -40,7 +40,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Key insight: (prefix[j] − prefix[i]) % k = 0  means  prefix[j] % k = prefix[i] % k. Two prefix sums with the SAME remainder → their difference is divisible by k.",
+        "Same remainder for two prefix sums means their difference is divisible by k.",
         "나머지가 같은 두 누계를 찾으면 그 차이가 k 로 나누어떨어져요."),
       content: (
         <div style={{ padding: 14 }}>
@@ -156,7 +156,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "One detail: Python's % operator always returns a non-negative result for positive divisors. So (-7) % 5 = 3 in Python (not -2). This means we can use remainder directly as a hashmap key without any adjustment.",
+        "Python's % always returns non-negative, so we can use it as a hashmap key directly.",
         "Python 의 % 는 나누는 수가 양수면 항상 0 이상을 돌려줘요."),
       content: (
         <div style={{ padding: 14 }}>

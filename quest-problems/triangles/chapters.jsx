@@ -22,7 +22,7 @@ export function makeTrianglesCh1(E) {
          narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
-        "FJ has N fence posts at integer (x, y) positions. He wants to choose three posts to form a RIGHT triangle whose two legs are parallel to the x and y axes.\nPrint TWICE the maximum area of such a triangle (to keep the answer integer).",
+        "Pick three fence posts to form the biggest axis-aligned right triangle.",
         "울타리 기둥 세 개로 가장 큰 직각 삼각형을 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -99,7 +99,7 @@ export function makeTrianglesCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Click any post — it becomes the right-angle corner. The simulator picks the farthest post on the same row (base) and the same column (height), then shows 2 × area = base × height.",
+        "Click a post to make it the right-angle corner.",
         "기둥을 클릭하면 그 기둥이 직각 꼭짓점이 돼요."),
     },
     // 1-4: Input
@@ -128,7 +128,7 @@ export function makeTrianglesCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Treat each post as the right-angle CORNER. Find the farthest post sharing same x (height) and farthest sharing same y (base). 2 × area = base × height. Sections build it one piece at a time.",
+        "Treat each post as the right-angle corner and find the largest area.",
         "각 기둥을 직각 꼭짓점으로 두고 가장 큰 넓이를 찾아요."),
       sections: getTrianglesSections(E),
     },

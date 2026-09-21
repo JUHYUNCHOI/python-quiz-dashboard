@@ -19,7 +19,7 @@ export function makeClockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A fence is described by a sequence of unit-step directions (N, E, S, W) that returns to the start, forming a closed simple polygon.\nDecide whether the fence is traced CLOCKWISE or COUNTER-CLOCKWISE.",
+        "Decide whether the closed fence is traced clockwise or counter-clockwise.",
         "울타리는 한 칸씩 가는 방향 N, E, S, W 를 죽 이어 놓은 것으로 주어져요.\n그대로 따라가면 처음 자리로 돌아오고, 길이 서로 겹치지 않아요.\n이 울타리를 시계 방향으로 그렸는지 반시계 방향으로 그렸는지 알아내요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -112,7 +112,7 @@ export function makeClockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Time to feel it. Pick a fence, step through each consecutive pair, watch (next − cur) mod 4 decide right / left / straight / U-turn, then let the verdict (CW vs CCW) drop out of the tally.",
+        "Step through each direction pair and watch right vs left turns decide the answer.",
         "울타리를 골라 한 걸음씩 보면\n(다음 − 지금) mod 4 가 오른쪽·왼쪽·직진·U턴 중 무엇인지 알려 줘요.\n오른쪽과 왼쪽을 세어 두면 마지막에 시계 방향인지 바로 나와요."),
       content: (
         <div style={{ padding: 12 }}>
@@ -135,7 +135,7 @@ export function makeClockCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Map N=0, E=1, S=2, W=3. For each consecutive pair, (next − cur) mod 4 = 1 → right turn, = 3 → left turn. CW iff right > left. Sections build it one piece at a time.",
+        "Map each direction to a number, then count right turns versus left turns.",
         "방향에 번호를 붙여요. N=0, E=1, S=2, W=3 이에요.\n이어진 두 방향에서 (다음 − 지금) mod 4 가 1 이면 오른쪽, 3 이면 왼쪽이에요.\n오른쪽이 왼쪽보다 많으면 CW 예요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
       sections: getClockFenceSections(E),
     },

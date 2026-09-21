@@ -184,7 +184,7 @@ export function makeMcc19ElimCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You are given a binary string and a limit K. You may DELETE at most K zeros; the leftover characters squeeze back into one string.\nPrint the longest run of consecutive 1s you can make.",
+        "Delete at most K zeros to make the longest possible run of 1s.",
         "0 을 최대 K 개 지워서 1 을 가장 길게 이어 붙여요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -362,7 +362,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every possible window and recounts each one: it does about N-times-N work — too slow for a long string. The fast way slides one window across in a single pass, keeping the zero and one counts as it goes: N work.",
+        "The slow way recounts every window; the fast way slides across in one pass.",
         "느린 방법은 구간마다 다시 세고, 빠른 방법은 한 번만 훑어요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

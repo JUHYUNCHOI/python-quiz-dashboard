@@ -23,7 +23,7 @@ export function makeMagicOrbsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have N magical orbs. Over and over, you fuse two orbs x and y into one new orb worth x + 2·y — until a single orb is left.\nMake that last orb as powerful as possible, then print its power mod 1e9+7.",
+        "Choose a fusing order to make the final orb's power as large as possible.",
         "구슬을 융합하는 순서를 골라 마지막 파워를 가장 크게 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -96,7 +96,7 @@ export function makeMagicOrbsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "How does the data arrive? First a line with T (number of test cases). Each test has n on its own line, then a line with the n orb powers. Print one answer per test.",
+        "See how the input data arrives, line by line.",
         "입력이 어떤 모양으로 들어오는지 먼저 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -156,7 +156,7 @@ export function makeMagicOrbsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Feel the fusion. Pick x, then pick y (y gets doubled), and fuse — over and over. Try different orders and watch the final power. Can you reach the best?",
+        "Fuse any two orbs yourself and watch the final power change.",
         "순서를 바꿔 가며 마지막 파워가 어떻게 달라지는지 봐요."),
       content: (
         <div style={{ padding: 12 }}>
@@ -199,7 +199,7 @@ export function makeMagicOrbsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Trying every possible fusing order explodes — with n orbs there are factorially many orders, hopeless past a handful. The fast way spots the pattern: sort ascending, and the k-th smallest orb is worth value × 2^k.",
+        "Sort instead of trying every possible fusing order.",
         "순서를 다 해보는 대신 정렬해서 규칙 하나로 끝내요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
