@@ -127,8 +127,8 @@ export function makeMakeDistinctCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Watch [4, 1, 4, 1] with K = 1, smallest first.",
-        "[4, 1, 4, 1] 에 K = 1. 작은 수부터 따라가 봐요."),
+        "Watch [4, 1, 4, 4, 1] with K = 1, smallest first.",
+        "[4, 1, 4, 4, 1] 에 K = 1. 작은 수부터 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
@@ -136,20 +136,28 @@ export function makeMakeDistinctCh1(E) {
           </div>
 
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
-            <div><b>{t(E, "Step 1.", "1.")}</b> {t(E, "Sort the group: ", "그룹 정렬: ")}<code style={{ color: "#2563eb" }}>[1, 1, 4, 4]</code></div>
+            <div><b>{t(E, "Step 1.", "1.")}</b> {t(E, "Sort the group: ", "그룹 정렬: ")}<code style={{ color: "#2563eb" }}>[1, 1, 4, 4, 4]</code></div>
             <div><b>{t(E, "Step 2.", "2.")}</b> {t(E, "The first one stays where it is: ", "첫 값은 그 자리에 그대로 놓아요: ")} <code>1</code> {t(E, " (0 ops)", " (0 회)")}</div>
             <div><b>{t(E, "Step 3.", "3.")}</b> {t(E, "Next is 1, not past 1, so push it to ", "다음이 1, 방금 놓은 1 을 넘지 못하니 밀어요 → ")}<code>2</code> ({t(E, "1 op", "1 회")})</div>
             <div><b>{t(E, "Step 4.", "4.")}</b> {t(E, "Next is 4, already past 2, so keep it: ", "다음 4 는 방금 놓은 2 를 이미 넘었으니 그대로: ")}<code>4</code> {t(E, " (0 ops)", " (0 회)")}</div>
             <div><b>{t(E, "Step 5.", "5.")}</b> {t(E, "Next is 4, not past 4, so push it to ", "다음 4 는 방금 놓은 4 를 넘지 못하니 밀어요 → ")}<code>5</code> ({t(E, "1 op", "1 회")})</div>
+            {/* 2026-09-21: 여기까지가 전부였다 — 밀 때마다 **항상 한 번**이었다.
+                그래서 코드의 `(cur - vals[i]) // k` 나눗셈이 왜 필요한지 화면이
+                한 번도 안 보여줬고, 학생이 그 조각에서 멈췄다 ("그만두고 싶었다").
+                예제에 4 를 하나 더 붙여 **한 번에 두 번 미는 경우**를 눈으로 보게 했다. */}
+            <div style={{ background: "#fef9c3", borderRadius: 6, padding: "3px 6px", margin: "3px -6px" }}>
+              <b>{t(E, "Step 6.", "6.")}</b> {t(E, "Last 4 is not past 5 — one push only reaches 5, so it takes ", "마지막 4 는 방금 놓은 5 를 넘지 못해요. 한 번 밀면 5 라 아직 겹쳐요 → ")}
+              <code>6</code> ({t(E, "2 ops at once", "한 번에 2 회")})
+            </div>
             <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #93c5fd" }}>
-              <b style={{ color: "#15803d" }}>{t(E, "Total: 0 + 1 + 0 + 1 = 2 ops", "합계: 0 + 1 + 0 + 1 = 2 회")}</b>
+              <b style={{ color: "#15803d" }}>{t(E, "Total: 0 + 1 + 0 + 1 + 2 = 4 ops", "합계: 0 + 1 + 0 + 1 + 2 = 4 회")}</b>
             </div>
           </div>
 
           <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: C.dim, lineHeight: 1.6 , wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              <>💡 Each value either stays, or moves up to (previous + K).<br />Sorting first makes this the best possible.</>,
-              <>💡 각 값은 그대로 두거나 이전값 + K 로 밀려요.<br />정렬을 먼저 하면 이 방법이 언제나 제일 좋아요.</>)}
+              <>💡 Each value either stays, or moves just past the one before it.<br />Why start from the smallest? If you moved a bigger one first, the smaller one would still have to climb over it later — the same work, or more.</>,
+              <>💡 각 값은 그대로 두거나, 바로 앞에 놓은 값을 막 넘을 만큼만 밀려요.<br />왜 작은 것부터 할까요? 큰 것을 먼저 옮겨 두면 작은 것이 나중에 그 위를 또 넘어야 해서, 일이 같거나 더 늘어나기 때문이에요.</>)}
           </div>
         </div>
       ),
@@ -162,18 +170,17 @@ export function makeMakeDistinctCh1(E) {
         "Now K = 2. Which numbers can ever collide?",
         "이번엔 K = 2 예요. 어떤 수끼리 부딪힐 수 있을까요?"),
       question: t(E,
-        "a = [5, 3, 5, 4], K = 2. Minimum ops?",
-        "a = [5, 3, 5, 4], K = 2. 최소 횟수는?"),
+        "a = [5, 3, 5, 4], K = 2. Which numbers can ever land on each other?",
+        "a = [5, 3, 5, 4], K = 2. 어떤 수끼리 같은 값이 될 수 있을까요?"),
       options: [
-        t(E, "0", "0"),
-        t(E, "1", "1"),
-        t(E, "2", "2"),
-        t(E, "3", "3"),
+        t(E, "Only 5, 3, 5 — the 4 is on its own", "5, 3, 5 끼리만. 4 는 혼자예요"),
+        t(E, "4 and 5 can meet too", "4 와 5 도 만날 수 있어요"),
+        t(E, "All four can meet each other", "네 수 모두 서로 만날 수 있어요"),
       ],
-      correct: 1,
+      correct: 0,
       explain: t(E,
-        "Right — 1.\nAdding 2 keeps odd numbers odd and even numbers even.\nSo 4 can never collide with 5, 3, 5 — it is on its own.\nOnly [3, 5, 5] matters: push one 5 up to 7. That is 1 op.",
-        "정답 — 1 회예요.\n2 를 더하면 홀수는 계속 홀수, 짝수는 계속 짝수예요.\n그래서 4 는 5, 3, 5 와 절대 안 부딪혀요. 혼자예요.\n볼 건 [3, 5, 5] 뿐이에요 — 5 하나를 7 로 밀면 끝. 1 회."),
+        "Right.\nAdding 2 keeps odd numbers odd and even numbers even, so 4 can never become 5, 3 or 5.\nSame remainder when divided by 2 = they can meet. Different remainder = they never can.\nSo we split the numbers by that remainder and solve each pile on its own.",
+        "맞아요.\n2 를 더하면 홀수는 계속 홀수, 짝수는 계속 짝수예요. 그래서 4 는 5·3·5 가 될 수 없어요.\n2 로 나눈 나머지가 같으면 만날 수 있고, 나머지가 다르면 영영 못 만나요.\n그래서 나머지끼리 따로 묶어서, 묶음마다 따로 풀면 돼요."),
     },
 
     // 1-5: Input — direction-only hint
@@ -183,12 +190,12 @@ export function makeMakeDistinctCh1(E) {
         "Now K is negative. Work it out yourself.",
         "이번엔 K 가 음수예요. 직접 풀어봐요."),
       question: t(E,
-        "a = [1, 1, 2], K = -1. Minimum ops?",
-        "a = [1, 1, 2], K = -1. 최소 횟수는?"),
+        "a = [3, 3, 4, 4], K = -2. Minimum ops?",
+        "a = [3, 3, 4, 4], K = -2. 최소 횟수는?"),
       hint: t(E,
-        "K is negative, so each push moves DOWN. Sort descending and walk left-to-right.",
-        "K 가 음수라서 밀면 값이 작아져요. 내림차순으로 정렬하고 왼쪽부터 살펴봐요."),
-      answer: 1,
+        "K is negative — which way does a push move a value? And which of these four can ever meet?",
+        "K 가 음수면 밀 때 값이 어느 쪽으로 갈까요? 그리고 이 넷 중 어떤 수끼리 만날 수 있을까요?"),
+      answer: 2,
     },
   ];
 }
