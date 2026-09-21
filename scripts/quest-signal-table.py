@@ -104,8 +104,18 @@ def main():
           r"[🔒 ]\s*(\S+?)(?:\(\w+\))?\s+(\d+)줄", "한줄")
     count(run(f"python3 scripts/check-stepper-first-step.py {names}"),
           r"🚨 (\S+).*?(\d+)", "스테퍼")
+    # 2026-09-21: 이 검사기가 **문법**(`+= K`·`a[i]`)과 **코드말 한국어**(`배열`·`원소`)도
+    # 보게 넓혔다. 선생님이 `makedistinct` 미션에서 막히신 자리다.
     count(run(f"python3 scripts/check-code-names-in-prose.py {names}"),
           r"■ (\S+) — (\d+)", "코드이름")
+
+    # 쪽과 쪽 사이 — "다음 쪽에서 보자" 는 약속이 지켜지나 (2026-09-21 새로 만들었다).
+    # 이건 **아무도 안 보던 층**이다. 검토자는 한 쪽씩 열고, 다른 검사기는 한 쪽 안만 본다.
+    for m in re.finditer(r"■ (\S+)\n((?:      .*\n)+)",
+                         run(f"python3 scripts/check-page-promise.py {names}")):
+        q = m.group(1)
+        if q in sig:
+            sig[q]["약속"] = m.group(2).count("다음 쪽에 없는 값")
     count(run(f"python3 scripts/check-codewalk-thinking-order.py {names}"),
           r"■ (\S+)\D+(\d+)", "생각순서")
 
@@ -130,7 +140,7 @@ def main():
         if "beats:" not in src:
             sig[q]["말풍선없음"] = 1
 
-    KEYS = ["기호", "내레이션", "한줄", "스테퍼", "코드이름", "생각순서", "말", "말풍선없음"]
+    KEYS = ["기호", "내레이션", "한줄", "스테퍼", "코드이름", "생각순서", "말", "약속", "말풍선없음"]
 
     CAP = 3   # 과목당 최대 점수 — 위 머리말 참고
 

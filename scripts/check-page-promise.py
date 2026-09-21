@@ -29,9 +29,15 @@ import re
 import sys
 
 # 다음을 가리키는 말
-POINTER = re.compile(r"(다음 쪽|다음 장|다음에|뒤에서|곧 |이따가|next page|next step)")
+# ⚠️ 2026-09-21 정밀도 손질 (project-lead 실측) — 처음엔 "다음에"·"뒤에서" 를 그냥 잡았더니
+#    `permutation` 의 *"다음에 적히는 값"*(= 다음 **차례**, 알고리즘 용어)까지 물었다.
+#    그래서 **쪽·장·페이지 가 같이 있을 때만** 잡는다. "다음 쪽" 은 그 자체로 분명해서 그대로 둔다.
+POINTER = re.compile(
+    r"(다음 쪽|다음 장|다음 페이지|next page|next slide"
+    r"|(?:다음에|뒤에서|곧|이따가)(?=[^.!?\n]{0,20}(?:쪽|장|페이지)))")
 # 그 문장이 들고 있는 값 — 숫자 · 대괄호 목록
-VALUE = re.compile(r"\[[^\]]*\]|(?<![\w.])\d+(?![\w.])")
+# ⚠️ `[i]` · `[j]` 같은 **한 글자 첨자**는 값이 아니라 코드 표기다 (bacteria 오탐).
+VALUE = re.compile(r"\[[^\]]{2,}\]|(?<![\w.])\d+(?![\w.])")
 STEP = re.compile(r'^\s*\{\s*$|^\s*(type|narr):', re.M)
 
 
@@ -68,7 +74,9 @@ def check(quest):
                 if not POINTER.search(sent):
                     continue
                 vals = [v for v in VALUE.findall(sent) if v]
-                vals = [v for v in set(vals) if not (v.isdigit() and int(v) <= 1)]
+                vals = [v for v in set(vals)
+                        if not (v.isdigit() and int(v) <= 1)
+                        and not re.fullmatch(r"\[\s*[a-zA-Z]\s*[+-]?\s*\d?\s*\]", v)]
                 if not vals:
                     continue
                 nxt = pages[i + 1]
