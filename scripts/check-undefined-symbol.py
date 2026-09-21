@@ -79,6 +79,62 @@ RULES = [
      "O(N log N) . 이 quest 가 복잡도를 가르치는 중이 아니면 '한 번만 훑어요' 가 낫다"),
 ]
 
+# ── 알고리즘 **이름**이 뜻보다 먼저 나오나 (2026-09-21) ───────────────────
+#
+# 왜 생겼나: 이틀 연속으로 같은 결함이 다른 quest 에서 났다.
+#   · reverseeng — `탐욕적` 이 🔒 코드 주석에서 처음 나왔다. 학생이 뜻을 모른 채 코드를 만났다.
+#   · wordproc   — 7쪽 제목이 `그리디 알고리즘` 인데 뜻 설명이 없다.
+#                  학생: *"여기서 멈칫했다. 뜻을 전혀 몰랐다."* (난이도 4/5)
+#
+# 왜 기존 그물에 안 걸렸나: `check-code-names-in-prose` 의 SNAKE/CAMEL 은
+#   **밑줄·대문자로 이어붙인 낱말**만 본다. `그리디` 는 한국어 낱말이라 구조적으로 밖이다.
+#   낱말 검사기도 "어려운 말" 사전에 없어서 안 걸렸다.
+#
+# 이 규칙만 다른 점: **한 문자열이 아니라 quest 전체**를 본다.
+#   이름이 어딘가에서 한 번이라도 **정의와 함께** 나오면 통과다.
+#   "이 쪽에 정의가 있나" 가 아니라 "이 quest 안에 있나" 를 묻는다 — 느슨한 쪽으로 잡았다.
+ALGO_TERMS = {
+    "그리디": ("그리디", "탐욕"),
+    "완전탐색": ("완전 탐색", "완전탐색", "브루트 포스", "브루트포스"),
+    "이분탐색": ("이분 탐색", "이진 탐색", "이분탐색", "이진탐색"),
+    "재귀": ("재귀",),
+    "누적합": ("누적 합", "누적합", "프리픽스 섬"),
+    "투포인터": ("투 포인터", "투포인터"),
+    "슬라이딩윈도우": ("슬라이딩 윈도우",),
+    "동적계획법": ("동적 계획법", "다이나믹 프로그래밍", "메모이제이션"),
+    "백트래킹": ("백트래킹",),
+    "시뮬레이션": ("시뮬레이션",),
+}
+
+# 이름 옆에 이게 있으면 **이름을 붙이는 중**이다 = 통과
+DEFINE_NEAR = (
+    # "…라고 불러요" · "…라는 뜻" — 대놓고 이름 붙이는 말
+    r"(라고\s*(불러|부릅|해요|합니다|하는|한다)|이라고\s*(불러|부릅|해요|합니다)"
+    r"|라는\s*(뜻|말|방법|이름)"
+    # "방금 본 게 바로 슬라이딩 윈도우예요" — 겪은 뒤에 이름 붙이는 모양.
+    #   feedback_first_concept_scaffolding 이 **권장하는** 자리라 반드시 통과시킨다.
+    r"|(바로|이게|이걸|이것이|방금)\b"
+    r"|is\s+called|we\s+call|call(ed)?\s+(this|that|it)|means\b|known\s+as)"
+)
+# "한 번 푼 건 영원히 다시 써요 = 메모이제이션" · "모든 순열 다 해 보기 (브루트포스)"
+#   — 등호나 괄호로 **쉬운 말 옆에** 이름을 붙인 모양. 이것도 정의다.
+DEFINE_GLUE = ("=", "(", ")", "—")
+
+
+def names_it(text, aliases):
+    """이 글이 이름을 **붙이고 있나**. 붙이는 중이면 통과."""
+    if re.search(DEFINE_NEAR, text):
+        return True
+    for w in aliases:
+        i = text.find(w)
+        while i != -1:
+            near = text[max(0, i - 4): i] + text[i + len(w): i + len(w) + 2]
+            if any(g in near for g in DEFINE_GLUE):
+                return True
+            i = text.find(w, i + 1)
+    return False
+
+
 # 안 보는 기호 — `≤ ≥ × ÷` 는 제약 카드에서 이미 통하고 대신 쓸 말이 마땅치 않다.
 # 규칙에 안 넣는 것으로 처리한다.
 
@@ -200,6 +256,7 @@ def main():
 
     files = sorted(glob.glob("quest-problems/*/*.jsx"))
     hits = {}          # quest -> [(파일, 줄, 이름, 조각)]
+    allq = {}          # quest -> [(파일, 줄, 화면 글)] — 알고리즘 이름 규칙이 쓴다
     for f in files:
         quest = f.split("/")[1]
         if want and quest not in want:
@@ -209,6 +266,8 @@ def main():
 
         chunks = list(screen_strings(src))
         chunks += jsx_text(src, holes)
+        for pos, text in chunks:
+            allq.setdefault(quest, []).append((os.path.basename(f), line_of(src, pos), text))
 
         for pos, text in chunks:
             # 한글도 영어 문장도 아닌 조각(식별자·클래스명)은 건너뛴다
@@ -268,6 +327,36 @@ def main():
         print("     \"한 번만 훑어요\" 같은 말이 같이 있으면 그대로 둬도 된다.")
         print("     복잡도를 **가르치는 중인 quest** 면 표기 그대로가 맞다.\n")
 
+    # ── 알고리즘 이름이 뜻보다 먼저 나오나 (quest 전체를 본다)
+    algo = {}
+    for quest, rows in allq.items():
+        for key, aliases in ALGO_TERMS.items():
+            first = None
+            defined = False
+            for fn, ln, text in rows:
+                if not any(w in text for w in aliases):
+                    continue
+                if first is None:
+                    frag = re.sub(r"\s+", " ", text).strip()
+                    first = (fn, ln, frag)
+                if names_it(text, aliases):
+                    defined = True
+                    break
+            if first and not defined:
+                algo.setdefault(quest, []).append((key, first))
+
+    n_algo = sum(len(v) for v in algo.values())
+    if n_algo:
+        print(f"  ── 따로: **뜻 없이 쓰인 알고리즘 이름** {n_algo}건 · quest {len(algo)}개")
+        print("     학생이 여기서 멈춘다 — 이름이 뜻보다 먼저 나왔다.")
+        print("     통과 조건은 느슨하다: 이 quest **어딘가에서** 한 번이라도")
+        print("     \"~라고 불러요\" 꼴로 이름을 붙이면 안 걸린다.\n")
+        for quest in sorted(algo, key=lambda q: (-len(algo[q]), q)):
+            print(f"     ■ {quest}")
+            for name, (fn, ln, frag) in sorted(algo[quest]):
+                print(f"         {fn}:{ln}  [{name}]  {frag[:74]}")
+            print()
+
     if not want:
         print("  왜 걸리나:")
         for name, _rx, why in RULES:
@@ -276,7 +365,8 @@ def main():
     print("\n⚠️ 판정이 아니라 **볼 자리 표시**다. 물어볼 것은 하나다 —")
     print("   **이 기호의 뜻이 이 화면 안에 있나?** 없으면 말로 풀어라.")
     print("⚠️ 코드 배열 안은 안 본다. 코드의 `N*N` 은 코드다.")
-    sys.exit(1 if total else 0)
+    print("⚠️ 알고리즘 이름은 **사전에 있는 것만** 본다. 새 이름을 쓰면 ALGO_TERMS 에 넣어라.")
+    sys.exit(1 if (total or n_algo) else 0)
 
 
 if __name__ == "__main__":

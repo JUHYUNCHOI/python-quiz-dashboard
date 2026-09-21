@@ -78,6 +78,8 @@ node scripts/see-flow.mjs http://localhost:3000/quest/<id>   # 쪽과 쪽 사이
 python3 scripts/check-word-difficulty.py <id>                # 어려운 말 · 같은 것 다른 이름 · 번역 티
 python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장 여러 개
 python3 scripts/check-undefined-symbol.py <id>               # 뜻 안 밝힌 기호 (10⁹ · N² · ⌈⌉ · Σ · O(N))
+                                                            #   + 뜻 없이 쓰인 **알고리즘 이름** (그리디·이분 탐색·누적합…)
+                                                            #     2026-09-21 추가 — 이틀 연속 다른 quest 에서 같은 결함이 났다
 python3 scripts/check-stepper-first-step.py <id>             # 코드 스테퍼 **첫 걸음**이 화면 밖 이름을 쓰나
 python3 scripts/check-code-names-in-prose.py <id>            # 코드 보기 전에 코드 이름이 나오나 (deal_price…)
 python3 scripts/check-codewalk-thinking-order.py <id>        # 코드 설명이 파일 순서를 읊나, 생각의 순서로 이끄나

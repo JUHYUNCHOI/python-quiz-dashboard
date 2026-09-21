@@ -57,19 +57,17 @@ export function ProgressiveCodeStepper({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          {/* 2026-09-21 PM 판정: 형제문제 배지(원형+숫자)와 이 배지(원형+숫자)가
-              같은 모양이라 학생이 둘을 헷갈렸다 — 형제 쪽엔 "같은 대회" 라벨이
-              붙어 있는데 이쪽엔 아무 라벨이 없어서 "이 숫자들이 뭔지 화면에서
-              못 읽었다"(학생 인터뷰). 형제 라벨 모양을 그대로 복사한다
-              (client.tsx:405-408 — text-[10px] font-semibold whitespace-nowrap +
-              hidden sm:inline / sm:hidden). 색은 형제의 노랑과 겹치지 않게
-              스테퍼 자신의 accentColor(보라 계열)를 쓴다. */}
+          {/* 2026-09-21 PM 판정 (2차): "이 문제 안에서" 는 전치사구고 무엇의
+              번호인지 가리키는 명사가 없었다 — 학생이 끝까지 못 알아봤다.
+              형제 배지의 "같은 대회" 는 그 자체로 완결된 명사구라 작동했다.
+              같은 모양으로 명사를 넣는다 — "코드 부분 N" 꼴(무엇을 세는지
+              밝힌다). 모양·색·크기는 그대로, 문구만 바꾼다. */}
           <span
             className="text-[10px] font-semibold whitespace-nowrap"
             style={{ color: accentColor }}
           >
-            <span className="hidden sm:inline">{t(E, "In this problem", "이 문제 안에서")}</span>
-            <span className="sm:hidden">{t(E, "This problem", "이 문제")}</span>
+            <span className="hidden sm:inline">{t(E, "Code part", "코드 부분")}</span>
+            <span className="sm:hidden">{t(E, "Part", "코드")}</span>
           </span>
           <div style={{ display: "flex", gap: 4 }}>
             {sections.map((_, i) => (
