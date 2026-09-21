@@ -183,30 +183,57 @@ const FULL_CPP = [
 export function getMcc15ChocoSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "1️⃣ Set up the stack", "1️⃣ 스택을 준비해요"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 6), cpp: FULL_CPP.slice(0, 11),
       why: [
-        t(E, "The stack holds exactly the bars that have not found a partner yet. The bar on top is the one currently sitting next to the bar we are reading.",
-            "스택에는 '아직 짝을 못 찾은 바' 들만 남아요. 그래서 맨 위 바가, 지금 읽는 바의 실제 왼쪽 이웃이에요."),
-        t(E, "That is why the chain reaction is free: when 9 and 9 leave, the stack top automatically becomes 5 — the two 5s meet without us moving anything.",
-            "그래서 연쇄가 저절로 처리돼요. 9 두 개가 빠지면 스택 맨 위가 저절로 5 가 되고, 아무것도 옮기지 않아도 5 와 5 가 만나요."),
-        t(E, "Every bar is pushed at most once and popped at most once, so the whole scan is one pass over N bars — fast enough for N up to 1,000,000.",
-            "바 하나는 최대 한 번 쌓이고 최대 한 번 빠져요. 그래서 전체가 N 번 훑기 한 번이에요 — N 이 1,000,000 이어도 충분히 빨라요."),
-        t(E, "We add 2 × bar, not bar: a pair is two bars of the same length.",
-            "bar 가 아니라 2 × bar 를 더해요 — 짝은 같은 길이의 바 두 개니까요."),
+        t(E, "What do we have to hand back? The total length Bessie grabs. So keep a stack of bars that have not found a partner yet — the bar on top is the one actually sitting next to the bar we are about to read.",
+            "무엇을 내놓아야 하나요? Bessie 가 가져간 총 길이예요.\n그러니 '아직 짝을 못 찾은 바' 들을 스택에 쌓아 둬요.\n스택 맨 위가, 지금 읽는 바의 실제 왼쪽 이웃이 돼요."),
       ],
       pyOnly: [
         t(E, "A plain list is already a stack: append() puts one on top, pop() takes the top one off, stack[-1] peeks at it.",
             "파이썬 리스트가 곧 스택이에요. append() 로 위에 올리고, pop() 으로 맨 위를 빼고, stack[-1] 로 맨 위를 봐요."),
-        t(E, "if stack and stack[-1] == bar checks 'not empty' first — reading stack[-1] on an empty list would crash.",
-            "if stack and stack[-1] == bar 는 '비었는지' 를 먼저 봐요. 빈 리스트에 stack[-1] 을 쓰면 에러가 나거든요."),
       ],
       cppOnly: [
         t(E, "vector works as a stack: push_back / pop_back / back(). std::stack would work too.",
             "vector 를 스택처럼 써요.\npush_back 으로 올리고, pop_back 으로 빼고, back() 으로 맨 위를 봐요.\nstd::stack 을 써도 돼요."),
         t(E, "The total needs long long: 1,000,000 bars of length 1,000,000 would overflow int.",
             "총합은 long long 이어야 해요. 길이 1,000,000 짜리 바가 1,000,000 개면 int 로는 넘쳐요."),
+      ],
+    },
+    {
+      label: t(E, "2️⃣ Compare with the top", "2️⃣ 맨 위와 비교해요"),
+      color: "#7c3aed",
+      py: FULL_PY.slice(6, 9), cpp: FULL_CPP.slice(11, 16),
+      why: [
+        t(E, "For each new bar, compare it with the top of the stack — if they match, we just found a pair.",
+            "새 바가 들어올 때마다 스택 맨 위와 비교해요.\n둘이 같으면 짝을 찾은 거예요."),
+      ],
+      pyOnly: [
+        t(E, "if stack and stack[-1] == bar checks 'not empty' first — reading stack[-1] on an empty list would crash.",
+            "if stack and stack[-1] == bar 는 '비었는지' 를 먼저 봐요.\n빈 리스트에 stack[-1] 을 쓰면 에러가 나거든요."),
+      ],
+    },
+    {
+      label: t(E, "3️⃣ Take the pair, or stack it", "3️⃣ 짝이면 가져가고, 아니면 쌓아요"),
+      color: "#16a34a",
+      py: FULL_PY.slice(9, 13), cpp: FULL_CPP.slice(16, 22),
+      why: [
+        t(E, "We add 2 × bar, not bar: a pair is two bars of the same length.",
+            "bar 가 아니라 2 × bar 를 더해요 — 짝은 같은 길이의 바 두 개니까요."),
+        t(E, "That is why the chain reaction is free: when 9 and 9 leave, the stack top automatically becomes 5 — the two 5s meet without us moving anything.",
+            "그래서 연쇄가 저절로 처리돼요.\n9 두 개가 빠지면 스택 맨 위가 저절로 5 가 되고,\n아무것도 옮기지 않아도 5 와 5 가 만나요."),
+        t(E, "Every bar is pushed at most once and popped at most once, so the whole scan is one pass over N bars — fast enough for N up to 1,000,000.",
+            "바 하나는 최대 한 번 쌓이고 최대 한 번 빠져요.\n그래서 전체가 N 번 훑기 한 번이에요 — N 이 1,000,000 이어도 충분히 빨라요."),
+      ],
+    },
+    {
+      label: t(E, "4️⃣ Print the answer", "4️⃣ 답을 출력해요"),
+      color: "#0891b2",
+      py: FULL_PY.slice(13), cpp: FULL_CPP.slice(22),
+      why: [
+        t(E, "Whatever is left in the stack never found a partner — total already holds the answer.",
+            "스택에 끝까지 남은 바들은 짝을 못 찾은 거예요.\ntotal 에 이미 답이 들어 있어요."),
       ],
     },
   ];

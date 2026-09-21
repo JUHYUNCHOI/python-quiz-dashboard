@@ -61,35 +61,65 @@ const FULL_CPP = [
 export function getMcc15RectSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "1️⃣ Take in the three corners", "1️⃣ 꼭짓점 세 개를 받아요"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 4), cpp: FULL_CPP.slice(0, 7),
       why: [
-        t(E, "Because the rectangle is parallel to the axes, only two different x values exist in it (left side and right side) — and only two different y values.",
-            "직사각형이 축에 평행하니까 x 좌표는 딱 두 종류(왼쪽 변·오른쪽 변)뿐이에요. y 도 아래쪽·위쪽 두 종류뿐이고요."),
-        t(E, "Each value is shared by two corners, so among the 3 given x's exactly two match and one is left without a partner — that lonely x is the answer's x. Same for y.",
-            "값 하나를 꼭짓점 두 개가 나눠 쓰니, 주어진 x 3개 중 두 개는 같고 하나는 짝이 없어요 — 그 짝 없는 x 가 답의 x 예요. y 도 똑같아요."),
-        t(E, "Negative coordinates work exactly the same — we never compare sizes, only whether two values are equal.",
-            "좌표가 음수여도 그대로 동작해요 — 크기 비교가 아니라 같은지만 보니까요."),
-        t(E, "The order of the 3 given corners does not matter: whichever two share an x, the remaining one is the lonely one.",
-            "주어진 꼭짓점 3개의 순서는 상관없어요. 어느 둘이 x 를 공유하든, 남는 하나가 짝 없는 값이에요."),
+        t(E, "What do we have to hand back? The 4th corner's coordinates, x4 and y4. So first read the three corners we're given.",
+            "무엇을 내놓아야 하나요? 4번째 꼭짓점의 좌표, x4 와 y4예요.\n그러니 먼저 주어진 꼭짓점 세 개를 읽어요."),
       ],
       pyOnly: [
         t(E, "map(int, input().split()) reads x and y from one line at once and turns both into numbers.",
             "map(int, input().split()) 로 한 줄에서 x, y 를 한 번에 받아 숫자로 바꿔요."),
-        /* 2026-09-09: 여기서 "짧은 본문은 콜론 뒤에 한 줄로 써도 돼요" 라며
-           압축 스타일을 **정답처럼 가르치고 있었다.** 선생님(2026-09-08):
-           "코드 보기 좋게 해줘 한줄에 여러개 쓰지 말고". 코드도 같이 폈다. */
-        t(E, "if / elif / else picks exactly one of the three — the two that match are skipped, and the odd one out is the answer.",
-            "if / elif / else 는 셋 중 하나만 골라요. 짝이 맞는 둘은 건너뛰고, 짝 없는 하나가 답이 돼요."),
-        t(E, "print(x4, y4) already puts a space between the two numbers, which is exactly the required output format.",
-            "print(x4, y4) 는 두 숫자 사이에 공백을 알아서 넣어줘요 — 요구하는 출력 형식 그대로예요."),
       ],
       cppOnly: [
         t(E, "cin >> x1 >> y1 >> ... skips spaces and newlines on its own, so all 3 lines can be read in one statement.",
             "cin >> x1 >> y1 >> ... 는 줄바꿈·공백을 알아서 건너뛰어요 — 3줄을 한 문장으로 읽어도 괜찮아요."),
         t(E, "int is plenty here: coordinates stay within −1,000 to 1,000.",
             "좌표가 −1,000 ~ 1,000 이라 int 로 충분해요."),
+      ],
+    },
+    {
+      label: t(E, "2️⃣ Find the lonely x", "2️⃣ 짝 없는 x 를 찾아요"),
+      color: "#0891b2",
+      py: FULL_PY.slice(4, 13), cpp: FULL_CPP.slice(7, 16),
+      why: [
+        t(E, "Because the rectangle is parallel to the axes, only two different x values exist in it — a left side and a right side.",
+            "직사각형이 축에 평행하니까 x 좌표는 딱 두 종류뿐이에요 — 왼쪽 변과 오른쪽 변이요."),
+        t(E, "Each value is shared by two corners, so among the 3 given x's exactly two match and one is left without a partner — that lonely x is the answer's x4.",
+            "값 하나를 꼭짓점 두 개가 나눠 쓰니, 주어진 x 3개 중 두 개는 같고 하나는 짝이 없어요.\n그 짝 없는 x 가 x4예요."),
+        t(E, "Negative coordinates work exactly the same — we never compare sizes, only whether two values are equal.",
+            "좌표가 음수여도 그대로 동작해요 — 크기 비교가 아니라 같은지만 보니까요."),
+      ],
+      pyOnly: [
+        /* 2026-09-09: 여기서 "짧은 본문은 콜론 뒤에 한 줄로 써도 돼요" 라며
+           압축 스타일을 **정답처럼 가르치고 있었다.** 선생님(2026-09-08):
+           "코드 보기 좋게 해줘 한줄에 여러개 쓰지 말고". 코드도 같이 폈다. */
+        t(E, "if / elif / else picks exactly one of the three — the two that match are skipped, and the odd one out is the answer.",
+            "if / elif / else 는 셋 중 하나만 골라요. 짝이 맞는 둘은 건너뛰고, 짝 없는 하나가 답이 돼요."),
+      ],
+    },
+    {
+      label: t(E, "3️⃣ Find the lonely y", "3️⃣ 짝 없는 y 를 찾아요"),
+      color: "#16a34a",
+      py: FULL_PY.slice(13, 20), cpp: FULL_CPP.slice(16, 24),
+      why: [
+        t(E, "y works exactly the same way as x — mirrored.",
+            "y 도 x 와 똑같은 방법으로 찾아요."),
+        t(E, "The order of the 3 given corners does not matter: whichever two share a value, the remaining one is the lonely one.",
+            "주어진 꼭짓점 3개의 순서는 상관없어요. 어느 둘이 값을 공유하든, 남는 하나가 짝 없는 값이에요."),
+      ],
+    },
+    {
+      label: t(E, "4️⃣ Print the answer", "4️⃣ 답을 출력해요"),
+      color: "#7c3aed",
+      py: FULL_PY.slice(20), cpp: FULL_CPP.slice(24),
+      why: [],
+      pyOnly: [
+        t(E, "print(x4, y4) already puts a space between the two numbers, which is exactly the required output format.",
+            "print(x4, y4) 는 두 숫자 사이에 공백을 알아서 넣어줘요 — 요구하는 출력 형식 그대로예요."),
+      ],
+      cppOnly: [
         t(E, "Print the space yourself: cout << x4 << \" \" << y4 — C++ does not insert one for you.",
             "C++ 는 공백을 자동으로 넣어주지 않아요. 그래서 cout << x4 << \" \" << y4 처럼 직접 넣어요."),
       ],

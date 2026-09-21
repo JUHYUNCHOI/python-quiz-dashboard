@@ -65,30 +65,50 @@ const FULL_CPP = [
 export function getMcc15EqSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "1️⃣ Get ready — read values, write the rule", "1️⃣ 준비해요 — 값을 받고 검사 규칙을 만들어요"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 11), cpp: FULL_CPP.slice(0, 22),
       why: [
-        t(E, "There are only 8 candidates — '=' in the first gap or the second gap, times 4 operators — so trying every one of them is the surest way. The problem guarantees the answer is unique, so we stop at the first match.",
-            "경우가 8가지뿐이라 — '=' 가 앞칸이냐 뒷칸이냐 2가지 × 기호 4가지 — 전부 해보는 게 가장 확실해요. 답은 하나뿐이라고 문제가 약속했으니까 처음 맞는 데서 멈춰요."),
-        t(E, "One check function handles all four operators, and the same function is reused for both places the '=' can go: check(a, op, b, c) tests a op b = c, and check(b, op, c, a) tests a = b op c.",
-            "check 함수 하나로 네 가지 기호를 다 처리하고, 같은 함수를 '=' 자리 두 가지에 다시 써요. check(a, op, b, c) 는 a op b = c 를, check(b, op, c, a) 는 a = b op c 를 확인해요."),
+        t(E, "What are we searching for? Which of 8 candidates makes a true equation — '=' in the first gap or the second, times 4 operators. That's few enough to just try them all, and the problem guarantees the answer is unique, so we can stop at the first match.",
+            "무엇을 찾아야 하나요? 8가지 후보 중 등식이 맞는 것 하나예요.\n'=' 가 앞칸이냐 뒷칸이냐 2가지 × 기호 4가지니까요.\n수가 적어서 다 해봐도 되고, 답은 하나뿐이라고 문제가 약속했으니\n처음 맞는 데서 멈춰요."),
+        t(E, "So write one check function that handles all four operators. We will reuse it for both places the '=' can go: check(a, op, b, c) tests a op b = c, and check(b, op, c, a) tests a = b op c.",
+            "그래서 check 함수 하나로 네 가지 기호를 다 처리해요.\n'=' 자리 두 가지에 이 함수를 그대로 또 써요.\ncheck(a, op, b, c) 는 a op b = c 를,\ncheck(b, op, c, a) 는 a = b op c 를 확인해요."),
         t(E, "Division is turned into multiplication: x / y == z is rewritten as x == y * z. '/' is real division here, so comparing decimals could be off by a tiny amount — this way the whole check stays between whole numbers.",
-            "나눗셈은 곱셈으로 뒤집어요. x / y == z 를 x == y * z 로 바꾸는 거예요. '/' 는 소수까지 그대로 계산해서, 소수로 비교하면 아주 작은 오차가 날 수 있어요. 이렇게 하면 확인이 전부 정수끼리 이뤄져요."),
+            "나눗셈은 곱셈으로 뒤집어요. x / y == z 를 x == y * z 로 바꿔요.\n'/' 는 소수까지 그대로 계산해서, 소수로 비교하면 아주 작은 오차가 날 수 있어요.\n이렇게 하면 확인이 전부 정수끼리 이뤄져요."),
         t(E, "That same rule explains why 3/2=1 is not a valid equation: 3/2 is 1.5, and 1.5 is not 1.",
             "3/2=1 이 올바른 등식이 아닌 이유도 똑같아요. 3/2 는 1.5 이고, 1.5 는 1 이 아니니까요."),
       ],
-      pyOnly: [
-        t(E, "for op in \"+-*/\" walks a string one character at a time, so op becomes '+', then '-', then '*', then '/'.",
-            "for op in \"+-*/\" 는 문자열을 한 글자씩 훑어요. op 에 '+', '-', '*', '/' 가 차례로 들어와요."),
-        t(E, "str(a) + op + str(b) + \"=\" + str(c) glues the numbers and symbols into one string with no spaces, exactly as the output format asks.",
-            "str(a) + op + str(b) + \"=\" + str(c) 로 숫자와 기호를 공백 없이 하나의 문자열로 이어 붙여요. 출력 형식이 요구하는 그대로예요."),
-      ],
       cppOnly: [
         t(E, "Values go up to 1,000,000, so x * y can reach 10^12 — too big for int. Use long long.",
-            "값이 1,000,000 까지 커질 수 있어서 x * y 가 1 조까지 가요. int 에는 담기지 않으니 더 큰 정수인 long long 을 써요."),
+            "값이 1,000,000 까지 커질 수 있어서 x * y 가 1 조까지 가요.\nint 에는 담기지 않으니 더 큰 정수인 long long 을 써요."),
+      ],
+    },
+    {
+      label: t(E, "2️⃣ Try '=' in the first gap: a op b = c", "2️⃣ '=' 가 앞칸일 때 — a op b = c"),
+      color: "#ea580c",
+      py: FULL_PY.slice(11, 15), cpp: FULL_CPP.slice(22, 27),
+      why: [
+        t(E, "Go through the four operators and test a op b = c with each one.",
+            "네 기호를 하나씩 넣어 a op b = c 가 맞는지 봐요."),
+      ],
+      pyOnly: [
+        t(E, "for op in \"+-*/\" walks a string one character at a time, so op becomes '+', then '-', then '*', then '/'.",
+            "for op in \"+-*/\" 는 문자열을 한 글자씩 훑어요.\nop 에 '+', '-', '*', '/' 가 차례로 들어와요."),
+        t(E, "str(a) + op + str(b) + \"=\" + str(c) glues the numbers and symbols into one string with no spaces, exactly as the output format asks.",
+            "str(a) + op + str(b) + \"=\" + str(c) 로 숫자와 기호를\n공백 없이 하나의 문자열로 이어 붙여요. 출력 형식이 요구하는 그대로예요."),
+      ],
+      cppOnly: [
         t(E, "cout << a << op << b << \"=\" << c prints the pieces back to back, so no spaces sneak in.",
             "cout << a << op << b << \"=\" << c 는 조각들을 연달아 출력해서 공백이 끼지 않아요."),
+      ],
+    },
+    {
+      label: t(E, "3️⃣ Otherwise try the second gap: a = b op c", "3️⃣ 아니면 뒷칸일 때 — a = b op c"),
+      color: "#16a34a",
+      py: FULL_PY.slice(15), cpp: FULL_CPP.slice(27),
+      why: [
+        t(E, "Same function, same operator — just check the other placement of '='. If a op b never matched c, maybe b op c matches a instead.",
+            "같은 함수, 같은 기호로 '=' 의 다른 자리를 확인해요.\na op b 가 c 와 안 맞았다면, 이번엔 b op c 가 a 와 맞는지 봐요."),
       ],
     },
   ];

@@ -70,34 +70,69 @@ const FULL_CPP = [
 export function getMcc15BahasaSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "1️⃣ Take in the sentence", "1️⃣ 문장을 받아요"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 3), cpp: FULL_CPP.slice(0, 12),
       why: [
-        t(E, "Cut the problem twice — sentence → words → syllables — and all that is left is one tiny rule about a single syllable.",
-            "문제를 '문장 → 단어 → 음절' 로 두 번 쪼개면, 남는 건 음절 하나짜리 규칙 하나뿐이에요."),
-        t(E, "That rule: consonant start → echo = 'f' + the rest of the syllable; vowel start → echo = 'f' + the whole syllable. Then write syllable + echo.",
-            "규칙은 이래요. 자음으로 시작하면 메아리 = 'f' + 음절의 나머지 이고, 모음으로 시작하면 메아리 = 'f' + 음절 전체예요. 그다음 음절 + 메아리 로 적어요."),
+        t(E, "What do we have to hand back? Each word echoed by Bessie's rule. So cut the problem twice — sentence → words → syllables — and all that is left is one tiny rule about a single syllable.",
+            "무엇을 내놓아야 하나요? 각 단어를 규칙대로 메아리쳐 붙인 문장이에요.\n그러니 문제를 '문장 → 단어 → 음절' 로 두 번 쪼개요.\n그러면 남는 건 음절 하나짜리 규칙 하나뿐이에요."),
         t(E, "You never need to list all 21 consonants — anything that is not one of the 5 vowels (a e i o u) is a consonant. Note that 'y' is a consonant too.",
-            "자음 21개를 다 적을 필요 없어요. 모음 5개(a e i o u)가 아니면 전부 자음이니까요. 'y' 도 자음이에요."),
+            "자음 21개를 다 적을 필요 없어요.\n모음 5개(a e i o u)가 아니면 전부 자음이니까요.\n'y' 도 자음이에요."),
+      ],
+      cppOnly: [
+        t(E, "The sentence contains spaces, so read the whole line with getline(cin, sentence) instead of cin >>.",
+            "문장에 공백이 있으니 cin >> 대신 getline(cin, sentence) 로 한 줄 통째로 받아요."),
+      ],
+    },
+    {
+      label: t(E, "2️⃣ Split into syllables", "2️⃣ 음절 단위로 쪼개요"),
+      color: "#ea580c",
+      py: FULL_PY.slice(3, 7), cpp: FULL_CPP.slice(12, 21),
+      why: [
         t(E, "The slashes only mark where syllables end — they must not appear in the output.",
             "슬래시는 음절이 끝나는 자리를 표시할 뿐이라 출력에는 나오면 안 돼요."),
       ],
       pyOnly: [
-        t(E, "word.split(\"/\") hands you the syllables, and \" \".join(...) puts the spaces between words back at the end.",
-            "word.split(\"/\") 가 음절을, \" \".join(...) 이 단어 사이 공백을 되살려요."),
+        t(E, "word.split(\"/\") hands you the syllables of that word, one by one.",
+            "word.split(\"/\") 가 그 단어의 음절을 하나씩 꺼내줘요."),
+      ],
+      cppOnly: [
+        t(E, "C++ has no split, so collect characters one by one into syl until you hit a '/' or a space.",
+            "C++ 에는 split 이 없어서, 글자를 하나씩 모아 syl 에 쌓다가 '/' 나 공백을 만나면 멈춰요."),
+        t(E, "The loop runs to i == size() so the last syllable (which has no '/' or space after it) also gets flushed.",
+            "반복을 i == size() 까지 돌려서, 뒤에 '/' 나 공백이 없는 마지막 음절도 빠짐없이 처리해요."),
+      ],
+    },
+    {
+      label: t(E, "3️⃣ Apply the echo rule", "3️⃣ 메아리 규칙을 적용해요"),
+      color: "#16a34a",
+      py: FULL_PY.slice(7, 12), cpp: FULL_CPP.slice(21, 39),
+      why: [
+        t(E, "That rule: consonant start → echo = 'f' + the rest of the syllable; vowel start → echo = 'f' + the whole syllable. Then write syllable + echo.",
+            "규칙은 이래요.\n자음으로 시작하면 메아리 = 'f' + 음절의 나머지이고,\n모음으로 시작하면 메아리 = 'f' + 음절 전체예요.\n그다음 음절 + 메아리 로 적어요."),
+      ],
+      pyOnly: [
         t(E, "syl[1:] is the syllable without its first letter, so \"f\" + syl[1:] swaps that first consonant for 'f'.",
             "syl[1:] 은 첫 글자를 뺀 음절이라, \"f\" + syl[1:] 이 첫 자음을 'f' 로 갈아끼는 셈이에요."),
       ],
       cppOnly: [
-        t(E, "C++ has no split, so read the characters one by one; when you hit a '/' or a space, the syllable you were collecting is finished.",
-            "C++ 에는 split 이 없어서, 글자를 하나씩 읽다가 '/' 나 공백을 만나면 모으던 음절이 끝난 걸로 처리해요."),
-        t(E, "The sentence contains spaces, so read the whole line with getline(cin, sentence) instead of cin >>.",
-            "문장에 공백이 있으니 cin >> 대신 getline(cin, sentence) 로 한 줄 통째로 받아요."),
-        t(E, "The loop runs to i == size() so the last syllable (which has no '/' or space after it) also gets flushed.",
-            "반복을 i == size() 까지 돌려서, 뒤에 '/' 나 공백이 없는 마지막 음절도 빠짐없이 처리해요."),
+        t(E, "When you hit '/' or a space, the syllable you were collecting is finished — apply the rule, add a space between words if needed, then reset syl for the next one.",
+            "'/' 나 공백을 만나면 모으던 음절이 끝난 거예요.\n규칙을 적용하고, 단어 사이라면 공백도 넣은 뒤 syl 을 비워요."),
         t(E, "syl.substr(1) is C++'s version of syl[1:] — the syllable without its first letter.",
             "syl.substr(1) 이 C++ 의 syl[1:] 이에요. 첫 글자를 뺀 음절이죠."),
+      ],
+    },
+    {
+      label: t(E, "4️⃣ Print the answer", "4️⃣ 답을 출력해요"),
+      color: "#0891b2",
+      py: FULL_PY.slice(12), cpp: FULL_CPP.slice(39),
+      why: [
+        t(E, "Each finished word joins the answer, and the spaces between words come back at the end.",
+            "완성된 단어를 하나씩 답에 붙이고, 단어 사이 공백을 되살려서 출력해요."),
+      ],
+      pyOnly: [
+        t(E, "\" \".join(new_words) puts the spaces between words back at the end.",
+            "\" \".join(new_words) 이 단어 사이 공백을 되살려요."),
       ],
     },
   ];
