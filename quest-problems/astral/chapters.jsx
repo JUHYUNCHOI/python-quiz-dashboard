@@ -136,7 +136,14 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption, E }) {
     : passing
       ? "0 10px 28px rgba(22,163,74,0.22)"
       : "0 10px 28px rgba(79,70,229,0.22)";
-  const bubLeft = placeRight ? ax + CELL / 2 + 14 : ax - CELL / 2 - 14 - BUB_W;
+  /* ⚠️ 2026-09-21: 말풍선을 **활성 칸 바로 옆**(`ax ± CELL/2`)에 뒀더니
+     격자 안쪽 칸을 덮었다. 코드 4/8 에서 칸 **여섯 개가 100% 가려져** 있었다
+     (ux-reviewer 가 잡고, 브라우저 사각형 대조로 확인).
+     칸이 왼쪽에 있을수록 오른쪽 이웃들을 그대로 깔고 앉는다.
+     → 가로는 **격자 바깥**으로 내보내고(SIDE 가 그만큼 자리를 이미 비워 둔다),
+        세로는 그대로 활성 칸 높이에 맞춘다. "일어나는 자리 옆" 이라는 뜻은 살면서
+        **어떤 칸도 안 가린다.** 화살표는 격자 쪽을 그대로 가리킨다. */
+  const bubLeft = placeRight ? SIDE + gridW + 14 : SIDE - 14 - BUB_W;
 
   return (
     <div>
