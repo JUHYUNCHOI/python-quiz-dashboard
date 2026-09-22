@@ -149,8 +149,8 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Now K = 2. Which numbers can ever meet?",
-        "이번엔 K = 2 예요. 어떤 수끼리 만날 수 있을까요?"),
+        "With K = 1, anyone could meet another. What now?",
+        "K = 1 땐 아무 수나 서로 만날 수 있었어요. K 가 다르면 어떨까요?"),
       content: <WhoCanMeetSim E={E} />,
     },
 

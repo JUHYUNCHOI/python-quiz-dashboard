@@ -28,6 +28,7 @@ function Say({ children, tone = "go" }) {
       background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg,
       fontSize: 13.5, fontWeight: 700, textAlign: "center",
       wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.7,
+      whiteSpace: "pre-line",
       boxShadow: "0 2px 10px rgba(0,0,0,.06)",
     }}>💬 {children}</div>
   );
@@ -139,6 +140,15 @@ export function WhoCanMeetSim({ E }) {
     { show: 3, tone: "aha",
       ko: "그래서 홀수끼리만 서로 부딪혀요. 4 는 혼자라 아무하고도 안 겹쳐요.",
       en: "So only the odd ones can ever clash. The 4 is alone — it never meets anyone." },
+    /* 다섯 번째 걸음 (2026-09-22 추가) — 선생님이 4쪽에서 멈췄다:
+       "이걸 왜 구하는건지 그 목적을 모르겠어 … 결과도 이걸 그래서 뭐가 어쨋다는건지"
+       들어가는 이유는 위 chapters.jsx 의 narr 에서, 나가는 결과는 여기서 준다 —
+       이 예제의 실제 답(전수 탐색 검산: 최소 1 회, 5→7)과 다음 문제로 이어지는 한 줄.
+       `show` 는 앞 걸음과 같은 3 을 유지해 화면이 갑자기 딴 걸 그리지 않게 한다.
+       PlaceOneByOneSim 의 마지막 aha 걸음(답 + 결론을 같이 담는 모양)을 따랐다. */
+    { show: 3, tone: "aha",
+      ko: "이 예제는 최소 1 번이에요 — 5 하나를 2 밀어서 7 로 만들면\n3, 4, 5, 7 로 다 달라져요.\n홀수는 홀수끼리, 짝수는 짝수끼리만 부딪혀요.\n이 나눔은 다음 문제에서도 그대로 쓰여요.",
+      en: "This example needs just 1 push — push one 5 by 2, to 7,\ngiving 3, 4, 5, 7, all different.\nOdds clash only with odds, evens only with evens.\nThis split keeps showing up next." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
