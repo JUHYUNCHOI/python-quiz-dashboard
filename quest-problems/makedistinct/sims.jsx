@@ -147,8 +147,8 @@ export function WhoCanMeetSim({ E }) {
        `show` 는 앞 걸음과 같은 3 을 유지해 화면이 갑자기 딴 걸 그리지 않게 한다.
        PlaceOneByOneSim 의 마지막 aha 걸음(답 + 결론을 같이 담는 모양)을 따랐다. */
     { show: 3, tone: "aha",
-      ko: "이 예제는 최소 1 번이에요 — 5 하나를 2 밀어서 7 로 만들면\n3, 4, 5, 7 로 다 달라져요.\n홀수는 홀수끼리, 짝수는 짝수끼리만 부딪혀요.\n이 나눔은 다음 문제에서도 그대로 쓰여요.",
-      en: "This example needs just 1 push — push one 5 by 2, to 7,\ngiving 3, 4, 5, 7, all different.\nOdds clash only with odds, evens only with evens.\nThis split keeps showing up next." },
+      ko: "이 예제는 최소 1 번이에요 — 5 하나를 2 밀어서 7 로 만들면\n3, 4, 5, 7 로 다 달라져요.\n홀수는 홀수끼리, 짝수는 짝수끼리만 부딪혀요.\n이 나눔은 다음 쪽에서도 그대로 쓰여요.",
+      en: "This example needs just 1 push — push one 5 by 2, to 7,\ngiving 3, 4, 5, 7, all different.\nOdds clash only with odds, evens only with evens.\nThis split is used on the next page too." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
