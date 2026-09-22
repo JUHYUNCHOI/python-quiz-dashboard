@@ -40,6 +40,9 @@
 ```bash
 python3 scripts/check-docs.py           # 목차가 가리키는 파일이 실제로 있나
 python3 scripts/check-frozen.py         # 건드리면 안 되는 파일을 건드렸나 (커밋 전)
+python3 scripts/check-vercel-config.py  # vercel.json 이 Vercel 스키마 한도를 넘나 (푸시 전)
+                                        #   2026-09-22: ignoreCommand 670자(한도 256)로 **프로덕션 빌드가 통째로 실패**했다.
+                                        #   푸시도 git 도 걸쇠도 아무 말 안 했다 — pre-push 훅에 넣었다.
 python3 scripts/check-concept-order.py  # 안 가르친 문법을 쓰고 있나
 python3 scripts/check-quest-lang.py     # quest 영어 자리에 한국어가 들어갔나
 python3 scripts/check-quest-algo-level.py  # Bronze 문제를 '심화' 토픽으로 보내나
