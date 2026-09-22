@@ -284,8 +284,8 @@ export function getWordProcSections(E) {
           + "따라가면 답이 나와요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 코드가 짧아져요."),
       ],
       /* 2026-09-22, PM 판정 ⑤: long long 팁을 뺐다 — N,K ≤ 100·80 이라
          이 문제에선 오버플로가 원리상 불가능하다(auditor). */

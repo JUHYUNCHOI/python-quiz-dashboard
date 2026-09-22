@@ -581,14 +581,14 @@ export function makeWordProcCh3(E, lang = "py") {
               "N, K = map(int, file_lines[0].split())",
               "words = file_lines[1].split()",
               "",
-              "lines = []",
+              "result = []",
               "cur_line = []",
               "cur_len = 0",
             ]}
             highlight={[5, 6, 7]}
           />
           <div style={{ marginTop: 8, background: "#fef2f2", borderRadius: 8, padding: 8, border: "1.5px solid #fca5a5", fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>lines</span> = {t(E, "list of finished lines", "완성된 줄들의 리스트")}</div>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>result</span> = {t(E, "list of finished lines", "완성된 줄들의 리스트")}</div>
             <div><span style={{ fontWeight: 600, color: "#dc2626" }}>cur_line</span> = {t(E, "words on the current line", "현재 줄의 단어들")}</div>
             <div><span style={{ fontWeight: 600, color: "#dc2626" }}>cur_len</span> = {t(E, "total chars on current line", "현재 줄의 총 글자 수")}</div>
           </div>
@@ -609,7 +609,7 @@ export function makeWordProcCh3(E, lang = "py") {
               "for w in words:",
               "    wl = len(w)",
               "    if cur_len + wl > K and cur_line:",
-              "        lines.append(' '.join(cur_line))",
+              "        result.append(' '.join(cur_line))",
               "        cur_line = []",
               "        cur_len = 0",
               "    cur_line.append(w)",
@@ -645,7 +645,7 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we check 'and cur_line' in the if condition? What if cur_line is empty?", "if 조건에 'and cur_line' 이 왜 붙어 있을까요?"),
+        "Why do we check 'and cur_line' in the if condition?", "if 조건에 'and cur_line' 이 왜 붙어 있을까요?"),
       question: t(E,
         "Why 'and cur_line' in the overflow check?",
         "넘침을 확인할 때 'and cur_line' 이 왜 필요할까요?"),
@@ -666,7 +666,7 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 부분씩 읽어 봐요."),
+        "Solution code — read part by part.", "풀이 코드를 한 부분씩 읽어 봐요."),
       sections: getWordProcSections(E),
     },
   ];
