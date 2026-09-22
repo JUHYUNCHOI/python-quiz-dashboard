@@ -144,7 +144,7 @@ export function makeWordProcCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
-                "Print the resulting document — each line at most K letters of words, words separated by single spaces.",
+                "Print the document so each line's letters add up to at most K.",
                 "각 줄의 글자 수 합이 K 를 넘지 않게 문서를 출력해요.")}
             </div>
           </div>
@@ -306,7 +306,7 @@ export function makeWordProcCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Important detail: when counting characters per line, do spaces between words count?", "한 줄의 글자 수를 셀 때 공백도 같이 셀까요?"),
+        "When counting letters per line, do spaces between words count too?", "한 줄의 글자 수를 셀 때 공백도 같이 셀까요?"),
       question: t(E,
         "Do spaces between words count toward the K character limit?",
         "단어 사이의 공백도 K 에 포함될까요?"),
@@ -327,7 +327,7 @@ export function makeWordProcCh1(E) {
          narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
-        "Let's trace a bigger example!\nWords: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5.\nWe add words greedily until the next one doesn't fit.", "단어 네 개를 K=5 로 한 줄씩 담아 봐요."),
+        "Let's pack four words into lines with K=5.", "단어 네 개를 K=5 로 한 줄씩 담아 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
@@ -381,14 +381,14 @@ export function makeWordProcCh1(E) {
       ],
       correct: 1,
       explain: t(E,
-        "ab(2)+cd(2)=4 <= 5. Add ef: 4+2=6 > 5, new line. Line 1: [ab, cd]. Line 2: [ef]. Total: 2 lines!",
+        "ab(2)+cd(2)=4 fits within 5.\nAdding ef makes it 6, which overflows, so it starts a new line. That's 2 lines!",
         "ab(2)+cd(2)=4 라서 5 안에 들어가요.\nef 를 더하면 6 이 되어 넘치니 새 줄이에요. 그래서 2줄이에요."),
     },
     // 1-7: Input practice
     {
       type: "input",
       narr: t(E,
-        "Walk through the words yourself, packing each into the current line until it overflows.",
+        "Keep adding to the current line — once it overflows K, start a new one.",
         "현재 줄에 넣다가 K 를 넘으면 새 줄로 가요."),
       question: t(E,
         "Words [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. How many output lines?",
@@ -461,7 +461,7 @@ export function makeWordProcCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We added hello and my — still under 8.", "hello 와 my 를 넣었어요 — 아직 8 이하예요."),
+        "That hello + my example again — 7 still fits.", "아까 그 hello + my 예제예요 — 7이라 아직 들어가요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
@@ -477,7 +477,7 @@ export function makeWordProcCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Adding name makes 11 — over 8, so it starts a new line.", "name 을 더하면 11이 되어 8을 넘겨서 새 줄로 가요."),
+        "Same example — now name pushes it over 8.", "같은 예제에서 name 을 더하면 8을 넘어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
@@ -494,14 +494,14 @@ export function makeWordProcCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now change K and the words yourself.", "이제 K 와 단어를 직접 바꿔 봐요."),
+        "Same numbers — now you can edit them freely.", "같은 숫자로 시작해요 — 이제 직접 바꿔 봐요."),
       content: <WordProcLineWrapSim E={E} />,
     },
     // 2-5: Quiz on edge case
     {
       type: "quiz",
       narr: t(E,
-        "Edge case: what if a single word is exactly K characters long?\nIt fills the entire line by itself!", "단어 하나가 딱 K 글자면 어떻게 될까요?"),
+        "What happens if a single word is exactly K characters long?", "단어 하나가 딱 K 글자면 어떻게 될까요?"),
       question: t(E,
         "Words [\"abcde\", \"fg\"], K=5. Word 1 is exactly 5 chars. What happens?",
         "단어 [\"abcde\", \"fg\"], K=5 예요. 첫 단어가 딱 5글자면 어떻게 될까요?"),
@@ -519,7 +519,7 @@ export function makeWordProcCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Try this packing yourself.  How many words fit per line, and how many lines total?",
+        "Count how many words fit in each line.",
         "한 줄에 몇 단어가 들어가는지 세어 봐요."),
       question: t(E,
         "Words [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. How many lines?",
@@ -551,16 +551,16 @@ export function makeWordProcCh3(E, lang = "py") {
           <CodeSnippet
             lines={[
               "with open('word.in') as file:",
-              "    file_lines = file.readlines()",
-              "N, K = map(int, file_lines[0].split())",
-              "words = file_lines[1].split()",
+              "    lines = file.readlines()",
+              "N, K = map(int, lines[0].split())",
+              "words = lines[1].split()",
             ]}
             highlight={[0, 1, 2, 3]}
           />
-          <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
+          <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5, whiteSpace: "pre-line", wordBreak: "keep-all" }}>
             {t(E,
-              "All N words are on a single line, separated by spaces. split() breaks them apart.",
-              "N 개 단어가 한 줄에 공백으로 붙어 와요. split() 으로 나눠요.")}
+              "readlines() reads the file's lines into a list — that's lines.\nAll N words are on a single line, separated by spaces. split() breaks them apart.",
+              "readlines() 는 파일의 줄들을 리스트로 읽어와요 — 그게 lines 예요.\nN 개 단어가 한 줄에 공백으로 붙어 와요. split() 으로 나눠요.")}
           </div>
         </div>),
     },
@@ -577,9 +577,9 @@ export function makeWordProcCh3(E, lang = "py") {
           <CodeSnippet
             lines={[
               "with open('word.in') as file:",
-              "    file_lines = file.readlines()",
-              "N, K = map(int, file_lines[0].split())",
-              "words = file_lines[1].split()",
+              "    lines = file.readlines()",
+              "N, K = map(int, lines[0].split())",
+              "words = lines[1].split()",
               "",
               "result = []",
               "cur_line = []",
@@ -598,7 +598,7 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Before adding each word, check if it would overflow — if so, flush the line first.", "단어를 넣기 전에 규칙대로 넘치는지부터 확인해요."),
+        "Before adding each word, check whether it would overflow.", "단어를 넣기 전에 규칙대로 넘치는지부터 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
@@ -659,8 +659,12 @@ export function makeWordProcCh3(E, lang = "py") {
       ],
       correct: 1,
       explain: t(E,
-        "If cur_line is empty, we haven't added any word yet. We must add the current word no matter what.",
-        "cur_line 이 비어 있으면 아직 아무 단어도 안 넣은 거예요.\n그럴 때는 지금 단어를 꼭 넣어야 해요."),
+        "If cur_line is empty, we haven't added any word yet.\n"
+        + "In Python, an empty list `[]` is false in an `if`.\n"
+        + "So we skip flushing, and always add the word.",
+        "cur_line 이 비어 있으면 아직 아무 단어도 안 넣은 거예요.\n"
+        + "파이썬에서는 빈 리스트 `[]` 는 `if` 안에서 거짓이에요.\n"
+        + "그래서 줄을 내보내지 않고, 지금 단어를 꼭 넣어요."),
     },
     // 3-5: Complete code
     {
