@@ -166,18 +166,31 @@ export function NumInput({ question, hint, answer, E, onSolve, explain }: NumInp
   const [val, setVal] = useState("")
   const [wrong, setWrong] = useState(false)
   const [correct, setCorrect] = useState(false)
-  // 풀이를 못 맞히고 넘어가는 학생을 위한 열람 상태 (2026-09-22).
+  // 풀이를 못 맞히고 넘어가는 학생을 위한 열람 상태 (2026-09-22, PM 판정으로 조건 확정).
   //
   //   왜 — 재검증 학생: "안 풀고 넘어간 학생한텐 처음 듣는 말이 돼요." 화면 아래
   //   고정바가 "그냥 넘어가도 OK" 라고 스킵을 권하는데, 맞히지 못하면 `explain` 을
-  //   영원히 못 본다. 그렇다고 오답 직후 바로 보여주면 정답을 그대로 베끼게 된다
-  //   (`memory/feedback_students_copy_the_answer.md`).
+  //   영원히 못 본다.
   //
-  //   ⚠️ PM 이 원한 정확한 트리거는 "다음(→) 버튼을 누르는 순간" 이지만, 그 버튼은
-  //   `QuestNavBar.jsx`(이 작업 범위 밖)가 그린다 — `NumInput` 은 그 클릭을 알 방법이
-  //   없다. 대신 **적어도 한 번 틀려 본 뒤에만** 여는 자기주도 버튼을 둔다 —
-  //   풀 기회가 최소 한 번은 지나간 다음에만 보이므로 바로 베끼는 통로는 아니다.
-  //   Next 클릭에 직접 거는 버전이 필요하면 `QuestNavBar.jsx` 도 같이 열어야 한다.
+  //   ⚠️ `QuestNavBar.jsx` 는 열지 않는다 — PM 판정 그대로 옮긴다:
+  //   "'안 풀고 그냥 넘어간 학생' 을 완전히 못 놓치게 하려면 결국 다음 버튼 클릭을
+  //   가로채야 하고, 그건 QuestNavBar 를 여는 것뿐이다. 그런데 그 화면의
+  //   '그냥 넘어가도 OK (→)' 는 이 저장소가 의도적으로 골라둔 철학이다(스킵을 막지
+  //   않는다). 그 철학을 지키면서 '아무것도 안 누른 학생' 까지 강제로 보게 만드는
+  //   방법은 원리상 없다 — 뭘 눌러야 뭐가 뜨는데, 아무것도 안 누르면 아무것도 못
+  //   띄운다. 그러니 목표를 '뭐라도 한 번 만진 학생은 놓치지 않는다' 로 좁히는 게
+  //   맞다." "완전 무행동 학생" 케이스는 스킵-허용 철학상 애초에 강제로 못 막는
+  //   게 맞는 것 — **의도된 설계의 자연스러운 한계**지, 남은 구멍이 아니다.
+  //   180개 전체에 닿는 QuestNavBar 변경을 이 구멍 하나로 여는 건 위험 대비
+  //   이득이 안 맞는다. 백로그에도 안 올린다.
+  //
+  //   그래서 이 버튼은 **한 번도 안 틀려도 처음부터** 뜬다(`wrong &&` 조건 없음).
+  //   PM: "이건 `hint` 버튼이 이미 이렇게 동작하는 것과 정확히 같은 패턴이다 —
+  //   새 UX 언어를 발명하는 게 아니라 이미 있는 것과 맞추는 것이다." 힌트도 처음부터
+  //   눌러야 열리는 버튼이지 자동으로 뜨지 않는다.
+  //   "정답 그대로 베끼기" 걱정은 여전히 막힌다 — 누르는 행위 자체가 능동적 선택이라
+  //   (`memory/feedback_students_copy_the_answer.md` 가 문제 삼은 건 "아무 대가 없이
+  //   저절로 뜨는 것" 이지 "눌러야 뜨는 것" 이 아니다).
   const [revealed, setRevealed] = useState(false)
   // 💡 힌트는 **눌러야 열린다.** 한 번 틀리면 저절로 열린다.
   //
@@ -250,8 +263,9 @@ export function NumInput({ question, hint, answer, E, onSolve, explain }: NumInp
           </span>
         )}
       </div>
-      {/* 최소 한 번 틀려 본 학생만 볼 수 있는 자기주도 열람 버튼. */}
-      {explain && wrong && !correct && !revealed && (
+      {/* 틀려 봤든 아니든, 뭐라도 만졌든 안 만졌든 — 언제나 뜨는 자기주도 열람 버튼.
+          (2026-09-22 PM 판정: `wrong &&` 제거. 힌트 버튼과 같은 패턴 — 눌러야 뜬다.) */}
+      {explain && !correct && !revealed && (
         <button
           onClick={() => setRevealed(true)}
           className="mt-2 text-xs font-semibold text-green-700 underline cursor-pointer bg-transparent border-0 p-0"
