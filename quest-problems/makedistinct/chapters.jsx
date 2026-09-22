@@ -226,18 +226,16 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
 
           <div style={{ marginTop: 10, background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#7f1d1d", lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
             <b>{t(E, "It gives the right answer — but it is too slow.", "답은 맞아요. 그런데 너무 느려요.")}</b><br />
-            {t(E,
-              "N can be 200,000. One value may be pushed almost N times, and each push looks through everything placed so far — that is about 200,000 × 200,000 = 40,000,000,000 steps.",
-              "N 이 200,000 까지예요. 값 하나가 거의 N 번 밀릴 수 있고, 밀 때마다 지금까지 놓은 값을 전부 훑어요. 200,000 × 200,000 = 400억 번쯤 돼요.")}<br />
             {/* "몇 분" 이었다 → 실측값으로. project-lead 가 N=200,000·K=1 을 끝까지 돌렸다: 1179초. */}
-            {t(E, "We actually ran it at N = 200,000 — it took about 20 minutes. The contest gives seconds.",
-                  "실제로 N = 200,000 으로 돌려봤어요. 약 20분이 걸렸어요. 대회가 주는 시간은 몇 초예요.")}
+            {t(E,
+              "N can be 200,000. One value may be pushed almost N times, and each push looks through everything placed so far — that is about 200,000 × 200,000 = 40,000,000,000 steps → we actually ran it, and it took about 20 minutes.",
+              "N 이 200,000 까지예요. 값 하나가 거의 N 번 밀릴 수 있고, 밀 때마다 지금까지 놓은 값을 전부 훑어요. 200,000 × 200,000 = 400억 번쯤 돼요 → 실제로 돌려보니 20분 걸려요.")}
           </div>
 
           <div style={{ marginTop: 10, background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
             👉 {t(E,
-              "We already know something this code does not use: values only collide when they share the same remainder. Split them by that remainder first, and each pile becomes small and easy. That is the next code.",
-              "우리는 이 코드가 안 쓰는 걸 하나 알고 있어요 — 나머지가 같은 값끼리만 부딪힌다는 것. 나머지로 먼저 나눠 두면 묶음마다 작아져요. 다음 코드가 그거예요.")}
+              "What split into odd and even on page 4, and what we looked at again as \"remainder\" on page 5 — this code does not use that. Split them by that remainder first, and each pile becomes small and easy. That is the next code.",
+              "4쪽에서 홀수·짝수로 갈렸던 것, 5쪽에서 '나머지'로 다시 본 것 — 이 코드는 그걸 안 써요. 나머지로 먼저 나눠 두면 묶음마다 작아져요. 다음 코드가 그거예요.")}
           </div>
         </div>
       ),
