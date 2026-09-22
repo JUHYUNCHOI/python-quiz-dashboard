@@ -40,6 +40,9 @@
 ```bash
 python3 scripts/check-docs.py           # 목차가 가리키는 파일이 실제로 있나
 python3 scripts/check-frozen.py         # 건드리면 안 되는 파일을 건드렸나 (커밋 전)
+python3 scripts/check-boasted-function.py  # 화면이 자랑하는 함수를 코드가 **실제로 쓰나**
+                                        #   2026-09-22: "list, map, sorted 덕분에 짧아요" 라고 써 놓고
+                                        #   안 쓰는 자리가 **172건·quest 86개**. 학생 둘이 각각 알아챘다.
 python3 scripts/check-vercel-config.py  # vercel.json 이 Vercel 스키마 한도를 넘나 (푸시 전)
                                         #   2026-09-22: ignoreCommand 670자(한도 256)로 **프로덕션 빌드가 통째로 실패**했다.
                                         #   푸시도 git 도 걸쇠도 아무 말 안 했다 — pre-push 훅에 넣었다.
