@@ -240,10 +240,13 @@ export function makeStrangeFnCh1(E) {
                   ⚠️ 2026-09-22 학생 검증: 앞 쪽(3쪽) 시뮬은 순수 십진 뺄셈인데
                   여기서 갑자기 "이진수로 읽는다" 고 해서 다리가 끊겨 있었다.
                   또 "x=10 은 3번" (5쪽) 과 "n=2 는 3" (이 표) 을 잇는 문장이
-                  빠져 있었다 — 직접 채워 넣는다. */}
+                  빠져 있었다 — 직접 채워 넣는다.
+                  2026-09-22 재검증: "이진수" 를 처음 쓰는 이 자리에서 읽는 법(자리마다
+                  2의 몇 제곱)을 한 번도 안 알려줬다 — 학생이 8쪽까지 혼자 짐작했다.
+                  한 줄만 추가하고, 대신 앞부분을 줄여서 전체 길이를 늘리지 않는다. */}
               {t(E,
-                "On page 3 we just subtracted in plain decimal — that was correct there. Here we're hunting for a counting rule, so we read the same 0/1 digits a different way: as a binary number n. The x = 10 we counted on the last page took 3 f's — read \"10\" as binary, that's n = 2. So the n = 2 row below is 3. Let's line up a few more n's and look for a rule.",
-                "3쪽에서는 그냥 십진수로 뺐죠? 거기서는 그게 맞아요. 여기서는 횟수를 세는 규칙을 찾으려고, 같은 0과 1을 다르게 읽어 봐요 — 이진수 n 으로요. 앞 쪽에서 센 x = 10 은 세 번이었어요. 그 \"10\" 을 이진수로 읽으면 n = 2 예요. 그래서 아래 표의 n = 2 칸이 3 이에요. 다른 n 들도 늘어놓고 규칙이 보이는지 살펴봐요.")}
+                "On page 3 we subtracted in plain decimal — that was correct there. Here we read the same 0/1 digits as binary instead: the rightmost digit is the 1s place, the next one left is the 2s place. \"10\" is 1×2 + 0×1 = 2, so n = 2. x = 10 took 3 f's, so the n = 2 row below is 3. Let's line up a few more n's and look for a rule.",
+                "3쪽에서는 십진수로 뺐어요, 거기선 그게 맞아요. 여기서는 규칙을 찾으려고 같은 0과 1을 이진수로 읽어요 — 오른쪽 자리가 1, 그 왼쪽이 2예요. \"10\" 은 1×2 + 0×1 = 2, 그래서 n = 2예요. x = 10 은 세 번이었으니 표의 n = 2 칸이 3이에요. 다른 n 도 늘어놓고 규칙을 찾아봐요.")}
             </div>
           </div>
 
@@ -341,7 +344,7 @@ export function makeStrangeFnCh2(E, lang = "py") {
         type: "reveal",
         label: t(E, "Code", "코드"),
         narr: t(E,
-          "Flip by parity if needed, then a closed form for floor(3n/2) mod p.",
+          "Flip digits once if needed, then use the formula.",
           "필요하면 자릿수를 한 번 바꾸고, 그 다음 공식을 써요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />),
       };
