@@ -87,9 +87,12 @@ export function PlaceOneByOneSim({ E }) {
       ko: "1, 2, 4, 5 — 다 달라요. 민 횟수는 모두 2 회. 앞 쪽 샘플의 답이 이거예요.",
       en: "1, 2, 4, 5 — all different. Two pushes in total. That is the sample answer." },
     { tiles: [["1"], ["2"], ["4"], ["5"], ["4"]], st: ["placed", "placed", "placed", "placed", "moving"],
-      note: ["", "", "", "", "4 는?"], ops: 2, tone: "stuck",
-      ko: "여기서 4 가 하나 더 있었다면? 1 도 2 도 4 도 5 도 이미 찼어요.",
-      en: "What if there were one more 4? 1 and 2 and 4 and 5 are all taken." },
+      /* 2026-09-22 학생 지적: "있었다면" 을 놓치고 빨리 읽으면 원래 문제(수 4개) 답이
+         4 인 줄 착각한다. 가정임을 문장 맨 앞 "만약" + note 태그로 눈에 띄게 한다.
+         (여기 tone="stuck" 이 이미 색으로도 구분하지만, 문장을 놓치면 색만으론 안 잡혔다.) */
+      note: ["", "", "", "", "만약 4 가?"], ops: 2, tone: "stuck",
+      ko: "만약 여기서 4 가 하나 더 있었다면?\n(원래 문제 수는 그대로 4개예요 — 이건 가정이에요)\n1, 2, 4, 5 는 이미 찼어요.",
+      en: "Suppose there were one more 4 here.\n(This is a what-if — the original problem still has 4 numbers.)\n1, 2, 4, 5 are already taken." },
     { tiles: [["1"], ["2"], ["4"], ["5"], ["6"]], st: ["placed", "placed", "placed", "placed", "moving"],
       note: ["", "", "", "", "4 → 5 → 6"], ops: 4, tone: "aha",
       ko: "한 칸 밀면 5 라 아직 겹쳐요. 그래서 6 까지 — 한 번에 2 회예요. 이렇게 여러 번 미는 경우가 생겨요.",
@@ -124,9 +127,10 @@ export function PlaceOneByOneSim({ E }) {
   );
 }
 
-/* ═══ K 가 2 면 누가 누구와 부딪히나 — 4쪽 퀴즈를 대신한다 ═══ */
+/* ═══ K 가 2 면 누가 누구와 부딪히나 — 옛 퀴즈 자리를 대신한다
+   (2026-09-22 순서 개편으로 3쪽·브루트 코드 다음, 5번째 쪽에 온다) ═══ */
 export function WhoCanMeetSim({ E }) {
-  /* 4쪽은 객관식 퀴즈였다. 선생님: "굳이 필요없는 퀴즈는 없애고 … 눈에 보이게끔".
+  /* 원래 객관식 퀴즈였다. 선생님: "굳이 필요없는 퀴즈는 없애고 … 눈에 보이게끔".
      같은 것을 보여주되 답을 고르는 게 아니라 눈으로 보게 한다.
      `a = [5, 3, 5, 4], K = 2` — 2 를 더하면 홀수는 계속 홀수, 짝수는 계속 짝수다. */
   const nums = [5, 3, 5, 4];
@@ -138,8 +142,10 @@ export function WhoCanMeetSim({ E }) {
     { show: 2, ko: "4 도 마찬가지예요. 6, 8, 10 … 계속 짝수예요.",
       en: "Same for 4 — 6, 8, 10 … always even." },
     { show: 3, tone: "aha",
-      ko: "그래서 홀수끼리만 서로 부딪혀요. 4 는 혼자라 아무하고도 안 겹쳐요.",
-      en: "So only the odd ones can ever clash. The 4 is alone — it never meets anyone." },
+      /* 2026-09-22 학생 지적: "짝수 — 혼자" 가 무슨 뜻인지 짐작만 했다(화면이 이유를 안 밝힘).
+         이 예제엔 짝수가 4 하나뿐이라는 걸 직접 말해 준다. */
+      ko: "그래서 홀수끼리만 서로 부딪혀요. 이 예제엔 짝수가 4 하나뿐이라, 부딪힐 다른 짝수가 없어요.",
+      en: "So only the odd ones can ever clash. This example has only one even number, 4 — there is no other even number for it to clash with." },
     /* 다섯 번째 걸음 (2026-09-22 추가) — 선생님이 4쪽에서 멈췄다:
        "이걸 왜 구하는건지 그 목적을 모르겠어 … 결과도 이걸 그래서 뭐가 어쨋다는건지"
        들어가는 이유는 위 chapters.jsx 의 narr 에서, 나가는 결과는 여기서 준다 —
@@ -147,8 +153,10 @@ export function WhoCanMeetSim({ E }) {
        `show` 는 앞 걸음과 같은 3 을 유지해 화면이 갑자기 딴 걸 그리지 않게 한다.
        PlaceOneByOneSim 의 마지막 aha 걸음(답 + 결론을 같이 담는 모양)을 따랐다. */
     { show: 3, tone: "aha",
-      ko: "이 예제는 최소 1 번이에요 — 5 하나를 2 밀어서 7 로 만들면\n3, 4, 5, 7 로 다 달라져요.\n홀수는 홀수끼리, 짝수는 짝수끼리만 부딪혀요.\n이 나눔은 다음 쪽에서도 그대로 쓰여요.",
-      en: "This example needs just 1 push — push one 5 by 2, to 7,\ngiving 3, 4, 5, 7, all different.\nOdds clash only with odds, evens only with evens.\nThis split is used on the next page too." },
+      /* 2026-09-22 학생 지적: "묶음 안에서 몇 번 밀지" 를 화면이 말 안 해서
+         "3쪽처럼 하면 되나?" 를 스스로 짐작했다. 직접 말해 준다. */
+      ko: "이 예제는 최소 1 번이에요 — 5 하나를 2 밀어서 7 로 만들면\n3, 4, 5, 7 로 다 달라져요.\n홀수는 홀수끼리, 짝수는 짝수끼리만 부딪혀요.\n묶음 안에서도 3쪽처럼 작은 값부터 하나씩 밀어서 자리를 잡아요.\n이 나눔은 다음 쪽에서도 그대로 쓰여요.",
+      en: "This example needs just 1 push — push one 5 by 2, to 7,\ngiving 3, 4, 5, 7, all different.\nOdds clash only with odds, evens only with evens.\nInside each group we settle values the same way as page 3 — smallest first, one push at a time.\nThis split is used on the next page too." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];

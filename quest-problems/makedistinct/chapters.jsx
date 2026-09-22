@@ -119,7 +119,7 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ T ≤ 10</div>
-              <div>1 ≤ N ≤ 200,000 (= 2 × 10⁵)</div>
+              <div>1 ≤ N ≤ 200,000</div>
               <div>−N ≤ K ≤ N,  K ≠ 0</div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "each number is between 1 and N  ·  all N added together ≤ 1,000,000", "수는 1 부터 N 사이  ·  N 을 다 더해도 1,000,000 이하")}</div>
             </div>
@@ -143,44 +143,19 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
       content: <PlaceOneByOneSim E={E} />,
     },
 
-    /* 1-4: K = 2 면 누가 누구와 부딪히나 — **시뮬**(전에는 객관식 퀴즈였다).
-       선생님: *"굳이 필요없는 퀴즈는 없애고 … 눈에 보이게끔"*.
-       고르게 하는 대신 **2 를 계속 더하면 홀수는 홀수, 짝수는 짝수**인 것을 눈으로 보게 한다. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "So far K was 1. What changes when K is 2?",
-        "지금까지는 K = 1 이었어요. K 가 2 면 무엇이 달라질까요?"),
-      content: <WhoCanMeetSim E={E} />,
-    },
-
-    // 1-5: Input — direction-only hint
-    {
-      type: "input",
-      narr: t(E,
-        "Now K is negative. Work it out yourself.",
-        "이번엔 K 가 음수예요. 직접 풀어봐요."),
-      question: t(E,
-        "a = [3, 3, 4, 4], K = -2. Minimum ops?",
-        "a = [3, 3, 4, 4], K = -2. 최소 횟수는?"),
-      hint: t(E,
-        "K is negative — which way does a push move a value? And which of these four can ever meet?",
-        "K 가 음수면 밀 때 값이 어느 쪽으로 갈까요? 그리고 이 넷 중 어떤 수끼리 만날 수 있을까요?"),
-      answer: 2,
-      /* 2026-09-21: 맞혀도 ✅ 만 뜨고 **왜 2 인지**가 없었다 (재검증 학생 지적).
-         `NumInput` 에 explain 을 새로 달아 이 자리부터 쓴다. */
-      explain: t(E,
-        "2 is right.\nK = -2, so each push lowers a value by 2 — and a value keeps its remainder when divided by 2.\nSo the two 3s are one pile and the two 4s are another; the piles never meet.\nIn each pile the second one has to move down once: 3 → 1 and 4 → 2. One push each, 2 in total.",
-        "2 가 맞아요.\nK = -2 라서 밀면 값이 2 씩 작아져요. 2 로 나눈 나머지는 그대로예요.\n그래서 3 두 개가 한 묶음, 4 두 개가 다른 묶음이고 서로 만나지 않아요.\n묶음마다 두 번째 값만 한 번씩 내려가면 돼요 — 3 → 1, 4 → 2. 합해서 2 회예요."),
-    },
-
-    /* 1-6: 쉬운 첫 코드와 그 한계 (2026-09-21 추가)
+    /* 1-4: 쉬운 첫 코드와 그 한계 (2026-09-21 추가, 2026-09-22 3쪽 바로 뒤로 이동)
        왜 생겼나 — 교육 검토: **[기][승][전] 다음이 바로 최종 코드**여서
        "쉬운 방법 → 왜 안 되나 → 그래서 이 방법" 사다리의 첫 칸이 비어 있었다.
        project-lead 가 실측해서 판정했다 — 브루트는 **답은 맞고**(무작위 3000 케이스
        최적해와 전부 일치) **느리다**(파이썬 N=10,000 에 2.3초, 깨끗한 O(N²)).
        그래서 한 쪽만 넣는다. `feedback_why_and_how_over_slowness.md` 처방대로
-       느림을 체감시키는 데 쪽을 쓰지 않고 **제약 숫자 + 연산량 한 줄**로 끝낸다. */
+       느림을 체감시키는 데 쪽을 쓰지 않고 **제약 숫자 + 연산량 한 줄**로 끝낸다.
+
+       왜 여기(3쪽 바로 뒤)로 옮겼나 (2026-09-22, PM 판정) — 선생님이 예전 4쪽 결론을
+       보시고 *"그래서 뭐? 어쨋다는거지?"*, 이어서 *"브루트 포스가 느리기 때문에
+       이걸 써야한다는게 더 맞는것 같은데"*. ux 실측: 3쪽 마지막 걸음이 이미
+       "겹치면 그 자리에서 바로 밀기" 를 손으로 시연하고 있었다 — 그 다음 문장은
+       (구 4쪽의 홀짝 관찰이 아니라) 그걸 코드로 옮긴 이 브루트 쪽이다. */
     {
       type: "reveal",
       narr: t(E,
@@ -232,13 +207,49 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
               "N 이 200,000 까지예요. 값 하나가 거의 N 번 밀릴 수 있고, 밀 때마다 지금까지 놓은 값을 전부 훑어요. 200,000 × 200,000 = 400억 번쯤 돼요 → 실제로 돌려보니 20분 걸려요.")}
           </div>
 
+          {/* 2026-09-22 PM 판정 — 이 쪽이 3쪽 바로 뒤(구 6쪽 자리)로 옮겨오면서
+              옛 문구("4쪽에서 홀수·짝수로 갈렸던 것, 5쪽에서 '나머지'로…")가
+              아직 안 나온 내용을 과거형으로 가리키게 됐다. 결론 선언 대신
+              질문을 던지고 다음 쪽이 구조로 답하게 한다 — PM 이 문장을 확정. */}
           <div style={{ marginTop: 10, background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
             👉 {t(E,
-              "What split into odd and even on page 4, and what we looked at again as \"remainder\" on page 5 — this code does not use that. Split them by that remainder first, and each pile becomes small and easy. That is the next code.",
-              "4쪽에서 홀수·짝수로 갈렸던 것, 5쪽에서 '나머지'로 다시 본 것 — 이 코드는 그걸 안 써요. 나머지로 먼저 나눠 두면 묶음마다 작아져요. 다음 코드가 그거예요.")}
+              "This code pushes blindly, without knowing which values will collide. Once we figure that out, it gets much faster — see the next page.",
+              "이 코드는 어떤 값끼리 부딪히는지 모르고 무작정 밉니다. 그걸 알아내면 훨씬 빨라져요 — 다음 쪽에서 봐요.")}
           </div>
         </div>
       ),
+    },
+
+    /* 1-5: K = 2 면 누가 누구와 부딪히나 — **시뮬**(전에는 객관식 퀴즈였다,
+       2026-09-22 순서 개편으로 구 1-4 에서 여기로 밀림 — 내용은 그대로 옮김).
+       선생님: *"굳이 필요없는 퀴즈는 없애고 … 눈에 보이게끔"*.
+       고르게 하는 대신 **2 를 계속 더하면 홀수는 홀수, 짝수는 짝수**인 것을 눈으로 보게 한다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "So far K was 1. What changes when K is 2?",
+        "지금까지는 K = 1 이었어요. K 가 2 면 무엇이 달라질까요?"),
+      content: <WhoCanMeetSim E={E} />,
+    },
+
+    // 1-6: Input — direction-only hint (2026-09-22 순서 개편으로 구 1-5 에서 여기로 밀림)
+    {
+      type: "input",
+      narr: t(E,
+        "Now K is negative. Work it out yourself.",
+        "이번엔 K 가 음수예요. 직접 풀어봐요."),
+      question: t(E,
+        "a = [3, 3, 4, 4], K = -2. Minimum ops?",
+        "a = [3, 3, 4, 4], K = -2. 최소 횟수는?"),
+      hint: t(E,
+        "K is negative — which way does a push move a value? And which of these four can ever meet?",
+        "K 가 음수면 밀 때 값이 어느 쪽으로 갈까요? 그리고 이 넷 중 어떤 수끼리 만날 수 있을까요?"),
+      answer: 2,
+      /* 2026-09-21: 맞혀도 ✅ 만 뜨고 **왜 2 인지**가 없었다 (재검증 학생 지적).
+         `NumInput` 에 explain 을 새로 달아 이 자리부터 쓴다. */
+      explain: t(E,
+        "2 is right.\nK = -2, so each push lowers a value by 2 — and a value keeps its remainder when divided by 2.\nSo the two 3s are one pile and the two 4s are another; the piles never meet.\nIn each pile the second one has to move down once: 3 → 1 and 4 → 2. One push each, 2 in total.",
+        "2 가 맞아요.\nK = -2 라서 밀면 값이 2 씩 작아져요. 2 로 나눈 나머지는 그대로예요.\n그래서 3 두 개가 한 묶음, 4 두 개가 다른 묶음이고 서로 만나지 않아요.\n묶음마다 두 번째 값만 한 번씩 내려가면 돼요 — 3 → 1, 4 → 2. 합해서 2 회예요."),
     },
   ];
 }

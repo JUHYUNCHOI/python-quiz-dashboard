@@ -166,6 +166,19 @@ export function NumInput({ question, hint, answer, E, onSolve, explain }: NumInp
   const [val, setVal] = useState("")
   const [wrong, setWrong] = useState(false)
   const [correct, setCorrect] = useState(false)
+  // 풀이를 못 맞히고 넘어가는 학생을 위한 열람 상태 (2026-09-22).
+  //
+  //   왜 — 재검증 학생: "안 풀고 넘어간 학생한텐 처음 듣는 말이 돼요." 화면 아래
+  //   고정바가 "그냥 넘어가도 OK" 라고 스킵을 권하는데, 맞히지 못하면 `explain` 을
+  //   영원히 못 본다. 그렇다고 오답 직후 바로 보여주면 정답을 그대로 베끼게 된다
+  //   (`memory/feedback_students_copy_the_answer.md`).
+  //
+  //   ⚠️ PM 이 원한 정확한 트리거는 "다음(→) 버튼을 누르는 순간" 이지만, 그 버튼은
+  //   `QuestNavBar.jsx`(이 작업 범위 밖)가 그린다 — `NumInput` 은 그 클릭을 알 방법이
+  //   없다. 대신 **적어도 한 번 틀려 본 뒤에만** 여는 자기주도 버튼을 둔다 —
+  //   풀 기회가 최소 한 번은 지나간 다음에만 보이므로 바로 베끼는 통로는 아니다.
+  //   Next 클릭에 직접 거는 버전이 필요하면 `QuestNavBar.jsx` 도 같이 열어야 한다.
+  const [revealed, setRevealed] = useState(false)
   // 💡 힌트는 **눌러야 열린다.** 한 번 틀리면 저절로 열린다.
   //
   //   왜 — 2026-09-17 MCC 전원 검토에서 담당자 둘이 각각 독립으로 짚었다.
@@ -237,7 +250,16 @@ export function NumInput({ question, hint, answer, E, onSolve, explain }: NumInp
           </span>
         )}
       </div>
-      {correct && explain && (
+      {/* 최소 한 번 틀려 본 학생만 볼 수 있는 자기주도 열람 버튼. */}
+      {explain && wrong && !correct && !revealed && (
+        <button
+          onClick={() => setRevealed(true)}
+          className="mt-2 text-xs font-semibold text-green-700 underline cursor-pointer bg-transparent border-0 p-0"
+        >
+          🔎 {E ? "Give up and show the solution" : "모르겠어요, 풀이 보기"}
+        </button>
+      )}
+      {explain && (correct || revealed) && (
         <div
           className="mt-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-xs leading-relaxed text-green-900 whitespace-pre-line"
           style={{ wordBreak: "keep-all", textWrap: "balance" }}
