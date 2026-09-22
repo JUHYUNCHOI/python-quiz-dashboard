@@ -36,7 +36,7 @@ const FULL_PY = [
   "                cur = vals[i]",
   "            else:",
   "                cur = cur + k",
-  "                total += (cur - vals[i]) // k",
+  "                total += (cur - vals[i]) // k    # distance from vals[i] to cur, divided by K = pushes",
   "    print(total)",
   "",
   "T = int(input())",
@@ -92,7 +92,7 @@ const FULL_CPP = [
   "                    cur = vals[i];",
   "                } else {",
   "                    cur = cur + k;",
-  "                    total += (cur - vals[i]) / k;",
+  "                    total += (cur - vals[i]) / k;   // distance from vals[i] to cur, divided by K = pushes",
   "                }",
   "            }",
   "        }",
@@ -118,7 +118,7 @@ export function getMakeDistinctWalk(E, lang = "py") {
       { hi: [26, 35], bubble: t(E, "total starts at 0 — every push adds to it.\nfor (auto &kv : groups) pulls out one group at a time — kv.second is that group's list of values (vals).\nFor K>0, sort ascending; for K<0, sort(…, greater<long long>()) sorts descending. The first value stays put as cur.\nvals.begin() and vals.end() just mark the start and end of the range to sort.", "total 은 0 에서 시작해요 — 밀 때마다 여기 더해요.\nfor (auto &kv : groups) 로 묶음을 하나씩 꺼내요 — kv.second 가 그 묶음의 값들(vals)이에요.\nK>0 이면 오름차순, K<0 이면 sort(…, greater<long long>()) 로 내림차순 정렬해요. 첫 값은 그대로 두고 cur 로 삼아요.\nvals.begin(), vals.end() 는 정렬할 범위의 시작과 끝을 가리켜요.") },
       { hi: [36, 42], bubble: t(E, "past just answers one question: is this value already ahead of cur?\nFor K>0 that means greater; for K<0 (sorted the other way) it means smaller.", "past 는 딱 하나만 물어요 — 이 값이 이미 cur 보다 앞서 있는가.\nK 가 양수면 '더 크다', 음수면(반대로 정렬했으니) '더 작다' 로 정해요.") },
       { hi: [43, 44], bubble: t(E, "When past is true, there's no collision — cur = vals[i] simply becomes the new cur, and total doesn't change.", "past 가 true 면 부딪히지 않아요 — cur = vals[i] 로 그 값이 바로 새 cur 가 돼요. total 은 그대로예요.") },
-      { hi: [45, 50], bubble: t(E, "cur = cur + k moves to the next free spot, and total += (cur - vals[i]) / k adds how many pushes that took.\nRemember page 5? The third 3 did this — 5 was already taken too, so it went to 7: (7-3) / 2 = 2.\nC++'s / is integer division — since (cur - vals[i]) is always a multiple of K, it divides with no remainder.\ntotal is long long, so it stays correct even as the count grows large.", "cur = cur + k 로 다음 빈 자리로 밀고, total += (cur - vals[i]) / k 로 몇 번 밀었는지 더해요.\n5쪽에서 셋째 3 이 그랬죠? 5도 이미 차서 7까지 갔어요: (7-3) / 2 = 2.\nC++ 의 / 는 정수 나눗셈이에요 — (cur - vals[i]) 는 항상 K 의 배수라서 나머지 없이 딱 떨어져요.\ntotal 이 long long 이라 값이 커져도 안전해요.") },
+      { hi: [45, 50], bubble: t(E, "cur = cur + k moves to the next free spot.\nBut cur isn't guaranteed to sit right before vals[i].\nEarlier values may have already pushed cur far ahead.\nSo vals[i] jumps straight from its own spot to cur, in one leap.\ntotal += (cur - vals[i]) / k adds up that jump.\nRemember page 5? The third 3 did this — 5 was already taken too, so it went to 7.\nDistance 4, moved by K=2 each time: (7-3) / 2 = 2.\nC++'s / is integer division.\n(cur - vals[i]) is always a multiple of K, so it divides with no remainder.\ntotal is long long, so it stays correct even as the count grows large.", "cur = cur + k 로 다음 빈 자리로 밀어요.\n그런데 cur 가 vals[i] 바로 앞이라는 보장은 없어요.\n앞선 값들이 이미 cur 를 저만치 밀어 놨을 수 있어요.\n그래서 vals[i] 는 자기 자리에서 cur 까지 한 번에 건너뛰어요.\ntotal += (cur - vals[i]) / k 로 그 건너뛴 횟수를 더해요.\n5쪽에서 셋째 3 이 그랬죠? 5도 이미 차서 7까지 갔어요.\n거리 4 를 K=2 씩 가니 (7-3) / 2 = 2 회예요.\nC++ 의 / 는 정수 나눗셈이에요.\n(cur - vals[i]) 는 항상 K 의 배수라서 나머지 없이 딱 떨어져요.\ntotal 이 long long 이라 값이 커져도 안전해요.") },
       { hi: [51, 51], bubble: t(E, "cout << total << \"\\n\" prints this test's answer — \"\\n\" instead of endl keeps it fast.", "cout << total << \"\\n\" 로 이 테스트의 답을 출력해요. endl 대신 \"\\n\" 을 써서 더 빨라요.") },
     ] };
   }
@@ -128,7 +128,7 @@ export function getMakeDistinctWalk(E, lang = "py") {
     { hi: [9, 12],  bubble: t(E, "Key insight: adding K never changes a value's remainder when divided by m.\nSo group values by that remainder — groups never interact!\ndefaultdict(list) makes an empty list on its own the first time a new remainder shows up — so groups[x % m].append(x) just works, no need to check first whether that remainder already has a list.", "핵심: K 를 더해도 m 으로 나눈 나머지는 안 바뀌어요.\n그래서 나머지가 같은 값끼리 묶으면, 묶음끼리는 서로 부딪히지 않아요!\ndefaultdict(list) 는 처음 보는 나머지가 나오면 빈 리스트를 스스로 만들어 둬요 — 그래서 groups[x % m].append(x) 를 바로 쓸 수 있어요. 그 나머지의 묶음이 이미 있는지 먼저 확인할 필요가 없어요.") },
     { hi: [14, 18], bubble: t(E, "total starts at 0 — every push adds to it.\nFor each group: sort (K>0 ascending, K<0 descending), then the first value stays put as cur.", "total 은 0 에서 시작해요 — 밀 때마다 여기 더해요.\n묶음마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 두고 cur 로 삼아요.") },
     { hi: [19, 22], bubble: t(E, "Walk through the rest of the group.\ncur is not how many times we pushed — it is the spot already taken.\nIf the next value is already past cur, it's safe: it becomes the new cur, no push needed.", "묶음의 나머지를 하나씩 봐요.\ncur 는 몇 번 밀었는지가 아니라 이미 차지한 자리예요.\n다음 값이 이미 cur 를 지나 있으면 안전해요 — 밀 필요 없이 그 값이 새 cur 가 돼요.") },
-    { hi: [23, 25], bubble: t(E, "Otherwise it collides, so push it to cur + K — the next free spot.\nRemember page 5? The third 3 did this — 5 was already taken too, so it went to 7. Distance 4, moved by K=2 each time: (7-3) / 2 = 2.\ncur - vals[i] is always a multiple of K, so it divides with no remainder.", "아니면 부딪히니까 cur + K, 즉 다음 빈 자리로 밀어요.\n5쪽에서 셋째 3 이 그랬죠? 5도 이미 차서 7까지 갔어요 — 거리 4 를 K=2 씩 가니 (7-3) ÷ 2 = 2 회예요.\ncur - vals[i] 는 항상 K 의 배수라서, 나눗셈 한 번으로 딱 나눠떨어져요.") },
+    { hi: [23, 25], bubble: t(E, "Otherwise it collides, so push it to cur + K — the next free spot.\nBut cur isn't guaranteed to sit right before vals[i].\nEarlier values may have already pushed cur far ahead.\nSo vals[i] jumps straight from its own spot to cur, in one leap.\nRemember page 5? The third 3 did this — 5 was already taken too, so it went to 7.\nDistance 4, moved by K=2 each time: (7-3) / 2 = 2.\ncur - vals[i] is always a multiple of K, so it divides with no remainder.\nThat quotient is exactly the push count.", "아니면 부딪히니까 cur + K, 즉 다음 빈 자리로 밀어요.\n그런데 cur 가 vals[i] 바로 앞이라는 보장은 없어요.\n앞선 값들이 이미 cur 를 저만치 밀어 놨을 수 있어요.\n그래서 vals[i] 는 자기 자리에서 cur 까지 한 번에 건너뛰어요.\n5쪽에서 셋째 3 이 그랬죠? 5도 이미 차서 7까지 갔어요.\n거리 4 를 K=2 씩 가니 (7-3) ÷ 2 = 2 회예요.\ncur - vals[i] 는 항상 K 의 배수라서 나머지 없이 딱 나누어떨어져요.\n그 몫이 바로 민 횟수예요.") },
     { hi: [26, 26], bubble: t(E, "Print this test's answer.", "이 테스트의 답을 출력해요.") },
     { hi: [28, 30], bubble: t(E, "Run solve() for all T tests.", "T 개 테스트를 solve() 로 반복해요.") },
   ] };

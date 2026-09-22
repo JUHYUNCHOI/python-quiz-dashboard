@@ -41,6 +41,8 @@ export const CODE_COMMENT_KO: Record<string, string> = {
   "first slot stays put": "첫 값은 그 자리에 그대로 둬요",
   "If next value already past cur, keep it; else push cur + K":
     "다음 값이 이미 앞서 있으면 그대로, 아니면 cur + K 로 밀어요",
+  "distance from vals[i] to cur, divided by K = pushes":
+    "vals[i] 에서 cur 까지 거리를 K 로 나누면 민 횟수예요",
   ...PART1,
   ...PART2,
   ...PART3,
