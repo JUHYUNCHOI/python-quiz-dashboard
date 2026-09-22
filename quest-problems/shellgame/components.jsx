@@ -103,8 +103,8 @@ export function getShellGameSections(E) {
             "그래서 시작마다 조개 위치를 뒤섞기 순서대로 따라가며 추측이 맞은 횟수를 세고,\n세 시작 중 가장 좋은 점수를 남겨요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
-            "Python 은 list, map 덕분에 코드가 짧아져요."),
+        t(E, "Python lists grow with .append() — no fixed size to declare upfront.",
+            "파이썬 리스트는 .append() 로 늘어나요 — 크기를 미리 정하지 않아도 돼요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

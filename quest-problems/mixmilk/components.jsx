@@ -85,8 +85,8 @@ export function getMixMilkSections(E) {
             "한 번의 붓기는 원래 양동이의 우유량과, 받는 양동이의 남은 자리 중 더 작은 만큼만 옮겨요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
-            "Python 은 list, map 같은 걸 써서 알고리즘을 짧게 쓸 수 있어요."),
+        t(E, "cap = [0, 0, 0] builds the array in one line — no type declaration needed.",
+            "cap = [0, 0, 0] 처럼 타입 선언 없이 배열을 한 줄로 만들어요."),
       ],
       cppOnly: [
         t(E, "Two parallel arrays cap[3] and milk[3] — read both values in one cin per bucket.",
