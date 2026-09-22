@@ -67,7 +67,7 @@ export function PlaceOneByOneSim({ E }) {
       ko: "먼저 작은 수부터 줄을 세워요. 작은 것부터 자리를 잡아야 나중에 덜 움직여요.",
       en: "First line them up from the smallest. Settling the small ones first means less moving later." },
     { tiles: [["1"], ["1"], ["4"], ["4"]], st: ["placed", "idle", "idle", "idle"],
-      note: ["그대로", "", "", ""], ops: 0,
+      note: [t(E, "stays", "그대로"), "", "", ""], ops: 0,
       ko: "맨 앞 1 은 그대로 둬요. 앞에 아무도 없으니 옮길 까닭이 없어요. (0 회)",
       en: "The first 1 stays. Nothing is in front of it, so there is no reason to move it. (0 moves)" },
     { tiles: [["1"], ["2"], ["4"], ["4"]], st: ["placed", "moving", "idle", "idle"],
@@ -75,7 +75,7 @@ export function PlaceOneByOneSim({ E }) {
       ko: "다음 1 은 앞의 1 과 같아요. 1 만큼 밀어서 2 로 만들어요. (1 회)",
       en: "The next 1 is the same as the one before. Push it by 1, to 2. (1 move)" },
     { tiles: [["1"], ["2"], ["4"], ["4"]], st: ["placed", "placed", "placed", "idle"],
-      note: ["", "", "그대로", ""], ops: 1,
+      note: ["", "", t(E, "stays", "그대로"), ""], ops: 1,
       ko: "다음 4 는 앞의 2 보다 이미 커요. 안 밀어도 돼요. (0 회)",
       en: "The next 4 is already bigger than 2. No need to push. (0 moves)" },
     { tiles: [["1"], ["2"], ["4"], ["5"]], st: ["placed", "placed", "placed", "moving"],
@@ -90,7 +90,7 @@ export function PlaceOneByOneSim({ E }) {
       /* 2026-09-22 학생 지적: "있었다면" 을 놓치고 빨리 읽으면 원래 문제(수 4개) 답이
          4 인 줄 착각한다. 가정임을 문장 맨 앞 "만약" + note 태그로 눈에 띄게 한다.
          (여기 tone="stuck" 이 이미 색으로도 구분하지만, 문장을 놓치면 색만으론 안 잡혔다.) */
-      note: ["", "", "", "", "만약 4 가?"], ops: 2, tone: "stuck",
+      note: ["", "", "", "", t(E, "one more 4?", "만약 4 가?")], ops: 2, tone: "stuck",
       ko: "만약 여기서 4 가 하나 더 있었다면?\n(원래 문제 수는 그대로 4개예요 — 이건 가정이에요)\n1, 2, 4, 5 는 이미 찼어요.",
       en: "Suppose there were one more 4 here.\n(This is a what-if — the original problem still has 4 numbers.)\n1, 2, 4, 5 are already taken." },
     { tiles: [["1"], ["2"], ["4"], ["5"], ["6"]], st: ["placed", "placed", "placed", "placed", "moving"],
@@ -104,8 +104,8 @@ export function PlaceOneByOneSim({ E }) {
        (memory/feedback_new_text_needs_a_reader.md 재검증에서 0건이 됐던 방식). */
     { tiles: [["1"], ["2"], ["4"], ["5"], ["6"]], st: ["placed", "placed", "placed", "placed", "placed"],
       note: ["", "", "", "", "(6-4) ÷ 1"], ops: 4, tone: "aha",
-      ko: "몇 번 밀었는지 하나씩 세지 않아도 돼요.\n4 에서 6 까지 거리는 2, K 가 1 이니까 2 ÷ 1 = 2 회예요.\n코드에서도 이 나눗셈 한 번으로 계산해요.",
-      en: "You do not have to count pushes one by one.\nDistance from 4 to 6 is 2, and K is 1, so 2 / 1 = 2 moves.\nThe code computes this with one division too." },
+      ko: "자리는 4 → 5 → 6 으로 한 칸씩만 밀린 것처럼 보이지만,\n4 가 실제로 밀린 횟수는 (6-4) ÷ 1 = 2 회예요.\n자리는 그대로 두고 K 가 2 라고 가정해볼게요.\n(진짜 K = 2 문제라면 자리 자체가 다 달라져요 — 여기선 나눗셈만 따로 봐요)\n거리는 똑같이 2, 한 번에 2 칸씩 미니까 (6-4) ÷ 2 = 1 회로 끝나요.\n코드에서도 이 나눗셈 한 번으로 계산해요.",
+      en: "The slot only looks like it moves one step, 4 → 5 → 6,\nbut 4 was really pushed (6-4) / 1 = 2 times.\nLet's keep the slots as they are and just imagine K were 2.\n(In a real K = 2 problem the slots would all end up different — here we only look at the division)\nThe distance is still 2, and each push covers 2, so (6-4) / 2 = 1 push.\nThe code computes this with one division too." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
