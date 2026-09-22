@@ -1,6 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getStrangeFnSections, getStrangeFnWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
+import { StrangeFnDigitSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeStrangeFnCh1
@@ -11,7 +12,7 @@ export function makeStrangeFnCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A weird function f. If x has a digit other than 0/1, replace each digit with its parity (odd→1, even→0). Otherwise, do x-1. Count how many f's reach 0.",
+        "How many times must f run to turn x into 0?",
         "이상한 함수 f 를 몇 번 써야 x 가 0 이 되는지 세는 문제예요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -86,12 +87,49 @@ export function makeStrangeFnCh1(E) {
         </div>),
     },
 
-    // 1-2: Sample I/O
+    // 1-2: Input/Output format (2026-09-22 신설 — 형식 카드를 샘플에서 분리, photoshoot25 시즌 표준 그대로)
     {
       type: "reveal",
       narr: t(E,
-        "Two sample cases. 24680 has even digits everywhere, so one op kills it. 210 takes 4 ops — let's trace.",
-        "24680 은 한 번이면 끝나고, 210 은 4 번 걸려요."),
+        "First line T, then one x per line — one test each.",
+        "첫 줄에 T, 그다음 줄마다 x 가 하나씩 있어요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#5b21b6", fontWeight: 800 }}>T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of tests", "— 테스트 개수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #c4b5fd" }}>
+                <div><span style={{ color: "#5b21b6", fontWeight: 800 }}>x</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— one number, on its own line", "— 수 하나, 한 줄에 하나")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats T times", "↑ 이 줄이 T 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "For each x, how many times f applies until it hits 0, mod 10⁹+7 (T lines).",
+                  "x 마다 f 를 몇 번 써야 0 이 되는지를 10⁹+7 로 나눈 나머지로, 한 줄씩 출력해요 (T 줄).")}
+            </div>
+          </div>
+          {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 100,000 (= 10⁵)</div>
+              <div>1 ≤ x &lt; 10^(2×10⁵)  <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(x can be astronomically large)", "(x 가 엄청 클 수 있음)")}</span></div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "total digits across all x ≤ 10⁶", "모든 x 의 자릿수 합 ≤ 10⁶")}</div>
+            </div>
+          </div>
+        </div>),
+    },
+
+    // 1-3: Sample I/O + x=210 시뮬 (2026-09-22 — 정적 텍스트 트레이스를 SimNav 시뮬로 교체)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Two samples, then walk x = 210 one step at a time.",
+        "예제 두 개를 보고, x = 210 은 한 단계씩 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
@@ -112,7 +150,7 @@ export function makeStrangeFnCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 14 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>
               {t(E, "Trace x = 24680", "추적 x = 24680")}
             </div>
@@ -123,37 +161,71 @@ export function makeStrangeFnCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>
-              {t(E, "Trace x = 210", "추적 x = 210")}
-            </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" , wordBreak: "keep-all", textWrap: "balance" }}>
-              <div>210 → 2→0, 1→1, 0→0 → 010 = 10  <span style={{ color: "#94a3b8" }}>{t(E, "(op 1)", "(1 회)")}</span></div>
-              <div>10  → {t(E, "only 0/1, so 10 − 1 =", "0/1 만, 10 − 1 =")} 9  <span style={{ color: "#94a3b8" }}>{t(E, "(op 2)", "(2 회)")}</span></div>
-              <div>9   → 9→1 → 1  <span style={{ color: "#94a3b8" }}>{t(E, "(op 3)", "(3 회)")}</span></div>
-              <div>1   → 1 − 1 = 0  <span style={{ color: "#94a3b8" }}>{t(E, "(op 4)", "(4 회)")}</span></div>
-              <div style={{ marginTop: 4 }}><b style={{ color: "#15803d" }}>{t(E, "Total: 4 ops", "합계: 4 회")}</b></div>
-            </div>
-          </div>
-
-          {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
-          <div style={{ marginTop: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
-            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
-              <div>1 ≤ T ≤ 100,000 (= 10⁵)</div>
-              <div>1 ≤ x &lt; 10^(2×10⁵)  <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(x can be astronomically large)", "(x 가 엄청 클 수 있음)")}</span></div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "total digits across all x ≤ 10⁶  ·  answer mod 10⁹+7", "모든 x 의 자릿수 합 ≤ 10⁶  ·  답은 10⁹+7 로 나눈 나머지")}</div>
-            </div>
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, overflow: "hidden" }}>
+            <StrangeFnDigitSim E={E} />
           </div>
         </div>),
     },
 
-    // 1-3: Pattern reveal
+    // 1-4: 한계 — 하나씩 세면 못 센다 (2026-09-22 신설. 브루트 코드 없음 — feedback_why_and_how_over_slowness)
     {
       type: "reveal",
       narr: t(E,
-        "Once x is a 0/1 string, view it as a binary number n. Watch what happens for small n.",
-        "x 가 0/1 만 남으면 이진수 n 으로 봐요."),
+        "What if we just count f, one use at a time? We can't.",
+        "f 를 하나씩 세면 어떻게 될까요? 그럴 수 없어요."),
+      content: (
+        <div style={{ padding: 20, wordBreak: "keep-all" }}>
+          <div style={{
+            maxWidth: 470, margin: "0 auto", background: "#fef2f2",
+            border: "1.5px solid #fca5a5", borderRadius: 12, padding: "14px 16px",
+          }}>
+            <div style={{ fontWeight: 800, color: "#b91c1c", marginBottom: 8, fontSize: 13 }}>
+              🐌 {t(E, "Count f one use at a time?", "f 를 한 번씩 세어 가면?")}
+            </div>
+            <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.9, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div>1 ≤ x &lt; 10^(2×10⁵)</div>
+              <div style={{ color: "#b91c1c", fontWeight: 800, marginTop: 4 }}>
+                {t(E, "total digits across all x ≤ 10⁶", "모든 x 의 자릿수 합 ≤ 10⁶")}
+              </div>
+            </div>
+            <div style={{ fontSize: 11.5, color: "#7f1d1d", marginTop: 8, lineHeight: 1.6 }}>
+              {t(E,
+                "x itself can already be a number with up to 200,000 digits. Even after it becomes 0/1 only, it stays that big — so the number of times f must be applied can itself be astronomically large. Counting one use at a time means looping that many times, which is far more than any loop could finish.",
+                "x 자체가 이미 20만 자리에 가까운 수일 수 있어요. 0/1 만 남은 뒤에도 그 크기는 그대로예요. 그러니 f 를 써야 하는 횟수 자체가 어마어마하게 클 수 있어요 — 하나씩 세는 건 그 횟수만큼 반복해야 하는데, 어떤 반복문도 끝낼 수 없는 크기예요.")}
+            </div>
+          </div>
+          <div style={{ maxWidth: 470, margin: "12px auto 0", fontSize: 12.5, color: "#5b21b6", textAlign: "center", fontWeight: 700 }}>
+            {t(E,
+              "→ So: don't count one by one. Find a rule from small values, and get the answer with one formula.",
+              "→ 그러니 하나씩 세지 말고, 작은 값에서 규칙을 찾아 식 하나로 한 번에 구해요.")}
+          </div>
+        </div>),
+    },
+
+    // 1-5: 도입 — 작은 n 부터 직접 세어보기 (input, 2026-09-22 신설. 공식 없이 손으로)
+    {
+      type: "input",
+      narr: t(E,
+        "Let's count by hand for small values first.",
+        "작은 값부터 직접 세어 봐요."),
+      question: t(E,
+        "x = 10 (only 0s and 1s). How many f's until it hits 0? Count it out.",
+        "x = 10 이에요 (0 과 1 만 있어요). 0 이 될 때까지 f 를 몇 번 써야 할까요? 직접 세어 보세요."),
+      hint: t(E,
+        "Warm-up: x = 1 takes 1 f (1 − 1 = 0).\nNow x = 10: it's only 0/1, so 10 − 1 = 9.\n9 has a digit other than 0/1, so flip by parity — 9 is odd, so it becomes 1.\n1 is only 0/1, so 1 − 1 = 0. How many f's was that in total?",
+        "몸풀기: x = 1 은 f 한 번(1 − 1 = 0).\n이제 x = 10: 0/1 만 있으니 10 − 1 = 9.\n9 는 0/1 이 아닌 자리가 있으니 홀짝으로 바꿔요 — 9 는 홀수라서 1.\n1 은 0/1 만 있으니 1 − 1 = 0. 모두 몇 번이었나요?"),
+      answer: 3,
+      explain: t(E,
+        "3 is right. 10 → 9 → 1 → 0, three f's.\nx = 1 took 1, x = 10 took 3 — it didn't just go up by one. Let's find the real rule next.",
+        "3 이 맞아요. 10 → 9 → 1 → 0, 세 번이에요.\nx = 1 은 1 번, x = 10 은 3 번 — 그냥 하나씩 늘어나지 않아요. 진짜 규칙을 다음 쪽에서 찾아봐요."),
+    },
+
+    // 1-6: 해결 — 패턴 정리 (2026-09-22: '왜 이진수 뺄셈과 같나' 지어낸 설명 제거, 관찰→규칙으로만)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Once x is 0/1 only, read it as binary n — and look for a rule.",
+        "x 가 0/1 만 남으면 이진수 n 으로 읽고 규칙을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
@@ -162,9 +234,12 @@ export function makeStrangeFnCh1(E) {
 
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
+              {/* ⚠️ 2026-09-22: 예전 문장은 "이진수에서 1 빼기와 똑같다" 고 주장했는데
+                  틀렸다 (10−1=9 ≠ 이진 10−1=1). 검증해 주지 않은 인과는 쓰지 않는다 —
+                  작은 n 을 세어서 나온 값을 그대로 관찰만 한다. */}
               {t(E,
-                "When x has only 0s and 1s, treat its decimal-string as a binary number n. f does x−1 each time, but 'subtract 1 in decimal-of-0/1' equals 'subtract 1 in binary' until the number breaks the 0/1 rule again.",
-                "x 가 0 과 1 만 가지면 그 문자열을 이진수 n 으로 봐요. 이때는 f 가 하는 x−1 이 이진수에서 1 을 빼는 것과 똑같아요. 그러다 0/1 규칙이 깨지는 순간 다시 자리별 변환이 일어나요.")}
+                "Once x has only 0s and 1s, read that string as a binary number n. We just counted n = 1 (1 f) and n = 2 (3 f's) by hand. Let's line up a few more n's and look for a rule in the results.",
+                "x 가 0 과 1 만 가지면 그 문자열을 이진수 n 으로 읽어요. 앞 쪽에서 n = 1(1 번)과 n = 2(3 번)를 직접 세어 봤어요. 다른 n 들도 함께 늘어놓고 규칙이 보이는지 살펴봐요.")}
             </div>
           </div>
 
@@ -206,39 +281,40 @@ export function makeStrangeFnCh1(E) {
         </div>),
     },
 
-    // 1-4: Quiz - x = 10
-    {
-      type: "quiz",
-      narr: t(E,
-        "x = 1000 has only 0/1 digits. Read it as binary and use the formula.",
-        "x = 1000 도 0/1 만 있어요. 이진수로 읽고 공식을 써 봐요."),
-      question: t(E,
-        "How many ops to take x = 1000 down to 0?",
-        "x = 1000 을 0 으로 만드는 데 몇 번?"),
-      options: [
-        t(E, "8", "8"),
-        t(E, "12", "12"),
-        t(E, "16", "16"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "1000 read as binary is 8. n = 8 is even, so g = 3 × (8 ÷ 2) = 12.",
-        "1000 을 이진수로 읽으면 8 이에요.\nn = 8 은 짝수라서 g = 3 × (8 ÷ 2) = 12 회."),
-    },
-
-    // 1-5: Input - x = 11
+    // 1-7: 연습1 — 0/1 이 아닌 자리가 있는 값 (input, x=37 → 5. 2026-09-22 신설)
     {
       type: "input",
       narr: t(E,
-        "x = 11 already has only 0/1 digits. Read as binary, then apply the closed form.",
-        "x = 11 은 이미 0/1 만. 이진수로 보고 공식 적용."),
+        "Practice — a value with a digit other than 0/1.",
+        "0/1 이 아닌 자리가 있는 값도 연습해 봐요."),
       question: t(E,
-        "How many ops for x = 11?",
-        "x = 11 은 몇 번?"),
+        "How many f's for x = 37?",
+        "x = 37 은 몇 번 만에 0 이 될까요?"),
       hint: t(E,
-        "Treat '11' as a binary number — what value is that? Then use g(2k+1) = 3k+1.",
-        "'11' 을 이진수로 보면 값이 얼마? g(2k+1) = 3k+1 적용."),
-      answer: 4,
+        "3 and 7 are both odd, so parity-flip makes 37 → 11 (1 f).\n'11' read as binary is n = 3, and g(3) = 4.\nTotal = 1 + g(3).",
+        "3 과 7 은 둘 다 홀수라서 홀짝으로 바꾸면 37 → 11 (1 번).\n'11' 을 이진수로 읽으면 n = 3, g(3) = 4.\n합계 = 1 + g(3)."),
+      answer: 5,
+      explain: t(E,
+        "5 is right. 37 → 11 (1) → 10 (2) → 9 (3) → 1 (4) → 0 (5).\nSame as 1 + g(3) = 1 + 4 = 5.",
+        "5 가 맞아요. 37 → 11 (1) → 10 (2) → 9 (3) → 1 (4) → 0 (5).\n1 + g(3) = 1 + 4 = 5 와 같아요."),
+    },
+
+    // 1-8: 연습2 — 이미 0/1 인 큰 값 (input, x=1010 → 15. 2026-09-22 신설)
+    {
+      type: "input",
+      narr: t(E,
+        "Practice — a value that's already all 0s and 1s, and bigger.",
+        "이미 0 과 1 만 있는, 더 큰 값도 연습해 봐요."),
+      question: t(E,
+        "How many f's for x = 1010?",
+        "x = 1010 은 몇 번 만에 0 이 될까요?"),
+      hint: t(E,
+        "It's already 0/1 only, so no parity-flip needed. Read '1010' as binary — that's n = 10. n is even, so g(2k) = 3k with k = 5.",
+        "이미 0/1 만 있어서 홀짝 변환이 필요 없어요. '1010' 을 이진수로 읽으면 n = 10. n 이 짝수니 g(2k) = 3k, k = 5."),
+      answer: 15,
+      explain: t(E,
+        "15 is right. g(10) = 3 × 5 = 15 — counting by hand would take 15 steps, but the formula gives it in one shot.",
+        "15 가 맞아요. g(10) = 3 × 5 = 15 — 직접 세면 15 단계나 걸리지만, 식으로는 한 번에 나와요."),
     },
   ];
 }
