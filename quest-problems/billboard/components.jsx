@@ -141,8 +141,8 @@ export function getBillboardSections(E) {
             "그래서 광고판마다 트럭과 겹치는 넓이(overlap)를 구해\n전체 넓이에서 빼고, 둘을 더하면 답이에요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
-            "Python 의 list, map 을 쓰면 알고리즘이 짧아져요."),
+        t(E, "Python's map() makes the code shorter.",
+            "Python 의 map() 을 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

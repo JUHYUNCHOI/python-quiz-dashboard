@@ -298,8 +298,8 @@ export function getCrossRoad3Sections(E) {
             "어느 경우든 그 소의 통과 시간(duration)을 더하면 끝나는\n시각이 되고, 그게 새로운 current_time 이에요. 마지막에\n남는 값이 바로 답이에요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
-            "Python 의 list, map 을 쓰면 알고리즘이 짧아져요."),
+        t(E, "Python's map() makes the code shorter.",
+            "Python 의 map() 을 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

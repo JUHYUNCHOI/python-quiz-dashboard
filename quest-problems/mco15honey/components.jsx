@@ -249,8 +249,8 @@ export function getHoneySections(E) {
          · "합계는 2×10^9 을 넘을 수 있어요" 는 지어낸 수다 — 바로 앞 제약 카드가
            "원문 상한을 확인하지 못했어요" 라고 적어 놓고 여기서만 상한을 안다고 말한다. */
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sort) make algorithms concise.",
-            "Python 은 list · map · sort 가 있어서 코드가 짧아져요."),
+        t(E, "Python's map() and sort() make algorithms concise.",
+            "Python 은 map() · sort() 가 있어서 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Include only the headers you've learned, one per line — iostream, vector, algorithm.",

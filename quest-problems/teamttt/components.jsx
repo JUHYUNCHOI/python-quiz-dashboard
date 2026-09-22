@@ -344,8 +344,8 @@ export function getTeamTttSections(E) {
           "무엇을 출력해야 하나요? 혼자 우승한 소 수와 2명 팀 우승 수예요.\n8개 줄(가로 3 + 세로 3 + 대각선 2)을 하나씩 봐야 해요.\n그래서 줄마다 글자를 set 에 모아요 — 서로 다른 글자가 1개면\n혼자 우승, 2개면 그 두 글자를 팀으로 세요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, sorted) make algorithms concise.",
-            "Python 은 list, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's sorted() makes the code shorter.",
+            "Python 은 sorted() 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

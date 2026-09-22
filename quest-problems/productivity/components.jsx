@@ -206,8 +206,8 @@ export function getProductivitySections(E) {
             "그래서 d 를 미리 구해 정렬해 둬요.\n물음마다 d[i] > S 인 개수를 세어 V 와 견줘요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, sorted) make algorithms concise.",
-            "Python 의 list, sorted 를 쓰면 알고리즘이 짧아져요."),
+        t(E, "Python's sorted() makes the code shorter.",
+            "Python 의 sorted() 를 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "upper_bound on a sorted vector — counts how many d[i] > S in O(log N).",

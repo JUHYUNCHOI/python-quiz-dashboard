@@ -108,8 +108,8 @@ export function getLifeguardsSections(E) {
           "무엇을 출력해야 하나요? 한 명을 해고한 뒤 남는 최대 커버 시간이에요.\nN 이 작아서 누구를 해고할지 한 명씩 다 시도해 볼 수 있어요.\n그래서 사람마다 그 한 명만 빼고 나머지 구간을 시간순으로 훑어\n합쳐진 커버 시간을 구하고, 그중 가장 큰 값을 답으로 골라요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
-            "Python 은 list, map 덕분에 코드가 짧아져요."),
+        t(E, "Python's map() makes the code shorter.",
+            "Python 은 map() 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Structured binding for (auto& [s, e] : rest) reads pair fields like names.",

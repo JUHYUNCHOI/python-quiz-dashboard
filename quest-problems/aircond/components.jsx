@@ -297,8 +297,8 @@ export function getAirCondSections(E) {
           "답은 모든 소를 시원하게 하는 에어컨 조합의 최소 비용이에요.\nM 이 10 까지라 조합은 2^M ≤ 1024 가지뿐이에요.\n그래서 조합을 하나씩 다 해 보며 축사마다 냉방력을 더하고,\n모든 소를 채우는 조합 중 가장 싼 것을 찾아요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
-            "Python 은 list, map 덕분에 코드가 짧아져요."),
+        t(E, "Python's map() makes the code shorter.",
+            "Python 은 map() 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

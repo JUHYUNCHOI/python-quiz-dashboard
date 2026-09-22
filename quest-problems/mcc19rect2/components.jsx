@@ -258,8 +258,8 @@ export function getMcc19Rect2Sections(E) {
             "그래서 아는 x 셋 중 짝 없는 값이 네 번째 점의 x 예요.\ny 도 똑같이 구해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
-            "Python의 고수준 구문 (list, map)으로 알고리즘이 간결."),
+        t(E, "Python's map() makes the code shorter.",
+            "Python 의 map() 덕분에 알고리즘이 간결해요."),
       ],
       cppOnly: [
         /* 2026-09-09: 이 설명은 why(항상 보임)에 있었다. MCC 는 codeLang="py" 고정이라

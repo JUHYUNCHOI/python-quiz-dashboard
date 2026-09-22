@@ -118,8 +118,8 @@ export function getBillboard2Sections(E) {
           "무엇을 출력해야 하나요? 가장 작은 타프의 넓이예요.\n타프는 직사각형 하나뿐이라 L자 모양의 빈틈이 곤란해요.\n그래서 확인해요 — 사료 광고판이 한쪽 끝까지 덮고 한 변 전체를 가리나요?\n그러면 남는 부분이 띠 모양이에요.\n아니면 빈틈이 L자라서 광고판 전체를 다 덮어야 해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
-            "파이썬의 list, map 덕분에 코드가 짧아요."),
+        t(E, "Python's map() makes the code shorter.",
+            "파이썬의 map() 덕분에 코드가 짧아요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

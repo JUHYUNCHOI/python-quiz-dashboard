@@ -99,8 +99,8 @@ export function getAcowdemia1Sections(E) {
             "그 필요량이 L 이하면 h 를 만들 수 있으니 더 큰 h 를 찾고,\n넘으면 더 작은 h 를 찾아요 — 이렇게 최댓값을 찾아요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's map() and sorted() make algorithms concise.",
+            "Python 은 map(), sorted() 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, algorithm) — what we've been using.",
