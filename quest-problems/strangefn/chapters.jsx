@@ -31,6 +31,13 @@ export function makeStrangeFnCh1(E) {
                 "Output how many applications of f are needed to reach 0, mod 10⁹+7.",
                 "f 를 몇 번 써야 0 이 되는지 10⁹+7 로 나눈 나머지를 출력해요.")}
             </div>
+            {/* 2026-09-22: 10⁹+7 이 화면에 16번 나오지만 뜻은 한 번도 안 밝혀져 있었다.
+                학생이 처음 만나는 이 자리(1쪽 미션)에서 한 번만 정의한다. */}
+            <div style={{ fontSize: 11, color: "#7c3aed", marginTop: 6, wordBreak: "keep-all", textWrap: "balance", whiteSpace: "pre-line" }}>
+              {t(E,
+                "10⁹+7 = 1,000,000,007, a huge prime.\nThe true answer can get astronomically large, so we only report the remainder after dividing by it.",
+                "10⁹+7 은 10억 7, 즉 1,000,000,007 이에요.\n답이 어마어마하게 커질 수 있어서, 이 수로 나눈 나머지만 답으로 내요.")}
+            </div>
           </div>
 
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -49,7 +56,7 @@ export function makeStrangeFnCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "If x has any digit ≠ 0 and ≠ 1: replace ",
+                  {t(E, "If x has any digit other than 0 or 1: replace ",
                         "x 에 0/1 이 아닌 자릿수가 하나라도 있으면: ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "each digit", "각 자릿수")}</b>
                   {t(E, " by 1 if odd, 0 if even.", " 를 홀수면 1, 짝수면 0 으로 바꿔요.")}
@@ -110,7 +117,7 @@ export function makeStrangeFnCh1(E) {
               {t(E, "Trace x = 24680", "추적 x = 24680")}
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" , wordBreak: "keep-all", textWrap: "balance" }}>
-              <div>24680 → {t(E, "has even/odd digits ≠ 0,1", "0/1 이 아닌 자릿수 있음")}</div>
+              <div>24680 → {t(E, "has digits other than 0/1", "0/1 이 아닌 자릿수 있음")}</div>
               <div>{t(E, "each digit by parity:", "자리별 홀짝:")} 2→0, 4→0, 6→0, 8→0, 0→0</div>
               <div>= 00000 = 0 ✅ <b style={{ color: "#15803d" }}>1 op</b></div>
             </div>
