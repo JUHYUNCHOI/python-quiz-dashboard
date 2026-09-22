@@ -273,11 +273,24 @@ export function NumInput({ question, hint, answer, E, onSolve, explain }: NumInp
           🔎 {E ? "Give up and show the solution" : "모르겠어요, 풀이 보기"}
         </button>
       )}
-      {explain && (correct || revealed) && (
+      {/* 2026-09-22 PM 판정: 안 풀고 "풀이 보기" 로 연 경우, 실제로 맞힌 경우와
+          같은 초록 박스가 떴다 — 재검증 학생 "마치 내가 맞춘 것처럼 보였다."
+          `revealed`(안 풀고 봄) 는 파랑/중립 톤 + "💡 풀이" 라벨로 갈라서 색부터
+          "맞혔다" 로 읽히지 않게 한다. `correct` 일 때 기존 초록 모양은 그대로. */}
+      {explain && correct && (
         <div
           className="mt-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-xs leading-relaxed text-green-900 whitespace-pre-line"
           style={{ wordBreak: "keep-all", textWrap: "balance" }}
         >
+          {explain}
+        </div>
+      )}
+      {explain && !correct && revealed && (
+        <div
+          className="mt-3 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs leading-relaxed text-blue-900 whitespace-pre-line"
+          style={{ wordBreak: "keep-all", textWrap: "balance" }}
+        >
+          <div className="mb-1 font-bold text-blue-700">💡 {E ? "Solution" : "풀이"}</div>
           {explain}
         </div>
       )}

@@ -97,6 +97,15 @@ export function PlaceOneByOneSim({ E }) {
       note: ["", "", "", "", "4 → 5 → 6"], ops: 4, tone: "aha",
       ko: "한 칸 밀면 5 라 아직 겹쳐요. 그래서 6 까지 — 한 번에 2 회예요. 이렇게 여러 번 미는 경우가 생겨요.",
       en: "One push only reaches 5, still taken. So it goes to 6 — two moves at once. Sometimes one number needs several pushes." },
+    /* 2026-09-22 학생 지적(3차 재검증): 코드에서 (cur - vals[i]) // k 를 처음 볼 때 막혔다.
+       "그렇다니까" 로 결론만 되짚는 말풍선(components.jsx hi:[22,24])은 두 번째 실패였다.
+       처방은 말이 아니라 숫자 — 이 장면의 실제 값(4 에서 6 까지, K=1)으로 나눗셈을
+       미리 한 번 보여준다. 예제를 [4,1,4,1]→[4,1,4,4,1] 로 늘린 처방과 같은 방향
+       (memory/feedback_new_text_needs_a_reader.md 재검증에서 0건이 됐던 방식). */
+    { tiles: [["1"], ["2"], ["4"], ["5"], ["6"]], st: ["placed", "placed", "placed", "placed", "placed"],
+      note: ["", "", "", "", "(6-4) ÷ 1"], ops: 4, tone: "aha",
+      ko: "몇 번 밀었는지 하나씩 세지 않아도 돼요.\n4 에서 6 까지 거리는 2, K 가 1 이니까 2 ÷ 1 = 2 회예요.\n코드에서도 이 나눗셈 한 번으로 계산해요.",
+      en: "You do not have to count pushes one by one.\nDistance from 4 to 6 is 2, and K is 1, so 2 / 1 = 2 moves.\nThe code computes this with one division too." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
