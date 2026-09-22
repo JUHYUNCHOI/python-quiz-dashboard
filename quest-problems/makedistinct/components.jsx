@@ -105,26 +105,29 @@ const FULL_CPP = [
 // 검증본 코드(FULL_PY/CPP)는 그대로, 표시만 CodeWalk 로.
 const _MD_VARS = [
   { v: "k", ko: "더하는 값", en: "the step" },
-  { v: "m", ko: "|K|", en: "|K|" },
-  { v: "groups", ko: "나머지별 묶음", en: "residue groups" },
+  { v: "m", ko: "K 크기 (항상 양수)", en: "size of K (always positive)" },
+  { v: "groups", ko: "나머지별 묶음", en: "same-remainder groups" },
   { v: "cur", ko: "직전에 놓은 값", en: "last placed" },
 ];
 export function getMakeDistinctWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _MD_VARS, beats: [
       { hi: [7, 17],  bubble: t(E, "What are we solving for? One number per test — the fewest operations needed.\nFirst read T, then each test's n, k, and the array. m = |k|.", "무엇을 구해야 하나요?\n테스트마다 최소 횟수 하나예요.\n먼저 T 를 읽고, 테스트마다 n, k, 배열을 읽어요. m = |k| 예요.") },
-      { hi: [19, 24], bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "K 를 더해도 |K| 로 나눈 나머지는 안 바뀌어요.\n그래서 나머지끼리 묶으면 묶음끼리 서로 영향이 없어요!") },
-      { hi: [26, 35], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "묶음마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 둬요.") },
-      { hi: [36, 50], bubble: t(E, "cur is not how many times we pushed — it is the spot that is taken.\nIf the next value is already past cur, keep it; otherwise it must move to cur+K.\nEvery spot sits K apart, so how many pushes that takes comes straight out of one division.", "cur 는 **몇 번 밀었는지가 아니라 이미 차지한 자리**예요.\n자리들은 K 씩 떨어져 있어서, 원래 값에서 그 자리까지 몇 번 뛰는지는 나눗셈 한 번으로 나와요.\n다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 횟수를 더해요.") },
+      { hi: [19, 24], bubble: t(E, "Key insight: adding K never changes a value's remainder when divided by m.\nSo group values by that remainder — groups never interact!\nC++'s % can return a negative number for negative input, so ((x % m) + m) % m nudges it back to 0..m-1.", "핵심: K 를 더해도 m 으로 나눈 나머지는 안 바뀌어요.\n그래서 나머지가 같은 값끼리 묶으면, 묶음끼리는 서로 부딪히지 않아요!\nC++ 의 % 는 음수가 들어오면 음수를 돌려줄 수 있어서, ((x % m) + m) % m 으로 한 번 더 보정해 0 이상으로 맞춰요.") },
+      { hi: [26, 35], bubble: t(E, "total starts at 0 — every push adds to it.\nFor each group: sort (K>0 ascending, K<0 descending), then the first value stays put as cur.", "total 은 0 에서 시작해요 — 밀 때마다 여기 더해요.\n묶음마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 두고 cur 로 삼아요.") },
+      { hi: [36, 42], bubble: t(E, "past just answers one question: is this value already ahead of cur?\nFor K>0 that means greater; for K<0 (sorted the other way) it means smaller.", "past 는 딱 하나만 물어요 — 이 값이 이미 cur 보다 앞서 있는가.\nK 가 양수면 '더 크다', 음수면(반대로 정렬했으니) '더 작다' 로 정해요.") },
+      { hi: [43, 44], bubble: t(E, "If it's already ahead (past), there's no collision — it just becomes the new cur.", "이미 앞서 있으면(past) 부딪히지 않아요. 그 값이 그대로 새 cur 가 돼요.") },
+      { hi: [45, 50], bubble: t(E, "Otherwise it collides, so push it to cur + K — the next free spot.\nEvery spot after that is exactly K apart, so the distance from vals[i] to the new cur is always a multiple of K.\nThat's why one division gives the exact push count, with no remainder.", "아니면 부딪히니까 cur + K, 즉 다음 빈 자리로 밀어요.\n그 뒤로 자리들은 K 씩 정확히 떨어져 있어서, vals[i] 에서 새 cur 까지 거리는 항상 K 의 배수예요.\n그래서 나눗셈 한 번으로 나머지 없이 딱 떨어지는 몇 번 밀었는지가 나와요.") },
       { hi: [51, 51], bubble: t(E, "Print this test's answer.", "이 테스트의 답을 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _MD_VARS, beats: [
     { hi: [0, 1],   bubble: t(E, "What are we solving for? One number per test — the fewest operations needed.\nAll the N values added together can reach 1,000,000, so read fast first.", "무엇을 구해야 하나요?\n테스트마다 최소 횟수 하나예요.\nN 을 다 더하면 1,000,000 까지라 입력부터 빠르게 받아요.") },
     { hi: [3, 6],   bubble: t(E, "solve() handles ONE test: read n, k, the array. m = |k|.", "solve() 는 테스트 하나를 맡아요. n, k, 배열을 읽고 m = |k| 예요.") },
-    { hi: [8, 11],  bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "K 를 더해도 |K| 로 나눈 나머지는 안 바뀌어요.\n그래서 나머지끼리 묶으면 묶음끼리 서로 영향이 없어요!") },
-    { hi: [13, 17], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "묶음마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 둬요.") },
-    { hi: [18, 24], bubble: t(E, "cur is not how many times we pushed — it is the spot that is taken.\nIf the next value is already past cur, keep it; otherwise it must move to cur+K.\nEvery spot sits K apart, so how many pushes that takes comes straight out of one division.", "cur 는 **몇 번 밀었는지가 아니라 이미 차지한 자리**예요.\n자리들은 K 씩 떨어져 있어서, 원래 값에서 그 자리까지 몇 번 뛰는지는 나눗셈 한 번으로 나와요.\n다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 횟수를 더해요.") },
+    { hi: [8, 11],  bubble: t(E, "Key insight: adding K never changes a value's remainder when divided by m.\nSo group values by that remainder — groups never interact!\ngroups.setdefault(key, []) means: if this remainder has no list yet, start one; then add x to it.", "핵심: K 를 더해도 m 으로 나눈 나머지는 안 바뀌어요.\n그래서 나머지가 같은 값끼리 묶으면, 묶음끼리는 서로 부딪히지 않아요!\ngroups.setdefault(key, []) 는 '이 나머지의 묶음이 아직 없으면 새로 만들고, x 를 거기 추가해라' 는 뜻이에요.") },
+    { hi: [13, 17], bubble: t(E, "total starts at 0 — every push adds to it.\nFor each group: sort (K>0 ascending, K<0 descending), then the first value stays put as cur.", "total 은 0 에서 시작해요 — 밀 때마다 여기 더해요.\n묶음마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 두고 cur 로 삼아요.") },
+    { hi: [18, 21], bubble: t(E, "Walk through the rest of the group.\ncur is not how many times we pushed — it is the spot already taken.\nIf the next value is already past cur, it's safe: it becomes the new cur, no push needed.", "묶음의 나머지를 하나씩 봐요.\ncur 는 몇 번 밀었는지가 아니라 이미 차지한 자리예요.\n다음 값이 이미 cur 를 지나 있으면 안전해요 — 밀 필요 없이 그 값이 새 cur 가 돼요.") },
+    { hi: [22, 24], bubble: t(E, "Otherwise it collides, so push it to cur + K — the next free spot.\nEvery spot after that is exactly K apart, so the distance from vals[i] to the new cur is always a multiple of K.\nThat's why one division gives the exact push count, with no remainder.", "아니면 부딪히니까 cur + K, 즉 다음 빈 자리로 밀어요.\n그 뒤로 자리들은 K 씩 정확히 떨어져 있어서, vals[i] 에서 새 cur 까지 거리는 항상 K 의 배수예요.\n그래서 나눗셈 한 번으로 나머지 없이 딱 떨어지는 몇 번 밀었는지가 나와요.") },
     { hi: [25, 25], bubble: t(E, "Print this test's answer.", "이 테스트의 답을 출력해요.") },
     { hi: [27, 29], bubble: t(E, "Run solve() for all T tests.", "T 개 테스트를 solve() 로 반복해요.") },
   ] };

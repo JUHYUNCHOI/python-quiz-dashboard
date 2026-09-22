@@ -258,7 +258,7 @@ export function makeMakeDistinctCh2(E, lang = "py") {
         type: "reveal",
         label: t(E, "Code", "코드"),
         narr: t(E,
-          "Group by residue, sort, greedy-push.  Each part lights up with a bubble — read them in order.",
+          "Group by remainder, sort, then push forward one at a time.",
           "나머지로 묶고, 정렬하고, 앞에서부터 하나씩 밀어요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />),
       };
