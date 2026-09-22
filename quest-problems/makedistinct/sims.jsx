@@ -34,10 +34,12 @@ function Say({ children, tone = "go" }) {
   );
 }
 
-/* 수 하나를 칸으로. 놓인 자리는 파랑, 아직 안 본 것은 회색, 지금 움직이는 것은 노랑. */
+/* 수 하나를 칸으로. 놓인 자리는 파랑, 아직 안 본 것은 회색, 지금 움직이는 것은 노랑,
+   묶음이 짝수 쪽임을 보일 때만 초록(even) — WhoCanMeetSim 의 홀/짝 묶음 표시용. */
 function Tile({ v, state, note }) {
   const c = state === "placed" ? { bg: "#dbeafe", bd: "#2563eb", fg: "#1e3a8a" }
           : state === "moving" ? { bg: "#fef9c3", bd: "#f59e0b", fg: "#92400e" }
+          : state === "even" ? { bg: "#dcfce7", bd: "#16a34a", fg: "#065f46" }
           : { bg: "#f8fafc", bd: "#cbd5e1", fg: "#64748b" };
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
@@ -100,12 +102,15 @@ export function PlaceOneByOneSim({ E }) {
     /* 2026-09-22 학생 지적(3차 재검증): 코드에서 (cur - vals[i]) // k 를 처음 볼 때 막혔다.
        "그렇다니까" 로 결론만 되짚는 말풍선(components.jsx hi:[22,24])은 두 번째 실패였다.
        처방은 말이 아니라 숫자 — 이 장면의 실제 값(4 에서 6 까지, K=1)으로 나눗셈을
-       미리 한 번 보여준다. 예제를 [4,1,4,1]→[4,1,4,4,1] 로 늘린 처방과 같은 방향
-       (memory/feedback_new_text_needs_a_reader.md 재검증에서 0건이 됐던 방식). */
+       미리 한 번 보여준다.
+       2026-09-22 두 번째 처방(같은 날, PM 지시) — 뒤 4줄("K 가 2 라고 가정")을
+       지웠다. 가정 위에 가정이라 학생이 여기서 그만두고 싶어 했다. K≠1 인 실제
+       장면은 5쪽(WhoCanMeetSim, [3,3,3,4] K=2)에서 숫자로 보여주므로,
+       여기는 예고만 하고 넘긴다. */
     { tiles: [["1"], ["2"], ["4"], ["5"], ["6"]], st: ["placed", "placed", "placed", "placed", "placed"],
       note: ["", "", "", "", "(6-4) ÷ 1"], ops: 4, tone: "aha",
-      ko: "자리는 4 → 5 → 6 으로 한 칸씩만 밀린 것처럼 보이지만,\n4 가 실제로 밀린 횟수는 (6-4) ÷ 1 = 2 회예요.\n자리는 그대로 두고 K 가 2 라고 가정해볼게요.\n(진짜 K = 2 문제라면 자리 자체가 다 달라져요 — 여기선 나눗셈만 따로 봐요)\n거리는 똑같이 2, 한 번에 2 칸씩 미니까 (6-4) ÷ 2 = 1 회로 끝나요.\n코드에서도 이 나눗셈 한 번으로 계산해요.",
-      en: "The slot only looks like it moves one step, 4 → 5 → 6,\nbut 4 was really pushed (6-4) / 1 = 2 times.\nLet's keep the slots as they are and just imagine K were 2.\n(In a real K = 2 problem the slots would all end up different — here we only look at the division)\nThe distance is still 2, and each push covers 2, so (6-4) / 2 = 1 push.\nThe code computes this with one division too." },
+      ko: "자리는 4 → 5 → 6 으로 한 칸씩만 밀린 것처럼 보이지만,\n4 가 실제로 밀린 횟수는 (6-4) ÷ 1 = 2 회예요.\nK 가 1 이 아니면 어떻게 되는지는 곧 봐요.",
+      en: "The slot only looks like it moves one step, 4 → 5 → 6,\nbut 4 was really pushed (6-4) / 1 = 2 times.\nWhat happens when K isn't 1 — that's coming up soon." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -141,35 +146,60 @@ export function PlaceOneByOneSim({ E }) {
 export function WhoCanMeetSim({ E }) {
   /* 원래 객관식 퀴즈였다. 선생님: "굳이 필요없는 퀴즈는 없애고 … 눈에 보이게끔".
      같은 것을 보여주되 답을 고르는 게 아니라 눈으로 보게 한다.
-     `a = [5, 3, 5, 4], K = 2` — 2 를 더하면 홀수는 계속 홀수, 짝수는 계속 짝수다. */
-  const nums = [5, 3, 5, 4];
+
+     2026-09-22 재설계 — 옛 예제 [5,3,5,4], K=2 는 답이 항상 1 회라 몫이 늘 1 이었다.
+     "(거리) ÷ K 가 2 이상인 장면이 이 quest 전체에 없다" 는 지적으로,
+     예제를 [3,3,3,4], K=2 로 바꿨다. 전수 검산: 답 3 회, 최종 자리값 3,5,7,4,
+     셋째 3 이 2 회 밀려 7 이 된다 → (7-3) ÷ 2 = 2.
+
+     세로 카드 쌓기 → **가로 한 줄**로 바꾼다. 세로 배치는 걸음마다 활성 카드가
+     아래로 내려가 흩어짐이 250~360px 였다(`feedback_one_thing_changes_at_a_time` 위반).
+     같은 도구로 잰 PlaceOneByOneSim(가로 한 줄)은 최대 157px 다.
+
+     [3,3,3] 이 전부 같은 숫자라 "그 칸" 을 가리킬 말이 없다 — 그래서 서수
+     (첫째~넷째)를 1걸음부터 계속 단다. Tile 의 note 슬롯만 쓰고 새 위젯은
+     만들지 않는다. 묶음 색(홀수=파랑, 짝수=초록)은 자리(index) 로 고정 —
+     값이 밀려도 홀/짝은 안 바뀌므로 index 로 정해도 항상 맞는다. */
+  const ord = (i) => [t(E, "1st", "첫째"), t(E, "2nd", "둘째"), t(E, "3rd", "셋째"), t(E, "4th", "넷째")][i];
+  // st(i) 로 각 칸 색을 정한다: 아직 안 본 짝수 칸만 "even"(초록), 나머지는 홀수 묶음 표시 or 실제 진행 상태.
   const steps = [
-    { show: 0, ko: "수 네 개예요 — 5, 3, 5, 4. 이번엔 K = 2 씩 더해요.",
-      en: "Four numbers — 5, 3, 5, 4. This time we add K = 2 each move." },
-    { show: 1, ko: "5 에 2 를 더하면 7, 또 더하면 9 … 계속 홀수예요. 짝수는 절대 안 돼요.",
-      en: "5 plus 2 is 7, then 9 … always odd. It can never become even." },
-    { show: 2, ko: "4 도 마찬가지예요. 6, 8, 10 … 계속 짝수예요.",
-      en: "Same for 4 — 6, 8, 10 … always even." },
-    { show: 3, tone: "aha",
-      /* 2026-09-22 학생 지적: "짝수 — 혼자" 가 무슨 뜻인지 짐작만 했다(화면이 이유를 안 밝힘).
-         이 예제엔 짝수가 4 하나뿐이라는 걸 직접 말해 준다. */
-      ko: "그래서 홀수끼리만 서로 부딪혀요. 이 예제엔 짝수가 4 하나뿐이라, 부딪힐 다른 짝수가 없어요.",
-      en: "So only the odd ones can ever clash. This example has only one even number, 4 — there is no other even number for it to clash with." },
-    /* 다섯 번째 걸음 (2026-09-22 추가) — 선생님이 4쪽에서 멈췄다:
-       "이걸 왜 구하는건지 그 목적을 모르겠어 … 결과도 이걸 그래서 뭐가 어쨋다는건지"
-       들어가는 이유는 위 chapters.jsx 의 narr 에서, 나가는 결과는 여기서 준다 —
-       이 예제의 실제 답(전수 탐색 검산: 최소 1 회, 5→7)과 다음 문제로 이어지는 한 줄.
-       `show` 는 앞 걸음과 같은 3 을 유지해 화면이 갑자기 딴 걸 그리지 않게 한다.
-       PlaceOneByOneSim 의 마지막 aha 걸음(답 + 결론을 같이 담는 모양)을 따랐다. */
-    { show: 3, tone: "aha",
-      /* 2026-09-22 학생 지적: "묶음 안에서 몇 번 밀지" 를 화면이 말 안 해서
-         "3쪽처럼 하면 되나?" 를 스스로 짐작했다. 직접 말해 준다. */
-      ko: "이 예제는 최소 1 번이에요 — 5 하나를 2 밀어서 7 로 만들면\n3, 4, 5, 7 로 다 달라져요.\n홀수는 홀수끼리, 짝수는 짝수끼리만 부딪혀요.\n묶음 안에서도 3쪽처럼 작은 값부터 하나씩 밀어서 자리를 잡아요.\n이 나눔은 다음 쪽에서도 그대로 쓰여요.",
-      en: "This example needs just 1 push — push one 5 by 2, to 7,\ngiving 3, 4, 5, 7, all different.\nOdds clash only with odds, evens only with evens.\nInside each group we settle values the same way as page 3 — smallest first, one push at a time.\nThis split is used on the next page too." },
+    { tiles: [3, 3, 3, 4], st: ["idle", "idle", "idle", "idle"],
+      extra: ["", "", "", ""],
+      ko: "수 네 개예요 — 3, 3, 3, 4. 이번엔 K = 2 씩 더해요.",
+      en: "Four numbers — 3, 3, 3, 4. This time we add K = 2 each move." },
+    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "idle"],
+      extra: ["", "", t(E, "→5→7→9…", "→5→7→9…"), ""],
+      ko: "3 에 2 를 더하면 5, 또 더하면 7 … 계속 홀수예요.",
+      en: "3 plus 2 is 5, then 7 … always odd." },
+    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
+      extra: ["", "", "", t(E, "→6→8→10…", "→6→8→10…")],
+      ko: "4 도 마찬가지예요. 6, 8, 10 … 계속 짝수예요. 짝지을 다른 짝수가 없어요.",
+      en: "Same for 4 — 6, 8, 10 … always even. There is no other even number for it to pair with." },
+    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
+      extra: ["", "", "", ""], tone: "aha",
+      ko: "홀수 셋이 한 묶음, 짝수 하나가 다른 묶음이에요. 서로는 절대 안 부딪혀요.",
+      en: "The three odds are one group, the one even is another. They never clash with each other." },
+    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
+      extra: [t(E, "· stays", "· 그대로"), "", "", ""],
+      ko: "묶음 안에서도 작은 값부터 하나씩 놓아요. 첫째 3 은 맨 앞이라 그대로예요. (0 회)",
+      en: "Inside a group too, we settle the smallest value first. The first 3 is at the front, so it stays. (0 moves)" },
+    { tiles: [3, 5, 3, 4], st: ["placed", "moving", "placed", "even"],
+      extra: ["", "· 3→5", "", ""], ops: 1,
+      ko: "둘째 3 은 첫째와 같아요. 2 만큼 밀어서 5 로 만들어요. (1 회)",
+      en: "The second 3 matches the first. Push it by 2, to 5. (1 move)" },
+    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "moving", "even"],
+      extra: ["", "", "· 3→5→7", ""], formula: "(7-3) ÷ 2 = 2", ops: 3,
+      ko: "셋째 3 은 5 도 이미 찼어요. 그래서 7 까지 — 한 번에 2 회예요. (7-3) ÷ 2 = 2.",
+      en: "The third 3 finds 5 already taken too. So it goes to 7 — two moves at once. (7-3) / 2 = 2." },
+    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "placed"],
+      extra: ["", "", "", ""], ops: 3, tone: "aha",
+      /* 자리 순서(첫째~넷째)를 끝까지 안 바꿨으므로 화면엔 3,5,7,4 로 보인다
+         (정렬한 3,4,5,7 이 아니다) — 실제 표시값으로 말한다. */
+      ko: "3, 5, 7, 4 — 다 달라요. 민 횟수는 모두 3 회. 이 나눔은 다음 쪽에서도 그대로 쓰여요.",
+      en: "3, 5, 7, 4 — all different. Three pushes in total. This split is used on the next page too." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
-  const chain = (v) => [v, v + 2, v + 4, v + 6];
 
   return (
     <div style={{ padding: 16 }}>
@@ -179,33 +209,24 @@ export function WhoCanMeetSim({ E }) {
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center", marginBottom: 10 }}>
-          {nums.map((v, i) => {
-            const odd = v % 2 === 1;
-            const lit = s.show >= 3 || (s.show === 1 && odd) || (s.show === 2 && !odd);
-            return (
-              <div key={i} style={{
-                display: "flex", alignItems: "center", gap: 7, padding: "5px 10px", borderRadius: 10,
-                background: lit ? (odd ? "#eff6ff" : "#f0fdf4") : "#f8fafc",
-                border: `1.5px solid ${lit ? (odd ? "#93c5fd" : "#86efac") : "#e2e8f0"}`,
-                opacity: s.show === 0 ? 0.85 : 1, transition: "all .25s",
-              }}>
-                <Tile v={v} state={lit ? "placed" : "idle"} />
-                {s.show >= 1 && lit && (
-                  <div style={{ fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace",
-                    color: odd ? "#1e3a8a" : "#065f46", fontWeight: 700 }}>
-                    → {chain(v).slice(1).join(" → ")} …
-                  </div>
-                )}
-                {s.show >= 3 && (
-                  <div style={{ fontSize: 11.5, fontWeight: 800, color: odd ? "#1e3a8a" : "#065f46" }}>
-                    {odd ? t(E, "odd", "홀수") : t(E, "even — alone", "짝수 — 혼자")}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+        <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
+          {s.tiles.map((v, i) => (
+            <Tile key={i} v={v} state={s.st[i]} note={`${ord(i)} ${s.extra[i]}`.trim()} />
+          ))}
         </div>
+
+        {s.formula && (
+          <div style={{ textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#92400e",
+            fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
+            {s.formula}
+          </div>
+        )}
+        {s.ops !== undefined && (
+          <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+            {t(E, "Moves so far: ", "지금까지 민 횟수: ")}
+            <span style={{ fontSize: 18, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{s.ops}</span>
+          </div>
+        )}
       </StepFade>
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
