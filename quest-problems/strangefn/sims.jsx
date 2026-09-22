@@ -21,13 +21,17 @@ import { t } from "@/components/quest/theme";
    차지하지 않음을 보이기 위해서다(흐려짐 + 취소선). 그 외 새 상태·새
    컴포넌트는 만들지 않았다.
 
-   걸음 4→5, 5→6 은 각각 실제 연산 한 번(10→9), 두 번(9→1→0 이 한 걸음에
-   묶임)을 나타낸다 — `makedistinct`의 WhoCanMeetSim 이 이미 쓰는 "한 번에
-   여러 번 밀림" 패턴과 같다. 그 자리엔 `formula` 로 무슨 일이 있었는지
-   숫자로 남긴다(`memory/feedback_same_number_two_meanings.md` — 같은
-   숫자가 다른 뜻으로 겹치지 않게, 출처를 식으로 밝힌다).
+   걸음 3 은 f 를 쓴 게 아니다(맨 앞 0 은 표기일 뿐이라 ops 는 그대로).
+   걸음 4·5·6 은 각각 실제 연산 정확히 한 번씩이다(10→9, 9→1, 1→0) —
+   한 걸음 = 한 번의 f, ops 는 매 걸음 최대 1 씩만 늘어난다. 그 자리엔
+   `formula` 로 무슨 일이 있었는지 숫자로 남긴다
+   (`memory/feedback_same_number_two_meanings.md` — 같은 숫자가 다른
+   뜻으로 겹치지 않게, 출처를 식으로 밝힌다).
 
-   전수 검산(2026-09-22): 210 → 010(=10) → 9 → 1 → 0, 총 4번. */
+   전수 검산(2026-09-22): 210 → 010(=10) → 9 → 1 → 0, 총 4번.
+   ⚠️ 2026-09-22 학생 검증에서 ops 가 null→1→1→1→2→4 로 나와 3 이
+   통째로 빠지는 버그를 잡았다(6번째 걸음이 9→1→0 을 한 걸음에
+   압축해서 생긴 문제). 지금은 매 걸음 정확히 한 번씩만 늘어난다. */
 
 const A = "#8b5cf6";
 
@@ -84,16 +88,16 @@ export function StrangeFnDigitSim({ E }) {
       note: [t(E, "doesn't count", "없는 셈"), "", ""], ops: 1,
       ko: "맨 앞 0 은 자리를 차지하지 않아요.",
       en: "A leading 0 doesn't take up a place." },
-    { tiles: [["1", "placed"], ["0", "placed"]],
-      note: ["", ""], ops: 1, formula: "10 − 1 = 9",
+    { tiles: [["9", "placed"]],
+      note: ["10→9"], ops: 2, formula: "10 − 1 = 9",
       ko: "이제 0 과 1 만 남았어요. 그러면 1 을 빼요 — 10 에서 1 을 빼면 9.",
       en: "Now only 0 and 1 are left, so we subtract 1 — 10 − 1 = 9." },
-    { tiles: [["9", "placed"]],
-      note: ["9→1"], ops: 2,
+    { tiles: [["1", "placed"]],
+      note: ["9→1"], ops: 3,
       ko: "9 는 0 도 1 도 아니에요. 다시 홀짝으로 — 9 는 홀수라 1.",
       en: "9 is neither 0 nor 1 — flip by parity again. 9 is odd, so 1." },
     { tiles: [["0", "placed"]],
-      note: [""], ops: 4, formula: "9 → 1 → 0", tone: "aha",
+      note: [""], ops: 4, formula: "1 − 1 = 0", tone: "aha",
       ko: "0 과 1 만 남았으니 1 을 빼요. 0 이 됐어요. 모두 4 번이에요.",
       en: "Only 0 and 1 left, so subtract 1. It's 0 now — 4 times total." },
   ];

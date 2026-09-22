@@ -97,26 +97,26 @@ const FULL_CPP = [
 const _SF_VARS = [
   { v: "s", ko: "입력 숫자(문자열)", en: "the number (string)" },
   { v: "n", ko: "이진수로 읽은 값 (mod 10⁹+7)", en: "value read as binary (mod 10⁹+7)" },
-  { v: "ops", ko: "이진화 비용", en: "binarize cost" },
+  { v: "ops", ko: "홀짝으로 바꾼 횟수(0 또는 1)", en: "times flipped by parity (0 or 1)" },
   { v: "g", ko: "floor(3n/2) 의 값 (mod 10⁹+7)", en: "floor(3n/2) (mod 10⁹+7)" },
 ];
 export function getStrangeFnWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _SF_VARS, beats: [
       { hi: [4, 12],  bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10⁹+7, since x can be astronomically large.\nSet up MOD and INV2 (needed in step 3), then read T tests,\neach x as a string s.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10⁹+7 나눈 나머지예요.\nx 가 엄청 커서 문자열로 다뤄요.\nMOD 와 INV2(3단계에서 씀)를 두고 T 개 테스트와 s 를 읽어요.") },
-      { hi: [14, 33], bubble: t(E, "Step 1 — why binarize? f only does x−1 while x is pure 0/1.\nAny other digit needs the parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "1단계 — 왜 이진화할까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
-      { hi: [36, 40], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nn can be huge, so mod at every digit.", "2단계: 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
-      { hi: [42, 44], bubble: t(E, "Step 3 — why floor(3n/2)? We found earlier that g(2k)=3k\nand g(2k+1)=3k+1, which is exactly floor(3n/2). Under a\nprime mod, dividing by 2 becomes multiplying by INV2.", "3단계 — 왜 floor(3n/2) 일까요?\n앞에서 g(2k)=3k, g(2k+1)=3k+1 임을 찾았고\n이게 바로 floor(3n/2) 예요.\nmod 에서 2로 나누기는 INV2 를 곱하는 것과 같아요.") },
-      { hi: [46, 46], bubble: t(E, "Answer = ops + g, mod MOD — the binarize cost plus the closed-form result.", "답은 ops + g 를 MOD 로 나눈 나머지예요 — 이진화 비용 더하기 닫힌 식 결과예요.") },
+      { hi: [14, 33], bubble: t(E, "Step 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
+      { hi: [36, 40], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nn can be huge, so mod at every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
+      { hi: [42, 44], bubble: t(E, "Step 3 — we need floor(3n/2), but in mod arithmetic we can't just\ndivide by 2. 3n − last is always even (that's why we picked last =\nn's last bit), so the half is a whole number. To do that division\nunder a mod, we multiply by INV2 instead — a value picked so that\nINV2 × 2 leaves remainder 1. Multiplying by INV2 has the same\neffect as dividing by 2.", "3단계 — floor(3n/2) 를 구해야 하는데, 나머지 세상에서는 그냥\n2로 나눌 수가 없어요. 3n − last 는 항상 짝수예요(그래서 last 를\nn 의 마지막 자리로 골랐어요) — 그러니 반으로 나누면 딱 떨어져요.\n나머지 세상에서 이 나눗셈을 하려면 대신 INV2 를 곱해요 — INV2 × 2\n를 나머지로 계산하면 1 이 나오도록 미리 구해 둔 값이에요. INV2 를\n곱하는 게 2 로 나누는 것과 같은 효과를 내요.") },
+      { hi: [46, 46], bubble: t(E, "Answer = ops + g, mod MOD — the parity-flip cost plus the closed-form result.", "답은 ops + g 를 MOD 로 나눈 나머지예요 — 홀짝 변환 비용 더하기 닫힌 식 결과예요.") },
     ] };
   }
   return { code: FULL_PY, vars: _SF_VARS, beats: [
     { hi: [0, 4],   bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10⁹+7. Read input fast (x can be huge),\nand set up MOD and INV2 (needed in step 3).", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10⁹+7 나눈 나머지예요.\nx 가 커서 입력을 빠르게 받고,\nMOD 와 INV2(3단계에서 씀)를 먼저 둬요.") },
     { hi: [6, 8],   bubble: t(E, "T tests; read each number x as a STRING (x can be astronomically large).", "테스트를 T 개 읽어요. 각 x 는 문자열 s 로 받아요 (x 가 엄청 커서).") },
-    { hi: [10, 14], bubble: t(E, "Step 1 — why binarize? f only does x−1 while x is pure 0/1.\nAny other digit needs the parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "1단계 — 왜 이진화할까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
-    { hi: [16, 19], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nn can be huge, so mod at every digit.", "2단계: 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
-    { hi: [21, 24], bubble: t(E, "Step 3 — why floor(3n/2)? We found earlier that g(2k)=3k\nand g(2k+1)=3k+1, which is exactly floor(3n/2). Under a\nprime mod, dividing by 2 becomes multiplying by INV2.", "3단계 — 왜 floor(3n/2) 일까요?\n앞에서 g(2k)=3k, g(2k+1)=3k+1 임을 찾았고\n이게 바로 floor(3n/2) 예요.\nmod 에서 2로 나누기는 INV2 를 곱하는 것과 같아요.") },
-    { hi: [26, 26], bubble: t(E, "Answer = ops + g, mod MOD — the binarize cost plus the closed-form result.", "답은 ops + g 를 MOD 로 나눈 나머지예요 — 이진화 비용 더하기 닫힌 식 결과예요.") },
+    { hi: [10, 14], bubble: t(E, "Step 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
+    { hi: [16, 19], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nn can be huge, so mod at every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
+    { hi: [21, 24], bubble: t(E, "Step 3 — we need floor(3n/2), but in mod arithmetic we can't just\ndivide by 2. 3n − last is always even (that's why we picked last =\nn's last bit), so the half is a whole number. To do that division\nunder a mod, we multiply by INV2 instead — a value picked so that\nINV2 × 2 leaves remainder 1. Multiplying by INV2 has the same\neffect as dividing by 2.", "3단계 — floor(3n/2) 를 구해야 하는데, 나머지 세상에서는 그냥\n2로 나눌 수가 없어요. 3n − last 는 항상 짝수예요(그래서 last 를\nn 의 마지막 자리로 골랐어요) — 그러니 반으로 나누면 딱 떨어져요.\n나머지 세상에서 이 나눗셈을 하려면 대신 INV2 를 곱해요 — INV2 × 2\n를 나머지로 계산하면 1 이 나오도록 미리 구해 둔 값이에요. INV2 를\n곱하는 게 2 로 나누는 것과 같은 효과를 내요.") },
+    { hi: [26, 26], bubble: t(E, "Answer = ops + g, mod MOD — the parity-flip cost plus the closed-form result.", "답은 ops + g 를 MOD 로 나눈 나머지예요 — 홀짝 변환 비용 더하기 닫힌 식 결과예요.") },
   ] };
 }
 
@@ -127,10 +127,10 @@ export function getStrangeFnSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "What are we finding? How many times f applies until x hits 0, mod 10⁹+7. There are two phases: an optional binarize (1 op), then the closed form g(n) = floor(3n/2).",
-            "무엇을 구해야 하나요? f 를 몇 번 써야 x 가 0 이 되는지를 mod 10⁹+7 로 구해요.\n단계는 둘이에요 — 필요하면 먼저 이진화(1번)를 하고,\n그다음 닫힌 식 g(n) = floor(3n/2) 를 써요."),
-        t(E, "Why binarize first? f only steps x → x−1 while x is pure 0/1 — any other digit forces one binarize pass. And n can grow up to 10^200000, so we keep it mod 10⁹+7 while reading digits.",
-            "왜 이진화가 먼저 필요할까요? f 는 x 가 0/1 로만 있을 때만 x−1 로 움직여요.\n다른 자리가 있으면 한 번 이진화해야 해요.\nn 은 최대 10^200000 까지 커질 수 있어서 자릿수를 읽으며 mod 10⁹+7 로 계속 줄여요."),
+        t(E, "What are we finding? How many times f applies until x hits 0, mod 10⁹+7. There are two phases: an optional parity flip (1 op), then the closed form g(n) = floor(3n/2).",
+            "무엇을 구해야 하나요? f 를 몇 번 써야 x 가 0 이 되는지를 mod 10⁹+7 로 구해요.\n단계는 둘이에요 — 필요하면 먼저 홀짝 변환(1번)을 하고,\n그다음 닫힌 식 g(n) = floor(3n/2) 를 써요."),
+        t(E, "Why flip by parity first? f only steps x → x−1 while x is pure 0/1 — any other digit forces one parity-flip pass. And n can grow up to 10^200000, so we keep it mod 10⁹+7 while reading digits.",
+            "왜 홀짝 변환이 먼저 필요할까요? f 는 x 가 0/1 로만 있을 때만 x−1 로 움직여요.\n다른 자리가 있으면 한 번 홀짝으로 바꿔야 해요.\nn 은 최대 10^200000 까지 커질 수 있어서 자릿수를 읽으며 mod 10⁹+7 로 계속 줄여요."),
         t(E, "So how do we compute floor(3n/2)? Under a prime mod, dividing by 2 becomes multiplying by the modular inverse of 2.",
             "그럼 floor(3n/2) 는 어떻게 계산할까요?\n소수 mod 에서 나누기 2 는 2 의 모듈러 역원을 곱하는 것과 같아요."),
       ],

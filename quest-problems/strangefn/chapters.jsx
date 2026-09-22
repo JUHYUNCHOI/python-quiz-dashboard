@@ -118,7 +118,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ T ≤ 100,000 (= 10⁵)</div>
               <div>1 ≤ x &lt; 10^(2×10⁵)  <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(x can be astronomically large)", "(x 가 엄청 클 수 있음)")}</span></div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "total digits across all x ≤ 10⁶", "모든 x 의 자릿수 합 ≤ 10⁶")}</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "total digits across all x ≤ 10⁶ (one million)", "모든 x 의 자릿수 합 ≤ 10⁶ (백만)")}</div>
             </div>
           </div>
         </div>),
@@ -157,7 +157,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" , wordBreak: "keep-all", textWrap: "balance" }}>
               <div>24680 → {t(E, "has digits other than 0/1", "0/1 이 아닌 자릿수 있음")}</div>
               <div>{t(E, "each digit by parity:", "자리별 홀짝:")} 2→0, 4→0, 6→0, 8→0, 0→0</div>
-              <div>= 00000 = 0 ✅ <b style={{ color: "#15803d" }}>1 op</b></div>
+              <div>= 00000 = 0 ✅ <b style={{ color: "#15803d" }}>{t(E, "1 op (f used once)", "1번 (f 를 한 번 씀)")}</b></div>
             </div>
           </div>
 
@@ -213,7 +213,7 @@ export function makeStrangeFnCh1(E) {
         "x = 10 이에요 (0 과 1 만 있어요). 0 이 될 때까지 f 를 몇 번 써야 할까요? 직접 세어 보세요."),
       hint: t(E,
         "Warm-up: x = 1 takes 1 f (1 − 1 = 0).\nNow x = 10: it's only 0/1, so 10 − 1 = 9.\n9 has a digit other than 0/1, so flip by parity — 9 is odd, so it becomes 1.\n1 is only 0/1, so 1 − 1 = 0. How many f's was that in total?",
-        "몸풀기: x = 1 은 f 한 번(1 − 1 = 0).\n이제 x = 10: 0/1 만 있으니 10 − 1 = 9.\n9 는 0/1 이 아닌 자리가 있으니 홀짝으로 바꿔요 — 9 는 홀수라서 1.\n1 은 0/1 만 있으니 1 − 1 = 0. 모두 몇 번이었나요?"),
+        "몸풀기 — x = 1 은 f 한 번(1 − 1 = 0)이에요.\n이제 x = 10 이에요. 0/1 만 있으니 10 − 1 = 9.\n9 는 0/1 이 아닌 자리가 있으니 홀짝으로 바꿔요 — 9 는 홀수라서 1.\n1 은 0/1 만 있으니 1 − 1 = 0. 모두 몇 번이었나요?"),
       answer: 3,
       explain: t(E,
         "3 is right. 10 → 9 → 1 → 0, three f's.\nx = 1 took 1, x = 10 took 3 — it didn't just go up by one. Let's find the real rule next.",
@@ -236,10 +236,14 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
               {/* ⚠️ 2026-09-22: 예전 문장은 "이진수에서 1 빼기와 똑같다" 고 주장했는데
                   틀렸다 (10−1=9 ≠ 이진 10−1=1). 검증해 주지 않은 인과는 쓰지 않는다 —
-                  작은 n 을 세어서 나온 값을 그대로 관찰만 한다. */}
+                  작은 n 을 세어서 나온 값을 그대로 관찰만 한다.
+                  ⚠️ 2026-09-22 학생 검증: 앞 쪽(3쪽) 시뮬은 순수 십진 뺄셈인데
+                  여기서 갑자기 "이진수로 읽는다" 고 해서 다리가 끊겨 있었다.
+                  또 "x=10 은 3번" (5쪽) 과 "n=2 는 3" (이 표) 을 잇는 문장이
+                  빠져 있었다 — 직접 채워 넣는다. */}
               {t(E,
-                "Once x has only 0s and 1s, read that string as a binary number n. We just counted n = 1 (1 f) and n = 2 (3 f's) by hand. Let's line up a few more n's and look for a rule in the results.",
-                "x 가 0 과 1 만 가지면 그 문자열을 이진수 n 으로 읽어요. 앞 쪽에서 n = 1(1 번)과 n = 2(3 번)를 직접 세어 봤어요. 다른 n 들도 함께 늘어놓고 규칙이 보이는지 살펴봐요.")}
+                "On page 3 we just subtracted in plain decimal — that was correct there. Here we're hunting for a counting rule, so we read the same 0/1 digits a different way: as a binary number n. The x = 10 we counted on the last page took 3 f's — read \"10\" as binary, that's n = 2. So the n = 2 row below is 3. Let's line up a few more n's and look for a rule.",
+                "3쪽에서는 그냥 십진수로 뺐죠? 거기서는 그게 맞아요. 여기서는 횟수를 세는 규칙을 찾으려고, 같은 0과 1을 다르게 읽어 봐요 — 이진수 n 으로요. 앞 쪽에서 센 x = 10 은 세 번이었어요. 그 \"10\" 을 이진수로 읽으면 n = 2 예요. 그래서 아래 표의 n = 2 칸이 3 이에요. 다른 n 들도 늘어놓고 규칙이 보이는지 살펴봐요.")}
             </div>
           </div>
 
@@ -276,6 +280,11 @@ export function makeStrangeFnCh1(E) {
               <div>g(2k)   = 3k</div>
               <div>g(2k+1) = 3k + 1</div>
               <div style={{ marginTop: 4, color: "#15803d" }}>{t(E, "= floor(3·n / 2)", "= floor(3·n / 2)")}</div>
+            </div>
+            <div style={{ fontSize: 11, color: "#166534", marginTop: 6, fontFamily: "inherit", wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E,
+                "floor drops anything after the decimal point — floor(3.5) is 3.",
+                "floor 는 소수점 아래를 버리는 거예요 — floor(3.5) 는 3 이에요.")}
             </div>
           </div>
         </div>),
@@ -332,7 +341,7 @@ export function makeStrangeFnCh2(E, lang = "py") {
         type: "reveal",
         label: t(E, "Code", "코드"),
         narr: t(E,
-          "Binarize if needed, then a closed form for floor(3n/2) mod p.  Each part lights up with a bubble.",
+          "Flip by parity if needed, then a closed form for floor(3n/2) mod p.",
           "필요하면 자릿수를 한 번 바꾸고, 그 다음 공식을 써요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />),
       };
