@@ -117,7 +117,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ T ≤ 100,000 (= 10⁵)</div>
-              <div>1 ≤ x &lt; 10^(2×10⁵)  <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(x can be astronomically large)", "(x 가 엄청 클 수 있음)")}</span></div>
+              <div>1 ≤ x &lt; 10^(2×10⁵)  <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(x can have up to 200,000 digits)", "(x 는 최대 20만 자리짜리 수일 수 있음)")}</span></div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "total digits across all x ≤ 10⁶ (one million)", "모든 x 의 자릿수 합 ≤ 10⁶ (백만)")}</div>
             </div>
           </div>
@@ -245,14 +245,19 @@ export function makeStrangeFnCh1(E) {
                   2의 몇 제곱)을 한 번도 안 알려줬다 — 학생이 8쪽까지 혼자 짐작했다.
                   한 줄만 추가하고, 대신 앞부분을 줄여서 전체 길이를 늘리지 않는다. */}
               {t(E,
-                "On page 3 we subtracted in plain decimal — that was correct there. Here we read the same 0/1 digits as binary instead: the rightmost digit is the 1s place, the next one left is the 2s place. \"10\" is 1×2 + 0×1 = 2, so n = 2. x = 10 took 3 f's, so the n = 2 row below is 3. Let's line up a few more n's and look for a rule.",
-                "3쪽에서는 십진수로 뺐어요, 거기선 그게 맞아요. 여기서는 규칙을 찾으려고 같은 0과 1을 이진수로 읽어요 — 오른쪽 자리가 1, 그 왼쪽이 2예요. \"10\" 은 1×2 + 0×1 = 2, 그래서 n = 2예요. x = 10 은 세 번이었으니 표의 n = 2 칸이 3이에요. 다른 n 도 늘어놓고 규칙을 찾아봐요.")}
+                "Page 3 subtracted in plain decimal — that was correct there. Here we read the same 0/1 digits as binary instead: from the right, place values go 1, 2, 4, 8 … doubling each time. \"10\" is 1×2 + 0×1 = 2, so n = 2. x = 10 took 3 f's, so the n = 2 row below is 3. Let's line up a few more n's and look for a rule.",
+                "3쪽은 십진수로 뺐어요, 거기선 그게 맞아요. 여기선 규칙을 찾으려 같은 0과 1을 이진수로 읽어요 — 오른쪽부터 1, 2, 4, 8 … 두 배씩이에요. \"10\" 은 1×2 + 0×1 = 2, 그래서 n = 2예요. x = 10 은 세 번이었으니 표의 n = 2 칸이 3이에요. 다른 n 도 늘어놓고 규칙을 찾아봐요.")}
             </div>
           </div>
 
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>
               {t(E, "g(n) = ops to kill the binary number n", "g(n) = 이진수 n 을 0 으로 만드는 데 드는 횟수")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginBottom: 6, wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E,
+                "\"form\" writes n as 2k (even) or 2k+1 (odd).",
+                "\"형태\" 는 n 이 짝수(2k)인지 홀수(2k+1)인지를 나타내요.")}
             </div>
             <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: C.text, borderCollapse: "collapse" }}>
               <thead>
@@ -277,12 +282,19 @@ export function makeStrangeFnCh1(E) {
 
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
-              {t(E, "✅ Closed form", "✅ 닫힌 식")}
+              {t(E, "✅ Formula", "✅ 공식")}
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" , wordBreak: "keep-all", textWrap: "balance" }}>
               <div>g(2k)   = 3k</div>
               <div>g(2k+1) = 3k + 1</div>
-              <div style={{ marginTop: 4, color: "#15803d" }}>{t(E, "= floor(3·n / 2)", "= floor(3·n / 2)")}</div>
+            </div>
+            <div style={{ fontSize: 11, color: "#166534", marginTop: 4, fontFamily: "inherit", wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E,
+                "n=2k → 3n/2=3k. n=2k+1 → 3n/2=3k+1.5, drop the decimal → 3k+1 — so both become one formula:",
+                "n=2k 면 3n/2=3k. n=2k+1 이면 3n/2=3k+1.5, 소수점을 버리면 3k+1 — 둘 다 이 식 하나로 써요:")}
+            </div>
+            <div style={{ fontSize: 12, color: "#15803d", fontFamily: "'JetBrains Mono', monospace", marginTop: 4 }}>
+              {t(E, "= floor(3·n / 2)", "= floor(3·n / 2)")}
             </div>
             <div style={{ fontSize: 11, color: "#166534", marginTop: 6, fontFamily: "inherit", wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,

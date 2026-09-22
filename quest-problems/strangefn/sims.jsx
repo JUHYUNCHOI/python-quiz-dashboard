@@ -86,7 +86,7 @@ export function StrangeFnDigitSim({ E }) {
       en: "So we flip each digit by parity: odd → 1, even → 0." },
     { tiles: [["0", "drop"], ["1", "placed"], ["0", "placed"]],
       note: [t(E, "doesn't count", "없는 셈"), "", ""], ops: 1,
-      ko: "맨 앞 0 은 자리를 차지하지 않아요 — 그래서 이건 f 를 쓴 게 아니에요, ops 는 그대로예요.",
+      ko: "맨 앞 0 은 자리를 차지하지 않아요 — 그래서 이건 f 를 쓴 게 아니에요, f 횟수는 그대로예요.",
       en: "A leading 0 doesn't take up a place — so this isn't a use of f, ops stays the same." },
     { tiles: [["9", "placed"]],
       note: ["10→9"], ops: 2, formula: "10 − 1 = 9",

@@ -106,8 +106,8 @@ export function getStrangeFnWalk(E, lang = "py") {
       { hi: [4, 12],  bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10⁹+7, since x can be astronomically large.\nSet up MOD and INV2 (what INV2 means comes in step 3), then\nread T tests, each x as a string s.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10⁹+7 나눈 나머지예요.\nx 가 엄청 커서 문자열로 다뤄요.\nMOD 와 INV2 를 둬요 (INV2 가 뭔지는 3단계에서 알려드려요) — 그다음 T 개 테스트와 s 를 읽어요.") },
       { hi: [14, 33], bubble: t(E, "Step 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
       { hi: [36, 40], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nn can be huge, so mod at every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
-      { hi: [42, 44], bubble: t(E, "Step 3 — we need floor(3n/2), but in mod arithmetic we can't just\ndivide by 2. 3n − last is always even (that's why we picked last =\nn's last bit), so the half is a whole number. To do that division\nunder a mod, we multiply by INV2 instead. Why INV2 = pow(2, MOD-2,\nMOD) gives exactly that value is something you'll learn later —\nfor now just take the tool: 'to divide by 2 under a mod, multiply\nby INV2.'", "3단계 — floor(3n/2) 를 구해야 하는데, 나머지 세상에서는 그냥\n2로 나눌 수가 없어요. 3n − last 는 항상 짝수예요(그래서 last 를\nn 의 마지막 자리로 골랐어요) — 그러니 반으로 나누면 딱 떨어져요.\n나머지 세상에서 이 나눗셈을 하려면 대신 INV2 를 곱해요.\nINV2 가 왜 그 값인지는 나중에 배워요 — 지금은 '나머지 세상에서\n2로 나누려면 INV2 를 곱한다' 는 도구만 가져가면 돼요.") },
-      { hi: [46, 46], bubble: t(E, "Answer = ops + g, mod MOD — the parity-flip cost plus the closed-form result.", "답은 ops + g 를 MOD 로 나눈 나머지예요 — 홀짝 변환 비용 더하기 닫힌 식 결과예요.") },
+      { hi: [42, 44], bubble: t(E, "Step 3 — we need floor(3n/2).\nIf n is even, 3n is even too, and last = 0.\nIf n is odd, 3n is odd too, and we subtract last = 1.\nEither way 3n − last is always even.\nBut here we only keep remainders, so we can't just divide by 2.\nTo divide by a, multiply by pow(a, MOD-2, MOD) instead.\nIt's a formula to memorize — why it works comes later.", "3단계 — floor(3n/2) 를 구해야 해요.\nn 이 짝수면 3n 도 짝수이고 last = 0 이에요.\nn 이 홀수면 3n 도 홀수인데 last = 1 을 빼요.\n그래서 3n − last 는 늘 짝수예요.\n그런데 나머지만 남기는 여기선 2 로 못 나눠요.\n나누는 수가 a 면 pow(a, MOD-2, MOD) 를 곱해요.\n외워서 쓰는 공식이에요 — 까닭은 나중에 배워요.") },
+      { hi: [46, 46], bubble: t(E, "Answer = ops + g, mod MOD — the parity-flip cost plus the formula's result.", "답은 ops + g 를 MOD 로 나눈 나머지예요 — 홀짝 변환 비용 더하기 공식 결과예요.") },
     ] };
   }
   return { code: FULL_PY, vars: _SF_VARS, beats: [
@@ -115,8 +115,8 @@ export function getStrangeFnWalk(E, lang = "py") {
     { hi: [6, 8],   bubble: t(E, "T tests; read each number x as a STRING (x can be astronomically large).", "테스트를 T 개 읽어요. 각 x 는 문자열 s 로 받아요 (x 가 엄청 커서).") },
     { hi: [10, 14], bubble: t(E, "Step 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
     { hi: [16, 19], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nn can be huge, so mod at every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
-    { hi: [21, 24], bubble: t(E, "Step 3 — we need floor(3n/2), but in mod arithmetic we can't just\ndivide by 2. 3n − last is always even (that's why we picked last =\nn's last bit), so the half is a whole number. To do that division\nunder a mod, we multiply by INV2 instead. Why INV2 = pow(2, MOD-2,\nMOD) gives exactly that value is something you'll learn later —\nfor now just take the tool: 'to divide by 2 under a mod, multiply\nby INV2.'", "3단계 — floor(3n/2) 를 구해야 하는데, 나머지 세상에서는 그냥\n2로 나눌 수가 없어요. 3n − last 는 항상 짝수예요(그래서 last 를\nn 의 마지막 자리로 골랐어요) — 그러니 반으로 나누면 딱 떨어져요.\n나머지 세상에서 이 나눗셈을 하려면 대신 INV2 를 곱해요.\nINV2 가 왜 그 값인지는 나중에 배워요 — 지금은 '나머지 세상에서\n2로 나누려면 INV2 를 곱한다' 는 도구만 가져가면 돼요.") },
-    { hi: [26, 26], bubble: t(E, "Answer = ops + g, mod MOD — the parity-flip cost plus the closed-form result.", "답은 ops + g 를 MOD 로 나눈 나머지예요 — 홀짝 변환 비용 더하기 닫힌 식 결과예요.") },
+    { hi: [21, 24], bubble: t(E, "Step 3 — we need floor(3n/2).\nIf n is even, 3n is even too, and last = 0.\nIf n is odd, 3n is odd too, and we subtract last = 1.\nEither way 3n − last is always even.\nBut here we only keep remainders, so we can't just divide by 2.\nTo divide by a, multiply by pow(a, MOD-2, MOD) instead.\nIt's a formula to memorize — why it works comes later.", "3단계 — floor(3n/2) 를 구해야 해요.\nn 이 짝수면 3n 도 짝수이고 last = 0 이에요.\nn 이 홀수면 3n 도 홀수인데 last = 1 을 빼요.\n그래서 3n − last 는 늘 짝수예요.\n그런데 나머지만 남기는 여기선 2 로 못 나눠요.\n나누는 수가 a 면 pow(a, MOD-2, MOD) 를 곱해요.\n외워서 쓰는 공식이에요 — 까닭은 나중에 배워요.") },
+    { hi: [26, 26], bubble: t(E, "Answer = ops + g, mod MOD — the parity-flip cost plus the formula's result.", "답은 ops + g 를 MOD 로 나눈 나머지예요 — 홀짝 변환 비용 더하기 공식 결과예요.") },
   ] };
 }
 
@@ -127,8 +127,8 @@ export function getStrangeFnSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "What are we finding? How many times f applies until x hits 0, mod 10⁹+7. There are two phases: an optional parity flip (1 op), then the closed form g(n) = floor(3n/2).",
-            "무엇을 구해야 하나요? f 를 몇 번 써야 x 가 0 이 되는지를 mod 10⁹+7 로 구해요.\n단계는 둘이에요 — 필요하면 먼저 홀짝 변환(1번)을 하고,\n그다음 닫힌 식 g(n) = floor(3n/2) 를 써요."),
+        t(E, "What are we finding? How many times f applies until x hits 0, mod 10⁹+7. There are two phases: an optional parity flip (1 op), then the formula g(n) = floor(3n/2).",
+            "무엇을 구해야 하나요? f 를 몇 번 써야 x 가 0 이 되는지를 mod 10⁹+7 로 구해요.\n단계는 둘이에요 — 필요하면 먼저 홀짝 변환(1번)을 하고,\n그다음 공식 g(n) = floor(3n/2) 를 써요."),
         t(E, "Why flip by parity first? f only steps x → x−1 while x is pure 0/1 — any other digit forces one parity-flip pass. And n can grow up to 10^200000, so we keep it mod 10⁹+7 while reading digits.",
             "왜 홀짝 변환이 먼저 필요할까요? f 는 x 가 0/1 로만 있을 때만 x−1 로 움직여요.\n다른 자리가 있으면 한 번 홀짝으로 바꿔야 해요.\nn 은 최대 10^200000 까지 커질 수 있어서 자릿수를 읽으며 mod 10⁹+7 로 계속 줄여요."),
         t(E, "So how do we compute floor(3n/2)? Under a prime mod, dividing by 2 becomes multiplying by the modular inverse of 2.",

@@ -130,7 +130,7 @@ export const PART2: Record<string, string> = {
   "min_stars[1] = min stars so far, when this cell DOES pass a star out":
     "min_stars[1] = 이 칸이 별을 보낼 때까지의 최소 별 개수",
   "modular inverse of 2": "2 의 모듈러 역원",
-  "n's parity = last bit": "n 의 홀짝 = 마지막 비트",
+  "n's parity = last bit": "n 의 홀짝 = 마지막 자리",
   "no assignment worked": "어떤 배정도 안 됐어요",
   "not enough odds": "홀수가 모자라요",
   "off": "출구로일 때",
