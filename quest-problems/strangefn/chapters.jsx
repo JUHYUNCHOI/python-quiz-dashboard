@@ -190,8 +190,8 @@ export function makeStrangeFnCh1(E) {
             </div>
             <div style={{ fontSize: 11.5, color: "#7f1d1d", marginTop: 8, lineHeight: 1.6 }}>
               {t(E,
-                "x itself can already be a number with up to 200,000 digits. Even after it becomes 0/1 only, it stays that big — so the number of times f must be applied can itself be astronomically large. Counting one use at a time means looping that many times, which is far more than any loop could finish.",
-                "x 자체가 이미 20만 자리에 가까운 수일 수 있어요. 0/1 만 남은 뒤에도 그 크기는 그대로예요. 그러니 f 를 써야 하는 횟수 자체가 어마어마하게 클 수 있어요 — 하나씩 세는 건 그 횟수만큼 반복해야 하는데, 어떤 반복문도 끝낼 수 없는 크기예요.")}
+                "x itself can already be a number with up to 200,000 digits. Even after it becomes 0/1 only, it stays that big — the digit count didn't shrink. And since f only subtracts 1 each time, reaching 0 takes as many steps as the value itself. So the number of times f must be applied can itself be astronomically large. Counting one use at a time means looping that many times, which is far more than any loop could finish.",
+                "x 자체가 이미 20만 자리에 가까운 수일 수 있어요. 0/1 만 남은 뒤에도 그 크기는 그대로예요. 자릿수가 그대로니 값도 그대로 크고, f 는 1 씩 빼니 0 까지 그 값만큼 걸려요. 그러니 f 를 써야 하는 횟수 자체가 어마어마하게 클 수 있어요 — 하나씩 세는 건 그 횟수만큼 반복해야 하는데, 어떤 반복문도 끝낼 수 없는 크기예요.")}
             </div>
           </div>
           <div style={{ maxWidth: 470, margin: "12px auto 0", fontSize: 12.5, color: "#5b21b6", textAlign: "center", fontWeight: 700 }}>
@@ -327,7 +327,7 @@ export function makeStrangeFnCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Practice — a value that's already all 0s and 1s, and bigger.",
+        "Practice — a bigger value that's already 0/1.",
         "이미 0 과 1 만 있는, 더 큰 값도 연습해 봐요."),
       question: t(E,
         "How many f's for x = 1010?",
