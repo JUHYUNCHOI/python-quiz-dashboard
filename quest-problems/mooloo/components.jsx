@@ -232,7 +232,7 @@ export function getMoolooSections(E) {
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, sorted)으로 알고리즘이 간결."),
+            "Python 의 list, sorted 덕분에 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

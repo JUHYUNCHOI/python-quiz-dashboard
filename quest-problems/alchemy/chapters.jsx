@@ -44,9 +44,8 @@ export function makeAlchemyCh1(E) {
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#d97706" }}>{t(E, "N metals numbered 1..N", "1..N 번호의 금속 N개")}</b>
-                  {t(E, ". You start with ", "이 있어요. 시작할 때 ")}
-                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>a[i]</code>
-                  {t(E, " units of metal i.", " 단위의 금속 i를 가지고 있어요.")}
+                  {t(E, ". You're told how many units of each metal you start with.",
+                        "가 있어요. 각 금속을 몇 개씩 가지고 시작하는지도 함께 주어져요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -97,7 +96,7 @@ export function makeAlchemyCh1(E) {
             <div>{t(E, "Line 1: N (number of metals, 1 ≤ N ≤ 100).", "1번째 줄: 금속 개수 N (1 ≤ N ≤ 100).")}</div>
             <div>{t(E, "Line 2: N integers a[1..N] — starting units (0 ≤ a[i] ≤ 10000).", "2번째 줄: 정수 N 개 a[1..N] — 처음에 가진 개수예요 (0 ≤ a[i] ≤ 10000).")}</div>
             <div>{t(E, "Line 3: K (number of recipes, 1 ≤ K < N).", "3번째 줄: 레시피 개수 K (1 ≤ K < N).")}</div>
-            <div>{t(E, "Next K lines: L M ing₁ … ing_M — make 1 of metal L from M ingredients.", "다음 K줄: L M 재료₁ … 재료_M — 재료 M개로 금속 L 1개를 만들어요.")}</div>
+            <div>{t(E, "Next K lines: L M ing_1 … ing_M — make 1 of metal L from M ingredients.", "다음 K줄: L M 재료_1 … 재료_M — 재료 M개로 금속 L 1개를 만들어요.")}</div>
             <div style={{ fontWeight: 700, color: "#92400e", margin: "8px 0 6px" }}>📤 {t(E, "Output", "출력")}</div>
             <div>{t(E, "The maximum number of units of metal N achievable.", "만들 수 있는 금속 N 의 최대 개수를 써요.")}</div>
           </div>
