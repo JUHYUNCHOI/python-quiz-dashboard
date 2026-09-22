@@ -271,10 +271,7 @@ export function getCandyCaneSections(E) {
         t(E, "So: for each cane, keep bottom = eaten-so-far, and only feed cows\ntaller than bottom, growing them and bottom together.",
             "그래서 캔디마다 bottom(먹힌 높이)을 두고, 키가 bottom 보다 큰 소만 먹여요.\n소가 자라면 bottom 도 같이 올라가요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬의 list, map, sorted 덕분에 코드가 짧아요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, algorithm).",
             "#include 는 배운 헤더로 하나씩 나눠 적어요 (iostream, vector, algorithm)."),

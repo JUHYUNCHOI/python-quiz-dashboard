@@ -117,8 +117,8 @@ export function getBackForthSections(E) {
           "무엇을 세야 하나요? 4일 뒤 헛간1 합이 될 수 있는 값의 개수예요.\n날마다 어느 양동이를 옮길지 선택이 갈리니, 모든 갈래를 다 봐야 해요.\n그래서 1일차 10가지, 2일차 11가지, 3일차 10가지, 4일차 11가지를 다 시도하고,\n나온 합을 set 에 모아 중복을 지우면 그 개수가 답이에요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

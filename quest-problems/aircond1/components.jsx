@@ -89,8 +89,8 @@ export function getAirCond1Sections(E) {
             "그 합을 2 로 나누면 답이 나와요 — 양 끝이 0 이라\n값이 오른 만큼 내린 곳도 있어서, 명령을 두 번씩 센 셈이거든요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python의 고수준 구문 (list, map)으로 알고리즘이 간결."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

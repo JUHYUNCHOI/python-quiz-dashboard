@@ -347,10 +347,7 @@ export function getSocDist2Sections(E) {
         t(E, "So the code finds max R from every healthy/sick distance, then counts clusters of sick cows more than R apart as separate outbreaks.",
             "그래서 코드는 먼저 R 을 구하고,\n정렬된 소를 순서대로 훑으며\nR 보다 멀리 떨어진 아픈 소 무리를\n새로운 발병으로 세요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 (<iostream>, <vector>, ...) 적어요 — 코드가 하려는 일이 또렷해져요."),

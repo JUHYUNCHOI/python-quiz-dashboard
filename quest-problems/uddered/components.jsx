@@ -343,10 +343,7 @@ export function getUdderedSections(E) {
         t(E, "So the code looks up each letter's alphabet position and starts a new recitation whenever the position doesn't increase.",
             "그래서 코드는 글자마다 알파벳 순서를 찾아 두고,\n순서가 앞으로 가지 않을 때마다\n외운 횟수를 하나씩 늘려요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "헤더는 필요한 것만 적어요 (<iostream>, <vector> …). 그래야 읽기 쉬워요."),

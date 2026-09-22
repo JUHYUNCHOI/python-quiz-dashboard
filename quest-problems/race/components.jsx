@@ -122,8 +122,8 @@ export function getRaceSections(E) {
           + "K 미터를 채우는 가장 짧은 시간을 찾아요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "long long for distances and times — partial sums like peak*(peak+1)/2 grow fast.",

@@ -314,8 +314,8 @@ export function getMcc19DitcoinSections(E) {
             "suffix_max 는 \"오늘부터 마지막 날까지 중 가장 비싼 가격\" 을 미리 적어둔 표예요.\n한 번 만들어 두고 날짜를 한 번만 훑으면 끝이라, 날이 며칠이든 그만큼만 일해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 을 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",

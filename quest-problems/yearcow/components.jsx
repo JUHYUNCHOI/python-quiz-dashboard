@@ -206,10 +206,7 @@ export function getYearCowSections(E) {
         t(E, "So the code reads statements in order, updates each new cow's year from an already-known one, then prints the absolute year gap.",
             "그래서 코드는 진술을 순서대로 읽으며\n이미 아는 연도를 기준으로 새 소의 연도를 구하고,\n마지막에 두 소의 연도차를 절댓값으로 출력해요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 넣어요 (<iostream>, <vector>, ...). 그래야 코드가 뭘 쓰는지 한눈에 보여요."),

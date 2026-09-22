@@ -423,10 +423,7 @@ export function getModernArtSections(E) {
             "So check this condition for every color and count how many\npass it.",
             "그래서 색마다 이 조건(is_first)을 확인하고,\n만족하는 색의 수를 답에 더해요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Colors are only 1..9 — use plain vectors indexed by color, not map.",
             "색이 1~9 뿐이라 map 없이 색 번호로 자리를 찾는 vector 면 충분해요."),

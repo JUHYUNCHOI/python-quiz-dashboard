@@ -106,8 +106,8 @@ export function getBovGenomicsSections(E) {
             "두 집합에 겹치는 글자가 하나라도 있으면 그 칸은 둘을\n구별해 주지 못해요. 겹치는 게 없을 때만 답에 1을 더해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, string, set).",

@@ -128,8 +128,8 @@ export function getHoofballSections(E) {
           "무엇을 출력해야 하나요? 모두가 공을 만지는 데 필요한 시작 공의 최소 개수예요.\n먼저 소마다 누구에게 던지는지(가장 가까운 이웃) 정하고, 몇 번 받는지 세요.\n아무도 안 던져주는 소는 공을 따로 줘야 해요.\n서로한테만 던지는 짝도 바깥에서 오는 공이 없어 공을 하나 더 줘야 해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 알고리즘을 짧게 쓸 수 있어요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "INT_MAX as a sentinel lets boundary cows pick their only neighbor automatically.",

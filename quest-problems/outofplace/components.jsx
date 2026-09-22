@@ -86,8 +86,8 @@ export function getOutOfPlaceSections(E) {
             "그런데 diff 가 그대로 답은 아니에요. 실제로 자리를 벗어난\n소는 한 마리뿐이고, 나머지는 그 소 때문에 한 칸씩 밀려서\ndiff 에 같이 잡혀요. 그래서 진짜 답은 diff - 1 이에요\n(diff 가 0 이면 0 으로 둬요)."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, sorted) make algorithms concise.",
+            "Python 은 list, sorted 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Copy then sort: `vector<int> sorted_a = a;` then sort(sorted_a.begin(), sorted_a.end()).",

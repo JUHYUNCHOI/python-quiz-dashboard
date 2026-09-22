@@ -260,8 +260,8 @@ export function getPhotoshoot2Sections(E) {
             "센 소들만 한 번씩 옮기면 나머지는 이미 순서가 맞아요.\n그래서 그 개수가 곧 정답이에요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 덕분에 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "std::map<int,int> mirrors Python's dict for the cow→position lookup.",

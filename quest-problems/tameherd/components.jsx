@@ -360,8 +360,8 @@ export function getTameHerdSections(E) {
           "무엇을 출력해야 하나요? 기록과 맞는 탈출 횟수의 최소·최대예요.\n−1 인 날은 카운터가 무엇이든 될 수 있어 경우가 여러 갈래로 갈려요.\n그래서 '카운터 값 → 그때까지 최소·최대 탈출 횟수' 표를 두고\n하루씩 갱신하며, 값이 적힌 날엔 그 값만 남기고 나머지는 지워요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "파이썬은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

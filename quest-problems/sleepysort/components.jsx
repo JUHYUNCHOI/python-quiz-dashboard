@@ -69,8 +69,8 @@ export function getSleepySortSections(E) {
             "그래서 오른쪽부터 훑어서 그 정렬된 접미사가 어디까지 이어지는지 찾아요.\n그 앞에 남은 소의 수가 곧 답이에요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

@@ -230,10 +230,7 @@ export function getRotShiftSections(E) {
         t(E, "So: repeat rotate-then-shift for T minutes, tracking each cow's\nposition — the C++ note below covers what to do when T is huge.",
             "그래서 회전 → 이동을 T 분만큼 그대로 반복하며 소의 위치를 따라가요.\nT 가 아주 클 때는 아래 C++ 설명을 봐요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 넣어요 (<iostream>, <vector>, ...). 그래야 코드가 뭘 쓰는지 한눈에 보여요."),

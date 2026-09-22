@@ -286,10 +286,7 @@ export function getCowntactSections(E) {
         t(E, "So: just scan the string and count how many separate runs of 1s there are.",
             "그래서 문자열을 훑으며 1 이 이어진 덩어리가 몇 번 나오는지만 세요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, string).",
             "#include 는 배운 헤더(iostream, string)를 하나씩 나눠 적어요."),

@@ -363,8 +363,8 @@ export function getNonTransSections(E) {
             "만든 C 로 두 순환 방향을 둘 다 확인해요.\n한 방향이라도 성립하면 yes, 다 안 되면 no 예요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬의 list, map, sorted 덕분에 코드가 짧아요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "파이썬의 list, map 덕분에 코드가 짧아요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

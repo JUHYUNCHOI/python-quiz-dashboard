@@ -142,8 +142,8 @@ export function getRevEngSections(E) {
           "답은 OK 나 LIE 예요 — 그런 프로그램을 만들 수 있는지예요.\n'변수=값' 을 거는 if 문은, 그 조건에 맞는 남은 줄의\n출력이 전부 같을 때만 쓸 수 있어요.\n그래서 그런 조건을 찾아 그 줄들을 떼어내고, 남은 줄로\n다시 찾기를 되풀이해요. 다 떼어지면 OK, 막히면 LIE 예요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "파이썬은 list, map 덕분에 코드가 짧아져요."),
       ],
     },
   ];

@@ -220,10 +220,7 @@ export function getTrianglesSections(E) {
           + "그 값이 이 기둥에서 나오는 2배 넓이라,\n"
           + "모든 기둥 중 가장 큰 값을 답으로 내요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 가 있어서 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 넣어요 (<iostream>, <vector>, ...). 뜻이 또렷해져요."),

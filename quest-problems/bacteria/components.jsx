@@ -229,10 +229,7 @@ export function getBacteriaSections(E) {
         t(E, "So: compute diff(diff(a)) once, then sum |x| over it — that's the answer.",
             "그러니 diff(diff(a)) 를 한 번 구하고, 그 절댓값을 다 더하면 답이 나와요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 (<iostream>, <vector>, ...) 넣으면 뜻이 또렷해요."),

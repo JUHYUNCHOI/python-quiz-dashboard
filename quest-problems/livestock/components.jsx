@@ -310,10 +310,7 @@ export function getLivestockSections(E) {
           + "배열을 만들어 가니까, 제약을 처음 만족하는 배열이\n"
           + "바로 답이에요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "getline + stringstream splits a sentence into words just like Python's split().",
             "getline 과 stringstream 으로 문장을 단어 단위로 나눠요 (Python 의 split())."),

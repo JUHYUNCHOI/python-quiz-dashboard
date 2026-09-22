@@ -246,8 +246,8 @@ export function getRevegSections(E) {
             "그래서 목초지마다 이웃이 안 쓴 가장 작은 색(1~4)을 골라 배정하고, 숫자들을 이어서 출력해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 알고리즘을 짧게 쓸 수 있어요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

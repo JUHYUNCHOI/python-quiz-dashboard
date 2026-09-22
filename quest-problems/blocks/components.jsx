@@ -111,10 +111,7 @@ export function getBlocksSections(E) {
         t(E, "One working assignment means YES. If none works — including words longer than 4 letters, which have no assignment at all — it's NO.",
             "하나라도 성공하면 YES, 다 실패하면 NO 예요.\n5글자 이상 단어는 배정 자체가 없어서 항상 NO 예요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, string) — no bits/stdc++.h.",
             "#include 는 배운 것만 써요 (iostream, string). bits/stdc++.h 는 안 써요."),

@@ -224,8 +224,8 @@ export function getCowSignalSections(E) {
             "그래서 각 행을 K번 출력하고,\n그 행 안에서 글자 하나도 K번씩 늘려요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list · map · sorted 를 바로 쓸 수 있어서 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list · map 을 바로 쓸 수 있어서 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "vector<string> stores each row of the input grid.",

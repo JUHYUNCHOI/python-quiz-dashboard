@@ -233,8 +233,8 @@ export function getCowCollegeSections(E) {
           "답은 최대 총 수입과 그 수입을 만드는 등록금이에요.\n정렬하면 c[i] 를 등록금으로 할 때 딱 N-i 마리가\n낼 수 있어요.\n그래서 정렬한 뒤 c[i] 마다 수입을 계산해\n가장 큰 값을 찾아요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, algorithm).",

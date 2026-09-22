@@ -92,8 +92,8 @@ export function getBovShuffleSections(E) {
             "지금 줄은 셔플을 3번 한 결과라서, 되돌리기도 3번\n반복하면 원래 줄이 나와요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

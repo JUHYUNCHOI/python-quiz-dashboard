@@ -95,10 +95,7 @@ export function getWhereAmISections(E) {
           + "똑같은 게 하나라도 있으면 그 K 는 아직 부족한 거예요.\n"
           + "처음으로 다 다른 K 가 나오면 그게 답이에요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 넣어요 (<iostream>, <vector> …).\n그래야 코드가 무엇을 하려는지 잘 보여요."),

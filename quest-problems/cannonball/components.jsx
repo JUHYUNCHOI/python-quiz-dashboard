@@ -101,10 +101,7 @@ export function getCannonballSections(E) {
         t(E, "So each step: check the target/pad at x, then move by direction × power.\nStop once x leaves [1, N] (or the step limit is hit).",
             "그래서 걸음마다 x 의 타겟·패드를 확인하고, direction × power 만큼 움직여요.\nx 가 [1, N] 을 벗어나면 (또는 걸음 한도에 닿으면) 멈춰요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector).",
             "#include 는 배운 헤더들로 (iostream, vector) 나눠 적어요."),

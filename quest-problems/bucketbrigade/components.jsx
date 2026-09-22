@@ -251,10 +251,7 @@ export function getBucketBrigadeSections(E) {
         t(E, "But if R sits exactly on the straight line between L and B (same row or column, in between), that path is blocked — so we detour, adding 2 more cows.",
             "그런데 R 이 L 과 B 를 잇는 직선 위(같은 행이나 열, 그 사이)에 있으면 그 길이 막혀요.\n그래서 돌아가야 하고, 소가 2 마리 더 필요해요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 (<iostream>, <vector>, ...) 적으면 코드 뜻이 또렷해져요."),

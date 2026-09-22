@@ -251,8 +251,8 @@ export function getSqPastureSections(E) {
             "정사각형은 더 넓게 벌어진 쪽까지 덮어야 해요.\n그래서 한 변 = max(가로, 세로) 예요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 을 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

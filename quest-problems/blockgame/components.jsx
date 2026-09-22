@@ -103,10 +103,7 @@ export function getBlockGameSections(E) {
         t(E, "So for each letter, each board, take max(front count, back count) and add it up.",
             "그래서 글자마다, 판마다 앞면·뒷면 개수 중 큰 쪽을 더해요.\n어느 쪽이 보여도 부족하지 않게요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 가 있어서 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, string, map, algorithm).",
             "#include 는 배운 헤더로 (iostream, string, map, algorithm) 나눠 적어요."),

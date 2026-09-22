@@ -72,8 +72,8 @@ export function getDaisyChainsSections(E) {
             "그래서 코드는 시작점 i 를 고정하고\nj 로 구간을 늘려가며,\n먼저 나누어지는지 보고\n그다음에만 구간 안에서 평균을 찾아요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "파이썬은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Outer for-loop fixes the start; inner for-loop grows the window.",

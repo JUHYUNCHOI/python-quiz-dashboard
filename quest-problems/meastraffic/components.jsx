@@ -311,10 +311,7 @@ export function getMeasTrafficSections(E) {
         t(E, "So run two sweeps, narrowing [lo,hi] at every sensor and clamping at 0 — forward for the end range, backward for the start.",
             "그래서 두 번 훑어요. 센서를 지날 때마다 [lo, hi] 를 좁히고 0 밑으로는 못 내려가게 해요.\n앞에서 훑으면 끝쪽 범위, 뒤에서 훑으면 시작쪽 범위가 나와요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "tuple<string, int, int> bundles type + lo + hi into one row.",
             "tuple<string, int, int> 로 type + lo + hi 를 하나로 묶어요."),

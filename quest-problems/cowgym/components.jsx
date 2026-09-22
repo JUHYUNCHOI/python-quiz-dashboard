@@ -278,8 +278,8 @@ export function getCowGymSections(E) {
           + "N 이 작아서 모든 쌍을 이렇게 다 검사해도 충분히 빨라요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 같은 게 있어서 알고리즘을 짧게 쓸 수 있어요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 같은 게 있어서 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector).",

@@ -333,8 +333,8 @@ export function getSwapitySections(E) {
             "무엇을 내놔야 하나요? 라운드를 K 번 반복한 뒤의 최종 줄이에요.\n그러니 먼저 N, K 와 두 뒤집기 범위 A1–A2, B1–B2 를 읽어요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 을 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

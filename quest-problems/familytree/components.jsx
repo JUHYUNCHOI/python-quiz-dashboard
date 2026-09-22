@@ -431,10 +431,7 @@ export function getFamilyTreeSections(E) {
           "What should we print? The family relationship between cows A and B.\nThat relationship depends on their nearest shared ancestor.\nSo follow each cow's mother-chain all the way up, find the first\nancestor the two chains share, and use the distances to name it.",
           "무엇을 출력해야 하나요? 소 A 와 B 의 가계 관계 이름이에요.\n관계는 둘의 가장 가까운 공통 조상으로 정해져요.\n그래서 A, B 각각 엄마 쪽으로 끝까지 올라가 조상 목록을 만들고,\n두 목록에서 처음 겹치는 조상을 찾아 그 거리로 관계를 가려요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더(<iostream>, <vector> …)만 적으면 코드가 뭘 쓰는지 한눈에 보여요."),

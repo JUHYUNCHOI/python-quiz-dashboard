@@ -276,10 +276,7 @@ export function getCowTipSections(E) {
         t(E, "Because every flip is forced, just counting them gives the minimum.",
             "뒤집기가 전부 강제로 정해지니까, 세기만 하면 그게 가장 적은 횟수예요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "vector<vector<int>> stores the grid as integers (0/1).",
             "vector<vector<int>> 로 격자를 0/1 정수로 담아요."),

@@ -104,10 +104,7 @@ export function getHerdleSections(E) {
         t(E, "Pass 2 matches leftover breeds and takes the smaller count on each side — that's how many can actually be paired up as yellow.",
             "2차에서는 남은 품종끼리 짝짓고, 정답·추측 개수 중\n작은 값만큼만 노랑으로 세요 — 실제로 짝지을 수 있는 만큼만요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "vector<string> holds 3 rows; index a row with [c] to get one breed letter.",
             "vector<string> 에 세 줄을 담고, [c] 로 품종 글자 하나를 꺼내요."),

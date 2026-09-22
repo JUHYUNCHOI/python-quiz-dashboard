@@ -101,10 +101,7 @@ export function getGuessAnimalSections(E) {
         t(E, "So for every pair, count shared traits and add 1 for the question that finally tells them apart — then keep the largest.",
             "그래서 모든 동물 쌍의 공통 특성 수를 세고, 마지막에 구별해 주는 질문 1 개를 더해요.\n그중 가장 큰 값을 답으로 남겨요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "vector<set<string>> stores each animal's traits as a set.",
             "vector<set<string>> 로 동물마다 특성을 set 에 담아요."),

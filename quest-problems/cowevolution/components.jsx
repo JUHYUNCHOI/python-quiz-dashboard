@@ -140,10 +140,7 @@ export function getCowEvolutionSections(E) {
         t(E, "So test every pair of traits for that crossing pattern. If any pair crosses, print \"no\" — otherwise print \"yes\".",
             "그래서 모든 특성 쌍이 교차하는지 검사해요.\n하나라도 교차하면 no, 하나도 없으면 yes 를 출력해요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, string, set).",
             "#include 는 배운 것들로 (iostream, vector, string, set) 나눠 적어요."),

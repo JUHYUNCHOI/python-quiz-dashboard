@@ -249,8 +249,8 @@ export function getComfyCowsSections(E) {
             "그래서 코드는 새 소와 이웃 4칸만 다시 확인해서\n편안한 소 집합을 갱신하고,\n그 크기를 결과로 남겨요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 가 있어서 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 이 있어서 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

@@ -315,8 +315,8 @@ export function getSleepClassSections(E) {
             "성공하는 d 마다 조각 수(총합/d)가 나와요.\n조각이 가장 많이 나오는 경우를 답으로 남겨요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 가 있어서 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 이 있어서 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

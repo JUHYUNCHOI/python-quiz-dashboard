@@ -230,8 +230,8 @@ export function getBucketListSections(E) {
           "무엇을 답으로 내야 하나요? 언제든 동시에 필요한 양동이의 최댓값이에요.\n분마다 소를 다 훑으면 너무 느려요.\n그래서 시작에는 +양동이, 끝난 다음 날에는 −양동이로 적어 둬요.\n시간순으로 정렬해 한 번만 훑으며 최댓값을 기억해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 알고리즘을 짧게 쓸 수 있어요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

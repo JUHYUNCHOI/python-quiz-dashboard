@@ -116,10 +116,7 @@ export function getMilkExchangeSections(E) {
         t(E, "So after M minutes, print what's left. Walking minute by minute is O(N·M) —\nthe faster way (chasing leaks between R→L pairs) is in the C++ note below.",
             "그래서 M분 뒤 남은 우유의 총량을 출력해요.\n한 분씩 따라가면 O(N·M) 이라 M 이 클 때 느려요.\n더 빠른 길(R→L 사이 새는 곳만 찾기)은 아래 C++ 설명에 있어요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 가 있어서 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Capacities ≤ 10^9 fit in int; only the final sum (up to N·10^9) needs long long.",
             "용량이 10^9 을 넘지 않아서 int 로 충분해요.\n마지막 합계만 long long 이 필요해요 (N·10^9 까지 가요)."),

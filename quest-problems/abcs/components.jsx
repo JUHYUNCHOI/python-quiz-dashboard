@@ -196,8 +196,8 @@ export function getAbcsSections(E) {
             "A 와 전체 합을 알면\nB 는 그다음 작은 값이고,\nC 는 전체 합에서 A, B 를 뺀 나머지예요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 알고리즘을 짧게 쓸 수 있어요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",

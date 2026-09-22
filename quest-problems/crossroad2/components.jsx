@@ -299,10 +299,7 @@ export function getCrossRoad2Sections(E) {
             "So check this interleaving condition for every pair of cows,\nand count how many pairs satisfy it.",
             "그래서 모든 소 쌍을 하나씩 견주면서 이 번갈아 나오는\n조건을 만족하는지 확인하고, 만족하는 쌍의 수를 세요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 넣어요 (<iostream>, <vector> …).\n그래야 코드가 무엇을 하려는지 잘 보여요."),

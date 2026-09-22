@@ -317,10 +317,7 @@ export function getDontBeLastSections(E) {
             "Fewer than 2 distinct totals means there's no second place —\n'Tie'. Otherwise, find every cow at the second value: exactly\none means that cow's name, more than one means 'Tie'.",
             "고유한 값이 2개 미만이면 두 번째 자리가 없으니 Tie 예요.\n있으면 두 번째 값을 가진 소를 모두 찾아요 — 딱 한\n마리면 그 이름을, 여러 마리면 Tie 를 출력해요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 알고리즘을 짧게 쓸 수 있어요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "map<string,int> tracks milk total per cow name.",
             "map<string,int> 로 소 이름마다 우유 합계를 적어 둬요."),

@@ -118,8 +118,8 @@ export function getAcowdemia2Sections(E) {
             "한 번 깨진 뒤로는 그 뒤 사람 전부가 x 보다 선임이라\n기록하고, 논문 K 편에서 알아낸 걸 다 모아 표를 채워요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 알고리즘을 짧게 쓸 수 있어요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector, string, map) — what we've been using.",

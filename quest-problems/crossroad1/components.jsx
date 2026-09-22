@@ -235,8 +235,8 @@ export function getCrossRoad1Sections(E) {
             "그리고 이 소의 last_side 를 지금 쪽으로 갱신해서,\n다음 관찰과 제대로 비교할 수 있게 해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 덕분에 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

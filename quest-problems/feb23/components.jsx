@@ -278,10 +278,7 @@ export function getFeb23Sections(E) {
         t(E, "So: loop over every bitmask, build that assignment, count adjacent\nmatches, and collect the results into a set.",
             "그래서 모든 비트마스크를 돌며 그 조합을 만들고, 옆칸이 같은 개수를\n세어 결과를 모아요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "헤더는 필요한 것만 적어요 (<iostream>, <vector> …). 그래야 읽기 쉬워요."),

@@ -78,8 +78,8 @@ export function getTeleportSections(E) {
           "무엇을 출력해야 하나요? a 에서 b 까지 걷는 최소 거리예요.\n곧장 걸어갈 수도, 텔레포터 한쪽으로 가서 반대쪽으로 나올 수도 있어요.\n그래서 세 가지 경로 — 직접, x 경유, y 경유 — 의 거리를 각각 구해\n가장 짧은 값을 답으로 골라요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 알고리즘을 짧게 쓸 수 있어요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

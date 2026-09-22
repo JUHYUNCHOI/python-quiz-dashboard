@@ -109,10 +109,7 @@ export function getHps17Sections(E) {
         t(E, "So try all 6, count cow 1's wins each time, and keep the biggest.",
             "그래서 6 가지를 다 해 보고,\n매번 cow 1 이 이긴 수를 세서 가장 큰 값을 남겨요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더(<iostream>, <vector>, ...)만 적으면 코드가 무엇을 쓰는지 한눈에 보여요."),

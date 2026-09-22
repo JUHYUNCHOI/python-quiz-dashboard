@@ -231,8 +231,8 @@ export function getMoolooSections(E) {
           "답은 모든 시청일을 덮는 구독의 최소 총 비용이에요.\n두 날의 간격이 K 이하면 새로 구독하는 것보다\n지금 구독을 늘리는 게 더 싸요.\n그래서 날짜를 정렬해 왼쪽부터 훑으며, 간격이 K 이하면\n늘리고 아니면 새로 시작해서 비용을 더해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "Python's high-level constructs (list, sorted) make algorithms concise.",
+            "Python의 고수준 구문 (list, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

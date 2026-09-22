@@ -281,10 +281,7 @@ export function getClockFenceSections(E) {
         t(E, "So the code counts right vs left turns at every corner and prints whichever direction happened more.",
             "그래서 코드는 모퉁이마다\n오른쪽인지 왼쪽인지 세어서\n더 많이 나온 쪽을 방향으로 출력해요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 넣으면 (<iostream>, <vector>, ...)\n코드가 무엇을 하려는지 더 잘 보여요."),

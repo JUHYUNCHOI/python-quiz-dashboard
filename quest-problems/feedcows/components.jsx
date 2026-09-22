@@ -127,10 +127,7 @@ export function getFeedCowsSections(E) {
         t(E, "There are T test cases. For each, print TWO lines: the patch count, then a string showing where each patch goes ('.', 'G', or 'H').",
             "테스트가 T 개예요. 테스트마다 두 줄을 출력해요.\n첫 줄은 패치 개수, 둘째 줄은 자리마다 무엇을 놓았는지예요 ('.', 'G', 'H')."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Compare s[i] with the chars 'G' and 'H' directly.",
             "s[i] 를 글자 'G', 'H' 와 바로 견줘요."),

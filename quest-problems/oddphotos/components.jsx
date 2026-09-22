@@ -272,8 +272,8 @@ export function getOddPhotosSections(E) {
             "그래서 코드는 짝수·홀수 소 개수를 먼저 세고,\n묶음 개수 k 를 0부터 다 넣어 보며\n그 개수로 만들 수 있는 가장 큰 k 를 답으로 남겨요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Read IDs one at a time and tally even vs odd with x % 2 — no array needed.",

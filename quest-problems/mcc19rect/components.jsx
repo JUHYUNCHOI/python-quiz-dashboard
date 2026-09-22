@@ -197,8 +197,8 @@ export function getMcc19RectSections(E) {
             "멀리 떨어진 두 수의 차이는 사이 칸들을 더한 것이라,\n이웃한 두 수만 보면 충분해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "파이썬은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",

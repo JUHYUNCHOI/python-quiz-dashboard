@@ -297,8 +297,8 @@ export function getSleepyHerdSections(E) {
             "최소는 다르게 봐요: 두 간격이 다 1 이면 0 번, 하나가 2 면 1 번이면 끝나요.\n그 외 나머지 경우는 항상 2 번이 필요해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

@@ -87,8 +87,8 @@ export function getHungryCowSections(E) {
           "답은 T 일까지 Bessie 가 실제로 먹은 날의 수예요.\nT 가 10^14 까지 커서 하루씩 세면 너무 느려요.\n그래서 배달을 날짜순으로 세우고, 배달 사이 간격만큼\n한 번에 먹은 날을 세요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "T can reach 10^14, so days and accumulated stock need long long.",

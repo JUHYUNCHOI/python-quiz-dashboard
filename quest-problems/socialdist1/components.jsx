@@ -326,10 +326,7 @@ export function getSocDist1Sections(E) {
         t(E, "So the code binary-searches D, and for each candidate D checks the gaps between existing cows and how many new cows still fit.",
             "그래서 코드는 D 를 이분 탐색하면서\n기존 소들 사이 간격과\n새로 몇 마리를 더 넣을 수 있는지 확인해요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 (<iostream>, <vector>, ...) 넣으면 코드가 무엇을 쓰는지 잘 보여요."),

@@ -106,10 +106,7 @@ export function getFjFarmsSections(E) {
         t(E, "So: for each day x, compute every height, count how many plants are\ntaller than i, and check it against t. Stop at the first match.",
             "그래서 날마다 키를 다시 계산하고, i 보다 큰 식물 수를 세어\nt 와 같은지 확인해요. 처음 맞는 날에서 멈춰요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "A helper function solve(...) keeps main() short and readable.",
             "도우미 함수 solve(...) 로 나누면 main() 이 짧아서 읽기 좋아요."),

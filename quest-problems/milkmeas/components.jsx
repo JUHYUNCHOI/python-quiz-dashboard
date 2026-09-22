@@ -378,10 +378,7 @@ export function getMilkMeasSections(E) {
             "If this leader set differs from the one right before it, that's\na change — bump display_changes by 1.",
             "바로 앞의 1등 조합과 지금 조합이 다르면 바뀐 걸로 세고,\ndisplay_changes 를 1 늘려요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "tuple<int, string, int> sorts by day first because of the natural lex order.",
             "tuple<int, string, int> 는 앞자리부터 차례로 견주기 때문에\n따로 시키지 않아도 day 순서로 줄을 서요."),

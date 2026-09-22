@@ -139,8 +139,8 @@ export function getWalkHomeSections(E) {
             "집(오른아래 끝)에서부터 거꾸로 채우면 오른쪽·아래 칸이\n이미 채워져 있어서, 재귀 없이 표만 보고 더할 수 있어요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 을 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

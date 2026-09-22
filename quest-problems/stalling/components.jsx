@@ -297,8 +297,8 @@ export function getStallingSections(E) {
             "그래서 코드는 소는 키 큰 순서로,\n축사는 작은 순서로 정렬한 뒤,\n소마다 아직 남은 선택지 수를 곱해 나가요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬은 list, map, sorted 덕분에 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "파이썬은 list, map 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",

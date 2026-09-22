@@ -135,10 +135,7 @@ export function getLeadersSections(E) {
           "The answer is how many valid (G-leader, H-leader) pairs exist.\nChecking every pair is O(N^2), too slow.\nKey fact: a valid pair always includes the very first cow\nof some breed that covers its whole breed.\nSo we find the first G and first H, then count the cases\nwhere each one plays that role.",
           "답은 되는 (G리더, H리더) 짝의 개수예요.\n모든 짝을 다 확인하면 N² 이라 느려요.\n핵심은, 되는 짝엔 늘 자기 품종을 전부 덮는\n맨 앞 소가 하나는 있다는 거예요.\n그래서 맨 앞 G 와 맨 앞 H 를 기준으로 경우를 나눠 세요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "We adjust arr[i]-- once on read to convert from 1-indexed to 0-indexed.",
             "읽을 때 arr[i]-- 로 1부터 세던 자리를 0부터 세도록 한 번에 바꿔요."),

@@ -317,8 +317,8 @@ export function getMilkFactorySections(E) {
             "그래서 후보 c 를 1 부터 N 까지 차례로 시도해요.\nc 에서 역방향 BFS 로 N 개 전부에 닿으면 그 c 를 출력하고, 없으면 -1 을 출력해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 을 쓰면 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "queue<int> from <queue> is the standard BFS frontier container.",

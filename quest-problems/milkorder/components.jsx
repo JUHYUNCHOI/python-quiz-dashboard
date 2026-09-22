@@ -193,8 +193,8 @@ export function getMilkOrderSections(E) {
           "무엇을 출력해야 하나요? 1번 소가 설 수 있는 가장 이른 자리예요.\n한 자리가 되려면 고정 위치와 순서 규칙을 둘 다 만족해야 해요.\n그래서 p 를 1부터 차례로 시도해요 — 고정 위치를 먼저 놓고,\n순서 규칙대로 소들을 앞에서부터 채워 처음 맞는 p 에서 멈춰요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 알고리즘이 짧아져요."),
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "Python 의 list, map 덕분에 알고리즘이 짧아져요."),
       ],
       cppOnly: [
         t(E, "map<int,int> for cow -> fixed position lookup — .count(key) checks existence.",

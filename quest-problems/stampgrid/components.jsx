@@ -352,10 +352,7 @@ export function getStampGridSections(E) {
           "The answer is YES or NO — can we recreate the pattern?\nThe grid is small, so trying every rotation and position\nis still fast enough.\nSo we rotate the stamp 4 ways, try every position, and\ncheck: does it cover every ★ without landing outside?",
           "답은 테스트마다 무늬를 만들 수 있는지 YES 나 NO 예요.\n격자가 작아서 회전과 자리를 다 해봐도 충분히 빨라요.\n그래서 도장을 4방향으로 돌려 자리마다 찍어 보면서,\n★ 을 벗어나지 않고 전부 덮이는지 확인해요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 를 쓰면 알고리즘이 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 넣어요 (<iostream>, <vector> …).\n그래야 코드가 무엇을 하려는지 잘 보여요."),

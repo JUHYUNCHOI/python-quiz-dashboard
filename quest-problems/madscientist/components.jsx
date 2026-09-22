@@ -257,10 +257,7 @@ export function getMadSciSections(E) {
           + "그래서 다른 자리가 이어진 덩어리가 몇 개인지 세면\n"
           + "그게 바로 답이에요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 의 list, map, sorted 덕분에 코드가 짧아져요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E, "A bool flag inBlock tracks whether we're currently inside a mismatch run.",
             "bool 값 inBlock 이 지금 다른 구간 안에 있는지를 기억해요."),
