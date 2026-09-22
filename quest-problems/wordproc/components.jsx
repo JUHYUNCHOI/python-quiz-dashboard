@@ -31,8 +31,11 @@ function packLines(lengths, K) {
 }
 
 export function WordProcLineWrapSim({ E }) {
-  const [lengths, setLengths] = useState([3, 3, 2, 1, 4, 3]);
-  const [K, setK] = useState(6);
+  /* 2026-09-22 PM 판정 ③: 기본값이 예전 "8쪽 표"(the/dog/is/a/good/boy, K=6)에
+     맞춰져 있었다. 그 표를 지웠으니, 이 시뮬 바로 앞(2-2·2-3쪽)에서 학생이 막
+     짚은 hello(5)/my(2)/name(4), K=8 로 시작해 끊기지 않게 이어준다. */
+  const [lengths, setLengths] = useState([5, 2, 4]);
+  const [K, setK] = useState(8);
 
   const lines = packLines(lengths, K);
 
@@ -284,11 +287,11 @@ export function getWordProcSections(E) {
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
             "Python 은 list, map, sorted 덕분에 코드가 짧아져요."),
       ],
+      /* 2026-09-22, PM 판정 ⑤: long long 팁을 뺐다 — N,K ≤ 100·80 이라
+         이 문제에선 오버플로가 원리상 불가능하다(auditor). */
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 (<iostream>, <vector>, ...) 넣으면 뜻이 또렷해요."),
-        t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합이나 곱이 2×10^9 를 넘을 수 있으면 long long 을 써요."),
       ],
     },
   ];

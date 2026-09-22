@@ -124,8 +124,10 @@ export function makeWordProcCh1(E) {
     // 1-1: Title
     {
       type: "reveal",
+      /* 2026-09-22, PM 판정 ⑤: 영어 narr 이 287자 4문장 — 아래 미션·문제 카드와
+         내용이 거의 그대로 겹쳤다. 한국어(24자 요약)와 같은 길이로 맞췄다. */
       narr: t(E,
-        "A word processor receives N words in order. Each line can hold at most K LETTERS of words (spaces don't count). Each word, in order, is added to the current line if it still fits — otherwise it goes onto a NEW line.\nPrint the document one line per row, words separated by single spaces.",
+        "Words go into a line; overflow starts a new one.",
         "단어를 순서대로 줄에 담다가 넘치면 새 줄로 넘어가요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -190,11 +192,77 @@ export function makeWordProcCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Rules explained with visual
+    /* 1-2: 입출력 형식 + 제약 카드 (2026-09-22, PM 판정 ②)
+       auditor·pedagogy·student 셋이 따로 짚었다 — 제약이 화면 어디에도 없고,
+       진짜 파일 형식(word.in/word.out)이 12쪽 코드에서야 처음 나오고, 최종 코드
+       주석 "단어 길이 합이 K 이하" 를 이해할 자리가 없었다.
+       예제는 auditor 가 usaco.org(cpid=987) 원문에서 확인한 진짜 샘플이다 —
+       words=[hello,my,name,is,Bessie,and,this,is,my,essay], N=10, K=7 →
+       그리디로 손으로 짚어도 6줄이 나온다(hello my / name is / Bessie /
+       and this / is my / essay). 우리가 지어낸 예제가 아니다.
+       형제(moohunt) 의 INPUT/OUTPUT 2박스 + makedistinct 의 CONSTRAINTS 박스를
+       그대로 복사했다 — 새로 발명하지 않았다. */
     {
       type: "reveal",
       narr: t(E,
-        "The rule: when adding the next word would push the total character count past K, start a new line.\nSpaces DON'T count!\nOnly the sum of word lengths matters.", "공백은 세지 않아요. 단어 글자 수의 합만 보면 돼요."),
+        "File I/O: word.in has N, K, then the words.",
+        "파일로 입출력해요 — word.in 에 N, K, 단어들."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 8 }}>
+            📥 {t(E, "Sample I/O (word.in / word.out)", "샘플 입출력 (word.in / word.out)")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+            <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.6 }}>
+              <div style={{ color: "#94a3b8", marginBottom: 4 }}>word.in</div>
+              <div>10 7</div>
+              <div style={{ wordBreak: "break-all" }}>hello my name is Bessie and this is my essay</div>
+            </div>
+            <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.6 }}>
+              <div style={{ color: "#94a3b8", marginBottom: 4 }}>word.out</div>
+              <div>hello my</div>
+              <div>name is</div>
+              <div>Bessie</div>
+              <div>and this</div>
+              <div>is my</div>
+              <div>essay</div>
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E, <>First line: <b>N K</b> — word count, then max letters per line.<br />Second line: all <b>N</b> words, separated by spaces.</>,
+                     <>첫 줄: <b>N K</b> — 단어 개수, 그리고 한 줄 최대 글자 수.<br />둘째 줄: <b>N</b>개 단어가 공백으로 이어져요.</>)}
+              </div>
+            </div>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E, <>The document, <b>one line per row</b>.</>,
+                     <>문서를 <b>한 줄씩</b> 출력해요.</>)}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              <div>1 ≤ K ≤ 80</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "each word: 1–15 letters, English letters only", "단어 하나: 1~15자, 영문자만")}</div>
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Rules explained with visual
+    {
+      type: "reveal",
+      /* 2026-09-22, PM 판정 ⑤: 영어 156자 3문장 — 카드 제목·본문과 겹쳤다. */
+      narr: t(E,
+        "Spaces don't count — only word lengths matter.",
+        "공백은 세지 않아요. 단어 글자 수의 합만 보면 돼요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
@@ -234,7 +302,7 @@ export function makeWordProcCh1(E) {
           </div>
         </div>),
     },
-    // 1-3: Quiz — does space count?
+    // 1-4: Quiz — does space count?
     {
       type: "quiz",
       narr: t(E,
@@ -252,7 +320,7 @@ export function makeWordProcCh1(E) {
         "Only word characters count! The K limit is the sum of word lengths, NOT counting spaces. This is explicitly stated in the problem!",
         "단어 글자만 세요. K 는 단어 길이의 합이고 공백은 빼요.\n문제에 그렇게 적혀 있어요."),
     },
-    // 1-4: Line fitting example
+    // 1-5: Line fitting example
     {
       type: "reveal",
       /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
@@ -298,7 +366,7 @@ export function makeWordProcCh1(E) {
           </div>
         </div>),
     },
-    // 1-5: Quiz — count lines
+    // 1-6: Quiz — count lines
     {
       type: "quiz",
       narr: t(E,
@@ -316,7 +384,7 @@ export function makeWordProcCh1(E) {
         "ab(2)+cd(2)=4 <= 5. Add ef: 4+2=6 > 5, new line. Line 1: [ab, cd]. Line 2: [ef]. Total: 2 lines!",
         "ab(2)+cd(2)=4 라서 5 안에 들어가요.\nef 를 더하면 6 이 되어 넘치니 새 줄이에요. 그래서 2줄이에요."),
     },
-    // 1-6: Input practice
+    // 1-7: Input practice
     {
       type: "input",
       narr: t(E,
@@ -338,19 +406,28 @@ export function makeWordProcCh1(E) {
    Chapter 2: 알고리즘 시뮬레이션 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeWordProcCh2(E) {
-  const wColors = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4"];
   return [
     // 2-1: Greedy algorithm walkthrough
     {
       type: "reveal",
+      /* 2026-09-22, PM 판정 ⑤: 영어 166자 3문장 — 아래 4단계 목록과 겹쳤다. */
       narr: t(E,
-        "The greedy strategy: scan words left to right.\nTrack cur_len (total chars on current line).\nIf adding the next word exceeds K, flush the current line and start fresh!", "현재 줄의 글자 수만 들고 왼쪽부터 하나씩 봐요."),
+        "Scan left to right, tracking the current line's length.",
+        "현재 줄의 글자 수만 들고 왼쪽부터 하나씩 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
             {t(E, "Greedy Algorithm", "그리디 알고리즘")}
           </div>
           <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "1px solid #fca5a5" }}>
+            {/* 2026-09-22, pedagogy 승인 문구 (그대로 씀 — 고쳐 쓰지 않는다).
+                "그리디" 가 이 quest 전체에서 처음 등장하는 자리라 정의 한 줄을 붙인다.
+                reverseeng/sims.jsx:126-127 의 문구와 일부러 맞췄다. */}
+            <div style={{ fontSize: 12.5, color: "#7f1d1d", lineHeight: 1.7, marginBottom: 10, wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E,
+                "If the word we're looking at fits, we add it right now and never reconsider later. This is called a greedy method — you'll meet that name again in the code.",
+                "지금 보는 단어가 줄에 들어가면 바로 넣고, 나중에 다시 고민하지 않아요. 이런 방법을 탐욕적(그리디) 방법이라고 불러요 — 코드에서도 이 이름을 다시 만나요.")}
+            </div>
             <div style={{ fontSize: 12, lineHeight: 2.2, color: C.text }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>1</span>
@@ -372,63 +449,55 @@ export function makeWordProcCh2(E) {
           </div>
         </div>),
     },
-    // 2-2: Detailed trace with state table
+    /* 2-2, 2-3, 2-4: 옛 "8쪽 트레이스 표" 를 지우고 그 자리에 시뮬을 당겼다.
+       (2026-09-22, PM 판정 ③) pedagogy·student 가 각자 짚었다 — 4쪽(Ch1) 과
+       이 표가 포맷만 다르고 같은 정보를 두 번, 시뮬(당시 9쪽)에 닿을 때는 이미
+       답을 세 번 본 뒤라 시뮬이 발견이 아니라 검산이었다.
+       pedagogy 가 준 걸음 목록대로 셋으로 쪼갰다 — ①고정 예시 ②하나 더 추가해
+       넘치는 것까지 ③그다음에 자유 편집. 예시는 **새로 안 만들고** 1-3쪽(Ch1,
+       "핵심 규칙" 카드)에서 이미 쓴 hello/my/name, K=8 을 그대로 재사용한다 —
+       같은 숫자를 새로 보여주는 게 아니라 이미 본 것을 되짚어 다음으로 잇는다. */
+    // 2-2: Step 1 — hello + my fit
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6.", "단어 여섯 개를 K=6 으로 한 줄씩 따라가 봐요."),
+        "We added hello and my — still under 8.", "hello 와 my 를 넣었어요 — 아직 8 이하예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
-            {t(E, "Trace: K=6", "추적: K=6")}
+            {t(E, "Step 1: hello + my", "1단계: hello + my")}
           </div>
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>
-              <thead>
-                <tr style={{ background: "#fef2f2" }}>
-                  <th style={{ padding: "5px 4px", borderBottom: "2px solid #fca5a5", color: "#dc2626", textAlign: "left" }}>{t(E, "Word", "단어")}</th>
-                  <th style={{ padding: "5px 4px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>len</th>
-                  <th style={{ padding: "5px 4px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>cur+len</th>
-                  <th style={{ padding: "5px 4px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>{t(E, ">K?", ">K?")}</th>
-                  <th style={{ padding: "5px 4px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>{t(E, "Action", "동작")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ["the", 3, "0+3=3", "3<=6", t(E, "add", "추가")],
-                  ["dog", 3, "3+3=6", "6<=6", t(E, "add", "추가")],
-                  ["is", 2, "6+2=8", "8>6", t(E, "flush! add", "출력! 추가")],
-                  ["a", 1, "2+1=3", "3<=6", t(E, "add", "추가")],
-                  ["good", 4, "3+4=7", "7>6", t(E, "flush! add", "출력! 추가")],
-                  ["boy", 3, "4+3=7", "7>6", t(E, "flush! add", "출력! 추가")],
-                ].map(([w, len, calc, cmp, act], i) => (
-                  <tr key={i} style={{ background: act.includes("flush") ? "#fef2f2" : "#fff" }}>
-                    <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", fontWeight: 600, color: wColors[i] }}>{w}</td>
-                    <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{len}</td>
-                    <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{calc}</td>
-                    <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", textAlign: "center", color: cmp.includes(">") ? "#dc2626" : "#059669", fontWeight: 700 }}>{cmp}</td>
-                    <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", textAlign: "center", fontWeight: act.includes("flush") ? 800 : 400, color: act.includes("flush") ? "#dc2626" : C.text }}>{act}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div style={{ marginTop: 10 }}>
-            <LineViz words={["the", "dog"]} colors={["#3b82f6", "#10b981"]} K={6} lineNum={1} E={E} />
-            <LineViz words={["is", "a"]} colors={["#f59e0b", "#8b5cf6"]} K={6} lineNum={2} E={E} />
-            <LineViz words={["good"]} colors={["#ec4899"]} K={6} lineNum={3} E={E} />
-            <LineViz words={["boy"]} colors={["#06b6d4"]} K={6} lineNum={4} E={E} />
+          <LineViz words={["hello", "my"]} colors={["#3b82f6", "#10b981"]} K={8} lineNum={1} E={E} />
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "5 + 2 = 7  ≤  8, still fits.", "5 + 2 = 7, 8 이하라 들어가요.")}
           </div>
         </div>),
     },
-    // 2-2.5: Interactive sim — play with word lengths and K
+    // 2-3: Step 2 — add name, overflow
     {
       type: "reveal",
       narr: t(E,
-        "Now play with it yourself.\nDrag K, edit each word's length, add or remove words — watch the lines re-pack live.", "K 와 단어 길이를 바꾸면 줄이 바로 다시 묶여요."),
+        "Adding name makes 11 — over 8, so it starts a new line.", "name 을 더하면 11이 되어 8을 넘겨서 새 줄로 가요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
+            {t(E, "Step 2: add name", "2단계: name 을 더하면")}
+          </div>
+          <div style={{ marginBottom: 8, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "7 + 4 = 11  >  8  →  overflow, new line", "7 + 4 = 11 > 8 → 넘쳐서 새 줄")}
+          </div>
+          <LineViz words={["hello", "my"]} colors={["#3b82f6", "#10b981"]} K={8} lineNum={1} E={E} />
+          <LineViz words={["name"]} colors={["#f59e0b"]} K={8} lineNum={2} E={E} />
+        </div>),
+    },
+    // 2-4: Step 3 — free-edit sim, starting from the same example
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now change K and the words yourself.", "이제 K 와 단어를 직접 바꿔 봐요."),
       content: <WordProcLineWrapSim E={E} />,
     },
-    // 2-3: Quiz on edge case
+    // 2-5: Quiz on edge case
     {
       type: "quiz",
       narr: t(E,
@@ -446,7 +515,7 @@ export function makeWordProcCh2(E) {
         "abcde(5)=5 <= 5, fits! Then 5+fg(2)=7 > 5, new line. Line 1: [abcde], Line 2: [fg].",
         "abcde 는 5글자라서 딱 들어가요.\n여기에 fg 를 더하면 7 이 되어 넘치니 fg 는 새 줄이에요."),
     },
-    // 2-4: Practice input
+    // 2-6: Practice input
     {
       type: "input",
       narr: t(E,
@@ -548,6 +617,14 @@ export function makeWordProcCh3(E, lang = "py") {
             ]}
             highlight={[0, 1, 2, 3, 4, 5, 6, 7]}
           />
+          {/* 2026-09-22, pedagogy 승인. 바로 앞 쪽(3-2) 의 "이름 = 뜻" 박스를
+              그대로 복제했다 — 새 스타일을 발명하지 않는다.
+              ⚠️ "and cur_line" 은 여기서 설명하지 않는다 — 바로 다음 쪽 퀴즈가
+              그 질문을 묻는다. 여기서 답하면 퀴즈를 스포일한다(pedagogy 판정). */}
+          <div style={{ marginTop: 8, background: "#fef2f2", borderRadius: 8, padding: 8, border: "1.5px solid #fca5a5", fontSize: 12, lineHeight: 1.8, color: C.text }}>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>wl</span> = {t(E, "this word's letter count (short for \"word length\")", "이 단어의 글자 수 (word length 줄임말)")}</div>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>{"' '.join(cur_line)"}</span> = {t(E, "the join from Lesson 18 — glues cur_line's words together with spaces", "레슨 18 join — cur_line 단어들을 공백으로 이어 붙여 문자열 하나로 만들어요")}</div>
+          </div>
           <div style={{ marginTop: 8, fontSize: 12, lineHeight: 1.8, color: C.text }}>
             <div style={{ fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>
               {t(E, "Key logic:", "핵심 방법:")}
@@ -557,7 +634,14 @@ export function makeWordProcCh3(E, lang = "py") {
           </div>
         </div>),
     },
-    // 3-4: Quiz on code logic
+    /* 3-4: Quiz on code logic (2026-09-22, PM 판정 ④)
+       학생: "정답은 맞췄지만 이 쪽엔 if문 코드 자체가 안 보였다 — 14쪽 코드를
+       기억해서 풀어야 했다." → hint 에 그 줄을 그대로 붙여, 앞 쪽 기억에
+       기대지 않게 한다 (memory/feedback_screen_must_not_rely_on_memory.md).
+       pedagogy: "정답 해설이 스스로 '이 문제에선 안 일어난다' 고 인정한다.
+       학생은 '그럼 왜 물어본 거지' 가 된다." — 영어 explain 의 자기모순
+       괄호("guaranteed not to happen... but good practice")를 뺐다.
+       한국어는 원래 그 말이 없었다 — 한영이 다른 말을 하고 있었다. */
     {
       type: "quiz",
       narr: t(E,
@@ -565,6 +649,9 @@ export function makeWordProcCh3(E, lang = "py") {
       question: t(E,
         "Why 'and cur_line' in the overflow check?",
         "넘침을 확인할 때 'and cur_line' 이 왜 필요할까요?"),
+      hint: t(E,
+        "The line in question: `if cur_len + wl > K and cur_line:`",
+        "지금 보는 줄: `if cur_len + wl > K and cur_line:`"),
       options: [
         t(E, "No reason, just extra safety", "이유 없어요, 그냥 안전장치예요"),
         t(E, "Don't flush an empty line — always add at least one word", "빈 줄을 출력하지 않으려고 — 한 단어는 꼭 넣어요"),
@@ -572,7 +659,7 @@ export function makeWordProcCh3(E, lang = "py") {
       ],
       correct: 1,
       explain: t(E,
-        "If cur_line is empty, we haven't added any word yet. We must add the current word even if it alone exceeds K (guaranteed not to happen by constraints, but good practice)!",
+        "If cur_line is empty, we haven't added any word yet. We must add the current word no matter what.",
         "cur_line 이 비어 있으면 아직 아무 단어도 안 넣은 거예요.\n그럴 때는 지금 단어를 꼭 넣어야 해요."),
     },
     // 3-5: Complete code
