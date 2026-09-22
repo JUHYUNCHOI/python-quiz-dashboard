@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getAlchemySections, RecipeSimulator } from "./components";
+import { getAlchemyWalk, RecipeSimulator } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -9,8 +10,9 @@ export function makeAlchemyCh1(E) {
     // 1-1: Title reveal
     {
       type: "reveal",
+      /* 2026-09-22, PM 판정 ⑤: 영어 297자 3문장 — 문단이었다. 한 문장으로 줄인다. */
       narr: t(E,
-        "There are N metals (1..N), and you start with a[i] units of metal i. Each recipe takes one unit each of several lower-numbered metals and turns them into ONE unit of a higher-numbered metal.\nUsing the recipes any number of times, what is the MAXIMUM number of units of metal N you can end up with?",
+        "Use recipes as many times as you like — what's the max units of metal N you can end up with?",
         "레시피를 여러 번 써서 금속 N 을 최대 몇 개까지 만들 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -48,12 +50,15 @@ export function makeAlchemyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
+                {/* 2026-09-22, PM 판정 ①: 원문은 "K (K < N) recipes … at most one recipe
+                    to make it" — 레시피가 모든 금속에 있는 게 아니고, 있어도 금속 하나당
+                    최대 하나뿐이다. 아래 2쪽 "금속 4 가 없어서" 와 맞춘다. usaco.org 원문 확인. */}
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "For each metal ", "각 금속 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "i ≥ 2, you're given a recipe", "i ≥ 2에 대해 레시피")}</b>
-                  {t(E, " — a set of distinct lower-numbered metals — that combines into 1 unit of metal i.",
-                        " — 서로 다른 더 낮은 번호의 금속들 — 가 주어져요. 이 재료를 모으면 금속 i 1단위가 만들어져요.")}
+                  {t(E, "Only some metals ", "레시피가 있는 금속은 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "have a recipe (K of them, K < N)", "일부(K개, K < N)뿐")}</b>
+                  {t(E, " — a set of distinct lower-numbered metals that combines into 1 unit of it. Every metal has at most one recipe.",
+                        "이에요 — 있으면, 서로 다른 더 낮은 번호의 금속들을 모아서 1개를 만들 수 있어요. 금속 하나에 레시피는 있어도 최대 하나예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -89,7 +94,7 @@ export function makeAlchemyCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10, fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 700, color: "#92400e", marginBottom: 6 }}>📥 {t(E, "Input", "입력")}</div>
-            <div>{t(E, "Line 1: N (number of metals).", "1번째 줄: 금속 개수 N.")}</div>
+            <div>{t(E, "Line 1: N (number of metals, 1 ≤ N ≤ 100).", "1번째 줄: 금속 개수 N (1 ≤ N ≤ 100).")}</div>
             <div>{t(E, "Line 2: N integers a[1..N] — starting units (0 ≤ a[i] ≤ 10000).", "2번째 줄: 정수 N 개 a[1..N] — 처음에 가진 개수예요 (0 ≤ a[i] ≤ 10000).")}</div>
             <div>{t(E, "Line 3: K (number of recipes, 1 ≤ K < N).", "3번째 줄: 레시피 개수 K (1 ≤ K < N).")}</div>
             <div>{t(E, "Next K lines: L M ing₁ … ing_M — make 1 of metal L from M ingredients.", "다음 K줄: L M 재료₁ … 재료_M — 재료 M개로 금속 L 1개를 만들어요.")}</div>
@@ -117,60 +122,80 @@ export function makeAlchemyCh1(E) {
             <div>{t(E, "\"5 2 3 4\" → make metal 5 from M=2 ingredients: metals 3 and 4.", "\"5 2 3 4\" → 재료 M=2개(금속 3, 4)로 금속 5 를 만들어요.")}</div>
             <div>{t(E, "\"2 1 1\" → make metal 2 from M=1 ingredient: metal 1.", "\"2 1 1\" → 재료 M=1개(금속 1)로 금속 2 를 만들어요.")}</div>
             <div>{t(E, "\"3 1 2\" → make metal 3 from M=1 ingredient: metal 2.", "\"3 1 2\" → 재료 M=1개(금속 2)로 금속 3 을 만들어요.")}</div>
-            <div style={{ marginTop: 6 }}>{t(E,
-              "Start: metal 1 = 2, metal 4 = 1, rest 0. Turn 1→2→3, then 3 + 4 → 5. That makes one unit of metal 5. Only one metal-1 is left after, not enough for a second metal 5 → answer 1.",
-              "처음에 금속 1 이 2개, 금속 4 가 1개 있고 나머지는 0 이에요. 1→2→3 으로 바꾸고 3 + 4 → 5 를 만들면 금속 5 가 1개 나와요. 그 뒤 금속 1 이 1개 남지만 금속 4 가 없어서 두 번째 금속 5 는 못 만들어요 → 답은 1 이에요.")}</div>
+            <div style={{ marginTop: 6, wordBreak: "keep-all" }}>
+              {/* 2026-09-22, PM 판정 ⑤(ux 실측): 143자 한 줄이 모바일에서 "금속"과 "5"
+                  사이가 끊겼다. 절 단위로 <br/> 을 직접 넣고, 숫자마다 "금속" 을 붙인다
+                  (학생 지적: "1→2→3 부분은 '금속' 이 빠지고 숫자만 있어서 눈이 멈췄어요"). */}
+              {t(E, "Start: metal 1 = 2, metal 4 = 1, rest 0.", "처음에 금속 1 이 2개, 금속 4 가 1개 있고 나머지는 0 이에요.")}
+              <br />
+              {t(E, "Turn metal 1 → metal 2 → metal 3.", "금속 1 → 금속 2 → 금속 3 으로 바꿔요.")}
+              <br />
+              {t(E, "Then metal 3 + metal 4 → metal 5 — that's one unit made.", "그리고 금속 3 + 금속 4 → 금속 5 를 만들면 금속 5 가 1개 나와요.")}
+              <br />
+              {t(E, "Only one metal 1 is left, not enough for a second metal 5 → answer 1.", "그 뒤 금속 1 이 1개 남지만 금속 4 가 없어서 두 번째 금속 5 는 못 만들어요 → 답은 1 이에요.")}
+            </div>
           </div>
         </div>
       ),
     },
-    // 1-3: Quiz
+    // 1-3: Quiz — 2026-09-22 PM 판정 ②③: 3쪽 숫자를 1쪽 시뮬(RecipeSimulator) 초기값에
+    // 맞춘다 (금속1=3, 금속2=2, 금속3=1). "방금 눌러본 시뮬 그대로" 로 이어지게.
+    // 검산: scripts/alchemy_check.py — solve(3, [3,2,1], {3:[1,2]}) == 3.
     {
       type: "quiz",
       narr: t(E,
-        "Recipe: metal 1 + metal 2 = metal 3. You have 2 of metal 1 and 1 of metal 2. Max metal 3?", "레시피가 금속1 + 금속2 = 금속3 일 때 금속3 을 몇 개 만들까요?"),
+        "Same numbers as the sim you just tried — what's the answer?", "방금 시뮬 그대로예요 — 답이 뭘까요?"),
       question: t(E,
-        "Recipe: 1+2->3. Have: 2x metal 1, 1x metal 2. Max metal 3?",
-        "레시피는 1+2->3 이에요. 금속1 이 2개, 금속2 가 1개일 때 금속3 은 최대 몇 개일까요?"),
+        "Recipe: metal1 + metal2 -> metal3. Start: 3 of metal1, 2 of metal2, already 1 of metal3. Max metal3 you can end up with?",
+        "레시피는 금속1 + 금속2 = 금속3 이에요. 처음에 금속1 이 3개, 금속2 가 2개, 금속3 이 이미 1개 있어요. 최대 몇 개의 금속3 을 가질 수 있나요?"),
       options: [
-        t(E, "1", "1"),
+        t(E, "3", "3"),
+        t(E, "4", "4"),
         t(E, "2", "2"),
-        t(E, "0", "0"),
       ],
       correct: 0,
       explain: t(E,
-        "Correct! You need 1 of each ingredient. With 1x metal 2, you can only make 1x metal 3.",
-        "맞아요! 재료가 1개씩 필요해요. 금속2 가 1개뿐이라 금속3 은 1개만 만들 수 있어요."),
+        "Correct! The 1 you already have + 2 more you can craft = 3 total.",
+        "맞아요! 이미 있던 1개 + 새로 만들 수 있는 2개 = 총 3개예요."),
     },
-    // 1-4: Input
+    // 1-4: Input — 2026-09-22 PM 판정 ②: 3쪽과 다른(더 어려운) 예제로 — 2단계 레시피
+    // 사슬에서 재고가 부분 소비된 뒤 실패하는 경우를 직접 계산해 본다.
+    // 검산: solve(3, [5,0,0], {2:[1], 3:[1,2]}) == 2 (scripts/alchemy_check.py).
     {
       type: "input",
       narr: t(E,
-        "Same setup: recipe 1+2->3, have 2x metal 1 and 1x metal 2. How many metal 3 can you make?", "앞과 같아요. 금속3 을 몇 개 만들 수 있을까요?"),
+        "A harder recipe chain: metal 2 needs metal 1, and metal 3 needs metal 1 AND metal 2.",
+        "이번엔 레시피가 두 단계예요 — 금속2 는 금속1 로, 금속3 은 금속1 과 금속2 로 만들어요."),
       question: t(E,
-        "Recipe: 1+2->3. Have 2x metal 1, 1x metal 2. Max metal 3?",
-        "레시피는 1+2->3 이에요. 금속1 이 2개, 금속2 가 1개일 때 금속3 은 최대 몇 개일까요?"),
+        "Two recipes: metal2 is made from metal1, and metal3 is made from metal1 AND metal2. You start with 5 of metal1 (0 of metal2, metal3). Max metal3 you can make?",
+        "레시피는 두 개예요: 금속2 는 금속1 로 만들고, 금속3 은 금속1 과 금속2 로 만들어요. 처음에 금속1 이 5개 있어요(금속2, 금속3 은 0개). 금속3 을 최대 몇 개까지 만들 수 있나요?"),
       hint: t(E,
-        "You need both metal 1 and metal 2 for each metal 3. Limited by metal 2 count.",
-        "금속3 하나를 만들려면 금속1 과 금속2 가 모두 있어야 해요. 그래서 금속2 개수에 막혀요."),
-      answer: 1,
+        "Each metal3 needs 1 metal1 directly, plus 1 metal2 — but that metal2 itself needs 1 more metal1. So each metal3 actually costs 2 of metal1.",
+        "금속3 하나를 만들려면 금속1 1개(직접) + 금속2 1개가 필요해요. 근데 금속2 하나를 만들려면 금속1 이 또 1개 필요해요 — 그래서 금속3 하나당 금속1 이 사실 2개씩 들어가요."),
+      answer: 2,
     },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: ⚡ 코드 (2 steps)
+   Chapter 2: ⚡ 코드 (1 step)
+   2026-09-22, PM 판정 ④: ProgressiveCodeStepper(섹션 1개, 코드 위 "왜" 3줄)를
+   CodeWalk 으로 바꾼다 — 이미 확립된 절차(moohunt·buymilk·makedistinct).
+   🔒 FULL_PY / FULL_CPP 는 한 글자도 안 바꿨다 (components.jsx 의 getAlchemyWalk 참고).
    ═══════════════════════════════════════════════════════════════ */
 export function makeAlchemyCh2(E, lang = "py") {
+  const w = getAlchemyWalk(E, lang);
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Recursively try to build 1 unit of metal N — for each ingredient: use stock if any, else build it recursively. If anything is missing, fail. Sections build it one piece at a time.",
-        "금속 N 을 한 개 만드는 방법을 한 단락씩 쌓아 가요."),
-      sections: getAlchemySections(E),
+        "Walk through the code piece by piece to see how we craft metal N.",
+        "코드를 한 조각씩 짚어가며 금속 N 을 만드는 방법을 봐요."),
+      content: (
+        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} marks={w.marks} beats={w.beats} accent="#d97706" />
+      ),
     },
   ];
 }

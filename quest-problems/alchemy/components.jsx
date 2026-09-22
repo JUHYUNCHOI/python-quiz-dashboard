@@ -7,7 +7,9 @@
 //   attempt must NOT consume stock (work on a copy, commit on success).
 //   Python: official sample PASS (output 1) — local verify
 //   C++:    official sample PASS (output 1) — local verify (g++ -std=c++17)
-//   USACO re-submit PENDING. 코드 수정 시 USACO 재제출 필요 — REPO_ROOT/USACO_VERIFICATION.md 참고
+//   2026-09-22: FULL_PY / FULL_CPP 한 글자도 안 바꿈 — CodeWalk 표시(beats/marks/vars)만
+//   추가했다. 코드가 그대로라 재제출 불필요. AC 11/11 (2026-06-16) 그대로 유효.
+//   코드 자체를 고치면 그때 USACO 재제출 — REPO_ROOT/USACO_VERIFICATION.md 참고
 
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
@@ -33,6 +35,9 @@ export function RecipeSimulator({ E }) {
   const [made, setMade] = useState(0);
   const [log, setLog] = useState([]);
   const [busy, setBusy] = useState(false);
+  // 2026-09-22 학생 지적: "버튼 색이 성공이든 실패든 똑같아서 글자를 읽어야만 알 수 있었어요."
+  // 마지막 시도 성공/실패를 색으로도 보이게 한다.
+  const [lastOk, setLastOk] = useState(null);
 
   const fmt = (m) => t(E, `metal ${m}`, `금속 ${m}`);
 
@@ -40,6 +45,7 @@ export function RecipeSimulator({ E }) {
     setStock({ ...INITIAL });
     setMade(0);
     setLog([]);
+    setLastOk(null);
   };
 
   // One full attempt at making one unit of TARGET, with step messages.
@@ -77,6 +83,7 @@ export function RecipeSimulator({ E }) {
       setMade(made + 1);
     }
     setLog(trace);
+    setLastOk(ok);
     setBusy(false);
   };
 
@@ -93,8 +100,10 @@ export function RecipeSimulator({ E }) {
       marginTop: 12,
     }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, flexWrap: "wrap", gap: 8 }}>
+        {/* 2026-09-22 학생 지적: "탐욕 알고리즘' 이 이름부터 나와요. 무슨 뜻인지 설명이
+            없어요." — 하는 일로 먼저 부르고, 이름은 아래 힌트(다 써본 뒤)에서 붙인다. */}
         <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e" }}>
-          🧪 {t(E, "Try the greedy algorithm", "탐욕 알고리즘 체험")}
+          🧪 {t(E, "Try crafting", "직접 만들어 보기")}
         </div>
         <div style={{ fontSize: 11, color: "#92400e" }}>
           {t(E, "Recipe: metal 1 + metal 2 → metal 3", "레시피: 금속1 + 금속2 → 금속3")}
@@ -131,7 +140,9 @@ export function RecipeSimulator({ E }) {
           onClick={tryMakeOne}
           disabled={busy}
           style={{
-            background: A,
+            // 2026-09-22 학생 지적: "성공이든 실패든 버튼 색이 똑같았어요." 마지막 시도가
+            // 실패면 빨강으로 갈라서, 글자를 안 읽어도 결과가 보이게 한다.
+            background: lastOk === false ? "#dc2626" : A,
             color: "#fff",
             border: "none",
             borderRadius: 8,
@@ -139,6 +150,7 @@ export function RecipeSimulator({ E }) {
             fontSize: 12,
             fontWeight: 800,
             cursor: busy ? "default" : "pointer",
+            transition: "background .2s",
           }}
         >
           {t(E, `▶ Make 1 metal ${TARGET}`, `▶ 금속${TARGET} 1개 만들기`)}
@@ -199,10 +211,12 @@ export function RecipeSimulator({ E }) {
         </div>
       )}
 
-      <div style={{ fontSize: 11, color: "#92400e", marginTop: 8, lineHeight: 1.5 }}>
+      <div style={{ fontSize: 11, color: "#92400e", marginTop: 8, lineHeight: 1.5, wordBreak: "keep-all" }}>
+        {/* 2026-09-22 학생 지적: "'깊이 1' 이 뭘 세는건지 몰랐어요." → 빼고, 하는 일로 풀어 쓴다.
+            이름(탐욕적/그리디)은 **여기, 다 써본 뒤에** 처음 붙인다 (reverseeng/wordproc 과 같은 문구). */}
         💡 {t(E,
-          "Click ▶ until it fails — that's the greedy answer. Notice: stock of metal 3 is used first (depth 1), then we fall back to combining 1+2.",
-          "▶ 를 실패할 때까지 눌러봐요 — 그게 탐욕 답이에요.\n금속3 재고가 먼저 쓰이고(깊이 1), 다음에 1+2 조합으로 넘어가요.")}
+          "Click ▶ until it fails — that count is the answer. Notice it uses metal 3's own stock first, then falls back to combining metal 1 + metal 2. Always picking what already works right now, without planning ahead, is called a greedy method — you'll meet that name again in the code.",
+          "▶ 를 실패할 때까지 눌러봐요 — 그 횟수가 답이에요.\n금속3 재고를 먼저 다 쓰고, 다 쓰면 금속1 + 금속2 조합으로 넘어가요.\n이렇게 지금 당장 되는 것을 그때그때 바로 쓰는 방법을 탐욕적(그리디) 방법이라고 불러요 — 코드에서도 이 이름을 다시 만나요.")}
       </div>
     </div>
   );
@@ -317,8 +331,10 @@ export function getAlchemySections(E) {
             "그래서 make() 는 재고 복사본에서 먼저 시도해요.\n성공했을 때만 진짜 재고에 반영하고, 실패할 때까지 반복해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "파이썬의 list, map, sorted 덕분에 코드가 짧아요."),
+        // 2026-09-22 학생 지적: "sorted 라고 써있는데 실제 코드엔 한 번도 안 나와요."
+        // grep -c "sorted(" FULL_PY → 0. list/map 은 실제로 쓰여서(각 2회) 그대로 둔다.
+        t(E, "Python's high-level constructs (list, map) make algorithms concise.",
+            "파이썬의 list, map 덕분에 코드가 짧아요."),
       ],
       cppOnly: [
         t(E, "Only <iostream> and <vector> needed — no bits/stdc++.h.",
@@ -330,6 +346,72 @@ export function getAlchemySections(E) {
       ],
     },
   ];
+}
+
+/* ================================================================
+   CodeWalk 걸음 (2026-09-22, PM 배정 ④ + 학생 보고 ①)
+   🔒 FULL_PY / FULL_CPP 는 한 글자도 안 건드린다 — 표시(beats/marks/vars)만.
+   생각 순서: 무엇을 내놓나 → make() 는 어떻게 만드나(여기서 재귀를 처음 이름 붙임,
+   1쪽 시뮬 경험과 연결) → 몇 번 할 수 있나(먼저 든 순진한 생각 → 복사본으로 고침).
+
+   학생(2026-09-22) 5쪽에서 그만뒀다: "함수가 자기 자신을 또 부르는 게 왜 되는 건지
+   전혀 몰랐어요. '재료부터 먼저 다 만들어요' 라는 주석만 있고, 함수가 자기를 다시
+   부른다는 것 자체를 아무도 말해준 적이 없어요." → beat 2 에서 "재귀" 라는 이름을
+   직접 붙이고, marks 로 ✋베이스/↺재귀를 상시 표시한다 (printseq 표준과 같은 문구).
+   ================================================================ */
+const _ALCHEMY_VARS = [
+  { v: "have", ko: "지금 가진 금속 개수(재고)", en: "units of each metal in stock" },
+  { v: "recipe", ko: "금속마다 있는 레시피(없을 수도 있음)", en: "each metal's recipe, if it has one" },
+  { v: "trial", ko: "이번 시도용 재고 복사본", en: "a working copy of stock for this attempt" },
+  { v: "ans", ko: "성공한 횟수 = 금속 N 최종 개수", en: "successful crafts = final units of metal N" },
+];
+
+export function getAlchemyWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: _ALCHEMY_VARS,
+      marks: [
+        { from: 10, to: 13, ko: "✋ 베이스 케이스", en: "✋ base case" },
+        { from: 14, to: 16, ko: "✋ 베이스 케이스", en: "✋ base case" },
+        { from: 17, to: 21, color: "#818cf8", ko: "↺ 재귀!", en: "↺ recursion!" },
+      ],
+      beats: [
+        { hi: [0, 6], bubble: t(E,
+          "What do we need to output?\nThe most units of metal N. We need somewhere to keep what we have and each recipe — declared globally since make() needs them too.",
+          "무엇을 내놓아야 하나요?\n금속 N 최대 개수예요. 그러려면 가진 것(have)과 레시피(recipe)를 저장해 둬야 해요 — make() 함수도 써야 해서 전역으로 선언해요.") },
+        { hi: [8, 23], bubble: t(E,
+          "Here, make() calls itself (line 18) — a function calling itself is called recursion.\nUse stock if any (✋ stop), or give up if there's no stock and no recipe (✋ stop). Otherwise craft every ingredient the same way first — so it calls itself again (↺).\nThat's exactly what you clicked in the sim earlier: \"no stock? build that ingredient first.\" stock is passed by reference (&) so the decrease inside recursion really sticks.",
+          "여기서 make 가 자기 자신을 다시 불러요(18번째 줄) — 이렇게 함수가 자기를 부르는 것을 재귀라고 해요.\n재고 있으면 바로 씀(✋ 멈춤), 재고도 레시피도 없으면 포기(✋ 멈춤). 그 외엔 재료부터 똑같이 만들어요 — 그래서 자기 자신을 또 불러요(↺).\n아까 시뮬에서 눌러본 '재고 없으면 그 재료부터 만든다' 가 바로 이 재귀예요. stock 을 참조(&)로 넘겨서, 재귀 안에서 줄인 값이 진짜로 남아요.") },
+        { hi: [25, 40], bubble: t(E,
+          "Now read the input — N, then have, then each recipe.",
+          "이제 입력을 읽어요 — N, 가진 것(have), 레시피(recipe) 차례로요.") },
+        { hi: [41, 53], bubble: t(E,
+          "Now, how many times can we do this?\nIf we spend have directly, a failed recipe can't undo the stock it already used.\nSo we try on a copy (trial) first, and only commit it to have on success. The count (ans) when it finally fails is the answer.",
+          "이제 몇 번 할 수 있을까요?\n바로 have 를 깎으며 만들면, 레시피 중간에 실패했을 때 이미 쓴 재고를 되돌릴 수 없어요.\n그래서 trial 복사본에서 먼저 시도하고, 성공했을 때만 have 에 반영해요. 실패할 때까지 반복한 횟수(ans)가 답이에요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: _ALCHEMY_VARS,
+    marks: [
+      { from: 15, to: 17, ko: "✋ 베이스 케이스", en: "✋ base case" },
+      { from: 18, to: 19, ko: "✋ 베이스 케이스", en: "✋ base case" },
+      { from: 20, to: 22, color: "#818cf8", ko: "↺ 재귀!", en: "↺ recursion!" },
+    ],
+    beats: [
+      { hi: [0, 11], bubble: t(E,
+        "What do we need to output?\nThe most units of metal N we can craft. First read what we start with (have) and each metal's recipe.",
+        "무엇을 내놓아야 하나요?\n금속 N 을 최대 몇 개까지 만들 수 있는지예요. 그러려면 먼저 가진 것(have)과 레시피(recipe)부터 읽어야 해요.") },
+      { hi: [13, 23], bubble: t(E,
+        "Here, make() calls itself (line 21) — a function calling itself is called recursion.\nFor metal m: use stock if any (✋ stop), or give up if there's no stock and no recipe (✋ stop). Otherwise, craft every ingredient the same way first — so it calls itself again (↺).\nThat's exactly what you clicked in the sim earlier: \"no stock? build that ingredient first.\"",
+        "여기서 make 함수가 자기 자신을 다시 불러요(21번째 줄) — 이렇게 함수가 자기를 부르는 것을 재귀라고 해요.\n금속 m 하나: 재고 있으면 바로 씀(✋ 멈춤), 재고도 레시피도 없으면 포기(✋ 멈춤). 그 외엔 재료부터 똑같이 만들어요 — 그래서 자기 자신을 또 불러요(↺).\n아까 시뮬에서 눌러본 '재고 없으면 그 재료부터 만든다' 가 바로 이 재귀예요.") },
+      { hi: [25, 33], bubble: t(E,
+        "Now, how many times can we do this?\nFirst idea: just spend real stock while crafting — but if a recipe fails partway, we've already wasted stock other things still need.\nSo we try on a copy (trial) first, and only commit it to have when the whole craft succeeds. The count (ans) when it finally fails is the answer.",
+        "이제 이걸 몇 번 할 수 있을까요?\n먼저 이렇게 생각해볼 수 있어요 — 재고를 바로 깎으면서 만들면 어떨까요? 근데 레시피 중간에 실패하면, 다른 곳에 쓸 재고까지 이미 써버려요.\n그래서 복사본(trial)에서 먼저 시도하고, 성공했을 때만 진짜 재고(have)에 반영해요. 더 못 만들 때까지 반복한 횟수(ans)가 답이에요.") },
+    ],
+  };
 }
 
 export function AlchemyProgressiveCode(props) {
