@@ -81,7 +81,7 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. The heights come as an M×N grid, and D is a single number read last.",
+        "Check what shape the input comes in first.",
         "입력이 어떤 모양으로 들어오는지 먼저 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -104,7 +104,7 @@ export function makeMcc20CityTourCh1(E) {
             </div>
             <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
               {t(E,
-                "The original problem hands the data over as values: M = 4, N = 5, D = 5, H = [[1,3,7,9,16], …].\nHere we read them from standard input, like the other problems — in the order shown below.",
+                "The original problem hands the data over as values: M = 4, N = 5, D = 5, H = [[1,3,7,9,16], …].\nThe code below starts from those same values — you'll meet input(), which reads lines in, in the 2022 problems.",
                 "원문은 M = 4, N = 5, D = 5, H = [[1,3,7,9,16], ...] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
             </div>
           </div>
