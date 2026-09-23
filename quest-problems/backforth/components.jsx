@@ -236,6 +236,9 @@ export function BackForthStateTreeSim({ E }) {
             "A toy version (3 buckets, 2 days) to see every branch.",
             "축소판이에요 (양동이 3 개, 2 일). 모든 갈래를 한눈에 볼 수 있어요.")}
         </div>
+        <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>
+          {t(E, "Σ = sum of that barn's buckets", "Σ = 그 헛간 양동이들의 합")}
+        </div>
       </div>
 
       {/* Controls */}
@@ -324,6 +327,9 @@ export function BackForthStateTreeSim({ E }) {
                   <span style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700 }}>
                     {t(E, "Barn1 Σ", "헛간1 Σ")} {head.day1Total}
                   </span>
+                  <span style={{ fontSize: 10, color: C.dim }}>
+                    ({barn1.reduce((s, x) => s + x, 0)}−{barn1[i]})
+                  </span>
                 </button>
 
                 {days === 2 && pickD1 === i && (
@@ -378,16 +384,22 @@ export function BackForthStateTreeSim({ E }) {
           ))}
         </div>
         <div style={{ fontSize: 11, color: "#3f6212" }}>
-          {t(E, "Count: ", "개수: ")}
-          <b style={{ fontSize: 13 }}>{distinctTotals.length}</b>
+          {t(E, "Total count", "총 개수")}
+          <span style={{
+            display: "inline-block", padding: "2px 10px", marginLeft: 6,
+            background: "#65a30d", color: "#fff", borderRadius: 999,
+            fontSize: 13, fontWeight: 800,
+          }}>
+            {distinctTotals.length}{t(E, "", " 가지")}
+          </span>
           <span style={{ color: C.dim, marginLeft: 6 }}>
             ({branches.length} {t(E, "branches total", "전체 분기")})
           </span>
         </div>
         <div style={{ fontSize: 10, color: C.dim, marginTop: 6, lineHeight: 1.4 }}>
           {t(E,
-            "👉 The real problem is the same idea with 10 buckets and 4 days — that is 10 × 11 × 11 × 11 ≈ 13,000 branches. A set still keeps it simple.",
-            "👉 실제 문제도 같은 방법이에요.\n양동이 10 개에 4 일이면 갈래가 10 × 11 × 11 × 11 ≈ 13,000 개라,\nset 하나면 충분해요.")}
+            "👉 The real problem is the same idea with 10 buckets and 4 days — barn 1 has 10 buckets on day 1 and day 3, so that is 10 × 11 × 10 × 11 = 12,100 branches. A set still keeps it simple.",
+            "👉 실제 문제도 같은 방법이에요.\n1 일차와 3 일차는 헛간 1 이 다시 10 개라, 갈래가 10 × 11 × 10 × 11 = 12,100 개예요.\nset 하나면 충분해요.")}
         </div>
       </div>
     </div>

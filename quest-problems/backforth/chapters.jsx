@@ -10,7 +10,7 @@ export function makeBackForthCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two barns each have 10 buckets of milk (1000 gallons total per barn). Over 4 days, FJ and his sister alternate carrying ONE bucket between barns: day 1 FJ moves one from barn 1 → 2, day 2 sister moves one from barn 2 → 1, day 3 FJ again, day 4 sister.\nCount the number of DISTINCT possible total milk amounts in barn 1 after the 4 days.",
+        "4 days of trading buckets — how many totals can barn 1 end up with?",
         "4 일이 끝나면 헛간 1 의 우유는 몇 가지 값이 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -67,7 +67,53 @@ export function makeBackForthCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Input / Output format
+    // 2026-09-23: 없던 쪽. 형식(줄 수·개수)은 🔒 검증된 풀이 코드(components.jsx FULL_PY)에서
+    // 그대로 가져왔다 — 지어낸 게 아니다. 다만 public/problems/backforth.pdf 가 없어서
+    // 원문 예제 숫자는 확인 못 한다. 그래서 예시 값은 직접 만들고 "예시일 뿐" 이라고 밝힌다.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Two lines in, one number out — here's exactly what they look like.",
+        "입력 두 줄, 출력 한 줄 — 정확한 모양을 봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E, <>Line 1: <b>10</b> integers — barn 1's buckets.<br />Line 2: <b>10</b> integers — barn 2's buckets.</>,
+                     <>첫 줄: <b>10</b> 개 정수 — 헛간 1 의 양동이들.<br />둘째 줄: <b>10</b> 개 정수 — 헛간 2 의 양동이들.</>)}
+              </div>
+            </div>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E, <>One line: the <b>number of distinct</b> possible totals for barn 1.</>,
+                     <>한 줄: 헛간 1 이 가질 수 있는 <b>서로 다른 값의 개수</b>.</>)}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 8 }}>
+            <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
+              <div style={{ color: "#94a3b8", marginBottom: 4 }}>Input</div>
+              <div>1 2 3 4 5 6 7 8 9 10</div>
+              <div>10 9 8 7 6 5 4 3 2 1</div>
+            </div>
+            <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
+              <div style={{ color: "#94a3b8", marginBottom: 4 }}>Output</div>
+              <div>33</div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11, color: C.dim, lineHeight: 1.5, wordBreak: "keep-all" }}>
+            {t(E,
+              "⚠️ This is an example we made up to show the shape — not the official sample.",
+              "⚠️ 모양을 보여주려고 직접 만든 예시예요 — 원문 예제가 아니에요.")}
+          </div>
+        </div>),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -86,26 +132,26 @@ export function makeBackForthCh1(E) {
         "If all buckets are identical, the amount leaving is always the amount coming back, so barn 1 returns to 1000 after every round trip. That leaves only 1 possible value.",
         "양동이가 다 같으면 나가는 양과 들어오는 양이 늘 같아요. 그래서 한 번 왕복할 때마다 헛간 1 은 다시 1000 이에요. 나올 수 있는 값이 하나뿐이에요."),
     },
-    // 1-3: State-tree sim (toy version, 3 buckets, 1-2 days)
+    // 1-4: State-tree sim (toy version, 3 buckets, 1-2 days)
     {
       type: "tree",
       narr: t(E,
-        "Before coding — *play* with the state tree.  Change the buckets, pick day-1, watch how every day-2 choice fans out.  The set at the bottom collects the distinct Barn 1 totals.",
+        "Play with the state tree — watch how each day-2 choice branches.",
         "1 일차 선택을 바꾸면 2 일차가 어떻게 갈라지는지 봐요."),
     },
-    // 1-4: Input
+    // 1-5: Input — recheck the 1-4 tree sim result (was a duplicate of 1-3 before 2026-09-23)
     {
       type: "input",
       narr: t(E,
-        "Now you say it — all 10 buckets identical, 4-day swap.  How many DIFFERENT final amounts can barn 1 have?",
-        "양동이 10 개가 다 같을 때 최종 값은 몇 가지일까요?"),
+        "Check the count you just found in the tree sim.",
+        "방금 시뮬에서 나온 개수를 확인해요."),
       question: t(E,
-        "All identical buckets. Distinct outcomes for barn 1?",
-        "양동이가 다 같을 때 헛간 1 의 값은 몇 가지일까요?"),
+        "With the tree sim's default buckets (4,1,7 / 3,5,2) and 2 days, how many distinct final totals did barn 1 have?",
+        "시뮬 기본값(4·1·7 / 3·5·2), 2 일일 때 헛간 1 의 최종 값은 몇 가지였나요?"),
       hint: t(E,
-        "Each transfer moves the same amount.  Does the total in barn 1 ever change?",
-        "옮기는 양이 매번 같아요. 헛간 1 의 총량이 바뀔 수 있을까요?"),
-      answer: 1,
+        "Look at the green box at the bottom of the tree sim you just played with — count the chips inside it.",
+        "방금 만진 시뮬 맨 아래 초록 박스를 보세요 — 안에 든 칩 개수를 세어 봐요."),
+      answer: 8,
     },
   ];
 }
