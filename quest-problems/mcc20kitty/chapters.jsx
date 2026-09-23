@@ -11,11 +11,6 @@ const NW = { whiteSpace: "nowrap" };
 const BASE = [11, 9, 20, 20, 25];
 const BASE_R = BASE.map((v) => v % 3); // [2, 0, 2, 2, 1]
 
-/* ─── verified reference numbers (from the solution) ───
-   pure cycle: starts at term 1, period 104, 35 zeros per cycle. */
-const PERIOD = 104;
-const ZEROS_PER_CYCLE = 35;
-
 // build the remainder sequence up to `n` terms (1-indexed length n)
 function remainders(n) {
   const r = [...BASE_R];
@@ -101,8 +96,8 @@ function KittyRemainderSim({ E }) {
           {
             touched
               ? t(E,
-                  `A window of 5 remainders (the red-outlined chips) has only 3⁵ = 243 possible patterns.\nSo as we go on, some window MUST come back — and from there everything repeats forever.\nFor Kitty the repeat length is ${PERIOD}, with ${ZEROS_PER_CYCLE} zeros inside one loop.\nCount the zeros in one loop, multiply by how many loops fit in N, add the leftover — done, even for N up to 10¹⁵.`,
-                  `나머지 5칸짜리 창(빨간 테두리 칩)은 경우의 수가 3⁵ = 243개뿐이에요.\n그러니 계속 가다 보면 어떤 창이 반드시 다시 나와요.\n그때부터는 영원히 똑같이 반복돼요.\nKitty 의 반복 길이는 ${PERIOD}, 한 바퀴 안에 0이 ${ZEROS_PER_CYCLE}개 들어 있어요.\n한 바퀴의 0 개수 × N 에 들어가는 바퀴 수 + 남는 조각 —\n이러면 N 이 10¹⁵ 이어도 끝나요.`)
+                  "A window of 5 remainders (the red-outlined chips) has only 3⁵ = 243 possible patterns.\nSo as we go on, some window MUST come back — and from there everything repeats forever.\nWhy exactly, and how many times — the next chapter figures that out.",
+                  "나머지 5칸짜리 창(빨간 테두리 칩)은 경우의 수가 3⁵ = 243개뿐이에요.\n그러니 계속 가다 보면 어떤 창이 반드시 다시 나와요.\n왜 그런지·정확히 몇 번인지는 다음 장에서 알아봐요.")
               : t(E,
                   "Press + and watch the red-outlined window of 5.\nHow many different patterns can that window ever take?",
                   "+ 를 눌러 빨간 테두리 5칸이 어떻게 바뀌는지 봐요.\n그 5칸이 될 수 있는 모양은 모두 몇 가지일까요?")}
@@ -330,33 +325,19 @@ export function makeMcc20KittyCh2(E) {
                 "컴퓨터는 1 초에 10^8–10^9 단계쯤 해요.\nN = 10^15 단계면 몇 주가 걸려요.\n게다가 Kitty 수는 너무 빨리 커져서 곧 자릿수가 조 단위예요.")}
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ so we need a shortcut that doesn't touch every term.", "↓ 그래서 모든 항을 건드리지 않는 지름길이 필요해요.")}
+          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center",
+            whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
+            {t(E, "↓ so we need a shortcut that doesn't touch every term.\nSo we keep only the remainders.", "↓ 그래서 모든 항을 건드리지 않는 지름길이 필요해요.\n그래서 나머지만 들고 다니기로 했죠 →")}
           </div>
         </div>),
     },
 
-    // 2-2 insight 1: only remainders matter
-    {
-      type: "reveal",
-      narr: t(E,
-        "A term's remainder depends only on the sum of the previous five remainders, mod 3.",
-        "첫 번째 열쇠예요. 3의 배수인지는 나머지에만 달렸어요.\n거대한 숫자는 버리고 0/1/2만 남겨요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ marginBottom: 10, textAlign: "center", fontSize: 11, fontWeight: 700, color: C.dim }}>
-            {t(E, "the numbers …", "숫자 …")}
-          </div>
-          <StaticChips vals={[11, 9, 20, 20, 25, 85, 159]} />
-          <div style={{ textAlign: "center", fontSize: 20, color: A, margin: "8px 0" }}>↓ mod 3</div>
-          <div style={{ marginBottom: 6, textAlign: "center", fontSize: 11, fontWeight: 700, color: C.dim }}>
-            {t(E, "… become just remainders (0 = divisible)", "… 나머지만 남아요 (0 = 3의 배수)")}
-          </div>
-          <StaticChips vals={[2, 0, 2, 2, 1, 1, 0]} />
-        </div>),
-    },
+    /* 2026-09-23: 여기 있던 "2-2 insight 1" 쪽(숫자→나머지 변환, 같은 예제 11,9,20,20,25,85,159)을
+       삭제했다 — 1장 4쪽 KittyRemainderSim 의 상단 고정 설명이 조작 없이도 항상 보이는 채로
+       이미 같은 말(나머지만 중요, 새 항=직전 다섯 나머지 합 mod 3, 0=3의 배수)을 다 했다.
+       이 쪽은 같은 숫자를 누를 것도 없이 그냥 다시 읽기만 하는 완전 중복이었다. */
 
-    // 2-3 insight 2: finite states → cycle
+    // 2-2 insight 2: finite states → cycle (was 2-3)
     {
       type: "reveal",
       narr: t(E,
@@ -388,7 +369,7 @@ export function makeMcc20KittyCh2(E) {
         </div>),
     },
 
-    // 2-4 quiz: why must it repeat
+    // 2-3 quiz: why must it repeat
     {
       type: "quiz",
       narr: t(E,
@@ -414,7 +395,7 @@ export function makeMcc20KittyCh2(E) {
         "다음 나머지는 현재 5칸 창에만 달려 있어요. 창이 243개뿐이니 243단계 안에 하나가 반복되고, 같은 창은 항상 같은 미래를 만들어요 — 사이클."),
     },
 
-    // 2-5 insight 3: count via cycle
+    // 2-4 insight 3: count via cycle
     {
       type: "reveal",
       narr: t(E,
@@ -438,7 +419,7 @@ export function makeMcc20KittyCh2(E) {
         </div>),
     },
 
-    // 2-6 quiz: apply the counting idea
+    // 2-5 quiz: apply the counting idea
     {
       type: "quiz",
       narr: t(E,
@@ -584,35 +565,18 @@ export function makeMcc20KittyCh3(E, lang = "py") {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center",
             lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
             {t(E,
-              "seen is a lookup table: each 5-window we have met, and the step it appeared at.\nFor Kitty this stops fast — start = 1, period = 104.",
-              "seen 은 찾아보기 표예요. 만난 5칸 창과 그게 몇 번째였는지를 적어 둬요.\nKitty 에서는 금방 멈춰요 — start = 1, period = 104 예요.")}
+              "seen is a lookup table: each 5-window we have met, and the step it appeared at.\nThis table is exactly the 243-window idea from chapter 2 — for Kitty it stops fast, at start = 1, period = 104.\nThe real code first stretches r up to k+4 terms each round — otherwise r[k-1:k+4] would point past what has been built.",
+              "seen 은 찾아보기 표예요. 만난 5칸 창과 그게 몇 번째였는지를 적어 둬요.\n이 표가 찾는 게 바로 2장에서 배운 그 창(243가지)이에요 — Kitty 에서는 금방 멈춰요, start = 1, period = 104 예요.\n실제 코드는 매번 r 을 k+4 칸까지 먼저 늘려요. 안 그러면 r[k-1:k+4] 가 아직 없는 칸을 가리켜요.")}
           </div>
         </div>),
     },
 
-    // 3-3 quiz: how far does the search go
-    {
-      type: "quiz",
-      /* 2026-09-17: narr 이 "5칸 × 0·1·2" 라고 답을 만드는 식을 그대로 줬고,
-         정답 보기만 "(= 3^5)" 라는 근거를 달고 있었다. 둘 다 explain 으로 내린다. */
-      narr: t(E,
-        "Your turn — count the windows.",
-        "이번엔 창이 몇 가지인지 세어볼 차례예요."),
-      question: t(E,
-        "At most how many windows must we check before one is guaranteed to repeat?",
-        "하나가 반드시 반복되기 전까지, 최대 몇 개의 창을 확인해야 하나요?"),
-      options: [
-        t(E, "243", "243"),
-        t(E, "10^15", "10^15"),
-        t(E, "104", "104"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "A window is 5 remainders, each one of 0, 1, 2 — so 3 × 3 × 3 × 3 × 3 = 243 windows exist.\nBy the 244th window a repeat must have happened. Kitty's actual period (104) is well under that bound.",
-        "창 하나는 나머지 5 개이고 나머지는 0·1·2 중 하나예요.\n그래서 3 × 3 × 3 × 3 × 3 = 243 가지뿐이에요.\n244번째 창에서는 반드시 반복이 일어나요.\nKitty 의 실제 주기(104)는 그 한계보다 훨씬 작아요."),
-    },
+    /* 2026-09-23: 여기 있던 "3-3 quiz" (창이 몇 가지인지)를 삭제했다 —
+       2장 2-3 퀴즈(:371-395)가 같은 세 보기(243/10^15/104)로 이미 같은 사실을 물었다.
+       코드 2단계(창 찾기)와 3단계(세는 식) 사이에 끼어 코드 읽는 흐름만 끊었다.
+       다리는 위 3-2 쪽 끝에 한 줄로 옮겼다. */
 
-    // 3-4 phase 3: count with arithmetic
+    // 3-3 phase 3: count with arithmetic
     {
       type: "reveal",
       /* 2026-09-23: 이 조각의 식이 진짜 코드와 달랐다 — 앞꼬리(tail_zeros)가 빠져 있어서,
@@ -632,7 +596,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
         </div>),
     },
 
-    // 3-5 complexity
+    // 3-4 complexity
     {
       type: "reveal",
       narr: t(E,
@@ -662,7 +626,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
         </div>),
     },
 
-    // 3-6 full code
+    // 3-5 full code
     {
       type: "progressive",
       narr: t(E,

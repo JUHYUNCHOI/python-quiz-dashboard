@@ -145,6 +145,8 @@ export function getMcc20KittySections(E) {
             "어디서 되풀이되는지 찾은 뒤, 0 의 개수를 앞쪽 조각 + (한 바퀴의 0 × 바퀴 수) + 남는 조각 으로 세요."),
         t(E, "That is instant even for N = 10^15.",
             "N 이 10^15 이어도 바로 끝나요."),
+        t(E, "If N falls before the cycle even starts (Kitty never actually hits this, since it starts at term 1), the top `if` just counts the first N terms directly.",
+            "N 이 사이클이 시작하기도 전이면(Kitty 는 1번 항부터라 실제로는 안 일어나요) 그냥 앞부분만 세요 — 맨 위 `if` 문이 그 경우예요."),
       ],
       pyOnly: [
         t(E, "tuple(r[k-1:k+4]) makes the 5-window hashable so it can be a dict key in `seen`.",
