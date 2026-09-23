@@ -4,6 +4,9 @@ import { getStrangeFnSections, getStrangeFnWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { StrangeFnDigitSim } from "./sims";
 
+/* 샘플 입출력 상자의 «← 설명» 라벨 */
+const SIO = { color: "#94a3b8", fontSize: 10.5 };
+
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeStrangeFnCh1
    ═══════════════════════════════════════════════════════════════ */
@@ -141,14 +144,20 @@ export function makeStrangeFnCh1(E) {
           <div style={{ display: "flex", gap: 10, marginBottom: 12 }}>
             <div style={{ flex: 1, background: "#0f172a", color: "#f8fafc", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>
               <div style={{ color: "#94a3b8", fontSize: 10, marginBottom: 4 }}>{t(E, "Input", "입력")}</div>
-              <div>2</div>
-              <div>24680</div>
-              <div>210</div>
+              {/* 2026-09-23 선생님: "입력값과 출력값이 뭐를 의미하는데? 학생은 이걸 알았어?"
+                  — 숫자만 있고 **뜻이 어디에도 없었다.** 설명은 한 쪽 전(「첫 줄에 T」)에 있는데,
+                  쪽을 넘기면 앞 쪽은 사라진다. 학생은 그 `T` 와 이 `2` 를 스스로 이어야 했다.
+                  학생 넷이 다녀갔는데 아무도 안 짚었다 — 아무도 이걸 묻지 않았다.
+                  형제 quest `checkups/chapters.jsx:97` 이 쓰는 «← 설명» 모양을 그대로 쓴다.
+                  근거: memory/feedback_screen_must_not_rely_on_memory.md */}
+              <div>2      <span style={SIO}>← {t(E, "2 problems below", "아래에 문제 2개")}</span></div>
+              <div>24680  <span style={SIO}>← {t(E, "first x", "첫 번째 x")}</span></div>
+              <div>210    <span style={SIO}>← {t(E, "second x", "두 번째 x")}</span></div>
             </div>
             <div style={{ flex: 1, background: "#0f172a", color: "#f8fafc", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>
               <div style={{ color: "#94a3b8", fontSize: 10, marginBottom: 4 }}>{t(E, "Output", "출력")}</div>
-              <div>1</div>
-              <div>4</div>
+              <div>1  <span style={SIO}>← {t(E, "answer for 24680", "24680 의 답")}</span></div>
+              <div>4  <span style={SIO}>← {t(E, "answer for 210", "210 의 답")}</span></div>
             </div>
           </div>
 
