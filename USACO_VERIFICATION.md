@@ -49,8 +49,8 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `cheese` | Cheese Block | Dec 2024 Bronze #2 | ✅ 16/16 PASS | ✅ 16/16 PASS |
 | `rounding` | Roundabout Rounding | Dec 2024 Bronze #1 | ✅ 13/13 PASS | ✅ 13/13 PASS |
 | `interview` | Bessie's Interview | Open 2024 Bronze #1 | ❌ 0/1 (WA on sample - wrong algorithm (Silver-level problem)) | ❌ 0/1 (WA on sample - wrong algorithm for Silver) |
-| `permutation` | FJ's Fav Permutation | Open 2024 Bronze #3 | 🟡 2/11 (TLE/RTE - backtracking too slow) | 🟡 2/11 (TLE 3-11, backtracking too slow) |
-| `favperm2` | FJ's Fav Perm II | Open 2024 Bronze #3 | 🟡 2/11 (TLE/RTE - backtracking too slow) (same file as permutation) | 🟡 2/11 (TLE 3-11, backtracking too slow) (same file as permutation) |
+| `permutation` | FJ's Fav Permutation | Open 2024 Bronze #3 | 🟡 2/11 (TLE 3-11 — 일부러 느린 완전탐색) | 🟡 2/11 (TLE 3-11 — 일부러 느린 완전탐색) |
+| `favperm2` | FJ's Fav Perm II | Open 2024 Bronze #3 | 🟡 2/11 (permutation 과 같은 파일) | 🟡 2/11 (permutation 과 같은 파일) |
 | `walkfence` | Walking Along a Fence | Open 2024 Bronze #2 | 🟡 6/11 (TLE 7-11) | 🟡 6/11 (TLE 7-11, O(NP)) |
 | `logicalmoos` | Logical Moos | Open 2024 Bronze #1 | 🟡 8/14 (TLE 9-14, brute slice eval) | 🟡 8/22 (TLE - O(NQ) brute) |
 | `productivity` | Max Productivity | Feb 2024 Bronze #3 | ✅ 17/17 PASS | ✅ 17/17 PASS |
@@ -147,3 +147,27 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `cowsignal` | The Cow-Signal | Dec 2016 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
 | `blockgame` | Block Game | Dec 2016 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14, sum vs max fix) | ✅ 10/10 PASS (재작성 2026-05-14) |
 | `sqpasture` | Square Pasture | Dec 2016 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+
+## 🔁 permutation — 2026-09-23 재제출 (선생님 승인·직접 제출)
+
+**왜 다시 냈나:** 화면에 있던 코드가 **학생이 받으면 안 돌았다.**
+- 파이썬 — `search()` 호출부가 `return False` 뒤 **함수 안에 갇혀** 도달 불가. 실행하면 **아무 출력도 없음.**
+- C++ — `main()` 을 안 닫은 채 전역 함수를 정의해 **컴파일 실패**(`function definition is not allowed here` 외 5).
+⚠️ **읽기로는 «일부러 그런 설계» 로 보였다**(C++ 에 `// (back inside main…)` 주석이 있었다).
+  **직접 돌려 보고서야 아니라는 걸 알았다.** 이 quest 는 `FULL_PY`/`FULL_CPP` 가 없어
+  조각을 **손으로 타이핑**하다 갈라진 것이다 — 오늘 `explodingarrow`·`mcc21dvd`·`mcc21simplemath` 와 같은 원인.
+
+**같이 바꾼 것 — 재귀를 뺐다.** 선생님(2026-09-23): *"코드 어렵게 하지마. 기억하지?"*
+`feedback_student_code_plain_and_no_recursion.md` 의 «진짜 재귀 네 개» 중 하나였고,
+**레슨 어디에도 재귀를 가르치는 자리가 없다.**
+→ 파이썬 `itertools.permutations` · C++ `next_permutation`. **알고리즘은 같다**(사전순 완전탐색, 첫 매치).
+⭐ 덤으로 **Ch1 이 `itertools.permutations` 를 가르쳐 놓고 3장에서 재귀를 보여주던 배신**도 닫혔다.
+
+**제출 결과 — 점수는 그대로다.**
+| 언어 | 전 | 후 |
+|---|---|---|
+| Python (3.6.9) | 🟡 2/11 | 🟡 **2/11** (1번 68ms · 2번 240ms) |
+| C++17 | 🟡 2/11 | 🟡 **2/11** (1번 2ms · 2번 16ms) |
+
+**원래 «일부러 느린 완전탐색» 이라 TLE 가 나는 게 정상이다.** 빠르게 만들면 다른 문제가 된다.
+이제 `.slice()` 로 조각을 자르므로 **화면 코드와 제출 코드가 바이트 단위로 같다.**

@@ -807,33 +807,24 @@ export function BruteForceEnumerator({ E }) {
    getPermSections — 단계별 코드 + Python/C++ + reasoning
    ═══════════════════════════════════════════════════════════════ */
 
-const PERM_INPUT_PY = [
-  "T = int(input())",
-  "for _ in range(T):",
-  "    N = int(input())",
-  "    h = list(map(int, input().split()))",
-];
-const PERM_INPUT_CPP = [
-  "#include <iostream>",
-  "#include <vector>",
-  "using namespace std;",
+// 🔧 2026-09-23: 선생님 승인 하에 SOLUTION_CODE 를 고친다 (USACO_VERIFIED 재제출 예정).
+//    옛 PERM_INPUT_* / PERM_DISMANTLE_* / PERM_TRY_* 를 손으로 이어붙이면
+//    파이썬은 search() 호출부가 함수 몸통 안에 갇혀 죽은 코드였고(도달 불가),
+//    C++ 은 main() 을 안 닫은 채 전역 함수를 정의해 컴파일이 안 됐다.
+//    거기다 재귀(search 가 자기 자신을 부름)까지 썼는데 — 학생 코드는 되도록 재귀를
+//    쓰지 않는다는 지시(2026-09-22)와 레슨에 재귀를 가르치는 곳이 없다는 점,
+//    그리고 Ch1(chapters.jsx) 이 이미 "from itertools import permutations" 로
+//    브루트포스를 보여주고 있었다는 점(코드 탭이 그 약속을 어기고 있었다) 때문에
+//    **재귀 없는 버전으로 다시 짰다.** 파이썬은 itertools.permutations, C++ 은
+//    <algorithm> 의 next_permutation — 둘 다 반복(do-while/for)이지 재귀가 아니다.
+//    explodingarrow 와 같은 방식으로 FULL_PY/FULL_CPP 를 한 벌로 먼저 쓰고
+//    .slice() 로만 자른다 — 원본이 하나로 남으니 이어붙이면 그대로 도는 프로그램이다.
+//    (순서는 "도우미(dismantle) → find_answer(모든 순열 시도) → 입력 읽고 실행" —
+//    파이썬은 def 를 쓰기 전에 반드시 앞서 정의해야 하고, C++ main() 은 한 덩어리라
+//    중간에서 끊어 다른 전역 함수를 못 끼워 넣는다. 그래서 이 순서로만 나뉜다.)
+const FULL_PY = [
+  "from itertools import permutations",
   "",
-  "int main() {",
-  "    int T;",
-  "    cin >> T;",
-  "    for (int t = 0; t < T; t++) {",
-  "        int N;",
-  "        cin >> N;",
-  "        vector<int> h;",
-  "        for (int i = 0; i < N - 1; i++) {",
-  "            int x;",
-  "            cin >> x;",
-  "            h.push_back(x);",
-  "        }",
-];
-
-/* Section 2: dismantle as a regular function (no lambda) */
-const PERM_DISMANTLE_PY = [
   "def dismantle(p):",
   "    p = list(p)",
   "    out = []",
@@ -845,8 +836,29 @@ const PERM_DISMANTLE_PY = [
   "            out.append(p[-2])",
   "            p.pop()",
   "    return out",
+  "",
+  "def find_answer(N, h):",
+  "    for p in permutations(range(1, N + 1)):",
+  "        if dismantle(p) == h:",
+  "            return p",
+  "    return None",
+  "",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    N = int(input())",
+  "    h = list(map(int, input().split()))",
+  "    answer = find_answer(N, h)",
+  "    if answer is None:",
+  "        print(-1)",
+  "    else:",
+  "        print(' '.join(map(str, answer)))",
 ];
-const PERM_DISMANTLE_CPP = [
+const FULL_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
+  "using namespace std;",
+  "",
   "// dismantle: simulate the deletion process and return the hint sequence.",
   "vector<int> dismantle(vector<int> p) {",
   "    vector<int> out;",
@@ -866,32 +878,7 @@ const PERM_DISMANTLE_CPP = [
   "    }",
   "    return out;",
   "}",
-];
-
-/* Section 3: try every permutation via recursion (no itertools / no next_permutation) */
-const PERM_TRY_PY = [
-  "def search(p, used, idx, N, h):",
-  "    if idx == N:",
-  "        if dismantle(p) == h:",
-  "            print(' '.join(map(str, p)))",
-  "            return True",
-  "        return False",
-  "    for v in range(1, N + 1):",
-  "        if used[v]:",
-  "            continue",
-  "        p[idx] = v",
-  "        used[v] = True",
-  "        if search(p, used, idx + 1, N, h):",
-  "            return True",
-  "        used[v] = False",
-  "    return False",
   "",
-  "    p = [0] * N",
-  "    used = [False] * (N + 1)",
-  "    if not search(p, used, 0, N, h):",
-  "        print(-1)",
-];
-const PERM_TRY_CPP = [
   "// Compare two int vectors element-by-element.",
   "bool same(vector<int> a, vector<int> b) {",
   "    if ((int)a.size() != (int)b.size()) {",
@@ -905,84 +892,94 @@ const PERM_TRY_CPP = [
   "    return true;",
   "}",
   "",
-  "// Recursively try every permutation of 1..N. First match wins.",
-  "// p, used, h declared as globals for simplicity.",
-  "int N;",
-  "vector<int> p, h;",
-  "vector<bool> used;",
-  "",
-  "bool search(int idx) {",
-  "    if (idx == N) {",
+  "// Try every permutation of 1..N in lex order. Return true and fill",
+  "// answer if one matches (next_permutation does the looping, not us).",
+  "bool findAnswer(int N, vector<int> h, vector<int>& answer) {",
+  "    vector<int> p(N);",
+  "    for (int i = 0; i < N; i++) {",
+  "        p[i] = i + 1;",
+  "    }",
+  "    do {",
   "        if (same(dismantle(p), h)) {",
+  "            answer = p;",
+  "            return true;",
+  "        }",
+  "    } while (next_permutation(p.begin(), p.end()));",
+  "    return false;",
+  "}",
+  "",
+  "int main() {",
+  "    int T;",
+  "    cin >> T;",
+  "    for (int t = 0; t < T; t++) {",
+  "        int N;",
+  "        cin >> N;",
+  "        vector<int> h;",
+  "        for (int i = 0; i < N - 1; i++) {",
+  "            int x;",
+  "            cin >> x;",
+  "            h.push_back(x);",
+  "        }",
+  "        vector<int> answer;",
+  "        if (!findAnswer(N, h, answer)) {",
+  "            cout << -1 << endl;",
+  "        } else {",
   "            for (int i = 0; i < N; i++) {",
-  "                cout << p[i];",
+  "                cout << answer[i];",
   "                if (i < N - 1) {",
   "                    cout << ' ';",
   "                }",
   "            }",
   "            cout << endl;",
-  "            return true;",
-  "        }",
-  "        return false;",
-  "    }",
-  "    for (int v = 1; v <= N; v++) {",
-  "        if (used[v]) {",
-  "            continue;",
-  "        }",
-  "        p[idx] = v;",
-  "        used[v] = true;",
-  "        if (search(idx + 1)) {",
-  "            return true;",
-  "        }",
-  "        used[v] = false;",
-  "    }",
-  "    return false;",
-  "}",
-  "",
-  "// (back inside main, after reading h:)",
-  "        p = vector<int>(N, 0);",
-  "        used = vector<bool>(N + 1, false);",
-  "        if (!search(0)) {",
-  "            cout << -1 << endl;",
   "        }",
   "    }",
   "    return 0;",
   "}",
 ];
 
+const PERM_HELPER_PY = FULL_PY.slice(0, 14);   // "from itertools import permutations" ~ dismantle() 끝 + 빈 줄
+const PERM_SEARCH_PY = FULL_PY.slice(14, 20);  // "def find_answer(...)" ~ "return None" + 빈 줄
+const PERM_RUN_PY = FULL_PY.slice(20);         // "T = int(input())" ~ 입력 읽고 find_answer 호출
+
+const PERM_HELPER_CPP = FULL_CPP.slice(0, 25);  // #include ~ dismantle() 끝 + 빈 줄
+const PERM_SEARCH_CPP = FULL_CPP.slice(25, 54); // same() ~ findAnswer() 끝 + 빈 줄
+const PERM_RUN_CPP = FULL_CPP.slice(54);        // "int main() {" ~ 끝
+
 export function getPermSections(E) {
   return [
     {
-      label: t(E, "📦 1. Read input", "📦 1. 입력 받기"),
-      color: A,
-      py: PERM_INPUT_PY, cpp: PERM_INPUT_CPP,
-      why: [
-        t(E, "T cases. Each: read N, then N−1 hints into h.",
-              "테스트 케이스가 T 개예요. 케이스마다 N 을 읽고, 힌트 N−1 개를 h 에 담아요."),
-      ],
-    },
-    {
-      label: t(E, "🔁 2. Helper — simulate Nhoj's process", "🔁 2. 도우미 함수 — Nhoj 과정 따라 하기"),
+      label: t(E, "🔁 1. Helper — simulate Nhoj's process", "🔁 1. 도우미 함수 — Nhoj 과정 따라 하기"),
       color: "#7c3aed",
-      py: PERM_DISMANTLE_PY, cpp: PERM_DISMANTLE_CPP,
+      py: PERM_HELPER_PY, cpp: PERM_HELPER_CPP,
       why: [
         t(E, "Given a permutation p, run Nhoj's rule until 1 element remains. Return the list of hints written.",
               "순열 p 를 받아서 원소가 1 개 남을 때까지 Nhoj 규칙을 써요. 그동안 적은 힌트 리스트를 돌려줘요."),
+        t(E, "permutations(range(1, N+1)) hands us every arrangement of 1..N in lex order — we'll use it in the next step.",
+              "permutations(range(1, N+1)) 이 1..N 의 모든 순서를 사전순으로 하나씩 줘요. 다음 단계에서 이걸 써요."),
       ],
     },
     {
-      label: t(E, "🎯 3. Try every permutation, print the first match", "🎯 3. 모든 순열을 해 보고 처음 맞는 것을 출력하기"),
+      label: t(E, "🎯 2. Try every permutation, return the first match", "🎯 2. 모든 순열을 해 보고 처음 맞는 것을 돌려주기"),
       color: "#16a34a",
-      py: PERM_TRY_PY, cpp: PERM_TRY_CPP,
+      py: PERM_SEARCH_PY, cpp: PERM_SEARCH_CPP,
       why: [
-        t(E, "This time we build every permutation ourselves instead of using a library. search fills one slot (idx), then calls itself to fill the next slot.",
-              "이번엔 순열을 직접 하나씩 만들어요. search 가 한 자리(idx)를 채우고 자기 자신을 다시 불러 다음 자리를 채워요."),
-        t(E, "If every value is stuck at some slot, it undoes the last pick (used[v] = False) and tries a different value there.",
-              "어느 자리에서 막히면 방금 고른 값을 되돌리고(used[v] = False) 그 자리에 다른 값을 다시 시도해요."),
+        t(E, "find_answer tries each candidate p — in lex order, since permutations hands them out that way — and returns the first one whose dismantle matches h.",
+              "find_answer 는 permutations 가 사전순으로 주는 순열 p 를 하나씩 시도해서, dismantle 결과가 h 와 같은 첫 번째 것을 돌려줘요."),
         t(E, "Lex order means the FIRST match is automatically the lex-smallest answer.",
               "사전순으로 도니까 처음 맞는 게 자동으로 사전순 최소예요."),
-        t(E, "No match across all N! permutations → Nhoj messed up → print −1.",
-              "N! 개를 다 돌려도 맞는 게 없으면 Nhoj 가 실수한 거예요. 그때는 −1 을 출력해요."),
+        t(E, "No permutation matches → the loop finishes without returning → we get None (nothing found).",
+              "맞는 순열이 하나도 없으면 반복문이 그냥 끝나고, None(못 찾음)을 돌려줘요."),
+      ],
+    },
+    {
+      label: t(E, "📦 3. Read input & run", "📦 3. 입력 받고 실행하기"),
+      color: A,
+      py: PERM_RUN_PY, cpp: PERM_RUN_CPP,
+      why: [
+        t(E, "T cases. Each: read N, then N−1 hints into h.",
+              "테스트 케이스가 T 개예요. 케이스마다 N 을 읽고, 힌트 N−1 개를 h 에 담아요."),
+        t(E, "Call find_answer once per test case. None means nothing matched, so print −1; otherwise print the permutation it found.",
+              "테스트 케이스마다 find_answer 를 한 번 불러요. None 이면 −1 을, 아니면 찾은 순열을 출력해요."),
       ],
     },
   ];

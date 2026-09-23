@@ -4,8 +4,10 @@ import { getPermSections, DismantleSimulator, BruteForceEnumerator } from "./com
 /* ================================================================
    SOLUTION CODE — Brute force.
    For each test case, run dismantle() on every permutation of
-   1..N (in lex order, via recursion). The FIRST p whose dismantle
-   matches h is automatically the lex-smallest answer. -1 if none.
+   1..N (in lex order, via itertools.permutations / next_permutation —
+   no recursion, per 2026-09-22 "no recursion in student code"). The
+   FIRST p whose dismantle matches h is automatically the lex-smallest
+   answer. -1 if none.
    ================================================================ */
 /* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
    import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
