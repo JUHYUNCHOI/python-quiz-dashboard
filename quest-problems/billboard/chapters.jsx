@@ -498,9 +498,8 @@ export function makeBillboardCh3(E, lang = "py") {
         "Let's build the code step by step!\nFirst, we need a function to compute rectangle area.\nRemember: max(0, ...) handles the no-overlap case!", "먼저 직사각형 면적을 구하는 함수부터 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
-            <div style={{ color: "#c084fc" }}>def</div>
-            <div style={{ color: "#e2e8f0" }}> rect_area(x1, y1, x2, y2):</div>
+          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8, whiteSpace: "pre" }}>
+            <div><span style={{ color: "#c084fc" }}>def</span><span style={{ color: "#e2e8f0" }}> rect_area(x1, y1, x2, y2):</span></div>
             <div style={{ color: "#e2e8f0" }}>    <span style={{ color: "#c084fc" }}>return</span> max(0, x2-x1) * max(0, y2-y1)</div>
           </div>
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
@@ -518,7 +517,7 @@ export function makeBillboardCh3(E, lang = "py") {
         "Next: the overlap function!\nIt finds the intersection rectangle using max/min, then calls rect_area.", "다음은 겹침 함수예요. max/min 으로 겹치는 직사각형을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
+          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8, whiteSpace: "pre" }}>
             <div style={{ color: "#c084fc" }}>def <span style={{ color: "#e2e8f0" }}>overlap</span>(ax1,ay1,ax2,ay2, bx1,by1,bx2,by2):</div>
             <div style={{ color: "#6b7280", fontStyle: "italic" }}>    # Intersection rectangle</div>
             <div style={{ color: "#e2e8f0" }}>    ox1 = <span style={{ color: "#fbbf24" }}>max</span>(ax1, bx1)  <span style={{ color: "#6b7280" }}># left edge</span></div>
@@ -559,7 +558,7 @@ export function makeBillboardCh3(E, lang = "py") {
         "Finally: read the three rectangles, compute areas and overlaps, print the answer!", "마지막으로 세 직사각형을 읽고 면적과 겹침을 구해 답을 써요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
+          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8, whiteSpace: "pre" }}>
             <div style={{ color: "#6b7280" }}># Read 3 rectangles (USACO 파일 I/O)</div>
             <div style={{ color: "#e2e8f0" }}>with open('billboard.in') as file:</div>
             <div style={{ color: "#e2e8f0" }}>{"    "}lines = file.readlines()</div>

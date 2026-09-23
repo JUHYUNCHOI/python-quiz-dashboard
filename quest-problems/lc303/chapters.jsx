@@ -1,4 +1,5 @@
 import { t } from "@/components/quest/theme";
+import { CodeBlock } from "@/components/quest/shared";
 
 const TEAL  = "#0891b2";
 const TEAL_L = "#e0f2fe";
@@ -49,13 +50,13 @@ export function makeChapters(E) {
             <div style={{ fontSize: 12.5, fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>
               🐢 {t(E, "Naive: O(n) per query", "단순한 방법: 물음마다 O(n)")}
             </div>
-            <div style={{ fontFamily: "monospace", fontSize: 12, color: "#1e293b", lineHeight: 1.7 }}>
-              <div>{"def sumRange(self, left, right):"}</div>
-              <div>{"    total = 0"}</div>
-              <div>{"    for i in range(left, right + 1):"}</div>
-              <div>{"        total += self.nums[i]"}</div>
-              <div>{"    return total"}</div>
-            </div>
+            <CodeBlock lang="py" lines={[
+              "def sumRange(self, left, right):",
+              "    total = 0",
+              "    for i in range(left, right + 1):",
+              "        total += self.nums[i]",
+              "    return total",
+            ]} />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             <div style={{ background: "#fef2f2", borderRadius: 8, padding: "8px 10px", textAlign: "center" }}>

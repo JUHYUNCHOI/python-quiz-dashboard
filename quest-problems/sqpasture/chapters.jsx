@@ -162,7 +162,7 @@ export function makeSqPastureCh2(E, lang = "py") {
         "The code is beautifully simple.\nRead 2 rectangles, find bounding box with min/max, compute square side, print area!", "직사각형 2개를 읽고 min/max 로 바운딩 박스를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8, whiteSpace: "pre" }}>
             <div style={{ color: "#6b7280" }}># Read two rectangles (USACO 파일 I/O)</div>
             <div style={{ color: "#e2e8f0" }}>with open('square.in') as file:</div>
             <div style={{ color: "#e2e8f0" }}>{"    "}lines = file.readlines()</div>
