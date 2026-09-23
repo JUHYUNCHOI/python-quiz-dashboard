@@ -299,26 +299,6 @@ export function makeMcc21CarrotsCh1(E) {
         "바구니를 홀수 더미와 짝수 더미로 나눠서 봐요."),
       content: <OddEvenPileSim E={E} />,
     },
-
-    // 1-4: understanding check
-    {
-      type: "quiz",
-      narr: t(E,
-        "odd+odd = even, and even+odd = odd. Build the parity up one step at a time and each combo's total parity is fixed.",
-        "홀 + 홀 은 짝, 짝 + 홀 은 홀이에요. 한 걸음씩 쌓아 봐요."),
-      question: t(E,
-        "A sum of 3 numbers is ODD in exactly two cases. Which mix is NOT one of them?",
-        "세 수의 합이 홀수가 되는 경우는 딱 두 가지예요. 다음 중 그 두 가지가 아닌 것은?"),
-      options: [
-        t(E, "three odds", "홀수 3개"),
-        t(E, "one odd + two evens", "홀수 1개 + 짝수 2개"),
-        t(E, "two odds + one even", "홀수 2개 + 짝수 1개"),
-      ],
-      correct: 2,
-      explain: t(E,
-        "two odds + one even = odd+odd+even = even+even = EVEN, so it can't make an odd sum. The two odd-sum recipes are three odds and one odd + two evens.",
-        "홀수 2 개 + 짝수 1 개는 홀+홀 = 짝, 거기에 짝을 더해도 짝이에요.\n그래서 홀수 합을 못 만들어요.\n홀수 합이 되는 건 '홀수 3 개' 와 '홀수 1 개 + 짝수 2 개' 뿐이에요."),
-    },
   ];
 }
 

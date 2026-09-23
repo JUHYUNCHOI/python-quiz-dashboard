@@ -99,6 +99,31 @@ export function Mcc21MenuProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* CodeWalk — 코드 줄에 붙는 말풍선 (2026-09-23, PM 판정 프로토타입).
+   MCC 는 파이썬 전용이라(feedback_mcc_is_python_only.md) C++ beats 는 안 만든다.
+   말풍선은 "지금 마주한 질문" 으로 연다 — 파일 순서를 읊지 않는다
+   (check-codewalk-thinking-order.py). hi 경계는 기존 getMcc21MenuSections 와
+   같은 코드 뜻 구간을 그대로 쓴다 — 값만 CodeWalk 모양(질문형 말풍선)으로 바꿨다. */
+const _MENU_VARS = [
+  { v: "layers", ko: "층 크기 리스트", en: "the layer sizes" },
+  { v: "order", ko: "정렬한 순서", en: "sorted order" },
+  { v: "prod", ko: "쌓아 온 곱 (지금까지 줄 수)", en: "running product (lines so far)" },
+  { v: "total", ko: "총 줄 수 (mod)", en: "total lines (mod)" },
+];
+export function getMcc21MenuWalk(E) {
+  return { code: FULL_PY, vars: _MENU_VARS, beats: [
+    { hi: [0, 5], bubble: t(E,
+        "What do we need before we can compute anything?\nThe layer sizes (N, layers) — and MOD, since the line count can grow huge.",
+        "무엇부터 알아야 계산을 시작할 수 있나요?\n층 크기(N, layers)가 있어야 해요.\n줄 수가 아주 커질 수 있어서 MOD 도 같이 둬요.") },
+    { hi: [6, 8], bubble: t(E,
+        "Which order should the layers go in?\nsorted(layers) puts the smallest size first — that keeps the running product small the longest.",
+        "층을 어떤 순서로 둬야 줄 수가 가장 적어질까요?\nsorted(layers) 가 작은 층부터 오도록 줄 세워요.\n그래야 곱이 오래 작게 유지돼요.") },
+    { hi: [9, 16], bubble: t(E,
+        "How do we total the lines for that order?\nEach layer multiplies prod by its size; adding prod after every layer builds total — all kept mod MOD.",
+        "정해진 순서대로 쌓으면 총 줄 수를 어떻게 세나요?\n층마다 prod 에 그 크기를 곱해서 새 줄 수를 만들고,\n그 prod 를 total 에 더해 가요. 전부 MOD 로 나눈 나머지로요.") },
+  ] };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

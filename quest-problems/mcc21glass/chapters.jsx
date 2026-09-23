@@ -274,7 +274,7 @@ export function makeMcc21GlassCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read N and A, then the N−1 known radii. Study the official sample: with 4,2,1 known and A=10, the broken radius is 3.",
+        "Read N and A, then the N−1 known radii. Study the official sample below.",
         "N 과 A 를 읽고 아는 반지름 N−1 개를 읽어요. 예제를 같이 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -319,8 +319,8 @@ export function makeMcc21GlassCh1(E) {
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
-              "With the broken radius 3, all four radii sorted are 4,3,2,1. Black area = (4²−3²+2²−1²)π = 10π. ✅",
-              "깨진 반지름이 3 이면 네 반지름이 4,3,2,1 순으로 줄을 서요.\n검은 넓이는 (4²−3²+2²−1²)π = 10π 예요. ✅")}
+              "This same sample comes back in a later sim — you'll find the broken radius for yourself there.",
+              "이 샘플은 나중에 시뮬로 다시 나와요.\n거기서 깨진 반지름을 직접 찾아봐요.")}
           </div>
         </div>),
     },
@@ -361,38 +361,7 @@ export function makeMcc21GlassCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc21GlassCh2(E) {
   return [
-    // 2-1 the alternating sum, telescoped
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sorted largest first, the black area telescopes into r1² − r2² + r3² − … (×π).",
-        "가운데 항이 서로 지워져서 번갈아 더하고 빼는 합만 남아요."),
-      content: (
-        <div style={{ padding: 16, ...KA }}>
-          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 16, textAlign: "center" }}>
-            <div style={{ fontSize: 12, color: C.dim, marginBottom: 8 }}>
-              {t(E, "radii sorted largest → smallest", "반지름을 큰 것부터 작은 것 순으로 줄 세워요")}
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 800, letterSpacing: 1, marginBottom: 12 }}>
-              <span style={{ color: "#16a34a" }}>+r₁²</span>{" "}
-              <span style={{ color: "#dc2626" }}>−r₂²</span>{" "}
-              <span style={{ color: "#16a34a" }}>+r₃²</span>{" "}
-              <span style={{ color: "#dc2626" }}>−r₄²</span>{" "}
-              <span style={{ color: C.dim }}>…</span>
-            </div>
-            <div style={{ display: "inline-block", background: "#0f172a", color: "#f8fafc", padding: "8px 16px", borderRadius: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800 }}>
-              {t(E, "black area = (that sum) × π", "검은 넓이 = (그 합) × π")}
-            </div>
-          </div>
-          <div style={{ marginTop: 12, fontSize: 12.5, color: C.text, lineHeight: 1.6 }}>
-            {t(E,
-              "Why the signs? The outermost ring is covered by 1 plate (black, +). The next by 2 (colorless, skipped). The next by 3 (black, +)… Adding each black ring's (outer²−inner²) and lining them up gives the plain alternating pattern above.",
-              "부호는 왜 이럴까요?\n맨 바깥 고리는 판 1 개가 덮어서 검정이라 더해요.\n다음은 2 개라서 무색이니 건너뛰고, 그다음은 3 개라서 또 더해요.\n검은 고리마다 (바깥²−안²) 을 더해 나란히 적으면\n위처럼 번갈아 가는 모양이 그대로 나와요.")}
-          </div>
-        </div>),
-    },
-
-    // 2-2 missing-radius interactive
+    // 2-1 missing-radius interactive (the alternating-sum idea was already shown in 1-3's sim)
     {
       type: "reveal",
       narr: t(E,
@@ -401,7 +370,7 @@ export function makeMcc21GlassCh2(E) {
       content: <MissingRadiusSim E={E} />,
     },
 
-    // 2-3 the closed-form idea
+    // 2-2 the closed-form idea
     {
       type: "reveal",
       /* 2026-09-17: 이 narr 이 106 자·세 문장이었다. 바로 아래 카드 세 장이
@@ -449,7 +418,7 @@ export function makeMcc21GlassCh2(E) {
         </div>),
     },
 
-    // 2-4 quiz on the perfect-square check
+    // 2-3 quiz on the perfect-square check
     {
       type: "quiz",
       narr: t(E,
@@ -471,7 +440,7 @@ export function makeMcc21GlassCh2(E) {
         "√49 = 7 은 정수라서 x = 7 이 후보가 돼요.\n줄 세운 순서에서 양옆 사이에도 들어가면 진짜 답이에요."),
     },
 
-    // 2-5 practice input (sample 2)
+    // 2-4 practice input (sample 2)
     {
       type: "input",
       /* 2026-09-17: narr 이 "줄 세우면 6, 5, 3, 2" 라고 **답(5)을 그대로 적어** 두고

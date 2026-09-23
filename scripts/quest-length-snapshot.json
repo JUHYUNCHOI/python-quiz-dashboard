@@ -480,9 +480,9 @@
     "korean_chars_ref": 1165
   },
   "mcc21carrots": {
-    "pages": 6,
-    "quiz_input": 1,
-    "korean_chars_ref": 1272
+    "pages": 5,
+    "quiz_input": 0,
+    "korean_chars_ref": 1152
   },
   "mcc21dvd": {
     "pages": 6,
@@ -490,9 +490,9 @@
     "korean_chars_ref": 767
   },
   "mcc21glass": {
-    "pages": 11,
+    "pages": 10,
     "quiz_input": 3,
-    "korean_chars_ref": 1976
+    "korean_chars_ref": 1844
   },
   "mcc21marbles": {
     "pages": 7,
@@ -502,7 +502,7 @@
   "mcc21menu": {
     "pages": 7,
     "quiz_input": 2,
-    "korean_chars_ref": 1453
+    "korean_chars_ref": 1458
   },
   "mcc21simplemath": {
     "pages": 9,
@@ -752,7 +752,7 @@
   "shellgame": {
     "pages": 14,
     "quiz_input": 6,
-    "korean_chars_ref": 1100,
+    "korean_chars_ref": 1089,
     "clicks": 15
   },
   "simplegame": {

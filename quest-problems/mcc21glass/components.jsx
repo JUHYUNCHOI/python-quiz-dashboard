@@ -5,8 +5,7 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#2563eb";
 
 const FULL_PY = [
-  "import sys, math",
-  "input = sys.stdin.readline",
+  "import math",
   "",
   "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
   "N = 4",
@@ -131,11 +130,11 @@ const FULL_CPP = [
    ⚠️ 코드 **내용**은 한 글자도 안 바꾼다 — 어디서 자르는지만 정한다.
    그래서 새 배열을 손으로 적지 않고 FULL_PY·FULL_CPP 를 slice 해서 쓴다.
    (본: mcc21simplemath 5 섹션 · mcc21menu) */
-const PY_READ   = FULL_PY.slice(0, 10);
-const PY_PREFIX = FULL_PY.slice(10, 20);
-const PY_SLOT   = FULL_PY.slice(20, 29);
-const PY_SQRT   = FULL_PY.slice(29, 32);
-const PY_FIT    = FULL_PY.slice(32);
+const PY_READ   = FULL_PY.slice(0, 9);
+const PY_PREFIX = FULL_PY.slice(9, 19);
+const PY_SLOT   = FULL_PY.slice(19, 28);
+const PY_SQRT   = FULL_PY.slice(28, 31);
+const PY_FIT    = FULL_PY.slice(31);
 
 const CPP_READ   = FULL_CPP.slice(0, 17);
 const CPP_PREFIX = FULL_CPP.slice(17, 29);
