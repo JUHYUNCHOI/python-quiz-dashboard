@@ -56,7 +56,7 @@ export const PART4: Record<string, string> = {
   "Single winners: line is all same letter":
     "혼자 이기는 경우: 줄이 전부 같은 글자예요",
   "Step 1: if any digit is not 0/1, binarize (1 op).":
-    "1 단계: 0/1 이 아닌 숫자가 있으면 0/1 로 바꿔요 (조작 1 번)",
+    "1 단계: 0/1 이 아닌 숫자가 있으면 0/1 로 바꿔요 (연산 1 번)",
   "Step 3: g = floor(3n/2) = (3n - last_bit) * inv2 mod MOD":
     "3 단계: g = floor(3n/2) = (3n - last_bit) * inv2 를 MOD 로 나눈 나머지",
   "Substrings of length >= 3 where i is the lonely cow:":
