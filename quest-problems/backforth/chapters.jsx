@@ -166,7 +166,7 @@ export function makeBackForthCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Try every choice across the 4 days — collect all distinct barn 1 totals into a set.  Sections build the recursion one piece at a time.",
+        "Try every choice across the 4 days — collect all distinct barn 1 totals into a set.",
         "4 일간 모든 선택을 해 보고 나온 총량을 set 에 모아요."),
       sections: getBackForthSections(E),
     },
