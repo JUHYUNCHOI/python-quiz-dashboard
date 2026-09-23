@@ -242,7 +242,7 @@ export function makeWhereAmICh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie lives on a street whose N mailboxes are labeled with letters A..Z. She'd like to identify her location by looking at K consecutive mailboxes.\nFind the SMALLEST K such that every length-K window of N consecutive letters is unique in the street.",
+        "What's the smallest K that reveals Bessie's spot?",
         "우편함 K 개만 보고도 내 자리를 알 수 있는 가장 작은 K 는 얼마일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -302,7 +302,7 @@ export function makeWhereAmICh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, what IS a substring?\nIt's a consecutive chunk of characters from the string.\nLike a sliding window!", "부분문자열은 문자열에서 연속으로 이어진 글자 묶음이에요."),
+        "A substring is a consecutive chunk of characters from the string.", "부분문자열은 문자열에서 연속으로 이어진 글자 묶음이에요."),
       content: (() => {
         const str = "ABCBA";
         return (
@@ -365,7 +365,7 @@ export function makeWhereAmICh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Think of it like a window sliding across the string!\nThe window size is K, and it moves one position at a time.", "문자열 위를 한 칸씩 미끄러지는 창문이라고 생각해 봐요."),
+        "Think of it as a window of size K sliding across the string, one step at a time.", "문자열 위를 한 칸씩 미끄러지는 창문이라고 생각해 봐요."),
       content: (() => {
         const str = "ABAB";
         const windows = [
@@ -434,7 +434,7 @@ export function makeWhereAmICh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now let's try K=3 on the same string \"ABAB\". Are all substrings unique this time?", "이번엔 같은 \"ABAB\" 에서 K=3 으로 해봐요."),
+        "Now let's try K=3 on the same string \"ABAB\".", "이번엔 같은 \"ABAB\" 에서 K=3 으로 해봐요."),
       content: (() => {
         const str = "ABAB";
         const windows = [
@@ -525,7 +525,7 @@ export function makeWhereAmICh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The algorithm is simple: try K=1, then K=2, then K=3...\nFor each K, check if ALL substrings of that length are unique.\nStop at the first K that works!", "K 를 1 부터 하나씩 키우다가 처음 되는 K 에서 멈춰요."),
+        "Grow K from 1 upward, and stop at the first K that works.", "K 를 1 부터 하나씩 키우다가 처음 되는 K 에서 멈춰요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
@@ -565,7 +565,7 @@ export function makeWhereAmICh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "How do we check if substrings are unique?\nUse a SET!\nA set only stores unique items.\nIf we try to add a substring that already exists, we found a duplicate!", "겹치는지 어떻게 확인할까요? 집합(set)을 쓰면 돼요."),
+        "How do we check for duplicates? Use a set!", "겹치는지 어떻게 확인할까요? 집합(set)을 쓰면 돼요."),
       content: (() => {
         const trace = [
           { sub: "AB", set: ["AB"], dup: false },
@@ -611,7 +611,7 @@ export function makeWhereAmICh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace through the entire algorithm for \"ABAB\". We check K=1, K=2, K=3 one by one.", "\"ABAB\" 로 K=1, K=2, K=3 을 하나씩 따라가 봐요."),
+        "Let's trace \"ABAB\" through K=1, K=2, K=3, one by one.", "\"ABAB\" 로 K=1, K=2, K=3 을 하나씩 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
@@ -670,7 +670,7 @@ export function makeWhereAmICh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Your turn — type any letters and slide K. Green windows are unique, red ones are duplicates. The smallest K with all-green is the answer.",
+        "Your turn — type some letters and slide K.",
         "글자를 아무거나 넣고 K 를 밀어 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -689,7 +689,7 @@ export function makeWhereAmICh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "What's the time complexity?\nWe try up to N values of K.\nFor each K, we check N-K+1 substrings.\nTotal: O(N^2) with hashing.", "시간이 얼마나 걸릴까요? 다 합치면 O(N²) 쯤이에요."),
+        "How long does this take? All together, about O(N²).", "시간이 얼마나 걸릴까요? 다 합치면 O(N²) 쯤이에요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -698,7 +698,7 @@ export function makeWhereAmICh2(E) {
           </div>
           <div style={{ marginTop: 12, background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Outer loop: K from 1 to N (max N iterations).\nInner loop: check N-K+1 substrings. With hash set, each check is O(1). Total: O(N^2). N <= 100, so this is fast enough!", "바깥 반복문은 K 를 1 부터 N 까지 돌아요 (많아야 N 번).\n안쪽 반복문은 N-K+1 개의 부분문자열을 봐요.\n집합에서 한 번 찾는 데 O(1) 이니까, 다 합치면 O(N^2) 이에요.\nN 이 100 을 넘지 않아서 충분히 빨라요!")}
+              "Outer loop: K from 1 to N (at most N rounds).\nInner loop: check N-K+1 substrings. Looking one up in a set is O(1), so altogether it's O(N²).\nN is at most 100, so that's about 100×100 = 10,000 steps — done in a blink!", "바깥 반복문은 K 를 1 부터 N 까지 돌아요 (많아야 N 번).\n안쪽 반복문은 N-K+1 개의 부분문자열을 봐요.\n집합에서 한 번 찾는 데 O(1) 이니까, 다 합치면 O(N²) 이에요.\nN 이 최대 100 이니까 100×100 = 10000 번쯤 — 눈 깜짝할 새에 끝나요!")}
           </div>
         </div>),
     },
@@ -769,7 +769,7 @@ export function makeWhereAmICh3(E, lang = "py") {
               "s = lines[1].strip()",
               "",
               "for K in range(1, N + 1):",
-              "    substrings = set()",
+              "    seen = set()",
               "    unique = True",
             ]}
             highlight={[5, 6, 7]}
@@ -799,21 +799,21 @@ export function makeWhereAmICh3(E, lang = "py") {
               "s = lines[1].strip()",
               "",
               "for K in range(1, N + 1):",
-              "    substrings = set()",
+              "    seen = set()",
               "    unique = True",
               "    for i in range(N - K + 1):",
               "        sub = s[i:i+K]",
-              "        if sub in substrings:",
+              "        if sub in seen:",
               "            unique = False",
               "            break",
-              "        substrings.add(sub)",
+              "        seen.add(sub)",
             ]}
             highlight={[8, 9, 10, 11, 12, 13]}
           />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
-              "s[i:i+K] extracts K characters starting at position i. If it's already in the set, we found a duplicate!",
-              "s[i:i+K] 는 i 번 자리에서 K 글자를 잘라 와요. 집합에 이미 있으면 겹치는 걸 찾은 거예요!")}
+              "The line above, s[i:i+K], extracts K characters starting at position i. If it's already in the set, we found a duplicate!",
+              "위 코드의 s[i:i+K] 는 i 번 자리에서 K 글자를 잘라 와요. 집합에 이미 있으면 겹치는 걸 찾은 거예요!")}
           </div>
         </div>),
     },
@@ -854,7 +854,7 @@ export function makeWhereAmICh3(E, lang = "py") {
             padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
-              {t(E, "Complete code! Just 11 lines!", "전체 코드 완성! 딱 11 줄이에요!")}
+              {t(E, "Complete code! Just 24 lines!", "전체 코드 완성! 딱 24 줄이에요!")}
             </div>
           </div>
         </div>),
