@@ -81,6 +81,15 @@ python3 scripts/check-code-one-statement.py  # 한 줄에 문장이 여러 개�
 
 ```bash
 node scripts/see-flow.mjs http://localhost:3000/quest/<id>   # 쪽과 쪽 사이
+python3 scripts/count-quests.py --list untaught              # ⭐ **다중 라운드로 손대기 전에 한 번.**
+                                                            #   그 quest 가 **안 가르친 개념**을 전제하나
+                                                            #   (모듈러 역원·비트·2차원 리스트·조합론…)
+                                                            #   ⚠️ 2026-09-23: 이 검사기는 **위 목록에 이미 있었는데
+                                                            #   이 문 목록에는 없었다.** 그래서 `strangefn` 을 하루에
+                                                            #   **여덟 라운드** 고치는 동안 **아무도 안 돌렸다.**
+                                                            #   돌렸으면 첫 줄에 `strangefn [모듈러역원]` 이 떴다 —
+                                                            #   학생 다섯이 전부 그 자리에서 막힌 이유였다.
+                                                            #   **문장을 고치기 전에 «이게 이 트랙에 맞는 문제인가» 부터.**
 python3 scripts/check-quest-length-regression.py <id>         # 고친 뒤 쪽 수·퀴즈 수가 **늘었나** (절대 상한 아님, 래칫)
                                                             #   2026-09-23 PM 판정: `strangefn` 이 한 세션에 10→17쪽,
                                                             #   직전 커밋 8개가 전부 순증가였다. "쪽 수 상한"은 오탐이 난다
