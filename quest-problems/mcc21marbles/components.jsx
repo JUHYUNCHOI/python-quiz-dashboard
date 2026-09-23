@@ -286,6 +286,37 @@ export function Mcc21MarblesProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* CodeWalk — 코드 줄에 붙는 말풍선 (2026-09-23, PM 판정 3단계, mcc21menu 를 본떴다).
+   MCC 는 파이썬 전용이라(feedback_mcc_is_python_only.md) C++ beats 는 안 만든다.
+   말풍선은 "지금 마주한 질문" 으로 연다 — 파일 순서를 읊지 않는다
+   (check-codewalk-thinking-order.py). 1장 시뮬(Mcc21MarblesBoundarySim)에서
+   걸었던 "경계를 하나씩 건너기" 를 그대로 코드로 잇는다. */
+const _MARBLES_VARS = [
+  { v: "A", ko: "시작 개수 (상자별)", en: "starting counts" },
+  { v: "B", ko: "목표 개수 (상자별)", en: "target counts" },
+  { v: "carry", ko: "지금까지 쌓인 차이", en: "running difference so far" },
+  { v: "ops", ko: "지금까지 건넌 구슬 수 (답)", en: "marbles crossed so far (the answer)" },
+];
+export function getMcc21MarblesWalk(E) {
+  return { code: FULL_PY, vars: _MARBLES_VARS, beats: [
+    { hi: [0, 4], bubble: t(E,
+        "What do we need before we start?\nThe box count (N) and the start/target counts (A, B).",
+        "무엇부터 알아야 하나요?\n상자 개수(N)와 시작 개수(A), 목표 개수(B) 가 있어야 해요.") },
+    { hi: [5, 8], bubble: t(E,
+        "How do we tally the crossings?\ncarry tracks the running difference, ops totals the crossings — both start at 0.",
+        "건너는 구슬을 어떻게 모아 셀까요?\ncarry 는 지금까지 쌓인 차이, ops 는 건넌 구슬 수예요.\n둘 다 0 부터 시작해요.") },
+    { hi: [9, 10], bubble: t(E,
+        "Walking the boxes left to right?\nEach box adds A[i]-B[i] to carry — the same boundary you crossed in the sim.",
+        "상자를 왼쪽부터 하나씩 보면요?\n상자 i 의 차이 A[i]-B[i] 를 carry 에 더해요.\n앞 시뮬의 그 경계예요.") },
+    { hi: [11, 11], bubble: t(E,
+        "How many cross at that edge?\nExactly abs(carry) — add that to ops.",
+        "그 경계에서 몇 개가 건너나요?\ncarry 의 절댓값만큼요. 그 수를 ops 에 더해요.") },
+    { hi: [12, 13], bubble: t(E,
+        "Once every box is done?\nops already holds the answer — print it.",
+        "상자를 다 훑었으면요?\nops 가 바로 답이에요. 그대로 출력해요.") },
+  ] };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

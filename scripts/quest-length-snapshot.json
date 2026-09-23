@@ -482,7 +482,7 @@
   "mcc21carrots": {
     "pages": 5,
     "quiz_input": 0,
-    "korean_chars_ref": 1152
+    "korean_chars_ref": 1157
   },
   "mcc21dvd": {
     "pages": 6,
@@ -492,12 +492,12 @@
   "mcc21glass": {
     "pages": 10,
     "quiz_input": 3,
-    "korean_chars_ref": 1844
+    "korean_chars_ref": 1848
   },
   "mcc21marbles": {
     "pages": 7,
     "quiz_input": 2,
-    "korean_chars_ref": 757
+    "korean_chars_ref": 762
   },
   "mcc21menu": {
     "pages": 7,

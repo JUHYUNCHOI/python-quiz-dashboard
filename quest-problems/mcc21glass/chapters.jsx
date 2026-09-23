@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getMcc21GlassSections } from "./components";
+import { getMcc21GlassWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const KA = { wordBreak: "keep-all" };
 const A = "#2563eb";
@@ -461,6 +462,7 @@ export function makeMcc21GlassCh2(E) {
    Chapter 3: ⚡ 코드 빌드
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc21GlassCh3(E, lang = "py") {
+  const w = getMcc21GlassWalk(E);
   return [
     // 3-1 slow vs fast plan
     {
@@ -496,12 +498,15 @@ export function makeMcc21GlassCh3(E, lang = "py") {
         </div>),
     },
 
-    // 3-2 progressive code
+    // 3-2 code, CodeWalk — bubbles sit on the lines they explain
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드를 한 부분씩 읽어 봐요."),
-      sections: getMcc21GlassSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains.",
+        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+      content: (
+        <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
+      ),
     },
   ];
 }

@@ -99,6 +99,37 @@ export function Mcc21CarrotsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* CodeWalk — 코드 줄에 붙는 말풍선 (2026-09-23, PM 판정 ③의 3단계, mcc21menu 를 본보기로).
+   MCC 는 파이썬 전용이라(feedback_mcc_is_python_only.md) C++ beats 는 안 만든다.
+   말풍선은 "지금 마주한 질문" 으로 연다 — 파일 순서를 읊지 않는다
+   (check-codewalk-thinking-order.py). hi 경계는 FULL_PY 를 직접 세어 새로 나눴다
+   (기존 getMcc21CarrotsSections 는 한 구간뿐이라 그대로 못 씀). */
+const _CARROTS_VARS = [
+  { v: "C", ko: "바구니마다 당근 수", en: "carrots in each basket" },
+  { v: "odd", ko: "홀수 바구니 개수", en: "odd-count baskets" },
+  { v: "even", ko: "짝수 바구니 개수", en: "even-count baskets" },
+  { v: "out", ko: "테스트별 답 모음", en: "answers, one per test" },
+];
+export function getMcc21CarrotsWalk(E) {
+  return { code: FULL_PY, vars: _CARROTS_VARS, beats: [
+    { hi: [0, 4], bubble: t(E,
+        "What do we need before counting anything?\nEach test's basket data (T, N, C) — and out to collect every test's answer.",
+        "무엇부터 있어야 셀 수 있을까요?\n테스트마다 바구니 정보(T, N, C)가 있어야 해요.\n답을 모아 둘 out 도 함께 만들어요.") },
+    { hi: [5, 11], bubble: t(E,
+        "Inside one test, what do we need to count?\nSweep its baskets once — the same odd/even split from the sim — counting how many carrot counts are odd, how many are even.",
+        "테스트 하나 안에서 무엇을 세야 하나요?\n바구니를 한 번 훑어요 — 시뮬에서 눌러본 홀수·짝수 나누기예요.\n홀수 몇 개, 짝수 몇 개인지 세요.") },
+    { hi: [12, 13], bubble: t(E,
+        "When can we answer YES?\nA sum of 3 is odd only two ways — three odds, or one odd + two evens.",
+        "언제 YES 라고 답할 수 있나요?\n세 수의 합이 홀수인 건 딱 두 가지예요.\n홀수 3개, 또는 홀수 1개 + 짝수 2개예요.") },
+    { hi: [14, 16], bubble: t(E,
+        "How do we record that verdict?\nAppend 'YES' when either way works, 'NO' otherwise — one line per test.",
+        "그 결과를 어떻게 적어 두나요?\n둘 중 하나라도 되면 'YES', 아니면 'NO' 를 out 에 적어요.\n테스트마다 한 줄씩이에요.") },
+    { hi: [17, 17], bubble: t(E,
+        "All tests done — now what?\nPrint every collected answer, one per line.",
+        "테스트가 다 끝나면요?\n모아 둔 답을 한 줄씩 출력해요.") },
+  ] };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

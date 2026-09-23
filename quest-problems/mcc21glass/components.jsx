@@ -234,6 +234,39 @@ export function Mcc21GlassProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* CodeWalk — 코드 줄에 붙는 말풍선 (2026-09-23, PM 판정 ③의 3단계, mcc21menu 본떠 만듦).
+   MCC 는 파이썬 전용이라(feedback_mcc_is_python_only.md) C++ beats 는 안 만든다.
+   말풍선은 "지금 마주한 질문" 으로 연다 — 파일 순서를 읊지 않는다
+   (check-codewalk-thinking-order.py). hi 경계는 기존 getMcc21GlassSections 의
+   PY_READ/PY_PREFIX/PY_SLOT/PY_SQRT/PY_FIT 와 같은 코드 뜻 구간을 그대로 쓴다 —
+   값만 CodeWalk 모양(질문형 말풍선)으로 바꿨다. */
+const _GLASS_VARS = [
+  { v: "b", ko: "아는 반지름 (큰 것부터)", en: "known radii, largest first" },
+  { v: "prefix", ko: "앞부분까지 번갈아 더한 값", en: "alternating sum so far" },
+  { v: "S", ko: "아는 반지름 전체의 번갈아 합", en: "full alternating sum" },
+  { v: "p", ko: "깨진 반지름이 들어갈 자리", en: "slot for the missing radius" },
+  { v: "x", ko: "깨진 반지름 후보", en: "candidate broken radius" },
+];
+export function getMcc21GlassWalk(E) {
+  return { code: FULL_PY, vars: _GLASS_VARS, beats: [
+    { hi: [0, 8], bubble: t(E,
+        "What order do the radii need to be in before the alternating sum even makes sense?\nSort them largest-first (b) — that's the order the plates actually stack in.",
+        "번갈아 더하려면 반지름이 어떤 순서로 있어야 할까요?\n큰 것부터 줄 세워요(b) — 판이 실제로 쌓이는 순서예요.") },
+    { hi: [9, 18], bubble: t(E,
+        "Redoing the alternating sum from scratch for every slot would be slow — what can we build once instead?\nprefix[i] stores the alternating sum of the first i known radii, so S = prefix[m] is ready right away.",
+        "매번 처음부터 다시 더하면 느린데, 무엇을 미리 만들어 둘까요?\nprefix[i] 에 앞 i 개까지의 번갈아 합을 쌓아 두면 S = prefix[m] 을 바로 꺼내 써요.") },
+    { hi: [19, 27], bubble: t(E,
+        "We don't know which slot the broken radius sits in — so what do we try?\nEvery slot p, one at a time. Once p is fixed, only x² is unknown, so we solve it directly.",
+        "깨진 반지름이 어느 자리에 들어갈지 모르는데 어떻게 하나요?\n자리 p 를 하나씩 다 넣어 봐요. p 가 정해지면 모르는 값이 x² 하나뿐이라 바로 풀려요.") },
+    { hi: [28, 30], bubble: t(E,
+        "The formula gave us x² — does that make it a real radius?\nOnly if x² is a positive perfect square. math.isqrt gives the exact integer root to check x*x == x2.",
+        "식에서 x² 가 나왔다고 진짜 반지름이 될까요?\nx² 가 양의 완전제곱수일 때만이에요. math.isqrt 로 정수 제곱근을 구해 x*x == x2 인지 확인해요.") },
+    { hi: [31, 45], bubble: t(E,
+        "x² checks out as a perfect square — is that enough to accept x?\nNo — x still has to fit between its neighbours at slot p. The first p that passes everything wins, so print x and stop.",
+        "x² 가 완전제곱이면 그걸로 충분할까요?\n아니요 — x 가 자리 p 의 양옆 사이에도 들어가야 해요.\n이걸 다 통과한 첫 p 에서 출력하고 멈춰요.") },
+  ] };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

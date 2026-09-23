@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getMcc21CarrotsSections } from "./components";
+import { getMcc21CarrotsSections, getMcc21CarrotsWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const NW = { whiteSpace: "nowrap" };
 const KA = { wordBreak: "keep-all" };
@@ -303,6 +304,7 @@ export function makeMcc21CarrotsCh1(E) {
 }
 
 export function makeMcc21CarrotsCh2(E, lang = "py") {
+  const w = getMcc21CarrotsWalk(E);
   return [
     // 2-1: plan — brute limit → fast idea
     {
@@ -335,12 +337,15 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: code, CodeWalk — bubbles sit on the lines they explain
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
-      sections: getMcc21CarrotsSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains.",
+        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+      content: (
+        <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#059669" />
+      ),
     },
   ];
 }
