@@ -144,14 +144,10 @@ export function RotShiftSim({ E }) {
 }
 
 const FULL_PY = [
-  "import sys",
   "from bisect import bisect_right",
   "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "K = int(data[1])",
-  "T = int(data[2])",
-  "active = [int(data[3 + i]) for i in range(K)]",
+  "N, K, T = map(int, input().split())",
+  "active = list(map(int, input().split()))",
   "",
   "result = [0] * N",
   "for p in range(N):",

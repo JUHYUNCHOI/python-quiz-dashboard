@@ -323,10 +323,7 @@ export function PalindromeRunner({ E }) {
 /* Section 1: read T test cases — S kept as a STRING (it can have up to
    100,000 digits, far too big for a normal number) */
 const PA_HELPER_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "T = int(data[0])         # number of test cases",
+  "T = int(input())         # number of test cases",
 ];
 const PA_HELPER_CPP = [
   "#include <iostream>",
@@ -342,7 +339,7 @@ const PA_HELPER_CPP = [
 const PA_DP_PY = [
   "out = []",
   "for k in range(T):",
-  "    S = data[1 + k]",
+  "    S = input()",
   "",
   "    # No palindrome ends in 0 (it would have to start with 0 too).",
   "    # Every single digit 1-9 IS a palindrome, so you can always shed",
@@ -388,14 +385,11 @@ const PA_OUT_CPP = [
 
 /* Section 4: full code */
 const PA_FULL_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "T = int(data[0])",
+  "T = int(input())",
   "",
   "out = []",
   "for k in range(T):",
-  "    S = data[1 + k]",
+  "    S = input()",
   "",
   "    last_digit = S[-1]",
   "    if last_digit == '0':",
