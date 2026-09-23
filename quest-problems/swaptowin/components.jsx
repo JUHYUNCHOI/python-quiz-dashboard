@@ -59,7 +59,8 @@ export const FULL_PY = [
   "            break",
   "",
   "    print(len(ops))",
-  "    print(\"\\n\".join(ops))",
+  "    if ops:",
+  "        print(\"\\n\".join(ops))",
 ];
 
 export const FULL_CPP = [
@@ -240,7 +241,8 @@ const SECTION_BORROW_CPP = [
 
 const SECTION_OUT_PY = [
   "print(len(ops))",
-  "print(\"\\n\".join(ops))",
+  "if ops:",
+  "    print(\"\\n\".join(ops))",
 ];
 const SECTION_OUT_CPP = [
   "cout << ops.size() << \"\\n\";",
@@ -272,7 +274,7 @@ export function getSwapToWinWalk(E, lang = "py") {
     { hi: [10, 13], bubble: t(E, "How do we build the moves? Fix s_1 left to right, one column\nat a time — once a column matches we never touch it again.\nAlready equal? Nothing to do.", "바꾸기를 어떻게 만들까요? s_1 을 왼쪽부터 한 칸씩 맞춰요.\n한 번 맞춘 칸은 다시 안 건드려요. 이미 같으면 할 일이 없어요.") },
     { hi: [15, 25], bubble: t(E, "If not, look for the cheapest fix first.\nIf the letter we need already sits further right in s_1 itself,\none swap inside s_1 is enough (1 op).", "다르다면 가장 싼 방법부터 찾아요.\n필요한 글자가 s_1 뒤쪽에 이미 있으면,\n같은 줄 안에서 한 번만 바꾸면 끝이에요 (1 op).") },
     { hi: [27, 45], bubble: t(E, "If s_1 has it nowhere, we must borrow it.\nFind the letter in some string s_y — if needed, line it up\nto column k there first (1 op), then swap that column with s_1 (1 op).\nAt most 2 ops total.", "s_1 어디에도 없으면 빌려야 해요.\n다른 줄 s_y 에서 그 글자를 찾아, 필요하면 먼저\nk 번째 칸으로 옮기고(1 op), 그다음 s_1 과 그 칸을 맞바꿔요(1 op).\n합쳐서 최대 2 op.") },
-    { hi: [47, 48], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.") },
+    { hi: [47, 49], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.\nSkip the second line if there were no swaps.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.\n바꾼 게 없으면 둘째 줄은 건너뛰어요.") },
   ] };
 }
 
