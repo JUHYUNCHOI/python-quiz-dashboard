@@ -38,7 +38,42 @@ props 로 받지도 않는다. `@/components/quest/CodeWalk`·`ProgressiveCodeSt
   - section === "MCC" 인 quest 는 애초에 화면에서 토글 자체가 없으니
     **이미 안전**하다 — 별도로 표시만 하고 "고쳐야 할 것"에선 뺀다.
 
-  python3 scripts/check-unused-lang-param.py              # 전체
+──────────────────────────────────────────────────────────────────────────
+2번째 구멍 (2026-09-23, `cowsignal` 학생 검증) — **컴포넌트 자체가 없는 경우**.
+
+`cowsignal` 은 위 검사기가 0건이라고 했는데, 학생은 "코드 들여쓰기가 다
+사라졌다", "C++ 토글을 눌러도 계속 파이썬" 을 둘 다 보고했다. 원인은
+`LOCAL_COMPONENT` 가 못 보는 세 번째 모양이었다 — `chapters.jsx` 가
+**컴포넌트를 정의하지도 않고**, `<div>`/`<span>` 을 스텝 하나하나마다
+**손으로 색칠해 쌓았다.** JSX 는 텍스트 노드 앞 공백을 지우므로 들여쓰기가
+사라지고, `lang` 을 받을 자리 자체가 없으니 토글도 안 먹는다.
+
+무엇을 보나 (아래 `find_raw_code_blocks`) — 파일 단위로:
+  ① `JetBrains Mono`/`monospace` 가 있고 (코드처럼 보이려고 스타일을 줬다)
+  ② `<span style={{ color: "#…"` 또는 `<div style={{ color: "#…"` 손칠한
+     줄이 **6개 이상** (하나 색칠하는 건 강조지, 코드 하이라이팅이 아니다)
+  ③ 실제 코드 문법(`range(`·`cin >>`·`cout <<`·`#include`·`for (`·`def `·
+     `print(`·`while (`·`return` …)이 **2개 이상**
+     (②만 보면 X/. 격자 같은 **데이터 시각화**를 코드로 오인한다 —
+     실측으로 뺀 예: `mcc20kitty`·`mco15secret`·`magicorbs` 는 spans 는
+     많지만 코드 문법이 0개였다. 그림이지 코드가 아니었다.)
+  ④ 파일 어디에도 `CodeBlock`/`CodeWalk`/`ProgressiveCodeStepper`/
+     `CodeSnippet`/`CodeBox` 를 안 쓴다 — 하나라도 쓰면 **그 파일 전체를
+     거른다**(부분적으로만 고쳐진 파일은 이 검사기가 못 가른다. 아래 참고).
+
+⚠️ 이 두 번째 검사기의 한계 — **더 크다, 눈으로 반드시 확인해라**:
+  - **파일 단위**라 스텝 단위가 아니다. 한 파일에 손칠한 코드와 정상
+    `CodeBlock` 사용이 **섞여 있으면 전체가 안전한 것으로 빠진다**
+    (④의 "하나라도 쓰면 전체를 거른다" 때문). `cowsignal` 을 고친 지금이
+    그 예다 — 새로 CodeBlock 을 쓰니 이 파일 자체는 이제 안 걸린다.
+  - **색칠한 코드가 실제로는 "언어 비교용으로 나란히 보여주는 것"** 일 수도
+    있다(예: `moo` 는 `cout`/`print` 두 언어를 한 화면에 같이 보여주는
+    설명 패널일 수 있다) — 이건 버그가 아닐 수 있다. **숫자만 보고 고치지
+    말고, 실제로 열어서 "토글이 있는데 안 먹는지" 눈으로 봐라.**
+  - 임계값(spans≥6, 코드문법≥2)은 cowsignal 실측(spans 다수·문법 4+)에
+    맞춘 것이라, 더 작은 코드 조각은 못 잡는다.
+
+  python3 scripts/check-unused-lang-param.py              # 전체 (두 검사 다)
   python3 scripts/check-unused-lang-param.py cowgym       # quest 골라서
 """
 import glob
@@ -50,6 +85,34 @@ LOCAL_COMPONENT = re.compile(
     r"^const\s+(CodeSnippet|CodeBlock|CodeBox)\s*=\s*\(\s*\{\s*([^}]*)\}",
     re.MULTILINE,
 )
+
+KNOWN_CODE_COMPONENTS = re.compile(
+    r"\b(CodeBlock|CodeWalk|ProgressiveCodeStepper|CodeSnippet|CodeBox)\b"
+)
+MONO_MARK = re.compile(r"JetBrains Mono|monospace")
+HAND_COLORED_LINE = re.compile(r'<(?:span|div)\s+style=\{\{\s*color:\s*"#')
+RAW_CODE_SYNTAX = re.compile(
+    r"\brange\(|cin\s*>>|cout\s*<<|#include|int\s+main|for\s*\(|for \w+ in |"
+    r"for _ in |\bdef \w+\(|\breturn\b|\bprint\(|\bwhile\s*\("
+)
+
+
+def find_raw_code_blocks(files, want):
+    """컴포넌트 없이 손으로 쌓은, lang 을 받을 자리 자체가 없는 코드 블록."""
+    hits = []
+    for f in files:
+        quest = f.split("/")[1]
+        if want and quest not in want:
+            continue
+        src = io.open(f, encoding="utf-8", errors="replace").read()
+        if KNOWN_CODE_COMPONENTS.search(src):
+            continue  # 하나라도 쓰면 전체를 거른다 (위 한계 참고)
+        mono_n = len(MONO_MARK.findall(src))
+        span_n = len(HAND_COLORED_LINE.findall(src))
+        code_n = len(RAW_CODE_SYNTAX.findall(src))
+        if mono_n >= 1 and span_n >= 6 and code_n >= 2:
+            hits.append((quest, span_n, code_n))
+    return hits
 
 
 def load_meta():
@@ -114,6 +177,15 @@ def main():
         for quest, name, props, info in sorted(already_safe):
             why = "MCC(토글 자체 없음)" if info.get("section") == "MCC" else "pythonOnly"
             print(f"  · {quest}  ({why})")
+
+    raw_hits = find_raw_code_blocks(files, want)
+    print(f"\n컴포넌트 없이 손으로 쌓은 코드 블록(lang 받을 자리 자체가 없음) {len(raw_hits)}개{scope}")
+    print("  (판정 아님 — 눈으로 열어서 진짜 토글 없이 방치된 코드인지 확인해라)\n")
+    for quest, span_n, code_n in sorted(raw_hits):
+        info = meta.get(quest, {})
+        safe = info.get("section") == "MCC" or info.get("pythonOnly")
+        tag = "  (이미 안전: MCC·pythonOnly)" if safe else ""
+        print(f"  ■ {quest}  (색칠한 줄 {span_n}개, 코드 문법 {code_n}개){tag}")
 
 
 if __name__ == "__main__":

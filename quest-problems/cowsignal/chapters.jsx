@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowSignalSections, CowSignalScaleSim } from "./components";
+import { CodeBlock } from "@/components/quest/shared";
 
 /* helper: render a grid of cells */
 function Grid({ data, cellSize = 32, gap = 3, xColor = "#7c3aed", xBg = "#7c3aed", dotColor = "#c4b5fd", dotBg = "#f5f3ff", border }) {
@@ -24,7 +25,7 @@ function Grid({ data, cellSize = 32, gap = 3, xColor = "#7c3aed", xBg = "#7c3aed
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (10 steps)
+   Chapter 1: 📋 문제 이해 (10 steps, 2026-09-23: 11→10, 곱셈 재드릴 1개 삭제)
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowSignalCh1(E) {
   return [
@@ -163,16 +164,13 @@ export function makeCowSignalCh1(E) {
                 fontSize: 20, fontWeight: 700, color: "#fff", fontFamily: "'JetBrains Mono',monospace", border: "1px solid #6d28d9" }}>X</div>
             </div>
             <div style={{ fontSize: 24, color: C.accent, fontWeight: 700 }}>→</div>
-            {/* After K=2 */}
+            {/* After K=2 — our running example stays K=2 (2026-09-23: a K=3 branch
+                used to sit here too, with no note about why the number changed;
+                a student flagged it as a jarring third number. K=3 is introduced
+                on its own terms two steps later, in the quiz. */}
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>K=2</div>
               <Grid data={[["X","X"],["X","X"]]} cellSize={36} gap={2} />
-            </div>
-            <div style={{ fontSize: 24, color: C.accent, fontWeight: 700 }}>→</div>
-            {/* After K=3 */}
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>K=3</div>
-              <Grid data={[["X","X","X"],["X","X","X"],["X","X","X"]]} cellSize={28} gap={1} />
             </div>
           </div>
         </div>),
@@ -204,7 +202,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If K=3, each single cell becomes a 3×3 block. That's 9 copies of the same character!", "K=3 이면 칸 하나가 3×3 블록이 돼요. 같은 글자가 9개예요!"),
+        "If K=3, each single cell becomes a 3×3 block of the same character.", "K=3 이면 칸 하나가 3×3 블록이 돼요. 같은 글자로 채워요."),
       question: t(E, "K=3. One 'X' becomes how many X's?", "K=3 이면 'X' 하나가 X 몇 개가 될까요?"),
       options: ["9", "3", "6", "12"],
       correct: 0,
@@ -261,20 +259,16 @@ export function makeCowSignalCh1(E) {
       explain: t(E, "5×3 = 15 rows, 4×3 = 12 columns ✅", "5×3 이라 15행, 4×3 이라 12열이에요 ✅"),
     },
 
-    // 1-10 입력 연습
-    {
-      type: "input",
-      narr: t(E,
-        "Your turn! Original grid has 3 rows, K=4. How many rows in the output?", "이제 네 차례예요! 원본 격자가 3행이고 K=4 예요.\n출력은 몇 행일까요?"),
-      question: t(E, "3 × 4 = ?", "3 × 4 = ?"),
-      answer: 12,
-    },
+    /* 옛 1-10 (input "3 × 4 = ?") 을 여기서 지웠다 (2026-09-23, 학생 지적).
+       이 자리는 1-9 와 똑같은 "행/열 × K" 공식을 다시 묻기만 했다 — 학생이
+       "8~11쪽이 다 같은 곱셈이라 세 번째부터는 안 읽었다" 고 한 그 반복 중 하나.
+       1-9 가 이 공식을 처음 확인하는 자리라 남기고, 곧바로 이어지는 재드릴은 뺐다. */
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 🔍 어떻게 확대할까? (8 steps)
+   Chapter 2: 🔍 어떻게 확대할까? (7 steps, 2026-09-23: 8→7, 곱셈 재드릴 1개 삭제)
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowSignalCh2(E) {
   return [
@@ -434,14 +428,10 @@ export function makeCowSignalCh2(E) {
       explain: t(E, "'.'*3 + 'X'*3 + '.'*3 = '...XXX...' ✅", "'.'*3 + 'X'*3 + '.'*3 = '...XXX...' ✅"),
     },
 
-    // 2-8 입력 연습
-    {
-      type: "input",
-      narr: t(E,
-        "Original: 3 rows × 2 columns, K=3.\nTotal output characters in ONE output row?\nEach original row has 2 chars, each repeated 3 times.", "원본이 3행 × 2열 이고 K=3 이에요.\n출력 행 하나에는 글자가 몇 개 있을까요?\n원본 행에는 글자가 2개, 그 글자마다 3번씩 되풀이돼요."),
-      question: t(E, "2 chars × 3 = ?", "글자 2개 × 3 = ?"),
-      answer: 6,
-    },
+    /* 옛 2-8 (input "2 chars × 3 = ?") 을 여기서 지웠다 (2026-09-23, 학생 지적).
+       Ch1 1-9 · 1-10 과 같은 "행/열 × K" 곱셈을 또 물었다 — 학생이 지적한
+       네 번 반복 중 마지막. Ch2 는 여기서 "그래서 어떤 반복문이 무엇을 하나"
+       확인(2-6, 2-7)까지만 하고 코드로 넘어간다. */
   ];
 }
 
@@ -458,17 +448,16 @@ export function makeCowSignalCh3(E, lang = "py") {
         "Step 1: read M, N, K from the first line.", "1단계 — 첫 줄에서 M, N, K 를 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
-            <span style={{ color: "#e2e8f0" }}>M, N, K = </span>
-            <span style={{ color: "#c084fc" }}>map</span>
-            <span style={{ color: "#e2e8f0" }}>(</span>
-            <span style={{ color: "#c084fc" }}>int</span>
-            <span style={{ color: "#e2e8f0" }}>, </span>
-            <span style={{ color: "#c084fc" }}>input</span>
-            <span style={{ color: "#e2e8f0" }}>().split())</span>
-          </div>
+          <CodeBlock lang={lang} lines={lang === "cpp" ? [
+            "int M, N, K;",
+            "cin >> M >> N >> K;",
+          ] : [
+            "M, N, K = map(int, input().split())",
+          ]} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, whiteSpace: "pre-line" }}>
-            {t(E, "input().split() reads '2 3 2' → ['2','3','2']. map(int,\n...) converts to integers.", "input().split() 이 '2 3 2' 를 읽어서 ['2','3','2'] 로 나눠요.\nmap(int, ...) 이 이걸 정수로 바꿔요.")}
+            {lang === "cpp"
+              ? t(E, "cin >> reads the three numbers directly — no parsing needed.", "cin >> 은 세 수를 바로 정수로 읽어요. 따로 변환할 필요 없어요.")
+              : t(E, "input().split() reads '2 3 2' → ['2','3','2']. map(int,\n...) converts to integers.", "input().split() 이 '2 3 2' 를 읽어서 ['2','3','2'] 로 나눠요.\nmap(int, ...) 이 이걸 정수로 바꿔요.")}
           </div>
         </div>),
     },
@@ -477,14 +466,19 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: read the next M lines to fill the grid.", "2단계 — 다음 M 줄을 읽어서 격자를 채워요."),
+        "Step 2: read the next M lines (rows) to fill the grid.", "2단계 — 다음 M 줄(행)을 읽어서 격자를 채워요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
-            <div style={{ color: "#e2e8f0" }}>grid = []</div>
-            <div><span style={{ color: "#c084fc" }}>for </span><span style={{ color: "#e2e8f0" }}>i </span><span style={{ color: "#c084fc" }}>in </span><span style={{ color: "#c084fc" }}>range</span><span style={{ color: "#e2e8f0" }}>(M):</span></div>
-            <div style={{ color: "#e2e8f0" }}>    grid.append(<span style={{ color: "#c084fc" }}>input</span>())</div>
-          </div>
+          <CodeBlock lang={lang} lines={lang === "cpp" ? [
+            "vector<string> grid(M);",
+            "for (int i = 0; i < M; i++) {",
+            "    cin >> grid[i];",
+            "}",
+          ] : [
+            "grid = []",
+            "for i in range(M):",
+            "    grid.append(input())",
+          ]} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim }}>
             {t(E, "grid[0] = 'X.X', grid[1] = '.X.' etc.", "grid[0] 은 'X.X', grid[1] 은 '.X.' 이렇게 들어가요.")}
           </div>
@@ -509,11 +503,17 @@ export function makeCowSignalCh3(E, lang = "py") {
         "Step 3: the output loop — outer for each row, inner to repeat it K times.", "3단계 — 출력 반복문이에요. 바깥은 행마다, 안쪽은 K 번씩요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
-            <div><span style={{ color: "#c084fc" }}>for </span><span style={{ color: "#e2e8f0" }}>i </span><span style={{ color: "#c084fc" }}>in range</span><span style={{ color: "#e2e8f0" }}>(M):  </span><span style={{ color: "#6b7280" }}># each original row</span></div>
-            <div><span style={{ color: "#c084fc" }}>    for </span><span style={{ color: "#e2e8f0" }}>_ </span><span style={{ color: "#c084fc" }}>in range</span><span style={{ color: "#e2e8f0" }}>(K):  </span><span style={{ color: "#6b7280" }}># repeat K times</span></div>
-            <div style={{ color: "#e2e8f0" }}>        ...</div>
-          </div>
+          <CodeBlock lang={lang} lines={lang === "cpp" ? [
+            E ? "for (int i = 0; i < M; i++) {  // each original row" : "for (int i = 0; i < M; i++) {  // 원본 한 행마다",
+            E ? "    for (int rep = 0; rep < K; rep++) {  // repeat K times" : "    for (int rep = 0; rep < K; rep++) {  // K 번 반복",
+            "        ...",
+            "    }",
+            "}",
+          ] : [
+            E ? "for i in range(M):  # each original row" : "for i in range(M):  # 원본 한 행마다",
+            E ? "    for _ in range(K):  # repeat K times" : "    for _ in range(K):  # K 번 반복",
+            "        ...",
+          ]} />
         </div>),
     },
 
@@ -524,16 +524,29 @@ export function makeCowSignalCh3(E, lang = "py") {
         "Step 4: build each row by repeating every character K times.", "4단계 — 글자마다 K 번씩 이어 붙여서 행을 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
-            <div><span style={{ color: "#c084fc" }}>for </span><span style={{ color: "#e2e8f0" }}>i </span><span style={{ color: "#c084fc" }}>in range</span><span style={{ color: "#e2e8f0" }}>(M):</span></div>
-            <div><span style={{ color: "#c084fc" }}>    for </span><span style={{ color: "#e2e8f0" }}>_ </span><span style={{ color: "#c084fc" }}>in range</span><span style={{ color: "#e2e8f0" }}>(K):</span></div>
-            <div style={{ color: "#e2e8f0" }}>        row = <span style={{ color: "#34d399" }}>''</span></div>
-            <div><span style={{ color: "#c084fc" }}>        for </span><span style={{ color: "#e2e8f0" }}>j </span><span style={{ color: "#c084fc" }}>in range</span><span style={{ color: "#e2e8f0" }}>(N):</span></div>
-            <div style={{ color: "#e2e8f0" }}>            row += grid[i][j] * <span style={{ color: "#fbbf24" }}>K</span>  <span style={{ color: "#6b7280" }}># ← magic!</span></div>
-            <div style={{ color: "#e2e8f0" }}>        <span style={{ color: "#c084fc" }}>print</span>(row)</div>
-          </div>
+          <CodeBlock lang={lang} lines={lang === "cpp" ? [
+            "for (int i = 0; i < M; i++) {",
+            "    for (int rep = 0; rep < K; rep++) {",
+            "        for (int j = 0; j < N; j++) {",
+            E ? "            for (int k = 0; k < K; k++) {  // ← magic!" : "            for (int k = 0; k < K; k++) {  // ← 핵심!",
+            "                cout << grid[i][j];",
+            "            }",
+            "        }",
+            "        cout << \"\\n\";",
+            "    }",
+            "}",
+          ] : [
+            "for i in range(M):",
+            "    for _ in range(K):",
+            "        row = ''",
+            "        for j in range(N):",
+            E ? "            row += grid[i][j] * K  # ← magic!" : "            row += grid[i][j] * K  # ← 핵심!",
+            "        print(row)",
+          ]} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.ok, fontWeight: 700, textAlign: "center" }}>
-            {t(E, "grid[i][j] * K → repeat character K times! ✨", "grid[i][j] * K → 글자를 K번 되풀이해요! ✨")}
+            {lang === "cpp"
+              ? t(E, "Print grid[i][j] K times in a row → that's the K×K block! ✨", "grid[i][j] 를 K번 이어서 출력해요 → 그게 K×K 블록이에요! ✨")
+              : t(E, "grid[i][j] * K → repeat character K times! ✨", "grid[i][j] * K → 글자를 K번 되풀이해요! ✨")}
           </div>
         </div>),
     },

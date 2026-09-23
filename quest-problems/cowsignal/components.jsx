@@ -11,10 +11,13 @@ const A = "#8b5cf6";
    Scale-Up Sim: edit a 3×3 grid + K slider, watch live K×K expansion
    ═══════════════════════════════════════════════════════════════ */
 export function CowSignalScaleSim({ E }) {
+  /* 시작 격자는 지금까지 봐 온 예제(X.X / .X.)와 맞춘다 — 2026-09-23, 학생 지적:
+     여기가 3×3 으로 시작해서 "출력: 6×6" 이 뜨는 바람에, 앞서 본 4×6(K=2) 답과
+     헷갈릴 뻔했다고 했다. K 는 학생이 슬라이더로 계속 바꿔볼 수 있으니
+     시작값만 예제와 같은 2×3 으로 맞춘다. */
   const [grid, setGrid] = useState([
     ["X", ".", "X"],
     [".", "X", "."],
-    ["X", ".", "X"],
   ]);
   const [K, setK] = useState(2);
   const [hover, setHover] = useState({ r: 1, c: 1 });
@@ -222,6 +225,10 @@ export function getCowSignalSections(E) {
             "원래 한 칸이 그대로 K×K 블록이 돼야 해요."),
         t(E, "So repeat each row K times, and inside a row repeat each character K times.",
             "그래서 각 행을 K번 출력하고,\n그 행 안에서 글자 하나도 K번씩 늘려요."),
+        /* 2026-09-23 — 학생 지적: 3-1~3-7 은 계속 input()/cin 을 가르쳤는데
+           이 최종 코드만 갑자기 open('cowsignal.in') 을 쓰는 이유가 어디에도 없었다. */
+        t(E, "Old USACO contests used file I/O — that's why only this final code reads and writes files, instead of input()/print().",
+            "옛날 USACO 대회는 파일로 입출력을 주고받았어요 — 그래서 이 최종 코드만 input()/print() 대신 파일을 읽고 써요."),
       ],
       pyOnly: [
         t(E, "Python's map() makes the code shorter.",
