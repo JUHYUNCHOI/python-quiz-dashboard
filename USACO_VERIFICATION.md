@@ -75,7 +75,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `reverseeng` | Reverse Engineering | Dec 2022 Bronze #3 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 에 고쳐진 코드 이전**의 기록이다. 지금 코드는 돈다 — 2026-09-14 확인: `quest-meta.ts` 의 공식 샘플 **2/2 통과**(메인 세션이 직접 돌림). **다만 채점기에 재제출한 적이 없다** — 로컬 통과이지 PASS 가 아니다. | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1253) |
 | `feedcows` | Feeding the Cows | Dec 2022 Bronze #2 | ✅ 12/12 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1252) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1252) |
 | `cowcollege` | Cow College | Dec 2022 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
-| `alchemy` | Alchemy | Open 2022 Bronze #3 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 에 고쳐진 코드 이전**의 기록이다. 지금 코드는 돈다 — 2026-09-14 확인: `quest-meta.ts` 의 공식 샘플 **2/2 통과**(메인 세션이 직접 돌림). **다만 채점기에 재제출한 적이 없다** — 로컬 통과이지 PASS 가 아니다. | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1229) |
+| `alchemy` | Alchemy | Open 2022 Bronze #3 | 🟡 9/11 (재제출 2026-09-23 Python-3.6.9, cpid=1229 — **2·3번 시간 초과**. 답은 맞고 파이썬 속도만 모자라다. C++ 은 11/11) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1229) |
 | `countliars` | Counting Liars | Open 2022 Bronze #2 | 🟡 2/9 (TLE - O(10^6 * N) loop too slow) | 🟡 2/12 (TLE - same as py (p up to 10^9)) |
 | `photoshoot` | Photoshoot | Open 2022 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1227) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1227) |
 | `blocks` | Blocks | Feb 2022 Bronze #3 | ✅ 20/20 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1205) | ✅ 20/20 PASS (re-submitted 2026-06-16 C++17, cpid=1205) |
@@ -84,11 +84,11 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `drought` | Drought | Jan 2022 Bronze #3 | ✅ 15/15 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1181) | ✅ 15/15 PASS (re-submitted 2026-06-16 C++17, cpid=1181) |
 | `nontrans` | Non-Transitive Dice | Jan 2022 Bronze #2 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1180) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1180; fixed to check both cycle directions) |
 | `herdle` | Herdle | Jan 2022 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1179) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1179) |
-| `walkhome` | Walking Home | Dec 2021 Bronze #3 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 수정(커밋 `3cc7769f`, T 루프 추가) 이전**의 기록이다. 2026-09-14 확인: RTE 없이 돌고, 화면 예제(2×2, K=1 → 2)와 무작위 작은 격자 40건을 브루트포스와 대조해 불일치 0 (python-qa). **채점기 재제출은 안 했다.** | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1157) |
+| `walkhome` | Walking Home | Dec 2021 Bronze #3 | ✅ 10/10 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1157) | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1157) |
 | `aircond1` | Air Cownditioning | Dec 2021 Bronze #2 | 🔧 Py rewritten 2026-06-15 to clean diff-array (0-padded, sum of upward jumps); local-verified vs official sample (5) | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1156; fixed missing trailing 0-pad) |
 | `lonelyphoto` | Lonely Photo | Dec 2021 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1155) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1155) |
 | `acowdemia3` | Acowdemia III | Open 2021 Bronze #3 | ✅ 12/12 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1133) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1133) |
-| `acowdemia2` | Acowdemia II | Open 2021 Bronze #2 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 수정 이전**의 기록이다. 지금 코드는 이름을 문자열로 비교한다(이 문제의 동점 규칙이 그렇다) — 옛 int 변환 버그가 아니다. 2026-09-14 확인: RTE 없이 돌고 화면 샘플과 정확히 일치 (python-qa). **채점기 재제출은 안 했다.** | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1132) |
+| `acowdemia2` | Acowdemia II | Open 2021 Bronze #2 | ✅ 10/10 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1132) | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1132) |
 | `acowdemia1` | Acowdemia I | Open 2021 Bronze #1 | ❌ 13/17 (WA on cases 9,11,12,13 - edge case bug) | ❌ 13/17 (WA same edge cases as py) |
 | `clockfence` | Clockwise Fence | Feb 2021 Bronze #3 | ❌ 0/1 (RTE - missing T (test cases) parse) | ❌ 0/1 (WA - output format (counts vs CW/CCW per test)) |
 | `comfycows` | Comfortable Cows | Feb 2021 Bronze #2 | ✅ 12/12 PASS | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1108) |
