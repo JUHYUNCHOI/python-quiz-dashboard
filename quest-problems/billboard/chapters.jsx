@@ -149,7 +149,7 @@ function RectBox({ x1, y1, x2, y2, color, label, opacity = 0.3 }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (7 steps)
+   Chapter 1: 📋 문제 이해 (6 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeBillboardCh1(E) {
   return [
@@ -157,7 +157,7 @@ export function makeBillboardCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Along a road there are TWO axis-aligned rectangular billboards, plus ONE axis-aligned truck parked in front. The truck may cover parts of one or both billboards.\nThe billboards do NOT overlap each other. Print the TOTAL visible billboard area (sum across both billboards).",
+        "Two billboards, one truck parked in front — find the total visible billboard area.",
         "트럭에 가려지지 않고 보이는 광고판 면적의 합을 구해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -278,7 +278,7 @@ export function makeBillboardCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now imagine: Billboard 1 (blue), Billboard 2 (green), and a Truck (red) blocking them.\nThe truck covers part of each billboard.\nWe need the visible area!", "트럭이 두 광고판의 일부를 가려요. 보이는 면적은 얼마일까요?"),
+        "The truck covers part of each billboard — we need the area still visible.", "트럭이 두 광고판의 일부를 가려요. 보이는 면적은 얼마일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 14, padding: 14 }}>
@@ -343,22 +343,12 @@ export function makeBillboardCh1(E) {
         "(20-6) + (15-0) = 14 + 15 = 29 ✅",
         "(20-6) + (15-0) = 14 + 15 = 29 ✅"),
     },
-
-    // 1-7: Input — calculate area
-    {
-      type: "input",
-      narr: t(E,
-        "Billboard 1: (1,2) to (5,5) → area = 4×3 = 12.\nBillboard 2: (8,1) to (10,4) → area = 2×3 = 6.\nTruck overlaps 4 with billboard 1, 0 with billboard 2.\nVisible?", "광고판1 은 (1,2)에서 (5,5) 라 면적이 4×3 = 12 예요.\n광고판2 는 (8,1)에서 (10,4) 라 면적이 2×3 = 6 이에요.\n트럭은 광고판1 과 4 만큼 겹치고, 광고판2 와는 안 겹쳐요.\n보이는 면적은 얼마일까요?"),
-      question: t(E, "12 - 4 + 6 - 0 = ?", "12 - 4 + 6 - 0 = ?"),
-      hint: t(E, "8 + 6 = ?", "8 + 6 = ?"),
-      answer: 14,
-    },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 🔍 겹침 계산법 (5 steps)
+   Chapter 2: 🔍 겹침 계산법 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeBillboardCh2(E) {
   return [
@@ -405,43 +395,11 @@ export function makeBillboardCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Try it yourself! Drag any corner to resize the blue (A) and red (B) rectangles. The purple overlap and its formula update live — separate them completely and see the overlap snap to 0.",
+        "Drag any corner — watch the purple overlap update live.",
         "꼭짓점을 끌어서 두 직사각형 크기를 바꿔 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <OverlapSim E={E} />
-        </div>),
-    },
-
-    // 2-2: Concrete example trace
-    {
-      type: "reveal",
-      narr: t(E,
-        "Let's trace!\nA = (1,1)→(6,4), B = (3,2)→(8,5).\nOverlap left = max(1,3) = 3, right = min(6,8) = 6, bottom = max(1,2) = 2, top = min(4,5) = 4.", "한 번 따라가 봐요.\nA = (1,1)→(6,4), B = (3,2)→(8,5) 예요.\n겹침 왼쪽 = max(1,3) = 3, 오른쪽 = min(6,8) = 6,\n아래 = max(1,2) = 2, 위 = min(4,5) = 4 예요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {[
-              { step: t(E, "A", "A"), desc: "(1,1) → (6,4)", color: "#3b82f6" },
-              { step: t(E, "B", "B"), desc: "(3,2) → (8,5)", color: "#ef4444" },
-              { step: t(E, "left", "왼쪽"), desc: "max(1, 3) = 3", color: "#7c3aed" },
-              { step: t(E, "bottom", "아래"), desc: "max(1, 2) = 2", color: "#7c3aed" },
-              { step: t(E, "right", "오른쪽"), desc: "min(6, 8) = 6", color: "#7c3aed" },
-              { step: t(E, "top", "위"), desc: "min(4, 5) = 4", color: "#7c3aed" },
-            ].map((s, i) => (
-              <div key={i} style={{
-                background: i < 2 ? "#f8fafc" : "#ede9fe", border: `1.5px solid ${i < 2 ? C.border : "#c4b5fd"}`,
-                borderRadius: 8, padding: "8px 12px", display: "flex", justifyContent: "space-between",
-                fontSize: 13, fontFamily: "'JetBrains Mono',monospace",
-              }}>
-                <span style={{ fontWeight: 600, color: s.color }}>{s.step}</span>
-                <span style={{ color: C.text }}>{s.desc}</span>
-              </div>
-            ))}
-            <div style={{ textAlign: "center", marginTop: 8, fontSize: 15, fontWeight: 700, color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>
-              {t(E, "Overlap = (3,2)→(6,4) = 3×2 = 6", "겹침 = (3,2)→(6,4) = 3×2 = 6")}
-            </div>
-          </div>
         </div>),
     },
 
@@ -468,26 +426,16 @@ export function makeBillboardCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Your turn!\nA = (2,1)→(6,5), B = (4,3)→(8,7).\nOverlap: left=max(2,4)=4, right=min(6,8)=6, bottom=max(1,3)=3, top=min(5,7)=5.\nWidth=2, Height=2.\nOverlap area?", "이번엔 직접 해봐요.\nA = (2,1)→(6,5), B = (4,3)→(8,7) 이에요.\n왼쪽=max(2,4)=4, 오른쪽=min(6,8)=6,\n아래=max(1,3)=3, 위=min(5,7)=5 라 가로도 2, 세로도 2 예요.\n겹침 면적은 얼마일까요?"),
+        "Now find the overlap area yourself, using the same left/right/bottom/top formula.", "이번엔 직접 해봐요.\nA = (2,1)→(6,5), B = (4,3)→(8,7) 이에요.\n왼쪽=max(2,4)=4, 오른쪽=min(6,8)=6,\n아래=max(1,3)=3, 위=min(5,7)=5 라 가로도 2, 세로도 2 예요.\n겹침 면적은 얼마일까요?"),
       question: t(E, "Overlap width=2, height=2. Area?", "겹침 가로가 2, 세로가 2 예요. 면적은 얼마일까요?"),
       answer: 4,
-    },
-
-    // 2-5: Full example
-    {
-      type: "input",
-      narr: t(E,
-        "Complete problem!\nBillboard1 (1,2)→(4,5), area=9.\nBillboard2 (6,0)→(10,4), area=16.\nTruck (3,1)→(7,3).\nOverlap1 = (3,2)→(4,3) = 1×1 = 1.\nOverlap2 = (6,1)→(7,3) = 1×2 = 2.\nVisible?", "이제 문제 전체를 풀어봐요.\n광고판1 (1,2)→(4,5) 는 면적이 9 예요.\n광고판2 (6,0)→(10,4) 는 면적이 16 이에요.\n트럭은 (3,1)→(7,3) 이에요.\n겹침1 = (3,2)→(4,3) = 1×1 = 1,\n겹침2 = (6,1)→(7,3) = 1×2 = 2 예요.\n보이는 면적은 얼마일까요?"),
-      question: t(E, "(9-1) + (16-2) = ?", "(9-1) + (16-2) = ?"),
-      hint: t(E, "8 + 14 = ?", "8 + 14 = ?"),
-      answer: 22,
     },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 3: ⚡ 코드 빌드 (5 steps)
+   Chapter 3: ⚡ 코드 빌드 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeBillboardCh3(E, lang = "py") {
   return [
@@ -551,36 +499,24 @@ export function makeBillboardCh3(E, lang = "py") {
         "겹침은 두 직사각형이 모두 있는 곳에만 생겨요. A 는 x=2 부터, B 는 x=5 부터 있어요. x=2 와 x=5 사이에는 A 만 있으니 겹침은 더 늦은 x=5 에서 시작해요. 그래서 max 예요 ✅"),
     },
 
-    // 3-4: Step 3 — main code
-    {
-      type: "reveal",
-      narr: t(E,
-        "Finally: read the three rectangles, compute areas and overlaps, print the answer!", "마지막으로 세 직사각형을 읽고 면적과 겹침을 구해 답을 써요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8, whiteSpace: "pre" }}>
-            <div style={{ color: "#6b7280" }}># Read 3 rectangles (USACO 파일 I/O)</div>
-            <div style={{ color: "#e2e8f0" }}>with open('billboard.in') as file:</div>
-            <div style={{ color: "#e2e8f0" }}>{"    "}lines = file.readlines()</div>
-            <div style={{ color: "#e2e8f0" }}>x1,y1,x2,y2 = map(int, lines[0].split()) <span style={{ color: "#6b7280" }}># billboard 1</span></div>
-            <div style={{ color: "#e2e8f0" }}>x3,y3,x4,y4 = map(int, lines[1].split()) <span style={{ color: "#6b7280" }}># billboard 2</span></div>
-            <div style={{ color: "#e2e8f0" }}>x5,y5,x6,y6 = map(int, lines[2].split()) <span style={{ color: "#6b7280" }}># truck</span></div>
-            <div style={{ color: "#e2e8f0", marginTop: 8 }}>area1 = rect_area(x1,y1,x2,y2)</div>
-            <div style={{ color: "#e2e8f0" }}>area2 = rect_area(x3,y3,x4,y4)</div>
-            <div style={{ color: "#e2e8f0", marginTop: 8 }}>ov1 = overlap(x1,y1,x2,y2, x5,y5,x6,y6)</div>
-            <div style={{ color: "#e2e8f0" }}>ov2 = overlap(x3,y3,x4,y4, x5,y5,x6,y6)</div>
-            <div style={{ color: "#e2e8f0", marginTop: 8 }}>with open('billboard.out', 'w') as file:</div>
-            <div style={{ color: "#e2e8f0" }}>{"    "}file.write(str(<span style={{ color: "#fbbf24" }}>area1 - ov1 + area2 - ov2</span>) + '\n')</div>
-          </div>
-        </div>),
-    },
-
-    // 3-5: Complete code
+    // 3-4 (was 3-5): Complete code
     {
       type: "progressive",
       narr: t(E,
         "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 부분씩 읽어봐요. 위에서 Python ↔ C++ 을 바꿔 볼 수 있어요."),
-      sections: getBillboardSections(E),
+      sections: (() => {
+        const sections = getBillboardSections(E);
+        // 🔗 다리 문장 — components.jsx(🔒)의 FULL_PY/FULL_CPP 는 3-2 에서 배운
+        // max()/min() 대신 if/else 로 같은 일을 한다. 왜 그런지는 모르니 지어내지
+        // 않고, "하는 일은 같다" 는 사실만 한 줄로 알려준다.
+        sections[0].why = [
+          ...sections[0].why,
+          t(E,
+            "Here the code uses if/else instead of max()/min() — it does the same thing.",
+            "여기서는 max()/min() 대신 if/else 를 써요. 하는 일은 똑같아요."),
+        ];
+        return sections;
+      })(),
     },
   ];
 }
