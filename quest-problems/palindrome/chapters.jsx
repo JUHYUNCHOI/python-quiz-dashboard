@@ -204,8 +204,8 @@ export function makePalindromeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Build can_win[n] from 0 upward — it answers 'does the player to move at n stones win?'.  Sections build the DP one piece at a time.",
-        "can_win[n] 을 0 부터 차례로 채워요.\n'돌이 n 개 남았을 때 둘 차례인 사람이 이기나?' 에 답하는 표예요."),
+        "The small cases above already showed the rule. The code just reads the last digit — that one digit decides the whole game.",
+        "위에서 작은 수로 찾은 규칙이 답이에요.\n코드는 마지막 자리 하나만 봐요.\n그 한 자리가 승부를 정해요."),
       sections: getPalindromeSections(E),
     },
     {

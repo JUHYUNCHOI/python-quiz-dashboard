@@ -151,8 +151,8 @@ export function makeLogicalCh2(E, lang = "py") {
       type: "reveal",
       narr: i === 0
         ? t(E,
-            "Build evaluate(tokens) using the OR-of-(AND chains) idea, then per query try both replacement values.  Sections build it one piece at a time.",
-            "AND 묶음을 만들고 그걸 OR 로 합치는 evaluate(tokens) 를 짜요.\n그다음 물음마다 두 가지 값으로 바꿔 봐요.\n아래에서 한 단락씩 쌓아 올려요.")
+            "Sweep the line once forward and once backward, storing what sits before and after every token. Then each question is answered in one step.",
+            "앞에서 한 번, 뒤에서 한 번 훑으며\n토큰마다 «앞에 무엇이 있고 뒤에 무엇이 있는지» 를 담아 둬요.\n그러면 물음마다 한 걸음이면 끝나요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
