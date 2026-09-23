@@ -131,8 +131,10 @@ export function getRevEngSections(E) {
           "한 케이스에 뭐가 필요할까요? N(문자열 길이), M(줄 개수),\n그리고 길이 N 문자열과 그 출력이 짝지어진 줄 M 개예요."),
       ],
       pyOnly: [
-        t(E, "s, o = input().split() reads one row's string and output digit at once.",
-            "s, o = input().split() 로 한 줄의 문자열과 출력을 한 번에 읽어요."),
+        t(E, "The judge leaves a blank line between test cases, and input() does not\nskip it. read_line() keeps reading until a line has something on it.",
+            "채점기는 케이스 사이에 빈 줄을 넣는데, input() 은 그걸 안 건너뛰어요.\nread_line() 은 내용이 있는 줄이 나올 때까지 계속 읽어요."),
+        t(E, "Then s, o = read_line().split() takes the string and its output digit\nin one go.",
+            "그다음 s, o = read_line().split() 로 문자열과 출력을 한 번에 받아요."),
       ],
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, <string>) — keeps code clear.",
