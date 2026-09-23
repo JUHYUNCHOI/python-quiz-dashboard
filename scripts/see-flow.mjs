@@ -34,18 +34,65 @@
  *   근거: memory/feedback_intent_check_is_everyones_job.md
  */
 import { chromium } from 'playwright'
+import { execSync } from 'node:child_process'
 
 const args = process.argv.slice(2)
 const url = args[0]
 if (!url) {
-  console.error('사용법: node scripts/see-flow.mjs <url> [--lang ko|en] [--max 40]')
+  console.error('사용법: node scripts/see-flow.mjs <url> [--lang ko|en] [--max 40] [--allow-dirty]')
   process.exit(1)
 }
 const lang = args.includes('--lang') ? args[args.indexOf('--lang') + 1] : 'ko'
 const MAX = args.includes('--max') ? +args[args.indexOf('--max') + 1] : 40
 const NEXT = lang === 'en' ? 'Next →' : '다음 →'
 const SUBNEXT = lang === 'en' ? 'Next ▶' : '다음 ▶'
+const allowDirty = args.includes('--allow-dirty')
 
+/* ① 검토 파견 전 게이트 — 그 quest 가 **완전히 커밋된 상태**인지 본다.
+   see-screen.mjs 와 같은 이유·같은 모양이다 (거기 주석이 원본, 여기는 사본).
+   왜 (2026-09-23): cowsignal·strangefn — 검토자·학생이 **커밋 전** 화면을 보고
+   틀린 결함/틀린 숫자를 보고했다. PM: "편집이 끝나기 전에 리뷰어를 보냈다."
+   빠져나갈 문: `--allow-dirty` (쓰면 막지 않되 크게 떠든다). */
+function gateOnUncommittedQuest(rawUrl, bypass) {
+  const m = /\/quest\/([a-zA-Z0-9_-]+)/.exec(rawUrl || '')
+  if (!m) return
+  const id = m[1]
+  const dir = `quest-problems/${id}/`
+  let out
+  try {
+    out = execSync(`git status --porcelain -- ${JSON.stringify(dir)}`, { encoding: 'utf8' })
+  } catch {
+    return
+  }
+  if (!out.trim()) return
+  const lines = out.trim().split('\n')
+  if (bypass) {
+    console.error(`\n⚠️⚠️⚠️  ${id} 가 아직 커밋되지 않았다 — --allow-dirty 로 그대로 본다.`)
+    lines.forEach((l) => console.error(`    ${l}`))
+    console.error('    지금 보는 이야기 흐름은 최종본이 아닐 수 있다.')
+    console.error('    보고에 "커밋 전 상태로 봤다" 고 적어라.\n')
+    return
+  }
+  console.error(`\n🚨 ${id} 가 아직 커밋되지 않았다 — 이 화면을 검토자·학생에게 보이지 마라.`)
+  lines.forEach((l) => console.error(`    ${l}`))
+  console.error(`\n   git status --porcelain -- ${dir}`)
+  console.error('   커밋을 마치고 다시 돌리거나, 방금 고친 걸 미리 보려면 --allow-dirty 를 붙여라.')
+  console.error('   (cowsignal·strangefn 사고 — 편집 중 화면을 검토자가 그대로 본 것. 2026-09-23)\n')
+  process.exit(3)
+}
+gateOnUncommittedQuest(url, allowDirty)
+
+/* ② HMR 재시도 — see-screen.mjs 와 같은 이유·같은 모양이다 (거기 주석이 원본).
+   Turbopack 이 저장 중인 파일을 읽으면 깨진 청크(`SyntaxError: Invalid or unexpected
+   token`)를 낸다. 막지 않고 2~3초 뒤 재시도, 그래도 안 없어지면 exit 3. */
+const HMR_NOISE_RX = /SyntaxError: Invalid or unexpected token|\[Fast Refresh\] rebuilding|ChunkLoadError|Loading chunk [\w.-]* failed|Failed to fetch dynamically imported module/
+function attachHmrWatch(p) {
+  const state = { lastAt: 0, count: 0 }
+  const mark = () => { state.lastAt = Date.now(); state.count++ }
+  p.on('pageerror', (e) => { if (HMR_NOISE_RX.test(e.message)) mark() })
+  p.on('console', (msg) => { if (HMR_NOISE_RX.test(msg.text())) mark() })
+  return state
+}
 
 /* 화면이 **실제로 그려질 때까지** 기다린다.
    ⚠️ 왜 (2026-09-17): 여러 명이 동시에 돌려 dev 서버가 밀리면 렌더가 고정 대기(4.5초)보다
@@ -53,11 +100,27 @@ const SUBNEXT = lang === 'en' ? 'Next ▶' : '다음 ▶'
       찍는다. 그날 담당자 여럿이 각자 참을성 있는 워커를 따로 짜서야 알아챘다.
       고정 대기는 **조용히 틀린 답**을 만든다 — 글자 수가 멈출 때까지 기다리고,
       끝내 안 뜨면 **크게 떠들고 exit 3** 으로 끝낸다. */
-async function waitForRender(p, label = '') {
+async function waitForRender(p, label = '', hmr = null) {
   const DEADLINE = 90000, MIN_CHARS = 160, STABLE_NEEDED = 3
+  const HMR_QUIET_MS = 2500, HMR_RETRY_GAP = 2500, HMR_RETRY_MAX = 6
   const t0 = Date.now()
-  let last = -1, stable = 0
+  let last = -1, stable = 0, hmrRetries = 0
   while (Date.now() - t0 < DEADLINE) {
+    // 방금(2.5초 안에) HMR 노이즈가 찍혔으면 지금 읽는 글자는 못 믿는다 — see-screen.mjs 참고.
+    if (hmr && hmr.lastAt && Date.now() - hmr.lastAt < HMR_QUIET_MS) {
+      if (hmrRetries >= HMR_RETRY_MAX) {
+        console.error(`\n🚨 ${label || '화면'} — HMR 노이즈(깨진 청크)가 ${HMR_RETRY_MAX}번 재시도 뒤에도 안 없어졌다.`)
+        console.error('   다른 사람이 이 quest 파일을 계속 저장하고 있을 수 있다. 잠시 뒤 다시 돌려라.')
+        process.exitCode = 3
+        return last
+      }
+      hmrRetries++
+      console.error(`   ⏳ HMR 재컴파일 신호(Turbopack 이 저장 중인 파일을 읽음) — 2.5초 뒤 재시도 (${hmrRetries}/${HMR_RETRY_MAX})`)
+      await p.waitForTimeout(HMR_RETRY_GAP)
+      try { await p.reload({ waitUntil: 'domcontentloaded' }) } catch {}
+      last = -1; stable = 0
+      continue
+    }
     let n = 0
     try {
       n = await p.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').trim().length)
@@ -81,15 +144,19 @@ async function waitForRender(p, label = '') {
 const b = await chromium.launch()
 const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } })
 const p = await ctx.newPage()
+const hmr = attachHmrWatch(p)
 const errs = []
-p.on('pageerror', (e) => errs.push(e.message))
+// ⚠️ HMR 노이즈(깨진 청크)는 여기서 **빼야** 한다 — waitForRender 가 이미 그걸 보고
+//    재시도한다. 안 빼면 재시도로 회복한 뒤에도 "페이지 에러 N건" 으로 다시 보고돼서
+//    진짜 페이지 에러가 노이즈 속에 묻힌다.
+p.on('pageerror', (e) => { if (!HMR_NOISE_RX.test(e.message)) errs.push(e.message) })
 
 try {
   await p.goto(url, { waitUntil: 'domcontentloaded' })
-  await waitForRender(p, url)
+  await waitForRender(p, url, hmr)
   await p.evaluate((l) => localStorage.setItem('language', l), lang)
   await p.reload({ waitUntil: 'domcontentloaded' })
-  await waitForRender(p, url)
+  await waitForRender(p, url, hmr)
 
   console.log(`\n=== ${url} (${lang}) — 이야기 전체 ===\n`)
   console.log('   쪽   위치     이 쪽이 하는 말')

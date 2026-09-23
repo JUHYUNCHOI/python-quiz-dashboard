@@ -37,15 +37,78 @@
  * ⚠️ --progress 로 옮긴 진도는 **끝나면 지운다** (선생님 진도가 아니다). 자동으로 지운다.
  */
 import { chromium } from 'playwright'
+import { execSync } from 'node:child_process'
 
 const args = process.argv.slice(2)
 const url = args[0]
-if (!url) { console.error('사용법: node scripts/see-screen.mjs <url> [--mobile] [--progress 45:1:1] [--shot out.png]'); process.exit(1) }
+if (!url) { console.error('사용법: node scripts/see-screen.mjs <url> [--mobile] [--progress 45:1:1] [--shot out.png] [--allow-dirty]'); process.exit(1) }
 const mobile = args.includes('--mobile')
 const prog = args[args.indexOf('--progress') + 1]
 const shot = args.includes('--shot') ? args[args.indexOf('--shot') + 1] : null
+const allowDirty = args.includes('--allow-dirty')
 const vp = mobile ? { width: 375, height: 812 } : { width: 1280, height: 900 }
 
+/* ① 검토 파견 전 게이트 — 그 quest 가 **완전히 커밋된 상태**인지 본다.
+   왜 (2026-09-23): 검토자·학생이 「그 quest」의 **커밋 전** 화면을 보고 결함을 보고했다.
+     - cowsignal — 학생이 "vector<string> 설명이 최종 코드 쪽에 없다" 고 했는데, 있었다.
+     - strangefn — 학생이 표 캡션·시뮬 수정 **전** 화면을 보고 숫자를 보고했다.
+   PM: "이건 레이스가 아니라 순서 문제다 — 편집이 끝나기 전에 리뷰어를 보냈다."
+   ⚠️ 이 검사를 **새 스크립트로 따로 만들지 않고 여기 박아 둔 이유**: 검토자·학생
+      에이전트가 quest 를 볼 때 반드시 거치는 문이 이미 `see-screen.mjs`/`see-flow.mjs`
+      다(CLAUDE.md "반드시 거치는 문"). 따로 만들면 "먼저 이거 돌려라" 를 또 잊는다 —
+      이 저장소에서 이미 여러 번 겪은 실패 모양이다(문서만 있고 검사 항목이 아니면 샌다).
+   ⚠️ 빠져나갈 문: `--allow-dirty` — 방금 고친 걸 미리 보고 싶을 때 쓴다. 쓰면 **막지 않되
+      크게 떠든다** — 검토자가 "커밋 전 상태로 봤다" 는 걸 보고에 적게 만들기 위해서다. */
+function gateOnUncommittedQuest(rawUrl, bypass) {
+  const m = /\/quest\/([a-zA-Z0-9_-]+)/.exec(rawUrl || '')
+  if (!m) return   // quest 화면이 아니면 이 게이트는 상관없다
+  const id = m[1]
+  const dir = `quest-problems/${id}/`
+  let out
+  try {
+    // ⚠️ --porcelain 은 스테이징 여부와 무관하게 잡는다 (M/A/D/R + 추적 안 된 ?? 전부).
+    //    "스테이징된 것과 안 된 것을 구분하라" 는 지시는 "둘 다 잡아야 한다" 는 뜻으로
+    //    읽었다 — 검토자에게는 둘 다 "아직 최종본이 아니다".
+    out = execSync(`git status --porcelain -- ${JSON.stringify(dir)}`, { encoding: 'utf8' })
+  } catch {
+    return   // git 을 못 읽으면(저장소 밖 등) 이 검사는 그냥 건너뛴다 — 필수 인프라가 아니다
+  }
+  if (!out.trim()) return
+  const lines = out.trim().split('\n')
+  if (bypass) {
+    console.error(`\n⚠️⚠️⚠️  ${id} 가 아직 커밋되지 않았다 — --allow-dirty 로 그대로 본다.`)
+    lines.forEach((l) => console.error(`    ${l}`))
+    console.error('    지금 보는 화면은 최종본이 아닐 수 있다.')
+    console.error('    보고에 "커밋 전 상태로 봤다" 고 적어라.\n')
+    return
+  }
+  console.error(`\n🚨 ${id} 가 아직 커밋되지 않았다 — 이 화면을 검토자·학생에게 보이지 마라.`)
+  lines.forEach((l) => console.error(`    ${l}`))
+  console.error(`\n   git status --porcelain -- ${dir}`)
+  console.error('   커밋을 마치고 다시 돌리거나, 방금 고친 걸 미리 보려면 --allow-dirty 를 붙여라.')
+  console.error('   (cowsignal·strangefn 사고 — 편집 중 화면을 검토자가 그대로 본 것. 2026-09-23)\n')
+  process.exit(3)
+}
+gateOnUncommittedQuest(url, allowDirty)
+
+/* ② HMR 재시도 — Turbopack 이 "저장 중인"(반쯤 써진) 파일을 읽으면 깨진 청크를 낸다.
+   왜 (2026-09-23): 다른 사람이 quest 파일을 고치는 동안 이 도구를 돌리면
+     `Uncaught SyntaxError: Invalid or unexpected token` 이 순간적으로 뜬다.
+     원인 확인됨 — Turbopack 이 저장 중인 파일을 읽어 HMR 청크를 만들어서다.
+     프로덕션은 정적 청크를 미리 굳혀서 구조적으로 면역이다(오늘 확인).
+   PM: "전면 직렬화(한 번에 한 quest 만 편집)는 오늘의 병렬 처리량을 죽이는 과잉 대응이다."
+   → **막지 않고 재시도**한다. 노이즈가 잡히면 결함으로 보고하지 않고 2~3초 뒤 재시도,
+     그래도 안 없어지면(아래 waitForRender 안에서) 크게 떠들고 exit 3 — **조용히 무시하지 않는다.**
+   ⚠️ 이 저장소엔 "고정 대기가 조용히 틀린" 전례가 있다(빈 화면을 읽고 "이상 없음" 을 찍음).
+      그래서 시간이 아니라 **신호(콘솔·pageerror 에 실제로 그 문구가 찍혔나)** 를 본다. */
+const HMR_NOISE_RX = /SyntaxError: Invalid or unexpected token|\[Fast Refresh\] rebuilding|ChunkLoadError|Loading chunk [\w.-]* failed|Failed to fetch dynamically imported module/
+function attachHmrWatch(p) {
+  const state = { lastAt: 0, count: 0 }
+  const mark = () => { state.lastAt = Date.now(); state.count++ }
+  p.on('pageerror', (e) => { if (HMR_NOISE_RX.test(e.message)) mark() })
+  p.on('console', (msg) => { if (HMR_NOISE_RX.test(msg.text())) mark() })
+  return state
+}
 
 /* 화면이 **실제로 그려질 때까지** 기다린다.
    ⚠️ 왜 (2026-09-17): 여러 명이 동시에 돌려 dev 서버가 밀리면 렌더가 고정 대기(4.5초)보다
@@ -53,11 +116,30 @@ const vp = mobile ? { width: 375, height: 812 } : { width: 1280, height: 900 }
       찍는다. 그날 담당자 여럿이 각자 참을성 있는 워커를 따로 짜서야 알아챘다.
       고정 대기는 **조용히 틀린 답**을 만든다 — 글자 수가 멈출 때까지 기다리고,
       끝내 안 뜨면 **크게 떠들고 exit 3** 으로 끝낸다. */
-async function waitForRender(p, label = '') {
+async function waitForRender(p, label = '', hmr = null) {
   const DEADLINE = 90000, MIN_CHARS = 160, STABLE_NEEDED = 3
+  const HMR_QUIET_MS = 2500, HMR_RETRY_GAP = 2500, HMR_RETRY_MAX = 6
   const t0 = Date.now()
-  let last = -1, stable = 0
+  let last = -1, stable = 0, hmrRetries = 0
   while (Date.now() - t0 < DEADLINE) {
+    // 방금(2.5초 안에) HMR 노이즈가 찍혔으면 — 지금 읽는 글자는 못 믿는다.
+    // "안정됐다" 로 보일 수 있는데(서버가 마지막 좋은 렌더를 그대로 들고 있거나,
+    // 깨진 청크 때문에 하이드레이션이 멈춘 화면이 그대로 굳은 것) 그게 더 위험하다 —
+    // 조용히 "성공" 으로 리턴해버리면 깨진 화면을 멀쩡하다고 보고하게 된다.
+    if (hmr && hmr.lastAt && Date.now() - hmr.lastAt < HMR_QUIET_MS) {
+      if (hmrRetries >= HMR_RETRY_MAX) {
+        console.error(`\n🚨 ${label || '화면'} — HMR 노이즈(깨진 청크)가 ${HMR_RETRY_MAX}번 재시도 뒤에도 안 없어졌다.`)
+        console.error('   다른 사람이 이 quest 파일을 계속 저장하고 있을 수 있다. 잠시 뒤 다시 돌려라.')
+        process.exitCode = 3
+        return last
+      }
+      hmrRetries++
+      console.error(`   ⏳ HMR 재컴파일 신호(Turbopack 이 저장 중인 파일을 읽음) — 2.5초 뒤 재시도 (${hmrRetries}/${HMR_RETRY_MAX})`)
+      await p.waitForTimeout(HMR_RETRY_GAP)
+      try { await p.reload({ waitUntil: 'domcontentloaded' }) } catch {}
+      last = -1; stable = 0
+      continue
+    }
     let n = 0
     try {
       n = await p.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').trim().length)
@@ -81,6 +163,7 @@ async function waitForRender(p, label = '') {
 const b = await chromium.launch()
 const ctx = await b.newContext({ viewport: vp })
 const p = await ctx.newPage()
+const hmr = attachHmrWatch(p)
 await p.goto(url, { waitUntil: 'domcontentloaded' })
 
 let progKey = null
@@ -90,14 +173,14 @@ if (args.includes('--progress')) {
   await p.evaluate(([k, c, s]) => localStorage.setItem(k, JSON.stringify({ chapter: +c, step: +s, completed: [] })), [progKey, ch, st])
   await p.reload({ waitUntil: 'domcontentloaded' })
 }
-await waitForRender(p, url)
+await waitForRender(p, url, hmr)
 await settleTyping(p)
 
 // --lang ko|en: 화면 언어를 정해서 연다 (모바일은 언어 버튼이 메뉴 안이라 못 누른다)
 if (args.includes('--lang')) {
   const L = args[args.indexOf('--lang') + 1]
   await p.evaluate(l => localStorage.setItem('language', l), L)
-  await p.reload({ waitUntil: 'domcontentloaded' }); await waitForRender(p, url)
+  await p.reload({ waitUntil: 'domcontentloaded' }); await waitForRender(p, url, hmr)
 }
 
 // 내레이션은 한 글자씩 타이핑된다 (components/quest/shared.tsx useTyping, 28ms/글자).
