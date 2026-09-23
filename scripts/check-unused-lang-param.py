@@ -93,7 +93,14 @@ MONO_MARK = re.compile(r"JetBrains Mono|monospace")
 HAND_COLORED_LINE = re.compile(r'<(?:span|div)\s+style=\{\{\s*color:\s*"#')
 RAW_CODE_SYNTAX = re.compile(
     r"\brange\(|cin\s*>>|cout\s*<<|#include|int\s+main|for\s*\(|for \w+ in |"
-    r"for _ in |\bdef \w+\(|\breturn\b|\bprint\(|\bwhile\s*\("
+    r"for _ in |\bdef \w+\(|\bprint\(|\bwhile\s*\(|with open\("
+    # ⚠️ 2026-09-23: `\breturn\b` 을 여기서 뺐다 — JS 컴포넌트 본문의 `return (<div>...)`
+    # 까지 "코드 문법" 으로 세서 오탐의 절반 이상을 만들었다(hps17·oddphotos·
+    # bovgenomics·acowdemia3·outofplace 등). def/print/range/for-in/cin/cout 같은
+    # 더 구체적인 신호로도 실제 코드 블록은 충분히 잡힌다.
+    # `with open(` 을 대신 추가했다 — USACO 파일 I/O quest(sqpasture·billboard)의
+    # 실제 버그는 `return` 없이 이 토큰 하나로만 코드 문법 2개 문턱을 넘겼었다.
+    # `with open(` 을 빼버리면 그 두 quest 의 수정 전 버전조차 안 걸린다(실측 확인).
 )
 
 

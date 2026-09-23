@@ -46,6 +46,18 @@ def ko(m):
 def norm(s):
     return re.sub(r"[\s\(\)\[\]'\",.·—–\-!?]+", "", s)
 
+def ko_opts(s):
+    """options: [...] 안의 보기 텍스트만 뽑는다.
+    t(E,"영어","한국어") 로 감싼 보기는 한국어를, **번역 없이 그냥 "9" 처럼
+    적은 보기**(숫자 답에 흔하다)는 문자열 자체를 답으로 쓴다.
+    ⚠️ 2026-09-23: cowsignal 의 옛 퀴즈가 `options: ["9","3","6","12"]` 처럼
+    t(E,...) 없이 순수 문자열 배열이었다 — 기존 ko() 는 이걸 0개로 읽어서
+    스포일러 검사 자체가 통째로 건너뛰어졌다(정답 인덱스가 범위 밖으로 보임)."""
+    pairs = re.findall(r't\(E,\s*"((?:[^"\\]|\\.)*)"\s*,\s*"((?:[^"\\]|\\.)*)"', s)
+    if pairs:
+        return [b for a, b in pairs]
+    return re.findall(r'"((?:[^"\\]|\\.)*)"', s)
+
 # 사람이 보고 "이건 설정이지 답이 아니다" 라고 판정한 자리. 이유를 꼭 적어라.
 # 계속 울리는 헛경보를 두면 아무도 이 검사기를 안 본다.
 ALLOW = {
@@ -74,7 +86,7 @@ for f in quest_files():
         opts = re.search(r"options:\s*\[(.*?)\]", blk, re.S)
         cor = re.search(r"correct:\s*(\d+)", blk)
         if not (opts and cor): continue
-        o = ko(opts.group(1))
+        o = ko_opts(opts.group(1))
         i = int(cor.group(1))
         if i >= len(o): continue
         ans = norm(o[i])
@@ -90,6 +102,19 @@ for f in quest_files():
         # 짧은 답은 **결론 자리**("= 3", "최선 3", "정답 3", "답은 3")에 있을 때만 신고한다.
         # 그냥 숫자가 스쳐 지나가는 건 문제 설정일 수 있어서다.
         if len(ans) <= 3 and re.search(r"(?:=|최선|정답|답은)\s*" + re.escape(ans) + r"(?![0-9])", narr):
+            hits.append((f.split("/")[1], o[i][:44], n.group(1)[:60]))
+            continue
+        # 정답이 숫자 하나뿐이고, narr 안에 그 숫자가 **세는 말**(개·번·줄·가지·명…)을
+        # 바로 달고 그대로 나오면 — 결론꼴("=·최선·정답·답은")이 아니어도 스포일러다.
+        # 2026-09-23: cowsignal "같은 글자가 9개예요!" / 정답 "9" 가 이 모양이었는데
+        # 위 결론꼴 검사엔 안 걸렸다(narr 이 서술문이라 "=" 도 "정답" 도 없었다).
+        # ⚠️ 처음엔 숫자 뒤에 아무 한글이나 오면 잡았더니 "소1을"("소1" = Cow 1 이라는
+        # **번호표**, "을" 은 목적격 조사) 같은 걸 오탐으로 잡았다(photoshoot2).
+        # "을/는/이/가/의/에…" 같은 조사가 아니라 **실제로 세는 말**일 때만 세게 좁혔다.
+        COUNTER = r"(?:개|번째|번|줄|가지|명|살|마리|칸|자리|시간|분|초|배|쌍|조각|그룹|층|개월|년|일|회)"
+        if re.fullmatch(r"-?\d+", ans) and re.search(
+            r"(?<!\d)" + re.escape(ans) + r"(?!\d)" + COUNTER, narr
+        ):
             hits.append((f.split("/")[1], o[i][:44], n.group(1)[:60]))
             continue
         # 정답 보기 안의 "= 숫자" 가 내레이션에도 그대로 있나.
@@ -118,7 +143,7 @@ for f in quest_files():
         c = re.search(r"correct:\s*(\d+)", blk)
         if not (o and c):
             continue
-        opts = ko(o.group(1))
+        opts = ko_opts(o.group(1))
         i = int(c.group(1))
         if i >= len(opts) or len(opts) < 3:
             continue
@@ -161,7 +186,7 @@ for f in quest_files():
         c = re.search(r"correct:\s*(\d+)", p)
         if not (o and c):
             continue
-        opts = ko(o.group(1))
+        opts = ko_opts(o.group(1))
         k = int(c.group(1))
         if k >= len(opts):
             continue
