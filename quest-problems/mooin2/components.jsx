@@ -507,11 +507,8 @@ export function Mooin2Runner() { return null; }
    ════════════════════════════════════════════════════════════════════ */
 
 const M2_S1_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "a = [int(data[1 + i]) for i in range(N)]",
+  "N = int(input())",
+  "a = list(map(int, input().split()))",
 ];
 const M2_S1_CPP = [
   "#include <iostream>",
@@ -585,11 +582,8 @@ const M2_S3_CPP = (E) => [
 ];
 
 const M2_FULL_PY = (E) => [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "a = [int(data[1 + i]) for i in range(N)]",
+  "N = int(input())",
+  "a = list(map(int, input().split()))",
   "",
   t(E, "# memo[i] = distinct values before i that DIFFER from a[i]  (= x candidates)",
        "# memo[i] = i 앞의 '서로 다른 값' 중 a[i] 와 다른 것의 개수  (= x 후보 수)"),

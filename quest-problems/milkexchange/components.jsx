@@ -16,17 +16,9 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 const FULL_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "N = int(data[p])",
-  "p += 1",
-  "M = int(data[p])",
-  "p += 1",
-  "S = data[p]               # direction string, e.g. 'RRL'",
-  "p += 1",
-  "cap = [int(x) for x in data[p:p + N]]",
+  "N, M = map(int, input().split())",
+  "S = input()               # direction string, e.g. 'RRL'",
+  "cap = list(map(int, input().split()))",
   "",
   "# A boundary is an 'R' cow right before an 'L' cow —",
   "# S[i] == 'R' and S[i + 1] == 'L'.",

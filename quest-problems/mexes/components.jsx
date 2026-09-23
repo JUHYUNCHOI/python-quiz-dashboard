@@ -137,11 +137,8 @@ export function MexesRunner() { return null; }
    ════════════════════════════════════════════════════════════════════ */
 
 const MEX_S1_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "a = [int(data[1 + i]) for i in range(N)]",
+  "N = int(input())",
+  "a = list(map(int, input().split()))",
 ];
 const MEX_S1_CPP = [
   "#include <iostream>",
@@ -199,11 +196,8 @@ const MEX_S3_CPP = [
 ];
 
 const MEX_FULL_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "a = [int(data[1 + i]) for i in range(N)]",
+  "N = int(input())",
+  "a = list(map(int, input().split()))",
   "",
   "cnt = [0] * (N + 2)",
   "for x in a:",

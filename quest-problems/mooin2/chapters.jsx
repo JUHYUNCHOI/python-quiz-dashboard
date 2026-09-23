@@ -190,10 +190,8 @@ export function makeMooin2Ch2(E, lang = "py") {
   // Brute split into 3 build-up pieces (read → loops → check) so the code
   // is never dumped all at once.
   const bruteReadPy = [
-    "import sys",
-    "data = sys.stdin.read().split()",
-    "N = int(data[0])",
-    "a = [int(data[1 + i]) for i in range(N)]",
+    "N = int(input())",
+    "a = list(map(int, input().split()))",
   ];
   const bruteLoopPy = [
     t(E, "seen = set()                       # distinct (x, y) moos", "seen = set()                       # 서로 다른 (x, y) moo 모음"),

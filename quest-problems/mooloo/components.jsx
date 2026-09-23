@@ -167,11 +167,8 @@ export function MoolooMergeSim({ E }) {
 }
 
 const FULL_PY = [
-  "import sys",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "K = int(data[1])",
-  "days = sorted(int(x) for x in data[2:2 + N])",
+  "N, K = map(int, input().split())",
+  "days = sorted(map(int, input().split()))",
   "",
   "total_cost = 0",
   "i = 0",

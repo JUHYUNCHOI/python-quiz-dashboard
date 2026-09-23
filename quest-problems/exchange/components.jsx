@@ -22,17 +22,9 @@ const A = "#2563eb";
    Real Milk Exchange (USACO 2024 Feb Bronze #2).
    ────────────────────────────────────────────────────────────── */
 const FULL_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "N = int(data[p])",
-  "p += 1",
-  "M = int(data[p])",
-  "p += 1",
-  "S = data[p]               # direction string, e.g. 'RRL'",
-  "p += 1",
-  "cap = [int(x) for x in data[p:p + N]]",
+  "N, M = map(int, input().split())",
+  "S = input()               # direction string, e.g. 'RRL'",
+  "cap = list(map(int, input().split()))",
   "",
   "# A boundary is an 'R' cow right before an 'L' cow —",
   "# S[i] == 'R' and S[i + 1] == 'L'.",
@@ -128,20 +120,17 @@ export function getExchangeSections(E) {
     {
       label: t(E, "1️⃣ Take in the values", "1️⃣ 값 받기"),
       color: A,
-      py: FULL_PY.slice(0, 11), cpp: FULL_CPP.slice(0, 22),
+      py: FULL_PY.slice(0, 3), cpp: FULL_CPP.slice(0, 22),
       why: [
         t(E, "What do we need before we can follow the milk? N, M, the direction string, and each cow's capacity. So read those first — each cow starts full.",
             "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 각 소의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 가득 찬 채로 시작해요."),
       ],
-      pyOnly: [
-        t(E, "sys.stdin.read().split() grabs every token at once — fast for big inputs.",
-            "sys.stdin.read().split() 으로 입력을 한 번에 다 읽어요. 입력이 크면 이 편이 빨라요."),
-      ],
+      pyOnly: [],
     },
     {
       label: t(E, "2️⃣ Find the leaking chains", "2️⃣ 새는 줄기 찾기"),
       color: "#0891b2",
-      py: FULL_PY.slice(11, 20), cpp: FULL_CPP.slice(22, 35),
+      py: FULL_PY.slice(3, 12), cpp: FULL_CPP.slice(22, 35),
       why: [
         t(E, "Passing milk minute by minute is what the problem describes, but M can be 10^9 — doing that M times is far too slow, in Python or C++. So instead of replaying every minute, find where milk is actually lost.",
             "매분 우유를 넘기는 게 문제 그대로의 방식이지만, M 이 최대 10^9 라\nM번을 그대로 반복하면 파이썬이든 C++ 이든 너무 느려요.\n그러니 매분을 따라가는 대신, 우유가 실제로 어디서 사라지는지를 찾아요."),
@@ -152,7 +141,7 @@ export function getExchangeSections(E) {
     {
       label: t(E, "3️⃣ Add it up", "3️⃣ 합산 출력"),
       color: "#16a34a",
-      py: FULL_PY.slice(20), cpp: FULL_CPP.slice(35),
+      py: FULL_PY.slice(12), cpp: FULL_CPP.slice(35),
       why: [
         t(E, "Start from the total milk, then for each boundary walk its 'R' run (or 'L' run) and subtract min(chainSum, M) — the milk that chain leaks in M minutes, capped at what it actually has. O(N) overall, so N=2·10^5 / M=10^9 runs instantly.",
             "전체 우유량에서 시작해서, 경계마다 그 'R' 줄기(또는 'L' 줄기)를 따라가며\nmin(chainSum, M) 을 빼요 — M분 동안 그 줄기가 흘려보내는 양인데,\n가진 양을 넘을 순 없으니 M 과 비교해 작은 쪽을 써요.\n전체가 O(N) 이라 N=2·10^5, M=10^9 도 바로 끝나요."),
