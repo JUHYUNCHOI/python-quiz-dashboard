@@ -19,7 +19,18 @@
   · pages       — `type: "..."` 개수. 학생 화면의 스텝 객체 하나 = 페이지 하나.
                   (MooHuntApp.jsx 류 러너가 `steps[cur]` 로 그 배열을 그대로 넘긴다 —
                   실측: 180개 중 178개가 `type:` 개수와 `narr:` 개수가 정확히 같다.)
-  · quiz_input  — `type: "quiz"` + `type: "input"` 개수. 「퀴즈 많고」 를 직접 잰다.
+  · quiz_input  — `type: "quiz"` + `type: "input"` 개수
+                  + **`<NumInput` · `<Quiz` JSX 태그 등장 횟수** (2026-09-23 확장).
+                  「퀴즈 많고」 를 직접 잰다.
+
+  ⚠️ 2026-09-23 왜 넓혔나 — `strangefn` 은 reveal 스텝 안에 `<NumInput>` 을
+    다섯 개 박아 써서 `type: "quiz"/"input"` 이 하나도 안 잡혔다. 선생님이
+    «퀴즈 많다» 고 하신 바로 그 quest 가 **quiz_input: 0** 으로 나왔다 —
+    검사기가 하필 이 건을 못 잡는 구멍이었다.
+    실측(2026-09-23): `<NumInput`·`<Quiz` 태그가 `chapters.jsx` 에 있는 quest 는
+    180개 중 **strangefn 하나뿐**이다(`<Quiz` 는 컴포넌트로 쓰이는 자리가
+    없고 주석("Quiz")뿐이라 안 걸린다). 그래서 이 확장으로 값이 바뀐 quest 는
+    strangefn 하나 — `quiz_input: 0 → 5`. 다른 179개는 그대로다.
 
 ⚠️ **글자 수는 일부러 안 넣는다.** 이 저장소는 WHY 주석을 강하게 요구한다
   (CLAUDE.md 곳곳 · 이 파일 자체가 그 증거). 파일 전체 한글 글자 수를 재면
@@ -66,6 +77,9 @@ SNAPSHOT_PATH = ROOT / "scripts" / "quest-length-snapshot.json"
 
 TYPE_RE = re.compile(r'type:\s*"([A-Za-z0-9_-]+)"')
 HANGUL_RE = re.compile(r"[가-힣]")
+# 2026-09-23: type: "quiz"/"input" 스텝 밖에서 쓰는 퀴즈성 JSX 태그도 센다.
+# (strangefn 이 reveal 스텝 안에 <NumInput> 을 박아 써서 type: 카운트가 0 으로 나온 구멍)
+NUMQUIZ_TAG_RE = re.compile(r"<(?:NumInput|Quiz)\b")
 
 
 def all_quest_ids():
@@ -84,6 +98,7 @@ def measure_static(qid):
     types = TYPE_RE.findall(text)
     pages = len(types)
     quiz_input = sum(1 for t in types if t in ("quiz", "input"))
+    quiz_input += len(NUMQUIZ_TAG_RE.findall(text))
     korean_chars = len(HANGUL_RE.findall(text))  # 참고용, 판정에는 안 씀 (주석 섞임)
     return {"pages": pages, "quiz_input": quiz_input, "korean_chars_ref": korean_chars}
 

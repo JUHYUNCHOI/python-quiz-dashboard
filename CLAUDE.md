@@ -97,6 +97,12 @@ python3 scripts/check-quest-length-regression.py <id>         # 고친 뒤 쪽 �
                                                             #   → 절대 상한 대신 **직전 기록보다 늘면 크게 떠든다.**
                                                             #   스냅샷=`scripts/quest-length-snapshot.json`(커밋됨). PM 승인된
                                                             #   늘림은 `--accept <id>` 로만 기준선을 올린다(자동으로는 안 됨).
+                                                            #   ⚠️ 2026-09-23 넓힘: `quiz_input` 은 원래 `type: "quiz"/"input"`
+                                                            #   만 셌다. `strangefn` 은 reveal 스텝 안에 `<NumInput>` 을 다섯 개
+                                                            #   박아 써서 **선생님이 «퀴즈 많다» 하신 바로 그 quest 가 0건**으로
+                                                            #   나왔다 — 하필 이 건을 못 잡는 구멍이었다. `<NumInput`·`<Quiz`
+                                                            #   JSX 태그 등장 횟수도 더한다(실측: 180개 중 바뀐 건 strangefn
+                                                            #   하나, `quiz_input: 0→5`, 5개 다 눈으로 대조함 — 오탐 0건).
 python3 scripts/check-word-difficulty.py <id>                # 어려운 말 · 같은 것 다른 이름 · 번역 티
 python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장 여러 개
 python3 scripts/check-narr-length.py <id>                    # 파란 내레이션 바 길이 — **narr 는 이걸로 잰다**
@@ -457,6 +463,22 @@ quest 172개를 고치는 일에서 **27개를 끝내고 "이어서 돌릴까요
 > `memory/feedback_no_more_deploy.md`
 > ⚠️ 라이브는 Vercel 프로젝트 `coderin` 인데 이 디렉터리 `.vercel` 링크는 다른 곳을 가리킨다.
 > 그냥 배포하면 라이브가 안 바뀐다. 정확한 명령은 `memory/infra_vercel_coderin_deploy.md`.
+
+### 🚧 quest 하나를 하루에 너무 많이 고치면 **커밋 자체가 막힌다**
+
+> 왜 (2026-09-23): `strangefn` 하나를 오늘 여덟 라운드 고쳤다 — 라운드마다
+> 「고치고 → 학생 붙이고 → 또 고치고」를 **PM 판정 없이** 돌렸고 10쪽 → 17쪽이 됐다.
+> 선생님: *"야! 자꾸 왜 이 상황이 되는거지?"* PM: *"오늘 아침에 만든 원칙이 오늘
+> 오후에 지켜지지 않았다."* 문서·기억으로는 안 막힌다 — 배포 예산과 같은 답을 썼다:
+> **걸쇠.** 단, 이번엔 **pre-commit** 이다 — 사고가 나는 자리가 「미는 순간」이 아니라
+> 「커밋을 쌓는 동안」이었다(그날 여덟 번은 전부 커밋, 푸시는 하루 1회로 이미 막혀 있다).
+> `.githooks/pre-commit` → `scripts/check-quest-polish-budget.py --staged`.
+> 규칙: **quest 하나당 "마지막 PM 판정 이후 3개" 까지는 공짜**, 4번째 커밋부터
+> `.claude/WORK.md` 에 그 quest id·"PM 판정"·오늘 날짜가 한 블록 안에 있는 항목이
+> 있어야 통과한다(롤링 — 판정을 받으면 그 순간부터 다시 3개가 공짜다. 하루에 한 번
+> 받으면 영원히 무제한이 되는 허점을 막으려고 롤링으로 짰다 — 실측: 첫 판정 이후에도
+> `strangefn` 은 unverdicted 커밋이 4개 더 쌓였다).
+> ⛔ `--no-verify` 로 넘기지 마라. 배포 걸쇠와 같은 원칙 — "특별히" 는 선생님/PM 이 말한다.
 
 - Vercel (정적 빌드)
 - `npm run build` = `next build`

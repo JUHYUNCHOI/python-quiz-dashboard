@@ -120,7 +120,13 @@ export function getStrangeFnWalk(E, lang = "py") {
   return { code: FULL_PY, vars: _SF_VARS, beats: [
     { hi: [0, 4],   bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10⁹+7. Read input fast (x can be huge),\nand set up MOD and INV2 (what INV2 means comes in step 3).\nA third argument to pow() adds \"mod\": pow(x, y, z) computes\nx to the y-th power, keeping only the remainder after\ndividing by z the whole way through — a Python built-in.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10⁹+7 로 나눈 나머지예요.\nx 가 커서 입력을 빠르게 받고,\nMOD 와 INV2 를 먼저 둬요 (INV2 가 뭔지는 3단계에서 알려드려요).\npow() 에 세 번째 값을 넣으면 '나머지' 까지 구해요 — x 를 y 번\n거듭제곱하는 내내 z 로 나눈 나머지만 남겨요. 파이썬에 있는 기능이에요.") },
     { hi: [6, 8],   bubble: t(E, "T tests; read each number x as a STRING (x can be astronomically large).", "테스트를 T 개 읽어요. 각 x 는 문자열 s 로 받아요 (x 가 엄청 커서).") },
-    { hi: [10, 14], bubble: t(E, "Step 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
+    /* 2026-09-23 학생 검증: `any(...)` 를 **짐작**하고 넘어갔다 —
+       *"`any(...)` 자체를 처음 본다. 확신 없다."*
+       이 말풍선은 «왜 홀짝으로 바꾸나»(알고리즘)만 말하고 «any() 가 뭐하는 함수인가»(문법)는 안 말했다.
+       레슨 전체에 `any(` 가 **0건**이고(grep), repo 에서 쓰는 quest 도 **셋뿐**이라 진짜 새 문법이다.
+       ⚠️ **C++ 쪽에는 안 넣는다** — C++ 코드는 `any` 가 없고 `bool needBinarize` + for 문이다.
+          넣으면 «화면이 코드에 없는 걸 말한다» 가 된다(오늘 두 번 고친 결함). */
+    { hi: [10, 14], bubble: t(E, "any(… for c in s) checks the letters of s one by one — True if it holds even once.\nStep 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "any(조건 for c in s) 는 s 의 글자를 하나씩 보다가\n조건이 한 번이라도 맞으면 True 예요.\n1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
     { hi: [16, 19], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have so far and adds the new\ndigit — that's how binary is read. n can be huge, so mod\nat every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 하나 볼 때마다 지금까지 값이 두 배가 되고\n새 자리를 더해요 — 그게 이진수를 읽는 방법이에요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
     { hi: [21, 23], bubble: t(E, "Step 3 — we need floor(3n/2).\nMultiplying an even number by anything keeps it even, so if n\nis even, 3n is even too and last = 0.\nOdd times odd is always odd, so if n\nis odd, 3n is odd too, and we subtract last = 1.\nEither way, 3n − last is always even as a whole number.", "3단계 — floor(3n/2) 를 구해야 해요.\n짝수에 무엇을 곱해도 짝수라서,\nn 이 짝수면 3n 도 짝수이고 last = 0이에요.\n홀수끼리 곱하면 홀수라서,\nn 이 홀수면 3n 도 홀수이고 last = 1이에요.\n그래서 3n − last 는 항상 짝수가 돼요.") },
     /* 2026-09-23 학생 검증: 468자짜리 말풍선 하나에 네 가지가 몰려 "숨찼다" —
