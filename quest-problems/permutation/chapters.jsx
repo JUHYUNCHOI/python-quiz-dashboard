@@ -121,7 +121,7 @@ export function makePermCh1(E) {
                   🤠 {t(E, "John's secret p", "John 의 비밀 p")}
                 </div>
                 <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#7c5cfc" }}>
-                  [3, 1, 2, 4]
+                  [?, ?, ?, ?]
                 </div>
               </div>
               <div style={{ fontSize: 18, color: "#dc2626", textAlign: "center", fontWeight: 700 }}>
@@ -133,7 +133,7 @@ export function makePermCh1(E) {
                   ✏️ {t(E, "hints Nhoj wrote", "Nhoj 가 적은 힌트")}
                 </div>
                 <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#92400e" }}>
-                  h = [2, 1, 1]
+                  h = [?, ?, ?]
                 </div>
               </div>
             </div>
@@ -151,7 +151,7 @@ export function makePermCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 8, alignItems: "center" }}>
               <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 10, fontWeight: 600, color: "#92400e", marginBottom: 4 }}>{t(E, "GIVEN", "받는 것")}</div>
-                <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>h = [2, 1, 1]</div>
+                <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>h = [?, ?, ?]</div>
               </div>
               <div style={{ fontSize: 22, color: "#15803d", textAlign: "center", fontWeight: 700 }}>→</div>
               <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
@@ -407,60 +407,6 @@ export function makePermCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePermCh2(E) {
   return [
-    // 2-1: Brute force plan
-    {
-      type: "reveal",
-      narr: t(E,
-        "How do we recover p? The dismantle rule is hard to invert directly. Easiest idea: try every permutation of 1..N in lex order, dismantle each, and stop at the first match.",
-        "p 를 어떻게 되살릴까요?\ndismantle 규칙을 거꾸로 푸는 건 까다로워요.\n가장 쉬운 방법은 1..N 의 모든 순열을 사전순으로 해 보는 거예요.\n하나씩 dismantle 해서 h 와 맞는 첫 번째에서 멈춰요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ Next page: the code, section by section.", "↓ 다음 쪽에서 코드를 한 단락씩 봐요.")}
-        </div>),
-
-    },
-    // 2-2: Trace example with dismantle on small input
-    {
-      type: "reveal",
-      narr: t(E,
-        "Worked example: N=4, h=[2,1,1]. We try permutations of {1,2,3,4} in lex order, dismantle each, stop at first match. There are 4! = 24 permutations to try in the worst case.",
-        "N=4, h=[2,1,1] 로 해 볼게요.\n{1,2,3,4} 의 순열을 사전순으로 하나씩 dismantle 해서\n처음 맞는 곳에서 멈춰요. 많아야 4! = 24 개예요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 12, color: C.text, marginBottom: 10, lineHeight: 1.6 }}>
-            {t(E, "First few attempts in lex order (most don't match):",
-                  "사전순으로 처음 몇 개예요. 대부분 안 맞아요.")}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {[
-              { p: "[1,2,3,4]", dis: "[3,2,1]", ok: false },
-              { p: "[1,2,4,3]", dis: "[4,2,1]", ok: false },
-              { p: "[1,3,2,4]", dis: "[2,3,1]", ok: false },
-              { p: "[1,3,4,2]", dis: "[4,3,1]", ok: false },
-              { p: "…", dis: "…", ok: false, ellipsis: true },
-              { p: "[3,1,2,4]", dis: "[2,1,1]", ok: true },
-            ].map((s, i) => (
-              <div key={i} style={{
-                background: s.ok ? "#dcfce7" : "#fff",
-                border: `1.5px solid ${s.ok ? "#16a34a" : C.border}`, borderRadius: 8, padding: "8px 12px",
-                fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: s.ok ? "#15803d" : C.text,
-                display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6,
-              }}>
-                <span style={{ fontWeight: 600 }}>p = {s.p}</span>
-                <span>→ dismantle = {s.dis}</span>
-                <span style={{ fontWeight: 700, color: s.ok ? "#16a34a" : "#9ca3af" }}>
-                  {s.ok ? "✓ MATCH" : s.ellipsis ? "…" : "✗"}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 10, fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-            {t(E, "→ The first p in lex order with dismantle(p) == [2, 1, 1] is ", "→ dismantle = [2, 1, 1] 인 사전순 첫 p 는 ")}
-            <b style={{ color: "#16a34a" }}>[3, 1, 2, 4]</b>
-            {t(E, ". Output that.", " 예요. 그걸 출력해요.")}
-          </div>
-        </div>),
-    },
     // 2-2.5: Interactive brute-force enumerator — walk all 24 perms in lex order
     {
       type: "reveal",

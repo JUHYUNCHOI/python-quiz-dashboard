@@ -960,14 +960,6 @@ export function getPermSections(E) {
         t(E, "T cases. Each: read N, then N−1 hints into h.",
               "테스트 케이스가 T 개예요. 케이스마다 N 을 읽고, 힌트 N−1 개를 h 에 담아요."),
       ],
-      pyOnly: [
-        t(E, "permutations() yields every permutation of 1..N in lex order.",
-              "permutations() 가 1..N 의 모든 순열을 사전순으로 줘요."),
-      ],
-      cppOnly: [
-        t(E, "next_permutation() (used in step 3) walks lex order — same idea.",
-              "3 단계에서 쓰는 next_permutation() 도 사전순으로 돌아요. 같은 생각이에요."),
-      ],
     },
     {
       label: t(E, "🔁 2. Helper — simulate Nhoj's process", "🔁 2. 도우미 함수 — Nhoj 과정 따라 하기"),
@@ -983,6 +975,10 @@ export function getPermSections(E) {
       color: "#16a34a",
       py: PERM_TRY_PY, cpp: PERM_TRY_CPP,
       why: [
+        t(E, "This time we build every permutation ourselves instead of using a library. search fills one slot (idx), then calls itself to fill the next slot.",
+              "이번엔 순열을 직접 하나씩 만들어요. search 가 한 자리(idx)를 채우고 자기 자신을 다시 불러 다음 자리를 채워요."),
+        t(E, "If every value is stuck at some slot, it undoes the last pick (used[v] = False) and tries a different value there.",
+              "어느 자리에서 막히면 방금 고른 값을 되돌리고(used[v] = False) 그 자리에 다른 값을 다시 시도해요."),
         t(E, "Lex order means the FIRST match is automatically the lex-smallest answer.",
               "사전순으로 도니까 처음 맞는 게 자동으로 사전순 최소예요."),
         t(E, "No match across all N! permutations → Nhoj messed up → print −1.",
