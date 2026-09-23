@@ -63,8 +63,8 @@ export function CowSignalScaleSim({ E }) {
         padding: "8px 12px", marginBottom: 12, fontSize: 12, color: "#92400e", textAlign: "center",
       }}>
         🧪 {t(E,
-          "Click a cell to flip X ↔ . — drag the K slider — see the live K×K expansion!",
-          "칸을 누르면 X 와 . 가 바뀌어요. K 슬라이더를 움직이면 K×K 확대가 바로 보여요!")}
+          "Click a cell to flip X ↔ . — drag K — hover a cell to see its output block!",
+          "칸을 누르면 X 와 . 가 바뀌어요 — K 를 움직이고, 칸에 마우스를 올려 그 블록을 확인해요!")}
       </div>
 
       {/* K slider */}
