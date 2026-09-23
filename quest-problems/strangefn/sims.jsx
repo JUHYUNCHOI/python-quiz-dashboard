@@ -21,7 +21,8 @@ import { t } from "@/components/quest/theme";
    차지하지 않음을 보이기 위해서다(흐려짐 + 취소선). 그 외 새 상태·새
    컴포넌트는 만들지 않았다.
 
-   걸음 3 은 f 를 쓴 게 아니다(맨 앞 0 은 표기일 뿐이라 ops 는 그대로).
+   걸음 2 에서 맨 앞 0 을 떼는 건 f 를 쓴 게 아니다(표기일 뿐이라 ops 는 그대로).
+   2026-09-23: 원래 따로 있던 걸음을 걸음 2 에 합쳤다 — 곁가지였다.
    걸음 4·5·6 은 각각 실제 연산 정확히 한 번씩이다(10→9, 9→1, 1→0) —
    한 걸음 = 한 번의 f, ops 는 매 걸음 최대 1 씩만 늘어난다. 그 자리엔
    `formula` 로 무슨 일이 있었는지 숫자로 남긴다
@@ -80,14 +81,15 @@ export function StrangeFnDigitSim({ E }) {
       ops: null,
       ko: "x = 210 이에요. 0 도 1 도 아닌 자리가 있나요? 2 가 있어요.",
       en: "x = 210. Any digit other than 0 or 1? Yes — the 2." },
-    { tiles: [["0", "placed"], ["1", "placed"], ["0", "placed"]],
-      note: ["2→0", "1→1", "0→0"], ops: 1,
-      ko: "그러면 자리마다 홀짝으로 바꿔요. 홀수는 1, 짝수는 0.",
-      en: "So we flip each digit by parity: odd → 1, even → 0." },
+    /* 2026-09-23: 걸음 둘을 하나로 합쳤다(6단계 → 5단계).
+       맨 앞 0 을 떼는 건 **곁가지**다 — 공식 경로(계획 쪽)는 "010" 을 그대로
+       이진수로 읽어서 이 트리밍을 아예 거치지 않는다. 그래서 자기 걸음을 쓸 값이 없다.
+       학생 신호도 약했다 — "한 번에 안 와닿았지만 다음 줄 보고 이해됨"(막힘이 아니다).
+       `drop` 상태가 흐려짐 + 취소선으로 이미 보여주므로 말은 한 줄이면 된다. */
     { tiles: [["0", "drop"], ["1", "placed"], ["0", "placed"]],
-      note: [t(E, "doesn't count", "없는 셈"), "", ""], ops: 1,
-      ko: "맨 앞 0 은 자리를 차지하지 않아요. 그래서 이건 f 를 쓴 게 아니라, f 횟수는 그대로예요.",
-      en: "A leading 0 doesn't take up a place — so this isn't a use of f, ops stays the same." },
+      note: ["2→0", "1→1", "0→0"], ops: 1,
+      ko: "그러면 자리마다 홀짝으로 바꿔요. 홀수는 1, 짝수는 0.\n맨 앞 0 은 자리를 차지하지 않아서 없는 셈이에요.",
+      en: "So we flip each digit by parity: odd → 1, even → 0.\nA leading 0 doesn't take up a place, so it doesn't count." },
     { tiles: [["9", "placed"]],
       note: ["10→9"], ops: 2, formula: "10 − 1 = 9",
       ko: "이제 0 과 1 만 남았어요. 그러면 1 을 빼요. 10 에서 1 을 빼면 9예요.",

@@ -330,6 +330,17 @@ export function makeStrangeFnCh1(E) {
               "Look at the even-n rows and the odd-n rows separately. How does g(n) differ?",
               "짝수 n 줄과 홀수 n 줄을 나눠서 봐요. g(n) 이 어떻게 다른가요?")}
           </div>
+          {/* 2026-09-23 교육 담당 지적: ✅ 가 붙은 n=1,2,3 만 학생이 직접 센 값인데
+              n=0,4,5,6,7 의 g(n) 이 **출처 없이** 같이 올라와 있었다.
+              다음 쪽이 그 값들로 "3k / 3k+1 과 맞나" 를 확인시키는데,
+              믿을 근거가 없으면 확인이 아니라 순환논증이 된다.
+              ⚠️ 손으로 세게 만들지는 않는다 — 여섯 걸음짜리 반복이라 이미 기각됐다.
+              한 줄이면 된다(새 쪽·새 클릭 0). */}
+          <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 6, wordBreak: "keep-all" }}>
+            {t(E,
+              "✅ rows are the ones you counted yourself. The rest were counted the same way, ahead of time.",
+              "✅ 가 붙은 줄은 직접 센 값이에요. 나머지도 같은 방법으로 미리 세어 둔 값이에요.")}
+          </div>
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
             <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: C.text, borderCollapse: "collapse" }}>
               <thead>
