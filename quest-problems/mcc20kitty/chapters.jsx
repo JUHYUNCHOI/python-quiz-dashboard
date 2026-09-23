@@ -327,7 +327,7 @@ export function makeMcc20KittyCh2(E) {
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center",
             whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
-            {t(E, "↓ so we need a shortcut that doesn't touch every term.\nSo we keep only the remainders.", "↓ 그래서 모든 항을 건드리지 않는 지름길이 필요해요.\n그래서 나머지만 들고 다니기로 했죠 →")}
+            {t(E, "↓ so we need a shortcut that doesn't touch every term.\nSo we keep only the remainders — and they come back around every 104 steps.", "↓ 그래서 모든 항을 건드리지 않는 지름길이 필요해요.\n그래서 나머지만 들고 다니기로 했죠.\nKitty 의 나머지는 104 번마다 처음 자리로 돌아와요.")}
           </div>
         </div>),
     },
@@ -337,37 +337,13 @@ export function makeMcc20KittyCh2(E) {
        이미 같은 말(나머지만 중요, 새 항=직전 다섯 나머지 합 mod 3, 0=3의 배수)을 다 했다.
        이 쪽은 같은 숫자를 누를 것도 없이 그냥 다시 읽기만 하는 완전 중복이었다. */
 
-    // 2-2 insight 2: finite states → cycle (was 2-3)
-    {
-      type: "reveal",
-      narr: t(E,
-        "Insight 2 — look at the 'window' made by the last five remainders.",
-        "두 번째 열쇠 — 나머지 다섯 칸이 이루는 '창' 을 봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
-            <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px", textAlign: "center", maxWidth: 360, ...KA }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#7f1d1d", marginBottom: 6 }}>
-                {t(E, "a window = 5 remainders", "창 = 나머지 5칸")}
-              </div>
-              <div style={{ fontSize: 13, fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: A }}>
-                3 × 3 × 3 × 3 × 3 = <span style={{ color: "#b91c1c" }}>243</span>
-              </div>
-              <div style={{ fontSize: 11.5, color: C.dim, marginTop: 4 }}>
-                {t(E, "only 243 possible windows", "가능한 창은 243개뿐")}
-              </div>
-            </div>
-            <div style={{ fontSize: 20, color: A, fontWeight: 700 }}>↓</div>
-            <div style={{ background: "#dcfce7", border: "1px solid #86efac", borderRadius: 10, padding: "10px 14px", textAlign: "center", maxWidth: 360, ...KA }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#15803d", lineHeight: 1.5 }}>
-                {t(E,
-                  "A window must eventually repeat → the remainders cycle. For Kitty the cycle length is 104.",
-                  "창은 언젠가 반드시 반복 → 나머지가 사이클을 이뤄요. Kitty의 사이클 길이는 104.")}
-              </div>
-            </div>
-          </div>
-        </div>),
-    },
+    /* 2026-09-23: 여기 있던 "2-2 insight 2" 쪽(창 = 나머지 5칸 → 3⁵ = 243 → 반드시 반복,
+       사이클 104)을 삭제했다. 1장 4쪽 시뮬의 각주가 조작 뒤 "243개뿐이라 반드시 다시 나와요"
+       를 이미 문장으로 말한다 — 이 쪽은 그 말을 카드로 다시 그린 것이었다.
+       새 정보는 "사이클 = 104" 한 줄뿐이라 바로 앞 2-1 의 닫는 말로 옮겼다
+       (3장 코드가 `full = N // 104` 로 이 수를 설명 없이 쓴다).
+       덤으로 바로 다음 퀴즈가 살아났다 — 전에는 이 쪽이 "243이라서 반복된다" 를
+       먼저 말해 버려서 퀴즈가 갈림길이 아니라 «확인» 이었다. */
 
     // 2-3 quiz: why must it repeat
     {
