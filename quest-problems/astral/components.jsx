@@ -1,4 +1,9 @@
 // ✅ USACO_VERIFIED — locally re-verified 2026-06-14 (greedy ≡ 12/12 DP + brute oracle + official samples)
+//   2026-09-23: Input reading rewritten data=sys.stdin.read().split()+pos-index
+//     → plain input()/split() (학생이 안 배운 손버릇 걷어냈다). Algorithm untouched.
+//     Re-verified: official sample (7), 300+ random-case diff vs old reading = 0
+//     mismatch, worst case (T=10,N=1000, all-G) timing unchanged (~2.78s greedy,
+//     ~4.1s DP appendix — same before/after, well within before this change too).
 //   2026-06-17: Teacher confirmed current greedy PASSES USACO 12/12 (submitted via VS Code).
 //     Then removed the redundant 'if right==0 and down==0' no-move branch from the GREEDY
 //     (AST_GREEDY_FULL_PY/CPP only — the DP/chain version still NEEDS it). Output proven
@@ -13,8 +18,7 @@
 //     removed the premature orbit/independence note. NO solution code changed.
 //   2026-06-03: Added BACKWARD-GREEDY as the MAIN solution (teacher's own verified
 //     approach). AST_GREEDY_FULL_PY is the teacher's actual USACO-accepted Python
-//     submission (logic verbatim; only input-reading switched to the fast
-//     sys.stdin pattern to match section 1). AST_GREEDY_FULL_CPP is a faithful
+//     submission (algorithm verbatim). AST_GREEDY_FULL_CPP is a faithful
 //     C++ translation — LOCALLY VERIFIED 2026-06-14: identical outputs to the
 //     12/12 DP on 4000 random cases + an independent brute-force oracle on 3000
 //     random cases + both official samples; worst case (N=1000 × 10) 1.86s (< 4s).
@@ -1179,24 +1183,12 @@ export function AstralAlgoTrace({ E }) {
    ════════════════════════════════════════════════════════════════════ */
 
 const AST_S1_PY = [
-  "import sys",
-  "",
-  "# 모든 입력을 단어 리스트로 한 번에 받기 (입력 빠름)",
-  "data = sys.stdin.read().split()",
-  "p = 0                       # p = 지금 읽을 단어 위치",
-  "",
-  "T = int(data[p])            # T = 퍼즐 개수 (T 번 풀어야 함)",
-  "p += 1",
+  "T = int(input())            # T = 퍼즐 개수 (T 번 풀어야 함)",
   "",
   "for _ in range(T):          # 퍼즐 하나씩 처리",
-  "    N = int(data[p])        # N = 격자 한 변 크기 (N × N)",
-  "    p += 1",
-  "    right = int(data[p])    # right = 별이 오른쪽으로 몇 칸",
-  "    p += 1",
-  "    down = int(data[p])     # down = 별이 아래로 몇 칸",
-  "    p += 1",
-  "    grid = [data[p + r] for r in range(N)]   # N 줄 모아서 grid",
-  "    p += N",
+  "    N, right, down = map(int, input().split())",
+  "    # N = 격자 한 변 크기 (N × N), right·down = 별 이동",
+  "    grid = [input() for _ in range(N)]   # N 줄 모아서 grid",
   "    # ↓ 다음: 이 퍼즐 풀기",
 ];
 const AST_S1_CPP = [
@@ -1401,24 +1393,14 @@ const AST_S4B_CPP = [
 // Backwards compatibility: keep AST_S4_PY/CPP as the union
 const AST_S4_PY = [...AST_S4A_PY, "", ...AST_S4B_PY];
 const AST_FULL_PY = [
-  "import sys",
-  "",
   "def main():",
-  "    data = sys.stdin.read().split()",
-  "    p = 0",
-  "    T = int(data[p])",
-  "    p += 1",
+  "    T = int(input())",
   "    out = []",
   "    EMPTY = 99999999    # 진짜 답보다 큰 수 (= '못 만듦' 표시)",
   "    for _ in range(T):",
-  "        N = int(data[p])",
-  "        p += 1",
-  "        right = int(data[p])    # 별이 오른쪽으로 몇 칸 이동",
-  "        p += 1",
-  "        down = int(data[p])     # 별이 아래로 몇 칸 이동",
-  "        p += 1",
-  "        grid = [data[p + r] for r in range(N)]",
-  "        p += N",
+  "        N, right, down = map(int, input().split())",
+  "        # right = 별이 오른쪽으로 몇 칸, down = 별이 아래로 몇 칸",
+  "        grid = [input() for _ in range(N)]",
   "",
   "        # Special case: stars don't move",
   "        if right == 0 and down == 0:",
@@ -1683,23 +1665,13 @@ const AST_GREEDY_CORE_CPP = [
 ];
 
 const AST_GREEDY_FULL_PY = [
-  "import sys",
-  "",
   "def main():",
-  "    data = sys.stdin.read().split()",
-  "    p = 0",
-  "    T = int(data[p])",
-  "    p += 1",
+  "    T = int(input())",
   "    out = []",
   "    for _ in range(T):",
-  "        N = int(data[p])",
-  "        p += 1",
-  "        right = int(data[p])     # 별이 오른쪽으로 몇 칸",
-  "        p += 1",
-  "        down = int(data[p])      # 별이 아래로 몇 칸",
-  "        p += 1",
-  "        grid = [data[p + r] for r in range(N)]",
-  "        p += N",
+  "        N, right, down = map(int, input().split())",
+  "        # right = 별이 오른쪽으로 몇 칸, down = 별이 아래로 몇 칸",
+  "        grid = [input() for _ in range(N)]",
   "",
   "        possibles = set()       # 원래 별이 있어야 하는 칸 (중복 자동 제거)",
   "        impossible = False",
@@ -1798,23 +1770,13 @@ const AST_GREEDY_FULL_CPP = [
 // LOGIC IS BYTE-IDENTICAL to AST_GREEDY_FULL_PY/_CPP — only the # / // comments
 // are translated (for the English CodeWalk). Do not change the logic here.
 const AST_GREEDY_FULL_PY_EN = [
-  "import sys",
-  "",
   "def main():",
-  "    data = sys.stdin.read().split()",
-  "    p = 0",
-  "    T = int(data[p])",
-  "    p += 1",
+  "    T = int(input())",
   "    out = []",
   "    for _ in range(T):",
-  "        N = int(data[p])",
-  "        p += 1",
-  "        right = int(data[p])     # star moves right by this many",
-  "        p += 1",
-  "        down = int(data[p])      # star moves down by this many",
-  "        p += 1",
-  "        grid = [data[p + r] for r in range(N)]",
-  "        p += N",
+  "        N, right, down = map(int, input().split())",
+  "        # right = star moves right by this many, down = down by this many",
+  "        grid = [input() for _ in range(N)]",
   "",
   "        possibles = set()       # cells that must have had a star (dupes auto-removed)",
   "        impossible = False",
@@ -1958,34 +1920,34 @@ export function getAstralWalk(E, lang = "py") {
     code: E ? AST_GREEDY_FULL_PY_EN : AST_GREEDY_FULL_PY,
     vars,
     beats: [
-      { hi: [0, 7], bubble: t(E,
+      { hi: [0, 2], bubble: t(E,
         "What are we solving for?\nHow many stars were in the original photo — or -1 if that's impossible.\nSo start with the input: read T (how many puzzles); `out` will collect one answer per puzzle.",
         "무엇을 구해야 하나요?\n원래 사진에 별이 몇 개 있었는지예요. 불가능하면 -1 이에요.\n그러니 입력부터 읽어요. T(퍼즐 개수)를 읽고, out 에 퍼즐마다 답을 하나씩 모을 거예요.") },
-      { hi: [8, 16], bubble: t(E,
+      { hi: [3, 6], bubble: t(E,
         "Take one puzzle: N (grid size), the star moves right by `right` and down by `down`, then read the N grid rows.",
         "퍼즐 하나를 꺼내요.\nN(격자 크기)과 별 이동(오른쪽 right 칸·아래 down 칸), 그리고 격자 N 줄을 읽어요.") },
-      { hi: [18, 19], bubble: t(E,
+      { hi: [8, 9], bubble: t(E,
         "Here's the KEY idea.\nCollect into `possibles` every cell that MUST have had a star in photo 1 — the answer is just how many.\nA set auto-dedupes repeats.",
         "여기가 핵심 아이디어예요.\n'원래(사진1)에 별이 있어야 하는 칸'을 possibles에 모아요 — 답은 그 칸 개수.\nset이라 같은 칸 중복은 알아서 하나로.") },
-      { hi: [20, 23], bubble: t(E,
+      { hi: [10, 13], bubble: t(E,
         "Why scan BACKWARD (end → start)?\nGoing back, the CERTAIN cells (a 'B' = star in both photos) get settled first.\nPin down the sure things first, and the ambiguous G's never trip you up. (Front → back got stuck!)",
         "왜 거꾸로(끝→시작)일까?\n뒤에서 보면 'B(두 사진 다 별)'처럼 확정인 칸부터 처리돼요.\n확실한 것부터 못 박으면, 애매한 G가 발목을 안 잡아요. (앞→뒤는 막혔죠!)") },
-      { hi: [25, 26], bubble: t(E,
+      { hi: [15, 16], bubble: t(E,
         "This cell is B — a star in BOTH photos, so it was definitely a star originally.\nAdd it to possibles.",
         "이 칸이 B면 — 두 사진 다 별이라 원래도 무조건 별.\npossibles에 넣어요.") },
-      { hi: [27, 36], bubble: t(E,
+      { hi: [17, 26], bubble: t(E,
         "A B also FORCES its 'predecessor' (one star-step back: r-down, c-right) to have been a star too.\nIf that cell is off the grid, or a W (blank) → it can't be made → -1.",
         "그리고 B는 '직전 칸'에도 원래 별이 있었어야 해요.\n직전 칸은 별을 한 걸음 거꾸로 간 칸이에요 (r-down, c-right).\n그 칸이 사진 밖이거나 W(빈칸)면 만들 수 없어요 → -1.") },
-      { hi: [37, 39], bubble: t(E,
+      { hi: [27, 29], bubble: t(E,
         "This cell is G (a star in ONE photo).\nIf it's already in possibles — handled earlier — just skip it (continue).",
         "이 칸이 G(한 사진에만 별)?\n이미 possibles에 찍혀 있으면 — 앞에서 처리된 거라 그냥 넘어가요(continue).") },
-      { hi: [40, 45], bubble: t(E,
+      { hi: [30, 35], bubble: t(E,
         "Otherwise decide where the star was:\npredecessor off-grid → put it HERE.\npredecessor is G or B → put it THERE (the surer spot).\notherwise → HERE.",
         "아직이면 별을 어디에 둘지 정해요.\n직전 칸이 사진 밖이면 → 여기에.\n직전 칸이 G나 B면 → 거기에 (그쪽이 더 확실해요).\n둘 다 아니면 → 여기에.") },
-      { hi: [46, 46], bubble: t(E,
+      { hi: [36, 36], bubble: t(E,
         "W (blank in both photos) → no star was here, so do nothing.",
         "W(두 사진 다 빈칸)면 — 원래 별이 없었으니 아무것도 안 해요.") },
-      { hi: [48, 49], bubble: t(E,
+      { hi: [38, 39], bubble: t(E,
         "After the whole puzzle: print -1 if impossible,\notherwise len(possibles) (= how many original stars). Done!",
         "한 퍼즐을 다 훑었어요.\n불가능이면 -1 을, 아니면 possibles 개수(= 원래 별 수)를 출력해요. 끝!") },
     ],
@@ -2003,8 +1965,8 @@ export function getAstralSections(E) {
             "맨 첫 줄에 퍼즐 개수 T 가 나와요. 퍼즐 하나마다 N (격자 크기) 과 right·down (이동량) 이 오고, 그 다음 W/G/B 격자가 N 줄 이어져요. (오른쪽 샘플 참고.)"),
       ],
       pyOnly: [
-        t(E, "Read all the input at once, then take it piece by piece — fast and simple.",
-            "입력을 한 번에 다 읽어서 앞에서부터 하나씩 꺼내 써요 — 빠르고 간단해요."),
+        t(E, "`input()` reads one line at a time, in the exact order the puzzle lists them.",
+            "`input()` 은 문제가 적어 준 순서 그대로 한 줄씩 읽어요."),
       ],
       cppOnly: [],
       aside: <SampleInputAside E={E} sample={AST_SAMPLE} highlight={[0, 1, 2, 3, 4]} note={t(E,
@@ -2106,8 +2068,8 @@ export function getAstralSections(E) {
             "📖 전부 합치기 — 입력 → 거꾸로 그리디 → 출력 (또는 -1). set possibles 하나가 다 기억해요."),
       ],
       pyOnly: [
-        t(E, "This is the teacher's actual USACO-accepted Python (logic verbatim; input switched to the fast sys.stdin read).",
-            "선생님이 USACO 를 통과시킨 실제 파이썬이에요 (풀이는 그대로, 입력만 빠른 sys.stdin 으로 바꿨어요)."),
+        t(E, "This is the teacher's actual USACO-accepted Python (algorithm verbatim; only the reading was rewritten to plain input()).",
+            "선생님이 USACO 를 통과시킨 실제 파이썬이에요 (풀이는 그대로, 입력 읽는 부분만 평범한 input() 으로 바꿨어요)."),
       ],
       cppOnly: [],
     },

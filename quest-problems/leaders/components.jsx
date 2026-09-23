@@ -11,14 +11,9 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#dc2626";
 
 const FULL_PY = [
-  "import sys",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "N = int(data[p])",
-  "p += 1",
-  "s = data[p]",
-  "p += 1",
-  "arr = [int(data[p + i]) for i in range(N)]",
+  "N = int(input())",
+  "s = input()",
+  "arr = list(map(int, input().split()))",
   "arr = [x - 1 for x in arr]",
   "",
   "eG = eH = lG = lH = -1",

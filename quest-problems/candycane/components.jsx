@@ -191,17 +191,9 @@ export function CandyCaneSim({ E }) {
 }
 
 const FULL_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "N = int(data[p])",
-  "p += 1",
-  "M = int(data[p])",
-  "p += 1",
-  "heights = [int(data[p + i]) for i in range(N)]",
-  "p += N",
-  "canes   = [int(data[p + i]) for i in range(M)]",
+  "N, M = map(int, input().split())",
+  "heights = list(map(int, input().split()))",
+  "canes = list(map(int, input().split()))",
   "",
   "for curr in canes:",
   "    bottom = 0",

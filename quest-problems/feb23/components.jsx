@@ -206,11 +206,8 @@ export function Feb23DeepAuditSim({ E }) {
 }
 
 const FULL_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "s = data[1]",
+  "N = int(input())",
+  "s = input()",
   "",
   "f_positions = [i for i, c in enumerate(s) if c == 'F']",
   "n_f = len(f_positions)",

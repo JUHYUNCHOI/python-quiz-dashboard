@@ -13,20 +13,12 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 const FULL_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "idx = 0",
-  "T = int(data[idx])   # number of test cases",
-  "idx += 1",
+  "T = int(input())   # number of test cases",
   "out = []",
   "",
   "for _ in range(T):",
-  "    N = int(data[idx])",
-  "    K = int(data[idx + 1])",
-  "    idx += 2",
-  "    s = data[idx]",
-  "    idx += 1",
+  "    N, K = map(int, input().split())",
+  "    s = input()",
   "",
   "    patches = ['.'] * N        # '.' = no patch, else 'G'/'H'",
   "    g_cover = -1               # G cows up to this index are satisfied",

@@ -161,11 +161,8 @@ export function BacteriaTrickSim({ E }) {
 }
 
 const FULL_PY = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "a = [int(data[1 + i]) for i in range(N)]",
+  "N = int(input())",
+  "a = list(map(int, input().split()))",
   "",
   "def diff(arr):",
   "    # First-order difference: [a0, a1-a0, a2-a1, ...]",

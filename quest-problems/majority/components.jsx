@@ -354,17 +354,11 @@ export function MajorityRunner({ E }) {
 
 /* Section 1: read T cases + per-case input */
 const MJ_INPUT_PY = [
-  "import sys",
-  "data = sys.stdin.read().split()",
-  "idx = 0",
-  "T = int(data[idx])",
-  "idx += 1     # number of test cases",
+  "T = int(input())     # number of test cases",
   "",
   "for _ in range(T):",
-  "    N = int(data[idx])",
-  "    idx += 1",
-  "    a = [int(data[idx + i]) for i in range(N)]",
-  "    idx += N",
+  "    N = int(input())",
+  "    a = list(map(int, input().split()))",
 ];
 const MJ_INPUT_CPP = [
   "#include <iostream>",
@@ -435,18 +429,12 @@ const MJ_OUT_CPP = [
 
 /* Section 4: full code */
 const MJ_FULL_PY = [
-  "import sys",
-  "data = sys.stdin.read().split()",
-  "idx = 0",
-  "T = int(data[idx])",
-  "idx += 1",
+  "T = int(input())",
   "",
   "out = []",
   "for _ in range(T):",
-  "    N = int(data[idx])",
-  "    idx += 1",
-  "    a = [int(data[idx + i]) for i in range(N)]",
-  "    idx += N",
+  "    N = int(input())",
+  "    a = list(map(int, input().split()))",
   "",
   "    valid = set()",
   "    for i in range(N - 1):",
@@ -516,12 +504,12 @@ export function getMajoritySections(E) {
       why: [
         t(E, "First line: T (number of test cases). For each case: N then N preferences.",
             "첫 줄에 테스트 수 T 가 있어요. 케이스마다 N 한 줄과 선호도 N 개가 와요."),
-        t(E, "Reading everything via sys.stdin.read().split() avoids per-line parsing overhead and handles values that are space-OR-newline separated.",
-            "sys.stdin.read().split() 로 한 번에 읽으면 줄마다 쪼개는 일이 없고, 공백과 줄바꿈을 다 알아서 처리해요."),
+        t(E, "Read each test's lines as they come — N, then the N preferences on the next line.",
+            "테스트마다 N 한 줄, 그다음 선호도 N 개를 순서대로 읽어요."),
       ],
       pyOnly: [
-        t(E, "Index pointer `idx` walks through the token list one at a time.",
-            "`idx` 가 자리를 가리키면서 값을 하나씩 꺼내요."),
+        t(E, "`input()` reads one line at a time — no need to track a position by hand.",
+            "`input()` 은 한 줄씩 읽어서, 자리 번호를 손으로 셀 필요가 없어요."),
       ],
       cppOnly: [
         t(E, "vector<int> a(N) sized exactly to N keeps memory tight.",
