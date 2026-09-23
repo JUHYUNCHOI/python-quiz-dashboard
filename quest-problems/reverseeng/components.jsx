@@ -12,12 +12,19 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#8b5cf6";
 
 const FULL_PY = [
-  "T = int(input())",
+  "def read_line():",
+  "    # The judge puts a blank line between test cases — skip it.",
+  "    line = input()",
+  "    while line.strip() == \"\":",
+  "        line = input()",
+  "    return line",
+  "",
+  "T = int(read_line())",
   "for _ in range(T):",
-  "    N, M = map(int, input().split())",
+  "    N, M = map(int, read_line().split())",
   "    rows = []",
   "    for _ in range(M):",
-  "        s, o = input().split()      # binary string, output digit",
+  "        s, o = read_line().split()      # binary string, output digit",
   "        rows.append((s, int(o)))",
   "",
   "    # Greedy peel: a group of rows can become one if-statement only",
@@ -41,7 +48,10 @@ const FULL_PY = [
   "                    remaining -= len(idx)",
   "                    progress = True",
   "",
-  "    print('OK' if remaining == 0 else 'LIE')",
+  "    if remaining == 0:",
+  "        print('OK')",
+  "    else:",
+  "        print('LIE')",
 ];
 
 const FULL_CPP = [
@@ -114,7 +124,7 @@ export function getRevEngSections(E) {
       /* 1️⃣ 입력 읽기 — T, 케이스마다 N M, 그리고 M 개의 (문자열, 출력) 행. */
       label: t(E, "1️⃣ Read the input", "1️⃣ 입력을 읽어요"),
       color: A,
-      py: FULL_PY.slice(0, 7), cpp: FULL_CPP.slice(0, 16),
+      py: FULL_PY.slice(0, 14), cpp: FULL_CPP.slice(0, 16),
       why: [
         t(E,
           "What do we need for one test case? N (string length), M (row count), then M rows — each a length-N string with its claimed output.",
@@ -135,7 +145,7 @@ export function getRevEngSections(E) {
       /* 2️⃣ 떼어내기 반복 — 앞 시뮬(PeelSim/StuckSim)에서 본 것을 코드로. */
       label: t(E, "2️⃣ Peel rows off, one if at a time", "2️⃣ if 하나씩 만들며 줄을 떼어내요"),
       color: "#7c3aed",
-      py: FULL_PY.slice(7), cpp: FULL_CPP.slice(16),
+      py: FULL_PY.slice(14), cpp: FULL_CPP.slice(16),
       why: [
         t(E,
           "The answer is OK or LIE — could such a program exist?\nAn if-statement on 'variable=value' only works if every\nremaining row matching it shares the same output.\nSo we find such a condition, peel those rows off, and\nrepeat on what's left. Everything peels away → OK;\nstuck → LIE.",
