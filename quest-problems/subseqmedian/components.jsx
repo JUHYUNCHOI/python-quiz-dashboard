@@ -342,8 +342,8 @@ export function getSubseqMedianSections(E) {
             "원소 v = A[i] 마다 앞쪽에서 v 보다 작은 증가값 k 개와 뒤쪽에서 v 보다 큰 증가값 k 개를 세어요. 둘을 짝지으면 v 가 길이 2k+1 인 좋은 부분수열의 중앙값이 돼요. 그래서 v 가 보태는 값은 v · Σ_k L_k·R_k 예요."),
         t(E, "L_k and R_k are built level by level: a Fenwick tree adds up the previous level's counts over 'smaller-and-earlier' (for L) or 'larger-and-later' (for R). Level 0 = every element on its own.",
             "L_k, R_k 는 레벨마다 쌓아 올려요. 펜윅 트리로 바로 앞 레벨의 값을 '작고 앞선'(L) 또는 '크고 뒤선'(R) 범위에서 합해요. 레벨 0 은 원소 하나하나예요."),
-        t(E, "⚠️ Honest note: this is CORRECT, but worst case is O(N² log N) — it comfortably passes the small subtasks (N up to a few hundred), yet TIMES OUT at the full N = 8000. The full-constraints solution needs CDQ divide-and-conquer + NTT, which is beyond this quest. Here we learn the correct idea and a correct implementation for small inputs.",
-            "⚠️ 솔직히 말할게요. 이 코드는 답이 맞지만 최악의 경우 O(N² log N) 이에요. 작은 서브태스크(N 수백 정도)는 넉넉히 통과하지만, 전체 N = 8000 에서는 시간 초과예요. 전체 제약에서 만점을 받으려면 CDQ 분할정복 + NTT 가 필요한데, 이 퀘스트 범위 밖이에요. 여기서는 올바른 아이디어와 작은 입력에서 맞게 도는 코드를 배워요."),
+        t(E, "⚠️ Honest note: this Fenwick DP is the full solution. Its worst case is O(N² log N), and the full constraint N = 8000 fits inside that. Python runs out of time there — but that does not mean a harder method is needed. This idea is the answer.",
+            "⚠️ 솔직히 말할게요. 이 펜윅 DP 가 바로 만점 풀이예요.\n최악이 O(N² log N) 인데, 전체 제약 N = 8000 이 그 안에 들어와요.\n다만 파이썬으로는 그 크기에서 시간이 모자라요.\n그렇다고 더 어려운 방법이 필요한 건 아니에요 — 이 아이디어가 정답이에요."),
       ],
       pyOnly: [
         t(E, "sys.stdin.buffer.read().split() reads all input at once — much faster than line-by-line for big arrays.",

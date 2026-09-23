@@ -201,12 +201,12 @@ export function makeSubseqMedianCh2(E, lang = "py") {
             </div>
             <div style={{ fontSize: 12, color: "#9a3412", lineHeight: 1.6 }}>
               {t(E,
-                "This Fenwick-DP is CORRECT, but its worst case is O(N² log N). It comfortably clears the small subtasks (N up to a few hundred), yet TIMES OUT at the full N = 8000.",
-                "이 펜윅 DP 는 정답이 맞지만 최악의 경우 O(N² log N) 이에요. 작은 서브태스크(N 수백)는 넉넉히 통과하지만, 전체 N = 8000 에서는 시간 초과예요.")}
+                "This Fenwick-DP is the full solution. Its worst case is O(N² log N), and the full constraint N = 8000 fits inside that.",
+                "이 펜윅 DP 가 바로 만점 풀이예요.\n최악이 O(N² log N) 인데, 전체 제약 N = 8000 이 그 안에 들어와요.")}
               <div style={{ marginTop: 4, fontWeight: 700 }}>
                 💡 {t(E,
-                  "The full-constraints solution needs CDQ divide-and-conquer + NTT — beyond this quest. Here we learn the correct idea and a correct implementation for small inputs.",
-                  "전체 제약에서 만점을 받으려면 CDQ 분할정복 + NTT 가 필요한데, 이 퀘스트 범위 밖이에요. 여기서는 올바른 아이디어와 작은 입력에서 맞게 도는 코드를 배워요.")}
+                  "Python runs out of time at N = 8000 though. That does not mean a harder method is needed — this idea is the answer.",
+                  "다만 파이썬으로는 N = 8000 에서 시간이 모자라요.\n그렇다고 더 어려운 방법이 필요한 건 아니에요 — 이 아이디어가 정답이에요.")}
               </div>
             </div>
           </div>

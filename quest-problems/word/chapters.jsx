@@ -316,7 +316,7 @@ export function makeWordCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's check! What's the distance between 'ade' and 'zaf'? Count the shared letters first.", "확인 퀴즈! 'ade'와 'zaf'에서 겹치는 글자를 먼저 찾아봐요. 그 다음 거리를 구해보자."),
+        "Let's check! What's the distance between 'ade' and 'zaf'? Count the shared letters first.", "확인 퀴즈! 'ade'와 'zaf'에서 겹치는 글자를 먼저 찾아봐요.\n그 다음 거리를 구해요."),
       question: t(E,
         "'ade' vs 'zaf': shared letter = 'a' (1). Distance = 3 − 1 = ?",
         "'ade'와 'zaf'에서 겹치는 글자는 'a' 하나뿐이에요.\n거리 = 글자 수 3 − 겹치는 수 1 = ?"),
@@ -396,7 +396,7 @@ export function makeWordCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "The answer word is 'ade'. Distances: 1+1+2+0+3. What's the total?", "정답 단어는 'ade'야. 각 단어와의 거리를 다 더해보자!"),
+        "The answer word is 'ade'. Distances: 1+1+2+0+3. What's the total?", "정답 단어는 'ade'예요. 각 단어와의 거리를 다 더해요!"),
       question: t(E,
         "Total distance of 'ade' to all 5 words?\n1 + 1 + 2 + 0 + 3 = ?",
         "'ade' 와 각 단어의 거리예요.\nadb→1, dez→1, zaf→2, aed→0, wxy→3\n다 더하면 얼마일까요?"),
