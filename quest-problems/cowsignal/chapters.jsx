@@ -25,7 +25,8 @@ function Grid({ data, cellSize = 32, gap = 3, xColor = "#7c3aed", xBg = "#7c3aed
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (10 steps, 2026-09-23: 11→10, 곱셈 재드릴 1개 삭제)
+   Chapter 1: 📋 문제 이해 (8 steps, 2026-09-23: 11→10→8, 순수 곱셈 퀴즈 1-4·1-7 삭제 —
+   "행×열/K×K/출력크기" 셋 중 미션 공식(출력크기, 1-9)만 남김)
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowSignalCh1(E) {
   return [
@@ -138,16 +139,10 @@ export function makeCowSignalCh1(E) {
         </div>),
     },
 
-    // 1-4 퀴즈: 기본 이해
-    {
-      type: "quiz",
-      narr: t(E,
-        "Quick check! If M=2 and N=3, how many cells are in the original grid?", "확인해 봐요! M=2 이고 N=3 이면 원본 격자에 칸이 몇 개일까요?"),
-      question: t(E, "2 rows × 3 columns = ? cells", "2행 × 3열 = ? 칸"),
-      options: ["6", "5", "8"],
-      correct: 0,
-      explain: t(E, "2 × 3 = 6 cells total! ✅", "2 × 3 이니까 모두 6칸이에요! ✅"),
-    },
+    /* 옛 1-4 (input "2 rows × 3 cols = ? cells") 을 여기서 지웠다 (2026-09-23, 학생 지적).
+       "순수하게 크기 곱하기만 묻는" 퀴즈가 이 자리 · 1-7(옛) · 1-9 세 곳에 있었고,
+       학생이 "세 번째부터는 설명은 안 읽고 숫자만 곱해서 답했다" 고 했다.
+       셋 중 실제 미션 공식(출력 크기)을 확인하는 1-9 하나만 남긴다. */
 
     // 1-5 확대란? 한 칸이 K×K 블록이 됨
     {
@@ -198,16 +193,9 @@ export function makeCowSignalCh1(E) {
         </div>),
     },
 
-    // 1-7 퀴즈: K=3이면?
-    {
-      type: "quiz",
-      narr: t(E,
-        "If K=3, each single cell becomes a 3×3 block of the same character.", "K=3 이면 칸 하나가 3×3 블록이 돼요. 같은 글자로 채워요."),
-      question: t(E, "K=3. One 'X' becomes how many X's?", "K=3 이면 'X' 하나가 X 몇 개가 될까요?"),
-      options: ["9", "3", "6", "12"],
-      correct: 0,
-      explain: t(E, "3×3 = 9 X's in a square block! ✅", "3×3 이니까 네모 블록 안에 X 가 9개예요! ✅"),
-    },
+    /* 옛 1-7 (K=3, X 몇 개?) 도 여기서 지웠다 (2026-09-23) — 위 1-4 삭제 사유와 같음.
+       파란 줄이 "K=3 이면 3×3 블록" 이라 공식을 준 바로 뒤에 그 계산만 시키는
+       자리이기도 했다(선생님 지적 ③). K×K 블록 자체는 1-5/1-6 에서 이미 그림으로 보여줬다. */
 
     // 1-8 전체 예시: 원본 → 확대
     {
@@ -370,11 +358,12 @@ export function makeCowSignalCh2(E) {
       explain: t(E, "The dot is repeated 4 times: '....' ✅", "점이 4번 되풀이돼서 '....' 가 돼요 ✅"),
     },
 
-    // 2-5 전체 과정 추적
+    // 2-5 전체 과정 추적 (2026-09-23: 이 격자는 벌써 네 번째 등장이라
+    // "왜 또 보는지" 를 narr 에 한 마디 붙였다 — 학생 지적 ⑥)
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace the full process for our example grid with K=2.", "우리 예제 격자를 K=2 로 처음부터 끝까지 따라가 봐요."),
+        "Same grid as before — but this time let's trace it row by row, copy by copy.", "같은 격자예요 — 이번엔 행 하나, 복사 하나씩 순서대로 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8, fontSize: 12, color: C.dim }}>
@@ -415,11 +404,13 @@ export function makeCowSignalCh2(E) {
       explain: t(E, "The inner loop runs K times for each row i → same row printed K times ✅", "안쪽 반복문이 행 i 마다 K번 돌아요 → 같은 행을 K번 출력해요 ✅"),
     },
 
-    // 2-7 퀴즈: 가로 확대는?
+    // 2-7 퀴즈: 가로 확대는? (2026-09-23: narr 이 "코드로는 grid[i][j] * K" 라고
+    // 공식을 미리 준 뒤 바로 그 계산만 시켰다 — 선생님 지적 ③. 그 코드 자체는
+    // 3-5/3-6 에서 처음 나오니 여기선 개념만 다시 확인한다.)
     {
       type: "quiz",
       narr: t(E,
-        "For horizontal stretching, we build each output row by repeating each character K times.\nIn code: grid[i][j] * K.", "가로 확대는 출력 행을 만들 때 글자마다 K번 되풀이해요.\n코드로는 grid[i][j] * K 예요."),
+        "Horizontal stretching means: build the row by repeating each character K times, one after another.", "가로 확대는 행을 만들 때 글자 하나하나를 K번씩 이어 붙이는 거예요."),
       question: t(E,
         "Row = '.X.', K=3. What's the expanded row?",
         "행이 '.X.' 이고 K=3 이에요. 확대된 행은 무엇일까요?"),
@@ -485,15 +476,23 @@ export function makeCowSignalCh3(E, lang = "py") {
         </div>),
     },
 
-    // 3-3 퀴즈: grid[i][j]
+    // 3-3 퀴즈: grid[i][j] (2026-09-23: C++ 을 눌러도 파이썬 리스트 문법(['X.X', '.X.'])
+    // 그대로였다 — 선생님 지적 ①. lang 을 따라가게 고쳤다.)
     {
       type: "quiz",
-      narr: t(E,
-        "If grid = ['X.X', '.X.'], what is grid[0][2]? Remember: index starts at 0!", "grid 가 ['X.X', '.X.'] 이면 grid[0][2] 는 무엇일까요?\n자리 번호는 0부터 세요!"),
-      question: t(E, "grid[0] = 'X.X'. grid[0][2] = ?", "grid[0] = 'X.X'. grid[0][2] = ?"),
+      narr: lang === "cpp"
+        ? t(E,
+            "If grid = {\"X.X\", \".X.\"} (a vector<string>), what is grid[0][2]? Remember: index starts at 0!",
+            "grid 가 {\"X.X\", \".X.\"} (vector<string>) 이면 grid[0][2] 는 무엇일까요?\n자리 번호는 0부터 세요!")
+        : t(E,
+            "If grid = ['X.X', '.X.'], what is grid[0][2]? Remember: index starts at 0!",
+            "grid 가 ['X.X', '.X.'] 이면 grid[0][2] 는 무엇일까요?\n자리 번호는 0부터 세요!"),
+      question: lang === "cpp"
+        ? t(E, "grid[0] = \"X.X\". grid[0][2] = ?", "grid[0] = \"X.X\". grid[0][2] = ?")
+        : t(E, "grid[0] = 'X.X'. grid[0][2] = ?", "grid[0] = 'X.X'. grid[0][2] = ?"),
       options: ["'X'", "'.'", "'.X'"],
       correct: 0,
-      explain: t(E, "'X.X'[0]='X', [1]='.', [2]='X' ✅", "'X.X'[0]='X', [1]='.', [2]='X' ✅"),
+      explain: t(E, "grid[0][0]='X', grid[0][1]='.', grid[0][2]='X' ✅", "grid[0][0]='X', grid[0][1]='.', grid[0][2]='X' ✅"),
     },
 
     // 3-4 출력 루프: 바깥
@@ -514,6 +513,9 @@ export function makeCowSignalCh3(E, lang = "py") {
             E ? "    for _ in range(K):  # repeat K times" : "    for _ in range(K):  # K 번 반복",
             "        ...",
           ]} />
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim }}>
+            {t(E, "'...' marks the spot we'll fill in the next step.", "'...' 는 다음 걸음에서 채울 자리예요.")}
+          </div>
         </div>),
     },
 
@@ -551,17 +553,27 @@ export function makeCowSignalCh3(E, lang = "py") {
         </div>),
     },
 
-    // 3-6 퀴즈: grid[i][j] * K
+    // 3-6 퀴즈: 핵심 줄 확인 (2026-09-23, 선생님 지적 ①·③:
+    // C++ 을 눌러도 파이썬 문자열 곱셈을 그대로 물었고, 바로 앞 3-5에서 이미
+    // 보여준 효과를 narr 가 또 말한 뒤 같은 계산을 시켰다. lang 을 따라가게 하고,
+    // narr 은 "확인해 보자" 로만 남겨 정답을 미리 주지 않는다.)
     {
       type: "quiz",
-      narr: t(E,
-        "This is the core of the solution! grid[i][j] * K does the horizontal stretching.", "이게 풀이의 핵심이에요! grid[i][j] * K 가 가로 확대를 맡아요."),
-      question: t(E,
-        "grid[0] = 'X.X', K=3. What does grid[0][1] * K produce?",
-        "grid[0] 이 'X.X' 이고 K=3 이에요. grid[0][1] * K 는 무엇일까요?"),
+      narr: lang === "cpp"
+        ? t(E, "Let's make sure this loop does what we expect.", "이 반복문이 우리가 생각한 대로 도는지 확인해 봐요.")
+        : t(E, "Let's make sure this line does what we expect.", "이 한 줄이 우리가 생각한 대로 도는지 확인해 봐요."),
+      question: lang === "cpp"
+        ? t(E,
+            "grid[0] = \"X.X\", K=3. The loop for (int k=0;k<K;k++) cout << grid[0][1]; prints what?",
+            "grid[0] 이 \"X.X\" 이고 K=3 이에요. for (int k=0;k<K;k++) cout << grid[0][1]; 는 무엇을 출력할까요?")
+        : t(E,
+            "grid[0] = 'X.X', K=3. What does grid[0][1] * K produce?",
+            "grid[0] 이 'X.X' 이고 K=3 이에요. grid[0][1] * K 는 무엇일까요?"),
       options: ["'...'", "'XXX'", "'X.X'"],
       correct: 0,
-      explain: t(E, "grid[0][1] = '.'. '.' * 3 = '...' ✅", "grid[0][1] = '.'. '.' * 3 = '...' ✅"),
+      explain: lang === "cpp"
+        ? t(E, "grid[0][1] = '.'. The loop prints it 3 times: '...' ✅", "grid[0][1] = '.'. 이 반복문이 3번 찍어서 '...' 가 돼요 ✅")
+        : t(E, "grid[0][1] = '.'. '.' * 3 = '...' ✅", "grid[0][1] = '.'. '.' * 3 = '...' ✅"),
     },
 
     // 3-7 복잡도
@@ -572,6 +584,9 @@ export function makeCowSignalCh3(E, lang = "py") {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 28, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(MNK²)</div>
+          <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+            {t(E, "O(...) is a rough way to say \"about how many steps this takes.\"", "O(...) 는 '대충 몇 번쯤 걸린다' 를 적는 방법이에요.")}
+          </div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>{t(E, "= output size, optimal!", "= 출력 크기와 같아요. 이보다 좋을 수 없어요!")}</div>
           <div style={{ marginTop: 8, fontSize: 12, color: C.ok, fontWeight: 700 }}>
             M,N ≤ 10, K ≤ 10 → {t(E, "max 10,000 chars, instant!", "많아야 10,000 글자예요. 바로 끝나요!")}
