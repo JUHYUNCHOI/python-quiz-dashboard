@@ -182,17 +182,17 @@ export function makeRotShiftCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Algorithm: Simply simulate each step.\nFor large T, you can detect cycles, but for Bronze, direct simulation works!", "\uc5ec\uae30\uc11c\ub294 \ud55c \ubd84\uc529 \uadf8\ub300\ub85c \ub530\ub77c\uac00 \ubcfc \uac70\uc608\uc694.\nT \uac00 \uc544\uc8fc \ud06c\uba74 \uac19\uc740 \ubaa8\uc591\uc774 \ub418\ud480\uc774\ub418\ub294 \uac78 \ucc3e\ub294 \ubc29\ubc95\ub3c4 \uc788\uc5b4\uc694."),
+        "This is what one minute does. Follow it by hand a few times and a pattern shows up — the code will ride that pattern instead of walking all T minutes.", "\ud55c \ubd84 \ub3d9\uc548 \uc77c\uc5b4\ub098\ub294 \uc77c\uc774\uc5d0\uc694.\n\uc190\uc73c\ub85c \uba87 \ubc88 \ub530\ub77c\uac00 \ubcf4\uba74 \uaddc\uce59\uc774 \ubcf4\uc5ec\uc694."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#8b5cf6", marginBottom: 10 }}>
-              {t(E, "Simulation Steps", "\ub530\ub77c \ud558\ub294 \uc21c\uc11c")}
+              {t(E, "Simulation Steps", "\ud55c \ubd84 \ub3d9\uc548 \uc77c\uc5b4\ub098\ub294 \uc77c")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
-                "For each of T steps:\n1. Find which cow is at each active position\n2. Move each cow to the next active position (cyclic)\n3. Shift all active positions by +1 (mod N)\n4. After all steps, output each cow's position",
-                "T \ubc88 \ub418\ud480\uc774\ud574\uc694.\n1. \uac01 \ud65c\uc131 \uc704\uce58\uc5d0 \uc5b4\ub5a4 \uc18c\uac00 \uc788\ub294\uc9c0 \ucc3e\uc544\uc694\n2. \uac01 \uc18c\ub97c \ub2e4\uc74c \ud65c\uc131 \uc704\uce58\ub85c \uc62e\uaca8\uc694 (\uc21c\ud658)\n3. \ubaa8\ub4e0 \ud65c\uc131 \uc704\uce58\ub97c +1 \uc62e\uaca8\uc694 (mod N)\n4. \ub2e4 \ub05d\ub098\uba74 \uac01 \uc18c\uc758 \uc704\uce58\ub97c \ucd9c\ub825\ud574\uc694")}
+                "Every minute:\n1. Find which cow is at each active position\n2. Move each cow to the next active position (cyclic)\n3. Shift all active positions by +1 (mod N)\nAfter T minutes, output each cow's position",
+                "\ud55c \ubd84\ub9c8\ub2e4 \uc774\ub7f0 \uc77c\uc774 \uc77c\uc5b4\ub098\uc694.\n1. \uac01 \ud65c\uc131 \uc704\uce58\uc5d0 \uc5b4\ub5a4 \uc18c\uac00 \uc788\ub294\uc9c0 \ucc3e\uc544\uc694\n2. \uac01 \uc18c\ub97c \ub2e4\uc74c \ud65c\uc131 \uc704\uce58\ub85c \uc62e\uaca8\uc694 (\uc21c\ud658)\n3. \ubaa8\ub4e0 \ud65c\uc131 \uc704\uce58\ub97c +1 \uc62e\uaca8\uc694 (mod N)\nT \ubd84\uc774 \ub2e4 \uc9c0\ub098\uba74 \uac01 \uc18c\uc758 \uc704\uce58\ub97c \ucd9c\ub825\ud574\uc694")}
             </div>
           </div>
         </div>),
@@ -209,8 +209,8 @@ export function makeRotShiftCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just simulate T minutes directly.  Each minute: rotate cows on active positions one step around the cycle, then shift every active position +1 mod N.",
-        "T 분을 한 분씩 그대로 따라가요. 회전한 뒤 활성 위치를 옮겨요."),
+        "T can reach a billion, so we never walk it minute by minute. We count the sweeps instead.",
+        "T 가 10억까지 가서 한 분씩 걸을 수 없어요.\n대신 «몇 번 휩쓸리나» 를 바로 세요."),
       content: (
         <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
           {t(E,
