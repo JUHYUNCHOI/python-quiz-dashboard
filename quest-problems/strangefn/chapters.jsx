@@ -37,7 +37,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 11, color: "#7c3aed", marginTop: 6, wordBreak: "keep-all", textWrap: "balance", whiteSpace: "pre-line" }}>
               {t(E,
                 "10⁹+7 = 1,000,000,007, a huge prime.\nThe true answer can get astronomically large, so we only report the remainder after dividing by it.",
-                "10⁹+7 은 10억 7, 즉 1,000,000,007 이에요.\n답이 어마어마하게 커질 수 있어서, 이 수로 나눈 나머지만 답으로 내요.")}
+                "10⁹+7 은 1,000,000,007 이라는 아주 큰 소수예요.\n답이 어마어마하게 커질 수 있어서, 이 수로 나눈 나머지만 답으로 내요.")}
             </div>
           </div>
 
@@ -58,17 +58,18 @@ export function makeStrangeFnCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "If x has any digit other than 0 or 1: replace ",
-                        "x 에 0/1 이 아닌 자릿수가 하나라도 있으면: ")}
+                        "x 에 0/1 이 아닌 자릿수가 하나라도 있으면, ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "each digit", "각 자릿수")}</b>
-                  {t(E, " by 1 if odd, 0 if even.", " 를 홀수면 1, 짝수면 0 으로 바꿔요.")}
+                  {t(E, " by 1 if odd, 0 if even.", "를 홀수면 1, 짝수면 0으로 바꿔요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Otherwise (x contains only 0/1): ",
-                        "그게 아니면 (x 가 0/1 만 가짐): ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "x − 1", "x − 1")}</b>.
+                  {t(E, "Otherwise (x contains only 0/1): replace x with ",
+                        "그게 아니면 (x 가 0 과 1 로만 되어 있으면), x 를 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "x − 1", "x − 1")}</b>
+                  {t(E, ".", " 로 바꿔요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
@@ -196,7 +197,7 @@ export function makeStrangeFnCh1(E) {
                 "x 자체가 이미 20만 자리에 가까운 수일 수 있어요. 0/1 만 남아도 크기는 그대로예요.")}</div>
               <div style={{ marginTop: 6 }}>{t(E,
                 "f only subtracts 1 each time, so reaching 0 takes as many steps as the value itself.",
-                "자릿수가 그대로니 값도 크고, f 는 1 씩 빼니 0 까지 그 값만큼 걸려요.")}</div>
+                "f 는 한 번에 1 씩만 빼요. 그래서 0 까지 가려면 그 값 크기만큼 여러 번 걸려요.")}</div>
               <div style={{ marginTop: 6, fontWeight: 700 }}>{t(E,
                 "That means the number of f's needed can be astronomically large.",
                 "그러니 f 의 횟수 자체가 어마어마하게 커질 수 있어요.")}</div>
@@ -251,7 +252,7 @@ export function makeStrangeFnCh1(E) {
       answer: 3,
       explain: t(E,
         "3 is right. 10 → 9 → 1 → 0, three f's.\nx = 1 took 1, x = 10 took 3 — it didn't just go up by one. Let's count one more, then find the rule.",
-        "3 이 맞아요. 10 → 9 → 1 → 0, 세 번이에요.\nx = 1 은 1 번, x = 10 은 3 번 — 하나씩 늘지 않아요. 하나만 더 세어 보고 규칙을 찾아요."),
+        "3 이 맞아요. 10 → 9 → 1 → 0, 세 번이에요.\nx = 1 은 1 번, x = 10 은 3 번이에요. 하나씩 늘지는 않네요. 하나만 더 세어 보고 규칙을 찾아요."),
     },
 
     // 1-7: 도입 — x=11 (n=3), 홀짝 변환이 낀 값 (2026-09-23 신설)
@@ -272,64 +273,137 @@ export function makeStrangeFnCh1(E) {
         "4 가 맞아요. 11 → 10 → 9 → 1 → 0, 네 번이에요. 방금 구한 세 값 1, 3, 4 를 표에서 다시 확인해요."),
     },
 
-    // 1-6: 해결 — 패턴 정리 (2026-09-22: '왜 이진수 뺄셈과 같나' 지어낸 설명 제거, 관찰→규칙으로만)
+    // 1-6 A: 이진수로 읽는 법 (2026-09-23 PM 판정 — 8쪽 5개 박스를 5쪽으로 쪼갠다.
+    // 근거: memory/quest_season_shape_consistency.md("쪽 하나에 표 하나") +
+    // feedback_screen_must_not_rely_on_memory. 걸음 A~E, 각 걸음은 질문 하나만 답한다.
     {
       type: "reveal",
       narr: t(E,
-        "Once x is 0/1 only, read it as binary n — and look for a rule.",
-        "x 가 0/1 만 남으면 이진수 n 으로 읽고 규칙을 찾아요."),
+        "How do leftover 0/1 digits become one number?",
+        "남은 0과 1을 어떻게 하나의 수로 읽을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
-            🧩 {t(E, "What's the pattern?", "패턴이 뭘까?")}
+            🔢 {t(E, "Reading as binary", "이진수로 읽기")}
           </div>
-
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
-              {/* ⚠️ 2026-09-22: 예전 문장은 "이진수에서 1 빼기와 똑같다" 고 주장했는데
-                  틀렸다 (10−1=9 ≠ 이진 10−1=1). 검증해 주지 않은 인과는 쓰지 않는다 —
-                  작은 n 을 세어서 나온 값을 그대로 관찰만 한다.
-                  ⚠️ 2026-09-22 학생 검증: 앞 쪽(3쪽) 시뮬은 순수 십진 뺄셈인데
-                  여기서 갑자기 "이진수로 읽는다" 고 해서 다리가 끊겨 있었다.
-                  또 "x=10 은 3번" (5쪽) 과 "n=2 는 3" (이 표) 을 잇는 문장이
-                  빠져 있었다 — 직접 채워 넣는다.
-                  2026-09-22 재검증: "이진수" 를 처음 쓰는 이 자리에서 읽는 법(자리마다
-                  2의 몇 제곱)을 한 번도 안 알려줬다 — 학생이 8쪽까지 혼자 짐작했다.
-                  한 줄만 추가하고, 대신 앞부분을 줄여서 전체 길이를 늘리지 않는다.
-                  2026-09-23 두 번째 검증: g(1)=1·g(3)=4 가 계산 과정 없이 나와서
-                  "검산할 방법이 없어 외워야 했다" — 5~7쪽에서 x=1·10·11 을 직접 셌으니
-                  그 세 값을 여기서 이진수(n=1,2,3)로 다시 확인해 준다. 화면은 앞 쪽을
-                  기억하지 않으므로 숫자를 다시 적는다(memory/feedback_screen_must_not_rely_on_memory). */}
-              {t(E,
-                "Page 3 subtracted x = 210 in plain decimal — that was correct there. Here we read the same 0/1 digits as binary instead: from the right, place values go 1, 2, 4, 8 … doubling each time. Let's convert the three values you just counted:",
-                "3쪽은 x = 210 을 그대로 십진수로 뺐어요, 거기선 그게 맞아요. 여기선 규칙을 찾으려 같은 0과 1을 이진수로 읽어요 — 오른쪽부터 1, 2, 4, 8 … 두 배씩이에요. 방금 직접 센 세 값을 이진수로 바꿔볼게요:")}
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, wordBreak: "keep-all", textWrap: "balance" }}>
+              <div>{t(E,
+                "Page 3 subtracted x = 210 in plain decimal. That was the right way to do it there.",
+                "3쪽에서는 x = 210 을 그냥 십진수로 뺐어요. 그 계산은 거기서는 맞는 방법이었어요.")}</div>
+              <div style={{ marginTop: 6 }}>{t(E,
+                "Here we want to find a rule, so we read the same 0/1 digits a different way: as binary.",
+                "여기서는 규칙을 찾으려고 같은 0과 1을 다른 방법으로 읽어요. 바로 이진수예요.")}</div>
+              <div style={{ marginTop: 6 }}>{t(E,
+                "In binary, place values double as you move left: 1, 2, 4, 8 …",
+                "이진수는 오른쪽 자리부터 자리값이 1, 2, 4, 8 … 이렇게 두 배씩 커져요.")}</div>
             </div>
           </div>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 8, textAlign: "center" }}>
+              {t(E, "Example: reading \"10\" as binary", "예: \"10\" 을 이진수로 읽으면?")}
+            </div>
+            <div style={{ display: "flex", justifyContent: "center", gap: 20, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 22, fontWeight: 900, color: "#5b21b6" }}>1</div>
+                <div style={{ fontSize: 10.5, color: C.dim, marginTop: 2 }}>{t(E, "place value 2", "자리값 2")}</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 22, fontWeight: 900, color: "#5b21b6" }}>0</div>
+                <div style={{ fontSize: 10.5, color: C.dim, marginTop: 2 }}>{t(E, "place value 1", "자리값 1")}</div>
+              </div>
+            </div>
+            <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 800, color: "#15803d", fontFamily: "'JetBrains Mono',monospace" }}>
+              1×2 + 0×1 = 2 → n = 2
+            </div>
+          </div>
+        </div>),
+    },
 
-          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12, marginBottom: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#166534", lineHeight: 1.9 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 4, fontFamily: "inherit" }}>
+    // 1-6 B: 이미 직접 센 세 값을 n 으로
+    {
+      type: "reveal",
+      narr: t(E,
+        "Turn the three values you already counted into n.",
+        "직접 센 세 값을 이진수 n 으로 바꿔요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12, marginBottom: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#166534", lineHeight: 2 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6, fontFamily: "inherit" }}>
               ✅ {t(E, "Already counted (pages 5–7)", "이미 직접 셌어요 (5~7쪽)")}
             </div>
-            <div>"1" → n=1, g(1)=1 <span style={{ color: C.dim }}>(x = 1)</span></div>
-            <div>"10" → n=2, g(2)=3 <span style={{ color: C.dim }}>(x = 10)</span></div>
-            <div>"11" → n=3, g(3)=4 <span style={{ color: C.dim }}>(x = 11)</span></div>
+            <div>"1" = 1×1 → n=1, g(1)=1 <span style={{ color: C.dim }}>(x = 1)</span></div>
+            <div>"10" = 1×2+0×1 → n=2, g(2)=3 <span style={{ color: C.dim }}>(x = 10)</span></div>
+            <div>"11" = 1×2+1×1 → n=3, g(3)=4 <span style={{ color: C.dim }}>(x = 11)</span></div>
           </div>
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              "Check: does this n match the g you counted by hand on those pages?",
+              "방금 5~7쪽에서 직접 구한 값과 같은지 확인해보세요.")}
+          </div>
+        </div>),
+    },
 
+    // 1-6 C: n=4~7 로 늘려서 짝/홀 비교 (형태 칸 없음 — 스스로 관찰)
+    {
+      type: "reveal",
+      narr: t(E,
+        "What about n = 4 through 7?",
+        "n = 4 부터 7 까지는 g(n) 이 얼마일까요?"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
+            🧩 {t(E, "Line up more n's", "표를 늘려서 비교해봐요")}
+          </div>
           <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "Those three rows are already confirmed below. Let's line up more n's the same way and look for a rule.",
-              "아래 표의 저 세 줄은 이미 확인된 값이에요. 같은 방법으로 더 늘어놓고 규칙을 찾아봐요.")}
+              "Look at the even-n rows and the odd-n rows separately. How does g(n) differ?",
+              "짝수 n 줄과 홀수 n 줄을 나눠서 봐요. g(n) 이 어떻게 다른가요?")}
           </div>
+          <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
+            <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: C.text, borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ background: "#ede9fe", color: "#5b21b6" }}>
+                  <th style={{ padding: "4px 8px", textAlign: "left" }}>n</th>
+                  <th style={{ padding: "4px 8px", textAlign: "left" }}>g(n)</th>
+                  <th style={{ padding: "4px 8px", textAlign: "left" }}>{t(E, "n is…", "n 은…")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>{t(E, "even", "짝수")}</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>{t(E, "odd", "홀수")}</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>{t(E, "even", "짝수")}</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>{t(E, "odd", "홀수")}</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>{t(E, "even", "짝수")}</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>{t(E, "odd", "홀수")}</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>{t(E, "even", "짝수")}</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>{t(E, "odd", "홀수")}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>),
+    },
 
-          <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>
-              {t(E, "g(n) = ops to kill the binary number n", "g(n) = 이진수 n 을 0 으로 만드는 데 드는 횟수")}
-            </div>
-            <div style={{ fontSize: 11, color: C.dim, marginBottom: 6, wordBreak: "keep-all", textWrap: "balance" }}>
-              {t(E,
-                "Green rows = what you already counted. \"form\" writes n as 2k (even) or 2k+1 (odd).",
-                "초록 줄 = 이미 직접 센 값이에요. \"형태\" 는 n 이 짝수(2k)인지 홀수(2k+1)인지를 나타내요.")}
-            </div>
+    // 1-6 D: 짝수=3k, 홀수=3k+1 확인 (형태 칸 등장 — 이제 "찾기"가 아니라 "확인")
+    {
+      type: "reveal",
+      narr: t(E,
+        "Is it really 3k for even n, 3k+1 for odd n?",
+        "정말 짝수는 3k, 홀수는 3k+1 인가요?"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
+            ✅ {t(E, "Let's check", "확인해봐요")}
+          </div>
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, wordBreak: "keep-all", textWrap: "balance" }}>
+            <div>{t(E,
+              "Let k be n divided by 2 (the quotient).",
+              "k 는 n 을 2 로 나눈 몫이에요.")}</div>
+            <div style={{ marginTop: 4 }}>{t(E,
+              "Let's check whether the even/odd rows you just split really follow this form.",
+              "방금 짝수 줄, 홀수 줄로 나눠 본 것이 정말 이런 식을 따르는지 확인해요.")}</div>
+          </div>
+          <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
             <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: C.text, borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ background: "#ede9fe", color: "#5b21b6" }}>
@@ -339,18 +413,28 @@ export function makeStrangeFnCh1(E) {
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>—</td></tr>
-                <tr style={{ background: "#ecfdf5" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>{t(E, "counted by hand", "직접 셈")}</td></tr>
-                <tr style={{ background: "#ecfdf5" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>{t(E, "counted by hand", "직접 셈")}</td></tr>
-                <tr style={{ background: "#ecfdf5" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>{t(E, "counted by hand", "직접 셈")}</td></tr>
-                <tr><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>2k, k=2 → 3k=6</td></tr>
-                <tr><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>2k+1, k=2 → 3k+1=7</td></tr>
-                <tr><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>2k, k=3 → 3k=9</td></tr>
-                <tr><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>2k+1, k=3 → 3k+1=10</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>—</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>2k+1, k=0 → 3k+1=1</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>2k, k=1 → 3k=3</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>2k+1, k=1 → 3k+1=4</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>2k, k=2 → 3k=6</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>2k+1, k=2 → 3k+1=7</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>2k, k=3 → 3k=9</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>2k+1, k=3 → 3k+1=10</td></tr>
               </tbody>
             </table>
           </div>
+        </div>),
+    },
 
+    // 1-6 E: 두 식을 하나로 합치기 (floor 정의는 여기서 처음 등장)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Combine both into one formula.",
+        "이 둘을 식 하나로 합쳐요."),
+      content: (
+        <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
               {t(E, "✅ Formula", "✅ 공식")}
@@ -359,24 +443,30 @@ export function makeStrangeFnCh1(E) {
               <div>g(2k)   = 3k</div>
               <div>g(2k+1) = 3k + 1</div>
             </div>
-            <div style={{ fontSize: 11, color: "#166534", marginTop: 4, fontFamily: "inherit", wordBreak: "keep-all", textWrap: "balance" }}>
-              {t(E,
-                "n=2k → 3n/2=3k. n=2k+1 → 3n/2=3k+1.5, drop the decimal → 3k+1 — so both become one formula:",
-                "n=2k 면 3n/2=3k. n=2k+1 이면 3n/2=3k+1.5, 소수점을 버리면 3k+1 — 둘 다 이 식 하나로 써요:")}
+            <div style={{ fontSize: 11, color: "#166534", marginTop: 8, fontFamily: "inherit", wordBreak: "keep-all", textWrap: "balance" }}>
+              <div>{t(E,
+                "If n = 2k, then 3n/2 is 3k.",
+                "n = 2k 면 3n/2 는 3k 예요.")}</div>
+              <div style={{ marginTop: 4 }}>{t(E,
+                "If n = 2k+1, then 3n/2 is 3k+1.5. Drop the decimal and it's 3k+1.",
+                "n = 2k+1 이면 3n/2 는 3k+1.5 인데, 소수점을 버리면 3k+1 이에요.")}</div>
+              <div style={{ marginTop: 4 }}>{t(E,
+                "Both cases become one formula:",
+                "둘 다 다음 식 하나로 써요.")}</div>
             </div>
-            <div style={{ fontSize: 12, color: "#15803d", fontFamily: "'JetBrains Mono', monospace", marginTop: 4 }}>
+            <div style={{ fontSize: 12, color: "#15803d", fontFamily: "'JetBrains Mono', monospace", marginTop: 6, textAlign: "center", fontWeight: 800 }}>
               {t(E, "= floor(3·n / 2)", "= floor(3·n / 2)")}
             </div>
-            <div style={{ fontSize: 11, color: "#166534", marginTop: 6, fontFamily: "inherit", wordBreak: "keep-all", textWrap: "balance" }}>
+            <div style={{ fontSize: 11, color: "#166534", marginTop: 8, fontFamily: "inherit", wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
-                "floor drops anything after the decimal point — floor(3.5) is 3.",
-                "floor 는 소수점 아래를 버리는 거예요 — floor(3.5) 는 3 이에요.")}
+                "floor drops anything after the decimal point. For example, floor(3.5) is 3.",
+                "floor 는 소수점 아래를 버리는 거예요. 예를 들어 floor(3.5) 는 3 이에요.")}
             </div>
           </div>
         </div>),
     },
 
-    // 1-7: 연습1 — 0/1 이 아닌 자리가 있는 값 (input, x=37 → 5. 2026-09-22 신설)
+    // 1-7: 연습1
     {
       type: "input",
       narr: t(E,
@@ -424,7 +514,11 @@ export function makeStrangeFnCh1(E) {
    의 "계획" 단계 부재 · memory/feedback_students_copy_the_answer.md 와 같은 모양).
    모양은 buymilk 의 "Plan" 쪽(BuyMilkPlan)을 그대로 베꼈다 — 파란 박스 +
    번호 걸음, 새 시뮬은 만들지 않는다. 숫자는 전부 학생이 이미 본 것만 쓴다
-   (x=210 은 3쪽 시뮬, n=2·g(2)=3 은 8쪽 표 — 2026-09-23 페이지 삽입으로 6→8쪽). */
+   (x=210 은 3쪽 시뮬, n=2·g(2)=3 은 "이미 직접 셌어요" 걸음).
+   ⚠️ 2026-09-23 두 번째 판정: 예전엔 여기서 "8쪽 표" 처럼 쪽 번호를 박아
+   놓았는데, 그 표가 있던 쪽을 다섯 쪽으로 쪼개면서 번호가 다 밀렸다.
+   쪽 번호를 아예 안 쓰고 "이미 확인한 값" 으로만 가리키도록 고쳤다 —
+   앞으로 쪽이 늘거나 줄어도 이 문장은 안 깨진다. */
 function StrangeFnPlan({ E }) {
   const Step = ({ n, children }) => (
     <div style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 8 }}>
@@ -470,7 +564,7 @@ function StrangeFnPlan({ E }) {
           wordBreak: "keep-all", textWrap: "balance" }}>
           <div>{t(E, "One by one (page 3): 210 → 10 → 9 → 1 → 0 = 4", "하나씩 세면 (3쪽): 210 → 10 → 9 → 1 → 0 = 4번")}</div>
           <div style={{ marginTop: 6 }}>{t(E, "① parity-flip once → \"010\"", "① 홀짝 변환 1번 → \"010\"")}</div>
-          <div>{t(E, "② read as binary → n = 2 (same n as page 8's table)", "② 이진수로 읽으면 → n = 2 (8쪽 표와 같아요)")}</div>
+          <div>{t(E, "② read as binary → n = 2 (same n we already confirmed)", "② 이진수로 읽으면 → n = 2 (앞에서 확인한 값과 같아요)")}</div>
           <div>{t(E, "③ g(2) = 3", "③ g(2) = 3")}</div>
           <div style={{ marginTop: 4, fontWeight: 800 }}>1 + 3 = 4</div>
         </div>
