@@ -160,9 +160,9 @@
     "korean_chars_ref": 291
   },
   "cowgym": {
-    "pages": 17,
-    "quiz_input": 7,
-    "korean_chars_ref": 1395
+    "pages": 14,
+    "quiz_input": 5,
+    "korean_chars_ref": 1206
   },
   "cowntact": {
     "pages": 6,
@@ -460,9 +460,9 @@
     "korean_chars_ref": 775
   },
   "mcc20kitty": {
-    "pages": 17,
-    "quiz_input": 4,
-    "korean_chars_ref": 2124
+    "pages": 15,
+    "quiz_input": 3,
+    "korean_chars_ref": 2139
   },
   "mcc20knight": {
     "pages": 7,
@@ -597,7 +597,7 @@
   "mixmilk": {
     "pages": 17,
     "quiz_input": 6,
-    "korean_chars_ref": 1348
+    "korean_chars_ref": 1459
   },
   "mobilegame": {
     "pages": 6,
@@ -617,7 +617,7 @@
   "moohunt": {
     "pages": 8,
     "quiz_input": 0,
-    "korean_chars_ref": 3732
+    "korean_chars_ref": 3901
   },
   "mooin2": {
     "pages": 16,
@@ -670,9 +670,9 @@
     "korean_chars_ref": 620
   },
   "permutation": {
-    "pages": 16,
+    "pages": 14,
     "quiz_input": 5,
-    "korean_chars_ref": 1934
+    "korean_chars_ref": 1790
   },
   "photoshoot": {
     "pages": 4,
@@ -750,9 +750,9 @@
     "korean_chars_ref": 2961
   },
   "shellgame": {
-    "pages": 16,
+    "pages": 14,
     "quiz_input": 6,
-    "korean_chars_ref": 1164,
+    "korean_chars_ref": 1100,
     "clicks": 15
   },
   "simplegame": {

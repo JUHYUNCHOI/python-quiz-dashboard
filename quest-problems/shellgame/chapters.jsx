@@ -94,7 +94,14 @@ const ShellRow = ({ shells, pebble, guess, label, E: isE }) => {
               position: "relative",
             }}>
               <div style={{ fontSize: 22 }}>{"🐚"}</div>
-              {hasPebble && <div style={{ fontSize: 10, position: "absolute", bottom: 2 }}>{"⚪"}</div>}
+              {hasPebble && (
+                <div style={{
+                  position: "absolute", bottom: -9, width: 14, height: 14, borderRadius: "50%",
+                  background: "#fff", border: "1.5px solid #f59e0b",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 8, lineHeight: 1, boxShadow: "0 1px 3px rgba(0,0,0,.15)",
+                }}>{"⚪"}</div>
+              )}
               {isGuess && <div style={{
                 position: "absolute", top: -8, right: -8, fontSize: 10,
                 background: "#dc2626", color: "#fff", borderRadius: 10, padding: "1px 5px", fontWeight: 600,
@@ -381,48 +388,7 @@ export function makeShellCh1(E) {
         "The pebble was at 1. We swapped 1 and 3, so the pebble moves from 1 to 3!",
         "조약돌이 1번에 있었어요. 1번과 3번을 바꿨으니 조약돌은 3번으로 가요!"),
     },
-    // 1-4: The key insight — try all 3 starts
-    {
-      type: "reveal",
-      narr: t(E,
-        "We don't know where the pebble starts!\nBut there are only 3 possible positions: 1, 2, or 3.\nSo we try ALL 3 starting positions and take the best score!", "시작 위치는 1, 2, 3 중 하나뿐이니 셋 다 해 보면 돼요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
-            {t(E, "The Key Insight: Try All 3!", "핵심 아이디어 — 세 가지를 다 해 봐요")}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[1, 2, 3].map(start => {
-              const colors = ["#3b82f6", "#10b981", "#f59e0b"];
-              return (
-                <div key={start} style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: `${colors[start - 1]}10`, borderRadius: 10,
-                  padding: "8px 12px", border: `1px solid ${colors[start - 1]}40`,
-                }}>
-                  <div style={{
-                    fontSize: 24, width: 40, height: 40, borderRadius: "50%",
-                    background: `${colors[start - 1]}20`, display: "flex",
-                    alignItems: "center", justifyContent: "center",
-                  }}>{"🐚"}</div>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: colors[start - 1] }}>
-                      {t(E, `Try start = ${start}`, `시작 위치 ${start} 번으로 해 보기`)}
-                    </div>
-                    <div style={{ fontSize: 11, color: C.dim }}>
-                      {t(E, "Simulate all swaps → count correct guesses", "바꾸기를 끝까지 따라가며 맞힌 횟수를 세요")}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div style={{ marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#dc2626" }}>
-            {t(E, "Answer = max of all 3 scores!", "답은 세 점수 중 제일 큰 값이에요!")}
-          </div>
-        </div>),
-    },
-    // 1-5: Quiz — number of starting positions
+    // 1-4: Quiz — number of starting positions
     {
       type: "quiz",
       narr: t(E,
@@ -440,7 +406,7 @@ export function makeShellCh1(E) {
         "Only 3 shells, so only 3 possible starts. Try each, simulate, take the max!",
         "컵이 세 개니 시작 위치도 세 가지예요. 각각 해 보고 제일 큰 값을 고르면 끝이에요!"),
     },
-    // 1-6: Input practice
+    // 1-5: Input practice
     {
       type: "input",
       narr: t(E,
@@ -463,55 +429,11 @@ export function makeShellCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeShellCh2(E) {
   return [
-    // 2-1: Trace example setup
+    // 2-1: Trace all 3 starting positions
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace with an example!\n3 swaps: (1,2,guess=1), (3,2,guess=1), (1,3,guess=1).\nWe'll try starting position = 1.", "시작 위치를 1 로 놓고 세 번 바꿔 가며 따라가 볼게요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
-            {t(E, "Trace: start = 1", "추적: 시작 = 1")}
-          </div>
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
-              <thead>
-                <tr style={{ background: "#fef2f2" }}>
-                  <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626", textAlign: "left" }}>{t(E, "Step", "단계")}</th>
-                  <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>{t(E, "Swap", "스왑")}</th>
-                  <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>{t(E, "Pebble", "조약돌")}</th>
-                  <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>{t(E, "Guess", "추측")}</th>
-                  <th style={{ padding: "6px 6px", borderBottom: "2px solid #fca5a5", color: "#dc2626" }}>{"✓?"}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  [t(E, "Init", "초기"), "—", "1", "—", "—"],
-                  ["1", "1↔2", "2", "1", "✗"],
-                  ["2", "3↔2", "3", "1", "✗"],
-                  ["3", "1↔3", "1", "1", "✓"],
-                ].map(([step, swap, peb, guess, ok], i) => (
-                  <tr key={i} style={{ background: ok === "✓" ? "#dcfce7" : i % 2 === 0 ? "#fff" : "#fef2f2" }}>
-                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2" }}>{step}</td>
-                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{swap}</td>
-                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center", fontWeight: 600, color: "#f59e0b" }}>{peb}</td>
-                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{guess}</td>
-                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center", fontWeight: 600, color: ok === "✓" ? "#059669" : "#dc2626" }}>{ok}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, fontWeight: 600, color: "#dc2626" }}>
-            {t(E, "Start=1: score = 1", "시작=1: 점수 = 1")}
-          </div>
-        </div>),
-    },
-    // 2-2: Trace other starts
-    {
-      type: "reveal",
-      narr: t(E,
-        "Now let's see start=2 and start=3 too. We need to compare all three!", "이제 시작=2와 시작=3도 보자. 셋 다 비교해야 해요!"),
+        "Let's trace an example! 3 swaps: (1,2,guess=1), (3,2,guess=1), (1,3,guess=1).\nWe'll follow all 3 starting positions through them.", "예제로 시작 위치 1, 2, 3을 모두 따라가며 점수를 비교해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
@@ -560,7 +482,7 @@ export function makeShellCh2(E) {
           </div>
         </div>),
     },
-    // 2-3: Interactive — try the simulation yourself
+    // 2-2: Interactive — try the simulation yourself
     {
       type: "reveal",
       narr: t(E,
@@ -568,7 +490,7 @@ export function makeShellCh2(E) {
         "한 단계씩 넘기면서 시작 위치 세 곳을 같이 봐요."),
       content: <ShellSim E={E} />,
     },
-    // 2-4: Quiz on simulation logic
+    // 2-3: Quiz on simulation logic
     {
       type: "quiz",
       narr: t(E,
@@ -586,7 +508,7 @@ export function makeShellCh2(E) {
         "If the pebble is at A and we swap A↔B, the pebble moves to B! If pos==B, it moves to A. Otherwise, no change.",
         "조약돌이 A 에 있을 때 A↔B 를 바꾸면 B 로 가요. pos 가 B 면 A 로 가고, 아니면 그대로예요."),
     },
-    // 2-5: Complexity input
+    // 2-4: Complexity input
     {
       type: "input",
       narr: t(E,
@@ -625,10 +547,11 @@ export function makeShellCh3(E, lang = "py") {
               "N = int(lines[0])",
               "swaps = []",
               "for i in range(N):",
-              "    a, b, g = map(int, lines[1 + i].split())",
+              "    parts = lines[1 + i].split()",
+              "    a, b, g = int(parts[0]), int(parts[1]), int(parts[2])",
               "    swaps.append((a, b, g))",
             ]}
-            highlight={[0, 1, 2, 3, 4, 5, 6]}
+            highlight={[0, 1, 2, 3, 4, 5, 6, 7]}
           />
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5, whiteSpace: "pre-line" }}>
             {t(E,
@@ -659,6 +582,11 @@ export function makeShellCh3(E, lang = "py") {
             <div><span style={{ fontWeight: 600, color: "#dc2626" }}>range(1, 4)</span> = {t(E, "gives 1, 2, 3", "1, 2, 3을 생성")}</div>
             <div><span style={{ fontWeight: 600, color: "#dc2626" }}>pos</span> = {t(E, "current pebble location", "현재 조약돌 위치")}</div>
             <div><span style={{ fontWeight: 600, color: "#dc2626" }}>score</span> = {t(E, "correct guesses for this start", "이 시작 위치의 정답 수")}</div>
+          </div>
+          <div style={{ marginTop: 6, fontSize: 11, color: C.dim, lineHeight: 1.6 }}>
+            {t(E,
+              "Earlier we wrote max(...) — here best starts at 0 and updates one comparison at a time. Same result.",
+              "앞서는 max(...) 로 썼지만, 여기서는 best = 0 부터 시작해서 한 번씩 비교하며 갱신해요. 결과는 같아요.")}
           </div>
         </div>),
     },

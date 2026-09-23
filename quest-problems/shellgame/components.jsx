@@ -95,6 +95,8 @@ export function getShellGameSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
+        t(E, "Here, a, b, g are each stored in their own list (not tuples in a `swaps` list like before) — same job, different container.",
+            "여기서는 a, b, g 를 각각 따로 리스트에 담아요(앞서 본 swaps 튜플 대신) — 하는 일은 같아요."),
         t(E, "What should we print? The best possible number of correct guesses, over all 3 choices of where the shell truly started. So first read N and the N swaps (a, b, guess).",
             "무엇을 출력해야 하나요? 조개가 실제로 어디서 시작했든, 가장 많이 맞힐 수 있는 정답 수예요.\n그러니 먼저 N 과 N 번의 (a, b, 추측) 을 읽어요."),
         t(E, "We don't know which cup is real, so try all 3 starting positions separately and replay the same swaps for each — the guesses might match a different number of times.",
