@@ -152,151 +152,25 @@ const FULL_CPP = [
   "}",
 ];
 
-const SEC1_PY = [
-  "import sys",
-  "from math import isqrt",
-  "",
-  "def solve(N, M, K, a):",
-  "    # X 가 커질수록 쉬워짐 → 정답 X 를 이분 탐색",
-  "    hi = 1",
-  "    for j in range(N):",
-  "        need = (a[j] + j*j + M - 1) // M   # j 를 혼자 없앨 최소 X",
-  "        if need > hi:",
-  "            hi = need",
-  "    lo = 1",
-  "",
-  "    # ... feasible(X) 는 아래 ② 에서 ...",
-  "",
-  "    while lo < hi:                         # 이분 탐색: 가능한 가장 작은 X",
-  "        mid = (lo + hi) // 2",
-  "        if feasible(mid):",
-  "            hi = mid",
-  "        else:",
-  "            lo = mid + 1",
-  "    return lo",
-  "",
-  "data = sys.stdin.read().split()",
-  "N, M, K = int(data[0]), int(data[1]), int(data[2])",
-  "a = [int(x) for x in data[3:3+N]]",
-  "print(solve(N, M, K, a))",
-];
+// 🔧 2026-09-23: SEC*_PY / SEC*_CPP 는 손으로 다시 타이핑하지 않는다.
+//    FULL_PY / FULL_CPP 를 .slice() 로 잘라 쓴다 — 원본이 한 벌로 남으니
+//    이어붙이면 그 자체로 도는 프로그램이 된다 (check-section-code-complete.py).
+//    PY: feasible(X) 가 solve() 안에 중첩돼 있어서, 순서를 바꾸지 않고
+//    ①준비 → ②feasible 정의(중첩 그대로) → ③반복문+입출력, 3조각으로 나눴다.
+//    CPP: feasible 은 원래 최상위 함수라 순서 그대로 ①준비(+isqrtll) → ②feasible
+//    정의 → ③main() 으로 나누면 forward-declare 없이도 유효하다.
+const SEC1_PY = FULL_PY.slice(0, 12);   // import ~ "lo = 1"
+const SEC2_PY = FULL_PY.slice(12, 47);  // "def feasible(X):" ~ "return True" (+빈 줄)
+const SEC3_PY = FULL_PY.slice(47);      // "while lo < hi:" ~ 입력 읽기·출력
 
-const SEC2_PY = [
-  "    def feasible(X):                       # 화살 K 개로 X 가 될까?",
-  "        MX = M * X",
-  "        L = isqrt(MX - 1)                  # 데미지가 닿는 최대 거리 (d*d < M*X)",
-  "        if L > N - 1:",
-  "            L = N - 1",
-  "        VAL = [0]*(N+1)",
-  "        D1 = [0]*(N+1)",
-  "        D2 = [0]*(N+1)",
-  "        val = 0",
-  "        slope = 0",
-  "        accel = 0",
-  "        used = 0",
-  "        for x in range(N):",
-  "            if x > 0:",
-  "                val += slope",
-  "                slope += accel",
-  "            val += VAL[x]",
-  "            slope += D1[x]",
-  "            accel += D2[x]",
-  "            deficit = a[x] - val           # 아직 남은 체력",
-  "            if deficit > 0:",
-  "                c = (deficit + MX - 1) // MX   # 여기서 쏠 화살 수",
-  "                used += c",
-  "                if used > K:",
-  "                    return False",
-  "                val += c*MX",
-  "                slope += -c",
-  "                accel += -2*c",
-  "                p = x + L + 1              # 이 포물선이 끝나는 위치",
-  "                if p <= N - 1:",
-  "                    VAL[p] += c*((L+1)*(L+1) - MX)",
-  "                    D1[p]  += c*(2*L + 3)",
-  "                    D2[p]  += 2*c",
-  "        return True",
-];
-
-const SEC1_CPP = [
-  "int N;",
-  "long long M, K;",
-  "vector<long long> a;",
-  "",
-  "// feasible(X) 는 아래 ② 에서 정의",
-  "bool feasible(long long X);",
-  "",
-  "int main() {",
-  "    cin >> N >> M >> K;",
-  "    a.resize(N);",
-  "    long long hi = 1;",
-  "    for (int j = 0; j < N; j++) {",
-  "        cin >> a[j];",
-  "        long long need = (a[j] + (long long)j*j + M - 1) / M;",
-  "        if (need > hi) {",
-  "            hi = need;",
-  "        }",
-  "    }",
-  "    long long lo = 1;",
-  "    while (lo < hi) {                       // 이분 탐색: 가능한 가장 작은 X",
-  "        long long mid = (lo + hi) / 2;",
-  "        if (feasible(mid)) {",
-  "            hi = mid;",
-  "        } else {",
-  "            lo = mid + 1;",
-  "        }",
-  "    }",
-  "    cout << lo << \"\\n\";",
-  "    return 0;",
-  "}",
-];
-
-const SEC2_CPP = [
-  "bool feasible(long long X) {               // 화살 K 개로 X 가 될까?",
-  "    long long MX = M * X;",
-  "    long long L = isqrtll(MX - 1);         // 데미지가 닿는 최대 거리",
-  "    if (L > N - 1) {",
-  "        L = N - 1;",
-  "    }",
-  "    vector<long long> VAL(N+1,0), D1(N+1,0), D2(N+1,0);",
-  "    long long val = 0;",
-  "    long long slope = 0;",
-  "    long long accel = 0;",
-  "    long long used = 0;",
-  "    for (int x = 0; x < N; x++) {",
-  "        if (x > 0) {",
-  "            val += slope;",
-  "            slope += accel;",
-  "        }",
-  "        val += VAL[x];",
-  "        slope += D1[x];",
-  "        accel += D2[x];",
-  "        long long deficit = a[x] - val;    // 아직 남은 체력",
-  "        if (deficit > 0) {",
-  "            long long c = (deficit + MX - 1) / MX;  // 여기서 쏠 화살 수",
-  "            used += c;",
-  "            if (used > K) {",
-  "                return false;",
-  "            }",
-  "            val += c*MX;",
-  "            slope += -c;",
-  "            accel += -2*c;",
-  "            long long p = x + L + 1;        // 이 포물선이 끝나는 위치",
-  "            if (p <= N - 1) {",
-  "                VAL[p] += c*((L+1)*(L+1) - MX);",
-  "                D1[p]  += c*(2*L + 3);",
-  "                D2[p]  += 2*c;",
-  "            }",
-  "        }",
-  "    }",
-  "    return true;",
-  "}",
-];
+const SEC1_CPP = FULL_CPP.slice(0, 20);  // #include ~ isqrtll (+빈 줄)
+const SEC2_CPP = FULL_CPP.slice(20, 60); // "bool feasible(...)" ~ 닫는 "}" (+빈 줄)
+const SEC3_CPP = FULL_CPP.slice(60);     // "int main() {" ~ 끝
 
 export function getExplodingArrowSections(E) {
   return [
     {
-      label: t(E, "① Binary-search the answer X", "① 정답 X 를 이분 탐색"),
+      label: t(E, "① Binary-search the answer X — bounds", "① 정답 X 를 이분 탐색 — 범위 정하기"),
       color: A,
       py: SEC1_PY, cpp: SEC1_CPP,
       why: [
@@ -304,10 +178,6 @@ export function getExplodingArrowSections(E) {
             "데미지를 시험하는 게 아니라 정답 X 를 시험해요. '힘 X 짜리 화살로 K 개 안에 다 끝낼 수 있나?' 는 판단이 쉬워요 — X 가 커질수록 쉬워지니 '예/아니오' 가 딱 한 번 뒤집혀요. 그 경계를 이분 탐색해요."),
         t(E, "hi starts big enough: (a[j] + j*j + M - 1)//M is the smallest X that could kill target j all by itself — the true answer never exceeds the largest of these.",
             "hi 는 충분히 크게 잡아요. (a[j] + j*j + M - 1)//M 은 j 를 혼자서 없앨 최소 X 예요 — 정답은 이 값들 중 최댓값을 넘지 않아요."),
-      ],
-      pyOnly: [
-        t(E, "feasible(mid) True → the answer is ≤ mid, so pull hi down; False → push lo up. lo == hi is the smallest feasible X.",
-            "feasible(mid) 가 True 면 정답 ≤ mid 이니 hi 를 내리고, False 면 lo 를 올려요. lo == hi 가 되면 그게 가능한 가장 작은 X 예요."),
       ],
       cppOnly: [
         t(E, "long long everywhere: M, K, a[i] reach 1e9 and M*X can overflow 32-bit ints.",
@@ -331,6 +201,15 @@ export function getExplodingArrowSections(E) {
       cppOnly: [
         t(E, "isqrtll gives L = ⌊√(M·X−1)⌋, the largest distance where M·X − d² is still positive.",
             "isqrtll 이 M·X−1 의 제곱근을 소수점 버려서 L 로 줘요 — M·X − d² 이 아직 양수인 가장 먼 거리예요."),
+      ],
+    },
+    {
+      label: t(E, "③ Binary-search loop + read input", "③ 이분 탐색 반복 + 입력 읽기"),
+      color: "#0891b2",
+      py: SEC3_PY, cpp: SEC3_CPP,
+      why: [
+        t(E, "feasible(mid) True → the answer is ≤ mid, so pull hi down; False → push lo up. lo == hi is the smallest feasible X.",
+            "feasible(mid) 가 True 면 정답 ≤ mid 이니 hi 를 내리고, False 면 lo 를 올려요. lo == hi 가 되면 그게 가능한 가장 작은 X 예요."),
       ],
     },
   ];
