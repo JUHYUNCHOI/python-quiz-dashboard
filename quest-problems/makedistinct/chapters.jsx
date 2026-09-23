@@ -121,7 +121,7 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
               <div>1 ≤ T ≤ 10</div>
               <div>1 ≤ N ≤ 200,000</div>
               <div>−N ≤ K ≤ N,  K ≠ 0</div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "each number is between 1 and N  ·  all N added together ≤ 1,000,000", "수는 1 부터 N 사이  ·  N 을 다 더해도 1,000,000 이하")}</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "each number is between 1 and N  ·  all N added together ≤ 1,000,000", "수는 1 부터 N 사이  ·  N 을 다 더해도 1,000,000 을 안 넘어요")}</div>
             </div>
           </div>
         </div>

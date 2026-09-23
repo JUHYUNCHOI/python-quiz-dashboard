@@ -83,6 +83,12 @@ python3 scripts/check-code-one-statement.py  # 한 줄에 문장이 여러 개�
 node scripts/see-flow.mjs http://localhost:3000/quest/<id>   # 쪽과 쪽 사이
 python3 scripts/check-word-difficulty.py <id>                # 어려운 말 · 같은 것 다른 이름 · 번역 티
 python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장 여러 개
+python3 scripts/check-narr-length.py <id>                    # 파란 내레이션 바 길이 — **narr 는 이걸로 잰다**
+                                                            #   ⚠️ 2026-09-23: `see-screen` 의 "55자 초과" 는 **한국어 기준**이다.
+                                                            #   영어는 글자 수가 아니라 **한국어 대비 문장 개수**로 잰다
+                                                            #   (feedback_narration_short.md 가 2026-09-09 에 정정).
+                                                            #   그걸 모르고 영어 내레이션 11곳을 줄였다가 전부 되돌렸다 —
+                                                            #   **검사기는 있었는데 이 목록에 없어서 안 돌렸다.**
 python3 scripts/check-undefined-symbol.py <id>               # 뜻 안 밝힌 기호 (10⁹ · N² · ⌈⌉ · Σ · O(N))
                                                             #   + 뜻 없이 쓰인 **알고리즘 이름** (그리디·이분 탐색·누적합…)
                                                             #     2026-09-21 추가 — 이틀 연속 다른 quest 에서 같은 결함이 났다
