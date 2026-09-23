@@ -294,6 +294,11 @@ export function makeStrangeFnCh1(E) {
               <div style={{ marginTop: 6 }}>{t(E,
                 "Here we want to find a rule, so we read the same 0/1 digits a different way: as binary.",
                 "여기서는 규칙을 찾으려고 같은 0과 1을 다른 방법으로 읽어요. 바로 이진수예요.")}</div>
+              {/* 2026-09-23 학생 검증: "왜 하필 이진수로 읽는지" 설명 없이 "그렇게 해보자" 로
+                  시작했다 — 한 문장으로 이유를 밝힌다. */}
+              <div style={{ marginTop: 6 }}>{t(E,
+                "Why binary and not decimal? Once every digit is only 0 or 1, those digits already look exactly like binary digits — reading them that way turns x into one small whole number n, small enough to search for a pattern in.",
+                "왜 하필 십진수가 아니라 이진수일까요? 자리마다 0 아니면 1 만 남으면, 그 모양이 이미 이진수 자리와 똑같아요. 그대로 이진수로 읽으면 x 가 작은 정수 n 하나가 되고, 그래야 규칙을 찾기 쉬워져요.")}</div>
               <div style={{ marginTop: 6 }}>{t(E,
                 "In binary, place values double as you move left: 1, 2, 4, 8 …",
                 "이진수는 오른쪽 자리부터 자리값이 1, 2, 4, 8 … 이렇게 두 배씩 커져요.")}</div>
@@ -328,6 +333,13 @@ export function makeStrangeFnCh1(E) {
         "직접 센 세 값을 이진수 n 으로 바꿔요."),
       content: (
         <div style={{ padding: 16 }}>
+          {/* 2026-09-23 학생 검증: g 가 이 쪽 표에서 정의 없이 처음 등장 —
+              "이게 답 세는 함수구나" 를 학생이 직접 짐작했다. 쓰기 전에 한 문장으로 밝힌다. */}
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              "Let's give that count a name: g(n) is the number of f's needed, once x has been read as the binary number n.",
+              "이 횟수에 이름을 붙여요. x 를 이진수로 읽은 값이 n 일 때, f 가 필요한 횟수를 g(n) 이라고 해요.")}
+          </div>
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12, marginBottom: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#166534", lineHeight: 2 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6, fontFamily: "inherit" }}>
               ✅ {t(E, "Already counted (pages 5–7)", "이미 직접 셌어요 (5~7쪽)")}
@@ -476,8 +488,8 @@ export function makeStrangeFnCh1(E) {
         "How many f's for x = 37?",
         "x = 37 은 몇 번 만에 0 이 될까요?"),
       hint: t(E,
-        "Same three ideas as before.\nDoes it need a parity-flip first — what do 3 and 7 become?\nThen read that result as binary — what's n?\nThen look up g(n) in the table above.",
-        "앞에서 배운 세 가지를 그대로 써요.\n먼저 홀짝 변환이 필요한가요? 3 과 7 은 뭐가 되나요?\n그 결과를 이진수로 읽으면 n 은 얼마인가요?\n표에서 g(n) 을 찾아요."),
+        "Same three ideas as before.\nDoes it need a parity-flip first — what do 3 and 7 become?\nThen read that result as binary — what's n?\nThen put n into the formula: floor(3n/2).",
+        "앞에서 배운 세 가지를 그대로 써요.\n먼저 홀짝 변환이 필요한가요? 3 과 7 은 뭐가 되나요?\n그 결과를 이진수로 읽으면 n 은 얼마인가요?\nn 을 공식 floor(3n/2) 에 넣어요."),
       answer: 5,
       explain: t(E,
         "5 is right. 37 → 11 (1) → 10 (2) → 9 (3) → 1 (4) → 0 (5).\nSame as 1 + g(3) = 1 + 4 = 5.",
@@ -494,8 +506,8 @@ export function makeStrangeFnCh1(E) {
         "How many f's for x = 1010?",
         "x = 1010 은 몇 번 만에 0 이 될까요?"),
       hint: t(E,
-        "This one is already 0/1, so skip the parity-flip.\nGo straight to reading it as binary, then plug that n into the formula.",
-        "이 값은 이미 0/1 이라 홀짝 변환은 건너뛰어요.\n바로 이진수로 읽고, 그 n 을 공식에 넣어요."),
+        "This one is already 0/1, so skip the parity-flip.\nGo straight to reading it as binary, then plug that n into the formula: floor(3n/2).",
+        "이 값은 이미 0/1 이라 홀짝 변환은 건너뛰어요.\n바로 이진수로 읽고, 그 n 을 공식 floor(3n/2) 에 넣어요."),
       answer: 15,
       explain: t(E,
         "15 is right. g(10) = 3 × 5 = 15 — counting by hand would take 15 steps, but the formula gives it in one shot.",
