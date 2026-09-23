@@ -402,13 +402,10 @@ export function Mcc22BirthdayBackwardWalkSim({ E }) {
    accumulate horizontal/vertical flip parity, then read off p/q/b/d.
    ================================================================ */
 const FULL_PY = [
-  "import sys",
-  "",
   "def solve():",
-  "    data = sys.stdin.read().split('\\n')",
-  "    N, S, Q = map(int, data[0].split())      # N 글자, S 두루마리, Q 친구",
-  "    scrolls = [data[1 + i].strip() for i in range(S)]",
-  "    friends = list(map(int, data[1 + S].split()))",
+  "    N, S, Q = map(int, input().split())      # N 글자, S 두루마리, Q 친구",
+  "    scrolls = [input().strip() for _ in range(S)]",
+  "    friends = list(map(int, input().split()))",
   "",
   "    CAP = 2 * 10**9                           # 가장 큰 번호보다 조금 큰 한계값",
   "    shape = {(0, 0): 'p', (1, 0): 'q', (0, 1): 'b', (1, 1): 'd'}",
@@ -529,7 +526,7 @@ export function getMcc22BirthdaySections(E) {
     {
       label: t(E, "1️⃣ Size the grid ahead of time", "1️⃣ 크기부터 계산해요"),
       color: A,
-      py: FULL_PY.slice(0, 24), cpp: FULL_CPP.slice(0, 33),
+      py: FULL_PY.slice(0, 21), cpp: FULL_CPP.slice(0, 33),
       why: [
         t(E, "Why not build the grid? After N letters it holds 2^N cookies, and N can be up to 10000 — far too many to build. So we handle each queried number on its own, using only its final position.",
             "왜 격자를 안 만들까요?\nN 글자 뒤 격자는 2^N 개인데 N 이 최대 10000 이라 만들 수조차 없어요.\n그래서 물어본 번호마다 최종 위치만 갖고 따로 풀어요."),
@@ -544,7 +541,7 @@ export function getMcc22BirthdaySections(E) {
     {
       label: t(E, "2️⃣ Walk the number backward", "2️⃣ 번호를 거꾸로 따라가요"),
       color: "#0891b2",
-      py: FULL_PY.slice(24, 39), cpp: FULL_CPP.slice(33, 53),
+      py: FULL_PY.slice(21, 36), cpp: FULL_CPP.slice(33, 53),
       why: [
         t(E, "So how do we find a number's shape? Turn it into (row, col) using the final width, then walk the scroll BACKWARD, one letter at a time.",
             "그럼 번호의 모양은 어떻게 구할까요?\n최종 가로 값으로 번호를 (행, 열) 로 바꾼 뒤,\n두루마리를 한 글자씩 거꾸로 따라가요."),
@@ -555,7 +552,7 @@ export function getMcc22BirthdaySections(E) {
     {
       label: t(E, "3️⃣ Decide the shape and print", "3️⃣ 모양 정해 출력해요"),
       color: "#16a34a",
-      py: FULL_PY.slice(39), cpp: FULL_CPP.slice(53),
+      py: FULL_PY.slice(36), cpp: FULL_CPP.slice(53),
       why: [
         t(E, "So two on/off flips (left↔right, up↔down) give exactly four shapes: (no,no)=p, (H,no)=q, (no,V)=b, (H,V)=d. That's the whole p/q/b/d family.",
             "그래서 좌우·위아래 두 뒤집힘(켜짐/꺼짐)이 정확히 네 모양을 만들어요.\n(안,안)=p, (좌우,안)=q, (안,위아래)=b, (좌우,위아래)=d —\n이게 p/q/b/d 한 묶음이에요."),

@@ -190,12 +190,10 @@ export function SubseqMedianSim({ E }) {
    values.  Worst case O(N^2 log N) — passes small subtasks, TLEs at N=8000.
    ================================================================ */
 const FULL_PY = [
-  "import sys",
   "def main():",
   "    MOD = 998244353",
-  "    data = sys.stdin.buffer.read().split()",
-  "    n = int(data[0])",
-  "    A = [int(x) for x in data[1:1+n]]",
+  "    n = int(input())",
+  "    A = list(map(int, input().split()))",
   "",
   "    # 값을 1..m 등수로 눌러 담아요 (A_i 는 최대 1e9)",
   "    vals = sorted(set(A))",
@@ -344,10 +342,6 @@ export function getSubseqMedianSections(E) {
             "L_k, R_k 는 레벨마다 쌓아 올려요. 펜윅 트리로 바로 앞 레벨의 값을 '작고 앞선'(L) 또는 '크고 뒤선'(R) 범위에서 합해요. 레벨 0 은 원소 하나하나예요."),
         t(E, "⚠️ Honest note: this Fenwick DP is the full solution. Its worst case is O(N² log N), and the full constraint N = 8000 fits inside that. Python runs out of time there — but that does not mean a harder method is needed. This idea is the answer.",
             "⚠️ 솔직히 말할게요. 이 펜윅 DP 가 바로 만점 풀이예요.\n최악이 O(N² log N) 인데, 전체 제약 N = 8000 이 그 안에 들어와요.\n다만 파이썬으로는 그 크기에서 시간이 모자라요.\n그렇다고 더 어려운 방법이 필요한 건 아니에요 — 이 아이디어가 정답이에요."),
-      ],
-      pyOnly: [
-        t(E, "sys.stdin.buffer.read().split() reads all input at once — much faster than line-by-line for big arrays.",
-            "sys.stdin.buffer.read().split() 로 입력을 한 번에 읽어요. 배열이 크면 한 줄씩 읽는 것보다 훨씬 빨라요."),
       ],
       cppOnly: [
         t(E, "Coordinate-compress with sort + unique + lower_bound so the Fenwick tree is sized by distinct values, not 1e9.",
