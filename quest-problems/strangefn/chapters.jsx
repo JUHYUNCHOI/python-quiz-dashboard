@@ -297,8 +297,8 @@ export function makeStrangeFnCh1(E) {
               {/* 2026-09-23 학생 검증: "왜 하필 이진수로 읽는지" 설명 없이 "그렇게 해보자" 로
                   시작했다 — 한 문장으로 이유를 밝힌다. */}
               <div style={{ marginTop: 6 }}>{t(E,
-                "Why binary and not decimal? Once every digit is only 0 or 1, those digits already look exactly like binary digits — reading them that way turns x into one small whole number n, small enough to search for a pattern in.",
-                "왜 하필 십진수가 아니라 이진수일까요? 자리마다 0 아니면 1 만 남으면, 그 모양이 이미 이진수 자리와 똑같아요. 그대로 이진수로 읽으면 x 가 작은 정수 n 하나가 되고, 그래야 규칙을 찾기 쉬워져요.")}</div>
+                "Why binary and not decimal? Once every digit is only 0 or 1, those digits already look exactly like binary digits — reading them that way turns x into one whole number n. We can then look for a pattern using small values of n first (like n = 1, 2, 3 you already found) — even though n itself can grow just as huge as x once you plug in the real input.",
+                "왜 하필 십진수가 아니라 이진수일까요? 자리마다 0 아니면 1 만 남으면, 그 모양이 이미 이진수 자리와 똑같아요. 그대로 이진수로 읽으면 x 가 정수 n 하나가 돼요. 그러면 방금 구한 것처럼 n 이 작을 때(1, 2, 3…)부터 규칙을 먼저 찾아볼 수 있어요 — 실제 입력을 넣으면 n 도 x 만큼 커질 수 있지만요.")}</div>
               <div style={{ marginTop: 6 }}>{t(E,
                 "In binary, place values double as you move left: 1, 2, 4, 8 …",
                 "이진수는 오른쪽 자리부터 자리값이 1, 2, 4, 8 … 이렇게 두 배씩 커져요.")}</div>
@@ -475,6 +475,25 @@ export function makeStrangeFnCh1(E) {
                 "floor 는 소수점 아래를 버리는 거예요. 예를 들어 floor(3.5) 는 3 이에요.")}
             </div>
           </div>
+
+          {/* 2026-09-23 재검증: 학생이 13쪽 힌트를 그대로 따라가 37 → n=3 → floor(3·3/2)=4 를
+              답으로 냈는데 정답은 5 였다 — "+1" 규칙이 13쪽보다 앞 어디에도 없었다.
+              여기(공식이 완성되는 자리)에서, 이미 3쪽에서 본 x=210 숫자 그대로 규칙을 굳힌다. */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: 12, marginTop: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
+              ⚠️ {t(E, "g(n) alone isn't the final answer", "g(n) 이 바로 답은 아니에요")}
+            </div>
+            <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E,
+                "g(n) only counts steps after everything is already 0/1. If a parity-flip ran first (page 3), that flip was also a use of f — add 1 for it.",
+                "g(n) 은 이미 0/1 만 남은 뒤의 단계만 세요. 그 전에 홀짝 변환을 한 번 썼다면(3쪽), 그것도 f 를 한 번 쓴 거라 1 을 더해야 해요.")}
+            </div>
+            <div style={{ marginTop: 8, fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: "#92400e", lineHeight: 1.9 }}>
+              {t(E,
+                "Check with x = 210 from page 3: parity-flip once → \"010\" → n = 2 → g(2) = 3 → 1 + 3 = 4. Matches the 4 we counted by hand.",
+                "3쪽 x = 210 으로 확인: 홀짝 변환 1번 → \"010\" → n = 2 → g(2) = 3 → 1 + 3 = 4. 손으로 센 4 번과 같아요.")}
+            </div>
+          </div>
         </div>),
     },
 
@@ -488,8 +507,8 @@ export function makeStrangeFnCh1(E) {
         "How many f's for x = 37?",
         "x = 37 은 몇 번 만에 0 이 될까요?"),
       hint: t(E,
-        "Same three ideas as before.\nDoes it need a parity-flip first — what do 3 and 7 become?\nThen read that result as binary — what's n?\nThen put n into the formula: floor(3n/2).",
-        "앞에서 배운 세 가지를 그대로 써요.\n먼저 홀짝 변환이 필요한가요? 3 과 7 은 뭐가 되나요?\n그 결과를 이진수로 읽으면 n 은 얼마인가요?\nn 을 공식 floor(3n/2) 에 넣어요."),
+        "Same ideas as before.\n① Does it need a parity-flip first — what do 3 and 7 become? (that flip counts as 1)\n② Read that result as binary — what's n?\n③ Put n into the formula: floor(3n/2).\n④ You flipped once in step ①, so add that 1 to step ③'s result — that's your final answer.",
+        "앞에서 배운 걸 그대로 써요.\n① 먼저 홀짝 변환이 필요한가요? 3 과 7 은 뭐가 되나요? (그 변환도 1번으로 세요)\n② 그 결과를 이진수로 읽으면 n 은 얼마인가요?\n③ n 을 공식 floor(3n/2) 에 넣어요.\n④ ①에서 한 번 변환했으니, ③의 결과에 그 1 을 더해요 — 그게 최종 답이에요."),
       answer: 5,
       explain: t(E,
         "5 is right. 37 → 11 (1) → 10 (2) → 9 (3) → 1 (4) → 0 (5).\nSame as 1 + g(3) = 1 + 4 = 5.",
@@ -506,8 +525,8 @@ export function makeStrangeFnCh1(E) {
         "How many f's for x = 1010?",
         "x = 1010 은 몇 번 만에 0 이 될까요?"),
       hint: t(E,
-        "This one is already 0/1, so skip the parity-flip.\nGo straight to reading it as binary, then plug that n into the formula: floor(3n/2).",
-        "이 값은 이미 0/1 이라 홀짝 변환은 건너뛰어요.\n바로 이진수로 읽고, 그 n 을 공식 floor(3n/2) 에 넣어요."),
+        "① This one is already 0/1, so the parity-flip step is skipped — nothing to add for it.\n② Read it straight as binary — what's n?\n③ Put n into the formula: floor(3n/2).\n④ Since step ① added nothing, step ③'s result is already your final answer — no +1 this time.",
+        "① 이 값은 이미 0/1 이라 홀짝 변환 단계는 건너뛰어요 — 더할 게 없어요.\n② 바로 이진수로 읽으면 n 은 얼마인가요?\n③ n 을 공식 floor(3n/2) 에 넣어요.\n④ ①에서 더할 게 없었으니, ③의 결과가 그대로 최종 답이에요 — 이번엔 +1 이 없어요."),
       answer: 15,
       explain: t(E,
         "15 is right. g(10) = 3 × 5 = 15 — counting by hand would take 15 steps, but the formula gives it in one shot.",
