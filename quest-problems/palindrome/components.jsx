@@ -1,6 +1,12 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 4/10 (TLE 5-10, O(S^2) DP per test case)
-//   C++:    6/13 (TLE 7-13, O(S^2) DP)
+// 🔒 USACO_VERIFIED (2026-05-13, rewritten 2026-09-23 — pending resubmission)
+//   Old: Python 4/10, C++ 6/13 — both TLE, O(S^2) DP per test case.
+//   Real constraint: S < 10^(10^5) (up to 100,000 DIGITS — checked against
+//   the official USACO problem page), so ANY DP over stone counts is
+//   impossible. Proved + verified: the losing pile sizes are exactly the
+//   multiples of 10 (no palindrome can end in 0, since that forces a
+//   leading 0 too) — so the answer is just "is S's last digit 0?".
+//   Checked against DP brute-force for S = 1..50000 (0 mismatches) and a
+//   real 100,000-digit S (runs in ~0.02s both languages).
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
@@ -314,96 +320,68 @@ export function PalindromeRunner({ E }) {
   );
 }
 
-/* Section 1: helpers — is_palindrome + read T test cases */
+/* Section 1: read T test cases — S kept as a STRING (it can have up to
+   100,000 digits, far too big for a normal number) */
 const PA_HELPER_PY = [
   "import sys",
   "",
-  "def is_palindrome(n):",
-  "    s = str(n)",
-  "    return s == s[::-1]",
-  "",
   "data = sys.stdin.read().split()",
   "T = int(data[0])         # number of test cases",
-  "# We solve each S in turn — each S becomes its own DP run.",
 ];
 const PA_HELPER_CPP = [
   "#include <iostream>",
   "#include <string>",
-  "#include <vector>",
-  "#include <algorithm>",
   "using namespace std;",
-  "",
-  "bool is_palindrome(int n) {",
-  "    string s = to_string(n);",
-  "    string r = s;",
-  "    reverse(r.begin(), r.end());",
-  "    return s == r;",
-  "}",
   "",
   "int main() {",
   "    int T;",
   "    cin >> T;",
-  "    // We will read each S inside the loop below.",
 ];
 
-/* Section 2: DP — per test case, build palindromes list + can_win table */
+/* Section 2: the key insight — losing piles are exactly the multiples of 10 */
 const PA_DP_PY = [
   "out = []",
   "for k in range(T):",
-  "    S = int(data[1 + k])",
-  "    palis = [p for p in range(1, S + 1) if is_palindrome(p)]",
+  "    S = data[1 + k]",
   "",
-  "    # can_win[n] = True if the player to move with n stones wins",
-  "    can_win = [False] * (S + 1)",
-  "    for n in range(1, S + 1):",
-  "        for p in palis:",
-  "            if p > n:",
-  "                break",
-  "            if not can_win[n - p]:   # leave opponent in a losing state",
-  "                can_win[n] = True",
-  "                break",
+  "    # No palindrome ends in 0 (it would have to start with 0 too).",
+  "    # Every single digit 1-9 IS a palindrome, so you can always shed",
+  "    # your pile's last digit. That move always lands on a multiple",
+  "    # of 10 — so multiples of 10 are always the losing pile size.",
+  "    last_digit = S[-1]",
 ];
 const PA_DP_CPP = [
+  "    string out;",
   "    for (int t = 0; t < T; t++) {",
-  "        int S;",
+  "        string S;",
   "        cin >> S;",
-  "        vector<int> palis;",
-  "        for (int p = 1; p <= S; p++) {",
-  "            if (is_palindrome(p)) {",
-  "                palis.push_back(p);",
-  "            }",
-  "        }",
   "",
-  "        vector<bool> can_win(S + 1, false);",
-  "        for (int n = 1; n <= S; n++) {",
-  "            for (int p : palis) {",
-  "                if (p > n) {",
-  "                    break;",
-  "                }",
-  "                if (!can_win[n - p]) {",
-  "                    can_win[n] = true;",
-  "                    break;",
-  "                }",
-  "            }",
-  "        }",
+  "        // No palindrome ends in 0 (it would have to start with 0",
+  "        // too). Every single digit 1-9 IS a palindrome, so you can",
+  "        // always shed your pile's last digit. That move always",
+  "        // lands on a multiple of 10 — so multiples of 10 are",
+  "        // always the losing pile size.",
+  "        char lastDigit = S[S.size() - 1];",
 ];
 
-/* Section 3: print winner per test case */
+/* Section 3: print the winner per test case */
 const PA_OUT_PY = [
-  "    if can_win[S]:",
-  "        out.append('B')",
-  "    else:",
+  "    if last_digit == '0':",
   "        out.append('E')",
+  "    else:",
+  "        out.append('B')",
   "",
   "print(chr(10).join(out))",
 ];
 const PA_OUT_CPP = [
-  "        char winner = 'B';",
-  "        if (!can_win[S]) {",
-  "            winner = 'E';",
+  "        if (lastDigit == '0') {",
+  "            out += 'E';",
+  "        } else {",
+  "            out += 'B';",
   "        }",
-  "        cout << winner << '\\n';",
+  "        out += '\\n';",
   "    }",
+  "    cout << out;",
   "    return 0;",
   "}",
 ];
@@ -412,80 +390,44 @@ const PA_OUT_CPP = [
 const PA_FULL_PY = [
   "import sys",
   "",
-  "def is_palindrome(n):",
-  "    s = str(n)",
-  "    return s == s[::-1]",
-  "",
   "data = sys.stdin.read().split()",
   "T = int(data[0])",
   "",
   "out = []",
   "for k in range(T):",
-  "    S = int(data[1 + k])",
-  "    palis = [p for p in range(1, S + 1) if is_palindrome(p)]",
+  "    S = data[1 + k]",
   "",
-  "    can_win = [False] * (S + 1)",
-  "    for n in range(1, S + 1):",
-  "        for p in palis:",
-  "            if p > n:",
-  "                break",
-  "            if not can_win[n - p]:",
-  "                can_win[n] = True",
-  "                break",
-  "",
-  "    if can_win[S]:",
-  "        out.append('B')",
-  "    else:",
+  "    last_digit = S[-1]",
+  "    if last_digit == '0':",
   "        out.append('E')",
+  "    else:",
+  "        out.append('B')",
   "",
   "print(chr(10).join(out))",
 ];
 const PA_FULL_CPP = [
   "#include <iostream>",
   "#include <string>",
-  "#include <vector>",
-  "#include <algorithm>",
   "using namespace std;",
-  "",
-  "bool is_palindrome(int n) {",
-  "    string s = to_string(n);",
-  "    string r = s;",
-  "    reverse(r.begin(), r.end());",
-  "    return s == r;",
-  "}",
   "",
   "int main() {",
   "    int T;",
   "    cin >> T;",
+  "",
+  "    string out;",
   "    for (int t = 0; t < T; t++) {",
-  "        int S;",
+  "        string S;",
   "        cin >> S;",
-  "        vector<int> palis;",
-  "        for (int p = 1; p <= S; p++) {",
-  "            if (is_palindrome(p)) {",
-  "                palis.push_back(p);",
-  "            }",
-  "        }",
   "",
-  "        vector<bool> can_win(S + 1, false);",
-  "        for (int n = 1; n <= S; n++) {",
-  "            for (int p : palis) {",
-  "                if (p > n) {",
-  "                    break;",
-  "                }",
-  "                if (!can_win[n - p]) {",
-  "                    can_win[n] = true;",
-  "                    break;",
-  "                }",
-  "            }",
+  "        char lastDigit = S[S.size() - 1];",
+  "        if (lastDigit == '0') {",
+  "            out += 'E';",
+  "        } else {",
+  "            out += 'B';",
   "        }",
-  "",
-  "        char winner = 'B';",
-  "        if (!can_win[S]) {",
-  "            winner = 'E';",
-  "        }",
-  "        cout << winner << '\\n';",
+  "        out += '\\n';",
   "    }",
+  "    cout << out;",
   "    return 0;",
   "}",
 ];
@@ -493,43 +435,25 @@ const PA_FULL_CPP = [
 export function getPalindromeSections(E) {
   return [
     {
-      label: t(E, "📦 1. Helper + Palindromes List", "📦 1. 헬퍼 + 회문 리스트"),
+      label: t(E, "📦 1. Read Input (S as a string!)", "📦 1. 입력 읽기 (S 는 문자열로!)"),
       color: A,
       py: PA_HELPER_PY, cpp: PA_HELPER_CPP,
       why: [
-        t(E, "is_palindrome(n) checks if n reads the same backwards.",
-            "is_palindrome(n) 은 n 을 거꾸로 읽어도 같은지 확인해요."),
-        t(E, "Pre-compute every palindrome from 1 to S — these are the legal move sizes.",
-            "1 부터 S 까지 회문을 미리 구해 둬요. 이게 가져갈 수 있는 개수예요."),
-      ],
-      pyOnly: [
-        t(E, "s[::-1] reverses a string in one expression.",
-            "s[::-1] 로 문자열을 한 줄에 뒤집어요."),
-      ],
-      cppOnly: [
-        t(E, "to_string + reverse(begin, end) is the standard idiom.",
-            "C++ 에서는 to_string 으로 바꾸고 reverse(begin, end) 로 뒤집어요."),
+        t(E, "S can have up to 100,000 digits — far too big for a normal number. Keep it as a string.",
+            "S 는 자리수가 최대 10 만 개예요 — 보통 숫자로는 못 담아요. 문자열로 그냥 둬요."),
       ],
     },
     {
-      label: t(E, "🧠 2. Game-Theory DP", "🧠 2. 게임 이론 DP"),
+      label: t(E, "🔑 2. The Key Insight", "🔑 2. 핵심 아이디어"),
       color: "#0891b2",
       py: PA_DP_PY, cpp: PA_DP_CPP,
       why: [
-        t(E, "can_win[n] = true if the player to move with n stones can force a win.",
-            "can_win[n] 은 돌이 n 개일 때 둘 차례인 사람이 이기는지를 담아요."),
-        t(E, "Player wins iff there exists a palindrome p ≤ n with can_win[n - p] == false (opponent loses next).",
-            "회문 p 를 뺐을 때 can_win[n - p] 가 false 면 상대가 지는 자리예요. 그런 p 가 하나라도 있으면 이겨요."),
-        t(E, "Bottom-up fill from n = 1 to S — each state depends only on smaller ones.",
-            "n = 1 부터 S 까지 작은 쪽부터 채워요. 각 칸은 더 작은 칸만 보면 되거든요."),
-      ],
-      pyOnly: [
-        t(E, "break out of the inner loop as soon as any winning move is found.",
-            "이기는 수를 찾자마자 안쪽 반복을 break 로 빠져나와요."),
-      ],
-      cppOnly: [
-        t(E, "vector<bool> is compact (1 bit per element) and fast enough here.",
-            "vector<bool> 은 한 칸을 1비트로 담아서 여기서는 충분히 빨라요."),
+        t(E, "Every single digit 1-9 is always a palindrome, so you can always remove exactly your pile's last digit.",
+            "한 자리 수 1~9 는 항상 회문이에요. 그래서 언제나 더미의 마지막 자리 수만큼 가져갈 수 있어요."),
+        t(E, "That move always lands on a multiple of 10 — and no palindrome can end in 0 (it would have to start with 0 too), so no move can ever land ON one from off of one.",
+            "그러면 항상 10 의 배수에 도착해요. 그리고 어떤 회문도 0 으로 끝날 수 없어서(그러면 0 으로 시작해야 하니까), 10 의 배수가 아닌 곳에서는 절대 10 의 배수로 갈 수 없어요."),
+        t(E, "So multiples of 10 are always the losing pile size — for ANY S, however huge.",
+            "그래서 10 의 배수는 S 가 아무리 커도 항상 지는 더미 크기예요."),
       ],
     },
     {
@@ -537,8 +461,8 @@ export function getPalindromeSections(E) {
       color: "#16a34a",
       py: PA_OUT_PY, cpp: PA_OUT_CPP,
       why: [
-        t(E, "Bessie moves first — she wins iff can_win[S] is true.",
-            "Bessie 가 먼저 두니까, can_win[S] 가 true 면 Bessie 가 이겨요."),
+        t(E, "Bessie moves first — she wins iff the last digit of S is NOT 0.",
+            "Bessie 가 먼저 두니까, S 의 마지막 자리가 0 이 아니면 Bessie 가 이겨요."),
       ],
     },
     {
@@ -546,8 +470,8 @@ export function getPalindromeSections(E) {
       color: "#7c3aed",
       py: PA_FULL_PY, cpp: PA_FULL_CPP,
       why: [
-        t(E, "Total work: O(S · |palindromes|) — well within limits since palindromes are sparse.",
-            "전체 계산량은 O(S · 회문 개수) 예요. 회문이 드물어서 충분히 빨라요."),
+        t(E, "No DP table needed at all — one character check per test case, however huge S is.",
+            "DP 표가 아예 필요 없어요. S 가 아무리 커도 테스트마다 글자 하나만 확인하면 돼요."),
       ],
     },
   ];

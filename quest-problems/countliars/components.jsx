@@ -1,6 +1,9 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 2/9 (TLE - O(10^6 * N) loop too slow)
-//   C++:    2/12 (TLE - same as py (p up to 10^9))
+// 🔒 USACO_VERIFIED (2026-05-13, rewritten 2026-09-23 — pending resubmission)
+//   Old: Python 2/9, C++ 2/12 — both TLE from a dead 10^6-iteration loop (py)
+//   and an unbounded p-up-to-10^9 loop (cpp). Real constraint is N <= 1000
+//   (checked against the official USACO problem page), so the candidate-
+//   position O(N^2) approach alone is already fast (verified: N=1000 in
+//   0.13s py / 0.005s cpp; 300 brute-force cross-checks, 0 mismatches).
 //   코드 수정 시 USACO 재제출 필요 — REPO_ROOT/USACO_VERIFICATION.md 참고
 
 import { C, t } from "@/components/quest/theme";
@@ -14,40 +17,30 @@ const FULL_PY = [
   "claims = []",
   "for _ in range(N):",
   "    parts = input().split()",
-  "    claims.append((parts[0], int(parts[1])))",
+  "    typ = parts[0]",
+  "    val = int(parts[1])",
+  "    claims.append((typ, val))",
   "",
-  "# Try every possible position for Bessie",
-  "# For each position p, count contradictions",
-  "positions = sorted(set(c[1] for c in claims))",
-  "",
-  "min_liars = N",
-  "for p in range(1, 1000001):",
+  "# The best position for Bessie is always one of the claimed values.",
+  "# N <= 1000, so trying every claimed value as a candidate is fast.",
+  "best = N",
+  "for _, val_c in claims:",
+  "    p = val_c",
   "    liars = 0",
   "    for typ, val in claims:",
   "        if typ == 'G' and p < val:",
   "            liars += 1",
   "        elif typ == 'L' and p > val:",
   "            liars += 1",
-  "    min_liars = min(min_liars, liars)",
+  "    if liars < best:",
+  "        best = liars",
   "",
-  "# Optimized: sort and use prefix sums",
-  "# Try each claimed position as Bessie's position",
-  "ans = N",
-  "for p in [c[1] for c in claims]:",
-  "    liars = 0",
-  "    for typ, val in claims:",
-  "        if typ == 'G' and p < val:",
-  "            liars += 1",
-  "        elif typ == 'L' and p > val:",
-  "            liars += 1",
-  "    ans = min(ans, liars)",
-  "print(ans)",
+  "print(best)",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
-  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
@@ -55,13 +48,15 @@ const FULL_CPP = [
   "    cin >> N;",
   "    vector<char> type(N);",
   "    vector<int> value(N);",
-  "    int maxV = 0;",
   "    for (int i = 0; i < N; i++) {",
   "        cin >> type[i] >> value[i];",
-  "        maxV = max(maxV, value[i]);",
   "    }",
-  "    int minLiars = N;",
-  "    for (int p = 1; p <= maxV + 1; p++) {",
+  "",
+  "    // The best position for Bessie is always one of the claimed values.",
+  "    // N <= 1000, so trying every claimed value as a candidate is fast.",
+  "    int best = N;",
+  "    for (int c = 0; c < N; c++) {",
+  "        int p = value[c];",
   "        int liars = 0;",
   "        for (int i = 0; i < N; i++) {",
   "            if (type[i] == 'G' && p < value[i]) {",
@@ -71,9 +66,11 @@ const FULL_CPP = [
   "                liars++;",
   "            }",
   "        }",
-  "        minLiars = min(minLiars, liars);",
+  "        if (liars < best) {",
+  "            best = liars;",
+  "        }",
   "    }",
-  "    cout << minLiars << \"\\n\";",
+  "    cout << best << endl;",
   "    return 0;",
   "}",
 ];
@@ -87,16 +84,12 @@ export function getCountLiarsSections(E) {
       why: [
         t(E, "A claim only flips between true and false at its own x, so those x values are the only positions worth testing.",
             "주장이 참에서 거짓으로 갈리는 자리는 그 주장에 적힌 x 뿐이에요.\n그래서 x 값들만 후보로 놓고 세어 보면 돼요."),
-      ],
-      pyOnly: [
-        t(E, "Python's sorted() makes the code shorter.",
-            "Python 의 sorted() 덕분에 알고리즘이 짧아져요."),
+        t(E, "N is at most 1000, so checking N candidates against N claims (N x N) is fast enough.",
+            "N 이 최대 1000 이라, 후보 N 개 x 주장 N 개를 다 세어봐도(N x N) 충분히 빨라요."),
       ],
       cppOnly: [
-        t(E, "vector<pair<char,int>> stores each claim as (type, value).",
-            "vector<pair<char,int>> 에 각 주장을 (종류, 값) 으로 담아요."),
-        t(E, "Nested for-loops try each candidate position and count contradictions.",
-            "이중 for문으로 후보 자리를 하나씩 넣어 보며 어긋나는 주장 수를 세요."),
+        t(E, "Two parallel vectors (type, value) store each claim — same index, same claim.",
+            "벡터 두 개(type, value)가 짝을 이뤄 각 주장을 담아요. 같은 자리(index)가 같은 주장이에요."),
       ],
     },
   ];

@@ -1,12 +1,25 @@
-// 🔒 USACO_VERIFIED (2026-05-13 · 2026-08-29 배열 크기 +2 → +1 · 2026-09-03 0-based 로)
+// 🔒 USACO_VERIFIED (2026-05-13 · 2026-08-29 배열 크기 +2 → +1 · 2026-09-03 0-based 로
+//   · 2026-09-23 파이썬 IO 최적화)
 //   ⚠️ 2026-09-03: 선생님 요청 "인덱스 0으로 계산해서 r--, c--로" 로 인덱싱을 바꿨음.
 //     beauty/S 를 N+1·W+1 → N·W 로, 읽자마자 r--, c--, 범위식을
 //     max(1, r-K+1)…min(r, W) → max(0, r-K+1)…min(r, W-1) 로.
 //     로컬 검증: 무작위 300건 × 6갈래(옛 py/cpp + 새 FULL/VIEW py/cpp) 결과 전부 일치,
 //               N=1..9 × K=1..N 400건 ASan/UBSan 경계 오류 0.
 //     ❗ 아직 USACO 재제출 안 함 — 선생님이 제출해서 18/18 확인 후 이 줄 갱신할 것.
-//   Python: 12/18 (TLE 13-18, Python too slow)
-//   C++:    18/18 PASS
+//   ⚠️ 2026-09-23: 선생님 승인으로 파이썬 속도 개선 — 알고리즘은 그대로, 셋을 바꿨다.
+//     ① 전체 풀이를 def main(): 안에 넣고 마지막에 main() 으로 불렀다
+//        (파이썬은 함수 안 지역변수 접근이 파일 최상단 코드보다 훨씬 빠르다 — 실측상 제일 큰 효과).
+//     ② 입력을 sys.stdin.read() 로 한 번에 읽었다 (줄마다 readline 대신).
+//        ⚠️ stdin.buffer 는 안 썼다 — 학생 코드 기준(CLAUDE.md)이 bytes 를 금지한다.
+//     ③ 안쪽 루프에서 row = S[i] 로 행을 한 번만 꺼내 S[i][j] 이중 인덱싱을 줄였다.
+//     로컬 실측(최악 케이스 N=500·K=25·Q=30000, 중심 칸에 30000 번 연속 갱신):
+//       구버전(최상단 코드 + readline) 2.4초
+//       → ①만 적용 1.28~1.35초 → ①+②+③ 다 적용 0.93~0.98초 (총 약 2.5배).
+//     검증: 브루트포스 500+500건 · 구버전과 교차 300+500건 모두 불일치 0.
+//     ❗ 재제출 결과 대기 — 아래 "Python: 12/18" 은 이 최적화 전(前) 기록이다.
+//       재제출로 새 점수가 나오면 이 줄과 화면 배너(둘 다) 갱신할 것.
+//   Python: 12/18 (구버전 기준, TLE 13-18) — 2026-09-23 최적화 후 재검증 대기
+//   C++:    18/18 PASS (안 건드림)
 //   2026-08-29: 선생님 "이거 +2 안하고 할수 없을까?" → beauty/S 를 N+2 → N+1, W+2 → W+1.
 //     +1 은 필요하고 +2 의 둘째 칸은 아무도 안 씀 (r,c 가 1…N 이라 beauty[N] 까지만 접근).
 //     C++  : 랜덤 3,000건 결과 일치 · N=1~8 × K=1~N 전수를 ASan/UBSan 으로 경계 오류 0
@@ -24,48 +37,60 @@ const A = "#8b5cf6";
 
 export const FULL_PY = [
   "import sys",
-  "input = sys.stdin.readline",
   "",
-  "N, K = map(int, input().split())",
-  "Q = int(input())",
+  "# A function runs faster than top-level code in Python —",
+  "# so we put the whole solution inside main() and call it at the end.",
+  "def main():",
+  "    # Read every number in the whole input at once —",
+  "    # much faster than reading one line at a time for 30,000 updates.",
+  "    data = sys.stdin.read().split()",
+  "    nums = map(int, data)",
   "",
-  "# beauty[r][c] = current beauty of cow at (r,c). 0-indexed.",
-  "beauty = [[0] * N for _ in range(N)]",
+  "    N = next(nums)",
+  "    K = next(nums)",
+  "    Q = next(nums)",
   "",
-  "# W = number of valid top-left positions per dimension",
-  "W = N - K + 1",
+  "    # beauty[r][c] = current beauty of cow at (r,c). 0-indexed.",
+  "    beauty = [[0] * N for _ in range(N)]",
   "",
-  "# S[i][j] = sum of K x K window with top-left (i,j)",
-  "S = [[0] * W for _ in range(W)]",
+  "    # W = number of valid top-left positions per dimension",
+  "    W = N - K + 1",
   "",
-  "cur_max = 0",
-  "out = []",
+  "    # S[i][j] = sum of K x K window with top-left (i,j)",
+  "    S = [[0] * W for _ in range(W)]",
   "",
-  "for _ in range(Q):",
-  "    r, c, v = map(int, input().split())",
-  "    # the input counts from 1, our arrays count from 0",
-  "    r -= 1",
-  "    c -= 1",
+  "    cur_max = 0",
+  "    out = []",
   "",
-  "    delta = v - beauty[r][c]",
-  "    beauty[r][c] = v",
+  "    for _ in range(Q):",
+  "        # the input counts from 1, our arrays count from 0",
+  "        r = next(nums) - 1",
+  "        c = next(nums) - 1",
+  "        v = next(nums)",
   "",
-  "    # windows containing (r,c) have top-left (i,j) with",
-  "    # max(0, r-K+1) <= i <= min(r, W-1),  same for j",
-  "    i_lo = max(0, r - K + 1)",
-  "    i_hi = min(r, W - 1)",
-  "    j_lo = max(0, c - K + 1)",
-  "    j_hi = min(c, W - 1)",
+  "        delta = v - beauty[r][c]",
+  "        beauty[r][c] = v",
   "",
-  "    for i in range(i_lo, i_hi + 1):",
-  "        for j in range(j_lo, j_hi + 1):",
-  "            S[i][j] += delta",
-  "            if S[i][j] > cur_max:",
-  "                cur_max = S[i][j]",
+  "        # windows containing (r,c) have top-left (i,j) with",
+  "        # max(0, r-K+1) <= i <= min(r, W-1),  same for j",
+  "        i_lo = max(0, r - K + 1)",
+  "        i_hi = min(r, W - 1)",
+  "        j_lo = max(0, c - K + 1)",
+  "        j_hi = min(c, W - 1)",
   "",
-  "    out.append(str(cur_max))",
+  "        for i in range(i_lo, i_hi + 1):",
+  "            row = S[i]  # grab the row once — cheaper than S[i][j] twice",
+  "            for j in range(j_lo, j_hi + 1):",
+  "                new_val = row[j] + delta",
+  "                row[j] = new_val",
+  "                if new_val > cur_max:",
+  "                    cur_max = new_val",
   "",
-  "sys.stdout.write('\\n'.join(out) + '\\n')",
+  "        out.append(str(cur_max))",
+  "",
+  "    sys.stdout.write('\\n'.join(out) + '\\n')",
+  "",
+  "main()",
 ];
 
 
@@ -132,42 +157,50 @@ const _PS_VARS = [
 // 표시용(주석 제거). 실행/PDF 는 위 FULL_PY/FULL_CPP 그대로.
 const VIEW_PY = [
   "import sys",
-  "input = sys.stdin.readline",
   "",
-  "N, K = map(int, input().split())",
-  "Q = int(input())",
+  "def main():",
+  "    data = sys.stdin.read().split()",
+  "    nums = map(int, data)",
   "",
-  "beauty = [[0] * N for _ in range(N)]",
+  "    N = next(nums)",
+  "    K = next(nums)",
+  "    Q = next(nums)",
   "",
-  "W = N - K + 1",
+  "    beauty = [[0] * N for _ in range(N)]",
   "",
-  "S = [[0] * W for _ in range(W)]",
+  "    W = N - K + 1",
   "",
-  "cur_max = 0",
-  "out = []",
+  "    S = [[0] * W for _ in range(W)]",
   "",
-  "for _ in range(Q):",
-  "    r, c, v = map(int, input().split())",
-  "    r -= 1",
-  "    c -= 1",
+  "    cur_max = 0",
+  "    out = []",
   "",
-  "    delta = v - beauty[r][c]",
-  "    beauty[r][c] = v",
+  "    for _ in range(Q):",
+  "        r = next(nums) - 1",
+  "        c = next(nums) - 1",
+  "        v = next(nums)",
   "",
-  "    i_lo = max(0, r - K + 1)",
-  "    i_hi = min(r, W - 1)",
-  "    j_lo = max(0, c - K + 1)",
-  "    j_hi = min(c, W - 1)",
+  "        delta = v - beauty[r][c]",
+  "        beauty[r][c] = v",
   "",
-  "    for i in range(i_lo, i_hi + 1):",
-  "        for j in range(j_lo, j_hi + 1):",
-  "            S[i][j] += delta",
-  "            if S[i][j] > cur_max:",
-  "                cur_max = S[i][j]",
+  "        i_lo = max(0, r - K + 1)",
+  "        i_hi = min(r, W - 1)",
+  "        j_lo = max(0, c - K + 1)",
+  "        j_hi = min(c, W - 1)",
   "",
-  "    out.append(str(cur_max))",
+  "        for i in range(i_lo, i_hi + 1):",
+  "            row = S[i]",
+  "            for j in range(j_lo, j_hi + 1):",
+  "                new_val = row[j] + delta",
+  "                row[j] = new_val",
+  "                if new_val > cur_max:",
+  "                    cur_max = new_val",
   "",
-  "sys.stdout.write('\\n'.join(out) + '\\n')",
+  "        out.append(str(cur_max))",
+  "",
+  "    sys.stdout.write('\\n'.join(out) + '\\n')",
+  "",
+  "main()",
 ];
 
 
@@ -238,19 +271,23 @@ export function getPhotoshoot25Walk(E, lang = "py") {
     ] };
   }
   return { code: VIEW_PY, vars: _PS_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "What do we need after each update? The best photo score at that moment.\nAdding every photo sum from scratch each time would be slow, so we keep a table and fix only what changed.\nUp to 30,000 updates can arrive, so reading has to be fast.",
-                                 "업데이트마다 무엇을 구해야 하나요?\n그 순간의 최고 사진 점수예요.\n매번 처음부터 다 더하면 느리니, 표에 저장해두고 바뀐 만큼만 고쳐요.\n업데이트가 최대 3만 번이라 읽기부터 빨라야 해요.") },
-    { hi: [3, 4],   bubble: t(E, "Read N, K, and the number of updates Q.", "N, K, 업데이트 수 Q 를 읽어요.") },
-    { hi: [6, 6],   bubble: t(E, "beauty = each cell's value (all 0 at first). Exactly N×N — no spare slot, because we already shifted r and c to start at 0.", "beauty = 각 칸의 값이에요 (처음엔 다 0).\n크기는 딱 N×N 이에요.\nr, c 를 0 부터로 이미 옮겼으니 여분 칸이 필요 없어요.") },
-    { hi: [8, 8],   bubble: t(E, "W = how many photos fit in a row (N−K+1).", "W = 한 줄에 들어가는 사진 수 (N−K+1).") },
-    { hi: [10, 10], bubble: t(E, "S = each photo's score. THE key idea — keep it, don't re-add every time.", "S = 각 사진의 점수예요.\n여기가 핵심이에요 — 저장해 두고 매번 다시 안 더해요.") },
-    { hi: [12, 13], bubble: t(E, "cur_max = best score so far. out = collect answers.", "cur_max = 지금까지 최고 점수. out = 답 모음.") },
-    { hi: [16, 18], bubble: t(E, "The input counts rows and columns from 1, but our arrays count from 0 — so subtract 1 right away. From here on r and c are array positions.", "입력은 행·열을 1 부터 세는데 배열은 0 부터예요.\n그래서 읽자마자 1 씩 빼요.\n이 뒤로 r, c 는 배열 자리 번호예요.") },
-    { hi: [20, 21], bubble: t(E, "delta = new v − old value. The photo sums already hold the old value, so add just the change — no recompute (that's the speed!). Then store the new value.", "delta = 새 값 v 에서 옛 값을 뺀 만큼이에요.\n사진 점수엔 옛 값이 이미 들어 있어요.\n그러니 다시 다 더하지 말고 늘어난 만큼만 더해요 (그래서 빨라요!).\n그 다음 칸 값을 새 값으로 바꿔요.") },
-    { hi: [23, 26], bubble: t(E, "Range of photos holding this cow — that rectangle from the sim.", "이 소를 품는 사진들의 범위예요.\n시뮬에서 본 그 직사각형이에요.") },
-    { hi: [28, 30], bubble: t(E, "Add delta to only those photos.", "그 사진들만 S 에 delta 를 더해요.") },
-    { hi: [31, 32], bubble: t(E, "A photo grew — lift cur_max if it beats it.", "사진 점수가 커졌어요.\n더 크면 cur_max 를 그 값으로 바꿔요.") },
-    { hi: [34, 36], bubble: t(E, "Save the answer; print all at the end.", "답을 모아 둬요.\n마지막에 한 번에 출력해요.") },
+    { hi: [0, 1],   bubble: t(E, "What do we need after each update? The best photo score at that moment.\nAdding every photo sum from scratch each time would be slow, so we keep a table and fix only what changed.",
+                                 "업데이트마다 무엇을 구해야 하나요?\n그 순간의 최고 사진 점수예요.\n매번 처음부터 다 더하면 느리니, 표에 저장해두고 바뀐 만큼만 고쳐요.") },
+    { hi: [2, 2],   bubble: t(E, "def main(): — code inside a function runs faster than code sitting at the top of the file in Python. Q can be up to 30,000, so every bit of speed helps; put the whole solution in here and call it at the very end.",
+                                 "def main(): — 파이썬은 함수 안 코드가 파일 맨 위에 그냥 적은 코드보다 빨라요.\nQ 가 최대 3만이라 이 차이도 아쉬워서, 풀이 전체를 함수 안에 넣고 맨 끝에서 불러요.") },
+    { hi: [3, 4],   bubble: t(E, "Read every number in the whole input at once, not one line at a time — with up to 30,000 updates, that adds up.", "입력에 있는 숫자를 전부 한 번에 읽어요.\n한 줄씩 읽지 않아요 — 업데이트가 최대 3만 개라 그 차이가 쌓여요.") },
+    { hi: [6, 8],   bubble: t(E, "Pull the numbers out one at a time: N, K, then the number of updates Q.", "숫자를 하나씩 꺼내요. N, K, 그다음 업데이트 수 Q.") },
+    { hi: [10, 10], bubble: t(E, "beauty = each cell's value (all 0 at first). Exactly N×N — no spare slot, because we already shifted r and c to start at 0.", "beauty = 각 칸의 값이에요 (처음엔 다 0).\n크기는 딱 N×N 이에요.\nr, c 를 0 부터로 이미 옮겼으니 여분 칸이 필요 없어요.") },
+    { hi: [12, 12], bubble: t(E, "W = how many photos fit in a row (N−K+1).", "W = 한 줄에 들어가는 사진 수 (N−K+1).") },
+    { hi: [14, 14], bubble: t(E, "S = each photo's score. THE key idea — keep it, don't re-add every time.", "S = 각 사진의 점수예요.\n여기가 핵심이에요 — 저장해 두고 매번 다시 안 더해요.") },
+    { hi: [16, 17], bubble: t(E, "cur_max = best score so far. out = collect answers.", "cur_max = 지금까지 최고 점수. out = 답 모음.") },
+    { hi: [20, 22], bubble: t(E, "The input counts rows and columns from 1, but our arrays count from 0 — so subtract 1 right away. From here on r and c are array positions.", "입력은 행·열을 1 부터 세는데 배열은 0 부터예요.\n그래서 읽자마자 1 씩 빼요.\n이 뒤로 r, c 는 배열 자리 번호예요.") },
+    { hi: [24, 25], bubble: t(E, "delta = new v − old value. The photo sums already hold the old value, so add just the change — no recompute (that's the speed!). Then store the new value.", "delta = 새 값 v 에서 옛 값을 뺀 만큼이에요.\n사진 점수엔 옛 값이 이미 들어 있어요.\n그러니 다시 다 더하지 말고 늘어난 만큼만 더해요 (그래서 빨라요!).\n그 다음 칸 값을 새 값으로 바꿔요.") },
+    { hi: [27, 30], bubble: t(E, "Range of photos holding this cow — that rectangle from the sim.", "이 소를 품는 사진들의 범위예요.\n시뮬에서 본 그 직사각형이에요.") },
+    { hi: [32, 36], bubble: t(E, "Add delta to only those photos. Grab the row once (row = S[i]) instead of looking up S[i][j] twice — one less step per cell.", "그 사진들만 S 에 delta 를 더해요.\n한 줄(row = S[i])을 미리 꺼내 두면 S[i][j] 를 두 번 찾지 않아도 돼요 — 칸마다 한 단계가 줄어요.") },
+    { hi: [37, 38], bubble: t(E, "A photo grew — lift cur_max if it beats it.", "사진 점수가 커졌어요.\n더 크면 cur_max 를 그 값으로 바꿔요.") },
+    { hi: [40, 42], bubble: t(E, "Save the answer; print all at the end.", "답을 모아 둬요.\n마지막에 한 번에 출력해요.") },
+    { hi: [44, 44], bubble: t(E, "main() is just a name until you call it here — this line actually runs the solution.", "main() 은 이렇게 불러야 실제로 실행돼요 — 여기서 진짜로 풀이가 돌아가요.") },
   ] };
 }
 
@@ -273,8 +310,8 @@ export function getPhotoshoot25Sections(E) {
       ],
       pyOnly: [
         t(E,
-          "Even with sys.stdin.readline + collected output, Python is too slow here — it times out on the larger tests (12/18). Same algorithm; submit in C++ for full marks.",
-          "sys.stdin.readline 을 쓰고 출력을 모아도 파이썬은 이 문제에 느려요. 큰 테스트에서 시간 초과가 나요 (12/18). 방법은 똑같으니 만점을 받으려면 C++ 로 내요."),
+          "Even reading the whole input at once, Python does each of those Q * K^2 steps slower than C++ — the biggest tests may still time out. Same algorithm; submit in C++ for a guaranteed full score.",
+          "입력을 통째로 한 번에 읽어도, 그 Q * K^2 번 계산 한 번 한 번이 파이썬은 C++ 보다 느려요. 제일 큰 테스트에서는 시간 초과가 날 수 있어요. 방법은 똑같으니, 확실한 만점을 받으려면 C++ 로 내요."),
       ],
       cppOnly: [
         t(E,

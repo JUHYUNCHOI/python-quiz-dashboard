@@ -271,8 +271,8 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
             {lang === "py" && (
               <div style={{ margin: "0 16px 6px", padding: "9px 13px", borderRadius: 10, background: "#fffbeb", border: "1.5px solid #fbbf24", color: "#92400e", fontSize: 12.5, fontWeight: 700, lineHeight: 1.6, wordBreak: "keep-all", textAlign: "center" }}>
                 {t(E,
-                  <>⚠️ This problem's data is large, so Python <b>times out on the later tests (12/18)</b>. The algorithm is identical — great for understanding — but submit in <b>C++</b> for full marks.</>,
-                  <>⚠️ 이 문제는 데이터가 커서 파이썬은 <b>뒷 테스트에서 시간 초과가 나요 (12/18)</b>. 방법은 똑같으니 이해하기엔 좋지만, USACO 만점은 <b>C++</b> 로 내요.</>)}
+                  <>⚠️ Up to Q·K² ≈ 2×10⁷ steps — plenty of room in <b>C++ (18/18 PASS)</b>. Python runs the identical algorithm, but each step is slower in Python, so the largest tests may still time out. For a guaranteed full score, submit in <b>C++</b>.</>,
+                  <>⚠️ 계산은 최대 Q·K² ≈ 2×10⁷ 번 — <b>C++ 은 이 정도면 넉넉해요 (18/18 통과)</b>. 파이썬도 방법은 똑같지만 한 걸음 한 걸음이 더 느려서, 제일 큰 테스트는 여전히 시간 초과가 날 수 있어요. 확실한 만점은 <b>C++</b> 로 내요.</>)}
               </div>
             )}
             <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />
