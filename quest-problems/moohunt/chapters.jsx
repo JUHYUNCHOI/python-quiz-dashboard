@@ -5,6 +5,11 @@ import { getMooHuntBruteWalk } from "./brute";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { EveryBoardSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
 
+/* 샘플 입출력 상자의 «← 설명» 라벨 — strangefn/chapters.jsx 의 SIO 와 같은 모양
+   (2026-09-23, check-taught-vs-final-code 계열 검토에서 이어진 "샘플 I/O 에 뜻 라벨이
+   없다" 지적. moohunt 는 숫자만 있고 어떤 줄이 N·K 인지, 어떤 줄이 무브인지 없었다.) */
+const SIO = { color: "#94a3b8", fontSize: 10.5 };
+
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (3 steps — 도입 · 형식+예제 · 보드 열거)
    ═══════════════════════════════════════════════════════════════ */
@@ -147,17 +152,21 @@ export function makeMooHuntCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
               <div style={{ color: "#94a3b8", marginBottom: 4 }}>Input</div>
-              <div>5 6</div>
-              <div>1 2 3</div>
-              <div>1 2 3</div>
-              <div>1 3 5</div>
-              <div>2 3 4</div>
-              <div>5 3 2</div>
-              <div>5 2 3</div>
+              {/* 2026-09-23 선생님이 strangefn 에서 짚은 것과 같은 결함 —
+                  "입력값과 출력값이 뭘 의미하는데?" 숫자만 있어서 어떤 줄이 N·K 이고
+                  어떤 줄이 무브인지 이 상자만으론 몰랐다(뜻은 다음 쪽 형식 카드에 있었다).
+                  🔒 components.jsx 의 입력 읽기 순서로 확인: N K → K 개의 x y z 줄. */}
+              <div>5 6      <span style={SIO}>← {t(E, "N=5 cells, K=6 moves", "N=5칸, K=6무브")}</span></div>
+              <div>1 2 3    <span style={SIO}>← {t(E, "move 1: x y z", "무브 1: x y z")}</span></div>
+              <div>1 2 3    <span style={SIO}>← {t(E, "move 2", "무브 2")}</span></div>
+              <div>1 3 5    <span style={SIO}>← {t(E, "move 3", "무브 3")}</span></div>
+              <div>2 3 4    <span style={SIO}>← {t(E, "move 4", "무브 4")}</span></div>
+              <div>5 3 2    <span style={SIO}>← {t(E, "move 5", "무브 5")}</span></div>
+              <div>5 2 3    <span style={SIO}>← {t(E, "move 6", "무브 6")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
               <div style={{ color: "#94a3b8", marginBottom: 4 }}>Output</div>
-              <div>4 2</div>
+              <div>4 2  <span style={SIO}>← {t(E, "best score, then ways", "최고 점수, 그다음 방법 수")}</span></div>
             </div>
           </div>
           {/* 2026-09-07: 입력 형식 설명이 없어서 `5 6` 이 뭔지 알 수가 없었다.

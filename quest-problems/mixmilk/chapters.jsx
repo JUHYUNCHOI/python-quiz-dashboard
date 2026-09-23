@@ -766,7 +766,27 @@ export function makeMixMilkCh3(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 부분별로 읽어봐요.\n위쪽에서 Python ↔ C++ 를 바꿀 수 있어요."),
-      sections: getMixMilkSections(E),
+      sections: (() => {
+        const sections = getMixMilkSections(E);
+        // 🔗 다리 문장 — components.jsx(🔒)의 FULL_PY/FULL_CPP 는 3-3 에서 배운
+        // min() 대신 if/else 로, FULL_PY 는 3-1 에서 배운 map(int, ...) 대신
+        // int(parts[0]) 로 하나씩 꺼내 같은 일을 한다. 왜 그런지는 모르니
+        // 지어내지 않고, "하는 일은 같다" 는 사실만 한 줄씩 알려준다.
+        // (billboard/chapters.jsx 의 max()/min() 다리 문장과 같은 처방 — 2026-09-23)
+        sections[0].why = [
+          ...sections[0].why,
+          t(E,
+            "Here the code uses if/else instead of min() — it does the same thing.",
+            "여기서는 min() 대신 if/else 를 써요. 하는 일은 똑같아요."),
+        ];
+        sections[0].pyOnly = [
+          ...sections[0].pyOnly,
+          t(E,
+            "Here the code reads each value with int(parts[0]) instead of map(int, ...) — same thing, one at a time.",
+            "여기서는 map(int, ...) 대신 int(parts[0]) 로 하나씩 꺼내요. 하는 일은 똑같아요."),
+        ];
+        return sections;
+      })(),
     },
   ];
 }

@@ -124,6 +124,10 @@ python3 scripts/check-unused-lang-param.py <id>               # Py/C++ 토글을
 python3 scripts/check-taught-vs-final-code.py <id>            # 화면 코드 블록이 **가르치는** 함수를 🔒 최종 코드가 쓰나
                                                             #   (`check-boasted-function.py` 와 다른 층 — 그건 자랑 *문장*만
                                                             #   본다. 이건 학생에게 **직접 보여준 코드 줄**과 대조한다)
+python3 scripts/check-unlabeled-sample-io.py <id>             # 샘플 입출력 상자에 **뜻 라벨(← 설명)** 이 있나 (가벼운 grep)
+                                                            #   2026-09-23: strangefn·moohunt 로 **두 번째** 발견된 결함.
+                                                            #   전수 69건·quest 52개(오탐 실측 ~1건/69 — 낮음). 판정이 아니라
+                                                            #   볼 자리 표시 — «→» 등 다른 화살표·상자 밖 형식 카드는 못 본다.
 node scripts/check-emphasis.mjs http://localhost:3000/quest/<id>  # 강조가 **보이나** (다 굵으면 강조가 아니다)
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
 ```
