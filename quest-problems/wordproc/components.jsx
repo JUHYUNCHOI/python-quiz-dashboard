@@ -31,9 +31,12 @@ function packLines(lengths, K) {
 }
 
 export function WordProcLineWrapSim({ E }) {
-  /* 2026-09-22 PM 판정 ③: 기본값이 예전 "8쪽 표"(the/dog/is/a/good/boy, K=6)에
-     맞춰져 있었다. 그 표를 지웠으니, 이 시뮬 바로 앞(2-2·2-3쪽)에서 학생이 막
-     짚은 hello(5)/my(2)/name(4), K=8 로 시작해 끊기지 않게 이어준다. */
+  /* 2026-09-22 PM 판정 ③, 2026-09-23 다리 갱신: 기본값이 예전 "8쪽 표"
+     (the/dog/is/a/good/boy, K=6)에 맞춰져 있었다. 그 표를 지웠고, 이 시뮬
+     바로 앞을 채웠던 예제 두 쪽(옛 2-2·2-3)도 1-3쪽과 겹쳐서 뺐다 — 이제
+     이 시뮬이 2-1(그리디 4단계) 바로 다음이다. hello(5)/my(2)/name(4),
+     K=8 은 1-3쪽("핵심 규칙" 카드)에서 이미 쓴 숫자라, 시뮬 narr 이 그
+     쪽을 가리키는 다리 문장으로 이어준다. */
   const [lengths, setLengths] = useState([5, 2, 4]);
   const [K, setK] = useState(8);
 
@@ -262,12 +265,24 @@ const FULL_CPP = [
   "}",
 ];
 
+/* 2026-09-23, PM 판정: 14~16쪽(Ch3)에서 "한 줄씩 읽는 법" 을 가르쳐 놓고
+   여기서는 25줄(py) / 38줄(cpp) 을 통째로 한 번에 던지고 있었다.
+   why 는 규칙만 설명하고, 반복이 끝난 뒤에도 마지막 줄을 한 번 더 내보내야
+   하는 이유(`if cur_line:`)도, 완성된 result 를 word.out 에 쓰는 이유
+   (`with open('word.out', 'w')`) 도 한 글자도 안 짚었다.
+   🔒 FULL_PY·FULL_CPP 텍스트는 그대로 두고, `.slice()` 로 어디서 자를지만
+   바꾼다 — 원본 한 벌이 그대로 남으므로 USACO 재제출이 필요 없다
+   (scripts/check-section-code-complete.py 의 권장 방식).
+   섹션 1 = 14~16쪽에서 이미 배운 것의 요약(읽기+그리디 반복),
+   섹션 2 = 반복이 끝나도 남는 마지막 줄(새로 설명),
+   섹션 3 = result 를 word.out 에 남기기(새로 설명, cpp 는 이미 fout 로
+   그때그때 썼으므로 남은 건 프로그램을 마무리하는 것뿐이라고 cppOnly 로 밝힌다). */
 export function getWordProcSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "1️⃣ Read + follow the rule", "1️⃣ 읽고, 규칙대로 채워요"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY.slice(0, 20), cpp: FULL_CPP.slice(0, 33),
       why: [
         t(E,
           "What do we need? The document, filled line by line.\n"
@@ -292,6 +307,46 @@ export function getWordProcSections(E) {
       cppOnly: [
         t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
             "필요한 헤더만 (<iostream>, <vector>, ...) 넣으면 뜻이 또렷해요."),
+      ],
+    },
+    {
+      label: t(E, "2️⃣ The last line — nobody flushes it", "2️⃣ 반복이 끝나도 마지막 줄이 남아요"),
+      color: A,
+      py: FULL_PY.slice(20, 23), cpp: FULL_CPP.slice(33, 36),
+      why: [
+        t(E,
+          "Inside the loop, we only flush a line when the NEXT\n"
+          + "word doesn't fit anymore. But after the very last\n"
+          + "word, there is no next word to trigger that check —\n"
+          + "so whatever's still sitting in the current line never\n"
+          + "gets flushed. We need one more flush, right after\n"
+          + "the loop ends, to catch that last line.",
+          "반복문 안의 조건은 '다음 단어가 안 들어갈 때' 만\n"
+          + "줄을 내보내요. 그런데 마지막 단어까지 넣고 나면\n"
+          + "더는 확인할 '다음 단어' 가 없어요 — 그래서 지금 줄에\n"
+          + "남아 있는 단어들은 그 조건으론 절대 안 나가요.\n"
+          + "그래서 반복이 끝난 바로 뒤에, 남은 게 있으면\n"
+          + "한 번 더 내보내야 해요."),
+      ],
+    },
+    {
+      label: t(E, "3️⃣ Leave the result in word.out", "3️⃣ 결과를 word.out 에 남겨요"),
+      color: A,
+      py: FULL_PY.slice(23), cpp: FULL_CPP.slice(36),
+      why: [
+        t(E,
+          "The document is done now — every finished line is\n"
+          + "sitting in our list, in order.",
+          "이제 문서가 다 완성됐어요 — 완성된 줄들이 순서대로\n"
+          + "리스트 안에 모여 있어요."),
+      ],
+      pyOnly: [
+        t(E, "Open word.out and write each line in result, one row at a time.",
+            "word.out 을 열어서 result 의 줄들을 한 줄씩 적어요."),
+      ],
+      cppOnly: [
+        t(E, "C++ already wrote each line to fout as it went (including the last-line flush above) — nothing left but to end the program.",
+            "C++ 은 위 마지막 줄 flush 를 포함해 그때그때 fout 에 이미 다 썼어요 — 이제 프로그램을 마무리하기만 하면 돼요."),
       ],
     },
   ];

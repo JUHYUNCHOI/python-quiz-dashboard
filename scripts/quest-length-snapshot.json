@@ -55,9 +55,9 @@
     "korean_chars_ref": 1175
   },
   "billboard": {
-    "pages": 18,
-    "quiz_input": 7,
-    "korean_chars_ref": 1061
+    "pages": 14,
+    "quiz_input": 5,
+    "korean_chars_ref": 960
   },
   "billboard2": {
     "pages": 5,
@@ -875,9 +875,9 @@
     "korean_chars_ref": 262
   },
   "whereami": {
-    "pages": 18,
-    "quiz_input": 5,
-    "korean_chars_ref": 1478
+    "pages": 15,
+    "quiz_input": 4,
+    "korean_chars_ref": 1316
   },
   "word": {
     "pages": 20,
@@ -885,9 +885,9 @@
     "korean_chars_ref": 1575
   },
   "wordproc": {
-    "pages": 18,
-    "quiz_input": 6,
-    "korean_chars_ref": 1890
+    "pages": 15,
+    "quiz_input": 5,
+    "korean_chars_ref": 1775
   },
   "xorstring": {
     "pages": 6,

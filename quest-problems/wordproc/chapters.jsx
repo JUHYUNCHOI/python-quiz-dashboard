@@ -366,25 +366,11 @@ export function makeWordProcCh1(E) {
           </div>
         </div>),
     },
-    // 1-6: Quiz — count lines
-    {
-      type: "quiz",
-      narr: t(E,
-        "Words [\"ab\",\"cd\",\"ef\"], K=5. Fill a line from the front.", "단어 [\"ab\",\"cd\",\"ef\"], K=5. 앞에서부터 한 줄에 담아봐요."),
-      question: t(E,
-        "Words [\"ab\",\"cd\",\"ef\"], K=5. How many lines?",
-        "단어 [\"ab\",\"cd\",\"ef\"], K=5 면 몇 줄이 될까요?"),
-      options: [
-        t(E, "1 line", "1줄"),
-        t(E, "2 lines", "2줄"),
-        t(E, "3 lines", "3줄"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "ab(2)+cd(2)=4 fits within 5.\nAdding ef makes it 6, which overflows, so it starts a new line. That's 2 lines!",
-        "ab(2)+cd(2)=4 라서 5 안에 들어가요.\nef 를 더하면 6 이 되어 넘치니 새 줄이에요. 그래서 2줄이에요."),
-    },
-    // 1-7: Input practice
+    /* 2026-09-23, PM 판정: 바로 앞 1-5쪽 표가 ab/cd/ef/gh 를 K=5 로 이미
+       다 짚었다(들어감/들어감/넘침/들어감). 여기서 그중 셋(ab,cd,ef)만 추려
+       "몇 줄?" 을 다시 물었는데, 답이 방금 본 표에 그대로 있었다 —
+       whereami 6쪽과 같은 구조라 같은 판정으로 뺀다. */
+    // 1-6: Input practice (was 1-7)
     {
       type: "input",
       narr: t(E,
@@ -449,55 +435,20 @@ export function makeWordProcCh2(E) {
           </div>
         </div>),
     },
-    /* 2-2, 2-3, 2-4: 옛 "8쪽 트레이스 표" 를 지우고 그 자리에 시뮬을 당겼다.
-       (2026-09-22, PM 판정 ③) pedagogy·student 가 각자 짚었다 — 4쪽(Ch1) 과
-       이 표가 포맷만 다르고 같은 정보를 두 번, 시뮬(당시 9쪽)에 닿을 때는 이미
-       답을 세 번 본 뒤라 시뮬이 발견이 아니라 검산이었다.
-       pedagogy 가 준 걸음 목록대로 셋으로 쪼갰다 — ①고정 예시 ②하나 더 추가해
-       넘치는 것까지 ③그다음에 자유 편집. 예시는 **새로 안 만들고** 1-3쪽(Ch1,
-       "핵심 규칙" 카드)에서 이미 쓴 hello/my/name, K=8 을 그대로 재사용한다 —
-       같은 숫자를 새로 보여주는 게 아니라 이미 본 것을 되짚어 다음으로 잇는다. */
-    // 2-2: Step 1 — hello + my fit
+    /* 2026-09-23, PM 판정: 옛 2-2·2-3쪽("hello+my 는 들어감", "name 더하면 넘침")이
+       1-3쪽(Ch1, "핵심 규칙" 카드)과 **완전히 같은 계산**을 두 조각으로 또 보여줬고,
+       바로 다음 시뮬(현재 2-2쪽)도 같은 숫자(hello/my/name, K=8)로 또 시작해서
+       세 번째 반복이었다. 2-1(그리디 4단계) → 시뮬을 직결하고, 시뮬 narr 에
+       1-3쪽을 가리키는 다리 문장 한 줄만 남긴다. */
+    // 2-2: Free-edit sim, starting from the 1-3 example (was 2-4)
     {
       type: "reveal",
       narr: t(E,
-        "That hello + my example again — 7 still fits.", "아까 그 hello + my 예제예요 — 7이라 아직 들어가요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
-            {t(E, "Step 1: hello + my", "1단계: hello + my")}
-          </div>
-          <LineViz words={["hello", "my"]} colors={["#3b82f6", "#10b981"]} K={8} lineNum={1} E={E} />
-          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "5 + 2 = 7  ≤  8, still fits.", "5 + 2 = 7, 8 이하라 들어가요.")}
-          </div>
-        </div>),
-    },
-    // 2-3: Step 2 — add name, overflow
-    {
-      type: "reveal",
-      narr: t(E,
-        "Same example — now name pushes it over 8.", "같은 예제에서 name 을 더하면 8을 넘어요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
-            {t(E, "Step 2: add name", "2단계: name 을 더하면")}
-          </div>
-          <div style={{ marginBottom: 8, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "7 + 4 = 11  >  8  →  overflow, new line", "7 + 4 = 11 > 8 → 넘쳐서 새 줄")}
-          </div>
-          <LineViz words={["hello", "my"]} colors={["#3b82f6", "#10b981"]} K={8} lineNum={1} E={E} />
-          <LineViz words={["name"]} colors={["#f59e0b"]} K={8} lineNum={2} E={E} />
-        </div>),
-    },
-    // 2-4: Step 3 — free-edit sim, starting from the same example
-    {
-      type: "reveal",
-      narr: t(E,
-        "Same numbers — now you can edit them freely.", "같은 숫자로 시작해요 — 이제 직접 바꿔 봐요."),
+        "Remember hello/my/name, K=8? Try it yourself now.",
+        "그 hello/my/name, K=8 기억나죠? 이제 직접 만져 봐요."),
       content: <WordProcLineWrapSim E={E} />,
     },
-    // 2-5: Quiz on edge case
+    // 2-3: Quiz on edge case (was 2-5)
     {
       type: "quiz",
       narr: t(E,
@@ -515,7 +466,7 @@ export function makeWordProcCh2(E) {
         "abcde(5)=5 <= 5, fits! Then 5+fg(2)=7 > 5, new line. Line 1: [abcde], Line 2: [fg].",
         "abcde 는 5글자라서 딱 들어가요.\n여기에 fg 를 더하면 7 이 되어 넘치니 fg 는 새 줄이에요."),
     },
-    // 2-6: Practice input
+    // 2-4: Practice input (was 2-6)
     {
       type: "input",
       narr: t(E,
