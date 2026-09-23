@@ -5,7 +5,6 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#f97316";
 
 const FULL_PY = [
-  "import sys",
   "from math import isqrt",
   "",
   "def solve(N, M, K, a):",
@@ -60,9 +59,8 @@ const FULL_PY = [
   "            lo = mid + 1",
   "    return lo",
   "",
-  "data = sys.stdin.read().split()",
-  "N, M, K = int(data[0]), int(data[1]), int(data[2])",
-  "a = [int(x) for x in data[3:3+N]]",
+  "N, M, K = map(int, input().split())",
+  "a = list(map(int, input().split()))",
   "print(solve(N, M, K, a))",
 ];
 
@@ -159,9 +157,9 @@ const FULL_CPP = [
 //    ①준비 → ②feasible 정의(중첩 그대로) → ③반복문+입출력, 3조각으로 나눴다.
 //    CPP: feasible 은 원래 최상위 함수라 순서 그대로 ①준비(+isqrtll) → ②feasible
 //    정의 → ③main() 으로 나누면 forward-declare 없이도 유효하다.
-const SEC1_PY = FULL_PY.slice(0, 12);   // import ~ "lo = 1"
-const SEC2_PY = FULL_PY.slice(12, 47);  // "def feasible(X):" ~ "return True" (+빈 줄)
-const SEC3_PY = FULL_PY.slice(47);      // "while lo < hi:" ~ 입력 읽기·출력
+const SEC1_PY = FULL_PY.slice(0, 11);   // from math import isqrt ~ "lo = 1"
+const SEC2_PY = FULL_PY.slice(11, 46);  // "def feasible(X):" ~ "return True" (+빈 줄)
+const SEC3_PY = FULL_PY.slice(46);      // "while lo < hi:" ~ 입력 읽기·출력
 
 const SEC1_CPP = FULL_CPP.slice(0, 20);  // #include ~ isqrtll (+빈 줄)
 const SEC2_CPP = FULL_CPP.slice(20, 60); // "bool feasible(...)" ~ 닫는 "}" (+빈 줄)

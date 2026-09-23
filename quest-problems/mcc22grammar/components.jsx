@@ -352,8 +352,6 @@ export function Mcc22GrammarSim({ E }) {
 }
 
 const FULL_PY = [
-  "import sys",
-  "",
   "# 문법은 고정이에요 — 문제에 주어지고 입력으로 읽지 않아요.",
   "# adj[x] = x 다음에 올 수 있는 단어들이에요.",
   "adj = {",
@@ -364,16 +362,11 @@ const FULL_PY = [
   "    'THAT': {'WE', 'THEY'},",
   "}",
   "",
-  "data = sys.stdin.read().split('\\n')",
-  "idx = 0",
-  "T = int(data[idx])",
-  "idx += 1",
+  "T = int(input())",
   "out = []",
   "for _ in range(T):",
-  "    n = int(data[idx])",
-  "    idx += 1",
-  "    words = data[idx].split()",
-  "    idx += 1",
+  "    n = int(input())",
+  "    words = input().split()",
   "",
   "    ok = True",
   "    # 검사 ①: 모든 단어가 5개 중 하나여야 해요",

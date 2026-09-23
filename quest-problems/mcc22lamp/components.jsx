@@ -17,7 +17,6 @@ const KA = { wordBreak: "keep-all" };
 
 // section 1: exact per-segment integer counting
 const PY_S1 = [
-  "import sys",
   "from collections import defaultdict",
   "",
   "# 0~L 중 F + s*d 가 k 이상인 정수 d 는 몇 개?",
@@ -72,18 +71,12 @@ const PY_S2 = [
 // section 3: read all tests, print one answer each
 const PY_S3 = [
   "def main():",
-  "    data = sys.stdin.read().split()",
-  "    idx = 0",
-  "    T = int(data[idx])",
-  "    idx += 1",
+  "    T = int(input())",
   "    out = []",
   "    for _ in range(T):",
-  "        n, k = int(data[idx]), int(data[idx + 1])",
-  "        idx += 2",
-  "        p = list(map(int, data[idx:idx + n]))",
-  "        idx += n",
-  "        b = list(map(int, data[idx:idx + n]))",
-  "        idx += n",
+  "        n, k = map(int, input().split())",
+  "        p = list(map(int, input().split()))",
+  "        b = list(map(int, input().split()))",
   "        out.append(str(solve_one(n, k, p, b)))",
   "    print(\"\\n\".join(out))",
   "",
@@ -221,8 +214,8 @@ export function getMcc22LampSections(E) {
       py: PY_S3, cpp: CPP_S3,
       why: [
         t(E,
-          "Up to 2×10^5 tests, so read all input at once and index through it. Collect answers and print them together — one integer per test.",
-          "테스트가 최대 2×10^5 개라 입력을 한 번에 읽고 자리 번호로 훑어요. 답을 모아 한꺼번에 출력해요. 테스트마다 정수 하나예요."),
+          "Read each test's lines as they come — n and k, then the p list, then the b list. Collect the answers and print them together at the end, one integer per test.",
+          "테스트마다 n과 k, p 목록, b 목록을 순서대로 읽어요. 답은 모아 뒀다가 마지막에 한꺼번에 출력해요. 테스트마다 정수 하나예요."),
       ],
       pyOnly: [
         t(E,
