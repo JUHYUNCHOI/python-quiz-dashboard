@@ -460,9 +460,9 @@
     "korean_chars_ref": 775
   },
   "mcc20kitty": {
-    "pages": 15,
+    "pages": 14,
     "quiz_input": 3,
-    "korean_chars_ref": 2139
+    "korean_chars_ref": 2257
   },
   "mcc20knight": {
     "pages": 7,
@@ -856,9 +856,9 @@
     "korean_chars_ref": 375
   },
   "tricks": {
-    "pages": 18,
+    "pages": 17,
     "quiz_input": 5,
-    "korean_chars_ref": 1227
+    "korean_chars_ref": 1251
   },
   "uddered": {
     "pages": 4,

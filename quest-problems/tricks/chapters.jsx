@@ -5,7 +5,6 @@ import { C, t } from "@/components/quest/theme";
    ================================================================ */
 export const SOLUTION_CODE = [
   "from collections import Counter",
-  "from itertools import combinations",
   "",
   "N = int(input())",
   "packs = []",
@@ -15,16 +14,12 @@ export const SOLUTION_CODE = [
   "",
   "pair_count = Counter(packs)",
   "",
-  "colors = set()",
-  "for a, b in packs:",
-  "    colors.add(a)",
-  "    colors.add(b)",
-  "",
   "answer = 0",
-  "for x, y in combinations(sorted(colors), 2):",
+  "for (x, y), C in pair_count.items():",
+  "    if x == y:",
+  "        continue",
   "    A = pair_count.get((x, x), 0)",
   "    B = pair_count.get((y, y), 0)",
-  "    C = pair_count.get((x, y), 0)",
   "    answer += A * B * C",
   "    answer += C * (C-1) * (C-2) // 6",
   "",
@@ -462,7 +457,7 @@ export function makeTricksCh2(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 3: ⚡ 코드 (6 steps)
+   Chapter 3: ⚡ 코드 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeTricksCh3(E) {
   return [
@@ -499,7 +494,7 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We'll need A, B, C counts for every pair, so count bag types once with Counter.", "A·B·C 봉지 개수가 필요하니까, Counter 로 미리 세어 둬요."),
+        "We'll need A, B, C counts for every pair, so count bag types once with Counter — its keys ARE the color pairs we need next.", "A·B·C 봉지 개수가 필요하니까, Counter 로 미리 세어 둬요. 이 결과의 키가 바로 다음에 쓸 색 쌍이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
@@ -517,78 +512,56 @@ export function makeTricksCh3(E) {
             padding: 10, border: "1px solid #fdba74",
           }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#f97316", marginBottom: 4 }}>
-              {t(E, "Example result:", "예시 결과:")}
+              {t(E, "Example result (9-bag sample):", "예시 결과 (9봉지 예제):")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.text, lineHeight: 1.8 }}>
               {"{"}<br />
               {"  (1,1): 3,  (1,2): 2,"}<br />
-              {"  (1,3): 2,  (2,2): 1"}<br />
+              {"  (1,3): 3,  (2,2): 1"}<br />
               {"}"}
             </div>
           </div>
         </div>),
     },
-    // 3-3: Colors + combinations
+    // 3-3: Loop over pair_count directly + formula (O(N) — no combinations needed)
     {
       type: "reveal",
       narr: t(E,
-        "We check every pair of colors, so first collect all the colors that appear.", "색 쌍마다 계산해야 하니, 나온 색을 모아 짝을 만들어요."),
+        "pair_count's keys ARE the color pairs — loop over them directly, skip same-color entries, and add the formulas.", "pair_count 의 키가 곧 색 쌍이에요 — 그걸 그대로 돌면서 같은 색끼리는 건너뛰고 공식대로 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
-            {t(E, "Step 3: Get color pairs", "3단계: 색 쌍 구하기")}
+            {t(E, "Step 3: Count valid ways!", "3단계: 가능한 방법 수 세기!")}
           </div>
-          <CodeSnippet
-            lines={[
-              "from itertools import combinations",
-              "",
-              "colors = set()",
-              "for a, b in packs:",
-              "    colors.add(a)",
-              "    colors.add(b)",
-              "",
-              "# combinations(sorted(colors), 2)",
-              "# → (1,2), (1,3), (2,3)",
-            ]}
-            highlight={[2, 3, 4, 5]}
-          />
-          <div style={{
-            display: "flex", justifyContent: "center", gap: 6, marginTop: 10,
-          }}>
-            {["(1,2)", "(1,3)", "(2,3)"].map((p, i) => (
-              <div key={i} style={{
-                padding: "4px 10px", borderRadius: 6, fontSize: 12, fontWeight: 600,
-                fontFamily: "'JetBrains Mono',monospace",
-                background: "#fff7ed", border: "1px solid #fdba74", color: "#f97316",
-              }}>{p}</div>
-            ))}
-          </div>
-        </div>),
-    },
-    // 3-4: Main loop + formula
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each pair, look up A, B, C and add the formulas — that total is the answer.", "색 쌍마다 A·B·C 를 찾아 공식대로 더하면, 그게 곧 답이에요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
-            {t(E, "Step 4: Count valid ways!", "4단계: 가능한 방법 수 세기!")}
+          <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
+            {t(E,
+              "x == y means both candies in that entry are the same color (Type A or B), not a mixed pack — skip it.",
+              "x == y 면 같은 색 봉지(A나 B종류)라는 뜻이니 건너뛰어요.")}
           </div>
           <CodeSnippet
             lines={[
               "answer = 0",
-              "for x, y in combinations(sorted(colors), 2):",
+              "for (x, y), C in pair_count.items():",
+              "    if x == y:",
+              "        continue",
               "    A = pair_count.get((x, x), 0)",
               "    B = pair_count.get((y, y), 0)",
-              "    C = pair_count.get((x, y), 0)",
               "    answer += A * B * C",
               "    answer += C * (C-1) * (C-2) // 6",
               "",
               "print(answer)",
             ]}
-            highlight={[5, 6]}
+            highlight={[1, 2, 3, 6, 7]}
           />
+          <div style={{
+            marginTop: 10, background: "#fff7ed", borderRadius: 10,
+            padding: 10, border: "1px solid #fdba74", fontSize: 11.5, lineHeight: 1.8,
+            fontFamily: "'JetBrains Mono',monospace", color: C.text,
+          }}>
+            <div>(1,2): C=2, A=3, B=1 → 3×1×2 + 0 = 6</div>
+            <div>(1,3): C=3, A=3, B=0 → 0 + 1 = 1</div>
+            <div style={{ color: "#059669", fontWeight: 700, marginTop: 2 }}>6 + 1 = 7 ✓</div>
+          </div>
           <div style={{
             marginTop: 10, background: "#d1fae5", borderRadius: 10,
             padding: "8px 12px", border: "1px solid #6ee7b7", textAlign: "center",
@@ -599,7 +572,7 @@ export function makeTricksCh3(E) {
           </div>
         </div>),
     },
-    // 3-5: Full code reveal
+    // 3-4: Full code reveal
     {
       type: "code",
       narr: t(E,
