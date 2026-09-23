@@ -315,8 +315,8 @@ export function makeStrangeFnCh1(E) {
         "How many f's for x = 37?",
         "x = 37 은 몇 번 만에 0 이 될까요?"),
       hint: t(E,
-        "3 and 7 are both odd, so parity-flip makes 37 → 11 (1 f).\n'11' read as binary is n = 3, and g(3) = 4.\nTotal = 1 + g(3).",
-        "3 과 7 은 둘 다 홀수라서 홀짝으로 바꾸면 37 → 11 (1 번).\n'11' 을 이진수로 읽으면 n = 3, g(3) = 4.\n합계 = 1 + g(3)."),
+        "Same three ideas as before.\nDoes it need a parity-flip first — what do 3 and 7 become?\nThen read that result as binary — what's n?\nThen look up g(n) in the table above.",
+        "앞에서 배운 세 가지를 그대로 써요.\n먼저 홀짝 변환이 필요한가요? 3 과 7 은 뭐가 되나요?\n그 결과를 이진수로 읽으면 n 은 얼마인가요?\n표에서 g(n) 을 찾아요."),
       answer: 5,
       explain: t(E,
         "5 is right. 37 → 11 (1) → 10 (2) → 9 (3) → 1 (4) → 0 (5).\nSame as 1 + g(3) = 1 + 4 = 5.",
@@ -333,8 +333,8 @@ export function makeStrangeFnCh1(E) {
         "How many f's for x = 1010?",
         "x = 1010 은 몇 번 만에 0 이 될까요?"),
       hint: t(E,
-        "It's already 0/1 only, so no parity-flip needed. Read '1010' as binary — that's n = 10. n is even, so g(2k) = 3k with k = 5.",
-        "이미 0/1 만 있어서 홀짝 변환이 필요 없어요. '1010' 을 이진수로 읽으면 n = 10. n 이 짝수니 g(2k) = 3k, k = 5."),
+        "This one is already 0/1, so skip the parity-flip.\nGo straight to reading it as binary, then plug that n into the formula.",
+        "이 값은 이미 0/1 이라 홀짝 변환은 건너뛰어요.\n바로 이진수로 읽고, 그 n 을 공식에 넣어요."),
       answer: 15,
       explain: t(E,
         "15 is right. g(10) = 3 × 5 = 15 — counting by hand would take 15 steps, but the formula gives it in one shot.",
@@ -344,11 +344,91 @@ export function makeStrangeFnCh1(E) {
 }
 
 
+/* ── 계획: 코드 전에 세 단계로 정리 (2026-09-23 신설) ─────────────
+   선생님: "코드 전에 뭘 어떻게 하겠다고 자세히 설명한건가?
+            시뮬만 보고도 코드를 짤수 있나?" → 못 짠다.
+   원인(pedagogy): 3쪽 시뮬은 f 를 4번 되풀이 적용하는 걸 보여주는데
+   코드는 그걸 안 한다 — ①홀짝 한 번 ②이진수로 읽기 ③공식. 그 세 단계가
+   화면에 없고 7쪽 힌트 안에 정답 전문으로 숨어 있었다(memory/usaco_quest_learning_flow.md
+   의 "계획" 단계 부재 · memory/feedback_students_copy_the_answer.md 와 같은 모양).
+   모양은 buymilk 의 "Plan" 쪽(BuyMilkPlan)을 그대로 베꼈다 — 파란 박스 +
+   번호 걸음, 새 시뮬은 만들지 않는다. 숫자는 전부 학생이 이미 본 것만 쓴다
+   (x=210 은 3쪽 시뮬, n=2·g(2)=3 은 6쪽 표). */
+function StrangeFnPlan({ E }) {
+  const Step = ({ n, children }) => (
+    <div style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 8 }}>
+      <span style={{ flexShrink: 0, width: 22, height: 22, borderRadius: 999, background: "#8b5cf6",
+        color: "#fff", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {n}
+      </span>
+      <div style={{ fontSize: 12.5, lineHeight: 1.7, color: "#334155", wordBreak: "keep-all", textWrap: "balance" }}>
+        {children}
+      </div>
+    </div>
+  );
+  return (
+    <div style={{ padding: 16, maxWidth: 470, margin: "0 auto" }}>
+      <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 12,
+        padding: "12px 16px", marginBottom: 12, wordBreak: "keep-all", textWrap: "balance" }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
+          🗺️ {t(E, "Three steps, in code order", "코드가 할 세 단계")}
+        </div>
+        <Step n={1}>
+          {t(E,
+            "If any digit isn't 0/1: flip every digit to 0/1 by parity, all at once (1 op).",
+            "0/1 이 아닌 자리가 있으면, 한 번에 다 홀짝으로 0/1 로 바꿔요 (1번).")}
+        </Step>
+        <Step n={2}>
+          {t(E,
+            "Read the leftover 0/1 digits as binary — that's n.",
+            "남은 0/1 을 이진수로 읽어요 — 그게 n 이에요.")}
+        </Step>
+        <Step n={3}>
+          {t(E,
+            "Put n into the formula: floor(3n/2).",
+            "n 을 공식 floor(3n/2) 에 넣어요.")}
+        </Step>
+      </div>
+
+      <div style={{ background: "#fff", border: "1.5px solid #e2e8f0", borderRadius: 12,
+        padding: "12px 16px", marginBottom: 10 }}>
+        <div style={{ fontSize: 12.5, fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>
+          🔁 {t(E, "Double-check with x = 210", "x = 210 으로 다시 세어 봐요")}
+        </div>
+        <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.9, fontFamily: "'JetBrains Mono',monospace",
+          wordBreak: "keep-all", textWrap: "balance" }}>
+          <div>{t(E, "One by one (page 3): 210 → 10 → 9 → 1 → 0 = 4", "하나씩 세면 (3쪽): 210 → 10 → 9 → 1 → 0 = 4번")}</div>
+          <div style={{ marginTop: 6 }}>{t(E, "① parity-flip once → \"010\"", "① 홀짝 변환 1번 → \"010\"")}</div>
+          <div>{t(E, "② read as binary → n = 2 (same n as page 6's table)", "② 이진수로 읽으면 → n = 2 (6쪽 표와 같아요)")}</div>
+          <div>{t(E, "③ g(2) = 3", "③ g(2) = 3")}</div>
+          <div style={{ marginTop: 4, fontWeight: 800 }}>1 + 3 = 4</div>
+        </div>
+      </div>
+
+      <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
+        padding: "9px 14px", fontSize: 12.5, color: "#166534", fontWeight: 700, textAlign: "center",
+        wordBreak: "keep-all", textWrap: "balance" }}>
+        {t(E,
+          "✅ Same answer, both ways — so these three steps become the code.",
+          "✅ 두 방법 다 답이 같아요 — 그래서 이 세 단계가 그대로 코드가 돼요.")}
+      </div>
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: makeStrangeFnCh2
    ═══════════════════════════════════════════════════════════════ */
 export function makeStrangeFnCh2(E, lang = "py") {
   return [
+    {
+      type: "reveal",
+      label: t(E, "Plan", "계획"),
+      narr: t(E,
+        "Before the code: what will it actually do? Three steps.",
+        "코드로는 뭘 할까요? 세 단계예요."),
+      content: (<StrangeFnPlan E={E} />),
+    },
     /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
     (() => {
       const w = getStrangeFnWalk(E, lang);
