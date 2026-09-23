@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
+import { localizeCode } from "@/components/quest/localizeCode";
 import { getWhereAmISections } from "./components";
 
 /* ──────────────────────────────────────────────────────────────
@@ -203,34 +204,39 @@ function pyHighlight(line, baseColor) {
   return tokens;
 }
 
-/* Helper: code snippet box (token-highlighted Python) */
-const CodeSnippet = ({ lines, highlight: hl }) => (
-  <div style={{
-    background: "#1e293b", borderRadius: 10, padding: "10px 8px",
-    overflowX: "auto", fontSize: 12, lineHeight: 1.8,
-    fontFamily: "'JetBrains Mono', monospace", marginTop: 8,
-  }}>
-    {lines.map((l, i) => {
-      const isHl = hl && hl.includes(i);
-      const baseColor = isHl ? "#fdba74" : "#e2e8f0";
-      const tokens = pyHighlight(l, baseColor);
-      return (
-        <div key={i} style={{
-          display: "flex", minHeight: 20,
-          background: isHl ? "rgba(249,115,22,.15)" : "transparent",
-          borderRadius: 4, padding: "0 4px",
-        }}>
-          <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 10, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
-          <span style={{ whiteSpace: "pre", wordBreak: "break-all" }}>
-            {tokens.map((tk, j) => (
-              <span key={j} style={{ color: tk.color }}>{tk.text}</span>
-            ))}
-          </span>
-        </div>
-      );
-    })}
-  </div>
-);
+/* Helper: code snippet box (token-highlighted Python)
+   ⚠️ 2026-09-23: 한국어 주석을 화면 언어에 맞춘다 — localizeCode.ts 를 그대로 탄다
+   (공용 CodeBlock 이 하는 것과 같은 일). 줄 수·줄 순서는 그대로, 주석 내용만 바뀐다. */
+const CodeSnippet = ({ lines, highlight: hl, E }) => {
+  const displayLines = localizeCode(lines, E);
+  return (
+    <div style={{
+      background: "#1e293b", borderRadius: 10, padding: "10px 8px",
+      overflowX: "auto", fontSize: 12, lineHeight: 1.8,
+      fontFamily: "'JetBrains Mono', monospace", marginTop: 8,
+    }}>
+      {displayLines.map((l, i) => {
+        const isHl = hl && hl.includes(i);
+        const baseColor = isHl ? "#fdba74" : "#e2e8f0";
+        const tokens = pyHighlight(l, baseColor);
+        return (
+          <div key={i} style={{
+            display: "flex", minHeight: 20,
+            background: isHl ? "rgba(249,115,22,.15)" : "transparent",
+            borderRadius: 4, padding: "0 4px",
+          }}>
+            <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 10, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
+            <span style={{ whiteSpace: "pre", wordBreak: "break-all" }}>
+              {tokens.map((tk, j) => (
+                <span key={j} style={{ color: tk.color }}>{tk.text}</span>
+              ))}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -375,8 +381,13 @@ export function makeWhereAmICh1(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
               {t(E, "Sliding window K=2 on \"ABAB\"", "\"ABAB\"에서 K=2 슬라이딩 윈도우")}
+            </div>
+            <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
+              {t(E,
+                "The letters inside the window are exactly a substring.",
+                "창문 안에 보이는 게 바로 그 부분문자열이에요.")}
             </div>
             {windows.map((w, wi) => (
               <div key={wi} style={{ marginBottom: 10 }}>
@@ -416,6 +427,7 @@ export function makeWhereAmICh1(E) {
     {
       type: "quiz",
       narr: t(E,
+        "Check why K=2 fails for \"ABAB\".",
         "\"ABAB\" 에서 K=2 가 왜 안 되는지 확인해 봐요."),
       question: t(E,
         "\"ABAB\", K=2. Substrings: AB, BA, AB. Why does K=2 fail?",
@@ -495,8 +507,8 @@ export function makeWhereAmICh1(E) {
       ],
       correct: 2,
       explain: t(E,
-        "Correct! K=1 and K=2 have duplicates. K=3 is the first where all substrings are unique. Answer: 3.",
-        "정답이에요! K=1 과 K=2 는 겹치는 게 있어요.\nK=3 에서 처음으로 하나도 안 겹쳐요. 그래서 답은 3 이에요."),
+        "Correct! K=1 gives A, B, A, B — A shows up twice. K=2 gives AB, BA, AB — AB repeats too.\nK=3 is the first where every substring is unique. Answer: 3.",
+        "정답이에요! K=1 이면 A, B, A, B — A 가 두 번이에요. K=2 이면 AB, BA, AB — AB 도 두 번이에요.\nK=3 에서 처음으로 하나도 안 겹쳐요. 그래서 답은 3 이에요."),
     },
     // 1-7: Input — try another string
     {
@@ -529,7 +541,7 @@ export function makeWhereAmICh2(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
-            {t(E, "Algorithm: Try K = 1, 2, 3, ...", "알고리즘: K = 1, 2, 3, ... 을 차례로 해보기")}
+            {t(E, "Method: Try K = 1, 2, 3, ...", "방법: K = 1, 2, 3, ... 을 차례로 해보기")}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[1, 2, 3].map(k => {
@@ -675,7 +687,7 @@ export function makeWhereAmICh2(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Play with the algorithm", "알고리즘 가지고 놀기")}
+            {t(E, "Play with the method", "방법 가지고 놀기")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
@@ -698,7 +710,8 @@ export function makeWhereAmICh2(E) {
           </div>
           <div style={{ marginTop: 12, background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Outer loop: K from 1 to N (at most N rounds).\nInner loop: check N-K+1 substrings. Looking one up in a set is O(1), so altogether it's O(N²).\nN is at most 100, so that's about 100×100 = 10,000 steps — done in a blink!", "바깥 반복문은 K 를 1 부터 N 까지 돌아요 (많아야 N 번).\n안쪽 반복문은 N-K+1 개의 부분문자열을 봐요.\n집합에서 한 번 찾는 데 O(1) 이니까, 다 합치면 O(N²) 이에요.\nN 이 최대 100 이니까 100×100 = 10000 번쯤 — 눈 깜짝할 새에 끝나요!")}
+              "O(...) means \"roughly this many steps\" — O(N²) is about N×N steps, O(1) is done in one step.\nOuter loop: K from 1 to N (at most N rounds).\nInner loop: checks N-K+1 substrings each time (why N-K+1 — coming up in the code soon). Looking one up in a set is O(1), so altogether it's O(N²).\nN is at most 100, so that's about 100×100 = 10,000 steps — done in a blink!",
+              "O(...) 는 '대충 몇 번 걸리는지' 를 적는 방법이에요 — O(N²) 는 N×N 번쯤, O(1) 은 한 번 만에 끝나요.\n바깥 반복문은 K 를 1 부터 N 까지 돌아요 (많아야 N 번).\n안쪽 반복문은 그때마다 N-K+1 개의 부분문자열을 확인해요 (왜 N-K+1 인지는 코드에서 곧 봐요). 집합에서 찾는 건 O(1) 이라 합치면 O(N²) 예요.\nN 이 최대 100 이니까 100×100 = 10000 번쯤 — 눈 깜짝할 새에 끝나요!")}
           </div>
         </div>),
     },
@@ -740,7 +753,7 @@ export function makeWhereAmICh3(E, lang = "py") {
               "First line: N (number of mailboxes). Second line: the string of labels.",
               "첫 줄에 N (우편함 수) 이 있어요. 둘째 줄에 글자 문자열이 있어요.")}
           </div>
-          <CodeSnippet lines={["with open('whereami.in') as file:", "    lines = file.readlines()", "N = int(lines[0])", "s = lines[1].strip()"]} highlight={[0, 1, 2, 3]} />
+          <CodeSnippet lines={["with open('whereami.in') as file:", "    lines = file.readlines()", "N = int(lines[0])", "s = lines[1].strip()"]} highlight={[0, 1, 2, 3]} E={E} />
           <div style={{
             marginTop: 10, background: C.carryBg, borderRadius: 8, padding: 8,
             border: `1.5px solid ${C.carryBd}`, fontSize: 12, color: C.text,
@@ -773,6 +786,7 @@ export function makeWhereAmICh3(E, lang = "py") {
               "    unique = True",
             ]}
             highlight={[5, 6, 7]}
+            E={E}
           />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
@@ -809,6 +823,7 @@ export function makeWhereAmICh3(E, lang = "py") {
               "        seen.add(sub)",
             ]}
             highlight={[8, 9, 10, 11, 12, 13]}
+            E={E}
           />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
@@ -848,6 +863,7 @@ export function makeWhereAmICh3(E, lang = "py") {
           <CodeSnippet
             lines={SOLUTION_CODE}
             highlight={[18, 19, 20]}
+            E={E}
           />
           <div style={{
             marginTop: 10, background: C.okBg, borderRadius: 10,
