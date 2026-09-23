@@ -295,8 +295,12 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           <span className="text-[10px] text-gray-400 font-bold">{t("읽기", "Read")}</span>
           <LanguageToggle />
         </div>
-        {/* 코드 언어 — Py/C++. MCC 퀘스트는 Python 전용이라 토글 숨김 */}
-        {meta?.section !== "MCC" && (
+        {/* 코드 언어 — Py/C++. MCC 퀘스트는 Python 전용이라 토글 숨김.
+            pythonOnly: 임시 조치(2026-09-23) — 이 7개 quest 는 chapters.jsx 가
+            lang 파라미터를 안 써서 토글을 눌러도 코드가 안 바뀌었다(학생 제보).
+            진짜 고치기(FULL_CPP 를 ProgressiveCodeStepper 로 쪼개기)는 재작성
+            큐에서 그 quest 를 만날 때 한다 — 그때 data.ts 의 pythonOnly 를 지운다. */}
+        {meta?.section !== "MCC" && !meta?.pythonOnly && (
         <div className="flex-shrink-0 flex items-center gap-1">
           <span className="text-[10px] text-gray-400 font-bold hidden sm:inline">{t("코드", "Code")}</span>
           <div className="flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">

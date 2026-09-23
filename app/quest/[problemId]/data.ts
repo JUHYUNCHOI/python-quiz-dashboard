@@ -8,6 +8,14 @@ export interface ProblemMeta {
   section: string
   /** 원래 문제 URL (USACO/MCC 등). 없으면 자동으로 Google 검색 fallback 생성. */
   url?: string
+  /**
+   * 임시 표시 — 이 quest 의 chapters.jsx 가 아직 자체 CodeSnippet 에 파이썬을
+   * 박아 넣고 lang 파라미터를 안 쓴다 (Py/C++ 토글이 버튼만 바뀌고 코드가 안
+   * 바뀜, 2026-09-23 학생 제보). 진짜 고치기(FULL_CPP 를 ProgressiveCodeStepper
+   * 로 쪼개기)는 이 quest 를 재작성 큐에서 만날 때 한다 — 그때 이 필드를 지운다.
+   * `scripts/check-unused-lang-param.py` 가 이 목록과 실제 코드가 맞는지 본다.
+   */
+  pythonOnly?: boolean
 }
 
 /** 원래 문제 URL — 명시 안 됐으면 Google 검색 fallback. */
@@ -79,7 +87,7 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"leaders",emoji:"👑",title:"Leaders",sub:"Jan 2023 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1275"},
   {id:"aircond",emoji:"❄️",title:"Air Cownditioning II",sub:"Jan 2023 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1276"},
   {id:"mooops",emoji:"🐮",title:"Moo Operations",sub:"Jan 2023 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1277"},
-  {id:"cowcollege",emoji:"🎓",title:"Cow College",sub:"Dec 2022 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1251"},
+  {id:"cowcollege",emoji:"🎓",title:"Cow College",sub:"Dec 2022 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1251",pythonOnly:true},
   {id:"feedcows",emoji:"🌾",title:"Feeding the Cows",sub:"Dec 2022 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1252"},
   {id:"reverseeng",emoji:"🔧",title:"Reverse Engineering",sub:"Dec 2022 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1253"},
   {id:"photoshoot",emoji:"📸",title:"Photoshoot",sub:"Open 2022 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1227"},
@@ -104,7 +112,7 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"oddphotos",emoji:"📸",title:"Even More Odd Photos",sub:"Jan 2021 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1084"},
   {id:"stalling",emoji:"🐄",title:"Just Stalling",sub:"Jan 2021 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1085"},
   {id:"abcs",emoji:"🔢",title:"Do You Know Your ABCs?",sub:"Dec 2020 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1059"},
-  {id:"daisychains",emoji:"🌼",title:"Daisy Chains",sub:"Dec 2020 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1060"},
+  {id:"daisychains",emoji:"🌼",title:"Daisy Chains",sub:"Dec 2020 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1060",pythonOnly:true},
   {id:"stuckinrut",emoji:"🐄",title:"Stuck in a Rut",sub:"Dec 2020 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1061"},
   {id:"socialdist1",emoji:"😷",title:"Social Distancing I",sub:"Open 2020 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1035"},
   {id:"socialdist2",emoji:"🦠",title:"Social Distancing II",sub:"Open 2020 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1036"},
@@ -112,11 +120,11 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"triangles",emoji:"📐",title:"Triangles",sub:"Feb 2020 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1011"},
   {id:"madscientist",emoji:"🧪",title:"Mad Scientist",sub:"Feb 2020 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1012"},
   {id:"swapity",emoji:"🔀",title:"Swapity Swap",sub:"Feb 2020 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1013"},
-  {id:"wordproc",emoji:"📝",title:"Word Processor",sub:"Jan 2020 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=987"},
+  {id:"wordproc",emoji:"📝",title:"Word Processor",sub:"Jan 2020 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=987",pythonOnly:true},
   {id:"photoshoot20",emoji:"📸",title:"Photoshoot",sub:"Jan 2020 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=988"},
   {id:"race",emoji:"🏃",title:"Race",sub:"Jan 2020 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=989"},
-  {id:"cowgym",emoji:"🤸",title:"Cow Gymnastics",sub:"Dec 2019 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=963"},
-  {id:"whereami",emoji:"📍",title:"Where Am I?",sub:"Dec 2019 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=964"},
+  {id:"cowgym",emoji:"🤸",title:"Cow Gymnastics",sub:"Dec 2019 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=963",pythonOnly:true},
+  {id:"whereami",emoji:"📍",title:"Where Am I?",sub:"Dec 2019 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=964",pythonOnly:true},
   {id:"livestock",emoji:"🐄",title:"Livestock Lineup",sub:"Dec 2019 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=965"},
   {id:"bucketbrigade",emoji:"🪣",title:"Bucket Brigade",sub:"Open 2019 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=939"},
   {id:"milkfactory",emoji:"🏭",title:"Milk Factory",sub:"Open 2019 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=940"},
@@ -124,10 +132,10 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"sleepyherd",emoji:"😴",title:"Sleepy Cow Herding",sub:"Feb 2019 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=915"},
   {id:"revegetation",emoji:"🌱",title:"Great Revegetation",sub:"Feb 2019 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=916"},
   {id:"meastraffic",emoji:"🚗",title:"Measuring Traffic",sub:"Feb 2019 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=917"},
-  {id:"shellgame",emoji:"🐚",title:"Shell Game",sub:"Jan 2019 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=891"},
+  {id:"shellgame",emoji:"🐚",title:"Shell Game",sub:"Jan 2019 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=891",pythonOnly:true},
   {id:"sleepysort",emoji:"😴",title:"Sleepy Cow Sorting",sub:"Jan 2019 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=892"},
   {id:"guessanimal",emoji:"🐾",title:"Guess the Animal",sub:"Jan 2019 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=893"},
-  {id:"mixmilk",emoji:"🥛",title:"Mixing Milk",sub:"Dec 2018 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=855"},
+  {id:"mixmilk",emoji:"🥛",title:"Mixing Milk",sub:"Dec 2018 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=855",pythonOnly:true},
   {id:"bucketlist",emoji:"🪣",title:"The Bucket List",sub:"Dec 2018 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=856"},
   {id:"backforth",emoji:"🔄",title:"Back and Forth",sub:"Dec 2018 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=857"},
   {id:"teamttt",emoji:"❌",title:"Team Tic Tac Toe",sub:"Open 2018 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=831"},

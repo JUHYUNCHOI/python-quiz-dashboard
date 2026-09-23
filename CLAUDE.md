@@ -91,6 +91,8 @@ python3 scripts/check-code-names-in-prose.py <id>            # 코드 보기 전
 python3 scripts/check-codewalk-thinking-order.py <id>        # 코드 설명이 파일 순서를 읊나, 생각의 순서로 이끄나
 python3 scripts/check-linebreak-rendered.py                  # 글쓴이가 넣은 줄바꿈이 화면에 실제로 나오나
 python3 scripts/check-section-code-complete.py               # 학생이 📄 PDF 로 받는 코드가 진짜 돌아가나
+python3 scripts/check-unused-lang-param.py <id>               # Py/C++ 토글을 눌러도 코드가 안 바뀌는 quest
+                                                            #   (자체 CodeSnippet 이 lang 을 못 받음, 2026-09-23 학생 제보)
 node scripts/check-emphasis.mjs http://localhost:3000/quest/<id>  # 강조가 **보이나** (다 굵으면 강조가 아니다)
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
 ```
