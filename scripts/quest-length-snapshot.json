@@ -752,7 +752,8 @@
   "shellgame": {
     "pages": 16,
     "quiz_input": 6,
-    "korean_chars_ref": 1164
+    "korean_chars_ref": 1164,
+    "clicks": 15
   },
   "simplegame": {
     "pages": 11,
@@ -802,7 +803,7 @@
   "strangefn": {
     "pages": 13,
     "quiz_input": 5,
-    "korean_chars_ref": 2650
+    "korean_chars_ref": 2801
   },
   "stuckinrut": {
     "pages": 5,

@@ -20,8 +20,21 @@ narr 는 "Let's build the code step by step!" 다. 그런데 진짜 최종 코�
 같은 **자랑 문장**만 본다. 여기는 자랑이 아니라 **명시적으로 코드를 보여주고
 안 쓰는** 모양이다.
 
-무엇을 보나 — quest 파일(`chapters.jsx` 등)에서 **모노스페이스로 스타일된
-코드 블록**(fontFamily: 'JetBrains Mono' 류)만 "가르친 코드" 로 본다.
+무엇을 보나 — "가르친 코드" 는 **두 모양**으로 나타난다.
+
+  ① JSX 안에 **모노스페이스로 스타일된 `<div>`** 로 코드 글자가 그대로 있는 경우
+     (fontFamily: 'JetBrains Mono' 류) — `mono_blocks()`.
+  ② `<CodeBlock lines={[...]}/>` · `<CodeSnippet lines={[...]}/>` 처럼
+     **자체 코드 래퍼 컴포넌트에 `lines=` 프롭으로 문자열 배열을 넘기는** 경우
+     — `lines_prop_blocks()`. 이 저장소 quest 168개가 공유 `CodeBlock`
+     (`components/quest/shared.tsx`)을, 12개가 자체 `CodeSnippet` 을 쓴다.
+     ⚠️ **2026-09-23 에 이 ②를 처음 찾았다.** `mono_blocks()` 는 래퍼
+     컴포넌트의 **정의부**(`{lines.map(...)}` 처럼 다 `{}` 안이라
+     `strip_js_braces` 가 통째로 지운다)만 보고, 코드 글자가 실제로 있는
+     **호출부**(`lines={[...]}`)는 안 봐서 `cowgym` 같은 quest 를
+     "가르친 코드 0개" 로 잘못 읽었다. `lines={NAME}` 처럼 상수를
+     참조하면 같은 quest 폴더 안의 `const NAME = [...]` 를 찾아 풀고,
+     `lines={pick(A, B)}` 면 A·B 둘 다 푼다.
 서술문(narr)에서 "max() 를 쓰면" 처럼 스치는 언급은 **일부러 뺐다** —
 그건 코드가 아니라 설명이라 오탐이 크다(아래 "오탐 실측" 참고).
 
@@ -34,6 +47,20 @@ narr 는 "Let's build the code step by step!" 다. 그런데 진짜 최종 코�
    누적합으로 바꾼 경우)는 정상이다 — 그런 자리는 다리 문장 하나로 잇거나
    "이렇게도 되지만 이번엔 이 방법을 씁니다" 를 설명하면 된다.
    사람이 열어서 판단해라.
+
+⚠️ **이 검사기가 못 보는 것 (2026-09-23 실측):**
+   - **반대 방향** — 🔒 최종 코드가 쓰는데 화면 어디서도 안 가르친 것은
+     **원리상** 못 본다(그 쪽이 훨씬 판정이 어렵다 — import·입출력
+     상용구·변수 초기화처럼 "최종 코드에만 있는 게 정상" 인 경우가
+     압도적으로 많다). `mcc20kitty` 검토에서 실제로 이 반대 방향
+     결함(코드가 화면에 없는 `while` 조건·분기)이 나왔다 — 사람이
+     읽어야 잡힌다.
+   - `lines={someFn(...)}` 처럼 **`pick(A,B)` 가 아닌 다른 함수 호출**로
+     넘기는 경우는 못 푼다(상수 참조가 아니면 통과).
+   - narr·"왜" 박스·퀴즈 설명문 속의 코드 언급은 일부러 안 본다
+     (설명문은 오탐이 커서 처음부터 범위 밖).
+   - **0건이 결백은 아니다.** 이 파일이 아는 두 모양(모노 div·`lines=`
+     프롭) 밖의 세 번째 모양이 있다면 여전히 못 본다.
 
   python3 scripts/check-taught-vs-final-code.py              # 전체
   python3 scripts/check-taught-vs-final-code.py billboard     # quest 골라서
@@ -65,6 +92,12 @@ TAG = re.compile(r"<[^>]+>")
 STR = re.compile(r'"((?:[^"\\]|\\.)*)"')
 FINAL_ARRAY = re.compile(r"^const (\w+_PY|\w+_CPP) = \[\n(.*?)\n\];",
                           re.M | re.S)
+
+# ② `lines={...}` 프롭으로 코드를 넘기는 래퍼 호출(CodeBlock·CodeSnippet…) 을 찾는다.
+CONST_ARRAY = re.compile(r"^const (\w+) = \[\n(.*?)\n\];", re.M | re.S)
+TAG_START = re.compile(r"<(\w+)\b")
+LINES_PROP = re.compile(r"\blines\s*=\s*\{")
+IDENT = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\b")
 
 
 def mono_blocks(src):
@@ -117,6 +150,94 @@ def strip_js_braces(text):
     return "".join(out)
 
 
+def const_arrays(src):
+    """이 파일 안 top-level `const NAME = [ ... ];` 배열의 문자열 내용을 전부 모은다.
+
+    `lines={SOLUTION_CODE}` 처럼 **이름으로 참조하는** 코드 배열을 풀려고 있다.
+    `_PY`/`_CPP` 로 안 끝나도(예: `SOLUTION_CODE`, `BF_INPUT`) 잡는다 — 참조하는
+    쪽에서 실제로 코드로 쓰이는지는 `lines_prop_blocks` 가 판단한다.
+    """
+    out = {}
+    for m in CONST_ARRAY.finditer(src):
+        name = m.group(1)
+        texts = []
+        for sm in STR.finditer(m.group(2)):
+            try:
+                texts.append(json.loads('"%s"' % sm.group(1)))
+            except Exception:
+                pass
+        if texts:
+            out[name] = "\n".join(texts)
+    return out
+
+
+def _tag_end(src, i):
+    """`<Name` 다음 위치 i 에서, `{}` 깊이를 세며 태그를 닫는 `>` 뒤 위치를 찾는다.
+
+    `{}` 로 감싸인 프롭 값(예: `lines={[...]}`) 안에 `>` 가 나와도(코드 비교
+    연산자 등) 태그가 안 끝난 걸로 본다 — 문자열 인용부호는 안 본다(이 저장소
+    JSX 스타일엔 태그 프롭 안에 따옴표 문자열 속 `>` 가 거의 없다).
+    """
+    depth = 0
+    n = len(src)
+    while i < n:
+        ch = src[i]
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        elif ch == ">" and depth <= 0:
+            return i + 1
+        i += 1
+    return n
+
+
+def _prop_value_span(src, i):
+    """i 는 `lines={` 의 여는 `{` 바로 다음. 짝 맞는 `}` 앞까지 글을 돌려준다."""
+    depth = 1
+    start = i
+    n = len(src)
+    while i < n and depth > 0:
+        ch = src[i]
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        i += 1
+    return src[start:i - 1]
+
+
+def lines_prop_blocks(src, consts):
+    """`<컴포넌트 ... lines={...} ...>` 호출에서 코드 글을 뽑는다.
+
+    `lines={[...]}` 면 그 배열의 문자열을 바로 쓰고, `lines={NAME}` 이나
+    `lines={pick(A, B)}` 처럼 **이름으로 참조**하면 `consts` 에서 그 이름의
+    배열 글을 찾아 쓴다(`pick` 은 A·B 둘 다 — 언어 토글로 어느 쪽이든
+    학생이 볼 수 있어서 둘 다 "가르친 것"으로 본다).
+    """
+    out = []
+    for m in TAG_START.finditer(src):
+        tag = src[m.end():_tag_end(src, m.end())]
+        pm = LINES_PROP.search(tag)
+        if not pm:
+            continue
+        expr = _prop_value_span(tag, pm.end()).strip()
+        if expr.startswith("["):
+            texts = []
+            for sm in STR.finditer(expr):
+                try:
+                    texts.append(json.loads('"%s"' % sm.group(1)))
+                except Exception:
+                    pass
+            if texts:
+                out.append("\n".join(texts))
+        else:
+            for name in IDENT.findall(expr):
+                if name in consts:
+                    out.append(consts[name])
+    return out
+
+
 def code_calls(plain):
     """WATCH 이름이 '이름(' 꼴로 쓰였는지 — plain 은 이미 태그·중괄호를 벗긴 글."""
     found = set()
@@ -161,16 +282,37 @@ def main():
             continue  # 최종 코드 배열이 없는 quest — 이 검사기가 못 본다
         quests_with_final += 1
 
+        srcs = {f: io.open(f, encoding="utf-8", errors="replace").read()
+                for f in files}
+
+        # `lines={NAME}` 처럼 이름으로 참조하는 자리를 풀려면, quest 폴더 안
+        # 모든 파일의 const 배열을 먼저 다 모아 둬야 한다(정의와 호출이
+        # chapters.jsx/components.jsx 로 나뉘어 있는 경우가 있다).
+        consts = {}
+        for src in srcs.values():
+            consts.update(const_arrays(src))
+
         taught = {}  # name -> (file, snippet)
-        for f in files:
-            src = io.open(f, encoding="utf-8", errors="replace").read()
-            for block in mono_blocks(src):
+        for f, src in srcs.items():
+            blocks = list(mono_blocks(src))
+            for block in blocks:
                 plain = TAG.sub(" ", strip_js_braces(block))
                 if not CODE_HINT.search(plain):
                     continue  # 코드처럼 안 생겼다 — 표/격자 등
                 for name in code_calls(plain):
                     if name not in taught:
                         snippet = re.sub(r"\s+", " ", plain).strip()[:90]
+                        taught[name] = (f.split("/")[-1], snippet)
+
+            # ② `lines={...}` 프롭으로 넘기는 CodeBlock/CodeSnippet 호출부 —
+            # 컴포넌트 정의부(mono_blocks)만 보면 `{lines.map(...)}` 가 다
+            # `{}` 안이라 지워져서 놓친다(2026-09-23, cowgym 사고).
+            for text in lines_prop_blocks(src, consts):
+                if not CODE_HINT.search(text):
+                    continue
+                for name in code_calls(text):
+                    if name not in taught:
+                        snippet = re.sub(r"\s+", " ", text).strip()[:90]
                         taught[name] = (f.split("/")[-1], snippet)
 
         if not taught:
@@ -199,7 +341,8 @@ def main():
     if total:
         print("  ⚠️ 판정이 아니다 — 일부러 더 나은 방법으로 갈아탄 자리일 수 있다.")
         print("  사람이 열어서: 진짜 안 이어지면 다리 문장 하나, 아니면 그냥 둔다.")
-    print("\n⚠️ 모노스페이스 코드 블록만 본다. narr·설명문의 스치는 언급은 안 본다.")
+    print("\n⚠️ 모노스페이스 코드 블록 + `lines=` 프롭 호출만 본다. narr·설명문의 "
+          "스치는 언급은 안 본다. 반대 방향(코드에만 있고 화면엔 없는 것)은 못 본다.")
     return 1 if total else 0
 
 
