@@ -81,6 +81,13 @@ python3 scripts/check-code-one-statement.py  # 한 줄에 문장이 여러 개�
 
 ```bash
 node scripts/see-flow.mjs http://localhost:3000/quest/<id>   # 쪽과 쪽 사이
+python3 scripts/check-quest-length-regression.py <id>         # 고친 뒤 쪽 수·퀴즈 수가 **늘었나** (절대 상한 아님, 래칫)
+                                                            #   2026-09-23 PM 판정: `strangefn` 이 한 세션에 10→17쪽,
+                                                            #   직전 커밋 8개가 전부 순증가였다. "쪽 수 상한"은 오탐이 난다
+                                                            #   (`mixmilk` 17쪽·`moohunt` 32클릭처럼 큰 수가 정당한 경우가 있다)
+                                                            #   → 절대 상한 대신 **직전 기록보다 늘면 크게 떠든다.**
+                                                            #   스냅샷=`scripts/quest-length-snapshot.json`(커밋됨). PM 승인된
+                                                            #   늘림은 `--accept <id>` 로만 기준선을 올린다(자동으로는 안 됨).
 python3 scripts/check-word-difficulty.py <id>                # 어려운 말 · 같은 것 다른 이름 · 번역 티
 python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장 여러 개
 python3 scripts/check-narr-length.py <id>                    # 파란 내레이션 바 길이 — **narr 는 이걸로 잰다**
