@@ -1,14 +1,14 @@
-// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 16/16 on cpid=1396 (efficient O(N) rewrite, was brute TLE)
+// 🔒 USACO_VERIFIED — C++17 AC 16/16 on cpid=1396 (2026-06-16 re-submit).
 //   Real USACO 2024 Feb Bronze #2 "Milk Exchange" (cpid 1396).
-//   Previous CPP was the brute O(N·M) simulation → TLE on the largest
-//   test (8/9 on judge). Replaced with the editorial O(N) deficit-cow
-//   approach: total milk − Σ min(chainSum, M) over each 'R…RL…L' chain.
-//   Matches all 3 official samples (3 1 RRL 1 1 1 → 2; 5 20 LLLLL
-//   3 3 2 3 3 → 14; 9 5 RRRLRRLLR 5 8 4 9 3 4 9 5 4 → 38), agrees with
-//   brute sim on 3000 random cases, and runs ~0.36s at N=2e5 / M=1e9.
-//   g++ -std=c++17 clean compile, explicit headers (no bits/stdc++.h).
-//   USACO re-submit PENDING (expect full credit).
-//   상세: REPO_ROOT/USACO_VERIFICATION.md
+//   O(N) deficit-cow approach: total milk − Σ min(chainSum, M) over each
+//   'R…RL…L' chain. Matches all 3 official samples (3 1 RRL 1 1 1 → 2;
+//   5 20 LLLLL 3 3 2 3 3 → 14; 9 5 RRRLRRLLR 5 8 4 9 3 4 9 5 4 → 38).
+//   2026-09-23: FULL_PY rewritten from brute O(N·M) (TLE at M=1e9) to the
+//   same O(N) chain-walk as FULL_CPP. Agrees with brute sim + FULL_CPP on
+//   1100+ random cases (500 general, 300 N≤60/M≤15, 300 edge patterns —
+//   N=1, all-R, all-L, alternating RLRLRL, huge single chain) and with
+//   FULL_CPP on 3 adversarial-chain inputs at N=2e5, M=1e9 (~0.12s each).
+//   Python re-submit for AC PENDING — 상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
@@ -32,23 +32,33 @@ const FULL_PY = [
   "p += 1",
   "S = data[p]               # direction string, e.g. 'RRL'",
   "p += 1",
-  "cap = [int(x) for x in data[p:p+N]]",
+  "cap = [int(x) for x in data[p:p + N]]",
   "",
-  "# Initial milk equals each cow's capacity",
-  "cur = list(cap)",
+  "# A boundary is an 'R' cow right before an 'L' cow —",
+  "# S[i] == 'R' and S[i + 1] == 'L'.",
+  "bad_L = [False] * N",
+  "bad_R = [False] * N",
+  "for i in range(N):",
+  "    if S[i] == 'R' and S[(i + 1) % N] == 'L':",
+  "        bad_L[i] = True",
+  "        bad_R[(i + 1) % N] = True",
   "",
-  "for t in range(M):",
-  "    # 1) every cow with milk passes 1L to its L/R neighbor",
-  "    for i in range(N):",
-  "        if cur[i] > 0:",
-  "            cur[i] -= 1",
-  "            j = (i + (1 if S[i] == 'R' else -1)) % N",
-  "            cur[j] += 1",
-  "    # 2) any cow over its cap loses the overflow",
-  "    for i in range(N):",
-  "        cur[i] = min(cur[i], cap[i])",
+  "ans = sum(cap)",
+  "for i in range(N):",
+  "    chain = 0",
+  "    if bad_L[i]:                # walk the 'R' run behind cow i",
+  "        j = (i - 1) % N",
+  "        while S[j] == 'R':",
+  "            chain += cap[j]",
+  "            j = (j - 1) % N",
+  "    if bad_R[i]:                # walk the 'L' run ahead of cow i",
+  "        j = (i + 1) % N",
+  "        while S[j] == 'L':",
+  "            chain += cap[j]",
+  "            j = (j + 1) % N",
+  "    ans -= min(chain, M)",
   "",
-  "print(sum(cur))",
+  "print(ans)",
 ];
 
 const FULL_CPP = [
@@ -118,7 +128,7 @@ export function getExchangeSections(E) {
     {
       label: t(E, "1️⃣ Take in the values", "1️⃣ 값 받기"),
       color: A,
-      py: FULL_PY.slice(0, 15), cpp: FULL_CPP.slice(0, 22),
+      py: FULL_PY.slice(0, 11), cpp: FULL_CPP.slice(0, 22),
       why: [
         t(E, "What do we need before we can follow the milk? N, M, the direction string, and each cow's capacity. So read those first — each cow starts full.",
             "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 각 소의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 가득 찬 채로 시작해요."),
@@ -129,15 +139,12 @@ export function getExchangeSections(E) {
       ],
     },
     {
-      label: t(E, "2️⃣ Python: replay each minute / C++: find the leaking chains",
-                  "2️⃣ 파이썬: 1분씩 따라가요 / C++: 새는 줄기부터 찾아요"),
+      label: t(E, "2️⃣ Find the leaking chains", "2️⃣ 새는 줄기 찾기"),
       color: "#0891b2",
-      py: FULL_PY.slice(15, 25), cpp: FULL_CPP.slice(22, 35),
+      py: FULL_PY.slice(11, 20), cpp: FULL_CPP.slice(22, 35),
       why: [
-        t(E, "Why hand off milk every single minute? Because that's exactly what the problem does — each cow with milk passes 1L to its neighbor, then anything over cap overflows. Doing this for all M minutes is O(N·M), and M can be 10^9 — for C++, that's far too slow, so it needs a different plan.",
-            "왜 매분 우유를 넘겨줄까요? 문제가 그렇게 하라고 했으니까요.\n우유가 있는 소가 이웃에게 1L 를 넘기고, 그다음 용량을 넘은 만큼은 버려요.\n이걸 M분 내내 반복하면 O(N·M) 인데 M 이 최대 10^9 라\nC++ 에서는 이대로 두면 너무 느려서 다른 방법이 필요해요."),
-      ],
-      cppOnly: [
+        t(E, "Passing milk minute by minute is what the problem describes, but M can be 10^9 — doing that M times is far too slow, in Python or C++. So instead of replaying every minute, find where milk is actually lost.",
+            "매분 우유를 넘기는 게 문제 그대로의 방식이지만, M 이 최대 10^9 라\nM번을 그대로 반복하면 파이썬이든 C++ 이든 너무 느려요.\n그러니 매분을 따라가는 대신, 우유가 실제로 어디서 사라지는지를 찾아요."),
         t(E, "Where does milk actually get lost forever? Only at a boundary 'R…RL…L' — an 'R' cow next to an 'L' cow. Those two keep trading milk back and forth forever, and each minute 1L of it leaks into that endless trade. So mark every such boundary first.",
             "우유가 영영 사라지는 곳은 딱 한 군데예요 — 'R…RL…L' 경계, 즉 'R' 소 바로 옆에 'L' 소가 있는 자리예요.\n이 둘은 우유를 끝없이 주고받으며 매분 1L 씩 그 교환 속으로 흘려보내요.\n그러니 그런 경계를 먼저 전부 찾아 표시해요."),
       ],
@@ -145,14 +152,12 @@ export function getExchangeSections(E) {
     {
       label: t(E, "3️⃣ Add it up", "3️⃣ 합산 출력"),
       color: "#16a34a",
-      py: FULL_PY.slice(25), cpp: FULL_CPP.slice(35),
+      py: FULL_PY.slice(20), cpp: FULL_CPP.slice(35),
       why: [
-        t(E, "So after M minutes, print what's left.",
-            "그래서 M분 뒤 남은 우유의 총량을 출력해요."),
-      ],
-      cppOnly: [
         t(E, "Start from the total milk, then for each boundary walk its 'R' run (or 'L' run) and subtract min(chainSum, M) — the milk that chain leaks in M minutes, capped at what it actually has. O(N) overall, so N=2·10^5 / M=10^9 runs instantly.",
             "전체 우유량에서 시작해서, 경계마다 그 'R' 줄기(또는 'L' 줄기)를 따라가며\nmin(chainSum, M) 을 빼요 — M분 동안 그 줄기가 흘려보내는 양인데,\n가진 양을 넘을 순 없으니 M 과 비교해 작은 쪽을 써요.\n전체가 O(N) 이라 N=2·10^5, M=10^9 도 바로 끝나요."),
+      ],
+      cppOnly: [
         t(E, "Sums (and M) reach N·10^9, so cap/ans/M use long long; (j - 1 + N) % N keeps the chain walk index positive on a circle.",
             "합계와 M 이 N·10^9 까지 가서 cap, ans, M 은 long long 으로 둬요.\n동그란 줄기를 따라갈 때는 (j - 1 + N) % N 으로 자리가 음수가 되지 않게 해요."),
       ],

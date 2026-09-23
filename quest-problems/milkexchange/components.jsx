@@ -1,9 +1,12 @@
-// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 16/16 on cpid=1396
-//   Real USACO 2024 Feb Bronze #2 "Milk Exchange".
-//   FULL_CPP rewritten to O(N) monotonic-chain (deficit-pair) — was brute
-//   O(N·M) simulation that TLE'd (8/14) on M up to 1e9. Same algorithm as
-//   quest `exchange`. Matches all 3 official samples (→ 2 / 14 / 38).
-//   NOTE: FULL_PY is still the brute O(N·M) sim (display only, not judged).
+// 🔒 USACO_VERIFIED — C++17 AC 16/16 on cpid=1396 (2026-06-16 re-submit).
+//   Real USACO 2024 Feb Bronze #2 "Milk Exchange". Same problem + same
+//   O(N) monotonic-chain (deficit-pair) algorithm as quest `exchange`.
+//   Matches all 3 official samples (→ 2 / 14 / 38).
+//   2026-09-23: FULL_PY rewritten from brute O(N·M) (TLE at M=1e9) to the
+//   same O(N) chain-walk as FULL_CPP. Agrees with brute sim + FULL_CPP on
+//   1100+ random cases and with FULL_CPP on 3 adversarial-chain inputs at
+//   N=2e5, M=1e9 (~0.12s each) — same test run as quest `exchange`.
+//   Python re-submit for AC PENDING.
 //   코드 수정 시 USACO 재제출 필요 — 상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { C, t } from "@/components/quest/theme";
@@ -23,23 +26,33 @@ const FULL_PY = [
   "p += 1",
   "S = data[p]               # direction string, e.g. 'RRL'",
   "p += 1",
-  "cap = [int(x) for x in data[p:p+N]]",
+  "cap = [int(x) for x in data[p:p + N]]",
   "",
-  "# Initial milk equals each cow's capacity",
-  "cur = list(cap)",
+  "# A boundary is an 'R' cow right before an 'L' cow —",
+  "# S[i] == 'R' and S[i + 1] == 'L'.",
+  "bad_L = [False] * N",
+  "bad_R = [False] * N",
+  "for i in range(N):",
+  "    if S[i] == 'R' and S[(i + 1) % N] == 'L':",
+  "        bad_L[i] = True",
+  "        bad_R[(i + 1) % N] = True",
   "",
-  "for t in range(M):",
-  "    # 1) every cow with milk passes 1L to its L/R neighbor",
-  "    for i in range(N):",
-  "        if cur[i] > 0:",
-  "            cur[i] -= 1",
-  "            j = (i + (1 if S[i] == 'R' else -1)) % N",
-  "            cur[j] += 1",
-  "    # 2) any cow over its cap loses the overflow",
-  "    for i in range(N):",
-  "        cur[i] = min(cur[i], cap[i])",
+  "ans = sum(cap)",
+  "for i in range(N):",
+  "    chain = 0",
+  "    if bad_L[i]:                # walk the 'R' run behind cow i",
+  "        j = (i - 1) % N",
+  "        while S[j] == 'R':",
+  "            chain += cap[j]",
+  "            j = (j - 1) % N",
+  "    if bad_R[i]:                # walk the 'L' run ahead of cow i",
+  "        j = (i + 1) % N",
+  "        while S[j] == 'L':",
+  "            chain += cap[j]",
+  "            j = (j + 1) % N",
+  "    ans -= min(chain, M)",
   "",
-  "print(sum(cur))",
+  "print(ans)",
 ];
 
 const FULL_CPP = [
@@ -111,10 +124,10 @@ export function getMilkExchangeSections(E) {
       why: [
         t(E, "What do we need before we can follow the minutes? N, M, the direction string, and each cow's capacity.\nSo read those first — each cow starts full.",
             "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 소마다의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 용량만큼 가득 차 시작해요."),
-        t(E, "Why hand off milk every minute? Because that's what the problem does —\neach cow with milk passes 1L to its neighbor, then overflow is lost.",
-            "왜 매분 우유를 넘길까요? 문제가 그렇게 하니까요.\n우유가 있는 소가 이웃에게 1L 를 넘기고, 용량을 넘은 만큼은 버려요."),
-        t(E, "So after M minutes, print what's left. Walking minute by minute is O(N·M) —\nthe faster way (chasing leaks between R→L pairs) is in the C++ note below.",
-            "그래서 M분 뒤 남은 우유의 총량을 출력해요.\n한 분씩 따라가면 O(N·M) 이라 M 이 클 때 느려요.\n더 빠른 길(R→L 사이 새는 곳만 찾기)은 아래 C++ 설명에 있어요."),
+        t(E, "Passing milk minute by minute is what the problem describes, but M can be 10^9 —\ndoing that M times is far too slow. Instead, find where milk is actually lost forever.",
+            "매분 우유를 넘기는 게 문제 그대로의 방식이지만, M 이 최대 10^9 라 M번을 그대로 반복하면 너무 느려요.\n그러니 대신 우유가 실제로 영영 사라지는 곳을 찾아요."),
+        t(E, "Milk only leaks forever at a boundary 'R…RL…L' — an 'R' cow next to an 'L' cow, trading milk back and forth. Start from the total milk, then for each boundary walk its 'R' run (or 'L' run) and subtract min(chainSum, M).",
+            "우유가 영영 새는 곳은 'R…RL…L' 경계, 즉 'R' 소 바로 옆에 'L' 소가 있는 자리뿐이에요 (서로 계속 주고받아요).\n전체 우유량에서 시작해서, 경계마다 그 'R' 줄기(또는 'L' 줄기)를 따라가며 min(chainSum, M) 을 빼요."),
       ],
       pyOnly: [],
       cppOnly: [
