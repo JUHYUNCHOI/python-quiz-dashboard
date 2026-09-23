@@ -173,8 +173,8 @@ export function WhoCanMeetSim({ E }) {
          않나?" — 맞는 말인데 화면에 K=1 비교가 없었다(3쪽 PlaceOneByOneSim 은
          샘플 [4,1,4,1] 이라 K=1 로 4→5→6 을 이미 보여준 적 있다). 비교 대상을
          같은 값 3 으로 넣는다 — 새 숫자를 들이면 "어디서 온 숫자지" 가 또 난다. */
-      ko: "K 가 1 이면 3 → 4 → 5 → 6, 홀수·짝수가 번갈아요.\nK 가 2 면 3 에 2 를 더해 5, 또 더해 7 … 계속 홀수예요.",
-      en: "With K = 1, 3 → 4 → 5 → 6 — odd and even alternate.\nWith K = 2, 3 plus 2 is 5, then 7 … always odd." },
+      ko: "K 가 1 이면 3 → 4 → 5 → 6, 홀수·짝수가 번갈아요.\nK 가 2 면 3 에 2 를 더해 5, 또 더해 7 … 계속 홀수예요.\n2 는 짝수라서, 더해도 홀짝이 안 바뀌어요.",
+      en: "With K = 1, 3 → 4 → 5 → 6 — odd and even alternate.\nWith K = 2, 3 plus 2 is 5, then 7 … always odd.\n2 is even, so adding it never changes odd or even." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
       extra: ["", "", "", t(E, "→6→8→10…", "→6→8→10…")],
       ko: "4 도 마찬가지예요. 6, 8, 10 … 계속 짝수예요. 짝지을 다른 짝수가 없어요.",
