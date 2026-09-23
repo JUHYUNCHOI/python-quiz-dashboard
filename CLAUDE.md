@@ -119,6 +119,15 @@ python3 scripts/check-code-names-in-prose.py <id>            # 코드 보기 전
 python3 scripts/check-codewalk-thinking-order.py <id>        # 코드 설명이 파일 순서를 읊나, 생각의 순서로 이끄나
 python3 scripts/check-linebreak-rendered.py                  # 글쓴이가 넣은 줄바꿈이 화면에 실제로 나오나
 python3 scripts/check-section-code-complete.py               # 학생이 📄 PDF 로 받는 코드가 진짜 돌아가나
+                                                            #   2026-09-23 넓힘 — `permutation` 파이썬이 #include/import
+                                                            #   검사는 통과했는데, `search()` 를 부르는 줄이 **자기 몸통
+                                                            #   안(같은 들여쓰기)에 갇혀** 죽은 코드였다. 최상위에 함수
+                                                            #   정의만 있나가 아니라 **top-level 실행문에서 (직접·간접으로)
+                                                            #   한 번도 안 불리는 top-level 함수**를 AST 호출 그래프로 찾는다.
+                                                            #   C++ 은 AST 가 없어 정규식으로 몸통을 떼고 "자기 밖에서 이름이
+                                                            #   한 번이라도 나오나"(호출이든 값으로 넘기든)만 본다 — 관대한 쪽.
+                                                            #   ⚠️ 셋을 못 본다: ①인자는 맞는데 로직만 틀린 경우 ②클래스
+                                                            #   메서드(self.foo()) ③문자열로 이름 만들어 동적으로 부르는 경우.
 python3 scripts/check-unused-lang-param.py <id>               # Py/C++ 토글을 눌러도 코드가 안 바뀌는 quest
                                                             #   (자체 CodeSnippet 이 lang 을 못 받음, 2026-09-23 학생 제보)
 python3 scripts/check-taught-vs-final-code.py <id>            # 화면 코드 블록이 **가르치는** 함수를 🔒 최종 코드가 쓰나

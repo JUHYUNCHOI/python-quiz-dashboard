@@ -210,7 +210,22 @@ try {
 
     let moved = false
     try {
-      const nb = await p.$(`button:has-text("${NEXT}")`)
+      /* ⚠️ 왜 `.quest-navbar` 안에서만 찾나 (2026-09-23, permutation 버그):
+         시뮬 내부에도 "다음 →" 라벨의 버튼이 있을 수 있다 — permutation 의
+         BruteForceEnumerator 가 `{t(E,"next","다음")} →` 로 자기 내부 스텝(idx)을
+         넘기는 버튼을 그린다. 문서 전체에서 텍스트로 찾으면 Playwright 가
+         **DOM 순서상 먼저 나오는 요소** 를 돌려주는데, 그게 이 내부 버튼이었다 —
+         그래서 쪽은 안 넘어가고 시뮬 내부 idx 만 계속 증가했고, "눌러야 하는 횟수"가
+         33/34 로 부풀었다(실제 16쪽). 실측: `permutation:16쪽 vs see-flow 33/34`.
+         진짜 "쪽 넘김" 버튼은 `QuestBottomNav`(components/quest/QuestNavBar.jsx)
+         하나뿐이고, 그 컴포넌트는 항상 `.quest-navbar` 로 감싸여 있다 —
+         quest-problems 180개 **전부**가 QuestBottomNav 를 쓴다(grep 확인,
+         2026-09-23). 그래서 그 스코프 안에서만 찾는다.
+         스코프 안에 없으면(quest-navbar 가 없는 화면 — 예: /learn 레슨) 예전처럼
+         문서 전체에서 찾는다. 거기엔 이 버그의 증거가 없었다 — 다만 이 fallback
+         은 permutation 과 같은 종류의 충돌에는 여전히 취약하다는 걸 적어둔다. */
+      const scoped = await p.$(`.quest-navbar button:has-text("${NEXT}")`)
+      const nb = scoped || (await p.$(`button:has-text("${NEXT}")`))
       if (nb && (await nb.isEnabled())) { await nb.click(); moved = true }
     } catch {}
     if (!moved) break
