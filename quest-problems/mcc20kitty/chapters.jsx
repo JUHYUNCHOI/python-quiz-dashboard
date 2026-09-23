@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
+import { CodeBlock } from "@/components/quest/shared";
 import { getMcc20KittySections } from "./components";
 
 const A = "#dc2626";
@@ -464,6 +465,94 @@ export function makeMcc20KittyCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드
    ═══════════════════════════════════════════════════════════════ */
+/* 3장 코드 조각 — 🔒 components.jsx 의 FULL_PY / FULL_CPP 에서 그대로 떼 온 줄들이다.
+   ⚠️ 저기를 고치면 여기도 같이 고쳐라. 화면과 코드가 어긋나면 학생이 먼저 알아챈다.
+   ⚠️ <span> 을 손으로 쌓지 마라 — JSX 가 앞 공백을 먹어서 들여쓰기가 사라진다. */
+const P1_PY = [
+  "r = [11 % 3, 9 % 3, 20 % 3, 20 % 3, 25 % 3]",
+  "# r = [2, 0, 2, 2, 1]",
+  "",
+  "nxt = sum(r[-5:]) % 3",
+];
+const P1_CPP = [
+  "vector<int> r = {11 % 3, 9 % 3, 20 % 3, 20 % 3, 25 % 3};",
+  "// r = {2, 0, 2, 2, 1}",
+  "",
+  "int s = 0;",
+  "for (int j = 1; j <= 5; j++) {",
+  "    s += r[r.size() - j];",
+  "}",
+  "r.push_back(s % 3);",
+];
+
+const P2_PY = [
+  "seen = {}",
+  "while True:",
+  "    st = tuple(r[k-1:k+4])",
+  "    if st in seen:",
+  "        start = seen[st]",
+  "        period = k - start",
+  "        break",
+  "    seen[st] = k",
+  "    k += 1",
+];
+const P2_CPP = [
+  "map<vector<int>, long long> seen;",
+  "while (true) {",
+  "    vector<int> st(r.begin() + (k - 1), r.begin() + (k + 4));",
+  "    if (seen.count(st)) {",
+  "        start = seen[st];",
+  "        period = k - start;",
+  "        break;",
+  "    }",
+  "    seen[st] = k;",
+  "    k++;",
+  "}",
+];
+
+const P3_PY = [
+  "tail  = r[:start-1]",
+  "cycle = r[start-1:start-1+period]",
+  "",
+  "tail_zeros = sum(1 for x in tail if x == 0)",
+  "cycle_zeros = sum(1 for x in cycle if x == 0)",
+  "",
+  "remaining = N - (start - 1)",
+  "full = remaining // period",
+  "partial = remaining % period",
+  "partial_zeros = sum(1 for x in cycle[:partial] if x == 0)",
+  "",
+  "ans = tail_zeros + full * cycle_zeros + partial_zeros",
+  "print(ans)",
+];
+const P3_CPP = [
+  "long long tail_zeros = 0;",
+  "for (long long i = 0; i < start - 1; i++) {",
+  "    if (r[i] == 0) {",
+  "        tail_zeros++;",
+  "    }",
+  "}",
+  "long long remaining = N - (start - 1);",
+  "long long full = remaining / period;",
+  "long long partial = remaining % period;",
+  "",
+  "long long cycle_zeros = 0;",
+  "for (long long i = 0; i < period; i++) {",
+  "    if (r[start-1+i] == 0) {",
+  "        cycle_zeros++;",
+  "    }",
+  "}",
+  "long long partial_zeros = 0;",
+  "for (long long i = 0; i < partial; i++) {",
+  "    if (r[start-1+i] == 0) {",
+  "        partial_zeros++;",
+  "    }",
+  "}",
+  "",
+  "long long ans = tail_zeros + full * cycle_zeros + partial_zeros;",
+  'cout << ans << "\\n";',
+];
+
 export function makeMcc20KittyCh3(E, lang = "py") {
   return [
     // 3-1 phase 1: work in remainders
@@ -474,12 +563,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
         "1단계 — 나머지 리스트를 늘리는 코드예요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5, lineHeight: 1.9 }}>
-            <div><span style={{ color: "#e2e8f0" }}>r = [11%3, 9%3, 20%3, 20%3, 25%3]</span></div>
-            <div><span style={{ color: "#6b7280" }}># r = [2, 0, 2, 2, 1]</span></div>
-            <div>&nbsp;</div>
-            <div><span style={{ color: "#e2e8f0" }}>nxt = </span><span style={{ color: "#c084fc" }}>sum</span><span style={{ color: "#e2e8f0" }}>(r[-5:]) % 3</span></div>
-          </div>
+          <CodeBlock lines={lang === "cpp" ? P1_CPP : P1_PY} lang={lang} isEn={E} />
         </div>),
     },
 
@@ -496,15 +580,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
         "2단계 — 다시 나오는 창을 찾아내요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
-            <div><span style={{ color: "#e2e8f0" }}>seen = {"{}"}</span></div>
-            <div><span style={{ color: "#c084fc" }}>while </span><span style={{ color: "#e2e8f0" }}>True:</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>    st = </span><span style={{ color: "#c084fc" }}>tuple</span><span style={{ color: "#e2e8f0" }}>(r[k-1:k+4])</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>    </span><span style={{ color: "#c084fc" }}>if </span><span style={{ color: "#e2e8f0" }}>st </span><span style={{ color: "#c084fc" }}>in </span><span style={{ color: "#e2e8f0" }}>seen:</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>        start = seen[st]; period = k - start</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>        </span><span style={{ color: "#c084fc" }}>break</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>    seen[st] = k; k += 1</span></div>
-          </div>
+          <CodeBlock lines={lang === "cpp" ? P2_CPP : P2_PY} lang={lang} isEn={E} />
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center",
             lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
             {t(E,
@@ -539,17 +615,19 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     // 3-4 phase 3: count with arithmetic
     {
       type: "reveal",
+      /* 2026-09-23: 이 조각의 식이 진짜 코드와 달랐다 — 앞꼬리(tail_zeros)가 빠져 있어서,
+         이 화면을 보고 그대로 치면 답이 틀리게 되어 있었다. FULL_PY 마지막 줄과 맞췄다. */
       narr: t(E,
-        "Phase 3: no big loop. Zeros in one cycle × number of whole cycles, plus zeros in the leftover. That gives the answer even for N = 10^15.",
-        "3단계예요. 한 사이클의 0에 사이클 수를 곱하고\n남는 조각의 0을 더해요. 큰 반복은 필요 없어요."),
+        "Phase 3 — add three pieces. No big loop.",
+        "3단계 — 세 조각을 더해요. 큰 반복은 없어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
-            <div><span style={{ color: "#e2e8f0" }}>remaining = N - (start - 1)</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>full    = remaining // period</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>partial = remaining % period</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>ans = full * cycle_zeros + partial_zeros</span></div>
-            <div><span style={{ color: "#c084fc" }}>print</span><span style={{ color: "#e2e8f0" }}>(ans)</span></div>
+          <CodeBlock lines={lang === "cpp" ? P3_CPP : P3_PY} lang={lang} isEn={E} />
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center",
+            lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
+            {t(E,
+              "Three pieces: the tail before the cycle, one whole cycle × how many cycles fit, and the leftover.\nAdd them up and the answer comes out even for N = 10^15.",
+              "세 조각이에요. 되풀이 전의 앞꼬리, 한 바퀴 × 들어가는 바퀴 수,\n그리고 남는 조각이에요. 이 셋을 더하면 N 이 10^15 이어도 답이 나와요.")}
           </div>
         </div>),
     },
