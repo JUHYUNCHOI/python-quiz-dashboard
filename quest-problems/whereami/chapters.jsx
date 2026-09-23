@@ -240,7 +240,7 @@ const CodeSnippet = ({ lines, highlight: hl, E }) => {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (7 steps)
+   Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeWhereAmICh1(E) {
   return [
@@ -304,70 +304,7 @@ export function makeWhereAmICh1(E) {
           </div>
         </div>),
     },
-    // 1-2: What is a substring?
-    {
-      type: "reveal",
-      narr: t(E,
-        "A substring is a consecutive chunk of characters from the string.", "부분문자열은 문자열에서 연속으로 이어진 글자 묶음이에요."),
-      content: (() => {
-        const str = "ABCBA";
-        return (
-          <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
-              {t(E, "Substrings of \"ABCBA\"", "\"ABCBA\"의 부분문자열")}
-            </div>
-            {/* Original string display */}
-            <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 12 }}>
-              {str.split("").map((ch, i) => (
-                <div key={i} style={{
-                  width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 8, fontSize: 18, fontWeight: 700,
-                  fontFamily: "'JetBrains Mono', monospace",
-                  background: C.carryBg, border: `1.5px solid ${C.carryBd}`, color: C.carry,
-                }}>{ch}</div>
-              ))}
-            </div>
-            {/* K=1 examples */}
-            <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-              K=1: {t(E, "each single letter", "각 글자 하나")}
-            </div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
-              {["A","B","C","B","A"].map((s, i) => (
-                <span key={i} style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 600,
-                  background: C.accentBg, borderRadius: 4, padding: "2px 6px", color: C.accent,
-                }}>{s}</span>
-              ))}
-            </div>
-            {/* K=2 examples */}
-            <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-              K=2: {t(E, "each pair of consecutive letters", "연속 2글자씩")}
-            </div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
-              {["AB","BC","CB","BA"].map((s, i) => (
-                <span key={i} style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 600,
-                  background: C.okBg, borderRadius: 4, padding: "2px 6px", color: C.ok,
-                }}>{s}</span>
-              ))}
-            </div>
-            {/* K=3 examples */}
-            <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-              K=3: {t(E, "each group of 3", "연속 3글자씩")}
-            </div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-              {["ABC","BCB","CBA"].map((s, i) => (
-                <span key={i} style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 600,
-                  background: C.bessieBg, borderRadius: 4, padding: "2px 6px", color: C.bessie,
-                }}>{s}</span>
-              ))}
-            </div>
-          </div>
-        );
-      })(),
-    },
-    // 1-3: Sliding window visual
+    // 1-2: Sliding window visual (also carries the substring definition)
     {
       type: "reveal",
       narr: t(E,
@@ -423,7 +360,7 @@ export function makeWhereAmICh1(E) {
         );
       })(),
     },
-    // 1-4: Quiz — K=2 on "ABAB"
+    // 1-3: Quiz — K=2 on "ABAB"
     {
       type: "quiz",
       narr: t(E,
@@ -442,7 +379,7 @@ export function makeWhereAmICh1(E) {
         "Right! \"AB\" appears at positions 0-1 and 2-3. Duplicate means two different locations look the same -- Bessie can't tell where she is!",
         "맞아요! \"AB\" 가 위치 0-1 과 2-3 에 나와요.\n겹치면 두 자리가 똑같아 보여서 Bessie 는 자기가 어디 있는지 알 수 없어요!"),
     },
-    // 1-5: Visual — K=3 on "ABAB" — all unique!
+    // 1-4: Visual — K=3 on "ABAB" — all unique!
     {
       type: "reveal",
       narr: t(E,
@@ -491,26 +428,7 @@ export function makeWhereAmICh1(E) {
         );
       })(),
     },
-    // 1-6: Quiz — minimum K for "ABAB"
-    {
-      type: "quiz",
-      narr: t(E,
-        "We saw K=1 has duplicates (A appears twice), K=2 has duplicates (AB appears twice), K=3 is all unique.\nWhat's the minimum K?", "K=1 도 K=2 도 겹쳤어요. 가장 작은 K 는 얼마일까요?"),
-      question: t(E,
-        "\"ABAB\": what is the minimum K for all unique substrings?",
-        "\"ABAB\" 에서 부분문자열이 하나도 안 겹치는 가장 작은 K 는 얼마일까요?"),
-      options: [
-        t(E, "K = 1", "K = 1"),
-        t(E, "K = 2", "K = 2"),
-        t(E, "K = 3", "K = 3"),
-        t(E, "K = 4", "K = 4"),
-      ],
-      correct: 2,
-      explain: t(E,
-        "Correct! K=1 gives A, B, A, B — A shows up twice. K=2 gives AB, BA, AB — AB repeats too.\nK=3 is the first where every substring is unique. Answer: 3.",
-        "정답이에요! K=1 이면 A, B, A, B — A 가 두 번이에요. K=2 이면 AB, BA, AB — AB 도 두 번이에요.\nK=3 에서 처음으로 하나도 안 겹쳐요. 그래서 답은 3 이에요."),
-    },
-    // 1-7: Input — try another string
+    // 1-5: Input — try another string
     {
       type: "input",
       narr: t(E,
@@ -619,66 +537,7 @@ export function makeWhereAmICh2(E) {
         );
       })(),
     },
-    // 2-3: Full trace table for K=1,2,3
-    {
-      type: "reveal",
-      narr: t(E,
-        "Let's trace \"ABAB\" through K=1, K=2, K=3, one by one.", "\"ABAB\" 로 K=1, K=2, K=3 을 하나씩 따라가 봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
-            {t(E, "Full trace: \"ABAB\"", "전체 따라가기: \"ABAB\"")}
-          </div>
-          {/* Trace table */}
-          <div style={{
-            borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
-            fontSize: 12, fontFamily: "'JetBrains Mono', monospace",
-          }}>
-            {/* Header */}
-            <div style={{
-              display: "grid", gridTemplateColumns: "50px 1fr 80px",
-              background: "#1e293b", color: "#e2e8f0", padding: "6px 8px", fontWeight: 600,
-            }}>
-              <span>K</span>
-              <span>{t(E, "Substrings", "부분문자열")}</span>
-              <span>{t(E, "Unique?", "안 겹쳐요?")}</span>
-            </div>
-            {/* K=1 */}
-            <div style={{
-              display: "grid", gridTemplateColumns: "50px 1fr 80px",
-              background: C.noBg, padding: "6px 8px", borderBottom: `1px solid ${C.border}`,
-            }}>
-              <span style={{ fontWeight: 600, color: C.no }}>1</span>
-              <span style={{ color: C.text }}>A, B, <span style={{ color: C.no, fontWeight: 600 }}>A</span>, B</span>
-              <span style={{ color: C.no, fontWeight: 600 }}>❌ {t(E, "No", "아니오")}</span>
-            </div>
-            {/* K=2 */}
-            <div style={{
-              display: "grid", gridTemplateColumns: "50px 1fr 80px",
-              background: C.noBg, padding: "6px 8px", borderBottom: `1px solid ${C.border}`,
-            }}>
-              <span style={{ fontWeight: 600, color: C.no }}>2</span>
-              <span style={{ color: C.text }}>AB, BA, <span style={{ color: C.no, fontWeight: 600 }}>AB</span></span>
-              <span style={{ color: C.no, fontWeight: 600 }}>❌ {t(E, "No", "아니오")}</span>
-            </div>
-            {/* K=3 */}
-            <div style={{
-              display: "grid", gridTemplateColumns: "50px 1fr 80px",
-              background: C.okBg, padding: "6px 8px",
-            }}>
-              <span style={{ fontWeight: 600, color: C.ok }}>3</span>
-              <span style={{ color: C.text }}>ABA, BAB</span>
-              <span style={{ color: C.ok, fontWeight: 600 }}>✅ {t(E, "Yes!", "예!")}</span>
-            </div>
-          </div>
-          <div style={{
-            marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: C.ok,
-          }}>
-            {t(E, "Answer: K = 3", "답: K = 3")}
-          </div>
-        </div>),
-    },
-    // 2-4: Interactive sim — try your own string + K
+    // 2-3: Interactive sim — try your own string + K
     {
       type: "reveal",
       narr: t(E,
@@ -697,7 +556,7 @@ export function makeWhereAmICh2(E) {
           <WhereAmISim E={E} />
         </div>),
     },
-    // 2-5: Complexity explanation
+    // 2-4: Complexity explanation
     {
       type: "reveal",
       narr: t(E,
