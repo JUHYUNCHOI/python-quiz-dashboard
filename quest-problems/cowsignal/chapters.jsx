@@ -25,8 +25,10 @@ function Grid({ data, cellSize = 32, gap = 3, xColor = "#7c3aed", xBg = "#7c3aed
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (8 steps, 2026-09-23: 11→10→8, 순수 곱셈 퀴즈 1-4·1-7 삭제 —
-   "행×열/K×K/출력크기" 셋 중 미션 공식(출력크기, 1-9)만 남김)
+   Chapter 1: 📋 문제 이해 (7 steps, 2026-09-23: 11→10→8→7.
+   ①순수 곱셈 퀴즈 1-4·1-7 삭제 — "행×열/K×K/출력크기" 셋 중
+   미션 공식(출력크기, 1-9)만 남김. ②옛 1-5(X→블록)·1-6(.→블록)을
+   한 화면으로 합침 — "거의 같은 화면이 연달아" 라는 지적.)
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowSignalCh1(E) {
   return [
@@ -144,50 +146,42 @@ export function makeCowSignalCh1(E) {
        학생이 "세 번째부터는 설명은 안 읽고 숫자만 곱해서 답했다" 고 했다.
        셋 중 실제 미션 공식(출력 크기)을 확인하는 1-9 하나만 남긴다. */
 
-    // 1-5 확대란? 한 칸이 K×K 블록이 됨
+    // 1-5 확대란? 한 칸이 K×K 블록이 됨 (2026-09-23: 옛 1-5 「X→블록」와
+    // 옛 1-6 「.→블록」이 거의 같은 화면이 연달아 나와 "반복 같다" 는 지적을
+    // 받았다 — 한 화면에 X 와 . 을 나란히 보여주는 걸로 합쳤다.)
     {
       type: "reveal",
       narr: t(E,
-        "Enlarging by K turns each single cell into a K×K block of that same character.", "K 배 확대는 칸 하나를 그 글자로 채운 K×K 블록으로 바꿔요."),
+        "Enlarging by K turns each single cell — X or '.' — into a K×K block of that same character.", "K 배 확대는 칸 하나를 그 글자로 채운 K×K 블록으로 바꿔요 — X 도 '.' 도 똑같이요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20 }}>
-            {/* Before */}
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Before", "전")}</div>
-              <div style={{ width: 44, height: 44, background: "#7c3aed", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 20, fontWeight: 700, color: "#fff", fontFamily: "'JetBrains Mono',monospace", border: "1px solid #6d28d9" }}>X</div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 28, flexWrap: "wrap" }}>
+            {/* X branch */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Before", "전")}</div>
+                <div style={{ width: 44, height: 44, background: "#7c3aed", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 20, fontWeight: 700, color: "#fff", fontFamily: "'JetBrains Mono',monospace", border: "1px solid #6d28d9" }}>X</div>
+              </div>
+              <div style={{ fontSize: 24, color: C.accent, fontWeight: 700 }}>→</div>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>K=2</div>
+                <Grid data={[["X","X"],["X","X"]]} cellSize={36} gap={2} />
+              </div>
             </div>
-            <div style={{ fontSize: 24, color: C.accent, fontWeight: 700 }}>→</div>
-            {/* After K=2 — our running example stays K=2 (2026-09-23: a K=3 branch
-                used to sit here too, with no note about why the number changed;
-                a student flagged it as a jarring third number. K=3 is introduced
-                on its own terms two steps later, in the quiz. */}
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>K=2</div>
-              <Grid data={[["X","X"],["X","X"]]} cellSize={36} gap={2} />
-            </div>
-          </div>
-        </div>),
-    },
-
-    // 1-6 빈칸도 마찬가지
-    {
-      type: "reveal",
-      narr: t(E,
-        "Empty cells follow the same rule — one '.' becomes a K×K block of dots.", "빈 칸도 똑같아요 — '.' 하나가 점으로 채운 K×K 블록이 돼요."),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20 }}>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Before", "전")}</div>
-              <div style={{ width: 44, height: 44, background: "#f5f3ff", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 20, fontWeight: 700, color: "#c4b5fd", fontFamily: "'JetBrains Mono',monospace", border: "1px solid #c4b5fd" }}>.</div>
-            </div>
-            <div style={{ fontSize: 24, color: C.accent, fontWeight: 700 }}>→</div>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>K=2</div>
-              <Grid data={[[".","."],[".","."]]} cellSize={36} gap={2} />
+            <div style={{ width: 1, alignSelf: "stretch", background: C.border }} />
+            {/* '.' branch */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Before", "전")}</div>
+                <div style={{ width: 44, height: 44, background: "#f5f3ff", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 20, fontWeight: 700, color: "#c4b5fd", fontFamily: "'JetBrains Mono',monospace", border: "1px solid #c4b5fd" }}>.</div>
+              </div>
+              <div style={{ fontSize: 24, color: C.accent, fontWeight: 700 }}>→</div>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>K=2</div>
+                <Grid data={[[".","."],[".","."]]} cellSize={36} gap={2} />
+              </div>
             </div>
           </div>
         </div>),
@@ -232,11 +226,13 @@ export function makeCowSignalCh1(E) {
       content: <CowSignalScaleSim E={E} />,
     },
 
-    // 1-9 출력 크기 퀴즈
+    // 1-9 출력 크기 퀴즈 (2026-09-23: narr 이 "M×K 행, N×K 열" 공식을 미리 준
+    // 다음 바로 그 계산만 시켰다 — 선생님 지적 ③. 앞선 1-5·1-8 에서 이미 그림으로
+    // 봤으니, 여기선 "확인해 보자" 로만 열고 공식은 explain 에서 답과 함께 준다.)
     {
       type: "quiz",
       narr: t(E,
-        "The output size is always M×K rows and N×K columns. Each dimension gets multiplied by K!", "출력 크기는 늘 M×K 행, N×K 열이에요.\n행 수에도 열 수에도 K 를 곱해요!"),
+        "Let's check this with a different example.", "이번엔 다른 숫자로 확인해 봐요."),
       question: t(E, "Original 5×4, K=3. Output size?", "원본이 5×4 이고 K=3 이에요. 출력 크기는 얼마일까요?"),
       options: [
         t(E, "15 rows × 12 columns", "15행 × 12열"),
@@ -347,15 +343,19 @@ export function makeCowSignalCh2(E) {
         </div>),
     },
 
-    // 2-4 퀴즈: 가로 확대
+    /* 2-4 퀴즈: 가로 확대 (2026-09-23, 선생님 지적 ①(나)·③: 이 쪽은 Ch2 로,
+       C++ 토글(codeLang)을 안 받는 개념 챕터다. "In Python, ... 'X' * 3" 처럼
+       파이썬 문법으로 쓰여 있어서 C++ 로 봐도 그대로였다. 이 쪽이 가르치려는 건
+       문법이 아니라 "글자 하나를 K번 되풀이한다" 는 생각이라 — 판정 ⓑ:
+       언어와 상관없는 말로 다시 쓴다. 문법 이름(곱셈)도 뺐다. */
     {
       type: "quiz",
       narr: t(E,
-        "In Python, repeating a character is easy: 'X' * 3 = 'XXX'. String multiplication!", "파이썬에서는 글자를 쉽게 되풀이할 수 있어요.\n'X' * 3 은 'XXX' 가 돼요. 글자에 곱셈을 쓰는 거예요!"),
-      question: t(E, "'.' * 4 = ?", "'.' * 4 = ?"),
+        "Repeating one character K times is the trick behind horizontal stretching.", "글자 하나를 K번 되풀이하는 것 — 이게 가로 확대의 핵심이에요."),
+      question: t(E, "Repeat '.' four times. What do you get?", "'.' 을 4번 되풀이하면 무엇이 될까요?"),
       options: ["'....'", "'4.'", "4", "'.....'"],
       correct: 0,
-      explain: t(E, "The dot is repeated 4 times: '....' ✅", "점이 4번 되풀이돼서 '....' 가 돼요 ✅"),
+      explain: t(E, "The dot repeated 4 times: '....' ✅", "점을 4번 되풀이하면 '....' 가 돼요 ✅"),
     },
 
     // 2-5 전체 과정 추적 (2026-09-23: 이 격자는 벌써 네 번째 등장이라
@@ -388,7 +388,9 @@ export function makeCowSignalCh2(E) {
         </div>),
     },
 
-    // 2-6 퀴즈: 어떤 루프가 세로 확대?
+    // 2-6 퀴즈: 어떤 루프가 세로 확대? (2026-09-23: 옵션이 "for _ in range(K)" 처럼
+    // 파이썬 문법 그대로였다 — 2-4 와 같은 사유(Ch2 는 codeLang 을 안 받음).
+    // 반복문 자체의 문법은 3-4 에서 처음 나오니, 여기선 "무슨 일을 하나" 만 고른다.)
     {
       type: "quiz",
       narr: t(E,
@@ -397,11 +399,11 @@ export function makeCowSignalCh2(E) {
         "Which loop makes each row appear K times vertically?",
         "각 행이 세로로 K번 나오게 하는 반복문은 어느 쪽일까요?"),
       options: [
-        t(E, "The inner loop: for _ in range(K)", "안쪽 반복문: for _ in range(K)"),
-        t(E, "The outer loop: for i in range(M)", "바깥 반복문: for i in range(M)"),
+        t(E, "The inner loop — repeats K times", "안쪽 반복문 — K번 되풀이함"),
+        t(E, "The outer loop — goes through each row once", "바깥 반복문 — 행을 한 번씩 봄"),
       ],
       correct: 0,
-      explain: t(E, "The inner loop runs K times for each row i → same row printed K times ✅", "안쪽 반복문이 행 i 마다 K번 돌아요 → 같은 행을 K번 출력해요 ✅"),
+      explain: t(E, "The inner loop runs K times for each row → same row printed K times ✅", "안쪽 반복문이 행마다 K번 돌아요 → 같은 행을 K번 출력해요 ✅"),
     },
 
     // 2-7 퀴즈: 가로 확대는? (2026-09-23: narr 이 "코드로는 grid[i][j] * K" 라고
@@ -416,7 +418,9 @@ export function makeCowSignalCh2(E) {
         "행이 '.X.' 이고 K=3 이에요. 확대된 행은 무엇일까요?"),
       options: ["'...XXX...'", "'..XX..'", "'.X..X..X.'"],
       correct: 0,
-      explain: t(E, "'.'*3 + 'X'*3 + '.'*3 = '...XXX...' ✅", "'.'*3 + 'X'*3 + '.'*3 = '...XXX...' ✅"),
+      /* 2026-09-23: explain 이 "'.'*3 + 'X'*3" 처럼 파이썬 곱셈 기호를 그대로
+         썼다 — Ch2 는 codeLang 을 안 받으니 C++ 로 봐도 그대로였다. 개수로 말한다. */
+      explain: t(E, "Three dots, then three X's, then three dots: '...XXX...' ✅", "점 3개, X 3개, 점 3개를 이어 붙이면 '...XXX...' 예요 ✅"),
     },
 
     /* 옛 2-8 (input "2 chars × 3 = ?") 을 여기서 지웠다 (2026-09-23, 학생 지적).
@@ -576,7 +580,9 @@ export function makeCowSignalCh3(E, lang = "py") {
         : t(E, "grid[0][1] = '.'. '.' * 3 = '...' ✅", "grid[0][1] = '.'. '.' * 3 = '...' ✅"),
     },
 
-    // 3-7 복잡도
+    // 3-7 복잡도 (2026-09-23, 선생님 지적 ②: O(...) 뜻은 있었는데 MNK² 라는
+    // 식 자체가 왜 그렇게 되는지 이어주는 한 줄이 없어서 학생이 짐작으로
+    // 메웠다. 앞서 본 "칸이 M×N개, 한 칸이 K×K 블록" 에 바로 붙인다.)
     {
       type: "reveal",
       narr: t(E,
@@ -586,6 +592,10 @@ export function makeCowSignalCh3(E, lang = "py") {
           <div style={{ fontSize: 28, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(MNK²)</div>
           <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
             {t(E, "O(...) is a rough way to say \"about how many steps this takes.\"", "O(...) 는 '대충 몇 번쯤 걸린다' 를 적는 방법이에요.")}
+          </div>
+          <div style={{ fontSize: 12, color: C.dim, marginTop: 6 }}>
+            {t(E, "M×N cells, and each cell is now a K×K block → M · N · K · K characters to write.",
+                  "칸이 M×N개이고, 칸 하나가 K×K 블록이 되니까 → M · N · K · K 글자를 써요.")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>{t(E, "= output size, optimal!", "= 출력 크기와 같아요. 이보다 좋을 수 없어요!")}</div>
           <div style={{ marginTop: 8, fontSize: 12, color: C.ok, fontWeight: 700 }}>
@@ -599,7 +609,7 @@ export function makeCowSignalCh3(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드예요 — 한 부분씩 읽어 봐요.\n위쪽 버튼으로 Python 과 C++ 을 바꿔 볼 수 있어요."),
-      sections: getCowSignalSections(E),
+      sections: getCowSignalSections(E, lang),
     },
   ];
 }

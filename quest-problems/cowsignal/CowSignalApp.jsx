@@ -117,7 +117,7 @@ export default function CowSignalApp(props = {}) {
 
   const codeControlsSlot = showCodeControls ? (
     <div style={{ display: "flex", gap: 0, alignItems: "stretch" }}>
-      <button onClick={() => downloadCowSignalPDF(E, getCowSignalSections(E), codeLang)} style={{
+      <button onClick={() => downloadCowSignalPDF(E, getCowSignalSections(E, codeLang), codeLang)} style={{
         background: A, color: "#fff", border: `1.5px solid ${A}`,
         borderRadius: "8px",
         padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,

@@ -212,7 +212,7 @@ const FULL_CPP = [
   "}",
 ];
 
-export function getCowSignalSections(E) {
+export function getCowSignalSections(E, lang = "py") {
   return [
     {
       label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
@@ -225,16 +225,27 @@ export function getCowSignalSections(E) {
             "원래 한 칸이 그대로 K×K 블록이 돼야 해요."),
         t(E, "So repeat each row K times, and inside a row repeat each character K times.",
             "그래서 각 행을 K번 출력하고,\n그 행 안에서 글자 하나도 K번씩 늘려요."),
-        /* 2026-09-23 — 학생 지적: 3-1~3-7 은 계속 input()/cin 을 가르쳤는데
-           이 최종 코드만 갑자기 open('cowsignal.in') 을 쓰는 이유가 어디에도 없었다. */
-        t(E, "Old USACO contests used file I/O — that's why only this final code reads and writes files, instead of input()/print().",
-            "옛날 USACO 대회는 파일로 입출력을 주고받았어요 — 그래서 이 최종 코드만 input()/print() 대신 파일을 읽고 써요."),
+        /* 2026-09-23 — 학생 지적(①가): 3-1~3-7 은 계속 input()/cin 을 가르쳤는데
+           이 최종 코드만 갑자기 파일을 여는 이유가 어디에도 없었다. 게다가
+           이 글은 lang 과 상관없이 늘 "input()/print() 대신" 이라고만 말해서,
+           C++ 로 보고 있으면 cin/cout 얘기는 안 나오고 파이썬 얘기만 나왔다.
+           lang 을 따라가게 갈랐다. */
+        lang === "cpp"
+          ? t(E, "Old USACO contests used file I/O — that's why only this final code reads and writes files with ifstream/ofstream, instead of cin/cout.",
+                  "옛날 USACO 대회는 파일로 입출력을 주고받았어요 — 그래서 이 최종 코드만 cin/cout 대신 ifstream/ofstream 으로 파일을 읽고 써요.")
+          : t(E, "Old USACO contests used file I/O — that's why only this final code reads and writes files, instead of input()/print().",
+                  "옛날 USACO 대회는 파일로 입출력을 주고받았어요 — 그래서 이 최종 코드만 input()/print() 대신 파일을 읽고 써요."),
       ],
       pyOnly: [
         t(E, "Python's map() makes the code shorter.",
             "Python 은 map() 을 바로 쓸 수 있어서 코드가 짧아져요."),
       ],
       cppOnly: [
+        /* 2026-09-23 — 학생 지적(①다): ifstream/ofstream 이 설명 없이 나왔다.
+           "cin/cout 을 파일용으로 바꾼 것" 이라는 한 줄만 붙인다 — 문법을
+           새로 가르치진 않는다(그건 이 quest 범위 밖). */
+        t(E, "ifstream/ofstream work just like cin/cout, but read and write a file instead of the keyboard/screen.",
+            "ifstream/ofstream 은 cin/cout 과 똑같이 쓰는데, 키보드·화면 대신 파일을 읽고 써요."),
         t(E, "vector<string> stores each row of the input grid.",
             "vector<string> 에 입력 격자의 각 행을 담아요."),
         t(E, "Nested for-loops repeat each cell K times in both directions.",
