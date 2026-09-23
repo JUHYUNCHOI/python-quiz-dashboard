@@ -215,14 +215,22 @@ const LOOP_PY = [
 ];
 const FULL_PY = [...READ_PY, "", ...ONE_PY, "", ...LOOP_PY];
 
-const READ_CPP = [
+// 🔧 2026-09-23: C++ 은 Q/H/W/T 를 main() 안 지역변수로 두면 one() 을 main() 보다
+//    먼저 정의해야 해서(중첩 함수 정의가 안 되므로) READ→ONE→ANSWER 라는 가르치는
+//    순서와 어긋난다. 값이 상수라 전역으로 둬도 뜻이 안 바뀌므로, Q/H/W/T 를
+//    전역으로 선언해 순서를 그대로 유지한다. FULL_CPP 가 한 벌이고, 세 섹션은
+//    거기서 .slice() 로 자른다 (check-section-code-complete.py 가 요구하는 방식).
+const FULL_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "using namespace std;",
+  "",
   "// 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (공식 예제)",
   "int Q = 4;",
   "vector<long long> H = {3, 2, 7, 36};",
   "vector<long long> W = {5, 2, 2, 28};",
   "vector<long long> T = {5, 5, 0, 127};",
-];
-const ONE_CPP = [
+  "",
   "long long one(long long N, long long t) {",
   "    // 한 방향은 1 과 N 사이를 오가요. 2*(N-1) 마다 되풀이돼요",
   "    long long p = t % (2 * (N - 1));",
@@ -232,26 +240,18 @@ const ONE_CPP = [
   "    }",
   "    return N - d;",
   "}",
-];
-const LOOP_CPP = [
-  "for (int i = 0; i < Q; i++) {",
-  "    // 세로는 H, 가로는 W 를 써요 — 같은 t 인데 따로 움직여요",
-  "    cout << one(H[i], T[i]) << ' ' << one(W[i], T[i]) << '\\n';",
-  "}",
-];
-const FULL_CPP = [
-  "#include <iostream>",
-  "#include <vector>",
-  "using namespace std;",
-  "",
-  ...ONE_CPP,
   "",
   "int main() {",
-  ...READ_CPP.map((l) => "    " + l),
-  ...LOOP_CPP.map((l) => "    " + l),
+  "    for (int i = 0; i < Q; i++) {",
+  "        // 세로는 H, 가로는 W 를 써요 — 같은 t 인데 따로 움직여요",
+  "        cout << one(H[i], T[i]) << ' ' << one(W[i], T[i]) << '\\n';",
+  "    }",
   "    return 0;",
   "}",
 ];
+const READ_CPP = FULL_CPP.slice(0, 10);  // #include ~ T 배열 (+빈 줄)
+const ONE_CPP = FULL_CPP.slice(10, 19);  // "long long one(...)" ~ 닫는 "}"
+const LOOP_CPP = FULL_CPP.slice(19);     // "int main() {" ~ 끝
 
 export { FULL_PY, FULL_CPP };
 
