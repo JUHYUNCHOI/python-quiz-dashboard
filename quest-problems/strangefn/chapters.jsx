@@ -475,11 +475,22 @@ export function makeStrangeFnCh1(E) {
                 "floor 는 소수점 아래를 버리는 거예요. 예를 들어 floor(3.5) 는 3 이에요.")}
             </div>
           </div>
+        </div>),
+    },
 
-          {/* 2026-09-23 재검증: 학생이 13쪽 힌트를 그대로 따라가 37 → n=3 → floor(3·3/2)=4 를
-              답으로 냈는데 정답은 5 였다 — "+1" 규칙이 13쪽보다 앞 어디에도 없었다.
-              여기(공식이 완성되는 자리)에서, 이미 3쪽에서 본 x=210 숫자 그대로 규칙을 굳힌다. */}
-          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: 12, marginTop: 10 }}>
+    // 1-6 F: g(n) 만으론 부족하다는 경고 — 2026-09-23 재검증에서 갈라냄.
+    // 원래 공식 카드 아래(marginTop:10)에 이어 붙어 있었는데, 학생이 "천천히 두 번
+    // 읽어야 했다" 고 난이도 4 를 매겼다. 공식(방금 완성)과 +1 보정(다음에 적용할 규칙)은
+    // 서로 다른 생각이라 쪽을 나눈다. 이 "+1" 규칙은 13쪽 힌트가 그대로 기대는 내용이라
+    // 반드시 13쪽보다 앞이어야 한다 — 빼거나 뒤로 미루면 힌트가 다시 틀려진다.
+    {
+      type: "reveal",
+      narr: t(E,
+        "But g(n) alone isn't the final answer.",
+        "그런데 g(n) 만으로는 아직 답이 아니에요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: 12 }}>
             <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
               ⚠️ {t(E, "g(n) alone isn't the final answer", "g(n) 이 바로 답은 아니에요")}
             </div>
