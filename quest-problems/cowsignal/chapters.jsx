@@ -53,8 +53,8 @@ export function makeCowSignalCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
-                "Output the M·K × N·K enlarged picture, with each original character expanded into a K × K block.",
-                "원본 글자를 하나하나 K × K 블록으로 확대해서 (M·K) × (N·K) 그림을 출력해요.")}
+                "Output the M×K × N×K enlarged picture, with each original character expanded into a K × K block.",
+                "원본 글자를 하나하나 K × K 블록으로 확대해서 (M×K) × (N×K) 그림을 출력해요.")}
             </div>
           </div>
 
@@ -87,7 +87,7 @@ export function makeCowSignalCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the resulting ", "확대된 ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "(M·K) × (N·K) enlarged picture", "(M·K) × (N·K) 그림")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "(M×K) × (N×K) enlarged picture", "(M×K) × (N×K) 그림")}</b>
                   {t(E, ".", "을 출력해요.")}
                 </div>
               </div>
@@ -399,11 +399,11 @@ export function makeCowSignalCh2(E) {
         "Which loop makes each row appear K times vertically?",
         "각 행이 세로로 K번 나오게 하는 반복문은 어느 쪽일까요?"),
       options: [
-        t(E, "The inner loop — repeats K times", "안쪽 반복문 — K번 되풀이함"),
-        t(E, "The outer loop — goes through each row once", "바깥 반복문 — 행을 한 번씩 봄"),
+        t(E, "The inner loop", "안쪽 반복문"),
+        t(E, "The outer loop", "바깥 반복문"),
       ],
       correct: 0,
-      explain: t(E, "The inner loop runs K times for each row → same row printed K times ✅", "안쪽 반복문이 행마다 K번 돌아요 → 같은 행을 K번 출력해요 ✅"),
+      explain: t(E, "The inner loop repeats K times for each row → same row printed K times ✅. (The outer loop just goes through each row once.)", "안쪽 반복문이 행마다 K번 되풀이해요 → 같은 행을 K번 출력해요 ✅. (바깥 반복문은 행을 한 번씩만 봐요.)"),
     },
 
     // 2-7 퀴즈: 가로 확대는? (2026-09-23: narr 이 "코드로는 grid[i][j] * K" 라고
@@ -477,6 +477,14 @@ export function makeCowSignalCh3(E, lang = "py") {
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim }}>
             {t(E, "grid[0] = 'X.X', grid[1] = '.X.' etc.", "grid[0] 은 'X.X', grid[1] 은 '.X.' 이렇게 들어가요.")}
           </div>
+          {/* 2026-09-23 — 학생 지적: vector<string> grid(M) 이 화면에 한 번도
+              설명 없이 나왔다. 새 문법 수업은 아니고 한 줄만 붙인다. */}
+          {lang === "cpp" && (
+            <div style={{ marginTop: 6, fontSize: 12, color: C.dim }}>
+              {t(E, "vector<string> grid(M) makes a box that holds M strings — one per row.",
+                    "vector<string> grid(M) 은 문자열을 M 개 담을 상자를 미리 만들어요 — 행 하나에 문자열 하나씩요.")}
+            </div>
+          )}
         </div>),
     },
 
@@ -594,12 +602,71 @@ export function makeCowSignalCh3(E, lang = "py") {
             {t(E, "O(...) is a rough way to say \"about how many steps this takes.\"", "O(...) 는 '대충 몇 번쯤 걸린다' 를 적는 방법이에요.")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 6 }}>
-            {t(E, "M×N cells, and each cell is now a K×K block → M · N · K · K characters to write.",
-                  "칸이 M×N개이고, 칸 하나가 K×K 블록이 되니까 → M · N · K · K 글자를 써요.")}
+            {t(E, "M×N cells, and each cell is now a K×K block → M × N × K × K characters to write.",
+                  "칸이 M×N개이고, 칸 하나가 K×K 블록이 되니까 → M × N × K × K 글자를 써요.")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>{t(E, "= output size, optimal!", "= 출력 크기와 같아요. 이보다 좋을 수 없어요!")}</div>
           <div style={{ marginTop: 8, fontSize: 12, color: C.ok, fontWeight: 700 }}>
             M,N ≤ 10, K ≤ 10 → {t(E, "max 10,000 chars, instant!", "많아야 10,000 글자예요. 바로 끝나요!")}
+          </div>
+        </div>),
+    },
+
+    /* 3-7.5 반복문 이름표 (2026-09-23, C++ 학생 지적 ①: "코드 8/8 에서 그만두고
+       싶었다 — 4겹 for 문을 손으로 따라가는 법을 못 따라갔다." 3-4·3-5 에서
+       이미 반복문을 하나씩 쌓아 왔으니, 여기선 새로 가르치지 않고 네 겹(C++)
+       / 세 겹(Python) 이 각각 몇 번 돌고 무엇을 세는지 이름표만 붙인다.
+       8/8(완전한 코드)에 가기 직전에 둬서, 그 쪽의 짐을 미리 덜어낸다. */
+    {
+      type: "reveal",
+      narr: lang === "cpp"
+        ? t(E,
+            "Before the full code: here's what each of the four nested loops counts.",
+            "완전한 코드를 보기 전에 — 네 겹 반복문이 각각 무엇을 세는지 확인해요.")
+        : t(E,
+            "Before the full code: here's what each of the three nested loops counts.",
+            "완전한 코드를 보기 전에 — 세 겹 반복문이 각각 무엇을 세는지 확인해요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {[
+              { v: "i", n: "M", desc: t(E, "through the original rows", "원본 행") },
+              { v: "rep", n: "K", desc: t(E, "copying that row", "그 행을 복사") },
+              { v: "j", n: "N", desc: t(E, "through the cells in the row", "행 안의 칸") },
+              ...(lang === "cpp" ? [{ v: "k", n: "K", desc: t(E, "printing that character", "그 글자를 출력") }] : []),
+            ].map((row, i) => (
+              <div key={row.v} style={{
+                marginLeft: i * 20,
+                marginTop: i === 0 ? 0 : 4,
+                display: "flex", alignItems: "center", gap: 8,
+                background: i % 2 === 0 ? "#f5f3ff" : "#eef2ff",
+                border: "1px solid #c4b5fd", borderRadius: 8, padding: "6px 10px",
+              }}>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 13, color: "#7c3aed" }}>
+                  for {row.v}
+                </span>
+                <span style={{ fontSize: 11, color: C.dim }}>→</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6" }}>{row.n} {t(E, "times", "번")}</span>
+                <span style={{ fontSize: 12, color: C.text }}>{row.desc}</span>
+              </div>
+            ))}
+            {lang === "py" && (
+              <div style={{
+                marginLeft: 3 * 20, marginTop: 4,
+                display: "flex", alignItems: "center", gap: 8,
+                background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, padding: "6px 10px",
+              }}>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 13, color: "#16a34a" }}>
+                  grid[i][j] * K
+                </span>
+                <span style={{ fontSize: 11, color: C.dim }}>→</span>
+                <span style={{ fontSize: 12, color: C.text }}>{t(E, "repeats that one character K times", "글자 하나를 K번 이어붙여요")}</span>
+              </div>
+            )}
+          </div>
+          <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
+            {t(E, "Each level is nested inside the one above it — same order as the code.",
+                  "위 칸 안에 아래 칸이 들어가요 — 코드에 나오는 순서와 같아요.")}
           </div>
         </div>),
     },
