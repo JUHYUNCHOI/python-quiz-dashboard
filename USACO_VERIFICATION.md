@@ -73,30 +73,30 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `aircond` | Air Cownditioning II | Jan 2023 Bronze #2 | ✅ **PASS — 선생님이 2026-09-17 제출해 통과 확인.** (아래는 경위) — 11/11 은 **옛 코드** 기준. 2026-09-16 에 학생이 못 읽는 비트 연산을 걷어냈다(`1<<M`→`2**M`, `mask&(1<<j)`→`% 2`·`//= 2`). 알고리즘 그대로, 문법만. 무작위 400케이스에서 **옛 코드와 답 불일치 0**. | ✅ **PASS — 2026-09-17 통과 확인.** 같은 이유. 옛 기록: ✅ 11/11 PASS (2026-06-16 C++17, cpid=1276). 새 판본도 400케이스 옛 코드와 일치. |
 | `leaders` | Leaders | Jan 2023 Bronze #1 | ✅ 17/17 PASS | ✅ 17/17 PASS |
 | `reverseeng` | Reverse Engineering | Dec 2022 Bronze #3 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 에 고쳐진 코드 이전**의 기록이다. 지금 코드는 돈다 — 2026-09-14 확인: `quest-meta.ts` 의 공식 샘플 **2/2 통과**(메인 세션이 직접 돌림). **다만 채점기에 재제출한 적이 없다** — 로컬 통과이지 PASS 가 아니다. | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1253) |
-| `feedcows` | Feeding the Cows | Dec 2022 Bronze #2 | ❌ 0/1 (RTE - wrong input parsing (missing T)) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1252) |
+| `feedcows` | Feeding the Cows | Dec 2022 Bronze #2 | ✅ 12/12 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1252) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1252) |
 | `cowcollege` | Cow College | Dec 2022 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
 | `alchemy` | Alchemy | Open 2022 Bronze #3 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 에 고쳐진 코드 이전**의 기록이다. 지금 코드는 돈다 — 2026-09-14 확인: `quest-meta.ts` 의 공식 샘플 **2/2 통과**(메인 세션이 직접 돌림). **다만 채점기에 재제출한 적이 없다** — 로컬 통과이지 PASS 가 아니다. | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1229) |
 | `countliars` | Counting Liars | Open 2022 Bronze #2 | 🟡 2/9 (TLE - O(10^6 * N) loop too slow) | 🟡 2/12 (TLE - same as py (p up to 10^9)) |
-| `photoshoot` | Photoshoot | Open 2022 Bronze #1 | ❌ 0/1 (RTE - wrong input format (no target line)) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1227) |
-| `blocks` | Blocks | Feb 2022 Bronze #3 | ❌ 0/1 (WA - output format wrong (prints count instead of YES/NO per word)) | ✅ 20/20 PASS (re-submitted 2026-06-16 C++17, cpid=1205) |
+| `photoshoot` | Photoshoot | Open 2022 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1227) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1227) |
+| `blocks` | Blocks | Feb 2022 Bronze #3 | ✅ 20/20 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1205) | ✅ 20/20 PASS (re-submitted 2026-06-16 C++17, cpid=1205) |
 | `photoshoot2` | Photoshoot 2 | Feb 2022 Bronze #2 | ✅ 14/14 PASS | ✅ 14/14 PASS (re-submitted 2026-06-16 C++17, cpid=1204) |
-| `sleepclass` | Sleeping in Class | Feb 2022 Bronze #1 | ❌ 0/1 (WA - bug when total=0 edge case) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1203) |
-| `drought` | Drought | Jan 2022 Bronze #3 | ❌ 0/1 (WA - py expects single case, problem has T test cases) | ✅ 15/15 PASS (re-submitted 2026-06-16 C++17, cpid=1181) |
-| `nontrans` | Non-Transitive Dice | Jan 2022 Bronze #2 | ❌ 0/1 (WA+RTE - wrong input parsing) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1180; fixed to check both cycle directions) |
-| `herdle` | Herdle | Jan 2022 Bronze #1 | ❌ 0/1 (RTE - wrong input parsing (no T)) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1179) |
+| `sleepclass` | Sleeping in Class | Feb 2022 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1203) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1203) |
+| `drought` | Drought | Jan 2022 Bronze #3 | ✅ 15/15 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1181) | ✅ 15/15 PASS (re-submitted 2026-06-16 C++17, cpid=1181) |
+| `nontrans` | Non-Transitive Dice | Jan 2022 Bronze #2 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1180) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1180; fixed to check both cycle directions) |
+| `herdle` | Herdle | Jan 2022 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1179) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1179) |
 | `walkhome` | Walking Home | Dec 2021 Bronze #3 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 수정(커밋 `3cc7769f`, T 루프 추가) 이전**의 기록이다. 2026-09-14 확인: RTE 없이 돌고, 화면 예제(2×2, K=1 → 2)와 무작위 작은 격자 40건을 브루트포스와 대조해 불일치 0 (python-qa). **채점기 재제출은 안 했다.** | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1157) |
 | `aircond1` | Air Cownditioning | Dec 2021 Bronze #2 | 🔧 Py rewritten 2026-06-15 to clean diff-array (0-padded, sum of upward jumps); local-verified vs official sample (5) | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1156; fixed missing trailing 0-pad) |
-| `lonelyphoto` | Lonely Photo | Dec 2021 Bronze #1 | ❌ 0/1 (WA - algorithm overcounts (22 vs 3 expected)) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1155) |
-| `acowdemia3` | Acowdemia III | Open 2021 Bronze #3 | ❌ 0/1 (WA - overcounts (5 vs 4)) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1133) |
+| `lonelyphoto` | Lonely Photo | Dec 2021 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1155) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1155) |
+| `acowdemia3` | Acowdemia III | Open 2021 Bronze #3 | ✅ 12/12 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1133) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1133) |
 | `acowdemia2` | Acowdemia II | Open 2021 Bronze #2 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 수정 이전**의 기록이다. 지금 코드는 이름을 문자열로 비교한다(이 문제의 동점 규칙이 그렇다) — 옛 int 변환 버그가 아니다. 2026-09-14 확인: RTE 없이 돌고 화면 샘플과 정확히 일치 (python-qa). **채점기 재제출은 안 했다.** | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1132) |
 | `acowdemia1` | Acowdemia I | Open 2021 Bronze #1 | ❌ 13/17 (WA on cases 9,11,12,13 - edge case bug) | ❌ 13/17 (WA same edge cases as py) |
 | `clockfence` | Clockwise Fence | Feb 2021 Bronze #3 | ❌ 0/1 (RTE - missing T (test cases) parse) | ❌ 0/1 (WA - output format (counts vs CW/CCW per test)) |
 | `comfycows` | Comfortable Cows | Feb 2021 Bronze #2 | ✅ 12/12 PASS | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1108) |
 | `yearcow` | Year of the Cow | Feb 2021 Bronze #1 | ❌ 0/1 (RTE - wrong input parsing (8-word phrase)) | ✅ 10/10 PASS |
 | `stalling` | Just Stalling | Jan 2021 Bronze #3 | 🔧 Py rewritten 2026-06-15 to space-separated input + tallest-cow-first greedy (was RTE wrong input format); local-verified vs official sample (8) + 300 random vs brute-force | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1085) |
-| `oddphotos` | Even More Odd Photos | Jan 2021 Bronze #2 | ❌ 0/1 (WA - overcounts (4 vs 3)) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1084) |
+| `oddphotos` | Even More Odd Photos | Jan 2021 Bronze #2 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1084) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1084) |
 | `uddered` | Uddered but not Herd | Jan 2021 Bronze #1 | ✅ 10/10 PASS | ✅ 10/10 PASS |
-| `stuckinrut` | Stuck in a Rut | Dec 2020 Bronze #3 | ❌ 3/10 (WA - greedy doesn't handle cascading correctly) | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1061) |
+| `stuckinrut` | Stuck in a Rut | Dec 2020 Bronze #3 | ✅ 10/10 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1061) | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1061) |
 | `daisychains` | Daisy Chains | Dec 2020 Bronze #2 | ✅ 10/10 PASS | ✅ 10/10 PASS |
 | `abcs` | Do You Know Your ABCs? | Dec 2020 Bronze #1 | ✅ 10/10 PASS | ✅ 10/10 PASS |
 | `cowntrace` | Cowntact Tracing | Open 2020 Bronze #3 | ✅ 16/16 PASS (재작성 2026-05-14) | ✅ 16/16 PASS (재작성 2026-05-14) |
