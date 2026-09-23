@@ -109,6 +109,12 @@ const PY_SETUP = [
   "P = 1",
   "a = [1, 2, 3]",
 ];
+// 🔧 2026-09-23: 예전 CPP_SETUP 은 N/P/a 를 전역으로 선언만 하고 "입력은
+//    main() 에서 읽음" 이라는 주석만 달아 뒀다 — 그 main() 이 어디에도 없었다.
+//    CPP_ADD/CPP_MUL/CPP_XOR 는 그 뒤에 최상위(global scope)에 `if (P==1) {...}`
+//    를 그대로 뒀는데, C++ 은 최상위에 실행문을 못 둔다 — 컴파일이 안 됐다.
+//    main() 을 열고 N/P/a/ans 를 그 안에서 선언하도록 고쳤다. CPP_OUT 이 이제
+//    main() 을 닫는다 — 이어붙이면 그 자체로 도는 프로그램이다.
 const CPP_SETUP = [
   "#include <iostream>",
   "#include <vector>",
@@ -127,8 +133,13 @@ const CPP_SETUP = [
   "    }",
   "    return r;",
   "}",
-  "int N, P;  // 입력은 main() 에서 읽음",
-  "vector<long long> a;",
+  "",
+  "int main() {",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (예제 1)",
+  "    int N = 3;",
+  "    int P = 1;",
+  "    vector<long long> a = {1, 2, 3};",
+  "    long long ans = 0;",
 ];
 
 const PY_ADD = [
@@ -138,13 +149,13 @@ const PY_ADD = [
   "    ans = pow(2, N - 1, MOD) * (sum(a) % MOD) % MOD",
 ];
 const CPP_ADD = [
-  "if (P == 1) {                       // ➕ 더하기",
-  "    long long s = 0;",
-  "    for (int i = 0; i < N; i++) {",
-  "        s = (s + a[i]) % MOD;",
+  "    if (P == 1) {                       // ➕ 더하기",
+  "        long long s = 0;",
+  "        for (int i = 0; i < N; i++) {",
+  "            s = (s + a[i]) % MOD;",
+  "        }",
+  "        ans = pw(2, N - 1) * s % MOD;   // 각 수 x 2^(N-1)",
   "    }",
-  "    ans = pw(2, N - 1) * s % MOD;   // 각 수 x 2^(N-1)",
-  "}",
 ];
 
 const PY_MUL = [
@@ -157,13 +168,13 @@ const PY_MUL = [
   "    ans = (prod - 1) % MOD",
 ];
 const CPP_MUL = [
-  "else if (P == 2) {                  // ✖️ 곱하기",
-  "    long long prod = 1;",
-  "    for (int i = 0; i < N; i++) {",
-  "        prod = prod * ((1 + a[i]) % MOD) % MOD;",
+  "    else if (P == 2) {                  // ✖️ 곱하기",
+  "        long long prod = 1;",
+  "        for (int i = 0; i < N; i++) {",
+  "            prod = prod * ((1 + a[i]) % MOD) % MOD;",
+  "        }",
+  "        ans = (prod - 1 + MOD) % MOD;   // 빈 집합(=1) 만 빼기",
   "    }",
-  "    ans = (prod - 1 + MOD) % MOD;   // 빈 집합(=1) 만 빼기",
-  "}",
 ];
 
 const PY_XOR = [
@@ -181,25 +192,29 @@ const PY_XOR = [
   "    ans %= MOD",
 ];
 const CPP_XOR = [
-  "else {                              // ⊕ XOR",
-  "    for (int bit = 0; bit < 31; bit++) {",
-  "        long long k = 0;",
-  "        for (int i = 0; i < N; i++) {",
-  "            if ((a[i] >> bit) & 1) {",
-  "                k++;",
+  "    else {                              // ⊕ XOR",
+  "        for (int bit = 0; bit < 31; bit++) {",
+  "            long long k = 0;",
+  "            for (int i = 0; i < N; i++) {",
+  "                if ((a[i] >> bit) & 1) {",
+  "                    k++;",
+  "                }",
   "            }",
+  "            if (k == 0) {",
+  "                continue;",
+  "            }",
+  "            long long f = pw(2, k - 1) * pw(2, N - k) % MOD;   // 2^(k-1)·2^(N-k)",
+  "            ans = (ans + ((1LL << bit) % MOD) * f) % MOD;",
   "        }",
-  "        if (k == 0) {",
-  "            continue;",
-  "        }",
-  "        long long f = pw(2, k - 1) * pw(2, N - k) % MOD;   // 2^(k-1)·2^(N-k)",
-  "        ans = (ans + ((1LL << bit) % MOD) * f) % MOD;",
   "    }",
-  "}",
 ];
 
 const PY_OUT = ["print(ans)"];
-const CPP_OUT = ["cout << ans << \"\\n\";"];
+const CPP_OUT = [
+  "    cout << ans << \"\\n\";",
+  "    return 0;",
+  "}",
+];
 
 /* ================================================================
    첫 코드 — 눈에 보이는 대로 짠 브루트 (2026-09-17 신설)
@@ -240,6 +255,62 @@ const BRUTE_OUT_PY = [
   "print(total % MOD)",
 ];
 
+// 🔧 2026-09-23: cpp 자리가 py 배열을 그대로 가리키고 있었다(PY_SETUP,
+//    BRUTE_MAKE_PY, BRUTE_COMBINE_PY, BRUTE_OUT_PY) — C++ 토글을 눌러도
+//    파이썬이 나왔다. 같은 브루트를 실제 C++ 로 새로 짰다 — 반복문만 쓰고
+//    비트 연산은 안 썼다(안 가르친 개념, 파이썬 쪽과 같은 원칙).
+const BRUTE_SETUP_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    long long MOD = 1000000007LL;",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (예제 1)",
+  "    int N = 3;",
+  "    int P = 1;",
+  "    vector<long long> a = {1, 2, 3};",
+];
+const BRUTE_MAKE_CPP = [
+  "    // 부분집합을 전부 만들어 봐요",
+  "    // 빈 것 하나로 시작해서, 수를 하나씩 넣은 사본을 계속 붙여요",
+  "    vector<vector<long long>> subsets = {{}};",
+  "    for (long long x : a) {",
+  "        int sz = (int)subsets.size();",
+  "        for (int i = 0; i < sz; i++) {",
+  "            vector<long long> copy = subsets[i];",
+  "            copy.push_back(x);",
+  "            subsets.push_back(copy);",
+  "        }",
+  "    }",
+];
+const BRUTE_COMBINE_CPP = [
+  "    long long total = 0;",
+  "    for (auto& sub : subsets) {",
+  "        if (sub.size() == 0) {        // 빈 부분집합은 세지 않아요",
+  "            continue;",
+  "        }",
+  "        long long value = sub[0];",
+  "        for (size_t i = 1; i < sub.size(); i++) {",
+  "            long long x = sub[i];",
+  "            if (P == 1) {",
+  "                value = value + x;",
+  "            } else if (P == 2) {",
+  "                value = value * x;",
+  "            } else {",
+  "                value = value ^ x;",
+  "            }",
+  "        }",
+  "        total = total + value;",
+  "    }",
+];
+const BRUTE_OUT_CPP = [
+  "    // MOD 는 1 번 걸음에서 정해 둔 1000000007LL 이에요",
+  "    cout << total % MOD << \"\\n\";",
+  "    return 0;",
+  "}",
+];
+
 export function getMcc21SimpleMathBruteSections(E) {
   return [
     /* ⚠️ 2026-09-17 project-lead 재판정에서 잡혔다 —
@@ -251,7 +322,7 @@ export function getMcc21SimpleMathBruteSections(E) {
     {
       label: t(E, "\u{1F4E5} 1. The values we are given", "\u{1F4E5} 1. 주어진 값"),
       color: A,
-      py: PY_SETUP, cpp: PY_SETUP,
+      py: PY_SETUP, cpp: BRUTE_SETUP_CPP,
       why: [
         t(E,
           "Same three values the examples used: N numbers in a, and P picking the operator.\nMOD keeps the running total small.",
@@ -261,7 +332,7 @@ export function getMcc21SimpleMathBruteSections(E) {
     {
       label: t(E, "\u{1F422} 2. Make every subset", "\u{1F422} 2. 부분집합을 전부 만들기"),
       color: A,
-      py: BRUTE_MAKE_PY, cpp: BRUTE_MAKE_PY,
+      py: BRUTE_MAKE_PY, cpp: BRUTE_MAKE_CPP,
       why: [
         t(E,
           "Start with one empty subset. For each number, copy every subset we already have and put that number in.\nThat is exactly what the 7 rows on the previous page were.",
@@ -271,7 +342,7 @@ export function getMcc21SimpleMathBruteSections(E) {
     {
       label: t(E, "\u{1F422} 3. Combine each subset", "\u{1F422} 3. 부분집합마다 합치기"),
       color: A,
-      py: BRUTE_COMBINE_PY, cpp: BRUTE_COMBINE_PY,
+      py: BRUTE_COMBINE_PY, cpp: BRUTE_COMBINE_CPP,
       why: [
         t(E,
           "Inside one subset, take the first number and fold the rest into it with the operator P picks.\nThen add that value to the total.",
@@ -281,7 +352,7 @@ export function getMcc21SimpleMathBruteSections(E) {
     {
       label: t(E, "\u{1F422} 4. Print", "\u{1F422} 4. 출력"),
       color: A,
-      py: BRUTE_OUT_PY, cpp: BRUTE_OUT_PY,
+      py: BRUTE_OUT_PY, cpp: BRUTE_OUT_CPP,
       why: [
         t(E,
           "This is correct, and on the sample it prints 24 / 23 / 12 just like the official output.\nThe next page asks the one question that matters: how far does it go?",
