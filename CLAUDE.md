@@ -121,9 +121,29 @@ python3 scripts/check-linebreak-rendered.py                  # 글쓴이가 넣�
 python3 scripts/check-section-code-complete.py               # 학생이 📄 PDF 로 받는 코드가 진짜 돌아가나
 python3 scripts/check-unused-lang-param.py <id>               # Py/C++ 토글을 눌러도 코드가 안 바뀌는 quest
                                                             #   (자체 CodeSnippet 이 lang 을 못 받음, 2026-09-23 학생 제보)
+python3 scripts/check-taught-vs-final-code.py <id>            # 화면 코드 블록이 **가르치는** 함수를 🔒 최종 코드가 쓰나
+                                                            #   (`check-boasted-function.py` 와 다른 층 — 그건 자랑 *문장*만
+                                                            #   본다. 이건 학생에게 **직접 보여준 코드 줄**과 대조한다)
 node scripts/check-emphasis.mjs http://localhost:3000/quest/<id>  # 강조가 **보이나** (다 굵으면 강조가 아니다)
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
 ```
+
+> 🆕 **`check-taught-vs-final-code.py` 가 2026-09-23 에 생긴 이유:** `billboard` 를 손으로 셌다 —
+> 🔒 `FULL_PY`/`FULL_CPP`(최종 코드) 안의 `max(`·`min(` 은 **0번**, `chapters.jsx` 안의
+> `max(`·`min(` 은 **33번**. 3장 "⚡ 코드 빌드" 가 `def rect_area(...): return max(0, x2-x1) * max(0, y2-y1)`
+> 을 **글자 그대로 보여주며** *"코드를 한 단계씩 만들어봐요!"* 라고 하는데, 진짜 최종 코드는
+> `if w < 0: w = 0` 처럼 if/else 로 짜여 있어 `max`/`min` 이 하나도 없다. 학생은 `max`/`min` 으로
+> 코드 짓는 법을 보고 마지막 🔒 코드에서 `if`/`else` 를 만난다 — 아무도 그 차이를 설명 안 한다.
+> ⚠️ **오탐이 컸다** — 첫 판에는 `map(`·`sorted(` 같은 이름이 **13개 quest 15건** 걸렸는데,
+> 손으로 열어 보니 거의 전부 `{lines.map((l,i) => ...)}` 처럼 **코드 줄을 화면에 그리는 React 식**이었다
+> (학생에게 보여주는 글자가 아니라 실행되는 JS). `{...}` 로 감싼 자리를 통째로 지우고 나니
+> **2건 · quest 1개(billboard)로 줄었고, 손으로 다 열어 확인해 전부 진짜였다.**
+> ⚠️ **모노스페이스(`fontFamily: 'JetBrains Mono'`)로 스타일된 코드 블록만 본다** — narr 의
+> "max() 를 쓰면…" 같은 스치는 언급은 일부러 뺐다. `CodeWalk` 로 이미 옮긴 quest는 그 컴포넌트가
+> 🔒 최종 코드 배열을 그대로 보여주므로(글자를 새로 안 쳐서) 구조적으로 안 걸린다 — 이 구멍은
+> **CodeWalk 로 아직 안 옮긴 옛 수기(手記) 코드 블록**에서만 난다.
+> **판정이 아니다** — 가르친 방법을 일부러 버리고 더 나은 방법으로 갈아탄 자리일 수 있다.
+> 실측이 작아서(1 quest) 아직은 **개별 다리 문장으로 해결하는 규모**다.
 
 > 🆕 **`check-undefined-symbol.py` 가 2026-09-17 에 생긴 이유:** MCC 12개를 훑었더니
 > **12개 중 11개**가 같은 구멍이었다 — `10⁹ · 2^R · N² · ⌈L/2⌉ · Σ · ∞ · ≯` 가
