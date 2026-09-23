@@ -169,8 +169,12 @@ export function WhoCanMeetSim({ E }) {
       en: "Four numbers — 3, 3, 3, 4. This time we add K = 2 each move." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "idle"],
       extra: ["", "", t(E, "→5→7→9…", "→5→7→9…"), ""],
-      ko: "3 에 2 를 더하면 5, 또 더하면 7 … 계속 홀수예요.",
-      en: "3 plus 2 is 5, then 7 … always odd." },
+      /* 2026-09-23 선생님 지적: "K=1 일 때는 홀수가 짝수 되었다가 홀수 되었다 하지
+         않나?" — 맞는 말인데 화면에 K=1 비교가 없었다(3쪽 PlaceOneByOneSim 은
+         샘플 [4,1,4,1] 이라 K=1 로 4→5→6 을 이미 보여준 적 있다). 비교 대상을
+         같은 값 3 으로 넣는다 — 새 숫자를 들이면 "어디서 온 숫자지" 가 또 난다. */
+      ko: "K 가 1 이면 3 → 4 → 5 → 6, 홀수·짝수가 번갈아요.\nK 가 2 면 3 에 2 를 더해 5, 또 더해 7 … 계속 홀수예요.",
+      en: "With K = 1, 3 → 4 → 5 → 6 — odd and even alternate.\nWith K = 2, 3 plus 2 is 5, then 7 … always odd." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
       extra: ["", "", "", t(E, "→6→8→10…", "→6→8→10…")],
       ko: "4 도 마찬가지예요. 6, 8, 10 … 계속 짝수예요. 짝지을 다른 짝수가 없어요.",
