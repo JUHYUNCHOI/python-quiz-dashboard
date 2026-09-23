@@ -262,14 +262,20 @@ export function getCowGymSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E,
-          "What do we need? How many pairs kept the same order\n"
+          "This is the same check as all() a moment ago — i_first counts\n"
+          + "how many sessions cow i led, and 0 or K matches what all()\n"
+          + "being True meant.\n"
+          + "What do we need? How many pairs kept the same order\n"
           + "in every single session.\n"
           + "For any two cows, just count in how many of the K\n"
           + "sessions cow i ranked ahead of cow j. If that count\n"
           + "is 0 or K, they always went the same way — consistent.\n"
           + "N is small, so checking every pair this way is fast\n"
           + "enough.",
-          "무엇을 내놔야 하나요? 모든 세션에서 순서가 한쪽으로만\n"
+          "방금 all() 로 확인한 것과 같은 뜻이에요. i_first 가 i 가\n"
+          + "앞선 횟수를 세서, 그 횟수가 0 이거나 K 면 all() 이 True\n"
+          + "였던 것과 같아요.\n"
+          + "무엇을 내놔야 하나요? 모든 세션에서 순서가 한쪽으로만\n"
           + "유지된 소 쌍의 개수예요.\n"
           + "소 두 마리를 정하면, K 개 세션 중 i 가 앞이었던 횟수만\n"
           + "세어 보면 돼요.\n"

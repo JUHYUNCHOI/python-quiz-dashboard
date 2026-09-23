@@ -312,7 +312,7 @@ export function makeCowGymCh1(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 알고리즘/시뮬레이션 (5 steps)
+   Chapter 2: 알고리즘/시뮬레이션 (3 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowGymCh2(E) {
   return [
@@ -351,50 +351,6 @@ export function makeCowGymCh2(E) {
           </div>
         </div>),
     },
-    // 2-2: Check all pairs visually
-    {
-      type: "reveal",
-      narr: t(E,
-        "Then for each pair (i, j), check ALL K sessions: is rank[s][i] < rank[s][j] for every s?\nOr the reverse?\nIf either holds, it's consistent!", "그다음 쌍 (i, j) 마다 세션 K 개를 모두 확인해요.\n모든 s 에서 rank[s][i] < rank[s][j] 인가요?\n아니면 그 반대인가요?\n둘 중 하나가 늘 맞으면 일관된 쌍이에요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 8 }}>
-            {t(E, "Checking all pairs systematically", "쌍을 하나씩 빠짐없이 확인하기")}
-          </div>
-          <div style={{ fontSize: 12, color: C.dim, marginBottom: 8 }}>
-            {t(E, "Sessions: [1,2,3] and [1,3,2]. Ranks:", "세션이 [1,2,3] 과 [1,3,2] 일 때 순위는 이래요")}
-          </div>
-          <RankTable
-            sessions={[
-              [0, 1, 2],
-              [0, 2, 1],
-            ]}
-            N={3}
-            E={E}
-          />
-          <div style={{ marginTop: 10 }}>
-            {[
-              { pair: "(1,2)", checks: ["0<1 ✓", "0<2 ✓"], result: true, why: t(E, "1 always beats 2", "1 이 항상 2 를 이겨요") },
-              { pair: "(1,3)", checks: ["0<2 ✓", "0<1 ✓"], result: true, why: t(E, "1 always beats 3", "1 이 항상 3 을 이겨요") },
-              { pair: "(2,3)", checks: ["1<2 ✓", "2>1 ✗"], result: false, why: t(E, "order changes!", "순서가 바뀌어요!") },
-            ].map(({ pair, checks, result, why }, i) => (
-              <div key={i} style={{
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "6px 10px", marginBottom: 4, borderRadius: 8,
-                background: result ? "#dcfce7" : "#fef2f2",
-                border: `1.5px solid ${result ? "#6ee7b7" : "#fca5a5"}`,
-              }}>
-                <span style={{ fontWeight: 600, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#d97706", minWidth: 36 }}>{pair}</span>
-                <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: C.dim, flex: 1 }}>{checks.join(", ")}</span>
-                <span style={{ fontSize: 13, fontWeight: 600, color: result ? "#059669" : "#dc2626" }}>{result ? "✓" : "✗"}</span>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 6, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#d97706" }}>
-            {t(E, "Answer: 2 consistent pairs", "일관된 쌍은 2 개예요")}
-          </div>
-        </div>),
-    },
     // 2-2b: Deep audit sim — pick a pair, step through every session
     {
       type: "reveal",
@@ -402,24 +358,6 @@ export function makeCowGymCh2(E) {
         "Your turn — pick a pair, then step through every session.\nWatch the rank cells light up, see who wins each round, and only call it consistent if the same cow wins every time.",
         "이번엔 직접 해봐요. 쌍을 고르고 세션마다 한 칸씩 넘겨 보세요.\nrank 칸이 켜지면 그 세션의 승자를 확인해요.\n매번 같은 소가 이겼을 때만 일관된 쌍이에요."),
       content: (<CowGymPairSim E={E} />),
-    },
-    // 2-3: Quiz
-    {
-      type: "quiz",
-      narr: t(E,
-        "For N cows, how many unique pairs are there? This determines our algorithm's complexity!", "소가 N 마리면 겹치지 않는 쌍은 몇 개일까요?\n이 수가 알고리즘이 얼마나 오래 걸리는지를 정해요."),
-      question: t(E,
-        "N=4 cows. How many unique pairs?",
-        "소가 N=4 마리일 때 쌍은 몇 개일까요?"),
-      options: [
-        t(E, "4", "4"),
-        t(E, "6", "6"),
-        t(E, "8", "8"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "N*(N-1)/2 = 4*3/2 = 6 pairs: (1,2), (1,3), (1,4), (2,3), (2,4), (3,4).",
-        "N*(N-1)/2 = 4*3/2 = 6 쌍이에요. (1,2), (1,3), (1,4), (2,3), (2,4), (3,4) 이렇게요."),
     },
     // 2-4: Complexity
     {
@@ -440,19 +378,6 @@ export function makeCowGymCh2(E) {
             </div>
           </div>
         </div>),
-    },
-    // 2-5: Input practice
-    {
-      type: "input",
-      narr: t(E,
-        "With N=5 cows, how many unique pairs must we check?", "소가 N=5 마리면 확인할 쌍은 몇 개일까요?"),
-      question: t(E,
-        "N=5 cows. N*(N-1)/2 = ?",
-        "소가 N=5 마리예요. N*(N-1)/2 = ?"),
-      hint: t(E,
-        "Apply N·(N − 1) / 2 with N = 5.",
-        "N·(N − 1) / 2 에 N = 5 를 넣어 보세요."),
-      answer: 10,
     },
   ];
 }
@@ -475,7 +400,7 @@ export function makeCowGymCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
-              "with open('cowgym.in') as file:",
+              "with open('gymnastics.in', 'r') as file:",
               "    lines = file.readlines()",
               "K, N = map(int, lines[0].split())",
               "",
