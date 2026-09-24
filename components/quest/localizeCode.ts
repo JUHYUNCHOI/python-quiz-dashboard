@@ -33,7 +33,13 @@ const CPP_LINE = /^(\s*)\/\/(.*)$/;
       언어를 모르고 `//` 를 주석으로 보면
       `buy_up = (left + block_size - 1) // block_size    # 올림 나눗셈`
       이 `buy_up = (left + block_size - 1)` 로 **잘린다** — 영어 학생에게 깨진 코드가 간다.
-      실측 7줄(buymilk 1 · explodingarrow 6)이 이 모양이었다. */
+      실측 7줄(buymilk 1 · explodingarrow 6)이 이 모양이었다.
+   ⚠️ 이건 **폴백**이다 (2026-09-24) — 호출부가 `lang` 을 이미 알면서도 안 넘기면
+      이 추측에 기댄다. **코드를 섹션별로 쪼개 보여주는 quest** 는 조각에 `#include` 가
+      없어서(예: `vector<long long> used;` 로 시작하는 C++ 조각) 여기서 파이썬으로
+      오판됐다 — 오판되면 `//` 주석을 못 찾아 **주석을 지우는 로직이 안 돌고
+      한국어 원문이 영어 화면에 그대로 나갔다**(makedistinct 실측). 새 호출부는
+      반드시 `lang` 을 넘겨라. */
 function isCpp(lines: string[]): boolean {
   return lines.some((l) => /^\s*(#include|using namespace|int main|template\s*<)/.test(l));
 }
@@ -110,8 +116,14 @@ function one(line: string, cpp: boolean, toEn: boolean): string {
  * ⚠️ 2026-09-21 이전에는 `if (!isEn) return lines;` 였다 —
  *    한국어 화면은 **아무것도 안 했다.** 그래서 한국어 학생이
  *    `# Group indices by residue mod |K|` 를 그대로 보고 있었다.
+ *
+ * @param lang **호출부가 이미 알면 반드시 넘겨라.** (`"py" | "cpp"`)
+ *   안 넘기면(`undefined`) `isCpp()` 추측으로 되돌아간다 — 그 추측은
+ *   `#include`·`int main` 같은 줄이 배열 **안**에 있어야만 C++ 로 본다.
+ *   섹션별로 쪼갠 C++ 코드 조각(헤더 없이 시작)은 이 추측에서 파이썬으로
+ *   오판돼 주석이 안 지워지고 한국어가 그대로 새어 나간다 (2026-09-24, makedistinct).
  */
-export function localizeCode(lines: string[], isEn: boolean): string[] {
-  const cpp = isCpp(lines);
+export function localizeCode(lines: string[], isEn: boolean, lang?: "py" | "cpp"): string[] {
+  const cpp = lang ? lang === "cpp" : isCpp(lines);
   return lines.map((l) => one(l, cpp, isEn));
 }

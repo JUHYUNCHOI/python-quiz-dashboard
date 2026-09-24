@@ -455,8 +455,11 @@ interface CodeBlockProps {
 export function CodeBlock({ lines: rawLines, lang = "py", dimUntil = 0, isEn = false }: CodeBlockProps) {
   /* 코드 안 한국어 주석을 영어 화면에서도 읽히게 한다 (2026-09-11).
      ⚠️ isEn 을 안 넘기는 옛 호출부는 지금과 똑같이 원본을 그린다 — 깨지지 않는다.
-     원본 배열은 안 건드리고 **그리는 자리에서만** 바꾼다. 줄 수는 유지된다. */
-  const lines = localizeCode(rawLines, isEn);
+     원본 배열은 안 건드리고 **그리는 자리에서만** 바꾼다. 줄 수는 유지된다.
+     ⚠️ 2026-09-24: `lang` 을 같이 넘긴다 — 이 컴포넌트가 이미 알고 있는데도
+     안 넘겨서, 섹션별로 쪼갠 C++ 조각(헤더 없음)이 언어 추측에서 파이썬으로
+     오판돼 한국어 주석이 영어 화면에 그대로 새어 나갔다 (makedistinct 실측). */
+  const lines = localizeCode(rawLines, isEn, lang);
   const [copied, setCopied] = useState(false)
   const handleCopy = async () => {
     try {

@@ -2207,4 +2207,57 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "how many baskets in each case",
   "케이스마다 바구니 하나씩":
     "one case's baskets at a time",
+
+  // ── 2026-09-24: makedistinct·buymilk·moohunt·mcc21simplemath·feb23·
+  //    mcc15bahasaf·reach·stampgrid·tichu (`localizeCode` 언어 오판 버그 수정과 같이 채움)
+  "이미 놓인 값들":
+    "values already placed",
+  "한 번 밀고 다시 본다":
+    "push once, check again",
+  "겹치면":
+    "if it collides",
+  "(A) 넉넉히 사고 끝내기":
+    "(A) buy enough, stop",
+  "(B) 모자라게 사고 남은 통은 작은 묶음에 넘기기":
+    "(B) buy less, pass the rest to a smaller group",
+  "묶음마다 몇 통인지 미리 적어둬요 (C++ 에는 ** 가 없어요)":
+    "note how many cans each group has (C++ has no **)",
+  "다음 보드 = 지금 보드 + 1. 1999 + 1 = 2000 처럼 받아올림이 생겨요.":
+    "next board = this board + 1. Carrying happens, like 1999 + 1 = 2000.",
+  "무브를 세어 둘 곳. 없던 열쇠를 물으면 0 부터 시작해요.":
+    "where we keep the move count. A new key starts at 0.",
+  "다음 보드 = 지금 보드 + 1. 1번 칸이 일의 자리예요.":
+    "next board = this board + 1. Cell 1 is the ones place.",
+  "1999 + 1 = 2000 처럼 받아올림이 생겨요 — 뒤의 9 들만 0 이 돼요.":
+    "carrying happens, like 1999 + 1 = 2000 — only the trailing 9s turn into 0.",
+  "여기서도 뒤에 붙은 M(1) 들만 O(0) 로 돌아가고, 처음 만난 O 가 M 이 돼요.":
+    "same here — only the trailing M(1)s flip to O(0), and the first O we hit becomes M.",
+  "부분집합을 전부 만들어 봐요":
+    "build every subset",
+  "빈 것 하나로 시작해서, 수를 하나씩 넣은 사본을 계속 붙여요":
+    "start from just the empty set, and keep appending copies with one more number added",
+  "빈 부분집합은 세지 않아요":
+    "don't count the empty subset",
+  "MOD 는 1 번 걸음에서 정해 둔 10**9 + 7 이에요":
+    "MOD is the 10**9 + 7 we set back in step 1",
+  "MOD 는 1 번 걸음에서 정해 둔 1000000007LL 이에요":
+    "MOD is the 1000000007LL we set back in step 1",
+  "F 가 많으면 1 << nf 가 int 범위를 넘어 엉뚱한 값이 돼요.":
+    "if F is large, 1 << nf overflows int and gives a wrong value.",
+  "그래서 0/1 을 담은 칸을 두고 다음 조합을 하나씩 만들어요.":
+    "so we keep a 0/1 array and build the next combination one at a time.",
+  "이진수에 1 을 더하듯 다음 조합으로 넘어가요.":
+    "move to the next combination the way you add 1 to a binary number.",
+  "첫 자음의 자리, 아직 못 찾았으면 -1":
+    "index of the first consonant, -1 if not found yet",
+  "첫 자음만 f 로 갈아끼워요":
+    "swap just the first consonant for f",
+  "첫 자음만 f 로":
+    "just the first consonant -> f",
+  "S가 0이어도 이 줄은 항상 있어요 (빈 줄)":
+    "this line is always here even when S is 0 (a blank line)",
+  "채점기는 케이스 사이에 빈 줄을 넣어요 — 그건 건너뛰어요.":
+    "the judge puts a blank line between cases — skip it.",
+  "와일드카드가 아닌 카드가 있을 때만 둘째 줄이 와요.":
+    "the second line only shows up when there's a non-wildcard card.",
 };

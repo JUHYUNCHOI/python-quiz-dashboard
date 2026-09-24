@@ -28,8 +28,10 @@ import { localizeCode } from "@/components/quest/localizeCode";
 export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a34a", vars = null, marks = null, badge = null }) {
   /* 코드 안 한국어 주석을 영어 화면에서도 읽히게 한다 (2026-09-11).
      ⚠️ 원본 배열은 절대 안 건드린다 — 🔒 USACO_VERIFIED 파일이 많다. **그리는 자리에서만** 바꾼다.
-     번역이 없으면 그 줄을 비운다. **줄 수는 유지**하므로 beats 의 hi 번호가 안 밀린다. */
-  const code = localizeCode(rawCode, !!E);
+     번역이 없으면 그 줄을 비운다. **줄 수는 유지**하므로 beats 의 hi 번호가 안 밀린다.
+     ⚠️ 2026-09-24: `lang` prop 을 같이 넘긴다 — 안 넘기면 섹션별로 쪼갠 C++ 조각이
+     언어 추측에서 파이썬으로 오판돼 한국어 주석이 영어 화면에 그대로 남는다. */
+  const code = localizeCode(rawCode, !!E, lang);
   const { idx, setIdx, total } = useTraceStep(beats.length);
 
   /* 언어를 바꾸면 **1단계로 돌아간다** (2026-09-16, pedagogy 판정).

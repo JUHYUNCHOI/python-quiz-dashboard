@@ -208,7 +208,8 @@ function pyHighlight(line, baseColor) {
    ⚠️ 2026-09-23: 한국어 주석을 화면 언어에 맞춘다 — localizeCode.ts 를 그대로 탄다
    (공용 CodeBlock 이 하는 것과 같은 일). 줄 수·줄 순서는 그대로, 주석 내용만 바뀐다. */
 const CodeSnippet = ({ lines, highlight: hl, E }) => {
-  const displayLines = localizeCode(lines, E);
+  // 이 quest 는 파이썬만 쓴다 — 추측에 기대지 않고 언어를 못박는다 (2026-09-24).
+  const displayLines = localizeCode(lines, E, "py");
   return (
     <div style={{
       background: "#1e293b", borderRadius: 10, padding: "10px 8px",
