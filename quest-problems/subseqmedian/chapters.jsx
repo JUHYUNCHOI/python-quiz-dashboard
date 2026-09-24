@@ -179,8 +179,8 @@ export function makeSubseqMedianCh2(E, lang = "py") {
                 🐢 {t(E, "Brute: list every subsequence", "느림: 모든 부분수열 나열")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "2^N subsequences, checking each for good + median. Fine to confirm small answers, but hopeless once N passes ~25.",
-                      "부분수열 2^N 개를 만들어 좋은지와 중앙값을 확인해요. 작은 답을 맞춰 볼 때는 좋지만, N 이 ~25 만 넘어도 못 해요.")}
+                {t(E, "2^N (multiplied by itself N times) subsequences, checking each for good + median. Fine to confirm small answers, but hopeless once N passes ~25.",
+                      "부분수열 2^N(2를 N번 곱한 수) 개를 만들어 좋은지와 중앙값을 확인해요. 작은 답을 맞춰 볼 때는 좋지만, N 이 ~25 만 넘어도 못 해요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>

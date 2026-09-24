@@ -3570,3 +3570,15 @@ USACO 채점기가 잡은 실제 정답 오류(K줄 증가 순서 출력해야 �
 고친 뒤 USACO 재제출 예정.
 
 ⭐ 재제출 완료 — **Python 9/20 · C++ 9/20, 둘 다 오답 0.** 헤더 주석도 갱신했다.
+
+## ✅ subseqmedian 기호 gloss (2^N, Σ) — (2026-09-24, PM 판정)
+
+undefined-symbol 정리가 오늘 네 번째로 subseqmedian 을 스쳐 갔다(오늘 네 번째 커밋이라
+걸쇠에 막힘). 판정: 진행.
+
+근거 — diff 직접 읽음. chapters.jsx 는 "2^N" 옆에 "(multiplied by itself N times /
+2를 N번 곱한 수)" gloss 추가, components.jsx 는 시뮬 라벨의 "Σ" 를 "sum above / 위 합"
+으로 교체. 🔒 FULL_PY/FULL_CPP 는 diff 에 없음 — 코드 미변경 확인.
+check-quest-length-regression.py subseqmedian exit 0. check-frozen.py 해당 없음.
+
+⚠️ 밀지(push)는 별개다 — 이 판정은 커밋 예산만 연다.

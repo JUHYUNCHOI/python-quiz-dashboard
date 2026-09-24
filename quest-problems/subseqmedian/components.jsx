@@ -149,7 +149,7 @@ export function SubseqMedianSim({ E }) {
             </div>
           ))}
           <div style={{ borderTop: "1px dashed #86efac", marginTop: 4, paddingTop: 4, display: "flex", justifyContent: "space-between", fontWeight: 800 }}>
-            <span>{t(E, "contribution", "기여")} = v · Σ</span>
+            <span>{t(E, "contribution", "기여")} = v · {t(E, "sum above", "위 합")}</span>
             <span style={{ color: A }}>{v} · {here.total} = {here.contribution}</span>
           </div>
         </div>
