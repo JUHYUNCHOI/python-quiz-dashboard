@@ -8,16 +8,19 @@ vector<vector<int>> recipe;    // recipe[i] = ingredients to make 1 of metal i
 
 // Try to make 1 unit of metal m using a working copy of stock.
 bool make(int m, vector<long long> &stock) {
-    if (stock[m] > 0) {
-        stock[m]--;
-        return true;   // have one ready
-    }
-    if (recipe[m].empty()) {
-        return false;             // no stock, no recipe
-    }
-    for (int ing : recipe[m]) {                      // craft each ingredient
-        if (!make(ing, stock)) {
-            return false;
+    vector<int> todo;
+    todo.push_back(m);
+    while (!todo.empty()) {
+        int cur = todo.back();
+        todo.pop_back();
+        if (stock[cur] > 0) {
+            stock[cur]--;                 // have one ready
+        } else if (recipe[cur].empty()) {
+            return false;                 // no stock, no recipe
+        } else {
+            for (int ing : recipe[cur]) {
+                todo.push_back(ing);      // need every ingredient too
+            }
         }
     }
     return true;

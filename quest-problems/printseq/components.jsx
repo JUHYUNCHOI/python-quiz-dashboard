@@ -151,119 +151,12 @@ export function PrintseqExplorer({ E }) {
 export function PrintseqSim({ E }) { return <PrintseqExplorer E={E} />; }
 export function PrintseqRunner() { return null; }
 
-/* ════════════════════════════════════════════════════════════════════
-   Progressive code: 5 sections.
-   1. Input loop                — read T, then per case
-   2. Define recursive can()    — base cases (empty, k<=0)
-   3. Option A — all same       — k ≥ 1 → True
-   4. Options B + C             — repeating block + split
-   5. Memoize + full code       — lru_cache, output YES/NO
-   ════════════════════════════════════════════════════════════════════ */
+/* 2026-09-24: PSQ_S1_PY~PSQ_S4_PY (재귀 예시 스캐폴딩, 5개 배열) 를 여기서 지웠다 —
+   chapters.jsx 어디서도 import 하지 않는 죽은 코드였다(grep 으로 확인, 참조 0곳).
+   화면에 한 번도 그려진 적이 없어 학생 영향 없음. 재귀는 이제 이 파일 안
+   PSQ_FAST_PY/PSQ_FAST_CPP(🎁 번외·선택)에만 남아 있다 — 표준 교육 자리라 보존.
+   근거: memory/feedback_student_code_plain_and_no_recursion.md */
 
-const PSQ_S1_PY = [
-  "T = int(input())               # 테스트 케이스 수",
-  "for _ in range(T):",
-  "    # 첫 줄: N K → map 으로 한 번에 int 두 개",
-  "    N, K = map(int, input().split())   # N=목표 길이(참고), K=PRINT 예산",
-  "",
-  "    # 다음 줄: 목표 수열 → tuple",
-  "    #  (tuple 이어야 나중에 '메모'의 열쇠로 쓸 수 있어요)",
-  "    target = tuple(map(int, input().split()))",
-  "    # 이 케이스 풀기 (다음 단계에서)",
-];
-const PSQ_S1_CPP = [
-  "#include <iostream>",
-  "#include <vector>",
-  "using namespace std;",
-  "",
-  "int main() {",
-  "    int T;",
-  "    cin >> T;",
-  "    for (int t = 0; t < T; t++) {",
-  "        int N, K;",
-  "        cin >> N >> K;",
-  "        vector<int> a(N);",
-  "        for (int i = 0; i < N; i++) {",
-  "            cin >> a[i];",
-  "        }",
-  "        // solve case (next steps)",
-  "    }",
-];
-
-const PSQ_S2_PY = [
-  "# can(seq, budget): 수열 seq 를 PRINT budget 개 이하로 만들 수 있나? (YES/NO)",
-  "def can(seq, budget):",
-  "    # 막다른 길 먼저: 빈 수열이거나 예산이 없으면 불가능",
-  "    if len(seq) == 0:",
-  "        return False",
-  "    if budget <= 0:",
-  "        return False",
-  "    # ... (요령 ①②③ 은 다음 단계에서)",
-  "    return False",
-];
-const PSQ_S3_PY = [
-  "def can(seq, budget):",
-  "    if len(seq) == 0 or budget <= 0:",
-  "        return False",
-  "",
-  "    # 요령 ①: 숫자가 다 같은지 확인 (하나라도 다르면 all_same = False)",
-  "    all_same = True",
-  "    for x in seq:",
-  "        if x != seq[0]:",
-  "            all_same = False",
-  "            break",
-  "    if all_same:",
-  "        return True   # PRINT 1 개를 REP 로 감싸면 끝",
-  "",
-  "    return False  # (요령 ②③ 은 다음 단계)",
-];
-
-const PSQ_S4_PY = [
-  "def can(seq, budget):",
-  "    if len(seq) == 0 or budget <= 0:",
-  "        return False",
-  "",
-  "    # 요령 ①: 다 같은지 확인",
-  "    all_same = True",
-  "    for x in seq:",
-  "        if x != seq[0]:",
-  "            all_same = False",
-  "            break",
-  "    if all_same:",
-  "        return True",
-  "",
-  "    n = len(seq)",
-  "",
-  "    # 요령 ②: 같은 블록이 copies 번 반복되는 모양이면",
-  "    #         → REP copies 로 감싸면 되니, 블록만 풀면 됨",
-  "    for copies in range(2, n + 1):",
-  "        if n % copies == 0:",
-  "            block_len = n // copies",
-  "            block = seq[:block_len]",
-  "",
-  "            # 정말 이 블록이 계속 반복되는지 확인",
-  "            is_repeat = True",
-  "            for i in range(n):",
-  "                if seq[i] != block[i % block_len]:",
-  "                    is_repeat = False",
-  "                    break",
-  "            if is_repeat:",
-  "                if can(block, budget):    # 같은 질문, 더 작게! (재귀)",
-  "                    return True",
-  "",
-  "    # 요령 ③: 둘로 잘라서 예산을 나눠 갖기",
-  "    #         왼쪽이 left_budget 개, 오른쪽이 나머지",
-  "    for cut in range(1, n):",
-  "        for left_budget in range(1, budget):",
-  "            left = seq[:cut]",
-  "            right = seq[cut:]",
-  "            right_budget = budget - left_budget",
-  "            if can(left, left_budget):           # 왼쪽 되나?",
-  "                if can(right, right_budget):     # 오른쪽도 되나?",
-  "                    return True                  # 둘 다 → 성공!",
-  "",
-  "    return False   # 세 요령 다 실패 → 불가능",
-];
 const PSQ_FAST_PY = [
   "T = int(input())          # 테스트 케이스 수",
   "",

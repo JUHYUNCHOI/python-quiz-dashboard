@@ -3,13 +3,18 @@
 //   Real problem: USACO 2022 US Open Bronze #3 "Alchemy" (cpid 1229).
 //   MAXIMIZE units of metal N. Recipe line is "L M ing1..ingM"
 //   (L = product, M = #ingredients). Greedy crafting: to make 1 of m,
-//   use stock if any else recursively craft each ingredient; a failed
+//   use stock if any else craft each ingredient first; a failed
 //   attempt must NOT consume stock (work on a copy, commit on success).
 //   Python: official sample PASS (output 1) — local verify
 //   C++:    official sample PASS (output 1) — local verify (g++ -std=c++17)
 //   2026-09-22: FULL_PY / FULL_CPP 한 글자도 안 바꿈 — CodeWalk 표시(beats/marks/vars)만
 //   추가했다. 코드가 그대로라 재제출 불필요. AC 11/11 (2026-06-16) 그대로 유효.
-//   코드 자체를 고치면 그때 USACO 재제출 — REPO_ROOT/USACO_VERIFICATION.md 참고
+//   2026-09-24: 선생님 지시("코드는 아이들이 이해하기 쉽게 ... 되도록이면 재귀 사용하지
+//   말기") — make() 를 재귀 → todo 스택 반복문으로 바꿨다. 알고리즘은 그대로다(방문
+//   순서만 바뀜: 실패하면 trial 전체를 버리므로 부분 되돌리기가 필요 없다).
+//   무작위 500케이스 + 공식 샘플: 옛 재귀 코드와 0 불일치. 깊은 체인(N 이 클 때)에서
+//   재귀는 RecursionError 위험이 있었는데 반복문은 그 위험이 없다.
+//   ⚠️ FULL_PY / FULL_CPP 를 바꿨다 — **USACO 재제출 필요**(cpid=1229). 결과 나오면 이 헤더 갱신.
 
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
@@ -20,7 +25,7 @@ const A = "#d97706";
 
 /* ================================================================
    Interactive sim: Greedy recipe maker
-   Shows the make(metal) recursion in action on a tiny example.
+   Shows the make(metal) crafting process in action on a tiny example.
    Student clicks "Make metal 3" — watch stock get consumed, see
    how many total units of N can be crafted before failure.
    ================================================================ */
@@ -223,9 +228,6 @@ export function RecipeSimulator({ E }) {
 }
 
 const FULL_PY = [
-  "import sys",
-  "sys.setrecursionlimit(100000)",
-  "",
   "N = int(input())",
   "have = [0] + list(map(int, input().split()))   # have[i] = units of metal i (1-indexed)",
   "K = int(input())",
@@ -237,14 +239,15 @@ const FULL_PY = [
   "",
   "# Try to make 1 unit of metal m using a working copy of stock.",
   "def make(m, stock):",
-  "    if stock[m] > 0:                # have one ready — use it",
-  "        stock[m] -= 1",
-  "        return True",
-  "    if not recipe[m]:              # no stock and no recipe — give up",
-  "        return False",
-  "    for ing in recipe[m]:         # craft every ingredient first",
-  "        if not make(ing, stock):",
+  "    todo = [m]                    # metals we still need to check",
+  "    while todo:",
+  "        cur = todo.pop()",
+  "        if stock[cur] > 0:        # have one ready — use it",
+  "            stock[cur] -= 1",
+  "        elif not recipe[cur]:     # no stock and no recipe — give up",
   "            return False",
+  "        else:",
+  "            todo.extend(recipe[cur])   # need every ingredient too",
   "    return True",
   "",
   "ans = 0",
@@ -269,16 +272,19 @@ const FULL_CPP = [
   "",
   "// Try to make 1 unit of metal m using a working copy of stock.",
   "bool make(int m, vector<long long> &stock) {",
-  "    if (stock[m] > 0) {",
-  "        stock[m]--;",
-  "        return true;   // have one ready",
-  "    }",
-  "    if (recipe[m].empty()) {",
-  "        return false;             // no stock, no recipe",
-  "    }",
-  "    for (int ing : recipe[m]) {                      // craft each ingredient",
-  "        if (!make(ing, stock)) {",
-  "            return false;",
+  "    vector<int> todo;",
+  "    todo.push_back(m);",
+  "    while (!todo.empty()) {",
+  "        int cur = todo.back();",
+  "        todo.pop_back();",
+  "        if (stock[cur] > 0) {",
+  "            stock[cur]--;                 // have one ready",
+  "        } else if (recipe[cur].empty()) {",
+  "            return false;                 // no stock, no recipe",
+  "        } else {",
+  "            for (int ing : recipe[cur]) {",
+  "                todo.push_back(ing);      // need every ingredient too",
+  "            }",
   "        }",
   "    }",
   "    return true;",
@@ -348,20 +354,22 @@ export function getAlchemySections(E) {
 }
 
 /* ================================================================
-   CodeWalk 걸음 (2026-09-22, PM 배정 ④ + 학생 보고 ①)
-   🔒 FULL_PY / FULL_CPP 는 한 글자도 안 건드린다 — 표시(beats/marks/vars)만.
-   생각 순서: 무엇을 내놓나 → make() 는 어떻게 만드나(여기서 재귀를 처음 이름 붙임,
+   CodeWalk 걸음 (2026-09-24 개정 — 재귀 → 반복문)
+   생각 순서: 무엇을 내놓나 → make() 는 어떻게 만드나(할 일 목록 방식,
    1쪽 시뮬 경험과 연결) → 몇 번 할 수 있나(먼저 든 순진한 생각 → 복사본으로 고침).
 
-   학생(2026-09-22) 5쪽에서 그만뒀다: "함수가 자기 자신을 또 부르는 게 왜 되는 건지
-   전혀 몰랐어요. '재료부터 먼저 다 만들어요' 라는 주석만 있고, 함수가 자기를 다시
-   부른다는 것 자체를 아무도 말해준 적이 없어요." → beat 2 에서 "재귀" 라는 이름을
-   직접 붙이고, marks 로 ✋베이스/↺재귀를 상시 표시한다 (printseq 표준과 같은 문구).
+   2026-09-22 에는 이 자리가 재귀(↺)를 가르쳤다. 학생이 5쪽에서 그만뒀다 —
+   "함수가 자기 자신을 또 부르는 게 왜 되는 건지 전혀 몰랐어요." →
+   2026-09-24 선생님 지시("되도록이면 재귀 사용하지 말기")로 make() 자체를
+   재귀 없는 '할 일 목록(todo)' 반복문으로 바꿨다 — 이제 재귀라는 낱말 자체가
+   필요 없다. 시뮬(1쪽)이 보여준 "재고 없으면 그 재료부터 만든다" 는 그대로
+   유효하다 — 이번엔 함수가 자기를 부르는 대신 할 일 목록에 적어 둔다.
    ================================================================ */
 const _ALCHEMY_VARS = [
   { v: "have", ko: "지금 가진 금속 개수(재고)", en: "units of each metal in stock" },
   { v: "recipe", ko: "금속마다 있는 레시피(없을 수도 있음)", en: "each metal's recipe, if it has one" },
   { v: "stock", ko: "make() 함수 안에서 재고를 가리키는 이름 — trial 이 이 이름으로 들어와요", en: "the name make() uses for stock inside itself — trial is passed in under this name" },
+  { v: "todo", ko: "아직 확인 안 한 금속들의 할 일 목록", en: "the to-do list of metals we still need to check" },
   { v: "trial", ko: "이번 시도용 재고 복사본", en: "a working copy of stock for this attempt" },
   { v: "ans", ko: "성공한 횟수 = 금속 N 최종 개수", en: "successful crafts = final units of metal N" },
 ];
@@ -372,21 +380,22 @@ export function getAlchemyWalk(E, lang = "py") {
       code: FULL_CPP,
       vars: _ALCHEMY_VARS,
       marks: [
-        { from: 10, to: 13, ko: "✋ 베이스 케이스", en: "✋ base case" },
-        { from: 14, to: 16, ko: "✋ 베이스 케이스", en: "✋ base case" },
-        { from: 17, to: 21, color: "#818cf8", ko: "↺ 재귀!", en: "↺ recursion!" },
+        { from: 10, to: 11, ko: "📋 할 일 목록", en: "📋 the to-do list" },
+        { from: 15, to: 16, ko: "✅ 재고 있으면 바로 씀", en: "✅ use stock if ready" },
+        { from: 17, to: 18, ko: "🛑 포기", en: "🛑 give up" },
+        { from: 20, to: 22, color: "#0d9488", ko: "➕ 목록에 더 넣기", en: "➕ add more to the list" },
       ],
       beats: [
         { hi: [0, 6], bubble: t(E,
           "What do we need to output?\nThe most units of metal N. We need somewhere to keep what we have and each recipe — declared globally since make() needs them too.",
           "무엇을 내놓아야 하나요?\n금속 N 최대 개수예요. 그러려면 가진 것(have)과 레시피(recipe)를 저장해 둬야 해요 — make() 함수도 써야 해서 전역으로 선언해요.") },
-        { hi: [8, 23], bubble: t(E,
-          "Here, make() calls itself (line 18) — a function calling itself is called recursion. The case where it stops calling itself is called the base case (✋).\nUse stock if any (✋ base case), or give up if there's no stock and no recipe (✋ base case). Otherwise craft every ingredient the same way first — so it calls itself again (↺ recursion).\nThat's exactly what you clicked in the sim earlier: \"no stock? build that ingredient first.\" stock is passed by reference (&) so the decrease inside recursion really sticks.",
-          "여기서 make 가 자기 자신을 다시 불러요(18번째 줄) — 이렇게 함수가 자기를 부르는 것을 재귀라고 해요. 재귀를 멈추는 경우를 베이스 케이스라고 불러요(✋).\n재고 있으면 바로 씀(✋ 베이스 케이스), 재고도 레시피도 없으면 포기(✋ 베이스 케이스). 그 외엔 재료부터 똑같이 만들어요 — 그래서 자기 자신을 또 불러요(↺ 재귀).\n아까 시뮬에서 눌러본 '재고 없으면 그 재료부터 만든다' 가 바로 이 재귀예요. stock 을 참조(&)로 넘겨서, 재귀 안에서 줄인 값이 진짜로 남아요.") },
-        { hi: [25, 40], bubble: t(E,
+        { hi: [8, 26], bubble: t(E,
+          "Here's the trick: make() keeps a to-do list (todo) of metals it still needs, starting with just the target itself (📋).\nIt looks at the item on top: if there's stock, use it (✅). If there's no stock and no recipe, give up (🛑) — the whole attempt fails right there. Otherwise, add every ingredient in its recipe to the list (➕) so they get checked too.\nThat's exactly what you clicked in the sim earlier: \"no stock? build that ingredient first.\" We just keep looping until the list is empty — no need for the function to call itself.",
+          "여기가 핵심이에요 — make() 는 아직 확인 안 한 금속들의 '할 일 목록(todo)' 을 들고 있어요. 처음엔 목표 금속 하나만 올려둬요(📋).\n목록 맨 위 것을 봐요. 재고 있으면 바로 씀(✅). 재고도 레시피도 없으면 그 자리에서 포기(🛑) — 이번 시도 전체가 실패해요. 그 외엔 레시피에 있는 재료를 전부 목록에 더 넣어요(➕) — 그것들도 확인해야 하니까요.\n아까 시뮬에서 눌러본 '재고 없으면 그 재료부터 만든다' 가 바로 이거예요. 목록이 빌 때까지 반복만 하면 돼요 — 함수가 자기를 다시 부를 필요가 없어요.") },
+        { hi: [28, 43], bubble: t(E,
           "Now read the input — N, then have, then each recipe.",
           "이제 입력을 읽어요 — N, 가진 것(have), 레시피(recipe) 차례로요.") },
-        { hi: [41, 53], bubble: t(E,
+        { hi: [44, 53], bubble: t(E,
           "Now, how many times can we do this?\nIf we spend have directly, a failed recipe can't undo the stock it already used.\nSo we try on a copy (trial) first, and only commit it to have on success. The count (ans) when it finally fails is the answer.",
           "이제 몇 번 할 수 있을까요?\n바로 have 를 깎으며 만들면, 레시피 중간에 실패했을 때 이미 쓴 재고를 되돌릴 수 없어요.\n그래서 trial 복사본에서 먼저 시도하고, 성공했을 때만 have 에 반영해요. 실패할 때까지 반복한 횟수(ans)가 답이에요.") },
       ],
@@ -396,18 +405,19 @@ export function getAlchemyWalk(E, lang = "py") {
     code: FULL_PY,
     vars: _ALCHEMY_VARS,
     marks: [
-      { from: 14, to: 16, ko: "✋ 베이스 케이스", en: "✋ base case" },
-      { from: 17, to: 18, ko: "✋ 베이스 케이스", en: "✋ base case" },
-      { from: 19, to: 21, color: "#818cf8", ko: "↺ 재귀!", en: "↺ recursion!" },
+      { from: 11, to: 11, ko: "📋 할 일 목록", en: "📋 the to-do list" },
+      { from: 14, to: 15, ko: "✅ 재고 있으면 바로 씀", en: "✅ use stock if ready" },
+      { from: 16, to: 17, ko: "🛑 포기", en: "🛑 give up" },
+      { from: 19, to: 19, color: "#0d9488", ko: "➕ 목록에 더 넣기", en: "➕ add more to the list" },
     ],
     beats: [
-      { hi: [0, 10], bubble: t(E,
+      { hi: [0, 7], bubble: t(E,
         "What do we need to output?\nThe most units of metal N we can craft. First read what we start with (have) and each metal's recipe.",
         "무엇을 내놓아야 하나요?\n금속 N 을 최대 몇 개까지 만들 수 있는지예요. 그러려면 먼저 가진 것(have)과 레시피(recipe)부터 읽어야 해요.") },
-      { hi: [12, 22], bubble: t(E,
-        "Here, make() calls itself (line 21) — a function calling itself is called recursion. The case where it stops calling itself is called the base case (✋).\nFor metal m: use stock if any (✋ base case), or give up if there's no stock and no recipe (✋ base case). Otherwise, craft every ingredient the same way first — so it calls itself again (↺ recursion).\nThat's exactly what you clicked in the sim earlier: \"no stock? build that ingredient first.\"",
-        "여기서 make 함수가 자기 자신을 다시 불러요(21번째 줄) — 이렇게 함수가 자기를 부르는 것을 재귀라고 해요. 재귀를 멈추는 경우를 베이스 케이스라고 불러요(✋).\n금속 m 하나: 재고 있으면 바로 씀(✋ 베이스 케이스), 재고도 레시피도 없으면 포기(✋ 베이스 케이스). 그 외엔 재료부터 똑같이 만들어요 — 그래서 자기 자신을 또 불러요(↺ 재귀).\n아까 시뮬에서 눌러본 '재고 없으면 그 재료부터 만든다' 가 바로 이 재귀예요.") },
-      { hi: [24, 32], bubble: t(E,
+      { hi: [9, 20], bubble: t(E,
+        "Here's the trick: make() keeps a to-do list (todo) of metals it still needs, starting with just the target itself (📋).\nIt looks at the item on top: if there's stock, use it (✅). If there's no stock and no recipe, give up (🛑) — the whole attempt fails right there. Otherwise, add every ingredient in its recipe to the list (➕) so they get checked too.\nThat's exactly what you clicked in the sim earlier: \"no stock? build that ingredient first.\" We just keep looping until the list is empty.",
+        "여기가 핵심이에요 — make() 는 아직 확인 안 한 금속들의 '할 일 목록(todo)' 을 들고 있어요. 처음엔 목표 금속 하나만 올려둬요(📋).\n목록 맨 위 것을 봐요. 재고 있으면 바로 씀(✅). 재고도 레시피도 없으면 그 자리에서 포기(🛑) — 이번 시도 전체가 실패해요. 그 외엔 레시피에 있는 재료를 전부 목록에 더 넣어요(➕) — 그것들도 확인해야 하니까요.\n아까 시뮬에서 눌러본 '재고 없으면 그 재료부터 만든다' 가 바로 이거예요. 목록이 빌 때까지 반복만 하면 돼요.") },
+      { hi: [22, 30], bubble: t(E,
         "Now, how many times can we do this?\nFirst idea: just spend real stock while crafting — but if a recipe fails partway, we've already wasted stock other things still need.\nSo we try on a copy (trial) first, and only commit it to have when the whole craft succeeds. The count (ans) when it finally fails is the answer.",
         "이제 이걸 몇 번 할 수 있을까요?\n먼저 이렇게 생각해볼 수 있어요 — 재고를 바로 깎으면서 만들면 어떨까요? 근데 레시피 중간에 실패하면, 다른 곳에 쓸 재고까지 이미 써버려요.\n그래서 복사본(trial)에서 먼저 시도하고, 성공했을 때만 진짜 재고(have)에 반영해요. 더 못 만들 때까지 반복한 횟수(ans)가 답이에요.") },
     ],

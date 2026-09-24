@@ -178,6 +178,29 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
         "격자를 몇 번이고 훑는 대신, 한 번만 훑는 방법을 찾아봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
+          {/* 2026-09-24: 원문(mcc20citytour.pdf) 이 풀이 절에서 명시적으로 짚는
+              흔한 오답 — "이웃과 건널 수 있는가" 만 보면 틀린다. D=2, 4×4 예제는
+              원문에 나온 그 예제 그대로다. PM 판정: 새 쪽을 만들지 않고 이 쪽
+              (plan) 에 자리를 찾았다. */}
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: "10px 14px", marginBottom: 10 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: "#c2410c", marginBottom: 6 }}>
+              ⚠️ {t(E, "A common mistake first", "먼저, 흔한 실수 하나를 봐요")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 8, whiteSpace: "pre-line" }}>
+              {t(E,
+                "The middle four cells below all match each other, so they can hop between themselves.\nBut the border cannot hop into the middle — the gap is 2, and D = 2 needs a gap LESS than D.\nIf Fluffy's home is on the border, the middle four are unreachable, even though they hop fine among themselves.\nChecking \"can this cell hop to some neighbor\" alone would wrongly count them.\nWe have to trace an actual path back to home.",
+                "아래 그림에서 가운데 네 칸은 서로 높이가 같아서 건널 수 있어요.\n하지만 테두리에서 가운데로는 못 건너가요 — 차이가 2 인데, D = 2 는 차이가 2 보다 작아야 해요.\nFluffy 의 집이 테두리에 있으면, 가운데 네 칸은 서로 건널 수 있어도 집에서는 갈 수 없어요.\n\"이웃과 건널 수 있는가\" 만 보면 이 네 칸도 답에 넣는 실수를 해요.\n집에서부터 실제로 이어지는 길이 있는지를 봐야 해요.")}
+            </div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6 }}>
+                <div style={{ color: "#8b949e", fontSize: 10.5, marginBottom: 2 }}>D = 2</div>
+                <div>10 10 10 10</div>
+                <div>10&nbsp;&nbsp;8&nbsp;&nbsp;8 10</div>
+                <div>10&nbsp;&nbsp;8&nbsp;&nbsp;8 10</div>
+                <div>10 10 10 10</div>
+              </div>
+            </div>
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>

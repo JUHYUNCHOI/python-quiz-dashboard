@@ -1,7 +1,3 @@
-import sys
-input = sys.stdin.readline
-sys.setrecursionlimit(100000)
-
 N = int(input())
 have = [0] + list(map(int, input().split()))   # have[i] = units of metal i (1-indexed)
 K = int(input())
@@ -13,14 +9,15 @@ for _ in range(K):
 
 # Try to make 1 unit of metal m using a working copy of stock.
 def make(m, stock):
-    if stock[m] > 0:                # have one ready — use it
-        stock[m] -= 1
-        return True
-    if not recipe[m]:              # no stock and no recipe — give up
-        return False
-    for ing in recipe[m]:         # craft every ingredient first
-        if not make(ing, stock):
+    todo = [m]                    # metals we still need to check
+    while todo:
+        cur = todo.pop()
+        if stock[cur] > 0:        # have one ready — use it
+            stock[cur] -= 1
+        elif not recipe[cur]:     # no stock and no recipe — give up
             return False
+        else:
+            todo.extend(recipe[cur])   # need every ingredient too
     return True
 
 ans = 0
