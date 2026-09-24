@@ -655,8 +655,8 @@ export function MooTraceSimulator({ E, lang = "py" }) {
           칸 위에 직접 붙는 뱃지(j✗ / j 가능)로 보여준다. */}
       {s.kind === "init" && (
         <Bubble cx={ROW_W / 2} bg="#fffbeb" bd="#fcd34d" fg="#92400e">
-          {t(E, <>Pin a middle <b>j</b> — then look both ways.</>,
-                <>가운데 <b>j</b> 를 하나 박고 — 양쪽을 봐요.</>)}
+          {t(E, <>Pin a middle <b>j</b> — then look both ways. <i>(32 steps — you can move on below without clicking them all.)</i></>,
+                <>가운데 <b>j</b> 를 하나 박고 — 양쪽을 봐요. <i>(32단계예요 — 다 안 눌러도 아래로 넘어갈 수 있어요.)</i></>)}
         </Bubble>
       )}
 
@@ -998,6 +998,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
       {s.kind === "final" && (
         <div style={{ maxWidth: 500, margin: "0 auto 12px", background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "11px 14px", fontSize: 11.5, lineHeight: 1.7, color: "#1e3a8a", wordBreak: "keep-all" }}>
           <div style={{ fontWeight: 800, marginBottom: 5, color: "#1d4ed8" }}>⚡ {t(E, "Why is this faster? (the technique)", "왜 빨라졌나 — 기법")}</div>
+          <div style={{ opacity: 0.85, marginBottom: 3 }}>{t(E, "(N³ or N² is shorthand for how fast the work grows as N grows — N² means doubling N makes about 4× the work.)", "(N³ · N² 같은 표기는 N 이 커질 때 일이 몇 배로 느는지를 적는 말이에요. N² 면 N 이 두 배일 때 일은 약 네 배예요.)")}</div>
           <div>• {t(E, "Triple loop tries every i, j, k → N³.", "3중 for 는 i·j·k 를 다 시도해요 → N³.")}</div>
           <div>• {t(E, "Fix j: the two gaps (j−i) and (k−j) are INDEPENDENT → put i as far LEFT as possible, k as far RIGHT as possible.  No middle values to try.", "j 를 고정하면 두 거리 (j−i) 와 (k−j) 가 서로 상관없어져요.\n그래서 i 는 최대한 왼쪽, k 는 최대한 오른쪽에 두면 돼요. 중간값은 볼 필요가 없어요.")}</div>
           <div style={{ fontWeight: 700, marginTop: 2 }}>→ {t(E, "one left scan + one right scan per j → N².  Technique: fix the middle + greedy extremes.", "j 마다 왼쪽 한 번,\n오른쪽 한 번만 보면 돼요 → N².  가운데를 고정하고 양 끝을 최대한 벌리는 방법이에요.")}</div>
@@ -1146,8 +1147,8 @@ export function Mooin3FastSim({ E }) {
       }}>
         💬{" "}
         {s.kind === "intro" && s.sub === 0 && t(E,
-          `A moo is 3 letters — the first is DIFFERENT, the last two are the SAME letter (like a-b-b here).`,
-          `moo 는 세 글자예요 — 앞은 '다른 글자', 뒤 두 개는 '같은 글자'. (여기선 a-b-b 처럼)`)}
+          `A moo is 3 letters — the first is DIFFERENT, the last two are the SAME letter (like a-b-b here). (12 steps — you can move on below without clicking them all.)`,
+          `moo 는 세 글자예요 — 앞은 '다른 글자', 뒤 두 개는 '같은 글자'. (여기선 a-b-b 처럼) 12단계예요 — 다 안 눌러도 아래로 넘어갈 수 있어요.`)}
         {s.kind === "intro" && s.sub === 1 && t(E,
           `So we split by that repeated letter — is it a? b? c? Only 3 cases.`,
           `그럼 그 '같은 글자'가 뭔지로 나눠서 찾으면 돼요 — a? b? c? 세 경우뿐이에요.`)}
@@ -2232,8 +2233,8 @@ export function Mooin3TableSim({ E, lang = "py" }) {
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
           {s.kind === "intro" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#ecfeff" bd="#67e8f9" fg="#155e75">
-              {t(E, <>First fill <b>latest_same[{CH}]</b> — for each spot, the <b>rightmost '{CH}' so far</b> (<b>−1</b> = none yet). Scan left→right.</>,
-                    <>먼저 <b>latest_same[{CH}]</b> 를 채워요 — 각 자리까지 중 <b>가장 오른쪽 '{CH}'</b>가 어디인지 (<b>−1</b> = 아직 없음). 왼→오로 훑어요.</>)}
+              {t(E, <>First fill <b>latest_same[{CH}]</b> — for each spot, the <b>rightmost '{CH}' so far</b> (<b>−1</b> = none yet). Scan left→right. <i>(22 steps — you can move on below without clicking them all.)</i></>,
+                    <>먼저 <b>latest_same[{CH}]</b> 를 채워요 — 각 자리까지 중 <b>가장 오른쪽 '{CH}'</b>가 어디인지 (<b>−1</b> = 아직 없음). 왼→오로 훑어요. <i>(22단계예요 — 다 안 눌러도 아래로 넘어갈 수 있어요.)</i></>)}
             </SimBubble>
           )}
           {s.kind === "L" && (
@@ -2520,8 +2521,8 @@ export function Mooin3MapSim({ E }) {
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
           {s.kind === "intro" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={330}>
-              {t(E, <>Instead of 3 tables — keep <b>one list of spots per letter</b>. (a map / dict.)</>,
-                    <>표 3개 대신 — <b>글자마다 '나온 위치 목록' 하나</b>만 만들어요. (map / dict.)</>)}
+              {t(E, <>Instead of 3 tables — keep <b>one list of spots per letter</b>. (a map / dict.) <i>(29 steps — you can move on below without clicking them all.)</i></>,
+                    <>표 3개 대신 — <b>글자마다 '나온 위치 목록' 하나</b>만 만들어요. (map / dict.) <i>(29단계예요 — 다 안 눌러도 아래로 넘어갈 수 있어요.)</i></>)}
             </SimBubble>
           )}
           {s.kind === "buildPos" && (

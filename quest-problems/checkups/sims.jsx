@@ -1340,8 +1340,8 @@ function _buildExpandSteps(E) {
   return [
     /* ── 0. Setup (2 steps) ── */
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
-      bubble: t(E, "Two rows to know: 🐮 cow (top) and 📋 want (bottom). A spot is a checkup (green) when they already match.",
-                   "두 줄만 알면 돼요. 위는 🐮 소, 아래는 📋 want 예요. 두 값이 같은 자리가 검진(초록)이에요.") },
+      bubble: t(E, "Two rows to know: 🐮 cow (top) and 📋 want (bottom). A spot is a checkup (green) when they already match. From here spots are counted from 0 — the leftmost is spot 0.",
+                   "두 줄만 알면 돼요. 위는 🐮 소, 아래는 📋 want 예요. 두 값이 같은 자리가 검진(초록)이에요. 여기부터 자리는 0 부터 세요 — 맨 왼쪽이 자리 0 이에요.") },
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "No flip yet. Only spot 4 matches (5=5) → matches = 1. This is our starting point.",
                    "아직 아무것도 안 뒤집었어요. 자리 4만 맞아요 (5=5). 그래서 matches = 1, 여기서 출발해요.") },

@@ -207,8 +207,8 @@ export function makeCheckupsCh2(E, lang = "py") {
       ],
       correct: 2,
       explain: t(E,
-        "Three nested loops → O(N³).  Doubling N multiplies work by 2³ = 8.  That's why 600 felt so much slower than 300.",
-        "반복문 세 겹이라 O(N³) 이에요. N 을 두 배로 하면 일은 2³ = 8 배가 돼요. 그래서 600 이 300 보다 훨씬 느렸어요."),
+        "Three nested loops → O(N³).  Doubling N multiplies work by 2³ = 8.  That's why 600 felt so much slower than 300.  O(...) is just shorthand for how fast the work grows as N grows.",
+        "반복문 세 겹이라 O(N³) 이에요. N 을 두 배로 하면 일은 2³ = 8 배가 돼요. 그래서 600 이 300 보다 훨씬 느렸어요. O(...) 는 N 이 커질 때 일이 몇 배로 느는지를 적는 표기예요."),
     },
 
     /* 2-8 — [결-b 한계] why brute times out on N=7500. */

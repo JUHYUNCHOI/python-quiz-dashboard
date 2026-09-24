@@ -215,6 +215,7 @@ abcabbacabac
               🔍 {t(E, "Line by line", "한 줄씩")}
             </div>
             <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>12 5</code> — {t(E, "N = 12 (string length), Q = 5 (queries)", "N = 12 (글자 줄의 길이), Q = 5 (물음 개수)")}</div>
+            <div style={{ marginTop: 6, fontWeight: 600, color: "#5b21b6" }}>📐 {t(E, "Real limits: N up to 100,000, Q up to 30,000.", "진짜 문제에서는 N 이 최대 10만, Q 가 최대 3만이에요.")}</div>
             <div style={{ marginTop: 6 }}>
               <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>abcabbacabac</code> — {t(E, "the string s", "글자 줄 s")}
             </div>
