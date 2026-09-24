@@ -74,10 +74,15 @@ export function Mcc21MarblesBoundarySim({ E }) {
     { ko: "Aᵢ", en: "Aᵢ" },
     { ko: "Bᵢ", en: "Bᵢ" },
     { ko: "Aᵢ−Bᵢ", en: "Aᵢ−Bᵢ" },
-    { ko: "이전 cur", ko2: "(=carry)", en: "prev cur", en2: "(=carry)" },
-    { ko: "새 cur", ko2: "(이전+차이)", en: "new cur", en2: "(prev+diff)" },
-    { ko: "|cur|", en: "|cur|" },
-    { ko: "ans", ko2: "(=ops)", en: "ans", en2: "(=ops)" },
+    // 2026-09-24 (6th round, fix①): dropped the made-up "cur"/"ans" names —
+    // a new student read them as "some unfamiliar name, plus an even more
+    // unfamiliar (=carry)" and had to hold three names (cur/누적/carry) in
+    // their head across pages 3, 4 and 7. The table now uses the code's own
+    // names (carry, ops) directly, so there is only ever one name to learn.
+    { ko: "이전 carry", en: "prev carry" },
+    { ko: "새 carry", ko2: "(이전+차이)", en: "new carry", en2: "(prev+diff)" },
+    { ko: "|carry|", en: "|carry|" },
+    { ko: "ops", en: "ops" },
     { ko: "의미", en: "meaning" },
   ];
   const th = { padding: "5px 6px", fontSize: 9.5, color: "#7f1d1d", fontWeight: 700, borderBottom: "1.5px solid #fca5a5", whiteSpace: "nowrap" };
@@ -162,8 +167,14 @@ export function Mcc21MarblesBoundarySim({ E }) {
           </tbody>
         </table>
       </div>
+      {/* 2026-09-24 (6th round, fix②): the arrow/dot row above the table had no
+          legend anywhere — a new student said "arrow feels like crossed, dot
+          feels like didn't, but that's my guess, it's not written". Attached
+          to this existing caption line instead of a new box (feedback_shorter_not_longer). */}
       <div style={{ fontSize: 10, color: C.dim, marginBottom: 12, ...KA }}>
-        {t(E, "|cur| is cur with the sign dropped — always 0 or more.", "|cur| 은 cur 에서 부호만 뺀 값이에요. 항상 0 이상이에요.")}
+        {t(E,
+          "|carry| is carry with the sign dropped (always 0 or more), and an arrow (→/←) marks a crossed boundary, a dot (·) one that wasn't.",
+          "|carry| 는 carry 의 부호만 뺀 값(항상 0 이상)이고, 화살표(→/←)는 건넌 경계, 점(·)은 안 건넌 경계예요.")}
       </div>
 
       {/* Controls */}
@@ -187,7 +198,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
       {done && (
         <div style={{ marginTop: 12, background: "#fff1f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", textAlign: "center", ...KA }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#b91c1c" }}>
-            ✅ {t(E, `Table filled — ans = ${ansAt(N - 1)}`, `표가 다 찼어요 — ans = ${ansAt(N - 1)}`)}
+            ✅ {t(E, `Table filled — ops = ${ansAt(N - 1)}`, `표가 다 찼어요 — ops = ${ansAt(N - 1)}`)}
           </div>
         </div>
       )}
@@ -202,7 +213,7 @@ const FULL_PY = [
   "B = [1, 2, 3, 4, 5]",
   "",
   "# D[i] = A[i] - B[i] — 상자 i 에 남는 양(+) 이나 모자란 양(-) 이에요",
-  "# 경계마다 넘겨야 하는 구슬 = D 의 누적(prefix). 답 = 그 |누적| 의 합.",
+  "# 경계마다 넘겨야 하는 구슬 = D 의 누적, 곧 carry. 답 = 그 |carry| 의 합.",
   "ops = 0",
   "carry = 0",
   "for i in range(N):",

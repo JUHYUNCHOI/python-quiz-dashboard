@@ -149,8 +149,10 @@ export function makeMcc21MarblesCh1(E) {
       ],
       correct: 1,
       explain: t(E,
-        "D = [+2, −2]. Prefix after box 1 = +2, so 2 marbles cross the boundary. |+2| = 2 moves.",
-        "D = [+2, −2] 예요.\n상자 1 까지의 누적이 +2 라서 구슬 2 개가 경계를 건너요.\n|+2| = 2 번이에요."),
+        // 2026-09-24 (6th round, fix①): "Prefix" here / "carry" on the table
+        // (page 3) was a 4th name for the same value. Now they match.
+        "D = [+2, −2]. Carry after box 1 = +2, so 2 marbles cross the boundary. |+2| = 2 moves.",
+        "D = [+2, −2] 예요.\n상자 1 까지의 carry 가 +2 라서 구슬 2 개가 경계를 건너요.\n|+2| = 2 번이에요."),
     },
 
     // 1-5: hand-computed input
@@ -162,7 +164,7 @@ export function makeMcc21MarblesCh1(E) {
       question: t(E,
         "A = [3, 0, 3], B = [1, 4, 1]. Min moves?",
         "A = [3, 0, 3], B = [1, 4, 1]. 최소 이동?"),
-      hint: t(E, "D = [+2, −4, +2]. Carry after box 1 = +2, after box 2 = −2. Add |+2| + |−2|.", "D = [+2, −4, +2] 예요.\n상자 1 까지의 누적은 +2, 상자 2 까지는 −2 예요.\n|+2| + |−2| 를 더해요."),
+      hint: t(E, "D = [+2, −4, +2]. Carry after box 1 = +2, after box 2 = −2. Add |+2| + |−2|.", "D = [+2, −4, +2] 예요.\n상자 1 까지의 carry 는 +2, 상자 2 까지는 −2 예요.\n|+2| + |−2| 를 더해요."),
       answer: 4,
     },
   ];
