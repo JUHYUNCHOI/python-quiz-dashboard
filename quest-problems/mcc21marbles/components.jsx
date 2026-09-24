@@ -48,9 +48,12 @@ export function Mcc21MarblesBoundarySim({ E }) {
     const amount = (v) => E
       ? (v > 0 ? `${v} too many` : v < 0 ? `${-v} short` : "exactly right")
       : (v > 0 ? `${v} 개가 남아요` : v < 0 ? `${-v} 개가 모자라요` : "딱 맞아요");
-    const boxLine = E
+    // 2026-09-24: boxLine 은 도형을 읽는 법을 가르치는 문장이다. 경계 0 에서 한 번
+    // 보면 학생이 패턴을 알아버린다(학생 제보: "경계 0·1 보고 알아서 숫자만 봤다") —
+    // 경계 1 부터는 뺀다. selfLine·sumLine·endLine 은 매 경계마다 값이 달라 유지한다.
+    const boxLine = i !== 0 ? null : (E
       ? `Box ${i} holds ${have} marbles and must end up with ${want}.`
-      : `상자 ${i} 에는 구슬이 ${have} 개 있는데 ${want} 개가 되어야 해요.`;
+      : `상자 ${i} 에는 구슬이 ${have} 개 있는데 ${want} 개가 되어야 해요.`);
     const selfLine = E
       ? `Looking at box ${i} alone, it is ${amount(d)}.`
       : `상자 ${i} 만 보면 ${amount(d)}.`;
@@ -76,8 +79,8 @@ export function Mcc21MarblesBoundarySim({ E }) {
         </div>
         <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5, whiteSpace: "pre-line" }}>
           {t(E,
-            "Each box's D = A − B: plus when it has too many, minus when it is short.\nWe walk the edges between the boxes one at a time, left to right,\nand count how many marbles must cross each one.",
-            "각 상자의 D = A − B 예요. 남으면 +, 모자라면 − 예요.\n상자 사이의 경계를 왼쪽부터 하나씩 건너가 볼게요.\n경계마다 구슬이 몇 개 건너야 하는지 세어요.")}
+            "Each box's D = A − B: plus when it has too many, minus when it is short.\nWalk the edges between the boxes left to right, counting how many marbles cross each one.",
+            "각 상자의 D = A − B 예요. 남으면 +, 모자라면 − 예요.\n상자 사이의 경계를 왼쪽부터 하나씩 건너가며 몇 개가 건너는지 세어요.")}
         </div>
       </div>
 
@@ -145,10 +148,13 @@ export function Mcc21MarblesBoundarySim({ E }) {
           <div style={{ fontSize: 20, fontWeight: 800, color: "#dc2626", fontFamily: "JetBrains Mono, monospace" }}>
             {liveCarry >= 0 ? "+" : ""}{liveCarry}
           </div>
-          <div style={{ fontSize: 10, color: C.dim }}>
-            {liveCarry > 0 && t(E, "→ extras move right", "→ 남는 구슬이 오른쪽으로 가요")}
-            {liveCarry < 0 && t(E, "← marbles come from the right", "← 오른쪽에서 구슬이 건너와요")}
-            {liveCarry === 0 && t(E, "already balanced — nothing crosses", "딱 맞아서 건너는 구슬이 없어요")}
+          {/* 2026-09-24: 이 캡션 문장이 바로 위 말풍선(stepNote endLine)과 같은 말이라
+              4스텝 전부에서 중복이었다. 방향은 위 +/− 부호와 도형 위 화살표가 이미
+              보여주므로, 여기는 화살표 아이콘만 남긴다. */}
+          <div style={{ fontSize: 12, color: C.dim }}>
+            {liveCarry > 0 && "→"}
+            {liveCarry < 0 && "←"}
+            {liveCarry === 0 && "·"}
           </div>
         </div>
         <div style={{ background: "#fff1f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "8px 10px", ...KA }}>

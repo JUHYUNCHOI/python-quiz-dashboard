@@ -128,7 +128,7 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Feel the idea. Look at each box's surplus/shortage D = A − B, then walk the edges one at a time.",
+        "Look at each box's surplus/shortage: D = A − B.",
         "상자마다 남거나 모자란 양 D = A − B 를 봐요."),
       content: <Mcc21MarblesBoundarySim E={E} />,
     },
@@ -137,7 +137,7 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "2 boxes. A = [5, 1], B = [3, 3]. Box 1 has 2 too many, box 2 is 2 short. Those 2 extra marbles must cross the single boundary.",
+        "Box 1 has 2 too many, box 2 is 2 short.",
         "상자 1 은 2 개 많고 상자 2 는 2 개 모자라요."),
       question: t(E,
         "A = [5, 1], target B = [3, 3]. Minimum moves?",
@@ -157,7 +157,7 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now three boxes. A = [3, 0, 3], B = [1, 4, 1]. Walk the prefix of D across both boundaries and add up |carry|.",
+        "Now three boxes. Add up the amount crossing both boundaries.",
         "이번엔 상자 3 개예요. 경계 두 곳을 건너는 양을 더해 봐요."),
       question: t(E,
         "A = [3, 0, 3], B = [1, 4, 1]. Min moves?",
@@ -196,12 +196,14 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>
                 🚀 {t(E, "Fast: prefix-carry over D = A − B", "빠름: D = A − B 를 쌓아 가며 세기")}
               </div>
-              {/* 2026-09-17: 화면에서 124 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
+              {/* 2026-09-24: mcc21marbles 4쪽 polish — "경계 왼쪽에 남은 차이는 반드시
+                  그 경계를 건너요" 가 이 문단·코드 why(components.jsx)·시뮬 완료 패널까지
+                  세 번 나왔다. 여기는 시뮬로 이어주는 한 줄 콜백만 남긴다. */}
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55,
                 whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
                 {t(E,
-                  "This is the one you walked through in the sim.\nMarbles only hop between neighbours,\nso whatever gap sits left of an edge MUST cross it.\nAdd up those crossings over all N boxes — one pass, no matter how big N is.",
-                  "앞 시뮬에서 경계를 하나씩 건너며 해 본 게 이 방법이에요.\n구슬은 옆 상자로만 갈 수 있어요.\n그래서 경계 왼쪽에 남은 차이는 반드시 그 경계를 건너요.\n경계마다 건넌 구슬을 상자 N 개에 걸쳐 더하면 돼요.\nN 이 커도 한 번만 훑으면 끝나요.")}
+                  "This is the method from the sim — turn it into code, one boundary at a time.",
+                  "이건 앞 시뮬에서 해 본 그 방법이에요. 그대로 코드로 옮겨요.")}
               </div>
             </div>
           </div>
