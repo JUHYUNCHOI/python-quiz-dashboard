@@ -385,22 +385,27 @@ export function makeMooin3Ch2(E, lang = "py") {
       type: "reveal",
       label: t(E, "One table \u2192 26", "\ud45c \ud558\ub098 \u2192 26\uac1c"),
       narr: t(E,
-        "You built one table \u2014 now stack one for every letter.",
-        "\ud45c \ud558\ub098\ub97c \ub9cc\ub4e4\uc5b4 \ubd24\uc8e0. \uc774\uc81c \uae00\uc790\ub9c8\ub2e4 \ud558\ub098\uc529 \uc313\uc544 \ub450\uc5b4\uc694."),
+        "Those 3 rows were for b \u2014 now build them for every letter.",
+        "\ubc29\uae08 \uc138 \uc904\uc740 \uae00\uc790 b \uac83\uc774\uc5d0\uc694. \uc774\uc81c \uae00\uc790\ub9c8\ub2e4 \ub9cc\ub4e4\uc5b4\uc694."),
       content: (
         <div style={{ padding: 16, maxWidth: 560, margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 12 }}>
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>{t(E, "just now", "\ubc29\uae08 \ub9cc\ub4e0 \uac83")}</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 8, padding: "6px 10px" }}>
-                <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#155e75" }}>b</b>
-                <span style={{ color: "#67e8f9" }}>|</span>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#155e75" }}>-1 -1 1 1 1 4 4</span>
+              <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>{t(E, "just now \u2014 letter b", "\ubc29\uae08 \ub9cc\ub4e0 \uac83 \u2014 \uae00\uc790 b")}</div>
+              <div style={{ background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 8, padding: "6px 10px", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#155e75", textAlign: "left" }}>
+                {[["latest_same[b]", "-1  1  1  1  4  5  5"],
+                  ["earliest_same[b]", " 1  1  4  4  4  5  \u221e"],
+                  ["nearest_diff[b]", " 0  2  2  3  6  6  6"]].map(([nm, row]) => (
+                  <div key={nm} style={{ display: "flex", gap: 8, whiteSpace: "pre" }}>
+                    <span style={{ minWidth: 118, display: "inline-block" }}>{nm}</span>
+                    <span style={{ fontWeight: 700 }}>{row}</span>
+                  </div>
+                ))}
               </div>
             </div>
             <div style={{ fontSize: 20, color: C.dim }}>{"\u2192"}</div>
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>{t(E, "what the code builds", "\ucf54\ub4dc\uac00 \ub9cc\ub4dc\ub294 \uac83")}</div>
+              <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>{t(E, "what the code builds \u2014 3 rows each", "\ucf54\ub4dc\uac00 \ub9cc\ub4dc\ub294 \uac83 \u2014 \uae00\uc790\ub9c8\ub2e4 3\uc904\uc529")}</div>
               <div style={{ display: "inline-block", border: "1.5px solid #c4b5fd", borderRadius: 8, overflow: "hidden" }}>
                 {[["0", "a"], ["1", "b"], ["2", "c"], ["\u22ee", "\u22ee"], ["25", "z"]].map(([n, ch], i) => (
                   <div key={n} style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 10px",
@@ -416,13 +421,13 @@ export function makeMooin3Ch2(E, lang = "py") {
           </div>
           <div style={{ fontSize: 13, color: C.text, lineHeight: 1.75, wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              <>Which letter sits in the middle? We don't know yet — so we build a row for <b>every</b> letter before any query arrives.</>,
-              <>가운데가 어떤 글자일지는 아직 모르잖아요.<br />그래서 물음을 받기 전에 <b>글자마다</b> 한 줄씩 미리 만들어 두어요.</>)}
+              <>Which letter sits in the middle? We don't know yet — so we build those same <b>3 rows for every letter</b>, before any query arrives.</>,
+              <>가운데가 어떤 글자일지는 아직 모르잖아요.<br />그래서 물음을 받기 전에 저 <b>3줄을 글자마다</b> 똑같이 만들어 두어요.</>)}
           </div>
           <div style={{ marginTop: 8, fontSize: 12.5, color: "#5b21b6", background: "#faf5ff", border: "1px solid #ddd6fe", borderRadius: 8, padding: "8px 11px", lineHeight: 1.75, wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              <>Rows are numbered 0–25, so the code writes <code>chr(97 + c)</code> to get the letter back — the same a→0, z→25 trick from the string topic.</>,
-              <>줄은 0~25 번으로 세요. 그래서 코드는 번호를 다시 글자로 바꿀 때 <code>chr(97 + c)</code> 를 써요.<br />알고리즘 ‘문자열’ 토픽에서 본 a→0, z→25 와 같은 방법이에요.</>)}
+              <>Letters get numbers 0–25, and <code>a</code> is 97 in Python — so <code>chr(97 + c)</code> turns number <code>c</code> back into its letter (0 → a, 25 → z).<br />Spots are counted from 0 here too: the leftmost is spot 0.</>,
+              <>글자에 0~25 번을 붙이고, 파이썬에서 <code>a</code> 는 97 번이에요.<br />그래서 <code>chr(97 + c)</code> 는 번호 <code>c</code> 를 다시 글자로 바꿔요 (0 → a, 25 → z).<br />자리도 여기서는 0 부터 세요 — 맨 왼쪽이 자리 0 이에요.</>)}
           </div>
         </div>),
     },
