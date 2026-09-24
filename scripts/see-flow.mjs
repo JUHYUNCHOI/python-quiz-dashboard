@@ -208,6 +208,34 @@ try {
     // 시뮬 첫 말풍선 — 이야기는 시뮬 안에서도 진행된다. 선언·결론이 여기 숨는다.
     if (r.subFirst) console.log(`              └ 시뮬 1단계: ${r.subFirst.slice(0, 64)}`)
 
+    /* ⚠️ 2026-09-24 — 쪽 안 스테퍼를 **실제로 눌러서** 센다.
+       왜: 학생이 `mcc21marbles` 를 직접 세어 «14번(쪽 6 + 표 4 + 코드 4)» 이라고 했는데
+       이 도구는 «6회» 라고 찍었다. 두 가지로 틀렸다 —
+         ① 커스텀 시뮬(`Next box →`)은 `(n / m)` 라벨도 ▶◀ 도 없어 **아예 감지 못 했다**
+         ② `ProgressiveCodeStepper`(◀ ▶)는 감지는 했는데 단계 수를 몰라
+            **조용히 0 을 더했다** — 「못 셈」이라 찍어 놓고 합계엔 0 으로 넣었다
+       라벨을 추측하는 대신 **눌러 본다.** 쪽 안에서 «앞으로 가는» 버튼은
+       글자가 `→` 나 `▶` 로 끝난다(`← 이전`·`↺ 처음으로`·`📄 PDF`·퀴즈 보기는 안 걸린다).
+       ⚠️ 그래도 추측이다 — 그 모양이 아닌 스테퍼는 여전히 못 센다.
+          못 셌을 수 있으면 합계를 «최소» 로 적고 크게 떠든다. */
+    let inPage = 0
+    for (let g = 0; g < 40; g++) {
+      const adv = await p.$(
+        'main button:not(.quest-navbar button):text-matches("(→|▶)\\s*$")'
+      ).catch(() => null)
+      if (!adv) break
+      let ok = false
+      try { ok = (await adv.isEnabled()) && (await adv.isVisible()) } catch {}
+      if (!ok) break
+      const before = await p.evaluate(() => document.body.innerText.length)
+      try { await adv.click({ timeout: 1500 }) } catch { break }
+      await p.waitForTimeout(260)
+      const after = await p.evaluate(() => document.body.innerText.length)
+      inPage++
+      if (before === after) break   // 더 안 바뀌면 끝난 것이다
+    }
+    rows[rows.length - 1].inPage = inPage
+
     let moved = false
     try {
       /* ⚠️ 왜 `.quest-navbar` 안에서만 찾나 (2026-09-23, permutation 버그):
@@ -246,12 +274,16 @@ try {
   }
   /* 누르는 횟수 — 분량 피로는 글자 수가 아니라 **클릭 수**로 온다 (ux-reviewer 2026-09-08 실측:
      rectangles 는 쪽 넘김 14 + 시뮬 서브 30 = 44회. "각 쪽은 안 긴데 계속 누르게 한다"). */
-  const subClicks = rows.reduce((a, r) => {
-    const m = /시뮬 (\d+)단계/.exec(r.subTxt)
-    return a + (m ? +m[1] - 1 : 0)
-  }, 0)
+  const subClicks = rows.reduce((a, r) => a + (r.inPage || 0), 0)
+  /* 「시뮬은 있다고 봤는데 한 번도 못 누른」 쪽 — 여기가 조용히 틀리는 자리다. */
+  const unsure = rows.filter((r) => r.subTxt && !(r.inPage > 0))
   const clicks = rows.length - 1 + subClicks
-  console.log(`\n   눌러야 하는 횟수: ${clicks}회 (쪽 넘김 ${rows.length - 1} + 시뮬 안 ${subClicks})`)
+  console.log(`\n   눌러야 하는 횟수: ${clicks}회 (쪽 넘김 ${rows.length - 1} + 쪽 안 ${subClicks})`)
+  if (unsure.length) {
+    console.log(`   ⚠️ **최소값이다.** ${unsure.map((r) => r.n).join(', ')}쪽은 시뮬이 보이는데`)
+    console.log('      «앞으로 가는» 버튼(글자가 → 나 ▶ 로 끝나는 것)을 못 찾아 0 으로 셌다.')
+    console.log('      그 쪽은 **직접 눌러 세라.** 0 건이 결백이 아니다.')
+  }
   if (clicks > 40) {
     console.log('   ⚠️ 40회가 넘는다. 열두 살이 끝까지 올 분량인지 의심해라.')
     console.log('      단, 줄이기 전에 **그 시뮬이 학생이 이해한 자리인지** 먼저 확인해라 —')
