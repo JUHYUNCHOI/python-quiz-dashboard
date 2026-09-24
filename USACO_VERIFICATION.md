@@ -27,28 +27,28 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 
 | Quest ID | 제목 | 회차 | Python | C++ |
 |---|---|---|---|---|
-| `swaptowin` | Swap to Win | Feb 2026 Bronze #3 | ❌ 0/1 (WA: print empty join produces extra newline) | ✅ 12/12 PASS |
-| `strangefn` | Strange Function | Feb 2026 Bronze #2 | ✅ 12/12 PASS | ✅ 12/12 PASS |
-| `makedistinct` | Make All Distinct | Feb 2026 Bronze #1 | ✅ 13/13 PASS | ✅ 13/13 PASS |
-| `buymilk` | Purchasing Milk | Jan 2026 Bronze #3 | ✅ **PASS — 선생님이 2026-09-17 제출해 통과 확인.** (아래는 경위) 2026-07-17 재설계로 TLE 해결 — 2026-07-17 재설계로 TLE 해결 (구 재귀는 5/14). 정규화 c[i]=min(a[i],2c[i-1]) + O(N) 그리디. **⚠️ 2026-09-15: 그 재설계에 버그가 있었다** — `1 << i` 가 큰 i 에서 3만 자리 정수를 만들어 **N=100,000·Q=100 에 164초**였다. 루프를 `min(N-1, 30)` 에서 시작하게 고쳤다(x ≤ 10^9 < 2^30). **고친 뒤 N=100,000·Q=10,000 실측 0.18초.** 브루트포스 300케이스(1800쿼리) 불일치 0, 공식 샘플 일치, 옛 코드가 맞던 N≤63 구간 200케이스 답 동일. | ✅ **PASS — 2026-09-17 통과 확인.** 같은 재설계 (구 브루트는 8/9+ TLE). **⚠️ 2026-09-15: `1LL << i` 가 i=N-1 까지 돌아 N≥64 에서 UB — N=64 에 답 0, 무작위 200건 중 142건 오답이었다.** 같은 방식으로 고쳤고 실측 0.15초. PY==CPP 교차 확인(N=30~200). **원인은 로컬 검증이 N≤14 까지만 돌았던 것** — 화면 제약은 N ≤ 100,000 이다. |
-| `moohunt` | Moo Hunt | Jan 2026 Bronze #2 | 🟡 파이썬은 이 문제에서 만점 불가 — 최대 입력 67~101초(제한 4초). 근본 연산량이 보드 2²⁰ × 평균 428조합 ≈ 4.5억 번이라 어떻게 짜도 45초 밑으로 안 내려간다. **공식 답안도 셋 다 C++ 이고 파이썬 만점 풀이가 없다.** 화면에 정직 배너 있음. | ✅ **PASS — 선생님이 2026-09-11 제출해 통과 확인.** 비트 연산자를 쓰지 않는 판본이다 (보드를 리스트로 두고 1 을 더하듯 다음 보드로). 실측 최대 입력 **1.43~1.44초**(제한 2초), 비트 판본 1.50~1.53초보다 오히려 빠르다 — 시간은 안쪽 3중 반복이 먹지 보드 만드는 방식이 아니다. 로컬: 공식 샘플 둘 + 랜덤 400건에서 공식 답안 3개와 전부 일치. ✅ **2026-09-13 재제출해 다시 통과.** C++ 표를 **3차원 배열 → 2차원 배열**로 바꾼 판본이다(`count[x][min*N+max]`). 이유: **3차원 배열을 가르치는 레슨이 0개**인데 2차원은 cpp-21 에서 가르친다. 선생님 지시("2차배열로 바꿔줘") → 선생님이 제출해 통과 확인. **지금 화면 코드 = 제출해 통과한 코드**다 — 제출본 `docs/usaco-submit/moohunt-2d.cpp`. (3차원 판본 `moohunt-nobit.cpp` 도 9/11 통과했고 기록으로 남겨둔다. 두 판본은 무작위 400건 완전 일치.) 실측 2차원 1.45~1.47초 · 3차원 1.46초 — 같다(제한 2초). map 은 못 쓴다: unordered_map 5.35초 · map 16.57초. 표를 찾는 횟수가 4.5억 번이라 한 번의 비용(배열 3.2ns · unordered_map 11.9ns · map 37ns)이 그대로 총 시간이 된다. |
-| `mooin4` | It's Mooin' Time IV | Jan 2026 Bronze #1 | ✅ 16/16 PASS | ✅ 16/16 PASS |
+| `swaptowin` | Swap to Win | Feb 2026 Bronze #3 | 🟡 6/12 (재제출 2026-09-24 Python-3.6.9, cpid=1589 — **7~12번 시간 초과**. 어젯밤 고친 빈 줄 버그는 사라졌다(옛 기록은 0/1 WA). 파이썬이 큰 입력을 못 버틴다 — 입력 읽기 때문이 아니다(실측 0.14 vs 0.13초)) | ✅ 12/12 PASS |
+| `strangefn` | Strange Function | Feb 2026 Bronze #2 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1588) | ✅ 12/12 PASS |
+| `makedistinct` | Make All Distinct | Feb 2026 Bronze #1 | ✅ 13/13 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1587) | ✅ 13/13 PASS |
+| `buymilk` | Purchasing Milk | Jan 2026 Bronze #3 | ✅ 16/16 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1565) | ✅ **PASS — 2026-09-17 통과 확인.** 같은 재설계 (구 브루트는 8/9+ TLE). **⚠️ 2026-09-15: `1LL << i` 가 i=N-1 까지 돌아 N≥64 에서 UB — N=64 에 답 0, 무작위 200건 중 142건 오답이었다.** 같은 방식으로 고쳤고 실측 0.15초. PY==CPP 교차 확인(N=30~200). **원인은 로컬 검증이 N≤14 까지만 돌았던 것** — 화면 제약은 N ≤ 100,000 이다. |
+| `moohunt` | Moo Hunt | Jan 2026 Bronze #2 | 🟡 7/11 (재제출 2026-09-24 Python-3.6.9, cpid=1564 — **4개 시간 초과**. 파이썬 만점 불가로 이미 기록돼 있던 것) | ✅ **PASS — 선생님이 2026-09-11 제출해 통과 확인.** 비트 연산자를 쓰지 않는 판본이다 (보드를 리스트로 두고 1 을 더하듯 다음 보드로). 실측 최대 입력 **1.43~1.44초**(제한 2초), 비트 판본 1.50~1.53초보다 오히려 빠르다 — 시간은 안쪽 3중 반복이 먹지 보드 만드는 방식이 아니다. 로컬: 공식 샘플 둘 + 랜덤 400건에서 공식 답안 3개와 전부 일치. ✅ **2026-09-13 재제출해 다시 통과.** C++ 표를 **3차원 배열 → 2차원 배열**로 바꾼 판본이다(`count[x][min*N+max]`). 이유: **3차원 배열을 가르치는 레슨이 0개**인데 2차원은 cpp-21 에서 가르친다. 선생님 지시("2차배열로 바꿔줘") → 선생님이 제출해 통과 확인. **지금 화면 코드 = 제출해 통과한 코드**다 — 제출본 `docs/usaco-submit/moohunt-2d.cpp`. (3차원 판본 `moohunt-nobit.cpp` 도 9/11 통과했고 기록으로 남겨둔다. 두 판본은 무작위 400건 완전 일치.) 실측 2차원 1.45~1.47초 · 3차원 1.46초 — 같다(제한 2초). map 은 못 쓴다: unordered_map 5.35초 · map 16.57초. 표를 찾는 횟수가 4.5억 번이라 한 번의 비용(배열 3.2ns · unordered_map 11.9ns · map 37ns)이 그대로 총 시간이 된다. |
+| `mooin4` | It's Mooin' Time IV | Jan 2026 Bronze #1 | ✅ 16/16 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1563) | ✅ 16/16 PASS |
 | `photoshoot25` | Photoshoot | Dec 2025 Bronze #3 | ✅ 18/18 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1541) | ✅ 18/18 PASS |
-| `cowsplits` | COW Splits | Dec 2025 Bronze #2 | ✅ 2026-08-29 제출 통과 (2026-08-14 M=2 block-pair 재작성분). 이전 M=3 풀이는 3/14 (k=1 만). 로컬: N=2·N=4 전수 + 랜덤 30만 — 배정 유효성까지 확인. | 같은 알고리즘, 채점기 제출은 아직. 로컬 검증은 통과. |
-| `chipxchg` | Chip Exchange | Dec 2025 Bronze #1 | ✅ 12/12 PASS (Python passes - C++ has overflow) | 5/12 (overflow bug) |
+| `cowsplits` | COW Splits | Dec 2025 Bronze #2 | ✅ 14/14 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1540) | 같은 알고리즘, 채점기 제출은 아직. 로컬 검증은 통과. |
+| `chipxchg` | Chip Exchange | Dec 2025 Bronze #1 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1539) | 5/12 (overflow bug) |
 | `mooin3` | Mooin' Time III | Open 2025 Bronze #3 | ✅ PASS (선생님 통과 버전 = 표 O(26)/query, `docs/mooin3-passing-solution.py`; quest 코드는 bisect 변형 로컬~0.9s. 구 brute 3/11) | ✅ PASS — 부록 map 풀이(M3_MAP_PY/CPP) 선생님 USACO 제출 통과(2026-08-10). 표 방식과 동치, 로컬 브루트 3400+/3400+ 일치, C++ 0.16s/Py 0.64s |
 | `cowphotos` | More Cow Photos | Open 2025 Bronze #2 | ✅ PASS (Counter O(N), 재제출 통과 2026-07-23; 구 brute 6/8 TLE) | ✅ 11/11 PASS |
 | `hps` | HPS Minus One | Open 2025 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
-| `printseq` | Printing Sequences | Feb 2025 Bronze #3 | ✅ 13/13 PASS | ✅ 13/13 PASS (after dev fix) |
+| `printseq` | Printing Sequences | Feb 2025 Bronze #3 | ✅ 13/13 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1493) | ✅ 13/13 PASS (after dev fix) |
 | `mexes` | Making Mexes | Feb 2025 Bronze #2 | ✅ 11/11 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1492) | ✅ 11/11 PASS |
-| `reflection` | Reflection | Feb 2025 Bronze #1 | ✅ **PASS — 선생님이 2026-09-17 제출해 통과 확인.** (아래는 경위) — 2026-09-11 선생님 지시로 풀이 모양 교체(묶음 개수표 제거 → 거울짝 3칸 직접 비교). 처음 훑기 N² → (N/2)². N=2000·U=10만 1.08s → **0.62s**. 구 버전은 3/16 TLE. 로컬: usaco.org 공식 만점 C++ 과 랜덤 500건 + 큰 입력 10만 줄 전부 일치. | ✅ **PASS — 2026-09-17 통과 확인.** 같은 교체 (구 버전은 15/15 PASS). 공식 답안과 일치 확인. |
+| `reflection` | Reflection | Feb 2025 Bronze #1 | ✅ 14/14 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1491) | ✅ **PASS — 2026-09-17 통과 확인.** 같은 교체 (구 버전은 15/15 PASS). 공식 답안과 일치 확인. |
 | `checkups` | Cow Checkups | Jan 2025 Bronze #3 | 🟡 6/13 (TLE 7-13, Python expected slow) | 6/13 (intended O(N^3)) |
 | `mooin2` | It's Mooin' Time II | Jan 2025 Bronze #2 | ✅ 11/11 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1468) | ✅ 11/11 PASS |
 | `astral` | Astral Superposition | Jan 2025 Bronze #1 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1467) | ✅ 12/12 PASS |
 | `moo` | It's Mooin' Time | Dec 2024 Bronze #3 | ✅ 13/13 PASS | ✅ 13/13 PASS |
 | `cheese` | Cheese Block | Dec 2024 Bronze #2 | ✅ 16/16 PASS | ✅ 16/16 PASS |
 | `rounding` | Roundabout Rounding | Dec 2024 Bronze #1 | ✅ 13/13 PASS | ✅ 13/13 PASS |
-| `interview` | Bessie's Interview | Open 2024 Bronze #1 | ❌ 0/1 (WA on sample - wrong algorithm (Silver-level problem)) | ❌ 0/1 (WA on sample - wrong algorithm for Silver) |
+| `interview` | Bessie's Interview | Open 2024 Bronze #1 | ✅ 21/21 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1422) | ❌ 0/1 (WA on sample - wrong algorithm for Silver) |
 | `permutation` | FJ's Fav Permutation | Open 2024 Bronze #3 | 🟡 2/11 (TLE 3-11 — 일부러 느린 완전탐색) | 🟡 2/11 (TLE 3-11 — 일부러 느린 완전탐색) |
 | `favperm2` | FJ's Fav Perm II | Open 2024 Bronze #3 | 🟡 2/11 (permutation 과 같은 파일) | 🟡 2/11 (permutation 과 같은 파일) |
 | `walkfence` | Walking Along a Fence | Open 2024 Bronze #2 | ✅ 11/11 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1420) | 🟡 6/11 (TLE 7-11, O(NP)) |
@@ -61,7 +61,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `cannonball` | Cannonball | Jan 2024 Bronze #2 | ✅ 20/20 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1372) | ✅ 20/20 PASS |
 | `majority` | Majority Opinion | Jan 2024 Bronze #1 | ✅ 15/15 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1371) | ✅ 15/15 PASS |
 | `fjfarms` | FJ Actually Farms | Dec 2023 Bronze #3 | ✅ 13/13 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1349) | 🟡 4/13 (1 WA + 8 TLE) |
-| `cowntact` | Cowntact Tracing 2 | Dec 2023 Bronze #2 | ❌ 4/12 (WA - algorithm wrong (counts 1-blocks)) | ❌ 4/12 (WA - same as py (counts 1-blocks)) |
+| `cowntact` | Cowntact Tracing 2 | Dec 2023 Bronze #2 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1348) | ❌ 4/12 (WA - same as py (counts 1-blocks)) |
 | `candycane` | Candy Cane Feast | Dec 2023 Bronze #1 | ✅ 14/14 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1347) | ✅ 14/14 PASS |
 | `rotshift` | Rotate and Shift | Open 2023 Bronze #3 | ✅ 13/13 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1325) | 🟡 7/10 (TLE 8-10, T up to 10^9) |
 | `moolang` | Moo Language | Open 2023 Bronze #2 | ✅ 16/16 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1324) | ✅ 16/16 PASS (re-submitted 2026-06-16 C++17, cpid=1324) |
@@ -75,13 +75,13 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `reverseeng` | Reverse Engineering | Dec 2022 Bronze #3 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1253) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1253) |
 | `feedcows` | Feeding the Cows | Dec 2022 Bronze #2 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1252) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1252) |
 | `cowcollege` | Cow College | Dec 2022 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
-| `alchemy` | Alchemy | Open 2022 Bronze #3 | 🟡 9/11 (재제출 2026-09-23 Python-3.6.9, cpid=1229 — **2·3번 시간 초과**. 답은 맞고 파이썬 속도만 모자라다. C++ 은 11/11) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1229) |
+| `alchemy` | Alchemy | Open 2022 Bronze #3 | 🟡 9/11 (재제출 2026-09-24 Python-3.6.9, cpid=1229 — **2·3번 시간 초과**. 답은 맞고 파이썬 속도만 모자라다. 재귀 quest 다. C++ 은 11/11) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1229) |
 | `countliars` | Counting Liars | Open 2022 Bronze #2 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1228) | 🟡 2/12 (TLE - same as py (p up to 10^9)) |
 | `photoshoot` | Photoshoot | Open 2022 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1227) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1227) |
 | `blocks` | Blocks | Feb 2022 Bronze #3 | ✅ 20/20 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1205) | ✅ 20/20 PASS (re-submitted 2026-06-16 C++17, cpid=1205) |
 | `photoshoot2` | Photoshoot 2 | Feb 2022 Bronze #2 | ✅ 14/14 PASS | ✅ 14/14 PASS (re-submitted 2026-06-16 C++17, cpid=1204) |
 | `sleepclass` | Sleeping in Class | Feb 2022 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1203) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1203) |
-| `drought` | Drought | Jan 2022 Bronze #3 | ✅ 15/15 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1181) | ✅ 15/15 PASS (re-submitted 2026-06-16 C++17, cpid=1181) |
+| `drought` | Drought | Jan 2022 Bronze #3 | ✅ 15/15 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1181) | ✅ 15/15 PASS (re-submitted 2026-06-16 C++17, cpid=1181) |
 | `nontrans` | Non-Transitive Dice | Jan 2022 Bronze #2 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1180) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1180; fixed to check both cycle directions) |
 | `herdle` | Herdle | Jan 2022 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1179) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1179) |
 | `walkhome` | Walking Home | Dec 2021 Bronze #3 | ✅ 10/10 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1157) | ✅ 10/10 PASS (re-submitted 2026-06-16 C++17, cpid=1157) |

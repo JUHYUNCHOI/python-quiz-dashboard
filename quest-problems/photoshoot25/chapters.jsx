@@ -271,8 +271,10 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
             {lang === "py" && (
               <div style={{ margin: "0 16px 6px", padding: "9px 13px", borderRadius: 10, background: "#fffbeb", border: "1.5px solid #fbbf24", color: "#92400e", fontSize: 12.5, fontWeight: 700, lineHeight: 1.6, wordBreak: "keep-all", textAlign: "center" }}>
                 {t(E,
-                  <>⚠️ Up to Q·K² ≈ 2×10⁷ steps — plenty of room in <b>C++ (18/18 PASS)</b>. Python runs the identical algorithm, but each step is slower in Python, so the largest tests may still time out. For a guaranteed full score, submit in <b>C++</b>.</>,
-                  <>⚠️ 계산은 최대 Q·K² ≈ 2×10⁷ 번 — <b>C++ 은 이 정도면 넉넉해요 (18/18 통과)</b>. 파이썬도 방법은 똑같지만 한 걸음 한 걸음이 더 느려서, 제일 큰 테스트는 여전히 시간 초과가 날 수 있어요. 확실한 만점은 <b>C++</b> 로 내요.</>)}
+                  <>Up to Q·K² ≈ 2×10⁷ steps. Both languages clear it — <b>C++ 18/18</b>, <b>Python 18/18</b>. Python needs the input read in one go; line-by-line reading is what runs out of time.</>,
+                  <>계산은 최대 Q·K² ≈ 2×10⁷ 번이에요.
+두 언어 다 통과해요 — <b>C++ 18/18</b>, <b>파이썬 18/18</b>.
+단 파이썬은 입력을 한 번에 읽어야 해요. 한 줄씩 읽으면 시간이 모자라요.</>)}
               </div>
             )}
             <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />
