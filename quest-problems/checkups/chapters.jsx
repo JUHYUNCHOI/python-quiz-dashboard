@@ -207,8 +207,8 @@ export function makeCheckupsCh2(E, lang = "py") {
       ],
       correct: 2,
       explain: t(E,
-        "Three nested loops → O(N³).  Doubling N multiplies work by 2³ = 8.  That's why 600 felt so much slower than 300.  O(...) is just shorthand for how fast the work grows as N grows.",
-        "반복문 세 겹이라 O(N³) 이에요. N 을 두 배로 하면 일은 2³ = 8 배가 돼요. 그래서 600 이 300 보다 훨씬 느렸어요. O(...) 는 N 이 커질 때 일이 몇 배로 느는지를 적는 표기예요."),
+        "Three nested loops → O(N³).  Doubling N multiplies work by 2³ = 8.  That's why 600 felt so much slower than 300.",
+        "반복문 세 겹이라 O(N³) 이에요. N 을 두 배로 하면 일은 2³ = 8 배가 돼요. 그래서 600 이 300 보다 훨씬 느렸어요."),
     },
 
     /* 2-8 — [결-b 한계] why brute times out on N=7500. */
@@ -235,6 +235,9 @@ export function makeCheckupsCh2(E, lang = "py") {
               <div style={{ marginLeft: 12, fontSize: 12.5, marginTop: 4 }}>
                 · {t(E, "Pairs (l, r): N(N+1)/2 ≈ N² / 2 → ", "쌍 (l, r): N(N+1)/2 ≈ N² / 2 → ")}
                 <code style={{ background: "#fef3c7", padding: "1px 6px", borderRadius: 4, fontWeight: 600 }}>O(N²)</code>
+              </div>
+              <div style={{ marginLeft: 12, fontSize: 11.5, marginTop: 6, opacity: 0.85 }}>
+                {t(E, "O(...) is just shorthand for how fast the work grows as N grows — O(N²) means doubling N makes about 4× the work.", "O(...) 는 N 이 커질 때 일이 몇 배로 느는지를 적는 표기예요. O(N²) 면 N 이 두 배일 때 일은 약 네 배예요.")}
               </div>
               <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fca5a5", textAlign: "center", fontWeight: 700, color: "#991b1b" }}>
                 = O(N³) {t(E, "total", "총합")}
@@ -578,7 +581,7 @@ export function makeCheckupsCh4(E, lang = "py") {
           <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 13px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all" }}>
             <div style={{ fontWeight: 800, marginBottom: 4 }}>🎯 {t(E, "So", "그래서")}</div>
             {t(E,
-              "For big N with an O(N²) solution, the language matters. Here: submit in C++ (passes). Pure Python can't hit the limit; only heavy numpy vectorization has a chance. A good lesson: sometimes the right move is choosing C++.",
+              "For big N with an O(N²) solution, the language matters. Here: submit in C++ (passes). Pure Python can't hit the limit; only heavy numpy vectorization (letting numpy compute a whole row at once) has a chance. A good lesson: sometimes the right move is choosing C++.",
               "N 이 크고 풀이가 O(N²) 면 어떤 언어로 쓰느냐가 중요해요. 이 문제는 C++ 로 제출하면 통과해요. 순수 Python 은 시간 안에 못 들어오고, numpy 로 한꺼번에 계산(벡터화)해야 겨우 가능해요. 좋은 교훈이에요 — 때로는 'C++ 로 가는 것' 이 정답이에요.")}
           </div>
         </div>),
