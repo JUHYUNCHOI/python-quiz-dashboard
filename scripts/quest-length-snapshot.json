@@ -117,7 +117,7 @@
   "cheese": {
     "pages": 34,
     "quiz_input": 12,
-    "korean_chars_ref": 3361
+    "korean_chars_ref": 3354
   },
   "chipxchg": {
     "pages": 13,
@@ -177,7 +177,7 @@
   "cowphotos": {
     "pages": 13,
     "quiz_input": 2,
-    "korean_chars_ref": 1021
+    "korean_chars_ref": 993
   },
   "cowsignal": {
     "pages": 23,
@@ -292,7 +292,7 @@
   "hps": {
     "pages": 15,
     "quiz_input": 0,
-    "korean_chars_ref": 2165
+    "korean_chars_ref": 2161
   },
   "hps17": {
     "pages": 5,
@@ -497,7 +497,7 @@
   "mcc21marbles": {
     "pages": 7,
     "quiz_input": 2,
-    "korean_chars_ref": 766
+    "korean_chars_ref": 731
   },
   "mcc21menu": {
     "pages": 7,
@@ -612,7 +612,7 @@
   "moo": {
     "pages": 34,
     "quiz_input": 11,
-    "korean_chars_ref": 2452
+    "korean_chars_ref": 2474
   },
   "moohunt": {
     "pages": 8,
@@ -625,9 +625,9 @@
     "korean_chars_ref": 1866
   },
   "mooin3": {
-    "pages": 13,
+    "pages": 14,
     "quiz_input": 1,
-    "korean_chars_ref": 1435
+    "korean_chars_ref": 1509
   },
   "mooin4": {
     "pages": 9,
@@ -717,7 +717,7 @@
   "reach": {
     "pages": 16,
     "quiz_input": 0,
-    "korean_chars_ref": 2275
+    "korean_chars_ref": 2457
   },
   "rectangles": {
     "pages": 14,
@@ -878,7 +878,7 @@
   "whereami": {
     "pages": 15,
     "quiz_input": 4,
-    "korean_chars_ref": 1316
+    "korean_chars_ref": 1339
   },
   "word": {
     "pages": 16,

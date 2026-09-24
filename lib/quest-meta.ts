@@ -263,8 +263,12 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   mooin3: {
     type: "brute-force",
     concepts_taught: ["nested-loop-search", "fix-middle"],
-    concepts_required: ["loop", "string-basics"],
-    difficulty: 3,
+    // 2026-09-24: 학생(초6)이 "💻 코드 6/9 부터 완전히 막혔다" 고 했다. 실제 최종 코드는
+    //   글자별 전처리 표 + 포물선 꼭짓점 근처 후보 탐색을 요구하는데 아래 둘에 안 잡혀 있었다.
+    //   ⚠️ 이 스키마에 **«언어 빌트인 선수지식»(chr/ord 같은 것) 칸이 아예 없다** —
+    //      그래서 어떤 필드도 이걸 못 적는다. 스키마 공백은 .claude/WORK.md 항목.
+    concepts_required: ["loop", "string-basics", "letter-index-table"],
+    difficulty: 4,
     supported_languages: ["py", "cpp"],
     // Verified against USACO 2025 Open Bronze #3 official sample.
     validate_io: [

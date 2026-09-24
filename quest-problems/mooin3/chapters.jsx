@@ -373,6 +373,60 @@ export function makeMooin3Ch2(E, lang = "py") {
       content: (<Mooin3TableSim E={E} lang={lang} />),
     },
 
+    /* ⭐ [결-c 다리] — 5/9 「표 만들기」 와 6/9 「빠른 코드」 사이의 **빠진 다리** (2026-09-24).
+       학생(초6)이 6/9 에서 "완전히 막혔다" 고 했다. pedagogy 가 화면을 따라가며 원인을 짚었다 —
+       5/9 는 글자 **하나**(b)의 **1차원 행 하나**만 만드는데, 6/9 가 곧장
+       「26글자 · 2차원 표 전체 + chr(c+97)」 로 뛴다. 그 사이에 아무 설명이 없다.
+       ⚠️ 원인은 chr() 가 어려워서가 아니다 — `data/algorithm/topics/string.ts` 가
+          ord(s[i])-ord('a') 를 a→0·b→1·z→25 그림까지 붙여 **이미 가르친다**(4단계).
+          가르친 걸 이 quest 가 **안 이어준** 것이라, 🔒 코드는 안 건드리고 화면만 놓는다.
+       클릭 0 · 한 화면. 분량이 느는 자리라 일부러 «쌓인 그림 + 두 줄» 로만 짰다. */
+    {
+      type: "reveal",
+      label: t(E, "One table \u2192 26", "\ud45c \ud558\ub098 \u2192 26\uac1c"),
+      narr: t(E,
+        "You built one table \u2014 now stack one for every letter.",
+        "\ud45c \ud558\ub098\ub97c \ub9cc\ub4e4\uc5b4 \ubd24\uc8e0. \uc774\uc81c \uae00\uc790\ub9c8\ub2e4 \ud558\ub098\uc529 \uc313\uc544 \ub450\uc5b4\uc694."),
+      content: (
+        <div style={{ padding: 16, maxWidth: 560, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 12 }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>{t(E, "just now", "\ubc29\uae08 \ub9cc\ub4e0 \uac83")}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 8, padding: "6px 10px" }}>
+                <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#155e75" }}>b</b>
+                <span style={{ color: "#67e8f9" }}>|</span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#155e75" }}>-1 -1 1 1 1 4 4</span>
+              </div>
+            </div>
+            <div style={{ fontSize: 20, color: C.dim }}>{"\u2192"}</div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>{t(E, "what the code builds", "\ucf54\ub4dc\uac00 \ub9cc\ub4dc\ub294 \uac83")}</div>
+              <div style={{ display: "inline-block", border: "1.5px solid #c4b5fd", borderRadius: 8, overflow: "hidden" }}>
+                {[["0", "a"], ["1", "b"], ["2", "c"], ["\u22ee", "\u22ee"], ["25", "z"]].map(([n, ch], i) => (
+                  <div key={n} style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 10px",
+                    background: ch === "b" ? "#ecfeff" : "#faf5ff",
+                    borderTop: i ? "1px solid #ede9fe" : "none", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                    <span style={{ width: 20, textAlign: "right", color: "#7c3aed", fontWeight: 700 }}>{n}</span>
+                    <span style={{ color: "#a78bfa" }}>|</span>
+                    <b style={{ color: ch === "b" ? "#155e75" : "#5b21b6" }}>{ch}</b>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 13, color: C.text, lineHeight: 1.75, wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              <>Which letter sits in the middle? We don't know yet — so we build a row for <b>every</b> letter before any query arrives.</>,
+              <>가운데가 어떤 글자일지는 아직 모르잖아요.<br />그래서 물음을 받기 전에 <b>글자마다</b> 한 줄씩 미리 만들어 두어요.</>)}
+          </div>
+          <div style={{ marginTop: 8, fontSize: 12.5, color: "#5b21b6", background: "#faf5ff", border: "1px solid #ddd6fe", borderRadius: 8, padding: "8px 11px", lineHeight: 1.75, wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              <>Rows are numbered 0–25, so the code writes <code>chr(97 + c)</code> to get the letter back — the same a→0, z→25 trick from the string topic.</>,
+              <>줄은 0~25 번으로 세요. 그래서 코드는 번호를 다시 글자로 바꿀 때 <code>chr(97 + c)</code> 를 써요.<br />알고리즘 ‘문자열’ 토픽에서 본 a→0, z→25 와 같은 방법이에요.</>)}
+          </div>
+        </div>),
+    },
+
     /* [결-c code] — 빠른 O(26) 코드를 CodeWalk 말풍선 하나로 (3단계 점진 코드 → 최종 코드 +
        '도약' 말풍선). 코드 위 노트 벽 3스텝 → 1스텝 (선생님 2026-07-23). */
     (() => {
