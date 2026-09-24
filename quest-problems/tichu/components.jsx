@@ -9,7 +9,11 @@ const A = "#dc2626";
    ================================================================ */
 const FULL_PY = [
   "n, k = map(int, input().split())",
-  "c = sorted(set(map(int, input().split())))",
+  "cards = []",
+  "if n > k:",
+  "    # 와일드카드가 아닌 카드가 있을 때만 둘째 줄이 와요.",
+  "    cards = list(map(int, input().split()))",
+  "c = sorted(set(cards))",
   "m = len(c)",
   "win = 0",
   "left = 0",
@@ -104,16 +108,16 @@ export function getTichuWalk(E, lang = "py") {
     ] };
   }
   return { code: FULL_PY, vars: _TICHU_VARS, beats: [
-    { hi: [0, 1], bubble: t(E,
-      "What are we looking for? The longest run of consecutive integers\nwe can build using wildcards. Duplicate values never help a run,\nso read N and K, then sort and dedupe the values.",
-      "무엇을 찾아야 하나요?\n와일드로 메꿔 만들 수 있는 가장 긴 연속 run 이에요.\n같은 값은 run 에 소용없으니, N·K 를 읽고 값을 정렬+중복제거해요.") },
-    { hi: [2, 4], bubble: t(E,
+    { hi: [0, 5], bubble: t(E,
+      "What are we looking for? The longest run of consecutive integers\nwe can build using wildcards. Duplicate values never help a run,\nso read N and K, then (if any numbered cards exist) read them,\nand sort and dedupe the values.",
+      "무엇을 찾아야 하나요?\n와일드로 메꿔 만들 수 있는 가장 긴 연속 run 이에요.\n같은 값은 run 에 소용없으니, N·K 를 읽고\n(수 카드가 있으면) 그 줄도 읽어서 값을 정렬+중복제거해요.") },
+    { hi: [6, 8], bubble: t(E,
       "We'll slide a window over these values and track the widest one.\nm = distinct value count, win = biggest window so far, left = its left end.",
       "이 값들 위에서 창을 움직이며 가장 넓은 걸 찾을 거예요.\nm = 서로 다른 값 개수, win = 지금까지 최대 창, left = 창의 왼쪽 끝이에요.") },
-    { hi: [5, 8], bubble: t(E,
+    { hi: [9, 12], bubble: t(E,
       "Slide right to extend the window.\nThe window's holes = (value gap) − (count gap)\n= c[right]−c[left] − (right−left).\nIf K wildcards can't fill it, shrink from the left. Track the biggest window.",
       "right 를 오른쪽으로 밀며 창을 넓혀요.\n창의 빈칸 수는 (값차) − (개수차)\n= c[right]−c[left] − (right−left) 예요.\nK 개로 못 메우면 left 를 옮겨 창을 줄여요. 제일 큰 창 크기를 기록해요.") },
-    { hi: [9, 9], bubble: t(E,
+    { hi: [13, 13], bubble: t(E,
       "Fill the window's holes with K wildcards, then use whatever's left\nto extend the ends. The answer is win + k, capped at n cards.",
       "창 안의 빈칸을 k 로 메우고 남는 와일드는 양끝에 붙여요.\n답은 win + k, 단 카드 수 n 을 넘을 순 없어요.") },
   ] };
