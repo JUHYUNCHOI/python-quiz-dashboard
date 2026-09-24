@@ -252,7 +252,7 @@
   "feb23": {
     "pages": 10,
     "quiz_input": 4,
-    "korean_chars_ref": 573
+    "korean_chars_ref": 584
   },
   "feedcows": {
     "pages": 4,
@@ -667,7 +667,7 @@
   "palindrome": {
     "pages": 9,
     "quiz_input": 2,
-    "korean_chars_ref": 598
+    "korean_chars_ref": 601
   },
   "permutation": {
     "pages": 14,
@@ -702,7 +702,7 @@
   "printseq": {
     "pages": 19,
     "quiz_input": 3,
-    "korean_chars_ref": 1403
+    "korean_chars_ref": 1408
   },
   "productivity": {
     "pages": 7,
@@ -722,7 +722,7 @@
   "rectangles": {
     "pages": 14,
     "quiz_input": 1,
-    "korean_chars_ref": 2830
+    "korean_chars_ref": 2844
   },
   "reflection": {
     "pages": 6,
@@ -768,7 +768,7 @@
   "sleepyherd": {
     "pages": 4,
     "quiz_input": 2,
-    "korean_chars_ref": 337
+    "korean_chars_ref": 301
   },
   "sleepysort": {
     "pages": 5,
@@ -813,12 +813,12 @@
   "subseqmedian": {
     "pages": 6,
     "quiz_input": 1,
-    "korean_chars_ref": 651
+    "korean_chars_ref": 656
   },
   "sumk": {
     "pages": 8,
     "quiz_input": 0,
-    "korean_chars_ref": 2380
+    "korean_chars_ref": 2382
   },
   "swapity": {
     "pages": 5,

@@ -90,19 +90,19 @@ export function makePalindromeCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
-{`3
-8
-10
-12`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d" }}>
+                <div>3 <span style={{ color: "#b91c1c", fontSize: 10, opacity: 0.65 }}>{t(E, "← T", "← T")}</span></div>
+                <div>8 <span style={{ color: "#b91c1c", fontSize: 10, opacity: 0.65 }}>{t(E, "← S (1)", "← S (1)")}</span></div>
+                <div>10 <span style={{ color: "#b91c1c", fontSize: 10, opacity: 0.65 }}>{t(E, "← S (2)", "← S (2)")}</span></div>
+                <div>12 <span style={{ color: "#b91c1c", fontSize: 10, opacity: 0.65 }}>{t(E, "← S (3)", "← S (3)")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`B
-E
-B`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
+                <div>B <span style={{ color: "#15803d", fontSize: 10, opacity: 0.65 }}>{t(E, "← answer (1)", "← 답 (1)")}</span></div>
+                <div>E <span style={{ color: "#15803d", fontSize: 10, opacity: 0.65 }}>{t(E, "← answer (2)", "← 답 (2)")}</span></div>
+                <div>B <span style={{ color: "#15803d", fontSize: 10, opacity: 0.65 }}>{t(E, "← answer (3)", "← 답 (3)")}</span></div>
               </div>
             </div>
           </div>

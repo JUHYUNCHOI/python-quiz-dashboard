@@ -490,8 +490,8 @@ export function getReflectionSections(E) {
       why: [
         t(E, "Simplest update: toggle the cell, then scan the whole quarter again. Easy to write but O(N²) per update.",
             "가장 단순한 방법은 칸을 뒤집고 1/4 을 통째로 다시 훑는 거예요.\n쉽지만 한 번 바꿀 때마다 O(N²) 이 들어요."),
-        t(E, "Total: O(U · N²). At U = 10⁵, N = 2000 → 4·10¹¹ ops — TLE.",
-            "다 합치면 O(U · N²) 이에요.\nU = 10⁵, N = 2000 이면 4·10¹¹ 번이라 시간 초과예요."),
+        t(E, "Total: O(U · N²). At U = 10⁵ (100,000), N = 2000 → 4·10¹¹ (400 billion) ops — TLE.",
+            "다 합치면 O(U · N²) 이에요.\nU = 10⁵(10만), N = 2000 이면 4·10¹¹(4천억) 번이라 시간 초과예요."),
       ],
     },
     {
@@ -531,8 +531,8 @@ export function getReflectionSections(E) {
             "왼쪽 위 1/4 을 한 번 훑으면 첫 답이 나와요. 따로 만들 표가 없어요."),
         t(E, "Each update: subtract that group's old cost, flip, add the new one — O(1).",
             "뒤집을 때마다 그 묶음의 옛 비용을 빼고, 칸을 뒤집고, 새 비용을 더해요 — O(1)."),
-        t(E, "Total: (N/2)² groups + U updates ≤ 10⁶ + 10⁵ ops. Fast enough in Python too.",
-            "다 합쳐도 묶음 (N/2)² 개에 update U 번이에요.\n10⁶ + 10⁵ 정도라서 파이썬으로도 넉넉해요."),
+        t(E, "Total: (N/2)² (multiplied by itself) groups + U updates ≤ 10⁶ (1 million) + 10⁵ (100,000) ops. Fast enough in Python too.",
+            "다 합쳐도 묶음 (N/2)²(자기 자신을 곱한 값) 개에 update U 번이에요.\n10⁶(100만) + 10⁵(10만) 정도라서 파이썬으로도 넉넉해요."),
       ],
     },
   ];

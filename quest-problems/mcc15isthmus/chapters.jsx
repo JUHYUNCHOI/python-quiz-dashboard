@@ -424,7 +424,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Checking K steps on both sides of every position is N×K work. Instead, carry the answer over from the neighbour: the run length at i is the run length at i−1 plus one.",
+        "Don't recheck K steps every time — carry the answer over from the neighbour.",
         "매번 K칸을 다시 세지 말고 옆 칸의 답을 이어받아요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

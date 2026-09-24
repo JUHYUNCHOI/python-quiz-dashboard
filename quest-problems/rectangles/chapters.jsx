@@ -417,13 +417,13 @@ export function makeRectanglesCh2(E, lang = "py") {
             ⏱ {t(E, "2^(n−1) ways to cut", "자르는 방법 = 2^(n−1) 가지")}
           </div>
           <div style={{ display: "grid", gap: 5 }}>
-            {[["n = 10", "512"], ["n = 20", "약 52만"], ["n = 30", "약 5억"], ["n = 200", "2^199 — 우주가 끝나도 못 셈"]].map(([a, b], i) => (
+            {[["n = 10", "512"], ["n = 20", "약 52만"], ["n = 30", "약 5억"], ["n = 200", "2를 199번 곱한 값 — 우주가 끝나도 못 셈"]].map(([a, b], i) => (
               <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "7px 12px",
                 borderRadius: 8, background: i === 3 ? "#fef2f2" : "#f8fafc",
                 border: `1.5px solid ${i === 3 ? "#fca5a5" : "#e2e8f0"}`,
                 fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800,
                 color: i === 3 ? "#b91c1c" : "#475569" }}>
-                <span>{a}</span><span>{t(E, b.replace("약 ", "~").replace("만", "0k").replace("억", "00M").replace(" — 우주가 끝나도 못 셈", " — hopeless"), b)}</span>
+                <span>{a}</span><span>{t(E, b.replace("2를 199번 곱한 값", "2 multiplied by itself 199 times").replace("약 ", "~").replace("만", "0k").replace("억", "00M").replace(" — 우주가 끝나도 못 셈", " — hopeless"), b)}</span>
               </div>
             ))}
           </div>
@@ -494,8 +494,8 @@ export function makeRectanglesCh2(E, lang = "py") {
             ))}
           </div>
           <div style={{ marginTop: 12, textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#15803d", textWrap: "balance" }}>
-            {t(E, "2^199 → about 200 × 200 × 200 steps. Now it fits.",
-                 "2^199 번이 200 × 200 × 200 번쯤으로 줄어요. 이제 시간 안에 들어와요.")}
+            {t(E, "2 multiplied by itself 199 times → about 200 × 200 × 200 steps. Now it fits.",
+                 "2를 199번 곱한 값이 200 × 200 × 200 번쯤으로 줄어요. 이제 시간 안에 들어와요.")}
           </div>
         </div>
       ),

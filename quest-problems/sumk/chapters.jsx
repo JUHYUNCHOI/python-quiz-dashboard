@@ -173,13 +173,12 @@ function SumKRecap({ E }) {
         <>
           <Head>{t(E, "If there were just two numbers a and b", "숫자가 a, b 둘뿐이라면")}</Head>
           <Body>
-            {t(E, "The subsets are {a}, {b}, {a,b}. So the answer is",
-                 "부분집합은 {a}, {b}, {a,b} 셋. 그러니 답은")}
+            {t(E, "The subsets are {a}, {b}, {a,b}. Square each sum (multiply it by itself), then add them all — that's the answer:",
+                 "부분집합은 {a}, {b}, {a,b} 셋. 각 합을 제곱(자기 자신을 곱한 값)해서 더하면 답이에요 —")}
             <span style={{ display: "block", fontSize: 16, margin: "8px 0", color: "#5b21b6" }}>
               <M>a² + b² + (a+b)²</M>
             </span>
-            {t(E, "Each sum is squared first, then all added. Expand it:",
-                 "각 합을 먼저 제곱하고, 그걸 다 더해요. 펼쳐보면 —")}
+            {t(E, "Expand it:", "펼쳐보면 —")}
             <span style={{ display: "block", fontSize: 14, margin: "8px 0", lineHeight: 2, color: "#1e40af" }}>
               <M>(a+b)² = a² + 2ab + b²</M><br />
               <M>a² + b² + (a+b)² = 2a² + 2b² + 2ab</M>

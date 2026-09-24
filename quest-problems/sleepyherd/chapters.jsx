@@ -10,7 +10,7 @@ export function makeSleepyHerdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three cows stand at distinct positions on a number line. The only allowed move: take ONE of the two ENDPOINT cows and place her at any unoccupied position STRICTLY BETWEEN the other two. The goal is to make all three positions CONSECUTIVE integers.\nPrint two numbers: the MIN and MAX possible number of moves to reach a consecutive configuration.",
+        "How many moves to line up the three cows?",
         "세 소가 나란히 붙을 때까지 몇 번 옮기게 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -121,8 +121,8 @@ export function makeSleepyHerdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sort a < b < c, then read the two gaps.\nMAX comes from shuffling one step at a time inside the bigger gap; MIN is 0 if they are already consecutive, 1 if a gap is exactly 2, else 2.",
-        "a < b < c 로 정렬한 다음 두 간격을 봐요.\n최대는 큰 쪽 간격 안에서 한 칸씩 좁혀 갈 때예요. 최소는 이미 연속이면 0, 한쪽 간격이 2 면 1, 아니면 2 예요."),
+        "Sort them and look at the two gaps.",
+        "정렬해서 두 간격을 보면 답이 나와요."),
       sections: getSleepyHerdSections(E),
     },
   ];

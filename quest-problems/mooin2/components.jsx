@@ -795,7 +795,7 @@ ${t(E, "output", "출력")}: 3</pre>
 
 <h2>${t(E, "First idea — and why it's too slow", "첫 아이디어 — 왜 너무 느린가")}</h2>
 <div class="why">
-  <p>${t(E, "Obvious approach: try every triple i &lt; j &lt; k. If a[j] = a[k] and a[i] ≠ a[j], add (a[i], a[j]) to a set. The set's final size is the answer (the set kills duplicates).", "뻔한 방법은 모든 삼중 i &lt; j &lt; k 를 다 해보는 거예요.\na[j] = a[k] 이고 a[i] ≠ a[j] 면 (a[i], a[j]) 를 집합에 넣어요.\n집합의 마지막 크기가 답이에요. 집합이 중복을 알아서 지워 주거든요.")}</p>
+  <p>${t(E, "Obvious approach: try every triple i &lt; j &lt; k. If a[j] = a[k] and a[i] is not a[j], add (a[i], a[j]) to a set. The set's final size is the answer (the set kills duplicates).", "뻔한 방법은 모든 삼중 i &lt; j &lt; k 를 다 해보는 거예요.\na[j] = a[k] 이고 a[i] 가 a[j] 와 다르면 (a[i], a[j]) 를 집합에 넣어요.\n집합의 마지막 크기가 답이에요. 집합이 중복을 알아서 지워 주거든요.")}</p>
   <p>${t(E, "But that's ≈ N³ ÷ 6 work. N = 10⁶ → ~1.7×10¹⁷ steps → about <b>30 YEARS</b> at a billion/sec. The limit is ~2 seconds. We need O(N).", "하지만 일의 양이 약 N³ ÷ 6 이에요.\nN = 10⁶ 이면 약 1.7×10¹⁷ 번이라, 초당 10억 번을 해도 <b>30년</b> 쯤 걸려요.\n제한 시간은 2초니까 O(N) 이 필요해요.")}</p>
 </div>
 
@@ -818,7 +818,7 @@ ${sections.map(s => `
   <p>1. ${t(E, "a = [1, 2, 2] — how many distinct moos occur?", "a = [1, 2, 2] — 서로 다른 moo 가 몇 개일까요?")}</p>
   <p>2. ${t(E, "a = [1, 1] — how many?", "a = [1, 1] — 몇 개일까요?")}</p>
   <p>3. ${t(E, "a = [4, 1, 4, 4] — which moo(s) occur, and why do we subtract 1?", "a = [4, 1, 4, 4] — 어떤 moo 가 발생하고, 왜 1 을 뺄까요?")}</p>
-  <p style="color:#9ca3af;font-size:11px;margin-top:8px;">${t(E, "Answers: 1) one — (1,2,2). 2) zero — there's no x ≠ 1 before the (1,1) pair. 3) one — (1,4,4); count[4] = 3, so a 4 sits before p and can't be its own x → subtract 1.", "답을 볼게요. 1) 1개 — (1,2,2). 2) 0개 — (1,1) 짝 앞에 x ≠ 1 인 값이 없어요. 3) 1개 — (1,4,4). count[4] = 3 이라 4 가 p 앞에도 있는데, 자기 자신은 x 가 못 되니까 1 을 빼요.")}</p>
+  <p style="color:#9ca3af;font-size:11px;margin-top:8px;">${t(E, "Answers: 1) one — (1,2,2). 2) zero — there's no value other than 1 before the (1,1) pair. 3) one — (1,4,4); count[4] = 3, so a 4 sits before p and can't be its own x → subtract 1.", "답을 볼게요. 1) 1개 — (1,2,2). 2) 0개 — (1,1) 짝 앞에는 1 이 아닌 값이 없어요. 3) 1개 — (1,4,4). count[4] = 3 이라 4 가 p 앞에도 있는데, 자기 자신은 x 가 못 되니까 1 을 빼요.")}</p>
 </div>
 
 <div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">© Coderin · 코드린</div>

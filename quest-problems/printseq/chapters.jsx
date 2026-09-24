@@ -145,8 +145,8 @@ export function makePrintseqCh1(E) {
       ],
       correct: 2,
       explain: t(E,
-        "All same? No (3≠1). One block repeating? No — (3 3) then (1 1) are different. So cut: [3 3] ✂️ [1 1] — each piece is all-same. Trick ③!",
-        "다 같나? 아니요 (3≠1). 블록 반복? 아니요 — (3 3) 다음 (1 1), 서로 달라요.\n그러니 잘라요. [3 3] ✂️ [1 1] — 조각마다 '다 같음'이 돼요. ③번 요령!"),
+        "All same? No (3 is not 1). One block repeating? No — (3 3) then (1 1) are different. So cut: [3 3] ✂️ [1 1] — each piece is all-same. Trick ③!",
+        "다 같나? 아니요 (3 은 1 과 달라요). 블록 반복? 아니요 — (3 3) 다음 (1 1), 서로 달라요.\n그러니 잘라요. [3 3] ✂️ [1 1] — 조각마다 '다 같음'이 돼요. ③번 요령!"),
     },
 
     /* 1-2d — 섞인 예제: "진짜 1111·1212·1122 같은 것만 있어?" 의문 해소 (선생님 2026-07-18).

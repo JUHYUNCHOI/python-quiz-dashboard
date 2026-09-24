@@ -67,8 +67,8 @@ export function getSumKSections(E) {
       why: [
         t(E, "P[t] = the sum of (subset sum)^t over every subset made so far. Getting this definition exactly right is the whole trick.",
             "P[t] 는 지금까지 만든 모든 부분집합의 (합)^t 를 더한 값이에요. 이 뜻을 정확히 잡는 게 핵심이에요."),
-        t(E, "With zero elements there's only the empty subset (sum 0). Treat 0^0 = 1, so P[0] = 1 to start.",
-            "원소가 0개면 공집합 하나뿐이고 그 합은 0 이에요. 0^0 = 1 로 보고 P[0] = 1 로 시작해요."),
+        t(E, "With zero elements there's only the empty subset (sum 0). Treat zero to the zeroth power as 1, so P[0] = 1 to start.",
+            "원소가 0개면 공집합 하나뿐이고 그 합은 0 이에요. 0의 0제곱은 1로 보고 P[0] = 1 로 시작해요."),
       ],
       pyOnly: [
         t(E, "A flat list of size K+1 is all the state we ever carry.",
@@ -148,8 +148,8 @@ export function getSumKSections(E) {
       why: [
         t(E, "After adding all N elements, P[K] is the answer.",
             "N 개 원소를 다 넣고 나면 P[K] 가 정답이에요."),
-        t(E, "For K ≥ 1 the empty subset scores 0^K = 0, so it drops out of the total on its own.",
-            "K 가 1 이상이면 공집합 점수는 0^K = 0 이라, 따로 빼지 않아도 답에 안 들어가요."),
+        t(E, "For K ≥ 1 the empty subset scores zero to the Kth power, which is 0, so it drops out of the total on its own.",
+            "K 가 1 이상이면 공집합 점수는 0의 K제곱, 즉 0 이라, 따로 빼지 않아도 답에 안 들어가요."),
         t(E, "Complexity O(N·K²) — fits both subtasks (N up to 10⁵ with small K, or N,K up to 200).",
             "복잡도는 O(N·K²) 라 두 서브태스크 모두 넉넉해요 (N 최대 10⁵ 에 K 가 작거나, N·K 가 최대 200)."),
       ],
@@ -181,9 +181,9 @@ export function getSumkWalk(E, lang = "py") {
     return { code, vars: _SK_VARS, beats: [
       { hi: [0, 7],   bubble: t(E, "What must we hand back? The sum of (subset sum)^K over every subset,\nmod 998244353. There are 2ᴺ subsets — too many to list — so we grow\nthe answer one number at a time instead. Fix MOD, then read N and K.", "무엇을 내놓아야 하나요?\n부분집합마다 (합)^K 를 더해 998244353 로 나눈 값이에요.\n2ᴺ 개라 나열은 못 하니, 숫자를 하나씩 담으며 답을 키워요.\n먼저 MOD 를 정하고 N, K 를 읽어요.") },
       { hi: [8, 14],  bubble: t(E, "We'll need C(t,j) later to expand with the binomial theorem.\nBuild it now with Pascal's triangle —\neach cell is the two cells above it, added.", "이따가 이항정리로 펼칠 때 C(t,j) 가 필요해요.\n미리 파스칼의 삼각형으로 만들어 둬요.\n한 칸은 바로 위 두 칸을 더한 값이에요.") },
-      { hi: [15, 16], bubble: t(E, "Define P[t] = the sum of (subset sum)^t over every subset made\nso far — the answer we want in the end is P[K].\nWith zero elements only the empty subset exists (sum 0, 0⁰=1),\nso start with P[0] = 1.", "P[t] 를 지금까지 담은 부분집합들의 (합)^t 합으로 정해요.\n우리가 구할 답은 결국 P[K] 예요.\n원소가 0개면 공집합(합 0)뿐이고 0⁰=1 이라, P[0] = 1 로 시작해요.") },
+      { hi: [15, 16], bubble: t(E, "Define P[t] = the sum of (subset sum)^t over every subset made\nso far — the answer we want in the end is P[K].\nWith zero elements only the empty subset exists (sum 0; zero to the zeroth power is 1),\nso start with P[0] = 1.", "P[t] 를 지금까지 담은 부분집합들의 (합)^t 합으로 정해요.\n우리가 구할 답은 결국 P[K] 예요.\n원소가 0개면 공집합(합 0)뿐이고 0의 0제곱은 1이라, P[0] = 1 로 시작해요.") },
       { hi: [17, 33], bubble: t(E, "Add one element a at a time. Subsets split two ways —\nwithout a (old P[t] stays), with a (sum becomes old sum + a).\nExpand (old sum + a)^t via the binomial theorem: add every\npiece C(t,j)·a^(t-j)·P[j] for j = 0..t (pw caches a's powers).", "원소 a 를 하나씩 담아요. 부분집합은 두 갈래로 갈려요.\na 를 안 담은 쪽은 옛 P[t] 그대로, 담은 쪽은 합이 옛합+a 예요.\n(옛합+a)^t 를 이항정리로 펼쳐 j=0..t 조각을 다 더해요.\npw 로 a 의 거듭제곱을 미리 구해두고, 두 쪽을 합치면 새 P[t].") },
-      { hi: [34, 36], bubble: t(E, "After all N elements are in, P[K] is the answer.\nFor K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N 개를 다 담으면 P[K] 가 답이에요.\nK 가 1 이상이면 공집합(0^K=0)은 저절로 빠져요.") },
+      { hi: [34, 36], bubble: t(E, "After all N elements are in, P[K] is the answer.\nFor K ≥ 1 the empty subset scores zero to the Kth power, which is 0, so it drops out on its own.", "N 개를 다 담으면 P[K] 가 답이에요.\nK 가 1 이상이면 공집합(0의 K제곱, 즉 0)은 저절로 빠져요.") },
     ] };
   }
   const code = [...s[0].py, ...s[1].py, ...s[2].py, ...s[3].py];
@@ -191,9 +191,9 @@ export function getSumkWalk(E, lang = "py") {
   return { code, vars: _SK_VARS, beats: [
     { hi: [0, 2],   bubble: t(E, "What must we hand back? The sum of (subset sum)^K over every subset,\nmod 998244353. There are 2ᴺ subsets — too many to list — so we grow\nthe answer one number at a time instead. Fix MOD, then read n, K, the array.", "무엇을 내놓아야 하나요?\n부분집합마다 (합)^K 를 더해 998244353 로 나눈 값이에요.\n2ᴺ 개라 나열은 못 하니, 숫자를 하나씩 담으며 답을 키워요.\n먼저 MOD 를 정하고 n, K, 배열을 읽어요.") },
     { hi: [3, 8],   bubble: t(E, "We'll need C(t,j) later to expand with the binomial theorem.\nBuild it now with Pascal's triangle —\neach cell is the two cells above it, added.", "이따가 이항정리로 펼칠 때 C(t,j) 가 필요해요.\n미리 파스칼의 삼각형으로 만들어 둬요.\n한 칸은 바로 위 두 칸을 더한 값이에요.") },
-    { hi: [9, 11],  bubble: t(E, "Define P[t] = the sum of (subset sum)^t over every subset made\nso far — the answer we want in the end is P[K].\nWith zero elements only the empty subset exists (sum 0, 0⁰=1),\nso start with P[0] = 1.", "P[t] 를 지금까지 담은 부분집합들의 (합)^t 합으로 정해요.\n우리가 구할 답은 결국 P[K] 예요.\n원소가 0개면 공집합(합 0)뿐이고 0⁰=1 이라, P[0] = 1 로 시작해요.") },
+    { hi: [9, 11],  bubble: t(E, "Define P[t] = the sum of (subset sum)^t over every subset made\nso far — the answer we want in the end is P[K].\nWith zero elements only the empty subset exists (sum 0; zero to the zeroth power is 1),\nso start with P[0] = 1.", "P[t] 를 지금까지 담은 부분집합들의 (합)^t 합으로 정해요.\n우리가 구할 답은 결국 P[K] 예요.\n원소가 0개면 공집합(합 0)뿐이고 0의 0제곱은 1이라, P[0] = 1 로 시작해요.") },
     { hi: [12, 23], bubble: t(E, "Add one element a at a time. Subsets split two ways —\nwithout a (old P[t] stays), with a (sum becomes old sum + a).\nExpand (old sum + a)^t via the binomial theorem: add every\npiece C(t,j)·a^(t-j)·P[j] for j = 0..t (pw caches a's powers).", "원소 a 를 하나씩 담아요. 부분집합은 두 갈래로 갈려요.\na 를 안 담은 쪽은 옛 P[t] 그대로, 담은 쪽은 합이 옛합+a 예요.\n(옛합+a)^t 를 이항정리로 펼쳐 j=0..t 조각을 다 더해요.\npw 로 a 의 거듭제곱을 미리 구해두고, 두 쪽을 합치면 새 P[t].") },
-    { hi: [24, 24], bubble: t(E, "After all n elements are in, P[K] is the answer.\nFor K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "n 개를 다 담으면 P[K] 가 답이에요.\nK 가 1 이상이면 공집합(0^K=0)은 저절로 빠져요.") },
+    { hi: [24, 24], bubble: t(E, "After all n elements are in, P[K] is the answer.\nFor K ≥ 1 the empty subset scores zero to the Kth power, which is 0, so it drops out on its own.", "n 개를 다 담으면 P[K] 가 답이에요.\nK 가 1 이상이면 공집합(0의 K제곱, 즉 0)은 저절로 빠져요.") },
   ] };
 }
 

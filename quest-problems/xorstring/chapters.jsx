@@ -188,7 +188,7 @@ export function makeXorStringCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way actually transforms every substring k times — impossible. The fast way treats each adjacent pair on its own, uses a closed formula for its beauty, and weights it by how many substrings contain it.",
+        "Don't build them — solve each pair with a formula instead.",
         "만들지 말고, 쌍마다 공식으로 바로 구해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
