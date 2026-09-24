@@ -259,7 +259,7 @@ const FULL_PY = [
   "        out.append('YES')",
   "    else:",
   "        out.append('NO')",
-  "print(chr(10).join(out))",
+  "print('\\n'.join(out))",
 ];
 
 const FULL_CPP = [

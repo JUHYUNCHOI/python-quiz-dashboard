@@ -140,7 +140,7 @@ const FULL_PY = [
   "    else:",
   "        out.append('NO')",
   "",
-  "print(chr(10).join(out))",
+  "print('\\n'.join(out))",
 ];
 
 const FULL_CPP = [

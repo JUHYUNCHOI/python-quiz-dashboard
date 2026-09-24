@@ -368,7 +368,7 @@ const PA_OUT_PY = [
   "    else:",
   "        out.append('B')",
   "",
-  "print(chr(10).join(out))",
+  "print('\\n'.join(out))",
 ];
 const PA_OUT_CPP = [
   "        if (lastDigit == '0') {",
@@ -397,7 +397,7 @@ const PA_FULL_PY = [
   "    else:",
   "        out.append('B')",
   "",
-  "print(chr(10).join(out))",
+  "print('\\n'.join(out))",
 ];
 const PA_FULL_CPP = [
   "#include <iostream>",

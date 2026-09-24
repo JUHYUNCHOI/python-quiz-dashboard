@@ -195,7 +195,7 @@ const FULL_PY = [
   "    out_lines.append(str(n_words))",
   "    out_lines.append(' '.join(sentences))",
   "",
-  "print(chr(10).join(out_lines))",
+  "print('\\n'.join(out_lines))",
 ];
 
 const FULL_CPP = [

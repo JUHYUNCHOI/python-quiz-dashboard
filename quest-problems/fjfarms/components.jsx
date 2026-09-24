@@ -56,7 +56,7 @@ const FULL_PY = [
   "    t = list(map(int, input().split()))",
   "    out.append(str(solve(N, h, a, t)))",
   "",
-  "print(chr(10).join(out))",
+  "print('\\n'.join(out))",
 ];
 
 const FULL_CPP = [

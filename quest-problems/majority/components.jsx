@@ -448,7 +448,7 @@ const MJ_FULL_PY = [
   "    else:",
   "        out.append(' '.join(str(x) for x in sorted(valid)))",
   "",
-  "print(chr(10).join(out))",
+  "print('\\n'.join(out))",
 ];
 const MJ_FULL_CPP = [
   "#include <iostream>",
