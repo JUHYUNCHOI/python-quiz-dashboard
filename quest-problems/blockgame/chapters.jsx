@@ -10,7 +10,7 @@ export function makeBlockGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has N alphabet blocks; each block has a word printed on its FRONT face and a word on its BACK face. To 'spell' a word using a block, the block must contain enough letter cubes for that word.\nFor each letter A..Z, find the minimum number of letter cubes Bessie needs so that she can spell EITHER the front or back word of every block — the answer is one count per letter.",
+        "Find how many letter cubes are needed for each letter.",
         "글자별로 큐브가 몇 개씩 있어야 하는지 구해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -104,7 +104,7 @@ export function makeBlockGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Deep audit: two boards. For EACH board take MAX(front, back) per letter — its worst case. Then SUM the per-board maxes across boards, letter by letter.",
+        "There are 2 boards — find each board's worst case first.",
         "판이 2개예요. 판마다 가장 나쁜 경우를 먼저 구해요."),
       content: <BlockGameDeepAuditSim E={E} />,
     },
@@ -224,7 +224,7 @@ export function makeBlockGameCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "For each board, take MAX(front-count, back-count) per letter — the board's worst case.  Sum those maxes across all boards.  Sections build it one piece at a time.",
+        "Find each board's worst case, then sum them per letter.",
         "판마다 가장 나쁜 경우를 구한 뒤 글자별로 더해요."),
       sections: getBlockGameSections(E),
     },

@@ -9,7 +9,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two non-overlapping axis-aligned rectangular pastures sit on a field. FJ wants to build a SQUARE fence (with sides parallel to the axes) whose interior contains both pastures.\nPrint the AREA of the smallest such square.",
+        "Two non-overlapping rectangular pastures need one SQUARE fence containing both. Print the AREA of the smallest such square.",
         "두 목초지를 모두 감싸는 가장 작은 정사각형의 면적을 구해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -92,7 +92,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Drag pastures A and B around the grid. The bounding box (purple) and the smallest enclosing square (orange) update live — watch how side = max(width, height) plays out.",
+        "Drag pastures A and B — the bounding box (purple) and smallest enclosing square (orange) update live.",
         "목초지 A 와 B 를 끌어서 정사각형이 어떻게 바뀌는지 봐요."),
       content: <SqPastureSim E={E} />,
     },

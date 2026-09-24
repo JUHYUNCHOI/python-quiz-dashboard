@@ -10,7 +10,7 @@ export function makeCrossRd2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "26 cows labeled A..Z walk around a circular road, each crossing it EXACTLY TWICE. We're given the cyclic sequence of letters at the 52 crossing points (each letter appears exactly twice).\nTwo cows' paths intersect if their two crossing points INTERLEAVE around the circle (like A..B..A..B). Count the number of intersecting cow-pairs.",
+        "How many pairs of cows have paths that cross?",
         "길이 서로 엇갈리는 소는 몇 쌍일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -131,7 +131,7 @@ export function makeCrossRd2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Record the TWO crossing positions of each of the 26 cows. For every pair (A, B), their paths intersect iff their positions INTERLEAVE: a1 < b1 < a2 < b2 (or rotated). Sections build it one piece at a time.",
+        "Read the solution code piece by piece.",
         "풀이 코드를 한 단락씩 읽어 봐요."),
       sections: getCrossRoad2Sections(E),
     },

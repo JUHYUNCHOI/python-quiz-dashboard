@@ -19,7 +19,7 @@ export function makeComfyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ adds N cows to an infinite 2D grid one at a time, each at a distinct cell.\nA cow is COMFORTABLE if it currently has exactly 3 of the 4 up/down/left/right neighbor cells occupied.\nAfter each addition, print the total number of comfortable cows on the grid.",
+        "Each time a cow is added, count how many cows are comfortable.",
         "소를 한 마리씩 놓을 때마다 편안한 소가 몇 마리인지 세요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -80,7 +80,7 @@ export function makeComfyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Click empty cells to add cows one by one. Each cow shows her current neighbor count. When that number hits 3 the cell glows orange — she's comfortable. Try the presets, then think: adding one cow can only change the count for which cells?",
+        "Click empty cells to add cows one at a time.",
         "빈 칸을 클릭해 소를 한 마리씩 놓아 봐요."),
       content: (<ComfyCowsSim E={E} />),
     },
@@ -127,7 +127,7 @@ export function makeComfyCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Maintain a SET of cow positions and a current comfort count. When a new cow is added, only the new cow + her 4 neighbors can change status — recheck just those 5 cells. Sections build it one piece at a time.",
+        "Only recheck the new cow and her 4 neighbors — 5 cells.",
         "새 소와 그 이웃 4칸, 이 5칸만 다시 보면 돼요."),
       sections: getComfyCowsSections(E),
     },

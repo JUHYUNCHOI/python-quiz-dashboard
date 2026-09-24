@@ -69,7 +69,7 @@ function SumKSample({ E }) {
             글자가 아니라 뜻이 갈린 경우다). PDF 의 서브태스크 표를 눈으로 읽고 다시 썼다:
               N=10 K=1 / 10,2 / 18,2 / 1000,2 / 100000,2 / 100000,3 / 200,200 / 777,150,  1 ≤ aᵢ ≤ 10⁹
             즉 두 갈래다 — 큰 N·작은 K, 그리고 작은 N·큰 K. aᵢ 상한은 아예 빠져 있었다. */}
-        {t(E, "📌 Constraints — two families: N up to 100,000 with K ≤ 3, or N up to 777 with K up to 200. Each aᵢ ≤ 10⁹. The answer is taken mod 998244353.",
+        {t(E, "📌 Constraints — two families: N up to 100,000 with K ≤ 3, or N up to 777 with K up to 200. Each aᵢ ≤ 10⁹ (one billion). The answer is taken mod 998244353.",
              "📌 제약은 두 갈래예요. N 이 최대 10만이면 K 는 3 까지고, N 이 777 까지면 K 는 200 까지예요. 각 원소 aᵢ 는 10억보다 작거나 같아요. 답은 998244353 로 나눈 나머지로 내요.")}
       </div>
     </div>
@@ -98,7 +98,7 @@ function SumKLimit({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", textWrap: "balance" }}>
-        🤔 {t(E, "7 subsets was easy — but N up to 10⁵?", "7개는 쉬웠죠 — 근데 N 이 10만이면?")}
+        🤔 {t(E, "7 subsets was easy — but N up to 10⁵ (100,000)?", "7개는 쉬웠죠 — 근데 N 이 10만이면?")}
       </div>
       <div style={{ maxWidth: 500, margin: "0 auto 14px", fontSize: 12.5, color: C.text, textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.7 }}>
         {/* 2026-09-10 quest-auditor: 여기 원래 "N=60 만 돼도 **온 우주 원자보다 많아요**" 라고 적혀 있었다.

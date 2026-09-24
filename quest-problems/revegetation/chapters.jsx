@@ -10,7 +10,7 @@ export function makeRevegCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are N pastures (1..N), each gets ONE of 4 grass types. M cow pairs each have two favorite pastures and they require those two pastures to have DIFFERENT grass types.\nPrint the LEXICOGRAPHICALLY SMALLEST valid grass-type assignment as a string of digits 1..4.",
+        "N pastures each get one of 4 grass types; M cow-pairs require their two favorite pastures to differ — print the lexicographically smallest valid assignment.",
         "목초지마다 잔디 1~4 중 하나를 심어요.\n규칙을 지키면서 사전순으로 가장 작게 심어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -72,7 +72,7 @@ export function makeRevegCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "5 pastures, 5 cow constraints. Click a pasture to cycle its grass type 1→2→3→4. Red edges = same color on both ends = violation. Aim for the lexicographically smallest valid string, then press 'Greedy auto' to compare.",
+        "Click a pasture to cycle its grass type — red edges mean a violation. Aim for the lex-smallest valid string.",
         "목초지를 눌러 잔디 종류를 바꿔 봐요.\n선이 빨개지면 규칙을 어긴 거예요."),
     },
     // 1-3: Quiz
@@ -120,7 +120,7 @@ export function makeRevegCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Greedy: process pastures 1..N in order. For each, look at colors already taken by colored neighbors and pick the smallest in {1,2,3,4} not in that set. Sections build it one piece at a time.",
+        "Greedy: process pastures 1..N in order, picking the smallest color not already used by a colored neighbor.",
         "1번 목초지부터 차례로 색을 정해요.\n이웃이 이미 쓴 색을 빼고 남은 것 중 가장 작은 색을 골라요."),
       sections: getRevegSections(E),
     },

@@ -10,7 +10,7 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows arrive at a single gate, each with an arrival time a[i] and a passage duration d[i]. The gate processes cows in arrival order (FIFO) — one at a time. If a cow arrives while the gate is busy, she queues; once it's her turn, she takes d[i] seconds to pass through.\nPrint the time the LAST cow finishes passing.",
+        "Cows pass through one gate, one at a time. When does the last cow finish?",
         "문 하나로 소들이 한 마리씩 지나가요. 마지막 소는 언제 끝날까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -129,7 +129,7 @@ export function makeCrossRd3Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sort cows by arrival time. Walk through them: track when the gate becomes free. If a cow arrives BEFORE the gate is free, she waits — gate-free advances by her duration. If after, she starts at her arrival. Sections build it one piece at a time.",
+        "Walk through arrivals in order, tracking when the gate frees up.",
         "도착 순서대로 보면서 문이 비는 시각을 계속 따라가요."),
       sections: getCrossRoad3Sections(E),
     },

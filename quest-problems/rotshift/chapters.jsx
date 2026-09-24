@@ -9,7 +9,7 @@ export function makeRotShiftCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand at positions 0..N−1 in a circle. K of those positions are 'active'.\nEach minute: (1) all cows currently AT active positions cyclically rotate by 1 (within the active set), (2) every active position then shifts by +1 (mod N).\nAfter T minutes, where does each cow end up?",
+        "N cows stand at 0..N−1 in a circle; K positions are 'active' and rotate the cows there each minute, then the active set shifts by +1 — where's each cow after T minutes?",
         "매분 소들이 한 칸 돌고 활성 위치도 옮겨가요. T분 뒤엔 어디 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>

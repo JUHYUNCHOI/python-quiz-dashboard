@@ -77,7 +77,7 @@ export function makeSocDist1Ch1(E) {
           {/* 🐄 Deep-audit sim — pick D and watch greedy placement */}
           <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "10px 8px", marginTop: 6 }}>
             <div style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>
-              🐄 {t(E, "See it: greedy placement vs D", "직접 봐요 — D 에 따라 달라지는 그리디 배치")}
+              🐄 {t(E, "See it: how the placement changes as D changes", "직접 봐요 — D 값에 따라 배치가 어떻게 달라지는지")}
             </div>
             <SocDist1Sim E={E} />
           </div>
@@ -127,8 +127,8 @@ export function makeSocDist1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Binary search the answer D, then greedily place cows to check if all N fit.",
-        "답 D 를 이분 탐색하고, D 마다 소를 그리디로 놓아 봐요."),
+        "Binary search the answer D, then place cows one by one to check if all N fit.",
+        "답 D 를 이분 탐색하고, D 마다 소를 하나씩 순서대로 놓아 봐요."),
       sections: getSocDist1Sections(E),
     },
   ];

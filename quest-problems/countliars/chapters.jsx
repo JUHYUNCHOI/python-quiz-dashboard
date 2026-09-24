@@ -158,7 +158,7 @@ export function makeLiarsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows each claim where Bessie is on a number line. A 'G x' claim says Bessie is at position ≥ x; 'L x' says ≤ x. Bessie has ONE actual position.\nFind the MINIMUM number of cows who must be lying — i.e., pick Bessie's position to maximize the number of true claims.",
+        "Find the position for Bessie that minimizes the number of liars.",
         "거짓말쟁이가 가장 적어지는 Bessie 의 자리를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -276,7 +276,7 @@ export function makeLiarsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Brute force: for each candidate position p (try the claim's x values), count contradicted claims.  Take the min.  Sections build it one piece at a time.",
+        "Only try the x values from the claims as candidates, and count liars.",
         "주장에 적힌 x 값들만 후보로 놓고 거짓말쟁이 수를 세어 봐요."),
       sections: getCountLiarsSections(E),
     },

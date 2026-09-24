@@ -199,7 +199,7 @@ export function makeSleepySortCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a line with distinct IDs. The only allowed move: take the FRONT cow and reinsert her anywhere later in the line.\nFind the MINIMUM number of such moves needed to make the IDs sorted in increasing order.",
+        "N cows have distinct IDs in a line; the only move is taking the FRONT cow and reinserting her later. Find the MINIMUM moves to sort by ID.",
         "맨 앞 소를 뒤로 옮겨서 ID 순으로 줄을 세워 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -266,7 +266,7 @@ export function makeSleepySortCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Look at the line from the RIGHT. Walk left as long as each cow is smaller than the next.\nThe green prefix from the right is already in order — those cows never have to move.\nEverything to the LEFT of the boundary must be pulled and reinserted.",
+        "Look from the RIGHT — the already-sorted suffix never needs to move; everything left of that boundary must be reinserted.",
         "오른쪽부터 이미 정렬된 곳이 어디까지인지 찾아봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -327,7 +327,7 @@ export function makeSleepySortCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Cows in the longest already-sorted SUFFIX never need to move. Every cow in front of it needs at least 1 move. Answer = N − (sorted suffix length). Sections build it one piece at a time.",
+        "Cows in the longest sorted SUFFIX never move; answer = N − (sorted suffix length).",
         "답은 N 에서 정렬된 접미사 길이를 뺀 값이에요."),
       sections: getSleepySortSections(E),
     },

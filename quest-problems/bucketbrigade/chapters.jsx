@@ -10,7 +10,7 @@ export function makeBrigadeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "On a 10×10 grid there's exactly one lake L, one barn B, and one rock R; every other cell is empty.\nCows stand on empty cells, holding hands in a chain that connects L to B (each adjacent step in the chain shares an edge — up/down/left/right). Cows can NOT stand on the rock.\nFind the MINIMUM number of cows needed.",
+        "How many cows are needed to hold hands and connect L to B?",
         "소들이 손을 잡고 L 과 B 를 이으려면 몇 마리가 필요할까요?"),
       content: (
         <div style={{ padding: 16 }}>

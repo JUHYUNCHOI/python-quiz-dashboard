@@ -97,7 +97,7 @@ export function makeSubseqMedianCh1(E) {
               <div>• {t(E, "line 2: ", "2번째 줄: ")}<b>N</b> {t(E, "integers ", "개의 정수 ")}<b>A₀ … A_(N-1)</b></div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: 1 ≤ N ≤ 8000, 1 ≤ A_i ≤ 10⁹.", "제약: 1 ≤ N ≤ 8000, 1 ≤ A_i ≤ 10⁹.")}
+              {t(E, "Limits: 1 ≤ N ≤ 8000, 1 ≤ A_i ≤ 10⁹ (one billion).", "제약: 1 ≤ N ≤ 8000, 1 ≤ A_i ≤ 10⁹(10억).")}
             </div>
             <div style={{ fontSize: 12.5, color: "#065f46", marginTop: 8, fontWeight: 700 }}>
               {t(E, "Output: the sum of medians, mod 998244353.", "중앙값의 합을 998244353 으로 나눈 나머지를 출력해요.")}
@@ -188,8 +188,8 @@ export function makeSubseqMedianCh2(E, lang = "py") {
                 🚀 {t(E, "Smarter: count each element as the median (Fenwick DP)", "더 똑똑히 — 각 원소를 중앙값으로 세기 (펜윅 DP)")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "For each v = A[i], count k increasing values < v before and k > v after (level by level with a Fenwick tree). Contribution = v · Σ_k L_k·R_k.",
-                      "v = A[i] 마다 앞쪽에서 v 보다 작은 증가값 k 개와 뒤쪽에서 v 보다 큰 증가값 k 개를 세어요 (펜윅 트리로 레벨마다). 그러면 v 가 보태는 값은 v · Σ_k L_k·R_k 예요.")}
+                {t(E, "For each v = A[i], count k increasing values < v before and k > v after (level by level with a Fenwick tree). Contribution = v × (add up L_k·R_k for every k).",
+                      "v = A[i] 마다 앞쪽에서 v 보다 작은 증가값 k 개와 뒤쪽에서 v 보다 큰 증가값 k 개를 세어요 (펜윅 트리로 레벨마다). 그러면 v 가 보태는 값은 v × (모든 k 에 대해 L_k·R_k 를 다 더한 값)이에요.")}
               </div>
             </div>
           </div>

@@ -336,8 +336,8 @@ export function getSubseqMedianSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "For each element v = A[i], count k strictly-increasing values < v BEFORE it and k > v AFTER it. Pair them up → v is the median of a length-(2k+1) good subsequence. So v's contribution is v · Σ_k L_k·R_k.",
-            "원소 v = A[i] 마다 앞쪽에서 v 보다 작은 증가값 k 개와 뒤쪽에서 v 보다 큰 증가값 k 개를 세어요. 둘을 짝지으면 v 가 길이 2k+1 인 좋은 부분수열의 중앙값이 돼요. 그래서 v 가 보태는 값은 v · Σ_k L_k·R_k 예요."),
+        t(E, "For each element v = A[i], count k strictly-increasing values < v BEFORE it and k > v AFTER it. Pair them up → v is the median of a length-(2k+1) good subsequence. So v's contribution is v × (add up L_k·R_k for every k).",
+            "원소 v = A[i] 마다 앞쪽에서 v 보다 작은 증가값 k 개와 뒤쪽에서 v 보다 큰 증가값 k 개를 세어요. 둘을 짝지으면 v 가 길이 2k+1 인 좋은 부분수열의 중앙값이 돼요. 그래서 v 가 보태는 값은 v × (모든 k 에 대해 L_k·R_k 를 다 더한 값)이에요."),
         t(E, "L_k and R_k are built level by level: a Fenwick tree adds up the previous level's counts over 'smaller-and-earlier' (for L) or 'larger-and-later' (for R). Level 0 = every element on its own.",
             "L_k, R_k 는 레벨마다 쌓아 올려요. 펜윅 트리로 바로 앞 레벨의 값을 '작고 앞선'(L) 또는 '크고 뒤선'(R) 범위에서 합해요. 레벨 0 은 원소 하나하나예요."),
         t(E, "⚠️ Honest note: this Fenwick DP is the full solution. Its worst case is O(N² log N), and the full constraint N = 8000 fits inside that. Python runs out of time there — but that does not mean a harder method is needed. This idea is the answer.",

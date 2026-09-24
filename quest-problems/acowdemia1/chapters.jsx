@@ -167,7 +167,7 @@ export function makeAcow1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has N papers with citation counts c[i]. Her h-index is the largest h such that at least h of her papers have ≥ h citations.\nShe can ADD a total of L extra citations distributed across her papers (each extra citation goes to one paper). What's the MAXIMUM h-index she can achieve?",
+        "If you can add L extra citations, how much can the h-index go up?",
         "인용을 L 개 더 줄 수 있다면 h-index 를 얼마나 올릴 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -263,7 +263,7 @@ export function makeAcow1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Play with the bars and the L slider to feel how the h-index moves. Notice: the h-index is bounded by the count of papers above the dashed line. Every bonus citation poured into a low paper might not raise h — only when the SHORTEST top-h paper crosses h does h jump up.",
+        "The h-index only rises once the shortest of the top-h bars crosses h.",
         "상위 h 편 중 가장 짧은 막대가 h 를 넘어야 h 가 올라가요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -314,7 +314,7 @@ export function makeAcow1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sort papers ascending. For a candidate h-index, the LAST h papers (top h cited) must each have ≥ h citations. Sum the deficits (max(0, h − c[i])) and check if ≤ L extra citations are needed. Binary search h. Sections build it one piece at a time.",
+        "Sort the papers, then binary-search for h.",
         "논문을 정렬해 두고 h 를 이분 탐색으로 찾아봐요."),
       sections: getAcowdemia1Sections(E),
     },

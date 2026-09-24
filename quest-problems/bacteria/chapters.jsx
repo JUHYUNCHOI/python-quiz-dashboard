@@ -10,7 +10,7 @@ export function makeBacteriaCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N patches in a row with deviation values a[1..N].  A type-1 walk starting at h adds the linear ramp 1, 2, 3, ... to a[h], a[h+1], ..., a[N].  A type-2 walk subtracts the same ramp.  Each walk = 1 operation.  Find the minimum number of walks to zero out every a[i].",
+        "Find the fewest walks needed to zero out every deviation.",
         "워크를 써서 편차를 모두 0 으로 만드는 최소 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -209,7 +209,7 @@ export function makeBacteriaCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Build the diff-of-diff trick step by step.  Each section explains why one walk only changes ONE position of diff(diff(a)) by ±1, so the answer = sum of absolute values.",
+        "See, piece by piece, why one walk changes just a single cell.",
         "워크 한 번이 왜 한 칸만 바꾸는지 한 단락씩 봐요."),
       sections: getBacteriaSections(E),
     },

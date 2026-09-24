@@ -143,7 +143,7 @@ export function makeRaceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A cow starts at speed 0 and must run a total distance of K meters. Each second, her speed goes UP by 1 OR DOWN by 1. The speed when she crosses the K-meter mark must be ≤ X.\nFor each query (K, X), print the MINIMUM number of seconds needed.",
+        "A cow starts at speed 0 and runs K meters, changing speed by ±1 each second; her speed at the K-meter mark must be ≤ X — print the MINIMUM seconds needed.",
         "K미터를 달리되 끝 속도가 X 를 넘지 않는 최소 시간을 구해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -211,7 +211,7 @@ export function makeRaceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's hand-trace K=4, X=0. Each second the speed must change by ±1, and the cow moves at her current speed. We need to land at distance ≥ 4 with final speed ≤ 0.",
+        "Let's hand-trace K=4, X=0 — each second the speed changes by ±1, and we need to land at distance ≥ 4 with final speed ≤ 0.",
         "K=4, X=0 을 한 초씩 손으로 따라가 볼까요?"),
       content: (() => {
         // Trace the optimal: speed 0→1→2→1→0, dist 0→1→3→4. Time=4? actually 1→2→2→0...
@@ -264,7 +264,7 @@ export function makeRaceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now play with the peak P yourself. Drag the sliders and press Play to watch the cow accelerate then decelerate. Find the smallest P that still reaches K.",
+        "Now play with the peak P — drag the sliders and press Play to find the smallest P that still reaches K.",
         "정점 P 를 움직여서 K 에 닿는 가장 작은 P 를 찾아봐요."),
       content: <PeakSpeedSim E={E} />,
     },
@@ -314,7 +314,7 @@ export function makeRaceCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Optimal: accelerate to some peak P, then decelerate to ≤ X. Distance = (1+…+P) + (P+(P−1)+…+(X+1)). Find smallest P with total ≥ K → time = P + (P − X). Sections build it one piece at a time.",
+        "Optimal: accelerate to peak P, then decelerate to ≤ X — find the smallest P whose total distance reaches K.",
         "정점 P 까지 가속했다가 X 까지 감속하는 게 제일 좋아요."),
       sections: getRaceSections(E),
     },

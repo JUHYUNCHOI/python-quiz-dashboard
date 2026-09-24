@@ -11,7 +11,7 @@ export function makeBlocksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has 4 cubes; each cube has 6 letters (one per face).\nFor each query word, decide whether you can spell it by lining up the 4 cubes left-to-right, choosing which cube goes in each position and which face shows.\nFor each query, print YES or NO.",
+        "Can you spell the word by lining up 4 cubes?",
         "큐브 4개를 늘어놓아 그 단어를 만들 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -131,7 +131,7 @@ NO`}</pre>
     {
       type: "reveal",
       narr: t(E,
-        "Try the simulator. Pick a target word, assign one cube to each letter, and see whether each face matches. Notice that reusing the same cube is blocked.",
+        "Pick cubes yourself and try to spell a word.",
         "직접 큐브를 골라 단어를 만들어 봐요."),
       content: <BlockLetterSim E={E} />,
     },
@@ -179,7 +179,7 @@ export function makeBlocksCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Only 4! = 24 ways to assign the 4 cubes to positions. For each query word, try every assignment and check that the required letter at each position exists on the assigned cube's faces. Sections build it one piece at a time.",
+        "There are only 4! = 24 ways to assign cubes — try them all and check each letter.",
         "큐브를 자리에 놓는 방법은 4! = 24 가지뿐이에요.\n24 가지를 다 놓아 보고, 자리마다 필요한 글자가 그 큐브 면에 있는지 확인해요."),
       sections: getBlocksSections(E),
     },

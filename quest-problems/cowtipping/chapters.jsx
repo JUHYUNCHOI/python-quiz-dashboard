@@ -10,7 +10,7 @@ export function makeCowTipCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has an N×N grid of 0s and 1s — each cow is either tipped over (0) or still standing (1). One operation: pick any cell (i, j) and FLIP every cell in the rectangle from (0, 0) to (i, j).\nFind the MINIMUM number of operations to turn the whole grid into all 0s.",
+        "Find the fewest operations to tip every cow down.",
         "소를 모두 엎드리게 만드는 가장 적은 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -121,7 +121,7 @@ export function makeCowTipCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Process cells bottom-right → top-left. If a cell is 1, the only flip that doesn't disturb fixed cells is toggle (0,0)–(i,j) — so we must do it. Count forced operations. Sections build it one piece at a time.",
+        "A cell with 1 has only one fix: flip the rectangle (0,0)–(i,j).",
         "1 인 칸은 (0,0)~(i,j) 뒤집기 말고는 방법이 없어요."),
       sections: getCowTipSections(E),
     },

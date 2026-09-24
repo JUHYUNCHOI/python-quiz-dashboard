@@ -10,7 +10,7 @@ export function makeDontBeLastCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Seven cows (Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta) produce milk. You're given a log of N entries, each saying how many gallons one cow produced on one occasion.\nFind the cow with the SECOND-lowest total production. If two or more cows are tied for second-lowest, print 'Tie'.",
+        "A log of milk records comes in for seven cows. Who has the second-lowest total?",
 "소 일곱 마리의 우유 기록이 들어와요.\n총 우유량이 두 번째로 적은 소는 누구일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -81,7 +81,7 @@ export function makeDontBeLastCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "All 7 cows produce 0 milk except Bessie who produces 5.\nThe minimum is 0 (six cows).\nThe second-lowest distinct value is 5.\nOnly Bessie has 5.\nWhat's the answer?", "Bessie 만 5 를 짜고 나머지 6마리는 0 이에요.\n서로 다른 값 중 두 번째로 작은 값은 5 예요."),
+        "Only Bessie produces 5; the other six produce 0. The second-lowest distinct value is 5.", "Bessie 만 5 를 짜고 나머지 6마리는 0 이에요.\n서로 다른 값 중 두 번째로 작은 값은 5 예요."),
       question: t(E,
         "6 cows produce 0, Bessie produces 5. Who is second-lowest?",
         "6마리는 0, Bessie 는 5 예요. 두 번째로 적은 소는 누구일까요?"),
@@ -111,7 +111,7 @@ export function makeDontBeLastCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Try different totals for each cow.\nWatch the ranking sort itself, and see who lands in second place.\nRemember: 'second-lowest' means the second distinct value — ties for second print 'Tie'.",
+        "Change each cow's total and watch the ranking sort itself. 'Second-lowest' means the second distinct value.",
         "각 소의 총량을 바꿔 보면 순위가 저절로 정렬돼요.\n'두 번째로 적음' 은 서로 다른 값 중 두 번째를 뜻해요."),
     },
   ];
@@ -127,7 +127,7 @@ export function makeDontBeLastCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sum each named cow's milk in a dict (cows not in the log default to 0). Find the second-lowest distinct total. If exactly one cow has that total, print her name; otherwise 'Tie'. Sections build it one piece at a time.",
+        "Sum each cow's milk in a dict, then find the second-lowest distinct total.",
         "사전에 소마다 우유를 더해 두고, 서로 다른 총량 중 두 번째로 작은 값을 찾아요.\n그 값을 가진 소가 한 마리면 이름을, 여럿이면 'Tie' 를 내요."),
       sections: getDontBeLastSections(E),
     },

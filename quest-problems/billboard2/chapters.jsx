@@ -186,7 +186,7 @@ export function makeBillboard2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There's a lawnmower billboard (an axis-aligned rectangle) and a cow-feed billboard (also axis-aligned) that may cover part of it.\nFind the area of the SMALLEST axis-aligned rectangle (a tarp) that covers every part of the lawnmower billboard NOT already hidden by the feed billboard.",
+        "What's the area of the smallest tarp covering every uncovered part?",
         "가려지지 않은 부분을 다 덮는 가장 작은 타프의 면적은 얼마일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -279,7 +279,7 @@ export function makeBillboard2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Audit every case yourself. Drag the cyan feed corners (or the body) and watch the tarp area + case label change. Find: full cover, full-side strip (left/right/top/bottom), no overlap, and the tricky L-shape that forces tarp = full billboard.",
+        "Drag the cyan feed billboard and watch the tarp area change.",
         "하늘색 사료 광고판을 끌어 보며 타프 면적이 어떻게 변하는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -304,7 +304,7 @@ export function makeBillboard2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Visible part is rectangular ONLY if the feed billboard fully covers one full side (left/right/top/bottom strip). Otherwise it's L-shaped/hole → smallest covering rectangle is the whole billboard. Sections build it one piece at a time.",
+        "The visible part is rectangular only when one whole side is covered.",
         "보이는 부분이 직사각형이 되는 건 한 변 전체가 덮일 때뿐이에요."),
       sections: getBillboard2Sections(E),
     },

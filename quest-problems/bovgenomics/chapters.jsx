@@ -206,7 +206,7 @@ export function makeGenomicsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N spotted cows and N plain cows; each cow has an M-letter genome over {A, C, G, T}.\nA position j is 'distinguishing' if the set of letters appearing at column j among spotted cows DOES NOT INTERSECT the set among plain cows.\nCount how many positions are distinguishing.",
+        "N spotted and N plain cows each have an M-letter genome. Count columns where the two breeds share no letter.",
         "점박이 소 N마리와 무늬 없는 소 N마리가 A·C·G·T 로 된 M글자 유전체를 가져요.\n어떤 칸에서 두 무리의 글자가 한 글자도 안 겹치면, 그 칸만 봐도 무리를 구별할 수 있어요.\n그런 칸이 몇 개인지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -267,7 +267,7 @@ export function makeGenomicsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's see distinguishing positions in action. Click any column — we compare the spotted set vs the plain set at that position. A position counts only when the two sets share NO letter.",
+        "Click a column to compare the spotted and plain letters — count columns that share none.",
         "칸을 누르면 그 자리의 점박이 글자와 무늬 없는 글자를 나란히 보여줘요.\n한 글자도 안 겹치는 칸만 세면 돼요."),
       content: <PositionTableSim E={E} />,
     },
@@ -314,7 +314,7 @@ export function makeGenomicsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "For each column j (1..M): gather the SET of letters from spotted cows and the SET from plain cows. If the two sets don't intersect, that column distinguishes the breeds. Sections build it one piece at a time.",
+        "For each column, gather the spotted and plain letter sets — no overlap means it distinguishes.",
         "칸 j 마다 점박이 소들의 글자와 무늬 없는 소들의 글자를 따로 모아요.\n두 쪽이 안 겹치면 그 칸은 구별할 수 있는 자리예요."),
       sections: getBovGenomicsSections(E),
     },

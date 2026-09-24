@@ -63,8 +63,8 @@ function RectanglesSample({ E }) {
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
-        {t(E, "📌 Constraints: N ≤ 200 · K ≤ 10⁹ · each h, w ≤ 1000. Areas add up to something huge.",
-             "📌 제약: N ≤ 200 · K ≤ 10⁹ · 각 h, w ≤ 1000\n면적을 다 더하면 아주 큰 수가 나와요.")}
+        {t(E, "📌 Constraints: N ≤ 200 · K ≤ 10⁹ (one billion) · each h, w ≤ 1000. Areas add up to something huge.",
+             "📌 제약: N ≤ 200 · K ≤ 10⁹(10억) · 각 h, w ≤ 1000\n면적을 다 더하면 아주 큰 수가 나와요.")}
       </div>
     </div>
   );
@@ -203,7 +203,7 @@ export function makeRectanglesCh1(E) {
           </div>
 
           <div style={{ fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
-            {t(E, "📌 N ≤ 200 · K ≤ 10⁹ · each h, w ≤ 1000.", "📌 N ≤ 200 · K ≤ 10⁹ · 각 h, w ≤ 1000.")}
+            {t(E, "📌 N ≤ 200 · K ≤ 10⁹ (one billion) · each h, w ≤ 1000.", "📌 N ≤ 200 · K ≤ 10⁹(10억) · 각 h, w ≤ 1000.")}
           </div>
         </div>),
     },

@@ -107,7 +107,7 @@ export function makeAcow2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie wants to figure out the relative seniority of N lab members from K publications.\nEvery publication lists ALL N members in decreasing order of effort. When two members put in the SAME effort, they are listed alphabetically. The rule: a more senior researcher never puts in more effort than a junior one.\nFor each ordered pair (i, j), decide whether i is definitely senior, definitely junior, or undetermined. Output an N×N grid.",
+        "From just the name order in K publications, figure out who's senior and who's junior.",
         "논문 K 편의 이름 순서만 보고\n누가 선임이고 누가 후임인지 가려내요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -195,7 +195,7 @@ export function makeAcow2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A publication lists members in decreasing effort order, ties broken alphabetically.\nIn one publication you see 'amy beth' (amy then beth). Can you conclude amy is more junior than beth?",
+        "Publications list members by effort, ties broken alphabetically.",
         "논문은 노력이 많은 순서로 나열되고,\n노력이 같으면 이름순으로 나열돼요."),
       question: t(E,
         "'amy beth' in one pub (already alphabetical). amy more junior than beth?",
@@ -213,7 +213,7 @@ export function makeAcow2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "One publication lists 'mildred dean' (mildred then dean).\nThis BREAKS alphabetical order (d < m), proving a real effort gap. So dean did less effort.\nIn the output grid, what digit goes at row=dean, column=mildred? (1 = dean senior, 0 = dean junior)",
+        "'mildred dean' breaks alphabetical order (d < m) — so dean did less effort.",
         "'mildred dean' 은 알파벳순을 깨뜨려요 (d < m).\n그러니 dean 이 노력을 덜 한 게 확실해요."),
       question: t(E,
         "'mildred dean' breaks alphabetical order. Grid cell row=dean, col=mildred = ? (1 or 0)",
@@ -236,7 +236,7 @@ export function makeAcow2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Each publication lists everyone in decreasing effort order. Scan each pair of positions x < y: once an alphabetical break appears between them, the later author (less effort) is definitely senior to the earlier one. Record senior[later][earlier] = True. Then fill the grid: 'B' on the diagonal, '1'/'0' from senior, '?' otherwise. Sections build it one piece at a time.",
+        "Find where alphabetical order breaks, record seniority, then fill the grid.",
         "알파벳순이 깨진 자리를 찾아 선임 관계를 적고,\n그 기록으로 격자를 채워요."),
       sections: getAcowdemia2Sections(E),
     },

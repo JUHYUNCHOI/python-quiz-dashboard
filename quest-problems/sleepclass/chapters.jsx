@@ -10,7 +10,7 @@ export function makeSleepCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has N class periods, each of some length a[i]. The only allowed operation: pick two ADJACENT periods and merge them into one whose length is the SUM. Repeat to reach a state where every remaining period has the SAME length.\nFor each test case, print the MINIMUM number of merges.",
+        "Bessie has N class periods; merging two ADJACENT periods sums their lengths. Reach equal-length periods with the MINIMUM number of merges.",
         "옆에 붙은 수업을 합쳐서 길이를 모두 똑같이 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -96,7 +96,7 @@ export function makeSleepCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Try a divisor d of the total. Walk left→right, accumulate; close a segment when sum = d. If you ever overshoot, that d fails.\nMerges = N − number of segments. Smallest across all working d is the answer.",
+        "Try a divisor d of the total — walk left→right, closing a segment at sum = d; merges = N − segment count.",
         "총합의 약수 d 를 골라 왼쪽부터 d 씩 묶어 봐요."),
     },
     // 1-4: Input
@@ -125,7 +125,7 @@ export function makeSleepCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Final equal value must divide total sum S. For each divisor d of S, greedily walk the array accumulating — start a new segment when running sum == d. Smallest 'N − segments' wins. Sections build it one piece at a time.",
+        "The final equal value must divide S — for each divisor d, greedily segment the array and keep the smallest 'N − segments'.",
         "마지막에 남는 길이는 총합 S 의 약수예요."),
       sections: getSleepClassSections(E),
     },

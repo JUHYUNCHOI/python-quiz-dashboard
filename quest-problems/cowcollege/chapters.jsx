@@ -107,7 +107,7 @@ export function makeCowCollegeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ runs a cow college. Each of N cows has a maximum tuition c[i] she's willing to pay. FJ sets ONE tuition price P; every cow with c[i] ≥ P enrolls and pays exactly P, the rest pay 0.\nPrint the MAX possible total revenue (and a price that achieves it).",
+        "Pick one tuition price to maximize total revenue.",
         "등록금을 하나만 정해서 수입을 가장 크게 만들어 봐요."),
       content: (
         <div style={{ padding: 16 }}>

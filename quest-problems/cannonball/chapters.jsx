@@ -10,7 +10,7 @@ export function makeCannonCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie is a cannonball that starts at position S, moving RIGHT with power 1.  Positions 1..N each hold either a jump pad (reverses direction and adds to power) or a target (breaks once if power ≥ its value).  Each step she moves by direction × power.  Count broken targets before she leaves [1, N].",
+        "How many targets does cannonball Bessie break before leaving the line?",
         "대포알 Bessie 가 수직선을 벗어나기 전까지 타겟을 몇 개 부술까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -226,7 +226,7 @@ export function makeCannonCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Simulate Bessie bouncing.  Each step: process the pad, then move by direction × power.  Stop when she leaves [1, N] or after a generous iteration cap (handles infinite jump-pad loops).  Sections build the loop one piece at a time.",
+        "Build the code that simulates Bessie bouncing, piece by piece.",
         "Bessie 가 튀는 걸 그대로 따라가는 코드를 한 단락씩 쌓아요."),
       sections: getCannonballSections(E),
     },

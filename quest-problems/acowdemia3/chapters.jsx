@@ -181,7 +181,7 @@ export function makeAcow3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "On a grid, every cell is either a cow (C) or grass (G). Two cows become friends through a SHARED grass cell adjacent to both (up/down/left/right).\nEach grass cell can mediate AT MOST ONE friendship. Print the maximum number of friendships possible.",
+        "Each cell is a cow (C) or grass (G) — two cows sharing an adjacent grass cell are friends. What's the max number of friendships?",
         "격자의 칸은 소(C) 아니면 풀(G) 이에요.\n두 소가 같은 풀 칸에 위아래양옆으로 붙어 있으면 그 풀을 사이에 두고 친구가 돼요.\n풀 칸 하나는 우정을 한 쌍까지만 이어 줘요. 우정이 최대 몇 쌍인지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -269,7 +269,7 @@ export function makeAcow3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's audit a 3×3 board cell-by-cell. We will visit every cell, and for each grass (G) cell count its 4-direction cow neighbors. A cell with 2 or more can make one friendship.",
+        "Audit a 3×3 board cell by cell — count each grass cell's cow neighbors; 2+ means one friendship.",
         "3×3 판을 한 칸씩 살펴봐요. 풀(G) 칸마다 위아래양옆에 붙은 소를 세요.\n2마리 이상이면 우정을 하나 맺어 줄 수 있어요."),
       content: <DeepAuditSim E={E} />,
     },
@@ -299,7 +299,7 @@ export function makeAcow3Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Scan grass cells left-to-right, top-to-bottom. A grass cell with exactly 2 adjacent cows offers ONE pair — but the same pair can show up at two grass cells, so we keep pairs in a set (counted once). A grass cell with 3+ cows always has two on opposite sides: a fresh pair, so add 1 immediately. Answer = opposite-side count + unique-pair count. Sections build it one piece at a time.",
+        "A cell with exactly 2 cows gives one pair (count each pair once in a set); a cell with 3+ always has an opposite pair — add one immediately.",
         "소가 딱 2마리인 풀 칸은 그 한 쌍을 내놓아요.\n같은 쌍이 다른 풀 칸에서 또 나올 수 있으니 set 에 담아 한 번만 세요.\n소가 3마리 이상이면 마주 보는 둘이 꼭 있어서 새 쌍이라 바로 더해요."),
       sections: getAcowdemia3Sections(E),
     },

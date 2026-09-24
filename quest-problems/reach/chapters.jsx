@@ -235,7 +235,7 @@ export function makeReachCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ N, M ≤ 300,000 (= 3 × 10⁵)</div>
-              <div>1 ≤ x, y ≤ N, x ≠ y</div>
+              <div>1 ≤ x, y ≤ N, x ≠ y <span style={{ color: C.dim, fontSize: 11, fontFamily: "inherit" }}>{t(E, "(a road's two ends are always different cities)", "(도로 양 끝 x, y 는 항상 서로 다른 도시)")}</span></div>
               <div>1 ≤ w ≤ 100,000 (= 10⁵)</div>
               <div>0 ≤ S ≤ N</div>
               <div>1 ≤ Q ≤ 100,000 (= 10⁵)</div>

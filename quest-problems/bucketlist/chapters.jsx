@@ -10,7 +10,7 @@ export function makeBucketListCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows. Cow i needs b[i] buckets each day during her time interval [s, t]. Buckets are SHARED between cows whose intervals don't overlap.\nPrint the MINIMUM number of buckets FJ must own to cover every cow on every day.",
+        "Each cow needs buckets for a different stretch of days. What's the fewest buckets needed?",
         "소마다 양동이가 필요한 기간이 달라요.\n양동이는 몇 개만 있으면 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -91,7 +91,7 @@ export function makeBucketListCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Three cows, three intervals. Drag the slider — bars light up while a cow is active, and the total below sums their buckets right now. The peak you see is the answer.",
+        "Drag the slider to see buckets needed at that moment — the peak is the answer.",
         "슬라이더를 움직이면 그 시점에 필요한 양동이 수가 보여요.\n그중 가장 큰 값이 정답이에요."),
     },
     // 1-4: Input
@@ -120,7 +120,7 @@ export function makeBucketListCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Convert each cow's interval into two events: +b at s, −b at t+1. Sort by time, sweep accumulating active buckets, track the running max. Sections build it one piece at a time.",
+        "Mark +b at each interval's start, −b the day after it ends, then track the running max.",
         "구간마다 시작에 +b, 끝난 다음 날에 −b 를 적어요.\n시간순으로 더해 가며 가장 큰 값을 기억해요."),
       sections: getBucketListSections(E),
     },

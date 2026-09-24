@@ -279,7 +279,7 @@ export function makeShellCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The classic shell game: a pebble hides under one of 3 shells. There are N rounds; each round records (a, b, g) — Bessie swaps shells a and b, then Elsie guesses the pebble is under shell g.\nThe pebble's STARTING shell is unknown. Print the MAXIMUM possible number of correct Elsie guesses, taken over all 3 starting positions.",
+        "The classic shell game — N rounds each swap two shells then guess one. Print the MAXIMUM correct guesses over all 3 possible starting shells.",
         "Elsie 가 가장 많이 맞히려면 조약돌이 어디서 시작해야 할까요?"),
       content: (
         <div style={{ padding: 16 }}>

@@ -80,7 +80,7 @@ const _RECT_VARS = [
   { v: "n", ko: "빨강 사각형 개수", en: "# of red rects" },
   { v: "k", ko: "파랑 최대 개수", en: "max # of blue rects" },
   { v: "dp[kk][i]", ko: "앞 i개를 파랑 kk개로 덮는 최소 면적", en: "min area: first i reds, kk blues" },
-  { v: "sw · mh", ko: "구간 폭합 × 최고높이 = 그 파랑 면적", en: "Σwidth × max-height = blue area" },
+  { v: "sw · mh", ko: "구간 폭합 × 최고높이 = 그 파랑 면적", en: "sum of widths × max-height = blue area" },
 ];
 
 
@@ -100,8 +100,8 @@ export function getRectanglesSections(E) {
             "구간 하나를 덮는 파랑의 넓이는 (폭의 합) × (제일 큰 높이) 예요.\n빨강을 많아야 K 개의 연속 구간으로 나눠서 총면적을 가장 작게 만들어요."),
         t(E, "dp[kk][i] = min area to cover the first i reds with kk blues. Try each last group [j..i].",
             "dp[kk][i] 는 앞 i 개 빨강을 파랑 kk 개로 덮는 가장 작은 면적이에요.\n마지막 구간 [j..i] 의 시작점 j 를 하나씩 다 넣어 봐요."),
-        t(E, "K can be up to 10⁹, but more than N blues is pointless — cap K = min(K, N).",
-            "K 는 10⁹ 까지 커질 수 있지만 빨강이 N 개뿐이에요.\n파랑이 N 개를 넘으면 덮을 빨강이 없으니\nK = min(K, N) 으로 줄여 놓아요."),
+        t(E, "K can be up to 10⁹ (one billion), but more than N blues is pointless — cap K = min(K, N).",
+            "K 는 10⁹(10억) 까지 커질 수 있지만 빨강이 N 개뿐이에요.\n파랑이 N 개를 넘으면 덮을 빨강이 없으니\nK = min(K, N) 으로 줄여 놓아요."),
       ],
       pyOnly: [
         t(E, "float('inf') as the DP sentinel; a generator in min(...) reads the final answer over all kk.",
@@ -127,8 +127,8 @@ export function getRectanglesWalk(E, lang = "py") {
           "What are we solving for?\nThe smallest total blue area that covers every red,\nusing at most K blues. Start by reading n, k,\nand each rect's height h[i] and width w[i].",
           "무엇을 구해야 하나요?\n빨강을 전부 덮는 파랑 총면적 중 가장 작은 값이에요.\n파랑은 최대 K개까지 쓸 수 있어요.\n먼저 n, k 와 사각형마다 높이 h[i]·폭 w[i]를 읽어요.") },
         { hi: [12, 14], bubble: t(E,
-          "k can be up to 10⁹, but you never need more than n blues (one per red). Cap k = min(k, n).",
-          "k 는 10⁹ 까지 커질 수 있어요.\n그런데 빨강 하나에 파랑 하나씩 씌워도 n 개면 충분해요.\n그래서 k = min(k, n) 으로 줄여요.") },
+          "k can be up to 10⁹ (one billion), but you never need more than n blues (one per red). Cap k = min(k, n).",
+          "k 는 10⁹(10억) 까지 커질 수 있어요.\n그런데 빨강 하나에 파랑 하나씩 씌워도 n 개면 충분해요.\n그래서 k = min(k, n) 으로 줄여요.") },
         { hi: [16, 18], bubble: t(E,
           "dp[kk][i] = the smallest total area to cover the first i reds using kk blues. Start from dp[0][0] = 0 (nothing covered, no area).",
           "dp[kk][i] 는 앞 i 개 빨강을 파랑 kk 개로 덮는 가장 작은 총면적이에요.\n아무것도 안 덮으면 면적이 0 이니까 dp[0][0] = 0 에서 시작해요.") },
@@ -147,8 +147,8 @@ export function getRectanglesWalk(E, lang = "py") {
         "What are we solving for?\nThe smallest total blue area that covers every red,\nusing at most K blues. Start by reading n, k,\nand each rect's height h[i] and width w[i].",
         "무엇을 구해야 하나요?\n빨강을 전부 덮는 파랑 총면적 중 가장 작은 값이에요.\n파랑은 최대 K개까지 쓸 수 있어요.\n먼저 n, k 와 사각형마다 높이 h[i]·폭 w[i]를 읽어요.") },
       { hi: [5, 6], bubble: t(E,
-        "k can be up to 10⁹, but you never need more than n blues (one per red). Cap k = min(k, n).",
-        "k 는 10⁹ 까지 커질 수 있어요.\n그런데 빨강 하나에 파랑 하나씩 씌워도 n 개면 충분해요.\n그래서 k = min(k, n) 으로 줄여요.") },
+        "k can be up to 10⁹ (one billion), but you never need more than n blues (one per red). Cap k = min(k, n).",
+        "k 는 10⁹(10억) 까지 커질 수 있어요.\n그런데 빨강 하나에 파랑 하나씩 씌워도 n 개면 충분해요.\n그래서 k = min(k, n) 으로 줄여요.") },
       { hi: [7, 11], bubble: t(E,
         "dp is a table: one row per kk, one box per i. We build it row by row — each row is a list of (n+1) boxes, all INF at first. dp[kk][i] = the smallest total area to cover the first i reds using kk blues. Start from dp[0][0] = 0 (nothing covered, no area).",
         "dp 는 표예요. kk 마다 줄 하나, 그 줄 안에 i 마다 칸 하나예요.\n줄을 하나씩 만들어 붙이는데, 한 줄은 (n+1) 칸짜리 리스트이고\n처음엔 전부 INF 로 채워요.\ndp[kk][i] 는 앞 i 개 빨강을 파랑 kk 개로 덮는 가장 작은 총면적이에요.\n아무것도 안 덮으면 면적이 0 이니까 dp[0][0] = 0 에서 시작해요.") },

@@ -10,7 +10,7 @@ export function makeCrossRd1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has 10 cows, each labeled 1..10. Over N observations he records (cow_id, side) where side ∈ {0, 1}. Each observation says which side of the road that cow was on at that moment.\nA 'crossing' happens between two consecutive observations of the SAME cow when her side changes. Count the total number of crossings across all cows.",
+        "Count the total number of road crossings across all cows.",
         "소들이 도로를 건넌 횟수를 모두 합해서 세어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -129,7 +129,7 @@ export function makeCrossRd1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Maintain a dict last[cow_id] = last seen side. For each observation, if the cow has been seen before on a DIFFERENT side, count one crossing. Then update last[cow_id]. Sections build it one piece at a time.",
+        "Track each cow's last-seen side, and count only when it changes.",
         "소마다 마지막으로 본 쪽을 적어 두고, 달라질 때만 세요."),
       sections: getCrossRoad1Sections(E),
     },

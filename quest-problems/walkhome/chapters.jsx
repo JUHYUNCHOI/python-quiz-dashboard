@@ -10,7 +10,7 @@ export function makeWalkHomeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie walks from (1, 1) (top-left) to (N, N) (bottom-right) on an N×N grid; some cells are HAYSTACKS ('H') she can't enter. She moves only RIGHT or DOWN.\nShe's also lazy — she changes direction (R↔D) at most K times during the walk.\nFor each test case, print the number of valid paths.",
+        "Bessie walks (1,1)→(N,N) on an N×N grid avoiding haystacks, moving only RIGHT/DOWN and changing direction at most K times — print the number of valid paths.",
         "방향을 K 번까지만 바꿔 갈 수 있는 길이 몇 개일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -119,7 +119,7 @@ export function makeWalkHomeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "DP: dp[r][c][last_dir][changes] = paths to (r, c) arriving via last_dir with that many changes. Move right/down; +1 changes when direction flips; prune when changes > K. Sections build it one piece at a time.",
+        "DP: dp[r][c][last_dir][changes] counts paths reaching (r,c); move right/down, +1 changes on a direction flip, prune when changes > K.",
         "(r, c) 까지 오는 길의 수를 dp 로 쌓아 올려요."),
       sections: getWalkHomeSections(E),
     },

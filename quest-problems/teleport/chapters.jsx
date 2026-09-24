@@ -188,7 +188,7 @@ export function makeTeleportCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ wants to go from position a to position b on a number line. There's a two-way teleporter linking positions x and y — using it instantly moves you between x and y at no walking cost.\nPrint the minimum total walking distance.",
+        "FJ wants to go from a to b; a two-way teleporter links x and y for free. Print the minimum total walking distance.",
         "x 와 y 를 잇는 텔레포터를 쓸 수 있어요.\na 에서 b 까지 가장 적게 걷는 거리를 구해요."),
       content: (
         <div style={{ padding: 16 }}>

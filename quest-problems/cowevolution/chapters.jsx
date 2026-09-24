@@ -10,7 +10,7 @@ export function makeEvolutionCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are N cow sub-populations, each with a set of characteristics. We want to know whether a valid evolutionary tree could have produced these populations — meaning each characteristic appeared exactly ONCE on the tree (every population that has it descends from that single appearance).\nPrint 'yes' if such a tree could exist, else 'no'.",
+        "Could an evolutionary tree have produced these populations?",
         "이 집단들을 만들 수 있는 진화 트리가 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -103,7 +103,7 @@ export function makeEvolutionCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Hands-on audit. Pick a pair (A, B). For every population, check which of A only / B only / both shows up. If all THREE flags ever turn on at once for any pair, the input is invalid.",
+        "Pick a pair (A, B) and check whether all three flags ever show up.",
         "쌍 (A, B) 를 골라 세 가지가 다 나오는지 살펴봐요."),
     },
   ];
@@ -119,7 +119,7 @@ export function makeEvolutionCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Two characteristics A, B 'cross' (no valid tree) if some pop has just {A}, another has just {B}, another has both {A, B}.  Check every pair.  Sections build it one piece at a time.",
+        "If A-only, B-only, and both ever appear for a pair, no valid tree exists — check every pair.",
         "A 만 · B 만 · 둘 다 가 모두 나오는 쌍이 하나라도 있으면 트리를 못 만들어요.\n그래서 모든 특성 쌍을 하나씩 확인해요."),
       sections: getCowEvolutionSections(E),
     },

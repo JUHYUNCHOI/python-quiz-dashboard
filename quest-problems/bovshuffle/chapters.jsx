@@ -135,7 +135,7 @@ export function makeShuffleCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a line. A 'shuffle' is a permutation that moves each cow at position i to position shuffle[i]. The shuffle has been applied THREE times in a row, and we're given the final lineup.\nRecover the original lineup before any shuffles.",
+        "Recover the original lineup from just the result after 3 shuffles.",
         "셔플을 세 번 한 줄만 보고 원래 줄을 되찾아 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -203,7 +203,7 @@ export function makeShuffleCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Before reading code, see the shuffle in motion. Click 'Apply shuffle' a few times — watch which cows land where, and notice how the lineup at round 3 is what the problem gives you.",
+        "Click 'Apply shuffle' to see which cow lands where.",
         "'셔플 적용' 을 눌러 어느 소가 어디로 가는지 봐요."),
       content: <PermShuffleSim E={E} />,
     },

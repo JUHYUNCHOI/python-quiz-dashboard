@@ -10,7 +10,7 @@ export function makeCowntactCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows in a row. Some unknown cows started sick on day 0; each night, every sick cow infects her immediate neighbors.\nGiven the final state of who's sick (a string of 0s and 1s) after some number of nights, what's the SMALLEST number of cows that could have been sick on day 0?",
+        "Find the fewest cows that could have been sick on day 0.",
         "0일차에 감염됐던 소가 최소 몇 마리였을지 구해요."),
       content: (
         <div style={{ padding: 16 }}>

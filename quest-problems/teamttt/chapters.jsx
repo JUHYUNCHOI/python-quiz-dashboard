@@ -10,7 +10,7 @@ export function makeTttCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A 3×3 grid is filled with letters A..Z (each letter represents a cow). Eight 'lines' exist: 3 rows, 3 columns, 2 diagonals.\nA single cow WINS if her letter fills an entire line. A team of EXACTLY 2 cows wins if their two letters together fill a line.\nPrint (1) how many distinct cows win solo, (2) how many distinct 2-cow teams win.",
+        "A 3×3 grid holds cow letters across 8 lines (rows/cols/diagonals). Print how many cows win solo, and how many 2-cow teams win.",
         "한 줄을 혼자 채운 소와 둘이서 채운 팀을 세어 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -81,7 +81,7 @@ export function makeTttCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Before any code, play with the grid. Edit cells, edit team rosters, and watch the 8 lines get judged. The whole problem is just: take the SET of letters per line.",
+        "Before any code, edit the grid and team rosters, and watch the 8 lines get judged live.",
         "칸을 직접 바꿔 보면 8 개 줄의 결과가 바로 나와요."),
       content: <TeamLineChecker E={E} />,
     },
@@ -130,7 +130,7 @@ export function makeTttCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Walk the 8 lines (3 rows + 3 cols + 2 diagonals). Take the SET of letters in its 3 cells: size 1 → solo win, size 2 → 2-cow team. Collect distinct winners. Sections build it one piece at a time.",
+        "Walk the 8 lines — take the set of letters in its 3 cells: size 1 wins solo, size 2 wins as a team.",
         "8 개 줄을 하나씩 보면서 우승을 가려낼게요."),
       sections: getTeamTttSections(E),
     },

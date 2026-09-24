@@ -10,7 +10,7 @@ export function makeCandyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows and hangs M candy canes from above, one at a time. For each cane, every cow walks up in order and eats the bottom of the cane up to her own height — and GROWS by the amount she ate.\nAfter all canes, print each cow's final height.",
+        "Each cow eats the cane up to her height, and grows by what she ate.",
         "소들이 캔디를 자기 키까지 먹고 먹은 만큼 자라요."),
       content: (
         <div style={{ padding: 16 }}>

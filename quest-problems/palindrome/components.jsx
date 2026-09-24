@@ -267,7 +267,7 @@ export function PalindromeRunner({ E }) {
   const run = () => {
     const S = parseInt(sIn);
     if (!S || S < 1 || S > 100000) {
-      setResult({ error: t(E, "Invalid: S must be a positive integer ≤ 10⁵.", "S 는 1 부터 10⁵ 까지의 정수여야 해요.") });
+      setResult({ error: t(E, "Invalid: S must be a positive integer ≤ 10⁵ (100,000).", "S 는 1 부터 10⁵(10만) 까지의 정수여야 해요.") });
       return;
     }
     setRunning(true); setResult(null); setLiveN(0);

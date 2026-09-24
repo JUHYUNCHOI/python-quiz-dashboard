@@ -127,7 +127,7 @@ export function makeCowGymCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are K gymnastics sessions; in each session, N cows are ranked best to worst (a permutation of cow IDs).\nA pair of cows (i, j) is 'consistent' if one of them ranks higher than the other in EVERY single session — same direction every time.\nCount the number of consistent pairs.",
+        "Cows were ranked K times. How many pairs always kept the same order?",
         "소들을 K 번 줄 세웠어요.\n매번 앞뒤 순서가 같았던 소 두 마리는 몇 쌍일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -355,7 +355,7 @@ export function makeCowGymCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Your turn — pick a pair, then step through every session.\nWatch the rank cells light up, see who wins each round, and only call it consistent if the same cow wins every time.",
+        "Pick a pair, then step through every session — watch who wins each round.",
         "이번엔 직접 해봐요. 쌍을 고르고 세션마다 한 칸씩 넘겨 보세요.\nrank 칸이 켜지면 그 세션의 승자를 확인해요.\n매번 같은 소가 이겼을 때만 일관된 쌍이에요."),
       content: (<CowGymPairSim E={E} />),
     },
@@ -363,7 +363,7 @@ export function makeCowGymCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "For each of the N*(N-1)/2 pairs, we check all K sessions.\nTotal: O(K * N^2).\nWith N<=20 and K<=10 from constraints, this is at most 10*400 = 4000 operations.\nVery fast!", "쌍 N*(N-1)/2 개마다 세션 K 개를 확인해요.\n모두 합치면 O(K * N^2) 이에요.\nN<=20, K<=10 이니까 많아야 10*400 = 4000 번 계산해요.\n아주 빨라요."),
+        "Check K sessions for each of N*(N-1)/2 pairs — at most 4000 operations. Fast.", "쌍 N*(N-1)/2 개마다 세션 K 개를 확인해요.\n많아야 4000 번이라 아주 빨라요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>

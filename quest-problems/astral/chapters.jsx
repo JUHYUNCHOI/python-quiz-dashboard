@@ -788,7 +788,7 @@ export function makeAstralCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, watch ONE star move between two photos. Bessie the cow took a night-sky photo, waited, then took another. Stars either disappear OR slide right/down by a fixed amount. Try the toggles — see what the COMPOSITE looks like.",
+        "Watch how one star moves between the two photos. 👇",
         "별 하나가 두 사진 사이에서 어떻게 움직이는지 봐요. 👇"),
       content: (
         <div>

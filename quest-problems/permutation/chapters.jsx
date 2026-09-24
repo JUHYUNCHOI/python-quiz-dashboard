@@ -345,8 +345,8 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "But the real constraint is N up to 10⁵. N! grows so fast it doesn't even fit in the universe.",
-        "그런데 실제 제약은 N 이 최대 10⁵ 이에요.\nN! 은 너무 빨리 커져서 우주에도 못 담아요."),
+        "But the real constraint is N up to 10⁵ (100,000). N! grows so fast it doesn't even fit in the universe.",
+        "그런데 실제 제약은 N 이 최대 10⁵(10만) 이에요.\nN! 은 너무 빨리 커져서 우주에도 못 담아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
@@ -358,7 +358,7 @@ export function makePermCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr", gap: "8px 12px", fontSize: 12, alignItems: "center" }}>
               <div style={{ fontWeight: 600, color: "#7f1d1d" }}>N</div>
               <div style={{ fontWeight: 600, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>N!</div>
-              <div style={{ fontWeight: 600, color: "#7f1d1d" }}>{t(E, "Time @ 10⁸/s", "10⁸/초 기준 시간")}</div>
+              <div style={{ fontWeight: 600, color: "#7f1d1d" }}>{t(E, "Time @ 10⁸/s (100M/sec)", "10⁸(1억)/초 기준 시간")}</div>
 
               {[
                 { n: 4,    fac: "24",                       time: t(E, "instant", "즉시"), bad: false },
