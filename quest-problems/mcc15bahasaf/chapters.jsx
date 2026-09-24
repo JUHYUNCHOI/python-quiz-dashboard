@@ -21,7 +21,19 @@ const DEMO_WORDS = DEMO_SENTENCE.split(" ").map((w) => w.split("/"));
 const DEMO_FLAT = [];
 DEMO_WORDS.forEach((w, wi) => w.forEach((syl, si) => DEMO_FLAT.push({ syl, wi, first: si === 0 })));
 
-const echoOf = (syl) => (VOWELS.includes(syl[0]) ? "f" + syl : "f" + syl.slice(1));
+/* 규칙은 "첫 글자가 모음이냐" 가 아니라 "음절 안에 첫 자음이 있느냐" 다 — 음절이
+   모음으로 시작해도 뒤에 자음이 있으면(예: "an") 그 자음을 f 로 갈아껴야 한다.
+   그래서 첫 글자만 보지 않고, 음절 전체를 훑어 첫 자음의 위치를 찾는다. */
+function firstConsonantPos(syl) {
+  for (let i = 0; i < syl.length; i++) {
+    if (!VOWELS.includes(syl[i])) return i;
+  }
+  return -1;
+}
+const echoOf = (syl) => {
+  const pos = firstConsonantPos(syl);
+  return pos === -1 ? "f" + syl : syl.slice(0, pos) + "f" + syl.slice(pos + 1);
+};
 
 /* Output built from the first (n+1) syllables. */
 function partialOutput(n) {
@@ -37,13 +49,15 @@ function partialOutput(n) {
 /* ─────────────────────────────────────────────────────────────
    Concept sim: walk ONE syllable at a time and watch its echo.
    Teaches: the whole problem is a single per-syllable rule —
-   consonant start → swap the first letter for 'f';
-   vowel start    → stick an 'f' in front.
+   has a consonant  → swap the first consonant for 'f'
+   (wherever it sits, not just when it's the first letter);
+   no consonant at all → stick an 'f' in front.
    ───────────────────────────────────────────────────────────── */
 function SyllableEchoSim({ E }) {
   const [i, setI] = useState(0);
   const cur = DEMO_FLAT[i];
-  const isVowelStart = VOWELS.includes(cur.syl[0]);
+  const pos = firstConsonantPos(cur.syl);
+  const hasConsonant = pos !== -1;
   const echo = echoOf(cur.syl);
 
   const chip = (syl, idx) => (
@@ -101,16 +115,17 @@ function SyllableEchoSim({ E }) {
           </div>
 
           <div style={{ display: "flex", gap: 8, alignItems: "baseline", marginBottom: 8 }}>
-            <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, minWidth: 52, flexShrink: 0 }}>{/* 이 칸은 syl[0] 을 그대로 보여준다 — 모음일 수도 있으니 "첫 글자" 가 맞다.
-                  규칙 문장 쪽만 원문(first consonant)에 맞춰 "첫 자음" 으로 쓴다. */}
-            {t(E, "first letter", "첫 글자")}</span>
+            <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, minWidth: 52, flexShrink: 0 }}>
+            {t(E, "1st consonant", "첫 자음")}</span>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, ...KA }}>
-              <b style={{ fontFamily: MONO, color: "#7c3aed" }}>{cur.syl[0]}</b>
-              {isVowelStart
-                ? t(E, " is a VOWEL → there is no consonant to swap, so put 'f' in front of the whole syllable.",
-                     " 는 모음이에요 → 갈아낄 자음이 없으니, 음절 통째로 앞에 'f' 를 붙여요.")
-                : t(E, " is a CONSONANT → swap that first consonant for 'f'.",
-                     " 는 자음이에요 → 그 첫 자음을 'f' 로 갈아껴요.")}
+              {hasConsonant
+                ? (<>
+                    <b style={{ fontFamily: MONO, color: "#7c3aed" }}>{cur.syl[pos]}</b>
+                    {t(E, " — swap that first consonant for 'f'.",
+                         " — 이 자음을 'f' 로 갈아껴요.")}
+                  </>)
+                : t(E, "none in this syllable → put 'f' in front of the whole syllable.",
+                     "이 음절엔 자음이 없어요 → 음절 통째로 앞에 'f' 를 붙여요.")}
             </div>
           </div>
 
@@ -350,8 +365,8 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
                 💡 {t(E, "Get the one-syllable rule exactly right", "음절 하나짜리 규칙만 정확히")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-                {t(E, "Consonant start → echo = 'f' + the rest. Vowel start → echo = 'f' + the whole syllable. Then glue: syllable + echo. Everything else is just putting the pieces back together.",
-                     "자음으로 시작하면 메아리 = 'f' + 나머지 예요. 모음으로 시작하면 메아리 = 'f' + 음절 전체고요. 그다음 음절 + 메아리 로 붙여요. 나머지는 조각을 다시 이어 붙이는 일뿐이에요.")}
+                {t(E, "Find the syllable's first consonant. If there is one, echo = that consonant swapped for 'f'. If there is none, echo = 'f' + the whole syllable. Then glue: syllable + echo. Everything else is just putting the pieces back together.",
+                     "음절 안에서 첫 자음을 찾아요. 있으면 메아리 = 그 자음만 'f' 로 갈아낀 음절이고, 없으면 메아리 = 'f' + 음절 전체예요. 그다음 음절 + 메아리 로 붙여요. 나머지는 조각을 다시 이어 붙이는 일뿐이에요.")}
               </div>
             </div>
           </div>
