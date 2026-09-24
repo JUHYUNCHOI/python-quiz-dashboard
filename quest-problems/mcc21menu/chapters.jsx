@@ -257,7 +257,7 @@ export function makeMcc21MenuCh1(E) {
             </div>
             <div style={{ background: "#0f172a", color: "#c4b5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800, fontSize: 18 }}>8</div>
+              <div style={{ fontWeight: 800, fontSize: 18 }}>8 <span style={{ color: "#c4b5fd", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← min lines", "← 최소 줄 수")}</span></div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55,

@@ -98,12 +98,12 @@ export function makeBackForthCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 8 }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
               <div style={{ color: "#94a3b8", marginBottom: 4 }}>Input</div>
-              <div>1 2 3 4 5 6 7 8 9 10</div>
-              <div>10 9 8 7 6 5 4 3 2 1</div>
+              <div>1 2 3 4 5 6 7 8 9 10 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "barn 1", "헛간 1")}</span></div>
+              <div>10 9 8 7 6 5 4 3 2 1 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "barn 2", "헛간 2")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
               <div style={{ color: "#94a3b8", marginBottom: 4 }}>Output</div>
-              <div>33</div>
+              <div>33 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "distinct totals", "서로 다른 값 개수")}</span></div>
             </div>
           </div>
           <div style={{ fontSize: 11, color: C.dim, lineHeight: 1.5, wordBreak: "keep-all" }}>

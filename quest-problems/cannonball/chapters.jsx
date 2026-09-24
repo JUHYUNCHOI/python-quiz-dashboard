@@ -131,19 +131,19 @@ export function makeCannonCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#9a3412", whiteSpace: "pre" }}>
-{`5 2
-0 1
-1 1
-1 2
-0 1
-1 1`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#9a3412" }}>
+                <div>5 2 <span style={{ fontSize: 10.5, color: "#9a3412", opacity: 0.65 }}>← {t(E, "N pads, start S", "패드 N, 시작 S")}</span></div>
+                <div>0 1 <span style={{ fontSize: 10.5, color: "#9a3412", opacity: 0.65 }}>← {t(E, "pos 1: jump pad, add 1", "1번: 점프패드, +1")}</span></div>
+                <div>1 1 <span style={{ fontSize: 10.5, color: "#9a3412", opacity: 0.65 }}>← {t(E, "pos 2: target, value 1", "2번: 타겟, 값 1")}</span></div>
+                <div>1 2 <span style={{ fontSize: 10.5, color: "#9a3412", opacity: 0.65 }}>← {t(E, "pos 3: target, value 2", "3번: 타겟, 값 2")}</span></div>
+                <div>0 1 <span style={{ fontSize: 10.5, color: "#9a3412", opacity: 0.65 }}>← {t(E, "pos 4: jump pad, add 1", "4번: 점프패드, +1")}</span></div>
+                <div>1 1 <span style={{ fontSize: 10.5, color: "#9a3412", opacity: 0.65 }}>← {t(E, "pos 5: target, value 1", "5번: 타겟, 값 1")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`1`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
+                <div>1 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "targets broken", "부서진 타겟 수")}</span></div>
               </div>
             </div>
           </div>

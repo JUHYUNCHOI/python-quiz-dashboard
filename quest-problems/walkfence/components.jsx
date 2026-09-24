@@ -536,7 +536,7 @@ export function getWalkFenceSections(E) {
       py: WF_QUERY_PY, cpp: WF_QUERY_CPP,
       why: [
         t(E, "Scanning all P edges per query is too slow (N·P). Instead, group edges by\ntheir fixed coordinate — then a query only checks the small group at that x or y.",
-            "매번 변 P 개를 다 보면 N·P 라 너무 느려요. 대신 변을 고정된 좌표별로\n묶어 두면, 쿼리마다 그 x 나 y 에 속한 작은 무리만 보면 돼요."),
+            "매번 변 P 개를 다 보면 N·P 라 너무 느려요. 대신 변을 고정된 좌표별로\n묶어 두면, 물음마다 그 x 나 y 에 속한 작은 무리만 보면 돼요."),
         t(E, "Within a group, binary search (bisect) finds the right segment in O(log P)\ninstead of scanning it.",
             "묶음 안에서는 이진 탐색(bisect)으로 O(log P) 만에 맞는 변을 찾아요."),
         t(E, "Why compute both directions? We can't tell which way is shorter in advance — one way is |d1 - d2|, the other is perimeter - |d1 - d2|. Take the min.",
@@ -559,7 +559,7 @@ export function getWalkFenceSections(E) {
         t(E, "Read posts → cumulative distances → for each cow, find both points on perimeter and pick shorter side.",
             "코너를 읽고, 쌓아 온 거리를 만들고, 소마다 두 점을 둘레에서 찾아 짧은 쪽을 골라요."),
         t(E, "Total work: O((N + P) log P) — building the lookup takes O(P log P),\neach of the N queries takes O(log P).",
-            "빠른 찾기를 만드는 데 O(P log P), 소 N 마리 각각의 쿼리에 O(log P) —\n모두 O((N + P) log P) 예요."),
+            "빠른 찾기를 만드는 데 O(P log P), 소 N 마리 각각의 물음에 O(log P) —\n모두 O((N + P) log P) 예요."),
       ],
     },
   ];

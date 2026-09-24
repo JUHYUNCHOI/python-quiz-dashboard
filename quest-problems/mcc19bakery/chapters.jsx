@@ -321,14 +321,14 @@ export function makeMcc19BakeryCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
               <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre", overflowX: "auto" }}>
-{`8
-3 2 6 8 10 1 7 9`}
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12" }}>
+                  <div>8 <span style={{ fontSize: 10.5, color: "#92400e", opacity: 0.65 }}>← {t(E, "N (breads)", "N (빵 개수)")}</span></div>
+                  <div style={{ overflowX: "auto" }}>3 2 6 8 10 1 7 9 <span style={{ fontSize: 10.5, color: "#92400e", opacity: 0.65 }}>← {t(E, "prices", "가격")}</span></div>
                 </div>
               </div>
               <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`35`}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>35 <span style={{ fontSize: 10.5, color: "#15803d", opacity: 0.65 }}>← {t(E, "min total cost", "최소 총 비용")}</span></div>
               </div>
             </div>
             {/* 2026-09-17: 여기 있던 "8 과 3 이 무료라 46 − 11 = 35" 를 뺐다.

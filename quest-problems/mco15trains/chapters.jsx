@@ -109,17 +109,19 @@ export function makeTrainsCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
               <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#1e3a8a", whiteSpace: "pre" }}>
-{`3
-1 9 1
-1 9 1
-1 1 1
-1 1 1 3`}
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#1e3a8a" }}>
+                  <div>3 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← N", "← N")}</span></div>
+                  <div>1 9 1 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← row 1", "← 1행")}</span></div>
+                  <div>1 9 1 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← row 2", "← 2행")}</span></div>
+                  <div>1 1 1 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← row 3", "← 3행")}</span></div>
+                  <div>1 1 1 3 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← A,B position", "← A행A열B행B열")}</span></div>
                 </div>
               </div>
               <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`7`}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>
+                  7 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← min cost", "← 최소 비용")}</span>
+                </div>
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic", whiteSpace: "pre-line" }}>

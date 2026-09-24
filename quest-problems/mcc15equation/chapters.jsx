@@ -343,7 +343,7 @@ export function makeMcc15EqCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "sample input", "예제 입력")}</div>
-              <div>13 2 15</div>
+              <div>13 2 15 <span style={{ fontSize: 10.5, color: "#8b949e" }}>← x y z</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#fcd34d", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 110 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "sample output", "예제 출력")}</div>

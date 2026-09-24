@@ -126,15 +126,15 @@ export function makeBacteriaCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#065f46", whiteSpace: "pre" }}>
-{`2
--1 3`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#065f46" }}>
+                <div>2 <span style={{ fontSize: 10.5, color: "#065f46", opacity: 0.6 }}>← {t(E, "N (patches)", "N (패치 수)")}</span></div>
+                <div>-1 3 <span style={{ fontSize: 10.5, color: "#065f46", opacity: 0.6 }}>← {t(E, "a[1..N]", "a[1..N]")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`6`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
+                <div>6 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.6 }}>← {t(E, "min walks", "최소 워크 수")}</span></div>
               </div>
             </div>
           </div>

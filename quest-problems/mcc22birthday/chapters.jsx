@@ -129,14 +129,14 @@ export function makeMcc22BirthdayCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 140 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>4 2 4</div>
-              <div>ABCA</div>
-              <div>BCAC</div>
-              <div>1 3 6 12</div>
+              <div>4 2 4 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← N S Q", "← N S Q")}</span></div>
+              <div>ABCA <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← scroll 1", "← 두루마리1")}</span></div>
+              <div>BCAC <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← scroll 2", "← 두루마리2")}</span></div>
+              <div>1 3 6 12 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← friends", "← 친구번호")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 110 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>pqpdppdd</div>
+              <div style={{ fontWeight: 800 }}>pqpdppdd <span style={{ color: "#4ade80", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← shapes", "← 모양들")}</span></div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>

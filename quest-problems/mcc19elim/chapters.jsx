@@ -274,14 +274,14 @@ export function makeMcc19ElimCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8 }}>
               <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#1e3a8a", whiteSpace: "pre", overflowX: "auto" }}>
-{`15 1
-101111001110111`}
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#1e3a8a" }}>
+                  <div>15 1 <span style={{ fontSize: 10.5, color: "#1e3a8a", opacity: 0.65 }}>← {t(E, "N K", "N K")}</span></div>
+                  <div style={{ overflowX: "auto" }}>101111001110111 <span style={{ fontSize: 10.5, color: "#1e3a8a", opacity: 0.65 }}>← {t(E, "s", "s")}</span></div>
                 </div>
               </div>
               <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`6`}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>6 <span style={{ fontSize: 10.5, color: "#15803d", opacity: 0.65 }}>← {t(E, "longest run", "가장 긴 연속 1")}</span></div>
               </div>
             </div>
             {/* 2026-09-08: 여기 계산이 **틀려 있었다.**

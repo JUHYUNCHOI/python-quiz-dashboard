@@ -100,17 +100,17 @@ export function makeBitcoinCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
               <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#9a3412", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`4
-1 1
-5 2
-2 6
-6 5`}
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12" }}>
+                  <div>4 <span style={{ color: "#b45309", fontSize: 10 }}>{t(E, "← N", "← N")}</span></div>
+                  <div>1 1 <span style={{ color: "#b45309", fontSize: 10 }}>{t(E, "← site 1", "← 사이트1")}</span></div>
+                  <div>5 2 <span style={{ color: "#b45309", fontSize: 10 }}>{t(E, "← site 2", "← 사이트2")}</span></div>
+                  <div>2 6 <span style={{ color: "#b45309", fontSize: 10 }}>{t(E, "← site 3", "← 사이트3")}</span></div>
+                  <div>6 5 <span style={{ color: "#b45309", fontSize: 10 }}>{t(E, "← site 4", "← 사이트4")}</span></div>
                 </div>
               </div>
               <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`41`}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>41 <span style={{ color: "#15803d", fontSize: 10 }}>{t(E, "← max dist²", "← 최대 거리²")}</span></div>
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>

@@ -92,28 +92,28 @@ export function makeMajorityCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
-{`5
-5
-1 2 2 2 3
-6
-1 2 3 1 2 3
-6
-1 1 1 2 2 2
-3
-3 2 3
-2
-2 1`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d" }}>
+                <div>5 <span style={{ fontSize: 10.5, color: "#7f1d1d", opacity: 0.65 }}>← {t(E, "T (cases)", "T (문제 수)")}</span></div>
+                {[
+                  { n: 5, a: "1 2 2 2 3" },
+                  { n: 6, a: "1 2 3 1 2 3" },
+                  { n: 6, a: "1 1 1 2 2 2" },
+                  { n: 3, a: "3 2 3" },
+                  { n: 2, a: "2 1" },
+                ].map((c, i) => (
+                  <div key={i} style={{ marginTop: 4, paddingTop: 4, borderTop: i > 0 ? "1px dotted #fca5a5" : "none" }}>
+                    <div>{c.n} <span style={{ fontSize: 10.5, color: "#7f1d1d", opacity: 0.65 }}>← N ({i + 1}{t(E, "", "번")})</span></div>
+                    <div>{c.a} <span style={{ fontSize: 10.5, color: "#7f1d1d", opacity: 0.65 }}>← {t(E, "cow preferences", "소가 좋아하는 건초")}</span></div>
+                  </div>
+                ))}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`2
--1
-1 2
-3
--1`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
+                {["2", "-1", "1 2", "3", "-1"].map((v, i) => (
+                  <div key={i}>{v} <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {i + 1}{t(E, "", "번")} {t(E, "answer", "답")}</span></div>
+                ))}
               </div>
             </div>
           </div>

@@ -134,43 +134,31 @@ export function makeFjFarmsCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#065f46", whiteSpace: "pre" }}>
-{`6
-1
-10
-1
-0
-2
-7 3
-8 10
-1 0
-2
-3 6
-10 8
-0 1
-2
-7 3
-8 9
-1 0
-2
-7 7
-8 8
-0 1
-2
-7 3
-8 8
-1 0`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#065f46" }}>
+                <div>6 <span style={{ fontSize: 10.5, color: "#065f46", opacity: 0.65 }}>← {t(E, "T (cases)", "T (문제 수)")}</span></div>
+                {[
+                  { n: 1, h: "10", a: "1", tt: "0" },
+                  { n: 2, h: "7 3", a: "8 10", tt: "1 0" },
+                  { n: 2, h: "3 6", a: "10 8", tt: "0 1" },
+                  { n: 2, h: "7 3", a: "8 9", tt: "1 0" },
+                  { n: 2, h: "7 7", a: "8 8", tt: "0 1" },
+                  { n: 2, h: "7 3", a: "8 8", tt: "1 0" },
+                ].map((c, i) => (
+                  <div key={i} style={{ marginTop: 4, paddingTop: 4, borderTop: i > 0 ? "1px dotted #a7f3d0" : "none" }}>
+                    <div>{c.n} <span style={{ fontSize: 10.5, color: "#065f46", opacity: 0.65 }}>← N ({i + 1}{t(E, "", "번")})</span></div>
+                    <div>{c.h} <span style={{ fontSize: 10.5, color: "#065f46", opacity: 0.65 }}>← h[]</span></div>
+                    <div>{c.a} <span style={{ fontSize: 10.5, color: "#065f46", opacity: 0.65 }}>← a[]</span></div>
+                    <div>{c.tt} <span style={{ fontSize: 10.5, color: "#065f46", opacity: 0.65 }}>← t[]</span></div>
+                  </div>
+                ))}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`0
-3
-2
-5
--1
--1`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
+                {[0, 3, 2, 5, -1, -1].map((v, i) => (
+                  <div key={i}>{v} <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {i + 1}{t(E, "", "번")} {t(E, "answer", "답")}</span></div>
+                ))}
               </div>
             </div>
           </div>

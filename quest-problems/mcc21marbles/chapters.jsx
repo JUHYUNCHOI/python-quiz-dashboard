@@ -111,7 +111,7 @@ export function makeMcc21MarblesCh1(E) {
             </div>
             <div style={{ background: "#0f172a", color: "#fca5a5", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>4</div>
+              <div style={{ fontWeight: 800 }}>4 <span style={{ color: "#fca5a5", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← min moves", "← 최소 횟수")}</span></div>
             </div>
           </div>
           {/* 2026-09-17: 98 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}

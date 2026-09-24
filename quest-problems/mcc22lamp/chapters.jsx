@@ -116,14 +116,14 @@ export function makeMcc22LampCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>1</div>
-              <div>4 6</div>
-              <div style={{ overflowX: "auto" }}>-5 -3 0 7</div>
-              <div style={{ overflowX: "auto" }}>3 2 6 1</div>
+              <div>1 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← T", "← T")}</span></div>
+              <div>4 6 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← n k", "← n k")}</span></div>
+              <div style={{ overflowX: "auto" }}>-5 -3 0 7 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← positions", "← 위치")}</span></div>
+              <div style={{ overflowX: "auto" }}>3 2 6 1 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← brightness", "← 밝기")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#c4b5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>2</div>
+              <div style={{ fontWeight: 800 }}>2 <span style={{ color: "#4ade80", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← count", "← 개수")}</span></div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>

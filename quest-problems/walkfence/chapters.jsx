@@ -67,27 +67,27 @@ export function makeWalkCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: TINT, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: DARK, marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: DARK, whiteSpace: "pre" }}>
-{`5 4
-0 0
-2 0
-2 2
-0 2
-0 0 0 2
-0 2 1 0
-2 1 0 2
-1 0 1 2
-1 2 1 0`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: DARK }}>
+                <div>5 4 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← N P", "← N P")}</span></div>
+                <div>0 0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← post 1", "← 코너1")}</span></div>
+                <div>2 0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← post 2", "← 코너2")}</span></div>
+                <div>2 2 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← post 3", "← 코너3")}</span></div>
+                <div>0 2 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← post 4", "← 코너4")}</span></div>
+                <div>0 0 0 2 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 1", "← 소1")}</span></div>
+                <div>0 2 1 0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 2", "← 소2")}</span></div>
+                <div>2 1 0 2 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 3", "← 소3")}</span></div>
+                <div>1 0 1 2 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 4", "← 소4")}</span></div>
+                <div>1 2 1 0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 5", "← 소5")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`2
-3
-3
-4
-4`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
+                <div>2 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 1", "← 소1")}</span></div>
+                <div>3 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 2", "← 소2")}</span></div>
+                <div>3 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 3", "← 소3")}</span></div>
+                <div>4 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 4", "← 소4")}</span></div>
+                <div>4 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← cow 5", "← 소5")}</span></div>
               </div>
             </div>
           </div>

@@ -315,7 +315,7 @@ export function makeMcc21GlassCh1(E) {
             </div>
             <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800, fontSize: 15 }}>3</div>
+              <div style={{ fontWeight: 800, fontSize: 15 }}>3 <span style={{ color: "#4ade80", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← radius", "← 깨진 반지름")}</span></div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>

@@ -270,15 +270,17 @@ export function makeSecretCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
               <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#4c1d95", whiteSpace: "pre" }}>
-{`5
-1 2 3 4 5
-3 4 5 1 2`}
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#4c1d95" }}>
+                  <div>5 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← N", "← N")}</span></div>
+                  <div>1 2 3 4 5 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← a", "← a")}</span></div>
+                  <div>3 4 5 1 2 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← b", "← b")}</span></div>
                 </div>
               </div>
               <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`YES`}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>
+                  YES <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← b is a rotation", "← 돌린 것 맞음")}</span>
+                </div>
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>

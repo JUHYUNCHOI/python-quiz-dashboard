@@ -103,15 +103,15 @@ export function makeMcc19Rect2Ch1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
               <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`0 0
-2 0
-0 3`}
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12" }}>
+                  <div>0 0 <span style={{ color: "#b45309", fontSize: 10 }}>{t(E, "← 1st", "← 1번째")}</span></div>
+                  <div>2 0 <span style={{ color: "#b45309", fontSize: 10 }}>{t(E, "← 2nd", "← 2번째")}</span></div>
+                  <div>0 3 <span style={{ color: "#b45309", fontSize: 10 }}>{t(E, "← 3rd", "← 3번째")}</span></div>
                 </div>
               </div>
               <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`2 3`}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>2 3 <span style={{ color: "#15803d", fontSize: 10 }}>{t(E, "← 4th corner", "← 4번째 꼭짓점")}</span></div>
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>

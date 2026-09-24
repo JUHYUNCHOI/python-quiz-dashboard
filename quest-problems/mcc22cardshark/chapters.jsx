@@ -289,14 +289,14 @@ export function makeMcc22CardSharkCh1(E) {
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input (1st test case)", "예제 입력 (첫 번째 케이스)")}</div>
               <div>4          <span style={{ color: "#8b949e" }}>{t(E, "# n = 4 stacks", "# 묶음이 n = 4 개")}</span></div>
-              <div>2 4 5</div>
-              <div>3 6 2 3</div>
-              <div>1 8</div>
-              <div>4 1 2 5 0</div>
+              <div>2 4 5 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← stack 1", "← 묶음1")}</span></div>
+              <div>3 6 2 3 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← stack 2", "← 묶음2")}</span></div>
+              <div>1 8 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← stack 3", "← 묶음3")}</span></div>
+              <div>4 1 2 5 0 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← stack 4", "← 묶음4")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>6</div>
+              <div style={{ fontWeight: 800 }}>6 <span style={{ color: "#4ade80", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← score diff", "← 점수차")}</span></div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>

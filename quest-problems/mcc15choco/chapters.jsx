@@ -97,12 +97,12 @@ export function makeMcc15ChocoCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 170 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>8</div>
-              <div style={{ overflowX: "auto" }}>3 4 4 5 9 9 5 2</div>
+              <div>8 <span style={{ fontSize: 10.5, color: "#8b949e" }}>← {t(E, "N (bars)", "N (바 개수)")}</span></div>
+              <div style={{ overflowX: "auto" }}>3 4 4 5 9 9 5 2 <span style={{ fontSize: 10.5, color: "#8b949e" }}>← {t(E, "bar lengths", "바 길이")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#c4b5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>36</div>
+              <div style={{ fontWeight: 800 }}>36 <span style={{ fontSize: 10.5, color: "#8b949e", fontWeight: 400 }}>← {t(E, "total length removed", "제거한 총 길이")}</span></div>
             </div>
           </div>
 

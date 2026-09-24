@@ -219,12 +219,12 @@ export function makeMcc19RectCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>5</div>
-              <div>1 5 7 10 12</div>
+              <div>5 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← N", "← N")}</span></div>
+              <div>1 5 7 10 12 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← the numbers", "← 수 5개")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#86efac", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>2</div>
+              <div style={{ fontWeight: 800 }}>2 <span style={{ color: "#4ade80", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← answer", "← 답")}</span></div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.65, wordBreak: "keep-all", textWrap: "balance" }}>

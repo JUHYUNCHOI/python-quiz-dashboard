@@ -113,16 +113,18 @@ export function makeHoneyCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
               <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`3 10 4
-25
-12
-8`}
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12" }}>
+                  <div>3 10 4 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← 3 hives,pot 10,K=4", "← 벌집3 항아리10 왕복4")}</span></div>
+                  <div>25 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← hive 1", "← 1번 벌집")}</span></div>
+                  <div>12 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← hive 2", "← 2번 벌집")}</span></div>
+                  <div>8 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← hive 3", "← 3번 벌집")}</span></div>
                 </div>
               </div>
               <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`38`}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>
+                  38 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← max honey", "← 최대 꿀량")}</span>
+                </div>
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>

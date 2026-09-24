@@ -151,11 +151,11 @@ export function makeBalancedCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
             <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#7c2d12", whiteSpace: "pre" }}>
-{`3
-5 3
-1 5
-100 42`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#7c2d12" }}>
+                <div>3 <span style={{ fontSize: 10.5, color: "#9a3412" }}>← {t(E, "T (test cases)", "T (문제 수)")}</span></div>
+                <div>5 3 <span style={{ fontSize: 10.5, color: "#9a3412" }}>← {t(E, "N M (case 1)", "N M (1번)")}</span></div>
+                <div>1 5 <span style={{ fontSize: 10.5, color: "#9a3412" }}>← {t(E, "N M (case 2)", "N M (2번)")}</span></div>
+                <div>100 42 <span style={{ fontSize: 10.5, color: "#9a3412" }}>← {t(E, "N M (case 3)", "N M (3번)")}</span></div>
               </div>
               <div style={{ fontSize: 10.5, color: "#9a3412", marginTop: 6, lineHeight: 1.5 }}>
                 {t(E, "Line 1: T = 3 cases. Then T lines of 'N M'.", "첫 줄의 T = 3 은 문제가 세 개라는 뜻이에요. 그 아래 세 줄이 'N M' 이에요.")}
@@ -163,10 +163,10 @@ export function makeBalancedCh1(E) {
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#166534", whiteSpace: "pre" }}>
-{`6
-2
-84`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#166534" }}>
+                <div>6 <span style={{ fontSize: 10.5, color: "#15803d" }}>← {t(E, "case 1 answer", "1번 답")}</span></div>
+                <div>2 <span style={{ fontSize: 10.5, color: "#15803d" }}>← {t(E, "case 2 answer", "2번 답")}</span></div>
+                <div>84 <span style={{ fontSize: 10.5, color: "#15803d" }}>← {t(E, "case 3 answer", "3번 답")}</span></div>
               </div>
               <div style={{ fontSize: 10.5, color: "#15803d", marginTop: 6, lineHeight: 1.5 }}>
                 {t(E, "One length per test case.", "문제마다 균형 부분수열의 길이를 한 줄씩 적어요.")}

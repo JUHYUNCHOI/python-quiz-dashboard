@@ -97,15 +97,15 @@ export function makeRotShiftCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>{t(E, "INPUT", "\uc785\ub825")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#5b21b6", whiteSpace: "pre" }}>
-{`5 3 4
-0 2 3`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#5b21b6" }}>
+                <div>5 3 4 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "\u2190 N K T", "\u2190 N K T")}</span></div>
+                <div>0 2 3 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "\u2190 active pos", "\u2190 \ud65c\uc131 \uc704\uce58")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "\ucd9c\ub825")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`1 2 3 4 0`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
+                1 2 3 4 0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "\u2190 cow at p=0..4", "\u2190 p=0..4 \uc758 \uc18c")}</span>
               </div>
             </div>
           </div>

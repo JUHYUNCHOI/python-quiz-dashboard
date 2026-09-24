@@ -106,21 +106,21 @@ export function makeMcc22MazeCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>2</div>
-              <div>4</div>
+              <div>2 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← T", "← T")}</span></div>
+              <div>4 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← n (test 1)", "← n (테스트1)")}</span></div>
               <div>..##</div>
               <div>#.##</div>
               <div>#..#</div>
               <div>##..</div>
-              <div>3</div>
+              <div>3 <span style={{ color: "#64748b", fontSize: 10.5 }}>{t(E, "← n (test 2)", "← n (테스트2)")}</span></div>
               <div>.#.</div>
               <div>.#.</div>
               <div>.#.</div>
             </div>
             <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 80 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>0</div>
-              <div style={{ fontWeight: 800 }}>1</div>
+              <div style={{ fontWeight: 800 }}>0 <span style={{ color: "#4ade80", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← test 1", "← 테스트1")}</span></div>
+              <div style={{ fontWeight: 800 }}>1 <span style={{ color: "#4ade80", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← test 2", "← 테스트2")}</span></div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>

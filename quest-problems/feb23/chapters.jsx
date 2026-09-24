@@ -93,17 +93,17 @@ export function makeFebCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
-{`4
-BEEF`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d" }}>
+                <div>4 <span style={{ fontSize: 10.5, color: "#7f1d1d", opacity: 0.65 }}>← {t(E, "N (message length)", "N (메시지 길이)")}</span></div>
+                <div>BEEF <span style={{ fontSize: 10.5, color: "#7f1d1d", opacity: 0.65 }}>← {t(E, "the message", "메시지")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`2
-1
-2`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
+                <div>2 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "distinct values count", "서로 다른 값 개수")}</span></div>
+                <div>1 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "min", "최솟값")}</span></div>
+                <div>2 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "max", "최댓값")}</span></div>
               </div>
             </div>
           </div>

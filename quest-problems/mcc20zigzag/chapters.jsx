@@ -316,7 +316,7 @@ export function makeMcc20ZigzagCh1(E) {
               </div>
               <div style={{ background: "#fff", border: "1px solid #e9d5ff", borderRadius: 8, padding: "6px 10px", fontFamily: "monospace" }}>
                 <div style={{ color: C.dim, fontSize: 11 }}>{t(E, "output", "출력")}</div>
-                <div>5</div>
+                <div>5 <span style={{ color: C.dim, fontSize: 10 }}>{t(E, "← count", "← 개수")}</span></div>
               </div>
               <div style={{ flex: 1, minWidth: 140, color: C.dim, fontSize: 11.5, lineHeight: 1.5, alignSelf: "center" }}>
                 {t(E, "bca, bad, bae, cad, cae — 5 length-3 zig-zags.", "bca, bad, bae, cad, cae — 길이 3 지그재그가 5 개예요.")}

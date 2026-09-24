@@ -698,13 +698,13 @@ export function makeSimpleGameCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, flex: 1, minWidth: 130 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>2</div>
-              <div>4 2</div>
-              <div>1 3</div>
+              <div>2 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← n", "← n")}</span></div>
+              <div>4 2 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← pair 1", "← 쌍1")}</span></div>
+              <div>1 3 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← pair 2", "← 쌍2")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#86efac", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>1</div>
+              <div style={{ fontWeight: 800 }}>1 <span style={{ color: "#8b949e", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← X−Y", "← X−Y")}</span></div>
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
@@ -725,11 +725,14 @@ export function makeSimpleGameCh1(E) {
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, flex: 1, minWidth: 130 }}>
                 <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "input", "입력")}</div>
-                <div>3</div><div>2 5</div><div>4 1</div><div>1 1</div>
+                <div>3 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← n", "← n")}</span></div>
+                <div>2 5 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← pair 1", "← 쌍1")}</span></div>
+                <div>4 1 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← pair 2", "← 쌍2")}</span></div>
+                <div>1 1 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← pair 3", "← 쌍3")}</span></div>
               </div>
               <div style={{ background: "#0f172a", color: "#86efac", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, minWidth: 90 }}>
                 <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontWeight: 800 }}>2</div>
+                <div style={{ fontWeight: 800 }}>2 <span style={{ color: "#8b949e", fontSize: 10.5, fontWeight: 400 }}>{t(E, "← X−Y", "← X−Y")}</span></div>
               </div>
             </div>
             {/* 설명 — 원문(mcc24simplegame.pdf)의 Sample Explanation 도 이렇게 한다:

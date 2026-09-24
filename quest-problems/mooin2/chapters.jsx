@@ -143,12 +143,16 @@ export function makeMooin2Ch1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 12 }}>
             <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>{`6
-1 2 3 4 4 4`}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12" }}>
+                <div>6 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← N", "← N")}</span></div>
+                <div>1 2 3 4 4 4 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← array a", "← 배열 a")}</span></div>
+              </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#166534" }}>3</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#166534" }}>
+                3 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← distinct moos", "← 서로 다른 moo 수")}</span>
+              </div>
             </div>
           </div>
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: 12, fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>

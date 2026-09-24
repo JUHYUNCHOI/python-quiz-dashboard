@@ -139,18 +139,18 @@ export function makeCandyCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
-{`3 2
-3 2 5
-6 1`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d" }}>
+                <div>3 2 <span style={{ fontSize: 10.5, color: "#7f1d1d", opacity: 0.65 }}>← {t(E, "N cows, M canes", "소 N, 캔디 M")}</span></div>
+                <div>3 2 5 <span style={{ fontSize: 10.5, color: "#7f1d1d", opacity: 0.65 }}>← {t(E, "cow heights", "소 키")}</span></div>
+                <div>6 1 <span style={{ fontSize: 10.5, color: "#7f1d1d", opacity: 0.65 }}>← {t(E, "cane heights", "캔디 높이")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`7
-2
-7`}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
+                <div>7 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "cow 1 final height", "소 1 최종 키")}</span></div>
+                <div>2 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "cow 2 final height", "소 2 최종 키")}</span></div>
+                <div>7 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "cow 3 final height", "소 3 최종 키")}</span></div>
               </div>
             </div>
           </div>

@@ -103,14 +103,14 @@ export function makeMcc19DitcoinCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
               <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#9a3412", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`3
-3 1 5`}
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12" }}>
+                  <div>3 <span style={{ fontSize: 10.5, color: "#9a3412", opacity: 0.65 }}>← {t(E, "D (days)", "D (일 수)")}</span></div>
+                  <div>3 1 5 <span style={{ fontSize: 10.5, color: "#9a3412", opacity: 0.65 }}>← {t(E, "prices", "가격")}</span></div>
                 </div>
               </div>
               <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`15`}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>15 <span style={{ fontSize: 10.5, color: "#15803d", opacity: 0.65 }}>← {t(E, "max total", "최대 총액")}</span></div>
               </div>
             </div>
             {/* 2026-09-08: 여기 있던 "왜 15?" 설명을 뺐다.
@@ -141,12 +141,12 @@ export function makeMcc19DitcoinCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, flex: 1, minWidth: 190 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>8</div>
-              <div>3 2 6 8 10 1 7 9</div>
+              <div>8 <span style={{ fontSize: 10.5, color: "#8b949e" }}>← {t(E, "D (days)", "D (일 수)")}</span></div>
+              <div>3 2 6 8 10 1 7 9 <span style={{ fontSize: 10.5, color: "#8b949e" }}>← {t(E, "prices", "가격")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#86efac", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
-              <div style={{ fontWeight: 800 }}>77</div>
+              <div style={{ fontWeight: 800 }}>77 <span style={{ fontSize: 10.5, color: "#8b949e", fontWeight: 400 }}>← {t(E, "max total", "최대 총액")}</span></div>
             </div>
           </div>
           <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.75, whiteSpace: "pre-line", textWrap: "balance" }}>
