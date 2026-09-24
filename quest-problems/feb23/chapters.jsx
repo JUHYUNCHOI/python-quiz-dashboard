@@ -25,8 +25,8 @@ export function makeFebCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
-              {t(E, "Print 3 lines: count of distinct excitement values, then min, then max — across all F-assignments.",
-                    "F 를 정하는 모든 방법에서 나오는 흥분도를 모아요. 서로 다른 값의 개수, 최솟값, 최댓값을 세 줄로 출력해요.")}
+              {t(E, "Print K, the count of distinct excitement values, then those K values in increasing order — across all F-assignments.",
+                    "F 를 정하는 모든 방법에서 나오는 흥분도를 모아요. 서로 다른 값의 개수 K, 그리고 그 K개 값을 작은 순서로 출력해요.")}
             </div>
           </div>
 
@@ -69,9 +69,9 @@ export function makeFebCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Output 3 lines: ", "출력 3 줄: ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "count of distinct excitement values, then min, then max",
-                                                            "서로 다른 흥분도 값의 개수, 그 다음 최솟값, 최댓값")}</b>
+                  {t(E, "Output K+1 lines: ", "출력 K+1 줄: ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "K (count of distinct excitement values), then those K values in increasing order",
+                                                            "서로 다른 흥분도 값의 개수 K, 그 다음 그 값들을 작은 순서로")}</b>
                   {t(E, " across all F-assignments.", " — 모든 F 결정 방식 기준.")}
                 </div>
               </div>
@@ -83,7 +83,7 @@ export function makeFebCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Input: N on line 1, string of length N on line 2.  Output: 3 lines (count, min, max).",
+        "Input: N on line 1, string of length N on line 2.  Output: K, then K values in order.",
         "첫 줄에 N, 둘째 줄에 길이 N 인 문자열이 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -101,9 +101,9 @@ export function makeFebCh1(E) {
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534" }}>
-                <div>2 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "distinct values count", "서로 다른 값 개수")}</span></div>
-                <div>1 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "min", "최솟값")}</span></div>
-                <div>2 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "max", "최댓값")}</span></div>
+                <div>2 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "K (distinct values count)", "K (서로 다른 값 개수)")}</span></div>
+                <div>1 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "smallest value", "작은 값")}</span></div>
+                <div>2 <span style={{ fontSize: 10.5, color: "#166534", opacity: 0.65 }}>← {t(E, "largest value", "큰 값")}</span></div>
               </div>
             </div>
           </div>
@@ -119,8 +119,8 @@ export function makeFebCh1(E) {
                     "F → E: 'BEEE' → 인접 (E,E)(E,E) ✓✓ → 흥분도 2.")}
             </div>
             <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
-              {t(E, "Distinct values {1, 2} → count=2, min=1, max=2.",
-                    "서로 다른 값 {1, 2} → 개수=2, 최솟=1, 최댓=2.")}
+              {t(E, "Distinct values {1, 2} → K=2, then print 1, 2 in increasing order.",
+                    "서로 다른 값 {1, 2} → K=2, 그 다음 1, 2 를 작은 순서로 출력해요.")}
             </div>
           </div>
         </div>),
@@ -157,10 +157,10 @@ export function makeFebCh1(E) {
       narr: t(E,
         "Let's think about 'BEEF'.\nIf F→B, we get 'BEEB' (excitement 1).\nIf F→E, we get 'BEEE' (excitement 2).\nGot it?", "'BEEF' 의 F 를 E 로 바꾸면 'BEEE' 가 돼요."),
       question: t(E, "What is the excitement of 'BEEE'?", "'BEEE'의 흥분도는?"),
-      hint: t(E, "Count consecutive same pairs: B≠E, E=E, E=E", "옆끼리 같은지 하나씩 세어 봐요. B≠E, E=E, E=E"),
+      hint: t(E, "Count consecutive same pairs: B≠E (different), E=E (same), E=E (same)", "옆끼리 같은지 하나씩 세어 봐요. B≠E(다른 글자), E=E(같은 글자), E=E(같은 글자)"),
       options: ["1", "2", "3"],
       correct: 1,
-      explain: t(E, "B≠E, E=E ✅, E=E ✅ → 2 pairs!", "B≠E, E=E ✅, E=E ✅ → 2쌍!"),
+      explain: t(E, "B≠E (different), E=E (same) ✅, E=E (same) ✅ → 2 pairs!", "B≠E(다른 글자), E=E(같은 글자) ✅, E=E(같은 글자) ✅ → 2쌍!"),
     },
     {
       type: "input",

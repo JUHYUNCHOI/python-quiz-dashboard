@@ -3548,3 +3548,25 @@ quiz_input 변경 0건 확인. 그대로 커밋.
 REAL 목록에 셋 다 없음 · `check-frozen.py` 해당 없음(동결/USACO_VERIFIED 아님).
 
 ⚠️ 밀지(push)는 별개다 — 이 판정은 커밋 예산만 연다.
+
+## ✅ chipxchg 10¹⁸ 기호 설명 보강 — (2026-09-24, PM 판정)
+
+`check-undefined-symbol.py` 정리 작업이 오늘 네 번째로 `chipxchg` 를 스쳐 갔다
+(오늘 네 번째 커밋이라 걸쇠에 막힘). **판정: 진행.**
+
+근거 — `git diff quest-problems/chipxchg/sims.jsx` 직접 읽음. 6줄 수정·6줄 삭제,
+순증가 0줄. 이미 있던 `10¹⁸` 표기 네 곳 옆에 `(10억×10억)` 괄호를 영·한 대칭으로
+덧붙인 것뿐 — 새 문단·새 쪽·새 퀴즈 없음. `check-quest-length-regression.py chipxchg`
+exit 0. 동결·USACO_VERIFIED 해당 없음.
+
+⚠️ 밀지(push)는 별개다 — 이 판정은 커밋 예산만 연다.
+
+## ✅ feb23 채점 오답 수정 — (2026-09-24, PM 판정)
+
+USACO 채점기가 잡은 실제 정답 오류(K줄 증가 순서 출력해야 하는데 min/max만 출력 —
+공식 샘플 3개 중 2개가 K=2 라 우연히 통과했었음) + C++ `1 << nf` 의 nf≥31 오버플로
+(조용히 0 을 출력)를 고치는 작업이 오늘 여러 번째로 `feb23` 를 스쳐 감(걸쇠에 막힘).
+**판정: 진행.** 🔒 USACO_VERIFIED 지만 선생님이 오늘 수정을 명시 승인했고,
+고친 뒤 USACO 재제출 예정.
+
+⭐ 재제출 완료 — **Python 9/20 · C++ 9/20, 둘 다 오답 0.** 헤더 주석도 갱신했다.

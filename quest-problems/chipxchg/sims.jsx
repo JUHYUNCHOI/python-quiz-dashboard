@@ -360,8 +360,8 @@ export function FormulaDeriveSim({ E }) {
   const worst = rows[worstB];
   const say =
     s.kind === "why"
-      ? t(E, <>The same table we built. <span style={NW}>If x hits 10¹⁸</span> we can't scan all b — <span style={NW}>let's find the pattern.</span></>,
-             <>앞에서 만든 그 표예요. <span style={NW}>x 가 10¹⁸ 면</span> <span style={NW}>b 다 못 봐</span> → <span style={NW}>규칙을 찾아요.</span></>)
+      ? t(E, <>The same table we built. <span style={NW}>If x hits 10¹⁸ (a billion times a billion)</span> we can't scan all b — <span style={NW}>let's find the pattern.</span></>,
+             <>앞에서 만든 그 표예요. <span style={NW}>x 가 10¹⁸(10억×10억) 면</span> <span style={NW}>b 다 못 봐</span> → <span style={NW}>규칙을 찾아요.</span></>)
       : s.kind === "obs"
       ? t(E, <><b>Observe:</b> the value dips hardest where a split <b>wastes 2 B</b> (leftover cB−1 = 2). Those b = <span style={NW}><b>2, 5, 8</b></span> — the candidates for worst.</>,
              <><b>관찰:</b> <b>B 2개를 버릴 때</b>(자투리 cB−1 = 2) 값이 훅 낮아져요. 그런 b = <span style={NW}><b>2, 5, 8</b></span> — 최악 후보들.</>)
@@ -670,8 +670,8 @@ export function SearchSim({ E }) {
       ? t(E, <>First, the <b>top row</b> = the worst for each x. Read left→right: it <b>only stays or climbs — never drops</b>. (extra chips can never make my worst case smaller)</>,
              <>먼저 <b>맨 윗줄</b> = 각 x 의 최악이에요. 왼→오로 읽으면 <b>계속 같거나 오르기만 — 절대 안 내려가요</b>. (칩이 늘어도 최악은 안 작아짐)</>)
       : s.kind === "why"
-      ? t(E, <>So goal <b>5</b> is first hit at <b style={{color:"#15803d",...NW}}>x=9</b>: before it all <b style={{color:"#475569"}}>✗</b>, after all <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>one boundary</span>. To find it we don't test every x — we <b>halve the range</b> each time. That's called binary search. <span style={NW}>(x reaches 10¹⁸)</span></>,
-             <>그래서 목표 <b>5</b> 에 처음 닿는 <b style={{color:"#15803d",...NW}}>x=9</b> 앞은 다 <b style={{color:"#475569"}}>✗</b>, 뒤는 다 <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>경계가 딱 하나</span>. 이걸 찾을 때 x 를 하나씩 안 보고 <b>범위를 반씩</b> 줄여요. 이런 방법을 이분탐색이라고 불러요. <span style={NW}>(x 는 10¹⁸까지)</span></>)
+      ? t(E, <>So goal <b>5</b> is first hit at <b style={{color:"#15803d",...NW}}>x=9</b>: before it all <b style={{color:"#475569"}}>✗</b>, after all <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>one boundary</span>. To find it we don't test every x — we <b>halve the range</b> each time. That's called binary search. <span style={NW}>(x reaches 10¹⁸, a billion times a billion)</span></>,
+             <>그래서 목표 <b>5</b> 에 처음 닿는 <b style={{color:"#15803d",...NW}}>x=9</b> 앞은 다 <b style={{color:"#475569"}}>✗</b>, 뒤는 다 <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>경계가 딱 하나</span>. 이걸 찾을 때 x 를 하나씩 안 보고 <b>범위를 반씩</b> 줄여요. 이런 방법을 이분탐색이라고 불러요. <span style={NW}>(x 는 10¹⁸(10억×10억)까지)</span></>)
       : s.kind === "done"
       ? t(E, <>Range shrank to one — <b style={{color:"#15803d"}}>answer x = {ANS}</b>, in just <b>{trace.length} checks</b>. Matches <b style={{color:"#15803d"}}>sample test 2's output 9 ✓</b> — this is the real solution.</>,
              <>범위가 하나로 좁혀졌어요 — <b style={{color:"#15803d"}}>답 x = {ANS}</b>, <b>{trace.length}번</b> 확인으로. <b style={{color:"#15803d"}}>샘플 테스트 2의 정답 9 와 일치 ✓</b> — 이게 진짜 해법이에요.</>)
@@ -1411,7 +1411,7 @@ export function CountUpSim({ E }) {
     { goal: "5", cnt: "3", combo: "9", key: "recap" },
     { goal: "50", cnt: "70", combo: "2,555", key: "g50" },
     { goal: "1,000", cnt: "1,495", combo: "1,119,755", key: "g1000" },
-    { goal: "10¹⁸", cnt: "약 10¹⁸", combo: "약 10³⁶", key: "limit", bad: true },
+    { goal: "10¹⁸(10억×10억)", cnt: "약 10¹⁸", combo: "약 10³⁶", key: "limit", bad: true },
   ];
   const upto = { recap: 1, g50: 2, g1000: 3, limit: 4, need: 4 }[s.k];
 
@@ -1704,7 +1704,7 @@ export function PlanSlide({ E }) {
           </div>
           <div style={{ marginTop: 5, paddingTop: 5, borderTop: "1px dashed #c4b5fd", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#334155" }}>
             {t(E, "answer = wasted_blue + short_chips + 1", "답 = wasted_blue + short_chips + 1")}
-            <span style={{ color: "#94a3b8", fontFamily: "system-ui" }}>{t(E, "  (64-bit — up to 10¹⁸)", "  (64비트 — 10¹⁸ 까지)")}</span>
+            <span style={{ color: "#94a3b8", fontFamily: "system-ui" }}>{t(E, "  (64-bit — up to 10¹⁸, a billion times a billion)", "  (64비트 — 10¹⁸(10억×10억) 까지)")}</span>
           </div>
         </Slab>
       </div>

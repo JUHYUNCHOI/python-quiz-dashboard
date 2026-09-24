@@ -1,7 +1,17 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 2/20 (WA/TLE - brute 2^|F| too slow)
-//   C++:    2/20 (WA/TLE same as py)
-//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+// 🔒 USACO_VERIFIED (2026-09-24 재제출, cpid=1323)
+//   Python-3.6.9: 9/20 — 정답 9 · 시간 초과 11 · **오답 0**
+//   C++17:        9/20 — 정답 9 · 시간 초과 11 · **오답 0**
+//
+//   ⚠️ 2026-09-24 에 «진짜 오답» 두 가지를 고쳤다 (이전 기록은 둘 다 2/20 이었다):
+//   ① 출력 형식 — 원문은 "K줄을 증가 순서로" 인데 **최솟값·최댓값만** 내고 있었다.
+//      공식 샘플 셋 중 둘이 K=2 라 **우연히 통과**해서 안 걸렸다.
+//      갈리는 건 샘플 3 뿐: BFFFFFEBFE → 정답 3/2/4/6, 옛 답 3/2/6.
+//   ② C++ `1 << nf` 가 nf ≥ 31 에서 **오버플로** — 루프가 안 돌고 «0» 을 출력했다.
+//      파이썬은 같은 자리에서 정직하게 시간 초과가 났다.
+//      → 0/1 칸 배열로 다음 조합을 만드는 방식으로 바꿨다. nf=31·63·65 실측 확인.
+//
+//   남은 시간 초과는 **정상이다** — 이 quest 는 일부러 느린 2^|F| 완전탐색을 가르친다.
+//   코드 수정 시 USACO 재제출 필요.
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { useState } from "react";
@@ -227,8 +237,8 @@ const FULL_PY = [
   "    results.add(excitement)",
   "",
   "print(len(results))",
-  "print(min(results))",
-  "print(max(results))",
+  "for v in sorted(results):",
+  "    print(v)",
 ];
 
 const FULL_CPP = [
@@ -252,11 +262,14 @@ const FULL_CPP = [
   "    }",
   "    int nf = fpos.size();",
   "",
+  "    // F 가 많으면 1 << nf 가 int 범위를 넘어 엉뚱한 값이 돼요.",
+  "    // 그래서 0/1 을 담은 칸을 두고 다음 조합을 하나씩 만들어요.",
   "    set<int> results;",
-  "    for (int mask = 0; mask < (1 << nf); mask++) {",
+  "    vector<int> bits(nf, 0);",
+  "    while (true) {",
   "        string arr = s;",
   "        for (int j = 0; j < nf; j++) {",
-  "            if ((mask >> j) & 1) {",
+  "            if (bits[j] == 1) {",
   "                arr[fpos[j]] = 'B';",
   "            } else {",
   "                arr[fpos[j]] = 'E';",
@@ -269,11 +282,23 @@ const FULL_CPP = [
   "            }",
   "        }",
   "        results.insert(excitement);",
+  "",
+  "        // 이진수에 1 을 더하듯 다음 조합으로 넘어가요.",
+  "        int j = 0;",
+  "        while (j < nf && bits[j] == 1) {",
+  "            bits[j] = 0;",
+  "            j++;",
+  "        }",
+  "        if (j == nf) {",
+  "            break;",
+  "        }",
+  "        bits[j] = 1;",
   "    }",
   "",
   "    cout << results.size() << '\\n';",
-  "    cout << *results.begin() << '\\n';",
-  "    cout << *results.rbegin() << '\\n';",
+  "    for (int v : results) {",
+  "        cout << v << '\\n';",
+  "    }",
   "    return 0;",
   "}",
 ];
@@ -285,12 +310,12 @@ export function getFeb23Sections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "What do we need? Across every way to set the F's, the count of\ndistinct excitement values, plus the min and max.",
-            "무엇을 내놓아야 하나요? F 를 정하는 모든 방법에서 나오는 흥분도 중\n서로 다른 값의 개수, 그리고 최솟값과 최댓값이에요."),
+        t(E, "What do we need? Across every way to set the F's, the count of\ndistinct excitement values, then those values in increasing order.",
+            "무엇을 내놓아야 하나요? F 를 정하는 모든 방법에서 나오는 흥분도 중\n서로 다른 값의 개수, 그리고 그 값들을 작은 순서로예요."),
         t(E, "Each F can be B or E, so there are only 2^|F| ways — few enough\nto just try every one and record the excitement each gives.",
             "F 하나마다 B 또는 E, 두 가지뿐이라 경우의 수는 2^|F| 예요.\n다 해봐도 충분히 적어서, 모든 경우의 흥분도를 그대로 구해요."),
-        t(E, "So: loop over every bitmask, build that assignment, count adjacent\nmatches, and collect the results into a set.",
-            "그래서 모든 비트마스크를 돌며 그 조합을 만들고, 옆칸이 같은 개수를\n세어 결과를 모아요."),
+        t(E, "So: loop over every bitmask, build that assignment, count adjacent\nmatches, collect into a set, then print the set in sorted order.",
+            "그래서 모든 비트마스크를 돌며 그 조합을 만들고, 옆칸이 같은 개수를\n세어 모은 뒤, 작은 순서로 출력해요."),
       ],
       pyOnly: [],
       cppOnly: [
