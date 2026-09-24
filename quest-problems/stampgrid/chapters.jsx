@@ -69,7 +69,7 @@ export function makeStampCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If canvas is 3\u00d73 and stamp is 2\u00d72, valid top-left positions are (0,0), (0,1), (1,0), (1,1).\nThat's (3-2+1)\u00b2 = 4 positions!", "\ub3c4\uc7a5\uc744 \uc5b4\ub514\uc5d0 \ub193\uc744 \uc218 \uc788\ub294\uc9c0 \uc138\uc5b4 \ubd10\uc694."),
+        "If canvas is 3\u00d73 and stamp is 2\u00d72, valid top-left positions are (0,0), (0,1), (1,0), (1,1).\nThat's (3-2+1) \u00d7 (3-2+1) = 4 positions!", "\ub3c4\uc7a5\uc744 \uc5b4\ub514\uc5d0 \ub193\uc744 \uc218 \uc788\ub294\uc9c0 \uc138\uc5b4 \ubd10\uc694."),
       question: t(E, "Canvas 3\u00d73, stamp 2\u00d72 \u2192 max positions?", "\uce94\ubc84\uc2a4\uac00 3\u00d73, \ub3c4\uc7a5\uc774 2\u00d72 \uc608\uc694.\n\ub3c4\uc7a5\uc744 \ub193\uc744 \uc218 \uc788\ub294 \uc790\ub9ac\ub294 \uba87 \uad70\ub370\uc77c\uae4c\uc694?"),
       hint: t(E, "Top-left rows: 0, 1. Top-left cols: 0, 1. Count the pairs.", "\uc67c\ucabd \uc704 \uce78\uc774 \uc62c \uc218 \uc788\ub294 \ud589\uc740 0, 1 \uc774\uc5d0\uc694.\n\uc5f4\ub3c4 0, 1 \uc774\uace0\uc694. \uadf8 \uc9dd\uc774 \uba87 \uac1c\uc778\uc9c0 \uc138\uc5b4 \ubd10\uc694."),
       answer: 4,
@@ -93,8 +93,8 @@ export function makeStampCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
-                "1. Generate 4 rotations of the stamp\n2. For each rotation, try all (N-K+1)\u00b2 positions\n3. For each placement, check if stamp cells match canvas\n4. Output YES if any combination works",
-                "1. \ub3c4\uc7a5\uc744 \ub124 \ubc29\ud5a5\uc73c\ub85c \ub3cc\ub824 \ub194\uc694\n2. \ubc29\ud5a5\ub9c8\ub2e4 (N-K+1)\u00b2 \uad70\ub370 \uc790\ub9ac\ub97c \ub2e4 \ud574\ubd10\uc694\n3. \ucc0d\uc744 \ub54c\ub9c8\ub2e4 \ub3c4\uc7a5 \uce78\uc774 \uce94\ubc84\uc2a4\uc640 \ub9de\ub294\uc9c0 \ubd10\uc694\n4. \ub9de\ub294 \ubc29\ubc95\uc774 \ud558\ub098\ub77c\ub3c4 \uc788\uc73c\uba74 YES \ub97c \ucd9c\ub825\ud574\uc694")}
+                "1. Generate 4 rotations of the stamp\n2. For each rotation, try all (N-K+1) \u00d7 (N-K+1) positions\n3. For each placement, check if stamp cells match canvas\n4. Output YES if any combination works",
+                "1. \ub3c4\uc7a5\uc744 \ub124 \ubc29\ud5a5\uc73c\ub85c \ub3cc\ub824 \ub194\uc694\n2. \ubc29\ud5a5\ub9c8\ub2e4 (N-K+1) \u00d7 (N-K+1) \uad70\ub370 \uc790\ub9ac\ub97c \ub2e4 \ud574\ubd10\uc694\n3. \ucc0d\uc744 \ub54c\ub9c8\ub2e4 \ub3c4\uc7a5 \uce78\uc774 \uce94\ubc84\uc2a4\uc640 \ub9de\ub294\uc9c0 \ubd10\uc694\n4. \ub9de\ub294 \ubc29\ubc95\uc774 \ud558\ub098\ub77c\ub3c4 \uc788\uc73c\uba74 YES \ub97c \ucd9c\ub825\ud574\uc694")}
             </div>
           </div>
         </div>),

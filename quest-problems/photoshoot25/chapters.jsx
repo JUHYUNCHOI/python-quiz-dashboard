@@ -145,8 +145,8 @@ export function makePhotoshoot25Ch1(E) {
             </div>
             <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.9, fontFamily: "'JetBrains Mono',monospace" }}>
               <div>{t(E, "biggest case", "최대 크기")}: N = 500, K = 25, Q = 30000</div>
-              <div>{t(E, "photos", "사진")} = (500−25+1)² = <b>226,576</b></div>
-              <div>{t(E, "cells per photo", "사진 한 장의 칸")} = 25² = <b>625</b></div>
+              <div>{t(E, "photos", "사진")} = (500−25+1) × (500−25+1) = <b>226,576</b></div>
+              <div>{t(E, "cells per photo", "사진 한 장의 칸")} = 25 × 25 = <b>625</b></div>
               <div style={{ color: "#b91c1c", fontWeight: 800, marginTop: 4 }}>
                 → 226,576 × 625 × 30,000 ≈ <b>4×10¹²</b>
               </div>
@@ -271,8 +271,8 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
             {lang === "py" && (
               <div style={{ margin: "0 16px 6px", padding: "9px 13px", borderRadius: 10, background: "#fffbeb", border: "1.5px solid #fbbf24", color: "#92400e", fontSize: 12.5, fontWeight: 700, lineHeight: 1.6, wordBreak: "keep-all", textAlign: "center" }}>
                 {t(E,
-                  <>Up to Q·K² ≈ 2×10⁷ steps. Both languages clear it — <b>C++ 18/18</b>, <b>Python 18/18</b>. Python needs the input read in one go; line-by-line reading is what runs out of time.</>,
-                  <>계산은 최대 Q·K² ≈ 2×10⁷ 번이에요.
+                  <>Up to Q·K×K ≈ 2×10⁷ (20 million) steps. Both languages clear it — <b>C++ 18/18</b>, <b>Python 18/18</b>. Python needs the input read in one go; line-by-line reading is what runs out of time.</>,
+                  <>계산은 최대 Q·K×K ≈ 2×10⁷(2천만) 번이에요.
 두 언어 다 통과해요 — <b>C++ 18/18</b>, <b>파이썬 18/18</b>.
 단 파이썬은 입력을 한 번에 읽어야 해요. 한 줄씩 읽으면 시간이 모자라요.</>)}
               </div>

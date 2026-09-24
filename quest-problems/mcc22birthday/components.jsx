@@ -178,8 +178,8 @@ export function Mcc22BirthdayCookieSim({ E }) {
 
         <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: "#92400e", lineHeight: 1.55, ...KA }}>
           {t(E,
-            "💡 Each letter DOUBLES the grid. After N letters there are 2^N cookies, and N can be 10000 — far too many to ever build. So how do we answer without the grid? Let's think about that next.",
-            "💡 글자 하나가 격자를 두 배로 늘려요. N 글자 뒤엔 쿠키가 2^N 개예요.\nN 이 최대 10000 이니 이 격자는 만들어 볼 수조차 없어요.\n그럼 격자 없이 어떻게 답할 수 있을까요? 다음 쪽에서 같이 생각해 봐요.")}
+            "💡 Each letter DOUBLES the grid. After N letters there are 2^N (2 multiplied by itself N times) cookies, and N can be 10000 — far too many to ever build. So how do we answer without the grid? Let's think about that next.",
+            "💡 글자 하나가 격자를 두 배로 늘려요. N 글자 뒤엔 쿠키가 2^N(2 를 N 번 곱한 수) 개예요.\nN 이 최대 10000 이니 이 격자는 만들어 볼 수조차 없어요.\n그럼 격자 없이 어떻게 답할 수 있을까요? 다음 쪽에서 같이 생각해 봐요.")}
         </div>
       </div>
     </div>
@@ -528,8 +528,8 @@ export function getMcc22BirthdaySections(E) {
       color: A,
       py: FULL_PY.slice(0, 21), cpp: FULL_CPP.slice(0, 33),
       why: [
-        t(E, "Why not build the grid? After N letters it holds 2^N cookies, and N can be up to 10000 — far too many to build. So we handle each queried number on its own, using only its final position.",
-            "왜 격자를 안 만들까요?\nN 글자 뒤 격자는 2^N 개인데 N 이 최대 10000 이라 만들 수조차 없어요.\n그래서 물어본 번호마다 최종 위치만 갖고 따로 풀어요."),
+        t(E, "Why not build the grid? After N letters it holds 2^N (2 multiplied by itself N times) cookies, and N can be up to 10000 — far too many to build. So we handle each queried number on its own, using only its final position.",
+            "왜 격자를 안 만들까요?\nN 글자 뒤 격자는 2^N(2 를 N 번 곱한 수) 개인데 N 이 최대 10000 이라 만들 수조차 없어요.\n그래서 물어본 번호마다 최종 위치만 갖고 따로 풀어요."),
         t(E, "To find that position we first need the grid's final width. rows[i] / cols[i] store the size after each step — A/B double the width, C doubles the height. Past CAP = 2×10^9 we just leave it at CAP, since a friend number never passes 10^9 anyway.",
             "그 위치를 알려면 먼저 격자의 최종 가로 길이를 알아야 해요.\nrows[i], cols[i] 에 각 단계 뒤 크기를 저장해요.\nA·B 는 가로를, C 는 세로를 두 배로 늘려요.\n크기가 CAP = 2×10^9 를 넘으면 그냥 CAP 으로 둬요.\n친구 번호는 최대 10^9 라 어차피 그보다 작거든요."),
       ],

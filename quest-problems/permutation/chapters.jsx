@@ -358,7 +358,7 @@ export function makePermCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr", gap: "8px 12px", fontSize: 12, alignItems: "center" }}>
               <div style={{ fontWeight: 600, color: "#7f1d1d" }}>N</div>
               <div style={{ fontWeight: 600, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>N!</div>
-              <div style={{ fontWeight: 600, color: "#7f1d1d" }}>{t(E, "Time @ 10⁸/s (100M/sec)", "10⁸(1억)/초 기준 시간")}</div>
+              <div style={{ fontWeight: 600, color: "#7f1d1d" }}>{t(E, "Time @ 10⁸/s (100 million/sec)", "10⁸(1억)/초 기준 시간")}</div>
 
               {[
                 { n: 4,    fac: "24",                       time: t(E, "instant", "즉시"), bad: false },

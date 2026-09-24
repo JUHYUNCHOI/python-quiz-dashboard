@@ -125,7 +125,7 @@ const FULL_CPP = [
 
 /* 2026-09-17: 여기가 섹션 **한 개**에 파이썬 47 줄·C++ 71 줄을 통째로 펼치고 있었다.
    이 묶음에서 수학이 제일 복잡한데 코드는 가장 안 쪼개져 있었다.
-   서로 다른 다섯 단계(읽기·정렬 / prefix 만들기 / 자리마다 x² 풀기 /
+   서로 다른 다섯 단계(읽기·정렬 / prefix 만들기 / 자리마다 x×x 풀기 /
    완전제곱 확인 / 양옆 확인·출력)로 나눈다.
    ⚠️ 코드 **내용**은 한 글자도 안 바꾼다 — 어디서 자르는지만 정한다.
    그래서 새 배열을 손으로 적지 않고 FULL_PY·FULL_CPP 를 slice 해서 쓴다.
@@ -168,13 +168,13 @@ export function getMcc21GlassSections(E) {
       color: A,
       py: PY_PREFIX, cpp: CPP_PREFIX,
       why: [
-        t(E, "prefix[i] = b1² − b2² + b3² − … : the alternating sum of the first i known radii. Signs flip because the answer alternates by position.",
-            "prefix[i] = b1² − b2² + b3² − … 예요.\n앞에서부터 i 개까지 번갈아 더하고 뺀 합이에요.\n자리마다 부호가 번갈아 바뀌니까 sign 도 +1, −1 을 오가요."),
+        t(E, "prefix[i] = b1×b1 − b2×b2 + b3×b3 − … : the alternating sum of the first i known radii. Signs flip because the answer alternates by position.",
+            "prefix[i] = b1×b1 − b2×b2 + b3×b3 − … 예요.\n앞에서부터 i 개까지 번갈아 더하고 뺀 합이에요.\n자리마다 부호가 번갈아 바뀌니까 sign 도 +1, −1 을 오가요."),
         t(E, "Computing it once means any prefix we need later is a quick O(1) lookup, not a recompute. S = prefix[m] is the whole alternating sum of the known radii.",
             "한 번만 만들어 두면 나중에 어느 앞부분이든 바로 꺼내 써요.\nS = prefix[m] 은 아는 반지름 전체의 번갈아 합이에요."),
       ],
       pyOnly: [
-        t(E, "Python ints are unbounded, so b[i]² (up to 10¹⁸ — a billion times a billion, since b[i] itself reaches 10⁹) and their running sum never overflow — no big-integer setup needed.",
+        t(E, "Python ints are unbounded, so b[i]² (up to 10¹⁸ — a billion times a billion, since b[i] itself reaches 10⁹, a billion) and their running sum never overflow — no big-integer setup needed.",
             "파이썬 정수는 크기 제한이 없어요.\n그래서 b[i] 가 최대 10⁹(10억)이라 b[i]² 은 10¹⁸(10억×10억)까지 가지만\n쌓아 온 합도 넘칠 걱정이 없어요."),
       ],
       cppOnly: [
@@ -183,25 +183,25 @@ export function getMcc21GlassSections(E) {
       ],
     },
     {
-      label: t(E, "🔍 3. Try each slot p, solve x²", "🔍 3. 자리 p 를 하나씩 놓아 보고 x² 풀기"),
+      label: t(E, "🔍 3. Try each slot p, solve x×x", "🔍 3. 자리 p 를 하나씩 놓아 보고 x×x 풀기"),
       color: A,
       py: PY_SLOT, cpp: CPP_SLOT,
       why: [
         t(E, "The missing radius lands in ONE slot p. Radii above p keep their signs; every radius below p shifts one place, so all their signs flip.",
             "깨진 반지름은 줄 세운 순서의 어느 한 자리 p 에 들어가요.\np 보다 큰 반지름은 자리가 그대로라 부호도 그대로예요.\np 보다 작은 반지름은 한 칸씩 밀려서 부호가 전부 뒤집혀요."),
-        t(E, "Once p is fixed, 'alternating sum = A' has only one unknown, so x² comes out immediately (O(1)): p odd → A+S−2·pre, p even → 2·pre−A−S.",
-            "p 를 정하면 '번갈아 합 = A' 에 모르는 값이 x² 하나뿐이에요.\n그래서 p 가 홀수면 x² = A+S−2·pre,\n짝수면 x² = 2·pre−A−S 로 바로 나와요."),
-        t(E, "A negative x² can't come from a real radius, so that slot is dropped at once.",
-            "x² 가 음수면 그런 반지름은 세상에 없어요.\n그 자리는 바로 버리고 다음 자리로 가요."),
+        t(E, "Once p is fixed, 'alternating sum = A' has only one unknown, so x×x comes out immediately (O(1)): p odd → A+S−2·pre, p even → 2·pre−A−S.",
+            "p 를 정하면 '번갈아 합 = A' 에 모르는 값이 x×x 하나뿐이에요.\n그래서 p 가 홀수면 x×x = A+S−2·pre,\n짝수면 x×x = 2·pre−A−S 로 바로 나와요."),
+        t(E, "A negative x×x can't come from a real radius, so that slot is dropped at once.",
+            "x×x 가 음수면 그런 반지름은 세상에 없어요.\n그 자리는 바로 버리고 다음 자리로 가요."),
       ],
     },
     {
-      label: t(E, "✅ 4. Is x² a perfect square?", "✅ 4. x² 가 완전제곱인지 확인"),
+      label: t(E, "✅ 4. Is x×x a perfect square?", "✅ 4. x×x 가 완전제곱인지 확인"),
       color: A,
       py: PY_SQRT, cpp: CPP_SQRT,
       why: [
-        t(E, "A radius is a whole number, so x² has to be a perfect square. Take the integer square root and square it back — if it doesn't return to x², this slot is out.",
-            "반지름은 정수라서 x² 는 완전제곱이어야 해요.\n정수 제곱근을 구해 다시 제곱해 보고,\nx² 로 돌아오지 않으면 이 자리는 버려요."),
+        t(E, "A radius is a whole number, so x×x has to be a perfect square. Take the integer square root and square it back — if it doesn't return to x×x, this slot is out.",
+            "반지름은 정수라서 x×x 는 완전제곱이어야 해요.\n정수 제곱근을 구해 다시 제곱해 보고,\nx×x 로 돌아오지 않으면 이 자리는 버려요."),
         t(E, "x ≤ 0 is rejected too — a circle of radius 0 or less isn't a radius.",
             "x 가 0 이하인 것도 버려요. 반지름이 0 이거나 음수일 수는 없으니까요."),
       ],
@@ -256,14 +256,14 @@ export function getMcc21GlassWalk(E) {
         "Redoing the alternating sum from scratch for every slot would be slow — what can we build once instead?\nprefix[i] stores the alternating sum of the first i known radii, so S = prefix[m] is ready right away.",
         "매번 처음부터 다시 더하면 느린데, 무엇을 미리 만들어 둘까요?\nprefix[i] 에 앞 i 개까지의 번갈아 합을 쌓아 두면 S = prefix[m] 을 바로 꺼내 써요.") },
     { hi: [19, 27], bubble: t(E,
-        "We don't know which slot the broken radius sits in — so what do we try?\nEvery slot p, one at a time. Once p is fixed, only x² is unknown, so we solve it directly.",
-        "깨진 반지름이 어느 자리에 들어갈지 모르는데 어떻게 하나요?\n자리 p 를 하나씩 다 넣어 봐요. p 가 정해지면 모르는 값이 x² 하나뿐이라 바로 풀려요.") },
+        "We don't know which slot the broken radius sits in — so what do we try?\nEvery slot p, one at a time. Once p is fixed, only x×x is unknown, so we solve it directly.",
+        "깨진 반지름이 어느 자리에 들어갈지 모르는데 어떻게 하나요?\n자리 p 를 하나씩 다 넣어 봐요. p 가 정해지면 모르는 값이 x×x 하나뿐이라 바로 풀려요.") },
     { hi: [28, 30], bubble: t(E,
-        "The formula gave us x² — does that make it a real radius?\nOnly if x² is a positive perfect square. math.isqrt gives the exact integer root to check x*x == x2.",
-        "식에서 x² 가 나왔다고 진짜 반지름이 될까요?\nx² 가 양의 완전제곱수일 때만이에요. math.isqrt 로 정수 제곱근을 구해 x*x == x2 인지 확인해요.") },
+        "The formula gave us x×x — does that make it a real radius?\nOnly if x×x is a positive perfect square. math.isqrt gives the exact integer root to check x*x == x2.",
+        "식에서 x×x 가 나왔다고 진짜 반지름이 될까요?\nx×x 가 양의 완전제곱수일 때만이에요. math.isqrt 로 정수 제곱근을 구해 x*x == x2 인지 확인해요.") },
     { hi: [31, 45], bubble: t(E,
-        "x² checks out as a perfect square — is that enough to accept x?\nNo — x still has to fit between its neighbours at slot p. The first p that passes everything wins, so print x and stop.",
-        "x² 가 완전제곱이면 그걸로 충분할까요?\n아니요 — x 가 자리 p 의 양옆 사이에도 들어가야 해요.\n이걸 다 통과한 첫 p 에서 출력하고 멈춰요.") },
+        "x×x checks out as a perfect square — is that enough to accept x?\nNo — x still has to fit between its neighbours at slot p. The first p that passes everything wins, so print x and stop.",
+        "x×x 가 완전제곱이면 그걸로 충분할까요?\n아니요 — x 가 자리 p 의 양옆 사이에도 들어가야 해요.\n이걸 다 통과한 첫 p 에서 출력하고 멈춰요.") },
   ] };
 }
 

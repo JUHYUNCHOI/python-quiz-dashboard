@@ -114,10 +114,10 @@ export function BitcoinPairInspector({ E }) {
               <div style={{ fontFamily: "ui-monospace, monospace", lineHeight: 1.7 }}>
                 <div>dx = {a.x} − {b.x} = <b style={{ color: A }}>{dx}</b></div>
                 <div>dy = {a.y} − {b.y} = <b style={{ color: A }}>{dy}</b></div>
-                <div>dx² + dy² = {dx * dx} + {dy * dy} = <b style={{ color: "#15803d" }}>{distSq}</b></div>
+                <div>dx×dx + dy×dy = {dx * dx} + {dy * dy} = <b style={{ color: "#15803d" }}>{distSq}</b></div>
                 <div style={{ fontFamily: "system-ui, sans-serif", fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.6, wordBreak: "keep-all" }}>
-                  {t(E, "dx is the two x's subtracted, dy the two y's. dx² + dy² is this pair's squared distance.",
-                        "dx 는 x 좌표끼리, dy 는 y 좌표끼리 뺀 값이에요. dx² + dy² 가 이 쌍의 거리의 제곱이에요.")}
+                  {t(E, "dx is the two x's subtracted, dy the two y's. dx×dx + dy×dy is this pair's squared distance.",
+                        "dx 는 x 좌표끼리, dy 는 y 좌표끼리 뺀 값이에요. dx×dx + dy×dy 가 이 쌍의 거리의 제곱이에요.")}
                 </div>
               </div>
             ) : (
@@ -227,8 +227,8 @@ export function getBitcoinSections(E) {
       why: [
         t(E, "j starts at i + 1, not at 0. That way each pair is measured once instead of twice, and a site is never compared with itself.",
             "j 를 0 이 아니라 i + 1 에서 시작해요.\n그래야 쌍마다 한 번씩만 재고, 자기 자신과 견주는 일도 없어요."),
-        t(E, "We keep dx² + dy² and never take a square root. The pair with the biggest squared distance is also the pair that is farthest apart, so the answer is the same — and it stays a whole number, with no decimal error.",
-            "dx² + dy² 만 쓰고 제곱근은 쓰지 않아요.\n거리가 클수록 거리의 제곱도 커요.\n그래서 제곱이 가장 큰 쌍이 실제로도 가장 먼 쌍이라 답이 같아요.\n게다가 값이 정수로 남아서 소수점 오차가 아예 없어요."),
+        t(E, "We keep dx×dx + dy×dy and never take a square root. The pair with the biggest squared distance is also the pair that is farthest apart, so the answer is the same — and it stays a whole number, with no decimal error.",
+            "dx×dx + dy×dy 만 쓰고 제곱근은 쓰지 않아요.\n거리가 클수록 거리의 제곱도 커요.\n그래서 제곱이 가장 큰 쌍이 실제로도 가장 먼 쌍이라 답이 같아요.\n게다가 값이 정수로 남아서 소수점 오차가 아예 없어요."),
         t(E, "max_dist just remembers the biggest one seen so far, so when the loops end it already holds the answer.",
             "max_dist 는 지금까지 본 것 중 가장 큰 값만 기억해요.\n그래서 반복이 끝나면 이미 답이 들어 있어요."),
       ],

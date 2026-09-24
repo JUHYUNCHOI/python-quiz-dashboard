@@ -248,8 +248,8 @@ export function getMagicOrbsSections(E) {
       pyOnly: [
         t(E, "a.sort() puts smallest first; p doubles each step so the LAST (biggest) value gets the largest coefficient.",
             "a.sort() 로 작은 것부터 늘어놔요. p 가 한 걸음마다 두 배가 되니까 마지막에 오는 가장 큰 값이 제일 큰 수를 곱해요."),
-        t(E, "Take % MOD every step — the coefficient p can grow to 2^200000, so keep it small.",
-            "한 걸음마다 % MOD 를 해요. p 가 2^200000 까지 커질 수 있어서 작게 눌러 둬야 해요."),
+        t(E, "Take % MOD every step — p can grow to 2^200000(multiplied by itself 200000 times), so keep it small.",
+            "한 걸음마다 % MOD 를 해요. p 가 2^200000(2 를 20만 번 곱한 수) 까지 커질 수 있어서 작게 눌러 둬야 해요."),
       ],
       cppOnly: [
         t(E, "a[i] can be up to 10^18, so store it as long long and reduce (a[i] % MOD) before multiplying.",

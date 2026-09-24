@@ -995,7 +995,7 @@ export function BruteRunSim({ E }) {
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={0} total={1} isEn={E}
-        title={t(E, "Run the brute force yourself", "완전탐색을 직접 돌려봐요")}
+        title={t(E, "Run the brute force yourself", "다 해보기(완전탐색)를 직접 돌려봐요")}
         subtitle={t(E, "every board, every move — for real", "보드도 무브도 전부 진짜로")} />
 
       <Say tone={state === "timeout" ? "stuck" : state === "done" ? "aha" : "go"}>{say}</Say>

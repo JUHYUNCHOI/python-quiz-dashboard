@@ -105,8 +105,8 @@ function GlassStackSim({ E }) {
               whiteSpace: "pre-line", ...KA }}>
               {touched
                 ? t(E,
-                    "Each black ring is (outer² − inner²)π. The colorless rings cancel the middle terms, so only the plain alternating sum survives.",
-                    "검은 고리 하나의 넓이는 (바깥² − 안²)π 예요.\n무색 고리가 가운데 항을 지워 주니까\n번갈아 더하고 빼는 합만 남아요.")
+                    "Each black ring is (outer×outer − inner×inner)π. The colorless rings cancel the middle terms, so only the plain alternating sum survives.",
+                    "검은 고리 하나의 넓이는 (바깥×바깥 − 안×안)π 예요.\n무색 고리가 가운데 항을 지워 주니까\n번갈아 더하고 빼는 합만 남아요.")
                 : t(E,
                     "Press 1, 2, 3, 4 in turn and watch the sum above.\nWhy does a + turn into a − each time you add a plate?",
                     "1, 2, 3, 4 를 차례로 눌러 위의 식을 봐요.\n판을 하나 더할 때마다 + 가 − 로 바뀌는 건 왜일까요?")}
@@ -394,11 +394,11 @@ export function makeMcc21GlassCh2(E) {
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
-                2️⃣ {t(E, "Solve for x² in one step (O(1))", "x² 를 한 번에(O(1)) 풀어요")}
+                2️⃣ {t(E, "Solve for x×x in one step (O(1))", "x×x 를 한 번에(O(1)) 풀어요")}
               </div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-                {t(E, "p odd  → x² = A + S − 2·pre", "p 홀수  → x² = A + S − 2·pre")}<br/>
-                {t(E, "p even → x² = 2·pre − A − S", "p 짝수 → x² = 2·pre − A − S")}
+                {t(E, "p odd  → x×x = A + S − 2·pre", "p 홀수  → x×x = A + S − 2·pre")}<br/>
+                {t(E, "p even → x×x = 2·pre − A − S", "p 짝수 → x×x = 2·pre − A − S")}
               </div>
               <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
                 {t(E, "S = full alternating sum of known radii, pre = prefix up to p−1.",
@@ -411,8 +411,8 @@ export function makeMcc21GlassCh2(E) {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
-                  "x² ≥ 0, x must be a perfect square's root (integer), positive, and fit between its neighbors at slot p. First p that passes → answer.",
-                  "x² 가 0 이상이고, x 가 정수인 제곱근이면서 양수여야 해요.\n그리고 자리 p 의 양옆 반지름 사이에 들어와야 해요.\n이걸 다 통과하는 첫 p 에서 나온 x 가 답이에요.")}
+                  "x×x ≥ 0, x must be a perfect square's root (integer), positive, and fit between its neighbors at slot p. First p that passes → answer.",
+                  "x×x 가 0 이상이고, x 가 정수인 제곱근이면서 양수여야 해요.\n그리고 자리 p 의 양옆 반지름 사이에 들어와야 해요.\n이걸 다 통과하는 첫 p 에서 나온 x 가 답이에요.")}
               </div>
             </div>
           </div>
@@ -423,11 +423,11 @@ export function makeMcc21GlassCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For a chosen position the formula might give x² = 20. Since 20 is not a perfect square, no integer radius fits there — we move to the next position.",
+        "For a chosen position the formula might give x×x = 20. Since 20 is not a perfect square, no integer radius fits there — we move to the next position.",
         "20 은 완전제곱수가 아니라서 그 자리엔 정수 반지름이 없어요."),
       question: t(E,
-        "A position gives x² = 49. What do we do?",
-        "어떤 자리에서 x² = 49 가 나왔어요. 어떻게 할까요?"),
+        "A position gives x×x = 49. What do we do?",
+        "어떤 자리에서 x×x = 49 가 나왔어요. 어떻게 할까요?"),
       /* 2026-09-17: 정답 보기만 2 배 넘게 길었다 — 읽지 않고 길이로 찍을 수 있다.
          셋 다 비슷한 길이로 맞췄다. 정답 자리(0)는 그대로. */
       options: [
@@ -468,8 +468,8 @@ export function makeMcc21GlassCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Trying every x is too slow — solve directly for x² at each slot instead.",
-        "x 를 다 넣어 보면 너무 느려요. 자리마다 x² 를 바로 풀면 빨라요."),
+        "Trying every x is too slow — solve directly for x×x at each slot instead.",
+        "x 를 다 넣어 보면 너무 느려요. 자리마다 x×x 를 바로 풀면 빨라요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

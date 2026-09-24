@@ -96,8 +96,8 @@ function KittyRemainderSim({ E }) {
           {
             touched
               ? t(E,
-                  "A window of 5 remainders (the red-outlined chips) has only 3⁵ = 243 possible patterns.\nSo as we go on, some window MUST come back — and from there everything repeats forever.\nWhy exactly, and how many times — the next chapter figures that out.",
-                  "나머지 5칸짜리 창(빨간 테두리 칩)은 경우의 수가 3⁵ = 243개뿐이에요.\n그러니 계속 가다 보면 어떤 창이 반드시 다시 나와요.\n왜 그런지·정확히 몇 번인지는 다음 장에서 알아봐요.")
+                  "A window of 5 remainders (the red-outlined chips) has only 3⁵ (3 multiplied by itself 5 times) = 243 possible patterns.\nSo as we go on, some window MUST come back — and from there everything repeats forever.\nWhy exactly, and how many times — the next chapter figures that out.",
+                  "나머지 5칸짜리 창(빨간 테두리 칩)은 경우의 수가 3⁵(3 을 다섯 번 곱한 수) = 243개뿐이에요.\n그러니 계속 가다 보면 어떤 창이 반드시 다시 나와요.\n왜 그런지·정확히 몇 번인지는 다음 장에서 알아봐요.")
               : t(E,
                   "Press + and watch the red-outlined window of 5.\nHow many different patterns can that window ever take?",
                   "+ 를 눌러 빨간 테두리 5칸이 어떻게 바뀌는지 봐요.\n그 5칸이 될 수 있는 모양은 모두 몇 가지일까요?")}

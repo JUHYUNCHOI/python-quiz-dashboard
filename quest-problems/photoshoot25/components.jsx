@@ -305,8 +305,8 @@ export function getPhotoshoot25Sections(E) {
           "Beauty values only increase, so the global max is non-decreasing — just compare new window sums against cur_max.",
           "아름다움은 늘기만 해서 안 바뀐 사진의 점수는 그대로예요. 그 사진들은 이미 cur_max 에 들어가 있어요. 그러니 방금 바뀐 사진만 cur_max 와 견주면 돼요."),
         t(E,
-          "Total work: Q * K^2 ≤ 30000 * 625 ≈ 2 x 10^7 operations — fast enough.",
-          "계산은 모두 합쳐 Q * K^2 ≤ 30000 * 625 ≈ 2 x 10^7 번이에요. 충분히 빨라요."),
+          "Total work: Q * K x K ≤ 30000 * 625 ≈ 2 x 10^7 (20,000,000) operations — fast enough.",
+          "계산은 모두 합쳐 Q * K x K ≤ 30000 * 625 ≈ 2 x 10^7(20,000,000) 번이에요. 충분히 빨라요."),
       ],
       pyOnly: [
         t(E,

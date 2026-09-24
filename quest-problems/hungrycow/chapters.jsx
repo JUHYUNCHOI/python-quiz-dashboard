@@ -62,8 +62,8 @@ export function makeHungryCowCh1(E) {
                 <div>
                   {t(E, "We're given a target day ", "마감일 ")}
                   <b style={{ color: "#7c3aed" }}>T</b>
-                  {t(E, " (which can be huge — up to 10¹⁴).",
-                        " 가 주어져요. T 는 10¹⁴ 까지 아주 커질 수 있어요.")}
+                  {t(E, " (which can be huge — up to 10¹⁴, 100 trillion).",
+                        " 가 주어져요. T 는 10¹⁴(100조) 까지 아주 커질 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -128,7 +128,7 @@ export function makeHungryCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Strategy: Sort deliveries by day.\nProcess gaps between deliveries, eating from stock.\nSimple simulation!", "\uc804\ub7b5: \ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c \uc815\ub82c.\n\ubc30\ub2ec \uc0ac\uc774 \uac04\uaca9\uc744 \ucc98\ub9ac\ud558\uba70 \uc7ac\uace0\uc5d0\uc11c \uba39\uc74c.\n\uac04\ub2e8\ud55c \uc2dc\ubbac\ub808\uc774\uc158!"),
+        "Strategy: Sort deliveries by day.\nProcess gaps between deliveries, eating from stock.\nThat's called a simulation \u2014 just follow the days one by one!", "\uc804\ub7b5: \ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c \uc815\ub82c.\n\ubc30\ub2ec \uc0ac\uc774 \uac04\uaca9\uc744 \ucc98\ub9ac\ud558\uba70 \uc7ac\uace0\uc5d0\uc11c \uba39\uc74c.\n\ub0a0\uc9dc\ub97c \ud558\ub098\uc529 \uadf8\ub300\ub85c \ub530\ub77c\uac00\ub294 \uac83\uc744 \uc2dc\ubbac\ub808\uc774\uc158\uc774\ub77c\uace0 \ubd88\ub7ec\uc694!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 14, padding: 14, marginBottom: 12 }}>

@@ -304,7 +304,7 @@ export function AliensCountSim({ E }) {
         }}>
           {ok
             ? t(E, "✅ needed T = existing T → YES", "✅ 필요한 T = 있는 T → YES")
-            : t(E, "❌ needed T ≠ existing T → NO", "❌ 필요한 T ≠ 있는 T → NO")}
+            : t(E, "❌ needed T ≠ existing T (different) → NO", "❌ 필요한 T ≠ 있는 T(다르다) → NO")}
         </div>
 
         {/* 2026-09-17: 이 요약도 누른 뒤에만 나온다. + 빠져 있던 전제(모두 한 번씩

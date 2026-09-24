@@ -110,7 +110,7 @@ export function makeBitcoinCh1(E) {
               </div>
               <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>41 <span style={{ color: "#15803d", fontSize: 10 }}>{t(E, "← max dist²", "← 최대 거리²")}</span></div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534" }}>41 <span style={{ color: "#15803d", fontSize: 10 }}>{t(E, "← max dist×dist", "← 최대 거리×거리")}</span></div>
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
@@ -165,8 +165,8 @@ export function makeBitcoinCh1(E) {
         "Squared distance between (0,0) and (3,4)?",
         "(0,0) 과 (3,4) 사이 거리의 제곱은 얼마일까요?"),
       hint: t(E,
-        "dx = 3 − 0, dy = 4 − 0. Compute dx² + dy².",
-        "dx = 3 − 0 이고 dy = 4 − 0 이에요. dx² + dy² 를 계산해 봐요."),
+        "dx = 3 − 0, dy = 4 − 0. Compute dx×dx + dy×dy.",
+        "dx = 3 − 0 이고 dy = 4 − 0 이에요. dx×dx + dy×dy 를 계산해 봐요."),
       answer: 25,
     },
   ];

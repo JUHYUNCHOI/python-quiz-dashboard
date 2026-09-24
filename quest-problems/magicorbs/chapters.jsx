@@ -215,7 +215,7 @@ export function makeMagicOrbsCh2(E, lang = "py") {
             </div>
             <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: sort ascending, weight by 2^k", "빠름: 오름차순 정렬 후 2^k 가중치")}
+                🚀 {t(E, "Fast: sort ascending, weight by 2^k (1, 2, 4, 8, …)", "빠름: 오름차순 정렬 후 2^k(1, 2, 4, 8, … 로 커지는 값) 가중치")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Sort once, then one pass: coefficient 1, 2, 4, 8, … for the smallest, next, next. Total O(n log n).",
@@ -227,7 +227,7 @@ export function makeMagicOrbsCh2(E, lang = "py") {
           {/* worked coefficient example */}
           <div style={{ marginTop: 12, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "10px 14px" }}>
             <div style={{ fontSize: 11.5, fontWeight: 800, color: C.dim, marginBottom: 6, letterSpacing: 0.3 }}>
-              {t(E, "WHY 2^k — [1, 2, 1] sorted → [1, 1, 2]", "왜 2^k — [1, 2, 1] 정렬 → [1, 1, 2]")}
+              {t(E, "WHY 2^k (1, 2, 4, 8, …) — [1, 2, 1] sorted → [1, 1, 2]", "왜 2^k(1, 2, 4, 8, … 로 커지는 값) — [1, 2, 1] 정렬 → [1, 1, 2]")}
             </div>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: C.text }}>
               <span style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 6, padding: "2px 8px" }}>1 × 1 = 1</span>
