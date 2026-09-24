@@ -240,9 +240,9 @@
     "korean_chars_ref": 374
   },
   "fans": {
-    "pages": 19,
-    "quiz_input": 6,
-    "korean_chars_ref": 1049
+    "pages": 15,
+    "quiz_input": 4,
+    "korean_chars_ref": 922
   },
   "favperm2": {
     "pages": 1,
@@ -260,9 +260,9 @@
     "korean_chars_ref": 350
   },
   "fences": {
-    "pages": 18,
-    "quiz_input": 6,
-    "korean_chars_ref": 1632
+    "pages": 14,
+    "quiz_input": 4,
+    "korean_chars_ref": 1291
   },
   "fjfarms": {
     "pages": 7,
@@ -856,9 +856,9 @@
     "korean_chars_ref": 375
   },
   "tricks": {
-    "pages": 17,
-    "quiz_input": 5,
-    "korean_chars_ref": 1251
+    "pages": 16,
+    "quiz_input": 4,
+    "korean_chars_ref": 1175
   },
   "uddered": {
     "pages": 4,
@@ -881,9 +881,9 @@
     "korean_chars_ref": 1316
   },
   "word": {
-    "pages": 20,
-    "quiz_input": 5,
-    "korean_chars_ref": 1575
+    "pages": 16,
+    "quiz_input": 3,
+    "korean_chars_ref": 1300
   },
   "wordproc": {
     "pages": 15,

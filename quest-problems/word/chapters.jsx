@@ -146,7 +146,7 @@ export function makeWordCh1(E) {
           </div>
         </div>),
     },
-    // 1-1b: 입출력 형식 + 제약 (MCC 2025 P4 원문 그대로)
+    // 1-2: 입출력 형식 + 제약 (MCC 2025 P4 원문 그대로)
     // 미션을 소개한 직후 "그래서 데이터가 어떻게 들어오는데?" 를 못박아 준다.
     {
       type: "reveal",
@@ -216,54 +216,11 @@ export function makeWordCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Anagram concept
-    {
-      type: "reveal",
-      narr: t(E,
-        "First, what's an anagram?\nTwo words are anagrams if they use the exact same letters, just in different order.\n'ade' and 'aed' are anagrams!", "글자만 섞으면 같아지는 게 애너그램이에요. 'ade'와 'aed'가 그 예예요."),
-      content: (() => {
-        const pairs = [
-          { a: "ade", b: "aed", ok: true },
-          { a: "aab", b: "aba", ok: true },
-          { a: "abc", b: "abd", ok: false },
-        ];
-        return (
-          <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>
-              {t(E, "Anagram examples", "애너그램 예시")}
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {pairs.map((p, i) => (
-                <div key={i} style={{
-                  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  background: p.ok ? "#ecfdf5" : "#fef2f2", borderRadius: 10, padding: "8px 12px",
-                  border: `1px solid ${p.ok ? "#6ee7b7" : "#fca5a5"}`,
-                }}>
-                  <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 600, color: "#3b82f6" }}>{p.a}</span>
-                  <span style={{ fontSize: 12, color: C.dim }}>↔</span>
-                  <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>{p.b}</span>
-                  <span style={{ fontSize: 14, fontWeight: 700 }}>{p.ok ? "✅" : "❌"}</span>
-                </div>
-              ))}
-            </div>
-            <div style={{
-              marginTop: 10, background: "#fef3c7", borderRadius: 8, padding: "6px 10px",
-              border: "1.5px solid #fbbf24", fontSize: 12, color: "#92400e",
-              fontWeight: 700, textAlign: "center",
-            }}>
-              💡 {t(E,
-                "Anagram = same letters, any order!",
-                "애너그램 = 같은 글자들을 쓰되, 순서만 다른 것!")}
-            </div>
-          </div>
-        );
-      })(),
-    },
     // 1-3: Distance concept
     {
       type: "reveal",
       narr: t(E,
-        "The 'distance' between two words = how many letters you need to change in one word so they become anagrams.\nIt's all about counting shared letters!", "두 단어의 '거리' 는 글자를 몇 개 바꿔야 둘이 애너그램이 되는지예요.\n쉽게 말하면 같은 글자가 많을수록 거리가 가까워요!"),
+        "The 'distance' between two words = how many letters you need to change in one word so they become identical.\nIt's all about counting shared letters!", "두 단어의 '거리' 는 글자를 몇 개 바꿔야 둘이 똑같아지는지예요.\n쉽게 말하면 같은 글자가 많을수록 거리가 가까워요!"),
       content: (() => {
         const ex = { a: "ade", b: "adb", shared: ["a", "d"], diff: 1 };
         return (
@@ -318,8 +275,8 @@ export function makeWordCh1(E) {
       narr: t(E,
         "Let's check! What's the distance between 'ade' and 'zaf'? Count the shared letters first.", "확인 퀴즈! 'ade'와 'zaf'에서 겹치는 글자를 먼저 찾아봐요.\n그 다음 거리를 구해요."),
       question: t(E,
-        "'ade' vs 'zaf': shared letter = 'a' (1). Distance = 3 − 1 = ?",
-        "'ade'와 'zaf'에서 겹치는 글자는 'a' 하나뿐이에요.\n거리 = 글자 수 3 − 겹치는 수 1 = ?"),
+        "What's the distance between 'ade' and 'zaf'?",
+        "'ade'와 'zaf' 사이의 거리는 얼마일까요?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -367,30 +324,12 @@ export function makeWordCh1(E) {
           </div>
         </div>),
     },
-    // 1-5b: Marginal gain hands-on
+    // 1-6: Marginal gain hands-on
     {
       type: "marginalGainSim",
       narr: t(E,
         "Tap a letter and watch its gain shrink — picking the highest gain each time is always safe.",
         "직접 해봐요!\n글자를 눌러서 추가하면 그 글자의 +N (새로 겹치는 수)이 줄어들어요.\n이게 핵심이에요 — 매번 가장 큰 +N을 고르면 항상 최선이에요!"),
-    },
-    // 1-6: Quiz — greedy pick
-    {
-      type: "quiz",
-      narr: t(E,
-        "Sample: 5 words 'adb, dez, zaf, aed, wxy'.\nLetter 'a' appears in 3 words, 'd' in 3 words, 'e' in 2.\nFirst slot: which letter?", "단어 5개 'adb, dez, zaf, aed, wxy' 가 있어요.\n'a' 가 들어 있는 단어는 3개, 'd' 도 3개, 'e' 는 2개예요.\n첫 번째 빈칸에 뭘 넣으면 좋을까요?"),
-      question: t(E,
-        "Slot 1: 'a' → gain 3, 'd' → gain 3, 'e' → gain 2. Which letter?",
-        "첫 빈칸에 'a'를 넣으면 3개 단어와 겹쳐.\n'd'를 넣어도 3개 단어와 겹쳐.\n'e'는 2개. 어떤 글자를 넣을까?"),
-      options: [
-        t(E, "'a' (gain 3, comes first alphabetically)", "'a' (3개 겹침, abc순으로 먼저)"),
-        t(E, "'d' (gain 3, just pick any)", "'d' (3개 겹침, 아무거나 고르기)"),
-        t(E, "'e' (gain 2)", "'e' (2개 겹침)"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Correct! 'a' and 'd' both have gain 3, but 'a' comes first alphabetically. So we pick 'a'!",
-        "정답! 'a'와 'd' 둘 다 3개 단어와 겹치지만, 같을 땐 abc순으로 앞인 'a'를 골라!"),
     },
     // 1-7: Input — total distance
     {
@@ -407,7 +346,7 @@ export function makeWordCh1(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 📝 시뮬레이션 (5 steps)
+   Chapter 2: 📝 시뮬레이션 (3 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeWordCh2(E) {
   return [
@@ -415,43 +354,19 @@ export function makeWordCh2(E) {
     {
       type: "distanceCalc",
       narr: t(E,
-        "Try typing two words and see how their anagram distance is calculated!\nWatch how shared letters are matched up.\n📝", "두 단어를 입력하면 겹치는 글자를 세어 거리를 계산해줘요."),
+        "Try typing two words and see how their letter distance is calculated!\nWatch how shared letters are matched up.\n📝", "두 단어를 입력하면 겹치는 글자를 세어 거리를 계산해줘요."),
     },
-    // 2-2: Quiz — shared letters
-    {
-      type: "quiz",
-      narr: t(E,
-        "Quick check! 'aab' and 'abb' — how many letters do they share?", "퀴즈! 'aab'와 'abb'에서 겹치는 글자는 몇 개일까요?"),
-      question: t(E,
-        "'aab' has a:2,b:1. 'abb' has a:1,b:2. How many letters overlap?",
-        "'aab'에는 a가 2개, b가 1개.\n'abb'에는 a가 1개, b가 2개.\n겹치는 글자는 총 몇 개?"),
-      options: [
-        t(E, "1", "1"),
-        t(E, "2", "2"),
-        t(E, "3", "3"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "Right! min(2,1) = 1 for 'a', min(1,2) = 1 for 'b'. Total shared = 2. Distance = 3 − 2 = 1.",
-        "정답! a는 둘 중 적은 쪽인 1개, b도 1개 겹쳐서 총 2개. 거리 = 3 − 2 = 1!"),
-    },
-    // 2-3: Greedy simulator
-    {
-      type: "greedySim",
-      narr: t(E,
-        "Watch the greedy algorithm fill each of the M slots by picking the letter shared by the most words.", "이제 직접 봐요!\n단어마다 글자가 몇 개씩 있는지 사전으로 보여 줄게요.\n▶ 를 누르면 어떤 글자가 가장 많이 겹치는지 세는 과정이 나와요!"),
-    },
-    // 2-4: Word builder
+    // 2-2: Word builder
     {
       type: "wordBuilder",
       narr: t(E,
-        "Now build the final answer!\nOnce we know the letter frequencies, sort them to get the lexicographically smallest word.", "고른 글자를 abc 순으로 세우면 정답 단어가 나와요."),
+        "Sort greedy's letter picks to build the final word.", "그리디가 고른 글자를 abc 순으로 이으면 단어가 완성돼요."),
     },
-    // 2-5: Final answer input
+    // 2-3: Final answer input
     {
       type: "input",
       narr: t(E,
-        "You saw the whole process! What's the answer word for our sample?", "전체 과정을 다 봤어! 이제 정답 단어를 직접 입력해봐요."),
+        "You just watched the letters combine into a word. What's the answer word for our sample?", "방금 글자들이 합쳐져 단어가 되는 걸 봤어요! 우리 예제의 정답 단어는 뭘까요?"),
       question: t(E,
         "Answer word = a(1) + d(1) + e(1) sorted = ?",
         "a 1개, d 1개, e 1개를 abc 순으로 이으면 뭐가 될까요?\n(소문자로 넣어 주세요)"),

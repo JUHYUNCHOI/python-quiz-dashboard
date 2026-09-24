@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal, TextInput } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { DistanceCalc, GreedySim, WordBuilder, GreedyTrace, MarginalGainSim } from "./components";
+import { DistanceCalc, WordBuilder, GreedyTrace, MarginalGainSim } from "./components";
 import { makeWordCh1, makeWordCh2, makeWordCh3 } from "./chapters";
 
 const A = "#3b82f6";
@@ -102,7 +102,6 @@ export default function WordApp(props = {}) {
     if (step.type === "code") return <CodeReveal label={step.label} lines={step.code} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "distanceCalc") return <DistanceCalc E={E} />;
-    if (step.type === "greedySim") return <GreedySim E={E} />;
     if (step.type === "wordBuilder") return <WordBuilder E={E} />;
     if (step.type === "greedyTrace") return <GreedyTrace E={E} />;
     if (step.type === "marginalGainSim") return <MarginalGainSim E={E} />;
@@ -120,7 +119,6 @@ export default function WordApp(props = {}) {
     if (s.type === "code") return <CodeReveal label={s.label} lines={s.code} />;
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "distanceCalc") return <DistanceCalc E={E} />;
-    if (s.type === "greedySim") return <GreedySim E={E} />;
     if (s.type === "wordBuilder") return <WordBuilder E={E} />;
     if (s.type === "greedyTrace") return <GreedyTrace E={E} />;
     if (s.type === "marginalGainSim") return <MarginalGainSim E={E} />;

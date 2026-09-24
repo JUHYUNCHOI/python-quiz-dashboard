@@ -150,8 +150,7 @@ export function DistanceCalc({ E }) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   GreedySim — Watch greedy algorithm fill slots
-   Show all words as fixed frequency dictionaries, highlight gains
+   computeGreedySteps — shared trace data for WordBuilder / GreedyTrace
    ═══════════════════════════════════════════════════════════════ */
 
 function computeGreedySteps() {
@@ -189,220 +188,6 @@ const GREEDY_STEPS = computeGreedySteps();
 /* All unique letters across all sample words, sorted */
 const ALL_LETTERS = [...new Set(SAMPLE_WORDS.join("").split(""))].sort();
 const WORD_FREQS = SAMPLE_WORDS.map(freq);
-
-/* Initial gain: for each letter, how many words contain it (at count > 0) */
-const INITIAL_GAINS = ALL_LETTERS.map(c => {
-  const code = c.charCodeAt(0) - 97;
-  return WORD_FREQS.reduce((s, f) => s + ((f[c] || 0) > 0 ? 1 : 0), 0);
-});
-
-export function GreedySim({ E }) {
-  const [step, setStep] = useState(-1); // -1 = not started
-
-  const done = step >= M;
-
-  const next = () => { if (step < M) setStep(s => s + 1); };
-  const reset = () => { setStep(-1); };
-
-  // Current step data
-  const gs = step >= 0 && step < M ? GREEDY_STEPS[step] : null;
-  // Which letters have been picked so far (all steps up to current)
-  const alreadyPicked = done
-    ? GREEDY_STEPS.map(s => s.picked)
-    : GREEDY_STEPS.slice(0, Math.max(0, step)).map(s => s.picked);
-  // Currently picking (highlighted this step)
-  const nowPicking = gs ? gs.picked : null;
-  // All picked including current
-  const allPicked = nowPicking ? [...alreadyPicked, nowPicking] : alreadyPicked;
-  const curWord = [...allPicked].sort().join("");
-
-  // Gain row: always show INITIAL counts (fixed), just mark picked letters
-  const gainRow = ALL_LETTERS.map((c, ci) => ({
-    gain: INITIAL_GAINS[ci],
-    isPicking: c === nowPicking,
-    isPicked: allPicked.includes(c) && c !== nowPicking,
-  }));
-
-  // Which words contribute to current pick
-  const wordHighlight = gs ? gs.wordContributes : SAMPLE_WORDS.map(() => false);
-
-  const cellW = 38;
-  const labelW = 52;
-
-  return (
-    <div style={{ padding: "10px 2px" }}>
-      {/* Header */}
-      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6 }}>
-        {t(E, "Each word's letter counts (dictionary)", "각 단어의 글자별 개수 (사전)")}
-      </div>
-
-      {/* Fixed frequency table */}
-      <div style={{ overflowX: "auto", marginBottom: 8 }}>
-        <div style={{ display: "inline-block", minWidth: "fit-content", margin: "0 auto" }}>
-          {/* Column headers */}
-          <div style={{ display: "flex", marginLeft: labelW }}>
-            {ALL_LETTERS.map(c => {
-              const picked = allPicked.includes(c);
-              const picking = c === nowPicking;
-              return (
-                <div key={c} style={{
-                  width: cellW, textAlign: "center", fontSize: 13, fontWeight: 700,
-                  fontFamily: "'JetBrains Mono',monospace",
-                  color: picking ? "#fbbf24" : (picked ? "#6ee7b7" : A),
-                  transition: "color .3s",
-                }}>
-                  {c}
-                  {picked && !picking && <div style={{ fontSize: 8, color: "#6ee7b7", marginTop: -2 }}>&#10003;</div>}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Word rows */}
-          {SAMPLE_WORDS.map((w, wi) => {
-            const f = WORD_FREQS[wi];
-            const isContrib = wordHighlight[wi];
-            return (
-              <div key={wi} style={{
-                display: "flex", alignItems: "center", marginBottom: 2,
-                background: isContrib ? "rgba(59,130,246,.08)" : "transparent",
-                borderRadius: 6, transition: "background .3s",
-              }}>
-                <div style={{
-                  width: labelW, fontSize: 12, fontWeight: 600,
-                  fontFamily: "'JetBrains Mono',monospace",
-                  color: isContrib ? A : C.dim,
-                  textAlign: "right", paddingRight: 6,
-                  transition: "color .3s",
-                }}>{w}</div>
-                {ALL_LETTERS.map(c => {
-                  const cnt = f[c] || 0;
-                  const picking = c === nowPicking;
-                  const highlight = picking && isContrib && cnt > 0;
-                  return (
-                    <div key={c} style={{
-                      width: cellW, height: 28, display: "flex",
-                      alignItems: "center", justifyContent: "center",
-                      fontSize: 13, fontWeight: 700,
-                      fontFamily: "'JetBrains Mono',monospace",
-                      color: cnt === 0 ? "#cbd5e1" : (highlight ? "#fbbf24" : "#334155"),
-                      background: highlight ? "rgba(251,191,36,.15)" : "transparent",
-                      borderRadius: 4, transition: "all .3s",
-                    }}>{cnt}</div>
-                  );
-                })}
-              </div>
-            );
-          })}
-
-          {/* Gain summary row — ALWAYS visible */}
-          <div style={{
-            display: "flex", alignItems: "center", marginTop: 4,
-            borderTop: "2px solid #e2e8f0", paddingTop: 4,
-          }}>
-            <div style={{
-              width: labelW, fontSize: 10, fontWeight: 600,
-              color: "#059669", textAlign: "right", paddingRight: 6,
-            }}>{t(E, "count", "개수")}</div>
-            {ALL_LETTERS.map((c, ci) => {
-              const { gain, isPicking, isPicked } = gainRow[ci];
-              return (
-                <div key={c} style={{
-                  width: cellW, height: 28, display: "flex",
-                  alignItems: "center", justifyContent: "center",
-                  fontSize: isPicking ? 15 : 13,
-                  fontWeight: 700,
-                  fontFamily: "'JetBrains Mono',monospace",
-                  color: isPicking ? "#fbbf24" : (isPicked ? "#6ee7b7" : (gain > 0 ? "#059669" : "#cbd5e1")),
-                  background: isPicking ? "rgba(251,191,36,.18)" : "transparent",
-                  borderRadius: 6, transition: "all .3s",
-                }}>{gain}</div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Step explanation */}
-      {gs && (
-        <div style={{
-          background: "#1e293b", borderRadius: 10, padding: "8px 12px",
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
-          color: "#e2e8f0", textAlign: "center", marginBottom: 8,
-        }}>
-          <span style={{ color: "#94a3b8" }}>
-            {t(E, "Slot", "빈칸")} {gs.slot + 1}/{M}:
-          </span>{" "}
-          <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 14 }}>'{gs.picked}'</span>
-          {" "}{t(E, "has the most", "이 가장 많아")} — <span style={{ color: "#93c5fd", fontWeight: 700 }}>{gs.pickedGain}{t(E, " words", "개")}</span>
-          {alreadyPicked.length > 0 && (
-            <div style={{ fontSize: 10, color: "#64748b", marginTop: 2 }}>
-              {t(E, "Already picked:", "이미 고른 글자:")} {alreadyPicked.join(", ")}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Done */}
-      {done && (
-        <div style={{ textAlign: "center", marginBottom: 8 }}>
-          <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-            {t(E, "All slots filled!", "빈칸 3개 모두 채웠어!")}
-          </div>
-          <div style={{
-            display: "inline-flex", gap: 4, padding: "8px 16px", borderRadius: 12,
-            background: `linear-gradient(135deg,#1d4ed8,${A})`,
-            boxShadow: "0 4px 16px rgba(59,130,246,.3)",
-            animation: "wordPopIn .4s ease",
-          }}>
-            {curWord.split("").map((c, i) => (
-              <span key={i} style={{
-                fontSize: 24, fontWeight: 700, color: "#fff",
-                fontFamily: "'JetBrains Mono',monospace",
-              }}>{c}</span>
-            ))}
-          </div>
-          <style>{`@keyframes wordPopIn { 0% { transform: scale(0.85); opacity: 0; } 60% { transform: scale(1.06); } 100% { transform: scale(1); opacity: 1; } }`}</style>
-        </div>
-      )}
-
-      {/* Not started hint */}
-      {step < 0 && (
-        <div style={{ textAlign: "center", fontSize: 12, color: C.dim, marginBottom: 8 }}>
-          {t(E, "Press ▶ to start filling slots!", "▶ 눌러서 빈칸 채우기 시작!")}
-        </div>
-      )}
-
-      {/* Current word being built */}
-      {step >= 0 && !done && (
-        <div style={{
-          textAlign: "center", marginBottom: 8, fontSize: 13, fontWeight: 700,
-          color: A, fontFamily: "'JetBrains Mono',monospace",
-        }}>
-          {t(E, "Building", "지금까지 고른 글자")}: {curWord || "..."}
-        </div>
-      )}
-
-      {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
-        {!done ? (
-          <button onClick={next} style={{
-            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: "none", cursor: "pointer",
-            color: "#fff", opacity: 1,
-            background: `linear-gradient(135deg,#1d4ed8,${A})`,
-            boxShadow: "0 3px 12px rgba(59,130,246,.3)",
-          }}>▶ {t(E, "Next slot", "다음 칸")}</button>
-        ) : (
-          <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-          }}>↺ {t(E, "Restart", "처음부터")}</button>
-        )}
-      </div>
-    </div>
-  );
-}
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -567,8 +352,11 @@ export function WordBuilder({ E }) {
   return (
     <div style={{ padding: "10px 6px" }}>
       {/* Frequency display */}
-      <div style={{ fontSize: 12, fontWeight: 600, color: A, textAlign: "center", marginBottom: 6 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: A, textAlign: "center", marginBottom: 2 }}>
         {t(E, "Letter frequencies from greedy:", "빈칸 채우기로 고른 글자들:")}
+      </div>
+      <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginBottom: 6 }}>
+        {t(E, "(see how they're picked in the Code chapter)", "(어떻게 고르는지는 코드 챕터에서 봐요)")}
       </div>
       <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10 }}>
         {finalAns.map((cnt, i) => cnt > 0 ? (
