@@ -200,7 +200,7 @@ export function makeSqPastureCh2(E, lang = "py") {
         t(E, "Start at the rightmost and end at the leftmost", "가장 오른쪽에서 시작, 가장 왼쪽에서 끝"),
       ],
       correct: 0,
-      explain: t(E, "We need to go from the leftmost left edge to the rightmost right edge to cover everything ✅", "모든 걸 포함하려면 가장 왼쪽부터 가장 오른쪽까지 ✅"),
+      explain: t(E, "Leftmost edge to rightmost edge covers everything ✅", "모든 걸 포함하려면 가장 왼쪽부터 가장 오른쪽까지 ✅"),
     },
     {
       type: "reveal",

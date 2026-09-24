@@ -277,7 +277,7 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {/* 2026-09-17: "N 이 25 만 넘어도 손을 못 댄다" 에서 25 가 어디서 온 수인지 안 말했다. */}
-                {t(E, "2^N − 1 subsets. At N=25 that's already over 30 million. At N=50000 that's 2^50000 — the universe can't hold that many.", "부분집합이 2^N − 1 개예요.\nN 이 25 면 벌써 3 천만 개가 넘어요.\nN 이 50000 이면 2^50000 개라서 세상에 다 적어 둘 수도 없어요.")}
+                {t(E, "2^N − 1 subsets. At N=25 that's already over 30 million. At N=50000 that's 2^50000 — the universe can't hold that many.", "부분집합이 2^N − 1 개예요.\nN 이 25 면 벌써 3000만 개가 넘어요.\nN 이 50000 이면 2^50000 개라서 세상에 다 적어 둘 수도 없어요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>

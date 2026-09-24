@@ -467,7 +467,7 @@ export function makeMooin2Ch4(E, lang = "py") {
          "섹션 2: memo[] 만들기. 자리 i 마다 그 앞에 나온 값 중 a[i] 와 다른 값이 몇 종류인지 세어요. 그게 그 자리 앞에 올 수 있는 x 후보 수예요. (a[i] 가 앞에 이미 나왔다면 자기 자신은 빼요.)"),
     t(E, "Section 3: build second_last. Scan from the RIGHT; the moment a value's count hits 2, that spot j is its 2nd-to-last — a same y still sits after it, so the (j, k) pair is ready.",
          "섹션 3: second_last 만들기. 오른쪽부터 세다가 어떤 값의 count 가 2 가 되는 순간, 그 자리 j 가 '끝에서 두 번째' 예요. 뒤에 같은 y 가 하나 더 있으니 (j, k) 짝이 완성돼요."),
-    t(E, "Section 4: the payoff. For each pair's j, add memo[j] — the distinct x's that can go before it. Sum them all. The whole thing is O(N). Done!",
+    t(E, "Section 4: the payoff. For each pair's j, add memo[j] — the distinct x's that can go before it. Sum them all — the whole thing is O(N). Done!",
          "섹션 4: 드디어 답. 짝의 j 마다 그 앞에 올 수 있는 x 개수인 memo[j] 를 더해요. 다 합치면 끝이고, 전체가 O(N) 이에요!"),
   ];
   return sections.map((sec, i) => ({
