@@ -37,10 +37,11 @@ for (const op of OPS) {
   CANDS.push({ eqFirst: true, op });    // a = b op c
 }
 
-/* 개발 중에만 도는 안전장치 (2026-09-09).
-   화면(:307)이 "답은 유일하게 존재하도록 주어져요" 라고 약속한다. 그런데 시뮬은
-   검증카드를 `ok`(그 칸만 독립 계산)로, 아래 문장을 `firstHit === i`(처음 맞은 것)로
-   따로 판정한다. 정답이 둘인 예제를 넣으면 두 판정이 갈려서 한 화면에
+/* 개발 중에만 도는 안전장치 (2026-09-09, 주석 2026-09-24 갱신).
+   원문(COCI TRI)은 답이 여럿일 수 있다고 하고 화면도 이제 그렇게 말한다.
+   그런데 이 시뮬은 검증카드를 `ok`(그 칸만 독립 계산)로, 아래 문장을
+   `firstHit === i`(처음 맞은 것)로 따로 판정한다 — 이건 시뮬 자체의 구조적
+   제약이다. 정답이 둘인 예제를 넣으면 두 판정이 갈려서 한 화면에
    "✅ 이게 답이에요" 와 "이 후보는 아니에요" 가 **동시에** 뜬다 — 실제로 그랬다.
    이중 판정 자체는 교육적으로 정당해서 그대로 두고, 대신 예제를 새로 넣을 때
    콘솔에서 바로 걸리게 한다. 프로덕션에서는 안 돈다. */
@@ -51,7 +52,7 @@ if (process.env.NODE_ENV !== "production") {
     if (n !== 1) {
       console.error(
         `[mcc15equation] 예제 ${a} ${b} ${c} 의 정답이 ${n} 개다. ` +
-        `화면은 "답은 유일" 이라고 약속한다 — 정답이 딱 1개인 예제로 바꿔라.`);
+        `이 시뮬은 후보 하나씩 독립 판정이라 정답이 딱 1개인 예제만 쓸 수 있다.`);
     }
   }
 }
@@ -191,8 +192,8 @@ function EqTrySim({ E }) {
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
           {firstHit === i
             ? t(E,
-                "The code stops right here and prints this equation. The problem guarantees the answer is unique, so there is nothing left to check.",
-                "코드는 바로 여기서 멈추고 이 식을 출력해요. 답은 유일하다고 문제가 보장하니까 더 볼 필요가 없어요.")
+                "The code stops right here and prints this equation. There can be more than one valid equation — the code only needs one, so it stops at the first match.",
+                "코드는 바로 여기서 멈추고 이 식을 출력해요. 올바른 등식이 여러 개일 수도 있지만, 그중 하나만 찾으면 되니까 여기서 멈춰요.")
             : t(E,
                 "Not this one. Press ▶ to check the next candidate.",
                 "이 후보는 아니에요. ▶ 를 눌러 다음 후보를 확인해봐요.")}
@@ -326,8 +327,8 @@ export function makeMcc15EqCh1(E) {
               </div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8, lineHeight: 1.6 }}>
-              {t(E, "Limits: 1 ≤ x, y, z ≤ 1,000,000. The inputs provided will guarantee that a unique solution exists.",
-                   "x, y, z 는 1 부터 1,000,000 까지예요. 답이 딱 하나만 나오는 입력만 주어져요.")}
+              {t(E, "Limits: 1 ≤ x, y, z ≤ 1,000,000. A valid equation is guaranteed to exist, but there could be more than one — printing any one of them is fine.",
+                   "x, y, z 는 1 부터 1,000,000 까지예요. 올바른 등식이 반드시 존재하지만, 여러 개일 수도 있어요 — 그중 아무거나 하나만 출력하면 돼요.")}
             </div>
           </div>
 
@@ -407,8 +408,8 @@ export function makeMcc15EqCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
-                  "That leaves only 8 candidates, so we can simply try them all — a full search. And the problem promises the answer is unique, so the first candidate that works is the answer.",
-                  "그러면 후보가 8가지뿐이에요. 전부 해보면 돼요 — 완전탐색이에요. 그리고 답은 유일하다고 문제가 약속했으니, 처음 맞는 후보가 곧 답이에요.")}
+                  "That leaves only 8 candidates, so we can simply try them all — a full search. There can be more than one valid equation, but we only need to find one, so the first candidate that works is our answer.",
+                  "그러면 후보가 8가지뿐이에요. 전부 해보면 돼요 — 완전탐색이에요. 올바른 등식이 여러 개일 수도 있지만 하나만 찾으면 되니까, 처음 맞는 후보가 곧 우리가 낼 답이에요.")}
               </div>
             </div>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>

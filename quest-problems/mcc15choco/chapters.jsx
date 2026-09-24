@@ -89,8 +89,8 @@ export function makeMcc15ChocoCh1(E) {
               <div>• {t(E, "line 2 — ", "2번째 줄 — ")}<b>N</b>{t(E, " lengths L₁ … Lₙ", " 개의 길이 L₁ … Lₙ")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: 1 ≤ N ≤ 1,000,000 · 1 ≤ Lᵢ ≤ 1,000,000. (About 50% of the points use N ≤ 10,000.)",
-                    "조건은 1 ≤ N ≤ 1,000,000 이고 1 ≤ Lᵢ ≤ 1,000,000 이에요.\n채점 문제 중에는 N 이 10,000 을 넘지 않는 작은 것도 있어요.\n거기서만 맞아도 점수의 절반쯤은 받아요.")}
+              {t(E, "Limits: 1 ≤ N ≤ 1,000,000 · 1 ≤ Lᵢ ≤ 1,000,000. (A slower O(N²) approach still earns about 50% of the points.)",
+                    "조건은 1 ≤ N ≤ 1,000,000 이고 1 ≤ Lᵢ ≤ 1,000,000 이에요.\nO(N²) 로 느리게 풀어도 점수의 절반쯤은 받아요.")}
             </div>
           </div>
 

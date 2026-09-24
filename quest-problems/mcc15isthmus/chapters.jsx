@@ -355,8 +355,8 @@ export function makeMcc15IsthmusCh1(E) {
             </div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 8, lineHeight: 1.6 }}>
               {t(E,
-                "Note: about 50% of the total score comes from tests with 1 ≤ N ≤ 10,000.",
-                "전체 배점의 약 50%는 1 ≤ N ≤ 10,000 인 테스트에서 나와요.")}
+                "A slower O(N × K) approach still earns about 48% of the total score.",
+                "O(N × K) 로 느리게 풀어도 전체 배점의 약 48%는 받을 수 있어요.")}
             </div>
             <div style={{ fontSize: 12.5, color: C.text, marginTop: 8, lineHeight: 1.6 }}>
               📤 {t(E, "Output — a single integer, the number of settlements built.",

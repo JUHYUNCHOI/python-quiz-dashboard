@@ -69,8 +69,8 @@ export function getMcc15EqSections(E) {
       color: A,
       py: FULL_PY.slice(0, 11), cpp: FULL_CPP.slice(0, 22),
       why: [
-        t(E, "What are we searching for? Which of 8 candidates makes a true equation — '=' in the first gap or the second, times 4 operators. That's few enough to just try them all, and the problem guarantees the answer is unique, so we can stop at the first match.",
-            "무엇을 찾아야 하나요? 8가지 후보 중 등식이 맞는 것 하나예요.\n'=' 가 앞칸이냐 뒷칸이냐 2가지 × 기호 4가지니까요.\n수가 적어서 다 해봐도 되고, 답은 하나뿐이라고 문제가 약속했으니\n처음 맞는 데서 멈춰요."),
+        t(E, "What are we searching for? Which of 8 candidates makes a true equation — '=' in the first gap or the second, times 4 operators. That's few enough to just try them all, and there could be more than one right answer — we only need one, so we can stop at the first match.",
+            "무엇을 찾아야 하나요? 8가지 후보 중 등식이 맞는 것 하나예요.\n'=' 가 앞칸이냐 뒷칸이냐 2가지 × 기호 4가지니까요.\n수가 적어서 다 해봐도 되고, 답이 여러 개일 수도 있지만\n하나만 찾으면 되니까 처음 맞는 데서 멈춰요."),
         t(E, "So write one check function that handles all four operators. We will reuse it for both places the '=' can go: check(a, op, b, c) tests a op b = c, and check(b, op, c, a) tests a = b op c.",
             "그래서 check 함수 하나로 네 가지 기호를 다 처리해요.\n'=' 자리 두 가지에 이 함수를 그대로 또 써요.\ncheck(a, op, b, c) 는 a op b = c 를,\ncheck(b, op, c, a) 는 a = b op c 를 확인해요."),
         t(E, "Division is turned into multiplication: x / y == z is rewritten as x == y * z. '/' is real division here, so comparing decimals could be off by a tiny amount — this way the whole check stays between whole numbers.",
