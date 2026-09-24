@@ -447,13 +447,19 @@ export function makeMooin3Ch2(E, lang = "py") {
     })(),
     /* ── 부록: map 이라는 '다른 방법' (선생님 2026-08-10 USACO 통과 → 부록 추가).
        ① 시뮬로 방법 소개 → ② 코드 → ③ 표 vs map 비교. 표 방식은 주 풀이로 유지. ── */
-    /* [부록 ①] map 시뮬 — 리스트 만들고 이분탐색으로 푸는 걸 눈으로 */
+    /* [부록 ①] map 시뮬 — 리스트 만들고 이분탐색으로 푸는 걸 눈으로
+       ⚠️ 2026-09-24: 학생이 **여기서 그만두고 싶었다**(29단계). 그런데 본인 말로는
+          *"화면에 「안 봐도 돼요」 라고 써 있어서 안심하고 스킵했다"* — 그 표시는
+          **부록 ② 에만** 붙어 있었다. 즉 ① 을 29단계 겪고 나서야 «안 봐도 됐구나» 를 안다.
+          **표시를 맨 앞으로 옮기는 게 답이다** — 시뮬을 줄이는 게 아니라.
+          (부록 셋은 선생님이 2026-08-10 에 「시뮬로 · 다른 방법이라 안내 · 마지막에 비교」로
+           **세 요소를 다 지시**하신 것이라 합치거나 지우지 않는다.) */
     {
       type: "reveal",
-      label: t(E, "Bonus ① Another way: map", "부록 ① 다른 방법 — map"),
+      label: t(E, "Bonus ① Another way: map (optional)", "부록 ① 다른 방법 — map (안 봐도 돼요)"),
       narr: t(E,
-        "A different tool for the same problem — one 'letter → its spots' list, binary-searched.",
-        "표 3 개 대신 '글자 → 위치 목록' 하나로 같은 문제를 풀어요."),
+        "Optional — a different tool for the same problem: one 'letter → its spots' list.",
+        "안 봐도 돼요. 표 3 개 대신 '글자 → 위치 목록' 하나로 푸는 방법이에요."),
       content: (<Mooin3MapSim E={E} />),
     },
     /* [부록 ②] map 코드 */

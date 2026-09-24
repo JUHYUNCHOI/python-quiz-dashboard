@@ -1216,10 +1216,46 @@ export function Mooin3FastSim({ E }) {
       {s.kind === "letter" && (
         <div style={{ textAlign: "center", fontSize: 10.5, color: "#6b21a8", marginBottom: 10, fontWeight: 700, wordBreak: "keep-all" }}>
           {t(E,
-            "Why here: push the ends far apart (i leftmost · k rightmost), j in the middle → (j−i)×(k−j) is biggest.",
-            "왜 이 자리일까요? 양 끝을 최대한 벌리고 (i 는 왼쪽 끝 · k 는 오른쪽 끝) j 를 가운데에 두면\n(j−i)×(k−j) 가 가장 커져요.")}
+            "Why here: push the ends far apart — i leftmost, k rightmost.",
+            "왜 이 자리일까요? 양 끝을 최대한 벌려요 — i 는 왼쪽 끝, k 는 오른쪽 끝이에요.")}
         </div>
       )}
+
+      {/* ⭐ 「가운데 j 가 최대」를 **말로 단언하지 않고 이 예제의 숫자로 보인다** (2026-09-24).
+          재검증 학생: *"「그런가보다」 하고 믿고 넘어갔다 … 나는 외운 거지 이해한 게 아니다."*
+          ⚠️ 증명은 원래 `M3PeakAside` 에 −j²+(i+k)j−ik 대수로 쓰여 있었는데 **화면에 안 그려졌고**,
+             pedagogy 판정은 **그 대수를 살리지 말라**였다 — 2차식 전개는 초6 에게 너무 무겁고
+             우리가 가르친 적도 없다. 대신 **곱셈 비교**면 충분하다(학생이 아는 것만 쓴다).
+          i·k·j 는 위 perC 가 이미 계산해 둔 값이다 — 새로 지어낸 숫자가 아니다. */}
+      {s.kind === "letter" && cur && cur.j >= 0 && (() => {
+        const f = (x) => (x - cur.i) * (cur.k - x);
+        const xs = [];
+        for (let x = cur.i + 1; x < cur.k; x++) xs.push(x);
+        if (xs.length < 3) return null;
+        const best = Math.max(...xs.map(f));
+        return (
+          <div style={{ textAlign: "center", fontSize: 10.5, color: "#6b21a8", marginBottom: 10, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 700 }}>
+              {t(E, `Every spot between i and k — work out (x−i)×(k−x):`,
+                    `i 와 k 사이 자리를 하나씩 곱해 봐요 — (x−i)×(k−x) 예요.`)}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", marginTop: 3 }}>
+              {xs.map((x) => (
+                <span key={x} style={{
+                  margin: "0 6px", fontWeight: f(x) === best ? 800 : 500,
+                  color: f(x) === best ? "#7c2d12" : "#a78bfa",
+                }}>
+                  {x - cur.i}{"×"}{cur.k - x}={f(x)}{f(x) === best ? " ▲" : ""}
+                </span>
+              ))}
+            </div>
+            <div style={{ marginTop: 3, fontWeight: 700 }}>
+              {t(E, `Up then down — biggest in the middle. But j has to be a spot where '${cur.c}' actually sits, so we take the '${cur.c}' closest to the middle.`,
+                    `올라갔다 내려와요 — 가운데가 제일 커요.\n다만 j 는 '${cur.c}' 가 실제로 있는 자리여야 해서, 그중 가운데에 가장 가까운 '${cur.c}' 를 골라요.`)}
+            </div>
+          </div>
+        );
+      })()}
 
       {mCells.length > 0 && (
         <div style={{ textAlign: "center", fontSize: 10.5, color: FA, marginBottom: 10, fontWeight: 700 }}>
@@ -3115,30 +3151,19 @@ const M3InsightAside = ({ E }) => (
   </div>
 );
 
-const M3PeakAside = ({ E }) => (
-  <div style={{
-    background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10,
-    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7c2d12",
-  }}>
-    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>
-      📈 {t(E, "Why a parabola?", "왜 포물선?")}
-    </div>
-    <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, marginBottom: 6 }}>
-      f(j) = (j − i)(k − j)<br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;= −j² + (i+k)j − ik
-    </div>
-    <div style={{ marginBottom: 6 }}>
-      {t(E,
-        "Coefficient of j² is −1 → opens DOWN. Maximum at the vertex j = (i + k)/2.",
-        "j² 앞의 수가 −1 이라 위로 볼록해요(∩). 그래서 꼭대기는 j = (i + k)/2 예요.")}
-    </div>
-    <div style={{ paddingTop: 6, borderTop: "1px dashed #fbbf24", fontSize: 11 }}>
-      {t(E,
-        "Constraint: s[j] = c.  The two c nearest the vertex come straight from the tables — latest_same[c][m] (left side) and earliest_same[c][m] (right side).  Just two candidates, O(1).",
-        "조건은 s[j] = c 예요.\n꼭짓점 양옆에서 가장 가까운 c 두 개는 표에서 바로 나와요 —\nlatest_same[c][m] (왼쪽) 과 earliest_same[c][m] (오른쪽).  후보가 둘뿐이라\nO(1) 이에요.")}
-    </div>
-  </div>
-);
+/* ❌ `M3PeakAside` 는 여기 있었고 **한 번도 화면에 안 그려졌다** (2026-09-24 제거).
+     내력: `7221cb5d` 「모든 섹션에 aside 를 붙인다」는 **일괄 작업으로 생겼고**,
+     `8c7c7f8e` 「입력 읽기 섹션에만 aside 를 남긴다」로 **호출부만 사라져 고아가 됐다.**
+     선생님 요청분이 아니다(부록 map 과 다르다 — 그건 선생님이 직접 지시·제출하신 것).
+
+     내용은 f(j) = (j−i)(k−j) = −j² + (i+k)j − ik → j² 계수 −1 → 위로 볼록 →
+     꼭짓점 (i+k)/2 라는 **대수 유도**였다. 학생이 *"외운 거지 이해한 게 아니다"* 라고 한
+     바로 그 주장의 증명이 **파일 안에는 있는데 화면엔 없었던** 것이다.
+
+     ⚠️ 그렇다고 이걸 되살리지 않았다 — pedagogy 판정: **2차식 전개는 초6 에게 너무 무겁고
+     우리가 가르친 적도 없다.** 대신 `Mooin3FastSim` 의 글자 국면에서 **이 예제의 숫자로**
+     (j−1)·j·(j+1) 의 곱을 나란히 보여 **곱셈만으로** 같은 것을 보이게 했다.
+     되살릴 일이 생기면 `git show 8c7c7f8e^:quest-problems/mooin3/components.jsx` 에 있다. */
 
 const M3FastAside = ({ E }) => (
   <div style={{
