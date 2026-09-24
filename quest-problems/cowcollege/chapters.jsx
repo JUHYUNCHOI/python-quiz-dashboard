@@ -120,7 +120,7 @@ export function makeCowCollegeCh1(E) {
           {/* \uD83C\uDFAF Mission box */}
           <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
-              \uD83C\uDFAF {t(E, "Mission", "\uBBF8\uC158")}
+              {"\uD83C\uDFAF"} {t(E, "Mission", "\uBBF8\uC158")}
             </div>
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,

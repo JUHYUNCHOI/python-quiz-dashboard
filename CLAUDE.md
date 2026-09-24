@@ -118,6 +118,14 @@ python3 scripts/check-stepper-first-step.py <id>             # 코드 스테퍼 
 python3 scripts/check-code-names-in-prose.py <id>            # 코드 보기 전에 코드 이름이 나오나 (deal_price…)
 python3 scripts/check-codewalk-thinking-order.py <id>        # 코드 설명이 파일 순서를 읊나, 생각의 순서로 이끄나
 python3 scripts/check-linebreak-rendered.py                  # 글쓴이가 넣은 줄바꿈이 화면에 실제로 나오나
+python3 scripts/check-jsx-raw-escape.py                      # JSX 텍스트에 맨몸 `\uXXXX` — **화면에 글자 그대로 나온다**
+                                                            #   2026-09-24: `rotshift` 제목이 «\ud83d\udce5 샘플 1» 로 떠 있었다.
+                                                            #   JSX 텍스트는 JS 문자열이 아니라 `\u` 를 **해석하지 않는다.**
+                                                            #   전수 quest 12개·14곳 — `hungrycow` 는 **범례 기호 셋**이 깨져
+                                                            #   그 아래 표가 무슨 말인지 알 수 없었다.
+                                                            #   ⚠️ **빌드도 타입 검사도 `see-screen` 도 못 잡는다** — 문법은
+                                                            #   정상이고 글자가 겹치지도 넘치지도 않는다. 뜻만 틀렸다.
+                                                            #   고치는 법: 중괄호로 감싼다 — `{"\ud83c\udfaf"}`.
 python3 scripts/check-section-code-complete.py               # 학생이 📄 PDF 로 받는 코드가 진짜 돌아가나
                                                             #   2026-09-23 넓힘 — `permutation` 파이썬이 #include/import
                                                             #   검사는 통과했는데, `search()` 를 부르는 줄이 **자기 몸통
