@@ -21,15 +21,15 @@ function TichuSample({ E }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 10, marginBottom: 10 }}>
         <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`11 2
-2 5 4 3 3 8 7 11 15`}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12" }}>
+            <div>11 2 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "N, K", "N, K")}</span></div>
+            <div>2 5 4 3 3 8 7 11 15 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "N−K cards", "N−K 장")}</span></div>
           </div>
         </div>
         <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
-{`8`}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534" }}>
+            8 <span style={{ fontSize: 10, color: "#15803d" }}>← {t(E, "answer", "답")}</span>
           </div>
         </div>
       </div>

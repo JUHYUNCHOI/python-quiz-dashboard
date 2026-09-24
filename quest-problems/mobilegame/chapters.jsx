@@ -15,19 +15,19 @@ function MobileGameSample({ E }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, marginBottom: 10 }}>
         <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`2
-5 3 10
-4 3 4 1 2
-3 20 100
-70 86 19`}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12" }}>
+            <div>2 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "T (tests)", "T (테스트 수)")}</span></div>
+            <div>5 3 10 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "N A B (test 1)", "N A B (1번)")}</span></div>
+            <div>4 3 4 1 2 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "enemies (test 1)", "적 파워 (1번)")}</span></div>
+            <div>3 20 100 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "N A B (test 2)", "N A B (2번)")}</span></div>
+            <div>70 86 19 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "enemies (test 2)", "적 파워 (2번)")}</span></div>
           </div>
         </div>
         <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
-{`3
--1`}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534" }}>
+            <div>3 <span style={{ fontSize: 10, color: "#15803d" }}>← {t(E, "test 1 answer", "1번 답")}</span></div>
+            <div>-1 <span style={{ fontSize: 10, color: "#15803d" }}>← {t(E, "test 2 answer", "2번 답")}</span></div>
           </div>
         </div>
       </div>

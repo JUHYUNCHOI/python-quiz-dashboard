@@ -92,7 +92,7 @@ export function makeRotShiftCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#8b5cf6", textAlign: "center", marginBottom: 10 }}>
-            \ud83d\udce5 {t(E, "Sample 1 \u2014 official", "\uc0d8\ud50c 1 \u2014 \uacf5\uc2dd")}
+            {"\ud83d\udce5"} {t(E, "Sample 1 \u2014 official", "\uc0d8\ud50c 1 \u2014 \uacf5\uc2dd")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 10 }}>
@@ -111,7 +111,7 @@ export function makeRotShiftCh1(E) {
           </div>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
-              \ud83d\udd0d {t(E, "Walkthrough \u2014 N=5, active=[0,2,3], 4 minutes",
+              {"\ud83d\udd0d"} {t(E, "Walkthrough \u2014 N=5, active=[0,2,3], 4 minutes",
                           "\ud480\uc774 \u2014 N=5, active=[0,2,3], 4 \ubd84")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>

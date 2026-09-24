@@ -15,19 +15,19 @@ function InnovationSample({ E }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 10, marginBottom: 10 }}>
         <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`5 3
-3 5 6 6
-4 9 1 2
-1 2 3 4
-2 2 9 8
-8 10 2 3`}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12" }}>
+            <div>5 3 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "n, m", "n, m")}</span></div>
+            <div>3 5 6 6 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "card 1", "카드 1")}</span></div>
+            <div>4 9 1 2 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "card 2", "카드 2")}</span></div>
+            <div>1 2 3 4 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "card 3", "카드 3")}</span></div>
+            <div>2 2 9 8 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "card 4", "카드 4")}</span></div>
+            <div>8 10 2 3 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "card 5", "카드 5")}</span></div>
           </div>
         </div>
         <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
-{`52`}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534" }}>
+            52 <span style={{ fontSize: 10, color: "#15803d" }}>← {t(E, "answer", "답")}</span>
           </div>
         </div>
       </div>
