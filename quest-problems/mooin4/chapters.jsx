@@ -244,7 +244,7 @@ export function makeMooin4Ch2(E, lang = "py") {
         label: t(E, "Code", "코드"),
         narr: t(E,
           "Walk right→left, flipping the letter when an odd number of O's come after it.  Each part lights up with a bubble.",
-          "오른쪽→왼쪽으로 걸으며, 뒤에 O 가 홀수 개면 글자를 뒤집어요.  각 부분이 밝아지며 말풍선이 떠요."),
+          "오른쪽→왼쪽으로 걸으며, 뒤에 O 가 홀수 개면 글자를 뒤집어요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),

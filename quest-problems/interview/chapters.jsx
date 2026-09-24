@@ -235,7 +235,7 @@ export function makeInterviewCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "N=4, K=2, times=[3,1,2,1]\n\n• t=0: Cow 1 → C1 (done @3), Cow 2 → C2 (done @1)\n• t=1: Cow 3 → C2 (free first) → done @3\n• t=3: both C1 and C2 free at the same time\n\nBessie (Cow 4) can go to either. How many possible counters?", "N=4, K=2, times=[3,1,2,1]\n\n• t=0: 소 1 → C1 (끝 @3), 소 2 → C2 (끝 @1)\n• t=1: 소 3 → C2 (먼저 비어요) → 끝 @3\n• t=3: C1 과 C2 가 동시에 비어요\n\nBessie(소 4)는 둘 다 갈 수 있어요. 몇 개일까요?"),
+        "N=4, K=2, times=[3,1,2,1] — trace it and see how many counters Bessie could land on.", "N=4, K=2, times=[3,1,2,1] — 직접 따라가며 몇 개인지 봐요."),
       question: t(E, "How many counters can Bessie go to?", "Bessie 가 갈 수 있는 카운터는 몇 개일까요?"),
       answer: 2,
     },

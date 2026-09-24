@@ -3511,3 +3511,22 @@ pages/quiz_input/clicks 뿐) 스크립트를 돌리기만 해도 자동 갱신�
 quiz_input 변경 0건 확인. 그대로 커밋.
 
 ⚠️ **밀지(push)는 별개다** — 이 판정은 **커밋 예산만** 연다.
+
+## ✅ interview · mooin4 narr 축약 — (2026-09-24, PM 판정)
+
+파란 내레이션 바(narr) 줄이기 일괄 작업이 오늘 세 번째로 `interview`·`mooin4` 를
+스쳐 갔다(둘 다 오늘 세 번째 커밋이라 걸쇠에 막힘). **판정: 진행.**
+
+근거 — diff 를 직접 읽음. `interview` 는 narr 축약이 아니라 **스포일러 제거**였다
+(예제를 끝까지 풀어 답 2개를 미리 보여주던 문장을 "직접 따라가며 봐요" 로 바꿈 —
+바로 앞 두 예제가 이미 같은 풀이를 완전히 보여준 뒤라 학생이 새 숫자에 직접
+적용하는 자리로 정상 작동한다). `mooin4` 는 CodeWalk 직전 narr 에서 UI 동작
+서술 한 문장만 뺐다(57자 → 정보 손실 없음).
+
+`check-narr-length.py` 0곳 · `check-bilingual-drift.py` REAL 0건(둘 다) ·
+`check-quest-length-regression.py` exit 0 · `check-frozen.py` 동결·USACO_VERIFIED
+해당 없음 · `see-flow.mjs --allow-dirty` 로 두 quest 전체 흐름 직접 확인, 끊긴
+자리 없음. 커밋 예산 걸쇠는 그대로 둔다 — 오늘 같은 "일괄 작업이 여러 quest 를
+스치는" 경우를 자동으로 가르는 것보다 판정 한 번이 더 싸고 안전하다는 게 PM 판단.
+
+⚠️ 밀지(push)는 별개다 — 이 판정은 커밋 예산만 연다.
