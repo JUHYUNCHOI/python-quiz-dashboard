@@ -68,7 +68,7 @@ export function makeMilkMeasCh1(E) {
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of times the displayed set changes", "간판에 적힌 1등 소들이 바뀐 횟수")}</b>
-                  {t(E, " over the whole event sequence.", " 를 출력해요.")}
+                  {t(E, " over the whole event sequence.", " 를 전체 기록에서 세어 출력해요.")}
                 </div>
               </div>
             </div>

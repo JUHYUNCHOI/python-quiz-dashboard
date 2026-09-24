@@ -87,7 +87,7 @@ export function makeSocDist1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Stalls \"10001\": cows already stand at 0 and 4.\nPlace 2 more so the smallest gap is as large as possible.", "소 2마리를 더 넣어서 최소 간격을 가장 크게 만들어요."),
+        "Cows already stand in a couple of stalls.\nPlace 2 more so the smallest gap is as large as possible.", "소 2마리를 더 넣어서 최소 간격을 가장 크게 만들어요."),
       question: t(E,
         "Stalls \"10001\": occupied at 0 and 4. Place 2 cows in empty stalls 1,2,3. To maximize minimum distance, best placement?",
         "축사 \"10001\" 의 0 번과 4 번에 소가 있어요. 빈 칸 1, 2, 3 에 소 2마리를 넣어요. 최소 거리를 가장 크게 하려면 어디에 놓을까요?"),
@@ -105,7 +105,7 @@ export function makeSocDist1Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Stalls \"10001\": positions 0 and 4 occupied, place 2 more cows.\nWhat is the maximum possible minimum distance?", "소 2마리를 더 넣었을 때 최소 거리를 가장 크게 해 봐요."),
+        "Positions 0 and 4 occupied, place 2 more cows.\nWhat is the maximum possible minimum distance?", "소 2마리를 더 넣었을 때 최소 거리를 가장 크게 해 봐요."),
       question: t(E,
         "\"10001\": occupied at 0,4. Place 2 cows. Max of min distance?",
         "\"10001\" 의 0 번과 4 번에 소가 있어요. 2마리를 더 넣을 때 최소 거리의 가장 큰 값은 얼마일까요?"),

@@ -360,7 +360,7 @@ export function makeDaisyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The average of a group is the sum divided by the count.\nFor example, flowers [2, 4, 6]: sum=12, count=3, average=4.", "평균은 꽃잎 수를 모두 더한 뒤 꽃 개수로 나눈 값이에요."),
+        "The average of a group is the sum divided by the count.", "평균은 꽃잎 수를 모두 더한 뒤 꽃 개수로 나눈 값이에요."),
       content: (() => {
         const petals = [2, 4, 6];
         const colors = [C.bessie, C.carry, C.accent];

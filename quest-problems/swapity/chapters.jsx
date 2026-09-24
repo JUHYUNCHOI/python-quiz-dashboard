@@ -19,7 +19,7 @@ export function makeSwapityCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "One round reverses [a1,b1] then [a2,b2]; find the order after K rounds (K up to 10^9).",
+        "One round reverses [a1,b1] then [a2,b2]; find the order after K rounds.",
         "뒤집기 두 번을 한 라운드로 묶어 K 번 반복하면 줄이 어떻게 될까요?"),
       content: (
         <div style={{ padding: 16 }}>

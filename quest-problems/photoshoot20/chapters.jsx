@@ -58,7 +58,7 @@ export function makePhoto20Ch1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest permutation a", "사전순으로 가장 작은 순열 a")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest permutation a", "b 에 맞는, 사전순으로 가장 작은 순열 a")}</b>
                   {t(E, " that fits the b array.", " 를 출력해요.")}
                 </div>
               </div>

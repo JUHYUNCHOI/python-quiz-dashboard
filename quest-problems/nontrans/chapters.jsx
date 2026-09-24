@@ -10,7 +10,7 @@ export function makeNonTransCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given two dice A, B (values 1..10), does a die C exist making A beats B beats C beats A?",
+        "Given two dice A, B, does a die C exist making A beats B beats C beats A?",
         "A→B, B→C, C→A 로 이어지는 주사위 C 가 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -102,7 +102,7 @@ export function makeNonTransCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Pick a dice pair, then tap 'Next pair' 16 times — watch the win/lose tally build up.",
+        "Pick a dice pair, then tap 'Next pair' — watch the win/lose tally build up.",
         "쌍을 하나씩 열어 보며 win / lose 가 쌓이는 걸 봐요."),
       content: <NonTransDeepAuditSim E={E} />,
     },

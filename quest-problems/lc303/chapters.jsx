@@ -182,7 +182,7 @@ export function makeChapters(E) {
     {
       type: "quiz",
       narr: t(E,
-        "nums = [1, 2, 3, 4, 5]. prefix = [0, 1, 3, 6, 10, 15]. What is sumRange(1, 3)?",
+        "Using the prefix below, what is sumRange(1, 3)?",
         "아래 prefix 로 sumRange(1, 3) 을 구해 볼까요?"),
       question: t(E,
         "nums = [1, 2, 3, 4, 5]\nprefix = [0, 1, 3, 6, 10, 15]\nsumRange(1, 3) = ?",

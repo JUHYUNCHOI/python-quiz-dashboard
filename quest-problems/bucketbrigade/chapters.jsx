@@ -130,7 +130,7 @@ export function makeBrigadeCh2(E, lang = "py") {
       type: "progressive",
       narr: t(E,
         "BFS from L to B on the 10×10 grid, blocking R.  Shortest path length minus 2 (L and B don't count as cows).  Sections build it one piece at a time.",
-        "최단 경로에서 L 과 B 를 뺀 칸 수가 소의 마릿수예요."),
+        "10×10 격자에서 L→B 최단 경로 칸 수(L·B 제외)가 소의 마릿수예요."),
       sections: getBucketBrigadeSections(E),
     },
   ];

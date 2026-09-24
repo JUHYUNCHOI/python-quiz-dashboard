@@ -90,7 +90,7 @@ export function makeOddPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's read the official sample. IDs = [11, 2, 17, 13, 1, 15, 3] → the answer is 5. Notice we only care about how many IDs are EVEN vs ODD.",
+        "Let's read the official sample. Notice we only care about how many IDs are EVEN vs ODD.",
         "ID 가 짝수인지 홀수인지만 보면 돼요."),
       content: (
         <div style={{ padding: 16 }}>

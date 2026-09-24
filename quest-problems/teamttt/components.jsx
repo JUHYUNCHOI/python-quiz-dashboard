@@ -220,7 +220,7 @@ export function TeamLineChecker({ E }) {
       }}>
         💡 {t(E,
           "Notice: the SET of 3 letters in a line tells you the answer. Size 1 → solo. Size 2 → 2-team. Size 3 → no win. That's the whole algorithm.",
-          "한 줄에 서로 다른 글자가 몇 개인지만 보면 돼요.\n1 개면 단독, 2 개면 2 명 팀, 3 개면 우승이 없어요.")}
+          "한 줄에 서로 다른 글자가 몇 개인지만 보면 돼요.\n1 개면 단독.\n2 개면 2 명 팀.\n3 개면 우승이 없어요.\n이게 알고리즘 전부예요.")}
       </div>
     </div>
   );

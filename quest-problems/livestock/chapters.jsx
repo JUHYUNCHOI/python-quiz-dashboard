@@ -42,7 +42,7 @@ export function makeLivestockCh1(E) {
                 <div>
                   {t(E, "Line up FJ's ", "FJ 의 ")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "8 named cows", "이름 있는 8마리 소")}</b>
-                  {t(E, " (Beatrice, Belinda, Bella, Bessie, Betsy, Blue, Buttercup, Sue) in a single row.",
+                  {t(E, " in a single row.",
                         " 를 한 줄로 세워요.")}
                 </div>
               </div>

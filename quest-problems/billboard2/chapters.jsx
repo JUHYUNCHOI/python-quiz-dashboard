@@ -248,7 +248,7 @@ export function makeBillboard2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A 10x10 billboard (area 100).\nThe feed billboard covers the top half entirely.\nWhat is the tarp area?", "사료 광고판이 윗절반을 통째로 덮으면 타프는 얼마일까요?"),
+        "A 10x10 billboard (area 100).\nThe feed billboard covers the top half entirely.\nWhat is the tarp area?", "광고판 10x10(=100)에서 사료가 윗절반을 통째로 덮으면 타프는 얼마일까요?"),
       question: t(E,
         "Billboard 10x10=100. Feed covers the entire top half. Tarp area?",
         "광고판이 10x10=100 이고 사료가 윗절반 전체를 덮어요. 타프 면적은 얼마일까요?"),
@@ -266,7 +266,7 @@ export function makeBillboard2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Billboard is 6 wide, 3 tall (area 18).\nThe feed billboard does NOT overlap at all.\nWhat is the tarp area?", "사료 광고판이 전혀 겹치지 않으면 타프는 얼마일까요?"),
+        "Billboard is 6 wide, 3 tall (area 18).\nThe feed billboard does NOT overlap at all.\nWhat is the tarp area?", "광고판 6x3(=18)에서 사료가 전혀 겹치지 않으면 타프는 얼마일까요?"),
       question: t(E,
         "Billboard 6x3=18, no overlap with feed. Tarp area?",
         "광고판이 6x3=18 이고 사료와 겹치지 않아요. 타프 면적은 얼마일까요?"),

@@ -160,7 +160,7 @@ export function makeXorStringCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Transform '10' once: insert 1 XOR 0 = 1 between them → '110'.",
+        "Transform '10' once: insert 1 XOR 0 = 1 between them.",
         "'10' 을 한 번 변신하면 사이에 1 XOR 0 = 1 이 들어가요."),
       question: t(E,
         "Transforming '10' once gives '110'. What is its beauty (equal-adjacent pairs)?",
@@ -188,7 +188,7 @@ export function makeXorStringCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way actually transforms every substring k times — impossible: the string doubles each time, and k reaches 10^18. The fast way treats each adjacent pair on its own, uses a closed formula for its beauty, and weights it by how many substrings contain it.",
+        "The slow way actually transforms every substring k times — impossible. The fast way treats each adjacent pair on its own, uses a closed formula for its beauty, and weights it by how many substrings contain it.",
         "만들지 말고, 쌍마다 공식으로 바로 구해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

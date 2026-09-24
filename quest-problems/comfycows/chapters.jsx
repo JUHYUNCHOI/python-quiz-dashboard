@@ -36,7 +36,7 @@ export function makeComfyCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
-                "After each cow is added, output the current count of comfortable cows (exactly 3 of 4 neighbors occupied).",
+                "After each cow is added, output the current count of comfortable cows.",
                 "소를 한 마리 놓을 때마다 편안한 소가 몇 마리인지 출력해요.")}
             </div>
           </div>

@@ -176,7 +176,7 @@ export function Mcc21DvdBounceSim({ E }) {
             </div>
             <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
               {t(E,
-                "The row repeats every 2(H−1) = 4 seconds and the column every 2(W−1) = 8 seconds. So even T = 10^16 needs no stepping — one modulo folds T back into the first cycle.",
+                "The row repeats every 2(H−1) = 4 seconds and the column every 2(W−1) = 8 seconds. So no matter how large T is, one modulo folds it back into the first cycle — no stepping needed.",
                 "행은 2(H−1) = 4 초마다, 열은 2(W−1) = 8 초마다 되풀이돼요.\n그래서 T 가 아무리 커도 한 칸씩 셀 필요가 없어요.\n나머지 계산 한 번이면 T 가 첫 바퀴 안으로 접혀 들어가요.")}
             </div>
           </>

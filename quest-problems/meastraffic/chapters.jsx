@@ -74,7 +74,7 @@ export function makeTrafficCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If highway flow is [10,20] and an on-ramp adds [5,10] cars, what's the flow after?", "진입로를 지난 뒤 유량 범위는 어떻게 될까요?"),
+        "If an on-ramp adds cars to the highway flow, what's the flow after?", "진입로를 지난 뒤 유량 범위는 어떻게 될까요?"),
       question: t(E,
         "Flow [10,20] + on-ramp [5,10] = ?",
         "유량 [10,20] + 진입로 [5,10] = ?"),

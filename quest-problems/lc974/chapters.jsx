@@ -10,7 +10,7 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "LeetCode #974 — count subarrays whose sum is divisible by k.",
+        "Count subarrays whose sum is divisible by k.",
         "합이 k 로 나누어떨어지는 부분 배열이 몇 개인지 세어요."),
       content: (
         <div style={{ padding: 14 }}>

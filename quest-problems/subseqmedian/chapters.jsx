@@ -84,7 +84,7 @@ export function makeSubseqMedianCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. A=[1,2,4,3] — there are 4 single elements plus [1,2,4] and [1,2,3], and their medians add to 14.",
+        "Read the input format and the official example.",
         "입력 형식과 공식 예제를 봐요."),
       content: (
         <div style={{ padding: 16 }}>
