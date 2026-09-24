@@ -540,7 +540,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "10¹⁰ ops in 2 seconds is impossible.  Need to do less work per query.  Same question, drawn as a picture, makes a shortcut visible.",
-        "한 번에 하는 일을 줄여야 해요. 그림으로 그려 볼게요."),
+        "10¹⁰ 번은 안 돼요 — 한 번에 하는 일을 줄여야 해요."),
       content: (<HpsFormulaGridSim E={E} />),
     },
     // Insight + smart code (sections 7-8)

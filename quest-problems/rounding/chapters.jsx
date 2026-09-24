@@ -74,7 +74,7 @@ export function makeCh1(E) {
               </div>
             </div>
             <div style={{ marginTop: 10, textAlign: "center", fontSize: 12, color: "#c2410c", fontWeight: 700 }}>
-              {t(E, "Same number, different answers!", "같은 48 인데 답이 달라요!")}
+              {t(E, "Same number (48), different answers!", "같은 48 인데 답이 달라요!")}
             </div>
           </div>
 
@@ -367,7 +367,7 @@ export function makePatternSteps(E) {
     { type: "reveal",
       narr: t(E,
         "So Bessie rounds 4 down to 0. But wait — Elsie does it differently! Let's see what she gets for 48.",
-        "Bessie 는 4 를 버려서 0 이에요. Elsie 는 어떻게 할까요?"),
+        "Bessie 는 4 를 버려서 0 이에요. Elsie 는 48 을 어떻게 할까요?"),
       content: (
         <div style={{ padding: 4 }}>
           <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:13, lineHeight:2.2, padding:10, background:C.elsieBg, borderRadius:10, border:`1.5px solid ${C.elsieBd}` }}>
@@ -476,7 +476,7 @@ export function makePatternSteps(E) {
     },
     { type: "reveal",
       narr: t(E,
-        "Each digit count d has its own contiguous block of disagreeing numbers — from the SMALLEST (s_d) to the LARGEST (e_d). Look at the digit boxes — see the pattern?",
+        "Each digit count d has its own contiguous block of disagreeing numbers — from the SMALLEST (s_d) to the LARGEST (e_d).",
         "자릿수마다 답이 갈리는 수가 한 덩어리로 붙어 있어요."),
       content: (() => {
         // Digit-box helper — Optimize 탭과 같은 색감
@@ -1192,7 +1192,7 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Step 4: Bessie looks at just the first digit. If it's ≥ 5, round up to 10ᴾ; otherwise round down to 0.\n(Quick note: 'first digit' here means the leftmost one — which is also the P-th digit counting from the right, since x has P digits.)",
+        "Step 4: Bessie looks at just the first digit — round up to 10ᴾ if it's ≥ 5, otherwise round down to 0.",
         "4단계 — Bessie 는 첫째 자리 하나만 봐요.\n그 숫자가 5 이상이면 10ᴾ 이고, 아니면 0 이에요.\n('첫째 자리' 는 가장 왼쪽이에요. x 가 P 자리니까 P 번째와 같아요.)"),
       content: (
         <div style={{ padding: 16 }}>
@@ -1297,7 +1297,7 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Wait — why does each of the T queries redo the work for 2 ~ N from scratch? If two queries cover overlapping ranges, we're doing the same arithmetic twice.\nSo: build the answer array ONCE, then every query just reads from it. That's the prefix sum idea.",
+        "Wait — why does each of the T queries redo the work for 2~N from scratch, when we could just build the answer array once and have every query read from it?",
         "잠깐만요. 물을 때마다 2 부터 N 까지 또 계산하나요?\n두 물음이 같은 구간을 겹쳐 쓰면 똑같은 일을 두 번 하는 거예요.\n그러니 답을 딱 한 번만 표에 채워 두고, 물을 때는 표에서 꺼내요.\n이게 쌓아 더하기(prefix sum) 생각이에요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -1632,14 +1632,14 @@ export function makeOptSteps(E) {
 
     { type: "interval-sim",
       narr: t(E,
-        "Click the d buttons (2, 3, 4, …) to see each digit count's interval [s_d, e_d]. Then drag the N slider — watch the rightmost interval get CLIPPED when N falls inside.",
+        "Click the d buttons to see each digit count's interval, then drag the N slider — watch the rightmost interval get CLIPPED.",
         "자릿수 버튼을 눌러 덩어리를 보고, N 슬라이더도 끌어 봐요."),
     },
 
     { type: "scale",
       narr: t(E,
-        "Drag the N slider all the way to 10⁹ (the right edge). Watch the brute bar shoot past the time limit while the formula stays a tiny dot. THIS is why we still need the formula, even with brute + cache already in place.",
-        "N 슬라이더를 끝까지 끌어 봐요. 브루트와 공식이 얼마나 다른지 보여요."),
+        "Drag the N slider all the way to 10⁹ — watch the brute bar shoot past the time limit while the formula stays tiny.",
+        "N 슬라이더를 10⁹ 까지 끌어 봐요 — 브루트와 공식이 얼마나 다른지 보여요."),
     },
 
     { type: "reveal",

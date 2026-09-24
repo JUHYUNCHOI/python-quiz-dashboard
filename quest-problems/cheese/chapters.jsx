@@ -366,7 +366,7 @@ export function makeCheeseCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "From the Brute tab you discovered: ① only 3 rows change per carve, ② row state = one number (carved count).\nNow let's verify by hand that this counter trick is exactly correct.", "느린 풀이에서 두 가지를 알아냈어요.\n① 블록을 하나 뺄 때 바뀌는 줄은 3개뿐이에요.\n② 줄 하나는 '몇 칸 빠졌나' 숫자 하나로 적을 수 있어요.\n이제 이 방법이 정말 맞는지 손으로 따라가 봐요."),
+        "From the Brute tab you discovered two things — only 3 rows change per carve, and row state is just one number.", "느린 풀이에서 두 가지를 알아냈어요.\n① 블록을 하나 뺄 때 바뀌는 줄은 3개뿐이에요.\n② 줄 하나는 '몇 칸 빠졌나' 숫자 하나로 적을 수 있어요.\n이제 이 방법이 정말 맞는지 손으로 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 16, marginBottom: 12 }}>
@@ -479,7 +479,7 @@ export function makeCheeseCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "After 3 removals, some counters hit 2!\nFor example, (0,0,0) and (0,1,0) share the y-row (x=0,z=0) — that counter reached 2, so 1 row opened!", "3번 제거 후, 어떤 세는 숫자는 2에 도달했어!\n예를 들어 (0,0,0)과 (0,1,0)은 y-줄(x=0,z=0)을 공유해 — 그 세는 숫자가 2가 돼서 1줄 뚫렸어!"),
+        "After 3 removals, some counters hit 2!\nFor example, (0,0,0) and (0,1,0) share the y-row (x=0,z=0) — that counter reached 2, so 1 row opened!", "3번 제거 후, 어떤 세는 숫자는 2에 도달했어!\n예를 들어 (0,0,0)과 (0,1,0)은 y-줄을 공유해 — 그 줄이 뚫렸어!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 2.2 }}>
@@ -720,7 +720,7 @@ export function makeCheeseCh4(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Great — only check the 3 affected rows.\nBut to know if a row is empty, we still need its current state.\nHow do we remember each row's state without re-scanning?", "3 줄만 보면 돼요. 그럼 줄 상태는 어떻게 기억해 둘까요?"),
+        "Great — only check the 3 affected rows, but we still need each row's current state.", "3 줄만 보면 돼요. 그럼 줄 상태는 어떻게 기억해 둘까요?"),
       question: t(E,
         "What's the smallest piece of info per row that tells us 'is this row empty yet?'",
         "줄마다 '이 줄 다 비었나?' 를 알려주는 가장 작은 정보는?"),

@@ -9,7 +9,7 @@ export function makeCowPhotosCh1(E) {
       section: "understand",
       type: "reveal",
       narr: t(E,
-        "FJ wants a row of cows for a photo where the heights go UP then DOWN, mirror around the middle, and no two neighbors share the same height.\nPick as many cows as possible!",
+        "FJ wants a row of cows whose heights go up then down, mirrored around the middle.\nPick as many cows as possible!",
         "가운데까지 올라갔다 내려오는 사진을 찍어요.\n최대한 많은 소를 넣어 봐요!"),
       content: (
         <div style={{ padding: 16 }}>
@@ -247,8 +247,8 @@ export function makeCowPhotosCh1(E) {
       section: "formula",
       type: "reveal",
       narr: t(E,
-        "Building these by hand works but it's getting tedious.  Same shape both times — peak in the middle, paired heights on the sides.  Maybe we can just COUNT.",
-        "손으로 짜는 거 되긴 하는데 점점 귀찮아지지. 두 번 다 같은 모양 — 가운데 peak, 양옆은 짝지은 키들. 그냥 세기만 하면 안 될까?"),
+        "Building these by hand works, but it's tedious — maybe we can just COUNT instead.",
+        "손으로 짜는 거 되긴 하는데 점점 귀찮아 — 그냥 세기만 하면 안 될까?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12.5 }}>
@@ -444,7 +444,7 @@ export function makeCowPhotosCh2(E, lang = "py") {
       section: "optimize",
       type: "reveal",
       narr: t(E, "One warning — why Counter and not h.count()?  Because h.count() re-scans everything each time → TLE on big N.",
-                 "한 가지 주의 — 왜 h.count() 말고 Counter 냐면, h.count() 는 매번 전체를 다시 훑어서 큰 N 에선 TLE 나요."),
+                 "한 가지 주의 — h.count() 는 매번 다시 훑어서 큰 N 에선 TLE 나요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 14 }}>
