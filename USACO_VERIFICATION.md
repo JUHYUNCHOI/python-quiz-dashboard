@@ -171,3 +171,43 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 
 **원래 «일부러 느린 완전탐색» 이라 TLE 가 나는 게 정상이다.** 빠르게 만들면 다른 문제가 된다.
 이제 `.slice()` 로 조각을 자르므로 **화면 코드와 제출 코드가 바이트 단위로 같다.**
+
+---
+
+# 🇲🇾 MCC 2015 — HackerRank 실제 채점기 제출 (2026-09-24)
+
+**MCC 2015 는 HackerRank 에 원본 대회가 그대로 살아 있다** —
+`hackerrank.com/contests/mcc-2015/challenges` (문제 다섯 개, 대회는 끝났지만 **채점은 된다**).
+선생님이 로그인해 주셔서 다섯 개를 **전부 Python 3 로 실제 제출**했다.
+
+| quest | HackerRank 문제 | 결과 |
+|---|---|---|
+| `mcc15rect` | Rectangles (40점) | ✅ 전 테스트 통과 |
+| `mcc15equation` | Complete the Equation (70점) | ✅ 전 테스트 통과 |
+| `mcc15bahasaf` | Bahasa F (125점) | ❌ **14/17 오답** → 규칙 고쳐 ✅ **17/17 통과** |
+| `mcc15isthmus` | Isthmus (125점) | ✅ 전 테스트 통과 |
+| `mcc15choco` | Chocolate Bars (140점) | ✅ 전 테스트 통과 |
+
+## ⚠️ `bahasaf` — 공식 샘플로는 안 걸리는 오류였다
+
+원문: *"changing **the first consonant** in every syllable to 'f' … **If the syllable does not have a consonant**, just add 'f' before it"*
+
+우리 코드는 **"첫 글자가 모음이냐"** 로 갈랐다. 원문은 **"첫 자음"** 이다.
+`"an"` 처럼 **모음으로 시작하지만 자음이 들어 있는** 음절에서 갈린다 —
+우리 답 `"anfan"`, 정답 `"anaf"`.
+
+⭐ **공식 샘플 다섯 단어는 두 해석이 똑같은 답을 낸다.** 그래서 샘플 검산으로는 못 잡았다.
+**채점기가 잡았다.** 코드만이 아니라 **화면 설명도 같은 오류를 가르치고 있었다.**
+
+## 다른 연도는 HackerRank 에 없다
+
+`mcc-2016` 만 페이지가 열리고(문제 목록은 안 보임), `2014·2017·2019·2021` 은 없다.
+**우리 MCC quest 48개 중 채점기로 확인 가능한 건 2015년 다섯 개뿐이다.**
+나머지는 공식 에디토리얼·원문 대조가 최선이다.
+
+## 같은 날 되돌린 것 — 출처를 잘못 골랐다
+
+`9d5f0955` 는 **COCI 원본 PDF + IOI Malaysia 에디토리얼**을 근거로 세 quest 를 고쳤는데,
+HackerRank 의 **MCC 2015 원문**과 대조하니 **셋 다 원래 화면이 맞았다.**
+MCC 는 COCI 문제를 **제약을 바꿔서** 다시 냈다 — **우리 출처는 MCC 판본이다.**
+(`43aa51bc` 에서 되돌림 · `mcc15rect` 음수 좌표 되돌림도 폐기)
