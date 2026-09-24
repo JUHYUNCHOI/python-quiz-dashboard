@@ -16,6 +16,13 @@ export interface ProblemMeta {
    * `scripts/check-unused-lang-param.py` 가 이 목록과 실제 코드가 맞는지 본다.
    */
   pythonOnly?: boolean
+  /**
+   * 「원래 문제」 버튼이 여는 자료에 **공식 풀이가 같이 들어 있다** (PDF 안에 Solution
+   * 절이 있거나, 링크가 아예 공식 해설 페이지로 감). 이 12개는 원문 PDF 를 전수로
+   * 열어 직접 확인했다(2026-09-24) — 나머지 quest 는 풀이가 없다. true 면 버튼
+   * 라벨이 "원래 문제"가 아니라 풀이가 있다는 걸 밝히는 문구로 바뀐다.
+   */
+  hasSolution?: boolean
 }
 
 /** 원래 문제 URL — 명시 안 됐으면 Google 검색 fallback. */
@@ -183,12 +190,12 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"tichu",emoji:"🃏",title:"Tichu",sub:"MCC 2023 P4",section:"MCC",url:"/problems/mcc23tichu.pdf"},
   {id:"rectangles",emoji:"▬",title:"Rectangles",sub:"MCC 2023 P5",section:"MCC",url:"/problems/mcc23rectangles.pdf"},
   {id:"sumk",emoji:"∑",title:"Sum^K",sub:"MCC 2023 P6",section:"MCC",url:"/problems/mcc23sumk.pdf"},
-  {id:"mcc19rect",emoji:"📏",title:"Rectangle",sub:"MCC 2019 P1",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
-  {id:"mcc19bakery",emoji:"🥖",title:"Bakery",sub:"MCC 2019 P2",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
-  {id:"mcc19candy",emoji:"🍬",title:"Candy",sub:"MCC 2019 P3",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
-  {id:"mcc19ditcoin",emoji:"💰",title:"Ditcoin",sub:"MCC 2019 P4",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
-  {id:"mcc19elim",emoji:"🔢",title:"Elimination",sub:"MCC 2019 P5",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
-  {id:"mcc19palindrome",emoji:"🔄",title:"Palindrome",sub:"MCC 2019 P6",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
+  {id:"mcc19rect",emoji:"📏",title:"Rectangle",sub:"MCC 2019 P1",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/",hasSolution:true},
+  {id:"mcc19bakery",emoji:"🥖",title:"Bakery",sub:"MCC 2019 P2",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/",hasSolution:true},
+  {id:"mcc19candy",emoji:"🍬",title:"Candy",sub:"MCC 2019 P3",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/",hasSolution:true},
+  {id:"mcc19ditcoin",emoji:"💰",title:"Ditcoin",sub:"MCC 2019 P4",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/",hasSolution:true},
+  {id:"mcc19elim",emoji:"🔢",title:"Elimination",sub:"MCC 2019 P5",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/",hasSolution:true},
+  {id:"mcc19palindrome",emoji:"🔄",title:"Palindrome",sub:"MCC 2019 P6",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/",hasSolution:true},
   {id:"mcc19rect2",emoji:"▭",title:"Rectangle 2",sub:"MCC 2019",section:"MCC"},
   {id:"mcc15rect",emoji:"▭",title:"Rectangle",sub:"MCC 2015 P1",section:"MCC",url:"https://www.hackerrank.com/contests/mcc-2015/challenges/mcc-rectangle/problem"},
   {id:"mcc15equation",emoji:"➕",title:"Complete the Equation",sub:"MCC 2015 P2",section:"MCC",url:"https://www.hackerrank.com/contests/mcc-2015/challenges/mcc-equations/problem"},
@@ -201,12 +208,12 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"mcc22birthday",emoji:"🎂",title:"Cats' Birthday",sub:"MCC 2022 P4",section:"MCC",url:"/problems/mcc22birthday.pdf"},
   {id:"mcc22cardshark",emoji:"🃏",title:"Card Shark",sub:"MCC 2022 P5",section:"MCC",url:"/problems/mcc22cardshark.pdf"},
   {id:"mcc22lamp",emoji:"💡",title:"Lamp",sub:"MCC 2022 P6",section:"MCC",url:"/problems/mcc22lamp.pdf"},
-  {id:"mcc21carrots",emoji:"🥕",title:"Carrots",sub:"MCC 2021 P1",section:"MCC",url:"/problems/mcc21carrots.pdf"},
-  {id:"mcc21dvd",emoji:"📀",title:"DVD Screensaver",sub:"MCC 2021 P2",section:"MCC",url:"/problems/mcc21dvd.pdf"},
-  {id:"mcc21marbles",emoji:"🔴",title:"Marbles and Boxes",sub:"MCC 2021 P3",section:"MCC",url:"/problems/mcc21marbles.pdf"},
-  {id:"mcc21glass",emoji:"🥛",title:"Round Glass",sub:"MCC 2021 P4",section:"MCC",url:"/problems/mcc21glass.pdf"},
-  {id:"mcc21simplemath",emoji:"🔢",title:"Simple Math",sub:"MCC 2021 P5",section:"MCC",url:"/problems/mcc21simplemath.pdf"},
-  {id:"mcc21menu",emoji:"📋",title:"Smallest Menu Ever",sub:"MCC 2021 P6",section:"MCC",url:"/problems/mcc21menu.pdf"},
+  {id:"mcc21carrots",emoji:"🥕",title:"Carrots",sub:"MCC 2021 P1",section:"MCC",url:"/problems/mcc21carrots.pdf",hasSolution:true},
+  {id:"mcc21dvd",emoji:"📀",title:"DVD Screensaver",sub:"MCC 2021 P2",section:"MCC",url:"/problems/mcc21dvd.pdf",hasSolution:true},
+  {id:"mcc21marbles",emoji:"🔴",title:"Marbles and Boxes",sub:"MCC 2021 P3",section:"MCC",url:"/problems/mcc21marbles.pdf",hasSolution:true},
+  {id:"mcc21glass",emoji:"🥛",title:"Round Glass",sub:"MCC 2021 P4",section:"MCC",url:"/problems/mcc21glass.pdf",hasSolution:true},
+  {id:"mcc21simplemath",emoji:"🔢",title:"Simple Math",sub:"MCC 2021 P5",section:"MCC",url:"/problems/mcc21simplemath.pdf",hasSolution:true},
+  {id:"mcc21menu",emoji:"📋",title:"Smallest Menu Ever",sub:"MCC 2021 P6",section:"MCC",url:"/problems/mcc21menu.pdf",hasSolution:true},
   {id:"mcc20cipher",emoji:"🔐",title:"Cipher",sub:"MCC 2020 P1",section:"MCC",url:"/problems/mcc20cipher.pdf"},
   {id:"mcc20citytour",emoji:"🏙️",title:"City Tour",sub:"MCC 2020 P2",section:"MCC",url:"/problems/mcc20citytour.pdf"},
   {id:"mcc20kitty",emoji:"🐱",title:"Kitty Numbers",sub:"MCC 2020 P3",section:"MCC",url:"/problems/mcc20kitty.pdf"},

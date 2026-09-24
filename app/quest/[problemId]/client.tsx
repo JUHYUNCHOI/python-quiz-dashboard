@@ -112,6 +112,9 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const { profile } = useAuth()
   const isTeacher = useEffectiveIsTeacher()
   const meta = PROBLEM_MAP.get(problemId)
+  // 이 문제는 「원래 문제」 링크에 **공식 풀이가 같이 들어 있다** (data.ts hasSolution 참고,
+  // 2026-09-24 — 12개 전수 확인). 버튼을 누르기 전에 학생이 그걸 알아야 해서 라벨을 바꾼다.
+  const hasOriginalSolution = !!meta?.hasSolution
   // 뒤로 가기 = 자기 섹션(USACO/MCC/MCO)으로. 섹션에 앵커가 없으면(LeetCode 등) /quest 맨 위.
   const backHref = meta && ANCHOR_SECTIONS.has(meta.section) ? `/quest#sec-${meta.section}` : "/quest"
 
@@ -338,20 +341,24 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                 ? "bg-amber-100 text-amber-800"
                 : "text-gray-500 hover:text-amber-700 hover:bg-amber-50"
             }`}
-            title={t("원본 문제를 옆에 띄우기", "Show original problem side-by-side")}
+            title={hasOriginalSolution
+              ? t("원본 문제와 공식 풀이를 옆에 띄우기 — 정답이 보여요", "Show original problem + official solution side-by-side — reveals the answer")
+              : t("원본 문제를 옆에 띄우기", "Show original problem side-by-side")}
           >
             <Columns2 size={11} />
-            <span>{splitView ? t("닫기", "Close") : t("원래 문제", "Original")}</span>
+            <span>{splitView ? t("닫기", "Close") : hasOriginalSolution ? t("원문+풀이", "Solution") : t("원래 문제", "Original")}</span>
           </button>
           <a
             href={getOriginalProblemUrl(meta)}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 text-[11px] font-semibold text-gray-500 hover:text-amber-700 hover:bg-amber-50 px-2 py-1 md:border-l md:border-gray-200 transition-colors"
-            title={t("새 탭에서 원본 문제 열기", "Open original problem in new tab")}
+            title={hasOriginalSolution
+              ? t("새 탭에서 열기 — 공식 풀이가 같이 있어요, 정답이 보여요", "Open in new tab — includes the official solution, reveals the answer")
+              : t("새 탭에서 원본 문제 열기", "Open original problem in new tab")}
           >
             <ExternalLink size={11} />
-            <span className="md:hidden">{t("원래 문제", "Original")}</span>
+            <span className="md:hidden">{hasOriginalSolution ? t("원문+풀이", "Solution") : t("원래 문제", "Original")}</span>
           </a>
         </div>
         {/* 🏆 USACO 검증 결과 — 선생님 전용 (학생에겐 'C++ 5/12' 같은 게 혼란) */}
@@ -634,7 +641,9 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 min-w-0 flex items-center gap-1.5 px-2 py-1 rounded-md bg-white border border-gray-300 hover:border-amber-400 hover:bg-amber-50 transition-colors group"
-                  title={t("새 탭에서 원본 문제 열기", "Open original in new tab")}
+                  title={hasOriginalSolution
+                    ? t("새 탭에서 열기 — 공식 풀이가 같이 있어요", "Open in new tab — includes the official solution")
+                    : t("새 탭에서 원본 문제 열기", "Open original in new tab")}
                 >
                   <ExternalLink size={11} className="text-amber-700 flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <span className="text-[11px] text-gray-600 truncate font-mono">{originalUrl.replace(/^https?:\/\//, "")}</span>
@@ -725,7 +734,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                         border: 0,
                       }}
                       onError={() => setIframeBlocked(true)}
-                      title={t("원본 문제", "Original problem")}
+                      title={hasOriginalSolution ? t("원본 문제 + 공식 풀이", "Original problem + official solution") : t("원본 문제", "Original problem")}
                     />
                   </div>
                 </div>
