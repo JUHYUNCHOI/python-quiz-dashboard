@@ -11,8 +11,6 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#8b5cf6";
 
 const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
   "",
   "MOD = 10**9 + 7",
   "INV2 = pow(2, MOD - 2, MOD)  # modular inverse of 2",
@@ -118,25 +116,25 @@ export function getStrangeFnWalk(E, lang = "py") {
     ] };
   }
   return { code: FULL_PY, vars: _SF_VARS, beats: [
-    { hi: [0, 4],   bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10⁹+7. Read input fast (x can be huge),\nand set up MOD and INV2 (what INV2 means comes in step 3).\nA third argument to pow() adds \"mod\": pow(x, y, z) computes\nx to the y-th power, keeping only the remainder after\ndividing by z the whole way through — a Python built-in.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10⁹+7 로 나눈 나머지예요.\nx 가 커서 입력을 빠르게 받고,\nMOD 와 INV2 를 먼저 둬요 (INV2 가 뭔지는 3단계에서 알려드려요).\npow() 에 세 번째 값을 넣으면 '나머지' 까지 구해요 — x 를 y 번\n거듭제곱하는 내내 z 로 나눈 나머지만 남겨요. 파이썬에 있는 기능이에요.") },
-    { hi: [6, 8],   bubble: t(E, "T tests; read each number x as a STRING (x can be astronomically large).", "테스트를 T 개 읽어요. 각 x 는 문자열 s 로 받아요 (x 가 엄청 커서).") },
+    { hi: [0, 2],   bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10⁹+7. Set up MOD and INV2 (what INV2 means comes in step 3).\nA third argument to pow() adds \"mod\": pow(x, y, z) computes\nx to the y-th power, keeping only the remainder after\ndividing by z the whole way through — a Python built-in.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10⁹+7 로 나눈 나머지예요.\nMOD 와 INV2 를 먼저 둬요 (INV2 가 뭔지는 3단계에서 알려드려요).\npow() 에 세 번째 값을 넣으면 '나머지' 까지 구해요 — x 를 y 번\n거듭제곱하는 내내 z 로 나눈 나머지만 남겨요. 파이썬에 있는 기능이에요.") },
+    { hi: [4, 6],   bubble: t(E, "T tests; read each number x as a STRING (x can be astronomically large).", "테스트를 T 개 읽어요. 각 x 는 문자열 s 로 받아요 (x 가 엄청 커서).") },
     /* 2026-09-23 학생 검증: `any(...)` 를 **짐작**하고 넘어갔다 —
        *"`any(...)` 자체를 처음 본다. 확신 없다."*
        이 말풍선은 «왜 홀짝으로 바꾸나»(알고리즘)만 말하고 «any() 가 뭐하는 함수인가»(문법)는 안 말했다.
        레슨 전체에 `any(` 가 **0건**이고(grep), repo 에서 쓰는 quest 도 **셋뿐**이라 진짜 새 문법이다.
        ⚠️ **C++ 쪽에는 안 넣는다** — C++ 코드는 `any` 가 없고 `bool needBinarize` + for 문이다.
           넣으면 «화면이 코드에 없는 걸 말한다» 가 된다(오늘 두 번 고친 결함). */
-    { hi: [10, 14], bubble: t(E, "any(… for c in s) checks the letters of s one by one — True if it holds even once.\nStep 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "any(조건 for c in s) 는 s 의 글자를 하나씩 보다가\n조건이 한 번이라도 맞으면 True 예요.\n1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
-    { hi: [16, 19], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have so far and adds the new\ndigit — that's how binary is read. n can be huge, so mod\nat every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 하나 볼 때마다 지금까지 값이 두 배가 되고\n새 자리를 더해요 — 그게 이진수를 읽는 방법이에요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
-    { hi: [21, 23], bubble: t(E, "Step 3 — we need floor(3n/2).\nMultiplying an even number by anything keeps it even, so if n\nis even, 3n is even too and last = 0.\nOdd times odd is always odd, so if n\nis odd, 3n is odd too, and we subtract last = 1.\nEither way, 3n − last is always even as a whole number.", "3단계 — floor(3n/2) 를 구해야 해요.\n짝수에 무엇을 곱해도 짝수라서,\nn 이 짝수면 3n 도 짝수이고 last = 0이에요.\n홀수끼리 곱하면 홀수라서,\nn 이 홀수면 3n 도 홀수이고 last = 1이에요.\n그래서 3n − last 는 항상 짝수가 돼요.") },
+    { hi: [8, 12], bubble: t(E, "any(… for c in s) checks the letters of s one by one — True if it holds even once.\nStep 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "any(조건 for c in s) 는 s 의 글자를 하나씩 보다가\n조건이 한 번이라도 맞으면 True 예요.\n1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
+    { hi: [14, 17], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have so far and adds the new\ndigit — that's how binary is read. n can be huge, so mod\nat every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 하나 볼 때마다 지금까지 값이 두 배가 되고\n새 자리를 더해요 — 그게 이진수를 읽는 방법이에요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
+    { hi: [19, 21], bubble: t(E, "Step 3 — we need floor(3n/2).\nMultiplying an even number by anything keeps it even, so if n\nis even, 3n is even too and last = 0.\nOdd times odd is always odd, so if n\nis odd, 3n is odd too, and we subtract last = 1.\nEither way, 3n − last is always even as a whole number.", "3단계 — floor(3n/2) 를 구해야 해요.\n짝수에 무엇을 곱해도 짝수라서,\nn 이 짝수면 3n 도 짝수이고 last = 0이에요.\n홀수끼리 곱하면 홀수라서,\nn 이 홀수면 3n 도 홀수이고 last = 1이에요.\n그래서 3n − last 는 항상 짝수가 돼요.") },
     /* 2026-09-23 학생 검증: 468자짜리 말풍선 하나에 네 가지가 몰려 "숨찼다" —
        ①짝수→mod 후 안 짝수일 수 있음 ②모듈러 역원 개념(mod5 예) ③정수론 고백
        ④연산 순서. ①②③은 INV2 가 실제로 정의된 줄(그 줄이 '왜' 있는지)로,
        ④는 그 연산이 실제로 있는 g 줄로 돌려보낸다. 글자는 그대로 옮겼을 뿐
        하나도 새로 쓰지 않았다. */
-    { hi: [4, 4], bubble: t(E, "Even as a whole number — but it's reduced mod 10⁹+7,\nso it may not be even now (1000000008 becomes 1).\nSo we can't just divide by 2 here.\nTry a tiny example: mod 5, value 8. 8 mod 5 = 3, which is\nodd — but 8/2 = 4, and 4 mod 5 = 4. Multiply 3 by 3 (since\n2×3 = 6 ≡ 1 mod 5) and you get 9 ≡ 4 mod 5 — same answer.\nThat 3 is the \"modular inverse\" of 2 under mod 5.\npow(2, MOD-2, MOD) computes that same idea for mod 10⁹+7 —\nwhy exponent MOD−2 specifically works needs more number\ntheory than this quest covers, so we just use this line as a\nfixed recipe, like a formula you'd look up.", "정수로는 짝수였죠. 그런데 10⁹+7 로 줄인 값이라\n짝수가 아닐 수도 있어요 (1000000008 → 1).\n그래서 2 로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 8 이라고 해요.\n8 mod 5 = 3, 홀수죠. 그런데 8÷2 = 4 이고, 4 mod 5 = 4 예요.\n3 에 3 을 곱하면 (2×3 = 6 ≡ 1 mod 5 이니까) 9 ≡ 4 mod 5,\n똑같이 4 가 나와요. 이 3 이 mod 5 에서 2 의 '모듈러 역원'이에요.\npow(2, MOD-2, MOD) 가 mod 10⁹+7 에서 그 값을 구해줘요 —\n왜 하필 지수가 MOD−2 여야 그 값이 나오는지는 이 quest\n범위보다 더 깊은 정수론이 필요해서, 지금은 이 줄을\n찾아 쓰는 공식처럼 정해진 방법으로만 써요.") },
-    { hi: [24, 24], bubble: t(E, "% and * have the same precedence, so this line runs left to\nright: first % MOD, then * INV2, then % MOD again.", "% 와 * 는 힘이 같아서 이 줄은 왼쪽부터 차례로 계산돼요 —\n먼저 % MOD, 그다음 * INV2, 그다음 다시 % MOD.") },
-    { hi: [26, 26], bubble: t(E, "Answer = ops + g, mod MOD: the parity-flip cost plus the formula's result, added together.", "답은 (ops + g) 를 MOD 로 나눈 나머지예요. 홀짝 변환 비용과 공식 결과를 더한 값이에요.") },
+    { hi: [2, 2], bubble: t(E, "Even as a whole number — but it's reduced mod 10⁹+7,\nso it may not be even now (1000000008 becomes 1).\nSo we can't just divide by 2 here.\nTry a tiny example: mod 5, value 8. 8 mod 5 = 3, which is\nodd — but 8/2 = 4, and 4 mod 5 = 4. Multiply 3 by 3 (since\n2×3 = 6 ≡ 1 mod 5) and you get 9 ≡ 4 mod 5 — same answer.\nThat 3 is the \"modular inverse\" of 2 under mod 5.\npow(2, MOD-2, MOD) computes that same idea for mod 10⁹+7 —\nwhy exponent MOD−2 specifically works needs more number\ntheory than this quest covers, so we just use this line as a\nfixed recipe, like a formula you'd look up.", "정수로는 짝수였죠. 그런데 10⁹+7 로 줄인 값이라\n짝수가 아닐 수도 있어요 (1000000008 → 1).\n그래서 2 로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 8 이라고 해요.\n8 mod 5 = 3, 홀수죠. 그런데 8÷2 = 4 이고, 4 mod 5 = 4 예요.\n3 에 3 을 곱하면 (2×3 = 6 ≡ 1 mod 5 이니까) 9 ≡ 4 mod 5,\n똑같이 4 가 나와요. 이 3 이 mod 5 에서 2 의 '모듈러 역원'이에요.\npow(2, MOD-2, MOD) 가 mod 10⁹+7 에서 그 값을 구해줘요 —\n왜 하필 지수가 MOD−2 여야 그 값이 나오는지는 이 quest\n범위보다 더 깊은 정수론이 필요해서, 지금은 이 줄을\n찾아 쓰는 공식처럼 정해진 방법으로만 써요.") },
+    { hi: [22, 22], bubble: t(E, "% and * have the same precedence, so this line runs left to\nright: first % MOD, then * INV2, then % MOD again.", "% 와 * 는 힘이 같아서 이 줄은 왼쪽부터 차례로 계산돼요 —\n먼저 % MOD, 그다음 * INV2, 그다음 다시 % MOD.") },
+    { hi: [24, 24], bubble: t(E, "Answer = ops + g, mod MOD: the parity-flip cost plus the formula's result, added together.", "답은 (ops + g) 를 MOD 로 나눈 나머지예요. 홀짝 변환 비용과 공식 결과를 더한 값이에요.") },
   ] };
 }
 

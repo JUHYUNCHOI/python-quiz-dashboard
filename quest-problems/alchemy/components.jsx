@@ -224,7 +224,6 @@ export function RecipeSimulator({ E }) {
 
 const FULL_PY = [
   "import sys",
-  "input = sys.stdin.readline",
   "sys.setrecursionlimit(100000)",
   "",
   "N = int(input())",
@@ -397,18 +396,18 @@ export function getAlchemyWalk(E, lang = "py") {
     code: FULL_PY,
     vars: _ALCHEMY_VARS,
     marks: [
-      { from: 15, to: 17, ko: "✋ 베이스 케이스", en: "✋ base case" },
-      { from: 18, to: 19, ko: "✋ 베이스 케이스", en: "✋ base case" },
-      { from: 20, to: 22, color: "#818cf8", ko: "↺ 재귀!", en: "↺ recursion!" },
+      { from: 14, to: 16, ko: "✋ 베이스 케이스", en: "✋ base case" },
+      { from: 17, to: 18, ko: "✋ 베이스 케이스", en: "✋ base case" },
+      { from: 19, to: 21, color: "#818cf8", ko: "↺ 재귀!", en: "↺ recursion!" },
     ],
     beats: [
-      { hi: [0, 11], bubble: t(E,
+      { hi: [0, 10], bubble: t(E,
         "What do we need to output?\nThe most units of metal N we can craft. First read what we start with (have) and each metal's recipe.",
         "무엇을 내놓아야 하나요?\n금속 N 을 최대 몇 개까지 만들 수 있는지예요. 그러려면 먼저 가진 것(have)과 레시피(recipe)부터 읽어야 해요.") },
-      { hi: [13, 23], bubble: t(E,
+      { hi: [12, 22], bubble: t(E,
         "Here, make() calls itself (line 21) — a function calling itself is called recursion. The case where it stops calling itself is called the base case (✋).\nFor metal m: use stock if any (✋ base case), or give up if there's no stock and no recipe (✋ base case). Otherwise, craft every ingredient the same way first — so it calls itself again (↺ recursion).\nThat's exactly what you clicked in the sim earlier: \"no stock? build that ingredient first.\"",
         "여기서 make 함수가 자기 자신을 다시 불러요(21번째 줄) — 이렇게 함수가 자기를 부르는 것을 재귀라고 해요. 재귀를 멈추는 경우를 베이스 케이스라고 불러요(✋).\n금속 m 하나: 재고 있으면 바로 씀(✋ 베이스 케이스), 재고도 레시피도 없으면 포기(✋ 베이스 케이스). 그 외엔 재료부터 똑같이 만들어요 — 그래서 자기 자신을 또 불러요(↺ 재귀).\n아까 시뮬에서 눌러본 '재고 없으면 그 재료부터 만든다' 가 바로 이 재귀예요.") },
-      { hi: [25, 33], bubble: t(E,
+      { hi: [24, 32], bubble: t(E,
         "Now, how many times can we do this?\nFirst idea: just spend real stock while crafting — but if a recipe fails partway, we've already wasted stock other things still need.\nSo we try on a copy (trial) first, and only commit it to have when the whole craft succeeds. The count (ans) when it finally fails is the answer.",
         "이제 이걸 몇 번 할 수 있을까요?\n먼저 이렇게 생각해볼 수 있어요 — 재고를 바로 깎으면서 만들면 어떨까요? 근데 레시피 중간에 실패하면, 다른 곳에 쓸 재고까지 이미 써버려요.\n그래서 복사본(trial)에서 먼저 시도하고, 성공했을 때만 진짜 재고(have)에 반영해요. 더 못 만들 때까지 반복한 횟수(ans)가 답이에요.") },
     ],

@@ -11,8 +11,6 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 export const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
   "",
   "T = int(input())",
   "for _ in range(T):",
@@ -134,8 +132,6 @@ export const FULL_CPP = [
 ];
 
 const SECTION_READ_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
   "",
   "T = int(input())",
   "for _ in range(T):",
@@ -269,12 +265,11 @@ export function getSwapToWinWalk(E, lang = "py") {
     ] };
   }
   return { code: FULL_PY, vars: _SW_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "What must we hand back? The swaps that turn s_1 into target —\nup to 2M of them are allowed.\nStrings can be long, so read input fast.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요. 최대 2M 번까지 써도 돼요.\n문자열이 길 수 있으니 입력을 빠르게 받아요.") },
-    { hi: [3, 9],   bubble: t(E, "For each test, read N, M, target, and the N strings.\nops will collect every swap we make, in order.", "테스트마다 N, M, target, 문자열 N 개를 읽어요.\nops 에 우리가 쓴 바꾸기를 순서대로 모아 둘 거예요.") },
-    { hi: [10, 13], bubble: t(E, "How do we build the moves? Fix s_1 left to right, one column\nat a time — once a column matches we never touch it again.\nAlready equal? Nothing to do.", "바꾸기를 어떻게 만들까요? s_1 을 왼쪽부터 한 칸씩 맞춰요.\n한 번 맞춘 칸은 다시 안 건드려요. 이미 같으면 할 일이 없어요.") },
-    { hi: [15, 25], bubble: t(E, "If not, look for the cheapest fix first.\nIf the letter we need already sits further right in s_1 itself,\none swap inside s_1 is enough (1 op).", "다르다면 가장 싼 방법부터 찾아요.\n필요한 글자가 s_1 뒤쪽에 이미 있으면,\n같은 줄 안에서 한 번만 바꾸면 끝이에요 (1 op).") },
-    { hi: [27, 45], bubble: t(E, "If s_1 has it nowhere, we must borrow it.\nFind the letter in some string s_y — if needed, line it up\nto column k there first (1 op), then swap that column with s_1 (1 op).\nAt most 2 ops total.", "s_1 어디에도 없으면 빌려야 해요.\n다른 줄 s_y 에서 그 글자를 찾아, 필요하면 먼저\nk 번째 칸으로 옮기고(1 op), 그다음 s_1 과 그 칸을 맞바꿔요(1 op).\n합쳐서 최대 2 op.") },
-    { hi: [47, 49], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.\nSkip the second line if there were no swaps.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.\n바꾼 게 없으면 둘째 줄은 건너뛰어요.") },
+    { hi: [0, 7],   bubble: t(E, "What must we hand back? The swaps that turn s_1 into target —\nup to 2M of them are allowed.\nFor each test, read N, M, target, and the N strings.\nops will collect every swap we make, in order.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요. 최대 2M 번까지 써도 돼요.\n테스트마다 N, M, target, 문자열 N 개를 읽어요.\nops 에 우리가 쓴 바꾸기를 순서대로 모아 둘 거예요.") },
+    { hi: [8, 11], bubble: t(E, "How do we build the moves? Fix s_1 left to right, one column\nat a time — once a column matches we never touch it again.\nAlready equal? Nothing to do.", "바꾸기를 어떻게 만들까요? s_1 을 왼쪽부터 한 칸씩 맞춰요.\n한 번 맞춘 칸은 다시 안 건드려요. 이미 같으면 할 일이 없어요.") },
+    { hi: [13, 23], bubble: t(E, "If not, look for the cheapest fix first.\nIf the letter we need already sits further right in s_1 itself,\none swap inside s_1 is enough (1 op).", "다르다면 가장 싼 방법부터 찾아요.\n필요한 글자가 s_1 뒤쪽에 이미 있으면,\n같은 줄 안에서 한 번만 바꾸면 끝이에요 (1 op).") },
+    { hi: [25, 43], bubble: t(E, "If s_1 has it nowhere, we must borrow it.\nFind the letter in some string s_y — if needed, line it up\nto column k there first (1 op), then swap that column with s_1 (1 op).\nAt most 2 ops total.", "s_1 어디에도 없으면 빌려야 해요.\n다른 줄 s_y 에서 그 글자를 찾아, 필요하면 먼저\nk 번째 칸으로 옮기고(1 op), 그다음 s_1 과 그 칸을 맞바꿔요(1 op).\n합쳐서 최대 2 op.") },
+    { hi: [45, 47], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.\nSkip the second line if there were no swaps.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.\n바꾼 게 없으면 둘째 줄은 건너뛰어요.") },
   ] };
 }
 

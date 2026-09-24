@@ -11,9 +11,7 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#2563eb";
 
 const FULL_PY = [
-  "import sys",
   "from collections import defaultdict",
-  "input = sys.stdin.readline",
   "",
   "def solve():",
   "    n, k = map(int, input().split())",
@@ -126,14 +124,14 @@ export function getMakeDistinctWalk(E, lang = "py") {
     ] };
   }
   return { code: FULL_PY, vars: _MD_VARS, beats: [
-    { hi: [0, 2],   bubble: t(E, "What are we solving for? One number per test — the fewest operations needed.\nAll the N values added together can reach 1,000,000, so read fast first.\nWe swap the name input for a faster reader.\ndefaultdict is coming up soon — a bin to hold values by remainder.", "무엇을 구해야 하나요? 테스트마다 최소 횟수 하나예요.\nN 을 다 더하면 1,000,000 까지라 입력부터 빠르게 받아요.\ninput 이라는 이름에 더 빠른 읽기를 대신 넣어 두는 거예요.\ndefaultdict 는 곧 나와요 — 나머지별로 값을 담을 통이에요.") },
-    { hi: [4, 7],   bubble: t(E, "solve() handles ONE test: read n, k, the array.\nK can be negative,\nso the grouping size takes its absolute value — m = abs(k).\nabs strips the sign — abs(-2) is 2.", "solve() 는 테스트 하나를 맡아요. n, k, 배열을 읽어요.\nK 가 음수일 수도 있어서,\n묶을 때 쓸 크기는 절댓값으로 잡아요 — m = abs(k)\nabs 는 부호를 떼는 것 — abs(-2) 는 2 예요.") },
-    { hi: [9, 12],  bubble: t(E, "Adding K never changes a value's remainder mod m.\nFor example, with K = 2: 3+2=5, 5+2=7 … remainder is always 1.\nSo different-remainder groups never collide with each other — we can handle each group separately.\nInside one group every gap is a multiple of m — 7−3=4 is a multiple of 2.\ndefaultdict(list) makes each remainder's list for us.", "K 를 더해도 m 으로 나눈 나머지는 안 바뀌어요.\n예를 들어 K=2 라면 3+2=5, 5+2=7 … 나머지가 늘 1 이에요.\n그래서 나머지가 다르면 서로 절대 안 부딪혀요 — 묶음끼리 따로 봐도 돼요.\n같은 묶음 안에서는 차이가 늘 m 의 배수예요 — 7−3=4 는 2 의 배수죠.\ndefaultdict(list) 가 나머지마다 통을 알아서 만들어 줘요.") },
-    { hi: [14, 18], bubble: t(E, "total starts at 0 — every push adds to it.\nFor each group: sort (K>0 ascending, K<0 descending), then the first value stays put as cur.", "total 은 0 에서 시작해요 — 밀 때마다 여기 더해요.\n묶음마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 두고 cur 로 삼아요.") },
-    { hi: [19, 22], bubble: t(E, "Walk through the rest of the group.\ncur is not how many times we pushed — it is the spot already taken.\nIf the next value is already past cur, it's safe: it becomes the new cur, no push needed.", "묶음의 나머지를 하나씩 봐요.\ncur 는 몇 번 밀었는지가 아니라 이미 차지한 자리예요.\n다음 값이 이미 cur 를 지나 있으면 안전해요 — 밀 필요 없이 그 값이 새 cur 가 돼요.") },
-    { hi: [23, 25], bubble: t(E, "On collision, push to cur + K, the next free spot — each push adds exactly K.\ncur isn't just the value we last compared — it's already been pushed several times by earlier steps.\nSo vals[i] leaps straight to cur in one jump.\nSame remainder means that gap is a multiple of m,\nso dividing it gives the exact push count.", "부딪히면 cur + K, 다음 빈 자리로 밀어요 — 한 번 밀 때마다 딱 K 만큼 커져요.\ncur 는 방금 비교한 값이 아니라, 앞선 반복들에서 이미 여러 번 밀린 값이에요.\n그래서 vals[i] 는 한 번에 cur 까지 건너뛰어요.\n나머지가 같으면 그 거리는 m 의 배수라서,\n나누면 민 횟수가 그대로 나와요.") },
-    { hi: [26, 26], bubble: t(E, "Print this test's answer.", "이 테스트의 답을 출력해요.") },
-    { hi: [28, 30], bubble: t(E, "Run solve() for all T tests.\n_ is just a name for a value we don't use.", "T 개 테스트를 solve() 로 반복해요.\n_ 는 그 값을 안 쓸 때 쓰는 이름이에요.") },
+    { hi: [0, 0],   bubble: t(E, "What are we solving for? One number per test — the fewest operations needed.\ndefaultdict is coming up soon — a bin to hold values by remainder.", "무엇을 구해야 하나요? 테스트마다 최소 횟수 하나예요.\ndefaultdict 는 곧 나와요 — 나머지별로 값을 담을 통이에요.") },
+    { hi: [2, 5],   bubble: t(E, "solve() handles ONE test: read n, k, the array.\nK can be negative,\nso the grouping size takes its absolute value — m = abs(k).\nabs strips the sign — abs(-2) is 2.", "solve() 는 테스트 하나를 맡아요. n, k, 배열을 읽어요.\nK 가 음수일 수도 있어서,\n묶을 때 쓸 크기는 절댓값으로 잡아요 — m = abs(k)\nabs 는 부호를 떼는 것 — abs(-2) 는 2 예요.") },
+    { hi: [7, 10],  bubble: t(E, "Adding K never changes a value's remainder mod m.\nFor example, with K = 2: 3+2=5, 5+2=7 … remainder is always 1.\nSo different-remainder groups never collide with each other — we can handle each group separately.\nInside one group every gap is a multiple of m — 7−3=4 is a multiple of 2.\ndefaultdict(list) makes each remainder's list for us.", "K 를 더해도 m 으로 나눈 나머지는 안 바뀌어요.\n예를 들어 K=2 라면 3+2=5, 5+2=7 … 나머지가 늘 1 이에요.\n그래서 나머지가 다르면 서로 절대 안 부딪혀요 — 묶음끼리 따로 봐도 돼요.\n같은 묶음 안에서는 차이가 늘 m 의 배수예요 — 7−3=4 는 2 의 배수죠.\ndefaultdict(list) 가 나머지마다 통을 알아서 만들어 줘요.") },
+    { hi: [12, 16], bubble: t(E, "total starts at 0 — every push adds to it.\nFor each group: sort (K>0 ascending, K<0 descending), then the first value stays put as cur.", "total 은 0 에서 시작해요 — 밀 때마다 여기 더해요.\n묶음마다 정렬해요 (K>0 은 오름차순, K<0 은 내림차순). 첫 값은 그대로 두고 cur 로 삼아요.") },
+    { hi: [17, 20], bubble: t(E, "Walk through the rest of the group.\ncur is not how many times we pushed — it is the spot already taken.\nIf the next value is already past cur, it's safe: it becomes the new cur, no push needed.", "묶음의 나머지를 하나씩 봐요.\ncur 는 몇 번 밀었는지가 아니라 이미 차지한 자리예요.\n다음 값이 이미 cur 를 지나 있으면 안전해요 — 밀 필요 없이 그 값이 새 cur 가 돼요.") },
+    { hi: [21, 23], bubble: t(E, "On collision, push to cur + K, the next free spot — each push adds exactly K.\ncur isn't just the value we last compared — it's already been pushed several times by earlier steps.\nSo vals[i] leaps straight to cur in one jump.\nSame remainder means that gap is a multiple of m,\nso dividing it gives the exact push count.", "부딪히면 cur + K, 다음 빈 자리로 밀어요 — 한 번 밀 때마다 딱 K 만큼 커져요.\ncur 는 방금 비교한 값이 아니라, 앞선 반복들에서 이미 여러 번 밀린 값이에요.\n그래서 vals[i] 는 한 번에 cur 까지 건너뛰어요.\n나머지가 같으면 그 거리는 m 의 배수라서,\n나누면 민 횟수가 그대로 나와요.") },
+    { hi: [24, 24], bubble: t(E, "Print this test's answer.", "이 테스트의 답을 출력해요.") },
+    { hi: [26, 28], bubble: t(E, "Run solve() for all T tests.\n_ is just a name for a value we don't use.", "T 개 테스트를 solve() 로 반복해요.\n_ 는 그 값을 안 쓸 때 쓰는 이름이에요.") },
   ] };
 }
 

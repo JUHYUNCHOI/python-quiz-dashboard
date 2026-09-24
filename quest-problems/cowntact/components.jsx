@@ -229,9 +229,6 @@ export function RunsViz({ E, str = "01110110" }) {
 }
 
 const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
   "N = int(input())",
   "s = input().strip()",
   "",

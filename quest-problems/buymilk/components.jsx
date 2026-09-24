@@ -68,8 +68,6 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#d97706";
 
 const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
   "",
   "deal_count, query_count = map(int, input().split())",
   "deal_price = list(map(int, input().split()))",
@@ -197,19 +195,17 @@ export function getBuyMilkWalk(E, lang = "py") {
     ] };
   }
   return { code: FULL_PY, vars: _BM_VARS, beats: [
-    { hi: [0, 1], bubble: t(E, "Up to 10,000 questions arrive, so reading has to be quick.\nThat is all this line is for.",
-                                 "질문이 1만 개까지 올 수 있어요. 읽는 것부터 빨라야 해요.\n이 줄은 그것뿐이에요.") },
-    { hi: [3, 4], bubble: t(E, "First, just take in what we are given — nothing is worked out yet.\nDeal 1 in the problem is deal_price[0] in the code.",
+    { hi: [1, 2], bubble: t(E, "First, just take in what we are given — nothing is worked out yet.\nDeal 1 in the problem is deal_price[0] in the code.",
                                  "먼저 주어진 것을 받아만 둬요. 아직 아무것도 계산하지 않아요.\n문제의 1번 거래가 코드에서는 deal_price[0] 이에요.") },
-    { hi: [6, 11], bubble: t(E, "Before answering anything: is the price on a pack its real price?\nNo — two half-size packs can be cheaper. So fix that first.\nAfter this a bigger pack is never worse per bucket,\nwhich is why one big-to-small sweep is enough — no recursion.",
+    { hi: [4, 9], bubble: t(E, "Before answering anything: is the price on a pack its real price?\nNo — two half-size packs can be cheaper. So fix that first.\nAfter this a bigger pack is never worse per bucket,\nwhich is why one big-to-small sweep is enough — no recursion.",
                                  "질문에 답하기 전에 물어요. 묶음에 붙은 값이 진짜 값일까요?\n아니에요. 절반짜리를 두 번 사는 게 쌀 수 있어요. 그것부터 정해요.\n이렇게 해 두면 큰 묶음일수록 한 통 값이 싸요.\n그래서 큰 것부터 한 번만 훑으면 돼요 — 재귀가 필요 없어요.") },
-    { hi: [13, 18], bubble: t(E, "A question arrives: buy want buckets.\nTo walk the packs we need three things —\nhow much is still missing, how much we have paid, and the cheapest so far.",
+    { hi: [11, 16], bubble: t(E, "A question arrives: buy want buckets.\nTo walk the packs we need three things —\nhow much is still missing, how much we have paid, and the cheapest so far.",
                                  "질문이 왔어요. want 통을 사야 해요.\n묶음을 훑으려면 세 가지가 필요해요 —\n아직 못 채운 통, 여기까지 낸 값, 지금까지 제일 싼 값.") },
-    { hi: [20, 31], bubble: t(E, "Now the real work. At each pack there are only two things to do —\n(A) buy_up: how many packs it takes to cover what is left.\n// rounds down, so we add (pack size − 1) first — that rounds up.\n(B) buy_down: how many fit without going over, so plain // works. The rest carries down.",
+    { hi: [18, 29], bubble: t(E, "Now the real work. At each pack there are only two things to do —\n(A) buy_up: how many packs it takes to cover what is left.\n// rounds down, so we add (pack size − 1) first — that rounds up.\n(B) buy_down: how many fit without going over, so plain // works. The rest carries down.",
                                  "이제 진짜 할 일이에요. 묶음마다 할 수 있는 건 둘뿐이에요 —\nbuy_up 은 넉넉히 사고 끝내기. 덮으려면 몇 개가 필요한지예요.\n// 는 내림이라 모자라요. 그래서 나누기 전에 (묶음크기 − 1) 을 더해 올림해요.\nbuy_down 은 넘지 않게 사는 개수라 그냥 내림이고, 남은 통은 작은 묶음에 넘겨요.") },
-    { hi: [33, 34], bubble: t(E, "Reaching the bottom means we covered it exactly. That is a candidate too.\nKeep whichever is cheapest.",
+    { hi: [31, 32], bubble: t(E, "Reaching the bottom means we covered it exactly. That is a candidate too.\nKeep whichever is cheapest.",
                                  "끝까지 내려왔다는 건 딱 맞게 샀다는 뜻이에요. 그것도 후보예요.\n그중 제일 싼 값을 남겨요.") },
-    { hi: [36, 36], bubble: t(E, "Every question is answered. Print them all in one go — one line each.",
+    { hi: [34, 34], bubble: t(E, "Every question is answered. Print them all in one go — one line each.",
                                  "질문에 다 답했어요. 한 번에 출력해요. 한 줄에 하나씩이에요.") },
   ] };
 }

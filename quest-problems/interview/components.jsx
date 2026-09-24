@@ -368,8 +368,7 @@ export function InterviewRunner({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 
 const IV_INPUT_PY = [
-  "import sys, heapq",
-  "input = sys.stdin.readline",
+  "import heapq",
   "",
   "N, K = map(int, input().split())",
   "times = list(map(int, input().split()))",

@@ -11,9 +11,6 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#f97316";
 
 export const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
   "T, k = map(int, input().split())",
   "out = []",
   "for _ in range(T):",
@@ -89,17 +86,15 @@ export function getMooin4Walk(E, lang = "py") {
     ] };
   }
   return { code: FULL_PY, vars: _M4_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "What do we need to know? What key was really pressed at each spot.\nUp to 10^4 tests can arrive, so reading has to be fast.",
-                                 "무엇을 알아야 하나요?\n각 자리마다 실제로 어떤 키를 눌렀는지예요.\n테스트가 최대 만 개까지 오니 읽기부터 빨라야 해요.") },
-    { hi: [3, 7],   bubble: t(E, "First read T, k, N, S.\nThe very last character is never flipped — nothing comes after it — so it equals S's last letter exactly.",
-                                 "먼저 T·k·N·S 를 읽어요.\n마지막 글자는 뒤에 아무것도 없어서 절대 안 뒤집혀요 — S 의 마지막 글자 그대로예요.") },
-    { hi: [8, 10],  bubble: t(E, "So we work backward, right to left.\nEach later O flips the current key once; two flips cancel out, so only the parity matters — that's flips.",
+    { hi: [0, 5],   bubble: t(E, "What do we need to know? What key was really pressed at each spot.\nFirst read T, k, N, S.\nThe very last character is never flipped — nothing comes after it — so it equals S's last letter exactly.",
+                                 "무엇을 알아야 하나요?\n각 자리마다 실제로 어떤 키를 눌렀는지예요.\n먼저 T·k·N·S 를 읽어요.\n마지막 글자는 뒤에 아무것도 없어서 절대 안 뒤집혀요 — S 의 마지막 글자 그대로예요.") },
+    { hi: [6, 8],  bubble: t(E, "So we work backward, right to left.\nEach later O flips the current key once; two flips cancel out, so only the parity matters — that's flips.",
                                  "그래서 뒤에서부터 거슬러 올라가요.\n글자 하나가 뒤집히는 건 뒤에서 친 O 키 하나마다 한 번씩이라, 두 번 뒤집히면 제자리로 돌아오니까 홀짝만 알면 돼요 — 그게 flips 예요.") },
-    { hi: [11, 17], bubble: t(E, "What should this spot actually press?\nIf flips is odd, the screen letter is flipped, so the real key is the opposite.\nRecord what was really typed, and bump flips if that key was O.",
+    { hi: [9, 15], bubble: t(E, "What should this spot actually press?\nIf flips is odd, the screen letter is flipped, so the real key is the opposite.\nRecord what was really typed, and bump flips if that key was O.",
                                  "이 자리는 무엇을 쳐야 할까요?\nflips 가 홀수면 화면 글자가 뒤집혀 보인 거라, 원래 친 키는 반대예요.\n실제로 친 글자를 기록하고, 그 키가 O 였다면 flips 를 하나 늘려요.") },
-    { hi: [18, 20], bubble: t(E, "So it's always possible — the answer is always YES.\nIf k==1, also keep the actual typed string found so far.",
+    { hi: [16, 18], bubble: t(E, "So it's always possible — the answer is always YES.\nIf k==1, also keep the actual typed string found so far.",
                                  "그래서 항상 만들 수 있어요 — 답은 늘 YES 예요.\nk==1 이면 지금까지 알아낸 실제 문자열도 같이 남겨요.") },
-    { hi: [21, 21], bubble: t(E, "Every test is solved. Print all results at once.",
+    { hi: [19, 19], bubble: t(E, "Every test is solved. Print all results at once.",
                                  "테스트를 다 풀었어요. 결과를 한 번에 출력해요.") },
   ] };
 }
@@ -121,11 +116,7 @@ export function getMooin4Sections(E) {
           "If parity is odd, flip the target letter to figure out what to type. The answer is always YES.",
           "홀수면 목표 글자를 뒤집어서 무엇을 칠지 정해요. 답은 항상 YES 예요."),
       ],
-      pyOnly: [
-        t(E,
-          "sys.stdin.readline keeps it fast across up to 10^4 test cases.",
-          "테스트케이스가 많으니 sys.stdin.readline 으로 빠르게 읽어요."),
-      ],
+      pyOnly: [],
       cppOnly: [
         t(E,
           "Build typed in-place — O(N) per test case, O(sum N) total.",

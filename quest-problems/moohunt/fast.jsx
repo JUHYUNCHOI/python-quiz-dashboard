@@ -74,9 +74,7 @@
 import { t } from "@/components/quest/theme";
 
 export const FAST_PY = [
-  "import sys",
   "from collections import defaultdict",
-  "input = sys.stdin.readline",
   "",
   "N, K = map(int, input().split())",
   "",
@@ -236,21 +234,21 @@ export function getMooHuntFastWalk(E, lang = "py") {
     ] };
   }
   return { code: FAST_PY, vars: _FAST_VARS, beats: [
-    { hi: [0, 4],   bubble: t(E, "What do we need to find?\nThe best score, and how many boards reach it.\nSo we will build every board and score it. Start by reading N and K.",
+    { hi: [0, 2],   bubble: t(E, "What do we need to find?\nThe best score, and how many boards reach it.\nSo we will build every board and score it. Start by reading N and K.",
                                  "무엇을 내놓아야 하나요?\n최고 점수와, 그 점수가 나오는 보드 개수예요.\n그러니 보드를 전부 만들어 점수를 매길 거예요. 먼저 N 과 K 를 읽어요.") },
-    { hi: [6, 14],  bubble: t(E, "Re-reading all K moves for every board would be far too slow.\nThe moves never change — so count them once, right here.\nThe key is (M cell, smaller O cell, larger O cell).",
+    { hi: [4, 12],  bubble: t(E, "Re-reading all K moves for every board would be far too slow.\nThe moves never change — so count them once, right here.\nThe key is (M cell, smaller O cell, larger O cell).",
                                  "보드마다 무브 K 개를 다시 훑으면 너무 느려요.\n무브는 바뀌지 않으니 여기서 **한 번만** 세어 둬요.\n열쇠는 (M 자리, 작은 O 자리, 큰 O 자리) 예요.") },
-    { hi: [16, 21], bubble: t(E, "Now, how do we make the boards?\nEach cell is either M or O — so a board is just 0s and 1s.\nStart from all O.",
+    { hi: [14, 19], bubble: t(E, "Now, how do we make the boards?\nEach cell is either M or O — so a board is just 0s and 1s.\nStart from all O.",
                                  "이제 보드를 어떻게 만들까요?\n칸마다 M 아니면 O 니까, 보드는 0 과 1 로 적으면 돼요.\n전부 O 에서 시작해요.") },
-    { hi: [22, 30], bubble: t(E, "One board in hand. To score it we first need to know\nwhich cells are M and which are O.",
+    { hi: [20, 28], bubble: t(E, "One board in hand. To score it we first need to know\nwhich cells are M and which are O.",
                                  "보드 하나를 받았어요. 점수를 내려면 먼저\n어느 칸이 M 이고 어느 칸이 O 인지 갈라 놔야 해요.") },
-    { hi: [31, 38], bubble: t(E, "So which moves score on this board?\nOnly 'one M cell + two O cells' ever can — so ask the table for exactly those.\ncount is a defaultdict, so a key nobody asked about gives 0.",
+    { hi: [29, 36], bubble: t(E, "So which moves score on this board?\nOnly 'one M cell + two O cells' ever can — so ask the table for exactly those.\ncount is a defaultdict, so a key nobody asked about gives 0.",
                                  "그럼 이 보드에서 득점하는 무브는 무엇일까요?\n'M 한 자리 + O 두 자리' 뿐이라, 그 조합만 표에서 꺼내요.\ncount 는 defaultdict 라 없는 열쇠를 물으면 0 이 나와요.") },
-    { hi: [40, 44], bubble: t(E, "This board has a score. Compare it with the best so far.\nSame score? Then one more board reaches it.",
+    { hi: [38, 42], bubble: t(E, "This board has a score. Compare it with the best so far.\nSame score? Then one more board reaches it.",
                                  "이 보드의 점수가 나왔어요. 지금까지 제일 높은 값과 견줘요.\n같으면 그 점수인 보드가 하나 늘어요.") },
-    { hi: [46, 55], bubble: t(E, "This board is done. What is the next one? Add 1, with cell 1 as the ones place.\nAdding 1 carries, just like 1999 + 1 = 2000 — only the trailing 9s turn into 0s.\nHere the trailing Ms turn back to O, and the first O it meets becomes M.\nMMO + 1 = OOM: two Ms reset, the third cell flips up.\nAll M already? Then there is nowhere left to go — stop.",
+    { hi: [44, 53], bubble: t(E, "This board is done. What is the next one? Add 1, with cell 1 as the ones place.\nAdding 1 carries, just like 1999 + 1 = 2000 — only the trailing 9s turn into 0s.\nHere the trailing Ms turn back to O, and the first O it meets becomes M.\nMMO + 1 = OOM: two Ms reset, the third cell flips up.\nAll M already? Then there is nowhere left to go — stop.",
                                  "이 보드는 끝났어요. 다음 보드는? 1번 칸을 일의 자리로 보고 1 을 더해요.\n더하면 받아올림이 생겨요. 1999 + 1 = 2000 처럼요 — 뒤의 9 들만 0 이 돼요.\n여기서도 뒤에 붙은 M 들만 O 로 되돌아가고, 처음 만난 O 가 M 이 돼요.\nMMO 에 1 을 더하면 OOM 이에요. 앞의 두 M 만 되돌아갔어요.\n전부 M 이었다면 더 갈 데가 없으니 멈춰요.") },
-    { hi: [57, 57], bubble: t(E, "Every board has been seen. Print the two numbers — that is the answer.",
+    { hi: [55, 55], bubble: t(E, "Every board has been seen. Print the two numbers — that is the answer.",
                                  "보드를 다 봤어요. 두 값을 출력하면 끝이에요.") },
   ] };
 }

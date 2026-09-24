@@ -145,8 +145,6 @@ export function ReflectionRunner() { return null; }
    ════════════════════════════════════════════════════════════════════ */
 
 const RFL_S1_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
   "",
   "N, U = map(int, input().split())",
   "",
@@ -231,8 +229,6 @@ const RFL_S3_CPP = [
 ];
 
 const RFL_BRUTE_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
   "",
   "# 칸 (i, j) 가 속한 묶음을 한 색으로 만드는 최소 뒤집기 수",
   "def flip_cost(grid, i, j):",
@@ -336,8 +332,6 @@ const RFL_BRUTE_CPP = [
 ];
 
 const RFL_FAST_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
   "",
   "# 칸 (i, j) 가 속한 묶음을 한 색으로 만드는 최소 뒤집기 수",
   "def flip_cost(grid, i, j):",
