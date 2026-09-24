@@ -58,9 +58,18 @@ export function AlgorithmTags({ E, tags }) {
           </>
         );
         // href 있으면 클릭해서 학습 페이지로, 없으면 그냥 칩
+        //
+        // ⚠️ 2026-09-24: 여기가 `target` 없는 같은 탭 <Link> 라 **quest 에서 통째로 이탈**했다.
+        //    학생이 실제로 헷갈렸다 — *"이게 설명이 들어있는 탭인 줄 알고 찾다가 못 찾았다."*
+        //    **위 57줄이 ↗ 아이콘을 달아 「새로 열린다」고 약속해 놓고 동작이 달랐다** — 아이콘이 거짓말을 했다.
+        //    고치는 법은 새 코드가 아니라 **이 저장소가 이미 쓰는 방식**이다 —
+        //    `app/quest/[problemId]/client.tsx:351-362` 의 「원래 문제」 링크가
+        //    `target="_blank" rel="noopener noreferrer"` + 툴팁 「새 탭에서 열기」를 쓴다.
+        //    ⭐ 이렇게 고치면 **안내 문구가 필요 없어진다** — 학생이 되돌아올 일 자체가 없다
+        //       (`feedback_shorter_not_longer` 와 안 부딪힌다). 툴팁도 정직해지게 「새 탭」을 적는다.
         return tag.href ? (
-          <Link key={i} href={tag.href} style={chipStyle}
-            title={t(E, "Learn this →", "이거 배우러 가기 →")}>{inner}</Link>
+          <Link key={i} href={tag.href} style={chipStyle} target="_blank" rel="noopener noreferrer"
+            title={t(E, "Learn this (new tab) →", "이거 배우러 가기 (새 탭) →")}>{inner}</Link>
         ) : (
           <span key={i} style={chipStyle}>{inner}</span>
         );

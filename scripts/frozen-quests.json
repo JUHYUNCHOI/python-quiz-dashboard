@@ -1,0 +1,12 @@
+{
+  "_comment": "🔒 절대 안 건드리는 quest — check-frozen.py 가 읽는 1차 소스(기계용). 사람이 읽는 이유·역사는 memory/quest_review_progress.md 의 '🔒 절대 안 건드리는 quest' 절에 있다. 이 파일을 바꾸면 그 문서도 같이 고쳐라 — 여기만 바뀌면 '왜' 가 사라진다.",
+  "quests": [
+    "hps",
+    "cowphotos",
+    "rounding",
+    "cheese",
+    "moo",
+    "mooin3",
+    "checkups"
+  ]
+}

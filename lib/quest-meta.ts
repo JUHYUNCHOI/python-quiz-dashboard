@@ -154,6 +154,24 @@ export const CONCEPT_ONTOLOGY = {
   "graph-component": "find connected components",
   "topological-order": "topological sort",
   "tree-traversal": "DFS through tree edges",
+
+  // ── 언어 빌트인 선수지식 (2026-09-24) ──────────────────────────────────
+  // 왜 생겼나: `mooin3` 이 `chr(c+97)` 로 26글자를 도는데 `concepts_required` 는
+  //   `["loop", "string-basics"]` 뿐이었다. 그래서 그 둘만 익힌 학생에게 시스템이
+  //   **적극적으로 mooin3 을 추천**했고(`app/quest/page.tsx` 의 `isReady()`),
+  //   학생은 그 코드 쪽에서 **"완전히 막혔다"** 고 했다.
+  //   ⚠️ 칸이 없어서가 아니다 — **칸은 있었고 틀리게 채워져 있었다.**
+  // 이름은 `scripts/count-quests.py` 의 UNTAUGHT 사전 키와 **1:1 로 맞춘다.**
+  //   두 목록이 따로 놀면 다음에 또 어긋난다 — 대조는 `check-required-vs-code.py` 가 한다.
+  // ⚠️ `grid-2d`(위)는 **순회** 개념이라 `2d-list-build`(만드는 문법)와 다르다. 재사용 금지.
+  "chr-ord-conversion": "chr()/ord() — letter ↔ 0..25 number",
+  "2d-list-build": "build a list of lists ([[x]*n for _ in range(m)])",
+  "3d-plus-indexing": "three or more index levels (a[i][j][k])",
+  "nested-comprehension": "comprehension inside a comprehension",
+  "bit-ops": "bit shifts and masks (1 << k, & 1)",
+  "pascal-triangle-dp": "build binomial coefficients as a table",
+  "fenwick-tree": "Fenwick / BIT prefix sums",
+  "modular-inverse": "modular inverse (Fermat / pow(a, MOD-2))",
 } as const;
 
 export type ConceptId = keyof typeof CONCEPT_ONTOLOGY;
@@ -267,7 +285,11 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
     //   글자별 전처리 표 + 포물선 꼭짓점 근처 후보 탐색을 요구하는데 아래 둘에 안 잡혀 있었다.
     //   ⚠️ 이 스키마에 **«언어 빌트인 선수지식»(chr/ord 같은 것) 칸이 아예 없다** —
     //      그래서 어떤 필드도 이걸 못 적는다. 스키마 공백은 .claude/WORK.md 항목.
-    concepts_required: ["loop", "string-basics", "letter-index-table"],
+    // ⚠️ 2026-09-24 정정: 처음엔 `letter-index-table` 이라고 적었는데 **그 자체가 어긋남이었다** —
+    //    `CONCEPT_ONTOLOGY` 에 없는 이름이라 `getConceptGraph()` 가 조용히 새 노드로 만들어 버리고
+    //    타입이 `string[]` 이라 컴파일도 안 잡는다. 「어긋남을 고치다 새 어긋남을 만든 것」이다.
+    //    `quest-auditor` 가 같은 날 잡았다. 등록된 이름으로 바꾼다.
+    concepts_required: ["loop", "string-basics", "chr-ord-conversion", "2d-list-build"],
     difficulty: 4,
     supported_languages: ["py", "cpp"],
     // Verified against USACO 2025 Open Bronze #3 official sample.

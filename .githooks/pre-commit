@@ -1,4 +1,14 @@
 #!/bin/sh
+# 두 걸쇠를 순서대로 건다 — 하나라도 막으면 커밋을 멈춘다.
+#
+# ── ① check-frozen.py --staged ───────────────────────────────────────────
+# 동결 quest(🔒 절대 안 건드리는 quest 7개) · USACO_VERIFIED 코드를 건드렸는지.
+# 왜 (2026-09-25): 이 검사기는 원래 자문 도구라 어느 훅에도 없었다. 그 틈으로
+# 동결 quest `mooin3` 의 USACO_VERIFIED 코드를 건드린 커밋(`fb5367dd`)이 그대로
+# 나갔다가 되돌려졌다. fail-closed·--staged 전용·고정 승인 마커 등 설계 이유는
+# `scripts/check-frozen.py` 상단 주석.
+#
+# ── ② check-quest-polish-budget.py --staged ──────────────────────────────
 # quest 하나를 오늘 몇 번이나 고쳤나 — **PM 판정 없이 더는 못 돈다.**
 #
 # 왜 (2026-09-23): `strangefn` 하나를 오늘 여덟 라운드 고쳤다. 라운드마다
@@ -12,9 +22,18 @@
 # pre-push 가 하루 1회로 이미 막고 있다). 자세한 이유는
 # `scripts/check-quest-polish-budget.py` 상단 주석.
 #
-# ⛔ `--no-verify` 로 넘기지 마라. 우회는 `.claude/WORK.md` 에 그 quest 를
-#    언급하는 «PM 판정» 항목(quest id · "PM 판정" · 오늘 날짜가 한 블록 안에)을
-#    먼저 남기는 것으로만 뚫린다 — 배포 걸쇠와 같은 원칙("특별히"는 선생님/PM 이 말한다).
+# ⛔ `--no-verify` 로 둘 다 넘기지 마라. 우회는:
+#    · 동결/USACO — `scripts/check-frozen.py` 가 실패 메시지에서 알려주는 대로
+#      (동결은 WORK.md 승인 마커, USACO 는 --no-verify 만).
+#    · PM 예산 — `.claude/WORK.md` 에 그 quest 를 언급하는 «PM 판정» 항목
+#      (quest id · "PM 판정" · 오늘 날짜가 한 블록 안에)을 먼저 남기는 것으로만 뚫린다.
+#    배포 걸쇠와 같은 원칙("특별히"는 선생님/PM 이 말한다).
+
+python3 scripts/check-frozen.py --staged
+frozen_status=$?
+if [ $frozen_status -ne 0 ]; then
+  exit $frozen_status
+fi
 
 python3 scripts/check-quest-polish-budget.py --staged
 exit $?
