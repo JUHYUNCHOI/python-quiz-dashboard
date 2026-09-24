@@ -1,7 +1,10 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 0/1 (WA on sample - wrong algorithm (Silver-level problem))
-//   C++:    0/1 (WA on sample - wrong algorithm for Silver)
-//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+// 🔒 USACO_VERIFIED (재확인 2026-09-24)
+//   문제는 Bronze 가 아니라 USACO 2024 US Open Silver #1 (cpid=1422) — 처음부터 맞던 메모였다.
+//   알고리즘을 2026-09-23 에 다시 짰다: 동점을 "사건"으로 기록해 두고, Bessie 도착 시
+//   뒤에서부터 되짚어 도달 가능한 농부를 전부 표시한다 (예전엔 마지막 동점만 봐서 답을 빠뜨렸다).
+//   Python: ✅ 21/21 PASS (재제출 2026-09-24)
+//   C++:    미재제출 — 알고리즘은 Python 과 동일하게 고쳐져 있음 (IV_SIMULATE_CPP/IV_OUTPUT_CPP), 재검증 필요
+//   코드 수정 시 USACO 재제출 필요
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { useState, useRef } from "react";
@@ -82,6 +85,13 @@ export function InterviewSim({ E }) {
         </div>
       </div>
 
+      {step.cow === N - 1 && (
+        <div style={{ fontSize: 11, color: "#92400e", background: "#fffbeb", border: "1px dashed #f59e0b", borderRadius: 8, padding: "6px 10px", marginBottom: 12 }}>
+          {t(E, "⚠ This is just ONE path. An earlier tie could send her elsewhere too — next step shows why.",
+                "⚠ 이건 한 가지 경우일 뿐이에요. 앞선 동점 때문에 다른 카운터로도 갈 수 있어요 — 다음 단계에서 봐요.")}
+        </div>
+      )}
+
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
           background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
@@ -102,47 +112,60 @@ export function InterviewSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   InterviewHeapAudit — deep-audit of heap state at each step,
-   with tied-minimum counters highlighted when Bessie arrives
+   InterviewHeapAudit — deep-audit of the heap, grouping simultaneous
+   ties into "events" and, at Bessie's moment, walking those events
+   BACKWARD to find every farmer who could reach her (not just the
+   ones tied at that exact instant — see feedback: "N-1 마리를 돌린 뒤
+   최솟값만 보면 된다" was the bug. An earlier tie can still matter.)
    ═══════════════════════════════════════════════════════════════ */
 function _heapTrace(N, K, times) {
-  // Build a trace of (heap_state, just_processed_cow, isBessieMoment)
-  // heap entries: { ft, cid }
   const heap = [];
-  const trace = [];
   for (let i = 0; i < K; i++) heap.push({ ft: times[i], cid: i });
   const sortHeap = () => heap.sort((a, b) => a.ft - b.ft || a.cid - b.cid);
   sortHeap();
-  trace.push({ phase: "init", cow: K - 1, heap: heap.map(h => ({ ...h })), note: "init" });
 
-  for (let i = K; i < N - 1; i++) {
+  const trace = [{ phase: "init", heap: heap.map(h => ({ ...h })) }];
+  const events = [];
+  let curCow = K;
+
+  while (true) {
     sortHeap();
-    const popped = heap.shift();
-    const newFt = popped.ft + times[i];
-    heap.push({ ft: newFt, cid: popped.cid });
+    const tied = [heap.shift()];
+    while (heap.length && heap[0].ft === tied[0].ft) tied.push(heap.shift());
+    const isEvent = tied.length > 1;
+    if (isEvent) events.push(tied.map(h => h.cid));
+
+    if (curCow + tied.length > N) {
+      // Not enough cows left for everyone tied here — this IS Bessie's moment.
+      const lastTime = tied[0].ft;
+      const lastFarmer = tied[0].cid;
+      const canInterview = new Array(K).fill(false);
+      canInterview[lastFarmer] = true;
+      for (let e = events.length - 1; e >= 0; e--) {
+        const touches = events[e].some(f => canInterview[f]);
+        if (touches) for (const f of events[e]) canInterview[f] = true;
+      }
+      trace.push({
+        phase: "bessie",
+        lastTime, lastFarmer,
+        naiveAnswer: tied.map(h => h.cid),
+        events: events.map(g => [...g]),
+        finalAnswer: Array.from({ length: K }, (_, c) => c).filter(c => canInterview[c]),
+      });
+      break;
+    }
+
+    for (const { ft, cid } of tied) {
+      heap.push({ ft: ft + times[curCow], cid });
+      curCow++;
+    }
     sortHeap();
-    trace.push({
-      phase: "process",
-      cow: i,
-      popped: { ...popped },
-      pushed: { ft: newFt, cid: popped.cid },
-      heap: heap.map(h => ({ ...h })),
-    });
+    trace.push({ phase: "process", tiedGroup: tied.map(h => h.cid), isEvent, heap: heap.map(h => ({ ...h })) });
   }
-  // Bessie moment — don't pop; show tied minimums
-  sortHeap();
-  const minFt = heap.length > 0 ? heap[0].ft : 0;
-  trace.push({
-    phase: "bessie",
-    cow: N - 1,
-    heap: heap.map(h => ({ ...h })),
-    minFt,
-    tied: heap.filter(h => h.ft === minFt).map(h => h.cid),
-  });
   return trace;
 }
 
-const _AUDIT_PRESET = { N: 5, K: 3, times: [4, 2, 3, 1, 5] };
+const _AUDIT_PRESET = { N: 5, K: 2, times: [1, 1, 5, 1, 1] };
 
 export function InterviewHeapAudit({ E }) {
   const { N, K, times } = _AUDIT_PRESET;
@@ -151,6 +174,7 @@ export function InterviewHeapAudit({ E }) {
   const cur = Math.min(si, trace.length - 1);
   const step = trace[cur];
   const isBessie = step.phase === "bessie";
+  const isInit = step.phase === "init";
 
   return (
     <div style={{ padding: 14 }}>
@@ -159,80 +183,92 @@ export function InterviewHeapAudit({ E }) {
       </div>
 
       <div style={{
-        background: isBessie ? "#fef3c7" : "#ecfdf5",
-        border: `1.5px solid ${isBessie ? "#f59e0b" : A}`,
+        background: isBessie ? "#fef3c7" : (step.isEvent ? "#fef2f2" : "#ecfdf5"),
+        border: `1.5px solid ${isBessie ? "#f59e0b" : (step.isEvent ? "#dc2626" : A)}`,
         borderRadius: 10, padding: "10px 12px", marginBottom: 10,
       }}>
-        <div style={{ fontSize: 11, color: isBessie ? "#92400e" : "#065f46", fontWeight: 700, marginBottom: 4, letterSpacing: 0.3 }}>
+        <div style={{ fontSize: 11, color: isBessie ? "#92400e" : (step.isEvent ? "#991b1b" : "#065f46"), fontWeight: 700, marginBottom: 4, letterSpacing: 0.3 }}>
           {isBessie
-            ? t(E, `🐄 BESSIE ARRIVES (cow ${step.cow + 1})`, `🐄 BESSIE 도착 (소 ${step.cow + 1})`)
-            : step.phase === "init"
-              ? t(E, `📦 Initial heap (cows 1..${K} placed)`, `📦 초기 heap (소 1..${K} 배치 완료)`)
-              : t(E, `Step ${cur}: cow ${step.cow + 1} processed`, `${cur} 단계: 소 ${step.cow + 1} 처리`)}
+            ? t(E, "🐄 BESSIE ARRIVES", "🐄 BESSIE 도착")
+            : isInit
+              ? t(E, `📦 Initial heap (farmers 1..${K} placed)`, `📦 초기 heap (농부 1..${K} 배치 완료)`)
+              : step.isEvent
+                ? t(E, "🚨 Tie event — recording it", "🚨 동점 사건 — 기록해요")
+                : t(E, "No tie — one farmer alone is free", "동점 없음 — 농부 한 명만 비어요")}
         </div>
         <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-          {step.phase === "process" && (
-            <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
-              pop ({step.popped.ft}, c{step.popped.cid + 1}) → push ({step.pushed.ft}, c{step.pushed.cid + 1})
-            </span>
-          )}
+          {isInit && t(E, "Each entry: (free_time, counter_id).", "각 항목은 (free_time, counter_id) 예요.")}
+          {step.phase === "process" && (step.isEvent
+            ? t(E, `Counters ${step.tiedGroup.map(c => c + 1).join(", ")} are free at the same time — both get a new cow.`,
+                  `카운터 ${step.tiedGroup.map(c => c + 1).join(", ")}가 같은 시각에 비어서, 둘 다 새 소를 받아요.`)
+            : t(E, `Counter ${step.tiedGroup[0] + 1} is free first — it gets the next cow, no tie here.`,
+                  `카운터 ${step.tiedGroup[0] + 1}이 가장 먼저 비어서 다음 소를 받아요. 동점 아니에요.`))}
           {isBessie && t(E,
-            `Min free time = ${step.minFt}. Bessie can take ANY counter with that exact free time.`,
-            `가장 이른 free time 은 ${step.minFt} 이에요. Bessie 는 그 시간과 같은 카운터라면 어디든 갈 수 있어요.`)}
-          {step.phase === "init" && t(E,
-            "Each entry: (free_time, counter_id). Sorted by free_time.",
-            "각 항목은 (free_time, counter_id) 예요. free_time 순으로 늘어놨어요.")}
+            "No cow is left for this tie — that makes it Bessie's moment.",
+            "이 동점을 받을 소가 안 남았어요 — 그게 바로 Bessie 차례라는 뜻이에요.")}
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
-        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 2 }}>
-          {t(E, "Heap contents (sorted by free_time)", "Heap 내용 (free_time 순 정렬)")}
-        </div>
-        {step.heap.map((h, idx) => {
-          const isMin = isBessie && h.ft === step.minFt;
-          const isTopElseStep = !isBessie && step.phase === "process" && idx === 0;
-          return (
+      {!isBessie && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
+          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 2 }}>
+            {t(E, "Heap contents (sorted by free_time)", "Heap 내용 (free_time 순 정렬)")}
+          </div>
+          {step.heap.map((h, idx) => (
             <div key={`${h.cid}-${idx}`} style={{
               display: "flex", alignItems: "center", gap: 10,
-              border: `1.5px solid ${isMin ? "#f59e0b" : (idx === 0 ? "#0891b2" : C.border)}`,
-              background: isMin ? "#fef3c7" : (idx === 0 && !isBessie ? "#ecfeff" : "#fff"),
+              border: `1.5px solid ${idx === 0 ? "#0891b2" : C.border}`,
+              background: idx === 0 ? "#ecfeff" : "#fff",
               borderRadius: 8, padding: "6px 10px",
             }}>
-              <div style={{
-                fontSize: 10, fontWeight: 700, color: idx === 0 ? "#0891b2" : C.dim,
-                minWidth: 30, fontFamily: "'JetBrains Mono',monospace",
-              }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: idx === 0 ? "#0891b2" : C.dim, minWidth: 30, fontFamily: "'JetBrains Mono',monospace" }}>
                 {idx === 0 ? "TOP" : `#${idx + 1}`}
               </div>
               <div style={{ flex: 1, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: C.text }}>
                 ({h.ft}, c{h.cid + 1})
               </div>
-              {isMin && (
-                <div style={{ fontSize: 10, fontWeight: 700, color: "#92400e", background: "#fde68a", padding: "2px 8px", borderRadius: 6 }}>
-                  ✓ {t(E, "Bessie OK", "Bessie 가능")}
-                </div>
-              )}
-              {isTopElseStep && idx === 0 && (
-                <div style={{ fontSize: 10, fontWeight: 700, color: "#0891b2" }}>
-                  {t(E, "← popped this step", "← 이 단계에 pop")}
-                </div>
-              )}
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
 
       {isBessie && (
-        <div style={{
-          background: "#dcfce7", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 12px", marginBottom: 12,
-        }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
-            {t(E, "📤 Output", "📤 출력")}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 12 }}>
+          <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#991b1b", marginBottom: 4 }}>
+              {t(E, "🔍 Looking at THIS instant only", "🔍 지금 이 순간만 보면")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>
+              {t(E, `Counter ${step.naiveAnswer.map(c => c + 1).join(", ")} only — no tie right now.`,
+                    `카운터 ${step.naiveAnswer.map(c => c + 1).join(", ")}뿐이에요 — 지금은 동점이 없거든요.`)}
+            </div>
           </div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#14532d" }}>
-            {step.tied.length}<br />
-            {step.tied.map(c => c + 1).sort((a, b) => a - b).join(" ")}
+
+          <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>
+              {t(E, "⏪ Rewind — the tie events we recorded", "⏪ 되감아 보면 — 기록해 둔 동점 사건")}
+            </div>
+            {step.events.length === 0
+              ? <div style={{ fontSize: 12, color: C.dim }}>{t(E, "(none)", "(없음)")}</div>
+              : step.events.map((g, i) => (
+                <div key={i} style={{ fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+                  {t(E, `Event: counters ${g.map(c => c + 1).join(" & ")} tied`, `사건: 카운터 ${g.map(c => c + 1).join(", ")} 동점`)}
+                </div>
+              ))}
+            <div style={{ fontSize: 12, color: C.text, marginTop: 6 }}>
+              {t(E, `Counter ${step.lastFarmer + 1} touches that event, so its tied partner joins the answer too.`,
+                    `카운터 ${step.lastFarmer + 1}이 그 사건에 속해 있어서, 짝도 답에 들어가요.`)}
+            </div>
+          </div>
+
+          <div style={{ background: "#dcfce7", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
+              {t(E, "✅ Real answer", "✅ 진짜 답")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#14532d" }}>
+              {step.finalAnswer.length}<br />
+              {step.finalAnswer.map(c => c + 1).join(" ")}
+            </div>
           </div>
         </div>
       )}
@@ -278,39 +314,55 @@ export function InterviewRunner({ E }) {
       return;
     }
     setRunning(true); setResult(null);
-    setLiveCow(0); setLiveCounters(new Array(K).fill(0));
     alive.current = true;
 
-    const counters = new Array(K).fill(0);
-    let i = 0;
-    let bessieCounter = -1;
+    // Farmers 0..K-1 all start at time 0 — first K cows go simultaneously.
+    let heap = Array.from({ length: K }, (_, i) => ({ ft: times[i], cid: i }));
+    const sortHeap = () => heap.sort((a, b) => a.ft - b.ft || a.cid - b.cid);
+    sortHeap();
+    setLiveCow(K); setLiveCounters(heap.slice().sort((a, b) => a.cid - b.cid).map(h => h.ft));
+
+    let curCow = K;
+    const events = [];
 
     const tick = () => {
       if (!alive.current) {
-        setResult({ stopped: true, lastCow: i });
+        setResult({ stopped: true, lastCow: curCow });
         setRunning(false);
         return;
       }
-      if (i >= N) {
-        setResult({ done: true, counters: [...counters], bessieCounter });
+      sortHeap();
+      const tied = [heap.shift()];
+      while (heap.length && heap[0].ft === tied[0].ft) tied.push(heap.shift());
+      if (tied.length > 1) events.push(tied.map(h => h.cid));
+
+      if (curCow + tied.length > N) {
+        // Not enough cows left for this whole tied group — Bessie's moment.
+        const lastTime = tied[0].ft;
+        const lastFarmer = tied[0].cid;
+        const canInterview = new Array(K).fill(false);
+        canInterview[lastFarmer] = true;
+        for (let e = events.length - 1; e >= 0; e--) {
+          const touches = events[e].some(f => canInterview[f]);
+          if (touches) for (const f of events[e]) canInterview[f] = true;
+        }
+        const answer = [];
+        for (let c = 0; c < K; c++) if (canInterview[c]) answer.push(c + 1);
+        setResult({ done: true, lastTime, answer });
         setRunning(false);
         return;
       }
-      let pick;
-      if (i < K) pick = i;
-      else {
-        pick = 0;
-        for (let c = 1; c < K; c++) if (counters[c] < counters[pick]) pick = c;
+
+      for (const { ft, cid } of tied) {
+        heap.push({ ft: ft + times[curCow], cid });
+        curCow++;
       }
-      if (i < K) counters[pick] = times[i];
-      else counters[pick] += times[i];
-      if (i === N - 1) bessieCounter = pick;
-      setLiveCow(i); setLiveCounters([...counters]);
-      i++;
-      const delay = N <= 10 ? 400 : (N <= 100 ? 30 : 5);
+      sortHeap();
+      setLiveCow(curCow); setLiveCounters(heap.slice().sort((a, b) => a.cid - b.cid).map(h => h.ft));
+      const delay = N <= 10 ? 500 : (N <= 100 ? 60 : 10);
       setTimeout(tick, delay);
     };
-    setTimeout(tick, 100);
+    setTimeout(tick, 150);
   };
   const stop = () => { alive.current = false; };
 
@@ -332,7 +384,7 @@ export function InterviewRunner({ E }) {
       {(running || result?.done) && (
         <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
           <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6 }}>
-            {running ? t(E, `assigning cow ${liveCow + 1}`, `소 ${liveCow + 1} 배정 중`) : t(E, "final state", "최종 상태")}
+            {running ? t(E, `next cow: #${liveCow + 1}`, `다음 소: #${liveCow + 1}`) : t(E, "final state", "최종 상태")}
           </div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
             {liveCounters.map((f, c) => (
@@ -350,7 +402,9 @@ export function InterviewRunner({ E }) {
       )}
       {result?.done && (
         <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 600 }}>
-          {t(E, `✅ Bessie went to counter ${result.bessieCounter + 1}.`, `✅ Bessie는 카운터 ${result.bessieCounter + 1}로 갔어.`)}
+          {t(E,
+            `✅ Bessie could go to counter${result.answer.length > 1 ? "s" : ""} ${result.answer.join(", ")} (free at time ${result.lastTime}).`,
+            `✅ Bessie 가 갈 수 있는 카운터: ${result.answer.join(", ")} (시각 ${result.lastTime}).`)}
         </div>
       )}
       {result?.stopped && (
@@ -668,7 +722,7 @@ export function downloadInterviewPDF(E, sections, lang = "py") {
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO 2025 January Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">USACO 2024 US Open Silver #1 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 <p>${t(E,

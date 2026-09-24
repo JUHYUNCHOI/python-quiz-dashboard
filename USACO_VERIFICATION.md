@@ -75,7 +75,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `reverseeng` | Reverse Engineering | Dec 2022 Bronze #3 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1253) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1253) |
 | `feedcows` | Feeding the Cows | Dec 2022 Bronze #2 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1252) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1252) |
 | `cowcollege` | Cow College | Dec 2022 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
-| `alchemy` | Alchemy | Open 2022 Bronze #3 | 🟡 9/11 (재제출 2026-09-24 Python-3.6.9, cpid=1229 — **2·3번 시간 초과**. 답은 맞고 파이썬 속도만 모자라다. 재귀 quest 다. C++ 은 11/11) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1229) |
+| `alchemy` | Alchemy | Open 2022 Bronze #3 | 🟡 9/11 (재제출 2026-09-24 Python-3.6.9, cpid=1229 — **2·3번 시간 초과**. 재귀를 걷어 2.7배 빨라졌지만(1.82초→0.67초) 모자랐다. 화면에 정직 배너를 달았다. C++ 은 11/11) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1229) |
 | `countliars` | Counting Liars | Open 2022 Bronze #2 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1228) | 🟡 2/12 (TLE - same as py (p up to 10^9)) |
 | `photoshoot` | Photoshoot | Open 2022 Bronze #1 | ✅ 11/11 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1227) | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1227) |
 | `blocks` | Blocks | Feb 2022 Bronze #3 | ✅ 20/20 PASS (재제출 2026-09-23 Python-3.6.9, cpid=1205) | ✅ 20/20 PASS (re-submitted 2026-06-16 C++17, cpid=1205) |

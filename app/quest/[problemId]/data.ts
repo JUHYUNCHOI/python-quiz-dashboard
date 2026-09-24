@@ -53,7 +53,7 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"cheese",emoji:"🧀",title:"Cheese Block",sub:"Dec 2024 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1444"},
   {id:"moo",emoji:"🐄",title:"It's Mooin' Time",sub:"Dec 2024 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1445"},
   {id:"permutation",emoji:"🔢",title:"FJ's Fav Permutation",sub:"Open 2024 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1421"},
-  {id:"interview",emoji:"🐄",title:"Bessie's Interview",sub:"Open 2024 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1422"},
+  {id:"interview",emoji:"🐄",title:"Bessie's Interview",sub:"Open 2024 Silver #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1422"},
   {id:"balanced",emoji:"🔗",title:"Balanced Subsequences",sub:"Bronze warm-up",section:"USACO"},
   {id:"astral",emoji:"🔭",title:"Astral Superposition",sub:"Jan 2025 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1467"},
   {id:"mooin2",emoji:"🐄",title:"It's Mooin' Time II",sub:"Jan 2025 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1468"},

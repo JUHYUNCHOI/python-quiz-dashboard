@@ -193,7 +193,26 @@ export function makeAlchemyCh2(E, lang = "py") {
         "Walk through the code piece by piece to see how we craft metal N.",
         "코드를 한 조각씩 짚어가며 금속 N 을 만드는 방법을 봐요."),
       content: (
-        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} marks={w.marks} beats={w.beats} accent="#d97706" />
+        <>
+          <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} marks={w.marks} beats={w.beats} accent="#d97706" />
+          {/* 2026-09-24: 파이썬은 여기까지다. 재귀를 걷어 2.7배 빨라졌지만(1.82초 → 0.67초)
+              채점기 2·3번은 여전히 시간 초과다(9/11). 숫자는 전부 그날 실제로 받은 결과다. */}
+          {lang === "py" && (
+            <div style={{
+              margin: "0 16px 16px", background: "#fff7ed", borderRadius: 8, padding: "8px 12px",
+              border: "1.5px solid #fdba74", fontSize: 12, color: "#9a3412",
+              lineHeight: 1.6, wordBreak: "keep-all", whiteSpace: "pre-line",
+            }}>
+              {t(E,
+                "Heads up: crafting one metal can pull in a long chain of other metals, and the same chain gets rebuilt many times. Python is too slow for the largest inputs.",
+                "\uc9da\uace0 \uac08 \uac83\uc774 \uc788\uc5b4\uc694. \uae08\uc18d \ud558\ub098\ub97c \ub9cc\ub4e4\ub824\uba74 \ub2e4\ub978 \uae08\uc18d\uc774 \uae38\uac8c \ub530\ub77c\uc624\uace0,\n\uac19\uc740 \uc904\uae30\ub97c \uc5ec\ub7ec \ubc88 \ub2e4\uc2dc \ub9cc\ub4e4\uc5b4\uc694. \uc81c\uc77c \ud070 \uc785\ub825\uc5d0\uc11c\ub294 \ud30c\uc774\uc36c\uc774 \ub290\ub824\uc694.")}
+              <div style={{ marginTop: 4, fontWeight: 700 }}>
+                {t(E, "Actual grading: Python 9/11 (TLE on 2\u20133) \u00b7 C++ 11/11 PASS.",
+                     "\uc2e4\uc81c \ucc44\uc810: \ud30c\uc774\uc36c 9/11 (2\u00b73\ubc88 \uc2dc\uac04 \ucd08\uacfc) \u00b7 C++ 11/11 \ud1b5\uacfc.")}
+              </div>
+            </div>
+          )}
+        </>
       ),
     },
   ];

@@ -82,7 +82,7 @@ const SECTIONS: Section[] = [
       { id: "cheese", emoji: "🧀", title: "Cheese Block", sub: "Dec 2024 Bronze #2" },
       { id: "moo", emoji: "🐄", title: "It's Mooin' Time", sub: "Dec 2024 Bronze #3" },
       // 2023-24 season + earlier
-      { id: "interview", emoji: "🐄", title: "Bessie's Interview", sub: "Open 2024 Bronze #1" },
+      { id: "interview", emoji: "🐄", title: "Bessie's Interview", sub: "Open 2024 Silver #1" },
       { id: "permutation", emoji: "🔢", title: "FJ's Fav Permutation", sub: "Open 2024 Bronze #3" },
       { id: "exchange", emoji: "🥛", title: "Milk Exchange", sub: "Feb 2024 Bronze #2" },
       { id: "balanced", emoji: "🔗", title: "Balanced Subsequences", sub: "Bronze warm-up" },

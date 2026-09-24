@@ -80,7 +80,7 @@ export function makeInterviewCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Bessie's Interview</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Silver #1</div>
           </div>
 
           {/* 🎯 Mission box */}
@@ -254,13 +254,13 @@ export function makeInterviewCh2(E) {
         "We use a min-heap (priority queue) to track when each counter finishes.\nThe cow always goes to the counter that finishes earliest!", "최소 힙으로 각 카운터가 언제 끝나는지 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `1px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
+          <div style={{ background: C.accentBg, border: `1px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text, whiteSpace: "pre-line" }}>
             <div style={{ fontWeight: 600, color: C.accent, marginBottom: 6 }}>
               {t(E, "🔧 Algorithm: Min-Heap Simulation", "🔧 알고리즘: 최소 힙 시뮬레이션")}
             </div>
             {t(E,
-              "1. Push first K cows' finish times into heap\n2. For each remaining cow: pop min, assign that counter\n3. Push new finish time (old finish + cow's time)\n4. For Bessie: check all counters with minimum finish time",
-              "1. 처음 K 마리의 종료 시간을 힙에 넣어요\n2. 나머지 소마다 가장 작은 값을 pop 해서 그 카운터를 줘요\n3. 새 종료 시간을 push 해요 (이전 종료 + 소의 시간)\n4. Bessie 차례엔 가장 빨리 끝나는 카운터를 모두 찾아요")}
+              "1. Push first K cows' finish times into heap\n2. Pop EVERY farmer tied for the smallest finish time together — that's one tie event\n3. Not enough cows left for the whole tied group? That's Bessie's moment — stop\n4. Otherwise push each farmer back with a new finish time, and keep going\n5. For Bessie: start from the farmer free at that moment, then walk the tie events backward — anyone who ever tied with them joins the answer too",
+              "1. 처음 K 마리의 종료 시간을 힙에 넣어요\n2. 가장 빨리 끝나는 시각이 같은 농부를 한꺼번에 pop 해요 — 이걸 '동점 사건'으로 기록해요\n3. 남은 소가 그 동점 묶음보다 적으면 — 바로 그때가 Bessie 차례예요, 멈춰요\n4. 아니면 각 농부를 새 종료 시간으로 다시 push 하고 계속해요\n5. Bessie 차례: 그 순간 비어 있는 농부에서 시작해서, 기록해 둔 동점 사건을 거꾸로 훑어요 — 한 번이라도 같이 묶였던 농부는 전부 답에 넣어요")}
           </div>
         </div>),
     },
@@ -289,8 +289,8 @@ export function makeInterviewCh2(E) {
     {
       type: "audit",
       narr: t(E,
-        "Deep-audit the heap itself.\nN=5, K=3, times=[4,2,3,1,5]. Each row = one heap entry (free_time, counter_id), sorted by free_time.\nWhen Bessie arrives, every counter tied at the minimum is highlighted — those are her possible answers.",
-        "Bessie 차례에 가장 빨리 끝나는 카운터가 모두 표시돼요."),
+        "Deep-audit the heap: N=5, K=2, times=[1,1,5,1,1].\nAn EARLIER tie can still change who reaches Bessie — watch closely.",
+        "겉보기엔 지금 동점이 없는데, 왜 Bessie 자리가 두 곳일까요?"),
     },
     {
       type: "input",
@@ -316,10 +316,11 @@ export function makeInterviewCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "After simulating N-1 cows, we check the heap.\nAll counters with the minimum finish time are valid for Bessie.", "N-1 마리를 돌린 뒤 힙에서 가장 빨리 끝나는 카운터를 모두 찾아요."),
+        "This heap is JUST BEFORE Bessie's turn — but it's not the whole story yet.",
+        "이 힙은 Bessie 바로 직전 상태예요 — 그런데 이게 다가 아니에요."),
       question: t(E,
-        "If the heap has [(5,0),(5,2),(7,1),(8,3)], which counters can Bessie go to?",
-        "힙이 [(5,0),(5,2),(7,1),(8,3)] 이면 Bessie 는 어느 카운터로 갈 수 있을까요?"),
+        "If the heap has [(5,0),(5,2),(7,1),(8,3)], which counters tie right now?",
+        "힙이 [(5,0),(5,2),(7,1),(8,3)] 이면 지금 어느 카운터끼리 동점일까요?"),
       options: [
         t(E, "Counter 1 and 3 (0-indexed: 0,2)", "카운터 1, 3 (0-indexed: 0,2)"),
         t(E, "Counter 1 only", "카운터 1만"),
@@ -327,8 +328,8 @@ export function makeInterviewCh3(E, lang = "py") {
       ],
       correct: 0,
       explain: t(E,
-        "Min finish = 5. Counters 0 and 2 both have finish time 5, so Bessie can go to either!",
-        "가장 빠른 종료 시간이 5 예요. 카운터 0 과 2 가 모두 5 라서 Bessie 는 둘 중 아무 데나 갈 수 있어요."),
+        "Min finish = 5, so counters 0 and 2 tie right now. But that's not always the full answer — if either of them tied with someone EARLIER too, that farmer joins the answer as well.",
+        "가장 빠른 종료 시간은 5 라서 지금은 카운터 0과 2가 묶여요. 그런데 이게 항상 다는 아니에요 — 둘 중 하나가 예전에 다른 카운터와도 동점이었다면, 그 카운터도 답에 들어가요."),
     },
     {
       type: "progressive",
