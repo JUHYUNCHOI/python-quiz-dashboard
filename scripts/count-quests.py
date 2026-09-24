@@ -67,6 +67,30 @@ UNTAUGHT = {
     "펜윅": re.compile(r"펜윅|[Ff]enwick|lowbit|\bBIT\b"),
     "모듈러역원": re.compile(r"역원|[Ff]ermat|페르마|pow\([^,]+, *MOD *- *2|modinv"),
 }
+
+# 🆕 2026-09-24 — 이 그물에 **구멍이 있었다.**
+#   `mooin3` 의 🔒 코드가 `chr(c + 97)` / `ord(s[i]) - 97` 로 0~25 를 글자로 오가는데,
+#   `chr()`·`ord()` 는 **`data/lesson*.ts` 전체에 0건 — 커리큘럼에 아예 없다.**
+#   그런데 위 UNTAUGHT 사전에 그 항목이 없어서 `mooin3` 는 **0건으로 나왔다.**
+#   학생이 "💻 코드 6/9 부터 **완전히 막혔다**" 고 한 지점이 정확히 거기였다.
+#
+# ⚠️ **왜 사전을 따로 두나** — 이 패턴만 «따옴표로 시작하는 줄»(= 코드 배열의 한 줄)로
+#   좁혀야 한다. 안 좁히면 오탐이 둘 났다: `reflection` 은 **주석**에 `ord(35/46)` 이
+#   적혀 있었고, `makedistinct` 는 시뮬의 **JS 헬퍼** `ord(i)` 였다. 좁히니 둘 다 사라졌다.
+#   위 UNTAUGHT 는 줄 전체를 보므로 같은 필터를 씌우면 기존 건수가 줄어든다 — 그래서 분리.
+#
+# 실측 9개 quest · 오탐 0 — 그런데 **두 종류가 섞여 있고 고치는 법이 다르다**:
+#   ① 진짜 글자↔숫자 변환 (3개) — `blockgame` · `mooin3` · `word`.
+#      `chr(c+97)` 로 26글자를 도는 모양. 이게 학생을 막은 것이다.
+#   ② `chr(10)` 으로 **줄바꿈을 쓴 것** (6개) — `fjfarms` · `majority` · `moolang` ·
+#      `palindrome` · `productivity` · `stampgrid`. 전부 `print(chr(10).join(out))` 이다.
+#      개념이 필요해서가 아니라 **문자열 안에 줄바꿈을 못 써서 우회한 것**으로 보인다.
+#      학생에게는 `"\n".join(out)` 이 훨씬 읽힌다 — ①보다 훨씬 싸게 고쳐진다.
+UNTAUGHT_CODELINE = {
+    "글자↔숫자변환": re.compile(r"\bchr\(|\bord\("),
+}
+CODELINE = re.compile(r'^\s*["`]')          # 코드 배열의 한 줄
+CODECOMMENT = re.compile(r'^\s*["`]\s*(#|//)')  # 그 안의 주석 줄
 CPP_STREAM = re.compile(r'c(out|err) *<<|<< *(endl|std::)')
 CODEWALK = re.compile(r"<CodeWalk\b")
 PROGRESSIVE = re.compile(r"<\w*ProgressiveCode\b")
@@ -98,6 +122,11 @@ def untaught_of(text):
         for name, pat in UNTAUGHT.items():
             if pat.search(line):
                 hit.add(name)
+        # 코드 배열의 한 줄일 때만 보는 것들 (주석 줄은 뺀다)
+        if CODELINE.match(line) and not CODECOMMENT.match(line):
+            for name, pat in UNTAUGHT_CODELINE.items():
+                if pat.search(line):
+                    hit.add(name)
     return sorted(hit)
 
 
@@ -184,13 +213,24 @@ def main():
         if not key:
             print("--list 는 io · codewalk · nodiff · orphan 중 하나")
             return 2
-        hit = [q for q in live if key(q)]
-        print(f"'{args.list}' 에 걸린 quest {len(hit)}개 (동결·폴더없음 제외):\n")
+        # ⚠️ 2026-09-24 — `untaught` 만 **동결 quest 도 같이 본다.**
+        #   그전에는 `live`(= 동결 제외)로 걸러서 **🔒 quest 가 통째로 안 보였다.**
+        #   `mooin3` 가 `chr()`·`ord()` 를 쓰는데 `--list untaught` 는 **0건**으로 나왔고,
+        #   학생은 정확히 그 코드 쪽에서 "완전히 막혔다" 고 했다.
+        #   ⭐ 뒤집어 생각하면 **동결일수록 더 봐야 한다** — 코드를 못 바꾸니
+        #      «안 가르친 개념을 쓰고 있다» 는 사실이 PM·선생님 판단에 꼭 필요하다.
+        #   다른 목록(io·codewalk·nodiff)은 «지금 고칠 것» 이라 동결 제외가 맞다 — 안 바꾼다.
+        pool = [q for q in quests if q["has_folder"]] if args.list == "untaught" else live
+        hit = [q for q in pool if key(q)]
+        scope = "동결 포함, 폴더없음 제외" if args.list == "untaught" else "동결·폴더없음 제외"
+        print(f"'{args.list}' 에 걸린 quest {len(hit)}개 ({scope}):\n")
         if args.list == "untaught":
             from collections import Counter
+            frozen_ids = {q["id"] for q in quests if q["frozen"]}
             cnt = Counter(k for q in hit for k in q["untaught"])
             for k, v in cnt.most_common():
-                names = [q["id"] for q in hit if k in q["untaught"]]
+                names = [("\U0001f512" + q["id"] if q["id"] in frozen_ids else q["id"])
+                         for q in hit if k in q["untaught"]]
                 print(f"  [{k}] {v}개")
                 for i in range(0, len(names), 5):
                     print("    " + "  ".join(names[i:i + 5]))
