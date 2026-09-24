@@ -19,8 +19,8 @@ export function makeStuckCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand on a 2D grid. Each cow moves forever in a single direction — either NORTH (+y) or EAST (+x) — at speed 1.\nWhen a moving cow steps onto a cell already grazed (visited) by ANOTHER cow's path, that arriving cow stops; the cow whose path she stepped onto keeps going.\nPrint the number of cells each cow ends up grazing (Infinity if she never stops).",
-        "2D 격자 위에 N 마리 소가 있어요. 각 소는 한 방향 — 북쪽 (위) 또는 동쪽 (오른쪽) — 으로 속도 1로 영원히 움직여요.\n움직이는 소가 다른 소의 경로에 이미 들렸던 칸에 도착하면 멈춰요. 그 칸의 원래 주인 소는 계속 움직여요.\n각 소가 먹은 칸의 수를 출력해요 (영원히 멈추지 않으면 무한대)."),
+        "N cows move north or east forever — until they cross another cow's path.",
+        "소들이 북쪽이나 동쪽으로 영원히 움직여요 — 다른 소의 길을 밟을 때까지."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -81,7 +81,7 @@ export function makeStuckCh1(E) {
       type: "reveal",
       narr: t(E,
         "Before reading code, watch the rule live. Press play. N-cows go up, E-cows go right. Whoever crosses someone else's earlier trail stops.",
-        "코드를 보기 전에 규칙을 직접 봐. 재생을 눌러 — N 소는 위로, E 소는 오른쪽으로. 누군가의 먼저 지나간 자취를 밟은 소가 멈춰."),
+        "코드를 보기 전에 규칙을 직접 봐요.\n재생을 눌러요 — N 소는 위로, E 소는 오른쪽으로 움직여요.\n먼저 지나간 자취를 밟은 소가 멈춰요."),
       content: (
         <div>
           <StuckInRutGridSim E={E} />
@@ -130,8 +130,8 @@ export function makeStuckCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Enumerate every N-cow / E-cow pair, compute potential collision time, sort events. Process: a cow already stopped doesn't trigger; the later arriver stops. Sections build it one piece at a time.",
-        "모든 N / E 소 쌍의 잠재 충돌 시각 계산, 시간순 정렬. 처리 — 이미 멈춘 소는 발동 X, 더 늦게 도착한 소가 멈춤. 아래 섹션이 한 단락씩 쌓아요."),
+        "Enumerate every N-cow / E-cow pair and sort the collision times.",
+        "모든 N / E 소 쌍의 충돌 시각을 계산해 시간순으로 정렬해요."),
       sections: getStuckInRutSections(E),
     },
   ];

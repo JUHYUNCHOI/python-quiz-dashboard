@@ -24,8 +24,8 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John has a permutation p of 1..N. Farmer Nhoj 'dismantled' it by repeatedly removing one end and writing down its neighbor — leaving N−1 hints. From those hints, recover the lex-smallest p, or print -1 if Nhoj must have made a mistake.",
-        "힌트만 보고 원래 순열을 되살려요.\n답이 여럿이면 가장 앞선 것을 골라요."),
+        "Recover Farmer John's permutation from Nhoj's hints.",
+        "힌트만 보고 원래 순열을 되살려요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -172,7 +172,7 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now hand-simulate Nhoj's process on p = [3, 1, 2, 4]. Press ▶ to walk through it one sub-step at a time — compare, then remove + write — and see how the array shrinks while the hint list grows.",
+        "Hand-simulate Nhoj's process on p = [3, 1, 2, 4] — press ▶ to step through it.",
         "이제 Nhoj 가 한 일을 p = [3, 1, 2, 4] 에서 손으로 따라가요.\n▶ 를 눌러 한 단계씩 비교하고, 빼고, 적어 봐요.\n리스트가 줄어들면서 힌트가 늘어나는 걸 볼 수 있어요."),
       content: (<DismantleSimulator E={E} />),
     },
@@ -180,8 +180,8 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's the sample input — the first line is T (number of test cases). Each test case is 2 lines: N, then the N−1 hints.\nFor each test case, print the permutation on one line, or −1 if impossible.",
-        "샘플 입력 형식이에요. 첫 줄은 테스트 케이스 수 T 예요.\n케이스마다 두 줄인데, 먼저 N 을 주고\n그다음 줄에 힌트 N−1 개를 줘요.\n케이스마다 순열을 한 줄로 출력해요.\n안 되면 −1 을 출력해요."),
+        "Here's the sample input and output.",
+        "샘플 입력과 출력 형식이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
@@ -282,8 +282,8 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "What's the most direct idea? Try EVERY permutation of 1..N — for each one, simulate Nhoj's process and check if it produces our h. Iterate in lex order so the first match is automatically the smallest.",
-        "가장 단순한 생각은 뭘까요?\n1..N 의 모든 순열을 다 해 보는 거예요.\n순열마다 Nhoj 과정을 돌려서 우리 h 가 나오는지 봐요.\n사전순으로 돌면 처음 맞는 게 자동으로 가장 작아요."),
+        "What's the simplest idea? Try every permutation of 1..N.",
+        "가장 단순한 생각은 뭘까요?\n1..N 의 모든 순열을 다 해 보는 거예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
@@ -413,8 +413,8 @@ export function makePermCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now drive it yourself. Step through all 24 permutations of {1,2,3,4} in lex order, dismantle each, and watch the FIRST match light up green. That's exactly what brute force does — and it's automatically the lex-smallest answer.",
-        "이제 직접 돌려 봐요.\n{1,2,3,4} 의 순열 24 개를 사전순으로 한 단계씩 dismantle 해요.\n처음 맞는 것이 초록으로 빛나요.\n브루트포스가 하는 일 그대로예요. 자동으로 사전순 최소가 나와요."),
+        "Step through all 24 permutations of {1,2,3,4} and watch the first match light up.",
+        "이제 직접 돌려 봐요.\n{1,2,3,4} 의 순열 24 개를 한 단계씩 dismantle 해요."),
       content: (<BruteForceEnumerator E={E} />),
     },
     // 2-3: Quiz on the brute force plan
@@ -441,8 +441,8 @@ export function makePermCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Test it. N=2, h=[1]. The only 2 permutations of [1,2] are: [1,2] and [2,1]. Dismantle each.\n• [1,2]: 1<2 → write 1, drop 2 → h=[1] ✓\n• [2,1]: 2>1 → write 1, drop 2 → h=[1] ✓\nBoth match! The lex-smallest is [1,2]. So perm[0] = ?",
-        "한번 해 봐요. N=2, h=[1] 이에요.\n[1,2] 의 순열은 [1,2] 와 [2,1] 둘뿐이에요. 각각 dismantle 해 볼게요.\n• [1,2] → 1<2 니까 1 을 적고 2 를 빼요 → h=[1] ✓\n• [2,1] → 2>1 니까 1 을 적고 2 를 빼요 → h=[1] ✓\n둘 다 맞아요. 사전순으로 더 작은 건 [1,2] 예요. perm[0] = ?"),
+        "N=2, h=[1]. Try both permutations of [1,2] and dismantle each.",
+        "N=2, h=[1] 이에요.\n[1,2] 의 순열 두 개를 각각 dismantle 해 봐요."),
       question: t(E, "N=2, h=[1]. perm[0]=?", "N=2, h=[1]. perm[0]=?"),
       answer: 1,
     },

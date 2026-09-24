@@ -128,8 +128,8 @@ export function makeAirCond1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N stalls in a row, each with a current temperature p[i] and a target temperature q[i]. One AC command adjusts EVERY stall in some contiguous range by +1 OR by -1.\nPrint the MINIMUM number of AC commands to make every p[i] equal q[i].",
-        "FJ 에게 한 줄로 늘어선 N 개 축사가 있어요. 각 축사는 현재 온도 p[i] 와 목표 온도 q[i] 를 가져요.\nAC 명령을 한 번 쓰면 어떤 연속한 구간의 모든 축사를 동시에 +1 또는 -1 만큼 조절할 수 있어요. 모든 p[i] 를 q[i] 와 같게 만드는 최소 명령 횟수를 출력해요."),
+        "FJ wants every stall's temperature to match its target using range +1/-1 commands.",
+        "FJ 가 범위 +1/-1 명령으로 축사 온도를 목표에 맞추려 해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -239,8 +239,8 @@ export function makeAirCond1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Compute d[i] = q[i] − p[i] (the change needed). The minimum number of range +1/−1 commands equals the sum of POSITIVE jumps in d (extended with 0 at both ends). Sections build it one piece at a time.",
-        "d[i] = q[i] − p[i] (필요한 변화) 를 계산. 최소 범위 +1/−1 명령 수는 d (양 끝에 0 추가) 에서 양의 점프의 합과 같아요. 아래 섹션이 한 단락씩 쌓아요."),
+        "Build the solution one piece at a time.",
+        "코드를 한 단계씩 만들어봐요."),
       sections: getAirCond1Sections(E),
     },
   ];
