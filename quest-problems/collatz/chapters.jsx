@@ -76,8 +76,8 @@ function CollatzSample({ E }) {
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
-        {t(E, "📌 Constraints: n, k ≤ 1000 · each aᵢ ≤ 10⁴.",
-             "📌 제약: n, k ≤ 1000 · 각 aᵢ ≤ 10⁴.")}
+        {t(E, "📌 Constraints: n, k ≤ 1000 · each number in the list ≤ 10,000.",
+             "📌 제약: n, k ≤ 1000 · 리스트의 각 수는 10000 이하예요.")}
       </div>
     </div>
   );
@@ -114,8 +114,8 @@ function CollatzRecap({ E }) {
             그래서 실제 최댓값을 계산해서 넣었다 — 시작값 1~10000 전부를 1000단계까지
             돌려보면 9663 이 48번째에 27,114,424 로 최고점을 찍는다. 리스트 1000칸이
             전부 9663 이면 그 순간 합은 271억이다. */}
-        {t(E, "n · k <= 10^6, so a plain simulation is fast enough. But the numbers get big: 9663 becomes 27,114,424 after 48 rounds, and 1000 of those add up to 27 billion.",
-             "n · k ≤ 10⁶ 라 시키는 대로 해도 충분히 빨라요.\n단 값이 꽤 커져요 — 9663 은 48번 만에 27,114,424 가 되고, 그런 수가 1000개면 합이 271억이에요.")}
+        {t(E, "n and k are each at most 1000, so at most 1,000,000 steps total — a plain simulation is fast enough. But the numbers get big: 9663 becomes 27,114,424 after 48 rounds, and 1000 of those add up to 27 billion.",
+             "n, k 가 각각 최대 1000이라 전체 계산은 최대 100만 번, 시키는 대로 해도 충분히 빨라요.\n단 값이 꽤 커져요 — 9663 은 48번 만에 27,114,424 가 되고, 그런 수가 1000개면 합이 271억이에요.")}
       </div>
       <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
         {t(E, "Now let's read the code that does exactly this →", "이제 이걸 그대로 하는 코드를 봐요 →")}

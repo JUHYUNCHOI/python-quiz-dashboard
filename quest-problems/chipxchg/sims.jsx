@@ -670,8 +670,8 @@ export function SearchSim({ E }) {
       ? t(E, <>First, the <b>top row</b> = the worst for each x. Read left→right: it <b>only stays or climbs — never drops</b>. (extra chips can never make my worst case smaller)</>,
              <>먼저 <b>맨 윗줄</b> = 각 x 의 최악이에요. 왼→오로 읽으면 <b>계속 같거나 오르기만 — 절대 안 내려가요</b>. (칩이 늘어도 최악은 안 작아짐)</>)
       : s.kind === "why"
-      ? t(E, <>So goal <b>5</b> is first hit at <b style={{color:"#15803d",...NW}}>x=9</b>: before it all <b style={{color:"#475569"}}>✗</b>, after all <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>one boundary</span>. To find it we don't test every x — we <b>halve the range</b> = binary search. <span style={NW}>(x reaches 10¹⁸)</span></>,
-             <>그래서 목표 <b>5</b> 에 처음 닿는 <b style={{color:"#15803d",...NW}}>x=9</b> 앞은 다 <b style={{color:"#475569"}}>✗</b>, 뒤는 다 <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>경계가 딱 하나</span>. 이걸 찾을 때 x 를 하나씩 안 보고 <b>범위를 반씩</b> 줄여요 = 이분탐색. <span style={NW}>(x 는 10¹⁸까지)</span></>)
+      ? t(E, <>So goal <b>5</b> is first hit at <b style={{color:"#15803d",...NW}}>x=9</b>: before it all <b style={{color:"#475569"}}>✗</b>, after all <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>one boundary</span>. To find it we don't test every x — we <b>halve the range</b> each time. That's called binary search. <span style={NW}>(x reaches 10¹⁸)</span></>,
+             <>그래서 목표 <b>5</b> 에 처음 닿는 <b style={{color:"#15803d",...NW}}>x=9</b> 앞은 다 <b style={{color:"#475569"}}>✗</b>, 뒤는 다 <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>경계가 딱 하나</span>. 이걸 찾을 때 x 를 하나씩 안 보고 <b>범위를 반씩</b> 줄여요. 이런 방법을 이분탐색이라고 불러요. <span style={NW}>(x 는 10¹⁸까지)</span></>)
       : s.kind === "done"
       ? t(E, <>Range shrank to one — <b style={{color:"#15803d"}}>answer x = {ANS}</b>, in just <b>{trace.length} checks</b>. Matches <b style={{color:"#15803d"}}>sample test 2's output 9 ✓</b> — this is the real solution.</>,
              <>범위가 하나로 좁혀졌어요 — <b style={{color:"#15803d"}}>답 x = {ANS}</b>, <b>{trace.length}번</b> 확인으로. <b style={{color:"#15803d"}}>샘플 테스트 2의 정답 9 와 일치 ✓</b> — 이게 진짜 해법이에요.</>)
@@ -1368,6 +1368,9 @@ export function LastOneWhySlide({ E }) {
               <div style={{ textAlign: "center", padding: "8px 0 2px", fontFamily: "'JetBrains Mono',monospace",
                 fontSize: 12.5, fontWeight: 800, color: "#5b21b6" }}>
                 ⌊(B + n<sub>B</sub>) / c<sub>B</sub>⌋ · c<sub>A</sub> + (A + n<sub>A</sub>) &lt; f<sub>A</sub>
+              </div>
+              <div style={{ textAlign: "center", fontSize: 10.5, color: "#94a3b8" }}>
+                {t(E, "⌊ ⌋ = drop the remainder, like the leftover-discarding we did above", "⌊ ⌋ = 위에서 한 자투리 버림, 나눈 몫만 남기는 표시예요")}
               </div>
             </div>
             <div style={{ padding: "9px 12px", borderRadius: 9, background: "#fffbeb", border: "1.5px solid #fbbf24", color: "#92400e" }}>

@@ -702,8 +702,8 @@ export function getMooin2Sections(E) {
             "이제 두 조각을 합쳐요.\nsecond_last 에 담긴 j 마다, memo[j] 가 바로 그 j 의 x 개수예요 —\ny 자신은 이미 빠져 있어요.\n그러니 답은 second_last 의 모든 j 에 대해 memo[j] 를 더한 값이에요."),
         t(E, "Why is this only O(N)? Both memo and second_last were each built in a single pass, and summing them is one more pass.",
             "왜 O(N) 일까요?\nmemo 와 second_last 모두 한 번씩만 훑어서 만들었고, 더하는 것도 한 번 더 훑는 것뿐이에요."),
-        t(E, "C++ uses long long for ans because it can exceed 2³¹.",
-            "C++ 는 ans 에 long long 을 써요. 값이 2³¹ 을 넘을 수 있거든요."),
+        t(E, "C++ uses long long for ans because it can exceed 2 billion (int's limit).",
+            "C++ 는 ans 에 long long 을 써요. 값이 int 한계인 약 21억을 넘을 수 있거든요."),
       ],
     },
   ];

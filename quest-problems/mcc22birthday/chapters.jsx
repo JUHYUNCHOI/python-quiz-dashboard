@@ -98,7 +98,7 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The grid can grow to 2^N cookies, so friend numbers are given as plain 1-based indices, not coordinates.",
+        "The grid can grow to 2^N cookies (2 multiplied by itself N times), so friend numbers are given as plain 1-based indices, not coordinates.",
         "격자는 글자마다 두 배로 커져서 2^N(2 를 N 번 곱한 수) 개까지 갈 수 있어요.\n그래서 친구 번호는 좌표가 아니라 1 부터 세는 순번 하나로 줘요."),
       content: (
         <div style={{ padding: 16 }}>

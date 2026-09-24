@@ -12,7 +12,7 @@ export function makeWalkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ's pasture is fenced by P posts forming a rectilinear polygon (axis-aligned). Each cow walks the SHORTER of the two routes around the closed loop between her start and end.",
+        "FJ's pasture is fenced by P posts forming a rectilinear loop; each cow walks the SHORTER of the two routes around it.",
         "울타리를 따라 도는 두 길 중 짧은 쪽으로 걸어요."),
       content: (
         <div style={{ padding: 16 }}>

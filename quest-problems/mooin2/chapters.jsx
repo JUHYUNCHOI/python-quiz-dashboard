@@ -165,7 +165,7 @@ export function makeMooin2Ch1(E) {
           </div>
           <div style={{ marginTop: 10, padding: "8px 10px", background: "#ecfdf5", border: "1px dashed #6ee7b7", borderRadius: 8, fontSize: 11.5, color: "#065f46", lineHeight: 1.6 }}>
             📐 <b>{t(E, "Constraints", "제약")}:</b>{" "}
-            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ N ≤ 10⁶</code>,{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ N ≤ 1,000,000</code>,{" "}
             <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ a[i] ≤ N</code>{" "}
             {t(E, "(answer can be big — 64-bit in C++).", "(답이 커질 수 있어서 C++ 는 64비트를 써요.)")}
           </div>
@@ -245,8 +245,8 @@ export function makeMooin2Ch2(E, lang = "py") {
           <div style={{ background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#155e75", lineHeight: 1.7 }}>
             <div style={{ marginBottom: 9 }}>
               {t(E,
-                "A moo is 3 spots: a front value (x), then the SAME value twice after it (y, y). So just try them all:",
-                "moo 는 자리 3개예요. 앞 칸 하나가 x 고, 그 뒤 같은 값 두 개가 y, y 예요. 그러니 그냥 다 해봐요:")}
+                "A moo is 3 spots: a front value (x), then the SAME value twice after it (y, y). So just try them all — this \"try everything\" way is called brute force:",
+                "moo 는 자리 3개예요. 앞 칸 하나가 x 고, 그 뒤 같은 값 두 개가 y, y 예요. 그러니 그냥 다 해봐요 — 이렇게 다 해보는 방법을 브루트포스(완전탐색)라고 불러요:")}
             </div>
             {[
               t(E, "Pick a front value → that's the x.", "앞 칸 하나를 골라요 → 이게 x 예요."),
@@ -417,7 +417,7 @@ export function makeMooin2Ch3(E) {
           <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 500, margin: "0 auto" }}>
             {[
               {
-                plain: t(E, "Each spot — how many DIFFERENT numbers (≠ this one) came before it?", "자리마다 — 그 앞에 이 값과 다른 숫자가 몇 종류 있을까요?"),
+                plain: t(E, "Each spot — how many DIFFERENT numbers came before it?", "자리마다 — 그 앞에 이 값과 다른 숫자가 몇 종류 있을까요?"),
                 why: t(E, "That count is exactly the x's we can pick for a moo ending here.", "그 종류 수가 곧 여기서 고를 수 있는 x 개수예요."),
                 code: "memo",
               },

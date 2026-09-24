@@ -115,7 +115,7 @@ export function makeTrafficCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Constraint propagation in two passes. Forward: start with [0, ∞), apply on-ramps (+k) and off-ramps (−k clamped), intersect with each sensor range to get end-flow range. Backward: reverse the whole thing. Sections build it one piece at a time.",
+        "Constraint propagation in two passes — forward through the ramps, then backward — built one piece at a time.",
         "한 번은 앞에서 뒤로, 한 번은 뒤에서 앞으로 훑으며 범위를 좁혀요."),
       sections: getMeasTrafficSections(E),
     },

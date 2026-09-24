@@ -78,7 +78,7 @@ function ChipXchgSample({ E }) {
         {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter which combination comes.", " 예요. 어떤 조합이 와도 목표에 닿을 수 있어요.")}
       </div>
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-        {t(E, "📌 Up to 10⁴ tests · answer can reach 10¹⁸ → use 64-bit.", "📌 테스트는 최대 10⁴ 개이고 답이 10¹⁸ 까지 커져요. 그래서 64비트 정수가 필요해요.")}
+        {t(E, "📌 Up to 10⁴ (10,000) tests · answer can reach 10¹⁸ (a billion times a billion) → use 64-bit.", "📌 테스트는 최대 10⁴(1만) 개이고 답이 10¹⁸(10억×10억) 까지 커져요. 그래서 64비트 정수가 필요해요.")}
       </div>
     </div>
   );

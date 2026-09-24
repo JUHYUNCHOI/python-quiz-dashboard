@@ -437,8 +437,8 @@ export function SpeedRaceSim({ E, nMax = 20000, nStart = 200, constraintN = 2000
 
       <div style={{ marginTop: 6, fontSize: 11.5, color: "#475569", textAlign: "center", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "7px 10px" }}>
         {t(E,
-          "Bars fill toward the ~2-second budget (≈2×10⁸ ops). Drag n up: brute shoots past it while the smart pass barely moves.",
-          "막대는 약 2초치(≈2×10⁸ 번 계산)까지 차요.\nn 을 키워 보면 완전탐색은 훌쩍 넘치는데, 똑똑한 방법은 거의 안 움직여요.")}
+          "Bars fill toward the ~2-second budget (about 200 million ops). Drag n up: brute shoots past it while the smart pass barely moves.",
+          "막대는 약 2초치(약 2억 번 계산)까지 차요.\nn 을 키워 보면 완전탐색은 훌쩍 넘치는데, 똑똑한 방법은 거의 안 움직여요.")}
       </div>
     </div>
   );

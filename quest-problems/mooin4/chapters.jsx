@@ -116,7 +116,7 @@ MOOMO`}
               <div>1 ≤ T ≤ 10,000 (= 10⁴)</div>
               <div>0 ≤ k ≤ 1</div>
               <div>1 ≤ N ≤ 200,000 (= 2 × 10⁵)</div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "sum of N across tests ≤ 4 × 10⁵", "모든 케이스 N 합 ≤ 4 × 10⁵")}</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "sum of N across tests ≤ 400,000", "모든 케이스 N 합 ≤ 400,000")}</div>
             </div>
           </div>
         </div>),

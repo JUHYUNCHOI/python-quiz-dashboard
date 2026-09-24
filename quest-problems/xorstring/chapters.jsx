@@ -188,7 +188,7 @@ export function makeXorStringCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way actually transforms every substring k times — impossible: the string grows like 2^k and k reaches 10^18. The fast way treats each adjacent pair on its own, uses a closed formula for its beauty, and weights it by how many substrings contain it.",
+        "The slow way actually transforms every substring k times — impossible: the string doubles each time, and k reaches 10^18. The fast way treats each adjacent pair on its own, uses a closed formula for its beauty, and weights it by how many substrings contain it.",
         "만들지 말고, 쌍마다 공식으로 바로 구해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -199,8 +199,8 @@ export function makeXorStringCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
-                  "Two walls at once: there are ~n²/2 substrings (up to 2·10^10), AND each transformed string is length ~2^k — for k = 10^18 it can never be built. Hopeless.",
-                  "막히는 곳이 두 군데예요. 부분문자열이 ~n²/2 개(최대 2·10^10) 나 돼요. 게다가 변신한 문자열은 길이가 ~2^k 라, k = 10^18 이면 아예 만들 수가 없어요.")}
+                  "Two walls at once: there are ~n×n/2 substrings (up to 2·10^10), AND each transformed string doubles in length every time — for k = 10^18 it can never be built. Hopeless.",
+                  "막히는 곳이 두 군데예요. 부분문자열이 ~n×n/2 개(최대 2·10^10) 나 돼요. 게다가 변신한 문자열은 한 번마다 길이가 두 배가 되는데, k = 10^18 이면 아예 만들 수가 없어요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
@@ -209,8 +209,8 @@ export function makeXorStringCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
-                  "Each adjacent pair transforms independently. Its beauty after k steps has a closed form from the pair type (00 / 11 / 01) and 2^k, (-1)^k. Weight the pair at i by i·(n−i) substrings. One pass: O(n).",
-                  "이웃 쌍은 서로 상관없이 따로 변신해요. 그래서 k번 뒤 beauty 는 쌍 종류(00 / 11 / 01) 와 2^k, (-1)^k 만으로 공식이 나와요. 위치 i 의 쌍은 부분문자열 i·(n−i) 개에 들어가니 그만큼 곱해 더해요. 한 번만 훑으면 되니 O(n) 이에요.")}
+                  "Each adjacent pair transforms independently. Its beauty after k steps has a closed form from the pair type (00 / 11 / 01) and two numbers: 2^k (2 multiplied by itself k times) and (-1)^k (+1 or −1, flipping each step). Weight the pair at i by i·(n−i) substrings. One pass: O(n).",
+                  "이웃 쌍은 서로 상관없이 따로 변신해요. 그래서 k번 뒤 beauty 는 쌍 종류(00 / 11 / 01) 와 두 값 — 2^k(2를 k번 곱한 수), (-1)^k(한 번씩 걸러 +1, −1) — 만으로 공식이 나와요. 위치 i 의 쌍은 부분문자열 i·(n−i) 개에 들어가니 그만큼 곱해 더해요. 한 번만 훑으면 되니 O(n) 이에요.")}
               </div>
             </div>
           </div>

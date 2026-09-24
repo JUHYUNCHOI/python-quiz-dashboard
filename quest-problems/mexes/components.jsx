@@ -314,8 +314,8 @@ export function getMexesSections(E) {
             "i 를 없앨 때 그 자리에 빠진 값을 적으면 돼요.\n한 번 바꾸기로 두 일이 같이 끝나요."),
         t(E, "So ops = max(missing[i], cnt[i]) — the bottleneck.",
             "그래서 둘을 더하지 않고 더 큰 쪽만큼만 바꾸면 돼요 — max(missing[i], cnt[i]) 예요."),
-        t(E, "Total: O(N) input + O(N) cnt + O(N) prefix + O(N) output = O(N). Fast even at N = 2·10⁵.",
-            "입력·cnt·missing·출력 모두 O(N) 이라 다 합쳐도 O(N) 이에요.\nN 이 2·10⁵ 이어도 충분히 빨라요."),
+        t(E, "Total: O(N) input + O(N) cnt + O(N) prefix + O(N) output = O(N). Fast even at N = 200,000.",
+            "입력·cnt·missing·출력 모두 O(N) 이라 다 합쳐도 O(N) 이에요.\nN 이 20만이어도 충분히 빨라요."),
       ],
     },
   ];

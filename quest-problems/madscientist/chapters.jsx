@@ -127,7 +127,7 @@ export function makeMadSciCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Each contiguous block where A[i] ≠ B[i] takes exactly one flip to fix. So count those differing blocks. Sections build it one piece at a time.",
+        "Each contiguous block where A and B differ takes exactly one flip to fix. So count those differing blocks. Sections build it one piece at a time.",
         "A 와 B 가 다른 구간 하나는 한 번 뒤집으면 해결돼요."),
       sections: getMadSciSections(E),
     },

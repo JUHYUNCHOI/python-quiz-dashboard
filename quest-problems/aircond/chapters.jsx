@@ -10,7 +10,7 @@ export function makeAirCondCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows, each in a stall range [s, t] needing at least some cooling power c.\nThere are M ≤ 10 AC units; each AC covers a stall range with some cooling power and a fixed cost. ACs stack — overlapping ACs add their power.\nPick a subset of ACs whose stacked power meets every cow's need, with minimum total cost.",
+        "Cool every cow while picking the cheapest set of ACs.",
         "모든 소가 시원해지게 하면서 에어컨을 가장 싸게 골라요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -101,7 +101,7 @@ export function makeAirCondCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Same scenario as the next question — toggle AC1 / AC2 and watch the bars stack on each stall. The dashed red line is the cow's need (3). All cells must clear that line.",
+        "Toggle AC1 and AC2 to see how the bars stack on each stall.",
         "AC1, AC2 를 켜고 끄면서 축사마다 막대가 얼마나 쌓이는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -145,7 +145,7 @@ export function makeAirCondCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "M ≤ 10, so at most 1024 AC subsets exist — try every subset, build cooling per stall, check every cow, track the cheapest valid one. Sections build it one piece at a time.",
+        "M ≤ 10, so there are at most 1024 subsets — just try them all.",
         "M ≤ 10 이라 조합이 최대 1024 가지뿐이니 전부 해 봐도 돼요."),
       sections: getAirCondSections(E),
     },

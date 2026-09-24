@@ -78,8 +78,8 @@ function CowSplitsInput({ E }) {
       <div style={{ marginBottom: 8 }}>
         <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
         <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
-          <div>1 ≤ T ≤ 10⁴</div>
-          <div>1 ≤ N (Σ N ≤ 10⁵)</div>
+          <div>1 ≤ T ≤ 10,000</div>
+          <div>1 ≤ N ({t(E, "sum of N over all tests", "모든 테스트의 N 합")} ≤ 100,000)</div>
           <div style={{ color: C.dim, fontSize: 11, marginTop: 2 , wordBreak: "keep-all", textWrap: "balance" }}>{t(E, "S consists of characters C, O, W only", "S 는 C, O, W 로만 이루어져요")}</div>
         </div>
       </div>
@@ -228,7 +228,7 @@ export function makeCowSplitsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has a string S made of COW-like pieces. Empty it in as few moves as possible — each move erases a group of letters that reads as 'the same block twice' (e.g. COWCOW, CC).",
+        "In how few moves can you clear a string S made of COW pieces?",
         "COW 조각으로 만든 S 를 몇 번 만에 다 지울 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -309,7 +309,7 @@ export function makeCowSplitsCh1(E) {
                     <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>C+C = CC</code>
                     {t(E, ".  ", ".  ")}
                     <code style={{ background: "#fef2f2", padding: "1px 5px", borderRadius: 3, color: "#991b1b" }}>COWO</code>
-                    {t(E, " is not (front ≠ back).", " 는 아니에요 (앞 ≠ 뒤).")}
+                    {t(E, " is not (the front half and back half differ).", " 는 아니에요 (앞과 뒤가 달라요).")}
                   </div>
                 </div>
               </div>

@@ -51,8 +51,8 @@ function InnovationSample({ E }) {
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
-        {t(E, "📌 1 ≤ m ≤ n ≤ 20000 · each value ≤ 10⁹ → adding them all reaches 2·10¹³.",
-             "📌 1 ≤ m ≤ n ≤ 20000 · 각 값 ≤ 10⁹ → 다 더하면 2·10¹³ 까지 가요.")}
+        {t(E, "📌 1 ≤ m ≤ n ≤ 20000 · each value up to 1 billion → adding them all reaches 20 trillion.",
+             "📌 1 ≤ m ≤ n ≤ 20000 · 각 값이 최대 10억 → 다 더하면 20조까지 가요.")}
       </div>
     </div>
   );
@@ -186,7 +186,7 @@ export function makeInnovationCh1(E) {
       type: "reveal",
       label: t(E, "What's visible", "무엇이 보이나"),
       narr: t(E,
-        "Overlap the cards and look: front cards show only a·b, the last shows all four. So the total is Σ(a+b) plus just one c+d.",
+        "Overlap the cards and look: front cards show only a·b, the last shows all four.",
         "겹쳐 놓으면 마지막 카드만 네 숫자가 다 보여요."),
       content: (<InnovationSim E={E} />),
     },

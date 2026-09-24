@@ -210,7 +210,7 @@ export function GapFormulaSim({ E }) {
               <>이번엔 <b>{span} − {have} = {gap}</b> 칸이 비었어요.<br /><b style={{ color: RED }}>{gap} &gt; {K}</b> 라 와일드가 모자라요.<br />그래서 코드는 <b>left</b> 를 오른쪽으로 옮겨요.</>))
     : s.k === "prefix" ? t(E,
         <>One more thing, for later.<br /><b>right − left + 1</b> is a <b>running count</b>:<br />cards up to c[right], minus cards below c[left].<br />That idea has a name — a <b>prefix count</b>.</>,
-        <>나중을 위해 하나만 더 봐요.<br /><b>right − left + 1</b> 은 사실 <b>세어 둔 개수의 차</b>예요.<br />c[right] 까지의 카드 수에서 c[left] 앞의 카드 수를 뺀 거죠.<br />이 생각에는 이름이 있어요. <b>누적 개수(prefix)</b> 예요.</>)
+        <>나중을 위해 하나만 더 봐요.<br /><b>right − left + 1</b> 은 사실 <b>세어 둔 개수의 차</b>예요.<br />c[right] 까지의 카드 수에서 c[left] 앞의 카드 수를 뺀 거죠.<br />이 생각에는 이름이 있어요. <b>쌓아 온 개수(prefix)</b> 예요.</>)
     : t(E,
         <>Write it out: <b>(slots) − (cards)</b>.<br />That is <b>(c[right] − c[left] + 1) − (right − left + 1)</b>.<br />The two <b>+1</b> cancel, leaving <b>c[right] − c[left] − (right − left)</b>.<br />That is exactly the line in the code.</>,
         <>식으로 써 봐요. <b>(칸 수) − (카드 수)</b> 예요.<br /><b>(c[right] − c[left] + 1) − (right − left + 1)</b> 인데<br /><b>+1</b> 두 개가 서로 지워져요.<br />남는 게 <b>c[right] − c[left] − (right − left)</b> — 코드의 그 줄이에요.</>);

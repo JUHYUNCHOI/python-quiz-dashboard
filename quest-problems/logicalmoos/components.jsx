@@ -594,8 +594,8 @@ export function getLogicalMoosSections(E) {
       why: [
         t(E, "Two passes (O(N)) precompute everything once. Every query then costs O(1) — no per-query rebuilding at all.",
             "두 번의 훑기(O(N))로 모든 걸 미리 구해요. 그 다음 물음은 하나하나 O(1) 이에요 — 다시 만드는 과정이 없어요."),
-        t(E, "Total time: O(N + Q), fast enough even at N, Q up to 2·10⁵.",
-            "전체 계산량은 O(N + Q) 예요. N, Q 가 2·10⁵ 이어도 충분히 빨라요."),
+        t(E, "Total time: O(N + Q), fast enough even at N, Q up to 200,000.",
+            "전체 계산량은 O(N + Q) 예요. N, Q 가 20만이어도 충분히 빨라요."),
       ],
     },
   ];

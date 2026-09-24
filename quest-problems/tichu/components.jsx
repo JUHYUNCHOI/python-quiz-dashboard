@@ -59,8 +59,8 @@ export function getTichuSections(E) {
       why: [
         t(E, "Duplicate values are useless in a run — sort and dedupe first (sorted(set(...))).",
             "같은 값이 두 장 있어도 run 은 안 길어져요. 그래서 먼저 정렬하고 중복을 없애요."),
-        t(E, "Two pointers: keep the widest window [left..right]\nwhose inner gap (value diff − count diff) ≤ k.",
-            "투포인터로 훑어요.\n안쪽 빈칸(값차 − 개수차)이 k 를 넘지 않는\n가장 넓은 창 [left..right] 을 잡아요."),
+        t(E, "left, right two pointers move together — this way of sweeping a window is called two pointers. Keep the widest window [left..right]\nwhose inner gap (value diff − count diff) ≤ k.",
+            "left, right 두 자리를 같이 움직여요 — 이렇게 창을 훑는 방법을 투포인터라고 불러요.\n안쪽 빈칸(값차 − 개수차)이 k 를 넘지 않는\n가장 넓은 창 [left..right] 을 잡아요."),
         t(E, "Answer = window size + k (fill inner gaps, extend the ends), capped at n.",
             "답은 창 크기 + k 예요. 안쪽 빈칸을 메꾸고 남는 와일드로 양끝을 늘리는데, n 을 넘을 순 없어요."),
       ],
@@ -71,8 +71,8 @@ export function getTichuSections(E) {
       cppOnly: [
         t(E, "sort then erase(unique(...)) is the C++ way to get distinct sorted values.",
             "C++ 에선 sort 후 erase(unique(...)) 로 서로 다른 값을 정렬해 얻어요."),
-        t(E, "Cᵢ can reach 10⁹ and N up to 10⁵ — use long long to be safe.",
-            "Cᵢ 가 10⁹ 까지, N 이 10⁵ 까지라서 long long 을 써요."),
+        t(E, "Cᵢ can reach 1,000,000,000 and N up to 100,000 — use long long to be safe.",
+            "Cᵢ 가 10억까지, N 이 10만까지라서 long long 을 써요."),
       ],
     },
   ];

@@ -81,8 +81,8 @@ function BinarySearchXSim({ E }) {
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
-            "4 targets in a row with hp [3, 3, 2, 4]. You have K = 2 arrows (M = 1). An arrow of power X fired at target i deals max(0, M·X − d²) to the target d steps to its right. Pick X, place arrows greedily, and see if everyone dies.",
-            "표적 4개가 일렬로 있고 체력은 [3, 3, 2, 4] 예요. 화살은 K = 2개 (M = 1). 힘 X 짜리 화살을 표적 i 에 쏘면, 오른쪽으로 d 칸 떨어진 표적이 max(0, M·X − d²) 만큼 데미지를 받아요. X 를 골라 화살을 놓고, 다 쓰러지는지 봐요.")}
+            "4 targets in a row with hp [3, 3, 2, 4]. You have K = 2 arrows (M = 1). An arrow of power X fired at target i deals max(0, M·X − (d×d)) to the target d steps to its right. Pick X, place arrows greedily, and see if everyone dies.",
+            "표적 4개가 일렬로 있고 체력은 [3, 3, 2, 4] 예요. 화살은 K = 2개 (M = 1). 힘 X 짜리 화살을 표적 i 에 쏘면, 오른쪽으로 d 칸 떨어진 표적이 max(0, M·X − (d×d)) 만큼 데미지를 받아요. X 를 골라 화살을 놓고, 다 쓰러지는지 봐요.")}
         </div>
 
         {/* X control */}
@@ -251,7 +251,7 @@ export function makeExplodingArrowCh1(E) {
                   {t(E, " fired at target ", " 짜리 화살을 표적 ")}<b style={{ color: A }}>i</b>
                   {t(E, " reduces every target ", " 에 쏘면, ")}<b style={{ color: A }}>j ≥ i</b>
                   {t(E, "'s health by ", " 인 모든 표적의 체력을 ")}
-                  <b style={{ color: P }}>max(0, M·X − (j−i)²)</b>{t(E, ".", " 만큼 줄여요.")}
+                  <b style={{ color: P }}>max(0, M·X − (j−i)×(j−i))</b>{t(E, ".", " 만큼 줄여요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>

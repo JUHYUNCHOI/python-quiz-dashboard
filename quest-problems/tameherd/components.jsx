@@ -104,7 +104,7 @@ export function TameHerdSim({ E }) {
   const noteText = (s) => {
     if (s.note === "day0-zero") return t(E, "day 1 starts after a breakout (counter=0)", "1 일차는 탈출 바로 다음이라 카운터가 0 이에요");
     if (s.note === "day0-missing") return t(E, "day 1 unknown — counter=0 either way", "1 일차는 안 적혀 있지만 어차피 카운터는 0 이에요");
-    if (s.note === "day0-bad") return t(E, "day 1 ≠ 0 — impossible, answer −1", "1 일차가 0 이 아니에요. 있을 수 없으니 답은 −1 이에요");
+    if (s.note === "day0-bad") return t(E, "day 1 isn't 0 — impossible, answer −1", "1 일차가 0 이 아니에요. 있을 수 없으니 답은 −1 이에요");
     if (s.note === "missing") return t(E, "−1 — both options allowed (continue or breakout)", "−1 이라서 이어가도 되고 탈출로 봐도 돼요");
     if (s.note === "force-zero") return t(E, "log=0 → breakout happened today", "기록이 0 이니까 오늘 탈출이 있었어요");
     if (s.note === "force-counter") return t(E, `log=${s.v} → counter must equal ${s.v}`, `기록이 ${s.v} 라서 카운터도 ${s.v} 여야 해요`);
@@ -357,7 +357,7 @@ export function getTameHerdSections(E) {
       why: [
         t(E,
           "What should we print? The min and max breakouts that fit the log.\nA missing day (-1) could be any counter value, so possibilities branch.\nSo keep a table of counter value → best breakout count, and update\nit day by day — narrowing it whenever that day's value is known.",
-          "무엇을 출력해야 하나요? 기록과 맞는 탈출 횟수의 최소·최대예요.\n−1 인 날은 카운터가 무엇이든 될 수 있어 경우가 여러 갈래로 갈려요.\n그래서 '카운터 값 → 그때까지 최소·최대 탈출 횟수' 표를 두고\n하루씩 갱신하며, 값이 적힌 날엔 그 값만 남기고 나머지는 지워요."),
+          "무엇을 출력해야 하나요? 기록과 맞는 탈출 횟수의 최소·최대예요.\n−1 인 날은 카운터가 무엇이든 될 수 있어 경우가 여러 갈래로 갈려요.\n그래서 '카운터 값 → 그때까지 최소·최대 탈출 횟수' 표를 두고\n하루씩 새로 고치며, 값이 적힌 날엔 그 값만 남기고 나머지는 지워요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map) make algorithms concise.",

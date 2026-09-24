@@ -117,8 +117,8 @@ export function getXorStringSections(E) {
           "Each adjacent pair transforms on its own. So the whole answer = the sum, over every adjacent pair of s, of that pair's beauty after k transforms — the pairs never interfere.",
           "이웃한 두 글자(한 쌍)는 서로 간섭 없이 각자 변신해요. 그래서 정답 = s 의 모든 이웃 쌍에 대해 'k번 변신한 뒤의 beauty' 를 더한 값이에요."),
         t(E,
-          "We never build the transformed string. After k steps its length is about 2^k — with k up to 10^18 that's astronomically huge. Instead a pair's beauty has a closed form: it depends only on the pair type (0,0 / 1,1 / 0,1) and on 2^k and (-1)^k. That is a Jacobsthal-like recurrence solved in one shot with modular powers.",
-          "변신한 문자열을 실제로 만들지는 않아요. k번 뒤 길이가 약 2^k 인데, k 가 10^18 까지라 상상도 못할 크기예요. 대신 한 쌍의 beauty 는 공식으로 바로 나와요. 쌍의 종류(0,0 / 1,1 / 0,1) 와 2^k, (-1)^k 만 있으면 돼요. Jacobsthal 형 점화식을 거듭제곱으로 한 번에 계산해요."),
+          "We never build the transformed string. After k steps its length doubles k times over — with k up to 10^18 that's astronomically huge. Instead a pair's beauty has a closed form: it depends only on the pair type (0,0 / 1,1 / 0,1) and on 2^k (2 multiplied by itself k times) and (-1)^k (+1 or −1). That is a Jacobsthal-like recurrence solved in one shot with modular powers.",
+          "변신한 문자열을 실제로 만들지는 않아요. k번 뒤 길이는 두 배씩 k번 커진 크기인데, k 가 10^18 까지라 상상도 못할 크기예요. 대신 한 쌍의 beauty 는 공식으로 바로 나와요. 쌍의 종류(0,0 / 1,1 / 0,1) 와 2^k(2를 k번 곱한 수), (-1)^k(+1 또는 −1) 만 있으면 돼요. Jacobsthal 형 점화식을 거듭제곱으로 한 번에 계산해요."),
         t(E,
           "A pair sitting between positions i and i+1 belongs to every substring that starts at or before i and ends at or after i+1 — that's exactly i*(n-i) substrings. So we weight each pair by i*(n-i) and add. One pass over s: O(n).",
           "위치 i 와 i+1 사이의 쌍은 'i 번째나 그 앞에서 시작하고, i+1 번째나 그 뒤에서 끝나는' 부분문자열에 모두 들어가요. 그런 부분문자열이 정확히 i*(n-i) 개예요. 그래서 각 쌍에 i*(n-i) 를 곱해 더해요. s 를 한 번만 훑으니 O(n) 이에요."),
@@ -131,8 +131,8 @@ export function getXorStringSections(E) {
           "pow(3, MOD-2, MOD) is Fermat's little theorem: the modular inverse of 3, so we can 'divide by 3' under the modulus.",
           "pow(3, MOD-2, MOD) 는 페르마 소정리로 구한 3 의 모듈러 역원이에요. 이걸로 '÷3' 을 모듈러 안에서 할 수 있어요."),
         t(E,
-          "pow(2, k, MOD) computes 2^k mod p fast even when k is 10^18.",
-          "pow(2, k, MOD) 는 k 가 10^18 이어도 2^k mod p 를 빠르게 계산해요."),
+          "pow(2, k, MOD) computes 2^k (2 multiplied by itself k times) mod p fast even when k is 10^18.",
+          "pow(2, k, MOD) 는 k 가 10^18 이어도 2^k(2를 k번 곱한 수) mod p 를 빠르게 계산해요."),
       ],
       cppOnly: [
         t(E,
@@ -302,8 +302,8 @@ export function TransformSim({ E }) {
 
       <div style={{ background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
         {t(E,
-          "The string roughly doubles each transform (length 2m-1), so it explodes as 2^k — we can never build it for big k. The way out: each ORIGINAL adjacent pair (00, 11, or 01) transforms on its own, and its beauty after k steps follows a fixed formula. Then a pair between positions i and i+1 counts inside i*(n-i) substrings — weight it and add.",
-          "문자열은 변신할 때마다 대략 두 배(길이 2m-1)가 돼요. 그래서 2^k 로 커져서 k 가 크면 아예 만들 수 없어요. 빠져나갈 길은 이거예요. 원래의 이웃 쌍(00, 11, 01)은 따로따로 변신하고, k번 뒤 beauty 는 정해진 공식을 따라요. 그리고 위치 i, i+1 사이 쌍은 부분문자열 i*(n-i) 개에 들어가니 그만큼 곱해서 더해요.")}
+          "The string roughly doubles each transform (length 2m-1), so after k transforms it's astronomically huge — we can never build it for big k. The way out: each ORIGINAL adjacent pair (00, 11, or 01) transforms on its own, and its beauty after k steps follows a fixed formula. Then a pair between positions i and i+1 counts inside i*(n-i) substrings — weight it and add.",
+          "문자열은 변신할 때마다 대략 두 배(길이 2m-1)가 돼요. 그래서 k번 뒤엔 상상도 못할 크기가 돼서 k 가 크면 아예 만들 수 없어요. 빠져나갈 길은 이거예요. 원래의 이웃 쌍(00, 11, 01)은 따로따로 변신하고, k번 뒤 beauty 는 정해진 공식을 따라요. 그리고 위치 i, i+1 사이 쌍은 부분문자열 i*(n-i) 개에 들어가니 그만큼 곱해서 더해요.")}
       </div>
     </div>
   );

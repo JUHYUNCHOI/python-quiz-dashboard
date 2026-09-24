@@ -63,8 +63,8 @@ function TichuSample({ E }) {
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
-        {t(E, "📌 Constraints: N ≤ 10⁵ · each card value Cᵢ ≤ 10⁹\n· cards can be rearranged freely.",
-             "📌 제약: N ≤ 10⁵ · 각 카드 값 Cᵢ ≤ 10⁹ · 카드 순서는 마음대로 바꿔도 돼요.")}
+        {t(E, "📌 Constraints: N ≤ 100,000 · each card value Cᵢ ≤ 1,000,000,000\n· cards can be rearranged freely.",
+             "📌 제약: N ≤ 10만 · 각 카드 값 Cᵢ ≤ 10억 · 카드 순서는 마음대로 바꿔도 돼요.")}
       </div>
     </div>
   );

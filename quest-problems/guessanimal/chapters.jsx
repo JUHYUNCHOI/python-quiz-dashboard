@@ -117,7 +117,7 @@ function PairwiseTraitSim({ E }) {
       }}>
         {SAME ? (
           <div style={{ fontSize: 12, color: "#991b1b", fontWeight: 700 }}>
-            {t(E, "Pick two DIFFERENT animals (i ≠ j).", "서로 다른 두 동물을 골라요 (i ≠ j).")}
+            {t(E, "Pick two DIFFERENT animals.", "서로 다른 두 동물을 골라요.")}
           </div>
         ) : (
           <>

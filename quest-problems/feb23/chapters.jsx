@@ -147,7 +147,7 @@ export function makeFebCh1(E) {
               ))}
             </div>
             <div style={{ textAlign: "center", fontSize: 13, fontWeight: 700, color: "#059669" }}>
-              {t(E, "Pairs: B≠E, E=E ✅, E≠B → excitement = 1", "쌍: B≠E, E=E ✅, E≠B → 흥분도 = 1")}
+              {t(E, "Pairs: B≠E (different), E=E (same) ✅, E≠B (different) → excitement = 1", "쌍: B≠E(다른 글자), E=E(같은 글자) ✅, E≠B(다른 글자) → 흥분도 = 1")}
             </div>
           </div>
         </div>),
@@ -173,7 +173,7 @@ export function makeFebCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The key insight: try all possible F assignments (2^count_of_F), compute excitement for each, then count distinct values!", "F 를 정하는 모든 방법을 다 해 보고 흥분도를 모아요."),
+        "The key insight: try every way to fill in the F's with B or E, compute excitement for each, then count distinct values!", "F 를 정하는 모든 방법을 다 해 보고 흥분도를 모아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 14, padding: 14 }}>
@@ -182,8 +182,8 @@ export function makeFebCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
-                "1. Find all F positions\n2. Try all 2^abs(F) assignments (B or E)\n3. For each, count consecutive same pairs\n4. Collect distinct excitement values\n5. Answer = size of that set",
-                "1. F 가 어디에 있는지 찾아요\n2. 2^abs(F) 가지 방법을 모두 해 봐요 (B 또는 E)\n3. 각각에서 옆끼리 같은 쌍을 세어요\n4. 나온 흥분도를 모아요\n5. 답은 집합의 크기예요")}
+                "1. Find all F positions\n2. Try every B/E combination for those F's\n3. For each, count consecutive same pairs\n4. Collect distinct excitement values\n5. Answer = size of that set",
+                "1. F 가 어디에 있는지 찾아요\n2. F 자리마다 B 또는 E 로 채우는 모든 조합을 다 해 봐요\n3. 각각에서 옆끼리 같은 쌍을 세어요\n4. 나온 흥분도를 모아요\n5. 답은 집합의 크기예요")}
             </div>
           </div>
         </div>),
