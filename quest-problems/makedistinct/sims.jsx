@@ -119,7 +119,7 @@ export function PlaceOneByOneSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Place them one by one, smallest first", "작은 수부터 하나씩 놓아 보기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
 
@@ -209,7 +209,7 @@ export function WhoCanMeetSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "With K = 2, who can ever meet?", "K = 2 일 때, 누가 누구와 만날 수 있나")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
 

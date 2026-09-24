@@ -426,8 +426,8 @@ export function makeMooin3Ch2(E, lang = "py") {
           </div>
           <div style={{ marginTop: 8, fontSize: 12.5, color: "#5b21b6", background: "#faf5ff", border: "1px solid #ddd6fe", borderRadius: 8, padding: "8px 11px", lineHeight: 1.75, wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              <>Letters get numbers 0–25, and <code>a</code> is 97 in Python — so <code>chr(97 + c)</code> turns number <code>c</code> back into its letter (0 → a, 25 → z).<br />Spots are counted from 0 here too: the leftmost is spot 0.</>,
-              <>글자에 0~25 번을 붙이고, 파이썬에서 <code>a</code> 는 97 번이에요.<br />그래서 <code>chr(97 + c)</code> 는 번호 <code>c</code> 를 다시 글자로 바꿔요 (0 → a, 25 → z).<br />자리도 여기서는 0 부터 세요 — 맨 왼쪽이 자리 0 이에요.</>)}
+              <>This is a <b>letter</b> number, not a spot number: a is 0, z is 25.<br />Python writes it <code>chr(97 + c)</code> — 97 is just where the alphabet starts there.</>,
+              <>이건 <b>자리</b> 번호가 아니라 <b>글자</b> 번호예요 — a 가 0, z 가 25 예요.<br />파이썬에서는 <code>chr(97 + c)</code> 라고 써요. 97 은 파이썬이 알파벳을 시작하는 번호예요.</>)}
           </div>
         </div>),
     },

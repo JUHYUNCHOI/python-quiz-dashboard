@@ -178,8 +178,8 @@ export function DeepAuditSim({ E }) {
         isEn={E}
         title={t(E, "Deep audit: dismantle a candidate against target h",
                     "꼼꼼히 보기 — 후보 p 를 하나씩 없애며 나온 힌트를 목표 h 와 맞춰 봐요")}
-        subtitle={t(E, `Pick a candidate, then ▶ to audit hint by hint. (${safe + 1} / ${trace.length})`,
-                       `후보를 고른 뒤 ▶ 으로 한 힌트씩 확인해요. (${safe + 1} / ${trace.length})`)}
+        subtitle={t(E, `Pick a candidate, then ▶ to audit hint by hint.`,
+                       `후보를 고른 뒤 ▶ 으로 한 힌트씩 확인해요.`)}
       />
 
       {/* Candidate picker */}

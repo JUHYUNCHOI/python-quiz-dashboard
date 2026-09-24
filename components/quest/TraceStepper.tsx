@@ -118,7 +118,7 @@ export function SimNav({
   const atStart = safe === 0;
   const atEnd = safe === total - 1;
   return (
-    <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16 }}>
       <button
         onClick={() => onIdx(0)}
         disabled={atStart}
@@ -141,6 +141,28 @@ export function SimNav({
       >
         ◀{showLabels ? ` ${t(isEn, "Prev", "이전")}` : ""}
       </button>
+      {/* 걸음 카운터 — ◀▶ 사이, 학생이 다음을 누르려는 바로 그 순간 시선이
+          있는 자리. mooin3·checkups 학생 이탈 원인이 "몇 단계짜리인지 몰라서"
+          였다(memory/feedback_*). 회색·상단 고정이었던 StepHeader 자리는
+          버튼 행과 멀어서 못 봤다 — 그래서 SimNav 자체에 내장한다.
+          total<=1 이면 카운터 자체가 무의미해 숨긴다. */}
+      {total > 1 && (
+        <div
+          style={{
+            padding: "5px 12px",
+            borderRadius: 999,
+            fontSize: 12,
+            fontWeight: 800,
+            fontVariantNumeric: "tabular-nums",
+            background: `${accent}1a`,
+            border: `2px solid ${accent}`,
+            color: accent,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {safe + 1} / {total}
+        </div>
+      )}
       <button
         onClick={() => onIdx(Math.min(total - 1, safe + 1))}
         disabled={atEnd}

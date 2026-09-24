@@ -68,6 +68,74 @@ MARKER_RE = re.compile(
 )
 USACO_HEADER_RE = re.compile(r"^\s*//\s*🔒?\s*USACO_VERIFIED", re.M)
 
+# ── 결함⑥ (2026-09-24, 이 걸쇠를 켠 당일에 드러났다) ────────────────────────────
+# 처음엔 USACO_VERIFIED 를 **파일 단위**로 걸었다. 그랬더니 시뮬 자막 한 줄
+# (`subtitle={...}`)만 고쳐도 커밋이 막혔다 — quest 파일 하나 안에 「검증된 코드 배열」과
+# 「시뮬·화면 코드」가 **같이 살기 때문**이다. 이 저장소의 거의 모든 quest 가 그 모양이다.
+#
+# ⚠️ **CLAUDE.md 의 규칙은 원래 변수 단위다** — *"헤더에 USACO_VERIFIED 있는 파일의
+#    `SOLUTION_CODE`, `*_CPP`, `*_PY` 변수는 절대 자동 수정 금지"*. 파일 전체가 아니다.
+#    그래서 게이트를 **느슨하게가 아니라 규칙대로 정확하게** 맞춘다 —
+#    **바뀐 줄이 보호 변수 블록 안에 있을 때만** 건다.
+#
+# 보수적으로 짠다: 옛 파일·새 파일 **양쪽**에서 블록 범위를 구해 둘 다 본다(줄이 지워진
+# 경우를 놓치지 않으려고). 블록을 못 찾으면 **막는 쪽**으로 넘어진다(fail-closed 유지).
+# 못 보는 것: 보호 변수를 **다른 파일에서** 조립해 넣는 경우. 그건 사람이 봐야 한다.
+# ⚠️ **회귀 테스트가 내 첫 판을 잡았다.** 처음엔 `const NAME = [` 만 봤는데,
+#    어젯밤 사고 커밋 `fb5367dd` 가 건드린 건 `const M3_MAP_PY = (E) => [` 였다 —
+#    **화살표 함수가 배열을 돌려주는 모양.** 그래서 「보호 변수 안 건드렸다」로 통과할 뻔했다.
+#    회귀 케이스를 안 돌렸으면 **걸쇠에 구멍을 내면서 고친 줄 알았을 것이다.**
+PROTECTED_NAME_RE = re.compile(r"^(SOLUTION_CODE$|.*_(PY|CPP)$|.*_(PY|CPP)_.*)")
+BLOCK_START_RE = re.compile(
+    r"^\s*(?:export\s+)?const\s+([A-Za-z_][\w]*)\s*=\s*"
+    r"(?:\([^)]*\)\s*=>\s*|[A-Za-z_][\w]*\s*=>\s*)?[\[`]"
+)
+
+
+def protected_line_ranges(text):
+    """보호 변수(`SOLUTION_CODE`·`*_PY`·`*_CPP`) 선언이 차지하는 줄 범위들."""
+    if not text:
+        return None                      # 내용을 못 읽었다 → 호출부가 막는 쪽으로 처리
+    lines = text.split("\n")
+    ranges, i = [], 0
+    while i < len(lines):
+        m = BLOCK_START_RE.match(lines[i])
+        if m and PROTECTED_NAME_RE.match(m.group(1)):
+            start = i + 1
+            depth = lines[i].count("[") - lines[i].count("]")
+            tick = lines[i].count("`") % 2
+            j = i + 1
+            while j < len(lines) and (depth > 0 or tick):
+                depth += lines[j].count("[") - lines[j].count("]")
+                tick = (tick + lines[j].count("`")) % 2
+                j += 1
+            ranges.append((start, j + 1))
+            i = j
+        i += 1
+    return ranges
+
+
+HUNK_RE = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@")
+
+
+def touches_protected(path, diff_text, old_text, new_text):
+    """이 파일의 diff 가 보호 변수 블록을 실제로 건드리나."""
+    old_r, new_r = protected_line_ranges(old_text), protected_line_ranges(new_text)
+    if old_r is None or new_r is None:
+        return True                      # 못 읽으면 막는다
+    def hit(ranges, start, count):
+        end = start + max(count, 1)
+        return any(start < b and end > a for a, b in ranges)
+    for line in diff_text.split("\n"):
+        m = HUNK_RE.match(line)
+        if not m:
+            continue
+        os_, oc, ns, nc = (int(m.group(1)), int(m.group(2) or 1),
+                           int(m.group(3)), int(m.group(4) or 1))
+        if hit(old_r, os_, oc) or hit(new_r, ns, nc):
+            return True
+    return False
+
 
 def run(args):
     return subprocess.run(args, cwd=ROOT, capture_output=True, text=True)
@@ -106,7 +174,7 @@ def build_mode(argv):
         def content_fn(path):
             return git_show(f":{path}")
 
-        return files, content_fn, "staged(인덱스)"
+        return files, content_fn, "staged(인덱스)", ["git", "diff", "--cached", "-U0", "--"], "HEAD"
 
     positional = [a for a in argv if not a.startswith("--")]
     if positional:
@@ -116,7 +184,7 @@ def build_mode(argv):
         def content_fn(path, ref=ref):
             return git_show(f"{ref}:{path}")
 
-        return files, content_fn, f"커밋 {ref} (그 시점 기준 재현)"
+        return files, content_fn, f"커밋 {ref} (그 시점 기준 재현)", ["git", "diff", "-U0", f"{ref}^", ref, "--"], f"{ref}^"
 
     # 자문(advisory) 기본값 — 스테이지 + 워킹트리 둘 다. **pre-commit 훅은 이 분기를
     # 절대 쓰지 않는다**(--staged 를 명시적으로 넘긴다). 사람이 손으로 미리 훑어볼 때만.
@@ -131,7 +199,7 @@ def build_mode(argv):
         p = os.path.join(ROOT, path)
         return open(p, encoding="utf-8", errors="ignore").read() if os.path.exists(p) else None
 
-    return files, content_fn, "advisory: staged+워킹트리 (훅 아님, 수동 점검용)"
+    return files, content_fn, "advisory: staged+워킹트리 (훅 아님, 수동 점검용)", ["git", "diff", "HEAD", "-U0", "--"], "HEAD"
 
 
 def approved_quest_ids(workmd_text):
@@ -149,13 +217,14 @@ def main():
         print("   scripts/frozen-quests.json 을 고쳐라. 정말 예외 상황이면 --no-verify (비권장, 의식적 우회만).")
         return 1
 
-    files, content_fn, mode_desc = build_mode(argv)
+    files, content_fn, mode_desc, diff_cmd, base_ref = build_mode(argv)
     if not files:
         print(f"변경된 파일 없음 ({mode_desc})")
         return 0
 
     hits_frozen = {}   # quest_id -> [file, ...]
     hits_verified = []
+    skipped_display_only = []   # USACO 파일이지만 보호 변수는 안 건드린 것
     for f in sorted(set(files)):
         m = re.match(r"quest-problems/([^/]+)/", f)
         if m and m.group(1) in frozen:
@@ -163,8 +232,21 @@ def main():
         if f.endswith((".jsx", ".tsx", ".ts")):
             content = content_fn(f)
             if content and USACO_HEADER_RE.search(content[:600]):
-                hits_verified.append(f)
+                # ⚠️ 결함⑥ — 파일이 아니라 **보호 변수 블록을 건드렸나**로 판정한다.
+                #    (CLAUDE.md 규칙 자체가 변수 단위다. 위 protected_line_ranges 주석 참고.)
+                diff_text = run(diff_cmd + [f]).stdout or ""
+                old_text = git_show(f"{base_ref}:{f}")
+                if touches_protected(f, diff_text, old_text, content):
+                    hits_verified.append(f)
+                else:
+                    skipped_display_only.append(f)
 
+    if skipped_display_only:
+        print(f"ℹ️  USACO_VERIFIED 파일 {len(skipped_display_only)}개 — **보호 변수는 안 건드렸다**(표시 부분만).")
+        for f in skipped_display_only:
+            print(f"     {f}")
+        print("   규칙은 파일이 아니라 `SOLUTION_CODE`·`*_PY`·`*_CPP` **변수** 단위다 (CLAUDE.md).")
+        print("   ⚠️ 그래도 diff 는 눈으로 읽어라 — 이 판정은 줄 범위로만 본다.\n")
     if not hits_frozen and not hits_verified:
         print(f"✅ 변경 {len(files)}개 파일 ({mode_desc}) — 동결 quest·USACO_VERIFIED 해당 없음")
         return 0

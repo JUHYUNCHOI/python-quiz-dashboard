@@ -257,7 +257,7 @@ export function RectanglesSim({ E }) {
       maxHeightCss="calc(100dvh - 400px)">
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Split reds into contiguous groups", "빨강을 연속 구간으로 나누기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.kind === "min" ? "aha" : "go"}>{say}</Say>
 
       {s.kind === "reds" && (
@@ -324,7 +324,7 @@ export function WhyContiguousSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why one blue = a run of neighbours", "왜 파랑 하나는 '붙어 있는 덩어리' 일까")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.kind === "so" ? "aha" : s.kind === "rule" ? "stuck" : "go"}>{say}</Say>
 
       {s.kind === "want" && <RectStage groups={null} />}
@@ -371,7 +371,7 @@ export function WhyCostSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "What one blue costs", "파랑 하나의 값은 얼마일까")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.kind === "waste" ? "stuck" : s.kind === "area" ? "aha" : "go"}>{say}</Say>
 
       <RectStage groups={G} showWaste={s.kind === "waste"} />
@@ -602,7 +602,7 @@ export function DPTableFillSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Filling the table by hand", "표를 한 칸씩 채워보기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.k === "answer" ? "aha" : s.k === "try" ? "go" : "go"}>{say}</Say>
 
       {/* 후보 구간을 **그림으로도** 보여준다 (2026-09-07 선생님: "이거 이미지랑 같이 보여주면 어떨까?").
@@ -803,7 +803,7 @@ export function WhyTableSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 100 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why is it slow — really?", "왜 느린 걸까요? 진짜 이유")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.k === "again" ? "stuck" : s.k === "write" ? "aha" : "go"}>{say}</Say>
 
       <div style={{ maxWidth: 420, margin: "0 auto", display: "grid", gap: 8 }}>

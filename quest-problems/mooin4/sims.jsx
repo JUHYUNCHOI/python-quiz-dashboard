@@ -87,7 +87,7 @@ export function TypeTraceSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Type MOOMO, one key at a time", "MOOMO 를 한 글자씩 쳐봐요")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={r.k === "O" ? "aha" : "go"}>{say}</Say>
 
@@ -188,7 +188,7 @@ export function BackwardSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Read S backwards to recover the keys", "S 를 거꾸로 읽어 친 키 찾기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "check" ? "aha" : (s.k === "why" || s.k === "why2") ? "stuck" : "go"}>{say}</Say>
 

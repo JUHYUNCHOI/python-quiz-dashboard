@@ -120,7 +120,7 @@ export function InnovationSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "What do you actually see?", "실제로 뭐가 보이나?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.kind === "overlap" ? "go" : "aha"}>{say}</Say>
 
       {/* 카드 3장 — 마지막(④)만 c·d 보임 */}

@@ -132,7 +132,7 @@ export function PeelSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Peel the rows off, one if at a time", "if 하나씩 만들며 줄을 떼어내기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
         {/* 2026-09-21 ux 실측(--sim): 규칙 상자가 표 **아래**(약 560~580px)에 있어서
@@ -201,7 +201,7 @@ export function StuckSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "All inputs different — and still a LIE", "입력이 다 달라도 LIE 일 수 있어요")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "center", marginBottom: 10 }}>

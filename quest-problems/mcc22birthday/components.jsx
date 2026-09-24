@@ -319,7 +319,7 @@ export function Mcc22BirthdayBackwardWalkSim({ E }) {
     <SimShell idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, `Trace cookie #${WALK_FRIEND} backward`, `${WALK_FRIEND}번 쿠키를 거꾸로 따라가기`)}
-        subtitle={`${ts.safe + 1} / ${steps.length}`} />
+ />
 
       {/* the scroll, with the letter being undone marked */}
       <div style={{ display: "flex", justifyContent: "center", gap: 5, marginBottom: 10, flexWrap: "wrap" }}>

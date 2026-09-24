@@ -118,7 +118,7 @@ export function NormalizeSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Turn deals into pack prices", "묶음마다 제일 싼 값을 구해요")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Carry E={E}>
         {t(E, <>A new, bigger example — <b>4 deals</b> now: 10, 15, 20, 45.<br />
                  (Sample 1 back on page 2 had only two: [10, 15].)</>,
@@ -272,7 +272,7 @@ export function GreedySim({ E, x = 5 }) {
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, `Buy at least ${X} buckets, as cheap as possible`, `${X}통 이상을 제일 싸게 사요`)}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Carry E={E}>
         {/* ⚠️ 2026-09-18 선생님: *"아까전에는 1통씩 계산하더니 왜 갑자기
             큰 묶음이 손해가 아니니 큰것부터 봐요라고 그러는거지?"*

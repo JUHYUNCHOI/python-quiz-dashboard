@@ -160,7 +160,7 @@ export function BruteLimitSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Trying every board — in time?", "보드를 전부 해보기 — 시간 안에 될까요?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <div ref={sayRef}>
         <Say tone={s.k === "limit" ? "stuck" : "aha"}>{say}</Say>
@@ -239,7 +239,7 @@ export function EveryBoardSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 90 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Every board, one at a time", "보드를 하나씩, 빠짐없이")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
         <div ref={sayRef}><Say tone={s.k === "why" ? "stuck" : s.k === "all" ? "aha" : "go"}>{say}</Say></div>
 
@@ -445,7 +445,7 @@ export function WholeRunSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 90 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Start to finish, in code order", "처음부터 끝까지 — 코드 도는 순서로")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
         <div ref={sayRef}><Say tone={s.k === "done" ? "aha" : "go"}>{say}</Say></div>
 
@@ -656,7 +656,7 @@ export function IsAtTableSim({ E, lang = "py" }) {
     <div style={{ padding: 16, paddingBottom: 90 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Count once, into a table", "한 번만 세서 표에 넣어두기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
         <div ref={sayRef}><Say tone={s.k === "ask" ? "stuck" : s.k === "order" ? "aha" : "go"}>{say}</Say></div>
 
@@ -827,7 +827,7 @@ export function FasterIdeaSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Can we check fewer moves?", "무브를 더 적게 볼 수는 없을까요?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "waste" ? "stuck" : s.k === "gain" ? "aha" : "go"}>{say}</Say>
 

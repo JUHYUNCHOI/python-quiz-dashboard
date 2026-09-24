@@ -66,7 +66,7 @@ export function ChipCountSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "How many A chips do I end with?", "A 칩은 몇 개가 될까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "How many A chips do I end with?", "A 칩은 몇 개가 될까요?")} />
       <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "total" ? "aha" : "go"}>{say}</Say>
 
@@ -142,7 +142,7 @@ export function AllBlueWorstSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "3 B in → 2 A out: swapping LOSES (cA < cB)", "B 3개 내면 → A 2개 — 바꾸면 손해 (cA < cB)")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "3 B in → 2 A out: swapping LOSES (cA < cB)", "B 3개 내면 → A 2개 — 바꾸면 손해 (cA < cB)")} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
         {t(E, "extra chips = 8 · swap: 3 B → 2 A", "추가 칩 = 8개 · 환전: B 3 → A 2")}
       </div>
@@ -209,7 +209,7 @@ export function AllRedWorstSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "2 B in → 3 A out: swapping GAINS (cA ≥ cB)", "B 2개 내면 → A 3개 — 바꾸면 이득 (cA ≥ cB)")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "2 B in → 3 A out: swapping GAINS (cA ≥ cB)", "B 2개 내면 → A 3개 — 바꾸면 이득 (cA ≥ cB)")} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
         {t(E, "this example · swap: 2 B → 3 A (cA ≥ cB)", "이 예시 · 환전: B 2 → A 3 (cA ≥ cB)")}
       </div>
@@ -278,7 +278,7 @@ export function AdversarySim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Try every split — find the worst", "모든 분배 다 따지기 — 최악 찾기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Try every split — find the worst", "모든 분배 다 따지기 — 최악 찾기")} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
         {t(E, "start A=0, B=0 · 3 B → 2 A · goal 5 · extra x=8", "시작 A=0, B=0 · B 3 → A 2 · 목표 5 · 추가 x=8")}
       </div>
@@ -374,7 +374,7 @@ export function FormulaDeriveSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Find the worst b from the table", "표에서 최악 b 찾기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Find the worst b from the table", "표에서 최악 b 찾기")} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
         {t(E, "start A 0 · B 0 · swap: 3 B → 2 A · goal 5 · extra x=8", "시작 A 0 · B 0 · 환전 B 3 → A 2 · 목표 5 · 추가 x=8")}
         <br/>{t(E, "b = B chips given · value = my final A (smaller = worse)", "b = B에 준 칩 · 값 = 그때 내 최종 A (작을수록 최악)")}
@@ -498,7 +498,7 @@ export function FormulaBuildSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Build the max-leftover formula", "자투리 최대 b 공식 만들기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Build the max-leftover formula", "자투리 최대 b 공식 만들기")} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
         {t(E, "leftover = total B mod cB(3) · max = cB−1 = 2", "자투리 = 총 B를 cB(3)로 나눈 나머지 · 최대 = cB−1 = 2")}
       </div>
@@ -609,7 +609,7 @@ export function CandidateSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Brute → a few smart spots", "브루트 → 몇 군데만")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Brute → a few smart spots", "브루트 → 몇 군데만")} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
         {t(E, "x=8 · each cell = my final A for that split · the worst is the smallest", "x=8 · 칸 = 그 분배일 때 내 최종 A · 최악의 경우엔 최소를 노림")}
       </div>
@@ -686,7 +686,7 @@ export function SearchSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Binary-search the smallest x", "가장 작은 x 를 이분탐색")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Binary-search the smallest x", "가장 작은 x 를 이분탐색")} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace", wordBreak: "keep-all" }}>
         {t(E, "sample test 2: 0 0 2 3 5 · goal 5 · ✓ = worst ≥ 5", "샘플 테스트 2: 0 0 2 3 5 · 목표 5 · ✓ = worst ≥ 5")}
       </div>
@@ -772,7 +772,7 @@ export function GameBoardSim({ E }) {
         <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", marginTop: 2 }}>USACO Dec 2025 Bronze #1</div>
       </div>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "One round of the game", "이 게임 한 판")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "One round of the game", "이 게임 한 판")} />
       <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "goal" || s.kind === "block" ? "stuck" : s.kind === "ask" ? "aha" : "go"}>{say}</Say>
 
@@ -879,7 +879,7 @@ export function CheckSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Quick check — did I get it?", "잠깐 확인 — 제대로 이해했나요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Quick check — did I get it?", "잠깐 확인 — 제대로 이해했나요?")} />
       <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "reveal" ? "aha" : "go"}>
         {s.kind === "ask"
@@ -1075,7 +1075,7 @@ export function WorstCaseWhySim({ E }) {
     <div style={{ padding: 16, paddingBottom: 120 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why do we count the worst case?", "왜 제일 나쁜 경우를 셀까요?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "rule" ? "aha" : s.k === "now" ? "go" : (cur && cur.v >= GOAL ? "go" : "stuck")}>{say}</Say>
 
@@ -1131,7 +1131,7 @@ export function StrategySlide({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "How will we solve it?", "어떻게 풀까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "How will we solve it?", "어떻게 풀까요?")} />
       <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "shape" ? "aha" : "go"}>
         {s.kind === "two"
@@ -1292,7 +1292,7 @@ export function LastOneWhySlide({ E }) {
     <div style={{ padding: 16, paddingBottom: 120 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "How many chips guarantee A 5?", "칩 몇 개면 A 5개가 확실할까요?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "nextB" || s.k === "sym2" || s.k === "math" ? "aha" : s.k === "fail" || s.k === "total" ? "stuck" : "go"}>{say}</Say>
 
@@ -1436,7 +1436,7 @@ export function CountUpSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 120 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Counting works — but how far?", "세는 방법, 어디까지 될까요?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "recap" ? "go" : s.k === "need" ? "aha" : "stuck"}>{say}</Say>
 
@@ -1562,7 +1562,7 @@ export function WhyNotGoalSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 120 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why not just count the goal itself?", "목표를 그대로 계산하면 안 될까요?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "ask" ? "stuck" : s.k === "why" || s.k === "table" ? "aha" : "go"}>{say}</Say>
 

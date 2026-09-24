@@ -99,7 +99,7 @@ export function CollatzStepSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Run one pass (k = 1)", "한 바퀴 돌려보기 (k = 1)")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.kind === "sum" ? "aha" : s.kind === "elem" ? (isEven ? "even" : "odd") : "go"}>{say}</Say>
 
       <Row>

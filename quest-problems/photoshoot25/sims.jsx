@@ -91,7 +91,7 @@ export function PhotoWindowSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, `${N}×${N} field, ${K}×${K} photo`, `${N}×${N} 들판, ${K}×${K} 사진`)}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
 
       {/* 말풍선 무대 */}
       <div style={{ position: "relative", width: ROW_W, height: 92, margin: "0 auto" }}>
@@ -332,7 +332,7 @@ export function PhotoUpdateSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "How many 3×3 photos contain this cow?", "이 소가 담긴 3×3 사진은 몇 장?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
 
       {!isCount ? (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start",
@@ -555,7 +555,7 @@ export function PhotoMonotoneSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why compare only the photos that changed?", "왜 '바뀐 사진'만 견줘도 될까?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <div style={{ maxWidth: 430, margin: "0 auto 16px", padding: "10px 14px", borderRadius: 12,
         background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5,
         fontWeight: 700, textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.7 }}>{say}</div>
@@ -740,7 +740,7 @@ export function PhotoTraceSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Store & read the variables", "변수에 저장하고 꺼내 쓰기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
 
       {/* 설명 */}
       <div style={{ maxWidth: 540, margin: "4px auto 16px", padding: "12px 16px", borderRadius: 11,

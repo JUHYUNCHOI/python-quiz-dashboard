@@ -190,7 +190,6 @@ export function TripletEnumSimulator({ E }) {
         total={trace.length}
         isEn={E}
         title={t(E, `s = "${str}"`, `s = "${str}"`)}
-        subtitle={`(${safe + 1} / ${trace.length})`}
       />
 
       {/* String visualization with i/j/k labels above */}
@@ -635,7 +634,6 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         total={trace.length}
         isEn={E}
         title={t(E, `s = "${str}"`, `s = "${str}"`)}
-        subtitle={`(${safe + 1} / ${trace.length})`}
       />
 
       {/* ── 말풍선 자리 — 높이 고정 ──────────────────────────────────────
@@ -1132,7 +1130,6 @@ export function Mooin3FastSim({ E }) {
         total={trace.length}
         isEn={E}
         title={t(E, `s = "${str}"  —  fast: check by LETTER`, `s = "${str}"  —  빠른 풀이: 글자로 확인`)}
-        subtitle={`(${ts.safe + 1} / ${trace.length})`}
       />
 
       {/* 스텝마다 pop 애니 (선생님 2026-08-01: "말풍선은 생동감이 있어야지"). */}
@@ -2261,7 +2258,7 @@ export function Mooin3TableSim({ E, lang = "py" }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={TA} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, `Build '${CH}' tables — once (precompute)`, `'${CH}' 표 만들기 — 딱 한 번 (전처리)`)}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
 
       {/* 말풍선 무대 — 지금 보고 있는 칸 위에 뜬다 */}
       <div style={{ position: "relative", width: ROW_W, height: 104, margin: "0 auto" }}>
@@ -2549,7 +2546,7 @@ export function Mooin3MapSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={MA} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, `Another way (map): letter → its spots`, `다른 방법 (map) — 글자 → 위치 목록`)}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
 
       {/* 말풍선 무대 */}
       <div style={{ position: "relative", width: ROW_W, height: 104, margin: "0 auto" }}>

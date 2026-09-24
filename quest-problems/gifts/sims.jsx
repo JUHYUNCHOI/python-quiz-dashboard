@@ -98,7 +98,7 @@ export function GiftQueueSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, `${n} guests, ${m} gifts`, `손님 ${n} 명, 선물 ${m} 개`)}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
 
       {/* 말풍선 — 스텝마다 줄 수가 달라 흔들리므로 가장 긴 경우에 맞춰 자리를 잡는다. */}
       <div style={{

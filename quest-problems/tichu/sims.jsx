@@ -80,7 +80,7 @@ export function TichuSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Fill the gaps with wildcards", "빈칸을 와일드로 메꾸기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.kind === "extend" || s.kind === "done" ? "aha" : s.kind === "window" ? "go" : "go"}>{say}</Say>
 
       {/* 와일드 토큰 표시 */}
@@ -219,7 +219,7 @@ export function GapFormulaSim({ E }) {
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why that line counts the gaps", "그 식이 왜 빈칸 개수일까요")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.k === "algebra" ? "aha" : s.k === "gap" && gap > K ? "stuck" : "go"}>{say}</Say>
 
       {s.k !== "algebra" && s.k !== "prefix" && (

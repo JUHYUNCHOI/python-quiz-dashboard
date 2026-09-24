@@ -177,7 +177,7 @@ export function EraseRuleSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "What can I wipe in one move?", "한 번에 뭘 지울 수 있지?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "poof1" ? "stuck" : (s.kind === "poofC" || s.kind === "poofOW") ? "aha" : "go"}>{say}</Say>
 
@@ -290,7 +290,7 @@ export function InsightSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why can 2 moves always clear it?", "왜 항상 두 번이면 다 지울 수 있을까?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       {/* '셋뿐' 을 쓰는 화면에서는 그 사실을 위에 계속 띄워둔다 */}
       {["pair", "overlap", "case2", "case3", "whypair"].includes(s.kind) && (
@@ -655,7 +655,7 @@ export function OddImpossibleSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Is it ever impossible?", "아예 못 비우는 S 는?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "concl" ? "stuck" : "go"}>{say}</Say>
 
@@ -731,7 +731,7 @@ export function CowSplitsTraceSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Watch the ans table fill in", "ans 표가 채워지는 걸 봐요")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "done" ? "aha" : s.kind === "check" ? "stuck" : "go"}>{say}</Say>
 

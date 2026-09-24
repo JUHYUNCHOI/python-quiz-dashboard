@@ -135,7 +135,7 @@ export function MobileSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={s.k === "imp" ? t(E, "When it's impossible → -1", "불가능하면 → -1")
                              : t(E, "Eat the biggest beatable enemy", "먹을 수 있는 가장 큰 적부터")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={tone}>{say}</Say>
 
       <HeroPower E={E} cur={s.cur} goal={goal} from={s.from ?? null} ate={s.ate ?? null} />
@@ -241,7 +241,7 @@ export function HeapTraceSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, s.title.en, s.title.ko)}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={tone}>{say}</Say>
 
       <HeroPower E={E} cur={s.cur} goal={goal} from={s.prevCur ?? null} ate={s.ate ?? null} />

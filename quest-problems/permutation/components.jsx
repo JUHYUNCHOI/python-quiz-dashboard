@@ -142,8 +142,8 @@ export function DismantleSimulator({ E }) {
         total={trace.length}
         isEn={E}
         title={t(E, "Hand-simulate Nhoj on p = [3, 1, 2, 4]", "Nhoj 가 p = [3, 1, 2, 4] 를 망가뜨리는 과정")}
-        subtitle={t(E, `Press ▶ to step through. (${safe + 1} / ${trace.length})`,
-                       `▶ 를 눌러 한 단계씩 따라가요. (${safe + 1} / ${trace.length})`)}
+        subtitle={t(E, `Press ▶ to step through.`,
+                       `▶ 를 눌러 한 단계씩 따라가요.`)}
       />
 
       {/* Cells row */}

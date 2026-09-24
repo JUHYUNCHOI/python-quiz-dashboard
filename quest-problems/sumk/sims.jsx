@@ -230,7 +230,7 @@ export function SumkSim({ E }) {
         maxHeightCss="calc(100dvh - 400px)">
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Add (sum)² over all 7 subsets", "7개 부분집합의 (합)² 다 더하기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.kind === "done" ? "aha" : s.kind === "intro" ? "go" : "go"}>{say}</Say>
 
       {/* 현재 부분집합의 원소 in/out 타일 */}
@@ -574,7 +574,7 @@ export function SumkBuildSim({ E }) {
       maxHeightCss="calc(100dvh - 400px)">
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Grow the answer without listing", "나열하지 않고 답 키우기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.k === "double" ? "stuck" : ["same", "rows", "fast"].includes(s.k) ? "aha" : "go"}>{say}</Say>
 
       <LedgerBox />
@@ -752,7 +752,7 @@ export function SumkAreaSim({ E }) {
       maxHeightCss="calc(100dvh - 400px)">
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why three rows are enough", "왜 세 줄이면 되나")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <Say tone={s.k === "rows" || s.k === "fast" ? "aha" : "go"}>{say}</Say>
 
       {/* 장부 — `rows` 부터 세 줄. 그전엔 우리가 원하는 한 줄만. */}

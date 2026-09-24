@@ -110,7 +110,7 @@ export function StrangeFnDigitSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} icon="🔮" idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Applying f to x = 210", "x = 210 을 f 로 줄여보기")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+ />
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
 

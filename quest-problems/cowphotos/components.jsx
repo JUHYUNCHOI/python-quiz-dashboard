@@ -76,8 +76,8 @@ export function HandDrawSimulator({ E }) {
         isEn={E}
         title={t(E, "Hand-draw: heights = [1, 1, 2, 3]. Try arrangements one by one.",
                     "손으로 그려 봐요. 키는 [1, 1, 2, 3] 이에요.\n늘어놓는 방법을 하나씩 해봐요.")}
-        subtitle={t(E, `(${safe + 1} / ${trace.length}) — ▶ to step`,
-                       `(${safe + 1} / ${trace.length}) — ▶ 눌러서 진행`)}
+        subtitle={t(E, `▶ to step`,
+                       `▶ 눌러서 진행`)}
       />
 
       {/* Available cow heights */}
@@ -202,8 +202,8 @@ export function TrickySimulator({ E }) {
         isEn={E}
         icon="⚠️"
         title={t(E, "Tricky case: heights = [3, 3, 2, 1]", "함정 케이스: 키 = [3, 3, 2, 1]")}
-        subtitle={t(E, `(${safe + 1} / ${trace.length}) — ▶ to step`,
-                       `(${safe + 1} / ${trace.length}) — ▶ 눌러서 진행`)}
+        subtitle={t(E, `▶ to step`,
+                       `▶ 눌러서 진행`)}
       />
 
       <div style={{ marginBottom: 14 }}>
