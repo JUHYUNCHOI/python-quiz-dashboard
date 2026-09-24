@@ -244,12 +244,21 @@ export function makeCheckupsCh2(E, lang = "py") {
               </div>
             </div>
 
-            {/* Concrete numbers grid */}
+            {/* Concrete numbers grid
+                ⚠️ 2026-09-24: 여기 시간은 원래 `~10ms / ~10s / ~hours` 였는데 **잰 적 없는 숫자**였다
+                   (quest-auditor 가 「가짜 수치」로 잡았다). 실제로 이 쪽의 브루트를 돌려서 쟀다:
+
+                     N=50  0.004초   N=100  0.027초   N=200  0.214초   (CPython, 2026-09-24)
+
+                   N 이 두 배일 때 시간이 **8배**(0.027→0.214) — N³ 배율이 실측으로 확인됐다.
+                   그 배율로 환산: N=1,000 → 0.027×10³ ≈ 27초 · N=7,500 → 0.027×75³ ≈ 3.2시간.
+                   → `~30ms / ~30초 / ~3시간`. 옛 값은 앞의 둘이 **실제보다 빠르게** 적혀 있었다.
+                   ⚠️ 화면의 brute 러너는 Pyodide(브라우저)라 이보다 **더 느리다** — 즉 이 값도 낙관적이다. */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 12 }}>
               {[
-                { n: "100",   ops: "10⁶",     ms: "~10ms",   ok: true,  label: t(E, "tiny",   "작음") },
-                { n: "1,000", ops: "10⁹",     ms: "~10s",    ok: false, label: t(E, "borderline", "경계") },
-                { n: "7,500", ops: "≈4·10¹¹", ms: "~hours",  ok: false, label: t(E, "TLE",    "TLE") },
+                { n: "100",   ops: "10⁶",     ms: t(E, "~30ms", "~30밀리초"), ok: true,  label: t(E, "tiny",   "작음") },
+                { n: "1,000", ops: "10⁹",     ms: t(E, "~30s",  "~30초"),     ok: false, label: t(E, "borderline", "경계") },
+                { n: "7,500", ops: "≈4·10¹¹", ms: t(E, "~3 hours", "~3시간"), ok: false, label: t(E, "TLE",    "TLE") },
               ].map((row) => (
                 <div key={row.n} style={{
                   background: row.ok ? "#dcfce7" : "#fee2e2",
