@@ -27,6 +27,38 @@
 import { useRef, useState } from "react";
 import { C, t } from "./theme";
 
+/* 「⚡ 코드」 탭 안에서 계획 쪽과 실제 코드 쪽을 구분해 라벨을 붙인다. (2026-09-24)
+   왜 — 지금까진 그 탭 안 쪽이 몇 개든 "⚡ 코드 1/2" 처럼 숫자만 보여서, 계획만 있는
+   첫 쪽을 보고 "코드가 없다" 는 오해가 났다(선생님, mcc20citytour). 32개 quest 가 같은
+   모양(project-lead 실측)이라 공유 컴포넌트 한 곳에서 고친다.
+   판별 방법 — step.type 이 "progressive"/"code" 면 코드고, "reveal" 이면 그 안의
+   content 트리를 걸어(elementHasCode) CodeWalk·자체 ProgressiveCode·CodeBlock
+   컴포넌트가 박혀 있는지 본다(mcc21marbles 처럼 reveal 안에 <CodeWalk> 를 직접 넣는
+   quest 가 있어 type 만으론 못 잡는다).
+   ⚠️ 안전장치 둘 — ①탭 이름에 "코드/code" 가 들어있을 때만(문제 탭까지 새지 않게)
+   ②그 탭 안에 코드 쪽과 계획 쪽이 **둘 다** 있을 때만. 하나뿐이거나 질문 쪽이라
+   판별이 안 되면 **원래 탭 이름을 그대로 둔다** — 억지로 이름 붙이지 않는다. */
+const CODE_COMPONENT_RE = /ProgressiveCode|CodeWalk|CodeBlock|CodeStepper/i;
+const elementHasCode = (node, depth = 0) => {
+  if (!node || depth > 8) return false;
+  if (Array.isArray(node)) return node.some((n) => elementHasCode(n, depth + 1));
+  if (typeof node !== "object") return false;
+  const ty = node.type;
+  const name = typeof ty === "function" ? (ty.displayName || ty.name || "") : "";
+  if (CODE_COMPONENT_RE.test(name)) return true;
+  const children = node.props && node.props.children;
+  if (children !== undefined) return elementHasCode(children, depth + 1);
+  return false;
+};
+const stepHasCode = (s) => {
+  if (!s) return false;
+  if (s.type === "progressive" || s.type === "code") return true;
+  if (s.type === "reveal") return elementHasCode(s.content);
+  return false;
+};
+const stepIsPlanLike = (s) => !!s && s.type === "reveal" && !elementHasCode(s.content);
+const isCodeTabName = (name) => /code|코드/i.test(name || "");
+
 const defaultLabelFor = (s, i, E) => {
   if (s?.label) return String(s.label);
   const narrText = typeof s?.narr === "string" ? s.narr : "";
@@ -57,6 +89,20 @@ export function QuestProgressBar({
   const barRef = useRef(null);
   const _labelFor = labelFor || ((s, i) => defaultLabelFor(s, i, E));
   const steps = states[tab] || [];
+  // 그 탭 라벨이 "코드/code" 를 담고 있고, 그 탭 안에 계획 쪽·코드 쪽이 둘 다 있을 때만
+  // 현재 쪽에 맞는 라벨("🧭 계획"/"💻 코드")을 돌려준다. 아니면 null — 호출부가 원래
+  // 탭 이름으로 그대로 떨어진다.
+  const stepSplitLabel = (tabIdx) => {
+    if (!isCodeTabName(tabs[tabIdx])) return null;
+    const tSteps = states[tabIdx] || [];
+    const flags = tSteps.map((s) => (stepHasCode(s) ? true : stepIsPlanLike(s) ? false : null));
+    const hasCodeStep = flags.some((f) => f === true);
+    const hasPlanStep = flags.some((f) => f === false);
+    if (!hasCodeStep || !hasPlanStep) return null;
+    const curFlag = tabIdx === tab ? flags[cur] : null;
+    if (curFlag === null) return null;
+    return curFlag ? t(E, "💻 Code", "💻 코드") : t(E, "🧭 Plan", "🧭 계획");
+  };
   // Each tab gets its own hue so the bar (and locator labels) make the
   // 문제 / 코드 regions instantly distinguishable. Tab 0 = quest accent.
   const TAB_HUES = [accent, "#0d9488", "#d97706", "#0891b2"];
@@ -289,20 +335,20 @@ export function QuestProgressBar({
               display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
             }}>
               <button type="button" onClick={() => goTab(0)} style={labelBtn(tab === 0, tabHue(0))}
-                      title={tabs[0]} aria-label={tabs[0]}>
-                {tabs[0]}{tab === 0 ? count : null}
+                      title={(tab === 0 && stepSplitLabel(0)) || tabs[0]} aria-label={(tab === 0 && stepSplitLabel(0)) || tabs[0]}>
+                {(tab === 0 && stepSplitLabel(0)) || tabs[0]}{tab === 0 ? count : null}
               </button>
               {/* middle-tab fallback (3+ tabs): name + count in the center */}
               {tabs.length > 2 && tab !== 0 && tab !== last && (
                 <button type="button" onClick={() => goTab(tab)} style={labelBtn(true, tabHue(tab))}
-                        title={tabs[tab]} aria-label={tabs[tab]}>
-                  {tabs[tab]}{count}
+                        title={stepSplitLabel(tab) || tabs[tab]} aria-label={stepSplitLabel(tab) || tabs[tab]}>
+                  {stepSplitLabel(tab) || tabs[tab]}{count}
                 </button>
               )}
               {tabs.length > 1 && (
                 <button type="button" onClick={() => goTab(last)} style={labelBtn(tab === last, tabHue(last))}
-                        title={tabs[last]} aria-label={tabs[last]}>
-                  {tabs[last]}{tab === last ? count : null}
+                        title={(tab === last && stepSplitLabel(last)) || tabs[last]} aria-label={(tab === last && stepSplitLabel(last)) || tabs[last]}>
+                  {(tab === last && stepSplitLabel(last)) || tabs[last]}{tab === last ? count : null}
                 </button>
               )}
             </div>
