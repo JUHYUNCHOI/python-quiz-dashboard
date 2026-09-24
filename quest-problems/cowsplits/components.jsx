@@ -85,7 +85,11 @@ export function getCowSplitsSections(E) {
         "            cout << 1 << \"\\n\";",
         "            for (int i = 0; i < n3; i++) {",
         "                cout << 1;",
-        "                cout << (i == n3 - 1 ? '\\n' : ' ');",
+        "                char sep = ' ';",
+        "                if (i == n3 - 1) {",
+        "                    sep = '\\n';",
+        "                }",
+        "                cout << sep;",
         "            }",
         "            continue;",
         "        }",
@@ -141,10 +145,18 @@ export function getCowSplitsSections(E) {
         "            }",
         "        }",
         "        int M = 1;",
-        "        for (int x : ans) if (x > M) M = x;",
+        "        for (int x : ans) {",
+        "            if (x > M) {",
+        "                M = x;",
+        "            }",
+        "        }",
         "        cout << M << \"\\n\";",
         "        for (int i = 0; i < n3; i++) {",
-        "            cout << ans[i] << (i == n3 - 1 ? '\\n' : ' ');",
+        "            char sep = ' ';",
+        "            if (i == n3 - 1) {",
+        "                sep = '\\n';",
+        "            }",
+        "            cout << ans[i] << sep;",
         "        }",
         "    }",
         "    return 0;",
@@ -186,17 +198,17 @@ export function getCowSplitsWalk(E, lang = "py") {
   const s = getCowSplitsSections(E);
   if (lang === "cpp") {
     const code = [...s[0].cpp, ...s[1].cpp, ...s[2].cpp];
-    // s0=18 (0-17), s1=9 (18-26), s2=23 (27-49)
+    // s0=18 (0-17), s1=13 (18-30), s2=31 (31-61)
     return { code, vars: _CS_VARS, beats: [
       { hi: [0, 4],   bubble: t(E, "What do we need to output per test? The fewest moves M, and which move erases each letter.\nSo start with the usual C++ setup.", "무엇을 출력해야 하나요?\n테스트마다 최소 지우기 횟수 M 과, 글자마다 어떤 번호로 지우는지예요.\n그러니 먼저 C++ 를 평범하게 시작해요.") },
       { hi: [5, 8],   bubble: t(E, "Read T tests and mode k (k we can ignore). Loop T times.", "테스트 T개와 모드 k 를 읽어요 (k 는 신경 안 써도 돼요). T번 반복해요.") },
       { hi: [9, 13],  bubble: t(E, "Each test: read N and the length-3N string S. n3 = 3·N.", "테스트마다 N 과 길이 3N 인 문자열 S 를 읽어요. n3 = 3·N 이에요 (전체 길이).") },
       { hi: [14, 17], bubble: t(E, "If N is odd, 3N is odd too — but each move erases an even number, and even + even is still even, so we can never empty it → −1.", "N이 홀수면 3N도 홀수예요.\n한 번에 짝수 개씩만 지우는데 짝수를 아무리 더해도 홀수가 안 돼요.\n그래서 끝까지 못 비워요 → −1.") },
       { hi: [18, 19], bubble: t(E, "First, can 1 move do it? Only if S is already a square — front half == back half.", "먼저 1번으로 될까요? S 가 통째로 제곱(앞 절반 == 뒤 절반)일 때만 돼요.") },
-      { hi: [20, 26], bubble: t(E, "If so → M = 1, mark every letter as move 1, next test.", "그러면 M = 1 이에요. 모든 글자를 1번으로 찍고 다음 테스트로 넘어가요.") },
-      { hi: [27, 30], bubble: t(E, "Otherwise it's 2. Pair each front block a with its back partner b (the block pairs from the sim). Start every letter as move 1 (ans).", "아니면 2번이에요.\n앞 블록 a 와 뒤 짝꿍 블록 b 를 짝지어요.\n앞에서 본 그 블록쌍이에요.\n일단 모든 글자를 1번으로 시작해요 (ans).") },
-      { hi: [31, 40], bubble: t(E, "Paired blocks always share 2 letters (e.g. COW·OWC → OW). Keep the shared 2 as move 1 (OW·OW); move the leftover 1 letter each side to move 2 (C·C). The a[:2]/b[1:] check just finds which side overlaps.", "짝지은 두 블록은 늘 2글자가 겹쳐요. COW·OWC 면 OW 예요.\n겹치는 2글자는 1번에 그대로 둬요 (OW·OW).\n남는 1글자씩만 2번으로 옮겨요 (C·C).\na[:2]/b[1:] 는 어느 쪽이 겹치는지 확인하는 거예요.") },
-      { hi: [41, 49], bubble: t(E, "The biggest move number is M (1 or 2). Print M, then each letter's move → e.g. 2 then 2 1 1 1 1 2.", "지우기 번호 중 가장 큰 게 M 이에요 (1 또는 2).\nM 을 출력하고 글자별 번호를 출력해요.\n예를 들면 2, 그리고 2 1 1 1 1 2.") },
+      { hi: [20, 30], bubble: t(E, "If so → M = 1, mark every letter as move 1, next test.", "그러면 M = 1 이에요. 모든 글자를 1번으로 찍고 다음 테스트로 넘어가요.") },
+      { hi: [31, 34], bubble: t(E, "Otherwise it's 2. Pair each front block a with its back partner b (the block pairs from the sim). Start every letter as move 1 (ans).", "아니면 2번이에요.\n앞 블록 a 와 뒤 짝꿍 블록 b 를 짝지어요.\n앞에서 본 그 블록쌍이에요.\n일단 모든 글자를 1번으로 시작해요 (ans).") },
+      { hi: [35, 44], bubble: t(E, "Paired blocks always share 2 letters (e.g. COW·OWC → OW). Keep the shared 2 as move 1 (OW·OW); move the leftover 1 letter each side to move 2 (C·C). The a[:2]/b[1:] check just finds which side overlaps.", "짝지은 두 블록은 늘 2글자가 겹쳐요. COW·OWC 면 OW 예요.\n겹치는 2글자는 1번에 그대로 둬요 (OW·OW).\n남는 1글자씩만 2번으로 옮겨요 (C·C).\na[:2]/b[1:] 는 어느 쪽이 겹치는지 확인하는 거예요.") },
+      { hi: [45, 61], bubble: t(E, "The biggest move number is M (1 or 2). Print M, then each letter's move → e.g. 2 then 2 1 1 1 1 2.", "지우기 번호 중 가장 큰 게 M 이에요 (1 또는 2).\nM 을 출력하고 글자별 번호를 출력해요.\n예를 들면 2, 그리고 2 1 1 1 1 2.") },
     ] };
   }
   const code = [...s[0].py, ...s[1].py, ...s[2].py];

@@ -126,7 +126,11 @@ const FULL_PY = [
   "    # Alternating sum: + - + - ...  (decides the final value f)",
   "    f = 0",
   "    for i in range(N):",
-  "        f += h[i] if i % 2 == 0 else -h[i]",
+  "        if i % 2 == 0:",
+  "            sign = 1",
+  "        else:",
+  "            sign = -1",
+  "        f += sign * h[i]",
   "",
   "    if N % 2 == 0:",
   "        if f != 0:",
@@ -240,7 +244,7 @@ export function getDroughtSections(E) {
     {
       label: t(E, "1️⃣ Find f, filter -1 right away", "1️⃣ 교대합으로 f 정하고 -1 부터 걸러요"),
       color: A,
-      py: FULL_PY.slice(0, 16), cpp: FULL_CPP.slice(0, 30),
+      py: FULL_PY.slice(0, 20), cpp: FULL_CPP.slice(0, 30),
       why: [
         t(E, "First, what is the final hunger f? The alternating sum (+ - + - ...) pins it down — there is only one f that can work.",
             "먼저 마지막 배고픔 f 부터 정해요.\n교대합(+ − + − …) 이 f 를 하나로 못 박아 줘요."),
@@ -251,7 +255,7 @@ export function getDroughtSections(E) {
     {
       label: t(E, "2️⃣ Work out o[i]", "2️⃣ o[i] 계산해요"),
       color: "#0891b2",
-      py: FULL_PY.slice(16, 25), cpp: FULL_CPP.slice(30, 41),
+      py: FULL_PY.slice(20, 29), cpp: FULL_CPP.slice(30, 41),
       why: [
         t(E, "Once f is fixed, how many times do we feed pair (i, i+1)? Walking left to right forces it: o[i] = h[i] - f - o[i-1].\nIf any o[i] comes out negative, this f is impossible — return -1.",
             "f 가 정해지면 쌍 (i, i+1) 에 몇 번 먹일지도 따라 정해져요.\n왼쪽부터 보면 o[i] = h[i] − f − o[i−1] 이에요.\no[i] 가 음수로 나오면 불가능하다는 뜻이라 -1 을 돌려줘요."),
@@ -260,7 +264,7 @@ export function getDroughtSections(E) {
     {
       label: t(E, "3️⃣ Fix up even N, get the answer", "3️⃣ 짝수 N 보정하고 답을 내요"),
       color: "#16a34a",
-      py: FULL_PY.slice(25, 32), cpp: FULL_CPP.slice(41, 58),
+      py: FULL_PY.slice(29, 36), cpp: FULL_CPP.slice(41, 58),
       why: [
         t(E, "Why adjust when N is even? f was free to pick, so we may lower every even-indexed o[i] by the same amount without breaking anything — so subtract their minimum to spend as few bags as possible.",
             "왜 N 이 짝수일 때 더 손봐야 할까요?\nf 를 자유롭게 고를 수 있어서, 짝수 자리 o[i] 를 전부 같은 만큼 줄여도 문제없어요.\n그래서 그중 최솟값만큼 다 같이 빼서 봉지를 최대한 적게 써요."),
@@ -271,7 +275,7 @@ export function getDroughtSections(E) {
     {
       label: t(E, "4️⃣ Read and print each case", "4️⃣ 테스트 케이스마다 읽고 출력해요"),
       color: "#7c3aed",
-      py: FULL_PY.slice(32), cpp: FULL_CPP.slice(58),
+      py: FULL_PY.slice(36), cpp: FULL_CPP.slice(58),
       why: [
         t(E, "Why solve cases one at a time? Each test case is a completely different row of cows. So read T, then solve and print exactly one answer per case.",
             "왜 케이스마다 따로 풀까요? 각 테스트 케이스는 서로 다른 소들의 줄이라서예요.\n그래서 T 를 읽고, 케이스마다 따로 풀어 한 줄에 하나씩 답을 출력해요."),

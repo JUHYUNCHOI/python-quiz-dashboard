@@ -3494,3 +3494,20 @@ MCC 2020·2021 원문 PDF 11개에는 **stdin 형식이 아예 없다.** 그런�
 `quiz_input` 이 `type:"quiz"|"input"` 만 세서 **`strangefn` 이 «퀴즈 0개» 로 나왔다** —
 선생님이 "퀴즈 많다" 하신 바로 그 quest 가 0 이었다. `<NumInput`·`<Quiz` 태그도 세게 했다.
 **180개 실측: 값이 바뀐 건 `strangefn` 하나뿐(0 → 5), 오탐 0건.** 다섯 자리 전부 눈으로 대조했다.
+
+## ✅ printseq 등 6개 quest — 한 줄 한 문장 정리 (2026-09-24, PM 판정)
+
+printseq · astral · cowsplits · strangefn · sleepyherd · drought 의 `삼항 → if/else`
+정리 커밋. **판정: 진행.** 근거 — diff 전체를 읽었고 학생용 문장은 0글자 안 바뀜(hi 범위만
+재매핑), `check-quest-length-regression.py` 전체 0건, `check-code-one-statement.py` 6개
+전부 0건. printseq 가 오늘 3번 걸린 건 반복 라운드가 아니라 서로 다른 전수 작업(🔒 입력
+손버릇 제거·alchemy 재귀 제거 중 죽은코드 삭제·narr 축약)이 printseq 를 스쳐간 것.
+`prove-same-program.py`·300~3000케이스 대조·build:check 는 에이전트 보고를 신뢰했고
+project-lead 가 직접 재실행하지는 않았음 — 재확인 필요하면 다음에.
+
+`scripts/quest-length-snapshot.json` — **`--accept` 불필요.** `korean_chars_ref` 는
+`check-quest-length-regression.py` 의 회귀 판정 대상이 아니고(코드에 grew 체크는
+pages/quiz_input/clicks 뿐) 스크립트를 돌리기만 해도 자동 갱신되는 참고 필드. pages·
+quiz_input 변경 0건 확인. 그대로 커밋.
+
+⚠️ **밀지(push)는 별개다** — 이 판정은 **커밋 예산만** 연다.
