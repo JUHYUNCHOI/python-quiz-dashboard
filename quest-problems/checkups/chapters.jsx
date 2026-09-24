@@ -13,7 +13,7 @@ export function makeCheckupsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows stand in a row. Each cow has a species, written as a number. The vet has already decided, for each spot, which species it will treat there — and it treats the cow at that spot only when the cow's species matches. FJ flips one chunk of cows to change who gets treated.",
+        "Each spot has a species the vet will treat there. FJ can flip one chunk of cows.",
         "자리마다 치료할 종이 정해져 있어요.\nFJ 는 한 구간을 통째로 뒤집을 수 있어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -110,7 +110,7 @@ export function makeCheckupsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Where does that 3, 3, 0, 0 come from? The flip isn't given — we try all 6 segments ourselves and tally by checkup count.",
-        "그 3, 3, 0, 0 은 어디서 나올까요? 뒤집을 곳은 안 주어져요 — 6가지 구간을 우리가 다 해보고 검진 수별로 모아요."),
+        "그 3, 3, 0, 0 은 어디서 나올까요? 6가지 구간을 다 해보면 보여요."),
       content: (<CheckupsEnumSim E={E} />),
     },
 
@@ -161,8 +161,8 @@ export function makeCheckupsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just write the obvious thing first.  Try every (l, r), reverse, count matches.  Read the code section by section.",
-        "일단 눈에 보이는 대로 짜요. (l, r) 다 돌려보고, 뒤집고, 일치 수 세기. 코드를 한 단락씩 읽어요."),
+        "Just write the obvious thing first. Try every (l, r), reverse, count matches.",
+        "일단 눈에 보이는 대로 짜요. (l, r) 다 돌리고, 뒤집고, 세요."),
       content: (
         <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
           {t(E,
@@ -185,7 +185,7 @@ export function makeCheckupsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Now RUN it.  Try N = 50, then 200, then 600 — watch the time jump.  Three nested loops means triple the trouble.",
+        "Now RUN it. Try N = 50, then 200, then 600 — watch the time jump.",
         "이제 직접 돌려봐요. 50 → 200 → 600 으로 늘리면 시간이 어떻게 뛸까요?"),
       content: (<CheckupsBruteRunner E={E} />),
     },
@@ -293,8 +293,8 @@ export function makeCheckupsCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Recounting every interval from scratch is too slow. Let's try a smarter way — start with a tiny interval, then grow it one step at a time and see what changes. Watch it unfold below.",
-        "구간마다 처음부터 다 세면 너무 느려요. 더 똑똑한 방법 — 작은 구간 하나로 시작해서, 한 칸씩 넓혀가며 뭐가 어떻게 바뀌는지 아래 시뮬로 하나씩 봐요."),
+        "Recounting every interval from scratch is too slow — start tiny and grow one step at a time.",
+        "구간마다 처음부터 다 세면 너무 느려요. 작은 구간부터 한 칸씩 넓혀 봐요."),
       content: (<CheckupsExpandSim E={E} />),
     },
 

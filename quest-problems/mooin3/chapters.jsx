@@ -294,8 +294,8 @@ abcabbacabac
       type: "reveal",
       label: t(E, "Worked example", "풀이 예제"),
       narr: t(E,
-        "Try the rule on \"abcabbc\", in order — (1,2,3), (1,2,4), (1,2,5)… sliding k right.  A moo scores more as k moves farther.  (All 35 triplets are summed up below.)",
-        "\"abcabbc\" 를 (1,2,3), (1,2,4), (1,2,5)… 순서로 봐요. k 를 오른쪽으로 밀수록 moo 점수가 커져요. 35 개 전체 결과는 아래에 있어요."),
+        "Try the rule on \"abcabbc\", in order — (1,2,3), (1,2,4)… sliding k right.",
+        "\"abcabbc\" 를 (1,2,3), (1,2,4)… 순서로 봐요. k 를 밀수록 점수가 커져요."),
       content: (<TripletEnumSimulator E={E} />),
     },
 
@@ -320,8 +320,8 @@ export function makeMooin3Ch2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Idea: fix the middle j", "아이디어 — 가운데 j 고정"),
       narr: t(E,
-        "We already saw brute (every i, j, k) is N³ per query — too slow.  The fix: pin the middle j, then search once for the best i and once for the best k.  Drag j around and see.",
-        "모든 i, j, k 를 다 보면 물음마다 N³ 이라 느린 건 이미 봤죠. 이번엔 가운데 j 를 고정하고, 가장 좋은 i 와 k 를 한 번씩만 찾아요. j 를 끌어 보면서 확인해요."),
+        "Pin the middle j, then search once for the best i and once for the best k.",
+        "가운데 j 를 고정하고, 가장 좋은 i 와 k 를 한 번씩만 찾아요."),
       content: (<MooTraceSimulator E={E} lang={lang} />),
     },
 
@@ -333,8 +333,8 @@ export function makeMooin3Ch2(E, lang = "py") {
         type: "reveal",
         label: t(E, "Code: fix-j", "코드 — j 고정"),
         narr: t(E,
-          "Same fix-j idea as the simulator — now in code.  Each part lights up with a bubble; read them in order.",
-          "방금 시뮬에서 본 j 고정 생각을 이번엔 코드로 봐요. 각 부분이 밝아지면서 말풍선이 떠요. 순서대로 읽어요."),
+          "Same fix-j idea as the simulator — now in code.",
+          "방금 시뮬에서 본 j 고정 생각을 이번엔 코드로 봐요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),
@@ -345,8 +345,8 @@ export function makeMooin3Ch2(E, lang = "py") {
       label: sec.label,
       preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       narr: t(E,
-        "The fix-j version solves it correctly — but how big can N get?  Let's count operations.",
-        "j 고정 코드는 답을 정확히 맞혀요. 그런데 N 이 얼마나 커질 수 있을까요? 계산 횟수를 세어 봐요."),
+        "The fix-j version is correct — but how big can N get?",
+        "j 고정 코드는 답을 맞혀요. 그런데 N 은 얼마나 커질 수 있을까요?"),
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
 
@@ -367,8 +367,8 @@ export function makeMooin3Ch2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Building the table", "표 만들기"),
       narr: t(E,
-        "Grouping by letter alone is still O(26·N) per query — we still scan.  The speed comes from building three small tables ONCE, before any query.  Here is how they fill up.",
-        "글자로 묶어도 물음마다 훑으면 아직 O(26·N) 이에요. 빨라지는 비결은 물음을 받기 전에 표 3 개를 한 번만 만들어 두는 거예요. 그 표가 어떻게 채워지는지 봐요."),
+        "The speed comes from building three small tables ONCE, before any query.",
+        "표 3 개를 물음 받기 전에 한 번만 만들어 두면 빨라져요."),
       content: (<Mooin3TableSim E={E} lang={lang} />),
     },
 
@@ -380,8 +380,8 @@ export function makeMooin3Ch2(E, lang = "py") {
         type: "reveal",
         label: t(E, "Code: fast (O(26)/query)", "코드 — 빠른 풀이 (물음당 O(26))"),
         narr: t(E,
-          "Three leaps make it fast: precompute tables once, loop over the 26 letters (not j), and use the ∩-parabola vertex.  Watch each part light up.",
-          "세 번 도약하면 빨라져요. 표를 한 번만 만들고, j 대신 글자 26 개를 돌고, ∩ 포물선 꼭짓점을 써요. 각 부분이 밝아질 때 봐요."),
+          "Three leaps: precompute the tables once, loop over the 26 letters, and use the vertex.",
+          "표를 한 번만 만들고, j 대신 글자 26 개를 돌고, 꼭짓점을 써요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#7c3aed" />),
       };
     })(),
@@ -392,8 +392,8 @@ export function makeMooin3Ch2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Bonus ① Another way: map", "부록 ① 다른 방법 — map"),
       narr: t(E,
-        "A different tool for the same problem: instead of 3 tables, keep one 'letter → its spots' list and binary-search it.  Watch it build, then solve a query.",
-        "같은 문제를 다른 도구로 풀어요. 표 3 개 대신 '글자 → 위치 목록' 하나를 만들고 이분탐색으로 찾아요. 목록이 만들어지는 것과 물음 푸는 것을 눈으로 봐요."),
+        "A different tool for the same problem — one 'letter → its spots' list, binary-searched.",
+        "표 3 개 대신 '글자 → 위치 목록' 하나로 같은 문제를 풀어요."),
       content: (<Mooin3MapSim E={E} />),
     },
     /* [부록 ②] map 코드 */
@@ -403,8 +403,8 @@ export function makeMooin3Ch2(E, lang = "py") {
         type: "reveal",
         label: t(E, "Bonus ② The map code", "부록 ② map 코드"),
         narr: t(E,
-          "The same idea as the tables, in code: nextDiff = nearest_diff, and the binary search plays the role of latest/earliest_same.  This one passed the real USACO judge too.",
-          "표 방식과 같은 생각을 코드로 옮겼어요. nextDiff 가 nearest_diff 이고, 이분탐색이 latest·earliest_same 역할을 해요. 이 코드도 실제 USACO 채점기를 통과했어요."),
+          "The same idea as the tables, in code — this one passed the real USACO judge too.",
+          "표 방식과 같은 생각인데, 이 코드도 USACO 채점기를 통과했어요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0d9488"
           badge={{ ko: "부록 · map 으로 같은 풀이 (안 봐도 돼요)", en: "Bonus · same solution with a map (optional)", color: "#0d9488" }} />),
       };

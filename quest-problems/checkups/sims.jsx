@@ -1357,8 +1357,8 @@ function _buildExpandSteps(E) {
       bubble: t(E, "Swapped! Flipped cows are now 1 2 4 3 5 6.",
                    "바뀌었어요! 뒤집고 나면 소는 1 2 4 3 5 6 이에요.") },
     { rev: [1, 2, 4, 3, 5, 6], win: [2, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
-      bubble: t(E, "Count green (= matches with want): spot 3 (4=4), spot 4 (3=3), spot 5 (5=5). Three greens.",
-                   "초록을 세어 봐요. want 와 같은 자리예요. 자리 3 (4=4), 자리 4 (3=3), 자리 5 (5=5) 니까 초록 3 개예요.") },
+      bubble: t(E, "Count green (= matches with want): spot 2 (4=4), spot 3 (3=3), spot 4 (5=5). Three greens.",
+                   "초록을 세어 봐요. want 와 같은 자리예요. 자리 2 (4=4), 자리 3 (3=3), 자리 4 (5=5) 니까 초록 3 개예요.") },
     { rev: [1, 2, 4, 3, 5, 6], win: [2, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 3, done: false, payoff: false,
       bubble: t(E, "matches = 3 → answer[3] += 1.",
                    "matches = 3 → answer[3] += 1.") },
@@ -1677,7 +1677,7 @@ export function CheckupsWindowSplitSim({ E }) {
 export function CheckupsWindowRecapSim({ E }) {
   const steps = [
     { rev: 0, payoff: false,
-      bubble: t(E, "Quick recap — FJ picks one stretch of the row, e.g. [2~5]. That stretch is the FLIP WINDOW.",
+      bubble: t(E, "30-second recap — FJ picks one stretch of the row, e.g. [2~5]. That stretch is the FLIP WINDOW.",
                    "30초 복습이에요. FJ 는 줄에서 구간 하나를 골라요. [2~5] 처럼요. 이 구간이 '뒤집는 창' 이에요.") },
     { rev: 2, payoff: false,
       bubble: t(E, "INSIDE the window = the part that gets reversed. The cows' order flips end-to-end.",
@@ -1695,7 +1695,7 @@ export function CheckupsWindowRecapSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 10 }}>
-        🔁 {t(E, "What was the 'window' again?", "'창'이 뭐였죠? — 30초 복습")}
+        🔁 {t(E, "What was the 'window' again? — 30-second recap", "'창'이 뭐였죠? — 30초 복습")}
       </div>
       {/* 말풍선 (창이 항상 화면 중앙이라 고정) */}
       <div style={{ position: "relative", maxWidth: 460, margin: "0 auto 22px" }}>
