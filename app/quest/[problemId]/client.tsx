@@ -497,12 +497,21 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                 좁게** 눌렸다(실측: scroller 19.5px < 배지 28px, 스크롤을 해도 영원히
                 다 안 보임). 배지 하나는 항상 들어갈 최소폭을 floor 로 둔다. */}
             <div className="relative min-w-[38px]">
+              {/* 2026-09-24 PM 판정: 세 번째 재발 — 라벨도 원형→알약형(rounded-md) 전환도
+                  모서리 반지름만 바꾼 정도라 28px 에선 원과 구별이 안 됐다(실측 radius 10px
+                  =36%, 코드 스테퍼 50% 와 육안 차이 없음. 게다가 quest 180개 중 71개가
+                  amber-700 과 같은 계열 accentColor 라 색도 안전망이 아니다). 이번엔
+                  "모서리를 얼마나 둥글리나" 가 아니라 "**개별 원 여러 개** 대 **하나로
+                  이어진 띠**" 로 실루엣 자체를 바꾼다 — 컨테이너 하나를 rounded-full 로
+                  감싸고, 안의 세그먼트는 각지게 두고 gap 없이 1px 세로줄로만 나눈다.
+                  코드 스테퍼(ProgressiveCodeStepper)는 그대로 "떨어진 원" 이라 근접성·
+                  연속성 단서만으로 색·라벨 없이 구별된다. */}
               <div
                 ref={siblingsScrollRef}
-                className="flex items-center gap-1.5 overflow-x-auto min-w-0 [&::-webkit-scrollbar]:hidden"
+                className="flex items-stretch overflow-x-auto min-w-0 rounded-full border border-amber-300 [&::-webkit-scrollbar]:hidden"
                 style={{ scrollbarWidth: "none" }}
               >
-                {contestSiblings.map((p) => {
+                {contestSiblings.map((p, idx) => {
                   const isCurrent = p.id === problemId
                   const numMatch = p.sub.match(/#(\d+)$/) || p.sub.match(/P(\d+)$/)
                   const num = numMatch?.[1] ?? "•"
@@ -511,10 +520,12 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                       key={p.id}
                       ref={isCurrent ? currentSiblingRef : undefined}
                       onClick={() => router.push(`/quest/${p.id}`)}
-                      className={`h-7 min-w-[28px] px-2 rounded-md text-[11px] font-black transition-colors flex-shrink-0 ${
+                      className={`h-8 min-w-[36px] px-2.5 flex items-center justify-center text-[11px] font-black transition-colors flex-shrink-0 ${
+                        idx > 0 ? "border-l border-amber-300/70" : ""
+                      } ${
                         isCurrent
                           ? "bg-amber-700 text-white"
-                          : "bg-white border border-amber-300 text-amber-700 hover:bg-amber-100"
+                          : "bg-white text-amber-700 hover:bg-amber-100"
                       }`}
                       title={`${t("문제", "Problem")} #${num} — ${p.title}`}
                     >
