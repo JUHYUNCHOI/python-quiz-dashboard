@@ -247,7 +247,7 @@ export function makeCollatzCh1(E) {
       ],
       correct: 1,
       explain: t(E,
-        "Both the first and second option say 1, but only one of them is right about why. The rule runs exactly k times, no matter what the numbers are. 1 is odd, so 3*1+1 = 4. Then 4 is even, so 4/2 = 2. Then 2 is even, so 2/2 = 1. Three passes, back to 1. The answer is the sum, which is 1.",
+        "Both the first and second option say 1, but only one of them is right about why. The rule runs exactly k times, no matter what the numbers are. 1 is odd, so 3*1+1 = 4; 4 is even, so 4/2 = 2; 2 is even, so 2/2 = 1. Three passes, back to 1. The answer is the sum, which is 1.",
         "첫째와 둘째 보기 모두 답은 1 이지만, 이유가 맞는 건 하나예요.\n규칙은 숫자가 무엇이든 **정확히 k번** 돌아요.\n1 은 홀수라 3×1+1 = 4, 4 는 짝수라 4÷2 = 2, 2 는 짝수라 2÷2 = 1.\n세 바퀴를 돌아 다시 1 이 됐어요. 합은 1 이에요."),
     },
 

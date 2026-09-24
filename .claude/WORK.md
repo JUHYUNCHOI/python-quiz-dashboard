@@ -3530,3 +3530,21 @@ quiz_input 변경 0건 확인. 그대로 커밋.
 스치는" 경우를 자동으로 가르는 것보다 판정 한 번이 더 싸고 안전하다는 게 PM 판단.
 
 ⚠️ 밀지(push)는 별개다 — 이 판정은 커밋 예산만 연다.
+
+## ✅ mcc15choco · mcc15isthmus · mooin2 narr 축약 — (2026-09-24, PM 판정)
+
+영·한 어긋남 정리 일괄 작업이 오늘 세 번째로 `mcc15choco`·`mcc15isthmus`·`mooin2` 를
+스쳐 갔다(셋 다 오늘 세 번째 커밋이라 걸쇠에 막힘). **판정: 진행.**
+
+근거 — diff 를 직접 읽음. 셋 다 narr(파란 내레이션)에서 **같은 화면 다른 자리에
+이미 있는 숫자를 또 말하던 문장**을 지웠다. `mcc15choco` 는 한국어 "50%" 문구를
+영어(원문 PDF 값 그대로)와 통일 — 어젯밤 되돌린(43aa51bc) PDF 원문 값을 다시
+깨뜨리지 않음, 직접 대조 확인. `mcc15isthmus` 는 "N ≤ 1,000,000"·"10^12" 를 narr
+에서 뺐는데 N 값은 Input 카드에 별도로 있음. `mooin2` 는 "N=40/N=2000" 을
+일반화했는데 같은 스텝의 BruteRunner 프리셋 버튼에 그 숫자가 라벨로 그대로 있음
+(`sims.jsx` BRUTE_PRESETS). 셋 다 한국어를 늘리지 않았다.
+
+`check-quest-length-regression.py` 세 quest 모두 exit 0 · `check-bilingual-drift.py`
+REAL 목록에 셋 다 없음 · `check-frozen.py` 해당 없음(동결/USACO_VERIFIED 아님).
+
+⚠️ 밀지(push)는 별개다 — 이 판정은 커밋 예산만 연다.

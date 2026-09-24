@@ -340,7 +340,7 @@ export function makeMcc15IsthmusCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Careful: N, K and the heights come on three separate lines. N can be as large as 1,000,000.",
+        "Careful: N, K and the heights come on three separate lines.",
         "N, K, 높이가 각각 다른 줄로 들어와요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -424,7 +424,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Checking K steps on both sides of every position is N×K work — up to about 10^12. Instead, carry the answer over from the neighbour: the run length at i is the run length at i−1 plus one.",
+        "Checking K steps on both sides of every position is N×K work. Instead, carry the answer over from the neighbour: the run length at i is the run length at i−1 plus one.",
         "매번 K칸을 다시 세지 말고 옆 칸의 답을 이어받아요."),
       content: (
         <div style={{ padding: 16, ...KA }}>

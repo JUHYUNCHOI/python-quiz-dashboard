@@ -90,7 +90,7 @@ export function makeMcc15ChocoCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ N ≤ 1,000,000 · 1 ≤ Lᵢ ≤ 1,000,000. (About 50% of the points use N ≤ 10,000.)",
-                    "조건은 1 ≤ N ≤ 1,000,000 이고 1 ≤ Lᵢ ≤ 1,000,000 이에요.\n채점 문제 중에는 N 이 10,000 을 넘지 않는 작은 것도 있어요.\n거기서만 맞아도 점수의 절반쯤은 받아요.")}
+                    "조건은 1 ≤ N ≤ 1,000,000 이고 1 ≤ Lᵢ ≤ 1,000,000 이에요.\n전체 배점의 약 50%는 N ≤ 10,000 인 테스트에서 나와요.")}
             </div>
           </div>
 

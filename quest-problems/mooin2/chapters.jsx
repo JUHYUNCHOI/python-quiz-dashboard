@@ -331,7 +331,7 @@ export function makeMooin2Ch2(E, lang = "py") {
     {
       type: "bruteRunner",
       narr: t(E,
-        "Let's RUN it. N = 40 finishes instantly — then jump to N = 2000 🐌 and watch it actually crawl. Hit Stop whenever you've felt enough!",
+        "Let's RUN it. A small N finishes instantly — then jump it way up 🐌 and watch it actually crawl. Hit Stop whenever you've felt enough!",
         "직접 돌려봐요. N 을 키우면 진짜로 느려지는 게 보여요."),
     },
     /* 2-4 (limit/bridge) REMOVED 2026-06-18 — narr·박스가 같은 말이었고, 체감은 BruteRunner(2-3)가,
