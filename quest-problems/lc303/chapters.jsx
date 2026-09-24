@@ -190,7 +190,7 @@ export function makeChapters(E) {
       options: [
         t(E, "9  (prefix[4] − prefix[1] = 10−1)", "9  (prefix[4] − prefix[1] = 10−1)"),
         t(E, "6  (just prefix[3])", "6  (prefix[3] 그대로)"),
-        t(E, "12 (prefix[4] − prefix[0] = 10−0+2)", "12 (계산 오류)"),
+        t(E, "12 (calculation error)", "12 (계산 오류)"),
       ],
       correct: 0,
       explain: t(E,

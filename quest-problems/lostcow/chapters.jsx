@@ -116,7 +116,7 @@ export function makeLostCowCh1(E) {
       type: "doubling",
       narr: t(E,
         "Before walking, feel the leg sizes: 1, 2, 4, 8, 16…  Each one twice the last.  Add legs and watch the bars and total grow.",
-        "다리 길이가 1, 2, 4, 8 … 처럼 두 배씩 늘어요."),
+        "다리 길이가 1, 2, 4, 8, 16 … 처럼 두 배씩 늘어요."),
     },
     {
       type: "sim",

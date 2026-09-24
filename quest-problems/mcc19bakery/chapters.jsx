@@ -198,7 +198,7 @@ function BakeryGreedySim({ E }) {
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginTop: 6, whiteSpace: "pre-line" }}>
               {t(E,
-                "(B) pairs the cheap 1 and 2 with expensive items, so it frees 8 and 3 → saves 11 → pay 35.\nA cheap bread is worth little as the free one — better to let it be one you pay for.",
+                "(B) pairs the cheap 1 and 2 with expensive items, so it frees 8 and 3 → 46 − 11 = pay 35.\nA cheap bread is worth little as the free one — better to let it be one you pay for.",
                 "(B) 는 싼 1 과 2 를 비싼 것들과 한 묶음에 넣어서, 8 과 3 이 무료가 돼요.\n같은 46 에서 8 + 3 = 11 을 빼면 35 를 내요.\n싼 빵을 공짜로 받으면 얼마 못 아껴요. 공짜 자리는 비싼 빵에 주는 게 이득이에요.")}
             </div>
           </div>

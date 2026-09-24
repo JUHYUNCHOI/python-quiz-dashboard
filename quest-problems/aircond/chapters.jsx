@@ -94,8 +94,8 @@ export function makeAirCondCh1(E) {
       ],
       correct: 0,
       explain: t(E,
-        "Correct! 2^10 = 1024. Each AC is either included or not, giving 2^M subsets. This is very manageable!",
-        "맞아요! 에어컨마다 켜거나 끄거나 두 가지라서 2^10 = 1024 가지예요. 이 정도는 전부 확인해도 괜찮아요."),
+        "Correct! Each AC is either included or not — two choices, 10 ACs, so the choices multiply to 1024 total. This is very manageable!",
+        "맞아요! 에어컨마다 켜거나 끄거나 두 가지고, 에어컨이 10대니까 두 가지씩 열 번 곱해서 1024 가지예요. 이 정도는 전부 확인해도 괜찮아요."),
     },
     // 1-3: Sim — toggle AC subsets, see stall coverage
     {
@@ -145,8 +145,8 @@ export function makeAirCondCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "M ≤ 10, so only 2^M ≤ 1024 AC subsets exist — try every subset, build cooling per stall, check every cow, track the cheapest valid one. Sections build it one piece at a time.",
-        "M ≤ 10 이라 조합이 1024 가지뿐이니 전부 해 봐도 돼요."),
+        "M ≤ 10, so at most 1024 AC subsets exist — try every subset, build cooling per stall, check every cow, track the cheapest valid one. Sections build it one piece at a time.",
+        "M ≤ 10 이라 조합이 최대 1024 가지뿐이니 전부 해 봐도 돼요."),
       sections: getAirCondSections(E),
     },
   ];
