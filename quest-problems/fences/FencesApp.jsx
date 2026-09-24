@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { FenceColumnScanner, RowColumnFillViz, ColumnCostAuditor } from "./components";
+import { RowColumnFillViz, ColumnCostAuditor } from "./components";
 import { makeFencesCh1, makeFencesCh2, makeFencesCh3 } from "./chapters";
 
 const A = "#059669";
@@ -96,7 +96,6 @@ export default function FencesApp(props = {}) {
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "code") return <CodeReveal label={step.label} lines={step.code} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
-    if (step.type === "fenceColumnScanner") return <FenceColumnScanner E={E} />;
     if (step.type === "rowColumnFillViz") return <RowColumnFillViz E={E} />;
     if (step.type === "columnCostAuditor") return <ColumnCostAuditor E={E} />;
     return null;
@@ -107,7 +106,6 @@ export default function FencesApp(props = {}) {
     if (s.type === "input") return <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />;
     if (s.type === "code") return <CodeReveal label={s.label} lines={s.code} />;
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
-    if (s.type === "fenceColumnScanner") return <FenceColumnScanner E={E} />;
     if (s.type === "rowColumnFillViz") return <RowColumnFillViz E={E} />;
     if (s.type === "columnCostAuditor") return <ColumnCostAuditor E={E} />;
     return null;

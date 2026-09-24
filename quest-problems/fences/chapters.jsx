@@ -232,24 +232,6 @@ export function makeFencesCh1(E) {
           </div>
         </div>),
     },
-    // 1-3: Quiz — full fence column
-    {
-      type: "quiz",
-      narr: t(E,
-        "A 'full fence column' means every cell in that column is a fence.\nEven one grass cell means it's not complete!", "'완전한 울타리 열'은 그 열의 모든 칸이 울타리란 뜻이에요. 풀이 1개라도 있으면 미완성!"),
-      question: t(E,
-        "For a column to be a 'full fence column', what must be true?",
-        "열이 '완전한 울타리 열'이 되려면?"),
-      options: [
-        t(E, "At least half must be #", "절반 이상이 #이면 된다"),
-        t(E, "Just the top and bottom must be #", "맨 위와 맨 아래만 #이면 된다"),
-        t(E, "Every cell in the column must be #", "열의 모든 칸이 #이어야 한다"),
-      ],
-      correct: 2,
-      explain: t(E,
-        "Right! ALL N cells must be fence. Even one grass cell means it's incomplete!",
-        "맞아! N칸 전부 울타리여야 해요. 풀이 1개라도 있으면 미완성!"),
-    },
     // 1-4: Cost concept — shown as a vertical column
     {
       type: "reveal",
@@ -303,112 +285,15 @@ export function makeFencesCh1(E) {
         "Now YOU audit each column!\nClick a column header to walk through it cell-by-cell.\nEvery '.' adds 1 to the cost. Audit them all to find the cheapest!",
         "이제 네가 직접 감사해봐!\n열 머리글을 누르면 그 열을 한 칸씩 따라가면서 비용이 쌓여요.\n'.' 한 개당 비용 +1. 전부 감사해서 가장 싼 열을 찾아내!"),
     },
-    // 1-5: Goal quiz — concrete grid with visible column costs
-    {
-      type: "reveal",
-      narr: t(E,
-        "We want the column with the MINIMUM cost — the one that already has the most fences!", "비용이 가장 적은 열을 찾아야 해 — 이미 울타리가 가장 많은 열!"),
-      content: (() => {
-        const g = [
-          [".", "#", ".", "#"],
-          [".", ".", "#", "#"],
-          [".", "#", ".", "#"],
-        ];
-        // dots per col: [3, 1, 2, 0]
-        return (
-          <div style={{ padding: 16 }}>
-            <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 8 }}>
-                {t(E, "3×4 grid — count dots per column!", "3×4 그리드 — 각 열의 풀을 세봐요!")}
-              </div>
-              {/* Column labels */}
-              <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 2 }}>
-                {g[0].map((_, c) => (
-                  <div key={c} style={{
-                    width: 36, textAlign: "center", fontSize: 10, fontWeight: 600,
-                    fontFamily: "'JetBrains Mono',monospace",
-                    color: c === 3 ? "#fff" : "#9ca3af",
-                    background: c === 3 ? "#059669" : "transparent",
-                    borderRadius: 4, padding: "1px 0",
-                  }}>{t(E, `C${c+1}`, `${c+1}열`)}</div>
-                ))}
-              </div>
-              {/* Grid */}
-              {g.map((row, r) => (
-                <div key={r} style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 4 }}>
-                  {row.map((ch, c) => {
-                    const isFence = ch === "#";
-                    return (
-                      <div key={c} style={{
-                        width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                        borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 600,
-                        background: isFence ? "#374151" : "#bbf7d0",
-                        border: `1.5px solid ${c === 3 ? "#059669" : isFence ? "#6b7280" : "#4ade80"}`,
-                        color: isFence ? "#fff" : "#166534",
-                        boxShadow: c === 3 ? "0 0 6px rgba(5,150,105,.3)" : "none",
-                      }}>{ch}</div>
-                    );
-                  })}
-                </div>
-              ))}
-              {/* Dot counts per column */}
-              <div style={{ display: "flex", justifyContent: "center", gap: 4, marginTop: 6 }}>
-                {[3, 1, 2, 0].map((cnt, c) => (
-                  <div key={c} style={{
-                    width: 36, textAlign: "center", fontSize: 13, fontWeight: 700,
-                    fontFamily: "'JetBrains Mono',monospace",
-                    color: c === 3 ? "#fff" : "#059669",
-                    background: c === 3 ? "#059669" : "#ecfdf5",
-                    borderRadius: 6, padding: "4px 0",
-                    border: `1px solid ${c === 3 ? "#059669" : "#6ee7b7"}`,
-                  }}>{cnt}</div>
-                ))}
-              </div>
-              <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 4 }}>
-                {t(E, "↑ grass per column (= cost)", "↑ 열별 풀 수 (= 비용)")}
-              </div>
-              {/* Answer highlight */}
-              {/* 2026-09-09: 여기에 "4열은 풀이 0개라 값도 0 이에요 — 제일 싸요! 🎯" 가 있었다.
-                  **바로 다음 쪽 퀴즈가 같은 [3,1,2,0] 으로 "어떤 열을 골라야 해요?" 를 묻는다.**
-                  결론을 지우면 이 쪽은 관찰, 다음 쪽은 퀴즈가 되어 순서가 살아난다. */}
-            </div>
-          </div>
-        );
-      })(),
-    },
-    // 1-6: Confirm understanding quiz
-    {
-      type: "quiz",
-      narr: t(E,
-        "Let's make sure you got it!\nIn the grid we just saw, the grass counts were [3, 1, 2, 0].\nWhich column should we pick?", "제대로 이해했는지 확인해요! 방금 본 그리드에서 풀 수가 [3, 1, 2, 0] 이었어요.\n어떤 열을 골라야 할까요?"),
-      question: t(E,
-        "Dot counts: 1st=3, 2nd=1, 3rd=2, 4th=0. Pick which?",
-        "풀은 1열에 3개, 2열에 1개, 3열에 2개, 4열에 0개예요.\n어떤 열을 고를까요?"),
-      options: [
-        t(E, "2nd column (1 dot = cost 1)", "2열 (풀 1개 = 비용 1)"),
-        t(E, "4th column (0 dots = cost 0!)", "4열 (풀 0개 = 비용 0!)"),
-        t(E, "1st column (3 dots = cost 3)", "1열 (풀 3개 = 비용 3)"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "The 4th column has 0 dots — already all fences! Cost = 0, the minimum! 🎯",
-        "4열은 풀이 0개 — 이미 전부 울타리! 비용 = 0, 최솟값! 🎯"),
-    },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 🏗️ 시뮬레이션 (4 steps)
+   Chapter 2: 🏗️ 시뮬레이션 (3 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeFencesCh2(E) {
   return [
-    // 2-1: Column scanner animation
-    {
-      type: "fenceColumnScanner",
-      narr: t(E,
-        "Press ▶ Scan to watch!\nIt counts grass in each column, one by one.\nThen try it yourself!\n👀", "▶ 스캔을 눌러봐요! 각 열의 풀을 하나씩 세는 걸 볼 수 있어요.\n그다음 직접 해봐요! 👀"),
-    },
     // 2-2: Observation quiz
     {
       type: "quiz",

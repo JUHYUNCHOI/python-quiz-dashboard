@@ -408,7 +408,7 @@ export function makeTricksCh1(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 🎃 시뮬레이션 (5 steps)
+   Chapter 2: 🎃 시뮬레이션 (3 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeTricksCh2(E) {
   return [
@@ -417,24 +417,6 @@ export function makeTricksCh2(E) {
       type: "packTypeClassifier",
       narr: t(E,
         "Pick a color pair and watch the 9 sample bags get sorted into A, B, C types!\nTry different pairs.\n🎃", "색 쌍을 골라 봉지 9개가\nA·B·C 로 나뉘는 걸 봐요. 🎃"),
-    },
-    // 2-2: Quiz — pack type
-    {
-      type: "quiz",
-      narr: t(E,
-        "Quick check!\nBag (1,1) has two candies, both color 1.\nIf we're looking at color pair (1,2), what type is this bag?", "봉지 (1,1) 에는 사탕이 둘 다 색1 이에요.\n색 쌍 (1,2) 에서 이 봉지는 어떤 종류일까요?"),
-      question: t(E,
-        "Bag (1,1) for pair (1,2) is...?",
-        "봉지 (1,1) 은 색 쌍 (1,2) 에서 어떤 종류일까요?"),
-      options: [
-        t(E, "Type A (both = x)", "A종류 (둘 다 x)"),
-        t(E, "Type B (both = y)", "B종류 (둘 다 y)"),
-        t(E, "Type C (mixed)", "C종류 (섞임)"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Bag (1,1) = both candies are color 1 = x. That's Type A: (x,x)!",
-        "봉지 (1,1) 은 사탕이 둘 다 색1, 곧 x색이에요.\n둘 다 x 니까 A종류 (x,x) 예요."),
     },
     // 2-3: Pack picker simulator
     {
