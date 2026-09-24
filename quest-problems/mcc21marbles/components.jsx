@@ -6,182 +6,169 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#dc2626";
 const KA = { wordBreak: "keep-all" };
 
-// Concept sim: walk left→right over D = A - B, carrying the running prefix
-// imbalance across each boundary. The absolute value of the carry at each
-// boundary is exactly how many single-marble adjacent moves must cross it —
-// so the answer is the sum of |carry| over all boundaries.
+// Concept sim: a table filled one row at a time, one row per box i.
+// Row i = one loop iteration of the fast code (carry += A[i]-B[i]; ops += abs(carry)).
+// 2026-09-24: rebuilt from a boundary-walk sim to a fill-the-table sim (teacher's
+// hand-drawn spec) so this page and the ch2 code page count the exact same way —
+// see components.jsx FULL_PY / getMcc21MarblesWalk for the code this table mirrors.
 export function Mcc21MarblesBoundarySim({ E }) {
   const START = [2, 2, 2, 6, 3];   // A — official sample
   const TARGET = [1, 2, 3, 4, 5];  // B — official sample  → answer 4
   const N = START.length;
-  const [step, setStep] = useState(0); // 0..N-1, boundary index after box `step`
+  const [step, setStep] = useState(0); // 0..N-1 — rows 0..step are filled in
 
   const diff = (i) => START[i] - TARGET[i];
-  // carry after processing box i = sum_{k<=i} (A[k] - B[k])
+  // carry after box i = sum_{k<=i} (A[k] - B[k])  — matches code var `carry`
   const carry = (i) => {
     let s = 0;
     for (let k = 0; k <= i; k++) s += diff(k);
     return s;
   };
-  // total ops up to (not including) boundary `s`  (boundaries 0..s-1)
-  const opsUpTo = (s) => {
+  // running answer after box i (inclusive) = sum of |carry(k)| for k<=i
+  const ansAt = (i) => {
     let total = 0;
-    for (let i = 0; i < s; i++) total += Math.abs(carry(i));
+    for (let k = 0; k <= i; k++) total += Math.abs(carry(k));
     return total;
   };
 
-  const cur = step;             // current boundary being highlighted (0..N-2), N-1 = done
-  const done = cur >= N - 1;
-  const liveCarry = done ? carry(N - 2) : carry(cur);
-  const liveOps = done ? opsUpTo(N - 1) : opsUpTo(cur) + Math.abs(liveCarry);
+  const done = step >= N - 1;
 
-  /* 2026-09-17: 이 시뮬은 경계를 하나씩 건너는 **걸음**이 4 개인데, 맨 위 상자가
-     걸음을 밟기도 전에 결론("누적은 반드시 그 경계를 건너요. 그게 옮기는 구슬 수예요")을
-     이미 말하고 있었다. 그러면 걸음이 할 말이 남지 않는다.
-     맨 위는 "무엇을 할지" 만 말하고, 설명은 걸음마다 아래 말풍선이 한다 —
-     되는 쪽을 먼저 보이고 → 값을 견주고 → 결론 순서로. */
-  const stepNote = (i) => {
-    const d = diff(i);
-    const c = carry(i);
-    const have = START[i], want = TARGET[i];
-    // 숫자 뒤에 조사가 붙지 않게 "에는 / 에서" 로 쓴다 (상자 2 는 ❌ / 상자 2 에는 ⭕).
-    const amount = (v) => E
-      ? (v > 0 ? `${v} too many` : v < 0 ? `${-v} short` : "exactly right")
-      : (v > 0 ? `${v} 개가 남아요` : v < 0 ? `${-v} 개가 모자라요` : "딱 맞아요");
-    // 2026-09-24: boxLine 은 도형을 읽는 법을 가르치는 문장이다. 경계 0 에서 한 번
-    // 보면 학생이 패턴을 알아버린다(학생 제보: "경계 0·1 보고 알아서 숫자만 봤다") —
-    // 경계 1 부터는 뺀다. selfLine·sumLine·endLine 은 매 경계마다 값이 달라 유지한다.
-    const boxLine = i !== 0 ? null : (E
-      ? `Box ${i} holds ${have} marbles and must end up with ${want}.`
-      : `상자 ${i} 에는 구슬이 ${have} 개 있는데 ${want} 개가 되어야 해요.`);
-    const selfLine = E
-      ? `Looking at box ${i} alone, it is ${amount(d)}.`
-      : `상자 ${i} 만 보면 ${amount(d)}.`;
-    const sumLine = i === 0 ? null : (E
-      ? `Adding up box 0 through box ${i}, the left side is ${amount(c)}.`
-      : `상자 0 부터 상자 ${i} 까지 더하면 왼쪽 전체는 ${amount(c)}.`);
-    const endLine = c > 0
-      ? (E ? `Those ${c} extra marbles have nowhere to go but right — ${c} cross edge ${i}.`
-           : `남는 ${c} 개는 오른쪽으로 갈 수밖에 없어요. 경계 ${i} 에서 ${c} 개가 건너가요.`)
-      : c < 0
-        ? (E ? `Those ${-c} missing marbles can only come from the right — ${-c} cross edge ${i}.`
-             : `모자란 ${-c} 개는 오른쪽에서 올 수밖에 없어요. 경계 ${i} 에서 ${-c} 개가 건너와요.`)
-        : (E ? `So nothing has to cross edge ${i}.`
-             : `그래서 경계 ${i} 에서는 건너가는 구슬이 없어요.`);
-    return [boxLine, selfLine, sumLine, endLine].filter(Boolean).join("\n");
+  // 2026-09-24: one line per row explaining what this box did to the running
+  // carry — this text lives INSIDE the new row, so "무엇이 바뀌나" and
+  // "왜 바뀌나" sit in the same place (no separate floating message box).
+  const meaningLine = (i) => {
+    const prev = i === 0 ? 0 : carry(i - 1);
+    const cur = carry(i);
+    const dir = cur >= 0 ? `${i}→${i + 1}` : `${i + 1}→${i}`;
+    if (cur === 0) {
+      if (prev !== 0) {
+        return E
+          ? `The ${Math.abs(prev)} carried over covers this box's gap. No move needed.`
+          : `넘어온 ${Math.abs(prev)}개로 부족분을 채워요. 이동 없음.`;
+      }
+      return E ? `This box balances on its own. Nothing crosses.`
+               : `이 상자는 그대로 맞아요. 건너가는 것도 없어요.`;
+    }
+    const amt = Math.abs(cur);
+    if (prev === 0) {
+      return E ? `${amt} left over → ${amt} moves ${dir}.`
+               : `${amt}개 남음 → ${dir}로 ${amt}개 이동.`;
+    }
+    if (prev === cur) {
+      return E ? `The ${amt} carried over passes straight through ${dir}.`
+               : `넘어온 ${amt}개가 그대로 ${dir}로 이동.`;
+    }
+    return E
+      ? `${Math.abs(prev)} carried over, this box adds more → ${amt} moves ${dir}.`
+      : `넘어온 ${Math.abs(prev)}개에 더해져 ${amt}개가 ${dir}로 이동.`;
   };
+
+  const headers = [
+    { ko: "i", en: "i" },
+    { ko: "Aᵢ", en: "Aᵢ" },
+    { ko: "Bᵢ", en: "Bᵢ" },
+    { ko: "Aᵢ−Bᵢ", en: "Aᵢ−Bᵢ" },
+    { ko: "이전 cur", en: "prev cur" },
+    { ko: "새 cur", ko2: "(이전+차이)", en: "new cur", en2: "(prev+diff)" },
+    { ko: "|cur|", en: "|cur|" },
+    { ko: "ans", en: "ans" },
+    { ko: "의미", en: "meaning" },
+  ];
+  const th = { padding: "5px 6px", fontSize: 9.5, color: "#7f1d1d", fontWeight: 700, borderBottom: "1.5px solid #fca5a5", whiteSpace: "nowrap" };
+  const td = { padding: "6px 6px", fontSize: 11, color: C.text, fontFamily: "JetBrains Mono, monospace", textAlign: "center", borderBottom: "1px solid #fee2e2" };
 
   return (
     <div style={{ padding: 14 }}>
-      <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center", ...KA }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
-          🔍 {t(E, "Carry-across Sim", "경계 넘기기 시뮬")}
-        </div>
-        <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5, whiteSpace: "pre-line" }}>
-          {t(E,
-            "Each box's D = A − B: plus when it has too many, minus when it is short.\nWalk the edges between the boxes left to right, counting how many marbles cross each one.",
-            "각 상자의 D = A − B 예요. 남으면 +, 모자라면 − 예요.\n상자 사이의 경계를 왼쪽부터 하나씩 건너가며 몇 개가 건너는지 세어요.")}
+      <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "8px 14px", marginBottom: 10, textAlign: "center", ...KA }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5 }}>
+          🔍 {t(E, "Fill the table, box by box", "표를 한 줄씩 채워요")}
         </div>
       </div>
 
-      {/* Boxes: A (start) row, B (target) row, boundaries between */}
-      {/* 2026-09-17: 375px 모바일에서 상자 0 과 상자 4 가 카드 밖으로 잘려 안 보였다.
-          (카드에 overflow:hidden 이 걸려 있어서 잘린 채로 끝났다.)
-          ① 폭·간격을 clamp 로 줄여 좁은 화면에서도 5 칸이 다 들어오게 하고
-          ② 그래도 모자라면 가로 스크롤로 넘어가게 한다. 양 끝 상자가 D 의 시작과 끝이라
-          하나라도 안 보이면 이 시뮬이 하려는 말이 안 된다. */}
-      <div style={{ overflowX: "auto", marginBottom: 12, paddingBottom: 4 }}>
-      <div style={{ display: "flex", alignItems: "stretch", gap: 0, width: "min-content", margin: "0 auto", fontFamily: "JetBrains Mono, monospace" }}>
-        {START.map((v, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "stretch" }}>
-            <div style={{
-              minWidth: "clamp(36px, 9.5vw, 60px)", padding: "8px clamp(2px, 1vw, 6px)", borderRadius: 8,
-              border: `2px solid ${i <= cur ? "#dc2626" : "#e5e7eb"}`,
-              background: i <= cur ? "#fef2f2" : "#fff",
-              textAlign: "center",
-              transition: "all .25s",
-            }}>
-              <div style={{ fontSize: "clamp(8px, 2.2vw, 9px)", color: C.dim }}>{t(E, "box", "상자")} {i}</div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: i <= cur ? "#dc2626" : C.text }}>{v}</div>
-              <div style={{ fontSize: 10, color: "#7c3aed" }}>→ {TARGET[i]}</div>
-              <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>
-                {t(E, "D ", "D ")}{diff(i) >= 0 ? "+" : ""}{diff(i)}
-              </div>
-            </div>
-            {i < N - 1 && (
+      {/* Boxes — pure map: position + processed/not. Numbers live in the table below,
+          not here, so no value is shown twice on this screen. */}
+      <div style={{ overflowX: "auto", marginBottom: 10, paddingBottom: 4 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 0, width: "min-content", margin: "0 auto" }}>
+          {START.map((v, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center" }}>
               <div style={{
-                width: "clamp(28px, 7.5vw, 40px)", flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                color: i === cur && !done ? "#dc2626" : "#cbd5e1",
-                fontWeight: 800, fontSize: 11,
-                transform: i === cur && !done ? "scale(1.15)" : "scale(1)",
+                width: 30, height: 30, borderRadius: 8,
+                border: `2px solid ${i <= step ? "#dc2626" : "#e5e7eb"}`,
+                background: i <= step ? "#fef2f2" : "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 11, fontWeight: 800, color: i <= step ? "#dc2626" : C.dim,
                 transition: "all .2s",
-              }}>
-                <div style={{ fontSize: "clamp(7.5px, 2.2vw, 9px)" }}>{t(E, "edge", "경계")}{i}</div>
-                <div style={{ fontSize: 16 }}>{i <= cur ? (carry(i) === 0 ? "·" : (carry(i) > 0 ? "→" : "←")) : "│"}</div>
-                <div>{i <= cur ? Math.abs(carry(i)) : ""}</div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+              }}>{i}</div>
+              {i < N - 1 && (
+                <div style={{
+                  width: 22, textAlign: "center", fontSize: 13, fontWeight: 800,
+                  color: i < step ? "#dc2626" : "#cbd5e1",
+                }}>
+                  {i < step ? (carry(i) === 0 ? "·" : carry(i) > 0 ? "→" : "←") : "│"}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* 걸음마다 하는 말 — 되는 쪽을 먼저 보이고 → 값을 견주고 → 결론 (2026-09-17) */}
-      {!done && (
-        <div style={{
-          background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10,
-          padding: "10px 12px", marginBottom: 12, fontSize: 12, lineHeight: 1.7,
-          color: "#7f1d1d", whiteSpace: "pre-line", textWrap: "balance", ...KA,
-        }}>
-          {stepNote(cur)}
-        </div>
-      )}
-
-      {/* Live state */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
-        <div style={{ background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 10px", ...KA }}>
-          <div style={{ fontSize: 10, color: C.dim, textTransform: "uppercase", letterSpacing: 0.5 }}>
-            {/* 2026-09-17: "경계 통과 누적 0" 은 0 이 경계 번호인지 구슬 수인지 안 말한다.
-                번호를 말 안쪽에 넣어 뜻이 갈리게 한다. */}
-            {E ? `Crossing edge ${done ? N - 2 : cur}` : `경계 ${done ? N - 2 : cur} 에서 건너는 구슬`}
-          </div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: "#dc2626", fontFamily: "JetBrains Mono, monospace" }}>
-            {liveCarry >= 0 ? "+" : ""}{liveCarry}
-          </div>
-          {/* 2026-09-24: 이 캡션 문장이 바로 위 말풍선(stepNote endLine)과 같은 말이라
-              4스텝 전부에서 중복이었다. 방향은 위 +/− 부호와 도형 위 화살표가 이미
-              보여주므로, 여기는 화살표 아이콘만 남긴다. */}
-          <div style={{ fontSize: 12, color: C.dim }}>
-            {liveCarry > 0 && "→"}
-            {liveCarry < 0 && "←"}
-            {liveCarry === 0 && "·"}
-          </div>
-        </div>
-        <div style={{ background: "#fff1f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "8px 10px", ...KA }}>
-          <div style={{ fontSize: 10, color: "#b91c1c", textTransform: "uppercase", letterSpacing: 0.5 }}>
-            {t(E, "Total ops so far", "지금까지 총 이동")}
-          </div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: "#b91c1c", fontFamily: "JetBrains Mono, monospace" }}>
-            {liveOps}
-          </div>
-          <div style={{ fontSize: 10, color: "#b91c1c" }}>
-            {t(E, "= the crossings added up", "= 경계마다 건넌 구슬을 다 더한 값")}
-          </div>
-        </div>
+      {/* The table — this IS the sim. New row = the one thing that changes each click.
+          2026-09-24: table-layout:fixed + % widths so "의미" (the most useful column)
+          wraps to 2-3 lines instead of getting clipped off-screen on 375px mobile
+          (a fixed minWidth pushed it past the right edge with no scroll hint). */}
+      <div style={{ overflowX: "auto", marginBottom: 10 }}>
+        <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 320, tableLayout: "fixed" }}>
+          <colgroup>
+            <col style={{ width: "5%" }} /><col style={{ width: "7%" }} /><col style={{ width: "7%" }} />
+            <col style={{ width: "9%" }} /><col style={{ width: "10%" }} /><col style={{ width: "12%" }} />
+            <col style={{ width: "8%" }} /><col style={{ width: "8%" }} /><col style={{ width: "34%" }} />
+          </colgroup>
+          <thead>
+            <tr>
+              {headers.map((h, hi) => (
+                <th key={hi} style={th}>
+                  {t(E, h.en, h.ko)}
+                  {(h.ko2 || h.en2) && <div style={{ fontWeight: 400, fontSize: 8.5 }}>{t(E, h.en2, h.ko2)}</div>}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: step + 1 }, (_, i) => i).map((i) => {
+              const isNew = i === step;
+              return (
+                <tr key={i} style={{ background: isNew ? "#fff1f2" : "transparent" }}>
+                  <td style={{ ...td, fontWeight: isNew ? 800 : 400 }}>{i}</td>
+                  <td style={td}>{START[i]}</td>
+                  <td style={td}>{TARGET[i]}</td>
+                  <td style={td}>{diff(i) >= 0 ? "+" : ""}{diff(i)}</td>
+                  <td style={td}>{i === 0 ? 0 : carry(i - 1)}</td>
+                  <td style={{ ...td, fontWeight: 800, color: "#dc2626" }}>{carry(i) >= 0 ? "+" : ""}{carry(i)}</td>
+                  <td style={td}>{Math.abs(carry(i))}</td>
+                  <td style={{ ...td, fontWeight: 800, color: "#b91c1c" }}>{ansAt(i)}</td>
+                  <td style={{ ...td, textAlign: "left", fontFamily: "inherit", fontSize: 10, lineHeight: 1.4, color: "#7f1d1d", whiteSpace: "normal", wordBreak: "keep-all", overflowWrap: "break-word" }}>{meaningLine(i)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ fontSize: 10, color: C.dim, marginBottom: 12, ...KA }}>
+        {t(E, "|cur| is cur with the sign dropped — always 0 or more.", "|cur| 은 cur 에서 부호만 뺀 값이에요. 항상 0 이상이에요.")}
       </div>
 
       {/* Controls */}
       <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
-        <button onClick={() => setStep(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#f1f5f9" : "#fff", color: cur === 0 ? "#cbd5e1" : "#dc2626",
-          border: `1.5px solid ${cur === 0 ? "#e2e8f0" : "#dc2626"}`, borderRadius: 8,
-          padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: cur === 0 ? "not-allowed" : "pointer",
+        <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} style={{
+          background: step === 0 ? "#f1f5f9" : "#fff", color: step === 0 ? "#cbd5e1" : "#dc2626",
+          border: `1.5px solid ${step === 0 ? "#e2e8f0" : "#dc2626"}`, borderRadius: 8,
+          padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: step === 0 ? "not-allowed" : "pointer",
         }}>← {t(E, "Back", "이전")}</button>
-        <button onClick={() => setStep(Math.min(N - 1, cur + 1))} disabled={done} style={{
+        <button onClick={() => setStep(Math.min(N - 1, step + 1))} disabled={done} style={{
           background: done ? "#f1f5f9" : "#dc2626", color: done ? "#cbd5e1" : "#fff",
           border: `1.5px solid ${done ? "#e2e8f0" : "#dc2626"}`, borderRadius: 8,
           padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: done ? "not-allowed" : "pointer",
-        }}>{t(E, "Cross next edge", "다음 경계 통과")} →</button>
+        }}>{t(E, "Next box", "다음 상자")} →</button>
         <button onClick={() => setStep(0)} style={{
           background: "#fff", color: "#64748b", border: "1.5px solid #cbd5e1", borderRadius: 8,
           padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer",
@@ -191,14 +178,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
       {done && (
         <div style={{ marginTop: 12, background: "#fff1f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", textAlign: "center", ...KA }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#b91c1c" }}>
-            ✅ {t(E,
-              `Answer = every edge's crossings added up = ${liveOps}`,
-              `정답 = 경계마다 건넌 구슬을 다 더한 값 = ${liveOps}`)}
-          </div>
-          <div style={{ fontSize: 11, color: "#b91c1c", marginTop: 4, whiteSpace: "pre-line", lineHeight: 1.6 }}>
-            {t(E,
-              "At each edge there was only ever one choice — the left side's total gap had to cross it.\nSo we never move a marble: one left-to-right pass over N boxes is the whole answer.",
-              "경계마다 고를 것이 없었어요.\n왼쪽에 쌓인 차이가 그대로 건너야만 했으니까요.\n그래서 구슬을 실제로 옮길 필요가 없어요.\n상자 N 개를 왼쪽부터 한 번 훑으면 답이 나와요.")}
+            ✅ {t(E, `Table filled — ans = ${ansAt(N - 1)}`, `표가 다 찼어요 — ans = ${ansAt(N - 1)}`)}
           </div>
         </div>
       )}
