@@ -19,9 +19,10 @@ export const SOLUTION_CODE = [
   "",
   "S = int(input())",
   "damaged = set()",
+  "line = input()               # S가 0이어도 이 줄은 항상 있어요 (빈 줄)",
   "if S > 0:",
   "    damaged = set(",
-  "        int(x)-1 for x in input().split())",
+  "        int(x)-1 for x in line.split())",
   "",
   "Q = int(input())",
   "queries = []",
@@ -461,16 +462,17 @@ export function makeReachCh3(E) {
             lines={[
               "S = int(input())",
               "damaged = set()",
+              "line = input()               # S가 0이어도 이 줄은 항상 있어요 (빈 줄)",
               "if S > 0:",
               "    damaged = set(",
-              "        int(x)-1 for x in input().split())",
+              "        int(x)-1 for x in line.split())",
               "",
               "Q = int(input())",
               "queries = []",
               "for _ in range(Q):",
               "    queries.append(int(input()))",
             ]}
-            highlight={[3, 4]}
+            highlight={[3, 4, 5]}
           />
           <div style={{
             marginTop: 10, background: "#fef3c7", borderRadius: 8, padding: "6px 10px",
