@@ -11,9 +11,6 @@ const A = "#059669";
    (선생님이 원문 PDF 를 주셔서 확인. Statements 3/statement-en.pdf p.1-2) */
 
 const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
   "T = int(input())",
   "for _ in range(T):",
   "    n, m, A, B = map(int, input().split())",

@@ -14,8 +14,7 @@ export { InnovationSim } from "./sims";
    그 앞의 a+b 상위 m-1개 합(min-heap)을 유지하며 best 갱신.
    ============================================================ */
 const FULL_PY = [
-  "import sys, heapq",
-  "input = sys.stdin.readline",
+  "import heapq",
   "n, m = map(int, input().split())",
   "cards = []",
   "for _ in range(n):",
@@ -77,7 +76,7 @@ export function getInnovationSections(E) {
     {
       label: t(E, "📥 Read + Sort by c+d", "📥 읽기 + c+d 정렬"),
       color: A,
-      py: FULL_PY.slice(0, 8),
+      py: FULL_PY.slice(0, 7),
       cpp: FULL_CPP.slice(0, 14),
       why: [
         t(E, "For each card we only ever need two totals: a+b (always visible) and c+d (visible only if this card is last).",
@@ -86,8 +85,8 @@ export function getInnovationSections(E) {
             "각 카드를 (c+d, a+b) 로 저장하고 c+d 오름차순으로 정렬해요.\n그러면 어떤 카드든 자기 앞 카드들보다 c+d 가 커요.\n그래서 앞 카드들과 함께 놓으면 그 카드가 마지막 장이 돼요."),
       ],
       pyOnly: [
-        t(E, "sys.stdin.readline speeds up reading when n is up to 20000.",
-            "n 이 최대 20000 이라 sys.stdin.readline 으로 빠르게 읽어요."),
+        t(E, "heapq needs its own import — it's not a built-in like min() or sorted().",
+            "heapq 는 min()·sorted() 처럼 기본 내장이 아니라서 따로 import 해요."),
       ],
       cppOnly: [
         t(E, "pair sorts by .first (c+d) automatically. Use long long — values reach 10^9.",
@@ -97,7 +96,7 @@ export function getInnovationSections(E) {
     {
       label: t(E, "🗂️ Keep top m−1 of a+b", "🗂️ a+b 상위 m−1개 유지"),
       color: A,
-      py: FULL_PY.slice(8, 11),
+      py: FULL_PY.slice(7, 10),
       cpp: FULL_CPP.slice(14, 17),
       why: [
         t(E, "A min-heap holds the a+b of the best m−1 cards seen so far; topsum is their sum; best is the running answer.",
@@ -117,7 +116,7 @@ export function getInnovationSections(E) {
     {
       label: t(E, "🎯 Try each card as the last one", "🎯 각 카드를 마지막 장으로"),
       color: A,
-      py: FULL_PY.slice(11),
+      py: FULL_PY.slice(10),
       cpp: FULL_CPP.slice(17),
       why: [
         t(E, "Walk cards in c+d order. Once we have m−1 candidates in front, using this card as the last gives: topsum (m−1 best a+b) + this card's a+b + its c+d.",

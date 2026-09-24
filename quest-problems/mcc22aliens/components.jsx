@@ -7,9 +7,6 @@ const A = "#2563eb";
 const KA = { wordBreak: "keep-all" };
 
 const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
   "def main():",
   "    T = int(input())",
   "    out = []",
@@ -84,10 +81,10 @@ const FULL_CPP = [
 /* 2026-09-17: 섹션 한 개에 30 줄을 통째로 펼치고 있었다 — 읽기 · 참/거짓 풀기 ·
    세기 · 비교/출력이 한 덩어리였다. 네 단계로 나눈다.
    ⚠️ 코드 **내용**은 한 글자도 안 바꾼다. 그래서 새로 적지 않고 slice 로 자른다. */
-const PY_READ    = FULL_PY.slice(0, 10);
-const PY_DECODE  = FULL_PY.slice(10, 23);
-const PY_VERDICT = FULL_PY.slice(23, 27);
-const PY_OUT     = FULL_PY.slice(27);
+const PY_READ    = FULL_PY.slice(0, 7);
+const PY_DECODE  = FULL_PY.slice(7, 20);
+const PY_VERDICT = FULL_PY.slice(20, 24);
+const PY_OUT     = FULL_PY.slice(24);
 
 const CPP_READ    = FULL_CPP.slice(0, 12);
 const CPP_DECODE  = FULL_CPP.slice(12, 32);
@@ -107,8 +104,8 @@ export function getMcc22AliensSections(E) {
             "a 와 b 는 자리끼리 짝이에요.\na[i] 는 i 번 자신의 타입이고,\nb[i] 는 i 번이 지목한 상대에게 붙인 타입이에요."),
       ],
       pyOnly: [
-        t(E, "rstrip() drops the newline that readline leaves at the end of each string.",
-            "readline 은 줄 끝의 줄바꿈까지 같이 줘요.\nrstrip() 으로 그 줄바꿈을 떼어 내요."),
+        t(E, "rstrip() removes any trailing space or newline, so a and b hold only the T/F characters we compare.",
+            "rstrip() 으로 끝에 남을 수 있는 공백이나 줄바꿈을 없애요.\n그래야 a 와 b 에 비교할 T/F 글자만 남아요."),
       ],
       cppOnly: [
         t(E, "cin >> n >> a >> b reads the count and two strings; while (T--) repeats for every test case.",

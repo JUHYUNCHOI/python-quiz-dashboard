@@ -5,9 +5,6 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#2563eb";
 
 const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
   "N = int(input())",
   "K = int(input())",
   "H = list(map(int, input().split()))",
@@ -108,7 +105,7 @@ export function getMcc15IsthmusSections(E) {
     {
       label: t(E, "1️⃣ Take in the heights", "1️⃣ 높이를 받아요"),
       color: A,
-      py: FULL_PY.slice(0, 7), cpp: FULL_CPP.slice(0, 12),
+      py: FULL_PY.slice(0, 4), cpp: FULL_CPP.slice(0, 12),
       why: [
         t(E, "What do we have to hand back? How many order-K peaks and valleys there are. So first take in the row of heights we'll measure runs on.",
             "무엇을 내놓아야 하나요? order-K 봉우리와 골짜기의 개수예요.\n그러니 먼저 길이를 잴 높이들을 받아요."),
@@ -129,7 +126,7 @@ export function getMcc15IsthmusSections(E) {
     {
       label: t(E, "2️⃣ Measure runs coming from the left", "2️⃣ 왼쪽에서 내려오는 길이를 재요"),
       color: "#2563eb",
-      py: FULL_PY.slice(7, 20), cpp: FULL_CPP.slice(12, 28),
+      py: FULL_PY.slice(4, 17), cpp: FULL_CPP.slice(12, 28),
       why: [
         t(E, "downL[i] = downL[i-1] + 1 is the whole trick. The left neighbour already knows how far the descent runs, so we never count the same stretch twice.",
             "downL[i] = downL[i-1] + 1 이 핵심이에요.\n왼쪽 이웃이 몇 칸 내려왔는지 이미 알고 있어서, 같은 구간을 다시 세지 않아요."),
@@ -138,7 +135,7 @@ export function getMcc15IsthmusSections(E) {
     {
       label: t(E, "3️⃣ Do the same from the right", "3️⃣ 오른쪽에서도 똑같이 재요"),
       color: "#0891b2",
-      py: FULL_PY.slice(20, 33), cpp: FULL_CPP.slice(28, 41),
+      py: FULL_PY.slice(17, 30), cpp: FULL_CPP.slice(28, 41),
       why: [
         t(E, "The right-hand lengths (downR, upR) are the same idea run from the back of the array.",
             "오른쪽 길이(downR, upR)는 같은 생각을 배열 뒤에서부터 돌린 것뿐이에요."),
@@ -147,7 +144,7 @@ export function getMcc15IsthmusSections(E) {
     {
       label: t(E, "4️⃣ Count peaks and valleys", "4️⃣ 봉우리·골짜기를 세요"),
       color: "#16a34a",
-      py: FULL_PY.slice(33), cpp: FULL_CPP.slice(41),
+      py: FULL_PY.slice(30), cpp: FULL_CPP.slice(41),
       why: [
         t(E, "The rule \"at least K pieces of land on both sides\" needs no separate check — if the land runs out, the run length simply cannot reach K.",
             "양쪽에 K칸이 있어야 한다는 조건은 따로 확인하지 않아도 돼요.\n칸이 모자라면 길이가 저절로 K 에 못 미치니까요."),

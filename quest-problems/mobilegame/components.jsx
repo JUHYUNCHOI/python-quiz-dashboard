@@ -17,9 +17,7 @@ export function MobileGameSim(props) {
    Alice 파워는 커지기만 → 매번 '먹을 수 있는 가장 큰 적'을 먹으면 최소 처치.
    ═══════════════════════════════════════════════════════════════ */
 const FULL_PY = [
-  "import sys, heapq",
-  "input = sys.stdin.readline",
-  "",
+  "import heapq",
   "T = int(input())",
   "for _ in range(T):",
   "    N, A, B = map(int, input().split())",
@@ -146,19 +144,19 @@ export function getMobileGameWalk(E, lang = "py") {
   }
   return {
     code: FULL_PY, vars: _MG_VARS, beats: [
-      { hi: [0, 6], bubble: t(E,
+      { hi: [0, 4], bubble: t(E,
         "What do we need to find? The fewest kills to reach power B (or -1 if it can't be done).\nSo first we have to decide which enemy to eat each time.\nRead T, N, A, B and the enemy powers, then sort them ascending.",
         "무엇을 구해야 하나요?\n목표 B 에 닿는 최소 처치 수예요 (안 되면 -1).\n그러니 매번 어떤 적을 먹을지부터 정해야 해요.\nT·N·A·B 와 적 파워를 읽고 오름차순으로 정렬해요.") },
-      { hi: [7, 10], bubble: t(E,
+      { hi: [5, 8], bubble: t(E,
         "Eating the biggest beatable enemy grows power the most.\nPython's heapq is a min-heap, so store -p to pop the largest.\nptr, kills, and cur (starting at A) track the rest.",
         "먹을 수 있는 적 중 가장 큰 걸 먹어야 파워가 제일 많이 늘어요.\nheapq 는 최소힙이라 -p 로 넣어야 가장 큰 걸 꺼낼 수 있어요.\nptr, kills, cur(=A) 도 같이 준비해요.") },
-      { hi: [11, 14], bubble: t(E,
+      { hi: [9, 12], bubble: t(E,
         "As power grows, more enemies become beatable.\nSo each time through the loop, push every enemy weaker than cur into the heap first.",
         "파워가 오를 때마다 새로 먹을 수 있는 적이 생겨요.\n그래서 돌 때마다 cur 보다 약한 적을 먼저 힙에 채워 넣어요.") },
-      { hi: [15, 18], bubble: t(E,
+      { hi: [13, 16], bubble: t(E,
         "Empty heap means nothing left to eat — stop there.\nOtherwise eat the biggest to grow the most, and count one kill.",
         "힙이 비었으면 더 먹을 적이 없다는 뜻이에요 — 거기서 멈춰요.\n아니면 가장 큰 적을 먹어 파워를 최대로 올리고, 처치 하나를 세요.") },
-      { hi: [19, 22], bubble: t(E,
+      { hi: [17, 20], bubble: t(E,
         "Repeat until power reaches B — print kills. Never reaches it — print -1.",
         "이렇게 반복해 B 에 닿았으면 kills, 끝내 못 닿았으면 -1 을 출력해요.") },
     ],

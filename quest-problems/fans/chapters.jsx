@@ -16,7 +16,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (8 steps)
+   Chapter 1: 📋 문제 이해 (7 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeFansCh1(E) {
   return [
@@ -182,12 +182,6 @@ export function makeFansCh1(E) {
       narr: t(E,
         "Before we see the algorithm, YOU try first!\nTap colors to place sticks. Same-color neighbors are blocked.\nCan you reach the optimal length?", "풀이를 보기 전에 먼저 직접 해봐요.\n색을 눌러 막대를 놓아요. 가장 길게까지 갈 수 있을까요?"),
     },
-    // 1-5: Three cases — watch sticks get placed one by one
-    {
-      type: "fanPlacementViz",
-      narr: t(E,
-        "Now let's watch the algorithm.\nWhen can we use all sticks? It depends on how many of the most common color we have!\nTry all three cases.", "언제 막대를 전부 쓸 수 있을까요?\n가장 많은 색이 나머지보다 얼마나 많은지에 달렸어요. 세 경우를 봐요."),
-    },
     // 1-5: Why 2×rest+1?
     {
       type: "separatorBuildViz",
@@ -212,30 +206,12 @@ export function makeFansCh1(E) {
         "min(12, 11) = 11! The dominant color (7) is too many — we can only use 11 sticks.",
         "min(12, 11) = 11 이에요. 나머지 5개로는 가장 많은 색 7개를 다 떼어 놓지 못해서 11개까지만 써요."),
     },
-    // 1-7: Quiz — when all fit
-    {
-      type: "quiz",
-      narr: t(E,
-        "Another example! Counts = [3, 3, 3]. Total = 9, max = 3, rest = 6. Can we use all 9?", "이번엔 [3, 3, 3]이에요. 9개를 다 쓸 수 있을까요?"),
-      question: t(E,
-        "min(9, 2×6+1) = min(9, 13) = ?",
-        "min(9, 2×6+1) = min(9, 13) = ?"),
-      options: [
-        t(E, "13", "13"),
-        t(E, "9 (use all!)", "9 (전부 쓰기!)"),
-        t(E, "7", "7"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "min(9, 13) = 9! rest (6) is large enough, so all sticks fit. ABCABCABC works!",
-        "min(9, 13) = 9 예요. 나머지 6개가 충분해서 ABCABCABC 처럼 다 떼어 놓을 수 있어요."),
-    },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 🏗️ 시뮬레이션 (4 steps)
+   Chapter 2: 🏗️ 시뮬레이션 (3 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeFansCh2(E) {
   return [
@@ -263,21 +239,11 @@ export function makeFansCh2(E) {
         "When the dominant color isn't too greedy, we can use ALL sticks! The rest provides enough separators.",
         "나머지 막대가 가장 많은 색 사이사이를 모두 갈라 줄 만큼 있어서, 막대를 전부 쓸 수 있어요."),
     },
-    // 2-3: Hand calculation 1
+    // 2-3: Hand calculation
     {
       type: "input",
       narr: t(E,
-        "Try it yourself! Counts = [5, 1, 1]. Total = 7, max = 5, rest = 2.", "직접 해봐요. 개수는 [5, 1, 1] 이고 합계 7, 최대 5, 나머지 2예요."),
-      question: t(E,
-        "min(7, 2×2+1) = ?",
-        "min(7, 2×2+1) = ?"),
-      answer: 5,
-    },
-    // 2-4: Hand calculation 2
-    {
-      type: "input",
-      narr: t(E,
-        "One more! Counts = [4, 4, 4]. Total = 12, max = 4, rest = 8.", "하나 더 해봐요. 개수는 [4, 4, 4] 이고 합계 12, 최대 4, 나머지 8이에요."),
+        "Try it yourself! Counts = [4, 4, 4]. Total = 12, max = 4, rest = 8.", "직접 해봐요. 개수는 [4, 4, 4] 이고 합계 12, 최대 4, 나머지 8이에요."),
       question: t(E,
         "min(12, 2×8+1) = ?",
         "min(12, 2×8+1) = ?"),
@@ -499,13 +465,7 @@ export function makeFansCh3(E) {
           </div>
         </div>),
     },
-    // 3-5: Walkthrough — formula visualizer
-    {
-      type: "formulaTrace",
-      narr: t(E,
-        "Let's trace through sample inputs step by step!\nWatch how the formula computes the answer.", "샘플 입력을 하나씩 따라가며 공식이 답을 어떻게 내는지 봐요."),
-    },
-    // 3-6: Full code reveal
+    // 3-5: Full code reveal
     {
       type: "code",
       narr: t(E,

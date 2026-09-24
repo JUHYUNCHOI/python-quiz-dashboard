@@ -17,9 +17,6 @@ const A = "#d97706";
    원문: public/problems/mcc-2024-statements.pdf p.3 */
 
 const FULL_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
   "n, m = map(int, input().split())",
   "t = list(map(int, input().split()))",
   "",

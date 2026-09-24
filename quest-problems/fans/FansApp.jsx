@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { FanSimulator, FanPlacementViz, SeparatorBuildViz, FormulaTrace, TryYourselfViz } from "./components";
+import { FanSimulator, SeparatorBuildViz, TryYourselfViz } from "./components";
 import { makeFansCh1, makeFansCh2, makeFansCh3 } from "./chapters";
 
 const A = "#d97706";
@@ -97,9 +97,7 @@ export default function FansApp(props = {}) {
     if (step.type === "code") return <CodeReveal label={step.label} lines={step.code} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "fanSimulator") return <FanSimulator E={E} />;
-    if (step.type === "fanPlacementViz") return <FanPlacementViz E={E} />;
     if (step.type === "separatorBuildViz") return <SeparatorBuildViz E={E} />;
-    if (step.type === "formulaTrace") return <FormulaTrace E={E} />;
     if (step.type === "tryYourselfViz") return <TryYourselfViz E={E} />;
     return null;
   };
@@ -110,9 +108,7 @@ export default function FansApp(props = {}) {
     if (s.type === "code") return <CodeReveal label={s.label} lines={s.code} />;
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "fanSimulator") return <FanSimulator E={E} />;
-    if (s.type === "fanPlacementViz") return <FanPlacementViz E={E} />;
     if (s.type === "separatorBuildViz") return <SeparatorBuildViz E={E} />;
-    if (s.type === "formulaTrace") return <FormulaTrace E={E} />;
     if (s.type === "tryYourselfViz") return <TryYourselfViz E={E} />;
     return null;
   };
