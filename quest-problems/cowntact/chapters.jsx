@@ -80,61 +80,61 @@ export function makeCowntactCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Try it: pick Day-0 sources, press Play, watch the wave. Notice — one source can fill a whole connected stretch.",
-        "0일차 감염원을 고르고 재생해서 어떻게 퍼지는지 봐요."),
+        "Try it: pick one source in the middle, then step night by night.",
+        "가운데 감염원 하나를 고르고, 한 밤씩 넘기며 지켜봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <InfectionSim E={E} />
           <div style={{ marginTop: 10, padding: "8px 12px", background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 8, fontSize: 12, color: "#9a3412" }}>
             🔑 {t(E,
-              "Key observation: no matter how long a connected run of 1s is, ONE source in the middle can produce it. And a 0 in between was never reached, so one source can never cover two runs. So we just need to count separate runs.",
-              "핵심 관찰: 1 이 연속된 덩어리가 아무리 길어도, 가운데 한 마리만 있으면 만들 수 있어요. 반대로 사이에 있는 0 에는 병이 닿은 적이 없으니, 한 마리가 두 덩어리를 채울 수는 없어요. 그래서 떨어진 덩어리 개수만 세면 돼요.")}
+              "Key observation: a single source's block is always ODD-sized after any number of nights — 1, 3, 5, 7... So an EVEN-sized block can never come from just one source.",
+              "핵심 관찰: 감염원 1마리가 만드는 덩어리 크기는 항상 홀수예요 — 1, 3, 5, 7... 그래서 짝수 크기 덩어리는 감염원 1마리로 못 만들어요.")}
           </div>
         </div>),
     },
-    // 1-3: Quiz — single segment
+    // 1-3: Quiz — an even-sized block needs more than 1 source
     {
       type: "quiz",
       narr: t(E,
-        "Picture the spread in reverse — if 5 cows are sick now, how few could have started it?",
-        "지금 5 마리가 감염이라면 처음엔 최소 몇 마리였을까요?"),
+        "Now think backwards — what's the minimum for \"0110\"?",
+        "이번엔 거꾸로 생각해봐요 — \"0110\" 은 최소 몇 마리로 만들 수 있을까요?"),
       question: t(E,
-        "\"11111\" — what is the minimum number initially infected?",
-        "\"11111\" 이 되려면 처음에 감염된 소는 최소 몇 마리일까요?"),
+        "\"0110\" — what is the minimum number initially infected?",
+        "\"0110\" 이 되려면 처음에 감염된 소는 최소 몇 마리일까요?"),
       options: [
-        t(E, "5 (all of them)", "5 (전부)"),
         t(E, "1 (one in the middle)", "1 (가운데 하나)"),
-        t(E, "2 (both ends)", "2 (양쪽 끝)"),
+        t(E, "2 (both of them)", "2 (둘 다)"),
+        t(E, "4 (all of them)", "4 (전부)"),
       ],
       correct: 1,
       explain: t(E,
-        "One cow in the middle can spread outward to infect all 5! A single continuous group needs only 1 initial source.",
-        "가운데 한 마리가 양옆으로 퍼져서 5마리를 모두 감염시킬 수 있어요! 이어진 덩어리 하나는 처음 감염 1마리면 돼요."),
+        "A single source only ever makes an ODD-sized block (1, 3, 5...). 2 is even, so it can NEVER come from 1 source — both cows must already be sick on day 0.",
+        "감염원 1마리가 만드는 덩어리는 항상 홀수 칸이에요 (1, 3, 5...). 2는 짝수라서 절대 안 나와요 — 두 마리 모두 0일차부터 감염돼 있어야 해요."),
     },
-    // 1-4: Visualize runs — eye-evident counting
+    // 1-4: Visualize runs — odd vs even blocks
     {
       type: "reveal",
       narr: t(E,
-        "Each '0' is a wall. Look at \"01110110\" — colored groups show the answer at a glance.",
-        "0 이 벽이 돼서 덩어리를 갈라 놓아요."),
+        "Each '0' splits the row into odd- or even-sized blocks.",
+        "0 이 줄을 덩어리로 나누면 크기가 홀수거나 짝수예요."),
       content: (
         <div style={{ padding: 16 }}>
           <RunsViz E={E} str="01110110" />
         </div>),
     },
-    // 1-5: Input — multiple segments
+    // 1-5: Input — how wide does a block grow?
     {
       type: "input",
       narr: t(E,
-        "0s split the row.  Look at \"01110110\" and find the runs of 1s.",
-        "0 이 줄을 끊어요. \"01110110\" 에서 1 이 이어진 덩어리를 세 보세요."),
+        "Each night, a block grows by 1 cell on each side.",
+        "밤이 지날수록 덩어리는 양쪽으로 1칸씩 자라나요."),
       question: t(E,
-        "\"01110110\"\nHow many separate infected groups?",
-        "\"01110110\"\n감염된 덩어리가 몇 개일까요?"),
+        "One source in the middle spreads for 3 nights.\nHow many cells does the block cover?",
+        "감염원 1마리가 가운데서 3일 밤 동안 퍼지면,\n덩어리는 몇 칸이 될까요?"),
       hint: t(E,
-        "Each '0' breaks the chain.  Count how many separate runs of 1s appear.",
-        "0 이 줄을 끊어 줘요. 1 이 이어진 덩어리가 몇 개일까요?"),
-      answer: 2,
+        "Block size = 2 × (nights) + 1.",
+        "덩어리 크기 = 2 × (밤 수) + 1 이에요."),
+      answer: 7,
     },
   ];
 }
@@ -145,12 +145,12 @@ export function makeCowntactCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowntactCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — answer = number of runs of 1s.
+    // 2-1: Progressive code — find the block-size limit, then sum ceil(block / limit).
     {
       type: "progressive",
       narr: t(E,
-        "Walk the string once and count runs of 1s.  Sections build the loop one piece at a time.",
-        "문자열을 한 번 훑으며 1 이 이어진 덩어리 수를 세요."),
+        "Find the biggest window that fits, then sum ceil(block / window).",
+        "딱 맞는 가장 큰 창을 구하고, ceil(덩어리 / 창) 을 더해요."),
       sections: getCowntactSections(E),
     },
   ];

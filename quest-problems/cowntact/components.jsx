@@ -13,7 +13,10 @@ const A = "#7c5cfc";
 
 /* ─────────────────────────────────────────────────────────────
    InfectionSim — pick initial sources, watch the wave spread.
-   Eye-evident proof: one connected run of 1s = exactly 1 source.
+   Eye-evident proof: a single source only ever makes ODD-sized
+   blocks (1, 3, 5, 7...). An even-sized block can never come
+   from just one source. (Counting "runs" is NOT the answer —
+   see the code chapter for why.)
    ───────────────────────────────────────────────────────────── */
 export function InfectionSim({ E }) {
   const N = 9;
@@ -151,11 +154,18 @@ export function InfectionSim({ E }) {
       </div>
 
       {/* Insight callout */}
-      {day > 0 && sourceCount > 0 && (
+      {day > 0 && sourceCount === 1 && sickCount === 2 * day + 1 && (
         <div style={{ marginTop: 10, padding: "8px 12px", background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, fontSize: 12, color: "#15803d" }}>
           💡 {t(E,
-            `${sourceCount} source(s) → ${countRuns(cur)} connected run(s) of 1s. Each run = 1 source needed.`,
-            `감염원 ${sourceCount}개 → 1 이 이어진 덩어리 ${countRuns(cur)}개예요. 덩어리 하나는 감염원 한 마리면 충분해요.`)}
+            `1 source, ${day} night(s) → block size = 2×${day}+1 = ${sickCount}. Always ODD (1,3,5,7...). An EVEN-size block can never come from 1 source.`,
+            `감염원 1마리, ${day}일 밤 → 덩어리 크기 2×${day}+1 = ${sickCount}칸. 항상 홀수예요 (1,3,5,7...). 짝수 크기 덩어리는 감염원 1마리로 못 만들어요.`)}
+        </div>
+      )}
+      {day > 0 && sourceCount > 1 && (
+        <div style={{ marginTop: 10, padding: "8px 12px", background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, fontSize: 12, color: "#15803d" }}>
+          💡 {t(E,
+            `${sourceCount} sources, ${countRuns(cur)} run(s) of 1s so far.`,
+            `감염원 ${sourceCount}마리, 지금 1 덩어리는 ${countRuns(cur)}개예요.`)}
         </div>
       )}
     </div>
@@ -169,13 +179,17 @@ function countRuns(arr) {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   RunsViz — given a final-state string, highlight each run of 1s.
-   Eye-evident: counting groups = the answer.
+   RunsViz — given a final-state string, highlight each run of 1s
+   and its length. Eye-evident: some blocks are odd, some are
+   even — counting blocks alone is NOT the answer (an even block
+   needs more than 1 source; see the code chapter for the exact
+   count).
    ───────────────────────────────────────────────────────────── */
 export function RunsViz({ E, str = "01110110" }) {
   const chars = str.split("");
+  const ODD = A;          // purple = odd-length block
+  const EVEN = "#dc2626"; // red = even-length block
   // Assign group id per run of 1s
-  const groupColors = ["#7c5cfc", "#0d9488", "#dc2626", "#ea580c", "#2563eb"];
   let g = -1; let prev = "0";
   const groupOf = chars.map((c) => {
     if (c === "1" && prev !== "1") g++;
@@ -183,16 +197,20 @@ export function RunsViz({ E, str = "01110110" }) {
     return c === "1" ? g : -1;
   });
   const numGroups = g + 1;
+  const groupLens = Array(numGroups).fill(0);
+  groupOf.forEach((gi) => { if (gi >= 0) groupLens[gi]++; });
+  const hasEven = groupLens.some((len) => len % 2 === 0);
 
   return (
     <div style={{ background: "#fff", border: `1.5px solid ${A}`, borderRadius: 12, padding: 14 }}>
       <div style={{ fontSize: 12, fontWeight: 800, color: A, marginBottom: 8 }}>
-        🔍 {t(E, "Count the groups", "덩어리 세기")}
+        🔍 {t(E, "Block sizes", "덩어리 크기")}
       </div>
       <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 10, flexWrap: "wrap" }}>
         {chars.map((c, i) => {
           const gi = groupOf[i];
-          const color = gi >= 0 ? groupColors[gi % groupColors.length] : "#94a3b8";
+          const isEven = gi >= 0 && groupLens[gi] % 2 === 0;
+          const color = gi >= 0 ? (isEven ? EVEN : ODD) : "#94a3b8";
           return (
             <div key={i} style={{
               width: 36, height: 44,
@@ -206,23 +224,24 @@ export function RunsViz({ E, str = "01110110" }) {
             }}>
               {c}
               {gi >= 0 && (
-                <div style={{ position: "absolute", top: -8, left: 0, right: 0, fontSize: 9, color, fontWeight: 700 }}>
-                  G{gi + 1}
+                <div style={{ position: "absolute", top: -9, left: 0, right: 0, fontSize: 9, color, fontWeight: 700 }}>
+                  {groupLens[gi]}
                 </div>
               )}
             </div>
           );
         })}
       </div>
-      <div style={{ textAlign: "center", fontSize: 13, color: C.text }}>
-        {t(E, "Groups of 1s", "1 덩어리 수")}: <b style={{ color: A, fontSize: 18 }}>{numGroups}</b>
-        <span style={{ color: C.dim, fontSize: 11, marginLeft: 8 }}>
-          {t(E, "← the answer", "← 정답")}
-        </span>
+      <div style={{ display: "flex", justifyContent: "center", gap: 14, marginBottom: 8, fontSize: 11 }}>
+        <span style={{ color: ODD }}>■ {t(E, "odd-size block", "홀수 크기 덩어리")}</span>
+        <span style={{ color: EVEN }}>■ {t(E, "even-size block", "짝수 크기 덩어리")}</span>
       </div>
-      <div style={{ marginTop: 8, padding: "6px 10px", background: "#f5f3ff", borderRadius: 6, fontSize: 11, color: "#5b21b6", textAlign: "center" }}>
-        {t(E, "Each '0' breaks the chain. Count the colored groups.",
-            "0 이 사슬을 끊어요. 색칠된 덩어리를 세요.")}
+      <div style={{ marginTop: 8, padding: "6px 10px", background: hasEven ? "#fef2f2" : "#f5f3ff", borderRadius: 6, fontSize: 11, color: hasEven ? "#b91c1c" : "#5b21b6", textAlign: "center", wordBreak: "keep-all" }}>
+        {hasEven
+          ? t(E, "The red block is even-sized — it can't come from just 1 source. Counting blocks alone isn't enough.",
+                  "빨간 덩어리는 짝수 크기예요 — 감염원 1마리로는 못 만들어요. 덩어리 개수만 세면 부족해요.")
+          : t(E, "All blocks here are odd-sized.",
+                  "여기 있는 덩어리는 모두 홀수 크기예요.")}
       </div>
     </div>
   );
