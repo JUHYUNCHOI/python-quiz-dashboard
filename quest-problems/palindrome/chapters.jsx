@@ -10,8 +10,8 @@ export function makePalindromeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie and Elsie share a pile of S stones. On her turn, a player removes a palindrome-number of stones (1, 2, 3, ..., 9, 11, 22, 121...).\nIf you can't move (the pile is empty on your turn), you LOSE.\nWho wins if Bessie goes first and both play perfectly?",
-        "Bessie 와 Elsie 가 돌 더미를 나눠 가져요.\n차례마다 회문 수(1, 2, 3, ..., 9, 11, 22, 121...)만큼 돌을 가져가요.\n차례에 더미가 비어 있으면 져요.\nBessie 가 먼저 두고 둘 다 최선을 다하면 누가 이길까요?"),
+        "Bessie and Elsie take turns removing a palindrome number of stones — who wins if both play perfectly?",
+        "Bessie 와 Elsie 가 회문 수만큼 돌을 번갈아 가져가요 — 최선을 다하면 누가 이길까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -165,7 +165,7 @@ B`}
         "121은 회문일까요?"),
       options: [
         t(E, "Yes, 121 reversed is 121", "네, 121 을 뒤집어도 121 이에요"),
-        t(E, "No, 121 reversed is different", "아니요, 뒤집으면 달라져요"),
+        t(E, "No, 121 reversed is different", "아니요, 121 을 뒤집으면 달라져요"),
       ],
       correct: 0,
       explain: t(E,

@@ -19,7 +19,7 @@ export function makeStallingCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are N cows (each with a height) and N stalls (each with a maximum height limit). Each stall can hold AT MOST ONE cow, and a cow can be assigned to a stall only if her height is ≤ the stall's limit.\nCount the number of valid one-to-one assignments of cows to stalls.",
+        "N cows and N stalls each have a height limit — count the ways to match them one-to-one.",
         "소 N 마리는 저마다 키가 있고, 축사 N 개는 저마다 들어갈 수 있는 키 제한이 있어요.\n축사 하나에는 소 한 마리만 들어가요.\n소의 키가 그 축사의 제한보다 크지 않아야 들어갈 수 있어요.\n소를 축사에 한 마리씩 넣는 방법이 몇 가지인지 세요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -123,7 +123,7 @@ export function makeStallingCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sort cows and stalls ascending. Process the TALLEST cow first — she can use any stall with limit ≥ her height. Each next (smaller) cow has more stalls available minus those taken by taller cows. Sections build it one piece at a time.",
+        "Sort cows and stalls, then place the tallest cow first.",
         "소와 축사를 작은 것부터 줄 세워요.\n키가 제일 큰 소부터 넣는데, 제한이 자기 키 이상인 축사면 다 들어갈 수 있어요.\n그다음 소는 키가 더 작아서 들어갈 수 있는 축사가 더 많지만\n큰 소가 이미 쓴 축사는 빼야 해요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
       sections: getStallingSections(E),
     },

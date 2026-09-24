@@ -166,7 +166,7 @@ export function makeMooLangCh2(E, lang = "py") {
     {
       type: "input",
       narr: t(E,
-        "5 nouns, 1 transitive verb, 3 intransitive verbs.\nIf we use 1 transitive sentence: 2 nouns used, 3 left.\nmin(3,3)=3 intransitive sentences.\nTotal = 3 + 3*2 = 9 words!", "\uba85\uc0ac 5, \ud0c0\ub3d9\uc0ac 1, \uc790\ub3d9\uc0ac 3.\n\ud0c0\ub3d9\uc0ac \ubb38\uc7a5 1\uac1c: \uba85\uc0ac 2\uac1c \uc0ac\uc6a9, 3\uac1c \ub0a8\uc74c.\nmin(3,3)=3 \uc790\ub3d9\uc0ac \ubb38\uc7a5.\n\ucd1d = 3 + 3*2 = 9\ub2e8\uc5b4!"),
+        "5 nouns, 1 transitive verb, 3 intransitive verbs — what's the max total word count?", "명사 5, 타동사 1, 자동사 3 — 최대 단어 수는?"),
       question: t(E, "5 nouns, 1 transitive, 3 intransitive → max words?", "\uba85\uc0ac 5, \ud0c0\ub3d9\uc0ac 1, \uc790\ub3d9\uc0ac 3 \u2192 \ucd5c\ub300 \ub2e8\uc5b4?"),
       hint: t(E, "Use 1 transitive (3 words) + 3 intransitive (6 words)", "\ud0c0\ub3d9\uc0ac 1\uac1c(3\ub2e8\uc5b4) + \uc790\ub3d9\uc0ac 3\uac1c(6\ub2e8\uc5b4)"),
       answer: 9,

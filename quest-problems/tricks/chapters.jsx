@@ -308,7 +308,7 @@ export function makeTricksCh1(E) {
       correct: 2,
       explain: t(E,
         "Both work! 1A+1B+1C: 2+0+1=3x, 0+2+1=3y ✓. 3C: 1+1+1=3x, 1+1+1=3y ✓. No other combos give 3+3!",
-        "둘 다 돼요!\nA+B+C 하나씩이면 x 가 2+0+1=3, y 가 0+2+1=3 이에요 ✓\nC 3개면 x 가 1+1+1=3, y 가 1+1+1=3 이에요 ✓\n이 두 가지만 가능해요!"),
+        "둘 다 돼요!\nA+B+C 하나씩이면 x 가 2+0+1=3, y 가 0+2+1=3 이에요! ✓\nC 3개면 x 가 1+1+1=3, y 가 1+1+1=3 이에요! ✓\n이 두 가지만 가능해요!"),
     },
     // 1-5b: Deep audit sim — verify combos candy by candy
     {
@@ -476,7 +476,7 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We'll need A, B, C counts for every pair, so count bag types once with Counter — its keys ARE the color pairs we need next.", "A·B·C 봉지 개수가 필요하니까, Counter 로 미리 세어 둬요. 이 결과의 키가 바로 다음에 쓸 색 쌍이에요."),
+        "We'll need A, B, C counts for every pair, so count bag types once with Counter — its keys ARE the color pairs we need next.", "봉지 종류를 Counter 로 세면 그 키가 바로 색 쌍이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
@@ -509,7 +509,7 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "pair_count's keys ARE the color pairs — loop over them directly, skip same-color entries, and add the formulas.", "pair_count 의 키가 곧 색 쌍이에요 — 그걸 그대로 돌면서 같은 색끼리는 건너뛰고 공식대로 더해요."),
+        "pair_count's keys ARE the color pairs — loop over them directly, skip same-color entries, and add the formulas.", "pair_count 의 키가 곧 색 쌍이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>

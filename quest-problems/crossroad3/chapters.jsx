@@ -89,7 +89,7 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cow A arrives at t=0, takes 5 sec.\nCow B arrives at t=3, takes 2 sec.\nA finishes at t=5.\nB has to wait (arrived at 3 but gate busy until 5).\nWhen does B finish?", "소 A 는 t=0 에 도착해 5초가 걸려요.\n소 B 는 t=3 에 도착해 2초가 걸려요.\nA 는 t=5 에 끝나요.\nB 는 t=3 에 도착했지만 문이 t=5 까지 차 있어서 기다려요.\nB 는 언제 끝날까요?"),
+        "Cow A arrives at t=0 (5 sec); cow B arrives at t=3 (2 sec) but the gate is still busy.", "소 A 는 t=0 에 도착해 5초가 걸려요.\n소 B 는 t=3 에 도착해 2초가 걸려요.\nA 는 t=5 에 끝나요.\nB 는 t=3 에 도착했지만 문이 t=5 까지 차 있어서 기다려요.\nB 는 언제 끝날까요?"),
       question: t(E,
         "A: arrive=0, dur=5. B: arrive=3, dur=2. When does B finish?",
         "A 는 도착 0 에 5초, B 는 도착 3 에 2초예요. B 는 언제 끝날까요?"),

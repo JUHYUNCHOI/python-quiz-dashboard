@@ -349,7 +349,7 @@ export function makeShellCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A swap exchanges the positions of two shells.\nIf the pebble is under one of the swapped shells, it moves!\nIf not, it stays put.", "스왑은 두 컵의 위치를 바꿔. 조약돌이 교환되는 컵 중 하나 아래에 있으면 이동해요! 아니면 그대로 있어요."),
+        "A swap exchanges the positions of two shells.\nIf the pebble is under one of the swapped shells, it moves!\nIf not, it stays put.", "스왑은 두 컵의 위치를 바꿔요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>

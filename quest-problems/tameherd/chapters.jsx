@@ -10,7 +10,7 @@ export function makeTameHerdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ keeps a daily log: each day records 'days since last breakout'. The counter resets to 0 the day a breakout occurs and increments by 1 each day after. Some entries are missing, marked −1.\nPrint the MIN and MAX possible number of breakouts consistent with the log, or −1 if impossible.",
+        "FJ keeps a daily log of days since the last breakout, and some entries are missing.",
         "FJ 는 날마다 '마지막 탈출 뒤로 며칠 지났는지' 를 적어 둬요.\n탈출한 날은 카운터가 0 이 되고, 그다음 날부터 1 씩 늘어요.\n못 적은 날은 −1 로 남아 있어요.\n이 기록과 어긋나지 않는 탈출 횟수의 가장 작은 값과 가장 큰 값을 출력해요.\n그런 경우가 아예 없으면 −1 을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -97,7 +97,7 @@ export function makeTameHerdCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Pick a log preset and step through it day by day. Watch how the counter must reset on a breakout, how −1 days are skipped, and when the log becomes impossible.",
+        "Pick a log preset and step through it day by day.",
         "기록을 하나 골라 하루씩 따라가 봐요.\n탈출한 날에 카운터가 0 이 되는 것,\n−1 인 날은 어떻게 넘어가는지,\n어느 순간 앞뒤가 안 맞게 되는지를 볼 수 있어요."),
     },
     // 1-4: Input
@@ -126,7 +126,7 @@ export function makeTameHerdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Walk the log once tracking previous known value. Each 0 = breakout. Non-zero values: check consistency (previous + 1, or new sequence from 0). Sections build it one piece at a time.",
+        "Walk the log once, tracking the previous known value.",
         "기록을 앞에서부터 한 번만 훑으면서 바로 앞의 값을 들고 다녀요.\n값이 0 이면 그날 탈출이 있었던 거예요.\n0 이 아니면 앞의 값 + 1 이 맞는지 봐요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
       sections: getTameHerdSections(E),
     },

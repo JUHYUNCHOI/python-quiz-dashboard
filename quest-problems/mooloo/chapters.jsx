@@ -9,8 +9,8 @@ export function makeMoolooCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie wants to watch Mooloo on N specific days. A subscription for d consecutive days costs d + K (a fixed activation fee K is paid no matter how short).\nFind the MINIMUM total cost to buy subscriptions covering EVERY day on her list.",
-        "Bessie가 정해진 N개의 날짜에 Mooloo 를 보고 싶어요. d 일 연속 구독은 d + K 비용이에요 (한 번 켤 때마다 길이와 상관없이 K 만큼 추가돼요).\n그녀의 목록에 있는 모든 날짜를 덮는 구독들의 최소 총 비용을 출력해요."),
+        "Bessie wants to watch Mooloo on N specific days — cover them all for the least cost.",
+        "Bessie가 정해진 날짜들을 최소 비용으로 모두 구독해서 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -129,7 +129,7 @@ export function makeMoolooCh1(E) {
       type: "reveal",
       narr: t(E,
         "Walk the greedy scan day by day. Watch each subscription grow as long as the next day fits within K, then a new bar starts when the gap is too big.",
-        "\uadf8\ub9ac\ub514 \uc2a4\uce94\uc744 \ud558\ub8e8\uc529 \ub530\ub77c\uac00\uc694. \ub2e4\uc74c \ub0a0\uc774 K \uc548\uc5d0 \ub4e4\uc5b4\uc624\uba74 \uac19\uc740 \uad6c\ub3c5\uc774 \uc790\ub77c\uace0, \uac04\uaca9\uc774 \ub108\ubb34 \ud06c\uba74 \uc0c8 \ub9c9\ub300\uac00 \uc2dc\uc791\ub3fc\uc694."),
+        "그리디 스캔을 하루씩 따라가 봐요."),
       content: <MoolooMergeSim E={E} />,
     },
   ];
