@@ -10,7 +10,7 @@ export function makeModernArtCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An N×N canvas was painted by stacking 9 axis-aligned rectangles of colors 1..9, one painting on top of another (later paintings cover earlier ones).\nWe see the FINAL canvas. Print which colors COULD have been the very first painting (i.e., are NOT forced to be painted over a different visible color).",
+        "Find which colors could have been painted first.",
         "가장 먼저 칠해졌을 수 있는 색이 무엇인지 찾아봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -72,7 +72,7 @@ export function makeModernArtCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Pick a 4×4 or 5×5 canvas, then paint rectangles one by one. Watch which colors stay visible and which get fully covered. The counter on the right is the answer for this preset.",
+        "Paint rectangles one by one and see which colors get covered.",
         "직사각형을 하나씩 칠해 보며 어떤 색이 덮이는지 봐요."),
     },
     // 1-3: Quiz
@@ -118,7 +118,7 @@ export function makeModernArtCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "For each color, find its bounding box. A color cannot be first if its bounding box sits entirely inside another color's bounding box (it must have been painted on top). Otherwise it can be first. Sections build it one piece at a time.",
+        "Find each color's bounding box and check which sit inside another.",
         "색마다 바운딩 박스를 구해서 서로 안에 들어가는지 봐요."),
       sections: getModernArtSections(E),
     },

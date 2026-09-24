@@ -10,7 +10,7 @@ export function makeHps17Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two cows play Hoof-Paper-Scissors for N rounds. Each round, both cows show a gesture labeled 1, 2, or 3 — but we DON'T know which number stands for Hoof, Paper, or Scissors. Try every assignment of {1, 2, 3} → (H, P, S) and find the one where cow 1 wins the most rounds.",
+        "We don't know what 1, 2, 3 mean — try every assignment.",
         "숫자 1, 2, 3 이 무슨 손 모양인지 몰라요. 다 해 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -98,7 +98,7 @@ export function makeHps17Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's try one assignment. Suppose 1 = H, 2 = P, 3 = S. Then run through the rounds and count cow 1's wins. Repeat for all 6 assignments; the max is the answer.",
+        "Try 1=H, 2=P, 3=S and count the wins.",
         "1 = H, 2 = P, 3 = S 로 정해 놓고 한 번 세어 봐요."),
       content: (() => {
         // Try assignment: 1=H, 2=P, 3=S on input rounds (1,2),(2,3),(1,3),(3,1),(3,1)
@@ -220,7 +220,7 @@ export function makeHps17Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Try every assignment of {1, 2, 3} to (H, P, S) — only 6 permutations. For each, walk through all rounds and count cow 1's wins via the rule (a beats b) ∈ {(H,S), (P,H), (S,P)}. Take the max. Sections build it one piece at a time.",
+        "Try all 6 assignments and take the highest win count.",
         "6 가지 짝을 모두 세어 보고 가장 큰 승수를 뽑아요."),
       sections: getHps17Sections(E),
     },

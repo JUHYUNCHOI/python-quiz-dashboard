@@ -243,7 +243,7 @@ export function makeMixMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three farmers have buckets numbered 1, 2, 3 with given CAPACITIES and starting milk amounts. They perform 100 pour operations in fixed cycle: 1→2, 2→3, 3→1, 1→2, ...\nA pour transfers as much milk as possible from source to destination — bounded by source's milk and destination's free space.\nPrint the milk in each bucket after 100 pours.",
+        "Pour milk between three buckets 100 times. How much is left in each?",
         "양동이 세 개로 우유를 100 번 부어요.\n마지막에 각 양동이에 얼마가 남을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -311,7 +311,7 @@ export function makeMixMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Each bucket has two values: CAPACITY (the maximum it can hold) and CURRENT MILK (how much is in it right now).\nThe current milk can never exceed the capacity!", "양동이마다 두 가지 값이 있어요.\n담을 수 있는 최대량인 용량과, 지금 들어 있는 현재 우유량이에요.\n현재 우유는 절대로 용량을 넘을 수 없어요!"),
+        "Each bucket has a capacity and a current amount. Current milk can never exceed capacity.", "양동이마다 두 가지 값이 있어요.\n담을 수 있는 최대량인 용량과, 지금 들어 있는 현재 우유량이에요.\n현재 우유는 절대로 용량을 넘을 수 없어요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>

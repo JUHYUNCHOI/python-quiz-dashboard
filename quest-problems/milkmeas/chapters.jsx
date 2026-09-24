@@ -10,7 +10,7 @@ export function makeMilkMeasCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has 3 cows (Bessie, Elsie, Mildred), each starting at 7 gallons of daily output. There are N daily change events: \"on day d, cow X's output changes by ±value\".\nA sign 'displays the leader(s)' — the set of cows currently producing the maximum. Print the number of times the displayed set changes over the whole period.",
+        "FJ has 3 cows starting at 7 gallons each; N events change a cow's output. Count how many times the leader set changes.",
         "FJ 에게 소 세 마리 (Bessie, Elsie, Mildred) 가 있어요.\n셋 다 하루 7 갤런에서 시작해요.\n날짜마다 변화가 N 번 일어나요 — \"d 일에 소 X 의 우유량이 ±값 만큼 바뀐다\" 예요.\n간판에는 지금 우유를 제일 많이 만드는 소들, 즉 1등 소들이 적혀요.\n간판에 적힌 1등 소들이 몇 번 바뀌는지 세어서 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -79,7 +79,7 @@ export function makeMilkMeasCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Replay a small event log.\nThe crown 👑 marks the current leader(s) — cows tied for the maximum.\nEach time the leader set differs from the previous one, the counter ticks up.",
+        "Replay a small event log. 👑 marks the current leader(s) — the counter ticks up when it changes.",
         "작은 변화 기록을 하나씩 따라가 봐요.\n👑 이 붙은 소가 지금 1등 소예요. 우유량이 같으면 여럿이 같이 1등이에요.\n1등 소들이 바로 앞과 달라질 때마다 숫자를 1 씩 올려요."),
     },
     // 1-3: quiz
@@ -126,7 +126,7 @@ export function makeMilkMeasCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sort events by day. Process each in order — update the cow's output, recompute leader set, compare with previous, count changes. Sections build it one piece at a time.",
+        "Sort events by day, update each cow's output, recheck the leaders, and count changes.",
         "변화를 날짜순으로 줄 세워요.\n앞에서부터 하나씩 우유량을 고치고, 1등 소들을 다시 찾고,\n바로 앞과 달라졌으면 횟수를 1 올려요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
       sections: getMilkMeasSections(E),
     },

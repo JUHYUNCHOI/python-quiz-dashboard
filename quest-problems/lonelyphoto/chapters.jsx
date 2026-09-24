@@ -10,7 +10,7 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows in a row, each Guernsey (G) or Holstein (H).\nA contiguous group of 3 or more is 'lonely' if exactly ONE cow has a different breed from all the others.\nCount how many lonely groups there are.",
+        "How many photos have exactly one cow of a different breed?",
         "한 마리만 품종이 다른 사진이 몇 장이나 나올까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -120,7 +120,7 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "windowSim",
       narr: t(E,
-        "Type your own G/H string and slide the window size — every length-w substring with exactly one minority breed lights up green. Watch the count change as you grow w.",
+        "Change the window length and watch lonely groups light up.",
         "묶음 길이를 바꿔 가며 외로운 묶음이 켜지는 걸 봐요."),
     },
   ];
@@ -136,7 +136,7 @@ export function makeLonelyPhotoCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Treat each cow i as the lonely one. Count the opposite-breed cows that touch i directly on its left and right, then a small formula combines those into the lonely count. Sections build it one piece at a time.",
+        "Fix one cow as the lonely one and count both sides.",
         "소 하나를 외로운 소로 정해 놓고 양옆을 세어 볼게요."),
       sections: getLonelyPhotoSections(E),
     },

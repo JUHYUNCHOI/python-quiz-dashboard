@@ -10,7 +10,7 @@ export function makeMooOpsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You're given a string of M's and O's. In one operation you can flip the FIRST char (M↔O), flip the LAST char, delete the FIRST char, or delete the LAST char.\nFind the minimum number of operations to turn the string into exactly \"MOO\". If impossible, print -1.",
+        "Find the fewest operations to turn the string into exactly 'MOO'.",
         "문자열을 딱 \"MOO\" 로 바꾸는 가장 적은 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -129,7 +129,7 @@ export function makeMooOpsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Final 'MOO' middle char can never be flipped (only first/last). Scan every i with s[i+1]='O' and compute (left deletes) + (right deletes) + (flips needed for s[i] and s[i+2]). Sections build it one piece at a time.",
+        "The middle can't be flipped, so only check positions where s[i+1]='O'.",
         "가운데는 못 뒤집으니 s[i+1]='O' 인 자리만 살펴봐요."),
       sections: getMooOpsSections(E),
     },

@@ -39,7 +39,7 @@ export function makeFavPerm2Ch2(E) {
   const auditStep = {
     type: "reveal",
     narr: t(E,
-      "The table above lists outcomes — now AUDIT them yourself. Pick a candidate p, then ▶ step Nhoj's process and check each produced hint against h. You'll see exactly where wrong candidates die and why [3, 1, 2, 4] survives all three checks.",
+      "Pick a candidate p and check its hints against h step by step.",
       "후보 p 를 골라 나온 힌트를 목표 h 와 한 칸씩 맞춰 봐요."),
     content: (<DeepAuditSim E={E} />),
   };

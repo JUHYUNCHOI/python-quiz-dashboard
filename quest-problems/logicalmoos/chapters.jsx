@@ -12,7 +12,7 @@ export function makeLogicalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a long boolean expression — alternating true/false tokens with and/or operators. Each query asks: can we replace one slice with a single boolean so the whole thing equals the target?",
+        "A long boolean expression alternates true/false with and/or. Can we replace one slice to hit the target?",
         "참/거짓이 and·or 로 길게 이어진 수식이에요.\n한 구간만 바꿔서 원하는 답을 만들 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>

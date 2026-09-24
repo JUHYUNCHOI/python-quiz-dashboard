@@ -10,7 +10,7 @@ export function makeLivestockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has 8 named cows (Beatrice, Belinda, Bella, Bessie, Betsy, Blue, Buttercup, Sue). He wants to line them up with N constraints — each constraint says \"cow X must be ADJACENT to cow Y\".\nPrint the LEXICOGRAPHICALLY SMALLEST valid lineup, or 'IMPOSSIBLE'.",
+        "Line up 8 cows to be lexicographically smallest while meeting every constraint.",
         "제약을 다 지키면서 소 8마리를 사전순으로 가장 앞서게 세워요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -71,7 +71,7 @@ export function makeLivestockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Click '+ Add constraint' to watch each adjacency rule connect two cows. Linked cows form a chain; free cows stay alone. Then build the final lineup alphabetically.",
+        "Click '+ Add constraint' to see how a rule links two cows.",
         "'+ 제약 추가' 를 눌러 규칙이 두 소를 어떻게 잇는지 봐요."),
       content: <ChainSim E={E} />,
     },
@@ -138,7 +138,7 @@ export function makeLivestockCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "The cows are already sorted alphabetically, so the lineups come out in lexicographic order. The first lineup that satisfies every constraint is the answer. Sections build it one piece at a time.",
+        "Scan lineups alphabetically — the first that meets every constraint is the answer.",
         "줄 세우기를 알파벳 순으로 훑다가 제약을 다 지키는 첫 줄이 답이에요."),
       sections: getLivestockSections(E),
     },

@@ -18,7 +18,7 @@ export function makeExchangeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a circle, each with a full bucket of milk.\nEvery minute, each cow with milk passes 1 liter left or right.\nMilk over a bucket's capacity is lost. How much milk is left after M minutes?",
+        "After M minutes of passing milk around, how much is left?",
         "M분 동안 우유를 주고받으면 얼마나 남을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -141,7 +141,7 @@ RRL
     {
       type: "reveal",
       narr: t(E,
-        "Each cow simultaneously passes 1 liter in its direction.\nA cow with 0 milk passes nothing.\nIf milk received pushes a cow over its capacity, the overflow is lost forever!",
+        "Every cow passes 1 liter at once — overflow is lost.",
         "모두 동시에 1리터씩 넘겨요. 넘친 우유는 사라져요."),
       content: (
         <div style={{ padding: 16 }}>

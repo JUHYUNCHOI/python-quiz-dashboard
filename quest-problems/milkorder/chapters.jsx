@@ -144,7 +144,7 @@ export function makeMilkOrderCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ wants a valid milking order of his N cows. Two kinds of rules exist: (1) hierarchy — a list saying these M cows must appear in this relative order, and (2) some cows have FIXED positions in the line.\nAmong all valid orders, print the EARLIEST possible position of cow #1.",
+        "Find the earliest position cow #1 can stand in.",
         "1번 소가 설 수 있는 가장 이른 자리를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -277,7 +277,7 @@ export function makeMilkOrderCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Try it yourself! N=7 cows. Hierarchy says 4 → 1 → 3 (in that relative order). Cow 4 is fixed at position 2, cow 3 at position 6. Slide cow #1's position — both constraint badges go green only when the lineup is valid. Find the earliest p that works.",
+        "Slide cow #1's position until both badges turn green.",
         "1번 소의 자리를 옮기면서 배지가 둘 다 초록이 되는 자리를 찾아봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -297,7 +297,7 @@ export function makeMilkOrderCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Build a DAG from the hierarchy chain (a → b means a must come before b). Try every possible position for cow 1 (1..N) — for each, build the lineup using topological sort with cow 1 inserted there. Print the smallest valid position. Sections build it one piece at a time.",
+        "Try every position from 1 to N for cow #1 and find one that works.",
         "1번 소의 자리를 1부터 N까지 다 넣어 보고 되는 자리를 찾아요."),
       sections: getMilkOrderSections(E),
     },

@@ -11,7 +11,7 @@ export function makeFjFarmsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N plants — plant i starts at height h[i] and grows by a[i] per day.  We're given target counts t[i] meaning 'after some day x, plant i should have exactly t[i] OTHER plants strictly taller than it'.  Find the smallest x ≥ 0 that makes ALL counts match — or -1.",
+        "As the plants grow, will a day ever match the targets exactly?",
         "식물이 자라다 보면 목표와 딱 맞는 날이 올까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -222,7 +222,7 @@ export function makeFjFarmsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Try every day x = 0, 1, …, 1000.  At each x compute heights, count strictly-taller plants per i, return the first x matching t.  Sections build the loop one piece at a time.",
+        "Try day x from 0 upward and find the first day that matches.",
         "날 x 를 0 부터 하나씩 넣어 보며 맞는 첫날을 찾을게요."),
       sections: getFjFarmsSections(E),
     },

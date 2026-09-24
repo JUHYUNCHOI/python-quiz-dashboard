@@ -73,7 +73,7 @@ export function makeInterviewCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows line up for interviews at K counters. Each counter takes a fixed amount of time per interview, and each cow goes to the EARLIEST available counter.\nBessie is last in line — which counter could she end up at?",
+        "Which counter could Bessie, last in line, end up at?",
         "줄 맨 뒤의 Bessie 는 어느 카운터로 갈 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>

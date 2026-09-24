@@ -12,7 +12,7 @@ export function makeMooin4Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie's keyboard has only M and O. Every time she types O, ALL letters typed so far flip first (M↔O), then O is appended. Can she type her favorite moo S?",
+        "Can Bessie type her favorite moo S?",
         "베시가 원하는 무 소리 S 를 칠 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>

@@ -10,7 +10,7 @@ export function makeFactoryCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a milk factory with N stations connected by N−1 one-way conveyor belts (so the underlying graph is a tree).\nFind a single station that EVERY other station can reach by following the conveyors. Print that station's number, or −1 if none exists.",
+        "Find one station every other station can reach.",
         "다른 모든 역에서 갈 수 있는 역 하나를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -73,7 +73,7 @@ export function makeFactoryCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Try it yourself! Edit the belts, pick a candidate station, and watch which stations turn green (reach the candidate). The sim also shows the auto-detected central station.",
+        "Edit the belts and pick a candidate station.",
         "컨베이어를 고치고 후보 역을 골라 봐요."),
       content: <MilkFactoryBeltSim E={E} />,
     },
@@ -122,7 +122,7 @@ export function makeFactoryCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "C reachable from all ↔ in the REVERSE graph C reaches all. Build the reverse graph, BFS/DFS from each candidate — print the first whose reverse-BFS reaches all N stations. Sections build it one piece at a time.",
+        "Reverse the arrows — then just check if all stations reach from one.",
         "화살표를 거꾸로 뒤집으면 한 역에서 다 갈 수 있는지만 보면 돼요."),
       sections: getMilkFactorySections(E),
     },

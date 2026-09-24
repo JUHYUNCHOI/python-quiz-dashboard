@@ -9,7 +9,7 @@ export function makeMooLangCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Moo Language has nouns, intransitive verbs, transitive verbs, and conjunctions. Sentences are either 'noun + intransitive verb' (2 words) or 'noun + transitive verb + noun + ...' (with extra nouns separated by commas, transitive needs ≥1 object).\nGiven word counts and a sentence-period budget P plus a comma budget C, MAXIMIZE the total number of words used.",
+        "How should sentences be built to use the most words?",
         "단어를 가장 많이 쓰려면 문장을 어떻게 짜야 할까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -110,7 +110,7 @@ export function makeMooLangCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "3 nouns, 0 transitive verbs, 2 intransitive verbs.\nWe can only make Type 1 sentences.\nEach needs 1 noun + 1 intransitive verb.\nLimited by 2 intransitive verbs = 2 sentences = 4 words!", "명사 3 개, 타동사 0 개, 자동사 2 개예요. 몇 단어까지 쓸 수 있을까요?"),
+        "3 nouns, 0 transitive verbs, 2 intransitive verbs. What's the max word count?", "명사 3 개, 타동사 0 개, 자동사 2 개예요. 몇 단어까지 쓸 수 있을까요?"),
       question: t(E, "3 nouns, 2 intransitive, 0 transitive → max words?", "\uba85\uc0ac 3 \uac1c, \uc790\ub3d9\uc0ac 2 \uac1c, \ud0c0\ub3d9\uc0ac 0 \uac1c\uc608\uc694.\n\uc4f8 \uc218 \uc788\ub294 \ub2e8\uc5b4\ub294 \ub9ce\uc544\uc57c \uba87 \uac1c\uc77c\uae4c\uc694?"),
       hint: t(E, "No transitive verbs \u2192 only Type 1. The bottleneck is the smaller of nouns / intransitive verbs.", "\ud0c0\ub3d9\uc0ac\uac00 \uc5c6\uc73c\ub2c8 \uc720\ud615 1 \ubb38\uc7a5\ub9cc \ub9cc\ub4e4 \uc218 \uc788\uc5b4\uc694.\n\uc720\ud615 1 \uc740 \uba85\uc0ac \ud558\ub098\uc640 \uc790\ub3d9\uc0ac \ud558\ub098\ub97c \uc4f0\ub2c8\uae4c,\n\uba85\uc0ac\uc640 \uc790\ub3d9\uc0ac \uc911 \ub354 \uc801\uc740 \ucabd\ub9cc\ud07c\ub9cc \ubb38\uc7a5\uc744 \ub9cc\ub4e4 \uc218 \uc788\uc5b4\uc694."),
       answer: 4,

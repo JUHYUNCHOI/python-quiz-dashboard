@@ -9,7 +9,7 @@ export function makeHungryCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie eats 1 haybale per day if she has any in stock.\nThere are N hay deliveries — each on a specific day, each adding some bales to her stockpile.\nGiven the deliveries and a target day T, count how many of days 1..T Bessie actually eats on.",
+        "How many days does Bessie eat hay by day T?",
         "T 일까지 Bessie 가 건초를 먹는 날이 며칠일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -224,7 +224,7 @@ export function makeHungryCowCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Don't simulate every day (T can be huge). Process delivery events in order — between deliveries, eat at most (stockpile) days; stop at T. Sum eating days. Sections build it one piece at a time.",
+        "Instead of counting day by day, count each gap between deliveries at once.",
         "하루씩 세는 대신 배달과 배달 사이를 한 번에 세어 볼게요."),
       sections: getHungryCowSections(E),
     },

@@ -10,7 +10,7 @@ export function makeMajorityCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a row, each preferring some hay type.\nFJ runs 'focus groups' on any 3 adjacent cows: if 2+ agree, the third switches to the majority.\nWhich hay types could end up everywhere?",
+        "Find which hay types could eventually win over every cow.",
         "결국 모든 소가 좋아하게 될 수 있는 건초를 찾아봐요."),
       content: (
         <div style={{ padding: 16 }}>

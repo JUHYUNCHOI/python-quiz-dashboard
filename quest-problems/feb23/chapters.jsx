@@ -9,7 +9,7 @@ export function makeFebCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie texts using only the letters B, E, and F. The 'excitement' of a message is the number of adjacent same-letter pairs (e.g., BBE has 1: the BB). Each F is a wildcard — it can become either B or E.\nFor a given message, print how many DISTINCT excitement values are possible across all ways of assigning F's.",
+        "If each F becomes B or E, how many distinct excitement values are possible?",
         "F 를 B 나 E 로 바꿔 보면 흥분도는 몇 가지가 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -192,7 +192,7 @@ export function makeFebCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Time to feel the algorithm. Pick a string, flip each F by hand to see how excitement changes, then hit 'Audit all' to enumerate every 2^|F| assignment at once and watch the distinct set form.",
+        "Flip each F yourself and watch the excitement value change.",
         "F 를 직접 바꿔 보면서 흥분도가 어떻게 변하는지 봐요."),
       content: (
         <div style={{ padding: 12 }}>
@@ -213,7 +213,7 @@ export function makeFebCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Each F is independently B or E — so 2^|F| total assignments. Enumerate them with a bitmask, count adjacent same-pairs each time, collect into a set, then print count/min/max. |F| ≤ ~20 in Bronze so brute is fine. Sections build it one piece at a time.",
+        "Build the code piece by piece to count every case.",
         "코드를 한 단락씩 쌓으면서 모든 경우를 세어 볼게요."),
       sections: getFeb23Sections(E),
     },

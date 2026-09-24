@@ -159,7 +159,7 @@ export function makeLeadersCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows of breed G or H stand in a line; each cow i 'covers' positions [i, E_i].\nWe pick ONE G-leader and ONE H-leader. The pair is VALID if either (a) the leader covers every cow of her own breed, OR (b) the OTHER leader sits inside her range.\nCount valid pairs.",
+        "Pick one G-leader and one H-leader. How many valid pairs are there?",
         "G 리더와 H 리더를 하나씩 골라요. 되는 짝은 몇 가지일까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -274,7 +274,7 @@ export function makeLeadersCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Editorial trick: in any valid leader pair, at least one of the two is the EARLIEST cow of its breed AND has visited all of its breed. Scan once for earliest/latest, then count Case A (eG is true G-leader) + Case B (symmetric) + special (eG & eH together). Sections build it one piece at a time.",
+        "Every valid pair always includes the very first cow of some breed.",
         "되는 쌍에는 늘 '자기 품종의 맨 앞 소' 가 한 마리는 끼어 있어요."),
       sections: getLeadersSections(E),
     },

@@ -10,7 +10,7 @@ export function makeTrafficCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A highway has N consecutive segments. Each segment is one of: a SENSOR with min/max measured car flow, an ON-RAMP that adds k cars to the flow, or an OFF-RAMP that removes k cars.\nGiven the segments in order, print the tightest [min, max] flow range that's POSSIBLE at the highway's START and at its END.",
+        "How tight can we pin down the flow range at the start and end?",
         "고속도로 시작과 끝의 유량 범위를 얼마나 좁힐 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>

@@ -175,7 +175,7 @@ export function makeLifeguardsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N lifeguards, each working a half-open shift [s, t). The pool is 'covered' at any moment when at least one lifeguard is on duty.\nFJ must FIRE exactly one lifeguard. Print the MAXIMUM total coverage time (union of remaining intervals) he can keep.",
+        "Fire one lifeguard to keep coverage as long as possible.",
         "한 명을 해고한 뒤 커버되는 시간을 가장 길게 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -245,7 +245,7 @@ export function makeLifeguardsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Time to play! Below are 5 lifeguards with overlapping shifts on a 0..30 timeline. Try firing each one and watch which seconds become uncovered. Find the lifeguard whose removal LOSES the LEAST — that's the one to fire.",
+        "Fire lifeguards one by one and see which seconds go uncovered.",
         "한 명씩 해고해 보면서 어느 초가 비는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -266,7 +266,7 @@ export function makeLifeguardsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Two shifts: [1,5] and [3,8].\nIf we fire the first guard, coverage = 3 to 8 = 5.\nIf we fire the second, coverage = 1 to 5 = 4.\nWhich gives max coverage?", "근무 [1,5] 와 [3,8] 중 누구를 해고할까요?"),
+        "Shifts [1,5] and [3,8] — who should be fired?", "근무 [1,5] 와 [3,8] 중 누구를 해고할까요?"),
       question: t(E,
         "Shifts [1,5] and [3,8]. Fire which guard for max coverage?",
         "근무 [1,5] 와 [3,8] 이에요. 커버 시간을 가장 길게 하려면 누구를 해고할까요?"),
@@ -305,7 +305,7 @@ export function makeLifeguardsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Brute force: fire each guard one at a time. For each removal, compute union coverage of remaining shifts via sweep line. Take the max across all N choices. Sections build it one piece at a time.",
+        "Remove each guard, measure remaining coverage, and take the max.",
         "한 명씩 빼 보고 남은 커버 시간을 재서 가장 큰 값을 골라요."),
       sections: getLifeguardsSections(E),
     },

@@ -10,7 +10,7 @@ export function makeHoofballCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand on a number line at distinct positions. When a cow has a ball, she immediately passes it to her closest neighbor (ties → pass right). Once a ball reaches a cow, she'll keep passing it forever.\nWe need to give out balls so EVERY cow eventually touches one. Print the MINIMUM number of starting balls needed.",
+        "A cow passes the ball to her nearest neighbor. How many balls make every cow touch one?",
         "소는 공을 받으면 가장 가까운 이웃에게 넘겨요.\n모두가 공을 만지려면 공이 몇 개 필요할까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -124,7 +124,7 @@ export function makeHoofballCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sort positions, find each cow's pass target, count cows that no one targets ('sources'), plus +1 per mutual-passing pair.  Sections build it one piece at a time.",
+        "Sort positions, find each cow's pass target, count cows nobody targets, plus one per mutual pair.",
         "위치를 정렬하고 각 소가 누구에게 넘기는지 찾아요.\n아무도 안 가리키는 소를 세고, 서로만 주고받는 쌍마다 하나를 더해요."),
       sections: getHoofballSections(E),
     },

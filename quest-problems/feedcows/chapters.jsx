@@ -10,7 +10,7 @@ export function makeFeedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows of breed G or H stand at distinct positions on a number line. FJ places grass patches (each patch is type G or H) on integer positions. Each cow must have a SAME-BREED patch within distance K of her — and a single patch can satisfy any number of cows of its breed within K.\nFind the MINIMUM number of patches needed.",
+        "Place same-breed grass near every cow, using as few patches as possible.",
         "소마다 가까이에 같은 품종 풀을 놓되, 풀을 가장 적게 써요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -124,7 +124,7 @@ export function makeFeedCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Track per breed how far it is already satisfied (g_cover, h_cover). When a cow of breed B at position i is not yet covered, place a NEW patch as far right as it can still reach — at position i + K — which then covers same-breed cows up to i + 2K. There are T test cases, and each prints the count plus the patch string. Sections build it one piece at a time.",
+        "When a cow isn't covered yet, place a new patch as far right as she can reach.",
         "못 먹은 소가 나오면 그 소가 닿는 가장 오른쪽에 패치를 놓아요."),
       sections: getFeedCowsSections(E),
     },

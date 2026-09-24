@@ -165,7 +165,7 @@ export function makeHerdleCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A Wordle-style game on a 3×3 grid of cow breeds. You're given the secret answer grid AND the player's guess grid.\nFor each guess cell: GREEN if the breed matches the same cell in the answer; otherwise YELLOW if that breed appears elsewhere in the answer (limited by remaining count).\nCount GREEN cells and YELLOW cells.",
+        "It's a Wordle game on cow breeds. Same spot, same breed is GREEN; elsewhere is YELLOW.",
         "3×3 격자에 소 품종을 적는 Wordle 게임이에요.\n정답 격자와 추측 격자를 견줘서, 같은 자리에 같은 품종이면 GREEN 이에요.\n아니지만 그 품종이 정답의 다른 칸에 남아 있으면 YELLOW 예요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -278,7 +278,7 @@ export function makeHerdleCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "First pass: count GREEN (exact matches) and record remaining guess / answer letters. Second pass: match remaining guess letters with remaining answer letters → YELLOW count. Sections build it one piece at a time.",
+        "First pass: count GREEN and note leftover letters. Second pass: match leftovers for YELLOW.",
         "1차 훑기에서 GREEN 을 세고 남은 글자를 적어 둬요.\n2차 훑기에서 남은 글자끼리 짝을 지으면 YELLOW 개수가 나와요."),
       sections: getHerdleSections(E),
     },

@@ -10,7 +10,7 @@ export function makeLostCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ stands at position x on a number line. His cow is at position y, but he doesn't know which side.\nHe zigzags: 1 step right, 2 steps left, 4 steps right, 8 steps left... doubling each time.\nHow far does he walk before reaching y?",
+        "How many total steps does FJ walk before finding his cow?",
         "소를 찾을 때까지 FJ 는 모두 몇 칸을 걸을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -137,7 +137,7 @@ export function makeLostCowCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Simulate the zigzag — each leg doubles, alternates direction, stops the moment y is between current and next position.  Sections build it one piece at a time.",
+        "Read the solution code piece by piece.",
         "풀이 코드를 한 단락씩 읽어 봐요."),
       sections: getLostCowSections(E),
     },

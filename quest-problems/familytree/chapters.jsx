@@ -10,7 +10,7 @@ export function makeFamilyTreeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ tracks cow mother-child relationships. Given two specific cows X and Y, classify their relationship from the family tree:\nmother / grand-mother / great-...-grand-mother (and the reverse: daughter / grand-daughter / great-...-grand-daughter), siblings, cousins, or unrelated.",
+        "A family tree links mothers to children. Given cows X and Y, find their relationship.",
         "엄마와 자식 관계가 죽 이어진 가계도가 있어요.\n소 두 마리 X 와 Y 가 주어지면 둘이 어떤 사이인지 알아내요.\n엄마·할머니·딸·손녀·자매·사촌 중 하나이거나, 아예 남남일 수도 있어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -71,7 +71,7 @@ export function makeFamilyTreeCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Tiny family tree. Pick X and Y — both walk up to their first common ancestor (LCA). Depths from each side decide the label: mother / grand-mother / siblings / cousins / unrelated. Try Tilly vs Rosie, Lola vs Mabel, Bessie vs Mildred, then Tilly vs Daisy.",
+        "Pick X and Y — both climb to their first shared ancestor. How far up decides the relationship.",
         "X 와 Y 를 고르면 둘 다 위로 올라가 처음 만나는 공통 조상을 찾아요.\n거기까지 몇 칸 올라갔는지로 사이가 정해져요.\nTilly 와 Rosie 부터 차례로 눌러 봐요."),
     },
     // 1-3: Quiz
@@ -118,7 +118,7 @@ export function makeFamilyTreeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Build A's ancestor chain with depths. Walk up from B — first ancestor that's also in A's chain is the LCA. Compare depths to decide: ancestor / descendant / siblings / cousins / unrelated. Sections build it one piece at a time.",
+        "Build A's ancestor chain, walk up from B to find the shared one, then compare depths.",
         "먼저 A 의 조상을 위로 죽 적어 둬요. 그다음 B 에서 위로 올라가다가\n처음 만나는 A 의 조상이 둘의 공통 조상이에요.\n거기까지 몇 칸씩 올라갔는지를 견줘서 사이를 정해요."),
       sections: getFamilyTreeSections(E),
     },
