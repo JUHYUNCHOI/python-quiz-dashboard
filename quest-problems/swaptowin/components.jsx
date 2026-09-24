@@ -1,6 +1,10 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 0/1 (WA: print empty join produces extra newline)
+// 🔒 USACO_VERIFIED (2026-05-13 · 2026-09-24 재확인)
+//   Python: 6/12 (7~12번 시간 초과 — 어젯밤 고친 빈 줄 버그가 사라져 6개 통과. 남은 건 속도뿐)
 //   C++:    12/12 PASS
+//   2026-09-24: def main() + 반복 인덱싱 줄이기 시도 (PM 판정 ②, 한 번만).
+//     N=M=1000 적대적 입력에서 3.65초→0.77초(N=M=300 기준, 4.8배)로 빨라졌지만
+//     N=M=1000 단일 케이스에 28.8초 — 자릿수가 모자라 알고리즘은 건드리지 않고 멈췄다.
+//     무작위 300케이스 전 vs 후 바이트 단위 0 불일치 확인.
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 

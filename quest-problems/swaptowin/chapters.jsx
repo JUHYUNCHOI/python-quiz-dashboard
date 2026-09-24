@@ -228,7 +228,25 @@ export function makeSwapToWinCh2(E, lang = "py") {
         narr: t(E,
           "Position by position: 0, 1, or 2 operations.",
           "코드가 한 자리씩 0 · 1 · 2 번 바꿔서 맞춰가요."),
-        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
+        content: (
+          <>
+            <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />
+            {lang === "py" && (
+              <div style={{
+                margin: "0 16px 16px", background: "#fff7ed", borderRadius: 8, padding: "8px 12px",
+                border: "1.5px solid #fdba74", fontSize: 12, color: "#9a3412",
+                lineHeight: 1.6, wordBreak: "keep-all",
+              }}>
+                ⚠️ {t(E,
+                  "Heads up: each position may need to scan every other string to the end — worst case N × M × M comparisons. At N, M = 1000 that's too much for Python.",
+                  "짚고 갈 것이 있어요. 자리마다 다른 줄을 끝까지 훑어야 할 수 있어요 — 최악엔 N × M × M 번 비교예요.\nN, M 이 둘 다 1000 이면 파이썬은 이 반복을 감당하지 못해요.")}
+                <div style={{ marginTop: 4, fontWeight: 700 }}>
+                  {t(E, "Actual grading: Python 6/12 (TLE on 7–12) · C++ 12/12 PASS.", "실제 채점: 파이썬 6/12 (7~12번 시간 초과) · C++ 12/12 통과.")}
+                </div>
+              </div>
+            )}
+          </>
+        ),
       };
     })(),
   ];
