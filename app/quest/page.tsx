@@ -320,6 +320,32 @@ export default function QuestPage() {
     setLoaded(true)
   }, [])
 
+  // quest 상세 화면의 "뒤로 가기(◀)" 가 "/quest#sec-USACO" 처럼 자기 섹션으로 온다.
+  // 목록이 클라이언트에서 그려지므로 loaded 이전엔 그 id 가 아직 DOM 에 없다 —
+  // loaded 된 뒤에만 스크롤한다. 접혀 있을 수도 있으니 그 섹션은 펼친다.
+  // scrollIntoView 방식은 위 "바로가기" 칩(667행)과 동일하게 맞춘다.
+  // hashchange 도 듣는다 — pathname 이 같은(그냥 "/quest") 두 링크 사이를 오가면
+  // Next 가 페이지를 새로 마운트하지 않고 해시만 바꿀 수도 있어서, 그때도 잡는다.
+  useEffect(() => {
+    if (!loaded) return
+    const applyHash = () => {
+      const hash = window.location.hash.replace(/^#sec-/, "")
+      if (!hash) return
+      const label = decodeURIComponent(hash)
+      if (!SECTIONS.some(s => s.label === label)) return
+      setExpandedSections(prev => {
+        if (prev.has(label)) return prev
+        const next = new Set(prev)
+        next.add(label)
+        return next
+      })
+      setTimeout(() => document.getElementById(`sec-${label}`)?.scrollIntoView({ behavior: "smooth", block: "start" }), 60)
+    }
+    applyHash()
+    window.addEventListener("hashchange", applyHash)
+    return () => window.removeEventListener("hashchange", applyHash)
+  }, [loaded])
+
   // 학생이 직접 "했음" 토글 — quest-solved 에 저장 (외부/튜토리얼이라 자동 채점이 어려움)
   const toggleSolved = (id: string) => {
     setSolvedSet(prev => {
@@ -685,7 +711,10 @@ export default function QuestPage() {
             const hasDiff = DIFF_SECTIONS.has(section.label)   // 난이도 뱃지·필터 붙는 섹션(USACO/MCC/MCO)
 
             return (
-              <div key={section.label} id={`sec-${section.label}`} className="border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden scroll-mt-4">
+              // scroll-mt: 모바일은 sticky Header(~69px, components/header.tsx)에 안 가리게
+              // 여유를 더 준다. 데스크탑은 그 Header 가 md:hidden 이라 원래 값(16px)이면 충분.
+              // 실측: 뒤로가기(◀)로 이 자리로 오면 섹션 제목이 헤더 밑에 완전히 가려졌었다.
+              <div key={section.label} id={`sec-${section.label}`} className="border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden scroll-mt-20 md:scroll-mt-4">
 
                 {/* Section header */}
                 <button

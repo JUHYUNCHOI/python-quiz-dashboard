@@ -21,6 +21,11 @@ import { useEffectiveIsTeacher } from "@/lib/effective-role"
 
 const ALGO_UNLOCK_THRESHOLD = 8
 
+// /quest 목록 페이지가 실제로 앵커(id={`sec-${label}`})를 갖고 있는 섹션만.
+// data.ts 의 "LeetCode" 섹션은 /quest 목록에 안 나오므로(코딩 뱅크로 이동) 앵커가 없다 —
+// 거긴 그냥 "/quest" 맨 위로 보낸다.
+const ANCHOR_SECTIONS = new Set(["USACO", "MCC", "MCO"])
+
 const STORAGE_KEY = "quest-solved"
 
 function useQuestSolved(problemId: string) {
@@ -107,6 +112,8 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const { profile } = useAuth()
   const isTeacher = useEffectiveIsTeacher()
   const meta = PROBLEM_MAP.get(problemId)
+  // 뒤로 가기 = 자기 섹션(USACO/MCC/MCO)으로. 섹션에 앵커가 없으면(LeetCode 등) /quest 맨 위.
+  const backHref = meta && ANCHOR_SECTIONS.has(meta.section) ? `/quest#sec-${meta.section}` : "/quest"
 
   // 잠금 해제 — 모든 학생이 바로 접근 가능 (이전엔 알고 토픽 8개 완료 조건이라
   // 첫 클릭은 profile 로딩 전이라서 /quest 로 튕겨나감 + 새로고침도 같은 이유로 튕김.)
@@ -273,7 +280,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
 
       {/* Breadcrumb: USACO · Dec 2024 Bronze #2 + done button */}
       <div className="bg-white border-b border-gray-300 px-3 py-1 sticky top-[57px] md:top-0 z-30 flex items-center gap-2">
-        <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
+        <Link href={backHref} className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
           <ChevronLeft size={16} />
         </Link>
         {/* Compact contest meta only — title moves DOWN one row to the
