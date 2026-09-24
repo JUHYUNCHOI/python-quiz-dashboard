@@ -315,7 +315,7 @@ export function makeReachCh2(E) {
             <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #6ee7b7", fontSize: 12 }}>
               🤔 <b>{t(E, "Why is 7 certain?", "왜 7분이 확실하지?")}</b>{" "}
               {t(E,
-                "Any other route to city 2 must START with some other road — and every other road out of city 1 already takes longer than 7. It can't beat 7.",
+                "Any other route to city 2 must START with some other road — and every other road out of city 1 (the road to city 5 takes 18) already takes longer than 7. It can't beat 7.",
                 "도시 2 로 가는 다른 길은 어차피 다른 다리로 시작해야 해요. 그런데 도시 1 에서 나가는 다른 다리(18분…)는 시작부터 이미 7분보다 늦어요. 그래서 7분을 이길 수 없어요.")}
             </div>
           </div>

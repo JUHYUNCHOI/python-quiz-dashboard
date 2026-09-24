@@ -507,7 +507,7 @@ export function getWalkFenceSections(E) {
             "tuple(map(int, ...)) 을 쓰면 (x, y) 쌍을 한 번에 담을 수 있어요."),
       ],
       cppOnly: [
-        t(E, "Two parallel vector<int> X, Y avoid struct overhead — coordinates fit in int.",
+        t(E, "Two parallel vector<int> X, Y avoid struct overhead — coordinates are 0..1000, so int is plenty.",
             "X, Y 를 벡터 두 개로 따로 두면 구조체를 안 만들어도 돼요.\n좌표가 0~1000 이라 int 면 넉넉해요."),
       ],
     },

@@ -112,7 +112,7 @@ export function makePhotoshoot25Ch1(E) {
               <div>1 ≤ N ≤ 500</div>
               <div>1 ≤ K ≤ min(N, 25)</div>
               <div>1 ≤ Q ≤ 30,000 (= 3 × 10⁴)</div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "1 ≤ v ≤ 10⁶  ·  updates only increase a cell's value", "1 ≤ v ≤ 10⁶  ·  업데이트는 값을 올리기만 해요")}</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "1 ≤ v ≤ 10⁶ (one million)  ·  updates only increase a cell's value", "1 ≤ v ≤ 10⁶(100만)  ·  업데이트는 값을 올리기만 해요")}</div>
             </div>
           </div>
         </div>),
@@ -152,8 +152,8 @@ export function makePhotoshoot25Ch1(E) {
               </div>
             </div>
             <div style={{ fontSize: 11.5, color: "#7f1d1d", marginTop: 8, lineHeight: 1.6 }}>
-              {t(E, "Way over the limit — a computer does roughly 10⁸~10⁹ simple steps per second.",
-                    "제한을 한참 넘어요 — 컴퓨터는 1 초에 대략 10⁸~10⁹ 번 정도 계산해요.")}
+              {t(E, "Way over the limit — a computer does roughly 10⁸~10⁹ (100 million~1 billion) simple steps per second.",
+                    "제한을 한참 넘어요 — 컴퓨터는 1 초에 대략 10⁸~10⁹(1억~10억) 번 정도 계산해요.")}
             </div>
           </div>
           <div style={{ maxWidth: 470, margin: "12px auto 0", fontSize: 12.5, color: "#5b21b6", textAlign: "center", fontWeight: 700 }}>

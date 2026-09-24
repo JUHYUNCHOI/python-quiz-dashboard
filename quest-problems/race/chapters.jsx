@@ -294,7 +294,7 @@ export function makeRaceCh1(E) {
         "Now you try: K=10, X=2. Find the smallest peak speed P (≥ X) such that accel-distance + decel-distance ≥ 10. Then time = P + (P − X).",
         "K=10, X=2 일 때 걸리는 시간을 직접 구해 볼까요?"),
       question: t(E,
-        "K=10, X=2. Try P=3: dist = (1+2+3) + nothing-to-decel-since-already-X+something? Try P=4: accel=1+2+3+4=10, decel from 4 to 2 = 3+2 = 5. Total dist 15 ≥ 10. Time = 4 + (4 − 2) = ?",
+        "K=10, X=2. Try P=4: accel = 1+2+3+4 = 10, decel from 4 to 2 = 3+2 = 5. Total dist 15 ≥ 10. Time = 4 + (4 − 2) = ?",
         "K=10, X=2 에서 P=4 로 해 봐요. 가속 1+2+3+4=10, 감속 3+2=5 라서 총 거리 15 로 10 을 넘어요. 시간 = 4 + (4 − 2) = ?"),
       hint: t(E,
         "Time formula: P + (P − X) = 4 + 2.",
