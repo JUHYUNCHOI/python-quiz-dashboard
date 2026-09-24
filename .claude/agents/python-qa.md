@@ -300,3 +300,27 @@ python3 scripts/check-code-one-statement.py <quest>
    (`memory/feedback_teaching_recursion_code.md`: ✋베이스 조기 return · ↺ 상시 배지).
 
 근거: `memory/feedback_student_code_plain_and_no_recursion.md`
+
+## ⚠️ 「공식 샘플 통과」는 「맞다」가 아니다 (2026-09-24)
+
+`mcc15bahasaf` 가 실제 채점기에서 **17개 중 14개 오답**이었다. **공식 샘플은 통과했다.**
+
+원문은 *"changing **the first consonant** in every syllable to 'f'"* 인데
+우리 코드는 **"첫 글자가 모음이냐"** 로 갈랐다. `"an"` 처럼 **모음으로 시작하지만
+자음이 있는** 음절에서만 갈리는데, **공식 샘플 다섯 단어는 두 해석이 똑같은 답을 낸다.**
+로컬 브루트 대조도 못 잡는다 — 우리가 만든 입력은 **우리 해석대로** 만들어지기 때문이다.
+
+**그래서 매번 이렇게 한다:**
+1. **채점기가 있으면 낸다.** USACO = `usaco.org` analysis mode.
+   **MCC 2015 = `hackerrank.com/contests/mcc-2015` — 대회가 끝나도 채점된다**
+   (`mcc-rectangle`·`mcc-equations`·`mcc-bahasa-f`·`mcc-isthmus`·`mcc-chocolates`).
+   다른 MCC 연도는 없다. 로그인이 필요하면 **선생님께 요청**하고, 못 냈으면 **"못 냈다"고 적어라.**
+2. **규칙 문장을 두 가지로 읽을 수 있나 묻고, 두 해석이 다른 답을 내는 입력을 지어내라.**
+   그런 입력 없이 샘플만 맞혔으면 **아무것도 증명 못 한 것**이다.
+3. **출처는 「원본」이 아니라 「우리가 푸는 대회 판본」이다.** COCI 재사용 문제라도
+   MCC 가 제약을 바꿔 냈으면 **MCC 가 출처**다. 에디토리얼과 원문이 다르면 **원문이 이긴다.**
+4. 코드를 고쳤으면 **화면 설명도 같은 오류를 가르치는지** 봐라 — bahasaf 는 코드·시뮬·why·
+   계획 쪽이 **전부** 같은 말을 하고 있었다.
+
+근거: `memory/feedback_sample_pass_is_not_correct.md`
+
