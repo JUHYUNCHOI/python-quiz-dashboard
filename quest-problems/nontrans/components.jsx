@@ -281,7 +281,10 @@ const FULL_PY = [
   "        if found:",
   "            break",
   "",
-  "    print('yes' if found else 'no')",
+  "    if found:",
+  "        print('yes')",
+  "    else:",
+  "        print('no')",
 ];
 
 const FULL_CPP = [

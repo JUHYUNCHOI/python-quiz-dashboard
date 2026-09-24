@@ -10,7 +10,7 @@ export function makePhoto2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has N cows in some current order, and a target order. The only allowed move: pick ONE cow and move her to ANY position farther LEFT in the line.\nPrint the MINIMUM number of moves to transform the current order into the target order.",
+        "Bessie has N cows in a current order and a target order; the only move is shifting one cow farther LEFT. Print the MINIMUM number of moves.",
         "현재 줄을 목표 순서로 만드는 가장 적은 이동 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -69,7 +69,7 @@ export function makePhoto2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Try the algorithm by hand. Walk the TARGET order left → right. Track the largest current-position you have seen. Each cow whose current-position drops below that max must move LEFT.",
+        "Walk the TARGET order left→right, tracking the largest current-position seen — any cow below that max must move LEFT.",
         "목표 순서를 왼쪽부터 훑으면서 언제 옮겨야 하는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -125,7 +125,7 @@ export function makePhoto2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Map each cow to her index in the CURRENT order. Walk the TARGET order; track running max of current-positions. Each cow with current-position < max must be moved left. Sections build it one piece at a time.",
+        "Map each cow to her index in the CURRENT order, then walk TARGET tracking the running max — any cow below it moves left.",
         "목표 순서를 훑으며 지금까지 본 가장 오른쪽 자리와 견줘요."),
       sections: getPhotoshoot2Sections(E),
     },

@@ -10,7 +10,7 @@ export function makeNonTransCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We're given two 4-sided dice A and B (each side a value in 1..10). A direction-beats relation: X beats Y if more (x, y) outcomes have x > y than x < y.\nDecide whether a 4-sided die C (sides also in 1..10) exists making a non-transitive cycle: A beats B, B beats C, and C beats A. Print 'yes' or 'no'.",
+        "Given two dice A, B (values 1..10), does a die C exist making A beats B beats C beats A?",
         "A→B, B→C, C→A 로 이어지는 주사위 C 가 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -102,7 +102,7 @@ export function makeNonTransCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Pick a dice pair, then tap 'Next pair' 16 times.\nEach (x, y) outcome is x > y, x < y, or x = y.\nWatch the win / lose tally build up — that's exactly what beats(X, Y) computes.\nTry the 4444 ▶ 3336 ▶ 2255 ▶ 4444 cycle: each beats the next, so the relation is non-transitive.",
+        "Pick a dice pair, then tap 'Next pair' 16 times — watch the win/lose tally build up.",
         "쌍을 하나씩 열어 보며 win / lose 가 쌓이는 걸 봐요."),
       content: <NonTransDeepAuditSim E={E} />,
     },
@@ -132,7 +132,7 @@ export function makeNonTransCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Each die face is in 1..10, so we can brute-force C: 4 sorted faces give only C(10+3, 4) = 715 unique dice. For each candidate, count win pairs B vs C and C vs A — keep one where both directions exceed half. Sections build it one piece at a time.",
+        "Each die face is in 1..10, so we can brute-force C — enumerate all sorted 4-face dice.",
         "C 의 면이 1..10 뿐이라 후보를 하나씩 다 해 볼 수 있어요."),
       sections: getNonTransSections(E),
     },

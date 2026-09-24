@@ -10,7 +10,7 @@ export function makePhotoshootCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a row of N cows (N even), each Guernsey (G) or Holstein (H). He wants as many Guernseys as possible at EVEN positions (positions 2, 4, 6, ...).\nHis only allowed move: reverse an EVEN-LENGTH prefix of the row. He must first reach the maximum possible number of G's at even positions.\nPrint the MINIMUM number of reversals needed to do that.",
+        "FJ has N cows (Guernsey/Holstein); maximize Gs at EVEN positions with even-length-prefix reversals — print the MINIMUM count needed.",
         "한 줄로 선 소들 중 짝수 자리에 건지(G)를 최대한 많이 두려고 해요.\n쓸 수 있는 동작은 앞쪽 짝수 마리를 통째로 뒤집는 것뿐이에요.\n최소 몇 번 뒤집어야 하는지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -144,7 +144,7 @@ export function makePhotoshootCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Scan the pairs from RIGHT to LEFT, keeping a flip flag. For each (odd-slot, even-slot) pair, the even slot's char is s[i] when flipped, else s[i+1]. If a G is already in the even slot, leave it; otherwise if the other cow is a G, do one reversal (count it and toggle flip). Sections build it one piece at a time.",
+        "Scan the pairs from RIGHT to LEFT, keeping a flip flag: if the even slot already has a G, keep going; otherwise flip once when the other cow is a G.",
         "두 마리씩 짝지어 오른쪽에서 왼쪽으로 훑어요.\n짝수 칸에 이미 G가 있으면 그대로 두고, 없는데 짝꿍이 G면 한 번 뒤집어요."),
       sections: getPhotoshootSections(E),
     },

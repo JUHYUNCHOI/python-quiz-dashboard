@@ -144,7 +144,7 @@ export function makeOutOfPlaceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ had cows in a row, sorted by height. ONE cow was secretly moved out of her sorted position to a new spot — pushing the cows in between by 1.\nFind the MINIMUM number of adjacent-swaps needed to put the row back into sorted order.",
+        "FJ's cows were sorted by height; one cow secretly moved. Find the MINIMUM adjacent-swaps to restore sorted order.",
         "소 한 마리가 자리를 옮겼어요. 몇 번 바꾸면 되돌릴까요?"),
       content: (
         <div style={{ padding: 16 }}>
@@ -251,7 +251,7 @@ export function makeOutOfPlaceCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Sort a copy and compare to original — the moved cow creates a CONTIGUOUS block of mismatches. Answer = (block length − 1). Sections build it one piece at a time.",
+        "Sort a copy and compare to the original — the moved cow creates a CONTIGUOUS block of mismatches.",
         "사본을 정렬해서 원래 줄과 비교해 봐요."),
       sections: getOutOfPlaceSections(E),
     },

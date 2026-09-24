@@ -287,7 +287,7 @@ export function makePrintseqCh2(E, lang = "py") {
       phase: 7,
       type: "reveal",
       narr: t(E,
-        "🎁 Bonus — we just solved it by driving a TO-DO list ourselves. There's a much shorter way to run the SAME three tricks: recursion. Remember the friend relay?",
+        "🎁 Bonus — there's a much shorter way to run the same three tricks: recursion.",
         "🎁 심화예요. 똑같은 세 요령을 재귀로 훨씬 짧게 쓸 수 있어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -359,7 +359,7 @@ export function makePrintseqCh2(E, lang = "py") {
       phase: 7,
       type: "reveal",
       narr: t(E,
-        "🎁 The recursive version — instead of us driving a TO-DO list, each piece directly CALLS smaller pieces (↺ can calls can). Same answer, same three tricks.",
+        "🎁 The recursive version — each piece directly calls smaller pieces, instead of us driving a TO-DO list.",
         "🎁 재귀 버전이에요. 조각이 더 작은 조각을 직접 불러요."),
       content: (<CodeWalk E={E} lang={lang} {...getPrintseqWalk(E, lang)} accent="#0d9488"
         badge={{ color: "#0d9488",

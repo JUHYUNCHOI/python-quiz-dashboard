@@ -10,7 +10,7 @@ export function makePhoto20Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie wrote down a permutation a of 1..N, then computed b[i] = a[i] + a[i+1] for i = 0 to N−2 — and only b survived.\nGiven b, recover the lexicographically SMALLEST permutation a that could have produced it.",
+        "Bessie's permutation a produced b[i] = a[i]+a[i+1]; given b, recover the lexicographically SMALLEST a.",
         "옆자리끼리 더한 값 b 만 보고 원래 순서 a 를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -70,7 +70,7 @@ export function makePhoto20Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Try the algorithm by hand. Pick a[0] = 1, chain a[i+1] = b[i] − a[i], then audit: are all values in 1..N with no duplicates? If not, bump a[0] up and retry. The first a[0] that passes is our lex-smallest answer.",
+        "Pick a[0] = 1, chain a[i+1] = b[i] − a[i], then check: are all values 1..N with no duplicates? If not, bump a[0] and retry.",
         "a[0] 을 1 부터 넣어 보며 사슬이 이어지는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -125,7 +125,7 @@ export function makePhoto20Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Once you fix a[0], the entire array is determined: a[i+1] = b[i] − a[i]. So try a[0] = 1, 2, …, N and pick the SMALLEST that produces a valid permutation of 1..N (no duplicates, all in range). Sections build it one piece at a time.",
+        "Fixing a[0] determines the whole array — try a[0] = 1, 2, …, N and keep the smallest that's a valid permutation.",
         "a[0] 하나만 정하면 나머지 수는 저절로 따라와요."),
       sections: getPhoto20Sections(E),
     },

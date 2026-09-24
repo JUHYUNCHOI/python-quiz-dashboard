@@ -121,7 +121,7 @@ export function makeProdCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Deep audit time! Slide S left and right.\nWatch d[i] = c[i] − t[i] decide each farm — green when d[i] > S.\nThe answer is just 'how many d[i] are above the line.'",
+        "Deep audit time! Slide S left and right and watch which farms turn green (d[i] > S).",
         "S 를 좌우로 밀어 보면 d[i] > S 인 농장이 초록이 돼요."),
     },
     // 1-3: Quiz
@@ -167,8 +167,8 @@ export function makeProdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Farm i reachable iff S < c[i] − t[i]. Precompute d[i] = c[i] − t[i], sort, and for each query do one binary search for 'how many d > S'. Sections build it one piece at a time.",
-        "풀이 코드를 한 단락씩 읽어 봐요."),
+        "Farm i is reachable iff S < c[i] − t[i]; precompute d[i] = c[i] − t[i], sort it, then binary-search each query.",
+        "S < c[i]−t[i] 인 농장만 갈 수 있어요. d[i] 정렬 후 질문마다 이분 탐색해요."),
       sections: getProductivitySections(E),
     },
   ];

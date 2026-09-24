@@ -141,8 +141,8 @@ export function PrintseqExplorer({ E }) {
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, lineHeight: 1.55 }}>
         {t(E,
-          "Try each preset. Notice K=1 only handles all-same sequences. K=2 covers blocks like (a^x)(b^y) or alternating (ab)·m. K=3 adds more flexibility.",
-          "버튼을 하나씩 눌러 보세요. K=1 이면 숫자가 다 같은 수열만 돼요. K=2 면 (a^x)(b^y) 나 (ab)·m 같은 블록까지 되고, K=3 이면 더 자유로워져요.")}
+          "Try each preset. Notice K=1 only handles all-same sequences. K=2 covers blocks like (a repeated, then b repeated) or an alternating (ab) pattern. K=3 adds more flexibility.",
+          "버튼을 하나씩 눌러 보세요. K=1 이면 숫자가 다 같은 수열만 돼요. K=2 면 (a 를 몇 번, 그다음 b 를 몇 번 반복) 이나 (ab) 가 번갈아 나오는 블록까지 되고, K=3 이면 더 자유로워져요.")}
       </div>
     </div>
   );

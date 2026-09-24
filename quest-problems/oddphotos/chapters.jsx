@@ -19,7 +19,7 @@ export function makeOddPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows, each with an ID number. He wants to put every cow into exactly one group, then line the groups up so the sum of IDs in group 1 is EVEN, group 2 is ODD, group 3 is EVEN, ... alternating.\nPrint the MAXIMUM number of groups possible.",
+        "Group all N cows so the bucket sums alternate EVEN, ODD, EVEN…; print the MAX possible number of groups.",
         "묶음의 합이 짝수, 홀수, 짝수 … 로 번갈아 가게 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -170,7 +170,7 @@ export function makeOddPhotosCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Only the even-count and odd-count matter. Try every possible number of groups k, and keep the largest k that we can actually build: enough odds for the odd-sum groups, leftover odds in pairs, and enough fillers for the even-sum groups. Sections build it one piece at a time.",
+        "Only the even-count and odd-count of IDs matter — try every group count k and keep the largest one that works.",
         "묶음 수 k 를 하나씩 넣어 보고 되는 것 중 제일 큰 값을 골라요."),
       sections: getOddPhotosSections(E),
     },
