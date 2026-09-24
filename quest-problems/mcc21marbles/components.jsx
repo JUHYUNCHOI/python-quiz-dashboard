@@ -39,7 +39,10 @@ export function Mcc21MarblesBoundarySim({ E }) {
   const meaningLine = (i) => {
     const prev = i === 0 ? 0 : carry(i - 1);
     const cur = carry(i);
-    const dir = cur >= 0 ? `${i}→${i + 1}` : `${i + 1}→${i}`;
+    // 2026-09-24 (5th round, fix②): boundary labels now match the 1-indexed
+    // boxes used everywhere else on this quest (page 2's "1→2, 2→3" example,
+    // page 4/5's "상자 1", "상자 2") — box i (0-idx) is now shown as box i+1.
+    const dir = cur >= 0 ? `${i + 1}→${i + 2}` : `${i + 2}→${i + 1}`;
     if (cur === 0) {
       if (prev !== 0) {
         return E
@@ -64,14 +67,17 @@ export function Mcc21MarblesBoundarySim({ E }) {
   };
 
   const headers = [
-    { ko: "i", en: "i" },
+    // 2026-09-24 (5th round): "i" renamed to "#" — this column is now 1-based
+    // (box #1..#N, fix②) while the code's loop var i stays 0-based, so keeping
+    // the label "i" would have implied they're the same thing. "#" is not.
+    { ko: "#", en: "#" },
     { ko: "Aᵢ", en: "Aᵢ" },
     { ko: "Bᵢ", en: "Bᵢ" },
     { ko: "Aᵢ−Bᵢ", en: "Aᵢ−Bᵢ" },
-    { ko: "이전 cur", en: "prev cur" },
+    { ko: "이전 cur", ko2: "(=carry)", en: "prev cur", en2: "(=carry)" },
     { ko: "새 cur", ko2: "(이전+차이)", en: "new cur", en2: "(prev+diff)" },
     { ko: "|cur|", en: "|cur|" },
-    { ko: "ans", en: "ans" },
+    { ko: "ans", ko2: "(=ops)", en: "ans", en2: "(=ops)" },
     { ko: "의미", en: "meaning" },
   ];
   const th = { padding: "5px 6px", fontSize: 9.5, color: "#7f1d1d", fontWeight: 700, borderBottom: "1.5px solid #fca5a5", whiteSpace: "nowrap" };
@@ -98,7 +104,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 11, fontWeight: 800, color: i <= step ? "#dc2626" : C.dim,
                 transition: "all .2s",
-              }}>{i}</div>
+              }}>{i + 1}</div>
               {i < N - 1 && (
                 <div style={{
                   width: 22, textAlign: "center", fontSize: 13, fontWeight: 800,
@@ -126,7 +132,10 @@ export function Mcc21MarblesBoundarySim({ E }) {
           <thead>
             <tr>
               {headers.map((h, hi) => (
-                <th key={hi} style={th}>
+                // 2026-09-24 (5th round): headers with a sub-line (=carry)/(=ops)/(이전+차이)
+                // must wrap, not nowrap — on mobile nowrap pushed "이전 cur"/"새 cur" into
+                // each other and merged their subtext into one unreadable line.
+                <th key={hi} style={(h.ko2 || h.en2) ? { ...th, whiteSpace: "normal" } : th}>
                   {t(E, h.en, h.ko)}
                   {(h.ko2 || h.en2) && <div style={{ fontWeight: 400, fontSize: 8.5 }}>{t(E, h.en2, h.ko2)}</div>}
                 </th>
@@ -138,7 +147,7 @@ export function Mcc21MarblesBoundarySim({ E }) {
               const isNew = i === step;
               return (
                 <tr key={i} style={{ background: isNew ? "#fff1f2" : "transparent" }}>
-                  <td style={{ ...td, fontWeight: isNew ? 800 : 400 }}>{i}</td>
+                  <td style={{ ...td, fontWeight: isNew ? 800 : 400 }}>{i + 1}</td>
                   <td style={td}>{START[i]}</td>
                   <td style={td}>{TARGET[i]}</td>
                   <td style={td}>{diff(i) >= 0 ? "+" : ""}{diff(i)}</td>
