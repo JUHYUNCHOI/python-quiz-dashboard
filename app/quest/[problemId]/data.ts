@@ -189,7 +189,7 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"mcc19ditcoin",emoji:"💰",title:"Ditcoin",sub:"MCC 2019 P4",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
   {id:"mcc19elim",emoji:"🔢",title:"Elimination",sub:"MCC 2019 P5",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
   {id:"mcc19palindrome",emoji:"🔄",title:"Palindrome",sub:"MCC 2019 P6",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
-  {id:"mcc19rect2",emoji:"▭",title:"Rectangle 2",sub:"MCC 2019 P7",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2019-editorial/"},
+  {id:"mcc19rect2",emoji:"▭",title:"Rectangle 2",sub:"MCC 2019",section:"MCC"},
   {id:"mcc15rect",emoji:"▭",title:"Rectangle",sub:"MCC 2015 P1",section:"MCC",url:"https://www.hackerrank.com/contests/mcc-2015/challenges/mcc-rectangle/problem"},
   {id:"mcc15equation",emoji:"➕",title:"Complete the Equation",sub:"MCC 2015 P2",section:"MCC",url:"https://www.hackerrank.com/contests/mcc-2015/challenges/mcc-equations/problem"},
   {id:"mcc15bahasaf",emoji:"🗣️",title:"Bahasa F",sub:"MCC 2015 P3",section:"MCC",url:"https://www.hackerrank.com/contests/mcc-2015/challenges/mcc-bahasa-f/problem"},

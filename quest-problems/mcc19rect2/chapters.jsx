@@ -27,7 +27,7 @@ export function makeMcc19Rect2Ch1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>▭</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Rectangle 2</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P7</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019</div>
           </div>
 
           {/* 🎯 Mission box — photoshoot25 표준 */}
@@ -117,14 +117,6 @@ export function makeMcc19Rect2Ch1(E) {
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
               {t(E, "Why 2 3? — the sim below reveals it bit by bit.",
                     "왜 2 3 일까? — 아래 시뮬이 하나씩 짚어줘요.")}
-            </div>
-          </div>
-          {/* CONSTRAINTS */}
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
-            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
-              <div>0 ≤ x, y ≤ 1,000,000,000</div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2, fontFamily: "inherit", wordBreak: "keep-all" }}>{t(E, "The 3 corners uniquely determine a rectangle with sides parallel to axes.", "꼭짓점 3 개만 있으면 기울어지지 않은 직사각형이 딱 하나로 정해져요.")}</div>
             </div>
           </div>
         </div>),
