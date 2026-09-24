@@ -3602,3 +3602,39 @@ check-quest-length-regression.py subseqmedian exit 0. check-frozen.py 해당 없
 union-find 기반으로 갈아엎었다. 그 설명 문장도 같이 고쳤다.
 
 ⚠️ 밀지(push)는 별개다 — 이 판정은 커밋 예산만 연다.
+
+## ✅ 173파일 `isEn={E}` prop 추가 — 영어 화면 한글 주석 버그 — (2026-09-24, PM 판정)
+
+**판정: 진행.** `git diff --cached quest-problems/` 를 직접 읽었다 — 343건 모두
+`<CodeBlock lines={...} />` 를 `<CodeBlock lines={...} isEn={E} />` 로 바꾸는
+**한 줄 치환**이고, 다른 변경은 섞여 있지 않다. 새로 추가되거나 지워진 문장·퀴즈·단어는
+0건. `NumInput` 에는 이미 `E={E}` 를 넘기고 있었는데 `CodeBlock` 만 빠져 있던 것 —
+그래서 영어 화면에서 한국어 주석이 그대로 떴다.
+메인 세션이 브라우저로 전/후 확인함(`lc303` 영어: `# prefix[i] 는 …` →
+`# prefix[i] = sum(…)`), 한국어 화면은 무변화.
+
+`check-frozen.py` — 동결·USACO_VERIFIED 해당 없음.
+`check-quest-length-regression.py` — 늘어난 quest 없음(0건).
+
+오늘 이미 3회+ 고쳐 걸쇠에 막힌 quest 22개(직접 `--staged` 로 확인한 정확한 목록):
+bacteria, bucketbrigade, cannonball, collatz, cowntact, hungrycow, innovation,
+leaders, lostcow, mcc15equation, mcc22birthday, meastraffic, palindrome,
+permutation, photoshoot25, rectangles, reflection, rotshift, sumk, tichu,
+walkfence, xorstring
+
+### 걸쇠 설계 — 판정 유지, 자동화는 안 한다
+
+오늘 이 판정이 일곱 번째라 "자동으로 가르는 기준을 짤지" 를 물었다. **판정은 그대로 유지.**
+
+1. 오늘 일곱 건 중 여섯은 **한 quest 를 여러 라운드에 걸쳐 고친** 진짜 폴리싱 패턴이고,
+   걸쇠가 정확히 막아야 하는 그 모양이다. 이번 건만 **한 커밋이 여러 quest 를 한 번에
+   스치는** 다른 모양이다 — 오늘 처음 나온 패턴이지 반복되는 비용이 아니다.
+2. "기계적 치환인지" 를 안전하게 자동 판별하려면 diff 패턴 매칭 + 서사문 미변경 검증이
+   필요한데, 잘못 짜면 **진짜 폴리싱 라운드를 기계적으로 오판해 통과시킬 위험**이 있다 —
+   그게 뚫리면 `strangefn` 8라운드 사고를 다시 열어주는 것과 같다.
+3. 비용도 이 판정 한 번이면 22개가 전부 풀린다.
+
+**같은 모양(한 커밋이 다수 quest 를 스치는 기계적 prop/치환)이 또 반복되면 그때 자동 예외
+기준을 설계한다.** 지금은 이르다.
+
+⚠️ 밀지(push)는 별개다 — 이 판정은 커밋 예산만 연다.

@@ -443,7 +443,7 @@ export function makeCowSignalCh3(E, lang = "py") {
         "Step 1: read M, N, K from the first line.", "1단계 — 첫 줄에서 M, N, K 를 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <CodeBlock lang={lang} lines={lang === "cpp" ? [
+          <CodeBlock lang={lang} isEn={E} lines={lang === "cpp" ? [
             "int M, N, K;",
             "cin >> M >> N >> K;",
           ] : [
@@ -464,7 +464,7 @@ export function makeCowSignalCh3(E, lang = "py") {
         "Step 2: read the next M lines (rows) to fill the grid.", "2단계 — 다음 M 줄(행)을 읽어서 격자를 채워요."),
       content: (
         <div style={{ padding: 16 }}>
-          <CodeBlock lang={lang} lines={lang === "cpp" ? [
+          <CodeBlock lang={lang} isEn={E} lines={lang === "cpp" ? [
             "vector<string> grid(M);",
             "for (int i = 0; i < M; i++) {",
             "    cin >> grid[i];",
@@ -514,7 +514,7 @@ export function makeCowSignalCh3(E, lang = "py") {
         "Step 3: the output loop — outer for each row, inner to repeat it K times.", "3단계 — 출력 반복문이에요. 바깥은 행마다, 안쪽은 K 번씩요."),
       content: (
         <div style={{ padding: 16 }}>
-          <CodeBlock lang={lang} lines={lang === "cpp" ? [
+          <CodeBlock lang={lang} isEn={E} lines={lang === "cpp" ? [
             E ? "for (int i = 0; i < M; i++) {  // each original row" : "for (int i = 0; i < M; i++) {  // 원본 한 행마다",
             E ? "    for (int rep = 0; rep < K; rep++) {  // repeat K times" : "    for (int rep = 0; rep < K; rep++) {  // K 번 반복",
             "        ...",
@@ -538,7 +538,7 @@ export function makeCowSignalCh3(E, lang = "py") {
         "Step 4: build each row by repeating every character K times.", "4단계 — 글자마다 K 번씩 이어 붙여서 행을 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <CodeBlock lang={lang} lines={lang === "cpp" ? [
+          <CodeBlock lang={lang} isEn={E} lines={lang === "cpp" ? [
             "for (int i = 0; i < M; i++) {",
             "    for (int rep = 0; rep < K; rep++) {",
             "        for (int j = 0; j < N; j++) {",

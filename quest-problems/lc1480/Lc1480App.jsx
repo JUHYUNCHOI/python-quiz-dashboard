@@ -59,7 +59,7 @@ export default function Lc1480App(props = {}) {
   const renderStep = (s, interactive = true) => {
     if (s.type === "quiz") return <Quiz {...s} onAnswer={interactive ? handleAnswer : () => {}} />;
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
-    if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
+    if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     return null;
   };
 

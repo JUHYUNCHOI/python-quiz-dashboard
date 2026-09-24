@@ -277,7 +277,7 @@ export function makeMooin2Ch2(E, lang = "py") {
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
             🐢 {t(E, "Brute — piece 1: read the input", "브루트 — 1조각: 먼저 값부터 읽기")}
           </div>
-          <CodeBlock lines={isCpp ? bruteReadCpp : bruteReadPy} lang={isCpp ? "cpp" : "py"} />
+          <CodeBlock lines={isCpp ? bruteReadCpp : bruteReadPy} lang={isCpp ? "cpp" : "py"} isEn={E} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E, "No judging yet — just load the numbers into a so the next piece can inspect them.",
                   "아직 판단은 안 해요. moo 인지 보려면 값부터 배열 a 에 담아야 하니까요.")}
@@ -298,7 +298,7 @@ export function makeMooin2Ch2(E, lang = "py") {
           <CodeBlock
             lines={isCpp ? [...bruteReadCpp, ...bruteLoopCpp] : [...bruteReadPy, ...bruteLoopPy]}
             dimUntil={isCpp ? bruteReadCpp.length : bruteReadPy.length}
-            lang={isCpp ? "cpp" : "py"} />
+            lang={isCpp ? "cpp" : "py"} isEn={E} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E, "seen collects (x, y) pairs.",
                   "seen 은 (x, y) 짝을 모으는 집합이에요.")}<br/>
@@ -320,7 +320,7 @@ export function makeMooin2Ch2(E, lang = "py") {
           </div>
           <CodeBlock
             lines={isCpp ? [...bruteReadCpp, ...bruteLoopCpp, ...bruteBodyCpp] : [...bruteReadPy, ...bruteLoopPy, ...bruteBodyPy]}
-            lang={isCpp ? "cpp" : "py"} />
+            lang={isCpp ? "cpp" : "py"} isEn={E} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E, "↑ The full brute program — all of it. Correct and easy to read — now the big question: how fast is it?",
                   "↑ 이게 브루트 코드 전부예요. 답도 맞고 읽기도 쉬운데, 이제 큰 질문이 남았어요. 얼마나 빠를까요?")}

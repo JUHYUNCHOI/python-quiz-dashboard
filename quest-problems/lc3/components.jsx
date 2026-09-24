@@ -388,7 +388,7 @@ export function CodeJourney({ E, sections, doneNote, fullCode }) {
                   {bullets.map((b, j) => (<li key={j} style={{ marginBottom: 3 }}>{b}</li>))}
                 </ul>
               )}
-              <CodeBlock lang={lang} lines={lang === "py" ? sec.py : sec.cpp} />
+              <CodeBlock lang={lang} lines={lang === "py" ? sec.py : sec.cpp} isEn={E} />
             </div>
           </div>
         );
@@ -400,7 +400,7 @@ export function CodeJourney({ E, sections, doneNote, fullCode }) {
             {t(E, "✓ Full solution", "✓ 전체 코드")}
           </div>
           <div style={{ border: `2px solid ${ACC_D}`, borderRadius: "0 8px 8px 8px", padding: 10, background: "#fff" }}>
-            <CodeBlock lang={lang} lines={lang === "py" ? fullCode.py : fullCode.cpp} />
+            <CodeBlock lang={lang} lines={lang === "py" ? fullCode.py : fullCode.cpp} isEn={E} />
           </div>
         </div>
       )}

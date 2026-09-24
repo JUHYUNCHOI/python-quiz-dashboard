@@ -50,7 +50,7 @@ export function makeChapters(E) {
             <div style={{ fontSize: 12.5, fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>
               🐢 {t(E, "Naive: O(n) per query", "단순한 방법: 물음마다 O(n)")}
             </div>
-            <CodeBlock lang="py" lines={[
+            <CodeBlock lang="py" isEn={E} lines={[
               "def sumRange(self, left, right):",
               "    total = 0",
               "    for i in range(left, right + 1):",

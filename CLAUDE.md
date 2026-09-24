@@ -138,6 +138,11 @@ python3 scripts/check-section-code-complete.py               # 학생이 📄 PD
                                                             #   메서드(self.foo()) ③문자열로 이름 만들어 동적으로 부르는 경우.
 python3 scripts/check-unused-lang-param.py <id>               # Py/C++ 토글을 눌러도 코드가 안 바뀌는 quest
                                                             #   (자체 CodeSnippet 이 lang 을 못 받음, 2026-09-23 학생 제보)
+python3 scripts/check-codeblock-isen.py <id>                  # <CodeBlock> 호출부가 isEn 을 안 넘겨 **영어 화면에
+                                                            #   한국어 코드 주석이 그대로 새는** 자리 (2026-09-24, MCC 43개
+                                                            #   ·86곳 + 그 밖 quest 89개·196곳에서 실측 — lc303 으로 실제
+                                                            #   브라우저에서 재현·수정 확인함). 0건이 결백은 아니다 — `CodeReveal`
+                                                            #   처럼 컴포넌트 내부에서 부르는 자리는 안 본다.
 python3 scripts/check-taught-vs-final-code.py <id>            # 화면 코드 블록이 **가르치는** 함수를 🔒 최종 코드가 쓰나
                                                             #   (`check-boasted-function.py` 와 다른 층 — 그건 자랑 *문장*만
                                                             #   본다. 이건 학생에게 **직접 보여준 코드 줄**과 대조한다)
