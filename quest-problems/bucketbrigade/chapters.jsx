@@ -23,7 +23,7 @@ export function makeBrigadeCh1(E) {
           {/* \ud83c\udfaf Mission box */}
           <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
-              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+              {"\ud83c\udfaf"} {t(E, "Mission", "\ubbf8\uc158")}
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,

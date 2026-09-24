@@ -200,9 +200,9 @@ export function makeHungryCowCh1(E) {
                   </div>
                   <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", fontSize: 11, color: C.dim }}>
                     <span><span style={{ color: "#0891b2", fontWeight: 700 }}>+n</span> = {t(E, "delivery", "\ubc30\ub2ec")}</span>
-                    <span><span style={{ color: "#fbbf24", fontWeight: 700 }}>\u25ae</span> = {t(E, "stock left after eating", "\uba39\uc740 \ud6c4 \uc7ac\uace0")}</span>
-                    <span>\ud83c\udf3e = {t(E, "ate", "\uba39\uc74c")}</span>
-                    <span>\u274c = {t(E, "no food", "\uc7ac\uace0 0")}</span>
+                    <span><span style={{ color: "#fbbf24", fontWeight: 700 }}>{"\u25ae"}</span> = {t(E, "stock left after eating", "\uba39\uc740 \ud6c4 \uc7ac\uace0")}</span>
+                    <span>{"\ud83c\udf3e"} = {t(E, "ate", "\uba39\uc74c")}</span>
+                    <span>{"\u274c"} = {t(E, "no food", "\uc7ac\uace0 0")}</span>
                   </div>
                   <div style={{ marginTop: 10, padding: "8px 12px", background: "#dcfce7", border: "1px solid #86efac", borderRadius: 8, fontSize: 12, color: "#166534", textAlign: "center", fontWeight: 700 }}>
                     {t(E, `Days she ate = ${total}  (D1, D2, D3, D5, D6 \u2192 5)`, `\uba39\uc740 \ub0a0 = ${total}  (1,2,3,5,6\uc77c \u2192 5)`)}

@@ -309,7 +309,7 @@ export function makeDaisyCh1(E) {
           {/* \uD83C\uDFAF Mission box */}
           <div style={{ background: C.carryBg, border: `1.5px solid ${C.carry}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.carry, letterSpacing: 0.5, marginBottom: 4 }}>
-              \uD83C\uDFAF {t(E, "Mission", "\uBBF8\uC158")}
+              {"\uD83C\uDFAF"} {t(E, "Mission", "\uBBF8\uC158")}
             </div>
             <div style={{ fontSize: 13, color: C.carry, lineHeight: 1.5 }}>
               {t(E,

@@ -23,7 +23,7 @@ export function makeLonelyPhotoCh1(E) {
           {/* \ud83c\udfaf Mission box */}
           <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
-              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+              {"\ud83c\udfaf"} {t(E, "Mission", "\ubbf8\uc158")}
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
