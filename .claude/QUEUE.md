@@ -71,16 +71,42 @@
    돌려 **quest 34개의 미커밋 편집이 한 번에 사라졌다**(pop 으로 전량 복구, 충돌 0).
    이제 `.githooks/reference-transaction` 이 막는다. **커밋은 메인 세션이 모아서 한다.**
 
-## 🔴 지금 도는 것 (2026-09-25 저녁)
+## 🔴 지금 도는 것 (2026-09-25 밤)
 
 | 무엇 | 담당 | 상태 |
 |---|---|---|
-| CodeWalk A·B·C조 **24개** | frontend-engineer ×3 | **DONE** `64e394c7` `72d56e88` `8f00fc4f` — 누적 **28개**(동결 4 포함) |
-| CodeWalk 1스탑 D조 9개 | frontend-engineer | READY 도는중 |
-| CodeWalk 1스탑 E조 9개 | frontend-engineer | READY 도는중 |
-| CodeWalk 다중스탑 F조 6개 | frontend-engineer | READY 도는중 |
-| 복사 버튼 — **고정 바가 클릭을 삼키지 않게** | frontend-engineer | READY 도는중 (PM 판정) |
-| 복사 버튼 — 범위 전수 재조사(1600ms 대기 + 실제 클릭) | frontend-engineer | READY 도는중 |
+| CodeWalk A~G조 **54개** | frontend-engineer ×7 | **DONE** — 누적 **58/66** |
+| CodeWalk H조 5개(`permutation`+`favperm2` 포함) | frontend-engineer | READY 도는중 |
+| `reflection`·`mcc21simplemath` **설계 검토** | pedagogy-reviewer | READY 도는중 — 마지막 2개 |
+| 첫 걸음에 생각이 0인 자리 4개 | frontend-engineer | READY 도는중 |
+| 복사 버튼 — 고정 바가 클릭을 삼키던 것 | frontend-engineer | **DONE** `fee8617c` — quest 180개 |
+
+### ⭐ 복사 버튼 축이 닫혔다 — **원인은 넷째였다**
+프론트(버튼을 아래로)·UX(코드창 높이 제한)·학생(아무 일도 안 난다) **셋이 갈렸고**,
+PM 이 **아무도 안 짚은 곳**을 찾았다: `.quest-navbar` **바깥 div 에 `onClick` 이 없는데**
+`fixed` 라 **그 빈 여백이 밑의 진짜 버튼을 영영 못 누르게** 하고 있었다.
+⚠️ PM 이 지정한 처방(바깥 none + wrapper auto)도 **부족했다** — 모바일에선 wrapper 가
+사실상 바 전체 폭이라 **버튼 사이 틈·좌우 여백이 여전히 죽어 있었다.**
+→ **버튼 두 개에만** `auto`. 유리를 버튼 크기까지 좁혔다. 전수 **180/180 dead-zone 0**.
+⭐ 내가 세 번 실패했던 「도달 실패 176개」의 원인도 여기서 밝혀졌다 —
+   대기 시간이 아니라 **Turbopack 컴파일 경합**이었다.
+⚠️ 남는 것: 버튼이 **시각적으로는 여전히 가려 보인다**(기능은 산다). backlog.
+
+### 🧾 손코딩 블록 축 — 조사 끝, **급하지 않다**
+`check-codewalk-thinking-order.py` 의 **세 번째 모양**. quest **17개**뿐이고,
+`CodeEditor`·`textarea`·`onRun` **0건** — **학생이 치는 자리가 아니라 읽기 전용**이다.
+안에서 둘로 갈린다:
+- **(A) 누적형** — 걸음마다 코드가 늘어 **마지막이 🔒 최종 코드와 겹친다**
+  (`cowcollege`(100%)·`daisychains`(100%)·`whereami`(92%)·`wordproc`(100%)).
+  CodeWalk 으로 **옮길 수 있다.** 다만 **지금 학생이 겪는 결함이 아니다** — 유지보수 이득뿐.
+- **(B) 구간형** — 걸음이 🔒 최종 코드와 **다른 접근**을 가르친다
+  (`cowgym` 57% · `mixmilk` · `mcc20kitty` 85% · `tricks` 는 최종 코드 배열 자체가 없다).
+  ⛔ **옮기면 안 된다** — 컴포넌트가 아니라 **가르치는 내용**을 바꿔야 하는 일이다.
+  ⭐ 이건 이미 `check-taught-vs-final-code.py` 가 잡고 있다. **새 축을 열 필요가 없다.**
+⛔ `rounding` 은 맨 마지막, 혼자. 동결이고 2050줄이며 **2236→184줄 붕괴한 바로 그 quest** 다.
+
+**권고 순서:** ①`cowgym`·`mixmilk` 의 taught-vs-final 어긋남(이미 알려진 버그) →
+②「목적지 없음」 문장 수정(싸다, **지금 도는 중**) → ③그 다음에야 (A)군 이전을 고려.
 
 ### ⭐ CodeWalk 스크리닝이 가정을 뒤집었다 (2026-09-25)
 **66개 중 「코드 섹션에 위젯이 박힌」 quest 는 사실상 0개다.**
