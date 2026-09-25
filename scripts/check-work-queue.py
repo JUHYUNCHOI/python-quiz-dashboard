@@ -63,7 +63,22 @@ def main() -> int:
     blocked = [r for r in rows if r[1] == "BLOCKED"]
     done = [r for r in rows if r[1] == "DONE"]
 
-    print(f"큐 {len(rows)}줄 — READY {len(ready)} · BLOCKED {len(blocked)} · DONE {len(done)}\n")
+    print(f"큐 {len(rows)}줄 — READY {len(ready)} · BLOCKED {len(blocked)} · DONE {len(done)}")
+
+    # ⭐ 2026-09-25 — **이 스크립트가 「비었다」고 거짓말한 적이 있다.**
+    #   `QUEUE.md` 만 읽으니, 내가 거기 「오늘 판정 10줄」만 적어 두면 당연히 비어 보인다.
+    #   그때 `.claude/WORK.md` 에는 **열린 항목이 40개** 있었다.
+    #   **큐가 둘인데 서로 안 맞는 게 「다음 뭐 하지」를 매 턴 재유추하게 만든 진짜 이유였다.**
+    #   → `QUEUE.md` 는 **오늘 도는 것**, `WORK.md` 는 **전체 대장**. 여기서 **둘 다 세고,
+    #     대장에 남은 게 있으면 「큐가 빈 게 아니다」라고 크게 떠든다.**
+    backlog = 0
+    wp = os.path.join(ROOT, ".claude", "WORK.md")
+    if os.path.exists(wp):
+        wt = open(wp, encoding="utf-8").read()
+        backlog = len(re.findall(r"`(대기|진행|선생님)`", wt))
+    if backlog:
+        print(f"전체 대장(.claude/WORK.md) 에 아직 열린 항목 — **{backlog}개**")
+    print()
 
     if ready:
         print("🚦 **project-lead 를 부르지 마라. 바로 이걸 해라:**\n")
@@ -78,12 +93,24 @@ def main() -> int:
         print("⏸ READY 가 없다. 막힌 것만 남았다:\n")
         for what, _, note in blocked:
             print(f"   · {what}  {note or '⚠️ 사유가 안 적혀 있다 — 적어라'}")
-        print("\n   **PM 을 부르는 건 위 사유가 풀렸을 때뿐이다.**")
-        print("   사유가 「계정·권한 / 학생 데이터 / 제품 방향 / 되돌리기 어려움」이 아니면")
+        print("\n   사유가 「계정·권한 / 학생 데이터 / 제품 방향 / 되돌리기 어려움」이 아니면")
         print("   그건 BLOCKED 가 아니다 — READY 로 고치고 그냥 해라.")
+        # ⚠️ 여기서 그냥 끝내면 **「막힌 것만 남았다 = 다 끝났다」로 읽힌다.**
+        #    실제로 그 실수를 했다 — 대장에 39개가 열려 있는데 「READY 0」만 보고 멈췄다.
+        if backlog:
+            print(f"\n   ⛔ **그런데 「다 끝난」 게 아니다** — 대장에 **{backlog}개**가 열려 있다.")
+            print("      막힌 둘은 선생님 몫이고, **나머지는 네가 할 수 있는 것들이다.**")
+            print("      project-lead 에게 **그중 다음 것을 달라고** 해라. 멈추지 마라.")
+        else:
+            print("\n   **PM 을 부르는 건 위 사유가 풀렸을 때뿐이다.**")
         return 0
 
-    print("✅ 큐가 비었다 — **이제 project-lead 를 불러 다음 계획을 받아라.**")
+    if backlog:
+        print(f"⚠️ **오늘 큐는 비었지만 「다 끝난」 게 아니다** — 대장에 {backlog}개가 열려 있다.")
+        print("   project-lead 에게 **그 40여 개 중 다음 것을 달라고** 해라.")
+        print("   ⛔ 「할 일이 없다」고 보고하지 마라 — 그건 큐가 작아서 그렇게 보이는 것뿐이다.")
+        return 0
+    print("✅ 큐도 대장도 비었다 — **이제 project-lead 를 불러 다음 계획을 받아라.**")
     return 0
 
 
