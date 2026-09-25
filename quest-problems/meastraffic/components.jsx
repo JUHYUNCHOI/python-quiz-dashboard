@@ -2,7 +2,6 @@
 // py 10/10 PASS · cpp 10/10 PASS · 2026-05-14
 import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
-import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
@@ -325,8 +324,60 @@ export function getMeasTrafficSections(E) {
   ];
 }
 
-export function MeasTrafficProgressiveCode(props) {
-  return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이의 표시용 사본이다 —
+   배열 내용은 절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getMeasTrafficWalk(E, lang = "py") {
+  const vars = [
+    { v: "types / los / his", ko: "구간마다 종류·lo·hi", en: "each segment's type, lo, hi" },
+    { v: "BIG", ko: "무한대 대신 쓰는 아주 큰 수", en: "a stand-in for infinity" },
+    { v: "f_lo / f_hi", ko: "앞에서 훑어 구한 [lo,hi]", en: "the [lo,hi] found sweeping forward" },
+    { v: "b_lo / b_hi", ko: "뒤에서 훑어 구한 [lo,hi]", en: "the [lo,hi] found sweeping backward" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "Same target in C++ — the same two ranges. So read each segment's type, lo, hi into three parallel vectors: types[i], los[i], his[i] are one record.",
+          "C++ 도 목표는 같아요 — 똑같이 두 범위를 구해요.\n그러니 구간마다 종류·lo·hi 를 통 셋(types, los, his)에 나란히 읽어요.\ntypes[i]·los[i]·his[i] 가 한 기록이에요.") },
+        { hi: [18, 18], bubble: t(E,
+          "BIG stands in for \"infinity\" again.",
+          "BIG 은 여기서도 '무한대' 대신이에요.") },
+        { hi: [19, 40], bubble: t(E,
+          "Sweep forward: a sensor narrows [f_lo, f_hi], an on-ramp adds, an off-ramp subtracts — and flow never drops below 0.",
+          "앞에서부터 훑어요.\n센서는 좁히고, 진입로는 더하고, 출구는 빼요.\n유량은 0 밑으로 못 내려가요.") },
+        { hi: [41, 62], bubble: t(E,
+          "Sweep backward with the same rules reversed: undo the on-ramp by subtracting, undo the off-ramp by adding.",
+          "뒤에서부터 같은 규칙을 반대로 적용해요 — 진입로는 빼서, 출구는 더해서 되돌려요.") },
+        { hi: [63, 66], bubble: t(E,
+          "Print the start range first, then the end range.",
+          "시작 범위를 먼저, 끝 범위를 그다음에 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 14], bubble: t(E,
+        "What are we heading toward? Two ranges — the possible flow at the very start of the highway, and at the very end, that agree with every sensor. First read each segment's type and its [lo, hi].",
+        "무엇을 향해 가나요?\n모든 센서와 맞아떨어지는, 맨 처음과 맨 끝의 가능한 유량 범위예요.\n먼저 구간마다 종류와 [lo, hi] 를 읽어요.") },
+      { hi: [16, 17], bubble: t(E,
+        "BIG stands in for \"infinity\" — a number large enough that it never becomes the real limit.",
+        "BIG 은 '무한대' 대신이에요.\n진짜 한계가 될 일이 없을 만큼 큰 수예요.") },
+      { hi: [19, 33], bubble: t(E,
+        "Sweep forward, segment by segment: a sensor narrows [f_lo, f_hi] to its own bounds, an on-ramp adds flow (both ends), an off-ramp subtracts it — and flow can never go below 0.",
+        "앞에서부터 구간마다 훑어요.\n센서는 [f_lo, f_hi] 를 자기 범위로 좁히고, 진입로는 더하고, 출구는 빼요.\n유량은 0 밑으로는 못 내려가요.") },
+      { hi: [35, 51], bubble: t(E,
+        "Now sweep backward — same rules, but reversed: an on-ramp that ADDED going forward must be SUBTRACTED going backward, and an off-ramp is added back.",
+        "이번엔 뒤에서부터 훑어요 — 규칙은 같은데 반대로 적용해요.\n앞에서 더했던 진입로는 뒤에서 빼고, 앞에서 뺐던 출구는 뒤에서 더해요.") },
+      { hi: [53, 55], bubble: t(E,
+        "Write the start range (from the backward sweep) first, then the end range (from the forward sweep).",
+        "시작 범위(뒤에서 훑은 값)를 먼저, 끝 범위(앞에서 훑은 값)를 그다음에 적어요.") },
+    ],
+  };
 }
 
 

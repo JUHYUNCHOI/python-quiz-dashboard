@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getShellGameSections } from "./components";
 
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
@@ -676,12 +675,11 @@ export function makeShellCh3(E, lang = "py") {
         "The swap updates pos first. THEN we check the guess against the NEW pos. If it were elif, the guess check might be skipped!",
         "먼저 pos 를 옮기고, 그 다음 새 pos 로 추측을 확인해요. elif 로 두면 확인을 건너뛸 수 있어요!"),
     },
-    // 3-5: Complete code
+    // 3-5: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
         "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 부분씩 읽어 봐요."),
-      sections: getShellGameSections(E),
     },
   ];
 }

@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowEvolutionSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -153,13 +152,12 @@ export function makeEvolutionCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeEvolutionCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — straight in.
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
         "If A-only, B-only, and both ever appear for a pair, no valid tree exists — check every pair.",
         "A 만 · B 만 · 둘 다 가 모두 나오는 쌍이 하나라도 있으면 트리를 못 만들어요.\n그래서 모든 특성 쌍을 하나씩 확인해요."),
-      sections: getCowEvolutionSections(E),
     },
   ];
 }

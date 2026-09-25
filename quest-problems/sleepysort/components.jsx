@@ -1,7 +1,6 @@
 // 🔒 USACO_VERIFIED — cpid=892, sleepysort (2019 Jan Bronze #2)
 // py 12/12 PASS · cpp 12/12 PASS · 2026-05-14
 import { C, t } from "@/components/quest/theme";
-import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
@@ -82,8 +81,46 @@ export function getSleepySortSections(E) {
   ];
 }
 
-export function SleepySortProgressiveCode(props) {
-  return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이의 표시용 사본이다 —
+   배열 내용은 절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getSleepySortWalk(E, lang = "py") {
+  const vars = [
+    { v: "a", ko: "소들의 ID 줄", en: "the line of cow IDs" },
+    { v: "k", ko: "이미 정렬된 뒷부분 바로 앞의 경계", en: "the boundary just before the sorted tail" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "Same target in C++ — the same k. So open the files and read N IDs into a vector.",
+          "C++ 도 목표는 같아요 — 똑같이 k 를 구해요.\n그러니 파일을 열고 ID N 개를 벡터에 읽어요.") },
+        { hi: [17, 21], bubble: t(E,
+          "Same rule: walk left from the end while it's still an increasing run — k stops where the streak breaks.",
+          "규칙은 같아요.\n맨 뒤부터 왼쪽으로 가며 오름차순이 이어지는 동안 계속 가요.\n끊기는 자리가 k 예요.") },
+        { hi: [23, 24], bubble: t(E,
+          "Print k.",
+          "k 를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we need to produce? How many cows (from the front) must be pulled out and re-inserted to sort the line by ID. First read N and the IDs.",
+        "무엇을 내놓아야 하나요?\n줄을 ID 순으로 만들려면 앞쪽 몇 마리를 빼서 다시 끼워야 하는지예요.\n먼저 N 과 ID 들을 읽어요.") },
+      { hi: [7, 10], bubble: t(E,
+        "Start at the last cow and walk left as long as each cow is smaller than the one after it — that's the already-sorted tail. k stops where that streak breaks.",
+        "맨 뒤 소부터 왼쪽으로 가면서, 바로 다음 소보다 작을 때까지 계속 가요 — 그게 이미 정렬된 뒷부분이에요.\n연속이 끊기는 자리가 k 예요.") },
+      { hi: [12, 14], bubble: t(E,
+        "k is exactly how many cows sit in front of that sorted tail — write it.",
+        "k 가 곧 정렬된 뒷부분 앞에 남은 소의 수예요 — 그대로 적어요.") },
+    ],
+  };
 }
 
 

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getSleepySortSections } from "./components";
 
 /* ================================================================
    Eye-evident sim: cows in a line + step-through suffix scan
@@ -357,13 +356,12 @@ export function makeSleepySortCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSleepySortCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
         "Cows in the longest sorted SUFFIX never move; answer = N − (sorted suffix length).",
         "답은 N 에서 정렬된 접미사 길이를 뺀 값이에요."),
-      sections: getSleepySortSections(E),
     },
   ];
 }

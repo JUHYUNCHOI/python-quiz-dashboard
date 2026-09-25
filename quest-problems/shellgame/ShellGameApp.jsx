@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { ShellGameProgressiveCode, downloadShellGamePDF, getShellGameSections } from "./components";
+import { downloadShellGamePDF, getShellGameSections, getShellGameWalk } from "./components";
 import { makeShellCh1, makeShellCh2, makeShellCh3 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#dc2626";
 
@@ -102,7 +103,7 @@ export default function ShellGameApp(props = {}) {
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
-    if (step.type === "progressive") return <ShellGameProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "codewalk") return <CodeWalk E={E} lang={codeLang} {...getShellGameWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -111,7 +112,7 @@ export default function ShellGameApp(props = {}) {
     if (s.type === "input") return <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />;
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
-    if (s.type === "progressive") return <ShellGameProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "codewalk") return <CodeWalk E={E} lang={codeLang} {...getShellGameWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

@@ -2,7 +2,6 @@
 // py 10/10 PASS · cpp 10/10 PASS · 2026-05-14
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
@@ -259,8 +258,53 @@ export function getRevegSections(E) {
   ];
 }
 
-export function RevegProgressiveCode(props) {
-  return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이의 표시용 사본이다 —
+   배열 내용은 절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getRevegWalk(E, lang = "py") {
+  const vars = [
+    { v: "adj[i]", ko: "목초지 i 와 달라야 하는 이웃 목록", en: "pastures i must differ from" },
+    { v: "color[i]", ko: "목초지 i 에 정한 잔디 종류", en: "the grass type chosen for pasture i" },
+    { v: "used", ko: "이웃이 이미 쓴 색 표시", en: "colors this pasture's neighbors already used" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 11], bubble: t(E,
+          "Same target in C++ — the same smallest valid coloring. So open the input/output files and read N pastures and M constraints.",
+          "C++ 도 목표는 같아요 — 똑같이 가장 작은 배색을 구해요.\n그러니 입출력 파일을 열고 N 개 목초지, M 개 제약을 읽어요.") },
+        { hi: [12, 19], bubble: t(E,
+          "adj[a] gets b and adj[b] gets a for every constraint — vector<vector<int>> just means \"a list of lists\", one per pasture.",
+          "제약마다 adj[a] 에 b, adj[b] 에 a 를 넣어요.\nvector<vector<int>> 는 목초지마다 하나씩 있는 '목록의 목록' 이에요.") },
+        { hi: [20, 35], bubble: t(E,
+          "For each pasture in order, mark which colors its already-colored neighbors used in a small used[] array, then pick the smallest color (1-4) not marked.",
+          "목초지 순서대로, 이미 정해진 이웃들이 쓴 색을 used[] 에 표시해 두고, 표시 안 된 가장 작은 색(1~4)을 골라요.") },
+        { hi: [36, 41], bubble: t(E,
+          "Print every pasture's color, then a newline.",
+          "목초지마다 색을 출력하고, 마지막에 줄바꿈해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need to produce? A digit 1-4 for every pasture, so that each constrained pair gets different digits — and among all valid answers, the lexicographically smallest one. Start by reading N pastures and M constraints.",
+        "무엇을 내놓아야 하나요?\n목초지마다 1~4 중 하나를 배정하는데, 이어진 쌍은 서로 달라야 하고, 그 중에서도 사전순으로 가장 작은 배열이에요.\n먼저 N 개 목초지와 M 개 제약을 읽어요.") },
+      { hi: [6, 13], bubble: t(E,
+        "For each constraint (a, b), a and b must end up different colors — so record that each is in the other's \"must differ from\" list.",
+        "제약 (a, b) 마다 a 와 b 는 서로 달라야 해요.\n그러니 a 의 목록에 b 를, b 의 목록에 a 를 넣어 서로 기억해 둬요.") },
+      { hi: [15, 26], bubble: t(E,
+        "To get the smallest string, fill pastures in order 1, 2, 3, ... For each one, look at its already-colored neighbors and pick the SMALLEST color (1-4) none of them used.",
+        "가장 작은 배열을 만들려면 목초지 1, 2, 3, ... 순서로 채워요.\n각 목초지마다 이미 색이 정해진 이웃들을 보고, 그들이 안 쓴 가장 작은 색(1~4)을 골라요.") },
+      { hi: [28, 32], bubble: t(E,
+        "Join every pasture's color into one string and write it.",
+        "목초지마다 정한 색을 이어 붙여서 한 줄로 적어요.") },
+    ],
+  };
 }
 
 

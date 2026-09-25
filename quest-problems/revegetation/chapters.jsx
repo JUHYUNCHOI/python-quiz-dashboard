@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getRevegSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -154,13 +153,12 @@ export function makeRevegCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeRevegCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
         "Greedy: process pastures 1..N in order, picking the smallest color not already used by a colored neighbor.",
         "1번 목초지부터 차례로 색을 정해요.\n이웃이 이미 쓴 색을 빼고 남은 것 중 가장 작은 색을 골라요."),
-      sections: getRevegSections(E),
     },
   ];
 }

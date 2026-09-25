@@ -2,7 +2,6 @@
 // py 10/10 PASS · cpp 10/10 PASS · 2026-05-14
 import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
-import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
@@ -315,8 +314,58 @@ export function getSleepyHerdSections(E) {
   ];
 }
 
-export function SleepyHerdProgressiveCode(props) {
-  return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이의 표시용 사본이다 —
+   배열 내용은 절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getSleepyHerdWalk(E, lang = "py") {
+  const vars = [
+    { v: "a / b / c", ko: "정렬한 세 위치 (왼쪽·가운데·오른쪽)", en: "the three sorted positions (left/mid/right)" },
+    { v: "gap1 / gap2", ko: "a↔b, b↔c 사이 간격", en: "gap between a↔b, and b↔c" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "Same target in C++ — the same min/max moves. So read the three positions into an array (long long, since positions can be large), sort it, then a/b/c are p[0], p[1], p[2].",
+          "C++ 도 목표는 같아요 — 똑같이 최소·최대 이동 수를 구해요.\n그러니 위치 세 개를 배열에 읽어서(long long — 값이 클 수 있어요) 정렬한 다음, a·b·c 는 p[0], p[1], p[2] 예요.") },
+        { hi: [18, 19], bubble: t(E,
+          "Same two numbers as before: gap1 between a and b, gap2 between b and c.",
+          "아까와 똑같이 두 숫자예요.\na·b 사이 gap1, b·c 사이 gap2.") },
+        { hi: [20, 26], bubble: t(E,
+          "The bigger gap, closed one step at a time, gives the max moves.",
+          "더 큰 간격을 한 칸씩 좁히는 게 최대 이동 수예요.") },
+        { hi: [27, 38], bubble: t(E,
+          "For the minimum: both gaps 1 → 0 moves. One gap exactly 2 → 1 move. Otherwise → 2 moves.",
+          "최소는 — 두 간격이 다 1 이면 0 번, 하나가 2 면 1 번, 그 외엔 2 번이에요.") },
+        { hi: [39, 42], bubble: t(E,
+          "Print the minimum, then the maximum.",
+          "최소, 최대 순서로 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 9], bubble: t(E,
+        "What do we need first? The three cow positions, sorted — once sorted, positions[0] is the leftmost (a), positions[2] is the rightmost (c), and positions[1] is the middle (b).",
+        "무엇부터 있어야 하나요?\n소 세 마리 위치를 정렬해 둬요.\n정렬하면 맨 왼쪽이 a, 맨 오른쪽이 c, 가운데가 b 예요.") },
+      { hi: [11, 12], bubble: t(E,
+        "Everything else comes from just two numbers: the gap between a and b, and the gap between b and c.",
+        "나머지는 딱 두 숫자로 결정돼요 — a 와 b 사이 간격(gap1), b 와 c 사이 간격(gap2)이에요.") },
+      { hi: [14, 18], bubble: t(E,
+        "Only the leftmost or rightmost cow can move, one step at a time, into the gap. So closing the BIGGER gap one step per move takes the most moves — that's the max.",
+        "왼쪽·오른쪽 끝 소만 한 칸씩 빈 곳으로 움직일 수 있어요.\n그러니 더 큰 간격을 한 칸씩 좁히는 게 가장 많이 움직이는 경우예요 — 이게 최대예요.") },
+      { hi: [20, 29], bubble: t(E,
+        "For the minimum: if both gaps are already 1, they're consecutive — 0 moves. If one gap is exactly 2, one move into the middle slot finishes it. Otherwise it always takes 2 moves.",
+        "최소는 다르게 봐요.\n두 간격이 다 1 이면 이미 연속이라 0 번, 하나가 2 면 가운데로 한 번만 옮기면 끝나요.\n그 외에는 항상 2 번이 필요해요.") },
+      { hi: [31, 33], bubble: t(E,
+        "Write the minimum, then the maximum, one per line.",
+        "최소, 최대 순서로 한 줄씩 적어요.") },
+    ],
+  };
 }
 
 

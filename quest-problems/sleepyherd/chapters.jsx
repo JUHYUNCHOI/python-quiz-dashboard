@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSleepyHerdSections, SleepyHerdSim } from "./components";
+import { SleepyHerdSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -151,13 +151,12 @@ export function makeSleepyHerdCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSleepyHerdCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
         "Sort them and look at the two gaps.",
         "정렬해서 두 간격을 보면 답이 나와요."),
-      sections: getSleepyHerdSections(E),
     },
   ];
 }

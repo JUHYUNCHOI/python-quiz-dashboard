@@ -1,7 +1,6 @@
 // 🔒 USACO_VERIFIED — cpid=891, shellgame (2019 Jan Bronze #1)
 // py 10/10 PASS · cpp 10/10 PASS · 2026-05-14
 import { C, t } from "@/components/quest/theme";
-import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
@@ -118,8 +117,53 @@ export function getShellGameSections(E) {
   ];
 }
 
-export function ShellGameProgressiveCode(props) {
-  return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이의 표시용 사본이다 —
+   배열 내용은 절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getShellGameWalk(E, lang = "py") {
+  const vars = [
+    { v: "a_list / b_list / g_list", ko: "뒤섞기마다의 a, b, 추측", en: "each swap's a, b, guess" },
+    { v: "pos", ko: "지금 조개(컵)의 위치", en: "the shell's current position" },
+    { v: "score / best", ko: "이번 시작의 점수 / 지금까지 최고 점수", en: "this start's score / the best score so far" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "Same target in C++ — the same best score. So open the files and read N swaps into three parallel vectors: a_arr[i], b_arr[i], g_arr[i] are one swap.",
+          "C++ 도 목표는 같아요 — 똑같이 최고 점수를 구해요.\n그러니 파일을 열고 N 번의 뒤섞기를 통 셋(a_arr, b_arr, g_arr)에 나란히 읽어요.") },
+        { hi: [16, 20], bubble: t(E,
+          "Try all three starting positions, resetting pos and score each time.",
+          "세 시작 위치를 다 시도해요.\n시도할 때마다 pos 와 score 를 다시 시작해요.") },
+        { hi: [21, 36], bubble: t(E,
+          "Replay every swap: move pos if it matches one of the two cups, THEN check it against the guess. After all swaps, keep this start's score if it's the best so far.",
+          "뒤섞기를 순서대로 따라가요.\npos 가 두 컵 중 하나면 옮기고, 그다음 추측과 비교해요.\n다 끝나면 이번 점수가 최고면 best 를 갱신해요.") },
+        { hi: [38, 38], bubble: t(E,
+          "Print the best score.",
+          "최고 점수를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 13], bubble: t(E,
+        "What are we heading toward? The best score across all 3 possible starting positions, once we replay the same swaps. First read N swaps — each one's (a, b, guess) — into three lists.",
+        "무엇을 향해 가나요?\n세 시작 위치 중 같은 뒤섞기를 그대로 따라갔을 때 가장 좋은 점수예요.\n먼저 N 번의 (a, b, 추측) 을 리스트 셋에 읽어요.") },
+      { hi: [15, 19], bubble: t(E,
+        "We don't know which cup the shell truly started under, so try all three — start = 1, then 2, then 3 — resetting the position and score each time.",
+        "조개가 실제로 어디서 시작했는지 모르니, 1·2·3 을 다 시도해요.\n시도할 때마다 위치와 점수를 다시 0 부터 시작해요.") },
+      { hi: [20, 31], bubble: t(E,
+        "Replay every swap in order: move pos if it's one of the two swapped cups, THEN check if pos now matches the guess. After all swaps, keep this start's score if it beats the best so far.",
+        "뒤섞기를 순서대로 따라가요.\npos 가 바뀐 두 컵 중 하나면 옮기고, 그다음 pos 가 추측과 같은지 봐요.\n다 끝나면 이번 점수가 지금까지 최고보다 크면 best 를 갱신해요.") },
+      { hi: [33, 34], bubble: t(E,
+        "Write the best score.",
+        "최고 점수를 적어요.") },
+    ],
+  };
 }
 
 

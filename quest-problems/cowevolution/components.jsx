@@ -2,7 +2,6 @@
 // py 17/17 PASS · cpp 17/17 PASS · 2026-05-14
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
@@ -151,8 +150,54 @@ export function getCowEvolutionSections(E) {
   ];
 }
 
-export function CowEvolutionProgressiveCode(props) {
-  return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이의 표시용 사본이다 —
+   배열 내용은 절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getCowEvolutionWalk(E, lang = "py") {
+  const vars = [
+    { v: "populations / pops", ko: "집단마다의 특성 집합", en: "trait set per population" },
+    { v: "all_chars", ko: "지금까지 본 모든 특성", en: "every trait seen so far" },
+    { v: "a_only / b_only / both", ko: "이 쌍에서 본 세 가지 경우", en: "the three cases seen for this pair" },
+    { v: "valid", ko: "지금까지 교차한 쌍이 있었나", en: "has any pair crossed so far" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "Same target in C++ — same yes/no answer. So open the input/output files, read N, then make room for N populations (pops) and one shared set of traits (all_chars).",
+          "C++ 도 목표는 같아요 — 똑같이 yes/no 를 구해요.\n그러니 입출력 파일을 열고 N 을 읽은 다음, N 개 집단(pops)과 전체 특성 집합(all_chars) 자리를 만들어요.") },
+        { hi: [16, 25], bubble: t(E,
+          "For each population, read its K traits and insert each one into that population's set AND into all_chars — insert() on a set just adds it if it isn't already there.",
+          "집단마다 특성 K개를 읽어서, 그 집단의 집합과 all_chars 둘 다에 넣어요.\nset 에 insert 하면 이미 있는 값은 다시 안 들어가요.") },
+        { hi: [26, 56], bubble: t(E,
+          "Copy all_chars into char_list so we can pick pairs by index i, j. Then test every pair: if some population has trait i only, some has j only, and some has both, that pair crosses — mark valid = false.",
+          "all_chars 를 char_list 로 옮겨서 i, j 로 짝을 고를 수 있게 해요.\n그다음 모든 쌍을 검사해요 — 어떤 집단은 i 만, 어떤 집단은 j 만, 어떤 집단은 둘 다 가지면 그 쌍이 교차한 거라 valid = false 로 둬요.") },
+        { hi: [57, 63], bubble: t(E,
+          "Print \"yes\" if valid is still true, otherwise \"no\".",
+          "valid 가 그대로 true 면 \"yes\", 아니면 \"no\" 를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What do we need before we can check anything? Every population's own trait set, plus one shared set of every distinct trait seen anywhere. So read N and start both empty.",
+        "무엇부터 있어야 검사를 시작할 수 있나요?\n집단마다의 특성 집합과, 지금까지 나온 모든 특성을 담을 집합이에요.\n그래서 N 을 읽고, 둘 다 빈 채로 시작해요.") },
+      { hi: [7, 17], bubble: t(E,
+        "For each of the N lines, split off K and the K traits. Add each trait to this population's own set AND to the shared all_chars set — we'll need both later.",
+        "N 줄마다 K 와 특성 K개를 나눠 받아요.\n각 특성을 이 집단의 집합에도, 전체 특성 집합 all_chars 에도 같이 넣어요 — 둘 다 나중에 써요.") },
+      { hi: [18, 42], bubble: t(E,
+        "Now the core idea: a pair of traits (a, b) breaks the tree only if some population has a only, some has b only, and some has both. So test every pair — the moment one pair crosses, mark valid = False and stop.",
+        "이제 핵심이에요.\n특성 쌍 (a, b) 는 어떤 집단은 a 만, 어떤 집단은 b 만, 어떤 집단은 둘 다 가질 때만 트리를 깨요.\n그래서 모든 쌍을 검사하다가 하나라도 교차하면 valid = False 로 두고 멈춰요.") },
+      { hi: [44, 48], bubble: t(E,
+        "Write \"yes\" if no pair ever crossed, otherwise \"no\".",
+        "교차한 쌍이 하나도 없으면 \"yes\", 있었으면 \"no\" 를 적어요.") },
+    ],
+  };
 }
 
 

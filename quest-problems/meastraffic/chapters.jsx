@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMeasTrafficSections, TrafficPropagateSim } from "./components";
+import { TrafficPropagateSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -149,13 +149,12 @@ export function makeTrafficCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeTrafficCh2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
         "Constraint propagation in two passes — forward through the ramps, then backward — built one piece at a time.",
         "한 번은 앞에서 뒤로, 한 번은 뒤에서 앞으로 훑으며 범위를 좁혀요."),
-      sections: getMeasTrafficSections(E),
     },
   ];
 }
