@@ -17,6 +17,8 @@ import {
   lesson49, lesson50, lesson51, lesson52,
   // Korean lesson 53 (2차원 리스트 — Part 3+ 심화 맨 앞)
   lesson53Data,
+  // Korean lesson 54 (3차원 리스트 — 53 바로 다음)
+  lesson54Data,
   // Korean project lessons
   lessonP1Data, lessonP2Data, lessonP3Data,
   lessonP4Data, lessonP4PygameData,
@@ -40,6 +42,8 @@ import {
   lesson49EnData, lesson50EnData, lesson51EnData, lesson52EnData,
   // English lesson 53
   lesson53EnData,
+  // English lesson 54
+  lesson54EnData,
   // English project lessons
   lessonP1EnData, lessonP2EnData, lessonP3EnData,
   lessonP4EnData, lessonP4PygameEnData,
@@ -121,6 +125,7 @@ export const lessonsData: Record<string, LessonData> = {
   "45": lesson45 as any, "46": lesson46 as any, "47": lesson47 as any, "48": lesson48 as any,
   "49": lesson49 as any, "50": lesson50 as any, "51": lesson51 as any, "52": lesson52 as any,
   "53": lesson53Data,
+  "54": lesson54Data,
   "p1": lessonP1Data, "p2": lessonP2Data, "p3": lessonP3Data, "p4": lessonP4Data,
   // C++ Part 1
   "cpp-1": cppLesson1Data, "cpp-2": cppLesson2Data, "cpp-3": cppLesson3Data, "cpp-4": cppLesson4Data,
@@ -232,6 +237,8 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "52": { ko: lesson52 as any, en: lesson52EnData },
   // Part 3+ 심화: 2차원 리스트 (53)
   "53": { ko: lesson53Data, en: lesson53EnData },
+  // Part 3+ 심화: 3차원 리스트 (54)
+  "54": { ko: lesson54Data, en: lesson54EnData },
   // 프로젝트 레슨
   "p1": { ko: lessonP1Data, en: lessonP1EnData },
   "p2": { ko: lessonP2Data, en: lessonP2EnData },

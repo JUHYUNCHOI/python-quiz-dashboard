@@ -250,6 +250,11 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./lesson53'), exportName: 'lesson53Data',
     enLoad: () => import('./lesson53-en'), enExportName: 'lesson53EnData',
   },
+  // Part 3+ 심화: 3차원 리스트 (54) — 53 바로 다음
+  "54": {
+    load: () => import('./lesson54'), exportName: 'lesson54Data',
+    enLoad: () => import('./lesson54-en'), enExportName: 'lesson54EnData',
+  },
 
   // 프로젝트 레슨
   "p1": {
@@ -673,6 +678,7 @@ export { lesson50 } from './lessons/lesson50'
 export { lesson51 } from './lessons/lesson51'
 export { lesson52 } from './lessons/lesson52'
 export { lesson53Data } from './lesson53'
+export { lesson54Data } from './lesson54'
 export { lessonP1Data } from './lessonP1'
 export { lessonP2Data } from './lessonP2'
 export { lessonP3Data } from './lessonP3'
@@ -733,6 +739,7 @@ export { lesson50EnData } from './lesson50-en'
 export { lesson51EnData } from './lesson51-en'
 export { lesson52EnData } from './lesson52-en'
 export { lesson53EnData } from './lesson53-en'
+export { lesson54EnData } from './lesson54-en'
 export { lessonP1EnData } from './lessonP1-en'
 export { lessonP2EnData } from './lessonP2-en'
 export { lessonP3EnData } from './lessonP3-en'

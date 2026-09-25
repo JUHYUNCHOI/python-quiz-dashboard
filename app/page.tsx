@@ -208,7 +208,7 @@ function LandingPage() {
           </div>
           {/* 무료 신뢰선 — 광고 유입자 "혹시 나중에 결제?" 불안 해소 (audit R2) */}
           <p className="text-[11px] font-medium text-gray-500 pt-1">
-            {t("✅ 100% 무료 · 결제 정보 안 받아요 · Python 53강 가입 없이 학습 가능", "✅ 100% free · No payment info · All 53 Python lessons free, no signup needed")}
+            {t("✅ 100% 무료 · 결제 정보 안 받아요 · Python 54강 가입 없이 학습 가능", "✅ 100% free · No payment info · All 54 Python lessons free, no signup needed")}
           </p>
         </div>
 
@@ -229,7 +229,7 @@ function LandingPage() {
                 <div className="flex items-center gap-2">
                   <span className="text-lg">🐍</span>
                   <div>
-                    <p className="font-black text-gray-900 text-sm">{t("Python 기초", "Python Basics")} <span className="text-[11px] font-normal text-gray-400">{t("53강", "53 lessons")}</span></p>
+                    <p className="font-black text-gray-900 text-sm">{t("Python 기초", "Python Basics")} <span className="text-[11px] font-normal text-gray-400">{t("54강", "54 lessons")}</span></p>
                     <p className="text-[11px] text-gray-500">{t("코딩 경험 없어도 시작 가능", "No prior coding experience needed")}</p>
                   </div>
                 </div>
@@ -425,8 +425,8 @@ function LandingPage() {
               {
                 q: t("정말 무료인가요?", "Is it really free?"),
                 a: t(
-                  "네. 결제 정보를 받지 않아요. Python 53강은 가입 없이도 학습할 수 있고, 가입하면 진도 저장 + 광고 없이 사용할 수 있어요.",
-                  "Yes. We never ask for payment info. Python 53 lessons are free without signup. Sign up to save progress and use the site ad-free."
+                  "네. 결제 정보를 받지 않아요. Python 54강은 가입 없이도 학습할 수 있고, 가입하면 진도 저장 + 광고 없이 사용할 수 있어요.",
+                  "Yes. We never ask for payment info. Python 54 lessons are free without signup. Sign up to save progress and use the site ad-free."
                 ),
               },
               {
@@ -446,8 +446,8 @@ function LandingPage() {
               {
                 q: t("어떤 언어를 배우나요?", "Which languages?"),
                 a: t(
-                  "Python (53강) → C++ (23강) → 알고리즘 → USACO·MCC 대회 문제. IGCSE 수도 코드도 별도로 있어요.",
-                  "Python (53 lessons) → C++ (23 lessons) → algorithms → USACO/MCC contests. IGCSE pseudocode is also available."
+                  "Python (54강) → C++ (23강) → 알고리즘 → USACO·MCC 대회 문제. IGCSE 수도 코드도 별도로 있어요.",
+                  "Python (54 lessons) → C++ (23 lessons) → algorithms → USACO/MCC contests. IGCSE pseudocode is also available."
                 ),
               },
             ]).map(({ q, a }) => (

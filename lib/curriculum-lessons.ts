@@ -27,6 +27,12 @@ export const PYTHON_LESSONS: LessonOption[] = [
   { id: "20", label: "20. 딕셔너리",            group: "Python Part 3" },
   { id: "21", label: "21. 집합 (set)",          group: "Python Part 3" },
   { id: "22", label: "22. 슬라이싱",            group: "Python Part 3" },
+  /* ⚠️ 2026-09-25: 53·54 를 여기 넣으면서 알게 된 것 — **이 파일은 이미 `25. 덱 (Deque)`
+     로 맞게 적혀 있었다.** 틀린 쪽은 `lib/curriculum-data.ts` 의 `lessonNames["25"]`
+     (「2D 리스트」)였다. 같은 것을 두 파일이 적고 있어 **한쪽만 고치면 또 어긋난다.**
+     ⛔ 레슨을 추가하면 **둘 다** 고쳐라. */
+  { id: "53", label: "53. 2차원 리스트",         group: "Python Part 4" },
+  { id: "54", label: "54. 3차원 리스트",         group: "Python Part 4" },
   { id: "23", label: "23. 스택 (Stack)",        group: "Python Part 4" },
   { id: "24", label: "24. 큐 (Queue)",          group: "Python Part 4" },
   { id: "25", label: "25. 덱 (Deque)",          group: "Python Part 4" },

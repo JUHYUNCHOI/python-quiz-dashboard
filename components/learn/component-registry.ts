@@ -108,6 +108,18 @@ const registry: Record<string, ComponentEntry> = {
     props: (_step, lang) => ({ lang }),
   },
 
+  // Lesson 54: 3차원 리스트
+  py3dFloorExplore: {
+    load: () => import("@/components/animations/py-3d-list"),
+    exportName: "Py3DFloorExplore",
+    props: (_step, lang) => ({ lang }),
+  },
+  py3dStateToggle: {
+    load: () => import("@/components/animations/py-3d-list"),
+    exportName: "Py3DStateToggle",
+    props: (_step, lang) => ({ lang }),
+  },
+
   // Lesson 30: 매개변수/반환값
   defaultValueVisualizer: {
     load: () => import("@/components/animations/lesson30"),

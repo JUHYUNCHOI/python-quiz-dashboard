@@ -130,6 +130,7 @@ export default function CurriculumPage() {
       description: t("2차원 리스트부터 스택, 큐, 덱까지 — 코딩테스트에 자주 나오는 자료구조를 마스터해요!", "From 2D lists to stacks, queues, and deques — master data structures common in coding tests!"),
       lessons: [
         { id: 53, title: t("53. 2차원 리스트", "53. 2D Lists"), description: t("리스트 속의 리스트 — 표처럼 생긴 데이터", "A list inside a list — table-shaped data"), duration: t("30분", "30 min"), hasQuiz: true },
+        { id: 54, title: t("54. 3차원 리스트", "54. 3D Lists"), description: t("리스트가 또 층으로 쌓이면? 축이 꼭 자리가 아니어도 돼요", "What if lists stack into floors? An axis doesn't always mean a place"), duration: t("30분", "30 min"), hasQuiz: true },
         { id: 23, title: t("23. 스택 (Stack)", "23. Stack"), description: t("LIFO! 마지막이 먼저 나오는 자료구조", "LIFO! Last in, first out data structure"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: 24, title: t("24. 큐 (Queue)", "24. Queue"), description: t("FIFO! 먼저 온 게 먼저 나오는 자료구조", "FIFO! First in, first out data structure"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: 25, title: t("25. 덱 (Deque)", "25. Deque"), description: t("양쪽에서 넣고 빼는 자료구조", "Add and remove from both ends"), duration: t("25분", "25 min"), hasQuiz: true },
@@ -810,7 +811,7 @@ export default function CurriculumPage() {
         {/* 고정 하단 CTA */}
         <div className="fixed bottom-16 left-0 right-0 z-10 bg-white/95 backdrop-blur-sm border-t border-orange-100 px-4 py-3">
           <div className="max-w-lg mx-auto space-y-2">
-            <p className="text-center text-xs text-gray-500">{t("Python 53강 · C++ 20강 · 알고리즘 훈련", "Python 53 · C++ 20 · Algorithm Training")}</p>
+            <p className="text-center text-xs text-gray-500">{t("Python 54강 · C++ 20강 · 알고리즘 훈련", "Python 54 · C++ 20 · Algorithm Training")}</p>
             <Link
               href="/login"
               className="block w-full text-center px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border border-gray-200 shadow-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
@@ -1026,7 +1027,7 @@ export default function CurriculumPage() {
                         }}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-xs font-bold text-orange-700 border border-orange-200 transition-colors"
                       >
-                        🐍 {t("Python 수업 보러가기 (53강 모두 자유 접근)", "Browse Python lessons (all 53 unlocked)")}
+                        🐍 {t("Python 수업 보러가기 (54강 모두 자유 접근)", "Browse Python lessons (all 54 unlocked)")}
                       </button>
                     </div>
                   )}

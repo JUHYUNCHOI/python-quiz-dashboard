@@ -116,6 +116,10 @@ const LESSON_TAUGHT_CONCEPTS: Record<string, string[]> = {
   // 뜯어서 설명(explain-comprehension-parts)한 뒤 tryit(try-nested-comprehension)에서
   // 학생이 직접 그 문법으로 빈칸을 채운다 → nested-comprehension 도 같이 넣는다.
   "53": ["2d-list-build", "nested-comprehension"],
+  // 레슨 54 (파이썬 3차원 리스트): Ch1~2 가 3중 인덱싱·삼중 컴프리헨션 만들기를 가르치고
+  // (try-floors-cell·try-3d-comprehension-fix 에서 학생이 직접 빈칸을 채운다),
+  // Ch4 가 삼중 for 순회를 가르친다 → 3d-plus-indexing 하나로 묶는다.
+  "54": ["3d-plus-indexing"],
 };
 
 export function masteredConcepts(
