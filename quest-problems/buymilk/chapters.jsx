@@ -60,21 +60,25 @@ export function makeBuyMilkCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div style={{ wordBreak: "keep-all" }}>
-                  {t(E, "Deal 1 sells ", "거래 1은 ")}
+                  {t(E, "Farmer John sells milk in bundles. Bundle 1 holds ", "농부가 우유를 묶음으로 팔아요. 묶음 1은 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "1 bucket", "1통")}</b>
-                  {t(E, ", deal 2 sells ", ", 거래 2는 ")}
+                  {t(E, ", bundle 2 holds ", ", 묶음 2는 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "2 buckets", "2통")}</b>
-                  {t(E, ", deal 3 sells ", ", 거래 3은 ")}
+                  {t(E, ", bundle 3 holds ", ", 묶음 3은 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "4 buckets", "4통")}</b>
-                  {t(E, ", and so on — the bucket count doubles each time. Prices go up in the same order too, deal by deal; no two deals cost the same.",
-                        "… 이렇게 거래 번호가 하나씩 늘어날 때마다 통 수가 두 배씩 커져요.\n값도 거래 번호 순서대로 항상 올라가요 — 같은 값을 가진 두 거래는 없어요.")}
+                  {t(E, " — the bucket count doubles each time. A bigger bundle always costs more than a smaller one.",
+                        " … 이렇게 두 배씩 커져요.\n묶음이 클수록 값도 더 비싸요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div style={{ wordBreak: "keep-all" }}>
-                  {t(E, "You can take any deal as many times as you like — or not at all.",
-                        "어떤 거래든 원하는 만큼 여러 번 살 수 있어요. 아예 안 사도 되고요.")}
+                  {/* ⚠️ 2026-09-25: 선생님이 이 줄을 보고 *"어떤 거래든 여러번 살수 있어?
+                      아니지 않나?"* 라고 하셨다. **사실은 맞다** — 🔒 코드가 개수를 곱하고,
+                      2쪽 예제의 45원이 바로 «묶음 2 를 세 번» 산 값이다.
+                      그런데 **문장이 그 사실을 전달하지 못했다.** 예제로 못을 박는다. */}
+                  {t(E, "You may buy the same bundle again and again — for 6 buckets you can buy bundle 2 three times.",
+                        "같은 묶음을 몇 번이든 다시 살 수 있어요.\n6통이 필요하면 묶음 2 를 세 번 사면 돼요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -107,8 +111,8 @@ export function makeBuyMilkCh1(E) {
                 읽는 순서 그대로: N,Q → 거래별 가격 → 질문 x 가 Q 줄. 출력 계산 과정은
                 안 보여준다(2026-09-16 사고) — 라벨은 "이 줄이 무엇이냐" 만 말한다. */}
             <div style={{ background: "#0f172a", color: "#f8fafc", padding: 10, borderRadius: 8, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
-              <div>2 4      <span style={SIO}>← {t(E, "N=2 deals, Q=4 queries", "거래 2개, 질문 4개")}</span></div>
-              <div>10 15    <span style={SIO}>← {t(E, "price of deal 1, deal 2", "거래1·거래2 가격")}</span></div>
+              <div>2 4      <span style={SIO}>← {t(E, "N=2 bundles, Q=4 queries", "묶음 2개, 질문 4개")}</span></div>
+              <div>10 15    <span style={SIO}>← {t(E, "price of bundle 1, bundle 2", "묶음1·묶음2 가격")}</span></div>
               <div>1        <span style={SIO}>← {t(E, "query 1: x", "질문 1: x")}</span></div>
               <div>2        <span style={SIO}>← {t(E, "query 2: x", "질문 2: x")}</span></div>
               <div>6        <span style={SIO}>← {t(E, "query 3: x", "질문 3: x")}</span></div>
@@ -118,8 +122,8 @@ export function makeBuyMilkCh1(E) {
                 사라진다(feedback_screen_must_not_rely_on_memory). 계산 없이 정의만 다시. */}
             <div style={{ marginTop: 8, fontSize: 11.5, color: "#92400e", lineHeight: 1.6, wordBreak: "keep-all" }}>
               📌 {t(E,
-                "Deal 1 sells 1 bucket. Deal 2 sells 2 buckets.",
-                "거래1은 1통, 거래2는 2통을 팔아요.")}
+                "Bundle 1 sells 1 bucket. Bundle 2 sells 2 buckets.",
+                "묶음1은 1통, 묶음2는 2통을 팔아요.")}
             </div>
           </div>
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -147,8 +151,8 @@ export function makeBuyMilkCh1(E) {
                 앞 두 번은 "45 를 어떻게 만드나" 를 **물어보기만** 했다 — 답은 어디에도 없었다.
                 입출력 형식 쪽이 할 일은 **출력을 읽는 법을 알려주는 것**이다.
                 ⚠️ 45 와 60 을 나란히 놓는 비교는 넣지 마라 — 3쪽 퀴즈를 죽인다(2026-09-16). */}
-            {t(E, "Outputs come in query order: x = 1, 2, 6, 7 → 10, 15, 45, 55.\nTake the last one: 7 buckets. Buy deal 2 three times (6 buckets, 45), then deal 1 once (1 bucket, 10). That is 55.\nYou may mix deals, and buy the same deal many times.",
-                 "출력은 질문 순서대로예요 — x = 1, 2, 6, 7 의 답이 10, 15, 45, 55 예요.\n마지막 55 를 봐요. 7통이에요.\n거래 2 를 세 번 사면 6통에 45, 여기에 거래 1 을 하나 더해 7통에 55 예요.\n거래를 섞어 사도 되고, 같은 거래를 여러 번 사도 돼요.")}
+            {t(E, "Outputs come in query order: x = 1, 2, 6, 7 → 10, 15, 45, 55.\nTake the last one: 7 buckets. Buy bundle 2 three times (6 buckets, 45), then bundle 1 once (1 bucket, 10). That is 55.\nYou may mix bundles, and buy the same bundle many times.",
+                 "출력은 질문 순서대로예요 — x = 1, 2, 6, 7 의 답이 10, 15, 45, 55 예요.\n마지막 55 를 봐요. 7통이에요.\n묶음 2 를 세 번 사면 6통에 45, 여기에 묶음 1 을 하나 더해 7통에 55 예요.\n묶음를 섞어 사도 되고, 같은 묶음를 여러 번 사도 돼요.")}
           </div>
 
           {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
@@ -170,8 +174,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Deal 2 costs more — but it also gives more buckets.",
-        "거래 2 는 더 비싼데, 통은 더 많이 줘요."),
+        "Bundle 2 costs more — but it also gives more buckets.",
+        "묶음 2 는 더 비싼데, 통은 더 많이 줘요."),
       // ⚠️ 2026-09-17 선생님이 이 쪽을 보시고 *"못알아보겠어"*.
       //    네 가지가 겹쳐 있었다:
       //    ① `a = [10, 15]` 만 주고 **거래 1·2 가 각각 몇 통인지는 이 쪽에 없었다.**
@@ -181,18 +185,18 @@ export function makeBuyMilkCh1(E) {
       //    ④ 보기가 **계산 결과 + 결론**을 같이 줘서, 학생이 계산 안 하고 결론만 보고 골랐다.
       //    근거: feedback_screen_must_not_rely_on_memory · feedback_no_invented_terms
       question: t(E,
-        "Deal 1 gives 1 bucket for 10.\nDeal 2 gives 2 buckets for 15.\nSo how much is ONE bucket from each?",
-        "거래 1 은 1통에 10 이에요.\n거래 2 는 2통에 15 예요.\n그럼 한 통으로 치면 각각 얼마일까요?"),
+        "Bundle 1 gives 1 bucket for 10.\nDeal 2 gives 2 buckets for 15.\nSo how much is ONE bucket from each?",
+        "묶음 1 은 1통에 10 이에요.\n묶음 2 는 2통에 15 예요.\n그럼 한 통으로 치면 각각 얼마일까요?"),
       options: [
-        t(E, "Deal 1 → 10 per bucket · Deal 2 → 7.5 per bucket",
-            "거래 1 은 한 통에 10 · 거래 2 는 한 통에 7.5"),
-        t(E, "Deal 1 → 10 per bucket · Deal 2 → 15 per bucket",
-            "거래 1 은 한 통에 10 · 거래 2 는 한 통에 15"),
+        t(E, "Bundle 1 → 10 per bucket · Bundle 2 → 7.5 per bucket",
+            "묶음 1 은 한 통에 10 · 묶음 2 는 한 통에 7.5"),
+        t(E, "Bundle 1 → 10 per bucket · Bundle 2 → 15 per bucket",
+            "묶음 1 은 한 통에 10 · 묶음 2 는 한 통에 15"),
       ],
       correct: 0,
       explain: t(E,
-        "Right. Deal 2 sells 2 buckets for 15, so 7.5 per bucket — cheaper than Deal 1's 10 per bucket. Greedy 'always use the smallest deal' would be wrong.",
-        "맞아요. 15 를 2통으로 나누면 7.5 예요.\n거래 1 은 10 이었으니, 7.5 가 더 싸요.\n**큰 거래가 한 통당 더 쌀 수 있어요.**\n그래서 '작은 거래만 쓰면 된다' 는 생각은 틀려요."),
+        "Right. Bundle 2 sells 2 buckets for 15, so 7.5 per bucket — cheaper than Bundle 1's 10 per bucket. Greedy 'always use the smallest bundle' would be wrong.",
+        "맞아요. 15 를 2통으로 나누면 7.5 예요.\n묶음 1 은 10 이었으니, 7.5 가 더 싸요.\n**큰 묶음가 한 통당 더 쌀 수 있어요.**\n그래서 '작은 묶음만 쓰면 된다' 는 생각은 틀려요."),
     },
 
 
@@ -250,7 +254,7 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Same deals, x = 7 this time. Watch the 'round up and stop' branch actually win.",
+        "Same bundles, x = 7 this time. Watch the 'round up and stop' branch actually win.",
         "이번엔 7통이에요. 같은 방법인데 답이 5통 때와 달라져요."),
       content: (<GreedySim key="greedy7" E={E} x={7} />),
     },
@@ -266,11 +270,11 @@ export function makeBuyMilkCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Same deals, but x = 3 this time — do it yourself.",
-        "같은 거래로 x = 3 을 직접 해봐요."),
+        "Same bundles, but x = 3 this time — do it yourself.",
+        "같은 묶음로 x = 3 을 직접 해봐요."),
       question: t(E,
-        "a=[10,15,20,45], deal sizes 1,2,4,8. Min cost for x=3?",
-        "거래 값이 10, 15, 20, 45 예요. 3통일 때 얼마가 제일 쌀까요?"),
+        "a=[10,15,20,45], bundle sizes 1,2,4,8. Min cost for x=3?",
+        "묶음 값이 10, 15, 20, 45 예요. 3통일 때 얼마가 제일 쌀까요?"),
       hint: t(E,
         "Use the pack prices you found: 10, 15, 20, 40.\nStart from the biggest pack and compare the two choices.",
         "아까 구한 묶음 값을 써요. 10, 15, 20, 40 이에요.\n제일 큰 묶음부터 두 갈래를 비교해 봐요."),
@@ -404,7 +408,7 @@ function BuyMilkPlan({ E }) {
             ))}
           </div>
           <div style={{ fontSize: 11.5, color: "#166534", marginTop: 5 }}>
-            ↑ {t(E, "two 4-packs (20 + 20) beat the 8-pack deal", "4통짜리를 두 번 사면 20 + 20 이라 더 싸요")}
+            ↑ {t(E, "two 4-packs (20 + 20) beat the 8-pack bundle", "4통짜리를 두 번 사면 20 + 20 이라 더 싸요")}
           </div>
         </StepPic>
         <StepPic
@@ -451,7 +455,7 @@ function BuyMilkPlan({ E }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 12px", alignItems: "center", fontSize: 12.5, color: "#334155" }}>
           {[
-            ["deal_price", t(E, "the deal prices", "거래 가격")],
+            ["deal_price", t(E, "the bundle prices", "묶음 가격")],
             ["block_cost", t(E, "cheapest price of one pack — step ①", "묶음 하나의 제일 싼 값 — ① 에서 정한 것")],
             ["want", t(E, "buckets to buy (the problem's x)", "사야 할 통 수 (문제의 x)")],
             ["left", t(E, "buckets not covered yet", "아직 못 채운 통")],

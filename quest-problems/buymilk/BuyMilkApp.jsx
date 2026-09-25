@@ -41,6 +41,15 @@ export default function BuyMilkApp(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+    /* ⚠️ 2026-09-25: 선생님이 **세 번** 물으셨다 — *"풀려면 알아야 하는 알고리즘이 있나?"* ·
+       *"뭐를 사용하면 되는건지 알수 있으면 좋겠는데"* · *"왜 아직 알고리즘이 뭔지 바로 알수가 없지?"*
+       **세 번 다 채팅에서 설명해서 끝났고 화면은 아무 말도 안 했다.**
+       원인: `lib/quest-algo.ts` 에 `buymilk: "greedy"` 가 **이미 있는데**
+       그 이름을 띄우는 `quest-algohint` 이벤트를 이 App 이 **한 번도 안 쏘고 있었다.**
+       (태그된 quest 74개 중 연결된 건 `checkups`·`printseq` **둘뿐**이었다.)
+       ⭐ `tab >= 1`(코드 탭)에서만 켠다 — 퀴즈·입력이 전부 0탭에 있어 **스포일러가 아니다.**
+       `printseq` 와 같은 모양이다(2026-07-13 선생님 지시로 만든 장치). */
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 1 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {
