@@ -243,6 +243,65 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고,
+   beats(설명 말풍선)만 덧붙인다. getPhotoshoot2Sections() 는 PDF 다운로드가 계속 쓰므로
+   그대로 둔다. ── */
+export function getPhotoshoot2Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "pos", ko: "소 번호 → current 안 위치", en: "cow number → its index in current" },
+        { v: "maxPos", ko: "지금까지 본 위치의 최댓값", en: "largest position seen so far" },
+        { v: "ans", ko: "지금까지 센 이동 횟수", en: "move count so far" },
+      ],
+      beats: [
+        { hi: [0, 14], bubble: t(E,
+          "What should we output? The minimum number of moves. Read N, then fill the target and current arrays.",
+          "무엇을 내놓아야 하나요? 최소 이동 횟수예요.\n먼저 N 을 읽고, target 과 current 배열도 채워요.") },
+        { hi: [16, 20], bubble: t(E,
+          "We need to know where each cow currently sits, so store cow → its index in current inside pos.",
+          "각 소가 지금 어디 있는지 알아야 해서,\npos 에 소 번호 → current 배열 안 위치를 저장해요.") },
+        { hi: [22, 26], bubble: t(E,
+          "Now walk target left to right. Track the largest position seen so far (maxPos), and start the move count (ans) at 0.",
+          "이제 target 을 왼쪽부터 훑어요.\n지금까지 본 위치의 최댓값(maxPos)을 기억해 두고, 이동 횟수(ans)는 0부터 시작해요.") },
+        { hi: [27, 34], bubble: t(E,
+          "For each cow, check its position p. If p is less than maxPos, it's out of order so ans increases by one; otherwise it becomes the new maxPos.",
+          "소마다 위치 p 를 확인해요.\np 가 maxPos 보다 작으면 순서가 어긋난 거라 ans 를 하나 늘리고, 아니면 이 소가 새 maxPos 가 돼요.") },
+        { hi: [35, 37], bubble: t(E,
+          "Once done, print ans.",
+          "다 훑었으면 ans 를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "pos", ko: "소 번호 → current 안 위치", en: "cow number → its index in current" },
+      { v: "max_pos", ko: "지금까지 본 위치의 최댓값", en: "largest position seen so far" },
+      { v: "ans", ko: "지금까지 센 이동 횟수", en: "move count so far" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What do we need to output? The minimum number of moves to reach the target order. So first read N, the target order, and the current order.",
+        "무엇을 내놓아야 하나요? 목표 순서로 만드는 데 필요한 최소 이동 횟수예요.\n먼저 N, 목표 순서(target), 현재 순서(current)를 읽어요.") },
+      { hi: [4, 7], bubble: t(E,
+        "To count moves we first need to know where each cow currently sits. So build pos: cow number → its index in current.",
+        "그 답을 구하려면 각 소가 지금 어디 있는지부터 알아야 해요.\n그래서 pos 에 소 번호 → 현재 위치를 저장해요.") },
+      { hi: [9, 13], bubble: t(E,
+        "Now walk the target order left to right. Track the largest current-position seen so far (max_pos), and start the move count (ans) at 0.",
+        "이제 목표 순서를 왼쪽부터 훑을 거예요.\n지금까지 본 위치 중 가장 큰 값(max_pos)을 기억해 두고, 이동 횟수(ans)는 0부터 시작해요.") },
+      { hi: [14, 22], bubble: t(E,
+        "For each cow, check its current position p. If p is less than max_pos, it's out of order and must move (ans += 1); otherwise it becomes the new max_pos.",
+        "소마다 현재 위치 p 를 확인해요.\np 가 max_pos 보다 작으면 이 소는 순서가 어긋난 거라 옮겨야 해요(ans += 1). 아니면 이 소가 새 max_pos 가 돼요.") },
+      { hi: [24, 24], bubble: t(E,
+        "Once the whole target order is walked, print ans — the minimum number of moves.",
+        "다 훑었으면 ans 를 출력해요 — 그게 최소 이동 횟수예요.") },
+    ],
+  };
+}
+
 export function getPhotoshoot2Sections(E) {
   return [
     {

@@ -88,6 +88,64 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고,
+   beats(설명 말풍선)만 덧붙인다. getHerdleSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getHerdleWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "ans / gue", ko: "정답 격자 / 추측 격자 (3줄)", en: "answer grid / guess grid (3 rows)" },
+        { v: "remA / remG", ko: "초록이 아닌 칸의 남은 품종 개수", en: "leftover breed counts (non-green cells)" },
+        { v: "green / yellow", ko: "정확히 맞음 / 품종만 맞음", en: "exact match / right breed wrong spot" },
+      ],
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "What should we output? The green and yellow counts. Read the 3-line ans grid, then the 3-line gue grid.",
+          "무엇을 내놓아야 하나요? 초록과 노랑 개수예요.\n정답 격자(ans)와 추측 격자(gue)를 각각 3줄씩 읽어요.") },
+        { hi: [17, 19], bubble: t(E,
+          "Set up green and yellow counters, plus remA and remG — maps from letter to leftover count.",
+          "초록·노랑을 셀 변수와, 초록이 아닌 칸의 남은 품종을 담을\nremA, remG(글자별 개수) 를 준비해요.") },
+        { hi: [21, 31], bubble: t(E,
+          "Pass 1 compares each position. Matches are green; mismatches add one to remA and remG for their own letter.",
+          "1차로 같은 자리를 견줘요.\n같으면 초록이고, 다르면 양쪽 품종을 remA, remG 에 하나씩 더해요.") },
+        { hi: [33, 38], bubble: t(E,
+          "Pass 2 checks each remG breed against remA. If present in both, add the smaller count to yellow.",
+          "2차로 remG 의 품종마다 remA 에도 있는지 봐요.\n있으면 적은 쪽 개수만큼 yellow 에 더해요.") },
+        { hi: [40, 42], bubble: t(E,
+          "Print green and yellow.",
+          "green 과 yellow 를 한 줄에 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "ans / gue", ko: "정답 격자 / 추측 격자 (3줄)", en: "answer grid / guess grid (3 rows)" },
+      { v: "remaining_ans / remaining_gue", ko: "초록이 아닌 칸의 남은 품종 개수", en: "leftover breed counts (non-green cells)" },
+      { v: "green / yellow", ko: "정확히 맞음 / 품종만 맞음", en: "exact match / right breed wrong spot" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What do we need to output? The green count (exact matches) and the yellow count (right breed, wrong spot). Read the 3-line answer grid (ans) and the 3-line guess grid (gue).",
+        "무엇을 내놓아야 하나요? 초록(정확히 맞은 칸) 개수와 노랑(자리만 다른 칸) 개수예요.\n먼저 정답 격자(ans)와 추측 격자(gue)를 3줄씩 읽어요.") },
+      { hi: [4, 7], bubble: t(E,
+        "Set up counters for green and yellow, plus dictionaries to hold the leftover breeds from cells that aren't green.",
+        "초록·노랑 개수를 셀 칸(green, yellow)과,\n초록이 아닌 칸의 남은 품종을 담을 칸(remaining_ans, remaining_gue)을 준비해요.") },
+      { hi: [9, 16], bubble: t(E,
+        "Pass 1 compares each position. If they match, it's green; otherwise, save both breeds — one to remaining_ans, one to remaining_gue.",
+        "1차로 같은 자리를 하나씩 견줘요.\n정답과 추측이 같으면 초록이고, 다르면 그 자리의 두 품종을 각각 remaining_ans, remaining_gue 에 남겨 둬요.") },
+      { hi: [18, 21], bubble: t(E,
+        "Pass 2 matches leftover breeds. For a breed present on both sides, only the smaller count can actually be paired — that's how much yellow it adds.",
+        "2차로 남은 품종끼리 짝지어요.\n같은 품종이 양쪽에 남아 있으면, 적은 쪽 개수만큼만 노랑으로 세요 — 그만큼만 실제로 짝지을 수 있으니까요.") },
+      { hi: [23, 24], bubble: t(E,
+        "Print green, then print yellow.",
+        "초록과 노랑을 각각 출력해요.") },
+    ],
+  };
+}
+
 export function getHerdleSections(E) {
   return [
     {

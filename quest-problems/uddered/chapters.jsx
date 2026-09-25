@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getUdderedSections, UdderedRecitalSim } from "./components";
+import { getUdderedWalk, UdderedRecitalSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -150,13 +150,12 @@ export function makeUdderedCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeUdderedCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk
     {
-      type: "progressive",
+      type: "uddered-walk",
       narr: t(E,
         "Map each letter to its position in Bessie's custom order, then scan S one letter at a time.",
         "글자마다 자리 번호를 붙여 두고 S 를 하나씩 볼게요."),
-      sections: getUdderedSections(E),
     },
   ];
 }

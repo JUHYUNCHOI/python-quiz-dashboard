@@ -101,6 +101,65 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고,
+   beats(설명 말풍선)만 덧붙인다. getAcowdemia3Sections() 는 PDF 다운로드가 계속 쓰므로
+   그대로 둔다. ── */
+export function getAcowdemia3Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "cows", ko: "이 풀 칸에 붙어 있는 소들", en: "cows touching this grass cell" },
+        { v: "answer", ko: "소 3마리+ 인 칸에서 바로 센 우정", en: "friendships counted right away (3+ cows)" },
+        { v: "pairs", ko: "소 2마리 쌍 모음 (중복 제거)", en: "unique 2-cow pairs seen" },
+      ],
+      beats: [
+        { hi: [0, 12], bubble: t(E,
+          "What do we need to count? Pairs of cows that became friends. Read N, M, and the grid — each cell is a cow (C), grass (G), or an empty dot.",
+          "무엇을 세야 하나요? 친구가 된 소 쌍의 개수예요.\nN, M 과 격자를 읽어요 — 칸은 소(C), 풀(G), 빈 칸(점) 중 하나예요.") },
+        { hi: [14, 18], bubble: t(E,
+          "dr and dc hold the four directions. Grass cells with 3+ cows go straight to answer; exactly 2 have their pair saved in pairs.",
+          "dr, dc 는 네 방향이에요.\n3마리 이상 붙은 풀 칸은 바로 answer 에 더하고, 정확히 2마리인 경우는 pairs 에 모아 중복을 없애요.") },
+        { hi: [20, 35], bubble: t(E,
+          "For each grass cell (G), check all four neighbors and collect any cow into cows. Empty dots and other cells aren't cows, so they're ignored.",
+          "풀 칸(G)마다 네 방향을 살펴 붙어 있는 소를 cows 에 모아요.\n빈 칸(점)이나 다른 풀 칸은 소가 아니니 무시해요.") },
+        { hi: [36, 50], bubble: t(E,
+          "0 or 1 cows means skip. 3+ counts right away; exactly 2 sorts the pair before inserting — ordering makes duplicate pairs collapse into one.",
+          "소가 0~1마리면 건너뛰어요.\n3마리 이상이면 바로 세고, 딱 2마리면 두 소를 정렬해서 pairs 에 넣어요 — 순서를 맞춰야 같은 쌍이 하나로 합쳐져요.") },
+        { hi: [53, 55], bubble: t(E,
+          "Print answer plus the size of pairs.",
+          "answer 에 pairs 의 크기를 더해 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "cows", ko: "이 풀 칸에 붙어 있는 소들", en: "cows touching this grass cell" },
+      { v: "answer", ko: "소 3마리+ 인 칸에서 바로 센 우정", en: "friendships counted right away (3+ cows)" },
+      { v: "pairs", ko: "소 2마리 쌍 모음 (중복 제거)", en: "unique 2-cow pairs seen" },
+    ],
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "What do we need to count? Pairs of cows that became friends. Read N, M, and the grid — each cell is a cow (C), grass (G), or an empty dot.",
+        "무엇을 세야 하나요? 친구가 된 소 쌍의 개수예요.\nN, M 과 격자를 읽어요 — 칸은 소(C), 풀(G), 빈 칸(점) 중 하나예요.") },
+      { hi: [5, 6], bubble: t(E,
+        "dirs holds the four neighbor directions. Grass cells with 3+ cows get added straight to answer; cells with exactly 2 have their pair saved in pairs to drop duplicates.",
+        "dirs 는 위/아래/왼쪽/오른쪽 네 방향이에요.\n3마리 이상 붙은 풀 칸은 바로 answer 에 더하고, 정확히 2마리인 경우는 그 소 쌍을 pairs 에 모아 중복을 없애요.") },
+      { hi: [8, 16], bubble: t(E,
+        "For each grass cell (G), check all four neighbors and collect any cow into cows. Empty dots and other cells aren't cows, so they're ignored.",
+        "풀 칸(G)마다 네 방향을 살펴 붙어 있는 소를 cows 에 모아요.\n빈 칸(점)이나 다른 풀 칸은 소가 아니니 무시해요.") },
+      { hi: [17, 23], bubble: t(E,
+        "0 or 1 cows means no friendship — skip. 3+ always has one opposite pair, so count it right away; exactly 2 means sort and add that pair to pairs.",
+        "소가 0~1마리면 우정이 없어 건너뛰어요.\n3마리 이상이면 마주 보는 한 쌍이 반드시 있어 바로 세고, 딱 2마리면 그 쌍을 정렬해서 pairs 에 넣어요.") },
+      { hi: [25, 25], bubble: t(E,
+        "Print answer plus the size of pairs.",
+        "answer 에 pairs 의 개수를 더해 출력해요.") },
+    ],
+  };
+}
+
 export function getAcowdemia3Sections(E) {
   return [
     {

@@ -358,6 +358,56 @@ export function UdderedProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest
+   코드 이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getUdderedWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "pos", ko: "이 순서에서 글자의 자리", en: "each letter's position in this order" },
+        { v: "cycles", ko: "지금까지 외운 횟수", en: "recitations counted so far" },
+      ],
+      beats: [
+        { hi: [0, 11], bubble: t(E,
+          "What do we print? The fewest full alphabet recitations needed to say every letter of `heard` in order. So read the custom order and the heard string, then store each letter's position in this order in a map.",
+          "무엇을 출력해야 하나요? heard 의 글자를 순서대로 말하는 데 필요한 알파벳 암송 최소 횟수예요.\n그러니 특별한 순서와 들은 문자열을 읽고, 글자마다 이 순서에서 몇 번째인지 map 에 저장해요.") },
+        { hi: [12, 17], bubble: t(E,
+          "Within one recitation you only ever move forward. So start at 1 recitation, and whenever the next letter's position isn't further along than the last one's, that means the old recitation couldn't reach it — count one more.",
+          "한 번 외우는 동안엔 항상 앞으로만 가요.\n그래서 1번으로 시작하고, 다음 글자 자리가 앞선 글자보다 뒤로 가지 않으면\n지금 외우던 걸로는 닿을 수 없다는 뜻이라 횟수를 하나 더 늘려요.") },
+        { hi: [18, 20], bubble: t(E,
+          "Once every letter is checked, print the total number of recitations.",
+          "글자를 다 확인했으면, 외운 총 횟수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "pos", ko: "이 순서에서 글자의 자리", en: "each letter's position in this order" },
+      { v: "cycles", ko: "지금까지 외운 횟수", en: "recitations counted so far" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we print? The fewest full alphabet recitations needed to say every letter of `heard` in order. So read the custom alphabet order and the string she heard.",
+        "무엇을 출력해야 하나요? heard 의 글자를 순서대로 말하는 데 필요한\n알파벳 암송 최소 횟수예요.\n그러니 먼저 특별한 알파벳 순서와 들은 문자열을 읽어요.") },
+      { hi: [3, 5], bubble: t(E,
+        "To know how far along each letter is in this custom order, look up its position once and store it in a dictionary.",
+        "이 특별한 순서에서 글자마다 몇 번째인지 알아야 하니까, 위치를 한 번씩 미리 dictionary 에 저장해요.") },
+      { hi: [7, 10], bubble: t(E,
+        "Within one recitation you only ever move forward. So start at 1 recitation, and whenever the next letter's position isn't further along than the last one's, that means the old recitation couldn't reach it — count one more.",
+        "한 번 외우는 동안엔 항상 앞으로만 가요.\n그래서 1번으로 시작하고, 다음 글자 자리가 앞선 글자보다 뒤로 가지 않으면\n지금 외우던 걸로는 닿을 수 없다는 뜻이라 횟수를 하나 더 늘려요.") },
+      { hi: [12, 12], bubble: t(E,
+        "Once every letter is checked, print the total number of recitations.",
+        "글자를 다 확인했으면, 외운 총 횟수를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getPhotoshootSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -174,13 +173,12 @@ export function makePhotoshootCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePhotoshootCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — full solution, explained line by line
     {
-      type: "progressive",
+      type: "photoshoot-walk",
       narr: t(E,
         "Scan the pairs from RIGHT to LEFT, keeping a flip flag: if the even slot already has a G, keep going; otherwise flip once when the other cow is a G.",
         "두 마리씩 짝지어 오른쪽에서 왼쪽으로 훑어요.\n짝수 칸에 이미 G가 있으면 그대로 두고, 없는데 짝꿍이 G면 한 번 뒤집어요."),
-      sections: getPhotoshootSections(E),
     },
   ];
 }

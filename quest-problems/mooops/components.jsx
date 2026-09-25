@@ -249,6 +249,63 @@ export function MooOpsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 원본이다 — 절대 안 바꾸고,
+   그대로 가져와 beats(설명 말풍선)만 덧붙인다. getMooOpsSections() 는 PDF 다운로드가 계속
+   쓰므로 그대로 둔다. ── */
+export function getMooOpsWalk(E, lang = "py") {
+  const vars = [
+    { v: "best", ko: "지금까지 찾은 가장 적은 비용", en: "smallest cost found so far" },
+    { v: "i", ko: "'MOO' 가 시작할 후보 자리", en: "candidate start position for 'MOO'" },
+  ];
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars,
+      beats: [
+        { hi: [0, 13], bubble: t(E,
+          "What do we hand back, for every string? The fewest ops to make it exactly 'MOO' — or -1 if impossible. Read Q, then for each: read s and start best at INT_MAX (a huge number meaning 'nothing found yet').",
+          "무엇을 내놓아야 하나요? 문자열마다 'MOO' 로 만드는 가장 적은 횟수예요 — 안 되면 -1 이에요.\nQ 를 읽고, 문자열마다 s 를 읽은 뒤 best 를 INT_MAX(아주 큰 수, '아직 없음')로 시작해요.") },
+        { hi: [14, 17], bubble: t(E,
+          "The middle character of the final 'MOO' can never be flipped — so it must already be 'O'. Try every start position i, and skip any i where s[i+1] isn't 'O'.",
+          "최종 'MOO' 의 가운데 글자는 절대 못 뒤집어요 — 그러니 이미 'O' 여야 해요.\n시작 자리 i 를 하나씩 시도하다가, s[i+1] 이 'O' 가 아니면 건너뛰어요.") },
+        { hi: [18, 24], bubble: t(E,
+          "For a valid i, add up the deletes on both sides (everything before i, everything after i+2). Then add 1 more if s[i] isn't already 'M', and 1 more if s[i+2] isn't already 'O'.",
+          "괜찮은 i 라면, 앞뒤로 지울 글자 수(i 앞 전부 + i+2 뒤 전부)를 먼저 더해요.\ns[i] 가 'M' 이 아니면 1, s[i+2] 가 'O' 가 아니면 1 을 더 더해요.") },
+        { hi: [25, 26], bubble: t(E,
+          "Keep the smallest cost seen so far across every i we tried.",
+          "지금까지 시도한 i 중 가장 작은 비용을 best 에 남겨요.") },
+        { hi: [27, 34], bubble: t(E,
+          "If no i ever worked, best is still INT_MAX — that means -1. Otherwise print best as-is, then move to the next string.",
+          "어떤 i 도 안 됐으면 best 가 그대로 INT_MAX 인데, 그건 -1 이라는 뜻이에요.\n아니면 best 를 그대로 출력하고, 다음 문자열로 넘어가요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars,
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we hand back, for every string? The fewest ops to make it exactly 'MOO' — or -1 if impossible. Read Q, then for each: read s and start best at -1 (nothing found yet).",
+        "무엇을 내놓아야 하나요? 문자열마다 'MOO' 로 만드는 가장 적은 횟수예요 — 안 되면 -1 이에요.\nQ 를 읽고, 문자열마다 s 를 읽은 뒤 best 를 -1(아직 없음)로 시작해요.") },
+      { hi: [6, 16], bubble: t(E,
+        "The middle character of the final 'MOO' can never be flipped — so it must already be 'O'. Try every start position i, and skip any i where s[i+1] isn't 'O'.",
+        "최종 'MOO' 의 가운데 글자는 절대 못 뒤집어요 — 그러니 이미 'O' 여야 해요.\n시작 자리 i 를 하나씩 시도하다가, s[i+1] 이 'O' 가 아니면 건너뛰어요.") },
+      { hi: [17, 21], bubble: t(E,
+        "For a valid i, add up the deletes on both sides (everything before i, everything after i+2) — that's the cost so far. Then add 1 more if s[i] isn't already 'M', and 1 more if s[i+2] isn't already 'O'.",
+        "괜찮은 i 라면, 앞뒤로 지울 글자 수(i 앞 전부 + i+2 뒤 전부)를 먼저 더해요.\ns[i] 가 'M' 이 아니면 1, s[i+2] 가 'O' 가 아니면 1 을 더 더해요.") },
+      { hi: [22, 23], bubble: t(E,
+        "Keep the smallest cost seen so far across every i we tried.",
+        "지금까지 시도한 i 중 가장 작은 비용을 best 에 남겨요.") },
+      { hi: [25, 25], bubble: t(E,
+        "Print the best cost for this string, then move to the next one.",
+        "이 문자열의 최소 비용을 출력하고, 다음 문자열로 넘어가요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

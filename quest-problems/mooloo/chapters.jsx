@@ -177,10 +177,9 @@ export function makeMoolooCh1(E) {
 export function makeMoolooCh2(E, lang = "py") {
   return [
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
-      sections: getMoolooSections(E),
+        "The solution code, start to finish — toggle Python ↔ C++ via the header.", "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
     {
       type: "quiz",

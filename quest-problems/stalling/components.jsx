@@ -314,6 +314,61 @@ export function StallingProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest
+   코드 이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (이 파일 헤더가 USACO_VERIFIED 라 그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getStallingWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "cows/stalls", ko: "정렬해 둔 키·제한 배열", en: "sorted cow heights / stall limits" },
+        { v: "fits", ko: "지금 소 키 이상인 축사 수", en: "stalls tall enough for this cow" },
+        { v: "ans", ko: "지금까지 곱해 온 답", en: "the answer multiplied so far" },
+      ],
+      beats: [
+        { hi: [0, 14], bubble: t(E,
+          "What do we need to output? How many ways to match every cow to a stall. So read N, then the cows' heights and the stalls' limits into long long vectors — heights can be up to 1 billion, and products can overflow int.",
+          "무엇을 출력해야 하나요? 소를 축사에 한 마리씩 넣는 방법의 가짓수예요.\nN 과 소들의 키, 축사들의 제한을 long long vector 로 받아요 — 키가 10억까지라 곱한 값이 int 를 넘을 수 있어요.") },
+        { hi: [16, 17], bubble: t(E,
+          "If we place the shortest cow first, we don't know how many stalls will be left for the tall cows later. So place the TALLEST cow first — rbegin()/rend() means \"read from the back\", so sorting with them lines cows up biggest to smallest, while stalls sort the normal way, smallest first.",
+          "작은 소부터 넣으면 큰 소한테 축사가 몇 개 남을지 알 수 없어요.\n그래서 키가 큰 소부터 넣어요 — rbegin()/rend() 는 '뒤에서부터 본다'는 뜻이라, 이걸로 정렬하면 소가 큰 것부터 줄서요.\n축사는 그냥 앞에서부터, 작은 순서로 정렬해요.") },
+        { hi: [18, 34], bubble: t(E,
+          "Start the answer at 1. For each cow (tallest first), count how many stalls are tall enough for her with a small inner loop, subtract the i stalls already taken by taller cows, and multiply that into the answer — or stop at 0 if none remain.",
+          "답을 1로 시작해요.\n소마다(큰 것부터) 안쪽 for 문으로 자기 키 이상인 축사 수를 세고, 앞선 i마리가 이미 쓴 만큼을 빼면 지금 고를 수 있는 축사 수예요.\n그 수를 답에 곱하는데, 고를 곳이 0 이거나 더 적으면 답은 0이 되고 그대로 멈춰요.") },
+        { hi: [35, 37], bubble: t(E,
+          "Once every cow is placed, print the multiplied answer.",
+          "모든 소를 다 배정했으면, 곱해 둔 답을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "cows/stalls", ko: "정렬해 둔 키·제한 배열", en: "sorted cow heights / stall limits" },
+      { v: "fits", ko: "지금 소 키 이상인 축사 수", en: "stalls tall enough for this cow" },
+      { v: "ans", ko: "지금까지 곱해 온 답", en: "the answer multiplied so far" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What do we need to output? How many ways to match every cow to a stall. So first read N, then the cows' heights, then the stalls' limits.",
+        "무엇을 출력해야 하나요? 소를 축사에 한 마리씩 넣는 방법의 가짓수예요.\n그러니 먼저 N, 소들의 키, 축사들의 제한을 읽어요.") },
+      { hi: [4, 7], bubble: t(E,
+        "If we place the shortest cow first, we don't know how many stalls will be left for the tall cows later. So place the TALLEST cow first — sort cows tallest-first and stalls smallest-first.",
+        "작은 소부터 넣으면 큰 소한테 축사가 몇 개 남을지 알 수 없어요.\n그래서 키가 큰 소부터 넣을 수 있게 소는 큰 순서로, 축사는 작은 순서로 정렬해요.") },
+      { hi: [9, 18], bubble: t(E,
+        "Start the answer at 1. For each cow (tallest first), count stalls tall enough for her, subtract the i stalls already taken by taller cows, and multiply that into the answer — or stop at 0 if none remain.",
+        "답을 1로 시작해요.\n소마다(큰 것부터) 자기 키 이상인 축사 수를 세고, 앞선 i마리가 이미 쓴 만큼을 빼면 지금 고를 수 있는 축사 수예요.\n그 수를 답에 곱하는데, 고를 곳이 0 이거나 더 적으면 답은 0이 되고 그대로 멈춰요.") },
+      { hi: [20, 20], bubble: t(E,
+        "Once every cow is placed, print the multiplied answer.",
+        "모든 소를 다 배정했으면, 곱해 둔 답을 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

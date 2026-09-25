@@ -349,6 +349,68 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고,
+   beats(설명 말풍선)만 덧붙인다. getNonTransSections() 는 PDF 다운로드가 계속 쓰므로
+   그대로 둔다. ── */
+export function getNonTransWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "beats(X, Y)", ko: "X 가 Y 를 이기는지 판정", en: "does X beat Y" },
+        { v: "A, B, C", ko: "세 주사위의 눈 4개씩", en: "each die's 4 face values" },
+        { v: "found", ko: "순환이 성립했나", en: "whether a cycle was found" },
+      ],
+      beats: [
+        { hi: [4, 18], bubble: t(E,
+          "beats(X, Y) decides whether X beats Y — compare all 16 pairs and return true when x > y outcomes outnumber x < y ones.",
+          "beats(X, Y) 는 X 가 Y 를 이기는지 판정해요.\n16쌍을 다 비교해서 x > y 인 쌍이 x < y 인 쌍보다 많으면 true 예요.") },
+        { hi: [20, 31], bubble: t(E,
+          "For each case, read A's 4 faces and B's 4 faces. Repeat T times.",
+          "케이스마다 A, B 의 눈 4개씩을 읽어요. T 케이스만큼 반복해요.") },
+        { hi: [33, 39], bubble: t(E,
+          "We can't compute C directly. So the c1..c4 loops try every sorted combination of 4 values from 1..10.",
+          "C 를 계산으로 바로 구할 수 없어요.\n그래서 1~10 중 4개를 고르는 모든 경우(오름차순)를 c1..c4 반복문으로 만들어요.") },
+        { hi: [40, 48], bubble: t(E,
+          "Check both cycle directions with that C — either one working sets found to true.",
+          "만든 C 로 두 순환 방향을 확인해요 — 한 방향이라도 성립하면 found 가 true 예요.") },
+        { hi: [49, 58], bubble: t(E,
+          "Choose yes or no based on found, and print it.",
+          "found 결과에 따라 yes 또는 no 를 골라 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "beats(X, Y)", ko: "X 가 Y 를 이기는지 판정", en: "does X beat Y" },
+      { v: "A, B, C_die", ko: "세 주사위의 눈 4개씩", en: "each die's 4 face values" },
+      { v: "found", ko: "순환이 성립했나", en: "whether a cycle was found" },
+    ],
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "beats(X, Y) decides whether X beats Y. It compares all 16 (x, y) pairs and returns True when x > y outcomes outnumber x < y ones.",
+        "beats(X, Y) 는 X 가 Y 를 이기는지 판정해요.\nX, Y 의 눈 16쌍을 다 비교해서, x > y 인 쌍이 x < y 인 쌍보다 많으면 True 예요.") },
+      { hi: [5, 10], bubble: t(E,
+        "Each case is 8 numbers on one line — A's 4 faces, then B's 4 faces. Loop T times, splitting them into A and B.",
+        "케이스마다 한 줄에 8개 숫자가 와요 — A 의 눈 4개, B 의 눈 4개예요.\nT 케이스만큼 반복하며 A, B 를 나눠 읽어요.") },
+      { hi: [12, 18], bubble: t(E,
+        "We can't compute C directly. So try every combination of 4 values from 1..10, kept sorted to skip duplicate dice.",
+        "C 의 눈을 계산으로 바로 구할 수 없어요.\n그래서 1~10 중 4개를 고르는 모든 경우(오름차순)를 하나씩 만들어 봐요.") },
+      { hi: [20, 23], bubble: t(E,
+        "Check both cycle directions with that C — A beats B beats C beats A, or the reverse. Either one sets found to True.",
+        "만든 C 로 두 순환 방향을 확인해요 — A→B→C→A 이거나 B→A→C→B 이거나,\n둘 중 하나만 성립하면 found 가 True 예요.") },
+      { hi: [24, 31], bubble: t(E,
+        "Once found is True there's nothing left to check, so break out of all four loops right away.",
+        "found 가 True 면 더 찾을 필요 없어서, 네 반복을 전부 즉시 멈춰요.") },
+      { hi: [33, 36], bubble: t(E,
+        "Print yes or no based on found.",
+        "found 결과에 따라 yes 또는 no 를 출력해요.") },
+    ],
+  };
+}
+
 export function getNonTransSections(E) {
   return [
     {

@@ -4885,3 +4885,70 @@ PM: *"5쪽이 계산해 둔 「최대 546」을 8쪽에 그대로 옮겨 붙여�
 ### 남은 것
 - `check-word-difficulty.py moohunt` — 리스트 7번·목록 7번·배열 1번(같은 것 세 이름),
   '이하' 1번. **내 새 문장 때문이 아니다**(원래 있던 것). 별도 커밋으로.
+
+## CodeWalk 24개 — PM 판정 (2026-09-25)
+
+PM: *"**CodeWalk L·M·N·O조(24개, `moolang`/`mooops`/`stampgrid` 포함)는 건드리지 말고
+완주를 기다려라. 끝나면 CodeWalk 축 73→49.**"*
+
+대상 24개 — `cowntact` `moolang` `hungrycow` `stampgrid` `mooloo` `leaders` ·
+`mooops` `cowcollege` `feedcows` `photoshoot` `countliars` `sleepclass` ·
+`photoshoot2` `herdle` `nontrans` `aircond1` `walkhome` `acowdemia3` ·
+`yearcow` `comfycows` `clockfence` `uddered` `stalling` `abcs`.
+
+실측: **USACO CodeWalk 45 → 74개.** 🔒 보호 변수 48개 전부 sha256 동일 → 재제출 불필요.
+
+⚠️ **`hungrycow` 가 오늘 세 번째 커밋이라 `check-quest-polish-budget.py` 에 걸렸다.**
+세 번이 「같은 자리를 세 번 고쳤다」가 아니다 — ①CodeWalk 이전(L조) ②내가 `git add -A`
+로 쓸어 담은 중간 상태 ③말풍선 다듬기. **②가 없었으면 두 번이다.**
+이 판정으로 뚫되, **원인은 내 `git add -A` 다** — 다음부터 담당 편집은 파일을 지목해서 add 한다.
+
+### 이 축에서 딸려 나온 것 (고치지 않고 넘김)
+- **`cowntact` 헤더가 `Python: 4/12 (WA - algorithm wrong)`** — 알고리즘이 **틀린 코드**를
+  학생이 보고 있다. 🔒 라 재제출 필요 → **선생님 몫.**
+- `walkhome` 의 `dp[r][c][dir][changes]`(3차원 리스트 + 중첩 컴프리헨션) → 안 가르친 개념 19개 축.
+- `nontrans`·`acowdemia3` 복사 버튼이 첫 스크롤에서 고정 바 영역에 든다 —
+  **클릭은 통과한다**(오늘 실측). 보이기만 하는 문제.
+
+---
+
+## C++ STL 게이트 — **C 는 3개가 아니라 2개였다** (2026-09-25)
+
+**내 검사기가 틀렸고, 검토자 둘이 각자 따로 잡았다.**
+`livestock` 이 C 유형으로 떴는데 걸린 그 한 줄은 **내가 오늘 직접 단 수정 기록 주석**이었다 —
+*"`stringstream` 과 `map<string, vector<string>> adj` 인데 🔒 `FULL_CPP` 에 둘 다 0번이다"*.
+즉 **「이건 코드에 없다」고 적어 둔 글**을 「코드에 있다」로 읽었다.
+게다가 `livestock` 은 `supported_languages: ["py"]` 라 **C++ 이 화면에 뜨지도 않는다.**
+⭐ `check-prose-vs-final-code.py` 에는 **같은 날 같은 이유로 주석 제거를 이미 넣어 뒀는데**
+이 파일에는 안 넣었다. **한 곳을 고치면 형제도 봐라.**
+→ 주석 제거 + 파이썬 전용 quest 제외. **C 2개**(`makedistinct`·`mooin3`)로 맞았다.
+
+### 교육 판정 — **지금은 아무것도 하지 않는다**
+- ⓐ 설명 추가 **기각** — `llabs` 는 이미 즉석 정의가 있고(*"llabs(k) is just abs() for
+  long long"*), 선생님이 오늘 이 quest 를 두고 **두 번** *"설명이 너무 많다"* 고 하셨다.
+- ⓑ 게이트 **기각** — `cpp-llabs`·`cpp-nested-container-value` 가 `CONCEPT_ONTOLOGY` 에
+  **없다.** `mooin3` 자신의 주석(`quest-meta.ts:331`)이 *"등록 안 된 이름이면
+  `getConceptGraph()` 가 조용히 새 노드를 만들고 타입도 안 잡는다"* 고 **이미 겪은 기록**이다.
+- ⓒ 코드를 바꿔 안 쓴다 — **원칙적으로 맞는 답인데 지금 실행 불가.** 🔒 재제출은 선생님 몫.
+  ⭐ `aircond1` 이 실물 증거다: `long long llabs_(long long x)` 를 **손수 짜서** 피한다.
+  **동결이 풀리면 1순위**, 그리고 **새로 짜는 quest 의 기본값**으로 삼는다.
+
+### ⭐ 그런데 우선순위는 C 가 아니라 D 다
+학생이 실제로 막힌 건 **전부 D** 였다 — `long long`·`auto &kv`·`.second`·`greater<>` 가
+**개별로는 커리큘럼에 있는데**(3·16·25·28번째) `makedistinct` 시점에 **한꺼번에 쏟아진다.**
+⛔ **그런데 D 도 지금 실행 못 한다** — 게이트에 담을 `cpp-*` 개념이 온톨로지에 없다.
+**「온톨로지를 확장할지」가 먼저 정해져야 하는 별도 판정이다. 정하지 못했다.**
+
+### 온톨로지 확장 — 조사 결과 (backend-engineer)
+- `CONCEPT_ONTOLOGY` 에 이름만 **등록하는 것 자체는 안전**하다(고립 노드로만 생긴다).
+- ⚠️ **`concepts_required` 에 실제로 쓰는 순간** 셋을 같은 커밋에 해야 한다:
+  ①그 이름을 **어느 quest 의 `concepts_taught`** 에도 심어야 한다 —
+   `masteredConcepts()` 는 **완료한 quest 의 `concepts_taught` 만** 본다(레슨은 안 본다).
+   ⚠️ **`data/cpp/lesson*.ts` 에는 `concepts_taught` 필드가 아예 없다**(grep 0건).
+   심지 않으면 그 quest 는 **영원히 준비됨이 안 뜬다.**
+  ②`difficulty` 를 기본값 2 로 흘리지 말고 **실제로 매긴 값**을 같이 적는다.
+  ③`check-required-vs-code.py` 의 `TAG` 사전에도 등록해야 **「0건」이 진짜 결백**이 된다.
+- ✅ **아픔은 작다** — 실패해도 **배지만 안 뜬다.** `page.tsx:521` 의 `<Link>` 는
+  `ready` 와 무관하게 늘 걸려 있어 **목록·클릭은 안 막힌다.** 학생 데이터 위험 **0**.
+- ⛔ `ALWAYS_MASTERED` 에는 **넣지 마라** — 레슨에 0건인 개념이라 넣으면
+  `mooin3` chr() 사고를 그대로 재현한다.

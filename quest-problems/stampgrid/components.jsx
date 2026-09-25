@@ -365,6 +365,78 @@ export function StampGridProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고
+   beats(설명 말풍선)만 덧붙인다. getStampGridSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getStampGridWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "canvas", ko: "찍어야 할 목표 무늬", en: "the target pattern to recreate" },
+        { v: "rots", ko: "도장의 4가지 회전", en: "the stamp's 4 rotations" },
+        { v: "covered", ko: "지금까지 도장이 덮은 칸", en: "cells the stamp has covered so far" },
+      ],
+      beats: [
+        { hi: [4, 12], bubble: t(E,
+          "What do we hand back? YES/NO per test case — can every ★ be recreated? We'll need to rotate the stamp 4 ways, so build a 90°-rotation helper first: read it column by column, from the bottom row up.",
+          "무엇을 내놓아야 하나요? 케이스마다 무늬를 다시 만들 수 있는지 YES/NO 예요.\n도장을 4방향으로 돌려야 하니, 90도 회전 도우미부터 만들어요 — 맨 아래 행부터 위로, 열 방향으로 읽어요.") },
+        { hi: [15, 26], bubble: t(E,
+          "Read this case's canvas, then the stamp shape.",
+          "이번 케이스의 캔버스를 읽고, 도장 모양도 읽어요.") },
+        { hi: [27, 30], bubble: t(E,
+          "Build all 4 rotations of the stamp by rotating 3 more times.",
+          "도장을 3번 더 돌려서 4가지 회전을 모두 만들어요.") },
+        { hi: [32, 43], bubble: t(E,
+          "For every rotation, try every top-left position it could land on. A position is only legal if every stamped ★ lands on a canvas ★ — one mismatch stops the check early.",
+          "회전마다, 도장을 놓을 수 있는 모든 왼쪽 위 자리를 시도해요.\n찍히는 ★ 이 전부 캔버스의 ★ 위에 떨어져야만 자리가 맞아요 — 하나라도 어긋나면 바로 멈춰요.") },
+        { hi: [44, 51], bubble: t(E,
+          "If the position is legal, mark every cell the stamp would color as covered.",
+          "자리가 맞으면, 도장이 칠할 칸을 전부 covered 로 표시해요.") },
+        { hi: [52, 58], bubble: t(E,
+          "The pattern is reachable only if every ★ in the canvas ended up covered.",
+          "캔버스의 ★ 이 전부 covered 로 표시됐을 때만 그 무늬를 만들 수 있어요.") },
+        { hi: [60, 73], bubble: t(E,
+          "Read T, run solve() for each test case, and print YES or NO.",
+          "T 를 읽고 케이스마다 solve() 를 돌려 YES 또는 NO 를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "canvas", ko: "찍어야 할 목표 무늬", en: "the target pattern to recreate" },
+      { v: "rotations", ko: "도장의 4가지 회전", en: "the stamp's 4 rotations" },
+      { v: "covered", ko: "지금까지 도장이 덮은 칸", en: "cells the stamp has covered so far" },
+    ],
+    beats: [
+      { hi: [0, 7], bubble: t(E,
+        "What do we hand back? YES or NO per test case — can the stamp recreate the pattern? read_line() skips the blank lines between cases, so we always get real input.",
+        "무엇을 내놓아야 하나요? 케이스마다 무늬를 다시 만들 수 있는지 YES/NO 예요.\nread_line() 은 케이스 사이 빈 줄을 건너뛰어서, 항상 진짜 입력을 받아요.") },
+      { hi: [9, 11], bubble: t(E,
+        "A helper to rotate a grid 90°: read it column by column, from the bottom row up.",
+        "격자를 90도 돌리는 도우미예요 — 맨 아래 행부터 위로, 열 방향으로 읽어요.") },
+      { hi: [13, 20], bubble: t(E,
+        "solve() reads one case: the canvas, then the stamp, and builds all 4 rotations by rotating 3 more times.",
+        "solve() 는 케이스 하나를 읽어요 — 캔버스, 도장, 그리고 3번 더 돌려서 4가지 회전을 만들어요.") },
+      { hi: [21, 34], bubble: t(E,
+        "For every rotation, try every top-left position it could land on. A position is only legal if every stamped ★ lands on a canvas ★ — one mismatch stops the check early.",
+        "회전마다, 도장을 놓을 수 있는 모든 왼쪽 위 자리를 시도해요.\n찍히는 ★ 이 전부 캔버스의 ★ 위에 떨어져야만 자리가 맞아요 — 하나라도 어긋나면 바로 멈춰요.") },
+      { hi: [35, 38], bubble: t(E,
+        "If the position is legal, mark every cell the stamp would color as covered.",
+        "자리가 맞으면, 도장이 칠할 칸을 전부 covered 로 표시해요.") },
+      { hi: [39, 39], bubble: t(E,
+        "The pattern is reachable only if every ★ in the canvas ended up covered.",
+        "캔버스의 ★ 이 전부 covered 로 표시됐을 때만 그 무늬를 만들 수 있어요.") },
+      { hi: [41, 47], bubble: t(E,
+        "Run solve() for each test case and collect YES/NO, then print them all.",
+        "케이스마다 solve() 를 돌려 YES/NO 를 모으고, 한 번에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

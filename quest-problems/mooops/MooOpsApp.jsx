@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { MooOpsProgressiveCode, downloadMooOpsPDF, getMooOpsSections } from "./components";
+import { MooOpsProgressiveCode, downloadMooOpsPDF, getMooOpsSections, getMooOpsWalk } from "./components";
 import { makeMooOpsCh1, makeMooOpsCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#059669";
 
@@ -102,6 +103,7 @@ export default function MooOpsApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <MooOpsProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "mooops-walk") return <CodeWalk E={E} lang={codeLang} {...getMooOpsWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function MooOpsApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <MooOpsProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "mooops-walk") return <CodeWalk E={E} lang={codeLang} {...getMooOpsWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

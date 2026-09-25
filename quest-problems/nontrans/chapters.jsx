@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getNonTransSections, NonTransDeepAuditSim } from "./components";
+import { NonTransDeepAuditSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (4 steps)
@@ -166,13 +166,12 @@ export function makeNonTransCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeNonTransCh2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Each die face is in 1..10, so we can brute-force C — enumerate all sorted 4-face dice.",
-        "C 의 면이 1..10 뿐이라 후보를 하나씩 다 해 볼 수 있어요."),
-      sections: getNonTransSections(E),
+        "The solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getCountLiarsSections } from "./components";
 
 /* ------------------------------------------------------------------
    Deep-audit sim — drag Bessie's position, watch liars light up.
@@ -323,13 +322,12 @@ export function makeLiarsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeLiarsCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — straight in.
+    // 2-1: CodeWalk — full solution, explained line by line
     {
-      type: "progressive",
+      type: "countliars-walk",
       narr: t(E,
         "Only try the x values from the claims as candidates, and count liars.",
         "주장에 적힌 x 값들만 후보로 놓고 거짓말쟁이 수를 세어 봐요."),
-      sections: getCountLiarsSections(E),
     },
   ];
 }

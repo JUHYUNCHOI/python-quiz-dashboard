@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getComfyCowsSections, ComfyCowsSim } from "./components";
+import { getComfyCowsWalk, ComfyCowsSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -161,13 +161,12 @@ export function makeComfyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeComfyCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk
     {
-      type: "progressive",
+      type: "comfycows-walk",
       narr: t(E,
         "Only recheck the new cow and her 4 neighbors — 5 cells.",
         "새 소와 그 이웃 4칸, 이 5칸만 다시 보면 돼요."),
-      sections: getComfyCowsSections(E),
     },
   ];
 }

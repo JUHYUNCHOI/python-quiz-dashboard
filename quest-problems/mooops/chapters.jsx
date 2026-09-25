@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooOpsSections, MooOpsLab } from "./components";
+import { MooOpsLab } from "./components";
 
 /* ===============================================================
    Chapter 1: Problem (3 steps)
@@ -159,17 +159,16 @@ export function makeMooOpsCh1(E) {
 
 
 /* ===============================================================
-   Chapter 2: Code (2 steps)
+   Chapter 2: Code (1 step)
    =============================================================== */
 export function makeMooOpsCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — full solution, explained line by line
     {
-      type: "progressive",
+      type: "mooops-walk",
       narr: t(E,
         "The middle can't be flipped, so only check positions where s[i+1]='O'.",
         "가운데는 못 뒤집으니 s[i+1]='O' 인 자리만 살펴봐요."),
-      sections: getMooOpsSections(E),
     },
   ];
 }

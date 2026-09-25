@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getClockFenceSections, ClockFenceDeepAuditSim } from "./components";
+import { getClockFenceWalk, ClockFenceDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -168,13 +168,12 @@ export function makeClockCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeClockCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk
     {
-      type: "progressive",
+      type: "clockfence-walk",
       narr: t(E,
         "Map each direction to a number, then count right turns versus left turns.",
         "방향에 번호를 붙여요. N=0, E=1, S=2, W=3 이에요.\n이어진 두 방향에서 (다음 − 지금) mod 4 가 1 이면 오른쪽, 3 이면 왼쪽이에요.\n오른쪽이 왼쪽보다 많으면 CW 예요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
-      sections: getClockFenceSections(E),
     },
   ];
 }

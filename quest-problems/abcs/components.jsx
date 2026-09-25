@@ -213,6 +213,59 @@ export function AbcsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest
+   코드 이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getAbcsWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "nums", ko: "정렬한 7개 합", en: "the sorted 7 sums" },
+        { v: "A/B/C", ko: "구해낸 원래 세 수", en: "the recovered original three numbers" },
+      ],
+      beats: [
+        { hi: [0, 11], bubble: t(E,
+          "What do we print? The original A, B, C in increasing order. We don't know which of the 7 shuffled sums is which — but sorting them fixes that, so read all 7 numbers into a vector and sort it.",
+          "무엇을 출력해야 하나요? 원래 A, B, C 를 작은 순서대로예요.\n섞인 7개 중 어느 게 무슨 합인지는 모르지만, 정렬하면 답이 보여요 — 그러니 7개를 vector 로 읽고 정렬해요.") },
+        { hi: [13, 16], bubble: t(E,
+          "No sum of two positive numbers can be smaller than the total of all three, or smaller than the smallest single one. So the largest value is A+B+C, the smallest is A, and the next smallest is B — C is whatever's left of the total.",
+          "두 수를 더한 값은 세 수를 다 더한 값보다 클 수 없고, 한 수보다 작을 수도 없어요.\n그래서 가장 큰 값이 A+B+C, 가장 작은 값이 A, 그다음 작은 값이 B 예요 — C 는 거기서 A, B 를 뺀 나머지예요.") },
+        { hi: [17, 19], bubble: t(E,
+          "Print A, B, and C in that order.",
+          "A, B, C 를 그 순서로 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "abc", ko: "7개 중 가장 큰 값(=A+B+C)", en: "largest of the 7 (= A+B+C)" },
+      { v: "A/B/C_val", ko: "구해낸 원래 세 수", en: "the recovered original three numbers" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we print? The original A, B, C in increasing order. We don't know which of the 7 shuffled sums is which — but sorting them fixes that, so read all 7 numbers and sort them.",
+        "무엇을 출력해야 하나요? 원래 A, B, C 를 작은 순서대로예요.\n섞인 7개 중 어느 게 무슨 합인지는 모르지만, 정렬하면 답이 보여요 — 그러니 7개를 읽고 정렬해요.") },
+      { hi: [3, 4], bubble: t(E,
+        "No sum of two positive numbers can be smaller than the total of all three. So the LARGEST of the 7 must be A+B+C.",
+        "두 수를 더한 값이 세 수를 다 더한 값보다 클 수는 없어요.\n그래서 7개 중 가장 큰 값이 A+B+C 예요.") },
+      { hi: [6, 10], bubble: t(E,
+        "Likewise, no sum of two positive numbers can be smaller than the smallest single one. So the SMALLEST of the 7 must be A itself, and the next smallest must be B.",
+        "마찬가지로 두 수를 더한 값이 한 수보다 작을 수는 없어요.\n그래서 가장 작은 값이 A 이고, 그다음 작은 값이 B 예요.") },
+      { hi: [12, 13], bubble: t(E,
+        "Once we have A, B, and the total, C is just whatever's left.",
+        "A, B, 전체 합을 알면, C 는 거기서 A, B 를 뺀 나머지예요.") },
+      { hi: [15, 15], bubble: t(E,
+        "Print A, B, and C in that order.",
+        "A, B, C 를 그 순서로 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

@@ -356,6 +356,78 @@ export function MooLangProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고
+   beats(설명 말풍선)만 덧붙인다. getMooLangSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getMooLangWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "n_tverb", ko: "지을 타동사 문장 개수", en: "how many transitive sentences to build" },
+        { v: "n_iverb", ko: "지을 자동사 문장 개수", en: "how many intransitive sentences to build" },
+        { v: "basic/compound", ko: "묶기 전/후 문장들", en: "sentences before / after combining with conjunctions" },
+      ],
+      beats: [
+        { hi: [7, 25], bubble: t(E,
+          "What do we hand back? For every test case, the biggest possible word count and the sentence that uses it. Read T, then each case's N/C/P and N words, sorting them into four buckets by type.",
+          "무엇을 내놓아야 하나요? 케이스마다 만들 수 있는 최대 단어 수와, 그 단어로 지은 문장이에요.\nT 를 읽고, 케이스마다 N/C/P 와 단어 N 개를 읽어 명사·타동사·자동사·접속사 네 바구니에 나눠 담아요.") },
+        { hi: [33, 45], bubble: t(E,
+          "Once we pick how many transitive sentences (n_tverb) to build, everything else follows. So try every n_tverb from 0 up — take as many intransitive sentences (n_iverb) as fit, trimming down until the period count stays within P.",
+          "타동사 문장 개수(n_tverb)를 정하면 나머지가 따라 정해져요.\n그래서 n_tverb 를 0부터 다 시도해요 — 자동사 문장(n_iverb)을 최대한 채우되, 마침표 수가 P 를 넘으면 하나씩 줄여요.") },
+        { hi: [46, 57], bubble: t(E,
+          "If even n_iverb = 0 doesn't fit, skip this n_tverb. Otherwise spend the comma budget C on extra nouns, total up the words, and keep the best n_tverb so far.",
+          "n_iverb = 0 이어도 안 맞으면 이 n_tverb 는 건너뛰어요.\n아니면 쉼표 예산 C 로 문장에 명사를 더 붙이고, 단어 총합을 구해서 지금까지 중 제일 좋은 n_tverb 를 저장해요.") },
+        { hi: [59, 80], bubble: t(E,
+          "Now rebuild the actual sentences for the best n_tverb. Pop nouns and verbs off the back of each vector — popping removes them so the same word is never reused.",
+          "가장 좋은 n_tverb 로 실제 문장을 다시 만들어요.\n명사·동사를 벡터 끝에서 꺼내 써요 — pop 은 그 단어를 지워서, 같은 단어를 두 번 쓰지 않게 해요.") },
+        { hi: [83, 88], bubble: t(E,
+          "There's still comma budget left, so tack extra nouns onto the last transitive sentence with commas until C runs out.",
+          "쉼표 예산이 남아 있으면, 마지막 타동사 문장에 명사를 쉼표로 계속 이어 붙여요 — C 가 다 떨어질 때까지.") },
+        { hi: [91, 100], bubble: t(E,
+          "Combine pairs of basic sentences with conjunctions into compound sentences — periods get added when we print them.",
+          "기본 문장을 둘씩 접속사로 이어 복문을 만들어요 — 마침표는 출력할 때 붙여요.") },
+        { hi: [103, 120], bubble: t(E,
+          "Print the word count, then build the output line: basic sentences first, then compound ones, each with a period and a space between them.",
+          "단어 수를 출력하고, 문장 줄을 만들어요 — 기본 문장 다음 복문 순서로 이어 붙이고, 문장마다 마침표를 붙이고 사이에 공백을 넣어요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "n_tverb", ko: "지을 타동사 문장 개수", en: "how many transitive sentences to build" },
+      { v: "n_iverb", ko: "지을 자동사 문장 개수", en: "how many intransitive sentences to build" },
+      { v: "basic/compound", ko: "묶기 전/후 문장들", en: "sentences before / after combining with conjunctions" },
+    ],
+    beats: [
+      { hi: [0, 15], bubble: t(E,
+        "What do we hand back? For every test case, the biggest possible word count and the sentence that uses it. Read every word and sort it into four buckets by type: noun / transitive verb / intransitive verb / conjunction.",
+        "무엇을 내놓아야 하나요? 케이스마다 만들 수 있는 최대 단어 수와, 그 단어로 지은 문장이에요.\n단어를 하나씩 읽어서 명사·타동사·자동사·접속사 네 바구니에 나눠 담아요.") },
+      { hi: [17, 26], bubble: t(E,
+        "Once we pick how many transitive sentences (n_tverb) to build, everything else follows. So try every n_tverb from 0 up — take as many intransitive sentences (n_iverb) as fit, trimming down until the period count stays within P.",
+        "타동사 문장 개수(n_tverb)를 정하면 나머지가 따라 정해져요.\n그래서 n_tverb 를 0부터 다 시도해요 — 자동사 문장(n_iverb)을 최대한 채우되, 마침표 수가 P 를 넘으면 하나씩 줄여요.") },
+      { hi: [27, 31], bubble: t(E,
+        "If even n_iverb = 0 doesn't fit, skip this n_tverb. Otherwise spend the comma budget C on extra nouns, total up the words, and keep the best n_tverb so far.",
+        "n_iverb = 0 이어도 안 맞으면 이 n_tverb 는 건너뛰어요.\n아니면 쉼표 예산 C 로 문장에 명사를 더 붙이고, 단어 총합을 구해서 지금까지 중 제일 좋은 n_tverb 를 저장해요.") },
+      { hi: [33, 36], bubble: t(E,
+        "Now rebuild the actual sentences for the best n_tverb. Pop nouns and verbs from the back of each list — popping removes them so the same word is never reused.",
+        "가장 좋은 n_tverb 로 실제 문장을 다시 만들어요.\n명사·동사를 리스트 끝에서 꺼내 써요 — pop 은 그 단어를 지워서, 같은 단어를 두 번 쓰지 않게 해요.") },
+      { hi: [37, 39], bubble: t(E,
+        "There's still comma budget left, so tack extra nouns onto the last transitive sentence with commas until C runs out.",
+        "쉼표 예산이 남아 있으면, 마지막 타동사 문장에 명사를 쉼표로 계속 이어 붙여요 — C 가 다 떨어질 때까지.") },
+      { hi: [40, 41], bubble: t(E,
+        "Combine pairs of basic sentences with conjunctions into compound sentences, then add a period to every sentence.",
+        "기본 문장을 둘씩 접속사로 이어 복문을 만들고, 모든 문장 끝에 마침표를 붙여요.") },
+      { hi: [42, 45], bubble: t(E,
+        "Save this case's word count and sentence, then after all cases, print everything at once.",
+        "이번 케이스의 단어 수와 문장을 저장해 두고, 모든 케이스가 끝나면 한 번에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

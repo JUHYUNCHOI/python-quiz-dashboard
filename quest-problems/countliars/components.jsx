@@ -99,6 +99,57 @@ export function CountLiarsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 원본이다 — 절대 안 바꾸고,
+   그대로 가져와 beats(설명 말풍선)만 덧붙인다. getCountLiarsSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. ── */
+export function getCountLiarsWalk(E, lang = "py") {
+  const vars = [
+    { v: "best", ko: "지금까지 찾은 가장 적은 거짓말쟁이 수", en: "fewest liars found so far" },
+    { v: "p", ko: "지금 시도하는 Bessie 의 자리", en: "candidate position for Bessie" },
+  ];
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars,
+      beats: [
+        { hi: [0, 11], bubble: t(E,
+          "What do we hand back? The fewest cows that must be lying, once Bessie picks her best position. Read N claims — each is 'G x' (claims position ≥ x) or 'L x' (claims position ≤ x).",
+          "무엇을 내놓아야 하나요? Bessie 가 가장 좋은 자리를 골랐을 때 거짓말쟁이가 될 수밖에 없는 소의 수예요.\nN 개의 주장을 읽어요 — 'G x'(자리 ≥ x 라는 주장) 또는 'L x'(자리 ≤ x 라는 주장)예요.") },
+        { hi: [13, 15], bubble: t(E,
+          "The best position is always one of the claimed values — that's the only place truth can flip. N is small (≤1000), so trying every claimed value is fast. Start best at N (worst case).",
+          "가장 좋은 자리는 항상 누군가의 주장값 중 하나예요 — 참·거짓이 바뀌는 자리가 거기뿐이거든요.\nN 이 작아서(≤1000) 후보를 다 시도해도 빨라요. best 는 최악의 경우(N)로 시작해요.") },
+        { hi: [16, 29], bubble: t(E,
+          "Try every claimed value as Bessie's position p. A 'G' claim lies when p is less than its value; an 'L' claim lies when p is more than its value. Keep the smallest liar count seen.",
+          "모든 주장값을 Bessie 의 자리 p 로 하나씩 시도해요.\n'G' 주장은 p 가 그 값보다 작으면 거짓, 'L' 주장은 p 가 그 값보다 크면 거짓이에요.\n지금까지 중 가장 적은 거짓말쟁이 수를 best 에 남겨요.") },
+        { hi: [31, 33], bubble: t(E,
+          "Print the smallest liar count found.",
+          "가장 적은 거짓말쟁이 수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars,
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What do we hand back? The fewest cows that must be lying, once Bessie picks her best position. Read N claims — each is 'G x' (claims position ≥ x) or 'L x' (claims position ≤ x).",
+        "무엇을 내놓아야 하나요? Bessie 가 가장 좋은 자리를 골랐을 때 거짓말쟁이가 될 수밖에 없는 소의 수예요.\nN 개의 주장을 읽어요 — 'G x'(자리 ≥ x 라는 주장) 또는 'L x'(자리 ≤ x 라는 주장)예요.") },
+      { hi: [8, 10], bubble: t(E,
+        "The best position is always one of the claimed values — that's the only place truth can flip. N is small (≤1000), so trying every claimed value is fast. Start best at N (worst case).",
+        "가장 좋은 자리는 항상 누군가의 주장값 중 하나예요 — 참·거짓이 바뀌는 자리가 거기뿐이거든요.\nN 이 작아서(≤1000) 후보를 다 시도해도 빨라요. best 는 최악의 경우(N)로 시작해요.") },
+      { hi: [11, 20], bubble: t(E,
+        "Try every claimed value as Bessie's position p. A 'G' claim lies when p is less than its value; an 'L' claim lies when p is more than its value. Keep the smallest liar count seen.",
+        "모든 주장값을 Bessie 의 자리 p 로 하나씩 시도해요.\n'G' 주장은 p 가 그 값보다 작으면 거짓, 'L' 주장은 p 가 그 값보다 크면 거짓이에요.\n지금까지 중 가장 적은 거짓말쟁이 수를 best 에 남겨요.") },
+      { hi: [22, 22], bubble: t(E,
+        "Print the smallest liar count found.",
+        "가장 적은 거짓말쟁이 수를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

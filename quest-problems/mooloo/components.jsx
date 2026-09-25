@@ -245,6 +245,64 @@ export function MoolooProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고
+   beats(설명 말풍선)만 덧붙인다. getMoolooSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getMoolooWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "start/end", ko: "지금 구독의 첫 날 / 마지막 날", en: "the current subscription's first / last day" },
+        { v: "total", ko: "지금까지 더한 총 비용", en: "total cost added so far" },
+      ],
+      beats: [
+        { hi: [6, 12], bubble: t(E,
+          "What do we hand back? The minimum total cost to cover every viewing day. Read N, K, and the days, then sort — sorted days only ever get farther apart as we scan.",
+          "무엇을 내놓아야 하나요? 모든 시청일을 덮는 구독의 최소 총 비용이에요.\nN, K, 시청일을 읽고 정렬해요 — 정렬하면 스캔하며 간격이 줄어들 일이 없어요.") },
+        { hi: [14, 19], bubble: t(E,
+          "Start the cost at 0. Each subscription begins fresh at the next day we haven't covered yet.",
+          "비용을 0 에서 시작해요. 구독은 매번 아직 안 덮인 다음 날부터 새로 시작해요.") },
+        { hi: [20, 23], bubble: t(E,
+          "If the next day's gap from this subscription's end is ≤ K, extending it is cheaper than starting a new one — keep absorbing days.",
+          "다음 날과 지금 구독의 끝 사이 간격이 K 이하면, 새로 구독하는 것보다 늘리는 게 더 싸요 — 계속 흡수해요.") },
+        { hi: [24, 24], bubble: t(E,
+          "Once the gap is too big, close this subscription: add its span plus the K-day grace period to the total.",
+          "간격이 너무 커지면 이 구독을 닫아요 — 구독 기간에 K일 유예까지 더해서 total 에 더해요.") },
+        { hi: [26, 26], bubble: t(E,
+          "Print the total cost.",
+          "총 비용을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "start/end", ko: "지금 구독의 첫 날 / 마지막 날", en: "the current subscription's first / last day" },
+      { v: "total_cost", ko: "지금까지 더한 총 비용", en: "total cost added so far" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we hand back? The minimum total cost to cover every viewing day. Read N, K, and the days, sorted — sorted days only ever get farther apart as we scan.",
+        "무엇을 내놓아야 하나요? 모든 시청일을 덮는 구독의 최소 총 비용이에요.\nN, K, 시청일을 정렬해서 읽어요 — 정렬하면 스캔하며 간격이 줄어들 일이 없어요.") },
+      { hi: [3, 8], bubble: t(E,
+        "Start the cost at 0. Each subscription begins fresh at the next day we haven't covered yet.",
+        "비용을 0 에서 시작해요. 구독은 매번 아직 안 덮인 다음 날부터 새로 시작해요.") },
+      { hi: [9, 11], bubble: t(E,
+        "If the next day's gap from this subscription's end is ≤ K, extending it is cheaper than starting a new one — keep absorbing days.",
+        "다음 날과 지금 구독의 끝 사이 간격이 K 이하면, 새로 구독하는 것보다 늘리는 게 더 싸요 — 계속 흡수해요.") },
+      { hi: [12, 12], bubble: t(E,
+        "Once the gap is too big, close this subscription: add its span plus the K-day grace period to the total.",
+        "간격이 너무 커지면 이 구독을 닫아요 — 구독 기간에 K일 유예까지 더해서 total_cost 에 더해요.") },
+      { hi: [14, 14], bubble: t(E,
+        "Print the total cost.",
+        "총 비용을 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

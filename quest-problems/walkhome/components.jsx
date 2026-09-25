@@ -122,6 +122,71 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고,
+   beats(설명 말풍선)만 덧붙인다. getWalkHomeSections() 는 PDF 다운로드가 계속 쓰므로
+   그대로 둔다. ── */
+export function getWalkHomeWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "dp[r][c][direction][changes]", ko: "그 칸에서 집까지 남은 길의 수", en: "paths remaining from this cell to home" },
+        { v: "direction", ko: "바로 전에 온 방향 (0=오른쪽,1=아래,2=시작)", en: "direction we just arrived from (0=right,1=down,2=start)" },
+        { v: "changes", ko: "지금까지 방향을 바꾼 횟수", en: "direction changes used so far" },
+      ],
+      beats: [
+        { hi: [5, 9], bubble: t(E,
+          "Listing every path would be too slow. So dp[r][c][direction][changes] is declared globally up front — 'paths remaining from here to home'.",
+          "길을 하나씩 세면 너무 느려요. 그래서 dp[r][c][방향][바꾼횟수] 표를 전역에 미리 만들어 둬요.\n'여기서 집까지 남은 길의 수' 예요.") },
+        { hi: [11, 19], bubble: t(E,
+          "For each case, read N, K, and the grid. K is the max number of direction changes allowed.",
+          "케이스마다 N, K 와 격자를 읽어요. K 는 방향을 바꿀 수 있는 최대 횟수예요.") },
+        { hi: [21, 30], bubble: t(E,
+          "Fill the table backward from home using four nested loops — no recursion needed. Home itself has exactly 1 way, so set it to 1 right away.",
+          "집(오른아래 끝)에서부터 거꾸로 네 겹 반복문으로 표를 채워요 — 재귀가 필요 없어요.\n집 칸 자신은 길이 1가지라 바로 1을 넣어요.") },
+        { hi: [32, 42], bubble: t(E,
+          "If moving right is possible, bump changes by one only when we just came from 'down', then add the already-filled right cell's value.",
+          "오른쪽으로 갈 수 있으면, 바로 전 방향이 '아래' 였을 때만 changes 를 하나 늘려서\n오른쪽 칸(이미 채워짐)의 값을 더해요.") },
+        { hi: [43, 54], bubble: t(E,
+          "Do the same for moving down. The sum of both directions is this cell's answer (total).",
+          "아래로 갈 수 있으면 똑같이 해요. 두 방향의 합이 이 칸의 답(total)이에요.") },
+        { hi: [56, 59], bubble: t(E,
+          "Once filled, print dp[0][0][start(2)][0].",
+          "표를 다 채웠으면 dp[0][0][시작(2)][0] 을 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "dp[r][c][direction][changes]", ko: "그 칸에서 집까지 남은 길의 수", en: "paths remaining from this cell to home" },
+      { v: "direction", ko: "바로 전에 온 방향 (0=오른쪽,1=아래,2=시작)", en: "direction we just arrived from (0=right,1=down,2=start)" },
+      { v: "changes", ko: "지금까지 방향을 바꾼 횟수", en: "direction changes used so far" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What should we output? The number of paths from start to home with at most K direction changes. Read N, K, and the grid for each case.",
+        "무엇을 내놓아야 하나요? 출발점에서 집까지, 방향을 K 번까지만 바꿔 가는 길의 수예요.\n케이스마다 N, K 와 격자를 읽어요.") },
+      { hi: [7, 12], bubble: t(E,
+        "Listing every path would be too slow. So store 'how many paths remain from here' in a table dp[r][c][direction][changes] — we'll fill it backward, so no recursion is needed.",
+        "길을 하나씩 다 세면 너무 느려요. 그래서 '여기서 집까지 남은 길의 수' 를 담을\ndp[r][c][방향][바꾼횟수] 표를 만들어요. 뒤에서부터 채울 거라 재귀가 필요 없어요.") },
+      { hi: [14, 20], bubble: t(E,
+        "Walk cells backward starting from home (bottom-right). Home itself has exactly 1 way (already there), so set it to 1 and move on.",
+        "집(오른아래 끝)에서부터 거꾸로 칸을 훑어요.\n집 칸 자신은 길이 1가지(이미 도착)라 바로 1을 넣고 넘어가요.") },
+      { hi: [21, 29], bubble: t(E,
+        "If moving right is possible, bump changes by one only when we just came from 'down', then add that already-filled right cell's value.",
+        "오른쪽으로 갈 수 있으면, 방향이 바로 전에 '아래'였다면 changes 를 하나 늘려서\n오른쪽 칸의 값을 더해요 — 그 칸은 이미 채워져 있어요.") },
+      { hi: [30, 38], bubble: t(E,
+        "Do the same for moving down. The sum of both directions is this cell's answer.",
+        "아래로 갈 수 있으면 똑같이 해요. 두 방향의 합이 이 칸의 답이에요.") },
+      { hi: [40, 40], bubble: t(E,
+        "Once the table is filled, print dp[0][0][start][0] — the number of paths from the start to home.",
+        "표를 다 채웠으면 dp[0][0][시작][0] 을 출력해요 — 출발점에서 집까지 가는 길의 수예요.") },
+    ],
+  };
+}
+
 export function getWalkHomeSections(E) {
   return [
     {

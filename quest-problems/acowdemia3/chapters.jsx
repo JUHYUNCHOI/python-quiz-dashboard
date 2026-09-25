@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getAcowdemia3Sections } from "./components";
 
 /* ================================================================
    Deep-audit sim: scan every grass cell, count adjacent cows.
@@ -334,13 +333,12 @@ export function makeAcow3Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAcow3Ch2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "A cell with exactly 2 cows gives one pair (count each pair once in a set); a cell with 3+ always has an opposite pair — add one immediately.",
-        "소가 딱 2마리인 풀 칸은 그 한 쌍을 내놓아요.\n같은 쌍이 다른 풀 칸에서 또 나올 수 있으니 set 에 담아 한 번만 세요.\n소가 3마리 이상이면 마주 보는 둘이 꼭 있어서 새 쌍이라 바로 더해요."),
-      sections: getAcowdemia3Sections(E),
+        "The solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

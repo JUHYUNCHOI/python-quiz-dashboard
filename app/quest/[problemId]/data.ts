@@ -94,7 +94,7 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"leaders",emoji:"👑",title:"Leaders",sub:"Jan 2023 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1275"},
   {id:"aircond",emoji:"❄️",title:"Air Cownditioning II",sub:"Jan 2023 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1276"},
   {id:"mooops",emoji:"🐮",title:"Moo Operations",sub:"Jan 2023 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1277"},
-  {id:"cowcollege",emoji:"🎓",title:"Cow College",sub:"Dec 2022 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1251",pythonOnly:true},
+  {id:"cowcollege",emoji:"🎓",title:"Cow College",sub:"Dec 2022 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1251"},
   {id:"feedcows",emoji:"🌾",title:"Feeding the Cows",sub:"Dec 2022 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1252"},
   {id:"reverseeng",emoji:"🔧",title:"Reverse Engineering",sub:"Dec 2022 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1253"},
   {id:"photoshoot",emoji:"📸",title:"Photoshoot",sub:"Open 2022 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1227"},

@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { YearCowProgressiveCode, downloadYearCowPDF, getYearCowSections } from "./components";
+import { YearCowProgressiveCode, downloadYearCowPDF, getYearCowSections, getYearCowWalk } from "./components";
 import { makeYearCowCh1, makeYearCowCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#d97706";
 
@@ -102,6 +103,7 @@ export default function YearCowApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <YearCowProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "yearcow-walk") return <CodeWalk E={E} lang={codeLang} {...getYearCowWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function YearCowApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <YearCowProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "yearcow-walk") return <CodeWalk E={E} lang={codeLang} {...getYearCowWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

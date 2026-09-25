@@ -308,11 +308,10 @@ export function makeLeadersCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
         "Every valid pair always includes the very first cow of some breed.",
         "되는 쌍에는 늘 '자기 품종의 맨 앞 소' 가 한 마리는 끼어 있어요."),
-      sections: getLeadersSections(E),
     },
   ];
 }

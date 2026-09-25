@@ -226,6 +226,68 @@ export function YearCowProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest
+   코드 이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getYearCowWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "year", ko: "소마다 알아낸 연도", en: "each cow's year so far" },
+        { v: "delta", ko: "두 동물 자리 사이 걸음 수", en: "steps between the two animal positions" },
+      ],
+      beats: [
+        { hi: [0, 16], bubble: t(E,
+          "What do we need to output? How many years apart Bessie and Elsie are. So list the 12 zodiac animals with a small idx() helper for their position, read how many statements there are, and start a year map with Bessie at 0.",
+          "무엇을 출력해야 하나요? Bessie 와 Elsie 의 연도 차이예요.\n십이지 동물 12개와 자리를 찾는 idx() 를 준비하고, 진술 개수를 읽은 뒤, Bessie 를 0 으로 하는 연도 map 을 시작해요.") },
+        { hi: [17, 26], bubble: t(E,
+          "Each statement names a new cow, a direction, an animal, and an already-known cow — all on one line. So read the whole line and split it into tokens with a stringstream.",
+          "진술 한 줄마다 새 소 이름, 방향, 동물, 이미 아는 소 이름이 한 줄에 들어 있어요.\n그러니 줄 전체를 읽어서 stringstream 으로 토큰을 나눠요.") },
+        { hi: [27, 34], bubble: t(E,
+          "The tokens always come in the same order, so pull out the four pieces we need, look up the known cow's year, and find both cows' positions in the 12-year cycle.",
+          "토큰은 항상 같은 순서로 오니까 필요한 네 조각을 꺼내고,\n아는 소의 연도를 찾은 뒤, 두 자리(아는 소·목표 동물)를 12년 주기 안에서 구해요.") },
+        { hi: [35, 48], bubble: t(E,
+          "If the direction is 'previous', the known cow is that many steps after the target animal, so subtract the gap (wrapping with %12, using 12 for a full cycle). If it's 'next', add the gap instead.",
+          "방향이 'previous' 면 아는 소가 목표 동물보다 그만큼 뒤에 있다는 뜻이라 차이를 빼요 (12 로 나눈 나머지, 0 이면 12 로 바꿔요).\n'next' 면 반대로 그만큼 더해요.") },
+        { hi: [49, 52], bubble: t(E,
+          "Once every statement is processed, print how many years apart Bessie and Elsie ended up.",
+          "진술을 다 처리했으면, Bessie 와 Elsie 의 연도차를 절댓값으로 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "year", ko: "소마다 알아낸 연도", en: "each cow's year so far" },
+      { v: "diff", ko: "두 동물 자리 사이 걸음 수", en: "steps between the two animal positions" },
+    ],
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "What do we need to output? How many years apart Bessie and Elsie are. So first list the 12 zodiac animals in order — we'll need each one's position in the cycle.",
+        "무엇을 출력해야 하나요? Bessie 와 Elsie 의 연도 차이예요.\n그러려면 먼저 십이지 동물 12개를 순서대로 적어 둬요 — 순서 안에서 각 동물의 자리(0~11)가 필요해요.") },
+      { hi: [5, 7], bubble: t(E,
+        "Read how many statements there are, and keep a dictionary of each cow's year — Bessie's is the reference point, so set it to 0.",
+        "진술이 몇 개인지 읽고, 소마다 연도를 담을 딕셔너리를 만들어요.\nBessie 의 연도가 기준이니 0 으로 시작해요.") },
+      { hi: [9, 15], bubble: t(E,
+        "Each statement names a new cow, a direction (previous/next), an animal, and an already-known cow. So split the line and pull out those four pieces.",
+        "진술 한 줄마다 새 소 이름, 방향(previous/next), 동물, 이미 아는 소 이름이 들어 있어요.\n그러니 줄을 나눠서 이 넷을 꺼내요.") },
+      { hi: [17, 19], bubble: t(E,
+        "We already know the reference cow's year, so look it up and find her position in the 12-year cycle, plus the target animal's position.",
+        "이미 아는 소의 연도를 찾아서\n12년 주기 안 자리(0~11)를 구하고,\n목표 동물의 자리도 구해요.") },
+      { hi: [21, 30], bubble: t(E,
+        "If direction is 'previous', the known cow is that many steps after the target animal, so subtract the gap (wrapping with %12, using 12 instead of 0 for a full cycle). If it's 'next', the known cow is that many steps before it, so add the gap instead.",
+        "direction 이 'previous' 면, 아는 소가 목표 동물보다 그만큼 뒤에 있다는 뜻이라 그 차이를 빼요 (12 로 나눈 나머지, 0 이면 12 로 바꿔요).\n'next' 면 반대로 그만큼 앞에 있다는 뜻이라 차이를 더해요.") },
+      { hi: [32, 32], bubble: t(E,
+        "Once every statement is processed, print how many years apart Bessie and Elsie ended up.",
+        "진술을 다 처리했으면, Bessie 와 Elsie 의 연도차를 절댓값으로 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

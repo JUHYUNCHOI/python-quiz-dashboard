@@ -332,6 +332,69 @@ export function SleepClassProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 원본이다 — 절대 안 바꾸고,
+   그대로 가져와 beats(설명 말풍선)만 덧붙인다. getSleepClassSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. ── */
+export function getSleepClassWalk(E, lang = "py") {
+  const vars = [
+    { v: "total", ko: "전체 시간 합 — 조각 길이 d 는 이 값의 약수여야 해요", en: "total sum — d must divide this" },
+    { v: "best", ko: "지금까지 찾은 가장 적은 합치기 횟수", en: "fewest merges found so far" },
+  ];
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars,
+      beats: [
+        { hi: [0, 18], bubble: t(E,
+          "What do we hand back? For each test case, the fewest merges so every period ends up equal length. Read T, then per case: N periods and their lengths a, plus their total.",
+          "무엇을 내놓아야 하나요? 테스트마다 모든 시간을 같은 길이로 만드는 최소 합치기 횟수예요.\nT 를 읽고, 테스트마다 시간 N 개와 길이 a, 그리고 total(전체 합)을 읽어요.") },
+        { hi: [20, 24], bubble: t(E,
+          "If total is 0, every period is already 0 — no merges needed. Print 0 and move to the next case.",
+          "total 이 0 이면 모든 시간이 이미 0 이라 합칠 필요가 없어요.\n0 을 출력하고 다음 테스트로 넘어가요.") },
+        { hi: [26, 26], bubble: t(E,
+          "Otherwise start best at the worst case — merging everything into one piece (N-1 merges).",
+          "아니면 best 를 최악의 경우로 시작해요 — 전부 하나로 합치는 N-1 번이에요.") },
+        { hi: [27, 42], bubble: t(E,
+          "Try every divisor d of total as the target piece length. Walk the array once, adding a running sum: hit exactly d → close a piece and reset; go past d → this d fails (ok = false), stop early.",
+          "total 의 약수 d 를 조각 길이로 하나씩 시도해요.\n배열을 훑으며 누적합을 더하다가, 딱 d 가 되면 조각을 끊고 리셋해요. 넘치면 이 d 는 실패예요(ok = false), 바로 멈춰요.") },
+        { hi: [43, 46], bubble: t(E,
+          "If we never went over (ok is still true) and nothing's left hanging (curr is back to 0), this d gives a clean partition. Fewer pieces from a bigger d means fewer merges — keep the best.",
+          "한 번도 안 넘쳤고(ok 그대로 true) 남은 조각도 없으면(curr = 0), 이 d 로 딱 나뉘어요.\n조각이 적을수록 합치기가 줄어드니 최솟값을 best 에 남겨요.") },
+        { hi: [48, 51], bubble: t(E,
+          "Print the fewest merges for this case, then move to the next.",
+          "이번 테스트의 최소 합치기 횟수를 출력하고, 다음 테스트로 넘어가요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars,
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we hand back? For each test case, the fewest merges so every period ends up equal length. Read T, then per case: N periods and their lengths a, plus their total.",
+        "무엇을 내놓아야 하나요? 테스트마다 모든 시간을 같은 길이로 만드는 최소 합치기 횟수예요.\nT 를 읽고, 테스트마다 시간 N 개와 길이 a, 그리고 total(전체 합)을 읽어요.") },
+      { hi: [6, 9], bubble: t(E,
+        "If total is 0, every period is already 0 — no merges needed. Print 0 and move to the next case.",
+        "total 이 0 이면 모든 시간이 이미 0 이라 합칠 필요가 없어요.\n0 을 출력하고 다음 테스트로 넘어가요.") },
+      { hi: [11, 11], bubble: t(E,
+        "Otherwise start best at the worst case — merging everything into one piece (N-1 merges).",
+        "아니면 best 를 최악의 경우로 시작해요 — 전부 하나로 합치는 N-1 번이에요.") },
+      { hi: [14, 25], bubble: t(E,
+        "Try every divisor d of total as the target piece length. Walk the array once, adding a running sum: hit exactly d → close a piece and reset; go past d → this d fails, stop early.",
+        "total 의 약수 d 를 조각 길이로 하나씩 시도해요.\n배열을 훑으며 누적합을 더하다가, 딱 d 가 되면 조각을 끊고 리셋해요. 넘치면 이 d 는 실패예요, 바로 멈춰요.") },
+      { hi: [26, 30], bubble: t(E,
+        "If we walked through without ever going over (the loop's else only runs then) and nothing's left hanging (curr is back to 0), this d gives a clean partition. Fewer pieces from a bigger d means fewer merges — keep the best.",
+        "한 번도 안 넘치고 끝까지 다 훑었으면(반복문의 else 는 그때만 실행돼요) 남은 조각도 없을 때(curr = 0), 이 d 로 딱 나뉘어요.\n조각이 적을수록 합치기가 줄어드니 최솟값을 best 에 남겨요.") },
+      { hi: [32, 32], bubble: t(E,
+        "Print the fewest merges for this case, then move to the next.",
+        "이번 테스트의 최소 합치기 횟수를 출력하고, 다음 테스트로 넘어가요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

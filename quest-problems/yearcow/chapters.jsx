@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getYearCowSections, ZodiacCircleSim } from "./components";
+import { getYearCowWalk, ZodiacCircleSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -162,13 +162,12 @@ export function makeYearCowCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeYearCowCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk
     {
-      type: "progressive",
+      type: "yearcow-walk",
       narr: t(E,
         "Track each cow's year-offset from Bessie, building the code piece by piece.",
         "소마다 Bessie 를 0 으로 놓은 연도 차이를 적어 두며 코드를 쌓아요."),
-      sections: getYearCowSections(E),
     },
   ];
 }

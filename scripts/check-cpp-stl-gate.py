@@ -223,6 +223,7 @@ def where_taught(teach):
 _meta_src = rd(os.path.join(ROOT, "lib/quest-meta.ts"))
 _m = re.search(r"export const QUEST_CONCEPT_META[^=]*=\s*\{", _meta_src)
 META = {}
+LANGS = {}   # quest -> supported_languages (파이썬 전용을 걸러내려고)
 if _m:
     _start = _m.end() - 1
     _depth = 0
@@ -239,6 +240,9 @@ if _m:
     for _mm in re.finditer(r'^  ([A-Za-z][\w]*)\s*:\s*\{(.*?)^  \}', _body, re.S | re.M):
         _req = re.search(r'concepts_required:\s*\[([^\]]*)\]', _mm.group(2))
         META[_mm.group(1)] = re.findall(r'"([^"]+)"', _req.group(1)) if _req else None
+        _lang = re.search(r'supported_languages:\s*\[([^\]]*)\]', _mm.group(2))
+        if _lang:
+            LANGS[_mm.group(1)] = re.findall(r'"([^"]+)"', _lang.group(1))
 
 # ── 카탈로그 (섹션까지) ────────────────────────────────────────────────────
 _cat = rd(os.path.join(ROOT, "app/quest/[problemId]/data.ts"))
@@ -265,25 +269,35 @@ SKIP_SECTIONS = {"MCC", "MCO", "LeetCode"}
 
 
 def cpp_text(qdir):
-    """그 quest 의 jsx/tsx **전체**를 읽는다.
+    """그 quest 의 jsx/tsx 전체에서 **학생이 보는 글자만** 남긴다.
 
-    ⚠️ 2026-09-25 **첫 판은 조용히 틀렸다.** 처음엔 `*_CPP` 배열과 `lang === "cpp"`
-      분기 뒤 6000자만 잘라 봤는데, `mooin3` 의 `map<char, vector<int>> posOf;`
-      (`components.jsx:2065`)를 **못 봤다** — 4만 자를 긁어 왔는데 그 줄이 창 밖이었다.
-      cpp-qa 가 손으로 찾은 둘 중 하나를 검사기가 놓친 것이다.
-      *"0건은 결백이 아니다"* 가 이 자리에서 또 맞았다.
+    ⚠️ 2026-09-25 — 이 함수가 **두 번 조용히 틀렸다. 둘 다 밖에서 잡혔다.**
 
-    그래서 **파일 전체**를 본다. 파이썬 코드에 섞여 오탐이 날까 싶지만,
-    위 `CPP_STL` 의 정규식은 전부 **C++ 에만 있는 모양**이다 —
-    `long long` · `llabs(` · `map<K, vector<` · `greater<` · `vector<vector<` ·
-    `.begin()` · `::iterator` · `endl`. 파이썬에는 이런 글자가 없다.
-    `auto` 만 위험한데(`margin: 0 auto`) `auto &` · `for (auto` · `auto x :`
-    처럼 **C++ 문법 모양을 요구**해서 좁혀 놨다.
+    ① 처음엔 `*_CPP` 배열과 `lang === "cpp"` 뒤 6000자만 잘라 봤다가
+       `mooin3` 의 `map<char, vector<int>> posOf;`(`components.jsx:2065`)를 **놓쳤다.**
+       4만 자를 긁어 왔는데 그 줄이 창 밖이었다. → 파일 전체를 보게 바꿨다.
+
+    ② 그랬더니 이번엔 **개발자 주석을 코드로 읽었다.** `livestock` 이 C 유형으로
+       떴는데, 걸린 그 한 줄은 내가 오늘 직접 단 **수정 기록 주석**이었다 —
+       *"`stringstream` 과 `map<string, vector<string>> adj` 인데 🔒 `FULL_CPP` 에
+       둘 다 **0번**이다"*. 즉 **「이건 코드에 없다」고 적어 둔 글**을 「코드에 있다」로
+       읽었다. `livestock` 은 `supported_languages: ["py"]` 라 C++ 이 화면에 뜨지도 않는다.
+       cpp-qa 와 교육 담당이 **각자 따로** 잡았다 — *"C 는 3개가 아니라 2개다."*
+       ⭐ `check-prose-vs-final-code.py` 에는 **같은 날 같은 이유로 주석 제거를 이미
+       넣어 뒀는데** 이 파일에는 안 넣었다. **한 곳을 고치면 형제도 봐라.**
+
+    그래서 이제 **주석(`/* */`·`//`)을 지우고** 본다. 남은 정규식은 전부 C++ 에만
+    있는 모양이라(`long long`·`llabs(`·`map<K, vector<`·`greater<`·`.begin()`·`endl`)
+    파이썬 코드와 섞여도 오탐이 안 난다. `auto` 만 `auto &`·`for (auto` 처럼
+    **C++ 문법 모양을 요구**해서 `margin: 0 auto` 를 피한다.
     """
     chunks = []
     for p in sorted(glob.glob(os.path.join(qdir, "*.jsx"))
                     + glob.glob(os.path.join(qdir, "*.tsx"))):
-        chunks.append(rd(p))
+        src = rd(p)
+        src = re.sub(r"/\*.*?\*/", "", src, flags=re.S)   # 블록 주석
+        src = re.sub(r"^\s*//.*$", "", src, flags=re.M)     # 줄 주석
+        chunks.append(src)
     return "\n".join(chunks)
 
 
@@ -309,6 +323,11 @@ def main():
         if q not in SECTION:
             continue                       # 카탈로그에 없으면 학생이 못 본다
         if SECTION[q] in SKIP_SECTIONS:
+            continue
+        # ⭐ 파이썬 전용 quest 는 C++ 화면이 아예 안 뜬다 — 보지 마라.
+        #   `livestock` 이 `supported_languages: ["py"]` 인데도 C 유형으로 떴다.
+        langs = LANGS.get(q)
+        if langs is not None and "cpp" not in langs:
             continue
         txt = cpp_text(qdir)
         if not txt.strip():

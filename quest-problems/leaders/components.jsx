@@ -145,6 +145,72 @@ export function LeadersProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고
+   beats(설명 말풍선)만 덧붙인다. getLeadersSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getLeadersWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "eG/eH", ko: "맨 처음 G / 맨 처음 H 의 위치", en: "position of the first G / first H" },
+        { v: "lG/lH", ko: "맨 마지막 G / 맨 마지막 H 의 위치", en: "position of the last G / last H" },
+        { v: "arr[i]", ko: "소 i 가 고른 index (0-indexed)", en: "the index cow i chose (0-indexed)" },
+      ],
+      beats: [
+        { hi: [6, 14], bubble: t(E,
+          "What do we hand back? The number of valid (G-leader, H-leader) pairs. Read N, the breed string, and each cow's chosen index — subtracting 1 to make it 0-indexed.",
+          "무엇을 내놓아야 하나요? 되는 (G리더, H리더) 짝의 개수예요.\nN, 품종 문자열, 소마다 고른 index 를 읽어요 — 1 을 빼서 0부터 세도록 맞춰요.") },
+        { hi: [16, 35], bubble: t(E,
+          "Scan right to left: every time we see G or H, overwrite eG/eH — so after the loop it holds the smallest index, the first G and first H. Scan left to right the same way to get lG/lH, the last G and last H.",
+          "오른쪽에서 왼쪽으로 훑으며 G·H 를 볼 때마다 eG·eH 를 덮어써요 — 그래서 반복이 끝나면 가장 작은 자리, 즉 맨 처음 G 와 맨 처음 H 가 남아요.\n똑같은 방식으로 왼쪽에서 오른쪽으로 훑으면 lG·lH, 즉 맨 마지막 G 와 맨 마지막 H 를 얻어요.") },
+        { hi: [37, 47], bubble: t(E,
+          "Case 1: the first G works as a leader for ALL of breed G only if its own chosen index reaches the last G. If so, every H cow before it whose chosen index reaches eG is a valid partner — count them.",
+          "경우 1: 맨 처음 G 가 G 전체의 리더가 되려면, 자기 chosen index 가 맨 마지막 G 까지 닿아야 해요.\n그러면 그 앞의 H 소 중 chosen index 가 eG 까지 닿는 소는 전부 짝이 될 수 있어요 — 그 수를 세요.") },
+        { hi: [48, 57], bubble: t(E,
+          "Case 2: the mirror image — check if the first H covers all of breed H, then count G cows before it that reach eH.",
+          "경우 2: 거울처럼 반대예요 — 맨 처음 H 가 H 전체를 덮는지 확인하고, 그 앞 G 소 중 eH 까지 닿는 소를 세요.") },
+        { hi: [58, 64], bubble: t(E,
+          "Case 3: pair the first G directly with the first H. Each must either cover its whole breed, or at least reach the other one's position. If both hold, that's one more valid pair.",
+          "경우 3: 맨 처음 G 와 맨 처음 H 를 바로 짝지어요.\n둘 다 자기 품종 전체를 덮거나, 적어도 상대방 자리까지는 닿아야 해요.\n둘 다 만족하면 짝이 하나 더 생겨요.") },
+        { hi: [65, 65], bubble: t(E,
+          "Print the total count.",
+          "총 개수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "eG/eH", ko: "맨 처음 G / 맨 처음 H 의 위치", en: "position of the first G / first H" },
+      { v: "lG/lH", ko: "맨 마지막 G / 맨 마지막 H 의 위치", en: "position of the last G / last H" },
+      { v: "arr[i]", ko: "소 i 가 고른 index (0-indexed)", en: "the index cow i chose (0-indexed)" },
+    ],
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "What do we hand back? The number of valid (G-leader, H-leader) pairs. Read N cows, their breed string, and each cow's chosen index — shift it to 0-indexed.",
+        "무엇을 내놓아야 하나요? 되는 (G리더, H리더) 짝의 개수예요.\n소 N 마리의 품종과, 소마다 고른 index(arr) 를 읽어요 — 0부터 세도록 맞춰요.") },
+      { hi: [5, 15], bubble: t(E,
+        "Scan right to left: every time we see G or H, overwrite eG/eH — so after the loop it holds the smallest index, the first G and first H. Scan left to right the same way to get lG/lH, the last G and last H.",
+        "오른쪽에서 왼쪽으로 훑으며 G·H 를 볼 때마다 eG·eH 를 덮어써요 — 그래서 반복이 끝나면 가장 작은 자리, 즉 맨 처음 G 와 맨 처음 H 가 남아요.\n똑같은 방식으로 왼쪽에서 오른쪽으로 훑으면 lG·lH, 즉 맨 마지막 G 와 맨 마지막 H 를 얻어요.") },
+      { hi: [17, 23], bubble: t(E,
+        "Case 1: the first G works as a leader for ALL of breed G only if its own chosen index reaches the last G. If so, every H cow before it whose chosen index reaches eG is a valid partner — count them.",
+        "경우 1: 맨 처음 G 가 G 전체의 리더가 되려면, 자기 chosen index 가 맨 마지막 G 까지 닿아야 해요.\n그러면 그 앞의 H 소 중 chosen index 가 eG 까지 닿는 소는 전부 짝이 될 수 있어요 — 그 수를 세요.") },
+      { hi: [24, 29], bubble: t(E,
+        "Case 2: the mirror image — check if the first H covers all of breed H, then count G cows before it that reach eH.",
+        "경우 2: 거울처럼 반대예요 — 맨 처음 H 가 H 전체를 덮는지 확인하고, 그 앞 G 소 중 eH 까지 닿는 소를 세요.") },
+      { hi: [30, 33], bubble: t(E,
+        "Case 3: pair the first G directly with the first H. Each must either cover its whole breed, or at least reach the other one's position. If both hold, that's one more valid pair.",
+        "경우 3: 맨 처음 G 와 맨 처음 H 를 바로 짝지어요.\n둘 다 자기 품종 전체를 덮거나, 적어도 상대방 자리까지는 닿아야 해요.\n둘 다 만족하면 짝이 하나 더 생겨요.") },
+      { hi: [34, 34], bubble: t(E,
+        "Print the total count.",
+        "총 개수를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

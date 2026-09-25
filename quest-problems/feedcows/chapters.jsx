@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getFeedCowsSections, FeedCowsNumberLineViz } from "./components";
+import { FeedCowsNumberLineViz } from "./components";
 
 /* ===============================================================
    Chapter 1: Problem (3 steps)
@@ -155,17 +155,16 @@ export function makeFeedCh1(E) {
 
 
 /* ===============================================================
-   Chapter 2: Code (2 steps)
+   Chapter 2: Code (1 step)
    =============================================================== */
 export function makeFeedCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — full solution, explained line by line
     {
-      type: "progressive",
+      type: "feedcows-walk",
       narr: t(E,
         "When a cow isn't covered yet, place a new patch as far right as she can reach.",
         "못 먹은 소가 나오면 그 소가 닿는 가장 오른쪽에 패치를 놓아요."),
-      sections: getFeedCowsSections(E),
     },
   ];
 }

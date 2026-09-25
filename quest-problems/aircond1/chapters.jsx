@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getAirCond1Sections } from "./components";
 
 /* ================================================================
    Bilingual sim — Stroke Counter
@@ -271,13 +270,12 @@ export function makeAirCond1Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAirCond1Ch2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Build the solution one piece at a time.",
-        "코드를 한 단계씩 만들어봐요."),
-      sections: getAirCond1Sections(E),
+        "The solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

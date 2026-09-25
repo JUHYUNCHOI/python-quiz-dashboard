@@ -266,6 +266,62 @@ export function ComfyCowsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest
+   코드 이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (이 파일 헤더가 USACO_VERIFIED 라 그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getComfyCowsWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "cows", ko: "소가 놓인 모든 자리", en: "every cell with a cow" },
+        { v: "comfortable", ko: "이웃이 정확히 3인 자리들", en: "cells with exactly 3 neighbors" },
+      ],
+      beats: [
+        { hi: [0, 8], bubble: t(E,
+          "What do we print after each cow is placed? The running count of comfortable cows. So start with two empty sets — all cows, and comfortable ones — plus the 4 neighbor directions as arrays.",
+          "매번 무엇을 출력해야 하나요? 지금까지 편안한 소의 수예요.\n그러니 소 집합, 편안한 소 집합을 빈 상태로 시작하고, 이웃 4방향을 배열로 준비해요.") },
+        { hi: [10, 18], bubble: t(E,
+          "A cow is comfortable only if exactly 3 of her 4 neighbor cells have a cow. So this function counts how many of those 4 cells are occupied.",
+          "이웃 4칸 중 정확히 3칸에 소가 있어야 편안해요.\n그래서 이 함수는 그 4칸 중 몇 칸에 소가 있는지 세요.") },
+        { hi: [20, 26], bubble: t(E,
+          "Whenever a cell's neighbor count changes, its comfort status might flip. So this function re-checks one cell: insert it into `comfortable` if the count is 3, otherwise erase it.",
+          "어떤 칸의 이웃 수가 바뀌면 편안한지도 바뀔 수 있어요.\n그래서 이 함수는 칸 하나를 다시 확인해서, 이웃이 3개면 comfortable 에 넣고 아니면 지워요.") },
+        { hi: [28, 43], bubble: t(E,
+          "Re-checking every cow each time is slow, but placing one new cow can only change comfort for HER and her 4 neighbors — nobody else. So after inserting the cow, updateComfort just those 5 spots, then print the current comfortable count right away.",
+          "매번 전체를 다시 확인하면 느려요.\n그런데 새 소 한 마리가 놓여도 편안함이 바뀔 수 있는 건 그 소와 이웃 4칸뿐이에요.\n그래서 소를 넣은 뒤 이 5칸만 updateComfort 하고, comfortable 크기를 바로 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "cows", ko: "소가 놓인 모든 자리", en: "every cell with a cow" },
+      { v: "comfortable", ko: "이웃이 정확히 3인 자리들", en: "cells with exactly 3 neighbors" },
+    ],
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "What do we print after each cow is placed? The running count of comfortable cows. So start with an empty set of cows, an empty set of comfortable ones, and the 4 neighbor directions.",
+        "매번 무엇을 출력해야 하나요? 지금까지 편안한 소의 수예요.\n그러니 소 집합, 편안한 소 집합, 이웃 4방향을 빈 상태로 시작해요.") },
+      { hi: [5, 6], bubble: t(E,
+        "A cow is comfortable only if exactly 3 of her 4 neighbor cells have a cow. So this helper counts how many of those 4 cells are occupied.",
+        "이웃 4칸 중 정확히 3칸에 소가 있어야 편안해요.\n그래서 이 함수는 그 4칸 중 몇 칸에 소가 있는지 세요.") },
+      { hi: [8, 13], bubble: t(E,
+        "Whenever a cell's neighbor count changes, its comfort status might flip. So this helper re-checks one cell: add it to `comfortable` if the count is 3, otherwise remove it.",
+        "어떤 칸의 이웃 수가 바뀌면 편안한지도 바뀔 수 있어요.\n그래서 이 함수는 칸 하나를 다시 확인해서, 이웃이 3개면 comfortable 에 넣고 아니면 빼요.") },
+      { hi: [15, 25], bubble: t(E,
+        "Re-checking every cow each time is slow, but placing one new cow can only change comfort for HER and her 4 neighbors — nobody else. So after adding the cow, update_comfort just those 5 spots, then save the current comfortable count.",
+        "매번 전체를 다시 확인하면 느려요.\n그런데 새 소 한 마리가 놓여도 편안함이 바뀔 수 있는 건 그 소와 이웃 4칸뿐이에요.\n그래서 소를 놓은 뒤 이 5칸만 update_comfort 하고, 그때그때 comfortable 개수를 저장해요.") },
+      { hi: [27, 28], bubble: t(E,
+        "Once every cow is placed, print the saved count after each step, in order.",
+        "소를 다 놓았으면, 저장해 둔 개수를 순서대로 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getStallingSections, StallingAssignmentSim } from "./components";
+import { getStallingWalk, StallingAssignmentSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -155,13 +155,12 @@ export function makeStallingCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeStallingCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk
     {
-      type: "progressive",
+      type: "stalling-walk",
       narr: t(E,
         "Sort cows and stalls, then place the tallest cow first.",
         "소와 축사를 작은 것부터 줄 세워요.\n키가 제일 큰 소부터 넣는데, 제한이 자기 키 이상인 축사면 다 들어갈 수 있어요.\n그다음 소는 키가 더 작아서 들어갈 수 있는 축사가 더 많지만\n큰 소가 이미 쓴 축사는 빼야 해요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
-      sections: getStallingSections(E),
     },
   ];
 }

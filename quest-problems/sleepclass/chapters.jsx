@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getSleepClassSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -160,13 +159,12 @@ export function makeSleepCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSleepCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — full solution, explained line by line
     {
-      type: "progressive",
+      type: "sleepclass-walk",
       narr: t(E,
         "The final equal value must divide S — for each divisor d, greedily segment the array and keep the smallest 'N − segments'.",
         "마지막에 남는 길이는 총합 S 의 약수예요."),
-      sections: getSleepClassSections(E),
     },
   ];
 }

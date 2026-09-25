@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getWalkHomeSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -161,13 +160,12 @@ export function makeWalkHomeCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeWalkHomeCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "DP: dp[r][c][last_dir][changes] counts paths reaching (r,c); move right/down, +1 changes on a direction flip, prune when changes > K.",
-        "(r, c) 까지 오는 길의 수를 dp 로 쌓아 올려요."),
-      sections: getWalkHomeSections(E),
+        "The solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

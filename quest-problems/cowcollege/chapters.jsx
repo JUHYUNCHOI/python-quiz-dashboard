@@ -25,79 +25,6 @@ export const SOLUTION_CODE = [
 ];
 
 
-/* Python syntax highlighter (shared across snippets) */
-const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
-const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);
-
-function pyHighlight(line, baseColor) {
-  const tokens = [];
-  let i = 0;
-  while (i < line.length) {
-    if (line[i] === "'" || line[i] === '"') {
-      const q = line[i];
-      let j = i + 1;
-      while (j < line.length && line[j] !== q) { if (line[j] === "\\") j++; j++; }
-      tokens.push({ text: line.slice(i, j + 1), color: "#a5d6a7" });
-      i = j + 1;
-    } else if (line[i] === "#") {
-      tokens.push({ text: line.slice(i), color: "#6b7280" });
-      i = line.length;
-    } else if (/[0-9]/.test(line[i]) && (i === 0 || /[\s(,=+\-*/<>[\]:]/.test(line[i - 1]))) {
-      let j = i;
-      while (j < line.length && /[0-9.]/.test(line[j])) j++;
-      tokens.push({ text: line.slice(i, j), color: "#f9a825" });
-      i = j;
-    } else if (/[a-zA-Z_]/.test(line[i])) {
-      let j = i;
-      while (j < line.length && /[a-zA-Z_0-9]/.test(line[j])) j++;
-      const word = line.slice(i, j);
-      if (PY_KW.has(word)) tokens.push({ text: word, color: "#c792ea" });
-      else if (PY_BUILTIN.has(word)) tokens.push({ text: word, color: "#82aaff" });
-      else tokens.push({ text: word, color: baseColor });
-      i = j;
-    } else if ("=<>!+-*/%&|^~".includes(line[i])) {
-      let j = i;
-      while (j < line.length && "=<>!+-*/%&|^~".includes(line[j])) j++;
-      tokens.push({ text: line.slice(i, j), color: "#89ddff" });
-      i = j;
-    } else {
-      tokens.push({ text: line[i], color: baseColor });
-      i++;
-    }
-  }
-  return tokens;
-}
-
-/* Helper: code snippet box (token-highlighted Python) */
-const CodeSnippet = ({ lines, highlight: hl }) => (
-  <div style={{
-    background: "#1e293b", borderRadius: 10, padding: "10px 8px",
-    overflowX: "auto", fontSize: 12, lineHeight: 1.8,
-    fontFamily: "'JetBrains Mono', monospace", marginTop: 8,
-  }}>
-    {lines.map((l, i) => {
-      const isHl = hl && hl.includes(i);
-      const baseColor = isHl ? "#fcd34d" : "#e2e8f0";
-      const tokens = pyHighlight(l, baseColor);
-      return (
-        <div key={i} style={{
-          display: "flex", minHeight: 20,
-          background: isHl ? "rgba(217,119,6,.15)" : "transparent",
-          borderRadius: 4, padding: "0 4px",
-        }}>
-          <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 10, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
-          <span style={{ whiteSpace: "pre", wordBreak: "break-all" }}>
-            {tokens.map((tk, j) => (
-              <span key={j} style={{ color: tk.color }}>{tk.text}</span>
-            ))}
-          </span>
-        </div>
-      );
-    })}
-  </div>
-);
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (6 steps)
    ═══════════════════════════════════════════════════════════════ */
@@ -530,141 +457,18 @@ export function makeCowCollegeCh2(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 3: ⚡ 코드 빌드 (5 steps)
+   Chapter 3: ⚡ 코드 빌드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowCollegeCh3(E, lang = "py") {
   return [
-    // 3-1: Step 1 — Read input
+    // 3-1: CodeWalk — full solution, explained line by line
     {
-      type: "reveal",
+      type: "cowcollege-walk",
       narr: t(E,
-        "The answer is the max revenue and its tuition.\nFirst read the values.", "답은 최고 수입과 그때 등록금이에요.\n먼저 값부터 읽어요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
-            {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
-          </div>
-          <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
-            {t(E,
-              "First line: N (number of cows). Second line: N max tuitions.",
-              "첫 줄에는 소의 수 N 이 있고, 둘째 줄에는 최대 등록금 N 개가 있어요.")}
-          </div>
-          <CodeSnippet
-            lines={[
-              "N = int(input())",
-              "c = list(map(int, input().split()))",
-            ]}
-            highlight={[0, 1]}
-          />
-          <div style={{
-            marginTop: 10, background: "#fffbeb", borderRadius: 8, padding: 8,
-            border: "1.5px solid #fcd34d", fontSize: 12, color: C.text,
-            fontFamily: "'JetBrains Mono', monospace",
-          }}>
-            {t(E, "Example: N=4, c=[6, 1, 6, 4]", "예시: N=4, c=[6, 1, 6, 4]")}
-          </div>
-        </div>),
+        "The answer is the max revenue and its tuition. Sort first, then sweep: revenue = c[i] x (N-i) at each i, track the best.",
+        "답은 최고 수입과 그때 등록금이에요.\n정렬한 뒤 훑어요 — 수입 = c[i] x (N-i) 를 구해 최댓값을 기억해요."),
     },
-    // 3-2: Step 2 — Sort
-    {
-      type: "reveal",
-      narr: t(E,
-        "How fast can we count how many cows afford each price?", "가격마다 낼 수 있는 소 수를 어떻게 빠르게 셀까요?"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
-            {t(E, "Step 2: Sort the array", "2단계: 배열 정렬")}
-          </div>
-          <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
-            {t(E,
-              "Checking every cow for every price is slow — O(N^2).\nSorting fixes that: cows that can pay c[i] all sit after index i.",
-              "후보마다 모든 소를 다시 세면 느려요 (O(N²)).\n정렬해두면 c[i] 를 낼 수 있는 소가 i 번 뒤에 모여요.")}
-          </div>
-          <CodeSnippet
-            lines={[
-              "N = int(input())",
-              "c = list(map(int, input().split()))",
-              "",
-              "c.sort()",
-            ]}
-            highlight={[3]}
-          />
-          {/* Before/After visual */}
-          <div style={{ marginTop: 10, display: "flex", gap: 12, justifyContent: "center", alignItems: "center" }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 10, fontWeight: 600, color: C.dim, marginBottom: 4 }}>
-                {t(E, "Before", "정렬 전")}
-              </div>
-              <div style={{ display: "flex", gap: 3 }}>
-                {[6, 1, 6, 4].map((v, i) => (
-                  <div key={i} style={{
-                    width: 30, height: 30, borderRadius: 6, display: "flex",
-                    alignItems: "center", justifyContent: "center",
-                    background: C.noBg, border: `1px solid ${C.noBd}`,
-                    fontSize: 13, fontWeight: 700, color: C.no,
-                    fontFamily: "'JetBrains Mono', monospace",
-                  }}>{v}</div>
-                ))}
-              </div>
-            </div>
-            <span style={{ fontSize: 20, color: "#d97706" }}>→</span>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 10, fontWeight: 600, color: C.dim, marginBottom: 4 }}>
-                {t(E, "After", "정렬 후")}
-              </div>
-              <div style={{ display: "flex", gap: 3 }}>
-                {[1, 4, 6, 6].map((v, i) => (
-                  <div key={i} style={{
-                    width: 30, height: 30, borderRadius: 6, display: "flex",
-                    alignItems: "center", justifyContent: "center",
-                    background: C.okBg, border: `1px solid ${C.okBd}`,
-                    fontSize: 13, fontWeight: 700, color: C.ok,
-                    fontFamily: "'JetBrains Mono', monospace",
-                  }}>{v}</div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>),
-    },
-    // 3-3: Step 3 — Sweep loop
-    {
-      type: "reveal",
-      narr: t(E,
-        "So sweep the sorted array:\nrevenue = c[i] x (N-i) at each i, track the best.", "그래서 정렬된 배열을 훑어요.\n수입 = c[i] x (N-i) 를 구해 최댓값을 기억해요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
-            {t(E, "Step 3: Sweep and track maximum", "3단계: 훑으며 가장 큰 값 찾기")}
-          </div>
-          <CodeSnippet
-            lines={[
-              "N = int(input())",
-              "c = list(map(int, input().split()))",
-              "",
-              "c.sort()",
-              "",
-              "best_rev = 0",
-              "best_tuition = c[0]",
-              "",
-              "for i in range(N):",
-              "    tuition = c[i]",
-              "    cows_paying = N - i",
-              "    revenue = tuition * cows_paying",
-              "    if revenue > best_rev:",
-              "        best_rev = revenue",
-              "        best_tuition = tuition",
-            ]}
-            highlight={[5, 6, 8, 9, 10, 11, 12, 13, 14]}
-          />
-          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E,
-              "We track both the best revenue AND the corresponding tuition price, since the problem asks for both.",
-              "문제가 둘 다 물어보니까 최고 수입과 해당 등록금을 모두 추적해요.")}
-          </div>
-        </div>),
-    },
-    // 3-4: Quiz — why N-i?
+    // 3-2: Quiz — why N-i?
     {
       type: "quiz",
       narr: t(E,
@@ -681,30 +485,6 @@ export function makeCowCollegeCh3(E, lang = "py") {
       explain: t(E,
         "Correct! Since the array is sorted in ascending order, all elements from index i to N-1 are >= c[i]. So N-i cows can afford tuition c[i].",
         "정답이에요! 배열이 오름차순이라 i 번 자리부터 끝까지\n모든 값이 c[i] 보다 크거나 같아요.\n그래서 N-i 마리가 등록금 c[i] 를 낼 수 있어요."),
-    },
-    // 3-5: Step 4 — Print + full code
-    {
-      type: "reveal",
-      narr: t(E,
-        "Last step: print the best revenue and the tuition price. That's the complete solution!", "마지막으로 가장 큰 수입과 그때의 등록금을 출력해요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
-            {t(E, "Step 4: Print the answer!", "4단계: 답 출력!")}
-          </div>
-          <CodeSnippet
-            lines={SOLUTION_CODE}
-            highlight={[22]}
-          />
-          <div style={{
-            marginTop: 10, background: C.okBg, borderRadius: 10,
-            padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
-          }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
-              {t(E, "Complete code! Sort + sweep in O(N log N)!", "전체 코드 완성! 정렬하고 훑기로 O(N log N) 이에요!")}
-            </div>
-          </div>
-        </div>),
     },
   ];
 }

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getAbcsSections, AbcsSumExplorer } from "./components";
+import { getAbcsWalk, AbcsSumExplorer } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -166,13 +166,12 @@ export function makeAbcsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAbcsCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk
     {
-      type: "progressive",
+      type: "abcs-walk",
       narr: t(E,
-        "Sort the 7 numbers, then read A, B, C off known positions of the sorted list. Sections build it one piece at a time.",
+        "Sort the 7 numbers, then read A, B, C off known positions of the sorted list.",
         "7개 숫자를 정렬하면\nA, B, C 가 정해진 자리에서 바로 읽혀요."),
-      sections: getAbcsSections(E),
     },
   ];
 }

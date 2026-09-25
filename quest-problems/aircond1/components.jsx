@@ -72,6 +72,65 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고,
+   beats(설명 말풍선)만 덧붙인다. getAirCond1Sections() 는 PDF 다운로드가 계속 쓰므로
+   그대로 둔다. ── */
+export function getAirCond1Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "llabs_", ko: "직접 만든 절댓값 함수", en: "hand-written absolute-value helper" },
+        { v: "total", ko: "이웃 칸 차이의 합", en: "sum of neighbor differences" },
+        { v: "prev", ko: "바로 앞 칸의 d 값 (양끝은 0)", en: "the previous cell's d value (0 at both ends)" },
+      ],
+      beats: [
+        { hi: [0, 9], bubble: t(E,
+          "First, build a small helper llabs_ — it flips the sign for negatives to return the absolute value. It's hand-written instead of std::llabs, so the code itself shows exactly what it does.",
+          "먼저 llabs_ 라는 작은 도우미를 직접 만들어요 — 음수면 부호를 뒤집어 절댓값을 돌려줘요.\nstd::llabs 대신 이렇게 직접 짜서, 뭘 하는 함수인지 코드만 보고 알 수 있게 했어요.") },
+        { hi: [11, 20], bubble: t(E,
+          "Read N, then fill pref (target temps) and cur (current temps).",
+          "N 을 읽고, 목표 온도(pref) 와 현재 온도(cur) 를 채워요.") },
+        { hi: [22, 26], bubble: t(E,
+          "A command shifts a whole range, so we can't count stall by stall. Set up total, and prev (starting at 0) to act as the padding.",
+          "명령 하나가 구간 전체를 +1/-1 하니까 칸마다 따로 셀 수 없어요.\n이웃 차이를 더할 준비로 total 과, 양 끝 패딩 역할을 할 prev(처음엔 0)를 둬요.") },
+        { hi: [27, 31], bubble: t(E,
+          "For each stall, compute cur_d = target − current, add |cur_d − prev| to total, then update prev to cur_d.",
+          "칸마다 cur_d = 목표 − 현재 를 구하고, 바로 앞 값(prev)과의 차이(절댓값)를 total 에 더해요.\n그리고 prev 를 지금 값으로 바꿔 둬요.") },
+        { hi: [32, 35], bubble: t(E,
+          "Finally, add the difference against the trailing 0 pad too — this catches cases where d ends negative. Then print total divided by 2.",
+          "마지막으로 오른쪽 끝 패딩(0)과의 차이도 한 번 더해요 — d 가 음수로 끝나는 경우를 놓치지 않으려고요.\n그리고 total 을 2로 나눠 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "d", ko: "칸마다 목표 − 현재", en: "target minus current, per stall" },
+      { v: "ext", ko: "d 양 끝에 0 을 붙인 배열", en: "d padded with 0 on both ends" },
+      { v: "total", ko: "이웃 칸 차이의 합", en: "sum of neighbor differences" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What should we output? The fewest AC commands to bring every stall to its target. Read N, preferred, and current.",
+        "무엇을 내놓아야 하나요? 모든 축사를 목표 온도로 맞추는 최소 명령 횟수예요.\nN, 목표 온도(preferred), 현재 온도(current)를 읽어요.") },
+      { hi: [4, 5], bubble: t(E,
+        "A command shifts a whole range by +1/-1, so we can't count stall by stall. Instead compute d[i] = target − current — how much each stall must change.",
+        "명령 하나는 구간 전체를 +1/-1 하니까, 칸마다 따로 셀 수 없어요.\n대신 d[i] = 목표 − 현재, 즉 각 칸이 얼마나 바뀌어야 하는지를 구해요.") },
+      { hi: [7, 10], bubble: t(E,
+        "We'll compare d to its neighbors, so pad both ends with 0 to make ext.",
+        "d 가 이웃과 얼마나 다른지 볼 거라, 양 끝에 0 을 붙여서 ext 를 만들어요.") },
+      { hi: [11, 13], bubble: t(E,
+        "Sum the absolute difference between each pair of neighbors in ext — that's total.",
+        "ext 에서 이웃한 값의 차이(절댓값)를 다 더해요 — 그게 total 이에요.") },
+      { hi: [15, 15], bubble: t(E,
+        "Print total divided by 2 — since both ends are 0, every rise in d is matched by a fall, so each command was counted twice.",
+        "total 을 2로 나눠 출력해요 — 양 끝이 0 이라 오른 만큼 내린 곳도 있어서, 명령을 두 번씩 센 셈이거든요.") },
+    ],
+  };
+}
+
 export function getAirCond1Sections(E) {
   return [
     {

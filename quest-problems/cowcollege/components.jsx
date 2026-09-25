@@ -246,6 +246,63 @@ export function getCowCollegeSections(E) {
   ];
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 원본이다 — 절대 안 바꾸고,
+   그대로 가져와 beats(설명 말풍선)만 덧붙인다. getCowCollegeSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. ── */
+export function getCowCollegeWalk(E, lang = "py") {
+  const vars = [
+    { v: "c", ko: "소마다 낼 수 있는 최대 등록금", en: "each cow's max tuition" },
+    { v: "best_rev/bestRev", ko: "지금까지 찾은 가장 큰 수입", en: "biggest revenue found so far" },
+  ];
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars,
+      beats: [
+        { hi: [0, 11], bubble: t(E,
+          "What do we hand back? The max revenue and the tuition price that makes it. Read N and each cow's max tuition into c — long long, since revenue (price × cows) can get big.",
+          "무엇을 내놓아야 하나요? 최대 수입과 그 수입을 만드는 등록금이에요.\nN 과 각 소의 최대 등록금 c 를 읽어요 — 수입(가격 × 소 수)이 커질 수 있어서 long long 을 써요.") },
+        { hi: [12, 12], bubble: t(E,
+          "Checking every price against every cow one by one would mean N candidates × N cows — way too slow once N is big. Sorting fixes it instantly: once sorted, everyone who can pay c[i] sits at index i or later — that's already N-i cows, no recounting needed.",
+          "가격 후보 N 개 × 소 N 마리를 매번 다시 세면 너무 느려요.\n정렬해두면 c[i] 를 낼 수 있는 소가 i 번 자리부터 끝까지 모여요 — 그게 바로 N-i 마리라, 다시 셀 필요가 없어요.") },
+        { hi: [13, 14], bubble: t(E,
+          "Start tracking the best revenue (0) and the tuition that made it — the cheapest price c[0] always works, since every cow can afford it.",
+          "지금까지 가장 큰 수입(0)과 그 등록금을 기억할 자리를 만들어요 — 가장 싼 가격 c[0] 은 모든 소가 낼 수 있어서 늘 성립해요.") },
+        { hi: [15, 21], bubble: t(E,
+          "Sweep every index i: N-i cows can afford tuition c[i] (the array is sorted, so everything from i onward is ≥ c[i]). Multiply for this price's revenue, and keep it if it beats the best so far.",
+          "자리 i 마다 N-i 마리가 등록금 c[i] 를 낼 수 있어요 (정렬돼 있어서 i 번부터 끝까지 전부 c[i] 이상이에요).\n곱해서 이 가격의 수입을 구하고, 지금까지보다 크면 최고 기록으로 남겨요.") },
+        { hi: [22, 24], bubble: t(E,
+          "Print the best revenue and the tuition price that made it.",
+          "가장 큰 수입과 그 등록금을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars,
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we hand back? The max revenue and the tuition price that makes it. Read N and each cow's max tuition into c.",
+        "무엇을 내놓아야 하나요? 최대 수입과 그 수입을 만드는 등록금이에요.\nN 과 각 소의 최대 등록금 c 를 읽어요.") },
+      { hi: [3, 3], bubble: t(E,
+        "Checking every price against every cow one by one would mean N candidates × N cows — way too slow once N is big. Sorting fixes it instantly: once sorted, everyone who can pay c[i] sits at index i or later — that's already N-i cows, no recounting needed.",
+        "가격 후보 N 개 × 소 N 마리를 매번 다시 세면 너무 느려요.\n정렬해두면 c[i] 를 낼 수 있는 소가 i 번 자리부터 끝까지 모여요 — 그게 바로 N-i 마리라, 다시 셀 필요가 없어요.") },
+      { hi: [5, 6], bubble: t(E,
+        "Start tracking the best revenue (0) and the tuition that made it — the cheapest price c[0] always works, since every cow can afford it.",
+        "지금까지 가장 큰 수입(0)과 그 등록금을 기억할 자리를 만들어요 — 가장 싼 가격 c[0] 은 모든 소가 낼 수 있어서 늘 성립해요.") },
+      { hi: [8, 14], bubble: t(E,
+        "Sweep every index i: N-i cows can afford tuition c[i] (the array is sorted, so everything from i onward is ≥ c[i]). Multiply for this price's revenue, and keep it if it beats the best so far.",
+        "자리 i 마다 N-i 마리가 등록금 c[i] 를 낼 수 있어요 (정렬돼 있어서 i 번부터 끝까지 전부 c[i] 이상이에요).\n곱해서 이 가격의 수입을 구하고, 지금까지보다 크면 최고 기록으로 남겨요.") },
+      { hi: [16, 16], bubble: t(E,
+        "Print the best revenue and the tuition price that made it.",
+        "가장 큰 수입과 그 등록금을 출력해요.") },
+    ],
+  };
+}
+
 export function CowCollegeProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }

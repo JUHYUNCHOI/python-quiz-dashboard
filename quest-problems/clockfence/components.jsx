@@ -296,6 +296,59 @@ export function ClockFenceProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest
+   코드 이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getClockFenceWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "diff", ko: "(다음 방향 − 지금 방향) mod 4", en: "(next direction − current) mod 4" },
+        { v: "rights/lefts", ko: "오른쪽/왼쪽으로 꺾은 횟수", en: "count of right/left turns" },
+      ],
+      beats: [
+        { hi: [0, 10], bubble: t(E,
+          "What do we print? Whether the fence loop turns clockwise or counterclockwise. So read the direction string, give each letter a number 0-3 (N,E,S,W), and start both turn counters at 0.",
+          "무엇을 출력해야 하나요? 울타리가 시계 방향인지 반시계 방향인지예요.\n방향 문자열을 읽고, 시계 방향 순서대로 N·E·S·W 에 0~3 번을 매긴 뒤, 두 카운터를 0 으로 시작해요.") },
+        { hi: [11, 20], bubble: t(E,
+          "At each corner, compare this direction to the next one (wrapping around to the start). A difference of 1 means a right turn, 3 means a left turn — 2 is a U-turn and 0 is straight, neither of which we need to count.",
+          "모퉁이마다 지금 방향과 다음 방향을 비교해요 (끝에서는 처음으로 돌아가요).\n차이가 1 이면 오른쪽, 3 이면 왼쪽으로 꺾은 거예요 — 2 는 U턴, 0 은 직진이라 세지 않아요.") },
+        { hi: [21, 27], bubble: t(E,
+          "One corner alone can't tell you the loop's overall direction, but going all the way around, right and left turns can't tie. So whichever count is bigger decides CW or CCW.",
+          "모퉁이 하나만으로는 전체 방향을 알 수 없지만, 한 바퀴를 다 돌면 오른쪽과 왼쪽 횟수가 같을 수 없어요.\n그래서 더 많은 쪽으로 CW 나 CCW 를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "diff", ko: "(다음 방향 − 지금 방향) mod 4", en: "(next direction − current) mod 4" },
+      { v: "right_turns/left_turns", ko: "오른쪽/왼쪽으로 꺾은 횟수", en: "count of right/left turns" },
+    ],
+    beats: [
+      { hi: [0, 0], bubble: t(E,
+        "What do we print? Whether the fence loop turns clockwise or counterclockwise. So first read the string of directions.",
+        "무엇을 출력해야 하나요? 울타리가 시계 방향인지 반시계 방향인지예요.\n그러니 먼저 방향이 적힌 문자열을 읽어요.") },
+      { hi: [2, 3], bubble: t(E,
+        "To compare directions numerically, give each letter a number 0-3 going clockwise: N, E, S, W.",
+        "방향을 숫자로 비교하려고, 시계 방향 순서(N, E, S, W)대로 0~3 번을 매겨요.") },
+      { hi: [5, 6], bubble: t(E,
+        "We'll tally how many corners turn right versus left, so start both counters at 0.",
+        "모퉁이마다 오른쪽으로 꺾었는지 왼쪽으로 꺾었는지 셀 거라, 두 값을 0 으로 시작해요.") },
+      { hi: [8, 16], bubble: t(E,
+        "At each corner, compare this direction to the next one (wrapping around to the start). A difference of 1 means a right turn, 3 means a left turn — 2 is a U-turn and 0 is straight, neither of which we need to count.",
+        "모퉁이마다 지금 방향과 다음 방향을 비교해요 (끝에서는 처음으로 돌아가요).\n차이가 1 이면 오른쪽, 3 이면 왼쪽으로 꺾은 거예요 — 2 는 U턴, 0 은 직진이라 세지 않아요.") },
+      { hi: [18, 21], bubble: t(E,
+        "One corner alone can't tell you the loop's overall direction, but going all the way around, right and left turns can't tie. So whichever count is bigger decides CW or CCW.",
+        "모퉁이 하나만으로는 전체 방향을 알 수 없지만, 한 바퀴를 다 돌면 오른쪽과 왼쪽 횟수가 같을 수 없어요.\n그래서 더 많은 쪽으로 CW 나 CCW 를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

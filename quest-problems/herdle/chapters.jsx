@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getHerdleSections } from "./components";
 
 /* ──────────────────────────────────────────────────────────────
    Interactive Herdle simulator — type a 9-letter guess, watch
@@ -308,13 +307,12 @@ export function makeHerdleCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeHerdleCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "First pass: count GREEN and note leftover letters. Second pass: match leftovers for YELLOW.",
-        "1차 훑기에서 GREEN 을 세고 남은 글자를 적어 둬요.\n2차 훑기에서 남은 글자끼리 짝을 지으면 YELLOW 개수가 나와요."),
-      sections: getHerdleSections(E),
+        "The solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

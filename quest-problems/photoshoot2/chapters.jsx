@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPhotoshoot2Sections, Photoshoot2SwapSim } from "./components";
+import { Photoshoot2SwapSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -155,13 +155,12 @@ export function makePhoto2Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePhoto2Ch2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14).
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Map each cow to her index in the CURRENT order, then walk TARGET tracking the running max — any cow below it moves left.",
-        "목표 순서를 훑으며 지금까지 본 가장 오른쪽 자리와 견줘요."),
-      sections: getPhotoshoot2Sections(E),
+        "The solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

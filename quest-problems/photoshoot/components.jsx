@@ -242,6 +242,57 @@ export function PhotoshootProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 원본이다 — 절대 안 바꾸고,
+   그대로 가져와 beats(설명 말풍선)만 덧붙인다. getPhotoshootSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. ── */
+export function getPhotoshootWalk(E, lang = "py") {
+  const vars = [
+    { v: "ans", ko: "지금까지 뒤집은 횟수", en: "reversals counted so far" },
+    { v: "flip", ko: "지금까지 짝이 뒤집힌 상태인지", en: "whether the pairing is flipped so far" },
+  ];
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars,
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "What do we hand back? The fewest reversals to get the most G's at even slots. Read N and s; ans counts reversals, and flip tracks whether we've flipped the pairing so far.",
+          "무엇을 내놓아야 하나요? 짝수 자리에 G 를 가장 많이 두는 최소 뒤집기 횟수예요.\nN 과 s 를 읽고, ans 는 뒤집은 횟수를, flip 은 지금까지 짝이 뒤집혔는지를 기억해요.") },
+        { hi: [18, 27], bubble: t(E,
+          "Walk pairs right to left. For this pair, figure out which cow currently sits in the even slot — that depends on whether we've flipped so far.",
+          "쌍을 오른쪽에서 왼쪽으로 훑어요.\n이 쌍에서 짝수 칸에 누가 있는지는 지금까지 뒤집혔는지에 달렸어요.") },
+        { hi: [28, 35], bubble: t(E,
+          "If the even slot already has a G, nothing to do. Else if the OTHER cow is G, one reversal brings her over — count it and flip our tracked orientation (that changes every pair further left too). Otherwise (both H), nothing helps this pair.",
+          "짝수 칸에 이미 G 가 있으면 할 일이 없어요.\n아니면 나머지 소가 G 라면, 한 번 뒤집어 데려와요 — 세고 flip 도 뒤집어요(왼쪽 모든 쌍에도 영향을 줘요).\n둘 다 H 면 이 쌍은 어떻게 해도 못 도와요.") },
+        { hi: [36, 38], bubble: t(E,
+          "Print the total number of reversals.",
+          "총 뒤집은 횟수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars,
+    beats: [
+      { hi: [0, 10], bubble: t(E,
+        "What do we hand back? The fewest reversals to get the most G's at even slots. Read N and s; ans counts reversals, and flip tracks whether we've flipped the pairing so far.",
+        "무엇을 내놓아야 하나요? 짝수 자리에 G 를 가장 많이 두는 최소 뒤집기 횟수예요.\nN 과 s 를 읽고, ans 는 뒤집은 횟수를, flip 은 지금까지 짝이 뒤집혔는지를 기억해요.") },
+      { hi: [11, 18], bubble: t(E,
+        "Walk pairs right to left. For this pair, figure out which cow currently sits in the even slot — that depends on whether we've flipped so far.",
+        "쌍을 오른쪽에서 왼쪽으로 훑어요.\n이 쌍에서 짝수 칸에 누가 있는지는 지금까지 뒤집혔는지에 달렸어요.") },
+      { hi: [19, 24], bubble: t(E,
+        "If the even slot already has a G, nothing to do. Else if the OTHER cow is G, one reversal brings her over — count it and flip our tracked orientation (that changes every pair further left too). Otherwise (both H), nothing helps this pair.",
+        "짝수 칸에 이미 G 가 있으면 할 일이 없어요.\n아니면 나머지 소가 G 라면, 한 번 뒤집어 데려와요 — 세고 flip 도 뒤집어요(왼쪽 모든 쌍에도 영향을 줘요).\n둘 다 H 면 이 쌍은 어떻게 해도 못 도와요.") },
+      { hi: [26, 26], bubble: t(E,
+        "Print the total number of reversals.",
+        "총 뒤집은 횟수를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

@@ -181,11 +181,10 @@ export function makeCowntactCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code — find the block-size limit, then sum ceil(block / limit).
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
         "Find the biggest window that fits, then sum ceil(block / window).",
         "딱 맞는 가장 큰 창을 구하고, ceil(덩어리 / 창) 을 더해요."),
-      sections: getCowntactSections(E),
     },
   ];
 }

@@ -412,6 +412,72 @@ export function CowntactProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#7c5cfc" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고
+   beats(설명 말풍선)만 덧붙인다. getCowntactSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getCowntactWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "blocks", ko: "연속된 1 덩어리들의 길이", en: "lengths of each run of 1s" },
+        { v: "bestWindow", ko: "고른 창의 크기(2D+1)", en: "the window size (2D+1) we settled on" },
+        { v: "firstIdx/lastIdx", ko: "안쪽(가장자리 아닌) 덩어리의 범위", en: "the range of interior (non-edge) blocks" },
+      ],
+      beats: [
+        { hi: [6, 25], bubble: t(E,
+          "What do we hand back? The minimum number of cows sick on day 0 to reach this final string, after any number of nights. Read N and the string, then break it into runs (blocks) of consecutive 1s — those are what we need to cover.",
+          "무엇을 내놓아야 하나요? 이 최종 문자열이 나오는 데 필요한, 0일차에 감염됐어야 할 소의 최소 수예요 (며칠 밤이 지났는지도 우리가 골라요).\nN 과 문자열을 읽고, 연속된 1 덩어리(block)로 나눠요 — 이게 우리가 덮어야 할 대상이에요.") },
+        { hi: [27, 30], bubble: t(E,
+          "If there are no 1s at all, the answer is simply 0.",
+          "1 이 하나도 없으면 답은 그냥 0 이에요.") },
+        { hi: [32, 34], bubble: t(E,
+          "D nights turns one source into a window of size 2D+1 — always odd. A bigger window always needs fewer sources, so we want the LARGEST window that still fits every block exactly.",
+          "D 일 밤이 지나면 감염원 하나가 2D+1 칸짜리 창이 돼요 — 항상 홀수예요.\n창이 클수록 감염원이 적게 필요하니, 모든 덩어리에 딱 맞는 가장 큰 창을 찾아요.") },
+        { hi: [36, 49], bubble: t(E,
+          "A block touching the string's edge can use a wider window — up to 2·block − 1 — because there's no neighbor on that side for it to leak into.",
+          "문자열 끝에 닿은 덩어리는 창을 더 넓게 써도 돼요 — 2·block − 1 까지요 — 그쪽엔 샐 이웃이 없으니까요.") },
+        { hi: [52, 63], bubble: t(E,
+          "For the rest — interior blocks — an EVEN length can't split evenly into odd windows and loses 1, while an ODD length lets the window equal the block itself. Keep the smallest limit found as our best window.",
+          "나머지(안쪽) 덩어리는 길이가 짝수면 홀수 창으로 딱 나눌 수 없어서 1 을 손해 보고, 홀수면 창이 덩어리 길이 그대로도 돼요.\n지금까지 찾은 것 중 가장 작은 한계를 bestWindow 로 남겨요.") },
+        { hi: [65, 71], bubble: t(E,
+          "Sum ceil(block / bestWindow) over every block — that's how many sources each block needs — then print the total.",
+          "덩어리마다 ceil(block / bestWindow) 를 더해요 — 그게 그 덩어리에 필요한 감염원 수예요 — 그리고 합계를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "blocks", ko: "연속된 1 덩어리들의 길이", en: "lengths of each run of 1s" },
+      { v: "best_window", ko: "고른 창의 크기(2D+1)", en: "the window size (2D+1) we settled on" },
+      { v: "first_idx/last_idx", ko: "안쪽(가장자리 아닌) 덩어리의 범위", en: "the range of interior (non-edge) blocks" },
+    ],
+    beats: [
+      { hi: [0, 14], bubble: t(E,
+        "What do we hand back? The minimum number of cows sick on day 0 to reach this final string, after any number of nights. Break the string into runs (blocks) of consecutive 1s — those are what we need to cover.",
+        "무엇을 내놓아야 하나요? 이 최종 문자열이 나오는 데 필요한, 0일차에 감염됐어야 할 소의 최소 수예요 (며칠 밤이 지났는지도 우리가 골라요).\n문자열을 연속된 1 덩어리(block)로 나눠요 — 이게 우리가 덮어야 할 대상이에요.") },
+      { hi: [16, 17], bubble: t(E,
+        "If there are no 1s at all, the answer is simply 0.",
+        "1 이 하나도 없으면 답은 그냥 0 이에요.") },
+      { hi: [19, 31], bubble: t(E,
+        "D nights turns one source into a window of size 2D+1 — always odd. A bigger window always needs fewer sources, so we want the LARGEST window that still fits every block exactly, without leaking into a neighboring 0.",
+        "D 일 밤이 지나면 감염원 하나가 2D+1 칸짜리 창이 돼요 — 항상 홀수예요.\n창이 클수록 감염원이 적게 필요하니, 모든 덩어리에 딱 맞고 옆 0으로 새지 않는 가장 큰 창을 찾아요.") },
+      { hi: [33, 43], bubble: t(E,
+        "A block touching the string's edge can use a wider window — up to 2·block − 1 — because there's no neighbor on that side for it to leak into.",
+        "문자열 끝에 닿은 덩어리는 창을 더 넓게 써도 돼요 — 2·block − 1 까지요 — 그쪽엔 샐 이웃이 없으니까요.") },
+      { hi: [45, 52], bubble: t(E,
+        "For the rest — interior blocks — an EVEN length can't split evenly into odd windows and loses 1, while an ODD length lets the window equal the block itself. Keep the smallest limit found as our best window.",
+        "나머지(안쪽) 덩어리는 길이가 짝수면 홀수 창으로 딱 나눌 수 없어서 1 을 손해 보고, 홀수면 창이 덩어리 길이 그대로도 돼요.\n지금까지 찾은 것 중 가장 작은 한계를 best_window 로 남겨요.") },
+      { hi: [54, 58], bubble: t(E,
+        "Sum ceil(block / best_window) over every block — that's how many sources each block needs — then print the total.",
+        "덩어리마다 ceil(block / best_window) 를 더해요 — 그게 그 덩어리에 필요한 감염원 수예요 — 그리고 합계를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

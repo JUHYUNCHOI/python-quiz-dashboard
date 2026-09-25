@@ -152,6 +152,71 @@ export function FeedCowsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 원본이다 — 절대 안 바꾸고,
+   그대로 가져와 beats(설명 말풍선)만 덧붙인다. getFeedCowsSections() 는 PDF 다운로드가 계속
+   쓰므로 그대로 둔다. ── */
+export function getFeedCowsWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "patches", ko: "자리마다 무엇을 놓았는지 ('.'/'G'/'H')", en: "what's placed at each spot ('.'/'G'/'H')" },
+        { v: "gCover/hCover", ko: "그 품종을 어디까지 먹였는지", en: "how far that breed is already fed" },
+      ],
+      beats: [
+        { hi: [0, 12], bubble: t(E,
+          "What do we hand back? For each test case: the fewest patches, and a string showing where they go. Read T, then for each case read N, K, and the breed string.",
+          "무엇을 내놓아야 하나요? 테스트마다 필요한 최소 패치 수와, 어디에 놓았는지 보여주는 문자열이에요.\nT 를 읽고, 테스트마다 N, K, 품종 문자열을 읽어요.") },
+        { hi: [14, 17], bubble: t(E,
+          "Start every spot empty ('.'). gCover and hCover track how far each breed is already fed — -1 means nothing fed yet.",
+          "모든 자리를 빈 칸('.')으로 시작해요.\ngCover, hCover 는 그 품종을 어디까지 먹였는지 기억해요 — -1 은 아직 아무도 안 먹였다는 뜻이에요.") },
+        { hi: [18, 32], bubble: t(E,
+          "Scan left to right. When we hit an unfed G cow: if she's too close to the right edge to push the patch further, patch right where she stands (or just before, if that spot's taken). Otherwise patch as far right as still reaches her (i+K) — that feeds G cows up to i+2K.",
+          "왼쪽부터 훑다가 못 먹은 G 소를 만나면 — 오른쪽 끝이라 더 못 밀면 그 자리(또는 바로 앞, 이미 찼으면)에 패치를 놓아요.\n아니면 그 소가 닿는 가장 오른쪽 i+K 에 패치를 놓아요 — 그러면 i+2K 까지 G 를 먹여요.") },
+        { hi: [33, 48], bubble: t(E,
+          "Same rule, for H cows.",
+          "H 소도 똑같은 규칙으로 패치를 놓아요.") },
+        { hi: [50, 55], bubble: t(E,
+          "Count how many spots got a patch (everything that isn't '.').",
+          "'.' 가 아닌 자리를 세어 패치 개수를 구해요.") },
+        { hi: [56, 63], bubble: t(E,
+          "Print this case's two lines: the count, then the patch string itself.",
+          "이번 테스트의 두 줄을 출력해요 — 패치 개수, 그리고 패치 문자열이요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "patches", ko: "자리마다 무엇을 놓았는지 ('.'/'G'/'H')", en: "what's placed at each spot ('.'/'G'/'H')" },
+      { v: "g_cover/h_cover", ko: "그 품종을 어디까지 먹였는지", en: "how far that breed is already fed" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What do we hand back? For each test case: the fewest patches, and a string showing where they go. Read T, then open a list to collect every case's output lines.",
+        "무엇을 내놓아야 하나요? 테스트마다 필요한 최소 패치 수와, 어디에 놓았는지 보여주는 문자열이에요.\nT 를 읽고, 각 테스트의 출력 줄을 모을 리스트를 열어요.") },
+      { hi: [3, 10], bubble: t(E,
+        "For each case, read N, K, and the breed string. Start every spot empty ('.'), and track how far each breed is already fed (-1 = nothing fed yet).",
+        "테스트마다 N, K, 품종 문자열을 읽어요.\n모든 자리를 빈 칸('.')으로 시작하고, 그 품종을 어디까지 먹였는지 기억해요 (-1 = 아직 없음).") },
+      { hi: [11, 22], bubble: t(E,
+        "Scan left to right. When we hit an unfed G cow: if she's too close to the right edge to push the patch further, patch right where she stands (or just before, if that spot's taken). Otherwise patch as far right as still reaches her (i+K) — that feeds G cows up to i+2K.",
+        "왼쪽부터 훑다가 못 먹은 G 소를 만나면 — 오른쪽 끝이라 더 못 밀면 그 자리(또는 바로 앞, 이미 찼으면)에 패치를 놓아요.\n아니면 그 소가 닿는 가장 오른쪽 i+K 에 패치를 놓아요 — 그러면 i+2K 까지 G 를 먹여요.") },
+      { hi: [23, 33], bubble: t(E,
+        "Same rule, for H cows.",
+        "H 소도 똑같은 규칙으로 패치를 놓아요.") },
+      { hi: [35, 37], bubble: t(E,
+        "Count how many spots got a patch (everything that isn't '.'), then save this case's two output lines — the count, and the patch string.",
+        "'.' 가 아닌 자리를 세어 패치 개수를 구하고, 이번 테스트의 두 줄(개수, 패치 문자열)을 저장해요.") },
+      { hi: [39, 39], bubble: t(E,
+        "Print every case's lines, all at once, joined by newlines.",
+        "모든 테스트의 줄을 한 번에, 줄바꿈으로 이어 출력해요.") },
+    ],
+  };
+}
+
 
 /* ===============================================================
    FeedCowsNumberLineViz
