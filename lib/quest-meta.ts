@@ -290,7 +290,16 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   hps: {
     type: "brute-force",
     concepts_taught: ["exhaustive-pair", "string-indexing"],
-    concepts_required: ["loop", "string-basics", "vector-basics", "2d-list-build", "bit-ops"],
+    /* ⚠️ 2026-09-25: `bit-ops` 를 **뺐다.** 교육·감사 담당이 **각자 따로** 같은 결론을 냈고
+       내가 코드로 확인했다 — 채택된 풀이 `HP_FULL_PY` 에 `<<`·`>>`·`& 1`·`mask` 가
+       **0회**다. 비트마스크는 `STEP_BITMASK_PY` 뿐인데 그건 화면이 스스로
+       **«🎁 BONUS — OPTIONAL»** 이라고 이름 붙인 자리다.
+       ⛔ 안 쓰는 개념을 선수로 걸면 **그 quest 가 추천에 영원히 안 뜬다** —
+       `ALWAYS_MASTERED` 에 `bit-ops` 가 일부러 빠져 있고(2026-09-25 `mooin3` 사고),
+       그걸 `concepts_taught` 로 가진 quest 도 없다. 즉 「게이트」가 아니라 **「숨김」**이었다.
+       ⚠️ C++ 쪽(`HP_FULL_CPP`)은 비트를 8회 쓴다 — 그건 `check-cpp-stl-gate.py` 가
+       보는 **다른 층**이다. 여기서 되살리지 마라. */
+    concepts_required: ["loop", "string-basics", "vector-basics", "2d-list-build"],
     difficulty: 2,
     supported_languages: ["py", "cpp"],
     // Phase 1: deferred CI runner — verified vs USACO Open 2025 Bronze #1.
@@ -2134,8 +2143,19 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   //    (`components.jsx` 의 `_CPP` 0건, 직접 확인). 기본값이 ["py","cpp"] 라 그냥 두면
   //    관리자 화면에 **「C++ 검증됨」이라는 거짓 배지**가 뜬다. (quest-auditor, 2026-09-25)
   word:            { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"], supported_languages: ["py"] },
-  xorstring:       { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["modular-inverse", "bit-ops"] },
-  mcc21simplemath: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["bit-ops"] },
+  /* ⚠️ 2026-09-25: `bit-ops` 를 **뺐다.** `FULL_PY` 에서 비트 연산자를 찾으니
+     걸린 한 줄이 **주석 안의 `2^k`**(`pow2k = pow(2, k, MOD)  # 2^k`)였다 — 연산자가 아니다.
+     `modular-inverse` 는 **진짜다**(`inv3 = pow(3, MOD - 2, MOD)`). 그건 남긴다.
+     이 quest 는 `supported_languages: ["py"]` 라 C++ 쪽 비트는 학생에게 안 보인다. */
+  xorstring:       { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["modular-inverse"] },
+  /* ⚠️ 2026-09-25: `bit-ops` 를 **뺐다.** 이 quest 의 파이썬 최종 코드는 비트 연산을
+     **일부러 피해서** 짜여 있다 — `place = 2 ** bit` 와 `(x // place) % 2 == 1` 이다.
+     `<<`·`>>`·`& 1` 은 C++ 쪽에만 있고, **MCC 는 C++ 토글이 아예 안 뜬다**
+     (`client.tsx:303` 이 `section !== "MCC"`, 선생님 *"MCC는 C++ 필요 없어"*).
+     즉 학생이 보는 코드에 비트가 **0회**다. 대신 실제로 쓰는 것을 적는다.
+     ⛔ 빈 배열로 두면 `isReady()` 가 `reqs.length === 0` 에서 false 라 **배지가 안 뜬다** —
+     안 쓰는 개념을 걸어 두는 것과 결과가 같아진다. 그래서 비우지 않고 채운다. */
+  mcc21simplemath: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "math-basics"] },
 };
 
 export function getQuestMeta(id: string): QuestConceptMeta {
