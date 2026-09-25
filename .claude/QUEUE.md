@@ -42,46 +42,67 @@
 
 ---
 
-## 🔴 READY — 입출력 축, **대회(형제) 단위 11배치**
+## 🔴 READY — 입출력 축 · **69 중 24 완료, 45 남음** (2026-09-25 실측)
 
-⚠️ **파일 크기 순으로 묶었다가 다시 짰다.** 화면 담당 판정 —
-*"병렬 에이전트가 서로 다른 quest 를 동시에 하면 「형제를 먼저 열어 본다」가 **레이스 컨디션**이 된다.
+⚠️ **파일 크기 순으로 묶었다가 대회(형제) 단위로 다시 짰다.** 화면 담당 판정 —
+*"병렬 에이전트가 각자 「형제를 먼저 열어 본다」를 하면 **레이스 컨디션**이 된다.
 먼저 손댄 사람의 즉흥적 모양이 곧 「형제」가 되어 버린다."*
-→ **대회를 안 쪼갠다. 그리고 참조 템플릿을 하나로 고정한다.**
+⚠️ **그리고 내 첫 묶음은 파싱이 틀렸다** — id 주변 ±600자를 봐서 **이웃 quest 의 `sub` 를 집었다**
+(`cowevolution` 을 Dec 2019 로 묶었는데 실제로는 Open 2019). 객체 블록을 정확히 끊어 다시 뽑았다.
 
-### 📐 참조 템플릿 — **`photoshoot25`** (`chapters.jsx:80-118`)
-    INPUT       amber #fffbeb / #fde68a — 필드마다 한 줄, 오른쪽에 회색 설명
-                반복되는 줄은 「↑ 이 줄이 Q 번 반복」
+### 📐 참조 템플릿 — **`photoshoot25`** (`chapters.jsx:80-118`) 하나로 고정
+    INPUT       amber #fffbeb / #fde68a — 필드마다 한 줄, 오른쪽 회색 설명
+                반복되는 줄은 「↑ 이 줄이 N 번 반복」
     OUTPUT      green #ecfdf5 / #6ee7b7 — 무엇을 몇 줄 출력하는지 한 문단
-    CONSTRAINTS white + border — 「1 ≤ N ≤ 500」 식으로 한 줄씩, monospace
-같은 표준 형제: `buymilk` · `makedistinct` · `swaptowin` · `mooin4` · `strangefn`.
-⛔ **`checkups` 를 따라 쓰지 마라 — 더 오래된 변형이다.** 내가 처음에 그걸 지정했다가 정정했다.
+    CONSTRAINTS white + border — monospace
+새 카드는 **1-1 바로 다음 새 쪽**. ⛔ **`checkups` 금지** — 옛 변형이다(내가 처음에 그걸 지정했다가 정정).
 
-| 배치 | 대회 | quest | 상태 |
-|---|---|---|---|
-| 1 | Jan 2022 / Dec 2022 / Feb 2021 / Feb 2018 / Jan 2018 | walkhome countliars abcs outofplace bovshuffle | READY 도는중 |
-| 2 | Dec 2017 Bronze | bovgenomics crossroad1 modernart | READY 도는중 |
-| 3 | Dec 2019 Bronze | cowevolution milkfactory sleepyherd | READY 도는중 |
-| 4 | Dec 2020 Bronze | cowntrace socialdist2 triangles | READY 도는중 |
-| 5 | Feb 2018 Bronze | billboard lifeguards | READY 도는중 |
-| 6 | Feb 2019 Bronze | guessanimal mixmilk sleepysort | READY |
-| 7 | Feb 2020 Bronze | cowgym photoshoot20 race | READY |
-| 8 | Jan 2020 Bronze | bucketbrigade livestock whereami | READY |
-| 9 | Jan 2021 Bronze | daisychains socialdist1 stuckinrut | READY |
-| 10 | Open 2017 / Open 2018 | crossroad2 crossroad3 dontbelast billboard2 hoofball tameherd | READY |
-| 11 | Open 2019 / Open 2021 / Open 2023 | meastraffic revegetation shellgame clockfence comfycows uddered leaders mooloo stampgrid | READY |
-| 12 | 나머지 2개짜리 대회 | familytree teleport acowdemia3 yearcow sleepclass hungrycow moolang cowtipping sqpasture stalling cowcollege mooops blockgame cowsignal milkmeas bucketlist teamttt aircond1 feedcows photoshoot madscientist swapity herdle photoshoot2 nontrans cowntact | READY |
+### ⭐ 원문 구하는 법 — 팀이 알아낸 것
+1. **`public/problems/` 에 USACO PDF 는 아예 없다**(MCC 것만). 거기서 찾지 마라.
+2. **usaco.org 를 직접. `https` + 리다이렉트 + UA 필수** — `http://` 는 **301 만** 돌아온다:
+   `curl -sL --max-time 30 -A "Mozilla/5.0" "https://usaco.org/index.php?page=viewproblem2&cpid=<cpid>"`
+   `cpid` 는 `components.jsx` 헤더나 `USACO_VERIFICATION.md` 에.
+3. 못 찾으면 **CONSTRAINTS 를 넣지 말고 「원문에 없다」고 보고.**
 
-### ⚠️ 배치마다 반드시
-1. **참조는 `photoshoot25` 하나** — 형제 보고 따라 하지 마라(레이스).
-2. **원문이 출처** — `pdftotext -layout public/problems/<id>.pdf`. **제약을 지어내지 마라.**
-   `countliars` 는 제약이 **코드 주석에만** 있었다 — 주석에서 베끼지 말고 원문으로.
-3. **숫자는 직접 돌려 확인** — 샘플을 쓰면 그 입력으로 **코드를 실제 실행**해 대조.
-4. **분량 전후 재기** — `see-flow.mjs`.
-5. ⭐ **위젯 개수 전후 대조** — `rounding` 사고(2236→184줄)의 **실제 증거는 커스텀 위젯이
-   사라진 것**이었다. `grep -oE "[A-Z][A-Za-z]*(Sim|Runner|View)" quest-problems/<id>/*.jsx | sort -u`.
-   **줄 수만 보면 못 잡는다.**
-6. 실측 소요: quest 당 **PDF 5~10분 + 카드 10~15분.**
+### ⛔ 「훈련 지식」으로 숫자를 쓰지 마라 — 오늘 실제로 났다
+`billboard` 를 `0 ≤ x ≤ 10억` 이라 썼는데 원문은 **−1000~+1000**,
+`lifeguards` 를 `≤ 10억` 이라 썼는데 원문은 **0~1000** 이었다.
+**「C++ 이 long long 을 쓰니까」 같은 추론으로 숫자를 만들지 마라.** 둘 다 원문으로 정정했다.
+
+### ✅ 완료 24개
+`abcs` `billboard` `bovgenomics` `bovshuffle` `countliars` `cowevolution` `cowgym`
+`cowntrace` `crossroad1` `lifeguards` `livestock` `milkfactory` `modernart` `outofplace`
+`sleepyherd` `socialdist2` `triangles` `walkhome` `whereami` + 도는 중(`blockgame` `cowsignal`
+`sqpasture` `hoofball` `tameherd` `teleport`)
+⚠️ `favperm2` 는 **오탐** — `permutation` 폴더 챕터를 재사용해 이미 카드가 있다. **손대지 마라.**
+
+### 🔴 남은 45개 — 대회 단위 묶음
+| 대회 | quest | 상태 |
+|---|---|---|
+| Feb 2021 | clockfence comfycows yearcow | READY 도는중 |
+| Feb 2023 | hungrycow mooloo stampgrid | READY 도는중 |
+| Jan 2019 | guessanimal shellgame sleepysort | READY 도는중 |
+| Feb 2017 | crossroad2 crossroad3 | READY 도는중 |
+| Dec 2018 | bucketlist mixmilk | READY |
+| Dec 2020 | daisychains stuckinrut | READY |
+| Dec 2022 | cowcollege feedcows | READY |
+| Feb 2019 | meastraffic revegetation | READY |
+| Feb 2020 | madscientist swapity | READY |
+| Feb 2022 | photoshoot2 sleepclass | READY |
+| Jan 2017 | cowtipping dontbelast | READY |
+| Jan 2020 | photoshoot20 race | READY |
+| Jan 2021 | stalling uddered | READY |
+| Jan 2022 | herdle nontrans | READY |
+| Jan 2023 | leaders mooops | READY |
+| Open 2018 | familytree teamttt | READY |
+| 1개짜리 8곳 | milkmeas aircond1 cowntact billboard2 bucketbrigade socialdist1 acowdemia3 photoshoot moolang | READY |
+
+### 배치마다 반드시
+**공식 샘플을 🔒 코드에 넣어 실제로 돌려 대조** ·
+⭐ **위젯 개수 전후** (`grep -oE "[A-Z][A-Za-z0-9]*(Sim|Runner|View)"`) —
+`rounding` 사고의 실제 증거는 **줄 수가 아니라 위젯이 사라진 것**이었다 ·
+`see-flow.mjs` 로 쪽 전후(**+1쪽이 표준**) · `quest-length-snapshot.json` 은 **건드리지 마라.**
+실측 소요: quest 당 **5~15분**(원문 조회가 제일 오래 걸린다).
 
 ## 🟡 BLOCKED
 
