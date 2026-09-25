@@ -314,6 +314,64 @@ export function Photo20ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getPhoto20Sections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getPhoto20Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "a0", ko: "지금 시도하는 a[0]", en: "the a[0] we're trying" },
+        { v: "a", ko: "a0 에서 이어 만든 사슬", en: "the chain built from a0" },
+        { v: "answer", ko: "찾은 정답 사슬", en: "the winning chain" },
+      ],
+      beats: [
+        { hi: [0, 16], bubble: t(E,
+          "What do we need? The lex-smallest permutation a. Fixing a[0] decides everything else through b[i] = a[i] + a[i+1] — so first read N and b.",
+          "무엇을 내놔야 하나요? 사전순으로 가장 작은 순열 a예요.\na[0] 하나만 정해지면 b[i]=a[i]+a[i+1] 규칙으로 나머지가 다 정해지니, 먼저 N과 b를 읽어요.") },
+        { hi: [17, 23], bubble: t(E,
+          "So try a0 = 1, 2, 3, ... in order, chaining a[i+1] = b[i] - a[i]. back() is the last value pushed — handy for chaining one step at a time.",
+          "그래서 a[0] = 1, 2, 3, ... 을 차례로 시도하며 사슬을 이어요.\nback() 은 방금 넣은 마지막 값이라, 한 칸씩 이어 붙이기 편해요.") },
+        { hi: [24, 33], bubble: t(E,
+          "Sort the chain and check it equals 1..N exactly.",
+          "사슬을 정렬해서 1..N 과 똑같은지 확인해요.") },
+        { hi: [34, 46], bubble: t(E,
+          "The first a0 that passes is the lex-smallest answer — print that chain and stop.",
+          "처음으로 통과한 a0 이 사전순으로 가장 앞선 답이에요 — 그 사슬을 출력하고 끝내요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "a0", ko: "지금 시도하는 a[0]", en: "the a[0] we're trying" },
+      { v: "a", ko: "a0 에서 이어 만든 사슬", en: "the chain built from a0" },
+      { v: "answer", ko: "찾은 정답 사슬", en: "the winning chain" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we need? The lex-smallest permutation a. Fixing a[0] decides everything else through b[i] = a[i] + a[i+1] — so first read N and b.",
+        "무엇을 내놔야 하나요? 사전순으로 가장 작은 순열 a예요.\na[0] 하나만 정해지면 b[i]=a[i]+a[i+1] 규칙으로 나머지가 다 정해지니, 먼저 N과 b를 읽어요.") },
+      { hi: [7, 10], bubble: t(E,
+        "So try a0 = 1, 2, 3, ... in order — the first one that works is the lex-smallest answer.",
+        "그래서 a[0] = 1, 2, 3, ... 을 차례로 시도해요. 처음 맞는 a[0] 이 사전순으로 가장 작은 답이에요.") },
+      { hi: [11, 13], bubble: t(E,
+        "Starting from a0, chain a[i+1] = b[i] - a[i] one step at a time.",
+        "정한 a[0] 에서 시작해 a[i+1] = b[i] - a[i] 규칙으로 사슬을 한 칸씩 이어 만들어요.") },
+      { hi: [14, 17], bubble: t(E,
+        "Sort the chain and check it equals 1..N exactly (Python's list, sorted make this a one-liner). If it matches, save it and stop.",
+        "사슬을 정렬해서 1..N 과 똑같은지 확인해요 (list, sorted 덕분에 한 줄로 돼요).\n맞으면 답으로 저장하고 멈춰요.") },
+      { hi: [19, 20], bubble: t(E,
+        "Write the answer to the output file.",
+        "답을 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

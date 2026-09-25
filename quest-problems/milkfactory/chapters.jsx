@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMilkFactorySections, MilkFactoryBeltSim } from "./components";
+import { MilkFactoryBeltSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -158,11 +158,10 @@ export function makeFactoryCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "milkfactory-codewalk",
       narr: t(E,
-        "Reverse the arrows — then just check if all stations reach from one.",
-        "화살표를 거꾸로 뒤집으면 한 역에서 다 갈 수 있는지만 보면 돼요."),
-      sections: getMilkFactorySections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

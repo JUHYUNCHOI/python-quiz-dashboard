@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getRaceSections } from "./components";
 
 /* ----------------------------------------------------------------
    Interactive: Peak-Speed Simulator
@@ -350,11 +349,10 @@ export function makeRaceCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "race-codewalk",
       narr: t(E,
-        "Optimal: accelerate to peak P, then decelerate to ≤ X — find the smallest P whose total distance reaches K.",
-        "정점 P 까지 가속했다가 X 까지 감속하는 게 제일 좋아요."),
-      sections: getRaceSections(E),
+        "The fast solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

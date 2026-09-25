@@ -266,6 +266,61 @@ export function BucketBrigadeProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getBucketBrigadeSections()
+   는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getBucketBrigadeWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "barn_r, barn_c", ko: "B (헛간) 의 자리", en: "B (barn)'s position" },
+        { v: "lake_r, lake_c", ko: "L (호수) 의 자리", en: "L (lake)'s position" },
+        { v: "rock_r, rock_c", ko: "R (바위) 의 자리", en: "R (rock)'s position" },
+      ],
+      beats: [
+        { hi: [0, 21], bubble: t(E,
+          "What do we print? The fewest cows to link L to B. So first read the 10x10 grid.",
+          "무엇을 출력해야 하나요? L 과 B 를 잇는 데 필요한 소의 최소 마릿수예요.\n먼저 10x10 격자를 읽어요.") },
+        { hi: [22, 42], bubble: t(E,
+          "Find where B, L, R sit. Every other cell is empty, so the shortest path length is just the Manhattan distance between L and B — minus 2, since L and B themselves aren't cows.",
+          "B, L, R 의 위치를 찾아요.\nL, B, R 말고는 다 빈 칸이라, 최단 길이는 L 과 B 의 맨해튼 거리와 같아요.\nL 과 B 는 소가 아니니 거기서 2 를 빼요.") },
+        { hi: [43, 60], bubble: t(E,
+          "But if R sits exactly on the straight line between L and B (same row, in between), that path is blocked — so detour, adding 2 more cows.",
+          "그런데 R 이 L 과 B 를 잇는 직선 위(같은 행, 그 사이)에 있으면 그 길이 막혀요.\n그래서 돌아가야 하고, 소가 2 마리 더 필요해요.") },
+        { hi: [61, 76], bubble: t(E,
+          "Same check for the column case, then print the answer.",
+          "같은 열에 대해서도 똑같이 확인하고, 답을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "barn_r, barn_c", ko: "B (헛간) 의 자리", en: "B (barn)'s position" },
+      { v: "lake_r, lake_c", ko: "L (호수) 의 자리", en: "L (lake)'s position" },
+      { v: "rock_r, rock_c", ko: "R (바위) 의 자리", en: "R (rock)'s position" },
+    ],
+    beats: [
+      { hi: [0, 19], bubble: t(E,
+        "What do we print? The fewest cows to link L to B. So first read the 10x10 grid and find where B, L, R sit.",
+        "무엇을 출력해야 하나요? L 과 B 를 잇는 데 필요한 소의 최소 마릿수예요.\n먼저 10x10 격자를 읽고 B, L, R 의 위치를 찾아요.") },
+      { hi: [21, 24], bubble: t(E,
+        "Every other cell is empty, so the shortest path length is just the Manhattan distance between L and B — minus 2, since L and B themselves aren't cows.",
+        "L, B, R 말고는 다 빈 칸이라, 최단 길이는 L 과 B 의 맨해튼 거리와 같아요.\nL 과 B 는 소가 아니니 거기서 2 를 빼요.") },
+      { hi: [25, 28], bubble: t(E,
+        "But if R sits exactly on the straight line between L and B (same row, in between), that path is blocked — so detour, adding 2 more cows.",
+        "그런데 R 이 L 과 B 를 잇는 직선 위(같은 행, 그 사이)에 있으면 그 길이 막혀요.\n그래서 돌아가야 하고, 소가 2 마리 더 필요해요.") },
+      { hi: [29, 35], bubble: t(E,
+        "Same check for the column case, then print the answer.",
+        "같은 열에 대해서도 똑같이 확인하고, 답을 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

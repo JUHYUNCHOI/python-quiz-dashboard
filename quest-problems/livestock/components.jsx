@@ -329,6 +329,66 @@ export function LivestockProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getLivestockSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   ⚠️ 2026-09-25 PM 판정 대기 중 — C++ 코드는 map<K, vector<V>> 를 쓰지 않는다(pairs_a·
+   pairs_b 두 벡터로 짝지어 담는다). 말풍선에서도 map 을 언급하지 않는다. ── */
+export function getLivestockWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "cows", ko: "지금 시도 중인 순서 (처음엔 알파벳순)", en: "the order we're trying now (starts alphabetical)" },
+        { v: "pairs_a / pairs_b", ko: "짝지어 담은 제약 — k 번째는 서로 붙어야 함", en: "paired constraints — index k means they must be adjacent" },
+        { v: "is_valid", ko: "이 순서가 모든 제약을 지키나", en: "does this order satisfy every constraint" },
+      ],
+      beats: [
+        { hi: [0, 11], bubble: t(E,
+          "What do we need? The lex-smallest lineup of the 8 cows that satisfies every constraint. Start cows in alphabetical order, and keep two vectors for the constraints.",
+          "무엇을 내놔야 하나요? 모든 제약을 지키면서 사전순으로 가장 앞선 8마리 배열이에요.\ncows 를 알파벳순으로 두고, 제약을 담을 벡터 둘을 준비해요.") },
+        { hi: [13, 34], bubble: t(E,
+          "is_valid checks one candidate order: for every constraint pair, the two cows must sit right next to each other (index difference 1).",
+          "is_valid 는 순서 하나를 확인해요. 모든 제약 쌍마다 두 소의 자리 차이가 1 이어야(바로 붙어야) 해요.") },
+        { hi: [36, 66], bubble: t(E,
+          "Open the files and read N. Then read each constraint line letter by letter, cutting a new word at every space, and pair the first and last word into pairs_a / pairs_b.",
+          "파일을 열고 N 을 읽어요.\n그리고 제약 줄을 글자 하나씩 보며 빈칸에서 새 단어를 잘라요 — 첫 단어와 마지막 단어를 pairs_a·pairs_b 에 짝지어 담아요.") },
+        { hi: [68, 82], bubble: t(E,
+          "cows starts alphabetical, so next_permutation steps through orders in lex order too — the first one that's_valid is our answer.",
+          "cows 가 알파벳순이라 next_permutation 도 사전순으로 순서를 만들어 줘요.\n처음으로 is_valid 를 통과하는 순서가 바로 답이에요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "cows", ko: "8마리 이름 (알파벳순)", en: "the 8 cow names (alphabetical)" },
+      { v: "pairs", ko: "(a, b) 쌍들 — 줄에서 붙어야 하는 소들", en: "(a, b) pairs — cows that must be adjacent" },
+      { v: "perm", ko: "지금 확인 중인 순서 하나", en: "the order being checked right now" },
+    ],
+    beats: [
+      { hi: [0, 8], bubble: t(E,
+        "What do we need? The lex-smallest lineup of the 8 cows that satisfies every constraint. There are only 8 factorial (40320) orders, so trying them all is fast enough.",
+        "무엇을 내놔야 하나요? 모든 제약을 지키면서 사전순으로 가장 앞선 8마리 배열이에요.\n순서가 8 팩토리얼(40320) 가지뿐이라 다 세어 봐도 충분히 빨라요.") },
+      { hi: [10, 18], bubble: t(E,
+        "Read each 'X must be milked beside Y' line — the first and last word are the two cow names, so pair them into pairs.",
+        "'X must be milked beside Y' 줄을 읽어요 — 첫 단어와 마지막 단어가 소 이름이니,\n둘을 짝지어 pairs 에 담아요.") },
+      { hi: [20, 26], bubble: t(E,
+        "is_valid checks one candidate order: every constraint pair must sit right next to each other (index difference exactly 1).",
+        "is_valid 는 순서 하나를 확인해요. 모든 제약 쌍의 자리 차이가 정확히 1 이어야(바로 붙어야) 해요.") },
+      { hi: [28, 34], bubble: t(E,
+        "cows starts alphabetical, so permutations() steps through orders in lex order too — the first is_valid order is our answer.",
+        "cows 가 알파벳순이라 permutations() 도 사전순으로 순서를 만들어 줘요.\n처음으로 is_valid 를 통과하는 순서가 바로 답이에요.") },
+      { hi: [36, 38], bubble: t(E,
+        "Write the answer, one cow per line.",
+        "답을 한 줄에 한 마리씩 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

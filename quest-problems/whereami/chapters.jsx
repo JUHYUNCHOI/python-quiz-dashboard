@@ -631,101 +631,16 @@ export function makeWhereAmICh2(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeWhereAmICh3(E, lang = "py") {
   return [
-    // 3-1: Step 1 — Read input
+    // 3-1: The full solution, walked through in thinking order
+    // (2026-09-25: 4개 누적형 reveal 을 CodeWalk 하나로 합침 — check-quest-length-regression 대상.
+    //  quiz 는 그대로 남긴다. SOLUTION_CODE 는 손대지 않는다.)
     {
-      type: "reveal",
+      type: "whereami-codewalk",
       narr: t(E,
-        "The answer is the smallest K with no repeats. So first, read N and s.", "답은 겹치지 않는 가장 작은 K예요. 먼저 N 과 문자열 s 를 읽어요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
-          </div>
-          <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
-            {t(E,
-              "First line: N (number of mailboxes). Second line: the string of labels.",
-              "첫 줄에 N (우편함 수) 이 있어요. 둘째 줄에 글자 문자열이 있어요.")}
-          </div>
-          <CodeSnippet lines={["with open('whereami.in') as file:", "    lines = file.readlines()", "N = int(lines[0])", "s = lines[1].strip()"]} highlight={[0, 1, 2, 3]} E={E} />
-          <div style={{
-            marginTop: 10, background: C.carryBg, borderRadius: 8, padding: 8,
-            border: `1.5px solid ${C.carryBd}`, fontSize: 12, color: C.text,
-          }}>
-            {t(E,
-              "Example: N=4, s=\"ABAB\"",
-              "예시: N=4, s=\"ABAB\"")}
-          </div>
-        </div>),
+        "The full solution, start to finish.",
+        "전체 풀이를 처음부터 끝까지 봐요."),
     },
-    // 3-2: Step 2 — Outer loop: try each K
-    {
-      type: "reveal",
-      narr: t(E,
-        "A smaller K is better, so try K = 1, 2, 3, ... in order.", "K 가 작을수록 좋으니까, 1부터 늘려가며 확인해요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 2: Try each K", "2단계: K 를 하나씩 해보기")}
-          </div>
-          <CodeSnippet
-            lines={[
-              "with open('whereami.in') as file:",
-              "    lines = file.readlines()",
-              "N = int(lines[0])",
-              "s = lines[1].strip()",
-              "",
-              "for K in range(1, N + 1):",
-              "    seen = set()",
-              "    unique = True",
-            ]}
-            highlight={[5, 6, 7]}
-            E={E}
-          />
-          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E,
-              "For each K, we create a fresh empty set and assume unique=True until proven otherwise.",
-              "K 마다 빈 집합을 새로 만들어요. 겹치는 게 나올 때까지는 unique 를 True 로 두고 시작해요.")}
-          </div>
-        </div>),
-    },
-    // 3-3: Step 3 — Inner loop: check substrings
-    {
-      type: "reveal",
-      narr: t(E,
-        "To see if this K works, check every substring for a repeat.", "이 K 로 될지 보려면, 부분문자열이 겹치는지 하나씩 확인해요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 3: Check each substring", "3단계: 부분문자열 하나씩 확인하기")}
-          </div>
-          <CodeSnippet
-            lines={[
-              "with open('whereami.in') as file:",
-              "    lines = file.readlines()",
-              "N = int(lines[0])",
-              "s = lines[1].strip()",
-              "",
-              "for K in range(1, N + 1):",
-              "    seen = set()",
-              "    unique = True",
-              "    for i in range(N - K + 1):",
-              "        sub = s[i:i+K]",
-              "        if sub in seen:",
-              "            unique = False",
-              "            break",
-              "        seen.add(sub)",
-            ]}
-            highlight={[8, 9, 10, 11, 12, 13]}
-            E={E}
-          />
-          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E,
-              "The line above, s[i:i+K], extracts K characters starting at position i. If it's already in the set, we found a duplicate!",
-              "위 코드의 s[i:i+K] 는 i 번 자리에서 K 글자를 잘라 와요. 집합에 이미 있으면 겹치는 걸 찾은 거예요!")}
-          </div>
-        </div>),
-    },
-    // 3-4: Quiz — understanding the inner loop
+    // 3-2 (was 3-4): Quiz — understanding the inner loop
     {
       type: "quiz",
       narr: t(E,
@@ -742,31 +657,6 @@ export function makeWhereAmICh3(E, lang = "py") {
       explain: t(E,
         "Correct! A window of length K can start at position 0, 1, ... up to N-K — any further and it would run off the end. That is N-K+1 starting positions, so a string of length N has exactly N-K+1 substrings of length K. For example, \"ABAB\" (N=4) with K=2 has 4-2+1 = 3 substrings.",
         "정답이에요! 길이 K 인 윈도우는 0 번 자리부터 N-K 번 자리까지에서 시작할 수 있어요.\n그보다 뒤에서 시작하면 끝을 넘어가 버리거든요.\n시작할 자리가 N-K+1 개니까 부분문자열도 딱 그만큼 있어요.\n\"ABAB\" (N=4) 에서 K=2 면 4-2+1 = 3 개예요."),
-    },
-    // 3-5: Step 4 — Print answer + full code
-    {
-      type: "reveal",
-      narr: t(E,
-        "The first K with no repeats is the answer — print it and stop.", "다 다른 K 가 나오면 그게 답이니, 출력하고 멈춰요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 4: Print and stop!", "4단계: 출력하고 멈춰요!")}
-          </div>
-          <CodeSnippet
-            lines={SOLUTION_CODE}
-            highlight={[18, 19, 20]}
-            E={E}
-          />
-          <div style={{
-            marginTop: 10, background: C.okBg, borderRadius: 10,
-            padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
-          }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
-              {t(E, "Complete code! Just 24 lines!", "전체 코드 완성! 딱 24 줄이에요!")}
-            </div>
-          </div>
-        </div>),
     },
   ];
 }

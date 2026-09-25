@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPhoto20Sections, Photo20AuditSim } from "./components";
+import { Photo20AuditSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -157,11 +157,10 @@ export function makePhoto20Ch2(E, lang = "py") {
   return [
     // 2-1: Code
     {
-      type: "progressive",
+      type: "photo20-codewalk",
       narr: t(E,
-        "Fixing a[0] determines the whole array — try a[0] = 1, 2, …, N and keep the smallest that's a valid permutation.",
-        "a[0] 하나만 정하면 나머지 수는 저절로 따라와요."),
-      sections: getPhoto20Sections(E),
+        "The fast solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

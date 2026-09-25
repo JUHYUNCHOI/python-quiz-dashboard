@@ -334,6 +334,67 @@ export function MilkFactoryProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getMilkFactorySections()
+   는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getMilkFactoryWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "radj", ko: "간선을 뒤집은 인접 리스트", en: "the reversed adjacency list" },
+        { v: "cand", ko: "지금 시도하는 후보 역", en: "the candidate station we're trying" },
+        { v: "vis / count", ko: "역방향 BFS 로 닿은 역들 · 닿은 개수", en: "stations reached by backward BFS / how many" },
+      ],
+      beats: [
+        { hi: [0, 19], bubble: t(E,
+          "What should we print? The station every other station's milk can reach, or -1 if none. Read N and the N-1 belts, and build the reverse graph radj — a queue<int> will drive the BFS below.",
+          "무엇을 출력해야 하나요? 모든 역의 우유가 도달할 수 있는 역, 없으면 -1 이에요.\nN 과 컨베이어 N-1 개를 읽고 방향을 뒤집은 그래프 radj 를 만들어요 — 아래 BFS 는 queue<int> 로 다음 갈 곳을 관리해요.") },
+        { hi: [20, 27], bubble: t(E,
+          "\"Every station reaches candidate c\" is the same as \"walking backward from c, do we touch every station?\" So try each candidate c = 1..N and start a backward BFS from it.",
+          "\"모든 역에서 후보 c 로 갈 수 있다\" 는 \"c 에서 거꾸로 타면 모든 역에 닿는다\" 와 같은 말이에요.\n그래서 후보 c = 1..N 을 하나씩 시도하며 c 에서 역방향 BFS 를 시작해요.") },
+        { hi: [28, 38], bubble: t(E,
+          "Walk radj outward from c, counting every station touched.",
+          "radj 를 c 에서부터 타고 나가며, 닿은 역 수를 세요.") },
+        { hi: [39, 46], bubble: t(E,
+          "If we touched all N stations, c is the answer — print it and stop (or -1 if no candidate works).",
+          "N 개 전부에 닿았으면 c 가 답이에요 — 출력하고 멈춰요 (아무 c 도 안 되면 -1).") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "radj", ko: "간선을 뒤집은 인접 리스트", en: "the reversed adjacency list" },
+      { v: "cand", ko: "지금 시도하는 후보 역", en: "the candidate station we're trying" },
+      { v: "visited / count", ko: "역방향 BFS 로 닿은 역들 · 닿은 개수", en: "stations reached by backward BFS / how many" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What should we print? The station every other station's milk can reach, or -1 if none. So first read N and the N-1 belts.",
+        "무엇을 출력해야 하나요? 모든 역의 우유가 도달할 수 있는 역, 없으면 -1 이에요.\n그러니 먼저 N 과 컨베이어(간선) N-1 개를 읽어요.") },
+      { hi: [5, 13], bubble: t(E,
+        "\"Every station reaches candidate c\" is the same as \"walking backward along belts from c, do we touch every station?\" So build the reverse graph radj (map() makes this short).",
+        "\"모든 역에서 후보 c 로 갈 수 있다\" 는 \"c 에서 거꾸로 컨베이어를 타면 모든 역에 닿는다\" 와 같은 말이에요.\n그래서 방향을 뒤집은 그래프(radj)를 만들어요 (map() 덕분에 짧아져요).") },
+      { hi: [15, 22], bubble: t(E,
+        "Try each candidate c = 1..N in order, and start a BFS backward from c using a list as the queue.",
+        "후보 c = 1..N 을 차례로 시도하고, 리스트를 큐 삼아 c 에서 역방향 BFS 를 시작해요.") },
+      { hi: [23, 30], bubble: t(E,
+        "Walk radj outward from c, counting every station touched.",
+        "radj 를 c 에서부터 타고 나가며, 닿은 역 수를 세요.") },
+      { hi: [31, 33], bubble: t(E,
+        "If we touched all N stations, c is the answer — save it and stop.",
+        "N 개 전부에 닿았으면 c 가 답이에요 — 저장하고 멈춰요.") },
+      { hi: [35, 36], bubble: t(E,
+        "Write the answer (or -1 if no candidate ever worked).",
+        "답을 파일에 출력해요 (아무 c 도 안 됐으면 -1).") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

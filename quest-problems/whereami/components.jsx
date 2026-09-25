@@ -110,6 +110,40 @@ export function WhereAmIProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은 절대 바꾸지
+   않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다.
+   이 quest 는 파이썬만 쓴다(pythonOnly:true, app/quest/[problemId]/data.ts) — C++ 분기는
+   안 만든다. */
+export function getWhereAmIWalk(E) {
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "K", ko: "지금 시도하는 윈도우 크기", en: "the window size we're trying" },
+      { v: "seen", ko: "이 K 에서 이미 나온 부분문자열들", en: "substrings already seen at this K" },
+      { v: "unique", ko: "이 K 가 되는지 (겹침이 없는지)", en: "whether this K has no duplicates" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we need? The smallest K with no repeats. So first read N and the mailbox string s.",
+        "무엇을 내놔야 하나요? 겹치지 않는 가장 작은 K예요.\n먼저 N 과 우편함 문자열 s 를 읽어요.") },
+      { hi: [7, 11], bubble: t(E,
+        "A smaller K is better, so try K = 1, 2, 3, ... in order. For each K, start a fresh set and assume it's unique until proven otherwise.",
+        "K 가 작을수록 좋으니 K = 1, 2, 3, ... 을 차례로 시도해요.\nK 마다 빈 집합을 새로 만들고, 겹치는 게 나올 때까지는 unique 를 True 로 둬요.") },
+      { hi: [12, 17], bubble: t(E,
+        "To check this K, look at every length-K window. If we've already seen it, this K fails — otherwise remember it.",
+        "이 K 가 되는지 보려면 길이 K 인 부분문자열을 하나씩 확인해요.\n이미 본 거면(집합에 있으면) 이 K 는 실패, 아니면 집합에 기억해 둬요.") },
+      { hi: [18, 20], bubble: t(E,
+        "If we made it through with no duplicates, this K works — save it and stop (smaller K's are checked first, so the first hit is the answer).",
+        "끝까지 겹치는 게 안 나왔으면 이 K 가 되는 거예요 — 저장하고 멈춰요.\n작은 K 부터 확인했으니 처음 성공한 K 가 바로 답이에요.") },
+      { hi: [22, 23], bubble: t(E,
+        "Write the answer to the output file.",
+        "답을 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

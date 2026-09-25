@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getBucketBrigadeSections, BucketBrigadeGrid } from "./components";
+import { BucketBrigadeGrid } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -161,11 +161,10 @@ export function makeBrigadeCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code — straight in.
     {
-      type: "progressive",
+      type: "bucketbrigade-codewalk",
       narr: t(E,
-        "BFS from L to B on the 10×10 grid, blocking R.  Shortest path length minus 2 (L and B don't count as cows).  Sections build it one piece at a time.",
-        "10×10 격자에서 L→B 최단 경로 칸 수(L·B 제외)가 소의 마릿수예요."),
-      sections: getBucketBrigadeSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

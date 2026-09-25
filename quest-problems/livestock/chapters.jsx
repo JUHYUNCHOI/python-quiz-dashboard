@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getLivestockSections, ChainSim } from "./components";
+import { ChainSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (5 steps)
@@ -173,11 +173,10 @@ export function makeLivestockCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "livestock-codewalk",
       narr: t(E,
-        "Scan lineups alphabetically — the first that meets every constraint is the answer.",
-        "줄 세우기를 알파벳 순으로 훑다가 제약을 다 지키는 첫 줄이 답이에요."),
-      sections: getLivestockSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

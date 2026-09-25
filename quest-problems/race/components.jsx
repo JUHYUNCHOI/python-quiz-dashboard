@@ -139,6 +139,64 @@ export function RaceProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getRaceSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getRaceWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "p", ko: "지금 시도하는 정점 속도", en: "the peak speed we're trying" },
+        { v: "base_dist / base_time", ko: "p 로 가속만 했을 때 거리·시간", en: "distance/time from just accelerating to p" },
+        { v: "best", ko: "지금까지 찾은 가장 짧은 시간", en: "the shortest time found so far" },
+      ],
+      beats: [
+        { hi: [0, 13], bubble: t(E,
+          "What do we need? The fastest time to cover K meters while ending at speed <= X. Read K, N, X — and use long long, since values like p*(p+1)/2 grow fast.",
+          "무엇을 내놔야 하나요? K 미터를 채우면서 도착 속도가 X 이하가 되는 가장 빠른 시간이에요.\nK, N, X 를 읽어요 — p*(p+1)/2 같은 값이 금방 커지니 long long 을 써요.") },
+        { hi: [14, 24], bubble: t(E,
+          "Once we pick a peak speed p, the distance and time are fixed by formula — so just try every p from 1 to 50000.",
+          "정점 속도 p 하나만 정하면 거리·시간이 공식으로 정해지니, p 를 1부터 50000까지 다 시도해요.") },
+        { hi: [25, 32], bubble: t(E,
+          "If accelerating alone already covers K meters, that's the time. Otherwise cruise the rest of the way — ceiling division so we don't fall short.",
+          "가속만으로 K 미터를 채우면 그게 시간이에요.\n못 채우면 남은 거리를 정속으로 채워요 — 나머지를 올림으로 나눠야 모자라지 않아요.") },
+        { hi: [33, 38], bubble: t(E,
+          "Keep the smallest time seen across every p, then print it.",
+          "모든 p 중 가장 짧은 시간을 기억해 뒀다가 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "p", ko: "지금 시도하는 정점 속도", en: "the peak speed we're trying" },
+      { v: "half / half_minus", ko: "0+..+X, 0+..+(X-1) 부분합", en: "partial sums 0+..+X and 0+..+(X-1)" },
+      { v: "best", ko: "지금까지 찾은 가장 짧은 시간", en: "the shortest time found so far" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need? The fastest time to cover K meters while ending at speed <= X. Read K, N first.",
+        "무엇을 내놔야 하나요? K 미터를 채우면서 도착 속도가 X 이하가 되는 가장 빠른 시간이에요.\n먼저 K, N 을 읽어요.") },
+      { hi: [6, 15], bubble: t(E,
+        "The plan (comments above): accelerate to a peak p, cruise, then decelerate to X. Once p is fixed, the distance/time formulas decide the rest — so we just try different p. Read this case's X.",
+        "계획(위 주석): 정점 p 까지 가속 → 정속 → X 까지 감속이에요.\np 가 정해지면 거리·시간 공식으로 나머지가 정해지니, p 를 이것저것 바꿔 봐요.\n이번 케이스의 X 를 읽어요.") },
+      { hi: [16, 29], bubble: t(E,
+        "Case p <= X (accelerate only, no need to decelerate): if X(X+1)/2 already reaches K, a smaller top speed t works. Otherwise accelerate to X, then cruise the rest.",
+        "p ≤ X 인 경우(가속만, 감속 필요 없음): X(X+1)/2 가 이미 K 를 넘으면 더 작은 최고 속도 t 로도 충분해요.\n아니면 X 까지 가속하고 남은 거리는 정속으로 채워요.") },
+      { hi: [30, 41], bubble: t(E,
+        "Case p > X (accelerate, cruise, decelerate): search p near sqrt(K + half_minus), and for each, compute the distance from acceleration alone, then cruise if it's not enough yet.",
+        "p > X 인 경우(가속 + 정속 + 감속): p 를 sqrt(K + half_minus) 근처에서만 찾아보고,\n가속만으로 되는 거리를 구한 뒤 모자라면 정속으로 채워요.") },
+      { hi: [42, 45], bubble: t(E,
+        "Keep the smallest time across every p tried, save it, and print all cases at the end.",
+        "시도한 p 중 가장 짧은 시간을 저장해 두고, 마지막에 케이스마다 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
