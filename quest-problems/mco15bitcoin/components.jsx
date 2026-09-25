@@ -246,6 +246,88 @@ export function BitcoinProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 절대 안 바꾸고 beats(설명 말풍선)만 덧붙인다.
+   getBitcoinSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   ⚠️ 코드 섹션이 2개라 스탑도 2개 — Walk1(① 사이트 읽어 두기) / Walk2(② 모든 쌍을 재 보기). ── */
+export function getBitcoinWalk1(E, lang = "py") {
+  const vars = [
+    { v: "sites", ko: "모든 사이트의 좌표 목록", en: "every site's coordinates, kept in a list" },
+    { v: "max_dist", ko: "지금까지 본 것 중 가장 큰 거리의 제곱", en: "the biggest squared distance seen so far" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP.slice(0, 18),
+      vars,
+      beats: [
+        { hi: [0, 14], bubble: t(E,
+          "What do we need to keep around? Every pair has to be compared with every other, so the sites have to stay — read them all into a vector first.",
+          "무엇을 계속 남겨둬야 하나요? 모든 쌍을 서로 견줘야 하니 사이트가 계속 있어야 해요. 그래서 먼저 전부 vector 에 담아 둬요.") },
+        { hi: [16, 16], bubble: t(E,
+          "Start max_dist at 0 — a squared distance is never negative, so 0 is a safe 'nothing found yet'.",
+          "max_dist 를 0 으로 시작해요 — 거리의 제곱은 음수가 될 수 없어서, 0 은 '아직 아무것도 못 찾음' 자리로 안전해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY.slice(0, 8),
+    vars,
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need to keep around? Every pair has to be compared with every other, so the sites have to stay — read them all into a list first.",
+        "무엇을 계속 남겨둬야 하나요? 모든 쌍을 서로 견줘야 하니 사이트가 계속 있어야 해요. 그래서 먼저 전부 목록에 담아 둬요.") },
+      { hi: [6, 6], bubble: t(E,
+        "Start max_dist at 0 — a squared distance is never negative, so 0 is a safe 'nothing found yet'.",
+        "max_dist 를 0 으로 시작해요 — 거리의 제곱은 음수가 될 수 없어서, 0 은 '아직 아무것도 못 찾음' 자리로 안전해요.") },
+    ],
+  };
+}
+
+export function getBitcoinWalk2(E, lang = "py") {
+  const vars = [
+    { v: "dist_sq", ko: "이 쌍의 거리의 제곱 (dx² + dy²)", en: "this pair's squared distance (dx² + dy²)" },
+    { v: "max_dist", ko: "지금까지 본 것 중 가장 큰 거리의 제곱", en: "the biggest squared distance seen so far" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP.slice(18, 30),
+      vars,
+      beats: [
+        { hi: [0, 1], bubble: t(E,
+          "How do we look at every pair exactly once? Start j at i + 1, not 0 — that way each pair is measured once, and a site never compares with itself.",
+          "모든 쌍을 한 번씩만 보려면? j 를 0 이 아니라 i + 1 에서 시작해요 — 그러면 쌍마다 한 번씩만 재고, 자기 자신과 견주는 일도 없어요.") },
+        { hi: [2, 4], bubble: t(E,
+          "Keep dx² + dy² and never take a square root. The pair with the biggest squared distance is also the farthest pair, so the answer is the same — and it stays a whole number, no decimal error.",
+          "dx²+dy² 만 쓰고 제곱근은 쓰지 않아요. 제곱이 가장 큰 쌍이 실제로도 가장 먼 쌍이라 답이 같고, 값이 정수로 남아서 소수점 오차도 없어요.") },
+        { hi: [5, 5], bubble: t(E,
+          "max_dist just remembers the biggest one seen so far.",
+          "max_dist 는 지금까지 본 것 중 가장 큰 값만 기억해요.") },
+        { hi: [9, 11], bubble: t(E,
+          "By the time the loops end, max_dist already holds the answer — print it.",
+          "반복이 끝나면 max_dist 에 이미 답이 들어 있으니 그대로 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY.slice(8, 16),
+    vars,
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "How do we look at every pair exactly once? Start j at i + 1, not 0 — that way each pair is measured once, and a site never compares with itself.",
+        "모든 쌍을 한 번씩만 보려면? j 를 0 이 아니라 i + 1 에서 시작해요 — 그러면 쌍마다 한 번씩만 재고, 자기 자신과 견주는 일도 없어요.") },
+      { hi: [2, 4], bubble: t(E,
+        "Keep dx² + dy² and never take a square root. The pair with the biggest squared distance is also the farthest pair, so the answer is the same — and it stays a whole number, no decimal error.",
+        "dx²+dy² 만 쓰고 제곱근은 쓰지 않아요. 제곱이 가장 큰 쌍이 실제로도 가장 먼 쌍이라 답이 같고, 값이 정수로 남아서 소수점 오차도 없어요.") },
+      { hi: [5, 5], bubble: t(E,
+        "max_dist just remembers the biggest one seen so far.",
+        "max_dist 는 지금까지 본 것 중 가장 큰 값만 기억해요.") },
+      { hi: [7, 7], bubble: t(E,
+        "By the time the loops end, max_dist already holds the answer — print it.",
+        "반복이 끝나면 max_dist 에 이미 답이 들어 있으니 그대로 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

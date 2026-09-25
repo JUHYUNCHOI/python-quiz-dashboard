@@ -212,6 +212,64 @@ export function ProductivityProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이 배열이다 — 절대 안 바꾸고
+   beats(설명 말풍선)만 덧붙인다. getProductivitySections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getProductivityWalk(E, lang = "py") {
+  const vars = [
+    { v: "d[i]", ko: "농장 i 에 갈 수 있는 가장 늦은 기상 시각 (c[i] − t[i])", en: "the latest wake-up time that still reaches farm i (c[i] − t[i])" },
+    { v: "V, S", ko: "이번 물음 — 최소 몇 곳(V), 기상 시각(S)", en: "this query — need at least V farms, wake-up time S" },
+    { v: "reachable", ko: "S 로 갈 수 있는 농장 수", en: "how many farms are reachable with this S" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 14], bubble: t(E,
+          "What do we need for every query? Just c[i] and t[i] for each farm. So read N, Q, then c[] and t[].",
+          "물음마다 무엇이 필요한가요? 농장마다 c[i] 와 t[i] 예요. 그래서 N, Q 와 c[], t[] 를 읽어요.") },
+        { hi: [15, 19], bubble: t(E,
+          "Farm i is reachable exactly when S + t[i] < c[i], i.e. d[i] := c[i] − t[i] > S. We'll ask this for every query, so compute d[] once and sort it.",
+          "농장 i 에 갈 수 있으려면 S + t[i] < c[i], 즉 d[i] = c[i] − t[i] 가 S 보다 커야 해요. 물음마다 이걸 물을 거니 d[] 를 한 번만 구해 정렬해 둬요.") },
+        { hi: [21, 23], bubble: t(E,
+          "For each query, read V and S — the input order is V then S.",
+          "물음마다 V 와 S 를 읽어요 — 입력은 V 가 먼저, S 가 나중이에요.") },
+        { hi: [24, 25], bubble: t(E,
+          "How many farms have d[i] > S? Since d[] is sorted, one binary search (upper_bound) gives that count in O(log N) instead of scanning all N.",
+          "d[i] > S 인 농장이 몇 개인가요? d[] 가 정렬돼 있으니, 다 훑지 않고 upper_bound 한 번(O(log N))으로 세요.") },
+        { hi: [26, 33], bubble: t(E,
+          "If that count is at least V, this query is YES — otherwise NO.",
+          "그 개수가 V 이상이면 이 물음은 YES, 아니면 NO 예요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need for every query? Just c[i] and t[i] for each farm. So read N, Q, then c[] and t[].",
+        "물음마다 무엇이 필요한가요? 농장마다 c[i] 와 t[i] 예요. 그래서 N, Q 와 c[], t[] 를 읽어요.") },
+      { hi: [6, 7], bubble: t(E,
+        "Farm i is reachable exactly when S + t[i] < c[i], i.e. d[i] := c[i] − t[i] > S. We'll ask this for every query, so compute d[] once and sort it.",
+        "농장 i 에 갈 수 있으려면 S + t[i] < c[i], 즉 d[i] = c[i] − t[i] 가 S 보다 커야 해요. 물음마다 이걸 물을 거니 d[] 를 한 번만 구해 정렬해 둬요.") },
+      { hi: [9, 11], bubble: t(E,
+        "For each query, read V and S — the input order is V then S.",
+        "물음마다 V 와 S 를 읽어요 — 입력은 V 가 먼저, S 가 나중이에요.") },
+      { hi: [12, 12], bubble: t(E,
+        "How many farms have d[i] > S? Since d[] is sorted, one binary search (bisect_left) gives that count instead of scanning all N.",
+        "d[i] > S 인 농장이 몇 개인가요? d[] 가 정렬돼 있으니, 다 훑지 않고 이분 탐색(bisect_left) 한 번으로 세요.") },
+      { hi: [13, 16], bubble: t(E,
+        "If that count is at least V, this query is YES — otherwise NO.",
+        "그 개수가 V 이상이면 이 물음은 YES, 아니면 NO 예요.") },
+      { hi: [18, 18], bubble: t(E,
+        "Print every answer at once, joined by newlines.",
+        "답을 다 모아 줄바꿈으로 이어 한 번에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

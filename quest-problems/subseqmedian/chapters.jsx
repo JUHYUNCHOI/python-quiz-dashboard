@@ -216,13 +216,12 @@ export function makeSubseqMedianCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: code
     {
-      type: "progressive",
+      type: "subseqmedian-walk",
       narr: t(E,
         "Solution code — read part by part. (Correct; small inputs only, as noted.)",
         "풀이 코드를 부분별로 읽어 봐요. 작은 입력에서만 빨라요."),
-      sections: getSubseqMedianSections(E),
     },
   ];
 }

@@ -106,6 +106,67 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 절대 안 바꾸고 beats(설명 말풍선)만 덧붙인다.
+   getXorStringSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getXorStringWalk(E, lang = "py") {
+  const vars = [
+    { v: "pow2k / sign", ko: "2^k mod p / (-1)^k (+1 또는 −1)", en: "2^k mod p / (-1)^k (+1 or −1)" },
+    { v: "f00 / f11 / f01", ko: "각 쌍 종류(0,0 / 1,1 / 0,1)가 k번 변신한 뒤 갖는 beauty", en: "the beauty each pair type (0,0 / 1,1 / 0,1) has after k transforms" },
+    { v: "w", ko: "이 쌍이 들어 있는 부분문자열의 개수 (i·(n−i))", en: "how many substrings contain this pair (i·(n−i))" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 22], bubble: t(E,
+          "What do we need to read? n, k, and the string s. We'll need modular division and modular powers, so build a helper pw() first.",
+          "무엇을 읽어야 하나요? n, k 와 문자열 s 예요. 모듈러 나눗셈·거듭제곱이 필요하니 pw() 함수를 먼저 만들어 둬요.") },
+        { hi: [24, 34], bubble: t(E,
+          "Each pair type (0,0 / 1,1 / 0,1) has a closed-form beauty after k transforms — it only needs 2^k and (-1)^k. Compute those once, then the three beauty values f00, f11, f01.",
+          "각 쌍 종류(0,0 / 1,1 / 0,1)가 k번 변신한 뒤 갖는 beauty 는 공식으로 바로 나와요 — 2^k 와 (-1)^k 만 있으면 돼요. 그걸 구하고, 세 가지 beauty 값 f00, f11, f01 을 계산해요.") },
+        { hi: [36, 39], bubble: t(E,
+          "A pair between positions i and i+1 sits inside i·(n−i) substrings — that's its weight w.",
+          "위치 i 와 i+1 사이의 쌍은 i·(n−i) 개의 부분문자열에 들어가요 — 그게 이 쌍의 가중치 w 예요.") },
+        { hi: [40, 49], bubble: t(E,
+          "Which beauty applies? Check the pair's two characters and pick f00, f11, or f01.",
+          "어느 beauty 를 써야 하나요? 이 쌍의 두 글자를 보고 f00, f11, f01 중 맞는 걸 골라요.") },
+        { hi: [50, 51], bubble: t(E,
+          "Add this pair's weighted beauty (w × f) to the running total.",
+          "이 쌍의 가중치를 곱한 beauty (w × f) 를 누적 합에 더해요.") },
+        { hi: [52, 54], bubble: t(E,
+          "Print the total.",
+          "누적 합을 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we need to read? n, k, and the string s. We'll need modular division, so prepare MOD and 3's modular inverse (inv3) up front.",
+        "무엇을 읽어야 하나요? n, k 와 문자열 s 예요. 모듈러 나눗셈이 필요하니 MOD 와 3의 모듈러 역원(inv3) 을 미리 준비해요.") },
+      { hi: [6, 15], bubble: t(E,
+        "Each pair type (0,0 / 1,1 / 0,1) has a closed-form beauty after k transforms — it only needs 2^k and (-1)^k. Compute those once, then the three beauty values f00, f11, f01.",
+        "각 쌍 종류(0,0 / 1,1 / 0,1)가 k번 변신한 뒤 갖는 beauty 는 공식으로 바로 나와요 — 2^k 와 (-1)^k 만 있으면 돼요. 그걸 구하고, 세 가지 beauty 값 f00, f11, f01 을 계산해요.") },
+      { hi: [17, 21], bubble: t(E,
+        "A pair between positions i and i+1 sits inside i·(n−i) substrings — that's its weight w.",
+        "위치 i 와 i+1 사이의 쌍은 i·(n−i) 개의 부분문자열에 들어가요 — 그게 이 쌍의 가중치 w 예요.") },
+      { hi: [22, 28], bubble: t(E,
+        "Which beauty applies? Check the pair's two characters and pick f00, f11, or f01.",
+        "어느 beauty 를 써야 하나요? 이 쌍의 두 글자를 보고 f00, f11, f01 중 맞는 걸 골라요.") },
+      { hi: [29, 29], bubble: t(E,
+        "Add this pair's weighted beauty (w × f) to the running total.",
+        "이 쌍의 가중치를 곱한 beauty (w × f) 를 누적 합에 더해요.") },
+      { hi: [31, 31], bubble: t(E,
+        "Print the total.",
+        "누적 합을 출력해요.") },
+    ],
+  };
+}
+
 export function getXorStringSections(E) {
   return [
     {

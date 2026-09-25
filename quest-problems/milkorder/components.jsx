@@ -210,6 +210,73 @@ export function MilkOrderProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이 배열이다 — 절대 안 바꾸고
+   beats(설명 말풍선)만 덧붙인다. getMilkOrderSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getMilkOrderWalk(E, lang = "py") {
+  const vars = [
+    { v: "fixed_cow_to_pos", ko: "소 번호 → 고정 자리", en: "cow number → its fixed slot" },
+    { v: "pos_to_cow", ko: "이번 p 후보에서, 각 자리에 있는 소", en: "for this candidate p, which cow sits at each slot" },
+    { v: "nxt", ko: "다음에 놓을 수 있는 가장 앞자리", en: "the earliest slot still free to place a cow" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 16], bubble: t(E,
+          "What do we need to know first? The hierarchy order and the fixed spots. So read N, M, K and the hierarchy list hier.",
+          "무엇을 먼저 알아야 하나요? 소들의 순서(hier)와 고정 자리들이에요. 그래서 N, M, K 와 순서 목록 hier 를 읽어요.") },
+        { hi: [17, 22], bubble: t(E,
+          "We'll need to look up a fixed spot by cow number, over and over. So store it once in a map: cow -> slot.",
+          "고정 자리를 소 번호로 계속 찾아봐야 해요. 그래서 map<int,int> 에 소 번호 → 자리로 한 번 저장해 둬요.") },
+        { hi: [23, 25], bubble: t(E,
+          "Which is the earliest slot cow 1 can take? Try p = 1, 2, 3, ... in order — the first one that works is the answer.",
+          "1번 소가 설 수 있는 가장 이른 자리는 몇 번일까요? p = 1, 2, 3, ... 순서로 시도해서, 처음 되는 자리가 답이에요.") },
+        { hi: [26, 46], bubble: t(E,
+          "For this p to even be possible: it must not clash with cow 1's own fixed spot, and the fixed cows must not overlap each other. If both check out, place cow 1 at p.",
+          "이 p 가 되려면 — 1번 소의 고정 자리와 안 맞으면 넘어가고(continue), 고정된 소들끼리 자리가 겹쳐도(conflict) 넘어가요. 둘 다 괜찮으면 1번 소를 p 에 놓아요.") },
+        { hi: [47, 82], bubble: t(E,
+          "Now lay the hierarchy out from the front: a fixed cow uses its own slot, cow 1 uses p, everyone else takes the next free slot (nxt). If any slot lands before nxt, the order is broken — this p fails.",
+          "이제 순서 목록(hier)을 앞에서부터 채워요 — 고정된 소면 그 자리, 1번 소면 p, 나머지는 nxt 이후 첫 빈 자리예요. 자리가 nxt 보다 앞이면 순서가 깨지니 이 p 는 실패예요.") },
+        { hi: [83, 89], bubble: t(E,
+          "If we made it through the whole hierarchy (ok), this p works — and since we tried p from small to large, this is already the smallest one. Stop right away.",
+          "끝까지 순서대로 놓을 수 있었으면(ok) 이 p 가 답이에요 — 작은 p 부터 봤으니 더 볼 것도 없이 바로 멈춰요.") },
+        { hi: [90, 92], bubble: t(E,
+          "Write the answer to the output file.",
+          "찾은 답을 파일에 써요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we need to know first? The hierarchy order and the fixed spots. So read N, M, K and the hierarchy list hier. (This old-style USACO contest uses file I/O.)",
+        "무엇을 먼저 알아야 하나요? 소들의 순서(hier)와 고정 자리들이에요. 그래서 N, M, K 와 순서 목록 hier 를 읽어요. (옛날 USACO 방식이라 파일에서 읽어요.)") },
+      { hi: [7, 13], bubble: t(E,
+        "We'll need to look up a fixed spot by cow number, over and over. So store it once in a dict: cow -> slot.",
+        "고정 자리를 소 번호로 계속 찾아봐야 해요. 그래서 딕셔너리에 소 번호 → 자리로 한 번 저장해 둬요.") },
+      { hi: [15, 19], bubble: t(E,
+        "Which is the earliest slot cow 1 can take? Try p = 1, 2, 3, ... in order — the first one that works is the answer.",
+        "1번 소가 설 수 있는 가장 이른 자리는 몇 번일까요? p = 1, 2, 3, ... 순서로 시도해서, 처음 되는 자리가 답이에요.") },
+      { hi: [20, 36], bubble: t(E,
+        "For this p to even be possible: it must not clash with cow 1's own fixed spot, and the fixed cows must not overlap each other. If both check out, place cow 1 at p.",
+        "이 p 가 되려면 — 1번 소의 고정 자리와 안 맞으면 넘어가고(continue), 고정된 소들끼리 자리가 겹쳐도(conflict) 넘어가요. 둘 다 괜찮으면 1번 소를 p 에 놓아요.") },
+      { hi: [37, 68], bubble: t(E,
+        "Now lay the hierarchy out from the front: a fixed cow uses its own slot, cow 1 uses p, everyone else takes the next free slot (nxt). If any slot lands before nxt, the order is broken — this p fails.",
+        "이제 순서 목록(hier)을 앞에서부터 채워요 — 고정된 소면 그 자리, 1번 소면 p, 나머지는 nxt 이후 첫 빈 자리예요. 자리가 nxt 보다 앞이면 순서가 깨지니 이 p 는 실패예요.") },
+      { hi: [69, 72], bubble: t(E,
+        "If we made it through the whole hierarchy (ok), this p works — and since we tried p from small to large, this is already the smallest one. Stop right away.",
+        "끝까지 순서대로 놓을 수 있었으면(ok) 이 p 가 답이에요 — 작은 p 부터 봤으니 더 볼 것도 없이 바로 멈춰요.") },
+      { hi: [74, 75], bubble: t(E,
+        "Write the answer to the output file.",
+        "찾은 답을 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

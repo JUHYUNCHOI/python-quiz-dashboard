@@ -247,6 +247,73 @@ export function RotShiftProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이 배열이다 — 절대 안 바꾸고
+   beats(설명 말풍선)만 덧붙인다. getRotShiftSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getRotShiftWalk(E, lang = "py") {
+  const vars = [
+    { v: "slot", ko: "p 를 처음 휩쓰는 활성 위치", en: "the active slot that first sweeps into p" },
+    { v: "wait", ko: "그 슬롯에서 p 까지 처음 도달하는 데 걸리는 시간", en: "minutes until that slot first reaches p" },
+    { v: "gap", ko: "그 슬롯이 다시 p 를 휩쓸 때까지의 간격", en: "minutes between that slot sweeping p again" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 12], bubble: t(E,
+          "What should we output? Which cow ends up at each position p after T minutes. So read N, K, T and the active positions.",
+          "무엇을 출력해야 하나요? T 분 뒤 각 위치 p 에 있는 소예요. 그래서 N, K, T 와 활성 위치들을 읽어요.") },
+        { hi: [14, 18], bubble: t(E,
+          "Position p is first swept by exactly one active slot — the one just behind it. Binary-search that slot, then measure how long until it first reaches p (wait).",
+          "위치 p 를 처음 휩쓰는 건 바로 뒤에 있는 활성 슬롯 딱 하나예요. 이분 탐색으로 그 슬롯을 찾고, p 까지 처음 도달하는 시간(wait) 을 구해요.") },
+        { hi: [19, 23], bubble: t(E,
+          "That same slot sweeps p again every gap minutes — the distance to the next active slot (or a full lap of N if it's the last one).",
+          "그 슬롯은 gap 분마다 다시 p 를 휩쓸어요 — 다음 활성 슬롯까지의 거리예요 (마지막 슬롯이면 한 바퀴 N 만큼).") },
+        { hi: [25, 27], bubble: t(E,
+          "If T minutes pass before the slot even reaches p once (wait ≥ T), p never gets swept — it stays put.",
+          "T 분이 지나도 슬롯이 p 에 한 번도 안 닿으면(wait ≥ T), p 는 그대로 남아요.") },
+        { hi: [28, 31], bubble: t(E,
+          "Otherwise, count how many times it sweeps p in T minutes (hits), then jump straight to where p ends up — no need to simulate each minute.",
+          "그렇지 않으면 T 분 동안 p 가 몇 번 휩쓸리는지(hits) 세어, 그만큼 건너뛴 자리로 바로 점프해요 — 분마다 시뮬레이션할 필요 없어요.") },
+        { hi: [33, 33], bubble: t(E,
+          "Cow p ends up at that final position — record it.",
+          "소 p 가 그 최종 위치에 도착한 거니, 그 자리에 기록해요.") },
+        { hi: [36, 42], bubble: t(E,
+          "Print the cow at each position, in order.",
+          "각 위치의 소를 순서대로 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "What should we output? Which cow ends up at each position p after T minutes. So read N, K, T and the active positions.",
+        "무엇을 출력해야 하나요? T 분 뒤 각 위치 p 에 있는 소예요. 그래서 N, K, T 와 활성 위치들을 읽어요.") },
+      { hi: [5, 9], bubble: t(E,
+        "Position p is first swept by exactly one active slot — the one just behind it. Binary-search that slot, then measure how long until it first reaches p (wait).",
+        "위치 p 를 처음 휩쓰는 건 바로 뒤에 있는 활성 슬롯 딱 하나예요. 이분 탐색으로 그 슬롯을 찾고, p 까지 처음 도달하는 시간(wait) 을 구해요.") },
+      { hi: [10, 13], bubble: t(E,
+        "That same slot sweeps p again every gap minutes — the distance to the next active slot (or a full lap of N if it's the last one).",
+        "그 슬롯은 gap 분마다 다시 p 를 휩쓸어요 — 다음 활성 슬롯까지의 거리예요 (마지막 슬롯이면 한 바퀴 N 만큼).") },
+      { hi: [15, 16], bubble: t(E,
+        "If T minutes pass before the slot even reaches p once (wait ≥ T), p never gets swept — it stays put.",
+        "T 분이 지나도 슬롯이 p 에 한 번도 안 닿으면(wait ≥ T), p 는 그대로 남아요.") },
+      { hi: [17, 19], bubble: t(E,
+        "Otherwise, count how many times it sweeps p in T minutes (hits), then jump straight to where p ends up — no need to simulate each minute.",
+        "그렇지 않으면 T 분 동안 p 가 몇 번 휩쓸리는지(hits) 세어, 그만큼 건너뛴 자리로 바로 점프해요 — 분마다 시뮬레이션할 필요 없어요.") },
+      { hi: [21, 21], bubble: t(E,
+        "Cow p ends up at that final position — record it.",
+        "소 p 가 그 최종 위치에 도착한 거니, 그 자리에 기록해요.") },
+      { hi: [23, 23], bubble: t(E,
+        "Print the cow at each position, in order.",
+        "각 위치의 소를 순서대로 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

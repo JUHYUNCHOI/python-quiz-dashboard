@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { ProductivityProgressiveCode, downloadProductivityPDF, getProductivitySections, ProductivitySim } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { ProductivityProgressiveCode, downloadProductivityPDF, getProductivitySections, getProductivityWalk, ProductivitySim } from "./components";
 import { makeProdCh1, makeProdCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -102,6 +103,7 @@ export default function ProductivityApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <ProductivityProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "productivity-walk") return <CodeWalk E={E} lang={codeLang} {...getProductivityWalk(E, codeLang)} accent={A} />;
     if (step.type === "sim") return <ProductivitySim E={E} />;
     return null;
   };
@@ -114,6 +116,7 @@ export default function ProductivityApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <ProductivityProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "productivity-walk") return <CodeWalk E={E} lang={codeLang} {...getProductivityWalk(E, codeLang)} accent={A} />;
     if (s.type === "sim") return <ProductivitySim E={E} />;
     return null;
   };

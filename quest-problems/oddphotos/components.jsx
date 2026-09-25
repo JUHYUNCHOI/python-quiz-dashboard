@@ -289,6 +289,73 @@ export function OddPhotosProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이 배열이다 — 절대 안 바꾸고
+   beats(설명 말풍선)만 덧붙인다. getOddPhotosSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getOddPhotosWalk(E, lang = "py") {
+  const vars = [
+    { v: "even / odd", ko: "짝수 소 / 홀수 소의 마릿수", en: "count of even-ID / odd-ID cows" },
+    { v: "k", ko: "지금 시도하는 묶음 개수", en: "the group count we're trying" },
+    { v: "evenGroups / oddGroups", ko: "k 묶음 중 짝수합 자리 수 / 홀수합 자리 수", en: "how many of the k groups need an even sum / an odd sum" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "What do we need to know? Only how many cows are even-ID and how many are odd-ID. So read N IDs and tally even vs odd — no array needed.",
+          "무엇을 알아야 하나요? 짝수 ID 소와 홀수 ID 소가 몇 마리인지만 알면 돼요. 그래서 N 개 ID 를 읽으며 짝수·홀수 개수만 세요 — 배열은 필요 없어요.") },
+        { hi: [19, 24], bubble: t(E,
+          "What should we print? The largest number of groups whose sums alternate even, odd, even, odd, ... An even-sum group needs 1 even cow OR 2 odd cows; an odd-sum group needs 1 odd cow. Only the counts matter.",
+          "무엇을 출력해야 하나요? 합이 짝-홀-짝-홀... 로 번갈아 가는 묶음의 최대 개수예요. 짝수합 묶음은 짝수 소 1마리 또는 홀수 소 2마리, 홀수합 묶음은 홀수 소 1마리면 돼요 — 개수만 알면 충분해요.") },
+        { hi: [25, 26], bubble: t(E,
+          "So try every group count k from 0 to N, and keep the largest k the counts can actually cover.",
+          "그래서 묶음 개수 k 를 0부터 N까지 다 시도해서, 되는 가장 큰 k 를 답으로 남겨요.") },
+        { hi: [27, 31], bubble: t(E,
+          "With k groups, the odd-sum slots number k/2 — that many odd cows are required. Not enough? This k fails.",
+          "k 묶음이면 홀수합 자리가 k/2 개예요 — 그만큼 홀수 소가 있어야 해요. 모자라면 이 k 는 실패예요.") },
+        { hi: [32, 35], bubble: t(E,
+          "The odd cows left over must pair up to fill even-sum groups — if that leftover count is odd, they can't all pair, so this k fails too.",
+          "남은 홀수 소는 짝수합 묶음을 채우려고 둘씩 짝지어야 해요 — 남은 수가 홀수면 다 못 짝지으니 이 k 도 실패예요.") },
+        { hi: [36, 39], bubble: t(E,
+          "Each even-sum group is filled by 1 even cow OR 2 leftover odd cows. If that filler is enough for all even-sum slots, k works — save it.",
+          "짝수합 묶음 하나는 짝수 소 1마리 또는 남은 홀수 소 2마리로 채워요. 그 필러가 짝수합 자리를 다 채울 만큼이면 k 가 성공이에요 — 저장해요.") },
+        { hi: [41, 43], bubble: t(E,
+          "Print the largest k we found.",
+          "찾은 가장 큰 k 를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need to know? Only how many cows are even-ID and how many are odd-ID. So read N and the IDs, then tally even vs odd.",
+        "무엇을 알아야 하나요? 짝수 ID 소와 홀수 ID 소가 몇 마리인지만 알면 돼요. 그래서 N 과 ID 를 읽고, 짝수·홀수 개수를 세요.") },
+      { hi: [6, 11], bubble: t(E,
+        "What should we print? The largest number of groups whose sums alternate even, odd, even, odd, ... An even-sum group needs 1 even cow OR 2 odd cows; an odd-sum group needs 1 odd cow. Only the counts matter.",
+        "무엇을 출력해야 하나요? 합이 짝-홀-짝-홀... 로 번갈아 가는 묶음의 최대 개수예요. 짝수합 묶음은 짝수 소 1마리 또는 홀수 소 2마리, 홀수합 묶음은 홀수 소 1마리면 돼요 — 개수만 알면 충분해요.") },
+      { hi: [12, 13], bubble: t(E,
+        "So try every group count k from 0 to N, and keep the largest k the counts can actually cover.",
+        "그래서 묶음 개수 k 를 0부터 N까지 다 시도해서, 되는 가장 큰 k 를 답으로 남겨요.") },
+      { hi: [14, 17], bubble: t(E,
+        "With k groups, the odd-sum slots number k // 2 — that many odd cows are required. Not enough? This k fails.",
+        "k 묶음이면 홀수합 자리가 k // 2 개예요 — 그만큼 홀수 소가 있어야 해요. 모자라면 이 k 는 실패예요.") },
+      { hi: [18, 20], bubble: t(E,
+        "The odd cows left over must pair up to fill even-sum groups — if that leftover count is odd, they can't all pair, so this k fails too.",
+        "남은 홀수 소는 짝수합 묶음을 채우려고 둘씩 짝지어야 해요 — 남은 수가 홀수면 다 못 짝지으니 이 k 도 실패예요.") },
+      { hi: [21, 23], bubble: t(E,
+        "Each even-sum group is filled by 1 even cow OR 2 leftover odd cows. If that filler is enough for all even-sum slots, k works — save it.",
+        "짝수합 묶음 하나는 짝수 소 1마리 또는 남은 홀수 소 2마리로 채워요. 그 필러가 짝수합 자리를 다 채울 만큼이면 k 가 성공이에요 — 저장해요.") },
+      { hi: [25, 25], bubble: t(E,
+        "Print the largest k we found.",
+        "찾은 가장 큰 k 를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

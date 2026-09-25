@@ -163,13 +163,12 @@ export function makeProdCh1(E) {
    ================================================================ */
 export function makeProdCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: Code
     {
-      type: "progressive",
+      type: "productivity-walk",
       narr: t(E,
         "Farm i is reachable iff S < c[i] − t[i]; precompute d[i] = c[i] − t[i], sort it, then binary-search each query.",
         "S < c[i]−t[i] 인 농장만 갈 수 있어요. d[i] 정렬 후 질문마다 이분 탐색해요."),
-      sections: getProductivitySections(E),
     },
   ];
 }

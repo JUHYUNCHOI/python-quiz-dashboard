@@ -375,12 +375,17 @@ export function makeMcc22CardSharkCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: code — ① collapse each stack to D
     {
-      type: "progressive",
+      type: "cardshark-walk-1",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
-      sections: getMcc22CardSharkSections(E),
+        "Solution code, part ① — collapse each stack to one number D.", "풀이 코드 ① — 묶음마다 수 D 하나로 줄여요."),
+    },
+    // 2-3: code — ② pick signs & output
+    {
+      type: "cardshark-walk-2",
+      narr: t(E,
+        "Solution code, part ② — pick each stack's sign, then output.", "풀이 코드 ② — 묶음마다 부호를 고르고 출력해요."),
     },
   ];
 }

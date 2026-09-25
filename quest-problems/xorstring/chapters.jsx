@@ -220,12 +220,11 @@ export function makeXorStringCh2(E, lang = "py") {
         </div>),
     },
 
-    // 2-2: progressive code
+    // 2-2: code
     {
-      type: "progressive",
+      type: "xorstring-walk",
       narr: t(E,
         "Solution code — read the why-notes, then the code.", "풀이 코드 — '왜 이렇게?' 노트를 읽고 코드를 봐요."),
-      sections: getXorStringSections(E),
     },
   ];
 }

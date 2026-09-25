@@ -220,12 +220,19 @@ export function makeRevEngCh2(E, lang = "py") {
     /* 2-1: 이 narr 이 예전엔 전체 알고리즘을 통째로 다시 말했다 — 1-4/1-5 시뮬 narr,
        그리고 아래 섹션의 `why` 와 네 번째로 겹쳤다. 이제 알고리즘 설명은 2번째 섹션의
        `why` 한 곳에만 두고, 여기서는 두 섹션이 무엇을 하는지만 가리킨다. */
+    // 2-1: code — 1️⃣ read the input
     {
-      type: "progressive",
+      type: "reverseeng-walk-1",
       narr: t(E,
-        "Two parts: read the input, then peel rows off.",
-        "두 부분으로 봐요 — 입력을 읽는 부분, 그다음 줄을 떼어내는 부분."),
-      sections: getRevEngSections(E),
+        "Solution code, part 1️⃣ — read the input.",
+        "풀이 코드 1️⃣ — 입력을 읽어요."),
+    },
+    // 2-2: code — 2️⃣ peel rows off
+    {
+      type: "reverseeng-walk-2",
+      narr: t(E,
+        "Solution code, part 2️⃣ — peel rows off, one if at a time.",
+        "풀이 코드 2️⃣ — if 하나씩 만들며 줄을 떼어내요."),
     },
   ];
 }

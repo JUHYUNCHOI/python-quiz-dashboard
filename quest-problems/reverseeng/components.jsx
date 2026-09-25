@@ -165,6 +165,94 @@ export function RevEngProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이 배열이다 — 절대 안 바꾸고
+   beats(설명 말풍선)만 덧붙인다. getRevEngSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   ⚠️ 코드 섹션이 2개라 스탑도 2개 — Walk1(1️⃣ 입력 읽기) / Walk2(2️⃣ 줄 떼어내기). ── */
+export function getRevEngWalk1(E, lang = "py") {
+  const vars = [
+    { v: "rows", ko: "(문자열, 출력) 짝지어진 줄들의 목록", en: "the list of (string, output) rows" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP.slice(0, 16),
+      vars,
+      beats: [
+        { hi: [0, 10], bubble: t(E,
+          "What do we need for one test case? N (string length), M (row count), then M rows. So read T, N, M.",
+          "한 케이스에 뭐가 필요할까요? N(문자열 길이), M(줄 개수), 그리고 줄 M 개예요. 그래서 T, N, M 을 읽어요.") },
+        { hi: [11, 15], bubble: t(E,
+          "Read the M rows — each a length-N binary string with its claimed output.",
+          "M 개의 줄을 읽어요 — 길이 N 문자열과 그 출력이 짝지어진 줄이에요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY.slice(0, 14),
+    vars,
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we need for one test case? N, M, then M rows. But the judge leaves a blank line between test cases, and input() won't skip it — so build read_line() to keep reading until a line has something on it.",
+        "한 케이스에 뭐가 필요할까요? N, M, 그리고 줄 M 개예요. 그런데 채점기가 케이스 사이에 빈 줄을 넣어서 input() 하나로는 못 건너뛰어요 — 그래서 내용 있는 줄이 나올 때까지 읽는 read_line() 을 만들어요.") },
+      { hi: [7, 13], bubble: t(E,
+        "For each of T cases, read N, M, then the M rows — each a length-N binary string with its claimed output.",
+        "T 케이스마다 N, M 을 읽고, M 개의 (문자열, 출력) 줄을 모아요.") },
+    ],
+  };
+}
+
+export function getRevEngWalk2(E, lang = "py") {
+  const vars = [
+    { v: "alive", ko: "아직 안 떼어낸 줄인지 표시", en: "whether this row hasn't been peeled off yet" },
+    { v: "remaining", ko: "아직 안 떼어낸 줄의 개수", en: "how many rows are still not peeled off" },
+    { v: "progress", ko: "이번 판에 뭔가 떼어냈는지", en: "whether this pass peeled anything off" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP.slice(16),
+      vars,
+      beats: [
+        { hi: [1, 3], bubble: t(E,
+          "The answer is OK or LIE — could such a program exist? An if-statement on 'variable=value' only works if every matching row shares the same output. So mark every row alive, and try peeling groups off.",
+          "답은 OK 나 LIE 예요 — 그런 프로그램을 만들 수 있는지예요. 'if 변수=값' 은 맞는 줄의 출력이 전부 같을 때만 쓸 수 있어요. 그래서 줄들을 모두 살아있다고(alive) 표시하고, 하나씩 떼어내 봐요.") },
+        { hi: [4, 7], bubble: t(E,
+          "While rows remain and the last pass made progress: try every position and every value as a possible if-condition.",
+          "뗄 게 남아 있고(remaining) 지난 판에 뭔가 뗐으면(progress), 자리(pos)마다 값(0 또는 1)마다 가능한 if 조건을 다시 찾아봐요.") },
+        { hi: [8, 20], bubble: t(E,
+          "For rows still alive that match this condition (position pos = val), count how many claim output 0 and how many claim 1.",
+          "아직 살아있는 줄 중 이 조건('자리 pos 가 val')에 맞는 줄들의 출력이 0 인 개수(cnt0)와 1 인 개수(cnt1)를 세요.") },
+        { hi: [21, 31], bubble: t(E,
+          "No matching rows? Skip. All matching rows share one output (cnt0 or cnt1 is 0)? Then one if-statement covers them — peel them off and mark progress.",
+          "맞는 줄이 없으면 건너뛰어요. 맞는 줄의 출력이 전부 같으면(cnt0 또는 cnt1 이 0) if 하나로 다 설명돼요 — 그 줄들을 떼어내고 이번 판에 뗐다고 표시해요.") },
+        { hi: [35, 44], bubble: t(E,
+          "Everything peeled away (remaining == 0)? OK. Stuck with rows left? LIE. Print it.",
+          "다 떼어졌으면(remaining == 0) OK, 막혀서 남았으면 LIE — 그대로 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY.slice(14),
+    vars,
+    beats: [
+      { hi: [1, 6], bubble: t(E,
+        "The answer is OK or LIE — could such a program exist? An if-statement on 'variable=value' only works if every matching row shares the same output. Mark every row alive, and try peeling groups off.",
+        "답은 OK 나 LIE 예요 — 그런 프로그램을 만들 수 있는지예요. 'if 변수=값' 은 맞는 줄의 출력이 전부 같을 때만 쓸 수 있어요. 그래서 줄들을 모두 살아있다고(alive) 표시하고, 하나씩 떼어내 봐요.") },
+      { hi: [7, 10], bubble: t(E,
+        "While rows remain and the last pass made progress: try every position and every value as a possible if-condition.",
+        "뗄 게 남아 있고(remaining) 지난 판에 뭔가 뗐으면(progress), 자리(pos)마다 값(0 또는 1)마다 가능한 if 조건을 다시 찾아봐요.") },
+      { hi: [11, 16], bubble: t(E,
+        "Gather the still-alive rows matching this condition (position pos = val). If their outputs are all the same, one if-statement covers them all.",
+        "아직 살아있는 줄 중 이 조건('자리 pos 가 val')에 맞는 줄들을 모아요. 그 줄들의 출력이 전부 같으면 if 하나로 다 설명돼요.") },
+      { hi: [17, 20], bubble: t(E,
+        "Peel those rows off (mark them not alive), shrink remaining by how many, and mark that this pass made progress.",
+        "그 줄들을 다 떼어내고(alive=False), 뗀 만큼 remaining 을 줄이고, 이번 판에 뗐다고 표시해요.") },
+      { hi: [22, 25], bubble: t(E,
+        "Everything peeled away (remaining == 0)? OK. Stuck with rows left? LIE. Print it.",
+        "다 떼어졌으면(remaining == 0) OK, 막혀서 남았으면 LIE — 그대로 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

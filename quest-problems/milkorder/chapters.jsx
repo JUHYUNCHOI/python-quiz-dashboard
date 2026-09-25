@@ -295,11 +295,10 @@ export function makeMilkOrderCh2(E, lang = "py") {
   return [
     // 2-1: Code
     {
-      type: "progressive",
+      type: "milkorder-walk",
       narr: t(E,
         "Try every position from 1 to N for cow #1 and find one that works.",
         "1번 소의 자리를 1부터 N까지 다 넣어 보고 되는 자리를 찾아요."),
-      sections: getMilkOrderSections(E),
     },
   ];
 }

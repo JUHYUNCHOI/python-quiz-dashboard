@@ -219,10 +219,9 @@ export function makeRotShiftCh2(E, lang = "py") {
         </div>),
     },
     {
-      type: "progressive",
+      type: "rotshift-walk",
       narr: t(E,
         "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 부분씩 읽어봐요. 위에서 Python ↔ C++ 을 바꿔 볼 수 있어요."),
-      sections: getRotShiftSections(E),
     },
     {
       type: "quiz",

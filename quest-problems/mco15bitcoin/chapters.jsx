@@ -178,13 +178,19 @@ export function makeBitcoinCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBitcoinCh2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: Code — ① read the sites
     {
-      type: "progressive",
+      type: "bitcoin-walk-1",
       narr: t(E,
-        "Brute force: for every pair of sites, compute their squared distance and keep the running max. Sections build it one piece at a time.",
-        "모든 쌍을 하나씩 다 재 보면서 가장 큰 값을 남겨요."),
-      sections: getBitcoinSections(E),
+        "Solution code, part ① — read every site's coordinates.",
+        "풀이 코드 ① — 사이트 좌표를 읽어 둬요."),
+    },
+    // 2-2: Code — ② measure every pair
+    {
+      type: "bitcoin-walk-2",
+      narr: t(E,
+        "Solution code, part ② — measure every pair and keep the max.",
+        "풀이 코드 ② — 모든 쌍을 재 보면서 가장 큰 값을 남겨요."),
     },
   ];
 }

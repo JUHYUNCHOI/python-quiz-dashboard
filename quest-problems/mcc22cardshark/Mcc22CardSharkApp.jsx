@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Mcc22CardSharkProgressiveCode, downloadMcc22CardSharkPDF, getMcc22CardSharkSections } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { Mcc22CardSharkProgressiveCode, downloadMcc22CardSharkPDF, getMcc22CardSharkSections, getMcc22CardSharkWalk1, getMcc22CardSharkWalk2 } from "./components";
 import { makeMcc22CardSharkCh1, makeMcc22CardSharkCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -102,6 +103,8 @@ export default function Mcc22CardSharkApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <Mcc22CardSharkProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "cardshark-walk-1") return <CodeWalk E={E} lang={codeLang} {...getMcc22CardSharkWalk1(E, codeLang)} accent={A} />;
+    if (step.type === "cardshark-walk-2") return <CodeWalk E={E} lang={codeLang} {...getMcc22CardSharkWalk2(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -113,6 +116,8 @@ export default function Mcc22CardSharkApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <Mcc22CardSharkProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "cardshark-walk-1") return <CodeWalk E={E} lang={codeLang} {...getMcc22CardSharkWalk1(E, codeLang)} accent={A} />;
+    if (s.type === "cardshark-walk-2") return <CodeWalk E={E} lang={codeLang} {...getMcc22CardSharkWalk2(E, codeLang)} accent={A} />;
     return null;
   };
 

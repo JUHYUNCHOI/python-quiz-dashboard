@@ -156,6 +156,94 @@ export function getMcc22CardSharkSections(E) {
   ];
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ SEC1_PY/CPP · SEC2_PY/CPP 는 절대 안 바꾸고 beats(설명 말풍선)만 덧붙인다.
+   getMcc22CardSharkSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   ⚠️ 코드 섹션이 2개라 스탑도 2개 — Walk1(① 묶음을 D로) / Walk2(② 부호 정하고 출력). ── */
+export function getMcc22CardSharkWalk1(E, lang = "py") {
+  const vars = [
+    { v: "D", ko: "묶음 하나를 맨 위부터 +, −, +, ... 로 번갈아 더한 값", en: "one stack collapsed: top card +, next −, next +, ..." },
+    { v: "even_D / odd_D", ko: "길이가 짝수인/홀수인 묶음들의 D 값 모음", en: "the D values of even-length / odd-length stacks" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: SEC1_CPP,
+      vars,
+      beats: [
+        { hi: [0, 10], bubble: t(E,
+          "What's really left to decide? Each stack keeps its card order — the only choice is its overall sign, +D or −D. So read T, n, and make buckets for even-length and odd-length stacks' D values.",
+          "정할 게 뭐가 남았나요? 묶음마다 카드 순서는 그대로라 부호 하나(+D 또는 −D)만 고르면 돼요. 그래서 T, n 을 읽고, 짝/홀 길이별로 D 를 모을 통을 만들어요.") },
+        { hi: [11, 21], bubble: t(E,
+          "Collapse one stack to a single D — add cards from the top with alternating signs +, −, +, ...",
+          "묶음 하나를 D 하나로 줄여요 — 맨 위 카드부터 +, −, +, ... 로 번갈아 더해요.") },
+        { hi: [22, 27], bubble: t(E,
+          "Even-length and odd-length stacks behave differently (an odd-length stack flips everything after it), so file this D into evenD or oddD.",
+          "길이가 짝수인 묶음과 홀수인 묶음은 다르게 다뤄야 해요 (홀수 길이는 뒤엣것들의 홀짝을 뒤집어요). 그래서 이 D 를 evenD 나 oddD 에 나눠 담아요.") },
+      ],
+    };
+  }
+  return {
+    code: SEC1_PY,
+    vars,
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What's really left to decide? Each stack keeps its card order — the only choice is its overall sign, +D or −D. So read T, n, and make buckets for even-length and odd-length stacks' D values.",
+        "정할 게 뭐가 남았나요? 묶음마다 카드 순서는 그대로라 부호 하나(+D 또는 −D)만 고르면 돼요. 그래서 T, n 을 읽고, 짝/홀 길이별로 D 를 모을 통을 만들어요.") },
+      { hi: [6, 14], bubble: t(E,
+        "Collapse one stack to a single D — add cards from the top with alternating signs +, −, +, ...",
+        "묶음 하나를 D 하나로 줄여요 — 맨 위 카드부터 +, −, +, ... 로 번갈아 더해요.") },
+      { hi: [15, 18], bubble: t(E,
+        "Even-length and odd-length stacks behave differently (an odd-length stack flips everything after it), so file this D into even_D or odd_D.",
+        "길이가 짝수인 묶음과 홀수인 묶음은 다르게 다뤄야 해요 (홀수 길이는 뒤엣것들의 홀짝을 뒤집어요). 그래서 이 D 를 even_D 나 odd_D 에 나눠 담아요.") },
+    ],
+  };
+}
+
+export function getMcc22CardSharkWalk2(E, lang = "py") {
+  const vars = [
+    { v: "plus", ko: "홀수 길이 묶음 중 + 부호를 받는 개수", en: "how many odd-length stacks get a + sign" },
+    { v: "ans", ko: "이번 케이스의 답", en: "this test case's answer" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: SEC2_CPP,
+      vars,
+      beats: [
+        { hi: [0, 9], bubble: t(E,
+          "Is there at least one odd-length stack? If so, every even-length stack can be moved to either kind of position — so it freely takes the bigger of D and −D, meaning |D|.",
+          "홀수 길이 묶음이 하나라도 있나요? 있으면 모든 짝수 길이 묶음을 어느 자리로든 옮길 수 있어서, D 와 −D 중 큰 쪽 — 즉 |D| — 를 자유롭게 가져가요.") },
+        { hi: [10, 18], bubble: t(E,
+          "Odd-length stacks flip parity, so read in order their own signs alternate +, −, +, ... With k of them, exactly (k+1)/2 get a +. Sort by D descending and hand the + to the first (k+1)/2.",
+          "홀수 길이 묶음은 홀짝을 뒤집어서, 그것들끼리 순서대로 보면 부호가 +, −, +, ... 로 번갈아요. k 개 중 (k+1)/2 개가 + 를 받으니, D 를 내림차순 정렬해서 앞쪽 (k+1)/2 개에 + 를 줘요.") },
+        { hi: [19, 24], bubble: t(E,
+          "No odd-length stack at all? Then every stack is forced onto an odd position, so all contribute +D — just add them up.",
+          "홀수 길이 묶음이 하나도 없으면요? 그러면 모든 묶음이 홀수 위치로 강제되니 전부 +D 예요 — 그냥 다 더해요.") },
+        { hi: [25, 28], bubble: t(E,
+          "Print each case's answer.",
+          "케이스마다 답을 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: SEC2_PY,
+    vars,
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "Is there at least one odd-length stack? If so, every even-length stack can be moved to either kind of position — so it freely takes the bigger of D and −D, meaning |D|.",
+        "홀수 길이 묶음이 하나라도 있나요? 있으면 모든 짝수 길이 묶음을 어느 자리로든 옮길 수 있어서, D 와 −D 중 큰 쪽 — 즉 |D| — 를 자유롭게 가져가요.") },
+      { hi: [3, 10], bubble: t(E,
+        "Odd-length stacks flip parity, so read in order their own signs alternate +, −, +, ... With k of them, exactly (k+1)//2 get a +. Sort by D descending and hand the + to the first (k+1)//2.",
+        "홀수 길이 묶음은 홀짝을 뒤집어서, 그것들끼리 순서대로 보면 부호가 +, −, +, ... 로 번갈아요. k 개 중 (k+1)//2 개가 + 를 받으니, D 를 내림차순 정렬해서 앞쪽 (k+1)//2 개에 + 를 줘요.") },
+      { hi: [11, 13], bubble: t(E,
+        "No odd-length stack at all? Then every stack is forced onto an odd position, so all contribute +D — just add them up.",
+        "홀수 길이 묶음이 하나도 없으면요? 그러면 모든 묶음이 홀수 위치로 강제되니 전부 +D 예요 — 그냥 다 더해요.") },
+      { hi: [14, 16], bubble: t(E,
+        "Collect every case's answer and print them all at once.",
+        "케이스마다 답을 모아 한 번에 출력해요.") },
+    ],
+  };
+}
+
 export function Mcc22CardSharkProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }

@@ -166,13 +166,12 @@ export function makeOddPhotosCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeOddPhotosCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: Code
     {
-      type: "progressive",
+      type: "oddphotos-walk",
       narr: t(E,
         "Only the even-count and odd-count of IDs matter — try every group count k and keep the largest one that works.",
         "묶음 수 k 를 하나씩 넣어 보고 되는 것 중 제일 큰 값을 골라요."),
-      sections: getOddPhotosSections(E),
     },
   ];
 }
