@@ -239,8 +239,14 @@ const scan = () => p.evaluate(() => {
     if (!top || top === t || t.contains(top)) return
     const blocker = bars.find(f => !f.contains(t) && (f === top || f.contains(top)))
     if (!blocker) return
+    /* ⭐ 2026-09-25: **대신 눌리는 것이 무엇인지**도 같이 담는다.
+       `socialdist1` 에서 D 슬라이더 자리를 누르면 `Next →` 가 눌려 **쪽이 넘어가 버렸다.**
+       「가려졌다」만 찍으면 그게 「아무 일도 안 난다」인지 「엉뚱한 게 눌린다」인지 알 수 없다. */
+    const hit = top.closest('button, a, input') || top
     covered.push({ what: name,
-                   by: (blocker.className || '').toString().slice(0, 40) || '(인라인 스타일 요소)' })
+                   by: (blocker.className || '').toString().slice(0, 40) || '(인라인 스타일 요소)',
+                   instead: (hit.tagName + ' ' + (hit.textContent || '').trim()).slice(0, 30),
+                   nav: !!top.closest('button, a') })
   })
   /* 글자끼리 · 글자와 도형이 **겹치나** (2026-09-08 추가).
      선생님: "디자이너와 qa가 잘 안하나봐. 글자랑 도형등 겹치는 부분이 있던데"
@@ -344,6 +350,15 @@ const scan = () => p.evaluate(() => {
    그래서 기준을 바꾼다 — **어느 스크롤 위치에서도 한 번도 못 눌린 것만** 신고한다.
    (진짜였던 사례: 아래 고정 바에 가린 입력칸은 끝까지 내려도 안 나온다.) */
 const r = await scan()
+/* ⭐ 2026-09-25 — **첫 진입(스크롤 0)** 에서 막힌 것은 따로 들고 간다.
+   아래의 「어느 위치에서든 한 번이라도 눌렸으면 뺀다」 규칙은 위쪽 sticky 헤더 헛경보를
+   막으려고 만든 건데, 그 규칙이 **진짜 결함 하나를 조용히 통과시켰다.**
+   `socialdist1` 의 D 슬라이더가 **1280×900·1440×900 첫 진입 위치에서** 하단 고정 바 뒤
+   죽은 영역에 들어가, 그 자리를 누르면 `Next →` 가 눌려 **쪽이 넘어가 버렸다.**
+   50px 만 내리면 정상이라 「한 번이라도 눌렸다」에 걸려 **0건으로 보였다.**
+   그런데 **스크롤 0 은 모든 학생이 시작하는 위치**고, 첫 클릭 전에 스크롤하는 학생은 없다.
+   그래서 여기만은 「한 번이라도」로 봐 주지 않는다. (UX 담당이 Playwright 로 실측해 찾았다.) */
+const coveredAtTop = r.covered.map(c => ({ ...c }))
 const seen = new Set(r.covered.map(c => c.what))
 const everClickable = new Set()
 const addClickable = (sc) => sc.onScreen.forEach(n => {
@@ -380,6 +395,19 @@ console.log(`\n=== ${mobile ? '모바일 375×812' : '데스크탑 1280×900'} �
 console.log(r.text)
 console.log(`\n── 고정 요소에 가려진 것: ${r.covered.length}개`)
 r.covered.slice(0, 10).forEach(c => console.log(`   🚨 ${c.what}  ← ${c.by}${c.y ? ` (스크롤 ${c.y}px 에서)` : ''}`))
+
+// ⭐ 첫 진입 위치 — 위 목록과 **다른 층**이다. 합치지 마라.
+console.log(`\n── 첫 진입(스크롤 0)에서 막힌 것: ${coveredAtTop.length}개`)
+if (coveredAtTop.length) {
+  console.log('   ⚠️ 학생은 **여기서 시작한다.** 첫 클릭 전에 스크롤하는 학생은 없다.')
+  coveredAtTop.slice(0, 10).forEach(c => console.log(
+    `   🚨 ${c.what}  ← ${c.by}` +
+    (c.instead ? `\n        대신 눌리는 것: ${c.instead}${c.nav ? '  ⛔ 이건 버튼·링크다 — 누르면 화면이 넘어간다' : ''}` : '')))
+  console.log('   고치는 법: 그 줄 아래에 **고정 바 높이만큼 여백**을 줘라(margin-bottom).')
+} else {
+  console.log('   ✅ 없음. ⚠️ 단 이 검사는 **이 뷰포트 높이에서만** 참이다 —')
+  console.log('      쪽 높이가 뷰포트와 우연히 맞아떨어질 때만 나는 결함이라 1280×900·1440×900 을 따로 봐라.')
+}
 console.log(`\n── 글자·도형이 겹친 곳: ${r.overlaps.length}개`)
 r.overlaps.slice(0, 8).forEach(o => console.log(`   🚨 "${o.a}" ↔ "${o.b}"  (겹침 ${Math.round(o.r * 100)}%)`))
 

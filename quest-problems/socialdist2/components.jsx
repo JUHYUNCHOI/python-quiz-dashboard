@@ -77,6 +77,50 @@ export function SocDist2Sim({ E }) {
         )}
       </div>
 
+      {/* R 조작기 — ⚠️ 2026-09-25: 원래 「수직선」 아래에 있었는데, 1280×900 첫 진입 화면에서
+          하필 하단 고정 바가 덮는 띠(y 832 아래)에 앉아 **학생이 조작기를 아예 못 봤다.**
+          누르면 바의 `다음 →` 이 눌려 쪽이 넘어가기까지 했다(Playwright 실측: 슬라이더 884~900,
+          바 시작 832). ⛔ 여백을 더하는 건 답이 아니다 — `QuestNavBar` 가 문서 끝에 이미 78px
+          스페이서를 두고 바 높이는 68px 이라 **여백은 남는다.** 조작기를 **수직선 위로 올려야**
+          화면 안에 들어온다. 부수 이득: 「누르는 곳 → 바뀌는 곳」 순서가 위에서 아래로 자연스러워진다.
+          형제 `socialdist1` 도 같은 결함이라 같은 모양으로 고친다. 이 둘 말고는 없다(슬라이더 쓰는
+          quest 31개 전수 확인). ⭐ `−`/`+` 를 같이 둔 이유 — 드래그는 기기·도구마다 되고 안 되고가
+          갈린다(학생 하나는 옮겼고 하나는 못 옮겼다). */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "Change spread radius R — drag, or tap − / +", "전파 반경 R 을 바꿔 봐요 — 끌거나 − / + 를 눌러요")}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <button
+            onClick={() => setR((v) => Math.max(0, v - 1))}
+            disabled={R <= 0}
+            aria-label={t(E, "decrease R", "R 줄이기")}
+            style={{
+              width: 30, height: 30, borderRadius: 8, fontSize: 16, fontWeight: 900,
+              border: `2px solid ${R <= 0 ? "#e5e7eb" : A}`, background: "#fff",
+              color: R <= 0 ? "#cbd5e1" : A, cursor: R <= 0 ? "default" : "pointer", lineHeight: 1,
+            }}
+          >−</button>
+          <span style={{ fontSize: 11, color: C.dim }}>0</span>
+          <input
+            type="range" min={0} max={MAX_R} value={R}
+            onChange={(e) => setR(parseInt(e.target.value, 10))}
+            style={{ width: 200, accentColor: A }}
+          />
+          <span style={{ fontSize: 11, color: C.dim }}>{MAX_R}</span>
+          <button
+            onClick={() => setR((v) => Math.min(MAX_R, v + 1))}
+            disabled={R >= MAX_R}
+            aria-label={t(E, "increase R", "R 늘리기")}
+            style={{
+              width: 30, height: 30, borderRadius: 8, fontSize: 16, fontWeight: 900,
+              border: `2px solid ${R >= MAX_R ? "#e5e7eb" : A}`, background: "#fff",
+              color: R >= MAX_R ? "#cbd5e1" : A, cursor: R >= MAX_R ? "default" : "pointer", lineHeight: 1,
+            }}
+          >+</button>
+        </div>
+      </div>
+
       {/* Number line stage */}
       <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "16px 10px", marginBottom: 10, overflowX: "auto" }}>
         <div style={{ position: "relative", width: totalW, height: 96, margin: "0 auto" }}>
@@ -167,22 +211,6 @@ export function SocDist2Sim({ E }) {
             );
           })}
           <span style={{ color: C.dim }}>· {t(E, "gap > R = new cluster", "간격 > R 이면 새 클러스터")}</span>
-        </div>
-      </div>
-
-      {/* R slider */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-        <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "Drag to change spread radius R", "전파 반경 R 을 바꿔 봐요")}
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 11, color: C.dim }}>0</span>
-          <input
-            type="range" min={0} max={MAX_R} value={R}
-            onChange={(e) => setR(parseInt(e.target.value, 10))}
-            style={{ width: 220, accentColor: A }}
-          />
-          <span style={{ fontSize: 11, color: C.dim }}>{MAX_R}</span>
         </div>
       </div>
 
