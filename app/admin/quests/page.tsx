@@ -329,7 +329,16 @@ export default function AdminQuestsPage() {
                                 그대로 ★2 로 뜬다(실측 22개). 카탈로그(`app/quest/page.tsx`)는
                                 `questDifficulty()` 를 거쳐 출처를 갈라 보여주는데 여기만 샜다.
                                 선생님(2026-09-13) *"이 문제가 진짜 레벨3인가?"* 가 나온 자리다. */}
-                            {QUEST_CONCEPT_META[p.id]?.difficulty
+                            {/* ⚠️ 2026-09-26: 여기가 `QUEST_CONCEPT_META[p.id]` 였다 — **오타다.**
+                                이 블록은 `groups[cat].map((q, i) => ...)` 안이라 변수는 `q` 다
+                                (`p` 는 앞쪽 `list.map((p) => ...)` 블록의 것이다).
+                                배포 판정 중 PM 이 `tsc --noEmit` 를 origin/main 과 대조해 찾았다 —
+                                **어제 작업이 새로 만든 유일한 타입 오류**였다.
+                                `next.config` 가 `ignoreBuildErrors: true` 라 **빌드는 안 깨지고**,
+                                그래서 묶음마다 돌린 `build:check` 가 **전부 통과로 나왔다.**
+                                ⭐ 학생 화면이 아니라 관리자 화면이라 눈에 안 띄었다 —
+                                **「빌드 통과」가 「타입 오류 없음」이 아니다.** */}
+                            {QUEST_CONCEPT_META[q.id]?.difficulty
                               ? <span className="text-[10px] font-bold text-amber-600">★ {m.difficulty}</span>
                               : <span className="text-[10px] font-bold text-gray-400" title="아무도 안 매긴 값 — 기본값이 보이는 것뿐이다">★ ?</span>}
                             <span className="text-[10px] font-bold text-emerald-600 flex gap-1">
