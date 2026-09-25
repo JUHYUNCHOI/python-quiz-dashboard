@@ -1906,11 +1906,15 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // Py choice the safe default for them.
   aircond1: {
     ...DEFAULT_META,
+    difficulty: 3,
+    concepts_required: ["loop", "list-basics", "math-basics"],
+    concepts_taught: ["diff-array"],
     supported_languages: ["py"],
   },
   alchemy: {
     ...DEFAULT_META,
-    concepts_required: ["2d-list-build"], /* ⚠️ 미감사 */
+    difficulty: 3,
+    concepts_required: ["2d-list-build"],
     type: "brute-force",
     supported_languages: ["py", "cpp"],
     // Rewritten 2026-06-15 → real USACO 2022 Open Bronze #3 (cpid 1229).
@@ -1956,15 +1960,18 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
       "print(ans)",
     ].join("\n"),
   },
-  madscientist: { ...DEFAULT_META, supported_languages: ["py"] },
+  madscientist: { ...DEFAULT_META, difficulty: 2, supported_languages: ["py"],
+                  concepts_required: ["loop", "string-basics"] },
   reach:        { ...DEFAULT_META, supported_languages: ["py"] },
   // reverseeng rewritten 2026-06-15 → real USACO 2022 Dec Bronze #3 (cpid 1253).
   // Correct greedy "peel a consistent (variable,value) group" algorithm lives in
   // quest-problems/reverseeng/components.jsx (py + cpp). Both verified locally vs the
   // official sample (OK/OK/LIE/LIE). Kept single-line here so the validate-solutions.mjs
   // extractor (which only cleanly parses isolated multi-line blocks) is unperturbed.
-  reverseeng:   { ...DEFAULT_META, concepts_required: ["3d-plus-indexing"], /* ⚠️ 미감사 */ supported_languages: ["py", "cpp"] },
-  socialdist2:  { ...DEFAULT_META, supported_languages: ["py"] },
+  reverseeng:   { ...DEFAULT_META, difficulty: 4, supported_languages: ["py", "cpp"],
+                  concepts_required: ["loop", "string-basics", "tuple-basics", "set-basics", "3d-plus-indexing"] },
+  socialdist2:  { ...DEFAULT_META, difficulty: 3, supported_languages: ["py"],
+                  concepts_required: ["loop", "tuple-basics", "sort-basics"] },
   stuckinrut:   { ...DEFAULT_META, supported_languages: ["py"] },
   subseqmedian: { ...DEFAULT_META, concepts_required: ["fenwick-tree"], /* ⚠️ 미감사 */ supported_languages: ["py"] },
   tameherd:     { ...DEFAULT_META, supported_languages: ["py"] },
@@ -1973,16 +1980,24 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // Until C++ is verified to match Python, mark Python as the
   // trustworthy path so the language picker / curriculum graph
   // doesn't recommend C++ for these.
-  acowdemia1:    { ...DEFAULT_META, type: "brute-force",       supported_languages: ["py"] },
-  acowdemia2:    { ...DEFAULT_META, concepts_required: ["2d-list-build"], /* ⚠️ 미감사 */ type: "pattern-discovery", supported_languages: ["py"] },
+  acowdemia1:    { ...DEFAULT_META, difficulty: 3, type: "brute-force",       supported_languages: ["py"],
+                   concepts_required: ["loop", "list-basics", "sort-basics"],
+                   concepts_taught: ["binary-search"] },
+  acowdemia2:    { ...DEFAULT_META, difficulty: 3, concepts_required: ["2d-list-build"], type: "pattern-discovery", supported_languages: ["py"] },
   acowdemia3:    { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
   billboard2: {
     ...DEFAULT_META,
+    difficulty: 3,
+    concepts_required: ["math-basics"],
+    concepts_taught: ["case-analysis", "rectangle-overlap"],
     type: "simulation",
     supported_languages: ["py"],
   },
   blocks: {
     ...DEFAULT_META,
+    difficulty: 3,
+    concepts_required: ["loop", "string-basics"],
+    concepts_taught: ["permutation-enum"],
     type: "brute-force",
     supported_languages: ["py", "cpp"],
     // Rewritten 2026-06-15 → real USACO 2022 Feb Bronze #3 (cpid 1205).
@@ -2018,12 +2033,15 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
       "    print('YES' if can_spell(w) else 'NO')",
     ].join("\n"),
   },
-  cowntrace:     { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },
+  cowntrace:     { ...DEFAULT_META, difficulty: 3, type: "simulation",        supported_languages: ["py"],
+                   concepts_required: ["loop", "set-basics", "dict-basics", "sort-basics"] },
   lifeguards:    { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
-  livestock:     { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },
+  livestock:     { ...DEFAULT_META, difficulty: 2, type: "simulation",        supported_languages: ["py"],
+                   concepts_required: ["loop", "list-basics"], concepts_taught: ["permutation-enum"] },
   magicorbs:     { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"] },
   milkorder:     { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
-  photoshoot2:   { ...DEFAULT_META, type: "simulation",        supported_languages: ["py", "cpp"] },
+  photoshoot2:   { ...DEFAULT_META, difficulty: 3, type: "simulation",        supported_languages: ["py", "cpp"],
+                   concepts_required: ["loop", "list-basics", "dict-basics"] },
   swapity:       { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"] },
   teleport:      { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },
 
@@ -2150,10 +2168,10 @@ export function getMetaCoverageStats() {
   buymilk:         { ...DEFAULT_META, difficulty: 4,
                      concepts_required: ["loop", "list-basics", "math-basics"],
                      concepts_taught: ["incremental-update", "greedy-pick"] },
-  photoshoot25:    { ...DEFAULT_META, concepts_required: ["2d-list-build"] },
+  photoshoot25:    { ...DEFAULT_META, difficulty: 4, concepts_required: ["loop", "2d-list-build"] },
   walkhome:        { ...DEFAULT_META, concepts_required: ["3d-plus-indexing", "nested-comprehension"] },
   teamttt:         { ...DEFAULT_META, concepts_required: ["3d-plus-indexing"] },
-  blockgame:       { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"] },
+  blockgame:       { ...DEFAULT_META, difficulty: 2, concepts_required: ["chr-ord-conversion", "frequency-count"] },
   // ⚠️ `supported_languages` 를 ["py"] 로 못박는다 — 이 quest 에 **C++ 코드가 아예 없다**
   //    (`components.jsx` 의 `_CPP` 0건, 직접 확인). 기본값이 ["py","cpp"] 라 그냥 두면
   //    관리자 화면에 **「C++ 검증됨」이라는 거짓 배지**가 뜬다. (quest-auditor, 2026-09-25)
