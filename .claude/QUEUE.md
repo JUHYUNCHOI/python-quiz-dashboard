@@ -75,12 +75,12 @@
 
 | 무엇 | 담당 | 상태 |
 |---|---|---|
-| CodeWalk 전환 — 1스탑 A조 9개 | frontend-engineer | READY 도는중 |
-| CodeWalk 전환 — 1스탑 B조 9개 | frontend-engineer | READY 도는중 |
-| CodeWalk 전환 — 다중스탑 C조 6개 | frontend-engineer | READY 도는중 |
-| 복사 버튼 — 학생 경험 판정 | ux-reviewer | READY 도는중 |
-| 복사 버튼 — 모바일 직접 체감 | student-python | READY 도는중 |
-| 복사 버튼 — 「영구히 못 누름」 자리 세기 | 메인 | READY 도는중 |
+| CodeWalk A·B·C조 **24개** | frontend-engineer ×3 | **DONE** `64e394c7` `72d56e88` `8f00fc4f` — 누적 **28개**(동결 4 포함) |
+| CodeWalk 1스탑 D조 9개 | frontend-engineer | READY 도는중 |
+| CodeWalk 1스탑 E조 9개 | frontend-engineer | READY 도는중 |
+| CodeWalk 다중스탑 F조 6개 | frontend-engineer | READY 도는중 |
+| 복사 버튼 — **고정 바가 클릭을 삼키지 않게** | frontend-engineer | READY 도는중 (PM 판정) |
+| 복사 버튼 — 범위 전수 재조사(1600ms 대기 + 실제 클릭) | frontend-engineer | READY 도는중 |
 
 ### ⭐ CodeWalk 스크리닝이 가정을 뒤집었다 (2026-09-25)
 **66개 중 「코드 섹션에 위젯이 박힌」 quest 는 사실상 0개다.**
@@ -99,7 +99,21 @@
     `favperm2` → `permutation` 챕터를 그대로 import 한다. **묶어서** 처리.
 **「코드 줄을 쪼개야 붙는 자리」는 0** — `hi` 는 기존 배열 인덱스를 가리킨다.
 
-### 📋 아직 안 띄운 CodeWalk 묶음 (24개 끝나면 바로)
+### ⭐ 복사 버튼 — **셋이 갈렸고 PM 이 네 번째 원인을 찾았다**
+`.quest-navbar` **바깥 div 에는 `onClick` 이 없다**(핸들러는 안쪽 버튼에만).
+→ 바의 **빈 자리**를 누르면 **정말 아무 일도 안 나고**(학생 말이 맞았다),
+  그 밑의 진짜 버튼은 **영영 못 누른다.**
+⛔ 「버튼을 아래로」도 「코드창 높이 제한」도 **이 문제를 없애지 못한다** —
+  메인 세션이 직접 쟀다: **`CodeWalk` 도 똑같이 막힌다**
+  (`acowdemia1`·`blocks` scrollY 150~210 · `checkups` 240~270, 모바일).
+⭕ 처방: **바깥 div 는 클릭을 안 받고 버튼 묶음만 받게** 한다 →
+  `CodeBlock`(215개 참조)을 **안 건드리고 quest 180개가 한꺼번에** 고쳐진다.
+⚠️ 남는 것: 버튼이 **시각적으로는 여전히 가려 보인다.** 기능은 살지만 어디를 누를지는 안 보인다 — backlog.
+⚠️ **범위를 아직 못 쟀다.** 전수 조사를 **세 번 돌려 세 번 다 실패**했다 —
+  화면이 그려지기 전에 탭을 눌러 **180개 중 176개가 「도달 실패」**였다(700ms → **1600ms** 면 잡힌다).
+  **「0건」을 결백으로 읽지 마라.**
+
+### 📋 아직 안 띄운 CodeWalk 묶음
     1스탑 나머지 18: mcc19palindrome mcc19rect mcc19rect2 mcc20cipher mcc20kitty
       mcc20missing mcc22grammar mco15honey milkexchange milkorder oddphotos
       productivity rotshift subseqmedian xorstring mcc22cardshark mco15bitcoin reverseeng
