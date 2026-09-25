@@ -101,6 +101,49 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 검증된 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getAcowdemia2Sections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getAcowdemia2Walk(E, lang = "py") {
+  const vars = [
+    { v: "senior[i][j]", ko: "i 가 j 보다 선임이란 증거", en: "proof i is senior to j" },
+    { v: "pub", ko: "이번 논문의 저자 순서", en: "this paper's author order" },
+    { v: "broke", ko: "알파벳 순서가 깨졌나", en: "did alphabetical order break" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "Read K publications' worth of N names, and set up an N×N senior grid. What should we output? For every pair, mark senior / junior / unknown.",
+          "논문 K 편 분의 저자 이름 N 개를 읽고, N×N senior 표를 만들어요.\n무엇을 답으로 내야 하나요? 모든 쌍마다 선임/후임/판단불가를 표시해요.") },
+        { hi: [18, 36], bubble: t(E,
+          "Names could just be tied in effort and happen to be alphabetical, so order alone doesn't prove a gap. For each publication, walk left to right: once alphabetical order breaks, that's proof of a real effort gap — and everyone after that point is senior to everyone before it.",
+          "이름이 알파벳순인 건 노력이 같아서일 수도 있어서,\n순서만 보고는 노력이 진짜 다른지 알 수 없어요.\n그래서 논문마다 왼쪽부터 훑어요 — 알파벳 순서가 깨지는 지점이 진짜 노력 차이의 증거고,\n그 뒤에 온 사람은 전부 그 앞사람보다 선임이에요.") },
+        { hi: [37, 54], bubble: t(E,
+          "Once we've read every publication, fill the grid from what we recorded and print it row by row.",
+          "논문을 다 훑었으면, 기록해 둔 것으로 표를 채워서 한 줄씩 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "Read K publications' worth of N names, and set up an N×N senior grid. What should we output? For every pair, mark senior / junior / unknown.",
+        "논문 K 편 분의 저자 이름 N 개를 읽고, N×N senior 표를 만들어요.\n무엇을 답으로 내야 하나요? 모든 쌍마다 선임/후임/판단불가를 표시해요.") },
+      { hi: [6, 16], bubble: t(E,
+        "Names could just be tied in effort and happen to be alphabetical, so order alone doesn't prove a gap. For each publication, walk left to right: once alphabetical order breaks, that's proof of a real effort gap — and everyone after that point is senior to everyone before it.",
+        "이름이 알파벳순인 건 노력이 같아서일 수도 있어서,\n순서만 보고는 노력이 진짜 다른지 알 수 없어요.\n그래서 논문마다 왼쪽부터 훑어요 — 알파벳 순서가 깨지는 지점이 진짜 노력 차이의 증거고,\n그 뒤에 온 사람은 전부 그 앞사람보다 선임이에요.") },
+      { hi: [17, 29], bubble: t(E,
+        "Once we've read every publication, fill the grid from what we recorded and print it row by row.",
+        "논문을 다 훑었으면, 기록해 둔 것으로 표를 채워서 한 줄씩 출력해요.") },
+    ],
+  };
+}
+
 export function getAcowdemia2Sections(E) {
   return [
     {

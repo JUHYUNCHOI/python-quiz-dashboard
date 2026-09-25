@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getBackForthSections, BackForthStateTreeSim } from "./components";
+import { BackForthStateTreeSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -162,13 +162,12 @@ export function makeBackForthCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBackForthCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — straight in, no placeholder.
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Try every choice across the 4 days — collect all distinct barn 1 totals into a set.",
-        "4 일간 모든 선택을 해 보고 나온 총량을 set 에 모아요."),
-      sections: getBackForthSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getAcowdemia1Sections } from "./components";
 
 /* ---------- H-Index Simulator ----------
    Additive bilingual interactive sim. Lets the student tweak paper citations
@@ -310,13 +309,12 @@ export function makeAcow1Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAcow1Ch2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Sort the papers, then binary-search for h.",
-        "논문을 정렬해 두고 h 를 이분 탐색으로 찾아봐요."),
-      sections: getAcowdemia1Sections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

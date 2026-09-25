@@ -79,6 +79,49 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 검증된 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getCannonballSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getCannonballWalk(E, lang = "py") {
+  const vars = [
+    { v: "x", ko: "Bessie 의 지금 위치", en: "Bessie's current position" },
+    { v: "direction / power", ko: "이동 방향과 점점 커지는 힘", en: "direction and growing power" },
+    { v: "ans", ko: "지금까지 부순 타겟 수", en: "targets broken so far" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "What should we output? How many targets break before Bessie leaves [1, N]. Read N targets/pads at positions 1..N (type 0=pad, 1=target, plus a value), then track her position x, direction, and growing power.",
+          "무엇을 답으로 내야 하나요? Bessie 가 [1, N] 을 벗어나기 전 부순 타겟 수예요.\n위치 1..N 의 타겟·패드 N 개를 읽어요(종류 0=패드/1=타겟과 값) — 그다음 위치 x, 방향, 점점 커지는 파워를 따라가요.") },
+        { hi: [18, 31], bubble: t(E,
+          "A jump pad changes both direction and power, so the next move depends on this one — simulate step by step instead of jumping ahead. Each step: check the target/pad at x, break it if strong enough, or flip direction and add power if it's a pad, then move by direction × power. Stop once x leaves [1, N].",
+          "점프 패드가 방향과 파워를 둘 다 바꿔서, 다음 걸음이 이번 걸음에 달려 있어요 — 그래서 건너뛰지 않고 한 걸음씩 따라가요.\n걸음마다 x 의 타겟·패드를 확인해 부수거나(타겟), 방향을 뒤집고 파워를 더한 뒤(패드) direction × power 만큼 움직여요.\nx 가 [1, N] 을 벗어나면 멈춰요.") },
+        { hi: [32, 35], bubble: t(E,
+          "Print how many targets broke.",
+          "부순 타겟 수를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 13], bubble: t(E,
+        "What should we output? How many targets break before Bessie leaves [1, N]. Read N targets/pads at positions 1..N (type 0=pad, 1=target, plus a value), then track her position x, direction, and growing power.",
+        "무엇을 답으로 내야 하나요? Bessie 가 [1, N] 을 벗어나기 전 부순 타겟 수예요.\n위치 1..N 의 타겟·패드 N 개를 읽어요(종류 0=패드/1=타겟과 값) — 그다음 위치 x, 방향, 점점 커지는 파워를 따라가요.") },
+      { hi: [14, 23], bubble: t(E,
+        "A jump pad changes both direction and power, so the next move depends on this one — simulate step by step instead of jumping ahead. Each step: check the target/pad at x, break it if strong enough, or flip direction and add power if it's a pad, then move by direction × power. Stop once x leaves [1, N].",
+        "점프 패드가 방향과 파워를 둘 다 바꿔서, 다음 걸음이 이번 걸음에 달려 있어요 — 그래서 건너뛰지 않고 한 걸음씩 따라가요.\n걸음마다 x 의 타겟·패드를 확인해 부수거나(타겟), 방향을 뒤집고 파워를 더한 뒤(패드) direction × power 만큼 움직여요.\nx 가 [1, N] 을 벗어나면 멈춰요.") },
+      { hi: [24, 25], bubble: t(E,
+        "Print how many targets broke.",
+        "부순 타겟 수를 출력해요.") },
+    ],
+  };
+}
+
 export function getCannonballSections(E) {
   return [
     {

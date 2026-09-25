@@ -285,6 +285,55 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 검증된 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getAirCondSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getAirCondWalk(E, lang = "py") {
+  const vars = [
+    { v: "combo", ko: "지금 시험하는 켜고 끄기 조합", en: "the on/off combo we're testing" },
+    { v: "cooling / cool", ko: "축사마다 지금 조합의 냉방력", en: "cooling this combo gives each stall" },
+    { v: "best", ko: "지금까지 찾은 가장 싼 비용", en: "cheapest cost found so far" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 16], bubble: t(E,
+          "Read each cow's stall range and needed cooling, and each AC's range/power/cost. What should we output? The cheapest AC subset that satisfies every cow.",
+          "소마다 축사 구간과 필요한 냉방력을, 에어컨마다 구간·세기·비용을 읽어요.\n무엇을 답으로 내야 하나요? 모든 소를 만족시키는 가장 싼 에어컨 조합이에요.") },
+        { hi: [17, 39], bubble: t(E,
+          "Since M ≤ 10, there are at most 1024 on/off combos — so try every one. Number them 0, 1, 2, ... and read each number's bits: bit j says whether AC j is on. Turn on the chosen ACs, add their cost, and add their cooling to every stall they cover.",
+          "M 이 10 까지라 켜고 끄는 조합이 최대 1024 가지뿐이에요 — 그래서 다 시도해요.\n조합을 0, 1, 2, ... 로 번호 매기고, 각 수의 비트로 j 번 에어컨이 켜졌는지 읽어요.\n켠 에어컨의 비용을 더하고, 그 구간 축사마다 냉방력을 더해요.") },
+        { hi: [40, 49], bubble: t(E,
+          "Check every cow: does every one of its stalls have enough cooling? If this combo satisfies everyone and costs less than what we've found, keep it.",
+          "소마다 확인해요: 그 축사 구간 전체에 냉방력이 충분한가요?\n모든 소를 만족시키면서 지금까지보다 싸면 그 조합을 기록해요.") },
+        { hi: [50, 53], bubble: t(E,
+          "Print the cheapest cost found.",
+          "찾은 가장 싼 비용을 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 11], bubble: t(E,
+        "Read each cow's stall range and needed cooling, and each AC's range/power/cost. What should we output? The cheapest AC subset that satisfies every cow.",
+        "소마다 축사 구간과 필요한 냉방력을, 에어컨마다 구간·세기·비용을 읽어요.\n무엇을 답으로 내야 하나요? 모든 소를 만족시키는 가장 싼 에어컨 조합이에요.") },
+      { hi: [12, 27], bubble: t(E,
+        "Since M ≤ 10, there are at most 1024 on/off combos — so try every one. Number them 0, 1, 2, ... and read each number's bits: bit j says whether AC j is on. Turn on the chosen ACs, add their cost, and add their cooling to every stall they cover.",
+        "M 이 10 까지라 켜고 끄는 조합이 최대 1024 가지뿐이에요 — 그래서 다 시도해요.\n조합을 0, 1, 2, ... 로 번호 매기고, 각 수의 비트로 j 번 에어컨이 켜졌는지 읽어요.\n켠 에어컨의 비용을 더하고, 그 구간 축사마다 냉방력을 더해요.") },
+      { hi: [28, 38], bubble: t(E,
+        "Check every cow: does every one of its stalls have enough cooling? If this combo satisfies everyone and costs less than what we've found, keep it.",
+        "소마다 확인해요: 그 축사 구간 전체에 냉방력이 충분한가요?\n모든 소를 만족시키면서 지금까지보다 싸면 그 조합을 기록해요.") },
+      { hi: [39, 40], bubble: t(E,
+        "Print the cheapest cost found.",
+        "찾은 가장 싼 비용을 출력해요.") },
+    ],
+  };
+}
+
 export function getAirCondSections(E) {
   return [
     {

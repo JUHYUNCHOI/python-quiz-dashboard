@@ -82,6 +82,58 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 위 표시용 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getAcowdemia1Sections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getAcowdemia1Walk(E, lang = "py") {
+  const vars = [
+    { v: "c", ko: "정렬한 인용수 배열", en: "sorted citation counts" },
+    { v: "h", ko: "지금 시험해보는 h", en: "h we're testing" },
+    { v: "need", ko: "h 를 만들려면 부족한 인용수 합", en: "citations still short of h" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 12], bubble: t(E,
+          "Read N papers' citations and L extra citations we can add, then sort ascending — so the top h papers are always the last h in the array.",
+          "논문 N 개의 인용수와 추가할 수 있는 L 을 읽고, 오름차순 정렬해요.\n그러면 상위 h 편은 항상 배열의 마지막 h 개예요.") },
+        { hi: [13, 16], bubble: t(E,
+          "What should we output? The biggest h reachable. Checking h = 0, 1, 2, ... one by one would be slow — but a bigger h always needs at least as many extra citations as a smaller one, so binary search works.",
+          "무엇을 답으로 내야 하나요? 만들 수 있는 가장 큰 h 예요.\nh 를 0 부터 하나씩 다 확인하면 느려요 — 그런데 h 가 커질수록 필요한 추가 인용도 늘기만 하니, 이분 탐색이 돼요.") },
+        { hi: [17, 30], bubble: t(E,
+          "For a candidate h = mid: the top mid papers are the last mid in the sorted array (idx = N - mid). If fewer than mid papers exist, it's impossible. Otherwise sum how many citations each of those papers is still short of mid — that's how many we'd need to spend.",
+          "후보 h = mid 를 시험해요: 상위 mid 편은 정렬된 배열의 마지막 mid 개예요 (idx = N - mid).\nmid 편이 안 되면 불가능해요. 아니면 그 논문들이 mid 에서 부족한 인용수를 다 더해요 — 그게 필요한 추가 인용수예요.") },
+        { hi: [31, 36], bubble: t(E,
+          "If that need fits within L, mid is reachable — keep it and search higher. Otherwise search lower.",
+          "필요한 양이 L 이하면 mid 를 만들 수 있으니 더 큰 쪽을 찾고,\n넘으면 더 작은 쪽을 찾아요.") },
+        { hi: [37, 39], bubble: t(E,
+          "Print the biggest reachable h we found.",
+          "찾은 가장 큰 h 를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "Read N papers' citations and L extra citations we can add, then sort ascending — so the top h papers are always the last h in the array.",
+        "논문 N 개의 인용수와 추가할 수 있는 L 을 읽고, 오름차순 정렬해요.\n그러면 상위 h 편은 항상 배열의 마지막 h 개예요.") },
+      { hi: [2, 13], bubble: t(E,
+        "Checking h = 0, 1, 2, ... one by one would be slow — but a bigger h always needs at least as many extra citations as a smaller one, so we can binary search. First write check(h): the top h papers are the last h (idx = N - h). If fewer than h papers exist, it fails. Otherwise sum how many citations each of those papers is still short of h — reachable if that fits within L.",
+        "h 를 0 부터 하나씩 다 확인하면 느려요 — 그런데 h 가 커질수록 필요한 추가 인용도 늘기만 하니, 이분 탐색을 써요.\n먼저 check(h) 를 만들어요: 상위 h 편은 마지막 h 개예요 (idx = N - h).\nh 편이 안 되면 실패, 아니면 부족한 인용수를 다 더해서 L 이하인지 봐요.") },
+      { hi: [14, 22], bubble: t(E,
+        "What should we output? The biggest h reachable. Binary search it: try mid, and if check(mid) works, remember it and search higher; otherwise search lower.",
+        "무엇을 답으로 내야 하나요? 만들 수 있는 가장 큰 h 예요.\n이분 탐색으로 찾아요: mid 를 시험해서 check(mid) 가 되면 기록하고 더 큰 쪽을, 안 되면 더 작은 쪽을 찾아요.") },
+      { hi: [23, 24], bubble: t(E,
+        "Print the biggest reachable h we found.",
+        "찾은 가장 큰 h 를 출력해요.") },
+    ],
+  };
+}
+
 export function getAcowdemia1Sections(E) {
   return [
     {

@@ -396,13 +396,28 @@ for (let y = SCROLL_STEP; y < H; y += SCROLL_STEP) {
 }
 await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(150)
 
-// 한 번이라도 눌린 것은 뺀다 — 잠깐 바 밑을 지난 것뿐이다
-r.covered = r.covered.filter(c => !everClickable.has(c.what))
+/* 한 번이라도 눌린 것은 뺀다 — 잠깐 바 밑을 지난 것뿐이다.
+   ⚠️ **단 하나 예외를 둔다 (2026-09-25).** 이 「한 번이라도」 규칙이
+   **진짜 결함을 세 번 연속 0건으로 통과시켰다** (슬라이더 · 복사 버튼 · 그 재조사).
+   갈림길은 「스크롤하면 닿나」가 아니라 **「눌렀을 때 무슨 일이 나나」** 다:
+     · 아무 일도 안 난다      → 학생은 더 내려 본다. 경미하다. 계속 뺀다.
+     · **엉뚱한 버튼이 눌린다** → 학생이 「다음 →」을 눌러 **쪽이 넘어가 버린다.**
+       학생은 「고장났다」가 아니라 「다른 데로 갔다」로 받아들이고 하려던 일을 잃는다.
+       이건 스크롤로 회복되는 종류가 아니다 — **뺄 수 없다.**
+   실제로 `socialdist1` 모바일에서 복사 버튼 자리를 누르면 `다음 →` 이 눌렸다. */
+const navMisclick = new Set(r.covered.filter(c => c.nav).map(c => c.what))
+r.covered = r.covered.filter(c => c.nav || !everClickable.has(c.what))
 
 console.log(`\n=== ${mobile ? '모바일 375×812' : '데스크탑 1280×900'} · ${url} ===\n`)
 console.log(r.text)
 console.log(`\n── 고정 요소에 가려진 것: ${r.covered.length}개`)
-r.covered.slice(0, 10).forEach(c => console.log(`   🚨 ${c.what}  ← ${c.by}${c.y ? ` (스크롤 ${c.y}px 에서)` : ''}`))
+r.covered.slice(0, 10).forEach(c => console.log(
+  `   🚨 ${c.what}  ← ${c.by}${c.y ? ` (스크롤 ${c.y}px 에서)` : ''}` +
+  (c.nav ? `\n        ⛔ 이 자리를 누르면 **${c.instead}** 가 눌린다 — 쪽이 넘어가 버린다.` : '')))
+if (navMisclick.size) {
+  console.log(`   ⚠️ 위 ${navMisclick.size}개는 **「스크롤하면 닿는다」로 넘길 수 없다** —`)
+  console.log('      아무 일도 안 나는 게 아니라 **엉뚱한 버튼이 눌려 화면이 넘어간다.**')
+}
 
 // ⭐ 첫 진입 위치 — 위 목록과 **다른 층**이다. 합치지 마라.
 console.log(`\n── 첫 진입(스크롤 0)에서 막힌 것: ${coveredAtTop.length}개`)

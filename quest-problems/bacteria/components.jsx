@@ -212,6 +212,55 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 검증된 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getBacteriaSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getBacteriaWalk(E, lang = "py") {
+  const vars = [
+    { v: "a", ko: "원래 배열", en: "the original array" },
+    { v: "dd", ko: "a 를 두 번 차분한 배열", en: "a differenced twice" },
+    { v: "ans", ko: "dd 의 절댓값 합 = 최소 워크 수", en: "sum of |dd| = min walks" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "What should we output? The minimum number of walks to zero out every a[i] — but one walk changes many cells at once, hard to count directly. So build a helper diff(a) that turns the array into consecutive differences.",
+          "무엇을 답으로 내야 하나요? a[i] 를 전부 0 으로 만드는 최소 워크 수예요.\n그런데 워크 한 번이 여러 칸을 한꺼번에 바꿔서 그대로 세기 어려워요.\n그래서 배열을 연속한 차이로 바꾸는 헬퍼 diff(a) 를 만들어요.") },
+        { hi: [16, 24], bubble: t(E,
+          "Read the array.",
+          "배열을 읽어요.") },
+        { hi: [25, 30], bubble: t(E,
+          "One walk changes exactly one cell of diff(diff(a)) by ±1 — that's why the second difference works. So take diff(diff(a)) and sum its absolute values.",
+          "워크 한 번은 diff(diff(a)) 의 딱 한 칸만 ±1 만큼 바꿔요 — 그래서 두 번 차분이 통해요.\n그러니 diff(diff(a)) 를 구하고 절댓값을 다 더해요.") },
+        { hi: [31, 34], bubble: t(E,
+          "Print that sum.",
+          "그 합을 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "Read the array. What should we output? The minimum number of walks to zero out every a[i] — but one walk changes many cells at once, hard to count directly.",
+        "배열을 읽어요. 무엇을 답으로 내야 하나요? a[i] 를 전부 0 으로 만드는 최소 워크 수예요.\n그런데 워크 한 번이 여러 칸을 한꺼번에 바꿔서 그대로 세기 어려워요.") },
+      { hi: [3, 6], bubble: t(E,
+        "So look one level removed. Build a helper diff(arr) that turns the array into consecutive differences.",
+        "그래서 한 단계 떨어져서 봐요. 배열을 연속한 차이로 바꾸는 헬퍼 diff(arr) 를 만들어요.") },
+      { hi: [7, 8], bubble: t(E,
+        "One walk changes exactly one cell of diff(diff(a)) by ±1 — that's why the second difference works. So take diff(diff(a)) and sum its absolute values.",
+        "워크 한 번은 diff(diff(a)) 의 딱 한 칸만 ±1 만큼 바꿔요 — 그래서 두 번 차분이 통해요.\n그러니 diff(diff(a)) 를 구하고 절댓값을 다 더해요.") },
+      { hi: [9, 10], bubble: t(E,
+        "Print that sum.",
+        "그 합을 출력해요.") },
+    ],
+  };
+}
+
 export function getBacteriaSections(E) {
   return [
     {

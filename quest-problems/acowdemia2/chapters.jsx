@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getAcowdemia2Sections } from "./components";
 
 // TODO: sim redesign — replace this static worked example with an interactive
 // sim for the REAL Acowdemia II (effort-order publications, alphabetical-tie
@@ -232,13 +231,12 @@ export function makeAcow2Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAcow2Ch2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Find where alphabetical order breaks, record seniority, then fill the grid.",
-        "알파벳순이 깨진 자리를 찾아 선임 관계를 적고,\n그 기록으로 격자를 채워요."),
-      sections: getAcowdemia2Sections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getBlocksSections } from "./components";
 import BlockLetterSim from "./BlockLetterSim";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -175,13 +174,12 @@ NO`}</pre>
    ═══════════════════════════════════════════════════════════════ */
 export function makeBlocksCh2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "There are only 4! = 24 ways to assign cubes — try them all and check each letter.",
-        "큐브를 자리에 놓는 방법은 4! = 24 가지뿐이에요.\n24 가지를 다 놓아 보고, 자리마다 필요한 글자가 그 큐브 면에 있는지 확인해요."),
-      sections: getBlocksSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getAirCondSections, ACSubsetSim } from "./components";
+import { ACSubsetSim } from "./components";
 
 /* ===============================================================
    Chapter 1: Problem (3 steps)
@@ -141,13 +141,12 @@ export function makeAirCondCh1(E) {
    =============================================================== */
 export function makeAirCondCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "M ≤ 10, so there are at most 1024 subsets — just try them all.",
-        "M ≤ 10 이라 조합이 최대 1024 가지뿐이니 전부 해 봐도 돼요."),
-      sections: getAirCondSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

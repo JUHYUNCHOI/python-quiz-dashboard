@@ -95,6 +95,49 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 검증된 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getBlocksSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getBlocksWalk(E, lang = "py") {
+  const vars = [
+    { v: "blocks", ko: "블록 4개의 네 면", en: "each block's 4 faces" },
+    { v: "choice / perm", ko: "글자마다 배정한 블록 번호", en: "block assigned to each letter" },
+    { v: "can_spell(w)", ko: "단어 w 를 만들 수 있나", en: "can we spell word w" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 9], bubble: t(E,
+          "What should we output? YES or NO for each word — can it be spelled? Each letter needs its own distinct block, so we must try every way to hand out the 4 blocks.",
+          "무엇을 답으로 내야 하나요? 단어마다 만들 수 있으면 YES, 아니면 NO 예요.\n글자마다 서로 다른 블록을 하나씩 배정해야 해서, 블록 4개를 나눠주는 방법을 전부 시도해요.") },
+        { hi: [10, 30], bubble: t(E,
+          "next_permutation walks every ordering of {0,1,2,3} — no recursion. For each ordering, check if every letter is on its assigned block's face. One working assignment means YES.",
+          "next_permutation 은 {0,1,2,3} 의 모든 순서를 재귀 없이 다 훑어요.\n순서마다 글자가 배정받은 블록 면에 있는지 확인하고, 하나라도 성공하면 YES 예요.") },
+        { hi: [31, 50], bubble: t(E,
+          "Read the 4 blocks' faces and N query words, then print YES/NO for each using can_spell.",
+          "블록 4개의 면과 질의 단어 N 개를 읽고, can_spell 로 각각 YES/NO 를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "Read the 4 blocks' faces, then N query words. What should we output? YES or NO for each word — can it be spelled?",
+        "블록 4개의 면과 질의 단어 N 개를 읽어요.\n무엇을 답으로 내야 하나요? 단어마다 만들 수 있으면 YES, 아니면 NO 예요.") },
+      { hi: [5, 13], bubble: t(E,
+        "Each letter needs its own distinct block, so we must try every way to hand out the 4 blocks. permutations(range(4), len(word)) builds every such assignment — no recursion. Check if each letter is on its assigned block's face.",
+          "글자마다 서로 다른 블록을 하나씩 배정해야 해서, 블록 4개를 나눠주는 방법을 전부 시도해요.\npermutations(range(4), len(word)) 가 재귀 없이 그 배정을 전부 만들어줘요.\n글자가 배정받은 블록 면에 있는지 확인해요.") },
+      { hi: [14, 20], bubble: t(E,
+        "One working assignment means YES. If none works — including words longer than 4 letters, which have no assignment at all — it's NO.",
+        "하나라도 성공하면 YES, 다 실패하면 NO 예요.\n5글자 이상 단어는 배정 자체가 없어서 항상 NO 예요.") },
+    ],
+  };
+}
+
 export function getBlocksSections(E) {
   return [
     {

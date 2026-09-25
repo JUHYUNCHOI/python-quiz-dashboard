@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getBacteriaSections, BacteriaTrickSim } from "./components";
+import { BacteriaTrickSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (5 steps)
@@ -205,13 +205,12 @@ export function makeBacteriaCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBacteriaCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — sections explain the diff(diff) trick as it unfolds.
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "See, piece by piece, why one walk changes just a single cell.",
-        "워크 한 번이 왜 한 칸만 바꾸는지 한 단락씩 봐요."),
-      sections: getBacteriaSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

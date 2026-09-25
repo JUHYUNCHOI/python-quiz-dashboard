@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCannonballSections, CannonballTrajectorySim } from "./components";
+import { CannonballTrajectorySim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -222,13 +222,12 @@ export function makeCannonCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCannonCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — straight in.
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Build the code that simulates Bessie bouncing, piece by piece.",
-        "Bessie 가 튀는 걸 그대로 따라가는 코드를 한 단락씩 쌓아요."),
-      sections: getCannonballSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

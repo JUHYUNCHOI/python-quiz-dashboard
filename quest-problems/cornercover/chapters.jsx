@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getCornerCoverSections } from "./components";
 import { CornerCoverSim } from "./sims";
 
 /* 옛 문제(꼭짓점 개수 세기)용 CornerAuditSim 과 SOLUTION_CODE 는 2026-07-30 삭제 —
@@ -233,15 +232,12 @@ YES`}</pre>
    ═══════════════════════════════════════════════════════════════ */
 export function makeCornerCoverCh2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
-      /* 앞 슬라이드가 규칙(들어가나·꽉 채우나)을 이미 말했다. 여기선 그 두 검사가
-         코드의 어느 줄인지만. (선생님 2026-07-30: "반복된건 없는지") */
+      type: "opt-codewalk",
       narr: t(E,
-        "Those two checks are two lines of code. Find them — and notice the loop that lays the stamp on its side.",
-        "방금 그 두 검사가 코드에선 어느 줄인지 찾아보세요."),
-      sections: getCornerCoverSections(E),
+        "The full solution, start to finish.",
+        "전체 풀이를 처음부터 끝까지 봐요."),
     },
   ];
 }

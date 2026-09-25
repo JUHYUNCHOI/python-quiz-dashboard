@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { CannonballProgressiveCode, downloadCannonballPDF, getCannonballSections } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { CannonballProgressiveCode, downloadCannonballPDF, getCannonballSections, getCannonballWalk } from "./components";
 import { makeCannonCh1, makeCannonCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -102,6 +103,7 @@ export default function CannonballApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <CannonballProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "opt-codewalk") return <CodeWalk E={E} lang={codeLang} {...getCannonballWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function CannonballApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <CannonballProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "opt-codewalk") return <CodeWalk E={E} lang={codeLang} {...getCannonballWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

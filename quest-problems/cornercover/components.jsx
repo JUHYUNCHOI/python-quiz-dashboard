@@ -31,6 +31,32 @@ const FULL_PY = [
    학생에게 C++ 이 아예 안 보인다 (선생님: "MCC는 c++ 다 없애줘").
    안 보이는 코드를 유지하면 검증 대상만 늘고 학생에겐 도움이 0. */
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getCornerCoverSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   MCC 는 C++ 이 필요 없다(선생님 "MCC는 c++ 다 없애줘") — 파이썬만 보여준다. */
+export function getCornerCoverWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "A, B", ko: "덮개의 두 변 길이", en: "the cover's two side lengths" },
+      { v: "h, w", ko: "지금 시험하는 방향(눕히거나 세우거나)", en: "the orientation we're testing" },
+      { v: "ok", ko: "코너 2개 이상을 덮을 수 있나", en: "can it cover 2+ corners" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What should we output? YES if an A×B (or B×A) cover can catch 2 or more corners, else NO. Read T cases; each gives the grid size n×m and cover size A×B.",
+        "무엇을 답으로 내야 하나요? A×B(또는 B×A) 로 코너 2개 이상을 덮을 수 있으면 YES, 아니면 NO 예요.\nT 케이스를 읽어요 — 케이스마다 격자 크기 n×m 과 덮개 크기 A×B 가 나와요.") },
+      { hi: [3, 8], bubble: t(E,
+        "You may lay the cover on its side, so try both orientations. For each: does it fit in the grid, and does it span all the way across one direction? Only spanning all the way across reaches two corners at once.",
+        "덮개를 눕혀도 되니 두 방향을 다 시도해요.\n방향마다: 격자 안에 들어가나, 그리고 한 방향을 끝까지 꽉 채우나?\n끝까지 채워야만 코너 두 개를 동시에 덮어요.") },
+      { hi: [9, 13], bubble: t(E,
+        "If any orientation worked, print YES, else NO.",
+        "어느 방향이든 됐으면 YES, 둘 다 안 됐으면 NO 를 출력해요.") },
+    ],
+  };
+}
+
 export function getCornerCoverSections(E) {
   return [
     {

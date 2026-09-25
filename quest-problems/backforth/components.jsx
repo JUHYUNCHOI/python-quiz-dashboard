@@ -105,6 +105,49 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 검증된 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getBackForthSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getBackForthWalk(E, lang = "py") {
+  const vars = [
+    { v: "b1 / b2", ko: "헛간1 / 헛간2 의 양동이 값들", en: "barn1 / barn2 bucket values" },
+    { v: "i1,j1,i2,j2", ko: "그날 옮길 양동이의 선택", en: "which bucket each day moves" },
+    { v: "states", ko: "나올 수 있는 헛간1 합의 집합", en: "set of possible barn1 totals" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 19], bubble: t(E,
+          "What should we count? How many distinct barn1 totals are possible after 4 days. USACO's older contests use file I/O, so read barn1's 10 values and barn2's 10 values from the file. Every day's move is a free choice, so we'll collect every resulting total into a set to drop duplicates.",
+          "무엇을 세야 하나요? 4일 뒤 헛간1 합이 될 수 있는 값의 개수예요.\nUSACO 이전 대회는 파일 입출력을 쓰니, 헛간1·헛간2 값 10개씩을 파일에서 읽어요.\n날마다 어느 양동이를 옮길지 자유롭게 고르니, 나온 값을 set 에 모아 중복을 지워요.") },
+        { hi: [20, 57], bubble: t(E,
+          "Every day's transfer is a free choice among many buckets, so every branch matters. Nest four loops: day 1 moves one of barn1's 10 out (i1), day 2 moves one of barn2's 11 back (j1), day 3 moves one of barn1's 10 (i2), day 4 moves one of barn2's 11 (j2) — track barn1's running total and record the final sum each time.",
+          "날마다 옮길 양동이를 고르는 게 자유라 모든 갈래를 다 봐야 해요.\n네 겹 반복문으로 시도해요: 1일차엔 헛간1 의 10개 중 1개를 옮기고(i1),\n2일차엔 헛간2 의 11개 중 1개를 되돌리고(j1), 3일차엔 헛간1 의 10개 중 1개(i2),\n4일차엔 헛간2 의 11개 중 1개(j2) — 그때마다 헛간1 총합을 기록해요.") },
+        { hi: [58, 60], bubble: t(E,
+          "Write how many distinct final sums we found.",
+          "찾은 서로 다른 합의 개수를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 14], bubble: t(E,
+        "What should we count? How many distinct barn1 totals are possible after 4 days. USACO's older contests use file I/O, so read barn1's 10 values and barn2's 10 values from the file. Every day's move is a free choice, so we'll collect every resulting total into a set to drop duplicates.",
+        "무엇을 세야 하나요? 4일 뒤 헛간1 합이 될 수 있는 값의 개수예요.\nUSACO 이전 대회는 파일 입출력을 쓰니, 헛간1·헛간2 값 10개씩을 파일에서 읽어요.\n날마다 어느 양동이를 옮길지 자유롭게 고르니, 나온 값을 set 에 모아 중복을 지워요.") },
+      { hi: [15, 27], bubble: t(E,
+        "Every day's transfer is a free choice among many buckets, so every branch matters. Nest four loops: day 1 moves one of barn1's 10 out (i1), day 2 moves one of barn2's 11 back (j1), day 3 moves one of barn1's 10 (i2), day 4 moves one of barn2's 11 (j2) — track barn1's running total and record the final sum each time.",
+        "날마다 옮길 양동이를 고르는 게 자유라 모든 갈래를 다 봐야 해요.\n네 겹 반복문으로 시도해요: 1일차엔 헛간1 의 10개 중 1개를 옮기고(i1),\n2일차엔 헛간2 의 11개 중 1개를 되돌리고(j1), 3일차엔 헛간1 의 10개 중 1개(i2),\n4일차엔 헛간2 의 11개 중 1개(j2) — 그때마다 헛간1 총합을 기록해요.") },
+      { hi: [28, 30], bubble: t(E,
+        "Write how many distinct final sums we found.",
+        "찾은 서로 다른 합의 개수를 출력해요.") },
+    ],
+  };
+}
+
 export function getBackForthSections(E) {
   return [
     {

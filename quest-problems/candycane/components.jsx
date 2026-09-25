@@ -249,6 +249,49 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 검증된 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getCandyCaneSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getCandyCaneWalk(E, lang = "py") {
+  const vars = [
+    { v: "heights", ko: "소들의 키 (계속 갱신)", en: "cow heights (updated live)" },
+    { v: "bottom", ko: "이번 캔디에서 이미 먹힌 높이", en: "how much of this cane is eaten" },
+    { v: "eat", ko: "이번에 이 소가 먹는 양", en: "how much this cow eats now" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 11], bubble: t(E,
+          "Read N cow heights. What should we output? Each cow's final height after every cane is eaten.",
+          "소 N 마리의 키를 읽어요.\n무엇을 답으로 내야 하나요? 캔디를 다 먹인 뒤 소들의 최종 키예요.") },
+        { hi: [12, 29], bubble: t(E,
+          "For each cane, cows eat from the bottom up — once part of a cane is eaten, no cow can reach it again, so track bottom = eaten-so-far and only feed cows taller than bottom, growing both together. Stop once the cane's fully eaten.",
+          "캔디마다 소들이 아래부터 순서대로 먹어요 — 아래쪽이 한 번 먹히면 다시 먹을 소가 없어서,\nbottom(먹힌 높이)을 두고 키가 bottom 보다 큰 소만 먹여요. 소가 자라면 bottom 도 같이 올라가요.\n캔디를 다 먹으면 멈춰요.") },
+        { hi: [30, 35], bubble: t(E,
+          "Print each cow's final height.",
+          "소마다 최종 키를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "Read N cow heights and the M candy canes. What should we output? Each cow's final height after every cane is eaten.",
+        "소 N 마리의 키와 캔디 M 개를 읽어요.\n무엇을 답으로 내야 하나요? 캔디를 다 먹인 뒤 소들의 최종 키예요.") },
+      { hi: [4, 14], bubble: t(E,
+        "For each cane, cows eat from the bottom up — once part of a cane is eaten, no cow can reach it again, so track bottom = eaten-so-far and only feed cows taller than bottom, growing both together. Stop once the cane's fully eaten.",
+        "캔디마다 소들이 아래부터 순서대로 먹어요 — 아래쪽이 한 번 먹히면 다시 먹을 소가 없어서,\nbottom(먹힌 높이)을 두고 키가 bottom 보다 큰 소만 먹여요. 소가 자라면 bottom 도 같이 올라가요.\n캔디를 다 먹으면 멈춰요.") },
+      { hi: [15, 16], bubble: t(E,
+        "Print each cow's final height.",
+        "소마다 최종 키를 출력해요.") },
+    ],
+  };
+}
+
 export function getCandyCaneSections(E) {
   return [
     {

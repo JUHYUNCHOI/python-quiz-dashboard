@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCandyCaneSections, CandyCaneSim } from "./components";
+import { CandyCaneSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -212,13 +212,12 @@ export function makeCandyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCandyCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — straight to the build.
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "For each cane, walk the cows in order — track 'taken' = how much of this cane has been eaten so far.  Sections build the loop one piece at a time.",
-        "캔디마다 소를 순서대로 돌면서 먹은 양을 쌓아 가요."),
-      sections: getCandyCaneSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }
