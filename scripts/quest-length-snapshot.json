@@ -1,8 +1,8 @@
 {
   "abcs": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 336
+    "korean_chars_ref": 414
   },
   "acowdemia1": {
     "pages": 5,
@@ -15,9 +15,9 @@
     "korean_chars_ref": 675
   },
   "acowdemia3": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 588
+    "korean_chars_ref": 682
   },
   "aircond": {
     "pages": 5,
@@ -25,9 +25,9 @@
     "korean_chars_ref": 452
   },
   "aircond1": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 343
+    "korean_chars_ref": 422
   },
   "alchemy": {
     "pages": 5,
@@ -55,19 +55,19 @@
     "korean_chars_ref": 1187
   },
   "billboard": {
-    "pages": 14,
+    "pages": 15,
     "quiz_input": 5,
-    "korean_chars_ref": 960
+    "korean_chars_ref": 1095
   },
   "billboard2": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 607
+    "korean_chars_ref": 753
   },
   "blockgame": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 395
+    "korean_chars_ref": 498
   },
   "blocks": {
     "pages": 6,
@@ -75,24 +75,24 @@
     "korean_chars_ref": 490
   },
   "bovgenomics": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 613
+    "korean_chars_ref": 731
   },
   "bovshuffle": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 375
+    "korean_chars_ref": 471
   },
   "bucketbrigade": {
-    "pages": 4,
-    "quiz_input": 2,
-    "korean_chars_ref": 202
-  },
-  "bucketlist": {
     "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 387
+    "korean_chars_ref": 318
+  },
+  "bucketlist": {
+    "pages": 6,
+    "quiz_input": 2,
+    "korean_chars_ref": 474
   },
   "buymilk": {
     "pages": 10,
@@ -110,14 +110,14 @@
     "korean_chars_ref": 527
   },
   "checkups": {
-    "pages": 18,
+    "pages": 15,
     "quiz_input": 3,
-    "korean_chars_ref": 2190
+    "korean_chars_ref": 2997
   },
   "cheese": {
     "pages": 34,
     "quiz_input": 12,
-    "korean_chars_ref": 3354
+    "korean_chars_ref": 3337
   },
   "chipxchg": {
     "pages": 13,
@@ -125,9 +125,9 @@
     "korean_chars_ref": 1228
   },
   "clockfence": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 635
+    "korean_chars_ref": 728
   },
   "collatz": {
     "pages": 6,
@@ -135,9 +135,9 @@
     "korean_chars_ref": 1253
   },
   "comfycows": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 386
+    "korean_chars_ref": 497
   },
   "cornercover": {
     "pages": 6,
@@ -145,34 +145,34 @@
     "korean_chars_ref": 1332
   },
   "countliars": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 389
+    "korean_chars_ref": 496
   },
   "cowcollege": {
-    "pages": 16,
+    "pages": 17,
     "quiz_input": 4,
-    "korean_chars_ref": 920
+    "korean_chars_ref": 1011
   },
   "cowevolution": {
-    "pages": 5,
-    "quiz_input": 2,
-    "korean_chars_ref": 291
-  },
-  "cowgym": {
-    "pages": 14,
-    "quiz_input": 5,
-    "korean_chars_ref": 1193
-  },
-  "cowntact": {
     "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 457
+    "korean_chars_ref": 446
+  },
+  "cowgym": {
+    "pages": 15,
+    "quiz_input": 5,
+    "korean_chars_ref": 1278
+  },
+  "cowntact": {
+    "pages": 7,
+    "quiz_input": 2,
+    "korean_chars_ref": 537
   },
   "cowntrace": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 545
+    "korean_chars_ref": 679
   },
   "cowphotos": {
     "pages": 13,
@@ -180,9 +180,9 @@
     "korean_chars_ref": 993
   },
   "cowsignal": {
-    "pages": 23,
+    "pages": 24,
     "quiz_input": 6,
-    "korean_chars_ref": 2403
+    "korean_chars_ref": 2485
   },
   "cowsplits": {
     "pages": 11,
@@ -190,34 +190,34 @@
     "korean_chars_ref": 1807
   },
   "cowtipping": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 263
+    "korean_chars_ref": 350
   },
   "crossroad1": {
-    "pages": 4,
-    "quiz_input": 2,
-    "korean_chars_ref": 321
-  },
-  "crossroad2": {
-    "pages": 4,
-    "quiz_input": 2,
-    "korean_chars_ref": 452
-  },
-  "crossroad3": {
-    "pages": 4,
-    "quiz_input": 2,
-    "korean_chars_ref": 377
-  },
-  "daisychains": {
-    "pages": 15,
-    "quiz_input": 4,
-    "korean_chars_ref": 1194
-  },
-  "dontbelast": {
     "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 420
+    "korean_chars_ref": 413
+  },
+  "crossroad2": {
+    "pages": 5,
+    "quiz_input": 2,
+    "korean_chars_ref": 544
+  },
+  "crossroad3": {
+    "pages": 5,
+    "quiz_input": 2,
+    "korean_chars_ref": 465
+  },
+  "daisychains": {
+    "pages": 16,
+    "quiz_input": 4,
+    "korean_chars_ref": 1262
+  },
+  "dontbelast": {
+    "pages": 6,
+    "quiz_input": 2,
+    "korean_chars_ref": 525
   },
   "drought": {
     "pages": 5,
@@ -235,9 +235,9 @@
     "korean_chars_ref": 1144
   },
   "familytree": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 374
+    "korean_chars_ref": 507
   },
   "fans": {
     "pages": 15,
@@ -255,9 +255,9 @@
     "korean_chars_ref": 584
   },
   "feedcows": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 350
+    "korean_chars_ref": 448
   },
   "fences": {
     "pages": 14,
@@ -275,19 +275,19 @@
     "korean_chars_ref": 1246
   },
   "guessanimal": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 472
+    "korean_chars_ref": 595
   },
   "herdle": {
-    "pages": 4,
-    "quiz_input": 2,
-    "korean_chars_ref": 557
-  },
-  "hoofball": {
     "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 494
+    "korean_chars_ref": 655
+  },
+  "hoofball": {
+    "pages": 6,
+    "quiz_input": 2,
+    "korean_chars_ref": 590
   },
   "hps": {
     "pages": 15,
@@ -300,9 +300,9 @@
     "korean_chars_ref": 423
   },
   "hungrycow": {
-    "pages": 8,
+    "pages": 9,
     "quiz_input": 4,
-    "korean_chars_ref": 174
+    "korean_chars_ref": 278
   },
   "innovation": {
     "pages": 5,
@@ -340,19 +340,19 @@
     "korean_chars_ref": 401
   },
   "leaders": {
-    "pages": 4,
-    "quiz_input": 2,
-    "korean_chars_ref": 415
-  },
-  "lifeguards": {
     "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 542
+    "korean_chars_ref": 539
+  },
+  "lifeguards": {
+    "pages": 6,
+    "quiz_input": 2,
+    "korean_chars_ref": 672
   },
   "livestock": {
-    "pages": 6,
+    "pages": 7,
     "quiz_input": 3,
-    "korean_chars_ref": 339
+    "korean_chars_ref": 433
   },
   "logicalmoos": {
     "pages": 6,
@@ -370,9 +370,9 @@
     "korean_chars_ref": 312
   },
   "madscientist": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 380
+    "korean_chars_ref": 462
   },
   "magicorbs": {
     "pages": 6,
@@ -565,9 +565,9 @@
     "korean_chars_ref": 1248
   },
   "meastraffic": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 289
+    "korean_chars_ref": 424
   },
   "mexes": {
     "pages": 6,
@@ -580,14 +580,14 @@
     "korean_chars_ref": 541
   },
   "milkfactory": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 295
+    "korean_chars_ref": 449
   },
   "milkmeas": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 567
+    "korean_chars_ref": 685
   },
   "milkorder": {
     "pages": 6,
@@ -595,9 +595,9 @@
     "korean_chars_ref": 587
   },
   "mixmilk": {
-    "pages": 17,
+    "pages": 18,
     "quiz_input": 6,
-    "korean_chars_ref": 1459
+    "korean_chars_ref": 1553
   },
   "mobilegame": {
     "pages": 6,
@@ -605,14 +605,14 @@
     "korean_chars_ref": 627
   },
   "modernart": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 337
+    "korean_chars_ref": 431
   },
   "moo": {
     "pages": 34,
     "quiz_input": 11,
-    "korean_chars_ref": 2474
+    "korean_chars_ref": 2454
   },
   "moohunt": {
     "pages": 8,
@@ -627,7 +627,7 @@
   "mooin3": {
     "pages": 14,
     "quiz_input": 1,
-    "korean_chars_ref": 1674
+    "korean_chars_ref": 1668
   },
   "mooin4": {
     "pages": 9,
@@ -635,24 +635,24 @@
     "korean_chars_ref": 1135
   },
   "moolang": {
-    "pages": 9,
+    "pages": 10,
     "quiz_input": 4,
-    "korean_chars_ref": 267
+    "korean_chars_ref": 749
   },
   "mooloo": {
-    "pages": 9,
+    "pages": 10,
     "quiz_input": 4,
-    "korean_chars_ref": 155
+    "korean_chars_ref": 263
   },
   "mooops": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 285
+    "korean_chars_ref": 369
   },
   "nontrans": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 337
+    "korean_chars_ref": 457
   },
   "oddphotos": {
     "pages": 5,
@@ -660,9 +660,9 @@
     "korean_chars_ref": 571
   },
   "outofplace": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 343
+    "korean_chars_ref": 439
   },
   "palindrome": {
     "pages": 9,
@@ -675,19 +675,19 @@
     "korean_chars_ref": 1593
   },
   "photoshoot": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 404
+    "korean_chars_ref": 483
   },
   "photoshoot2": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 304
+    "korean_chars_ref": 392
   },
   "photoshoot20": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 278
+    "korean_chars_ref": 380
   },
   "photoshoot25": {
     "pages": 9,
@@ -710,9 +710,9 @@
     "korean_chars_ref": 517
   },
   "race": {
-    "pages": 6,
+    "pages": 7,
     "quiz_input": 2,
-    "korean_chars_ref": 480
+    "korean_chars_ref": 568
   },
   "reach": {
     "pages": 16,
@@ -730,9 +730,9 @@
     "korean_chars_ref": 444
   },
   "revegetation": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 415
+    "korean_chars_ref": 548
   },
   "reverseeng": {
     "pages": 7,
@@ -747,12 +747,12 @@
   "rounding": {
     "pages": 36,
     "quiz_input": 6,
-    "korean_chars_ref": 2961
+    "korean_chars_ref": 3507
   },
   "shellgame": {
-    "pages": 14,
+    "pages": 15,
     "quiz_input": 6,
-    "korean_chars_ref": 1059,
+    "korean_chars_ref": 1136,
     "clicks": 15
   },
   "simplegame": {
@@ -761,44 +761,44 @@
     "korean_chars_ref": 3837
   },
   "sleepclass": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 277
+    "korean_chars_ref": 392
   },
   "sleepyherd": {
-    "pages": 4,
-    "quiz_input": 2,
-    "korean_chars_ref": 301
-  },
-  "sleepysort": {
     "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 482
+    "korean_chars_ref": 436
+  },
+  "sleepysort": {
+    "pages": 6,
+    "quiz_input": 2,
+    "korean_chars_ref": 567
   },
   "socialdist1": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 459
+    "korean_chars_ref": 757
   },
   "socialdist2": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 508
+    "korean_chars_ref": 622
   },
   "sqpasture": {
-    "pages": 12,
+    "pages": 13,
     "quiz_input": 4,
-    "korean_chars_ref": 552
+    "korean_chars_ref": 654
   },
   "stalling": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 603
+    "korean_chars_ref": 701
   },
   "stampgrid": {
-    "pages": 9,
+    "pages": 10,
     "quiz_input": 4,
-    "korean_chars_ref": 45
+    "korean_chars_ref": 138
   },
   "strangefn": {
     "pages": 13,
@@ -806,9 +806,9 @@
     "korean_chars_ref": 2801
   },
   "stuckinrut": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 422
+    "korean_chars_ref": 520
   },
   "subseqmedian": {
     "pages": 6,
@@ -821,9 +821,9 @@
     "korean_chars_ref": 2382
   },
   "swapity": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 443
+    "korean_chars_ref": 548
   },
   "swaptowin": {
     "pages": 6,
@@ -831,19 +831,19 @@
     "korean_chars_ref": 478
   },
   "tameherd": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 506
+    "korean_chars_ref": 627
   },
   "teamttt": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 305
+    "korean_chars_ref": 417
   },
   "teleport": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 429
+    "korean_chars_ref": 512
   },
   "tichu": {
     "pages": 6,
@@ -851,9 +851,9 @@
     "korean_chars_ref": 732
   },
   "triangles": {
-    "pages": 5,
+    "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 375
+    "korean_chars_ref": 500
   },
   "tricks": {
     "pages": 16,
@@ -861,9 +861,9 @@
     "korean_chars_ref": 1134
   },
   "uddered": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 378
+    "korean_chars_ref": 456
   },
   "walkfence": {
     "pages": 7,
@@ -871,14 +871,14 @@
     "korean_chars_ref": 390
   },
   "walkhome": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 262
+    "korean_chars_ref": 470
   },
   "whereami": {
-    "pages": 15,
+    "pages": 16,
     "quiz_input": 4,
-    "korean_chars_ref": 1339
+    "korean_chars_ref": 1405
   },
   "word": {
     "pages": 16,
@@ -896,8 +896,8 @@
     "korean_chars_ref": 688
   },
   "yearcow": {
-    "pages": 4,
+    "pages": 5,
     "quiz_input": 2,
-    "korean_chars_ref": 360
+    "korean_chars_ref": 448
   }
 }
