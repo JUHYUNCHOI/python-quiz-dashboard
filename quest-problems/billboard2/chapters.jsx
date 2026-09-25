@@ -244,6 +244,40 @@ export function makeBillboard2Ch1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=783) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  Lawnmower corners, then feed billboard corners.",
+        "입력은 잔디깎이 광고판의 좌표, 다음 사료 광고판의 좌표로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x1 y1 x2 y2</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— lawnmower billboard: lower-left, upper-right", "— 잔디깎이 광고판: 왼쪽아래, 오른쪽위 좌표")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x1 y1 x2 y2</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— feed billboard: lower-left, upper-right", "— 사료 광고판: 왼쪽아래, 오른쪽위 좌표")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The minimum area of tarp needed to cover the visible part of the lawnmower billboard.",
+                  "잔디깎이 광고판에서 보이는 부분을 덮는 데 필요한 최소 타프 면적을 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>-1000 ≤ {t(E, "each coordinate", "각 좌표")} ≤ 1000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "the feed billboard may cover all, some, or none of the lawnmower billboard", "사료 광고판은 잔디깎이를 전부, 일부, 혹은 전혀 안 가릴 수 있어요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: quiz
     {
       type: "quiz",

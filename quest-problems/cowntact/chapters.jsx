@@ -76,6 +76,40 @@ export function makeCowntactCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=1348) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then the final 0/1 string.",
+        "입력은 N 다음 최종 0/1 문자열로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows", "— 소의 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>bitstring</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— length N string of 0s and 1s (final state)", "— 길이 N 인 0/1 문자열 (최종 상태)")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The minimum number of cows that could have started sick.",
+                  "0일차에 감염됐을 수 있는 소의 최소 수를 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 300,000 <span style={{ color: C.dim, fontWeight: 400 }}>{t(E, "(= 3 × 10⁵)", "(= 3 × 10⁵)")}</span></div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "some subtasks: N ≤ 1,000", "일부 서브태스크: N ≤ 1,000")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Spread simulator — see infection wave with your eyes
     {
       type: "reveal",

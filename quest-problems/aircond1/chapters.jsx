@@ -187,6 +187,42 @@ export function makeAirCond1Ch1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=1156) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then p[], then q[].",
+        "입력은 N 다음 p[] 줄, q[] 줄로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of stalls", "— 축사 개수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>p[1] ... p[N]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— target temperatures", "— 목표 온도")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>t[1] ... t[N]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— current temperatures", "— 현재 온도")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The minimum number of AC commands needed to make every t[i] = p[i].",
+                  "모든 t[i] 를 p[i] 로 만드는 데 필요한 최소 AC 명령 횟수를 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100,000 <span style={{ color: C.dim, fontWeight: 400 }}>{t(E, "(= 10⁵)", "(= 10⁵)")}</span></div>
+              <div>0 ≤ p[i], t[i] ≤ 10,000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "some subtasks: N ≤ 1,000, values ≤ 100", "일부 서브태스크: N ≤ 1,000, 값 ≤ 100")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

@@ -78,6 +78,45 @@ export function makeHungryCowCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, T, then N deliveries.",
+        "입력은 배달 수 N, 마감일 T 다음에, N 번의 배달로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of deliveries, target day", "— 배달 수, 마감일")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>d b</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— on day d, deliver b bales", "— d 일에 b 단을 배달")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One integer: the total number of haybales Bessie eats during the first T days.",
+                  "정수 하나: T 일 동안 Bessie 가 먹는 건초의 총 개수를 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 10⁵ (100,000)</div>
+              <div>1 ≤ T ≤ 10¹⁴</div>
+              <div>1 ≤ d₁ &lt; d₂ &lt; ... &lt; d_N ≤ T, 1 ≤ b ≤ 10⁹</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "the answer can be large — use a 64-bit integer type", "답이 클 수 있어요 — 64비트 정수형을 써야 해요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     {
       type: "reveal",
       narr: t(E,

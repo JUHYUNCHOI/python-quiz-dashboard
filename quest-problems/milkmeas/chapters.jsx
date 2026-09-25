@@ -75,6 +75,45 @@ export function makeMilkMeasCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=761) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N events, then that many lines of \"day cow change\".",
+        "입력은 측정 횟수 N 다음에 그만큼의 기록 줄로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of measurements", "— 측정 횟수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>d cow ±v</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— on day d, cow's output changes by v", "— d 일에 그 소의 우유량이 v 만큼 바뀜")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The number of days on which the displayed leader set changed.",
+                  "간판에 적힌 1등 소들이 바뀐 날의 수를 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100 <span style={{ color: C.dim, fontWeight: 400 }}>{t(E, "(one measurement per day, days 1..100)", "(하루 최대 한 번, 1~100 일)")}</span></div>
+              <div>1 ≤ d ≤ 100</div>
+              <div>0 ≤ {t(E, "each cow's output", "각 소의 우유량")} ≤ 1000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "v is a nonzero integer  ·  at most one measurement per day", "v 는 0 이 아닌 정수  ·  하루에 측정은 최대 한 번")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: sim — replay event log, watch leader set + counter
     {
       type: "sim",

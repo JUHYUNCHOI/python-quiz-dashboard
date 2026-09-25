@@ -34,6 +34,46 @@ export function makeStampCh1(E) {
     {
       type: "reveal",
       narr: t(E,
+        "How does the data arrive?  T test cases, each with a target grid and a stamp.",
+        "입력은 T 개의 테스트 케이스로 들어와요. 각 케이스에 목표 무늬와 도장이 있어요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of test cases", "— 테스트 케이스 수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— target grid size", "— 목표 무늬 크기")}</span></div>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>*. row</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— N lines: the target grid", "— N줄: 목표 무늬")}</span></div>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— stamp size", "— 도장 크기")}</span></div>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>*. row</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— K lines: the stamp", "— K줄: 도장 무늬")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this block repeats T times", "↑ 이 묶음이 T 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "For each test case, YES or NO on its own line (T lines total).",
+                  "테스트 케이스마다 YES 또는 NO 를 한 줄씩 출력해요 (T 줄).")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 100</div>
+              <div>1 ≤ N ≤ 20</div>
+              <div>1 ≤ K ≤ N</div>
+            </div>
+          </div>
+        </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
         "The stamp can be rotated 4 ways (0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0).\nEach placement covers a K\u00d7K area on the canvas.", "\ub3c4\uc7a5\uc740 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0 \ub85c \ub3cc\ub9b4 \uc218 \uc788\uc5b4\uc694.\n\ud55c \ubc88 \ucc0d\uc73c\uba74 \uce94\ubc84\uc2a4\uc758 K\u00d7K \ub113\uc774\ub97c \ub36e\uc5b4\uc694."),
       content: (
         <div style={{ padding: 16 }}>

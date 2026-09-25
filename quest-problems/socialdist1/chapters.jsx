@@ -83,6 +83,40 @@ export function makeSocDist1Ch1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=1035) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then a 0/1 string of occupied stalls.",
+        "입력은 N 다음 현재 소가 있는 칸을 나타내는 0/1 문자열로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of stalls", "— 칸의 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>bitstring</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— length N string of 0s and 1s (1 = occupied)", "— 길이 N 인 0/1 문자열 (1 = 소가 있음)")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The largest D achievable after placing 2 new cows in empty stalls.",
+                  "빈 칸에 새 소 2마리를 놓은 뒤 얻을 수 있는 가장 큰 D 값을 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>2 ≤ N ≤ 100,000 <span style={{ color: C.dim, fontWeight: 400 }}>{t(E, "(= 10⁵)", "(= 10⁵)")}</span></div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "the string has at least two 0s  ·  some subtasks: N ≤ 10, ≤ 100, ≤ 5000", "문자열에는 0이 최소 두 개  ·  일부 서브태스크: N ≤ 10, ≤ 100, ≤ 5000")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",
