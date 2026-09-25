@@ -110,7 +110,7 @@ export function makeStallingCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ N ≤ 20</div>
-              <div>1 ≤ a[i], b[i] ≤ 10⁹</div>
+              <div>1 ≤ a[i], b[i] ≤ 10⁹ {t(E, "(= 1 billion)", "(= 10억)")}</div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "the answer may need a 64-bit integer", "답이 커서 64비트 정수가 필요할 수 있어요")}</div>
             </div>
           </div>

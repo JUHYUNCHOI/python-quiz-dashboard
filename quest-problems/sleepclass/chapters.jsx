@@ -107,7 +107,7 @@ export function makeSleepCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ T ≤ 10</div>
-              <div>1 ≤ N ≤ 10⁵, 0 ≤ aᵢ ≤ 10⁶</div>
+              <div>1 ≤ N ≤ 10⁵ {t(E, "(= 100,000)", "(= 10만)")}, 0 ≤ aᵢ ≤ 10⁶ {t(E, "(= 1 million)", "(= 100만)")}</div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "sum of a in one test case ≤ 10⁶  ·  sum of N over all test cases ≤ 10⁵", "한 테스트케이스 안 a 의 합 ≤ 10⁶  ·  전체 테스트케이스의 N 합 ≤ 10⁵")}</div>
             </div>
           </div>

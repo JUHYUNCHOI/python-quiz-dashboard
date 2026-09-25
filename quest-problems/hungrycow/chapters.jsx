@@ -110,8 +110,8 @@ export function makeHungryCowCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ N ≤ 10⁵ (100,000)</div>
-              <div>1 ≤ T ≤ 10¹⁴</div>
-              <div>1 ≤ d₁ &lt; d₂ &lt; ... &lt; d_N ≤ T, 1 ≤ b ≤ 10⁹</div>
+              <div>1 ≤ T ≤ 10¹⁴ {t(E, "(= 100 trillion)", "(= 100조)")}</div>
+              <div>1 ≤ d₁ &lt; d₂ &lt; ... &lt; d_N ≤ T, 1 ≤ b ≤ 10⁹ {t(E, "(= 1 billion)", "(= 10억)")}</div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "the answer can be large — use a 64-bit integer type", "답이 클 수 있어요 — 64비트 정수형을 써야 해요")}</div>
             </div>
           </div>

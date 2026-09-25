@@ -193,8 +193,8 @@ export function makeCowCollegeCh1(E) {
           <div>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
-              <div>1 ≤ N ≤ 10⁵</div>
-              <div>1 ≤ c ≤ 10⁶</div>
+              <div>1 ≤ N ≤ 10⁵ {t(E, "(= 100,000)", "(= 10만)")}</div>
+              <div>1 ≤ c ≤ 10⁶ {t(E, "(= 1 million)", "(= 100만)")}</div>
             </div>
           </div>
         </div>),

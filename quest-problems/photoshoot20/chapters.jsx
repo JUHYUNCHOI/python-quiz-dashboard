@@ -94,7 +94,7 @@ export function makePhoto20Ch1(E) {
           <div>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
-              <div>2 ≤ N ≤ 10³</div>
+              <div>2 ≤ N ≤ 10³ {t(E, "(= 1,000)", "(= 1000)")}</div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "it's guaranteed that at least one valid a exists", "조건에 맞는 a 가 적어도 하나는 있다고 보장돼요")}</div>
             </div>
           </div>

@@ -108,7 +108,7 @@ export function makeStuckCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ N ≤ 50</div>
-              <div>0 ≤ x, y ≤ 10⁹</div>
+              <div>0 ≤ x, y ≤ 10⁹ {t(E, "(= 1 billion)", "(= 10억)")}</div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "all x's are distinct, and separately all y's are distinct", "x좌표는 서로 다 다르고, y좌표도 서로 다 달라요")}</div>
             </div>
           </div>
