@@ -496,8 +496,15 @@ export default function QuestPage() {
   // ⚠️ 난이도(diff) 출처는 문제마다 다르다 (lib/quest-difficulty.ts):
   //   - MCC = 사람이 감사해서 매긴 값(lib/mcc-difficulty.ts)
   //   - USACO/MCO = 문제 번호로 유추한 추정치(#1→2, #2→3 ...). 감사값이 아니다.
-  //   지금은 화면에서 둘을 구분하지 않고 똑같이 "Lv N" 으로 보여준다. 손대지 말 것 — 어떻게
-  //   드러낼지는 따로 정한다 (선생님 지시, 2026-09-07).
+  //
+  //   ✅ 2026-09-25 에 정했다 — `questDifficulty()` 가 `{value, source}` 를 돌려주고,
+  //   **선생님 화면에서만** 추정치를 「테두리만 있는 뱃지」로 가른다(아래 diff 렌더).
+  //   실측: 175개 중 사람이 매긴 건 91개, 안 매긴 게 84개다.
+  //   ⚠️ **학생 화면은 그대로 둔다.** 난이도 확신도는 「다음 1개」를 고르는 데 쓰는
+  //   정보가 아니라 콘텐츠를 관리하는 사람의 정보다. 학생에게 옅은 뱃지를 보이면
+  //   「왜 어떤 문제만 흐리지?」라는 새 질문만 생긴다 (ux-reviewer 판정).
+  //   ⚠️ 물음표(`Lv3?`)는 버렸다 — 9px 뱃지 안에서 「레벨이 3인지 묻는 것」으로 읽힌다.
+  //   ⚠️ 툴팁에만 담지 않는다 — 모바일엔 hover 가 없다. 핵심 신호는 **채움 유무**다.
   const renderProblemRow = (problem: Problem, idx: number, contestLabel?: string) => {
     /* contestLabel 이 있으면 = 난이도로 걸러 카드 구조를 없앤 평평한 목록이다.
        그 상태에서는 대회 안 순번(#1·#2)을 숨긴다 — 서로 다른 대회 수십 개가 한 줄씩 나오는데
@@ -537,15 +544,32 @@ export default function QuestPage() {
             {contestLabel}
           </span>
         )}
-        {diff && (
-          <span
-            title={`난이도 ${diff}/5`}
-            className="text-[9px] font-black px-1.5 py-px rounded-full flex-shrink-0 text-white"
-            style={{ background: DIFF_COLOR[diff] }}
-          >
-            Lv{diff}
-          </span>
-        )}
+        {diff && (() => {
+          /* 감사값(사람이 매긴 것)과 추정치(아무도 안 본 것)를 **선생님 화면에서만** 가른다.
+             꽉 찬 색 = 사람이 확인함 / 테두리만 = 확인 안 됨(유추).
+             ⭐ 새 글자도 새 모양도 안 쓴다 — 바로 옆 `internal`·`beta` 뱃지가 이미
+             「테두리만 = 아직 다 검증 안 됨」 이라는 뜻으로 쓰이고 있어서 배울 게 없다. */
+          /* ⚠️ `isTeacher`(= `useEffectiveIsTeacher()`) 를 쓰면 **선생님 본인이 못 본다.**
+             `lib/effective-role.ts` 가 owner 를 **기본 학생 뷰**로 두기 때문이다
+             (`teacher-as-student` 를 "false" 로 바꿔야 선생님 뷰가 된다).
+             그런데 *"이 문제가 진짜 레벨3인가?"* 라고 물으신 그 화면이 바로 그 기본 화면이다.
+             → 그래서 **원래 role** 로 가른다. 학생은 role 이 teacher 가 아니라 영향이 0 이다. */
+          const unverified = profile?.role === "teacher" && diff.source === "inferred"
+          return (
+            <span
+              title={unverified ? `난이도 ${diff.value}/5 — 확인 안 됨(유추)` : `난이도 ${diff.value}/5`}
+              className={[
+                "text-[9px] font-black px-1.5 py-px rounded-full flex-shrink-0",
+                unverified ? "bg-white border" : "text-white",
+              ].join(" ")}
+              style={unverified
+                ? { color: DIFF_COLOR[diff.value], borderColor: DIFF_COLOR[diff.value] }
+                : { background: DIFF_COLOR[diff.value] }}
+            >
+              Lv{diff.value}
+            </span>
+          )
+        })()}
         {stage === "internal" && (
           <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-rose-100 text-rose-700 border border-rose-300 flex-shrink-0">
             internal
@@ -745,7 +769,7 @@ export default function QuestPage() {
                           const color = lv === null ? "#334155" : DIFF_COLOR[lv as 1 | 2 | 3 | 4 | 5]
                           const pool = lv === null
                             ? section.problems
-                            : section.problems.filter(p => questDifficulty(p.id, p.sub) === lv)
+                            : section.problems.filter(p => questDifficulty(p.id, p.sub)?.value === lv)
                           const cnt = pool.length
                           const done = pool.filter(p => solvedSet.has(p.id)).length
                           if (cnt === 0) return null   // 그 난이도에 (보이는) 문제가 없으면 칩 숨김
@@ -777,7 +801,7 @@ export default function QuestPage() {
                       // 정렬은 section.problems 원래 순서 그대로(최신이 위) — 새로 만들지 않음.
                       <div className="flex flex-col divide-y divide-gray-200 bg-white">
                         {section.problems
-                          .filter(p => questDifficulty(p.id, p.sub) === diffBySection[section.label])
+                          .filter(p => questDifficulty(p.id, p.sub)?.value === diffBySection[section.label])
                           .map((problem, idx) => renderProblemRow(
                             problem,
                             idx,
@@ -809,10 +833,10 @@ export default function QuestPage() {
                               // 난이도 섹션(MCC·USACO·MCO): 쉬운 것부터 정렬 + 난이도 필터. 그 외는 원래 순서.
                               const hasDiff = DIFF_SECTIONS.has(section.label)
                               const sorted = hasDiff
-                                ? [...items].sort((a, b) => (questDifficulty(a.id, a.sub) ?? 9) - (questDifficulty(b.id, b.sub) ?? 9))
+                                ? [...items].sort((a, b) => (questDifficulty(a.id, a.sub)?.value ?? 9) - (questDifficulty(b.id, b.sub)?.value ?? 9))
                                 : items
                               const rows = (hasDiff && (diffBySection[section.label] ?? null) !== null)
-                                ? sorted.filter(p => questDifficulty(p.id, p.sub) === diffBySection[section.label])
+                                ? sorted.filter(p => questDifficulty(p.id, p.sub)?.value === diffBySection[section.label])
                                 : sorted
                               if (rows.length === 0) return null   // 필터에 안 걸리는 대회 카드는 숨김
                               const groupSolved = rows.filter(p => solvedSet.has(p.id)).length

@@ -44,7 +44,14 @@ for m in re.finditer(r'^  ([a-z0-9]+):\s*\{', meta, re.M):
         i += 1
     if re.search(r'\bdifficulty:\s*\d', meta[m.end():i]):
         with_diff.add(name)
-audited = set(re.findall(r'^\s*([a-z0-9]+):\s*\d\s*,', mcc, re.M))
+# ⚠️ 2026-09-25 수정: mcc-difficulty.ts 는 한 줄에 여러 엔트리를 쉼표로 늘어놓는다
+#    (`tichu: 3, tricks: 3, word: 3,`). `^\s*name:\s*\d\s*,` 는 **줄 맨 앞 것만** 잡고
+#    같은 줄의 나머지는 놓친다 — 48개 중 19개만 잡혀 word·reach·subseqmedian·
+#    mcc21simplemath 등 29개가 "안 매김(④)" 으로 잘못 보였다. 객체 본문만 잘라
+#    줄 시작 앵커 없이 전부 찾는다(주석은 먼저 지운다).
+_mcc_body = re.search(r'MCC_DIFFICULTY[^{]*\{(.*?)\n\};', mcc, re.S)
+_mcc_body = re.sub(r'//.*', '', _mcc_body.group(1)) if _mcc_body else ""
+audited = set(re.findall(r'([a-z0-9]+):\s*[1-5]\s*,', _mcc_body))
 
 buckets = {"① 감사맵": [], "② 명시": [], "③ 유추": [], "④ 기본값이 새어나옴": []}
 for q in sorted(quests):
