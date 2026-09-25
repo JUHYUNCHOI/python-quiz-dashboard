@@ -332,6 +332,61 @@ export function DontBeLastProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getDontBeLastSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getDontBeLastWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "milk", ko: "소 이름마다 우유 총합", en: "each cow's milk total" },
+        { v: "vals", ko: "서로 다른 총합 값들 (정렬됨)", en: "the distinct totals, sorted" },
+        { v: "second", ko: "두 번째로 적은 총합 값", en: "the second-lowest total value" },
+      ],
+      beats: [
+        { hi: [0, 18], bubble: t(E,
+          "What do we need? Every cow's milk total, starting from 0. Read N lines and add each amount to its cow.",
+          "무엇이 필요한가요? 소마다 우유 총합을 0부터 시작해서 구해야 해요.\nN 줄을 읽어 소마다 양을 더해요.") },
+        { hi: [19, 41], bubble: t(E,
+          "Collect the DISTINCT totals into vals — several cows can share a total, so we need the value itself, not a rank.",
+          "서로 다른 총합 값들만 vals 에 모아요 — 값이 같은 소가 여러 마리일 수 있어서\n순위가 아니라 값 자체가 필요해요.") },
+        { hi: [42, 59], bubble: t(E,
+          "Sort vals. Fewer than 2 distinct totals means no second place — Tie. Otherwise find every cow at the second value: exactly one means that cow's name, more than one means Tie.",
+          "vals 를 정렬해요. 서로 다른 값이 2개 미만이면 두 번째 자리가 없으니 Tie 예요.\n있으면 두 번째 값을 가진 소를 모두 찾아요 — 한 마리면 그 이름을, 여러 마리면 Tie 예요.") },
+        { hi: [60, 62], bubble: t(E,
+          "Print the answer.",
+          "답을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "milk", ko: "소 이름마다 우유 총합", en: "each cow's milk total" },
+      { v: "vals", ko: "서로 다른 총합 값들 (정렬됨)", en: "the distinct totals, sorted" },
+      { v: "second", ko: "두 번째로 적은 총합 값", en: "the second-lowest total value" },
+    ],
+    beats: [
+      { hi: [0, 16], bubble: t(E,
+        "What do we need? Every cow's milk total, starting from 0. Read N lines and add each amount to its cow.",
+        "무엇이 필요한가요? 소마다 우유 총합을 0부터 시작해서 구해야 해요.\nN 줄을 읽어 소마다 양을 더해요.") },
+      { hi: [18, 23], bubble: t(E,
+        "Collect the DISTINCT totals into vals and sort them — several cows can share a total, so we need the value itself, not a rank.",
+        "서로 다른 총합 값들만 vals 에 모아 정렬해요 — 값이 같은 소가 여러 마리일 수 있어서\n순위가 아니라 값 자체가 필요해요.") },
+      { hi: [25, 36], bubble: t(E,
+        "Fewer than 2 distinct totals means no second place — Tie. Otherwise find every cow at the second value: exactly one means that cow's name, more than one means Tie.",
+        "서로 다른 값이 2개 미만이면 두 번째 자리가 없으니 Tie 예요.\n있으면 두 번째 값을 가진 소를 모두 찾아요 — 한 마리면 그 이름을, 여러 마리면 Tie 예요.") },
+      { hi: [38, 39], bubble: t(E,
+        "Write the answer to the output file.",
+        "답을 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

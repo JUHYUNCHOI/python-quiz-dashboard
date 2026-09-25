@@ -315,6 +315,56 @@ export function CrossRoad3ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getCrossRoad3Sections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getCrossRoad3Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "cows", ko: "(도착 시각, 통과 시간) 목록", en: "list of (arrival, duration) pairs" },
+        { v: "current_time", ko: "문이 다음에 비는 시각", en: "when the gate is next free" },
+      ],
+      beats: [
+        { hi: [0, 16], bubble: t(E,
+          "What do we need? Every cow's arrival time and how long she takes to pass. Sort by arrival — the gate only lets cows through in arrival order.",
+          "무엇이 필요한가요? 소마다 도착 시각과 통과 시간이에요.\n도착 순으로 정렬해요 — 문은 도착한 순서로만 통과시켜요.") },
+        { hi: [17, 27], bubble: t(E,
+          "Track when the gate becomes free. If a cow arrives before that, she waits and starts at current_time instead. Either way, add her duration to get when she finishes.",
+          "문이 비는 시각을 계속 따라가요.\n소가 그 전에 도착하면 기다렸다가 current_time 부터 시작해요.\n어느 쪽이든 통과 시간을 더하면 끝나는 시각이에요.") },
+        { hi: [28, 30], bubble: t(E,
+          "Whatever's left at the end is the last cow's finish time — print it.",
+          "마지막에 남는 값이 마지막 소가 끝나는 시각이에요 — 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "pairs", ko: "(도착 시각, 통과 시간) 목록", en: "list of (arrival, duration) pairs" },
+      { v: "current_time", ko: "문이 다음에 비는 시각", en: "when the gate is next free" },
+    ],
+    beats: [
+      { hi: [0, 11], bubble: t(E,
+        "What do we need? Every cow's arrival time and how long she takes to pass. Read N, then each cow's (arrival, duration).",
+        "무엇이 필요한가요? 소마다 도착 시각과 통과 시간이에요.\nN 을 읽고, 소마다 (도착 시각, 통과 시간) 을 읽어요.") },
+      { hi: [13, 17], bubble: t(E,
+        "Sort by arrival — the gate only lets cows through in arrival order.",
+        "도착 순으로 정렬해요 — 문은 도착한 순서로만 통과시켜요.") },
+      { hi: [19, 25], bubble: t(E,
+        "Track when the gate becomes free. If a cow arrives before that, she waits and starts at current_time instead. Either way, add her duration to get when she finishes.",
+        "문이 비는 시각을 계속 따라가요.\n소가 그 전에 도착하면 기다렸다가 current_time 부터 시작해요.\n어느 쪽이든 통과 시간을 더하면 끝나는 시각이에요.") },
+      { hi: [27, 28], bubble: t(E,
+        "Whatever's left at the end is the last cow's finish time — write it to the output file.",
+        "마지막에 남는 값이 마지막 소가 끝나는 시각이에요 — 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

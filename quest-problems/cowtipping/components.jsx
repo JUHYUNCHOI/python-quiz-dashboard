@@ -291,6 +291,53 @@ export function CowTipProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getCowTipSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getCowTipWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "grid", ko: "N×N 판 (0/1)", en: "the N×N grid of 0/1" },
+        { v: "ans", ko: "지금까지 뒤집은 횟수", en: "flips counted so far" },
+      ],
+      beats: [
+        { hi: [0, 20], bubble: t(E,
+          "What do we need? The N×N grid. Read N rows into grid, turning each character into 0/1.",
+          "무엇이 필요한가요? N×N 판이에요.\nN 줄을 읽어 grid 에 담고, 글자 하나하나를 0/1 로 바꿔요.") },
+        { hi: [21, 34], bubble: t(E,
+          "Walk from the bottom-right corner up to the top-left. Whenever a cell is still 1, the only flip that can clear it is the rectangle (0,0)-(i,j) — a bigger one would disturb cells we already fixed. So that flip is forced: count it, then apply it.",
+          "오른쪽 아래 구석부터 왼쪽 위로 훑어요.\n칸이 아직 1 이면 그걸 없앨 뒤집기는 (0,0)-(i,j) 직사각형뿐이에요 — 더 크면 이미 맞춰 둔 칸을 건드려요.\n그러니 이 뒤집기는 반드시 해야 해요 — 세고, 실제로 뒤집어요.") },
+        { hi: [35, 37], bubble: t(E,
+          "Every flip was forced, so the count is the minimum. Print it.",
+          "모든 뒤집기가 강제로 정해졌으니, 센 개수가 곧 최소예요. 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "grid", ko: "N×N 판 (0/1)", en: "the N×N grid of 0/1" },
+      { v: "ans", ko: "지금까지 뒤집은 횟수", en: "flips counted so far" },
+    ],
+    beats: [
+      { hi: [0, 11], bubble: t(E,
+        "What do we need? The N×N grid. Read N rows and turn each character into 0/1.",
+        "무엇이 필요한가요? N×N 판이에요.\nN 줄을 읽어 글자 하나하나를 0/1 로 바꿔요.") },
+      { hi: [13, 21], bubble: t(E,
+        "Walk from the bottom-right corner up to the top-left. Whenever a cell is still 1, the only flip that can clear it is the rectangle (0,0)-(i,j) — a bigger one would disturb cells we already fixed. So that flip is forced: count it, then apply it.",
+        "오른쪽 아래 구석부터 왼쪽 위로 훑어요.\n칸이 아직 1 이면 그걸 없앨 뒤집기는 (0,0)-(i,j) 직사각형뿐이에요 — 더 크면 이미 맞춰 둔 칸을 건드려요.\n그러니 이 뒤집기는 반드시 해야 해요 — 세고, 실제로 뒤집어요.") },
+      { hi: [23, 24], bubble: t(E,
+        "Every flip was forced, so the count is the minimum. Write it to the output file.",
+        "모든 뒤집기가 강제로 정해졌으니, 센 개수가 곧 최소예요. 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

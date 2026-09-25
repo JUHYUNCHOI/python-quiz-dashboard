@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowTipSections, CowTipSim } from "./components";
+import { CowTipSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -155,11 +155,10 @@ export function makeCowTipCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "ctip-codewalk",
       narr: t(E,
-        "A cell with 1 has only one fix: flip the rectangle (0,0)–(i,j).",
-        "1 인 칸은 (0,0)~(i,j) 뒤집기 말고는 방법이 없어요."),
-      sections: getCowTipSections(E),
+        "The solution code, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { CrossRoad3ProgressiveCode, downloadCrossRoad3PDF, getCrossRoad3Sections } from "./components";
+import { CrossRoad3ProgressiveCode, downloadCrossRoad3PDF, getCrossRoad3Sections, getCrossRoad3Walk } from "./components";
 import { makeCrossRd3Ch1, makeCrossRd3Ch2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#8b5cf6";
 
@@ -102,6 +103,7 @@ export default function CrossRoad3App(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <CrossRoad3ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "cr3-codewalk") return <CodeWalk E={E} lang={codeLang} {...getCrossRoad3Walk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function CrossRoad3App(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <CrossRoad3ProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "cr3-codewalk") return <CodeWalk E={E} lang={codeLang} {...getCrossRoad3Walk(E, codeLang)} accent={A} />;
     return null;
   };
 

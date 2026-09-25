@@ -314,6 +314,61 @@ export function CrossRoad2ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getCrossRoad2Sections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getCrossRoad2Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "first / second", ko: "글자마다 처음·두 번째로 나온 자리", en: "each letter's first/second position" },
+        { v: "cows", ko: "등장한 소 글자 목록", en: "the list of distinct cow letters" },
+        { v: "ans", ko: "지금까지 센 교차 쌍 수", en: "crossing pairs counted so far" },
+      ],
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "What do we need? The string s. Find where each letter appears first and second.",
+          "무엇이 필요한가요? 문자열 s 예요.\n글자마다 처음 나온 자리와 두 번째 나온 자리를 찾아요.") },
+        { hi: [16, 29], bubble: t(E,
+          "Store those two positions in first/second, keyed by letter, then collect the distinct letters into cows.",
+          "그 두 자리를 first/second 에 글자별로 저장하고, 나온 글자들을 cows 에 모아요.") },
+        { hi: [30, 44], bubble: t(E,
+          "For every pair of cows, check if their positions interleave (a1 < b1 < a2 < b2, or the same starting from b). If so, they cross — count it.",
+          "소 쌍마다 자리가 번갈아 나오는지 봐요(a1 < b1 < a2 < b2, 또는 b 부터 시작해도 같은 모양).\n그러면 서로 엇갈리는 거니 세어요.") },
+        { hi: [45, 47], bubble: t(E,
+          "Print the total crossing count.",
+          "총 교차 수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "first / second", ko: "글자마다 처음·두 번째로 나온 자리", en: "each letter's first/second position" },
+      { v: "cows", ko: "등장한 소 글자 목록", en: "the list of distinct cow letters" },
+      { v: "ans", ko: "지금까지 센 교차 쌍 수", en: "crossing pairs counted so far" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What do we need? The string s. Read the file and pull out that one line.",
+        "무엇이 필요한가요? 문자열 s 예요. 파일을 읽어서 그 한 줄을 꺼내요.") },
+      { hi: [8, 16], bubble: t(E,
+        "Find where each letter appears first and second, and save those positions in first/second.",
+        "글자마다 처음 나온 자리와 두 번째 나온 자리를 찾아 first, second 에 저장해요.") },
+      { hi: [18, 30], bubble: t(E,
+        "For every pair of cows, check if their positions interleave (a1 < b1 < a2 < b2, or the same starting from b). If so, they cross — count it.",
+        "소 쌍마다 자리가 번갈아 나오는지 봐요(a1 < b1 < a2 < b2, 또는 b 부터 시작해도 같은 모양).\n그러면 서로 엇갈리는 거니 세어요.") },
+      { hi: [32, 33], bubble: t(E,
+        "Write the total crossing count to the output file.",
+        "총 교차 수를 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

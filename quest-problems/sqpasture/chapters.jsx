@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSqPastureSections, SqPastureSim } from "./components";
+import { SqPastureSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (6 steps)
@@ -253,10 +253,10 @@ export function makeSqPastureCh2(E, lang = "py") {
         </div>),
     },
     {
-      type: "progressive",
+      type: "sqp-codewalk",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
-      sections: getSqPastureSections(E),
+        "The solution code, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

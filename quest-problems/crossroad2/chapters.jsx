@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCrossRoad2Sections, CrossRoad2Sim } from "./components";
+import { CrossRoad2Sim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -162,11 +162,10 @@ export function makeCrossRd2Ch2(E, lang = "py") {
   return [
     // 2-1: Code
     {
-      type: "progressive",
+      type: "cr2-codewalk",
       narr: t(E,
-        "Read the solution code piece by piece.",
-        "풀이 코드를 한 단락씩 읽어 봐요."),
-      sections: getCrossRoad2Sections(E),
+        "The solution code, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

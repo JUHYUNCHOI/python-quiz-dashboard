@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCrossRoad3Sections, CrossRoad3Sim } from "./components";
+import { CrossRoad3Sim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -164,11 +164,10 @@ export function makeCrossRd3Ch2(E, lang = "py") {
   return [
     // 2-1: Code
     {
-      type: "progressive",
+      type: "cr3-codewalk",
       narr: t(E,
-        "Walk through arrivals in order, tracking when the gate frees up.",
-        "도착 순서대로 보면서 문이 비는 시각을 계속 따라가요."),
-      sections: getCrossRoad3Sections(E),
+        "The solution code, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

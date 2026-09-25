@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getDontBeLastSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -162,11 +161,10 @@ export function makeDontBeLastCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "dbl-codewalk",
       narr: t(E,
-        "Sum each cow's milk in a dict, then find the second-lowest distinct total.",
-        "사전에 소마다 우유를 더해 두고, 서로 다른 총량 중 두 번째로 작은 값을 찾아요.\n그 값을 가진 소가 한 마리면 이름을, 여럿이면 'Tie' 를 내요."),
-      sections: getDontBeLastSections(E),
+        "The solution code, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

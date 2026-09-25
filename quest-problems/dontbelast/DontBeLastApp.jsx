@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { DontBeLastProgressiveCode, DontBeLastSim, downloadDontBeLastPDF, getDontBeLastSections } from "./components";
+import { DontBeLastProgressiveCode, DontBeLastSim, downloadDontBeLastPDF, getDontBeLastSections, getDontBeLastWalk } from "./components";
 import { makeDontBeLastCh1, makeDontBeLastCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#dc2626";
 
@@ -102,6 +103,7 @@ export default function DontBeLastApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <DontBeLastProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "dbl-codewalk") return <CodeWalk E={E} lang={codeLang} {...getDontBeLastWalk(E, codeLang)} accent={A} />;
     if (step.type === "sim") return <DontBeLastSim E={E} />;
     return null;
   };
@@ -114,6 +116,7 @@ export default function DontBeLastApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <DontBeLastProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "dbl-codewalk") return <CodeWalk E={E} lang={codeLang} {...getDontBeLastWalk(E, codeLang)} accent={A} />;
     if (s.type === "sim") return <DontBeLastSim E={E} />;
     return null;
   };

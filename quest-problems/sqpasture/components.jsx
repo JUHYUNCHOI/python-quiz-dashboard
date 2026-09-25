@@ -268,6 +268,59 @@ export function SqPastureProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getSqPastureSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getSqPastureWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "min_x/max_x, min_y/max_y", ko: "두 목장을 감싸는 바운딩 박스", en: "the bounding box around both pastures" },
+        { v: "side", ko: "정사각형 한 변의 길이", en: "the square's side length" },
+      ],
+      beats: [
+        { hi: [0, 11], bubble: t(E,
+          "What do we need? Both pastures' corner coordinates. Use long long — the answer can be a huge square.",
+          "무엇이 필요한가요? 두 목장의 꼭짓점 좌표예요.\nlong long 을 써요 — 답이 아주 큰 정사각형일 수 있어요.") },
+        { hi: [12, 35], bubble: t(E,
+          "Find the bounding box that covers both pastures — the smallest and largest x, and the smallest and largest y across both.",
+          "두 목장을 다 덮는 바운딩 박스를 구해요 — 둘을 합친 x 의 최소·최대, y 의 최소·최대예요.") },
+        { hi: [36, 43], bubble: t(E,
+          "The square's side must cover the wider gap, so side = max(width, height).",
+          "정사각형은 더 넓게 벌어진 쪽까지 덮어야 해요.\n그래서 한 변 = max(가로, 세로) 예요.") },
+        { hi: [44, 46], bubble: t(E,
+          "Print the area — side squared.",
+          "넓이를 출력해요 — 한 변을 제곱한 값이에요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "min_x/max_x, min_y/max_y", ko: "두 목장을 감싸는 바운딩 박스", en: "the bounding box around both pastures" },
+      { v: "side", ko: "정사각형 한 변의 길이", en: "the square's side length" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What do we need? Both pastures' corner coordinates. Read the two lines.",
+        "무엇이 필요한가요? 두 목장의 꼭짓점 좌표예요. 두 줄을 읽어요.") },
+      { hi: [8, 24], bubble: t(E,
+        "Find the bounding box that covers both pastures — the smallest and largest x, and the smallest and largest y across both.",
+        "두 목장을 다 덮는 바운딩 박스를 구해요 — 둘을 합친 x 의 최소·최대, y 의 최소·최대예요.") },
+      { hi: [26, 32], bubble: t(E,
+        "The square's side must cover the wider gap, so side = max(width, height).",
+        "정사각형은 더 넓게 벌어진 쪽까지 덮어야 해요.\n그래서 한 변 = max(가로, 세로) 예요.") },
+      { hi: [34, 35], bubble: t(E,
+        "Write the area — side squared — to the output file.",
+        "넓이를 출력 파일에 써요 — 한 변을 제곱한 값이에요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

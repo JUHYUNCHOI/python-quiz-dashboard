@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { CowTipProgressiveCode, downloadCowTipPDF, getCowTipSections } from "./components";
+import { CowTipProgressiveCode, downloadCowTipPDF, getCowTipSections, getCowTipWalk } from "./components";
 import { makeCowTipCh1, makeCowTipCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#059669";
 
@@ -102,6 +103,7 @@ export default function CowTipApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <CowTipProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "ctip-codewalk") return <CodeWalk E={E} lang={codeLang} {...getCowTipWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function CowTipApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <CowTipProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "ctip-codewalk") return <CodeWalk E={E} lang={codeLang} {...getCowTipWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

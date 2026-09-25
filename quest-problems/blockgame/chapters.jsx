@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getBlockGameSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -259,11 +258,10 @@ export function makeBlockGameCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code — straight in.
     {
-      type: "progressive",
+      type: "bg-codewalk",
       narr: t(E,
-        "Find each board's worst case, then sum them per letter.",
-        "판마다 가장 나쁜 경우를 구한 뒤 글자별로 더해요."),
-      sections: getBlockGameSections(E),
+        "The solution code, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

@@ -122,6 +122,61 @@ export function BlockGameProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getBlockGameSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   ⚠️ `chr(ord('a')+ci)`(파이썬)·`a[i]-'a'`(C++) 는 안 가르친 글자↔숫자 변환이다 — 처음
+   나오는 말풍선에서 한 줄로 뜻을 밝힌다(2026-09-25 판정). ── */
+export function getBlockGameWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "need[26]", ko: "글자마다(a~z) 필요한 최소 블록 수", en: "min blocks needed, per letter a..z" },
+        { v: "ca[26] / cb[26]", ko: "이번 판 앞면·뒷면에서 글자별 개수", en: "this board's front/back letter counts" },
+      ],
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "What do we need? The minimum blocks needed for each letter. Start need[26] at 0 — index 0 is 'a', 25 is 'z'.",
+          "무엇이 필요한가요? 글자마다(a~z) 필요한 최소 블록 수예요.\nneed[26] 을 0으로 시작해요 — 인덱스 0이 'a', 25가 'z'예요.") },
+        { hi: [16, 29], bubble: t(E,
+          "Read this board's front and back word, and count each letter in both. Subtracting 'a' turns a letter into its slot number, so a[i]-'a' means 0 for 'a', 1 for 'b', and so on.",
+          "이번 판의 앞면·뒷면 단어를 읽고, 각각 글자별로 세요.\n글자에서 'a' 를 빼면 그 글자의 번호가 돼요 — a[i]-'a' 는 'a' 면 0, 'b' 면 1이 돼요.") },
+        { hi: [30, 39], bubble: t(E,
+          "We don't know which side will show, so for each letter add the larger of front-count and back-count.",
+          "어느 면이 보일지 모르니, 글자마다 앞면·뒷면 개수 중 큰 쪽을 더해요.") },
+        { hi: [40, 45], bubble: t(E,
+          "Print the total for every letter, a through z.",
+          "글자마다(a~z) 총합을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "need[26]", ko: "글자마다(a~z) 필요한 최소 블록 수", en: "min blocks needed, per letter a..z" },
+      { v: "front / back", ko: "이번 판의 앞면·뒷면 글자들", en: "this board's front/back letters" },
+    ],
+    beats: [
+      { hi: [0, 8], bubble: t(E,
+        "What do we need? The minimum blocks needed for each letter. Start need with 26 zeros — index 0 is 'a', 25 is 'z'.",
+        "무엇이 필요한가요? 글자마다(a~z) 필요한 최소 블록 수예요.\nneed 를 0이 26개인 배열로 시작해요 — 인덱스 0이 'a', 25가 'z'예요.") },
+      { hi: [9, 12], bubble: t(E,
+        "Read this board's front and back word.",
+        "이번 판의 앞면·뒷면 단어를 읽어요.") },
+      { hi: [13, 26], bubble: t(E,
+        "For each letter (ci from 0 to 25), count how many times it appears on the front and on the back. ord('a')+ci is that letter's code number, and chr() turns it back into the letter. We don't know which side will show, so add the larger count.",
+        "글자마다(ci 는 0부터 25까지) 앞면·뒷면에 몇 번 나오는지 세요.\nord('a')+ci 는 그 글자의 코드번호, chr() 는 그걸 다시 글자로 바꿔요.\n어느 면이 보일지 모르니 큰 쪽을 더해요.") },
+      { hi: [28, 30], bubble: t(E,
+        "Write the total for every letter, a through z.",
+        "글자마다(a~z) 총합을 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
