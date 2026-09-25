@@ -71,41 +71,42 @@
    돌려 **quest 34개의 미커밋 편집이 한 번에 사라졌다**(pop 으로 전량 복구, 충돌 0).
    이제 `.githooks/reference-transaction` 이 막는다. **커밋은 메인 세션이 모아서 한다.**
 
-## 🔴 READY — PM 판정 셋 다 「한다」 (2026-09-25, 팀 배치 완료)
-
-PM 이 세 건 다 판정하고 **프롬프트까지 써서** 돌려줬다. 다섯이 도는 중.
+## 🔴 지금 도는 것 (2026-09-25 저녁)
 
 | 무엇 | 담당 | 상태 |
 |---|---|---|
-| `socialdist1` 인트로·시뮬을 cpid 1035 로 다시 쓰기 | frontend-engineer | READY 도는중 |
-| 난이도 `{value, source}` 반환 + ④ 명시 | backend-engineer | **DONE** `ffc7d842` — ④ 26→**22**. 남은 22개는 **일부러 안 채웠다**(감사 기록이 없다). 검사기 버그도 잡았다: `mcc-difficulty.ts` 의 한 줄 여러 항목을 못 세서 4개가 「안 매김」으로 보였다 |
-| 감사값 vs 추정치 **뱃지 표시** | ux-reviewer → 메인 | **DONE** `ffc7d842` — 선생님 화면만, **테두리만 = 확인 안 됨**(옆 `internal`·`beta` 뱃지가 이미 쓰는 뜻). 학생 화면 그대로. ⚠️ `isTeacher` 로 가두면 **선생님 본인이 못 본다**(owner 는 기본 학생 뷰) → 원래 role 로 갈랐다 |
-| 동결 6개 CodeWalk 전환 (hps 제외) | frontend-engineer | READY 도는중 |
-| 동결 6개 CodeWalk **교육 검토** | pedagogy-reviewer | READY 도는중 |
-| `socialdist1` 학생 재확인 | student-python | ⏳ 수정 끝난 뒤 |
-| 입출력 카드 **맨몸 윗첨자** | 메인 | **DONE** `472f7cf8` — 9개 quest·13곳에 「10억·10만·100만·100조」를 붙였다 |
-| `/quest` 모바일 네비가 체크 버튼 2개를 가린다 | 별건으로 띄웠다(`task_bfa2d393`) | ⏳ |
-| 전환 뒤 코드 무변경 독립 재확인 | quest-auditor | ⏳ 전환 끝난 뒤 |
+| CodeWalk 전환 — 1스탑 A조 9개 | frontend-engineer | READY 도는중 |
+| CodeWalk 전환 — 1스탑 B조 9개 | frontend-engineer | READY 도는중 |
+| CodeWalk 전환 — 다중스탑 C조 6개 | frontend-engineer | READY 도는중 |
+| 복사 버튼 — 학생 경험 판정 | ux-reviewer | READY 도는중 |
+| 복사 버튼 — 모바일 직접 체감 | student-python | READY 도는중 |
+| 복사 버튼 — 「영구히 못 누름」 자리 세기 | 메인 | READY 도는중 |
 
-### PM 이 확인해 준 사실 셋 — 이게 판정의 근거다
-1. **`socialdist1` 은 동결 목록에 없다.** 틀린 건 **1-1 인트로 글 + `SocDist1Sim` 둘뿐** —
-   카드(1-1b)·퀴즈(1-2)·입력(1-3)은 **이미 cpid 1035 에 맞게 정확히** 써져 있다.
-   🔒 `FULL_PY`/`FULL_CPP` 도 1035 코드고 15/15 PASS 다. **코드는 손댈 이유가 없다.**
-2. **동결 7개는 7/7 `USACO_VERIFIED`.** 그런데 `check-frozen.py` 는 **파일이 아니라
-   `SOLUTION_CODE`·`*_PY`·`*_CPP` 변수 diff** 를 막는다 → **코드 배열을
-   byte-identical 로 두고 표시 컴포넌트만** 감싸면 **재제출이 필요 없다.**
-   이미 quest 21개·46곳에서 같은 방식으로 끝낸 전례(`.claude/WORK.md:121`).
-   ⛔ 단 **코드 줄을 쪼개야 붙는 자리 37줄**(checkups 26+1·cheese 4·moo 3·cowphotos 2·hps 1)은
-   내용 변경이라 **이번 범위 밖 — 「재제출 필요」로 남긴다.**
-   ⛔ `hps` 는 별도 — 검사기가 유일하게 「narr 가 코드에 안 붙었다」고 찍은 quest다. 진단만.
-3. **난이도는 「값 채우기」가 먼저가 아니다.** 화면이 출처를 안 보여주는 한
-   **얼마를 채워도 「매긴 값처럼 보이는 안 매긴 값」이 계속 나온다.**
-   그래서 ①출처를 데이터에 싣고 ②화면을 가르고 ③④26개만 먼저 채운다.
-   ③유추 86개는 **「Lv N?」로 정직하게 보이면 그 자체로 해결**이라 급히 안 채운다.
+### ⭐ CodeWalk 스크리닝이 가정을 뒤집었다 (2026-09-25)
+**66개 중 「코드 섹션에 위젯이 박힌」 quest 는 사실상 0개다.**
+66개 전부 `App.jsx` 렌더 분기가 **글자 하나까지 같고**, `Section` 인터페이스가
+`{label,color,py,cpp,why?,pyOnly?,cppOnly?,aside?}` 뿐이라 **텍스트 밖에 못 담는다.**
+`*Sim`·`*Runner` 는 전부 **별도 step**(`"sim"`·`"runner"`)이다.
+⭐ `rounding` 2236→184줄 붕괴도 「위젯이 코드 안에 있어서」가 아니라
+**통째로 다시 쓰다가 무관한 step 이 같이 날아간 것**이었다 —
+방지책은 quest 선별이 아니라 **좁은 범위 편집**(`"progressive"` step 만)이다.
 
-### 배포 — **오늘은 안 민다**
-`check-deploy-budget.py` 실측: **오늘 08:08:52 에 이미 한 번 밀렸다.**
-커밋만 계속 쌓고 내일 창에 묶어서 한 번.
+**진짜 분산 요인은 코드 스탑(`label:`) 개수:**
+    1스탑 33 · 2스탑 3 → 참조 템플릿 **`rounding`**(`getRoundingOptWalk`)
+    3스탑 11 · 4스탑 16 → 참조 템플릿 **`moo`**(`getMooWalk`, 스탑마다 `hi:[lo,hi]`)
+    `reflection`(6) · `mcc21simplemath`(9) → ⚠️ **증분 빌드** — 코드가 단계마다 자란다.
+        그냥 뭉치면 `hi` 범위 강조의 가치가 **오히려 깎인다.** pedagogy 설계 검토 먼저.
+    `favperm2` → `permutation` 챕터를 그대로 import 한다. **묶어서** 처리.
+**「코드 줄을 쪼개야 붙는 자리」는 0** — `hi` 는 기존 배열 인덱스를 가리킨다.
+
+### 📋 아직 안 띄운 CodeWalk 묶음 (24개 끝나면 바로)
+    1스탑 나머지 18: mcc19palindrome mcc19rect mcc19rect2 mcc20cipher mcc20kitty
+      mcc20missing mcc22grammar mco15honey milkexchange milkorder oddphotos
+      productivity rotshift subseqmedian xorstring mcc22cardshark mco15bitcoin reverseeng
+    다중스탑 나머지 21: lostcow majority mcc15bahasaf mcc15choco mcc15isthmus mcc20zigzag
+      mcc22aliens mcc22maze mco15badminton mco15trains palindrome walkfence
+      mcc15equation mcc20citytour mcc20knight mcc21dvd mcc22birthday mcc22lamp
+      mco15secret permutation(+favperm2) wordproc
 
 ## ✅ 2026-09-25 오후에 닫은 것
 
