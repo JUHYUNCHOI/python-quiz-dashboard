@@ -573,6 +573,36 @@ export function Mcc22BirthdayProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc22BirthdayWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "rows / cols", ko: "각 단계 뒤 격자의 세로·가로 크기", en: "the grid's height/width after each step" },
+      { v: "flip_h / flip_v", ko: "좌우·위아래로 뒤집혔는지 (켜짐/꺼짐)", en: "whether flipped left↔right / up↔down (on/off)" },
+    ],
+    beats: [
+      { hi: [0, 8], bubble: t(E,
+        "What do we need to answer? For each queried friend number, which cookie shape it is — without ever building the 2^N grid. Read N (letters), the scrolls, and the friend numbers; set up a size cap CAP so numbers never overflow, the shape lookup for the two flip switches, and an answers list.",
+        "무엇에 답해야 하나요? 물어본 친구 번호마다 어떤 쿠키 모양인지예요 — 2^N 격자를 절대 만들지 않고요.\nN(글자 수), 두루마리들, 친구 번호들을 읽어요.\n번호가 넘치지 않게 한계값 CAP, 두 스위치로 모양을 찾는 shape, 답을 모을 answer 를 준비해요.") },
+      { hi: [9, 20], bubble: t(E,
+        "Why not build the grid? After N letters it holds 2^N cookies, and N can be up to 10000 — far too many to build. So instead, precompute just the grid's width and height at every step: A/B double the width, C doubles the height, capped at CAP so the numbers stay small.",
+        "왜 격자를 안 만들까요? N 글자 뒤 격자는 2^N 개인데 N 이 최대 10000 이라 만들 수조차 없어요.\n그래서 대신 각 단계의 가로·세로 크기만 미리 구해요 — A·B 는 가로를, C 는 세로를 두 배로 늘리고, CAP 을 넘으면 그대로 CAP 에 둬요.") },
+      { hi: [22, 26], bubble: t(E,
+        "So how do we find a number's shape? First turn it into (row, col) using the final width, then walk the scroll BACKWARD one letter at a time, starting with both flip switches off.",
+        "그럼 번호의 모양은 어떻게 구할까요? 먼저 최종 가로 길이로 번호를 (행, 열) 로 바꾸고, 두루마리를 한 글자씩 거꾸로 따라가요 — 두 스위치는 모두 꺼진 채로 시작해요.") },
+      { hi: [27, 35], bubble: t(E,
+        "Each backward step asks: was this cell in the ORIGINAL half or the COPIED half? A/B grew the grid rightward, C downward — so check the matching axis against that step's earlier size. Landing in the copy means stepping back into the original spot, and since B/C copies are flipped, that flicks the matching switch; landing in the original half changes nothing.",
+        "거꾸로 가는 한 걸음마다 물어요 — 이 칸이 원본 쪽이었나, 복사본 쪽이었나?\nA·B 는 오른쪽으로, C 는 아래쪽으로 격자를 키웠으니, 그 축을 그 단계의 이전 크기와 비교해요.\n복사본 쪽이면 원본 자리로 되돌리고, B·C 의 복사본은 뒤집혀 있으니 그 스위치를 하나 켜요.\n원본 쪽이면 아무것도 안 바뀌어요.") },
+      { hi: [36, 40], bubble: t(E,
+        "Two on/off switches give exactly four shapes: (no,no)=p, (H,no)=q, (no,V)=b, (H,V)=d. Look it up, collect every answer, and print them all joined together.",
+        "좌우·위아래 두 스위치(켜짐/꺼짐)가 정확히 네 모양을 만들어요. (안,안)=p, (좌우,안)=q, (안,위아래)=b, (좌우,위아래)=d.\n그 값을 찾아 답을 모으고, 다 이어 붙여 한 번에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

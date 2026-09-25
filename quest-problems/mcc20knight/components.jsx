@@ -345,6 +345,37 @@ export function Mcc20KnightProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc20KnightWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "best", ko: "차이(dx,dy)별 최소 이동 횟수 표", en: "table of minimum moves per gap (dx,dy)" },
+      { v: "need", ko: "지금 질문의 최소 이동 횟수", en: "minimum moves for this query" },
+      { v: "K", ko: "정확히 이 횟수에 도착할 수 있는지 묻는 값", en: "the exact move count being asked about" },
+    ],
+    beats: [
+      { hi: [0, 14], bubble: t(E,
+        "What do we need before answering any query? For every possible gap (dx, dy), the minimum number of knight moves to cross it — computed once, not per query. Reaching (A,B) from (X,Y) is exactly the same problem as reaching (dx,dy) = (|X−A|,|Y−B|) from (0,0), so one table of gaps serves every query. List the 8 L-moves, then build an empty table (best) where −1 means 'not reached yet' — a little bigger than 2000 because the shortest path to a nearby square sometimes dips below 0 first.",
+        "질문에 답하기 전에 뭐가 필요할까요? 모든 차이 (dx, dy) 마다 나이트가 최소 몇 번 움직이면 되는지를요 — 질문마다가 아니라 딱 한 번만 구해 둬요.\n(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 차이 (dx,dy) = (|X−A|, |Y−B|) 만큼 가는 것과 같아서, 차이만 담은 표 하나면 모든 질문을 처리해요.\nL자 이동 8가지를 적고, 빈 표(best) 를 만들어요 — −1 은 '아직 도착 못 했다' 는 뜻이고, 표를 2000 보다 조금 크게 잡은 건 가까운 칸으로 가는 가장 짧은 길이 0 아래로 살짝 도는 경우가 있어서예요.") },
+      { hi: [15, 23], bubble: t(E,
+        "Why fill it with BFS? It spreads out in rings — every square one move away first, then every square two moves away, and so on — so the first time a square is written is already its shortest distance, and it's never overwritten. Run this once, starting from (0,0), before reading any query.",
+        "왜 BFS 로 채울까요? BFS 는 동그라미가 퍼지듯 나아가요 — 한 번에 갈 수 있는 칸을 먼저 적고, 그다음 두 번에 갈 수 있는 칸을 적어요.\n그래서 어떤 칸에 처음 적히는 값이 이미 가장 짧은 거리라, 다시 고치지 않아요.\n(0,0) 에서 시작해 질문을 읽기 전에 이 일을 딱 한 번만 해요.") },
+      { hi: [24, 31], bubble: t(E,
+        "Now answer each query. This contest has no fixed input format, so the values are given like this (the official sample). For every query, turn the coordinates back into a gap (dx, dy) and look up its precomputed minimum.",
+        "이제 질문마다 답해요. 이 대회는 입력 형식이 따로 없어서 값을 이렇게 줘요 (공식 예제).\n질문마다 좌표를 다시 차이 (dx, dy) 로 바꾸고, 미리 구해 둔 최소값을 찾아봐요.") },
+      { hi: [32, 36], bubble: t(E,
+        "Why must the leftover (K − need) be even? Color the board like a chessboard — an L-move is 1 in one direction and 2 in the other, so 1+2 = 3 squares, and an odd step always lands on the opposite color. So after an even number of moves the knight is back on its starting color, after an odd number it's on the other one. The target's color never changes, so the move count can only shift by 2 at a time — and any extra pair can always be burned by stepping out and straight back.",
+        "남는 이동 (K − need) 이 왜 짝수여야 할까요? 판을 체스판처럼 두 색으로 칠해 봐요.\nL자 이동은 한 쪽으로 1, 다른 쪽으로 2 라서 합쳐서 3 칸 — 홀수 칸을 움직이면 색이 반드시 반대가 돼요.\n그래서 짝수 번 움직이면 출발한 색으로 돌아오고, 홀수 번 움직이면 반대 색에 있어요.\n목표 칸의 색은 정해져 있으니 이동 횟수는 2 씩만 달라질 수 있고, 남는 이동은 아무 칸으로나 나갔다 바로 돌아오면 항상 쓸 수 있어요.") },
+      { hi: [37, 37], bubble: t(E,
+        "Collect every answer and print them all at once, one per line.",
+        "답을 다 모아서 한 번에, 한 줄씩 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

@@ -316,6 +316,30 @@ export function Mcc21DvdProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc21DvdWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "one", ko: "한 축이 1과 N 사이를 튕기며 도는 위치를 구하는 함수", en: "computes where one axis bounces to at time t" },
+      { v: "p", ko: "이번 바퀴에서 지난 시간", en: "how far into this bounce cycle we are" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we have to answer? For each of Q independent queries, where the logo is on an H×W screen after T seconds. Read the queries — H, W, T as three arrays, with query i being H[i], W[i], T[i].",
+        "무엇에 답해야 하나요? 서로 상관없는 물음 Q 개마다, H×W 화면에서 T 초 뒤 로고 위치예요.\n물음을 읽어요 — H, W, T 를 배열 세 개로 받고, i 번째 물음은 H[i], W[i], T[i] 예요.") },
+      { hi: [6, 9], bubble: t(E,
+        "Key idea: the row and column move independently — each is a dot bouncing 1→N→1 on its own line of length N. Going up takes N−1 seconds and coming back down takes N−1 more, so the whole trip repeats every 2(N−1) seconds; p = t mod 2(N−1) is how far into this trip we are. The dot is at the top exactly when p = N−1, so (N−1) − p is the gap to the top — take its absolute value and subtract from N: N − |(N−1) − p|. Why not just step T second by second? T can be up to 10^16 with Q up to 1000 — the formula answers each query directly, with no loop.",
+        "핵심 아이디어는 이거예요. 행과 열은 서로 상관없이 움직여요 — 각각은 길이 N 인 선 위에서 1→N→1 로 튕기는 점 하나예요.\n올라가는 데 N−1 초, 내려오는 데 N−1 초가 걸려서 한 바퀴는 2(N−1) 초예요. p = t mod 2(N−1) 은 이번 바퀴에서 몇 초 지났는지예요.\n점이 꼭대기 N 에 있는 순간은 p = N−1 이라, (N−1) − p 는 꼭대기까지 남은 거리예요 — 절댓값을 씌워 N 에서 빼면 N − |(N−1) − p| 가 돼요.\nT 를 왜 한 초씩 세면 안 될까요? T 가 최대 10^16, Q 가 최대 1000 이라서예요. 공식은 반복 없이 물음 하나를 바로 답해요.") },
+      { hi: [11, 13], bubble: t(E,
+        "For each query, call the same one() twice — once with H for the row, once with W for the column, both with the same T[i] — and print 'r c' in the original query order.",
+        "물음마다 같은 one() 을 두 번 불러요 — 행은 H, 열은 W 로, T[i] 는 둘 다 똑같이 넣어요.\n'r c' 를 물음이 들어온 순서 그대로 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

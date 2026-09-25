@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc22BirthdaySections, Mcc22BirthdayCookieSim, Mcc22BirthdayBackwardWalkSim } from "./components";
+import { getMcc22BirthdayWalk, Mcc22BirthdayCookieSim, Mcc22BirthdayBackwardWalkSim } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const KA = { wordBreak: "keep-all" };
 const NW = { whiteSpace: "nowrap" };
@@ -184,6 +185,7 @@ export function makeMcc22BirthdayCh1(E) {
    [🐢 slow vs 🚀 fast plan] → [progressive code]
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22BirthdayCh2(E, lang = "py") {
+  const w = getMcc22BirthdayWalk(E);
   return [
     // 2-1: plan — brute limit → fast idea
     {
@@ -228,12 +230,15 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
         "쿠키 번호 하나를 글자 하나씩 거꾸로 따라가 봐요."),
       content: <Mcc22BirthdayBackwardWalkSim E={E} />,
     },
-    // 2-3: progressive code
+    // 2-3: code, CodeWalk — bubbles sit on the lines they explain
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
-      sections: getMcc22BirthdaySections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains.",
+        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+      content: (
+        <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#f97316" />
+      ),
     },
   ];
 }

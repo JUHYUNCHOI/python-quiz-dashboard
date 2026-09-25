@@ -118,6 +118,33 @@ export function Mcc15EqProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc15EqWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "check", ko: "기호 하나가 식을 만족하는지 보는 함수", en: "checks whether one operator makes the equation true" },
+      { v: "op", ko: "지금 시도하는 기호", en: "the operator being tried" },
+    ],
+    beats: [
+      { hi: [0, 0], bubble: t(E,
+        "What are we searching for? Only 8 candidates make a true equation — '=' in the first gap or the second, times 4 operators. Few enough to just try them all, and the answer is unique, so we can stop at the first match. Start by reading a, b, c.",
+        "무엇을 찾아야 하나요? 8가지 후보 중 등식이 맞는 것 하나예요.\n'=' 가 앞칸이냐 뒷칸이냐 2가지 × 기호 4가지예요.\n수가 적어서 다 해봐도 되고, 답은 하나뿐이라 처음 맞는 데서 멈춰요.\n먼저 a, b, c 를 읽어요.") },
+      { hi: [2, 9], bubble: t(E,
+        "Write one check function that handles all four operators, and reuse it for both places '=' can go: check(a, op, b, c) tests a op b = c, check(b, op, c, a) tests a = b op c. Division is turned into multiplication — x / y == z becomes x == y * z — because '/' does real division and comparing decimals could be off by a tiny amount. That's also why 3/2=1 is not valid: 3/2 is 1.5, and 1.5 is not 1.",
+        "check 함수 하나로 네 기호를 다 처리하고, '=' 자리 두 곳에 그대로 재사용해요.\ncheck(a, op, b, c) 는 a op b = c 를, check(b, op, c, a) 는 a = b op c 를 확인해요.\n나눗셈은 곱셈으로 바꿔요. x / y == z 를 x == y * z 로요 —\n'/' 는 소수까지 계산해서 소수로 비교하면 오차가 날 수 있거든요.\n3/2=1 이 틀린 이유도 같아요. 3/2 는 1.5 이고, 1.5 는 1 이 아니니까요.") },
+      { hi: [11, 14], bubble: t(E,
+        "Try each of the 4 operators with '=' in the first gap: a op b = c. If it matches, print it in that format and stop — the answer is unique.",
+        "네 기호를 하나씩 넣어 '=' 가 앞칸일 때 — a op b = c — 가 맞는지 봐요.\n맞으면 그 형식대로 출력하고 멈춰요 — 답은 하나뿐이니까요.") },
+      { hi: [15, 17], bubble: t(E,
+        "If the first gap never matched, try the second gap instead — same function, same operator: a = b op c.",
+        "첫 칸이 안 맞았으면 같은 함수, 같은 기호로 둘째 칸을 시도해요 — a = b op c.") },
+    ],
+  };
+}
+
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
 function highlightHTML(line, lang) {

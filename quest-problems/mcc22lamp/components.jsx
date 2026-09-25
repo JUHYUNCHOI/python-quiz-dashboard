@@ -436,6 +436,43 @@ export function Mcc22LampProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc22LampWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "count_ge", ko: "구간 하나에서 k 이상인 칸 수를 세는 함수", en: "counts how many spots in one stretch reach k" },
+      { v: "delta", ko: "밝기가 꺾이는 지점과 그때 기울기 변화량", en: "where the brightness bends, and by how much the slope changes there" },
+      { v: "s / F", ko: "지금 구간의 기울기 / 구간 시작 밝기", en: "the current slope / brightness at the start of this stretch" },
+    ],
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "The plan first: each lamp is a triangular tent, so the summed brightness only changes direction at a few spots — between them it runs perfectly straight. So instead of visiting every x, handle one straight stretch at a time. This helper, count_ge, counts inside ONE stretch; the sweep that cuts the line into stretches comes right after it.",
+        "먼저 전체 계획이에요. 램프 하나는 삼각형 텐트라서, 다 더한 밝기는 몇 군데에서만 방향이 꺾이고 그 사이는 완전히 곧아요.\n그래서 x 를 하나씩 도는 대신 곧은 구간을 하나씩 처리해요.\n이 도우미 count_ge 는 구간 하나 안을 세는 일을 해요 — 구간으로 잘라내는 일은 바로 다음에 나와요.") },
+      { hi: [4, 10], bubble: t(E,
+        "count_ge(F, s, k, L) asks: in a stretch of L+1 more spots, starting at brightness F and changing by s each step, how many spots reach k? If the stretch is empty (L<0) there's nothing to count. If it's flat (s=0), every spot has the same brightness F — either all L+1 of them qualify, or none do.",
+        "count_ge(F, s, k, L) 은 이렇게 물어요 — 구간에 L+1 칸이 남아 있고 첫 칸 밝기가 F, 한 칸 갈 때마다 s 만큼 변할 때, 몇 칸이 k 에 닿나요?\n구간이 비어 있으면(L<0) 셀 게 없어요. 평평하면(s=0) 모든 칸이 똑같이 F 라서, L+1 칸이 전부 되거나 하나도 안 되거나예요.") },
+      { hi: [11, 20], bubble: t(E,
+        "On a rising stretch (s>0) we only need the FIRST step that reaches k — every step after it reaches k too. Divide (k−F) by s to see how many steps that takes, and round UP if it doesn't divide evenly, because a partial step isn't enough.",
+        "밝기가 올라가는 구간(s>0)에서는 k 에 처음 닿는 걸음만 찾으면 돼요 — 그 뒤 걸음은 전부 k 에 닿거든요.\n(k−F) 를 s 로 나눠 몇 걸음인지 보고, 딱 안 나누어떨어지면 한 걸음 더 가요 — 걸음을 반쯤 갈 수는 없으니까요.") },
+      { hi: [21, 25], bubble: t(E,
+        "A falling stretch (s<0) is the mirror image — find the LAST step that still holds, so round the leftover DOWN instead. All of this stays in whole numbers on purpose: k reaches 10^18, and a decimal would blur the last digit.",
+        "내려가는 구간(s<0)은 거꾸로예요 — k 를 지키는 마지막 걸음을 찾으니 이번엔 아래로 내려 잡아요.\n이 계산은 일부러 정수로만 해요. k 가 10^18 까지 커서 소수로 하면 끝자리가 뭉개지거든요.") },
+      { hi: [28, 34], bubble: t(E,
+        "Now build the pieces count_ge will need. One lamp's tent rises by 1 per step from p−b, peaks at p, then falls by 1 to p+b. As a slope, that's +1 at p−b, −2 at the peak p (up→down), and +1 at p+b (down→flat). Adding every lamp's tent is the same as adding all these slope events together.",
+        "이제 count_ge 가 쓸 재료를 만들어요. 램프 하나의 텐트는 p−b 부터 한 칸에 +1 씩 올라가 p 에서 꼭대기가 되고, p+b 까지 −1 씩 내려가요.\n기울기로 보면 p−b 에서 +1, 꼭대기 p 에서 −2(오름→내림), p+b 에서 +1(내림→평평) 이에요.\n모든 텐트를 더하는 건 이 기울기 이벤트를 다 더하는 것과 같아요.") },
+      { hi: [36, 46], bubble: t(E,
+        "The summed profile only bends at those breakpoints. Sort them, then sweep left to right, updating the slope s and the brightness F as each breakpoint passes — and hand each straight stretch between two breakpoints to count_ge. No need to visit every x, even though positions span up to 10^12.",
+        "합친 밝기 곡선은 그 꺾인점에서만 꺾여요. 그러니 꺾인점을 정렬해서 왼쪽부터 오른쪽으로 훑어요 — 꺾인점을 지날 때마다 기울기 s 와 밝기 F 를 새로 맞추고, 두 꺾인점 사이 곧은 구간을 count_ge 에 넘겨요.\n위치가 최대 10^12 까지 퍼져 있어도 x 를 하나씩 방문할 필요가 없어요.") },
+      { hi: [49, 59], bubble: t(E,
+        "Finally, read every test the same way — n and k, then the p list, then the b list — and collect each answer. Print them all together at the end, one integer per test.",
+        "마지막으로 테스트마다 같은 순서로 읽어요 — n과 k, 그다음 p 목록, 그다음 b 목록이에요.\n답을 모아 뒀다가 마지막에 한꺼번에, 테스트마다 정수 하나씩 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

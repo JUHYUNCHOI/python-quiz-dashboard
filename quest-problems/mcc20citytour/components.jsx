@@ -276,6 +276,37 @@ export function Mcc20CityTourProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc20CityTourWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "visited", ko: "이미 다녀온 칸 표시", en: "cells already visited" },
+      { v: "q", ko: "차례를 기다리는 칸들의 줄", en: "queue of cells waiting their turn" },
+      { v: "D", ko: "이 값보다 높이 차가 작아야 건널 수 있음", en: "the height gap must be smaller than this to cross" },
+    ],
+    beats: [
+      { hi: [0, 12], bubble: t(E,
+        "What do we have to hand back? How many cells we can reach from (1,1). So first take in the map — its size, the gap limit D, and every height.",
+        "무엇을 내놓아야 하나요? (1,1) 에서 갈 수 있는 칸이 몇 개인지예요.\n그러니 먼저 지도를 받아요 — 크기와 높이 차 한계 D, 그리고 높이들이에요.") },
+      { hi: [13, 19], bubble: t(E,
+        "Why not sweep the whole grid over and over? That could take M×N passes over M×N cells — 10^10. So visit each cell just once: keep a note of where we've been, and a line of cells waiting their turn. (1,1) goes into both, and the count starts at 1.",
+        "왜 지도를 몇 번씩 다시 훑지 않을까요? 그러면 최대 M×N 번을 M×N 칸에 되풀이해서 10^10 이 될 수 있어요.\n그래서 칸마다 딱 한 번만 가요 — 어디를 다녀왔는지 적을 곳과, 차례를 기다리는 칸들의 줄이 필요해요.\n(1,1) 을 둘 다에 넣고, 센 수는 1 에서 시작해요.") },
+      { hi: [20, 23], bubble: t(E,
+        "This spreading is called BFS (flood fill). Pop a cell off the front, then look at its 4 neighbors.",
+        "이렇게 번져 나가며 채우는 방법을 BFS 라고 불러요.\n큐 앞에서 칸을 하나 꺼내서 이웃 4개를 봐요.") },
+      { hi: [24, 28], bubble: t(E,
+        "Step into a neighbor only if it hasn't been visited AND the height gap |H[nr][nc] − H[r][c]| < D — that's the whole edge rule, so no wall is fixed in advance. Mark visited and bump count right when you push, so every reachable cell is counted exactly once.",
+        "아직 안 간 칸이면서 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요 — 이 한 줄이 규칙의 전부라 벽이 어디인지 미리 정해져 있지 않아요.\n큐에 넣는 순간 방문 표시를 하고 count 를 올려요.\n그래야 갈 수 있는 칸이 정확히 한 번씩만 세어져요.") },
+      { hi: [30, 30], bubble: t(E,
+        "The answer is how many cells got visited — print count.",
+        "답은 방문한 칸 개수예요 — count 를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set","queue"];

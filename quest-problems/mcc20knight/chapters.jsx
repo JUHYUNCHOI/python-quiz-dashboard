@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc20KnightSections, KnightExactSim } from "./components";
+import { getMcc20KnightWalk, KnightExactSim } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const KA = { wordBreak: "keep-all" };
 
@@ -192,6 +193,7 @@ export function makeMcc20KnightCh1(E) {
 }
 
 export function makeMcc20KnightCh2(E, lang = "py") {
+  const w = getMcc20KnightWalk(E);
   return [
     // 2-1: plan — brute limit → fast idea
     {
@@ -230,12 +232,15 @@ export function makeMcc20KnightCh2(E, lang = "py") {
         </div>),
     },
 
-    // 2-2: progressive code
+    // 2-2: code, CodeWalk — bubbles sit on the lines they explain
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
-      sections: getMcc20KnightSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains.",
+        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+      content: (
+        <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
+      ),
     },
   ];
 }

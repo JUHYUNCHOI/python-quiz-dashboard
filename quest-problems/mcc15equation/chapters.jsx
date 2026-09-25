@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getMcc15EqSections } from "./components";
+import { getMcc15EqWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#d97706";
 const NW = { whiteSpace: "nowrap" };
@@ -391,6 +392,7 @@ export function makeMcc15EqCh1(E) {
 }
 
 export function makeMcc15EqCh2(E, lang = "py") {
+  const w = getMcc15EqWalk(E);
   return [
     // 2-1: plan
     {
@@ -427,12 +429,15 @@ export function makeMcc15EqCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: code, CodeWalk — bubbles sit on the lines they explain
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
-      sections: getMcc15EqSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains.",
+        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+      content: (
+        <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent={A} />
+      ),
     },
   ];
 }

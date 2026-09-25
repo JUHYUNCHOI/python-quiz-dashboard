@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc22LampSections } from "./components";
+import { getMcc22LampWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const KA = { wordBreak: "keep-all" };
 
@@ -170,6 +171,7 @@ export function makeMcc22LampCh1(E) {
    Chapter 2: Code (2 steps) — slow vs fast plan → progressive code
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22LampCh2(E, lang = "py") {
+  const w = getMcc22LampWalk(E);
   return [
     // 2-1: plan — brute limit → fast idea
     {
@@ -206,12 +208,15 @@ export function makeMcc22LampCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: code, CodeWalk — bubbles sit on the lines they explain
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드를 부분별로 읽어 봐요."),
-      sections: getMcc22LampSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains.",
+        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+      content: (
+        <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
+      ),
     },
   ];
 }
