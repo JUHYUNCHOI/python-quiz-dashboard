@@ -71,6 +71,40 @@
    돌려 **quest 34개의 미커밋 편집이 한 번에 사라졌다**(pop 으로 전량 복구, 충돌 0).
    이제 `.githooks/reference-transaction` 이 막는다. **커밋은 메인 세션이 모아서 한다.**
 
+## 🔴 READY — PM 판정 셋 다 「한다」 (2026-09-25, 팀 배치 완료)
+
+PM 이 세 건 다 판정하고 **프롬프트까지 써서** 돌려줬다. 다섯이 도는 중.
+
+| 무엇 | 담당 | 상태 |
+|---|---|---|
+| `socialdist1` 인트로·시뮬을 cpid 1035 로 다시 쓰기 | frontend-engineer | READY 도는중 |
+| 난이도 `{value, source}` 반환 + ④ 26개 명시 | backend-engineer | READY 도는중 |
+| 감사값 vs 추정치 **뱃지 표시** 설계 | ux-reviewer | READY 도는중 |
+| 동결 6개 CodeWalk 전환 (hps 제외) | frontend-engineer | READY 도는중 |
+| 동결 6개 CodeWalk **교육 검토** | pedagogy-reviewer | READY 도는중 |
+| `socialdist1` 학생 재확인 | student-python | ⏳ 수정 끝난 뒤 |
+| 전환 뒤 코드 무변경 독립 재확인 | quest-auditor | ⏳ 전환 끝난 뒤 |
+
+### PM 이 확인해 준 사실 셋 — 이게 판정의 근거다
+1. **`socialdist1` 은 동결 목록에 없다.** 틀린 건 **1-1 인트로 글 + `SocDist1Sim` 둘뿐** —
+   카드(1-1b)·퀴즈(1-2)·입력(1-3)은 **이미 cpid 1035 에 맞게 정확히** 써져 있다.
+   🔒 `FULL_PY`/`FULL_CPP` 도 1035 코드고 15/15 PASS 다. **코드는 손댈 이유가 없다.**
+2. **동결 7개는 7/7 `USACO_VERIFIED`.** 그런데 `check-frozen.py` 는 **파일이 아니라
+   `SOLUTION_CODE`·`*_PY`·`*_CPP` 변수 diff** 를 막는다 → **코드 배열을
+   byte-identical 로 두고 표시 컴포넌트만** 감싸면 **재제출이 필요 없다.**
+   이미 quest 21개·46곳에서 같은 방식으로 끝낸 전례(`.claude/WORK.md:121`).
+   ⛔ 단 **코드 줄을 쪼개야 붙는 자리 37줄**(checkups 26+1·cheese 4·moo 3·cowphotos 2·hps 1)은
+   내용 변경이라 **이번 범위 밖 — 「재제출 필요」로 남긴다.**
+   ⛔ `hps` 는 별도 — 검사기가 유일하게 「narr 가 코드에 안 붙었다」고 찍은 quest다. 진단만.
+3. **난이도는 「값 채우기」가 먼저가 아니다.** 화면이 출처를 안 보여주는 한
+   **얼마를 채워도 「매긴 값처럼 보이는 안 매긴 값」이 계속 나온다.**
+   그래서 ①출처를 데이터에 싣고 ②화면을 가르고 ③④26개만 먼저 채운다.
+   ③유추 86개는 **「Lv N?」로 정직하게 보이면 그 자체로 해결**이라 급히 안 채운다.
+
+### 배포 — **오늘은 안 민다**
+`check-deploy-budget.py` 실측: **오늘 08:08:52 에 이미 한 번 밀렸다.**
+커밋만 계속 쌓고 내일 창에 묶어서 한 번.
+
 ## 🟡 BLOCKED
 
 | 무엇 | 사유 |
