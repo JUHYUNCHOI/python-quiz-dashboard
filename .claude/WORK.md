@@ -5081,3 +5081,62 @@ MCC 2019 문제들은 **CONSTRAINTS 절 자체가 없다.**
 ⭐ 같은 카드의 `N` 줄은 **이미** 「원문에 정확한 상한이 없다」고 정직하게 처리돼 있었는데
 **`K` 줄만 안 받았다 — 한 카드 안에서 일관성이 깨져 있었다.**
 `billboard`(10억→−1000~+1000)·`lifeguards`(10억→0~1000)와 같은 층이다.
+
+## 🔒 배지 없는 정답 코드 — **A/B/C/D 분류** (2026-09-25, quest-auditor)
+
+⚠️ **PM 이 이 분류의 근거를 WORK.md 에서 찾지 못했다** — **내가 안 적었기 때문이다.**
+세션 안에만 있었다. **판정 결과는 적어야 다음 사람이 쓴다.** 여기 남긴다.
+
+`USACO_VERIFICATION.md`(382줄) 정독 + 58개 파일의 헤더·보호 변수 실측.
+⚠️ **같은 quest 가 여러 번 나오면 「마지막 줄」이 최종 상태다** —
+`mcc15bahasaf` 는 앞줄 ❌14/17, 나중줄 ✅17/17 이다.
+
+### A. 완전 PASS — 헤더 자격 있음 (**38개**)
+· **USACO 표준 10개** — `abcs`(10/10) `cowntrace`(16/16) `daisychains`(10/10)
+  `madscientist`(10/10) `socialdist1`(15/15) `socialdist2`(10/10) `swapity`(13/13)
+  `triangles`(10/10) `uddered`(10/10) `yearcow`(10/10)
+· **MCC 2015 (HackerRank 실채점)** — `mcc15bahasaf`(17/17) `mcc15choco` `mcc15equation`
+  `mcc15isthmus` `mcc15rect`
+· **MCC 2023 (공식 테스트 데이터로 직접 채점)** — `mobilegame`(10/10) `innovation`(8/8)
+  `tichu`(7/7, 수정 후) `rectangles`(5/5 — ⚠️ 최악 케이스 파이썬 **1.05~1.2초**, 여유 적다)
+· **MCC 2024 (공식 데이터 100/100 일괄)** — `cornercover` `gifts` `magicorbs`
+  `simplegame` `explodingarrow` `xorstring`
+· **MCC 2019/2021 (공식 풀이 대조, 불일치 0)** — `mcc19bakery` `mcc19candy` `mcc19ditcoin`
+  `mcc19elim` `mcc19palindrome` `mcc19rect` `mcc21carrots` `mcc21dvd` `mcc21glass`
+  `mcc21marbles` `mcc21menu` `mcc21simplemath`
+  ⭐ `mcc21glass` 는 **공식 풀이 쪽이 버그였고 우리 코드가 맞았다.**
+· **MCC 2020/2022 (원문 읽고 독립 브루트 대조, 불일치 0)** — `mcc20cipher` `mcc20citytour`
+  `mcc20kitty` `mcc20knight` `mcc20missing` `mcc20zigzag` `mcc22aliens` `mcc22birthday`
+  `mcc22grammar` `mcc22lamp`
+
+### B. 부분 통과 — 배지를 달되 **「부분」을 반드시 명시** (2개)
+· `collatz` 🟡 6/7 — **7번은 내려받은 공식 데이터 파일 자체가 깨져 있다**(우리 코드 문제 아님)
+· `subseqmedian` 🟡 6/7 — 시간초과 1건. 파일 주석에 이미 *"small inputs only"* 라고 있다
+
+### C. 실패로 기록됨 — **배지 대상 아니다. 버그다** (1개)
+· **`clockfence` ❌ 0/1 (RTE) / ❌ 0/1 (WA)** — 양쪽 다 실패.
+  **코드가 실제 문제를 안 풀고 있다**(`T` 도 안 읽는다). **난이도도 일부러 안 매겼다.**
+
+### D. 판정 이력 없음 (17개)
+· `balanced`·`presents` — 문서에 **이름이 없다.** 내용 감사(2026-05-08) 이력만 있고
+  **채점 검증은 없다.** 화면은 *"USACO Bronze warm-up"* 이라고 한다.
+· `mcc19rect2` — **대응하는 공식 문제 자체가 없다**(2019 공식 문제는 6개뿐).
+· `mco15badminton`·`mco15bitcoin`·`mco15honey`·`mco15secret`·`mco15trains` —
+  **「MCO 2015」는 MCC 와 다른 대회**이고 `USACO_VERIFICATION.md` 가 **다루는 대상이 아니다.**
+
+### ⛔ MCC 배지 이름 — 감사 판정
+`USACO_VERIFIED` 를 MCC 27개에 붙이면 **거짓 라벨**이다. MCC 는 검증 방법이 **넷으로
+제각각**이다(HackerRank 실채점 / 공식 데이터 직접 채점 / 공식 풀이 대조 / 독립 브루트).
+`USACO_VERIFIED` 는 «usaco.org 채점기 제출» 을 뜻하는데 MCC 는 **원리상 불가능한 연도가
+대부분**이다.
+→ **`// 🔒 MCC_VERIFIED` + 방법 명시**를 새로 만들 것을 권한다.
+⚠️ **그러면 `check-frozen.py` 의 `USACO_HEADER_RE` 도 같이 고쳐야 한다** —
+**이름만 바꾸면 「보호되는 척하며 실제로는 안 걸리는」 상태**가 된다.
+⛔ `tichu` 는 MCC 2023 이지만 **USACO 급 엄밀한 pass/fail 테이블에 들어가 있다** —
+**이름만 보고 「MCC = 제외」 로 자동 판단하지 마라.**
+
+### ⚠️ 덤으로 나온 것 — `simplegame` 은 배지를 달아도 안 지켜진다
+`simplegame` 의 파이썬 코드가 **`const fullPy = (E) => [...]`**(소문자)라
+`check-frozen.py` 의 `PROTECTED_NAME_RE`(`.*_(PY|CPP)$`)가 **안 잡는다.**
+→ 내 `check-solution-code-unchanged.py` 는 **넓혀서 잡게 고쳤다**(변수 523→573개).
+**`check-frozen.py` 쪽은 아직 못 잡는다 — 그건 걸쇠라 넓히면 막는 범위가 커진다. PM 판정 대기.**
