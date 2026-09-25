@@ -14,6 +14,7 @@
 | 화면 만들기 · 데이터 위치 찾기 | `.claude/docs/learning-modes.md` |
 | DB · 진도 저장 | `.claude/docs/supabase.md` |
 | **지금 어디까지 왔나 · 다음 뭘 하나** | **`.claude/WORK.md`** — 살아있는 작업 목록. 주인은 `project-lead` |
+| ⭐ **턴을 끝내기 전에 — 아직 할 일이 남았나** | **`.claude/QUEUE.md`** — 지금 도는 큐. **`대기` 가 하나라도 있으면 보고하고 멈추지 마라.** 2026-09-25 에 선생님이 *"왜 자꾸 멈추지?"* 를 **다섯 번** 물으셨다. 계획이 없어서가 아니었다 — PM 이 전체 계획을 줬는데도 멈췄다. **보고를 「턴의 마지막 행동」으로 취급한 것**이 원인이고, 이 파일이 「다음 뭐 하지」를 매 턴 다시 유추하는 걸 없앤다 |
 | 되돌리기 어려운 결정 (배포·삭제·구조 변경) | **`/decide` 스킬** — 한 사람이 판정하지 않는다 |
 | 남은 일 목록 | `~/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/next_work_2026-09-04.md` |
 | 우선순위 정하기 | `.claude/docs/roadmap.md` |
