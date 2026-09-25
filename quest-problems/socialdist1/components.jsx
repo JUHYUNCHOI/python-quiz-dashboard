@@ -12,20 +12,23 @@ const A = "#dc2626";
    소 N 마리를 배치)를 그리고 있었다. 진짜 문제(Bronze, cpid 1035)는:
      길이 N 인 0/1 문자열 하나(1 = 이미 소가 있음) + 빈 칸에 소 2마리를 더 넣어서
      이웃한 두 소 사이 최소 거리를 최대로 만들기.
-   퀴즈(1-2)·입력(1-3)이 이미 쓰는 예제 "10001"(0번·4번에 소) 을 그대로 쓴다 —
-   같은 예제가 미션 → 시뮬 → 퀴즈 → 코드로 이어지게.
+
+   ⚠️ 2026-09-25 (2차, PM 판정 ③): 예제를 "10001"(0번·4번) → "0100000010"
+   (N=10, 1번·8번) 으로 바꿨다. 옛 예제는 사이 구간 길이가 3이라 D=2 이상에서
+   `ones[0]//D` · `(N-1-ones[-1])//D` 두 줄이 **항상 0** — 그 두 줄이 왜 필요한지
+   원리상 못 느꼈다(학생: "5쪽 코드에서 그만두고 싶었다"). 새 예제는 사이 간격이
+   7 이라 D=1 에서 양 끝 칸(0·9)이 처음 값을 낸다. 미션·시뮬·퀴즈(1-2)·입력(1-3)이
+   전부 이 예제를 같이 쓴다.
 
    여기서 보여주는 계산은 🔒 FULL_PY 의 `can_place(D, 2)` 와 **같은 논리**다:
      기존 소와 소 사이 빈 구간의 길이를 구하고, 그 안에 D 간격으로 몇 자리가
-     남는지 (구간길이 − D) ÷ D 로 센다. 이 예제는 소가 양쪽 끝(0, 4)에 있어서
-     "사이" 구간 하나만 있다 — 끝보다 바깥쪽(맨 앞 왼쪽·맨 뒤 오른쪽) 구간은
-     길이 0이라 화면에 안 그려진다(코드에는 그 경우도 있어 함께 계산은 해둔다).
-   검산: D=1→3자리(✓, 2마리 이상), D=2→1자리(✗), D=3,4→0자리(✗) → 가장 좋은 D=1,
-   퀴즈 1-2·입력 1-3 의 정답(1)과 일치.
+     남는지 (구간길이 − D) ÷ D 로 센다.
+   검산(완전탐색과 대조): D=1→8자리(✓) · D=2→2자리(✓) · D=3→1자리(✗) · D=4+→0자리(✗)
+   → 가장 좋은 D=2, 퀴즈 1-2(D=3 은 안 됨)·입력 1-3(정답 2) 과 일치.
    --------------------------------------------------------------- */
 export function SocDist1Sim({ E }) {
-  const N = 5;
-  const S = "10001";                              // 퀴즈·입력과 같은 예제
+  const N = 10;
+  const S = "0100000010";                         // 미션·퀴즈·입력과 같은 예제
   const ones = [];
   for (let i = 0; i < N; i++) if (S[i] === "1") ones.push(i);
   const NEED = 2;                                 // 새로 넣을 소
@@ -81,7 +84,48 @@ export function SocDist1Sim({ E }) {
   return (
     <div style={{ padding: "10px 8px" }}>
       <div style={{ textAlign: "center", marginBottom: 8, fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-        {t(E, `Try it · stalls = "${S}" (cows already at 0, 4)`, `직접 해봐요 · 칸 = "${S}" (0번, 4번에 소)`)}
+        {t(E, `Try it · stalls = "${S}" (cows already at ${ones.join(", ")})`, `직접 해봐요 · 칸 = "${S}" (${ones.map((p) => `${p}번`).join(", ")}에 소)`)}
+      </div>
+
+      {/* D 슬라이더 — **칸 줄보다 위에 둔다.** (2026-09-25, PM 재지시)
+          ⚠️ 처음엔 이 자리에 margin-top 을 줘서 아래로 밀었는데, 그러면 슬라이더가
+          **더** 하단 고정 바 뒤로 들어가 오히려 나빠졌다(실측: top 863→925, 바가
+          832 부터 시작). 진짜 문제는 "여백 부족"이 아니라 "칸 줄(90px+)이 슬라이더보다
+          먼저 나와서 슬라이더를 화면 아래로 떠민 것" — 그래서 순서를 바꿨다.
+          부수 효과: 조작기(슬라이더)를 먼저 보고 그 결과(상태 배지·칸 그림)가
+          아래에서 바뀌는 순서가 돼서 "한 걸음에 바뀌는 자리는 한 곳" 에도 맞는다.
+          끌기 정밀도가 기기마다 갈려서(선생님 확인) 양옆에 −/+ 버튼을 뒀다. */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "Drag — or tap −/+ — to change minimum gap D", "끌거나 −/+ 를 눌러 최소 간격 D 를 바꿔 봐요")}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <button
+            type="button" onClick={() => setD((d) => Math.max(1, d - 1))} disabled={D <= 1}
+            aria-label={t(E, "Decrease D", "D 줄이기")}
+            style={{
+              width: 32, height: 32, borderRadius: 8, border: `1.5px solid ${D <= 1 ? "#e2e8f0" : A}`,
+              background: D <= 1 ? "#f1f5f9" : "#fff", color: D <= 1 ? "#94a3b8" : A,
+              fontSize: 16, fontWeight: 800, cursor: D <= 1 ? "default" : "pointer", flexShrink: 0,
+            }}
+          >−</button>
+          <span style={{ fontSize: 11, color: C.dim }}>1</span>
+          <input
+            type="range" min={1} max={MAX_X} value={D}
+            onChange={(e) => setD(parseInt(e.target.value, 10))}
+            style={{ width: 180, accentColor: A }}
+          />
+          <span style={{ fontSize: 11, color: C.dim }}>{MAX_X}</span>
+          <button
+            type="button" onClick={() => setD((d) => Math.min(MAX_X, d + 1))} disabled={D >= MAX_X}
+            aria-label={t(E, "Increase D", "D 늘리기")}
+            style={{
+              width: 32, height: 32, borderRadius: 8, border: `1.5px solid ${D >= MAX_X ? "#e2e8f0" : A}`,
+              background: D >= MAX_X ? "#f1f5f9" : "#fff", color: D >= MAX_X ? "#94a3b8" : A,
+              fontSize: 16, fontWeight: 800, cursor: D >= MAX_X ? "default" : "pointer", flexShrink: 0,
+            }}
+          >+</button>
+        </div>
       </div>
 
       {/* Status row */}
@@ -160,22 +204,6 @@ export function SocDist1Sim({ E }) {
               {"🐄"}<span style={{ position: "absolute", left: 0, top: 0, fontSize: 18, color: "#dc2626" }}>✗</span>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* D 슬라이더 */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-        <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "Drag to change minimum gap D", "끌어서 최소 간격 D 를 바꿔 봐요")}
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 11, color: C.dim }}>1</span>
-          <input
-            type="range" min={1} max={MAX_X} value={D}
-            onChange={(e) => setD(parseInt(e.target.value, 10))}
-            style={{ width: 220, accentColor: A }}
-          />
-          <span style={{ fontSize: 11, color: C.dim }}>{MAX_X}</span>
         </div>
       </div>
 
@@ -322,8 +350,8 @@ export function getSocDist1Sections(E) {
             "무엇을 출력해야 하나요?\n소 2마리를 더 놓았을 때\n어떤 두 소든 보장되는 최소 거리의\n가장 큰 값이에요."),
         t(E, "Trying every distance D one by one is slow. But 'can 2 more cows fit with gaps of at least D?' gets harder as D grows and easier as D shrinks — it flips exactly once. So we test the middle and keep halving toward the side that works. That way of searching is called binary search.",
             "거리 D 를 하나씩 다 시도하면 느려요.\n그런데 'D 이상 거리로 2마리를 더 놓을 수 있나?'\n라는 질문은 D 가 커질수록 어려워지고\n작아질수록 쉬워져요 — 딱 한 번만 뒤집혀요.\n그래서 가운데를 찍어 보고 되는 쪽으로 절반씩 좁혀 가요.\n이렇게 찾는 걸 이분 탐색이라고 불러요."),
-        t(E, "So the code binary-searches D, and for each candidate D checks the gaps between existing cows and how many new cows still fit.",
-            "그래서 코드는 D 를 이분 탐색하면서\n기존 소들 사이 간격과\n새로 몇 마리를 더 넣을 수 있는지 확인해요."),
+        t(E, "So the code binary-searches D, and for each candidate D checks the gaps between existing cows and how many new cows still fit. (With 3+ existing cows, this check just repeats once per gap between them.)",
+            "그래서 코드는 D 를 이분 탐색하면서\n기존 소들 사이 간격과\n새로 몇 마리를 더 넣을 수 있는지 확인해요.\n(소가 3마리 이상이면 이 계산을 간격마다 한 번씩 반복해요.)"),
         /* ⚠️ 2026-09-25 학생 보고 ①: *"제일 어려운 «한 구간에 새 소가 몇 마리 들어가나»
            계산식은 설명이 없었다. 손으로 계산해서 억지로 따라갔지 이해한 게 아니다."*
            ⚠️ 그래서 쓴 첫 문장이 **두 번째 학생에게 틀리게 읽혔다** —

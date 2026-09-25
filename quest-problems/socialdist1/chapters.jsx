@@ -19,7 +19,7 @@ export function makeSocDist1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Add 2 more cows to empty stalls to maximize the minimum distance between neighbors.",
+        "Add 2 cows to empty stalls to maximize the minimum gap.",
         "빈 칸에 소 2마리를 더 넣어 최소 거리를 최대로 만들어요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
@@ -109,12 +109,32 @@ export function makeSocDist1Ch1(E) {
             </div>
           </div>
           {/* 제약 */}
-          <div>
+          <div style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>2 ≤ N ≤ 100,000 <span style={{ color: C.dim, fontWeight: 400 }}>{t(E, "(= 10⁵)", "(= 10⁵)")}</span></div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "the string has at least two 0s  ·  some subtasks: N ≤ 10, ≤ 100, ≤ 5000", "문자열에는 0이 최소 두 개  ·  일부 서브태스크: N ≤ 10, ≤ 100, ≤ 5000")}</div>
             </div>
+          </div>
+          {/* 샘플 — 시뮬·퀴즈·입력과 같은 예제(0100000010) */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
+                <div>10</div>
+                <div>0100000010</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>2</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "Cows already at stalls 1 and 8. Adding 2 more with every gap at least 2 apart is the best you can do.",
+                "1 번과 8 번에 이미 소가 있어요. 2마리를 더해 모든 간격을 2 이상으로 만드는 게 최선이에요.")}
           </div>
         </div>),
     },
@@ -123,39 +143,43 @@ export function makeSocDist1Ch1(E) {
       type: "quiz",
       narr: t(E,
         "Before hunting for the answer, ask a smaller question: does THIS distance fit?", "답을 찾기 전에 먼저 물어봐요 — 이 거리로 넣을 수 있나요?"),
-      /* ⚠️ 2026-09-25: 원래 질문은 「어디에 놓을까요?」였는데 **답이 하나가 아니었다.**
+      /* ⚠️ 2026-09-25 (1차): 원래 질문은 「어디에 놓을까요?」였는데 **답이 하나가 아니었다.**
          "10001" 에 2마리를 넣는 경우는 {1,2}·{1,3}·{2,3} 셋뿐이고 **최소 거리가 전부 1** 이다
          (전수로 확인). 그런데 보기 글자에 둘 다 「= 1」 이라고 적어 놓고 하나만 ✅ 였다.
          학생이 잡았다 — *"왜 똑같은 숫자인데 하나는 틀렸다는 거지?"*
          → 예제를 키우지 않고, **코드가 실제로 묻는 질문**으로 바꿨다:
             `can_place(D, 2)` = 「거리 D 로 2마리를 넣을 수 있나?」
-         이러면 답이 하나로 갈리고(안 된다), 다음 쪽의 「답은 1」로도 곧바로 이어진다. */
+         이러면 답이 하나로 갈리고(안 된다), 다음 쪽의 「답은 1」로도 곧바로 이어진다.
+
+         ⚠️ 2026-09-25 (2차, PM 판정 ③): 공유 예제를 "10001" → "0100000010" 으로 바꿨다
+         (`(gap−D)//D` 가 D 에 따라 실제로 움직이게). 새 예제의 D=2 최적 배치는
+         (3,5)·(3,6)·(4,6) 세 가지가 **동점**이라(완전탐색 확인) 자리 선택형은 또 같은 함정에
+         빠진다. 그래서 이번엔 **D=3**(유일하게 실패하는 값)을 물어 정답을 하나로 고정했다. */
       question: t(E,
-        "Stalls \"10001\": occupied at 0 and 4, empty at 1,2,3. Can we place 2 cows so EVERY neighbouring pair is at least 2 apart?",
-        "축사 \"10001\" 의 0 번과 4 번에 소가 있고 1, 2, 3 이 비었어요.\n이웃한 두 소가 모두 2 칸 이상 떨어지게 2마리를 넣을 수 있을까요?"),
+        "Stalls \"0100000010\": occupied at 1 and 8. Can we place 2 cows so EVERY neighbouring pair is at least 3 apart?",
+        "축사 \"0100000010\" 의 1 번과 8 번에 소가 있어요.\n이웃한 두 소가 모두 3 칸 이상 떨어지게 2마리를 넣을 수 있을까요?"),
       options: [
-        t(E, "No — only stall 2 is far enough from both, so just 1 cow fits",
-             "안 돼요 — 양쪽에서 2 칸 떨어진 자리는 2 번뿐이라 1마리만 들어가요"),
-        t(E, "Yes — stalls 1 and 3", "돼요 — 1 번과 3 번"),
-        t(E, "Yes — stalls 2 and 3", "돼요 — 2 번과 3 번"),
+        t(E, "No — only stalls 4 and 5 are far enough from both, but they're only 1 apart",
+             "안 돼요 — 양쪽에서 3 칸 떨어진 자리는 4, 5 번뿐인데 둘이 1 칸밖에 안 떨어져요"),
+        t(E, "Yes — stalls 4 and 5", "돼요 — 4 번과 5 번"),
       ],
       correct: 0,
       explain: t(E,
-        "A cow at least 2 from the cow at 0 must be at stall 2 or later; at least 2 from the cow at 4 must be at stall 2 or earlier. Only stall 2 satisfies both — 1 cow, not 2. So distance 2 is impossible, and the answer must be smaller.",
-        "0 번 소에서 2 칸 이상 떨어지려면 2 번부터,\n4 번 소에서 2 칸 이상 떨어지려면 2 번까지예요.\n둘 다 되는 자리는 2 번 하나뿐이라 1마리밖에 못 넣어요.\n그래서 거리 2 는 안 되고, 답은 그보다 작아요."),
+        "A cow at least 3 from the cow at 1 must be at stall 4 or later; at least 3 from the cow at 8 must be at stall 5 or earlier. Only stalls 4 and 5 satisfy both, and they're just 1 apart — so only 1 cow fits, not 2. So distance 3 is impossible, and the answer must be smaller.",
+        "1 번 소에서 3 칸 이상 떨어지려면 4 번부터,\n8 번 소에서 3 칸 이상 떨어지려면 5 번까지예요.\n둘 다 되는 자리는 4, 5 번뿐인데 서로 1 칸밖에 안 떨어져 1마리만 들어가요.\n그래서 거리 3 은 안 되고, 답은 그보다 작아요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Positions 0 and 4 occupied, place 2 more cows.\nWhat is the maximum possible minimum distance?", "소 2마리를 더 넣었을 때 최소 거리를 가장 크게 해 봐요."),
+        "Positions 1 and 8 occupied, place 2 more cows.\nWhat is the maximum possible minimum distance?", "소 2마리를 더 넣었을 때 최소 거리를 가장 크게 해 봐요."),
       question: t(E,
-        "\"10001\": occupied at 0,4. Place 2 cows. Max of min distance?",
-        "\"10001\" 의 0 번과 4 번에 소가 있어요. 2마리를 더 넣을 때 최소 거리의 가장 큰 값은 얼마일까요?"),
+        "\"0100000010\": occupied at 1,8. Place 2 cows. Max of min distance?",
+        "\"0100000010\" 의 1 번과 8 번에 소가 있어요. 2마리를 더 넣을 때 최소 거리의 가장 큰 값은 얼마일까요?"),
       hint: t(E,
         "Try different placements and look at the smallest gap each makes.",
         "여러 가지로 놓아 보면서 그때마다 가장 작은 간격을 확인해 봐요."),
-      answer: 1,
+      answer: 2,
     },
   ];
 }
