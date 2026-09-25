@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getTrainsSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -242,13 +241,12 @@ export function makeTrainsCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-1: Code
+    // 2-1: CodeWalk — solution code, explained line by line in thinking order.
     {
-      type: "progressive",
+      type: "trains-walk",
       narr: t(E,
-        "Four steps: read the grid, make a cost table, take the cheapest, spread.",
-        "싼 칸부터 넓혀 가는 코드를 네 걸음으로 나눠 읽어요."),
-      sections: getTrainsSections(E),
+        "Read the solution code piece by piece.",
+        "풀이 코드를 한 단락씩 읽어 봐요."),
     },
   ];
 }

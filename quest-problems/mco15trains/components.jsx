@@ -441,6 +441,64 @@ export function TrainsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/CPP 배열을 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라. ── */
+export function getTrainsWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "dist", ko: "칸마다 지금까지 아는 가장 싼 비용", en: "the cheapest cost known so far, per cell" },
+        { v: "pq", ko: "아직 봐야 할 칸들 (싼 순서로 나온다)", en: "cells still to look at (comes out cheapest first)" },
+      ],
+      beats: [
+        { hi: [0, 21], bubble: t(E,
+          "What do we need to read? The N×N grid — grid[x][y] is that cell's population — then A and B's position. The problem counts rows/columns from 1, but a vector counts from 0, so subtract 1 from all four.",
+          "무엇을 읽어야 하나요? 먼저 N×N 격자를 읽어요 — grid[x][y] 는 그 칸에 사는 사람 수예요.\n그다음 A 와 B 의 자리를 읽는데, 문제는 1 부터 세고 벡터는 0 부터 세서 네 값 모두 1 씩 빼요.") },
+        { hi: [23, 30], bubble: t(E,
+          "How do we track the cheapest cost known so far per cell? A dist table, starting at INF everywhere — except dist[A], which starts at grid[A] (the starting cell's people move too). pq holds cells still to visit as (cost, x, y) — cost first, so the top is always the cheapest one waiting.",
+          "칸마다 지금까지 아는 가장 싼 비용을 어떻게 적어 둘까요? dist 표를 만들어 전부 INF 로 시작해요 — 출발 칸의 사람도 옮겨야 하니 dist[A] 만 grid[A] 로 시작해요.\n아직 볼 칸은 (비용, x, y) 로 pq 에 넣어요. 비용이 맨 앞이라 pq 맨 위는 늘 가장 싼 칸이에요.") },
+        { hi: [32, 41], bubble: t(E,
+          "Why is it safe to always take the cheapest cell first? Populations are never negative, so a longer path only gets pricier — the cheapest one waiting is already final. The same cell can be pushed twice, so skip it if we already have a cheaper answer, and stop the moment B comes out. This way of always spreading from the cheapest known place has a name: Dijkstra's algorithm.",
+          "왜 가장 싼 칸부터 꺼내도 안전할까요? 인구는 음수가 없어서 길이 길어질수록 비용만 늘어요 — 그러니 꺼낸 게 가장 싼 칸이면 그게 이미 최종 답이에요.\n같은 칸이 두 번 들어갔을 수도 있으니 이미 더 좋은 값이 있으면 건너뛰고, B 가 나오는 순간 바로 멈춰요.\n이렇게 아는 것 중 가장 싼 곳부터 넓혀 가는 방법의 이름이 다익스트라예요.") },
+        { hi: [42, 52], bubble: t(E,
+          "From the cell we just took, check its 4 neighbours. Skip anything outside the grid or marked −1. If the cost to reach a neighbour beats what's already written, update dist and push it so it can be taken later.",
+          "방금 꺼낸 칸에서 이웃 네 칸을 봐요. 격자 밖이거나 −1 인 칸은 건너뛰어요.\n이웃까지의 비용이 표에 적힌 값보다 작을 때만 고쳐 적고, 나중에 꺼낼 수 있게 pq 에 넣어요.") },
+        { hi: [55, 58], bubble: t(E,
+          "When the loop ends (or breaks early at B), dist[B] holds the answer — the smallest cost you were hunting for on the grid.",
+          "반복이 끝나면(또는 B 에서 멈추면) dist[B] 에 답이 남아요 — 앞에서 격자에 길을 놓으며 찾아보려 했던 '가장 적은 비용' 이에요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "dist", ko: "칸마다 지금까지 아는 가장 싼 비용", en: "the cheapest cost known so far, per cell" },
+      { v: "pq", ko: "아직 봐야 할 칸들 (싼 순서로 나온다)", en: "cells still to look at (comes out cheapest first)" },
+    ],
+    beats: [
+      { hi: [0, 12], bubble: t(E,
+        "What do we need to read? The N×N grid — grid[x][y] is that cell's population — then A and B's position. The problem counts rows/columns from 1, but a list counts from 0, so subtract 1 from all four.",
+        "무엇을 읽어야 하나요? 먼저 N×N 격자를 읽어요 — grid[x][y] 는 그 칸에 사는 사람 수예요.\n그다음 A 와 B 의 자리를 읽는데, 문제는 1 부터 세고 리스트는 0 부터 세서 네 값 모두 1 씩 빼요.") },
+      { hi: [14, 21], bubble: t(E,
+        "How do we track the cheapest cost known so far per cell? A dist table, starting at INF everywhere — except dist[A], which starts at grid[A] (the starting cell's people move too). pq holds cells still to visit as (cost, x, y) — cost first, so the top is always the cheapest one waiting.",
+        "칸마다 지금까지 아는 가장 싼 비용을 어떻게 적어 둘까요? dist 표를 만들어 전부 INF 로 시작해요 — 출발 칸의 사람도 옮겨야 하니 dist[A] 만 grid[A] 로 시작해요.\n아직 볼 칸은 (비용, x, y) 로 pq 에 넣어요. 비용이 맨 앞이라 pq 맨 위는 늘 가장 싼 칸이에요.") },
+      { hi: [23, 28], bubble: t(E,
+        "Why is it safe to always take the cheapest cell first? Populations are never negative, so a longer path only gets pricier — the cheapest one waiting is already final. The same cell can be pushed twice, so skip it if we already have a cheaper answer, and stop the moment B comes out. This way of always spreading from the cheapest known place has a name: Dijkstra's algorithm.",
+        "왜 가장 싼 칸부터 꺼내도 안전할까요? 인구는 음수가 없어서 길이 길어질수록 비용만 늘어요 — 그러니 꺼낸 게 가장 싼 칸이면 그게 이미 최종 답이에요.\n같은 칸이 두 번 들어갔을 수도 있으니 이미 더 좋은 값이 있으면 건너뛰고, B 가 나오는 순간 바로 멈춰요.\n이렇게 아는 것 중 가장 싼 곳부터 넓혀 가는 방법의 이름이 다익스트라예요.") },
+      { hi: [29, 35], bubble: t(E,
+        "From the cell we just took, check its 4 neighbours. Skip anything outside the grid or marked −1. If the cost to reach a neighbour beats what's already written, update dist and push it so it can be taken later.",
+        "방금 꺼낸 칸에서 이웃 네 칸을 봐요. 격자 밖이거나 −1 인 칸은 건너뛰어요.\n이웃까지의 비용이 표에 적힌 값보다 작을 때만 고쳐 적고, 나중에 꺼낼 수 있게 pq 에 넣어요.") },
+      { hi: [37, 37], bubble: t(E,
+        "When the loop ends (or breaks early at B), dist[B] holds the answer — the smallest cost you were hunting for on the grid.",
+        "반복이 끝나면(또는 B 에서 멈추면) dist[B] 에 답이 남아요 — 앞에서 격자에 길을 놓으며 찾아보려 했던 '가장 적은 비용' 이에요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

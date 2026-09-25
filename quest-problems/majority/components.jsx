@@ -570,6 +570,59 @@ export function MajorityProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 MJ_FULL_PY/CPP 배열을 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (이 파일 헤더가 USACO_VERIFIED 라 그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getMajorityWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = MJ_FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "valid", ko: "이 케이스에서 퍼질 수 있는 건초 종류", en: "hay types that can spread in this case" },
+        { v: "a", ko: "소마다 좋아하는 건초 종류", en: "each cow's favorite hay type" },
+      ],
+      beats: [
+        { hi: [0, 14], bubble: t(E,
+          "What do we need to read? T test cases, and for each: N cows and their N favorite hay types.",
+          "무엇을 읽어야 하나요? 테스트 개수 T, 그리고 케이스마다 소 마리 수 N 과 좋아하는 건초 종류 N 개예요.") },
+        { hi: [16, 24], bubble: t(E,
+          "Which hay types can eventually spread to everyone? If two cows 1 apart OR 2 apart like the same type, that type can win a focus group and flip the cow between them. So scan once and check both distances.",
+          "어떤 건초 종류가 결국 모두에게 퍼질 수 있을까요? 1칸이나 2칸 떨어진 두 소가 같은 종류를 좋아하면, 포커스 그룹으로 그 사이 소를 바꿀 수 있어요.\n그러니 배열을 한 번 훑으면서 이 두 거리를 다 확인해요.") },
+        { hi: [26, 39], bubble: t(E,
+          "No such pair found for this case? Print -1. Otherwise print the valid types in ascending order, space-separated.",
+          "이 케이스에 그런 짝이 하나도 없으면? -1 을 출력해요. 있으면 작은 값부터 공백으로 이어 붙여 출력해요.") },
+        { hi: [40, 41], bubble: t(E,
+          "Each case is a single O(N) pass — fast enough for every test case.",
+          "케이스마다 배열을 한 번만 훑어서 O(N) 이라, 모든 테스트 케이스를 처리해도 충분히 빨라요.") },
+      ],
+    };
+  }
+  const code = MJ_FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "valid", ko: "이 케이스에서 퍼질 수 있는 건초 종류", en: "hay types that can spread in this case" },
+      { v: "a", ko: "소마다 좋아하는 건초 종류", en: "each cow's favorite hay type" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we need to read? T test cases, and for each: N cows and their N favorite hay types.",
+        "무엇을 읽어야 하나요? 테스트 개수 T, 그리고 케이스마다 소 마리 수 N 과 좋아하는 건초 종류 N 개예요.") },
+      { hi: [7, 12], bubble: t(E,
+        "Which hay types can eventually spread to everyone? If two cows 1 apart OR 2 apart like the same type, that type can win a focus group and flip the cow between them. So scan once and check both distances.",
+        "어떤 건초 종류가 결국 모두에게 퍼질 수 있을까요? 1칸이나 2칸 떨어진 두 소가 같은 종류를 좋아하면, 포커스 그룹으로 그 사이 소를 바꿀 수 있어요.\n그러니 배열을 한 번 훑으면서 이 두 거리를 다 확인해요.") },
+      { hi: [14, 17], bubble: t(E,
+        "No such pair found for this case? Record -1. Otherwise record the valid types in ascending order, space-separated.",
+        "이 케이스에 그런 짝이 하나도 없으면? -1 을 기록해요. 있으면 작은 값부터 공백으로 이어 붙여 기록해요.") },
+      { hi: [19, 19], bubble: t(E,
+        "Collect every case's answer in a list, then print them all at once at the end — faster than printing inside the loop.",
+        "케이스마다 답을 리스트에 모아 뒀다가 마지막에 한 번에 출력해요 — 반복문 안에서 매번 출력하는 것보다 빨라요.") },
+    ],
+  };
+}
+
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
 function highlightHTML(line, lang) {

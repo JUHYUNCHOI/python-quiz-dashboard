@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { LostCowProgressiveCode, downloadLostCowPDF, getLostCowSections, LostCowSim, LostCowRunner, LostCowDoublingSim } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { LostCowProgressiveCode, downloadLostCowPDF, getLostCowSections, getLostCowWalk, LostCowSim, LostCowRunner, LostCowDoublingSim } from "./components";
 import { makeLostCowCh1, makeLostCowCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -102,6 +103,7 @@ export default function LostCowApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <LostCowProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "lostcow-walk") return <CodeWalk E={E} lang={codeLang} {...getLostCowWalk(E, codeLang)} accent={A} />;
     if (step.type === "sim") return <LostCowSim E={E} />;
     if (step.type === "doubling") return <LostCowDoublingSim E={E} />;
     if (step.type === "runner") return <LostCowRunner E={E} />;
@@ -116,6 +118,7 @@ export default function LostCowApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <LostCowProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "lostcow-walk") return <CodeWalk E={E} lang={codeLang} {...getLostCowWalk(E, codeLang)} accent={A} />;
     if (s.type === "sim") return <LostCowSim E={E} />;
     if (s.type === "doubling") return <LostCowDoublingSim E={E} />;
     if (s.type === "runner") return <LostCowRunner E={E} />;

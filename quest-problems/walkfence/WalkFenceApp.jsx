@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { WalkFenceProgressiveCode, downloadWalkFencePDF, getWalkFenceSections, WalkFenceSim } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { WalkFenceProgressiveCode, downloadWalkFencePDF, getWalkFenceSections, getWalkFenceWalk, WalkFenceSim } from "./components";
 import { makeWalkCh1, makeWalkCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -102,6 +103,7 @@ export default function WalkFenceApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <WalkFenceProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "walkfence-walk") return <CodeWalk E={E} lang={codeLang} {...getWalkFenceWalk(E, codeLang)} accent={A} />;
     if (step.type === "sim") return <WalkFenceSim E={E} />;
     return null;
   };
@@ -114,6 +116,7 @@ export default function WalkFenceApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <WalkFenceProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "walkfence-walk") return <CodeWalk E={E} lang={codeLang} {...getWalkFenceWalk(E, codeLang)} accent={A} />;
     if (s.type === "sim") return <WalkFenceSim E={E} />;
     return null;
   };

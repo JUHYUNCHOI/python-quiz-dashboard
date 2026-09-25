@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getLostCowSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -133,13 +132,12 @@ export function makeLostCowCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeLostCowCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — straight in.
+    // 2-1: CodeWalk — solution code, explained line by line in thinking order.
     {
-      type: "progressive",
+      type: "lostcow-walk",
       narr: t(E,
         "Read the solution code piece by piece.",
         "풀이 코드를 한 단락씩 읽어 봐요."),
-      sections: getLostCowSections(E),
     },
     {
       type: "runner",

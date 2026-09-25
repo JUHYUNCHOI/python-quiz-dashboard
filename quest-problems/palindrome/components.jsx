@@ -475,6 +475,62 @@ export function PalindromeProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#9333ea" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 PA_FULL_PY/CPP 배열을 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. ⚠️ 이 quest 의 풀이엔 재귀가 없다(최종 코드는 문자 하나만 확인) —
+   건드릴 알고리즘이 아예 없다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를
+   만들지 마라 (이 파일 헤더가 USACO_VERIFIED 라 그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getPalindromeWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = PA_FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "S", ko: "돌 더미 크기 (숫자가 아니라 문자열)", en: "the pile size (kept as a string, not a number)" },
+        { v: "lastDigit", ko: "S 의 마지막 글자", en: "S's last character" },
+        { v: "out", ko: "케이스마다 쌓는 결과 ('B' 또는 'E')", en: "the answer per case, being built up ('B' or 'E')" },
+      ],
+      beats: [
+        { hi: [0, 12], bubble: t(E,
+          "What do we need to read? T test cases, and each pile size S. S can have up to 100,000 digits — far too big for a normal number — so keep it as a string.",
+          "무엇을 읽어야 하나요? 테스트 개수 T, 그리고 케이스마다 돌 더미 크기 S 예요.\nS 는 자릿수가 최대 10 만 개라 보통 숫자로는 못 담아요 — 그래서 문자열로 읽어요.") },
+        { hi: [13, 13], bubble: t(E,
+          "How can we tell the winner from just one digit? Every single digit 1-9 IS a palindrome, so you can always shed your pile's last digit — that move always lands on a multiple of 10. And no palindrome can end in 0 (it would have to start with 0 too), so you can never land ON a multiple of 10 from off of one. So multiples of 10 are always the losing pile size — checking S's last digit is enough.",
+          "글자 하나만 보고 어떻게 승자를 알 수 있을까요? 한 자리 수 1~9 는 항상 회문이라, 더미의 마지막 자리 수만큼 언제나 가져갈 수 있어요.\n그러면 항상 10 의 배수에 도착해요. 그리고 어떤 회문도 0 으로 끝날 수 없어서(그럼 0 으로 시작해야 하니까), 10 의 배수가 아닌 곳에서는 절대 10 의 배수로 갈 수 없어요.\n그래서 10 의 배수는 항상 지는 더미고, S 의 마지막 글자만 봐도 충분해요.") },
+        { hi: [14, 19], bubble: t(E,
+          "Bessie moves first, so if S's last digit is '0' she starts on a losing pile — Elsie wins. Otherwise Bessie wins.",
+          "Bessie 가 먼저 두니까, S 의 마지막 글자가 '0' 이면 지는 더미에서 시작하는 거라 Elsie 가 이겨요. 아니면 Bessie 가 이겨요.") },
+        { hi: [20, 23], bubble: t(E,
+          "Collect every case's answer, then print them all at once — one character check per test case, however huge S is.",
+          "케이스마다 답을 모아 뒀다가 한 번에 출력해요 — S 가 아무리 커도 테스트마다 글자 하나만 확인하면 돼요.") },
+      ],
+    };
+  }
+  const code = PA_FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "S", ko: "돌 더미 크기 (숫자가 아니라 문자열)", en: "the pile size (kept as a string, not a number)" },
+      { v: "last_digit", ko: "S 의 마지막 글자", en: "S's last character" },
+      { v: "out", ko: "케이스마다 쌓는 결과 ('B' 또는 'E')", en: "the answer per case, being built up ('B' or 'E')" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need to read? T test cases, and each pile size S. S can have up to 100,000 digits — far too big for a normal number — so keep it as a string.",
+        "무엇을 읽어야 하나요? 테스트 개수 T, 그리고 케이스마다 돌 더미 크기 S 예요.\nS 는 자릿수가 최대 10 만 개라 보통 숫자로는 못 담아요 — 그래서 문자열로 읽어요.") },
+      { hi: [6, 6], bubble: t(E,
+        "How can we tell the winner from just one digit? Every single digit 1-9 IS a palindrome, so you can always shed your pile's last digit — that move always lands on a multiple of 10. And no palindrome can end in 0 (it would have to start with 0 too), so you can never land ON a multiple of 10 from off of one. So multiples of 10 are always the losing pile size — checking S's last digit is enough.",
+        "글자 하나만 보고 어떻게 승자를 알 수 있을까요? 한 자리 수 1~9 는 항상 회문이라, 더미의 마지막 자리 수만큼 언제나 가져갈 수 있어요.\n그러면 항상 10 의 배수에 도착해요. 그리고 어떤 회문도 0 으로 끝날 수 없어서(그럼 0 으로 시작해야 하니까), 10 의 배수가 아닌 곳에서는 절대 10 의 배수로 갈 수 없어요.\n그래서 10 의 배수는 항상 지는 더미고, S 의 마지막 글자만 봐도 충분해요.") },
+      { hi: [7, 10], bubble: t(E,
+        "Bessie moves first, so if S's last digit is '0' she starts on a losing pile — Elsie wins. Otherwise Bessie wins.",
+        "Bessie 가 먼저 두니까, S 의 마지막 글자가 '0' 이면 지는 더미에서 시작하는 거라 Elsie 가 이겨요. 아니면 Bessie 가 이겨요.") },
+      { hi: [12, 12], bubble: t(E,
+        "Collect every case's answer in a list, then print them all at once — one character check per test case, however huge S is.",
+        "케이스마다 답을 리스트에 모아 뒀다가 한 번에 출력해요 — S 가 아무리 커도 테스트마다 글자 하나만 확인하면 돼요.") },
+    ],
+  };
+}
+
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
 function highlightHTML(line, lang) {

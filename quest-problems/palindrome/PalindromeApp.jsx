@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { PalindromeProgressiveCode, downloadPalindromePDF, getPalindromeSections, PalindromeSim, PalindromeRunner, PalindromeTwoPointerSim } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { PalindromeProgressiveCode, downloadPalindromePDF, getPalindromeSections, getPalindromeWalk, PalindromeSim, PalindromeRunner, PalindromeTwoPointerSim } from "./components";
 import { makePalindromeCh1, makePalindromeCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -102,6 +103,7 @@ export default function PalindromeApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <PalindromeProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "palindrome-walk") return <CodeWalk E={E} lang={codeLang} {...getPalindromeWalk(E, codeLang)} accent={A} />;
     if (step.type === "sim") return <PalindromeSim E={E} />;
     if (step.type === "twopointer") return <PalindromeTwoPointerSim E={E} />;
     if (step.type === "runner") return <PalindromeRunner E={E} />;
@@ -116,6 +118,7 @@ export default function PalindromeApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <PalindromeProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "palindrome-walk") return <CodeWalk E={E} lang={codeLang} {...getPalindromeWalk(E, codeLang)} accent={A} />;
     if (s.type === "sim") return <PalindromeSim E={E} />;
     if (s.type === "twopointer") return <PalindromeTwoPointerSim E={E} />;
     if (s.type === "runner") return <PalindromeRunner E={E} />;

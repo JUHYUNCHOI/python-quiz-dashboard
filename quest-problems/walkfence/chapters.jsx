@@ -1,6 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getWalkFenceSections, WalkFenceSim, WalkFencePathSim } from "./components";
-import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { WalkFenceSim, WalkFencePathSim } from "./components";
 
 const ACCENT = "#059669";       // emerald-600
 const TINT   = "#ecfdf5";        // emerald-50
@@ -157,16 +156,13 @@ export function makeWalkCh1(E) {
 }
 
 export function makeWalkCh2(E, lang = "py") {
-  const sections = getWalkFenceSections(E);
   return [
-    ...sections.map((sec, i) => ({
-      type: "reveal",
-      narr: i === 0
-        ? t(E,
-            "Compute a perimeter offset for each query point — then the answer is min(|d1 − d2|, perimeter − |d1 − d2|).  Sections build it one piece at a time.",
-            "점마다 둘레를 따라 잰 위치를 먼저 구할게요.")
-        : "",
-      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
-    })),
+    // 2-1: CodeWalk — solution code, explained line by line in thinking order.
+    {
+      type: "walkfence-walk",
+      narr: t(E,
+        "Read the solution code piece by piece.",
+        "풀이 코드를 한 단락씩 읽어 봐요."),
+    },
   ];
 }

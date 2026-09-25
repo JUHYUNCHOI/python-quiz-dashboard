@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getMajoritySections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -190,13 +189,12 @@ export function makeMajorityCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMajorityCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — sections explain the insight as they unfold.
+    // 2-1: CodeWalk — solution code, explained line by line in thinking order.
     {
-      type: "progressive",
+      type: "majority-walk",
       narr: t(E,
-        "Build the scan one piece at a time.  Each section explains why one short check (distance 1 + distance 2) decides whether each type can take over.",
-        "코드를 한 단락씩 쌓으며 짧은 검사 하나로 답이 나는 걸 봐요."),
-      sections: getMajoritySections(E),
+        "Read the solution code piece by piece.",
+        "풀이 코드를 한 단락씩 읽어 봐요."),
     },
     {
       type: "runner",

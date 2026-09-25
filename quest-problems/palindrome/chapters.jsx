@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getPalindromeSections } from "./components";
 
 /* ================================================================
    Chapter 1: Problem Understanding (4 steps)
@@ -200,13 +199,12 @@ export function makePalindromeCh1(E) {
    ================================================================ */
 export function makePalindromeCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — straight in.
+    // 2-1: CodeWalk — solution code, explained line by line in thinking order.
     {
-      type: "progressive",
+      type: "palindrome-walk",
       narr: t(E,
         "The small cases above already showed the rule. The code just reads the last digit — that one digit decides the whole game.",
         "위에서 작은 수로 찾은 규칙이 답이에요.\n코드는 마지막 자리 하나만 봐요.\n그 한 자리가 승부를 정해요."),
-      sections: getPalindromeSections(E),
     },
     {
       type: "runner",

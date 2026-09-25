@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getBadmintonSections } from "./components";
 
 /* ================================================================
    Deep-Audit Sim: step through an A/B string, watch the state machine
@@ -411,13 +410,12 @@ A`}
    ═══════════════════════════════════════════════════════════════ */
 export function makeBadmintonCh2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: CodeWalk — solution code, explained line by line in thinking order.
     {
-      type: "progressive",
+      type: "badminton-walk",
       narr: t(E,
-        "Walk the record one letter at a time, tracking the score.",
-        "랠리 문자열을 한 글자씩 보면서 점수를 따라가요."),
-      sections: getBadmintonSections(E),
+        "Read the solution code piece by piece.",
+        "풀이 코드를 한 단락씩 읽어 봐요."),
     },
   ];
 }

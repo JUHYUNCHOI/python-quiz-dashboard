@@ -566,6 +566,75 @@ export function LostCowProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 LC_FULL_PY/CPP 배열을 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (이 파일 헤더가 USACO_VERIFIED 라 그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getLostCowWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = LC_FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "pos", ko: "지금 발 위치", en: "current foot position" },
+        { v: "direction", ko: "걷는 방향 (+1/-1)", en: "walking direction (+1/-1)" },
+        { v: "step", ko: "이번 다리 길이 — 매번 두 배", en: "this leg's length — doubles each time" },
+        { v: "total", ko: "지금까지 걸은 거리", en: "total distance walked so far" },
+      ],
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "What do we need to know first? Where FJ starts (x) and where the cow is (y) — both can be huge, so read them as 64-bit. abs_ll is a small helper to get absolute value without a library.",
+          "먼저 뭘 알아야 할까요? FJ 가 시작하는 자리 x 와 소가 있는 자리 y 예요.\n둘 다 아주 클 수 있어서 64비트로 읽어요. abs_ll 은 절댓값을 구하는 작은 도우미예요.") },
+        { hi: [19, 23], bubble: t(E,
+          "How do we track the zigzag as we walk? 4 things: current position, current direction, this leg's length, and total distance so far. Direction starts +1 and step starts 1 — both will grow/flip each leg.",
+          "지그재그를 걸으면서 뭘 계속 적어 둬야 할까요? 지금 위치, 방향, 다리 길이, 총 거리 — 네 가지예요.\n방향은 +1 로, 다리 길이는 1 로 시작해서 매 다리마다 바뀌어요.") },
+        { hi: [24, 33], bubble: t(E,
+          "Where does this leg end? target — always measured from the START x, not from pos. Then figure out the range [lo, hi] this leg covers, so we can check whether y falls inside it.",
+          "이번 다리는 어디서 끝날까요? target 이에요 — 지금 pos 가 아니라 항상 시작점 x 를 기준으로 구해요.\n그다음 이 다리가 덮는 범위 [lo, hi] 를 구해서, 그 사이에 y 가 있는지 볼 준비를 해요.") },
+        { hi: [34, 36], bubble: t(E,
+          "Does y fall inside this leg? If so, FJ finds the cow partway through — add only |y - pos| (not the whole leg) and stop.",
+          "y 가 이번 다리 안에 있나요? 있으면 이 다리 도중에 소를 찾은 거예요 — 다리 전체가 아니라 |y - pos| 만 더하고 끝내요.") },
+        { hi: [37, 41], bubble: t(E,
+          "Not found yet? Then walk the FULL leg, flip direction, and double the step for the next leg.",
+          "아직 못 찾았으면요? 이번 다리를 끝까지 다 걷고, 방향을 뒤집고, 다음 다리는 두 배로 늘려요.") },
+        { hi: [43, 45], bubble: t(E,
+          "Print the total distance. Step doubles each leg, so this loop only runs O(log |x-y|) times — extremely fast.",
+          "총 거리를 출력해요. 다리 길이가 매번 두 배가 되니까 반복은 O(log |x-y|) 번이면 끝나요 — 아주 빨라요.") },
+      ],
+    };
+  }
+  const code = LC_FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "pos", ko: "지금 발 위치", en: "current foot position" },
+      { v: "direction", ko: "걷는 방향 (+1/-1)", en: "walking direction (+1/-1)" },
+      { v: "step", ko: "이번 다리 길이 — 매번 두 배", en: "this leg's length — doubles each time" },
+      { v: "total", ko: "지금까지 걸은 거리", en: "total distance walked so far" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need to know first? Where FJ starts (x) and where the cow is (y). USACO's older contests use file I/O, so read the input file's first line and split it.",
+        "먼저 뭘 알아야 할까요? FJ 가 시작하는 자리 x 와 소가 있는 자리 y 예요.\nUSACO 옛날 문제는 파일 입출력을 쓰니까, 입력 파일 첫 줄을 읽어서 나눠요.") },
+      { hi: [6, 11], bubble: t(E,
+        "How do we track the zigzag as we walk? 4 things: current position, current direction, this leg's length, and total distance so far. Direction starts +1 and step starts 1.",
+        "지그재그를 걸으면서 뭘 계속 적어 둬야 할까요? 지금 위치, 방향, 다리 길이, 총 거리 — 네 가지예요.\n방향은 +1 로, 다리 길이는 1 로 시작해요.") },
+      { hi: [13, 20], bubble: t(E,
+        "Where does this leg end? target — always measured from the START x, not from pos. Then figure out the range [lo, hi] this leg covers, so we can check whether y falls inside it.",
+        "이번 다리는 어디서 끝날까요? target 이에요 — 지금 pos 가 아니라 항상 시작점 x 를 기준으로 구해요.\n그다음 이 다리가 덮는 범위 [lo, hi] 를 구해서, 그 사이에 y 가 있는지 볼 준비를 해요.") },
+      { hi: [21, 23], bubble: t(E,
+        "Does y fall inside this leg? If so, FJ finds the cow partway through — add only |y - pos| (not the whole leg) and stop.",
+        "y 가 이번 다리 안에 있나요? 있으면 이 다리 도중에 소를 찾은 거예요 — 다리 전체가 아니라 |y - pos| 만 더하고 끝내요.") },
+      { hi: [24, 27], bubble: t(E,
+        "Not found yet? Then walk the FULL leg, flip direction, and double the step for the next leg.",
+        "아직 못 찾았으면요? 이번 다리를 끝까지 다 걷고, 방향을 뒤집고, 다음 다리는 두 배로 늘려요.") },
+      { hi: [29, 30], bubble: t(E,
+        "Write the total distance to the output file. Step doubles each leg, so this loop only runs O(log |x-y|) times — extremely fast.",
+        "총 거리를 출력 파일에 적어요. 다리 길이가 매번 두 배가 되니까 반복은 O(log |x-y|) 번이면 끝나요 — 아주 빨라요.") },
+    ],
+  };
+}
+
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
 function highlightHTML(line, lang) {

@@ -569,6 +569,73 @@ export function WalkFenceProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#16a34a" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 WF_ALL_PY/CPP 배열을 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (이 파일 헤더가 USACO_VERIFIED 라 그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getWalkFenceWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = WF_ALL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "cum", ko: "코너 0 에서부터 쌓아 온 거리", en: "distance walked from post 0, accumulated" },
+        { v: "vertical / horizontal", ko: "고정 좌표별로 묶은 변 목록", en: "fence segments grouped by their fixed coordinate" },
+        { v: "offsetOf", ko: "점 (x,y) 가 코너 0 부터 몇 걸음인지", en: "how far a point (x,y) is from post 0, along the fence" },
+      ],
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "What do we need? N cows, P fence posts, and the posts' coordinates. Goal: for each cow, print the shorter of the two routes around the loop.",
+          "무엇을 알아야 할까요? 소의 수 N, 코너의 수 P, 그리고 코너 좌표들이에요.\n목표는 소마다 울타리 한 바퀴를 도는 두 길 중 짧은 쪽을 출력하는 거예요.") },
+        { hi: [17, 25], bubble: t(E,
+          "How do we turn the loop into something we can measure quickly? Record cum[i] — the distance walked from post 0 to post i. Then the distance between ANY two posts is just a subtraction.",
+          "울타리를 빠르게 잴 수 있게 바꾸려면 어떻게 할까요? cum[i] 에 코너 0 부터 코너 i 까지 쌓아 온 거리를 적어 둬요.\n그러면 어느 두 코너 사이 거리도 뺄셈 한 번으로 구할 수 있어요.") },
+        { hi: [27, 49], bubble: t(E,
+          "Scanning all P edges for every query is too slow (N·P). How do we speed it up? Group edges by their FIXED coordinate — vertical edges by x, horizontal edges by y. Now a query only needs to look at the small group at one x or one y.",
+          "물음마다 변 P 개를 다 보면 N·P 라 너무 느려요. 어떻게 빠르게 할까요?\n변을 고정된 좌표별로 묶어 둬요 — 세로 변은 x 로, 가로 변은 y 로요.\n그러면 물음마다 그 x 나 y 에 속한 작은 무리만 보면 돼요.") },
+        { hi: [50, 57], bubble: t(E,
+          "Within each group, how do we find the right segment fast? Sort the segments by their starting coordinate — that unlocks binary search instead of scanning.",
+          "그 무리 안에서 맞는 변을 빠르게 찾으려면요? 변을 시작 좌표 순으로 정렬해 둬요 — 그러면 훑지 않고 이진 탐색을 쓸 수 있어요.") },
+        { hi: [59, 77], bubble: t(E,
+          "Given a point (x, y), how far is it from post 0 along the fence? Binary-search the vertical group at x (or horizontal at y) to find the segment containing the point, then add how far into that segment the point sits.",
+          "점 (x, y) 가 코너 0 부터 울타리를 따라 얼마나 떨어져 있을까요? x 의 세로 변 무리(또는 y 의 가로 변 무리)에서 이진 탐색으로 그 점이 속한 변을 찾고, 그 변 안에서 움직인 만큼을 더해요.") },
+        { hi: [79, 88], bubble: t(E,
+          "For each cow, find where both points sit (d1, d2). We can't tell which way around is shorter in advance, so compute both — |d1-d2| and perimeter minus that — and print the smaller one.",
+          "소마다 두 점의 위치(d1, d2)를 구해요. 어느 방향이 짧은지 미리 알 수 없어서, |d1-d2| 와 perimeter 에서 그걸 뺀 값을 둘 다 구해서 작은 쪽을 출력해요.") },
+      ],
+    };
+  }
+  const code = WF_ALL_PY;
+  return {
+    code,
+    vars: [
+      { v: "cum", ko: "코너 0 에서부터 쌓아 온 거리", en: "distance walked from post 0, accumulated" },
+      { v: "vertical / horizontal", ko: "고정 좌표별로 묶은 변 목록", en: "fence segments grouped by their fixed coordinate" },
+      { v: "offset_of", ko: "점 (x,y) 가 코너 0 부터 몇 걸음인지", en: "how far a point (x,y) is from post 0, along the fence" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need? N cows, P fence posts, and the posts' coordinates. Goal: for each cow, print the shorter of the two routes around the loop.",
+        "무엇을 알아야 할까요? 소의 수 N, 코너의 수 P, 그리고 코너 좌표들이에요.\n목표는 소마다 울타리 한 바퀴를 도는 두 길 중 짧은 쪽을 출력하는 거예요.") },
+      { hi: [6, 12], bubble: t(E,
+        "How do we turn the loop into something we can measure quickly? Record cum[i] — the distance walked from post 0 to post i. Then the distance between ANY two posts is just a subtraction.",
+        "울타리를 빠르게 잴 수 있게 바꾸려면 어떻게 할까요? cum[i] 에 코너 0 부터 코너 i 까지 쌓아 온 거리를 적어 둬요.\n그러면 어느 두 코너 사이 거리도 뺄셈 한 번으로 구할 수 있어요.") },
+      { hi: [14, 30], bubble: t(E,
+        "Scanning all P edges for every query is too slow (N·P). How do we speed it up? Group edges by their FIXED coordinate — vertical edges by x, horizontal edges by y. Now a query only needs to look at the small group at one x or one y.",
+        "물음마다 변 P 개를 다 보면 N·P 라 너무 느려요. 어떻게 빠르게 할까요?\n변을 고정된 좌표별로 묶어 둬요 — 세로 변은 x 로, 가로 변은 y 로요.\n그러면 물음마다 그 x 나 y 에 속한 작은 무리만 보면 돼요.") },
+      { hi: [32, 38], bubble: t(E,
+        "Within each group, how do we find the right segment fast? Sort the segments by their starting coordinate — that unlocks binary search instead of scanning.",
+        "그 무리 안에서 맞는 변을 빠르게 찾으려면요? 변을 시작 좌표 순으로 정렬해 둬요 — 그러면 훑지 않고 이진 탐색을 쓸 수 있어요.") },
+      { hi: [40, 56], bubble: t(E,
+        "Given a point (x, y), how far is it from post 0 along the fence? Binary-search (bisect_right) the vertical group at x (or horizontal at y) to find the segment containing the point, then add how far into that segment the point sits.",
+        "점 (x, y) 가 코너 0 부터 울타리를 따라 얼마나 떨어져 있을까요? x 의 세로 변 무리(또는 y 의 가로 변 무리)에서 이진 탐색(bisect_right)으로 그 점이 속한 변을 찾고, 그 변 안에서 움직인 만큼을 더해요.") },
+      { hi: [58, 63], bubble: t(E,
+        "For each cow, find where both points sit (d1, d2). We can't tell which way around is shorter in advance, so compute both — |d1-d2| and perimeter minus that — and print the smaller one.",
+        "소마다 두 점의 위치(d1, d2)를 구해요. 어느 방향이 짧은지 미리 알 수 없어서, |d1-d2| 와 perimeter 에서 그걸 뺀 값을 둘 다 구해서 작은 쪽을 출력해요.") },
+    ],
+  };
+}
+
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
 function highlightHTML(line, lang) {

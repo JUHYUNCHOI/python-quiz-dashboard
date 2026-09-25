@@ -154,6 +154,60 @@ export function BadmintonProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/CPP 배열을 **그대로** 쓴다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라. ── */
+export function getBadmintonWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "game_a / game_b", ko: "지금 게임의 점수", en: "points in the game being played right now" },
+        { v: "wins_a / wins_b", ko: "이미 이긴 게임 수", en: "games each player has already won" },
+        { v: "results", ko: "끝난 게임마다의 점수", en: "each finished game's final score" },
+      ],
+      beats: [
+        { hi: [0, 16], bubble: t(E,
+          "What do we need to track the whole match? 4 counters: 2 for the points in the current game, 2 for games already won. results will hold each finished game's score — it has to be written down before the points reset to 0, or it's lost.",
+          "경기 전체를 어떻게 추적할까요? 세는 값 네 개예요 — 지금 게임의 점수 둘, 이미 이긴 게임 수 둘이에요.\nresults 에는 끝난 게임의 점수를 모아 둬요. 점수가 0 으로 되돌기 전에 적어 두지 않으면 사라져요.") },
+        { hi: [16, 24], bubble: t(E,
+          "Each character is one rally. 'A' means A scored, anything else means B scored — so one point goes up, and nothing else changes yet.",
+          "글자 하나가 랠리 하나예요. 'A' 면 A 가 득점, 아니면 B 가 득점이에요.\n점수 하나만 오르고 아직 다른 건 그대로예요.") },
+        { hi: [24, 39], bubble: t(E,
+          "Right after a point goes up is the only moment a game can end, so that's the only place we check for 21. Order matters: save the score first (clearing to 0 would wipe it), then add the win, then clear. At 2 wins the match is decided, so break — the rest of the letters aren't played at all.",
+          "게임이 끝날 수 있는 순간은 점수가 오른 직후뿐이라, 21 인지는 거기서만 확인해요.\n순서가 중요해요 — 점수를 먼저 저장하고(0 으로 비우면 사라지니까), 이긴 게임 수를 올리고, 그다음 비워요.\n2 승이 되면 매치가 정해져서 break — 남은 글자는 아예 안 봐요.") },
+        { hi: [39, 51], bubble: t(E,
+          "Print one line per finished game, then the winner. The loop stopped the moment someone reached 2 wins, so the other player has at most 1 — the bigger win count is always the match winner, no tie possible.",
+          "끝난 게임마다 한 줄씩 찍고, 마지막에 승자를 찍어요.\n반복은 누군가 2 승을 한 순간 멈췄으니 상대는 많아야 1 승이에요 — 그래서 이긴 게임이 더 많은 쪽이 항상 매치 승자고, 비기는 일은 없어요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "game_a / game_b", ko: "지금 게임의 점수", en: "points in the game being played right now" },
+      { v: "wins_a / wins_b", ko: "이미 이긴 게임 수", en: "games each player has already won" },
+      { v: "results", ko: "끝난 게임마다의 점수", en: "each finished game's final score" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we need to track the whole match? 4 counters: 2 for the points in the current game, 2 for games already won. results will hold each finished game's score — it has to be written down before the points reset to 0, or it's lost.",
+        "경기 전체를 어떻게 추적할까요? 세는 값 네 개예요 — 지금 게임의 점수 둘, 이미 이긴 게임 수 둘이에요.\nresults 에는 끝난 게임의 점수를 모아 둬요. 점수가 0 으로 되돌기 전에 적어 두지 않으면 사라져요.") },
+      { hi: [6, 11], bubble: t(E,
+        "Each character is one rally. 'A' means A scored, anything else means B scored — so one point goes up, and nothing else changes yet.",
+        "글자 하나가 랠리 하나예요. 'A' 면 A 가 득점, 아니면 B 가 득점이에요.\n점수 하나만 오르고 아직 다른 건 그대로예요.") },
+      { hi: [12, 21], bubble: t(E,
+        "Right after a point goes up is the only moment a game can end, so that's the only place we check for 21. Order matters: save the score first (clearing to 0 would wipe it), then add the win, then clear. At 2 wins the match is decided, so break — the rest of the letters aren't played at all.",
+        "게임이 끝날 수 있는 순간은 점수가 오른 직후뿐이라, 21 인지는 거기서만 확인해요.\n순서가 중요해요 — 점수를 먼저 저장하고(0 으로 비우면 사라지니까), 이긴 게임 수를 올리고, 그다음 비워요.\n2 승이 되면 매치가 정해져서 break — 남은 글자는 아예 안 봐요.") },
+      { hi: [22, 27], bubble: t(E,
+        "Print one line per finished game, then the winner. The loop stopped the moment someone reached 2 wins, so the other player has at most 1 — the bigger win count is always the match winner, no tie possible.",
+        "끝난 게임마다 한 줄씩 찍고, 마지막에 승자를 찍어요.\n반복은 누군가 2 승을 한 순간 멈췄으니 상대는 많아야 1 승이에요 — 그래서 이긴 게임이 더 많은 쪽이 항상 매치 승자고, 비기는 일은 없어요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
