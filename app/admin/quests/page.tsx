@@ -261,7 +261,7 @@ export default function AdminQuestsPage() {
                                   ? "border-emerald-200 bg-emerald-50 text-emerald-900"
                                   : "border-gray-200 bg-gray-50 text-gray-600"
                               }`}
-                              title={`${p.title} — ${m.type} ★${m.difficulty} · ${stage}`}
+                              title={`${p.title} — ${m.type} ★${QUEST_CONCEPT_META[p.id]?.difficulty ?? "?(안 매김)"} · ${stage}`}
                             >
                               <span className="font-mono font-bold truncate flex-1">{p.id}</span>
                               {stage === "internal" && <span className="text-rose-600" title="internal — only teachers see this in catalog">🛠️</span>}
@@ -324,7 +324,14 @@ export default function AdminQuestsPage() {
                               <ExternalLink size={12} />
                             </Link>
                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{m.type}</span>
-                            <span className="text-[10px] font-bold text-amber-600">★ {m.difficulty}</span>
+                            {/* ⚠️ 2026-09-25: `m.difficulty` 를 그대로 쓰면 **아무도 안 매긴 값이 매긴 값처럼**
+                                보인다 — 엔트리에 difficulty 가 없으면 `DEFAULT_META` 의 **2** 가
+                                그대로 ★2 로 뜬다(실측 22개). 카탈로그(`app/quest/page.tsx`)는
+                                `questDifficulty()` 를 거쳐 출처를 갈라 보여주는데 여기만 샜다.
+                                선생님(2026-09-13) *"이 문제가 진짜 레벨3인가?"* 가 나온 자리다. */}
+                            {QUEST_CONCEPT_META[p.id]?.difficulty
+                              ? <span className="text-[10px] font-bold text-amber-600">★ {m.difficulty}</span>
+                              : <span className="text-[10px] font-bold text-gray-400" title="아무도 안 매긴 값 — 기본값이 보이는 것뿐이다">★ ?</span>}
                             <span className="text-[10px] font-bold text-emerald-600 flex gap-1">
                               {m.supported_languages.includes("py") && <span title="Python verified">🐍</span>}
                               {m.supported_languages.includes("cpp") && <span title="C++ verified">💻</span>}
