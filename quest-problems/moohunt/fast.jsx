@@ -227,8 +227,17 @@ export function getMooHuntFastWalk(E, lang = "py") {
                                    "그럼 이 보드에서 득점하는 무브는 무엇일까요?\n'M 한 자리 + O 두 자리' 뿐이라, 그 조합만 표에서 꺼내요.\nOs 는 차례로 담아서 Os[i] 가 늘 작은 자리예요.") },
       { hi: [46, 52], bubble: t(E, "This board has a score. Compare it with the best so far.\nSame score? Then one more board reaches it.",
                                    "이 보드의 점수가 나왔어요. 지금까지 제일 높은 값과 견줘요.\n같으면 그 점수인 보드가 하나 늘어요.") },
-      { hi: [54, 64], bubble: t(E, "This board is done. What is the next one? Add 1, with cell 1 as the ones place.\nAdding 1 carries, just like 1999 + 1 = 2000 — only the trailing 9s turn into 0s.\nHere the trailing Ms turn back to O, and the first O it meets becomes M.\nMMO + 1 = OOM: two Ms reset, the third cell flips up.",
-                                   "이 보드는 끝났어요. 다음 보드는? 1번 칸을 일의 자리로 보고 1 을 더해요.\n더하면 받아올림이 생겨요. 1999 + 1 = 2000 처럼요 — 뒤의 9 들만 0 이 돼요.\n여기서도 뒤에 붙은 M 들만 O 로 되돌아가고, 처음 만난 O 가 M 이 돼요.\nMMO 에 1 을 더하면 OOM 이에요. 앞의 두 M 만 되돌아갔어요.") },
+      /* ⚠️ 2026-09-25 선생님: *"moohunt 코드 설명이 너무 길어서 읽기 힘들다.
+         더 단계적으로 설명이 필요하다."* 이 자리가 **말풍선 하나에 다섯 문장**이었다
+         (받아올림 비유 + M 되돌리기 + 멈추기 + MMO→OOM 예까지 전부 한 덩어리).
+         → **세 걸음으로 가른다.** 누르는 횟수는 둘 늘지만 그게 선생님이 요청하신 것이다.
+         한 걸음에 바뀌는 자리는 한 곳이어야 한다(`feedback_one_thing_changes_at_a_time`). */
+      { hi: [55, 60], bubble: t(E, "This board is done. The next one is this board + 1, with cell 1 as the ones place.\nAdding 1 carries — like 1999 + 1 = 2000, where only the trailing 9s turn into 0.",
+                                   "이 보드는 끝났어요. 다음 보드는 여기에 1 을 더한 거예요.\n더하면 받아올림이 생겨요 — 1999 + 1 = 2000 처럼, 뒤의 9 들만 0 이 되죠.\n여기서도 뒤에 붙은 M 들만 O 로 되돌아가요.") },
+      { hi: [61, 63], bubble: t(E, "What if every cell was already M? Then there is nowhere left to go — stop here.",
+                                   "칸이 전부 M 이었다면? 더 갈 데가 없어요. 여기서 멈춰요.") },
+      { hi: [64, 64], bubble: t(E, "Otherwise the first O it met flips up to M. MMO + 1 = OOM.",
+                                   "아니라면 처음 만난 O 하나를 M 으로 바꿔요.\nMMO 에 1 을 더하면 OOM 이에요.") },
       { hi: [66, 68], bubble: t(E, "Every board has been seen. Print the two numbers — that is the answer.",
                                    "보드를 다 봤어요. 두 값을 출력하면 끝이에요.") },
     ] };
@@ -246,8 +255,17 @@ export function getMooHuntFastWalk(E, lang = "py") {
                                  "그럼 이 보드에서 득점하는 무브는 무엇일까요?\n'M 한 자리 + O 두 자리' 뿐이라, 그 조합만 표에서 꺼내요.\ncount 는 defaultdict 라 없는 열쇠를 물으면 0 이 나와요.") },
     { hi: [38, 42], bubble: t(E, "This board has a score. Compare it with the best so far.\nSame score? Then one more board reaches it.",
                                  "이 보드의 점수가 나왔어요. 지금까지 제일 높은 값과 견줘요.\n같으면 그 점수인 보드가 하나 늘어요.") },
-    { hi: [44, 53], bubble: t(E, "This board is done. What is the next one? Add 1, with cell 1 as the ones place.\nAdding 1 carries, just like 1999 + 1 = 2000 — only the trailing 9s turn into 0s.\nHere the trailing Ms turn back to O, and the first O it meets becomes M.\nMMO + 1 = OOM: two Ms reset, the third cell flips up.\nAll M already? Then there is nowhere left to go — stop.",
-                                 "이 보드는 끝났어요. 다음 보드는? 1번 칸을 일의 자리로 보고 1 을 더해요.\n더하면 받아올림이 생겨요. 1999 + 1 = 2000 처럼요 — 뒤의 9 들만 0 이 돼요.\n여기서도 뒤에 붙은 M 들만 O 로 되돌아가고, 처음 만난 O 가 M 이 돼요.\nMMO 에 1 을 더하면 OOM 이에요. 앞의 두 M 만 되돌아갔어요.\n전부 M 이었다면 더 갈 데가 없으니 멈춰요.") },
+    /* ⚠️ 2026-09-25 선생님: *"moohunt 코드 설명이 너무 길어서 읽기 힘들다.
+       더 단계적으로 설명이 필요하다."* 이 자리가 **말풍선 하나에 다섯 문장**이었다
+       (받아올림 비유 + M 되돌리기 + 멈추기 + MMO→OOM 예까지 전부 한 덩어리).
+       → **세 걸음으로 가른다.** 누르는 횟수는 둘 늘지만 그게 선생님이 요청하신 것이다.
+       한 걸음에 바뀌는 자리는 한 곳이어야 한다(`feedback_one_thing_changes_at_a_time`). */
+    { hi: [44, 50], bubble: t(E, "This board is done. The next one is this board + 1, with cell 1 as the ones place.\nAdding 1 carries — like 1999 + 1 = 2000, where only the trailing 9s turn into 0.",
+                                 "이 보드는 끝났어요. 다음 보드는 여기에 1 을 더한 거예요.\n더하면 받아올림이 생겨요 — 1999 + 1 = 2000 처럼, 뒤의 9 들만 0 이 되죠.\n여기서도 뒤에 붙은 M 들만 O 로 되돌아가요.") },
+    { hi: [51, 52], bubble: t(E, "What if every cell was already M? Then there is nowhere left to go — stop here.",
+                                 "칸이 전부 M 이었다면? 더 갈 데가 없어요. 여기서 멈춰요.") },
+    { hi: [53, 53], bubble: t(E, "Otherwise the first O it met flips up to M. MMO + 1 = OOM.",
+                                 "아니라면 처음 만난 O 하나를 M 으로 바꿔요.\nMMO 에 1 을 더하면 OOM 이에요.") },
     { hi: [55, 55], bubble: t(E, "Every board has been seen. Print the two numbers — that is the answer.",
                                  "보드를 다 봤어요. 두 값을 출력하면 끝이에요.") },
   ] };
