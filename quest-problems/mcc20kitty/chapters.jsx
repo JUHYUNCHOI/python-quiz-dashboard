@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
-import { getMcc20KittySections } from "./components";
 
 const A = "#dc2626";
 const KA = { wordBreak: "keep-all" };
@@ -602,13 +601,11 @@ export function makeMcc20KittyCh3(E, lang = "py") {
         </div>),
     },
 
-    // 3-5 full code
+    // 3-5: code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Here's the whole solution — read it part by part.",
-        "전체 풀이예요 — 부분별로 읽어봐요."),
-      sections: getMcc20KittySections(E),
+        "The full solution, start to finish.", "전체 풀이를 처음부터 끝까지 봐요."),
     },
   ];
 }

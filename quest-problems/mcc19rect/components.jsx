@@ -182,6 +182,31 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getMcc19RectSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   MCC 는 C++ 이 필요 없다(선생님 "MCC는 c++ 다 없애줘") — 파이썬만 보여준다. */
+export function getMcc19RectWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "min_diff", ko: "지금까지 본 가장 작은 차이", en: "smallest gap seen so far" },
+      { v: "diff", ko: "이웃한 두 수의 차이", en: "the gap between one neighbour pair" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What should we output? The smallest difference between any two numbers. Read N numbers.",
+        "무엇을 내놓아야 하나요? 아무 두 수의 차이 중 가장 작은 값이에요.\nN 개의 수를 읽어요.") },
+      { hi: [3, 7], bubble: t(E,
+        "Checking every pair is slow. But the list is sorted, so a far pair's gap is always the sum of the steps in between — meaning only neighbour pairs can be smallest. Walk the list and keep the smallest neighbour gap seen.",
+        "짝을 다 확인하면 느려요. 그런데 리스트가 정렬돼 있어서, 멀리 떨어진 두 수의 차이는 사이 칸들을 더한 값이에요 — 그러니 이웃한 두 수만 봐도 충분해요.\n리스트를 훑으며 이웃 차이 중 가장 작은 값을 기억해요.") },
+      { hi: [9, 9], bubble: t(E,
+        "Print the smallest gap found.",
+        "찾은 가장 작은 차이를 출력해요.") },
+    ],
+  };
+}
+
 export function getMcc19RectSections(E) {
   return [
     {

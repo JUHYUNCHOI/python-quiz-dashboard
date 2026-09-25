@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Mcc20MissingProgressiveCode, downloadMcc20MissingPDF, getMcc20MissingSections } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { Mcc20MissingProgressiveCode, downloadMcc20MissingPDF, getMcc20MissingSections, getMcc20MissingWalk } from "./components";
 import { makeMcc20MissingCh1, makeMcc20MissingCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -102,6 +103,7 @@ export default function Mcc20MissingApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <Mcc20MissingProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "opt-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMcc20MissingWalk(E)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function Mcc20MissingApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <Mcc20MissingProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "opt-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMcc20MissingWalk(E)} accent={A} />;
     return null;
   };
 

@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { SimNav, useTraceStep } from "@/components/quest/TraceStepper";
-import { getMcc19RectSections, ConsecutiveDiffScanSim } from "./components";
+import { ConsecutiveDiffScanSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -302,14 +302,11 @@ export function makeMcc19RectCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc19RectCh2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
-      /* 전에는 여기서 "비내림차순이라 …" 라며 결론을 통보했다. 그 말은 어디서도 정의된 적이
-         없었고(학생이 걸렸다), 관찰은 이제 앞 쪽에서 학생이 직접 한다. */
-      narr: t(E, "We only look at neighbours — one pass down the list.",
-                 "이웃끼리만 보면 돼요. 한 번만 훑어요."),
-      sections: getMcc19RectSections(E),
+      type: "opt-codewalk",
+      narr: t(E, "The full solution, start to finish.",
+                 "전체 풀이를 처음부터 끝까지 봐요."),
     },
   ];
 }

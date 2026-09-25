@@ -441,6 +441,37 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getMcc22GrammarSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   MCC 는 C++ 이 필요 없다(선생님 "MCC는 c++ 다 없애줘") — 파이썬만 보여준다. */
+export function getMcc22GrammarWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "adj", ko: "각 단어 다음에 올 수 있는 단어들", en: "words allowed right after each word" },
+      { v: "ok", ko: "지금까지 검사를 다 통과했나", en: "whether every check has passed so far" },
+    ],
+    beats: [
+      { hi: [0, 8], bubble: t(E,
+        "What should we output? YES/NO for each test — is the sentence a valid path through the grammar? The grammar never changes, so hard-code adj[x] = the set of words allowed right after x.",
+        "무엇을 출력해야 하나요? 테스트마다 YES/NO — 문장이 문법을 따라가는 올바른 경로인지예요.\n문법은 변하지 않으니 adj[x] 에 x 다음에 올 수 있는 단어를 코드에 그대로 적어 둬요.") },
+      { hi: [10, 14], bubble: t(E,
+        "Read T test cases; each gives n and the n words of the sentence.",
+        "T 개의 테스트를 읽어요. 각각 n 과, 문장을 이루는 단어 n 개가 나와요.") },
+      { hi: [16, 21], bubble: t(E,
+        "Check ①: every word must be a key of adj — one of the 5 words. If any word is unknown, it fails.",
+        "검사 ①: 모든 단어가 adj 의 키, 즉 5개 단어 중 하나여야 해요. 모르는 단어가 있으면 실패예요.") },
+      { hi: [22, 27], bubble: t(E,
+        "Check ②: for each neighbour pair, the next word must be in adj[this word] — the arrow must exist.",
+        "검사 ②: 이웃한 쌍마다 다음 단어가 adj[이 단어] 안에 있어야 해요 — 화살표가 있어야 해요.") },
+      { hi: [29, 34], bubble: t(E,
+        "If both checks passed, record YES, else NO — then print every case's answer at once.",
+        "두 검사를 다 통과했으면 YES, 아니면 NO 를 기록해요 — 그리고 모든 답을 한 번에 출력해요.") },
+    ],
+  };
+}
+
 export function getMcc22GrammarSections(E) {
   return [
     {

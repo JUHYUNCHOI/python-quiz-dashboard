@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getHoneySections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -210,15 +209,12 @@ export function makeHoneyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeHoneyCh2(E, lang = "py") {
   return [
-    // 2-1: Code (greedy strategy + progressive sections)
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
-      /* 2026-09-17: 이 narr 도 1-2 퀴즈와 같은 틀린 전략("벌집 단위로 정렬해
-         ceil(honey/M) 번씩")을 적고 있었다. 아래 코드는 그렇게 하지 않는다. */
+      type: "opt-codewalk",
       narr: t(E,
-        "Split every hive into trip-sized blocks, then take the K biggest.",
-        "모든 벌집을 왕복 조각으로 쪼갠 뒤 큰 것부터 K 개를 골라요."),
-      sections: getHoneySections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

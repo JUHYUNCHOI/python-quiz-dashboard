@@ -225,6 +225,50 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getHoneySections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. */
+export function getHoneyWalk(E, lang = "py") {
+  const vars = [
+    { v: "yields", ko: "왕복 조각들의 양", en: "amounts from each trip block" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 8], bubble: t(E,
+          "What should we output? The most honey we can carry in K trips. Read N, M, K.",
+          "무엇을 내놓아야 하나요? K 번 왕복해서 담을 수 있는 최대 꿀이에요.\nN, M, K 를 읽어요.") },
+        { hi: [9, 20], bubble: t(E,
+          "A trip to a hive carries min(M, what's left). Split every hive into these trip blocks and collect all of them — once split, which hive a block came from stops mattering.",
+          "한 번 다녀오면 min(M, 남은 꿀) 만큼 담아요.\n모든 벌집을 이 왕복 조각으로 쪼개서 다 모아요 — 쪼개고 나면 어느 벌집 조각인지는 상관없어요.") },
+        { hi: [22, 27], bubble: t(E,
+          "K trips = pick K blocks, so sort descending and add up the K biggest. Sorting puts every full-M block ahead of leftover blocks, so a leftover is never taken too early.",
+          "K 번 다녀온다는 건 조각 K 개를 고른다는 뜻이라, 내림차순 정렬해 가장 큰 K 개를 더해요.\n정렬하면 M 을 꽉 채운 조각이 자투리 조각보다 늘 앞에 서요.") },
+        { hi: [29, 29], bubble: t(E,
+          "Print the total.",
+          "합계를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What should we output? The most honey we can carry in K trips. Read N, M, K and each hive's amount.",
+        "무엇을 내놓아야 하나요? K 번 왕복해서 담을 수 있는 최대 꿀이에요.\nN, M, K 와 벌집마다의 꿀 양을 읽어요.") },
+      { hi: [3, 10], bubble: t(E,
+        "A trip to a hive carries min(M, what's left). Split every hive into these trip blocks and collect all of them — once split, which hive a block came from stops mattering.",
+        "한 번 다녀오면 min(M, 남은 꿀) 만큼 담아요.\n모든 벌집을 이 왕복 조각으로 쪼개서 다 모아요 — 쪼개고 나면 어느 벌집 조각인지는 상관없어요.") },
+      { hi: [12, 13], bubble: t(E,
+        "K trips = pick K blocks, so sort descending and add up the K biggest. Sorting puts every full-M block ahead of leftover blocks, so a leftover is never taken too early.",
+        "K 번 다녀온다는 건 조각 K 개를 고른다는 뜻이라, 내림차순 정렬해 가장 큰 K 개를 더해요.\n정렬하면 M 을 꽉 채운 조각이 자투리 조각보다 늘 앞에 서요.") },
+    ],
+  };
+}
+
 export function getHoneySections(E) {
   return [
     {

@@ -107,6 +107,55 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다. 🔒
+   USACO_VERIFIED 라 절대 안 건드렸다. getMilkExchangeSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. */
+export function getMilkExchangeWalk(E, lang = "py") {
+  const vars = [
+    { v: "bad_L, bad_R", ko: "경계('R'-'L' 접점)의 두 소", en: "the two cows at a boundary ('R' next to 'L')" },
+    { v: "chain / sum", ko: "경계로 쏠려 영영 안 돌아오는 우유", en: "milk that pours toward the boundary and never returns" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "What do we need before we can follow the minutes? N, M, the direction string, and each cow's capacity. So read those first — each cow starts full.",
+          "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 소마다의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 용량만큼 가득 차 시작해요.") },
+        { hi: [19, 32], bubble: t(E,
+          "Passing milk minute by minute is what the problem describes, but M can be 10^9 — too slow. Instead find where milk is actually lost forever: at a 'deficit pair', an 'R' cow right before an 'L' cow, trading milk back and forth. Mark every such boundary.",
+          "매분 우유를 넘기는 게 문제 그대로의 방식이지만, M 이 최대 10^9 라 너무 느려요.\n대신 우유가 실제로 영영 사라지는 곳을 찾아요 — 'R' 소 바로 옆에 'L' 소가 있는 자리(서로 계속 주고받는 경계)예요. 그 경계를 전부 표시해요.") },
+        { hi: [34, 52], bubble: t(E,
+          "Start from the total milk. For each boundary, walk its 'R' run behind it (or 'L' run ahead of it) — that whole chain pours milk into the loop and never gets it back, losing min(chainSum, M) over M minutes. Subtract that loss.",
+          "전체 우유량에서 시작해요. 경계마다 그 'R' 줄기(또는 'L' 줄기)를 따라가요 — 이 사슬 전체가 경계 쪽으로 쏠려 영영 못 돌아오고, M 분 동안 min(chainSum, M) 만큼 사라져요. 그만큼을 빼요.") },
+        { hi: [54, 54], bubble: t(E,
+          "Print what's left.",
+          "남은 양을 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars,
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What do we need before we can follow the minutes? N, M, the direction string, and each cow's capacity. So read those first — each cow starts full.",
+        "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 소마다의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 용량만큼 가득 차 시작해요.") },
+      { hi: [4, 11], bubble: t(E,
+        "Passing milk minute by minute is what the problem describes, but M can be 10^9 — too slow. Instead find where milk is actually lost forever: at a boundary 'R' cow right before an 'L' cow. Mark every such boundary.",
+        "매분 우유를 넘기는 게 문제 그대로의 방식이지만, M 이 최대 10^9 라 너무 느려요.\n대신 우유가 실제로 영영 사라지는 곳을 찾아요 — 'R' 소 바로 옆에 'L' 소가 있는 경계예요. 그 경계를 전부 표시해요.") },
+      { hi: [13, 26], bubble: t(E,
+        "Start from the total milk. For each boundary, walk its 'R' run behind it (or 'L' run ahead of it) — that whole chain pours milk into the loop and never gets it back, losing min(chainSum, M) over M minutes. Subtract that loss.",
+        "전체 우유량에서 시작해요. 경계마다 그 'R' 줄기(또는 'L' 줄기)를 따라가요 — 이 사슬 전체가 경계 쪽으로 쏠려 영영 못 돌아오고, M 분 동안 min(chainSum, M) 만큼 사라져요. 그만큼을 빼요.") },
+      { hi: [28, 28], bubble: t(E,
+        "Print what's left.",
+        "남은 양을 출력해요.") },
+    ],
+  };
+}
+
 export function getMilkExchangeSections(E) {
   return [
     {

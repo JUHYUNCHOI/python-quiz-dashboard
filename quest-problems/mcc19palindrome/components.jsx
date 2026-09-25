@@ -306,6 +306,41 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getMcc19PalSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   MCC 는 C++ 이 필요 없다(선생님 "MCC는 c++ 다 없애줘") — 파이썬만 보여준다. */
+export function getMcc19PalWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "c", ko: "답이 들어있는 길이", en: "the length the answer lives in" },
+      { v: "r", ko: "그 길이 안에서 n 의 순위 (0부터)", en: "n's rank inside that length (0-indexed)" },
+      { v: "half", ko: "만들고 있는 앞 절반", en: "the front half we're building" },
+    ],
+    beats: [
+      { hi: [0, 8], bubble: t(E,
+        "What should we output? The n-th palindrome string. A length-L palindrome is fully decided by its front half (half of L, rounded up), so its count is k raised to that many digits. Add these counts length by length until you pass n — that's the length c the answer lives in.",
+        "무엇을 출력해야 하나요? n 번째 회문 문자열이에요.\n길이 L 짜리 회문은 앞 절반(L 의 절반, 올림)만 고르면 다 정해지니, 그 자리 수만큼 k 를 거듭제곱한 값이 개수예요.\n이 개수를 길이별로 더해 n 을 넘기는 순간까지 가요 — 그게 답의 길이 c 예요.") },
+      { hi: [9, 14], bubble: t(E,
+        "Once we know length c, find n's rank r inside that length (0-indexed) — subtract off the counts of every shorter length.",
+        "길이 c 를 찾았으면, 그 안에서 n 이 몇 번째인지(0 부터 센 순위 r)를 구해요 — 앞선 길이들의 개수를 다 빼면 돼요.") },
+      { hi: [16, 23], bubble: t(E,
+        "Writing r in base k gives the front half directly. Peel off remainders one at a time and turn each into a digit.",
+        "r 을 k 진법으로 적으면 그게 바로 앞 절반이에요. 나머지를 하나씩 떼어 숫자로 바꿔가며 모아요.") },
+      { hi: [25, 28], bubble: t(E,
+        "If the front half is short, pad with zeros, then reverse what we collected so the most significant digit comes first.",
+        "앞 절반의 자리 수가 부족하면 0 으로 채우고, 지금까지 모은 순서를 뒤집어 높은 자리부터 오게 해요.") },
+      { hi: [30, 34], bubble: t(E,
+        "Mirror the front half onto itself to complete the palindrome — for odd length, the middle character is shared, so skip it once.",
+        "앞 절반을 거울처럼 뒤집어 붙이면 회문이 완성돼요 — 길이가 홀수면 가운데 글자는 한 번만 써요.") },
+      { hi: [36, 37], bubble: t(E,
+        "Read N and K, call the function, and print the answer.",
+        "N 과 K 를 입력받아 함수를 부르고 답을 출력해요.") },
+    ],
+  };
+}
+
 export function getMcc19PalSections(E) {
   return [
     {

@@ -98,6 +98,38 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getMcc20MissingSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   MCC 는 C++ 이 필요 없다(선생님 "MCC는 c++ 다 없애줘") — 파이썬만 보여준다. */
+export function getMcc20MissingWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "candidates", ko: "시험해 볼 K 후보 네 개", en: "the four K candidates to test" },
+      { v: "mags", ko: "K 를 되돌려 복원한 크기들", en: "magnitudes recovered by undoing K" },
+      { v: "ans", ko: "찾은 빠진 값들의 합", en: "sum of missing values found" },
+    ],
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "What should we output? The number erased before shuffling. This contest has no fixed input format — N and the shuffled array a are given as fixed values.",
+        "무엇을 출력해야 하나요? 뒤섞이기 전 지워진 수예요.\n이 대회는 입력 형식이 따로 없어요 — N 과 뒤섞인 배열 a 가 값으로 주어져요.") },
+      { hi: [4, 9], bubble: t(E,
+        "If N is 1 there's nothing to compare — the missing number must be 1. Otherwise get ready: total is the sum of 1..N, mn/mx are the array's smallest/largest values, and lim is the range K can fall in.",
+        "N 이 1 이면 비교할 것도 없이 빠진 수는 1 이에요.\n아니면 준비해요 — total 은 1..N 의 합, mn/mx 는 배열의 최소·최대값, lim 은 K 가 가질 수 있는 범위예요.") },
+      { hi: [11, 14], bubble: t(E,
+        "The four candidate K we worked out on the previous page become one line: {mn+N, mx−N, mn+(N−1), mx−(N−1)}. Instead of testing all 6N+1 values of K, we test just these four.",
+        "앞 쪽에서 찾은 후보 네 개가 코드에서는 한 줄이에요 — {mn+N, mx−N, mn+(N−1), mx−(N−1)}.\nK 를 6N+1 개 다 보는 대신 이 넷만 확인해요.") },
+      { hi: [16, 23], bubble: t(E,
+        "For each candidate K (staying inside [−3N, 3N]), undo it with |x−K| to recover the original magnitudes. It's a valid reconstruction only if the N−1 magnitudes are all different and all inside [1, N] — then the missing value is total − sum(mags), added into the answer.",
+        "후보 K 마다(단 [−3N, 3N] 안에서만) |x−K| 로 되돌려 원래 크기들을 복원해요.\nN−1 개가 모두 서로 다르고 전부 [1, N] 안에 있어야만 올바른 복원이고, 그때 빠진 값은 total − sum(mags) 예요 — 이걸 답에 더해요.") },
+      { hi: [24, 24], bubble: t(E,
+        "Print the total found across every valid K.",
+        "찾은 값들을 다 더한 걸 출력해요.") },
+    ],
+  };
+}
+
 export function getMcc20MissingSections(E) {
   return [
     {

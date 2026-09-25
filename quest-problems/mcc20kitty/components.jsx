@@ -125,6 +125,38 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getMcc20KittySections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   MCC 는 C++ 이 필요 없다(선생님 "MCC는 c++ 다 없애줘") — 파이썬만 보여준다. */
+export function getMcc20KittyWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "r", ko: "나머지만 남긴 수열", en: "the sequence, kept as remainders" },
+      { v: "start, period", ko: "되풀이가 시작되는 자리 · 길이", en: "where the repeat starts · its length" },
+      { v: "tail, cycle", ko: "앞쪽 조각 · 되풀이되는 한 바퀴", en: "the lead-in piece · one full repeating cycle" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What should we output? How many of the first N Kitty numbers divide by 3. We only care about that, so keep just each term's remainder (0, 1, or 2) instead of the huge numbers themselves.",
+        "무엇을 출력해야 하나요? Kitty 수열 앞 N 개 중 3 의 배수 개수예요.\n그것만 궁금하니 거대한 수 대신 각 항의 나머지(0, 1, 2)만 들고 다녀요.") },
+      { hi: [3, 16], bubble: t(E,
+        "A new remainder is just the previous five remainders added up, mod 3. A 5-window of remainders has only 3×3×3×3×3 = 243 possible patterns, so it has to start repeating — keep growing the sequence and remember every 5-window you've seen until one repeats.",
+        "새 나머지는 바로 앞 다섯 나머지를 더해서 3 으로 나눈 값이에요.\n나머지 5 칸 창은 모양이 3×3×3×3×3 = 243 가지뿐이라 반드시 되풀이돼요 — 수열을 늘려가며 5 칸 창을 전부 기억해두다가 겹치는 순간을 찾아요.") },
+      { hi: [18, 23], bubble: t(E,
+        "Once we know where the repeat starts (start) and how long it is (period), grow the sequence just enough to hold one lead-in piece plus one full cycle, then split it into those two pieces.",
+        "되풀이가 시작되는 자리(start)와 길이(period)를 알았으면, 앞쪽 조각 + 한 바퀴만큼만 더 채운 뒤 그 둘로 나눠요.") },
+      { hi: [25, 34], bubble: t(E,
+        "Now count the zeros (multiples of 3): tail zeros + (how many full cycles fit) × (zeros per cycle) + zeros in the leftover partial cycle. That's instant even for N = 10^15. If N falls before the cycle even starts, the top `if` just counts the first N terms directly.",
+        "이제 0(3 의 배수)의 개수를 세요 — 앞쪽 조각의 0 + (한 바퀴가 몇 번 도나) × (한 바퀴의 0 개수) + 남는 조각의 0.\nN 이 10^15 이어도 바로 끝나요. N 이 사이클이 시작하기도 전이면 맨 위 `if` 문이 그냥 앞부분만 세요.") },
+      { hi: [36, 37], bubble: t(E,
+        "Read N and print the count.",
+        "N 을 입력받아 개수를 출력해요.") },
+    ],
+  };
+}
+
 export function getMcc20KittySections(E) {
   return [
     {

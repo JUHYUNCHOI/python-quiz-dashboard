@@ -243,6 +243,33 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getMcc19Rect2Sections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   MCC 는 C++ 이 필요 없다(선생님 "MCC는 c++ 다 없애줘") — 파이썬만 보여준다. */
+export function getMcc19Rect2Walk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "x4, y4", ko: "빠진 네 번째 꼭짓점", en: "the missing fourth corner" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What should we output? The x, y of the missing fourth corner. Read the three known corners.",
+        "무엇을 내놓아야 하나요? 빠진 네 번째 꼭짓점의 x, y 예요.\n아는 세 꼭짓점을 읽어요.") },
+      { hi: [4, 10], bubble: t(E,
+        "In a rectangle, each x value shows up at two of the four corners. So among the 3 known x's, the one left without a partner is the 4th corner's x.",
+        "직사각형은 같은 x 값이 네 꼭짓점 중 두 곳에 나와요.\n그래서 아는 x 셋 중 짝 없는 값이 네 번째 점의 x 예요.") },
+      { hi: [12, 18], bubble: t(E,
+        "Same idea for y — find the one without a partner.",
+        "y 도 똑같이 짝 없는 값을 찾아요.") },
+      { hi: [20, 20], bubble: t(E,
+        "Print the missing corner's x and y.",
+        "빠진 꼭짓점의 x, y 를 출력해요.") },
+    ],
+  };
+}
+
 export function getMcc19Rect2Sections(E) {
   return [
     {

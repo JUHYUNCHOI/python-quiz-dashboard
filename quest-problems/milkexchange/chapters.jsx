@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getMilkExchangeSections } from "./components";
 import MilkCircleSim from "./MilkCircleSim";
 
 /* ================================================================
@@ -212,13 +211,12 @@ RRL
    ================================================================ */
 export function makeMilkExCh2(E, lang = "py") {
   return [
-    // 2-1: Solution code — straight to the build, no placeholder page.
+    // 2-1: Code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
-        "Simulate one minute at a time: every cow with milk passes 1 L, then over-cap cells lose the overflow.  Sections build the loop one piece at a time.",
-        "1분씩 차례대로 따라 해 봐요."),
-      sections: getMilkExchangeSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

@@ -65,6 +65,34 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 위 배열을 그대로 쓴다 — 한 글자도 안 바꿨다.
+   getMcc20CipherSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   MCC 는 C++ 이 필요 없다(선생님 "MCC는 c++ 다 없애줘") — 파이썬만 보여준다. */
+export function getMcc20CipherWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "step", ko: "규칙을 한 번 적용한 표", en: "table for one application of the rule" },
+      { v: "after", ko: "K 번 적용한 뒤의 표", en: "table after K applications" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What should we output? The message after applying the shuffle K times. This contest has no fixed input format — S, K, and the shuffle rule (A turns into B) are given as fixed values.",
+        "무엇을 출력해야 하나요? 규칙을 K 번 적용한 메시지예요.\n이 대회는 입력 형식이 따로 없어요 — S, K, 뒤섞는 규칙(A 가 B 로 바뀜)이 값으로 주어져요.") },
+      { hi: [6, 9], bubble: t(E,
+        "step[A[i]] = B[i] stores one application of the rule as a lookup table.",
+        "step[A[i]] = B[i] 는 규칙을 한 번 적용한 결과를 표 하나에 적어 둬요.") },
+      { hi: [11, 17], bubble: t(E,
+        "Rewriting the whole message K times would be slow. Instead, ask each of the 26 letters where it lands after K hops, and build the 'after' table once.",
+        "메시지를 K 번 다시 쓰면 느려요.\n대신 26 글자마다 'K 번 뛰면 어디에 도착하나?' 를 물어 'after' 표를 한 번만 만들어요.") },
+      { hi: [19, 20], bubble: t(E,
+        "Then rewrite S in a single pass using that table.",
+        "그 표로 S 를 한 번만 훑어 바꿔요.") },
+    ],
+  };
+}
+
 export function getMcc20CipherSections(E) {
   return [
     {

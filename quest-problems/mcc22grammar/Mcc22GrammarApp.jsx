@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Mcc22GrammarProgressiveCode, Mcc22GrammarSim, downloadMcc22GrammarPDF, getMcc22GrammarSections } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { Mcc22GrammarProgressiveCode, Mcc22GrammarSim, downloadMcc22GrammarPDF, getMcc22GrammarSections, getMcc22GrammarWalk } from "./components";
 import { makeMcc22GrammarCh1, makeMcc22GrammarCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -103,6 +104,7 @@ export default function Mcc22GrammarApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "sim") return <Mcc22GrammarSim E={E} />;
     if (step.type === "progressive") return <Mcc22GrammarProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "opt-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMcc22GrammarWalk(E)} accent={A} />;
     return null;
   };
 
@@ -115,6 +117,7 @@ export default function Mcc22GrammarApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "sim") return <Mcc22GrammarSim E={E} />;
     if (s.type === "progressive") return <Mcc22GrammarProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "opt-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMcc22GrammarWalk(E)} accent={A} />;
     return null;
   };
 
