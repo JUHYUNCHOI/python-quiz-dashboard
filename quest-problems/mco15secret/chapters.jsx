@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getSecretSections } from "./components";
 
 /* ================================================================
    Deep-Audit Sim: rotation check via a+a doubling
@@ -355,17 +354,12 @@ export function makeSecretCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSecretCh2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: Code — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
     {
-      type: "progressive",
-      /* 2026-09-17: narr 이 "'B in A+A' 한 줄만 확인하면 돼요" 라고 했는데
-         아래 코드는 한 줄이 아니라 슬라이딩 윈도우 반복문이다. 게다가 파이썬
-         **리스트**에서 `in` 은 부분수열 검사를 못 한다 — 실행되지 않는 코드를
-         암시하고 있었다. 실제 코드가 하는 일로 바꾼다. */
+      type: "secret-walk",
       narr: t(E,
-        "Slide an N-wide window across a+a and look for b.",
-        "a+a 위에서 N 칸짜리 창문을 밀며 b 와 같은 자리를 찾아요."),
-      sections: getSecretSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더에서 Python ↔ C++ 을 바꿀 수 있어요."),
     },
   ];
 }

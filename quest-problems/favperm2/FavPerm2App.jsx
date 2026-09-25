@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { FavPerm2ProgressiveCode, downloadFavPerm2PDF, getFavPerm2Sections } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { FavPerm2ProgressiveCode, downloadFavPerm2PDF, getFavPerm2Sections, getFavPerm2Walk } from "./components";
 import { makeFavPerm2Ch1, makeFavPerm2Ch2, makeFavPerm2Ch3 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -103,6 +104,7 @@ export default function FavPerm2App(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <FavPerm2ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "perm-walk") return <CodeWalk E={E} lang={codeLang} {...getFavPerm2Walk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -112,6 +114,7 @@ export default function FavPerm2App(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <FavPerm2ProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "perm-walk") return <CodeWalk E={E} lang={codeLang} {...getFavPerm2Walk(E, codeLang)} accent={A} />;
     return null;
   };
 

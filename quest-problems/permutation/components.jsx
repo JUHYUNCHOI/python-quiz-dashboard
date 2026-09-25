@@ -988,6 +988,67 @@ export function getPermSections(E) {
 export function PermProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#7c5cfc" />;
 }
+
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 한 글자도 안 바꾼다.
+   ⚠️ 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라 — 이 파일이
+   USACO_VERIFIED 라 그 이름 패턴은 보호 변수로 간주된다. ── */
+export function getPermWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "p", ko: "지금 시도하는 순열", en: "the permutation being tried" },
+        { v: "h", ko: "목표 힌트 리스트", en: "the target hint list" },
+        { v: "answer", ko: "찾아낸 순열(있다면)", en: "the permutation found, if any" },
+      ],
+      beats: [
+        { hi: [0, 4], bubble: t(E,
+          "What do we need first? Every arrangement of 1..N in lex order, one at a time — <algorithm>'s next_permutation gives us exactly that, we'll use it in a moment.",
+          "먼저 뭐가 필요할까요? 1..N 의 모든 순서를 사전순으로 하나씩 얻는 거예요 — <algorithm> 의 next_permutation 이 바로 그 일을 해요. 잠시 뒤에 써요.") },
+        { hi: [6, 23], bubble: t(E,
+          "A way to run Nhoj's rule on a candidate p until one element remains, returning the hints it wrote. Vectors don't shrink from the front for free, so removing p[0] means shifting everything left by one.",
+          "후보 p 에 Nhoj 규칙을 적용해서, 원소가 하나 남을 때까지 돌리고 그동안 적은 힌트를 돌려주는 함수예요.\nvector 는 앞쪽 원소를 공짜로 못 지워서, p[0] 을 지우려면 나머지를 한 칸씩 왼쪽으로 밀어요.") },
+        { hi: [25, 36], bubble: t(E,
+          "C++ has no vector-to-vector ==, so a small helper compares two hint lists one number at a time.",
+          "C++ 에는 vector 끼리 == 로 견주는 게 없어서, 작은 도우미가 힌트 두 목록을 하나씩 견줘요.") },
+        { hi: [38, 52], bubble: t(E,
+          "Now try each candidate p — next_permutation walks through every arrangement in lex order, so the first match is automatically the lex-smallest answer. If nothing ever matches, next_permutation eventually runs out and we report failure.",
+          "이제 후보 p 를 하나씩 시도해요 — next_permutation 이 사전순으로 다음 순열을 주니까, 처음 맞는 게 자동으로 사전순 최소예요.\n끝까지 하나도 안 맞으면 next_permutation 이 더 줄 게 없어지고, 실패를 알려줘요.") },
+        { hi: [54, 66], bubble: t(E,
+          "T cases. Each: read N, then N−1 hints into h.",
+          "테스트 케이스가 T 개예요. 케이스마다 N 을 읽고, 힌트 N−1 개를 h 에 담아요.") },
+        { hi: [67, 80], bubble: t(E,
+          "If findAnswer failed, print −1. Otherwise print the permutation it found.",
+          "findAnswer 가 실패했으면 −1 을 출력해요. 성공했으면 찾은 순열을 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "p", ko: "지금 시도하는 순열", en: "the permutation being tried" },
+      { v: "h", ko: "목표 힌트 리스트", en: "the target hint list" },
+    ],
+    beats: [
+      { hi: [0], bubble: t(E,
+        "What do we need first? Every arrangement of 1..N in lex order, one at a time — itertools.permutations gives us exactly that, we'll use it in a moment.",
+        "먼저 뭐가 필요할까요? 1..N 의 모든 순서를 사전순으로 하나씩 얻는 거예요 — itertools.permutations 가 바로 그 일을 해요. 잠시 뒤에 써요.") },
+      { hi: [2, 12], bubble: t(E,
+        "A way to run Nhoj's rule on a candidate p until one element remains, returning the hints it wrote.",
+        "후보 p 에 Nhoj 규칙을 적용해서, 원소가 하나 남을 때까지 돌리고 그동안 적은 힌트를 돌려주는 함수예요.") },
+      { hi: [14, 18], bubble: t(E,
+        "Now try each candidate p — in lex order, since permutations hands them out that way — and return the first one whose dismantle matches h. So the first match is automatically the lex-smallest answer. No permutation matches → the loop finishes without returning → we get None.",
+        "이제 permutations 가 사전순으로 주는 후보 p 를 하나씩 시도해서, dismantle 결과가 h 와 같은 첫 번째 것을 돌려줘요.\n사전순으로 도니까 처음 맞는 게 자동으로 사전순 최소예요.\n맞는 순열이 하나도 없으면 반복문이 그냥 끝나고, None(못 찾음)을 돌려줘요.") },
+      { hi: [20, 24], bubble: t(E,
+        "T cases. Each: read N, then N−1 hints into h, and call find_answer once.",
+        "테스트 케이스가 T 개예요. 케이스마다 N 을 읽고, 힌트 N−1 개를 h 에 담아 find_answer 를 한 번 불러요.") },
+      { hi: [25, 28], bubble: t(E,
+        "None means nothing matched, so print −1. Otherwise print the permutation it found.",
+        "None 이면 −1 을, 아니면 찾은 순열을 출력해요.") },
+    ],
+  };
+}
 /* PDF — comprehensive study guide */
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","join"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min"];

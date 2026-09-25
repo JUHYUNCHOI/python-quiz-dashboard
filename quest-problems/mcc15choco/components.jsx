@@ -243,6 +243,69 @@ export function Mcc15ChocoProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 한 글자도 안 바꾼다.
+   MCC 는 파이썬 전용(feedback_mcc_is_python_only.md) — 헤더 토글은 숨겨지지만
+   CPP 배열은 참고용으로 남겨 둔다. ── */
+export function getMcc15ChocoWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "stack", ko: "아직 짝을 못 찾은 바들", en: "bars that haven't found a partner yet" },
+        { v: "total", ko: "지금까지 가져간 초콜릿 길이", en: "the chocolate length grabbed so far" },
+      ],
+      beats: [
+        { hi: [0, 7], bubble: t(E,
+          "What do we have to hand back? The total length Bessie grabs. So first read N.",
+          "무엇을 내놓아야 하나요? Bessie 가 가져간 총 길이예요. 그러니 먼저 N 을 읽어요.") },
+        { hi: [8, 9], bubble: t(E,
+          "Keep a stack of bars that have not found a partner yet — the bar on top is the one actually sitting next to the bar we are about to read. The total needs long long: 1,000,000 bars of length 1,000,000 would overflow int.",
+          "'아직 짝을 못 찾은 바' 들을 스택에 쌓아 둬요 — 스택 맨 위가, 지금 읽는 바의 실제 왼쪽 이웃이 돼요.\n총합은 long long 이어야 해요. 길이 1,000,000 짜리 바가 1,000,000 개면 int 로는 넘쳐요.") },
+        { hi: [11, 14], bubble: t(E,
+          "For each new bar, compare it with the top of the stack — if they match, we just found a pair. Check 'not empty' first, since peeking an empty stack would crash.",
+          "새 바가 들어올 때마다 스택 맨 위와 비교해요. 둘이 같으면 짝을 찾은 거예요.\n'비었는지' 를 먼저 봐요 — 빈 스택에서 맨 위를 보면 에러가 나거든요.") },
+        { hi: [15, 17], bubble: t(E,
+          "We add 2 × bar, not bar: a pair is two bars of the same length. That is why the chain reaction is free: when 9 and 9 leave, the stack top automatically becomes 5 — the two 5s meet without us moving anything.",
+          "bar 가 아니라 2 × bar 를 더해요 — 짝은 같은 길이의 바 두 개니까요.\n그래서 연쇄가 저절로 처리돼요. 9 두 개가 빠지면 스택 맨 위가 저절로 5 가 되고, 아무것도 옮기지 않아도 5 와 5 가 만나요.") },
+        { hi: [18, 21], bubble: t(E,
+          "No match yet? Push the bar on top and keep waiting — it might match a future bar. Every bar is pushed at most once and popped at most once, so the whole scan is one pass over N bars.",
+          "아직 짝이 없으면 바를 스택 위에 쌓고 기다려요 — 나중에 올 바와 짝이 될 수도 있으니까요.\n바 하나는 최대 한 번 쌓이고 최대 한 번 빠져요. 그래서 전체가 N 번 훑기 한 번이에요.") },
+        { hi: [23, 25], bubble: t(E,
+          "Whatever is left in the stack never found a partner — total already holds the answer.",
+          "스택에 끝까지 남은 바들은 짝을 못 찾은 거예요. total 에 이미 답이 들어 있어요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "stack", ko: "아직 짝을 못 찾은 바들", en: "bars that haven't found a partner yet" },
+      { v: "total", ko: "지금까지 가져간 초콜릿 길이", en: "the chocolate length grabbed so far" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we have to hand back? The total length Bessie grabs. So first read N and the bars.",
+        "무엇을 내놓아야 하나요? Bessie 가 가져간 총 길이예요. 그러니 먼저 N 과 바들을 읽어요.") },
+      { hi: [3, 4], bubble: t(E,
+        "Keep a stack of bars that have not found a partner yet — the bar on top is the one actually sitting next to the bar we are about to read.",
+        "'아직 짝을 못 찾은 바' 들을 스택에 쌓아 둬요 — 스택 맨 위가, 지금 읽는 바의 실제 왼쪽 이웃이 돼요.") },
+      { hi: [6, 7], bubble: t(E,
+        "For each new bar, compare it with the top of the stack — if they match, we just found a pair. `stack and` checks 'not empty' first, since peeking an empty list would crash.",
+        "새 바가 들어올 때마다 스택 맨 위와 비교해요. 둘이 같으면 짝을 찾은 거예요.\n`stack and` 가 '비었는지' 를 먼저 봐요 — 빈 리스트에 stack[-1] 을 쓰면 에러가 나거든요.") },
+      { hi: [8, 10], bubble: t(E,
+        "We add 2 × bar, not bar: a pair is two bars of the same length. That is why the chain reaction is free: when 9 and 9 leave, the stack top automatically becomes 5 — the two 5s meet without us moving anything.",
+        "bar 가 아니라 2 × bar 를 더해요 — 짝은 같은 길이의 바 두 개니까요.\n그래서 연쇄가 저절로 처리돼요. 9 두 개가 빠지면 스택 맨 위가 저절로 5 가 되고, 아무것도 옮기지 않아도 5 와 5 가 만나요.") },
+      { hi: [11, 12], bubble: t(E,
+        "No match yet? Push the bar on top and keep waiting — it might match a future bar. Every bar is pushed at most once and popped at most once, so the whole scan is one pass over N bars — fast enough for N up to 1,000,000.",
+        "아직 짝이 없으면 바를 스택 위에 쌓고 기다려요 — 나중에 올 바와 짝이 될 수도 있으니까요.\n바 하나는 최대 한 번 쌓이고 최대 한 번 빠져요. 그래서 전체가 N 번 훑기 한 번이에요 — N 이 1,000,000 이어도 충분히 빨라요.") },
+      { hi: [14], bubble: t(E,
+        "Whatever is left in the stack never found a partner — total already holds the answer.",
+        "스택에 끝까지 남은 바들은 짝을 못 찾은 거예요. total 에 이미 답이 들어 있어요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

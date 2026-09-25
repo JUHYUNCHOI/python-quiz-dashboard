@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getWordProcSections, WordProcLineWrapSim } from "./components";
+import { WordProcLineWrapSim } from "./components";
 
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
@@ -617,12 +617,12 @@ export function makeWordProcCh3(E, lang = "py") {
         + "파이썬에서는 빈 리스트 `[]` 는 `if` 안에서 거짓이에요.\n"
         + "그래서 줄을 내보내지 않고, 지금 단어를 꼭 넣어요."),
     },
-    // 3-5: Complete code
+    // 3-5: Code — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
     {
-      type: "progressive",
+      type: "wordproc-walk",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드를 한 부분씩 읽어 봐요."),
-      sections: getWordProcSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더에서 Python ↔ C++ 을 바꿀 수 있어요."),
     },
   ];
 }

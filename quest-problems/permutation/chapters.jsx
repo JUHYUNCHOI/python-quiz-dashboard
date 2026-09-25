@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPermSections, DismantleSimulator, BruteForceEnumerator } from "./components";
+import { DismantleSimulator, BruteForceEnumerator } from "./components";
 
 /* ================================================================
    SOLUTION CODE — Brute force.
@@ -486,13 +486,12 @@ export function makePermCh3(E, lang = "py") {
         "Some hint lists are 'unreachable' — no permutation produces them under Nhoj's dismantle rule. We can only know after trying all N! permutations.",
         "어떤 힌트 리스트는 dismantle 규칙으로는 만들 수 없어요.\nN! 개를 다 돌려본 뒤에야 알 수 있어요."),
     },
-    // 3-3: Progressive code
+    // 3-3: Code — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
     {
-      type: "progressive",
+      type: "perm-walk",
       narr: t(E,
-        "Solution code — read it part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드예요. 한 부분씩 읽어 봐요.\n위쪽에서 Python 과 C++ 을 바꿔 볼 수 있어요."),
-      sections: getPermSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더에서 Python ↔ C++ 을 바꿀 수 있어요."),
     },
   ];
 }

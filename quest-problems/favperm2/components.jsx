@@ -25,6 +25,7 @@ import { SimNav, useTraceStep, StepHeader, NarrativePanel } from "@/components/q
 
 export {
   getPermSections as getFavPerm2Sections,
+  getPermWalk as getFavPerm2Walk,
   PermProgressiveCode as FavPerm2ProgressiveCode,
   downloadPermPDF as downloadFavPerm2PDF,
 } from "../permutation/components";

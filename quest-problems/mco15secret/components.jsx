@@ -155,6 +155,68 @@ export function SecretProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 한 글자도 안 바꾼다. ── */
+export function getSecretWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "doubled", ko: "a 를 두 번 이어붙인 것", en: "a written twice" },
+        { v: "same", ko: "i 번째 창문이 b 와 같은지", en: "whether the window at i matches b" },
+        { v: "found", ko: "같은 창문을 찾았는지", en: "whether a matching window was found" },
+      ],
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "What do we need to answer? Whether b is some rotation of a. readInts is pulled out as its own function because the same work happens twice — once for a, once for b: read one line, split it into numbers.",
+          "무엇을 답해야 할까요? b 가 a 를 돌린 것인지예요.\nreadInts 를 따로 함수로 뺀 건 같은 일을 두 번 하기 때문이에요 — a 한 번, b 한 번.\n한 줄을 읽어 숫자로 나누는 일이에요.") },
+        { hi: [19, 24], bubble: t(E,
+          "So first read the three lines that come in: the length N, then a, then b.",
+          "그래서 먼저 세 줄을 읽어요 — 길이 N, 그다음 a, 그다음 b.") },
+        { hi: [26, 31], bubble: t(E,
+          "The problem says a and b are the same length, but the code checks anyway — it costs one line. If the lengths ever differed, no amount of rotating could make them match, so in that case we already know the answer is NO.",
+          "문제는 a 와 b 의 길이가 같다고 했지만, 코드는 한 줄로 확인하고 넘어가요.\n혹시 길이가 다르면 아무리 돌려도 같아질 수 없어요.\n그래서 그럴 땐 바로 NO 예요.") },
+        { hi: [33, 36], bubble: t(E,
+          "Rotating a means taking some numbers off the front and putting them on the back. Lay a down twice in a row and every one of those rotations is already sitting there, side by side.",
+          "a 를 돌린다는 건 앞쪽 몇 개를 떼어 뒤에 붙인다는 뜻이에요.\na 를 두 번 이어 놓으면, 그렇게 돌린 모양들이 이미 나란히 놓여 있어요.") },
+        { hi: [37, 50], bubble: t(E,
+          "Take a window of length N on doubled and compare it with b, one number at a time — C++ has no list-to-list ==, so the inner loop gives up early on the first mismatch. Slide the window one step at a time; N slides is enough, since sliding N steps brings it back to where it started. The moment one window matches, we are done — break out.",
+          "doubled 위에 N 칸짜리 창문을 놓고 b 와 하나씩 견줘요 — C++ 은 목록끼리 == 로 견줄 수 없어서, 하나라도 다르면 그 자리에서 바로 그만둬요.\n한 칸씩 밀어요. N 번만 밀면 충분해요 — N 칸을 밀면 창문이 처음 자리로 돌아오니, 더 밀어도 같은 것만 또 나와요.\n한 자리에서 같아지는 순간 끝이에요 — 빠져나와요.") },
+        { hi: [51, 58], bubble: t(E,
+          "If we found a matching window, print YES. If none of them matched, print NO.",
+          "같은 창문을 찾았으면 YES 를 출력해요. 끝까지 하나도 안 맞았으면 NO 예요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "doubled", ko: "a 를 두 번 이어붙인 것", en: "a written twice" },
+      { v: "found", ko: "같은 창문을 찾았는지", en: "whether a matching window was found" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What do we need to answer? Whether b is some rotation of a. So first read the three lines that come in: the length N, then a, then b.",
+        "무엇을 답해야 할까요? b 가 a 를 돌린 것인지예요.\n그래서 먼저 세 줄을 읽어요 — 길이 N, 그다음 a, 그다음 b.") },
+      { hi: [4, 6], bubble: t(E,
+        "Rotating a means taking some numbers off the front and putting them on the back. Write a twice in a row and every one of those rotations is already sitting there, side by side.",
+        "a 를 돌린다는 건 앞쪽 몇 개를 떼어 뒤에 붙인다는 뜻이에요.\na 를 두 번 이어 적어 두면, 그렇게 돌린 모양들이 이미 나란히 놓여 있어요.") },
+      { hi: [8, 9], bubble: t(E,
+        "The problem says a and b are the same length, but the code checks anyway — it costs one line. If the lengths ever differed, no amount of rotating could make them match, so in that case we already know the answer is NO.",
+        "문제는 a 와 b 의 길이가 같다고 했지만, 코드는 한 줄로 확인하고 넘어가요.\n혹시 길이가 다르면 아무리 돌려도 같아질 수 없어요.\n그래서 그럴 땐 바로 NO 예요.") },
+      { hi: [11], bubble: t(E,
+        "Now actually lay a down twice — doubled[i:i+N] will cut out any window we need.",
+        "이제 진짜로 a 를 두 번 이어 붙여요 — doubled[i:i+N] 이 필요한 창문을 잘라내 줄 거예요.") },
+      { hi: [12, 16], bubble: t(E,
+        "Take a window of length N on doubled and compare it with b. Slide it one step at a time — N slides is enough, since sliding N steps brings the window back to where it started. The moment one window matches, we are done — break out.",
+          "doubled 위에 N 칸짜리 창문을 놓고 b 와 견줘요. 한 칸씩 밀어요.\nN 번만 밀면 충분해요 — N 칸을 밀면 창문이 처음 자리로 돌아오니, 더 밀어도 같은 것만 또 나와요.\n한 자리에서 같아지는 순간 끝이에요 — 빠져나와요.") },
+      { hi: [17, 20], bubble: t(E,
+        "If we found a matching window, print YES. If none of them matched, print NO.",
+        "같은 창문을 찾았으면 YES 를 출력해요. 끝까지 하나도 안 맞았으면 NO 예요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

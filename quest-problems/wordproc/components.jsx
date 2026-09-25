@@ -356,6 +356,70 @@ export function WordProcProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 한 글자도 안 바꾼다.
+   ⚠️ 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라 — 이 파일이
+   USACO_VERIFIED 라 그 이름 패턴은 보호 변수로 간주된다. ── */
+export function getWordProcWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "cur", ko: "지금 채우고 있는 줄", en: "the line being filled" },
+        { v: "cur_len", ko: "cur 의 글자 수 합", en: "cur's letter count so far" },
+      ],
+      beats: [
+        { hi: [0, 10], bubble: t(E,
+          "What do we need? The document, filled line by line. USACO's older contests use file I/O, so open word.in to read and word.out to write.",
+          "무엇을 답으로 내놔야 하나요? 줄마다 채워진 문서예요.\nUSACO 이전 contest 는 파일 입출력을 쓰니까, word.in 을 읽고 word.out 을 쓸 준비를 해요.") },
+        { hi: [11, 16], bubble: t(E,
+          "Read N and K, then the N words.",
+          "N 과 K 를 읽고, 이어서 단어 N 개를 읽어요.") },
+        { hi: [17, 19], bubble: t(E,
+          "The rule is already given: if adding this word still keeps the line's letter count at or below K, put it on the current line — cur. Otherwise start a new line. So we just walk the words in order and follow that rule for each one.",
+          "규칙은 문제에 이미 나와 있어요 — 이 단어를 더해도 글자 수 합이 K 를 넘지 않으면 지금 줄(cur)에 넣고, 넘으면 새 줄을 시작해요.\n그래서 단어를 순서대로 보면서 그 규칙만 그대로 따라가면 돼요.") },
+        { hi: [20, 32], bubble: t(E,
+          "For each word: if it doesn't fit, flush cur to fout and start over. Otherwise (or after flushing) add a space if the line isn't empty, then append the word.",
+          "단어마다: 안 들어가면 cur 를 fout 에 내보내고 새로 시작해요.\n아니면(또는 내보낸 뒤) 줄이 비어 있지 않을 때만 띄어쓰기를 넣고, 단어를 이어붙여요.") },
+        { hi: [33, 35], bubble: t(E,
+          "Inside the loop, we only flush a line when the NEXT word doesn't fit anymore. But after the very last word, there is no next word to trigger that check — so whatever's still in cur never gets flushed. We need one more flush right here to catch that last line.",
+          "반복문 안의 조건은 '다음 단어가 안 들어갈 때' 만 줄을 내보내요. 그런데 마지막 단어까지 넣고 나면 더는 확인할 '다음 단어' 가 없어요 — 그래서 cur 에 남은 게 그 조건으론 절대 안 나가요.\n그래서 여기서 한 번 더 내보내야 해요.") },
+        { hi: [36, 37], bubble: t(E,
+          "C++ already wrote each line to fout as it went (including the last-line flush above) — nothing left but to end the program.",
+          "C++ 은 위 마지막 줄 flush 를 포함해 그때그때 fout 에 이미 다 썼어요 — 이제 프로그램을 마무리하기만 하면 돼요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "cur_line", ko: "지금 채우고 있는 줄", en: "the line being filled" },
+      { v: "cur_len", ko: "cur_line 의 글자 수 합", en: "cur_line's letter count so far" },
+      { v: "result", ko: "완성된 줄들", en: "the finished lines" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What do we need? The document, filled line by line. USACO's older contests use file I/O, so open word.in and read it.",
+        "무엇을 답으로 내놔야 하나요? 줄마다 채워진 문서예요.\nUSACO 이전 contest 는 파일 입출력을 쓰니까, word.in 을 열어서 읽어요.") },
+      { hi: [4, 5], bubble: t(E,
+        "Read N and K from the first line, and the N words from the second.",
+        "첫 줄에서 N 과 K 를, 둘째 줄에서 단어 N 개를 읽어요.") },
+      { hi: [7, 10], bubble: t(E,
+        "The rule is already given: if adding this word still keeps the line's letter count at or below K, put it on the current line — cur_line. Otherwise start a new line. So we just walk the words in order and follow that rule for each one — no extra thinking needed.",
+        "규칙은 문제에 이미 나와 있어요 — 이 단어를 더해도 글자 수 합이 K 를 넘지 않으면 지금 줄(cur_line)에 넣고, 넘으면 새 줄을 시작해요.\n그래서 단어를 순서대로 보면서 그 규칙만 그대로 따라가면 답이 나와요.") },
+      { hi: [12, 19], bubble: t(E,
+        "For each word: if it doesn't fit and the current line isn't empty, flush cur_line into result and start over. Then add the word to (the possibly-fresh) cur_line.",
+        "단어마다: 안 들어가고 지금 줄이 비어 있지 않으면, cur_line 을 result 에 내보내고 새로 시작해요.\n그러고 나서 (새로 시작했을 수도 있는) cur_line 에 단어를 더해요.") },
+      { hi: [21, 22], bubble: t(E,
+        "Inside the loop, we only flush a line when the NEXT word doesn't fit anymore. But after the very last word, there is no next word to trigger that check — so whatever's still sitting in cur_line never gets flushed. We need one more flush, right after the loop ends, to catch that last line.",
+        "반복문 안의 조건은 '다음 단어가 안 들어갈 때' 만 줄을 내보내요. 그런데 마지막 단어까지 넣고 나면 더는 확인할 '다음 단어' 가 없어요 — 그래서 cur_line 에 남아 있는 단어들은 그 조건으론 절대 안 나가요.\n그래서 반복이 끝난 바로 뒤에, 남은 게 있으면 한 번 더 내보내야 해요.") },
+      { hi: [24, 26], bubble: t(E,
+        "The document is done now — every finished line is sitting in result, in order. Open word.out and write each line, one row at a time.",
+        "이제 문서가 다 완성됐어요 — 완성된 줄들이 순서대로 result 안에 모여 있어요.\nword.out 을 열어서 한 줄씩 적어요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

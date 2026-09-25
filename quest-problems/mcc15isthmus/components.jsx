@@ -163,6 +163,67 @@ export function Mcc15IsthmusProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 한 글자도 안 바꾼다.
+   MCC 는 파이썬 전용(feedback_mcc_is_python_only.md) — 헤더 토글은 숨겨지지만
+   CPP 배열은 참고용으로 남겨 둔다. ── */
+export function getMcc15IsthmusWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "downL", ko: "왼쪽에서부터 계속 내려간 길이", en: "descent length seen from the left" },
+        { v: "upL", ko: "왼쪽에서부터 계속 올라간 길이", en: "ascent length seen from the left" },
+        { v: "downR", ko: "오른쪽에서부터 계속 내려간 길이", en: "descent length seen from the right" },
+        { v: "upR", ko: "오른쪽에서부터 계속 올라간 길이", en: "ascent length seen from the right" },
+      ],
+      beats: [
+        { hi: [0, 10], bubble: t(E,
+          "What do we have to hand back? How many order-K peaks and valleys there are. So first take in the row of heights we'll measure runs on.",
+          "무엇을 내놓아야 하나요? order-K 봉우리와 골짜기의 개수예요.\n그러니 먼저 길이를 잴 높이들을 받아요.") },
+        { hi: [12, 27], bubble: t(E,
+          "downL[i] = downL[i-1] + 1 is the whole trick. The left neighbour already knows how far the descent runs, so we never count the same stretch twice — upL works the same way for ascents.",
+          "downL[i] = downL[i-1] + 1 이 핵심이에요.\n왼쪽 이웃이 몇 칸 내려왔는지 이미 알고 있어서, 같은 구간을 다시 세지 않아요 — upL 도 올라가는 방향으로 똑같이 해요.") },
+        { hi: [28, 39], bubble: t(E,
+          "The right-hand lengths (downR, upR) are the same idea run from the back of the array.",
+          "오른쪽 길이(downR, upR)는 같은 생각을 배열 뒤에서부터 돌린 것뿐이에요.") },
+        { hi: [41, 48], bubble: t(E,
+          "The rule 'at least K pieces of land on both sides' needs no separate check — if the land runs out, the run length simply cannot reach K. else if, not a second if: one piece of land can never be a peak and a valley at the same time.",
+          "양쪽에 K칸이 있어야 한다는 조건은 따로 확인하지 않아도 돼요. 칸이 모자라면 길이가 저절로 K 에 못 미치니까요.\n한 땅이 봉우리이면서 동시에 골짜기일 수는 없어서, if 를 하나 더 쓰지 않고 else if 를 써요.") },
+        { hi: [49, 51], bubble: t(E,
+          "Print how many peaks and valleys we counted.",
+          "봉우리·골짜기 개수를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "downL", ko: "왼쪽에서부터 계속 내려간 길이", en: "descent length seen from the left" },
+      { v: "upL", ko: "왼쪽에서부터 계속 올라간 길이", en: "ascent length seen from the left" },
+      { v: "downR", ko: "오른쪽에서부터 계속 내려간 길이", en: "descent length seen from the right" },
+      { v: "upR", ko: "오른쪽에서부터 계속 올라간 길이", en: "ascent length seen from the right" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What do we have to hand back? How many order-K peaks and valleys there are. So first take in the row of heights we'll measure runs on.",
+        "무엇을 내놓아야 하나요? order-K 봉우리와 골짜기의 개수예요.\n그러니 먼저 길이를 잴 높이들을 받아요.") },
+      { hi: [4, 15], bubble: t(E,
+        "downL[i] = downL[i-1] + 1 is the whole trick. The left neighbour already knows how far the descent runs, so we never count the same stretch twice — upL works the same way for ascents.",
+        "downL[i] = downL[i-1] + 1 이 핵심이에요.\n왼쪽 이웃이 몇 칸 내려왔는지 이미 알고 있어서, 같은 구간을 다시 세지 않아요 — upL 도 올라가는 방향으로 똑같이 해요.") },
+      { hi: [17, 28], bubble: t(E,
+        "The right-hand lengths (downR, upR) are the same idea run from the back of the array.",
+        "오른쪽 길이(downR, upR)는 같은 생각을 배열 뒤에서부터 돌린 것뿐이에요.") },
+      { hi: [30, 35], bubble: t(E,
+        "The rule 'at least K pieces of land on both sides' needs no separate check — if the land runs out, the run length simply cannot reach K. elif, not a second if: one piece of land can never be a peak and a valley at the same time, so it must not be counted twice.",
+        "양쪽에 K칸이 있어야 한다는 조건은 따로 확인하지 않아도 돼요. 칸이 모자라면 길이가 저절로 K 에 못 미치니까요.\n한 땅이 봉우리이면서 동시에 골짜기일 수는 없어요. 그래서 if 를 하나 더 쓰지 않고 elif 를 써요.") },
+      { hi: [37], bubble: t(E,
+        "Print how many peaks and valleys we counted.",
+        "봉우리·골짜기 개수를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
