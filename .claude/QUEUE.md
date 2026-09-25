@@ -42,7 +42,7 @@
 
 ---
 
-## 🔴 READY — 입출력 축 · **69 중 24 완료, 45 남음** (2026-09-25 실측)
+## 🔴 READY — 입출력 축 · **69 중 30 커밋 완료 + 18 편집 완료(미커밋), 21 진행중** (2026-09-25)
 
 ⚠️ **파일 크기 순으로 묶었다가 대회(형제) 단위로 다시 짰다.** 화면 담당 판정 —
 *"병렬 에이전트가 각자 「형제를 먼저 열어 본다」를 하면 **레이스 컨디션**이 된다.
@@ -69,29 +69,37 @@
 `lifeguards` 를 `≤ 10억` 이라 썼는데 원문은 **0~1000** 이었다.
 **「C++ 이 long long 을 쓰니까」 같은 추론으로 숫자를 만들지 마라.** 둘 다 원문으로 정정했다.
 
-### ✅ 완료 24개
+### ✅ 완료 30개 (커밋됨)
 `abcs` `billboard` `bovgenomics` `bovshuffle` `countliars` `cowevolution` `cowgym`
-`cowntrace` `crossroad1` `lifeguards` `livestock` `milkfactory` `modernart` `outofplace`
-`sleepyherd` `socialdist2` `triangles` `walkhome` `whereami` + 도는 중(`blockgame` `cowsignal`
-`sqpasture` `hoofball` `tameherd` `teleport`)
+`cowntrace` `crossroad1` `crossroad2` `crossroad3` `guessanimal` `hoofball` `lifeguards`
+`livestock` `milkfactory` `modernart` `outofplace` `shellgame` `sleepyherd` `sleepysort`
+`socialdist2` `tameherd` `teleport` `triangles` `walkhome` `whereami`
+(+ `blockgame` `cowsignal` `sqpasture`)
 ⚠️ `favperm2` 는 **오탐** — `permutation` 폴더 챕터를 재사용해 이미 카드가 있다. **손대지 마라.**
 
-### 🔴 남은 45개 — 대회 단위 묶음
+### 🟢 편집 끝났고 커밋 대기 — 18개
+`bucketlist` `mixmilk` `daisychains` `stuckinrut` `cowcollege`
+`meastraffic` `revegetation` `madscientist` `swapity` `photoshoot2` `sleepclass`
+`cowtipping` `dontbelast` `photoshoot20` `race` `stalling` `uddered`
+`clockfence` `comfycows` `yearcow` `hungrycow` `mooloo`
+(담당 에이전트가 보고를 올리면 메인 세션이 검사기 돌리고 대회 단위로 커밋한다)
+
+### 🔴 아직 도는 중 — 대회 단위 묶음
 | 대회 | quest | 상태 |
 |---|---|---|
-| Feb 2021 | clockfence comfycows yearcow | READY 도는중 |
-| Feb 2023 | hungrycow mooloo stampgrid | READY 도는중 |
-| Jan 2019 | guessanimal shellgame sleepysort | READY 도는중 |
-| Feb 2017 | crossroad2 crossroad3 | READY 도는중 |
-| Dec 2018 | bucketlist mixmilk | READY |
-| Dec 2020 | daisychains stuckinrut | READY |
-| Dec 2022 | cowcollege feedcows | READY |
-| Feb 2019 | meastraffic revegetation | READY |
-| Feb 2020 | madscientist swapity | READY |
-| Feb 2022 | photoshoot2 sleepclass | READY |
-| Jan 2017 | cowtipping dontbelast | READY |
-| Jan 2020 | photoshoot20 race | READY |
-| Jan 2021 | stalling uddered | READY |
+| Feb 2021 | clockfence comfycows yearcow | READY 편집끝·보고대기 |
+| Feb 2023 | hungrycow mooloo **stampgrid** | READY 도는중 |
+| Jan 2019 | guessanimal shellgame sleepysort | DONE |
+| Feb 2017 | crossroad2 crossroad3 | DONE |
+| Dec 2018 | bucketlist mixmilk | READY 편집끝·보고대기 |
+| Dec 2020 | daisychains stuckinrut | READY 편집끝·보고대기 |
+| Dec 2022 | cowcollege **feedcows** | READY 도는중 |
+| Feb 2019 | meastraffic revegetation | READY 편집끝·보고대기 |
+| Feb 2020 | madscientist swapity | READY 편집끝·보고대기 |
+| Feb 2022 | photoshoot2 sleepclass | READY 편집끝·보고대기 |
+| Jan 2017 | cowtipping dontbelast | READY 편집끝·보고대기 |
+| Jan 2020 | photoshoot20 race | READY 편집끝·보고대기 |
+| Jan 2021 | stalling uddered | READY 편집끝·보고대기 |
 | Jan 2022 | herdle nontrans | READY |
 | Jan 2023 | leaders mooops | READY |
 | Open 2018 | familytree teamttt | READY |
