@@ -39,7 +39,17 @@
 
 ```bash
 python3 scripts/check-docs.py           # 목차가 가리키는 파일이 실제로 있나
-python3 scripts/check-frozen.py         # 건드리면 안 되는 파일을 건드렸나 (커밋 전)
+python3 scripts/check-frozen.py         # 건드리면 안 되는 파일을 건드렸나
+                                        #   ⭐ 2026-09-25: **이제 pre-commit 걸쇠다.** 손으로 안 돌려도 된다.
+                                        #   그전엔 자문 도구라 어느 훅에도 없었고, 그 틈으로 동결 quest 의
+                                        #   USACO_VERIFIED 코드를 건드린 커밋이 나갔다가 되돌려졌다.
+                                        #   동결 목록의 1차 소스는 이제 **저장소 안** `scripts/frozen-quests.json` 이다
+                                        #   (밖에 있으면 못 읽을 때 **조용히 통과**했다 — fail-closed 로 뒤집었다).
+                                        #   우회는 `.claude/WORK.md` 의 **고정 마커** 한 줄뿐:
+                                        #     `### ✅ 동결 승인: <quest-id> (<날짜>) — 범위: <한 줄>`
+                                        #   ⛔ USACO_VERIFIED 는 **마커로 안 뚫린다** — 재제출이 필요한 종류라서다.
+                                        #   ⚠️ 판정은 **파일이 아니라 보호 변수(`SOLUTION_CODE`·`*_PY`·`*_CPP`) 단위**다.
+                                        #     자막 한 줄만 고쳤으면 「표시 부분만」이라 안 막는다.
 python3 scripts/check-boasted-function.py  # 화면이 자랑하는 함수를 코드가 **실제로 쓰나**
                                         #   2026-09-22: "list, map, sorted 덕분에 짧아요" 라고 써 놓고
                                         #   안 쓰는 자리가 **172건·quest 86개**. 학생 둘이 각각 알아챘다.
@@ -143,6 +153,19 @@ python3 scripts/check-codeblock-isen.py <id>                  # <CodeBlock> 호�
                                                             #   ·86곳 + 그 밖 quest 89개·196곳에서 실측 — lc303 으로 실제
                                                             #   브라우저에서 재현·수정 확인함). 0건이 결백은 아니다 — `CodeReveal`
                                                             #   처럼 컴포넌트 내부에서 부르는 자리는 안 본다.
+python3 scripts/check-required-vs-code.py                     # ⭐ quest 코드가 **쓰는** 선수개념과 `lib/quest-meta.ts` 의
+                                                            #   `concepts_required` 에 **적힌** 것이 어긋나나.
+                                                            #   ⚠️ 이 값은 장식이 아니다 — `app/quest/page.tsx` 의 `isReady()`,
+                                                            #   `lib/concept-graph.ts` 의 `readyQuests()`, `QuestCompletionCard`
+                                                            #   가 읽어서 **「지금 풀 준비됨」을 띄운다.** 빠져 있으면
+                                                            #   **준비 안 된 학생에게 그 문제를 추천한다.**
+                                                            #   2026-09-25: `mooin3` 이 `chr(c+97)` 를 쓰는데 required 는
+                                                            #   `["loop","string-basics"]` 뿐이었고, 학생이 그 코드 쪽에서
+                                                            #   **"완전히 막혔다"** 고 했다. 실측 **23곳** → 0곳으로 만들었다.
+                                                            #   ⚠️ **빈 배열이 제일 위험하다** — `readyQuests()` 의
+                                                            #   `required.every(...)` 는 **빈 배열에서 항상 true** 라
+                                                            #   **아무에게나 추천**한다. 그런 quest 가 14개였다.
+                                                            #   pre-commit 에 **경고로만** 걸려 있다(0곳이 유지되면 하드 블록).
 python3 scripts/check-taught-vs-final-code.py <id>            # 화면 코드 블록이 **가르치는** 함수를 🔒 최종 코드가 쓰나
                                                             #   (`check-boasted-function.py` 와 다른 층 — 그건 자랑 *문장*만
                                                             #   본다. 이건 학생에게 **직접 보여준 코드 줄**과 대조한다)
