@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getDroughtSections, FeedPairSim } from "./components";
+import { FeedPairSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (4 steps)
@@ -168,13 +168,12 @@ export function makeDroughtCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeDroughtCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: Code walk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14)
     {
-      type: "progressive",
+      type: "drought-walk",
       narr: t(E,
         "Going left to right, how many times we feed each pair is decided for us.",
         "왼쪽부터 차례로 보면 각 쌍에 몇 번 먹일지가 저절로 정해져요."),
-      sections: getDroughtSections(E),
     },
   ];
 }

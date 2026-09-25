@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getExplodingArrowSections } from "./components";
 
 const A = "#f97316";      // orange accent
 const P = "#7c3aed";      // purple secondary
@@ -416,12 +415,11 @@ export function makeExplodingArrowCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: code walk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14)
     {
-      type: "progressive",
+      type: "explodingarrow-walk",
       narr: t(E,
         "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
-      sections: getExplodingArrowSections(E),
     },
   ];
 }

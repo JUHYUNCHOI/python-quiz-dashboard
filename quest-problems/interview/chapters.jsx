@@ -1,68 +1,12 @@
 import { C, t } from "@/components/quest/theme";
-import { getInterviewSections } from "./components";
+import { getInterviewWalk } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import heapq",
-  "",
-  "N, K = map(int, input().split())",
-  "times = list(map(int, input().split()))",
-  "",
-  "# min-heap: (finish_time, counter_id)",
-  "heap = []",
-  "for i in range(K):",
-  "    heapq.heappush(heap, (times[i], i))",
-  "",
-  "# For cow K..N-1, assign to earliest counter",
-  "assignment = list(range(K))  # first K cows → counters 0..K-1",
-  "for i in range(K, N):",
-  "    finish, counter = heapq.heappop(heap)",
-  "    assignment.append(counter)",
-  "    heapq.heappush(heap, (finish + times[i], counter))",
-  "",
-  "# Find when Bessie (last cow, index N-1) finishes",
-  "# Actually: which counter does cow N-1 go to?",
-  "# Bessie's start time = when her counter becomes free",
-  "# All cows that could give same result as Bessie",
-  "bessie_counter = assignment[N-1]",
-  "",
-  "# Find Bessie's start time",
-  "# Simulate again tracking start times",
-  "heap2 = []",
-  "for i in range(K):",
-  "    heapq.heappush(heap2, (times[i], i))",
-  "",
-  "start_times = [0] * N",
-  "for i in range(K, N):",
-  "    finish, counter = heapq.heappop(heap2)",
-  "    start_times[i] = finish",
-  "    heapq.heappush(heap2, (finish + times[i], counter))",
-  "",
-  "bessie_start = start_times[N-1]",
-  "",
-  "# Which counters have the same free time as Bessie's start?",
-  "# Those are the ones Bessie could have gone to",
-  "result = []",
-  "# Recompute free times just before Bessie arrives",
-  "heap3 = []",
-  "for i in range(K):",
-  "    heapq.heappush(heap3, (times[i], i))",
-  "for i in range(K, N-1):",
-  "    finish, counter = heapq.heappop(heap3)",
-  "    heapq.heappush(heap3, (finish + times[i], counter))",
-  "",
-  "# Check all counters with min finish time",
-  "min_finish = heap3[0][0]",
-  "for ft, cid in heap3:",
-  "    if ft == min_finish:",
-  "        result.append(cid + 1)",
-  "",
-  "result.sort()",
-  "print(len(result))",
-  "print(' '.join(map(str, result)))",
-];
+/* 2026-09-25: 여기 있던 SOLUTION_CODE(export const) 를 지웠다 — export 만 되고
+   어디서도 import 되지 않는 죽은 사본이었다(오직 이 파일의 `_legacyCode:` 필드
+   하나가 참조했는데 그 필드도 App.jsx 어디서도 안 읽힌다). 게다가 **틀린 옛
+   알고리즘**이었다 — components.jsx 헤더가 말하듯 "예전엔 마지막 동점만 봐서
+   답을 빠뜨렸다"; 지금 화면에 보이는 코드는 components.jsx 의 IV_FULL_PY/CPP 다.
+   백업이 아니라 함정이었다 (explodingarrow 에서 2026-09-17 에 같은 판정: '지운다'). */
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -332,11 +276,9 @@ export function makeInterviewCh3(E, lang = "py") {
         "가장 빠른 종료 시간은 5 라서 지금은 카운터 0과 2가 묶여요. 그런데 이게 항상 다는 아니에요 — 둘 중 하나가 예전에 다른 카운터와도 동점이었다면, 그 카운터도 답에 들어가요."),
     },
     {
-      type: "progressive",
+      type: "interview-walk",
       narr: t(E,
         "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 부분별로 읽어 봐요 (위에서 Python ↔ C++ 바꾸기)."),
-      sections: getInterviewSections(E),
-      _legacyCode: SOLUTION_CODE,
     },
     {
       type: "runner",

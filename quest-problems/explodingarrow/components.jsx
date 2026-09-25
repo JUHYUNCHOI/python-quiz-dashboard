@@ -165,6 +165,52 @@ const SEC1_CPP = FULL_CPP.slice(0, 20);  // #include ~ isqrtll (+빈 줄)
 const SEC2_CPP = FULL_CPP.slice(20, 60); // "bool feasible(...)" ~ 닫는 "}" (+빈 줄)
 const SEC3_CPP = FULL_CPP.slice(60);     // "int main() {" ~ 끝
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로 참조**한다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라. ── */
+export function getExplodingArrowWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "feasible(X)", ko: "화살 K개로 X 를 만들 수 있나", en: "can K arrows finish everyone at power X?" },
+        { v: "VAL / D1 / D2", ko: "포물선 데미지를 O(1)로 더하는 2차 차분 배열", en: "2nd-order diff array adding parabola damage in O(1)" },
+      ],
+      beats: [
+        { hi: [0, 19], bubble: t(E,
+          "We don't test damage — we test the ANSWER. 'Can arrows of power X finish the job with ≤ K arrows?' is easier: bigger X → easier, so the yes/no flips exactly once. Binary-search that boundary.\n\nhi starts big enough: (a[j] + j*j + M - 1)/M is the smallest X that could kill target j all by itself — the true answer never exceeds the largest of these.\n\nlong long everywhere: M, K, a[i] reach 1e9 and M*X can overflow 32-bit ints.",
+          "데미지를 시험하는 게 아니라 정답 X 를 시험해요. '힘 X 짜리 화살로 K 개 안에 다 끝낼 수 있나?' 는 판단이 쉬워요 — X 가 커질수록 쉬워지니 '예/아니오' 가 딱 한 번 뒤집혀요. 그 경계를 이분 탐색해요.\n\nhi 는 충분히 크게 잡아요. (a[j] + j*j + M - 1)/M 은 j 를 혼자서 없앨 최소 X 예요 — 정답은 이 값들 중 최댓값을 넘지 않아요.\n\n전부 long long 으로 써요. M, K, a[i] 가 1e9 까지라 M*X 는 32비트를 넘칠 수 있어요.") },
+        { hi: [20, 59], bubble: t(E,
+          "Sweep left to right. A target still alive here MUST be finished by an arrow fired at or before it — and firing right HERE reaches the farthest to the right, so it's never worse. Fire as many arrows as deficit ÷ (M·X) rounded up — one more if there is any remainder.\n\nAn arrow's damage max(0, M·X − (d×d)) is a parabola in the distance d. Adding a parabola to a range is O(1) with a 2nd-order difference array: val/slope/accel roll it forward, and one cancellation event at p = x+L+1 clamps the tail to 0. Whole check: O(N).\n\nisqrtll gives L = the square root of (M·X−1), rounded down — the largest distance where M·X − (d×d) is still positive.",
+          "왼쪽부터 훑어요. 지금 살아있는 표적은 반드시 여기(또는 그 전)에서 쏜 화살로 끝내야 해요 — 그런데 바로 여기서 쏘면 오른쪽으로 가장 멀리 닿으니 절대 손해가 아니에요. 그 자리에서 deficit ÷ (M·X) 를 올림한 수만큼 쏴요 — 나머지가 있으면 한 발 더예요.\n\n화살의 데미지 max(0, M·X − (d×d)) 는 거리 d 에 대한 포물선이에요. 포물선을 구간에 더하는 건 2차 차분 배열을 쓰면 O(1) 이에요. val/slope/accel 이 앞으로 굴려주고, p = x+L+1 에서 취소 이벤트 하나로 꼬리를 0 으로 잘라요. 그래서 검사 전체가 O(N) 이에요.\n\nisqrtll 이 M·X−1 의 제곱근을 소수점 버려서 L 로 줘요 — M·X − (d×d) 이 아직 양수인 가장 먼 거리예요.") },
+        { hi: [60, 82], bubble: t(E,
+          "feasible(mid) True → the answer is ≤ mid, so pull hi down; False → push lo up. lo == hi is the smallest feasible X.",
+          "feasible(mid) 가 True 면 정답 ≤ mid 이니 hi 를 내리고, False 면 lo 를 올려요. lo == hi 가 되면 그게 가능한 가장 작은 X 예요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "feasible(X)", ko: "화살 K개로 X 를 만들 수 있나", en: "can K arrows finish everyone at power X?" },
+      { v: "VAL / D1 / D2", ko: "포물선 데미지를 O(1)로 더하는 2차 차분 배열", en: "2nd-order diff array adding parabola damage in O(1)" },
+    ],
+    beats: [
+      { hi: [0, 10], bubble: t(E,
+        "We don't test damage — we test the ANSWER. 'Can arrows of power X finish the job with ≤ K arrows?' is easier: bigger X → easier, so the yes/no flips exactly once. Binary-search that boundary.\n\nhi starts big enough: (a[j] + j*j + M - 1)//M is the smallest X that could kill target j all by itself — the true answer never exceeds the largest of these.",
+        "데미지를 시험하는 게 아니라 정답 X 를 시험해요. '힘 X 짜리 화살로 K 개 안에 다 끝낼 수 있나?' 는 판단이 쉬워요 — X 가 커질수록 쉬워지니 '예/아니오' 가 딱 한 번 뒤집혀요. 그 경계를 이분 탐색해요.\n\nhi 는 충분히 크게 잡아요. (a[j] + j*j + M - 1)//M 은 j 를 혼자서 없앨 최소 X 예요 — 정답은 이 값들 중 최댓값을 넘지 않아요.") },
+      { hi: [11, 45], bubble: t(E,
+        "Sweep left to right. A target still alive here MUST be finished by an arrow fired at or before it — and firing right HERE reaches the farthest to the right, so it's never worse. Fire as many arrows as deficit ÷ (M·X) rounded up — one more if there is any remainder.\n\nAn arrow's damage max(0, M·X − (d×d)) is a parabola in the distance d. Adding a parabola to a range is O(1) with a 2nd-order difference array: val/slope/accel roll it forward, and one cancellation event at p = x+L+1 clamps the tail to 0. Whole check: O(N).\n\nused > K means even this greedy (which is optimal) can't do it → X is too small, return False.",
+        "왼쪽부터 훑어요. 지금 살아있는 표적은 반드시 여기(또는 그 전)에서 쏜 화살로 끝내야 해요 — 그런데 바로 여기서 쏘면 오른쪽으로 가장 멀리 닿으니 절대 손해가 아니에요. 그 자리에서 deficit ÷ (M·X) 를 올림한 수만큼 쏴요 — 나머지가 있으면 한 발 더예요.\n\n화살의 데미지 max(0, M·X − (d×d)) 는 거리 d 에 대한 포물선이에요. 포물선을 구간에 더하는 건 2차 차분 배열을 쓰면 O(1) 이에요. val/slope/accel 이 앞으로 굴려주고, p = x+L+1 에서 취소 이벤트 하나로 꼬리를 0 으로 잘라요. 그래서 검사 전체가 O(N) 이에요.\n\nused > K 면 제일 좋은 이 그리디로도 안 된다는 뜻이에요 → X 가 너무 작으니 False 를 돌려줘요.") },
+      { hi: [46, 56], bubble: t(E,
+        "feasible(mid) True → the answer is ≤ mid, so pull hi down; False → push lo up. lo == hi is the smallest feasible X.",
+        "feasible(mid) 가 True 면 정답 ≤ mid 이니 hi 를 내리고, False 면 lo 를 올려요. lo == hi 가 되면 그게 가능한 가장 작은 X 예요.") },
+    ],
+  };
+}
+
 export function getExplodingArrowSections(E) {
   return [
     {

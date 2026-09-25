@@ -538,6 +538,52 @@ const LM_FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 LM_FULL_PY/LM_FULL_CPP 를 **그대로 참조**한다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라. ── */
+export function getLogicalMoosWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = LM_FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "preAnd / preOr", ko: "토큰 앞의 AND묶음값 / 이미 끝난 묶음들의 OR", en: "AND-chain-so-far / OR of chains already closed, before this token" },
+        { v: "sufAnd / sufOr", ko: "토큰 뒤도 같은 방식으로", en: "the same, but looking after this token" },
+      ],
+      beats: [
+        { hi: [0, 11], bubble: t(E,
+          "Read N tokens — they alternate value, op, value, op, ... (so length N is odd). vector<string> reads each token with cin >> word.",
+          "낱말 N 개를 읽어요. 값, and/or, 값, ... 이 번갈아 나와요 (그래서 N 은 홀수예요).\nvector<string> 에 cin >> word 로 낱말을 하나씩 읽어요.") },
+        { hi: [13, 49], bubble: t(E,
+          "Walk left-to-right. 'result' = OR of chains already closed; 'group' = AND-so-far of the open chain. Save both BEFORE each token — that's the state we'd need if this token started a replacement.\n\nThen mirror the same idea scanning right-to-left, so we also know the state right AFTER each token.\n\nvector<bool> works the same way, just with true/false and &&/||.",
+          "왼쪽에서 오른쪽으로 가요. result 는 이미 끝난 묶음들의 OR 값, group 은 지금 묶음의 AND 값이에요. 이 값을 각 낱말을 보기 '전'에 저장해 둬요 — 그 낱말부터 바꾼다면 필요한 상태거든요.\n\n같은 방식을 오른쪽에서 왼쪽으로도 반복해서, 각 낱말 '다음'의 상태도 구해 둬요.\n\nvector<bool> 로 똑같이 담고, true/false 와 &&/|| 를 써요.") },
+        { hi: [51, 80], bubble: t(E,
+          "l and r sit inside one AND-chain. preAnd[l] AND the replacement AND sufAnd[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever already closed before (preOr[l]) and after (sufOr[r]) to get the whole expression's value.\n\nTwo passes (O(N)) precompute everything once. Every query then costs O(1) — no per-query rebuilding at all. Total time: O(N + Q), fast enough even at N, Q up to 200,000.",
+          "l 과 r 은 같은 AND 묶음 안에 있어요. preAnd[l] 과 교체값과 sufAnd[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n\n그 값을 앞에서 끝난 묶음(preOr[l]), 뒤에서 끝난 묶음(sufOr[r]) 과 OR 하면 전체 식의 값이에요.\n\n두 번의 훑기(O(N))로 모든 걸 미리 구해요. 그 다음 물음은 하나하나 O(1) 이에요 — 다시 만드는 과정이 없어요.\n전체 계산량은 O(N + Q) 예요. N, Q 가 20만이어도 충분히 빨라요.") },
+      ],
+    };
+  }
+  const code = LM_FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "pre_and / pre_or", ko: "토큰 앞의 AND묶음값 / 이미 끝난 묶음들의 OR", en: "AND-chain-so-far / OR of chains already closed, before this token" },
+      { v: "suf_and / suf_or", ko: "토큰 뒤도 같은 방식으로", en: "the same, but looking after this token" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "Read N tokens — they alternate value, op, value, op, ... (so length N is odd). input().split() splits on whitespace into a list of strings.",
+        "낱말 N 개를 읽어요. 값, and/or, 값, ... 이 번갈아 나와요 (그래서 N 은 홀수예요).\ninput().split() 이 띄어쓰기로 잘라서 낱말 목록을 만들어요.") },
+      { hi: [3, 39], bubble: t(E,
+        "Walk left-to-right. 'result' = OR of chains already closed; 'group' = AND-so-far of the open chain. Save both BEFORE each token — that's the state we'd need if this token started a replacement.\n\nThen mirror the same idea scanning right-to-left, so we also know the state right AFTER each token.\n\nFour plain lists (pre_and, pre_or, suf_and, suf_or) hold all the state.",
+        "왼쪽에서 오른쪽으로 가요. result 는 이미 끝난 묶음들의 OR 값, group 은 지금 묶음의 AND 값이에요. 이 값을 각 낱말을 보기 '전'에 저장해 둬요 — 그 낱말부터 바꾼다면 필요한 상태거든요.\n\n같은 방식을 오른쪽에서 왼쪽으로도 반복해서, 각 낱말 '다음'의 상태도 구해 둬요.\n\n리스트 네 개(pre_and, pre_or, suf_and, suf_or)에 상태를 담아요.") },
+      { hi: [41, 58], bubble: t(E,
+        "l and r sit inside one AND-chain. pre_and[l] AND the replacement AND suf_and[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever already closed before (pre_or[l]) and after (suf_or[r]) to get the whole expression's value.\n\nTwo passes (O(N)) precompute everything once. Every query then costs O(1) — no per-query rebuilding at all. Total time: O(N + Q), fast enough even at N, Q up to 200,000.",
+        "l 과 r 은 같은 AND 묶음 안에 있어요. pre_and[l] 과 교체값과 suf_and[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n\n그 값을 앞에서 끝난 묶음(pre_or[l]), 뒤에서 끝난 묶음(suf_or[r]) 과 OR 하면 전체 식의 값이에요.\n\n두 번의 훑기(O(N))로 모든 걸 미리 구해요. 그 다음 물음은 하나하나 O(1) 이에요 — 다시 만드는 과정이 없어요.\n전체 계산량은 O(N + Q) 예요. N, Q 가 20만이어도 충분히 빨라요.") },
+    ],
+  };
+}
+
 export function getLogicalMoosSections(E) {
   return [
     {

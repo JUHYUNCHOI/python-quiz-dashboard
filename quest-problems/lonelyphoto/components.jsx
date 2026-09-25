@@ -413,6 +413,50 @@ const LP_FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 LP_FULL_PY/LP_FULL_CPP 를 **그대로 참조**한다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라. ── */
+export function getLonelyPhotoWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = LP_FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "left / right", ko: "i 왼쪽·오른쪽에 붙은 반대 품종 수", en: "opposite-breed cows touching i on each side" },
+      ],
+      beats: [
+        { hi: [0, 9], bubble: t(E,
+          "What do we need to produce? The total count of lonely photos.\nWe'll get there by standing at each cow — so first read N and the G/H string.\n\ncin >> string reads a whitespace-delimited token cleanly.",
+          "무엇을 내놓아야 할까요? 외로운 사진의 총 개수예요.\n소 하나하나에 서서 양옆을 세는 방법으로 구할 거예요. 그러니 먼저 길이 N 과 G/H 문자열을 읽어요.\n\ncin >> string 이면 문자열을 그대로 읽어 와요.") },
+        { hi: [11, 26], bubble: t(E,
+          "Treat each cow i as the lonely one. Count opposite-breed cows that touch i directly on each side.\n\nStop the moment the breed changes — only the run immediately next to i can extend a substring where i stays the only one of its breed.\n\nCombine the bound check with the equality check in the for-loop condition.",
+          "소 i 를 외로운 한 마리로 보고, i 에 바로 붙어 있는 반대 품종 소가 왼쪽·오른쪽에 몇 마리인지 세요.\n\n품종이 바뀌는 자리에서 멈춰요. i 에 바로 붙은 구간까지만 'i 만 자기 품종' 이 유지되거든요.\n\n범위를 벗어났는지와 품종이 같은지를 for 조건에 같이 적어요.") },
+        { hi: [27, 33], bubble: t(E,
+          "left = opposite cows touching i on the left, right = opposite cows touching i on the right.\n\nWe need length ≥ 3 with exactly one cow of i's breed. Three cases: ≥1 on each side, ≥2 on one side only. Sum is left·right + max(0, left-1) + max(0, right-1).\n\nUse 0LL to keep max() in long long territory and avoid narrowing. Worst-case time per i is O(N), so overall O(N²) — fine for Bronze.",
+          "left 는 i 왼쪽에 붙은 반대 품종 수, right 는 i 오른쪽에 붙은 반대 품종 수예요.\n\n묶음은 3 마리 이상이고 i 품종이 딱 한 마리여야 해요. 그래서 경우가 셋이에요.\n양쪽에서 1 마리씩 가져오거나, 왼쪽에서만 2 마리, 오른쪽에서만 2 마리예요.\n그래서 합은 left·right + max(0, left-1) + max(0, right-1) 이에요.\n\nmax() 결과를 long long 으로 두려고 0 대신 0LL 을 써요.\n소 하나마다 길게는 N 칸까지 보니 모두 O(N²) 번 일해요. Bronze 문제에는 넉넉해요.") },
+      ],
+    };
+  }
+  const code = LP_FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "left / right", ko: "i 왼쪽·오른쪽에 붙은 반대 품종 수", en: "opposite-breed cows touching i on each side" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we need to produce? The total count of lonely photos.\nWe'll get there by standing at each cow — so first read N and the G/H string.\n\ninput().strip() removes any trailing newline.",
+        "무엇을 내놓아야 할까요? 외로운 사진의 총 개수예요.\n소 하나하나에 서서 양옆을 세는 방법으로 구할 거예요. 그러니 먼저 길이 N 과 G/H 문자열을 읽어요.\n\ninput().strip() 을 쓰면 줄 끝의 줄바꿈이 지워져요.") },
+      { hi: [3, 22], bubble: t(E,
+        "Treat each cow i as the lonely one. Count opposite-breed cows that touch i directly on each side.\n\nStop the moment the breed changes — only the run immediately next to i can extend a substring where i stays the only one of its breed.\n\nFirst check s[i-1] != s[i]; only then walk further left while the breed stays the same.",
+        "소 i 를 외로운 한 마리로 보고, i 에 바로 붙어 있는 반대 품종 소가 왼쪽·오른쪽에 몇 마리인지 세요.\n\n품종이 바뀌는 자리에서 멈춰요. i 에 바로 붙은 구간까지만 'i 만 자기 품종' 이 유지되거든요.\n\n먼저 s[i-1] != s[i] 인지 봐요. 맞으면 같은 품종이 이어지는 동안만 더 왼쪽으로 가요.") },
+      { hi: [23, 27], bubble: t(E,
+        "left = opposite cows touching i on the left, right = opposite cows touching i on the right.\n\nWe need length ≥ 3 with exactly one cow of i's breed. Three cases: ≥1 on each side, ≥2 on one side only. Sum is left·right + max(0, left-1) + max(0, right-1).\n\nmax(0, x - 1) handles the case where there are < 2 cows available. Worst-case time per i is O(N), so overall O(N²) — fine for Bronze.",
+        "left 는 i 왼쪽에 붙은 반대 품종 수, right 는 i 오른쪽에 붙은 반대 품종 수예요.\n\n묶음은 3 마리 이상이고 i 품종이 딱 한 마리여야 해요. 그래서 경우가 셋이에요.\n양쪽에서 1 마리씩 가져오거나, 왼쪽에서만 2 마리, 오른쪽에서만 2 마리예요.\n그래서 합은 left·right + max(0, left-1) + max(0, right-1) 이에요.\n\n한쪽이 2 마리도 안 될 때는 max(0, x - 1) 이 0 이 되어 걸러 줘요.\n소 하나마다 길게는 N 칸까지 보니 모두 O(N²) 번 일해요. Bronze 문제에는 넉넉해요.") },
+    ],
+  };
+}
+
 export function getLonelyPhotoSections(E) {
   return [
     {

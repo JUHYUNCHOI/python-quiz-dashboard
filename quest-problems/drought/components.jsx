@@ -239,6 +239,58 @@ const FULL_CPP = [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 FULL_PY/FULL_CPP 를 **그대로 참조**한다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라. ── */
+export function getDroughtWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "f", ko: "모두가 도달할 마지막 배고픔 값", en: "the final hunger every cow lands on" },
+        { v: "o[i]", ko: "쌍 (i, i+1) 에 먹인 횟수", en: "how many times we fed pair (i, i+1)" },
+      ],
+      beats: [
+        { hi: [0, 29], bubble: t(E,
+          "First, what is the final hunger f? The alternating sum (+ - + - ...) pins it down — there is only one f that can work.\n\nIf N is even, f must land exactly on 0; if N is odd, f must be 0 or more. Anything else means no feeding plan can work, so answer -1 right away.",
+          "먼저 마지막 배고픔 f 부터 정해요.\n교대합(+ − + − …) 이 f 를 하나로 못 박아 줘요.\n\nN 이 짝수면 f 가 정확히 0 이어야 하고, 홀수면 f 가 0 이상이어야 해요.\n그렇지 않으면 어떻게 먹여도 답이 안 나와서 바로 -1 이에요.") },
+        { hi: [30, 40], bubble: t(E,
+          "Once f is fixed, how many times do we feed pair (i, i+1)? Walking left to right forces it: o[i] = h[i] - f - o[i-1].\nIf any o[i] comes out negative, this f is impossible — return -1.",
+          "f 가 정해지면 쌍 (i, i+1) 에 몇 번 먹일지도 따라 정해져요.\n왼쪽부터 보면 o[i] = h[i] − f − o[i−1] 이에요.\no[i] 가 음수로 나오면 불가능하다는 뜻이라 -1 을 돌려줘요.") },
+        { hi: [41, 57], bubble: t(E,
+          "Why adjust when N is even? f was free to pick, so we may lower every even-indexed o[i] by the same amount without breaking anything — so subtract their minimum to spend as few bags as possible.\n\nSo the answer is 2 * sum(o): one feeding costs 2 bags (one cow each), and o[i] is how many times we fed the pair (i, i+1).",
+          "왜 N 이 짝수일 때 더 손봐야 할까요?\nf 를 자유롭게 고를 수 있어서, 짝수 자리 o[i] 를 전부 같은 만큼 줄여도 문제없어요.\n그래서 그중 최솟값만큼 다 같이 빼서 봉지를 최대한 적게 써요.\n\n그래서 답은 2 * sum(o) 예요.\n한 번 먹일 때마다 봉지 2개(소 한 마리씩)가 쓰이고,\no[i] 는 쌍 (i, i+1) 에 먹인 횟수거든요.") },
+        { hi: [58, 72], bubble: t(E,
+          "Why solve cases one at a time? Each test case is a completely different row of cows. So read T, then solve and print exactly one answer per case.\n\nvector<long long> stores hunger values because they can be up to 1e9 and sums grow large. while (T--) loops over all test cases; solve() is called once per case.",
+          "왜 케이스마다 따로 풀까요? 각 테스트 케이스는 서로 다른 소들의 줄이라서예요.\n그래서 T 를 읽고, 케이스마다 따로 풀어 한 줄에 하나씩 답을 출력해요.\n\nvector<long long> 에 배고픔 값을 담아요 — 값이 최대 1e9 라 합이 커질 수 있거든요.\nwhile (T--) 로 모든 테스트 케이스를 돌아요. 케이스마다 solve() 를 한 번씩 불러요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "f", ko: "모두가 도달할 마지막 배고픔 값", en: "the final hunger every cow lands on" },
+      { v: "o[i]", ko: "쌍 (i, i+1) 에 먹인 횟수", en: "how many times we fed pair (i, i+1)" },
+    ],
+    beats: [
+      { hi: [0, 19], bubble: t(E,
+        "First, what is the final hunger f? The alternating sum (+ - + - ...) pins it down — there is only one f that can work.\n\nIf N is even, f must land exactly on 0; if N is odd, f must be 0 or more. Anything else means no feeding plan can work, so answer -1 right away.",
+        "먼저 마지막 배고픔 f 부터 정해요.\n교대합(+ − + − …) 이 f 를 하나로 못 박아 줘요.\n\nN 이 짝수면 f 가 정확히 0 이어야 하고, 홀수면 f 가 0 이상이어야 해요.\n그렇지 않으면 어떻게 먹여도 답이 안 나와서 바로 -1 이에요.") },
+      { hi: [20, 28], bubble: t(E,
+        "Once f is fixed, how many times do we feed pair (i, i+1)? Walking left to right forces it: o[i] = h[i] - f - o[i-1].\nIf any o[i] comes out negative, this f is impossible — return -1.",
+        "f 가 정해지면 쌍 (i, i+1) 에 몇 번 먹일지도 따라 정해져요.\n왼쪽부터 보면 o[i] = h[i] − f − o[i−1] 이에요.\no[i] 가 음수로 나오면 불가능하다는 뜻이라 -1 을 돌려줘요.") },
+      { hi: [29, 35], bubble: t(E,
+        "Why adjust when N is even? f was free to pick, so we may lower every even-indexed o[i] by the same amount without breaking anything — so subtract their minimum to spend as few bags as possible.\n\nSo the answer is 2 * sum(o): one feeding costs 2 bags (one cow each), and o[i] is how many times we fed the pair (i, i+1).",
+        "왜 N 이 짝수일 때 더 손봐야 할까요?\nf 를 자유롭게 고를 수 있어서, 짝수 자리 o[i] 를 전부 같은 만큼 줄여도 문제없어요.\n그래서 그중 최솟값만큼 다 같이 빼서 봉지를 최대한 적게 써요.\n\n그래서 답은 2 * sum(o) 예요.\n한 번 먹일 때마다 봉지 2개(소 한 마리씩)가 쓰이고,\no[i] 는 쌍 (i, i+1) 에 먹인 횟수거든요.") },
+      { hi: [36, 41], bubble: t(E,
+        "Why solve cases one at a time? Each test case is a completely different row of cows. So read T, then solve and print exactly one answer per case.\n\nlist(map(int, input().split())) reads one line of hunger values into a list.",
+        "왜 케이스마다 따로 풀까요? 각 테스트 케이스는 서로 다른 소들의 줄이라서예요.\n그래서 T 를 읽고, 케이스마다 따로 풀어 한 줄에 하나씩 답을 출력해요.\n\nlist(map(int, input().split())) 로 한 줄의 배고픔 값을 리스트로 읽어요.") },
+    ],
+  };
+}
+
 export function getDroughtSections(E) {
   return [
     {

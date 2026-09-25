@@ -577,6 +577,52 @@ const IV_OUTPUT_CPP = [
 const IV_FULL_PY = [...IV_INPUT_PY, "", ...IV_SIMULATE_PY, "", ...IV_OUTPUT_PY];
 const IV_FULL_CPP = [...IV_INPUT_CPP, "", ...IV_SIMULATE_CPP, "", ...IV_OUTPUT_CPP];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 IV_FULL_PY/IV_FULL_CPP 를 **그대로 참조**한다 — 새 알고리즘 내용을
+   추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라. ── */
+export function getInterviewWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = IV_FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "events", ko: "지금까지 기록한 동점 묶음들", en: "every tied group recorded so far" },
+        { v: "canInterview", ko: "그 농부가 Bessie 를 인터뷰할 수 있나", en: "could this farmer end up interviewing Bessie?" },
+      ],
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "What are we trying to find? Which farmer(s) COULD end up interviewing\nBessie, and when. So first read N, K, and every cow's time.\n\nThe first K cows immediately go to farmers 0..K-1 — every farmer is\nstill empty, so there's nothing to compare yet.\n\npriority_queue with greater<> for min-heap (default is max-heap). Cumulative finish times can exceed int (N·max time). Use long long in the heap.",
+          "무엇을 알아내야 할까요? Bessie 를 인터뷰\n'할 수도 있는' 농부들과 그 시각이에요. 먼저 N, K, 소마다 걸리는 시간을 읽어요.\n\n처음 K 마리 소는 바로 농부 0..K-1 에게 가요.\n아직 모든 농부가 비어 있어서 견줄 게 없거든요.\n\npriority_queue 에 greater<> 를 넣어 min-heap 을 만들어요 (기본은 max-heap).\n쌓아 온 종료 시간은 N·시간 까지 커져서 int 를 넘을 수 있어요.\nheap 에 long long 을 써요.") },
+        { hi: [19, 53], bubble: t(E,
+          "Each cow goes to whichever farmer frees up earliest — pop the min-heap.\nBut if SEVERAL farmers tie for that time, ANY of them could take the cow,\nso we save that whole tied group as an 'event' before choosing one.\n\nWe stop the moment a tied group is BIGGER than the cows left — that's\nexactly when Bessie is the next one waiting, not a real cow anymore.\n\nheap.top().first / .second access the pair components — no structured bindings needed.",
+          "소는 가장 먼저 비는 농부에게 가요. min-heap 에서 pop 하면 나와요.\n그런데 여러 농부가 같은 시간에 묶여 있으면 그중 아무나 받을 수 있으니,\n하나를 고르기 전에 그 묶음 전체를 '사건'으로 저장해 둬요.\n\n동점 묶음이 남은 소보다 커지는 순간 멈춰요.\n바로 그 순간이 Bessie 가 다음 차례로 기다리는 때예요, 진짜 소가 아니라.\n\nheap.top().first 와 .second 로 pair 를 꺼내요.\nstructured bindings 없이도 충분해요.") },
+        { hi: [55, 84], bubble: t(E,
+          "One farmer (last_farmer) is DEFINITELY free when Bessie arrives.\nBut if that farmer was ever part of an earlier tied group, any OTHER\nfarmer in that same group could have been picked instead — and end up\nin last_farmer's exact position by Bessie's turn.\n\nSo walk the recorded events from LATEST to earliest. Whenever a group\nshares a farmer with our known set, the whole group joins the set too.\n\nPrint the time, then the K-length bit string (1 = could interview Bessie).\n\nTime: O(N log K), space: O(K) for the heap and up to O(N) for the recorded tie events. Picking ONE farmer per tie (no events) misses valid answers — Bessie's actual interviewer chain can pass through any of them.",
+          "농부 한 명(last_farmer)은 Bessie 가 왔을 때 확실히 비어 있어요.\n그런데 그 농부가 예전에 어떤 동점 묶음에 있었다면,\n그 묶음의 다른 농부가 대신 뽑혔어도 Bessie 차례엔 똑같은 자리에\n있을 수 있어요.\n\n그래서 기록해 둔 사건들을 가장 최근 것부터 거꾸로 훑어요.\n묶음이 우리가 아는 농부와 한 명이라도 겹치면, 묶음 전체를 더해요.\n\n시각을 먼저 출력하고, 길이 K 인 0/1 문자열을 출력해요 (1 = Bessie 를 인터뷰할 수 있음).\n\n시간은 O(N log K), 메모리는 heap 에 O(K), 기록해 둔 동점 사건에 최대 O(N) 을 써요. 동점마다 농부 한 명만 고르면(사건 기록 없이) 답을 놓쳐요 — Bessie 로 이어지는 사슬이 그 동점의 아무 농부나 지나갈 수 있거든요.") },
+      ],
+    };
+  }
+  const code = IV_FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "events", ko: "지금까지 기록한 동점 묶음들", en: "every tied group recorded so far" },
+      { v: "can_interview", ko: "그 농부가 Bessie 를 인터뷰할 수 있나", en: "could this farmer end up interviewing Bessie?" },
+    ],
+    beats: [
+      { hi: [0, 8], bubble: t(E,
+        "What are we trying to find? Which farmer(s) COULD end up interviewing\nBessie, and when. So first read N, K, and every cow's time.\n\nThe first K cows immediately go to farmers 0..K-1 — every farmer is\nstill empty, so there's nothing to compare yet.\n\nimport heapq for the priority queue (min-heap).",
+        "무엇을 알아내야 할까요? Bessie 를 인터뷰\n'할 수도 있는' 농부들과 그 시각이에요. 먼저 N, K, 소마다 걸리는 시간을 읽어요.\n\n처음 K 마리 소는 바로 농부 0..K-1 에게 가요.\n아직 모든 농부가 비어 있어서 견줄 게 없거든요.\n\nimport heapq 로 우선순위 큐(min-heap)를 써요.") },
+      { hi: [10, 32], bubble: t(E,
+        "Each cow goes to whichever farmer frees up earliest — pop the min-heap.\nBut if SEVERAL farmers tie for that time, ANY of them could take the cow,\nso we save that whole tied group as an 'event' before choosing one.\n\nWe stop the moment a tied group is BIGGER than the cows left — that's\nexactly when Bessie is the next one waiting, not a real cow anymore.\n\nheapq.heappop / heappush — log K each.",
+        "소는 가장 먼저 비는 농부에게 가요. min-heap 에서 pop 하면 나와요.\n그런데 여러 농부가 같은 시간에 묶여 있으면 그중 아무나 받을 수 있으니,\n하나를 고르기 전에 그 묶음 전체를 '사건'으로 저장해 둬요.\n\n동점 묶음이 남은 소보다 커지는 순간 멈춰요.\n바로 그 순간이 Bessie 가 다음 차례로 기다리는 때예요, 진짜 소가 아니라.\n\nheapq.heappop 과 heappush 는 각각 log K 만큼 걸려요.") },
+      { hi: [34, 56], bubble: t(E,
+        "One farmer (last_farmer) is DEFINITELY free when Bessie arrives.\nBut if that farmer was ever part of an earlier tied group, any OTHER\nfarmer in that same group could have been picked instead — and end up\nin last_farmer's exact position by Bessie's turn.\n\nSo walk the recorded events from LATEST to earliest. Whenever a group\nshares a farmer with our known set, the whole group joins the set too.\n\nPrint the time, then the K-length bit string (1 = could interview Bessie).\n\nTime: O(N log K), space: O(K) for the heap and up to O(N) for the recorded tie events. Picking ONE farmer per tie (no events) misses valid answers — Bessie's actual interviewer chain can pass through any of them.",
+        "농부 한 명(last_farmer)은 Bessie 가 왔을 때 확실히 비어 있어요.\n그런데 그 농부가 예전에 어떤 동점 묶음에 있었다면,\n그 묶음의 다른 농부가 대신 뽑혔어도 Bessie 차례엔 똑같은 자리에\n있을 수 있어요.\n\n그래서 기록해 둔 사건들을 가장 최근 것부터 거꾸로 훑어요.\n묶음이 우리가 아는 농부와 한 명이라도 겹치면, 묶음 전체를 더해요.\n\n시각을 먼저 출력하고, 길이 K 인 0/1 문자열을 출력해요 (1 = Bessie 를 인터뷰할 수 있음).\n\n시간은 O(N log K), 메모리는 heap 에 O(K), 기록해 둔 동점 사건에 최대 O(N) 을 써요. 동점마다 농부 한 명만 고르면(사건 기록 없이) 답을 놓쳐요 — Bessie 로 이어지는 사슬이 그 동점의 아무 농부나 지나갈 수 있거든요.") },
+    ],
+  };
+}
+
 export function getInterviewSections(E) {
   return [
     {

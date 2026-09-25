@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getLonelyPhotoSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -132,13 +131,12 @@ export function makeLonelyPhotoCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeLonelyPhotoCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code — straight in, no placeholder.
+    // 2-1: Code walk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14)
     {
-      type: "progressive",
+      type: "lonelyphoto-walk",
       narr: t(E,
         "Fix one cow as the lonely one and count both sides.",
         "소 하나를 외로운 소로 정해 놓고 양옆을 세어 볼게요."),
-      sections: getLonelyPhotoSections(E),
     },
     {
       type: "runner",

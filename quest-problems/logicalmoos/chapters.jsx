@@ -1,6 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getLogicalMoosSections, LogicalMoosSim } from "./components";
-import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { LogicalMoosSim } from "./components";
 
 const ACCENT = "#4f46e5";       // indigo-600
 const TINT   = "#e0e7ff";        // indigo-100
@@ -145,16 +144,13 @@ false and true or true
 }
 
 export function makeLogicalCh2(E, lang = "py") {
-  const sections = getLogicalMoosSections(E);
   return [
-    ...sections.map((sec, i) => ({
-      type: "reveal",
-      narr: i === 0
-        ? t(E,
-            "Sweep the line once forward and once backward, storing what sits before and after every token. Then each question is answered in one step.",
-            "앞에서 한 번, 뒤에서 한 번 훑으며\n토큰마다 «앞에 무엇이 있고 뒤에 무엇이 있는지» 를 담아 둬요.\n그러면 물음마다 한 걸음이면 끝나요.")
-        : "",
-      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
-    })),
+    // 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드 이 방식)
+    {
+      type: "logicalmoos-walk",
+      narr: t(E,
+        "Sweep the line once forward and once backward, storing what sits before and after every token. Then each question is answered in one step.",
+        "앞에서 한 번, 뒤에서 한 번 훑으며\n토큰마다 «앞에 무엇이 있고 뒤에 무엇이 있는지» 를 담아 둬요.\n그러면 물음마다 한 걸음이면 끝나요."),
+    },
   ];
 }

@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getExchangeSections } from "./components";
 
 const A = "#2563eb";
 
@@ -233,13 +232,12 @@ export function makeExchangeCh2(E, lang = "py") {
         "공식 샘플 1을 1분씩 따라가 봐요."),
     },
 
-    // 2-2 Progressive code build
+    // 2-2 Code walk — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14)
     {
-      type: "progressive",
+      type: "exchange-walk",
       narr: t(E,
         "Now build the solution. The section below reveals the simulation loop one piece at a time.",
         "이제 풀이를 만들어 봐요. 아래에 한 조각씩 나와요."),
-      sections: getExchangeSections(E),
     },
 
     // 2-3 Runner — verify on official samples
