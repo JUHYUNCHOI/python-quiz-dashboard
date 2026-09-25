@@ -1347,6 +1347,14 @@ function _buildExpandSteps(E) {
                    "아직 아무것도 안 뒤집었어요. 자리 4만 맞아요 (5=5). 그래서 matches = 1, 여기서 출발해요.") },
 
     /* ── 1. Flip [2,3] (5 steps) ── */
+    /* ⭐ 2026-09-25 — 이 스텝은 원래 **맨 끝(20클릭 지점)** 에 있었다.
+       학생: *"처음엔 자리4 하나만 보다가 갑자기 「작은 구간을 골라봐요, 자리 2와 3」 으로
+       넘어가는데, 방금 보던 걸 넓히는 건지 새로 시작하는 건지 그 순간엔 몰랐다.
+       한참 뒤에 「중심은 두 종류예요」 가 나왔는데 **그게 처음에 있었으면 안 헷갈렸을 것.
+       순서가 거꾸로였다."*  → 문구는 그대로 두고 **자리만** 맨 앞으로 옮겼다. */
+    { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false, centers: true,
+      bubble: t(E, "Two center kinds: odd ([i,i] = one spot, no flip) and even ([i,i+1] = two spots). Every interval belongs to exactly one center.",
+                   "중심은 두 종류예요. 홀수 중심 [i,i] 는 한 칸이라 안 뒤집히고, 짝수 중심 [i,i+1] 은 두 칸이에요. 모든 구간은 딱 한 중심에만 속해요.") },
     { rev: [1, 2, 3, 4, 5, 6], win: [2, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Let's pick a tiny interval: spots 2 and 3. See the bracket above — that's our flip zone.",
                    "작은 구간을 골라 봐요. 자리 2 와 3 이에요. 위에 표시된 꺾쇠가 뒤집을 구간이에요.") },
@@ -1423,10 +1431,7 @@ function _buildExpandSteps(E) {
       bubble: t(E, "The rule: each widen = O(1) work (only 2 ends). No matter how big the interval, we always fix only 2 spots per step.",
                    "규칙은 이래요. 한 번 넓히는 일은 O(1) 이에요 (양 끝 2 칸). 구간이 아무리 커져도 매번 딱 2 칸만 봐요.") },
 
-    /* ── 5. All centers (2 steps) ── */
-    { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false, centers: true,
-      bubble: t(E, "Two center kinds: odd ([i,i] = one spot, no flip) and even ([i,i+1] = two spots). Every interval belongs to exactly one center.",
-                   "중심은 두 종류예요. 홀수 중심 [i,i] 는 한 칸이라 안 뒤집히고, 짝수 중심 [i,i+1] 은 두 칸이에요. 모든 구간은 딱 한 중심에만 속해요.") },
+    /* ── 5. All centers (1 step — 「중심 두 종류」는 맨 앞으로 옮겼다, 2026-09-25) ── */
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: true, payoff: true,
       bubble: t(E, "Every center → widen till it hits a wall, 2 ends per step. Total O(N²). (Full run in the code next!) 🚀",
                    "중심마다 벽에 닿을 때까지 넓히고, 한 걸음에 두 끝만 봐요. 다 합치면 O(N²) 예요. (전부 돌려보는 건 다음 코드에서!) 🚀") },
@@ -2274,5 +2279,71 @@ export function CheckupsFinalCodeSim({ E }) {
         <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#0891b2" isEn={E} />
       </div>
     </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   두 공식에 **근거**를 붙이는 정적 카드 둘 (2026-09-25)
+
+   왜: 재검증 학생이 *"`l+r−i` 도 `N(N+1)/2` 도 왜 그런지 유도 없이 나와서
+   **혼자 검산**해서 넘어갔다"* 고 했다.
+
+   ⚠️ **새 쪽도 새 클릭도 안 만든다.** 이 둘은 이 quest 의 핵심 통찰(가운데서 넓히기)이
+      아니라 **브루트가 왜 느린지를 셈하는 보조 사실**이다. 스텝식 시뮬로 만들면 과투자다
+      (`feedback_why_and_how_over_slowness` · `feedback_shorter_not_longer`).
+   ⚠️ **가우스 합 공식을 증명하지 않는다** — 「계단처럼 하나씩 줄어드는 합」이라고
+      이름만 붙인다. `mooin3` 에서 2차식 전개를 살리지 않고 숫자로 보인 것과 같은 판단이다.
+   ⚠️ 숫자는 **전부 학생이 이미 본 것**이다 — 1쪽 `CheckupsEnumSim` 에서 손수 센 여섯 구간,
+      그리고 `CK_SAMPLE` 의 `cow = [1, 3, 2]`. **새로 지어낸 수는 하나도 없고,
+      셋 다 코드로 다시 계산해 맞는 것을 확인했다.**
+      (`mooin3` 에서 첫 판이 주장을 반박하는 숫자였던 일을 되풀이하지 않으려는 것이다.)
+   ════════════════════════════════════════════════════════════════════ */
+const _FCard = ({ title, children }) => (
+  <div style={{
+    maxWidth: 460, margin: "10px auto 0", background: "#fffbeb",
+    border: "1.5px solid #fcd34d", borderRadius: 10, padding: "10px 13px",
+    fontSize: 12, lineHeight: 1.8, color: "#7c2d12", wordBreak: "keep-all", textWrap: "balance",
+  }}>
+    <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 5 }}>{title}</div>
+    {children}
+  </div>
+);
+const _mono = { fontFamily: "'JetBrains Mono',monospace" };
+
+export function CheckupsPairCountCard({ E }) {
+  return (
+    <_FCard title={t(E, "🔢 Why N(N+1)/2 intervals?", "🔢 왜 구간이 N(N+1)/2 개일까요?")}>
+      <div style={{ ..._mono, fontSize: 12.5, marginBottom: 6 }}>
+        {[["1", "1, 2, 3", 3], ["2", "2, 3", 2], ["3", "3", 1]].map(([l, rs, n]) => (
+          <div key={l}>l = {l} {"→"} r {t(E, "can be", "은")} {rs} {"→"} <b>{n}{t(E, "", "가지")}</b></div>
+        ))}
+        <div style={{ borderTop: "1px dashed #fcd34d", marginTop: 4, paddingTop: 4 }}>
+          3 + 2 + 1 = <b>6</b>
+        </div>
+      </div>
+      {t(E,
+        <>That's the same 6 you counted by hand on page 1. Each time l moves right, r has one fewer choice — a staircase. N(N+1)/2 = 3×4/2 = <b>6</b> ✓</>,
+        <>1쪽에서 손으로 세어 본 그 6가지예요.<br />l 이 하나 뒤로 갈 때마다 r 후보가 하나씩 줄어요 — 계단처럼요.<br />N(N+1)/2 = 3×4/2 = <b>6</b> ✓</>)}
+    </_FCard>
+  );
+}
+
+export function CheckupsMirrorFormulaCard({ E }) {
+  return (
+    <_FCard title={t(E, "🔍 Why l + r − i?", "🔍 왜 l + r − i 일까요?")}>
+      <div style={{ ..._mono, fontSize: 12.5, marginBottom: 6 }}>
+        <div>cow = [1, 3, 2]　　{t(E, "spots", "자리")} 0 1 2</div>
+        <div>[0, 2] {t(E, "reversed", "를 뒤집으면")} {"→"} [<b>2</b>, 3, <b>1</b>]</div>
+      </div>
+      {t(E,
+        <>The two ends swap. The middle (spot 1) has no partner, so it stays.<br />
+          Spot 0 ↔ spot 2, and 0 + 2 = 2. So spot i gets its partner's value, and the partner's number is always l + r − i.</>,
+        <>양 끝이 자리를 맞바꿔요. 가운데(자리 1)는 짝이 없어서 그대로예요.<br />
+          자리 0 ↔ 자리 2 이고, 0 + 2 = 2 예요.<br />
+          그래서 자리 i 에는 짝의 값이 오고, 그 짝의 번호가 늘 l + r − i 예요.</>)}
+      <div style={{ ..._mono, fontSize: 11.5, marginTop: 5, opacity: 0.85 }}>
+        0+2−0=2 {"→"} 2　·　0+2−1=1 {"→"} 3　·　0+2−2=0 {"→"} 1
+      </div>
+    </_FCard>
   );
 }

@@ -1,6 +1,11 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsReuseSim, CheckupsKeyCodeSim, CheckupsEnumSim, CheckupsFinalCodeSim, CheckupsWindowSplitSim, CheckupsWindowRecapSim, CheckupsOutPrefixSim, CheckupsInPrefixSim, CheckupsExpandSim } from "./sims";
+// ⚠️ 2026-09-25: `CheckupsMirrorSim`·`CheckupsGrowSim`·`CheckupsKeyCodeSim` 를 뺐다 —
+//    **import 만 되고 화면에 한 번도 안 쓰였다**(JSX 사용 0회, grep 확인).
+//    2026-07-02 에 풀이가 「거울/누적합」에서 「가운데서 넓히기」로 바뀌면서 버려진 것들이다.
+//    `mooin3` 의 `M3PeakAside` 와 같은 모양 — 쓰던 걸 갈아치우면서 호출부만 지운 자국.
+//    되살릴 일이 생기면 `git show HEAD:quest-problems/checkups/sims.jsx` 에 그대로 있다.
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsTrySim, CheckupsReuseSim, CheckupsEnumSim, CheckupsFinalCodeSim, CheckupsWindowSplitSim, CheckupsWindowRecapSim, CheckupsOutPrefixSim, CheckupsInPrefixSim, CheckupsExpandSim, CheckupsPairCountCard, CheckupsMirrorFormulaCard } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -178,7 +183,17 @@ export function makeCheckupsCh2(E, lang = "py") {
         ? t(E, "Build brute step by step (1️⃣–4️⃣). It's the literal translation of the problem statement — fine for partial credit.",
               "brute 를 한 단락씩 볼게요 (1️⃣–4️⃣). 문제를 그대로 옮긴 모양이라 부분점수에 충분해요.")
         : "",
-      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+      // ⭐ 2026-09-25 — 두 공식에 **근거**를 붙인다. 학생: *"`l+r−i` 도 `N(N+1)/2` 도
+      //    왜 그런지 유도 없이 나와서 **혼자 검산**해서 넘어갔다."*
+      //    **새 쪽을 안 만든다** — 이미 있는 두 쪽 아래에 정적 카드만 얹는다.
+      //    숫자는 전부 학생이 이미 본 것(1쪽에서 손수 센 6가지 · `CK_SAMPLE` 의 [1,3,2]).
+      content: (
+        <>
+          <CodeSectionView section={sec} lang={lang} E={E} />
+          {i === 1 && <CheckupsPairCountCard E={E} />}
+          {i === 2 && <CheckupsMirrorFormulaCard E={E} />}
+        </>
+      ),
     })),
 
     /* 2-6 — RUN the brute force live: feel it crawl as N grows. */
