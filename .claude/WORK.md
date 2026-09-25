@@ -4806,3 +4806,33 @@ sha256 **바뀌지 않았다**(말풍선만 고쳤다) — **USACO 재제출 불
 
 ⛔ **219곳·63개 전체 작업은 여기서 멈춘다.** 위 넷이 오기 전에 다른 quest 를 A/B 로
 계속 가르거나 줄이면 오늘 `makedistinct` 에서 드러난 실패를 그대로 반복한다.
+
+### 💻 C++ 전용 설명이 **코드가 안 쓰는 자료구조**를 말하고 있었다 — quest 5개 (2026-09-25)
+
+C++ 학생이 `milkmeas` 를 보다 스스로 찾았다 — *"설명은 「tuple 이 알아서 정렬해준다」고
+했는데 **코드에는 `tuple` 이 한 번도 안 나와요.** 말과 코드가 다르다는 걸 눈치챘어요."*
+전수로 재 보니 **quest 5개 · 문장 9줄**이었다(🔒 최종 코드에 그 이름이 **0번**):
+
+| quest | 화면이 말한 것 | 🔒 코드가 실제로 하는 것 |
+|---|---|---|
+| `milkmeas` | `tuple<int,string,int>` 가 날짜순 정렬 | 통 셋 + `idx` 번호 통 + 이중 반복문 교환 |
+| `meastraffic` | `tuple<string,int,int>` · `auto& [typ,lo,hi]` | 통 셋(`types`·`los`·`his`) 나란히 |
+| `livestock` | `stringstream` · `map<string, vector<string>> adj` | 글자 하나씩 잘라 담고 `pairs_a`/`pairs_b` |
+| `blockgame` | 헤더에 `map`·`algorithm` · `map<char,int>` | `iostream`·`fstream`·`string` · `int need[26]` |
+| `lifeguards` | `for (auto& [s, e] : rest)` 구조 분해 | `for (int i = 0; ...)` |
+
+⚠️ **`cheese` 는 오탐이다** — *"2D vector 가 `map<pair<int,int>>` 보다 빠름"* 은
+안 쓰는 걸 **비교 대상으로** 든 정당한 문장이다. 손으로 열어 확인했다.
+
+#### 🚨 왜 어느 검사기도 못 잡았나
+`check-taught-vs-final-code.py` 를 `milkmeas` 에 돌리면 **0건**이다. 일부러 그렇다 —
+그 검사기는 **모노스페이스 코드 블록과 `lines=` 프롭만** 본다(파일 머리 주석에 적혀 있다).
+이 결함은 **`cppOnly`·`why`·`pyOnly` 설명문**에 있어서 **구조적으로 사각지대**였다.
+`billboard` 와 같은 병인데 **다른 층**이다.
+
+**고쳤다** — 늘리지 않고 갈아끼웠다(문장 수 그대로). 각 자리에 왜 틀렸는지 주석을 남겼다.
+🔒 보호 변수는 한 글자도 안 건드렸다 — **USACO 재제출 불필요.**
+`check-word-difficulty.py` 다섯 quest 다 깨끗, 타입 검사 통과.
+
+**남은 일:** 이 층(`cppOnly` 설명문 vs 🔒 코드)을 보는 **검사 항목이 아직 없다.**
+`check-taught-vs-final-code.py` 를 넓힐지, 새로 만들지 — 판정 필요.

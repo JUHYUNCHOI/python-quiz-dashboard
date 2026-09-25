@@ -313,10 +313,13 @@ export function getMeasTrafficSections(E) {
       ],
       pyOnly: [],
       cppOnly: [
-        t(E, "tuple<string, int, int> bundles type + lo + hi into one row.",
-            "tuple<string, int, int> 로 type + lo + hi 를 하나로 묶어요."),
-        t(E, "Structured binding auto& [typ, lo, hi] reads each tuple slot like a field.",
-            "auto& [typ, lo, hi] 로 묶어 둔 값을 이름으로 하나씩 꺼내 써요."),
+        /* ⚠️ 2026-09-25: 이 두 줄이 **코드에 없는 것**을 설명하고 있었다 —
+           `tuple<string,int,int>` 과 `auto& [typ, lo, hi]`(구조 분해)인데
+           🔒 `FULL_CPP` 에 `tuple` 은 **0번**이다. 실제로는 통 세 개를 나란히 쓴다. */
+        t(E, "type, lo and hi live in three parallel vectors — the same i means the same record.",
+            "type · lo · hi 를 통 세 개에 나란히 담아요.\n같은 번호 i 가 같은 기록이에요."),
+        t(E, "So one record is read as types[i], los[i], his[i] — three names, one index.",
+            "그래서 한 기록은 types[i] · los[i] · his[i] 로 꺼내요.\n이름은 셋인데 번호는 하나예요."),
       ],
     },
   ];

@@ -312,10 +312,14 @@ export function getLivestockSections(E) {
       ],
       pyOnly: [],
       cppOnly: [
-        t(E, "getline + stringstream splits a sentence into words just like Python's split().",
-            "getline 과 stringstream 으로 문장을 단어 단위로 나눠요 (Python 의 split())."),
-        t(E, "map<string, vector<string>> adj stores neighbors keyed by cow name.",
-            "map<string, vector<string>> adj 에 소 이름마다 옆에 올 소들을 담아요."),
+        /* ⚠️ 2026-09-25: 이 두 줄이 **코드에 없는 것**을 설명하고 있었다 —
+           `stringstream` 과 `map<string, vector<string>> adj` 인데 🔒 `FULL_CPP` 에
+           둘 다 **0번**이다. 실제로는 글자를 하나씩 보며 빈칸에서 자르고,
+           제약은 `pairs_a`·`pairs_b` 두 통에 짝지어 담는다. */
+        t(E, "getline takes a whole sentence; we walk it letter by letter and cut at each space.",
+            "getline 으로 문장을 통째로 받고,\n글자를 하나씩 보며 빈칸에서 잘라요."),
+        t(E, "The two constraint vectors pair up: pairs_a[k] must stand next to pairs_b[k].",
+            "제약은 pairs_a 와 pairs_b 두 통에 짝지어 담아요.\nk 번째는 pairs_a[k] 와 pairs_b[k] 가 붙어 있어야 한다는 뜻이에요."),
       ],
     },
   ];

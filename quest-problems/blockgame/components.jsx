@@ -105,10 +105,14 @@ export function getBlockGameSections(E) {
       ],
       pyOnly: [],
       cppOnly: [
-        t(E, "Split #include into specific headers (iostream, string, map, algorithm).",
-            "#include 는 배운 헤더로 (iostream, string, map, algorithm) 나눠 적어요."),
-        t(E, "map<char,int> auto-initializes missing keys to 0 — handy for tallying.",
-            "map<char,int> 는 없는 값을 찾으면 0 으로 시작해요. 셀 때 편해요."),
+        /* ⚠️ 2026-09-25: 이 두 줄이 **코드에 없는 것**을 설명하고 있었다 —
+           헤더로 `map`·`algorithm` 을 적어 뒀는데 🔒 `FULL_CPP` 가 넣는 건
+           `iostream`·`fstream`·`string` 뿐이고, `map<char,int>` 는 **0번**이다.
+           실제로는 `int need[26]` 과 `a[i] - 'a'` 로 센다. */
+        t(E, "Split #include into just the headers this code needs — iostream, fstream, string.",
+            "#include 는 이 코드가 쓰는 것만 나눠 적어요 (iostream, fstream, string)."),
+        t(E, "26 counters, one per letter — subtracting 'a' turns a letter into its slot number.",
+            "글자마다 칸 하나인 통 26개를 써요.\n글자에서 'a' 를 빼면 a→0, b→1 처럼 번호가 돼요."),
       ],
     },
   ];

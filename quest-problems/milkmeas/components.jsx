@@ -380,8 +380,15 @@ export function getMilkMeasSections(E) {
       ],
       pyOnly: [],
       cppOnly: [
-        t(E, "tuple<int, string, int> sorts by day first because of the natural lex order.",
-            "tuple<int, string, int> 는 앞자리부터 차례로 견주기 때문에\n따로 시키지 않아도 day 순서로 줄을 서요."),
+        /* ⚠️ 2026-09-25: 이 줄이 **코드에 없는 것**을 설명하고 있었다 —
+           *"tuple<int, string, int> 는 앞자리부터 차례로 견주기 때문에…"* 인데
+           🔒 `FULL_CPP` 에 `tuple` 은 **0번** 나온다(`sort(` 도 0번). 실제로는
+           통 세 개(days·names·deltas)를 나란히 두고 `idx` 번호를 바꿔 날짜순을 만든다.
+           학생이 「tuple 이 알아서 정렬한다」고 읽고 코드에서 이중 반복문을 만난다.
+           `billboard` 와 같은 병이다. `check-taught-vs-final-code.py` 는 **못 잡는다** —
+           모노스페이스 코드 블록만 보고 `cppOnly` 설명문은 일부러 안 본다. */
+        t(E, "Day order comes from an index list idx — we reorder positions, not the rows.",
+            "날짜 순서는 idx 라는 번호 통으로 매겨요.\n기록을 옮기지 않고 «몇 번째를 먼저 볼까» 만 바꿔요."),
         t(E, "set<string> top != newTop compares membership directly, no manual loop needed.",
             "set<string> 끼리는 top != newTop 으로 바로 견줄 수 있어요.\n하나하나 도는 반복문을 쓸 필요가 없어요."),
       ],

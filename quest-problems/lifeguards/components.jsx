@@ -112,8 +112,13 @@ export function getLifeguardsSections(E) {
             "Python 은 map() 덕분에 코드가 짧아져요."),
       ],
       cppOnly: [
-        t(E, "Structured binding for (auto& [s, e] : rest) reads pair fields like names.",
-            "for (auto& [s, e] : rest) 로 pair 안의 두 값을 이름처럼 읽어요."),
+        /* ⚠️ 2026-09-25: 이 줄이 **코드에 없는 것**을 설명하고 있었다 —
+           `for (auto& [s, e] : rest)`(구조 분해)인데 🔒 `FULL_CPP` 에 `auto&` 는
+           **0번**이고 `rest` 라는 이름도 없다. 실제로는 `for (int i = 0; ...)` 로
+           번호를 세며 돈다. 같은 날 milkmeas·meastraffic·livestock·blockgame 에서
+           같은 결함을 넷 더 찾았다 — `cppOnly` 설명문은 어느 검사기도 안 본다. */
+        t(E, "Plain index loops walk the guards — for (int i = 0; i < N; i++).",
+            "구조원은 번호를 세며 돌아요 — for (int i = 0; i < N; i++) 예요."),
         t(E, "Sweep with curEnd merges overlapping intervals without explicit union sets.",
             "curEnd 를 밀면서 겹치는 구간을 이어 붙여요. 따로 자료구조가 필요 없어요."),
       ],
