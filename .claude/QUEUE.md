@@ -78,11 +78,13 @@ PM 이 세 건 다 판정하고 **프롬프트까지 써서** 돌려줬다. 다�
 | 무엇 | 담당 | 상태 |
 |---|---|---|
 | `socialdist1` 인트로·시뮬을 cpid 1035 로 다시 쓰기 | frontend-engineer | READY 도는중 |
-| 난이도 `{value, source}` 반환 + ④ 26개 명시 | backend-engineer | READY 도는중 |
-| 감사값 vs 추정치 **뱃지 표시** 설계 | ux-reviewer | READY 도는중 |
+| 난이도 `{value, source}` 반환 + ④ 명시 | backend-engineer | **DONE** `ffc7d842` — ④ 26→**22**. 남은 22개는 **일부러 안 채웠다**(감사 기록이 없다). 검사기 버그도 잡았다: `mcc-difficulty.ts` 의 한 줄 여러 항목을 못 세서 4개가 「안 매김」으로 보였다 |
+| 감사값 vs 추정치 **뱃지 표시** | ux-reviewer → 메인 | **DONE** `ffc7d842` — 선생님 화면만, **테두리만 = 확인 안 됨**(옆 `internal`·`beta` 뱃지가 이미 쓰는 뜻). 학생 화면 그대로. ⚠️ `isTeacher` 로 가두면 **선생님 본인이 못 본다**(owner 는 기본 학생 뷰) → 원래 role 로 갈랐다 |
 | 동결 6개 CodeWalk 전환 (hps 제외) | frontend-engineer | READY 도는중 |
 | 동결 6개 CodeWalk **교육 검토** | pedagogy-reviewer | READY 도는중 |
 | `socialdist1` 학생 재확인 | student-python | ⏳ 수정 끝난 뒤 |
+| 입출력 카드 **맨몸 윗첨자** | 메인 | **DONE** `472f7cf8` — 9개 quest·13곳에 「10억·10만·100만·100조」를 붙였다 |
+| `/quest` 모바일 네비가 체크 버튼 2개를 가린다 | 별건으로 띄웠다(`task_bfa2d393`) | ⏳ |
 | 전환 뒤 코드 무변경 독립 재확인 | quest-auditor | ⏳ 전환 끝난 뒤 |
 
 ### PM 이 확인해 준 사실 셋 — 이게 판정의 근거다
@@ -104,6 +106,17 @@ PM 이 세 건 다 판정하고 **프롬프트까지 써서** 돌려줬다. 다�
 ### 배포 — **오늘은 안 민다**
 `check-deploy-budget.py` 실측: **오늘 08:08:52 에 이미 한 번 밀렸다.**
 커밋만 계속 쌓고 내일 창에 묶어서 한 번.
+
+## 🧹 이 축 밖이라 안 건드린 것 — 잊지 않게 적어 둔다
+
+- **맨몸 윗첨자가 남은 옛 quest** — `checkups` 44건 · `cheese` 34 · `hps` 28 ·
+  `rounding` 28 · `mooin3` 23 · `moo` 21 · `strangefn` 18 · `permutation` · `mcc21glass`.
+  전체 **282건 · quest 39개**(`check-undefined-symbol.py`). 대부분 `N²`·`O(...)` 같은
+  복잡도 표기라 **판정이 아니라 볼 자리 표시**다. ⚠️ 그중 셋은 지금 CodeWalk 담당이 편집 중.
+- **`app/admin/quests/page.tsx:264,327`** 이 `m.difficulty` 를 **직접** 읽어
+  ④ 22개에 `DEFAULT_META` 의 **2** 를 그대로 띄운다. 카탈로그는 `questDifficulty()` 를
+  거쳐서 안 그런데, 여기만 샌다.
+- **`cowcollege:581`** — `O(N²)` 옆에 평이한 말이 없다.
 
 ## 🟡 BLOCKED
 
