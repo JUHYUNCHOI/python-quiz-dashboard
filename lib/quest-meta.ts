@@ -2137,7 +2137,19 @@ export function getMetaCoverageStats() {
   //   값의 출처: `scripts/check-required-vs-code.py` 가 **코드에서 실제로 검출**한 것.
   //   진짜 감사(네 필드 다)는 quest-auditor 몫으로 남아 있다.
   strangefn:       { ...DEFAULT_META, concepts_required: ["modular-inverse"] },
-  buymilk:         { ...DEFAULT_META, concepts_required: [] },
+  /* ⚠️ 2026-09-25: `concepts_required: []` 였다 — **빈 배열은 `every()` 가 항상 참**이라
+     이 quest 가 **아무 학생에게나 「지금 풀 준비됨」으로 추천되고** 있었다.
+     난이도도 `DEFAULT_META` 의 2 가 새어 나와 **아무도 안 매긴 값이 매긴 값처럼** 보였다.
+     선생님이 **이 quest 하나에서 여섯 번** 막히신 이력이 있다(`feedback_plain_korean.md`).
+     감사 판정 — 문법은 가볍다(`for`·리스트·`**`·`//` 뿐, 함수·재귀·자료구조 없음).
+     무거운 건 **아이디어**고, 그건 선수개념이 아니라 **이 quest 가 가르치는 것**이다
+     (화면의 `why[]`·CodeWalk 말풍선이 처음부터 끝까지 유도한다) → `concepts_taught` 로.
+     ⭐ `strangefn`(모듈러 역원 = **배울 수 없는 외부 지식**)과 다르다. 트랙에서 빼지 않는다.
+     난이도 4 — 통찰이 두 겹이고(전처리 정당화 + 그리디 정당화) 그 정당성이 직관적이지 않다.
+     5 는 외부 선수개념이 있는 경우(`sumk`)라 과하다. 3 무리는 감사가 안 끝난 자리가 많다. */
+  buymilk:         { ...DEFAULT_META, difficulty: 4,
+                     concepts_required: ["loop", "list-basics", "math-basics"],
+                     concepts_taught: ["incremental-update", "greedy-pick"] },
   photoshoot25:    { ...DEFAULT_META, concepts_required: ["2d-list-build"] },
   walkhome:        { ...DEFAULT_META, concepts_required: ["3d-plus-indexing", "nested-comprehension"] },
   teamttt:         { ...DEFAULT_META, concepts_required: ["3d-plus-indexing"] },
