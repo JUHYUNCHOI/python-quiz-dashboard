@@ -333,6 +333,14 @@ export function WholeRunSim({ E }) {
        무엇보다 **"지금까지 최고 점수" 가 실제로 두 번 바뀌는 걸** 봐야 그 칸이 뭘 하는지 안다:
          3점(갈아치움) → 4점(갈아치움) → 4점(개수만 +1). */
   const WALK = [1, hits[0], hits[1]];
+  /* ⚠️ 2026-09-25 세 번째 접기. 학생(41걸음 직접 눌러봄)·화면·교육 담당이 독립적으로
+     같은 자리를 짚었다 — "1번째 판은 꼼꼼히 봤다. 2번째부터는 훑었다. 3번째는 거의
+     안 읽고 그림만 보고 넘겼다. 여기서 그만두고 싶었다." PM 판정: **교육 담당 안대로
+     간다** — 2·3번째 보드는 split·pick·score·keep 네 걸음을 각각 다시 밟지 않고
+     **한 걸음짜리 요약("recap")**으로 접는다. 이 네 걸음이 가르치는 것
+     (표에서 꺼내 더하기 → 이 보드 점수 → 최고 점수와 견주기)은 6쪽 IsAtTableSim 과
+     이 시뮬 1번째 보드에서 **이미 두 번** 완전히 가르쳐졌다 — 세 번째는 새 정보가 아니다.
+     1번째 보드만 PH 네 걸음 그대로, 2·3번째는 "recap" 한 걸음. 15 → 9. */
   /* ⚠️ 2026-09-13, 선생님이 이 화면을 보시고:
        "정보를 보여주는 방법이 별로야. **필요 없는 정보는 없는데 봐야할게 많아.**
         스텝바이스텝 맞아? 그 보드 점수? 지금까지 최고 점수? 그 점수인 보드수?
@@ -348,9 +356,11 @@ export function WholeRunSim({ E }) {
      M 이 하나도 없는 보드(b = 0)는 쪼갤 게 없어 한 걸음("none")으로 둔다. */
   const PH = ["split", "pick", "score", "keep"];
   const steps = [{ k: "read" }, { k: "table" },
-                 ...WALK.flatMap((b, i) => (scoreOf(b).Ms.length === 0
-                   ? [{ k: "board", b, i, p: "none" }]
-                   : PH.map((ph) => ({ k: "board", b, i, p: ph })))),
+                 ...WALK.flatMap((b, i) => {
+                   if (scoreOf(b).Ms.length === 0) return [{ k: "board", b, i, p: "none" }];
+                   if (i === 0) return PH.map((ph) => ({ k: "board", b, i, p: ph }));
+                   return [{ k: "board", b, i, p: "recap" }];
+                 }),
                  { k: "done" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -358,7 +368,7 @@ export function WholeRunSim({ E }) {
 
   /* 지금까지 본 보드만으로 계산한 장부 — "그 순간의 값" 을 보여준다 */
   /* 장부(최고 점수·보드 수)는 **keep 걸음에서만** 바뀐다 — 그 전엔 이 보드가 아직 안 들어간다. */
-  const seen = s.k === "board" ? WALK.slice(0, s.i + (s.p === "keep" || s.p === "none" ? 1 : 0))
+  const seen = s.k === "board" ? WALK.slice(0, s.i + (s.p === "keep" || s.p === "none" || s.p === "recap" ? 1 : 0))
              : s.k === "done" ? WALK : [];
   let runBest = 0, runWays = 0;
   seen.forEach((b) => { const sc = scoreOf(b).sc; if (sc > runBest) { runBest = sc; runWays = 1; } else if (sc === runBest) runWays++; });
@@ -418,6 +428,18 @@ export function WholeRunSim({ E }) {
       const prev = WALK.slice(0, s.i);
       let pb = 0, pw = 0;
       prev.forEach((b2) => { const sc = scoreOf(b2).sc; if (sc > pb) { pb = sc; pw = 1; } else if (sc === pb) pw++; });
+      /* ⚠️ 2026-09-25: 처음엔 요약 문장이 2·3번째 보드에 **똑같았다**("같은 순서를 한 번 더").
+         그러면 접기 전과 같은 문제가 남는다 — 학생이 *"아 또 이거네"* 하고 넘긴 그 느낌이다.
+         **이 걸음의 요점은 「최고점이 바뀌었나」** 다(PM 판정 ①의 네 번째 항목). 그걸 말한다. */
+      if (s.p === "recap") return t(E,
+        <><b>3–6.</b> Same steps, new board — this one scores <b>{cur.sc}</b>.<br />
+          {cur.sc > pb ? <>Higher than <b>{pb}</b> — this is the new best.</>
+            : cur.sc === pb ? <>Same as the best <b>{pb}</b> — one more board reaches it.</>
+              : <>Lower than the best <b>{pb}</b>, so nothing changes.</>}</>,
+        <><b>3–6.</b> 같은 순서를 그대로 한 번 더 돌려요 — 이 보드는 <b>{cur.sc}점</b>이에요.<br />
+          {cur.sc > pb ? <>지금까지 최고인 <b>{pb}점</b>보다 높아요 — 최고점이 바뀌어요.</>
+            : cur.sc === pb ? <>최고점 <b>{pb}점</b>과 같아요 — 그 점수인 보드가 하나 늘어요.</>
+              : <>최고점 <b>{pb}점</b>보다 낮아서 그대로예요.</>}</>);
       return t(E,
         <><b>6.</b> Compare with the best so far.<br />{cur.sc > pb ? <>Higher — the best becomes <b>{cur.sc}</b>, and the count starts again at <b>1</b>.</> : <>Same — the count goes up by one.</>}</>,
         <><b>6.</b> 지금까지 최고 점수와 견줘요.<br />{cur.sc > pb ? <>더 높으니 최고 점수가 바뀌어요 — <b>{cur.sc}점</b>. 보드 수는 <b>1</b> 부터 다시 세요.</> : <>같으니 보드 수만 <b>하나 늘어요</b>.</>}</>);
@@ -476,7 +498,7 @@ export function WholeRunSim({ E }) {
           )}
 
           {/* 표는 **꺼내는 걸음부터** 보인다 — 보드를 가르는 걸음엔 아직 필요 없다. */}
-          {(s.k === "table" || (s.k === "board" && (s.p === "pick" || s.p === "score"))) && (
+          {(s.k === "table" || (s.k === "board" && (s.p === "pick" || s.p === "score" || s.p === "recap"))) && (
             <div style={{ display: "grid", gap: 4, marginBottom: s.k === "board" ? 10 : 0 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", textAlign: "center",
                 marginBottom: 2, wordBreak: "keep-all" }}>
@@ -503,7 +525,7 @@ export function WholeRunSim({ E }) {
                   </div>
                 );
               })}
-              {s.k === "board" && s.p === "score" && (
+              {s.k === "board" && (s.p === "score" || s.p === "recap") && (
                 <div style={{ fontSize: 11.5, fontWeight: 800, color: "#047857", textAlign: "center",
                   marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
                   {/* ⚠️ 이 화면 안에서 2 가 여러 뜻으로 나온다(표의 무브 개수 · 여기 더하는 수 ·
@@ -520,12 +542,13 @@ export function WholeRunSim({ E }) {
           )}
 
 
-          {s.k === "board" && (s.p === "score" || s.p === "keep" || s.p === "none") && (
+          {s.k === "board" && (s.p === "score" || s.p === "keep" || s.p === "none" || s.p === "recap") && (
             <Row label={t(E, "this board's score", "이 보드 점수")} value={cur.sc} hot={cur.sc === best} />
           )}
 
-          {/* 장부는 **남기는 걸음**부터. 그 전에 띄우면 아직 안 정해진 값을 보여주게 된다. */}
-          {((s.k === "board" && (s.p === "keep" || s.p === "none")) || s.k === "done") && (
+          {/* 장부는 **남기는 걸음**부터. recap 은 그 걸음 하나에 keep 까지 합쳐져 있다.
+              그 전엔 띄우면 아직 안 정해진 값을 보여주게 된다. */}
+          {((s.k === "board" && (s.p === "keep" || s.p === "none" || s.p === "recap")) || s.k === "done") && (
             <div style={{ marginTop: 10, paddingTop: 9, borderTop: "1px dashed #cbd5e1" }}>
               <Row label={t(E, "best so far", "지금까지 최고 점수")} value={runBest} hot={s.k === "done"} />
               <Row label={t(E, "boards at that score", "그 점수인 보드 수")} value={runWays} hot={s.k === "done"} />
