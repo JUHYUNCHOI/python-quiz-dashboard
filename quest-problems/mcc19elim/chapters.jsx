@@ -298,7 +298,15 @@ export function makeMcc19ElimCh1(E) {
           <div>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
-              <div>0 ≤ K ≤ N</div>
+              {/* ⚠️ 2026-09-25: 여기 `0 ≤ K ≤ N` 이라고 적혀 있었는데 **원문에 없는 숫자**다.
+                  감사 담당이 `ioimalaysia.org/competition/mcc/2019-editorial/` 원문을 열어
+                  확인했다 — MCC 2019 문제들은 **CONSTRAINTS 절 자체가 없다.**
+                  `K` 가 「지울 0 의 개수」라 논리적으로 그럴듯한 추론이긴 하지만
+                  **원문이 준 값이 아닌데 제약 카드에 사실처럼** 적혀 있었다.
+                  ⭐ 바로 아래 `N` 줄은 **이미** 「원문에 정확한 상한이 없다」고 정직하게
+                  처리돼 있었다 — **같은 카드 안에서 일관성이 깨져 있었다.**
+                  `billboard`·`lifeguards` 가 훈련 지식으로 숫자를 써서 틀린 그 층이다. */}
+              <div>K = 지울 0 의 개수 <span style={{ color: C.dim, fontSize: 11 }}>(원문에 상한이 없어요)</span></div>
               <div>{t(E, "s holds only the characters 0 and 1", "s 에는 글자 0 과 1 만 들어 있어요")}</div>
               {/* 2026-09-17: 원문(ioimalaysia 2019 editorial)에 N 의 정확한 상한이 없다.
                   없는 숫자를 "공식 상한" 인 척 지어내지 않는다. 대신 이 풀이가 감당하는

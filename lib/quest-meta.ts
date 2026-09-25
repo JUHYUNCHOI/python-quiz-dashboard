@@ -2156,6 +2156,92 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
      ⛔ 빈 배열로 두면 `isReady()` 가 `reqs.length === 0` 에서 false 라 **배지가 안 뜬다** —
      안 쓰는 개념을 걸어 두는 것과 결과가 같아진다. 그래서 비우지 않고 채운다. */
   mcc21simplemath: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "math-basics"] },
+  /* ════ 난이도 감사 — 2026-09-25 ════════════════════════════════════
+     선생님(2026-09-13): *"이 문제가 진짜 레벨3인가?"*
+     여기까지 이 quest 들은 `difficulty` 가 **없어서** `quest-difficulty.ts` 의
+     **문제 번호 유추 규칙**(Bronze → 3)이 붙인 값이 쓰였고, 화면은 그걸
+     **사람이 매긴 값과 같은 Lv 뱃지**로 보여줬다.
+     감사 세 조가 **서로 안 보고** 🔒 최종 코드·제약·`USACO_VERIFICATION.md` 를
+     직접 읽어 매겼다. 잣대는 아래 `moohunt` 주석 그대로 —
+       Lv1~2 아이디어 하나가 바로 보인다 / Lv3 아이디어 하나인데 **찾아야** 한다
+       Lv4 **아이디어가 둘**이거나 구현 밀도가 높거나 파이썬이 빡빡하다
+       Lv5 알고리즘 자체가 Gold 급
+     ⭐ **유추값(전부 3)이 실제와 많이 달랐다** — `sqpasture`·`cowsignal`·`abcs`·
+       `wordproc`·`mixmilk` 는 **1**(문제 문장을 그대로 옮기는 수준)이고,
+       `swaptowin`(파이썬 TLE 6/12)·`chipxchg`·`drought`·`socialdist1`·`meastraffic`·
+       `familytree`·`mco15trains` 는 **4** 다.
+     ⛔ **둘은 일부러 안 매겼다:**
+       · `clockfence` — `USACO_VERIFICATION.md` 에 **❌ 0/1(양쪽 다 오답)**. 코드가
+         실제 문제를 안 풀고 있다(`T` 도 안 읽는다). **틀린 코드로 난이도를 매기면
+         그게 지어낸 값이다.** 코드를 고친 뒤에 다시 본다.
+       · `interview` — 파일 헤더가 스스로 **"Bronze 가 아니라 US Open 2024 Silver #1"**
+         이라고 적어 뒀다. Silver 를 Bronze 1~5 척도에 끼워 넣는 건 **선생님 판단**이다.
+     ⚠️ `mco15*` 다섯은 `USACO_VERIFICATION.md` 에 **이름이 아예 없다**(원문도 못 찾았다).
+       **코드가 요구하는 아이디어 개수로만** 매긴 값이다 — 유추값(4·5)보다는 정확하지만
+       **출처가 없다는 것을 알고 써라.**
+     ⚠️ `stalling`·`cowsplits`(C++)·`countliars`(C++) 는 **채점기 기록이 없거나 재제출
+       대기**다 — 난이도와 별개로 감사 대상이다.
+     ════════════════════════════════════════════════════════════ */
+  abcs:             { ...DEFAULT_META, difficulty: 1 },
+  backforth:        { ...DEFAULT_META, difficulty: 2 },
+  balanced:         { ...DEFAULT_META, difficulty: 1 },
+  billboard:        { ...DEFAULT_META, difficulty: 2 },
+  bovgenomics:      { ...DEFAULT_META, difficulty: 2 },
+  bovshuffle:       { ...DEFAULT_META, difficulty: 3 },
+  bucketbrigade:    { ...DEFAULT_META, difficulty: 2 },
+  bucketlist:       { ...DEFAULT_META, difficulty: 3 },
+  chipxchg:         { ...DEFAULT_META, difficulty: 4 },
+  comfycows:        { ...DEFAULT_META, difficulty: 2 },
+  countliars:       { ...DEFAULT_META, difficulty: 2 },
+  cowcollege:       { ...DEFAULT_META, difficulty: 2 },
+  cowevolution:     { ...DEFAULT_META, difficulty: 3 },
+  cowgym:           { ...DEFAULT_META, difficulty: 2 },
+  cowsignal:        { ...DEFAULT_META, difficulty: 1 },
+  cowsplits:        { ...DEFAULT_META, difficulty: 3 },
+  cowtipping:       { ...DEFAULT_META, difficulty: 3 },
+  crossroad1:       { ...DEFAULT_META, difficulty: 2 },
+  crossroad2:       { ...DEFAULT_META, difficulty: 3 },
+  crossroad3:       { ...DEFAULT_META, difficulty: 2 },
+  daisychains:      { ...DEFAULT_META, difficulty: 2 },
+  dontbelast:       { ...DEFAULT_META, difficulty: 2 },
+  drought:          { ...DEFAULT_META, difficulty: 4 },
+  familytree:       { ...DEFAULT_META, difficulty: 4 },
+  guessanimal:      { ...DEFAULT_META, difficulty: 2 },
+  herdle:           { ...DEFAULT_META, difficulty: 2 },
+  lonelyphoto:      { ...DEFAULT_META, difficulty: 3 },
+  lostcow:          { ...DEFAULT_META, difficulty: 3 },
+  makedistinct:     { ...DEFAULT_META, difficulty: 3 },
+  mco15badminton:   { ...DEFAULT_META, difficulty: 2 },
+  mco15bitcoin:     { ...DEFAULT_META, difficulty: 2 },
+  mco15honey:       { ...DEFAULT_META, difficulty: 3 },
+  mco15secret:      { ...DEFAULT_META, difficulty: 3 },
+  mco15trains:      { ...DEFAULT_META, difficulty: 4 },
+  meastraffic:      { ...DEFAULT_META, difficulty: 4 },
+  milkfactory:      { ...DEFAULT_META, difficulty: 3 },
+  milkmeas:         { ...DEFAULT_META, difficulty: 3 },
+  mixmilk:          { ...DEFAULT_META, difficulty: 1 },
+  modernart:        { ...DEFAULT_META, difficulty: 3 },
+  mooin4:           { ...DEFAULT_META, difficulty: 3 },
+  nontrans:         { ...DEFAULT_META, difficulty: 3 },
+  oddphotos:        { ...DEFAULT_META, difficulty: 3 },
+  outofplace:       { ...DEFAULT_META, difficulty: 2 },
+  photoshoot:       { ...DEFAULT_META, difficulty: 3 },
+  photoshoot20:     { ...DEFAULT_META, difficulty: 2 },
+  presents:         { ...DEFAULT_META, difficulty: 2 },
+  revegetation:     { ...DEFAULT_META, difficulty: 3 },
+  shellgame:        { ...DEFAULT_META, difficulty: 2 },
+  sleepclass:       { ...DEFAULT_META, difficulty: 3 },
+  sleepyherd:       { ...DEFAULT_META, difficulty: 3 },
+  sleepysort:       { ...DEFAULT_META, difficulty: 3 },
+  socialdist1:      { ...DEFAULT_META, difficulty: 4 },
+  sqpasture:        { ...DEFAULT_META, difficulty: 1 },
+  stalling:         { ...DEFAULT_META, difficulty: 3 },
+  swaptowin:        { ...DEFAULT_META, difficulty: 4 },
+  triangles:        { ...DEFAULT_META, difficulty: 2 },
+  uddered:          { ...DEFAULT_META, difficulty: 2 },
+  whereami:         { ...DEFAULT_META, difficulty: 2 },
+  wordproc:         { ...DEFAULT_META, difficulty: 1 },
+  yearcow:          { ...DEFAULT_META, difficulty: 2 },
 };
 
 export function getQuestMeta(id: string): QuestConceptMeta {
