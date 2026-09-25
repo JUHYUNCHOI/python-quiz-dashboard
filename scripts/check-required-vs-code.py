@@ -35,6 +35,8 @@
 - **반대 방향(적혀 있는데 코드가 안 쓰는 것)은 일부러 안 본다** — 가르치려고 일부러 적어 둘 수 있다.
 - `concepts_required` 를 **정규식으로** 읽는다. 한 줄에 배열이 다 들어 있는 모양만 본다.
 """
+import glob
+import pathlib
 import re
 import sys
 import importlib.util
@@ -89,6 +91,80 @@ def ontology_ids(meta_src: str) -> set[str]:
     return set(re.findall(r'^\s*"([^"]+)":', seg, re.M))
 
 
+
+# ── 2026-09-25 추가: **학생이 못 보는 코드를 근거로 쓰지 마라** ────────────────
+#   왜 — 오늘 `hps`·`xorstring`·`mcc21simplemath` 에서 `bit-ops` 를 **일부러 뺐다.**
+#   교육·감사 담당이 각자 따로, 그리고 내가 코드로 확인한 근거:
+#     · `hps`        — `HP_FULL_PY` 에 비트 **0회**. 비트마스크는 화면이 스스로
+#                      **«🎁 BONUS — OPTIONAL»** 이라 부르는 `STEP_BITMASK_PY` 뿐이다.
+#     · `xorstring`  — 걸린 한 줄이 **주석 안의 `2^k`**. 연산자가 아니다.
+#     · `mcc21simplemath` — 파이썬이 **일부러 피해** 짰다(`(x // place) % 2`).
+#   그런데 이 검사기의 왼쪽(코드 스캐너)은 **quest 텍스트 전체**를 본다 —
+#   **C++ 코드와 보너스 절까지** 읽는다. `xorstring`·`mcc21simplemath` 는
+#   `supported_languages: ["py"]` 라 **C++ 이 화면에 뜨지도 않는데** 그 비트를 근거로
+#   «빠졌다» 고 신고했다. 고치지 않으면 **누군가 이 경고를 보고 오늘의 옳은 수정을
+#   되돌린다.** 그래서 언어를 가린다.
+#   ⚠️ **보너스 절은 아직 못 가린다**(`hps` 가 그 경우다) — 이름 규칙이 없다.
+#      그건 `❓` 로 낮춰 찍고 **사람이 읽게** 한다.
+LANG_ARRAY = re.compile(r'\b([A-Za-z][A-Za-z0-9_]*?)(_PY|_CPP|Py|Cpp)\s*=\s*'
+                        r'(?:\([^)]*\)\s*=>\s*)?\[')
+
+
+# ⭐ 2026-09-25: **보너스 절**을 가린다. `hps` 가 그 경우다 —
+#   `STEP_BITMASK_PY` 위에 `/* Python bitmask bonus ... */` 주석이 있고,
+#   화면 라벨이 **`9️⃣ (보너스) Python 비트마스크 트릭`** 이다.
+#   즉 «선수 개념» 이 아니라 **다 풀고 나서 보는 덧붙임**이다. 선수로 걸면
+#   그 quest 가 추천에 안 뜬다 — 오늘 그래서 `bit-ops` 를 뺐다.
+#   ⚠️ 이름 규칙이 아니라 **라벨·주석의 낱말**로 판별한다(이름은 quest 마다 다르다).
+#   ⚠️ 못 보는 모양이 있을 것이다 — 「보너스」라 안 쓰고 「덤」이라 쓰면 못 잡는다.
+BONUS_WORD = re.compile(r"bonus|optional|보너스|심화|덤|참고용", re.I)
+
+
+def _is_bonus_array(src, start):
+    """그 배열 **앞 400자**(주석)와, 그 이름을 쓰는 **라벨 줄**에 「보너스」가 있나."""
+    head = src[max(0, start - 400):start]
+    return bool(BONUS_WORD.search(head))
+
+
+def _arrays_by_lang(qid):
+    """그 quest 의 배열을 **언어별로** 모은다 — (py 글자, cpp 글자).
+
+    **보너스 절의 배열은 빼고** 모은다 — 선수 개념의 근거가 못 된다.
+    """
+    py, cpp = [], []
+    for f in sorted(glob.glob(str(ROOT / "quest-problems" / qid / "*.jsx"))
+                    + glob.glob(str(ROOT / "quest-problems" / qid / "*.tsx"))):
+        src = pathlib.Path(f).read_text(encoding="utf-8", errors="replace")
+        for m in LANG_ARRAY.finditer(src):
+            if "KEYWORD" in m.group(1).upper():
+                continue
+            d, i = 0, src.index("[", m.end() - 1)
+            j = i
+            while j < len(src):
+                if src[j] == "[":
+                    d += 1
+                elif src[j] == "]":
+                    d -= 1
+                    if d == 0:
+                        break
+                j += 1
+            if _is_bonus_array(src, m.start()):
+                continue                      # 보너스 절 — 선수 개념 근거 아님
+            body = src[i:j]
+            (py if m.group(2).lower() in ("_py", "py") else cpp).append(body)
+    return "\n".join(py), "\n".join(cpp)
+
+
+def _supported(meta_src, qid):
+    """`supported_languages` — 못 찾으면 둘 다 본다(관대한 쪽)."""
+    m = re.search(r'^\s*' + re.escape(qid) + r':\s*\{(.*?)(?=^\s*\w+:\s*\{|^\};)',
+                  meta_src, re.S | re.M)
+    if not m:
+        return {"py", "cpp"}
+    g = re.search(r'supported_languages:\s*\[([^\]]*)\]', m.group(1))
+    return set(re.findall(r'"([^"]+)"', g.group(1))) if g else {"py", "cpp"}
+
+
 def main() -> int:
     only = set(sys.argv[1:])
     cq = load_counter()
@@ -112,6 +188,26 @@ def main() -> int:
             continue
         have = set(req.get(q["id"], []))
         missing = [d for d in detected if d not in have]
+        # ⭐ 학생이 못 보는 언어의 코드만 근거라면 **빼라.**
+        if missing:
+            langs = _supported(meta_src, q["id"])
+            if True:                          # 언어가 둘 다여도 **보너스 제외**는 해야 한다
+                py_src, cpp_src = _arrays_by_lang(q["id"])
+                kept = []
+                for d in missing:
+                    key = next((k for k, v in TAG.items() if v == d), None)
+                    pat = (cq.UNTAUGHT.get(key) or cq.UNTAUGHT_CODELINE.get(key)) if key else None
+                    if pat is None:
+                        kept.append(d)
+                        continue
+                    seen_py = bool(pat.search(py_src))
+                    seen_cpp = bool(pat.search(cpp_src))
+                    if "py" in langs and seen_py:
+                        kept.append(d)
+                    elif "cpp" in langs and seen_cpp:
+                        kept.append(d)
+                    # 둘 다 아니면 — 화면에 안 뜨는 언어의 코드뿐이다. 뺀다.
+                missing = kept
         if missing:
             rows.append((q["id"], q["frozen"], missing, "엔트리 없음" if q["id"] not in req else ""))
 
