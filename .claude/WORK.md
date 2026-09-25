@@ -4475,3 +4475,47 @@ pedagogy 가 후보 하나를 **스스로 기각**한 것도 옳았다 — 1쪽�
 **이번 라운드에서 같은 종류를 두 quest 에서 찾은 것이다.**
 
 쪽 수 21 그대로 · 클릭 52 그대로 · build 통과 · narr 0 · `\uXXXX` 0 · 가려짐 0.
+
+---
+
+## 🔴 온톨로지가 **자기 설명과 달랐다** — 「선수 그래프」에 간선이 하나도 없다 (2026-09-25)
+
+`concepts_taught` 72종 문제를 파러 갔다가 **더 큰 걸 찾았다.** `CONCEPT_ONTOLOGY` 주석의
+**두 문장이 사실이 아니었다.** 실측으로 확인하고 주석을 고쳤다.
+
+### ❌ *"Every concept used in QUEST_CONCEPT_META must be listed here."*
+
+`concepts_taught` 이 쓰는 이름 **85개 중 74개가 온톨로지에 없다.**
+그리고 그 74개 중 **68개는 quest 하나만 쓰는 일회용 라벨**이다 —
+`per-cane-eat-simulation` · `jump-pad-direction-flip` · `valid-hay-type` 같은 것들.
+
+**그래서 전부 등록하지 않았다.** 등록하면 온톨로지가 **55 → 123** 으로 부는데
+**대부분 아무와도 안 이어진다.** 대신:
+- **둘 이상이 실제로 재사용하는 6개만** 올렸다(`case-analysis`·`incremental-update`·
+  `circular-array`·`directional-pass`·`capacity-cap`), 그중 `nested-loop` 은
+  기존 `nested-loop-search` 와 같은 뜻이라 **합쳤다.**
+- 남은 68개는 전부 **재사용 0회** — 「등록 안 된 이름 중 둘 이상이 쓰는 것: **0개**」.
+- **`concepts_taught` 은 사실상 자유 서술 칸**이라고 인정하고 주석에 적었다.
+  (등록된 이름은 반대다 — 55개 중 한 번만 쓰이는 건 7개뿐, 대부분 재사용된다.)
+
+### ❌ *"The curriculum graph reads this to build the prereq DAG."*
+
+**그 DAG 에는 간선이 하나도 없다.** 두 칸이 **이름을 단 하나도 공유하지 않는다:**
+
+    concepts_required 가 쓰는 18개 → 전부 기초(loop · list-basics · bit-ops …)
+                                    **그걸 가르치는 quest 는 0개** (기초는 레슨이 가르친다)
+    concepts_taught 가 쓰는 85개   → **required 로 한 번도 안 쓰인다**
+
+→ **`getConceptCoverageGaps()` 의 「고아 개념」 패널이 경보 구실을 못 한 이유가 이것이다.**
+앞서 감사는 *"`mooin3` 사고를 막을 수 있었던 유일한 경로"* 로 그 패널을 꼽았는데,
+**실제로는 required 18개가 전부 「아무도 안 가르침」으로 뜬다.**
+**늘 빨간 화면이면 아무도 안 본다.**
+
+### 그래서 이 registry 가 실제로 하는 일은 하나다
+
+**`concepts_required` 에 쓸 수 있는 이름을 못박는 것.** 그 칸만 `ConceptId` 로 묶었고,
+대조는 `check-required-vs-code.py` 가 한다. 주석을 그렇게 다시 썼다 —
+**다음 사람이 「전부 등록해야 한다」는 틀린 문장을 읽고 68개를 올리지 않도록.**
+
+⏸ **고아 패널을 쓸모 있게 만드는 것**(레슨이 가르치는 기초를 그래프에 넣기)은 별건 —
+`learning_tracks.md` 의 트랙 구조에 닿는다.

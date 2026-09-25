@@ -93,8 +93,30 @@ const DEFAULT_META: QuestConceptMeta = {
 
 /**
  * Concept ontology (registry of all valid concept tags).
- * Every concept used in QUEST_CONCEPT_META must be listed here.
- * The curriculum graph reads this to build the prereq DAG.
+ *
+ * ⚠️ 2026-09-25 — 여기 적혀 있던 두 문장이 **사실이 아니었다.** 실측해서 고친다.
+ *
+ *   ❌ "Every concept used in QUEST_CONCEPT_META must be listed here."
+ *      → `concepts_taught` 이 쓰는 이름 85개 중 **74개가 여기 없다.**
+ *        그중 **68개는 quest 하나만 쓰는 일회용 라벨**이다
+ *        (`per-cane-eat-simulation`·`jump-pad-direction-flip`·`valid-hay-type`…).
+ *        전부 등록하면 온톨로지가 55 → 123 으로 부는데 **대부분 아무와도 안 이어진다.**
+ *      → **`concepts_taught` 은 사실상 자유 서술 칸이다.** 그 현실을 인정하고,
+ *        **`concepts_required` 만 `ConceptId` 로 묶는다**(타입도 그렇게 좁혀 뒀다).
+ *
+ *   ❌ "The curriculum graph reads this to build the prereq DAG."
+ *      → **그 DAG 에는 지금 간선이 하나도 없다.** 두 칸이 **이름을 단 하나도 공유하지 않는다** —
+ *        `required` 가 쓰는 18개는 전부 기초(`loop`·`list-basics`·`bit-ops`…)인데
+ *        **그걸 가르치는 quest 는 0개**다(기초는 quest 가 아니라 **레슨**이 가르친다).
+ *        `taught` 가 쓰는 85개는 **required 로 한 번도 안 쓰인다.**
+ *      → `getConceptCoverageGaps()` 의 「고아 개념」 패널이 경보 구실을 못 한 이유가 이것이다.
+ *        **required 18개가 전부 「아무도 안 가르침」으로 뜬다** — 늘 빨간 화면이면 아무도 안 본다.
+ *
+ * 그래서 이 registry 가 **실제로** 하는 일은 하나다 —
+ * **`concepts_required` 에 쓸 수 있는 이름을 못박는 것.** 그 칸은 장식이 아니다:
+ * `isReady()`·`readyQuests()`·`QuestCompletionCard` 가 읽어서 「지금 풀 준비됨」을 띄우고,
+ * 빠지거나 비면 **준비 안 된 학생에게 그 문제를 추천한다**(2026-09-25 에 14개가 그랬다).
+ * 대조는 `scripts/check-required-vs-code.py` 가 한다.
  *
  * Categories are lightweight grouping for the dashboard view —
  * not strict — concepts can be referenced cross-category.
@@ -140,6 +162,13 @@ export const CONCEPT_ONTOLOGY = {
   // ⚠️ 위 `tuple-enum` 과 헷갈리지 마라 — 그건 **조합을 열거**하는 것이고,
   //    이건 그냥 `(start, end)` 를 한 덩어리로 묶어 정렬 키로 쓰는 것이다. (2026-09-25)
   "tuple-basics": "store a pair as one value, e.g. (a, b)",
+  // ── `concepts_taught` 에서 **둘 이상의 quest 가 실제로 재사용**하는 이름만 올린다 (2026-09-25).
+  //    나머지 68개는 quest 하나만 쓰는 일회용 라벨이라 일부러 안 올렸다 — 위 ⚠️ 참고.
+  "case-analysis": "split into cases and handle each",
+  "incremental-update": "update an answer from the previous one instead of recomputing",
+  "circular-array": "array that wraps around at the end",
+  "directional-pass": "sweep once left-to-right, once right-to-left",
+  "capacity-cap": "clamp a value at a maximum",
 
   // Strings
   "string-indexing": "char-by-char access with []",
@@ -796,7 +825,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   },
   reflection: {
     type: "brute-force",
-    concepts_taught: ["nested-loop", "incremental-update", "symmetry-grouping"],
+    concepts_taught: ["nested-loop-search", "incremental-update", "symmetry-grouping"],
     concepts_required: ["loop", "list-basics", "function-basics"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
@@ -943,7 +972,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   },
   checkups: {
     type: "brute-force",
-    concepts_taught: ["nested-loop", "subarray-reversal", "prefix-sum"],
+    concepts_taught: ["nested-loop-search", "subarray-reversal", "prefix-sum"],
     concepts_required: ["loop", "list-basics"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
