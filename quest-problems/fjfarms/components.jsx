@@ -156,6 +156,71 @@ export function FjFarmsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 풀이의 표시용 배열이다 — 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getFjFarmsWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "rankToIndex", ko: "순위마다 어느 식물인지", en: "which plant sits at each rank" },
+        { v: "days", ko: "지금까지 밀어 둔 날짜", en: "days pushed forward so far" },
+      ],
+      beats: [
+        { hi: [0, 6], bubble: t(E,
+          "What do we need to find? The earliest day x where every t[i] holds (or -1 if none does). t[i] is how many plants must end up taller than plant i — since no two are the same, the height order is already fixed.",
+          "무엇을 찾아야 하나요? t[i] 가 전부 맞아떨어지는 가장 이른 날 x 예요(없으면 -1).\nt[i] 는 «나보다 커야 하는 식물 수» — 겹치는 값이 없으니 키 순서가 이미 정해져 있어요.") },
+        { hi: [7, 11], bubble: t(E,
+          "So build a helper solve(...) that first records that order: rankToIndex[r] = which plant belongs at rank r.",
+          "그래서 도우미 함수 solve(...) 를 만들어요. 먼저 rankToIndex[r] 에\n순위 r 자리에 올 식물이 누군지 저장해요.") },
+        { hi: [13, 27], bubble: t(E,
+          "Walk the line from the shortest pair up. If the one that should be shorter is still taller (or equal), push days forward just enough — and if it grows no faster, no day ever works, so return -1.",
+          "짧은 쪽부터 이웃한 두 그루씩 봐요. 작아야 할 쪽이 아직 크거나 같으면,\ndays 를 딱 필요한 만큼만 밀어요. 더 빨리 자라지도 않으면 영영 안 되니 -1 이에요.") },
+        { hi: [29, 37], bubble: t(E,
+          "Pushing days for a later pair can undo a pair we already fixed. So check every neighbor once more.",
+          "뒤쪽 짝 때문에 days 를 밀면 앞에서 맞춰 둔 짝이 도로 뒤집힐 수 있어요.\n그래서 이웃을 전부 한 번 더 확인해요.") },
+        { hi: [39, 40], bubble: t(E,
+          "If nothing broke, return the day we landed on.",
+          "아무것도 안 깨졌으면 지금까지 밀어 둔 날짜를 돌려줘요.") },
+        { hi: [42, 58], bubble: t(E,
+          "For each of T cases, read N, then the starting heights h, growth rates a, and target ranks t.",
+          "T 케이스마다 N 을 읽고, 시작 키 h, 하루 성장량 a, 목표 순위 t 를 읽어요.") },
+        { hi: [59, 62], bubble: t(E,
+          "Call solve on this case and print the answer, then move to the next case.",
+          "이 케이스로 solve 를 불러 답을 출력하고, 다음 케이스로 넘어가요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "rank_to_index", ko: "순위마다 어느 식물인지", en: "which plant sits at each rank" },
+      { v: "days", ko: "지금까지 밀어 둔 날짜", en: "days pushed forward so far" },
+    ],
+    beats: [
+      { hi: [0, 0], bubble: t(E,
+        "What do we need to find? The earliest day x where every t[i] holds (or -1 if none does). There are several cases, so read T first.",
+        "무엇을 찾아야 하나요? t[i] 가 전부 맞아떨어지는 가장 이른 날 x 예요(없으면 -1).\n케이스가 여러 개라 먼저 T 를 읽어요.") },
+      { hi: [2, 9], bubble: t(E,
+        "What does t tell us? t[i] is how many plants must end up taller than plant i — since no two are the same, the height order is already fixed. rank_to_index[r] records who belongs at rank r.",
+        "t 는 무엇을 말해 주나요? t[i] 는 «나보다 커야 하는 식물 수» —\n겹치는 값이 없으니 키 순서가 이미 정해져 있어요.\nrank_to_index[r] 에 순위 r 자리에 올 식물을 저장해요.") },
+      { hi: [10, 24], bubble: t(E,
+        "Walk the line from the shortest pair up. If the one that should be shorter is still taller (or equal), push days forward just enough — and if it grows no faster, no day ever works, so return -1.",
+          "짧은 쪽부터 이웃한 두 그루씩 봐요. 작아야 할 쪽이 아직 크거나 같으면,\ndays 를 딱 필요한 만큼만 밀어요. 더 빨리 자라지도 않으면 영영 안 되니 -1 이에요.") },
+      { hi: [26, 33], bubble: t(E,
+        "Pushing days for a later pair can undo a pair we already fixed. So check every neighbor once more.",
+        "뒤쪽 짝 때문에 days 를 밀면 앞에서 맞춰 둔 짝이 도로 뒤집힐 수 있어요.\n그래서 이웃을 전부 한 번 더 확인해요.") },
+      { hi: [35, 35], bubble: t(E,
+        "If nothing broke, return the day we landed on.",
+        "아무것도 안 깨졌으면 지금까지 밀어 둔 날짜를 돌려줘요.") },
+      { hi: [37, 45], bubble: t(E,
+        "For each of T cases, read N, h, a, t, call solve, and collect the answer — then print them all at once.",
+        "T 케이스마다 N, h, a, t 를 읽고 solve 를 불러 답을 모은 뒤,\n마지막에 한 번에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

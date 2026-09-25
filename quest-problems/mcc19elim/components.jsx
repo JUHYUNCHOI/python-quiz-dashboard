@@ -103,6 +103,36 @@ export function Mcc19ElimProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc19ElimWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "left", ko: "창의 왼쪽 끝", en: "the window's left edge" },
+      { v: "zero/one", ko: "창 안의 0/1 개수", en: "0s/1s inside the window" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What do we need to find? The longest run of 1s we can make by deleting at most K zeros. Read N, K, s, and set up a window: left edge, and counts of 0s and 1s inside it.",
+        "무엇을 내놓아야 하나요? 0 을 K 개까지 지울 수 있을 때 만들 수 있는 가장 긴 연속 1 구간의 길이예요.\nN, K, s 를 읽고, 창(왼쪽 끝 left, 안에 든 0/1 개수)을 준비해요.") },
+      { hi: [8, 10], bubble: t(E,
+        "Slide the right edge forward one character at a time. If it's a 0, count it inside the window.",
+        "오른쪽 끝을 한 칸씩 밀어요. 새 글자가 0 이면 창 안의 0 개수를 하나 늘려요.") },
+      { hi: [11, 16], bubble: t(E,
+        "If there are now more than K zeros, shrink from the left — one character at a time — until it fits again.",
+        "0 이 K 개보다 많아지면, 다시 K 개 이하가 될 때까지 왼쪽에서 한 칸씩 빼요.") },
+      { hi: [17, 19], bubble: t(E,
+        "If it's a 1, count it, and remember the biggest count of 1s seen so far — the answer is how many 1s are in the window, not the window's length, since the zeros inside get deleted.",
+        "새 글자가 1 이면 1 개수를 늘리고, 지금까지 중 가장 큰 값이면 기억해요.\n답은 창의 길이가 아니라 창 안의 1 개수예요 — 안에 있는 0 은 지워지니까요.") },
+      { hi: [21, 21], bubble: t(E,
+        "Once the whole string is scanned, print the answer.",
+        "문자열을 다 훑었으면, 답을 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

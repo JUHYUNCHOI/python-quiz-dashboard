@@ -328,6 +328,70 @@ export function getFeb23Sections(E) {
   ];
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이의 표시용 배열이다 —
+   내용은 절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getFeb23Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "fpos", ko: "F 가 있는 자리들", en: "positions where F sits" },
+        { v: "bits", ko: "지금 조합 (자리마다 0/1)", en: "current assignment (0/1 per F)" },
+        { v: "results", ko: "지금까지 나온 흥분도 모음", en: "distinct excitement values so far" },
+      ],
+      beats: [
+        { hi: [0, 10], bubble: t(E,
+          "What do we need to find? Across every way to set the F's, the distinct excitement values. Start by reading N and the message s.",
+          "무엇을 찾아야 하나요? F 를 정하는 모든 방법에서 나오는, 서로 다른 흥분도예요.\n먼저 N 과 문자열 s 를 읽어요.") },
+        { hi: [12, 18], bubble: t(E,
+          "Only the F's can change. Find where they sit (fpos) and count them (nf).",
+          "바뀔 수 있는 건 F 뿐이에요. F 가 있는 자리(fpos)를 찾고 개수(nf)를 세어요.") },
+        { hi: [20, 23], bubble: t(E,
+          "If nf is large, 1 << nf overflows int and gives a wrong number. So instead of a bitmask, we keep one 0/1 slot per F and update it by hand.",
+          "nf 가 크면 1 << nf 가 int 범위를 넘어 엉뚱한 값이 나와요.\n그래서 비트마스크 대신, F 마다 0/1 칸을 하나씩 두고 손으로 관리해요.") },
+        { hi: [24, 32], bubble: t(E,
+          "Build this assignment: start from s, then set each F to B or E following its slot.",
+          "이번 조합을 만들어요. s 에서 시작해서, F 마다 자기 칸을 보고 B 나 E 로 바꿔요.") },
+        { hi: [33, 39], bubble: t(E,
+          "Count adjacent matches for this assignment, then remember the value in a set — a set drops duplicates automatically.",
+          "이번 조합의 옆칸이 같은 개수를 세고, set 에 담아요 — set 은 중복을 저절로 없애줘요.") },
+        { hi: [41, 51], bubble: t(E,
+          "Move to the next assignment — like adding 1 in binary: flip trailing 1's to 0, then the first 0 to 1. Once every slot is 1, we've tried them all.",
+          "다음 조합으로 넘어가요 — 이진수에 1 을 더하는 것과 같아요.\n뒤에서부터 1 을 0 으로 바꾸다가, 처음 만나는 0 을 1 로 바꿔요.\n모든 칸이 1 이면 다 해 본 거예요.") },
+        { hi: [53, 58], bubble: t(E,
+          "Once every assignment is tried, print how many distinct values we found, then each one in order.",
+          "모든 조합을 다 해 봤으면, 서로 다른 값의 개수를 출력하고, 그 값들을 순서대로 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "f_positions", ko: "F 가 있는 자리들", en: "positions where F sits" },
+      { v: "mask", ko: "지금 시도하는 조합 (비트로 표현)", en: "current assignment (as a bitmask)" },
+      { v: "results", ko: "지금까지 나온 흥분도 모음", en: "distinct excitement values so far" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we need to find? Across every way to set the F's, the distinct excitement values. Start by reading N and the message s.",
+        "무엇을 찾아야 하나요? F 를 정하는 모든 방법에서 나오는, 서로 다른 흥분도예요.\n먼저 N 과 문자열 s 를 읽어요.") },
+      { hi: [3, 4], bubble: t(E,
+        "Only the F's can change. Find where they sit (f_positions) and count them (n_f).",
+        "바뀔 수 있는 건 F 뿐이에요. F 가 있는 자리(f_positions)를 찾고 개수(n_f)를 세어요.") },
+      { hi: [6, 13], bubble: t(E,
+        "Try every assignment: mask counts from 0 to 2^n_f − 1, and bit j of mask tells us whether the j-th F becomes B or E.",
+        "모든 조합을 시도해요. mask 는 0 부터 2^n_f − 1 까지 가고,\nmask 의 j 번째 비트가 j 번째 F 를 B 로 할지 E 로 할지 정해요.") },
+      { hi: [14, 18], bubble: t(E,
+        "Count adjacent matches for this assignment, then remember the value in a set — a set drops duplicates automatically.",
+        "이번 조합의 옆칸이 같은 개수를 세고, set 에 담아요 — set 은 중복을 저절로 없애줘요.") },
+      { hi: [20, 22], bubble: t(E,
+        "Once every assignment is tried, print how many distinct values we found, then each one in increasing order.",
+        "모든 조합을 다 해 봤으면, 서로 다른 값의 개수를 출력하고, 그 값들을 작은 순서로 출력해요.") },
+    ],
+  };
+}
+
 export function Feb23ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }

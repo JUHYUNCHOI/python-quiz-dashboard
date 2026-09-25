@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getMcc19ElimSections } from "./components";
 
 const NW = { whiteSpace: "nowrap" };
 const KA = { wordBreak: "keep-all" };
@@ -389,13 +388,12 @@ export function makeMcc19ElimCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: codewalk
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
-        "Solution code — read part by part. The key line counts ONES, not the window length.",
-        "풀이 코드를 한 부분씩 읽어 봐요."),
-      sections: getMcc19ElimSections(E),
+        "The full solution, start to finish.",
+        "전체 풀이를 처음부터 끝까지 봐요."),
     },
   ];
 }

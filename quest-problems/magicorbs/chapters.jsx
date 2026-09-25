@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMagicOrbsSections, MagicOrbsMergeSim } from "./components";
+import { MagicOrbsMergeSim } from "./components";
 
 const KA = { wordBreak: "keep-all" };
 
@@ -248,10 +248,10 @@ export function makeMagicOrbsCh2(E, lang = "py") {
     },
     // 2-2: progressive code
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
-      sections: getMagicOrbsSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

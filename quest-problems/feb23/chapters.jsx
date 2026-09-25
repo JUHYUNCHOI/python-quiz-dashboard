@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getFeb23Sections, Feb23DeepAuditSim } from "./components";
+import { Feb23DeepAuditSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem understanding
@@ -211,11 +211,10 @@ export function makeFebCh1(E) {
 export function makeFebCh2(E, lang = "py") {
   return [
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
-        "Build the code piece by piece to count every case.",
-        "코드를 한 단락씩 쌓으면서 모든 경우를 세어 볼게요."),
-      sections: getFeb23Sections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
     {
       type: "quiz",

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc19CandySections, Mcc19CandyShoutSim } from "./components";
+import { Mcc19CandyShoutSim } from "./components";
 
 const KA = { wordBreak: "keep-all" };
 
@@ -232,13 +232,12 @@ export function makeMcc19CandyCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: codewalk
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
-        "Solution code — read part by part.",
-        "풀이 코드 — 부분별로 읽어봐요."),
-      sections: getMcc19CandySections(E),
+        "The full solution, start to finish.",
+        "전체 풀이를 처음부터 끝까지 봐요."),
     },
   ];
 }

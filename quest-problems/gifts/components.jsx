@@ -64,6 +64,33 @@ export function getGiftsSections(E) {
   ];
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getGiftsWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "order", ko: "(티어, 번호) 로 줄 세운 결과", en: "guests lined up by (tier, number)" },
+      { v: "x", ko: "손님마다 선물을 받았는지 (0/1)", en: "did this guest get a gift (0/1)" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we need to find? For guests 1..n in order, whether each got a gift (1) or not (0). Read the guest count n, gift count m, and each guest's tier t.",
+        "무엇을 내놓아야 하나요? 손님 1..n 순서로, 선물을 받았으면 1, 못 받았으면 0 이에요.\n손님 수 n, 선물 수 m, 손님마다 티어 t 를 읽어요.") },
+      { hi: [3, 5], bubble: t(E,
+        "Who goes first? Lower tier first, and ties broken by the guest who came first (smaller number). Sorting (tier, number) pairs does both rules in one shot.",
+        "누가 먼저 받아야 하나요? 티어가 낮은 사람부터, 같은 티어면 번호가 작은(먼저 온) 사람부터예요.\n(티어, 번호) 쌍으로 정렬하면 두 규칙이 한 번에 들어가요.") },
+      { hi: [7, 9], bubble: t(E,
+        "Only the first m in that line get a gift. Mark each one at their own original spot, x[i] = 1.",
+        "그 줄에서 앞 m 명만 선물을 받아요. 그 사람의 원래 자리 x[i] 에 표시를 남겨요.") },
+      { hi: [11, 11], bubble: t(E,
+        "Print x as-is — since it's indexed by the original guest number, it's already in guest order.",
+        "x 를 그대로 출력해요 — 원래 손님 번호로 인덱스가 되어 있어서, 이미 손님 순서예요.") },
+    ],
+  };
+}
+
 export function GiftsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc19DitcoinSections, Mcc19DitcoinDeepAuditSim } from "./components";
+import { Mcc19DitcoinDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -298,15 +298,14 @@ export function makeMcc19DitcoinCh2(E, lang = "py") {
     },
     // 2-1: Code
     {
-      type: "progressive",
+      type: "codewalk",
       /* 2026-09-08: 여기 narr 이 "i 일에 미래 최고 가격은 suffix_max[i]…" 로
          **결론부터** 시작했다. 앞 쪽에서 학생이 규칙을 찾았으니, 여기선 코드로 옮기는
          이야기만 한다. 그리고 suffix_max 라는 이름이 여기서 처음 나오므로 뜻을 붙인다
          (학생: "코드 쪽에서 갑자기 영어 변수 이름으로만 부르니 스스로 연결해야 했다"). */
       narr: t(E,
-        "suffix_max[i] = the best price from day i to the end. Let us build it.",
-        "suffix_max[i] 는 i 일부터 마지막 날까지 중 가장 비싼 가격이에요. 그걸 만들어 봐요."),
-      sections: getMcc19DitcoinSections(E),
+        "The full solution, start to finish.",
+        "전체 풀이를 처음부터 끝까지 봐요."),
     },
   ];
 }

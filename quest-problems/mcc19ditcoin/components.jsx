@@ -331,6 +331,33 @@ export function Mcc19DitcoinProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc19DitcoinWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "suffix_max", ko: "오늘부터 끝까지 중 가장 비싼 가격", en: "the best price from today to the end" },
+      { v: "coins", ko: "아직 안 판 코인 수", en: "coins earned but not yet sold" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we need to find? The most profit we can earn selling coins. Read N and the daily prices.",
+        "무엇을 내놓아야 하나요? 코인을 팔아 얻을 수 있는 최대 수익이에요.\nN 과 날짜별 가격을 읽어요.") },
+      { hi: [3, 7], bubble: t(E,
+        "We can't tell if today is a good day to sell just by looking at today. So build suffix_max — the best price from today to the end — working backwards from the last day.",
+        "오늘이 팔기 좋은 날인지는 오늘 가격만 봐서는 몰라요.\n그래서 suffix_max — 오늘부터 끝까지 중 가장 비싼 가격 — 표를 마지막 날부터 거꾸로 만들어요.") },
+      { hi: [9, 16], bubble: t(E,
+        "Walk the days forward, earning one coin each day. When today's price equals the best-from-here-on price, sell every coin held so far.",
+        "날짜를 앞에서부터 훑으며 매일 코인을 1 개씩 벌어요.\n오늘 가격이 '오늘부터 끝까지 중 최고가' 와 같으면, 지금까지 모은 코인을 전부 팔아요.") },
+      { hi: [18, 18], bubble: t(E,
+        "Once every day is done, print the total profit.",
+        "모든 날을 다 훑었으면, 총 수익을 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

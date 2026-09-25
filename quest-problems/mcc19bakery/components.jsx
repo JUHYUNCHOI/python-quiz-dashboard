@@ -87,6 +87,33 @@ export function Mcc19BakeryProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc19BakeryWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "dq", ko: "가격 오름차순 덱 (뒤=비쌈, 앞=쌈)", en: "prices in a deque (back=priciest, front=cheapest)" },
+      { v: "pay", ko: "지금까지 낸 금액", en: "amount paid so far" },
+    ],
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "What do we need to find? The least total we can pay, grouping breads 4 at a time. Read N and the prices.",
+        "무엇을 내놓아야 하나요? 빵을 4 개씩 묶어 낼 때 낼 수 있는 최소 금액이에요.\nN 과 가격들을 읽어요.") },
+      { hi: [5, 7], bubble: t(E,
+        "Sort and hold the prices in a deque, so both ends are cheap to grab — the back is the priciest, the front is the cheapest.",
+        "정렬해서 덱에 담아요 — 양끝을 바로 꺼낼 수 있어요. 뒤쪽이 제일 비싼 빵, 앞쪽이 제일 싼 빵이에요.") },
+      { hi: [9, 14], bubble: t(E,
+        "Each group of 4: pay the two priciest, let the 3rd-priciest be FREE, then pay the cheapest one left over — that way the free slot lands on an expensive bread instead of a cheap one.",
+        "네 개씩 묶어요. 제일 비싼 두 개는 값을 내고, 세 번째로 비싼 것은 무료로 받고,\n남은 것 중 제일 싼 것을 마지막 지불 자리로 써요.\n그래야 무료 자리가 싼 빵이 아니라 비싼 빵에 떨어져요.") },
+      { hi: [16, 16], bubble: t(E,
+        "Once every group is done, print the total paid.",
+        "모든 묶음을 다 처리했으면, 낸 금액을 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

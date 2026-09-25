@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Feb23ProgressiveCode, downloadFeb23PDF, getFeb23Sections } from "./components";
+import { downloadFeb23PDF, getFeb23Sections, getFeb23Walk } from "./components";
 import { makeFebCh1, makeFebCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#dc2626";
 
@@ -101,7 +102,7 @@ export default function Feb23App(props = {}) {
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
-    if (step.type === "progressive") return <Feb23ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "codewalk") return <CodeWalk E={E} lang={codeLang} {...getFeb23Walk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -112,7 +113,7 @@ export default function Feb23App(props = {}) {
     );
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
-    if (s.type === "progressive") return <Feb23ProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "codewalk") return <CodeWalk E={E} lang={codeLang} {...getFeb23Walk(E, codeLang)} accent={A} />;
     return null;
   };
 

@@ -265,6 +265,56 @@ export function MagicOrbsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY / FULL_CPP 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로
+   가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getMagicOrbsWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "a", ko: "구슬 값들 (정렬됨)", en: "orb values (sorted)" },
+        { v: "p", ko: "지금 곱할 배수 (1, 2, 4, …)", en: "coefficient right now (1, 2, 4, …)" },
+      ],
+      beats: [
+        { hi: [0, 8], bubble: t(E,
+          "What do we need to find? The biggest possible value after fusing every orb into one, mod 1e9+7. Read T cases.",
+          "무엇을 내놓아야 하나요? 구슬을 하나로 다 합쳤을 때 나올 수 있는 가장 큰 값이에요(나머지 1e9+7 로). 케이스 수 T 를 읽어요.") },
+        { hi: [9, 17], bubble: t(E,
+          "For each case, read n and the orb values a, then sort them ascending.",
+          "케이스마다 n 과 구슬 값 a 를 읽고, 오름차순으로 정렬해요.") },
+        { hi: [19, 24], bubble: t(E,
+          "The biggest orb should get doubled the most. So walk from smallest to biggest, multiplying by a coefficient that doubles each step (1, 2, 4, …), and add it in.",
+          "가장 큰 구슬이 가장 많이 두 배가 돼야 해요. 그래서 작은 값부터 큰 값까지 훑으면서,\n한 걸음마다 두 배로 커지는 배수(1, 2, 4, …)를 곱해 더해요.") },
+        { hi: [25, 28], bubble: t(E,
+          "Print this case's answer, then move to the next case.",
+          "이 케이스의 답을 출력하고, 다음 케이스로 넘어가요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "a", ko: "구슬 값들 (정렬됨)", en: "orb values (sorted)" },
+      { v: "p", ko: "지금 곱할 배수 (1, 2, 4, …)", en: "coefficient right now (1, 2, 4, …)" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need to find? The biggest possible value after fusing every orb into one, mod 1e9+7. The input is big, so read fast — then read T cases.",
+        "무엇을 내놓아야 하나요? 구슬을 하나로 다 합쳤을 때 나올 수 있는 가장 큰 값이에요(나머지 1e9+7 로).\n입력이 크니 빠르게 읽도록 설정하고, 케이스 수 T 를 읽어요.") },
+      { hi: [5, 8], bubble: t(E,
+        "For each case, read n and the orb values a, then sort them ascending.",
+        "케이스마다 n 과 구슬 값 a 를 읽고, 오름차순으로 정렬해요.") },
+      { hi: [10, 14], bubble: t(E,
+        "The biggest orb should get doubled the most. So walk from smallest to biggest, multiplying by a coefficient that doubles each step (1, 2, 4, …), and add it in.",
+        "가장 큰 구슬이 가장 많이 두 배가 돼야 해요. 그래서 작은 값부터 큰 값까지 훑으면서,\n한 걸음마다 두 배로 커지는 배수(1, 2, 4, …)를 곱해 더해요.") },
+      { hi: [15, 15], bubble: t(E,
+        "Print this case's answer, then move to the next case.",
+        "이 케이스의 답을 출력하고, 다음 케이스로 넘어가요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

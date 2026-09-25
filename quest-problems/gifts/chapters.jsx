@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getGiftsSections } from "./components";
 import { GiftQueueSim } from "./sims";
 
 /* 옛 문제(N 개를 K 명에게)용 SOLUTION_CODE 는 2026-07-30 삭제 — quest 를
@@ -186,13 +185,12 @@ export function makeGiftsCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "codewalk",
       /* 앞 슬라이드(세 동작)와 같은 말을 반복하지 않는다 — 여기서는 그 세 동작이
          *코드의 어느 줄* 인지만 짚어준다. (선생님 2026-07-30: "반복된건 없는지") */
       narr: t(E,
-        "Those three moves are three lines of code. Find them: the sort, the slice, the print.",
-        "방금 그 세 동작이 코드에선 딱 세 줄이에요.\n어느 줄인지 찾아보세요 — 정렬, 앞에서 자르기, 출력."),
-      sections: getGiftsSections(E),
+        "Those three moves are three lines of code — find them below.",
+        "방금 그 세 동작이 코드에선 딱 세 줄이에요 — 아래에서 찾아보세요."),
     },
   ];
 }

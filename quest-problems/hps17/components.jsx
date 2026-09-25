@@ -124,6 +124,68 @@ export function Hps17ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 풀이의 표시용 배열이다 — 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. ── */
+export function getHps17Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "H/P/S", ko: "이번 순열에서 1·2·3 이 뭔지", en: "what 1/2/3 mean under this permutation" },
+        { v: "best", ko: "지금까지 가장 큰 승수", en: "biggest win count so far" },
+      ],
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "What do we need to find? Cow 1's max wins over N rounds — but we don't know which of 1, 2, 3 is Hoof, Paper, Scissors. Older contests use file I/O, so read hps.in.",
+          "무엇을 찾아야 하나요? N 라운드에서 cow 1 의 최대 승수예요 — 그런데 1, 2, 3 중\n뭐가 Hoof·Paper·Scissors 인지 몰라요. 이전 대회는 파일 입출력을 쓰니\nhps.in 에서 N 과 라운드들을 읽어요.") },
+        { hi: [16, 21], bubble: t(E,
+          "Only 6 ways exist to assign {1,2,3} to (H,P,S). List them, and remember the win rule: H beats S, P beats H, S beats P.",
+          "{1,2,3} 을 (H,P,S) 에 배정하는 방법은 6가지뿐이에요. 그 6가지를 다 적어 둬요.\n이기는 규칙도 기억해요 — H 는 S 를, P 는 H 를, S 는 P 를 이겨요.") },
+        { hi: [22, 26], bubble: t(E,
+          "Try each of the 6 permutations in turn. Pull out what H, P, S mean under this one.",
+          "6 가지 순열을 하나씩 시도해요. 이번 순열에서 H, P, S 가 각각 뭔지 꺼내요.") },
+        { hi: [27, 36], bubble: t(E,
+          "For every round, compare cow 1's move (a) with cow 2's (b) — if it matches one of the three winning pairs, count a win.",
+          "라운드마다 cow 1 의 손(a)과 cow 2 의 손(b)을 비교해요.\n셋 중 하나의 이기는 조합과 같으면 승리를 세어요.") },
+        { hi: [37, 40], bubble: t(E,
+          "If this permutation's win count beats the best so far, remember it.",
+          "이번 순열의 승수가 지금까지 최댓값보다 크면 갱신해요.") },
+        { hi: [41, 43], bubble: t(E,
+          "Once all 6 permutations are tried, write the best count to hps.out.",
+          "6 가지를 다 해 봤으면 최댓값을 hps.out 에 써요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "H/P/S", ko: "이번 순열에서 1·2·3 이 뭔지", en: "what 1/2/3 mean under this permutation" },
+      { v: "best", ko: "지금까지 가장 큰 승수", en: "biggest win count so far" },
+    ],
+    beats: [
+      { hi: [0, 10], bubble: t(E,
+        "What do we need to find? Cow 1's max wins over N rounds — but we don't know which of 1, 2, 3 is Hoof, Paper, Scissors. Older contests use file I/O, so read hps.in.",
+        "무엇을 찾아야 하나요? N 라운드에서 cow 1 의 최대 승수예요 — 그런데 1, 2, 3 중\n뭐가 Hoof·Paper·Scissors 인지 몰라요. 이전 대회는 파일 입출력을 쓰니\nhps.in 에서 N 과 라운드들을 읽어요.") },
+      { hi: [12, 18], bubble: t(E,
+        "Only 6 ways exist to assign {1,2,3} to (H,P,S). List them, and remember the win rule: H beats S, P beats H, S beats P.",
+        "{1,2,3} 을 (H,P,S) 에 배정하는 방법은 6가지뿐이에요. 그 6가지를 다 적어 둬요.\n이기는 규칙도 기억해요 — H 는 S 를, P 는 H 를, S 는 P 를 이겨요.") },
+      { hi: [19, 23], bubble: t(E,
+        "Try each of the 6 permutations in turn. Pull out what H, P, S mean under this one.",
+        "6 가지 순열을 하나씩 시도해요. 이번 순열에서 H, P, S 가 각각 뭔지 꺼내요.") },
+      { hi: [24, 33], bubble: t(E,
+        "For every round, compare cow 1's move (a) with cow 2's (b) — if it matches one of the three winning pairs, count a win.",
+        "라운드마다 cow 1 의 손(a)과 cow 2 의 손(b)을 비교해요.\n셋 중 하나의 이기는 조합과 같으면 승리를 세어요.") },
+      { hi: [34, 35], bubble: t(E,
+        "If this permutation's win count beats the best so far, remember it.",
+        "이번 순열의 승수가 지금까지 최댓값보다 크면 갱신해요.") },
+      { hi: [37, 38], bubble: t(E,
+        "Once all 6 permutations are tried, write the best count to hps.out.",
+        "6 가지를 다 해 봤으면 최댓값을 hps.out 에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

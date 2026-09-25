@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getFjFarmsSections } from "./components";
 import { GrowthSim } from "./GrowthSim";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -220,11 +219,10 @@ export function makeFjFarmsCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code — try every x = 0, 1, ..., 1000.
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
-        "Try day x from 0 upward and find the first day that matches.",
-        "날 x 를 0 부터 하나씩 넣어 보며 맞는 첫날을 찾을게요."),
-      sections: getFjFarmsSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

@@ -264,6 +264,32 @@ export function Mcc19CandyProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
+export function getMcc19CandyWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "pos", ko: "지금 되짚는 자리 번호", en: "position we're tracing back" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What do we need to find? The original spot of the person who ends up in position 1 after R rounds. Read R and the shouts.",
+        "무엇을 내놓아야 하나요? R 라운드가 끝난 뒤 1 번 자리에 남는 사람의 원래 번호예요.\nR 과 외침들을 읽어요.") },
+      { hi: [3, 7], bubble: t(E,
+        "Simulating forward means rebuilding the whole line every round — slow. Instead, start at the final position (1) and undo the rounds from last to first.",
+        "앞으로 따라가려면 매 라운드마다 줄을 다시 세워야 해서 느려요.\n대신 마지막 자리(1)에서 시작해 라운드를 거꾸로 되돌려요.") },
+      { hi: [8, 12], bubble: t(E,
+        "Walk the rounds backwards. \"odd\" wiped out odd spots, so a round earlier this person was at 2·pos. \"even\" wiped out even spots, so they were at 2·pos − 1.",
+        "라운드를 마지막부터 거꾸로 훑어요. \"odd\" 는 홀수 자리를 지웠으니, 한 라운드 전엔 2·pos 번째에 있었어요.\n\"even\" 은 짝수 자리를 지웠으니 2·pos − 1 번째였어요.") },
+      { hi: [14, 14], bubble: t(E,
+        "Once every round is undone, print the original position.",
+        "모든 라운드를 되돌렸으면, 원래 자리를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

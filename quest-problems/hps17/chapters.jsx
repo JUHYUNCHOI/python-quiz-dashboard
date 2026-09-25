@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getHps17Sections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)
@@ -218,11 +217,10 @@ export function makeHps17Ch2(E, lang = "py") {
   return [
     // 2-1: Code
     {
-      type: "progressive",
+      type: "codewalk",
       narr: t(E,
-        "Try all 6 assignments and take the highest win count.",
-        "6 가지 짝을 모두 세어 보고 가장 큰 승수를 뽑아요."),
-      sections: getHps17Sections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }
