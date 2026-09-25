@@ -165,6 +165,40 @@ export function makeCowCollegeCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문 cpid=1251) — 시즌 표준(photoshoot25) 형식
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then one line of N tuition caps.",
+        "입력은 소의 수 N, 그다음 최대 등록금이 한 줄로 와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows", "— 소의 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>c₁ c₂ … cₙ</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— each cow's max tuition, one line", "— 각 소의 최대 등록금, 한 줄")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "Two numbers on one line — the maximum revenue, and the price P that achieves it (smallest P if there's a tie).",
+                  "한 줄에 숫자 2개 — 최대 수입과 그 수입을 만드는 가격 P (여럿이면 가장 작은 P) 를 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 10⁵</div>
+              <div>1 ≤ c ≤ 10⁶</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Visual — cows with max tuition as bar chart
     {
       type: "reveal",

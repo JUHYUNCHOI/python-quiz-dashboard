@@ -307,6 +307,41 @@ export function makeMixMilkCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문 cpid=855) — 시즌 표준(photoshoot25) 형식
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  Three lines, one per bucket.",
+        "입력은 양동이마다 한 줄씩, 세 줄로 와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>c₁ m₁</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— bucket 1's capacity, milk amount", "— 양동이 1의 용량, 우유량")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>c₂ m₂</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— bucket 2's capacity, milk amount", "— 양동이 2의 용량, 우유량")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>c₃ m₃</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— bucket 3's capacity, milk amount", "— 양동이 3의 용량, 우유량")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "Three lines — the milk left in bucket 1, 2, 3 after 100 pours.",
+                  "세 줄 — 100번 부은 뒤 양동이 1, 2, 3에 남은 우유량을 각각 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ m ≤ c ≤ 1,000,000,000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "(for each of the 3 buckets)", "(양동이 셋 모두)")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Bucket concept visual
     {
       type: "reveal",
