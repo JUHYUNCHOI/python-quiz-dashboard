@@ -191,6 +191,34 @@ def collect():
     md = read(os.path.join(ROOT, "lib/mcc-difficulty.ts"))
     diff = {k: int(v) for k, v in re.findall(r"(\w+):\s*(\d)", md)}
 
+    # ⭐ 2026-09-26: **`lib/quest-meta.ts` 의 `difficulty` 를 읽는다.**
+    #   왜 — 이 스크립트는 `mcc-difficulty.ts`(MCC 감사맵)와 **문제 번호 문자열**만 보고
+    #   「감사값 / 추정치」를 갈랐다. 그래서 2026-09-25 에 감사 세 조가 **60개를 사람이 매겨**
+    #   `quest-meta.ts` 에 넣었는데도 이 표는 **여전히 「추정치 117」** 이라고 찍었다.
+    #   `check-quest-difficulty.py` 는 같은 시점에 **「유추 2개」** 라고 했다 —
+    #   **두 검사기가 115 만큼 어긋났다.** 이 스크립트가 **그 파일을 안 읽어서**다.
+    #   ⛔ 안 고치면 **축이 끝났는데도 안 끝난 것처럼 보이고**, 다음 사람이 이미 매긴
+    #      60개를 또 매긴다(오늘 낡은 목록으로 quest 17개를 재배정한 것과 같은 사고).
+    meta_src = read(os.path.join(ROOT, "lib/quest-meta.ts"))
+    _m = re.search(r"export const QUEST_CONCEPT_META[^=]*=\s*\{", meta_src)
+    meta_diff = set()
+    if _m:
+        _d, _i = 1, _m.end()
+        while _i < len(meta_src):
+            if meta_src[_i] == "{":
+                _d += 1
+            elif meta_src[_i] == "}":
+                _d -= 1
+                if _d == 0:
+                    break
+            _i += 1
+        _body = meta_src[_m.end():_i]
+        for _mm in re.finditer(
+                r'^  ([A-Za-z]\w*):\s*\{(.*?)(?=^  [A-Za-z]\w*:\s*\{|\Z)',
+                _body, re.S | re.M):
+            if "difficulty:" in _mm.group(2):
+                meta_diff.add(_mm.group(1))
+
     quests = []
     for qid, sub, section in rows:
         t = quest_text(qid)
@@ -208,7 +236,9 @@ def collect():
             # 화면은 둘을 똑같은 Lv 뱃지로 보여준다. 세는 자리에서라도 갈라 둔다.
             "untaught": untaught_of(t) if t else [],
             "difficulty": diff.get(qid),
+            # 순서가 중요하다 — **사람이 매긴 값이 문제 번호 유추보다 앞선다.**
             "diff_source": ("감사값" if qid in diff
+                            else "명시" if qid in meta_diff
                             else "추정치" if re.search(r"Bronze\s*#\s*\d|\bP\d\b", sub or "")
                             else None),
         })
@@ -237,6 +267,7 @@ def main():
             "옛 코드 표시만": len([q for q in rows if q["progressive"] and not q["codewalk"]]),
             "안 배운 개념": len([q for q in rows if q["untaught"]]),
             "난이도 감사값": len([q for q in rows if q["diff_source"] == "감사값"]),
+            "난이도 명시": len([q for q in rows if q["diff_source"] == "명시"]),
             "난이도 추정치": len([q for q in rows if q["diff_source"] == "추정치"]),
         }
 
@@ -297,7 +328,7 @@ def main():
         return 0
 
     cols = ["전체", "셀 수 있음", "입출력 카드 없음", "CodeWalk 씀", "옛 코드 표시만",
-            "안 배운 개념", "난이도 감사값", "난이도 추정치"]
+            "안 배운 개념", "난이도 감사값", "난이도 명시", "난이도 추정치"]
     w = max(len(c) for c in cols) + 2
     print("\n=== quest 개수 (기준: app/quest/[problemId]/data.ts 카탈로그) ===\n")
     print("  " + "섹션".ljust(11) + "".join(c.rjust(w) for c in cols))
