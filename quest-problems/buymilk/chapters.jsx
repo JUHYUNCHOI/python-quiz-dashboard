@@ -34,7 +34,12 @@ export function makeBuyMilkCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5, wordBreak: "keep-all" }}>
+            {/* ⚠️ 2026-09-25: `\n` 을 넣어 놓고 **화면에서는 한 문단으로 붙어 나오고 있었다.**
+                이 div 에 `whiteSpace` 가 없었다 — `check-linebreak-rendered.py` 는
+                `components/quest/**` 의 `.map()` 자리만 봐서 **이 모양을 못 본다.**
+                저장소 전체로 재니 같은 자리가 **104곳 · quest 54개**다(큐에 적었다). */}
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5,
+                          whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
                 "For each query x, output the minimum cost to buy at least x buckets of milk.",
                 "x 가 주어질 때마다, 그 통 수 이상을 사는 가장 싼 값을 알려줘요.")}
