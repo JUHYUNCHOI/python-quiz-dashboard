@@ -79,6 +79,50 @@ export function makeAirCondCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문 cpid=1276) — photoshoot25 카드 모양 그대로
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, M, then N cows, then M ACs.",
+        "입력은 N, M 다음에 소 N줄, 에어컨 M줄로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N M</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows, number of ACs", "— 소의 수, 에어컨의 수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>s t c</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— cow's stall range [s,t], needed cooling c", "— 소의 축사 범위 [s,t], 필요한 냉방력 c")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+              <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>a b p m</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— AC's stall range [a,b], power p, cost m", "— 에어컨의 축사 범위 [a,b], 냉방력 p, 비용 m")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats M times", "↑ 이 줄이 M 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E,
+                "A single integer — the minimum total cost.",
+                "정수 하나 — 최소 총 비용이에요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 20</div>
+              <div>1 ≤ M ≤ 10</div>
+              <div>1 ≤ s ≤ t ≤ 100, 1 ≤ a ≤ b ≤ 100</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "1 ≤ p ≤ 10⁶ (one million)  ·  1 ≤ m ≤ 1000", "1 ≤ p ≤ 10⁶(100만)  ·  1 ≤ m ≤ 1000")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

@@ -77,6 +77,40 @@ export function makeLostCowCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문 cpid=735) — photoshoot25 카드 모양 그대로
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  One line, x and y — from a file (this contest is old style).",
+        "입력은 한 줄, x 와 y 예요 — 이 대회는 옛날 방식이라 파일로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT (lostcow.in)", "입력 (lostcow.in)")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x y</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— FJ's start position, the cow's position (one line, two integers)", "— FJ의 시작 위치, 소의 위치 (한 줄에 정수 두 개)")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT (lostcow.out)", "출력 (lostcow.out)")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E,
+                "A single integer — the total distance FJ walks before reaching y.",
+                "정수 하나 — y 에 닿기 전까지 FJ 가 걸은 총 거리예요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>0 ≤ x, y ≤ 1000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "x and y are always different", "x 와 y 는 항상 서로 달라요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { CowGymProgressiveCode, downloadCowGymPDF, getCowGymSections } from "./components";
+import { CowGymProgressiveCode, downloadCowGymPDF, getCowGymSections, getCowGymWalk } from "./components";
 import { makeCowGymCh1, makeCowGymCh2, makeCowGymCh3 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#d97706";
 
@@ -103,6 +104,7 @@ export default function CowGymApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <CowGymProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "cowgym-codewalk") return <CodeWalk E={E} lang={codeLang} {...getCowGymWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -112,6 +114,7 @@ export default function CowGymApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <CowGymProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "cowgym-codewalk") return <CodeWalk E={E} lang={codeLang} {...getCowGymWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

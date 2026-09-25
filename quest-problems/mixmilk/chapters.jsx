@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getMixMilkSections } from "./components";
 
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
@@ -796,32 +795,14 @@ export function makeMixMilkCh3(E, lang = "py") {
         "Two constraints: (1) can't pour more milk than source has, (2) can't exceed destination capacity. min() ensures both!",
         "지켜야 할 게 두 가지예요. (1) 출발지가 가진 것보다 많이 부을 수 없고, (2) 목적지 용량을 넘을 수 없어요. min() 이 둘 다 지켜 줘요!"),
     },
-    // 3-5: Complete code
+    // 3-5: Complete code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
+    // 🔗 다리 문장 둘(min() 대신 if/else · map(int,...) 대신 int(parts[0]))은
+    // components.jsx 의 getMixMilkWalk() beats 안으로 옮겼다 — 그 갈리는 줄에 직접 붙는다.
     {
-      type: "progressive",
+      type: "mixmilk-codewalk",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 부분별로 읽어봐요.\n위쪽에서 Python ↔ C++ 를 바꿀 수 있어요."),
-      sections: (() => {
-        const sections = getMixMilkSections(E);
-        // 🔗 다리 문장 — components.jsx(🔒)의 FULL_PY/FULL_CPP 는 3-3 에서 배운
-        // min() 대신 if/else 로, FULL_PY 는 3-1 에서 배운 map(int, ...) 대신
-        // int(parts[0]) 로 하나씩 꺼내 같은 일을 한다. 왜 그런지는 모르니
-        // 지어내지 않고, "하는 일은 같다" 는 사실만 한 줄씩 알려준다.
-        // (billboard/chapters.jsx 의 max()/min() 다리 문장과 같은 처방 — 2026-09-23)
-        sections[0].why = [
-          ...sections[0].why,
-          t(E,
-            "Here the code uses if/else instead of min() — it does the same thing.",
-            "여기서는 min() 대신 if/else 를 써요. 하는 일은 똑같아요."),
-        ];
-        sections[0].pyOnly = [
-          ...sections[0].pyOnly,
-          t(E,
-            "Here the code reads each value with int(parts[0]) instead of map(int, ...) — same thing, one at a time.",
-            "여기서는 map(int, ...) 대신 int(parts[0]) 로 하나씩 꺼내요. 하는 일은 똑같아요."),
-        ];
-        return sections;
-      })(),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

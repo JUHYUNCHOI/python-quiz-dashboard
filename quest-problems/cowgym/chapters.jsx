@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowGymSections, CowGymPairSim } from "./components";
+import { CowGymPairSim } from "./components";
 
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
@@ -529,12 +529,12 @@ export function makeCowGymCh3(E, lang = "py") {
         "Starting j at i+1 avoids both self-pairs (i,i) AND double-counting (1,2) vs (2,1). We only check each pair once!",
         "j 를 i+1 부터 시작하면 자기 자신과의 쌍 (i,i) 도, (1,2) 와 (2,1) 을 두 번 세는 것도 피해요. 쌍마다 딱 한 번씩만 확인해요."),
     },
-    // 3-5: Complete code
+    // 3-5: Complete code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {
-      type: "progressive",
+      type: "cowgym-codewalk",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드예요. 한 부분씩 읽어 봐요.\n위쪽에서 Python ↔ C++ 을 바꿀 수 있어요."),
-      sections: getCowGymSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

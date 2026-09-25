@@ -83,6 +83,41 @@ export function makeInterviewCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문 cpid=1422) — photoshoot25 카드 모양 그대로
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, K, then each cow's time.",
+        "입력은 N, K 다음에 소마다 걸리는 시간으로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— cows before Bessie, number of counters", "— Bessie 앞 소의 수, 카운터 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>t₁ t₂ … tₙ</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— how many minutes each cow's interview takes", "— 소마다 인터뷰에 걸리는 시간(분)")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E,
+                "Line 1: the time Bessie's interview begins. Line 2: a length-K bit string — the i-th character is 1 if counter i could end up interviewing her, else 0.",
+                "첫째 줄: Bessie 의 인터뷰가 시작하는 시각. 둘째 줄: 길이 K인 문자열 — i번째 글자가 1이면 카운터 i가 Bessie 를 인터뷰할 수 있어요, 아니면 0이에요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ K ≤ N ≤ 300,000 (= 3 × 10⁵)</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "1 ≤ tᵢ ≤ 10⁹ (one billion)", "1 ≤ tᵢ ≤ 10⁹(10억)")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     {
       type: "reveal",
       narr: t(E,

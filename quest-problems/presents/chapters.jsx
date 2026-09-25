@@ -129,6 +129,37 @@ export function makePresentsCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 — 출처 없는 연습용 문제라 CONSTRAINTS 는 없다 (아래 보고 참고)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N presents, Q queries, then the queries.",
+        "입력은 선물 N개, 요청 Q개, 그다음 요청들로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N Q</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of presents, number of queries", "— 선물 개수, 요청 개수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>p₁ p₂ … pₙ</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the stack, top (index 0) to bottom", "— 맨 위(0번 자리)부터 맨 아래까지 선물")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>target</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— which present to fetch", "— 꺼낼 선물 번호")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats Q times", "↑ 이 줄이 Q 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E,
+                "For each query, one line: how many presents were removed before reaching the target (Q lines total).",
+                "요청마다 한 줄씩, 그 선물에 닿기 전에 치운 선물 수를 출력해요 (Q 줄).")}
+            </div>
+          </div>
+        </div>),
+    },
     {
       type: "reveal",
       narr: t(E,

@@ -102,6 +102,75 @@ export function MixMilkProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이 그대로다 — 배열 내용은 절대
+   바꾸지 않고, beats(설명 말풍선)만 덧붙인다. getMixMilkSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다.
+   🔗 다리 문장 둘 — 3-1 에서 map(int, ...) 로 한 번에 읽는 법을, 3-3 에서
+   min(...) 으로 이동량을 정하는 법을 가르치는데, 이 최종 코드는 int(parts[0]) 로
+   하나씩 읽고 if/else 로 고른다. 두 문장 다 예전 getMixMilkSections 다리 문장을
+   그대로 옮겨 그 갈리는 줄에 붙인다 — 파이썬만(같은 처방 2026-09-23). if/else
+   문장은 C++ 에도 붙인다 — FULL_CPP 도 min() 없이 if/else 로 짜여 있다. ── */
+export function getMixMilkWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "cap, milk", ko: "양동이의 용량 · 지금 담긴 우유량", en: "each bucket's capacity · current milk" },
+        { v: "src, dst", ko: "붓는 쪽 · 받는 쪽 양동이 번호", en: "the pouring bucket · the receiving bucket" },
+        { v: "amount", ko: "이번에 옮기는 우유량", en: "how much milk moves this pour" },
+      ],
+      beats: [
+        { hi: [0, 12], bubble: t(E,
+          "What should we print? How much milk sits in each of the 3 buckets after all the pouring. So first read each bucket's capacity and current milk.",
+          "무엇을 출력해야 하나요? 붓기가 다 끝난 뒤 세 양동이에 남은 우유량이에요.\n그러니 먼저 양동이마다 용량과 현재 우유량을 읽어요.") },
+        { hi: [13, 16], bubble: t(E,
+          "The problem fixes the cycle 1→2, 2→3, 3→1, ... for exactly 100 pours — so just follow that order and repeat it 100 times.",
+          "문제가 1→2, 2→3, 3→1, ... 순서를 정확히 100 번 반복하라고 정했어요.\n그러니 그 순서를 그대로 100 번 따라가요.") },
+        { hi: [17, 23], bubble: t(E,
+          "Each pour moves as much milk as fits — limited by the source's milk or the destination's free space, whichever is smaller. Here the code uses if/else instead of min() — it does the same thing.",
+          "한 번의 붓기는 원래 양동이의 우유량과, 받는 양동이의 남은 자리 중 더 작은 만큼만 옮겨요.\n여기서는 min() 대신 if/else 를 써요. 하는 일은 똑같아요.") },
+        { hi: [24, 26], bubble: t(E,
+          "Move that amount: take it from the source, add it to the destination.",
+          "그만큼 옮겨요 — 원래 양동이에서 빼고, 받는 양동이에 더해요.") },
+        { hi: [27, 31], bubble: t(E,
+          "Write each bucket's final amount to the output file.",
+          "세 양동이의 최종 우유량을 파일에 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "cap, milk", ko: "양동이의 용량 · 지금 담긴 우유량", en: "each bucket's capacity · current milk" },
+      { v: "src, dst", ko: "붓는 쪽 · 받는 쪽 양동이 번호", en: "the pouring bucket · the receiving bucket" },
+      { v: "amount", ko: "이번에 옮기는 우유량", en: "how much milk moves this pour" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What should we print? How much milk sits in each of the 3 buckets after all the pouring. So first read each bucket's capacity and current milk.",
+        "무엇을 출력해야 하나요? 붓기가 다 끝난 뒤 세 양동이에 남은 우유량이에요.\n그러니 먼저 양동이마다 용량과 현재 우유량을 읽어요.") },
+      { hi: [7, 9], bubble: t(E,
+        "Here the code reads each value with int(parts[0]) instead of map(int, ...) — same thing, one at a time.",
+        "여기서는 map(int, ...) 대신 int(parts[0]) 로 하나씩 꺼내요. 하는 일은 똑같아요.") },
+      { hi: [11, 14], bubble: t(E,
+        "The problem fixes the cycle 1→2, 2→3, 3→1, ... for exactly 100 pours — so just follow that order and repeat it 100 times.",
+        "문제가 1→2, 2→3, 3→1, ... 순서를 정확히 100 번 반복하라고 정했어요.\n그러니 그 순서를 그대로 100 번 따라가요.") },
+      { hi: [15, 19], bubble: t(E,
+        "Each pour moves as much milk as fits — limited by the source's milk or the destination's free space, whichever is smaller. Here the code uses if/else instead of min() — it does the same thing.",
+        "한 번의 붓기는 원래 양동이의 우유량과, 받는 양동이의 남은 자리 중 더 작은 만큼만 옮겨요.\n여기서는 min() 대신 if/else 를 써요. 하는 일은 똑같아요.") },
+      { hi: [20, 21], bubble: t(E,
+        "Move that amount: take it from the source, add it to the destination.",
+        "그만큼 옮겨요 — 원래 양동이에서 빼고, 받는 양동이에 더해요.") },
+      { hi: [23, 25], bubble: t(E,
+        "Write each bucket's final amount to the output file.",
+        "세 양동이의 최종 우유량을 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

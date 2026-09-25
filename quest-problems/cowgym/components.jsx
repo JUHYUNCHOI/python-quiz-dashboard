@@ -301,6 +301,71 @@ export function CowGymProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이 그대로다 — 배열 내용은 절대
+   바꾸지 않고, beats(설명 말풍선)만 덧붙인다. getCowGymSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다.
+   🔗 다리 문장 — 3-3 에서 all(rank[s][i] < rank[s][j] for s in ...) 로 일관성을
+   확인하는 법을 가르치는데, 이 최종 코드는 i_first 카운터로 같은 일을 한다.
+   그 정확한 줄(if i_first == 0 or i_first == K:)에 다리 문장을 그대로 옮겨 붙인다
+   (예전 getCowGymSections 의 why 에 있던 문장 — 2026-09-25). ── */
+export function getCowGymWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "rank", ko: "세션마다 소의 등수", en: "each cow's rank, per session" },
+        { v: "i_first", ko: "i 가 j 보다 앞선 세션 수", en: "how many sessions cow i ranked ahead of cow j" },
+        { v: "ans", ko: "순서가 일관된 쌍의 개수", en: "count of pairs with a consistent order" },
+      ],
+      beats: [
+        { hi: [0, 12], bubble: t(E,
+          "What do we need? K sessions and N cows — read them from the file.",
+          "무엇이 필요한가요? 세션 K 번과 소 N 마리를 파일에서 읽어요.") },
+        { hi: [13, 20], bubble: t(E,
+          "To compare pairs across sessions, we first need each cow's rank in every session. Read each session's order and store rank[s][cow].",
+          "쌍을 비교하려면 먼저 세션마다 소의 등수를 알아야 해요.\n세션의 순서를 읽어 rank[s][소] 에 등수로 저장해요.") },
+        { hi: [21, 30], bubble: t(E,
+          "What should we hand back? How many pairs kept the same order in every single session. For any two cows i, j, count in how many of the K sessions cow i ranked ahead of cow j.",
+          "무엇을 내놔야 하나요? 모든 세션에서 순서가 한쪽으로만 유지된 소 쌍의 개수예요.\n소 두 마리 (i, j) 를 고르면, K 개 세션 중 i 가 앞이었던 횟수(i_first)만 세면 돼요.") },
+        { hi: [31, 35], bubble: t(E,
+          "This is the same check as all() a moment ago — i_first counts how many sessions cow i led, and 0 or K matches what all() being True meant. N is small, so checking every pair this way is fast enough.",
+          "방금 all() 로 확인한 것과 같은 뜻이에요. i_first 가 i 가 앞선 횟수를 세서, 그 횟수가 0 이거나 K 면 all() 이 True 였던 것과 같아요.\nN 이 작아서 모든 쌍을 이렇게 다 검사해도 충분히 빨라요.") },
+        { hi: [36, 38], bubble: t(E,
+          "Write the answer to the output file.",
+          "결과를 파일에 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "rank", ko: "세션마다 소의 등수", en: "each cow's rank, per session" },
+      { v: "i_first", ko: "i 가 j 보다 앞선 세션 수", en: "how many sessions cow i ranked ahead of cow j" },
+      { v: "ans", ko: "순서가 일관된 쌍의 개수", en: "count of pairs with a consistent order" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need? K sessions and N cows — read them from the file.",
+        "무엇이 필요한가요? 세션 K 번과 소 N 마리를 파일에서 읽어요.") },
+      { hi: [6, 13], bubble: t(E,
+        "To compare pairs across sessions, we first need each cow's rank in every session. Read each session's order and store rank[s][cow].",
+        "쌍을 비교하려면 먼저 세션마다 소의 등수를 알아야 해요.\n세션의 순서를 읽어 rank[s][소] 에 등수로 저장해요.") },
+      { hi: [15, 22], bubble: t(E,
+        "What should we hand back? How many pairs kept the same order in every single session. For any two cows i, j, count in how many of the K sessions cow i ranked ahead of cow j.",
+        "무엇을 내놔야 하나요? 모든 세션에서 순서가 한쪽으로만 유지된 소 쌍의 개수예요.\n소 두 마리 (i, j) 를 고르면, K 개 세션 중 i 가 앞이었던 횟수(i_first)만 세면 돼요.") },
+      { hi: [23, 25], bubble: t(E,
+        "This is the same check as all() a moment ago — i_first counts how many sessions cow i led, and 0 or K matches what all() being True meant. N is small, so checking every pair this way is fast enough.",
+        "방금 all() 로 확인한 것과 같은 뜻이에요. i_first 가 i 가 앞선 횟수를 세서, 그 횟수가 0 이거나 K 면 all() 이 True 였던 것과 같아요.\nN 이 작아서 모든 쌍을 이렇게 다 검사해도 충분히 빨라요.") },
+      { hi: [27, 28], bubble: t(E,
+        "Write the answer to the output file.",
+        "결과를 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
