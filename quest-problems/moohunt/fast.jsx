@@ -223,8 +223,28 @@ export function getMooHuntFastWalk(E, lang = "py") {
                                    "이제 보드를 어떻게 만들까요?\n칸마다 M 아니면 O 니까, 보드는 0 과 1 로 적으면 돼요.\n전부 O 에서 시작해요.") },
       { hi: [26, 35], bubble: t(E, "One board in hand. To score it we first need to know\nwhich cells are M and which are O.",
                                    "보드 하나를 받았어요. 점수를 내려면 먼저\n어느 칸이 M 이고 어느 칸이 O 인지 갈라 놔야 해요.") },
-      { hi: [36, 45], bubble: t(E, "So which moves score on this board?\nOnly 'one M cell + two O cells' ever can — so ask the table for exactly those.\nOs is filled in order, so Os[i] is always the smaller cell.",
-                                   "그럼 이 보드에서 득점하는 무브는 무엇일까요?\n'M 한 자리 + O 두 자리' 뿐이라, 그 조합만 표에서 꺼내요.\nOs 는 차례로 담아서 Os[i] 가 늘 작은 자리예요.") },
+      /* ⚠️ 2026-09-25 PM 판정 — 이 자리를 **둘로 가른다.**
+         선생님: *"코드가 잘 안읽혀. **반복문 안에 반복문**이 들어가서."*
+         그리고 최종 코드를 보시고 스스로 답을 맞히셨다 — *"결국 000000 하고 000001
+         이렇게 하는 것 같은데 **이게 왜 빠른건지.** 그냥 키로 가져와서 다시 계산할
+         필요가 없다는건가?"* **맞히셨는데 화면이 그 자리에서 말해주지 않았다.**
+         「왜 빠른가」는 5쪽 `FasterIdeaSim` 에만 있고, 3중 반복문이 **실제로 나오는
+         이 자리**엔 한 문장뿐이었다(`feedback_screen_must_not_rely_on_memory`).
+         학생도 확증했다 — *"설명할 수는 있었다. 그런데 **화면이 증명은 안 해줬다.**"*
+
+         ⛔ 그래서 숫자를 옆에 다시 놓되 — **최대치(546)는 쓰지 않는다.**
+         `sims.jsx:775` 주석에 이유가 남아 있다: *"2026-09-13 학생 넷 중 셋이 이 수에서
+         「짐작도 못 하고 그냥 믿었다」고 했다. 학생이 직접 셀 수 없는 수라서다."*
+         그 결정대로 **손으로 확인되는 10 × 45 = 450** 만 쓴다.
+
+         ⭐ 그리고 **두 언어를 대칭으로 맞춘다.** 여기 셋째 문장이 언어마다 달랐다 —
+         C++ 에만 *"Os[i] 가 늘 작은 자리"*(`j` 가 `i+1` 부터인 이유를 설명하는 **유일한
+         문장**)가 있고, 기본 탭인 **파이썬에는 없었다.** 오늘 `reverseeng`·`teamttt` 로
+         같은 실수를 두 번 했다 — **한쪽 언어만 보고 끝내지 마라.** */
+      { hi: [38, 42], bubble: t(E, "So which moves score on this board?\nOnly 'one M cell + two O cells' ever can — so walk every M, and every O pair.\nOs is filled from the front, so Os[i] is always the smaller cell — the same order the table used.",
+                                   "그럼 이 보드에서 득점하는 무브는 무엇일까요?\n'M 한 자리 + O 두 자리' 뿐이라, M 마다 · O 짝마다 다 훑어요.\nOs 는 앞에서부터 채워서 Os[i] 가 늘 작은 자리예요 — 표를 만들 때와 같은 순서예요.") },
+      { hi: [43, 45], bubble: t(E, "Look that combination up in the table and add it — no walking the 200,000 moves again.\nWith 10 M cells that is 10 x 45 = 450 lookups, not 200,000.\ncount starts every slot at 0, so a combination nobody asked about is just 0.",
+                                   "그 조합을 표에서 찾아 더해요 — 무브 20만 개를 다시 훑지 않아요.\nM 이 10개면 10 × 45 = 450 번만 꺼내면 돼요.\ncount 는 처음부터 0 으로 채워 둬서, 아무도 안 물은 조합은 그냥 0 이에요.") },
       { hi: [46, 52], bubble: t(E, "This board has a score. Compare it with the best so far.\nSame score? Then one more board reaches it.",
                                    "이 보드의 점수가 나왔어요. 지금까지 제일 높은 값과 견줘요.\n같으면 그 점수인 보드가 하나 늘어요.") },
       /* ⚠️ 2026-09-25 선생님: *"moohunt 코드 설명이 너무 길어서 읽기 힘들다.
@@ -251,8 +271,28 @@ export function getMooHuntFastWalk(E, lang = "py") {
                                  "이제 보드를 어떻게 만들까요?\n칸마다 M 아니면 O 니까, 보드는 0 과 1 로 적으면 돼요.\n전부 O 에서 시작해요.") },
     { hi: [20, 28], bubble: t(E, "One board in hand. To score it we first need to know\nwhich cells are M and which are O.",
                                  "보드 하나를 받았어요. 점수를 내려면 먼저\n어느 칸이 M 이고 어느 칸이 O 인지 갈라 놔야 해요.") },
-    { hi: [29, 36], bubble: t(E, "So which moves score on this board?\nOnly 'one M cell + two O cells' ever can — so ask the table for exactly those.\ncount is a defaultdict, so a key nobody asked about gives 0.",
-                                 "그럼 이 보드에서 득점하는 무브는 무엇일까요?\n'M 한 자리 + O 두 자리' 뿐이라, 그 조합만 표에서 꺼내요.\ncount 는 defaultdict 라 없는 열쇠를 물으면 0 이 나와요.") },
+    /* ⚠️ 2026-09-25 PM 판정 — 이 자리를 **둘로 가른다.**
+       선생님: *"코드가 잘 안읽혀. **반복문 안에 반복문**이 들어가서."*
+       그리고 최종 코드를 보시고 스스로 답을 맞히셨다 — *"결국 000000 하고 000001
+       이렇게 하는 것 같은데 **이게 왜 빠른건지.** 그냥 키로 가져와서 다시 계산할
+       필요가 없다는건가?"* **맞히셨는데 화면이 그 자리에서 말해주지 않았다.**
+       「왜 빠른가」는 5쪽 `FasterIdeaSim` 에만 있고, 3중 반복문이 **실제로 나오는
+       이 자리**엔 한 문장뿐이었다(`feedback_screen_must_not_rely_on_memory`).
+       학생도 확증했다 — *"설명할 수는 있었다. 그런데 **화면이 증명은 안 해줬다.**"*
+
+       ⛔ 그래서 숫자를 옆에 다시 놓되 — **최대치(546)는 쓰지 않는다.**
+       `sims.jsx:775` 주석에 이유가 남아 있다: *"2026-09-13 학생 넷 중 셋이 이 수에서
+       「짐작도 못 하고 그냥 믿었다」고 했다. 학생이 직접 셀 수 없는 수라서다."*
+       그 결정대로 **손으로 확인되는 10 × 45 = 450** 만 쓴다.
+
+       ⭐ 그리고 **두 언어를 대칭으로 맞춘다.** 여기 셋째 문장이 언어마다 달랐다 —
+       C++ 에만 *"Os[i] 가 늘 작은 자리"*(`j` 가 `i+1` 부터인 이유를 설명하는 **유일한
+       문장**)가 있고, 기본 탭인 **파이썬에는 없었다.** 오늘 `reverseeng`·`teamttt` 로
+       같은 실수를 두 번 했다 — **한쪽 언어만 보고 끝내지 마라.** */
+    { hi: [30, 34], bubble: t(E, "So which moves score on this board?\nOnly 'one M cell + two O cells' ever can — so walk every M, and every O pair.\nOs is filled from the front, so Os[i] is always the smaller cell — the same order the table used.",
+                                 "그럼 이 보드에서 득점하는 무브는 무엇일까요?\n'M 한 자리 + O 두 자리' 뿐이라, M 마다 · O 짝마다 다 훑어요.\nOs 는 앞에서부터 채워서 Os[i] 가 늘 작은 자리예요 — 표를 만들 때와 같은 순서예요.") },
+    { hi: [35, 36], bubble: t(E, "Look that combination up in the table and add it — no walking the 200,000 moves again.\nWith 10 M cells that is 10 x 45 = 450 lookups, not 200,000.\ncount is a defaultdict, so a key nobody asked about gives 0.",
+                                 "그 조합을 표에서 찾아 더해요 — 무브 20만 개를 다시 훑지 않아요.\nM 이 10개면 10 × 45 = 450 번만 꺼내면 돼요.\ncount 는 defaultdict 라 없는 열쇠를 물으면 0 이 나와요.") },
     { hi: [38, 42], bubble: t(E, "This board has a score. Compare it with the best so far.\nSame score? Then one more board reaches it.",
                                  "이 보드의 점수가 나왔어요. 지금까지 제일 높은 값과 견줘요.\n같으면 그 점수인 보드가 하나 늘어요.") },
     /* ⚠️ 2026-09-25 선생님: *"moohunt 코드 설명이 너무 길어서 읽기 힘들다.
