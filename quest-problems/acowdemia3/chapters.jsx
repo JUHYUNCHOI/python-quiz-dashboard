@@ -213,9 +213,11 @@ export function makeAcow3Ch1(E) {
                 <div>
                   {t(E, "A grid where each cell is ", "각 칸이 ")}
                   <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>C</code>
-                  {t(E, " (cow) or ", " (소) 또는 ")}
+                  {t(E, " (cow), ", " (소), ")}
                   <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>G</code>
-                  {t(E, " (grass).", " (풀) 인 격자가 주어져요.")}
+                  {t(E, " (grass), or ", " (풀), 또는 ")}
+                  <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>.</code>
+                  {t(E, " (empty).", " (빈 칸) 인 격자가 주어져요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>

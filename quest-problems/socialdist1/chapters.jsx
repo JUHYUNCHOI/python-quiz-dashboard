@@ -19,10 +19,10 @@ export function makeSocDist1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Place N cows in M segments to maximize the minimum distance between any two.",
-        "소 N 마리를 놓아서 서로 사이가 가장 멀어지게 해요."),
+        "Add 2 more cows to empty stalls to maximize the minimum distance between neighbors.",
+        "빈 칸에 소 2마리를 더 넣어 최소 거리를 최대로 만들어요."),
       content: (
-        <div style={{ padding: 16 }}>
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\ude37"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Social Distancing I</div>
@@ -36,8 +36,8 @@ export function makeSocDist1Ch1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
-                "Output the maximum possible minimum distance between any two of the N placed cows.",
-                "소 N 마리를 놓았을 때 두 소 사이 최소 거리가 가장 커지는 값을 출력해요.")}
+                "Print the largest possible minimum gap after adding 2 more cows to empty stalls.",
+                "빈 칸에 소 2마리를 넣어 최소 거리를 가장 크게 만드는 값을 출력해요.")}
             </div>
           </div>
 
@@ -49,40 +49,41 @@ export function makeSocDist1Ch1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "FJ has ", "FJ 한테 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "M disjoint segments on a number line", "수직선 위 M 개의 서로 떨어진 구간")}</b>
-                  {t(E, " — cows can only stand on integer positions inside these segments.",
-                        " 이 있어서, 소는 그 구간 안 정수 위치에만 설 수 있어요.")}
+                  {t(E, "There are ", "칸이 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "N stalls in a row", "N 개")}</b>
+                  {t(E, ", each already holding a cow (1) or empty (0) — given as a 0/1 string.",
+                        " 한 줄로 있고, 이미 소가 있거나(1) 비어 있어요(0) — 0/1 문자열로 주어져요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Place EXACTLY ", "정확히 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "N cows", "N 마리 소")}</b>
-                  {t(E, " in those positions.", " 를 그 위치에 배치해요.")}
+                  {t(E, "Place EXACTLY ", "빈 칸에 정확히 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "2 more cows", "소 2마리")}</b>
+                  {t(E, " into the EMPTY stalls.", "를 새로 놓아요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM possible minimum distance between any two cows", "두 소 사이 최소 거리가 가장 크게 되는 값")}</b>
-                  {t(E, ".", "을 출력해요.")}
+                  <b style={{ color: "#15803d" }}>{t(E, "largest possible minimum distance between neighboring cows", "이웃한 두 소 사이 최소 거리의 가장 큰 값")}</b>
+                  {t(E, " after placing them.", "을 출력해요.")}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 🐄 Deep-audit sim — pick D and watch greedy placement */}
+          {/* 🐄 Deep-audit sim — pick D, watch how many new cows still fit */}
           <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "10px 8px", marginTop: 6 }}>
             <div style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>
-              🐄 {t(E, "See it: how the placement changes as D changes", "직접 봐요 — D 값에 따라 배치가 어떻게 달라지는지")}
+              🐄 {t(E, "See it: how many new cows fit as D changes", "직접 봐요 — D 값에 따라 새 소가 몇 마리 들어가는지")}
             </div>
             <SocDist1Sim E={E} />
           </div>
         </div>),
     },
+
     // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=1035) — 선생님 2026-07-27 시즌 표준화
     {
       type: "reveal",
@@ -161,8 +162,8 @@ export function makeSocDist1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Binary search the answer D, then place cows one by one to check if all N fit.",
-        "답 D 를 이분 탐색하고, D 마다 소를 하나씩 순서대로 놓아 봐요."),
+        "Binary search the answer D, then check each gap to see if 2 new cows still fit.",
+        "답 D 를 이분 탐색하고, D 마다 빈 구간에 소 2마리가 들어가는지 확인해요."),
       sections: getSocDist1Sections(E),
     },
   ];

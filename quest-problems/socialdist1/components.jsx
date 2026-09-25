@@ -7,58 +7,81 @@ const A = "#dc2626";
 
 /* ----------------------------------------------------------------
    SocDist1Sim — bilingual deep-audit sim for the title page
-   Sample: N=5 cows, segments [(0,2),(4,7),(9,9)] (length 12 number line).
-   Student picks D (1..6). Greedy places cows segment by segment:
-   in each segment, first slot at max(a, last+D), then keep stepping +D ≤ b.
-   Shows: segments, placed cows, count vs N, verdict (✓ feasible / ✗ too far).
-   Big idea: as D grows, fewer cows fit. Largest D with count ≥ N = answer.
+
+   2026-09-25 재작성 — 이전 버전은 **다른 문제**(Silver, cpid 1038: 구간 M 개에
+   소 N 마리를 배치)를 그리고 있었다. 진짜 문제(Bronze, cpid 1035)는:
+     길이 N 인 0/1 문자열 하나(1 = 이미 소가 있음) + 빈 칸에 소 2마리를 더 넣어서
+     이웃한 두 소 사이 최소 거리를 최대로 만들기.
+   퀴즈(1-2)·입력(1-3)이 이미 쓰는 예제 "10001"(0번·4번에 소) 을 그대로 쓴다 —
+   같은 예제가 미션 → 시뮬 → 퀴즈 → 코드로 이어지게.
+
+   여기서 보여주는 계산은 🔒 FULL_PY 의 `can_place(D, 2)` 와 **같은 논리**다:
+     기존 소와 소 사이 빈 구간의 길이를 구하고, 그 안에 D 간격으로 몇 자리가
+     남는지 (구간길이 − D) ÷ D 로 센다. 이 예제는 소가 양쪽 끝(0, 4)에 있어서
+     "사이" 구간 하나만 있다 — 끝보다 바깥쪽(맨 앞 왼쪽·맨 뒤 오른쪽) 구간은
+     길이 0이라 화면에 안 그려진다(코드에는 그 경우도 있어 함께 계산은 해둔다).
+   검산: D=1→3자리(✓, 2마리 이상), D=2→1자리(✗), D=3,4→0자리(✗) → 가장 좋은 D=1,
+   퀴즈 1-2·입력 1-3 의 정답(1)과 일치.
    --------------------------------------------------------------- */
 export function SocDist1Sim({ E }) {
   const N = 5;
-  const segments = [[0, 2], [4, 7], [9, 9]]; // length 0..9
-  const MAX_X = 9;
-  const [D, setD] = useState(2);
+  const S = "10001";                              // 퀴즈·입력과 같은 예제
+  const ones = [];
+  for (let i = 0; i < N; i++) if (S[i] === "1") ones.push(i);
+  const NEED = 2;                                 // 새로 넣을 소
+  const MAX_X = N - 1;                            // D 가 가질 수 있는 가장 큰 값
+  const [D, setD] = useState(1);
 
-  // Greedy placement for the current D
-  const placements = [];
-  let last = -1e9;
-  for (const [a, b] of segments) {
-    let x = Math.max(a, last + D);
-    while (x <= b) {
-      placements.push(x);
-      last = x;
-      x += D;
+  // can_place(D, NEED) 와 같은 논리 — 빈 구간마다 D 간격으로 몇 자리가 남는지 센다.
+  // renderA/renderB = 그 구간에 **실제로 비어 있는 칸**의 범위(칸 번호, 양끝 포함).
+  // 이 범위는 D 가 바뀌어도 움직이지 않는다 — 소가 이미 있는 칸(0, 4)은 절대 포함하지 않는다
+  // (전엔 a,b 를 그대로 배경 상자에 써서 기존 소 칸까지 덮어 겹쳐 보였다 — see-screen 실측으로 발견).
+  function regionsFor(d) {
+    const segs = [];
+    if (ones.length === 0) {
+      const cap = Math.floor((N - 1) / d) + 1;
+      segs.push({ renderA: 0, renderB: N - 1, cap, pos: Array.from({ length: cap }, (_, i) => i * d) });
+      return segs;
     }
+    if (ones[0] > 0) {
+      const cap = Math.floor(ones[0] / d);
+      segs.push({ renderA: 0, renderB: ones[0] - 1, cap, pos: Array.from({ length: cap }, (_, i) => ones[0] - (i + 1) * d).reverse() });
+    }
+    for (let k = 1; k < ones.length; k++) {
+      const a = ones[k - 1], b = ones[k];
+      const cap = Math.max(0, Math.floor((b - a - d) / d));
+      segs.push({ renderA: a + 1, renderB: b - 1, cap, pos: Array.from({ length: cap }, (_, i) => a + (i + 1) * d) });
+    }
+    const lastOne = ones[ones.length - 1];
+    if (lastOne < N - 1) {
+      const cap = Math.floor((N - 1 - lastOne) / d);
+      segs.push({ renderA: lastOne + 1, renderB: N - 1, cap, pos: Array.from({ length: cap }, (_, i) => lastOne + (i + 1) * d) });
+    }
+    return segs;
   }
-  const fits = placements.length >= N;
-  const shown = placements.slice(0, N); // never draw more than N cow icons
 
-  // Find the true answer by scanning D = 1..MAX_X
-  const answer = (() => {
-    let best = 1;
+  const segs = regionsFor(D);
+  const totalCap = segs.reduce((s, x) => s + x.cap, 0);
+  const feasible = totalCap >= NEED;
+  const newPositions = segs.flatMap((s) => s.pos).slice(0, NEED); // 필요한 만큼만 표시
+
+  // 이 예제에서 가장 좋은 D — D 를 1부터 늘려가며 직접 스캔
+  const bestD = (() => {
+    let best = 0;
     for (let d = 1; d <= MAX_X; d++) {
-      let cnt = 0; let lst = -1e9;
-      for (const [a, b] of segments) {
-        let x = Math.max(a, lst + d);
-        while (x <= b) { cnt++; lst = x; x += d; if (cnt >= N) break; }
-        if (cnt >= N) break;
-      }
-      if (cnt >= N) best = d;
+      if (regionsFor(d).reduce((s, x) => s + x.cap, 0) >= NEED) best = d;
     }
     return best;
   })();
-  const isAnswer = D === answer;
+  const isBest = D === bestD;
 
-  // Layout: each unit on the number line = ~40px wide
-  const U = 40;
-  const totalW = (MAX_X + 1) * U;
+  const U = 46;
+  const totalW = N * U;
 
   return (
     <div style={{ padding: "10px 8px" }}>
       <div style={{ textAlign: "center", marginBottom: 8, fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-        {t(E,
-          "Try it · N = 5 cows, segments = [0,2] ∪ [4,7] ∪ [9,9]",
-          "직접 해봐 · N = 5 마리, 구간 = [0,2] ∪ [4,7] ∪ [9,9]")}
+        {t(E, `Try it · stalls = "${S}" (cows already at 0, 4)`, `직접 해봐요 · 칸 = "${S}" (0번, 4번에 소)`)}
       </div>
 
       {/* Status row */}
@@ -67,104 +90,80 @@ export function SocDist1Sim({ E }) {
           D = <b>{D}</b>
         </div>
         <div style={{
-          background: fits ? "#dcfce7" : "#fee2e2",
-          border: `1px solid ${fits ? "#16a34a" : "#dc2626"}`,
+          background: feasible ? "#dcfce7" : "#fee2e2",
+          border: `1px solid ${feasible ? "#16a34a" : "#dc2626"}`,
           borderRadius: 8, padding: "4px 10px", fontSize: 11,
-          color: fits ? "#166534" : "#7f1d1d",
+          color: feasible ? "#166534" : "#7f1d1d",
           fontFamily: "'JetBrains Mono',monospace",
         }}>
-          {t(E, "placed", "배치")} = <b>{placements.length}</b> / {N} {fits ? "✓" : "✗"}
+          {t(E, "room for new cows", "새로 넣을 자리")} = <b>{totalCap}</b> / {NEED} {feasible ? "✓" : "✗"}
         </div>
-        {isAnswer && (
+        {isBest && (
           <div style={{ background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#92400e", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
             {t(E, "★ best D", "★ 가장 좋은 D")}
           </div>
         )}
       </div>
 
-      {/* Number line stage */}
+      {/* Stall row */}
       <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "16px 10px", marginBottom: 10, overflowX: "auto" }}>
         <div style={{ position: "relative", width: totalW, height: 90, margin: "0 auto" }}>
-          {/* Base axis */}
-          <div style={{ position: "absolute", left: U / 2, right: U / 2, top: 50, height: 2, background: C.border }} />
-
-          {/* Segments (where cows MAY stand) */}
-          {segments.map(([a, b], si) => (
+          {/* D 로 검사 중인 빈 구간 — 자리가 있으면 빨갛게, 없으면 회색.
+              renderA..renderB 는 실제로 비어 있는 칸만 (기존 소 칸은 절대 포함 안 함). */}
+          {segs.filter((sgm) => sgm.renderB >= sgm.renderA).map((sgm, si) => (
             <div key={`seg-${si}`} style={{
               position: "absolute",
-              left: a * U + U / 2 - 14,
-              top: 38,
-              width: (b - a) * U + 28,
-              height: 26,
-              background: "linear-gradient(180deg, #fee2e2, #fecaca)",
-              border: "1.5px solid #fca5a5",
-              borderRadius: 14,
-              boxShadow: "inset 0 0 0 1px #fff",
+              left: sgm.renderA * U + 4, top: 38,
+              width: (sgm.renderB - sgm.renderA + 1) * U - 8, height: 26,
+              background: sgm.cap > 0 ? "linear-gradient(180deg, #fee2e2, #fecaca)" : "#f1f5f9",
+              border: `1.5px dashed ${sgm.cap > 0 ? "#fca5a5" : "#cbd5e1"}`,
+              borderRadius: 10,
             }} />
           ))}
 
-          {/* Tick marks + numbers */}
-          {Array.from({ length: MAX_X + 1 }, (_, i) => (
-            <div key={`tick-${i}`} style={{
-              position: "absolute",
-              left: i * U + U / 2 - 8,
-              top: 64,
-              width: 16,
-              textAlign: "center",
-              fontSize: 10,
-              color: C.dim,
-              fontFamily: "'JetBrains Mono',monospace",
+          {/* 칸 번호 */}
+          {Array.from({ length: N }, (_, i) => (
+            <div key={`cell-${i}`} style={{
+              position: "absolute", left: i * U, top: 64, width: U, textAlign: "center",
+              fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace",
             }}>{i}</div>
           ))}
 
-          {/* Cows */}
-          {shown.map((pos, ci) => (
-            <div key={`cow-${ci}`} style={{
-              position: "absolute",
-              left: pos * U + U / 2 - 14,
-              top: 14,
-              width: 28,
-              fontSize: 22,
-              textAlign: "center",
-              transition: "left .25s ease-out",
-            }}>
+          {/* 이미 있던 소 */}
+          {ones.map((pos, i) => (
+            <div key={`old-${i}`} style={{ position: "absolute", left: pos * U + U / 2 - 14, top: 14, width: 28, fontSize: 22, textAlign: "center" }}>
               <div>{"🐄"}</div>
-              <div style={{ fontSize: 9, color: "#dc2626", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", marginTop: -2 }}>
-                {pos}
-              </div>
+              <div style={{ fontSize: 9, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", marginTop: -2 }}>{pos}</div>
             </div>
           ))}
 
-          {/* Missing cow markers if not all N fit */}
-          {!fits && Array.from({ length: N - placements.length }, (_, mi) => (
-            <div key={`miss-${mi}`} style={{
-              position: "absolute",
-              right: 4 + mi * 22,
-              top: 0,
-              fontSize: 16,
-              opacity: 0.55,
-            }}>{"🐄"}<span style={{ position: "absolute", left: 0, top: 0, fontSize: 18, color: "#dc2626" }}>✗</span></div>
+          {/* 새로 놓을 소 (필요한 2마리, D 가 바뀌면 자리도 바뀐다).
+              고리(테두리 원)는 라벨과 겹치지 않게 크기를 고정한다 —
+              전엔 라벨에 marginTop:-2 를 줘서 고리 배경과 겹쳐 보였다(see-screen 실측). */}
+          {newPositions.map((pos, i) => (
+            <div key={`new-${i}`} style={{
+              position: "absolute", left: pos * U + U / 2 - 16, top: 11, width: 32,
+              textAlign: "center", transition: "left .2s ease-out",
+            }}>
+              <div style={{
+                width: 30, height: 30, borderRadius: 999, background: "#fecaca",
+                border: "2px solid #dc2626", display: "flex", alignItems: "center",
+                justifyContent: "center", margin: "0 auto", fontSize: 18,
+              }}>{"🐄"}</div>
+              <div style={{ fontSize: 9, color: "#dc2626", fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", marginTop: 2 }}>{pos}</div>
+            </div>
+          ))}
+
+          {/* 부족한 만큼 ✗ 표시 */}
+          {!feasible && Array.from({ length: NEED - totalCap }, (_, mi) => (
+            <div key={`miss-${mi}`} style={{ position: "absolute", right: 4 + mi * 22, top: 0, fontSize: 16, opacity: 0.55 }}>
+              {"🐄"}<span style={{ position: "absolute", left: 0, top: 0, fontSize: 18, color: "#dc2626" }}>✗</span>
+            </div>
           ))}
         </div>
-
-        {/* Gaps row */}
-        {placements.length >= 2 && (
-          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.dim, flexWrap: "wrap" }}>
-            <span>{t(E, "gaps:", "간격:")}</span>
-            {placements.slice(1).map((p, i) => {
-              const g = p - placements[i];
-              return (
-                <span key={i} style={{ color: g >= D ? "#16a34a" : "#dc2626", fontWeight: 700 }}>
-                  {g}{i < placements.length - 2 ? "," : ""}
-                </span>
-              );
-            })}
-            <span style={{ color: C.dim }}>· min ≥ D? {Math.min(...placements.slice(1).map((p, i) => p - placements[i])) >= D ? "✓" : "✗"}</span>
-          </div>
-        )}
       </div>
 
-      {/* D slider */}
+      {/* D 슬라이더 */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
         <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
           {t(E, "Drag to change minimum gap D", "끌어서 최소 간격 D 를 바꿔 봐요")}
@@ -181,11 +180,11 @@ export function SocDist1Sim({ E }) {
       </div>
 
       {/* Insight box */}
-      <div style={{ marginTop: 10, background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.55 }}>
+      <div style={{ marginTop: 10, background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.55, wordBreak: "keep-all" }}>
         <b style={{ color: A }}>{t(E, "Why binary search?", "왜 이분 탐색?")}</b>{" "}
         {t(E,
-          "Bigger D → fewer cows fit. So {D : N cows fit} is a downward-true range. The biggest such D is the answer — perfect for binary search.",
-          "D 가 커질수록 들어가는 소가 줄어요. 그래서 'N 마리가 들어가는 D' 는 작은 쪽이 모두 참이에요.\n그중 가장 큰 D 가 답이라서 이분 탐색이 딱 맞아요.")}
+          <>Bigger D → less room for the 2 new cows. So {"{D : 2 more cows fit}"} is a downward-true range —<br />the biggest such D is the answer.</>,
+          <>D 가 커질수록 새로 넣을 자리가 줄어요.<br />그래서 '2마리가 들어가는 D' 는 작은 쪽이 모두 참이라, 그중 가장 큰 D 가 답이에요.</>)}
       </div>
     </div>
   );
@@ -321,8 +320,8 @@ export function getSocDist1Sections(E) {
       why: [
         t(E, "What do we print? The largest minimum distance guaranteed between any two of the N cows once we add 2 more.",
             "무엇을 출력해야 하나요?\n소 2마리를 더 놓았을 때\n어떤 두 소든 보장되는 최소 거리의\n가장 큰 값이에요."),
-        t(E, "Trying every distance D one by one is slow. But 'can 2 more cows fit with gaps of at least D?' gets harder as D grows and easier as D shrinks — it flips exactly once, so we can binary-search for that flip point.",
-            "거리 D 를 하나씩 다 시도하면 느려요.\n그런데 'D 이상 거리로 2마리를 더 놓을 수 있나?'\n라는 질문은 D 가 커질수록 어려워지고\n작아질수록 쉬워져요 — 딱 한 번만 뒤집혀요.\n그 지점을 이분 탐색으로 찾아요."),
+        t(E, "Trying every distance D one by one is slow. But 'can 2 more cows fit with gaps of at least D?' gets harder as D grows and easier as D shrinks — it flips exactly once. So we test the middle and keep halving toward the side that works. That way of searching is called binary search.",
+            "거리 D 를 하나씩 다 시도하면 느려요.\n그런데 'D 이상 거리로 2마리를 더 놓을 수 있나?'\n라는 질문은 D 가 커질수록 어려워지고\n작아질수록 쉬워져요 — 딱 한 번만 뒤집혀요.\n그래서 가운데를 찍어 보고 되는 쪽으로 절반씩 좁혀 가요.\n이렇게 찾는 걸 이분 탐색이라고 불러요."),
         t(E, "So the code binary-searches D, and for each candidate D checks the gaps between existing cows and how many new cows still fit.",
             "그래서 코드는 D 를 이분 탐색하면서\n기존 소들 사이 간격과\n새로 몇 마리를 더 넣을 수 있는지 확인해요."),
       ],
