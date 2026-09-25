@@ -81,6 +81,42 @@ export function makeSwapityCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=1013 직접 확인) — 시즌 표준화 (photoshoot25 형태)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N and K, then the two reversal ranges.",
+        "입력은 N 과 K, 그다음 두 개의 뒤집을 구간이에요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows, number of rounds", "— 소의 마릿수, 라운드 횟수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>a1 a2</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— first reversal range, reversed every round", "— 매 라운드 첫 번째로 뒤집을 구간")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>b1 b2</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— second reversal range, reversed every round", "— 매 라운드 두 번째로 뒤집을 구간")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "N lines: the label of the cow standing at position i, from left to right, after K rounds.",
+                  "N 줄: K 라운드 뒤 왼쪽부터 i번째 자리에 서 있는 소의 번호.")}
+            </div>
+          </div>
+          {/* 제약 (USACO 원문) */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              <div>1 ≤ K ≤ 10⁹ (= 1,000,000,000)</div>
+              <div>1 ≤ a1 &lt; a2 ≤ N, 1 ≤ b1 &lt; b2 ≤ N</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Sim — animate one round + cycle detection on [1..5]
     {
       type: "reveal",

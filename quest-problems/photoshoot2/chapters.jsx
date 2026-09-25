@@ -65,7 +65,41 @@ export function makePhoto2Ch1(E) {
           </div>
         </div>),
     },
-    // 1-1b: Interactive walk-through sim
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=1204 직접 확인) — 시즌 표준화 (photoshoot25 형태)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then the current order, then the target order.",
+        "입력은 N, 그다음 현재 줄, 그다음 목표 줄이에요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows", "— 소의 마릿수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>a1 a2 ... aN</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— current order, left to right", "— 현재 줄, 왼쪽부터")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>b1 b2 ... bN</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— target order, left to right", "— 목표 줄, 왼쪽부터")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the minimum number of move-left operations to reach the target order.",
+                  "한 줄: 목표 줄을 만드는 데 필요한 최소 왼쪽 이동 횟수.")}
+            </div>
+          </div>
+          {/* 제약 (USACO 원문) */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 10⁵ (= 100,000)</div>
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-1c: Interactive walk-through sim
     {
       type: "reveal",
       narr: t(E,

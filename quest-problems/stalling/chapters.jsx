@@ -80,6 +80,42 @@ export function makeStallingCh1(E) {
           <StallingAssignmentSim E={E} />
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=1085) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then the cow heights, then the stall limits.",
+        "입력은 N 다음에 키, 제한 배열로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows, number of stalls", "— 소의 수, 축사의 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>a[0] a[1] ... a[N-1]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— each cow's height", "— 소들의 키")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>b[0] b[1] ... b[N-1]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— each stall's height limit", "— 축사들의 키 제한")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The number of valid one-to-one cow ↔ stall assignments.",
+                  "소를 축사에 한 마리씩 넣는 방법의 가짓수를 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 20</div>
+              <div>1 ≤ a[i], b[i] ≤ 10⁹</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "the answer may need a 64-bit integer", "답이 커서 64비트 정수가 필요할 수 있어요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

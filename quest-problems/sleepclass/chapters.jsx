@@ -74,6 +74,45 @@ export function makeSleepCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=1203 직접 확인) — 시즌 표준화 (photoshoot25 형태)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  T test cases, each its own N and lengths.",
+        "입력은 테스트케이스 T 개, 각자 N 과 길이들이에요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of test cases", "— 테스트케이스 개수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of class periods", "— 수업 개수")}</span></div>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>a1 a2 ... aN</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— each period's length", "— 각 수업의 길이")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this pair of lines repeats T times", "↑ 이 두 줄이 T 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "T lines: the minimum number of merges for each test case.",
+                  "T 줄: 테스트케이스마다 필요한 최소 합치기 횟수.")}
+            </div>
+          </div>
+          {/* 제약 (USACO 원문) */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 10</div>
+              <div>1 ≤ N ≤ 10⁵, 0 ≤ aᵢ ≤ 10⁶</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "sum of a in one test case ≤ 10⁶  ·  sum of N over all test cases ≤ 10⁵", "한 테스트케이스 안 a 의 합 ≤ 10⁶  ·  전체 테스트케이스의 N 합 ≤ 10⁵")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

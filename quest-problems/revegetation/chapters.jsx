@@ -68,6 +68,44 @@ export function makeRevegCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=916 직접 확인) — 시즌 표준화 (photoshoot25 형태)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N and M, then M lines of cow-favorite pairs.",
+        "입력은 N 과 M, 그다음 소가 좋아하는 목초지 쌍이 M 줄 이어져요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N M</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of pastures, number of cows", "— 목초지 개수, 소의 마릿수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>u v</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— this cow's two favorite pastures (1..N)", "— 이 소가 좋아하는 목초지 두 곳 (1..N)")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats M times", "↑ 이 줄이 M 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: an N-digit number (digits 1..4), the lexicographically smallest valid grass assignment.",
+                  "한 줄: N자리 숫자 (각 자리는 1..4), 조건을 지키는 것 중 사전순으로 가장 작은 배색.")}
+            </div>
+          </div>
+          {/* 제약 (USACO 원문) */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>2 ≤ N ≤ 100</div>
+              <div>1 ≤ M ≤ 150</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "no pasture is a favorite of more than 3 cows", "어떤 목초지도 3마리보다 많은 소의 즐겨찾기가 아니에요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Interactive sim — click pastures, watch violations live
     {
       type: "sim",

@@ -70,6 +70,44 @@ export function makeTrafficCh1(E) {
           <TrafficPropagateSim E={E} />
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=917 직접 확인) — 시즌 표준화 (photoshoot25 형태)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then N lines describing each mile segment.",
+        "입력은 N, 그다음 각 구간을 설명하는 N 줄이에요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of highway segments", "— 고속도로 구간 개수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>type low high</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— this segment's sensor: type is on / off / none", "— 이 구간의 센서: type 은 on / off / none 중 하나")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times, mile 1 to mile N in order", "↑ 이 줄이 N 번 반복 (1번 구간부터 순서대로)")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "Two lines: the tightest [low, high] flow before mile 1, then the tightest [low, high] flow after mile N.",
+                  "두 줄: 1번 구간 이전의 가장 좁은 [low, high] 유량, 그다음 N번 구간 이후의 가장 좁은 [low, high] 유량.")}
+            </div>
+          </div>
+          {/* 제약 (USACO 원문) */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              <div>0 ≤ low, high ≤ 1000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "at least one segment is \"none\" (main highway, no ramp)  ·  a valid solution always exists", "적어도 한 구간은 \"none\" (진입로·출구로 없는 본선)  ·  답은 항상 존재해요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

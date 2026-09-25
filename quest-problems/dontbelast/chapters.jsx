@@ -77,6 +77,43 @@ export function makeDontBeLastCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=687) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  The log length, then the log's own entries.",
+        "입력은 기록 개수 다음에 기록들로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of log entries", "— 기록 개수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>name amount</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— cow name, milk from one session", "— 소 이름, 그 한 번의 우유량")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The name of the cow with the second-lowest total — or 'Tie' if it's not unique.",
+                  "총 생산량이 두 번째로 적은 소의 이름을 출력해요. 동률이면 'Tie' 를 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "each entry's amount is a positive integer, at most 100", "기록 하나의 양은 1 ~ 100 사이 정수예요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

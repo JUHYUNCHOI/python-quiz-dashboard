@@ -69,6 +69,42 @@ export function makeCowTipCh1(E) {
           </div>
         </div>),
     },
+    // 1-1c: 입출력 형식 + 제약 (USACO 원문, cpid=689) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  Grid size, then the grid's own rows.",
+        "입력은 격자 크기 다음에 격자 줄들로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— grid size", "— 격자 크기")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>row</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— a string of N characters, each 0 or 1", "— 0 과 1 로 된 N 글자 문자열")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The minimum number of operations needed to turn the whole grid into 0s.",
+                  "격자를 모두 0 으로 만드는 데 필요한 가장 적은 횟수를 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 10</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Sandbox sim — feel the operation before reasoning about it
     {
       type: "reveal",

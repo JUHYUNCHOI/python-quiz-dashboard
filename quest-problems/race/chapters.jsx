@@ -207,6 +207,44 @@ export function makeRaceCh1(E) {
           </div>
         </div>),
     },
+    // 1-1a: 입출력 형식 + 제약 (USACO 원문, cpid=989) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  K and N, then N queries of X.",
+        "입력은 K, N 다음에 X 값들로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>K N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— race length, number of queries", "— 달릴 거리, 물음 개수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>X</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the finishing speed limit for this query", "— 이번 물음의 도착 속도 제한")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "N lines — for each query X, the minimum seconds needed to finish.",
+                  "물음 X 마다, 완주에 필요한 최소 초 수를 한 줄씩 출력해요 (N 줄).")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ K ≤ 10⁹</div>
+              <div>1 ≤ N ≤ 1,000</div>
+              <div>1 ≤ X ≤ 10⁵</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Hand-simulate one step at a time (active visualization)
     {
       type: "reveal",

@@ -76,6 +76,40 @@ export function makeMadSciCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=1012 직접 확인) — 시즌 표준화 (photoshoot25 형태)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then the two strings A and B.",
+        "입력은 N, 그다음 두 문자열 A 와 B 예요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— length of both strings", "— 두 문자열의 길이")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>A</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the target string (H/G, length N)", "— 목표 문자열 (H/G, 길이 N)")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>B</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the current string (H/G, length N)", "— 현재 문자열 (H/G, 길이 N)")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the minimum number of flips to turn B into A.",
+                  "한 줄: B 를 A 로 만드는 데 필요한 최소 뒤집기 횟수.")}
+            </div>
+          </div>
+          {/* 제약 (USACO 원문) */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 1000</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

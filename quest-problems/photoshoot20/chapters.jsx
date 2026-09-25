@@ -66,6 +66,40 @@ export function makePhoto20Ch1(E) {
           </div>
         </div>),
     },
+    // 1-1a: 입출력 형식 + 제약 (USACO 원문, cpid=988) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then the b array of pair sums.",
+        "입력은 N 다음에 b 배열로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— length of the hidden permutation a", "— 숨겨진 순열 a 의 길이")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>b[0] b[1] ... b[N-2]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— N−1 pair sums", "— 이웃끼리 더한 값 N−1 개")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line with N space-separated integers — the lexicographically smallest a that fits b.",
+                  "b 에 맞는, 사전순으로 가장 작은 순열 a 를 한 줄에 출력해요 (N 개, 공백으로 구분).")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>2 ≤ N ≤ 10³</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "it's guaranteed that at least one valid a exists", "조건에 맞는 a 가 적어도 하나는 있다고 보장돼요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-1b: Deep-audit sim — walk through trying a[0] = 1, 2, ...
     {
       type: "reveal",
