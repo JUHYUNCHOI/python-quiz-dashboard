@@ -1972,9 +1972,11 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
                   concepts_required: ["loop", "string-basics", "tuple-basics", "set-basics", "3d-plus-indexing"] },
   socialdist2:  { ...DEFAULT_META, difficulty: 3, supported_languages: ["py"],
                   concepts_required: ["loop", "tuple-basics", "sort-basics"] },
-  stuckinrut:   { ...DEFAULT_META, supported_languages: ["py"] },
+  stuckinrut:   { ...DEFAULT_META, difficulty: 4, supported_languages: ["py"],
+                  concepts_required: ["loop", "list-basics", "sort-basics", "tuple-basics"] },
   subseqmedian: { ...DEFAULT_META, concepts_required: ["fenwick-tree"], /* ⚠️ 미감사 */ supported_languages: ["py"] },
-  tameherd:     { ...DEFAULT_META, supported_languages: ["py"] },
+  tameherd:     { ...DEFAULT_META, difficulty: 4, supported_languages: ["py"],
+                  concepts_required: ["loop", "list-basics"] },
 
   // ─── py-cpp-mismatch quests — both run but disagree ──────────
   // Until C++ is verified to match Python, mark Python as the
@@ -2042,8 +2044,10 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   milkorder:     { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
   photoshoot2:   { ...DEFAULT_META, difficulty: 3, type: "simulation",        supported_languages: ["py", "cpp"],
                    concepts_required: ["loop", "list-basics", "dict-basics"] },
-  swapity:       { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"] },
-  teleport:      { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },
+  swapity:       { ...DEFAULT_META, difficulty: 3, type: "algorithm-reveal",  supported_languages: ["py"],
+                   concepts_required: ["loop", "list-basics"] },
+  teleport:      { ...DEFAULT_META, difficulty: 1, type: "simulation",        supported_languages: ["py"],
+                   concepts_required: ["math-basics"] },
 
   // ─── Algorithm/logic bugs in BOTH languages — full review needed ───
   // Banner already warns. Mark difficulty hint but no language safe-list.
@@ -2084,6 +2088,54 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // difficulty 도 2 였는데 학생 화면에 뜨는 값(lib/mcc-difficulty.ts:48)은 5 다. 초6 학생이
   // 4쪽에서 그만뒀다("이건 초6이 풀 수 있는 문제가 아니었다"). 5 로 맞춘다.
   sumk:      { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["pascal-triangle-dp"], /* ⚠️ 미감사 */ type: "algorithm-reveal", difficulty: 5 },
+  /* ═══ 🚨 2026-09-25: 이 아홉은 **객체 밖에 있었다** — `getMetaCoverageStats()` 의
+     `return {...}` 안에 잘못 들어가 있었다(2087줄에서 `QUEST_CONCEPT_META` 가 닫히는데
+     항목은 2157~2180줄에 있었다). 즉 `getQuestMeta()` 가 **전부 `DEFAULT_META` 로 폴백**했고,
+     오늘 매긴 난이도·선수개념이 **하나도 적용되지 않고 있었다.**
+     ⚠️ **빌드도 타입체크도 통과한다** — 반환 타입이 추론이라 키가 늘어도 에러가 안 난다.
+     `check-required-vs-code.py` 도 **파일 전체를 정규식으로** 보기 때문에 못 잡았다.
+     「0건」이 결백이 아니었던 아홉 번째 사례다. quest-auditor 가 중괄호를 세어 찾았다.
+     ═══════════════════════════════════════════════════════════════════════ */
+  // ─── 감사 완료 (2026-09-25, quest-auditor A·B·C조) ───────
+  // 왜: 이 아홉은 엔트리가 아예 없어 `concepts_required` 가 **빈 배열**이었다.
+  //   그런데 `lib/concept-graph.ts:97` 의 `required.every(...)` 는 **빈 배열에서 항상 true** 다.
+  //   즉 시스템이 이 quest 들을 **아무에게나 「지금 풀 준비됨」으로 추천**하고 있었다 —
+  //   `mooin3` 이 학생을 막히게 한 것과 **정확히 같은 경로**다. 그래서 값부터 급히 채운다.
+  // ⚠️ **반쪽이다.** `type`·`difficulty`·`concepts_taught` 는 여전히 `DEFAULT_META` 기본값이고
+  //   **아무도 감사한 적이 없다.** 채워져 있다고 검토된 값으로 읽지 마라 —
+  //   2026-09-13 에 「유추한 난이도가 매긴 값처럼 보인」 사고가 정확히 그 모양이었다.
+  //   값의 출처: `scripts/check-required-vs-code.py` 가 **코드에서 실제로 검출**한 것.
+  //   진짜 감사(네 필드 다)는 quest-auditor 몫으로 남아 있다.
+  strangefn:       { ...DEFAULT_META, difficulty: 4, concepts_required: ["modular-inverse"] },
+  /* ⚠️ 2026-09-25: `concepts_required: []` 였다 — **빈 배열은 `every()` 가 항상 참**이라
+     이 quest 가 **아무 학생에게나 「지금 풀 준비됨」으로 추천되고** 있었다.
+     난이도도 `DEFAULT_META` 의 2 가 새어 나와 **아무도 안 매긴 값이 매긴 값처럼** 보였다.
+     선생님이 **이 quest 하나에서 여섯 번** 막히신 이력이 있다(`feedback_plain_korean.md`).
+     감사 판정 — 문법은 가볍다(`for`·리스트·`**`·`//` 뿐, 함수·재귀·자료구조 없음).
+     무거운 건 **아이디어**고, 그건 선수개념이 아니라 **이 quest 가 가르치는 것**이다
+     (화면의 `why[]`·CodeWalk 말풍선이 처음부터 끝까지 유도한다) → `concepts_taught` 로.
+     ⭐ `strangefn`(모듈러 역원 = **배울 수 없는 외부 지식**)과 다르다. 트랙에서 빼지 않는다.
+     난이도 4 — 통찰이 두 겹이고(전처리 정당화 + 그리디 정당화) 그 정당성이 직관적이지 않다.
+     5 는 외부 선수개념이 있는 경우(`sumk`)라 과하다. 3 무리는 감사가 안 끝난 자리가 많다. */
+  buymilk:         { ...DEFAULT_META, difficulty: 4,
+                     concepts_required: ["loop", "list-basics", "math-basics"],
+                     concepts_taught: ["incremental-update", "greedy-pick"] },
+  photoshoot25:    { ...DEFAULT_META, difficulty: 4, concepts_required: ["loop", "2d-list-build"] },
+  walkhome:        { ...DEFAULT_META, difficulty: 5, concepts_required: ["3d-plus-indexing", "nested-comprehension"] },
+  /* ⚠️ 2026-09-25: 감사가 *"기존 `3d-plus-indexing` 은 틀렸다 — 코드에 3차원 인덱싱이 없다"*
+     고 했는데 **감사가 틀렸다.** `check-required-vs-code.py` 와 충돌해서 코드를 직접 봤더니
+     C++ 쪽에 `int rows_idx[8][3][2]` 와 `rows_idx[k][0][0]` 이 **실제로 있다**
+     (`components.jsx:306-314`). 감사는 파이썬만 보고 판단한 듯하다 —
+     **한쪽 언어만 보고 끝내지 마라.** 그래서 원래 값을 살려 두고 나머지만 더한다. */
+  teamttt:         { ...DEFAULT_META, difficulty: 2,
+                     concepts_required: ["loop", "list-basics", "set-basics", "3d-plus-indexing"] },
+  blockgame:       { ...DEFAULT_META, difficulty: 2, concepts_required: ["chr-ord-conversion", "frequency-count"] },
+  // ⚠️ `supported_languages` 를 ["py"] 로 못박는다 — 이 quest 에 **C++ 코드가 아예 없다**
+  //    (`components.jsx` 의 `_CPP` 0건, 직접 확인). 기본값이 ["py","cpp"] 라 그냥 두면
+  //    관리자 화면에 **「C++ 검증됨」이라는 거짓 배지**가 뜬다. (quest-auditor, 2026-09-25)
+  word:            { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"], supported_languages: ["py"] },
+  xorstring:       { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["modular-inverse", "bit-ops"] },
+  mcc21simplemath: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["bit-ops"] },
 };
 
 export function getQuestMeta(id: string): QuestConceptMeta {
@@ -2143,40 +2195,5 @@ export function getMetaCoverageStats() {
     conceptsUsed: conceptsUsed.size,
     totalConceptsInOntology: Object.keys(CONCEPT_ONTOLOGY).length,
     solutionVerified,
-
-  // ─── ⚠️ 미감사 — `concepts_required` **만** 채운 엔트리 (2026-09-25) ───────
-  // 왜: 이 아홉은 엔트리가 아예 없어 `concepts_required` 가 **빈 배열**이었다.
-  //   그런데 `lib/concept-graph.ts:97` 의 `required.every(...)` 는 **빈 배열에서 항상 true** 다.
-  //   즉 시스템이 이 quest 들을 **아무에게나 「지금 풀 준비됨」으로 추천**하고 있었다 —
-  //   `mooin3` 이 학생을 막히게 한 것과 **정확히 같은 경로**다. 그래서 값부터 급히 채운다.
-  // ⚠️ **반쪽이다.** `type`·`difficulty`·`concepts_taught` 는 여전히 `DEFAULT_META` 기본값이고
-  //   **아무도 감사한 적이 없다.** 채워져 있다고 검토된 값으로 읽지 마라 —
-  //   2026-09-13 에 「유추한 난이도가 매긴 값처럼 보인」 사고가 정확히 그 모양이었다.
-  //   값의 출처: `scripts/check-required-vs-code.py` 가 **코드에서 실제로 검출**한 것.
-  //   진짜 감사(네 필드 다)는 quest-auditor 몫으로 남아 있다.
-  strangefn:       { ...DEFAULT_META, concepts_required: ["modular-inverse"] },
-  /* ⚠️ 2026-09-25: `concepts_required: []` 였다 — **빈 배열은 `every()` 가 항상 참**이라
-     이 quest 가 **아무 학생에게나 「지금 풀 준비됨」으로 추천되고** 있었다.
-     난이도도 `DEFAULT_META` 의 2 가 새어 나와 **아무도 안 매긴 값이 매긴 값처럼** 보였다.
-     선생님이 **이 quest 하나에서 여섯 번** 막히신 이력이 있다(`feedback_plain_korean.md`).
-     감사 판정 — 문법은 가볍다(`for`·리스트·`**`·`//` 뿐, 함수·재귀·자료구조 없음).
-     무거운 건 **아이디어**고, 그건 선수개념이 아니라 **이 quest 가 가르치는 것**이다
-     (화면의 `why[]`·CodeWalk 말풍선이 처음부터 끝까지 유도한다) → `concepts_taught` 로.
-     ⭐ `strangefn`(모듈러 역원 = **배울 수 없는 외부 지식**)과 다르다. 트랙에서 빼지 않는다.
-     난이도 4 — 통찰이 두 겹이고(전처리 정당화 + 그리디 정당화) 그 정당성이 직관적이지 않다.
-     5 는 외부 선수개념이 있는 경우(`sumk`)라 과하다. 3 무리는 감사가 안 끝난 자리가 많다. */
-  buymilk:         { ...DEFAULT_META, difficulty: 4,
-                     concepts_required: ["loop", "list-basics", "math-basics"],
-                     concepts_taught: ["incremental-update", "greedy-pick"] },
-  photoshoot25:    { ...DEFAULT_META, difficulty: 4, concepts_required: ["loop", "2d-list-build"] },
-  walkhome:        { ...DEFAULT_META, concepts_required: ["3d-plus-indexing", "nested-comprehension"] },
-  teamttt:         { ...DEFAULT_META, concepts_required: ["3d-plus-indexing"] },
-  blockgame:       { ...DEFAULT_META, difficulty: 2, concepts_required: ["chr-ord-conversion", "frequency-count"] },
-  // ⚠️ `supported_languages` 를 ["py"] 로 못박는다 — 이 quest 에 **C++ 코드가 아예 없다**
-  //    (`components.jsx` 의 `_CPP` 0건, 직접 확인). 기본값이 ["py","cpp"] 라 그냥 두면
-  //    관리자 화면에 **「C++ 검증됨」이라는 거짓 배지**가 뜬다. (quest-auditor, 2026-09-25)
-  word:            { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"], supported_languages: ["py"] },
-  xorstring:       { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["modular-inverse", "bit-ops"] },
-  mcc21simplemath: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["bit-ops"] },
   };
 }
