@@ -272,6 +272,52 @@ export function MadSciProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY / FULL_CPP 는 그대로 가져와 beats(설명 말풍선)만 덧붙인다.
+   getMadSciSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getMadSciWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "inBlock", ko: "지금 A·B 가 다른 구간 안에 있나", en: "whether we're currently inside a mismatch run" },
+        { v: "blocks", ko: "떨어져 있는 다른 구간의 개수", en: "how many separate mismatch runs there are" },
+      ],
+      beats: [
+        { hi: [5, 13], bubble: t(E,
+          "What do we hand back? The fewest flips to make B equal A. Read N, and the two strings A and B.",
+          "무엇을 내놓아야 하나요? B 를 A 와 같게 만드는 최소 뒤집기 횟수예요.\nN 과 두 문자열 A, B 를 읽어요.") },
+        { hi: [14, 26], bubble: t(E,
+          "One flip swaps a whole chosen range at once, so a single run of mismatched spots only needs one flip. Walk the string and count how many separate runs of A[i] != B[i] there are — a new run starts each time we go from matching to mismatching.",
+          "한 번 뒤집으면 고른 구간 전체가 한 번에 바뀌니까, 다른 자리가 쭉 이어진 구간 하나는 뒤집기 한 번이면 돼요.\n문자열을 훑으며 A[i] != B[i] 인 구간이 몇 번 새로 시작되는지 세요 — 같다가 다르게 바뀌는 순간마다 새 구간이에요.") },
+        { hi: [27, 29], bubble: t(E,
+          "That count of runs is exactly the answer — write it out.",
+          "그 구간 수가 바로 답이에요 — 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "in_diff", ko: "지금 A·B 가 다른 구간 안에 있나", en: "whether we're currently inside a mismatch run" },
+      { v: "flips", ko: "떨어져 있는 다른 구간의 개수", en: "how many separate mismatch runs there are" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What do we hand back? The fewest flips to make B equal A. Read N, and the two strings A and B.",
+        "무엇을 내놓아야 하나요? B 를 A 와 같게 만드는 최소 뒤집기 횟수예요.\nN 과 두 문자열 A, B 를 읽어요.") },
+      { hi: [8, 17], bubble: t(E,
+        "One flip swaps a whole chosen range at once, so a single run of mismatched spots only needs one flip. Walk the string and count how many separate runs of A[i] != B[i] there are — a new run starts each time we go from matching to mismatching.",
+        "한 번 뒤집으면 고른 구간 전체가 한 번에 바뀌니까, 다른 자리가 쭉 이어진 구간 하나는 뒤집기 한 번이면 돼요.\n문자열을 훑으며 A[i] != B[i] 인 구간이 몇 번 새로 시작되는지 세요 — 같다가 다르게 바뀌는 순간마다 새 구간이에요.") },
+      { hi: [19, 20], bubble: t(E,
+        "That count of runs is exactly the answer — write it out.",
+        "그 구간 수가 바로 답이에요 — 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

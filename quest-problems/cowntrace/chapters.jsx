@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowntraceSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -172,13 +171,13 @@ export function makeCowntraceCh1(E) {
    --------------------------------------------------------------- */
 export function makeCowntraceCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    /* ⚡ 풀이 전체 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+       PDF 는 getCowntraceSections() 로 계속 받을 수 있음(위 PDF 버튼). */
     {
-      type: "progressive",
+      type: "cowntrace-walk",
       narr: t(E,
         "Brute force: try every (patient zero, K) pair and simulate all events to check the final state.",
-        "풀이 코드를 한 단락씩 읽어 봐요."),
-      sections: getCowntraceSections(E),
+        "환자 제로와 K 조합을 다 시도해서 결과를 확인해요."),
     },
   ];
 }

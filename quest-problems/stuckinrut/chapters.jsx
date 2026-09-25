@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getStuckInRutSections, StuckInRutGridSim } from "./components";
+import { StuckInRutGridSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -164,13 +164,13 @@ export function makeStuckCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeStuckCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    /* ⚡ 풀이 전체 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+       PDF 는 getStuckInRutSections() 로 계속 받을 수 있음(위 PDF 버튼). */
     {
-      type: "progressive",
+      type: "stuck-walk",
       narr: t(E,
-        "Enumerate every N-cow / E-cow pair and sort the collision times.",
-        "모든 N / E 소 쌍의 충돌 시각을 계산해 시간순으로 정렬해요."),
-      sections: getStuckInRutSections(E),
+        "The solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

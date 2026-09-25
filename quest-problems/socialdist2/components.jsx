@@ -390,6 +390,66 @@ export function SocDist2ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY / FULL_CPP 는 그대로 가져와 beats(설명 말풍선)만 덧붙인다.
+   getSocDist2Sections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getSocDist2Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "max_R", ko: "가능한 가장 큰 전파 거리", en: "the largest spread radius still consistent with today" },
+        { v: "in_cluster", ko: "지금 아픈 무리 안에 있나", en: "whether we're currently inside a sick cluster" },
+        { v: "clusters", ko: "처음 감염이 몇 번 있었나", en: "how many separate outbreaks there were" },
+      ],
+      beats: [
+        { hi: [6, 17], bubble: t(E,
+          "What do we hand back? The fewest cows that could have started today's outbreak. To compare distances between neighbors we need positions in order, so read every cow and sort by position.",
+          "무엇을 내놓아야 하나요? 오늘 상태를 만들 수 있는, 처음 감염된 소의 최소 마릿수예요.\n이웃끼리 거리를 재려면 위치 순서가 필요하니, 소를 다 읽고 위치순으로 정렬해요.") },
+        { hi: [19, 26], bubble: t(E,
+          "Split them into two lists — who's sick today, and who's still healthy. R can never be big enough to reach a healthy cow, or that cow would already be sick.",
+          "오늘 아픈 소와 아직 건강한 소, 두 무리로 나눠요.\nR 이 건강한 소까지 닿으면 안 돼요 — 닿았다면 이미 아팠을 거예요.") },
+        { hi: [28, 47], bubble: t(E,
+          "If nobody's sick, the answer's 0. If everybody's sick, one cow could've started it all. Otherwise R is capped by the closest healthy cow to any sick one — check every healthy-sick pair and keep the smallest (distance − 1).",
+          "아무도 안 아프면 답은 0, 모두 아프면 한 마리로 시작할 수 있어요.\n둘 다 아니면 R 은 건강한 소와 가장 가까운 아픈 소까지의 거리로 막혀요 — 모든 건강-아픈 쌍 중 (거리 − 1) 의 최솟값이에요.") },
+        { hi: [49, 69], bubble: t(E,
+          "Now count clusters: walk the sorted cows in order. Every healthy cow breaks a cluster. Among sick cows, a gap bigger than R means the infection couldn't have spread across it — that's a fresh start.",
+          "이제 무리 수를 세요 — 정렬된 소를 순서대로 훑어요.\n건강한 소를 만나면 무리가 끊겨요.\n아픈 소끼리는 간격이 R 보다 크면 그 사이는 못 퍼진 거라, 새로운 시작이에요.") },
+        { hi: [70, 72], bubble: t(E,
+          "Write out the answer.",
+          "답을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "max_R", ko: "가능한 가장 큰 전파 거리", en: "the largest spread radius still consistent with today" },
+      { v: "in_cluster", ko: "지금 아픈 무리 안에 있나", en: "whether we're currently inside a sick cluster" },
+      { v: "clusters", ko: "처음 감염이 몇 번 있었나", en: "how many separate outbreaks there were" },
+    ],
+    beats: [
+      { hi: [0, 9], bubble: t(E,
+        "What do we hand back? The fewest cows that could have started today's outbreak. To compare distances between neighbors we need positions in order, so read every cow and sort by position.",
+        "무엇을 내놓아야 하나요? 오늘 상태를 만들 수 있는, 처음 감염된 소의 최소 마릿수예요.\n이웃끼리 거리를 재려면 위치 순서가 필요하니, 소를 다 읽고 위치순으로 정렬해요.") },
+      { hi: [11, 17], bubble: t(E,
+        "Split them into two lists — who's sick today, and who's still healthy. R can never be big enough to reach a healthy cow, or that cow would already be sick.",
+        "오늘 아픈 소와 아직 건강한 소, 두 무리로 나눠요.\nR 이 건강한 소까지 닿으면 안 돼요 — 닿았다면 이미 아팠을 거예요.") },
+      { hi: [19, 33], bubble: t(E,
+        "If nobody's sick, the answer's 0. If everybody's sick, one cow could've started it all. Otherwise R is capped by the closest healthy cow to any sick one — check every healthy-sick pair and keep the smallest (distance − 1).",
+        "아무도 안 아프면 답은 0, 모두 아프면 한 마리로 시작할 수 있어요.\n둘 다 아니면 R 은 건강한 소와 가장 가까운 아픈 소까지의 거리로 막혀요 — 모든 건강-아픈 쌍 중 (거리 − 1) 의 최솟값이에요.") },
+      { hi: [35, 51], bubble: t(E,
+        "Now count clusters: walk the sorted cows in order. Every healthy cow breaks a cluster. Among sick cows, a gap bigger than R means the infection couldn't have spread across it — that's a fresh start.",
+        "이제 무리 수를 세요 — 정렬된 소를 순서대로 훑어요.\n건강한 소를 만나면 무리가 끊겨요.\n아픈 소끼리는 간격이 R 보다 크면 그 사이는 못 퍼진 거라, 새로운 시작이에요.") },
+      { hi: [53, 54], bubble: t(E,
+        "Write out the answer.",
+        "답을 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

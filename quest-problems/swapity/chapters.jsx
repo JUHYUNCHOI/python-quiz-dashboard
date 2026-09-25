@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSwapitySections, SwapityRoundSim } from "./components";
+import { SwapityRoundSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -168,13 +168,13 @@ export function makeSwapityCh1(E) {
    --------------------------------------------------------------- */
 export function makeSwapityCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    /* ⚡ 풀이 전체 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+       PDF 는 getSwapitySections() 로 계속 받을 수 있음(위 PDF 버튼). */
     {
-      type: "progressive",
+      type: "swapity-walk",
       narr: t(E,
         "Track each cow's cycle length, then apply only K mod cycle rounds.",
         "소마다 순환 길이를 구하면 K 번 대신 K mod 순환 번만 하면 돼요."),
-      sections: getSwapitySections(E),
     },
   ];
 }

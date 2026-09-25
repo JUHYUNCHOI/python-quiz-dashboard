@@ -185,6 +185,61 @@ export function StuckInRutProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 🔒 USACO_VERIFIED 최적화 풀이의 표시용 배열이다 —
+   한 글자도 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getStuckInRutSections()
+   는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getStuckInRutWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "events", ko: "만날 수 있는 N-E 쌍과 그 시각", en: "N-E pairs that could meet, with their meeting time" },
+        { v: "stopTime", ko: "각 소가 멈춘 시각 (-1 = 안 멈춤)", en: "when each cow stopped (-1 = never)" },
+        { v: "meetTime / blockerArrive", ko: "늦게 온 소 / 먼저 온 소가 그 칸에 닿은 시각", en: "when the later / earlier cow reached that cell" },
+      ],
+      beats: [
+        { hi: [19, 26], bubble: t(E,
+          "What do we hand back? The number of cells each cow grazes before stopping. Read N cows — each has a direction and a starting cell.",
+          "무엇을 내놓아야 하나요? 각 소가 멈추기 전까지 먹은 칸 수예요. 소 N 마리를 읽어요 — 각자 방향과 시작 칸이 있어요.") },
+        { hi: [28, 55], bubble: t(E,
+          "Only a North cow and an East cow can ever cross paths — same-direction cows never meet. For every such pair that could meet, figure out who arrives at the shared cell later. That later cow is the one who stops, so record (meetTime, victim, blocker, blockerArrive).",
+          "북쪽 소와 동쪽 소만 서로 길이 겹칠 수 있어요 — 같은 방향끼리는 절대 안 만나요.\n그런 쌍마다, 겹치는 칸에 누가 더 늦게 도착하는지 봐요.\n늦게 온 소가 멈추는 쪽이니 (meetTime, victim, blocker, blockerArrive) 로 적어 둬요.") },
+        { hi: [57, 70], bubble: t(E,
+          "Resolve these possible stops in time order — the earliest collision happens first. A blocker only counts if it was still moving (or arrived even earlier) when the victim reaches the cell; otherwise the blocker itself already stopped somewhere else, and the victim just passes through.",
+          "이 충돌들을 시간순으로 처리해요 — 제일 먼저 일어나는 것부터예요.\n막는 소가 아직 살아 있거나 더 일찍 그 칸에 왔을 때만 진짜로 멈춰요.\n아니면 막는 소가 이미 다른 데서 멈춰 버린 거라, 그냥 지나가요.") },
+        { hi: [72, 80], bubble: t(E,
+          "Print each cow's stop time, or Infinity if she never stopped.",
+          "각 소의 멈춘 시각을 출력해요. 안 멈췄으면 Infinity.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "events", ko: "만날 수 있는 N-E 쌍과 그 시각", en: "N-E pairs that could meet, with their meeting time" },
+      { v: "stop_time", ko: "각 소가 멈춘 시각 (None = 안 멈춤)", en: "when each cow stopped (None = never)" },
+      { v: "meet_time / blocker_arrive", ko: "늦게 온 소 / 먼저 온 소가 그 칸에 닿은 시각", en: "when the later / earlier cow reached that cell" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What do we hand back? The number of cells each cow grazes before stopping. Read N cows — each has a direction and a starting cell — and start everyone as still-moving (None).",
+        "무엇을 내놓아야 하나요? 각 소가 멈추기 전까지 먹은 칸 수예요.\n소 N 마리를 읽고 — 각자 방향과 시작 칸이 있어요 — 다들 아직 안 멈춘 상태(None)로 시작해요.") },
+      { hi: [8, 28], bubble: t(E,
+        "Only a North cow and an East cow can ever cross paths — same-direction cows never meet. For every such pair that could meet, figure out who arrives at the shared cell later. That later cow is the one who stops, so record (meet_time, victim, blocker, blocker_arrive).",
+        "북쪽 소와 동쪽 소만 서로 길이 겹칠 수 있어요 — 같은 방향끼리는 절대 안 만나요.\n그런 쌍마다, 겹치는 칸에 누가 더 늦게 도착하는지 봐요.\n늦게 온 소가 멈추는 쪽이니 (meet_time, victim, blocker, blocker_arrive) 로 적어 둬요.") },
+      { hi: [30, 37], bubble: t(E,
+        "Resolve these possible stops in time order — the earliest collision happens first. A blocker only counts if it was still moving (or arrived even earlier) when the victim reaches the cell; otherwise the blocker itself already stopped somewhere else, and the victim just passes through.",
+        "이 충돌들을 시간순으로 처리해요 — 제일 먼저 일어나는 것부터예요.\n막는 소가 아직 살아 있거나 더 일찍 그 칸에 왔을 때만 진짜로 멈춰요.\n아니면 막는 소가 이미 다른 데서 멈춰 버린 거라, 그냥 지나가요.") },
+      { hi: [39, 43], bubble: t(E,
+        "Print each cow's stop time, or Infinity if she never stopped.",
+        "각 소의 멈춘 시각을 출력해요. 안 멈췄으면 Infinity.") },
+    ],
+  };
+}
+
 
 /* ═══════════════════════════════════════════════════════════════
    StuckInRutGridSim — animated NE-mover grid

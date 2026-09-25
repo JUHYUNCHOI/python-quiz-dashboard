@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getTrianglesSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -163,13 +162,13 @@ export function makeTrianglesCh1(E) {
    --------------------------------------------------------------- */
 export function makeTrianglesCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    /* ⚡ 풀이 전체 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+       PDF 는 getTrianglesSections() 로 계속 받을 수 있음(위 PDF 버튼). */
     {
-      type: "progressive",
+      type: "triangles-walk",
       narr: t(E,
         "Treat each post as the right-angle corner and find the largest area.",
         "각 기둥을 직각 꼭짓점으로 두고 가장 큰 넓이를 찾아요."),
-      sections: getTrianglesSections(E),
     },
   ];
 }

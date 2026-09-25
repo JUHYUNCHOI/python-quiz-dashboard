@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { TrianglesProgressiveCode, TrianglesSim, downloadTrianglesPDF, getTrianglesSections } from "./components";
+import { TrianglesProgressiveCode, TrianglesSim, downloadTrianglesPDF, getTrianglesSections, getTrianglesWalk } from "./components";
 import { makeTrianglesCh1, makeTrianglesCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#d97706";
 
@@ -103,6 +104,7 @@ export default function TrianglesApp(props = {}) {
     if (step.type === "sim") return <TrianglesSim E={E} />;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <TrianglesProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "triangles-walk") return <CodeWalk E={E} lang={codeLang} {...getTrianglesWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -115,6 +117,7 @@ export default function TrianglesApp(props = {}) {
     if (s.type === "sim") return <TrianglesSim E={E} />;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <TrianglesProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "triangles-walk") return <CodeWalk E={E} lang={codeLang} {...getTrianglesWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

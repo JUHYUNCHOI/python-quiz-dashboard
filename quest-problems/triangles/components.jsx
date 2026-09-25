@@ -235,6 +235,52 @@ export function TrianglesProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY / FULL_CPP 는 그대로 가져와 beats(설명 말풍선)만 덧붙인다.
+   getTrianglesSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getTrianglesWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "maxDx / maxDy", ko: "이 기둥에서 나오는 가로·세로 다리 길이", en: "the horizontal/vertical leg length from this post" },
+        { v: "best", ko: "지금까지 찾은 가장 큰 2배 넓이", en: "the largest twice-area found so far" },
+      ],
+      beats: [
+        { hi: [7, 17], bubble: t(E,
+          "What do we hand back? Twice the largest right-triangle area we can make with legs along the axes. Read every post's (x, y).",
+          "무엇을 내놓아야 하나요? 다리가 x축·y축과 나란한 직각삼각형 중 가장 큰 넓이의 2배예요.\n모든 기둥의 (x, y) 를 읽어요.") },
+        { hi: [19, 34], bubble: t(E,
+          "The right angle sits at one post, so try each post as that corner: find the farthest other post sharing its y (the horizontal leg) and the farthest sharing its x (the vertical leg). Multiply the two leg lengths — that's twice the area from this corner — and keep the biggest one seen.",
+          "직각은 기둥 하나에서 생겨요. 기둥마다 그 자리를 꼭짓점으로 두고 — 같은 y 중 가장 먼 점(가로 다리), 같은 x 중 가장 먼 점(세로 다리) 을 찾아요.\n두 다리 길이를 곱하면 이 꼭짓점에서 나오는 2배 넓이예요 — 가장 큰 값을 기억해요.") },
+        { hi: [35, 37], bubble: t(E,
+          "Write out the biggest twice-area found.",
+          "찾은 가장 큰 2배 넓이를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "max_dx / max_dy", ko: "이 기둥에서 나오는 가로·세로 다리 길이", en: "the horizontal/vertical leg length from this post" },
+      { v: "best", ko: "지금까지 찾은 가장 큰 2배 넓이", en: "the largest twice-area found so far" },
+    ],
+    beats: [
+      { hi: [0, 10], bubble: t(E,
+        "What do we hand back? Twice the largest right-triangle area we can make with legs along the axes. Read every post's (x, y).",
+        "무엇을 내놓아야 하나요? 다리가 x축·y축과 나란한 직각삼각형 중 가장 큰 넓이의 2배예요.\n모든 기둥의 (x, y) 를 읽어요.") },
+      { hi: [12, 26], bubble: t(E,
+        "The right angle sits at one post, so try each post as that corner: find the farthest other post sharing its y (the horizontal leg) and the farthest sharing its x (the vertical leg). Multiply the two leg lengths — that's twice the area from this corner — and keep the biggest one seen.",
+        "직각은 기둥 하나에서 생겨요. 기둥마다 그 자리를 꼭짓점으로 두고 — 같은 y 중 가장 먼 점(가로 다리), 같은 x 중 가장 먼 점(세로 다리) 을 찾아요.\n두 다리 길이를 곱하면 이 꼭짓점에서 나오는 2배 넓이예요 — 가장 큰 값을 기억해요.") },
+      { hi: [28, 29], bubble: t(E,
+        "Write out the biggest twice-area found.",
+        "찾은 가장 큰 2배 넓이를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSocDist2Sections, SocDist2Sim } from "./components";
+import { SocDist2Sim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -163,13 +163,13 @@ export function makeSocDist2Ch1(E) {
    --------------------------------------------------------------- */
 export function makeSocDist2Ch2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    /* ⚡ 풀이 전체 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+       PDF 는 getSocDist2Sections() 로 계속 받을 수 있음(위 PDF 버튼). */
     {
-      type: "progressive",
+      type: "socdist2-walk",
       narr: t(E,
         "Take the largest R that never reaches a healthy cow, then count the clusters.",
         "건강한 소에 닿지 않는 가장 큰 R 을 잡고 클러스터 수를 세요."),
-      sections: getSocDist2Sections(E),
     },
   ];
 }

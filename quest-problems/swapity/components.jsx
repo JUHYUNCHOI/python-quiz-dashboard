@@ -377,6 +377,60 @@ export function SwapityProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY / FULL_CPP 는 그대로 가져와 beats(설명 말풍선)만 덧붙인다.
+   getSwapitySections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getSwapityWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "perm", ko: "한 라운드가 각 자리를 어디로 옮기는지", en: "where one round sends each position" },
+        { v: "cycle", ko: "이 자리가 몇 라운드마다 되돌아오는 순환", en: "the loop of positions this one cycles through" },
+        { v: "shift", ko: "K 라운드가 실제로는 몇 칸 옮기는 것과 같나", en: "how far K rounds actually moves things, within one cycle" },
+      ],
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "What do we hand back? The final order after K rounds. Read N, K, and the two reversal ranges A1–A2, B1–B2.",
+          "무엇을 내놓아야 하나요? 라운드를 K 번 돌린 뒤의 최종 줄이에요.\nN, K 와 두 뒤집기 범위 A1–A2, B1–B2 를 읽어요.") },
+        { hi: [16, 23], bubble: t(E,
+          "First figure out how one round moves things. Apply the two reversals to the identity order [0..N-1] — the result IS one round's move rule, perm.",
+          "먼저 한 라운드가 자리를 어떻게 옮기는지 알아야 해요.\n항등 순서 [0..N-1] 에 두 번 뒤집기를 그대로 적용하면, 그 결과가 한 라운드의 이동 규칙 perm 이에요.") },
+        { hi: [24, 44], bubble: t(E,
+          "K can be up to 10^9, so replaying the round K times is too slow. But every position sits in a cycle that returns to itself after some fixed number of rounds — so find each cycle, then jump ahead by K mod (cycle length) instead of K steps.",
+          "K 가 10억까지 가서 라운드를 K 번 그대로 되풀이하면 너무 느려요.\n하지만 각 자리는 몇 라운드마다 원래로 돌아오는 순환 안에 있어요 — 순환을 찾아서 K 를 순환 길이로 나눈 나머지만큼만 옮겨요.") },
+        { hi: [45, 50], bubble: t(E,
+          "Every position now knows which cow ends up there — print them in order, one per line.",
+          "이제 모든 자리에 어떤 소가 오는지 정해졌어요 — 순서대로 한 줄에 하나씩 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "perm", ko: "한 라운드가 각 자리를 어디로 옮기는지", en: "where one round sends each position" },
+      { v: "cycle", ko: "이 자리가 몇 라운드마다 되돌아오는 순환", en: "the loop of positions this one cycles through" },
+      { v: "shift", ko: "K 라운드가 실제로는 몇 칸 옮기는 것과 같나", en: "how far K rounds actually moves things, within one cycle" },
+    ],
+    beats: [
+      { hi: [0, 7], bubble: t(E,
+        "What do we hand back? The final order after K rounds. Read N, K, and the two reversal ranges A1–A2, B1–B2.",
+        "무엇을 내놓아야 하나요? 라운드를 K 번 돌린 뒤의 최종 줄이에요.\nN, K 와 두 뒤집기 범위 A1–A2, B1–B2 를 읽어요.") },
+      { hi: [8, 14], bubble: t(E,
+        "First figure out how one round moves things. Apply the two reversals to the identity order [0..N-1] — the result IS one round's move rule, perm.",
+        "먼저 한 라운드가 자리를 어떻게 옮기는지 알아야 해요.\n항등 순서 [0..N-1] 에 두 번 뒤집기를 그대로 적용하면, 그 결과가 한 라운드의 이동 규칙 perm 이에요.") },
+      { hi: [15, 33], bubble: t(E,
+        "K can be up to 10^9, so replaying the round K times is too slow. But every position sits in a cycle that returns to itself after some fixed number of rounds — so find each cycle, then jump ahead by K mod (cycle length) instead of K steps.",
+        "K 가 10억까지 가서 라운드를 K 번 그대로 되풀이하면 너무 느려요.\n하지만 각 자리는 몇 라운드마다 원래로 돌아오는 순환 안에 있어요 — 순환을 찾아서 K 를 순환 길이로 나눈 나머지만큼만 옮겨요.") },
+      { hi: [34, 37], bubble: t(E,
+        "Every position now knows which cow ends up there — print them in order, one per line.",
+        "이제 모든 자리에 어떤 소가 오는지 정해졌어요 — 순서대로 한 줄에 하나씩 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

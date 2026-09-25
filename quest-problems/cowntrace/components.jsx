@@ -195,6 +195,75 @@ export function CowntraceProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). FULL_PY / FULL_CPP 는 그대로 가져와 beats(설명 말풍선)만 덧붙인다.
+   getCowntraceSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getCowntraceWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "sick", ko: "이 (환자 제로, K) 로 시뮬해봤을 때 감염된 소들", en: "who ends up sick, for this (patient-zero, K) try" },
+        { v: "count", ko: "그 소가 이미 몇 번 옮겼나 (K 와 비교)", en: "how many times that cow has already spread (checked against K)" },
+        { v: "minK / maxK", ko: "지금까지 맞았던 K 값의 최소·최대", en: "smallest / largest K seen so far that fits" },
+      ],
+      beats: [
+        { hi: [0, 13], bubble: t(E,
+          "What do we hand back? How many cows could be patient zero, and the smallest/largest K consistent with what actually happened. We'll replay events in time order, so first define an Event (time, a, b) and a comparator to sort by it.",
+          "무엇을 내놓아야 하나요? 환자 제로가 몇 명일 수 있는지, 그리고 실제 결과와 맞는 K 의 최소·최대예요.\n사건을 시간순으로 재생할 거라, 먼저 Event(시간, a, b) 와 정렬용 비교 함수를 만들어요.") },
+        { hi: [14, 30], bubble: t(E,
+          "Read N, T, and today's infection string, and mark who's actually sick — that's the target we'll compare every replay against.",
+          "N, T, 오늘의 감염 문자열을 읽고 누가 실제로 아픈지 표시해요 — 이게 나중에 재생 결과와 비교할 목표예요.") },
+        { hi: [32, 36], bubble: t(E,
+          "Read the T handshake events and sort them by time — we're about to replay them in order.",
+          "발굽 맞대기 기록 T 개를 읽고 시간순으로 정렬해요 — 이제 순서대로 재생할 거예요.") },
+        { hi: [38, 46], bubble: t(E,
+          "Try every (candidate patient-zero, K) pair. For each, start with just that one cow sick, and keep a count of how many cows each sick cow has already infected.",
+          "(후보 환자 제로, K) 조합을 하나씩 다 시도해요.\n그 소 하나만 아픈 상태로 시작하고, 각 아픈 소가 이미 몇 마리를 옮겼는지 세요.") },
+        { hi: [47, 68], bubble: t(E,
+          "Replay every handshake in time order: if only one side is sick, it infects the other — but only if it hasn't already used up its K infections.",
+          "모든 발굽 맞대기를 시간순으로 재생해요 — 한쪽만 아프면 다른 쪽을 옮기되, 이미 K 번을 다 썼으면 못 옮겨요.") },
+        { hi: [69, 77], bubble: t(E,
+          "If replaying ends with exactly the real sick set, this (patient-zero, K) is possible — count it, and track the smallest/largest K seen.",
+          "재생 결과가 실제 감염 상태와 똑같으면 이 (환자 제로, K) 는 가능해요 — 개수를 세고, K 의 최소·최대를 새로 고쳐요.") },
+        { hi: [80, 88], bubble: t(E,
+          "Write out how many patient-zeros work, and the K range — Infinity if the largest K reached T (meaning even more would still work).",
+          "가능한 환자 제로의 수와 K 의 범위를 출력해요 — 가장 큰 K 가 T 까지 닿았으면 더 커도 되니 Infinity 예요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "sick", ko: "이 (환자 제로, K) 로 시뮬해봤을 때 감염된 소들", en: "who ends up sick, for this (patient-zero, K) try" },
+      { v: "count", ko: "그 소가 이미 몇 번 옮겼나 (K 와 비교)", en: "how many times that cow has already spread (checked against K)" },
+      { v: "min_k / max_k", ko: "지금까지 맞았던 K 값의 최소·최대", en: "smallest / largest K seen so far that fits" },
+    ],
+    beats: [
+      { hi: [0, 11], bubble: t(E,
+        "What do we hand back? How many cows could be patient zero, and the smallest/largest K consistent with what actually happened. Read N, T, and today's infection string, and mark who's actually sick.",
+        "무엇을 내놓아야 하나요? 환자 제로가 몇 명일 수 있는지, 그리고 실제 결과와 맞는 K 의 최소·최대예요.\nN, T, 오늘의 감염 문자열을 읽고 누가 실제로 아픈지 표시해요.") },
+      { hi: [13, 18], bubble: t(E,
+        "Read the T handshake events and sort them by time — we're about to replay them in order.",
+        "발굽 맞대기 기록 T 개를 읽고 시간순으로 정렬해요 — 이제 순서대로 재생할 거예요.") },
+      { hi: [20, 27], bubble: t(E,
+        "Try every (candidate patient-zero, K) pair. For each, start with just that one cow sick, and keep a count of how many cows each sick cow has already infected.",
+        "(후보 환자 제로, K) 조합을 하나씩 다 시도해요.\n그 소 하나만 아픈 상태로 시작하고, 각 아픈 소가 이미 몇 마리를 옮겼는지 세요.") },
+      { hi: [28, 43], bubble: t(E,
+        "Replay every handshake in time order: if only one side is sick, it infects the other — but only if it hasn't already used up its K infections.",
+        "모든 발굽 맞대기를 시간순으로 재생해요 — 한쪽만 아프면 다른 쪽을 옮기되, 이미 K 번을 다 썼으면 못 옮겨요.") },
+      { hi: [44, 49], bubble: t(E,
+        "If replaying ends with exactly the real sick set, this (patient-zero, K) is possible — count it, and track the smallest/largest K seen.",
+        "재생 결과가 실제 감염 상태와 똑같으면 이 (환자 제로, K) 는 가능해요 — 개수를 세고, K 의 최소·최대를 새로 고쳐요.") },
+      { hi: [51, 55], bubble: t(E,
+        "Write out how many patient-zeros work, and the K range — Infinity if the largest K reached T (meaning even more would still work).",
+        "가능한 환자 제로의 수와 K 의 범위를 출력해요 — 가장 큰 K 가 T 까지 닿았으면 더 커도 되니 Infinity 예요.") },
+    ],
+  };
+}
+
 
 /* ───────────────────────────────────────────────────────────────
    CowntraceSim — pick patient-zero + K, replay handshake events,

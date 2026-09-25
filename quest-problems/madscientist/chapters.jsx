@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getMadSciSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -157,13 +156,13 @@ export function makeMadSciCh1(E) {
    --------------------------------------------------------------- */
 export function makeMadSciCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    /* ⚡ 풀이 전체 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+       PDF 는 getMadSciSections() 로 계속 받을 수 있음(위 PDF 버튼). */
     {
-      type: "progressive",
+      type: "madsci-walk",
       narr: t(E,
-        "Each contiguous block where A and B differ takes exactly one flip to fix. So count those differing blocks. Sections build it one piece at a time.",
+        "Each contiguous block where A and B differ takes exactly one flip to fix.",
         "A 와 B 가 다른 구간 하나는 한 번 뒤집으면 해결돼요."),
-      sections: getMadSciSections(E),
     },
   ];
 }
