@@ -1,0 +1,55 @@
+#!/bin/sh
+# ─────────────────────────────────────────────────────────────────────────────
+# `git stash` 를 막는 걸쇠 — 2026-09-25
+#
+# 왜 생겼나
+#   에이전트 여섯이 같은 작업 트리에서 병렬로 quest 를 고치는 중에 그중 하나가
+#   `git stash` 를 돌렸다. **quest 34개의 미커밋 편집이 한 번에 사라졌다**
+#   (`stash pop` 으로 되살렸고 충돌은 0이었지만, 몇 시간치가 날아갈 뻔했다).
+#
+#   `git stash` 는 **경로를 안 가린다** — 내 파일만 치우는 게 아니라 작업 트리
+#   전체를 치운다. 병렬로 일하는 판에서는 그게 곧 남의 작업을 지우는 명령이다.
+#   pre-commit 도 pre-push 도 stash 는 못 본다(커밋 사건이 아니다). 그래서
+#   `refs/stash` 가 만들어지는 순간을 보는 이 훅으로 왔다.
+#
+# 무엇을 막나
+#   `refs/stash` 를 새로 만드는 것만. 되돌림이 필요하면 **경로를 콕 집어라** —
+#   `git restore <파일>` · `git checkout -- <파일>`.
+#
+# 넘겨야 할 때
+#   CODERIN_ALLOW_STASH=1 git stash
+#   (병렬 에이전트가 하나도 안 돌 때만. "특별히" 는 선생님/PM 이 말한다.)
+# ─────────────────────────────────────────────────────────────────────────────
+[ "$1" = "prepared" ] || exit 0
+[ -n "$CODERIN_ALLOW_STASH" ] && exit 0
+
+while read -r old new ref; do
+  [ "$ref" = "refs/stash" ] || continue
+  # push 와 pop/drop 을 가른다.
+  #   push  = 방금 만든 stash 커밋. 그 **첫 부모가 지금 HEAD** 다.
+  #   pop/drop = 이미 있던 stash 를 가리키게 바꾸는 것(또는 지우는 것) — 통과시킨다.
+  # ⚠️ 첫 판에는 「refs/stash 가 새로 생길 때만」으로 짰는데, **stash 가 이미 셋
+  #    있는 상태**라 그 조건이 거짓이 되어 정작 지금 상황을 안 막았다. 그래서 부모로 본다.
+  case "$new" in *[!0]*) ;; *) continue ;; esac      # 지우는 것(new=0)은 통과
+  parent=$(git rev-parse --quiet --verify "$new^1" 2>/dev/null) || continue
+  head=$(git rev-parse --quiet --verify HEAD 2>/dev/null)
+  [ "$parent" = "$head" ] || continue
+  cat >&2 <<'MSG'
+
+⛔ `git stash` 는 막혀 있다.
+
+   stash 는 **경로를 안 가린다** — 작업 트리 전체를 치운다.
+   에이전트 여러 명이 같이 일하는 중이면 그게 곧 **남의 미커밋 작업을 지우는 것**이다.
+   2026-09-25 에 실제로 quest 34개가 한 번에 사라졌다.
+
+   되돌리고 싶으면 **파일을 콕 집어라**:
+       git restore <파일>
+       git checkout -- <파일>
+
+   정말 stash 가 필요하면 (병렬 작업이 하나도 없을 때만):
+       CODERIN_ALLOW_STASH=1 git stash
+
+MSG
+  exit 1
+done
+exit 0
