@@ -188,9 +188,16 @@ export function getXorStringSections(E) {
           "솔직히 아주 어려운(Div-1) 문제예요. 코드는 짧지만 쌍의 beauty 를 주는 공식을 찾아내는 게 제일 어려워요. 그래서 하나씩 따라 해 보는 대신 공식에 기대요."),
       ],
       pyOnly: [
+        /* ⚠️ 2026-09-25: 여기가 **한 문장뿐이었다** — *"페르마 소정리로 구한 3 의 모듈러
+           역원"*. **이름은 있고 「작은 예」가 없었다.**
+           형제인 `strangefn` 은 같은 개념을 **mod 5 로 손으로 확인시키는** 문단을 갖고 있다
+           (그 quest 는 학생이 여기서 포기한 뒤 여덟 라운드를 돌아 정착한 모양이다).
+           ⭐ **둘이 서로 다른 것을 빠뜨리고 있었다** — `xorstring` 은 예가 없고,
+           `strangefn` 은 **찾아볼 이름**이 없었다. 양쪽을 채운다.
+           `memory/quest_season_shape_consistency.md`: *"문장 하나를 고칠 때도 형제를 먼저 열어라."* */
         t(E,
-          "pow(3, MOD-2, MOD) is Fermat's little theorem: the modular inverse of 3, so we can 'divide by 3' under the modulus.",
-          "pow(3, MOD-2, MOD) 는 페르마 소정리로 구한 3 의 모듈러 역원이에요. 이걸로 '÷3' 을 모듈러 안에서 할 수 있어요."),
+          "As a whole number it was a multiple of 3 — but reduced mod 10⁹+7 it may not be,\nso we can't just divide by 3.\nTry a tiny example: mod 5, value 9. 9 mod 5 = 4. But 9/3 = 3, and 3 mod 5 = 3.\nMultiply 4 by 2 (since 3×2 = 6 ≡ 1 mod 5) and you get 8 ≡ 3 mod 5 — same answer.\nThat 2 is the \"modular inverse\" of 3 under mod 5.\npow(3, MOD-2, MOD) finds that same value for mod 10⁹+7.\n(Name to look up: Fermat's little theorem)",
+          "정수로는 3 의 배수였죠. 그런데 10⁹+7 로 줄인 값이라\n3 의 배수가 아닐 수도 있어요. 그래서 3 으로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 9 라고 해요.\n9 mod 5 = 4 예요. 그런데 9÷3 = 3 이고, 3 mod 5 = 3 이에요.\n4 에 2 를 곱하면 (3×2 = 6 ≡ 1 mod 5 이니까) 8 ≡ 3 mod 5,\n똑같이 3 이 나와요. 이 2 가 mod 5 에서 3 의 '모듈러 역원'이에요.\npow(3, MOD-2, MOD) 가 mod 10⁹+7 에서 그 값을 구해줘요.\n(찾아볼 이름: 페르마의 소정리)"),
         t(E,
           "pow(2, k, MOD) computes 2^k (2 multiplied by itself k times) mod p fast even when k is 10^18.",
           "pow(2, k, MOD) 는 k 가 10^18 이어도 2^k(2를 k번 곱한 수) mod p 를 빠르게 계산해요."),
