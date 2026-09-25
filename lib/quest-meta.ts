@@ -241,7 +241,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   moohunt: {
     type: "brute-force",
     concepts_taught: ["precompute-table", "enumerate-all-states"],
-    concepts_required: ["loop", "vector-basics", "dict-basics", "3d-plus-indexing", "bit-ops"],
+    concepts_required: ["loop", "vector-basics", "dict-basics", "bit-ops"],
     difficulty: 4,
     supported_languages: ["py", "cpp"],
   },
@@ -480,7 +480,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   cheese: {
     type: "brute-force",
     concepts_taught: ["3d-grid", "incremental-update", "axis-row-counting"],
-    concepts_required: ["loop", "list-basics", "2d-list-build", "2d-list-build", "3d-plus-indexing", "nested-comprehension"],
+    concepts_required: ["loop", "list-basics", "2d-list-build", "3d-plus-indexing", "nested-comprehension"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -1506,7 +1506,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   aircond: {
     type: "brute-force",
     concepts_taught: ["bitmask-subset", "interval-coverage", "min-cost"],
-    concepts_required: ["loop", "list-basics", "tuple-basics", "bit-ops"],
+    concepts_required: ["loop", "list-basics", "tuple-basics"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -2065,7 +2065,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // 2026-09-10: type 이 "brute-force" 였는데 이 문제의 풀이는 DP + 이항정리다 — 브루트가 아니다.
   // difficulty 도 2 였는데 학생 화면에 뜨는 값(lib/mcc-difficulty.ts:48)은 5 다. 초6 학생이
   // 4쪽에서 그만뒀다("이건 초6이 풀 수 있는 문제가 아니었다"). 5 로 맞춘다.
-  sumk:      { ...DEFAULT_META, concepts_required: ["pascal-triangle-dp"], /* ⚠️ 미감사 */ type: "algorithm-reveal", difficulty: 5 },
+  sumk:      { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["pascal-triangle-dp"], /* ⚠️ 미감사 */ type: "algorithm-reveal", difficulty: 5 },
 };
 
 export function getQuestMeta(id: string): QuestConceptMeta {
@@ -2137,13 +2137,16 @@ export function getMetaCoverageStats() {
   //   값의 출처: `scripts/check-required-vs-code.py` 가 **코드에서 실제로 검출**한 것.
   //   진짜 감사(네 필드 다)는 quest-auditor 몫으로 남아 있다.
   strangefn:       { ...DEFAULT_META, concepts_required: ["modular-inverse"] },
-  buymilk:         { ...DEFAULT_META, concepts_required: ["bit-ops"] },
+  buymilk:         { ...DEFAULT_META, concepts_required: [] },
   photoshoot25:    { ...DEFAULT_META, concepts_required: ["2d-list-build"] },
   walkhome:        { ...DEFAULT_META, concepts_required: ["3d-plus-indexing", "nested-comprehension"] },
   teamttt:         { ...DEFAULT_META, concepts_required: ["3d-plus-indexing"] },
   blockgame:       { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"] },
-  word:            { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"] },
-  xorstring:       { ...DEFAULT_META, concepts_required: ["modular-inverse", "bit-ops"] },
-  mcc21simplemath: { ...DEFAULT_META, concepts_required: ["bit-ops"] },
+  // ⚠️ `supported_languages` 를 ["py"] 로 못박는다 — 이 quest 에 **C++ 코드가 아예 없다**
+  //    (`components.jsx` 의 `_CPP` 0건, 직접 확인). 기본값이 ["py","cpp"] 라 그냥 두면
+  //    관리자 화면에 **「C++ 검증됨」이라는 거짓 배지**가 뜬다. (quest-auditor, 2026-09-25)
+  word:            { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"], supported_languages: ["py"] },
+  xorstring:       { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["modular-inverse", "bit-ops"] },
+  mcc21simplemath: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["bit-ops"] },
   };
 }

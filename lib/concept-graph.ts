@@ -67,8 +67,34 @@ export function getConceptGraph(): ReadonlyMap<string, ConceptNode> {
  * without curated meta contribute nothing (DEFAULT_META.taught is
  * empty), which is the safe default — no false claim of mastery.
  */
+/**
+ * ⚠️ 2026-09-25 — **여기 없던 한 줄 때문에 「지금 풀 준비됨」이 통째로 꺼졌다.**
+ *
+ * 그날 quest 14개의 빈 `concepts_required` 를 채웠다(비어 있으면 `every()` 가 늘 참이라
+ * **아무에게나 추천**하고 있었다). 그런데 `concepts_required` 가 쓰는 이름 18개와
+ * `concepts_taught` 가 쓰는 이름 85개의 **교집합이 0** 이다 — 기초는 quest 가 아니라
+ * **레슨·알고리즘 토픽**이 가르치기 때문이다. 그래서 아래 누적만으로는
+ * **required 가 비지 않은 quest 가 영원히 ready 가 안 된다.**
+ * **과잉추천을 고치다 추천 0 으로 만든 것이다.**
+ *
+ * `pedagogy-reviewer`·`backend-engineer` 가 **서로 안 보고 같은 처방**에 닿았다 —
+ * 「기초는 늘 안다」를 **18개 전부에 주면 안 되고**, 레슨 초반에 누구나 배우는
+ * **아래 열 개만** 화이트리스트한다.
+ *
+ * ⛔ **여기 더 넣지 마라.** 뺀 여덟(`bit-ops`·`2d-list-build`·`3d-plus-indexing`·
+ * `nested-comprehension`·`chr-ord-conversion`·`pascal-triangle-dp`·`fenwick-tree`·
+ * `modular-inverse`)은 **레슨에 없거나 특정 토픽 한 챕터에만** 있다.
+ * 특히 `chr-ord-conversion` 은 **이 칸을 만들게 한 사고 그 자체**다 —
+ * `mooin3` 이 `chr()` 를 쓰는데 그 값이 비어서 준비 안 된 학생에게 추천됐다.
+ * **그걸 「늘 안다」로 넣으면 그 사고를 그대로 재현한다.**
+ */
+const ALWAYS_MASTERED = new Set([
+  "loop", "function-basics", "list-basics", "string-basics", "dict-basics",
+  "set-basics", "math-basics", "sort-basics", "tuple-basics", "vector-basics",
+]);
+
 export function masteredConcepts(completedQuestIds: Iterable<string>): Set<string> {
-  const acc = new Set<string>();
+  const acc = new Set<string>(ALWAYS_MASTERED);
   for (const id of completedQuestIds) {
     for (const c of getQuestMeta(id).concepts_taught) acc.add(c);
   }

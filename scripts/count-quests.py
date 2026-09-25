@@ -122,20 +122,41 @@ def quest_text(qid):
     return "\n".join(out) if out else None
 
 
+# ⚠️ 2026-09-25 — **주석과 인용문이 오탐을 만들고 있었다.** 셋을 실물로 잡았다:
+#   `buymilk`·`aircond` — *"`1 << i` 를 `2 ** i` 로 **바꿨다**"* 는 **고침 기록 주석**이 걸렸다.
+#      **이미 고친 자리를, 고쳤다고 적어 뒀다는 이유로** 계속 신고하고 있었다.
+#   `moohunt`  — *"`isAt[x][a][b]` 나오자마자 '나 혼자 못 짜겠다'"* 라는 **학생 말 인용**.
+#      따옴표로 시작해서 CODELINE 필터도 못 걸렀다 — **한국어 글인데 코드처럼 보였다.**
+#   그 오탐 셋 때문에 `lib/quest-meta.ts` 에 **없는 선수개념을 채울 뻔했다**(채웠다가 되돌렸다).
+#
+# ⭐ **패턴 성격에 따라 갈라서 본다** — 한 규칙으로 묶으면 반드시 한쪽이 틀린다:
+#   · **문법 모양**을 찾는 것 → 코드 배열의 한 줄에서만, **줄 안 주석을 떼고**,
+#     **한국어가 3자 이상이면 「글」로 보고 건너뛴다.**
+#   · **이름**으로 찾는 것(`조합론`·`펜윅`·`모듈러역원`) → **주석을 읽어야 한다. 그대로 둔다.**
+#     `sumk` 은 「# 이항계수 C[t][j] 미리 계산 (파스칼의 삼각형)」이라는 **코드 주석에만**
+#     그 이름이 있다 — 주석을 빼면 **진짜를 놓친다.** 한 번 그렇게 짰다가 되돌렸다.
+#
+# 실측: 태그 총합 34 → 31. **빠진 셋이 정확히 위 오탐 셋이고 다른 건 하나도 안 변했다.**
+SYNTAX_KIND = {"비트연산", "2차원리스트", "3차원리스트", "중첩컴프리헨션", "글자↔숫자변환"}
+INLINE_COMMENT = re.compile(r"(#|//).*$")
+HANGUL = re.compile(r"[가-힣]")
+
+
 def untaught_of(text):
     """줄 단위로 본다. C++ 출력 스트림 줄은 건너뛴다 (`cout << -1 <<` 가 비트로 잡혔다)."""
     hit = set()
     for line in text.split("\n"):
         if CPP_STREAM.search(line):
             continue
-        for name, pat in UNTAUGHT.items():
-            if pat.search(line):
-                hit.add(name)
-        # 코드 배열의 한 줄일 때만 보는 것들 (주석 줄은 뺀다)
-        if CODELINE.match(line) and not CODECOMMENT.match(line):
-            for name, pat in UNTAUGHT_CODELINE.items():
-                if pat.search(line):
+        quoted = bool(CODELINE.match(line)) and not CODECOMMENT.match(line)
+        code = INLINE_COMMENT.sub("", line.strip().strip('",`').strip())
+        prose = len(HANGUL.findall(code)) >= 3      # 코드가 아니라 한국어 글이다
+        for name, pat in list(UNTAUGHT.items()) + list(UNTAUGHT_CODELINE.items()):
+            if name in SYNTAX_KIND:
+                if quoted and not prose and pat.search(code):
                     hit.add(name)
+            elif pat.search(line):                  # 이름으로 찾는 것 — 주석도 읽는다
+                hit.add(name)
     return sorted(hit)
 
 
