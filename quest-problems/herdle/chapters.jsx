@@ -234,6 +234,40 @@ export function makeHerdleCh1(E) {
           <HerdleSim E={E} />
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=1179) — 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? 3 lines for the answer, then 3 more for the guess.",
+        "정답 격자 3줄, 그다음 추측 격자 3줄이 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>{t(E, "line 1~3", "1~3번째 줄")}</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the answer grid, one 3-letter row per line (A~Z)", "— 정답 격자, 한 줄에 3글자씩 (A~Z)")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>{t(E, "line 4~6", "4~6번째 줄")}</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the guess grid, same format", "— 추측 격자, 같은 형식")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "Two lines: the count of GREEN cells, then the count of YELLOW cells.",
+                  "두 줄로 출력해요: GREEN 칸 수, 그다음 줄에 YELLOW 칸 수.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>{t(E, "grid size is always 3 x 3", "격자 크기는 항상 3 x 3")}</div>
+              <div>{t(E, "each letter is one of A..Z (26 possible breeds)", "각 글자는 A~Z 중 하나 (품종 26가지)")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

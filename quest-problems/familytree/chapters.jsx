@@ -67,6 +67,47 @@ export function makeFamilyTreeCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=833) — 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "This one reads from a file, not the keyboard. N and the two names come first, then N mother-child lines.",
+        "이 문제는 파일에서 읽어요. N, 두 이름, 그리고 엄마-자식 줄이 와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 8 }}>
+            {t(E, "📁 This problem uses FILE input/output: read from family.in, write to family.out.",
+                "📁 이 문제는 파일로 입출력해요: family.in 을 읽고, family.out 에 써요.")}
+          </div>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT (family.in)", "입력 (family.in)")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N X Y</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of mother-child lines, then the two cows to compare", "— 엄마-자식 줄의 개수, 그다음 관계를 물어볼 두 소 이름")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>{t(E, "mom child", "엄마 자식")}</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— mom is the mother of child", "— 엄마가 자식의 어머니라는 뜻")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT (family.out)", "출력 (family.out)")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line describing the relationship between X and Y.",
+                  "X 와 Y 의 관계를 한 줄로 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "each cow name is at most 10 uppercase letters (A..Z)", "소 이름은 대문자 A~Z 로만, 최대 10글자")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Sim — pick two cows, watch LCA + classification live
     {
       type: "sim",

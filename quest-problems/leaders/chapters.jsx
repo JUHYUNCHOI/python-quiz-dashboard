@@ -231,6 +231,42 @@ export function makeLeadersCh1(E) {
           <LeadersIntroSim E={E} />
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=1275) — 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? N, then the breed string, then each cow's E_i.",
+        "N 다음, 품종 문자열, 그다음 소마다 E_i 가 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows", "— 소의 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>s</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— length-N string, i-th char is 'G' or 'H' (cow i's breed)", "— 길이 N 문자열, i번째 글자가 i번 소의 품종 (G 또는 H)")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>E₁ E₂ ... Eₙ</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— N integers on one line, cow i's list reaches up to Eᵢ", "— 한 줄에 N개, i번 소의 목록이 Eᵢ 까지 이어져요")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the number of valid leader pairs.",
+                  "유효한 리더 짝의 수를 한 줄로 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>2 ≤ N ≤ 10⁵ (10만)</div>
+              <div>i ≤ Eᵢ ≤ N</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "at least one G and one H are guaranteed  ·  at least one valid pair is guaranteed", "G 와 H 가 각각 하나 이상 있음이 보장돼요  ·  유효한 짝이 하나 이상 있음이 보장돼요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

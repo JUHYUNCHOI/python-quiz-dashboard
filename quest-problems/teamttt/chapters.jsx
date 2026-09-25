@@ -77,6 +77,43 @@ export function makeTttCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=831) — 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "This one reads from a file, not the keyboard. 3 lines make the grid.",
+        "이 문제는 키보드가 아니라 파일에서 읽어요. 3줄이 격자예요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 8 }}>
+            {t(E, "📁 This problem uses FILE input/output: read from tttt.in, write to tttt.out.",
+                "📁 이 문제는 파일로 입출력해요: tttt.in 을 읽고, tttt.out 에 써요.")}
+          </div>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT (tttt.in)", "입력 (tttt.in)")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>{t(E, "line 1~3", "1~3번째 줄")}</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the 3x3 grid, one 3-letter row per line (A..Z)", "— 3x3 격자, 한 줄에 3글자씩 (A~Z)")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT (tttt.out)", "출력 (tttt.out)")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "Two lines: the number of solo winners, then the number of 2-cow team winners.",
+                  "두 줄로 출력해요: 단독 우승자 수, 그다음 줄에 2인 팀 우승 수.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>{t(E, "grid size is always 3 x 3", "격자 크기는 항상 3 x 3")}</div>
+              <div>{t(E, "each letter is one of A..Z", "각 글자는 A~Z 중 하나")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Interactive sim — feel the algorithm before code
     {
       type: "reveal",

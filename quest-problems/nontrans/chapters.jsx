@@ -78,6 +78,44 @@ export function makeNonTransCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, cpid=1180) — 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? T test cases, then T lines of 8 numbers each.",
+        "테스트 케이스 개수 T 다음, 8개 숫자로 된 줄이 T번 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of test cases", "— 테스트 케이스 개수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>{t(E, "8 numbers", "정수 8개")}</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— die A's 4 faces, then die B's 4 faces, on one line", "— 주사위 A 의 4면, 이어서 B 의 4면, 한 줄에")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats T times", "↑ 이 줄이 T 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "'yes' or 'no' for each test case, one per line (T lines).",
+                  "테스트 케이스마다 'yes' 또는 'no' 를 한 줄씩 출력해요 (T 줄).")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 10</div>
+              <div>{t(E, "each face value is an integer from 1 to 10", "각 면의 값은 1~10 사이 정수")}</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "the same value can appear on multiple faces of one die", "같은 값이 한 주사위의 여러 면에 있어도 돼요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",
