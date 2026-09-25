@@ -324,6 +324,11 @@ export function getSocDist1Sections(E) {
             "거리 D 를 하나씩 다 시도하면 느려요.\n그런데 'D 이상 거리로 2마리를 더 놓을 수 있나?'\n라는 질문은 D 가 커질수록 어려워지고\n작아질수록 쉬워져요 — 딱 한 번만 뒤집혀요.\n그래서 가운데를 찍어 보고 되는 쪽으로 절반씩 좁혀 가요.\n이렇게 찾는 걸 이분 탐색이라고 불러요."),
         t(E, "So the code binary-searches D, and for each candidate D checks the gaps between existing cows and how many new cows still fit.",
             "그래서 코드는 D 를 이분 탐색하면서\n기존 소들 사이 간격과\n새로 몇 마리를 더 넣을 수 있는지 확인해요."),
+        /* ⚠️ 2026-09-25 학생 보고: *"제일 어려운 «한 구간에 새 소가 몇 마리 들어가나»
+           계산식은 설명이 없었다. 손으로 계산해서 억지로 따라갔지 이해한 게 아니다."*
+           식 하나를 말로 풀어 주는 한 줄만 더한다 — 쪽은 안 늘린다. */
+        t(E, "Why (gap − D) // D? Inside a gap of length `gap`, the first new cow must sit D past the left cow, leaving gap − D. Every further cow needs another D. So gap − D divided by D is how many fit. The two ends have a cow on one side only, so they use the whole leftover: ones[0] // D and (N−1−ones[−1]) // D.",
+            "(gap − D) // D 는 왜 이럴까요?\n길이 gap 인 빈 구간에서 첫 소는 왼쪽 소로부터 D 칸 뒤에 놓여요.\n그러면 gap − D 만큼이 남고, 그다음 소마다 또 D 칸이 필요해요.\n그러니 gap − D 를 D 로 나누면 몇 마리가 들어가는지 나와요.\n양 끝은 한쪽에만 소가 있어서 남은 만큼을 다 써요 —\nones[0] // D 와 (N−1−ones[−1]) // D 예요."),
       ],
       pyOnly: [],
       cppOnly: [

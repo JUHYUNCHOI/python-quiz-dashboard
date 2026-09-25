@@ -122,19 +122,27 @@ export function makeSocDist1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cows already stand in a couple of stalls.\nPlace 2 more so the smallest gap is as large as possible.", "소 2마리를 더 넣어서 최소 간격을 가장 크게 만들어요."),
+        "Before hunting for the answer, ask a smaller question: does THIS distance fit?", "답을 찾기 전에 먼저 물어봐요 — 이 거리로 넣을 수 있나요?"),
+      /* ⚠️ 2026-09-25: 원래 질문은 「어디에 놓을까요?」였는데 **답이 하나가 아니었다.**
+         "10001" 에 2마리를 넣는 경우는 {1,2}·{1,3}·{2,3} 셋뿐이고 **최소 거리가 전부 1** 이다
+         (전수로 확인). 그런데 보기 글자에 둘 다 「= 1」 이라고 적어 놓고 하나만 ✅ 였다.
+         학생이 잡았다 — *"왜 똑같은 숫자인데 하나는 틀렸다는 거지?"*
+         → 예제를 키우지 않고, **코드가 실제로 묻는 질문**으로 바꿨다:
+            `can_place(D, 2)` = 「거리 D 로 2마리를 넣을 수 있나?」
+         이러면 답이 하나로 갈리고(안 된다), 다음 쪽의 「답은 1」로도 곧바로 이어진다. */
       question: t(E,
-        "Stalls \"10001\": occupied at 0 and 4. Place 2 cows in empty stalls 1,2,3. To maximize minimum distance, best placement?",
-        "축사 \"10001\" 의 0 번과 4 번에 소가 있어요. 빈 칸 1, 2, 3 에 소 2마리를 넣어요. 최소 거리를 가장 크게 하려면 어디에 놓을까요?"),
+        "Stalls \"10001\": occupied at 0 and 4, empty at 1,2,3. Can we place 2 cows so EVERY neighbouring pair is at least 2 apart?",
+        "축사 \"10001\" 의 0 번과 4 번에 소가 있고 1, 2, 3 이 비었어요.\n이웃한 두 소가 모두 2 칸 이상 떨어지게 2마리를 넣을 수 있을까요?"),
       options: [
-        t(E, "Place at 1 and 3: min dist = 1", "1 번과 3 번에 놓아요 — 최소 거리 = 1"),
-        t(E, "Place at 2: only 1 cow, can't place 2 optimally. Min = 1", "2 번에만 놓아요 — 소를 1마리밖에 못 놔요. 최소 = 1"),
-        t(E, "Place at 1 and 2: min dist = 1", "1 번과 2 번에 놓아요 — 최소 거리 = 1"),
+        t(E, "No — only stall 2 is far enough from both, so just 1 cow fits",
+             "안 돼요 — 양쪽에서 2 칸 떨어진 자리는 2 번뿐이라 1마리만 들어가요"),
+        t(E, "Yes — stalls 1 and 3", "돼요 — 1 번과 3 번"),
+        t(E, "Yes — stalls 2 and 3", "돼요 — 2 번과 3 번"),
       ],
       correct: 0,
       explain: t(E,
-        "With 2 cows to place in {1,2,3}, the best is positions 1 and 3. Distances: 0-1=1, 1-3=2, 3-4=1. Min distance = 1.",
-        "소 2마리를 1, 2, 3 에 넣으면 1 번과 3 번이 제일 좋아요. 거리가 0-1=1, 1-3=2, 3-4=1 이라 최소 거리는 1 이에요."),
+        "A cow at least 2 from the cow at 0 must be at stall 2 or later; at least 2 from the cow at 4 must be at stall 2 or earlier. Only stall 2 satisfies both — 1 cow, not 2. So distance 2 is impossible, and the answer must be smaller.",
+        "0 번 소에서 2 칸 이상 떨어지려면 2 번부터,\n4 번 소에서 2 칸 이상 떨어지려면 2 번까지예요.\n둘 다 되는 자리는 2 번 하나뿐이라 1마리밖에 못 넣어요.\n그래서 거리 2 는 안 되고, 답은 그보다 작아요."),
     },
     // 1-3: Input
     {
