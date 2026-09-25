@@ -479,7 +479,8 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: read M, N, K from the first line.", "1단계 — 첫 줄에서 M, N, K 를 읽어요."),
+        "First question — what do we need before anything else? The grid size and K.",
+        "가장 먼저 뭐가 필요할까요?\n격자 크기 M, N 과 확대 배수 K 부터 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <CodeBlock lang={lang} isEn={E} lines={lang === "cpp" ? [
@@ -500,7 +501,8 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: read the next M lines (rows) to fill the grid.", "2단계 — 다음 M 줄(행)을 읽어서 격자를 채워요."),
+        "We know the size now — but we still need the actual picture. Read M rows.",
+        "크기는 알았어요. 이제 진짜 그림이 필요해요.\nM 줄을 읽어서 격자를 채워요."),
       content: (
         <div style={{ padding: 16 }}>
           <CodeBlock lang={lang} isEn={E} lines={lang === "cpp" ? [
@@ -550,7 +552,8 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 3: the output loop — outer for each row, inner to repeat it K times.", "3단계 — 출력 반복문이에요. 바깥은 행마다, 안쪽은 K 번씩요."),
+        "Grid's ready — now how do we print it enlarged? Loop each row, then repeat it K times.",
+        "격자는 다 읽었어요. 이제 어떻게 K배로 출력할까요?\n바깥은 행마다, 안쪽은 K 번씩 반복해요."),
       content: (
         <div style={{ padding: 16 }}>
           <CodeBlock lang={lang} isEn={E} lines={lang === "cpp" ? [
@@ -574,7 +577,8 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 4: build each row by repeating every character K times.", "4단계 — 글자마다 K 번씩 이어 붙여서 행을 만들어요."),
+        "Inside those loops — what fills each row? Repeat every character K times.",
+        "그 반복문 안에서 행은 어떻게 채울까요?\n글자마다 K 번씩 이어 붙여서 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <CodeBlock lang={lang} isEn={E} lines={lang === "cpp" ? [

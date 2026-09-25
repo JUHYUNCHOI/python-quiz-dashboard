@@ -385,7 +385,8 @@ export function makeWordCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's code it!\nFirst, read the words and count each word's letter frequencies using Counter.", "코드를 짜볼게요. 먼저 단어를 읽고 글자 수를 Counter로 세요."),
+        "Time to code it — what do we need before picking letters? Each word's letter counts.",
+        "코드로 옮겨볼게요. 글자를 고르기 전에 뭐가 필요할까요?\n단어를 읽고 글자 수를 Counter로 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 6 }}>
@@ -415,7 +416,8 @@ export function makeWordCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The core: fill M slots greedily.\nFor each slot, try all 26 letters and pick the one with highest marginal gain.", "빈칸마다 a~z 를 다 시도해 가장 많이 겹치는 글자를 골라요."),
+        "We have the counts — so for each slot, how do we pick the best letter? Try all 26 and keep the highest gain.",
+        "글자 수는 세었어요. 빈칸마다 어떤 글자를 고를까요?\na~z 를 다 시도해 가장 많이 겹치는 글자를 골라요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 6 }}>
@@ -455,7 +457,8 @@ export function makeWordCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Finally, build the word!\nJust line up the letters in alphabetical order — that's automatically the lexicographically smallest.", "글자들을 abc 순으로 이어붙이면 정답 단어가 완성돼요."),
+        "We picked how many of each letter — so how do we turn that into the word? Line them up in order a→z.",
+        "글자마다 몇 개 쓸지는 정했어요. 이걸 어떻게 단어로 만들까요?\na 부터 z 순서로 이어붙이면 정답이 나와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 6 }}>

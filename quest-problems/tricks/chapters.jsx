@@ -447,7 +447,8 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The answer sums a value over every color pair. So first, read the bags and normalize.", "답은 색 쌍마다 구한 값을 다 더한 거예요. 먼저 봉지를 읽어 (1,2)로 맞춰요."),
+        "The answer sums a value over every color pair — so what do we need first? Read the bags and normalize them.",
+        "답은 색 쌍마다 구한 값을 다 더한 거예요.\n그러려면 먼저 뭐가 필요할까요?\n봉지부터 읽어 (1,2)로 맞춰요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
@@ -476,7 +477,8 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We'll need A, B, C counts for every pair, so count bag types once with Counter — its keys ARE the color pairs we need next.", "봉지 종류를 Counter 로 세면 그 키가 바로 색 쌍이에요."),
+        "Bags are normalized — now how do we quickly count each type? Counter's keys ARE the color pairs we need next.",
+        "봉지는 정리했어요. 이제 종류별 개수를 어떻게 빠르게 셀까요?\nCounter 로 세면 그 키가 바로 색 쌍이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
@@ -509,7 +511,8 @@ export function makeTricksCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "pair_count's keys ARE the color pairs — loop over them directly, skip same-color entries, and add the formulas.", "pair_count 의 키가 곧 색 쌍이에요."),
+        "We have the counts — so how do we get the answer for each pair? Skip same-color entries, then add the formulas.",
+        "개수는 다 세었어요. 그럼 색 쌍마다 답을 어떻게 구할까요?\n같은 색(x==y)은 건너뛰고, 공식을 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>

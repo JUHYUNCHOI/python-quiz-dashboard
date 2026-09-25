@@ -4,6 +4,11 @@ import { getBuyMilkSections, getBuyMilkWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { NormalizeSim, GreedySim } from "./sims";
 
+/* 샘플 입출력 상자의 «← 설명» 라벨 — moohunt/strangefn 의 SIO 와 같은 모양
+   (2026-09-25, "입력값이 뭐지? 뭘 의미하는거지?" 지적. 숫자만 있고 어떤 줄이
+   N·Q 인지, 어떤 줄이 가격인지, 어떤 줄이 질문인지 이 상자만으론 몰랐다.) */
+const SIO = { color: "#94a3b8", fontSize: 10.5 };
+
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeBuyMilkCh1 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
@@ -29,10 +34,16 @@ export function makeBuyMilkCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5, wordBreak: "keep-all" }}>
               {t(E,
-                "For each query x,\noutput the minimum cost to buy at least x buckets of milk.",
-                "질문이 하나 올 때마다,\nx 통 이상을 사는 가장 싼 값을 출력해요.")}
+                "For each query x, output the minimum cost to buy at least x buckets of milk.",
+                "x 가 주어질 때마다, 그 통 수 이상을 사는 가장 싼 값을 알려줘요.")}
+              {/* ⚠️ 2026-09-25: 처음엔 "반복문과 **리스트**면 돼요" 라고 썼는데
+                  `check-code-names-in-prose.py` 가 잡았다 — 학생이 **코드를 한 줄도
+                  안 본 1쪽**에서 「리스트」는 아직 코드 이름이다. 그 말을 뺐다. */}
+              {t(E,
+                "\nNo special algorithm here — the hard part is working out what to buy first.",
+                "\n어려운 알고리즘은 필요 없어요.\n대신 무엇부터 살지 정하는 게 어려워요.")}
             </div>
           </div>
 
@@ -43,29 +54,30 @@ export function makeBuyMilkCh1(E) {
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "Deal ", "거래 ")}
-                  <b style={{ color: "#d97706" }}>i</b>
-                  {t(E, " sells ", " 는 ")}
-                  <b style={{ color: "#0891b2" }}>2^(i-1)</b>
-                  {t(E, " buckets at price ", " 통을 ")}
-                  <b style={{ color: "#0891b2" }}>a_i</b>
-                  {t(E, ". Prices strictly increase: a_1 < a_2 < ... < a_N.", " 원에 팔아요.\n뒤 거래일수록 값이 꼭 더 비싸요 — a_1 < a_2 < ... < a_N 이에요.")}
+                <div style={{ wordBreak: "keep-all" }}>
+                  {t(E, "Deal 1 sells ", "거래 1은 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "1 bucket", "1통")}</b>
+                  {t(E, ", deal 2 sells ", ", 거래 2는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "2 buckets", "2통")}</b>
+                  {t(E, ", deal 3 sells ", ", 거래 3은 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "4 buckets", "4통")}</b>
+                  {t(E, ", and so on — the bucket count doubles each time. Prices go up in the same order too, deal by deal; no two deals cost the same.",
+                        "… 이렇게 거래 번호가 하나씩 늘어날 때마다 통 수가 두 배씩 커져요.\n값도 거래 번호 순서대로 항상 올라가요 — 같은 값을 가진 두 거래는 없어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "Each deal can be taken any non-negative number of times.",
-                        "각 거래는 0 번 이상 원하는 만큼 살 수 있어요.")}
+                <div style={{ wordBreak: "keep-all" }}>
+                  {t(E, "You can take any deal as many times as you like — or not at all.",
+                        "어떤 거래든 원하는 만큼 여러 번 살 수 있어요. 아예 안 사도 되고요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
-                <div>
-                  {t(E, "For each of the Q queries x, print the minimum cost to get ", "x 가 하나 올 때마다 ")}
+                <div style={{ wordBreak: "keep-all" }}>
+                  {t(E, "For each query x, print the minimum cost to get ", "x 가 주어질 때마다 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "at least x buckets", "x 통 이상")}</b>
-                  {t(E, ".", " 을 사는 가장 싼 값을 출력해요.")}
+                  {t(E, ".", "을 사는 가장 싼 값을 출력해요.")}
                 </div>
               </div>
             </div>
@@ -86,25 +98,35 @@ export function makeBuyMilkCh1(E) {
             <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 10 }}>
               📥 {t(E, "Sample 1 — Input", "예제 1 — 입력")}
             </div>
-            <pre style={{ background: "#0f172a", color: "#f8fafc", padding: 10, borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "'JetBrains Mono',monospace" }}>
-{`2 4
-10 15
-1
-2
-6
-7`}
-            </pre>
+            {/* 2026-09-25 — 숫자만 있던 것에 «← 뜻» 라벨을 붙였다. 🔒 FULL_PY 가
+                읽는 순서 그대로: N,Q → 거래별 가격 → 질문 x 가 Q 줄. 출력 계산 과정은
+                안 보여준다(2026-09-16 사고) — 라벨은 "이 줄이 무엇이냐" 만 말한다. */}
+            <div style={{ background: "#0f172a", color: "#f8fafc", padding: 10, borderRadius: 8, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
+              <div>2 4      <span style={SIO}>← {t(E, "N=2 deals, Q=4 queries", "거래 2개, 질문 4개")}</span></div>
+              <div>10 15    <span style={SIO}>← {t(E, "price of deal 1, deal 2", "거래1·거래2 가격")}</span></div>
+              <div>1        <span style={SIO}>← {t(E, "query 1: x", "질문 1: x")}</span></div>
+              <div>2        <span style={SIO}>← {t(E, "query 2: x", "질문 2: x")}</span></div>
+              <div>6        <span style={SIO}>← {t(E, "query 3: x", "질문 3: x")}</span></div>
+              <div>7        <span style={SIO}>← {t(E, "query 4: x", "질문 4: x")}</span></div>
+            </div>
+            {/* 1쪽 규칙("거래 i 는 2^(i-1) 통") 이 이 쪽엔 없었다 — 쪽을 넘기면 앞 쪽은
+                사라진다(feedback_screen_must_not_rely_on_memory). 계산 없이 정의만 다시. */}
+            <div style={{ marginTop: 8, fontSize: 11.5, color: "#92400e", lineHeight: 1.6, wordBreak: "keep-all" }}>
+              📌 {t(E,
+                "Deal 1 sells 1 bucket. Deal 2 sells 2 buckets.",
+                "거래1은 1통, 거래2는 2통을 팔아요.")}
+            </div>
           </div>
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 10 }}>
               📤 {t(E, "Sample 1 — Output", "예제 1 — 출력")}
             </div>
-            <pre style={{ background: "#0f172a", color: "#f8fafc", padding: 10, borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "'JetBrains Mono',monospace" }}>
-{`10
-15
-45
-55`}
-            </pre>
+            <div style={{ background: "#0f172a", color: "#f8fafc", padding: 10, borderRadius: 8, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
+              <div>10   <span style={SIO}>← {t(E, "answer for x=1", "x=1 답")}</span></div>
+              <div>15   <span style={SIO}>← {t(E, "answer for x=2", "x=2 답")}</span></div>
+              <div>45   <span style={SIO}>← {t(E, "answer for x=6", "x=6 답")}</span></div>
+              <div>55   <span style={SIO}>← {t(E, "answer for x=7", "x=7 답")}</span></div>
+            </div>
           </div>
           <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
             {/* ⚠️ 2026-09-16 — 두 번 고쳤다.

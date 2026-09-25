@@ -515,8 +515,8 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Phase 1 — grow the list of remainders.",
-        "1단계 — 나머지 리스트를 늘리는 코드예요."),
+        "Time to code it — first, what do we need? A list we can keep growing with remainders.",
+        "코드로 옮겨볼게요. 먼저 뭐가 필요할까요?\n나머지를 늘려가는 리스트부터 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <CodeBlock lines={lang === "cpp" ? P1_CPP : P1_PY} lang={lang} isEn={E} />
@@ -532,8 +532,8 @@ export function makeMcc20KittyCh3(E, lang = "py") {
       /* 2026-09-17: 80자였고, 학생용 글에 "dict" 라는 코드 용어가 그대로 있었다.
          파란 바는 짧게, 표(dict) 설명은 아래 코드 밑에 우리말로 붙인다. */
       narr: t(E,
-        "Phase 2 — spot the window that comes back.",
-        "2단계 — 다시 나오는 창을 찾아내요."),
+        "The list can grow forever — so when do we stop? Spot the window that comes back.",
+        "리스트는 끝없이 늘어나요. 언제 멈출까요?\n다시 나오는 창을 찾아서 멈춰요."),
       content: (
         <div style={{ padding: 16 }}>
           <CodeBlock lines={lang === "cpp" ? P2_CPP : P2_PY} lang={lang} isEn={E} />
@@ -557,8 +557,8 @@ export function makeMcc20KittyCh3(E, lang = "py") {
       /* 2026-09-23: 이 조각의 식이 진짜 코드와 달랐다 — 앞꼬리(tail_zeros)가 빠져 있어서,
          이 화면을 보고 그대로 치면 답이 틀리게 되어 있었다. FULL_PY 마지막 줄과 맞췄다. */
       narr: t(E,
-        "Phase 3 — add three pieces. No big loop.",
-        "3단계 — 세 조각을 더해요. 큰 반복은 없어요."),
+        "We know where the cycle starts and how long it is — so how do we count without looping to N? Add three pieces.",
+        "사이클이 어디서 시작하고 얼마나 긴지 알아요.\nN까지 반복하지 않고 어떻게 셀까요? 세 조각을 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <CodeBlock lines={lang === "cpp" ? P3_CPP : P3_PY} lang={lang} isEn={E} />
