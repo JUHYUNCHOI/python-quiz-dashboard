@@ -53,6 +53,21 @@ PAT = re.compile(
     r'bubble:\s*t\(E,\s*("(?:[^"\\]|\\.)*")\s*,\s*("(?:[^"\\]|\\.)*")', re.S)
 
 
+
+def size(ko):
+    """말풍선 하나가 **몇 생각**인가 — `\n` 개수와 문장부호 개수 중 **큰 쪽**.
+
+    ⚠️ 2026-09-25 정정: 처음엔 `\n` 만 셌는데 **교육 담당이 실측으로 반증했다.**
+      · `checkups` 는 `\n` 기준 **0건**인데 문장 수로 세면 **8곳**이 나온다 —
+        줄바꿈 없이 쉼표·접속사로 이어붙이면 `\n` 카운트가 **못 잡는다.**
+      · 반대로 `astral` 은 짧은 구절을 `\n` 으로 자주 끊어 써서 줄 수는 많아도
+        **생각 개수는 2~3개**다. `\n` 만 보면 **순위가 뒤집힌다.**
+    `check-narr-length.py` 가 이미 이 이중 기준을 쓴다 — 같은 방식으로 맞춘다.
+    """
+    lines = len(ko.split("\n"))
+    sentences = len([x for x in re.split(r"[.!?]+", ko) if x.strip()])
+    return max(lines, sentences)
+
 def scan(path):
     src = io.open(path, encoding="utf-8", errors="replace").read()
     out = []
@@ -63,13 +78,21 @@ def scan(path):
         except ValueError:
             continue
         line_no = src[:m.start()].count("\n") + 1
-        out.append((en, ko, line_no))
+        # ⚠️ 2026-09-25: **CodeWalk 걸음**과 **시뮬 말풍선**을 갈라야 한다.
+        #   교육 담당: *"checkups 의 8개는 CodeWalk 이 아니라 도입 시뮬 내레이션이라
+        #   **다른 문제**다 — 이 작업 범위에서 빠져야 맞다."*
+        #   섞어 세면 숫자가 쓸모없어진다(처음에 printseq 가 31곳으로 1위가 됐는데
+        #   그 대부분이 `sims.jsx` 의 시뮬 말풍선이었다).
+        #   CodeWalk 걸음은 같은 객체에 **`hi:` 가 있다.** 그걸로 가른다.
+        head = src[max(0, m.start() - 160):m.start()]
+        is_walk = "hi:" in head
+        out.append((en, ko, line_no, is_walk))
     return out
 
 
 def main():
     argv = sys.argv[1:]
-    min_lines = 6
+    min_lines = 4   # 교육 판정(2026-09-25): **2~3 문장이 적정선**, 4 부터 고칠 것
     if "--min" in argv:
         i = argv.index("--min")
         min_lines = int(argv[i + 1])
@@ -83,27 +106,43 @@ def main():
         quest = f.split("/")[1]
         if args and quest not in args:
             continue
-        for en, ko, line_no in scan(f):
+        for en, ko, line_no, is_walk in scan(f):
             total += 1
-            n = len(ko.split("\n"))
+            n = size(ko)
             if n >= min_lines:
                 hits.setdefault(quest, []).append(
-                    (n, f, line_no, ko.splitlines()[0][:50]))
+                    (n, f, line_no, ko.splitlines()[0][:50], is_walk))
 
-    n_hits = sum(len(v) for v in hits.values())
-    print(f"CodeWalk 말풍선 — **{min_lines}줄 이상 {n_hits}곳 · quest {len(hits)}개** "
+    walk = {q: [h for h in v if h[4]] for q, v in hits.items()}
+    walk = {q: v for q, v in walk.items() if v}
+    sims = {q: [h for h in v if not h[4]] for q, v in hits.items()}
+    sims = {q: v for q, v in sims.items() if v}
+    n_walk = sum(len(v) for v in walk.values())
+    n_sims = sum(len(v) for v in sims.values())
+    print(f"**CodeWalk 걸음** — {min_lines} 이상 **{n_walk}곳 · quest {len(walk)}개** "
           f"(전체 bubble {total}개)\n")
-    for q in sorted(hits, key=lambda x: (-len(hits[x]), x)):
-        print(f"  🚨 {q:<20} {len(hits[q])}곳")
+    for q in sorted(walk, key=lambda x: (-len(walk[x]), x)):
+        print(f"  🚨 {q:<20} {len(walk[q])}곳")
         if detail:
-            for n, f, line_no, snippet in sorted(hits[q], key=lambda x: -x[0]):
-                print(f"       {f}:{line_no}  {n}줄  {snippet}")
-    if not hits:
+            for n, f, line_no, snippet, _ in sorted(walk[q], key=lambda x: -x[0]):
+                print(f"       {f}:{line_no}  {n}생각  {snippet}")
+    print(f"\n── 따로: **시뮬 말풍선**({min_lines} 이상) {n_sims}곳 · quest {len(sims)}개")
+    print("   ⚠️ 이건 **다른 층**이다 — CodeWalk 걸음이 아니라 도입 시뮬 내레이션이다.")
+    print("      교육 판정(2026-09-25): 이 작업 범위에서 **빼라.** 합쳐 세지 마라.")
+    for q in sorted(sims, key=lambda x: (-len(sims[x]), x))[:6]:
+        print(f"   · {q:<20} {len(sims[q])}곳")
+    if not walk:
         print("  0곳.")
-    if not detail and hits:
+    if not detail and walk:
         print("\n  줄까지 보려면: python3 scripts/check-codewalk-bubble-length.py --min "
               f"{min_lines} <quest 이름>")
-    print(f"\n잣대: 한국어 `bubble` 문자열 안 `\\n` 개수 + 1 이 {min_lines}줄 이상이면 걸린다.")
+    print(f"\n잣대: `\\n` 개수와 문장부호 개수 중 **큰 쪽**이 {min_lines} 이상이면 걸린다.")
+    print("   교육 판정(2026-09-25): **한 말풍선은 2~3 문장**. 그걸 넘으면 고칠 대상이다.")
+    print("   ⚠️ 걸렸다고 **가르지 마라.** 원인이 셋이고 처방이 다르다 —")
+    print("      A 코드가 진짜 여러 갈래다 → **가른다**(클릭이 느는 건 정당한 비용)")
+    print("      B 같은 코드인데 여담·중복 설명이 붙었다 → **줄인다**(가르면 클릭만 늘고 반복은 남는다)")
+    print("      C 안 가르친 개념이 말풍선 안에 숨어 있다 → **손대지 마라.** 구조적 구멍이라 PM 판정이 먼저다")
+    print("   실측 표본 21개에서 **A 는 moohunt 하나뿐이고 나머지는 B 아니면 C** 였다.")
     print("   기준 줄 수는 이 스크립트가 정한 게 아니다 — --min 으로 바꿔서 판정해라.")
     print("⚠️ 영어 쪽은 아직 안 잰다. 0건이 결백은 아니다 — 근거는 파일 머리 주석.")
     return 1 if hits else 0
