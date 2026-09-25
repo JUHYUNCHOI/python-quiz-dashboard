@@ -54,7 +54,15 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-NAME = re.compile(r'\b((?:SOLUTION_CODE|FULL_[A-Z0-9_]+|[A-Z0-9_]*_(?:PY|CPP)))\s*=\s*\[')
+# ⚠️ 2026-09-25 넓힘 — 처음엔 **대문자 이름만** 봤다. 그런데 감사 담당이
+#   `simplegame` 의 정답 코드가 `const fullPy = (E) => [...]`(소문자 카멜)이라
+#   **`check-frozen.py` 의 `PROTECTED_NAME_RE`(`.*_(PY|CPP)$`)도, 이 검사기도 못 잡는다**
+#   고 보고했다. 전수로 재니 그런 이름은 **quest 2개**뿐이었다 —
+#   `simplegame`(`fullPy`, **진짜 최종 코드**)과 `mooin2`(`brute*Py/Cpp`, 브루트 시연 조각).
+#   ⭐ 화살표 함수 뒤에 배열이 오는 모양(`= (E) => [`)도 같이 받는다.
+NAME = re.compile(
+    r'\b((?:SOLUTION_CODE|FULL_[A-Z0-9_]+|[A-Z0-9_]*_(?:PY|CPP)'
+    r'|[a-z][A-Za-z0-9]*(?:Py|Cpp|Code)))\s*=\s*(?:\([^)]*\)\s*=>\s*)?\[')
 
 
 def sh(args):

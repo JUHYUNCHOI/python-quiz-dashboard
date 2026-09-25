@@ -39,6 +39,31 @@
        **USACO_VERIFIED 히트는 마커로 뚫리지 않는다** — WORK.md 에 뭐가 적혀 있든
        무조건 막는다. 우회는 **`--no-verify` 뿐**(의식적 우회, 자동 통로를 만들지 않는다).
 
+⚠️ **`USACO_VERIFIED` 배지의 뜻을 오해하지 마라 — «채점기에 제출해 결과가 기록됨» 이지
+   «정답 보장» 이 아니다. 실패한 코드도 잠긴다.** 실물 증거: `cowntact` 는 헤더가 있는데
+   `USACO_VERIFICATION.md` 엔 `Python: 4/12 (WA - algorithm wrong)` 로 적혀 있다. 이건
+   설계 결함이 아니라 **"몰래 손대지 말고 의도적으로 고치고 재제출하라"** 는 뜻으로
+   이미 일관되게 쓰인다.
+
+  ⑦ 헤더가 **아직 없는 채** PASS 로 문서화된 quest — `USACO_VERIFICATION.md` 에는 PASS 로
+     적혀 있는데 파일에 `// 🔒 USACO_VERIFIED` 헤더가 없는 것들. 이 걸쇠는 파일에 헤더
+     문자열이 실제로 있어야만 보호하므로, 그런 quest 는 재제출·헤더 추가 전까지 **아무
+     보호도 없이** 자동 수정될 수 있었다(2026-09-25, CodeWalk 이관을 한 번에 36개씩
+     돌리던 중 발견).
+     → 저장소 안 `scripts/pending-badge-quests.json` 을 **두 번째 목록**으로 추가했다.
+       PM 이 `USACO_VERIFICATION.md` 와 직접 대조해 확정한 부분집합만 우선 담는다(전체
+       분류가 끝나면 갱신). 이 목록에 있는 quest 는 헤더가 없어도 **같은
+       `protected_line_ranges`/`touches_protected` 로직으로 보호 변수 블록을 건드리면
+       막는다.** ⚠️ 이건 `frozen-quests.json`(선생님이 손대지 말라고 한 것)과 **다른
+       목록이다** — 혼동 방지로 파일을 분리했다. `frozen-quests.json` 과 달리 이 파일이
+       없거나 못 읽히면 **fail-open**(경고만 찍고 빈 집합으로 진행)이다 — 이 목록은
+       "이미 있던 최종 안전망(①의 fail-closed)" 위에 얹는 **추가 안전망**이라, 이 파일이
+       실수로 지워졌다고 저장소 전체 커밋이 막히면 안 된다는 판단이다. 우회는 동결
+       quest 와 **같은** WORK.md 마커(`### ✅ 동결 승인: <quest-id> …`)를 그대로 쓴다 —
+       "이 quest 의 이 변경을 사람이 확인했다" 는 뜻은 같기 때문이다. 메시지에서는
+       "동결 quest" 와 구분해 "문서상 PASS·헤더 없음" 이라고 표시한다 —
+       **`USACO_VERIFIED` 라고 주장하지 않는다.**
+
 ────────────────────────────────────────────────────────────────────────
 쓰는 법
 ────────────────────────────────────────────────────────────────────────
@@ -58,6 +83,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FROZEN_JSON = os.path.join(ROOT, "scripts", "frozen-quests.json")
+PENDING_BADGE_JSON = os.path.join(ROOT, "scripts", "pending-badge-quests.json")
 WORKMD_PATH = ".claude/WORK.md"
 
 # 고정 마커 — 결함③④⑤ 대응. 이 정확한 모양(헤딩 #, ✅, "동결 승인:", "범위:")만 잡는다.
@@ -163,6 +189,24 @@ def load_frozen_quests():
     return set(quests), None
 
 
+def load_pending_badge_quests():
+    """결함⑦ 대응 — 문서상 PASS 인데 파일에 USACO_VERIFIED 헤더가 아직 없는 quest 목록.
+    frozen-quests.json 과 달리 **fail-open** 이다: 이건 이미 있는 fail-closed 안전망
+    위에 얹는 추가 보호라, 이 파일 하나가 지워졌다고 저장소 전체 커밋을 막을 이유는
+    없다고 판단했다. 못 읽으면 (빈 set, 경고 메시지) 를 돌려준다 — main() 이 경고만
+    찍고 진행한다."""
+    if not os.path.exists(PENDING_BADGE_JSON):
+        return set(), f"{PENDING_BADGE_JSON} 없음"
+    try:
+        data = json.loads(open(PENDING_BADGE_JSON, encoding="utf-8").read())
+    except Exception as e:
+        return set(), f"{PENDING_BADGE_JSON} 파싱 실패: {e}"
+    quests = data.get("quests")
+    if not isinstance(quests, list):
+        return set(), f"{PENDING_BADGE_JSON} 의 'quests' 가 배열이 아님"
+    return set(quests), None
+
+
 def build_mode(argv):
     """(files, content_fn, 설명) — 모드별로 "무엇이 바뀌었나" 와 "그 파일 내용을 어떻게
     읽나" 를 만든다. content_fn 은 WORK.md 를 읽을 때도 그대로 재사용한다(같은 스냅샷
@@ -217,18 +261,25 @@ def main():
         print("   scripts/frozen-quests.json 을 고쳐라. 정말 예외 상황이면 --no-verify (비권장, 의식적 우회만).")
         return 1
 
+    pending_badges, pending_err = load_pending_badge_quests()
+    if pending_err:
+        print(f"⚠️  {pending_err} — 이 부가 보호(문서상 PASS·헤더 없는 quest)는 이번엔 건너뛴다.")
+
     files, content_fn, mode_desc, diff_cmd, base_ref = build_mode(argv)
     if not files:
         print(f"변경된 파일 없음 ({mode_desc})")
         return 0
 
-    hits_frozen = {}   # quest_id -> [file, ...]
+    hits_frozen = {}    # quest_id -> [file, ...]
+    hits_pending = {}   # quest_id -> [file, ...]  — 문서상 PASS, 헤더 없음
     hits_verified = []
-    skipped_display_only = []   # USACO 파일이지만 보호 변수는 안 건드린 것
+    skipped_display_only = []            # USACO 파일이지만 보호 변수는 안 건드린 것
+    skipped_pending_display_only = []    # pending-badge quest 지만 보호 변수는 안 건드린 것
     for f in sorted(set(files)):
         m = re.match(r"quest-problems/([^/]+)/", f)
-        if m and m.group(1) in frozen:
-            hits_frozen.setdefault(m.group(1), []).append(f)
+        qid = m.group(1) if m else None
+        if qid and qid in frozen:
+            hits_frozen.setdefault(qid, []).append(f)
         if f.endswith((".jsx", ".tsx", ".ts")):
             content = content_fn(f)
             if content and USACO_HEADER_RE.search(content[:600]):
@@ -240,6 +291,15 @@ def main():
                     hits_verified.append(f)
                 else:
                     skipped_display_only.append(f)
+            elif content and qid and qid in pending_badges:
+                # 결함⑦ — 헤더는 없지만 USACO_VERIFICATION.md 엔 PASS 로 적혀 있는 quest.
+                # 같은 protected_line_ranges/touches_protected 로직을 헤더 유무와 무관하게 적용한다.
+                diff_text = run(diff_cmd + [f]).stdout or ""
+                old_text = git_show(f"{base_ref}:{f}")
+                if touches_protected(f, diff_text, old_text, content):
+                    hits_pending.setdefault(qid, []).append(f)
+                else:
+                    skipped_pending_display_only.append(f)
 
     if skipped_display_only:
         print(f"ℹ️  USACO_VERIFIED 파일 {len(skipped_display_only)}개 — **보호 변수는 안 건드렸다**(표시 부분만).")
@@ -247,46 +307,65 @@ def main():
             print(f"     {f}")
         print("   규칙은 파일이 아니라 `SOLUTION_CODE`·`*_PY`·`*_CPP` **변수** 단위다 (CLAUDE.md).")
         print("   ⚠️ 그래도 diff 는 눈으로 읽어라 — 이 판정은 줄 범위로만 본다.\n")
-    if not hits_frozen and not hits_verified:
-        print(f"✅ 변경 {len(files)}개 파일 ({mode_desc}) — 동결 quest·USACO_VERIFIED 해당 없음")
+    if skipped_pending_display_only:
+        print(f"ℹ️  문서상 PASS·헤더 없는 quest 파일 {len(skipped_pending_display_only)}개 — **보호 변수는 안 건드렸다**(표시 부분만).")
+        for f in skipped_pending_display_only:
+            print(f"     {f}")
+        print()
+    if not hits_frozen and not hits_verified and not hits_pending:
+        print(f"✅ 변경 {len(files)}개 파일 ({mode_desc}) — 동결 quest·USACO_VERIFIED·문서상 PASS(헤더 없음) 해당 없음")
         return 0
 
     workmd_text = content_fn(WORKMD_PATH) or ""
     approved = approved_quest_ids(workmd_text)
 
     blocking_frozen = []
+    blocking_pending = []
     passed_notes = []
     for qid, fs in hits_frozen.items():
         if qid in approved:
             passed_notes.append(f"  🔓 동결 quest {qid:<12} — WORK.md 승인 마커 확인됨: {', '.join(fs)}")
         else:
             blocking_frozen.append((qid, fs))
+    for qid, fs in hits_pending.items():
+        if qid in approved:
+            passed_notes.append(f"  🔓 문서상 PASS quest {qid:<12} — WORK.md 승인 마커 확인됨: {', '.join(fs)}")
+        else:
+            blocking_pending.append((qid, fs))
 
     if passed_notes:
         print("\n".join(passed_notes))
 
-    if not blocking_frozen and not hits_verified:
-        print(f"✅ 동결 quest {len(hits_frozen)}개 — 전부 승인 마커로 통과 ({mode_desc})")
+    if not blocking_frozen and not blocking_pending and not hits_verified:
+        print(f"✅ 동결/문서상 PASS quest {len(hits_frozen) + len(hits_pending)}개 — 전부 승인 마커로 통과 ({mode_desc})")
         return 0
 
     print(f"\n🔒 멈춰라 — 변경 {len(files)}개 중 건드리면 안 되는 게 있다 ({mode_desc})\n")
     for qid, fs in blocking_frozen:
         for f in fs:
-            print(f"  동결 quest(승인 없음)  {qid:<12} {f}")
+            print(f"  동결 quest(승인 없음)         {qid:<12} {f}")
+    for qid, fs in blocking_pending:
+        for f in fs:
+            print(f"  문서상 PASS·헤더 없음(승인 없음)  {qid:<12} {f}")
     for f in hits_verified:
         print(f"  USACO 검증               {f}")
 
     print("""
 동결 quest = 선생님이 직접 polish 한 것. "명시적 변경 요청 전엔 읽기 전용" 이다.
-USACO_VERIFIED = 채점기로 검증된 코드. 고치면 재제출이 필요하다.
+문서상 PASS(헤더 없음) = USACO_VERIFICATION.md 엔 PASS 로 적혀 있는데 파일에
+  // 🔒 USACO_VERIFIED 헤더가 아직 없는 quest(scripts/pending-badge-quests.json).
+  ⚠️ 이건 "USACO_VERIFIED" 가 아니다 — 재제출로 헤더를 붙이기 전까지의 임시 보호다.
+USACO_VERIFIED = 채점기로 검증된 코드(단, 통과를 보장하진 않는다 — 위 docstring 참고).
+  고치면 재제출이 필요하다.
 
 ⛔ `--no-verify` 로 그냥 넘기지 마라 — 이 걸쇠는 어젯밤 정확히 그 자리에서 사고가
    났기 때문에 생겼다.
 
 올바른 우회:
-  · 동결 quest 는 — `.claude/WORK.md` 에 아래 모양 그대로 마커를 **먼저** 추가하고
-    (이 커밋 안에 같이 넣어도 된다) 다시 커밋해라. 범위는 감사 기록일 뿐 게이트가
-    검증하진 않는다 — "정말 이 범위 안인지"는 PM/검토자가 diff 를 읽어야 한다.
+  · 동결 quest / 문서상 PASS quest 는 — `.claude/WORK.md` 에 아래 모양 그대로 마커를
+    **먼저** 추가하고(이 커밋 안에 같이 넣어도 된다) 다시 커밋해라. 범위는 감사
+    기록일 뿐 게이트가 검증하진 않는다 — "정말 이 범위 안인지"는 PM/검토자가 diff 를
+    읽어야 한다.
 
         ### ✅ 동결 승인: <quest-id> (<오늘 날짜>) — 범위: <무엇을 허락받았나 한 줄>
 
