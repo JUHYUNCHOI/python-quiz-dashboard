@@ -1340,8 +1340,8 @@ function _buildExpandSteps(E) {
   return [
     /* ── 0. Setup (2 steps) ── */
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
-      bubble: t(E, "Two rows to know: 🐮 cow (top) and 📋 want (bottom). A spot is a checkup (green) when they already match. From here spots are counted from 0 — the leftmost is spot 0. (27 steps — you can move on below without clicking them all.)",
-                   "두 줄만 알면 돼요. 위는 🐮 소, 아래는 📋 want 예요. 두 값이 같은 자리가 검진(초록)이에요. 여기부터 자리는 0 부터 세요 — 맨 왼쪽이 자리 0 이에요. (27단계예요 — 다 안 눌러도 아래로 넘어갈 수 있어요.)") },
+      bubble: t(E, "A new example here — 6 cows, so we get to widen twice. Top is 🐮 cow, bottom is 📋 want; a spot is a checkup (green) when they match. Spots count from 0. (27 steps — you can move on below without clicking them all.)",
+                   "여기서는 **새 예제**를 써요 — 소가 6 마리라야 넓히기를 두 번 볼 수 있거든요.\n위는 🐮 소, 아래는 📋 want 이고, 두 값이 같은 자리가 검진(초록)이에요.\n자리는 0 부터 세요 — 맨 왼쪽이 자리 0 이에요. (27단계예요 — 다 안 눌러도 아래로 넘어갈 수 있어요.)") },
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "No flip yet. Only spot 4 matches (5=5) → matches = 1. This is our starting point.",
                    "아직 아무것도 안 뒤집었어요. 자리 4만 맞아요 (5=5). 그래서 matches = 1, 여기서 출발해요.") },
@@ -1356,8 +1356,8 @@ function _buildExpandSteps(E) {
       bubble: t(E, "Two center kinds: odd ([i,i] = one spot, no flip) and even ([i,i+1] = two spots). Every interval belongs to exactly one center.",
                    "중심은 두 종류예요. 홀수 중심 [i,i] 는 한 칸이라 안 뒤집히고, 짝수 중심 [i,i+1] 은 두 칸이에요. 모든 구간은 딱 한 중심에만 속해요.") },
     { rev: [1, 2, 3, 4, 5, 6], win: [2, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
-      bubble: t(E, "Let's pick a tiny interval: spots 2 and 3. See the bracket above — that's our flip zone.",
-                   "작은 구간을 골라 봐요. 자리 2 와 3 이에요. 위에 표시된 꺾쇠가 뒤집을 구간이에요.") },
+      bubble: t(E, "Start from one of those even centers — spots 2 and 3. We'll widen from here, one step at a time.",
+                   "방금 말한 **짝수 중심** 하나로 시작해요 — 자리 2 와 3 이에요.\n여기서 한 칸씩 넓혀 갈 거예요. 꺾쇠가 지금 구간이에요.") },
     { rev: [1, 2, 3, 4, 5, 6], win: [2, 3], changed: [], pending: [2, 3], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "The two ends (spots 2 and 3) are about to swap cows. cow[2]=3 ↔ cow[3]=4.",
                    "양 끝(자리 2, 3)이 곧 소를 바꿔요. cow[2]=3 ↔ cow[3]=4.") },
@@ -2342,7 +2342,7 @@ export function CheckupsMirrorFormulaCard({ E }) {
           자리 0 ↔ 자리 2 이고, 0 + 2 = 2 예요.<br />
           그래서 자리 i 에는 짝의 값이 오고, 그 짝의 번호가 늘 l + r − i 예요.</>)}
       <div style={{ ..._mono, fontSize: 11.5, marginTop: 5, opacity: 0.85 }}>
-        0+2−0=2 {"→"} 2　·　0+2−1=1 {"→"} 3　·　0+2−2=0 {"→"} 1
+        i=0: 0+2−0=2 {"→"} 2　·　i=1: 0+2−1=1 {"→"} 3　·　i=2: 0+2−2=0 {"→"} 1
       </div>
     </_FCard>
   );
