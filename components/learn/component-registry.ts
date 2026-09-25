@@ -91,6 +91,23 @@ const registry: Record<string, ComponentEntry> = {
     }),
   },
 
+  // Lesson 53: 2차원 리스트
+  py2dGridExplore: {
+    load: () => import("@/components/animations/py-2d-list"),
+    exportName: "Py2DGridExplore",
+    props: (_step, lang) => ({ lang }),
+  },
+  py2dAliasArrows: {
+    load: () => import("@/components/animations/py-2d-list"),
+    exportName: "Py2DAliasArrows",
+    props: (_step, lang) => ({ lang }),
+  },
+  py2dGridWalk: {
+    load: () => import("@/components/animations/py-2d-list"),
+    exportName: "Py2DGridWalk",
+    props: (_step, lang) => ({ lang }),
+  },
+
   // Lesson 30: 매개변수/반환값
   defaultValueVisualizer: {
     load: () => import("@/components/animations/lesson30"),

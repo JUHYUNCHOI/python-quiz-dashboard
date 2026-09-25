@@ -507,7 +507,7 @@ export default function JourneyPage() {
                       <div className="flex flex-col items-center gap-1 flex-1 justify-center">
                         <div className="flex flex-col items-center">
                           <span className="text-3xl sm:text-4xl">🐍</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">Python 52강</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">Python 53강</span>
                         </div>
                         <span className="text-amber-400 text-lg">↓</span>
                         <div className="flex flex-col items-center">
@@ -549,7 +549,7 @@ export default function JourneyPage() {
                       <div className="flex flex-col items-center gap-1 flex-1 justify-center">
                         <div className="flex flex-col items-center">
                           <span className="text-3xl sm:text-4xl">🐍</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">Python 52강</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">Python 53강</span>
                         </div>
                         <span className="text-amber-400 text-lg">↓</span>
                         <div className="flex flex-col items-center">

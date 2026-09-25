@@ -110,15 +110,36 @@ def read(path):
         return f.read()
 
 
-def quest_text(qid):
-    """그 quest 폴더의 모든 소스를 이어 붙인 것. 없으면 None."""
+CROSS_QUEST_IMPORT = re.compile(r'from\s+"\.\./([a-z0-9_-]+)/')
+
+
+def quest_text(qid, _depth=0):
+    """그 quest 폴더의 모든 소스를 이어 붙인 것. 없으면 None.
+
+    ⭐ 2026-09-25: **다른 quest 폴더에서 가져오는 것도 따라간다.**
+      왜 — `favperm2` 는 `from "../permutation/chapters"` 로 챕터를 **통째로 재사용**한다
+      (파일 머리 주석: *"To avoid drift between the two quest tutorials"*). 그래서
+      입출력 형식 카드가 **이미 있는데** 이 함수가 **자기 폴더만 읽어서** 「없다」고 했다.
+      입출력 카드 축을 69/69 닫고도 **그 하나가 영원히 남는 것처럼** 보였다 —
+      담당이 손으로 열어 확인해 준 오탐이다.
+      ⚠️ 실측: 이런 재사용을 하는 quest 는 **`favperm2` 하나뿐**이다(전수 grep).
+      ⚠️ **한 겹만** 따라간다(`_depth`) — 서로 물고 도는 import 가 생기면 멈춘다.
+    """
     d = os.path.join(QDIR, qid)
     if not os.path.isdir(d):
         return None
     out = []
+    borrowed = set()
     for f in sorted(os.listdir(d)):
         if f.endswith((".jsx", ".tsx", ".js", ".ts")):
-            out.append(read(os.path.join(d, f)))
+            src = read(os.path.join(d, f))
+            out.append(src)
+            if _depth == 0:
+                borrowed |= {m.group(1) for m in CROSS_QUEST_IMPORT.finditer(src)}
+    for other in sorted(borrowed - {qid}):
+        t = quest_text(other, _depth + 1)
+        if t:
+            out.append(t)
     return "\n".join(out) if out else None
 
 

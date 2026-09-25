@@ -14,7 +14,7 @@ export const pythonParts: PartMeta[] = [
   { id: "part1", title: "Part 1: 기초", titleEn: "Part 1: Basics", lessonIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "p1"] },
   { id: "part2", title: "Part 2: 제어문", titleEn: "Part 2: Control Flow", lessonIds: [11, 12, 13, 14, "p2"] },
   { id: "part3", title: "Part 3: 자료구조", titleEn: "Part 3: Data Structures", lessonIds: [15, 16, 17, 18, 19, 20, 21, 22, "p3"] },
-  { id: "part3+", title: "Part 3+: 자료구조 심화", titleEn: "Part 3+: Advanced DS", lessonIds: [23, 24, 25, 26] },
+  { id: "part3+", title: "Part 3+: 자료구조 심화", titleEn: "Part 3+: Advanced DS", lessonIds: [53, 23, 24, 25, 26] },
   { id: "part4", title: "Part 4: 프로젝트", titleEn: "Part 4: Projects", lessonIds: [27, 28, 29, 30, 31] },
   { id: "part5", title: "Part 5: 함수", titleEn: "Part 5: Functions", lessonIds: [32, 33, 34, 35, 36] },
   { id: "part6", title: "Part 6: 에러와 파일", titleEn: "Part 6: Errors & Files", lessonIds: [37, 38, 39, 40] },
@@ -57,6 +57,7 @@ export const lessonNames: Record<string, string> = {
      ⭐ 이건 「파이썬에 2차원 리스트 레슨이 없다」를 조사하다 드러났다 —
      **이름만 있고 내용이 없던** 죽은 계획의 흔적이다. 2차원 리스트는 레슨 53 으로 새로 쓴다.
      ⛔ `lesson_id` 는 안 바꿨다 — 라벨만 고쳤다(학생 진도 영향 0). */
+  "53": "2차원 리스트",
   "23": "스택", "24": "큐", "25": "덱 (Deque)", "26": "정렬",
   // Python Part 4-9
   "27": "Turtle 기초", "28": "Turtle 그림", "29": "Turtle 게임", "30": "Pygame 기초", "31": "Pygame 게임",
@@ -99,6 +100,7 @@ export const lessonNamesEn: Record<string, string> = {
   "15": "Data Structures Overview", "16": "Lists Basics", "17": "Lists & Loops", "18": "split/join",
   "19": "Tuples", "20": "Dictionaries", "21": "Sets", "22": "Slicing", "p3": "🎮 Hangman",
   // Python Part 3+
+  "53": "2D Lists",
   "23": "Stacks", "24": "Queues", "25": "Deques", "26": "Sorting",
   // Python Part 4-9
   "27": "Turtle Basics", "28": "Turtle Drawing", "29": "Turtle Game", "30": "Pygame Basics", "31": "Pygame Game",
