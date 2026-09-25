@@ -3,8 +3,9 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { DaisyChainsProgressiveCode, downloadDaisyChainsPDF, getDaisyChainsSections } from "./components";
-import { makeDaisyCh1, makeDaisyCh2, makeDaisyCh3 } from "./chapters";
+import { makeDaisyCh1, makeDaisyCh2, makeDaisyCh3, getDaisyChainsWalk } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#f97316";
 
@@ -103,6 +104,7 @@ export default function DaisyChainsApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <DaisyChainsProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "daisychains-codewalk") return <CodeWalk E={E} lang={codeLang} {...getDaisyChainsWalk(E)} accent={A} />;
     return null;
   };
 
@@ -112,6 +114,7 @@ export default function DaisyChainsApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <DaisyChainsProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "daisychains-codewalk") return <CodeWalk E={E} lang={codeLang} {...getDaisyChainsWalk(E)} accent={A} />;
     return null;
   };
 

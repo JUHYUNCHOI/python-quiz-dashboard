@@ -116,6 +116,70 @@ export function GuessAnimalProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk (선생님 2026-07-14: "앞으로 코드는 모두 이런식으로") ──
+   FULL_PY / FULL_CPP 는 위에서 한 글자도 안 바뀐다 — beats 는 그 배열의
+   줄 번호(hi:[lo,hi], 0-based, 양끝 포함)만 가리킨다. */
+export function getGuessAnimalWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "best", ko: "지금까지 최댓값(정답 후보)", en: "best answer so far" },
+        { v: "shared", ko: "두 동물이 공유하는 특성 수", en: "traits shared between two animals" },
+        { v: "candidate", ko: "이 쌍에서 나올 수 있는 '예' 횟수", en: "yes-count for this pair" },
+      ],
+      beats: [
+        { hi: [0, 13], bubble: t(E,
+          "What should we print? The most 'yes' answers Bessie could give before you must know the animal.\nRead the animal count N from the file.",
+          "무엇을 출력해야 하나요? 동물을 확실히 알기 전까지 나올 수 있는 최대 '예' 답변 수예요.\n파일에서 동물 수 N을 읽어요.") },
+        { hi: [14, 24], bubble: t(E,
+          "To compare animals later we need to count overlapping traits, so store each animal's traits as a set.",
+          "나중에 동물끼리 겹치는 특성을 세려면 집합(set)에 담아 둬야 쉬워요.\nvector<set<string>>에 이름 뒤 특성들을 담아요.") },
+        { hi: [25, 29], bubble: t(E,
+          "Two animals only stay confused as long as their traits overlap. So check every pair, and start counting the traits they share.",
+          "두 동물은 특성이 겹치는 동안만 구분이 안 돼요.\n그러니 모든 두 동물 쌍마다 공통 특성 수를 세어봐요.") },
+        { hi: [30, 34], bubble: t(E,
+          "Walk animal i's traits and count how many also appear in animal j's set.",
+          "동물 i의 특성을 하나씩 보면서, 동물 j의 집합에도 있으면 shared를 늘려요.") },
+        { hi: [35, 38], bubble: t(E,
+          "Add 1 for the question that finally tells them apart, then keep the largest candidate seen so far.",
+          "마지막으로 구별해 주는 질문 1개를 더한 값이 candidate예요.\n지금까지의 최댓값 best와 비교해 더 크면 갱신해요.") },
+        { hi: [41, 43], bubble: t(E,
+          "Write the answer to the output file.",
+          "답을 출력 파일에 써요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "best", ko: "지금까지 최댓값(정답 후보)", en: "best answer so far" },
+      { v: "shared", ko: "두 동물이 공유하는 특성 수", en: "traits shared between two animals" },
+      { v: "candidate", ko: "이 쌍에서 나올 수 있는 '예' 횟수", en: "yes-count for this pair" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What should we print? The most 'yes' answers Bessie could give before you must know the animal.\nRead the animal count N from the file.",
+        "무엇을 출력해야 하나요? 동물을 확실히 알기 전까지 나올 수 있는 최대 '예' 답변 수예요.\n파일에서 동물 수 N을 읽어요.") },
+      { hi: [5, 16], bubble: t(E,
+        "To compare animals later we need to count overlapping traits, so store each animal's traits as a set — read each line's name, count K, then that many traits.",
+        "나중에 동물끼리 겹치는 특성을 세려면 집합(set)에 담아 둬야 쉬워요.\n줄마다 이름과 특성 개수 K를 읽고, 특성 K개를 traits 집합에 모아요.") },
+        { hi: [17, 21], bubble: t(E,
+          "Two animals only stay confused as long as their traits overlap. So check every pair, and start counting the traits they share.",
+          "두 동물은 특성이 겹치는 동안만 구분이 안 돼요.\n그러니 모든 두 동물 쌍마다 공통 특성 수를 세어봐요.") },
+      { hi: [22, 24], bubble: t(E,
+        "Walk animal i's traits and count how many also appear in animal j's set.",
+        "동물 i의 특성을 하나씩 보면서, 동물 j의 집합에도 있으면 shared를 늘려요.") },
+      { hi: [25, 27], bubble: t(E,
+        "Add 1 for the question that finally tells them apart, then keep the largest candidate seen so far.",
+        "마지막으로 구별해 주는 질문 1개를 더한 값이 candidate예요.\n지금까지의 최댓값 best와 비교해 더 크면 갱신해요.") },
+      { hi: [29, 30], bubble: t(E,
+        "Write the answer to the output file.",
+        "답을 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

@@ -446,6 +446,94 @@ export function FamilyTreeProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk (선생님 2026-07-14: "앞으로 코드는 모두 이런식으로") ──
+   FULL_PY / FULL_CPP 는 위에서 한 글자도 안 바뀐다 — beats 는 그 배열의
+   줄 번호(hi:[lo,hi], 0-based, 양끝 포함)만 가리킨다. */
+export function getFamilyTreeWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "parent", ko: "자식 → 엄마 사전", en: "child → mother lookup" },
+        { v: "chain_A / chain_B", ko: "A·B 각각의 조상 목록(자기 포함)", en: "A's / B's ancestor list, including themselves" },
+        { v: "dA / dB", ko: "공통 조상까지 올라간 칸 수", en: "steps up to the shared ancestor" },
+      ],
+      beats: [
+        { hi: [0, 6], bubble: t(E,
+          "What should we print? The family relationship between cows A and B. We'll need two naming helpers to build that answer, so prepare them first.",
+          "무엇을 출력해야 하나요? 소 A와 B의 가계 관계 이름이에요.\n그 이름을 만들 때 쓸 도우미 함수 둘을 먼저 준비해요.") },
+        { hi: [8, 20], bubble: t(E,
+          "ancestor_name(depth) turns 'how many steps up' into a word: 1 step is mother, 2 is grand-mother, and each step beyond that adds another great-.",
+          "ancestor_name(depth)는 몇 칸 위 조상인지를 이름으로 바꿔요 — 1이면 mother, 2면 grand-mother, 그보다 많으면 great-를 그만큼 붙여요.") },
+        { hi: [22, 31], bubble: t(E,
+          "aunt_name works the same way for aunts: 1 step over is aunt, further is great-aunt, great-great-aunt, ...",
+          "aunt_name도 같은 방식이에요 — 1칸 차이면 aunt, 그보다 멀면 great-를 붙여요.") },
+        { hi: [33, 46], bubble: t(E,
+          "Now in main, read the cow count N and the two names A, B, then store every mother-child pair in parent.",
+          "이제 main에서 소 수 N과 두 소 이름 A, B를 읽고, 엄마-자식 쌍을 parent에 저장해요.") },
+        { hi: [47, 61], bubble: t(E,
+          "The relationship depends on A and B's nearest shared ancestor. So follow each cow's mother-chain all the way up, building chain_A and chain_B.",
+          "관계는 A와 B의 가장 가까운 공통 조상으로 정해져요.\n그러니 A, B 각각 엄마 쪽으로 끝까지 올라가며 조상 목록 chain_A, chain_B를 만들어요.") },
+        { hi: [62, 75], bubble: t(E,
+          "Compare the two chains and find the first ancestor they share — that's the closest one. dA and dB record how many steps each cow took to reach it.",
+          "두 목록을 대조해서 가장 먼저 만나는 공통 조상을 찾아요 — 그게 lca예요.\n그때까지 A, B가 각각 몇 칸 올라갔는지가 dA, dB예요.") },
+        { hi: [76, 79], bubble: t(E,
+          "No shared ancestor at all means the two cows aren't related.",
+          "공통 조상이 아예 없으면 두 소는 관계가 없어요.") },
+        { hi: [80, 82], bubble: t(E,
+          "If both are 0 steps from the shared ancestor, that ancestor is a parent they both have — siblings. If only one is 0 steps, that cow IS the other's direct ancestor.",
+          "둘 다 0칸이면(부모가 같으면) 자매, 한쪽만 0칸이면 그 소가 다른 쪽의 직계 조상이에요.") },
+        { hi: [83, 86], bubble: t(E,
+          "Both 1 step away (a shared grandparent) is also siblings; one at 1 step is an aunt relationship. Anything else left is cousins.",
+          "둘 다 1칸(같은 할머니)이어도 자매, 한쪽만 1칸이면 이모(고모) 관계예요.\n나머지는 전부 사촌이에요.") },
+        { hi: [87, 89], bubble: t(E,
+          "Write the answer to the output file.",
+          "답을 출력 파일에 써요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "parent", ko: "자식 → 엄마 사전", en: "child → mother lookup" },
+      { v: "chain_A / chain_B", ko: "A·B 각각의 조상 목록(자기 포함)", en: "A's / B's ancestor list, including themselves" },
+      { v: "depth_A / depth_B", ko: "공통 조상까지 올라간 칸 수", en: "steps up to the shared ancestor" },
+    ],
+    beats: [
+      { hi: [0, 8], bubble: t(E,
+        "What should we print? The family relationship between cows A and B. Read the cow count N and their two names.",
+        "무엇을 출력해야 하나요? 소 A와 B의 가계 관계 이름이에요.\n먼저 소 수 N과 두 소 이름 A, B를 읽어요.") },
+      { hi: [10, 16], bubble: t(E,
+        "To trace relationships we need to know who's whose mother — so store every mother-child pair in parent.",
+        "관계를 알려면 누가 누구의 엄마인지 필요해요.\n그래서 줄마다 엄마-자식 쌍을 parent 사전에 저장해요.") },
+      { hi: [18, 23], bubble: t(E,
+        "The relationship depends on A and B's nearest shared ancestor. So follow A's mother-chain all the way up, collecting ancestors into chain_A.",
+        "관계는 A와 B의 가장 가까운 공통 조상으로 정해져요.\n그러니 A부터 엄마 쪽으로 끝까지 올라가며 조상 목록 chain_A를 만들어요.") },
+      { hi: [25, 30], bubble: t(E,
+        "Do the same for B, building chain_B.",
+        "B도 똑같이 조상 목록 chain_B를 만들어요.") },
+      { hi: [32, 44], bubble: t(E,
+        "Compare the two chains and find the first ancestor they share — that's the closest one. depth_A and depth_B record how many steps each cow took to reach it.",
+        "두 목록을 대조해서 가장 먼저 만나는 공통 조상을 찾아요 — 그게 lca예요.\n그때까지 A, B가 각각 몇 칸 올라갔는지가 depth_A, depth_B예요.") },
+      { hi: [46, 55], bubble: t(E,
+        "ancestor_name(depth) turns 'how many steps up' into a word: 1 step is mother, 2 is grand-mother, and each step beyond that adds another great-.",
+        "ancestor_name(depth)는 몇 칸 위 조상인지를 이름으로 바꿔요 — 1이면 mother, 2면 grand-mother, 그보다 많으면 great-를 그만큼 붙여요.") },
+      { hi: [57, 64], bubble: t(E,
+        "aunt_name works the same way for aunts: 1 step over is aunt, further is great-aunt, great-great-aunt, ...",
+        "aunt_name도 같은 방식이에요 — 1칸 차이면 aunt, 그보다 멀면 great-를 붙여요.") },
+      { hi: [66, 75], bubble: t(E,
+        "No shared ancestor at all means not related. If both are 0 steps away, that shared ancestor is a parent they both have — siblings. If only one is 0 steps, that cow IS the other's direct ancestor.",
+          "공통 조상이 아예 없으면 관계가 없어요.\n둘 다 0칸이면(부모가 같으면) 자매, 한쪽만 0칸이면 그 소가 다른 쪽의 직계 조상이에요.") },
+      { hi: [76, 84], bubble: t(E,
+        "Both 1 step away (a shared grandparent) is also siblings; one at 1 step is an aunt relationship. Anything else left is cousins.",
+        "둘 다 1칸(같은 할머니)이어도 자매, 한쪽만 1칸이면 이모(고모) 관계예요.\n나머지는 전부 사촌이에요.") },
+      { hi: [86, 87], bubble: t(E,
+        "Write the answer to the output file.",
+        "답을 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

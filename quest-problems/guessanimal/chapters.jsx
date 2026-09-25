@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getGuessAnimalSections } from "./components";
 
 /* ================================================================
    Eye-evident sim: pick 2 animals → see trait sets + intersection
@@ -326,13 +325,12 @@ export function makeGuessAnimalCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeGuessAnimalCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 선생님 2026-07-14: "앞으로 코드는 모두 이런식으로"
     {
-      type: "progressive",
+      type: "guessanimal-codewalk",
       narr: t(E,
-        "Build the solution one piece at a time.",
-        "코드를 한 단계씩 만들어봐요."),
-      sections: getGuessAnimalSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

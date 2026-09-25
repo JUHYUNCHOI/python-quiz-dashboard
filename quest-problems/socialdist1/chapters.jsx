@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSocDist1Sections, SocDist1Sim } from "./components";
+import { SocDist1Sim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -199,13 +199,12 @@ export function makeSocDist1Ch1(E) {
    --------------------------------------------------------------- */
 export function makeSocDist1Ch2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 선생님 2026-07-14: "앞으로 코드는 모두 이런식으로"
     {
-      type: "progressive",
+      type: "socialdist1-codewalk",
       narr: t(E,
-        "Binary search the answer D, then check each gap to see if 2 new cows still fit.",
-        "답 D 를 이분 탐색하고, D 마다 빈 구간에 소 2마리가 들어가는지 확인해요."),
-      sections: getSocDist1Sections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

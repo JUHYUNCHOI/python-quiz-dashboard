@@ -51,7 +51,13 @@ export const lessonNames: Record<string, string> = {
   "15": "자료구조 개요", "16": "리스트 기초", "17": "리스트와 반복문", "18": "split/join",
   "19": "튜플", "20": "딕셔너리", "21": "집합 (set)", "22": "슬라이싱", "p3": "🎮 Hangman",
   // Python Part 3+
-  "23": "스택", "24": "큐", "25": "2D 리스트", "26": "정렬",
+  /* ⚠️ 2026-09-25: `"25"` 가 **「2D 리스트」로 잘못 적혀 있었다.** 실제
+     `data/lesson25.ts` 는 **`title: "덱 (Deque)"`** 다(파일 머리 주석도 *"레슨 25: 덱
+     (Deque) - 심화"*). 학생은 커리큘럼에서 「2D 리스트」를 누르고 **덱 수업을 열게 된다.**
+     ⭐ 이건 「파이썬에 2차원 리스트 레슨이 없다」를 조사하다 드러났다 —
+     **이름만 있고 내용이 없던** 죽은 계획의 흔적이다. 2차원 리스트는 레슨 53 으로 새로 쓴다.
+     ⛔ `lesson_id` 는 안 바꿨다 — 라벨만 고쳤다(학생 진도 영향 0). */
+  "23": "스택", "24": "큐", "25": "덱 (Deque)", "26": "정렬",
   // Python Part 4-9
   "27": "Turtle 기초", "28": "Turtle 그림", "29": "Turtle 게임", "30": "Pygame 기초", "31": "Pygame 게임",
   "32": "함수 기초", "33": "매개변수", "34": "반환값", "35": "스코프", "36": "재귀",
@@ -93,7 +99,7 @@ export const lessonNamesEn: Record<string, string> = {
   "15": "Data Structures Overview", "16": "Lists Basics", "17": "Lists & Loops", "18": "split/join",
   "19": "Tuples", "20": "Dictionaries", "21": "Sets", "22": "Slicing", "p3": "🎮 Hangman",
   // Python Part 3+
-  "23": "Stacks", "24": "Queues", "25": "2D Lists", "26": "Sorting",
+  "23": "Stacks", "24": "Queues", "25": "Deques", "26": "Sorting",
   // Python Part 4-9
   "27": "Turtle Basics", "28": "Turtle Drawing", "29": "Turtle Game", "30": "Pygame Basics", "31": "Pygame Game",
   "32": "Functions Basics", "33": "Parameters", "34": "Return Values", "35": "Scope", "36": "Recursion",

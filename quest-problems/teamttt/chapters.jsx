@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getTeamTttSections, TeamLineChecker } from "./components";
+import { TeamLineChecker } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (4 steps)
@@ -163,13 +163,12 @@ export function makeTttCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeTttCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 선생님 2026-07-14: "앞으로 코드는 모두 이런식으로"
     {
-      type: "progressive",
+      type: "teamttt-codewalk",
       narr: t(E,
-        "Walk the 8 lines — take the set of letters in its 3 cells: size 1 wins solo, size 2 wins as a team.",
-        "8 개 줄을 하나씩 보면서 우승을 가려낼게요."),
-      sections: getTeamTttSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

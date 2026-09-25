@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { FamilyTreeProgressiveCode, FamilyTreeSim, downloadFamilyTreePDF, getFamilyTreeSections } from "./components";
+import { FamilyTreeProgressiveCode, FamilyTreeSim, downloadFamilyTreePDF, getFamilyTreeSections, getFamilyTreeWalk } from "./components";
 import { makeFamilyTreeCh1, makeFamilyTreeCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#059669";
 
@@ -103,6 +104,7 @@ export default function FamilyTreeApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "sim") return <FamilyTreeSim E={E} />;
     if (step.type === "progressive") return <FamilyTreeProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "familytree-codewalk") return <CodeWalk E={E} lang={codeLang} {...getFamilyTreeWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -115,6 +117,7 @@ export default function FamilyTreeApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "sim") return <FamilyTreeSim E={E} />;
     if (s.type === "progressive") return <FamilyTreeProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "familytree-codewalk") return <CodeWalk E={E} lang={codeLang} {...getFamilyTreeWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

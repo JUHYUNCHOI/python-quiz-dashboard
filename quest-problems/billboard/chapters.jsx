@@ -489,10 +489,22 @@ export function makeBillboardCh3(E, lang = "py") {
             <div><span style={{ color: "#c084fc" }}>def</span><span style={{ color: "#e2e8f0" }}> rect_area(x1, y1, x2, y2):</span></div>
             <div style={{ color: "#e2e8f0" }}>    <span style={{ color: "#c084fc" }}>return</span> max(0, x2-x1) * max(0, y2-y1)</div>
           </div>
-          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", whiteSpace: "pre-line" }}>
             {t(E,
               "max(0, ...) ensures: if width or height is negative (no overlap), area = 0.",
-              "가로나 세로가 음수면 두 직사각형이 안 겹친다는 뜻이에요. max(0, ...) 가 그럴 때 면적을 0 으로 만들어 줘요.")}
+              "가로나 세로가 음수면 두 직사각형이 안 겹친다는 뜻이에요.\nmax(0, ...) 가 그럴 때 면적을 0 으로 만들어 줘요.")}
+          </div>
+          {/* ⚠️ 2026-09-25 다리 문장 — `check-taught-vs-final-code.py` 가 잡은 자리다.
+              이 절은 `max(0, x2-x1)` 을 **글자 그대로** 보여주는데 🔒 `FULL_PY` 에는
+              `max(`·`min(` 이 **0번**이고 `if w < 0: w = 0` 으로 짜여 있다.
+              학생은 `max` 로 짓는 법을 보고 마지막 코드에서 `if` 를 만난다 —
+              그 사이를 아무도 설명하지 않았다. `shellgame`·`cowgym` 이 이미 쓰는 모양
+              («앞서는 A 로 썼지만 여기서는 B 예요. 결과는 같아요»)을 그대로 따른다.
+              ⛔ 설명을 늘리지 않는다 — **한 문장**이다(선생님이 오늘 두 번 «설명이 많다»). */}
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", whiteSpace: "pre-line" }}>
+            {t(E,
+              "The final code writes this as if w < 0: w = 0 instead of max(0, ...) — same thing.",
+              "마지막 코드는 max(0, ...) 대신 if w < 0: w = 0 으로 써요.\n음수면 0 으로 바꾼다는 뜻이라 결과는 같아요.")}
           </div>
         </div>),
     },
@@ -515,6 +527,13 @@ export function makeBillboardCh3(E, lang = "py") {
           </div>
           <div style={{ marginTop: 8, fontSize: 12, color: C.ok, fontWeight: 700, textAlign: "center" }}>
             {t(E, "max() for left/bottom, min() for right/top!", "왼쪽과 아래는 max(), 오른쪽과 위는 min() 을 써요!")}
+          </div>
+          {/* ⚠️ 2026-09-25 다리 문장 — 위 3-1 과 같은 이유다. 🔒 코드는 `max`/`min` 대신
+              `if bx1 > ax1: ox1 = bx1` 처럼 **하나씩 견준다.** */}
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", whiteSpace: "pre-line" }}>
+            {t(E,
+              "The final code compares one at a time — if bx1 > ax1: ox1 = bx1 — instead of max/min. Same result.",
+              "마지막 코드는 max·min 대신 if bx1 > ax1: ox1 = bx1 처럼 하나씩 견줘요.\n결과는 같아요.")}
           </div>
         </div>),
     },

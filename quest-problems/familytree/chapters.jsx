@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getFamilyTreeSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -155,13 +154,12 @@ export function makeFamilyTreeCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeFamilyTreeCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 선생님 2026-07-14: "앞으로 코드는 모두 이런식으로"
     {
-      type: "progressive",
+      type: "familytree-codewalk",
       narr: t(E,
-        "Build A's ancestor chain, walk up from B to find the shared one, then compare depths.",
-        "먼저 A 의 조상을 위로 죽 적어 둬요. 그다음 B 에서 위로 올라가다가\n처음 만나는 A 의 조상이 둘의 공통 조상이에요.\n거기까지 몇 칸씩 올라갔는지를 견줘서 사이를 정해요."),
-      sections: getFamilyTreeSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

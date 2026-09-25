@@ -247,6 +247,64 @@ export function BucketListProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk (선생님 2026-07-14: "앞으로 코드는 모두 이런식으로") ──
+   FULL_PY / FULL_CPP 는 위에서 한 글자도 안 바뀐다 — beats 는 그 배열의
+   줄 번호(hi:[lo,hi], 0-based, 양끝 포함)만 가리킨다. */
+export function getBucketListWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "events", ko: "양동이 수가 바뀌는 지점들(+b/−b)", en: "the +b / −b timeline marks" },
+        { v: "cur", ko: "지금 시각에 필요한 양동이 수", en: "buckets needed right now" },
+        { v: "best", ko: "지금까지 최댓값", en: "largest cur seen so far" },
+      ],
+      beats: [
+        { hi: [0, 12], bubble: t(E,
+          "What should we print? The biggest bucket total needed at once. Read the cow count N from the file.",
+          "무엇을 답으로 내야 하나요? 언제든 동시에 필요한 양동이의 최댓값이에요.\n파일에서 소 수 N을 읽어요.") },
+        { hi: [13, 20], bubble: t(E,
+          "Checking every minute for every cow is too slow. So for each cow, mark +buckets at its start day and −buckets the day right after it ends.",
+          "분마다 소를 다 훑으면 너무 느려요.\n그래서 소마다 시작일엔 +양동이, 끝난 다음 날엔 −양동이 이벤트로 적어 둬요.") },
+        { hi: [21, 21], bubble: t(E,
+          "Sort those marks by time so we can sweep through them in order.",
+          "이 이벤트들을 시간순으로 정렬해요.") },
+        { hi: [22, 29], bubble: t(E,
+          "Sweep once: add each mark's delta to cur (buckets needed right now), and keep the largest cur ever seen.",
+          "이제 시간순으로 한 번만 훑으면서 cur에 델타를 더하고,\n지금까지 최댓값 best를 기억해요.") },
+        { hi: [30, 32], bubble: t(E,
+          "Write the answer to the output file.",
+          "답을 출력 파일에 써요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "events", ko: "양동이 수가 바뀌는 지점들(+b/−b)", en: "the +b / −b timeline marks" },
+      { v: "cur", ko: "지금 시각에 필요한 양동이 수", en: "buckets needed right now" },
+      { v: "best", ko: "지금까지 최댓값", en: "largest cur seen so far" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What should we print? The biggest bucket total needed at once. Read the cow count N from the file.",
+        "무엇을 답으로 내야 하나요? 언제든 동시에 필요한 양동이의 최댓값이에요.\n파일에서 소 수 N을 읽어요.") },
+      { hi: [5, 11], bubble: t(E,
+        "Checking every minute for every cow is too slow. So for each cow, mark +buckets at its start day and −buckets the day right after it ends.",
+        "분마다 소를 다 훑으면 너무 느려요.\n그래서 소마다 시작일엔 +양동이, 끝난 다음 날엔 −양동이 이벤트로 적어 둬요.") },
+      { hi: [13, 13], bubble: t(E,
+        "Sort those marks by time so we can sweep through them in order.",
+        "이 이벤트들을 시간순으로 정렬해요.") },
+      { hi: [15, 20], bubble: t(E,
+        "Sweep once: add each mark's delta to cur (buckets needed right now), and keep the largest cur ever seen.",
+        "이제 시간순으로 한 번만 훑으면서 cur에 델타를 더하고,\n지금까지 최댓값 best를 기억해요.") },
+      { hi: [22, 23], bubble: t(E,
+        "Write the answer to the output file.",
+        "답을 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

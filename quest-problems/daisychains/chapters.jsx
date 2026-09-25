@@ -213,6 +213,39 @@ export const SOLUTION_CODE = [
   "print(count)",
 ];
 
+/* ── CodeWalk (선생님 2026-07-14: "앞으로 코드는 모두 이런식으로") ──
+   SOLUTION_CODE 는 위에서 한 글자도 안 바뀐다 — beats 는 그 배열의
+   줄 번호(hi:[lo,hi], 0-based, 양끝 포함)만 가리킨다.
+   ⚠️ 이 quest 는 파이썬 전용이다(check-unused-lang-param.py: "pythonOnly") — C++ 토글이
+   노출되지 않으니 lang 분기를 만들지 않는다. */
+export function getDaisyChainsWalk(E) {
+  return {
+    code: SOLUTION_CODE,
+    vars: [
+      { v: "s", ko: "지금 구간의 합", en: "running sum of the current window" },
+      { v: "length", ko: "지금 구간의 길이", en: "length of the current window" },
+      { v: "count", ko: "평균과 같은 꽃이 있던 구간 수", en: "windows where a flower matches the average" },
+    ],
+    beats: [
+      { hi: [0, 1], bubble: t(E,
+        "What should we print? How many contiguous windows have a flower matching their own average. Read the flower count N and the petal counts p.",
+        "무엇을 출력해야 하나요? 평균 꽃잎 수와 같은 꽃이 있는 구간(부분 배열)의 개수예요.\n먼저 꽃 수 N과 꽃잎 수 목록 p를 읽어요.") },
+      { hi: [3, 7], bubble: t(E,
+        "Recomputing the sum from scratch every time is slow. So fix a start i, and as the end j grows, keep a running sum s instead of re-adding everything.",
+        "합을 매번 처음부터 다시 더하면 느려요.\n그래서 시작점 i를 고정하고, 끝점 j를 늘려가며 s에 합을 쌓아요.") },
+      { hi: [8, 9], bubble: t(E,
+        "The average is only an integer when the sum divides evenly by the length — a non-integer average can never match a whole petal count, so only check further when it divides evenly.",
+        "평균이 정수가 되려면 합이 구간 길이로 나누어떨어져야 해요.\n나누어지지 않으면 평균이 정수가 아니라서 어떤 꽃과도 같을 수 없어요 — 나누어질 때만 더 확인해요.") },
+      { hi: [10, 12], bubble: t(E,
+        "If it divides evenly, compute the average and check whether any flower in this window has that many petals — if so, this window counts.",
+        "나누어지면 평균을 구하고, 그 값을 가진 꽃이 이 구간 안에 있는지 확인해요.\n있으면 count를 늘려요.") },
+      { hi: [14, 14], bubble: t(E,
+        "Print how many windows counted.",
+        "마지막으로 count를 출력하면 끝이에요.") },
+    ],
+  };
+}
+
 
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
@@ -711,101 +744,14 @@ export function makeDaisyCh2(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeDaisyCh3(E, lang = "py") {
   return [
-    // 3-1: Step 1 — Read input
+    // 3-1: CodeWalk — 선생님 2026-07-14: "앞으로 코드는 모두 이런식으로"
     {
-      type: "reveal",
+      type: "daisychains-codewalk",
       narr: t(E,
-        "The answer is how many ranges match their own average.\nFirst read the values.", "답은 평균과 같은 꽃잎 수를 가진 구간의 개수예요.\n먼저 값을 읽어요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
-          </div>
-          <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
-            {t(E,
-              "First line: N. Second line: N petal counts separated by spaces.",
-              "첫 줄에는 N 이 있어요.\n둘째 줄에는 꽃잎 수 N 개가 빈칸으로 나뉘어 있어요.")}
-          </div>
-          <CodeSnippet
-            lines={[
-              "N = int(input())",
-              "p = list(map(int, input().split()))",
-            ]}
-            highlight={[0, 1]}
-          />
-          <div style={{
-            marginTop: 10, background: C.carryBg, borderRadius: 8, padding: 8,
-            border: `1.5px solid ${C.carryBd}`, fontSize: 12, color: C.text,
-            fontFamily: "'JetBrains Mono', monospace",
-          }}>
-            {t(E, "Example: N=3, p=[1, 1, 2]", "예시: N=3, p=[1, 1, 2]")}
-          </div>
-        </div>),
+        "The full solution, start to finish.",
+        "전체 풀이를 처음부터 끝까지 봐요."),
     },
-    // 3-2: Step 2 — Outer loop + running sum
-    {
-      type: "reveal",
-      narr: t(E,
-        "Recomputing the sum from scratch each time is slow.\nSo keep a running sum as j grows.", "합을 매번 처음부터 다시 더하면 느려요.\n그래서 s 에 쌓아 가며 j 를 늘려요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 2: Outer loop + running sum", "2단계: 바깥 반복 + 쌓아 온 합")}
-          </div>
-          <CodeSnippet
-            lines={[
-              "N = int(input())",
-              "p = list(map(int, input().split()))",
-              "",
-              "count = 0",
-              "for i in range(N):",
-              "    s = 0",
-              "    for j in range(i, N):",
-              "        s += p[j]",
-            ]}
-            highlight={[3, 4, 5, 6, 7]}
-          />
-          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line" }}>
-            {t(E,
-              "count tracks valid subarrays. s accumulates the sum as we extend j.\nNo need to recompute from scratch!", "count 는 유효한 부분 배열이 몇 개인지 세어요.\ns 는 j 가 늘어날 때마다 합을 쌓아 두니까\n처음부터 다시 더할 필요가 없어요.")}
-          </div>
-        </div>),
-    },
-    // 3-3: Step 3 — Check condition
-    {
-      type: "reveal",
-      narr: t(E,
-        "If the sum divides evenly by the length, look for a flower matching the average.", "합이 길이로 나누어지면 평균이 정수예요. 그때만 꽃을 찾아봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 3: Check the condition", "3단계: 조건 확인")}
-          </div>
-          <CodeSnippet
-            lines={[
-              "N = int(input())",
-              "p = list(map(int, input().split()))",
-              "",
-              "count = 0",
-              "for i in range(N):",
-              "    s = 0",
-              "    for j in range(i, N):",
-              "        s += p[j]",
-              "        length = j - i + 1",
-              "        if s % length == 0:",
-              "            avg = s // length",
-              "            if avg in p[i:j+1]:",
-              "                count += 1",
-            ]}
-            highlight={[8, 9, 10, 11, 12]}
-          />
-          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E,
-              "s % length == 0 checks if avg is an integer. avg in p[i:j+1] checks if any flower in the subarray has that petal count.", "s % length == 0 은 평균이 정수인지 알려 줘요.\navg in p[i:j+1] 은 그 꽃잎 수를 가진 꽃이 있는지 알려 줘요.")}
-          </div>
-        </div>),
-    },
-    // 3-4: Quiz — why check s % length?
+    // 3-2: Quiz — why check s % length?
     {
       type: "quiz",
       narr: t(E,
@@ -822,30 +768,6 @@ export function makeDaisyCh3(E, lang = "py") {
       explain: t(E,
         "Right! Petal counts are integers, so the average must be an integer to match any flower. If sum isn't divisible by length, the average is a fraction and no flower can match!",
         "맞아요. 꽃잎 수가 정수라서 평균도 정수여야 꽃과 같아질 수 있어요.\n합이 길이로 나누어지지 않으면 평균이 분수라\n같은 꽃이 아예 없어요."),
-    },
-    // 3-5: Step 4 — Print + full code
-    {
-      type: "reveal",
-      narr: t(E,
-        "Finally, print the count. That's the complete solution!", "마지막으로 count 를 출력하면 풀이가 끝나요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
-            {t(E, "Step 4: Print the answer!", "4단계: 답 출력!")}
-          </div>
-          <CodeSnippet
-            lines={SOLUTION_CODE}
-            highlight={[20]}
-          />
-          <div style={{
-            marginTop: 10, background: C.okBg, borderRadius: 10,
-            padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
-          }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
-              {t(E, "Complete solution! O(N^2) with running sum!", "풀이 완성! 합을 쌓아 두니까 O(N^2) 예요.")}
-            </div>
-          </div>
-        </div>),
     },
   ];
 }

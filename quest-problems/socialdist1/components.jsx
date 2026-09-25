@@ -377,6 +377,85 @@ export function SocDist1ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk (선생님 2026-07-14: "앞으로 코드는 모두 이런식으로") ──
+   FULL_PY / FULL_CPP 는 위에서 한 글자도 안 바뀐다 — beats 는 그 배열의
+   줄 번호(hi:[lo,hi], 0-based, 양끝 포함)만 가리킨다. */
+export function getSocDist1Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "ones", ko: "기존 소가 있는 칸 번호들", en: "positions of existing cows" },
+        { v: "D", ko: "지금 시도하는 최소 거리", en: "the minimum distance we're testing" },
+        { v: "placed", ko: "D 간격으로 더 놓을 수 있는 소 수", en: "how many new cows fit with spacing D" },
+      ],
+      beats: [
+        { hi: [0, 8], bubble: t(E,
+          "What should we print? The biggest minimum gap we can guarantee once 2 more cows are squeezed in.\nWe'll binary-search that value, so N and the existing positions ones go in global scope.",
+          "무엇을 출력해야 하나요? 소 2마리를 더 넣었을 때 보장되는 최소 거리의 가장 큰 값이에요.\n이 값을 이분 탐색으로 찾을 거라, 반복해서 쓸 N과 기존 소 위치 ones를 전역에 둬요.") },
+        { hi: [10, 16], bubble: t(E,
+          "can_place(D, cows) asks: could every cow end up at least D apart if we add cows more?\nFirst the existing cows themselves must already be D apart — if two are already closer, distance D is impossible no matter what we add.",
+          "can_place(D, cows) 는 «cows 마리를 더해도 모든 소가 D 이상 떨어질 수 있나?» 를 확인해요.\n먼저 지금 있는 소들끼리도 D 이상 떨어져 있어야 해요 — 이미 둘이 D보다 가까우면 무엇을 더해도 D는 불가능해요.") },
+        { hi: [17, 20], bubble: t(E,
+          "If there are no existing cows at all, the stalls are wide open — cows fit at 0, D, 2D, … as densely as that spacing allows.",
+          "기존 소가 하나도 없으면 칸이 완전히 비어 있으니, 0, D, 2D, … 자리에 그 간격대로 최대한 촘촘히 놓을 수 있어요.") },
+        { hi: [21, 26], bubble: t(E,
+          "Otherwise, check each gap between two neighboring existing cows. New cows sit at D, 2D, 3D … past the left one, and the last must still stay D short of the right one — so (gap − D) / D new cows fit, no more.",
+          "그게 아니면 이웃한 기존 소 사이 간격마다 확인해요. 새 소는 왼쪽 소로부터 D, 2D, 3D … 자리에 놓이고, 마지막 소도 오른쪽 소에서 D만큼은 떨어져야 해서 그 간격엔 (gap − D) / D 마리만 들어가요.") },
+        { hi: [27, 32], bubble: t(E,
+          "The two outer ends only have a cow on one side, so nothing needs to stay clear on the far side — ones[0] / D on the left, (N−1−ones.back()) / D on the right.\nD works if the total placed reaches cows (here, 2).",
+          "양 끝은 한쪽에만 소가 있어서 반대쪽을 비워 둘 필요가 없어요 — 왼쪽은 ones[0] / D, 오른쪽은 (N−1−ones.back()) / D 만큼 놓을 수 있어요.\n이렇게 다 놓은 자리 수가 cows(여기선 2) 이상이면 D는 성공이에요.") },
+        { hi: [35, 42], bubble: t(E,
+          "USACO's older contests use file I/O. Read the stall count N and the current layout string from the file.",
+          "USACO 이전 대회는 파일로 입출력해요. 칸 수 N과 지금 배치 문자열을 파일에서 읽어요.") },
+        { hi: [44, 49], bubble: t(E,
+          "To measure gaps later, we need to know exactly where the existing cows are — scan the string and collect their positions into ones.",
+          "나중에 간격을 재려면 지금 소가 있는 자리를 알아야 해요 — 문자열을 훑어 그 위치들을 ones에 모아요.") },
+        { hi: [51, 63], bubble: t(E,
+          "Trying every D one by one is slow. But «can 2 cows fit at distance D?» flips exactly once as D grows — possible for small D, impossible for large D — so binary-search the largest D that still works.",
+          "D를 하나씩 다 시도하면 느려요. 그런데 «거리 D로 2마리가 들어가나?» 는 D가 커질수록 딱 한 번만 가능→불가능으로 뒤집혀요 — 그래서 되는 가장 큰 D를 이분 탐색으로 찾아요.") },
+        { hi: [64, 66], bubble: t(E,
+          "Write the answer to the output file.",
+          "답을 출력 파일에 써요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "ones", ko: "기존 소가 있는 칸 번호들", en: "positions of existing cows" },
+      { v: "D", ko: "지금 시도하는 최소 거리", en: "the minimum distance we're testing" },
+      { v: "placed", ko: "D 간격으로 더 놓을 수 있는 소 수", en: "how many new cows fit with spacing D" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What should we print? The biggest minimum gap we can guarantee once 2 more cows are squeezed in.\nRead the stall count N and the current layout string from the file.",
+        "무엇을 출력해야 하나요? 소 2마리를 더 넣었을 때 보장되는 최소 거리의 가장 큰 값이에요.\n파일에서 칸 수 N과 지금 배치 문자열을 읽어요.") },
+      { hi: [7, 11], bubble: t(E,
+        "To measure gaps later, we need to know exactly where the existing cows are — scan the string and collect their positions into ones.",
+        "나중에 간격을 재려면 지금 소가 있는 자리를 알아야 해요 — 문자열을 훑어 그 위치들을 ones에 모아요.") },
+      { hi: [13, 19], bubble: t(E,
+        "can_place(D, cows) asks: could every cow end up at least D apart if we add cows more?\nFirst the existing cows themselves must already be D apart — if two are already closer, distance D is impossible no matter what we add.",
+        "can_place(D, cows) 는 «cows 마리를 더해도 모든 소가 D 이상 떨어질 수 있나?» 를 확인해요.\n먼저 지금 있는 소들끼리도 D 이상 떨어져 있어야 해요 — 이미 둘이 D보다 가까우면 무엇을 더해도 D는 불가능해요.") },
+      { hi: [21, 23], bubble: t(E,
+        "If there are no existing cows at all, the stalls are wide open — cows fit at 0, D, 2D, … as densely as that spacing allows.",
+        "기존 소가 하나도 없으면 칸이 완전히 비어 있으니, 0, D, 2D, … 자리에 그 간격대로 최대한 촘촘히 놓을 수 있어요.") },
+      { hi: [24, 28], bubble: t(E,
+        "Otherwise, check each gap between two neighboring existing cows. New cows sit at D, 2D, 3D … past the left one, and the last must still stay D short of the right one — so (gap − D) // D new cows fit, no more.",
+        "그게 아니면 이웃한 기존 소 사이 간격마다 확인해요. 새 소는 왼쪽 소로부터 D, 2D, 3D … 자리에 놓이고, 마지막 소도 오른쪽 소에서 D만큼은 떨어져야 해서 그 간격엔 (gap − D) // D 마리만 들어가요.") },
+      { hi: [29, 33], bubble: t(E,
+        "The two outer ends only have a cow on one side, so nothing needs to stay clear on the far side — ones[0] // D on the left, (N−1−ones[-1]) // D on the right.\nD works if the total placed reaches cows (here, 2).",
+        "양 끝은 한쪽에만 소가 있어서 반대쪽을 비워 둘 필요가 없어요 — 왼쪽은 ones[0] // D, 오른쪽은 (N−1−ones[-1]) // D 만큼 놓을 수 있어요.\n이렇게 다 놓은 자리 수가 cows(여기선 2) 이상이면 D는 성공이에요.") },
+      { hi: [35, 44], bubble: t(E,
+        "Trying every D one by one is slow. But «can 2 cows fit at distance D?» flips exactly once as D grows — possible for small D, impossible for large D — so binary-search the largest D that still works.",
+        "D를 하나씩 다 시도하면 느려요. 그런데 «거리 D로 2마리가 들어가나?» 는 D가 커질수록 딱 한 번만 가능→불가능으로 뒤집혀요 — 그래서 되는 가장 큰 D를 이분 탐색으로 찾아요.") },
+      { hi: [46, 47], bubble: t(E,
+        "Write the answer to the output file.",
+        "답을 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

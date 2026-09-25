@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getBucketListSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -154,13 +153,12 @@ export function makeBucketListCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBucketListCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: CodeWalk — 선생님 2026-07-14: "앞으로 코드는 모두 이런식으로"
     {
-      type: "progressive",
+      type: "bucketlist-codewalk",
       narr: t(E,
-        "Mark +b at each interval's start, −b the day after it ends, then track the running max.",
-        "구간마다 시작에 +b, 끝난 다음 날에 −b 를 적어요.\n시간순으로 더해 가며 가장 큰 값을 기억해요."),
-      sections: getBucketListSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "전체 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

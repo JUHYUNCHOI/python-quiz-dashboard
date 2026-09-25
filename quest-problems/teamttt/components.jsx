@@ -357,6 +357,72 @@ export function getTeamTttSections(E) {
   ];
 }
 
+/* ── CodeWalk (선생님 2026-07-14: "앞으로 코드는 모두 이런식으로") ──
+   FULL_PY / FULL_CPP 는 위에서 한 글자도 안 바뀐다 — beats 는 그 배열의
+   줄 번호(hi:[lo,hi], 0-based, 양끝 포함)만 가리킨다.
+   ⚠️ C++ 은 rows_idx[8][3][2] 표를 쓰고 파이썬은 안 쓴다 — 양쪽을 각각 그 코드
+   그대로 설명한다(한쪽만 보고 끝내지 않는다). */
+export function getTeamTttWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars: [
+        { v: "distinct", ko: "이 줄에 나온 서로 다른 글자", en: "distinct letters in this line" },
+        { v: "singles", ko: "혼자 우승한 글자들", en: "solo winners" },
+        { v: "teams", ko: "2명이 함께 우승한 팀들", en: "2-cow team winners" },
+      ],
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "What should we print? Two counts — solo line winners, then 2-cow team winners.\nFirst read the 3×3 grid, one row at a time.",
+          "무엇을 출력해야 하나요? 혼자 우승한 소 수와 2명 팀 우승 수예요.\n먼저 3×3 격자를 한 줄씩 읽어요.") },
+        { hi: [17, 24], bubble: t(E,
+          "There are 8 lines to check — 3 rows, 3 columns, 2 diagonals. rows_idx is a table listing which (row, col) each of the 8 lines uses.",
+          "확인할 줄은 8개예요 — 가로 3, 세로 3, 대각선 2.\nrows_idx는 그 여덟 줄이 각각 어느 칸(행, 열)을 쓰는지 미리 적어 둔 표예요.") },
+        { hi: [25, 28], bubble: t(E,
+          "For each of the 8 lines, look up the table to pull out its 3 cells' letters.",
+          "표를 보고 이번 줄의 세 칸 글자 a, b, c를 꺼내요.") },
+        { hi: [29, 32], bubble: t(E,
+          "Collect those 3 letters into a set — that tells us how many distinct letters this line has.",
+          "그 세 글자를 집합 distinct에 모아요 — 서로 다른 글자가 몇 개인지 보려는 거예요.") },
+        { hi: [33, 41], bubble: t(E,
+          "1 distinct letter means a solo win; 2 means those two form a team (a set is already sorted, so joining it gives a consistent pair name).",
+          "서로 다른 글자가 1개면 혼자 우승, 2개면 두 글자를 이어 붙여 팀으로 기록해요.\nset은 이미 정렬돼 있어서 같은 팀은 항상 같은 이름이 돼요.") },
+        { hi: [43, 46], bubble: t(E,
+          "Print both counts.",
+          "두 개수를 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "distinct", ko: "이 줄에 나온 서로 다른 글자", en: "distinct letters in this line" },
+      { v: "singles", ko: "혼자 우승한 글자들", en: "solo winners" },
+      { v: "teams", ko: "2명이 함께 우승한 팀들", en: "2-cow team winners" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What should we print? Two counts — solo line winners, then 2-cow team winners.\nFirst read the 3×3 grid.",
+        "무엇을 출력해야 하나요? 혼자 우승한 소 수와 2명 팀 우승 수예요.\n먼저 3×3 격자를 읽어요.") },
+      { hi: [8, 15], bubble: t(E,
+        "There are 8 lines to check — 3 rows, 3 columns, 2 diagonals. Collect all 8 lines' 3 cells into all_lines.",
+        "확인할 줄은 8개예요 — 가로 3, 세로 3, 대각선 2.\n그 여덟 줄의 세 칸을 all_lines에 모아 둬요.") },
+      { hi: [17, 21], bubble: t(E,
+        "1 distinct letter in a line means a solo win; 2 means a team win. Open two sets to collect the results.",
+        "줄에 글자가 하나면 혼자 우승, 둘이면 팀 우승이에요.\n결과를 모을 집합 singles와 teams를 만들어요.") },
+      { hi: [22, 29], bubble: t(E,
+        "For each line, collect its 3 letters into a set — that tells us how many distinct letters it has.",
+        "줄마다 세 칸의 글자를 집합에 모아요 — 서로 다른 글자가 몇 개인지 보려는 거예요.") },
+      { hi: [30, 35], bubble: t(E,
+        "1 distinct letter means a solo win; 2 means those two letters form a team — sort them so the same pair always gets the same name.",
+        "서로 다른 글자가 1개면 혼자 우승, 2개면 그 두 글자가 한 팀으로 우승이에요.\n정렬해서 같은 팀은 항상 같은 이름이 되게 해요.") },
+      { hi: [37, 39], bubble: t(E,
+        "Print both counts.",
+        "두 개수를 출력해요.") },
+    ],
+  };
+}
+
 export function TeamTttProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }

@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { SocDist1ProgressiveCode, downloadSocDist1PDF, getSocDist1Sections } from "./components";
+import { SocDist1ProgressiveCode, downloadSocDist1PDF, getSocDist1Sections, getSocDist1Walk } from "./components";
 import { makeSocDist1Ch1, makeSocDist1Ch2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#dc2626";
 
@@ -102,6 +103,7 @@ export default function SocDist1App(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <SocDist1ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "socialdist1-codewalk") return <CodeWalk E={E} lang={codeLang} {...getSocDist1Walk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function SocDist1App(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <SocDist1ProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "socialdist1-codewalk") return <CodeWalk E={E} lang={codeLang} {...getSocDist1Walk(E, codeLang)} accent={A} />;
     return null;
   };
 
