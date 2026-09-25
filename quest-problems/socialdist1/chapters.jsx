@@ -168,18 +168,27 @@ export function makeSocDist1Ch1(E) {
         "A cow at least 3 from the cow at 1 must be at stall 4 or later; at least 3 from the cow at 8 must be at stall 5 or earlier. Only stalls 4 and 5 satisfy both, and they're just 1 apart — so only 1 cow fits, not 2. So distance 3 is impossible, and the answer must be smaller.",
         "1 번 소에서 3 칸 이상 떨어지려면 4 번부터,\n8 번 소에서 3 칸 이상 떨어지려면 5 번까지예요.\n둘 다 되는 자리는 4, 5 번뿐인데 서로 1 칸밖에 안 떨어져 1마리만 들어가요.\n그래서 거리 3 은 안 되고, 답은 그보다 작아요."),
     },
-    // 1-3: Input
+    /* 1-3: Input
+       ⚠️ 2026-09-25: 여기가 **앞 쪽을 베껴도 맞는** 자리였다. 1-1b 카드의 SAMPLE OUTPUT 에
+       `"0100000010"` 의 답 **2** 가 글자 그대로 박혀 있는데, 이 쪽이 **같은 예제로 같은 숫자**를
+       물었다 — 「← 이전」 두 번이면 닿는다. `feedback_students_copy_the_answer` 와 같은 모양이다
+       (거기선 힌트2 가 정답 전문이었고, 여기선 두 쪽 앞의 샘플 출력이 정답 전문이다).
+       형제를 열어 보니 **저장소 관행은 이미 갈라 놨다** — `drought` 는 카드가 `[3,5,2]→10` 인데
+       입력은 `[2,4,2]→8`, `exchange` 는 카드가 `RRL→2` 인데 입력은 `모두 오른쪽→6` 이다.
+       socialdist1 만 어긋나 있었다. → **입력 쪽에만 새 예제를 준다.**
+       카드·시뮬·퀴즈가 쓰는 `"0100000010"` 은 그대로 둔다(오늘 양 끝 버그를 고친 그 예제다).
+       검산: 완전탐색과 🔒 `FULL_PY` 둘 다 `6 / 100001` → **1**. 카드의 2 와 달라서 베끼면 틀린다. */
     {
       type: "input",
       narr: t(E,
-        "Positions 1 and 8 occupied, place 2 more cows.\nWhat is the maximum possible minimum distance?", "소 2마리를 더 넣었을 때 최소 거리를 가장 크게 해 봐요."),
+        "New example — a smaller one this time.", "이번엔 새 예제로 풀어봐요."),
       question: t(E,
-        "\"0100000010\": occupied at 1,8. Place 2 cows. Max of min distance?",
-        "\"0100000010\" 의 1 번과 8 번에 소가 있어요. 2마리를 더 넣을 때 최소 거리의 가장 큰 값은 얼마일까요?"),
+        "\"100001\": occupied at 0,5. Place 2 cows. Max of min distance?",
+        "\"100001\" 의 0 번과 5 번에 소가 있어요.\n2마리를 더 넣을 때 최소 거리의 가장 큰 값은 얼마일까요?"),
       hint: t(E,
-        "Try different placements and look at the smallest gap each makes.",
-        "여러 가지로 놓아 보면서 그때마다 가장 작은 간격을 확인해 봐요."),
-      answer: 2,
+        "Same idea as the slider: pick a distance, then count how many cows still fit.",
+        "슬라이더에서 하던 것과 같아요 —\n거리를 하나 정하고, 그 간격으로 몇 마리가 들어가는지 세어 봐요."),
+      answer: 1,
     },
   ];
 }
