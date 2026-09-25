@@ -367,7 +367,15 @@ const addClickable = (sc) => sc.onScreen.forEach(n => {
 addClickable(r)
 const seenOv = new Set((r.overlaps || []).map(o => o.a + '|' + o.b))
 const H = await p.evaluate(() => document.body.scrollHeight)
-for (let y = Math.round(vp.height * 0.3); y < H; y += Math.round(vp.height * 0.3)) {
+/* ⭐ 2026-09-25: 30% 스텝(모바일 244px·데스크탑 270px)이 **좁은 겹침 구간을 건너뛰었다.**
+   `socialdist1` 모바일에서 "⚡ Code" 쪽의 📋 Copy 버튼이 하단 고정 바(68px) 뒤에
+   숨는 구간은 스크롤 141~235px(폭 ~94px) 뿐인데, 244px 스텝이 234.6px 을 딱 지나쳐
+   그 구간 전체를 건너뛰었다 — 그래서 "0건" 이 나왔지만 실제로는 겹쳤다(학생이 직접 신고,
+   scrollY 160~220 에서 실측 재현함). 고정 바 높이(대개 60~70px)보다 촘촘히 밟아야
+   그 폭의 죽은 구간을 반드시 한 번은 통과한다. 80px 로 낮춘다 — 어떤 흔한 고정 바
+   높이보다도 촘촘하다. */
+const SCROLL_STEP = Math.min(Math.round(vp.height * 0.3), 80)
+for (let y = SCROLL_STEP; y < H; y += SCROLL_STEP) {
   // ⚠️ 부드러운 스크롤(smooth) 도중에 재면 또 헛 경보가 난다 — 2026-09-07 실측:
   //    멀쩡한 버튼 4개가 애니메이션 중간 프레임에서 "가려졌다" 로 잡혔다.
   //    즉시 스크롤하고, 스크롤 위치가 멈출 때까지 기다린 뒤에 잰다.
