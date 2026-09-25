@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getHoofballSections, HoofballPassSim } from "./components";
+import { HoofballPassSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (4 steps)
@@ -157,11 +157,10 @@ export function makeHoofballCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code — straight in.
     {
-      type: "progressive",
+      type: "hoofball-codewalk",
       narr: t(E,
-        "Sort positions, find each cow's pass target, count cows nobody targets, plus one per mutual pair.",
-        "위치를 정렬하고 각 소가 누구에게 넘기는지 찾아요.\n아무도 안 가리키는 소를 세고, 서로만 주고받는 쌍마다 하나를 더해요."),
-      sections: getHoofballSections(E),
+        "The fast solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getTameHerdSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -158,19 +157,10 @@ export function makeTameHerdCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
-      /* ⚠️ 2026-09-25: 이 narr 이 **코드와 다른 알고리즘**을 설명하고 있었다 —
-         *"바로 앞의 값을 들고 다녀요 … 앞의 값 + 1 이 맞는지 봐요"* 는 **한 값만 들고 가는
-         한 번 훑기**다. 그런데 🔒 `FULL_PY` 는 `dp_min[c]`/`dp_max[c]` 로
-         **날마다 계수기 값을 전부 들고 가는 DP** 다(`-1` 인 날은 갈래가 여러 개라
-         값 하나로는 못 푼다). 바로 아래 `why[]` 는 **DP 를 정확히** 설명하고 있어서
-         **파란 바와 그 밑 설명이 서로 다른 말을 하고 있었다.**
-         `strangefn` 과 같은 병이다 — 시뮬·설명이 가리키는 것과 코드가 하는 것이 다르다.
-         quest-auditor 가 난이도 감사 중에 부수로 찾았다. `why[]` 쪽에 맞췄다. */
+      type: "tameherd-codewalk",
       narr: t(E,
         "Refresh a table of counter value → min/max breakouts, one day at a time.",
-        "날마다 «계수기 값 → 최소·최대 탈출 수» 표를 새로 고쳐요."),
-      sections: getTameHerdSections(E),
+        "날마다 «카운터 값 → 최소·최대 탈출 수» 표를 새로 고쳐요."),
     },
   ];
 }

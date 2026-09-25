@@ -377,6 +377,79 @@ export function TameHerdProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getTameHerdSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다.
+   ⚠️ 이 코드는 dp_min[c]/dp_max[c] 로 **날마다 카운터 값 전부를 들고 가는 DP** 다
+   (한 값만 들고 가는 한 번 훑기가 아니다 — −1 인 날은 갈래가 여러 개라 값 하나로는 못 푼다).
+   말풍선은 이 DP 에 맞춰 쓴다. ── */
+export function getTameHerdWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "dp_min/dp_max", ko: "카운터 값 c 로 올 수 있는 최소·최대 탈출 수", en: "min/max breakouts to reach counter value c" },
+        { v: "new_min/new_max", ko: "다음 날의 새 표", en: "next day's fresh table" },
+        { v: "ans_min/ans_max", ko: "모든 날을 다 본 뒤의 답", en: "the answer after all days" },
+      ],
+      beats: [
+        { hi: [0, 15], bubble: t(E,
+          "What do we need? The min and max number of breakouts consistent with the log. Read N and each day's counter reading (−1 if missing).",
+          "무엇을 내놓아야 하나요? 기록과 맞는 탈출 횟수의 최소·최대예요. N 과 날마다 적힌 카운터 값(−1 이면 안 적힌 거예요)을 읽어요.") },
+        { hi: [16, 22], bubble: t(E,
+          "A missing day could be any counter value, so we can't follow just one number — keep a table instead: for every possible counter value c, the fewest and the most breakouts that could land us there. Day 1's counter is always 0 (right after a breakout) — if the log says otherwise, it's impossible.",
+          "안 적힌 날은 카운터가 무엇이든 될 수 있어서 값 하나만 따라갈 수 없어요 — 대신 표를 둬요. 카운터 값 c 마다, 거기 오기까지 가능한 최소·최대 탈출 횟수예요.\n1일차 카운터는 항상 0(탈출 직후)이에요 — 기록이 다르면 있을 수 없는 경우예요.") },
+        { hi: [23, 26], bubble: t(E,
+          "Start the table: counter value 0 is reachable, with exactly 1 breakout (that first reset counts).",
+          "표를 시작해요 — 카운터 값 0 은 도달 가능하고, 그때 탈출 수는 정확히 1이에요(첫 리셋도 세니까요).") },
+        { hi: [27, 50], bubble: t(E,
+          "Each later day, every counter value c can go two ways: keep counting (c → c+1, no breakout) or break out (any c → 0, one more breakout). Build tomorrow's table from both moves.",
+          "그 다음 날부터는 카운터 값 c 마다 두 갈래예요 — 계속 세거나(c → c+1, 탈출 없음), 탈출하거나(어떤 c든 → 0, 탈출 +1). 두 갈래를 다 반영해 다음 날 표를 만들어요.") },
+        { hi: [51, 61], bubble: t(E,
+          "If today's counter is actually written down, only that value can be true — throw out every other entry in the fresh table.",
+          "오늘 카운터가 적혀 있으면 그 값만 맞아요 — 새 표에서 나머지 칸은 다 지워요.") },
+        { hi: [62, 72], bubble: t(E,
+          "After all days, scan the final table for the smallest and largest breakout counts still standing.",
+          "모든 날을 다 본 뒤, 마지막 표에서 아직 남아 있는 탈출 횟수 중 가장 작은 값과 가장 큰 값을 찾아요.") },
+        { hi: [73, 79], bubble: t(E,
+          "If nothing survived, no log-consistent history exists — otherwise write the min and max.",
+          "하나도 안 남았으면 기록과 맞는 경우가 없다는 뜻이에요 — 아니면 최소·최대를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "dp_min/dp_max", ko: "카운터 값 c 로 올 수 있는 최소·최대 탈출 수", en: "min/max breakouts to reach counter value c" },
+      { v: "new_min/new_max", ko: "다음 날의 새 표", en: "next day's fresh table" },
+      { v: "ans_min/ans_max", ko: "모든 날을 다 본 뒤의 답", en: "the answer after all days" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we need? The min and max number of breakouts consistent with the log. Read N and each day's counter reading (−1 if missing).",
+        "무엇을 내놓아야 하나요? 기록과 맞는 탈출 횟수의 최소·최대예요. N 과 날마다 적힌 카운터 값(−1 이면 안 적힌 거예요)을 읽어요.") },
+      { hi: [7, 19], bubble: t(E,
+        "A missing day could be any counter value, so we can't follow just one number — keep a table instead: for every possible counter value c, the fewest and the most breakouts that could land us there. Day 1's counter is always 0 (right after a breakout) — if the log says otherwise, it's impossible.",
+        "안 적힌 날은 카운터가 무엇이든 될 수 있어서 값 하나만 따라갈 수 없어요 — 대신 표를 둬요. 카운터 값 c 마다, 거기 오기까지 가능한 최소·최대 탈출 횟수예요.\n1일차 카운터는 항상 0(탈출 직후)이에요 — 기록이 다르면 있을 수 없는 경우예요.") },
+      { hi: [20, 36], bubble: t(E,
+        "Each later day, every counter value c can go two ways: keep counting (c → c+1, no breakout) or break out (any c → 0, one more breakout). Build tomorrow's table from both moves.",
+        "그 다음 날부터는 카운터 값 c 마다 두 갈래예요 — 계속 세거나(c → c+1, 탈출 없음), 탈출하거나(어떤 c든 → 0, 탈출 +1). 두 갈래를 다 반영해 다음 날 표를 만들어요.") },
+      { hi: [37, 44], bubble: t(E,
+        "If today's counter is actually written down, only that value can be true — throw out every other entry in the fresh table.",
+        "오늘 카운터가 적혀 있으면 그 값만 맞아요 — 새 표에서 나머지 칸은 다 지워요.") },
+      { hi: [45, 55], bubble: t(E,
+        "After all days, scan the final table for the smallest and largest breakout counts still standing. If nothing survived, no log-consistent history exists.",
+        "모든 날을 다 본 뒤, 마지막 표에서 아직 남아 있는 탈출 횟수 중 가장 작은 값과 가장 큰 값을 찾아요. 하나도 안 남았으면 기록과 맞는 경우가 없다는 뜻이에요.") },
+      { hi: [57, 58], bubble: t(E,
+        "Write the answer to the output file.",
+        "답을 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

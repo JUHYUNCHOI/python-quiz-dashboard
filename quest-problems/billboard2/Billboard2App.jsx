@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Billboard2ProgressiveCode, downloadBillboard2PDF, getBillboard2Sections } from "./components";
+import { Billboard2ProgressiveCode, downloadBillboard2PDF, getBillboard2Sections, getBillboard2Walk } from "./components";
 import { makeBillboard2Ch1, makeBillboard2Ch2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#dc2626";
 
@@ -102,6 +103,7 @@ export default function Billboard2App(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <Billboard2ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "billboard2-codewalk") return <CodeWalk E={E} lang={codeLang} {...getBillboard2Walk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function Billboard2App(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <Billboard2ProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "billboard2-codewalk") return <CodeWalk E={E} lang={codeLang} {...getBillboard2Walk(E, codeLang)} accent={A} />;
     return null;
   };
 

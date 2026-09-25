@@ -95,6 +95,64 @@ export function TeleportProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getTeleportSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getTeleportWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "direct", ko: "곧장 걷는 거리", en: "distance walking straight there" },
+        { v: "via1", ko: "a→x 텔레포트 y→b 거리", en: "distance via a→x, teleport, y→b" },
+        { v: "via2", ko: "a→y 텔레포트 x→b 거리", en: "distance via a→y, teleport, x→b" },
+      ],
+      beats: [
+        { hi: [4, 9], bubble: t(E,
+          "We'll be subtracting positions, and a smaller one might come first — so make a helper that always returns a non-negative distance.",
+          "위치끼리 빼다 보면 작은 값이 앞에 올 수도 있어요 — 그래서 항상 음이 아닌 거리를 돌려주는 헬퍼를 만들어요.") },
+        { hi: [11, 17], bubble: t(E,
+          "What do we need to print? The shortest walking distance from a to b. Read a, b, and the teleporter's two ends x, y.",
+          "무엇을 출력해야 하나요? a 에서 b 까지 걷는 최소 거리예요. a, b 와 텔레포터 양 끝 x, y 를 읽어요.") },
+        { hi: [19, 21], bubble: t(E,
+          "There are three ways to get there: walk straight, or walk to one teleporter end and pop out the other side (two directions). Compute all three.",
+          "가는 길은 세 가지예요. 곧장 걷거나, 텔레포터 한쪽으로 가서 반대쪽으로 나오거나(양방향). 셋 다 구해요.") },
+        { hi: [23, 29], bubble: t(E,
+          "The answer is whichever of the three routes is shortest — keep swapping in a smaller one whenever we find it.",
+          "답은 세 경로 중 가장 짧은 거예요 — 더 짧은 걸 찾을 때마다 바꿔 넣어요.") },
+        { hi: [30, 32], bubble: t(E,
+          "Write the shortest distance to the output file.",
+          "가장 짧은 거리를 출력 파일에 써요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "direct", ko: "곧장 걷는 거리", en: "distance walking straight there" },
+      { v: "via1", ko: "a→x 텔레포트 y→b 거리", en: "distance via a→x, teleport, y→b" },
+      { v: "via2", ko: "a→y 텔레포트 x→b 거리", en: "distance via a→y, teleport, x→b" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we need to print? The shortest walking distance from a to b. Read the four numbers a, b, x, y from the input file.",
+        "무엇을 출력해야 하나요? a 에서 b 까지 걷는 최소 거리예요. 입력 파일에서 a, b, x, y 네 수를 읽어요.") },
+      { hi: [6, 11], bubble: t(E,
+        "There are three ways to get there: walk straight (direct), or walk to one teleporter end and pop out the other side — two directions, via1 and via2.",
+        "가는 길은 세 가지예요. 곧장 걷기(direct), 텔레포터 한쪽으로 가서 반대쪽으로 나오기 — 양방향(via1, via2)이에요.") },
+      { hi: [13, 17], bubble: t(E,
+        "The answer is whichever of the three routes is shortest — start from direct, then swap in a smaller one whenever we find it.",
+        "답은 세 경로 중 가장 짧은 거예요 — direct 에서 시작해, 더 짧은 걸 찾을 때마다 바꿔 넣어요.") },
+      { hi: [19, 20], bubble: t(E,
+        "Write the shortest distance to the output file.",
+        "가장 짧은 거리를 출력 파일에 써요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

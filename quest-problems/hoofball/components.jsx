@@ -145,6 +145,76 @@ export function HoofballProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getHoofballSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getHoofballWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "target", ko: "각 소가 패스하는 상대", en: "who each cow passes to" },
+        { v: "received", ko: "각 소가 받는 횟수", en: "how many passes each cow receives" },
+        { v: "ans", ko: "필요한 시작 공 개수", en: "starting balls needed" },
+      ],
+      beats: [
+        { hi: [6, 17], bubble: t(E,
+          "We'll need to know each cow's neighbors, so read all the positions and sort them along the line first.",
+          "소마다 이웃을 알아야 하니, 먼저 모든 위치를 읽고 줄 위에서 정렬해요.") },
+        { hi: [18, 21], bubble: t(E,
+          "With just one cow there's no one to pass to — she needs her own ball, so handle that case right away.",
+          "소가 한 마리뿐이면 패스할 상대가 없어요 — 공을 하나 줘야 하니 이 경우는 바로 처리해요.") },
+        { hi: [22, 37], bubble: t(E,
+          "Every cow passes to her nearest neighbor (ties go left) — record that in target.",
+          "소마다 가장 가까운 이웃에게 패스해요 (거리가 같으면 왼쪽) — target 에 기록해요.") },
+        { hi: [38, 42], bubble: t(E,
+          "Now count, for each cow, how many passes she receives.",
+          "이제 소마다 몇 번 패스를 받는지 세요.") },
+        { hi: [43, 49], bubble: t(E,
+          "A cow nobody passes to (received 0) needs her own starting ball — count those.",
+          "아무도 패스해주지 않는 소(받은 횟수 0)는 자기 공이 필요해요 — 그런 소를 세요.") },
+        { hi: [50, 57], bubble: t(E,
+          "Why give that pair an extra ball? A pair that only passes to each other (and to no one else) forms a closed loop no outside ball ever reaches.",
+          "왜 그 짝에 공을 하나 더 줄까요? 서로에게만 패스하는 짝(다른 곳으로는 안 감)은 바깥 공이 닿지 않는 닫힌 고리이기 때문이에요.") },
+        { hi: [58, 60], bubble: t(E,
+          "Write the total number of starting balls needed.",
+          "필요한 시작 공의 총 개수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "target", ko: "각 소가 패스하는 상대", en: "who each cow passes to" },
+      { v: "received", ko: "각 소가 받는 횟수", en: "how many passes each cow receives" },
+      { v: "ans", ko: "필요한 시작 공 개수", en: "starting balls needed" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "We'll need to know each cow's neighbors, so read all the positions and sort them along the line first.",
+        "소마다 이웃을 알아야 하니, 먼저 모든 위치를 읽고 줄 위에서 정렬해요.") },
+      { hi: [8, 21], bubble: t(E,
+        "Every cow passes to her nearest neighbor (ties go left) — record that in target.",
+        "소마다 가장 가까운 이웃에게 패스해요 (거리가 같으면 왼쪽) — target 에 기록해요.") },
+      { hi: [23, 26], bubble: t(E,
+        "Now count, for each cow, how many passes she receives.",
+        "이제 소마다 몇 번 패스를 받는지 세요.") },
+      { hi: [28, 32], bubble: t(E,
+        "A cow nobody passes to (received 0) needs her own starting ball — count those.",
+        "아무도 패스해주지 않는 소(받은 횟수 0)는 자기 공이 필요해요 — 그런 소를 세요.") },
+      { hi: [34, 38], bubble: t(E,
+        "Why give that pair an extra ball? A pair that only passes to each other (and to no one else) forms a closed loop no outside ball ever reaches.",
+        "왜 그 짝에 공을 하나 더 줄까요? 서로에게만 패스하는 짝(다른 곳으로는 안 감)은 바깥 공이 닿지 않는 닫힌 고리이기 때문이에요.") },
+      { hi: [40, 41], bubble: t(E,
+        "Write the total number of starting balls needed.",
+        "필요한 시작 공의 총 개수를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

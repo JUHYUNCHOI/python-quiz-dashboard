@@ -130,6 +130,73 @@ export function LifeguardsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getLifeguardsSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getLifeguardsWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "skip", ko: "지금 해고했다고 치는 사람", en: "who we're pretending to fire" },
+        { v: "events", ko: "근무 시작·끝 시각 목록", en: "start/end times of the remaining shifts" },
+        { v: "best", ko: "지금까지 가장 많이 남은 커버 시간", en: "the most coverage found so far" },
+      ],
+      beats: [
+        { hi: [6, 16], bubble: t(E,
+          "What do we need? The most coverage left after firing one lifeguard. Read every lifeguard's shift.",
+          "무엇을 내놔야 하나요? 한 명을 해고한 뒤 남는 최대 커버 시간이에요. 모든 인명구조원의 근무 구간을 읽어요.") },
+        { hi: [17, 18], bubble: t(E,
+          "N is small, so we can just try firing each lifeguard in turn and keep the best result.",
+          "N 이 작으니 한 명씩 다 해고해 보고 가장 좋은 결과를 남기면 돼요.") },
+        { hi: [19, 27], bubble: t(E,
+          "For this candidate, collect the start/end times of every OTHER lifeguard's shift.",
+          "이번 후보를 빼고, 나머지 인명구조원의 근무 시작·끝 시각을 모아요.") },
+        { hi: [28, 40], bubble: t(E,
+          "Sort those times and sweep through them: while at least one shift is active, the seconds since the last event are covered.",
+          "그 시각들을 정렬해서 순서대로 훑어요. 누군가 근무 중인 동안엔 직전 시각부터 지금까지가 커버된 시간이에요.") },
+        { hi: [41, 44], bubble: t(E,
+          "Keep this candidate's coverage if it beats the best found so far.",
+          "이번 후보의 커버 시간이 지금까지 중 가장 크면 갱신해요.") },
+        { hi: [45, 47], bubble: t(E,
+          "Write the best coverage found across all candidates.",
+          "모든 후보 중 가장 큰 커버 시간을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "skip", ko: "지금 해고했다고 치는 사람", en: "who we're pretending to fire" },
+      { v: "events", ko: "근무 시작·끝 시각 목록", en: "start/end times of the remaining shifts" },
+      { v: "best", ko: "지금까지 가장 많이 남은 커버 시간", en: "the most coverage found so far" },
+    ],
+    beats: [
+      { hi: [0, 11], bubble: t(E,
+        "What do we need? The most coverage left after firing one lifeguard. Read every lifeguard's shift.",
+        "무엇을 내놔야 하나요? 한 명을 해고한 뒤 남는 최대 커버 시간이에요. 모든 인명구조원의 근무 구간을 읽어요.") },
+      { hi: [13, 14], bubble: t(E,
+        "N is small, so we can just try firing each lifeguard in turn and keep the best result.",
+        "N 이 작으니 한 명씩 다 해고해 보고 가장 좋은 결과를 남기면 돼요.") },
+      { hi: [15, 21], bubble: t(E,
+        "For this candidate, collect the start/end times of every OTHER lifeguard's shift.",
+        "이번 후보를 빼고, 나머지 인명구조원의 근무 시작·끝 시각을 모아요.") },
+      { hi: [22, 30], bubble: t(E,
+        "Sort those times and sweep through them: while at least one shift is active, the seconds since the last event are covered.",
+        "그 시각들을 정렬해서 순서대로 훑어요. 누군가 근무 중인 동안엔 직전 시각부터 지금까지가 커버된 시간이에요.") },
+      { hi: [31, 32], bubble: t(E,
+        "Keep this candidate's coverage if it beats the best found so far.",
+        "이번 후보의 커버 시간이 지금까지 중 가장 크면 갱신해요.") },
+      { hi: [34, 35], bubble: t(E,
+        "Write the best coverage found across all candidates.",
+        "모든 후보 중 가장 큰 커버 시간을 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

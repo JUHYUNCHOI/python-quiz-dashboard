@@ -135,6 +135,73 @@ export function Billboard2ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getBillboard2Sections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getBillboard2Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "bw/bh/area", ko: "광고판 너비·높이·전체 면적", en: "billboard width/height/full area" },
+        { v: "overlap", ko: "사료가 덮는 띠의 두께", en: "how thick the feed's strip is" },
+        { v: "answer", ko: "타프 면적", en: "the tarp's area" },
+      ],
+      beats: [
+        { hi: [4, 11], bubble: t(E,
+          "What do we need? The smallest tarp area. Read the billboard's corners and the feed's corners.",
+          "무엇을 내놔야 하나요? 가장 작은 타프의 면적이에요. 광고판 모서리와 사료 모서리를 읽어요.") },
+        { hi: [12, 15], bubble: t(E,
+          "Start from the worst case: the tarp covers the whole billboard.",
+          "가장 나쁜 경우부터 시작해요 — 타프가 광고판 전체를 덮는 경우예요.") },
+        { hi: [16, 34], bubble: t(E,
+          "If the feed spans the FULL width and touches the top or bottom edge, only a horizontal strip is left uncovered — shrink the height by that strip's thickness.",
+          "사료가 너비 전체를 덮고 위나 아래 변에 닿으면, 가로 띠만 안 덮인 채 남아요 — 그 띠 두께만큼 높이를 줄여요.") },
+        { hi: [35, 53], bubble: t(E,
+          "If instead the feed spans the FULL height and touches the left or right edge, only a vertical strip is left — shrink the width by that strip's thickness.",
+          "이번엔 사료가 높이 전체를 덮고 왼쪽이나 오른쪽 변에 닿으면, 세로 띠만 남아요 — 그 띠 두께만큼 너비를 줄여요.") },
+        { hi: [54, 56], bubble: t(E,
+          "Otherwise the uncovered gap is ㄴ-shaped — one rectangle can't match that shape, so the tarp has to cover the whole billboard.",
+          "그 외엔 안 덮인 부분이 ㄴ자예요 — 직사각형 하나로는 그 모양을 딱 맞출 수 없어서, 타프가 광고판 전체를 덮어야 해요.") },
+        { hi: [57, 59], bubble: t(E,
+          "Write the tarp's area.",
+          "타프의 면적을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "bw/bh/area", ko: "광고판 너비·높이·전체 면적", en: "billboard width/height/full area" },
+      { v: "overlap", ko: "사료가 덮는 띠의 두께", en: "how thick the feed's strip is" },
+      { v: "answer", ko: "타프 면적", en: "the tarp's area" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What do we need? The smallest tarp area. Read the billboard's corners and the feed's corners.",
+        "무엇을 내놔야 하나요? 가장 작은 타프의 면적이에요. 광고판 모서리와 사료 모서리를 읽어요.") },
+      { hi: [8, 10], bubble: t(E,
+        "Compute the billboard's width, height, and full area — the worst case.",
+        "광고판의 너비·높이·전체 면적을 구해요 — 가장 나쁜 경우예요.") },
+      { hi: [12, 19], bubble: t(E,
+        "If the feed spans the FULL width and touches the top or bottom edge, only a horizontal strip is left uncovered — shrink the height by that strip's thickness.",
+        "사료가 너비 전체를 덮고 위나 아래 변에 닿으면, 가로 띠만 안 덮인 채 남아요 — 그 띠 두께만큼 높이를 줄여요.") },
+      { hi: [20, 27], bubble: t(E,
+        "If instead the feed spans the FULL height and touches the left or right edge, only a vertical strip is left — shrink the width by that strip's thickness.",
+        "이번엔 사료가 높이 전체를 덮고 왼쪽이나 오른쪽 변에 닿으면, 세로 띠만 남아요 — 그 띠 두께만큼 너비를 줄여요.") },
+      { hi: [28, 30], bubble: t(E,
+        "Otherwise the uncovered gap is ㄴ-shaped — one rectangle can't match that shape, so the tarp has to cover the whole billboard.",
+        "그 외엔 안 덮인 부분이 ㄴ자예요 — 직사각형 하나로는 그 모양을 딱 맞출 수 없어서, 타프가 광고판 전체를 덮어야 해요.") },
+      { hi: [32, 33], bubble: t(E,
+        "Write the tarp's area.",
+        "타프의 면적을 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

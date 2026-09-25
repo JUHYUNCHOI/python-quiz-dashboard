@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getOutOfPlaceSections } from "./components";
 
 /* ================================================================
    VISUAL: array vs sorted side-by-side with mismatch block
@@ -286,11 +285,10 @@ export function makeOutOfPlaceCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "outofplace-codewalk",
       narr: t(E,
-        "Sort a copy and compare to the original — the moved cow creates a CONTIGUOUS block of mismatches.",
-        "사본을 정렬해서 원래 줄과 비교해 봐요."),
-      sections: getOutOfPlaceSections(E),
+        "The fast solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

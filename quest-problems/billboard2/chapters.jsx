@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getBillboard2Sections } from "./components";
 
 /* ================================================================
    Deep-audit sim: drag the feed billboard, watch the tarp area
@@ -336,11 +335,10 @@ export function makeBillboard2Ch2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "billboard2-codewalk",
       narr: t(E,
-        "The visible part is rectangular only when one whole side is covered.",
-        "보이는 부분이 직사각형이 되는 건 한 변 전체가 덮일 때뿐이에요."),
-      sections: getBillboard2Sections(E),
+        "The fast solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

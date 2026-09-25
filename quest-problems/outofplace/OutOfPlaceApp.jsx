@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { OutOfPlaceProgressiveCode, downloadOutOfPlacePDF, getOutOfPlaceSections } from "./components";
+import { OutOfPlaceProgressiveCode, downloadOutOfPlacePDF, getOutOfPlaceSections, getOutOfPlaceWalk } from "./components";
 import { makeOutOfPlaceCh1, makeOutOfPlaceCh2, MismatchVisual } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#059669";
 
@@ -103,6 +104,7 @@ export default function OutOfPlaceApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "visual") return <MismatchVisual E={E} />;
     if (step.type === "progressive") return <OutOfPlaceProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "outofplace-codewalk") return <CodeWalk E={E} lang={codeLang} {...getOutOfPlaceWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -115,6 +117,7 @@ export default function OutOfPlaceApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "visual") return <MismatchVisual E={E} />;
     if (s.type === "progressive") return <OutOfPlaceProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "outofplace-codewalk") return <CodeWalk E={E} lang={codeLang} {...getOutOfPlaceWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

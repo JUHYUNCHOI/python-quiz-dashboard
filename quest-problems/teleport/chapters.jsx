@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getTeleportSections } from "./components";
 
 /* ──────────────────────────────────────────────────────────────
    Bilingual route sim — pick teleporter endpoints, watch the
@@ -329,11 +328,10 @@ export function makeTeleportCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "teleport-codewalk",
       narr: t(E,
-        "Three routes from a to b: 1) direct |a − b|, 2) |a − x| + |y − b|, 3) |a − y| + |x − b|. Take the min. Sections build it one piece at a time.",
-        "a 에서 b 로 가는 길은 세 가지예요.\n셋 중 가장 작은 값을 고르면 돼요."),
-      sections: getTeleportSections(E),
+        "The fast solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

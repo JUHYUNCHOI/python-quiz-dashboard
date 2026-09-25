@@ -103,6 +103,61 @@ export function OutOfPlaceProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getOutOfPlaceSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getOutOfPlaceWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "b", ko: "정렬한 줄", en: "the sorted row" },
+        { v: "diff", ko: "자리가 어긋난 칸 수", en: "how many positions differ from sorted" },
+        { v: "answer", ko: "필요한 이웃 교환 횟수", en: "adjacent swaps needed" },
+      ],
+      beats: [
+        { hi: [6, 16], bubble: t(E,
+          "What do we need? The fewest adjacent swaps to restore sorted order. Read the row a.",
+          "무엇을 내놔야 하나요? 정렬된 순서로 되돌리는 데 필요한 최소 이웃 교환 횟수예요. 줄 a 를 읽어요.") },
+        { hi: [17, 25], bubble: t(E,
+          "Build the sorted row b, then count every position where a and b differ — that count is diff.",
+          "정렬한 줄 b 를 만들고, a 와 b 가 다른 자리 수를 세요 — 그 값이 diff 예요.") },
+        { hi: [26, 29], bubble: t(E,
+          "diff isn't the answer yet — only one cow truly moved, the rest just got pushed by one seat, so they're counted in diff too. The real swaps needed is diff − 1 (clamped at 0).",
+          "diff 가 그대로 답은 아니에요 — 실제로 옮긴 소는 한 마리뿐이고, 나머지는 그 소 때문에 한 칸씩 밀려서 diff 에 같이 잡혀요. 진짜 필요한 교환은 diff − 1 이에요(0 밑으로는 안 내려가요).") },
+        { hi: [30, 32], bubble: t(E,
+          "Write the number of swaps needed.",
+          "필요한 교환 횟수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "b", ko: "정렬한 줄", en: "the sorted row" },
+      { v: "diff", ko: "자리가 어긋난 칸 수", en: "how many positions differ from sorted" },
+      { v: "answer", ko: "필요한 이웃 교환 횟수", en: "adjacent swaps needed" },
+    ],
+    beats: [
+      { hi: [0, 7], bubble: t(E,
+        "What do we need? The fewest adjacent swaps to restore sorted order. Read the row a.",
+        "무엇을 내놔야 하나요? 정렬된 순서로 되돌리는 데 필요한 최소 이웃 교환 횟수예요. 줄 a 를 읽어요.") },
+      { hi: [9, 14], bubble: t(E,
+        "Build the sorted row b, then count every position where a and b differ — that count is diff.",
+        "정렬한 줄 b 를 만들고, a 와 b 가 다른 자리 수를 세요 — 그 값이 diff 예요.") },
+      { hi: [16, 19], bubble: t(E,
+        "diff isn't the answer yet — only one cow truly moved, the rest just got pushed by one seat, so they're counted in diff too. The real swaps needed is diff − 1 (clamped at 0).",
+        "diff 가 그대로 답은 아니에요 — 실제로 옮긴 소는 한 마리뿐이고, 나머지는 그 소 때문에 한 칸씩 밀려서 diff 에 같이 잡혀요. 진짜 필요한 교환은 diff − 1 이에요(0 밑으로는 안 내려가요).") },
+      { hi: [21, 22], bubble: t(E,
+        "Write the number of swaps needed.",
+        "필요한 교환 횟수를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

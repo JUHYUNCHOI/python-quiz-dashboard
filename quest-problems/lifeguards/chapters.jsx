@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getLifeguardsSections } from "./components";
 
 /* ================================================================
    Interactive Sim: interval-removal coverage visualizer
@@ -344,11 +343,10 @@ export function makeLifeguardsCh2(E, lang = "py") {
   return [
     // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "lifeguards-codewalk",
       narr: t(E,
-        "Remove each guard, measure remaining coverage, and take the max.",
-        "한 명씩 빼 보고 남은 커버 시간을 재서 가장 큰 값을 골라요."),
-      sections: getLifeguardsSections(E),
+        "The fast solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }
