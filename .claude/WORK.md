@@ -3787,9 +3787,9 @@ diff 는 `+14 −12`, 순증 **+2**(새 줄은 제약 1줄 · O 뜻 1줄뿐). `b
 | 무엇 | 왜 | 상태 |
 |---|---|---|
 | **`mooin3` 분량·밀도** (12쪽·67클릭, 시뮬 32단계) | 빼는 건 재배열, PM 경계 밖 | `선생님` |
-| **`SimNav` 에 「3/22」 진행률** | `TraceStepper.tsx` 공유 컴포넌트 — 168개 quest 가 쓴다 | `대기` |
-| **`AlgorithmTags` 링크가 같은 탭 이탈** | `AlgorithmTags.jsx:62`, 공유 컴포넌트 | `대기` |
-| **`checkups/chapters.jsx:247-249` 의 `~10ms`/`~10s`/`~hours`** | **잰 적 없는 숫자다** (auditor 부수 발견) | `대기` |
+| **`SimNav` 에 「3/22」 진행률** | `TraceStepper.tsx` 공유 컴포넌트 | `완료` (2026-09-25 `c0a524a9` — 버튼 옆 알약. **중복 63곳도 같이 정리**) |
+| **`AlgorithmTags` 링크가 같은 탭 이탈** | `AlgorithmTags.jsx:62` | `완료` (2026-09-25 — `target="_blank"`. ↗ 아이콘이 거짓말하고 있었다) |
+| **`checkups` 의 `~10ms`/`~10s`/`~hours`** | 잰 적 없는 숫자였다 | `완료` (2026-09-25 `b0f81848` — 실측 `~30ms`/`~30초`/`~3시간`) |
 
 마지막 건은 **이미 실측해 뒀다** — 브루트를 직접 돌려 `N³` 배율까지 확인했다
 (N=50 0.004초 · N=100 **0.027초** · N=200 0.214초, 두 배마다 8배 ✓).
@@ -4649,3 +4649,70 @@ pedagogy 가 후보 하나를 **스스로 기각**한 것도 옳았다 — 1쪽�
   관리자 화면에 **「C++ 검증됨」이라는 거짓 배지**가 떴다 → `["py"]` 고정.
 - **MCC 넷**(`xorstring`·`mcc21simplemath`·`subseqmedian`·`sumk`) — 학생이 C++ 을
   **아예 못 본다**(`client.tsx:303`). 코드가 있어도 「검증됨」이 안 보이는 경로를 가리키면 안 된다 → `["py"]`.
+
+---
+
+## 2026-09-25 — 목표 「모든 USACO 와 MCC」: 입출력 축 **완주**, 난이도 축 착수
+
+선생님(2026-09-25): ***"우리의 목표는 모든 USACO와 MCC라니까"*** ·
+***"앞으로 자리 비울거야. PM은 팀원들과 멈추는것 없이 일 진행"***
+
+### ✅ 입출력 형식 카드 — **69/69**
+커밋 여섯: `748a46a0`(19) `9c0b6bed`(6) `740e4042`(6) `22b04062`(12) `6fe6bdac`(6) `39134214`(15)
++ 재검사 `472f7cf8`(윗첨자 13곳).
+
+전부 `photoshoot25` 템플릿 하나로 고정. 제약은 **usaco.org 원문 인용**이고
+`public/problems/` 에 USACO PDF 는 **없다**(MCC 것만) — 조회 레시피는 `.claude/QUEUE.md` 에.
+
+**틀렸던 것 둘을 원문으로 잡았다:** `billboard` 10억 → **−1000~+1000** ·
+`lifeguards` 10억 → **0~1000**. 둘 다 「C++ 이 long long 을 쓰니까」식 추론이 원인이었다.
+⛔ **훈련 지식으로 숫자를 쓰지 마라. 원문에 없으면 「없다」고 말해라.**
+
+### 🚨 사고 하나 — `git stash` 로 quest 34개가 한 번에 사라졌다
+에이전트 여섯이 같은 작업 트리에서 병렬로 일하는 중에 하나가 `git stash` 를 돌렸다.
+**quest 34개의 미커밋 편집이 통째로 사라졌고**, `git stash pop` 으로 **충돌 0으로 전량 복구**했다.
+- 왜 문서로 안 끝냈나: `git stash` 는 **경로를 안 가린다.** 병렬 판에서는 그 사실 하나가
+  「내 작업 정리」를 「남의 작업 삭제」로 바꾼다. pre-commit·pre-push 는 **stash 를 못 본다**(커밋 사건이 아니다).
+- **걸쇠**: `.githooks/reference-transaction` (`f4a3cdc2`). stash **push 만** 거부, pop·drop 통과.
+  가르는 법 = **stash push 커밋은 첫 부모가 지금 HEAD 다.**
+  ⚠️ 첫 판은 「`refs/stash` 가 새로 생길 때만」으로 짰는데 **stash 가 이미 셋 쌓여 있어
+  그 조건이 거짓**이 되는 걸 회귀 테스트가 잡았다 — 정작 지금 상황을 안 막는 훅이었다.
+- 우회는 `CODERIN_ALLOW_STASH=1` 뿐. `frontend-engineer.md` 에 규칙을 배포했다.
+
+### ✅ 난이도 축 — 값을 채우기 **전에** 화면을 갈랐다 (`ffc7d842`)
+`questDifficulty()` → `{ value, source }`. 선생님 화면에서만 추정치를 **테두리만 있는 뱃지**로.
+- ⚠️ **`isTeacher` 로 가두면 선생님 본인이 못 본다** — `lib/effective-role.ts` 가 owner 를
+  **기본 학생 뷰**로 둔다. 그런데 *"이 문제가 진짜 레벨3인가?"* 를 물으신 화면이 그 화면이다.
+  → **원래 role** 로 갈랐다. 학생은 role 이 teacher 가 아니라 영향 0.
+- **검사기가 조용히 틀렸다**: `mcc-difficulty.ts` 는 한 줄에 여러 항목을 쓰는데 정규식이
+  줄 맨 앞만 세서 `word`·`reach`·`subseqmedian`·`mcc21simplemath` 가 **이미 감사됐는데도
+  「안 매김」**으로 보였다. ①19→48 ②44→43 ③86→62 ④26→**22**.
+- **남은 22개는 일부러 안 채웠다.** 난이도를 사람이 매긴 기록이 없어서,
+  유추값(Bronze=3)을 박으면 **안 매긴 값을 매긴 값으로 위장**하는 것이다.
+
+### ⏳ 도는 중 · 동결 quest CodeWalk 축
+
+### ✅ 동결 승인: rounding (2026-09-25) — 범위: 코드 설명을 CodeSectionView → CodeWalk 로. 보호 변수(SOLUTION_CODE·*_PY·*_CPP) byte-identical 유지
+### ✅ 동결 승인: moo (2026-09-25) — 범위: 코드 설명을 CodeSectionView → CodeWalk 로. 보호 변수 byte-identical 유지
+### ✅ 동결 승인: cheese (2026-09-25) — 범위: 코드 설명을 CodeSectionView → CodeWalk 로. 보호 변수 byte-identical 유지
+### ✅ 동결 승인: checkups (2026-09-25) — 범위: chapters.jsx 인라인 코드 섹션을 CodeWalk 로. components.jsx 의 🔒 prefix-sum 코드는 손대지 않는다
+
+근거 = 선생님(2026-09-24) ***"프로젝트 매니저가 다 결정할거야"*** + PM 판정.
+`check-frozen.py` 는 **파일이 아니라 보호 변수 diff** 를 막으므로, 코드 배열을 그대로 두고
+표시 컴포넌트만 감싸면 **USACO 재제출이 필요 없다**(quest 21개·46곳 전례).
+
+**교육 검토(독립) 결과 — 여섯 다 구조적 문제 없음.** 다만:
+- `cowphotos` 는 **이미 CodeWalk** — 할 일 없음(구식 함수는 죽은 경로에만 남아 있다).
+- `mooin3` 은 최종 코드 3개가 이미 CodeWalk. 남은 건 **한계 페이지 하나**라 범위 밖.
+- `moo` 는 `getMooWalk` 만 들어가고 **배선이 안 끝난 중간 상태** — 그대로면 죽은 코드다.
+- **한 beat 로 묶어야 하는 자리**: `checkups` `secExpand` if 4개 · `cheese` 카운터 3줄 ·
+  `rounding` C++ 헬퍼 19줄. **반대로 쪼개야 하는 자리**: `cheese` `CHEESE_LOOP_PY` 의 xy/yz/xz.
+
+### 🧹 안 한 것 — 적어 두지 않으면 「0건」이 거짓이 된다
+- 옛 quest 의 맨몸 윗첨자 **282건·quest 39개**(`checkups` 44 · `cheese` 34 · `hps` 28 ·
+  `rounding` 28 · `mooin3` 23 · `moo` 21 · `strangefn` 18 …). 대부분 `N²`·`O(...)` 복잡도 표기.
+- `app/admin/quests/page.tsx:264,327` 이 `m.difficulty` 를 **직접** 읽어
+  ④ 22개에 `DEFAULT_META` 의 **2** 를 그대로 띄운다(카탈로그는 안 그런다).
+- `/quest` **모바일에서 하단 네비가 체크 버튼 2개를 가린다** — 별건으로 띄웠다.
+- `quest-length-snapshot.json` 기준선 — 입출력 카드로 **69곳이 +1쪽**이 됐다.
+  ⏳ **에이전트가 다 끝난 뒤에** `--accept` 로 올린다(도는 중에 재면 중간 상태를 찍는다).
