@@ -398,6 +398,20 @@ export function QuestBottomNav({
         이 자리가 **JSX 자식 자리**가 됐고, `//` 주석은 JSX 안에서 주석이 아니라 **글자**라
         학생 화면에 그대로 찍혔다 — quest 180개 전부. 빌드는 이걸 못 잡는다(정상 문자열이니까).
         디자이너가 스크린샷에서 잡았다. JSX 자식 자리에 주석을 달 땐 중괄호로 감싸라. */}
+    {/* pointer-events 를 "투명한 유리" 로 — 실제 버튼 두 개에만 auto. (2026-09-25 PM 판정 + 실측 보강)
+        왜 — 이 바는 이전·다음 버튼 둘레에 **큰 빈 여백**이 있는데, 그 여백엔 onClick 이
+        없다. 그런데 fixed 라 그 여백 밑에 깔린 진짜 요소(복사 버튼 등)는 클릭 자체가
+        이 바로 먼저 잡혀서 **영영 눌리지 않았다** — 학생이 "아무 반응 없다" 고 한 그 자리.
+        바 높이·버튼 위치를 조정해도 안 없어진다(코드창 높이와 무관하게 재현됨).
+        ⚠️ PM 이 처음 지정한 「바깥 none + wrapper(min(880px,100%)) auto」만으로는
+        **부족했다** — 실측(playwright elementFromPoint)해 보니 wrapper 가 auto 라
+        모바일(375px)에선 wrapper 폭이 사실상 바 전체 폭과 같아서, 이전/이후 버튼
+        **사이 12px 틈**과 **버튼 바깥 좌우 여백(약 64px씩)** 이 여전히 죽어 있었다
+        (elementFromPoint 가 버튼이 아니라 그 틈의 flex-row `div` 를 돌려줌).
+        그래서 wrapper 와 버튼 행(row) 도 none 으로 내리고, **버튼 두 개에만** 직접
+        auto 를 줬다 — 유리를 버튼 크기까지 좁힌 것. 이제 진짜로 버튼이 아닌 모든
+        자리(위아래 패딩·좌우 여백·버튼 사이 틈)가 밑으로 통과한다.
+        quest 180개 전부에 적용되는 공유 컴포넌트라 한 곳만 고친다. */}
     <div className="quest-navbar" style={{
       position: "fixed", bottom: 0, left: 0, right: 0,
       background: C.bg,
@@ -405,8 +419,9 @@ export function QuestBottomNav({
       zIndex: 100,
       borderTop: `1px solid ${C.border}`,
       boxShadow: "0 -4px 12px rgba(0,0,0,.06)",
+      pointerEvents: "none",
     }}>
-      <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+      <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)", pointerEvents: "none" }}>
         {showAnswerHint && (
           <div style={{ textAlign: "center", fontSize: 11, color: C.dim, fontWeight: 600, marginBottom: 4 }}>
             {t(E,
@@ -414,13 +429,14 @@ export function QuestBottomNav({
               "💡 팁: 위에서 답해보면 좋아요. (그냥 넘어가도 OK — →)")}
           </div>
         )}
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center", pointerEvents: "none" }}>
           <button onClick={onPrev} disabled={prevDisabled} style={{
             background: prevDisabled ? "#e5e7eb" : C.card,
             border: `2px solid ${prevDisabled ? "#e5e7eb" : accent}`,
             borderRadius: 9, padding: "10px 24px", fontSize: 14, fontWeight: 800,
             cursor: prevDisabled ? "default" : "pointer",
             color: prevDisabled ? "#b0b5c3" : accent,
+            pointerEvents: "auto",
           }}>← {t(E, "Prev", "이전")}</button>
           <button onClick={onNext} disabled={!canNext} style={{
             background: !canNext ? "#e5e7eb" : accent,
@@ -428,6 +444,7 @@ export function QuestBottomNav({
             borderRadius: 9, padding: "10px 24px", fontSize: 14, fontWeight: 800,
             cursor: !canNext ? "default" : "pointer",
             color: !canNext ? "#b0b5c3" : "#fff",
+            pointerEvents: "auto",
           }}>{t(E, "Next", "다음")} →</button>
         </div>
       </div>
