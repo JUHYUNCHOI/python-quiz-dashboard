@@ -70,7 +70,11 @@ def required_map(meta_src: str) -> dict[str, list[str]]:
         m = re.match(r"^  ([A-Za-z][\w]*):\s*\{", line)
         if m:
             cur = m.group(1)
-            continue
+            # ⚠️ 2026-09-25: 여기서 `continue` 만 하고 있었다 — 그래서
+            #    `  word: { ...DEFAULT_META, concepts_required: [...] },` 처럼
+            #    **한 줄짜리 엔트리를 통째로 못 읽었다.** 이름만 잡고 그 줄을 버린 것이다.
+            #    한 줄 엔트리는 이 저장소에서 흔한 모양이라 그대로 뒀으면
+            #    「채웠는데 검사기는 안 채웠다고 하는」 상태가 계속됐다. 같은 줄도 본다.
         if cur:
             r = re.search(r"concepts_required:\s*\[([^\]]*)\]", line)
             if r:

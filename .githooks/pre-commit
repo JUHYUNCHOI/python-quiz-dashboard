@@ -36,4 +36,29 @@ if [ $frozen_status -ne 0 ]; then
 fi
 
 python3 scripts/check-quest-polish-budget.py --staged
-exit $?
+budget_status=$?
+if [ $budget_status -ne 0 ]; then
+  exit $budget_status
+fi
+
+# ── ③ check-required-vs-code.py — **지금은 경고만, 아직 안 막는다** ─────────
+# quest 코드가 쓰는 선수개념과 `lib/quest-meta.ts` 의 `concepts_required` 가 어긋나나.
+#
+# 왜 (2026-09-25): `mooin3` 이 `chr(c+97)` 를 쓰는데 required 는 `["loop","string-basics"]`
+# 뿐이었다. 그 값은 장식이 아니라 `isReady()`·`readyQuests()`·`QuestCompletionCard` 가
+# 읽어서 **「지금 풀 준비됨」을 띄운다** — 즉 **준비 안 된 학생에게 그 문제를 추천했다.**
+# 학생은 그 코드 쪽에서 "완전히 막혔다" 고 했다. 실측하니 같은 자리가 **23곳**이었다.
+#
+# ⚠️ **왜 exit 코드를 안 쓰나(경고만 하나)** — PM 판정(2026-09-25):
+#   "지금 하드 블록으로 걸면 이미 알려진 어긋남 때문에 **무관한 커밋까지 막힌다.**"
+#   지금은 0곳으로 만들어 뒀으니, 다시 늘면 여기 경고가 먼저 보인다.
+#   **0곳이 한동안 유지되면 그때 하드 블록으로 올린다.** 그 전엔 사람이 읽고 판단한다.
+#   (`check-frozen.py` 가 「안 걸려 있어서」 사고가 났던 것과 같은 자리라 일단 건다.)
+python3 scripts/check-required-vs-code.py >/dev/null 2>&1 || {
+  echo ""
+  echo "⚠️  선수개념 대조에 걸린 게 있다 (경고 — 커밋은 막지 않는다)"
+  echo "    python3 scripts/check-required-vs-code.py 로 확인해라."
+  echo "    빠진 값은 «준비 안 된 학생에게 이 quest 를 추천한다» 는 뜻이다."
+}
+
+exit 0

@@ -44,8 +44,19 @@ export type ReleaseStage = "internal" | "beta" | "full";
 
 export interface QuestConceptMeta {
   type: QuestTemplateType;
+  // ⚠️ 2026-09-25: 원래 `string[]` 이었다. 그래서 `letter-index-table` 처럼
+  //    **온톨로지에 없는 이름**이 들어가도 아무도 안 잡았다 — `getConceptGraph()` 는
+  //    모르는 문자열을 **조용히 새 노드로** 만든다.
+  //    `ConceptId[]` 로 좁히면 에디터가 빨간 줄을 준다.
+  //    ⚠️ **다만 이게 게이트는 아니다** — `next.config` 가 `ignoreBuildErrors: true` 고
+  //       `tsc` 를 도는 훅도 없어서 **커밋·푸시·배포 어디서도 안 걸린다.**
+  //       진짜 방어선은 `scripts/check-required-vs-code.py` 다. 둘 다 있어야 한다.
+  // ⚠️ `concepts_taught` 는 **일부러 아직 안 좁혔다.** 좁혀 보니 타입 에러 **139개** —
+  //    등록 안 된 이름이 **72종**이나 있다(`precompute-table`·`digit-dp`·`3d-grid`…).
+  //    「비용 0」이라던 예상과 달랐다. 그 72종을 온톨로지에 올릴지 기존 이름으로 합칠지는
+  //    하나씩 사람이 봐야 하는 일이라 별건으로 뗀다. `concepts_required` 는 **에러 0개**였다.
   concepts_taught: string[];
-  concepts_required: string[];
+  concepts_required: ConceptId[];
   /** 1 (easiest) .. 5 (hardest), Bronze-relative. */
   difficulty: 1 | 2 | 3 | 4 | 5;
   /** Which languages have a verified, runnable solution. */
@@ -98,7 +109,7 @@ export const CONCEPT_ONTOLOGY = {
   "string-basics": "string indexing, length",
   "dict-basics": "Python dict / C++ map (cpp-16 only)",
   "set-basics": "Python set / C++ set for dedup membership",
-  "math-basics": "+, -, *, %, abs",
+  "math-basics": "+, -, *, %, abs, min, max",
   "io-basics": "input + output",
 
   // Counting & lookups
@@ -126,6 +137,9 @@ export const CONCEPT_ONTOLOGY = {
   "subset-enum": "enumerate all subsets of N items",
   "combination-count": "C(N, k) counting",
   "tuple-enum": "iterate over all 2-tuples / 3-tuples",
+  // ⚠️ 위 `tuple-enum` 과 헷갈리지 마라 — 그건 **조합을 열거**하는 것이고,
+  //    이건 그냥 `(start, end)` 를 한 덩어리로 묶어 정렬 키로 쓰는 것이다. (2026-09-25)
+  "tuple-basics": "store a pair as one value, e.g. (a, b)",
 
   // Strings
   "string-indexing": "char-by-char access with []",
@@ -198,7 +212,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   moohunt: {
     type: "brute-force",
     concepts_taught: ["precompute-table", "enumerate-all-states"],
-    concepts_required: ["loop", "vector-basics", "dictionary"],
+    concepts_required: ["loop", "vector-basics", "dict-basics", "3d-plus-indexing", "bit-ops"],
     difficulty: 4,
     supported_languages: ["py", "cpp"],
   },
@@ -247,7 +261,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   hps: {
     type: "brute-force",
     concepts_taught: ["exhaustive-pair", "string-indexing"],
-    concepts_required: ["loop", "string-basics", "vector-basics"],
+    concepts_required: ["loop", "string-basics", "vector-basics", "2d-list-build", "bit-ops"],
     difficulty: 2,
     supported_languages: ["py", "cpp"],
     // Phase 1: deferred CI runner — verified vs USACO Open 2025 Bronze #1.
@@ -437,7 +451,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   cheese: {
     type: "brute-force",
     concepts_taught: ["3d-grid", "incremental-update", "axis-row-counting"],
-    concepts_required: ["loop", "list-basics", "2d-list"],
+    concepts_required: ["loop", "list-basics", "2d-list-build", "2d-list-build", "3d-plus-indexing", "nested-comprehension"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -593,7 +607,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   walkfence: {
     type: "brute-force",
     concepts_taught: ["perimeter-walk", "axis-aligned-segment", "min-of-two-arcs"],
-    concepts_required: ["loop", "list-basics", "function-basics"],
+    concepts_required: ["loop", "list-basics", "function-basics", "2d-list-build", "nested-comprehension"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -653,7 +667,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   astral: {
     type: "brute-force",
     concepts_taught: ["chain-walk", "dp-on-chain", "case-analysis"],
-    concepts_required: ["loop", "list-basics", "function-basics"],
+    concepts_required: ["loop", "list-basics", "function-basics", "2d-list-build"],
     difficulty: 4,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -879,7 +893,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   printseq: {
     type: "brute-force",
     concepts_taught: ["recursion", "memoization", "divide-and-conquer"],
-    concepts_required: ["function-basics", "list-basics"],
+    concepts_required: ["function-basics", "list-basics", "2d-list-build", "3d-plus-indexing"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -1402,7 +1416,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   stampgrid: {
     type: "brute-force",
     concepts_taught: ["grid-rotation", "stamp-placement", "pixel-coverage", "multi-test"],
-    concepts_required: ["loop", "list-basics", "string-basics"],
+    concepts_required: ["loop", "list-basics", "string-basics", "2d-list-build", "nested-comprehension"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -1463,7 +1477,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   aircond: {
     type: "brute-force",
     concepts_taught: ["bitmask-subset", "interval-coverage", "min-cost"],
-    concepts_required: ["loop", "list-basics", "tuple-basics"],
+    concepts_required: ["loop", "list-basics", "tuple-basics", "bit-ops"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -1553,7 +1567,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   candycane: {
     type: "simulation",
     concepts_taught: ["per-cane-eat-simulation", "height-doubling-growth"],
-    concepts_required: ["loop", "list-basics", "min-max"],
+    concepts_required: ["loop", "list-basics", "math-basics"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -1591,7 +1605,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   hungrycow: {
     type: "simulation",
     concepts_taught: ["sort-events", "stock-simulation", "delivery-gaps"],
-    concepts_required: ["loop", "list-basics", "tuple-basics", "sort"],
+    concepts_required: ["loop", "list-basics", "tuple-basics", "sort-basics"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -1624,7 +1638,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   mooloo: {
     type: "algorithm-reveal",
     concepts_taught: ["sort-then-greedy", "subscription-window"],
-    concepts_required: ["loop", "list-basics", "sort"],
+    concepts_required: ["loop", "list-basics", "sort-basics"],
     difficulty: 2,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -1772,7 +1786,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   feb23: {
     type: "brute-force",
     concepts_taught: ["bitmask-enum", "string-mutation", "set-of-results"],
-    concepts_required: ["loop", "list-basics", "string-basics", "set-basics"],
+    concepts_required: ["loop", "list-basics", "string-basics", "set-basics", "bit-ops"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -1867,6 +1881,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   },
   alchemy: {
     ...DEFAULT_META,
+    concepts_required: ["2d-list-build"], /* ⚠️ 미감사 */
     type: "brute-force",
     supported_languages: ["py", "cpp"],
     // Rewritten 2026-06-15 → real USACO 2022 Open Bronze #3 (cpid 1229).
@@ -1919,10 +1934,10 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // quest-problems/reverseeng/components.jsx (py + cpp). Both verified locally vs the
   // official sample (OK/OK/LIE/LIE). Kept single-line here so the validate-solutions.mjs
   // extractor (which only cleanly parses isolated multi-line blocks) is unperturbed.
-  reverseeng:   { ...DEFAULT_META, supported_languages: ["py", "cpp"] },
+  reverseeng:   { ...DEFAULT_META, concepts_required: ["3d-plus-indexing"], /* ⚠️ 미감사 */ supported_languages: ["py", "cpp"] },
   socialdist2:  { ...DEFAULT_META, supported_languages: ["py"] },
   stuckinrut:   { ...DEFAULT_META, supported_languages: ["py"] },
-  subseqmedian: { ...DEFAULT_META, supported_languages: ["py"] },
+  subseqmedian: { ...DEFAULT_META, concepts_required: ["fenwick-tree"], /* ⚠️ 미감사 */ supported_languages: ["py"] },
   tameherd:     { ...DEFAULT_META, supported_languages: ["py"] },
 
   // ─── py-cpp-mismatch quests — both run but disagree ──────────
@@ -1930,7 +1945,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // trustworthy path so the language picker / curriculum graph
   // doesn't recommend C++ for these.
   acowdemia1:    { ...DEFAULT_META, type: "brute-force",       supported_languages: ["py"] },
-  acowdemia2:    { ...DEFAULT_META, type: "pattern-discovery", supported_languages: ["py"] },
+  acowdemia2:    { ...DEFAULT_META, concepts_required: ["2d-list-build"], /* ⚠️ 미감사 */ type: "pattern-discovery", supported_languages: ["py"] },
   acowdemia3:    { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
   billboard2: {
     ...DEFAULT_META,
@@ -1988,7 +2003,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   bacteria: {
     type: "algorithm-reveal",
     concepts_taught: ["second-order-difference", "operation-cost-as-l1-sum"],
-    concepts_required: ["loop", "list-basics", "abs"],
+    concepts_required: ["loop", "list-basics", "math-basics"],
     difficulty: 3,
     supported_languages: ["py", "cpp"],
     validate_io: [
@@ -2021,7 +2036,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // 2026-09-10: type 이 "brute-force" 였는데 이 문제의 풀이는 DP + 이항정리다 — 브루트가 아니다.
   // difficulty 도 2 였는데 학생 화면에 뜨는 값(lib/mcc-difficulty.ts:48)은 5 다. 초6 학생이
   // 4쪽에서 그만뒀다("이건 초6이 풀 수 있는 문제가 아니었다"). 5 로 맞춘다.
-  sumk:      { ...DEFAULT_META, type: "algorithm-reveal", difficulty: 5 },
+  sumk:      { ...DEFAULT_META, concepts_required: ["pascal-triangle-dp"], /* ⚠️ 미감사 */ type: "algorithm-reveal", difficulty: 5 },
 };
 
 export function getQuestMeta(id: string): QuestConceptMeta {
@@ -2081,5 +2096,25 @@ export function getMetaCoverageStats() {
     conceptsUsed: conceptsUsed.size,
     totalConceptsInOntology: Object.keys(CONCEPT_ONTOLOGY).length,
     solutionVerified,
+
+  // ─── ⚠️ 미감사 — `concepts_required` **만** 채운 엔트리 (2026-09-25) ───────
+  // 왜: 이 아홉은 엔트리가 아예 없어 `concepts_required` 가 **빈 배열**이었다.
+  //   그런데 `lib/concept-graph.ts:97` 의 `required.every(...)` 는 **빈 배열에서 항상 true** 다.
+  //   즉 시스템이 이 quest 들을 **아무에게나 「지금 풀 준비됨」으로 추천**하고 있었다 —
+  //   `mooin3` 이 학생을 막히게 한 것과 **정확히 같은 경로**다. 그래서 값부터 급히 채운다.
+  // ⚠️ **반쪽이다.** `type`·`difficulty`·`concepts_taught` 는 여전히 `DEFAULT_META` 기본값이고
+  //   **아무도 감사한 적이 없다.** 채워져 있다고 검토된 값으로 읽지 마라 —
+  //   2026-09-13 에 「유추한 난이도가 매긴 값처럼 보인」 사고가 정확히 그 모양이었다.
+  //   값의 출처: `scripts/check-required-vs-code.py` 가 **코드에서 실제로 검출**한 것.
+  //   진짜 감사(네 필드 다)는 quest-auditor 몫으로 남아 있다.
+  strangefn:       { ...DEFAULT_META, concepts_required: ["modular-inverse"] },
+  buymilk:         { ...DEFAULT_META, concepts_required: ["bit-ops"] },
+  photoshoot25:    { ...DEFAULT_META, concepts_required: ["2d-list-build"] },
+  walkhome:        { ...DEFAULT_META, concepts_required: ["3d-plus-indexing", "nested-comprehension"] },
+  teamttt:         { ...DEFAULT_META, concepts_required: ["3d-plus-indexing"] },
+  blockgame:       { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"] },
+  word:            { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"] },
+  xorstring:       { ...DEFAULT_META, concepts_required: ["modular-inverse", "bit-ops"] },
+  mcc21simplemath: { ...DEFAULT_META, concepts_required: ["bit-ops"] },
   };
 }
