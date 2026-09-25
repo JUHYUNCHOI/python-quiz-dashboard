@@ -93,10 +93,41 @@ const ALWAYS_MASTERED = new Set([
   "set-basics", "math-basics", "sort-basics", "tuple-basics", "vector-basics",
 ]);
 
-export function masteredConcepts(completedQuestIds: Iterable<string>): Set<string> {
+/**
+ * ⚠️ 2026-09-25 — **레슨이 가르치는 개념. quest 의 `concepts_taught` 와는 별도 축이다.**
+ *
+ * 레슨 콘텐츠 파일(`data/lesson*.ts`·`data/cpp/lesson*.ts`)에는 `concepts_taught` 같은
+ * 필드가 **아예 없다**(grep 0건, 2026-09-25 확인). 그래서 quest 를 하나도 안 풀고
+ * 레슨만 끝낸 학생에게는 `masteredConcepts()` 가 그 레슨이 가르친 걸 **전혀 몰랐다** —
+ * `photoshoot25`·`astral`·`acowdemia2`·`alchemy` 처럼 `2d-list-build` 를 요구하는 quest 가
+ * 레슨 53(파이썬 2차원 리스트)을 막 끝낸 학생에게도 「지금 풀 준비됨」이 안 떴다.
+ *
+ * 키는 `completedLessons` localStorage 에 저장되는 **문자열 lesson id 그대로**다
+ * (`lib/mark-lesson-complete.ts` 의 `String(lessonId)` 표기와 동일 — "53" 처럼).
+ *
+ * ⛔ **스치듯 언급한 것만 있고 학생이 직접 써 본 적 없는 문법은 넣지 마라.**
+ * 이 칸을 만들게 한 `chr-ord-conversion` 사고(위 `ALWAYS_MASTERED` 주석)와 같은 실수를
+ * 여기서도 반복할 수 있다 — 넣기 전에 그 레슨에 **학생이 직접 그 문법을 쓰는 tryit/mission**이
+ * 있는지 확인해라.
+ */
+const LESSON_TAUGHT_CONCEPTS: Record<string, string[]> = {
+  // 레슨 53 (파이썬 2차원 리스트): Ch1~3 이 만들기·순회를 가르치고(2d-list-build),
+  // Ch4 "통째로 바꾸기" 가 `[[v*2 for v in row] for row in students]` 이중 컴프리헨션을
+  // 뜯어서 설명(explain-comprehension-parts)한 뒤 tryit(try-nested-comprehension)에서
+  // 학생이 직접 그 문법으로 빈칸을 채운다 → nested-comprehension 도 같이 넣는다.
+  "53": ["2d-list-build", "nested-comprehension"],
+};
+
+export function masteredConcepts(
+  completedQuestIds: Iterable<string>,
+  completedLessonIds: Iterable<string> = []
+): Set<string> {
   const acc = new Set<string>(ALWAYS_MASTERED);
   for (const id of completedQuestIds) {
     for (const c of getQuestMeta(id).concepts_taught) acc.add(c);
+  }
+  for (const id of completedLessonIds) {
+    for (const c of LESSON_TAUGHT_CONCEPTS[id] ?? []) acc.add(c);
   }
   return acc;
 }
@@ -112,10 +143,11 @@ export function masteredConcepts(completedQuestIds: Iterable<string>): Set<strin
  */
 export function readyQuests(
   completedQuestIds: Iterable<string>,
-  candidateQuestIds: Iterable<string>
+  candidateQuestIds: Iterable<string>,
+  completedLessonIds: Iterable<string> = []
 ): string[] {
   const completed = new Set(completedQuestIds);
-  const mastered = masteredConcepts(completed);
+  const mastered = masteredConcepts(completed, completedLessonIds);
   const out: string[] = [];
   for (const qid of candidateQuestIds) {
     if (completed.has(qid)) continue;
@@ -144,10 +176,11 @@ export interface NextConceptSuggestion {
 export function suggestNextConcepts(
   completedQuestIds: Iterable<string>,
   candidateQuestIds: Iterable<string>,
-  limit = 5
+  limit = 5,
+  completedLessonIds: Iterable<string> = []
 ): NextConceptSuggestion[] {
   const completed = new Set(completedQuestIds);
-  const mastered = masteredConcepts(completed);
+  const mastered = masteredConcepts(completed, completedLessonIds);
   const candidates = [...candidateQuestIds].filter(q => !completed.has(q));
 
   // For each unmet concept, count how many candidate quests it blocks

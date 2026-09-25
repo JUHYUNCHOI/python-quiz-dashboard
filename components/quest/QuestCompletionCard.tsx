@@ -45,10 +45,27 @@ function useSolvedSet(): Set<string> {
   return set;
 }
 
+const LESSONS_KEY = "completedLessons";
+
+/** Load completed lesson IDs — 레슨이 가르친 개념도 추천에 반영하기 위함(2026-09-25). */
+function useCompletedLessonIds(): Set<string> {
+  const [set, setSet] = useState<Set<string>>(() => new Set());
+  useEffect(() => {
+    try {
+      const arr = JSON.parse(localStorage.getItem(LESSONS_KEY) || "[]") as (string | number)[];
+      setSet(new Set(arr.map(id => String(id))));
+    } catch {
+      // localStorage may be unavailable (private mode); keep empty set
+    }
+  }, []);
+  return set;
+}
+
 const MAX_RECOMMENDATIONS = 4;
 
 export function QuestCompletionCard({ questId, solved, isEn = false }: Props) {
   const solvedSet = useSolvedSet();
+  const completedLessonIds = useCompletedLessonIds();
   if (!solved) return null;
   const meta = getQuestMeta(questId);
   const taught = meta.concepts_taught;
@@ -57,7 +74,7 @@ export function QuestCompletionCard({ questId, solved, isEn = false }: Props) {
   // updating its set in the same render).
   const completed = new Set(solvedSet);
   completed.add(questId);
-  const mastered = masteredConcepts(completed);
+  const mastered = masteredConcepts(completed, completedLessonIds);
 
   // Recommendations: quests not yet solved, prereqs satisfied, AND
   // they share at least one required concept with what we just

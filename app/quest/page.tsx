@@ -270,6 +270,9 @@ export default function QuestPage() {
   const [loaded, setLoaded] = useState(false)
   const [algoTopicsDone, setAlgoTopicsDone] = useState(0)
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
+  // 「지금 풀 준비됨」 배지가 레슨이 가르친 개념도 보게 한다 (2026-09-25).
+  // quest 를 하나도 안 풀고 레슨만 끝낸 학생도 대상이라 solvedSet 과 별도로 읽는다.
+  const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(new Set())
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["USACO", "MCC", "MCO"]))
   /* 난이도 필터 — **섹션마다 따로** 기억한다 (2026-09-07).
      전엔 변수 하나(mccDiff)를 USACO·MCC·MCO 가 같이 썼다. 칩 줄은 섹션 안에 따로 그려져서
@@ -288,7 +291,7 @@ export default function QuestPage() {
   // Phase 6: "ready to try" — required concepts all covered by completed
   // quests. Quests with no curated prereqs are NOT marked ready (they
   // could be anything, so silence is safer than a false promise).
-  const mastered = masteredConcepts(solvedSet)
+  const mastered = masteredConcepts(solvedSet, completedLessonIds)
   const isReady = (id: string): boolean => {
     if (solvedSet.has(id)) return false
     const reqs = getQuestMeta(id).concepts_required
@@ -299,7 +302,7 @@ export default function QuestPage() {
   // Phase 7: top concept that, once mastered, would unlock the most
   // currently-locked quests. Only shown when there's a clear winner.
   const allCandidateIds = SECTIONS.flatMap(s => s.problems.map(p => p.id))
-  const studyHints = suggestNextConcepts(solvedSet, allCandidateIds, 1)
+  const studyHints = suggestNextConcepts(solvedSet, allCandidateIds, 1, completedLessonIds)
   const studyHint = studyHints[0]
 
   useEffect(() => {
@@ -309,6 +312,7 @@ export default function QuestPage() {
       const completed = JSON.parse(localStorage.getItem("completedLessons") || "[]") as string[]
       const topicsDone = completed.filter(id => typeof id === "string" && id.startsWith("algo-")).length
       setAlgoTopicsDone(topicsDone)
+      setCompletedLessonIds(new Set(completed.map(id => String(id))))
     } catch { /* ignore */ }
 
     // Load quest solved problems
