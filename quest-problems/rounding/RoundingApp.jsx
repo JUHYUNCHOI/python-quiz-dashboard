@@ -7,10 +7,11 @@ import {
   RecapDrawer,
 } from "./components";
 import {
-  makeCh1, makePatternSteps, makeBruteSteps, makeOptSteps, getOptSections,
+  makeCh1, makePatternSteps, makeBruteSteps, makeOptSteps, getOptSections, getRoundingOptWalk,
 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = C.accent;
 
@@ -148,6 +149,7 @@ export default function RoundingApp(props = {}) {
     if (step.type === "interval-sim") return <IntervalSim E={E} />;
     if (step.type === "progressive") return <ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={step.section} />;
+    if (step.type === "opt-codewalk") return <CodeWalk E={E} lang={codeLang} {...getRoundingOptWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -162,6 +164,7 @@ export default function RoundingApp(props = {}) {
     if (s.type === "interval-sim") return <IntervalSim E={E} />;
     if (s.type === "progressive") return <ProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={s.section} />;
+    if (s.type === "opt-codewalk") return <CodeWalk E={E} lang={codeLang} {...getRoundingOptWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

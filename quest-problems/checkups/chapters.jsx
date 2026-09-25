@@ -7,6 +7,7 @@ import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from ".
 //    되살릴 일이 생기면 `git show HEAD:quest-problems/checkups/sims.jsx` 에 그대로 있다.
 import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsTrySim, CheckupsReuseSim, CheckupsEnumSim, CheckupsFinalCodeSim, CheckupsWindowSplitSim, CheckupsWindowRecapSim, CheckupsOutPrefixSim, CheckupsInPrefixSim, CheckupsExpandSim, CheckupsPairCountCard, CheckupsMirrorFormulaCard } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
 //  1-1 이 CheckupsIntroSim 으로, 1-5 가 삭제되며 더 안 쓰여서 제거함.)
@@ -415,6 +416,67 @@ export function makeCheckupsCh3(E, lang = "py") {
    center-expansion O(N²) 코드: baseMatches → expand(두 끝만) → 모든 중심 → 전체.
    (코드는 이 파일에 인라인 정의; components.jsx 의 옛 prefix 코드는 미사용.)
    ════════════════════════════════════════════════════════════════════ */
+
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest
+   코드 이 방식). ⚠️ secFull(makeCheckupsCh4 안에서 그대로 조립한 배열)을 그대로 넘겨받아
+   쓰기만 한다 — 새 알고리즘 내용을 추가하지 않는다. ── */
+function getCheckupsExpandWalk(E, lang, secFull) {
+  const vars = [
+    { v: "matches", ko: "지금 구간에서 맞는 자리 수", en: "matches in the current interval" },
+    { v: "baseMatches", ko: "안 뒤집었을 때 맞는 자리 수", en: "matches with no flip at all" },
+    { v: "answer[k]", ko: "검진 수가 k 인 구간 개수", en: "how many intervals have checkup count k" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: secFull.cpp,
+      vars,
+      beats: [
+        { hi: [0, 7], bubble: t(E,
+          "expand widens a window outward from (left, right), one step at a time, starting from matches = baseMatches.",
+          "expand 는 (left, right) 에서 바깥으로 한 칸씩 창을 넓혀요. matches 는 baseMatches 에서 시작해요.") },
+        { hi: [8, 11], bubble: t(E,
+          "Each widen touches only 2 new spots — the two ends. Before the flip, left and right matched in place, so subtract those (−). After the flip, left lines up with the far want, and right with the near want — add those if they now match (+).",
+          "왜 딱 이 두 자리만 고치면 될까요? 이전 구간과 다른 건 새로 들어온 양 끝뿐이거든요. 뒤집기 전엔 left, right 가 제자리로 맞았으니 그걸 빼요(−).\n뒤집은 뒤엔 left 가 반대쪽 want 와, right 가 반대쪽 want 와 비교돼요 — 맞으면 더해요(+).") },
+        { hi: [12, 16], bubble: t(E,
+          "Record this interval's checkup count, then step outward for the next-bigger interval around the same center.",
+          "이 구간의 검진 수를 기록하고, 같은 중심을 기준으로 한 칸씩 더 넓은 구간으로 넘어가요.") },
+        { hi: [18, 26], bubble: t(E,
+          "Read N, cow, want, and count baseMatches — the checkup count with no flip at all. Every interval's count starts from here.",
+          "N, cow, want 를 읽고, baseMatches(안 뒤집었을 때 맞는 수)를 세요. 모든 구간의 검진 수는 여기서 출발해요.") },
+        { hi: [28, 32], bubble: t(E,
+          "Every interval has exactly one center: odd-length ones at (i, i), even-length ones at (i, i+1). Widen from both, for every i, and every interval gets counted exactly once.",
+          "모든 구간엔 중심이 딱 하나 있어요 — 길이가 홀수면 (i, i), 짝수면 (i, i+1) 이에요.\ni 마다 두 중심에서 넓히면 모든 구간을 정확히 한 번씩 세요.") },
+        { hi: [34, 35], bubble: t(E,
+          "Print answer[k] for every k — how many intervals need exactly k checkups.",
+          "k 마다 answer[k] 를 출력해요 — 검진이 정확히 k 번 필요한 구간이 몇 개인지예요.") },
+      ],
+    };
+  }
+  return {
+    code: secFull.py,
+    vars,
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "expand widens a window outward from (left, right), one step at a time, starting from matches = baseMatches.",
+        "expand 는 (left, right) 에서 바깥으로 한 칸씩 창을 넓혀요. matches 는 baseMatches 에서 시작해요.") },
+      { hi: [6, 9], bubble: t(E,
+        "Each widen touches only 2 new spots — the two ends. Before the flip, left and right matched in place, so subtract those (−). After the flip, left lines up with the far want, and right with the near want — add those if they now match (+).",
+        "왜 딱 이 두 자리만 고치면 될까요? 이전 구간과 다른 건 새로 들어온 양 끝뿐이거든요. 뒤집기 전엔 left, right 가 제자리로 맞았으니 그걸 빼요(−).\n뒤집은 뒤엔 left 가 반대쪽 want 와, right 가 반대쪽 want 와 비교돼요 — 맞으면 더해요(+).") },
+      { hi: [10, 12], bubble: t(E,
+        "Record this interval's checkup count, then step outward for the next-bigger interval around the same center.",
+        "이 구간의 검진 수를 기록하고, 같은 중심을 기준으로 한 칸씩 더 넓은 구간으로 넘어가요.") },
+      { hi: [14, 19], bubble: t(E,
+        "Read N, cow, want, and count baseMatches — the checkup count with no flip at all. Every interval's count starts from here.",
+        "N, cow, want 를 읽고, baseMatches(안 뒤집었을 때 맞는 수)를 세요. 모든 구간의 검진 수는 여기서 출발해요.") },
+      { hi: [21, 23], bubble: t(E,
+        "Every interval has exactly one center: odd-length ones at (i, i), even-length ones at (i, i+1). Widen from both, for every i, and every interval gets counted exactly once.",
+        "모든 구간엔 중심이 딱 하나 있어요 — 길이가 홀수면 (i, i), 짝수면 (i, i+1) 이에요.\ni 마다 두 중심에서 넓히면 모든 구간을 정확히 한 번씩 세요.") },
+      { hi: [25, 25], bubble: t(E,
+        "Print answer[k] for every k — how many intervals need exactly k checkups.",
+        "k 마다 answer[k] 를 출력해요 — 검진이 정확히 k 번 필요한 구간이 몇 개인지예요.") },
+    ],
+  };
+}
 export function makeCheckupsCh4(E, lang = "py") {
   // center-expansion 코드 (선생님 검증). 코드 조각을 chapters.jsx 안에 인라인으로 정의 →
   // CodeSectionView 로 렌더 (🔒 components.jsx 의 옛 prefix 코드는 안 건드림). 선생님 2026-07-02.
@@ -567,14 +629,10 @@ export function makeCheckupsCh4(E, lang = "py") {
   );
 
   return [
-    { type: "reveal", narr: t(E, "First — the starting count (no flip).", "먼저 출발점부터 봐요. 안 뒤집었을 때의 검진 수예요."),
-      content: (<CodeSectionView section={secBase} lang={lang} E={E} />) },
-    { type: "reveal", narr: t(E, "The heart: expand — touch only the two ends.", "가장 중요한 건 expand 예요. 두 끝만 건드려요."),
-      content: (<CodeSectionView section={secExpand} lang={lang} E={E} />) },
-    { type: "reveal", narr: t(E, "Run every center, then print.", "모든 중심을 돌고 나서 출력해요."),
-      content: (<CodeSectionView section={secMain} lang={lang} E={E} />) },
-    { type: "reveal", narr: t(E, "All pieces in one program.", "조각들을 한 코드로 모아 봐요."),
-      content: (<CodeSectionView section={secFull} lang={lang} E={E} />) },
+    { type: "reveal", narr: t(E,
+        "The center-expansion solution, start to finish — toggle Python ↔ C++ via the header.",
+        "가운데서 넓히는 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
+      content: (<CodeWalk E={E} lang={lang} {...getCheckupsExpandWalk(E, lang, secFull)} accent="#15803d" />) },
     /* (복잡도 퀴즈 제거 — Big-O 고르기는 중1엔 추상적. 언어노트가 구체 시간으로 대신 설명. 선생님 2026-07-02.) */
 
     /* 4-끝 — 언어 선택: 이 문제는 O(N²)라 C++로. Python 은 큰 N 에서 TLE (선생님 2026-07-02). */

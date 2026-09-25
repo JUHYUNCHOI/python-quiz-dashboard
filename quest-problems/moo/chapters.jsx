@@ -1,6 +1,5 @@
 import { C, t } from "@/components/quest/theme";
 import { MiniCode } from "./helpers";
-import { getMooSections, getMooBruteSections } from "./components";
 
 export { isMoo, findAllMoos, bruteSolve } from "./helpers";
 
@@ -232,16 +231,13 @@ export function makeMooCh3(E) {
         </div>
       </div>),
     },
-    // 브루트 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
-    ...getMooBruteSections(E).map((sec, i, arr) => ({
-      type: "code-section",
-      narr: i === 0
-        ? t(E,
-            `Brute force code — walk through ${arr.length} parts. Notice how the inner loop calls count_all 26N times — that's the TLE source.`,
-            `브루트포스 코드예요 — ${arr.length} 부분으로 나눠서 따라가요. 안쪽 반복이 count_all 을 26N 번 부르는 게 TLE 원인이에요.`)
-        : "",
-      section: sec,
-    })),
+    // 브루트 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+    {
+      type: "moo-brute-walk",
+      narr: t(E,
+        "Brute force code — notice how the inner loop calls count_all 26N times. That's the TLE source.",
+        "브루트포스 코드예요 — 안쪽 반복이 count_all 을 26N 번 부르는 게 TLE 원인이에요."),
+    },
     { type: "reveal",
       narr: t(E, "104 seconds!\n😱 But remember from the simulator — changing 1 letter only affects 3 windows, not N.\nThere MUST be a better way!", "104초예요. 더 좋은 방법이 있을 거예요."),
       content: (<div style={{ fontSize: 13, textAlign: "center", padding: 8 }}>
@@ -489,16 +485,13 @@ export function makeMooCh5(E, lang = "py") {
         <div style={{ marginTop: 8, fontSize: 12, color: C.accent, fontWeight: 700, textAlign: "center" }}>+1 → check → -1 = {t(E, "clean state for next trial!", "다음 시도를 위한 깨끗한 상태!")} ✨</div>
       </div>),
     },
-    // 메인 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
-    ...getMooSections(E).map((sec, i, arr) => ({
-      type: "code-section",
-      narr: i === 0
-        ? t(E,
-            `Walk through the smart solution one part at a time (${arr.length} pages). Toggle Python ↔ C++ via the header. Save as PDF for later.`,
-            `제일 좋은 풀이를 한 부분씩 따라가요 (총 ${arr.length} 페이지). 위 헤더에서 Python ↔ C++ 을 바꿔 볼 수 있어요. PDF 로 저장할 수도 있어요.`)
-        : "",
-      section: sec,
-    })),
+    // 메인 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+    {
+      type: "moo-walk",
+      narr: t(E,
+        "The smart solution, start to finish — toggle Python ↔ C++ via the header.",
+        "제일 좋은 풀이를 처음부터 끝까지 봐요 — 위 헤더에서 Python ↔ C++ 을 바꿀 수 있어요."),
+    },
     // 5-NEW: 왜 sorted(result) + distinct
     { type: "reveal",
       narr: lang === "cpp"

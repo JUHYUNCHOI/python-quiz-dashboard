@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 import { Ch1PRecap, RecapDrawer } from "./components";
 
 /* ================================================================
@@ -1528,6 +1529,65 @@ export function getOptSections(E) {
   ];
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+   ⚠️ OPT_CODE / OPT_CODE_CPP(및 그 안에 이어붙이는 OPT_INPUT/OPT_LOOP/OPT_OUTPUT 조각)은
+   USACO_VERIFIED 최적화 풀이의 표시용 사본이다 — 배열 내용은 절대 바꾸지 않고, 그대로
+   가져와 beats(설명 말풍선)만 덧붙인다. getOptSections() 는 PDF 다운로드가 계속 쓰므로
+   그대로 둔다. ── */
+export function getRoundingOptWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = OPT_CODE_CPP(E);
+    return {
+      code,
+      vars: [
+        { v: "digits", ko: "지금 보는 자릿수", en: "digit count we're on" },
+        { v: "smallest/largest", ko: "이 자릿수의 가장 작은/큰 수", en: "smallest/largest number with this many digits" },
+        { v: "answer", ko: "지금까지 더한 구간 길이", en: "block lengths added so far" },
+      ],
+      beats: [
+        { hi: [3, 21], bubble: t(E,
+          "We'll need the smallest and largest disagreeing number for each digit count, over and over. So build two small helpers once: smallest_for(d) (lots of 4's + ending 5) and largest_for(d) (a 4 + lots of 9's).",
+          "자릿수마다 답이 다른 가장 작은 수·가장 큰 수가 계속 필요해요.\n그래서 헬퍼 둘을 미리 만들어요 — smallest_for(d) (4 잔뜩 + 끝에 5), largest_for(d) (4 하나 + 9 잔뜩).") },
+        { hi: [23, 27], bubble: t(E,
+          "What do we hand back? The total count of disagreeing numbers up to N. So read T cases, and N for each.",
+          "무엇을 내놓아야 하나요? N 까지 답이 다른 수의 총 개수예요. 그러니 T 케이스와, 케이스마다 N 을 받아요.") },
+        { hi: [29, 36], bubble: t(E,
+          "Walk digit counts 2, 3, 4, ... Once smallest_for(digits) passes N, no number with that many digits can be ≤ N — stop. Otherwise the whole block [smallest, min(N, largest)] disagrees, so add its length.",
+          "자릿수 2, 3, 4, ... 를 따라가요.\nsmallest_for(digits) 가 N 을 넘으면 그 자릿수엔 N 이하인 수가 없으니 멈춰요.\n아니면 [smallest, min(N, largest)] 구간 전체가 답이 다르니 그 길이를 더해요.") },
+        { hi: [37, 40], bubble: t(E,
+          "Print the total for this case, once all digit counts are done.",
+          "이 케이스의 자릿수를 다 훑었으면, 합계를 출력해요.") },
+      ],
+    };
+  }
+  const code = OPT_CODE(E);
+  return {
+    code,
+    vars: [
+      { v: "digits", ko: "지금 보는 자릿수", en: "digit count we're on" },
+      { v: "smallest/largest", ko: "이 자릿수의 가장 작은/큰 수", en: "smallest/largest number with this many digits" },
+      { v: "answer", ko: "지금까지 더한 구간 길이", en: "block lengths added so far" },
+    ],
+    beats: [
+      { hi: [0, 3], bubble: t(E,
+        "What do we hand back? The total count of disagreeing numbers up to N, for every case. Read the whole input at once — it's faster than input() per line.",
+        "무엇을 내놓아야 하나요? 케이스마다 N 까지 답이 다른 수의 총 개수예요.\n입력 전체를 한 번에 받아요 — 줄마다 input() 하는 것보다 빨라요.") },
+      { hi: [5, 7], bubble: t(E,
+        "For each of the T cases, pull out N and start this case's total at 0.",
+        "T 케이스마다 N 을 꺼내고, 이번 케이스 합계를 0 으로 시작해요.") },
+      { hi: [9, 19], bubble: t(E,
+        "Walk digit counts 2, 3, 4, ... For each, the smallest disagreeing number is lots of 4's ending in 5, and the largest is a 4 followed by lots of 9's — the whole block between them disagrees. Once the smallest passes N, no number with that many digits can be ≤ N — stop.",
+        "자릿수 2, 3, 4, ... 를 따라가요.\n가장 작은 수는 4 잔뜩에 끝이 5, 가장 큰 수는 4 하나에 9 가 잔뜩이에요 — 그 사이는 전부 답이 달라요.\n가장 작은 수가 N 을 넘으면 그 자릿수엔 N 이하인 수가 없으니 멈춰요.") },
+      { hi: [20, 20], bubble: t(E,
+        "Save this case's total, then move to the next case.",
+        "이번 케이스 합계를 저장해 두고, 다음 케이스로 넘어가요.") },
+      { hi: [22, 22], bubble: t(E,
+        "Print all the answers at the end, joined by newlines — one print call instead of T of them.",
+        "답을 다 모았으면 줄바꿈으로 이어 한 번에 출력해요 — print 를 T 번이 아니라 한 번만 불러요.") },
+    ],
+  };
+}
+
 export function makeOptSteps(E) {
   return [
     { type: "reveal",
@@ -1693,15 +1753,15 @@ export function makeOptSteps(E) {
       answer: 183,
     },
 
-    ...getOptSections(E).map((sec, i, arr) => ({
-      type: "code-section",
-      narr: i === 0
-        ? t(E,
-            `Walk through the full solution one part at a time (${arr.length} pages). Toggle Python ↔ C++ via the header. Save as PDF for later.`,
-            `전체 풀이를 한 단락씩 살펴봐요 (총 ${arr.length} 페이지). 위 헤더로 Python ↔ C++ 토글. PDF 저장해서 나중에 보기.`)
-        : "",
-      section: sec,
-    })),
+    /* ⚡ 빠른 풀이 전체 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드
+       이 방식). 단계별 4페이지(입력/반복/출력/전체) → 1스텝. PDF 는 getOptSections() 로
+       계속 받을 수 있음(위 PDF 버튼). */
+    {
+      type: "opt-codewalk",
+      narr: t(E,
+        "The fast solution, start to finish — toggle Python ↔ C++ via the header.",
+        "빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
+    },
   ];
 }
 

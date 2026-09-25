@@ -3,9 +3,10 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 import {
   CheeseSim2, CheeseBruteRunner, CheeseProgressiveCode,
-  downloadCheesePDF, getCheeseSections,
+  downloadCheesePDF, getCheeseSections, getCheeseWalk, getCheeseBruteWalk,
   RodFitSim,
 } from "./components";
 import {
@@ -151,6 +152,8 @@ export default function CheeseApp(props = {}) {
     if (step.type === "rodFitSim") return <RodFitSim E={E} />;
     if (step.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={step.section} />;
+    if (step.type === "cheese-brute-walk") return <CodeWalk E={E} lang={codeLang} {...getCheeseBruteWalk(E, codeLang)} accent={A} />;
+    if (step.type === "cheese-walk") return <CodeWalk E={E} lang={codeLang} {...getCheeseWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -165,6 +168,8 @@ export default function CheeseApp(props = {}) {
     if (s.type === "rodFitSim") return <RodFitSim E={E} />;
     if (s.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={s.section} />;
+    if (s.type === "cheese-brute-walk") return <CodeWalk E={E} lang={codeLang} {...getCheeseBruteWalk(E, codeLang)} accent={A} />;
+    if (s.type === "cheese-walk") return <CodeWalk E={E} lang={codeLang} {...getCheeseWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

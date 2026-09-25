@@ -962,6 +962,149 @@ const MOO_FULL_CPP = [
   ...MOO_OUTPUT_CPP,
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 MOO_*_PY/CPP 배열을 **그대로 이어붙이기만** 한다 — 새 알고리즘
+   내용을 추가하지 않는다. 절대 이 함수 안에서 `_PY`/`_CPP` 로 끝나는 새 변수를 만들지 마라
+   (이 파일 헤더가 USACO_VERIFIED 라 그 이름 패턴은 보호 변수로 간주된다). ── */
+export function getMooWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = MOO_FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "mydict", ko: "moo 패턴별 지금 개수", en: "current count per moo pattern" },
+        { v: "pos", ko: "지금 바꿔보는 자리", en: "the spot we're trying a swap at" },
+        { v: "result", ko: "f 번 이상 나올 수 있는 moo 모음", en: "moos that can reach f" },
+      ],
+      beats: [
+        { hi: [0, 14], bubble: t(E,
+          "Why was the brute version slow? It re-scanned the WHOLE string on every trial, even though a swap only ever touches 3 windows. So this time: read n, f, and the string, but don't rescan blindly.",
+          "왜 브루트가 느렸을까요? 한 글자만 바꿔도 문자열 전체를 매번 다시 훑었기 때문이에요 — 바뀌는 건 3개 윈도우뿐인데도요.\n그러니 이번엔 n, f, 문자열을 읽되, 무작정 다시 훑지 않아요.") },
+        { hi: [16, 22], bubble: t(E,
+          "Scan the string ONCE and count every moo into mydict. From now on, the trial loop only ever adjusts this count — it never rescans from scratch.",
+          "문자열을 한 번만 훑어서 모든 moo 를 mydict 에 세어 둬요.\n이제부터 시도 반복은 이 개수만 살짝 고쳐요 — 처음부터 다시 훑지 않아요.") },
+        { hi: [24, 29], bubble: t(E,
+          "For each position, only the windows starting at minIdx..maxIdx can contain it — at most 3.",
+          "자리마다 그 자리를 포함하는 윈도우는 minIdx..maxIdx 뿐이에요 — 많아야 3개예요.") },
+        { hi: [30, 33], bubble: t(E,
+          "Those windows are about to change, so subtract their current moo counts first — otherwise we'd double-count once we try new letters.",
+          "이 윈도우들은 곧 바뀔 거라, 먼저 지금 세어 둔 개수를 빼요 — 안 그러면 새 글자를 시도할 때 두 번 세게 돼요.") },
+        { hi: [35, 50], bubble: t(E,
+          "Now try all 26 letters at this position. For each, check just those 2-3 windows, add to mydict, and record the pattern if it reaches f. Then immediately undo (mydict[key]--) — we're only testing, not keeping the change.",
+          "이제 이 자리에 26 글자를 다 넣어 봐요. 그때마다 그 2~3 윈도우만 확인해서 mydict 에 더하고, f 번 이상이면 결과에 기록해요.\n그리고 바로 되돌려요(mydict[key]--) — 진짜로 바꾸는 게 아니라 시험만 하는 거예요.") },
+        { hi: [52, 56], bubble: t(E,
+          "Done trying this position — put the original windows' counts back before moving to the next position.",
+          "이 자리는 다 시도했어요 — 다음 자리로 가기 전에 원래 윈도우 개수를 되돌려 둬요.") },
+        { hi: [58, 63], bubble: t(E,
+          "Print how many moos qualify, then list them in alphabetical order.",
+          "몇 개의 moo 가 조건을 만족하는지 출력하고, 알파벳순으로 나열해요.") },
+      ],
+    };
+  }
+  const code = MOO_FULL_PY(E);
+  return {
+    code,
+    vars: [
+      { v: "mydict", ko: "moo 패턴별 지금 개수", en: "current count per moo pattern" },
+      { v: "pos", ko: "지금 바꿔보는 자리", en: "the spot we're trying a swap at" },
+      { v: "result", ko: "f 번 이상 나올 수 있는 moo 모음", en: "moos that can reach f" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "Why was the brute version slow? It re-scanned the WHOLE string on every trial, even though a swap only ever touches 3 windows. So this time: read n, f, and the string, but don't rescan blindly.",
+        "왜 브루트가 느렸을까요? 한 글자만 바꿔도 문자열 전체를 매번 다시 훑었기 때문이에요 — 바뀌는 건 3개 윈도우뿐인데도요.\n그러니 이번엔 n, f, 문자열을 읽되, 무작정 다시 훑지 않아요.") },
+      { hi: [7, 14], bubble: t(E,
+        "Scan the string ONCE and count every moo into mydict. From now on, the trial loop only ever adjusts this count — it never rescans from scratch.",
+        "문자열을 한 번만 훑어서 모든 moo 를 mydict 에 세어 둬요.\n이제부터 시도 반복은 이 개수만 살짝 고쳐요 — 처음부터 다시 훑지 않아요.") },
+      { hi: [16, 22], bubble: t(E,
+        "For each position, only the windows starting at minIdx..maxIdx can contain it — at most 3.",
+        "자리마다 그 자리를 포함하는 윈도우는 minIdx..maxIdx 뿐이에요 — 많아야 3개예요.") },
+      { hi: [23, 28], bubble: t(E,
+        "Those windows are about to change, so subtract their current moo counts first — otherwise we'd double-count once we try new letters.",
+        "이 윈도우들은 곧 바뀔 거라, 먼저 지금 세어 둔 개수를 빼요 — 안 그러면 새 글자를 시도할 때 두 번 세게 돼요.") },
+      { hi: [29, 39], bubble: t(E,
+        "Now try all 26 letters at this position. For each, check just those 2-3 windows, add to mydict, and record the pattern if it reaches f. Then immediately undo (mydict[key] -= 1) — we're only testing, not keeping the change.",
+        "이제 이 자리에 26 글자를 다 넣어 봐요. 그때마다 그 2~3 윈도우만 확인해서 mydict 에 더하고, f 번 이상이면 결과에 기록해요.\n그리고 바로 되돌려요(mydict[key] -= 1) — 진짜로 바꾸는 게 아니라 시험만 하는 거예요.") },
+      { hi: [41, 45], bubble: t(E,
+        "Done trying this position — put the original windows' counts back before moving to the next position.",
+        "이 자리는 다 시도했어요 — 다음 자리로 가기 전에 원래 윈도우 개수를 되돌려 둬요.") },
+      { hi: [47, 49], bubble: t(E,
+        "Print how many moos qualify, then list them in alphabetical order.",
+        "몇 개의 moo 가 조건을 만족하는지 출력하고, 알파벳순으로 나열해요.") },
+    ],
+  };
+}
+
+/* ── 브루트(첫 아이디어) CodeWalk — 같은 원칙: BR_* 배열을 이어붙이기만 한다. ── */
+export function getMooBruteWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    /* ⚠️ BR_INPUT_CPP 는 (includes...using namespace) 뒤에 바로 int main() { ... }
+       이 이어진다 — 원래 "code-section" 단계별 표시(섹션마다 따로 보여줌)에선 문제
+       없었지만, 하나로 이어붙이면 헬퍼 함수(isMoo/countAll)가 main() **뒤**에 와서
+       컴파일이 안 된다. .slice() 로 순서만 바꿔 보여준다 — BR_INPUT_CPP 자체는
+       한 글자도 안 바꾼다 (그 원본은 여전히 getMooBruteSections 의 단계별 표시가 씀). */
+    const code = [
+      ...BR_INPUT_CPP.slice(0, 6),   // #include... + using namespace + 빈 줄
+      ...BR_HELPERS_CPP,
+      "",
+      ...BR_INPUT_CPP.slice(6),      // int main() { ... set<string> result;
+      "",
+      ...BR_LOOP_CPP(E),
+      "",
+      ...BR_OUTPUT_CPP,
+    ];
+    return {
+      code,
+      vars: [
+        { v: "result", ko: "f 번 이상 나올 수 있는 moo 모음", en: "moos that can reach f" },
+        { v: "countAll", ko: "지금 문자열 전체를 훑어 moo 개수 세기", en: "re-scan the whole string for moo counts" },
+      ],
+      beats: [
+        { hi: [0, 18], bubble: t(E,
+          "What's the simplest way to check every possible one-letter change? Literally try every position and every letter. Two helpers do the checking: isMoo looks at one window (1st ≠ 2nd, 2nd = 3rd), countAll scans the WHOLE string once and returns every window's count.",
+          "1글자를 바꾸는 모든 경우를 확인하는 가장 단순한 방법은 뭘까요? 위치와 글자를 하나씩 다 바꿔 보며 확인하는 거예요.\n도우미 둘이 그 확인을 해요. isMoo 는 윈도우 하나(1번째 ≠ 2번째, 2번째 = 3번째)를 보고,\ncountAll 은 문자열 전체를 한 번 훑어서 모든 윈도우의 개수를 돌려줘요.") },
+        { hi: [20, 25], bubble: t(E,
+          "Read n, f, and the string, and open an empty set for the results.",
+          "n, f, 문자열을 읽고, 결과를 모을 빈 set 을 만들어요.") },
+        { hi: [27, 29], bubble: t(E,
+          "Register the moos already present in the original string first.",
+          "먼저 원본 문자열에 이미 있는 moo 를 등록해요.") },
+        { hi: [31, 42], bubble: t(E,
+          "For every position × every one of 26 letters: swap the letter in, re-scan the WHOLE string with countAll, then restore. ⚠️ That full re-scan inside the innermost loop is what makes this O(26·N²) — too slow once N is big.",
+          "모든 위치 × 26 글자마다: 글자를 바꾸고, countAll 로 문자열 전체를 다시 훑고, 되돌려요.\n⚠️ 이 안쪽 반복 안에서 전체를 다시 훑는 게 O(26·N²) 의 원인이에요 — N 이 크면 너무 느려요.") },
+        { hi: [44, 49], bubble: t(E,
+          "Print how many moos qualify, then list them in alphabetical order.",
+          "몇 개의 moo 가 조건을 만족하는지 출력하고, 알파벳순으로 나열해요.") },
+      ],
+    };
+  }
+  const code = [...BR_INPUT_PY, "", ...BR_HELPERS_PY, "", ...BR_LOOP_PY(E), "", ...BR_OUTPUT_PY];
+  return {
+    code,
+    vars: [
+      { v: "result", ko: "f 번 이상 나올 수 있는 moo 모음", en: "moos that can reach f" },
+      { v: "count_all", ko: "지금 문자열 전체를 훑어 moo 개수 세기", en: "re-scan the whole string for moo counts" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What's the simplest way to check every possible one-letter change? Literally try every position and every letter. So start by reading n, f, the string, and an empty set for results.",
+        "1글자를 바꾸는 모든 경우를 확인하는 가장 단순한 방법은 뭘까요? 위치와 글자를 하나씩 다 바꿔 보며 확인하는 거예요.\n먼저 n, f, 문자열을 읽고, 결과를 모을 빈 set 을 만들어요.") },
+      { hi: [7, 16], bubble: t(E,
+        "Two small helpers: is_moo checks one window (1st ≠ 2nd, 2nd = 3rd), count_all scans the WHOLE array once and returns every window's count as a dict. count_all gets called again and again below — that's the slow part.",
+        "도우미가 둘이에요. is_moo 는 윈도우 하나(1번째 ≠ 2번째, 2번째 = 3번째)를 봐요.\ncount_all 은 배열 전체를 한 번 훑어서 모든 윈도우 개수를 dict 로 돌려줘요.\n이 count_all 을 아래에서 계속 다시 부르는데, 그게 느려지는 이유예요.") },
+      { hi: [18, 21], bubble: t(E,
+        "Register the moos already present in the original string first.",
+        "먼저 원본 문자열에 이미 있는 moo 를 등록해요.") },
+      { hi: [23, 34], bubble: t(E,
+        "For every position × every one of 26 letters: swap the letter in, re-scan the WHOLE string with count_all, then restore. ⚠️ That full re-scan inside the innermost loop is what makes this O(26·N²) — too slow once N is big.",
+        "모든 위치 × 26 글자마다: 글자를 바꾸고, count_all 로 문자열 전체를 다시 훑고, 되돌려요.\n⚠️ 이 안쪽 반복 안에서 전체를 다시 훑는 게 O(26·N²) 의 원인이에요 — N 이 크면 너무 느려요.") },
+      { hi: [36, 38], bubble: t(E,
+        "Print how many moos qualify, then list them in alphabetical order.",
+        "몇 개의 moo 가 조건을 만족하는지 출력하고, 알파벳순으로 나열해요.") },
+    ],
+  };
+}
+
 export function getMooSections(E) {
   return [
     {

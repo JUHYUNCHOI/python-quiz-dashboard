@@ -929,6 +929,136 @@ const CHEESE_FULL_CPP = (E) => [
   "}",
 ];
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 아래는 위 CHEESE_*_PY/CPP 배열을 **그대로 이어붙이기만** 한다 — 새 알고리즘
+   내용을 추가하지 않는다. 이 파일 헤더가 USACO_VERIFIED 라 `_PY`/`_CPP` 로 끝나는 새 변수를
+   만들지 않는다(보호 변수로 오인될 수 있다). ── */
+export function getCheeseWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = CHEESE_FULL_CPP(E);
+    return {
+      code,
+      vars: [
+        { v: "xy/yz/xz", ko: "방향별 줄 하나에 남은 블록 수", en: "blocks left per row, per direction" },
+        { v: "count", ko: "완전히 뚫린 줄 개수", en: "how many rows are fully open" },
+      ],
+      beats: [
+        { hi: [0, 6], bubble: t(E,
+          "What do we hand back after EACH removal? How many rows are now fully open. Start by reading N and Q.",
+          "블록을 뺄 때마다 무엇을 내놓아야 하나요? 지금까지 완전히 뚫린 줄 개수예요.\n먼저 N 과 Q 를 읽어요.") },
+        { hi: [8, 11], bubble: t(E,
+          "A block sits on exactly 3 rows — one per direction. So keep one counter per direction: xy for z-rows, yz for x-rows, xz for y-rows.",
+          "블록 하나는 정확히 3개 줄에 걸쳐요 — 방향마다 하나씩이에요.\n그래서 방향마다 세는 숫자를 하나씩 둬요. xy 는 z-방향 줄, yz 는 x-방향 줄, xz 는 y-방향 줄이에요.") },
+        { hi: [13, 16], bubble: t(E,
+          "For each removal, read which block (x, y, z) is taken out.",
+          "블록을 뺄 때마다 어느 블록 (x, y, z) 인지 읽어요.") },
+        { hi: [18, 22], bubble: t(E,
+          "That block was part of ONE z-direction row: the one at (x, y). Bump its counter — once it reaches N, every cell in that row is gone, so it just became a fully open row.",
+          "그 블록은 z-방향 줄 하나 — (x, y) 자리 — 에 속해 있었어요. 그 줄의 카운터를 올려요.\nN 에 닿으면 그 줄의 칸이 전부 비었다는 뜻이라, 방금 완전히 뚫린 줄이 하나 생긴 거예요.") },
+        { hi: [24, 28], bubble: t(E,
+          "Same idea for the x-direction row at (y, z).",
+          "x-방향 줄 (y, z) 도 똑같은 방식이에요.") },
+        { hi: [30, 34], bubble: t(E,
+          "Same idea for the y-direction row at (x, z). Since a block only ever affects these 3 rows, each removal is O(1) — no rescanning.",
+          "y-방향 줄 (x, z) 도 똑같아요. 블록 하나는 딱 이 3줄에만 영향을 주니까,\n한 번 뺄 때마다 O(1) 이에요 — 다시 훑지 않아요.") },
+        { hi: [36, 39], bubble: t(E,
+          "Print count after every removal — the problem wants an answer per step.",
+          "뺄 때마다 count 를 출력해요 — 문제가 매번 답을 내라고 했어요.") },
+      ],
+    };
+  }
+  const code = CHEESE_FULL_PY(E);
+  return {
+    code,
+    vars: [
+      { v: "xy/yz/xz", ko: "방향별 줄 하나에 남은 블록 수", en: "blocks left per row, per direction" },
+      { v: "count", ko: "완전히 뚫린 줄 개수", en: "how many rows are fully open" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we hand back after EACH removal? How many rows are now fully open. Start by reading N and Q.",
+        "블록을 뺄 때마다 무엇을 내놓아야 하나요? 지금까지 완전히 뚫린 줄 개수예요.\n먼저 N 과 Q 를 읽어요.") },
+      { hi: [6, 8], bubble: t(E,
+        "A block sits on exactly 3 rows — one per direction. So keep one counter per direction: xy for z-rows, yz for x-rows, xz for y-rows.",
+        "블록 하나는 정확히 3개 줄에 걸쳐요 — 방향마다 하나씩이에요.\n그래서 방향마다 세는 숫자를 하나씩 둬요. xy 는 z-방향 줄, yz 는 x-방향 줄, xz 는 y-방향 줄이에요.") },
+      { hi: [10, 12], bubble: t(E,
+        "For each removal, read which block (x, y, z) is taken out.",
+        "블록을 뺄 때마다 어느 블록 (x, y, z) 인지 읽어요.") },
+      { hi: [14, 17], bubble: t(E,
+        "That block was part of ONE z-direction row: the one at (x, y). Bump its counter — once it reaches N, every cell in that row is gone, so it just became a fully open row.",
+        "그 블록은 z-방향 줄 하나 — (x, y) 자리 — 에 속해 있었어요. 그 줄의 카운터를 올려요.\nN 에 닿으면 그 줄의 칸이 전부 비었다는 뜻이라, 방금 완전히 뚫린 줄이 하나 생긴 거예요.") },
+      { hi: [19, 22], bubble: t(E,
+        "Same idea for the x-direction row at (y, z).",
+        "x-방향 줄 (y, z) 도 똑같은 방식이에요.") },
+      { hi: [24, 27], bubble: t(E,
+        "Same idea for the y-direction row at (x, z). Since a block only ever affects these 3 rows, each removal is O(1) — no rescanning.",
+        "y-방향 줄 (x, z) 도 똑같아요. 블록 하나는 딱 이 3줄에만 영향을 주니까,\n한 번 뺄 때마다 O(1) 이에요 — 다시 훑지 않아요.") },
+      { hi: [29, 29], bubble: t(E,
+        "Print count after every removal — the problem wants an answer per step.",
+        "뺄 때마다 count 를 출력해요 — 문제가 매번 답을 내라고 했어요.") },
+    ],
+  };
+}
+
+/* ── 브루트(첫 아이디어) CodeWalk — 같은 원칙: CB_* 배열을 이어붙이기만 한다. ── */
+export function getCheeseBruteWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = [...CB_INPUT_CPP(E), "", ...CB_CARVE_CPP(E), "", ...CB_SCAN_CPP(E), "", ...CB_OUTPUT_CPP];
+    return {
+      code,
+      vars: [
+        { v: "cheese", ko: "칸마다 블록이 있는지 (3D)", en: "whether a block sits at each cell (3D)" },
+        { v: "count", ko: "지금까지 찾은 빈 줄 개수", en: "empty rows found so far" },
+      ],
+      beats: [
+        { hi: [0, 10], bubble: t(E,
+          "What's the simplest way to track blocks in a cube? A 3D array: cheese[x][y][z] = true means a block is there. Start with N, Q, and a full cube.",
+          "큐브 안 블록을 가장 단순하게 기억하는 방법은 뭘까요? 3D 배열이에요 — cheese[x][y][z] 가 true 면 블록이 있다는 뜻이에요.\nN, Q 를 읽고, 가득 찬 큐브로 시작해요.") },
+        { hi: [12, 16], bubble: t(E,
+          "For each removal, read (x, y, z) and take that block out. We'll recompute count from scratch every time — the simple (but slow) way.",
+          "블록을 뺄 때마다 (x, y, z) 를 읽고 그 블록을 빼요.\n이번엔 매번 count 를 처음부터 다시 세요 — 단순하지만 느린 방법이에요.") },
+        { hi: [18, 27], bubble: t(E,
+          "A row is 'open' when every cell along it is empty. Check the z-direction rows by scanning all N cells for each (x,y) pair. ⚠️ That's N² pairs × N cells = O(N³) — for every single removal.",
+          "줄 하나가 '뚫렸다' 는 그 줄의 모든 칸이 비었다는 뜻이에요. (x,y) 쌍마다 N 칸을 다 훑어서 z-방향 줄을 확인해요.\n⚠️ N² 쌍 × N 칸 = O(N³) 이에요 — 블록 하나 뺄 때마다요.") },
+        { hi: [29, 30], bubble: t(E,
+          "The x-direction and y-direction rows repeat the exact same pattern.",
+          "x-방향, y-방향 줄도 똑같은 방식이 반복돼요.") },
+        { hi: [32, 35], bubble: t(E,
+          "Print count after this removal, then move to the next query.",
+          "이번 제거 뒤의 count 를 출력하고, 다음 물음으로 넘어가요.") },
+      ],
+    };
+  }
+  const code = [...CB_INPUT_PY(E), "", ...CB_CARVE_PY(E), "", ...CB_SCAN_PY(E), "", ...CB_OUTPUT_PY];
+  return {
+    code,
+    vars: [
+      { v: "cheese", ko: "칸마다 블록이 있는지 (3D)", en: "whether a block sits at each cell (3D)" },
+      { v: "count", ko: "지금까지 찾은 빈 줄 개수", en: "empty rows found so far" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What's the simplest way to track blocks in a cube? A 3D array: cheese[x][y][z] = True means a block is there. Start with N, Q, and a full cube.",
+        "큐브 안 블록을 가장 단순하게 기억하는 방법은 뭘까요? 3D 배열이에요 — cheese[x][y][z] 가 True 면 블록이 있다는 뜻이에요.\nN, Q 를 읽고, 가득 찬 큐브로 시작해요.") },
+      { hi: [8, 11], bubble: t(E,
+        "For each removal, read (x, y, z) and take that block out. We'll recompute count from scratch every time — the simple (but slow) way.",
+        "블록을 뺄 때마다 (x, y, z) 를 읽고 그 블록을 빼요.\n이번엔 매번 count 를 처음부터 다시 세요 — 단순하지만 느린 방법이에요.") },
+      { hi: [13, 19], bubble: t(E,
+        "A row is 'open' when every cell along it is empty. Check the z-direction rows: for each (x,y) pair, look through all N cells. ⚠️ That's N² pairs × N cells = O(N³) — for every single removal.",
+        "줄 하나가 '뚫렸다' 는 그 줄의 모든 칸이 비었다는 뜻이에요. (x,y) 쌍마다 N 칸을 다 훑어서 z-방향 줄을 확인해요.\n⚠️ N² 쌍 × N 칸 = O(N³) 이에요 — 블록 하나 뺄 때마다요.") },
+      { hi: [21, 25], bubble: t(E,
+        "Same check for the x-direction rows.",
+        "x-방향 줄도 똑같이 확인해요.") },
+      { hi: [27, 31], bubble: t(E,
+        "Same check for the y-direction rows.",
+        "y-방향 줄도 똑같이 확인해요.") },
+      { hi: [33, 33], bubble: t(E,
+        "Print count after this removal, then move to the next query.",
+        "이번 제거 뒤의 count 를 출력하고, 다음 물음으로 넘어가요.") },
+    ],
+  };
+}
+
 export function getCheeseSections(E) {
   return [
     {

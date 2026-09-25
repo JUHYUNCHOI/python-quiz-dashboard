@@ -1,6 +1,5 @@
 import { C, t } from "@/components/quest/theme";
 import { highlight } from "@/components/quest/shared";
-import { getCheeseSections, getCheeseBruteSections } from "./components";
 
 /* ================================================================
    HELPERS
@@ -683,16 +682,13 @@ export function makeCheeseCh4(E) {
         </div>),
     },
 
-        // 4-3-code: brute 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
-    ...getCheeseBruteSections(E).map((sec, i, arr) => ({
-      type: "code-section",
-      narr: i === 0
-        ? t(E,
-            `OK, so it's slow. What does the brute code actually look like? Let's walk through it in ${arr.length} parts. Toggle Python ↔ C++ via the header.`,
-            `느리다는 건 알겠고. 그럼 브루트 코드 어떻게 생겼을까? ${arr.length} 부분으로 따라가요. 위 헤더로 Python ↔ C++ 토글.`)
-        : "",
-      section: sec,
-    })),
+        // 4-3-code: brute 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+    {
+      type: "cheese-brute-walk",
+      narr: t(E,
+        "OK, so it's slow. What does the brute code actually look like?",
+        "느리다는 건 알겠고. 그럼 브루트 코드 어떻게 생겼을까?"),
+    },
 
     // 4-3a: 🔑 1차 개선 사고 디딤돌 — 학생이 자기 머리로 발견
     {
@@ -907,16 +903,13 @@ export function makeCheeseCh5(E, lang = "py") {
         "xy 자리는 z-방향 줄이에요!\n축 두 개가 정해지면 줄은 남은 축 하나를 따라 뻗어요."),
     },
 
-    // 5-5: 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
-    ...getCheeseSections(E).map((sec, i, arr) => ({
-      type: "code-section",
-      narr: i === 0
-        ? t(E,
-            `Walk through the smart solution one part at a time (${arr.length} pages). Toggle Python ↔ C++ via the header. Save as PDF for later.`,
-            `제일 빠른 풀이를 한 부분씩 따라가요 (총 ${arr.length} 페이지). 위 헤더로 Python ↔ C++ 토글. PDF 저장 가능.`)
-        : "",
-      section: sec,
-    })),
+    // 5-5: 코드 — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+    {
+      type: "cheese-walk",
+      narr: t(E,
+        "The smart solution, start to finish — toggle Python ↔ C++ via the header.",
+        "제일 빠른 풀이를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
+    },
 
     // 5-6: 샘플 입력 변수 trace — 시뮬에서 본 것과 코드 변수 연결
     {

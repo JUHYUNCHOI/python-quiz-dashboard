@@ -4,7 +4,8 @@ import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared"
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
-import { MooSim, MooBruteRunner, MooRTRSim, MooProgressiveCode, downloadMooPDF, getMooSections } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { MooSim, MooBruteRunner, MooRTRSim, MooProgressiveCode, downloadMooPDF, getMooSections, getMooWalk, getMooBruteWalk } from "./components";
 import { makeMooCh1, makeMooCh2, makeMooCh3, makeMooCh4, makeMooCh5 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -133,6 +134,8 @@ export default function MooApp(props = {}) {
     if (step.type === "mooRTR") return <MooRTRSim E={E} />;
     if (step.type === "progressive") return <MooProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={step.section} />;
+    if (step.type === "moo-brute-walk") return <CodeWalk E={E} lang={codeLang} {...getMooBruteWalk(E, codeLang)} accent={A} />;
+    if (step.type === "moo-walk") return <CodeWalk E={E} lang={codeLang} {...getMooWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -147,6 +150,8 @@ export default function MooApp(props = {}) {
     if (s.type === "mooRTR") return <MooRTRSim E={E} />;
     if (s.type === "progressive") return <MooProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={s.section} />;
+    if (s.type === "moo-brute-walk") return <CodeWalk E={E} lang={codeLang} {...getMooBruteWalk(E, codeLang)} accent={A} />;
+    if (s.type === "moo-walk") return <CodeWalk E={E} lang={codeLang} {...getMooWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
