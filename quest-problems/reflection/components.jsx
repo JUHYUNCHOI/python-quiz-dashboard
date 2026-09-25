@@ -542,6 +542,119 @@ export function ReflectionProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor={A} />;
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14:
+   모든 quest 코드 이 방식). 2026-09-25: CodeSectionView(💡 노트가 코드 *위*에
+   뜨는, 금지된 모양)에서 전환.
+
+   ⚠️ 🔒 USACO_VERIFIED — RFL_BRUTE_PY/CPP · RFL_FAST_PY/CPP 는 **보호 변수다.
+   한 글자도 안 바꾼다.** `moo` 가 같은 문제(물리적 순서 ≠ 생각 순서)를 이미 풀었다
+   (components.jsx:1038 주석: "원본 그대로 두고 .slice() 로 순서만 바꿔 보여준다").
+   그 방식 그대로 따른다.
+
+   파이썬: RFL_BRUTE_PY/RFL_FAST_PY 의 물리적 순서(비용함수 def → 읽기 → …)는
+   생각 순서(읽기 → 비용함수 → …)와 다르다 → .slice() 로 재배열한 **파생** 배열.
+   C++: flip_cost 가 main() 안에서 쓰이므로 **main() 보다 먼저 나와야 컴파일된다**
+   (파이썬처럼 재배열할 수 없다 — moo cpp 와 같은 제약). 원본 그대로 코드로 쓰고,
+   beats 순서(설명하는 순서)만 그 제약 안에서 최대한 "무엇을 먼저 알아야 하나" 로 연다.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 브루트(첫 아이디어) CodeWalk ── */
+export function getReflectionBruteWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: RFL_BRUTE_CPP,
+      vars: [
+        { v: "flip_cost", ko: "묶음 하나를 맞추는 최소 뒤집기 수", en: "min flips for one group" },
+        { v: "total", ko: "지금 다시 훑어 구한 전체 비용", en: "whole cost, just rescanned" },
+      ],
+      beats: [
+        { hi: [0, 22], bubble: t(E,
+          "How much does it cost to make one mirror group all the same color? A group is 4 cells: (i,j) and its 3 mirror partners. Count how many of the 3 differ from (i,j) — that's diff. Then flip those diff cells, or flip the other 4-diff cells (including itself) — whichever is fewer.",
+          "거울 묶음 하나를 한 색으로 만들려면 비용이 얼마나 들까요?\n묶음은 칸 (i,j) 와 거울짝 3 칸, 모두 4 칸이에요.\n그 3 칸 중 (i,j) 와 색이 다른 칸의 수를 diff 라고 해요.\n다른 diff 칸을 고치거나, 나를 포함한 나머지 4-diff 칸을 고치거나 — 더 적은 쪽을 골라요.") },
+        { hi: [24, 31], bubble: t(E,
+          "What do we read first? N (grid size), U (number of updates), then the N×N grid itself.",
+          "가장 먼저 뭘 읽어야 할까요?\n격자 크기 N 과 업데이트 횟수 U, 그리고 N×N 격자를 읽어요.") },
+        { hi: [33, 41], bubble: t(E,
+          "What is the total cost for the grid right now? Add up flip_cost for every group — looping i,j over N/2 × N/2 covers every group exactly once, since each group has exactly one representative in the top-left quarter.",
+          "지금 격자 전체의 비용은 얼마일까요?\n모든 묶음의 flip_cost 를 더해요.\n묶음마다 대표 칸이 왼쪽 위 1/4 에 딱 하나씩 있어서, i, j 를 N/2 × N/2 만 돌면 묶음을 하나도 빠짐없이, 겹치지도 않게 다 봐요.") },
+        { hi: [43, 54], bubble: t(E,
+          "After each of the U flips, how do we get the new total? Simplest way: flip the cell, then rescan the whole quarter from scratch (the loop above) and print it again. ⚠️ That full N²/4 re-scan runs U times — O(U·N²) total. With N up to 2000 and U up to 10⁵, that's far too slow.",
+          "U 번 뒤집을 때마다 새 총 비용은 어떻게 구하나요?\n가장 단순한 방법은, 칸을 뒤집고 위 루프(1/4 다시 훑기)를 처음부터 다시 실행하는 거예요.\n⚠️ 이 N²/4 다시 훑기가 U 번 반복되니까 전체는 O(U·N²) 이에요.\nN 이 2000, U 가 10만까지 갈 수 있어서 너무 느려요.") },
+      ],
+    };
+  }
+  return {
+    code: [...RFL_BRUTE_PY.slice(16, 21), "", ...RFL_BRUTE_PY.slice(1, 15), "", ...RFL_BRUTE_PY.slice(22, 31), "", ...RFL_BRUTE_PY.slice(32, 41)],
+    vars: [
+      { v: "flip_cost", ko: "묶음 하나를 맞추는 최소 뒤집기 수", en: "min flips for one group" },
+      { v: "total_cost", ko: "지금 다시 훑어 구한 전체 비용", en: "whole cost, just rescanned" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we read first? N (grid size) and U (number of updates), then the N×N grid itself.",
+        "가장 먼저 뭘 읽어야 할까요?\n격자 크기 N 과 업데이트 횟수 U, 그리고 N×N 격자를 읽어요.") },
+      { hi: [6, 19], bubble: t(E,
+        "How much does it cost to make one mirror group all the same color? A group is 4 cells: (i,j) and its 3 mirror partners. Count how many of the 3 differ from (i,j) — that's diff. Then flip those diff cells, or flip the other 4-diff cells (including itself) — whichever is fewer.",
+        "거울 묶음 하나를 한 색으로 만들려면 비용이 얼마나 들까요?\n묶음은 칸 (i,j) 와 거울짝 3 칸, 모두 4 칸이에요.\n그 3 칸 중 (i,j) 와 색이 다른 칸의 수를 diff 라고 해요.\n다른 diff 칸을 고치거나, 나를 포함한 나머지 4-diff 칸을 고치거나 — 더 적은 쪽을 골라요.") },
+      { hi: [21, 29], bubble: t(E,
+        "What is the total cost for the grid right now? Add up flip_cost for every group — and since each group has exactly one representative in the top-left quarter, looping i,j over N/2 × N/2 covers every group exactly once.",
+        "지금 격자 전체의 비용은 얼마일까요?\n모든 묶음의 flip_cost 를 더해요.\n묶음마다 대표 칸이 왼쪽 위 1/4 에 딱 하나씩 있어서, i, j 를 N/2 × N/2 만 돌면 묶음을 하나도 빠짐없이, 겹치지도 않게 다 봐요.") },
+      { hi: [31, 39], bubble: t(E,
+        "After each of the U flips, how do we get the new total? Simplest way: flip the cell, then call total_cost() again from scratch and print it. ⚠️ That full N²/4 re-scan runs U times — O(U·N²) total. With N up to 2000 and U up to 10⁵, that's far too slow.",
+        "U 번 뒤집을 때마다 새 총 비용은 어떻게 구하나요?\n가장 단순한 방법은, 칸을 뒤집고 total_cost() 를 처음부터 다시 불러서 출력하는 거예요.\n⚠️ 이 N²/4 다시 훑기가 U 번 반복되니까 전체는 O(U·N²) 이에요.\nN 이 2000, U 가 10만까지 갈 수 있어서 너무 느려요.") },
+    ],
+  };
+}
+
+/* ── 빠른 코드(스마트 update) CodeWalk ── */
+export function getReflectionWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: RFL_FAST_CPP,
+      vars: [
+        { v: "flip_cost", ko: "묶음 하나를 맞추는 최소 뒤집기 수", en: "min flips for one group" },
+        { v: "total", ko: "쌓아 온 전체 비용 (매번 ±1 만 고침)", en: "running total (nudged, not rebuilt)" },
+      ],
+      beats: [
+        { hi: [0, 31], bubble: t(E,
+          "Why doesn't an update need a full rescan anymore? Flipping one cell changes the color of only ONE group — every other group's contribution to total stays exactly the same. So instead of rebuilding the sum from scratch, we can just subtract that group's old cost and add its new one. flip_cost, and reading N/U/the grid below, are unchanged from before.",
+          "왜 이제는 update 마다 전부 다시 훑지 않아도 될까요?\n칸 하나를 뒤집으면 그 칸이 속한 묶음 하나만 비용이 바뀌어요 — 나머지 묶음이 더하는 값은 그대로예요.\n그래서 total 을 처음부터 다시 만들 필요 없이, 그 묶음의 옛 비용만 빼고 새 비용을 더하면 돼요.\nflip_cost 와 아래 N/U/격자 읽기는 전과 똑같아요.") },
+        { hi: [33, 40], bubble: t(E,
+          "How do we get the first answer? One pass over the top-left quarter, summing flip_cost, then print it — no extra table to build.",
+          "처음 답은 어떻게 구하나요?\n왼쪽 위 1/4 을 한 번 훑어서 flip_cost 를 다 더하고 출력해요.\n따로 만들 표가 없어요.") },
+        { hi: [42, 58], bubble: t(E,
+          "How does each update stay O(1)? Subtract that group's old cost, flip the cell, add the new cost, print — that's it, no rescan.",
+          "update 마다 어떻게 O(1) 로 끝날까요?\n그 묶음의 옛 비용을 빼고, 칸을 뒤집고, 새 비용을 더해서 바로 출력해요 — 그게 다예요. 다시 훑지 않아요.") },
+        { hi: [59, 60], bubble: t(E,
+          "How fast is this in total? The quarter scan is (N/2)² operations, plus U updates at O(1) each — at most about 10⁶ + 10⁵ operations. Fast even in C++, and fast enough in Python too.",
+          "전체로는 얼마나 빠를까요?\n처음 1/4 훑기가 (N/2)² 번, 거기에 U 번의 update 가 O(1) 씩 더해져요 — 다 합쳐도 대략 10⁶ + 10⁵ 번이에요.\nC++ 이라 순식간이고, 파이썬으로도 충분히 빨라요.") },
+      ],
+    };
+  }
+  return {
+    code: RFL_FAST_PY,
+    vars: [
+      { v: "flip_cost", ko: "묶음 하나를 맞추는 최소 뒤집기 수", en: "min flips for one group" },
+      { v: "total", ko: "쌓아 온 전체 비용 (매번 ±1 만 고침)", en: "running total (nudged, not rebuilt)" },
+    ],
+    beats: [
+      { hi: [0, 20], bubble: t(E,
+        "Why doesn't an update need a full rescan anymore? Flipping one cell changes the color of only ONE group — every other group's contribution to total stays exactly the same. So instead of rebuilding the sum from scratch, we can just subtract that group's old cost and add its new one. flip_cost, and the input reading below, are unchanged from before.",
+        "왜 이제는 update 마다 전부 다시 훑지 않아도 될까요?\n칸 하나를 뒤집으면 그 칸이 속한 묶음 하나만 비용이 바뀌어요 — 나머지 묶음이 더하는 값은 그대로예요.\n그래서 total 을 처음부터 다시 만들 필요 없이, 그 묶음의 옛 비용만 빼고 새 비용을 더하면 돼요.\n아래 flip_cost 와 입력 읽기는 전과 똑같아요.") },
+      { hi: [22, 28], bubble: t(E,
+        "How do we get the first answer? One pass over the top-left quarter, summing flip_cost — no extra table to build.",
+        "처음 답은 어떻게 구하나요?\n왼쪽 위 1/4 을 한 번 훑어서 flip_cost 를 다 더해요.\n따로 만들 표가 없어요.") },
+      { hi: [30, 43], bubble: t(E,
+        "How does each update stay O(1)? Subtract that group's old cost, flip the cell, add the new cost — that's it, no rescan.",
+        "update 마다 어떻게 O(1) 로 끝날까요?\n그 묶음의 옛 비용을 빼고, 칸을 뒤집고, 새 비용을 더해요 — 그게 다예요. 다시 훑지 않아요.") },
+      { hi: [45, 45], bubble: t(E,
+        "How fast is this in total? The quarter scan is (N/2)² operations, plus U updates at O(1) each — at most about 10⁶ + 10⁵ operations. Fast enough even in Python.",
+        "전체로는 얼마나 빠를까요?\n처음 1/4 훑기가 (N/2)² 번, 거기에 U 번의 update 가 O(1) 씩 더해져요 — 다 합쳐도 대략 10⁶ + 10⁵ 번이에요.\n파이썬으로도 충분히 빨라요.") },
+    ],
+  };
+}
+
 /* ─── Syntax-highlight helpers + PDF (same shape as other quests) ─── */
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sum"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","map","pair"];

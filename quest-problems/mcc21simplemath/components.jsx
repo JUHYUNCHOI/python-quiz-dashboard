@@ -440,6 +440,63 @@ export function Mcc21SimpleMathProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor={A} />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). MCC 는 파이썬 전용이라(feedback_mcc_is_python_only.md) C++ beats 는 안 만든다.
+   2026-09-25: `check-taught-vs-final-code.py` 재검토 축 — ProgressiveCodeStepper(💡 노트가
+   코드 *위*에 뜨는 모양)를 CodeWalk 로 옮긴다. hi 경계는 FULL_PY 의 실제 줄 번호를 스크립트로
+   다시 세어 확인했다 — 눈으로 세지 않았다. */
+export function getMcc21SimpleMathWalk(E) {
+  return {
+    code: FULL_PY,
+    vars: [
+      { v: "MOD", ko: "나머지 연산 기준값 (10^9+7)", en: "the modulus (10^9+7)" },
+      { v: "ans", ko: "지금까지 구한 답", en: "the answer so far" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "Why can't we just enumerate subsets here? N numbers give 2^N − 1 nonempty subsets — up to 2^50000, impossible to list. So we count each part's contribution instead. MOD = 10^9+7 keeps every running value small.",
+        "여기서는 왜 부분집합을 만들면 안 될까요?\n수가 N 개면 부분집합은 2^N − 1 개, 많으면 2^50000 개까지 가서 다 적을 수 없어요.\n그래서 부분집합을 만들지 말고, 각 수가 몇 번 쓰이는지를 세요.\nMOD 는 10^9 + 7 이에요. 계산마다 나머지만 들고 있으면 수가 안 커져요.") },
+      { hi: [7, 9], bubble: t(E,
+        "For addition, how many subsets does one number sit in? Pin it down — the other N−1 numbers are each free, so it's in 2^(N-1) subsets. So every number is added 2^(N-1) times → answer = 2^(N-1) · (sum of all numbers).",
+        "덧셈에서, 수 하나는 부분집합 몇 개에 들어갈까요?\n그 수를 꼭 넣고 나머지 N−1 개는 넣거나 빼거나 마음대로라, 2^(N-1) 개의 부분집합에 들어가요.\n그래서 답은 2^(N-1) × (모든 수를 더한 값) 이에요.") },
+      { hi: [11, 16], bubble: t(E,
+        "For multiplication, how do we sum every subset's product without listing them? Expand (1+A1)(1+A2)…(1+An) — each bracket picks 1 or Ai, and the numbers where you picked Ai are exactly one subset. That covers the empty subset too (all 1's), so subtract that 1.",
+        "곱셈에서는 부분집합마다 곱한 값을 어떻게 다 적지 않고 더할까요?\n(1+A1)(1+A2)…(1+An) 을 펼치면, 괄호마다 1 이나 Ai 를 고른 항이 나오고, Ai 를 고른 수들이 곧 부분집합 하나예요.\n이러면 빈 집합(모두 1 을 고른 경우, 곱은 1)까지 포함되니 그 1 만 빼요.") },
+      { hi: [18, 28], bubble: t(E,
+        "For XOR, why work bit by bit? XOR sets a digit to 1 only when an ODD number of chosen numbers have a 1 there. If k numbers have that bit, odd picks = 2^(k-1) and the rest are free = 2^(N-k) — multiply, times the bit's value, and sum over all bits.",
+        "XOR 는 왜 자리(비트)마다 따로 셀까요?\nXOR 는 어떤 자리가 1 이 되려면 그 자리에 1 이 있는 수를 홀수 개 골라야 해요.\n그 자리에 1 이 있는 수가 k 개면 홀수로 고르는 방법은 2^(k-1) 가지, 나머지 N−k 개는 마음대로라 2^(N-k) 가지예요.\n둘을 곱하고 자리값을 곱한 뒤 모든 자리에 대해 더해요.") },
+      { hi: [30, 30], bubble: t(E,
+        "All three branches already keep ans mod 10^9+7, so we just print it. Each branch touches every number about once — fast even for N=50000, unlike listing 2^N subsets.",
+        "세 갈래 모두 ans 를 이미 10^9+7 로 나눈 나머지로 들고 있어서, 그대로 출력해요.\n어느 갈래든 수를 한 번씩만 훑어서 N 이 50000 이어도 금방 끝나요 — 부분집합 2^N 개를 다 적는 것과는 비교가 안 돼요.") },
+    ],
+  };
+}
+
+/* ── 브루트(첫 아이디어) CodeWalk — 같은 원칙: PY_SETUP·BRUTE_* 배열을 이어붙이기만 한다. ── */
+export function getMcc21SimpleMathBruteWalk(E) {
+  return {
+    code: [...PY_SETUP, "", ...BRUTE_MAKE_PY, "", ...BRUTE_COMBINE_PY, "", ...BRUTE_OUT_PY],
+    vars: [
+      { v: "subsets", ko: "지금까지 만든 부분집합 모두", en: "every subset built so far" },
+      { v: "total", ko: "부분집합 값들의 합", en: "sum of subset values" },
+    ],
+    beats: [
+      { hi: [0, 5], bubble: t(E,
+        "What do we start from? The same three values the examples used — N numbers in a, and P picking the operator. MOD keeps the running total small.",
+        "무엇부터 있어야 시작할 수 있을까요?\n예제에서 쓰던 값 그대로예요 — 수 N 개가 a 에 있고, P 가 연산자를 골라요.\nMOD 는 총합이 너무 커지지 않게 해 줘요.") },
+      { hi: [7, 12], bubble: t(E,
+        "How do we make every subset without missing any? Start with one empty subset, and for each number, copy every subset we already have and add that number in. That is exactly what built the 7 rows on the previous page.",
+        "부분집합을 하나도 안 빠뜨리고 어떻게 다 만들까요?\n빈 부분집합 하나로 시작해서, 수를 하나 볼 때마다 지금 있는 부분집합을 전부 베껴서 그 수를 넣어요.\n그렇게 만든 게 바로 앞 쪽의 7 줄이에요.") },
+      { hi: [14, 26], bubble: t(E,
+        "Once we have one subset, how do we turn it into a single number? Take the first number and fold the rest into it with the operator P picks, then add that value to the running total.",
+        "부분집합 하나가 있으면, 그걸 어떻게 수 하나로 합칠까요?\n첫 수를 잡고 나머지를 P 가 고른 연산자로 하나씩 합쳐요.\n그렇게 나온 값을 총합에 더해요.") },
+      { hi: [28, 29], bubble: t(E,
+        "This is correct — on the sample it prints 24 / 23 / 12, same as the official output. Next page asks the one question that matters: how far does this go?",
+        "이 코드는 맞아요. 예제에 넣으면 공식 답과 똑같이 24 / 23 / 12 가 나와요.\n다음 쪽에서 딱 하나를 물어볼게요 — 이 방법은 어디까지 갈까요?") },
+    ],
+  };
+}
+
 /* ═══════════════════════════════════════════════════════════════
    Concept sim — for the set {1,2,3}, pick an operator (+ / × / ⊕),
    LIST all 7 nonempty subsets with each subset's combined value and

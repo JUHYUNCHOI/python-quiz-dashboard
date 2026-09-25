@@ -1,7 +1,9 @@
 import { C, t } from "@/components/quest/theme";
-import { getReflectionSections, ReflectionGrid } from "./components";
+import { getReflectionBruteWalk, getReflectionWalk, ReflectionGrid } from "./components";
 import { ReflectionRuleSim, ReflectionGroupSim, ReflectionUpdateSim, ReflectionBruteSim } from "./sims";
-import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+
+const A = "#0891b2";
 
 export function makeReflectionCh1(E) {
   return [
@@ -160,16 +162,34 @@ export function makeReflectionCh1(E) {
 }
 
 export function makeReflectionCh2(E, lang = "py") {
+  /* 2026-09-25: CodeSectionView(💡 노트가 코드 *위*에 뜨는, 금지된 모양) 6쪽 →
+     CodeWalk(말풍선이 코드 줄에 붙음) 2쪽으로 전환. 🔒 USACO_VERIFIED — RFL_BRUTE_*
+     /RFL_FAST_* 는 한 글자도 안 바꿨다. 자세한 이유는 components.jsx 의 walk
+     함수 위 주석 참고. 잃는 것 하나 — 옛 1️⃣ 섹션의 SampleInputAside(샘플 줄
+     하이라이트)는 뺐다. Ch1 1-2(입출력 카드)에서 이미 줄 단위로 다 보여줘서
+     중복이었다는 게 검토 결론이다. */
+  const wb = getReflectionBruteWalk(E, lang);
+  const wf = getReflectionWalk(E, lang);
   return [
-    /* 2-1..2-7 — sections directly. */
-    ...getReflectionSections(E).map((sec, i) => ({
+    // 2-1: 첫 코드 — 눈에 보이는 대로 짠 브루트 (읽기 → 비용함수 → 초기합 → naive update + 한계)
+    {
       type: "reveal",
-      narr: i === 0
-        ? t(E,
-            "Flips per group = the smaller of (cells unlike me) and (the rest).",
-            "나와 다른 칸과 나머지 중 적은 쪽만 뒤집어요.")
-        : "",
-      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
-    })),
+      narr: t(E,
+        "Flips per group = the smaller of (cells unlike me) and (the rest). First, the simplest code — rebuild the total every time.",
+        "나와 다른 칸과 나머지 중 적은 쪽만 뒤집어요. 먼저 가장 단순한 코드 — 매번 전체를 다시 세요."),
+      content: (
+        <CodeWalk E={E} lang={lang} code={wb.code} vars={wb.vars} beats={wb.beats} accent={A} />
+      ),
+    },
+    // 2-2: 빠른 코드 — 바뀐 묶음만 ±1 (인사이트 → 초기합 → update → 복잡도)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Read the solution top to bottom — each bubble sits on the lines it explains.",
+        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+      content: (
+        <CodeWalk E={E} lang={lang} code={wf.code} vars={wf.vars} beats={wf.beats} accent={A} />
+      ),
+    },
   ];
 }

@@ -1,7 +1,9 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc21SimpleMathSections, getMcc21SimpleMathBruteSections } from "./components";
+import { getMcc21SimpleMathWalk, getMcc21SimpleMathBruteWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const KA = { wordBreak: "keep-all" };
+const A = "#f97316";
 
 /* ================================================================
    SOLUTION CODE (counting per element / per bit — never enumerate
@@ -249,18 +251,23 @@ export function makeMcc21SimpleMathCh1(E) {
 }
 
 export function makeMcc21SimpleMathCh2(E, lang = "py") {
+  const wb = getMcc21SimpleMathBruteWalk(E);
+  const wf = getMcc21SimpleMathWalk(E);
   return [
-    /* 2-0: 첫 코드 (2026-09-17 신설)
+    /* 2-0: 첫 코드 (2026-09-17 신설, 2026-09-25 CodeWalk 로 전환)
        왜 생겼나 — project-lead 판정: 기승전결의 **'첫 코드' 단계가 통째로 없었다.**
        예제를 손으로 세다가 곧장 최종 공식으로 점프했다.
        이 쪽이 있어야 다음 쪽의 "그런데 N 이 커지면" 이 **무엇에 대한 한계인지** 가 생긴다.
-       비트 연산은 안 쓴다 — 안 가르친 개념이다. 리스트를 늘려 가며 만든다. */
+       비트 연산은 안 쓴다 — 안 가르친 개념이다. 리스트를 늘려 가며 만든다.
+       2026-09-25: ProgressiveCodeStepper(💡 노트가 코드 위) → CodeWalk(말풍선이 코드 줄에 붙음)로. */
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
         "First, write it the way you just counted by hand.",
         "먼저 방금 손으로 센 그대로 짜 봐요."),
-      sections: getMcc21SimpleMathBruteSections(E),
+      content: (
+        <CodeWalk E={E} lang="py" code={wb.code} vars={wb.vars} beats={wb.beats} accent={A} />
+      ),
     },
     // 2-1: plan — brute limit → fast idea
     {
@@ -298,13 +305,15 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: code, CodeWalk — bubbles sit on the lines they explain (2026-09-25 전환)
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Solution code — one section per operator. Read the 💡 note first, then the code.",
-        "연산자마다 한 부분씩 있어요. 💡 설명을 먼저 읽고 코드를 봐요."),
-      sections: getMcc21SimpleMathSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains.",
+        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+      content: (
+        <CodeWalk E={E} lang="py" code={wf.code} vars={wf.vars} beats={wf.beats} accent={A} />
+      ),
     },
   ];
 }

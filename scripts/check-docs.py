@@ -8,7 +8,14 @@
 import os, re, sys
 
 HOME = os.path.expanduser("~")
-PAT = re.compile(r"`((?:\.claude/|scripts/|data/|app/|lib/|components/|hooks/|~?/?Users/[^`]*memory/)[^`\s]+?\.(?:md|py|ts|tsx|mjs|jsx))`")
+# ⚠️ 2026-09-25 넓힘 — `memory/xxx.md` 처럼 **짧게** 쓴 참조를 못 보고 있었다.
+#   `CLAUDE.md:224` 가 `memory/feedback_plain_korean.md` 를 가리키는데 **그 파일이 없었고**,
+#   이 검사기는 **0건**이라고 했다. 담당 하나가 그 파일을 찾다 시간을 썼다.
+#   패턴이 `~/Users/...memory/` 같은 **긴 형태만** 봤기 때문이다 —
+#   그런데 CLAUDE.md 본문은 거의 다 `memory/...` 로 짧게 쓴다. 정확히 못 보는 쪽만 골라 봤다.
+#   "없는 걸 가리키는 목차는 틀린 본문보다 나쁘다" 가 이 검사기가 생긴 이유인데
+#   **그 이유에 제일 잘 맞는 모양을 놓치고 있었다.**
+PAT = re.compile(r"`((?:\.claude/|scripts/|data/|app/|lib/|components/|hooks/|memory/|~?/?Users/[^`]*memory/)[^`\s]+?\.(?:md|py|ts|tsx|mjs|jsx))`")
 
 def scan(path):
     bad = []
@@ -18,7 +25,11 @@ def scan(path):
         if "*" in ref or "<" in ref:      # glob·자리표시자는 건너뛴다
             continue
         p = ref.replace("~", HOME)
-        if not os.path.exists(p if p.startswith("/") else p):
+        # `memory/...` 는 저장소 밖(홈 아래 프로젝트 메모리 폴더)에 산다.
+        if p.startswith("memory/"):
+            p = os.path.join(HOME, ".claude", "projects",
+                             "-Users-juhyunchoi-Coding-python-quiz-dashboard", p)
+        if not os.path.exists(p):
             bad.append((txt[:m.start()].count("\n") + 1, ref))
     return bad
 
