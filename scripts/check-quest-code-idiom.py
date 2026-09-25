@@ -99,12 +99,94 @@ cpp_lesson_text = "".join(
     io.open(f, encoding="utf-8", errors="replace").read()
     for f in glob.glob("data/cpp/lesson*.ts"))
 
-# IDIOMS 는 전부 파이썬 손버릇이다 → 파이썬 레슨만 본다.
-taught = {name: bool(teach.search(py_lesson_text)) for name, _, teach, _ in IDIOMS}
+# ⭐ 2026-09-25 — **「가르쳤나」를 한 층만 보다가 틀렸다.**
+#   `mooin3` 의 `chr(c+97)` 를 두고 *"커리briculum 에 아예 없다"* 고 보고했는데 **틀렸다.**
+#   `data/lesson*.ts` 에는 정말 0건이지만, **`data/algorithm/topics/string.ts` 가
+#   `ord(s[i]) - ord('a')` 를 a→0 · z→25 그림까지 붙여 가르치고 있었다.**
+#   `learning_tracks.md` 상 알고리즘(4단계)이 대회(5단계)보다 **앞**이라, 거기서 가르쳤으면
+#   quest 가 전제해도 되는 것이다. **한 층만 보고 「없다」고 하면 엉뚱한 처방이 나온다** —
+#   실제로 그때 「🔒 코드를 바꾸자(=USACO 재제출)」까지 갈 뻔했고, 진짜 답은
+#   **「가르친 걸 이 quest 가 안 이어줬다」(화면만 고치면 됨)** 였다.
+#
+# 그래서 **다리를 세 층에서 찾는다:**
+#   ① 파이썬 레슨      `data/lesson*.ts`
+#   ② 알고리즘 토픽    `data/algorithm/topics/*.ts`   ← 이게 빠져 있었다
+#   ③ **그 quest 자신**                               ← 아래 per-quest 에서 따로 본다
+#      (quest 가 자기 화면에서 설명했으면 그건 다리가 **있는** 것이다.
+#       `mooin3` 에 실제로 그런 다리를 놓았다 — 그걸 검사기가 못 보면 영원히 걸린다)
+algo_topic_text = "".join(
+    io.open(f, encoding="utf-8", errors="replace").read()
+    for f in glob.glob("data/algorithm/topics/*.ts"))
+CURRICULUM_TEXT = py_lesson_text + algo_topic_text
+taught = {name: bool(teach.search(CURRICULUM_TEXT)) for name, _, teach, _ in IDIOMS}
+taught_where = {
+    name: ("레슨" if teach.search(py_lesson_text) else "알고리즘 토픽")
+    for name, _, teach, _ in IDIOMS if teach.search(CURRICULUM_TEXT)
+}
 
 # ⚠️ 배열 **이름**으로 찾지 마라. 2026-09-11 에 그렇게 짰다가 chipxchg(`code`)와
 #    mooin2(`bruteReadCpp`)의 진짜 <bits/stdc++.h> 를 놓쳤다 — 검사기는 "2개" 라고 했고
 #    실제로는 4개였다. 이름은 quest 마다 제멋대로다. **내용으로 언어를 가른다.**
+def _strip_arrays(src):
+    """배열 리터럴이 차지한 **원본 구간**을 통째로 지운다 (코드 배열 제거용).
+
+    `arrays()` 와 같은 괄호-깊이 방식이되, 내용이 아니라 **범위**를 돌려준다.
+    """
+    out, i, keep = [], 0, 0
+    while True:
+        i = src.find("[", i)
+        if i < 0:
+            out.append(src[keep:])
+            return "".join(out)
+        d, j, instr = 0, i, None
+        while j < len(src):
+            ch = src[j]
+            if instr:
+                if ch == "\\":
+                    j += 1
+                elif ch == instr:
+                    instr = None
+            elif ch in "\"'`":
+                instr = ch
+            elif ch == "[":
+                d += 1
+            elif ch == "]":
+                d -= 1
+                if not d:
+                    break
+            j += 1
+        if j >= len(src):
+            out.append(src[keep:])
+            return "".join(out)
+        out.append(src[keep:i])          # 배열 앞까지만 남긴다
+        keep = j + 1
+        i = j + 1
+
+
+_PROSE_CACHE = {}
+
+
+def prose_of(quest):
+    """그 quest 가 **학생에게 보여주는 글**(코드 배열 밖). 다리가 quest 안에 있나 볼 때 쓴다.
+
+    코드 배열은 통째로 지운다 — 코드에 `ord(` 를 쓴 건 「쓴 것」이지 「가르친 것」이 아니다.
+    """
+    if quest in _PROSE_CACHE:
+        return _PROSE_CACHE[quest]
+    txt = []
+    for f in glob.glob(f"quest-problems/{quest}/*.jsx") + glob.glob(f"quest-problems/{quest}/*.tsx"):
+        src = io.open(f, encoding="utf-8", errors="replace").read()
+        # ⚠️ 2026-09-25 — 처음엔 `src.replace(unesc(lines), "")` 로 지웠는데 **아무 일도 안 했다.**
+        #    `unesc()` 가 돌려주는 건 **디코드된 코드 문자열**이라 원본(따옴표로 쪼개진 JS 배열)에
+        #    그대로 들어있지 않다. 그래서 코드 안의 `sys.stdin.buffer` 가 「quest 가 설명했다」로
+        #    **거짓 통과**했다 — `mooin3`·`photoshoot25`·`rounding` 셋 다 그랬다.
+        #    **거짓 통과는 진짜 구멍을 가린다.** 손으로 확인해서 잡았다.
+        #    → 배열이 차지한 **원본 구간**을 잘라낸다.
+        txt.append(_strip_arrays(src))
+    _PROSE_CACHE[quest] = "".join(txt)
+    return _PROSE_CACHE[quest]
+
+
 STR = re.compile(r'"((?:[^"\\]|\\.)*)"')
 CPP_SIGN = re.compile(r"#include|using namespace|int main\s*\(|\bcout\b|\bcin\b")
 PY_SIGN = re.compile(r"^\s*(?:import |from |def |print\()|sys\.stdin", re.M)
@@ -149,6 +231,7 @@ def unesc(lines):
 
 
 hits, cpp_hits = {}, {}
+self_taught = {}   # quest 가 자기 화면에서 설명해 둔 것
 shift_py, shift_cpp = set(), set()
 for f in sorted(glob.glob("quest-problems/*/*.jsx")):
     quest = f.split("/")[1]
@@ -162,9 +245,16 @@ for f in sorted(glob.glob("quest-problems/*/*.jsx")):
             if uses_shift(code):
                 shift_cpp.add(f"{quest}({f.split(chr(47))[-1][:-4]})")
         elif PY_SIGN.search(code):                     # 파이썬 배열
-            for name, use, _, _ in IDIOMS:
-                if use.search(code) and not taught[name]:
-                    hits.setdefault(name, set()).add(quest)
+            for name, use, teach, _ in IDIOMS:
+                if not use.search(code) or taught[name]:
+                    continue
+                # ③ 그 quest 가 **자기 화면에서** 설명했으면 다리가 있는 것이다.
+                #    코드 배열 밖(= 학생에게 보여주는 글)에서만 찾는다 — 코드에 쓴 건
+                #    「쓴 것」이지 「가르친 것」이 아니다.
+                if teach.search(prose_of(quest)):
+                    self_taught.setdefault(name, set()).add(quest)
+                    continue
+                hits.setdefault(name, set()).add(quest)
             if uses_shift(code):
                 shift_py.add(f"{quest}({f.split(chr(47))[-1][:-4]})")
 
@@ -173,7 +263,13 @@ print(f"안 가르친 파이썬 기교를 쓰는 quest {total}개")
 print("  (판정이 아니다 — 본질이면 레슨에서 가르치고, 수단이면 갈아치운다)\n")
 for name, use, teach, why in IDIOMS:
     qs = sorted(hits.get(name, ()))
-    mark = "레슨에서 가르침 ✅" if taught[name] else f"레슨 설명에 **없음** — quest {len(qs)}개"
+    if taught[name]:
+        mark = f"{taught_where.get(name, '커리큘럼')}에서 가르침 ✅"
+    else:
+        mark = f"커리큘럼에 **없음** — quest {len(qs)}개"
+    st = sorted(self_taught.get(name, ()))
+    if st:
+        mark += f"  ·  quest 가 스스로 설명함: {', '.join(st)}"
     print(f"  ▸ {name} — {mark}")
     if qs and not taught[name]:
         print(f"     왜 위험한가: {why}")
