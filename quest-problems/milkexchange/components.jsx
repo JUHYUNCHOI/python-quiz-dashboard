@@ -123,7 +123,7 @@ export function getMilkExchangeWalk(E, lang = "py") {
       beats: [
         { hi: [0, 17], bubble: t(E,
           "What do we need before we can follow the minutes? N, M, the direction string, and each cow's capacity. So read those first — each cow starts full.",
-          "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 소마다의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 용량만큼 가득 차 시작해요.") },
+          "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 소마다의 용량이에요.\n그러니 이 넷을 먼저 읽어요 — 각 소는 용량만큼 가득 차 시작해요.") },
         { hi: [19, 32], bubble: t(E,
           "Passing milk minute by minute is what the problem describes, but M can be 10^9 — too slow. Instead find where milk is actually lost forever: at a 'deficit pair', an 'R' cow right before an 'L' cow, trading milk back and forth. Mark every such boundary.",
           "매분 우유를 넘기는 게 문제 그대로의 방식이지만, M 이 최대 10^9 라 너무 느려요.\n대신 우유가 실제로 영영 사라지는 곳을 찾아요 — 'R' 소 바로 옆에 'L' 소가 있는 자리(서로 계속 주고받는 경계)예요. 그 경계를 전부 표시해요.") },
@@ -142,7 +142,7 @@ export function getMilkExchangeWalk(E, lang = "py") {
     beats: [
       { hi: [0, 2], bubble: t(E,
         "What do we need before we can follow the minutes? N, M, the direction string, and each cow's capacity. So read those first — each cow starts full.",
-        "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 소마다의 용량이에요.\n그러니 이 넷을 먼저 읽어요. 각 소는 용량만큼 가득 차 시작해요.") },
+        "무엇을 알아야 흐름을 따라갈 수 있나요? N, M, 방향 문자열, 그리고 소마다의 용량이에요.\n그러니 이 넷을 먼저 읽어요 — 각 소는 용량만큼 가득 차 시작해요.") },
       { hi: [4, 11], bubble: t(E,
         "Passing milk minute by minute is what the problem describes, but M can be 10^9 — too slow. Instead find where milk is actually lost forever: at a boundary 'R' cow right before an 'L' cow. Mark every such boundary.",
         "매분 우유를 넘기는 게 문제 그대로의 방식이지만, M 이 최대 10^9 라 너무 느려요.\n대신 우유가 실제로 영영 사라지는 곳을 찾아요 — 'R' 소 바로 옆에 'L' 소가 있는 경계예요. 그 경계를 전부 표시해요.") },

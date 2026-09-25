@@ -134,10 +134,10 @@ export function getXorStringWalk(E, lang = "py") {
           "어느 beauty 를 써야 하나요? 이 쌍의 두 글자를 보고 f00, f11, f01 중 맞는 걸 골라요.") },
         { hi: [50, 51], bubble: t(E,
           "Add this pair's weighted beauty (w × f) to the running total.",
-          "이 쌍의 가중치를 곱한 beauty (w × f) 를 누적 합에 더해요.") },
+          "이 쌍의 가중치를 곱한 beauty (w × f) 를 지금까지 쌓아 온 합에 더해요.") },
         { hi: [52, 54], bubble: t(E,
           "Print the total.",
-          "누적 합을 출력해요.") },
+          "쌓아 온 합을 출력해요.") },
       ],
     };
   }
@@ -159,10 +159,10 @@ export function getXorStringWalk(E, lang = "py") {
         "어느 beauty 를 써야 하나요? 이 쌍의 두 글자를 보고 f00, f11, f01 중 맞는 걸 골라요.") },
       { hi: [29, 29], bubble: t(E,
         "Add this pair's weighted beauty (w × f) to the running total.",
-        "이 쌍의 가중치를 곱한 beauty (w × f) 를 누적 합에 더해요.") },
+        "이 쌍의 가중치를 곱한 beauty (w × f) 를 지금까지 쌓아 온 합에 더해요.") },
       { hi: [31, 31], bubble: t(E,
         "Print the total.",
-        "누적 합을 출력해요.") },
+        "쌓아 온 합을 출력해요.") },
     ],
   };
 }

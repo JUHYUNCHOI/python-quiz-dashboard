@@ -261,11 +261,10 @@ export function makeHungryCowCh1(E) {
 export function makeHungryCowCh2(E, lang = "py") {
   return [
     {
-      type: "progressive",
+      type: "opt-codewalk",
       narr: t(E,
         "Instead of counting day by day, count each gap between deliveries at once.",
         "하루씩 세는 대신 배달과 배달 사이를 한 번에 세어 볼게요."),
-      sections: getHungryCowSections(E),
     },
     {
       type: "quiz",

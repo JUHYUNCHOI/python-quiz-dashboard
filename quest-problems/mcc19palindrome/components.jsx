@@ -320,8 +320,8 @@ export function getMcc19PalWalk(E) {
     ],
     beats: [
       { hi: [0, 8], bubble: t(E,
-        "What should we output? The n-th palindrome string. A length-L palindrome is fully decided by its front half (half of L, rounded up), so its count is k raised to that many digits. Add these counts length by length until you pass n — that's the length c the answer lives in.",
-        "무엇을 출력해야 하나요? n 번째 회문 문자열이에요.\n길이 L 짜리 회문은 앞 절반(L 의 절반, 올림)만 고르면 다 정해지니, 그 자리 수만큼 k 를 거듭제곱한 값이 개수예요.\n이 개수를 길이별로 더해 n 을 넘기는 순간까지 가요 — 그게 답의 길이 c 예요.") },
+        "What should we output? The n-th palindrome string — and a length-L palindrome is fully decided by its front half (half of L, rounded up), so its count is k raised to that many digits. Add these counts length by length until you pass n; that's the length c the answer lives in.",
+        "무엇을 출력해야 하나요? n 번째 회문 문자열이에요 — 길이 L 짜리 회문은 앞 절반(L 의 절반, 올림)만 고르면 다 정해지니, 그 자리 수만큼 k 를 거듭제곱한 값이 개수예요.\n이 개수를 길이별로 더해 n 을 넘기는 순간까지 가요 — 그게 답의 길이 c 예요.") },
       { hi: [9, 14], bubble: t(E,
         "Once we know length c, find n's rank r inside that length (0-indexed) — subtract off the counts of every shorter length.",
         "길이 c 를 찾았으면, 그 안에서 n 이 몇 번째인지(0 부터 센 순위 r)를 구해요 — 앞선 길이들의 개수를 다 빼면 돼요.") },

@@ -76,9 +76,14 @@
 | 무엇 | 담당 | 상태 |
 |---|---|---|
 | CodeWalk A~G조 **54개** | frontend-engineer ×7 | **DONE** — 누적 **58/66** |
-| CodeWalk H조 5개(`permutation`+`favperm2` 포함) | frontend-engineer | READY 도는중 |
-| `reflection`·`mcc21simplemath` **설계 검토** | pedagogy-reviewer | READY 도는중 — 마지막 2개 |
-| 첫 걸음에 생각이 0인 자리 4개 | frontend-engineer | READY 도는중 |
+| CodeWalk H조 5개(`permutation`+`favperm2` 포함) | frontend-engineer | **DONE** |
+| `reflection`·`mcc21simplemath` **설계 검토** | pedagogy-reviewer | **DONE** |
+| 첫 걸음에 생각이 0인 자리 4개 | frontend-engineer | **DONE** |
+| 말풍선 길이 축 — `makedistinct` | frontend-engineer | **DONE** `ed1bbe02` — 단 근본 원인은 C/D 유형 |
+| moohunt — 7쪽 접기 + 8쪽 beat 분리 | PM 판정 → 실행 | **DONE** `dcc3a904` `592bf21a` — **46→41클릭** |
+| 💻 C++ 설명이 코드와 다른 quest 5개 | 메인 세션 | **DONE** `9e2a35a0` |
+| 복사 버튼 — 진짜 클릭 확인 | frontend-engineer | **DONE** — 4건 전부 복사됨. **버그가 아니라 낡은 조언**(`57bd4184`) |
+| CodeWalk **1스탑 나머지 18개** | frontend-engineer ×3 | **READY 도는중** |
 | 복사 버튼 — 고정 바가 클릭을 삼키던 것 | frontend-engineer | **DONE** `fee8617c` — quest 180개 |
 
 ### ⭐ 복사 버튼 축이 닫혔다 — **원인은 넷째였다**
@@ -183,6 +188,49 @@ PM 이 **아무도 안 짚은 곳**을 찾았다: `.quest-navbar` **바깥 div �
   ④ 22개에 `DEFAULT_META` 의 **2** 를 그대로 띄운다. 카탈로그는 `questDifficulty()` 를
   거쳐서 안 그런데, 여기만 샌다.
 - **`cowcollege:581`** — `O(N²)` 옆에 평이한 말이 없다.
+
+## 🔴 오늘 밤 새로 열린 축 — **C++ STL 개념 게이트** (2026-09-25)
+
+선생님: *"프로젝트 매니저한테 올려. **이것도 너무 설명이 많잖아.**"*
+→ 말풍선 **219곳·quest 63개**를 뽑았는데, 1위 `makedistinct` 를 「가르기」로 고쳤더니
+**C++ 초심자 학생이 처방을 반증했다** — *"`long long` 이 뭔지 **한 번도 안 배웠는데**
+둘을 비교하며 설명한다"*, *"`auto &kv`·`.second`·`greater<>` 가 한 번에 쏟아져
+**사실상 다 포기하고 싶었다**"*. 쪼갠 diff 는 5문장을 2+3 으로 나눈 것뿐이었다.
+
+**교육 판정: 네 유형이고 처방이 다르다** — A 가른다 · B 줄인다 · C 손대지 마라 ·
+**D(신규) 가르치긴 했는데 이 quest 시점에 리마인드가 없다 → ⓑ 추천 게이트.**
+*"D 의 처방은 설명을 늘리지 않는 쪽이다. ⓐ(리마인드 추가)는 선생님 지적과 정면 충돌."*
+구분선: **«이 문제만의 아이디어인가, C++ 언어 전반의 손버릇인가»** — 후자는 게이트.
+
+새 검사기 `scripts/check-cpp-stl-gate.py`(`6ee3410b`)가 C/D 를 가른다.
+실측 quest 121개 중 **C 3개** — `makedistinct`·`livestock`·`mooin3`
+(`llabs` 와 `map<K, vector<V>>`. 둘 다 **저장소 어디에도 가르치는 자리가 없다**).
+⚠️ **D 의 수(118)는 판정에 쓰지 마라** — 게이트에 `cpp-*` 개념이 아직 하나도 없으니
+거의 전부 D 로 나오는 게 당연하다. 쓸 수 있는 건 **C 쪽**이다.
+
+### ⚠️ 이 축에서 내가 거꾸로 알고 있던 것 — 고쳐 적는다
+CLAUDE.md 는 *"빈 `concepts_required` 는 `every()` 가 항상 true 라 **아무에게나
+추천**한다"* 고 하는데 — 그 함수(`readyQuests()`)는 **호출하는 곳이 0곳**이다.
+학생이 보는 두 곳은 **정반대로 막아 놨다**:
+`app/quest/page.tsx:295` 와 `components/quest/QuestCompletionCard.tsx:72` 가
+둘 다 **빈 배열을 명시적으로 걸러낸다.**
+→ 실제 결과는 「아무에게나 추천」이 아니라 **「추천 장치에 아예 안 보인다」**
+  (quest 180개 중 **118개가 메타에 항목 자체가 없다**). **위험의 방향이 반대다.**
+  카탈로그·클릭은 안 막으므로 **「학생 데이터 사고」로 취급하지 마라.**
+⛔ **`{ ...DEFAULT_META, concepts_required: [...] }` 로 껍데기를 만들지 마라** —
+  `difficulty: 2` 가 섞여 들어가고 `quest-difficulty.ts` 가 그걸 **「사람이 매긴 값」**
+  으로 보고한다. 2026-09-13 *"이 문제가 진짜 레벨3인가?"* 와 **같은 사고**다.
+  **게이트를 채우려면 난이도도 진짜로 매겨라.** 못 매기면 항목을 안 만드는 게 낫다.
+
+### READY
+- **C 3개 게이트** — `cpp-llabs`·`cpp-nested-container-value` 두 개념을
+  `CONCEPT_ONTOLOGY` + `count-quests.py` 의 `UNTAUGHT` 에 **1:1 로** 넣고,
+  `makedistinct`·`livestock`·`mooin3` 에 게이트를 건다. **난이도는 같이 감사한다.**
+  ⏳ PM 판정 필요 — 개념 이름을 박는 일이라 되돌리기가 비싸다.
+- **`cppOnly` 설명문 vs 🔒 코드** — 오늘 손으로 quest 5개를 찾아 고쳤는데
+  **이 층을 보는 검사 항목이 없다.** `check-taught-vs-final-code.py` 는
+  **모노스페이스 코드 블록만** 보고 `cppOnly`·`why` 설명문은 일부러 안 본다.
+  → 검사기를 넓힐지 새로 만들지. **오탐 하나(`cheese`)를 이미 봤으니 사전을 좁게.**
 
 ## 🟡 BLOCKED
 

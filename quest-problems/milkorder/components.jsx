@@ -253,8 +253,8 @@ export function getMilkOrderWalk(E, lang = "py") {
     vars,
     beats: [
       { hi: [0, 5], bubble: t(E,
-        "What do we need to know first? The hierarchy order and the fixed spots. So read N, M, K and the hierarchy list hier. (This old-style USACO contest uses file I/O.)",
-        "무엇을 먼저 알아야 하나요? 소들의 순서(hier)와 고정 자리들이에요. 그래서 N, M, K 와 순서 목록 hier 를 읽어요. (옛날 USACO 방식이라 파일에서 읽어요.)") },
+        "What do we need to know first? The hierarchy order and the fixed spots. So read N, M, K and the hierarchy list hier — this old-style USACO contest uses file I/O.",
+        "무엇을 먼저 알아야 하나요? 소들의 순서(hier)와 고정 자리들이에요. 그래서 N, M, K 와 순서 목록 hier 를 읽어요 — 옛날 USACO 방식이라 파일에서 읽어요.") },
       { hi: [7, 13], bubble: t(E,
         "We'll need to look up a fixed spot by cow number, over and over. So store it once in a dict: cow -> slot.",
         "고정 자리를 소 번호로 계속 찾아봐야 해요. 그래서 딕셔너리에 소 번호 → 자리로 한 번 저장해 둬요.") },

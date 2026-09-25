@@ -104,6 +104,72 @@ export function HungryCowProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ 위 FULL_PY/FULL_CPP 를 **그대로** 쓴다 — 배열 내용은 절대 바꾸지 않고
+   beats(설명 말풍선)만 덧붙인다. getHungryCowSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getHungryCowWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "eaten", ko: "지금까지 실제로 먹은 날 수", en: "days actually eaten so far" },
+        { v: "stock", ko: "지금 남은 건초 양", en: "hay left right now" },
+        { v: "prev", ko: "마지막으로 처리한 날", en: "the last day we've processed" },
+      ],
+      beats: [
+        { hi: [6, 12], bubble: t(E,
+          "What do we hand back? The number of days Bessie actually eats by day T. T can reach 10^14, so N and T need long long. Read every (day, bales) delivery.",
+          "무엇을 내놓아야 하나요? T 일까지 Bessie 가 실제로 먹은 날의 수예요.\nT 가 10^14 까지 가서 N, T 는 long long 으로 담아요.\n배달마다 (day, bales) 를 읽어요.") },
+        { hi: [13, 13], bubble: t(E,
+          "We'll process gaps between deliveries in order, so sort by day first.",
+          "배달 사이 간격을 순서대로 처리할 거라, 먼저 날짜순으로 정렬해요.") },
+        { hi: [15, 17], bubble: t(E,
+          "Start counting: eaten so far, hay in stock, and the last day we've handled — all 0.",
+          "eaten(먹은 날), stock(남은 건초), prev(처리한 날) 을 모두 0 에서 시작해요.") },
+        { hi: [18, 25], bubble: t(E,
+          "For each delivery: the gap since prev is gap days with no new hay, so she eats min(stock, gap) of them. Add the new bales, then move prev to day − 1 (she still eats on the delivery day itself).",
+          "배달마다: prev 이후 gap 일은 새 건초가 없으니 min(stock, gap) 만큼만 먹어요.\n그다음 새 건초를 더하고, prev 를 day − 1 로 옮겨요 (배달 당일도 먹으니까요).") },
+        { hi: [26, 27], bubble: t(E,
+          "After the last delivery, the same rule applies up to day T — eat min(stock, gap) more.",
+          "마지막 배달 이후에도 T 일까지 같은 규칙이에요 — min(stock, gap) 만큼 더 먹어요.") },
+        { hi: [28, 28], bubble: t(E,
+          "Print the total days eaten.",
+          "먹은 날 수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "eaten", ko: "지금까지 실제로 먹은 날 수", en: "days actually eaten so far" },
+      { v: "stock", ko: "지금 남은 건초 양", en: "hay left right now" },
+      { v: "prev_day", ko: "마지막으로 처리한 날", en: "the last day we've processed" },
+    ],
+    beats: [
+      { hi: [0, 4], bubble: t(E,
+        "What do we hand back? The number of days Bessie actually eats by day T. Read every (day, bales) delivery.",
+        "무엇을 내놓아야 하나요? T 일까지 Bessie 가 실제로 먹은 날의 수예요.\n배달마다 (day, bales) 를 읽어요.") },
+      { hi: [6, 6], bubble: t(E,
+        "We'll process gaps between deliveries in order, so sort by day first.",
+        "배달 사이 간격을 순서대로 처리할 거라, 먼저 날짜순으로 정렬해요.") },
+      { hi: [8, 10], bubble: t(E,
+        "Start counting: eaten so far, hay in stock, and the last day we've handled — all 0.",
+        "eaten(먹은 날), stock(남은 건초), prev_day(처리한 날) 을 모두 0 에서 시작해요.") },
+      { hi: [12, 21], bubble: t(E,
+        "For each delivery: the gap since prev_day is gap days with no new hay, so she eats min(stock, gap) of them. Add the new bales, then move prev_day to day − 1 (she still eats on the delivery day itself).",
+        "배달마다: prev_day 이후 gap 일은 새 건초가 없으니 min(stock, gap) 만큼만 먹어요.\n그다음 새 건초를 더하고, prev_day 를 day − 1 로 옮겨요 (배달 당일도 먹으니까요).") },
+      { hi: [23, 25], bubble: t(E,
+        "After the last delivery, the same rule applies up to day T — eat min(stock, gap) more.",
+        "마지막 배달 이후에도 T 일까지 같은 규칙이에요 — min(stock, gap) 만큼 더 먹어요.") },
+      { hi: [27, 27], bubble: t(E,
+        "Print the total days eaten.",
+        "먹은 날 수를 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

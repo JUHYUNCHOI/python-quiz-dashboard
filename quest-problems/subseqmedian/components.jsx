@@ -374,13 +374,13 @@ export function getSubseqMedianWalk(E, lang = "py") {
       beats: [
         { hi: [0, 33], bubble: t(E,
           "What do we need, over and over? For each level, the sum of 'smaller values before' or 'larger values after' — fast. So build a Fenwick tree (upd/qry) first, then read n, A, and compress values to ranks 1..m.",
-          "무엇이 계속 필요한가요? 레벨마다 '앞쪽 작은 값들의 합' 또는 '뒤쪽 큰 값들의 합'을 빠르게 구해야 해요. 그래서 펜윅 트리(upd, qry) 를 먼저 만들고, n, A 를 읽어 값을 1..m 등수로 눌러 담아요.") },
+          "무엇이 계속 필요한가요? 레벨마다 '앞쪽 작은 값들의 합' 또는 '뒤쪽 큰 값들의 합'을 빠르게 구해야 해요. 그래서 펜윅 트리(upd, qry) 를 먼저 만들고, n, A 를 읽어 값을 1~m 등수로 눌러 담아요.") },
         { hi: [35, 38], bubble: t(E,
           "Level 0: every element is already an increasing chain of length 1 by itself. Start Lprev and Rprev at 1, and their product is each element's starting contribution.",
           "레벨 0: 원소 하나하나가 이미 길이 1인 증가열이에요. Lprev, Rprev 를 1로 시작하고, 그 곱을 각 원소의 시작 기여로 둬요.") },
         { hi: [40, 45], bubble: t(E,
           "To grow the left chains by one step: Lk[i] should be the sum of Lprev[j] over every earlier, smaller value. A Fenwick tree gets that sum in one query instead of rescanning.",
-          "왼쪽 체인을 한 칸 늘리려면 — Lk[i] 는 앞에 있는 더 작은 값들의 Lprev 합이어야 해요. 펜윅 트리로 한 번의 쿼리에 그 합을 구해요, 다시 훑지 않고요.") },
+          "왼쪽 체인을 한 칸 늘리려면 — Lk[i] 는 앞에 있는 더 작은 값들의 Lprev 합이어야 해요. 펜윅 트리로 한 번 조회하면 그 합이 나와요, 다시 훑지 않고요.") },
         { hi: [46, 51], bubble: t(E,
           "Do the same for the right side, scanning back to front this time: Rk[i] is the sum of Rprev[j] over every later, larger value.",
           "오른쪽도 똑같이 하되, 이번엔 뒤에서 앞으로 훑어요 — Rk[i] 는 뒤에 있는 더 큰 값들의 Rprev 합이에요.") },
@@ -402,7 +402,7 @@ export function getSubseqMedianWalk(E, lang = "py") {
     beats: [
       { hi: [0, 8], bubble: t(E,
         "What do we need, over and over? For each level, the sum of 'smaller values before' or 'larger values after' — fast. So read n, A, then compress values to ranks 1..m (A can be up to 1e9).",
-        "무엇이 계속 필요한가요? 레벨마다 '앞쪽 작은 값들의 합' 또는 '뒤쪽 큰 값들의 합'을 빠르게 구해야 해요. 그래서 n, A 를 읽고, 값을 1..m 등수로 눌러 담아요 (A는 1e9 까지 커요).") },
+        "무엇이 계속 필요한가요? 레벨마다 '앞쪽 작은 값들의 합' 또는 '뒤쪽 큰 값들의 합'을 빠르게 구해야 해요. 그래서 n, A 를 읽고, 값을 1~m 등수로 눌러 담아요 (A는 1e9 까지 커요).") },
       { hi: [10, 20], bubble: t(E,
         "We'll need those sums fast, over and over, so build a Fenwick tree (BIT) over the ranks: upd adds a value in, qry sums everything up to a rank.",
         "그 합을 빠르게 계속 구해야 하니, 등수 위에 펜윅 트리(BIT) 를 만들어요. upd 는 값을 더해 넣고, qry 는 어떤 등수까지의 합을 구해요.") },
@@ -411,7 +411,7 @@ export function getSubseqMedianWalk(E, lang = "py") {
         "레벨 0: 원소 하나하나가 이미 길이 1인 증가열이에요. Lprev, Rprev 를 1로 시작하고, 그 곱을 각 원소의 시작 기여로 둬요.") },
       { hi: [27, 35], bubble: t(E,
         "To grow the left chains by one step: Lk[i] should be the sum of Lprev[j] over every earlier, smaller value. The Fenwick tree gets that sum in one query instead of rescanning.",
-        "왼쪽 체인을 한 칸 늘리려면 — Lk[i] 는 앞에 있는 더 작은 값들의 Lprev 합이어야 해요. 펜윅 트리로 한 번의 쿼리에 그 합을 구해요, 다시 훑지 않고요.") },
+        "왼쪽 체인을 한 칸 늘리려면 — Lk[i] 는 앞에 있는 더 작은 값들의 Lprev 합이어야 해요. 펜윅 트리로 한 번 조회하면 그 합이 나와요, 다시 훑지 않고요.") },
       { hi: [36, 43], bubble: t(E,
         "Do the same for the right side, scanning back to front this time: Rk[i] is the sum of Rprev[j] over every later, larger value.",
         "오른쪽도 똑같이 하되, 이번엔 뒤에서 앞으로 훑어요 — Rk[i] 는 뒤에 있는 더 큰 값들의 Rprev 합이에요.") },
@@ -420,7 +420,7 @@ export function getSubseqMedianWalk(E, lang = "py") {
         "이번 레벨에서 양쪽 다 아무것도 안 늘었으면 더 긴 체인은 더 못 만드니 멈춰요. 아니면 양쪽에서 k 개씩 짝지으면 A[i] 가 가운데인 길이 2k+1 체인이 되니, Lk[i]·Rk[i] 를 i 의 기여에 더하고 다음 레벨로 넘어가요.") },
       { hi: [53, 55], bubble: t(E,
         "The answer is each element's value times its total contribution, all summed up. (Honest note: this Fenwick DP is worst-case O(N² log N), and N ≤ 8000 fits inside that — this is the intended solution, not a stepping stone to something harder. Python just runs out of time at that size.)",
-        "답은 원소마다 자기 값 곱하기 총 기여를 다 더한 값이에요. (솔직히 말하면 이 펜윅 DP 가 최악 O(N² log N) 인데 N ≤ 8000 이 그 안에 들어와요 — 이게 만점 풀이예요, 더 어려운 방법으로 가는 디딤돌이 아니에요. 다만 파이썬은 그 크기에서 시간이 모자라요.)") },
+        "답은 원소마다 자기 값 곱하기 총 기여를 다 더한 값이에요. (솔직히 말하면 이 펜윅 DP 가 최악 O(N² log N) 인데 N ≤ 8000 이 그 안에 들어와요 — 이게 만점 풀이예요, 더 어려운 방법으로 가는 디딤돌이 아니에요. 다만 파이썬은 그 크기에서 시간이 모자라요).") },
     ],
   };
 }
