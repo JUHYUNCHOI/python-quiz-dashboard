@@ -99,9 +99,9 @@ export function makeCowntraceCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
             <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
               <div><span style={{ color: "#92400e", fontWeight: 800 }}>N T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows, number of interactions", "— 소의 수, 접촉 기록의 수")}</span></div>
-              <div><span style={{ color: "#92400e", fontWeight: 800 }}>s</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— length-N string of 0/1, cow i's state now (0=healthy, 1=infected)", "— 길이 N 문자열, 소 i 의 지금 상태 (0=건강, 1=감염)")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>s</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— cow states now (0=healthy, 1=infected)", "— 지금 상태 (0=건강, 1=감염)")}</span></div>
               <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
-                <div><span style={{ color: "#92400e", fontWeight: 800 }}>t x y</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— at time t, cows x and y shook hooves", "— 시각 t 에 소 x 와 소 y 가 발굽을 맞댐")}</span></div>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>t x y</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— cows x, y shook hooves at time t", "— 시각 t 에 소 x, y 가 접촉")}</span></div>
                 <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats T times", "↑ 이 줄이 T 번 반복")}</div>
               </div>
             </div>

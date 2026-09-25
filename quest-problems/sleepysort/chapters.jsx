@@ -262,6 +262,40 @@ export function makeSleepySortCh1(E) {
           </div>
         </div>),
     },
+    // 1-1c: 입출력 형식 + 제약 (USACO 원문) — 시즌 표준 (photoshoot25 참조)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the input arrive? N, then the starting order on one line.",
+        "입력은 N 다음에 시작 순서가 한 줄로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows", "— 소의 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>p1 p2 ... pN</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— starting order, one line", "— 시작 순서, 한 줄")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The minimum number of moves needed to sort the cows — a single integer.",
+                  "소를 정렬하는 데 필요한 최소 움직임 횟수를 한 줄로 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              <div>{t(E, "p1..pN is a permutation of 1..N", "p1..pN 은 1..N 을 한 번씩 쓴 순서예요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-1b: Suffix-sort visualizer
     {
       type: "reveal",

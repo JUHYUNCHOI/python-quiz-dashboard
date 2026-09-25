@@ -82,6 +82,39 @@ export function makeCrossRd2Ch1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문) — 시즌 표준 (photoshoot25 참조)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the input arrive? A single line of 52 letters.",
+        "입력은 52개의 글자로 된 한 줄이에요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>s</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— one line, 52 upper-case letters, going around the circle", "— 한 줄, 대문자 52개, 원을 따라가는 순서")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The total number of intersecting cow-pairs — a single integer.",
+                  "교차하는 소-쌍의 개수를 한 줄로 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>{t(E, "length of s = 52", "s 의 길이 = 52")}</div>
+              <div>{t(E, "s uses letters A..Z, each appearing exactly twice", "s 는 A..Z 로만 이루어지고, 글자마다 정확히 두 번씩 나와요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     // ⚠️ 2026-09-17 고침 — 원래 이 퀴즈는 **ABBA 가 교차한다**고 가르쳤다. 틀렸다.
     //    A(0,3) 이 B(1,2) 를 **감싸는** 모양이고, 감싸는 건 넘어가는 게 아니다.
