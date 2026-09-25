@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCrossRoad1Sections, CrossRoad1Sim } from "./components";
+import { CrossRoad1Sim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
@@ -163,13 +163,12 @@ export function makeCrossRd1Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCrossRd1Ch2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: Full solution as CodeWalk
     {
-      type: "progressive",
+      type: "crossroad1-codewalk",
       narr: t(E,
-        "Track each cow's last-seen side, and count only when it changes.",
-        "소마다 마지막으로 본 쪽을 적어 두고, 달라질 때만 세요."),
-      sections: getCrossRoad1Sections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

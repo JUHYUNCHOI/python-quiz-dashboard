@@ -158,6 +158,67 @@ export function BillboardProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이 그대로다 — 배열 내용은 절대
+   바꾸지 않고, beats(설명 말풍선)만 덧붙인다. getBillboardSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. ── */
+export function getBillboardWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "rect_area", ko: "직사각형 하나의 넓이를 구하는 함수", en: "area of one rectangle" },
+        { v: "overlap", ko: "두 직사각형이 겹치는 넓이를 구하는 함수", en: "area where two rectangles overlap" },
+        { v: "answer", ko: "가려지지 않은 넓이의 합", en: "total uncovered area" },
+      ],
+      beats: [
+        { hi: [4, 14], bubble: t(E,
+          "First, a rectangle's area. If width or height would be negative — meaning no overlap — clamp it to 0.",
+          "먼저 직사각형 하나의 넓이부터 구해요. 가로나 세로가 음수면(안 겹친다는 뜻) 0으로 막아요.") },
+        { hi: [16, 43], bubble: t(E,
+          "The overlap of two rectangles is itself a rectangle. Its left/bottom take the later start (max), its right/top take the earlier end (min) — then measure that rectangle with rect_area.",
+          "두 직사각형이 겹치는 부분도 직사각형이에요. 왼쪽·아래는 더 늦게 시작하는 쪽(max), 오른쪽·위는 더 일찍 끝나는 쪽(min)을 골라, rect_area 로 넓이를 재요.") },
+        { hi: [45, 53], bubble: t(E,
+          "What should we hand back? The billboard area NOT covered by the truck. So read the two billboards' and the truck's corners.",
+          "무엇을 출력해야 하나요? 트럭에 가려지지 않은 넓이예요. 그러니 광고판 두 개와 트럭의 좌표부터 읽어요.") },
+        { hi: [55, 58], bubble: t(E,
+          "Now find each billboard's own area, and how much the truck overlaps it.",
+          "이제 광고판마다 자기 넓이와, 트럭과 겹치는 넓이를 구해요.") },
+        { hi: [60, 63], bubble: t(E,
+          "Each billboard's (area − overlap) adds up to the uncovered answer. Print it.",
+          "광고판마다 (넓이 − 겹침)을 더하면 가려지지 않은 답이에요. 그 값을 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "rect_area", ko: "직사각형 하나의 넓이를 구하는 함수", en: "area of one rectangle" },
+      { v: "overlap", ko: "두 직사각형이 겹치는 넓이를 구하는 함수", en: "area where two rectangles overlap" },
+      { v: "answer", ko: "가려지지 않은 넓이의 합", en: "total uncovered area" },
+    ],
+    beats: [
+      { hi: [0, 8], bubble: t(E,
+        "What should we hand back? The billboard area NOT covered by the truck. So first read the two billboards' and the truck's corners.",
+        "무엇을 출력해야 하나요? 트럭에 가려지지 않은 넓이예요. 그러니 먼저 광고판 두 개와 트럭의 좌표부터 읽어요.") },
+      { hi: [9, 16], bubble: t(E,
+        "First, a rectangle's area. If width or height would be negative — meaning no overlap — clamp it to 0.",
+        "먼저 직사각형 하나의 넓이부터 구해요. 가로나 세로가 음수면(안 겹친다는 뜻) 0으로 막아요.") },
+      { hi: [18, 36], bubble: t(E,
+        "The overlap of two rectangles is itself a rectangle. Its left/bottom take the later start (max), its right/top take the earlier end (min) — then measure that rectangle with rect_area.",
+        "두 직사각형이 겹치는 부분도 직사각형이에요. 왼쪽·아래는 더 늦게 시작하는 쪽(max), 오른쪽·위는 더 일찍 끝나는 쪽(min)을 골라, rect_area 로 넓이를 재요.") },
+      { hi: [38, 41], bubble: t(E,
+        "Now find each billboard's own area, and how much the truck overlaps it.",
+        "이제 광고판마다 자기 넓이와, 트럭과 겹치는 넓이를 구해요.") },
+      { hi: [43, 46], bubble: t(E,
+        "Each billboard's (area − overlap) adds up to the uncovered answer. Write it.",
+        "광고판마다 (넓이 − 겹침)을 더하면 가려지지 않은 답이에요. 그 값을 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

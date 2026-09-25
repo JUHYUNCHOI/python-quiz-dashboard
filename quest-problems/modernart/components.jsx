@@ -438,6 +438,61 @@ export function ModernArtProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이 그대로다 — 배열 내용은 절대
+   바꾸지 않고, beats(설명 말풍선)만 덧붙인다. getModernArtSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. ── */
+export function getModernArtWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "canvas", ko: "칸마다 칠해진 색 번호", en: "the color number painted at each cell" },
+        { v: "minr/maxr/minc/maxc", ko: "색마다 실제로 칠해진 네모(bbox)의 경계", en: "each color's actual painted rectangle (bbox)" },
+        { v: "is_first", ko: "이 색이 가장 먼저였을 수 있나", en: "whether this color could've been painted first" },
+      ],
+      beats: [
+        { hi: [6, 21], bubble: t(E,
+          "What should we print? How many colors COULD have been painted first. So read the canvas grid.",
+          "무엇을 출력해야 하나요? 가장 먼저 칠해졌을 수 있는 색의 개수예요. 그러니 캔버스를 읽어요.") },
+        { hi: [22, 43], bubble: t(E,
+          "For each color, find its bounding box — the smallest rectangle covering every cell of that color.",
+          "색마다 그 색이 칠해진 칸을 전부 덮는 가장 작은 네모(bbox)를 찾아요.") },
+        { hi: [44, 73], bubble: t(E,
+          "Color C could be first only if none of C's cells sit inside another color's bbox — if one does, C was painted after that color. Check this for every color and count how many pass.",
+          "색 C 가 가장 먼저였을 수 있으려면, C 의 칸이 다른 색의 bbox 안에 있으면 안 돼요. 있으면 C 는 나중에 칠해진 거예요. 색마다 이 조건을 확인하고 통과하는 수를 세요.") },
+        { hi: [74, 76], bubble: t(E,
+          "Print the count.",
+          "개수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "canvas", ko: "칸마다 칠해진 색 번호", en: "the color number painted at each cell" },
+      { v: "minr/maxr/minc/maxc", ko: "색마다 실제로 칠해진 네모(bbox)의 경계", en: "each color's actual painted rectangle (bbox)" },
+      { v: "is_first", ko: "이 색이 가장 먼저였을 수 있나", en: "whether this color could've been painted first" },
+    ],
+    beats: [
+      { hi: [0, 12], bubble: t(E,
+        "What should we output? How many colors COULD have been painted first. So read the canvas grid — each row is N digits.",
+        "무엇을 출력해야 하나요? 가장 먼저 칠해졌을 수 있는 색의 개수예요. 그러니 캔버스를 읽어요 — 한 줄이 N 자리 숫자예요.") },
+      { hi: [14, 31], bubble: t(E,
+        "For each color, find its bounding box — the smallest rectangle covering every cell of that color.",
+        "색마다 그 색이 칠해진 칸을 전부 덮는 가장 작은 네모(bbox)를 찾아요.") },
+      { hi: [33, 58], bubble: t(E,
+        "Color C could be first only if none of C's cells sit inside another color's bbox — if one does, that means C was painted AFTER that color, so C isn't the first. Check this for every color and count how many pass.",
+        "색 C 가 가장 먼저였을 수 있으려면, C 의 칸이 다른 색의 bbox 안에 있으면 안 돼요. 있으면 C 는 그 색보다 나중에 칠해진 거라 첫 번째가 아니에요. 색마다 이 조건을 확인하고 통과하는 수를 답에 더해요.") },
+      { hi: [60, 61], bubble: t(E,
+        "Write the count.",
+        "개수를 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

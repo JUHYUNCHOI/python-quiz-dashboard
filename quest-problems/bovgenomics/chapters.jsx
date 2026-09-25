@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getBovGenomicsSections } from "./components";
 
 /* ────────────────────────────────────────────────────────────────
    Interactive sim: position-by-position distinguishing table
@@ -352,13 +351,12 @@ export function makeGenomicsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeGenomicsCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: Full solution as CodeWalk
     {
-      type: "progressive",
+      type: "bovgenomics-codewalk",
       narr: t(E,
-        "For each column, gather the spotted and plain letter sets — no overlap means it distinguishes.",
-        "칸 j 마다 점박이 소들의 글자와 무늬 없는 소들의 글자를 따로 모아요.\n두 쪽이 안 겹치면 그 칸은 구별할 수 있는 자리예요."),
-      sections: getBovGenomicsSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

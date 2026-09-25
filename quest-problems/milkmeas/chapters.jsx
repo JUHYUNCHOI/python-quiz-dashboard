@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getMilkMeasSections } from "./components";
 
 /* ---------------------------------------------------------------
    Chapter 1: Problem (3 steps)
@@ -161,13 +160,12 @@ export function makeMilkMeasCh1(E) {
    --------------------------------------------------------------- */
 export function makeMilkMeasCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: Full solution as CodeWalk
     {
-      type: "progressive",
+      type: "milkmeas-codewalk",
       narr: t(E,
-        "Sort events by day, update each cow's output, recheck the leaders, and count changes.",
-        "변화를 날짜순으로 줄 세워요.\n앞에서부터 하나씩 우유량을 고치고, 1등 소들을 다시 찾고,\n바로 앞과 달라졌으면 횟수를 1 올려요.\n아래에서 코드를 한 부분씩 쌓아 갈게요."),
-      sections: getMilkMeasSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

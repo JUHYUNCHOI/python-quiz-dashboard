@@ -109,6 +109,53 @@ export function BovShuffleProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이 그대로다 — 배열 내용은 절대
+   바꾸지 않고, beats(설명 말풍선)만 덧붙인다. getBovShuffleSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. ── */
+export function getBovShuffleWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "shuf", ko: "자리 i 의 소가 가는 곳 (0-indexed)", en: "where the cow at spot i moves to (0-indexed)" },
+        { v: "cows", ko: "지금(after) 줄 → 되돌리는 중인 줄", en: "today's lineup, being undone step by step" },
+      ],
+      beats: [
+        { hi: [5, 19], bubble: t(E,
+          "What should we print? The lineup BEFORE 3 shuffles happened. So read the shuffle rule (shuf, converted to 0-indexed) and today's lineup (cows).",
+          "무엇을 출력해야 하나요? 셔플을 3번 하기 전의 원래 줄이에요. 그러니 셔플 규칙(shuf, 0-indexed 로 변환)과 지금 줄(cows)을 읽어요.") },
+        { hi: [20, 28], bubble: t(E,
+          "The rule only tells us forward: the cow at spot i moves to shuf[i]. To undo one step, follow that arrow backward — nxt[i] = cows[shuf[i]]. The lineup we're given is after 3 shuffles, so undo it 3 times.",
+          "규칙은 앞으로만 알려줘요: 자리 i 의 소가 shuf[i] 로 가요. 한 칸 되돌리려면 화살표를 거꾸로 따라가요 — nxt[i] = cows[shuf[i]]. 지금 줄은 셔플을 3번 한 결과라서, 되돌리기도 3번 반복해요.") },
+        { hi: [29, 32], bubble: t(E,
+          "Print the undone lineup, one cow per line.",
+          "되돌린 줄을 한 줄에 소 한 마리씩 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "shuffle", ko: "자리 i 의 소가 가는 곳 (0-indexed)", en: "where the cow at spot i moves to (0-indexed)" },
+      { v: "cows / result", ko: "지금(after) 줄 / 되돌리는 중인 줄", en: "today's lineup / the lineup being undone" },
+    ],
+    beats: [
+      { hi: [0, 10], bubble: t(E,
+        "What should we output? The lineup BEFORE 3 shuffles happened. So read the shuffle rule (converted to 0-indexed) and today's lineup.",
+        "무엇을 출력해야 하나요? 셔플을 3번 하기 전의 원래 줄이에요. 그러니 셔플 규칙(0-indexed 로 변환)과 지금 줄을 읽어요.") },
+      { hi: [12, 23], bubble: t(E,
+        "The rule only tells us forward: the cow at spot i moves to shuffle[i]. To undo one step, follow that arrow backward — temp[i] = result[shuffle[i]]. The lineup we're given is after 3 shuffles, so undo it 3 times in a row.",
+        "규칙은 앞으로만 알려줘요: 자리 i 의 소가 shuffle[i] 로 가요. 한 칸 되돌리려면 화살표를 거꾸로 따라가요 — temp[i] = result[shuffle[i]]. 지금 줄은 셔플을 3번 한 결과라서, 되돌리기도 3번 반복해요.") },
+      { hi: [25, 27], bubble: t(E,
+        "Write the undone lineup, one cow per line.",
+        "되돌린 줄을 한 줄에 소 한 마리씩 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

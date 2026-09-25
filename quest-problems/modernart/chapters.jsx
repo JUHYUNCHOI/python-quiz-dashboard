@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { getModernArtSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)
@@ -151,13 +150,12 @@ export function makeModernArtCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeModernArtCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: Full solution as CodeWalk
     {
-      type: "progressive",
+      type: "modernart-codewalk",
       narr: t(E,
-        "Find each color's bounding box and check which sit inside another.",
-        "색마다 바운딩 박스를 구해서 서로 안에 들어가는지 봐요."),
-      sections: getModernArtSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

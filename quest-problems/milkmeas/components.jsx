@@ -400,6 +400,68 @@ export function MilkMeasProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이 그대로다 — 배열 내용은 절대
+   바꾸지 않고, beats(설명 말풍선)만 덧붙인다. getMilkMeasSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. 2026-09-25 에 고친 cppOnly 「tuple」 설명은 그대로 두고
+   손대지 않는다(9e2a35a0). ── */
+export function getMilkMeasWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "idx", ko: "day 순서로 정렬한 번호 통", en: "index list ordered by day" },
+        { v: "milk", ko: "소마다 지금 우유량", en: "each cow's current milk amount" },
+        { v: "top / newTop", ko: "바로 앞 1등 조합 / 지금 1등 조합", en: "the previous leader set / the current leader set" },
+      ],
+      beats: [
+        { hi: [9, 21], bubble: t(E,
+          "What should we print? How many times the leader set changes. So read N, then each event — a day, a cow's name, and a milk change.",
+          "무엇을 출력해야 하나요? 1등 조합이 바뀐 횟수예요. N 을 읽고, 이벤트마다 날짜·소 이름·우유 변화량을 읽어요.") },
+        { hi: [22, 35], bubble: t(E,
+          "Events may not arrive in day order. There's no tuple sort in C++ here — instead build an index list idx and bubble-sort it, comparing days[idx[..]] — we reorder positions, not the rows themselves.",
+          "이벤트가 날짜순으로 안 들어올 수 있어요. C++ 이라 튜플 정렬 대신 idx 라는 번호 통을 만들어 버블 정렬해요 — days[idx[..]] 로 견주면서, 기록을 옮기지 않고 «몇 번째를 먼저 볼까» 만 바꿔요.") },
+        { hi: [37, 46], bubble: t(E,
+          "Start Bessie, Elsie, Mildred at 7, and top starts as all three — everyone is tied for the lead.",
+          "Bessie, Elsie, Mildred 를 7 로 시작하고, top 은 셋 다 — 처음엔 모두 공동 1등이에요.") },
+        { hi: [47, 71], bubble: t(E,
+          "Apply each event in day order. After each one, find the new max milk and everyone at that amount (newTop). If that set differs from top, it's a change — count it and remember the new top.",
+          "이벤트를 날짜순으로 하나씩 적용해요. 그때마다 최댓값과 그 값을 가진 소들(newTop)을 다시 찾아요. top 과 다르면 바뀐 거니 세고, top 을 갱신해요.") },
+        { hi: [72, 74], bubble: t(E,
+          "Print the total number of changes.",
+          "바뀐 횟수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "events", ko: "(날짜, 이름, 변화량)으로 묶어 정렬한 목록", en: "(day, name, delta) tuples, sorted" },
+      { v: "milk", ko: "소마다 지금 우유량", en: "each cow's current milk amount" },
+      { v: "prev / cur", ko: "바로 앞 1등 조합 / 지금 1등 조합", en: "the previous leader set / the current leader set" },
+    ],
+    beats: [
+      { hi: [0, 16], bubble: t(E,
+        "What should we output? How many times the leader set changes. So read N, start Bessie/Elsie/Mildred at 7, then read each event — a day, a cow's name, and a milk change.",
+        "무엇을 출력해야 하나요? 1등 조합이 바뀐 횟수예요. N 을 읽고 Bessie/Elsie/Mildred 를 7 로 시작한 뒤, 이벤트마다 날짜·소 이름·우유 변화량을 읽어요.") },
+      { hi: [18, 22], bubble: t(E,
+        "Events may not arrive in day order. So gather them into (day, name, delta) tuples and sort — Python compares tuples left to right, so this sorts by day.",
+        "이벤트가 날짜순으로 안 들어올 수 있어요. 그래서 (날짜, 이름, 변화량) 튜플로 묶어 정렬해요 — 튜플은 앞자리부터 견주니 날짜순이 돼요.") },
+      { hi: [24, 34], bubble: t(E,
+        "We'll need to know who's in the lead, over and over — so build a helper: find the max milk amount, then collect everyone tied at that amount (sorted, so ties compare the same way each time).",
+        "누가 1등인지 계속 알아야 하니 헬퍼를 만들어요 — 최댓값을 찾고, 그 값을 가진 소들을 전부 모아요 (정렬해서 항상 같은 순서로 견줘요).") },
+      { hi: [36, 47], bubble: t(E,
+        "Apply each event in day order. After each one, find the new leaders. If they differ from the previous leaders, that's a change — count it.",
+        "이벤트를 날짜순으로 하나씩 적용해요. 그때마다 지금 1등을 다시 구해요. 바로 앞 1등과 다르면 바뀐 거니 세요.") },
+      { hi: [49, 50], bubble: t(E,
+        "Write the total number of changes.",
+        "바뀐 횟수를 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

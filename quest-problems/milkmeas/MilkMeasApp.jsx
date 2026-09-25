@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { MilkMeasProgressiveCode, downloadMilkMeasPDF, getMilkMeasSections, MilkMeasSim } from "./components";
+import { MilkMeasProgressiveCode, downloadMilkMeasPDF, getMilkMeasSections, getMilkMeasWalk, MilkMeasSim } from "./components";
 import { makeMilkMeasCh1, makeMilkMeasCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#8b5cf6";
 
@@ -103,6 +104,7 @@ export default function MilkMeasApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <MilkMeasProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "sim") return <MilkMeasSim E={E} />;
+    if (step.type === "milkmeas-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMilkMeasWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -115,6 +117,7 @@ export default function MilkMeasApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <MilkMeasProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "sim") return <MilkMeasSim E={E} />;
+    if (s.type === "milkmeas-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMilkMeasWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

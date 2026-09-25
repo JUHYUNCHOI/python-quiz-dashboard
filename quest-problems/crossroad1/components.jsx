@@ -252,6 +252,53 @@ export function CrossRoad1ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이 그대로다 — 배열 내용은 절대
+   바꾸지 않고, beats(설명 말풍선)만 덧붙인다. getCrossRoad1Sections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. ── */
+export function getCrossRoad1Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "last_side", ko: "소마다 마지막으로 본 쪽", en: "the side we last saw each cow on" },
+        { v: "crossings", ko: "지금까지 센 횡단 횟수", en: "crossings counted so far" },
+      ],
+      beats: [
+        { hi: [5, 14], bubble: t(E,
+          "What should we print? The total number of crossings, summed over every cow. So read N and prepare a place to remember each cow's last side.",
+          "무엇을 출력해야 하나요? 모든 소를 합친 횡단 총 횟수예요. 그러니 N 을 읽고, 소마다 마지막으로 본 쪽을 적어 둘 자리를 준비해요.") },
+        { hi: [15, 22], bubble: t(E,
+          "For each observation, if we've seen this cow before AND her side differs from last time, she just crossed — count it. Then update her last side.",
+          "관찰마다, 이 소를 전에 본 적이 있고 그때 쪽이 지금과 다르면 방금 건넌 거예요 — 세요. 그리고 이 소의 마지막 쪽을 갱신해요.") },
+        { hi: [23, 25], bubble: t(E,
+          "Print the total crossings.",
+          "총 횡단 횟수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "last_side", ko: "소마다 마지막으로 본 쪽", en: "the side we last saw each cow on" },
+      { v: "crossings", ko: "지금까지 센 횡단 횟수", en: "crossings counted so far" },
+    ],
+    beats: [
+      { hi: [0, 8], bubble: t(E,
+        "What should we output? The total number of crossings, summed over every cow. So read N and prepare a place to remember each cow's last side.",
+        "무엇을 출력해야 하나요? 모든 소를 합친 횡단 총 횟수예요. 그러니 N 을 읽고, 소마다 마지막으로 본 쪽을 적어 둘 자리를 준비해요.") },
+      { hi: [9, 14], bubble: t(E,
+        "For each observation, if we've seen this cow before AND her side differs from last time, she just crossed — count it. Then update last_side for this cow to her current side.",
+        "관찰마다, 이 소를 전에 본 적이 있고 그때 쪽이 지금과 다르면 방금 건넌 거예요 — crossings 를 늘려요. 그리고 이 소의 last_side 를 지금 쪽으로 갱신해요.") },
+      { hi: [16, 17], bubble: t(E,
+        "Write the total crossings.",
+        "총 횡단 횟수를 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

@@ -123,6 +123,61 @@ export function BovGenomicsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이 그대로다 — 배열 내용은 절대
+   바꾸지 않고, beats(설명 말풍선)만 덧붙인다. getBovGenomicsSections() 는 PDF 다운로드가
+   계속 쓰므로 그대로 둔다. ── */
+export function getBovGenomicsWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "spp / pln", ko: "이 칸에서 점박이 소 / 무늬 없는 소가 쓴 글자들", en: "letters spotted / plain cows have at this column" },
+        { v: "common", ko: "두 집합에 겹치는 글자가 있나", en: "whether the two sets share a letter" },
+        { v: "ans", ko: "겹치지 않는 칸의 개수", en: "count of columns with no overlap" },
+      ],
+      beats: [
+        { hi: [7, 20], bubble: t(E,
+          "What should we print? The number of columns where spotted-cow letters and plain-cow letters never share a letter. So read both groups of genome strings.",
+          "무엇을 출력해야 하나요? 점박이 소와 무늬 없는 소의 글자가 한 번도 안 겹치는 칸의 개수예요. 그러니 두 무리의 유전자 문자열을 읽어요.") },
+        { hi: [21, 30], bubble: t(E,
+          "For each column j, collect the letters spotted cows have there (spp) and the letters plain cows have there (pln).",
+          "칸 j 마다 점박이 소들이 쓴 글자들(spp)과 무늬 없는 소들이 쓴 글자들(pln)을 모아요.") },
+        { hi: [31, 41], bubble: t(E,
+          "If any letter appears in both sets, this column can't tell the two groups apart. Only count columns with zero overlap.",
+          "두 집합에 겹치는 글자가 하나라도 있으면 그 칸은 둘을 구별해 주지 못해요. 겹치는 게 없을 때만 답에 더해요.") },
+        { hi: [42, 44], bubble: t(E,
+          "Print the total count.",
+          "총 개수를 출력해요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "s_chars / p_chars", ko: "이 칸에서 점박이 소 / 무늬 없는 소가 쓴 글자들", en: "letters spotted / plain cows have at this column" },
+      { v: "common", ko: "두 집합에 겹치는 글자가 있나", en: "whether the two sets share a letter" },
+      { v: "ans", ko: "겹치지 않는 칸의 개수", en: "count of columns with no overlap" },
+    ],
+    beats: [
+      { hi: [0, 10], bubble: t(E,
+        "What should we output? The number of columns where spotted-cow letters and plain-cow letters never share a letter. So first read both groups of genome strings.",
+        "무엇을 출력해야 하나요? 점박이 소와 무늬 없는 소의 글자가 한 번도 안 겹치는 칸의 개수예요. 그러니 먼저 두 무리의 유전자 문자열을 읽어요.") },
+      { hi: [12, 19], bubble: t(E,
+        "For each column j, collect the letters spotted cows have there (s_chars) and the letters plain cows have there (p_chars).",
+        "칸 j 마다 점박이 소들이 쓴 글자들(s_chars)과 무늬 없는 소들이 쓴 글자들(p_chars)을 모아요.") },
+      { hi: [20, 27], bubble: t(E,
+        "If any letter appears in both sets, this column can't tell the two groups apart. Only count columns with zero overlap.",
+        "두 집합에 겹치는 글자가 하나라도 있으면 그 칸은 둘을 구별해 주지 못해요. 겹치는 게 없을 때만 답에 1을 더해요.") },
+      { hi: [29, 30], bubble: t(E,
+        "Write the total count.",
+        "총 개수를 파일에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

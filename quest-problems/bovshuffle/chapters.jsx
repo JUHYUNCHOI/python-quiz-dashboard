@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getBovShuffleSections } from "./components";
 
 /* ────────────────────────────────────────────────────────────────
    Interactive sim: step the shuffle round-by-round
@@ -282,13 +281,12 @@ export function makeShuffleCh1(E) {
    --------------------------------------------------------------- */
 export function makeShuffleCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: Full solution as CodeWalk
     {
-      type: "progressive",
+      type: "bovshuffle-codewalk",
       narr: t(E,
-        "Given lineup AFTER 3 shuffles → recover original by building INVERSE shuffle and applying it 3 times. Sections build it one piece at a time.",
-        "반대 셔플을 만들어 3 번 하면 원래 줄이 나와요."),
-      sections: getBovShuffleSections(E),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }

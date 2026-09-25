@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { ModernArtProgressiveCode, ModernArtPaintSim, downloadModernArtPDF, getModernArtSections } from "./components";
+import { ModernArtProgressiveCode, ModernArtPaintSim, downloadModernArtPDF, getModernArtSections, getModernArtWalk } from "./components";
 import { makeModernArtCh1, makeModernArtCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#059669";
 
@@ -103,6 +104,7 @@ export default function ModernArtApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <ModernArtProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "sim") return <ModernArtPaintSim E={E} />;
+    if (step.type === "modernart-codewalk") return <CodeWalk E={E} lang={codeLang} {...getModernArtWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -115,6 +117,7 @@ export default function ModernArtApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <ModernArtProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "sim") return <ModernArtPaintSim E={E} />;
+    if (s.type === "modernart-codewalk") return <CodeWalk E={E} lang={codeLang} {...getModernArtWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

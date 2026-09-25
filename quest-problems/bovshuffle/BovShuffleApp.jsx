@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { BovShuffleProgressiveCode, downloadBovShufflePDF, getBovShuffleSections } from "./components";
+import { BovShuffleProgressiveCode, downloadBovShufflePDF, getBovShuffleSections, getBovShuffleWalk } from "./components";
 import { makeShuffleCh1, makeShuffleCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#f97316";
 
@@ -102,6 +103,7 @@ export default function BovShuffleApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <BovShuffleProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "bovshuffle-codewalk") return <CodeWalk E={E} lang={codeLang} {...getBovShuffleWalk(E, codeLang)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function BovShuffleApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <BovShuffleProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "bovshuffle-codewalk") return <CodeWalk E={E} lang={codeLang} {...getBovShuffleWalk(E, codeLang)} accent={A} />;
     return null;
   };
 

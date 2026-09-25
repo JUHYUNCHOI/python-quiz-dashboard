@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getBillboardSections } from "./components";
 
 /* ================================================================
    Interactive overlap simulator — drag rectangle corners,
@@ -541,22 +540,10 @@ export function makeBillboardCh3(E, lang = "py") {
 
     // 3-4 (was 3-5): Complete code
     {
-      type: "progressive",
+      type: "billboard-codewalk",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드를 한 부분씩 읽어봐요. 위에서 Python ↔ C++ 을 바꿔 볼 수 있어요."),
-      sections: (() => {
-        const sections = getBillboardSections(E);
-        // 🔗 다리 문장 — components.jsx(🔒)의 FULL_PY/FULL_CPP 는 3-2 에서 배운
-        // max()/min() 대신 if/else 로 같은 일을 한다. 왜 그런지는 모르니 지어내지
-        // 않고, "하는 일은 같다" 는 사실만 한 줄로 알려준다.
-        sections[0].why = [
-          ...sections[0].why,
-          t(E,
-            "Here the code uses if/else instead of max()/min() — it does the same thing.",
-            "여기서는 max()/min() 대신 if/else 를 써요. 하는 일은 똑같아요."),
-        ];
-        return sections;
-      })(),
+        "The full solution, start to finish — toggle Python ↔ C++ via the header.",
+        "풀이 코드를 처음부터 끝까지 봐요 — 위 헤더로 Python ↔ C++ 토글."),
     },
   ];
 }
