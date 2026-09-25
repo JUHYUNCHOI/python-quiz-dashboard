@@ -170,6 +170,37 @@ python3 scripts/check-required-vs-code.py                     # ⭐ quest 코드
 python3 scripts/check-taught-vs-final-code.py <id>            # 화면 코드 블록이 **가르치는** 함수를 🔒 최종 코드가 쓰나
                                                             #   (`check-boasted-function.py` 와 다른 층 — 그건 자랑 *문장*만
                                                             #   본다. 이건 학생에게 **직접 보여준 코드 줄**과 대조한다)
+python3 scripts/check-solution-code-unchanged.py               # ⭐ **정답 코드 배열이 바뀌었나** (sha256, 배지와 무관)
+                                                            #   2026-09-25: quest 30개를 CodeWalk 으로 옮기며 이 대조를
+                                                            #   **손으로 30번 넘게** 돌렸다. 손으로 도는 검사는 잊는 날 뚫린다.
+                                                            #   ⚠️ `check-frozen.py` 와 **다른 층**이다 — 그건 헤더에
+                                                            #   `USACO_VERIFIED` 가 **있는 파일만** 막는데, 실측하니
+                                                            #   **문서는 통과라는데 배지가 없는 quest 가 24개**다
+                                                            #   (`abcs` 10/10 · `daisychains` · `socialdist1` 15/15 ·
+                                                            #    `swapity` 13/13 · `triangles` · `uddered` · `yearcow` ·
+                                                            #    `mcc15*` 넷 · 2023·2024 묶음). **그 24개는 아무 걸쇠도
+                                                            #   안 지킨다.** 이건 배지와 무관하게 본다. 실측 변수 523개.
+                                                            #   ⛔ 바뀌었다고 곧 잘못이 아니다 — 눈으로 읽어라는 신호다.
+                                                            #   걸리면 이어서 `prove-same-program.py` 로 **뜻이 같은지 증명**해라.
+python3 scripts/check-prose-vs-final-code.py <id>             # 화면 **설명문**(`cppOnly`·`why`)이 말하는 자료구조를
+                                                            #   🔒 최종 코드가 **실제로 쓰나**. 2026-09-25 학생이 먼저 찾았다 —
+                                                            #   `milkmeas` 가 *"tuple 이 알아서 정렬해준다"* 는데 코드에
+                                                            #   `tuple` 이 **0번**이었다(quest 5개·문장 9줄, 고쳤다).
+                                                            #   ⚠️ `check-taught-vs-final-code.py` 와 **다른 층**이다 —
+                                                            #   그건 **모노스페이스 코드 블록만** 보고 설명문은 일부러 안 본다.
+                                                            #   그래서 `milkmeas` 가 그쪽에서 **0건**으로 통과했다.
+                                                            #   ⚠️ 오탐 둘: **비교**(`cheese` "map 보다 빠름")와
+                                                            #   **부정**(`mooin3` "bisect 없이") — 둘 다 정당한 문장이다.
+python3 scripts/check-cpp-stl-gate.py                        # C++ STL 손버릇을 «C(어디서도 안 가르침) / D(가르쳤지만
+                                                            #   이 quest 시점에 리마인드 없음)» 로 가른다.
+                                                            #   2026-09-25 C++ 학생이 `makedistinct` 에서 *"`auto &kv`·
+                                                            #   `.second`·`greater<>` 가 한 번에 쏟아져 **사실상 여기서
+                                                            #   다 포기하고 싶었다**"* 고 했다. 실측 **C 2개**
+                                                            #   (`makedistinct`·`mooin3` — `llabs`·`map<K,vector<V>>`).
+                                                            #   ⚠️ **D 의 수는 판정에 쓰지 마라** — 게이트에 `cpp-*` 개념이
+                                                            #   아직 하나도 없어 거의 전부 D 로 나오는 게 당연하다.
+                                                            #   ⚠️ 이 검사기는 만들면서 **네 번 조용히 틀렸다**(주석을 코드로
+                                                            #   읽은 것 포함). C 판정은 **손으로 재확인**해라.
 python3 scripts/check-unlabeled-sample-io.py <id>             # 샘플 입출력 상자에 **뜻 라벨(← 설명)** 이 있나 (가벼운 grep)
                                                             #   2026-09-23: strangefn·moohunt 로 **두 번째** 발견된 결함.
                                                             #   전수 69건·quest 52개(오탐 실측 ~1건/69 — 낮음). 판정이 아니라
