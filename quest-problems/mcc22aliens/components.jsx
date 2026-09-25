@@ -168,6 +168,36 @@ export function Mcc22AliensProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 그대로 가져와 beats(설명 말풍선)만 덧붙인다 — 배열 내용은 한 글자도
+   안 바꾼다. MCC 는 C++ 이 필요 없어(선생님 지시) — Python 만 만든다.
+   getMcc22AliensSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getMcc22AliensWalk(E) {
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "req", ko: "이 말이 필요로 하는 타입", en: "the type this claim demands" },
+      { v: "need_T", ko: "말들이 필요로 하는 T 의 개수", en: "how many T's the claims demand" },
+      { v: "have_T", ko: "진짜로 있는 T 의 개수", en: "how many real T's exist" },
+    ],
+    beats: [
+      { hi: [0, 6], bubble: t(E,
+        "What do we have to hand back? YES or NO for each test. T tests arrive one after another — each is three lines: n, the real types a, and the claims b.",
+        "무엇을 내놓아야 하나요? 테스트마다 YES/NO 하나씩이에요.\nT 개 테스트가 줄줄이 들어오고, 하나가 n, 진짜 타입 a, 주장 b 세 줄이에요.") },
+      { hi: [7, 19], bubble: t(E,
+        "Never search the n! orders — each claim only pins down ONE thing: the type its target must have. A truth-teller means b[i] as-is; a liar means the opposite. Count how many claims demand T (need_T) and how many real T's exist (have_T).",
+        "n! 가지 지목 순서를 뒤질 필요가 없어요 — 말 하나가 정해 주는 건 지목당한 쪽에게 필요한 타입 하나뿐이에요.\n진실쟁이면 b[i] 그대로, 거짓말쟁이면 반대로 뒤집어 req 를 구해요.\nreq 가 T 인 개수는 need_T, 실제 T 의 개수는 have_T 에 세요.") },
+      { hi: [20, 23], bubble: t(E,
+        "Everyone is pointed at exactly once, so the demanded types must be handed out to the real aliens one for one. That's possible exactly when need_T == have_T.",
+        "모두가 정확히 한 번씩 지목되니, 필요한 타입을 진짜 외계인들에게 하나씩 짝지을 수 있어야 해요.\nneed_T == have_T 면 YES, 아니면 NO 예요.") },
+      { hi: [24, 25], bubble: t(E,
+        "One line per test, printed once at the end — then call main() to start.",
+        "테스트 하나에 한 줄씩 모아 한 번에 출력하고, main() 을 불러 시작해요.") },
+    ],
+  };
+}
+
 
 /* ═══════════════════════════════════════════════════════════════
    AliensCountSim — the supply-vs-demand counting argument.

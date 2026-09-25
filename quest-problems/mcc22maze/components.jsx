@@ -529,6 +529,36 @@ export function Mcc22MazeProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ S1_PY..S4_PY 를 **그대로 이어붙이기만** 한다 — 한 글자도 안 바꾼다.
+   MCC 는 C++ 이 필요 없어(선생님 지시) — Python 만 만든다.
+   getMcc22MazeSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getMcc22MazeWalk(E) {
+  const code = [...S1_PY, "", ...S2_PY, ...S3_PY, "", ...S4_PY];
+  return {
+    code,
+    vars: [
+      { v: "dsu / DSU", ko: "칸들을 묶음으로 관리하는 도구 (유니온-파인드)", en: "the tool that groups cells (union-find)" },
+      { v: "history", ko: "되돌리기 위해 적어둔 합친 기록", en: "the log of merges, kept so we can undo them" },
+      { v: "mark", ko: "시험 전 상태로 되돌아갈 지점", en: "the point we roll back to after a trial" },
+    ],
+    beats: [
+      { hi: [0, 30], bubble: t(E,
+        "All three questions need the same check: are S and G linked right now? The trick: keep cells in groups and merge two groups whenever their cells touch — that's union-find (DSU). Since a row is cleared only to TRY it, every merge is logged in history so it can be undone.",
+        "세 질문이 전부 같은 확인을 필요로 해요 — 지금 S 와 G 가 이어졌나?\n방법은 칸들을 묶음으로 관리하는 거예요 — 통로 두 칸이 닿으면 묶음을 합쳐요. 이게 유니온-파인드(DSU)예요.\n행을 부수는 건 시험 삼아 해 보는 거라, 합칠 때마다 history 에 적어 되돌릴 수 있게 해요.") },
+      { hi: [32, 52], bubble: t(E,
+        "Give each cell a number cid(r,c), then union every pair of neighbouring open cells — that captures the maze's current connectivity. If S and G are already in the same group with nothing cleared, the answer is 0.",
+        "각 칸에 번호 cid(r,c) 를 붙이고, 인접한 통로끼리 union 해요 — 이러면 지금 미로의 연결 상태가 담겨요.\n아무것도 안 부쉈는데 S 와 G 가 이미 같은 묶음이면 답은 0이에요.") },
+      { hi: [53, 83], bubble: t(E,
+        "Clearing row i turns it into a corridor: union its cells side-by-side, then with any open cell above/below. Check S–G right after, then rollback_to(mark) before trying the next row or column — every attempt starts fresh. One success means the answer is 1; none means 2.",
+        "행 i 를 부수면 그 행 전체가 통로가 돼요 — 옆칸끼리 union 하고, 위·아래 통로와도 union 해요.\n바로 S–G 를 확인하고 rollback_to(mark) 로 되돌린 뒤 다음 행·열을 시험해요 — 매 시도가 새 출발이에요.\n하나라도 이어지면 답은 1, 아무것도 안 되면 답은 2예요.") },
+      { hi: [85, 98], bubble: t(E,
+        "Each test is 1 + n lines: the size n, then n rows. For each test, solve_case returns 0, 1, or 2 — collect the answers and print them all at once.",
+        "테스트 하나가 1 + n 줄이에요 — 크기 n 한 줄, 그다음 격자 n 줄이에요.\n각 테스트마다 solve_case 가 0/1/2 를 돌려주고, 모아서 한 번에 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs","class","self"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set","swap"];

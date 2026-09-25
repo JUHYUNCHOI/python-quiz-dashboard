@@ -155,6 +155,36 @@ export function Mcc15BahasaProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 그대로 가져와 beats(설명 말풍선)만 덧붙인다 — 배열 내용은 한 글자도
+   안 바꾼다. MCC 는 C++ 이 필요 없어(선생님 지시) — Python 만 만든다.
+   getMcc15BahasaSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getMcc15BahasaWalk(E) {
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "syl", ko: "지금 보는 음절", en: "the syllable we're looking at" },
+      { v: "pos", ko: "그 음절의 첫 자음 자리 (없으면 -1)", en: "index of the syllable's first consonant (-1 if none)" },
+      { v: "echo", ko: "메아리로 붙일 부분", en: "the echoed part we'll attach" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "What do we have to hand back? Each word echoed by Bessie's rule. Read the sentence, and remember: anything that's not one of the 5 vowels is a consonant.",
+        "무엇을 내놓아야 하나요? 각 단어를 규칙대로 메아리쳐 붙인 문장이에요.\n문장을 받고, 모음 5개(a e i o u)가 아니면 전부 자음이라는 것만 기억해요.") },
+      { hi: [3, 6], bubble: t(E,
+        "Cut the problem twice — sentence → words → syllables. word.split(\"/\") hands you the syllables of that word, one by one.",
+        "문제를 '문장 → 단어 → 음절' 로 두 번 쪼개요.\nword.split(\"/\") 가 그 단어의 음절을 하나씩 꺼내줘요.") },
+      { hi: [7, 16], bubble: t(E,
+        "Now the one tiny rule: find the syllable's first consonant (pos). If there is one, swap just that letter for 'f'. If there is none, put 'f' in front of the whole syllable. Then write syllable + echo.",
+        "이제 음절 하나짜리 규칙만 남았어요.\n첫 자음 자리(pos)를 찾아요 — 있으면 그 글자 하나만 f 로 갈아끼우고, 없으면 f 를 음절 앞에 통째로 붙여요.\n그다음 음절 + 메아리로 이어붙여요.") },
+      { hi: [17, 19], bubble: t(E,
+        "Collect each finished word, then join them back with spaces and print.",
+        "완성된 단어를 new_words 에 모으고, 마지막에 공백으로 이어 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

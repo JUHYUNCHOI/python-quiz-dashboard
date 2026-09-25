@@ -179,6 +179,35 @@ export function Mcc20ZigzagProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY 는 한 글자도 안 바꾸고 그대로 쓴다 — beats(설명 말풍선)만 덧붙인다.
+   MCC 는 C++ 이 필요 없어(선생님 지시) — Python 만 만든다.
+   getMcc20ZigzagSections() 는 PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getMcc20ZigzagWalk(E) {
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "up[i][j] / dn[i][j]", ko: "i 에서 끝나는 길이 j 짜리 지그재그 개수 (마지막이 오름/내림)", en: "count of length-j zig-zags ending at i, last step up/down" },
+      { v: "j", ko: "지금까지 고른 글자 수 (지그재그 길이)", en: "how many letters picked so far (zig-zag length)" },
+    ],
+    beats: [
+      { hi: [0, 9], bubble: t(E,
+        "What do we need? The count of length-K zig-zags in s, mod 1000. If K is longer than the string there's nothing to pick — answer 0. If K is 1, every single letter counts — answer N.",
+        "무엇을 구해야 하나요? s 안에서 길이 K 짜리 지그재그의 개수를 1000 으로 나눈 나머지로 구해요.\nK 가 문자열보다 길면 고를 수 없으니 답은 0, K 가 1 이면 글자 하나하나가 답이니 N 개예요.") },
+      { hi: [10, 14], bubble: t(E,
+        "Otherwise we need two tables: up[i][j]/dn[i][j] = how many length-j zig-zags end at letter i with the last step up/down. We need both, because a zig-zag's next step must go the opposite way — so we must know which way the last step went.",
+        "그 외에는 표 두 개가 필요해요.\nup[i][j]·dn[i][j] 는 i 에서 끝나는 길이 j 짜리 지그재그 중 마지막 걸음이 오름·내림인 개수예요.\n둘 다 필요한 건, 다음 걸음이 반드시 반대 방향이어야 해서 — 마지막 걸음이 어느 쪽이었는지 알아야 해요.") },
+      { hi: [16, 30], bubble: t(E,
+        "Fill j from small to large. At length 2, an earlier letter smaller than s[i] makes an up-ending pair, a bigger one a down-ending pair. For longer ones, glue a new letter onto something already counted — if s[p] < s[i] the new step goes up, so what came before must have ended going down: dn[p][j-1].",
+        "j 를 작은 것부터 채워요.\n길이 2 에서는 앞쪽 글자가 s[i] 보다 작으면 오름 짝, 크면 내림 짝이 하나 생겨요.\n더 긴 것은 이미 세어 둔 것에 글자를 이어 붙여요 — s[p] < s[i] 면 새 걸음이 오름이니, 그 앞은 내림으로 끝났어야 해요(dn[p][j-1]).") },
+      { hi: [31, 33], bubble: t(E,
+        "A length-K zig-zag ends somewhere, with its last step either up or down — so sum up[i][K] + dn[i][K] over every i, then print it.",
+        "길이 K 짜리 지그재그는 어딘가에서 끝나고 마지막 걸음은 오름 또는 내림이에요.\n그러니 모든 i 에 대해 up[i][K] + dn[i][K] 를 더해서 출력해요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

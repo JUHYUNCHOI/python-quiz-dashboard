@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getMcc20ZigzagSections } from "./components";
 
 const PURPLE = "#8b5cf6";
 const KA = { wordBreak: "keep-all" };
@@ -413,11 +412,9 @@ export function makeMcc20ZigzagCh2(E, lang = "py") {
         </div>),
     },
     {
-      type: "progressive",
+      type: "mcc20zigzag-codewalk",
       narr: t(E,
-        "Instead of listing every zig-zag, we count them with two tables.",
-        "지그재그를 하나씩 적는 대신 표 두 개로 세어 볼게요."),
-      sections: getMcc20ZigzagSections(E),
+        "The full solution, start to finish.", "풀이 코드를 처음부터 끝까지 봐요."),
     },
   ];
 }

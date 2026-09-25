@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getMcc15BahasaSections } from "./components";
 
 const NW = { whiteSpace: "nowrap" };
 const KA = { wordBreak: "keep-all" };
@@ -375,12 +374,11 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: CodeWalk
     {
-      type: "progressive",
+      type: "mcc15bahasaf-codewalk",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드를 부분별로 읽어 봐요."),
-      sections: getMcc15BahasaSections(E),
+        "The full solution, start to finish.", "풀이 코드를 처음부터 끝까지 봐요."),
     },
   ];
 }

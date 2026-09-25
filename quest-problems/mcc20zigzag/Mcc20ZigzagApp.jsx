@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Mcc20ZigzagProgressiveCode, downloadMcc20ZigzagPDF, getMcc20ZigzagSections } from "./components";
+import { Mcc20ZigzagProgressiveCode, downloadMcc20ZigzagPDF, getMcc20ZigzagSections, getMcc20ZigzagWalk } from "./components";
 import { makeMcc20ZigzagCh1, makeMcc20ZigzagCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#8b5cf6";
 
@@ -102,6 +103,7 @@ export default function Mcc20ZigzagApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <Mcc20ZigzagProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "mcc20zigzag-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMcc20ZigzagWalk(E)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function Mcc20ZigzagApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <Mcc20ZigzagProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "mcc20zigzag-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMcc20ZigzagWalk(E)} accent={A} />;
     return null;
   };
 

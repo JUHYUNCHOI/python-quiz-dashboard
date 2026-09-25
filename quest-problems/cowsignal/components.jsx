@@ -259,6 +259,53 @@ export function CowSignalProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
+   이 방식). ⚠️ FULL_PY / FULL_CPP 는 USACO_VERIFIED 풀이의 표시용 사본이다 — 배열 내용은
+   절대 바꾸지 않고, 그대로 가져와 beats(설명 말풍선)만 덧붙인다. getCowSignalSections() 는
+   PDF 다운로드가 계속 쓰므로 그대로 둔다. ── */
+export function getCowSignalWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    const code = FULL_CPP;
+    return {
+      code,
+      vars: [
+        { v: "M, N, K", ko: "원본 격자 크기와 확대 배수", en: "original grid size and the scale factor" },
+        { v: "grid", ko: "읽어들인 원본 격자", en: "the original grid we read in" },
+      ],
+      beats: [
+        { hi: [0, 9], bubble: t(E,
+          "Old USACO contests read/wrote files instead of the keyboard/screen — so open cowsignal.in and cowsignal.out. ifstream/ofstream work just like cin/cout.",
+          "옛날 USACO 대회는 키보드·화면 대신 파일로 입출력을 했어요 — 그래서 cowsignal.in, cowsignal.out 을 열어요.\nifstream/ofstream 은 cin/cout 과 똑같이 써요.") },
+        { hi: [11, 16], bubble: t(E,
+          "Read M, N, K, then read the M rows of the original grid into a vector<string>.",
+          "M, N, K 를 읽고, 원본 격자 M줄을 vector<string> 에 읽어요.") },
+        { hi: [18, 27], bubble: t(E,
+          "What do we output? Each original cell becomes a K×K block of the same character. So repeat each row K times, and inside a row repeat each character K times.",
+          "무엇을 내놓아야 하나요? 원래 한 칸이 그대로 K×K 블록이 돼야 해요.\n그래서 각 행을 K번 출력하고, 그 안에서 글자 하나도 K번씩 늘려요.") },
+      ],
+    };
+  }
+  const code = FULL_PY;
+  return {
+    code,
+    vars: [
+      { v: "M, N, K", ko: "원본 격자 크기와 확대 배수", en: "original grid size and the scale factor" },
+      { v: "grid", ko: "읽어들인 원본 격자", en: "the original grid we read in" },
+    ],
+    beats: [
+      { hi: [0, 2], bubble: t(E,
+        "Old USACO contests read/wrote files instead of the keyboard/screen — so open cowsignal.in and read every line.",
+        "옛날 USACO 대회는 키보드·화면 대신 파일로 입출력을 했어요 — 그래서 cowsignal.in 을 열어 한 줄씩 읽어요.") },
+      { hi: [4, 7], bubble: t(E,
+        "The first line has M, N, K. The next M lines are the original grid.",
+        "첫 줄에 M, N, K 가 있고, 그다음 M줄이 원본 격자예요.") },
+      { hi: [9, 16], bubble: t(E,
+        "What do we output? Each original cell becomes a K×K block of the same character. So open cowsignal.out, and for each row, repeat it K times — inside, repeat each character K times too.",
+        "무엇을 내놓아야 하나요? 원래 한 칸이 그대로 K×K 블록이 돼야 해요.\n그래서 cowsignal.out 을 열고, 각 행을 K번 출력하고 그 안에서 글자 하나도 K번씩 늘려요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];

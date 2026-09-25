@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Mcc15BahasaProgressiveCode, downloadMcc15BahasaPDF, getMcc15BahasaSections } from "./components";
+import { Mcc15BahasaProgressiveCode, downloadMcc15BahasaPDF, getMcc15BahasaSections, getMcc15BahasaWalk } from "./components";
 import { makeMcc15BahasaCh1, makeMcc15BahasaCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const A = "#dc2626";
 
@@ -102,6 +103,7 @@ export default function Mcc15BahasaApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} isEn={E} /></div>;
     if (step.type === "progressive") return <Mcc15BahasaProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "mcc15bahasaf-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMcc15BahasaWalk(E)} accent={A} />;
     return null;
   };
 
@@ -113,6 +115,7 @@ export default function Mcc15BahasaApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} isEn={E} /></div>;
     if (s.type === "progressive") return <Mcc15BahasaProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "mcc15bahasaf-codewalk") return <CodeWalk E={E} lang={codeLang} {...getMcc15BahasaWalk(E)} accent={A} />;
     return null;
   };
 
