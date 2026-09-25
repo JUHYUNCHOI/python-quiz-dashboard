@@ -68,6 +68,44 @@ export function makeEvolutionCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 (시즌 표준 — photoshoot25 형태). ⚠️ PDF 원문 없음(public/problems/ 에
+    // cowevolution.pdf 없음) — CONSTRAINTS(제약 숫자) 는 원문으로 확인 못해 넣지 않음.
+    // 아래 샘플은 1-3 퀴즈/입력 스텝과 같은 {fly}/{swim} 예제를 그대로 재사용하고,
+    // 🔒 검증된 FULL_PY 로직으로 직접 돌려 "yes" 를 확인함.
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? N, then N lines — each a population's traits.",
+        "입력은 N, 그 다음 N줄로 와요 — 한 줄에 한 집단의 특성들이에요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of populations", "— 집단의 개수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>K c₁ c₂ … c_K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— this population's K traits", "— 이 집단이 가진 특성 K개")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: \"yes\" if a valid tree exists, otherwise \"no\".",
+                  "한 줄: 유효한 트리가 있으면 \"yes\", 없으면 \"no\".")}
+            </div>
+          </div>
+          {/* 샘플 — 1-3 퀴즈와 같은 {fly}/{swim} 예제, 실제 코드로 검증함 */}
+          <div style={{ background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: 10, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "SAMPLE", "샘플")}</div>
+            <div style={{ whiteSpace: "pre" }}>{`2\n1 fly\n1 swim`}</div>
+            <div style={{ color: "#15803d", marginTop: 4 }}>→ {`yes`}</div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

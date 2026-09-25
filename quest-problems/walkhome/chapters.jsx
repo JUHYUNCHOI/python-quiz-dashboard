@@ -75,6 +75,52 @@ export function makeWalkHomeCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 — photoshoot25 시즌 표준(2026-07-27) 그대로.
+    // ⚠️ public/problems/ 에 walkhome PDF 가 없다 — USACO_VERIFICATION.md·docs/usaco-submit/
+    //    를 다 뒤졌지만 원문 제약(N, K 상한)이 저장소 어디에도 없다. 숫자를 지어내지 않고
+    //    "N, K 는 작다" 로만 말한다 (검증된 아래 CONSTRAINTS 자체는 코드로 직접 실행해 확인함).
+    {
+      type: "reveal",
+      narr: t(E,
+        "Each test case gives grid size, K, then the grid — print the path count.",
+        "테스트 케이스마다 격자 크기와 K, 격자가 주어지고,\n길의 수를 출력해요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of test cases", "— 테스트 케이스 수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>N K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— grid size, max direction changes", "— 격자 크기, 최대 방향 전환 횟수")}</span></div>
+                <div style={{ marginTop: 2 }}><span style={{ color: "#92400e", fontWeight: 800 }}>grid</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— a row of N chars ('.' or 'H')", "— N 글자짜리 한 줄 ('.' 또는 'H')")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ grid line repeats N times", "↑ grid 줄이 N 번 반복")}</div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 4 }}>{t(E, "↑ this whole block repeats T times", "↑ 이 블록 전체가 T 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "For each test case, the number of valid (1,1) to (N,N) paths (T lines).",
+                  "테스트 케이스마다 (1,1) 에서 (N,N) 까지 가는 길의 수를 한 줄씩 출력해요 (T 줄).")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T</div>
+              <div>{t(E, "grid cells: '.' or 'H' only", "grid 칸: '.' 또는 'H' 만 나와요")}</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 4 }}>
+                {t(E, "N and K stay small enough that the DP table fills fast.",
+                    "N 과 K 는 작게 주어져요. DP 표를 미리 다 채워도 충분히 빨라요.")}
+              </div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

@@ -77,6 +77,45 @@ export function makeTrianglesCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문 triangles.in/.out, usaco.org cpid=1011 직접 확인) —
+    // 시즌 표준화 (photoshoot25 형태). 샘플은 원문 그대로, FULL_PY 로 직접 돌려 "2" 확인함.
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N, then N lines of a post's (x, y).",
+        "입력은 N, 그다음 기둥의 (x, y) 가 적힌 N 줄이에요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of fence posts", "— 울타리 기둥의 수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>X Y</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— this post's position", "— 이 기둥의 위치")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: twice the maximum triangle area (so the answer is always a whole number).",
+                  "한 줄: 최대 삼각형 넓이의 2 배 (그래야 항상 정수가 돼요).")}
+            </div>
+          </div>
+          {/* 제약 (USACO 원문) */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>3 ≤ N ≤ 100</div>
+              <div>−10⁴ ≤ X, Y ≤ 10⁴  (= −10,000 ~ 10,000)</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "posts are at distinct points  ·  at least one valid triangle exists", "기둥은 서로 다른 위치  ·  만들 수 있는 삼각형이 하나는 있음")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

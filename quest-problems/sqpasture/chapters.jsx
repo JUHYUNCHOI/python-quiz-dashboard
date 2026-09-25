@@ -64,6 +64,40 @@ export function makeSqPastureCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=663) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  Two rectangles, one per line.",
+        "입력은 직사각형 두 개가 한 줄씩 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x1 y1 x2 y2</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— pasture A: lower-left, upper-right corners", "— 목초지 A: 왼쪽아래, 오른쪽위 모서리")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x3 y3 x4 y4</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— pasture B, same format", "— 목초지 B, 같은 형식")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line — the area of the smallest square covering both pastures.",
+                  "한 줄 — 두 목초지를 모두 감싸는 가장 작은 정사각형의 넓이예요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>0 ≤ x1, y1, x2, y2, x3, y3, x4, y4 ≤ 10</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "the two pastures don't overlap or touch", "두 목초지는 겹치거나 닿지 않아요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     {
       type: "reveal",
       narr: t(E,

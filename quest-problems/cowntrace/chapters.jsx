@@ -85,6 +85,46 @@ export function makeCowntraceCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문 tracing.in/.out, usaco.org cpid=1037 직접 확인) —
+    // 시즌 표준화 (photoshoot25 형태). 샘플은 원문 그대로, FULL_PY 로 직접 돌려 "1 1 Infinity" 확인함.
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  N and T, then the health string, then T contacts.",
+        "입력은 N, T, 상태 문자열, 그다음 접촉 기록 T 줄로 와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows, number of interactions", "— 소의 수, 접촉 기록의 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>s</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— length-N string of 0/1, cow i's state now (0=healthy, 1=infected)", "— 길이 N 문자열, 소 i 의 지금 상태 (0=건강, 1=감염)")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>t x y</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— at time t, cows x and y shook hooves", "— 시각 t 에 소 x 와 소 y 가 발굽을 맞댐")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats T times", "↑ 이 줄이 T 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line, three numbers: candidates for patient zero, smallest possible K, largest possible K (or \"Infinity\").",
+                  "한 줄에 세 수: 환자 제로 후보 수, K 의 가장 작은 값, K 의 가장 큰 값 (또는 \"Infinity\").")}
+            </div>
+          </div>
+          {/* 제약 (USACO 원문) */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>2 ≤ N ≤ 100</div>
+              <div>1 ≤ T ≤ 250</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "each interaction time t ≤ 250  ·  at most one interaction per time", "접촉 시각 t ≤ 250  ·  한 시각에 접촉은 최대 1 번")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

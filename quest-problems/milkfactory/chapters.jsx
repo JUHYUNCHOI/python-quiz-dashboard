@@ -69,6 +69,44 @@ export function makeFactoryCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 (시즌 표준 — photoshoot25 형태). ⚠️ PDF 원문 없음(public/problems/ 에
+    // milkfactory.pdf 없음) — CONSTRAINTS(제약 숫자) 는 원문으로 확인 못해 넣지 않음.
+    // 아래 샘플은 1-3 퀴즈/1-4 입력 스텝과 같은 "1->2, 3->2" 예제를 그대로 재사용하고,
+    // 🔒 검증된 FULL_PY 로직으로 직접 돌려 "2" 를 확인함.
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? N, then N-1 belt lines.",
+        "입력은 N, 그 다음 컨베이어 N-1줄로 와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of stations", "— 역의 개수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>a b</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— belt carries milk from a to b", "— 컨베이어가 a 에서 b 로 우유를 옮김")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N-1 times", "↑ 이 줄이 N-1 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the station number every other station can reach, or -1 if none.",
+                  "한 줄: 다른 모든 역에서 갈 수 있는 역 번호, 없으면 -1.")}
+            </div>
+          </div>
+          {/* 샘플 — 1-3 퀴즈와 같은 1->2, 3->2 예제, 실제 코드로 검증함 */}
+          <div style={{ background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: 10, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "SAMPLE", "샘플")}</div>
+            <div style={{ whiteSpace: "pre" }}>{`3\n1 2\n3 2`}</div>
+            <div style={{ color: "#15803d", marginTop: 4 }}>→ {`2`}</div>
+          </div>
+        </div>),
+    },
     // 1-2: Belt-graph reachability sim (interactive)
     {
       type: "reveal",

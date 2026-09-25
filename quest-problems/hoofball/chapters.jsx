@@ -66,6 +66,41 @@ export function makeHoofballCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  Cow count, then their positions.  Print one number.",
+        "입력은 소의 수 다음에 소들의 위치로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows", "— 소의 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x₁ x₂ … xₙ</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— each cow's position", "— 각 소의 위치")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The minimum number of starting balls so every cow touches one (one line).",
+                  "모든 소가 공을 만지도록, 처음에 나눠줘야 할 공의 최소 개수를 한 줄로 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              <div>1 ≤ xᵢ ≤ 1000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "every cow stands at a distinct position", "모든 소의 위치는 서로 달라요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Interactive sim — passes on a number line
     {
       type: "reveal",

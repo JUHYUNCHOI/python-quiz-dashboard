@@ -200,7 +200,44 @@ export function makeOutOfPlaceCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: quiz
+    // 1-2: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=785) — 시즌 표준(photoshoot25) 형식
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? N, then N heights — one per line.",
+        "입력은 N 다음에 키가 한 줄에 하나씩 N번 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows", "— 소의 수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>height</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— one cow's height, after Bessie moved", "— 소 한 마리의 키, Bessie가 옮긴 뒤")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single number — the minimum swaps needed to sort the row.",
+                  "숫자 1개 — 줄을 정렬하는 데 필요한 최소 스왑 횟수를 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>2 ≤ N ≤ 100</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "1 ≤ height ≤ 1,000,000  ·  heights can repeat", "1 ≤ 키 ≤ 1,000,000  ·  같은 키가 있을 수 있어요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: quiz
     {
       type: "quiz",
       narr: t(E,

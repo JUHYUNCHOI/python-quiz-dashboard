@@ -241,6 +241,47 @@ export function makeLifeguardsCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=784) — 시즌 표준(photoshoot25) 형식
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? N, then N shift intervals — one per line.",
+        "입력은 인명구조원 수 N, 그다음 근무 구간이 N번 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of lifeguards", "— 인명구조원 수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>S E</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— one lifeguard's shift, [S, E)", "— 한 명의 근무 구간, [S, E)")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single number — the maximum total covered time after firing exactly one lifeguard.",
+                  "숫자 1개 — 정확히 1명을 해고한 뒤 남는 최대 커버 시간을 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              {/* ⚠️ 2026-09-25 정정 — 처음엔 `1 ≤ S < E ≤ 1,000,000,000` 이었다. **원문에 없는 수다.**
+                   usaco.org cpid=784 원문: 수영장은 *"open from time t=0 until time t=1000"*,
+                   각 교대는 *"two integers in the range 0 … 1000"*, 그리고 *"All such endpoints are distinct."* */}
+              <div>0 ≤ S &lt; E ≤ 1000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "all endpoints are distinct", "시작·끝 시각은 모두 서로 달라요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: interactive sim
     {
       type: "reveal",

@@ -96,6 +96,45 @@ export function makeCowSignalCh1(E) {
         </div>),
     },
 
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=665) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  Grid size and K first, then the M rows.",
+        "입력은 격자 크기와 K 다음에 M 개의 행으로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>M N K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— rows, columns, enlarge factor", "— 행 수, 열 수, 확대 배수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>row</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— length-N string of '.' and 'X'", "— '.' 과 'X' 로 된 길이 N 문자열")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats M times", "↑ 이 줄이 M 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "KM lines, each with KN characters — the enlarged picture.",
+                  "KM 줄, 한 줄에 KN 글자씩 — 확대된 그림이에요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ M ≤ 10</div>
+              <div>1 ≤ N ≤ 10</div>
+              <div>1 ≤ K ≤ 10</div>
+            </div>
+          </div>
+        </div>),
+    },
+
     // 1-2 그리드란?
     {
       type: "reveal",

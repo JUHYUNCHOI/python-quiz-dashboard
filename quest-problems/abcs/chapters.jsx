@@ -76,6 +76,47 @@ export function makeAbcsCh1(E) {
               </div>
             </div>
           </div>
+
+        </div>),
+    },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문 cpid=1059 그대로) — 선생님 2026-07-27 시즌 표준 (photoshoot25 형태)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  One line of 7 numbers.  Print A B C.",
+        "입력은 한 줄에 7개 숫자로 와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x₁ x₂ … x₇</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— 7 numbers, one line", "— 7개 숫자, 한 줄")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: A, B, C separated by spaces.",
+                  "한 줄: A, B, C 를 띄어서.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ x ≤ 1,000,000,000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "(each of the 7 numbers)", "(7개 숫자 모두)")}</div>
+            </div>
+          </div>
+
+          {/* 공식 샘플 — usaco.org cpid=1059, 이미 4번째 스텝(입력)에 쓰인 값과 같음 */}
+          <div style={{ marginTop: 12, background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: 10, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "SAMPLE", "샘플")}</div>
+            <div>{`2 2 11 4 9 7 9`}</div>
+            <div style={{ color: "#15803d", marginTop: 4 }}>→ {`2 2 7`}</div>
+          </div>
         </div>),
     },
     // 1-2: Interactive sim — feel the structure of the 7 sums

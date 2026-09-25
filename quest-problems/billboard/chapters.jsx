@@ -224,6 +224,46 @@ export function makeBillboardCh1(E) {
         </div>),
     },
 
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=759) — 시즌 표준(photoshoot25) 형식
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? Three lines — billboard 1, billboard 2, then the truck.",
+        "입력은 광고판 1, 광고판 2, 트럭 좌표 순서로 세 줄이에요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x1 y1 x2 y2</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— billboard 1's corners", "— 광고판 1 의 꼭짓점")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x1 y1 x2 y2</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— billboard 2's corners", "— 광고판 2 의 꼭짓점")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x1 y1 x2 y2</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the truck's corners", "— 트럭의 꼭짓점")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single number — the total visible billboard area.",
+                  "숫자 1개 — 보이는 광고판 면적의 합을 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              {/* ⚠️ 2026-09-25 정정 — 처음엔 `0 ≤ x ≤ 1,000,000,000` 이라고 적혀 있었다.
+                   **원문에 없는 수였다**(「C++ 이 long long 을 쓰니까」라는 추론으로 지어낸 값).
+                   usaco.org cpid=759 원문: *"All coordinates are in the range -1000 to +1000."* */}
+              <div>-1000 ≤ x1 &lt; x2 ≤ 1000</div>
+              <div>-1000 ≤ y1 &lt; y2 ≤ 1000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "same range for both billboards and the truck", "광고판 2개와 트럭 모두 같은 범위예요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
+
     // 1-2: What is a rectangle on a coordinate plane?
     {
       type: "reveal",

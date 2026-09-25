@@ -263,6 +263,48 @@ export function makeGenomicsCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 + 제약 (USACO 원문) — 시즌 표준 (photoshoot25 참조)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the input arrive? N and M, then the genome rows.",
+        "입력은 N, M 다음에 유전체 줄들이 이어져요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N M</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows (each breed), genome length", "— 소 수(각 무리), 유전체 길이")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>AATCCCAT</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— spotted cow's genome (M letters, A/C/G/T)", "— 점박이 소의 유전체 (M글자, A/C/G/T)")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N번 반복")}</div>
+              </div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>ACTCCCAG</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— plain cow's genome (M letters, A/C/G/T)", "— 무늬 없는 소의 유전체 (M글자, A/C/G/T)")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The number of distinguishing positions — a single integer from 0 to M.",
+                  "구별할 수 있는 자리의 개수를 한 줄로 출력해요 (0 이상 M 이하인 정수).")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              <div>1 ≤ M ≤ 100</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "genome letters are only A, C, G, T", "유전체 글자는 A, C, G, T 뿐이에요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: Interactive sim — position-by-position distinguishing table
     {
       type: "reveal",

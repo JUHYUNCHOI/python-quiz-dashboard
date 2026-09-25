@@ -199,7 +199,42 @@ export function makeShuffleCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Interactive sim — step the shuffle round-by-round
+    // 1-2: 입출력 형식 + 제약 (USACO 원문, usaco.org cpid=760) — 시즌 표준(photoshoot25) 형식
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? N, then the shuffle rule, then the lineup AFTER 3 shuffles.",
+        "입력은 N, 셔플 규칙, 셔플 3번 후의 줄 순서로 들어와요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows", "— 소의 수")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>a[1] a[2] ... a[N]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— shuffle rule: cow at position i moves to position a[i]", "— 셔플 규칙: 위치 i 의 소가 a[i] 위치로")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>id[1] id[2] ... id[N]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— cow IDs AFTER 3 shuffles", "— 셔플 3번 후의 소 ID 줄")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "N lines — one cow ID per line, the lineup BEFORE any shuffles.",
+                  "N줄 — 한 줄에 소 ID 하나씩, 셔플 전 원래 줄을 출력해요.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "cow IDs are distinct 7-digit integers", "소 ID는 서로 다른 7자리 정수예요")}</div>
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Interactive sim — step the shuffle round-by-round
     {
       type: "reveal",
       narr: t(E,

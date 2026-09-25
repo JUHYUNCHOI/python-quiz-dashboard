@@ -76,6 +76,40 @@ export function makeSleepyHerdCh1(E) {
           <SleepyHerdSim E={E} />
         </div>),
     },
+    // 1-1b: 입출력 형식 (시즌 표준 — photoshoot25 형태). ⚠️ PDF 원문 없음(public/problems/ 에
+    // sleepyherd.pdf 없음) — CONSTRAINTS(제약 숫자) 는 원문으로 확인 못해 넣지 않음.
+    // 아래 샘플은 1-2 퀴즈/1-3 입력 스텝과 같은 [4,7,9] 예제를 그대로 재사용하고,
+    // 🔒 검증된 FULL_PY 로직으로 직접 돌려 "1, 2" 를 확인함.
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? One line — the three positions.",
+        "입력은 한 줄 — 세 소의 위치예요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>p₁ p₂ p₃</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the 3 cow positions, one line", "— 소 3마리의 위치, 한 줄")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "Two lines: the minimum moves, then the maximum moves.",
+                  "두 줄: 최소 이동 횟수, 그 다음 최대 이동 횟수.")}
+            </div>
+          </div>
+          {/* 샘플 — 1-2 퀴즈와 같은 [4,7,9] 예제, 실제 코드로 검증함 */}
+          <div style={{ background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: 10, padding: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "SAMPLE", "샘플")}</div>
+            <div>{`4 7 9`}</div>
+            <div style={{ color: "#15803d", marginTop: 4 }}>{"→ "}<span style={{ whiteSpace: "pre" }}>{`1\n2`}</span></div>
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",
