@@ -42,90 +42,52 @@
 
 ---
 
-## 🔴 READY — 입출력 축 · **69 중 30 커밋 완료 + 18 편집 완료(미커밋), 21 진행중** (2026-09-25)
+## ✅ DONE — 입출력 형식 카드 축 **69/69** (2026-09-25)
 
-⚠️ **파일 크기 순으로 묶었다가 대회(형제) 단위로 다시 짰다.** 화면 담당 판정 —
-*"병렬 에이전트가 각자 「형제를 먼저 열어 본다」를 하면 **레이스 컨디션**이 된다.
-먼저 손댄 사람의 즉흥적 모양이 곧 「형제」가 되어 버린다."*
-⚠️ **그리고 내 첫 묶음은 파싱이 틀렸다** — id 주변 ±600자를 봐서 **이웃 quest 의 `sub` 를 집었다**
-(`cowevolution` 을 Dec 2019 로 묶었는데 실제로는 Open 2019). 객체 블록을 정확히 끊어 다시 뽑았다.
+| 축 | 상태 |
+|---|---|
+| 입출력 형식 카드 | DONE — 69/69 |
 
-### 📐 참조 템플릿 — **`photoshoot25`** (`chapters.jsx:80-118`) 하나로 고정
-    INPUT       amber #fffbeb / #fde68a — 필드마다 한 줄, 오른쪽 회색 설명
-                반복되는 줄은 「↑ 이 줄이 N 번 반복」
-    OUTPUT      green #ecfdf5 / #6ee7b7 — 무엇을 몇 줄 출력하는지 한 문단
-    CONSTRAINTS white + border — monospace
-새 카드는 **1-1 바로 다음 새 쪽**. ⛔ **`checkups` 금지** — 옛 변형이다(내가 처음에 그걸 지정했다가 정정).
+커밋 여섯: `748a46a0`(19) · `9c0b6bed`(6) · `740e4042`(6) · `22b04062`(12) ·
+`6fe6bdac`(6) · `39134214`(15). 전부 미푸시.
 
-### ⭐ 원문 구하는 법 — 팀이 알아낸 것
-1. **`public/problems/` 에 USACO PDF 는 아예 없다**(MCC 것만). 거기서 찾지 마라.
-2. **usaco.org 를 직접. `https` + 리다이렉트 + UA 필수** — `http://` 는 **301 만** 돌아온다:
-   `curl -sL --max-time 30 -A "Mozilla/5.0" "https://usaco.org/index.php?page=viewproblem2&cpid=<cpid>"`
-   `cpid` 는 `components.jsx` 헤더나 `USACO_VERIFICATION.md` 에.
-3. 못 찾으면 **CONSTRAINTS 를 넣지 말고 「원문에 없다」고 보고.**
+### 이 축에서 남은 것 — **PM 판정 대기**
+- ⚠️ **`socialdist1`** — 인트로 글과 `SocDist1Sim` 이 **Silver**(cpid 1038)를
+  설명하는데 🔒 코드와 진짜 Bronze #1 은 **cpid 1035** 다. 카드는 코드 쪽에 맞췄고,
+  그래서 **카드와 위쪽 글이 안 맞는 채로** 커밋돼 있다. `strangefn` 과 같은 모양.
+- `acowdemia3` — 입력에 `.`(빈 칸)이 있는데 설명 글은 C/G 만 말한다(작은 건).
+- 쪽 수 **+1** 이 69곳에 생겼다 — `quest-length-snapshot.json` 기준선 올림은
+  **PM `--accept` 판정 뒤에만.** 지금은 안 올렸다.
 
-### ⛔ 「훈련 지식」으로 숫자를 쓰지 마라 — 오늘 실제로 났다
-`billboard` 를 `0 ≤ x ≤ 10억` 이라 썼는데 원문은 **−1000~+1000**,
-`lifeguards` 를 `≤ 10억` 이라 썼는데 원문은 **0~1000** 이었다.
-**「C++ 이 long long 을 쓰니까」 같은 추론으로 숫자를 만들지 마라.** 둘 다 원문으로 정정했다.
-
-### ✅ 완료 30개 (커밋됨)
-`abcs` `billboard` `bovgenomics` `bovshuffle` `countliars` `cowevolution` `cowgym`
-`cowntrace` `crossroad1` `crossroad2` `crossroad3` `guessanimal` `hoofball` `lifeguards`
-`livestock` `milkfactory` `modernart` `outofplace` `shellgame` `sleepyherd` `sleepysort`
-`socialdist2` `tameherd` `teleport` `triangles` `walkhome` `whereami`
-(+ `blockgame` `cowsignal` `sqpasture`)
-⚠️ `favperm2` 는 **오탐** — `permutation` 폴더 챕터를 재사용해 이미 카드가 있다. **손대지 마라.**
-
-### 🟢 편집 끝났고 커밋 대기 — 18개
-`bucketlist` `mixmilk` `daisychains` `stuckinrut` `cowcollege`
-`meastraffic` `revegetation` `madscientist` `swapity` `photoshoot2` `sleepclass`
-`cowtipping` `dontbelast` `photoshoot20` `race` `stalling` `uddered`
-`clockfence` `comfycows` `yearcow` `hungrycow` `mooloo`
-(담당 에이전트가 보고를 올리면 메인 세션이 검사기 돌리고 대회 단위로 커밋한다)
-
-### 🔴 아직 도는 중 — 대회 단위 묶음
-| 대회 | quest | 상태 |
-|---|---|---|
-| Feb 2021 | clockfence comfycows yearcow | READY 편집끝·보고대기 |
-| Feb 2023 | hungrycow mooloo **stampgrid** | READY 도는중 |
-| Jan 2019 | guessanimal shellgame sleepysort | DONE |
-| Feb 2017 | crossroad2 crossroad3 | DONE |
-| Dec 2018 | bucketlist mixmilk | READY 편집끝·보고대기 |
-| Dec 2020 | daisychains stuckinrut | READY 편집끝·보고대기 |
-| Dec 2022 | cowcollege **feedcows** | READY 도는중 |
-| Feb 2019 | meastraffic revegetation | READY 편집끝·보고대기 |
-| Feb 2020 | madscientist swapity | READY 편집끝·보고대기 |
-| Feb 2022 | photoshoot2 sleepclass | READY 편집끝·보고대기 |
-| Jan 2017 | cowtipping dontbelast | READY 편집끝·보고대기 |
-| Jan 2020 | photoshoot20 race | READY 편집끝·보고대기 |
-| Jan 2021 | stalling uddered | READY 편집끝·보고대기 |
-| Jan 2022 | herdle nontrans | READY |
-| Jan 2023 | leaders mooops | READY |
-| Open 2018 | familytree teamttt | READY |
-| 1개짜리 8곳 | milkmeas aircond1 cowntact billboard2 bucketbrigade socialdist1 acowdemia3 photoshoot moolang | READY |
-
-### 배치마다 반드시
-**공식 샘플을 🔒 코드에 넣어 실제로 돌려 대조** ·
-⭐ **위젯 개수 전후** (`grep -oE "[A-Z][A-Za-z0-9]*(Sim|Runner|View)"`) —
-`rounding` 사고의 실제 증거는 **줄 수가 아니라 위젯이 사라진 것**이었다 ·
-`see-flow.mjs` 로 쪽 전후(**+1쪽이 표준**) · `quest-length-snapshot.json` 은 **건드리지 마라.**
-실측 소요: quest 당 **5~15분**(원문 조회가 제일 오래 걸린다).
+### 이 축에서 배운 것 — 다음 축에 그대로 쓴다
+1. **참조 템플릿을 하나로 고정**(`photoshoot25`). 「형제를 먼저 열어 봐라」만 시키면
+   먼저 손댄 사람의 즉흥적 모양이 곧 「형제」가 되는 **레이스 컨디션**이 된다.
+2. **원문 조회**: `curl -sL --max-time 30 -A "Mozilla/5.0" "https://usaco.org/index.php?page=viewproblem2&cpid=<cpid>"`
+   — `http://` 는 301 만 돌아온다. `public/problems/` 에 **USACO PDF 는 없다**(MCC 것만).
+3. ⛔ **훈련 지식으로 숫자를 쓰지 마라.** 오늘 `billboard`(10억→**−1000~+1000**)와
+   `lifeguards`(10억→**0~1000**) 둘이 실제로 틀렸다. 원문에 없으면 **「없다」고 보고.**
+4. ⭐ **위젯 개수 전후**를 재라 — `rounding` 사고의 실제 증거는 줄 수가 아니라 **위젯**이었다.
+5. ⛔ **`git stash`·`git restore .`·`git checkout .` 금지.** 오늘 하나가 `git stash` 를
+   돌려 **quest 34개의 미커밋 편집이 한 번에 사라졌다**(pop 으로 전량 복구, 충돌 0).
+   이제 `.githooks/reference-transaction` 이 막는다. **커밋은 메인 세션이 모아서 한다.**
 
 ## 🟡 BLOCKED
 
 | 무엇 | 사유 |
 |---|---|
-| **동결 7개의 CodeWalk 축** | BLOCKED — 감사: 입출력·난이도는 **이미 다 통과**, **CodeWalk 에서만 막힌다.** 그게 `rounding` 사고와 **같은 범주**(커스텀 위젯 `BruteRunner`·`Cube3D`·`CheeseSim2`…)라 선생님/PM 판정 필요 |
+| **동결 7개의 CodeWalk 축** | ⏳ **PM 판정 대기**(BLOCKED 아님) — 선생님(2026-09-24) *"프로젝트 매니저가 다 결정할거야"* 로 **동결 quest 구조 변경까지 PM 몫**이 됐다. 입출력·난이도는 이미 통과, CodeWalk 에서만 막힌다(커스텀 위젯 = `rounding` 사고 범주). ⛔ 단 `USACO_VERIFIED` 는 동결 마커로 안 뚫린다 — 재제출은 선생님 로그인 |
 | `readyQuests()` 기본값 뒤집기 (140+) | BLOCKED (제품 방향 — 선생님 몫) |
 | Vercel `[ignore]` 로그 | BLOCKED (계정 — 대시보드는 선생님만) |
 | `mooin3` 분량·밀도 | BLOCKED (재배열 — 선생님 몫) |
 
-## 🔵 다음 축 — 입출력이 끝나면
+## 🔵 다음 축 — **PM 판정 돌아오는 중**
 - **CodeWalk 66개**(교집합 밖) — ⚠️ **축 단위로 가되 사람이 먼저 훑어 「커스텀 위젯 있는 quest」를 빼라.**
   감사: *"기계가 「커스텀 위젯 있음」을 자동 판별 못 하므로 이 단계는 사람 개입이 필요하다."*
-- **난이도 48개**(교집합 밖) — 축 단위 OK(메타데이터라 자산 손실 경로 없음).
-  ⚠️ **감사값과 추정치를 구별되게** 저장해라 — 「안 매긴 값이 매긴 값처럼 보이는」 게 원래 문제다.
+- **난이도** — ⚠️ 큐의 「48개」는 **낡은 수다.** 2026-09-25 실측(quest 175개):
+  ① 감사맵 19 · ② 명시 44 · ③ 유추 **86** · ④ **기본값이 새어나옴 26**.
+  **사람이 안 매긴 게 112개**고 ④ 26개가 제일 위험하다(매긴 적 없는 2 가 매긴 값처럼 뜬다).
+  ⭐ **진짜 결정은 「누가 매기나」가 아니라 「화면이 출처 넷을 어떻게 다르게 보여주나」다.**
+  `quest-meta.ts` 에는 출처를 적는 필드가 **없다.** 값만 채우면 문제는 112개로 굳는다.
 
 ### 배포
 오늘(09-25) 몫은 **이미 썼다**(`f09e71de..c0a524a9`, 32개). 쌓인 건 내일 창에 한 번에.
