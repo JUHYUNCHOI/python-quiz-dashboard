@@ -31,7 +31,7 @@ export const TOPIC_KO: Record<string, string> = {
 // questId → 핵심 알고리즘 토픽 (특정 알고리즘이 핵심인 문제만 수록)
 export const QUEST_ALGO: Record<string, string> = {
   abcs: "sorting", acowdemia1: "binarysearch", aircond1: "prefixsum", alchemy: "recursion",
-  astral: "greedy", bacteria: "prefixsum", bucketbrigade: "graph", bucketlist: "prefixsum",
+  astral: "greedy", bacteria: "prefixsum", bucketlist: "prefixsum",
   buymilk: "greedy",
   // chipxchg: 제거 — USACO 공식 풀이는 이분탐색이 아니라 O(1) 닫힌 공식(애드혹 수학+경우나눔).
   //   심술쟁이 최악을 직접 계산 → 표준 알고 토픽 없음 → 링크 안 띄우는 게 정확.
@@ -41,7 +41,7 @@ export const QUEST_ALGO: Record<string, string> = {
   cowcollege: "sorting", cowtipping: "greedy", crossroad1: "hashtable", crossroad3: "sorting",
   explodingarrow: "binarysearch", familytree: "tree", fans: "greedy", favperm2: "backtracking", feedcows: "greedy",
   innovation: "greedy", interview: "priorityqueue", lc1480: "prefixsum", lc3: "hashtable",
-  lc303: "prefixsum", lc560: "prefixsum", lc974: "prefixsum", livestock: "graph",
+  lc303: "prefixsum", lc560: "prefixsum", lc974: "prefixsum",
   magicorbs: "sorting", makedistinct: "sorting", mcc15bahasaf: "string", mcc15choco: "stackqueue",
   mcc19bakery: "greedy", mcc19ditcoin: "greedy", mcc19rect: "sorting",
   // 2026-09-08 제거: mcc19rect2 → bitmanipulation.
@@ -83,10 +83,22 @@ export const QUEST_ALGO: Record<string, string> = {
          (`mcc21dvd` 는 「주기」라는 말은 쓰지만 닫힌 공식이지 시뮬로 찾은 사이클이 아니다).
          **하나뿐인 수법에 토픽을 만들 값이 없다.** 배지가 없는 게 틀린 배지보다 낫다. */
   mcc20cipher: "hashtable",
+  /* 🚨 2026-09-26: **틀린 배지 셋을 정리했다.** 전수 감사(quest 180개, 🔒 최종 코드만 봄)에서
+     「배지는 graph 인데 코드엔 BFS/DFS 가 없는」 것이 셋 나왔다. 학생 기록이 이미 있다 —
+     *"「그래프(BFS/DFS)」 배지가 붙어 있는데 코드에 BFS 가 하나도 없었다.
+       **배지가 틀렸다고 느껴졌다.**"* **틀린 배지가 없는 배지보다 나쁘다.**
+       · `bucketbrigade` — 🔒 코드는 맨해튼 거리 −1 + 바위 경우나눔. **시뮬 주석에만** BFS 가 있고
+         학생 화면엔 그 말이 없다. 맞는 토픽이 없어 **뗐다**(비우는 게 맞다).
+       · `livestock` — 🔒 코드는 `itertools.permutations` 브루트포스. **인접 그래프 자체가 없다.** 뗐다.
+       · `mcc22grammar` — `adj` 는 있으나 **연속 쌍 조회만** 한다(큐·스택 없음). 화면 2쪽이 스스로
+         *"다음에 올 수 있는 단어 표를 한 번만 만들어 두기"* 라고 설명한다 → **`hashtable` 로 바꿨다.**
+         오늘 `mcc22maze` 를 `unionfind` 로 바꾼 것과 같은 자리다.
+     ⛔ **되돌리지 마라.** BFS/DFS 를 실제로 쓰는 quest 는 **셋뿐**이고 셋 다 배지가 켜져 있다 —
+     `mcc20citytour` · `mcc20knight` · `milkfactory`(USACO 2019 Open Bronze #2). */
   mcc20citytour: "graph",
   mcc20knight: "graph", mcc20zigzag: "dp", mcc21marbles: "prefixsum",
   // mcc20missing: 제거 — 핵심은 "가장 큰 크기(N/N-1)가 극단에 온다"는 anchor 경우나눔(ad-hoc). set 은 부수적. 표준 토픽 없음.
-  mcc21menu: "greedy", mcc22cardshark: "sorting", mcc22grammar: "graph", mcc22lamp: "prefixsum",
+  mcc21menu: "greedy", mcc22cardshark: "sorting", mcc22grammar: "hashtable", mcc22lamp: "prefixsum",
   // ⚠️ 2026-09-17 — 학생이 잡았다: *"'이 문제 핵심: 그래프 (BFS/DFS)' 배지가 붙어 있는데
   //    실제 코드에 BFS 나 DFS 는 하나도 없었다. 배지가 틀렸다고 느껴졌다."*
   //    세어 보니 맞다 — `bfs|dfs|deque|queue` 0건, `union` 15·`find` 19·`rollback` 12건이다.
