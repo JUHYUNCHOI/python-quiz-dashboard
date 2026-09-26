@@ -872,8 +872,8 @@
   },
   "walkhome": {
     "pages": 5,
-    "quiz_input": 2,
-    "korean_chars_ref": 491
+    "quiz_input": 1,
+    "korean_chars_ref": 566
   },
   "whereami": {
     "pages": 13,

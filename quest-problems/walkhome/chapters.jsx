@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { WalkHomeDpFillSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -138,18 +139,17 @@ export function makeWalkHomeCh1(E) {
         "Correct! DR has 1 change (D->R), RD has 1 change (R->D). Both are <= K=1, so 2 paths.",
         "맞아요! DR 은 방향을 한 번 바꾸고(D→R), RD 도 한 번 바꿔요(R→D). 둘 다 K=1 을 넘지 않으니 길은 2개예요."),
     },
-    // 1-3: Input
+    // 1-3: DP 표를 손으로 채우는 시뮬 (2026-09-26, pedagogy·ux 판정으로 확정된 설계).
+    // ⚠️ 이 자리엔 원래 "input" 스텝(3쪽 퀴즈와 글자 그대로 같은 문항, 답도 둘 다 2)이
+    //    있었다 — feedback_shorter_not_longer: 같은 걸 두 번 묻지 않는다. 3쪽(퀴즈)은
+    //    남긴다 — 거기에만 이 문제의 유일한 풀이 서술(explain, DR·RD 각 방향전환 1회)이 있다.
+    //    이 시뮬은 그 2 가 "표를 채우면 어떻게 나오는지" 를 보여준다 — 같은 예제, 같은 숫자.
     {
-      type: "input",
+      type: "reveal",
       narr: t(E,
-        "2x2 empty grid, K=1. Count the paths!", "2x2 빈 격자에서 K=1 일 때 길을 세어 봐요."),
-      question: t(E,
-        "2x2 grid, no obstacles, K=1. Number of paths?",
-        "2x2 격자에 장애물이 없고 K=1 이에요. 길은 몇 개일까요?"),
-      hint: t(E,
-        "List the possible paths and count those with at most K direction changes.",
-        "갈 수 있는 길을 다 적어 보고, 방향을 K 번까지만 바꾼 것을 세어 봐요."),
-      answer: 2,
+        "Let's fill the table by hand, starting from home.",
+        "표를 집에서부터 직접 채워봐요."),
+      content: (<WalkHomeDpFillSim E={E} />),
     },
   ];
 }
