@@ -29,6 +29,16 @@
  *   그리고 그 자리에서 `elementFromPoint` 로 **실제로 누가 클릭을 가져가는지** 확인한다 —
  *   겹치기만 하고 안 뺏기는 경우(`pointer-events:none` 등)를 헛경보로 버리려고.
  *
+ * ⚠️ **`see-screen.mjs` 의 옛 잣대가 「그냥 틀린」 게 아니다 — 내가 처음에 그렇게 적었다가
+ *    실측하고 고쳤다.** 푸터 링크(`Privacy`·`Contact`)는 스크롤 중에 바 밑을 지나지만,
+ *    쪽 **맨 아래에서는 y=692 로 바(744) 위에 올라와 멀쩡히 눌린다**(`shellgame` 실측).
+ *    즉 「끝까지 못 눌리나」 잣대로는 **정당하게** 0건이다.
+ *    ⭐ **진짜 갈림길은 「그 버튼을 한 번 누르나, 한 자리에 머문 채 스무 번 누르나」다.**
+ *    시뮬의 ◀▶ 는 학생이 **읽기 좋은 자리에 멈춰 두고 되풀이해서** 누른다 — 그 자리가
+ *    하필 바 밑이면 스무 번이 다 막힌다. 푸터는 한 번 가서 한 번 누르면 된다.
+ *    그래서 이 검사기는 **푸터·헤더 같은 페이지 크롬을 「참고」로 내리고 본문만 센다.**
+ *    ⚠️ 이 가르기는 **DOM 위치(footer/header/nav)로 하는 근사**다 — 완벽하지 않다.
+ *
  * ⚠️ 못 보는 것 (0건이 결백이 아니다)
  *   ① 탭·쪽을 넘겨야 나오는 화면. 이 스크립트는 **연 쪽 하나**만 본다
  *      (`--tab "⚡ 코드"` 로 한 번은 눌러 준다).
@@ -94,7 +104,8 @@ const COLLECT = `(() => {
     if (!clickable(el, !fx)) continue;
     const r = el.getBoundingClientRect();
     if (r.bottom < 0 || r.top > innerHeight) continue;          // 화면 밖
-    const rec = { x: r.x, y: r.y, w: r.width, h: r.height, off: el.disabled === true,
+    const chrome = !!el.closest("footer, header, nav[aria-label], .quest-navbar");
+    const rec = { x: r.x, y: r.y, w: r.width, h: r.height, off: el.disabled === true, chrome,
                   label: (el.textContent || el.value || el.tagName).trim().slice(0, 22) };
     (fx ? out.fixed : out.flow).push(rec);
   }
@@ -184,7 +195,7 @@ for (const target of targets) {
 
           const prev = worst.get(f.label);
           if (!prev || ratio > prev.ratio) {
-            worst.set(f.label, { ratio, scroll: s, thief: who.label, bar: b.label, off: who.off });
+            worst.set(f.label, { ratio, scroll: s, thief: who.label, bar: b.label, off: who.off, chrome: f.chrome });
           }
         }
       }
@@ -207,21 +218,24 @@ for (const target of targets) {
   break;                                          // 정상 종료
   }
   const hits = [...worst.entries()];
-  totalHits += hits.length;
+  totalHits += hits.filter(([, w]) => !w.chrome).length;   // 세는 수는 **본문**만
   perQuest.push([target, hits]);
 }
 await browser.close();
 
 console.log(`\n=== 고정 바가 본문 버튼의 클릭을 가져가는 자리 (${MOBILE ? "모바일 375×812" : "데스크탑 1280×900"}) ===\n`);
-console.log(`quest ${targets.length}개 · **${totalHits}곳**\n`);
+console.log(`quest ${targets.length}개 · **본문 ${totalHits}곳**\n`);
 for (const [q, hits] of perQuest) {
-  if (!hits.length) { console.log(`  ✅ ${q}  0곳`); continue; }
-  console.log(`  🚨 ${q}  ${hits.length}곳`);
-  for (const [label, w] of hits) {
-    console.log(`       «${label}» → 스크롤 ${w.scroll}px 에서 ${Math.round(w.ratio * 100)}% 덮임`
+  const body = hits.filter(([, w]) => !w.chrome);
+  const chrome = hits.filter(([, w]) => w.chrome);
+  if (!body.length && !chrome.length) { console.log(`  ✅ ${q}  0곳`); continue; }
+  console.log(body.length ? `  🚨 ${q}  본문 ${body.length}곳` + (chrome.length ? ` (+ 페이지 크롬 ${chrome.length}곳)` : "")
+                          : `  ✅ ${q}  본문 0곳 (페이지 크롬 ${chrome.length}곳 — 아래 참고)`);
+  const line = ([label, w]) => `       «${label}» → 스크롤 ${w.scroll}px 에서 ${Math.round(w.ratio * 100)}% 덮임`
       + (w.off ? `, 그 자리는 **비활성** «${w.thief}» 라 눌러도 **아무 일도 안 난다**`
-               : `, 실제로는 «${w.thief}» 가 눌린다`));
-  }
+               : `, 실제로는 «${w.thief}» 가 눌린다`);
+  for (const h of body) console.log(line(h));
+  for (const h of chrome) console.log(line(h) + "   ⟨페이지 크롬 — 참고⟩");
 }
 console.log(`
 잣대: 고정 요소 안의 누를 수 있는 것과 **그 밖**의 누를 수 있는 것이 화면 사각형을
