@@ -12,6 +12,7 @@
 // 같은 숫자. CLAUDE.md 가 quest 를 닫기 전에 묻는 그 질문("인트로 시뮬 숫자와 코드
 // 단계 숫자가 같은 예제로 맞아떨어지나")에 답하기 위한 장치다.
 
+import { useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
@@ -125,6 +126,20 @@ function Arrow({ dir, active, color }) {
 export function WalkHomeDpFillSim({ E }) {
   const steps = buildSteps(E);
   const { safe, setIdx, total } = useTraceStep(steps.length);
+
+  /* 버튼 줄이 고정 바에 묻히면 그만큼만 스크롤을 내려 준다. (근거는 아래 JSX 주석) */
+  const navRef = useRef(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const row = navRef.current;
+    if (!row) return;
+    const bar = document.querySelector(".quest-navbar");
+    if (!bar) return;
+    const rowBottom = row.getBoundingClientRect().bottom;
+    const barTop = bar.getBoundingClientRect().top;
+    const hidden = rowBottom - barTop;
+    if (hidden > 0) window.scrollBy({ top: hidden + 12, behavior: "smooth" });
+  }, [safe]);
   const cur = steps[safe];
   const filledSet = new Set(cur.filledThrough);
   const valueOf = (r, c) => {
@@ -210,7 +225,18 @@ export function WalkHomeDpFillSim({ E }) {
         {/* 2026-09-26 모바일 375px 실측: SimNav(4버튼, showLabels) + 끝까지 버튼을 한 줄로
             강제하면 화면 밖으로 넘친다("Restart" 앞글자가 잘림). flexWrap 으로 두 번째 줄로
             자연스럽게 내려가게 한다 — 고정 폭 계산 대신, 화면이 좁아지면 알아서 접힌다. */}
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: 10, rowGap: 8, marginTop: 14 }}>
+        {/* ⭐ 2026-09-26 ux 재검토가 잡은 것 — **마지막 걸음(6/6)에서 이 버튼 줄이
+            화면 하단 고정 바에 묻힌다.** 실측: 버튼 줄 top=760·bottom=792 인데
+            고정 바(`.quest-navbar`)가 top=744·bottom=812 이고 배경이 **불투명**이다.
+            클릭 자체는 통과한다(바 컨테이너가 `pointer-events:none`) — 그래서
+            「눌러도 안 먹는다」는 아니다. 하지만 **버튼이 안 보인다.**
+            왜 마지막 걸음만인가: 그 걸음에만 공식 줄과 초록 「답: 2」 띠가 더 붙어서
+            카드가 길어진다. 걸음이 넘어갈 때 `useTraceStep` 은 스크롤을 안 건드리니,
+            스크롤 0 인 채로 6까지 누르면 버튼 줄이 딱 그 자리에 온다.
+            ⚠️ 아래 여백을 늘리는 걸로는 **안 고쳐진다** — 버튼 줄 자체가 안 올라간다.
+            그래서 **가려졌을 때만** 그만큼 스크롤을 밀어 준다. 안 가려졌으면 아무것도 안 한다
+            (학생이 잡아 둔 스크롤을 함부로 흔들지 않는다). */}
+        <div ref={navRef} style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: 10, rowGap: 8, marginTop: 14 }}>
           <SimNav idx={safe} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
           {/* ⭐ 끝까지 건너뛰기 — mcc20citytour 의 Mcc20CityTourBfsProcessStepper 와 같은 자리·같은 용도.
               feedback_student_agent_must_quit: 패턴을 알면 그만두고 싶어 한다 — 나가는 문을 준다. */}
