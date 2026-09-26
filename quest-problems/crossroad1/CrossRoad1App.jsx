@@ -42,6 +42,11 @@ export default function CrossRoad1App(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+    /* ⭐ 2026-09-26: `quest-algohint` 배선 — 코드 탭(tab >= 1)에서만
+       보라색 큰 배너(📘)를 띄운다. 문제·시뮬 탭은 아직 알고리즘을 배우기 전이라
+       그 이름을 미리 보여주면 스포일러라 켜지 않는다.
+       `buymilk`·`mcc20citytour` 와 같은 모양이다. */
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 1 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {

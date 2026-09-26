@@ -38,6 +38,7 @@ export default function ReachApp(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 2 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {

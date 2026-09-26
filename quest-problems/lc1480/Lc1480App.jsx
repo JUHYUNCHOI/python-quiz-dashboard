@@ -43,6 +43,15 @@ export default function Lc1480App(props = {}) {
   const cur = Math.min(si, steps.length - 1);
   const step = steps[cur];
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    /* ⭐ 2026-09-26: `quest-algohint` 배선. 이 quest 는 탭이 하나뿐이고
+       코드는 마지막 챕터(steps 배열의 끝) 하나에 몰려 있어 `tab >= N` 을
+       쓸 수 없다 — 그래서 "지금 보는 스텝이 마지막 스텝(최종 코드)인가" 로 켠다.
+       `buymilk`·`mcc20citytour` 와 같은 배너, 켜는 조건만 다르다. */
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: cur >= steps.length - 1 } }));
+  }, [cur, steps.length]);
+
   const handleAnswer = i => {
     if (step.answered != null) return;
     const u = [...steps]; u[cur] = { ...u[cur], answered: i }; setSteps(u);

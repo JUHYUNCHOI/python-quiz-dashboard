@@ -41,6 +41,10 @@ export default function Mcc21MarblesApp(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+    /* ⭐ 2026-09-26: 코드 탭(`tab >= 1`)에서 큰 알고리즘 배너를 띄운다.
+       `quest-algohint` 를 안 쓐면 `lib/quest-algo.ts` 태그가 있어도 화면엔 안 뜵다.
+       `buymilk`·`mcc20citytour` 와 같은 모양. 문제 탭(0)은 안 켜서 스포일러가 아니다. */
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 1 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {

@@ -52,6 +52,11 @@ export default function MooApp(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+    /* ⭐ 2026-09-26: 🔒 동결 quest — 이 줄은 표시(이벤트 디스패치)일 뿐 보호 변수
+       (SOLUTION_CODE·*_PY·*_CPP)를 건드리지 않는다. TABS 는
+       ["📋 문제","🔍 시뮬","🐍 브루트","💡 패턴","⚡ 코드"] 라 코드 탭은 인덱스 4.
+       `buymilk`·`mcc20citytour` 와 같은 배너 모양. */
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 4 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {

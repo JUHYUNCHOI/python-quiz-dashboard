@@ -30,7 +30,12 @@ export default function Lc974App(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ si })); } catch {}
-  }, [si, _posKey]);
+    /* ⭐ 2026-09-26: 이 quest 는 탭이 하나(`TABS = ["📋 문제"]`)라 `tab >= N` 을 못 쓴다.
+       코드는 스텝 배열 안에 `type: "code"` 로 섞여 있다(현재 6스텝 중 마지막 하나).
+       그래서 탭 번호 대신 **그 스텝의 실제 type** 으로 판정한다 — 스텝이 늘어도 안 깨진다.
+       `buymilk`·`mcc20citytour` 와 같은 배너, 트리거 방식만 다르다. */
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: steps[Math.min(si, steps.length - 1)]?.type === "code" } }));
+  }, [si, _posKey, steps]);
 
   useEffect(() => {
     if ((propLang === "ko" || propLang === "en") && propLang !== lang) {
