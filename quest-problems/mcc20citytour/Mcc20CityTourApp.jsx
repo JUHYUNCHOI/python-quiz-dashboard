@@ -46,7 +46,9 @@ export default function Mcc20CityTourApp(props = {}) {
        `quest-algohint` 를 받으면 보라색 **큰 배너(📘)** 를, 안 받으면 작은 줄(🧠)을 띄운다.
        그런데 이 quest 는 **① `lib/quest-algo.ts` 의 `graph` 매핑이 주석에 삼켜져 있었고**
        (오늘 복구) **② 이 이벤트를 한 번도 안 쏘고 있었다.** 둘 다라서 아무것도 안 떴다.
-       ⚠️ 이 이벤트를 쏘는 quest 가 180개 중 **3개**뿐이다 — 나머지도 같은 배선이 필요하다.
+       ⚠️ 이 주석을 쓸 때는 이벤트를 쏘는 quest 가 **3개**뿐이었다. 같은 날 69개를
+       더 배선해서 지금은 **73개**다(`7a9a3286`). 매핑은 51개 — 수가 안 맞는 건
+       매핑 없이 쏘는 quest 가 있어서고, 그건 `client.tsx` 가 알아서 무시한다.
        ⭐ `tab >= 1`(코드 쪽)에서만 켠다 — 문제·퀴즈는 0탭이라 **스포일러가 아니다.**
        `buymilk`·`printseq`·`checkups` 와 같은 모양이다. */
     window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 1 } }));

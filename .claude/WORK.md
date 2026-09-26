@@ -18,7 +18,7 @@
 ---
 
 
-### PM 판정: mcc20citytour (2026-09-26)
+## PM 판정: mcc20citytour (2026-09-26)
 
 오늘 4번째 라운드 요청 — **좁게 승인.** 범위는 딱 하나:
 `chapters.jsx:67` 의 `|H(현재) − H(이웃)| < D` 앞에 이미 quest 안에 있는 표현
@@ -37,7 +37,7 @@ deque 없음, 레슨 25 가 LESSON_TAUGHT_CONCEPTS 에 없음)은 **이 quest �
 재검증: 6번(절댓값 정의) 문단 하나만 새 학생에게 확인. 전체 재통독 안 함.
 이 커밋 이후 citytour 는 더 이상 건드리지 않는다 — 다음 지적이 나오면 새 PM 판정 필요.
 
-### 백로그: 개념 그래프에 "deque" 가 없다 — quest 118개가 메타 자체가 없다 (2026-09-26)
+## 백로그: 개념 그래프에 "deque" 가 없다 — quest 118개가 메타 자체가 없다 (2026-09-26)
 
 `lib/quest-meta.ts` CONCEPT_ONTOLOGY 에 deque/queue 개념 없음. `mcc20citytour`
 포함 다수 quest 가 QUEST_CONCEPT_META 에 항목이 없어 DEFAULT_META(concepts_required: [])
@@ -47,7 +47,7 @@ deque 없음, 레슨 25 가 LESSON_TAUGHT_CONCEPTS 에 없음)은 **이 quest �
 PM 주도로 처리. 오늘 citytour 폴리시 예산에 넣지 않는다. 선생님 확인 불필요
 (제품 방향 아니라 데이터 완결성 — PM 권한 내).
 
-### 모바일 고정 바 vs 시뮬 스테퍼 — 후보 **넷 다 실측으로 탈락** (2026-09-26)
+## 모바일 고정 바 vs 시뮬 스테퍼 — 후보 **넷 다 실측으로 탈락** (2026-09-26)
 
 A(바 버튼을 좌우 끝으로) · B(스크롤 중 비활성) · C(하단 여백) · D(모양 가르기) 전부 기각.
 · C — 스페이서가 **이미 있고**(`QuestNavBar.jsx`), 여백은 **문서 끝만** 막는다. 메커니즘 불일치.
