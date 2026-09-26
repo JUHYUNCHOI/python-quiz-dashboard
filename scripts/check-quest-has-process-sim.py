@@ -175,6 +175,8 @@ STEP_NAV_SIGNS = [
     r"◀", r"▶",
     r"nextStep\s*\(",
     r"stepNext\s*\(",
+    r"<SimNav",       # 공유 걸음 네비 (components/quest/TraceStepper.tsx)
+    r"useTraceStep",  # 그 네비가 쓰는 걸음 상태 훅
 ]
 INSTANT_PARAM_SIGNS = [
     r"useMemo",
@@ -182,8 +184,16 @@ INSTANT_PARAM_SIGNS = [
     r"Math\.min\(\d+,\s*\w+\s*\+\s*1\)",
 ]
 
+# ⭐ 2026-09-26: `useState` 만 보던 게 **조용히 틀렸다.** `moolang` 은
+#   `useTraceStep`(components/quest/TraceStepper.tsx — 안에서 useState 를 쓴다)
+#   + `SimNav` 로 이미 **과정 스테퍼**를 갖고 있는데, 이 파일에 `useState(` 라는
+#   글자가 없어서 「시뮬 자체가 없음(C)」으로 나왔다. 공유 훅을 쓰면 안 걸리는
+#   구멍이라, 「시뮬이 없는 5개」 목록에 멀쩡한 quest 가 하나 섞여 있었다.
+#   근거: memory/feedback_checkers_can_be_silently_wrong.md
+STATE_SIGNS = [r"useState", r"useTraceStep", r"useReducer"]
+
 def classify_component(body: str):
-    has_state = bool(re.search(r"useState", body))
+    has_state = any(re.search(p, body) for p in STATE_SIGNS)
     has_step_nav = any(re.search(p, body) for p in STEP_NAV_SIGNS)
     has_instant = any(re.search(p, body) for p in INSTANT_PARAM_SIGNS)
     if has_step_nav:
