@@ -176,7 +176,7 @@ export function makeSwapToWinCh1(E) {
             </div>
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 2:", "자리 2:")}</b> {t(E, "want b, s_1[2]=b ✓ skip", "b 가 필요, s_1 의 2번 칸이 이미 b ✓ 건너뜀")}
-              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>(s_1 = abxy {"그대로"})</span>
+              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>(s_1 = abxy{t(E, " unchanged", " 그대로")})</span>
             </div>
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 3:", "자리 3:")}</b> {t(E, "want c, s_1[3]=x. c is nowhere left in s_1 → borrow. s_2's column 3 already has c → ", "c 가 필요, s_1 의 3번 칸은 x. s_1 안엔 c 가 더 없음 → 빌려요.\ns_2 의 3번 칸에 c 가 바로 있음 → ")}
@@ -187,6 +187,7 @@ export function makeSwapToWinCh1(E) {
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 4:", "자리 4:")}</b> {t(E, "want d, s_1[4]=y. Not in s_1, not in s_2. d is in s_3 — but at column 1, not 4. Line it up first → ", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 1번 칸에 있음 — 먼저 4번 칸으로 옮겨요 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 3 1 4</code>
+              {t(E, " (inside s_3)", " (s_3 안에서)")}
               <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_3 = zzzd</span>
               {t(E, ", then swap that column with s_1 → ", ", 그다음 그 칸을 s_1 과 맞바꿔요 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 3 4</code>
