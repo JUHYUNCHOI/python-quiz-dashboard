@@ -20,7 +20,10 @@ export default function Mcc20CityTourApp(props = {}) {
     return "ko";
   });
   const E = lang === "en";
-  const codeLang = "py";  // MCC: Python 전용 — C++ 토글 무시
+  /* ⭐ 2026-09-26 선생님 직접 지시: "c++코드로도 만들어줘. 이 MCC는" —
+     이 quest 는 MCC 지만 예외로 C++ 토글을 켠다(client.tsx 의 허용 목록 참고).
+     다른 MCC 는 여전히 Python 전용이다 — 그 규칙은 안 건드린다. */
+  const [codeLang] = useCodeLang();
   const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
   const _loadPos = () => {
     if (typeof window === "undefined") return { tab: 0, si: 0 };

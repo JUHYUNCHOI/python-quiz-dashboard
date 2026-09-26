@@ -26,6 +26,11 @@ const ALGO_UNLOCK_THRESHOLD = 8
 // 거긴 그냥 "/quest" 맨 위로 보낸다.
 const ANCHOR_SECTIONS = new Set(["USACO", "MCC", "MCO"])
 
+// ⭐ 2026-09-26 선생님 직접 지시: "c++코드로도 만들어줘. 이 MCC는" — mcc20citytour
+// 하나만. 다른 MCC 는 Python 전용 규칙(feedback_mcc_is_python_only.md)을 그대로 따른다.
+// ⛔ 여기에 다른 MCC id 를 더하지 마라 — 선생님이 콕 집어 지시한 것만 켠다.
+const MCC_CPP_ALLOWLIST = new Set(["mcc20citytour"])
+
 const STORAGE_KEY = "quest-solved"
 
 function useQuestSolved(problemId: string) {
@@ -309,8 +314,14 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             pythonOnly: 임시 조치(2026-09-23) — 이 7개 quest 는 chapters.jsx 가
             lang 파라미터를 안 써서 토글을 눌러도 코드가 안 바뀌었다(학생 제보).
             진짜 고치기(FULL_CPP 를 ProgressiveCodeStepper 로 쪼개기)는 재작성
-            큐에서 그 quest 를 만날 때 한다 — 그때 data.ts 의 pythonOnly 를 지운다. */}
-        {meta?.section !== "MCC" && !meta?.pythonOnly && (
+            큐에서 그 quest 를 만날 때 한다 — 그때 data.ts 의 pythonOnly 를 지운다.
+
+            ⭐ 2026-09-26 선생님 직접 지시: "c++코드로도 만들어줘. 이 MCC는" —
+            mcc20citytour 만 예외로 켠다. MCC_CPP_ALLOWLIST 밖의 MCC 는 여전히
+            Python 전용이다(feedback_mcc_is_python_only — 그 규칙은 안 건드린다).
+            id 로 판별하는 이유: mcc20citytour 는 `lib/quest-meta.ts` 에 항목이
+            없어서 meta 기반 플래그를 못 쓴다. */}
+        {(meta?.section !== "MCC" || MCC_CPP_ALLOWLIST.has(problemId)) && !meta?.pythonOnly && (
         <div className="flex-shrink-0 flex items-center gap-1">
           <span className="text-[10px] text-gray-400 font-bold hidden sm:inline">{t("코드", "Code")}</span>
           <div className="flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">

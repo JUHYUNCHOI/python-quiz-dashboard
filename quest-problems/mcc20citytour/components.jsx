@@ -640,16 +640,54 @@ export function Mcc20CityTourProgressiveCode(props) {
 }
 
 /* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드
-   이 방식). FULL_PY 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
-   beats(설명 말풍선)만 덧붙인다. MCC 는 C++ 이 없다 — py 만 만든다. ── */
-export function getMcc20CityTourWalk(E) {
+   이 방식). FULL_PY / FULL_CPP 는 표시용 배열이다 — 내용은 절대 바꾸지 않고, 그대로 가져와
+   beats(설명 말풍선)만 덧붙인다.
+   ⭐ 2026-09-26 선생님 직접 지시: "c++코드로도 만들어줘. 이 MCC는" — 이 quest 는
+   MCC 중 유일하게 C++ 을 만든다(다른 MCC 는 여전히 Python 전용, feedback_mcc_is_python_only). ── */
+export function getMcc20CityTourWalk(E, lang = "py") {
+  const vars = [
+    { v: "visited", ko: "이미 다녀온 칸 표시", en: "cells already visited" },
+    { v: "q", ko: "차례를 기다리는 칸들의 줄", en: "queue of cells waiting their turn" },
+    { v: "D", ko: "이 값보다 높이 차가 작아야 건널 수 있음", en: "the height gap must be smaller than this to cross" },
+  ];
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP,
+      vars,
+      beats: [
+        { hi: [0, 17], bubble: t(E,
+          "What do we have to hand back? How many cells we can reach from (1,1). So first take in the map — bring in the tools we need (vector, queue) with headers, then set the size, the gap limit D, and every height as values.",
+          "무엇을 내놓아야 하나요? (1,1) 에서 갈 수 있는 칸이 몇 개인지예요.\n그러니 먼저 지도를 받아요 — 필요한 도구(vector, queue)를 헤더로 가져오고, 크기와 D, 높이들을 값으로 넣어요.") },
+        { hi: [18, 23], bubble: t(E,
+          "Why not sweep the whole grid again and again? That's 10^10 checks.\nSo we visit each cell just once — mark where we've been in a vector<vector<bool>>, and put cells waiting their turn in a queue<pair<int,int>>, pairing up (row, col) like a Python tuple.",
+          "왜 지도를 몇 번씩 다시 훑지 않을까요? 그러면 10^10 번을 봐야 해요.\n그래서 칸마다 딱 한 번만 가요 — 다녀온 곳은 vector<vector<bool>> 에 적고, 차례를 기다리는 칸은 pair 로 줄 번호·칸 번호를 묶어 queue<pair<int,int>> 에 넣어요.") },
+          /* ⭐ 파이썬 쪽 [(-1,0),(1,0),(0,-1),(0,1)] 을 오늘 방향까지 풀어 설명했다
+             (선생님 라이브 지적 + 재검증 학생). C++ 은 dr[]/dc[] 두 배열로 나뉘어
+             있어서 그 대응을 여기서 짚는다 — 그대로 번역하면 안 되는 자리다. */
+        { hi: [24, 25], bubble: t(E,
+          "Lay out the four directions as arrays ahead of time — dr[0],dc[0]=(-1,0) up, dr[1],dc[1]=(1,0) down,\ndr[2],dc[2]=(0,-1) left, dr[3],dc[3]=(0,1) right.\nOne index d pairs the two arrays together.",
+          "네 방향을 미리 배열로 적어 둬요 — dr[0], dc[0] = (-1, 0) 은 위, dr[1], dc[1] = (1, 0) 은 아래,\ndr[2], dc[2] = (0, -1) 은 왼쪽, dr[3], dc[3] = (0, 1) 은 오른쪽이에요.\n숫자 d 하나로 두 배열을 짝지어 써요.") },
+        { hi: [26, 28], bubble: t(E,
+          "This spreading is called BFS. Keep going while the queue isn't empty, and each time look at the front cell with front() and remove it with pop() — the same job as Python's popleft().",
+          "이렇게 번져 나가는 방법을 BFS 라고 불러요.\n줄이 빌 때까지 계속하면서, 매번 맨 앞의 칸을 front() 로 보고 pop() 으로 꺼내요 — 파이썬의 popleft() 와 같은 일이에요.") },
+        { hi: [29, 31], bubble: t(E,
+          "Now check the four directions one by one.\nAdd dr[d], dc[d] to the row and column we're standing on, and you get that neighbor's place.",
+          "이제 네 방향을 하나씩 확인해요.\n지금 칸의 줄 번호·칸 번호에 dr[d], dc[d] 를 더하면 그 이웃의 자리가 나와요.") },
+        { hi: [32, 33], bubble: t(E,
+          "Step into a neighbor only when two things hold: it's still inside the grid and not yet visited, and the height gap abs(H[nr][nc] - H[r][c]) is smaller than D.\nThis one line is the whole rule.",
+          "이웃으로 들어가는 건 두 가지가 맞을 때예요 — 격자 안이면서 아직 안 간 칸이고,\n높이 차 abs(H[nr][nc] - H[r][c]) 가 D 보다 작을 때요.\n이 한 줄이 규칙의 전부예요.") },
+        { hi: [34, 36], bubble: t(E,
+          "Mark it visited and bump count at the moment we push it into the queue, not when we pop it.\nThat way a cell can never enter the queue twice, so every reachable cell is counted exactly once.",
+          "큐에 넣는 순간에 방문 표시를 하고 count 를 올려요. 꺼낼 때가 아니에요.\n그래야 같은 칸이 큐에 두 번 들어가지 않아서, 갈 수 있는 칸이 딱 한 번씩만 세어져요.") },
+        { hi: [40, 40], bubble: t(E,
+          "The answer is how many cells got visited — print count.",
+          "답은 방문한 칸 개수예요 — count 를 출력해요.") },
+      ],
+    };
+  }
   return {
     code: FULL_PY,
-    vars: [
-      { v: "visited", ko: "이미 다녀온 칸 표시", en: "cells already visited" },
-      { v: "q", ko: "차례를 기다리는 칸들의 줄", en: "queue of cells waiting their turn" },
-      { v: "D", ko: "이 값보다 높이 차가 작아야 건널 수 있음", en: "the height gap must be smaller than this to cross" },
-    ],
+    vars,
     beats: [
       { hi: [0, 12], bubble: t(E,
         "What do we have to hand back? How many cells we can reach from (1,1). So first take in the map — its size, the gap limit D, and every height.",

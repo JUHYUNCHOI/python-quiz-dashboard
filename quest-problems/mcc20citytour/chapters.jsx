@@ -181,7 +181,7 @@ export function makeMcc20CityTourCh1(E) {
 }
 
 export function makeMcc20CityTourCh2(E, lang = "py") {
-  const w = getMcc20CityTourWalk(E);
+  const w = getMcc20CityTourWalk(E, lang);
   return [
     // 2-1: BFS process stepper — pop a cell, check its 4 neighbors, repeat.
     // (2026-09-26: 여기 있던 느림/빠름 산문 두 박스와 정적 D=2 그림을 걷어냈다 —
@@ -209,7 +209,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
         "Read the solution top to bottom — each bubble sits on the lines it explains.",
         "말풍선이 설명하는 코드 줄에 붙어 있어요."),
       content: (
-        <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#d97706" />
+        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#d97706" />
       ),
     },
   ];
