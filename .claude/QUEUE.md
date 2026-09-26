@@ -257,7 +257,9 @@ CLAUDE.md 는 *"빈 `concepts_required` 는 `every()` 가 항상 true 라 **아�
 | `feedcows` 과정 시뮬 | DONE `745a5b97` — 정적 한 컷을 **대체**(쪽 수 그대로). 예제를 🔒 코드로 먼저 검증했다 |
 | `photoshoot` 과정 시뮬 | DONE `e9021aed` — TODO 구멍을 메웠다. 🔒 코드 전이를 손으로 따로 돌려 대조함 |
 | `swaptowin` **손풀이 재작성** | DONE `d4bcf0ee` `86399a5f` — 검토자 셋 전원 A 로 수렴. 감사·학생 재검증 둘 다 통과 |
-| `swaptowin` **과정 시뮬** | READY — 텍스트가 닫혔으니 이제 착수. ⛔ **걸음 목록을 ux·pedagogy 에 먼저** 보인다(코드부터 짜지 마라) |
+| `swaptowin` **과정 시뮬** | BLOCKED (`/decide` 2라운드 — **1라운드가 갈렸다.** ux «안 만든다» vs pedagogy·auditor «대체하면 만든다» vs **학생 «진짜 필요했다»**. 학생 증언이 ux 근거를 흔들어 재판정 중) |
+| `algo/graph` **DFS 를 재귀 → 스택으로** (선생님 지시) | DONE `bc4539f5` — BFS 와 **한 줄 차이**(`popleft()`↔`pop()`). 시뮬 로직을 파이썬으로 옮겨 검산, 걸음 값 전부 일치. **학생 확인 중** |
+| `mcc20citytour` **C++ 열기** (선생님 지시) | DONE `ac676e11` — `FULL_CPP` 는 이미 있었고 화면이 막고 있었다. 다른 MCC 47개는 그대로(브라우저 확인) |
 | 시뮬 걸음을 **저장**해 탭을 나갔다 와도 안 날아가게 | DONE `ed879a35` — 학생 재검증 통과(*"그만두고 싶은 느낌이 지금은 안 든다"*). 훅은 **opt-in** 이라 나머지 34~38개 무영향 |
 | citytour 「20/20」과 「18/20」이 한 화면에 (뜻이 다른데 분모가 같다) | BLOCKED (오늘 이 quest 를 여섯 번 건드렸다 — 한 줄 라벨로 일곱 번째를 열지 않는다. 다음 세션 새 판정) |
 | `mcc20cipher`·`mcc20kitty` 알고리즘 배지 | DONE `b743da29` — cipher ⭕ `hashtable` / kitty ➖ **일부러 비움**(맞는 토픽이 없다) |
