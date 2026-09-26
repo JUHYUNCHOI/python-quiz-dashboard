@@ -2,6 +2,9 @@ import { C, t } from "@/components/quest/theme";
 import { getSwapToWinSections, getSwapToWinWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+/* 샘플 입출력 상자의 «← 설명» 라벨 (형제 quest strangefn/checkups 와 같은 모양) */
+const SIO = { color: C.dim, fontSize: 10.5 };
+
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeSwapToWinCh1 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
@@ -92,15 +95,17 @@ export function makeSwapToWinCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, padding: 10 }}>
               <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 4 }}>{t(E, "Input", "입력")}</div>
-              <pre style={{ margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#065f46" }}>{`3 5
-abcde
-abcde
-abcde
-zzzzz`}</pre>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#065f46", lineHeight: 1.8 }}>
+                <div>3 5 <span style={SIO}>← N, M</span></div>
+                <div>abcde <span style={SIO}>← target</span></div>
+                <div>abcde <span style={SIO}>← s_1</span></div>
+                <div>abcde <span style={SIO}>← s_2</span></div>
+                <div>zzzzz <span style={SIO}>← s_3</span></div>
+              </div>
             </div>
             <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, padding: 10 }}>
               <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 4 }}>{t(E, "Output", "출력")}</div>
-              <pre style={{ margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#065f46" }}>{`0`}</pre>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#065f46" }}>0 <span style={SIO}>← {t(E, "0 operations", "0번 바꾸기")}</span></div>
             </div>
           </div>
 
@@ -122,12 +127,16 @@ zzzzz`}</pre>
         </div>),
     },
 
-    // 1-3: Worked walkthrough — test 1 (banana / nabana)
+    // 1-3: Worked walkthrough — target=abcd, s_1=xbay, s_2=zzcy, s_3=dzzz
+    // (2026-09-26 재작성: 옛 예제는 코드 순서대로 풀면 1번에 끝나 「같은 줄 먼저 → 안 되면 빌리기」
+    //  순서를 다 못 보여줬고, 옛 walkthrough 는 k=0 에서 같은 줄을 안 보고 곧장 빌려 🔒 코드 순서와
+    //  어긋났었다(검토자 셋이 독립으로 잡음). 이 예제는 🔒 FULL_PY 로 직접 돌려 확인했다 —
+    //  `scripts/run-quest-code.py swaptowin` 출력이 아래 숫자와 한 글자도 다르지 않다.)
     {
       type: "reveal",
       narr: t(E,
-        "Now a real one. target = banana, s_1 = nabana. Walk left-to-right and fix each position.",
-        "진짜 문제를 봐요. target 은 banana 이고 s_1 은 nabana 예요.\n왼쪽부터 한 칸씩 맞춰 가요."),
+        "Now a real one. target = abcd, s_1 = xbay. Fix each position, left to right.",
+        "진짜 문제를 봐요. target 은 abcd, s_1 은 xbay 예요.\n왼쪽부터 한 칸씩 맞춰 가요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 8 }}>
@@ -136,43 +145,46 @@ zzzzz`}</pre>
 
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, padding: 10, marginBottom: 10 }}>
             <div style={{ fontSize: 12, color: "#065f46", marginBottom: 4 }}>
-              <b>target</b> = <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>banana</code>
+              <b>target</b> = <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>abcd</code>
             </div>
             <div style={{ fontSize: 12, color: "#065f46", marginBottom: 4 }}>
-              <b>s_1</b> = <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>nabana</code>
-              {", "}<b>s_2</b> = <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>banana</code>
-              {", "}<b>s_3</b> = <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>nnbaaa</code>
+              <b>s_1</b> = <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>xbay</code>
+              {", "}<b>s_2</b> = <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>zzcy</code>
+              {", "}<b>s_3</b> = <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>dzzz</code>
             </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px dashed #6ee7b7", borderRadius: 6, padding: "6px 10px", marginBottom: 10, fontSize: 11.5, color: "#065f46", lineHeight: 1.5, wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              "Same rule at every position: look inside s_1 first. Only borrow from another string when s_1 has nothing left.",
+              "모든 자리에서 규칙은 같아요. 먼저 s_1 안에서 찾아요.\ns_1 안에 없을 때만 다른 줄에서 빌려요.")}
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12.5, color: C.text, lineHeight: 1.55 , wordBreak: "keep-all", textWrap: "balance" }}>
             <div>
-              <b style={{ color: "#059669" }}>k=0:</b> {t(E, "want b, s_1[0]=n. b sits at s_2[0] already → ", "b 가 필요. s_1[0]=n. b 는 s_2[0] 에 있음 → ")}
-              <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 2 1</code>
-              {t(E, " (1 op)", " (1번 바꾸기)")}
+              <b style={{ color: "#059669" }}>{t(E, "position 1:", "자리 1:")}</b> {t(E, "want a, s_1[1]=x. a is later in s_1 at position 3 → ", "a 가 필요, s_1 의 1번 칸은 x. a 는 s_1 의 3번 칸에 있음 → ")}
+              <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 1 1 3</code>
+              {t(E, " (1 op, inside s_1)", " (1번, s_1 안에서)")}
             </div>
             <div>
-              <b style={{ color: "#059669" }}>k=1:</b> {t(E, "want a, s_1[1]=a ✓ skip", "a 가 필요, s_1[1]=a ✓ 건너뜀")}
+              <b style={{ color: "#059669" }}>{t(E, "position 2:", "자리 2:")}</b> {t(E, "want b, s_1[2]=b ✓ skip", "b 가 필요, s_1 의 2번 칸이 이미 b ✓ 건너뜀")}
             </div>
             <div>
-              <b style={{ color: "#059669" }}>k=2:</b> {t(E, "want n, s_1[2]=b. n is later in s_1 at position 4 → ", "n 이 필요, s_1[2]=b. s_1 뒤쪽 4번 위치에 n 있음 → ")}
-              <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 1 3 5</code>
-              {t(E, " (1 op)", " (1번 바꾸기)")}
+              <b style={{ color: "#059669" }}>{t(E, "position 3:", "자리 3:")}</b> {t(E, "want c, s_1[3]=x. c is nowhere left in s_1 → borrow. s_2's column 3 already has c → ", "c 가 필요, s_1 의 3번 칸은 x. s_1 안엔 c 가 더 없음 → 빌려요.\ns_2 의 3번 칸에 c 가 바로 있음 → ")}
+              <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 2 3</code>
+              {t(E, " (1 op, borrow)", " (1번, 빌리기)")}
             </div>
             <div>
-              <b style={{ color: "#059669" }}>k=3:</b> {t(E, "want a, s_1[3]=a ✓ skip", "a 가 필요, s_1[3]=a ✓ 건너뜀")}
-            </div>
-            <div>
-              <b style={{ color: "#059669" }}>k=4:</b> {t(E, "want n, s_1[4]=b (changed). Borrow from s_2 column 4 → ", "n 이 필요. s_2 의 4번 칸에서 빌려 → ")}
-              <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 2 5</code>
-            </div>
-            <div>
-              <b style={{ color: "#059669" }}>k=5:</b> {t(E, "want a, s_1[5]=a ✓ skip", "a 가 필요, s_1[5]=a ✓ 건너뜀")}
+              <b style={{ color: "#059669" }}>{t(E, "position 4:", "자리 4:")}</b> {t(E, "want d, s_1[4]=y. Not in s_1, not in s_2. d is in s_3 — but at column 1, not 4. Line it up first → ", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 1번 칸에 있음 — 먼저 4번 칸으로 옮겨요 → ")}
+              <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 3 1 4</code>
+              {t(E, ", then swap that column with s_1 → ", ", 그다음 그 칸을 s_1 과 맞바꿔요 → ")}
+              <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 3 4</code>
+              {t(E, " (2 ops, borrow)", " (2번, 빌리기)")}
             </div>
           </div>
 
           <div style={{ marginTop: 10, padding: 8, background: "#ecfdf5", border: "1px dashed #6ee7b7", borderRadius: 6, fontSize: 12, color: "#065f46" }}>
-            {t(E, "Total: 3 operations. Output:", "모두 3번 바꿔요. 출력:")} <code>3 / 2 1 2 1 / 1 1 3 5 / 2 1 2 5</code>
+            {t(E, "Total: 4 operations. Output:", "모두 4번 바꿔요. 출력:")} <code>4 / 1 1 1 3 / 2 1 2 3 / 1 3 1 4 / 2 1 3 4</code>
           </div>
         </div>),
     },
