@@ -919,11 +919,19 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-emerald-300 mb-3">
-              <p className="text-xs font-bold text-emerald-800 mb-1">📌 {t("재귀 아니에요", "Not recursion")}</p>
+              {/* ⭐ 2026-09-26 학생 확인 뒤 고침 — 여기 원래 「📌 재귀 아니에요 / 재귀가
+                  아니에요 — …」 였다. **내가 그렇게 지시했는데 역효과였다.**
+                  학생: *"**재귀가 뭔지 몰라서 이 문장을 이해 못 했다.** 「이건 재귀가
+                  아니에요」라고 하는데 나는 재귀가 뭔지도 모르니까 「아, 다행이다」인지
+                  「그게 왜 중요하지」인지 판단이 안 됐다. **모르는 말을 부정하는 문장은
+                  그냥 아무 정보가 안 되는 문장이었다.**"*
+                  ⭐ 「재귀를 안 쓴다」를 **말하려다 오히려 재귀를 불러왔다.**
+                  진짜로 안 부르는 길은 **그 말을 아예 안 쓰는 것**이다. 덜어냈다. */}
+              <p className="text-xs font-bold text-emerald-800 mb-1">📌 {t("우리가 직접 넣고 빼요", "We push and pop it ourselves")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "재귀가 아니에요 — 우리가 만든 상자(스택)를 우리 손으로 넣고 뺄 뿐이에요. BFS 때 쓴 큐랑 같은 상자예요, 꺼내는 자리만 달라요.",
-                  "This isn't recursion — we just push and pop our own box (the stack) by hand. It's the same kind of box as BFS's queue, just a different end.",
+                  "상자(스택)를 우리 손으로 넣고 빼요. BFS 때 쓴 큐랑 같은 상자예요, 꺼내는 자리만 달라요.",
+                  "We push and pop our own box (the stack) by hand. It's the same kind of box as BFS's queue — only the end we take from is different.",
                 )}
               </p>
             </div>
