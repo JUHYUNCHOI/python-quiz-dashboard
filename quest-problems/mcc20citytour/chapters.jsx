@@ -36,8 +36,11 @@ export function makeMcc20CityTourCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
-                "Count the cells Fluffy can reach from (1,1), hopping only where |height difference| < D.",
-                "높이 차이 < D 인 곳으로만 건너면서, (1,1) 에서 Fluffy 가 도달할 수 있는 칸의 수를 세요.")}
+                /* ⭐ 2026-09-26: 재검증 학생 *"1쪽 미션에서 D 를 먼저 쓰는데, D 가
+                   «건너가기 기준값» 이라는 뜻은 2쪽에 가서야 나온다"*.
+                   뜻을 그 자리에서 붙인다 (feedback_no_invented_terms — 처음 쓰기 전에 정의). */
+                "Count the cells Fluffy can reach from (1,1), hopping to a neighbor only when the height difference is smaller than a given limit D.",
+                "이웃과의 높이 차이가 기준값 D 보다 작을 때만 건너가면서,\n(1,1) 에서 Fluffy 가 갈 수 있는 칸이 몇 개인지 세요.")}
             </div>
           </div>
 
@@ -95,7 +98,7 @@ export function makeMcc20CityTourCh1(E) {
                 M = 4 / N = 5 / D = 5 / H = [[1,3,7,9,16], ...] 처럼 값을 변수로 준다.
                 값의 이름만 남기고, 표준 입력은 우리 연습 방식이라고 밝힌다. */}
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• <b>M</b>, <b>N</b> — {t(E, "rows and columns", "행 수와 열 수")}</div>
+              <div>• <b>M</b>, <b>N</b> — {t(E, "rows and columns", "줄 수와 칸 수")}</div>
               <div>• <b>H</b> — {t(E, "the M×N grid of building heights", "M×N 격자에 담긴 건물 높이")}</div>
               <div>• <b>D</b> — {t(E, "the jump threshold", "건너가기 기준값")}</div>
             </div>
@@ -105,8 +108,10 @@ export function makeMcc20CityTourCh1(E) {
             </div>
             <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
               {t(E,
-                "The original problem hands the data over as values: M = 4, N = 5, D = 5, H = [[1,3,7,9,16], …].\nThe code below starts from those same values — you'll meet input(), which reads lines in, in the 2022 problems.",
-                "원문은 M = 4, N = 5, D = 5, H = [[1,3,7,9,16], ...] 처럼 값을 변수로 줘요.\n코드도 원문 그대로 값을 적어 두고 시작해요.\ninput() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
+                /* 2026-09-26: 이 쪽은 「형식」만 다뤄야 하는데 주제가 넷이었다(293자).
+                   예고 두 문장을 하나로 줄인다 (feedback_shorter_not_longer). */
+                "This contest hands the data over as values, so the code below starts from those same values — no reading lines in.",
+                "이 대회는 값을 그대로 줘요. 그래서 아래 코드도 값을 적어 두고 시작해요 — 줄을 읽어 오지 않아요.")}
             </div>
           </div>
 

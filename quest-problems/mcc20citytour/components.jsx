@@ -43,7 +43,12 @@ function reachableMask(H, D) {
 }
 
 export function Mcc20CityTourBfsSim({ E }) {
-  const [D, setD] = useState(5);
+  /* ⭐ 2026-09-26: 기본값이 **정확히 샘플의 D(5)** 였다. 앞 쪽(1-2)이
+     "칸은 20 개인데 답은 18 이에요. 어느 두 칸이 막힌 걸까요?" 라고 물어 놓고
+     이 쪽을 열면 손대기도 전에 18/20 과 회색 두 칸이 이미 떠 있었다
+     (touched 게이트는 마지막 문단만 가렸다). 3 으로 시작한다 — 4/20 이라
+     답이 아니고, 바로 다음 쪽 퀴즈가 쓰는 D 와도 같다. */
+  const [D, setD] = useState(3);
   const [touched, setTouched] = useState(false);
   const vis = useMemo(() => reachableMask(SIM_H, D), [D]);
   const R = SIM_H.length, Cn = SIM_H[0].length;
@@ -172,13 +177,15 @@ function buildBfsProcessTrace(H, D, E) {
       "확실한 건 (1,1) 하나뿐이에요.\n줄에 넣고 시작해요."),
   });
 
+  /* 1단계 — 처음 두 번의 pop 만 «한 걸음에 한 방향» 으로 자세히 본다.
+     이 둘이면 네 가지 결과가 다 나온다: 격자 밖 · 막힘 · 통과 · 이미 다녀옴.
+     나머지는 아래 2단계에서 «한 겹» 씩 묶는다. */
   let popIdx = 0;
-  while (queue.length) {
+  while (queue.length && popIdx < 2) {
     const [r, c] = queue[0];
     queue = queue.slice(1);
-    const fine = popIdx < 2;
 
-    if (fine) {
+    {
       trace.push({
         ...snap(), current: [r, c], checking: null, status: "pop",
         msg: t(E,
@@ -218,44 +225,73 @@ function buildBfsProcessTrace(H, D, E) {
         }
         trace.push({ ...snap(), current: [r, c], checking: inBounds ? [nr, nc] : null, status, msg });
       }
-    } else {
-      const added = [];
-      const blocked = [];
+    }
+    popIdx++;
+  }
+
+  /* ⭐ 2026-09-26: 여기가 원래 「pop 한 번 = 한 걸음」이었다. 재검증 학생 —
+     *"8~10걸음쯤부터 지루했다. 15~25걸음은 좌표만 바뀌고 하는 말이 거의 똑같아서
+     그냥 ▶ 다음만 눌렀다"*. ux 도 같은 자리를 **12~27걸음(16번)** 으로 쟀다.
+     `feedback_shorter_not_longer` — 더 설명하는 게 아니라 **묶는다.**
+     이제 한 걸음이 **한 겹(지금 줄에서 기다리던 칸 전부)** 이다. 16걸음 → 8걸음.
+     ⭐ 그냥 줄인 게 아니다 — BFS 가 실제로 **겹 단위로 번진다**는 걸 보여준다.
+     자세히 본 두 번의 pop 이 「한 칸씩」을 이미 가르쳤으니, 여기서는 그 되풀이를
+     묶어도 거짓이 아니다. 묶는다는 말을 첫 겹에서 대놓고 한다. */
+  let waveNo = 0;
+  while (queue.length) {
+    const layer = queue;
+    queue = [];
+    waveNo++;
+
+    const added = [];
+    const blockedMap = new Map();
+    for (const [r, c] of layer) {
       for (const d of DIRS) {
         const nr = r + d.dr, nc = c + d.dc;
         if (nr < 0 || nr >= R || nc < 0 || nc >= Cn || visited[nr][nc]) continue;
-        const diff = Math.abs(H[nr][nc] - H[r][c]);
-        if (diff < D) {
+        if (Math.abs(H[nr][nc] - H[r][c]) < D) {
           visited[nr][nc] = true;
           queue = [...queue, [nr, nc]];
           count++;
           added.push([nr, nc]);
         } else {
-          blocked.push([nr, nc]);
+          blockedMap.set(`${nr},${nc}`, [nr, nc]);
         }
       }
-      const fmt = (list) => list.map(([rr, cc]) => `(${rr + 1},${cc + 1})`).join(", ");
-      let msg;
-      if (added.length && blocked.length) {
-        msg = t(E,
-          `Pop (${r + 1},${c + 1}).\nNew: ${fmt(added)}.  Blocked: ${fmt(blocked)}.`,
-          `(${r + 1},${c + 1}) 를 꺼내요.\n새로 넣은 칸: ${fmt(added)}.  막힌 칸: ${fmt(blocked)}.`);
-      } else if (added.length) {
-        msg = t(E,
-          `Pop (${r + 1},${c + 1}).\nNew: ${fmt(added)}.`,
-          `(${r + 1},${c + 1}) 를 꺼내요.\n새로 넣은 칸: ${fmt(added)}.`);
-      } else if (blocked.length) {
-        msg = t(E,
-          `Pop (${r + 1},${c + 1}).\nNo new cells — blocked: ${fmt(blocked)}.`,
-          `(${r + 1},${c + 1}) 를 꺼내요.\n새로 넣을 칸이 없어요 — 막힘: ${fmt(blocked)}.`);
-      } else {
-        msg = t(E,
-          `Pop (${r + 1},${c + 1}).\nNo new cells.`,
-          `(${r + 1},${c + 1}) 를 꺼내요.\n새로 넣을 칸이 없어요.`);
-      }
-      trace.push({ ...snap(), current: [r, c], checking: null, status: added.length ? "pass" : "blocked", msg });
     }
-    popIdx++;
+    /* 같은 겹 안에서 어떤 칸은 A 에서 보면 막히고 B 에서 보면 통과한다.
+       통과한 칸을 «막힘» 에 같이 적으면 한 칸이 두 뜻으로 보인다
+       (feedback_same_number_two_meanings) — 통과가 이긴다. */
+    for (const [rr, cc] of added) blockedMap.delete(`${rr},${cc}`);
+    const blocked = [...blockedMap.values()];
+
+    // 마지막 겹이 아무것도 못 넣고 줄도 비웠으면, 빈 걸음을 만들지 않고 결론으로 넘긴다.
+    if (added.length === 0 && queue.length === 0) break;
+
+    const fmt = (list) => list.map(([rr, cc]) => `(${rr + 1},${cc + 1})`).join(", ");
+    const head = waveNo === 1
+      ? t(E,
+          "From here it's the same move over and over, so let's take a whole layer at a time.\n",
+          "여기부터는 똑같은 일의 되풀이예요 — 한 겹씩 묶어서 볼게요.\n")
+      : "";
+    const popped = t(E,
+      `Popped the ${layer.length} cell${layer.length > 1 ? "s" : ""} that were waiting.`,
+      `줄에서 기다리던 ${layer.length} 칸을 꺼냈어요.`);
+    let tail;
+    if (added.length && blocked.length) {
+      tail = t(E, `\nNew: ${fmt(added)}.  Blocked: ${fmt(blocked)}.`,
+                  `\n새로 들어온 칸: ${fmt(added)}.  막힌 칸: ${fmt(blocked)}.`);
+    } else if (added.length) {
+      tail = t(E, `\nNew: ${fmt(added)}.`, `\n새로 들어온 칸: ${fmt(added)}.`);
+    } else {
+      tail = t(E, `\nNothing new — blocked: ${fmt(blocked)}.`,
+                  `\n새로 들어올 칸이 없어요 — 막힘: ${fmt(blocked)}.`);
+    }
+    trace.push({
+      ...snap(), current: null, checking: null, wave: added,
+      status: added.length ? "pass" : "blocked",
+      msg: head + popped + tail,
+    });
   }
 
   const isTrap = D === 2 && R === 4 && Cn === 4;
@@ -345,9 +381,12 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             {preset.H.map((row, r) => row.map((h, c) => {
               const isCurrent = cur.current && cur.current[0] === r && cur.current[1] === c;
               const isChecking = cur.checking && cur.checking[0] === r && cur.checking[1] === c;
+              // 이번 겹에 새로 들어온 칸 — 한 걸음에 바뀐 자리가 어디인지 눈에 보이게
+              const isNew = cur.wave && cur.wave.some(([wr, wc]) => wr === r && wc === c);
               const isVisited = cur.visited[r][c];
               let border = "2px solid #e5e7eb";
               if (isChecking) border = `2.5px solid ${statusColor}`;
+              else if (isNew) border = "2.5px solid #059669";
               else if (isCurrent) border = `2.5px solid ${A}`;
               else if (isVisited) border = "2px solid #6ee7b7";
               return (
@@ -394,6 +433,14 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             border: "none", cursor: idx === maxStep ? "default" : "pointer", color: "#fff",
             background: idx === maxStep ? "#a5f3fc" : "#0e7490",
           }}>▶ {t(E, "Next", "다음")}</button>
+          {/* ⭐ 2026-09-26: 재검증 학생 *"이름을 얻으려고 20번 넘게 눌러야 하는 건 지쳤다"*.
+              `feedback_student_agent_must_quit` — 학생은 패턴을 알면 그만두고 싶어 한다.
+              막지 말고 **나가는 문**을 준다. 마지막 두 걸음(답 + 이름)이 어차피 결론이다. */}
+          <button onClick={() => setStep(maxStep)} disabled={idx === maxStep} style={{
+            padding: "7px 14px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
+            border: "1.5px solid #0e7490", background: idx === maxStep ? "#f1f5f9" : "#fff",
+            color: idx === maxStep ? "#cbd5e1" : "#0e7490", cursor: idx === maxStep ? "default" : "pointer",
+          }}>{t(E, "Skip to the end", "끝까지")} ▶▶</button>
         </div>
         <div style={{ textAlign: "center", marginTop: 4, fontSize: 10.5, color: C.dim, fontWeight: 700 }}>
           {idx + 1}/{maxStep + 1}
@@ -533,7 +580,7 @@ export function getMcc20CityTourSections(E) {
       ],
       pyOnly: [
         t(E, "deque.popleft() finishes instantly no matter how big the deque is — that is what makes this real BFS, not a slow list.pop(0) each step.",
-            "deque 의 popleft() 는 크기와 상관없이 바로 끝나는 연산이에요.\n그래서 느린 list.pop(0) 대신 쓰면 진짜 BFS 가 돼요."),
+            "deque 의 popleft() 는 줄이 아무리 길어도 바로 끝나요.\n그래서 느린 list.pop(0) 대신 쓰면 진짜 BFS 가 돼요."),
         t(E, "abs(H[nr][nc] - H[r][c]) < D is the whole edge rule — the height DIFFERENCE, strictly less than D.",
             "abs(H[nr][nc] - H[r][c]) < D 한 줄이 규칙의 전부예요.\n높이 '차이' 가 D 보다 작아야만 건너가요."),
       ],
@@ -567,8 +614,8 @@ export function getMcc20CityTourWalk(E) {
         "What do we have to hand back? How many cells we can reach from (1,1). So first take in the map — its size, the gap limit D, and every height.",
         "무엇을 내놓아야 하나요? (1,1) 에서 갈 수 있는 칸이 몇 개인지예요.\n그러니 먼저 지도를 받아요 — 크기와 높이 차 한계 D, 그리고 높이들이에요.") },
       { hi: [13, 19], bubble: t(E,
-        "Why not sweep the whole grid over and over? That could take M×N passes over M×N cells — 10^10. So visit each cell just once: keep a note of where we've been, and a line of cells waiting their turn. (1,1) goes into both, and the count starts at 1.",
-        "왜 지도를 몇 번씩 다시 훑지 않을까요? 그러면 최대 M×N 번을 M×N 칸에 되풀이해서 10^10 이 될 수 있어요.\n그래서 칸마다 딱 한 번만 가요 — 어디를 다녀왔는지 적을 곳과, 차례를 기다리는 칸들의 줄이 필요해요.\n(1,1) 을 둘 다에 넣고, 센 수는 1 에서 시작해요.") },
+        "Why not sweep the whole grid again and again? That is 10^10 checks.\nSo we go to each cell just once — we need a note of where we've been, and a line of cells waiting their turn.",
+        "왜 지도를 몇 번씩 다시 훑지 않을까요? 그러면 10^10 번을 봐야 해요.\n그래서 칸마다 딱 한 번만 가요 — 다녀온 곳을 적을 곳과, 차례를 기다리는 줄이 필요해요.") },
       /* ⭐ 2026-09-26: 재검증 학생이 **딱 하나**를 남겼다 —
          *"`deque` 가 무슨 뜻인지, `popleft()` 가 리스트의 무엇과 다른지 **한 번도 설명이
          없었다.** … 「리스트의 `.pop(0)` 도 되지만 느려서 `deque` 라는 걸 쓴다」 정도
@@ -582,12 +629,22 @@ export function getMcc20CityTourWalk(E) {
       { hi: [17, 17], bubble: t(E,
         "Why deque and not a plain list? list.pop(0) has to shift every item left, so it gets slower as the line grows.\ndeque.popleft() finishes instantly no matter how long the line is.\n(Lesson 25 covers deque.)",
         "왜 리스트가 아니라 deque 일까요? list.pop(0) 은 뒤의 값을 전부 한 칸씩 당겨야 해서\n줄이 길어질수록 느려져요.\ndeque 의 popleft() 는 줄이 아무리 길어도 바로 끝나요. (deque 는 25강에서 배워요.)") },
-      { hi: [20, 23], bubble: t(E,
-        "This spreading is called BFS (flood fill). Pop a cell off the front, then look at its 4 neighbors.",
-        "이렇게 번져 나가며 채우는 방법을 BFS 라고 불러요.\n큐 앞에서 칸을 하나 꺼내서 이웃 4개를 봐요.") },
-      { hi: [24, 28], bubble: t(E,
-        "Step into a neighbor only if it hasn't been visited AND the height gap |H[nr][nc] − H[r][c]| < D — that's the whole edge rule, so no wall is fixed in advance. Mark visited and bump count right when you push, so every reachable cell is counted exactly once.",
-        "아직 안 간 칸이면서 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요 — 이 한 줄이 규칙의 전부라 벽이 어디인지 미리 정해져 있지 않아요.\n큐에 넣는 순간 방문 표시를 하고 count 를 올려요.\n그래야 갈 수 있는 칸이 정확히 한 번씩만 세어져요.") },
+      /* ⭐ 2026-09-26: 선생님이 라이브를 보시고 *"neighbor 또는 next 가 위아래오른쪽왼쪽인데"*
+         라고 짚으신 자리. 재검증 학생도 같은 줄에서 걸렸다 —
+         *"dr·dc 가 상하좌우를 어떻게 나타내는지는 안 짚어준다"*.
+         숫자 넷이 각각 어느 쪽인지 그 자리에서 말한다. */
+      { hi: [20, 21], bubble: t(E,
+        "This spreading is called BFS.\nKeep going while the line still has someone in it, and take the cell at the front each time.",
+        "이렇게 번져 나가는 방법을 BFS 라고 불러요.\n줄에 누가 남아 있는 동안 계속하면서, 매번 줄 맨 앞의 칸을 꺼내요.") },
+      { hi: [22, 23], bubble: t(E,
+        "The four number pairs are the four directions — (-1,0) up, (1,0) down, (0,-1) left, (0,1) right.\nAdd one to the row and column number of where we stand, and you get that neighbor's place.",
+        "숫자 짝 네 개가 곧 네 방향이에요 — (-1,0) 은 위, (1,0) 은 아래, (0,-1) 은 왼쪽, (0,1) 은 오른쪽.\n지금 서 있는 칸의 줄 번호·칸 번호에 하나씩 더하면 그 이웃의 자리가 나와요.") },
+      { hi: [24, 25], bubble: t(E,
+        "Step into a neighbor only when two things hold: it is still inside the grid and not yet visited, and the height gap is smaller than D.\nThis one line is the whole rule — so no wall is fixed in advance.",
+        "이웃으로 들어가는 건 두 가지가 맞을 때예요 — 격자 안이면서 아직 안 간 칸이고,\n높이 차가 D 보다 작을 때요.\n이 한 줄이 규칙의 전부예요 — 그래서 벽이 어디인지 미리 정해져 있지 않아요.") },
+      { hi: [26, 28], bubble: t(E,
+        "Mark it visited and bump count at the moment we put it in the line, not when we pop it.\nThat way a cell can never enter the line twice, so every reachable cell is counted exactly once.",
+        "줄에 넣는 그 순간에 방문 표시를 하고 count 를 올려요. 꺼낼 때가 아니에요.\n그래야 같은 칸이 줄에 두 번 들어가지 않아서, 갈 수 있는 칸이 딱 한 번씩만 세어져요.") },
       { hi: [30, 30], bubble: t(E,
         "The answer is how many cells got visited — print count.",
         "답은 방문한 칸 개수예요 — count 를 출력해요.") },
