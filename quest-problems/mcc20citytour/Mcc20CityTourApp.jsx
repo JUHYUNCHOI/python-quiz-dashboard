@@ -41,6 +41,15 @@ export default function Mcc20CityTourApp(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+    /* ⭐ 2026-09-26 선생님: *"중간에 BFS 공부하고 오라고 **크게** 알려주면 좋을텐데"*
+       그 장치는 **이미 있었다** — `app/quest/[problemId]/client.tsx` 가
+       `quest-algohint` 를 받으면 보라색 **큰 배너(📘)** 를, 안 받으면 작은 줄(🧠)을 띄운다.
+       그런데 이 quest 는 **① `lib/quest-algo.ts` 의 `graph` 매핑이 주석에 삼켜져 있었고**
+       (오늘 복구) **② 이 이벤트를 한 번도 안 쏘고 있었다.** 둘 다라서 아무것도 안 떴다.
+       ⚠️ 이 이벤트를 쏘는 quest 가 180개 중 **3개**뿐이다 — 나머지도 같은 배선이 필요하다.
+       ⭐ `tab >= 1`(코드 쪽)에서만 켠다 — 문제·퀴즈는 0탭이라 **스포일러가 아니다.**
+       `buymilk`·`printseq`·`checkups` 와 같은 모양이다. */
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 1 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {

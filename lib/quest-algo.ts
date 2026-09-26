@@ -50,7 +50,23 @@ export const QUEST_ALGO: Record<string, string> = {
   //   "세 점의 x 좌표 중 둘은 같다. 다른 하나가 답의 x 다. y 도 마찬가지."
   //   비트 연산은 한 번도 안 쓴다. 그런데 배너가 학생을
   //   '심화 (Gold~Platinum)' 라벨이 붙은 /algo/bitmanipulation 으로 보내고 있었다.
-  //   난이도 표에서 이 문제는 2(기본)다. moohunt 때와 같은 사고다. mcc20cipher: "hashtable", mcc20citytour: "graph", mcc20kitty: "dp",
+  //   난이도 표에서 이 문제는 2(기본)다. moohunt 때와 같은 사고다.
+  /* 🚨 2026-09-26: **바로 윗줄 끝에 실제 항목 셋이 붙어 있었다** —
+     `mcc20cipher: "hashtable", mcc20citytour: "graph", mcc20kitty: "dp",` 가
+     `//` 주석 줄 안에 삼켜져 **매핑에서 사라져 있었다.** 그래서 그 셋은
+     「이 문제 핵심 알고리즘 → 배우러 가기」 배너가 **아예 안 떴다.**
+     선생님(2026-09-26): *"중간에 BFS 공부하고 오라고 크게 알려주면 좋을텐데"* —
+     **그 장치는 이미 있었는데 이 quest 에서 꺼져 있었다.**
+     오늘 아침 `quest-meta.ts` 에서 **항목 9개가 객체 밖에 있던 것과 같은 사고**다.
+
+     ⛔ **셋을 다 살리지는 않았다.** 이 파일에 학생이 잡은 기록이 있다 —
+       *"「그래프(BFS/DFS)」 배지가 붙어 있는데 실제 코드에 BFS 가 하나도 없었다.
+         배지가 틀렸다고 느껴졌다."* 그래서 **코드를 열어 확인한 것만** 되살린다.
+       · `mcc20citytour` → 🔒 코드에 `deque`/`popleft` **3회**. **graph 맞다. 살린다.**
+       · `mcc20cipher`(hashtable) · `mcc20kitty`(dp) → **근거를 못 찾았다.**
+         `kitty` 는 **DP 표(`dp[`·`memo`)가 코드에 0회**다. 추측으로 되살리면
+         그 학생이 겪은 「틀린 배지」를 다시 만든다. **감사 판정 대기로 남긴다.** */
+  mcc20citytour: "graph",
   mcc20knight: "graph", mcc20zigzag: "dp", mcc21marbles: "prefixsum",
   // mcc20missing: 제거 — 핵심은 "가장 큰 크기(N/N-1)가 극단에 온다"는 anchor 경우나눔(ad-hoc). set 은 부수적. 표준 토픽 없음.
   mcc21menu: "greedy", mcc22cardshark: "sorting", mcc22grammar: "graph", mcc22lamp: "prefixsum",

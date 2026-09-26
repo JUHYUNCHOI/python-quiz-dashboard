@@ -128,6 +128,281 @@ const dBtn = {
   color: "#92400e", fontSize: 17, fontWeight: 800, cursor: "pointer", lineHeight: 1,
 };
 
+/* ───────────────── BFS process stepper — pop, check 4 neighbors, repeat ─────────────────
+   2026-09-26: 선생님이 라이브를 보시고 "BFS에 대한 설명도 없고 … 시뮬로 설명하는
+   부분도 없고" 라고 하셨다. 이 자리(⚡코드 1/2)에는 결과만 있었지 "과정"이 없었다.
+   여기서는 큐에서 칸을 하나씩 꺼내 이웃 4개를 확인하는 과정을 직접 밟는다.
+   ⭐ 이름(큐/BFS)은 맨 마지막 걸음에만 나온다 — 그전엔 "방법"으로만 부른다.
+   ⭐ 첫 두 번의 pop 은 방향별로(한 걸음에 한 방향) 자세히 보여주고, 그 뒤로는
+   pop 한 번에 한 걸음으로 압축한다 — 큐가 빌 때까지 클릭 수가 지나치게
+   많아지지 않게. ⭐ D=2 트랩 예제는 옛 정적 그림(선생님이 걷어내라 하신 것)과
+   똑같은 숫자를 쓴다 — 그림 대신 같은 스테퍼로 "가운데는 서로 통해도 테두리에서
+   못 들어간다"를 직접 보여준다.
+   ───────────────────────────────────────────────────────────────────── */
+const DIRS = [
+  { dr: -1, dc: 0, en: "up", ko: "위" },
+  { dr: 1, dc: 0, en: "down", ko: "아래" },
+  { dr: 0, dc: -1, en: "left", ko: "왼쪽" },
+  { dr: 0, dc: 1, en: "right", ko: "오른쪽" },
+];
+function capFirst(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// The same border/middle numbers the old static picture used — border cells
+// all match, but the gap to the middle equals D, so it's blocked.
+const TRAP_H = [
+  [10, 10, 10, 10],
+  [10, 8, 8, 10],
+  [10, 8, 8, 10],
+  [10, 10, 10, 10],
+];
+
+function buildBfsProcessTrace(H, D, E) {
+  const R = H.length, Cn = H[0].length;
+  const visited = Array.from({ length: R }, () => Array(Cn).fill(false));
+  visited[0][0] = true;
+  let queue = [[0, 0]];
+  let count = 1;
+  const snap = () => ({ visited: visited.map(row => row.slice()), queue: queue.slice(), count });
+  const trace = [];
+
+  trace.push({
+    ...snap(), current: null, checking: null, status: "start",
+    msg: t(E,
+      "The only sure cell is (1,1).\nPut it in the queue and start.",
+      "확실한 건 (1,1) 하나뿐이에요.\n줄에 넣고 시작해요."),
+  });
+
+  let popIdx = 0;
+  while (queue.length) {
+    const [r, c] = queue[0];
+    queue = queue.slice(1);
+    const fine = popIdx < 2;
+
+    if (fine) {
+      trace.push({
+        ...snap(), current: [r, c], checking: null, status: "pop",
+        msg: t(E,
+          `Pop (${r + 1},${c + 1}) from the front of the queue.\nCheck its 4 neighbors, one at a time.`,
+          `줄 앞에서 (${r + 1},${c + 1}) 를 꺼내요.\n이웃 4칸을 하나씩 봐요.`),
+      });
+      for (const d of DIRS) {
+        const nr = r + d.dr, nc = c + d.dc;
+        const inBounds = nr >= 0 && nr < R && nc >= 0 && nc < Cn;
+        let status, msg;
+        if (!inBounds) {
+          status = "oob";
+          msg = t(E,
+            `${capFirst(d.en)}: outside the grid.\nCan't go there.`,
+            `${d.ko}: 격자 밖이에요.\n못 가요.`);
+        } else if (visited[nr][nc]) {
+          status = "visited";
+          msg = t(E,
+            `${capFirst(d.en)} (${nr + 1},${nc + 1}): already visited.\nSkip.`,
+            `${d.ko}(${nr + 1},${nc + 1}): 이미 다녀왔어요.\n건너뛰어요.`);
+        } else {
+          const diff = Math.abs(H[nr][nc] - H[r][c]);
+          if (diff < D) {
+            status = "pass";
+            visited[nr][nc] = true;
+            queue = [...queue, [nr, nc]];
+            count++;
+            msg = t(E,
+              `${capFirst(d.en)} (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff} < D(${D}).\nPass — add to the queue.`,
+              `${d.ko}(${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff} < D(${D}).\n통과 — 줄에 넣어요.`);
+          } else {
+            status = "blocked";
+            msg = t(E,
+              `${capFirst(d.en)} (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff}, not less than D(${D}).\nBlocked.`,
+              `${d.ko}(${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff}, D(${D}) 보다 작지 않아요.\n막혀요.`);
+          }
+        }
+        trace.push({ ...snap(), current: [r, c], checking: inBounds ? [nr, nc] : null, status, msg });
+      }
+    } else {
+      const added = [];
+      const blocked = [];
+      for (const d of DIRS) {
+        const nr = r + d.dr, nc = c + d.dc;
+        if (nr < 0 || nr >= R || nc < 0 || nc >= Cn || visited[nr][nc]) continue;
+        const diff = Math.abs(H[nr][nc] - H[r][c]);
+        if (diff < D) {
+          visited[nr][nc] = true;
+          queue = [...queue, [nr, nc]];
+          count++;
+          added.push([nr, nc]);
+        } else {
+          blocked.push([nr, nc]);
+        }
+      }
+      const fmt = (list) => list.map(([rr, cc]) => `(${rr + 1},${cc + 1})`).join(", ");
+      let msg;
+      if (added.length && blocked.length) {
+        msg = t(E,
+          `Pop (${r + 1},${c + 1}).\nNew: ${fmt(added)}.  Blocked: ${fmt(blocked)}.`,
+          `(${r + 1},${c + 1}) 를 꺼내요.\n새로 넣은 칸: ${fmt(added)}.  막힌 칸: ${fmt(blocked)}.`);
+      } else if (added.length) {
+        msg = t(E,
+          `Pop (${r + 1},${c + 1}).\nNew: ${fmt(added)}.`,
+          `(${r + 1},${c + 1}) 를 꺼내요.\n새로 넣은 칸: ${fmt(added)}.`);
+      } else if (blocked.length) {
+        msg = t(E,
+          `Pop (${r + 1},${c + 1}).\nNo new cells — blocked: ${fmt(blocked)}.`,
+          `(${r + 1},${c + 1}) 를 꺼내요.\n새로 넣을 칸이 없어요 — 막힘: ${fmt(blocked)}.`);
+      } else {
+        msg = t(E,
+          `Pop (${r + 1},${c + 1}).\nNo new cells.`,
+          `(${r + 1},${c + 1}) 를 꺼내요.\n새로 넣을 칸이 없어요.`);
+      }
+      trace.push({ ...snap(), current: [r, c], checking: null, status: added.length ? "pass" : "blocked", msg });
+    }
+    popIdx++;
+  }
+
+  const isTrap = D === 2 && R === 4 && Cn === 4;
+  trace.push({
+    ...snap(), current: null, checking: null, status: "done",
+    msg: isTrap
+      ? t(E,
+          `The queue is empty. Answer: ${count}.\nThe middle 4 cells connect to EACH OTHER, but never to the border — unreachable.`,
+          `줄이 비었어요. 답은 ${count}예요.\n가운데 4칸은 서로 통하지만, 테두리에서는 못 들어가서 갈 수 없어요.`)
+      : t(E,
+          `The queue is empty. Answer: ${count}.`,
+          `줄이 비었어요. 답은 ${count}예요.`),
+  });
+  trace.push({
+    ...snap(), current: null, checking: null, status: "name",
+    msg: t(E,
+      "Spreading out with a waiting line, one cell at a time — that's called BFS.\nThe waiting line itself is called a queue.",
+      "이렇게 줄을 하나씩 꺼내며 번져 나가는 방법을 «BFS» 라고 불러요.\n그 줄은 «큐» 라고 불러요."),
+  });
+
+  return trace;
+}
+
+const BFS_PRESETS = [
+  { key: "main", H: SIM_H, D: 5, en: "🌆 Main example (D=5)", ko: "🌆 메인 예제 (D=5)" },
+  { key: "trap", H: TRAP_H, D: 2, en: "⚠️ The trap (D=2)", ko: "⚠️ 흔한 실수 예제 (D=2)" },
+];
+
+export function Mcc20CityTourBfsProcessStepper({ E }) {
+  const [presetKey, setPresetKey] = useState("main");
+  const [step, setStep] = useState(0);
+  const preset = BFS_PRESETS.find(p => p.key === presetKey);
+  const trace = useMemo(() => buildBfsProcessTrace(preset.H, preset.D, E), [presetKey, E]);
+  const maxStep = trace.length - 1;
+  const idx = Math.min(step, maxStep);
+  const cur = trace[idx];
+  const R = preset.H.length, Cn = preset.H[0].length;
+
+  const choosePreset = (k) => { setPresetKey(k); setStep(0); };
+
+  const statusColor = { pass: "#059669", blocked: "#dc2626", visited: "#9ca3af", oob: "#9ca3af" }[cur.status] || A;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8 }}>
+          🧭 {t(E, "Drain the queue, one check at a time", "줄이 빠져나가는 걸 하나씩 봐요")}
+        </div>
+
+        {/* preset picker */}
+        <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
+          {BFS_PRESETS.map(p => (
+            <button key={p.key} onClick={() => choosePreset(p.key)} style={{
+              padding: "5px 12px", borderRadius: 8, fontSize: 12, fontWeight: 700,
+              border: `1.5px solid ${presetKey === p.key ? A : "#fcd34d"}`,
+              background: presetKey === p.key ? A : "#fff",
+              color: presetKey === p.key ? "#fff" : "#92400e",
+              cursor: "pointer",
+            }}>{t(E, p.en, p.ko)}</button>
+          ))}
+        </div>
+
+        {/* queue — a horizontal row of tiles, leftmost = next to pop */}
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 4 }}>
+            {t(E, "queue — front is next", "줄 — 왼쪽이 다음 차례")}
+          </div>
+          <div style={{ display: "flex", gap: 4, minHeight: 34, flexWrap: "wrap" }}>
+            {cur.queue.length === 0 ? (
+              <span style={{ fontSize: 11.5, color: C.dim, alignSelf: "center" }}>{t(E, "(empty)", "(비어 있음)")}</span>
+            ) : cur.queue.map(([r, c], i) => (
+              <div key={i} style={{
+                width: 32, height: 32, borderRadius: 6,
+                border: i === 0 ? `2px solid ${A}` : "1.5px solid #fcd34d",
+                background: i === 0 ? "#fef3c7" : "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 10.5, fontWeight: 700, color: "#92400e",
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>{r + 1},{c + 1}</div>
+            ))}
+          </div>
+        </div>
+
+        {/* height grid */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 42px)`, gap: 4 }}>
+            {preset.H.map((row, r) => row.map((h, c) => {
+              const isCurrent = cur.current && cur.current[0] === r && cur.current[1] === c;
+              const isChecking = cur.checking && cur.checking[0] === r && cur.checking[1] === c;
+              const isVisited = cur.visited[r][c];
+              let border = "2px solid #e5e7eb";
+              if (isChecking) border = `2.5px solid ${statusColor}`;
+              else if (isCurrent) border = `2.5px solid ${A}`;
+              else if (isVisited) border = "2px solid #6ee7b7";
+              return (
+                <div key={`${r}-${c}`} style={{
+                  width: 42, height: 42, borderRadius: 7, display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center",
+                  background: isVisited ? "#d1fae5" : "#f3f4f6",
+                  border, color: isVisited ? "#065f46" : "#9ca3af",
+                  fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5,
+                  transition: "all 160ms",
+                }}>
+                  {r === 0 && c === 0 && <span style={{ fontSize: 9, lineHeight: 1 }}>🐰</span>}
+                  <span>{h}</span>
+                </div>
+              );
+            }))}
+          </div>
+        </div>
+
+        {/* step message */}
+        <div style={{
+          background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 12px",
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 12, textAlign: "center", lineHeight: 1.6,
+          minHeight: 46, whiteSpace: "pre-line", wordBreak: "keep-all",
+        }}>
+          {cur.msg}
+        </div>
+
+        <div style={{ marginTop: 8, textAlign: "center", fontSize: 12.5, color: "#92400e" }}>
+          {t(E, "reachable so far = ", "지금까지 갈 수 있는 칸 = ")}<b style={{ color: A }}>{cur.count}</b>
+          <span style={{ color: C.dim }}> / {R * Cn}</span>
+        </div>
+
+        {/* controls — deliberately NOT the pill bottom-nav shape/color: small
+            in-card rectangular buttons, cyan accent (feedback_one_nav_shape_per_screen) */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 12 }}>
+          <button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={idx === 0} style={{
+            padding: "7px 16px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
+            border: "1.5px solid #0e7490", background: idx === 0 ? "#f1f5f9" : "#ecfeff",
+            color: idx === 0 ? "#cbd5e1" : "#0e7490", cursor: idx === 0 ? "default" : "pointer",
+          }}>◀ {t(E, "Back", "이전")}</button>
+          <button onClick={() => setStep(s => Math.min(maxStep, s + 1))} disabled={idx === maxStep} style={{
+            padding: "7px 16px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
+            border: "none", cursor: idx === maxStep ? "default" : "pointer", color: "#fff",
+            background: idx === maxStep ? "#a5f3fc" : "#0e7490",
+          }}>▶ {t(E, "Next", "다음")}</button>
+        </div>
+        <div style={{ textAlign: "center", marginTop: 4, fontSize: 10.5, color: C.dim, fontWeight: 700 }}>
+          {idx + 1}/{maxStep + 1}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ================================================================
    SOLUTION CODE  (flood-fill / BFS with the |Δheight| < D edge rule)
    Input format:  line 1 = "M N",  then M lines of N heights,  last line = "D".

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc20CityTourWalk, Mcc20CityTourBfsSim } from "./components";
+import { getMcc20CityTourWalk, Mcc20CityTourBfsSim, Mcc20CityTourBfsProcessStepper } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const KA = { wordBreak: "keep-all" };
@@ -172,62 +172,24 @@ export function makeMcc20CityTourCh1(E) {
 export function makeMcc20CityTourCh2(E, lang = "py") {
   const w = getMcc20CityTourWalk(E);
   return [
-    // 2-1: plan — slow sweep vs fast flood-fill
+    // 2-1: BFS process stepper — pop a cell, check its 4 neighbors, repeat.
+    // (2026-09-26: 여기 있던 느림/빠름 산문 두 박스와 정적 D=2 그림을 걷어냈다 —
+    //  선생님 "시뮬로 설명하는 부분도 없고". 그 자리에 과정을 직접 밟는 스테퍼를
+    //  넣었다. "왜 스윕 대신 큐" 논증은 다음 쪽 CodeWalk 의 [13,19] 말풍선에
+    //  이미 있어 여기서 되풀이하지 않는다.)
     {
       type: "reveal",
       narr: t(E,
-        "Instead of sweeping the grid over and over, flood-fill visits each cell just once.",
-        "격자를 몇 번이고 훑는 대신, 한 번만 훑는 방법을 찾아봐요."),
+        "Pop a cell, check its 4 neighbors, repeat — walk through it yourself.",
+        "줄에서 칸을 하나씩 꺼내며 이웃을 확인하는 과정을 직접 밟아봐요."),
       content: (
-        <div style={{ padding: 16, ...KA }}>
-          {/* 2026-09-24: 원문(mcc20citytour.pdf) 이 풀이 절에서 명시적으로 짚는
-              흔한 오답 — "이웃과 건널 수 있는가" 만 보면 틀린다. D=2, 4×4 예제는
-              원문에 나온 그 예제 그대로다. PM 판정: 새 쪽을 만들지 않고 이 쪽
-              (plan) 에 자리를 찾았다. */}
-          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: "10px 14px", marginBottom: 10 }}>
-            <div style={{ fontSize: 12.5, fontWeight: 700, color: "#c2410c", marginBottom: 6 }}>
-              ⚠️ {t(E, "A common mistake first", "먼저, 흔한 실수 하나를 봐요")}
-            </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 8, whiteSpace: "pre-line" }}>
-              {t(E,
-                "The middle four cells below all match each other, so they can hop between themselves.\nBut the border cannot hop into the middle — the gap is 2, and D = 2 needs a gap LESS than D.\nIf Fluffy's home is on the border, the middle four are unreachable, even though they hop fine among themselves.\nChecking \"can this cell hop to some neighbor\" alone would wrongly count them.\nWe have to trace an actual path back to home.",
-                "아래 그림에서 가운데 네 칸은 서로 높이가 같아서 건널 수 있어요.\n하지만 테두리에서 가운데로는 못 건너가요 — 차이가 2 인데, D = 2 는 차이가 2 보다 작아야 해요.\nFluffy 의 집이 테두리에 있으면, 가운데 네 칸은 서로 건널 수 있어도 집에서는 갈 수 없어요.\n\"이웃과 건널 수 있는가\" 만 보면 이 네 칸도 답에 넣는 실수를 해요.\n집에서부터 실제로 이어지는 길이 있는지를 봐야 해요.")}
-            </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6 }}>
-                <div style={{ color: "#8b949e", fontSize: 10.5, marginBottom: 2 }}>D = 2</div>
-                <div>10 10 10 10</div>
-                <div>10&nbsp;&nbsp;8&nbsp;&nbsp;8 10</div>
-                <div>10&nbsp;&nbsp;8&nbsp;&nbsp;8 10</div>
-                <div>10 10 10 10</div>
-              </div>
-            </div>
+        <>
+          <Mcc20CityTourBfsProcessStepper E={E} />
+          <div style={{ padding: "0 16px 14px", fontSize: 12, color: C.dim, textAlign: "center", ...KA }}>
+            {t(E, "↓ Next page: the same code, section by section.", "↓ 다음 쪽에서 같은 코드를 한 단락씩 봐요.")}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: sweep the whole grid until nothing changes", "느림: 변화가 없을 때까지 격자 전체를 반복해서 훑기")}
-              </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Up to (M×N) passes × (M×N) cells = 10^5 × 10^5 = 10^10 operations. Times out.", "최대 (M×N) 번 × (M×N) 칸 = 10^5 × 10^5 = 10^10 번 계산해요. 시간 초과예요.")}
-              </div>
-            </div>
-            <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: flood-fill (BFS) — visit each cell once", "빠름: 플러드필 (BFS) — 각 칸을 한 번만 방문")}
-              </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Each cell enters the queue once; we check its 4 neighbors once. Total ≈ 4×M×N ≈ 4×10^5.", "각 칸은 큐에 한 번만 들어가고, 이웃 4 개를 한 번씩 확인해요. 모두 합쳐 ≈ 4×M×N ≈ 4×10^5 번이에요.")}
-              </div>
-            </div>
-          </div>
-          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", ...KA }}>
-            {t(E, "The edge rule stays the same: step to a neighbor only if |Δheight| < D.", "건너가기 규칙은 그대로예요. 이웃과 높이 차가 D 보다 작을 때만 건너가요.")}
-          </div>
-          <div style={{ marginTop: 6, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
-          </div>
-        </div>),
+        </>
+      ),
     },
     // 2-2: code, CodeWalk — bubbles sit on the lines they explain
     {
