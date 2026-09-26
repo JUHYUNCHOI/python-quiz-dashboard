@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { PhotoshootRightToLeftScanSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -77,9 +78,7 @@ export function makePhotoshootCh1(E) {
             </div>
           </div>
 
-          {/* I/O + official sample (static worked example).
-              TODO: sim redesign — the old PhotoshootUnfoldSim animated a
-              wrong-problem "guess a[0], unfold a[i+1]=b[i]-a[i]" model. */}
+          {/* I/O + official sample (static worked example) + 오른쪽→왼쪽 스캔 시뮬. */}
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14 }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 8 }}>
               🔎 {t(E, "Official sample", "공식 예제")}
@@ -96,6 +95,7 @@ export function makePhotoshootCh1(E) {
                 "Reverse the first six cows: GGGHGH·HGHHHGHG → HGHGGG·HGHHHGHG. That lifts G's at even positions from 4 up to 6 — the most possible. So 1 reversal is enough.",
                 "앞 6마리를 뒤집으면 GGGHGH·HGHHHGHG → HGHGGG·HGHHHGHG 가 돼요.\n짝수 위치의 G가 4개에서 6개로 늘어나요. 이게 가능한 최대치라서 한 번이면 충분해요.")}
             </div>
+            <PhotoshootRightToLeftScanSim E={E} />
           </div>
         </div>),
     },
