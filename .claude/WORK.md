@@ -5140,3 +5140,53 @@ MCC 2019 문제들은 **CONSTRAINTS 절 자체가 없다.**
 `check-frozen.py` 의 `PROTECTED_NAME_RE`(`.*_(PY|CPP)$`)가 **안 잡는다.**
 → 내 `check-solution-code-unchanged.py` 는 **넓혀서 잡게 고쳤다**(변수 523→573개).
 **`check-frozen.py` 쪽은 아직 못 잡는다 — 그건 걸쇠라 넓히면 막는 범위가 커진다. PM 판정 대기.**
+
+## 🎬 「과정을 보여주는 시뮬이 없다」 — 전수 (2026-09-26)
+
+선생님이 `mcc20citytour` 라이브를 보시고: *"BFS에 대한 설명도 없고 …
+**하나도 알아볼수가 없어. 시뮬로 설명하는부분도 없고.**"*
+
+### ⚠️ 내 첫 측정이 틀렸다 — 두 번
+① `type: "sim"` 문자열만 grep 해 *"시뮬 0개 · 전체 154개"* 라고 했다.
+   **`mcc20citytour` 자신이 그 154개 안에 있었고 실제로는 시뮬이 있다** —
+   `components.jsx:45` 의 `Mcc20CityTourBfsSim` 이 **`type: "reveal"` 안에** 박혀 있다.
+② 그러면 `type: "sim"` 라벨을 믿으면 되나 — **그것도 아니다.**
+   감사가 찾았다: **라벨이 `sim` 인데 실제로는 즉시-결과형인 quest 가 12개**다
+   (`bucketlist`·`cowevolution`·`dontbelast`·`exchange`·`familytree`·`madscientist`·
+    `mcc19palindrome`·`mco15honey`·`modernart`·`productivity`·`sleepclass`·`triangles`).
+   **라벨을 믿지 말고 컴포넌트를 열어야 한다.**
+
+### ⭐ 진짜 갈래는 셋이다
+- **A 과정 시뮬 있음 — 92개** (걸음마다 상태가 바뀌고 ◀▶ 로 따라간다)
+- **B 즉시-결과형 — 72개** (`useState` 는 있는데 **결과를 한 번에 계산해 보여준다**)
+- **C 시뮬 자체가 없음 — 5개**
+
+**선생님이 겪으신 건 B 다.** 「시뮬 있음/없음」으로 세면 **통과해 버린다.**
+
+### 🚨 과정이 곧 개념인 토픽에서 **절반이 B 였다**
+`lib/quest-algo.ts` 의 `graph`·`shortestpath`·`unionfind`·`tree` **10개를 전부 직접 열었다:**
+· **A** — `mcc22grammar` `reach` `bucketbrigade` `livestock` `mco15trains`
+· **B** — **`mcc20citytour` `mcc20knight` `milkfactory` `mcc22maze` `familytree`**
+→ **`mcc20citytour` 하나만의 문제가 아니다.**
+
+### C 5개 — 시뮬이 아예 없다
+`feedcows` `moolang` `photoshoot` `swaptowin`(greedy) · `walkhome`(dp)
+⭐ **`photoshoot` 은 사연이 있다** — `chapters.jsx:81` 에 주석이 남아 있다:
+*"TODO: sim redesign — the old PhotoshootUnfoldSim animated a **wrong-problem** model."*
+**틀린 시뮬을 지웠는데 대신 넣지 않아 구멍이 남았다.**
+
+### 새 검사기 — `scripts/check-quest-has-process-sim.py`
+**C 잣대:** *"`useState` 를 가진 커스텀 컴포넌트가 하나도 없어서 **학생이 조작하며
+알고리즘 진행을 볼 수단 자체가 없다**"*.
+⚠️ **맹점을 머리 주석에 8개 적어 뒀다** — 걸음을 `step`/`steps[]`/`◀▶` 이름으로만 찾아서
+`idx`·`frame`·`tick` 은 놓친다(A 를 B 로 오판) · 정적 그림과 「없음」을 구별 못 한다 ·
+`PROCESS_MATTERS_TOPICS` 는 감사가 임의로 잡은 것이라 **교육이 다시 판단해야 한다**.
+⚠️ 감사가 **자기 숫자가 틀릴 수 있는 자리 넷**을 스스로 적었다 —
+A/B 164개는 **자동 분류만** 했고 표본을 더 열어야 확신할 수 있다.
+
+### 판정 — 순서
+1. **`mcc20citytour` 2쪽을 과정 스테퍼로** (도는 중). **쪽 안 늘림.**
+2. **학생으로 재검증** — 새로 태어난 화면은 구조적으로 아무도 안 읽는다.
+3. 통과하면 **같은 모양을 `mcc20knight` 에 복사**(교육 확인: **같은 템플릿**이다).
+4. 그다음 `milkfactory`·`mcc22maze`·`familytree`.
+5. C 5개는 **따로** — 시뮬을 새로 설계해야 한다(`photoshoot` 은 왜 지웠는지부터).
