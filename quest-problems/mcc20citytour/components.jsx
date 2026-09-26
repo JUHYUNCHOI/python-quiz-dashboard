@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -320,19 +320,43 @@ const BFS_PRESETS = [
   { key: "trap", H: TRAP_H, D: 2, en: "⚠️ The trap (D=2)", ko: "⚠️ 흔한 실수 예제 (D=2)" },
 ];
 
+/* ⭐ 2026-09-26 — 탭을 옮겼다 와도(모바일 오탭 포함) 보던 걸음 그대로.
+   ⚠️ 이건 **학생 진도가 아니라 UI 위치 캐시**다 — CLAUDE.md 의 보호 localStorage
+   키 34개(`completedLessons` 등)와는 다른 층이다. 지워지거나 손상돼도
+   그냥 이 시뮬이 1걸음으로 돌아갈 뿐, 학습 데이터 손실이 아니다.
+   기존 `quest-pos-${pathname}`(챕터/섹션 위치, *App.jsx 168개가 씀) 과도
+   다른 키 네임스페이스(`quest-step-`)를 써서 절대 겹치지 않게 한다. */
+const CITY_TOUR_STEP_KEY = "quest-step-mcc20citytour-bfsprocess";
+
+function readCityTourSteps() {
+  try {
+    if (typeof window === "undefined") return { main: 0, trap: 0 };
+    const raw = window.localStorage.getItem(CITY_TOUR_STEP_KEY);
+    if (!raw) return { main: 0, trap: 0 };
+    const parsed = JSON.parse(raw);
+    return {
+      main: Number.isFinite(parsed?.main) && parsed.main >= 0 ? Math.floor(parsed.main) : 0,
+      trap: Number.isFinite(parsed?.trap) && parsed.trap >= 0 ? Math.floor(parsed.trap) : 0,
+    };
+  } catch {
+    // 사생활 모드·손상된 값 등 — 조용히 0부터 시작한다. 화면은 항상 떠야 한다.
+    return { main: 0, trap: 0 };
+  }
+}
+
 export function Mcc20CityTourBfsProcessStepper({ E }) {
   const [presetKey, setPresetKey] = useState("main");
-  /* ⭐ 2026-09-26 — **프리셋마다 걸음을 따로 기억한다.**
-     왜: 모바일 학생이 10걸음쯤 가 있다가 「⚠️ 흔한 실수 예제」 탭을 눌러 보고
-     **다시 「🌆 메인 예제」로 돌아왔는데도 1/20 으로 리셋**됐다.
-     *"이건 이상했다 — 난 그냥 잠깐 다른 거 봤다 온 건데 왜 처음부터?"*
-     원인은 `choosePreset` 이 부르던 `setStep(0)` — **오늘 내가 쓴 줄**이다.
-     ⭐ 프리셋 전환은 **언마운트가 아니라서** 순수 React state 로 충분하다.
-     새 localStorage 키를 만들지 않는다(그 목록은 학생 진도가 걸려 있어 엄격히 관리한다).
-     ⚠️ **탭·쪽을 벗어나면 여전히 리셋된다** — 그건 컴포넌트가 언마운트되기 때문이고,
-     같은 모양이 quest 79개에 더 있어 **공유 층 설계 판정이 따로 돌고 있다.**
-     여기서 혼자 넓히지 않는다. */
-  const [stepByPreset, setStepByPreset] = useState({ main: 0, trap: 0 });
+  // 프리셋마다 걸음을 따로 기억한다 — 「⚠️ 흔한 실수 예제」를 봤다가
+  // 「🌆 메인 예제」로 돌아와도 진행이 사라지지 않는다.
+  const [stepByPreset, setStepByPreset] = useState(readCityTourSteps);
+  useEffect(() => {
+    try {
+      if (typeof window === "undefined") return;
+      window.localStorage.setItem(CITY_TOUR_STEP_KEY, JSON.stringify(stepByPreset));
+    } catch {
+      // 저장소 차단·가득 참 등 — 조용히 무시. 위치 기억만 안 될 뿐이다.
+    }
+  }, [stepByPreset]);
   const step = stepByPreset[presetKey] ?? 0;
   const setStep = (v) =>
     setStepByPreset(prev => ({

@@ -56,15 +56,59 @@ export interface UseTraceStep<T> {
 }
 
 /**
+ * `localStorage` 에서 걸음 번호 하나를 읽는다 — 실패하면(사생활 모드·저장소 차단·
+ * 손상된 값 등) **조용히 0** 을 돌려준다. 화면이 깨지면 안 되기 때문이다.
+ *
+ * ⚠️ 이건 학생 진도가 아니라 **UI 위치 캐시**다 — 지워져도 학습 데이터 손실이
+ * 아니라 그냥 그 시뮬이 1 걸음으로 돌아갈 뿐이다. CLAUDE.md 의 보호 localStorage
+ * 키 34개(`completedLessons` 등)와는 다른 층이니 착각하지 말 것.
+ */
+function readPersistedStep(key: string): number {
+  try {
+    if (typeof window === "undefined") return 0;
+    const raw = window.localStorage.getItem(key);
+    if (raw == null) return 0;
+    const n = Number(raw);
+    return Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function writePersistedStep(key: string, value: number): void {
+  try {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(key, String(value));
+  } catch {
+    // 사생활 모드·저장소 가득 참 등 — 조용히 무시. 위치 기억이 안 될 뿐,
+    // 화면 동작에는 영향 없다.
+  }
+}
+
+/**
  * Hook for trace-walking simulators.
  *
  * Pass either `total` (a number) for index-only state, or pass a
  * `trace` array — in which case `step` is populated for convenience.
+ *
+ * `persistKey` 는 **opt-in** 이다 — 안 주면 기존과 완전히 같다(회귀 위험 0).
+ * 주면 그 키로 `localStorage` 에 현재 걸음을 저장·복원한다(탭을 옮겼다 와도,
+ * 새로고침해도 보던 걸음 그대로). ⚠️ 이건 학생 진도 저장 키(`completedLessons`
+ * 등, CLAUDE.md 보호 목록)가 **아니다** — 지워지면 그냥 1걸음으로 돌아갈 뿐인
+ * UI 캐시다. 키 이름은 `quest-step-` 네임스페이스를 쓰고, 기존 `quest-pos-`
+ * (챕터/섹션 위치, `*App.jsx` 168개가 씀)와는 다른 용도이니 겹치지 않게 한다.
  */
-export function useTraceStep<T = unknown>(arg: number | readonly T[]): UseTraceStep<T> {
+export function useTraceStep<T = unknown>(
+  arg: number | readonly T[],
+  persistKey?: string
+): UseTraceStep<T> {
   const total = typeof arg === "number" ? arg : arg.length;
   const trace = typeof arg === "number" ? null : arg;
-  const [idx, setIdx] = useState(0);
+  const [idx, _setIdx] = useState(() => (persistKey ? readPersistedStep(persistKey) : 0));
+  const setIdx = (n: number) => {
+    _setIdx(n);
+    if (persistKey) writePersistedStep(persistKey, n);
+  };
   const forced = useContext(ForcedStepContext);
   if (forced) {
     forced.report?.(total);
