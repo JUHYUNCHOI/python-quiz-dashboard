@@ -30,6 +30,12 @@ const REGISTRY = {
                  source: "public/problems/mcc-2024-statements.pdf p.1-2" },
   gifts:       { file: "quest-problems/gifts/components.jsx",       varName: "FULL_PY",
                  source: "public/problems/mcc-2024-statements.pdf p.3-4" },
+  // ⭐ 2026-09-26: 1-3쪽 손풀이가 화면에 **중간 상태 문자열**(abxy·abcy·zzzd·abcd)을 박고 있다.
+  //    그걸 코드와 대조하는 검사기가 **하나도 없어서**(감사 지적) 여기 등록한다 —
+  //    나중에 FULL_PY 의 탐색 순서가 바뀌면 화면 문자열이 **조용히 낡는다.**
+  //    ⚠️ 주석으로 "검증했다" 고 남기는 건 이 저장소가 오늘 두 번 실패를 확인한 패턴이다.
+  swaptowin:   { file: "quest-problems/swaptowin/components.jsx",   varName: "FULL_PY",
+                 source: "WORK.md 2026-09-26 /decide 3라운드 검증 블록" },
 };
 
 /** components.jsx 의 `const NAME = [ "...", ... ];` 를 실제 코드 문자열로 복원 */

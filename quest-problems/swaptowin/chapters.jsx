@@ -168,21 +168,30 @@ export function makeSwapToWinCh1(E) {
               <b style={{ color: "#059669" }}>{t(E, "position 1:", "자리 1:")}</b> {t(E, "want a, s_1[1]=x. a is later in s_1 at position 3 → ", "a 가 필요, s_1 의 1번 칸은 x. a 는 s_1 의 3번 칸에 있음 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 1 1 3</code>
               {t(E, " (1 op, inside s_1)", " (1번, s_1 안에서)")}
+              {/* ⭐ 2026-09-26 /decide 3라운드: 학생이 여기서 막혔다 —
+                  *"자리3 에서 「s_1 의 3번 칸은 x」라는데 「어? 원래 3번 칸은 a 잖아?」 하고
+                  헷갈렸다. 글이 「지금 s_1 이 뭔지」를 한 번도 안 보여준다."*
+                  네 값 전부 🔒 FULL_PY 로 돌려 대조했다(감사). */}
+              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abxy</span>
             </div>
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 2:", "자리 2:")}</b> {t(E, "want b, s_1[2]=b ✓ skip", "b 가 필요, s_1 의 2번 칸이 이미 b ✓ 건너뜀")}
+              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>(s_1 = abxy {"그대로"})</span>
             </div>
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 3:", "자리 3:")}</b> {t(E, "want c, s_1[3]=x. c is nowhere left in s_1 → borrow. s_2's column 3 already has c → ", "c 가 필요, s_1 의 3번 칸은 x. s_1 안엔 c 가 더 없음 → 빌려요.\ns_2 의 3번 칸에 c 가 바로 있음 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 2 3</code>
               {t(E, " (1 op, borrow)", " (1번, 빌리기)")}
+              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abcy</span>
             </div>
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 4:", "자리 4:")}</b> {t(E, "want d, s_1[4]=y. Not in s_1, not in s_2. d is in s_3 — but at column 1, not 4. Line it up first → ", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 1번 칸에 있음 — 먼저 4번 칸으로 옮겨요 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 3 1 4</code>
+              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_3 = zzzd</span>
               {t(E, ", then swap that column with s_1 → ", ", 그다음 그 칸을 s_1 과 맞바꿔요 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 3 4</code>
               {t(E, " (2 ops, borrow)", " (2번, 빌리기)")}
+              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abcd ✓</span>
             </div>
           </div>
 
