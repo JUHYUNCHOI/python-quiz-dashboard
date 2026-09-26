@@ -322,7 +322,23 @@ const BFS_PRESETS = [
 
 export function Mcc20CityTourBfsProcessStepper({ E }) {
   const [presetKey, setPresetKey] = useState("main");
-  const [step, setStep] = useState(0);
+  /* ⭐ 2026-09-26 — **프리셋마다 걸음을 따로 기억한다.**
+     왜: 모바일 학생이 10걸음쯤 가 있다가 「⚠️ 흔한 실수 예제」 탭을 눌러 보고
+     **다시 「🌆 메인 예제」로 돌아왔는데도 1/20 으로 리셋**됐다.
+     *"이건 이상했다 — 난 그냥 잠깐 다른 거 봤다 온 건데 왜 처음부터?"*
+     원인은 `choosePreset` 이 부르던 `setStep(0)` — **오늘 내가 쓴 줄**이다.
+     ⭐ 프리셋 전환은 **언마운트가 아니라서** 순수 React state 로 충분하다.
+     새 localStorage 키를 만들지 않는다(그 목록은 학생 진도가 걸려 있어 엄격히 관리한다).
+     ⚠️ **탭·쪽을 벗어나면 여전히 리셋된다** — 그건 컴포넌트가 언마운트되기 때문이고,
+     같은 모양이 quest 79개에 더 있어 **공유 층 설계 판정이 따로 돌고 있다.**
+     여기서 혼자 넓히지 않는다. */
+  const [stepByPreset, setStepByPreset] = useState({ main: 0, trap: 0 });
+  const step = stepByPreset[presetKey] ?? 0;
+  const setStep = (v) =>
+    setStepByPreset(prev => ({
+      ...prev,
+      [presetKey]: typeof v === "function" ? v(prev[presetKey] ?? 0) : v,
+    }));
   const preset = BFS_PRESETS.find(p => p.key === presetKey);
   const trace = useMemo(() => buildBfsProcessTrace(preset.H, preset.D, E), [presetKey, E]);
   const maxStep = trace.length - 1;
@@ -330,7 +346,8 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
   const cur = trace[idx];
   const R = preset.H.length, Cn = preset.H[0].length;
 
-  const choosePreset = (k) => { setPresetKey(k); setStep(0); };
+  // 걸음은 프리셋마다 따로 산다 — 돌아오면 보던 자리 그대로다.
+  const choosePreset = (k) => setPresetKey(k);
 
   const statusColor = { pass: "#059669", blocked: "#dc2626", visited: "#9ca3af", oob: "#9ca3af" }[cur.status] || A;
 

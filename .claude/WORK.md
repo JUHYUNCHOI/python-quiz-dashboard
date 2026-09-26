@@ -23,6 +23,18 @@
 
 
 
+
+## mcc20citytour BFS 스테퍼 — 프리셋 전환 시 step 리셋 (학생 모바일 보고, 2026-09-26)
+
+- **PM 판정 ①**: 프리셋별 step 기억(quest-local, **새 localStorage 키 없음**) — **오늘 진행.** ✅ 완료
+- **② 탭/쪽 왕복까지 기억 — 보류.** 같은 `useState(0)` 스테퍼 모양이 **quest 79개에 더 있어**
+  여기만 고치면 「왜 이 quest 만」이 남는다. frontend-engineer + ux-reviewer 답 대기.
+  ⚠️ 기존 `quest-pos-${pathname}` 캐시(전 quest 180개가 쓰는 것)에 필드를 얹는 방식이
+  맞는지부터 물어야 한다 — **학생 진도 캐시 스키마**라 신중해야 한다.
+- **flakiness(「20번 눌렀는데 16/20」·「빨리 누르면 씹힌다」) — 원인 미확인, 별도 티켓.**
+- ① 패치 후 **student-python 재검증 필수**(고리 안 끊음).
+
+
 ## swaptowin — 1-3쪽 재작성 확정, **검증된 새 예제 있음** (2026-09-26 진행)
 
 셋(quest-auditor · pedagogy-reviewer · student-python) 독립 검토 **전원이 A(코드 순서대로
