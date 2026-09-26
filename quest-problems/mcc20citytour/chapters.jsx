@@ -69,7 +69,7 @@ export function makeMcc20CityTourCh1(E) {
                       **그 검사기가 못 보는 구멍**이었다.
                       ⛔ 새 설명을 지어내지 않는다 — **이미 이 quest 안에 있는 말**을 앞에 붙인다
                       (`components.jsx:92` 의 「높이 차이」). `feedback_no_invented_terms`. */}
-                  {t(E, " and may jump to an adjacent cell (up/down/left/right) only when the height difference ", " 에서 시작하고, 인접 칸 (상하좌우) 으로는 높이 차이 ")}
+                  {t(E, " and may jump to an adjacent cell (up/down/left/right) only if, either way, the height difference ", " 에서 시작하고, 인접 칸 (상하좌우) 으로는 어느 쪽이 높든 높이 차이 ")}
                   <b style={{ color: "#dc2626", whiteSpace: "nowrap" }}>{t(E, "|H(here) − H(there)| < D", "|H(현재) − H(이웃)| < D")}</b>
                   {t(E, ".", " 일 때만 건너가요.")}
                 </div>
