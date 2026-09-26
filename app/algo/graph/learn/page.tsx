@@ -4,7 +4,7 @@
  * 그래프 (Graph — BFS/DFS) — 챕터식 학습 페이지 v1.
  *
  * Wave 2 — USACO Silver 의 절반은 그래프. 인접 리스트 표현부터 BFS/DFS 까지.
- * 비유 (지하철 노선도/SNS) → 인접 리스트 → BFS (큐, 최단 거리) → DFS (재귀, 깊이) → 정리.
+ * 비유 (지하철 노선도/SNS) → 인접 리스트 → BFS (큐, 최단 거리) → DFS (스택, 깊이) → 정리.
  *
  * 교육 원칙: 한 챕터 = 한 가지 + 한 인터랙션 + 한 미니 퀴즈.
  */
@@ -27,7 +27,7 @@ const CHAPTERS = [
   { id: 1, emoji: "🕸️", title: "왜 그래프?",                    titleEn: "Why Graphs?",                     mins: 4 },
   { id: 2, emoji: "📋", title: "인접 리스트 표현",                titleEn: "Adjacency List",                  mins: 6 },
   { id: 3, emoji: "🌊", title: "BFS — 큐로 최단 거리",            titleEn: "BFS — Shortest Path",             mins: 8 },
-  { id: 4, emoji: "🌳", title: "DFS — 재귀로 깊이",               titleEn: "DFS — Recursive Depth",           mins: 8 },
+  { id: 4, emoji: "🌳", title: "DFS — 스택으로 깊이",              titleEn: "DFS — Stack-based Depth",         mins: 8 },
   { id: 5, emoji: "🏆", title: "정리 + 옆길",                     titleEn: "Recap & Side Path",               mins: 5 },
 ]
 
@@ -805,10 +805,16 @@ vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
                 "Check: ① mark visited when pushing (not on pop). Why? — marking on pop lets the same node get pushed multiple times via different neighbors. Marking on push means each node enters the queue exactly once. ② shortest only on unweighted graphs.",
               )}
             </p>
+            <p className="text-xs text-sky-800 text-center leading-relaxed bg-sky-50 rounded-lg p-2 border border-sky-200">
+              {t(
+                "궁금하지 않아요? — q.popleft() 를 q.pop() 으로 바꾸면 어떻게 될까요? 다음 챕터에서 확인해요.",
+                "Curious? — What happens if we change q.popleft() to q.pop()? We'll find out in the next chapter.",
+              )}
+            </p>
           </div>
         )}
 
-        
+
       </div>
 
       {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
@@ -816,13 +822,13 @@ vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
   )
 }
 
-// ── Chapter 4: DFS — 재귀로 깊이 ──────────────────────────────────
+// ── Chapter 4: DFS — 스택으로 깊이 ──────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 3
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
-  // 같은 6 노드 그래프 — DFS 재귀 시뮬레이션
+  // 같은 6 노드 그래프 — DFS(명시 스택) 시뮬레이션
   const nodes = [
     { id: 1, x: 60,  y: 100 },
     { id: 2, x: 150, y: 50 },
@@ -837,31 +843,57 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   edges.forEach(([u, v]) => { adj[u].push(v); adj[v].push(u) })
   for (const k of Object.keys(adj)) adj[+k].sort((a, b) => a - b)
 
-  // DFS 재귀 시뮬레이션 — call stack 추적
-  type DFSState = { stack: number[]; visited: Set<number>; cur: number | null; msg: string }
+  // DFS 시뮬레이션 — 명시 스택. visited 는 push 하는 순간 표시 (BFS 와 같은 규칙 — pop() 딱 하나만 다르다).
+  // stack = "다음에 볼 후보들", path = "지금까지 온 길" (parent 체인) — 서로 다른 상자로 분리해서 보여준다.
+  type DFSState = { stack: number[]; visited: Set<number>; cur: number | null; path: number[]; msg: string }
   const dfsStates: DFSState[] = []
   {
-    const visited = new Set<number>()
-    const stack: number[] = []
-    const push = (msg: string, cur: number | null) =>
-      dfsStates.push({ stack: [...stack], visited: new Set(visited), cur, msg })
-    push(t("시작 전. 노드 1 부터 DFS.", "Before start. DFS from node 1."), null)
-    const dfs = (u: number) => {
-      visited.add(u)
-      stack.push(u)
-      push(t(`dfs(${u}) 진입. 방문 표시. 스택 push.`, `Enter dfs(${u}). Mark visited. Push to stack.`), u)
-      for (const nb of adj[u]) {
-        if (!visited.has(nb)) {
-          push(t(`이웃 ${nb} 미방문 — 깊이 들어감 →`, `Neighbor ${nb} unvisited — go deeper →`), u)
-          dfs(nb)
-          push(t(`dfs(${u}) 로 돌아옴.`, `Back to dfs(${u}).`), u)
+    const visited = new Set<number>([1])
+    const parent: Record<number, number> = {}
+    const stack: number[] = [1]
+    const pathTo = (node: number | null): number[] => {
+      if (node === null) return []
+      const p: number[] = []
+      let c: number | undefined = node
+      while (c !== undefined) { p.unshift(c); c = parent[c] }
+      return p
+    }
+    dfsStates.push({ stack: [...stack], visited: new Set(visited), cur: null, path: [],
+      msg: t("시작: 노드 1 을 스택에 push. visited={1}", "Start: push 1 to stack. visited={1}") })
+
+    let prevCur: number | null = null
+    while (stack.length > 0) {
+      const c = stack.pop()!
+      // ⚠️ 스택 스냅샷은 반드시 "꺼낸 직후, 이 노드의 이웃을 push 하기 전" 이어야 한다.
+      //    push 뒤에 찍으면 "꺼냄 1 → 스택=[2,3]" 처럼 되어 기획서의 트레이스(스택=[])와 어긋난다.
+      const stackAfterPop = [...stack]
+      const path = pathTo(c)
+      let msg: string
+      if (prevCur === null) {
+        msg = t(`노드 ${c} 를 꺼내요 — 여기가 출발점이에요.`, `Pop ${c} — this is where we start.`)
+      } else {
+        const p = parent[c]
+        if (p === prevCur) {
+          msg = t(`${p} 에서 이웃 ${c} 로 내려가요.`, `Go from ${p} down to neighbor ${c}.`)
+        } else {
+          msg = t(
+            `${prevCur} 에서 더 갈 곳이 없어요 → ${p} 에서 갈라져 나온 이웃 ${c} 를 이어서 파요.`,
+            `${prevCur} has nowhere left to go → back up to ${p} and continue with neighbor ${c}.`,
+          )
         }
       }
-      stack.pop()
-      push(t(`dfs(${u}) 끝. 스택 pop.`, `dfs(${u}) done. Pop stack.`), stack.length > 0 ? stack[stack.length - 1] : null)
+      for (const nb of adj[c]) {
+        if (!visited.has(nb)) {
+          visited.add(nb)
+          parent[nb] = c
+          stack.push(nb)
+        }
+      }
+      dfsStates.push({ stack: stackAfterPop, visited: new Set(visited), cur: c, path, msg })
+      prevCur = c
     }
-    dfs(1)
-    push(t("✅ DFS 완료!", "✅ DFS done!"), null)
+    dfsStates.push({ stack: [], visited: new Set(visited), cur: null, path: pathTo(prevCur),
+      msg: t("✅ DFS 완료!", "✅ DFS done!") })
   }
 
   const [phase, setPhase] = useState(0)
@@ -877,20 +909,29 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🌳</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("DFS — 끝까지 갔다가 되돌아오기", "DFS — go deep, then backtrack")}
+              {t("DFS — 스택으로 깊이 파고들기", "DFS — dig deep with a stack")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-emerald-700">{t("DFS = Depth-First Search", "DFS = Depth-First Search")}</b>.{" "}
               {t(
-                "재귀 — 함수가 자기 자신을 다시 부르는 것 — 로 한 길을 끝까지 파고든 뒤, 막히면 되돌아와서 다른 길로 가요.",
-                "Recursion — a function calling itself — goes all the way down one path, then backs up and tries another.",
+                "스택 — 나중에 넣은 게 먼저 나오는 통 (LIFO) — 을 써서 한 길로 끝까지 파고든 뒤, 막히면 되돌아와서 다른 길로 가요.",
+                "A stack — like a pile, last in, first out (LIFO) — digs down one path to the end, then backs up and tries another.",
               )}
             </p>
-            <div className="bg-white/70 rounded-lg p-3 border border-emerald-200 mb-3">
-              <p className="text-xs font-bold text-emerald-800 mb-2">💡 {t("BFS 와의 차이", "Difference from BFS")}</p>
+            <div className="bg-white/80 rounded-lg p-3 border border-emerald-300 mb-3">
+              <p className="text-xs font-bold text-emerald-800 mb-1">📌 {t("재귀 아니에요", "Not recursion")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "재귀가 아니에요 — 우리가 만든 상자(스택)를 우리 손으로 넣고 뺄 뿐이에요. BFS 때 쓴 큐랑 같은 상자예요, 꺼내는 자리만 달라요.",
+                  "This isn't recursion — we just push and pop our own box (the stack) by hand. It's the same kind of box as BFS's queue, just a different end.",
+                )}
+              </p>
+            </div>
+            <div className="bg-white/70 rounded-lg p-3 border border-emerald-200">
+              <p className="text-xs font-bold text-emerald-800 mb-2">💡 {t("BFS 와 DFS — 상자만 다르다", "BFS vs DFS — only the box differs")}</p>
               <ul className="text-xs text-gray-700 leading-relaxed space-y-1">
-                <li>• <b>BFS</b> — {t("큐, 한 층씩, 최단 거리 강함", "queue, layer by layer, shortest path strong")}</li>
-                <li>• <b>DFS</b> — {t("한 길 끝까지 파고들기. 서로 이어진 덩어리 세기(연결 요소)·빙 도는 길 찾기(사이클) 에 강함", "go all the way down one path. Strong for *counting connected blobs (components), finding loops (cycles)*")}</li>
+                <li>• <b>BFS</b> — {t("큐(FIFO) — 먼저 넣은 게 먼저 나와요. 한 층씩, 최단 거리 강함", "queue (FIFO) — first in, first out. layer by layer, shortest path strong")}</li>
+                <li>• <b>DFS</b> — {t("스택(LIFO) — 나중에 넣은 게 먼저 나와요. 한 길 끝까지. 이어진 덩어리 세기(연결 요소)·빙 도는 길 찾기(사이클) 에 강함", "stack (LIFO) — last in, first out. one path to the end. strong for counting connected blobs (components), finding loops (cycles)")}</li>
               </ul>
             </div>
           </div>
@@ -898,9 +939,9 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("DFS 시뮬레이션 (call stack)", "DFS simulation (call stack)")}</p>
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("DFS 시뮬레이션 (스택)", "DFS simulation (stack)")}</p>
             <p className="text-xs text-gray-600 text-center mb-3">
-              {t("재귀 호출이 스택에 쌓이고 풀려요. 깊이 먼저 가는 거 보여요.", "Recursive calls stack and unwind. See depth-first in action.")}
+              {t("스택엔 “다음에 볼 후보들”이 쌓여요. 지금까지 온 길은 그래프 위 굵은 선으로 따로 봐요.", "The stack holds “candidates to check next”. The path so far is a separate bold line on the graph.")}
             </p>
             <div className="bg-gray-50 rounded-lg p-2 mb-3">
               <svg viewBox="0 0 380 200" className="w-full h-[170px]">
@@ -909,6 +950,13 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                   const nv = nodes[v - 1]
                   return <line key={i} x1={nu.x} y1={nu.y} x2={nv.x} y2={nv.y} stroke="#9ca3af" strokeWidth={2} />
                 })}
+                {/* 지금까지 온 길 — 굵은 분홍 선. 스택(초록 테두리)과 모양을 갈라 헷갈리지 않게 */}
+                {cur.path.length > 1 && (
+                  <polyline
+                    points={cur.path.map(id => { const n = nodes[id - 1]; return `${n.x},${n.y}` }).join(" ")}
+                    fill="none" stroke="#e11d48" strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" opacity={0.55}
+                  />
+                )}
                 {nodes.map(n => {
                   const isCur = cur.cur === n.id
                   const isVisited = cur.visited.has(n.id)
@@ -926,18 +974,14 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 })}
               </svg>
             </div>
-            <div className="bg-emerald-50 rounded-lg p-2 mb-2 min-h-[3.5rem]">
-              <p className="text-[10px] font-bold text-emerald-800 mb-1">{t("지금 부른 함수들 (call stack) — 맨 위 = 가장 최근에 부른 것", "functions in progress (call stack) — top = most recent")}</p>
-              <div className="flex flex-col-reverse gap-0.5">
-                {cur.stack.length === 0 ? (
-                  <p className="text-[11px] text-gray-400 italic">{t("(비어 있음)", "(empty)")}</p>
-                ) : cur.stack.map((v, i) => (
-                  <div key={i} className={cn("font-mono text-xs px-2 py-0.5 rounded",
-                    i === cur.stack.length - 1 ? "bg-emerald-200 text-emerald-900 font-bold" : "bg-white text-emerald-700",
-                  )}>
-                    dfs({v})
-                  </div>
-                ))}
+            <div className="grid grid-cols-2 gap-2 mb-2">
+              <div className="bg-emerald-50 rounded-lg p-2">
+                <p className="text-[10px] font-bold text-emerald-800 mb-0.5">{t("스택 — 다음에 볼 후보들", "Stack — candidates to check next")}</p>
+                <p className="font-mono text-xs text-emerald-900">[{cur.stack.join(", ")}]</p>
+              </div>
+              <div className="bg-rose-50 rounded-lg p-2">
+                <p className="text-[10px] font-bold text-rose-800 mb-0.5">{t("지금까지 온 길", "Path so far")}</p>
+                <p className="font-mono text-xs text-rose-900">[{cur.path.join(", ")}]</p>
               </div>
             </div>
             <div className="bg-amber-50 rounded-lg p-2 mb-3 text-center min-h-[2.5rem]">
@@ -960,103 +1004,164 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900">📝 {t("코드 — DFS 재귀 템플릿", "Code — DFS recursive template")}</p>
+              <p className="text-sm font-black text-blue-900">📝 {t("코드 — BFS 와 딱 한 곳만 달라요", "Code — one spot different from BFS")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("재귀 = call stack 이 자동 stack. visited 만 잘 챙기면 끝.", "Recursion = call stack auto-stack. Just track visited.")}
+                {t("BFS 코드에서 q.popleft() 를 q.pop() 으로 바꾸면 DFS 가 돼요. 나머지는 전부 똑같아요.", "Change BFS's q.popleft() to q.pop() and it becomes DFS. Everything else stays the same.")}
               </p>
             </div>
+
+            <p className="text-xs font-bold text-sky-800">🌊 {t("BFS (챕터 3 에서 본 코드)", "BFS (from chapter 3)")}</p>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={t(`import sys
-sys.setrecursionlimit(10**6)        # ← 큰 그래프 필수!
+              py={t(`from collections import deque
 
-def dfs(u, adj, visited):
-    visited[u] = True
-    # 여기서 노드 u 처리 (예: print, count += 1)
-    for nb in adj[u]:
-        if not visited[nb]:
-            dfs(nb, adj, visited)
+def bfs(start, n, adj):
+    visited = [False] * (n + 1)
+    q = deque([start])
+    visited[start] = True
 
-# 호출 예
-visited = [False] * (n + 1)
-dfs(1, adj, visited)`, `import sys
-sys.setrecursionlimit(10**6)        # <- needed for big graphs!
+    while q:
+        cur = q.popleft()              # ← FIFO! (BFS)
+        for nb in adj[cur]:
+            if not visited[nb]:
+                visited[nb] = True
+                q.append(nb)
+    return visited`, `from collections import deque
 
-def dfs(u, adj, visited):
-    visited[u] = True
-    # process node u here (e.g. print, count += 1)
-    for nb in adj[u]:
-        if not visited[nb]:
-            dfs(nb, adj, visited)
+def bfs(start, n, adj):
+    visited = [False] * (n + 1)
+    q = deque([start])
+    visited[start] = True
 
-# example call
-visited = [False] * (n + 1)
-dfs(1, adj, visited)`)}
+    while q:
+        cur = q.popleft()              # <- FIFO! (BFS)
+        for nb in adj[cur]:
+            if not visited[nb]:
+                visited[nb] = True
+                q.append(nb)
+    return visited`)}
+              cpp={t(`#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+vector<bool> bfs(int start, int n, vector<vector<int>>& adj) {
+    vector<bool> visited(n + 1, false);
+    queue<int> q;
+    q.push(start);
+    visited[start] = true;
+
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();      // FIFO! (BFS)
+        for (int nb : adj[cur]) {
+            if (!visited[nb]) {
+                visited[nb] = true;
+                q.push(nb);
+            }
+        }
+    }
+    return visited;
+}`, `#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+vector<bool> bfs(int start, int n, vector<vector<int>>& adj) {
+    vector<bool> visited(n + 1, false);
+    queue<int> q;
+    q.push(start);
+    visited[start] = true;
+
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();      // FIFO! (BFS)
+        for (int nb : adj[cur]) {
+            if (!visited[nb]) {
+                visited[nb] = true;
+                q.push(nb);
+            }
+        }
+    }
+    return visited;
+}`)}
+            />
+
+            <p className="text-xs font-bold text-emerald-800">🌳 {t("DFS — pop() 하나만 바뀌어요", "DFS — only pop() changes")}</p>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={t(`from collections import deque
+
+def dfs(start, n, adj):
+    visited = [False] * (n + 1)
+    q = deque([start])
+    visited[start] = True
+
+    while q:
+        cur = q.pop()                  # ← LIFO! (DFS — 여기만 다름)
+        for nb in adj[cur]:
+            if not visited[nb]:
+                visited[nb] = True
+                q.append(nb)
+    return visited`, `from collections import deque
+
+def dfs(start, n, adj):
+    visited = [False] * (n + 1)
+    q = deque([start])
+    visited[start] = True
+
+    while q:
+        cur = q.pop()                  # <- LIFO! (DFS — only this line differs)
+        for nb in adj[cur]:
+            if not visited[nb]:
+                visited[nb] = True
+                q.append(nb)
+    return visited`)}
               cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
-vector<vector<int>> adj;
-vector<bool> visited;
+vector<bool> dfs(int start, int n, vector<vector<int>>& adj) {
+    vector<bool> visited(n + 1, false);
+    vector<int> stk;                       // vector 를 스택처럼 (뒤에서 push/pop)
+    stk.push_back(start);
+    visited[start] = true;
 
-void dfs(int u) {
-    visited[u] = true;
-    // u 처리 (예: cout, count++)
-    for (int nb : adj[u]) {
-        if (!visited[nb]) dfs(nb);
+    while (!stk.empty()) {
+        int cur = stk.back(); stk.pop_back();   // LIFO! (DFS — 여기만 다름)
+        for (int nb : adj[cur]) {
+            if (!visited[nb]) {
+                visited[nb] = true;
+                stk.push_back(nb);
+            }
+        }
     }
-}
-
-int main() {
-    int n;
-    cin >> n;
-    adj.assign(n + 1, {});
-    visited.assign(n + 1, false);
-    // 간선 입력...
-    dfs(1);
-    return 0;
+    return visited;
 }`, `#include <iostream>
 #include <vector>
 using namespace std;
 
-vector<vector<int>> adj;
-vector<bool> visited;
+vector<bool> dfs(int start, int n, vector<vector<int>>& adj) {
+    vector<bool> visited(n + 1, false);
+    vector<int> stk;                       // use a vector as a stack (push/pop at the back)
+    stk.push_back(start);
+    visited[start] = true;
 
-void dfs(int u) {
-    visited[u] = true;
-    // process u here (e.g. cout, count++)
-    for (int nb : adj[u]) {
-        if (!visited[nb]) dfs(nb);
+    while (!stk.empty()) {
+        int cur = stk.back(); stk.pop_back();   // LIFO! (DFS — only this part differs)
+        for (int nb : adj[cur]) {
+            if (!visited[nb]) {
+                visited[nb] = true;
+                stk.push_back(nb);
+            }
+        }
     }
-}
-
-int main() {
-    int n;
-    cin >> n;
-    adj.assign(n + 1, {});
-    visited.assign(n + 1, false);
-    // read edges...
-    dfs(1);
-    return 0;
+    return visited;
 }`)}
             />
+
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
                 "응용: 모든 점을 훑으며 아직 안 가본 점에서 dfs 시작 → 몇 번 시작했나 = 서로 이어진 덩어리 개수(연결 요소). visited 안 쓰면 빙 도는 길에서 무한 루프!",
                 "Apply: for each node, if unvisited do dfs(i) → count connected components. Without visited, cycles → infinite loop!",
               )}
             </p>
-            {/* Python 재귀 한도 경고 — 코드 바로 옆으로 이동 (예전엔 DFS 코드도 보기 전 첫 슬라이드에 있었음) */}
-            <div className="bg-rose-50 rounded-lg p-3 border border-rose-200">
-              <p className="text-[11px] text-rose-800 leading-relaxed">
-                ⚠️ <b>{t("Python 함정", "Python pitfall")}:</b>{" "}
-                {t(
-                  "파이썬은 함수가 자기를 부르는 걸 1000 번까지만 허용해요. 점이 많은 그래프에선 그보다 깊이 들어가서 멈춰버려요 — 그래서 맨 위에 ",
-                  "Python only allows about 1000 nested self-calls. Big graphs go deeper and crash — so put ",
-                )}<code className="bg-white px-1 rounded">sys.setrecursionlimit(10**6)</code>{" "}
-                {t("을 꼭 적어요.", "at the top.")}
-              </p>
-            </div>
-            {/* 다음 슬라이드 퀴즈가 복잡도를 묻는데 정작 어디에도 안 나와 있었음 */}
             <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
               <p className="text-[11px] text-blue-900 leading-relaxed text-center">
                 ⏱️ {t(
@@ -1068,7 +1173,7 @@ int main() {
           </div>
         )}
 
-        
+
       </div>
 
       {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
@@ -1099,8 +1204,8 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200">
               <p className="text-sm text-gray-800 font-bold text-center">
                 {t(
-                  "BFS = 큐 = 최단. DFS = 재귀 = 깊이. 이 두 가지가 수많은 문제 의 베이스가 돼요.",
-                  "BFS = queue = shortest. DFS = recursion = depth. These two are the base of countless problems.",
+                  "BFS = 큐 = 최단. DFS = 스택 = 깊이. 이 두 가지가 수많은 문제 의 베이스가 돼요.",
+                  "BFS = queue = shortest. DFS = stack = depth. These two are the base of countless problems.",
                 )}
               </p>
             </div>
@@ -1113,10 +1218,9 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("그래프 = ", "Graph = ")}<b>{t("노드 + 간선", "nodes + edges")}</b>. {t("코드로는 ", "In code: ")}<b>{t("인접 리스트", "adjacency list")}</b> {t("표준 (메모리 O(V+E)).", "standard (memory O(V+E)).")}</li>
               <li><b>2.</b> <b>BFS</b> = <code className="bg-white px-1 rounded text-xs">deque</code>/<code className="bg-white px-1 rounded text-xs">queue</code>, {t("FIFO. 가중치 없는 그래프 ", "FIFO. Unweighted ")}<b>{t("최단 거리", "shortest path")}</b> {t("보장.", "guaranteed.")}</li>
-              <li><b>3.</b> <b>DFS</b> = {t("재귀, call stack. ", "recursion, call stack. ")}<b>{t("이어진 덩어리(연결 요소), 빙 도는 길(사이클), 트리 훑기", "connected blobs (components), loops (cycles), tree traversal")}</b> {t("강함.", "strong.")}</li>
+              <li><b>3.</b> <b>DFS</b> = {t("스택(LIFO). ", "stack (LIFO). ")}<b>{t("이어진 덩어리(연결 요소), 빙 도는 길(사이클), 트리 훑기", "connected blobs (components), loops (cycles), tree traversal")}</b> {t("강함.", "strong.")}</li>
               <li><b>4.</b> <b>visited</b> {t("배열 필수 — 안 쓰면 사이클에서 무한 루프!", "array required — without it, cycles → infinite loop!")}</li>
-              <li><b>5.</b> {t("Python DFS: ", "Python DFS: ")}<code className="bg-white px-1 rounded text-xs">sys.setrecursionlimit(10**6)</code> {t("잊지 말기.", "don't forget.")}</li>
-              <li><b>6.</b> {t("시간/공간: BFS & DFS 둘 다 ", "Time/space: both ")}<b>O(V+E)</b>.</li>
+              <li><b>5.</b> {t("시간/공간: BFS & DFS 둘 다 ", "Time/space: both ")}<b>O(V+E)</b>.</li>
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("그래프가 손에 잡히면 — 최단 경로, 다익스트라, 위상 정렬, MST 다 열려요!", "Once graphs click — shortest paths, Dijkstra, topological sort, MST all open!")}
