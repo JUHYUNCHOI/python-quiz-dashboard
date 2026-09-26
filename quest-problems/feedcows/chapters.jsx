@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { FeedCowsNumberLineViz } from "./components";
+import { FeedCowsGreedyFillSim } from "./sims";
 
 /* ===============================================================
    Chapter 1: Problem (3 steps)
@@ -77,8 +77,11 @@ export function makeFeedCh1(E) {
             </div>
           </div>
 
-          {/* 👀 Eye-evident visualization — additive */}
-          <FeedCowsNumberLineViz E={E} />
+          {/* 👀 그리디가 왼쪽부터 훑는 과정 시뮬 (2026-09-26, pedagogy·ux 판정으로 확정된 설계).
+              이 자리엔 원래 고정된 한 컷짜리 FeedCowsNumberLineViz 가 있었다 — 결론만
+              보여주고 "왜 자기 자리가 아니라 오른쪽에 놓나" 가 전혀 안 보였다.
+              같은 자리를 그대로 대체한다 — 쪽 수는 늘리지 않는다. */}
+          <FeedCowsGreedyFillSim E={E} />
         </div>),
     },
     // 1-1b: 입출력 형식 + 제약 (USACO 원문 cpid=1252) — 시즌 표준(photoshoot25) 형식
