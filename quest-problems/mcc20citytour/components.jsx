@@ -317,8 +317,8 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
     ...snap(), current: null, checking: null, status: "name",
     msg: isRepeatVisit
       ? t(E,
-          "Same method as before — BFS with a queue.",
-          "이것도 방금과 같은 방법이에요 — 큐를 쓰는 BFS.")
+          "Same method as before.",
+          "방법은 방금과 똑같아요.")
       : t(E,
           "Spreading out with a waiting line, one cell at a time — that's called BFS.\nThe waiting line itself is called a queue.",
           "이렇게 줄을 하나씩 꺼내며 번져 나가는 방법을 «BFS» 라고 불러요.\n그 줄은 «큐» 라고 불러요."),
@@ -734,8 +734,8 @@ export function getMcc20CityTourWalk(E, lang = "py") {
          `feedback_shorter_not_longer` — 늘리지 않고 **뜻 먼저, 성능은 한 줄로
          줄이고, 강의 번호는 뺀다.** */
       { hi: [17, 17], bubble: t(E,
-        "A deque is a line you can add to or remove from at both ends.\npopleft() always finishes instantly, no matter how long the line gets.",
-        "deque 는 앞뒤로 넣고 뺄 수 있는 줄이에요.\npopleft() 는 줄이 아무리 길어도 항상 순식간에 끝나요.") },
+        "deque IS that line — the one we called a queue a moment ago. Python just spells it deque.\nappend() puts a cell at the back, popleft() takes one from the front.",
+        "deque 가 바로 그 줄이에요 — 방금 «큐» 라고 부른 그것. 파이썬에서 쓰는 이름이 deque 예요.\nappend() 로 뒤에 넣고, popleft() 로 앞에서 꺼내요.") },
       /* ⭐ 2026-09-26: 선생님이 라이브를 보시고 *"neighbor 또는 next 가 위아래오른쪽왼쪽인데"*
          라고 짚으신 자리. 재검증 학생도 같은 줄에서 걸렸다 —
          *"dr·dc 가 상하좌우를 어떻게 나타내는지는 안 짚어준다"*.
