@@ -42,6 +42,14 @@ export default function Mcc20CipherApp(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+    /* ⭐ 2026-09-26: 이 quest 의 `hashtable` 매핑이 오늘까지 `//` 주석에 삼켜져 있어서
+       「이 문제 핵심 알고리즘 → 배우러 가기」 배너가 아예 안 떴다. 매핑을 살렸으니
+       (`lib/quest-algo.ts`, 감사 판정 — 원문 에디토리얼이 직접 "map(dictionary)" 를 지목)
+       이벤트도 같이 쏜다. 이게 있어야 `client.tsx` 가 작은 줄(🧠)이 아니라
+       보라색 **큰 배너(📘)** 를 띄운다.
+       ⭐ 탭이 둘("📋 문제" / "⚡ 코드")이라 코드 쪽은 `tab >= 1` 이다 —
+       문제·퀴즈 쪽에서는 안 띄운다(스포일러). */
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 1 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {

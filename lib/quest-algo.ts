@@ -65,7 +65,24 @@ export const QUEST_ALGO: Record<string, string> = {
        · `mcc20citytour` → 🔒 코드에 `deque`/`popleft` **3회**. **graph 맞다. 살린다.**
        · `mcc20cipher`(hashtable) · `mcc20kitty`(dp) → **근거를 못 찾았다.**
          `kitty` 는 **DP 표(`dp[`·`memo`)가 코드에 0회**다. 추측으로 되살리면
-         그 학생이 겪은 「틀린 배지」를 다시 만든다. **감사 판정 대기로 남긴다.** */
+         그 학생이 겪은 「틀린 배지」를 다시 만든다. **감사 판정 대기로 남긴다.**
+
+     ✅ **감사 판정 돌아옴 (2026-09-26, quest-auditor — 원문 PDF + 🔒 코드 대조).**
+       · `mcc20cipher` → ⭕ **`hashtable` 로 켠다.** 코드가 `step = {}` 로 규칙 한 번을
+         표로 만들고 `after = {}` 로 26 글자의 K 번 뒤 도착지를 미리 저장해 O(1) 로
+         조회한다(`components.jsx:15,20`). **원문 에디토리얼이 직접 그걸 지목한다** —
+         *"more elegantly, using a map (known as dictionary in Python)"*.
+         `lc3`·`crossroad1` 과 같은 「저장해 두고 O(1) 조회」 갈래라 관행과도 맞는다.
+       · `mcc20kitty` → ➖ **계속 비워 둔다.** `dp` 는 기각(위 근거 그대로).
+         `seen = {}` 가 딕셔너리이긴 하나 그건 **「이미 본 상태인가」를 확인하는 수단**일
+         뿐이라, 3진수로 인코딩해 배열 인덱스로 써도 똑같이 짜진다 — `hashtable` 이
+         가르치려는 「조회 표」와 **다른 층**이다. 진짜 통찰은
+         **유한 상태공간(3⁵=243) + 비둘기집 → 반드시 되풀이 → 답을 앞머리·완전바퀴·나머지로 쪼갬**
+         이라는 **주기(cycle) 논증**인데, 이 파일이 실제로 쓰는 토픽 16개에 그 이름이 없다.
+         🆕 새 토픽은 **안 만든다** — 같은 수법을 쓰는 quest 를 훑었더니 `kitty` 하나뿐이다
+         (`mcc21dvd` 는 「주기」라는 말은 쓰지만 닫힌 공식이지 시뮬로 찾은 사이클이 아니다).
+         **하나뿐인 수법에 토픽을 만들 값이 없다.** 배지가 없는 게 틀린 배지보다 낫다. */
+  mcc20cipher: "hashtable",
   mcc20citytour: "graph",
   mcc20knight: "graph", mcc20zigzag: "dp", mcc21marbles: "prefixsum",
   // mcc20missing: 제거 — 핵심은 "가장 큰 크기(N/N-1)가 극단에 온다"는 anchor 경우나눔(ad-hoc). set 은 부수적. 표준 토픽 없음.
