@@ -250,13 +250,15 @@ CLAUDE.md 는 *"빈 `concepts_required` 는 `every()` 가 항상 true 라 **아�
 | `clockfence` — N 을 안 읽어 **다른 문제를 풀던** 코드 | DONE `a890b9e3` — ⚠️ USACO 재제출은 선생님 로그인 |
 | 검사기가 공유 `useTraceStep` 스테퍼를 못 보던 것 | DONE `63267706` — C 5 → 4 |
 | 🔒 걸쇠가 소문자 `fullPy` 를 못 보던 것 (`simplegame` 보호가 가짜였다) | DONE `f4b9042e` — 회귀 시험 양방향 |
-| `mcc20citytour` 고친 뒤 **새 학생 재검증** | READY (검토자 답 대기 — 돌아오면 바로 반영) |
-| 모바일 고정 바가 시뮬 ▶다음 탭을 가로챔 (공유 `QuestNavBar`) | READY (PM `/decide` 2라운드 — frontend 답 옴, ux 대기) |
-| `walkhome` 과정 시뮬 (C 4개 중 1순위) | READY (걸음 목록 ux 판정 대기 — 오면 바로 만든다) |
+| `mcc20citytour` 고친 뒤 **새 학생 재검증** | DONE `37f28738` — 학생이 여섯 냈고 **PM 이 하나만 승인**(절댓값 정의). 제일 큰 `deque` 건은 **개념 그래프 구멍**이라 백로그로 뗐다. ⛔ **citytour 는 더 안 건드린다** |
+| 모바일 고정 바가 시뮬 ▶다음 탭을 가로챔 (공유 `QuestNavBar`) | DONE(판정) — **후보 A·B·C·D 넷 다 실측으로 탈락.** 대신 검사기를 만들었다(`4c627174`·`c8294575`). ⚠️ **더 큰 게 나왔다** → 아래 새 줄 |
+| `walkhome` 과정 시뮬 **프리셋 A(2×2)** | DONE `06e789a2` `eae60cac` — 같은 질문 두 쪽 중 하나를 뺐다(퀴즈 2→1) |
+| `walkhome` **프리셋 B(3×3)** | READY — ux 가 «A 의 고정 바 겹침을 먼저 고치고» 라 했고 그건 끝났다 |
 | `feedcows` 과정 시뮬 | READY |
 | `photoshoot` 과정 시뮬 — 옛 것은 **다른 문제**를 애니메이션하던 죽은 코드 | READY |
 | `swaptowin` 과정 시뮬 — 정적 벽글을 걸음으로 **압축**(늘리는 게 아니다) | READY |
-| `mcc20cipher`·`mcc20kitty` 알고리즘 배지 — 원문 감사 | READY (감사 답 대기) |
+| `mcc20cipher`·`mcc20kitty` 알고리즘 배지 | DONE `b743da29` — cipher ⭕ `hashtable` / kitty ➖ **일부러 비움**(맞는 토픽이 없다) |
+| ⭐ **시뮬 진행이 탭만 바꿨다 오면 매번 1/20 으로 리셋된다** | READY — 모바일 학생 4번 시도 4번 다. *"20/20 채워놓고 뒤로 왔더니 또 1단계, 그만두고 싶어졌다."* 겹침보다 **이게 더 크다.** 다음 PM 판정 대상 |
 
 ### 오늘의 함정 — 적어 둔다
 - **걸음 수 상한**이 아직 안 정해졌다. pedagogy 는 12, `citytour` 는 20(+「끝까지 ▶▶」).
