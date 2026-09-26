@@ -5190,3 +5190,28 @@ A/B 164개는 **자동 분류만** 했고 표본을 더 열어야 확신할 수 
 3. 통과하면 **같은 모양을 `mcc20knight` 에 복사**(교육 확인: **같은 템플릿**이다).
 4. 그다음 `milkfactory`·`mcc22maze`·`familytree`.
 5. C 5개는 **따로** — 시뮬을 새로 설계해야 한다(`photoshoot` 은 왜 지웠는지부터).
+
+## 🏷️ 주석에 삼켜졌던 algo 매핑 셋 — **하나만 살렸다** (2026-09-26)
+
+선생님: *"중간에 BFS 공부하고 오라고 **크게** 알려주면 좋을텐데."*
+→ 그 장치는 이미 있었는데 **`lib/quest-algo.ts` 의 항목 셋이 `//` 주석 줄 끝에 삼켜져**
+매핑에서 사라져 있었다(`mcc20cipher`·`mcc20citytour`·`mcc20kitty`).
+**오늘 아침 `quest-meta.ts` 에서 항목 9개가 객체 밖에 있던 것과 같은 사고**다.
+
+### 왜 셋을 다 안 살렸나 — 코드를 열어 봤다
+이 파일에 학생이 잡은 기록이 있다: *"「그래프(BFS/DFS)」 배지가 붙어 있는데
+**실제 코드에 BFS 가 하나도 없었다.** 배지가 틀렸다고 느껴졌다."*
+
+| quest | 옛 라벨 | 🔒 코드가 실제로 하는 일 | 판정 |
+|---|---|---|---|
+| `mcc20citytour` | graph | `deque`·`popleft` **3회** — 진짜 BFS | ✅ **살렸다** |
+| `mcc20kitty` | **dp** | `seen = {}` 로 **순환(cycle)을 찾고** 꼬리·주기·나머지를 나눠 센다. **`dp[`·`memo` 0회** | ❌ **dp 아니다** |
+| `mcc20cipher` | hashtable | `step = {}`·`after = {}` 는 **저장 수단**이고, 핵심은 **글자마다 K번 반복 적용** | ❌ **확신 못 한다** |
+
+⛔ **토픽 목록에 「순환 찾기」가 없다** — 쓸 수 있는 건
+`backtracking binarysearch dp graph greedy hashtable prefixsum priorityqueue recursion
+shortestpath sorting stackqueue string topologicalsort tree unionfind` 뿐이다.
+**억지로 끼워 넣으면 그 학생이 겪은 「틀린 배지」를 다시 만든다.**
+→ **둘은 비워 둔다.** 배지가 없는 게 **틀린 배지보다 낫다.**
+**남은 일: 원문을 보고 「이 문제의 핵심이 무엇인가」를 감사가 판정 → 그때 넣는다.**
+(토픽을 새로 만들어야 할 수도 있다 — 그건 제품 결정이라 PM·선생님 몫이다.)
