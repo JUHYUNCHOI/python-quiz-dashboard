@@ -70,9 +70,9 @@ export function makeSwapToWinCh1(E) {
                 <div>
                   {t(E, "Make ", "")}
                   <b style={{ color: "#059669" }}>s_1 = target</b>
-                  {t(E, " using ", " 를 ")}
-                  <b style={{ color: "#059669" }}>{t(E, "at most 2M operations", "최대 2M 번 바꾸기")}</b>
-                  {t(E, ".", " 으로 달성.")}
+                  {t(E, " using ", " 이 되게, ")}
+                  <b style={{ color: "#059669" }}>{t(E, "at most 2M operations", "최대 2M 번")}</b>
+                  {t(E, ".", " 안에 바꿔요.")}
                 </div>
               </div>
             </div>
@@ -96,6 +96,9 @@ export function makeSwapToWinCh1(E) {
             <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, padding: 10 }}>
               <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 4 }}>{t(E, "Input", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#065f46", lineHeight: 1.8 }}>
+                {/* 2026-09-26 학생: *"제약엔 1 ≤ T ≤ 10 이 있는데 여기 T 줄이 없어서
+                    첫 줄이 T 인지 N M 인지 잠깐 헷갈렸다."* 코드가 T 를 먼저 읽는다. */}
+                <div>1 <span style={SIO}>{t(E, "← T (how many tests)", "← T (테스트 개수)")}</span></div>
                 <div>3 5 <span style={SIO}>← N, M</span></div>
                 <div>abcde <span style={SIO}>← target</span></div>
                 <div>abcde <span style={SIO}>← s_1</span></div>
