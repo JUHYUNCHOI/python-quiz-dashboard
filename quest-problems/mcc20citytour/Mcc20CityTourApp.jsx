@@ -53,8 +53,14 @@ export default function Mcc20CityTourApp(props = {}) {
        더 배선해서 지금은 **73개**다(`7a9a3286`). 매핑은 51개 — 수가 안 맞는 건
        매핑 없이 쏘는 quest 가 있어서고, 그건 `client.tsx` 가 알아서 무시한다.
        ⭐ `tab >= 1`(코드 쪽)에서만 켠다 — 문제·퀴즈는 0탭이라 **스포일러가 아니다.**
-       `buymilk`·`printseq`·`checkups` 와 같은 모양이다. */
-    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 1 } }));
+       `buymilk`·`printseq`·`checkups` 와 같은 모양이다.
+       🚨 2026-09-26 (재검증 학생): *"5쪽에 들어가자마자 배너가 «그래프
+       (BFS/DFS)» 라고 이미 떠 있어서, 줄 시뮬레이션으로 직접 알아내기 전에
+       답을 먼저 봐버린 느낌이었다."* — 5쪽(tab 1 · si 0)은 BFS 과정 스테퍼로,
+       ⭐ 스테퍼는 **마지막 걸음에서야** 이름을 주게 일부러 설계했는데
+       `tab >= 1` 이 5쪽에서부터 배너를 쐈다. 진짜 코드가 보이는 6쪽
+       (tab 1 · si 1, CodeWalk)에서만 뜨게 좁힌다. */
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab === 1 && si === 1 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {

@@ -161,7 +161,7 @@ const TRAP_H = [
   [10, 10, 10, 10],
 ];
 
-function buildBfsProcessTrace(H, D, E) {
+function buildBfsProcessTrace(H, D, E, presetKey) {
   const R = H.length, Cn = H[0].length;
   const visited = Array.from({ length: R }, () => Array(Cn).fill(false));
   visited[0][0] = true;
@@ -169,12 +169,20 @@ function buildBfsProcessTrace(H, D, E) {
   let count = 1;
   const snap = () => ({ visited: visited.map(row => row.slice()), queue: queue.slice(), count });
   const trace = [];
+  /* ⭐ 2026-09-26: 재검증 학생 — 시작·이름 문장이 "두 프리셋에서 토씨 하나 안
+     틀리고" 반복됐다. main 을 먼저 보고 오는 게 기본값이니, trap 에서는
+     되풀이하지 않고 짧게 다시 부른다(feedback_shorter_not_longer). */
+  const isRepeatVisit = presetKey === "trap";
 
   trace.push({
     ...snap(), current: null, checking: null, status: "start",
-    msg: t(E,
-      "The only sure cell is (1,1).\nPut it in the queue and start.",
-      "확실한 건 (1,1) 하나뿐이에요.\n줄에 넣고 시작해요."),
+    msg: isRepeatVisit
+      ? t(E,
+          "Same start, new grid — (1,1) again.",
+          "이번에도 (1,1)에서 시작해요.")
+      : t(E,
+          "The only sure cell is (1,1).\nPut it in the queue and start.",
+          "확실한 건 (1,1) 하나뿐이에요.\n줄에 넣고 시작해요."),
   });
 
   /* 1단계 — 처음 두 번의 pop 만 «한 걸음에 한 방향» 으로 자세히 본다.
@@ -307,17 +315,26 @@ function buildBfsProcessTrace(H, D, E) {
   });
   trace.push({
     ...snap(), current: null, checking: null, status: "name",
-    msg: t(E,
-      "Spreading out with a waiting line, one cell at a time — that's called BFS.\nThe waiting line itself is called a queue.",
-      "이렇게 줄을 하나씩 꺼내며 번져 나가는 방법을 «BFS» 라고 불러요.\n그 줄은 «큐» 라고 불러요."),
+    msg: isRepeatVisit
+      ? t(E,
+          "Same method as before — BFS with a queue.",
+          "이것도 방금과 같은 방법이에요 — 큐를 쓰는 BFS.")
+      : t(E,
+          "Spreading out with a waiting line, one cell at a time — that's called BFS.\nThe waiting line itself is called a queue.",
+          "이렇게 줄을 하나씩 꺼내며 번져 나가는 방법을 «BFS» 라고 불러요.\n그 줄은 «큐» 라고 불러요."),
   });
 
   return trace;
 }
 
+/* ⭐ 2026-09-26: 재검증 학생 — *"「흔한 실수 예제」라고 이름 붙여놓고 실제로는
+   실수하는 장면이 하나도 안 나왔다. 그냥 D=2 로 한 번 더 정상적으로 BFS 를 도는
+   것뿐. 「뭐가 실수라는 거지?」 하고 넘어갔다."* 이 프리셋이 실제로 보여주는 건
+   "가운데는 서로 통해도 테두리에서 못 들어간다" 는 것 — 이름을 그것에 맞춘다
+   (feedback_shorter_not_longer — 화면을 더 만드는 대신 이름 한 줄만 고친다). */
 const BFS_PRESETS = [
   { key: "main", H: SIM_H, D: 5, en: "🌆 Main example (D=5)", ko: "🌆 메인 예제 (D=5)" },
-  { key: "trap", H: TRAP_H, D: 2, en: "⚠️ The trap (D=2)", ko: "⚠️ 흔한 실수 예제 (D=2)" },
+  { key: "trap", H: TRAP_H, D: 2, en: "🧊 Trapped cells (D=2)", ko: "🧊 갇힌 칸 예제 (D=2)" },
 ];
 
 /* ⭐ 2026-09-26 — 탭을 옮겼다 와도(모바일 오탭 포함) 보던 걸음 그대로.
@@ -364,7 +381,7 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
       [presetKey]: typeof v === "function" ? v(prev[presetKey] ?? 0) : v,
     }));
   const preset = BFS_PRESETS.find(p => p.key === presetKey);
-  const trace = useMemo(() => buildBfsProcessTrace(preset.H, preset.D, E), [presetKey, E]);
+  const trace = useMemo(() => buildBfsProcessTrace(preset.H, preset.D, E, presetKey), [presetKey, E]);
   const maxStep = trace.length - 1;
   const idx = Math.min(step, maxStep);
   const cur = trace[idx];
@@ -667,9 +684,13 @@ export function getMcc20CityTourWalk(E, lang = "py") {
         { hi: [24, 25], bubble: t(E,
           "Lay out the four directions as arrays ahead of time — dr[0],dc[0]=(-1,0) up, dr[1],dc[1]=(1,0) down,\ndr[2],dc[2]=(0,-1) left, dr[3],dc[3]=(0,1) right.\nOne index d pairs the two arrays together.",
           "네 방향을 미리 배열로 적어 둬요 — dr[0], dc[0] = (-1, 0) 은 위, dr[1], dc[1] = (1, 0) 은 아래,\ndr[2], dc[2] = (0, -1) 은 왼쪽, dr[3], dc[3] = (0, 1) 은 오른쪽이에요.\n숫자 d 하나로 두 배열을 짝지어 써요.") },
+        /* ⭐ 2026-09-26: py 쪽과 같은 이유로 "BFS 라고 불러요" 정의를 뺐다 —
+           5쪽(BFS 과정 스테퍼) 마지막 걸음과 토씨 하나 안 틀리게 겹쳐서
+           1클릭 거리에 같은 문장이 두 번 있었다. front()/pop() ↔ popleft() 대응은
+           C++ 만의 새 정보라 남긴다. */
         { hi: [26, 28], bubble: t(E,
-          "This spreading is called BFS. Keep going while the queue isn't empty, and each time look at the front cell with front() and remove it with pop() — the same job as Python's popleft().",
-          "이렇게 번져 나가는 방법을 BFS 라고 불러요.\n줄이 빌 때까지 계속하면서, 매번 맨 앞의 칸을 front() 로 보고 pop() 으로 꺼내요 — 파이썬의 popleft() 와 같은 일이에요.") },
+          "This is the same method you just saw. Keep going while the queue isn't empty, and each time look at the front cell with front() and remove it with pop() — the same job as Python's popleft().",
+          "방금 봤던 그 방법이에요.\n줄이 빌 때까지 계속하면서, 매번 맨 앞의 칸을 front() 로 보고 pop() 으로 꺼내요 — 파이썬의 popleft() 와 같은 일이에요.") },
         { hi: [29, 31], bubble: t(E,
           "Now check the four directions one by one.\nAdd dr[d], dc[d] to the row and column we're standing on, and you get that neighbor's place.",
           "이제 네 방향을 하나씩 확인해요.\n지금 칸의 줄 번호·칸 번호에 dr[d], dc[d] 를 더하면 그 이웃의 자리가 나와요.") },
@@ -704,17 +725,28 @@ export function getMcc20CityTourWalk(E, lang = "py") {
          **화면(CodeWalk)에는 없었다.** 이 quest 에서 **같은 모양의 사고가 두 번째**다
          (앞서 「1️⃣2️⃣3️⃣ 왜 이렇게」 단계별 설명도 PDF 에만 있었다).
          ⭐ **PDF 에만 있는 글은 학생이 안 본다.** 화면으로 옮긴다.
-         ⭐ 그리고 **`deque` 는 레슨 25(덱)가 이미 가르친다** — 갈 곳을 알려준다. */
+         🚨 2026-09-26 (같은 날 두 번째 재검증): 이 문장이 오히려 **다른 학생을
+         쫓아냈다** — *"`deque` 니 `popleft()` 니 처음 보는 게 튀어나와서 뒤에는
+         대충 훑고 넘겼다."* 원인 셋: ⓐ **뜻 없이 성능부터** 말함(`deque` 가
+         뭔지 한 마디도 없이 `list.pop(0)` 비교부터 시작) ⓑ **「25강에서 배워요」**
+         가 "몇 강까지 배웠는지도 모르는" 학생을 뒤처진 기분으로 만듦
+         ⓒ 성능 비교(뒤 값을 한 칸씩 당기는 이유)가 "너무 앞서간 얘기"였음.
+         `feedback_shorter_not_longer` — 늘리지 않고 **뜻 먼저, 성능은 한 줄로
+         줄이고, 강의 번호는 뺀다.** */
       { hi: [17, 17], bubble: t(E,
-        "Why deque and not a plain list? list.pop(0) has to shift every item left, so it gets slower as the line grows.\ndeque.popleft() finishes instantly no matter how long the line is.\n(Lesson 25 covers deque.)",
-        "왜 리스트가 아니라 deque 일까요? list.pop(0) 은 뒤의 값을 전부 한 칸씩 당겨야 해서\n줄이 길어질수록 느려져요.\ndeque 의 popleft() 는 줄이 아무리 길어도 바로 끝나요. (deque 는 25강에서 배워요.)") },
+        "A deque is a line you can add to or remove from at both ends.\npopleft() always finishes instantly, no matter how long the line gets.",
+        "deque 는 앞뒤로 넣고 뺄 수 있는 줄이에요.\npopleft() 는 줄이 아무리 길어도 항상 순식간에 끝나요.") },
       /* ⭐ 2026-09-26: 선생님이 라이브를 보시고 *"neighbor 또는 next 가 위아래오른쪽왼쪽인데"*
          라고 짚으신 자리. 재검증 학생도 같은 줄에서 걸렸다 —
          *"dr·dc 가 상하좌우를 어떻게 나타내는지는 안 짚어준다"*.
-         숫자 넷이 각각 어느 쪽인지 그 자리에서 말한다. */
+         숫자 넷이 각각 어느 쪽인지 그 자리에서 말한다.
+         🚨 2026-09-26 (같은 날 두 번째 재검증): "BFS 라고 불러요" 정의가
+         **5쪽(BFS 과정 스테퍼) 마지막 걸음과 토씨 하나 안 틀리고 같다** —
+         1클릭 거리에서 두 번 나온다(pedagogy: "정보가 아니라 되풀이"). 이름은
+         5쪽에 남기고, 여기는 "방금 봤던 그 방법" 으로 되짚기만 한다. */
       { hi: [20, 21], bubble: t(E,
-        "This spreading is called BFS.\nKeep going while the line still has someone in it, and take the cell at the front each time.",
-        "이렇게 번져 나가는 방법을 BFS 라고 불러요.\n줄에 누가 남아 있는 동안 계속하면서, 매번 줄 맨 앞의 칸을 꺼내요.") },
+        "This is the same method you just saw.\nKeep going while the line still has someone in it, and take the cell at the front each time.",
+        "방금 봤던 그 방법이에요.\n줄에 누가 남아 있는 동안 계속하면서, 매번 줄 맨 앞의 칸을 꺼내요.") },
       { hi: [22, 23], bubble: t(E,
         "The four number pairs are the four directions — (-1,0) up, (1,0) down, (0,-1) left, (0,1) right.\nAdd one to the row and column number of where we stand, and you get that neighbor's place.",
         "숫자 짝 네 개가 곧 네 방향이에요 — (-1,0) 은 위, (1,0) 은 아래, (0,-1) 은 왼쪽, (0,1) 은 오른쪽.\n지금 서 있는 칸의 줄 번호·칸 번호에 하나씩 더하면 그 이웃의 자리가 나와요.") },
