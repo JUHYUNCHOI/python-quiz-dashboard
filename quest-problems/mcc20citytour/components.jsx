@@ -569,6 +569,19 @@ export function getMcc20CityTourWalk(E) {
       { hi: [13, 19], bubble: t(E,
         "Why not sweep the whole grid over and over? That could take M×N passes over M×N cells — 10^10. So visit each cell just once: keep a note of where we've been, and a line of cells waiting their turn. (1,1) goes into both, and the count starts at 1.",
         "왜 지도를 몇 번씩 다시 훑지 않을까요? 그러면 최대 M×N 번을 M×N 칸에 되풀이해서 10^10 이 될 수 있어요.\n그래서 칸마다 딱 한 번만 가요 — 어디를 다녀왔는지 적을 곳과, 차례를 기다리는 칸들의 줄이 필요해요.\n(1,1) 을 둘 다에 넣고, 센 수는 1 에서 시작해요.") },
+      /* ⭐ 2026-09-26: 재검증 학생이 **딱 하나**를 남겼다 —
+         *"`deque` 가 무슨 뜻인지, `popleft()` 가 리스트의 무엇과 다른지 **한 번도 설명이
+         없었다.** … 「리스트의 `.pop(0)` 도 되지만 느려서 `deque` 라는 걸 쓴다」 정도
+         **한 줄이면** 됐을 것 같다."* — 처방까지 학생이 직접 말했다.
+         🚨 **그 문장은 이미 있었다.** `getMcc20CityTourSections`(491~550줄, **PDF 전용**)에
+         *"deque 의 popleft() 는 크기와 상관없이 바로 끝나는 연산이에요"* 라고 적혀 있는데
+         **화면(CodeWalk)에는 없었다.** 이 quest 에서 **같은 모양의 사고가 두 번째**다
+         (앞서 「1️⃣2️⃣3️⃣ 왜 이렇게」 단계별 설명도 PDF 에만 있었다).
+         ⭐ **PDF 에만 있는 글은 학생이 안 본다.** 화면으로 옮긴다.
+         ⭐ 그리고 **`deque` 는 레슨 25(덱)가 이미 가르친다** — 갈 곳을 알려준다. */
+      { hi: [17, 17], bubble: t(E,
+        "Why deque and not a plain list? list.pop(0) has to shift every item left, so it gets slower as the line grows.\ndeque.popleft() finishes instantly no matter how long the line is.\n(Lesson 25 covers deque.)",
+        "왜 리스트가 아니라 deque 일까요? list.pop(0) 은 뒤의 값을 전부 한 칸씩 당겨야 해서\n줄이 길어질수록 느려져요.\ndeque 의 popleft() 는 줄이 아무리 길어도 바로 끝나요. (deque 는 25강에서 배워요.)") },
       { hi: [20, 23], bubble: t(E,
         "This spreading is called BFS (flood fill). Pop a cell off the front, then look at its 4 neighbors.",
         "이렇게 번져 나가며 채우는 방법을 BFS 라고 불러요.\n큐 앞에서 칸을 하나 꺼내서 이웃 4개를 봐요.") },
