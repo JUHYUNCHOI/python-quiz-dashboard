@@ -111,7 +111,18 @@ USACO_HEADER_RE = re.compile(r"^\s*//\s*🔒?\s*USACO_VERIFIED", re.M)
 #    어젯밤 사고 커밋 `fb5367dd` 가 건드린 건 `const M3_MAP_PY = (E) => [` 였다 —
 #    **화살표 함수가 배열을 돌려주는 모양.** 그래서 「보호 변수 안 건드렸다」로 통과할 뻔했다.
 #    회귀 케이스를 안 돌렸으면 **걸쇠에 구멍을 내면서 고친 줄 알았을 것이다.**
-PROTECTED_NAME_RE = re.compile(r"^(SOLUTION_CODE$|.*_(PY|CPP)$|.*_(PY|CPP)_.*)")
+# ⚠️ **두 번째 회귀 케이스 (2026-09-26).** 위 패턴은 **대문자 이름만** 본다.
+#    그런데 `simplegame` 은 `const fullPy = (E) => [` 처럼 **소문자 카멜**로 쓴다 —
+#    그리고 `simplegame` 은 `scripts/pending-badge-quests.json` 에 들어 있는,
+#    **문서상 PASS 인데 배지가 없어서 이 걸쇠가 대신 지키기로 한** quest 다.
+#    즉 **지키는 줄 알았는데 안 지키고 있었다.** 정답 코드를 고쳐도 통과했다.
+#    `check-solution-code-unchanged.py` 는 이미 소문자를 보고 있었는데
+#    (`[a-z][A-Za-z0-9]*(?:Py|Cpp|Code)`) **걸쇠 쪽만 좁았다** — 두 검사기가
+#    같은 것을 다른 눈으로 보고 있던 것이다. 눈을 맞춘다.
+PROTECTED_NAME_RE = re.compile(
+    r"^(SOLUTION_CODE$"
+    r"|.*_(PY|CPP)$|.*_(PY|CPP)_.*"
+    r"|[a-z][A-Za-z0-9]*(Py|Cpp|Code)$)")
 BLOCK_START_RE = re.compile(
     r"^\s*(?:export\s+)?const\s+([A-Za-z_][\w]*)\s*=\s*"
     r"(?:\([^)]*\)\s*=>\s*|[A-Za-z_][\w]*\s*=>\s*)?[\[`]"
