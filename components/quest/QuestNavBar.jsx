@@ -25,6 +25,8 @@
  * so the caller passes that knowledge in via this function.
  */
 import { useRef, useState } from "react";
+import Link from "next/link";
+import { List } from "lucide-react";
 import { C, t } from "./theme";
 
 /* 「⚡ 코드」 탭 안에서 계획 쪽과 실제 코드 쪽을 구분해 라벨을 붙인다. (2026-09-24)
@@ -429,23 +431,56 @@ export function QuestBottomNav({
               "💡 팁: 위에서 답해보면 좋아요. (그냥 넘어가도 OK — →)")}
           </div>
         )}
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center", pointerEvents: "none" }}>
-          <button onClick={onPrev} disabled={prevDisabled} style={{
-            background: prevDisabled ? "#e5e7eb" : C.card,
-            border: `2px solid ${prevDisabled ? "#e5e7eb" : accent}`,
-            borderRadius: 9, padding: "10px 24px", fontSize: 14, fontWeight: 800,
-            cursor: prevDisabled ? "default" : "pointer",
-            color: prevDisabled ? "#b0b5c3" : accent,
-            pointerEvents: "auto",
-          }}>← {t(E, "Prev", "이전")}</button>
-          <button onClick={onNext} disabled={!canNext} style={{
-            background: !canNext ? "#e5e7eb" : accent,
-            border: `2px solid ${!canNext ? "#e5e7eb" : accent}`,
-            borderRadius: 9, padding: "10px 24px", fontSize: 14, fontWeight: 800,
-            cursor: !canNext ? "default" : "pointer",
-            color: !canNext ? "#b0b5c3" : "#fff",
-            pointerEvents: "auto",
-          }}>{t(E, "Next", "다음")} →</button>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, pointerEvents: "none" }}>
+          {/* 왼쪽 spacer — Next.js 개발 모드 자체 배지(devIndicators)가 화면 좌하단을
+              차지한다(로컬 개발자 화면에만 뜨고 프로덕션엔 없음). 「← 목록으로」 버튼을
+              오른쪽에 둬 그 배지와 안 겹치게 하고, 이 spacer 로 Prev/Next 그룹을 중앙에 맞춘다. */}
+          <div style={{ width: 38, flexShrink: 0 }} aria-hidden="true" />
+          <div style={{ flex: 1, display: "flex", gap: 12, justifyContent: "center", alignItems: "center", pointerEvents: "none" }}>
+            <button onClick={onPrev} disabled={prevDisabled} style={{
+              background: prevDisabled ? "#e5e7eb" : C.card,
+              border: `2px solid ${prevDisabled ? "#e5e7eb" : accent}`,
+              borderRadius: 9, padding: "10px 24px", fontSize: 14, fontWeight: 800,
+              cursor: prevDisabled ? "default" : "pointer",
+              color: prevDisabled ? "#b0b5c3" : accent,
+              pointerEvents: "auto",
+            }}>← {t(E, "Prev", "이전")}</button>
+            <button onClick={onNext} disabled={!canNext} style={{
+              background: !canNext ? "#e5e7eb" : accent,
+              border: `2px solid ${!canNext ? "#e5e7eb" : accent}`,
+              borderRadius: 9, padding: "10px 24px", fontSize: 14, fontWeight: 800,
+              cursor: !canNext ? "default" : "pointer",
+              color: !canNext ? "#b0b5c3" : "#fff",
+              pointerEvents: "auto",
+            }}>{t(E, "Next", "다음")} →</button>
+          </div>
+          {/* 「목록으로」 — quest 목록으로 나가는 탈출로. (2026-09-27)
+              왜 여기 붙였나 — 오늘 상단 sticky 바 둘을 걷어내며(41c522bd·704b6b7f)
+              클릭 도둑질은 0건이 됐지만, quest 를 빠져나가는 길도 같이 사라졌다.
+              상단 breadcrumb 의 `←`(client.tsx)는 이제 sticky 가 아니라 일반 흐름이라
+              스크롤하면 화면 밖으로 사라진다. 이 하단 바는 이미 `pointerEvents:"auto"`
+              를 버튼 크기까지 좁혀 겹침 0건으로 검증됐으므로, 새 sticky 요소를
+              또 만들지 않고 여기에 얹는다.
+              ⛔ 화살표 모양 금지 — Prev/Next 가 이미 화살표라 세 번째 같은 모양이
+              되면 `feedback_one_nav_shape_per_screen.md` 를 또 어긴다. 그래서
+              **원형 아이콘 버튼 + List 아이콘 + 무채색**으로 모양·색을 둘 다 갈랐다. */}
+          <Link
+            href="/quest"
+            aria-label={t(E, "Quest list", "문제 목록으로")}
+            title={t(E, "Quest list", "문제 목록으로")}
+            style={{
+              flexShrink: 0,
+              width: 38, height: 38,
+              borderRadius: "50%",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              background: C.card,
+              border: `2px solid ${C.border}`,
+              color: C.dim,
+              pointerEvents: "auto",
+            }}
+          >
+            <List size={17} strokeWidth={2.5} />
+          </Link>
         </div>
       </div>
     </div>
