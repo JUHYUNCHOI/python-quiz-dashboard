@@ -370,12 +370,12 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
 
     {
       trace.push({
-        ...snap(), current: [r, c], checking: null, status: "pop",
+        ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 0, status: "pop",
         msg: t(E,
           `Pop (${r + 1},${c + 1}) from the front of the queue.\nCheck its 4 neighbors, one at a time.`,
           `줄 앞에서 (${r + 1},${c + 1}) 를 꺼내요.\n이웃 4칸을 하나씩 봐요.`),
       });
-      for (const d of DIRS) {
+      for (const [di, d] of DIRS.entries()) {
         const nr = r + d.dr, nc = c + d.dc;
         const inBounds = nr >= 0 && nr < R && nc >= 0 && nc < Cn;
         let status, msg;
@@ -406,7 +406,10 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
               `${dirLabel(d, false)} → (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff}, D(${D}) 보다 작지 않아요.\n막혀요.`);
           }
         }
-        trace.push({ ...snap(), current: [r, c], checking: inBounds ? [nr, nc] : null, status, msg });
+        /* ⭐ `dirIdx` 를 같이 넘긴다 — 격자 **밖** 이웃은 `checking` 이 null 이라
+           칸 좌표로는 가리킬 수 없다. 「위 없음」 자리를 화면에 표시하려면 방향이 필요하다. */
+        trace.push({ ...snap(), current: [r, c], checking: inBounds ? [nr, nc] : null,
+          dirIdx: di, checkedDirs: di + 1, status, msg });
       }
     }
     popIdx++;
@@ -637,23 +640,6 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             참고 구현(`mexes/sims.jsx:56-63`)은 **밝은 바탕 + 강조색 글씨 + 13px 굵게 + 💬 + 그림자**이고,
             **걸음 종류에 따라 색이 바뀐다.** 그대로 맞춘다 — 발명하지 않는다.
             색이 바뀌면 「이번 걸음에 무슨 일이 났나」가 **글을 읽기 전에** 보인다. */}
-        {(() => {
-          const tone = {
-            pass:    { bg: "#ecfdf5", bd: "#6ee7b7", fg: "#065f46" },   // 통과 — 초록
-            blocked: { bg: "#fef2f2", bd: "#fca5a5", fg: "#991b1b" },   // 막힘 — 빨강
-            oob:     { bg: "#f8fafc", bd: "#cbd5e1", fg: "#475569" },   // 격자 밖 — 회색
-            visited: { bg: "#f8fafc", bd: "#cbd5e1", fg: "#475569" },   // 이미 다녀옴
-          }[cur.status] || { bg: "#fffbeb", bd: "#fcd34d", fg: "#92400e" };  // 그 밖 — quest 색
-          return (
-            <div style={{
-              background: tone.bg, border: `1.5px solid ${tone.bd}`, color: tone.fg,
-              borderRadius: 12, padding: "11px 14px", fontSize: 13, lineHeight: 1.6,
-              minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center",
-              textAlign: "center", fontWeight: 600, whiteSpace: "pre-line",
-              boxShadow: "0 4px 14px rgba(0,0,0,.08)", ...KA,
-            }}>💬 {cur.msg}</div>
-          );
-        })()}
         {/* ⭐ 2026-09-27: 칸 수가 **격자 아래**에 있어서 말풍선과 250px 떨어져 있었다
             (`see-screen --sim` 경고). 걸음마다 바뀌는 건 말풍선·칸수·격자 셋인데,
             셋이 붙어 있어야 눈이 한 군데만 본다. 말풍선 바로 밑으로 올린다. */}
@@ -670,14 +656,84 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
           {t(E, "cells reached ", "갈 수 있다고 확인한 칸 ")}<b style={{ color: A }}>{cur.count}</b>
           <span style={{ color: C.dim }}> / {R * Cn} {t(E, "cells", "칸")}</span>
         </div>
-        {/* 꼬리 ▼ — 이 말이 **아래 격자**를 가리킨다는 표시 */}
-        <div aria-hidden="true" style={{
-          width: 0, height: 0, margin: "-2px auto 10px",
-          borderLeft: "8px solid transparent", borderRight: "8px solid transparent",
-          borderTop: "8px solid #fcd34d",
-        }} />
         {/* height grid */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+        {/* ⭐ 2026-09-27 선생님: *"이건 말풍선이라기 보다는 그냥 위에 박혀있는거잖아.
+            난 **화면 위에 있는 말풍선**을 예전에 얘기했었고"* — 맞다.
+            `feedback_sim_style_consistency`(2026-07-02) 에 이미 적혀 있다:
+            **absolute + zIndex, 대상에 앵커, 아래 콘텐츠를 좀 가려도 OK.**
+            나는 흐름 안에 블록으로 박아 뒀다 — 「위치 고정」의 변종일 뿐이었다.
+            이제 격자를 `relative` 로 감싸고 말풍선이 **지금 보는 칸 옆에 떠서** 따라다닌다. */}
+        <div style={{ position: "relative", display: "flex", justifyContent: "center", marginBottom: 10 }}>
+          {(() => {
+            const tone = {
+              pass:    { bg: "#ecfdf5", bd: "#059669", fg: "#065f46" },
+              blocked: { bg: "#fef2f2", bd: "#dc2626", fg: "#991b1b" },
+              oob:     { bg: "#f1f5f9", bd: "#94a3b8", fg: "#475569" },
+              visited: { bg: "#f1f5f9", bd: "#94a3b8", fg: "#475569" },
+            }[cur.status] || { bg: "#fffbeb", bd: "#d97706", fg: "#92400e" };
+            // 말풍선이 붙을 칸 — 지금 보는 이웃이 있으면 거기, 없으면 꺼낸 칸
+            const anchor = cur.checking || cur.current || (cur.wave && cur.wave[0]) || [0, 0];
+            const [ar, ac] = anchor;
+            const CELL = 42, GAP = 8;
+            const gridW = Cn * CELL + (Cn - 1) * GAP;
+            const above = ar >= R / 2;                 // 아래쪽 칸이면 위에, 위쪽 칸이면 아래에 띄운다
+            const cx = ac * (CELL + GAP) + CELL / 2;
+            return (
+              <div style={{
+                position: "absolute", zIndex: 20, left: `calc(50% - ${gridW / 2}px)`,
+                width: gridW, pointerEvents: "none",
+                top: above ? undefined : (ar + 1) * (CELL + GAP) + 6,
+                bottom: above ? (R - ar) * (CELL + GAP) + 6 : undefined,
+              }}>
+                <div style={{
+                  background: tone.bg, border: `2px solid ${tone.bd}`, color: tone.fg,
+                  borderRadius: 12, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.55,
+                  textAlign: "center", fontWeight: 700, whiteSpace: "pre-line",
+                  boxShadow: "0 6px 20px rgba(0,0,0,.18)", ...KA,
+                }}>💬 {cur.msg}</div>
+                {/* 꼬리 — 지금 보는 **그 칸**을 가리킨다 */}
+                <div aria-hidden="true" style={{
+                  position: "absolute", left: cx - 8, [above ? "bottom" : "top"]: -8,
+                  width: 0, height: 0,
+                  borderLeft: "8px solid transparent", borderRight: "8px solid transparent",
+                  [above ? "borderTop" : "borderBottom"]: `8px solid ${tone.bd}`,
+                }} />
+              </div>
+            );
+          })()}
+          {/* ⭐ 2026-09-27 선생님: *"이웃하는 4군데라는것을 보여주려면 **네군대를 표시**하면서
+              처음으넨 **위 왼쪽 없는것 전부 다 단계적으로** 보여줘야지"*
+              격자 **밖**에 있는 이웃은 지금까지 «격자 밖이에요» 라는 **말로만** 있었다.
+              자리를 안 보여주니 「이웃이 넷」이 안 보인다. 유령 칸으로 그 자리를 표시한다. */}
+          {cur.current && (() => {
+            const [pr, pc] = cur.current;
+            const CELL = 42, GAP = 8;
+            const gridW = Cn * CELL + (Cn - 1) * GAP, gridH = R * CELL + (R - 1) * GAP;
+            return (
+              <div style={{ position: "absolute", zIndex: 5, pointerEvents: "none",
+                left: `calc(50% - ${gridW / 2}px)`, top: 0, width: gridW, height: gridH }}>
+                {DIRS.map((d, di) => {
+                  const nr = pr + d.dr, nc = pc + d.dc;
+                  const outside = nr < 0 || nr >= R || nc < 0 || nc >= Cn;
+                  const isNow = cur.dirIdx === di;
+                  // 격자 밖이면 «그 자리» 를 유령 칸으로, 안이면 점선 테두리만
+                  const seen = cur.checkedDirs != null && di < cur.checkedDirs;
+                  return (
+                    <div key={di} style={{
+                      position: "absolute",
+                      left: nc * (CELL + GAP), top: nr * (CELL + GAP),
+                      width: CELL, height: CELL, borderRadius: 7, boxSizing: "border-box",
+                      border: isNow ? `3px dashed ${A}` : `2px dashed ${seen ? "#cbd5e1" : "#fcd34d"}`,
+                      background: outside ? (isNow ? "rgba(217,119,6,.12)" : "rgba(148,163,184,.10)") : "transparent",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 10, fontWeight: 800, color: isNow ? A : "#cbd5e1",
+                      transition: "all 160ms",
+                    }}>{outside ? t(E, "none", "없음") : ""}</div>
+                  );
+                })}
+              </div>
+            );
+          })()}
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 42px)`, gap: 8 }}>
             {preset.H.map((row, r) => row.map((h, c) => {
               const at = (list) => list && list.some(([wr, wc]) => wr === r && wc === c);
