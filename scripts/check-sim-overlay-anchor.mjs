@@ -3,6 +3,12 @@
  * check-sim-overlay-anchor.mjs — 시뮬의 **떠 있는 요소**가 엉뚱한 데 붙어 있나.
  *
  *   node scripts/check-sim-overlay-anchor.mjs <quest-id|URL> [...] [--tab "⚡ Code"] [--steps 8]
+ *                                              [--click "다음 →" --click "다음 →" ...]
+ *
+ * ⚠️ **시뮬이 1쪽에 없으면 `--click` 으로 거기까지 가야 한다.** 안 그러면 이 검사기는
+ *    걸음 버튼을 못 찾고 «못 본 것으로 친다» 로 지나간다 — 2026-09-27 실측: 이 검사기를
+ *    만든 계기였던 `mcc20citytour` 자신이 **시뮬이 5쪽**이라 한 번도 안 밟히고 있었다.
+ *    (`see-screen.mjs` 에는 `--click` 이 있는데 여기엔 없어서 생긴 구멍이다.)
  *
  * ─────────────────────────────────────────────────────────────────────────
  * 왜 생겼나 (2026-09-27)
@@ -37,7 +43,9 @@ const argv = process.argv.slice(2);
 const flag = (n, d) => { const i = argv.indexOf(`--${n}`); return i === -1 ? d : argv[i + 1]; };
 const TAB = flag("tab", null);
 const STEPS = Number(flag("steps", 8));
-const targets = argv.filter((a, i) => !a.startsWith("--") && argv[i - 1] !== "--tab" && argv[i - 1] !== "--steps");
+const CLICKS = argv.reduce((acc, a, i) => (a === "--click" ? [...acc, argv[i + 1]] : acc), []);
+const targets = argv.filter((a, i) => !a.startsWith("--") &&
+  !["--tab", "--steps", "--click"].includes(argv[i - 1]));
 
 if (!targets.length) {
   console.error('쓰는 법: node scripts/check-sim-overlay-anchor.mjs <quest-id|URL> [--tab "⚡ Code"] [--steps 8]');
@@ -103,6 +111,13 @@ try {
       if (!(await t.count())) t = page.locator("button").filter({ hasText: /Code|코드/ }).first();
       if (await t.count()) { await t.click(); await page.waitForTimeout(700); }
       else { console.log(`  ⚠️ ${target} — 탭 «${TAB}» 을 못 찾았다. **시뮬에 못 들어갔을 수 있다.**`); }
+    }
+    // --click: 시뮬이 있는 쪽까지 눌러서 간다. 못 누르면 **크게 떠든다** —
+    // 조용히 지나가면 「걸음 버튼을 못 찾았다」의 진짜 이유가 안 보인다.
+    for (const label of CLICKS) {
+      const b = page.locator("button", { hasText: label }).first();
+      if (await b.count()) { await b.click(); await page.waitForTimeout(650); }
+      else console.log(`  ⚠️ ${target} — --click "${label}" 을 못 눌렀다. **그 쪽에 못 갔다.**`);
     }
     // 시뮬에 정말 들어왔나 — 걸음 버튼이 없으면 이 quest 는 «못 봤다» 로 센다
     const hasStepper = await page.locator("button").filter({ hasText: /^Next ▶$|^다음 ▶$|⏮/ }).count();

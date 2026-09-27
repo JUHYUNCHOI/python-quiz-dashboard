@@ -85,9 +85,20 @@ INSIDE = {
 }
 
 
+# 「앞에 한글이 붙어 있으면 딴 낱말이다」 — 낱말별로 열거하지 않고 규칙으로 뺀다.
+#   2026-09-27: `이하` 가 **「되풀이하면」 안에서** 두 번 잡혔다(`mcc20citytour`).
+#   「이하」는 수학에서 쓰일 때 **늘 띄어 쓴다**("100000 이하" · "N 이하") —
+#   앞 글자가 한글이면 그건 «…이하다» 꼴의 동사다(되풀이하다·풀이하다·놀이하다).
+#   ⚠️ 모든 낱말에 걸면 안 된다 — `탐색` 은 「깊이탐색」처럼 한글에 붙는 게 정상이다.
+NEEDS_SPACE_BEFORE = {"이하", "이상"}
+
+
 def count_word(word, text):
     """긴 낱말 안에 든 것은 빼고 센다. '글' 은 '글자' 안의 것을 세지 않는다."""
-    n = len(re.findall(re.escape(word), text))
+    if word in NEEDS_SPACE_BEFORE:
+        n = len(re.findall(r"(?<![가-힣])" + re.escape(word), text))
+    else:
+        n = len(re.findall(re.escape(word), text))
     for longer in INSIDE.get(word, []):
         n -= len(re.findall(re.escape(longer), text))
     return max(n, 0)

@@ -284,6 +284,16 @@ node scripts/see-screen.mjs http://localhost:3000/quest/<id> --sim   # ⭐⭐ **
                                                             #   **이 목록에 없어서 안 돌렸다.** 그래서 넣는다.
                                                             #   ⛔ `--sim` 을 빼면 첫 화면만 본다 — 흩어짐은 안 본다.
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
+node scripts/check-sim-overlay-anchor.mjs <id> --click "Next →" … --steps 18
+                                                            # 시뮬의 **떠 있는 요소**(유령 칸·말풍선)가 엉뚱한 데
+                                                            #   붙었나 — 좌표로 잰다. ⚠️ **시뮬이 1쪽에 없으면
+                                                            #   `--click` 으로 거기까지 가야 한다.** 안 그러면
+                                                            #   «걸음 버튼을 못 찾았다» 로 조용히 지나간다 —
+                                                            #   2026-09-27 실측: 이 검사기를 만든 계기인
+                                                            #   `mcc20citytour` 자신이 **시뮬이 5쪽**이라 한 번도
+                                                            #   안 밟히고 있었다. `--click` 을 붙여 처음 밟자마자
+                                                            #   맨 아랫줄의 「아래」 유령 칸이 **⏮·◀ 버튼을 덮는**
+                                                            #   결함을 걸음 15·17 에서 잡았다.
 node scripts/check-fixed-bar-overlap.mjs <id> --tab "⚡ 코드"  # 고정 바가 본문 버튼의 **탭을 가져가나** (모바일)
                                                             #   ⚠️ `see-screen` 과 **다른 층이다.** 그쪽은 2026-09-09 에 헛경보를 죽이려고
                                                             #   「어느 스크롤에서도 **한 번도** 못 눌린 것만 신고」로 바꿨는데, 이 결함은

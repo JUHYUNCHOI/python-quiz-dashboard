@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef, useLayoutEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 /* ⭐ 2026-09-27 선생님: *"버튼 순서나 처음부터 시작하는 버튼도 없어. 디자이너? 뭐지?
@@ -18,13 +18,38 @@ import { CodeBlock } from "@/components/quest/shared";
    quest 색으로 안 바꾼 것이다. **accent 는 반드시 `A` 를 넘겨라.** */
 const A = "#d97706";
 const NW = { whiteSpace: "nowrap" };
-/** 말풍선이 격자 위에 뜰 자리 — 이만큼 미리 비워 둬야 격자를 안 가린다. */
+/** 말풍선이 격자 위에 뜰 자리 — 이만큼 미리 비워 둬야 격자를 안 가린다.
+    ⚠️ 이건 **최소값**이다. 실제로 쓰는 값은 아래 `useBubbleH` 가 **잰 높이**다.
+    🐛 2026-09-27: 이게 **고정값 78** 이었다. 한국어에서 절이 네 개인 걸음
+    (8·11·12)은 말풍선이 **97px** 로 자라는데 비워 둔 자리는 78px 이라,
+    넘친 19px 이 바로 위의 **「갈 수 있다고 확인한 칸 N / 20 칸」 줄을 덮었다.**
+    말풍선은 `zIndex 20` 불투명이라 그 걸음에서 **카운터가 화면에서 사라진다.**
+    선생님이 캡처하신 8걸음이 바로 그 자리다. 학생도 *"8단계에서 숫자가
+    사라짐"* 이라고 먼저 보고했다 — 맞는 관찰이었다.
+    ⚠️ **`innerText` 로는 못 잡는다** — 글자는 DOM 에 있고 히트테스트도 통과한다
+    (`pointerEvents: "none"`). 틀린 건 **그려지는 순서**뿐이다. 좌표로 재라. */
 const BUBBLE_H = 78;
 /** 「위」 유령 칸이 격자보다 **한 칸 위**에 있다. 말풍선이 그걸 덮으면
     *"위쪽은 칸이 없어요"* 라고 말하면서 **바로 그 자리를 가린다**(선생님 2026-09-27
     *"가려지잖아"*). 말풍선 자리를 한 칸(42+8) 더 비운다. */
 const GHOST_ROW = 50;
 const KA = { wordBreak: "keep-all" };
+
+/** 말풍선이 실제로 차지하는 높이를 재서, 자리를 그만큼 비우게 한다.
+    글자 수에 따라 41~97px 로 달라지므로 상수로는 못 맞춘다.
+    ⚠️ 말풍선 **너비는 격자 폭으로 고정**이라, 이 값이 바뀌어도 줄바꿈이 다시
+    바뀌지 않는다 — 잰다 → 자리를 넓힌다 → 또 잰다 로 도는 일이 없다. */
+function useBubbleH(dep) {
+  const ref = useRef(null);
+  const [h, setH] = useState(BUBBLE_H);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measured = Math.ceil(el.getBoundingClientRect().height);
+    if (measured > 0) setH(Math.max(BUBBLE_H, measured));
+  }, [dep]);
+  return [ref, h];
+}
 
 /* ───────────────── Height-reachability concept sim ─────────────────
    Each cell is a building HEIGHT. Fluffy hops to a neighbor only when
@@ -463,6 +488,14 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
      자세히 본 두 번의 pop 이 「한 칸씩」을 이미 가르쳤으니, 여기서는 그 되풀이를
      묶어도 거짓이 아니다. 묶는다는 말을 첫 겹에서 대놓고 한다. */
   let waveNo = 0;
+  /* ⭐ (b) 2026-09-27 PM 판정 — 선생님: *"4개의 기호가 동시에?"*
+     첫 칸은 방향을 하나씩 밟는데(2~6걸음), 그다음 칸부터 갑자기 넷이 한 번에 뜬다.
+     pedagogy: *"압축할 땐 **압축한다고 말하고** 압축하라 — 브리핑 문장이
+     학생이 읽는 텍스트 어디에도 없다"*(grep 으로 확인).
+     걸음을 쪼개지 않는다(그건 오전에 걷어낸 「지루하다」로 되돌아간다). **첫 요약
+     걸음에만 한 줄**을 얹는다 — 이 파일의 `queueNamed`·`isRepeatVisit` 과 같은
+     「한 번만 켜지는 플래그」 패턴이다. */
+  let briefed = false;
   /* ⭐ 2026-09-27 선생님: *"아니야. **내가 있는것 기준으로 하나씩** 되어야지
      **퍼져가는것 이해가 안돼**"* — 겹(wave)을 걷어낸다.
      겹은 「한 번에 여러 칸이 동시에」라 **서 있는 자리가 사라진다.** 학생이 보는 건
@@ -481,32 +514,44 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
        방향 넷을 **이름으로** 말하고, 갔던 곳·막힘·없음을 그대로 드러낸다. */
     const added = [], blocked = [], goKo = [], seenKo = [], blockKo = [], noneKo = [];
     const goEn = [], seenEn = [], blockEn = [], noneEn = [];
+    /* ⭐ (c) 2026-09-27 ux: *"배지는 **공간 순서**(위/아래/왼쪽/오른쪽)인데 글은
+       **의미 순서**(통과 먼저, 막힘 나중)라 읽으면서 눈이 왔다갔다한다."*
+       묶음은 그대로 둔다(안 묶으면 늘 네 마디가 된다 — `shorter_not_longer`).
+       대신 **묶음의 차례를 「그 결과가 처음 나온 방향」 순서**로 놓는다.
+       그러면 글이 배지를 위→아래→왼쪽→오른쪽으로 훑는다. */
+    const firstAt = { pass: 99, visited: 99, blocked: 99, oob: 99 };
     const dirStatus = [null, null, null, null];
     for (const [di, d] of DIRS.entries()) {
       const nr = r + d.dr, nc = c + d.dc;
-      if (nr < 0 || nr >= R || nc < 0 || nc >= Cn) { dirStatus[di] = "oob"; noneKo.push(d.ko); noneEn.push(d.en); continue; }
-      if (visited[nr][nc]) { dirStatus[di] = "visited"; seenKo.push(d.ko); seenEn.push(d.en); continue; }
+      const mark = (k) => { if (firstAt[k] === 99) firstAt[k] = di; };
+      if (nr < 0 || nr >= R || nc < 0 || nc >= Cn) { dirStatus[di] = "oob"; mark("oob"); noneKo.push(d.ko); noneEn.push(d.en); continue; }
+      if (visited[nr][nc]) { dirStatus[di] = "visited"; mark("visited"); seenKo.push(d.ko); seenEn.push(d.en); continue; }
       if (Math.abs(H[nr][nc] - H[r][c]) < D) {
         visited[nr][nc] = true;
         queue = [...queue, [nr, nc]];
         count++;
-        dirStatus[di] = "pass"; added.push([nr, nc]); goKo.push(d.ko); goEn.push(d.en);
+        dirStatus[di] = "pass"; mark("pass"); added.push([nr, nc]); goKo.push(d.ko); goEn.push(d.en);
       } else {
-        dirStatus[di] = "blocked"; blocked.push([nr, nc]); blockKo.push(d.ko); blockEn.push(d.en);
+        dirStatus[di] = "blocked"; mark("blocked"); blocked.push([nr, nc]); blockKo.push(d.ko); blockEn.push(d.en);
       }
     }
     const here = t(E, `Now I'm on (${r + 1},${c + 1}).`, `이제 (${r + 1},${c + 1}) 에 서 있어요.`);
-    const ko = [], en = [];
-    if (goKo.length)    { ko.push(`${joinKo(goKo, "으로", "로")} 갈 수 있어요`);        en.push(`${goEn.join(", ")} — I can go`); }
-    if (seenKo.length)  { ko.push(`${joinKo(seenKo, "은", "는")} 갔던 곳이라 안 가요`);        en.push(`${seenEn.join(", ")} — been there`); }
-    if (blockKo.length) { ko.push(`${joinKo(blockKo, "은", "는")} 높이 차이가 커서 못 가요`);           en.push(`${blockEn.join(", ")} — blocked`); }
-    if (noneKo.length)  { ko.push(`${joinKo(noneKo, "은", "는")} 칸이 없어요`);         en.push(`${noneEn.join(", ")} — no cell`); }
-    const tail = "\n" + t(E, en.join(". ") + ".", ko.join(". ") + ".");
+    const parts = [
+      goKo.length    && { at: firstAt.pass,    ko: `${joinKo(goKo, "으로", "로")} 갈 수 있어요`,            en: `${goEn.join(", ")} — I can go` },
+      seenKo.length  && { at: firstAt.visited, ko: `${joinKo(seenKo, "은", "는")} 갔던 곳이라 안 가요`,      en: `${seenEn.join(", ")} — been there` },
+      blockKo.length && { at: firstAt.blocked, ko: `${joinKo(blockKo, "은", "는")} 높이 차이가 커서 못 가요`, en: `${blockEn.join(", ")} — blocked` },
+      noneKo.length  && { at: firstAt.oob,     ko: `${joinKo(noneKo, "은", "는")} 칸이 없어요`,              en: `${noneEn.join(", ")} — no cell` },
+    ].filter(Boolean).sort((a, b) => a.at - b.at);
+    const tail = "\n" + t(E, parts.map(x => x.en).join(". ") + ".", parts.map(x => x.ko).join(". ") + ".");
+    const brief = briefed ? "" : t(E,
+      "From here on I check all four directions in one go.\n",
+      "여기서부터는 네 방향을 한 번에 봐요.\n");
+    briefed = true;
     trace.push({
       ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 4, dirStatus,
       wave: added, blocked, popped: [[r, c]],
       status: added.length ? "pass" : "blocked",
-      msg: here + tail,
+      msg: brief + here + tail,
     });
   }
 
@@ -551,12 +596,23 @@ const BFS_PRESETS = [
    그냥 이 시뮬이 1걸음으로 돌아갈 뿐, 학습 데이터 손실이 아니다.
    기존 `quest-pos-${pathname}`(챕터/섹션 위치, *App.jsx 168개가 씀) 과도
    다른 키 네임스페이스(`quest-step-`)를 써서 절대 겹치지 않게 한다. */
+/* ⭐ 2026-09-27 — **`localStorage` → `sessionStorage`.** 독립 검토 셋이 같은 곳에 모였다:
+   · frontend: *"`localStorage` 는 **탭을 새로 열어도** 값이 공유돼 답이 또 샌다.
+     `sessionStorage` 는 탭마다 따로라 그 위험이 없고, 새로고침 생존은 그대로다."*
+   · ux: *"**(c) 오늘 처음이면 1번부터, 오늘 안에서는 기억**이 맞다. 며칠 뒤 다시 열면
+     «이어서 하면 되는 화면»이 아니라 **«이미 끝난 그림»**으로 읽힌다."*
+   · pedagogy: *"2쪽이 «답은 18인데 어느 두 칸이 막혔을까요?» 라고 **질문을 걸어 놓고**
+     이 시뮬이 그 답을 밝히는 자리다. 영구 저장이면 **질문을 다시 읽자마자 답이 떠 있다.**"*
+   🚨 pedagogy 가 새로 찾은 위험 — **공유 기기**: 학원·가정 컴퓨터에서 학생 A 가
+   결론까지 본 뒤 학생 B 가 **처음** 열면 시뮬이 결론에서 시작한다.
+   `sessionStorage` 는 탭을 닫으면 사라져 이것도 같이 막는다.
+   ⚠️ 이건 **학생 진도가 아니라 UI 위치 캐시**라 옮겨도 잃을 데이터가 없다. */
 const CITY_TOUR_STEP_KEY = "quest-step-mcc20citytour-bfsprocess";
 
 function readCityTourSteps() {
   try {
     if (typeof window === "undefined") return { main: 0, trap: 0 };
-    const raw = window.localStorage.getItem(CITY_TOUR_STEP_KEY);
+    const raw = window.sessionStorage.getItem(CITY_TOUR_STEP_KEY);
     if (!raw) return { main: 0, trap: 0 };
     const parsed = JSON.parse(raw);
     return {
@@ -577,22 +633,50 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
   useEffect(() => {
     try {
       if (typeof window === "undefined") return;
-      window.localStorage.setItem(CITY_TOUR_STEP_KEY, JSON.stringify(stepByPreset));
+      window.sessionStorage.setItem(CITY_TOUR_STEP_KEY, JSON.stringify(stepByPreset));
     } catch {
       // 저장소 차단·가득 참 등 — 조용히 무시. 위치 기억만 안 될 뿐이다.
     }
   }, [stepByPreset]);
   const step = stepByPreset[presetKey] ?? 0;
-  const setStep = (v) =>
+  // 이번 방문에 **직접 눌렀나** — 눌렀으면 뚜껑을 푼다(복원값에만 씌우는 뚜껑이다)
+  const [touchedStep, setTouchedStep] = useState(false);
+  /* 🐛 2026-09-27 실측(모바일 375×812): 스크롤 460px 에서 말풍선이 66~125px 에 놓이는데
+     상단 고정 바 둘이 **0~105px** 을 덮는다(헤더 z-40 + quest 바 z-30). 말풍선은 z-20 이라
+     그 아래로 들어가 **59px 중 39px 이 사라진다.** 선생님이 하루 종일 말씀하신
+     *"말풍선이 잘 안보여"* 가 모바일에선 디자인이 아니라 **스크롤 자리** 때문이었다.
+     z 를 올려 고정 바를 덮는 건 더 나쁘다 — 걸음을 누르면 화면을 맞춰 준다.
+     ⚠️ 복원값에는 안 건다. 학생이 **직접 누른 뒤**에만 움직인다(`touchedStep`). */
+  const simRef = useRef(null);
+  useEffect(() => {
+    if (!touchedStep) return;
+    const el = simRef.current;
+    if (!el || typeof window === "undefined") return;
+    const SAFE_TOP = 118;           // 고정 바 105px + 숨 쉴 자리
+    const r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) return;   // 시뮬이 화면 밖이면 건드리지 않는다
+    if (r.top >= SAFE_TOP) return;                            // 이미 잘 보인다
+    window.scrollBy(0, r.top - SAFE_TOP);
+  }, [step, presetKey, touchedStep]);
+  const setStep = (v) => {
+    setTouchedStep(true);
     setStepByPreset(prev => ({
       ...prev,
       [presetKey]: typeof v === "function" ? v(prev[presetKey] ?? 0) : v,
     }));
+  };
   const preset = BFS_PRESETS.find(p => p.key === presetKey);
   const trace = useMemo(() => buildBfsProcessTrace(preset.H, preset.D, E, presetKey), [presetKey, E]);
   const maxStep = trace.length - 1;
-  const idx = Math.min(step, maxStep);
+  /* ⭐ pedagogy 판정: *"«초기화»가 아니라 **결론 한 걸음 앞에서 멈춰 세운다**."*
+     돌아왔을 때 마지막 걸음(「답은 18이에요」)이 떠 있으면 **스스로 발견하기 전에
+     결론부터** 보게 된다. 복원값에만 뚜껑을 씌운다 — **누르는 건 끝까지 간다.** */
+  const restoreCap = Math.max(0, maxStep - 1);
+  const idx = Math.min(step, touchedStep ? maxStep : restoreCap);
   const cur = trace[idx];
+  /* 🐛 (a) 2026-09-27 — 말풍선 자리를 **실제 높이만큼** 비운다. 고정 78px 이던 탓에
+     절 네 개짜리 걸음(8·11·12)에서 97px 로 자라 위의 카운터 줄을 덮었다. */
+  const [bubbleRef, bubbleH] = useBubbleH(cur?.msg);
   const R = preset.H.length, Cn = preset.H[0].length;
 
   // 걸음은 프리셋마다 따로 산다 — 돌아오면 보던 자리 그대로다.
@@ -699,8 +783,13 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             **absolute + zIndex, 대상에 앵커, 아래 콘텐츠를 좀 가려도 OK.**
             나는 흐름 안에 블록으로 박아 뒀다 — 「위치 고정」의 변종일 뿐이었다.
             이제 격자를 `relative` 로 감싸고 말풍선이 **지금 보는 칸 옆에 떠서** 따라다닌다. */}
-        <div style={{ position: "relative", display: "flex", justifyContent: "center",
-          paddingTop: BUBBLE_H + 10 + GHOST_ROW, marginBottom: 10 }}>
+        {/* 🐛 2026-09-27: 유령 칸 자리를 **위에만** 비워 뒀다(`paddingTop`). 맨 아랫줄 칸에
+            서면 「아래」 유령 칸이 격자 밖 42px 로 내려가 **⏮ 처음부터 · ◀ 이전 버튼을 덮었다.**
+            `check-sim-overlay-anchor.mjs` 가 걸음 15·17 에서 잡았다 — 그 검사기가 이 quest 를
+            처음으로 실제로 밟은 걸음이다(그전엔 시뮬이 5쪽이라 못 들어갔다).
+            **아래에도 같은 만큼 비운다.** */}
+        <div ref={simRef} style={{ position: "relative", display: "flex", justifyContent: "center",
+          paddingTop: bubbleH + 10 + GHOST_ROW, paddingBottom: GHOST_ROW, marginBottom: 10 }}>
           {(() => {
             const tone = {
               pass:    { bg: "#ecfdf5", bd: "#059669", fg: "#065f46" },
@@ -721,9 +810,9 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
                그대로 맞춘다: 말풍선은 격자 **바깥 위**에 뜨고(자리를 미리 비워 둔다),
                꼬리가 **지금 보는 칸의 세로줄**을 가리킨다. 격자는 하나도 안 가린다. */
             return (
-              <div style={{
+              <div ref={bubbleRef} style={{
                 position: "absolute", zIndex: 20, left: `calc(50% - ${gridW / 2}px)`,
-                bottom: `calc(100% - ${BUBBLE_H}px)`, width: gridW, pointerEvents: "none",
+                bottom: `calc(100% - ${bubbleH}px)`, width: gridW, pointerEvents: "none",
               }}>
                 <div style={{
                   background: tone.bg, border: `2px solid ${tone.bd}`, color: tone.fg,
@@ -755,7 +844,7 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
                  **격자가 아니라 바깥 상자**다. 말풍선 자리로 `paddingTop: BUBBLE_H + 10` 을
                  준 뒤로 그만큼 **위로 밀려 있었다.** 격자 시작점에 맞춘다. */
               <div style={{ position: "absolute", zIndex: 5, pointerEvents: "none",
-                left: `calc(50% - ${gridW / 2}px)`, top: BUBBLE_H + 10 + GHOST_ROW, width: gridW, height: gridH }}>
+                left: `calc(50% - ${gridW / 2}px)`, top: bubbleH + 10 + GHOST_ROW, width: gridW, height: gridH }}>
                 {DIRS.map((d, di) => {
                   const nr = pr + d.dr, nc = pc + d.dc;
                   const outside = nr < 0 || nr >= R || nc < 0 || nc >= Cn;
@@ -774,7 +863,13 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
                       position: "absolute",
                       left: nc * (CELL + GAP), top: nr * (CELL + GAP),
                       width: CELL, height: CELL, borderRadius: 7, boxSizing: "border-box",
-                      border: isNow ? `3px dashed ${A}` : `2px dashed ${seen ? "#cbd5e1" : "#fcd34d"}`,
+                      /* ⭐ 2026-09-27 검토: 격자 **밖**(없는 칸)과 격자 **안**(있는데 아직
+                         확인 전인 칸)이 **똑같은 노란 점선**이었다 — 한 모양이 두 뜻을 말했다
+                         (`feedback_same_number_two_meanings`). 모양을 가른다:
+                         **점선 = 칸이 없다 · 실선 = 칸은 있고 아직 확인 전**.
+                         범례에 항목을 더하지 않는다 — 이미 일곱 개다. */
+                      border: `${isNow ? 3 : 2}px ${outside ? "dashed" : "solid"} ${
+                        isNow ? A : seen ? "#cbd5e1" : "#fcd34d"}`,
                       background: outside ? (isNow ? "rgba(217,119,6,.12)" : "rgba(148,163,184,.10)") : "transparent",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       fontSize: 9, fontWeight: 900,

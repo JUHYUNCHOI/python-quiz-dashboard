@@ -173,7 +173,7 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Feel the rule. Slide D up and down and watch the reachable region flood-fill out from Fluffy's start.",
+        "Slide D up and down and watch how the reachable area changes.",
         "D 를 바꾸면 갈 수 있는 곳이 어떻게 달라지는지 봐요."),
       content: <Mcc20CityTourBfsSim E={E} />,
     },
@@ -182,7 +182,7 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The edge rule is strict: the height gap must be LESS than D, not equal. A gap exactly equal to D is blocked.",
+        "You can only hop when the height gap is smaller than D.",
         "높이 차가 D 보다 작아야만 건너갈 수 있어요."),
       question: t(E,
         "Fluffy is on a building of height 10 with D = 3. Which neighbor can Fluffy hop to?",
