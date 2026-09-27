@@ -20,6 +20,10 @@ const A = "#d97706";
 const NW = { whiteSpace: "nowrap" };
 /** 말풍선이 격자 위에 뜰 자리 — 이만큼 미리 비워 둬야 격자를 안 가린다. */
 const BUBBLE_H = 78;
+/** 「위」 유령 칸이 격자보다 **한 칸 위**에 있다. 말풍선이 그걸 덮으면
+    *"위쪽은 칸이 없어요"* 라고 말하면서 **바로 그 자리를 가린다**(선생님 2026-09-27
+    *"가려지잖아"*). 말풍선 자리를 한 칸(42+8) 더 비운다. */
+const GHOST_ROW = 50;
 const KA = { wordBreak: "keep-all" };
 
 /* ───────────────── Height-reachability concept sim ─────────────────
@@ -402,11 +406,13 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
 
     {
       trace.push({
-        ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 0, status: "pop",
+        ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 0,
+        dirStatus: [null, null, null, null], status: "pop",
         msg: t(E,
           `From (${r + 1},${c + 1}) — up, down, left, right.\nOne at a time.`,
           `(${r + 1},${c + 1}) 에서 위·아래·왼쪽·오른쪽.\n하나씩 봐요.`),
       });
+      const dirStatus = [null, null, null, null];
       for (const [di, d] of DIRS.entries()) {
         const nr = r + d.dr, nc = c + d.dc;
         const inBounds = nr >= 0 && nr < R && nc >= 0 && nc < Cn;
@@ -440,8 +446,9 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
         }
         /* ⭐ `dirIdx` 를 같이 넘긴다 — 격자 **밖** 이웃은 `checking` 이 null 이라
            칸 좌표로는 가리킬 수 없다. 「위 없음」 자리를 화면에 표시하려면 방향이 필요하다. */
+        dirStatus[di] = status;
         trace.push({ ...snap(), current: [r, c], checking: inBounds ? [nr, nc] : null,
-          dirIdx: di, checkedDirs: di + 1, status, msg });
+          dirIdx: di, checkedDirs: di + 1, dirStatus: [...dirStatus], status, msg });
       }
     }
     popIdx++;
@@ -474,17 +481,18 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
        방향 넷을 **이름으로** 말하고, 갔던 곳·막힘·없음을 그대로 드러낸다. */
     const added = [], blocked = [], goKo = [], seenKo = [], blockKo = [], noneKo = [];
     const goEn = [], seenEn = [], blockEn = [], noneEn = [];
-    for (const d of DIRS) {
+    const dirStatus = [null, null, null, null];
+    for (const [di, d] of DIRS.entries()) {
       const nr = r + d.dr, nc = c + d.dc;
-      if (nr < 0 || nr >= R || nc < 0 || nc >= Cn) { noneKo.push(d.ko); noneEn.push(d.en); continue; }
-      if (visited[nr][nc]) { seenKo.push(d.ko); seenEn.push(d.en); continue; }
+      if (nr < 0 || nr >= R || nc < 0 || nc >= Cn) { dirStatus[di] = "oob"; noneKo.push(d.ko); noneEn.push(d.en); continue; }
+      if (visited[nr][nc]) { dirStatus[di] = "visited"; seenKo.push(d.ko); seenEn.push(d.en); continue; }
       if (Math.abs(H[nr][nc] - H[r][c]) < D) {
         visited[nr][nc] = true;
         queue = [...queue, [nr, nc]];
         count++;
-        added.push([nr, nc]); goKo.push(d.ko); goEn.push(d.en);
+        dirStatus[di] = "pass"; added.push([nr, nc]); goKo.push(d.ko); goEn.push(d.en);
       } else {
-        blocked.push([nr, nc]); blockKo.push(d.ko); blockEn.push(d.en);
+        dirStatus[di] = "blocked"; blocked.push([nr, nc]); blockKo.push(d.ko); blockEn.push(d.en);
       }
     }
     const here = t(E, `Now I'm on (${r + 1},${c + 1}).`, `이제 (${r + 1},${c + 1}) 에 서 있어요.`);
@@ -495,7 +503,7 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
     if (noneKo.length)  { ko.push(`${joinKo(noneKo, "은", "는")} 칸이 없어요`);         en.push(`${noneEn.join(", ")} — no cell`); }
     const tail = "\n" + t(E, en.join(". ") + ".", ko.join(". ") + ".");
     trace.push({
-      ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 4,
+      ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 4, dirStatus,
       wave: added, blocked, popped: [[r, c]],
       status: added.length ? "pass" : "blocked",
       msg: here + tail,
@@ -692,7 +700,7 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             나는 흐름 안에 블록으로 박아 뒀다 — 「위치 고정」의 변종일 뿐이었다.
             이제 격자를 `relative` 로 감싸고 말풍선이 **지금 보는 칸 옆에 떠서** 따라다닌다. */}
         <div style={{ position: "relative", display: "flex", justifyContent: "center",
-          paddingTop: BUBBLE_H + 10, marginBottom: 10 }}>
+          paddingTop: BUBBLE_H + 10 + GHOST_ROW, marginBottom: 10 }}>
           {(() => {
             const tone = {
               pass:    { bg: "#ecfdf5", bd: "#059669", fg: "#065f46" },
@@ -747,11 +755,18 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
                  **격자가 아니라 바깥 상자**다. 말풍선 자리로 `paddingTop: BUBBLE_H + 10` 을
                  준 뒤로 그만큼 **위로 밀려 있었다.** 격자 시작점에 맞춘다. */
               <div style={{ position: "absolute", zIndex: 5, pointerEvents: "none",
-                left: `calc(50% - ${gridW / 2}px)`, top: BUBBLE_H + 10, width: gridW, height: gridH }}>
+                left: `calc(50% - ${gridW / 2}px)`, top: BUBBLE_H + 10 + GHOST_ROW, width: gridW, height: gridH }}>
                 {DIRS.map((d, di) => {
                   const nr = pr + d.dr, nc = pc + d.dc;
                   const outside = nr < 0 || nr >= R || nc < 0 || nc >= Cn;
                   const isNow = cur.dirIdx === di;
+                  /* ⭐ 2026-09-27 선생님: *"**동서남북 다 갈수 있는곳 표시하고 또 지금
+                     갈수 있는곳** 등등 더 좋게 표현할 방법없나?"*
+                     네 방향 결과가 **글에만** 있었다. 자리마다 기호를 찍어
+                     **글을 안 읽어도** 「어디로 갈 수 있나」가 보이게 한다. */
+                  const st = cur.dirStatus ? cur.dirStatus[di] : null;
+                  const mark = { pass: "✓", blocked: "✕", oob: "–", visited: "↺" }[st] || "";
+                  const markColor = { pass: "#047857", blocked: "#dc2626", oob: "#94a3b8", visited: "#0e7490" }[st] || "#cbd5e1";
                   // 격자 밖이면 «그 자리» 를 유령 칸으로, 안이면 점선 테두리만
                   const seen = cur.checkedDirs != null && di < cur.checkedDirs;
                   return (
@@ -762,9 +777,10 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
                       border: isNow ? `3px dashed ${A}` : `2px dashed ${seen ? "#cbd5e1" : "#fcd34d"}`,
                       background: outside ? (isNow ? "rgba(217,119,6,.12)" : "rgba(148,163,184,.10)") : "transparent",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 10, fontWeight: 800, color: isNow ? A : "#cbd5e1",
+                      fontSize: outside ? 9 : 15, fontWeight: 900,
+                      color: mark ? markColor : (isNow ? A : "#cbd5e1"),
                       transition: "all 160ms",
-                    }}>{outside ? t(E, "none", "없음") : ""}</div>
+                    }}>{mark || (outside ? t(E, "none", "없음") : "")}</div>
                   );
                 })}
               </div>
@@ -823,11 +839,22 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             `feedback_screen_must_not_rely_on_memory` — 화면은 앞 쪽 기억에 기대면 안 된다. */}
         <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap",
           fontSize: 10.5, color: "#92400e", marginBottom: 8, ...KA }}>
+          {/* ⭐ 2026-09-27: 네 자리에 기호(✓·✕·–·↺)를 찍었으면 **그 뜻도 여기 있어야** 한다.
+              색만 설명하고 기호를 안 밝히면 학생이 또 짐작한다. */}
+          {[
+            { sym: "✓", c: "#047857", ko: "갈 수 있음", en: "can go" },
+            { sym: "✕", c: "#dc2626", ko: "막힘", en: "blocked" },
+            { sym: "↺", c: "#0e7490", ko: "갔던 곳", en: "been there" },
+            { sym: "–", c: "#94a3b8", ko: "칸 없음", en: "no cell" },
+          ].map(k => (
+            <span key={k.ko} style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+              <b style={{ color: k.c, fontSize: 13 }}>{k.sym}</b>{t(E, k.en, k.ko)}
+            </span>
+          ))}
+          <span style={{ color: "#cbd5e1" }}>|</span>
           {[
             { bg: "#34d399", bd: "#047857", ko: "이번에 새로", en: "new now" },
-            { bg: "#fee2e2", bd: "#dc2626", ko: "막힘", en: "blocked" },
             { bg: "#d1fae5", bd: "#6ee7b7", ko: "이미 감", en: "already in" },
-            { bg: "#f3f4f6", bd: "#e5e7eb", ko: "아직", en: "not yet" },
           ].map(k => (
             <span key={k.ko} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
               <span style={{ width: 11, height: 11, borderRadius: 3, background: k.bg,
