@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { C, t } from "@/components/quest/theme";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#059669";
 const ABg = "#ecfdf5";
@@ -59,7 +60,7 @@ const VIZ_CODE = [
 ];
 
 export function RowColumnFillViz({ E }) {
-  const [step, setStep] = useState(0);
+  const { safe: step, setIdx, total: stepsTotal } = useTraceStep(ALL_STEPS.length);
   const [flashCol, setFlashCol] = useState(-1);
 
   const cur = ALL_STEPS[step];
@@ -79,9 +80,6 @@ export function RowColumnFillViz({ E }) {
     }
     setFlashCol(-1);
   }, [step]);
-
-  const next = () => { if (!isDone) setStep(s => s + 1); };
-  const reset = () => { setStep(0); setFlashCol(-1); };
 
   // Min value for final highlight
   const finalMin = cur.type === "done" ? cur.minVal : null;
@@ -312,38 +310,8 @@ export function RowColumnFillViz({ E }) {
       </div>
 
       {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 12 }}>
-        {!isDone ? (
-          <>
-            <button onClick={next} style={{
-              padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: "none", cursor: "pointer", color: "#fff",
-              background: "linear-gradient(135deg,#047857,#059669)",
-              boxShadow: "0 3px 12px rgba(5,150,105,.3)",
-            }}>▶ {E ? "Next step" : "다음 스텝"}</button>
-          </>
-        ) : (
-          <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `1px solid ${ABd}`, background: ABg,
-            color: A, cursor: "pointer",
-          }}>↺ {E ? "Restart" : "처음부터"}</button>
-        )}
-        {step > 0 && !isDone && (
-          <button onClick={reset} style={{
-            padding: "8px 12px", borderRadius: 10, fontSize: 11, fontWeight: 700,
-            border: `1.5px solid ${C.border}`, background: C.card,
-            color: C.dim, cursor: "pointer",
-          }}>↺</button>
-        )}
-      </div>
-
-      {/* Step counter */}
-      <div style={{
-        textAlign: "center", marginTop: 6, fontSize: 10, color: C.dim,
-        fontFamily: "'JetBrains Mono',monospace", fontWeight: 700,
-      }}>
-        {step}/{ALL_STEPS.length - 1}
+      <div style={{ marginTop: 12 }}>
+        <SimNav idx={step} total={stepsTotal} onIdx={setIdx} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
