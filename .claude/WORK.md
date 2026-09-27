@@ -6630,3 +6630,38 @@ sticky 유래만 더해졌다.
 **오늘 학생 보고 전부를 함께 넘겨서 걸음 구조 자체를 다시 설계하는 게 다음 세션 첫 작업이다.**
 
 ### ✅ 동결 승인: hps (2026-09-27) — 범위: StepHeader/SimNav accent 값 5곳을 CLAUDE.md 예시색(#0891b2·#d97706) 복붙에서 quest 고유색(A=#059669)으로. 🔒 SOLUTION_CODE/*_PY/*_CPP 등 보호 변수는 손대지 않음(스타일 상수만).
+
+## ✅ A조 19개 시각 일관성 정리 완료 (2026-09-27, frontend-engineer)
+
+`check-bubble-not-terminal.py` · `check-sim-uses-simnav.py` 로 A조 19개 전수 확인.
+**실제로 고친 건 8개, 나머지 11개는 검사기가 오탐이거나 「정당한 예외」로 판단해 그대로 뒀다.**
+
+**고침 (커밋 8개):**
+- `feedcows` — 걸음 설명(msg/breakdown)이 까만 터미널 상자였다 → mexes 참고 구현대로
+  말풍선(밝은 바탕+강조테두리)으로, 걸음 종류(place/skip/done)별 색 적용.
+- `checkups` · `hps` — SimNav accent 가 CLAUDE.md 예시색(#0891b2·#d97706) 복붙이었다
+  → `accent={A}` 로. 둘 다 🔒 동결 quest라 WORK.md 마커 필요(하나는 기존 마커 재사용,
+  hps 는 이번에 새로 추가).
+- `fans` · `fences` · `lc3` · `lc560` · `mcc15bahasaf` · `mcc15equation` · `mcc15isthmus` ·
+  `mcc19bakery` — 손으로 만든 ◀▶ 버튼(+navBtn 헬퍼)을 `useTraceStep`+`SimNav` 로 교체.
+  브라우저로 6개 직접 열어 걸음 수·accent 색이 맞는지 확인(lc3 9걸음, mcc19bakery 3걸음,
+  mcc15equation 8걸음, mcc15isthmus 6/8·초기값 5 유지 등). fans·fences 는 코드 패턴이
+  동일해 esbuild 파스 + 로직 검토로 확인(그 sim 챕터까지 클릭으로 못 감).
+
+**안 고침 (검사기가 봤지만 사람이 읽고 「정당하다」고 판단):**
+- `mcc19palindrome`·`mcc20cipher`·`mcc21carrots`·`mcc20kitty`·`mcc22cardshark` 의
+  까만 상자 7곳 — 전부 **코드 스니펫이거나 값 표시 상자**(예: "지금까지 3의 배수: 7",
+  "score1−score2=6", "example input/output"), 학생에게 말 거는 글이 아니다.
+- `checkups`(3곳)·`hps`(2곳)·`feedcows`(1곳)의 "말풍선이 흐름에 박혀 있다" 플래그 —
+  **참고 구현 `mexes/sims.jsx` 자체가 `position: relative`** 라 이 여섯 곳과 모양이
+  똑같다. `absolute` 앵커 요구는 citytour 같은 격자-오버레이 전용 케이스로 읽었다.
+- `mcc22cardshark` StackOrderSim 의 ◀▶ 3쌍 — 걸음 네비가 아니라 **순서 재배치 컨트롤**
+  (스택별 위치 swap 버튼). `bovshuffle` 의 "▶ Apply shuffle" — 실행형 액션 버튼.
+  `cowntact` 의 "⏭ Step" — Play/Pause 가 있는 자동재생 시뮬레이터 컨트롤. 셋 다 SimNav
+  가 표현하는 "고정 순서 걸음"이 아니다.
+- `hps`·`checkups`·`cheese` 의 accent 불일치 나머지 — `hps` 의 dc2626(Elsie)/A(Bessie),
+  `chapters.jsx`의 brute/smart red/green 은 의도된 대비. `checkups` Pair Y 패널·CodeWalk
+  섹션색, `cheese` 의 `accentColor="#7c5cfc"`(ProgressiveCodeStepper) 는 SimNav 와
+  다른 컴포넌트의 독립적 색상 관례(수십 개 quest 가 이렇게 쓴다) — 복붙 감염이 아니다.
+
+**커밋 8개, 전부 main 에 로컬 커밋만(푸시 안 함).** 나머지 11개는 무변경.
