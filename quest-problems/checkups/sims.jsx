@@ -833,7 +833,7 @@ export function CheckupsMirrorSim({ E }) {
         )}
       </div>
 
-      <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
     </div>
   );
 }
@@ -988,7 +988,7 @@ export function CheckupsGrowSim({ E }) {
         </div>
       )}
 
-      <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+      <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} showLabels isEn={E} />
     </div>
   );
 }
@@ -1117,7 +1117,7 @@ export function CheckupsTrySim({ E }) {
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={"#0891b2"} showLabels isEn={E} />
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
@@ -1205,7 +1205,7 @@ export function CheckupsReuseSim({ E }) {
       </div>
 
       <div style={{ marginTop: 10 }}>
-        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={"#0891b2"} showLabels isEn={E} />
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
@@ -1315,7 +1315,7 @@ export function CheckupsKeyCodeSim({ E, lang = "py" }) {
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
@@ -1574,7 +1574,7 @@ export function CheckupsExpandSim({ E }) {
       )}
 
       <div style={{ height: 12 }} />
-      <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
     </div>
   );
 }
@@ -1669,7 +1669,7 @@ export function CheckupsWindowSplitSim({ E }) {
           </div>
         )}
       </div>
-      <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
     </div>
   );
 }
@@ -1723,7 +1723,7 @@ export function CheckupsWindowRecapSim({ E }) {
         {[1, 2, 3, 4, 5, 6].map(p => <div key={p} style={{ width: TW, textAlign: "center", fontSize: 9.5, color: p >= wl && p <= wr ? "#0e7490" : C.dim, fontWeight: p >= wl && p <= wr ? 700 : 400 }}>{t(E, "spot", "자리")} {p}</div>)}
       </div>
       <div style={{ marginTop: 14 }}>
-        <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+        <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
@@ -1868,7 +1868,7 @@ export function CheckupsOutPrefixSim({ E }) {
         )}
       </div>
 
-      <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
     </div>
   );
 }
@@ -2043,7 +2043,7 @@ export function CheckupsInPrefixSim({ E }) {
       </div>
 
       <div style={{ height: 18 }} />
-      <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
     </div>
   );
 }
@@ -2276,7 +2276,7 @@ export function CheckupsFinalCodeSim({ E }) {
       {/* 카드 안 '단계' 네비 — quest 슬라이드 '이전/다음'과 헷갈리지 않게 화살표+카운터만 */}
       <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
         <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "monospace" }}>{t(E, "step", "단계")} {idx + 1}/{tot}</span>
-        <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#0891b2" isEn={E} />
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} isEn={E} />
       </div>
     </div>
   );
