@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
+import { SimNav, useTraceStep } from "@/components/quest/TraceStepper";
+
+const A = "#8b5cf6"; // mco15secret 보라 액센트 (components.jsx 와 동일)
 
 /* ================================================================
    Deep-Audit Sim: rotation check via a+a doubling
@@ -17,8 +20,8 @@ const PRESETS = [
 
 function SecretDeepAuditSim({ E }) {
   const [presetIdx, setPresetIdx] = useState(0);
-  const [offset, setOffset] = useState(0);
   const N = SIM_A.length;
+  const { idx: offset, setIdx: setOffset } = useTraceStep(N + 1);
   const b = PRESETS[presetIdx].b;
   const window = SIM_DOUBLED.slice(offset, offset + N);
   const isMatch = window.every((v, i) => v === b[i]);
@@ -92,23 +95,9 @@ function SecretDeepAuditSim({ E }) {
           </div>
         </div>
 
-        {/* offset slider */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, marginBottom: 12 }}>
-          <button onClick={() => setOffset(Math.max(0, offset - 1))} disabled={offset === 0} style={{
-            padding: "4px 10px", fontSize: 12, fontWeight: 700,
-            border: "1.5px solid #8b5cf6", background: offset === 0 ? "#eee" : "#fff",
-            color: offset === 0 ? "#999" : "#5b21b6", borderRadius: 6,
-            cursor: offset === 0 ? "not-allowed" : "pointer",
-          }}>◀</button>
-          <input type="range" min={0} max={N} value={offset}
-            onChange={e => setOffset(parseInt(e.target.value, 10))}
-            style={{ flex: 1, accentColor: "#8b5cf6" }} />
-          <button onClick={() => setOffset(Math.min(N, offset + 1))} disabled={offset === N} style={{
-            padding: "4px 10px", fontSize: 12, fontWeight: 700,
-            border: "1.5px solid #8b5cf6", background: offset === N ? "#eee" : "#fff",
-            color: offset === N ? "#999" : "#5b21b6", borderRadius: 6,
-            cursor: offset === N ? "not-allowed" : "pointer",
-          }}>▶</button>
+        {/* offset nav — 공용 SimNav (2026-09-27: 손으로 만든 ◀▶ 를 공용 컴포넌트로) */}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 10, marginBottom: 12 }}>
+          <SimNav idx={offset} total={N + 1} onIdx={setOffset} accent={A} showLabels isEn={E} />
         </div>
 
         {/* compare row */}
