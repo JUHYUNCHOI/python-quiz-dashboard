@@ -433,26 +433,41 @@ export function QuestBottomNav({
         )}
         <div style={{ display: "flex", alignItems: "center", gap: 8, pointerEvents: "none" }}>
           {/* 왼쪽 spacer — Next.js 개발 모드 자체 배지(devIndicators)가 화면 좌하단을
-              차지한다(로컬 개발자 화면에만 뜨고 프로덕션엔 없음). 「← 목록으로」 버튼을
-              오른쪽에 둬 그 배지와 안 겹치게 하고, 이 spacer 로 Prev/Next 그룹을 중앙에 맞춘다. */}
-          <div style={{ width: 38, flexShrink: 0 }} aria-hidden="true" />
-          <div style={{ flex: 1, display: "flex", gap: 12, justifyContent: "center", alignItems: "center", pointerEvents: "none" }}>
+              차지한다(로컬 개발자 화면에만 뜨고 프로덕션엔 없음). 「목록」 버튼을
+              오른쪽에 둬 그 배지와 안 겹치게 하고, 이 spacer 로 Prev/Next 그룹을 중앙에 맞춘다.
+              목록 버튼과 같은 폭(36px — citytour 처럼 화면 하단에 자체 ▶ 버튼을 둔 시뮬과
+              부딪히지 않을 만큼 좁혔다, 아래 목록 버튼 주석 참고)을 써서 대칭을 맞춘다. */}
+          <div style={{ width: 36, flexShrink: 0 }} aria-hidden="true" />
+          <div style={{ flex: 1, display: "flex", gap: "clamp(4px, 2vw, 12px)", justifyContent: "center", alignItems: "center", pointerEvents: "none", minWidth: 0 }}>
+            {/* 라벨을 "이전/다음" 에서 "이전 쪽/다음 쪽" 으로. (2026-09-27, 재검증 학생)
+                왜 — "이 버튼이 다른 문제로 넘어가는 버튼인가?" 라고 짐작했다. 실제 동작은
+                onPrev/onNext 가 스텝 인덱스(si)를 바꾸는 것 = **이 문제 안의 쪽 이동**이다.
+                "문제" 란 낱말은 넣지 않는다 — 그게 오해의 근원이었다.
+                ⚠️ 폭·글자 크기를 vw 로 재느라 clamp 를 썼다 — **기본 언어가 영어다**
+                (`contexts/language-context.tsx` 의 `useState<Language>('en')`).
+                "Next page ▶" 는 14px/padding 24px 로는 320px 폭에서 **111px 이 넘친다**
+                (playwright 실측, 목록 캡션 추가분 포함). ux 가 잰 "94→110px" 는 **한국어
+                기준**이라 영어에서 그대로 쓰면 잘린다 — 그래서 고정 padding/font 대신
+                clamp(뷰포트 폭 기반)로 좁은 화면에서만 줄고 넓은 화면(375+·데스크탑)에선
+                원래 크기(14px/24px)로 돌아오게 했다. 실측 0건(320/375, ko/en 모두). */}
             <button onClick={onPrev} disabled={prevDisabled} style={{
               background: prevDisabled ? "#e5e7eb" : C.card,
               border: `2px solid ${prevDisabled ? "#e5e7eb" : accent}`,
-              borderRadius: 9, padding: "10px 24px", fontSize: 14, fontWeight: 800,
+              borderRadius: 9, padding: "10px clamp(6px, 3vw, 24px)",
+              fontSize: "clamp(12px, 3.6vw, 14px)", fontWeight: 800,
               cursor: prevDisabled ? "default" : "pointer",
               color: prevDisabled ? "#b0b5c3" : accent,
-              pointerEvents: "auto",
-            }}>← {t(E, "Prev", "이전")}</button>
+              pointerEvents: "auto", whiteSpace: "nowrap", minWidth: 0,
+            }}>{t(E, "◀ Prev page", "◀ 이전 쪽")}</button>
             <button onClick={onNext} disabled={!canNext} style={{
               background: !canNext ? "#e5e7eb" : accent,
               border: `2px solid ${!canNext ? "#e5e7eb" : accent}`,
-              borderRadius: 9, padding: "10px 24px", fontSize: 14, fontWeight: 800,
+              borderRadius: 9, padding: "10px clamp(6px, 3vw, 24px)",
+              fontSize: "clamp(12px, 3.6vw, 14px)", fontWeight: 800,
               cursor: !canNext ? "default" : "pointer",
               color: !canNext ? "#b0b5c3" : "#fff",
-              pointerEvents: "auto",
-            }}>{t(E, "Next", "다음")} →</button>
+              pointerEvents: "auto", whiteSpace: "nowrap", minWidth: 0,
+            }}>{t(E, "Next page ▶", "다음 쪽 ▶")}</button>
           </div>
           {/* 「목록으로」 — quest 목록으로 나가는 탈출로. (2026-09-27)
               왜 여기 붙였나 — 오늘 상단 sticky 바 둘을 걷어내며(41c522bd·704b6b7f)
@@ -463,23 +478,45 @@ export function QuestBottomNav({
               또 만들지 않고 여기에 얹는다.
               ⛔ 화살표 모양 금지 — Prev/Next 가 이미 화살표라 세 번째 같은 모양이
               되면 `feedback_one_nav_shape_per_screen.md` 를 또 어긴다. 그래서
-              **원형 아이콘 버튼 + List 아이콘 + 무채색**으로 모양·색을 둘 다 갈랐다. */}
+              **원형 아이콘 버튼 + List 아이콘 + 무채색**으로 모양·색을 둘 다 갈랐다.
+              2026-09-27 재검증 학생: "글자가 하나도 없고 작은 줄 세 개짜리 그림만 있어서
+              혼자 봤으면 뜻을 몰랐을 것 같다. 마우스를 대야만 뜻이 나오는데 초등학생이
+              대볼 생각을 할지 모르겠다." → hover 는 터치 기기에 없다. 아이콘 옆은 폭이
+              안 되니(1번의 목록 글자까지 붙으면 44→70px, +26px 로 다시 빠듯해진다는
+              ux 사전 경고) **아이콘 아래 작은 캡션**으로 세로로 늘렸다. aria-label·title 은
+              그대로 둔다 — 스크린리더용은 이미 있었다.
+              ⚠️ 폭은 46 이 아니라 36 이다 — `check-fixed-bar-overlap.mjs` 로 재검증하다가
+              `mcc20citytour` 에서 **본문 1곳**이 새로 걸렸다. 그 quest 의 BFS 시뮬은
+              자체 «Next ▶» 버튼을 화면 맨 아래(스크롤 200px, y=751~806)에 두는데, 이
+              바가 40px 목록 버튼일 때 그 버튼의 클릭 판정 지점(중심)이 목록 버튼 왼쪽
+              경계에서 0.8px 안쪽으로 들어왔다 — 클릭이 "목록으로 나가기" 에 뺏겼다.
+              46px 는 그 경계를 21px 나 잠식해 더 나빴다(46 이전엔 겹침이 아예 없었던
+              건 옛 원형 버튼이 더 작고, 그 옆 Prev/Next 도 지금보다 넓어 우연히 이
+              시뮬 버튼 밑에 빈 틈이 있었기 때문 — 실측으로 확인). 36 으로 좁히니
+              그 지점이 다시 시뮬 자신의 버튼에게 돌아갔다(실측 0건). 폭을 다시 키울
+              땐 반드시 `node scripts/check-fixed-bar-overlap.mjs mcc20citytour --tab
+              "⚡ 코드"` 를 단독·직렬로 돌려 재확인해라. */}
           <Link
             href="/quest"
             aria-label={t(E, "Quest list", "문제 목록으로")}
             title={t(E, "Quest list", "문제 목록으로")}
             style={{
               flexShrink: 0,
-              width: 38, height: 38,
-              borderRadius: "50%",
-              display: "flex", alignItems: "center", justifyContent: "center",
+              width: 36, minHeight: 38,
+              borderRadius: 12,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              gap: 1, padding: "5px 2px 4px",
               background: C.card,
               border: `2px solid ${C.border}`,
               color: C.dim,
               pointerEvents: "auto",
+              textDecoration: "none",
             }}
           >
-            <List size={17} strokeWidth={2.5} />
+            <List size={15} strokeWidth={2.5} />
+            <span style={{ fontSize: 8.5, fontWeight: 700, lineHeight: 1, whiteSpace: "nowrap" }}>
+              {t(E, "List", "목록")}
+            </span>
           </Link>
         </div>
       </div>
