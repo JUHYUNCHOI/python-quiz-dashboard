@@ -177,33 +177,6 @@ export function Mcc20CityTourBfsSim({ E }) {
           }}>{t(E, "Official sample (D=5)", "공식 예제 (D=5)")}</button>
         </div>
 
-        {/* ⭐ 2026-09-27 ①: 여기까지는 «결과»만 보여준다 — D 를 누르면 초록이 통째로 바뀐다.
-            선생님과 학생이 같은 자리에서 막혔다: *"왜 딱 거기까지만 초록인지 모르겠다."*
-            그 답은 **한 홉씩 번져나가는 순서**인데, 그걸 보여주는 화면이 지금까지
-            ⚡코드 탭 안쪽(고정 D 두 개)에만 있었다. 학생이 D 를 만지는 이 순간엔
-            볼 방법이 없었다 — **빠진 다리**였다. 여기 놓는다.
-            ⚠️ 기본은 꺼짐이고 **자동재생이 아니다**(`feedback_sim_style_consistency`
-            — 선생님: *"자동은 뭐지? 우리 시뮬 스타일이랑 넘 달라."*). 학생이 눌러서 넘긴다.
-            ⚠️ 여기서 «BFS» 라는 이름은 **부르지 않는다** — 이름은 ⚡코드 탭 끝에서 한 번만. */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-          {/* ⭐ 2026-09-27 선생님: *"저게 버튼인지도 몰랐고."*
-              흰 배경 + 얇은 주황 테두리라 바로 위 `− / +` 와 **똑같은 옷**이었고
-              옆 회색 설명문과도 구별이 안 됐다. **꽉 찬 색 + 흰 글씨 + 큰 글자**로
-              바꿔서 「이건 누르는 것」이 한눈에 보이게 한다. */}
-          <button onClick={() => { setWaveMode(v => !v); setWaveIdx(0); }} style={{
-            padding: "10px 20px", borderRadius: 10, fontSize: 14, fontWeight: 800,
-            border: "none", boxShadow: "0 2px 6px rgba(217,119,6,.30)",
-            background: waveMode ? "#334155" : A,
-            color: "#fff", cursor: "pointer", ...KA,
-          }}>
-            {waveMode
-              ? t(E, "✕ Back to the finished picture", "✕ 다 칠한 그림으로")
-              /* ⭐ 2026-09-27 학생: *"「번져간다」만 말하고 **지금 화면이 지워진다**는 말은
-                 안 해서, 누르기 전엔 지금 보이는 초록칸이 없어질 거라고 짐작 못 했다."*
-                 버튼 이름이 **누르면 무슨 일이 나는지**를 그대로 말하게 고친다. */
-              : t(E, "▶ Clear it and colour one hop at a time", "▶ 다 지우고 한 번씩 뛰면서 칠해 보기")}
-          </button>
-        </div>
 
         {/* height grid */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
@@ -249,6 +222,37 @@ export function Mcc20CityTourBfsSim({ E }) {
               {"  "}{t(E, "✓ same as the finished picture", "✓ 다 칠한 그림과 같아요")}
             </span>
           )}
+        </div>
+
+        {/* ⭐ 2026-09-27 선생님: *"여직까지 시뮬의 다음 이전은 시뮬 밑에 나왔던것 같은데
+            페이지 3은 버튼이 위에 있는게 있네"* — 맞다. 이 토글이 **격자 위**에 있었다.
+            형제 시뮬은 조작이 전부 **그림 아래**에 모여 있다. 아래로 내린다. */}
+        {/* ⭐ 2026-09-27 ①: 여기까지는 «결과»만 보여준다 — D 를 누르면 초록이 통째로 바뀐다.
+            선생님과 학생이 같은 자리에서 막혔다: *"왜 딱 거기까지만 초록인지 모르겠다."*
+            그 답은 **한 홉씩 번져나가는 순서**인데, 그걸 보여주는 화면이 지금까지
+            ⚡코드 탭 안쪽(고정 D 두 개)에만 있었다. 학생이 D 를 만지는 이 순간엔
+            볼 방법이 없었다 — **빠진 다리**였다. 여기 놓는다.
+            ⚠️ 기본은 꺼짐이고 **자동재생이 아니다**(`feedback_sim_style_consistency`
+            — 선생님: *"자동은 뭐지? 우리 시뮬 스타일이랑 넘 달라."*). 학생이 눌러서 넘긴다.
+            ⚠️ 여기서 «BFS» 라는 이름은 **부르지 않는다** — 이름은 ⚡코드 탭 끝에서 한 번만. */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+          {/* ⭐ 2026-09-27 선생님: *"저게 버튼인지도 몰랐고."*
+              흰 배경 + 얇은 주황 테두리라 바로 위 `− / +` 와 **똑같은 옷**이었고
+              옆 회색 설명문과도 구별이 안 됐다. **꽉 찬 색 + 흰 글씨 + 큰 글자**로
+              바꿔서 「이건 누르는 것」이 한눈에 보이게 한다. */}
+          <button onClick={() => { setWaveMode(v => !v); setWaveIdx(0); }} style={{
+            padding: "10px 20px", borderRadius: 10, fontSize: 14, fontWeight: 800,
+            border: "none", boxShadow: "0 2px 6px rgba(217,119,6,.30)",
+            background: waveMode ? "#334155" : A,
+            color: "#fff", cursor: "pointer", ...KA,
+          }}>
+            {waveMode
+              ? t(E, "✕ Back to the finished picture", "✕ 다 칠한 그림으로")
+              /* ⭐ 2026-09-27 학생: *"「번져간다」만 말하고 **지금 화면이 지워진다**는 말은
+                 안 해서, 누르기 전엔 지금 보이는 초록칸이 없어질 거라고 짐작 못 했다."*
+                 버튼 이름이 **누르면 무슨 일이 나는지**를 그대로 말하게 고친다. */
+              : t(E, "▶ Clear it and colour one hop at a time", "▶ 다 지우고 한 번씩 뛰면서 칠해 보기")}
+          </button>
         </div>
 
         {waveMode && (
@@ -462,8 +466,13 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
       tail = t(E, `\nNothing new — blocked: ${fmt(blocked)}.`,
                   `\n새로 들어올 칸이 없어요 — 막힘: ${fmt(blocked)}.`);
     }
+    /* ⭐ 2026-09-27 선생님: *"색도 똑같고 한단계 어떻다는건지도 시뮬에서 볼수가 없어."*
+       글로는 «새로 들어온 칸 / 막힌 칸» 을 말하는데 **격자는 그걸 안 보여줬다** —
+       새 칸이 이미 간 칸과 **채움색이 같고 테두리만** 2.5px 진한 초록이라 구별이 안 됐다.
+       걸음마다 셋을 따로 들고 가서 화면에서 색을 가른다. */
     trace.push({
       ...snap(), current: null, checking: null, wave: added,
+      blocked, popped: layer,
       status: added.length ? "pass" : "blocked",
       msg: head + popped + tail,
     });
@@ -614,31 +623,67 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 42px)`, gap: 8 }}>
             {preset.H.map((row, r) => row.map((h, c) => {
+              const at = (list) => list && list.some(([wr, wc]) => wr === r && wc === c);
               const isCurrent = cur.current && cur.current[0] === r && cur.current[1] === c;
               const isChecking = cur.checking && cur.checking[0] === r && cur.checking[1] === c;
-              // 이번 겹에 새로 들어온 칸 — 한 걸음에 바뀐 자리가 어디인지 눈에 보이게
-              const isNew = cur.wave && cur.wave.some(([wr, wc]) => wr === r && wc === c);
+              const isNew = at(cur.wave);            // 이번 걸음에 **새로 들어온** 칸
+              const isBlocked = at(cur.blocked);     // 이번 걸음에 **막힌** 칸
+              const isPopped = at(cur.popped);       // 이번 걸음에 **꺼낸** 칸 (여기서 둘러봤다)
               const isVisited = cur.visited[r][c];
-              let border = "2px solid #e5e7eb";
+
+              /* ⭐ 2026-09-27: 셋이 **채움색으로** 갈린다. 전에는 전부 연초록 바탕에
+                 테두리만 달라서 *"색도 똑같고 한 단계가 뭘 하는지 안 보인다"* 였다. */
+              let bg = isVisited ? "#d1fae5" : "#f3f4f6";   // 이미 간 칸 / 아직 못 간 칸
+              let border = isVisited ? "2px solid #6ee7b7" : "2px solid #e5e7eb";
+              let fg = isVisited ? "#065f46" : "#9ca3af";
+              let ring = "none";
+              if (isPopped) { border = `2.5px solid ${A}`; }
+              if (isNew) {                                   // 새 칸 — 진한 초록으로 확 튄다
+                bg = "#34d399"; fg = "#04372a";
+                border = "2.5px solid #047857";
+                ring = "0 0 0 3px rgba(4,120,87,.22)";
+              }
+              if (isBlocked) {                               // 막힌 칸 — 빨강
+                bg = "#fee2e2"; fg = "#991b1b";
+                border = "2.5px solid #dc2626";
+              }
               if (isChecking) border = `2.5px solid ${statusColor}`;
-              else if (isNew) border = "2.5px solid #059669";
-              else if (isCurrent) border = `2.5px solid ${A}`;
-              else if (isVisited) border = "2px solid #6ee7b7";
+              else if (isCurrent && !isNew && !isBlocked) border = `2.5px solid ${A}`;
               return (
                 <div key={`${r}-${c}`} style={{
                   width: 42, height: 42, borderRadius: 7, display: "flex", flexDirection: "column",
-                  alignItems: "center", justifyContent: "center",
-                  background: isVisited ? "#d1fae5" : "#f3f4f6",
-                  border, color: isVisited ? "#065f46" : "#9ca3af",
+                  alignItems: "center", justifyContent: "center", position: "relative",
+                  background: bg, border, color: fg, boxShadow: ring,
                   fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5,
                   transition: "all 160ms",
                 }}>
                   {r === 0 && c === 0 && <span style={{ fontSize: 9, lineHeight: 1 }}>🐰</span>}
                   <span>{h}</span>
+                  {isBlocked && <span style={{
+                    position: "absolute", top: -1, right: 2, fontSize: 11, color: "#dc2626", fontWeight: 900,
+                  }}>✕</span>}
                 </div>
               );
             }))}
           </div>
+        </div>
+
+        {/* ⭐ 2026-09-27: 색을 갈랐으면 **그 색이 무슨 뜻인지**도 그 자리에 있어야 한다.
+            `feedback_screen_must_not_rely_on_memory` — 화면은 앞 쪽 기억에 기대면 안 된다. */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap",
+          fontSize: 10.5, color: "#92400e", marginBottom: 8, ...KA }}>
+          {[
+            { bg: "#34d399", bd: "#047857", ko: "이번에 새로", en: "new now" },
+            { bg: "#fee2e2", bd: "#dc2626", ko: "막힘", en: "blocked" },
+            { bg: "#d1fae5", bd: "#6ee7b7", ko: "이미 감", en: "already in" },
+            { bg: "#f3f4f6", bd: "#e5e7eb", ko: "아직", en: "not yet" },
+          ].map(k => (
+            <span key={k.ko} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <span style={{ width: 11, height: 11, borderRadius: 3, background: k.bg,
+                border: `1.5px solid ${k.bd}`, display: "inline-block" }} />
+              {t(E, k.en, k.ko)}
+            </span>
+          ))}
         </div>
 
         {/* step message */}
