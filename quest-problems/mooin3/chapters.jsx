@@ -3,6 +3,8 @@ import { getMooin3Sections, getMooin3Walk, getMooin3MapWalk, MooTraceSimulator, 
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+const A = "#7c5cfc"; // mooin3 보라 액센트 (components.jsx 와 동일)
+
 /* ═══════════════════════════════════════════════════════════════
    Mooin' Time III walkthrough — follows the 기·승·전·결 arc
    (see quest_problem_standard.md "🌟 최우선 — 큰 틀"):
@@ -336,7 +338,7 @@ export function makeMooin3Ch2(E, lang = "py") {
         narr: t(E,
           "Same fix-j idea as the simulator — now in code.",
           "방금 시뮬에서 본 j 고정 생각을 이번엔 코드로 봐요."),
-        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent={A} />),
       };
     })(),
 
@@ -442,7 +444,7 @@ export function makeMooin3Ch2(E, lang = "py") {
         narr: t(E,
           "Three leaps: precompute the tables once, loop over the 26 letters, and use the vertex.",
           "표를 한 번만 만들고, j 대신 글자 26 개를 돌고, 꼭짓점을 써요."),
-        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#7c3aed" />),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent={A} />),
       };
     })(),
     /* ── 부록: map 이라는 '다른 방법' (선생님 2026-08-10 USACO 통과 → 부록 추가).
