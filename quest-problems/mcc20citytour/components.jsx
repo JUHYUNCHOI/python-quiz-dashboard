@@ -347,11 +347,16 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
           "확실한 건 (1,1) 하나뿐이에요.\n줄에 넣고 시작해요."),
   });
 
-  /* 1단계 — 처음 두 번의 pop 만 «한 걸음에 한 방향» 으로 자세히 본다.
-     이 둘이면 네 가지 결과가 다 나온다: 격자 밖 · 막힘 · 통과 · 이미 다녀옴.
-     나머지는 아래 2단계에서 «한 겹» 씩 묶는다. */
+  /* 1단계 — 처음 **한 번**의 pop 만 «한 걸음에 한 방향» 으로 자세히 본다.
+     그 한 번이면 네 가지 결과가 다 나온다: 격자 밖 · 막힘 · 통과 · 이미 다녀옴.
+     나머지는 아래 2단계에서 «한 겹» 씩 묶는다.
+     ⭐ 2026-09-27: 원래 **둘**이었는데 하나로 줄였다. **독립 학생 둘이 같은 자리에서
+     같은 말을 했다** — *"6~7번째 클릭쯤부터 패턴이 이미 파악됐는데 그 뒤로도 13번을 더
+     눌러야 했다"* · *"중간부터는 그냥 다음다음 누르기만 했어."*
+     `feedback_student_agent_must_quit` — 같은 신호가 두 번 겹치면 약한 신호가 아니다.
+     ⚠️ 재설계가 아니라 **이미 있던 손잡이를 하나 돌린 것**이다(PM 판정). */
   let popIdx = 0;
-  while (queue.length && popIdx < 2) {
+  while (queue.length && popIdx < 1) {
     const [r, c] = queue[0];
     queue = queue.slice(1);
 
@@ -559,6 +564,16 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
       <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8 }}>
           🧭 {t(E, "Drain the queue, one check at a time", "줄이 빠져나가는 걸 하나씩 봐요")}
+        </div>
+        {/* ⭐ 2026-09-27 ①: 새 학생 — *"둘 다 처음엔 «어 또 이거네» 싶었다.
+            첫 3~4번 클릭까지는 진짜 겹친다고 느꼈다 — 같은 그림, 같은 색, 같은 시작 칸이라서."*
+            그런데 이어서 *"«아까 본 걸 이번엔 코드가 실제로 하는 순서로 더 자세히 본다»는
+            느낌"* 이라고 했다. **빼지 않고 잇는다** — 앞 쪽과 이 쪽이 어떻게 다른지를
+            첫 화면에서 말해 준다(`feedback_screen_must_not_rely_on_memory` — 앞 쪽은 사라진다). */}
+        <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 8, lineHeight: 1.55, ...KA }}>
+          {t(E,
+            "Same spreading you saw earlier — but there it moved a whole hop at a time. Here you watch one cell, one direction at a time, in the order the code does it.",
+            "앞에서 본 그 번짐이에요. 거기서는 한 번에 «한 뜀»씩 묶어서 봤죠. 여기서는 칸 하나, 방향 하나씩 — 코드가 실제로 하는 순서 그대로 봐요.")}
         </div>
 
         {/* preset picker */}
@@ -804,6 +819,18 @@ export function getMcc20CityTourSections(E) {
             "deque 의 popleft() 는 줄이 아무리 길어도 바로 끝나요.\n그래서 느린 list.pop(0) 대신 쓰면 진짜 BFS 가 돼요."),
         t(E, "abs(H[nr][nc] - H[r][c]) < D is the whole edge rule — the height DIFFERENCE, strictly less than D.",
             "abs(H[nr][nc] - H[r][c]) < D 한 줄이 규칙의 전부예요.\n높이 '차이' 가 D 보다 작아야만 건너가요."),
+        /* ⭐ 2026-09-27: 새 학생이 이 셋을 **«짐작하고 넘어갔다»** 고 했다 —
+           *"뜻은 짐작했지만 이 문법을 처음 본 건 여기서였다"* ·
+           *"«그래서 파이썬 코드로 쓸 때 왜 대괄호가 두 개냐»는 아무도 설명 안 했다."*
+           선생님(2026-09-27): *"그러면 인덱스라던가? 고민해야하는것들."*
+           ⚠️ 이건 반창고다 — 진짜 구멍은 **파이썬 레슨이 격자 문법을 안 가르치는 것**이고
+           그건 WORK.md 에 별도 항목으로 뗐다(PM 판정 3차). */
+        t(E, "H[nr][nc] — two brackets means two picks: first the row, then the cell in that row.",
+            "H[nr][nc] 처럼 대괄호가 두 개인 건 **두 번 고른다**는 뜻이에요.\n먼저 nr 번째 줄을 고르고, 그 줄에서 nc 번째 칸을 골라요."),
+        t(E, "0 <= nr < M is two comparisons written as one line — nr must be at least 0 AND less than M.",
+            "0 <= nr < M 은 부등호 두 개를 이어 쓴 거예요.\nnr 이 0 이상이면서 **동시에** M 보다 작아야 한다는 뜻이에요."),
+        t(E, "r, c = q.popleft() — the queue holds pairs, so one item unpacks straight into two names.",
+            "r, c = q.popleft() — 줄에는 (줄 번호, 칸 번호) 짝이 들어 있어요.\n그래서 하나를 꺼내면 이름 두 개로 나뉘어 담겨요."),
       ],
       cppOnly: [
         t(E, "Use queue<pair<int,int>> and abs() from <cstdlib>; visited is a vector<vector<bool>>.",
