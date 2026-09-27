@@ -355,9 +355,15 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
       ? t(E,
           "Same start, new grid — (1,1) again.",
           "이번에도 (1,1)에서 시작해요.")
+      /* ⭐ 2026-09-27 선생님: *"BFS에 대한 개념을 아는 사람들은 너가 저 시뮬을 왜할려는건지
+         알겠는데 **사실 내가 있는곳에서 위아래오른쪽왼쪽이잖아.**"*
+         맞다. 첫 문장이 *"줄에 넣고 시작해요"* 였다 — **왜 줄이 필요한지 겪기도 전에**
+         자료구조부터 나왔다. 그건 BFS 를 **아는 사람의 순서**다.
+         `feedback_first_concept_scaffolding`: 아는 것 → 새 생각법 → **이름은 나중**.
+         줄은 「갈 곳이 둘 이상」이 되는 순간에 나온다(아래 needQueue). */
       : t(E,
-          "The only sure cell is (1,1).\nPut it in the queue and start.",
-          "확실한 건 (1,1) 하나뿐이에요.\n줄에 넣고 시작해요."),
+          "I'm standing on (1,1).\nLet's look around from here.",
+          "나는 (1,1) 에 서 있어요.\n여기서 둘러봐요."),
   });
 
   /* 1단계 — 처음 **한 번**의 pop 만 «한 걸음에 한 방향» 으로 자세히 본다.
@@ -377,8 +383,8 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
       trace.push({
         ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 0, status: "pop",
         msg: t(E,
-          `Pop (${r + 1},${c + 1}) from the front of the queue.\nCheck its 4 neighbors, one at a time.`,
-          `줄 앞에서 (${r + 1},${c + 1}) 를 꺼내요.\n이웃 4칸을 하나씩 봐요.`),
+          `From (${r + 1},${c + 1}) — up, down, left, right.\nOne at a time.`,
+          `(${r + 1},${c + 1}) 에서 위·아래·왼쪽·오른쪽.\n하나씩 봐요.`),
       });
       for (const [di, d] of DIRS.entries()) {
         const nr = r + d.dr, nc = c + d.dc;
@@ -613,10 +619,17 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
           ))}
         </div>
 
-        {/* queue — a horizontal row of tiles, leftmost = next to pop */}
+        {/* queue — a horizontal row of tiles, leftmost = next to pop
+            ⭐ 2026-09-27 선생님: *"BFS 아는 사람은 왜 하는지 알겠는데 사실 내가 있는곳에서
+            위아래오른쪽왼쪽이잖아."* — 이 줄 패널이 **격자보다 위에 항상** 있었다.
+            학생은 「줄」이 왜 있는지 모르는 채로 그걸 먼저 본다.
+            **갈 곳이 둘 이상이 되는 순간**에만 나타나게 한다 — 그때 「어디부터 가지?」 라는
+            질문이 생기고, 줄은 **그 질문의 답**이다. (`feedback_first_concept_scaffolding`) */}
+        {cur.queue.length >= 2 && (
         <div style={{ marginBottom: 10 }}>
-          <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 4 }}>
-            {t(E, "queue — front is next", "줄 — 왼쪽이 다음 차례")}
+          <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 4, ...KA }}>
+            {t(E, "Two or more places to go — keep them in order. This line is the queue.",
+                  "갈 곳이 둘 이상이네요 — 순서대로 세워 둬요. 이 줄이 «큐» 예요.")}
           </div>
           <div style={{ display: "flex", gap: 4, minHeight: 34, flexWrap: "wrap" }}>
             {cur.queue.length === 0 ? (
@@ -633,6 +646,7 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             ))}
           </div>
         </div>
+        )}
 
         {/* ⭐ 2026-09-27 — 말풍선을 **격자 바로 위**로 올린다(꼬리 ▼ 가 격자를 가리킨다).
             선생님이 2026-07-02 에 이미 주신 규칙이다(`feedback_sim_style_consistency`,
