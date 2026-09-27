@@ -201,19 +201,31 @@ export function PhotoshootRightToLeftScanSim({ E }) {
         </div>
       </div>
 
-      {/* 걸음 설명 */}
-      <div style={{
-        background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 12px",
-        fontSize: 12.5, lineHeight: 1.7, whiteSpace: "pre-line", textAlign: "center", marginTop: 12, ...KA,
-      }}>
-        {cur.msg}
-        {cur.breakdown && (
+      {/* 걸음 설명 — 말풍선 (mexes/sims.jsx:56-63 참고 · 발명 금지).
+          까만 터미널 상자였던 걸 밝은 바탕 + 강조 테두리 + 💬 로 바꾼다.
+          걸음 종류에 따라 색이 바뀐다: flip 이 켜지거나 끝나는 순간(아하)은 초록,
+          그 밖(그냥 훑는 중)은 이 quest 고유색(A, 빨강). */}
+      {(() => {
+        const aha = cur.kind === "flip" || cur.kind === "final";
+        const bg = aha ? "#ecfdf5" : "#fef2f2";
+        const bd = aha ? "#6ee7b7" : "#fca5a5";
+        const fg = aha ? "#065f46" : "#7f1d1d";
+        return (
           <div style={{
-            marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 700,
-            color: "#fbbf24", whiteSpace: "pre-line",
-          }}>{cur.breakdown}</div>
-        )}
-      </div>
+            background: bg, border: `1.5px solid ${bd}`, borderRadius: 12, padding: "11px 14px",
+            fontSize: 13, fontWeight: 600, color: fg, lineHeight: 1.6, whiteSpace: "pre-line",
+            textAlign: "center", marginTop: 12, boxShadow: "0 4px 14px rgba(0,0,0,.08)", ...KA,
+          }}>
+            💬 {cur.msg}
+            {cur.breakdown && (
+              <div style={{
+                marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 700,
+                color: fg, opacity: 0.85, whiteSpace: "pre-line",
+              }}>{cur.breakdown}</div>
+            )}
+          </div>
+        );
+      })()}
 
       {cur.kind === "final" && (
         <div style={{
