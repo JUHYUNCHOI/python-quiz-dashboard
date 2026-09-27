@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#dc2626";
 
@@ -66,16 +67,18 @@ export function UdderedRecitalSim({ E }) {
     ? (cleanHeard.length > 0 ? 1 : 0)
     : stepInfo.pairs[step - 1]?.cyclesAfter ?? 1;
 
-  const reset = () => { setStep(0); setPlaying(false); setReciteFlash(false); };
-  const stepOnce = () => {
-    if (step >= maxStep - 1) return;
-    const nextStep = step + 1;
-    const pairIdx = nextStep - 1;
-    if (stepInfo.pairs[pairIdx]?.back) {
-      setReciteFlash(true);
-      setTimeout(() => setReciteFlash(false), 600);
+  // SimNav 로 어느 걸음이든 바로 이동할 수 있다 — 앞으로 넘어갈 때만
+  // (되돌아갈 땐 안 함) "다시 외우기" 펄스를 울린다.
+  const goToStep = (n) => {
+    setPlaying(false);
+    if (n > step) {
+      const pairIdx = n - 1;
+      if (stepInfo.pairs[pairIdx]?.back) {
+        setReciteFlash(true);
+        setTimeout(() => setReciteFlash(false), 600);
+      }
     }
-    setStep(nextStep);
+    setStep(n);
   };
 
   return (
@@ -241,8 +244,8 @@ export function UdderedRecitalSim({ E }) {
         })()}
       </div>
 
-      {/* Cycle counter + buttons */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+      {/* Cycle counter + controls — 공용 SimNav(⏮ 가 옛 Reset 을 대신한다) */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
         <div style={{
           background: "#dc2626", color: "#fff",
           padding: "4px 10px", borderRadius: 6,
@@ -251,27 +254,16 @@ export function UdderedRecitalSim({ E }) {
         }}>
           cycles = {cyclesNow}
         </div>
-        <div style={{ fontSize: 11, color: C.dim }}>
-          {t(E, `step ${step + 1} / ${Math.max(maxStep, 1)}`, `단계 ${step + 1} / ${Math.max(maxStep, 1)}`)}
-        </div>
-        <div style={{ flex: 1 }} />
-        <button onClick={reset} style={{
-          background: "#fef2f2", color: "#7f1d1d",
-          border: "1px solid #fca5a5", borderRadius: 6,
-          padding: "4px 10px", fontSize: 11, fontWeight: 600, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "처음으로")}</button>
+        <SimNav
+          idx={step}
+          total={Math.max(maxStep, 1)}
+          onIdx={goToStep}
+          accent={A}
+          showLabels
+          isEn={E}
+        />
         <button
-          onClick={stepOnce}
-          disabled={step >= maxStep - 1 || playing}
-          style={{
-            background: step >= maxStep - 1 || playing ? "#e5e7eb" : "#fff",
-            color: step >= maxStep - 1 || playing ? "#9ca3af" : "#7f1d1d",
-            border: "1px solid #fca5a5", borderRadius: 6,
-            padding: "4px 10px", fontSize: 11, fontWeight: 600,
-            cursor: step >= maxStep - 1 || playing ? "not-allowed" : "pointer",
-          }}>▶ {t(E, "Step", "한 단계")}</button>
-        <button
-          onClick={() => { if (step >= maxStep - 1) reset(); setPlaying(p => !p); }}
+          onClick={() => { if (step >= maxStep - 1) goToStep(0); setPlaying(p => !p); }}
           style={{
             background: playing ? "#7f1d1d" : "#dc2626", color: "#fff",
             border: "1px solid #dc2626", borderRadius: 6,
