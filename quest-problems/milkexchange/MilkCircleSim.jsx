@@ -1,9 +1,16 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
+import { SimNav, useTraceStep } from "@/components/quest/TraceStepper";
+
+const A = "#059669"; // milkexchange 초록 액센트 (components.jsx 와 동일)
+
+// 몇 분까지 미리 계산해 둘지 — 이 크기(용량 2, 소 4마리)는 몇 분 안에
+// 흐름이 안정되므로 12분이면 충분히 보여준다.
+const MAX_MINUTE = 12;
 
 /* ================================================================
    MilkCircleSim — interactive circular cow exchange
-   - Student presses "▶ 1 minute" to advance one step.
+   - 걸음 목록(0~MAX_MINUTE 분)을 미리 계산해 SimNav 로 앞뒤 이동.
    - Cows arranged on a circle; arrows show pass direction.
    - Overflow cells highlighted yellow when capped.
    - Total recomputed live.
@@ -13,35 +20,31 @@ export default function MilkCircleSim({ E }) {
   const N = 4;
   const cap = useMemo(() => [2, 2, 2, 2], []);
   const dirs = useMemo(() => ["R", "R", "L", "L"], []);
-  const [cur, setCur] = useState([2, 2, 2, 2]);
-  const [overflowSet, setOverflowSet] = useState(new Set());
-  const [minute, setMinute] = useState(0);
 
-  const stepOne = () => {
-    const next = cur.slice();
-    // pass
-    for (let i = 0; i < N; i++) {
-      if (next[i] > 0) {
-        next[i] -= 1;
-        const j = (i + (dirs[i] === "R" ? 1 : -1) + N) % N;
-        next[j] += 1;
+  const trace = useMemo(() => {
+    const states = [{ minute: 0, cur: cap.slice(), overflowSet: new Set() }];
+    let cur = cap.slice();
+    for (let m = 1; m <= MAX_MINUTE; m++) {
+      const next = cur.slice();
+      for (let i = 0; i < N; i++) {
+        if (next[i] > 0) {
+          next[i] -= 1;
+          const j = (i + (dirs[i] === "R" ? 1 : -1) + N) % N;
+          next[j] += 1;
+        }
       }
+      const overs = new Set();
+      for (let i = 0; i < N; i++) {
+        if (next[i] > cap[i]) { overs.add(i); next[i] = cap[i]; }
+      }
+      states.push({ minute: m, cur: next.slice(), overflowSet: overs });
+      cur = next;
     }
-    // overflow
-    const overs = new Set();
-    for (let i = 0; i < N; i++) {
-      if (next[i] > cap[i]) { overs.add(i); next[i] = cap[i]; }
-    }
-    setCur(next);
-    setOverflowSet(overs);
-    setMinute(m => m + 1);
-  };
+    return states;
+  }, [cap, dirs, N]);
 
-  const reset = () => {
-    setCur(cap.slice());
-    setOverflowSet(new Set());
-    setMinute(0);
-  };
+  const { idx, setIdx } = useTraceStep(trace.length);
+  const { minute, cur, overflowSet } = trace[Math.min(idx, trace.length - 1)];
 
   // Layout cows on a circle
   const R = 78; const cx = 130; const cy = 130;
@@ -99,15 +102,8 @@ export default function MilkCircleSim({ E }) {
           </svg>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 10 }}>
-          <button onClick={stepOne} style={{
-            background: "#059669", color: "#fff", border: "none", borderRadius: 8,
-            padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-          }}>▶ {t(E, "1 minute", "1 분")}</button>
-          <button onClick={reset} style={{
-            background: "#fff", color: "#059669", border: "1.5px solid #059669", borderRadius: 8,
-            padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-          }}>↺ {t(E, "Reset", "처음부터")}</button>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+          <SimNav idx={idx} total={trace.length} onIdx={setIdx} accent={A} showLabels isEn={E} />
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 12, color: C.text }}>
