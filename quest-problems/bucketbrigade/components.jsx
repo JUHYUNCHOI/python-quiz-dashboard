@@ -9,7 +9,11 @@ const A = "#dc2626";
 
 /* ───────── Bucket Brigade interactive grid ─────────
    Eye-evident 10×10 sim: shows L (lake), B (barn), R (rock).
-   ▶ button animates the BFS shortest path; cows fill in cell-by-cell.
+   ▶ button animates the Manhattan-distance shortcut; cows fill in cell-by-cell.
+   ⚠️ 2026-09-27: 여기 «BFS shortest path» 라고 적혀 있었다. **낡은 문서다** —
+      `USACO_VERIFICATION.md:116` 에 «재작성 2026-05-14, BFS → manhattan+우회» 로
+      남아 있다. 코드는 BFS 를 **하나도 안 쓴다**(맨해튼 거리 + 직선 위 바위면 +2).
+      그대로 두면 다음 사람이 grep 만 보고 `bfs-grid` 를 태깅할 위험이 있어 고친다.
    Counter displays cows placed so far. */
 const SAMPLE_GRID = [
   "..........",
@@ -246,8 +250,8 @@ export function getBucketBrigadeSections(E) {
       why: [
         t(E, "What should we print? The fewest cows needed to link L to B. So first scan the grid for L, B, and R's positions.",
             "무엇을 출력해야 하나요? L 과 B 를 잇는 데 필요한 소의 최소 마릿수예요.\n그러니 먼저 격자를 훑어 L, B, R 의 위치를 찾아요."),
-        t(E, "Since every other cell is empty, the shortest path length is just the Manhattan distance between L and B — minus 2, because L and B themselves aren't cows.",
-            "L, B, R 말고는 다 빈 칸이라, 최단 길이는 L 과 B 의 맨해튼 거리와 같아요.\nL 과 B 는 소가 아니니 거기서 2 를 빼요."),
+        t(E, "Since every other cell is empty, the cows sit on every cell between L and B. That's the Manhattan distance minus 1 — the cells strictly in between.",
+            "L, B, R 말고는 다 빈 칸이라, 소는 L 과 B **사이의 칸**에 한 마리씩 서요.\n그 칸 수는 맨해튼 거리에서 1 을 뺀 만큼이에요."),
         t(E, "But if R sits exactly on the straight line between L and B (same row or column, in between), that path is blocked — so we detour, adding 2 more cows.",
             "그런데 R 이 L 과 B 를 잇는 직선 위(같은 행이나 열, 그 사이)에 있으면 그 길이 막혀요.\n그래서 돌아가야 하고, 소가 2 마리 더 필요해요."),
       ],
@@ -285,8 +289,8 @@ export function getBucketBrigadeWalk(E, lang = "py") {
           "What do we print? The fewest cows to link L to B. So first read the 10x10 grid.",
           "무엇을 출력해야 하나요? L 과 B 를 잇는 데 필요한 소의 최소 마릿수예요.\n먼저 10x10 격자를 읽어요.") },
         { hi: [22, 42], bubble: t(E,
-          "Find where B, L, R sit. Every other cell is empty, so the shortest path length is just the Manhattan distance between L and B — minus 2, since L and B themselves aren't cows.",
-          "B, L, R 의 위치를 찾아요.\nL, B, R 말고는 다 빈 칸이라, 최단 길이는 L 과 B 의 맨해튼 거리와 같아요.\nL 과 B 는 소가 아니니 거기서 2 를 빼요.") },
+          "Find where B, L, R sit. Every other cell is empty, so the cows sit on every cell between L and B — the Manhattan distance minus 1.",
+          "B, L, R 의 위치를 찾아요.\nL, B, R 말고는 다 빈 칸이라, 소는 L 과 B **사이의 칸**에 한 마리씩 서요.\n그 칸 수는 맨해튼 거리에서 1 을 뺀 만큼이에요.") },
         { hi: [43, 60], bubble: t(E,
           "But if R sits exactly on the straight line between L and B (same row, in between), that path is blocked — so detour, adding 2 more cows.",
           "그런데 R 이 L 과 B 를 잇는 직선 위(같은 행, 그 사이)에 있으면 그 길이 막혀요.\n그래서 돌아가야 하고, 소가 2 마리 더 필요해요.") },
@@ -309,8 +313,8 @@ export function getBucketBrigadeWalk(E, lang = "py") {
         "What do we print? The fewest cows to link L to B. So first read the 10x10 grid and find where B, L, R sit.",
         "무엇을 출력해야 하나요? L 과 B 를 잇는 데 필요한 소의 최소 마릿수예요.\n먼저 10x10 격자를 읽고 B, L, R 의 위치를 찾아요.") },
       { hi: [21, 24], bubble: t(E,
-        "Every other cell is empty, so the shortest path length is just the Manhattan distance between L and B — minus 2, since L and B themselves aren't cows.",
-        "L, B, R 말고는 다 빈 칸이라, 최단 길이는 L 과 B 의 맨해튼 거리와 같아요.\nL 과 B 는 소가 아니니 거기서 2 를 빼요.") },
+        "Every other cell is empty, so the cows sit on every cell between L and B — the Manhattan distance minus 1.",
+        "L, B, R 말고는 다 빈 칸이라, 소는 L 과 B **사이의 칸**에 한 마리씩 서요.\n그 칸 수는 맨해튼 거리에서 1 을 뺀 만큼이에요.") },
       { hi: [25, 28], bubble: t(E,
         "But if R sits exactly on the straight line between L and B (same row, in between), that path is blocked — so detour, adding 2 more cows.",
         "그런데 R 이 L 과 B 를 잇는 직선 위(같은 행, 그 사이)에 있으면 그 길이 막혀요.\n그래서 돌아가야 하고, 소가 2 마리 더 필요해요.") },
