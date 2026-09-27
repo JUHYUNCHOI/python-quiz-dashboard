@@ -87,7 +87,7 @@ export function AlgorithmReasoningTour({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader
-        accent="#0891b2"
+        accent={A}
         idx={ts.idx}
         total={ts.total}
         isEn={E}
@@ -147,7 +147,7 @@ export function AlgorithmReasoningTour({ E }) {
         )}
       </NarrativePanel>
 
-      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent="#0891b2" isEn={E} showLabels />
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
 }
@@ -398,7 +398,7 @@ export function ChartReadingTour({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader
-        accent="#d97706"
+        accent={A}
         idx={ts.idx}
         total={ts.total}
         isEn={E}
@@ -542,7 +542,7 @@ export function ChartReadingTour({ E }) {
         <div style={{ fontSize: 14, lineHeight: 1.65 }}>{cur.narr}</div>
       </NarrativePanel>
 
-      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent="#d97706" isEn={E} showLabels />
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
 }
@@ -2081,7 +2081,7 @@ export function HpsFormulaGridSim({ E }) {
       )}
 
       <div style={{ marginTop: 12 }}>
-        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent="#d97706" isEn={E} showLabels />
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
     </div>
   );
