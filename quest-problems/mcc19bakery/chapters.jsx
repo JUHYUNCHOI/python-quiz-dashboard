@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 const NW = { whiteSpace: "nowrap" };
 const KA = { wordBreak: "keep-all" };
@@ -37,7 +38,7 @@ const ROUNDS = buildRounds(SORTED); // 2 rounds for the sample
 
 function BakeryGreedySim({ E }) {
   // step 0 = nothing revealed, step k = first k rounds revealed
-  const [step, setStep] = useState(0);
+  const { safe: step, setIdx: setStep, total: stepTotal } = useTraceStep(ROUNDS.length + 1);
   const shown = ROUNDS.slice(0, step);
 
   // running total after the shown rounds
@@ -123,12 +124,8 @@ function BakeryGreedySim({ E }) {
         </div>
 
         {/* controls */}
-        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12 }}>
-          <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} style={navBtn(step === 0)}>◀ {t(E, "back", "이전")}</button>
-          <button onClick={() => setStep(Math.min(ROUNDS.length, step + 1))} disabled={done} style={navBtn(done)}>{t(E, "next round", "다음 묶음")} ▶</button>
-          <span style={{ fontSize: 12, color: "#92400e", fontWeight: 700 }}>
-            {t(E, "round ", "묶음 ")}{step}/{ROUNDS.length}
-          </span>
+        <div style={{ marginBottom: 12 }}>
+          <SimNav idx={step} total={stepTotal} onIdx={setStep} accent="#d97706" showLabels isEn={E} />
         </div>
 
         {/* revealed rounds */}
@@ -206,14 +203,6 @@ function BakeryGreedySim({ E }) {
     </div>
   );
 }
-function navBtn(disabled) {
-  return {
-    padding: "5px 12px", borderRadius: 8, border: "1px solid #d97706",
-    background: disabled ? "#f1f5f9" : "#d97706", color: disabled ? "#94a3b8" : "#fff",
-    fontSize: 12, fontWeight: 800, cursor: disabled ? "default" : "pointer",
-  };
-}
-
 /* ================================================================
    SOLUTION CODE  (deque greedy — kept for any external reference)
    ================================================================ */
