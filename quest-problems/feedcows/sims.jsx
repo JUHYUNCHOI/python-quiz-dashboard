@@ -204,6 +204,13 @@ export function FeedCowsGreedyFillSim({ E }) {
   const newPos = cur.newPatch ? cur.newPatch.pos : null;
   const patchesStr = cur.patches.join("");
 
+  // 말풍선 색 — 걸음 종류에 따라 다르게 (글을 읽기 전에 무슨 일인지 보이게).
+  // done=성공(초록) · covered=넘어감(회색) · 그 밖(패치 놓기/인트로)=amber.
+  // 참고: quest-problems/mexes/sims.jsx:56-58
+  const bBd = cur.done ? "#6ee7b7" : cur.covered ? "#cbd5e1" : "#fbbf24";
+  const bBg = cur.done ? "#ecfdf5" : cur.covered ? "#f8fafc" : "#fffbeb";
+  const bFg = cur.done ? "#065f46" : cur.covered ? "#475569" : "#92400e";
+
   return (
     <div style={{ padding: 16, ...KA }}>
       <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14 }}>
@@ -233,16 +240,18 @@ export function FeedCowsGreedyFillSim({ E }) {
           fontFamily: "'JetBrains Mono',monospace", color: "#065f46", letterSpacing: 2,
         }}>{patchesStr}</div>
 
-        {/* 걸음 설명 */}
+        {/* 걸음 설명 — 말풍선 (참고: quest-problems/mexes/sims.jsx:56-63) */}
         <div style={{
-          background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 12px",
-          fontSize: 12.5, lineHeight: 1.7, whiteSpace: "pre-line", textAlign: "center", marginTop: 10, ...KA,
+          background: bBg, border: `1.5px solid ${bBd}`, color: bFg, borderRadius: 12, padding: "11px 14px",
+          fontSize: 13, fontWeight: 600, lineHeight: 1.6, whiteSpace: "pre-line", textAlign: "center",
+          marginTop: 10, boxShadow: "0 4px 14px rgba(0,0,0,.08)", ...KA,
         }}>
-          {cur.msg}
+          💬 {cur.msg}
           {cur.breakdown && (
             <div style={{
-              marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 700,
-              color: "#fbbf24",
+              marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${bBd}`,
+              fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 800,
+              color: bFg,
             }}>{cur.breakdown}</div>
           )}
         </div>
