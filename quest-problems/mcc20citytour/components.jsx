@@ -619,6 +619,42 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
           </div>
         </div>
 
+        {/* ⭐ 2026-09-27 — 말풍선을 **격자 바로 위**로 올린다(꼬리 ▼ 가 격자를 가리킨다).
+            선생님이 2026-07-02 에 이미 주신 규칙이다(`feedback_sim_style_consistency`,
+            **반복 지적** *"그건 내가 원하는게 아니라니까"*) — **말풍선 본체가 설명 대상
+            옆으로 이동**해야 하고 「위치 고정 + 꼬리만 이동」은 금지. 참고 구현은 `mexes`.
+            그동안 이건 **격자 아래 까만 띠에 고정**이었다. `see-screen --sim` 실측 —
+            16걸음 중 14걸음이 *"바뀐 자리가 3~5군데로 283~471px 흩어짐"* 경고였다.
+            큐 칩 → 말풍선 → 격자 → 칸 수 를 **한 덩어리로 붙인다.** */}
+        <div style={{
+          background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 12px",
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 12, textAlign: "center", lineHeight: 1.6,
+          minHeight: 46, whiteSpace: "pre-line", wordBreak: "keep-all",
+        }}>
+          {cur.msg}
+        </div>
+        {/* ⭐ 2026-09-27: 칸 수가 **격자 아래**에 있어서 말풍선과 250px 떨어져 있었다
+            (`see-screen --sim` 경고). 걸음마다 바뀌는 건 말풍선·칸수·격자 셋인데,
+            셋이 붙어 있어야 눈이 한 군데만 본다. 말풍선 바로 밑으로 올린다. */}
+        {/* ⭐ 2026-09-27: 여기와 아래 걸음 카운터가 **둘 다 「X / 20」** 이었다.
+            끝까지 가면 분모까지 같아져서 «18 / 20» 과 «20/20» 이 한 화면에 나란히 떴다.
+            게다가 눈에 띄는 건 이쪽(진한 갈색·크다)인데 **네 걸음 동안 안 변한다** —
+            선생님(2026-09-27): *"시뮬레이션에서 다음 버튼이 눌러지는것 같지도 않아."*
+            새 학생도 같은 말을 했다: *"처음 9번 클릭 중 4번은 격자도 큐도 숫자도 안 바뀌어서
+            «방금 누른 게 진짜 눌린 거 맞나» 싶었을 것."*
+            `feedback_same_number_two_meanings` 의 처방 셋을 그대로 쓴다 —
+            ①값 옆에 **무엇의 20인지 이름표** ②뜻이 다르면 **모양도 가른다**
+            (이쪽은 맨 글자, 걸음 쪽은 알약 칩) ③출처와 같은 색. */}
+        <div style={{ marginTop: 8, textAlign: "center", fontSize: 12.5, color: "#92400e" }}>
+          {t(E, "cells reached ", "갈 수 있다고 확인한 칸 ")}<b style={{ color: A }}>{cur.count}</b>
+          <span style={{ color: C.dim }}> / {R * Cn} {t(E, "cells", "칸")}</span>
+        </div>
+        {/* 꼬리 ▼ — 이 말이 **아래 격자**를 가리킨다는 표시 */}
+        <div aria-hidden="true" style={{
+          width: 0, height: 0, margin: "-2px auto 10px",
+          borderLeft: "8px solid transparent", borderRight: "8px solid transparent",
+          borderTop: "8px solid #0f172a",
+        }} />
         {/* height grid */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 42px)`, gap: 8 }}>
@@ -668,6 +704,8 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
           </div>
         </div>
 
+
+
         {/* ⭐ 2026-09-27: 색을 갈랐으면 **그 색이 무슨 뜻인지**도 그 자리에 있어야 한다.
             `feedback_screen_must_not_rely_on_memory` — 화면은 앞 쪽 기억에 기대면 안 된다. */}
         <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap",
@@ -684,29 +722,6 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
               {t(E, k.en, k.ko)}
             </span>
           ))}
-        </div>
-
-        {/* step message */}
-        <div style={{
-          background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 12px",
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 12, textAlign: "center", lineHeight: 1.6,
-          minHeight: 46, whiteSpace: "pre-line", wordBreak: "keep-all",
-        }}>
-          {cur.msg}
-        </div>
-
-        {/* ⭐ 2026-09-27: 여기와 아래 걸음 카운터가 **둘 다 「X / 20」** 이었다.
-            끝까지 가면 분모까지 같아져서 «18 / 20» 과 «20/20» 이 한 화면에 나란히 떴다.
-            게다가 눈에 띄는 건 이쪽(진한 갈색·크다)인데 **네 걸음 동안 안 변한다** —
-            선생님(2026-09-27): *"시뮬레이션에서 다음 버튼이 눌러지는것 같지도 않아."*
-            새 학생도 같은 말을 했다: *"처음 9번 클릭 중 4번은 격자도 큐도 숫자도 안 바뀌어서
-            «방금 누른 게 진짜 눌린 거 맞나» 싶었을 것."*
-            `feedback_same_number_two_meanings` 의 처방 셋을 그대로 쓴다 —
-            ①값 옆에 **무엇의 20인지 이름표** ②뜻이 다르면 **모양도 가른다**
-            (이쪽은 맨 글자, 걸음 쪽은 알약 칩) ③출처와 같은 색. */}
-        <div style={{ marginTop: 8, textAlign: "center", fontSize: 12.5, color: "#92400e" }}>
-          {t(E, "cells reached ", "갈 수 있다고 확인한 칸 ")}<b style={{ color: A }}>{cur.count}</b>
-          <span style={{ color: C.dim }}> / {R * Cn} {t(E, "cells", "칸")}</span>
         </div>
 
         {/* 공용 SimNav — ⏮ 처음부터 · ◀ 이전 · [걸음 N/총] · ▶ 다음.
