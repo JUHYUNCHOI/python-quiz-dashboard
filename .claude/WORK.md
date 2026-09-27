@@ -6868,3 +6868,22 @@ quest breadcrumb 35.5px = **93px**) 겹쳐 있었고, 그 아래를 스크롤로
 
 고칠 방향(미판정): `unlockAfter` 가 algo 토픽이면 `/algo/<topic>/learn` 으로 보내거나,
 `data/index.ts` 에 그 키를 잇거나. **다른 클러스터도 같은 구멍인지 안 세어 봤다.**
+
+### ✅ 위 결함 수정 (2026-09-27) — graph 하나가 아니라 **algo 20개 전부**였다
+
+`app/practice/page.tsx:812` — `unlockAfter` 가 `algo-` 로 시작하면
+`/algo/<topic>` 으로, 아니면 기존 `/learn/<id>` 로 간다. **값 자체는 안 건드렸다**
+(`lesson_id`·`unlockAfter` 는 Supabase 키값이다).
+
+실측:
+- `data/practice/algo-*-contest.ts` 의 `unlockAfter` **20개**와 `data/algo/topics.ts` 의 `id`
+  **20개**가 접두사만 떼면 **1:1 로 정확히 일치**.
+- **새 목적지 20개 전부 HTTP 200** — `/algo/array` … `/algo/unionfind` 하나하나 확인함.
+- ⭐ 곁들여 **로그인 벽도 없어졌다** — `/algo/*` 는 **공개**인데 `/learn/*` 는 **307 로 로그인으로
+  보낸다.** 막힌 학생이 수업을 보려다 로그인 화면을 만나던 것이다.
+- `944행 getNextLessonId(cluster.unlockAfter)` 는 **안전하다**(확인함) — `algo-*` 는 목록에 없어
+  `null` 을 리턴하고 `nextLessonHref && ` 가드에 버튼이 숨는다. 죽은 링크가 안 생긴다.
+
+⚠️ **「준비 중인 레슨」 플레이스홀더가 실제로 뜨는 건 코드로만 확인했다**
+(`client-page.tsx:558`). `/learn/*` 이 로그인 보호라 **화면은 못 봤다.**
+⚠️ **Python·C++ 클러스터의 `unlockAfter` 는 정상이다**(PM 이 전수 대조) — algo 20개만의 문제였다.

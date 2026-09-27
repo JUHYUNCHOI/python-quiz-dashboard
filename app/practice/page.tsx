@@ -811,7 +811,11 @@ function ProblemDetail({
         </div>
         {problem.unlockAfter && (
           <a
-            href={`/learn/${problem.unlockAfter}`}
+            href={
+              String(problem.unlockAfter).startsWith("algo-")
+                ? `/algo/${String(problem.unlockAfter).replace("algo-", "")}`
+                : `/learn/${problem.unlockAfter}`
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="ml-auto shrink-0 flex items-center gap-1.5 text-sm font-bold text-blue-600 hover:text-blue-700 hover:underline whitespace-nowrap"
