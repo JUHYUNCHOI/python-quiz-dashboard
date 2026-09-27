@@ -75,9 +75,17 @@ export function makeMcc20CityTourCh1(E) {
                       그게 이 화면에서 `|…|` 를 푸는 **유일한 말**이라, 지우면
                       2026-09-26 에 「절댓값 기호가 정의 없이 쓰였다」고 한 학생 쪽으로 되돌아간다.
                       **기호 뒤로 옮겨** 조건이 아니라 「기호 풀이」로 읽히게 한다. */}
-                  {t(E, " and may jump to an adjacent cell (up/down/left/right) only if the height difference ", " 에서 시작하고, 인접 칸 (상하좌우) 으로는 높이 차이 ")}
+                  {/* ⭐ 2026-09-27 (세 번째이자 마지막 수정 — PM 조건부 승인).
+                      09-26 엔 풀이를 기호 **앞**에 뒀더니 «조건이 하나 더 있는 줄» 알았고,
+                      09-27 엔 **뒤**로 옮겼더니 pedagogy 가 *"기호를 쓰고 나서 정의하는
+                      순서 자체는 그대로"* 라고 했다. 자리만 옮긴 게 문제였다.
+                      **이번엔 순서를 뒤집는다** — 쉬운 말로 뜻을 먼저 세우고,
+                      «그걸 이렇게 적어요» 로 기호를 **이름 붙이듯** 도입한다
+                      (`feedback_first_concept_scaffolding` 의 «겪은 뒤에 이름» 모양). */}
+                  {t(E,
+                    " and may jump to an adjacent cell (up/down/left/right) only when the two heights are close enough. Take the taller minus the shorter — if that gap is smaller than D, the hop is allowed. We write that gap like this: ",
+                    " 에서 시작해요. 인접 칸 (상하좌우) 으로는 두 건물 높이가 충분히 가까울 때만 건너가요. 높은 쪽에서 낮은 쪽을 빼 보고, 그 차이가 D 보다 작으면 건너갈 수 있어요. 그 차이를 이렇게 적어요 — ")}
                   <b style={{ color: "#dc2626", whiteSpace: "nowrap" }}>{t(E, "|H(here) − H(there)| < D", "|H(현재) − H(이웃)| < D")}</b>
-                  {t(E, " — the bars just mean the gap, whichever side is taller.", " 일 때만 건너가요. 양옆의 | | 는 «어느 쪽이 높든 뺀 차이» 라는 표시예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>

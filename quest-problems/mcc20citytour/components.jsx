@@ -164,6 +164,17 @@ export function Mcc20CityTourBfsSim({ E }) {
           <span style={{ fontSize: 11.5, color: C.dim, ...KA }}>
             {t(E, "(hop allowed if |Δheight| < D)", "(높이 차이 < D 이면 건너기 가능)")}
           </span>
+          {/* ⭐ 2026-09-27: 2쪽이 *"칸은 20개인데 답은 18이에요 — 다음 쪽에서 확인해요"* 라고
+              **약속해 놓고**, 이 쪽 기본값이 D=3 이라 학생이 **18 을 한 번도 못 봤다.**
+              (D=5 를 기본값으로 두면 답이 미리 새기 때문에 일부러 3 으로 뒀던 것이다.)
+              → 기본값은 3 그대로 두고, **약속을 회수하는 버튼**을 하나 준다.
+              `feedback_sentence_must_follow` — 예고했으면 회수해야 한다. */}
+          <button onClick={() => { setTouched(true); setD(5); }} style={{
+            padding: "5px 11px", borderRadius: 999, fontSize: 11.5, fontWeight: 800,
+            border: `1.5px solid ${D === 5 ? A : "#fcd34d"}`,
+            background: D === 5 ? A : "#fff", color: D === 5 ? "#fff" : "#92400e",
+            cursor: "pointer", ...KA,
+          }}>{t(E, "Official sample (D=5)", "공식 예제 (D=5)")}</button>
         </div>
 
         {/* ⭐ 2026-09-27 ①: 여기까지는 «결과»만 보여준다 — D 를 누르면 초록이 통째로 바뀐다.
@@ -253,8 +264,10 @@ export function Mcc20CityTourBfsSim({ E }) {
           {
             touched
               ? t(E,
-                  "The rule is about the DIFFERENCE to a neighbor — not the height itself.\nTwo tall buildings side by side differ little, so the hop is easy.\nA tall one next to a short one becomes a wall once that difference reaches D.\nSo no wall is fixed: the same edge opens for a big D and closes for a small one.",
-                  "중요한 건 높이 자체가 아니라 이웃과의 '차이' 예요.\n높은 건물 둘이 나란히 있으면 차이가 작아서 쉽게 건너요.\n높은 건물 옆 낮은 건물은 차이가 D 이상이면 벽이 돼요.\n그래서 벽이 어디인지 미리 정해져 있지 않아요.\n같은 자리도 D 가 크면 열리고 작으면 막혀요.")
+                  /* 2026-09-27: 다섯 줄이었다. 위에 버튼을 하나 늘렸으니 여기서 갚는다
+                     (`feedback_shorter_not_longer`). 셋째~다섯째 줄은 같은 말을 세 번 한다. */
+                  "The rule is about the DIFFERENCE to a neighbor — not the height itself.\nSo no wall is fixed: the same edge opens for a big D and closes for a small one.",
+                  "중요한 건 높이 자체가 아니라 이웃과의 '차이' 예요.\n그래서 같은 자리도 D 가 크면 열리고 작으면 막혀요.")
               : t(E,
                   "Try a bigger D, then a smaller one.\nDoes the same edge stay a wall every time?",
                   "D 를 키웠다 줄였다 해봐요.\n같은 자리가 늘 벽으로 남아 있나요?")}
@@ -279,6 +292,13 @@ const dBtn = {
    똑같은 숫자를 쓴다 — 그림 대신 같은 스테퍼로 "가운데는 서로 통해도 테두리에서
    못 들어간다"를 직접 보여준다.
    ───────────────────────────────────────────────────────────────────── */
+/* ⭐ 2026-09-27: 방향을 **말로만** 부르다가 6쪽 코드에서 갑자기 `dr[d]/dc[d]` 숫자쌍이
+   튀어나왔다. pedagogy: *"진짜 점프는 5쪽→6쪽이다 — 말로 이해한 규칙을 코드가 다룰 수 있는
+   모양(좌표쌍)으로 어떻게 바꾸나를 다루는 자리가 없다."*
+   선생님(2026-09-27): *"결국 우리가 갈 수 있는게 위아래오른쪽왼쪽이라는거잖아.
+   그러면 인덱스라던가? 고민해야하는것들…"*
+   → **새 쪽을 만들지 않고** 걸음 문장의 방향 이름 옆에 「줄 −1」 같은 좌표를 붙인다.
+   `lab` 이 그 꼬리표다. */
 const DIRS = [
   { dr: -1, dc: 0, en: "up", ko: "위" },
   { dr: 1, dc: 0, en: "down", ko: "아래" },
@@ -286,6 +306,13 @@ const DIRS = [
   { dr: 0, dc: 1, en: "right", ko: "오른쪽" },
 ];
 function capFirst(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+/** 방향 이름 + **좌표가 어떻게 바뀌는지**. 6쪽 `dr/dc` 와 같은 값을 미리 보여준다. */
+function dirLabel(d, E) {
+  const n = (v) => (v < 0 ? "−1" : v > 0 ? "+1" : "0");
+  return E
+    ? `${capFirst(d.en)} (row ${n(d.dr)}, col ${n(d.dc)})`
+    : `${d.ko} (줄 ${n(d.dr)}, 칸 ${n(d.dc)})`;
+}
 
 // The same border/middle numbers the old static picture used — border cells
 // all match, but the gap to the middle equals D, so it's blocked.
@@ -342,13 +369,13 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
         if (!inBounds) {
           status = "oob";
           msg = t(E,
-            `${capFirst(d.en)}: outside the grid.\nCan't go there.`,
-            `${d.ko}: 격자 밖이에요.\n못 가요.`);
+            `${dirLabel(d, true)}: outside the grid.\nCan't go there.`,
+            `${dirLabel(d, false)}: 격자 밖이에요.\n못 가요.`);
         } else if (visited[nr][nc]) {
           status = "visited";
           msg = t(E,
-            `${capFirst(d.en)} (${nr + 1},${nc + 1}): already visited.\nSkip.`,
-            `${d.ko}(${nr + 1},${nc + 1}): 이미 다녀왔어요.\n건너뛰어요.`);
+            `${dirLabel(d, true)} → (${nr + 1},${nc + 1}): already visited.\nSkip.`,
+            `${dirLabel(d, false)} → (${nr + 1},${nc + 1}): 이미 다녀왔어요.\n건너뛰어요.`);
         } else {
           const diff = Math.abs(H[nr][nc] - H[r][c]);
           if (diff < D) {
@@ -357,13 +384,13 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
             queue = [...queue, [nr, nc]];
             count++;
             msg = t(E,
-              `${capFirst(d.en)} (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff} < D(${D}).\nPass — add to the queue.`,
-              `${d.ko}(${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff} < D(${D}).\n통과 — 줄에 넣어요.`);
+              `${dirLabel(d, true)} → (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff} < D(${D}).\nPass — add to the queue.`,
+              `${dirLabel(d, false)} → (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff} < D(${D}).\n통과 — 줄에 넣어요.`);
           } else {
             status = "blocked";
             msg = t(E,
-              `${capFirst(d.en)} (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff}, not less than D(${D}).\nBlocked.`,
-              `${d.ko}(${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff}, D(${D}) 보다 작지 않아요.\n막혀요.`);
+              `${dirLabel(d, true)} → (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff}, not less than D(${D}).\nBlocked.`,
+              `${dirLabel(d, false)} → (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff}, D(${D}) 보다 작지 않아요.\n막혀요.`);
           }
         }
         trace.push({ ...snap(), current: [r, c], checking: inBounds ? [nr, nc] : null, status, msg });
