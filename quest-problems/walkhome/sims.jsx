@@ -366,19 +366,25 @@ export function WalkHomeDpFillSim({ E }) {
           )}
         </div>
 
-        {/* 걸음 설명 — 지금 보는 칸 하나의 상태만 (4상태 표를 격자 위에 얹지 않는다) */}
+        {/* 걸음 설명 — 말풍선 (mexes/sims.jsx:56-63 참고 · 발명 금지).
+            지금 보는 칸 하나의 상태만 (4상태 표를 격자 위에 얹지 않는다).
+            표를 다 채운 마지막 걸음(done)은 초록, 그 밖은 quest 고유색. */}
         <div style={{
-          background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 12px",
-          fontSize: 12.5, lineHeight: 1.7, whiteSpace: "pre-line", textAlign: "center", ...KA,
+          background: cur.done ? "#ecfdf5" : "#f5f3ff",
+          border: `1.5px solid ${cur.done ? "#6ee7b7" : "#c4b5fd"}`,
+          color: cur.done ? "#065f46" : "#5b21b6",
+          borderRadius: 12, padding: "11px 14px", fontSize: 13, fontWeight: 600,
+          lineHeight: 1.6, whiteSpace: "pre-line", textAlign: "center",
+          boxShadow: "0 4px 14px rgba(0,0,0,.08)", ...KA,
         }}>
-          {cur.msg}
+          💬 {cur.msg}
           {cur.breakdown && (
             <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800 }}>
               <span style={{ color: RIGHT }}>1{t(E, "(right)", "(오른쪽)")}</span>
               {" + "}
               <span style={{ color: DOWN }}>1{t(E, "(down)", "(아래)")}</span>
               {" = "}
-              <span style={{ color: cur.done ? DONE : "#fbbf24" }}>2</span>
+              <span style={{ color: cur.done ? DONE : "#f59e0b" }}>2</span>
             </div>
           )}
         </div>
