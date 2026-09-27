@@ -6705,3 +6705,52 @@ sticky 유래만 더해졌다.
 뜻이다. `reach`·`mcc22maze` 는 그 알고리즘을 **통째로** 요구한다 — 등록하면 **거짓 안심**을 준다.
 
 실측: `check-required-vs-code.py` **0곳** · `tsc` quest-meta 오류 없음 · 세 값 모두 반영 확인.
+
+## 🖌️ B조 18개 — 까만 터미널 상자 → 말풍선 · 손으로 만든 ◀▶ → SimNav (2026-09-27)
+
+담당 목록: `mco15secret milkexchange milkmeas moohunt mooin3 mooin4 mooops photoshoot
+reach revegetation rotshift rounding stalling swapity tricks uddered walkhome word`
+
+**고침 (15개, 커밋 15개 — 전부 main 에 로컬 커밋만, 푸시 안 함):**
+- `mco15secret`·`mooops` — 손으로 만든 `i`/offset ◀▶ 를 `SimNav` 로.
+- `milkexchange`·`rotshift`·`swapity` — "▶ 1분/Step" 앞으로만 가던 버튼을
+  **걸음 전체를 미리 계산한 trace + SimNav** 로 바꿔 되돌리기가 새로 생겼다.
+- `milkmeas`·`stalling`·`uddered` — 🔒/문서상 PASS quest. `SOLUTION_CODE` 등 보호
+  변수는 안 건드리고 스타일 버튼만. `stalling`·`uddered` 는 자동재생(⏯) 토글을
+  SimNav 옆에 그대로 뒀다(SimNav 가 못 하는 기능).
+- `tricks` — 3개 시뮬 중 2개(`DeepAuditSim`·`TricksFormulaTrace`)만 SimNav 로.
+  `ColorPairCounter` 는 "완전 공개 → 다음 걸음" 2단 동작 + 350ms 연쇄 애니메이션이라
+  일반 이전/다음이 아니라고 판단해 그대로 뒀다.
+- `word` — `GreedyTrace` 동일 패턴.
+- `photoshoot`·`walkhome` — `#0f172a` 까만 상자의 `cur.msg` 를 mexes 참고 구현대로
+  밝은 바탕 + 💬 + 걸음별 색(아하=초록/그 밖=quest 색)으로.
+- `reach` — 시뮬 4개(`DijkstraKAudit`·`DijkstraTrace`·`ReachSpreadSim`·
+  `GraphBuildSim`) 전부 까만 상자 + 손으로 만든 ◀▶ 였다. 체크리스트는 `pre-line`
+  없어서 2곳만 잡았지만 나머지 2곳도 같은 문제라 눈으로 찾아 같이 고쳤다.
+- `mooin3` — 🔒 동결. brute/fast CodeWalk `accent="#0891b2"`·`"#7c3aed"` 가
+  mooin3 고유색(#7c5cfc)이 아니라 mexes 등 무관한 quest 색과 겹쳤다(#0891b2 는
+  CLAUDE.md 가 짚은 감염원). `accent={A}` 로 교체. 부록(map) 의 `#0d9488` 는
+  CodeWalk 자체의 기본 badge 색과 짝을 맞춘 의도된 대비라 그대로 뒀다.
+- `mooin4` — 동일 감염원(`#0891b2`) accent 를 quest 고유색(#f97316)으로.
+
+**안 고침 (검사기가 봤지만 사람이 읽고 「정당하다」 또는 「위험이 더 크다」 판단):**
+- `moohunt` — check①·② 모두 0/0 인데 accent 불일치 1건(브루트=#dc2626, 빠른=#059669)
+  이 떴다. 코드 확인 결과 **브루트/빠른 코드 두 CodeWalk 을 빨강/초록으로 의도적으로
+  대비**시킨 것(hps 의 오답/정답 대비와 같은 층). USACO 재제출 대기 quest 라 더 조심.
+- `revegetation` — "▶ Greedy auto" 는 단계 이동이 아니라 **1회 실행 액션 버튼**
+  (`▶ 실행` 예외와 같은 층). "Current assignment" 다크 박스는 값 표시 상자.
+- `rounding` — 🔒 동결 + **2026-05-06 에 2236→184줄로 붕괴한 바로 그 quest**
+  (`quest_review_progress.md` "표준-맞추기 함정"). ◀▶ 가 걸음마다 다른 미리보기
+  라벨("▶ Next: d=3"·"🎯 합계 보기"·"🔄 다시 처음부터")을 붙이는데 SimNav 는
+  고정 라벨만 지원해서, 강행하면 **정보 손실(어떤 자릿수가 다음인지 안 보임)**이
+  된다. 고위험·저이득이라 손대지 않았다.
+
+**esbuild 파스 + `check-solution-code-unchanged.py`/`check-frozen.py` 로 매 quest
+정답 코드 불변 확인. `reach` 는 브라우저(`see-screen.mjs --allow-dirty --sim`)로
+4개 시뮬 중 3개(GraphBuildSim·ReachSpreadSim·DijkstraTrace)를 직접 열어 확인했고,
+DijkstraKAudit 은 중첩 코드 스테퍼 때문에 --click 만으론 정확히 못 짚었지만
+나머지 셋과 동일 패턴이라 구조적으로 안전. `walkhome` 도 브라우저로 확인.**
+
+최종 재확인(18개 전수, 손으로 안 세고 스크립트로): 까만 상자 남은 곳 = `mooin4` 1곳
+(값 표시 `<pre>` 옆 코드 주석을 오탐한 것, 실사용은 0), 손 버튼 남은 곳 =
+`revegetation`·`rounding` 각 1건(둘 다 위 이유로 의도적으로 안 고침).
