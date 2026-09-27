@@ -53,6 +53,46 @@ NOT_NAV = re.compile(
     r"다음 쪽|다음 단계로 넘어|Next page", re.I)
 
 
+# ── 규칙 2 (2026-09-27): `accent` 가 **그 quest 고유색과 다른가** ────────────
+# 선생님: *"USACO에서 우리가 해왔던 디자인? UX랑 너무 다른데?"*
+# 형제는 각자 **한 색**만 쓴다 — knight `#2563eb` · kitty `#dc2626` · rect `#059669`.
+# citytour 만 셋이 섞여 있었고, 그중 `#0e7490` 은 **CLAUDE.md 의 SimNav 사용 예시에
+# 적힌 색**이었다. **예시를 복붙하고 quest 색으로 안 바꾼 것**이다.
+# 한 번 나온 실수가 아니라 **복붙이 원인**이라 다른 quest 에도 있다 — 실측 35건·quest 11개.
+#
+# ⚠️ **판정이 아니다.** 일부러 다른 색을 쓰는 자리가 있다 — 예: `hps` 는 한 줄 차이로
+#    `#dc2626`(틀린 쪽)과 `#16a34a`(맞는 쪽)를 나란히 쓴다. 그건 **의미가 있는 대비**다.
+#    그래서 **「여러 quest 에 똑같이 나타나는 남의 색」을 따로 세운다** — 그게 복붙 신호다.
+A_RE = re.compile(r'const A = "(#[0-9a-fA-F]{3,8})"')
+ACCENT_RE = re.compile(r'(?:accent|accentColor)=\{?"(#[0-9a-fA-F]{3,8})"\}?')
+
+
+def accent_mismatches(want):
+    """quest -> [(파일, 줄, 색)] — 그 quest 의 `const A` 와 다른 accent."""
+    own, bad = {}, {}
+    files = sorted(glob.glob("quest-problems/*/*.jsx"))
+    for f in files:
+        q = f.split("/")[1]
+        if want and q not in want:
+            continue
+        src = io.open(f, encoding="utf-8", errors="replace").read()
+        for m in A_RE.finditer(src):
+            own.setdefault(q, set()).add(m.group(1).lower())
+    for f in files:
+        q = f.split("/")[1]
+        if want and q not in want:
+            continue
+        if not own.get(q):
+            continue          # 고유색을 안 정한 quest 는 비교할 기준이 없다
+        src = io.open(f, encoding="utf-8", errors="replace").read()
+        for m in ACCENT_RE.finditer(src):
+            col = m.group(1).lower()
+            if col not in own[q]:
+                bad.setdefault(q, []).append(
+                    (os.path.basename(f), src[:m.start()].count("\n") + 1, col))
+    return own, bad
+
+
 def open_tag_end(btn: str) -> int:
     """`<button ...>` 여는 태그가 **끝나는** 자리. 중괄호 깊이를 세야 한다 —
     `onClick={() => setStep(...)}` 안의 `=>` 때문에 첫 `>` 를 쓰면 틀린다
@@ -129,7 +169,35 @@ def main():
    그 밖에도 정당한 자리가 있을 수 있다 — **라벨을 읽고 사람이 정해라.**
 ⚠️ 0건이 결백이 아니다 — `<div onClick>` 으로 만든 자리, 화살표 없이 글자만 쓴 자리는 못 본다.
 근거: memory/feedback_sim_style_consistency.md · memory/quest_season_shape_consistency.md""")
-    sys.exit(1 if n else 0)
+
+    # ── 규칙 2 — accent 색 ────────────────────────────────────────────────
+    own, bad = accent_mismatches(want)
+    n2 = sum(len(v) for v in bad.values())
+    from collections import Counter
+    spread = Counter(c for v in bad.values() for _, _, c in v)
+    # 서로 다른 quest 2개 이상에 같은 «남의 색» 이 나오면 복붙 신호다
+    by_q = {}
+    for q, v in bad.items():
+        for _, _, c in v:
+            by_q.setdefault(c, set()).add(q)
+    copypaste = {c: qs for c, qs in by_q.items() if len(qs) >= 2}
+
+    print(f"\n── 따로: **accent 가 quest 고유색과 다른 자리** {n2}건 · quest {len(bad)}개")
+    if copypaste:
+        print("   🚩 **여러 quest 에 똑같이 나타나는 남의 색** — 복붙 자국일 가능성이 높다:")
+        for c, qs in sorted(copypaste.items(), key=lambda kv: -len(kv[1])):
+            print(f"      {c}  ← quest {len(qs)}개: {', '.join(sorted(qs))}")
+    for q in sorted(bad, key=lambda x: (-len(bad[x]), x))[:6 if not want else 99]:
+        print(f"   ■ {q}  (A = {', '.join(sorted(own[q]))})")
+        for fn, ln, col in bad[q][:3]:
+            print(f"       {fn}:{ln}  accent={col}")
+        if len(bad[q]) > 3:
+            print(f"       … {len(bad[q]) - 3}건 더")
+    print("""   ⚠️ **판정이 아니다.** 일부러 다른 색을 쓰는 자리가 있다 — `hps` 는 한 줄 차이로
+      `#dc2626`(틀린 쪽)·`#16a34a`(맞는 쪽)를 나란히 쓴다. 그건 **의미 있는 대비**다.
+      위 🚩 목록부터 봐라 — 서로 무관한 quest 에 같은 색이 반복되면 그건 의미가 아니라 복붙이다.""")
+
+    sys.exit(1 if (n or n2) else 0)
 
 
 if __name__ == "__main__":
