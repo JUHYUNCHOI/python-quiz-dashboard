@@ -6158,3 +6158,47 @@ Algorithm Lab Graph 를 끝내도 `masteredConcepts()` 에 **반영되지 않는
 
 ### 배포
 **전부 커밋까지만.** 오늘 1번 썼다.
+
+
+## 🔧 정정 — 「C++ 토글 7개」 큐 항목의 전제가 틀렸다 (2026-09-27)
+
+PM 큐 1번이 *"이미 검증된 `FULL_CPP` 를 `ProgressiveCodeStepper` 로 쪼개 C++ 토글을
+실제로 작동시킨다 … **학생이 실제로 겪은 라이브 결함**"* 이라고 했다. **둘 다 틀렸다.**
+
+### ① 라이브 결함이 아니다
+`check-unused-lang-param.py` 실측 — **토글이 아직 노출된 것 0개.**
+11개 전부 MCC 숨김이거나 `pythonOnly:true` 로 **이미 막혀 있다.**
+학생이 지금 겪는 결함이 아니라 **C++ 학생이 그 quest 에서 C++ 을 못 보는 완성도 문제**다.
+
+### ② 7개가 아니라 **6개**, 그중 고칠 수 있는 건 **4개**
+`app/quest/[problemId]/data.ts` 의 `pythonOnly:true` — `daisychains`·`wordproc`·`cowgym`·
+`whereami`·`shellgame`·`mixmilk` **6개**(`cowcollege` 는 워크트리 사본에만 있고 main 엔 없다).
+· **CodeWalk 은 4개가 이미 완전히 배선돼 있다** — `wordproc`·`cowgym`·`shellgame`·`mixmilk` 의
+  `getXWalk(E, lang)` 가 `if (lang === "cpp")` 로 갈린다. 플래그를 떼고 브라우저로 확인하니
+  **C++ 로 `#include <iostream>` 이 정상 렌더된다.**
+· `daisychains`·`whereami` 는 walk 가 `lang` 을 아예 안 받는다(`whereami` 는 `lang="py"` 하드코딩).
+
+### ③ 🚨 진짜 막는 것 — **최종 코드가 아니라 「중간 설명 스니펫」이다**
+플래그를 떼 봤더니 검사기가 바로 잡았다:
+> *"cowgym · mixmilk · shellgame · wordproc — `CodeSnippet` props: lines, highlight: hl"*
+
+`chapters.jsx` 안의 **자체 `CodeSnippet`** 이 `lang` 을 안 받고, 호출부가 **파이썬 코드를
+글자 그대로 하드코딩**하고 있다. 즉 토글을 열면 **최종 코드는 C++ 로 바뀌는데 중간 설명은
+파이썬 그대로**여서 **더 헷갈린다.** 플래그는 그걸 막고 있던 것이다 — **되돌렸다.**
+
+**실제 작업량(실측):**
+```
+wordproc   스니펫 3개 · 파이썬 코드 약 22줄
+cowgym     스니펫 2개 · 약 18줄
+shellgame  스니펫 3개 · 약 19줄
+mixmilk    스니펫 3개 · 약 25줄
+           ─────────────────────────
+           스니펫 11개 · 약 84줄을 C++ 로 새로 써야 한다
+```
+⚠️ **이건 플래그 한 줄이 아니라 C++ 콘텐츠 작성이다.** 쓰면 `cpp-qa` 로 **실제 컴파일 검증**이
+필요하고(`feedback_sample_pass_is_not_correct`), `check-cpp-stl-gate.py` 로 **안 가르친
+STL 손버릇**도 걸러야 한다. 큐에 「플래그 떼기」로 잡혀 있으면 안 되는 크기다.
+
+**→ 큐 1번을 이렇게 다시 쓴다:** 「C++ 학생용 중간 스니펫 11개(약 84줄) 작성 +
+`CodeSnippet` 에 `lang` 지원 + `cpp-qa` 컴파일 검증」. `daisychains`·`whereami` 는
+walk 배선부터라 **별도**.
