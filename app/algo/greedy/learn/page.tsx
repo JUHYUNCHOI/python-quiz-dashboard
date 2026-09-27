@@ -1014,6 +1014,17 @@ export default function GreedyPage() {
       if (raw) {
         const d = JSON.parse(raw)
         if (typeof d.current === "number") setCurrent(d.current)
+
+      /* ⭐ 2026-09-27: `?ch=N` 으로 챕터에 **직접 들어올 수 있게** 한다.
+         그전엔 어떤 링크를 줘도 항상 1장에서 열렸다 — 챕터 상태가
+         localStorage 에만 있고 주소에는 없었기 때문이다. 선생님이 학생에게
+         "4장 봐" 라고 링크를 줄 수가 없었고, 검토자도 4장까지 손으로
+         눌러 들어가야 했다(실제로 오늘 내가 거기서 막혔다).
+         ⚠️ `completedChapters` 는 **건드리지 않는다** — 진짜 진도 기록이다.
+         옮기는 건 「지금 보는 자리」뿐이고, 그건 원래 학생이 눌러서 바꾸는 값이다.
+         localStorage 복원 **뒤에** 두어 주소가 이긴다. */
+      const ch = Number(new URLSearchParams(window.location.search).get("ch"))
+      if (Number.isInteger(ch) && ch >= 1 && ch <= CHAPTERS.length) setCurrent(ch)
         const completedArr = Array.isArray(d.completed) ? d.completed : []
         if (completedArr.length) setCompletedChapters(new Set(completedArr))
         // mastered 는 실제로 모든 챕터가 완료된 경우에만 인정 (구버전 stale 데이터 방지)
