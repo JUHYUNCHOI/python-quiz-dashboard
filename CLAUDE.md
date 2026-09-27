@@ -163,10 +163,20 @@ python3 scripts/check-required-vs-code.py                     # ⭐ quest 코드
                                                             #   2026-09-25: `mooin3` 이 `chr(c+97)` 를 쓰는데 required 는
                                                             #   `["loop","string-basics"]` 뿐이었고, 학생이 그 코드 쪽에서
                                                             #   **"완전히 막혔다"** 고 했다. 실측 **23곳** → 0곳으로 만들었다.
-                                                            #   ⚠️ **빈 배열이 제일 위험하다** — `readyQuests()` 의
-                                                            #   `required.every(...)` 는 **빈 배열에서 항상 true** 라
-                                                            #   **아무에게나 추천**한다. 그런 quest 가 14개였다.
-                                                            #   pre-commit 에 **경고로만** 걸려 있다(0곳이 유지되면 하드 블록).
+                                                            #   🔧 **정정 (2026-09-27) — 「빈 배열이 제일 위험하다」는 틀렸다.**
+                                                            #   `quest-auditor` 가 검증했다: `readyQuests()`(`concept-graph.ts`)는
+                                                            #   **호출하는 곳이 0곳인 죽은 코드**다. 학생이 실제로 보는 두 경로는
+                                                            #   **최초 커밋(2026-05-06)부터 빈 배열을 걸러낸다** —
+                                                            #     `app/quest/page.tsx:296`  `if (reqs.length === 0) return false`
+                                                            #     `QuestCompletionCard.tsx:90` `if (req.length === 0) continue`
+                                                            #   → 빈 배열은 「아무에게나 추천」이 **아니라** 정반대로
+                                                            #     **「누구에게도 준비됨이 안 뜸」**이다.
+                                                            #   ⚠️ **진짜 위험한 건 «일부만 채워진 배열»** 이다 — `mooin3` 의
+                                                            #     `["loop","string-basics"]` 처럼 **필요한 것 중 일부가 빠지면**
+                                                            #     두 guard 를 다 통과해 **준비 안 된 학생에게 추천된다.**
+                                                            #   ⛔ 그러니 «빈 걸 급히 채우는» 게 아니라 «채울 거면 빠짐없이» 다.
+                                                            #   (MCC 는 48개 중 47개가 미감사 — 별도 항목.)
+                                                            #   pre-commit 에 **경고로만** 걸려 있다.
 python3 scripts/check-taught-vs-final-code.py <id>            # 화면 코드 블록이 **가르치는** 함수를 🔒 최종 코드가 쓰나
                                                             #   (`check-boasted-function.py` 와 다른 층 — 그건 자랑 *문장*만
                                                             #   본다. 이건 학생에게 **직접 보여준 코드 줄**과 대조한다)

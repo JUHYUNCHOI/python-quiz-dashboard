@@ -173,3 +173,23 @@ FILE: <경로>
 
 검사: `python3 scripts/check-sim-uses-simnav.py <id>`
 근거: memory/feedback_sim_style_consistency.md
+
+
+## ⛔ 새로 쓴 글이 **화면에 뜨는지** 눈으로 봐라 · 예시 값은 **변수로**
+
+**① 「썼다」와 「뜬다」는 다르다.** 2026-09-27 — 선생님이 물으신 설명 셋을 `pyOnly` 에
+써 놓고 커밋했는데 **`CodeWalk` 은 그 prop 을 안 읽는다**(소비처는 `ProgressiveCodeStepper`·
+`CodeSectionView` 뿐). **죽은 자리였다.** 빌드도 검사기 15개도 통과했다.
+선생님: *"설명이 말풍선에 안나오네."*
+· 글을 넣기 전에 **`grep -rn "<propName>" components/`** 로 소비처를 확인해라.
+· 넣은 뒤엔 **화면을 열어 그 문자열을 찾아라.** 검사기 0건은 「떴다」가 아니다.
+· **언어·조건으로 갈리는 자리는 양쪽 다** — `lang === "py"` 에 넣었으면 `cpp` 도.
+
+**② 예시 코드에 구체값을 박지 마라 — 예시가 감염원이다.**
+citytour 색이 형제와 달랐는데 범인은 **문서 예시에 적힌 `#0e7490`** 이었다.
+전수 **35곳·quest 11개**, 무관한 quest 6개에 `#0891b2` 가 똑같이 박혀 있었다.
+⭕ `accent={A}`   ❌ `accent="#0e7490"`
+검사: `python3 scripts/check-sim-uses-simnav.py <id>`
+
+근거: memory/feedback_new_text_must_actually_render.md ·
+      memory/feedback_example_code_is_contagious.md

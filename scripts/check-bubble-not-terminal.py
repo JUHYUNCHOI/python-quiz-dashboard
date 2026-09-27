@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""학생에게 **말을 거는 글**이 「까만 터미널 상자」에 들어 있나.
+"""말풍선이 **말풍선처럼** 생겼나 · **떠 있나**.
+
+  검사 둘:
+    ① 학생에게 말을 거는 글이 「까만 터미널 상자」에 들어 있나
+    ② 그 말풍선이 **흐름 안에 박혀** 있나 (떠서 대상을 가리켜야 한다)
 
   python3 scripts/check-bubble-not-terminal.py            # 전수
   python3 scripts/check-bubble-not-terminal.py walkhome mcc20cipher
@@ -33,8 +37,16 @@
 ⚠️ **판정이 아니라 볼 자리 표시다.** 「값을 보여주는 상자」(예: `mcc20kitty` 의
    *"지금까지 3의 배수: 7 ← ✓ 개수"*)는 숫자 표시라 어두운 바탕이 정당할 수 있다.
    **라벨을 읽고 사람이 정해라.**
+⭐ **검사 ② — 2026-09-27 선생님이 같은 날 다시 짚으셨다:**
+   *"이건 말풍선이라기 보다는 **그냥 위에 박혀있는거잖아.** 난 **화면 위에 있는 말풍선**을
+   예전에 얘기했었고"*
+   나는 색을 고친 뒤에도 **흐름 안에 블록으로** 뒀다 — 「위치 고정」의 변종이다.
+   `feedback_sim_style_consistency` 원문: ***"absolute + zIndex, 대상에 `right/top` 앵커.
+   말풍선이 아래·옆 콘텐츠를 좀 가려도 OK."***
+   → **`💬` 를 그리는 자리가 `position: absolute` 안에 있나**를 본다.
+
 ⚠️ **0건이 결백이 아니다** — 다른 어두운 색값, `<div>` 아닌 태그, 스타일을 상수로
-   빼 둔 자리는 못 본다.
+   빼 둔 자리는 못 본다. ②도 `absolute` 가 **그 블록 안**에 문자로 있나만 보는 근사다.
 ──────────────────────────────────────────────────────────────────────────
 """
 import argparse
@@ -82,6 +94,21 @@ def main():
             else:
                 codeblocks += 1
 
+    # ── 검사 ② — 💬 말풍선이 흐름 안에 박혀 있나 ────────────────────────────
+    stuck = {}
+    for f in sorted(glob.glob("quest-problems/*/*.jsx")):
+        quest = f.split("/")[1]
+        if want and quest not in want:
+            continue
+        src = io.open(f, encoding="utf-8", errors="replace").read()
+        for m in re.finditer(r"💬", src):
+            # 그 말풍선을 감싸는 앞쪽 900자 안에 absolute 앵커가 있나
+            back = src[max(0, m.start() - 900): m.start()]
+            if "position: \"absolute\"" in back or "position:\"absolute\"" in back:
+                continue
+            line = src[:m.start()].count("\n") + 1
+            stuck.setdefault(quest, []).append((os.path.basename(f), line))
+
     n = sum(len(v) for v in hits.values())
     scope = f" (quest={', '.join(sorted(want))})" if want else ""
     print(f"학생에게 **말을 거는 글**인데 까만 터미널 상자 — {n}곳 · quest {len(hits)}개{scope}")
@@ -99,6 +126,15 @@ def main():
     if len(hits) > len(shown):
         print(f"\n  … quest {len(hits) - len(shown)}개 더 (--all)")
 
+    n2 = sum(len(v) for v in stuck.values())
+    print(f"\n── 따로: **💬 말풍선이 흐름 안에 박혀 있다**(떠 있지 않다) — {n2}곳 · quest {len(stuck)}개")
+    for q in sorted(stuck, key=lambda x: (-len(stuck[x]), x))[:8 if not want else 99]:
+        print(f"   ■ {q}  " + ", ".join(f"{a}:{b}" for a, b in stuck[q][:3]))
+    print("""   ⭐ 선생님(2026-09-27): *"이건 말풍선이라기 보다는 **그냥 위에 박혀있는거잖아.**"*
+      `feedback_sim_style_consistency`: **absolute + zIndex, 대상에 앵커,
+      아래 콘텐츠를 좀 가려도 OK.** 격자/표를 `position: relative` 로 감싸고
+      말풍선을 그 위에 띄워 **지금 보는 칸 옆**에 붙여라 — 참고: `mcc20citytour`.""")
+
     print("""
 고치는 법 — `quest-problems/mexes/sims.jsx:56-63` 을 그대로 따른다 (발명 금지):
     background: <밝은 바탕>, border: "1.5px solid <강조>", color: <강조 글씨>,
@@ -112,7 +148,7 @@ def main():
    (`mcc20kitty` 의 "지금까지 3의 배수: 7 ← ✓ 개수" 같은 것). **라벨을 읽고 사람이 정해라.**
 ⚠️ 0건이 결백이 아니다 — 다른 색값·다른 태그·상수로 뺀 스타일은 못 본다.
 근거: memory/feedback_sim_style_consistency.md · memory/feedback_fix_all_at_once_not_one_by_one.md""")
-    sys.exit(1 if n else 0)
+    sys.exit(1 if (n or n2) else 0)
 
 
 if __name__ == "__main__":
