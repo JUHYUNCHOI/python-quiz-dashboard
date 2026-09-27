@@ -2,6 +2,7 @@ import { useState } from "react";
 import { t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 const TEAL   = "#0891b2";
 const TEAL_L = "#e0f2fe";
@@ -86,20 +87,16 @@ export function SubarraySumSim({ E }) {
   const py = lang === "py";
   const [mode, setMode] = useState("prefix");   // "prefix" = 리스트 만들기, "count" = 쌍 세기
   const [caseId, setCaseId] = useState("basic");
-  const [si, setSi] = useState(0);
 
   const cur = CASES.find(c => c.id === caseId);
   const trace = mode === "prefix" ? buildPrefixTrace(cur.nums) : buildCountTrace(cur.nums, cur.k);
+  const { safe: si, setIdx: setSi, total: siTotal } = useTraceStep(trace.length);
   const step = trace[Math.min(si, trace.length - 1)];
   const last = si >= trace.length - 1;
   const final = mode === "count" ? trace[trace.length - 1].count : null;
-  const totalSteps = trace.length - 1;
 
   const pickMode = (m) => { setMode(m); setSi(0); };
   const pick = (id) => { setCaseId(id); setSi(0); };
-  const next = () => setSi(s => Math.min(s + 1, trace.length - 1));
-  const prev = () => setSi(s => Math.max(s - 1, 0));
-  const reset = () => setSi(0);
 
   const seenEntries = mode === "count"
     ? Object.entries(step.seen).sort((a, b) => Number(a[0]) - Number(b[0]))
@@ -292,20 +289,7 @@ export function SubarraySumSim({ E }) {
       )}
 
       {/* 컨트롤 */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <button onClick={prev} disabled={si === 0} style={btn(si === 0)}>
-          ◀ {t(E, "Prev", "이전")}
-        </button>
-        <button onClick={next} disabled={last} style={btn(last, true)}>
-          {t(E, "Next step", "다음 스텝")} ▶
-        </button>
-        <button onClick={reset} style={{ ...btn(false), background: "#fff", color: "#64748b", border: "2px solid #cbd5e1" }}>
-          ↺ {t(E, "Restart", "처음으로")}
-        </button>
-        <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 700, color: "#94a3b8", fontFamily: "monospace" }}>
-          {step.phase === "init" ? t(E, "start", "시작") : `${t(E, "step", "스텝")} ${si}`} / {totalSteps}
-        </span>
-      </div>
+      <SimNav idx={si} total={siTotal} onIdx={setSi} accent={TEAL} showLabels isEn={E} />
 
       {/* 마지막 스텝 — 모드별 마무리 배너 */}
       {last && mode === "prefix" && (
@@ -357,18 +341,6 @@ function Row({ n, code, desc, ok, no, E }) {
       <span style={{ fontSize: 11.5, color: "#475569" }}>{desc}</span>
     </div>
   );
-}
-
-function btn(disabled, primary) {
-  return {
-    cursor: disabled ? "default" : "pointer",
-    opacity: disabled ? 0.4 : 1,
-    borderRadius: 8, padding: "8px 16px",
-    fontSize: 12.5, fontWeight: 700,
-    border: `2px solid ${primary ? TEAL : "#cbd5e1"}`,
-    background: primary ? TEAL : "#fff",
-    color: primary ? "#fff" : "#475569",
-  };
 }
 
 /* ── 속도 체감 — brute(모든 쌍) vs 똑똑한 한 번 스캔 ──────────────
