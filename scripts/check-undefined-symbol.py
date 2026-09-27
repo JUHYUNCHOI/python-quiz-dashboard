@@ -106,6 +106,14 @@ ALGO_TERMS = {
     "시뮬레이션": ("시뮬레이션",),
 }
 
+# 알고리즘 **이름** 이 아니라 **개념어** — 「이 말의 뜻이 이 화면에 있나」는 똑같이
+# 묻지만, 적용 범위가 다르다. 알고리즘 이름은 `/algo` 에서 그 페이지의 주제 자체라
+# 안 보지만(아래 `SKIP_ALGO_NAME_ON` 참고), 개념어는 **어디서나** 본다.
+#   ⭐ 2026-09-27 선생님 지적 — `/algo` 에서 「가중치」가 뜻 없이 쓰인다.
+CONCEPT_TERMS = {
+    "가중치": ("가중치",),
+}
+
 # 이름 옆에 이게 있으면 **이름을 붙이는 중**이다 = 통과
 DEFINE_NEAR = (
     # "…라고 불러요" · "…라는 뜻" — 대놓고 이름 붙이는 말
@@ -113,7 +121,10 @@ DEFINE_NEAR = (
     r"|라는\s*(뜻|말|방법|이름)"
     # "방금 본 게 바로 슬라이딩 윈도우예요" — 겪은 뒤에 이름 붙이는 모양.
     #   feedback_first_concept_scaffolding 이 **권장하는** 자리라 반드시 통과시킨다.
-    r"|(바로|이게|이걸|이것이|방금)\b"
+    # ⭐ 2026-09-27: `그게` 를 빠뜨려서 xorstring 이 오탐으로 걸렸다 —
+    #    "i·(n−i) 개의 부분문자열에 들어가요 — **그게** 이 쌍의 가중치 w 예요."
+    #    「이게」와 토씨 하나 차이인데 규칙에 없었다. 앞을 가리키는 말은 다 넣는다.
+    r"|(바로|이게|이걸|이것이|그게|그걸|그것이|방금)\b"
     r"|is\s+called|we\s+call|call(ed)?\s+(this|that|it)|means\b|known\s+as)"
 )
 # "한 번 푼 건 영원히 다시 써요 = 메모이제이션" · "모든 순열 다 해 보기 (브루트포스)"
@@ -255,10 +266,16 @@ def main():
     want = set(args) if args else None
 
     files = sorted(glob.glob("quest-problems/*/*.jsx"))
+    # ⭐ 2026-09-27: `/algo` 학습 페이지를 **아무 검사기도 안 보고 있었다.**
+    #    선생님이 「가중치」가 뜻 없이 쓰인다고 하셨는데, 이 검사기는 원래
+    #    `quest-problems/*/*.jsx` 만 돌아서 algo 쪽은 구조적으로 0건이었다.
+    #    quest 와 같은 규칙(기호·알고리즘 이름)이 그대로 필요한 화면이다.
+    #    이름은 `algo:<토픽>` 으로 둔다 — quest id 와 안 겹치고, 인자로 골라 돌릴 수 있다.
+    algo_files = sorted(glob.glob("app/algo/*/page.tsx") + glob.glob("app/algo/*/*/page.tsx"))
     hits = {}          # quest -> [(파일, 줄, 이름, 조각)]
     allq = {}          # quest -> [(파일, 줄, 화면 글)] — 알고리즘 이름 규칙이 쓴다
-    for f in files:
-        quest = f.split("/")[1]
+    for f in files + algo_files:
+        quest = ("algo:" + f.split("/")[2]) if f.startswith("app/algo/") else f.split("/")[1]
         if want and quest not in want:
             continue
         src = strip_comments(io.open(f, encoding="utf-8", errors="replace").read())
@@ -330,7 +347,15 @@ def main():
     # ── 알고리즘 이름이 뜻보다 먼저 나오나 (quest 전체를 본다)
     algo = {}
     for quest, rows in allq.items():
-        for key, aliases in ALGO_TERMS.items():
+        # ⚠️ `/algo` 학습 페이지에서는 **알고리즘 이름 규칙을 안 본다.**
+        #    그 페이지의 존재 이유가 그 알고리즘을 이름 붙여 가르치는 것이고,
+        #    바닥의 "다음 토픽: 그리디, DP" 는 글이 아니라 **길찾기 링크**다.
+        #    2026-09-27 에 algo 를 열자마자 13건이 쏟아졌는데 손으로 열어 보니
+        #    「이진 탐색 트리」를 「이분탐색」으로 읽은 것까지 **전부 오탐**이었다.
+        #    (`feedback_checkers_can_be_silently_wrong` — 오탐이 쌓이면 검사기를
+        #     아무도 안 믿는다. 반대로 **기호 규칙은 algo 에서도 그대로 값을 한다.**)
+        terms = CONCEPT_TERMS if quest.startswith("algo:") else {**ALGO_TERMS, **CONCEPT_TERMS}
+        for key, aliases in terms.items():
             first = None
             defined = False
             for fn, ln, text in rows:

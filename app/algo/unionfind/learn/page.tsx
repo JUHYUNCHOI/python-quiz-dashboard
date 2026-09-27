@@ -195,10 +195,10 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 <p className="text-sm font-black text-purple-800 mb-1">
                   🌉 {t("크루스칼 (MST 최소 신장 트리)", "Kruskal (MST)")}
                 </p>
-                <p className="text-xs text-gray-700 leading-relaxed">
+                <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-line break-keep">
                   {t(
-                    "간선을 가중치 순으로 보면서, 사이클 안 만드는 간선만 추가. find 로 사이클 검출.",
-                    "Scan edges by weight; only add ones that don't form a cycle. find detects cycles.",
+                    "다리마다 놓는 값(가중치)이 달라요. 싼 다리부터 차례로 보면서,\n고리가 생기는 다리만 빼고 이어요 — 고리인지는 find 가 알려줘요.",
+                    "Each bridge has a cost (its weight). Go from cheapest to priciest,\nskipping any that would close a loop — find is what spots the loop.",
                   )}
                 </p>
               </div>
