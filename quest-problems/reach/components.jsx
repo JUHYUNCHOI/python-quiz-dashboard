@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
+import { SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#8b5cf6";
 const ABg = "#f5f3ff";
@@ -468,15 +469,26 @@ export function DijkstraKAudit({ E }) {
         })}
       </svg>
 
-      {/* Step message */}
-      <div style={{
-        background: "#1e293b", borderRadius: 10, padding: "8px 12px", marginTop: 6,
-        fontFamily: "'JetBrains Mono',monospace", fontSize: 11,
-        color: cur.status === "blocked" ? "#fca5a5" : (cur.status === "relax" ? "#86efac" : "#e2e8f0"),
-        textAlign: "center", lineHeight: 1.6, minHeight: 36,
-      }}>
-        {cur.msg}
-      </div>
+      {/* Step message — 말풍선 (mexes/sims.jsx:56-63 참고 · 발명 금지).
+          걸음 상태에 따라 색이 바뀐다: blocked(막힘)=빨강, relax(갱신)=초록,
+          그 밖(init/pop/skip/done)=quest 고유색. */}
+      {(() => {
+        const tone = cur.status === "blocked"
+          ? { bg: "#fef2f2", bd: "#fca5a5", fg: "#7f1d1d" }
+          : cur.status === "relax"
+          ? { bg: "#ecfdf5", bd: "#6ee7b7", fg: "#065f46" }
+          : { bg: ABg, bd: ABd, fg: A };
+        return (
+          <div style={{
+            background: tone.bg, border: `1.5px solid ${tone.bd}`, borderRadius: 12,
+            padding: "11px 14px", fontSize: 13, fontWeight: 600, color: tone.fg,
+            lineHeight: 1.6, textAlign: "center", minHeight: 36, marginTop: 6,
+            wordBreak: "keep-all", boxShadow: "0 4px 14px rgba(0,0,0,.08)",
+          }}>
+            💬 {cur.msg}
+          </div>
+        );
+      })()}
 
       {/* Status legend (only for edge events) */}
       {cur.kind === "edge" && (
@@ -487,33 +499,9 @@ export function DijkstraKAudit({ E }) {
         </div>
       )}
 
-      {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
-        <button onClick={() => setStep(s => Math.max(0, s - 1))}
-          disabled={idx === 0}
-          style={{
-            padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
-            border: `1px solid ${ABd}`,
-            background: idx === 0 ? "#f1f5f9" : ABg,
-            color: idx === 0 ? "#cbd5e1" : A,
-            cursor: idx === 0 ? "default" : "pointer",
-          }}>◀ {t(E, "Back", "이전")}</button>
-        {idx < maxStep ? (
-          <button onClick={() => setStep(s => Math.min(s + 1, maxStep))} style={{
-            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: "none", cursor: "pointer", color: "#fff",
-            background: `linear-gradient(135deg,#6d28d9,${A})`,
-            boxShadow: "0 3px 12px rgba(139,92,246,.3)",
-          }}>▶ {t(E, "Next", "다음")}</button>
-        ) : (
-          <button onClick={() => setStep(0)} style={{
-            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-          }}>↺ {t(E, "Restart", "처음부터")}</button>
-        )}
-      </div>
-      <div style={{ textAlign: "center", marginTop: 4, fontSize: 10, color: C.dim, fontWeight: 700 }}>
-        {idx + 1}/{maxStep + 1}
+      {/* Controls — 공용 SimNav */}
+      <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
+        <SimNav idx={idx} total={maxStep + 1} onIdx={setStep} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
@@ -593,33 +581,19 @@ export function DijkstraTrace({ E }) {
         })}
       </div>
 
-      {/* Step message */}
+      {/* Step message — 말풍선 (mexes/sims.jsx:56-63 참고 · 발명 금지). 이 걸음엔
+          통과/막힘 구분이 없어 그 밖(quest 고유색) 톤 하나만 쓴다. */}
       <div style={{
-        background: "#1e293b", borderRadius: 10, padding: "8px 12px", marginBottom: 8,
-        fontFamily: "'JetBrains Mono',monospace", fontSize: 11,
-        color: "#e2e8f0", textAlign: "center", lineHeight: 1.6,
+        background: ABg, border: `1.5px solid ${ABd}`, borderRadius: 12, padding: "11px 14px",
+        fontSize: 13, fontWeight: 600, color: A, lineHeight: 1.6, textAlign: "center",
+        marginBottom: 8, wordBreak: "keep-all", boxShadow: "0 4px 14px rgba(0,0,0,.08)",
       }}>
-        {cur.msg}
+        💬 {cur.msg}
       </div>
 
-      {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
-        {step <= maxStep ? (
-          <button onClick={() => setStep(s => Math.min(s + 1, maxStep + 1))} style={{
-            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: "none", cursor: "pointer", color: "#fff",
-            background: `linear-gradient(135deg,#6d28d9,${A})`,
-            boxShadow: "0 3px 12px rgba(139,92,246,.3)",
-          }}>▶ {t(E, "Next", "다음")}</button>
-        ) : (
-          <button onClick={() => setStep(0)} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-          }}>↺ {t(E, "Restart", "처음부터")}</button>
-        )}
-      </div>
-      <div style={{ textAlign: "center", marginTop: 4, fontSize: 10, color: C.dim, fontWeight: 700 }}>
-        {Math.min(step, maxStep + 1)}/{maxStep + 1}
+      {/* Controls — 공용 SimNav */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <SimNav idx={Math.min(step, maxStep)} total={maxStep + 1} onIdx={setStep} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
@@ -845,43 +819,29 @@ export function ReachSpreadSim({ E }) {
         </div>
       )}
 
-      {/* Step message bubble */}
-      <div style={{
-        background: "#1e293b", borderRadius: 10, padding: "8px 12px", marginTop: 6,
-        fontFamily: "'JetBrains Mono',monospace", fontSize: 11,
-        color: cur.status === "block" ? "#fca5a5" : (cur.status === "reach" ? "#86efac" : "#e2e8f0"),
-        textAlign: "center", lineHeight: 1.6, minHeight: 36,
-      }}>
-        {cur.msg}
-      </div>
+      {/* Step message — 말풍선 (mexes/sims.jsx:56-63 참고 · 발명 금지).
+          block(못 감)=빨강, reach(감)=초록, 그 밖(start/done)=quest 고유색. */}
+      {(() => {
+        const tone = cur.status === "block"
+          ? { bg: "#fef2f2", bd: "#fca5a5", fg: "#7f1d1d" }
+          : cur.status === "reach"
+          ? { bg: "#ecfdf5", bd: "#6ee7b7", fg: "#065f46" }
+          : { bg: ABg, bd: ABd, fg: A };
+        return (
+          <div style={{
+            background: tone.bg, border: `1.5px solid ${tone.bd}`, borderRadius: 12,
+            padding: "11px 14px", fontSize: 13, fontWeight: 600, color: tone.fg,
+            lineHeight: 1.6, textAlign: "center", minHeight: 36, marginTop: 6,
+            wordBreak: "keep-all", boxShadow: "0 4px 14px rgba(0,0,0,.08)",
+          }}>
+            💬 {cur.msg}
+          </div>
+        );
+      })()}
 
-      {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
-        <button onClick={() => setStep(s => Math.max(0, s - 1))}
-          disabled={idx === 0}
-          style={{
-            padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
-            border: `1px solid ${ABd}`,
-            background: idx === 0 ? "#f1f5f9" : ABg,
-            color: idx === 0 ? "#cbd5e1" : A,
-            cursor: idx === 0 ? "default" : "pointer",
-          }}>◀ {t(E, "Back", "이전")}</button>
-        {idx < maxStep ? (
-          <button onClick={() => setStep(s => Math.min(s + 1, maxStep))} style={{
-            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: "none", cursor: "pointer", color: "#fff",
-            background: `linear-gradient(135deg,#6d28d9,${A})`,
-            boxShadow: "0 3px 12px rgba(139,92,246,.3)",
-          }}>▶ {t(E, "Next", "다음")}</button>
-        ) : (
-          <button onClick={() => setStep(0)} style={{
-            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-          }}>↺ {t(E, "Restart", "처음부터")}</button>
-        )}
-      </div>
-      <div style={{ textAlign: "center", marginTop: 4, fontSize: 10, color: C.dim, fontWeight: 700 }}>
-        {idx + 1}/{maxStep + 1}
+      {/* Controls — 공용 SimNav */}
+      <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
+        <SimNav idx={idx} total={maxStep + 1} onIdx={setStep} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
@@ -1050,13 +1010,14 @@ export function GraphBuildSim({ E }) {
         </div>
       )}
 
-      {/* explanation bubble */}
+      {/* explanation bubble — 말풍선 (mexes/sims.jsx:56-63 참고 · 발명 금지).
+          통과/막힘 구분이 없는 걸음이라 quest 고유색 톤 하나만 쓴다. */}
       <div style={{
-        background: "#1e293b", borderRadius: 10, padding: "8px 12px", marginTop: 8,
-        fontSize: 11.5, color: "#e2e8f0", textAlign: "center", lineHeight: 1.6,
-        minHeight: 34, wordBreak: "keep-all",
+        background: ABg, border: `1.5px solid ${ABd}`, borderRadius: 12, padding: "11px 14px",
+        fontSize: 13, fontWeight: 600, color: A, lineHeight: 1.6, textAlign: "center",
+        marginTop: 8, wordBreak: "keep-all", boxShadow: "0 4px 14px rgba(0,0,0,.08)",
       }}>
-        {t(E, cur.en, cur.ko)}
+        💬 {t(E, cur.en, cur.ko)}
       </div>
 
       {/* legend */}
@@ -1066,33 +1027,9 @@ export function GraphBuildSim({ E }) {
         <span style={{ color: "#8b5cf6" }}>{t(E, "①–⑥ = road number", "①–⑥ = 도로 번호")}</span>
       </div>
 
-      {/* controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
-        <button onClick={() => setStep(s => Math.max(0, s - 1))}
-          disabled={idx === 0}
-          style={{
-            padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
-            border: `1px solid ${ABd}`,
-            background: idx === 0 ? "#f1f5f9" : ABg,
-            color: idx === 0 ? "#cbd5e1" : A,
-            cursor: idx === 0 ? "default" : "pointer",
-          }}>◀ {t(E, "Back", "이전")}</button>
-        {idx < maxStep ? (
-          <button onClick={() => setStep(s => Math.min(s + 1, maxStep))} style={{
-            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: "none", cursor: "pointer", color: "#fff",
-            background: `linear-gradient(135deg,#6d28d9,${A})`,
-            boxShadow: "0 3px 12px rgba(139,92,246,.3)",
-          }}>▶ {t(E, "Next", "다음")}</button>
-        ) : (
-          <button onClick={() => setStep(0)} style={{
-            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-          }}>↺ {t(E, "Restart", "처음부터")}</button>
-        )}
-      </div>
-      <div style={{ textAlign: "center", marginTop: 4, fontSize: 10, color: C.dim, fontWeight: 700 }}>
-        {idx + 1}/{maxStep + 1}
+      {/* controls — 공용 SimNav */}
+      <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
+        <SimNav idx={idx} total={maxStep + 1} onIdx={setStep} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
