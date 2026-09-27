@@ -5994,3 +5994,50 @@ sorting?ch=3 → 3. Time Complexity         · 탭 3/5 열림  ✅ 다른 토픽
 **가장 작은 해법(미확정)**: `QUEST_ALGO` 를 **거꾸로 읽으면** 새 데이터가 필요 없다 —
 `Object.entries(QUEST_ALGO).filter(([,t]) => t === "graph")`. 읽기 전용 조합이라 위험이 낮다.
 **어디에 둘지**는 `pedagogy-reviewer`, **셋이 맞는지**는 `quest-auditor` 에 붙였다 — 판정 대기.
+
+
+## ✅ BFS/DFS 문제 모아두기 — **켰다** (2026-09-27)
+
+선생님: *"BFS랑 DFS 문제들 모아두게 해달라는것 되었나? USACO랑 MCC에서."*
+
+**PM 판정 + 검토 둘(quest-auditor · pedagogy-reviewer)을 거쳐 오늘 닫았다.**
+
+### 진짜 원인 — **만들 게 아니라 켤 것이었다**
+`data/algo/contest-links.ts` + `AlgoContestSection` 이 **정확히 이 기능**을 5개월째 갖고 있었다
+(커밋 `607b0fab "Connect student journey: lesson → practice → algo → competition"`).
+그런데 그게 `app/algo/[topicId]/client-page.tsx` **동적 라우트** 안에 있었고,
+`app/algo/<토픽>/page.tsx` **정적 라우트가 22개** 있어서 Next.js 라우팅 우선순위상
+**어떤 토픽에서도 렌더링된 적이 없다.**
+→ `array`·`sorting`·`stackqueue`·`hashtable`·`prefixsum`·`string` **6개 토픽 데이터가
+5개월간 화면에 한 번도 안 떴다.** graph 는 데이터 자체가 없었다.
+
+### 한 것
+1. `components/algo/contest-section.tsx` 로 **공용 컴포넌트 분리** (중복 두 벌 금지 —
+   오늘 `graph-lesson.tsx` 가 정확히 그렇게 한쪽만 고쳐져 「재귀로」에 남아 있었다).
+2. 정적 라우트가 **실제로 쓰는** `TopicProblemsPage` 안에서 렌더 → **6개 토픽이 같이 살아났다.**
+3. **링크를 내부로.** 원본은 `codeQuestUrl(id)` 로 `https://codequest.coderin.app/?p=...`
+   **외부 도메인**이었다 — `quest_integration_strategy.md`(2026-04-29)로 quest 가 사이트 안
+   `/quest/<id>` 로 통합된 뒤 이 파일만 갱신이 안 됐다.
+   실측: id **20개 전부** `quest-problems/` 에 있다 → 그대로 내부 경로로 쓴다. 새 탭·외부 아이콘 제거.
+4. `graph` 항목 추가 — `mcc20citytour`·`mcc20knight`·`milkfactory`.
+5. graph 카드 아래 **「막히면 — BFS·DFS 다시 보기」** → `/algo/graph/learn?ch=3`
+   (오늘 넣은 `?ch=N` 딥링크를 쓴다. 1장부터 다시 안 읽어도 된다).
+6. 동적 라우트의 죽은 중복 **57줄 제거**, 공용 컴포넌트를 import 하게.
+
+### 셋이 맞는지 — quest-auditor 재검증
+🔒 `FULL_PY`/`FULL_CPP` 를 직접 읽었고, **네 겹으로 다시 훑었다**
+(키워드 → 좌표쌍 패턴 → `stack.pop/append` → `visited` 동의어 `seen|marked|explore`)
+\+ **`def dfs|def bfs` 전수 검색 = 0건**(재귀 DFS 가 숨은 자리 없음).
+→ **셋이 맞다. 더 없다.** `reach`·`mco15trains` 는 가중치 다익스트라(`shortestpath` 가 맞다),
+`swapity`(순열 사이클)·`revegetation`(고정 순서 그리디 색칠)·`mcc19bakery`(two-pointer)는
+`deque`·`visited` 를 쓰지만 탐색이 아니다. `drought` 의 BFS 는 **디버깅 검증용**이지 🔒 코드가 아니다.
+⚠️ 못 한 것: 180개를 한 줄씩 다 읽지는 못했다 — 네 그물 밖 다섯 번째 모양은 못 잡았을 수 있다.
+
+### 검증 (브라우저 실측)
+```
+/algo/graph   섹션 O · /quest/mcc20citytour·mcc20knight·milkfactory · 다시보기 ?ch=3 · 외부링크 0
+/algo/array   섹션 O · /quest/hps17·billboard·outofplace        ← 5개월 만에 처음 뜸
+/algo/sorting 섹션 O · quest 4개                                  ← 5개월 만에 처음 뜸
+/algo/dp      섹션 X (데이터 없음 — 아무것도 안 뜬다, 회귀 없음)
+```
+페이지 에러 0 · 타입 오류 58(기준선)

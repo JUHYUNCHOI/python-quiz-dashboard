@@ -173,6 +173,39 @@ export const ALGO_CONTEST_LINKS: TopicContestLink[] = [
       },
     ],
   },
+  /* ⭐ 2026-09-27 선생님: *"BFS랑 DFS 문제들 모아두게 해달라는것 되었나? USACO랑 MCC에서."*
+     `quest-auditor` 가 quest 180개를 네 겹으로 훑어(키워드 → 좌표쌍 패턴 → 스택 패턴 →
+     `visited` 동의어 `seen|marked|explore`, 거기에 `def dfs|def bfs` 전수 검색까지)
+     🔒 정답 코드를 직접 읽고 판정했다 — **BFS/DFS 를 쓰는 quest 는 정확히 이 셋뿐이다.**
+     `reach`·`mco15trains` 는 가중치가 있는 다익스트라라 `shortestpath` 가 맞고,
+     `swapity`(순열 사이클)·`revegetation`(고정 순서 그리디 색칠)·`mcc19bakery`(two-pointer)는
+     `deque`·`visited` 를 쓰지만 탐색이 아니다. */
+  {
+    topicId: "graph",
+    problems: [
+      {
+        id: "mcc20citytour",
+        title: "City Tour (MCC 2020)",
+        source: "MCC",
+        difficulty: "easy",
+        why: "격자에서 건너갈 수 있는 칸만 따라가며 번져 나가기 — 가장 기본이 되는 모양",
+      },
+      {
+        id: "mcc20knight",
+        title: "Knight (MCC 2020)",
+        source: "MCC",
+        difficulty: "medium",
+        why: "나이트가 뛰는 8방향 — 몇 번 만에 닿는지는 «한 겹씩» 세면 나와요",
+      },
+      {
+        id: "milkfactory",
+        title: "Milk Factory (Bronze)",
+        source: "USACO Bronze",
+        difficulty: "medium",
+        why: "길을 거꾸로 뒤집어 놓고 탐색하면 «모두가 닿을 수 있는 곳» 이 보여요",
+      },
+    ],
+  },
 ]
 
 /**

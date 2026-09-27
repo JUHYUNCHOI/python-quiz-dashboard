@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { ArrowLeft, BookOpen, CheckCircle2 } from "lucide-react"
 import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { LessonPanel } from "@/components/algo/lesson-panel"
+import { AlgoContestSection } from "@/components/algo/contest-section"
 
 interface TopicProblem { id: string; difficulty: string; title: string; en?: { title?: string } }
 
@@ -20,6 +21,7 @@ interface TopicProblem { id: string; difficulty: string; title: string; en?: { t
  */
 export function TopicProblemsPage({
   topicId, titleKo, titleEn, emoji, cluster, lesson,
+  contestReviewHref, contestReviewLabel,
 }: {
   topicId: string
   titleKo: string
@@ -27,9 +29,12 @@ export function TopicProblemsPage({
   emoji: string
   cluster: { problems: TopicProblem[] }
   lesson: ReactNode
+  /** 실전 문제 카드 아래 「막히면 다시 보기」가 갈 곳. `?ch=N` 딥링크를 쓴다. */
+  contestReviewHref?: string
+  contestReviewLabel?: { ko: string; en: string }
 }) {
   const router = useRouter()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const SOLVED_KEY = `algo-${topicId}-contest-solved`
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
   const [showLesson, setShowLesson] = useState(false)
@@ -144,6 +149,19 @@ export function TopicProblemsPage({
             🎉 {t("이 토픽 문제 다 풀었어요! 다음 토픽 →", "All problems done! Next topic →")}
           </Link>
         )}
+
+        {/* ⭐ 2026-09-27 — 선생님: *"BFS랑 DFS 문제들 모아두게 해달라는것 되었나? USACO랑 MCC에서."*
+            이 섹션은 **새로 만든 게 아니다.** `app/algo/[topicId]/client-page.tsx` 안에 5개월째
+            있었는데, `app/algo/<토픽>/page.tsx` **정적 라우트 22개**가 동적 라우트를 가려서
+            **한 번도 렌더링된 적이 없다.** 데이터가 이미 6개 토픽에 들어 있었다.
+            정적 라우트가 **실제로 쓰는** 이 컴포넌트로 옮겨서 켠다.
+            데이터 없는 토픽에서는 `null` 이라 아무것도 안 뜬다. */}
+        <AlgoContestSection
+          topicId={topicId}
+          lang={lang}
+          reviewHref={contestReviewHref}
+          reviewLabel={contestReviewLabel}
+        />
       </main>
 
       {/* 📖 수업 — 이동 없이 옆 슬라이드 (in-context) */}
