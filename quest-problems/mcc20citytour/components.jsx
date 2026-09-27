@@ -18,6 +18,8 @@ import { CodeBlock } from "@/components/quest/shared";
    quest 색으로 안 바꾼 것이다. **accent 는 반드시 `A` 를 넘겨라.** */
 const A = "#d97706";
 const NW = { whiteSpace: "nowrap" };
+/** 말풍선이 격자 위에 뜰 자리 — 이만큼 미리 비워 둬야 격자를 안 가린다. */
+const BUBBLE_H = 78;
 const KA = { wordBreak: "keep-all" };
 
 /* ───────────────── Height-reachability concept sim ─────────────────
@@ -314,6 +316,9 @@ const DIRS = [
   { dr: 0, dc: 1, en: "right", ko: "오른쪽" },
 ];
 function capFirst(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+/** 방향 이름 뒤에 붙는 말 — 「왼쪽」에 「쪽」을 또 붙이면 «왼쪽쪽» 이 된다.
+    (2026-09-27 실측으로 잡았다. 화면을 안 봤으면 그대로 나갔을 것이다.) */
+function dirKo(d) { return d.ko.endsWith("쪽") ? d.ko : d.ko + "쪽"; }
 /** 방향 이름 + **좌표가 어떻게 바뀌는지**. 6쪽 `dr/dc` 와 같은 값을 미리 보여준다. */
 function dirLabel(d, E) {
   const n = (v) => (v < 0 ? "−1" : v > 0 ? "+1" : "0");
@@ -382,13 +387,13 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
         if (!inBounds) {
           status = "oob";
           msg = t(E,
-            `${dirLabel(d, true)}: outside the grid.\nCan't go there.`,
-            `${dirLabel(d, false)}: 격자 밖이에요.\n못 가요.`);
+            `${capFirst(d.en)} — nothing there.`,
+            `${dirKo(d)}은 칸이 없어요.`);
         } else if (visited[nr][nc]) {
           status = "visited";
           msg = t(E,
-            `${dirLabel(d, true)} → (${nr + 1},${nc + 1}): already visited.\nSkip.`,
-            `${dirLabel(d, false)} → (${nr + 1},${nc + 1}): 이미 다녀왔어요.\n건너뛰어요.`);
+            `${capFirst(d.en)} — already been there.`,
+            `${dirKo(d)}은 이미 다녀왔어요.`);
         } else {
           const diff = Math.abs(H[nr][nc] - H[r][c]);
           if (diff < D) {
@@ -397,13 +402,13 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
             queue = [...queue, [nr, nc]];
             count++;
             msg = t(E,
-              `${dirLabel(d, true)} → (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff} < D(${D}).\nPass — add to the queue.`,
-              `${dirLabel(d, false)} → (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff} < D(${D}).\n통과 — 줄에 넣어요.`);
+              `${capFirst(d.en)} — can go!\nThe gap is ${diff}, under ${D}.`,
+              `${dirKo(d)}은 갈 수 있어요!\n높이 차이가 ${diff}, ${D} 보다 작아요.`);
           } else {
             status = "blocked";
             msg = t(E,
-              `${dirLabel(d, true)} → (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff}, not less than D(${D}).\nBlocked.`,
-              `${dirLabel(d, false)} → (${nr + 1},${nc + 1})=${H[nr][nc]}: |${H[r][c]}−${H[nr][nc]}|=${diff}, D(${D}) 보다 작지 않아요.\n막혀요.`);
+              `${capFirst(d.en)} — blocked.\nThe gap is ${diff}, not under ${D}.`,
+              `${dirKo(d)}은 막혀요.\n높이 차이가 ${diff}, ${D} 보다 작지 않아요.`);
           }
         }
         /* ⭐ `dirIdx` 를 같이 넘긴다 — 격자 **밖** 이웃은 `checking` 이 null 이라
@@ -588,8 +593,11 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             첫 화면에서 말해 준다(`feedback_screen_must_not_rely_on_memory` — 앞 쪽은 사라진다). */}
         <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 8, lineHeight: 1.55, ...KA }}>
           {t(E,
-            "Same spreading you saw earlier — but there it moved a whole hop at a time. Here you watch one cell, one direction at a time, in the order the code does it.",
-            "앞에서 본 그 번짐이에요. 거기서는 한 번에 «한 뜀»씩 묶어서 봤죠. 여기서는 칸 하나, 방향 하나씩 — 코드가 실제로 하는 순서 그대로 봐요.")}
+            /* ⭐ 2026-09-27 선생님: *"위에 있는건 애들이 읽을까?"* — 안 읽는다.
+               세 문장짜리 회색 덩어리였다. 한 줄로 줄인다
+               (`feedback_narration_short` · `feedback_shorter_not_longer`). */
+            "Same spreading — but one cell at a time.",
+            "앞에서 본 그 번짐을 이번엔 한 칸씩 봐요.")}
         </div>
 
         {/* preset picker */}
@@ -663,7 +671,8 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             **absolute + zIndex, 대상에 앵커, 아래 콘텐츠를 좀 가려도 OK.**
             나는 흐름 안에 블록으로 박아 뒀다 — 「위치 고정」의 변종일 뿐이었다.
             이제 격자를 `relative` 로 감싸고 말풍선이 **지금 보는 칸 옆에 떠서** 따라다닌다. */}
-        <div style={{ position: "relative", display: "flex", justifyContent: "center", marginBottom: 10 }}>
+        <div style={{ position: "relative", display: "flex", justifyContent: "center",
+          paddingTop: BUBBLE_H + 10, marginBottom: 10 }}>
           {(() => {
             const tone = {
               pass:    { bg: "#ecfdf5", bd: "#059669", fg: "#065f46" },
@@ -672,31 +681,34 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
               visited: { bg: "#f1f5f9", bd: "#94a3b8", fg: "#475569" },
             }[cur.status] || { bg: "#fffbeb", bd: "#d97706", fg: "#92400e" };
             // 말풍선이 붙을 칸 — 지금 보는 이웃이 있으면 거기, 없으면 꺼낸 칸
+            // 말풍선이 가리킬 칸 — 지금 보는 이웃 > 꺼낸 칸 > 이번에 새로 들어온 칸
             const anchor = cur.checking || cur.current || (cur.wave && cur.wave[0]) || [0, 0];
-            const [ar, ac] = anchor;
+            const ac = anchor[1];
             const CELL = 42, GAP = 8;
             const gridW = Cn * CELL + (Cn - 1) * GAP;
-            const above = ar >= R / 2;                 // 아래쪽 칸이면 위에, 위쪽 칸이면 아래에 띄운다
             const cx = ac * (CELL + GAP) + CELL / 2;
+            /* ⭐ 2026-09-27 선생님: *"화면을 가리네"* — 규칙은 «좀 가려도 OK» 인데
+               격자를 **통째로 덮고** 있었다(칸 위에 겹쳐 놨다).
+               참고 구현 `mexes` 는 **상자를 안 덮는다** — 위/아래에 두고 **꼬리만** 대상을 가리킨다.
+               그대로 맞춘다: 말풍선은 격자 **바깥 위**에 뜨고(자리를 미리 비워 둔다),
+               꼬리가 **지금 보는 칸의 세로줄**을 가리킨다. 격자는 하나도 안 가린다. */
             return (
               <div style={{
                 position: "absolute", zIndex: 20, left: `calc(50% - ${gridW / 2}px)`,
-                width: gridW, pointerEvents: "none",
-                top: above ? undefined : (ar + 1) * (CELL + GAP) + 6,
-                bottom: above ? (R - ar) * (CELL + GAP) + 6 : undefined,
+                bottom: `calc(100% - ${BUBBLE_H}px)`, width: gridW, pointerEvents: "none",
               }}>
                 <div style={{
                   background: tone.bg, border: `2px solid ${tone.bd}`, color: tone.fg,
-                  borderRadius: 12, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.55,
+                  borderRadius: 12, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.5,
                   textAlign: "center", fontWeight: 700, whiteSpace: "pre-line",
-                  boxShadow: "0 6px 20px rgba(0,0,0,.18)", ...KA,
+                  boxShadow: "0 6px 20px rgba(0,0,0,.14)", ...KA,
                 }}>💬 {cur.msg}</div>
-                {/* 꼬리 — 지금 보는 **그 칸**을 가리킨다 */}
+                {/* 꼬리 — 지금 보는 **그 칸의 세로줄**을 가리킨다 */}
                 <div aria-hidden="true" style={{
-                  position: "absolute", left: cx - 8, [above ? "bottom" : "top"]: -8,
-                  width: 0, height: 0,
+                  position: "absolute", left: cx - 8, top: "100%",
+                  width: 0, height: 0, transition: "left 160ms",
                   borderLeft: "8px solid transparent", borderRight: "8px solid transparent",
-                  [above ? "borderTop" : "borderBottom"]: `8px solid ${tone.bd}`,
+                  borderTop: `8px solid ${tone.bd}`,
                 }} />
               </div>
             );
