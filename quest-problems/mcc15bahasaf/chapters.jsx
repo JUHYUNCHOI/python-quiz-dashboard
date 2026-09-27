@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 const NW = { whiteSpace: "nowrap" };
 const KA = { wordBreak: "keep-all" };
@@ -53,7 +54,7 @@ function partialOutput(n) {
    no consonant at all → stick an 'f' in front.
    ───────────────────────────────────────────────────────────── */
 function SyllableEchoSim({ E }) {
-  const [i, setI] = useState(0);
+  const { safe: i, setIdx: setI, total: iTotal } = useTraceStep(DEMO_FLAT.length);
   const cur = DEMO_FLAT[i];
   const pos = firstConsonantPos(cur.syl);
   const hasConsonant = pos !== -1;
@@ -98,12 +99,8 @@ function SyllableEchoSim({ E }) {
         </div>
 
         {/* stepper */}
-        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12 }}>
-          <button onClick={() => setI(Math.max(0, i - 1))} disabled={i === 0} style={navBtn(i === 0)}>◀</button>
-          <span style={{ fontSize: 12, color: "#7f1d1d", fontWeight: 700, minWidth: 74, textAlign: "center" }}>
-            {t(E, "syllable ", "음절 ")}{i + 1} / {DEMO_FLAT.length}
-          </span>
-          <button onClick={() => setI(Math.min(DEMO_FLAT.length - 1, i + 1))} disabled={i === DEMO_FLAT.length - 1} style={navBtn(i === DEMO_FLAT.length - 1)}>▶</button>
+        <div style={{ marginBottom: 12 }}>
+          <SimNav idx={i} total={iTotal} onIdx={setI} accent="#dc2626" showLabels isEn={E} />
         </div>
 
         {/* the three-line breakdown for the current syllable */}
@@ -158,12 +155,6 @@ function SyllableEchoSim({ E }) {
     </div>
   );
 }
-const navBtn = (disabled) => ({
-  width: 34, height: 30, borderRadius: 8, border: "1px solid #fca5a5",
-  background: disabled ? "#f8fafc" : "#fff", color: disabled ? "#cbd5e1" : "#dc2626",
-  fontSize: 14, fontWeight: 800, cursor: disabled ? "default" : "pointer", lineHeight: 1,
-});
-
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
