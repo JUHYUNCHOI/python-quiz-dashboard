@@ -319,6 +319,18 @@ function capFirst(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 /** 방향 이름 뒤에 붙는 말 — 「왼쪽」에 「쪽」을 또 붙이면 «왼쪽쪽» 이 된다.
     (2026-09-27 실측으로 잡았다. 화면을 안 봤으면 그대로 나갔을 것이다.) */
 function dirKo(d) { return d.ko.endsWith("쪽") ? d.ko : d.ko + "쪽"; }
+/** 받침에 따라 조사를 고른다 — 「위은/아래으로」 같은 말이 나오면 애들이 먼저 걸린다.
+    (2026-09-27 실측으로 잡았다. 화면을 안 읽었으면 그대로 나갔다.) */
+function hasJong(w) {
+  const c = w.charCodeAt(w.length - 1);
+  return c >= 0xac00 && c <= 0xd7a3 && (c - 0xac00) % 28 !== 0;
+}
+function josa(w, withJong, without) { return w + (hasJong(w) ? withJong : without); }
+/** 여러 방향을 「·」 로 잇고 마지막 낱말 기준으로 조사를 붙인다. */
+function joinKo(list, withJong, without) {
+  const j = list.join("·");
+  return josa(j, withJong, without);
+}
 /** 방향 이름 + **좌표가 어떻게 바뀌는지**. 6쪽 `dr/dc` 와 같은 값을 미리 보여준다. */
 function dirLabel(d, E) {
   const n = (v) => (v < 0 ? "−1" : v > 0 ? "+1" : "0");
@@ -455,28 +467,33 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
   while (queue.length) {
     const [r, c] = queue[0];
     queue = queue.slice(1);
-    const added = [], blocked = [];
+    /* ⭐ 2026-09-27 선생님: *"**두군데가 더 생긴게 아니라 갔던곳은 가는게 아니니까**
+       원래는 위아래오른쪽왼쪽이잖아. 그런게 잘 안나타나고 **말도 부자연스러워**"*
+       「N 군데 늘었어요」는 **결과 숫자**다. 학생이 실제로 하는 건 **네 방향을 하나씩 보고
+       «갈까 말까» 를 정하는 것**이고, 그중 하나가 **「거긴 벌써 갔잖아」** 다.
+       방향 넷을 **이름으로** 말하고, 갔던 곳·막힘·없음을 그대로 드러낸다. */
+    const added = [], blocked = [], goKo = [], seenKo = [], blockKo = [], noneKo = [];
+    const goEn = [], seenEn = [], blockEn = [], noneEn = [];
     for (const d of DIRS) {
       const nr = r + d.dr, nc = c + d.dc;
-      if (nr < 0 || nr >= R || nc < 0 || nc >= Cn) continue;
-      if (visited[nr][nc]) continue;
+      if (nr < 0 || nr >= R || nc < 0 || nc >= Cn) { noneKo.push(d.ko); noneEn.push(d.en); continue; }
+      if (visited[nr][nc]) { seenKo.push(d.ko); seenEn.push(d.en); continue; }
       if (Math.abs(H[nr][nc] - H[r][c]) < D) {
         visited[nr][nc] = true;
         queue = [...queue, [nr, nc]];
         count++;
-        added.push([nr, nc]);
+        added.push([nr, nc]); goKo.push(d.ko); goEn.push(d.en);
       } else {
-        blocked.push([nr, nc]);
+        blocked.push([nr, nc]); blockKo.push(d.ko); blockEn.push(d.en);
       }
     }
     const here = t(E, `Now I'm on (${r + 1},${c + 1}).`, `이제 (${r + 1},${c + 1}) 에 서 있어요.`);
-    let tail;
-    if (added.length) {
-      tail = t(E, `\n${added.length} new place${added.length > 1 ? "s" : ""} to go.`,
-                  `\n갈 수 있는 곳이 ${added.length} 군데 늘었어요.`);
-    } else {
-      tail = t(E, "\nNowhere new from here.", "\n여기서 새로 갈 곳은 없어요.");
-    }
+    const ko = [], en = [];
+    if (goKo.length)    { ko.push(`${joinKo(goKo, "으로", "로")} 갈 수 있어요`);        en.push(`${goEn.join(", ")} — I can go`); }
+    if (seenKo.length)  { ko.push(`${joinKo(seenKo, "은", "는")} 벌써 갔던 곳`);        en.push(`${seenEn.join(", ")} — been there`); }
+    if (blockKo.length) { ko.push(`${joinKo(blockKo, "은", "는")} 막혔어요`);           en.push(`${blockEn.join(", ")} — blocked`); }
+    if (noneKo.length)  { ko.push(`${joinKo(noneKo, "은", "는")} 칸이 없어요`);         en.push(`${noneEn.join(", ")} — no cell`); }
+    const tail = "\n" + t(E, en.join(". ") + ".", ko.join(". ") + ".");
     trace.push({
       ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 4,
       wave: added, blocked, popped: [[r, c]],
