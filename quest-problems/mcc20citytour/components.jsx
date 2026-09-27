@@ -488,14 +488,15 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
      자세히 본 두 번의 pop 이 「한 칸씩」을 이미 가르쳤으니, 여기서는 그 되풀이를
      묶어도 거짓이 아니다. 묶는다는 말을 첫 겹에서 대놓고 한다. */
   let waveNo = 0;
-  /* ⭐ (b) 2026-09-27 PM 판정 — 선생님: *"4개의 기호가 동시에?"*
-     첫 칸은 방향을 하나씩 밟는데(2~6걸음), 그다음 칸부터 갑자기 넷이 한 번에 뜬다.
-     pedagogy: *"압축할 땐 **압축한다고 말하고** 압축하라 — 브리핑 문장이
-     학생이 읽는 텍스트 어디에도 없다"*(grep 으로 확인).
-     걸음을 쪼개지 않는다(그건 오전에 걷어낸 「지루하다」로 되돌아간다). **첫 요약
-     걸음에만 한 줄**을 얹는다 — 이 파일의 `queueNamed`·`isRepeatVisit` 과 같은
-     「한 번만 켜지는 플래그」 패턴이다. */
-  let briefed = false;
+  /* ⛔ (b) 2026-09-27 — 여기 「여기서부터는 네 방향을 한 번에 봐요」 한 줄이 있었다.
+     **되돌렸다.** 새 학생 재검증: *"몰랐다. 그냥 넘겼다."*
+     원인은 문구가 아니었다 — 7걸음은 이미 셋을 동시에 한다:
+       ①방식 전환(하나씩 → 네 방향 한 번에) ②서 있는 자리가 (1,1)→(1,2) 로 옮겨감
+       ③처음 보는 「큐」가 상자와 함께 등장
+     거기에 브리핑이 **네 번째**를 얹었을 뿐이다. 더 좋은 문장으로는 못 고친다 —
+     **셋을 떼어놓아야** 한다. 그건 보류 목록의 「큐 등장」 항목과 한 몸이라
+     다음 라운드에 **한 번에** 설계한다(PM 판정). 있으나 마나 한 글을 남겨 두면
+     그때 방해만 된다 — `feedback_shorter_not_longer`. */
   /* ⭐ 2026-09-27 선생님: *"아니야. **내가 있는것 기준으로 하나씩** 되어야지
      **퍼져가는것 이해가 안돼**"* — 겹(wave)을 걷어낸다.
      겹은 「한 번에 여러 칸이 동시에」라 **서 있는 자리가 사라진다.** 학생이 보는 건
@@ -543,15 +544,11 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
       noneKo.length  && { at: firstAt.oob,     ko: `${joinKo(noneKo, "은", "는")} 칸이 없어요`,              en: `${noneEn.join(", ")} — no cell` },
     ].filter(Boolean).sort((a, b) => a.at - b.at);
     const tail = "\n" + t(E, parts.map(x => x.en).join(". ") + ".", parts.map(x => x.ko).join(". ") + ".");
-    const brief = briefed ? "" : t(E,
-      "From here on I check all four directions in one go.\n",
-      "여기서부터는 네 방향을 한 번에 봐요.\n");
-    briefed = true;
     trace.push({
       ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 4, dirStatus,
       wave: added, blocked, popped: [[r, c]],
       status: added.length ? "pass" : "blocked",
-      msg: brief + here + tail,
+      msg: here + tail,
     });
   }
 
