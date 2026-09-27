@@ -2,6 +2,7 @@ import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getMcc15EqWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#d97706";
 const NW = { whiteSpace: "nowrap" };
@@ -79,7 +80,7 @@ function fmt(v) {
 
 function EqTrySim({ E }) {
   const [exIdx, setExIdx] = useState(0);
-  const [i, setI] = useState(0);
+  const { safe: i, setIdx: setI, total: iTotal } = useTraceStep(CANDS.length);
   const [a, b, c] = EXAMPLES[exIdx];
 
   const cur = CANDS[i];
@@ -152,12 +153,8 @@ function EqTrySim({ E }) {
         </div>
 
         {/* candidate stepper */}
-        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 10 }}>
-          <button onClick={() => setI(Math.max(0, i - 1))} disabled={i === 0} style={navBtn(i === 0)}>◀</button>
-          <span style={{ fontSize: 12.5, color: "#92400e", fontWeight: 700, ...NW }}>
-            {t(E, "candidate ", "후보 ")}{i + 1} / 8
-          </span>
-          <button onClick={() => setI(Math.min(7, i + 1))} disabled={i === 7} style={navBtn(i === 7)}>▶</button>
+        <div style={{ marginBottom: 10 }}>
+          <SimNav idx={i} total={iTotal} onIdx={setI} accent={A} showLabels isEn={E} />
         </div>
 
         {/* the filled-in equation */}
@@ -217,12 +214,6 @@ function EqTrySim({ E }) {
     </div>
   );
 }
-
-const navBtn = (disabled) => ({
-  width: 34, height: 30, borderRadius: 7, border: "1px solid #fcd34d",
-  background: disabled ? "#fef3c7" : "#fff", color: disabled ? "#d6bd8a" : "#92400e",
-  fontSize: 14, fontWeight: 800, cursor: disabled ? "default" : "pointer", lineHeight: 1,
-});
 
 /* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도 import 되지
    않는 죽은 복제본이었다. 화면이 쓰는 살아 있는 코드는 components.jsx 쪽이다.
