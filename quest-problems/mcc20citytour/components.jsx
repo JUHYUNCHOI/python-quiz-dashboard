@@ -420,13 +420,13 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
         if (!inBounds) {
           status = "oob";
           msg = t(E,
-            `${capFirst(d.en)} — nothing there.`,
-            `${dirKo(d)}은 칸이 없어요.`);
+            `No cell ${d.en} from here.`,
+            `${josa(dirKo(d), "은", "는")} 칸이 없어요.`);
         } else if (visited[nr][nc]) {
           status = "visited";
           msg = t(E,
-            `${capFirst(d.en)} — already been there.`,
-            `${dirKo(d)}은 이미 다녀왔어요.`);
+            `${capFirst(d.en)} is where I already went, so I skip it.`,
+            `${josa(dirKo(d), "은", "는")} 벌써 갔던 곳이라 안 가요.`);
         } else {
           const diff = Math.abs(H[nr][nc] - H[r][c]);
           if (diff < D) {
@@ -435,13 +435,13 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
             queue = [...queue, [nr, nc]];
             count++;
             msg = t(E,
-              `${capFirst(d.en)} — can go!\nThe gap is ${diff}, under ${D}.`,
-              `${dirKo(d)}은 갈 수 있어요!\n높이 차이가 ${diff}, ${D} 보다 작아요.`);
+              `${capFirst(d.en)} has a cell and the gap is only ${diff}, so I can go.`,
+              `${josa(dirKo(d), "은", "는")} 칸이 있고 높이 차이가 ${diff} 라서 갈 수 있어요.`);
           } else {
             status = "blocked";
             msg = t(E,
-              `${capFirst(d.en)} — blocked.\nThe gap is ${diff}, not under ${D}.`,
-              `${dirKo(d)}은 막혀요.\n높이 차이가 ${diff}, ${D} 보다 작지 않아요.`);
+              `${capFirst(d.en)} has a cell, but the gap is ${diff} so I cannot go.\nIt has to be under ${D}.`,
+              `${josa(dirKo(d), "은", "는")} 칸이 있는데 높이 차이가 ${diff} 라서 갈 수가 없어요.\n${D} 보다 작아야 하거든요.`);
           }
         }
         /* ⭐ `dirIdx` 를 같이 넘긴다 — 격자 **밖** 이웃은 `checking` 이 null 이라
@@ -498,8 +498,8 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
     const here = t(E, `Now I'm on (${r + 1},${c + 1}).`, `이제 (${r + 1},${c + 1}) 에 서 있어요.`);
     const ko = [], en = [];
     if (goKo.length)    { ko.push(`${joinKo(goKo, "으로", "로")} 갈 수 있어요`);        en.push(`${goEn.join(", ")} — I can go`); }
-    if (seenKo.length)  { ko.push(`${joinKo(seenKo, "은", "는")} 벌써 갔던 곳`);        en.push(`${seenEn.join(", ")} — been there`); }
-    if (blockKo.length) { ko.push(`${joinKo(blockKo, "은", "는")} 막혔어요`);           en.push(`${blockEn.join(", ")} — blocked`); }
+    if (seenKo.length)  { ko.push(`${joinKo(seenKo, "은", "는")} 갔던 곳이라 안 가요`);        en.push(`${seenEn.join(", ")} — been there`); }
+    if (blockKo.length) { ko.push(`${joinKo(blockKo, "은", "는")} 높이 차이가 커서 못 가요`);           en.push(`${blockEn.join(", ")} — blocked`); }
     if (noneKo.length)  { ko.push(`${joinKo(noneKo, "은", "는")} 칸이 없어요`);         en.push(`${noneEn.join(", ")} — no cell`); }
     const tail = "\n" + t(E, en.join(". ") + ".", ko.join(". ") + ".");
     trace.push({
