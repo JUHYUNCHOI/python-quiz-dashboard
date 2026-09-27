@@ -33,8 +33,11 @@
  * ─────────────────────────────────────────────────────────────────────────
  *
  * 잣대
- *   고정 요소(`position: fixed`) 안의 **누를 수 있는** 것과, 그 밖의 **누를 수 있는** 것이
- *   **어떤 스크롤 위치에서든** 화면 사각형을 겹치면 신고한다.
+ *   고정 요소(`position: fixed` **또는 `sticky`**) 안의 **누를 수 있는** 것과,
+ *   그 밖의 **누를 수 있는** 것이 **어떤 스크롤 위치에서든** 화면 사각형을 겹치면 신고한다.
+ *   (2026-09-27: `sticky` 도 보게 넓혔다 — `sticky top-[57px]` 상단 바가 「⚡ Code」
+ *   탭·형제 quest 피커 클릭을 스크롤 100px 부근에서 가로채는 게 `feedcows` 에서 잡혔는데,
+ *   `fixed` 만 보던 옛 잣대는 원리상 못 봤다.)
  *   그리고 그 자리에서 `elementFromPoint` 로 **실제로 누가 클릭을 가져가는지** 확인한다 —
  *   겹치기만 하고 안 뺏기는 경우(`pointer-events:none` 등)를 헛경보로 버리려고.
  *
@@ -51,7 +54,7 @@
  * ⚠️ 못 보는 것 (0건이 결백이 아니다)
  *   ① 탭·쪽을 넘겨야 나오는 화면. 이 스크립트는 **연 쪽 하나**만 본다
  *      (`--tab "⚡ 코드"` 로 한 번은 눌러 준다).
- *   ② `position: sticky` 로 붙은 요소. 지금은 `fixed` 만 본다.
+ *   ② (2026-09-27 해소) `position: sticky` 도 이제 본다.
  *   ③ 겹치는데 **둘의 동작이 같은** 경우 — 신고는 하되 심각도를 낮춘다.
  *   ④ Chromium 은 `env(safe-area-inset-*)` 를 늘 0 으로 본다. 실기기에서 바가 더 크면
  *      겹치는 구간도 더 넓다 — 여기 수치는 **하한**이다.
@@ -100,9 +103,10 @@ const COLLECT = `(() => {
     const r = el.getBoundingClientRect();
     return r.width > 4 && r.height > 4;
   };
+  const isPinned = (pos) => pos === "fixed" || pos === "sticky";
   const inFixed = (el) => {
     for (let n = el; n && n !== document.body; n = n.parentElement) {
-      if (getComputedStyle(n).position === "fixed") return true;
+      if (isPinned(getComputedStyle(n).position)) return true;
     }
     return false;
   };
@@ -194,7 +198,8 @@ for (const target of targets) {
             if (!el) return null;
             let fx = false;
             for (let n = el; n && n !== document.body; n = n.parentElement) {
-              if (getComputedStyle(n).position === "fixed") { fx = true; break; }
+              const p = getComputedStyle(n).position;
+              if (p === "fixed" || p === "sticky") { fx = true; break; }
             }
             const btn = el.closest('button, a[href], [role="button"]');
             return { stolen: fx, off: btn?.disabled === true,
@@ -247,10 +252,10 @@ for (const [q, hits] of perQuest) {
   for (const h of chrome) console.log(line(h) + "   ⟨페이지 크롬 — 참고⟩");
 }
 console.log(`
-잣대: 고정 요소 안의 누를 수 있는 것과 **그 밖**의 누를 수 있는 것이 화면 사각형을
-   25% 이상 겹치고, **그 지점에서 실제로 고정 요소가 클릭을 가져갈 때만** 신고한다.
+잣대: 고정 요소(fixed 또는 sticky) 안의 누를 수 있는 것과 **그 밖**의 누를 수 있는 것이
+   화면 사각형을 25% 이상 겹치고, **그 지점에서 실제로 고정 요소가 클릭을 가져갈 때만** 신고한다.
 ⚠️ **0건이 결백이 아니다.** 이 스크립트는 **연 쪽 하나**만 본다(탭은 --tab 으로 한 번 눌러 준다).
-   \`position: sticky\` 는 안 본다. Chromium 은 \`env(safe-area-inset-*)\` 를 늘 0 으로 봐서
+   Chromium 은 \`env(safe-area-inset-*)\` 를 늘 0 으로 봐서
    실기기에서 바가 더 크면 겹치는 구간도 더 넓다 — **여기 수치는 하한이다.**
 ⚠️ \`see-screen.mjs\` 와 **다른 층이다.** 그쪽은 「어느 스크롤에서도 한 번도 못 눌린 것」만
    신고해서 이 결함을 **원리상 0건으로 본다.** 합쳐 세지 마라.
