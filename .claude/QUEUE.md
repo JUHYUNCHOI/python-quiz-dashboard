@@ -288,7 +288,7 @@ A **98** · B 71 · **C 1**(`swaptowin` 하나만 남았고 그건 BLOCKED) · �
 | 무엇 | 사유 |
 |---|---|
 | **동결 7개의 CodeWalk 축** | ⏳ **PM 판정 대기**(BLOCKED 아님) — 선생님(2026-09-24) *"프로젝트 매니저가 다 결정할거야"* 로 **동결 quest 구조 변경까지 PM 몫**이 됐다. 입출력·난이도는 이미 통과, CodeWalk 에서만 막힌다(커스텀 위젯 = `rounding` 사고 범주). ⛔ 단 `USACO_VERIFIED` 는 동결 마커로 안 뚫린다 — 재제출은 선생님 로그인 |
-| `readyQuests()` 기본값 뒤집기 (140+) | BLOCKED (제품 방향 — 선생님 몫) |
+| `readyQuests()` 기본값 뒤집기 (140+) | DONE — **안 해도 된다.** 2026-09-27 `quest-auditor` 검증: `readyQuests()` 는 **호출하는 곳이 0곳인 죽은 코드**고, 살아있는 두 경로(`app/quest/page.tsx:296`·`QuestCompletionCard.tsx:90`)는 **최초 커밋부터 빈 배열을 걸러낸다.** 진짜 위험은 빈 배열이 아니라 **일부만 채워진 배열**(`mooin3`)이다 |
 | Vercel `[ignore]` 로그 | BLOCKED (계정 — 대시보드는 선생님만) |
 | `mooin3` 분량·밀도 | BLOCKED (재배열 — 선생님 몫) |
 
