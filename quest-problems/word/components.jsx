@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
+import { SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#3b82f6";
 const ABg = "#eff6ff";
@@ -410,9 +411,6 @@ export function GreedyTrace({ E }) {
   const [step, setStep] = useState(0);
   const maxSteps = M + 1; // M slots + done
 
-  const next = () => { if (step < maxSteps) setStep(s => s + 1); };
-  const reset = () => setStep(0);
-
   return (
     <div style={{ padding: "10px 8px" }}>
       {/* Words display */}
@@ -492,29 +490,10 @@ export function GreedyTrace({ E }) {
         </div>
       </div>
 
-      {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
-        {step <= M ? (
-          <button onClick={next} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: "none", cursor: "pointer", color: "#fff",
-            background: `linear-gradient(135deg,#1d4ed8,${A})`,
-            boxShadow: "0 3px 12px rgba(59,130,246,.3)",
-          }}>▶ {t(E, "Next", "다음")}</button>
-        ) : (
-          <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-          }}>↺ {t(E, "Restart", "처음부터")}</button>
-        )}
-      </div>
-
-      {/* Step counter */}
-      <div style={{
-        textAlign: "center", marginTop: 4, fontSize: 10, color: C.dim,
-        fontFamily: "'JetBrains Mono',monospace", fontWeight: 700,
-      }}>
-        {step}/{maxSteps}
+      {/* Controls — 공용 SimNav(⏮ 가 옛 Restart 를, 걸음 칩이 옛
+          "step/maxSteps" 카운터를 대신한다) */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <SimNav idx={step} total={maxSteps + 1} onIdx={setStep} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
