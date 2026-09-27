@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#059669";
 
@@ -30,8 +31,6 @@ export function StallingAssignmentSim({ E }) {
     timerRef.current = setTimeout(() => setStep(s => s + 1), 950);
     return () => clearTimeout(timerRef.current);
   }, [playing, step, N]);
-
-  const reset = () => { setPlaying(false); setStep(-1); };
 
   // For each processed step k (0..step-1), compute which cow it processed,
   // which stalls fit, and how many choices remained.
@@ -178,19 +177,16 @@ export function StallingAssignmentSim({ E }) {
         )}
       </div>
 
-      {/* Controls */}
-      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-        <button
-          onClick={() => { setPlaying(false); setStep(s => Math.min(s + 1, N)); }}
-          disabled={step >= N}
-          style={{
-            background: step >= N ? "#d1d5db" : A,
-            color: "#fff", border: "none", borderRadius: 8,
-            padding: "6px 14px", fontWeight: 700, fontSize: 12,
-            cursor: step >= N ? "not-allowed" : "pointer",
-          }}>
-          ▶ {t(E, "Step", "한 단계")}
-        </button>
+      {/* Controls — 공용 SimNav(⏮ 처음부터가 옛 Reset 을 대신한다) + 자동재생 토글 */}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+        <SimNav
+          idx={step + 1}
+          total={N + 2}
+          onIdx={(n) => { setPlaying(false); setStep(n - 1); }}
+          accent={A}
+          showLabels
+          isEn={E}
+        />
         <button
           onClick={() => { if (step >= N) setStep(-1); setPlaying(p => !p); }}
           style={{
@@ -201,16 +197,6 @@ export function StallingAssignmentSim({ E }) {
             padding: "6px 14px", fontWeight: 700, fontSize: 12, cursor: "pointer",
           }}>
           {playing ? `⏸ ${t(E, "Pause", "일시정지")}` : `⚡ ${t(E, "Auto", "자동")}`}
-        </button>
-        <button
-          onClick={reset}
-          style={{
-            background: "#fff", color: C.dim,
-            border: `1.5px solid ${C.border}`,
-            borderRadius: 8,
-            padding: "6px 14px", fontWeight: 700, fontSize: 12, cursor: "pointer",
-          }}>
-          ↻ {t(E, "Reset", "처음으로")}
         </button>
       </div>
     </div>
