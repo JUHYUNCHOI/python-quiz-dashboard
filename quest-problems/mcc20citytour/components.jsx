@@ -199,10 +199,14 @@ export function Mcc20CityTourBfsSim({ E }) {
         {/* 겹 모드일 때만 뜨는 한 줄 — 이번 걸음이 답하는 질문을 그 자리에서 말한다. */}
         {waveMode && (
           <div style={{
-            background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: "9px 12px",
-            fontSize: 12.5, textAlign: "center", lineHeight: 1.6, marginBottom: 8,
-            whiteSpace: "pre-line", ...KA,
-          }}>
+            /* ⭐ 2026-09-27: 여기도 까만 터미널 상자였다 — 3쪽 겹 시뮬의 말.
+               ⚡코드 쪽 말풍선만 고치고 이건 놓칠 뻔했다(선생님: *"전체적으로 확인해주고"*).
+               같은 quest 안에서 **말 거는 자리는 같은 모양**이어야 한다. */
+            background: "#fffbeb", border: "1.5px solid #fcd34d", color: "#92400e",
+            borderRadius: 12, padding: "11px 14px", fontWeight: 600,
+            fontSize: 13, textAlign: "center", lineHeight: 1.6, marginBottom: 8,
+            whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)", ...KA,
+          }}>💬 
             {waveIdx === 0
               ? t(E, "Start here. Nothing else is sure yet.", "여기서 시작해요.\n아직 다른 칸은 확실하지 않아요.")
               : t(E,
@@ -626,13 +630,30 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             그동안 이건 **격자 아래 까만 띠에 고정**이었다. `see-screen --sim` 실측 —
             16걸음 중 14걸음이 *"바뀐 자리가 3~5군데로 283~471px 흩어짐"* 경고였다.
             큐 칩 → 말풍선 → 격자 → 칸 수 를 **한 덩어리로 붙인다.** */}
-        <div style={{
-          background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 12px",
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 12, textAlign: "center", lineHeight: 1.6,
-          minHeight: 46, whiteSpace: "pre-line", wordBreak: "keep-all",
-        }}>
-          {cur.msg}
-        </div>
+        {/* ⭐ 2026-09-27 선생님: *"말풍선이 잘 안보여. 디자인? 넌 괜찮은것 같지? 전체 기획에 맞춰서?"*
+            **안 괜찮았다.** 자리만 옮기고 **생김새는 그대로 뒀다** — 까만 `#0f172a` 바탕에
+            흰 글씨, 12px 고정폭(JetBrains Mono). 크림색(`#fffbeb`) 카드 안에서 **혼자 터미널**이었고,
+            한국어 문장을 12px 고정폭으로 읽게 하고 있었다. 말풍선이 아니라 **코드 출력 상자**다.
+            참고 구현(`mexes/sims.jsx:56-63`)은 **밝은 바탕 + 강조색 글씨 + 13px 굵게 + 💬 + 그림자**이고,
+            **걸음 종류에 따라 색이 바뀐다.** 그대로 맞춘다 — 발명하지 않는다.
+            색이 바뀌면 「이번 걸음에 무슨 일이 났나」가 **글을 읽기 전에** 보인다. */}
+        {(() => {
+          const tone = {
+            pass:    { bg: "#ecfdf5", bd: "#6ee7b7", fg: "#065f46" },   // 통과 — 초록
+            blocked: { bg: "#fef2f2", bd: "#fca5a5", fg: "#991b1b" },   // 막힘 — 빨강
+            oob:     { bg: "#f8fafc", bd: "#cbd5e1", fg: "#475569" },   // 격자 밖 — 회색
+            visited: { bg: "#f8fafc", bd: "#cbd5e1", fg: "#475569" },   // 이미 다녀옴
+          }[cur.status] || { bg: "#fffbeb", bd: "#fcd34d", fg: "#92400e" };  // 그 밖 — quest 색
+          return (
+            <div style={{
+              background: tone.bg, border: `1.5px solid ${tone.bd}`, color: tone.fg,
+              borderRadius: 12, padding: "11px 14px", fontSize: 13, lineHeight: 1.6,
+              minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center",
+              textAlign: "center", fontWeight: 600, whiteSpace: "pre-line",
+              boxShadow: "0 4px 14px rgba(0,0,0,.08)", ...KA,
+            }}>💬 {cur.msg}</div>
+          );
+        })()}
         {/* ⭐ 2026-09-27: 칸 수가 **격자 아래**에 있어서 말풍선과 250px 떨어져 있었다
             (`see-screen --sim` 경고). 걸음마다 바뀌는 건 말풍선·칸수·격자 셋인데,
             셋이 붙어 있어야 눈이 한 군데만 본다. 말풍선 바로 밑으로 올린다. */}
@@ -653,7 +674,7 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
         <div aria-hidden="true" style={{
           width: 0, height: 0, margin: "-2px auto 10px",
           borderLeft: "8px solid transparent", borderRight: "8px solid transparent",
-          borderTop: "8px solid #0f172a",
+          borderTop: "8px solid #fcd34d",
         }} />
         {/* height grid */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
