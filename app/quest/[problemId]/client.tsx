@@ -287,11 +287,19 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
       <Header />
 
       {/* Breadcrumb: USACO · Dec 2024 Bronze #2 + done button */}
-      {/* ⚠️ 2026-09-27 PM 승인 (다) 안 — 전역 Header(components/header.tsx) 를 이 페이지에서
-          sticky 해제했으므로, 모바일에서도 이 바 위에 57px 짜리 고정 바가 더는 없다.
-          top-[57px] 로 비워 뒀던 자리를 top-0 으로 당겨 데스크탑과 같게 만든다.
-          (안 당기면 모바일에서 57px 짜리 빈 흰 여백만 위에 남는다.) */}
-      <div className="bg-white border-b border-gray-300 px-3 py-1 sticky top-0 z-30 flex items-center gap-2">
+      {/* ⚠️ 2026-09-27 PM 승인 — sticky 해제. `41c522bd` 가 전역 Header 를 이 페이지에서
+          sticky 해제한 것과 **같은 이유, 같은 처방**: 이 바가 `sticky top-0 z-30` 이던 동안,
+          바로 아래 정상 흐름 콘텐츠(형제-문제 배지 1·2·3, 이전/다음 문제 제목, 진행 탭의
+          "📋 Problem 1/3"·"💻 코드 1/5" 라벨, 「📄 PDF」·「📋 전체 코드 복사」 버튼)가
+          스크롤 110~200px·950px 구간에서 이 바 밑으로 지나가며 **덮이고, 그 자리를 누르면
+          가려서 안 보이는 버튼 대신 이 바의 Original·Done·언어 토글이 눌렸다**
+          (`check-fixed-bar-overlap.mjs` 로 elementFromPoint 실측 — moohunt 9곳·
+          mcc20citytour 10곳). 이 바 자체는 어느 스크롤에서도 "항상 접근 가능해야 하는"
+          만큼 자주 쓰는 컨트롤이 아니다(Original/Done/언어 토글은 문제를 다 읽거나 끝낸
+          뒤 한 번 쓰는 것) — 반면 늘 눌러야 하는 이전/다음은 이미 하단 고정
+          `.quest-navbar` 가 맡는다. 그래서 **sticky 를 걷어내 일반 흐름으로 되돌린다** —
+          top-[57px] 였던 자리도 이제 의미가 없어 같이 지운다. */}
+      <div className="bg-white border-b border-gray-300 px-3 py-1 flex items-center gap-2">
         <Link href={backHref} className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
           <ChevronLeft size={16} />
         </Link>
