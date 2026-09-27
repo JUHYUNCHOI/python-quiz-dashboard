@@ -10,6 +10,12 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { SimNav } from "@/components/quest/TraceStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
+/* ⭐ 이 quest 의 **고유색 하나**. 형제도 각자 한 색이다 —
+   knight `#2563eb`(파랑) · kitty `#dc2626`(빨강) · rect `#059669`(초록).
+   2026-09-27 선생님: *"UX랑 너무 다른데?"* 실측하니 citytour 만 **세 색이 섞여** 있었다 —
+   3쪽 시뮬 `#047857`(초록) · 5쪽 시뮬 `#0e7490`(청록) · 나머지 주황.
+   ⛔ `#0e7490` 은 **CLAUDE.md 의 SimNav 사용 예시에 적힌 색**이다. 예시를 복붙하고
+   quest 색으로 안 바꾼 것이다. **accent 는 반드시 `A` 를 넘겨라.** */
 const A = "#d97706";
 const NW = { whiteSpace: "nowrap" };
 const KA = { wordBreak: "keep-all" };
@@ -175,8 +181,8 @@ export function Mcc20CityTourBfsSim({ E }) {
               바꿔서 「이건 누르는 것」이 한눈에 보이게 한다. */}
           <button onClick={() => { setWaveMode(v => !v); setWaveIdx(0); }} style={{
             padding: "10px 20px", borderRadius: 10, fontSize: 14, fontWeight: 800,
-            border: "none", boxShadow: "0 2px 6px rgba(4,120,87,.28)",
-            background: waveMode ? "#334155" : "#047857",
+            border: "none", boxShadow: "0 2px 6px rgba(217,119,6,.30)",
+            background: waveMode ? "#334155" : A,
             color: "#fff", cursor: "pointer", ...KA,
           }}>
             {waveMode
@@ -236,7 +242,7 @@ export function Mcc20CityTourBfsSim({ E }) {
 
         {waveMode && (
           <div style={{ marginTop: 10 }}>
-            <SimNav idx={waveIdx} total={lastWave + 1} onIdx={setWaveIdx} accent="#047857" showLabels isEn={E} />
+            <SimNav idx={waveIdx} total={lastWave + 1} onIdx={setWaveIdx} accent={A} showLabels isEn={E} />
           </div>
         )}
 
@@ -619,7 +625,7 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
         {/* 공용 SimNav — ⏮ 처음부터 · ◀ 이전 · [걸음 N/총] · ▶ 다음.
             카운터가 버튼 **사이**에 들어간다(형제 시뮬 전부 같은 모양). */}
         <div style={{ marginTop: 12 }}>
-          <SimNav idx={idx} total={maxStep + 1} onIdx={setStep} accent="#0e7490" showLabels isEn={E} />
+          <SimNav idx={idx} total={maxStep + 1} onIdx={setStep} accent={A} showLabels isEn={E} />
         </div>
 
         {/* ⭐ 2026-09-26: 재검증 학생 *"이름을 얻으려고 20번 넘게 눌러야 하는 건 지쳤다"*.
@@ -628,9 +634,9 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
         <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
           <button onClick={() => setStep(maxStep)} disabled={idx === maxStep} style={{
             padding: "5px 12px", borderRadius: 8, fontSize: 11.5, fontWeight: 700,
-            border: "1.5px dashed #0e7490", background: "transparent",
-            color: idx === maxStep ? "#cbd5e1" : "#0e7490", cursor: idx === maxStep ? "default" : "pointer",
-            borderColor: idx === maxStep ? "#e5e7eb" : "#0e7490",
+            border: "1.5px dashed", background: "transparent",
+            color: idx === maxStep ? "#cbd5e1" : A, cursor: idx === maxStep ? "default" : "pointer",
+            borderColor: idx === maxStep ? "#e5e7eb" : A,
           }}>{t(E, "Skip to the end", "끝까지 건너뛰기")} ▶▶</button>
         </div>
       </div>
@@ -783,7 +789,7 @@ export function getMcc20CityTourSections(E) {
 }
 
 export function Mcc20CityTourProgressiveCode(props) {
-  return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
+  return <ProgressiveCodeStepper {...props} accentColor={A} />;
 }
 
 /* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드

@@ -101,7 +101,8 @@ export function makeMcc20CityTourCh1(E) {
         "입력이 어떤 모양으로 들어오는지 먼저 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
+          {/* 2026-09-27: 입출력 카드만 초록이었다. 형제는 입력 카드도 자기 고유색을 쓴다 — 주황으로 맞춘다. */}
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
               📥 {t(E, "Input", "입력")}
             </div>

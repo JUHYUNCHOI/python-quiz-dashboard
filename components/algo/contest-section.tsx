@@ -47,6 +47,19 @@ const DIFF_COLOR: Record<ContestProblem["difficulty"], string> = {
   medium: "text-amber-700 bg-amber-100",
 }
 
+/* ⭐ 2026-09-27 선생님: *"저기 나오는것중에 MCC나 USACO에 나온 문제들이라고 표시좀
+   했으면 좋겠는데"* — `source` 가 있긴 했는데 `text-gray-400` 작은 글씨라 안 보였다.
+   **어느 대회 문제인지가 이 카드의 핵심**이다(그게 「실전」이라는 뜻이니까).
+   대회마다 색을 갈라 배지로 세운다. 난이도 배지와 **모양이 겹치지 않게**
+   난이도는 알약(rounded-full), 대회는 각진 것(rounded)으로 둔다. */
+function contestBadge(source: string): { label: string; cls: string } {
+  const s = source.toUpperCase()
+  if (s.includes("USACO")) return { label: source, cls: "text-sky-800 bg-sky-100 border-sky-300" }
+  if (s.includes("MCO")) return { label: source, cls: "text-fuchsia-800 bg-fuchsia-100 border-fuchsia-300" }
+  if (s.includes("MCC")) return { label: source, cls: "text-violet-800 bg-violet-100 border-violet-300" }
+  return { label: source, cls: "text-gray-700 bg-gray-100 border-gray-300" }
+}
+
 export function AlgoContestSection({
   topicId,
   lang,
@@ -72,10 +85,16 @@ export function AlgoContestSection({
         </span>
         <div className="flex-1 h-px bg-amber-100" />
       </div>
-      <p className="text-xs text-gray-400 mb-4 break-keep">
-        {en
-          ? "Apply what you just learned to real USACO / MCC problems."
-          : "방금 배운 것을 USACO · MCC 진짜 대회 문제에 써봐요."}
+      {/* ⚠️ JSX 텍스트에 마크다운 `**` 를 쓰면 **별표가 글자 그대로 찍힌다.**
+          강조는 태그로 한다 (`check-jsx-raw-escape.py` 가 잡는 `\uXXXX` 와 같은 층의 실수). */}
+      <p className="text-xs text-gray-500 mb-4 break-keep">
+        {en ? (
+          <>These are real problems from <b className="text-gray-700">USACO</b> and{" "}
+          <b className="text-gray-700">MCC</b> contests — not practice ones.</>
+        ) : (
+          <>아래는 <b className="text-gray-700">USACO · MCC 대회에 실제로 나온</b> 문제예요.
+          연습 문제가 아니에요.</>
+        )}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -86,12 +105,16 @@ export function AlgoContestSection({
             className="rounded-2xl border border-amber-200 bg-amber-50 hover:bg-amber-100 hover:border-amber-300 transition-all p-3 flex items-start justify-between gap-3"
           >
             <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap mb-0.5">
+              <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                {/* 대회 배지를 **제목 앞**에 둔다 — 「이게 어디 문제냐」가 먼저 읽혀야 한다 */}
+                <span className={cn(
+                  "text-[11px] px-1.5 py-0.5 rounded border font-black tracking-wide",
+                  contestBadge(p.source).cls,
+                )}>{contestBadge(p.source).label}</span>
                 <span className="font-semibold text-sm text-gray-900">{p.title}</span>
                 <span className={cn("text-xs px-1.5 py-0.5 rounded-full font-medium", DIFF_COLOR[p.difficulty])}>
                   {en ? DIFF_LABEL[p.difficulty].en : DIFF_LABEL[p.difficulty].ko}
                 </span>
-                <span className="text-xs text-gray-400">{p.source}</span>
               </div>
               <p className="text-xs text-gray-500 break-keep">{p.why}</p>
             </div>
