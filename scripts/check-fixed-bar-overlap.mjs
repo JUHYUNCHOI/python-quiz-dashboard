@@ -78,6 +78,7 @@ const MOBILE = !argv.includes("--desktop");
 const STEP = Number(flag("step", 10));
 const MAX_SCROLL = Number(flag("max-scroll", 1200));
 const TAB = flag("tab", null);
+const tabMissed = [];
 const targets = argv.filter(a => !a.startsWith("--") && a !== String(STEP)
   && a !== String(MAX_SCROLL) && a !== TAB);
 
@@ -159,8 +160,15 @@ for (const target of targets) {
   try {
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 90000 });
     await page.waitForTimeout(3500);
-    /* ⚠️ 이 자리에서 한 번 조용히 틀렸다 — `--tab "⚡ 코드"` 만 찾다가 **화면이 영어라**
-       못 누르고 그냥 1쪽을 쟀고, 그래서 **0건**이 나왔다. 못 누르면 **크게 말한다.** */
+    /* ⚠️ 이 자리에서 **두 번** 조용히 틀렸다.
+       1차(2026-09-26): `--tab "⚡ 코드"` 만 찾다가 **화면이 영어라** 못 누르고 1쪽을 쟀다 → 0건.
+       2차(2026-09-27): 한·영 둘 다 대봤는데도 **모바일 158/180 · 데스크탑 172/180 에서 실패**했다.
+         `components/quest/QuestNavBar.jsx`(2026-09-24 새 nav)가 라벨을 `💻 Code`·`💻 코드`·
+         `🧭 계획` 처럼 **상태에 따라 바꾸는데**, `⚡ 코드` 는 옛 스타일에만 남아 있었다.
+         그래서 전수 99/180 이라는 숫자가 **대부분 「연 쪽」 기준**으로 나왔다.
+       이제 흔한 코드 탭 라벨을 **정규식으로 전부** 대본다. 그리고 **하나도 못 찾으면
+       조용히 넘어가지 않는다** — 크게 떠들고 `exit 3` 이다.
+       근거: memory/feedback_checkers_can_be_silently_wrong.md — **조용한 0건이 제일 위험하다.** */
     if (TAB && typeof TAB === "string") {
       const cands = [TAB, TAB.replace("코드", "Code"), TAB.replace("Code", "코드")];
       let clicked = false;
@@ -168,7 +176,22 @@ for (const target of targets) {
         const el = await page.$(`text=${c}`);
         if (el) { await el.click(); await page.waitForTimeout(1200); clicked = true; break; }
       }
-      if (!clicked) console.log(`  ⚠️ ${target}: «${TAB}» 탭을 못 찾았다 — **연 쪽 그대로 쟀다.**`);
+      if (!clicked) {
+        // 대체 매칭 — 이 저장소가 실제로 쓰는 코드 탭 라벨들
+        const CODE_TAB = /^(⚡|💻)\s*(코드|Code)\b/;
+        const btns = await page.$$("button, a");
+        for (const b of btns) {
+          const txt = ((await b.innerText().catch(() => "")) || "").trim();
+          if (CODE_TAB.test(txt)) {
+            await b.click().catch(() => {});
+            await page.waitForTimeout(1200);
+            clicked = true;
+            console.log(`  ℹ️ ${target}: «${TAB}» 대신 «${txt.slice(0, 18)}» 을 눌렀다 (대체 매칭).`);
+            break;
+          }
+        }
+      }
+      if (!clicked) { tabMissed.push(target); }
     }
     const docH = await page.evaluate(() => document.documentElement.scrollHeight);
     const limit = Math.min(MAX_SCROLL, Math.max(0, docH - 812));
@@ -264,6 +287,13 @@ if (noisyGaveUp.length) {
   console.log(`⛔ **못 잰 quest 가 ${noisyGaveUp.length}개다** — ${noisyGaveUp.join(", ")}`);
   console.log(`   위 「0곳」은 이 quest 들에 대해서는 **결백이 아니라 «안 봤다» 는 뜻이다.**`);
   console.log(`   다른 사람이 quest 파일을 저장하는 중일 수 있다. 편집이 멎은 뒤 다시 돌려라.`);
+  process.exit(3);
+}
+if (tabMissed.length) {
+  console.log(`\n⛔ **«${TAB}» 탭을 못 찾은 quest ${tabMissed.length}개 — 「연 쪽」 그대로 쟀다.**`);
+  console.log(`   ${tabMissed.slice(0, 20).join(" ")}${tabMissed.length > 20 ? " …" : ""}`);
+  console.log(`   **이 quest 들의 숫자는 코드 쪽을 안 본 값이다 — 0건이어도 결백이 아니다.**`);
+  console.log(`   조용히 지나가지 않으려고 exit 3 으로 끝낸다 (2026-09-27, 두 번 당한 자리).`);
   process.exit(3);
 }
 process.exit(totalHits ? 1 : 0);
