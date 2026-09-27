@@ -777,10 +777,28 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
                       border: isNow ? `3px dashed ${A}` : `2px dashed ${seen ? "#cbd5e1" : "#fcd34d"}`,
                       background: outside ? (isNow ? "rgba(217,119,6,.12)" : "rgba(148,163,184,.10)") : "transparent",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: outside ? 9 : 15, fontWeight: 900,
-                      color: mark ? markColor : (isNow ? A : "#cbd5e1"),
+                      fontSize: 9, fontWeight: 900,
+                      color: isNow ? A : "#cbd5e1",
                       transition: "all 160ms",
-                    }}>{mark || (outside ? t(E, "none", "없음") : "")}</div>
+                    }}>
+                      {/* ⭐ 2026-09-27 선생님: *"잘 안보여."* — 기호를 칸 **한가운데**
+                          찍었더니 **격자 숫자 위에 겹쳐서** 둘 다 안 읽혔다(`7`+`✓`, `2`+`✓`).
+                          격자 안 칸은 **숫자가 주인공**이다. 기호는 **모서리 배지**로 비킨다.
+                          격자 밖(유령) 칸만 숫자가 없으니 가운데에 둔다. */}
+                      {outside
+                        ? <span style={{ color: mark ? markColor : "#cbd5e1", fontSize: 13 }}>
+                            {mark || t(E, "none", "없음")}
+                          </span>
+                        : mark && (
+                          <span style={{
+                            position: "absolute", top: -7, right: -6,
+                            width: 16, height: 16, borderRadius: 999,
+                            background: "#fff", border: `1.5px solid ${markColor}`, color: markColor,
+                            fontSize: 10, lineHeight: "13px", textAlign: "center", fontWeight: 900,
+                            boxShadow: "0 1px 3px rgba(0,0,0,.18)",
+                          }}>{mark}</span>
+                        )}
+                    </div>
                   );
                 })}
               </div>
