@@ -1,6 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
+/* ⭐ 2026-09-27 선생님: *"버튼 순서나 처음부터 시작하는 버튼도 없어. 디자이너? 뭐지?
+   너 마음대로 다른 디자인이랑 다르잖아."* — 맞는 지적이다.
+   이 저장소에는 **공용 `SimNav`** 가 이미 있다(⏮ 처음부터 · ◀ 이전 · [걸음 칩] · ▶ 다음,
+   카운터가 버튼 **사이**에 들어간다). 그런데 내가 그걸 안 쓰고 버튼을 새로 만들었다 —
+   그래서 ①「처음부터」가 없고 ②카운터가 버튼 위에 따로 떠 있고 ③형제 시뮬과 모양이 달랐다.
+   `quest_season_shape_consistency`: **발명 금지, 형제부터 열어라.** 공용 것으로 되돌린다. */
+import { SimNav } from "@/components/quest/TraceStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
@@ -162,11 +169,15 @@ export function Mcc20CityTourBfsSim({ E }) {
             — 선생님: *"자동은 뭐지? 우리 시뮬 스타일이랑 넘 달라."*). 학생이 눌러서 넘긴다.
             ⚠️ 여기서 «BFS» 라는 이름은 **부르지 않는다** — 이름은 ⚡코드 탭 끝에서 한 번만. */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+          {/* ⭐ 2026-09-27 선생님: *"저게 버튼인지도 몰랐고."*
+              흰 배경 + 얇은 주황 테두리라 바로 위 `− / +` 와 **똑같은 옷**이었고
+              옆 회색 설명문과도 구별이 안 됐다. **꽉 찬 색 + 흰 글씨 + 큰 글자**로
+              바꿔서 「이건 누르는 것」이 한눈에 보이게 한다. */}
           <button onClick={() => { setWaveMode(v => !v); setWaveIdx(0); }} style={{
-            padding: "6px 14px", borderRadius: 999, fontSize: 12.5, fontWeight: 800,
-            border: `1.5px solid ${waveMode ? "#047857" : "#fcd34d"}`,
-            background: waveMode ? "#047857" : "#fff",
-            color: waveMode ? "#fff" : "#92400e", cursor: "pointer", ...KA,
+            padding: "10px 20px", borderRadius: 10, fontSize: 14, fontWeight: 800,
+            border: "none", boxShadow: "0 2px 6px rgba(4,120,87,.28)",
+            background: waveMode ? "#334155" : "#047857",
+            color: "#fff", cursor: "pointer", ...KA,
           }}>
             {waveMode
               ? t(E, "✕ Back to the finished picture", "✕ 다 칠한 그림으로")
@@ -221,22 +232,8 @@ export function Mcc20CityTourBfsSim({ E }) {
         </div>
 
         {waveMode && (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginTop: 10 }}>
-            <button onClick={() => setWaveIdx(i => Math.max(0, i - 1))} disabled={waveIdx === 0} style={{
-              padding: "7px 16px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
-              border: "1.5px solid #047857", background: waveIdx === 0 ? "#f1f5f9" : "#ecfdf5",
-              color: waveIdx === 0 ? "#cbd5e1" : "#047857", cursor: waveIdx === 0 ? "default" : "pointer",
-            }}>◀ {t(E, "Back", "이전")}</button>
-            <span style={{
-              padding: "3px 12px", borderRadius: 999, fontSize: 13, fontWeight: 800,
-              background: "#ecfdf5", border: "1.5px solid #047857", color: "#047857",
-              fontFamily: "'JetBrains Mono',monospace",
-            }}>{t(E, "hop ", "뛰기 ")}{waveIdx} / {lastWave}</span>
-            <button onClick={() => setWaveIdx(i => Math.min(lastWave, i + 1))} disabled={waveIdx === lastWave} style={{
-              padding: "7px 16px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
-              border: "none", cursor: waveIdx === lastWave ? "default" : "pointer", color: "#fff",
-              background: waveIdx === lastWave ? "#a7f3d0" : "#047857",
-            }}>▶ {t(E, "Next", "다음")}</button>
+          <div style={{ marginTop: 10 }}>
+            <SimNav idx={waveIdx} total={lastWave + 1} onIdx={setWaveIdx} accent="#047857" showLabels isEn={E} />
           </div>
         )}
 
@@ -616,38 +613,22 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
           <span style={{ color: C.dim }}> / {R * Cn} {t(E, "cells", "칸")}</span>
         </div>
 
-        {/* 걸음 카운터 — **버튼 바로 위**에 둔다. 이게 매 클릭 바뀌는 유일한 값인데
-            예전엔 화면 맨 아래에 10.5px 회색으로 있어서 제일 안 보였다.
-            `feedback_one_thing_changes_at_a_time` — 바뀌는 자리를 누르는 자리 옆에. */}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
-          <span style={{
-            padding: "3px 12px", borderRadius: 999, fontSize: 13, fontWeight: 800,
-            background: "#ecfeff", border: "1.5px solid #0e7490", color: "#0e7490",
-            fontFamily: "'JetBrains Mono',monospace",
-          }}>{t(E, "step ", "걸음 ")}{idx + 1} / {maxStep + 1}</span>
+        {/* 공용 SimNav — ⏮ 처음부터 · ◀ 이전 · [걸음 N/총] · ▶ 다음.
+            카운터가 버튼 **사이**에 들어간다(형제 시뮬 전부 같은 모양). */}
+        <div style={{ marginTop: 12 }}>
+          <SimNav idx={idx} total={maxStep + 1} onIdx={setStep} accent="#0e7490" showLabels isEn={E} />
         </div>
 
-        {/* controls — deliberately NOT the pill bottom-nav shape/color: small
-            in-card rectangular buttons, cyan accent (feedback_one_nav_shape_per_screen) */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 8 }}>
-          <button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={idx === 0} style={{
-            padding: "7px 16px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
-            border: "1.5px solid #0e7490", background: idx === 0 ? "#f1f5f9" : "#ecfeff",
-            color: idx === 0 ? "#cbd5e1" : "#0e7490", cursor: idx === 0 ? "default" : "pointer",
-          }}>◀ {t(E, "Back", "이전")}</button>
-          <button onClick={() => setStep(s => Math.min(maxStep, s + 1))} disabled={idx === maxStep} style={{
-            padding: "7px 16px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
-            border: "none", cursor: idx === maxStep ? "default" : "pointer", color: "#fff",
-            background: idx === maxStep ? "#a5f3fc" : "#0e7490",
-          }}>▶ {t(E, "Next", "다음")}</button>
-          {/* ⭐ 2026-09-26: 재검증 학생 *"이름을 얻으려고 20번 넘게 눌러야 하는 건 지쳤다"*.
-              `feedback_student_agent_must_quit` — 학생은 패턴을 알면 그만두고 싶어 한다.
-              막지 말고 **나가는 문**을 준다. 마지막 두 걸음(답 + 이름)이 어차피 결론이다. */}
+        {/* ⭐ 2026-09-26: 재검증 학생 *"이름을 얻으려고 20번 넘게 눌러야 하는 건 지쳤다"*.
+            `feedback_student_agent_must_quit` — 막지 말고 **나가는 문**을 준다.
+            SimNav 에는 없는 버튼이라 그 아래 한 줄로 따로 둔다(네비가 아니라 지름길). */}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
           <button onClick={() => setStep(maxStep)} disabled={idx === maxStep} style={{
-            padding: "7px 14px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
-            border: "1.5px solid #0e7490", background: idx === maxStep ? "#f1f5f9" : "#fff",
+            padding: "5px 12px", borderRadius: 8, fontSize: 11.5, fontWeight: 700,
+            border: "1.5px dashed #0e7490", background: "transparent",
             color: idx === maxStep ? "#cbd5e1" : "#0e7490", cursor: idx === maxStep ? "default" : "pointer",
-          }}>{t(E, "Skip to the end", "끝까지")} ▶▶</button>
+            borderColor: idx === maxStep ? "#e5e7eb" : "#0e7490",
+          }}>{t(E, "Skip to the end", "끝까지 건너뛰기")} ▶▶</button>
         </div>
       </div>
     </div>
