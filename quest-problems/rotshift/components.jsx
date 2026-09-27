@@ -4,10 +4,11 @@
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav, useTraceStep } from "@/components/quest/TraceStepper";
 
 const A = "#8b5cf6";
 
@@ -44,19 +45,20 @@ export function RotShiftSim({ E }) {
     active: SIM_INIT_ACTIVE.slice(),
     pos: Array.from({ length: SIM_N }, (_, i) => i),
   });
-  const [state, setState] = useState(init);
-  const [step, setStep] = useState(0);
+
+  // 걸음 0~T 를 미리 계산해 SimNav 로 앞뒤 이동 (2026-09-27: 손으로 만든
+  // "▶ Step" 버튼은 앞으로만 갔다 — 되돌리려면 "처음으로" 뿐이었다).
+  const trace = useMemo(() => {
+    const states = [init()];
+    for (let i = 0; i < SIM_T; i++) states.push(_simStep(states[states.length - 1]));
+    return states;
+  }, []);
+  const { idx: step, setIdx: setStep } = useTraceStep(trace.length);
+  const state = trace[step];
 
   const atPos = Array(state.N).fill(-1);
   for (let c = 0; c < state.N; c++) atPos[state.pos[c]] = c;
   const activeSet = new Set(state.active);
-
-  const onStep = () => {
-    if (step >= SIM_T) return;
-    setState(s => _simStep(s));
-    setStep(s => s + 1);
-  };
-  const onReset = () => { setState(init()); setStep(0); };
 
   const done = step >= SIM_T;
   const outputLine = atPos.join(" ");
@@ -117,21 +119,9 @@ export function RotShiftSim({ E }) {
         {done && <span style={{ marginLeft: 8 }}>✓ {t(E, "matches expected '1 2 3 4 0'", "기댓값 '1 2 3 4 0' 과 똑같아요")}</span>}
       </div>
 
-      {/* controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
-        <button onClick={onStep} disabled={done} style={{
-          background: done ? "#cbd5e1" : A, color: "#fff", border: "none",
-          borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 700,
-          cursor: done ? "not-allowed" : "pointer",
-        }}>
-          ▶ {t(E, "Step (rotate + shift)", "Step (회전 + 이동)")}
-        </button>
-        <button onClick={onReset} style={{
-          background: "#fff", color: A, border: `1.5px solid ${A}`,
-          borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-        }}>
-          ↺ {t(E, "Reset", "처음으로")}
-        </button>
+      {/* controls — 공용 SimNav */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <SimNav idx={step} total={trace.length} onIdx={setStep} accent={A} showLabels isEn={E} />
       </div>
 
       <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginTop: 8, lineHeight: 1.5 }}>
