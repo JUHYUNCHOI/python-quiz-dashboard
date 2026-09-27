@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
+import { SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#f97316";
 const ABg = "#fff7ed";
@@ -567,11 +568,6 @@ export function DeepAuditSim({ E }) {
     setRevealed(0);
   };
 
-  const stepOne = () => {
-    setRevealed(r => Math.min(6, r + 1));
-  };
-
-
   // Tally by color, only over revealed candies
   const tally = {};
   flat.slice(0, revealed).forEach(c => { tally[c] = (tally[c] || 0) + 1; });
@@ -702,19 +698,9 @@ export function DeepAuditSim({ E }) {
         </div>
       )}
 
-      {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
-        <button onClick={stepOne} disabled={done} style={{
-          padding: "7px 16px", borderRadius: 10, fontSize: 12, fontWeight: 700,
-          border: "none", cursor: done ? "default" : "pointer",
-          color: "#fff", opacity: done ? 0.4 : 1,
-          background: `linear-gradient(135deg,#ea580c,${A})`,
-          boxShadow: "0 3px 10px rgba(249,115,22,.3)",
-        }}>▶ {t(E, "Reveal next", "다음 공개")}</button>
-        <button onClick={() => reset()} style={{
-          padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
-          border: `1px solid ${C.border}`, background: "#fff", color: C.dim, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "처음부터 다시")}</button>
+      {/* Controls — 공용 SimNav(⏮ 처음부터가 옛 Reset 을 대신한다) */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <SimNav idx={revealed} total={7} onIdx={setRevealed} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
@@ -731,9 +717,6 @@ export function TricksFormulaTrace({ E }) {
   // 3 pairs × 2 sub-steps each + 1 final = 7 steps total
   // Simplify: one step per pair + final
   const maxSteps = PAIRS.length + 1; // 0..3 (3 pairs + done)
-
-  const next = () => { if (step < maxSteps) setStep(s => s + 1); };
-  const reset = () => setStep(0);
 
   const runningTotal = PAIR_DATA.slice(0, step).reduce((s, d) => s + d.sub, 0);
 
@@ -810,29 +793,10 @@ export function TricksFormulaTrace({ E }) {
         </div>
       )}
 
-      {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
-        {step <= PAIRS.length ? (
-          <button onClick={next} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: "none", cursor: "pointer", color: "#fff",
-            background: `linear-gradient(135deg,#ea580c,${A})`,
-            boxShadow: "0 3px 12px rgba(249,115,22,.3)",
-          }}>▶ {t(E, "Next", "다음")}</button>
-        ) : (
-          <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-          }}>↺ {t(E, "Restart", "처음부터")}</button>
-        )}
-      </div>
-
-      {/* Step counter */}
-      <div style={{
-        textAlign: "center", marginTop: 4, fontSize: 10, color: C.dim,
-        fontFamily: "'JetBrains Mono',monospace", fontWeight: 700,
-      }}>
-        {step}/{maxSteps}
+      {/* Controls — 공용 SimNav(⏮ 처음부터가 옛 Restart 를 대신하고,
+          걸음 칩이 옛 "step/maxSteps" 카운터를 대신한다) */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <SimNav idx={step} total={maxSteps + 1} onIdx={setStep} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
