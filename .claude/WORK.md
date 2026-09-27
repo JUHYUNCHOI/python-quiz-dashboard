@@ -6848,3 +6848,23 @@ quest breadcrumb 35.5px = **93px**) 겹쳐 있었고, 그 아래를 스크롤로
 
 ⚠️ **이건 기계가 아니라 사람이 확인한 것이다.** 검사기에 `--click` 체인을 붙이는 건 백로그.
 그전까지 이 층은 **매번 손으로 봐야 한다.**
+
+## 🐛 연습 15개의 「📖 막히면 수업 보기」가 **「준비 중인 레슨」으로 간다** (2026-09-27, 미수정)
+
+`app/practice/page.tsx:812` 가 `href={`/learn/${problem.unlockAfter}`}` 로 링크를 만든다.
+`algo-graph-contest` 클러스터 **15문제 전부** `unlockAfter: "algo-graph"` 라
+**`/learn/algo-graph`** 로 간다.
+
+⛔ 그런데 **`data/index.ts` 의 레슨 registry 에 `"algo-graph"` 키가 없다**(실측 `grep -c` = **0**).
+거기엔 숫자 Python ID · `cpp-*` · `pseudo-*` · `igcse-*` 만 있다.
+**진짜 그래프 수업은 `app/algo/graph/learn/page.tsx` 라는 다른 경로에 있다.**
+
+→ 학생이 연습에서 막혀 **「막히면 수업 보기」를 누르면 「준비 중인 레슨이에요」 플레이스홀더**
+(`app/learn/[lessonId]/client-page.tsx:558`)로 간다.
+**버튼이 대놓고 「막히면 우리 수업으로 — 구글 말고」라고 써 있는데 그 수업이 안 나온다.**
+
+⚠️ 코드로 확인했다. **화면은 못 봤다** — `/practice` 가 로그인 보호 라우트라
+(`lib/supabase/middleware.ts:47-56`) 렌더링 확인을 못 했다. **「확인 못 했다」로 남긴다.**
+
+고칠 방향(미판정): `unlockAfter` 가 algo 토픽이면 `/algo/<topic>/learn` 으로 보내거나,
+`data/index.ts` 에 그 키를 잇거나. **다른 클러스터도 같은 구멍인지 안 세어 봤다.**
