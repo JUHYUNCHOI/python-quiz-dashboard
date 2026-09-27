@@ -385,3 +385,25 @@ node scripts/see-screen.mjs <url> --sim
 **전체 분량도 누르는 횟수도 아무도 안 센다.**
 
 근거: memory/feedback_shorter_not_longer.md
+
+## ⛔ 시뮬의 ◀▶ 를 **새로 만들지 마라** — 공용 `SimNav` 가 있다
+
+선생님(2026-09-27): *"버튼 순서나 처음부터 시작하는 버튼도 없어.
+**디자이너? 뭐지? 너 마음대로 다른 디자인이랑 다르잖아**"*
+
+`components/quest/TraceStepper.tsx` 에 **`SimNav`** 가 있다 —
+**⏮ 처음부터 · ◀ 이전 · [걸음 칩] · ▶ 다음** (카운터가 버튼 **사이**에 들어간다).
+`useTraceStep(total, key)` 는 **localStorage 저장까지 이미 해 준다.**
+
+손으로 만들면 이렇게 된다(실제로 났다) — ①「처음부터」가 없어 20걸음 끝에서
+◀ 를 19번 눌러야 하고 ②카운터가 버튼 위로 떨어져 안 보이고 ③형제 시뮬과 모양이 다르다.
+**규칙은 2026-06-30 부터 있었는데 검사 항목이 아니어서 또 났다.**
+전수 실측 **버튼 43개 · quest 24개**가 손으로 만든 것이다.
+
+⭕ `<SimNav idx={idx} total={n} onIdx={setIdx} accent="#0e7490" showLabels isEn={E} />`
+   — **`accent` 만** quest 색으로. 모양·순서·카운터 자리는 그대로 둔다.
+❌ `<button onClick={() => setStep(s => s - 1)}>◀ 이전</button>` 직접 쓰기
+⭐ 「끝까지 건너뛰기」처럼 SimNav 에 없는 버튼은 **네비 줄 밖에** 따로.
+
+검사: `python3 scripts/check-sim-uses-simnav.py <id>`
+근거: memory/feedback_sim_style_consistency.md

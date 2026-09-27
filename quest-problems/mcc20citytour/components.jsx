@@ -181,7 +181,10 @@ export function Mcc20CityTourBfsSim({ E }) {
           }}>
             {waveMode
               ? t(E, "✕ Back to the finished picture", "✕ 다 칠한 그림으로")
-              : t(E, "▶ Watch it spread, one hop at a time", "▶ 한 번씩 뛰어서 번져가는 것 보기")}
+              /* ⭐ 2026-09-27 학생: *"「번져간다」만 말하고 **지금 화면이 지워진다**는 말은
+                 안 해서, 누르기 전엔 지금 보이는 초록칸이 없어질 거라고 짐작 못 했다."*
+                 버튼 이름이 **누르면 무슨 일이 나는지**를 그대로 말하게 고친다. */
+              : t(E, "▶ Clear it and colour one hop at a time", "▶ 다 지우고 한 번씩 뛰면서 칠해 보기")}
           </button>
         </div>
 

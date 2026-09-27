@@ -217,6 +217,21 @@ printf '<입력>' | python3 scripts/run-quest-code.py <id>     # ⭐ **화면이
                                                             #   ⚠️ **판정 도구가 아니다.** 「화면이 말하는 답」은 기계가 모른다 —
                                                             #   **비교의 한쪽**만 준다. 나머지 반은 사람이 화면을 읽어야 한다.
                                                             #   ⭐ **시뮬·손풀이를 만들기 전에 먼저 돌려라.** 만든 뒤에 돌리면 늦다.
+python3 scripts/check-sim-uses-simnav.py <id>                 # ⭐ 시뮬의 ◀▶ 를 **손으로 만들었나**
+                                                            #   `components/quest/TraceStepper.tsx` 에 공용 `SimNav`
+                                                            #   (⏮ 처음부터 · ◀ 이전 · **[걸음 칩]** · ▶ 다음)가 있는데
+                                                            #   안 쓰고 새로 만든 자리를 찾는다. 2026-09-27 선생님:
+                                                            #   *"버튼 순서나 처음부터 시작하는 버튼도 없어. 디자이너? 뭐지?
+                                                            #     너 마음대로 다른 디자인이랑 다르잖아"*
+                                                            #   ⚠️ **규칙은 2026-06-30 부터 있었다**
+                                                            #   (`feedback_sim_style_consistency` — "useTraceStep/SimNav 를 쓴다").
+                                                            #   검사 항목이 아니어서 그날 내가 또 발명했고, 그래서
+                                                            #   ①「처음부터」가 없고 ②카운터가 버튼 위에 뜨고 ③형제와 달랐다.
+                                                            #   ⛔ `useTraceStep` 은 **localStorage 저장까지 이미 해 준다** —
+                                                            #     그것도 손으로 짰다가 같은 걸 두 번 만들었다.
+                                                            #   실측 **버튼 43개 · quest 24개**(공용을 쓰는 파일 39개).
+                                                            #   판정이 아니라 볼 자리 표시 — `▶ 실행`·`▶▶ 끝까지` 는 걸러내지만
+                                                            #   라벨을 읽고 사람이 정해라.
 node scripts/check-emphasis.mjs http://localhost:3000/quest/<id>  # 강조가 **보이나** (다 굵으면 강조가 아니다)
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
 node scripts/check-fixed-bar-overlap.mjs <id> --tab "⚡ 코드"  # 고정 바가 본문 버튼의 **탭을 가져가나** (모바일)
