@@ -198,6 +198,26 @@ export const CONCEPT_ONTOLOGY = {
   "topological-order": "topological sort",
   "tree-traversal": "DFS through tree edges",
 
+  // ── 이미 코드가 쓰는데 «이름이 없던» 것들 (2026-09-27) ──────────────────
+  // 왜 생겼나: MCC 48개를 감사하니 quest 코드가 실제로 쓰는데 **온톨로지에 이름이 없어서
+  //   `concepts_required` 에 적을 수가 없는** 개념이 다섯 있었다. 이름이 없으면
+  //   `isReady()` 가 «준비 안 됨» 을 **낼 수조차 없다** — 빈 배열과 같아진다.
+  // ⚠️ **이름을 붙이는 게 「가르치겠다」는 약속은 아니다.** 아래 다섯 중 heapq·dijkstra 는
+  //   `shortestpath`·`priorityqueue` 토픽이 **「심화 (Gold~Platinum)」** 이고, 이걸 쓰는
+  //   quest(`reach` 난이도5 · `mcc22maze` 난이도4)는 정상 트랙보다 **세 단계 위**를 요구한다.
+  //   이름을 채우는 목적은 **정직하게 「준비 안 됨」을 내게 하는 것**이다.
+  // ⛔ `lib/quest-algo.ts` 의 `ALGO_LEVEL_NOTE` 에는 **넣지 마라** — 그건 「이 토픽은 위
+  //   등급이지만 이 문제엔 **일부만** 쓴다」는 뜻인데, 이 둘은 **통째로** 요구한다.
+  //   등록하면 학생에게 **거짓 안심**을 준다.
+  // ⚠️ `mcc22maze` 가 실제로 요구하는 **되돌리기(rollback) DSU** 는 여기 **일부러 안 넣었다** —
+  //   커리큘럼 전체에 가르치는 자리가 없다. 이름을 지어 붙이면 「우리가 이걸 가르친다」는
+  //   거짓 신호가 된다. `.claude/WORK.md` 에 별도 항목으로만 남겼다.
+  "heapq": "priority queue (heapq / push-pop smallest)",
+  "dijkstra": "shortest path with weights (Dijkstra)",
+  "stack": "LIFO stack (append / pop from the end)",
+  "deque": "double-ended queue (appendleft / popleft)",
+  "class-oop": "define a class and use its methods",
+
   // ── 언어 빌트인 선수지식 (2026-09-24) ──────────────────────────────────
   // 왜 생겼나: `mooin3` 이 `chr(c+97)` 로 26글자를 도는데 `concepts_required` 는
   //   `["loop", "string-basics"]` 뿐이었다. 그래서 그 둘만 익힌 학생에게 시스템이
@@ -1971,7 +1991,29 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   },
   madscientist: { ...DEFAULT_META, difficulty: 2, supported_languages: ["py"],
                   concepts_required: ["loop", "string-basics"] },
-  reach:        { ...DEFAULT_META, supported_languages: ["py"] },
+  /* 2026-09-27 — 이 둘은 **엔트리 자체가 없어** `DEFAULT_META`(빈 배열)로 떨어지고 있었다.
+     ⭐ `bfs-grid` 는 이 저장소에 **이름만 있고 잇는 quest 가 0개**였다. `mcc20citytour` 가
+     실제로 격자 4방향 BFS 를 쓴다(`components.jsx:1028,1029`) — **죽은 라벨이 아니라
+     안 이어 놓은 것**이었다. pedagogy 판정: `graph` 토픽은 「탐색 (Silver)」로 한 단계
+     차이일 뿐이고, citytour 는 **이름을 끝까지 숨기고 시뮬로 먼저 가르치는** 구조를
+     이미 갖췄다 → **저위험.**
+     ⚠️ `mcc20knight` 는 **보류**다 — BFS 이름을 일찍 부르고 「링」 비유 수준이라 검토가 안 끝났다.
+     ⚠️ `milkfactory` 에는 **절대 `bfs-grid` 를 붙이지 마라** — 격자가 아니라 **일반 그래프**다. */
+  mcc20citytour: { ...DEFAULT_META, difficulty: 3, supported_languages: ["py", "cpp"],
+                   concepts_required: ["bfs-grid", "grid-2d", "loop"] },
+  /* `class DSU` 로 파이썬 클래스를 직접 정의해 쓴다(`components.jsx:224-253`). MCC 감사
+     난이도 **4**. ⚠️ 실제로는 **되돌리기(rollback) DSU** 까지 요구하는데 그 기법은
+     **커리큘럼 어디에도 가르치는 자리가 없다** — 이름을 지어 붙이면 「우리가 가르친다」는
+     거짓 신호가 되므로 일부러 **안 넣었다.** `.claude/WORK.md` 에 별도 항목으로 남겼다. */
+  mcc22maze:    { ...DEFAULT_META, difficulty: 4, supported_languages: ["py"],
+                  concepts_required: ["class-oop", "graph-component"] },
+  /* 2026-09-27 — `concepts_required` 가 **빈 배열**이었다. 코드는 `heapq` 다익스트라 +
+     함수형 union-find + `bisect_right` 를 쓴다(`quest-problems/reach/chapters.jsx:8,9,43,56,62,99`).
+     MCC 감사 난이도 **5**(1~5 중 최고), 대응 토픽 `shortestpath` 는 「심화 (Gold~Platinum)」 —
+     정상 트랙보다 **세 단계 위**다. 정직하게 「준비 안 됨」이 뜨도록 채운다(PM 판정 2026-09-27).
+     ⛔ 위치는 옮기지 않는다 — 그건 제품 방향이라 선생님 몫이다. */
+  reach:        { ...DEFAULT_META, supported_languages: ["py"], difficulty: 5,
+                  concepts_required: ["dijkstra", "heapq", "graph-component", "binary-search"] },
   // reverseeng rewritten 2026-06-15 → real USACO 2022 Dec Bronze #3 (cpid 1253).
   // Correct greedy "peel a consistent (variable,value) group" algorithm lives in
   // quest-problems/reverseeng/components.jsx (py + cpp). Both verified locally vs the

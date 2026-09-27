@@ -6665,3 +6665,43 @@ sticky 유래만 더해졌다.
   다른 컴포넌트의 독립적 색상 관례(수십 개 quest 가 이렇게 쓴다) — 복붙 감염이 아니다.
 
 **커밋 8개, 전부 main 에 로컬 커밋만(푸시 안 함).** 나머지 11개는 무변경.
+
+## 🧩 선수개념 온톨로지 — 이름이 없어 적을 수 없던 다섯 (2026-09-27, PM 판정)
+
+`concepts_required` 는 `app/quest/page.tsx` 의 `isReady()` 와 `QuestCompletionCard.tsx` 가 읽어
+**「지금 풀 준비됨」을 띄운다.** 그런데 **온톨로지에 이름이 없으면 적을 수가 없고**,
+못 적으면 빈 배열과 같아져 **「준비 안 됨」조차 못 낸다.**
+
+추가한 다섯: `heapq` · `dijkstra` · `stack` · `deque` · `class-oop`
+(`two-pointer`·`diff-array` 는 **이미 있었다** — 내가 없다고 보고했던 건 틀렸다.)
+
+⚠️ **이름을 붙이는 게 「가르치겠다」는 약속이 아니다.** `heapq`·`dijkstra` 는
+`priorityqueue`·`shortestpath` 토픽이 **「심화 (Gold~Platinum)」** 이고,
+이걸 쓰는 quest 는 정상 트랙보다 **세 단계 위**를 요구한다.
+목적은 **정직하게 「준비 안 됨」을 내게 하는 것**이다.
+
+채운 자리 셋:
+- `reach` (난이도 5) — `["dijkstra","heapq","graph-component","binary-search"]`.
+  빈 배열이었다. 코드는 heapq 다익스트라 + 함수형 union-find + `bisect_right`.
+- `mcc22maze` (난이도 4) — `["class-oop","graph-component"]`. **엔트리 자체가 없었다.**
+- `mcc20citytour` (난이도 3) — `["bfs-grid","grid-2d","loop"]`. **엔트리 자체가 없었다.**
+
+### ⭐ `bfs-grid` 는 죽은 라벨이 아니었다
+내가 PM 에게 *"쓰는 quest 가 0개인 죽은 라벨"* 이라고 보고했는데 **틀렸다.**
+`mcc20citytour` 가 실제로 격자 4방향 BFS 를 쓴다(`components.jsx:1028,1029`) —
+**죽은 게 아니라 안 이어 놓은 것**이었다. 오늘 선생님이 하루 종일 보신 그 quest 다.
+- ⚠️ **`mcc20knight` 는 보류** — BFS 이름을 일찍 부르고 「링」 비유 수준이라 검토가 안 끝났다.
+- ⛔ **`milkfactory` 에는 절대 붙이지 마라** — 격자가 아니라 **일반 그래프**다.
+  (온톨로지에 「일반 그래프 위 BFS」에 해당하는 키가 **없다** — 다음 판정거리.)
+
+### ⛔ 오늘 일부러 안 한 것 — `mcc22maze` 의 되돌리기(rollback) DSU
+그 기법은 **커리큘럼 전체에 가르치는 자리가 없다**(`unionfind` 토픽의 기본형에도 없다).
+이름을 지어 붙이면 **「우리가 이걸 가르친다」는 거짓 신호**가 된다.
+**이건 「이름을 못 붙인 문제」가 아니라 「가르칠 콘텐츠가 없는 문제」다.**
+→ 다음에 커리큘럼을 짜거나 `mcc22maze` 를 이 트랙에 둘지 다시 볼 때의 항목.
+
+### ⛔ `ALGO_LEVEL_NOTE` 에는 넣지 마라
+`lib/quest-algo.ts:144-148` 의 그 장치는 「이 토픽은 위 등급이지만 이 문제엔 **일부만** 쓴다」는
+뜻이다. `reach`·`mcc22maze` 는 그 알고리즘을 **통째로** 요구한다 — 등록하면 **거짓 안심**을 준다.
+
+실측: `check-required-vs-code.py` **0곳** · `tsc` quest-meta 오류 없음 · 세 값 모두 반영 확인.
