@@ -8,6 +8,7 @@ import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#059669";
 
@@ -110,22 +111,11 @@ export function MooOpsLab({ E }) {
         ))}
       </div>
 
-      {/* i slider */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-        <button onClick={() => setI(Math.max(0, i - 1))} disabled={i === 0} style={{
-          padding: "4px 10px", fontSize: 14, fontWeight: 800, cursor: i === 0 ? "default" : "pointer",
-          border: `1.5px solid ${C.border}`, background: "#fff", color: A, borderRadius: 6,
-          opacity: i === 0 ? 0.4 : 1,
-        }}>◀</button>
-        <div style={{ flex: 1, fontSize: 12, textAlign: "center", color: C.text }}>
-          i = <b style={{ color: A, fontFamily: "JetBrains Mono, monospace" }}>{i}</b>
-          <span style={{ color: C.dim }}> / max {maxI}</span>
-        </div>
-        <button onClick={() => setI(Math.min(maxI, i + 1))} disabled={i === maxI} style={{
-          padding: "4px 10px", fontSize: 14, fontWeight: 800, cursor: i === maxI ? "default" : "pointer",
-          border: `1.5px solid ${C.border}`, background: "#fff", color: A, borderRadius: 6,
-          opacity: i === maxI ? 0.4 : 1,
-        }}>▶</button>
+      {/* i 선택 — 공용 SimNav (2026-09-27: 손으로 만든 ◀▶ 를 공용 컴포넌트로).
+          정확한 i 값은 위 칸 아래 "←i" 표시가 이미 짚어 준다 — 여기 걸음 칩(1부터)과
+          i(0부터)를 나란히 두면 숫자 둘이 헷갈릴 수 있어 뺐다. */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+        <SimNav idx={i} total={maxI + 1} onIdx={setI} accent={A} showLabels isEn={E} />
       </div>
 
       {/* Cost breakdown */}
