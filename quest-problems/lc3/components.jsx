@@ -2,6 +2,7 @@ import { useState } from "react";
 import { t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 const ACC   = "#7c3aed";
 const ACC_L = "#ede9fe";
@@ -78,18 +79,14 @@ export function SlidingWindowSim({ E }) {
   const [lang] = useCodeLang();                 // 위쪽 🐍 Py / 💻 C++ 토글과 동기화
   const py = lang === "py";
   const [caseId, setCaseId] = useState("basic");
-  const [si, setSi] = useState(0);
-
   const cur = CASES.find(c => c.id === caseId);
   const trace = buildTrace(cur.s);
+  const { safe: si, setIdx: setSi, total: siTotal } = useTraceStep(trace.length);
   const step = trace[Math.min(si, trace.length - 1)];
   const last = si >= trace.length - 1;
   const final = trace[trace.length - 1].best;
 
   const pick = (id) => { setCaseId(id); setSi(0); };
-  const next = () => setSi(s => Math.min(s + 1, trace.length - 1));
-  const prev = () => setSi(s => Math.max(s - 1, 0));
-  const reset = () => setSi(0);
 
   const lastEntries = Object.entries(step.last).sort((a, b) => Number(a[1]) - Number(b[1]));
   const isStep = step.phase === "step";
@@ -222,20 +219,7 @@ export function SlidingWindowSim({ E }) {
       </div>
 
       {/* 컨트롤 */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <button onClick={prev} disabled={si === 0} style={btn(si === 0)}>
-          ◀ {t(E, "Prev", "이전")}
-        </button>
-        <button onClick={next} disabled={last} style={btn(last, true)}>
-          {t(E, "Next step", "다음")} ▶
-        </button>
-        <button onClick={reset} style={{ ...btn(false), background: "#fff", color: "#64748b", border: "2px solid #cbd5e1" }}>
-          ↺ {t(E, "Restart", "처음부터")}
-        </button>
-        <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 700, color: "#94a3b8", fontFamily: "monospace" }}>
-          {step.phase === "init" ? t(E, "start", "시작") : (E ? `step ${step.right + 1}` : `${step.right + 1}번째`)} / {cur.s.length}
-        </span>
-      </div>
+      <SimNav idx={si} total={siTotal} onIdx={setSi} accent={ACC} showLabels isEn={E} />
 
       {/* 마지막 스텝이면 정답 배너 */}
       {last && (
@@ -276,18 +260,6 @@ function Row({ n, code, desc, ok, no }) {
       <span style={{ fontSize: 11.5, color: "#475569" }}>{desc}</span>
     </div>
   );
-}
-
-function btn(disabled, primary) {
-  return {
-    cursor: disabled ? "default" : "pointer",
-    opacity: disabled ? 0.4 : 1,
-    borderRadius: 8, padding: "8px 16px",
-    fontSize: 12.5, fontWeight: 700,
-    border: `2px solid ${primary ? ACC : "#cbd5e1"}`,
-    background: primary ? ACC : "#fff",
-    color: primary ? "#fff" : "#475569",
-  };
 }
 
 /* ── 속도 체감 — brute(모든 쌍) vs 똑똑한 한 번 스캔 ──────────────
