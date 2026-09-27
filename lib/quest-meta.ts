@@ -1983,7 +1983,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
                   concepts_required: ["loop", "tuple-basics", "sort-basics"] },
   stuckinrut:   { ...DEFAULT_META, difficulty: 4, supported_languages: ["py"],
                   concepts_required: ["loop", "list-basics", "sort-basics", "tuple-basics"] },
-  subseqmedian: { ...DEFAULT_META, concepts_required: ["fenwick-tree"], /* ⚠️ 미감사 */ supported_languages: ["py"] },
+  subseqmedian: { ...DEFAULT_META, concepts_required: ["fenwick-tree", "bit-ops", "dict-basics", "function-basics"], supported_languages: ["py"] },
   tameherd:     { ...DEFAULT_META, difficulty: 4, supported_languages: ["py"],
                   concepts_required: ["loop", "list-basics"] },
 
@@ -2096,7 +2096,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // 2026-09-10: type 이 "brute-force" 였는데 이 문제의 풀이는 DP + 이항정리다 — 브루트가 아니다.
   // difficulty 도 2 였는데 학생 화면에 뜨는 값(lib/mcc-difficulty.ts:48)은 5 다. 초6 학생이
   // 4쪽에서 그만뒀다("이건 초6이 풀 수 있는 문제가 아니었다"). 5 로 맞춘다.
-  sumk:      { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["pascal-triangle-dp"], /* ⚠️ 미감사 */ type: "algorithm-reveal", difficulty: 5 },
+  sumk:      { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["pascal-triangle-dp", "2d-list-build", "loop", "list-basics"], type: "algorithm-reveal", difficulty: 5 },
   /* ═══ 🚨 2026-09-25: 이 아홉은 **객체 밖에 있었다** — `getMetaCoverageStats()` 의
      `return {...}` 안에 잘못 들어가 있었다(2087줄에서 `QUEST_CONCEPT_META` 가 닫히는데
      항목은 2157~2180줄에 있었다). 즉 `getQuestMeta()` 가 **전부 `DEFAULT_META` 로 폴백**했고,
@@ -2142,7 +2142,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // ⚠️ `supported_languages` 를 ["py"] 로 못박는다 — 이 quest 에 **C++ 코드가 아예 없다**
   //    (`components.jsx` 의 `_CPP` 0건, 직접 확인). 기본값이 ["py","cpp"] 라 그냥 두면
   //    관리자 화면에 **「C++ 검증됨」이라는 거짓 배지**가 뜬다. (quest-auditor, 2026-09-25)
-  word:            { ...DEFAULT_META, concepts_required: ["chr-ord-conversion"], supported_languages: ["py"] },
+  word:            { ...DEFAULT_META, concepts_required: ["chr-ord-conversion", "frequency-count", "dict-basics"], supported_languages: ["py"] },
   /* ⚠️ 2026-09-25: `bit-ops` 를 **뺐다.** `FULL_PY` 에서 비트 연산자를 찾으니
      걸린 한 줄이 **주석 안의 `2^k`**(`pow2k = pow(2, k, MOD)  # 2^k`)였다 — 연산자가 아니다.
      `modular-inverse` 는 **진짜다**(`inv3 = pow(3, MOD - 2, MOD)`). 그건 남긴다.
@@ -2155,7 +2155,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
      즉 학생이 보는 코드에 비트가 **0회**다. 대신 실제로 쓰는 것을 적는다.
      ⛔ 빈 배열로 두면 `isReady()` 가 `reqs.length === 0` 에서 false 라 **배지가 안 뜬다** —
      안 쓰는 개념을 걸어 두는 것과 결과가 같아진다. 그래서 비우지 않고 채운다. */
-  mcc21simplemath: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "math-basics"] },
+  mcc21simplemath: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "math-basics", "list-basics"] },
   /* ════ 난이도 감사 — 2026-09-25 ════════════════════════════════════
      선생님(2026-09-13): *"이 문제가 진짜 레벨3인가?"*
      여기까지 이 quest 들은 `difficulty` 가 **없어서** `quest-difficulty.ts` 의
