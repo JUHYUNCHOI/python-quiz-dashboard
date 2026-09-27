@@ -42,6 +42,39 @@ function reachableMask(H, D) {
   return vis;
 }
 
+/* ⭐ 2026-09-27: 같은 퍼짐을 **한 홉씩 겹으로 끊어서** 돌려준다.
+   선생님(4차 반려): *"색칠된 것이 단계별로 더 나눠서 어떻게 가지는지
+   실제로 점프하면서 갈 수 있는 것이 더 세분화되어 있지 않아."*
+   새 학생도 독립적으로 같은 말을 했다 — *"색깔만 보고 «왜 딱 거기까지만 초록인지»는
+   처음엔 몰랐다. 결과만 보고 넘어가기엔 부족했다."*
+   ⚠️ `reachableMask` 와 **같은 규칙**을 써야 한다 — 마지막 겹까지 다 켜면
+   두 결과가 반드시 같아야 하고, 화면이 그걸 «✓ 같은 결과» 로 보여준다.
+   겹 수 실측: D=1~2 → 1겹 · D=3 → 4겹 · D=4 → 6겹 · D=5 → 10겹 · D≥6 → 8겹. */
+function reachableWaves(H, D) {
+  const R = H.length, Cn = H[0].length;
+  const vis = Array.from({ length: R }, () => Array(Cn).fill(false));
+  vis[0][0] = true;
+  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+  const waves = [[[0, 0]]];
+  let frontier = [[0, 0]];
+  while (frontier.length) {
+    const next = [];
+    for (const [r, c] of frontier) {
+      for (const [dr, dc] of dirs) {
+        const nr = r + dr, nc = c + dc;
+        if (nr >= 0 && nr < R && nc >= 0 && nc < Cn && !vis[nr][nc] &&
+            Math.abs(H[nr][nc] - H[r][c]) < D) {
+          vis[nr][nc] = true;
+          next.push([nr, nc]);
+        }
+      }
+    }
+    if (next.length) waves.push(next);
+    frontier = next;
+  }
+  return waves;
+}
+
 export function Mcc20CityTourBfsSim({ E }) {
   /* ⭐ 2026-09-26: 기본값이 **정확히 샘플의 D(5)** 였다. 앞 쪽(1-2)이
      "칸은 20 개인데 답은 18 이에요. 어느 두 칸이 막힌 걸까요?" 라고 물어 놓고
@@ -52,17 +85,44 @@ export function Mcc20CityTourBfsSim({ E }) {
   const [touched, setTouched] = useState(false);
   const vis = useMemo(() => reachableMask(SIM_H, D), [D]);
   const R = SIM_H.length, Cn = SIM_H[0].length;
-  const count = vis.flat().filter(Boolean).length;
+  const fullCount = vis.flat().filter(Boolean).length;
+
+  /* 「겹으로 보기」 — **기본은 꺼짐**이라 지금까지 보던 화면이 그대로다.
+     켠 사람만 한 겹씩 밟는다(강제 클릭이 안 늘어난다 — `feedback_shorter_not_longer`). */
+  const [waveMode, setWaveMode] = useState(false);
+  const [waveIdx, setWaveIdx] = useState(0);
+  const waves = useMemo(() => reachableWaves(SIM_H, D), [D]);
+  const lastWave = waves.length - 1;
+  // D 를 바꾸면 겹도 달라지니 처음부터 다시 본다.
+  useEffect(() => { setWaveIdx(0); }, [D]);
+
+  // 칸마다 «몇 번째 홉에 들어왔나». -1 이면 끝내 못 간다.
+  const waveNo = useMemo(() => {
+    const g = Array.from({ length: R }, () => Array(Cn).fill(-1));
+    waves.forEach((w, i) => w.forEach(([r, c]) => { g[r][c] = i; }));
+    return g;
+  }, [waves, R, Cn]);
+
+  const shown = (r, c) => (waveMode ? waveNo[r][c] >= 0 && waveNo[r][c] <= waveIdx : vis[r][c]);
+  const count = waveMode
+    ? waves.slice(0, waveIdx + 1).reduce((a, w) => a + w.length, 0)
+    : fullCount;
 
   const cellStyle = (r, c) => {
-    const on = vis[r][c];
+    const on = shown(r, c);
     const isStart = r === 0 && c === 0;
+    // 이번 겹에 **새로** 들어온 칸 — 한 걸음에 바뀐 자리가 눈에 보이게
+    // (Ch2 과정 스테퍼가 쓰는 색·테두리를 그대로 쓴다. 새로 만들지 않는다.)
+    const isNew = waveMode && waveNo[r][c] === waveIdx && waveIdx > 0;
+    let border = "2px solid #e5e7eb";
+    if (isNew) border = "2.5px solid #059669";
+    else if (isStart) border = "2.5px solid #059669";
+    else if (on) border = "2px solid #6ee7b7";
     return {
       width: 46, height: 46, display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center", gap: 1,
       background: on ? "#d1fae5" : "#f3f4f6",
-      border: isStart ? "2.5px solid #059669" : on ? "2px solid #6ee7b7" : "2px solid #e5e7eb",
-      borderRadius: 8, color: on ? "#065f46" : "#9ca3af",
+      border, borderRadius: 8, color: on ? "#065f46" : "#9ca3af",
       fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", fontSize: 14,
       transition: "background 160ms, border-color 160ms",
     };
@@ -93,9 +153,36 @@ export function Mcc20CityTourBfsSim({ E }) {
           </span>
         </div>
 
+        {/* ⭐ 2026-09-27 ①: 여기까지는 «결과»만 보여준다 — D 를 누르면 초록이 통째로 바뀐다.
+            선생님과 학생이 같은 자리에서 막혔다: *"왜 딱 거기까지만 초록인지 모르겠다."*
+            그 답은 **한 홉씩 번져나가는 순서**인데, 그걸 보여주는 화면이 지금까지
+            ⚡코드 탭 안쪽(고정 D 두 개)에만 있었다. 학생이 D 를 만지는 이 순간엔
+            볼 방법이 없었다 — **빠진 다리**였다. 여기 놓는다.
+            ⚠️ 기본은 꺼짐이고 **자동재생이 아니다**(`feedback_sim_style_consistency`
+            — 선생님: *"자동은 뭐지? 우리 시뮬 스타일이랑 넘 달라."*). 학생이 눌러서 넘긴다.
+            ⚠️ 여기서 «BFS» 라는 이름은 **부르지 않는다** — 이름은 ⚡코드 탭 끝에서 한 번만. */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+          <button onClick={() => { setWaveMode(v => !v); setWaveIdx(0); }} style={{
+            padding: "6px 14px", borderRadius: 999, fontSize: 12.5, fontWeight: 800,
+            border: `1.5px solid ${waveMode ? "#047857" : "#fcd34d"}`,
+            background: waveMode ? "#047857" : "#fff",
+            color: waveMode ? "#fff" : "#92400e", cursor: "pointer", ...KA,
+          }}>
+            {waveMode
+              ? t(E, "✕ Back to the finished picture", "✕ 다 칠한 그림으로")
+              : t(E, "▶ Watch it spread, one hop at a time", "▶ 한 번씩 뛰어서 번져가는 것 보기")}
+          </button>
+        </div>
+
         {/* height grid */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 46px)`, gap: 4 }}>
+          {/* ⭐ 2026-09-27 선생님: "배열의 위 아래가 너무 다닥 붙어있어서 보기 불편해".
+              ux 실측으로 **전제가 정정됐다** — 가로·세로 둘 다 정확히 4px 로 **대칭**이고
+              위아래만 좁을 구조적 이유는 없다(셀 높이가 46px 로 고정이라 🐰 두 줄 칸도
+              행을 안 늘린다). 즉 위아래만이 아니라 **전체가 빽빽**했다.
+              형제 기준 `checkups/sims.jsx:274` 가 gap 8 이라 거기에 맞춘다.
+              ⚠️ 셀 크기는 **안 건드린다** — 46→48 은 검증 안 된 제안이고, gap 만으로 푼다. */}
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 46px)`, gap: 8 }}>
             {SIM_H.map((row, r) => row.map((h, c) => (
               <div key={`${r}-${c}`} style={cellStyle(r, c)}>
                 {r === 0 && c === 0 && <span style={{ fontSize: 11, lineHeight: 1 }}>🐰</span>}
@@ -105,11 +192,53 @@ export function Mcc20CityTourBfsSim({ E }) {
           </div>
         </div>
 
+        {/* 겹 모드일 때만 뜨는 한 줄 — 이번 걸음이 답하는 질문을 그 자리에서 말한다. */}
+        {waveMode && (
+          <div style={{
+            background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: "9px 12px",
+            fontSize: 12.5, textAlign: "center", lineHeight: 1.6, marginBottom: 8,
+            whiteSpace: "pre-line", ...KA,
+          }}>
+            {waveIdx === 0
+              ? t(E, "Start here. Nothing else is sure yet.", "여기서 시작해요.\n아직 다른 칸은 확실하지 않아요.")
+              : t(E,
+                  `Hop ${waveIdx}: ${waves[waveIdx].length} new cell(s).`,
+                  `${waveIdx}번 뛰어서 닿는 칸이에요 — 이번에 ${waves[waveIdx].length}칸 늘었어요.`)}
+          </div>
+        )}
+
         <div style={{ background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
           fontFamily: "'JetBrains Mono',monospace", fontSize: 13, textAlign: "center" }}>
           {t(E, "reachable = ", "갈 수 있는 칸 = ")}<b style={{ color: "#34d399" }}>{count}</b>
           <span style={{ color: "#64748b" }}> / {R * Cn}</span>
+          {/* 마지막 겹까지 켜면 즉시 계산한 값과 **반드시 같아야** 한다.
+              새 설명 문장을 대는 대신 그걸 숫자로 보여준다. */}
+          {waveMode && waveIdx === lastWave && (
+            <span style={{ color: "#34d399", fontWeight: 800 }}>
+              {"  "}{t(E, "✓ same as the finished picture", "✓ 다 칠한 그림과 같아요")}
+            </span>
+          )}
         </div>
+
+        {waveMode && (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginTop: 10 }}>
+            <button onClick={() => setWaveIdx(i => Math.max(0, i - 1))} disabled={waveIdx === 0} style={{
+              padding: "7px 16px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
+              border: "1.5px solid #047857", background: waveIdx === 0 ? "#f1f5f9" : "#ecfdf5",
+              color: waveIdx === 0 ? "#cbd5e1" : "#047857", cursor: waveIdx === 0 ? "default" : "pointer",
+            }}>◀ {t(E, "Back", "이전")}</button>
+            <span style={{
+              padding: "3px 12px", borderRadius: 999, fontSize: 13, fontWeight: 800,
+              background: "#ecfdf5", border: "1.5px solid #047857", color: "#047857",
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>{t(E, "hop ", "뛰기 ")}{waveIdx} / {lastWave}</span>
+            <button onClick={() => setWaveIdx(i => Math.min(lastWave, i + 1))} disabled={waveIdx === lastWave} style={{
+              padding: "7px 16px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
+              border: "none", cursor: waveIdx === lastWave ? "default" : "pointer", color: "#fff",
+              background: waveIdx === lastWave ? "#a7f3d0" : "#047857",
+            }}>▶ {t(E, "Next", "다음")}</button>
+          </div>
+        )}
 
         {/* 2026-09-17: 150자가 한 덩어리였다 + D 를 만지기도 전에 결론이 다 떠 있었다.
             (mcc20cipher:27,109-118 의 touched 수법을 그대로 가져왔다.) */}
@@ -435,7 +564,7 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
 
         {/* height grid */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 42px)`, gap: 4 }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 42px)`, gap: 8 }}>
             {preset.H.map((row, r) => row.map((h, c) => {
               const isCurrent = cur.current && cur.current[0] === r && cur.current[1] === c;
               const isChecking = cur.checking && cur.checking[0] === r && cur.checking[1] === c;
@@ -473,14 +602,34 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
           {cur.msg}
         </div>
 
+        {/* ⭐ 2026-09-27: 여기와 아래 걸음 카운터가 **둘 다 「X / 20」** 이었다.
+            끝까지 가면 분모까지 같아져서 «18 / 20» 과 «20/20» 이 한 화면에 나란히 떴다.
+            게다가 눈에 띄는 건 이쪽(진한 갈색·크다)인데 **네 걸음 동안 안 변한다** —
+            선생님(2026-09-27): *"시뮬레이션에서 다음 버튼이 눌러지는것 같지도 않아."*
+            새 학생도 같은 말을 했다: *"처음 9번 클릭 중 4번은 격자도 큐도 숫자도 안 바뀌어서
+            «방금 누른 게 진짜 눌린 거 맞나» 싶었을 것."*
+            `feedback_same_number_two_meanings` 의 처방 셋을 그대로 쓴다 —
+            ①값 옆에 **무엇의 20인지 이름표** ②뜻이 다르면 **모양도 가른다**
+            (이쪽은 맨 글자, 걸음 쪽은 알약 칩) ③출처와 같은 색. */}
         <div style={{ marginTop: 8, textAlign: "center", fontSize: 12.5, color: "#92400e" }}>
-          {t(E, "reachable so far = ", "지금까지 갈 수 있는 칸 = ")}<b style={{ color: A }}>{cur.count}</b>
-          <span style={{ color: C.dim }}> / {R * Cn}</span>
+          {t(E, "cells reached ", "갈 수 있다고 확인한 칸 ")}<b style={{ color: A }}>{cur.count}</b>
+          <span style={{ color: C.dim }}> / {R * Cn} {t(E, "cells", "칸")}</span>
+        </div>
+
+        {/* 걸음 카운터 — **버튼 바로 위**에 둔다. 이게 매 클릭 바뀌는 유일한 값인데
+            예전엔 화면 맨 아래에 10.5px 회색으로 있어서 제일 안 보였다.
+            `feedback_one_thing_changes_at_a_time` — 바뀌는 자리를 누르는 자리 옆에. */}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
+          <span style={{
+            padding: "3px 12px", borderRadius: 999, fontSize: 13, fontWeight: 800,
+            background: "#ecfeff", border: "1.5px solid #0e7490", color: "#0e7490",
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>{t(E, "step ", "걸음 ")}{idx + 1} / {maxStep + 1}</span>
         </div>
 
         {/* controls — deliberately NOT the pill bottom-nav shape/color: small
             in-card rectangular buttons, cyan accent (feedback_one_nav_shape_per_screen) */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 12 }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 8 }}>
           <button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={idx === 0} style={{
             padding: "7px 16px", borderRadius: 8, fontSize: 12.5, fontWeight: 700,
             border: "1.5px solid #0e7490", background: idx === 0 ? "#f1f5f9" : "#ecfeff",
@@ -499,9 +648,6 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             border: "1.5px solid #0e7490", background: idx === maxStep ? "#f1f5f9" : "#fff",
             color: idx === maxStep ? "#cbd5e1" : "#0e7490", cursor: idx === maxStep ? "default" : "pointer",
           }}>{t(E, "Skip to the end", "끝까지")} ▶▶</button>
-        </div>
-        <div style={{ textAlign: "center", marginTop: 4, fontSize: 10.5, color: C.dim, fontWeight: 700 }}>
-          {idx + 1}/{maxStep + 1}
         </div>
       </div>
     </div>
@@ -676,8 +822,8 @@ export function getMcc20CityTourWalk(E, lang = "py") {
           "What do we have to hand back? How many cells we can reach from (1,1). So first take in the map — bring in the tools we need (vector, queue) with headers, then set the size, the gap limit D, and every height as values.",
           "무엇을 내놓아야 하나요? (1,1) 에서 갈 수 있는 칸이 몇 개인지예요.\n그러니 먼저 지도를 받아요 — 필요한 도구(vector, queue)를 헤더로 가져오고, 크기와 D, 높이들을 값으로 넣어요.") },
         { hi: [18, 23], bubble: t(E,
-          "Why not sweep the whole grid again and again? That's 10^10 checks.\nSo we visit each cell just once — mark where we've been in a vector<vector<bool>>, and put cells waiting their turn in a queue<pair<int,int>>, pairing up (row, col) like a Python tuple.",
-          "왜 지도를 몇 번씩 다시 훑지 않을까요? 그러면 10^10 번을 봐야 해요.\n그래서 칸마다 딱 한 번만 가요 — 다녀온 곳은 vector<vector<bool>> 에 적고, 차례를 기다리는 칸은 pair 로 줄 번호·칸 번호를 묶어 queue<pair<int,int>> 에 넣어요.") },
+          "Why not sweep the whole grid again and again?\nThe grid can hold M×N = 100,000 cells, and sweeping it that many times is 100,000 × 100,000 = 10^10 checks.\nSo we visit each cell just once — mark where we've been in a vector<vector<bool>>, and put cells waiting their turn in a queue<pair<int,int>>, pairing up (row, col) like a Python tuple.",
+          "왜 지도를 몇 번씩 다시 훑지 않을까요?\n칸이 최대 M×N = 100,000 개인데 그걸 그만큼 되풀이하면 100,000 × 100,000 = 10^10 번이에요.\n그래서 칸마다 딱 한 번만 가요 — 다녀온 곳은 vector<vector<bool>> 에 적고, 차례를 기다리는 칸은 pair 로 줄 번호·칸 번호를 묶어 queue<pair<int,int>> 에 넣어요.") },
           /* ⭐ 파이썬 쪽 [(-1,0),(1,0),(0,-1),(0,1)] 을 오늘 방향까지 풀어 설명했다
              (선생님 라이브 지적 + 재검증 학생). C++ 은 dr[]/dc[] 두 배열로 나뉘어
              있어서 그 대응을 여기서 짚는다 — 그대로 번역하면 안 되는 자리다. */
@@ -714,8 +860,8 @@ export function getMcc20CityTourWalk(E, lang = "py") {
         "What do we have to hand back? How many cells we can reach from (1,1). So first take in the map — its size, the gap limit D, and every height.",
         "무엇을 내놓아야 하나요? (1,1) 에서 갈 수 있는 칸이 몇 개인지예요.\n그러니 먼저 지도를 받아요 — 크기와 높이 차 한계 D, 그리고 높이들이에요.") },
       { hi: [13, 19], bubble: t(E,
-        "Why not sweep the whole grid again and again? That is 10^10 checks.\nSo we go to each cell just once — we need a note of where we've been, and a line of cells waiting their turn.",
-        "왜 지도를 몇 번씩 다시 훑지 않을까요? 그러면 10^10 번을 봐야 해요.\n그래서 칸마다 딱 한 번만 가요 — 다녀온 곳을 적을 곳과, 차례를 기다리는 줄이 필요해요.") },
+        "Why not sweep the whole grid again and again?\nThe grid can hold M×N = 100,000 cells, and sweeping it that many times is 100,000 × 100,000 = 10^10 checks.\nSo we go to each cell just once — we need a note of where we've been, and a line of cells waiting their turn.",
+        "왜 지도를 몇 번씩 다시 훑지 않을까요?\n칸이 최대 M×N = 100,000 개인데 그걸 그만큼 되풀이하면 100,000 × 100,000 = 10^10 번이에요.\n그래서 칸마다 딱 한 번만 가요 — 다녀온 곳을 적을 곳과, 차례를 기다리는 줄이 필요해요.") },
       /* ⭐ 2026-09-26: 재검증 학생이 **딱 하나**를 남겼다 —
          *"`deque` 가 무슨 뜻인지, `popleft()` 가 리스트의 무엇과 다른지 **한 번도 설명이
          없었다.** … 「리스트의 `.pop(0)` 도 되지만 느려서 `deque` 라는 걸 쓴다」 정도

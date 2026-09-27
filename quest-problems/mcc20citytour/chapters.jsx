@@ -69,9 +69,15 @@ export function makeMcc20CityTourCh1(E) {
                       **그 검사기가 못 보는 구멍**이었다.
                       ⛔ 새 설명을 지어내지 않는다 — **이미 이 quest 안에 있는 말**을 앞에 붙인다
                       (`components.jsx:92` 의 「높이 차이」). `feedback_no_invented_terms`. */}
-                  {t(E, " and may jump to an adjacent cell (up/down/left/right) only if, either way, the height difference ", " 에서 시작하고, 인접 칸 (상하좌우) 으로는 어느 쪽이 높든 높이 차이 ")}
+                  {/* ⭐ 2026-09-27: 「어느 쪽이 높든」이 기호 **앞**에 있어서 새 학생이
+                      *"절댓값을 이미 쓰는데 왜 «어느 쪽이든» 이 또 붙는지 몰랐다"* 고 했다.
+                      조건이 하나 더 있는 것처럼 읽힌 것이다. 지우지는 않는다 —
+                      그게 이 화면에서 `|…|` 를 푸는 **유일한 말**이라, 지우면
+                      2026-09-26 에 「절댓값 기호가 정의 없이 쓰였다」고 한 학생 쪽으로 되돌아간다.
+                      **기호 뒤로 옮겨** 조건이 아니라 「기호 풀이」로 읽히게 한다. */}
+                  {t(E, " and may jump to an adjacent cell (up/down/left/right) only if the height difference ", " 에서 시작하고, 인접 칸 (상하좌우) 으로는 높이 차이 ")}
                   <b style={{ color: "#dc2626", whiteSpace: "nowrap" }}>{t(E, "|H(here) − H(there)| < D", "|H(현재) − H(이웃)| < D")}</b>
-                  {t(E, ".", " 일 때만 건너가요.")}
+                  {t(E, " — the bars just mean the gap, whichever side is taller.", " 일 때만 건너가요. 양옆의 | | 는 «어느 쪽이 높든 뺀 차이» 라는 표시예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -109,8 +115,13 @@ export function makeMcc20CityTourCh1(E) {
               <div>• <b>D</b> — {t(E, "the jump threshold", "건너가기 기준값")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {/* 2026-09-17: 세미콜론 3개를 쉼표로. 형제 quest(mcc20kitty:209·mcc20cipher:217)가 쉼표를 쓴다. */}
-              {t(E, "Limits: 1 ≤ M, N, M×N ≤ 100000, 1 ≤ D ≤ 100000, −10^6 ≤ H ≤ 10^6.", "제약: 1 ≤ M, N, M×N ≤ 100000, 1 ≤ D ≤ 100000, −10^6 ≤ H ≤ 10^6.")}
+              {/* 2026-09-17: 세미콜론 3개를 쉼표로. 형제 quest(mcc20kitty:209·mcc20cipher:217)가 쉼표를 쓴다.
+                  ⭐ 2026-09-27: 그런데 쉼표로 이으니 **세 조건이 한 줄에 붙어** 새 학생이
+                  *"M 이랑 N 각각 100000 까지인 줄 알았는데 «M×N 도 100000 이하» 라는 뜻이 껴 있었다"* 고 했다.
+                  **글자를 더하지 않고 줄만 나눈다** — 정보가 없던 게 아니라 뭉쳐 있던 것이다. */}
+              <div style={{ whiteSpace: "pre-line", ...KA }}>{t(E,
+                "Limits\n· 1 ≤ M, 1 ≤ N\n· M×N ≤ 100000  (the two multiplied, not each)\n· 1 ≤ D ≤ 100000\n· −10^6 ≤ H ≤ 10^6",
+                "제약\n· 1 ≤ M, 1 ≤ N\n· M×N ≤ 100000  (각각이 아니라 둘을 곱한 값)\n· 1 ≤ D ≤ 100000\n· −10^6 ≤ H ≤ 10^6")}</div>
             </div>
             <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
               {t(E,
