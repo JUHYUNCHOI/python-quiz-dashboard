@@ -786,16 +786,21 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
                           격자 안 칸은 **숫자가 주인공**이다. 기호는 **모서리 배지**로 비킨다.
                           격자 밖(유령) 칸만 숫자가 없으니 가운데에 둔다. */}
                       {outside
-                        ? <span style={{ color: mark ? markColor : "#cbd5e1", fontSize: 13 }}>
+                        ? <span style={{ color: mark ? markColor : "#94a3b8",
+                            fontSize: mark ? 20 : 9, fontWeight: 900 }}>
                             {mark || t(E, "none", "없음")}
                           </span>
                         : mark && (
+                          /* ⭐ 2026-09-27 선생님: *"표시가 잘 안나는데?"* —
+                             16px 원에 10px 글자, **흰 바탕 + 얇은 테두리**라 묻혔다.
+                             **색을 채우고 흰 글씨**로 키운다(22px). 배지는 작아도
+                             «채운 색» 이면 눈에 먼저 들어온다. */
                           <span style={{
-                            position: "absolute", top: -7, right: -6,
-                            width: 16, height: 16, borderRadius: 999,
-                            background: "#fff", border: `1.5px solid ${markColor}`, color: markColor,
-                            fontSize: 10, lineHeight: "13px", textAlign: "center", fontWeight: 900,
-                            boxShadow: "0 1px 3px rgba(0,0,0,.18)",
+                            position: "absolute", top: -9, right: -8,
+                            width: 22, height: 22, borderRadius: 999,
+                            background: markColor, border: "2px solid #fff", color: "#fff",
+                            fontSize: 13, lineHeight: "18px", textAlign: "center", fontWeight: 900,
+                            boxShadow: "0 2px 6px rgba(0,0,0,.30)",
                           }}>{mark}</span>
                         )}
                     </div>
@@ -866,7 +871,9 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             { sym: "–", c: "#94a3b8", ko: "칸 없음", en: "no cell" },
           ].map(k => (
             <span key={k.ko} style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
-              <b style={{ color: k.c, fontSize: 13 }}>{k.sym}</b>{t(E, k.en, k.ko)}
+              <span style={{ width: 16, height: 16, borderRadius: 999, background: k.c,
+                color: "#fff", fontSize: 10, lineHeight: "16px", textAlign: "center",
+                fontWeight: 900, display: "inline-block" }}>{k.sym}</span>{t(E, k.en, k.ko)}
             </span>
           ))}
           <span style={{ color: "#cbd5e1" }}>|</span>
