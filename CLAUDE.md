@@ -233,6 +233,20 @@ python3 scripts/check-sim-uses-simnav.py <id>                 # ⭐ 시뮬의 �
                                                             #   판정이 아니라 볼 자리 표시 — `▶ 실행`·`▶▶ 끝까지` 는 걸러내지만
                                                             #   라벨을 읽고 사람이 정해라.
 node scripts/check-emphasis.mjs http://localhost:3000/quest/<id>  # 강조가 **보이나** (다 굵으면 강조가 아니다)
+node scripts/see-screen.mjs http://localhost:3000/quest/<id> --sim   # ⭐⭐ **시뮬을 고쳤으면 반드시.**
+                                                            #   걸음마다 «바뀐 자리»를 찍고 **200px 넘게 흩어지면 경고**한다.
+                                                            #   `feedback_one_thing_changes_at_a_time`(2026-09-08) 와
+                                                            #   `feedback_sim_style_consistency`(2026-07-02, **반복 지적**
+                                                            #   *"그건 내가 원하는게 아니라니까"* — 말풍선 본체가
+                                                            #   설명 대상 **옆으로 이동**해야 하고 「고정 + 꼬리만 이동」은 금지)
+                                                            #   를 재는 **유일한 기계 잣대**다.
+                                                            #   ⚠️ 2026-09-27: `mcc20citytour` 를 하루에 **일곱 번** 고치면서
+                                                            #   **한 번도 안 돌렸다.** 다른 검사기 15개는 전부 0건이었는데
+                                                            #   이것만 돌리자 **16걸음 중 14걸음이 경고**였다
+                                                            #   (큐 칩 438px / 격자 721px / 설명 띠 807px / 칸 수 909px 가
+                                                            #    동시에 바뀜 — 471px 흩어짐).
+                                                            #   **이 목록에 없어서 안 돌렸다.** 그래서 넣는다.
+                                                            #   ⛔ `--sim` 을 빼면 첫 화면만 본다 — 흩어짐은 안 본다.
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
 node scripts/check-fixed-bar-overlap.mjs <id> --tab "⚡ 코드"  # 고정 바가 본문 버튼의 **탭을 가져가나** (모바일)
                                                             #   ⚠️ `see-screen` 과 **다른 층이다.** 그쪽은 2026-09-09 에 헛경보를 죽이려고
