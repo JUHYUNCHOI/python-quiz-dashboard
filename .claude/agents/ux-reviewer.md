@@ -639,8 +639,11 @@ python3 scripts/check-undefined-symbol.py <quest>
 **규칙은 2026-06-30 부터 있었는데 검사 항목이 아니어서 또 났다.**
 전수 실측 **버튼 43개 · quest 24개**가 손으로 만든 것이다.
 
-⭕ `<SimNav idx={idx} total={n} onIdx={setIdx} accent="#0e7490" showLabels isEn={E} />`
-   — **`accent` 만** quest 색으로. 모양·순서·카운터 자리는 그대로 둔다.
+⭕ `<SimNav idx={idx} total={n} onIdx={setIdx} accent={A} showLabels isEn={E} />`
+   — **그 quest 의 `const A` 를 넘긴다.** 모양·순서·카운터 자리는 그대로 둔다.
+⛔ **`accent` 에 색을 직접 쓰지 마라.** 예시에 박힌 색이 그대로 복붙돼
+   **quest 11개·35곳**에 남아 있다(`#0e7490`·`#0891b2` — 서로 무관한 quest 6개에 같은 값).
+   이 줄의 예시 자체가 감염원이었다. 검사: `python3 scripts/check-sim-uses-simnav.py <id>`
 ❌ `<button onClick={() => setStep(s => s - 1)}>◀ 이전</button>` 직접 쓰기
 ⭐ 「끝까지 건너뛰기」처럼 SimNav 에 없는 버튼은 **네비 줄 밖에** 따로.
 

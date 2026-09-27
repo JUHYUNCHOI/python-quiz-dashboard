@@ -161,7 +161,9 @@ def main():
     print("""
 고치는 법 — `components/quest/TraceStepper.tsx` 의 공용 것을 쓴다:
     import { SimNav, useTraceStep } from "@/components/quest/TraceStepper";
-    <SimNav idx={idx} total={총걸음} onIdx={setIdx} accent="#0e7490" showLabels isEn={E} />
+    <SimNav idx={idx} total={총걸음} onIdx={setIdx} accent={A} showLabels isEn={E} />
+  ⛔ `accent` 에 **색을 직접 쓰지 마라. 그 quest 의 `const A` 를 넘겨라.**
+     예시에 박힌 색(`#0e7490`·`#0891b2`)이 그대로 복붙돼 quest 11개에 남아 있다 — 이 예시가 감염원이었다.
   ⏮ 처음부터 · ◀ 이전 · **[걸음 칩]** · ▶ 다음 이 한 줄로 나온다(카운터가 버튼 **사이**).
   `useTraceStep(total, key)` 는 **localStorage 저장까지 이미 해 준다** — 손으로 짜지 마라.
 
