@@ -13,6 +13,13 @@
  * 쓰는 법 (반드시 프로젝트 루트에서 — 그래야 playwright 를 찾는다):
  *   node scripts/see-screen.mjs <url> [--mobile] [--progress 레슨:챕터:스텝] [--shot 파일명] [--sim]
  *                                     [--lang ko|en] [--click "글자" [--click "글자" ...]]
+ *                                     [--ls key=value [--ls key2=value2 ...]]
+ *
+ * ⚠️ `--ls`: 방문 전에 localStorage 를 원하는 값으로 미리 심어 놓고 연다
+ *    ("저장된 상태로 들어왔을 때 화면"을 볼 수단이 이전엔 없었다, 2026-09-27 추가).
+ *    값은 문자열 그대로 저장된다 — JSON 이 필요하면 호출부에서 직접 문자열을 만들어 넘겨라
+ *    (예: --ls 'quest-step-foo={"main":11,"trap":0}'). 여러 번 줄 수 있다.
+ *    끝나면 **심은 키만** 자동으로 지운다(진도 오염 방지, `--progress` 와 같은 원칙).
  *
  * ⚠️ quest 는 한 주소 안에서 탭·페이지를 눌러 넘긴다. 첫 화면만 보고 "확인했다" 하지 마라.
  *    보고 싶은 자리까지 `--click` 으로 눌러서 가라. 예 — 느린 코드 페이지:
@@ -180,6 +187,15 @@ await settleTyping(p)
 if (args.includes('--lang')) {
   const L = args[args.indexOf('--lang') + 1]
   await p.evaluate(l => localStorage.setItem('language', l), L)
+  await p.reload({ waitUntil: 'domcontentloaded' }); await waitForRender(p, url, hmr)
+}
+
+// --ls key=value (반복 가능): 「저장된 상태로 들어왔을 때 화면」을 미리 만들어 놓고 연다.
+const lsPairs = args.reduce((acc, a, i) => (a === '--ls' ? [...acc, args[i + 1]] : acc), [])
+  .map(kv => { const idx = kv.indexOf('='); return idx < 0 ? null : [kv.slice(0, idx), kv.slice(idx + 1)] })
+  .filter(Boolean)
+if (lsPairs.length) {
+  await p.evaluate(pairs => { for (const [k, v] of pairs) localStorage.setItem(k, v) }, lsPairs)
   await p.reload({ waitUntil: 'domcontentloaded' }); await waitForRender(p, url, hmr)
 }
 
@@ -548,4 +564,5 @@ if (args.includes('--sim')) {
 
 if (shot) { await p.screenshot({ path: shot, fullPage: false }); console.log(`\n스크린샷: ${shot}`) }
 if (progKey) await p.evaluate(k => localStorage.removeItem(k), progKey)   // 진도 원복
+if (lsPairs.length) await p.evaluate(keys => { for (const k of keys) localStorage.removeItem(k) }, lsPairs.map(([k]) => k))
 await ctx.close(); await b.close()
