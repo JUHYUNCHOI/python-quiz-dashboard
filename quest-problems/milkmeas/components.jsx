@@ -4,6 +4,7 @@ import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#8b5cf6";
 
@@ -183,28 +184,7 @@ export function MilkMeasSim({ E }) {
 
       {/* controls + counter */}
       <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
-        <button onClick={() => setStep(0)} disabled={step === 0} style={{
-          padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
-          background: "#fff", color: step === 0 ? C.dim : C.text,
-          fontSize: 12, fontWeight: 700, cursor: step === 0 ? "default" : "pointer",
-        }}>
-          ⏮ {t(E, "Reset", "처음")}
-        </button>
-        <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} style={{
-          padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
-          background: "#fff", color: step === 0 ? C.dim : C.text,
-          fontSize: 12, fontWeight: 700, cursor: step === 0 ? "default" : "pointer",
-        }}>
-          ◀ {t(E, "Back", "뒤로")}
-        </button>
-        <button onClick={() => setStep(Math.min(events.length, step + 1))} disabled={step >= events.length} style={{
-          padding: "6px 14px", borderRadius: 8, border: `1px solid ${A}`,
-          background: step >= events.length ? "#e5e7eb" : A,
-          color: step >= events.length ? C.dim : "#fff",
-          fontSize: 12, fontWeight: 800, cursor: step >= events.length ? "default" : "pointer",
-        }}>
-          {t(E, "Next event", "다음 변화")} ▶
-        </button>
+        <SimNav idx={step} total={events.length + 1} onIdx={setStep} accent={A} showLabels isEn={E} />
 
         <div style={{
           marginLeft: 6,
