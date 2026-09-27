@@ -342,7 +342,16 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
   visited[0][0] = true;
   let queue = [[0, 0]];
   let count = 1;
-  const snap = () => ({ visited: visited.map(row => row.slice()), queue: queue.slice(), count });
+  /* ⭐ 「줄」은 **갈 곳이 둘 이상이 되는 순간** 처음 나오고, 그 뒤로는 계속 보인다.
+     검토 지적: 렌더에서 `queue.length >= 2` 로만 판정하면 줄이 다시 1개로 줄 때
+     **패널이 사라졌다 나타난다.** 한 번 켜지면 안 꺼지게 걸음에 플래그를 실어 보낸다.
+     ⚠️ 「몇 번째 걸음」으로 하드코딩하면 안 된다 — trap 프리셋(D=2)은 첫 칸에서
+     두 방향이 바로 통과해 **더 이른 걸음**에 걸린다. 길이로 판정해야 둘 다 맞는다. */
+  let queueNamed = false;
+  const snap = () => {
+    if (queue.length >= 2) queueNamed = true;
+    return { visited: visited.map(row => row.slice()), queue: queue.slice(), count, queueNamed };
+  };
   const trace = [];
   /* ⭐ 2026-09-26: 재검증 학생 — 시작·이름 문장이 "두 프리셋에서 토씨 하나 안
      틀리고" 반복됐다. main 을 먼저 보고 오는 게 기본값이니, trap 에서는
@@ -435,64 +444,44 @@ function buildBfsProcessTrace(H, D, E, presetKey) {
      자세히 본 두 번의 pop 이 「한 칸씩」을 이미 가르쳤으니, 여기서는 그 되풀이를
      묶어도 거짓이 아니다. 묶는다는 말을 첫 겹에서 대놓고 한다. */
   let waveNo = 0;
+  /* ⭐ 2026-09-27 선생님: *"아니야. **내가 있는것 기준으로 하나씩** 되어야지
+     **퍼져가는것 이해가 안돼**"* — 겹(wave)을 걷어낸다.
+     겹은 「한 번에 여러 칸이 동시에」라 **서 있는 자리가 사라진다.** 학생이 보는 건
+     「나는 여기 있고, 내 위·아래·왼쪽·오른쪽은 어떤가」 하나뿐이어야 한다.
+     ⚠️ 2026-09-26 에 반대 방향으로 한 번 갔었다(pop 하나씩 → 지루하다 → 겹으로 묶음).
+     그때 지루했던 진짜 이유는 **걸음 수가 아니라 한 걸음이 방향 하나였던 것**이다.
+     이번엔 **한 걸음 = 칸 하나**, 네 방향은 **한 화면에 그림으로 같이** 보여준다.
+     `feedback_one_thing_changes_at_a_time` — 바뀌는 자리는 「지금 서 있는 칸」 하나. */
   while (queue.length) {
-    const layer = queue;
-    queue = [];
-    waveNo++;
-
-    const added = [];
-    const blockedMap = new Map();
-    for (const [r, c] of layer) {
-      for (const d of DIRS) {
-        const nr = r + d.dr, nc = c + d.dc;
-        if (nr < 0 || nr >= R || nc < 0 || nc >= Cn || visited[nr][nc]) continue;
-        if (Math.abs(H[nr][nc] - H[r][c]) < D) {
-          visited[nr][nc] = true;
-          queue = [...queue, [nr, nc]];
-          count++;
-          added.push([nr, nc]);
-        } else {
-          blockedMap.set(`${nr},${nc}`, [nr, nc]);
-        }
+    const [r, c] = queue[0];
+    queue = queue.slice(1);
+    const added = [], blocked = [];
+    for (const d of DIRS) {
+      const nr = r + d.dr, nc = c + d.dc;
+      if (nr < 0 || nr >= R || nc < 0 || nc >= Cn) continue;
+      if (visited[nr][nc]) continue;
+      if (Math.abs(H[nr][nc] - H[r][c]) < D) {
+        visited[nr][nc] = true;
+        queue = [...queue, [nr, nc]];
+        count++;
+        added.push([nr, nc]);
+      } else {
+        blocked.push([nr, nc]);
       }
     }
-    /* 같은 겹 안에서 어떤 칸은 A 에서 보면 막히고 B 에서 보면 통과한다.
-       통과한 칸을 «막힘» 에 같이 적으면 한 칸이 두 뜻으로 보인다
-       (feedback_same_number_two_meanings) — 통과가 이긴다. */
-    for (const [rr, cc] of added) blockedMap.delete(`${rr},${cc}`);
-    const blocked = [...blockedMap.values()];
-
-    // 마지막 겹이 아무것도 못 넣고 줄도 비웠으면, 빈 걸음을 만들지 않고 결론으로 넘긴다.
-    if (added.length === 0 && queue.length === 0) break;
-
-    const fmt = (list) => list.map(([rr, cc]) => `(${rr + 1},${cc + 1})`).join(", ");
-    const head = waveNo === 1
-      ? t(E,
-          "From here it's the same move over and over, so let's take a whole layer at a time.\n",
-          "여기부터는 똑같은 일의 되풀이예요 — 한 겹씩 묶어서 볼게요.\n")
-      : "";
-    const popped = t(E,
-      `Popped the ${layer.length} cell${layer.length > 1 ? "s" : ""} that were waiting.`,
-      `줄에서 기다리던 ${layer.length} 칸을 꺼냈어요.`);
+    const here = t(E, `Now I'm on (${r + 1},${c + 1}).`, `이제 (${r + 1},${c + 1}) 에 서 있어요.`);
     let tail;
-    if (added.length && blocked.length) {
-      tail = t(E, `\nNew: ${fmt(added)}.  Blocked: ${fmt(blocked)}.`,
-                  `\n새로 들어온 칸: ${fmt(added)}.  막힌 칸: ${fmt(blocked)}.`);
-    } else if (added.length) {
-      tail = t(E, `\nNew: ${fmt(added)}.`, `\n새로 들어온 칸: ${fmt(added)}.`);
+    if (added.length) {
+      tail = t(E, `\n${added.length} new place${added.length > 1 ? "s" : ""} to go.`,
+                  `\n갈 수 있는 곳이 ${added.length} 군데 늘었어요.`);
     } else {
-      tail = t(E, `\nNothing new — blocked: ${fmt(blocked)}.`,
-                  `\n새로 들어올 칸이 없어요 — 막힘: ${fmt(blocked)}.`);
+      tail = t(E, "\nNowhere new from here.", "\n여기서 새로 갈 곳은 없어요.");
     }
-    /* ⭐ 2026-09-27 선생님: *"색도 똑같고 한단계 어떻다는건지도 시뮬에서 볼수가 없어."*
-       글로는 «새로 들어온 칸 / 막힌 칸» 을 말하는데 **격자는 그걸 안 보여줬다** —
-       새 칸이 이미 간 칸과 **채움색이 같고 테두리만** 2.5px 진한 초록이라 구별이 안 됐다.
-       걸음마다 셋을 따로 들고 가서 화면에서 색을 가른다. */
     trace.push({
-      ...snap(), current: null, checking: null, wave: added,
-      blocked, popped: layer,
+      ...snap(), current: [r, c], checking: null, dirIdx: null, checkedDirs: 4,
+      wave: added, blocked, popped: [[r, c]],
       status: added.length ? "pass" : "blocked",
-      msg: head + popped + tail,
+      msg: here + tail,
     });
   }
 
@@ -625,7 +614,7 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             학생은 「줄」이 왜 있는지 모르는 채로 그걸 먼저 본다.
             **갈 곳이 둘 이상이 되는 순간**에만 나타나게 한다 — 그때 「어디부터 가지?」 라는
             질문이 생기고, 줄은 **그 질문의 답**이다. (`feedback_first_concept_scaffolding`) */}
-        {cur.queue.length >= 2 && (
+        {cur.queueNamed && (
         <div style={{ marginBottom: 10 }}>
           <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 4, ...KA }}>
             {t(E, "Two or more places to go — keep them in order. This line is the queue.",
@@ -736,8 +725,12 @@ export function Mcc20CityTourBfsProcessStepper({ E }) {
             const CELL = 42, GAP = 8;
             const gridW = Cn * CELL + (Cn - 1) * GAP, gridH = R * CELL + (R - 1) * GAP;
             return (
+              /* 🐛 2026-09-27 선생님이 화면에서 잡으셨다 — 유령 칸이 **격자 위로 떠올라**
+                 프리셋 버튼 옆에 붙어 있었다. 원인: 이 겹침 판이 `top: 0` 인데 그 기준이
+                 **격자가 아니라 바깥 상자**다. 말풍선 자리로 `paddingTop: BUBBLE_H + 10` 을
+                 준 뒤로 그만큼 **위로 밀려 있었다.** 격자 시작점에 맞춘다. */
               <div style={{ position: "absolute", zIndex: 5, pointerEvents: "none",
-                left: `calc(50% - ${gridW / 2}px)`, top: 0, width: gridW, height: gridH }}>
+                left: `calc(50% - ${gridW / 2}px)`, top: BUBBLE_H + 10, width: gridW, height: gridH }}>
                 {DIRS.map((d, di) => {
                   const nr = pr + d.dr, nc = pc + d.dc;
                   const outside = nr < 0 || nr >= R || nc < 0 || nc >= Cn;
