@@ -819,18 +819,6 @@ export function getMcc20CityTourSections(E) {
             "deque 의 popleft() 는 줄이 아무리 길어도 바로 끝나요.\n그래서 느린 list.pop(0) 대신 쓰면 진짜 BFS 가 돼요."),
         t(E, "abs(H[nr][nc] - H[r][c]) < D is the whole edge rule — the height DIFFERENCE, strictly less than D.",
             "abs(H[nr][nc] - H[r][c]) < D 한 줄이 규칙의 전부예요.\n높이 '차이' 가 D 보다 작아야만 건너가요."),
-        /* ⭐ 2026-09-27: 새 학생이 이 셋을 **«짐작하고 넘어갔다»** 고 했다 —
-           *"뜻은 짐작했지만 이 문법을 처음 본 건 여기서였다"* ·
-           *"«그래서 파이썬 코드로 쓸 때 왜 대괄호가 두 개냐»는 아무도 설명 안 했다."*
-           선생님(2026-09-27): *"그러면 인덱스라던가? 고민해야하는것들."*
-           ⚠️ 이건 반창고다 — 진짜 구멍은 **파이썬 레슨이 격자 문법을 안 가르치는 것**이고
-           그건 WORK.md 에 별도 항목으로 뗐다(PM 판정 3차). */
-        t(E, "H[nr][nc] — two brackets means two picks: first the row, then the cell in that row.",
-            "H[nr][nc] 처럼 대괄호가 두 개인 건 **두 번 고른다**는 뜻이에요.\n먼저 nr 번째 줄을 고르고, 그 줄에서 nc 번째 칸을 골라요."),
-        t(E, "0 <= nr < M is two comparisons written as one line — nr must be at least 0 AND less than M.",
-            "0 <= nr < M 은 부등호 두 개를 이어 쓴 거예요.\nnr 이 0 이상이면서 **동시에** M 보다 작아야 한다는 뜻이에요."),
-        t(E, "r, c = q.popleft() — the queue holds pairs, so one item unpacks straight into two names.",
-            "r, c = q.popleft() — 줄에는 (줄 번호, 칸 번호) 짝이 들어 있어요.\n그래서 하나를 꺼내면 이름 두 개로 나뉘어 담겨요."),
       ],
       cppOnly: [
         t(E, "Use queue<pair<int,int>> and abs() from <cstdlib>; visited is a vector<vector<bool>>.",
@@ -935,14 +923,14 @@ export function getMcc20CityTourWalk(E, lang = "py") {
          1클릭 거리에서 두 번 나온다(pedagogy: "정보가 아니라 되풀이"). 이름은
          5쪽에 남기고, 여기는 "방금 봤던 그 방법" 으로 되짚기만 한다. */
       { hi: [20, 21], bubble: t(E,
-        "This is the same method you just saw.\nKeep going while the line still has someone in it, and take the cell at the front each time.",
-        "방금 봤던 그 방법이에요.\n줄에 누가 남아 있는 동안 계속하면서, 매번 줄 맨 앞의 칸을 꺼내요.") },
+        "This is the same method you just saw.\nKeep going while the line still has someone in it, and take the cell at the front each time.\nWhat comes out is a (row, col) pair — that is why it lands in two names at once: r, c = q.popleft().",
+        "방금 봤던 그 방법이에요.\n줄에 누가 남아 있는 동안 계속하면서, 매번 줄 맨 앞의 칸을 꺼내요.\n꺼낸 건 (줄 번호, 칸 번호) 짝이라서 이름 두 개에 한꺼번에 담겨요 — 그게 r, c = q.popleft() 예요.") },
       { hi: [22, 23], bubble: t(E,
         "The four number pairs are the four directions — (-1,0) up, (1,0) down, (0,-1) left, (0,1) right.\nAdd one to the row and column number of where we stand, and you get that neighbor's place.",
         "숫자 짝 네 개가 곧 네 방향이에요 — (-1,0) 은 위, (1,0) 은 아래, (0,-1) 은 왼쪽, (0,1) 은 오른쪽.\n지금 서 있는 칸의 줄 번호·칸 번호에 하나씩 더하면 그 이웃의 자리가 나와요.") },
       { hi: [24, 25], bubble: t(E,
-        "Step into a neighbor only when two things hold: it is still inside the grid and not yet visited, and the height gap is smaller than D.\nThis one line is the whole rule — so no wall is fixed in advance.",
-        "이웃으로 들어가는 건 두 가지가 맞을 때예요 — 격자 안이면서 아직 안 간 칸이고,\n높이 차가 D 보다 작을 때요.\n이 한 줄이 규칙의 전부예요 — 그래서 벽이 어디인지 미리 정해져 있지 않아요.") },
+        "Step into a neighbor only when two things hold: it is still inside the grid and not yet visited, and the height gap is smaller than D.\n0 <= nr < M is two comparisons on one line — nr must be 0 or more AND under M.\nAnd H[nr][nc] has two brackets because you pick twice: first the row nr, then the cell nc in that row.",
+        "이웃으로 들어가는 건 두 가지가 맞을 때예요 — 격자 안이면서 아직 안 간 칸이고,\n높이 차가 D 보다 작을 때요.\n0 <= nr < M 은 부등호를 두 개 이어 쓴 거예요 — nr 이 0 이상이면서 동시에 M 보다 작아야 해요.\nH[nr][nc] 에 대괄호가 두 개인 건 두 번 고르기 때문이에요 — 먼저 nr 번째 줄, 그 줄에서 nc 번째 칸.") },
       { hi: [26, 28], bubble: t(E,
         "Mark it visited and bump count at the moment we put it in the line, not when we pop it.\nThat way a cell can never enter the line twice, so every reachable cell is counted exactly once.",
         "줄에 넣는 그 순간에 방문 표시를 하고 count 를 올려요. 꺼낼 때가 아니에요.\n그래야 같은 칸이 줄에 두 번 들어가지 않아서, 갈 수 있는 칸이 딱 한 번씩만 세어져요.") },
