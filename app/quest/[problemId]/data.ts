@@ -142,7 +142,7 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"shellgame",emoji:"🐚",title:"Shell Game",sub:"Jan 2019 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=891",pythonOnly:true},
   {id:"sleepysort",emoji:"😴",title:"Sleepy Cow Sorting",sub:"Jan 2019 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=892"},
   {id:"guessanimal",emoji:"🐾",title:"Guess the Animal",sub:"Jan 2019 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=893"},
-  {id:"mixmilk",emoji:"🥛",title:"Mixing Milk",sub:"Dec 2018 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=855",pythonOnly:true},
+  {id:"mixmilk",emoji:"🥛",title:"Mixing Milk",sub:"Dec 2018 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=855"},
   {id:"bucketlist",emoji:"🪣",title:"The Bucket List",sub:"Dec 2018 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=856"},
   {id:"backforth",emoji:"🔄",title:"Back and Forth",sub:"Dec 2018 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=857"},
   {id:"teamttt",emoji:"❌",title:"Team Tic Tac Toe",sub:"Open 2018 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=831"},

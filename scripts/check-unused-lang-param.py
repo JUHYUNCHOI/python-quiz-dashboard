@@ -153,7 +153,12 @@ def main():
         src = io.open(f, encoding="utf-8", errors="replace").read()
         for m in LOCAL_COMPONENT.finditer(src):
             name, props = m.group(1), m.group(2)
-            prop_names = [p.strip().split(":")[0].strip() for p in props.split(",")]
+            # ⚠️ 2026-09-27: 원래 `:` 로만 갈랐더니 **기본값이 붙은 prop 을 못 알아봤다** —
+            #    `({ lines, lang = "py" })` 의 `lang = "py"` 가 통째로 이름이 돼서
+            #    `"lang" in prop_names` 가 **false** 가 됐다. 그래서 진짜 고친 quest 를
+            #    「아직 안 고쳤다」고 신고했다(mixmilk 에서 실측으로 발견).
+            #    `=`(기본값)와 `:`(이름 바꾸기) 둘 다에서 **앞부분만** 이름으로 본다.
+            prop_names = [re.split(r"[:=]", p, maxsplit=1)[0].strip() for p in props.split(",")]
             if "lang" in prop_names:
                 continue
             hits.append((quest, name, props.strip()))

@@ -2,10 +2,14 @@ import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 
 /* Python syntax highlighter (shared across snippets) */
+/* ⭐ 2026-09-27: C++ 로 갈아탈 수 있게 되면서 키워드 집합도 갈라야 했다 —
+   파이썬 집합만 쓰면 C++ 화면에서 `int`·`for`·`return` 말고는 색이 거의 안 붙는다. */
+const CPP_KW = new Set(["#include","using","namespace","int","long","double","char","bool","void","for","while","if","else","return","struct","const","auto","true","false","break","continue","ifstream","ofstream","string","vector","main"]);
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
 const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);
 
-function pyHighlight(line, baseColor) {
+function pyHighlight(line, baseColor, lang = "py") {
+  const KW = lang === "cpp" ? CPP_KW : PY_KW;
   const tokens = [];
   let i = 0;
   while (i < line.length) {
@@ -44,8 +48,17 @@ function pyHighlight(line, baseColor) {
   return tokens;
 }
 
-/* Helper: code snippet box (token-highlighted Python) */
-const CodeSnippet = ({ lines, highlight: hl }) => (
+/* Helper: code snippet box (token-highlighted).
+   ⭐ 2026-09-27: 원래 **파이썬만** 받았다. 그래서 `data.ts` 에 `pythonOnly:true` 를 붙여
+   C++ 토글을 아예 숨겨 두고 있었다 — 안 그러면 최종 코드만 C++ 로 바뀌고
+   **여기 중간 설명은 파이썬 그대로**라 더 헷갈리기 때문이다(임시 조치, 2026-09-23).
+   이제 `cpp` 를 같이 받아서 진짜로 갈아탄다. `cpp` 를 안 주면 파이썬 그대로 — 점진 적용. */
+const CodeSnippet = ({ lines, cpp, highlight: hl, cppHighlight, lang = "py" }) => {
+  const useCpp = lang === "cpp" && Array.isArray(cpp);
+  return <CodeSnippetBox lines={useCpp ? cpp : lines} hl={useCpp ? (cppHighlight ?? hl) : hl} lang={useCpp ? "cpp" : "py"} />;
+};
+
+const CodeSnippetBox = ({ lines, hl, lang = "py" }) => (
   <div style={{
     background: "#1e293b", borderRadius: 10, padding: "10px 8px",
     overflowX: "auto", fontSize: 12, lineHeight: 1.8,
@@ -54,7 +67,7 @@ const CodeSnippet = ({ lines, highlight: hl }) => (
     {lines.map((l, i) => {
       const isHl = hl && hl.includes(i);
       const baseColor = isHl ? "#fbbf24" : "#e2e8f0";
-      const tokens = pyHighlight(l, baseColor);
+      const tokens = pyHighlight(l, baseColor, lang);
       return (
         <div key={i} style={{
           display: "flex", minHeight: 20,
@@ -690,6 +703,7 @@ export function makeMixMilkCh3(E, lang = "py") {
               "입력은 3줄이고, 한 줄에 \"용량 우유\" 가 들어 있어요.")}
           </div>
           <CodeSnippet
+            lang={lang}
             lines={[
               "with open('mixmilk.in') as file:",
               "    lines = file.readlines()",
@@ -699,6 +713,16 @@ export function makeMixMilkCh3(E, lang = "py") {
               "    cap[i], milk[i] = map(int, lines[i].split())",
             ]}
             highlight={[0, 1, 4, 5]}
+            cpp={[
+              "ifstream fin(\"mixmilk.in\");",
+              "ofstream fout(\"mixmilk.out\");",
+              "",
+              "int cap[3], milk[3];",
+              "for (int i = 0; i < 3; i++) {",
+              "    fin >> cap[i] >> milk[i];",
+              "}",
+            ]}
+            cppHighlight={[0, 1, 4, 5]}
           />
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
             {t(E,
@@ -718,6 +742,7 @@ export function makeMixMilkCh3(E, lang = "py") {
             {t(E, "Step 2: The simulation loop", "2단계: 붓기를 반복하는 부분")}
           </div>
           <CodeSnippet
+            lang={lang}
             lines={[
               "with open('mixmilk.in') as file:",
               "    lines = file.readlines()",
@@ -731,6 +756,17 @@ export function makeMixMilkCh3(E, lang = "py") {
               "    dst = (step + 1) % 3",
             ]}
             highlight={[7, 8, 9]}
+            cpp={[
+              "int cap[3], milk[3];",
+              "for (int i = 0; i < 3; i++) {",
+              "    fin >> cap[i] >> milk[i];",
+              "}",
+              "",
+              "for (int step = 0; step < 100; step++) {",
+              "    int src = step % 3;",
+              "    int dst = (step + 1) % 3;",
+            ]}
+            cppHighlight={[5, 6, 7]}
           />
           <div style={{ marginTop: 8, display: "flex", gap: 8, justifyContent: "center" }}>
             {[
@@ -760,6 +796,7 @@ export function makeMixMilkCh3(E, lang = "py") {
             {t(E, "Step 3: The pour logic", "3단계: 붓는 양 계산하기")}
           </div>
           <CodeSnippet
+            lang={lang}
             lines={[
               "for step in range(100):",
               "    src = step % 3",
@@ -770,10 +807,37 @@ export function makeMixMilkCh3(E, lang = "py") {
               "    milk[dst] += amount",
             ]}
             highlight={[4, 5, 6]}
+            cpp={[
+              "for (int step = 0; step < 100; step++) {",
+              "    int src = step % 3;",
+              "    int dst = (step + 1) % 3;",
+              "    int space = cap[dst] - milk[dst];",
+              "    int amount;",
+              "    if (milk[src] < space) {",
+              "        amount = milk[src];",
+              "    } else {",
+              "        amount = space;",
+              "    }",
+              "    milk[src] -= amount;",
+              "    milk[dst] += amount;",
+              "}",
+            ]}
+            cppHighlight={[3, 4, 5, 6, 7, 8, 9, 10, 11]}
           />
           <div style={{ marginTop: 8, background: "#fef3c7", borderRadius: 8, padding: 8, border: "1.5px solid #fbbf24", fontSize: 12, lineHeight: 1.8, color: "#92400e" }}>
             <div><span style={{ fontWeight: 600 }}>cap[dst] - milk[dst]</span> = {t(E, "remaining space in destination", "목적지의 남은 공간")}</div>
-            <div><span style={{ fontWeight: 600 }}>min(...)</span> = {t(E, "can't pour more than source has OR dest can fit", "출발지가 가진 양과 목적지의 남은 공간 중 더 작은 값")}</div>
+            {/* ⚠️ 2026-09-27: 파이썬은 `min(...)` 한 줄이지만 **C++ 최종 코드는 if/else** 다
+                (`FULL_CPP` 확인). 여기서 「min(...)」이라고만 쓰면 C++ 화면에서
+                **코드에 없는 걸 가리키게 된다** — `check-prose-vs-final-code` 가 잡는 층. */}
+            <div>
+              <span style={{ fontWeight: 600 }}>{lang === "cpp" ? "if (milk[src] < space)" : "min(...)"}</span>
+              {" = "}
+              {lang === "cpp"
+                ? t(E, "whichever is smaller — what the source holds, or the space left",
+                     "둘 중 작은 쪽을 고르는 거예요 — 출발지가 가진 양과 목적지의 남은 공간")
+                : t(E, "can't pour more than source has OR dest can fit",
+                     "출발지가 가진 양과 목적지의 남은 공간 중 더 작은 값")}
+            </div>
           </div>
         </div>),
     },
