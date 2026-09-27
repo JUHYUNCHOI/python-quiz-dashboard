@@ -51,27 +51,51 @@ while (!q.empty()) {
       </section>
 
       <section>
-        <H>{t("3. DFS — 한 길로 끝까지, 재귀로", "3. DFS — deep first, with recursion")}</H>
-        <p>{t("한 방향으로 갈 수 있는 데까지 들어갔다가 막히면 되돌아와요. 재귀(또는 스택)로 구현해요. 연결 요소 세기, 경로 찾기에 좋아요.", "Go as deep as possible, then back up when stuck. Use recursion (or a stack). Great for counting components or finding paths.")}</p>
-        <Code code={t(`void dfs(int cur) {
+        {/* ⭐ 2026-09-27: 여기가 **어제 고친 것과 어긋나 있었다.** 선생님(2026-09-26)
+            *"DFS는 스택으로 해야하지 않나?"* 로 `/algo/graph/learn` 4장을 스택으로
+            바꿨는데, **학생이 같이 보는 이 인라인 패널**은 「재귀로」 그대로였다.
+            한 학생이 두 화면에서 다른 말을 듣는다 —
+            `feedback_same_number_two_meanings` 와 같은 층(같은 것을 다른 이름으로).
+            게다가 `feedback_student_code_plain_and_no_recursion`:
+            *"대도록이면 재귀 사용하지 말기"* — `data/lesson*.ts` 어디에도 재귀를
+            가르치는 레슨이 없다. 스택으로 맞춘다. */}
+        <H>{t("3. DFS — 한 길로 끝까지, 스택으로", "3. DFS — deep first, with a stack")}</H>
+        <p>{t("한 방향으로 갈 수 있는 데까지 들어갔다가 막히면 되돌아와요. 다음에 볼 곳을 스택에 쌓아 두고 맨 위부터 꺼내요. 연결 요소 세기, 경로 찾기에 좋아요.", "Go as deep as possible, then back up when stuck. Keep the places to visit on a stack and always take the top one. Great for counting components or finding paths.")}</p>
+        <Code code={t(`stack<int> st;
+st.push(start);
+while (!st.empty()) {
+    int cur = st.top(); st.pop();
+    if (visited[cur]) continue;
     visited[cur] = true;
     for (int nx : adj[cur])
-        if (!visited[nx]) dfs(nx);
-}`, `void dfs(int cur) {
+        if (!visited[nx]) st.push(nx);
+}`, `stack<int> st;
+st.push(start);
+while (!st.empty()) {
+    int cur = st.top(); st.pop();
+    if (visited[cur]) continue;
     visited[cur] = true;
     for (int nx : adj[cur])
-        if (!visited[nx]) dfs(nx);
+        if (!visited[nx]) st.push(nx);
 }`)} />
-        <p className="text-gray-500">{t("파이썬도 거의 같아요:", "Python looks almost the same:")}</p>
-        <Code lang="python" code={t(`def dfs(cur):
+        <p className="text-gray-500">{t("파이썬도 거의 같아요 — 리스트 하나면 스택이에요:", "Python looks almost the same — a list is already a stack:")}</p>
+        <Code lang="python" code={t(`st = [start]
+while st:
+    cur = st.pop()
+    if visited[cur]:
+        continue
     visited[cur] = True
     for nx in adj[cur]:
         if not visited[nx]:
-            dfs(nx)`, `def dfs(cur):
+            st.append(nx)`, `st = [start]
+while st:
+    cur = st.pop()
+    if visited[cur]:
+        continue
     visited[cur] = True
     for nx in adj[cur]:
         if not visited[nx]:
-            dfs(nx)`)} />
+            st.append(nx)`)} />
       </section>
 
       <section>
