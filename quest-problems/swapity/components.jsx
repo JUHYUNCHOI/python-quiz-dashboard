@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav, useTraceStep } from "@/components/quest/TraceStepper";
 
 const A = "#8b5cf6";
 
@@ -54,16 +55,6 @@ export function SwapityRoundSim({ E }) {
   /* phase machine:
      0 = identity, 1 = after first reversal, 2 = after second (= 1 round done)
      round counter increments when we transition 2 -> next 0. */
-  const [phase, setPhase] = useState(0);
-  const [round, setRound] = useState(0);
-  const [arr, setArr] = useState(initial);
-  const [playing, setPlaying] = useState(false);
-  const timerRef = useRef(null);
-
-  useEffect(() => {
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, []);
-
   const stepOnce = (curArr, curPhase, curRound) => {
     if (curPhase === 0) {
       // Apply first reversal.
@@ -84,15 +75,27 @@ export function SwapityRoundSim({ E }) {
     return { arr: curArr, phase: 0, round: curRound };
   };
 
-  const doStep = () => {
-    const { arr: a, phase: p, round: r } = stepOnce(arr, phase, round);
-    setArr(a); setPhase(p); setRound(r);
-  };
-  const doReset = () => {
-    setPlaying(false);
-    if (timerRef.current) clearTimeout(timerRef.current);
-    setArr(initial); setPhase(0); setRound(0);
-  };
+  // 라운드가 순환(cycleLen)에 닿을 때까지 걸음을 미리 다 계산해 둔다 —
+  // 2026-09-27: 손으로 만든 "▶ Step" 은 앞으로만 갔다. SimNav 로 앞뒤 다 되게 한다.
+  const trace = useMemo(() => {
+    const states = [{ arr: initial, phase: 0, round: 0 }];
+    let s = states[0];
+    while (!(s.round >= cycleLen && s.phase === 0)) {
+      s = stepOnce(s.arr, s.phase, s.round);
+      states.push(s);
+    }
+    return states;
+  }, []);
+
+  const { idx, setIdx } = useTraceStep(trace.length);
+  const { arr, phase, round } = trace[idx];
+  const [playing, setPlaying] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, []);
+
   const togglePlay = () => {
     if (playing) {
       setPlaying(false);
@@ -105,13 +108,10 @@ export function SwapityRoundSim({ E }) {
   // Auto-advance when playing.
   useEffect(() => {
     if (!playing) return;
-    if (round >= cycleLen && phase === 0) { setPlaying(false); return; }
-    timerRef.current = setTimeout(() => {
-      const { arr: a, phase: p, round: r } = stepOnce(arr, phase, round);
-      setArr(a); setPhase(p); setRound(r);
-    }, 700);
+    if (idx >= trace.length - 1) { setPlaying(false); return; }
+    timerRef.current = setTimeout(() => setIdx(idx + 1), 700);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [playing, arr, phase, round, cycleLen]);
+  }, [playing, idx, trace.length]);
 
   // Highlight which range is "active" based on phase.
   const activeRange = phase === 0 ? null : REV[phase === 1 ? 0 : 1];
@@ -205,23 +205,22 @@ export function SwapityRoundSim({ E }) {
         </div>
       )}
 
-      {/* Controls */}
-      <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-        <button onClick={doStep} disabled={reachedCycle} style={{
-          background: reachedCycle ? "#e5e7eb" : A, color: reachedCycle ? "#94a3b8" : "#fff",
-          border: "none", borderRadius: 8, padding: "8px 18px",
-          fontSize: 13, fontWeight: 700, cursor: reachedCycle ? "default" : "pointer",
-        }}>▶ {t(E, "Step", "단계")}</button>
+      {/* Controls — 공용 SimNav(⏮ 처음부터가 옛 Reset 을 대신한다) + 재생 토글 */}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+        <SimNav
+          idx={idx}
+          total={trace.length}
+          onIdx={(n) => { setPlaying(false); setIdx(n); }}
+          accent={A}
+          showLabels
+          isEn={E}
+        />
         <button onClick={togglePlay} disabled={reachedCycle} style={{
           background: "#fff", color: A, border: `1.5px solid ${A}`, borderRadius: 8,
           padding: "8px 18px", fontSize: 13, fontWeight: 700,
           cursor: reachedCycle ? "default" : "pointer",
           opacity: reachedCycle ? 0.5 : 1,
         }}>{playing ? "⏸ " + t(E, "Pause", "일시정지") : "⏯ " + t(E, "Play", "재생")}</button>
-        <button onClick={doReset} style={{
-          background: "#fff", color: C.dim, border: `1.5px solid ${C.border}`, borderRadius: 8,
-          padding: "8px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "처음으로")}</button>
       </div>
     </div>
   );
