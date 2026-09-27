@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#d97706";
 const ABg = "#fffbeb";
@@ -75,7 +76,6 @@ function buildSimSteps(counts, E) {
 
 export function FanSimulator({ E }) {
   const [counts, setCounts] = useState([3, 7, 2]);
-  const [step, setStep] = useState(0);
 
   const total = counts.reduce((a, b) => a + b, 0);
   const maxC = Math.max(...counts);
@@ -84,11 +84,10 @@ export function FanSimulator({ E }) {
   const allFit = maxC <= rest + 1;
 
   const allSteps = buildSimSteps(counts, E);
-  const cur = Math.min(step, allSteps.length - 1);
+  const { safe: cur, setIdx, total: maxSteps } = useTraceStep(allSteps.length);
   const s = allSteps[cur];
-  const maxSteps = allSteps.length;
 
-  const resetSim = () => { setStep(0); };
+  const resetSim = () => { setIdx(0); };
 
   // Reset when counts change
   const countsKey = counts.join(",");
@@ -96,8 +95,6 @@ export function FanSimulator({ E }) {
   useEffect(() => {
     if (prevKeyRef.current !== countsKey) { prevKeyRef.current = countsKey; resetSim(); }
   }, [countsKey]);
-
-  const nextStep = () => { if (step < maxSteps - 1) setStep(p => p + 1); };
 
   const loadPreset = (p) => setCounts([...p.counts]);
   const adjustCount = (idx, delta) => { const nc = [...counts]; nc[idx] = Math.max(0, Math.min(20, nc[idx] + delta)); setCounts(nc); };
@@ -263,24 +260,8 @@ export function FanSimulator({ E }) {
       )}
 
       {/* Controls */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
-        {!s.done ? (
-          <button onClick={nextStep} style={{
-            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: "none", cursor: "pointer",
-            color: "#fff",
-            background: `linear-gradient(135deg,#b45309,${A})`,
-            boxShadow: "0 3px 12px rgba(217,119,6,.3)",
-          }}>▶ {E ? "Next" : "다음"}</button>
-        ) : (
-          <button onClick={resetSim} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-          }}>↺ {E ? "Restart" : "처음부터"}</button>
-        )}
-      </div>
-      <div style={{ textAlign: "center", marginTop: 3, fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700 }}>
-        {cur}/{maxSteps - 1}
+      <div style={{ marginTop: 8 }}>
+        <SimNav idx={cur} total={maxSteps} onIdx={setIdx} accent={A} showLabels isEn={E} />
       </div>
     </div>
   );
