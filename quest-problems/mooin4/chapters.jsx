@@ -3,6 +3,8 @@ import { getMooin4Sections, getMooin4Walk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { TypeTraceSim, BackwardSim } from "./sims";
 
+const A = "#f97316"; // mooin4 주황 액센트 (components.jsx 와 동일)
+
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooin4Ch1 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
@@ -245,7 +247,7 @@ export function makeMooin4Ch2(E, lang = "py") {
         narr: t(E,
           "Walk right→left, flipping the letter when an odd number of O's come after it.  Each part lights up with a bubble.",
           "오른쪽→왼쪽으로 걸으며, 뒤에 O 가 홀수 개면 글자를 뒤집어요."),
-        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent={A} />),
       };
     })(),
 
