@@ -287,7 +287,11 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
       <Header />
 
       {/* Breadcrumb: USACO · Dec 2024 Bronze #2 + done button */}
-      <div className="bg-white border-b border-gray-300 px-3 py-1 sticky top-[57px] md:top-0 z-30 flex items-center gap-2">
+      {/* ⚠️ 2026-09-27 PM 승인 (다) 안 — 전역 Header(components/header.tsx) 를 이 페이지에서
+          sticky 해제했으므로, 모바일에서도 이 바 위에 57px 짜리 고정 바가 더는 없다.
+          top-[57px] 로 비워 뒀던 자리를 top-0 으로 당겨 데스크탑과 같게 만든다.
+          (안 당기면 모바일에서 57px 짜리 빈 흰 여백만 위에 남는다.) */}
+      <div className="bg-white border-b border-gray-300 px-3 py-1 sticky top-0 z-30 flex items-center gap-2">
         <Link href={backHref} className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
           <ChevronLeft size={16} />
         </Link>

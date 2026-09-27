@@ -44,8 +44,22 @@ export function Header() {
   // 학생이 문제 들어가기 전에 언어 정해두는 것을 강제.
   const isInQuestProblem = /^\/quest\/[^/]+/.test(pathname || "")
 
+  /* ⚠️ 2026-09-27 PM 승인 (다) 안 — quest 문제 화면(모바일)에서는 이 전역 Header 를
+     sticky 로 두지 않는다. quest 페이지엔 quest 전용 breadcrumb 바(client.tsx)가
+     따로 sticky 로 떠 있는데, 이 둘을 모바일에서 함께 sticky 로 두면 합쳐 93px 를
+     영구 점유해 그 아래를 지나가는 형제문제 피커·탭 줄을 스크롤 40~200px 구간에서
+     가리고, 그 자리를 실제로 Login·🦒Coderin(이 헤더 안의 버튼)이 가져간다
+     (`check-fixed-bar-overlap.mjs` 실측: 62개 quest 중 59개, 도둑 431/520 곳이
+     이 헤더의 Login·🦒Coderin). ux 검증: 로그아웃 확인은 이미 진입 시점에 끝나 있고,
+     quest 를 나가는 길은 breadcrumb 의 `←`, "어디 있는지 보인다" 도 breadcrumb 이
+     담당하므로 이 헤더가 안 보여도 잃는 게 없다 — 가려지는 버튼 5→1(무관 1곳 남음).
+     ⚠️ **quest 페이지 밖은 그대로 sticky** — 이 조건 밖 화면은 안 건드린다.
+     데스크탑은 이 헤더 자체가 `md:hidden` 이라 애초에 안 뜬다(DesktopSidebar 담당). */
   return (
-    <header className="md:hidden sticky top-0 z-40 border-b border-orange-100 bg-white/80 backdrop-blur-sm">
+    <header className={cn(
+      "md:hidden border-b border-orange-100 bg-white/80 backdrop-blur-sm",
+      isInQuestProblem ? "relative" : "sticky top-0 z-40"
+    )}>
       <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-4">
         <Link href="/" className="flex items-center gap-2">
           <div className="text-2xl md:text-3xl">🦒</div>
