@@ -79,6 +79,7 @@ const STEP = Number(flag("step", 10));
 const MAX_SCROLL = Number(flag("max-scroll", 1200));
 const TAB = flag("tab", null);
 const tabMissed = [];
+const unstable = [];
 const targets = argv.filter(a => !a.startsWith("--") && a !== String(STEP)
   && a !== String(MAX_SCROLL) && a !== TAB);
 
@@ -193,11 +194,41 @@ for (const target of targets) {
       }
       if (!clicked) { tabMissed.push(target); }
     }
+    /* 🐛 2026-09-27 — **이 검사기가 실행마다 다른 답을 냈다.** 같은 quest·같은 코드로
+       세 번 돌리면 `reflection` 8·0·8, `mexes` 0·0·8 처럼 오갔다. quest 구조 차이가
+       아니었다(여섯 quest 의 header·sticky 바를 `getBoundingClientRect()` 로 재니
+       `{y:0,h:69}`·`{y:69,h:35.5}` 로 **바이트 단위로 동일**했다).
+       원인: `components/quest/QuestNavBar.jsx:152,202` 가 `behavior:"smooth"` 로
+       **스크롤 애니메이션**을 돌린다. 탭을 누른 직후 그 애니메이션이 아직 도는 중인데
+       `scrollTo` 로 덮어써서, **실제로 머문 자리가 실행마다 달랐다.**
+       고침: ①부드러운 스크롤을 끈다 ②`scrollY` 가 목표에 **실제로 닿았는지 확인**하고
+       ③그다음에야 가드 시간을 기다린다.
+       근거: memory/feedback_checkers_can_be_silently_wrong.md */
+    await page.addStyleTag({ content: "html,body{scroll-behavior:auto !important}" });
+    // 탭 클릭이 띄웠을 수 있는 애니메이션이 끝날 때까지 — scrollY 가 멈출 때까지 본다
+    await page.evaluate(async () => {
+      let last = -1, same = 0;
+      for (let i = 0; i < 40 && same < 3; i++) {
+        await new Promise(r => requestAnimationFrame(r));
+        if (window.scrollY === last) same++; else { same = 0; last = window.scrollY; }
+      }
+    });
+
     const docH = await page.evaluate(() => document.documentElement.scrollHeight);
     const limit = Math.min(MAX_SCROLL, Math.max(0, docH - 812));
 
     for (let s = 0; s <= limit; s += STEP) {
-      await page.evaluate(v => window.scrollTo(0, v), s);
+      // 목표 자리에 **실제로 닿을 때까지** 기다린다 — 안 닿으면 그 걸음은 건너뛴다
+      const landed = await page.evaluate(async v => {
+        window.scrollTo(0, v);
+        for (let i = 0; i < 30; i++) {
+          await new Promise(r => requestAnimationFrame(r));
+          if (Math.abs(window.scrollY - v) <= 2) return true;
+        }
+        // 문서가 짧아 더 못 내려가는 경우는 정상이다
+        return Math.abs(window.scrollY - (document.documentElement.scrollHeight - innerHeight)) <= 2;
+      }, s);
+      if (!landed) { unstable.push(`${target}@${s}px`); continue; }
       /* ⚠️ **400ms 를 기다리는 데는 이유가 있다. 60ms 였을 때 이 검사기가 조용히 틀렸다.**
          `QuestBottomNav` 에는 「스크롤 중에는 바의 버튼을 끈다」는 가드가 있다(180ms).
          60ms 에 재면 **가드가 켜진 상태**를 재게 되고, 바 버튼이 `pointer-events:none`
@@ -288,6 +319,10 @@ if (noisyGaveUp.length) {
   console.log(`   위 「0곳」은 이 quest 들에 대해서는 **결백이 아니라 «안 봤다» 는 뜻이다.**`);
   console.log(`   다른 사람이 quest 파일을 저장하는 중일 수 있다. 편집이 멎은 뒤 다시 돌려라.`);
   process.exit(3);
+}
+if (unstable.length) {
+  console.log(`\n⚠️ **스크롤이 목표 자리에 못 닿아 건너뛴 걸음 ${unstable.length}개** — 그만큼 덜 본 것이다.`);
+  console.log(`   ${unstable.slice(0, 12).join(" ")}${unstable.length > 12 ? " …" : ""}`);
 }
 if (tabMissed.length) {
   console.log(`\n⛔ **«${TAB}» 탭을 못 찾은 quest ${tabMissed.length}개 — 「연 쪽」 그대로 쟀다.**`);
