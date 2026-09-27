@@ -12,7 +12,7 @@
 //   ]} />
 
 import { useRef, useEffect, useState, Fragment } from "react";
-import { t } from "@/components/quest/theme";
+import { t, C } from "@/components/quest/theme";
 import { highlight } from "@/components/quest/shared";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
@@ -118,6 +118,105 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
     //    조각이 바뀌면 줄 머리부터 보여야 한다.
     box.scrollLeft = 0;
   }, [safeIdx, lo]);
+
+  /* ⚠️ 2026-09-27: 「복사 전체 코드」 + SimNav ◀▶ 를 고정 하단바(`QuestBottomNav`,
+     `.quest-navbar`, z-index 100)가 특정 스크롤 구간에서 **가려서 클릭을 뺏는다**
+     (`scripts/check-fixed-bar-overlap.mjs` 로 실측 — moohunt 190px·checkups 250px 에서
+     실제로 «다음 →» 가 눌림).
+     시도했다가 버린 안 넷:
+     ①복사 버튼 z-index 를 올린다 → 이번엔 복사 버튼이 진짜 Next→ 클릭을 뺏는다(자리만 바뀜)
+     ②페이지 끝에 여백만 준다 → 고정 바는 스크롤 내내 같은 화면 좌표에 있어서, 콘텐츠가
+       그 좌표를 지나가는 "언젠가 한 번"은 구조적으로 피할 수 없다(중간 스크롤은 그대로 겹침)
+     ③복사 버튼만 위로 옮긴다 → 겹치는 스크롤 지점이 바뀔 뿐 사라지지 않는다
+     ④**CSS `position: sticky`** — 처음엔 이걸로 됐다고 생각했다(스크래치 HTML 테스트로는
+       스크롤 내내 화면 하단에서 최소 Npx 위에 고정됨을 확인했다). 그런데 실제 페이지에서
+       재니 **하나도 안 붙잡혔다** — 원인은 `client.tsx` 레이아웃에 `overflow:hidden` 인
+       `flex` 조상이 끼어 있어서다. sticky 의 "고정 기준"은 **가장 가까운 스크롤 조상**인데,
+       그 조상은 자기 자신은 스크롤하지 않는(진짜 스크롤은 더 위 document 레벨에서 일어나는)
+       상자라, 브라우저가 그 상자를 기준으로 sticky 를 계산해서 **영원히 안 붙잡힌다.**
+       (`getBoundingClientRect` 로 실측: bottom 값이 스크롤량만큼 그대로 선형으로 움직였다 —
+       sticky 가 전혀 작동 안 한 증거.)
+     지금 안 — **CSS 를 버리고 JS 로 같은 효과를 낸다.** `sentinelRef` (복사줄 바로 앞의
+     높이 0 표식)로 "안 붙잡았을 때 이 자리가 어디였을까"(자연 위치)를 매 스크롤마다
+     `getBoundingClientRect` 로 직접 재고, 그 자연 위치가 고정 바 위 `navGap`px 보다
+     아래로 내려가려는 순간만 `transform: translateY(...)` 로 끌어올린다.
+     `getBoundingClientRect` 는 조상의 overflow/포지셔닝과 **무관하게 항상 뷰포트
+     기준 실좌표**를 주므로 위 ④의 원인에 안 걸린다.
+     복사줄+SimNav줄을 **한 덩어리**로 묶은 이유 — 복사줄만 끌어올리면, 그 아래
+     SimNav 줄이 스크롤하며 지나가다 이번엔 **멈춰선 복사줄에 가려지는 새 충돌**이
+     생긴다(같은 컴포넌트 안에서 자기 자신과 부딪힘). 한 덩어리면 서로 상대 위치가
+     고정이라 그 충돌 자체가 안 생긴다.
+     `navGap` 은 하드코딩하지 않고 실제 `.quest-navbar` 높이를 재서 쓴다 —
+     `showAnswerHint` 로 78px/96px 이 갈리고 `env(safe-area-inset-bottom)` 은
+     기기마다 다르다(`QuestBottomNav` 코드를 CodeWalk 가 몰라도 항상 맞게). */
+  const [navGap, setNavGap] = useState(92); // 못 재면 78(기본 바 높이)+14 여유
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const measure = () => {
+      const bar = document.querySelector(".quest-navbar");
+      if (bar) setNavGap(bar.getBoundingClientRect().height + 10);
+    };
+    measure();
+    let ro;
+    const bar = document.querySelector(".quest-navbar");
+    if (bar && typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(measure);
+      ro.observe(bar);
+    }
+    window.addEventListener("resize", measure);
+    return () => { ro && ro.disconnect(); window.removeEventListener("resize", measure); };
+  }, []);
+
+  const sentinelRef = useRef(null);
+  const pinWrapRef = useRef(null);
+  const [pinY, setPinY] = useState(0);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let ticking = false;
+    const recompute = () => {
+      ticking = false;
+      const sentinel = sentinelRef.current;
+      const wrap = pinWrapRef.current;
+      if (!sentinel || !wrap) return;
+      const vh = window.innerHeight;
+      const naturalTop = sentinel.getBoundingClientRect().top;
+      // ⚠️ **여기 기준을 `naturalBottom`(끝쪽)으로 재봤다가 실측(elementFromPoint)에서
+      // 다시 걸렸다** — 복사 버튼은 이 덩어리(복사줄+SimNav줄) **맨 위**에 있는데,
+      // "덩어리 전체의 아래쪽 끝" 을 기준으로 재면 복사 버튼이 **이미 고정 바 대역에
+      // 들어간 뒤에도** 한참 더 자연스러운(안 끌어올린) 상태로 남아, 그 사이에
+      // 진짜 클릭 도둑맞음 창(최대 25px, 100% 겹침)이 생겼다.
+      // `naturalTop`(맨 위) 기준이면 — 아직 한 픽셀도 화면에 안 보이는 상태(위쪽이
+      // 뷰포트 맨 아래줄에 닿기 직전)에서 곧장 안전한 자리로 넘어가므로, 부분적으로
+      // 보이면서 동시에 고정 바와 겹치는 프레임 자체가 생기지 않는다(스크롤이라는
+      // 연속값에 대한 계단함수라, 걸리는 순간 "안 보임 → 안전한 자리" 로 한 번에
+      // 넘어간다). 대신 처음 나타날 때 도약 폭이 크다(덩어리 키만큼, 실측 ~176px) —
+      // 클릭 안전이 시각적 매끄러움보다 우선이라 이 안을 쓴다.
+      if (naturalTop >= vh) { setPinY(0); return; }
+      const naturalBottom = naturalTop + wrap.offsetHeight;
+      const maxBottom = vh - navGap;
+      const ty = Math.min(0, maxBottom - naturalBottom);
+      setPinY(ty);
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(recompute);
+    };
+    recompute();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    // 코드창을 손으로 늘리면(resize: vertical) 아래 배치가 통째로 바뀐다 — 같이 다시 잰다.
+    let ro;
+    if (boxRef.current && typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(onScroll);
+      ro.observe(boxRef.current);
+    }
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      ro && ro.disconnect();
+    };
+  }, [navGap, safeIdx]);
 
   return (
     <div style={{ padding: 16 }}>
@@ -250,25 +349,37 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
         })}
       </div>
 
-      {/* 진행 표시 + 전체 코드 복사 (코드창 바로 아래) */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, margin: "8px 0 2px" }}>
-        <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700 }}>
-          {t(E, `part ${safeIdx + 1} of ${total}`, `${total} 조각 중 ${safeIdx + 1} 번째`)}
-        </span>
-        <button onClick={copyAll} style={{
-          fontSize: 11, fontWeight: 800, padding: "3px 10px", borderRadius: 999, cursor: "pointer",
-          background: copied ? "#059669" : "#fff",
-          border: `1.5px solid ${copied ? "#059669" : "#cbd5e1"}`,
-          color: copied ? "#fff" : "#475569",
-          transition: "all .15s",
-        }}>
-          {copied ? `✓ ${t(E, "copied!", "복사됨!")}` : `📋 ${t(E, "copy full code", "전체 코드 복사")}`}
-        </button>
-      </div>
+      {/* 복사 줄 + SimNav 줄을 한 덩어리로 — 위 주석 참고.
+          `transform: translateY` 로 필요할 때만 끌어올려서 이 자리가 코드창 꼬리를
+          살짝 덮을 순 있어도 — 흔한 "하단 고정 툴바" 모양이라 어색하지 않다 —
+          **고정 하단바와는 절대 안 겹친다**(둘 사이 간격이 navGap 으로 항상 보장됨).
+          background 를 페이지 배경(C.bg)과 맞춰서 코드창 검정 배경 위에 떠 있을 때도
+          붕 뜨지 않게 한다. */}
+      <div ref={sentinelRef} style={{ height: 0 }} aria-hidden="true" />
+      <div ref={pinWrapRef} style={{
+        position: "relative", transform: pinY ? `translateY(${pinY}px)` : "none",
+        zIndex: 5, background: C.bg, paddingTop: 4, marginTop: -4,
+      }}>
+        {/* 진행 표시 + 전체 코드 복사 (코드창 바로 아래) */}
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, margin: "8px 0 2px" }}>
+          <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700 }}>
+            {t(E, `part ${safeIdx + 1} of ${total}`, `${total} 조각 중 ${safeIdx + 1} 번째`)}
+          </span>
+          <button onClick={copyAll} style={{
+            fontSize: 11, fontWeight: 800, padding: "3px 10px", borderRadius: 999, cursor: "pointer",
+            background: copied ? "#059669" : "#fff",
+            border: `1.5px solid ${copied ? "#059669" : "#cbd5e1"}`,
+            color: copied ? "#fff" : "#475569",
+            transition: "all .15s",
+          }}>
+            {copied ? `✓ ${t(E, "copied!", "복사됨!")}` : `📋 ${t(E, "copy full code", "전체 코드 복사")}`}
+          </button>
+        </div>
 
-      {/* 버튼 — 코드창이 고정 높이라 항상 여기, 스크롤 없이 닿음 */}
-      <div style={{ marginTop: 4 }}>
-        <SimNav idx={safeIdx} total={total} onIdx={setIdx} accent={accent} showLabels isEn={E} />
+        {/* 버튼 — 코드창이 고정 높이라 항상 여기, 스크롤 없이 닿음 */}
+        <div style={{ marginTop: 4 }}>
+          <SimNav idx={safeIdx} total={total} onIdx={setIdx} accent={accent} showLabels isEn={E} />
+        </div>
       </div>
     </div>
   );
