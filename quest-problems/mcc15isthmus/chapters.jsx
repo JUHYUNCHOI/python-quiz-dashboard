@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
+import { SimNav } from "@/components/quest/TraceStepper";
 
 const NW = { whiteSpace: "nowrap" };
 const KA = { wordBreak: "keep-all" };
@@ -117,12 +118,11 @@ function IsthmusPeakSim({ E }) {
               }}>{v}</button>
             ))}
           </div>
-          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-            <button onClick={() => setI(Math.max(0, i - 1))} style={navBtn}>◀</button>
-            <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#1d4ed8", minWidth: 74, textAlign: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center" }}>
+            <SimNav idx={i} total={N} onIdx={setI} accent="#2563eb" isEn={E} />
+            <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 800, color: "#1d4ed8" }}>
               i = {i} (h={H[i]})
             </span>
-            <button onClick={() => setI(Math.min(N - 1, i + 1))} style={navBtn}>▶</button>
           </div>
         </div>
 
@@ -235,10 +235,6 @@ function IsthmusPeakSim({ E }) {
   );
 }
 
-const navBtn = {
-  width: 30, height: 28, borderRadius: 7, border: "1px solid #93c5fd", background: "#fff",
-  color: "#1e3a8a", fontSize: 13, fontWeight: 800, cursor: "pointer", lineHeight: 1,
-};
 const caseBtn = {
   borderRadius: 999, border: "1px solid #bfdbfe", background: "#fff", color: "#1d4ed8",
   fontSize: 11.5, fontWeight: 700, padding: "3px 10px", cursor: "pointer", wordBreak: "keep-all",
