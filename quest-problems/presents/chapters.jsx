@@ -174,6 +174,10 @@ export function makePresentsCh1(E) {
                 {t(E, "BEFORE", "전")}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
+                {/* ⭐ 2026-09-28 학생(초6): *"「2」 상자 **밑에** 「↑ 맨 위」라고 써 있는데
+                    화면에서 「2」는 제일 아래 칸이었다. **「맨 위」라면서 왜 제일 아래 상자를
+                    가리키지?**"* — 라벨이 기둥 **맨 아래**에 있었다. 위/아래를 갈라 붙인다. */}
+                <div style={{ fontSize: 9, color: C.dim, marginBottom: 2 }}>↓ {t(E, "top", "맨 위")}</div>
                 {[3,1,4,2].map((v, i) => {
                   const isTarget = v === 4;
                   const isAbove = i < 2;
@@ -187,7 +191,7 @@ export function makePresentsCh1(E) {
                     }}>{v}{isTarget ? " ←" : isAbove ? " ✗" : ""}</div>
                   );
                 })}
-                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>↑ {t(E, "top", "맨 위")}</div>
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>↑ {t(E, "bottom", "맨 아래")}</div>
               </div>
             </div>
             {/* arrow */}
@@ -203,7 +207,7 @@ export function makePresentsCh1(E) {
                   borderRadius: 7, fontWeight: 700, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
                   background: "#fff", border: `1px solid #cbd5e1`, color: C.text,
                 }}>2</div>
-                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>↑ {t(E, "top", "맨 위")}</div>
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>↑ {t(E, "bottom", "맨 아래")}</div>
               </div>
             </div>
           </div>
@@ -240,6 +244,10 @@ export function makePresentsCh1(E) {
                 {t(E, "BEFORE Q1", "요청 1 전")}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
+                {/* ⭐ 2026-09-28 학생(초6): *"「2」 상자 **밑에** 「↑ 맨 위」라고 써 있는데
+                    화면에서 「2」는 제일 아래 칸이었다. **「맨 위」라면서 왜 제일 아래 상자를
+                    가리키지?**"* — 라벨이 기둥 **맨 아래**에 있었다. 위/아래를 갈라 붙인다. */}
+                <div style={{ fontSize: 9, color: C.dim, marginBottom: 2 }}>↓ {t(E, "top", "맨 위")}</div>
                 {[5,3,1,4,2].map((v, i) => {
                   const isTarget = v === 1;
                   const isAbove = i < 2;
@@ -262,6 +270,10 @@ export function makePresentsCh1(E) {
                 {t(E, "AFTER Q1 (now ask Q2)", "요청 1 후 (이제 요청 2)")}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
+                {/* ⭐ 2026-09-28 학생(초6): *"「2」 상자 **밑에** 「↑ 맨 위」라고 써 있는데
+                    화면에서 「2」는 제일 아래 칸이었다. **「맨 위」라면서 왜 제일 아래 상자를
+                    가리키지?**"* — 라벨이 기둥 **맨 아래**에 있었다. 위/아래를 갈라 붙인다. */}
+                <div style={{ fontSize: 9, color: C.dim, marginBottom: 2 }}>↓ {t(E, "top", "맨 위")}</div>
                 {[4,2].map((v, i) => (
                   <div key={i} style={{
                     width: 60, height: 28, display: "flex", alignItems: "center", justifyContent: "center",

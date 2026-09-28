@@ -44,6 +44,14 @@ if (!url) {
 }
 const lang = args.includes('--lang') ? args[args.indexOf('--lang') + 1] : 'ko'
 const MAX = args.includes('--max') ? +args[args.indexOf('--max') + 1] : 40
+/* 🐛 2026-09-28 — 여기가 **한 글자로 고정**돼 있어서 조용히 틀렸다.
+   그날 `QuestNavBar` 의 쪽 넘김 라벨을 「다음 →」 → **「다음 쪽 ▶」** 로 바꿨는데
+   (학생이 「다음 →」을 「다른 문제로 간다」로 오해해서), 이 도구가 옛 글자만 찾아
+   **quest 셋이 연달아 「쪽이 1개로 잡혔다」로 실패**했다(strangefn·makedistinct·swaptowin).
+   학생 셋이 각각 손으로 세어 우회했다 — **도구가 조용히 틀린 것**이다.
+   이제 **정규식으로 둘 다** 받는다. 라벨이 또 바뀌면 여기부터 봐라. */
+const NEXT_RE = lang === 'en' ? /^(Next page ▶|Next →)$/ : /^(다음 쪽 ▶|다음 →)$/
+const SUBNEXT_RE = lang === 'en' ? /^(Next ▶|Next)$/ : /^(다음 ▶|다음)$/
 const NEXT = lang === 'en' ? 'Next →' : '다음 →'
 const SUBNEXT = lang === 'en' ? 'Next ▶' : '다음 ▶'
 const allowDirty = args.includes('--allow-dirty')
@@ -252,8 +260,16 @@ try {
          스코프 안에 없으면(quest-navbar 가 없는 화면 — 예: /learn 레슨) 예전처럼
          문서 전체에서 찾는다. 거기엔 이 버그의 증거가 없었다 — 다만 이 fallback
          은 permutation 과 같은 종류의 충돌에는 여전히 취약하다는 걸 적어둔다. */
-      const scoped = await p.$(`.quest-navbar button:has-text("${NEXT}")`)
-      const nb = scoped || (await p.$(`button:has-text("${NEXT}")`))
+      /* 라벨이 바뀔 수 있으니 **정규식으로 둘 다** 본다 (2026-09-28). */
+      const pickNext = async (root) => {
+        for (const b of await p.$$(`${root}button`)) {
+          const txt = ((await b.innerText().catch(() => "")) || "").trim()
+          if (NEXT_RE.test(txt)) return b
+        }
+        return null
+      }
+      const scoped = await pickNext(".quest-navbar ")
+      const nb = scoped || (await pickNext(""))
       if (nb && (await nb.isEnabled())) { await nb.click(); moved = true }
     } catch {}
     if (!moved) break
