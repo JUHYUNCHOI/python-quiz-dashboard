@@ -116,7 +116,21 @@ python3 scripts/check-quest-length-regression.py <id>         # 고친 뒤 쪽 �
                                                             #   하나, `quiz_input: 0→5`, 5개 다 눈으로 대조함 — 오탐 0건).
 python3 scripts/check-word-difficulty.py <id>                # 어려운 말 · 같은 것 다른 이름 · 번역 티
 python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장 여러 개
-python3 scripts/check-narr-length.py <id>                    # 파란 내레이션 바 길이 — **narr 는 이걸로 잰다**
+python3 scripts/check-narr-length.py <id>                    # 파란 내레이션 바 — **줄 길이**를 잰다
+                                                            #   ⚠️ **2026-09-28 정정: 이 하나로 다 재지 못한다.**
+                                                            #   `swaptowin` 3쪽이 그 틈으로 샜다 — 줄마다 44자·13자라
+                                                            #   **여기서 0건**, 그런데 화면에선 **57자 두 문장**이라
+                                                            #   `see-screen` 이 잡았다. **두 도구가 다른 답을 냈다.**
+                                                            #   둘은 **다른 층**이다. 싸우는 게 아니다 —
+                                                            #     이것        = 글쓴이가 넣은 `\n` 으로 쪼갠 **한 줄**의 길이
+                                                            #                   (`feedback_korean_linebreak` 의 60자 규칙)
+                                                            #     see-screen  = 화면에 **이어져 보이는 글 전체**의 분량
+                                                            #                   (`feedback_narration_short` 의 「한 문장」 규칙)
+                                                            #   ⭐ **둘 다 돌려라.** 학생이 읽는 분량은 뒤쪽이다.
+                                                            #   이 스크립트도 이제 「합치면 55자 초과」를 **표시만** 한다 —
+                                                            #   판정으로 안 올린 이유: 실측 **144건**(narr 1465개 중)이라
+                                                            #   그 순간 일괄 작업이 된다. 일괄은 `/decide` 를 거쳐야 한다
+                                                            #   (`quest_review_progress.md` 「표준-맞추기 함정」).
                                                             #   ⚠️ 2026-09-23: `see-screen` 의 "55자 초과" 는 **한국어 기준**이다.
                                                             #   영어는 글자 수가 아니라 **한국어 대비 문장 개수**로 잰다
                                                             #   (feedback_narration_short.md 가 2026-09-09 에 정정).

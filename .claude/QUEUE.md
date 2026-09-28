@@ -392,18 +392,20 @@ quest 5개에 흩어져 있고 **쪽 수 불변**, 매번 **다른 구체적 결
 
 | 상태 | 항목 | 한 줄 |
 |---|---|---|
-| ✅ DONE | `swaptowin` 3쪽 내레이션 57자 | `c55a5fb9` — 26자·한 문장으로 |
-| ✅ DONE | `strangefn` 코드 탭 헤더 「코드 2 / 2」 | `d2c5461b` — 「코드 2 / 2 쪽」으로. 세는 대상을 글자에 박음 (공유 컴포넌트, quest 180개) |
-| ✅ DONE | CodeWalk 코드 상자 **맨 밑 한두 줄** 잘림 | ux-reviewer **허용 판정** — 아직 설명 안 된 흐린 줄, 다음 걸음에서 온전히 나온다 |
-| BLOCKED | `see-screen` CodeWalk 헛경보 | ux-reviewer: **일반 겹침 탐지로는 못 가른다** — 조작 바가 코드창 꼬리를 덮는 건 정상 동작이다. 새 전용 검사기로 대신했고(`f04ae9a5`), `see-screen` 쪽 잣대는 **안 건드린다**(진짜 겹침을 같이 죽인다) |
-| ✅ DONE | CodeWalk 마지막 걸음 **전수(168개) 자동 판정** | `f04ae9a5` — `check-codewalk-bubble-hidden.mjs`. `--selftest` 로 잣대가 사는지 먼저 본다 |
-| READY | 미푸시 커밋 ~70개 | **오늘 배포 예산 소진.** 내일 아침 |
+| `swaptowin` 3쪽 내레이션 57자 | DONE | `c55a5fb9` — 26자·한 문장으로 |
+| `strangefn` 코드 탭 헤더 「코드 2 / 2」 | DONE | `d2c5461b` — 「코드 2 / 2 쪽」으로. 세는 대상을 글자에 박음 (공유 컴포넌트, quest 180개) |
+| CodeWalk 코드 상자 **맨 밑 한두 줄** 잘림 | DONE | ux-reviewer **허용 판정** — 아직 설명 안 된 흐린 줄, 다음 걸음에서 온전히 나온다 |
+| `see-screen` CodeWalk 헛경보 | BLOCKED | ux-reviewer: **일반 겹침 탐지로는 못 가른다** — 조작 바가 코드창 꼬리를 덮는 건 정상 동작이다. 새 전용 검사기로 대신했고(`f04ae9a5`), `see-screen` 쪽 잣대는 **안 건드린다**(진짜 겹침을 같이 죽인다) |
+| CodeWalk 마지막 걸음 **전수(168개) 자동 판정** | DONE | `f04ae9a5` — `check-codewalk-bubble-hidden.mjs`. `--selftest` 로 잣대가 사는지 먼저 본다 |
+| 미푸시 커밋 ~78개 | BLOCKED(배포 — 오늘 예산 소진, 선생님 지시) | **오늘 배포 예산 소진.** 내일 아침 |
 
 ### 새로 생긴 것 (2026-09-28 밤)
 
 | 상태 | 항목 | 한 줄 |
 |---|---|---|
-| READY | `check-narr-length.py` 와 `see-screen` 이 **다른 답**을 낸다 | swaptowin 3쪽 57자·두 문장을 see-screen 은 잡고 check-narr-length 는 **0건**으로 통과시켰다(`\n` 으로 쪼개 줄마다 재는 듯). CLAUDE.md 는 「narr 는 check-narr-length 로 잰다」고 적어 뒀다 — **어느 쪽이 맞는지 정하고 목차를 고쳐라** |
+| `check-narr-length.py` 와 `see-screen` 이 **다른 답**을 낸다 | DONE | swaptowin 3쪽 57자·두 문장을 see-screen 은 잡고 check-narr-length 는 **0건**으로 통과시켰다(`\n` 으로 쪼개 줄마다 재는 듯). CLAUDE.md 는 「narr 는 check-narr-length 로 잰다」고 적어 뒀다 — **어느 쪽이 맞는지 정하고 목차를 고쳐라** |
 
-| ✅ DONE | CodeWalk 스페이서가 「고장났나」로 보임 | `f88cec28` — 「— 코드 끝 · 다음 설명은 ▶ 를 눌러요 —」 를 sticky 로 |
-| READY | 전수 훑기 나머지 축 | `--cpp` · `--every-step` · `--mobile` — 데스크탑·파이썬·마지막 걸음만 봤다 |
+| CodeWalk 스페이서가 「고장났나」로 보임 | DONE | `f88cec28` — 「— 코드 끝 · 다음 설명은 ▶ 를 눌러요 —」 를 sticky 로 |
+| 전수 훑기 나머지 축 | READY | `--cpp` · `--every-step` · `--mobile` — 데스크탑·파이썬·마지막 걸음만 봤다 |
+
+| narr 「합치면 55자 초과」 144건을 판정으로 올릴지 | BLOCKED(일괄 작업 — `/decide` 필요) | 지금은 표시만. 올리면 quest 수십 개를 한꺼번에 고치게 된다 |
