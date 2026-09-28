@@ -144,8 +144,10 @@ export function makeSwapToWinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now a real one. target = abcd, s_1 = xbay. Fix each position, left to right.",
-        "진짜 문제를 봐요. target 은 abcd, s_1 은 xbay 예요.\n왼쪽부터 한 칸씩 맞춰 가요."),
+        /* narr 은 **한 문장**이다(한국어 55자). 여기 57자·두 문장이었다 —
+           `target`·`s_1` 값은 바로 아래 카드가 이미 보여준다. 되풀이를 뺀다. */
+        "The real one now — fix each position, left to right.",
+        "이제 진짜 문제예요 — 왼쪽부터 한 칸씩 맞춰 가요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 8 }}>
