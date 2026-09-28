@@ -335,3 +335,14 @@ A **98** · B 71 · **C 1**(`swaptowin` 하나만 남았고 그건 BLOCKED) · �
 - [ ] `swaptowin`
 - [ ] `balanced`
 - [ ] `presents`
+
+### ⚠️ `balanced` — 고치지 않고 남긴 것 하나 (2026-09-28)
+
+학생: *"`long long` — **답이 커질 수 있어서** 라고 설명은 해줬다. 다만 **N, M 이 정확히
+얼마나 커질 수 있는지 숫자(제약)는 이 화면 어디에도 없었다.**"*
+
+**맞는 지적인데 안 고쳤다.** `balanced` 는 「Bronze warm-up」이라 `data.ts` 에 **원문 링크가
+없고**(`url` 필드 없음) `public/problems/` 에도 PDF 가 없다.
+⛔ **제약 숫자를 지어내면 안 된다** — `feedback_original_problem_is_the_source`:
+*"없으면 「없다」 고 말해라."* 형제 quest 둘(`makedistinct`·`presents`)은 제약 카드가 있는데
+**이것만 없다** — 원문을 찾으면 그때 넣는다.

@@ -82,8 +82,8 @@ export function makeBalancedCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7c2d12", lineHeight: 1.5 }}>
               {t(E,
-                "Given N opening brackets followed by M closing brackets, find the LONGEST balanced subsequence length.",
-                "여는 괄호 N 개 뒤에 닫는 괄호 M 개가 붙어 있어요. 여기서 만들 수 있는 가장 긴 균형 부분수열의 길이를 출력해요.")}
+                "Given N opening brackets followed by M closing brackets, find the LONGEST balanced piece you can make by skipping characters.",
+                "여는 괄호 N 개 뒤에 닫는 괄호 M 개가 붙어 있어요.\n여기서 **글자를 건너뛰며 골라** 만들 수 있는 가장 긴 균형 잡힌 조각의 길이를 출력해요.")}
             </div>
           </div>
 
@@ -174,8 +174,14 @@ export function makeBalancedCh1(E) {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
-            {t(E, "→ The next page walks through how the first answer (6) actually comes out.",
-                  "→ 다음 페이지에서 첫 답 (6) 이 어떻게 나오는지 자세히 봐요.")}
+            {/* ⭐ 2026-09-28 학생(초6): *"「다음 페이지에서 첫 답 (6) 이 어떻게 나오는지」 라고
+                해서 **당연히 3쪽에서 N=5, M=3 을 보여줄 거라 기대**했다. 그런데 3쪽에는
+                N=3,M=2 랑 N=1,M=5 두 개만 나오고 **N=5,M=3(답 6)은 끝까지 안 나온다.**
+                **「어? 방금 약속한 그 6은 어디 갔지?」** 하고 잠깐 헷갈렸다."*
+                → 3쪽이 **실제로 보여주는 것**(둘째 답 2)을 가리키게 고친다.
+                 쪽을 더하지 않는다 — 약속을 화면에 맞춘다. */}
+            {t(E, "→ The next page walks through the second answer (2) step by step, on a small board.",
+                  "→ 다음 페이지에서 둘째 답 (2) 이 어떻게 나오는지 작은 예제로 따라가 봐요.")}
           </div>
         </div>),
     },
@@ -241,28 +247,36 @@ export function makeBalancedCh1(E) {
     },
     {
       type: "quiz",
+      /* ⭐ 2026-09-28 학생(초6) 둘:
+         ① *"N=5, M=3 → 6 은 **2쪽에서 이미 답으로 나온 바로 그 숫자**다. 내가 공식을
+            이해해서 맞춘 건지, **그냥 2쪽 표를 기억해서 맞춘 건지 구별이 안 됐다.**"*
+            → `feedback_students_copy_the_answer` 와 같은 모양. **표에 없는 수로 바꾼다.**
+         ② *"「괄호를 그려 보고」 라고 하는데 **이 쪽엔 괄호를 그릴 수 있는 곳이 전혀 없다**
+            (4지선다 버튼만 있음). 뭘 그리라는 건지 헷갈렸다."* → 「머릿속으로」를 명시한다. */
       narr: t(E,
-        "Try this — sketch out the brackets in your head and count how many pairs you can really form.",
-        "괄호를 그려 보고 몇 쌍이 만들어지는지 세어 봐요."),
+        "Try this one in your head — which side runs out first?",
+        "머릿속으로 세어 봐요 — 어느 쪽이 먼저 모자랄까요?"),
       question: t(E,
-        "For N=5, M=3, what's the longest balanced subsequence length?",
-        "N=5, M=3 이면 가장 긴 균형 부분수열의 길이는 얼마일까요?"),
-      options: ["5", "6", "8", "3"],
+        "For N=4, M=7, what's the longest balanced subsequence length?",
+        "N=4, M=7 이면 가장 긴 균형 부분수열의 길이는 얼마일까요?"),
+      options: ["4", "8", "11", "7"],
       correct: 1,
       explain: t(E,
-        "5 '(' but only 3 ')' → can pair only 3 of each = 3 pairs = 6 characters total.",
-        "'(' 5 개 인데 ')' 는 3 개 → 3 쌍밖에 못 만들어요. 3 쌍 × 2 = 6 글자."),
+        "4 '(' but 7 ')' → we can pair only 4 of each = 4 pairs = 8 characters total.",
+        "'(' 는 4 개, ')' 는 7 개 → 4 쌍밖에 못 만들어요. 4 쌍 × 2 = 8 글자."),
     },
     {
       type: "input",
       narr: t(E,
         "Same idea on a bigger case. Which side runs out first?",
         "같은 생각으로 더 큰 수를 풀어 봐요. 어느 쪽이 먼저 모자랄까요?"),
-      question: t(E, "N=100, M=42. Answer?", "N=100, M=42 일 때 답은 얼마일까요?"),
+      /* ⭐ 같은 이유로 바꿨다 — N=100, M=42 → 84 도 **2쪽 표 3번 줄과 똑같은 숫자**였다.
+         학생: *"새로 풀어보는 문제가 아니라 앞에서 본 답을 그대로 다시 쓰는 것 같았다."* */
+      question: t(E, "N=60, M=25. Answer?", "N=60, M=25 일 때 답은 얼마일까요?"),
       hint: t(E,
         "The shorter side limits the pair count.",
         "적은 쪽 개수만큼만 짝을 지을 수 있어요."),
-      answer: 84,
+      answer: 50,
     },
   ];
 }

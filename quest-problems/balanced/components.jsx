@@ -321,7 +321,20 @@ export function BalancedRunner({ E }) {
           </div>
           {results.map((r, i) => (
             <div key={i} style={{ fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: r.error ? "#dc2626" : A, fontWeight: 600, lineHeight: 1.6 }}>
-              {r.error ? `Test ${r.test}: bad input` : (r.test ? `Test ${r.test}: 2 × min(${r.N}, ${r.M}) = ${r.ans}` : r.error)}
+              {/* ⭐ 2026-09-28 학생(초6): *"코드는 그냥 `print(2 * min(N, M))` 만 하는데
+                  화면엔 **「Test 1: 2 × min(3, 2) = 4」처럼 말로 풀어쓴 게** 나왔다.
+                  **이 코드를 진짜로 실행한 게 맞는지 헷갈렸다.**"*
+                  → 코드가 **실제로 찍는 것은 숫자 한 줄**이다. 그걸 먼저 보여주고,
+                  풀이는 **옆에 흐린 글씨로** 붙인다. `check-boasted-function` 과 같은 층 —
+                  **화면이 코드가 안 하는 일을 한 것처럼 보이면 안 된다.** */}
+              {r.error
+                ? `Test ${r.test}: bad input`
+                : (<>
+                    <span>{r.ans}</span>
+                    <span style={{ color: C.dim, fontWeight: 500, marginLeft: 10, fontSize: 11 }}>
+                      {`← ${t(E, "test", "문제")} ${r.test} · 2 × min(${r.N}, ${r.M})`}
+                    </span>
+                  </>)}
             </div>
           ))}
         </div>
