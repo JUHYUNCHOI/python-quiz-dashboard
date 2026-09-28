@@ -66,18 +66,18 @@ export function makeCheckupsCh1(E) {
             <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
-{`3
-1 3 2
-3 2 1`}
+<div>3 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "N — cows", "N — 소 수")}</span></div>
+                <div>1 3 2 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "top row a", "윗줄 a")}</span></div>
+                <div>3 2 1 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "bottom row b", "아랫줄 b")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`3
-3
-0
-0`}
+<div>3 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "ways with 0 checkups", "검진 0 번인 경우의 수")}</span></div>
+                <div>3 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… with 1", "… 1 번")}</span></div>
+                <div>0 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… with 2", "… 2 번")}</span></div>
+                <div>0 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… with 3", "… 3 번")}</span></div>
               </div>
             </div>
           </div>

@@ -241,9 +241,9 @@ LWD
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`0
-0
-5`}
+<div>0 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "answer for Elsie's hand 1", "Elsie 패 1 의 답")}</span></div>
+                <div>0 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… hand 2", "… 패 2")}</span></div>
+                <div>5 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… hand 3", "… 패 3")}</span></div>
               </div>
             </div>
           </div>

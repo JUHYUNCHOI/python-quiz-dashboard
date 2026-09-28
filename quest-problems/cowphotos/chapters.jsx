@@ -94,18 +94,18 @@ export function makeCowPhotosCh1(E) {
             <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
-{`2
-4
-1 1 2 3
-4
-3 3 2 1`}
+<div>2 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "T — how many photos", "T — 사진 수")}</span></div>
+                <div>4 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "N — cows in photo 1", "N — 사진 1 의 소 수")}</span></div>
+                <div>1 1 2 3 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "their breeds", "각 소의 품종")}</span></div>
+                <div>4 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "N — cows in photo 2", "N — 사진 2 의 소 수")}</span></div>
+                <div>3 3 2 1 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "their breeds", "각 소의 품종")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`3
-1`}
+<div>3 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "answer for photo 1", "사진 1 의 답")}</span></div>
+                <div>1 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "answer for photo 2", "사진 2 의 답")}</span></div>
               </div>
             </div>
           </div>
