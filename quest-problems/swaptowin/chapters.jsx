@@ -201,7 +201,7 @@ export function makeSwapToWinCh1(E) {
               <div style={{ marginLeft: 14, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>(s_1 = abxy{t(E, " unchanged", " 그대로")})</div>
             </div>
             <div>
-              <b style={{ color: "#059669" }}>{t(E, "position 3:", "자리 3:")}</b> {t(E, "want c, s_1[3]=x. c is nowhere left in s_1 → borrow. s_2's column 3 already has c — same column number we need, so one swap → ", "c 가 필요, s_1 의 3번 칸은 x. s_1 안엔 c 가 더 없음 → 빌려요.\ns_2 의 3번 칸에 c 가 있음 — 필요한 자리도 3번 — 「번호가 마침 같아요」 → ")}
+              <b style={{ color: "#059669" }}>{t(E, "position 3:", "자리 3:")}</b> {t(E, "want c, s_1[3]=x. c is nowhere left in s_1 → borrow. s_2's column 3 has c — same number we need, so one swap → ", "c 가 필요, s_1 의 3번 칸은 x. s_1 안엔 c 가 더 없음 → 빌려요.\ns_2 의 3번 칸에 c 가 있음. 필요한 자리도 3번이라 바로 돼요 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 2 3</code>
               {t(E, " (1 swap — borrow)", " (바꾼 횟수 1 — 빌려오기)")}
               <div style={{ marginLeft: 14, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abcy</div>
@@ -212,7 +212,7 @@ export function makeSwapToWinCh1(E) {
                   나서야 「아 `2 x y k` 는 같은 자리(k)끼리만 바꿀 수 있구나」를 **혼자 유추**했다.
                   여기가 난이도 4 — 여러 번 다시 읽었다."*
                   → 규칙은 1쪽에 있지만 **필요한 그 자리에 없었다.** 한 마디만 그 자리에 놓는다. */}
-              {t(E, "want d, s_1[4]=y — not in s_1, not in s_2. d is in s_3 at column 1, but we need column 4 — unlike position 3, the numbers differ. Two strings can only swap the SAME column, so line it up first.", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 「1번」 칸, 그런데 필요한 자리는 「4번」 — 자리3 과 달리 번호가 안 맞아요.\n두 줄끼리는 「같은 번호 칸」끼리만 바꿀 수 있어서, 먼저 번호부터 맞춰요.")}
+              {t(E, "want d, s_1[4]=y — not in s_1, not in s_2. d is in s_3 at column 1, but we need column 4 — the numbers differ. Two strings can only swap the SAME column, so line it up first.", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 엔 없음.\nd 는 s_3 의 1번 칸 — 필요한 자리(4번)와 번호가 안 맞아요.\n같은 번호 칸끼리만 바꿀 수 있으니 번호부터 맞춰요.")}
               {/* ⭐ 2026-09-28 학생(초6) **막힘**: *"자리4 설명에서 「1 3 1 4」랑 「→ s_3 = zzzd」 글자가
                   화면에서 **겹쳐서 실제로 읽기 힘들었다**(도구가 겹침 95%). 하필 이 문제에서
                   **제일 복잡한 자리**(스왑 2번 필요한 곳)가 겹쳐 있어서 거기서 멈칫했다."*
@@ -228,9 +228,7 @@ export function makeSwapToWinCh1(E) {
                 <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 3 4</code>
                 <div style={{ marginLeft: 14, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abcd ✓</div>
               </div>
-              <div style={{ marginLeft: 14, color: "#047857" }}>
-                {t(E, "→ 2 swaps at this position (both borrow-style).", "→ 이 자리만 바꾼 횟수 2 (① 자리 맞추기 + ② 빌려오기).")}
-              </div>
+
             </div>
           </div>
 
@@ -263,8 +261,11 @@ export function makeSwapToWinCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "target = 'aa', s_1 = 'aa'. How many operations are needed?",
-        "target = 'aa', s_1 = 'aa'. 몇 번 바꿔야 할까요?"),
+        /* ⭐ 2026-09-28 학생(초6): *"5쪽에서 진짜로 똑같은 문장이 두 번 나온다.
+           파란 줄과 바로 아래 본문이 **토씨 하나 안 틀리고** 같았다."* — 맞다.
+           오늘 「K」 혼란을 고치며 둘을 같은 말로 맞춘 결과다. 질문은 카드가 한다. */
+        "One more — this time nothing differs.",
+        "마지막 하나 — 이번엔 다른 곳이 하나도 없어요."),
       /* ⭐ 2026-09-28 학생(초6): *"「K」 라는 글자가 여기서 처음 나왔다. 앞의 1~4쪽 어디에도
          K 라는 말은 없었다. 바로 위 파란 줄은 「몇 번 바꿔야 할까요?」라고 물어놓고 흰 박스에서는
          갑자기 「K = ?」 라고 바뀌어서 **같은 질문인데 부르는 말이 달라져 순간 헷갈렸다.**

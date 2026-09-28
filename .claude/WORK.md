@@ -7245,3 +7245,17 @@ PM 은 *"이 quest 들이 CodeWalk 을 안 쓰거나 구조가 다르다"* 로 �
 ⚠️ **이게 「0건이 결백이 아니다」의 실제 모양이다** — PM 의 「못 봤다 3개」를
    그대로 뒀으면 *"CodeWalk 을 안 쓰는 quest"* 라는 **틀린 결론**이 기록에 남았다.
    두 사람이 같은 도구의 **다른 판**을 돌리면 숫자가 갈린다. 판을 맞춰라.
+
+## PM 판정: swaptowin — 5번째 커밋 승인 (2026-09-28)
+
+폴리시 예산 걸쇠가 swaptowin 5번째 커밋(자리3·자리4 문장 조이기 + 자리4 중복 요약줄
+삭제 + 5쪽 narr 중복 문장 제거)을 막았다. project-lead 판정: 승인.
+
+근거 — ①diff 47줄, chapters.jsx 하나·전부 텍스트(구조 변경 없음) ②`check-quest-length-
+regression.py swaptowin` = 0 ③`check-jsx-markdown.py`·`check-bilingual-drift.py` 둘 다
+swaptowin 0건 ④삭제한 줄들은 바로 위/파란 줄이 이미 하던 말의 중복이라 정보 손실 없음
+⑤방향이 늘림이 아니라 줄임 — `feedback_new_text_needs_a_reader.md` "문단으로 좁혀지면
+닫는다" 기준 충족.
+
+**오늘은 swaptowin 여기서 닫는다.** CodeWalk 코드 탭 말풍선 3개가 3쪽 내용을 또 말하는
+건(학생 지적: "이거 아까 봤는데") 구조 변경이라 **내일 별도 PM 판정**으로 넘긴다.
