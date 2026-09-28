@@ -314,7 +314,10 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
             <Fragment key={i}>
               {/* 지금 밝아진 줄(lo) 바로 위에 말풍선을 흐름 안으로 끼워 넣음 — 그 줄을 가리킴 */}
               {i === lo && (
-                <div ref={inlineBubbleRef} style={{ margin: "3px 2px 7px" }}>
+                /* `data-codewalk-bubble` — 기계가 이 말풍선을 **확실히** 집으라고 단 표다.
+                   💬 글자로 찾으면 quest 본문에도 💬 를 쓰는 자리가 있어 헷갈린다.
+                   쓰는 곳: `scripts/check-codewalk-bubble-hidden.mjs` (2026-09-28) */
+                <div ref={inlineBubbleRef} data-codewalk-bubble="1" style={{ margin: "3px 2px 7px" }}>
                   <div style={{
                     background: done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`,
                     borderRadius: 12, padding: "9px 13px", fontSize: 13,
