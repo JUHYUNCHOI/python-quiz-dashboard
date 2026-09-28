@@ -68,6 +68,7 @@ narr 는 "Let's build the code step by step!" 다. 그런데 진짜 최종 코�
 import glob
 import io
 import json
+import os
 import re
 import sys
 
@@ -326,6 +327,31 @@ def main():
         if missing:
             hits[quest] = missing
 
+    # ── 사람이 읽고 «다리 문장» 으로 닫은 자리는 빼고 센다 ──────────────────
+    # ⚠️ 2026-09-28: 이 검사기의 남은 5건 · quest 3개가 **전부 이미 다리 문장이
+    #    달린 자리**였다(billboard 둘 · cowgym · mixmilk 둘). 검사기가 그걸 기억할
+    #    방법이 없어서 **영원히 빨간 게이트**였고, 영원히 빨간 게이트는 아무도 안 본다.
+    #    `scripts/quest-length-snapshot.json` 과 같은 생각 — 사람이 **일부러만** 늘린다.
+    #    ⛔ 초록으로 만들려고 줄을 넣지 마라. 넣으려면 `근거` 에 **화면의 그 문장**을 적어라.
+    accepted = set()
+    acc_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "taught-vs-final-accepted.json")
+    try:
+        with io.open(acc_path, encoding="utf-8") as fh:
+            for row in json.load(fh).get("accepted", []):
+                accepted.add((row["quest"], row["name"]))
+    except Exception as e:      # 파일이 없거나 깨졌으면 **아무것도 빼지 않는다** (fail-open 금지)
+        print(f"⚠️ 승인 목록을 못 읽었다({e}) — 하나도 빼지 않고 전부 신고한다.\n")
+
+    skipped = 0
+    for quest in list(hits):
+        for name in list(hits[quest]):
+            if (quest, name) in accepted:
+                del hits[quest][name]
+                skipped += 1
+        if not hits[quest]:
+            del hits[quest]
+
     total = sum(len(v) for v in hits.values())
     scope = f" (quest={', '.join(sorted(want))})" if want else ""
     print(f"화면 코드 블록이 **가르치는데** 🔒 최종 코드가 **안 쓰는** 이름 — "
@@ -338,6 +364,9 @@ def main():
             print(f"  ■ {quest}/{fname} — 안 쓰는 이름: {name}(")
             print(f"      \"{snippet}\"\n")
 
+    if skipped:
+        print(f"  ℹ️ {skipped}건은 **이미 다리 문장을 단 자리**라 뺐다 "
+              f"(`scripts/taught-vs-final-accepted.json` — 근거가 한 줄씩 적혀 있다).")
     if total:
         print("  ⚠️ 판정이 아니다 — 일부러 더 나은 방법으로 갈아탄 자리일 수 있다.")
         print("  사람이 열어서: 진짜 안 이어지면 다리 문장 하나, 아니면 그냥 둔다.")
