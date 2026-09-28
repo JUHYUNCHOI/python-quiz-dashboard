@@ -326,9 +326,16 @@ export function QuestProgressBar({
             misread as belonging to the other tab (e.g. code-tab "7/7" next to "문제"). */}
         {(() => {
           const last = tabs.length - 1;
+          /* ⭐ 2026-09-28 `strangefn` 재검증 학생(초6): *"코드 탭 헤더의 작은 숫자가
+             「코드 2 / 2」로 뜨는데, 8조각(1/8~8/8)을 다 넘기는 동안 이 숫자가 안 바뀐다 —
+             **뭘 세는 건지 몰랐고 그냥 넘어갔다.**"*
+             → 숫자는 맞다. 이건 **쪽**을 세고, 안에서 바뀌는 건 CodeWalk **조각**이다.
+             한 화면에 두 개의 「N / M」이 있는데 **한쪽만 이름이 없었다**
+             (`feedback_same_number_two_meanings`). 세는 대상을 글자로 박는다.
+             CodeWalk 쪽은 이미 「8 조각 중 1 번째」라고 자기 이름을 달고 있다. */
           const count = (
             <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 800 }}>
-              {cur + 1} / {steps.length}
+              {t(E, "p.", "")}{cur + 1} / {steps.length}{t(E, "", " 쪽")}
             </span>
           );
           return (
