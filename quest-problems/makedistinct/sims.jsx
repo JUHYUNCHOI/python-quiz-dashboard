@@ -181,8 +181,15 @@ export function WhoCanMeetSim({ E }) {
       en: "Same for 4 — 6, 8, 10 … always even. There is no other even number for it to pair with." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
       extra: ["", "", "", ""], tone: "aha",
-      ko: "홀수 셋이 한 묶음, 짝수 하나가 다른 묶음이에요. 서로는 절대 안 부딪혀요.",
-      en: "The three odds are one group, the one even is another. They never clash with each other." },
+      /* ⭐ 2026-09-28 선생님: *"k 가 2 일때는 짝수와 홀수가 겹쳐질 걱정이 없는건 맞는데
+         **1 이거나 3 일떄 다를때도?**"* — 맞는 지적이다. **홀/짝은 K = 2 일 때만의 모습**이고,
+         진짜 규칙은 **「K 로 나눈 나머지」**다(🔒 코드도 `groups[x % abs(k)]` 로 묶는다).
+         ⚠️ 학생(초6)도 같은 곳을 짚었다: *"5쪽은 **「나머지」라는 말을 한 번도 안 쓴다.**
+         코드 탭에 가서야 그게 나머지였다는 걸 알았다. 5쪽만 읽고 그친 학생은 「나머지」를
+         못 본 채로 코드에 가서 갑자기 그 말이 나오는 셈이다."*
+         → **이름을 여기서 붙인다.** 쪽을 더하지 않고 이 걸음의 문장만 바꾼다. */
+      ko: "홀수 셋이 한 묶음, 짝수 하나가 다른 묶음이에요. 서로는 절대 안 부딪혀요.\n홀짝으로 갈린 건 K 가 2 라서예요 — 2 로 나눈 나머지가 0 이냐 1 이냐로 갈린 거예요.\nK 가 3 이면 3 으로 나눈 나머지로 갈려요. K 가 1 이면 나머지가 하나뿐이라 전부 한 묶음이에요.",
+      en: "The three odds are one group, the one even is another. They never clash.\nThey split by odd/even because K is 2 — that is the remainder after dividing by 2.\nWith K = 3 they split by the remainder after dividing by 3. With K = 1 there is only one remainder, so everything is one group." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
       extra: [t(E, "· stays", "· 그대로"), "", "", ""],
       ko: "묶음 안에서도 작은 값부터 하나씩 놓아요. 첫째 3 은 맨 앞이라 그대로예요. (0 회)",
