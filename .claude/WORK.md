@@ -7068,3 +7068,15 @@ PM: *"`feedback_new_text_needs_a_reader` 의 「고리를 언제 끊나」 기�
 **새 문장의 범위가 쪽 전체가 아니라 한 문단으로 좁혀지면 닫는다.**"*
 - `strangefn`(2026-09-23): 같은 quest **하루 8번**, 범위가 넓어져 **10→17쪽**. **폭주.**
 - 오늘: **quest 5개에 걸쳐** 각 1~3번, **쪽 수 불변**, 매번 **다른 구체적 결함**. **정상.**
+
+## PM 판정: swaptowin — 4번째 커밋 승인 (2026-09-28)
+
+폴리시 예산 걸쇠가 swaptowin 4번째 커밋(자리4 겹침 95% 수정 + s_y 정의 +
+"한 번"→"바꾼 횟수 1")을 막았다. project-lead 판정: 승인.
+
+근거 — ①`see-screen.mjs --mobile --allow-dirty`로 project-lead 가 직접 재현: 겹침 95%
+→ 0 확인(좌표) ②diff 범위는 「단계별 풀이」자리4 문단 하나 ③`check-quest-length-regression.py
+swaptowin` = 0(쪽 수 불변) ④🔒 USACO_VERIFIED 는 components.jsx 헤더에만 있고 이번 diff는
+chapters.jsx만 건드림 — 재제출 불필요 ⑤글자 수 증가는 겹친 줄을 펼친 결과이지 설명을 늘린 게 아님.
+
+체크포인트를 여기서 새로 연다.
