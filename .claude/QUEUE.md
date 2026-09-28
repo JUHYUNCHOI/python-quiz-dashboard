@@ -410,6 +410,8 @@ quest 5개에 흩어져 있고 **쪽 수 불변**, 매번 **다른 구체적 결
 
 | narr 「합치면 55자 초과」 144건을 판정으로 올릴지 | BLOCKED(일괄 작업 — `/decide` 필요) | 지금은 표시만. 올리면 quest 수십 개를 한꺼번에 고치게 된다 |
 
-| `swaptowin` 에서 **뺄 것이 있나** 학생에게 묻기 | READY | 오늘 한국어 글자 수가 **810 → 1606 (두 배)**. 다섯 다 학생 보고로 들어간 것이라 확인 없이 빼면 막힘을 다시 연다 — **더한 뒤라도 덜어낼 자리는 봐야 한다**(`feedback_shorter_not_longer`, 선생님 세 번 지적) |
+| `swaptowin` 에서 **뺄 것이 있나** 학생에게 묻기 | DONE | 오늘 한국어 글자 수가 **810 → 1606 (두 배)**. 다섯 다 학생 보고로 들어간 것이라 확인 없이 빼면 막힘을 다시 연다 — **더한 뒤라도 덜어낼 자리는 봐야 한다**(`feedback_shorter_not_longer`, 선생님 세 번 지적) |
 | 내일 밀기 — PM 판정 **«민다, 조건부»** | BLOCKED(선생님 지시 대기) | ①스냅샷 커밋 ✅ ②ux-reviewer 스팟체크 5개(도는 중) ③C++ 축 ✅ **네 축 전부 168/168**. 셋 다 이상 없으면 선생님 확인만 받고 push |
 | `tsc --noEmit` 58건 — Supabase 계열 `any` | BLOCKED(학생 데이터 — `lib/mark-lesson-complete.ts` 는 진도 저장 경로다) | 전부 내가 안 건드린 기존 빚. `lib/mark-lesson-complete.ts`·`practice-session-sync.ts`·`supabase/*` |
+
+| `swaptowin` CodeWalk 말풍선 셋이 **3쪽 내용을 또 말한다** | BLOCKED(내일 · 별도 PM 판정) | 학생: *"이거 아까 봤는데"*. 코드 설명 **구조** 변경이라 텍스트 수정과 위험도가 다르다 — PM: *"오늘은 손대지 마라"* |
