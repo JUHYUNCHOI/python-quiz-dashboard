@@ -7158,3 +7158,32 @@ PM 기준: **(1) 막힘 = 0 (타협 없음) AND (2) 새 결함 범위 ≤ 문단
 ⚠️ **이 0건은 「마지막 걸음 · 파이썬 · 데스크탑」에서만 참이다.**
    `--mobile` · `--cpp` · `--every-step` 은 따로 돌려야 한다 — 큐에 있다.
 ⚠️ 자기시험(`--selftest`)으로 잣대가 살아 있음을 매번 확인했다(🚨 86px 먹힘).
+
+### 🧹 정적 게이트 청소 (2026-09-28 밤) — 빨간 게이트 다섯을 닫았다
+
+| 검사기 | 전 | 후 | 무엇이었나 |
+|---|---|---|---|
+| `check-unlabeled-sample-io` | 13 | **0** | 샘플 상자 줄마다 뜻 라벨을 달았다(7 quest) + 오탐 둘(`←` 이스케이프·`outNote`) |
+| `check-bilingual-drift` | 27 | **7** | 한국어가 「왜」를 뺀 3자리 수정 + 오탐 두 종류 가려냄 |
+| `check-taught-vs-final-code` | 5 | **0** | 다섯 다 **이미 다리 문장이 있었다** — 승인 목록 파일을 붙임 |
+| `check-quest-lang` | 4 | **0** | 전부 **블록 주석을 영어 자리로 읽은 것** |
+| `check-boasted-function` | 1 | **0** | 「min-heap」을 `min()` 함수로 읽은 것 |
+| `check-codewalk-thinking-order` | 1 | **0** | `rounding` 첫 걸음에 목적지가 없었다 |
+
+**남은 7건(bilingual-drift)은 판단해서 남긴 것이다** — 「64-bit ints」→「큰 정수」처럼
+일부러 쉬운 말로 쓴 자리다. 게이트를 초록으로 만들려고 멀쩡한 글을 건드리지 않았다.
+
+### 판단해서 남긴 것 — `swaptowin` 의 `check-code-names-in-prose` 16건
+
+`s_1`·`s_x`·`s_y` 를 「코드 보기 전에 나온 코드 이름」으로 신고한다.
+**아니다 — 문제 **원문의 표기**이고(`1 x p q → swap s_x[p] ↔ s_x[q]`),
+1쪽에서 *"s_x 는 x 번째, s_y 는 y 번째 문자열이에요"* 라고 **정의한 뒤** 쓴다.
+`feedback_no_invented_terms` 가 요구하는 「처음 쓰기 전에 정의」를 **지킨 자리**다.
+⛔ 검사기 핵심 로직은 안 건드렸다 — 저장소 전체 232건·quest 56개를 보는 도구라
+   한 quest 때문에 잣대를 바꾸면 나머지 55개가 조용히 틀어진다.
+
+### 손 안 댄 큰 backlog (시작만 하고 두면 안 되는 것)
+
+`check-code-names-in-prose` 232건·56개 · `check-undefined-symbol` 394건·57개 ·
+`check-word-difficulty` 번역 티 152건·119개 · `check-cpp-stl-gate` 118개 ·
+`check-quest-code-idiom` 3개(🔒 코드라 PM·선생님 몫).
