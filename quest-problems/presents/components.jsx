@@ -75,10 +75,15 @@ export function PresentsSim({ E }) {
             <div key={`${idx}-${v}`} style={{
               width: 80, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
               borderRadius: 8, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-              background: isFind ? (isTarget ? "#dcfce7" : (isAbove ? "#fef3c7" : "#fff")) : (isTarget && cur % 2 === 1 ? "#fee2e2" : "#fff"),
-              border: `1px solid ${isFind ? (isTarget ? "#16a34a" : (isAbove ? "#f59e0b" : "#e5e7eb")) : (isTarget && cur % 2 === 1 ? "#dc2626" : "#e5e7eb")}`,
+              /* ⭐ 2026-09-28 재검증 학생(초6): *"「치우기」 걸음에서 위에 있던 선물들
+                 (노랑이었던 것)이 **갑자기 하얀색으로만 바뀌고 화면에는 그대로 남아있었다.**
+                 「얘네도 같이 치워지는 거 맞나? 왜 안 사라지지?」 싶었다."*
+                 → 치우는 건 **target 과 그 위 전부**인데, 빨강·흐리게가 **target 에만** 걸려
+                 있었다. 위엣것도 같이 흐려지게 한다 — 규칙이 눈에 보이게. */
+              background: isFind ? (isTarget ? "#dcfce7" : (isAbove ? "#fef3c7" : "#fff")) : ((isTarget || isAbove) && cur % 2 === 1 ? "#fee2e2" : "#fff"),
+              border: `1px solid ${isFind ? (isTarget ? "#16a34a" : (isAbove ? "#f59e0b" : "#e5e7eb")) : ((isTarget || isAbove) && cur % 2 === 1 ? "#dc2626" : "#e5e7eb")}`,
               color: isFind ? (isTarget ? "#15803d" : (isAbove ? "#92400e" : C.text)) : C.text,
-              opacity: !isFind && isTarget && cur % 2 === 1 ? 0.4 : 1,
+              opacity: !isFind && (isTarget || isAbove) && cur % 2 === 1 ? 0.4 : 1,
               transition: "all .25s",
             }}>{v}</div>
           );
@@ -144,7 +149,14 @@ export function PresentsRunner({ E }) {
       const idx = cur.indexOf(target);
       if (idx >= 0) {
         out.push(`Q${i+1}: ${target} → ${idx}`);
-        cur.splice(idx, 1);
+        /* 🐛 2026-09-28 **같은 버그가 여기에도 있었다.** 위 시뮬(`splice(idx,1)`)을
+           고친 뒤 재검증 학생(초6)이 **이 실행기와 시뮬이 서로 다른 답을 낸다**고 잡았다:
+             같은 입력 `3 1 4 2` / 요청 `4 2`
+               7쪽 시뮬  → Q2 = **0**  (고친 뒤, 맞는 값)
+               이 실행기 → Q2 = **2**  ← 틀렸다
+           학생: *"두 화면이 같은 예제로 **서로 다른 답을 가르치고 있다.**"*
+           🔒 `FULL_PY` 는 `del stack[:pos + 1]` — **target 과 그 위 전부**다. */
+        cur.splice(0, idx + 1);
       } else {
         out.push(`Q${i+1}: ${target} not found`);
       }
