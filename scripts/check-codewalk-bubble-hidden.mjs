@@ -70,6 +70,17 @@ const named = argv.filter((a) => !a.startsWith("--"));
    2026-09-28 실측: `/^(⚡|💻)\s*(코드|Code)\b/` 의 `\b` 는 **한국어에서 절대 안 맞는다**
    (`드` 가 `\w` 가 아니다) — 그 대비책이 영어에서만 돌고 있었다. 둘 다 받게 쓴다. */
 const CODE_TAB = /^(⚡|💻)\s*(코드|Code\b)/;
+/* ⚠️ 2026-09-28 전수 첫 판에서 **4개를 못 봤다.** 파 보니 원인이 셋이었다 —
+   ① 탭 이름이 「코드」가 아닌 quest 가 있다. `rounding` 은 **「⚡ 더 빠르게」** 다.
+      → ⚡·💻 로 시작하는 탭이면 **이름을 안 따진다**(문제 탭은 📋·🧭 라 안 겹친다).
+   ② 탭에 들어간 **첫 쪽에 말풍선이 없을 수 있다**(`cowsignal`·`mcc20kitty`).
+      → 코드창을 찾았다고 멈추지 말고 **말풍선이 나올 때까지** 쪽을 넘긴다.
+   ③ 탭을 누른 뒤 800ms 로는 덜 그려질 때가 있다(`chipxchg`). → 1000ms.
+   **이 넷을 「없다」로 치고 넘어갔으면 전수라고 말할 수 없었다.** */
+/* ⛔ 그냥 `/^(⚡|💻)/` 로 넓혔더니 **언어 토글 「💻 C++」을 탭으로 집었다**(실측 rounding).
+   토글 둘(🐍 Py · 💻 C++)을 명시적으로 뺀다. */
+const LANG_TOGGLE = /^(🐍\s*Py|💻\s*C\+\+)$/;
+const CODE_TAB_LOOSE = /^(⚡|💻)\s*\S/;
 const NEXT_PAGE = /^(다음 쪽 ▶|Next page ▶|다음 →|Next →)$/;
 const NEXT_STEP = /^(다음 ▶|Next ▶|▶)$/;           // SimNav — 쪽 넘김과 안 겹치게
 
@@ -142,16 +153,24 @@ try {
       await page.addStyleTag({ content: "*{scroll-behavior:auto !important}" });
       if (SELFTEST) await page.addStyleTag({ content: ".quest-navbar{min-height:520px !important}" });
 
-      const tab = page.locator("button").filter({ hasText: CODE_TAB }).first();
-      if (await tab.count()) { await tab.click(); await page.waitForTimeout(800); }
+      let tab = page.locator("button").filter({ hasText: CODE_TAB }).first();
+      if (!(await tab.count())) {
+        tab = page.locator("button")
+          .filter({ hasText: CODE_TAB_LOOSE })
+          .filter({ hasNotText: LANG_TOGGLE })
+          .first();
+      }
+      if (await tab.count()) { await tab.click(); await page.waitForTimeout(1000); }
 
       if (CPP) {
         const c = page.locator("button", { hasText: "💻 C++" }).first();
         if (await c.count()) { await c.click(); await page.waitForTimeout(600); }
       }
 
-      // 계획 쪽을 건너뛰어 CodeWalk 이 있는 쪽까지 간다
-      for (let i = 0; i < 8 && !(await page.locator(".qcode-scroll").count()); i++) {
+      // 계획 쪽을 건너뛰어 CodeWalk 이 있는 쪽까지 간다.
+      // ⚠️ 잣대는 `.qcode-scroll`(코드창) 이 아니라 **말풍선**이다 — 코드창은 있는데
+      //    그 쪽엔 말풍선이 없는 quest 가 있다(`cowsignal`·`mcc20kitty`, 실측).
+      for (let i = 0; i < 12 && !(await page.locator("[data-codewalk-bubble]").count()); i++) {
         const n = page.locator("button").filter({ hasText: NEXT_PAGE }).first();
         if (!(await n.count()) || (await n.isDisabled())) break;
         await n.click(); await page.waitForTimeout(650);
