@@ -16,7 +16,13 @@ const _BAL_PRESETS = [
 ];
 
 export function BalancedSim({ E }) {
-  const [pi, setPi] = useState(2);
+  /* ⭐ 2026-09-28 재검증 학생(초6): *"프리셋 버튼 4개 중 페이지를 열자마자 **세 번째
+     (N=4,M=4)가 기본으로 선택**돼 있었음. **왜 첫 번째가 아니라 세 번째가 기본인지는
+     모르겠음** — 이상하다고 느꼈지만 내용 자체는 맞았음."*
+     → 버튼은 왼쪽부터 놓여 있는데 시작점만 세 번째였다. **첫 번째로 맞춘다.**
+     N=3, M=2 는 「적은 쪽이 한계」라는 이 문제의 핵심이 바로 보이는 자리라 열기에도 낫다
+     (N=4,M=4 는 이미 균형이라 뺄 게 없다). */
+  const [pi, setPi] = useState(0);
   const { N, M } = _BAL_PRESETS[pi];
   const pairs = Math.min(N, M);
   const ans = 2 * pairs;
