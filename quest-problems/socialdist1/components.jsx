@@ -360,7 +360,7 @@ export function getSocDist1Sections(E) {
            그 나눗셈은 **첫 소까지 포함한 전체 마리 수**다(gap 1~15 · D 1~7 전수 대조로 확인,
            어긋난 경우 0). 「첫 소」를 따로 세지 말고 **자리를 D·2D·3D… 로 세는** 쪽으로 다시 썼다. */
         t(E, "Why (gap − D) // D? New cows go at D, 2D, 3D … past the left cow — that spacing is what D means. The last one must also stay D short of the right cow, so k·D ≤ gap − D. Divide and k = (gap − D) // D — that is ALL the new cows, not the ones after the first. The two ends have a cow on one side only, so nothing is reserved on the far side: ones[0] // D and (N−1−ones[−1]) // D.",
-            "(gap − D) // D 는 왜 이럴까요?\n새 소는 왼쪽 소로부터 D · 2D · 3D … 칸에 놓여요.\n마지막 소도 오른쪽 소에서 D 칸은 떨어져야 하니까\nk 번째 자리 k×D 가 gap − D 를 넘으면 안 돼요.\n그래서 k = (gap − D) // D 예요 —\n이 값이 **새로 넣는 소 전체**예요. 첫 소를 따로 더하지 않아요.\n양 끝은 한쪽에만 소가 있어서 반대쪽을 비워 둘 필요가 없어요 —\nones[0] // D 와 (N−1−ones[−1]) // D 예요."),
+            "(gap − D) // D 는 왜 이럴까요?\n새 소는 왼쪽 소로부터 D · 2D · 3D … 칸에 놓여요.\n마지막 소도 오른쪽 소에서 D 칸은 떨어져야 하니까\nk 번째 자리 k×D 가 gap − D 를 넘으면 안 돼요.\n그래서 k = (gap − D) // D 예요 —\n이 값이 「새로 넣는 소 전체」예요. 첫 소를 따로 더하지 않아요.\n양 끝은 한쪽에만 소가 있어서 반대쪽을 비워 둘 필요가 없어요 —\nones[0] // D 와 (N−1−ones[−1]) // D 예요."),
       ],
       pyOnly: [],
       cppOnly: [

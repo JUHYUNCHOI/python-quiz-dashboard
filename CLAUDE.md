@@ -129,6 +129,19 @@ python3 scripts/check-stepper-first-step.py <id>             # 코드 스테퍼 
 python3 scripts/check-code-names-in-prose.py <id>            # 코드 보기 전에 코드 이름이 나오나 (deal_price…)
 python3 scripts/check-codewalk-thinking-order.py <id>        # 코드 설명이 파일 순서를 읊나, 생각의 순서로 이끄나
 python3 scripts/check-linebreak-rendered.py                  # 글쓴이가 넣은 줄바꿈이 화면에 실제로 나오나
+python3 scripts/check-jsx-markdown.py <id>                    # 화면 글자에 **마크다운 `**`** — JSX 는 해석 안 한다
+                                                            #   2026-09-28 `swaptowin` 재검증 학생: *"굵게 처리가 안 되고
+                                                            #   **별표 두 개가 그대로 글자로** 나온다. 처음 보는 기호라
+                                                            #   「이게 뭐지?」 했다."* — **그날 내가 새로 쓴 문장**이었다.
+                                                            #   ⚠️ 그날 **같은 실수를 네 군데** 했다(swaptowin·balanced·
+                                                            #   makedistinct·bucketbrigade). 세션 앞부분에서 이미 한 번
+                                                            #   겪고 「`<b>` 로 고쳤다」고 적었는데 **검사 항목이 아니어서**
+                                                            #   몇 시간 뒤 또 했다 — `feedback_fix_all_at_once_not_one_by_one`.
+                                                            #   전수 실측 **13곳·quest 9개**(주석 제외), 전부 「낫표」로 바꿨다.
+                                                            #   ⚠️ 빌드·타입 검사·`see-screen` 이 **못 잡는다** — 문법은 정상이고
+                                                            #   글자도 안 깨진다. **뜻만 틀렸다**(`check-jsx-raw-escape` 와 같은 층).
+                                                            #   ⚠️ 주석 안의 `**` 는 정상이다 — 여러 줄 주석 «가운데 줄»을
+                                                            #   못 걸러 처음엔 30곳이 나왔다(태반이 오탐). 상태로 따라간다.
 python3 scripts/check-jsx-raw-escape.py                      # JSX 텍스트에 맨몸 `\uXXXX` — **화면에 글자 그대로 나온다**
                                                             #   2026-09-24: `rotshift` 제목이 «\ud83d\udce5 샘플 1» 로 떠 있었다.
                                                             #   JSX 텍스트는 JS 문자열이 아니라 `\u` 를 **해석하지 않는다.**

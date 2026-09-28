@@ -196,7 +196,7 @@ export function makeBuyMilkCh1(E) {
       correct: 0,
       explain: t(E,
         "Right. Bundle 2 sells 2 buckets for 15, so 7.5 per bucket — cheaper than Bundle 1's 10 per bucket. Greedy 'always use the smallest bundle' would be wrong.",
-        "맞아요. 15 를 2통으로 나누면 7.5 예요.\n묶음 1 은 10 이었으니, 7.5 가 더 싸요.\n**큰 묶음가 한 통당 더 쌀 수 있어요.**\n그래서 '작은 묶음만 쓰면 된다' 는 생각은 틀려요."),
+        "맞아요. 15 를 2통으로 나누면 7.5 예요.\n묶음 1 은 10 이었으니, 7.5 가 더 싸요.\n「큰 묶음가 한 통당 더 쌀 수 있어요.」\n그래서 '작은 묶음만 쓰면 된다' 는 생각은 틀려요."),
     },
 
 

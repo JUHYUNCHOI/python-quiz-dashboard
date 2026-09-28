@@ -27,7 +27,7 @@ export function makeCowPhotosCh1(E) {
               {t(E, "FJ has N cows with heights ", "FJ에게 키 ")}
               <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>h[1..N]</code>
               {t(E, " — pick a subset and arrange them in a row h₁,…,h_K satisfying ALL three rules below.",
-                    "인 N 마리 소가 있어요 — 그 중 일부를 골라 한 줄 h₁,…,h_K 로 세우는데, 아래 세 조건을 **모두** 만족해야 해요.")}
+                    "인 N 마리 소가 있어요 — 그 중 일부를 골라 한 줄 h₁,…,h_K 로 세우는데, 아래 세 조건을 「모두」 만족해야 해요.")}
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55 }}>

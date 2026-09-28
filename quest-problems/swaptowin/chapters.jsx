@@ -190,7 +190,7 @@ export function makeSwapToWinCh1(E) {
                   나서야 「아 `2 x y k` 는 같은 자리(k)끼리만 바꿀 수 있구나」를 **혼자 유추**했다.
                   여기가 난이도 4 — 여러 번 다시 읽었다."*
                   → 규칙은 1쪽에 있지만 **필요한 그 자리에 없었다.** 한 마디만 그 자리에 놓는다. */}
-              {t(E, "want d, s_1[4]=y. Not in s_1, not in s_2. d is in s_3 — but at column 1, not 4. Two strings can only swap the SAME column, so line it up first → ", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 1번 칸에 있어요. 두 줄끼리는 **같은 번호 칸끼리만** 바꿀 수 있으니,\n먼저 s_3 안에서 4번 칸으로 옮겨요 → ")}
+              {t(E, "want d, s_1[4]=y. Not in s_1, not in s_2. d is in s_3 — but at column 1, not 4. Two strings can only swap the SAME column, so line it up first → ", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 1번 칸에 있어요. 두 줄끼리는 「같은 번호 칸」끼리만 바꿀 수 있으니,\n먼저 s_3 안에서 4번 칸으로 옮겨요 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 3 1 4</code>
               {t(E, " (inside s_3)", " (s_3 안에서)")}
               <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_3 = zzzd</span>

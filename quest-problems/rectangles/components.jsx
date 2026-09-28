@@ -154,7 +154,7 @@ export function getRectanglesWalk(E, lang = "py") {
         "dp 는 표예요. kk 마다 줄 하나, 그 줄 안에 i 마다 칸 하나예요.\n줄을 하나씩 만들어 붙이는데, 한 줄은 (n+1) 칸짜리 리스트이고\n처음엔 전부 INF 로 채워요.\ndp[kk][i] 는 앞 i 개 빨강을 파랑 kk 개로 덮는 가장 작은 총면적이에요.\n아무것도 안 덮으면 면적이 0 이니까 dp[0][0] = 0 에서 시작해요.") },
       { hi: [12, 20], bubble: t(E,
         "Fill the table: let the last blue cover the group [j..i]. j walks backwards from i — that way each step only adds one more red on the left, so sw and mh keep growing instead of being recomputed. That group's blue = sw × mh, the rest is dp[kk-1][j-1]. Keep the minimum.",
-        "표를 채워요. 마지막 파랑이 구간 [j..i] 를 덮는다고 생각해요.\nj 가 i 에서 **거꾸로** 내려가는 이유가 있어요.\n한 칸씩 왼쪽으로 넓힐 때마다 빨강이 하나씩만 더 붙으니까\nsw(폭의 합) 와 mh(제일 큰 높이) 를 **다시 계산하지 않고 이어서 키울 수 있어요.**\n그 파랑의 넓이는 sw × mh 이고, 앞부분은 dp[kk-1][j-1] 이에요.\n둘을 더한 값 중 제일 작은 것을 칸에 적어요.") },
+        "표를 채워요. 마지막 파랑이 구간 [j..i] 를 덮는다고 생각해요.\nj 가 i 에서 「거꾸로」 내려가는 이유가 있어요.\n한 칸씩 왼쪽으로 넓힐 때마다 빨강이 하나씩만 더 붙으니까\nsw(폭의 합) 와 mh(제일 큰 높이) 를 「다시 계산하지 않고 이어서 키울 수 있어요.」\n그 파랑의 넓이는 sw × mh 이고, 앞부분은 dp[kk-1][j-1] 이에요.\n둘을 더한 값 중 제일 작은 것을 칸에 적어요.") },
       { hi: [21, 24], bubble: t(E,
         "Now pick the answer: walk kk = 1..k and keep the smallest dp[kk][n] — the best way using at most K blues.",
         "이제 답을 골라요.\nkk 를 1 부터 k 까지 보면서 dp[kk][n] 중 제일 작은 값을 남겨요.\n그게 파랑을 K 개까지 써서 전체를 덮는 가장 좋은 답이에요.") },

@@ -126,7 +126,7 @@ export function makeMooCh2(E) {
       narr: t(E, "Did you notice? When you change ONE letter, only the moos right next to it change. Far ones stay the same!",
             "눈치챘나요?\n글자 하나를 바꾸면 그 글자 바로 옆 moo 만 변해요.\n멀리 있는 건 그대로예요."),
       question: t(E, "Change one letter. How many 3-letter chunks (called windows) can it affect at most?",
-            "글자 하나를 바꾸면 영향받는 3 글자 묶음 (= **윈도우**) 은 많아야 몇 개일까요?"),
+            "글자 하나를 바꾸면 영향받는 3 글자 묶음 (= 「윈도우」) 은 많아야 몇 개일까요?"),
       options: [
         t(E, "At most 3 — only the windows that contain that letter", "많아야 3 개 — 그 글자가 들어있는 윈도우만"),
         t(E, "All windows in the string", "문자열의 모든 윈도우"),

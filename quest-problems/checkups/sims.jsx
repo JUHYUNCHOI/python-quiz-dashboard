@@ -1341,7 +1341,7 @@ function _buildExpandSteps(E) {
     /* ── 0. Setup (2 steps) ── */
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "A new example here — 6 cows, so we get to widen twice. Top is 🐮 cow, bottom is 📋 want; a spot is a checkup (green) when they match. Spots count from 0. (27 steps — you can move on below without clicking them all.)",
-                   "여기서는 **새 예제**를 써요 — 소가 6 마리라야 넓히기를 두 번 볼 수 있거든요.\n위는 🐮 소, 아래는 📋 want 이고, 두 값이 같은 자리가 검진(초록)이에요.\n자리는 0 부터 세요 — 맨 왼쪽이 자리 0 이에요. (27단계예요 — 다 안 눌러도 아래로 넘어갈 수 있어요.)") },
+                   "여기서는 「새 예제」를 써요 — 소가 6 마리라야 넓히기를 두 번 볼 수 있거든요.\n위는 🐮 소, 아래는 📋 want 이고, 두 값이 같은 자리가 검진(초록)이에요.\n자리는 0 부터 세요 — 맨 왼쪽이 자리 0 이에요. (27단계예요 — 다 안 눌러도 아래로 넘어갈 수 있어요.)") },
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "No flip yet. Only spot 4 matches (5=5) → matches = 1. This is our starting point.",
                    "아직 아무것도 안 뒤집었어요. 자리 4만 맞아요 (5=5). 그래서 matches = 1, 여기서 출발해요.") },
@@ -1357,7 +1357,7 @@ function _buildExpandSteps(E) {
                    "중심은 두 종류예요. 홀수 중심 [i,i] 는 한 칸이라 안 뒤집히고, 짝수 중심 [i,i+1] 은 두 칸이에요. 모든 구간은 딱 한 중심에만 속해요.") },
     { rev: [1, 2, 3, 4, 5, 6], win: [2, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Start from one of those even centers — spots 2 and 3. We'll widen from here, one step at a time.",
-                   "방금 말한 **짝수 중심** 하나로 시작해요 — 자리 2 와 3 이에요.\n여기서 한 칸씩 넓혀 갈 거예요. 꺾쇠가 지금 구간이에요.") },
+                   "방금 말한 「짝수 중심」 하나로 시작해요 — 자리 2 와 3 이에요.\n여기서 한 칸씩 넓혀 갈 거예요. 꺾쇠가 지금 구간이에요.") },
     { rev: [1, 2, 3, 4, 5, 6], win: [2, 3], changed: [], pending: [2, 3], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "The two ends (spots 2 and 3) are about to swap cows. cow[2]=3 ↔ cow[3]=4.",
                    "양 끝(자리 2, 3)이 곧 소를 바꿔요. cow[2]=3 ↔ cow[3]=4.") },

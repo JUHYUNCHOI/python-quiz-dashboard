@@ -83,7 +83,7 @@ export function makeBalancedCh1(E) {
             <div style={{ fontSize: 13, color: "#7c2d12", lineHeight: 1.5 }}>
               {t(E,
                 "Given N opening brackets followed by M closing brackets, find the LONGEST balanced piece you can make by skipping characters.",
-                "여는 괄호 N 개 뒤에 닫는 괄호 M 개가 붙어 있어요.\n여기서 **글자를 건너뛰며 골라** 만들 수 있는 가장 긴 균형 잡힌 조각의 길이를 출력해요.")}
+                "여는 괄호 N 개 뒤에 닫는 괄호 M 개가 붙어 있어요.\n여기서 「글자를 건너뛰며 골라」 만들 수 있는 가장 긴 균형 잡힌 조각의 길이를 출력해요.")}
             </div>
           </div>
 

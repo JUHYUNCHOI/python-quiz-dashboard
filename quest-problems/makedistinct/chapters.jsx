@@ -208,7 +208,7 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
             <b>{t(E, "It gives the right answer — but it is too slow.", "답은 맞아요. 그런데 너무 느려요.")}</b><br />
             {t(E,
               "Wait — page 3 said to settle the smallest value first, but this code walks the values in their original order. It still lands on the right answer: whatever order we try, each value ends up at the first free spot in its group. Sorting doesn't change the answer — it only saves work.",
-              "잠깐 — 3쪽에서는 작은 값부터 놓으라고 했는데 이 코드는 원래 순서 그대로 돌아요.\n그래도 답은 맞아요. 어떤 순서로 하든 값마다 결국 자기 묶음의 빈 자리 중 맨 앞에 놓이거든요.\n정렬은 답을 바꾸는 게 아니라 **일을 줄여 줄 뿐**이에요.")}<br />
+              "잠깐 — 3쪽에서는 작은 값부터 놓으라고 했는데 이 코드는 원래 순서 그대로 돌아요.\n그래도 답은 맞아요. 어떤 순서로 하든 값마다 결국 자기 묶음의 빈 자리 중 맨 앞에 놓이거든요.\n정렬은 답을 바꾸는 게 아니라 「일을 줄여 줄 뿐」이에요.")}<br />
             {/* "몇 분" 이었다 → 실측값으로. project-lead 가 N=200,000·K=1 을 끝까지 돌렸다: 1179초. */}
             {t(E,
               "N can be 200,000. One value may be pushed almost N times, and each push looks through everything placed so far — that is about 200,000 × 200,000 = 40,000,000,000 steps → we actually ran it, and it took about 20 minutes.",

@@ -52,7 +52,7 @@
   "balanced": {
     "pages": 12,
     "quiz_input": 4,
-    "korean_chars_ref": 1187
+    "korean_chars_ref": 1498
   },
   "billboard": {
     "pages": 15,
@@ -387,7 +387,7 @@
   "makedistinct": {
     "pages": 7,
     "quiz_input": 1,
-    "korean_chars_ref": 1382
+    "korean_chars_ref": 1585
   },
   "mcc15bahasaf": {
     "pages": 6,
@@ -803,7 +803,7 @@
   "strangefn": {
     "pages": 13,
     "quiz_input": 5,
-    "korean_chars_ref": 2801
+    "korean_chars_ref": 2772
   },
   "stuckinrut": {
     "pages": 6,
