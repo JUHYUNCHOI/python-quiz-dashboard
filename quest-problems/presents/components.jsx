@@ -8,10 +8,15 @@ const A = "#8b5cf6";
 /* ═══════════════════════════════════════════════════════════════
    PresentsSim — stack with queries, find target then pop
    ═══════════════════════════════════════════════════════════════ */
+/* ⚠️ 2026-09-28 — 위 버그를 고치고 나니 **예제 둘이 애초에 불가능한 요청**이었다.
+   「target 과 그 위 전부」가 사라지므로 **다음 요청은 반드시 더 아래에 있는 것**이어야 한다.
+     `[5,3,1,4,2]` 요청 1·2·**3** → 1 을 찾는 순간 5·3·1 이 사라져 **3 이 없다**
+     `[10,20,30]` 요청 30·**20**·10 → 30 을 찾는 순간 전부 사라져 **20 이 없다**
+   (실제로 🔒 코드로 돌리면 `ValueError` 다.) 가능한 요청으로 바꾼다 — 답도 같이 적어 둔다. */
 const _PR_PRESETS = [
-  { stack: [3, 1, 4, 2], queries: [4, 2] },
-  { stack: [5, 3, 1, 4, 2], queries: [1, 2, 3] },
-  { stack: [10, 20, 30], queries: [30, 20, 10] },
+  { stack: [3, 1, 4, 2],    queries: [4, 2] },   // → 2, 0
+  { stack: [5, 3, 1, 4, 2], queries: [1, 2] },   // → 2, 1
+  { stack: [10, 20, 30],    queries: [10, 30] }, // → 0, 1
 ];
 
 export function PresentsSim({ E }) {
@@ -28,10 +33,19 @@ export function PresentsSim({ E }) {
   let qIdx = 0;
   const isFind = cur % 2 === 0;
   const fullQ = Math.floor(cur / 2);
+  /* 🐛 2026-09-28 학생(초6)이 직접 파이썬으로 돌려 잡았다 —
+     여기가 `stack.splice(idx, 1)` 이었다. **target 하나만** 지운다.
+     그런데 규칙은 **「target 과 그 위에 있는 것 전부」** 다
+     (🔒 `FULL_PY`: `del stack[:pos + 1]`).
+     그래서 시뮬이 case1 `[3,1,4,2]` 요청 4·2 에 **「2, 2」** 를 보여줬는데
+     실제 코드는 **「2, 0」** 을 낸다. 문제 설명·5쪽 예제·코드 말풍선은 전부
+     *"한번 사라진 선물은 다시 안 돌아와요"* 라고 정확히 말하는데
+     **이 시뮬만 그 규칙을 안 지키고 있었다.**
+     ⭐ **틀린 길을 가르치고 있었다** — `feedback_intent_check_is_everyones_job`. */
   for (let q = 0; q < fullQ; q++) {
     const t = preset.queries[q];
     const idx = stack.indexOf(t);
-    if (idx !== -1) stack.splice(idx, 1);
+    if (idx !== -1) stack.splice(0, idx + 1);   // target 과 그 위 전부
   }
   qIdx = fullQ;
   const target = preset.queries[qIdx];
