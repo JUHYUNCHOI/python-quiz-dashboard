@@ -392,9 +392,15 @@ quest 5개에 흩어져 있고 **쪽 수 불변**, 매번 **다른 구체적 결
 
 | 상태 | 항목 | 한 줄 |
 |---|---|---|
-| READY | `swaptowin` 3쪽 내레이션 57자 | 55자 초과. **이번 수정 이전부터** 있던 것 |
-| READY | `strangefn` 코드 탭 헤더 「코드 2 / 2」 | 8조각을 다 넘겨도 안 바뀐다. 학생: *"뭘 세는 건지 몰랐고 그냥 넘어갔다"* |
+| ✅ DONE | `swaptowin` 3쪽 내레이션 57자 | `c55a5fb9` — 26자·한 문장으로 |
+| ✅ DONE | `strangefn` 코드 탭 헤더 「코드 2 / 2」 | `d2c5461b` — 「코드 2 / 2 쪽」으로. 세는 대상을 글자에 박음 (공유 컴포넌트, quest 180개) |
 | BLOCKED | CodeWalk 코드 상자 **맨 밑 한두 줄** 잘림 | 조각 1~5. 다음 조각에서 온전히 다시 나옴 — 허용인가 판정 대기(ux-reviewer) |
 | BLOCKED | `see-screen` CodeWalk 헛경보 | 안쪽 스크롤 상자 위 `transform` 고정 바를 `inFixed()` 가 못 본다. **가르는 잣대를 잘못 세우면 진짜 겹침을 같이 죽인다** — 설계 판정 대기(ux-reviewer) |
 | BLOCKED | CodeWalk 마지막 걸음 **전수(168개) 자동 판정** | 지금은 표본 10개뿐. 설계 판정 대기(ux-reviewer) |
 | READY | 미푸시 커밋 ~70개 | **오늘 배포 예산 소진.** 내일 아침 |
+
+### 새로 생긴 것 (2026-09-28 밤)
+
+| 상태 | 항목 | 한 줄 |
+|---|---|---|
+| READY | `check-narr-length.py` 와 `see-screen` 이 **다른 답**을 낸다 | swaptowin 3쪽 57자·두 문장을 see-screen 은 잡고 check-narr-length 는 **0건**으로 통과시켰다(`\n` 으로 쪼개 줄마다 재는 듯). CLAUDE.md 는 「narr 는 check-narr-length 로 잰다」고 적어 뒀다 — **어느 쪽이 맞는지 정하고 목차를 고쳐라** |
