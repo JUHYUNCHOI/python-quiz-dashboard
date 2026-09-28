@@ -296,6 +296,25 @@ const scan = () => p.evaluate(() => {
     }
     return false
   }
+  /* ⭐ 2026-09-28: 겹침 판정은 **잘린 뒤의 상자**로 해야 한다.
+     `clipped()` 는 **세로만** 봤다. 그런데 quest 머리말은 `truncate`(overflow-x:hidden)로
+     **가로로** 잘리는데, 안쪽 `<span>` 의 `getBoundingClientRect()` 는 **안 잘린 폭**을
+     그대로 돌려준다 → 화면엔 「USACO Feb 2…」로 멀쩡히 잘려 있는데
+     **quest 180개 전부에서 «부제 ↔ 🐍 Py 68% 겹침»** 이 뜬다(실측, 스크린샷으로 확인).
+     헛경보가 매 quest 2건씩 깔리면 **진짜 신고가 그 밑에 묻힌다** — 이 파일이
+     푸터를 뺀 이유와 같다. 그래서 자르는 조상마다 **교집합**을 낸다. */
+  const visRect = (e) => {
+    const q = e.getBoundingClientRect()
+    let L = q.left, T = q.top, R = q.right, B = q.bottom
+    for (let n = e.parentElement; n && n !== document.body; n = n.parentElement) {
+      const st = getComputedStyle(n)
+      const c = n.getBoundingClientRect()
+      if (/auto|scroll|hidden|clip/.test(st.overflowX)) { L = Math.max(L, c.left); R = Math.min(R, c.right) }
+      if (/auto|scroll|hidden|clip/.test(st.overflowY)) { T = Math.max(T, c.top); B = Math.min(B, c.bottom) }
+    }
+    return { left: L, top: T, right: Math.max(L, R), bottom: Math.max(T, B),
+             width: Math.max(0, R - L), height: Math.max(0, B - T) }
+  }
   const boxes = [...document.querySelectorAll('body *')].filter((e) => {
     if (e.children.length) return false                 // 말단만 (부모-자식 겹침은 정상)
     if (!(e.textContent || '').trim()) return false
@@ -322,10 +341,10 @@ const scan = () => p.evaluate(() => {
   // 글자 ↔ 도형
   for (const A of boxes) for (const S of shapes) {
     if (A.contains(S) || S.contains(A)) continue
-    const a = A.getBoundingClientRect(), c = S.getBoundingClientRect()
+    const a = visRect(A), c = visRect(S)
     const w = Math.min(a.right, c.right) - Math.max(a.left, c.left)
     const h = Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top)
-    if (w <= 1 || h <= 1) continue
+    if (w <= 1 || h <= 1 || a.width < 1 || a.height < 1) continue
     const ratio = (w * h) / (a.width * a.height)        // 글자가 얼마나 덮였나
     if (ratio < 0.25) continue
     overlaps.push({ a: (A.textContent || '').trim().slice(0, 16), b: '〈도형〉', r: +ratio.toFixed(2) })
@@ -333,10 +352,10 @@ const scan = () => p.evaluate(() => {
   for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
     const A = boxes[i], B = boxes[j]
     if (A.contains(B) || B.contains(A)) continue
-    const a = A.getBoundingClientRect(), c = B.getBoundingClientRect()
+    const a = visRect(A), c = visRect(B)
     const w = Math.min(a.right, c.right) - Math.max(a.left, c.left)
     const h = Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top)
-    if (w <= 1 || h <= 1) continue
+    if (w <= 1 || h <= 1 || a.width < 1 || a.height < 1 || c.width < 1 || c.height < 1) continue
     const ratio = (w * h) / Math.min(a.width * a.height, c.width * c.height)
     if (ratio < 0.15) continue                          // 살짝 스치는 건 뺀다
     overlaps.push({ a: (A.textContent || '').trim().slice(0, 16),
