@@ -89,6 +89,34 @@ def all_quest_ids():
     )
 
 
+SCREEN_BLOCK = re.compile(r"/\*.*?\*/", re.S)
+SCREEN_LINE = re.compile(r"^\s*//.*$", re.M)
+SCREEN_T = re.compile(r't\(\s*E\s*,\s*("(?:[^"\\]|\\.)*")\s*,\s*("(?:[^"\\]|\\.)*")', re.S)
+
+
+def korean_on_screen(text):
+    """**화면에 실제로 뜨는** 한국어 글자 수 — 주석과 영어 자리를 뺀다.
+
+    ⚠️ 2026-09-28 에 이게 왜 필요해졌나 — `korean_chars_ref` 는 파일의 한글을 **전부**
+       센다(주석 포함). 이 저장소는 WHY 주석을 강하게 요구해서 학생 인용을 길게 적는데,
+       그날 `swaptowin` 의 `korean_chars_ref` 가 **810 → 1606, 두 배**로 뛰었다.
+       나는 그 숫자를 근거로 선생님께 *"설명이 두 배가 됐다"* 고 보고했다. **틀렸다.**
+       화면 글자만 다시 재니 **581 → 651, +12%** 였다 — 늘어난 건 대부분 **내 주석**이다.
+       (스크립트는 「참고용, 판정에는 안 씀」이라고 적어 뒀는데 내가 판정에 썼다.)
+    ⚠️ `t(E, 영어, 한국어)` 모양만 본다 — 그 밖의 문자열은 못 본다. 여기서도 근사치다.
+    """
+    src = SCREEN_BLOCK.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+    src = SCREEN_LINE.sub("", src)
+    total = 0
+    for m in SCREEN_T.finditer(src):
+        try:
+            ko = json.loads(m.group(2))
+        except ValueError:
+            continue
+        total += len(HANGUL_RE.findall(ko))
+    return total
+
+
 def measure_static(qid):
     """chapters.jsx 만 읽어서 pages · quiz_input · (참고용) korean_chars 를 센다."""
     f = QUEST_DIR / qid / "chapters.jsx"
@@ -100,7 +128,8 @@ def measure_static(qid):
     quiz_input = sum(1 for t in types if t in ("quiz", "input"))
     quiz_input += len(NUMQUIZ_TAG_RE.findall(text))
     korean_chars = len(HANGUL_RE.findall(text))  # 참고용, 판정에는 안 씀 (주석 섞임)
-    return {"pages": pages, "quiz_input": quiz_input, "korean_chars_ref": korean_chars}
+    return {"pages": pages, "quiz_input": quiz_input, "korean_chars_ref": korean_chars,
+            "korean_screen_ref": korean_on_screen(text)}
 
 
 def measure_clicks(url):
