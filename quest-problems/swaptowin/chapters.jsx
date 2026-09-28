@@ -185,7 +185,12 @@ export function makeSwapToWinCh1(E) {
               <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abcy</span>
             </div>
             <div>
-              <b style={{ color: "#059669" }}>{t(E, "position 4:", "자리 4:")}</b> {t(E, "want d, s_1[4]=y. Not in s_1, not in s_2. d is in s_3 — but at column 1, not 4. Line it up first → ", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 1번 칸에 있음 — 먼저 4번 칸으로 옮겨요 → ")}
+              <b style={{ color: "#059669" }}>{t(E, "position 4:", "자리 4:")}</b> {/* ⭐ 2026-09-28 학생(초6): *"자리3은 한 번에 되는데 **자리4는 왜 두 번 해야 하는지,
+                  그 이유를 화면이 말해주지 않는다.** 그냥 「이렇게 한다」만 보여준다. 코드 쪽까지 보고
+                  나서야 「아 `2 x y k` 는 같은 자리(k)끼리만 바꿀 수 있구나」를 **혼자 유추**했다.
+                  여기가 난이도 4 — 여러 번 다시 읽었다."*
+                  → 규칙은 1쪽에 있지만 **필요한 그 자리에 없었다.** 한 마디만 그 자리에 놓는다. */}
+              {t(E, "want d, s_1[4]=y. Not in s_1, not in s_2. d is in s_3 — but at column 1, not 4. Two strings can only swap the SAME column, so line it up first → ", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 1번 칸에 있어요. 두 줄끼리는 **같은 번호 칸끼리만** 바꿀 수 있으니,\n먼저 s_3 안에서 4번 칸으로 옮겨요 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 3 1 4</code>
               {t(E, " (inside s_3)", " (s_3 안에서)")}
               <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_3 = zzzd</span>
@@ -227,12 +232,18 @@ export function makeSwapToWinCh1(E) {
       narr: t(E,
         "target = 'aa', s_1 = 'aa'. How many operations are needed?",
         "target = 'aa', s_1 = 'aa'. 몇 번 바꿔야 할까요?"),
+      /* ⭐ 2026-09-28 학생(초6): *"「K」 라는 글자가 여기서 처음 나왔다. 앞의 1~4쪽 어디에도
+         K 라는 말은 없었다. 바로 위 파란 줄은 「몇 번 바꿔야 할까요?」라고 물어놓고 흰 박스에서는
+         갑자기 「K = ?」 라고 바뀌어서 **같은 질문인데 부르는 말이 달라져 순간 헷갈렸다.**
+         힌트를 눌러도 「K 값은?」 이라고만 하지 K 가 뭔지는 안 알려줬다."*
+         → `feedback_no_invented_terms`: **용어는 처음 쓰기 전에 정의**한다.
+         여기선 정의를 더하는 대신 **내레이션과 같은 말로 통일**한다(늘리지 않고 맞춘다). */
       question: t(E,
-        "target = 'aa', s_1 = 'aa'. K = ?",
-        "target = 'aa', s_1 = 'aa'. K = ?"),
+        "target = 'aa', s_1 = 'aa'. How many operations?",
+        "target = 'aa', s_1 = 'aa'. 몇 번 바꿔야 할까요?"),
       hint: t(E,
-        "Compare position by position — what changes when nothing differs?",
-        "한 칸씩 비교해봐 — 다른 곳이 하나도 없을 때 K 값은?"),
+        "Compare position by position — what if nothing differs?",
+        "한 칸씩 비교해봐 — 다른 곳이 하나도 없으면 몇 번일까?"),
       answer: 0,
     },
   ];
