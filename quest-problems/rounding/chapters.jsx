@@ -1138,11 +1138,20 @@ export function makeBruteSteps(E, lang = "py") {
 
   return [
     { type: "reveal",
+      /* ⭐ `check-codewalk-thinking-order.py` 신고: **첫 걸음에 목적지가 없다.**
+         전에는 *"1단계 — 먼저 입력을 받아요."* 였다 — **생각이 0 이다.**
+         학생은 코드를 끝까지 보고도 **왜 그렇게 짰는지**는 모른 채 나간다.
+         `feedback_quest_code_codewalk`(2026-07-14): 말풍선은 **지금 마주한 질문**으로 열어라.
+         「T 개 온다」는 사실은 아래 카드로 내렸다 — narr 은 한 문장이다. */
       narr: t(E,
-        "Step 1: read the input. T test cases, each gives one N.", "1단계 — 먼저 입력을 받아요.\n문제가 T 개 오고, 하나마다 N 이 하나씩 들어와요."),
+        "What we need is the rounded value — so read N first.", "구할 것은 반올림한 값 — 그러려면 N 부터 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 1: Input", "1단계: 입력 받기")} />
+          <div style={{ marginBottom: 6, fontSize: 12.5, color: "#57534e", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E, "The input holds T test cases, and each one gives a single N.",
+                  "문제가 T 개 오고, 하나마다 N 이 하나씩 들어와요.")}
+          </div>
           <CodeBlock lines={pick(BF_INPUT, BF_INPUT_CPP)} />
         </div>
       ),
