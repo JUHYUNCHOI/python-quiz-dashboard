@@ -14,7 +14,7 @@ export function makeSwapToWinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Strings, and two kinds of swaps. Match the first one to the target.",
+        "Swap letters around until the first string matches the target.",
         "문자열들을 바꿔가며 첫 번째 줄을 목표에 맞춰볼 거예요."),
       content: (
         <div style={{ padding: 16 }}>
@@ -55,8 +55,8 @@ export function makeSwapToWinCh1(E) {
                       「문자열들을 s_1, s_2... 라고 부른다」는 말이 없었다. **2쪽 샘플에 가서야**
                       그 이름이 처음 등장한다."* → `feedback_no_invented_terms`:
                       **용어는 처음 쓰기 전에 정의.** 바로 아래 줄에서 `s_x` 를 쓰므로 여기서 소개한다. */}
-                  {t(E, " We call them s_1, s_2, … in order — so s_x means the x-th string.",
-                        " 이 문자열들을 차례대로 s_1, s_2, … 라고 불러요. s_x 는 x 번째 문자열이에요.")}
+                  {t(E, " We call them s_1, s_2, … in order — s_x is the x-th string, s_y the y-th.",
+                        " 이 문자열들을 차례대로 s_1, s_2, … 라고 불러요. s_x 는 x 번째, s_y 는 y 번째 문자열이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -169,7 +169,7 @@ export function makeSwapToWinCh1(E) {
               "모든 자리에서 규칙은 같아요. 먼저 s_1 안에서 찾아요.\ns_1 안에 없을 때만 다른 줄에서 빌려요.")}
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12.5, color: C.text, lineHeight: 1.55 , wordBreak: "keep-all", textWrap: "balance" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 12.5, color: C.text, lineHeight: 1.95 , wordBreak: "keep-all", textWrap: "balance" }}>
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 1:", "자리 1:")}</b> {t(E, "want a, s_1[1]=x. a is later in s_1 at position 3 → ", "a 가 필요, s_1 의 1번 칸은 x. a 는 s_1 의 3번 칸에 있음 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 1 1 3</code>
@@ -178,22 +178,22 @@ export function makeSwapToWinCh1(E) {
                   **「몇 번째 빌리기인지」**를 뜻하는 것 같아서 **규칙이 오락가락**한다."*
                   → 맞다. 이 문제는 조작 이름이 **`1 x p q`·`2 x y k`** 라 **「1번」이 곧 조작 이름**이다.
                   `feedback_same_number_two_meanings`. **횟수는 「한 번/두 번」으로** 갈라 쓴다. */}
-              {t(E, " (1 op, inside s_1)", " (한 번 — s_1 안에서)")}
+              {t(E, " (1 swap — inside s_1)", " (바꾼 횟수 1 — s_1 안에서)")}
               {/* ⭐ 2026-09-26 /decide 3라운드: 학생이 여기서 막혔다 —
                   *"자리3 에서 「s_1 의 3번 칸은 x」라는데 「어? 원래 3번 칸은 a 잖아?」 하고
                   헷갈렸다. 글이 「지금 s_1 이 뭔지」를 한 번도 안 보여준다."*
                   네 값 전부 🔒 FULL_PY 로 돌려 대조했다(감사). */}
-              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abxy</span>
+              <div style={{ marginLeft: 14, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abxy</div>
             </div>
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 2:", "자리 2:")}</b> {t(E, "want b, s_1[2]=b ✓ skip", "b 가 필요, s_1 의 2번 칸이 이미 b ✓ 건너뜀")}
-              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>(s_1 = abxy{t(E, " unchanged", " 그대로")})</span>
+              <div style={{ marginLeft: 14, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>(s_1 = abxy{t(E, " unchanged", " 그대로")})</div>
             </div>
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 3:", "자리 3:")}</b> {t(E, "want c, s_1[3]=x. c is nowhere left in s_1 → borrow. s_2's column 3 already has c → ", "c 가 필요, s_1 의 3번 칸은 x. s_1 안엔 c 가 더 없음 → 빌려요.\ns_2 의 3번 칸에 c 가 바로 있음 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 2 3</code>
-              {t(E, " (1 op, borrow)", " (한 번 — 빌려오기)")}
-              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abcy</span>
+              {t(E, " (1 swap — borrow)", " (바꾼 횟수 1 — 빌려오기)")}
+              <div style={{ marginLeft: 14, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abcy</div>
             </div>
             <div>
               <b style={{ color: "#059669" }}>{t(E, "position 4:", "자리 4:")}</b> {/* ⭐ 2026-09-28 학생(초6): *"자리3은 한 번에 되는데 **자리4는 왜 두 번 해야 하는지,
@@ -201,14 +201,25 @@ export function makeSwapToWinCh1(E) {
                   나서야 「아 `2 x y k` 는 같은 자리(k)끼리만 바꿀 수 있구나」를 **혼자 유추**했다.
                   여기가 난이도 4 — 여러 번 다시 읽었다."*
                   → 규칙은 1쪽에 있지만 **필요한 그 자리에 없었다.** 한 마디만 그 자리에 놓는다. */}
-              {t(E, "want d, s_1[4]=y. Not in s_1, not in s_2. d is in s_3 — but at column 1, not 4. Two strings can only swap the SAME column, so line it up first → ", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 1번 칸에 있어요. 두 줄끼리는 「같은 번호 칸」끼리만 바꿀 수 있으니,\n먼저 s_3 안에서 4번 칸으로 옮겨요 → ")}
-              <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 3 1 4</code>
-              {t(E, " (first, inside s_3)", " (먼저 — s_3 안에서)")}
-              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_3 = zzzd</span>
-              {t(E, ", then swap that column with s_1 → ", ", 그다음 그 칸을 s_1 과 맞바꿔요 → ")}
-              <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 3 4</code>
-              {t(E, " (2 ops total, borrow)", " (모두 두 번 — 빌려오기)")}
-              <span style={{ marginLeft: 6, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abcd ✓</span>
+              {t(E, "want d, s_1[4]=y — not in s_1, not in s_2. d is in s_3, but at column 1, not 4. Two strings can only swap the SAME column, so line it up first.", "d 가 필요, s_1 의 4번 칸은 y. s_1, s_2 어디에도 없음.\nd 는 s_3 의 1번 칸에 있어요. 두 줄끼리는 「같은 번호 칸」끼리만 바꿀 수 있어서, 먼저 자리를 맞춰요.")}
+              {/* ⭐ 2026-09-28 학생(초6) **막힘**: *"자리4 설명에서 「1 3 1 4」랑 「→ s_3 = zzzd」 글자가
+                  화면에서 **겹쳐서 실제로 읽기 힘들었다**(도구가 겹침 95%). 하필 이 문제에서
+                  **제일 복잡한 자리**(스왑 2번 필요한 곳)가 겹쳐 있어서 거기서 멈칫했다."*
+                  → 이 자리만 **조작이 둘**이라 한 줄에 몰려 접혔다. **걸음마다 한 줄씩** 준다.
+                  (줄 높이도 1.55 → 1.95 — 초록 칩이 줄 상자보다 커서 접힌 줄과 겹쳤다.) */}
+              <div style={{ marginLeft: 14, marginTop: 2 }}>
+                {t(E, "① first, move it to column 4 inside s_3 → ", "① 먼저 s_3 안에서 4번 칸으로 옮겨요 → ")}
+                <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 3 1 4</code>
+                <div style={{ marginLeft: 14, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_3 = zzzd</div>
+              </div>
+              <div style={{ marginLeft: 14 }}>
+                {t(E, "② then swap that column with s_1 → ", "② 그다음 그 칸을 s_1 과 맞바꿔요 → ")}
+                <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 3 4</code>
+                <div style={{ marginLeft: 14, color: "#047857", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>→ s_1 = abcd ✓</div>
+              </div>
+              <div style={{ marginLeft: 14, color: "#047857" }}>
+                {t(E, "→ 2 swaps at this position (both borrow-style).", "→ 이 자리만 바꾼 횟수 2 (① 자리 맞추기 + ② 빌려오기).")}
+              </div>
             </div>
           </div>
 
