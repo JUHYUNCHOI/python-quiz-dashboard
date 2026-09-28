@@ -77,6 +77,22 @@ model: sonnet
 node scripts/see-screen.mjs http://localhost:3000/quest/moohunt
 node scripts/see-screen.mjs http://localhost:3000/learn/45 --progress 45:1:1 --mobile
 node scripts/see-screen.mjs <url> --shot /tmp/x.png     # 스크린샷
+
+# ⭐⭐ quest 는 **학생이 쓰는 조건**으로도 반드시 — 모바일 390px · 한국어 · **쪽마다**
+node scripts/see-flow.mjs http://localhost:3000/quest/<id>          # 쪽 수부터 센다
+node scripts/see-screen.mjs "http://localhost:3000/quest/<id>?lang=ko" --mobile \
+     --click "다음 쪽 ▶" --click "다음 쪽 ▶"                          # 쪽 수만큼
+
+> 🚨 **기본값으로 돌리면 못 잡는 층이 있다.** 2026-09-28 `swaptowin` 학생(초6) **막힘** —
+> *"「1 3 1 4」랑 「→ s_3 = zzzd」 글자가 화면에서 **겹쳐서 실제로 읽기 힘들었다**(겹침 95%)."*
+> 실측으로 갈린다 — **1100px/영어/1쪽 = 0건**, **390px/한국어/3쪽 = 95%·48%·88%.**
+> 왜 그 조건에서만 나나: ①좁으면 줄이 접히고, 접힌 줄 위로 `<code>` 칩이 올라탄다
+> ②**기본 언어가 영어다**(`contexts/language-context.tsx:29`) — 한국어가 더 길어 더 접힌다
+> ③첫 화면만 보면 못 잡는다(그 결함은 3쪽에 있었다).
+> ⛔ **「see-screen 0건, 이상 없음」이라고 쓰지 마라.** 어떤 조건에서 0건인지 같이 적어라 —
+>    ⭕ *"**1100px/영어/1쪽** 0건. 모바일·한국어는 아직 안 봤다."*
+> ⚠️ 라벨을 박지 마라 — `?lang=ko` 없이 `--click "다음 쪽 ▶"` 는 **조용히 안 눌린다.**
+> 근거: `memory/feedback_check_as_the_student_sees_it.md`
 ```
 찍어주는 것: 화면 글자 · **고정 요소에 가려진 버튼/입력칸**(좌표로 실측) ·
 55자 넘는 문장 · 스크린샷. `--mobile` 은 375×812.
