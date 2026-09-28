@@ -237,22 +237,22 @@ export function makeCheeseCh1(E) {
               <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
                 <div><span style={{ color: "#fbbf24" }}>2</span> <span style={{ color: "#fbbf24" }}>5</span> <span style={{ color: "#94a3b8", fontSize: 10 }}> {t(E, "// N=2, Q=5", "// N=2, Q=5")}</span></div>
-                <div>0 0 0</div>
-                <div>1 1 1</div>
-                <div>0 1 0</div>
-                <div>1 0 0</div>
-                <div>1 1 0</div>
+                <div>0 0 0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "carve 1 — x y z", "1번째로 뺀 칸 — x y z")}</span></div>
+                <div>1 1 1 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "carve 2", "2번째")}</span></div>
+                <div>0 1 0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "carve 3", "3번째")}</span></div>
+                <div>1 0 0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "carve 4", "4번째")}</span></div>
+                <div>1 1 0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "carve 5", "5번째")}</span></div>
               </div>
             </div>
             {/* Output */}
             <div>
               <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
-                <div>0</div>
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div style={{ color: "#34d399", fontWeight: 900 }}>5 ←!</div>
+                <div>0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "after carve 1", "1번째 뺀 뒤")}</span></div>
+                <div>0 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "after carve 2", "2번째 뒤")}</span></div>
+                <div>1 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "after carve 3", "3번째 뒤")}</span></div>
+                <div>2 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "after carve 4", "4번째 뒤")}</span></div>
+                <div style={{ color: "#34d399", fontWeight: 900 }}>5 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "after carve 5 — jumps +3!", "5번째 뒤 — 한 번에 +3!")}</span></div>
               </div>
             </div>
           </div>

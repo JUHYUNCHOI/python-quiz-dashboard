@@ -98,14 +98,14 @@ export function makeMooCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "INPUT", "입력")}</div>
             <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
               <div><span style={{ color: "#fbbf24" }}>10</span> <span style={{ color: "#fbbf24" }}>2</span> <span style={{ color: "#94a3b8", fontSize: 10 }}>{t(E, "// N=10, F=2", "// N=10, F=2")}</span></div>
-              <div>zzmoozzmoo</div>
+              <div>zzmoozzmoo <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "S — the string", "S — 문자열")}</span></div>
             </div>
           </div>
           <div>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
-              <div>1</div>
-              <div style={{ color: "#34d399", fontWeight: 900 }}>moo</div>
+              <div>1 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "K — how many moos qualify", "K — 조건을 채운 moo 개수")}</span></div>
+              <div style={{ color: "#34d399", fontWeight: 900 }}>moo <span style={{ color: "#94a3b8", fontSize: 10.5 }}>← {t(E, "the moo itself", "그 moo")}</span></div>
             </div>
           </div>
         </div>

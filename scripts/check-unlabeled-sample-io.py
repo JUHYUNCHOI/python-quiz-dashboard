@@ -83,7 +83,14 @@ def numeric_lines_in_window(lines, start, end):
                 # 안에 💬 노트가 붙는다 ("←" 없이도 라벨이 있는 것 — 실측으로 찾은
                 # 유일한 오탐 종류, 2026-09-23). 3줄 안에 있으면 라벨로 인정.
                 nearby = "".join(lines[i:min(i + 4, len(lines))])
-                has_label = "←" in line or "💬" in nearby
+                # ⚠️ 2026-09-28: `←` **글자만** 찾다가 두 quest 를 오탐했다.
+                #    `rotshift` 는 소스에 `"\u2190 N K T"` 라고 **이스케이프로** 써 있다
+                #    (JS 문자열이라 화면엔 「← N K T」로 멀쩡히 뜬다).
+                #    `reflection` 은 화살표 없이 **옆 칸 note** 로 라벨을 단다
+                #    (`<div style={outChip}>4</div><div style={outNote}>처음 답</div>`).
+                #    소스 글자만 보는 grep 검사기의 한계다 — 아는 모양을 넓힌다.
+                has_label = ("←" in line or "\\u2190" in line
+                             or "💬" in nearby or "outNote" in nearby)
                 found.append((i, line.strip()[:60], "same" if has_label else None))
             i += 1
         else:

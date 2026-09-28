@@ -209,11 +209,11 @@ export function makePermCh1(E) {
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-                {`1 2
--1
--1
-3 1 2 4
-1 2 3 4`}
+                <div>1 2 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "answer to test 1", "테스트 1 의 답")}</span></div>
+<div>-1 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "test 2 — impossible", "테스트 2 — 안 됨")}</span></div>
+<div>-1 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "test 3 — impossible", "테스트 3 — 안 됨")}</span></div>
+<div>3 1 2 4 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… test 4", "… 테스트 4")}</span></div>
+<div>1 2 3 4 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… test 5", "… 테스트 5")}</span></div>
               </div>
             </div>
           </div>

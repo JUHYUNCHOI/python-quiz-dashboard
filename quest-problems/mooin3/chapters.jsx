@@ -204,11 +204,11 @@ abcabbacabac
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`28
-6
-1
--1
-12`}
+<div>28 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "answer to query 1", "질문 1 의 답")}</span></div>
+<div>6 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… query 2", "… 질문 2")}</span></div>
+<div>1 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… query 3", "… 질문 3")}</span></div>
+<div>-1 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… query 4 (none)", "… 질문 4 (없음)")}</span></div>
+<div>12 <span style={{ fontSize: 10.5, color: "#94a3b8" }}>← {t(E, "… query 5", "… 질문 5")}</span></div>
               </div>
             </div>
           </div>
