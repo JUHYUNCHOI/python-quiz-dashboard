@@ -387,7 +387,7 @@
   "makedistinct": {
     "pages": 7,
     "quiz_input": 1,
-    "korean_chars_ref": 1585
+    "korean_chars_ref": 1583
   },
   "mcc15bahasaf": {
     "pages": 6,
@@ -697,7 +697,7 @@
   "presents": {
     "pages": 9,
     "quiz_input": 2,
-    "korean_chars_ref": 1046
+    "korean_chars_ref": 1252
   },
   "printseq": {
     "pages": 19,
@@ -828,7 +828,7 @@
   "swaptowin": {
     "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 810
+    "korean_chars_ref": 1643
   },
   "tameherd": {
     "pages": 6,
