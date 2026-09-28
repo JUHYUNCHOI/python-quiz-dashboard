@@ -7318,3 +7318,26 @@ PM 판정: **「민다, 조건부」**. 세 단계 결과.
 
 `familytree` 코드 탭 상단 배너 겹침(스크롤 중 일시적)도 **이번 수정과 무관**한 기존 자리로
 검토자가 적어 뒀다 — 별건.
+
+## 🚀 배포 (2026-09-29) — 선생님 지시 «배포해»
+
+`git push origin main` — `474c2972..899739a2`, **커밋 96개.**
+PM 판정 「민다, 조건부」의 세 조건이 전부 통과한 뒤에 밀었다.
+
+**학생이 화면에서 보게 되는 것**
+- `swaptowin` — 막힘(자리4 글자 95% 겹침) 해소 · `s_y` 정의 · 「바꾼 횟수」 라벨 ·
+  조작 형식 되짚기 · 자리3↔4 칸 번호 대조 · 분량 되돌림
+- `QuestNavBar` — 「코드 2 / 2 **쪽**」 (quest 180개 공유)
+- `CodeWalk` — 「— 코드 끝 · 다음 설명은 ▶ 를 눌러요 —」 (quest 168개 공유)
+- 샘플 입출력 상자 **7개 quest** 에 줄마다 뜻 라벨
+- 한국어가 「왜」를 빼먹던 3자리 (`bucketlist`·`cowphotos`·`rounding`)
+- `rounding` 코드 첫 걸음이 목적지로 열린다
+- `presents`·`balanced`·`strangefn`·`makedistinct` 재검증 수정
+
+**밀기 전에 확인한 것**: `npm run build` 오류 0 · `check-vercel-config` 통과 ·
+CodeWalk 말풍선 전수 네 축 각 168/168 · ux-reviewer 스팟체크 결함 0 ·
+동결 quest 의 `SOLUTION_CODE` diff 0줄(PM 이 직접 확인).
+
+- [ ] **라이브 반영 확인** — `coderin.vercel.app/quest/swaptowin` 에서
+      「s_y 는 y 번째」와 「N / M 쪽」이 보이나. 미는 시점엔 아직 빌드 중이었다. `대기`
+- [ ] **Vercel 빌드 로그의 `[ignore]` 줄** — 대시보드는 선생님만 볼 수 있다 `선생님`
