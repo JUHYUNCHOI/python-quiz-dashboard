@@ -71,7 +71,7 @@ export function makeStrangeFnCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Otherwise (x contains only 0/1): replace x with ",
-                        "그게 아니면 (x 가 0 과 1 로만 되어 있으면), x 를 ")}
+                        "그게 아니면 x 를 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "x − 1", "x − 1")}</b>
                   {t(E, ".", " 로 바꿔요.")}
                 </div>
@@ -82,7 +82,7 @@ export function makeStrangeFnCh1(E) {
                   {t(E, "Print how many ", "")}
                   <b style={{ color: "#15803d" }}>f</b>
                   {t(E, " applications make x become 0, mod ",
-                        " 를 몇 번 쓰면 x 가 0 이 되는지를 ")}
+                        " 를 몇 번 쓰면 x 가 0 이 되는지 ")}
                   <b style={{ color: "#15803d" }}>10⁹+7</b>
                   {t(E, ".", " 로 나눈 나머지를 출력해요.")}
                 </div>
@@ -114,7 +114,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "For each x, how many times f applies until it hits 0, mod 10⁹+7 (T lines).",
-                  "x 마다 f 를 몇 번 써야 0 이 되는지를 10⁹+7 로 나눈 나머지로, 한 줄씩 출력해요 (T 줄).")}
+                  "x 마다 f 를 몇 번 써야 0 이 되는지 10⁹+7 로 나눈 나머지로, 한 줄씩 출력해요 (T 줄).")}
             </div>
           </div>
           {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
@@ -264,8 +264,8 @@ export function makeStrangeFnCh1(E) {
               {/* 2026-09-23 학생 검증: "왜 하필 이진수로 읽는지" 설명 없이 "그렇게 해보자" 로
                   시작했다 — 한 문장으로 이유를 밝힌다. */}
               <div style={{ marginTop: 6 }}>{t(E,
-                "Why binary and not decimal? Once every digit is only 0 or 1, those digits already look exactly like binary digits — reading them that way turns x into one whole number n. We can then look for a pattern using small values of n first (like n = 1, 2, 3 you already found) — even though n itself can grow just as huge as x once you plug in the real input.",
-                "왜 하필 십진수가 아니라 이진수일까요? 자리마다 0 아니면 1 만 남으면, 그 모양이 이미 이진수 자리와 똑같아요. 그대로 이진수로 읽으면 x 가 정수 n 하나가 돼요. 그러면 방금 구한 것처럼 n 이 작을 때(1, 2, 3…)부터 규칙을 먼저 찾아볼 수 있어요 — 실제 입력을 넣으면 n 도 x 만큼 커질 수 있지만요.")}</div>
+                "Why binary and not decimal? Once every digit is only 0 or 1, those digits already look exactly like binary digits — reading them that way turns x into one whole number n. We can then look for a pattern using small values of n first (like n = 1, 2, 3 you already found).",
+                "왜 하필 십진수가 아니라 이진수일까요? 자리마다 0 아니면 1 만 남으면, 그 모양이 이미 이진수 자리와 똑같아요. 그대로 이진수로 읽으면 x 가 정수 n 하나가 돼요. 그러면 방금 구한 것처럼 n 이 작을 때(1, 2, 3…)부터 규칙을 먼저 찾아볼 수 있어요")}</div>
               <div style={{ marginTop: 6 }}>{t(E,
                 "In binary, place values double as you move left: 1, 2, 4, 8 …",
                 "이진수는 오른쪽 자리부터 자리값이 1, 2, 4, 8 … 이렇게 두 배씩 커져요.")}</div>

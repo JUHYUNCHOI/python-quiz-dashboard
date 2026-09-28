@@ -101,7 +101,11 @@ const FULL_CPP = [
 ];
 
 // CodeWalk — 코드 위 '왜 이렇게?' 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙).
+/* ⭐ 2026-09-28 ux: MOD 는 **1쪽 미션 박스에서만** 뜻이 밝혀지는데 코드 쪽은 한참 뒤
+   **다른 장**이다. 범례에 없으면 학생이 앞 쪽 기억에 기댄다
+   (`feedback_screen_must_not_rely_on_memory`). 새 글이 아니라 **자리 이동**이다. */
 const _SF_VARS = [
+  { v: "MOD", ko: "10⁹+7 = 1,000,000,007", en: "10⁹+7 = 1,000,000,007" },
   { v: "s", ko: "입력 숫자(문자열)", en: "the number (string)" },
   { v: "n", ko: "이진수로 읽은 값 (mod 10⁹+7)", en: "value read as binary (mod 10⁹+7)" },
   { v: "ops", ko: "홀짝으로 바꾼 횟수(0 또는 1)", en: "times flipped by parity (0 or 1)" },
@@ -130,8 +134,8 @@ export function getStrangeFnWalk(E, lang = "py") {
          ⭐ **줄이면 그 포기가 돌아온다.** 검사기는 「생각 개수」만 세고 **왜 그 길이인지는
            모른다** — 그 검사기 자신이 «C 유형: 안 가르친 개념이 숨어 있으면 손대지 마라» 고
            적어 뒀다. 이게 바로 그 C 유형이고, **여기서는 가르치는 쪽을 택했다.** */
-      { hi: [5, 5], bubble: t(E, "Even as a whole number — but it's reduced mod 10⁹+7,\nso it may not be even now (1000000008 becomes 1).\nSo we can't just divide by 2 here.\nTry a tiny example: mod 5, value 8. 8 mod 5 = 3, which is\nodd — but 8/2 = 4, and 4 mod 5 = 4. Multiply 3 by 3 (since\n2×3 = 6 ≡ 1 mod 5) and you get 9 ≡ 4 mod 5 — same answer.\nThat 3 is the \"modular inverse\" of 2 under mod 5.\n500000004 is that same idea, precomputed for mod 10⁹+7 —\nwhy that exact number comes out needs more number theory\nthan this quest covers, so we just use it as a fixed value,\nlike a formula you'd look up.\n(Name to look up: Fermat's little theorem)", "정수로는 짝수였죠. 그런데 10⁹+7 로 줄인 값이라\n짝수가 아닐 수도 있어요 (1000000008 → 1).\n그래서 2 로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 8 이라고 해요.\n8 mod 5 = 3, 홀수죠. 그런데 8÷2 = 4 이고, 4 mod 5 = 4 예요.\n3 에 3 을 곱하면 (2×3 = 6 ≡ 1 mod 5 이니까) 9 ≡ 4 mod 5,\n똑같이 4 가 나와요. 이 3 이 mod 5 에서 2 의 '모듈러 역원'이에요.\n500000004 도 같은 원리로, mod 10⁹+7 에서 미리 구해 둔 값이에요 —\n왜 하필 이 숫자가 나오는지는 이 quest 범위보다 더 깊은\n정수론이 필요해서, 지금은 찾아 쓰는 공식처럼 정해진\n값으로만 써요.\n(찾아볼 이름: 페르마의 소정리)") },
-      { hi: [44, 44], bubble: t(E, "The (... + MOD) guards against a negative.\n% and * have the same precedence, so this line runs left to\nright: first % MOD, then * INV2, then % MOD again.", "(... + MOD)는 음수를 막아요.\n% 와 * 는 힘이 같아서 이 줄은 왼쪽부터 차례로 계산돼요 —\n먼저 % MOD, 그다음 * INV2, 그다음 다시 % MOD.") },
+      { hi: [5, 5], bubble: t(E, "Even as a whole number — but it's reduced mod 10⁹+7,\nso it may not be even now (1000000008 becomes 1).\nSo we can't just divide by 2 here.\nTry a tiny example: mod 5, value 8. 8 mod 5 = 3, which is\nodd — but 8/2 = 4, and 4 mod 5 = 4. Multiply 3 by 3 (since\n2×3 = 6 ≡ 1 mod 5) and you get 9 ≡ 4 mod 5 — same answer.\nThat 3 is the \"modular inverse\" of 2 under mod 5.\n500000004 is the same value no matter what x is (it is 2's inverse),\nso we don't recompute it per test — the INV2 line at the top does it once.\nWhy that exact number comes out needs more number theory\nthan this quest covers, so we just use it as a fixed value,\nlike a formula you'd look up.\n(Name to look up: Fermat's little theorem)", "정수로는 짝수였죠. 그런데 10⁹+7 로 줄인 값이라\n짝수가 아닐 수도 있어요 (1000000008 → 1).\n그래서 2 로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 8 이라고 해요.\n8 mod 5 = 3, 홀수죠. 그런데 8÷2 = 4 이고, 4 mod 5 = 4 예요.\n3 에 3 을 곱하면 (2×3 = 6 ≡ 1 mod 5 이니까) 9 ≡ 4 mod 5,\n똑같이 4 가 나와요. 이 3 이 mod 5 에서 2 의 '모듈러 역원'이에요.\n500000004 는 x 가 무엇이든 늘 똑같은 값이에요 — 2 의 역원이니까요.\n그래서 테스트마다 새로 구하지 않고 맨 위 INV2 줄에서 딱 한 번만 구해 둬요.\n같은 원리로, mod 10⁹+7 에서 미리 구해 둔 값이에요 —\n왜 하필 이 숫자가 나오는지는 이 quest 범위보다 더 깊은\n정수론이 필요해서, 지금은 찾아 쓰는 공식처럼 정해진\n값으로만 써요.\n(찾아볼 이름: 페르마의 소정리)") },
+      { hi: [44, 44], bubble: t(E, "The (... + MOD) guards against a negative.\n% and * have the same precedence, so this line runs left to\nright: first % MOD, then * INV2, then % MOD again.", "(... + MOD)는 음수를 막아요.\n% 와 * 는 계산 차례가 같아서 이 줄은 왼쪽부터 차례로 계산돼요 —\n먼저 % MOD, 그다음 * INV2, 그다음 다시 % MOD.") },
       { hi: [46, 46], bubble: t(E, "Answer = ops + g, mod MOD: the parity-flip cost plus the formula's result, added together.", "답은 (ops + g) 를 MOD 로 나눈 나머지예요. 홀짝 변환 비용과 공식 결과를 더한 값이에요.") },
     ] };
   }
@@ -153,7 +157,7 @@ export function getStrangeFnWalk(E, lang = "py") {
        ④는 그 연산이 실제로 있는 g 줄로 돌려보낸다. 글자는 그대로 옮겼을 뿐
        하나도 새로 쓰지 않았다. */
     { hi: [2, 2], bubble: t(E, "Even as a whole number — but it's reduced mod 10⁹+7,\nso it may not be even now (1000000008 becomes 1).\nSo we can't just divide by 2 here.\nTry a tiny example: mod 5, value 8. 8 mod 5 = 3, which is\nodd — but 8/2 = 4, and 4 mod 5 = 4. Multiply 3 by 3 (since\n2×3 = 6 ≡ 1 mod 5) and you get 9 ≡ 4 mod 5 — same answer.\nThat 3 is the \"modular inverse\" of 2 under mod 5.\npow(2, MOD-2, MOD) computes that same idea for mod 10⁹+7 —\nwhy exponent MOD−2 specifically works needs more number\ntheory than this quest covers, so we just use this line as a\nfixed recipe, like a formula you'd look up.", "정수로는 짝수였죠. 그런데 10⁹+7 로 줄인 값이라\n짝수가 아닐 수도 있어요 (1000000008 → 1).\n그래서 2 로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 8 이라고 해요.\n8 mod 5 = 3, 홀수죠. 그런데 8÷2 = 4 이고, 4 mod 5 = 4 예요.\n3 에 3 을 곱하면 (2×3 = 6 ≡ 1 mod 5 이니까) 9 ≡ 4 mod 5,\n똑같이 4 가 나와요. 이 3 이 mod 5 에서 2 의 '모듈러 역원'이에요.\npow(2, MOD-2, MOD) 가 mod 10⁹+7 에서 그 값을 구해줘요 —\n왜 하필 지수가 MOD−2 여야 그 값이 나오는지는 이 quest\n범위보다 더 깊은 정수론이 필요해서, 지금은 이 줄을\n찾아 쓰는 공식처럼 정해진 방법으로만 써요.") },
-    { hi: [31, 31], bubble: t(E, "% and * have the same precedence, so this line runs left to\nright: first % MOD, then * INV2, then % MOD again.", "% 와 * 는 힘이 같아서 이 줄은 왼쪽부터 차례로 계산돼요 —\n먼저 % MOD, 그다음 * INV2, 그다음 다시 % MOD.") },
+    { hi: [31, 31], bubble: t(E, "% and * have the same precedence, so this line runs left to\nright: first % MOD, then * INV2, then % MOD again.", "% 와 * 는 계산 차례가 같아서 이 줄은 왼쪽부터 차례로 계산돼요 —\n먼저 % MOD, 그다음 * INV2, 그다음 다시 % MOD.") },
     { hi: [33, 33], bubble: t(E, "Answer = ops + g, mod MOD: the parity-flip cost plus the formula's result, added together.", "답은 (ops + g) 를 MOD 로 나눈 나머지예요. 홀짝 변환 비용과 공식 결과를 더한 값이에요.") },
   ] };
 }
