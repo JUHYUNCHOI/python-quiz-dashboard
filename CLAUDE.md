@@ -297,6 +297,26 @@ node scripts/see-screen.mjs http://localhost:3000/quest/<id> --sim   # ⭐⭐ **
                                                             #   **이 목록에 없어서 안 돌렸다.** 그래서 넣는다.
                                                             #   ⛔ `--sim` 을 빼면 첫 화면만 본다 — 흩어짐은 안 본다.
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
+node scripts/see-screen.mjs "http://localhost:3000/quest/<id>?lang=ko" --mobile \
+     --click "다음 쪽 ▶" ...                                 # ⭐⭐ **모바일 390px · 한국어 · 쪽마다.**
+                                                            #   2026-09-28 `swaptowin` 재검증 학생(초6) **막힘**:
+                                                            #   *"자리4 설명에서 「1 3 1 4」랑 「→ s_3 = zzzd」 글자가
+                                                            #     화면에서 **겹쳐서 실제로 읽기 힘들었다**(겹침 95%).
+                                                            #     하필 이 문제에서 **제일 복잡한 자리**(스왑 2번 필요한
+                                                            #     곳)가 겹쳐 있어서 거기서 멈칫했다."*
+                                                            #   ⛔ **데스크탑·영어로는 0건이었다.** 실측 —
+                                                            #     1100px/영어 0건 · 390px/한국어 95%·48%·88% 세 건.
+                                                            #   `--mobile` 도 `--lang` 도 이 스크립트에 **원래 있었다.**
+                                                            #   목록에 «그렇게 돌려라» 가 없어서 안 돌렸을 뿐이다
+                                                            #   (`feedback_fix_all_at_once_not_one_by_one` 과 같은 모양).
+                                                            #   ⚠️ **기본 언어는 영어다** — `?lang=ko` 를 안 붙이면
+                                                            #     학생이 읽는 화면이 아니다. 한국어가 더 길어 더 접힌다.
+                                                            #   ⚠️ **첫 쪽만 보면 못 잡는다** — 위 결함은 3쪽에 있었다.
+                                                            #     쪽 수는 `see-flow.mjs` 로 세고 그만큼 `--click` 해라.
+                                                            #   ⚠️ 헛경보 한 종류가 남아 있다 — CodeWalk 코드 탭에서
+                                                            #     「코드 줄 ↔ ⏮ 처음부터」류 10건. 안쪽 스크롤 상자 위에
+                                                            #     `transform` 으로 고정한 바라 `inFixed()` 가 못 본다.
+                                                            #     학생 둘이 스크린샷으로 «눈에는 안 보인다» 확인했다.
 node scripts/check-sim-overlay-anchor.mjs <id> --click "Next →" … --steps 18
                                                             # 시뮬의 **떠 있는 요소**(유령 칸·말풍선)가 엉뚱한 데
                                                             #   붙었나 — 좌표로 잰다. ⚠️ **시뮬이 1쪽에 없으면
