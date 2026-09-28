@@ -7202,3 +7202,14 @@ PM 기준: **(1) 막힘 = 0 (타협 없음) AND (2) 새 결함 범위 ≤ 문단
 ⭐ 매 축마다 `--selftest` 로 **잣대가 살아 있는지 먼저** 확인했다(🚨 86px 먹힘).
 
 **즉 `b266a93f` 의 고침은 표본 10개가 아니라 전수에서 유효하다.**
+
+### 🏗️ 빌드 확인 (2026-09-28 밤) — **통과**
+
+`npm run build` **오류 0.** 공유 컴포넌트 둘(`CodeWalk`·`QuestNavBar`)과 quest 10여 개를
+건드렸는데 그동안 **개발 서버에서만** 봤다. 내일 밀기 전에 필요한 확인이라 미리 돌렸다.
+
+`npx tsc --noEmit` 은 **58건**이 뜨는데 **전부 내가 안 건드린 Supabase 계열**이다
+(`lib/mark-lesson-complete.ts` · `lib/practice-session-sync.ts` · `lib/supabase/*` 의
+`implicitly has an 'any' type`). 내가 바꾼 파일은 **한 건도 안 걸린다** — 실측으로 확인:
+`tsc 출력 | grep -E "CodeWalk|QuestNavBar|quest-problems|see-screen"` = 0줄.
+⚠️ 이건 **원래 있던 빚**이지 오늘 만든 게 아니다. 별건으로 남긴다.
