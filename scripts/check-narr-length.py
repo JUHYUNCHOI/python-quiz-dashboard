@@ -69,6 +69,16 @@ def judge(en, ko):
     ko_len = max(len(x) for x in ko.split("\n"))
     if ko_len > KO_MAX:
         fix.append(f"한국어 {ko_len}자 (기준 {KO_MAX}자) — {ko.splitlines()[0][:50]}")
+    else:
+        # ⭐ 2026-09-28: 이 검사기는 **줄마다** 재는데 `see-screen.mjs` 는 **화면에 뜬 글 전체**를
+        #    잰다. `swaptowin` 3쪽이 그 틈으로 샜다 — 줄마다는 40자·38자라 여기서 통과했고,
+        #    화면에선 57자 두 문장이라 see-screen 이 잡았다. **두 도구가 다른 답을 냈다.**
+        #    ⚠️ 판정으로 올리면 **144건**이 한꺼번에 뜬다(실측, narr 1465개 중).
+        #    일괄 작업은 `/decide` 를 거쳐야 하므로 지금은 **표시만** 한다.
+        total = len(ko.replace("\n", " "))
+        if total > KO_MAX:
+            note.append(f"한국어 줄마다는 {ko_len}자지만 **합치면 {total}자** "
+                        f"(화면엔 이어져 보인다) — {ko.replace(chr(10), ' ')[:50]}")
     en_s, en_len = sentences(en), len(en)
     if en_s >= 2 and en_len > EN_MAX:
         fix.append(f"영어 {en_len}자 · {en_s}문장 — 문단이다 — {en[:60]}")
