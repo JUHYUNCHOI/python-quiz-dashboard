@@ -73,7 +73,11 @@ def main():
                 continue
             if not BOAST.search(t):
                 continue
-            named = [w for w in WATCH if re.search(r"\b" + w + r"\b", t)]
+            # ⚠️ 2026-09-28: `\b` 만으로는 **합성어 속 글자**를 함수로 읽는다.
+            #    실측 유일한 신고가 `interview` 의 **「min-heap」·「max-heap」** 이었다 —
+            #    `min()`·`max()` 함수를 자랑한 게 아니라 **자료구조 이름**이다.
+            #    이름 뒤에 `-` 나 글자가 붙으면 그건 다른 낱말이다.
+            named = [w for w in WATCH if re.search(r"\b" + w + r"\b(?![-\w])", t)]
             if len(named) >= 2:          # 나열해서 자랑하는 자리만
                 claims.append((t, named))
         if not claims:
