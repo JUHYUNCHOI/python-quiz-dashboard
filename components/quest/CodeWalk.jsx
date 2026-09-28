@@ -374,8 +374,28 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
           );
         })}
         {/* 뒤 여백 — 위 boxH 주석 참고. 마지막 몇 걸음의 말풍선이 창 아래쪽 끝에
-            눌려 고정 바에 가리는 걸 막는다. 화면엔 안 보이고 스크롤 한도만 늘린다. */}
-        <div style={{ height: boxH }} aria-hidden="true" />
+            눌려 고정 바에 가리는 걸 막는다. 스크롤 한도만 늘리는 자리다.
+
+            ⚠️ 2026-09-28 `ux-reviewer`: 주석에 「화면엔 안 보인다」고 적어 뒀는데 **틀렸다.**
+               *"학생이 코드 상자를 손으로 끝까지 밀면, 아무 글자도 힌트도 없는 큰 여백만 나와서
+                 **「여기서 끝났나, 고장났나」 싶은 인상**을 줄 수 있다(400px 넘는 빈 사각형에
+                 아무 표시가 없다)."*
+               기본 자동 스크롤은 말풍선을 창 위쪽에 두니 **일부러 더 내릴 때만** 보인다.
+               그래도 빈 화면은 「끝」이 아니라 「고장」으로 읽힌다 — 끝이라고 말해 준다. */}
+        <div style={{ height: boxH }}>
+          <div style={{
+            /* 빈 칸 «맨 위»에만 두면 더 내렸을 때 다시 빈 화면이 된다.
+               이 상자는 자기 `overflow` 를 가진 스크롤 조상이라 여기선 sticky 가 산다
+               (`reference_css_sticky_degrades_here` 가 말하는 건 quest **본문** 쪽이다).
+               ⚠️ 그래도 믿지 말고 화면으로 확인했다 — 아래 커밋 메시지에 실측값. */
+            position: "sticky", top: 10,
+            paddingTop: 14, textAlign: "center", fontSize: 11.5, fontWeight: 700,
+            color: "#64748b", letterSpacing: 0.2, wordBreak: "keep-all",
+          }}>
+            {t(E, "— end of code · press ▶ for the next step —",
+                  "— 코드 끝 · 다음 설명은 ▶ 를 눌러요 —")}
+          </div>
+        </div>
       </div>
 
       {/* 복사 줄 + SimNav 줄을 한 덩어리로 — 위 주석 참고.

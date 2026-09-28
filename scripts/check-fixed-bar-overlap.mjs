@@ -192,7 +192,13 @@ for (const target of targets) {
       }
       if (!clicked) {
         // 대체 매칭 — 이 저장소가 실제로 쓰는 코드 탭 라벨들
-        const CODE_TAB = /^(⚡|💻)\s*(코드|Code)\b/;
+        /* ⚠️ 2026-09-28: 여기 `\b` 가 붙어 있었는데 **한국어에서는 절대 안 맞는다.**
+           JS 의 `\b` 는 `\w`(ASCII 낱말 글자) 경계다. `드` 는 `\w` 가 아니라
+           `/코드\b/` 는 **어떤 문자열과도 매칭되지 않는다**(실측: `"⚡ 코드"` → false,
+           `"⚡ Code"` → true). 즉 이 대비책은 **영어 화면에서만** 돌고 있었다.
+           기본 언어가 영어라 여태 안 걸렸다 — `feedback_check_as_the_student_sees_it`.
+           영어 쪽만 낱말 경계를 요구하고 한국어는 그대로 끝나게 갈라 쓴다. */
+        const CODE_TAB = /^(⚡|💻)\s*(코드|Code\b)/;
         const btns = await page.$$("button, a");
         for (const b of btns) {
           const txt = ((await b.innerText().catch(() => "")) || "").trim();
