@@ -119,6 +119,32 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
     box.scrollLeft = 0;
   }, [safeIdx, lo]);
 
+  /* ⚠️ 2026-09-28: **말풍선이 하단 고정 바(`.quest-navbar`)에 가려 안 보이는** 버그.
+     학생 셋이 각각 보고(strangefn·makedistinct) — 재검증 학생: "7/8, 8/8 걸음의
+     말풍선이 화면 아래 고정 바에 가려서 거의 안 보인다 ... 코드가 길어서 말풍선이
+     박스 아래쪽 끝에 놓이는 걸음에서만 이 문제가 생긴다."
+     실측(strangefn 8/8, playwright 좌표): `box.scrollTop` 이 **445 로 캡**돼 있었다
+     (scrollHeight 1005 − clientHeight 560 = 445, 정확히 최댓값). 위 useEffect 가
+     원하는 목표(`bub.offsetTop − margin` ≈ 831)는 이 캡보다 훨씬 커서, 브라우저가
+     스크롤을 831 이 아니라 445 까지만 허용 — 말풍선이 창 **맨 위**가 아니라
+     **맨 아래**(box top + 798px, box 는 334~894px)에 놓였다. 마침 그 자리가
+     고정 바(832~900px)와 겹쳐 가려졌다. 다른 걸음(1,3,4,6/8)은 뒤에 코드 줄이
+     충분히 남아 있어 스크롤이 안 캡되고, 말풍선이 항상 창 위쪽 3줄 여유 자리에 뜬다
+     — **마지막 몇 걸음만, 뒤에 남은 코드가 적을 때만** 캡에 걸린다.
+     고침: 코드 줄 뒤에 **창 높이만큼 빈 여백**을 붙여 `scrollHeight` 를 넉넉히
+     키운다 — 그러면 마지막 걸음이어도 `scrollTop` 이 캡되지 않고, 다른 걸음과
+     똑같이 말풍선이 창 위쪽에 뜬다(고정 바와 겹칠 일이 없는 자리). */
+  const [boxH, setBoxH] = useState(560); // 못 재면 이 컴포넌트의 기본 높이(min(64vh,560px)) 상한
+  useEffect(() => {
+    const box = boxRef.current;
+    if (!box || typeof ResizeObserver === "undefined") return;
+    const measure = () => setBoxH(box.clientHeight || 560);
+    measure();
+    const ro = new ResizeObserver(measure);   // resize:vertical 로 늘려도 같이 따라감
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, []);
+
   /* ⚠️ 2026-09-27: 「복사 전체 코드」 + SimNav ◀▶ 를 고정 하단바(`QuestBottomNav`,
      `.quest-navbar`, z-index 100)가 특정 스크롤 구간에서 **가려서 클릭을 뺏는다**
      (`scripts/check-fixed-bar-overlap.mjs` 로 실측 — moohunt 190px·checkups 250px 에서
@@ -347,6 +373,9 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
             </Fragment>
           );
         })}
+        {/* 뒤 여백 — 위 boxH 주석 참고. 마지막 몇 걸음의 말풍선이 창 아래쪽 끝에
+            눌려 고정 바에 가리는 걸 막는다. 화면엔 안 보이고 스크롤 한도만 늘린다. */}
+        <div style={{ height: boxH }} aria-hidden="true" />
       </div>
 
       {/* 복사 줄 + SimNav 줄을 한 덩어리로 — 위 주석 참고.
