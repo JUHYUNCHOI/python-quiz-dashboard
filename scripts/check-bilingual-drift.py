@@ -250,8 +250,15 @@ for f in sorted(glob.glob("quest-problems/*/*.jsx")):
         if ne != nk and not ko_uses_word_numerals:
             only_en = [x for x in ne if x not in nk]
             only_ko = [x for x in nk if x not in ne]
-            if only_en or only_ko:
-                why_real.append(f"숫자 EN에만{only_en or '없음'} KO에만{only_ko or '없음'}")
+            # ⚠️ 2026-09-28: **한국어에만 숫자가 더 있는 건 누락이 아니다** — 반대다.
+            #    실측 헛경보 넷 — `rounding` 은 영어 "tens" 를 한국어가 **「10의자리」** 로
+            #    풀어 썼고, `yearcow` 는 12년 주기를 한국어가 **「(0~11)」** 까지 밝혔다.
+            #    한국어가 **더 구체적으로** 말한 자리를 「빠졌다」로 신고하고 있었다.
+            #    → 영어에만 있는 숫자가 하나도 없으면 넘어간다.
+            if only_en:
+                why_real.append(f"숫자 EN에만{only_en} KO에만{only_ko or '없음'}")
+            elif only_ko:
+                why_watch.append(f"숫자 KO에만{only_ko} (한국어가 더 밝혔다 — 누락은 아니다)")
 
         if is_narr:
             # ④ narr 전용 — 영어가 한국어보다 문장이 많다. REAL 이 아니라 WATCH.
@@ -260,8 +267,18 @@ for f in sorted(glob.glob("quest-problems/*/*.jsx")):
                 why_watch.append(f"narr 문장 수 EN {se} vs KO {sk} (영어가 더 말한다 — 아래 카드로 옮겨갔을 수 있다)")
         else:
             # ③ 한국어에서 문장이 줄어든 경우만 (narr 는 ④ 가 대신한다 — 중복 방지).
-            if se >= 3 and sk <= se - 2:
-                why_real.append(f"문장 수 EN {se} vs KO {sk} (한국어에서 줄었다)")
+            #    ⚠️ 2026-09-28: **문장 수만으로는 헛경보가 압도적이다.** 27건을 손으로 읽어
+            #    보니 태반이 **한국어가 절을 쉼표로 합친 것**이었다 —
+            #      EN "Perimeter = 8. Distance one way = 3. Shorter route?"  (3문장)
+            #      KO "둘레가 8 이고 한쪽 길이가 3 이면 더 짧은 길은 얼마일까요?" (1문장)
+            #    내용은 하나도 안 빠졌다. 게다가 이 저장소는 **한국어가 짧은 쪽을 요구한다**
+            #    (`feedback_narration_short` · `feedback_korean_linebreak` 의 60자 규칙).
+            #    → 문장 수 **와 함께 길이까지** 줄었을 때만 「내용이 빠졌다」로 본다.
+            #      기준은 ① 과 같은 0.35 를 쓴다(한국어는 같은 뜻이어도 영어의 40~50% 다).
+            if se >= 3 and sk <= se - 2 and len(ko) < len(en) * 0.35:
+                why_real.append(f"문장 수 EN {se} vs KO {sk} · 길이도 EN {len(en)} vs KO {len(ko)} (내용이 빠졌다)")
+            elif se >= 3 and sk <= se - 2:
+                why_watch.append(f"문장 수 EN {se} vs KO {sk} (길이는 비슷 — 한국어가 절을 합친 것일 수 있다)")
 
         if why_real:
             real_hits.append((quest, f, line, " · ".join(why_real), en[:64], ko[:44]))

@@ -69,7 +69,7 @@ export function makeCowPhotosCh1(E) {
             <div style={{ display: "flex", gap: 8, marginTop: 10, paddingTop: 8, borderTop: "1px dashed #fdba74", fontSize: 13 }}>
               <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
               <div>
-                {t(E, "Print the ", "")}
+                {t(E, "Print the ", "사진에 설 수 있는 ")}
                 <b style={{ color: "#15803d" }}>{t(E, "maximum number of cows K", "최대 소 수 K")}</b>
                 {t(E, " that can stand in the photo.", "를 출력해요.")}
               </div>

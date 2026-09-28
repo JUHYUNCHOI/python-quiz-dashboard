@@ -459,7 +459,7 @@ export function makePatternSteps(E) {
 
           <div style={{ padding: "12px 14px", background: "#fef3c7", border: `2px solid #fcd34d`, borderRadius: 10, fontSize: 13, color: "#a16207", fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
             💡 {t(E, "The middle digit has to be ≥ 4 — that's the only way the carry climbs all the way up to the first digit.",
-                  "중간 자리가 ≥4 여야 carry 가 첫째까지 계속 올라가요.")}
+                  "중간 자리가 ≥4 여야만 carry 가 첫째까지 올라가요.\n4 보다 작으면 거기서 멈춰서 첫째 자리는 안 바뀌어요.")}
           </div>
         </div>
       ),
