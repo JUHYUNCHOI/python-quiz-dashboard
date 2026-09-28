@@ -39,9 +39,28 @@ def args_of(s, i):
         j += 1
     return parts if len(parts) == 2 else None
 
+BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.S)
+
+
+def blank_block_comments(src):
+    """`/* … */` 를 **같은 길이의 공백**으로 바꾼다 — 줄 번호가 안 밀리게.
+
+    ⚠️ 2026-09-28: 이걸 안 해서 **4건이 전부 헛경보**였다.
+       `t(E,` 바로 뒤에 설명 주석을 다는 게 이 저장소의 손버릇이다 —
+           narr: t(E,
+             /* 2026-09-17: 원래 여기 다섯 줄이 문제 설명 전부를 미리 말했다. */
+             "Deal the cards so player 1 beats player 2 …",
+       인자 파서가 그 주석을 **영어 자리의 값**으로 읽어서
+       「영어 자리에 알파벳이 없다」고 신고했다. 실제 영어는 멀쩡하다.
+    ⚠️ `//` 줄 주석은 **일부러 안 지운다** — 문자열 안의 `http://` 를 잘라
+       멀쩡한 값을 망가뜨릴 수 있다. 여기서 난 4건은 전부 블록 주석이었다.
+    """
+    return BLOCK_COMMENT.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), src)
+
+
 bad = []
 for f in sorted(glob.glob("quest-problems/*/*.jsx")):
-    s = io.open(f, encoding="utf-8").read()
+    s = blank_block_comments(io.open(f, encoding="utf-8").read())
     for m in re.finditer(r"\bt\(\s*E\s*,", s):
         a = args_of(s, m.end())
         if not a: continue
