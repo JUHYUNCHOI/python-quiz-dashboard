@@ -120,6 +120,26 @@ const LESSON_TAUGHT_CONCEPTS: Record<string, string[]> = {
   // (try-floors-cell·try-3d-comprehension-fix 에서 학생이 직접 빈칸을 채운다),
   // Ch4 가 삼중 for 순회를 가르친다 → 3d-plus-indexing 하나로 묶는다.
   "54": ["3d-plus-indexing"],
+
+  /* ⭐ 2026-09-29 — `pedagogy-reviewer` 가 「남은 일 정비」에서 찾았다.
+     **Algorithm Lab 을 다 끝내도 아무 개념도 「익힘」으로 안 잡히고 있었다.**
+     `app/algo/<토픽>/learn` **15곳**이 완주 시 `completedLessons` 에 `"algo-graph"` 같은
+     키를 적는데, 이 표에 `algo-*` 키가 **하나도 없어서** 그 기록이 아무 데도 안 닿았다.
+     → 4단계(알고리즘) → 3단계(도전) 로 돌아오는 다리가 **통째로 끊겨 있었다.**
+     ⚠️ 잘못된 추천(false positive)이 아니라 **맞는 신호가 안 뜨는**(false negative) 쪽이라
+        사고는 아니었다 — 그래서 아무도 못 봤다.
+
+     ⛔ 위 주석의 규칙("학생이 직접 써 본 적 없는 문법은 넣지 마라")을 지켰다.
+        넣기 전에 각 learn 페이지를 열어 **학생이 직접 하는 자리**가 있는지 셌다:
+          algo/graph      — 격자 BFS 를 가르치고(격자·[r][c]·dr/dc 7곳) 직접 하는 자리 3곳 ✅
+          algo/unionfind  — 「연결 요소」를 12곳에서 가르치고 직접 하는 자리 8곳 ✅
+          레슨 41(클래스)  — ch2·3·4 에 mission/tryit 이 29곳, 학생이 class 를 직접 친다 ✅
+        ❌ **`algo-string` → `chr-ord-conversion` 은 안 넣었다.** `ord(c) - ord('a')` 가
+           코드로 보이기는 하는데 **퀴즈가 그걸 묻지 않는다**(실측 0건) — 보여준 것과
+           직접 써 본 것은 다르다. 이 표가 만들어진 계기가 바로 그 사고다. */
+  "algo-graph": ["bfs-grid"],
+  "algo-unionfind": ["graph-component"],
+  "41": ["class-oop"],
 };
 
 export function masteredConcepts(
