@@ -2091,7 +2091,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   lifeguards:    { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
   livestock:     { ...DEFAULT_META, difficulty: 2, type: "simulation",        supported_languages: ["py"],
                    concepts_required: ["loop", "list-basics"], concepts_taught: ["permutation-enum"] },
-  magicorbs:     { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"] },
+  magicorbs:     { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], concepts_required: ["sort-basics", "list-basics", "math-basics"] },  // 2026-09-29 MCC 감사
   milkorder:     { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
   photoshoot2:   { ...DEFAULT_META, difficulty: 3, type: "simulation",        supported_languages: ["py", "cpp"],
                    concepts_required: ["loop", "list-basics", "dict-basics"] },
@@ -2198,6 +2198,71 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
      ⛔ 빈 배열로 두면 `isReady()` 가 `reqs.length === 0` 에서 false 라 **배지가 안 뜬다** —
      안 쓰는 개념을 걸어 두는 것과 결과가 같아진다. 그래서 비우지 않고 채운다. */
   mcc21simplemath: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "math-basics", "list-basics"] },
+  /* ════ MCC `concepts_required` 감사 — 2026-09-29 ══════════════════════
+     선생님(2026-09-29): *"아니야. 난 브론즈와 mcc에 우선 집중할거야"* →
+     MCC 48개 중 **40개가 미감사**였다. `quest-auditor` 3명이 🔒 파이썬 코드를 직접 읽었다
+     (MCC 는 C++ 을 안 본다 — `feedback_mcc_is_python_only`).
+
+     ⚠️ **감사자끼리 갈렸고, 그 차이가 화면 동작을 바꿨다.**
+       `loop`·`list-basics` 같은 기초는 `concept-graph.ts:91` 의 `ALWAYS_MASTERED` 라
+       누구나 이미 안다. 그래서 —
+         빈 배열     → `app/quest/page.tsx:296` 이 걸러서 **「준비됨」이 영원히 안 뜬다**
+         기초로 채움 → 조건이 항상 참이라 **누구에게나 뜬다**
+       PM 판정: **채운다.** 근거는 취향이 아니라 **선례**다 — `mcc21simplemath`(MCC 자신)을
+       비롯해 최소 14곳이 이미 「기초만 필요하면 기초를 적는다」로 돌고 있다.
+       빈 배열은 「확신 없음·판단 유보」라는 뜻이라, 감사를 해 놓고 `[]` 를 두면 **거짓 신호**다.
+
+     ⛔ **핵심 트릭은 안 넣었다** — 그 quest 가 새로 가르치는 것은 `concepts_taught` 몫이다
+       (suffix-max · two-pointer · directional-pass · event-sweep · cycle-detection · 이진 배가).
+     ⛔ **온톨로지에 없는 이름은 지어내지 않았다.**
+     ⛔ `mcc20knight` 는 **뺐다** — 아래 「보류」 메모가 콘텐츠 검토 미완을 뜻하므로
+       데이터만 채워 그 플래그를 조용히 덮지 않는다.
+     ⛔ `rectangles` 는 `[]` 로 뒀다 — 기초만 필요한 게 아니라 **구간분할 DP 가 진짜 필요한데
+       온톨로지에 범용 DP 개념이 없다.** 이름을 여기서 지어내지 않는다(WORK.md 에 별건으로).
+     ⛔ `mcc22birthday` 의 `bit-ops` 는 뺐다 — `flip_h ^= 1` 은 **불리언 토글**이지 비트 기법이 아니다.
+     ⛔ `tichu` 는 진짜 two-pointer 인데 **`two-pointer` 를 안 넣었다** — 온톨로지에 이름은
+       있지만 `concepts_required` 로 쓴 전례가 **0건**이고 가르치는 레슨도 없다.
+       걸면 **아무도 만족 못 해 영원히 「준비 안 됨」**이 된다. 기초만 넣었다.
+       (PM 은 *"실사용 선례도 있다"* 고 했는데 실측 **0건**이었다.)
+     ⚠️ `check-required-vs-code.py` 는 TAG 사전이 8개뿐이라 **이 층을 원리상 못 본다.**
+       이번 검증은 **사람 셋이 코드를 읽은 것**이 전부다. */
+  fences: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "math-basics"] },
+  fans: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "math-basics"] },
+  cornercover: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["tuple-basics", "math-basics"] },
+  gifts: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["sort-basics", "tuple-basics", "list-basics"] },
+  simplegame: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["sort-basics", "tuple-basics", "math-basics"] },
+  collatz: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "math-basics"] },
+  mcc19rect: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "math-basics"] },
+  tricks: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["frequency-count"] },
+  explodingarrow: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["binary-search"] },
+  mobilegame: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["heapq"] },
+  innovation: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["heapq"] },
+  tichu: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "sort-basics", "set-basics", "math-basics"] },
+  mcc19bakery: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "sort-basics", "deque"] },
+  mcc19candy: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "string-basics"] },
+  mcc19ditcoin: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "math-basics"] },
+  mcc19elim: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "string-basics"] },
+  mcc19palindrome: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "string-basics", "function-basics", "math-basics"] },
+  mcc19rect2: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["math-basics"] },
+  mcc15rect: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["math-basics"] },
+  mcc15equation: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["function-basics", "string-basics", "math-basics"] },
+  mcc15bahasaf: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "string-basics"] },
+  mcc15isthmus: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "math-basics"] },
+  mcc15choco: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "stack"] },
+  mcc22grammar: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "string-basics", "dict-basics", "set-basics"] },
+  mcc22aliens: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "string-basics", "function-basics"] },
+  mcc22birthday: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "string-basics", "tuple-basics", "dict-basics", "math-basics"] },
+  mcc22cardshark: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "sort-basics", "math-basics"] },
+  mcc22lamp: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "function-basics", "dict-basics", "sort-basics", "math-basics"] },
+  mcc21carrots: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "math-basics"] },
+  mcc21dvd: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "function-basics", "math-basics"] },
+  mcc21marbles: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "math-basics"] },
+  mcc21glass: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["sort-basics", "prefix-sum", "list-basics", "math-basics"] },
+  mcc21menu: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "sort-basics", "math-basics"] },
+  mcc20cipher: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "string-basics", "dict-basics"] },
+  mcc20kitty: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "dict-basics", "tuple-basics", "math-basics"] },
+  mcc20missing: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "set-basics", "math-basics"] },
+  mcc20zigzag: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "string-basics", "2d-list-build", "math-basics"] },
   /* ════ 난이도 감사 — 2026-09-25 ════════════════════════════════════
      선생님(2026-09-13): *"이 문제가 진짜 레벨3인가?"*
      여기까지 이 quest 들은 `difficulty` 가 **없어서** `quest-difficulty.ts` 의

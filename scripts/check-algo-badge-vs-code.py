@@ -30,11 +30,24 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 코드에 **반드시 흔적이 남는** 토픽만. 흔적이 안 남는 토픽은 일부러 뺐다.
 SIGNS = {
-    "hashtable":       [r"\bdict\b", r"\bset\(", r"\{\s*\}", r"\bmap<", r"unordered_map", r"defaultdict", r"Counter"],
-    "dp":              [r"\bdp\s*[\[=]", r"\bmemo\b", r"lru_cache", r"\bdp\w*\s*=\s*\[" ],
+    # ⚠️ 2026-09-29: 처음 만든 정규식이 **너무 좁아서 헛경보가 절반이었다.**
+    #    손으로 여덟을 다 열어 보니 대부분 「그 토픽이 맞는데 내가 찾던 낱말만 안 쓴」 것이었다.
+    #    ⭐ 잣대를 **낱말이 아니라 모양**으로 넓힌다.
+    "hashtable":       [r"\bdict\b", r"\bset\(", r"\bmap<", r"unordered_map", r"defaultdict",
+                        r"Counter", r"=\s*\{",        # ← `adj = {…}` 딕셔너리 리터럴 (mcc22grammar)
+                        r"\{[^}]*:[^}]*\}", r"\.get\("],
+    "dp":              [r"\bdp\s*[\[=]", r"\bmemo\b", r"lru_cache",
+                        r"=\s*\[\s*\[",              # ← 2차원 표를 만들면 이름이 dp 가 아니어도 DP다
+                        r"\[\s*0\s*\]\s*\*",       # ← `[0] * (K+1)` 표 초기화 (mcc20zigzag 의 up/dn)
+                        r"\brank\s*=\s*\{", r"\bMOD\b"],
     "sorting":         [r"\.sort\(", r"\bsorted\(", r"sort\(.*begin", r"std::sort"],
     "binarysearch":    [r"\bbisect", r"lower_bound", r"upper_bound", r"while\s+lo\s*<", r"while\s+left\s*<"],
-    "prefixsum":       [r"\bprefix", r"\bpre\w*sum", r"\bcum\w*", r"accumulate"],
+    # ⭐ **누적 합의 짝은 「차분 배열」이다** — 같은 토픽인데 코드 모양이 정반대다.
+    #    실측 오탐 넷(aircond1·bacteria·bucketlist·mcc21marbles)이 전부 이 모양이었다:
+    #      `d = [p[i]-c[i] …]` · `diff(diff(a))` · `events.append((e+1, -b))` · `carry += A[i]-B[i]`
+    "prefixsum":       [r"\bprefix", r"\bpre\w*sum", r"\bcum\w*", r"accumulate",
+                        r"\bdiff\b", r"\bcarry\b", r"\[i\s*-\s*1\]", r",\s*-\w+\)",
+                        r"\brunning\b", r"\btotal\s*\+="],
     "unionfind":       [r"\bfind\s*\(", r"\bunion\b", r"\bparent\s*\[", r"\bdsu\b"],
     "graph":           [r"\badj\b", r"\bdeque\b", r"popleft", r"\bqueue\b", r"\bdfs\b", r"\bbfs\b", r"visited"],
     "topologicalsort": [r"indegree", r"in_degree", r"\btopo", r"popleft"],
