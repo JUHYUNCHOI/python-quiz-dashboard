@@ -323,3 +323,22 @@ node scripts/see-flow.mjs <그 화면 주소>
 > 학생 넷이 다녀왔는데 **아무도 «길다» 고 말하지 않았다.**
 > 너희 정의엔 *"길면 건너뛰어라"* 가 2026-09-08부터 있었는데, 그건
 > **«느꼈으면 적어라»** 라서 안 걸렸다. 숫자는 느낌이 아니다. 그래서 그냥 적게 한다.
+
+## ⛔⛔ `git stash` 를 돌리지 마라 — `git stash pop` · `git stash apply` 도
+
+**2026-09-29 사고.** 검토 에이전트 하나가 화면을 깨끗한 상태로 보려고
+`git stash && … ; git stash pop` 을 돌렸다. `git stash` 는 걸쇠에 막혔는데
+**뒤이은 `git stash pop` 은 안 막혀서 「다른 세션의 옛 stash」가 풀렸고**,
+**quest 290개에 충돌 표시가 박혀 사이트가 통째로 안 떴다.**
+(HEAD 는 무사해서 `git checkout HEAD -- quest-problems/` 로 복구했다.)
+
+- `git stash` 는 **경로를 안 가린다.** 지금 이 저장소에서는 **여러 명이 동시에** 일한다 —
+  네가 치우는 건 네 파일이 아니라 **남의 미커밋 작업**이다.
+- `git stash pop`/`apply` 는 **네가 만들지 않은 stash** 를 현재 HEAD 에 덮어씌운다.
+  stash 목록에 무엇이 들어 있는지 너는 모른다.
+- **커밋 전 화면을 보고 싶으면 `--allow-dirty` 를 써라.** 그게 그 문이다:
+  `node scripts/see-screen.mjs "<url>" --allow-dirty …`
+- 되돌릴 일이 있으면 **파일을 콕 집어라** — `git restore <파일>` · `git checkout -- <파일>`.
+
+⛔ 저장소 상태를 바꾸는 명령(`reset` · `checkout <branch>` · `merge` · `rebase` · `clean`)도
+   마찬가지다. **너는 읽고 재는 사람이다.** 고치는 건 메인 세션이 한다.

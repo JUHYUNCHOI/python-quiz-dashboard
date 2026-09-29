@@ -93,6 +93,7 @@ function gateOnUncommittedQuest(rawUrl, bypass) {
   lines.forEach((l) => console.error(`    ${l}`))
   console.error(`\n   git status --porcelain -- ${dir}`)
   console.error('   커밋을 마치고 다시 돌리거나, 방금 고친 걸 미리 보려면 --allow-dirty 를 붙여라.')
+  console.error('   ⛔⛔ **깨끗한 트리를 만들려고 `git stash` 를 돌리지 마라 — `git stash pop` 도.**\n      2026-09-29 에 검토 에이전트 하나가 정확히 그걸 했다. `git stash` 는 걸쇠에 막혔는데\n      뒤이은 `git stash pop` 은 안 막혀서 **다른 세션의 옛 stash** 가 풀렸고\n      **quest 290개에 충돌 표시가 박혀 사이트가 통째로 안 떴다.**\n      stash 는 경로를 안 가린다 — 지금 같이 일하는 사람들 것까지 건드린다.\n      **네가 쓸 문은 `--allow-dirty` 하나다.**')
   console.error('   (cowsignal·strangefn 사고 — 편집 중 화면을 검토자가 그대로 본 것. 2026-09-23)\n')
   process.exit(3)
 }

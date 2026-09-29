@@ -28,6 +28,18 @@ while read -r old new ref; do
   # push 와 pop/drop 을 가른다.
   #   push  = 방금 만든 stash 커밋. 그 **첫 부모가 지금 HEAD** 다.
   #   pop/drop = 이미 있던 stash 를 가리키게 바꾸는 것(또는 지우는 것) — 통과시킨다.
+  # ⛔⛔ **2026-09-29: 「pop 은 통과시킨다」가 뚫렸다.** 검토 에이전트가
+  #    `git stash && … ; git stash pop` 을 돌렸다. 앞의 stash 는 여기서 막혔는데
+  #    **뒤의 pop 은 그대로 실행되어 「다른 세션의 옛 stash」가 HEAD 에 적용**됐고,
+  #    **quest 290개에 충돌 표시가 박혀 사이트가 통째로 안 떴다.**
+  #    (HEAD 는 무사했다 — `git checkout HEAD -- quest-problems/` 로 복구.)
+  # ⚠️ **이 훅으로는 그걸 못 막는다.** 충돌난 pop 은 `refs/stash` 를 **안 건드린다** —
+  #    적용은 이미 끝난 뒤라 ref 훅이 보는 시점이 늦다. `stash apply` 는 아예 ref 를 안 쓴다.
+  #    그래서 막는 자리를 **명령 앞**으로 옮겼다:
+  #      ① `.claude/agents/*.md` 12개에 「stash·pop·apply 금지」를 박았다
+  #      ② `see-screen.mjs`·`see-flow.mjs` 의 「커밋 전이라 막는다」 메시지에
+  #         **「stash 하지 마라, --allow-dirty 를 써라」**를 넣었다 —
+  #         에이전트가 stash 를 떠올린 **바로 그 자리**가 거기였다.
   # ⚠️ 첫 판에는 「refs/stash 가 새로 생길 때만」으로 짰는데, **stash 가 이미 셋
   #    있는 상태**라 그 조건이 거짓이 되어 정작 지금 상황을 안 막았다. 그래서 부모로 본다.
   case "$new" in *[!0]*) ;; *) continue ;; esac      # 지우는 것(new=0)은 통과
