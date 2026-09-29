@@ -255,16 +255,6 @@ export function PlaceOneByOneSim({ E }) {
           <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
             {t(E, "Moves so far: ", "지금까지 민 횟수: ")}
             <span style={{ fontSize: 18, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{s.ops}</span>
-            {/* ⚠️ ux-reviewer(2026-09-29): 식이 **따로 한 줄**로 있어서
-                「민 횟수 3」 바로 밑에 「= 2」가 떴다. 뜻이 다른 두 숫자가 나란히 서서
-                *"눈이 한 번 더 멈춘다"* (`feedback_same_number_two_meanings`).
-              ⛔ 식을 지우지는 않는다 — 3쪽이 *"K 가 1 이 아니면 곧 봐요"* 라고 약속했고
-                학생이 멈춰 선 유일한 자리다(PM 판정). **줄을 합치고 무엇의 수인지 붙인다.** */}
-            {s.formula && (
-              <span style={{ fontSize: 12.5, fontWeight: 700, color: "#92400e", marginLeft: 8 }}>
-                {t(E, `(the third one alone: ${s.formula})`, `(셋째 것만: ${s.formula} 회)`)}
-              </span>
-            )}
           </div>
         )}
       </StepFade>
@@ -511,6 +501,19 @@ export function WhoCanMeetSim({ E }) {
           <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
             {t(E, "Moves so far: ", "지금까지 민 횟수: ")}
             <span style={{ fontSize: 18, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{s.ops}</span>
+            {/* ⚠️ 2026-09-29 — **이 블록이 엉뚱한 시뮬(3쪽 `PlaceOneByOneSim`)에 들어가 있었다.**
+                `formula:` 데이터는 이 시뮬(5쪽)에만 있는데 렌더는 저쪽에 넣어서,
+                **3쪽엔 절대 안 뜨는 죽은 코드 · 5쪽엔 아무도 안 읽는 데이터**가 됐다.
+                `ux-reviewer` 가 토론 라운드에서 잡았다.
+              ⛔ 오늘 세 번째다(`feedback_new_text_must_actually_render`) —
+                빌드가 통과한 것은 「떴다」가 아니다. **화면에서 그 글자를 눈으로 찾아라.**
+              원래 의도: 「민 횟수 3」 바로 밑에 식의 「2」가 따로 떠서 뜻이 다른 두 숫자가
+                나란히 섰다(`feedback_same_number_two_meanings`). **줄을 합치고 무엇의 수인지 붙인다.** */}
+            {s.formula && (
+              <span style={{ fontSize: 12.5, fontWeight: 700, color: "#92400e", marginLeft: 8 }}>
+                {t(E, `(the third one alone: ${s.formula})`, `(셋째 것만: ${s.formula} 회)`)}
+              </span>
+            )}
           </div>
         )}
       </StepFade>
