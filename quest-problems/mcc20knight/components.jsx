@@ -305,38 +305,49 @@ const CPP_QUERY = FULL_CPP.slice(35, 52);
 
 const KN_R = 5;   // 5×5 오프셋 격자 — 「칸이 없어요」가 나오도록 일부러 작게
 
+/* 숫자 뒤 조사 — **한국어로 읽었을 때** 받침이 있나로 고른다.
+   1(일)·3(삼)·6(육)·7(칠)·8(팔)·0(영) 은 받침이 있고, 2(이)·4(사)·5(오)·9(구) 는 없다.
+   ⚠️ `hasJong` 은 한글 음절용이라 숫자에는 못 쓴다 — 그래서 따로 둔다.
+   («4 이 채워져요» 가 나와서 고쳤다.) */
+const NUM_JONG = { 0: true, 1: true, 2: false, 3: true, 4: false, 5: false, 6: true, 7: true, 8: true, 9: false };
+const numJosa = (n, withJong, without) => `${n}${NUM_JONG[n % 10] ? withJong : without}`;
+
 function buildKnightBfsTrace(E) {
+  /* ⚠️ 2026-09-29 — **첫 판을 학생이 무너뜨렸다.** 고친 것 넷, 전부 학생 말이 근거다.
+
+     ① *"11번째에 「한 칸씩 **꺼내면서**」라는데, 1~10걸음 어디에도 뭔가를 **꺼내는
+        동작이 없었다**(그냥 격자에 숫자만 채워졌다). 그래서 「꺼낸다」가 뭘 말하는지 몰랐다."*
+        → **줄(큐)을 화면에 그린다.** 형제 `citytour` 가 칩으로 그리는 것과 같은 모양.
+          꺼내는 걸 **보여준 뒤에** 그 이름을 붙인다.
+     ② *"9→10번째에서 갑자기 나머지 22칸이 전부 한꺼번에 나타났다. 제목이 「한 칸씩
+        채워지는 걸 봐요」인데 3칸만 한 칸씩 보여주고 나머지는 순간이동 같았다."*
+        → **겹(layer)마다 끊어서** 1 → 2 → 3 이 차례로 차는 걸 보여준다.
+     ③ *"2,3,6,8번째는 격자가 안 바뀌는데 버튼을 눌러야 해서 「어 또 그대로네」 싶었다."*
+        → 격자가 안 바뀌는 걸음은 **줄이 바뀌게** 한다(꺼내기·넣기). 빈 걸음을 없앤다.
+     ④ *"`deque`·`popleft`·「큐」를 코드에서 처음 만났다 — 화면 전체에서 「큐」라는 낱말을
+        한 번도 못 봤다."*  → 줄이 둘 이상이 되는 순간 **「줄」**이라고 부르고,
+        마지막에 «이 줄을 코드에서는 deque 라고 부른다» 로 잇는다. */
   const dist = Array.from({ length: KN_R }, () => new Array(KN_R).fill(-1));
   dist[0][0] = 0;
   let queue = [[0, 0]];
   const trace = [];
-  const snap = (extra) => ({
-    dist: dist.map(r => r.slice()), queue: queue.slice(), ...extra,
-  });
+  const snap = (extra) => ({ dist: dist.map(r => r.slice()), queue: queue.slice(), ...extra });
 
-  trace.push(snap({
-    cur: [0, 0], look: null, status: "start",
+  trace.push(snap({ cur: [0, 0], look: null, status: "start",
     msg: t(E, "I'm standing on (0,0).\nLet's see where the knight can jump from here.",
-             "나는 (0,0) 에 서 있어요.\n여기서 나이트가 갈 수 있는 곳을 봐요."),
-  }));
-  trace.push(snap({
-    cur: [0, 0], look: null, status: "moves",
-    msg: t(E, "A knight jumps in an L — two squares one way, one square across.\nEight ways in all.",
-             "나이트는 ㄴ자로 뛰어요 — 한 쪽으로 2칸, 옆으로 1칸.\n모두 여덟 가지예요."),
-  }));
+             "나는 (0,0) 에 서 있어요.\n여기서 나이트가 갈 수 있는 곳을 봐요.") }));
 
-  // ── 첫 칸: 여덟 방향을 **하나씩**. 네 가지 결과가 여기서 다 나온다.
-  /* ⚠️ 2026-09-29 `see-screen --sim` 이 잡았다 — 처음엔 「앞에서 네 방향」을 보여줬는데
-     (0,0) 에서는 그 넷이 **전부 격자 밖**이라 «칸이 없어요» 가 **네 걸음 연달아** 나왔다.
-     학생은 갈 수 있는 경우를 보기도 전에 지루해진다.
-     → **결과가 서로 다른 것만** 고른다: 격자 밖 1 · 갈 수 있음 2. 나머지는 묶는다. */
+  // ── 첫 칸을 **꺼낸다** — 줄에서 사라지는 게 눈에 보인다
   const [r0, c0] = queue[0];
   queue = queue.slice(1);
+  trace.push(snap({ cur: [r0, c0], look: null, status: "pop",
+    msg: t(E, "Take (0,0) out and look around from there.\nA knight jumps in an L — two one way, one across.",
+             "(0,0) 을 꺼내서 거기서 둘러봐요.\n나이트는 ㄴ자로 뛰어요 — 한 쪽으로 2칸, 옆으로 1칸.") }));
+
   let shownOob = 0, shownPass = 0;
   for (const [mr, mc] of MOVES) {
     const nr = r0 + mr, nc = c0 + mc;
-    const inb = nr >= 0 && nr < KN_R && nc >= 0 && nc < KN_R;
-    if (!inb) {
+    if (nr < 0 || nr >= KN_R || nc < 0 || nc >= KN_R) {
       if (shownOob < 1) {
         shownOob++;
         trace.push(snap({ cur: [r0, c0], look: [nr, nc], status: "oob",
@@ -350,20 +361,20 @@ function buildKnightBfsTrace(E) {
     if (shownPass < 2) {
       shownPass++;
       trace.push(snap({ cur: [r0, c0], look: [nr, nc], status: "pass",
-        msg: t(E, `(${nr},${nc}) is empty — one jump gets me there. Write 1.`,
-                 `(${nr},${nc}) 는 비어 있어요 — 한 번에 닿아요. 1 을 적어요.`) }));
+        msg: t(E, `(${nr},${nc}) is empty — one jump gets me there.\nWrite 1, and put it at the back of the line.`,
+                 `(${nr},${nc}) 는 비어 있어요 — 한 번에 닿아요.\n1 을 적고, 줄 맨 뒤에 세워 둬요.`) }));
     }
   }
   trace.push(snap({ cur: [r0, c0], look: null, status: "layer",
-    msg: t(E, "The rest work the same way. Every square one jump away now holds 1.",
-             "나머지도 같은 식이에요. 한 번에 갈 수 있는 칸에 모두 1 이 적혔어요.") }));
+    msg: t(E, "The rest work the same way. Everything one jump away now holds 1,\nand they're all waiting in the line.",
+             "나머지도 같은 식이에요. 한 번에 갈 수 있는 칸이 모두 1 이 됐고,\n그 칸들이 줄에 서서 기다려요.") }));
 
-  // ── 두 번째 칸: 「이미 갔던 곳」이 나온다
+  // ── 두 번째 칸: 「이미 갔던 곳」 + 2 적기
   const [r1, c1] = queue[0];
   queue = queue.slice(1);
   trace.push(snap({ cur: [r1, c1], look: null, status: "pop",
-    msg: t(E, `Now I move to a square marked 1 — (${r1},${c1}) — and do the same thing.`,
-             `이제 1 이라고 적힌 칸 (${r1},${c1}) 으로 가서 똑같이 해요.`) }));
+    msg: t(E, `Take the front of the line — (${r1},${c1}) — and do exactly the same thing.`,
+             `줄 맨 앞을 꺼내요 — (${r1},${c1}) — 그리고 똑같이 해요.`) }));
   let sawVisited = false, sawNew = false;
   for (const [mr, mc] of MOVES) {
     const nr = r1 + mr, nc = c1 + mc;
@@ -373,7 +384,7 @@ function buildKnightBfsTrace(E) {
         sawVisited = true;
         trace.push(snap({ cur: [r1, c1], look: [nr, nc], status: "visited",
           msg: t(E, `(${nr},${nc}) already has a number, so I leave it alone.\nThe first number written is the shortest.`,
-                   `(${nr},${nc}) 는 이미 숫자가 적혀 있어서 그냥 둬요.\n처음 적힌 값이 가장 짧은 횟수예요.`) }));
+                   `(${nr},${nc}) 는 이미 숫자가 있어서 그냥 둬요.\n처음 적힌 값이 가장 짧은 횟수예요.`) }));
       }
       continue;
     }
@@ -382,29 +393,43 @@ function buildKnightBfsTrace(E) {
     if (!sawNew) {
       sawNew = true;
       trace.push(snap({ cur: [r1, c1], look: [nr, nc], status: "pass",
-        msg: t(E, `(${nr},${nc}) is still empty — two jumps to get here. Write 2.`,
-                 `(${nr},${nc}) 는 아직 비어 있어요 — 두 번 만에 닿아요. 2 를 적어요.`) }));
+        msg: t(E, `(${nr},${nc}) is still empty — two jumps. Write 2 and line it up.`,
+                 `(${nr},${nc}) 는 아직 비어 있어요 — 두 번 만에 닿아요. 2 를 적고 줄에 세워요.`) }));
     }
   }
 
-  // ── 끝까지 채운다 (화면은 결과만)
+  /* ── 나머지를 **겹마다 끊어서** 보여준다. 학생이 *"22칸이 한꺼번에 나타났다"* 고 한 자리. */
+  let layer = 2;
   while (queue.length) {
-    const [r, c] = queue[0];
-    queue = queue.slice(1);
-    for (const [mr, mc] of MOVES) {
-      const nr = r + mr, nc = c + mc;
-      if (nr < 0 || nr >= KN_R || nc < 0 || nc >= KN_R) continue;
-      if (dist[nr][nc] !== -1) continue;
-      dist[nr][nc] = dist[r][c] + 1;
-      queue = [...queue, [nr, nc]];
+    const before = dist.map(r => r.slice());
+    const thisLayer = queue.filter(([r, c]) => dist[r][c] === layer);
+    if (!thisLayer.length) break;
+    queue = queue.filter(([r, c]) => dist[r][c] !== layer);
+    for (const [r, c] of thisLayer) {
+      for (const [mr, mc] of MOVES) {
+        const nr = r + mr, nc = c + mc;
+        if (nr < 0 || nr >= KN_R || nc < 0 || nc >= KN_R) continue;
+        if (dist[nr][nc] !== -1) continue;
+        dist[nr][nc] = layer + 1;
+        queue = [...queue, [nr, nc]];
+      }
     }
+    const added = dist.flat().filter(v => v === layer + 1).length;
+    if (added) {
+      trace.push(snap({ cur: null, look: null, status: "layer",
+        msg: t(E, `Empty the line of every ${layer} — that fills in the ${layer + 1}s.`,
+                 `줄에 선 ${layer} 들을 다 꺼내고 나면 ${numJosa(layer + 1, "이", "가")} 채워져요.`) }));
+    }
+    layer++;
+    void before;
   }
+
   trace.push(snap({ cur: null, look: null, status: "done",
-    msg: t(E, "Keep going the same way and every square gets its smallest number — nearest first.",
-             "이렇게 계속하면 가까운 곳부터 차례로 모든 칸이 가장 작은 숫자로 채워져요.") }));
+    msg: t(E, "The line is empty, so every square already has its smallest number.",
+             "줄이 비었어요 — 모든 칸이 이미 가장 작은 숫자를 갖고 있다는 뜻이에요.") }));
   trace.push(snap({ cur: null, look: null, status: "named",
-    msg: t(E, "Taking one square at a time and filling the nearest ones first — that method is called BFS.",
-             "이렇게 한 칸씩 꺼내면서 가까운 곳부터 채우는 방법을 BFS 라고 불러요.") }));
+    msg: t(E, "Taking the front of the line each time, nearest first — that method is called BFS.\nIn the code the line is a deque, and taking the front is popleft().",
+             "이렇게 줄 맨 앞을 하나씩 꺼내며 가까운 곳부터 채우는 방법을 BFS 라고 불러요.\n코드에서는 이 줄을 deque, 맨 앞을 꺼내는 걸 popleft() 라고 써요.") }));
   return trace;
 }
 
@@ -452,6 +477,34 @@ export function Mcc20KnightBfsProcessStepper({ E }) {
         <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10, ...KA }}>
           {t(E, "(0,0) is the knight's start. Each number = fewest jumps to reach that square.",
                "(0,0) 이 나이트가 선 곳이에요. 숫자는 그 칸까지 가는 가장 적은 횟수예요.")}
+        </div>
+
+        {/* ⭐ 2026-09-29 — **줄(큐)을 그린다.** 학생이 *"「꺼내면서」라는데 어디에도
+            꺼내는 동작이 없었다"* 고 했다. 꺼내는 걸 **보여준 뒤에** 이름을 붙인다.
+            형제 `mcc20citytour` 가 칩으로 그리는 것과 같은 모양. 맨 앞은 테두리로 표시한다. */}
+        <div style={{ background: "#fff", border: "1px dashed #93c5fd", borderRadius: 10,
+          padding: "8px 10px", marginBottom: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: A, marginBottom: 6, ...KA }}>
+            {t(E, "Line of squares waiting", "차례를 기다리는 줄")}
+            <span style={{ color: C.dim, fontWeight: 500 }}> · {st.queue.length}</span>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 4, minHeight: 30, alignItems: "center" }}>
+            {st.queue.length === 0
+              ? <span style={{ fontSize: 11.5, color: C.dim, ...KA }}>
+                  {t(E, "(empty — nothing left to check)", "(비었어요 — 더 볼 칸이 없어요)")}
+                </span>
+              : st.queue.slice(0, 12).map(([r, c], i) => (
+                  <div key={i} style={{
+                    padding: "3px 7px", borderRadius: 6, fontSize: 10.5, fontWeight: 700,
+                    fontFamily: "'JetBrains Mono',monospace",
+                    border: i === 0 ? `2px solid ${A}` : "1.5px solid #bfdbfe",
+                    background: i === 0 ? "#dbeafe" : "#fff", color: "#1e3a8a",
+                  }}>{r},{c}</div>
+                ))}
+            {st.queue.length > 12 && (
+              <span style={{ fontSize: 11, color: C.dim }}>+{st.queue.length - 12}</span>
+            )}
+          </div>
         </div>
 
         <SimNav idx={safe} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
