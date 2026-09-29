@@ -115,8 +115,12 @@ export const PART4: Record<string, string> = {
   "left = opposite-breed cows touching i on the left":
     "left = i 의 왼쪽에 붙어 있는 다른 품종 소 수",
   "leftover odds must pair up": "남은 홀수는 짝을 지어야 해요",
-  'memo = the answer notebook (memoization) — key = "sequence#budget" string':
-    'memo = 답을 적어두는 공책(메모이제이션) — 키는 "수열#예산" 문자열이에요',
+  /* ⚠️ 2026-09-29: 여기 있던 항목을 지웠다 — **같은 키가 아래 164번 줄에 또 있었다.**
+     하나는 `—`(em-dash 직접), 하나는 `\u2014` 라 눈으로는 달라 보이는데 **TS 는 같은 키**다.
+     객체 리터럴에서 **뒤에 온 값이 앞을 조용히 덮는다** → 여기 있던 번역은 **죽은 코드**였다.
+     `tsc` 는 `TS1117` 로 잡고 있었지만 `next.config.mjs` 의 `ignoreBuildErrors: true` 라
+     빌드가 안 죽어서 아무도 안 봤다. `frontend-engineer` 가 찾았다.
+     ⛔ 지운 건 **앞쪽(죽어 있던 것)** 이다 — 화면에 뜨는 글자는 하나도 안 바뀐다. */
   "min-heap: (finish_time, counter_id)": "최소 힙: (끝나는 시각, 창구 번호)",
   "missing[i] = how many of {0..i-1} are absent → must ADD":
     "missing[i] = {0..i-1} 중 없는 값의 개수 → 더해야(ADD) 해요",
