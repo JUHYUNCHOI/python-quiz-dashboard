@@ -249,9 +249,18 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
        고르게 하는 대신 **2 를 계속 더하면 홀수는 홀수, 짝수는 짝수**인 것을 눈으로 보게 한다. */
     {
       type: "reveal",
+      /* ⚠️ 2026-09-29 선생님(라이브 보시고): *"**갑자기 애들이 이해할수 있는건가?**"*
+         ⭐ 원인을 찾았다 — **4쪽의 약속과 5쪽의 첫 줄이 어긋나 있었다.**
+           4쪽 끝: *"이 코드는 **어떤 값끼리 부딪히는지** 모르고 무작정 밉니다.
+                    그걸 알아내면 훨씬 빨라져요 — 다음 쪽에서 봐요."*
+           5쪽 narr: *"K 가 달라지면 무엇이 달라질까요?"*  ← **다른 걸 묻는다.**
+         학생은 「부딪히는 값 찾기」를 기대하고 넘어오는데 첫 줄이 딴 얘기를 하니
+         걸음 1 의 「3 이 갈 수 있는 수」가 **왜 나오는지** 알 수 없다.
+         → narr 이 **4쪽의 약속을 받는다.** K 가 2 로 바뀌는 것도 같은 줄에 담는다.
+         (`feedback_reviewers_see_pages_teacher_sees_story` — 이상한 건 쪽과 쪽 **사이**다.) */
       narr: t(E,
-        "So far K was 1. What changes when K changes?",
-        "지금까지는 K = 1 이었어요. K 가 달라지면 무엇이 달라질까요?"),
+        "This time K = 2. Which values can ever clash?",
+        "이번엔 K = 2 예요. 어떤 값끼리 부딪힐 수 있는지 알아봐요."),
       content: <WhoCanMeetSim E={E} />,
     },
 
