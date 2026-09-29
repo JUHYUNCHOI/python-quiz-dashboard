@@ -367,7 +367,7 @@ function buildKnightBfsTrace(E) {
   }
   trace.push(snap({ cur: [r0, c0], look: null, status: "layer",
     msg: t(E, "The rest work the same way. Everything one jump away now holds 1,\nand they're all waiting in the line.",
-             "나머지도 같은 식이에요. 한 번에 갈 수 있는 칸이 모두 1 이 됐고,\n그 칸들이 줄에 서서 기다려요.") }));
+             "나머지 여섯 방향도 같은 식이에요.\n줄을 보세요 — 1 이 적힌 칸들이 모두 거기 서서 기다려요.") }));
 
   // ── 두 번째 칸: 「이미 갔던 곳」 + 2 적기
   const [r1, c1] = queue[0];
@@ -384,7 +384,7 @@ function buildKnightBfsTrace(E) {
         sawVisited = true;
         trace.push(snap({ cur: [r1, c1], look: [nr, nc], status: "visited",
           msg: t(E, `(${nr},${nc}) already has a number, so I leave it alone.\nThe first number written is the shortest.`,
-                   `(${nr},${nc}) 는 이미 숫자가 있어서 그냥 둬요.\n처음 적힌 값이 가장 짧은 횟수예요.`) }));
+                   `(${nr},${nc}) 는 이미 숫자가 있어요 — 그래서 줄에 넣지 않아요.\n처음 적힌 값이 가장 짧은 횟수라 고칠 필요가 없거든요.`) }));
       }
       continue;
     }
@@ -398,30 +398,43 @@ function buildKnightBfsTrace(E) {
     }
   }
 
-  /* ── 나머지를 **겹마다 끊어서** 보여준다. 학생이 *"22칸이 한꺼번에 나타났다"* 고 한 자리. */
-  let layer = 2;
+  /* ── 나머지를 **겹마다 끊어서** 보여준다.
+
+     ⚠️ 2026-09-29 (2판) — 재검증 학생이 **막힘**으로 보고했다:
+       *"13·14번째 말풍선은 「줄이 비었어요」라는데 그 밑에 「차례를 기다리는 줄 · 1」
+         이라고 써 있고 안에 `2,1` 이 그대로 남아 있었다. 「어? 비었다면서 왜 있지?」
+         하고 멈칫했다."*
+       원인 — `if (!thisLayer.length) break;` 로 빠져나오면서 **줄을 안 비웠다.**
+       내 코드 버그다. 겹 번호를 하드코딩하지 말고 **줄에 남은 가장 작은 값**으로 잡는다
+       → 줄이 반드시 빈다.
+     ⚠️ 같은 학생: *"1~9걸음은 한 칸씩 천천히인데 10~11걸음은 갑자기 왕창 채워져서
+       리듬이 갑자기 바뀐다."*  → **바뀐다고 말해 준다.** 화면이 말 안 하면 학생은
+       「내가 뭘 놓쳤나」로 읽는다. */
+  let first = true;
   while (queue.length) {
-    const before = dist.map(r => r.slice());
-    const thisLayer = queue.filter(([r, c]) => dist[r][c] === layer);
-    if (!thisLayer.length) break;
-    queue = queue.filter(([r, c]) => dist[r][c] !== layer);
+    const layerNow = Math.min(...queue.map(([r, c]) => dist[r][c]));
+    const thisLayer = queue.filter(([r, c]) => dist[r][c] === layerNow);
+    queue = queue.filter(([r, c]) => dist[r][c] !== layerNow);
+    let added = 0;
     for (const [r, c] of thisLayer) {
       for (const [mr, mc] of MOVES) {
         const nr = r + mr, nc = c + mc;
         if (nr < 0 || nr >= KN_R || nc < 0 || nc >= KN_R) continue;
         if (dist[nr][nc] !== -1) continue;
-        dist[nr][nc] = layer + 1;
+        dist[nr][nc] = layerNow + 1;
         queue = [...queue, [nr, nc]];
+        added++;
       }
     }
-    const added = dist.flat().filter(v => v === layer + 1).length;
-    if (added) {
-      trace.push(snap({ cur: null, look: null, status: "layer",
-        msg: t(E, `Empty the line of every ${layer} — that fills in the ${layer + 1}s.`,
-                 `줄에 선 ${layer} 들을 다 꺼내고 나면 ${numJosa(layer + 1, "이", "가")} 채워져요.`) }));
-    }
-    layer++;
-    void before;
+    if (!added) continue;             // 새로 채운 게 없으면 걸음을 만들지 않는다
+    const lead = first
+      ? t(E, "From here on I'll take a whole batch at a time.\n",
+             "여기서부터는 한 겹씩 묶어서 볼게요.\n")
+      : "";
+    first = false;
+    trace.push(snap({ cur: null, look: null, status: "layer",
+      msg: lead + t(E, `Empty the line of every ${layerNow} — that fills in the ${layerNow + 1}s.`,
+                      `줄에 선 ${layerNow} 들을 다 꺼내고 나면 ${numJosa(layerNow + 1, "이", "가")} 채워져요.`) }));
   }
 
   trace.push(snap({ cur: null, look: null, status: "done",

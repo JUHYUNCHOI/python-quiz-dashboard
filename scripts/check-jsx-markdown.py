@@ -38,6 +38,31 @@ import sys
 CODEY = re.compile(r"\d\s*\*\*\s*\d|\*\*kwargs|\*\*\{")
 BOLD = re.compile(r"\*\*[^*\n]{1,60}\*\*")
 STR = re.compile(r'"((?:[^"\\]|\\.)*)"')
+# ⚠️ 2026-09-29: **백틱 템플릿 문자열을 원리상 못 보고 있었다.**
+#   `mcc20knight` 시뮬을 만들며 `` `… **줄에 넣지 않아요.** …` `` 라고 썼는데
+#   이 검사기가 **0건**으로 통과시켰다(큰따옴표만 봤다). 시뮬 말풍선은 좌표·숫자를
+#   끼워 넣느라 **템플릿 문자열을 많이 쓴다** — 그 층이 통째로 사각지대였다.
+#   ⚠️ `${...}` 안은 **코드**라 `a ** b`(거듭제곱)가 정상이다. 그 자리는 지운 뒤 본다.
+def _strings(src):
+    """큰따옴표 **와** 백틱 문자열을 모두 돌려준다.
+    백틱 안의 `${...}` 는 코드라 지우고 본다(`10 ** 9` 같은 거듭제곱이 정상이다)."""
+    for mm in STR.finditer(src):
+        yield mm
+    for mm in TMPL.finditer(src):
+        body = re.sub(r"\$\{[^}]*\}", " ", mm.group(1))
+        yield _Fake(body, mm.start())
+
+
+class _Fake:
+    def __init__(self, text, pos):
+        self._t, self._p = text, pos
+    def group(self, n=0):
+        return self._t
+    def start(self):
+        return self._p
+
+
+TMPL = re.compile(r"`((?:[^`\\]|\\.)*)`", re.S)
 
 
 def main():
@@ -63,7 +88,7 @@ def main():
             # 우리끼리 보는 주석은 뺀다 — 거긴 마크다운을 써도 된다
             if t.startswith(("//", "*", "/*", "{/*")):
                 continue
-            for m in STR.finditer(line):
+            for m in _strings(line):
                 body = m.group(1)
                 if CODEY.search(body) or not BOLD.search(body):
                     continue
