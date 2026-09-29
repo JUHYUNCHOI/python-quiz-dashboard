@@ -87,8 +87,20 @@ def main():
     ts = re.sub(r"//.*$", "", ts, flags=re.M)
     badges = dict(re.findall(r'(\w+)\s*:\s*"([a-z]+)"', ts))
     want = set(sys.argv[1:]) - {"--all"}
+    # ── 사람이 코드를 열어 «맞는 배지다» 로 닫은 자리는 빼고 센다 ──────────────
+    # ⛔ fail-open 금지 — 목록을 못 읽으면 **하나도 빼지 않는다.**
+    accepted = set()
+    try:
+        with io.open(os.path.join(ROOT, "scripts", "algo-badge-accepted.json"), encoding="utf-8") as fh:
+            for row in json.load(fh).get("accepted", []):
+                accepted.add((row["quest"], row["badge"]))
+    except Exception as e:
+        print(f"⚠️ 승인 목록을 못 읽었다({e}) — 하나도 빼지 않는다.\n")
+
     hits, seen, skipped = [], 0, 0
     for qid, topic in sorted(badges.items()):
+        if (qid, topic) in accepted:
+            continue
         if want and qid not in want: continue
         if topic not in SIGNS:
             skipped += 1; continue
