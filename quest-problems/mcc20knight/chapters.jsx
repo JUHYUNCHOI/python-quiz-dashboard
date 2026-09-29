@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc20KnightWalk, KnightExactSim } from "./components";
+import { getMcc20KnightWalk, KnightExactSim, Mcc20KnightBfsProcessStepper } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const KA = { wordBreak: "keep-all" };
@@ -198,9 +198,14 @@ export function makeMcc20KnightCh2(E, lang = "py") {
     // 2-1: plan — brute limit → fast idea
     {
       type: "reveal",
+      /* ⚠️ 2026-09-29 `pedagogy-reviewer`: *"학생이 처음 만나는 「BFS」라는 글자가
+         **파란 내레이션 첫 문장**이다. 이 시점까지 학생은 BFS 가 뭘 하는지 전혀 겪은
+         적이 없다."* `feedback_first_concept_scaffolding` 이 금지하는 모양 —
+         **용어 먼저 금지, 겪은 뒤에 이름.** 이름은 다음 쪽 과정 스테퍼의
+         **마지막 걸음**에서만 붙인다(형제 `mcc20citytour` 와 같은 순서). */
       narr: t(E,
-        "BFS finds the minimum moves to each offset once, so every query becomes a quick check.",
-        "BFS 로 최소 이동만 구해 두면 질문은 금방 답해요."),
+        "Work out the fewest moves once, and every query becomes a quick check.",
+        "최소 횟수를 한 번만 구해 두면 질문은 금방 답해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -216,13 +221,13 @@ export function makeMcc20KnightCh2(E, lang = "py") {
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: BFS once, then min + parity", "빠름: BFS 한 번, 그다음 최소 + 홀짝")}
+                🚀 {t(E, "Fast: work out the fewest moves once, then min + parity", "빠름: 최소 횟수를 한 번에 구해 두고, 그다음 최소 + 홀짝")}
               </div>
               {/* 2026-09-17: 104 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55,
                 whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
-                {t(E, "Reduce (X,Y)→(A,B) to the gap (dx,dy).\nOne BFS from (0,0) fills in every minimum.\nEach query: K ≥ min AND (K − min) even.",
-                      "(X,Y)→(A,B) 를 차이 (dx,dy) 로 줄여요.\n(0,0) 에서 BFS 를 한 번 돌려 모든 최소를 채워요.\n질문마다 K ≥ 최소 이고 (K − 최소) 가 짝수인지만 보면 돼요.")}
+                {t(E, "Reduce (X,Y)→(A,B) to the gap (dx,dy).\nStarting from (0,0), fill in every minimum once.\nEach query: K ≥ min AND (K − min) even.",
+                      "(X,Y)→(A,B) 를 차이 (dx,dy) 로 줄여요.\n(0,0) 에서 시작해 모든 최소를 한 번에 채워요.\n질문마다 K ≥ 최소 이고 (K − 최소) 가 짝수인지만 보면 돼요.")}
               </div>
             </div>
           </div>
@@ -232,7 +237,19 @@ export function makeMcc20KnightCh2(E, lang = "py") {
         </div>),
     },
 
-    // 2-2: code, CodeWalk — bubbles sit on the lines they explain
+    /* ⭐ 2026-09-29 새 쪽 — **표가 어떻게 채워지는지** 한 걸음씩.
+       `pedagogy-reviewer`: *"`KnightExactSim` 은 이미 계산된 결과만 보여준다.
+       큐에서 칸을 꺼내고 이웃을 확인하는 **과정 자체는 한 번도 안 보여준다** —
+       2-1 에서 곧바로 코드로 건너뛴다."* 형제 `mcc20citytour` 가 같은 지적을 받고
+       만든 과정 스테퍼와 같은 자리·같은 모양이다. **이름(BFS)은 이 쪽 마지막 걸음에서.** */
+    {
+      type: "reveal",
+      narr: t(E, "Watch the table fill in, one square at a time.",
+                 "표가 한 칸씩 채워지는 걸 봐요."),
+      content: <Mcc20KnightBfsProcessStepper E={E} />,
+    },
+
+    // 2-3: code, CodeWalk — bubbles sit on the lines they explain
     {
       type: "reveal",
       narr: t(E,

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -284,6 +285,181 @@ const CPP_SETUP = FULL_CPP.slice(0, 14);
 const CPP_BFS = FULL_CPP.slice(15, 34);
 const CPP_QUERY = FULL_CPP.slice(35, 52);
 
+/* ═══════════════════════════════════════════════════════════════════════
+   BFS 과정 스테퍼 — 표가 **어떻게** 채워지는지 한 걸음씩 (2026-09-29)
+
+   왜 생겼나 — `pedagogy-reviewer` 판정:
+     *"`KnightExactSim` 은 **이미 계산된 결과**만 보여준다. 큐에서 칸을 꺼내고
+       이웃을 확인하는 **과정 자체는 한 번도 안 보여준다.** 2-1 쪽은 산문 박스
+       둘에서 곧바로 코드로 건너뛴다 — `mcc20citytour` 가 정확히 이 모양을
+       걷어내고 과정 스테퍼로 바꾼 바로 그 결함이 그대로 남아 있다."*
+
+   ⭐ 형제(`mcc20citytour` 의 `Mcc20CityTourBfsProcessStepper`)를 그대로 따른다.
+      발명하지 않는다 — 공용 `useTraceStep` + `SimNav`, 밝은 말풍선 + 💬.
+   ⭐ **이름(BFS)은 맨 마지막 걸음에만** 나온다. 그전엔 「방법」으로만 부른다
+      (`feedback_first_concept_scaffolding` — 겪은 뒤에 이름).
+   ⛔ 「동그라미가 퍼지듯」 비유는 **안 쓴다.** 나이트는 ㄴ자로 뛰어서 실제 모양이
+      원이 아니다 — 학생이 문자 그대로 상상하면 **틀린 그림**이 남는다
+      (`feedback_no_invented_terms` 의 「지우면 더 쉬워지나」 판정).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+const KN_R = 5;   // 5×5 오프셋 격자 — 「칸이 없어요」가 나오도록 일부러 작게
+
+function buildKnightBfsTrace(E) {
+  const dist = Array.from({ length: KN_R }, () => new Array(KN_R).fill(-1));
+  dist[0][0] = 0;
+  let queue = [[0, 0]];
+  const trace = [];
+  const snap = (extra) => ({
+    dist: dist.map(r => r.slice()), queue: queue.slice(), ...extra,
+  });
+
+  trace.push(snap({
+    cur: [0, 0], look: null, status: "start",
+    msg: t(E, "I'm standing on (0,0).\nLet's see where the knight can jump from here.",
+             "나는 (0,0) 에 서 있어요.\n여기서 나이트가 갈 수 있는 곳을 봐요."),
+  }));
+  trace.push(snap({
+    cur: [0, 0], look: null, status: "moves",
+    msg: t(E, "A knight jumps in an L — two squares one way, one square across.\nEight ways in all.",
+             "나이트는 ㄴ자로 뛰어요 — 한 쪽으로 2칸, 옆으로 1칸.\n모두 여덟 가지예요."),
+  }));
+
+  // ── 첫 칸: 여덟 방향을 **하나씩**. 네 가지 결과가 여기서 다 나온다.
+  /* ⚠️ 2026-09-29 `see-screen --sim` 이 잡았다 — 처음엔 「앞에서 네 방향」을 보여줬는데
+     (0,0) 에서는 그 넷이 **전부 격자 밖**이라 «칸이 없어요» 가 **네 걸음 연달아** 나왔다.
+     학생은 갈 수 있는 경우를 보기도 전에 지루해진다.
+     → **결과가 서로 다른 것만** 고른다: 격자 밖 1 · 갈 수 있음 2. 나머지는 묶는다. */
+  const [r0, c0] = queue[0];
+  queue = queue.slice(1);
+  let shownOob = 0, shownPass = 0;
+  for (const [mr, mc] of MOVES) {
+    const nr = r0 + mr, nc = c0 + mc;
+    const inb = nr >= 0 && nr < KN_R && nc >= 0 && nc < KN_R;
+    if (!inb) {
+      if (shownOob < 1) {
+        shownOob++;
+        trace.push(snap({ cur: [r0, c0], look: [nr, nc], status: "oob",
+          msg: t(E, `(${nr},${nc}) is off the board — there's no such square.`,
+                   `(${nr},${nc}) 는 격자 밖이에요 — 그런 칸이 없어요.`) }));
+      }
+      continue;
+    }
+    dist[nr][nc] = 1;
+    queue = [...queue, [nr, nc]];
+    if (shownPass < 2) {
+      shownPass++;
+      trace.push(snap({ cur: [r0, c0], look: [nr, nc], status: "pass",
+        msg: t(E, `(${nr},${nc}) is empty — one jump gets me there. Write 1.`,
+                 `(${nr},${nc}) 는 비어 있어요 — 한 번에 닿아요. 1 을 적어요.`) }));
+    }
+  }
+  trace.push(snap({ cur: [r0, c0], look: null, status: "layer",
+    msg: t(E, "The rest work the same way. Every square one jump away now holds 1.",
+             "나머지도 같은 식이에요. 한 번에 갈 수 있는 칸에 모두 1 이 적혔어요.") }));
+
+  // ── 두 번째 칸: 「이미 갔던 곳」이 나온다
+  const [r1, c1] = queue[0];
+  queue = queue.slice(1);
+  trace.push(snap({ cur: [r1, c1], look: null, status: "pop",
+    msg: t(E, `Now I move to a square marked 1 — (${r1},${c1}) — and do the same thing.`,
+             `이제 1 이라고 적힌 칸 (${r1},${c1}) 으로 가서 똑같이 해요.`) }));
+  let sawVisited = false, sawNew = false;
+  for (const [mr, mc] of MOVES) {
+    const nr = r1 + mr, nc = c1 + mc;
+    if (nr < 0 || nr >= KN_R || nc < 0 || nc >= KN_R) continue;
+    if (dist[nr][nc] !== -1) {
+      if (!sawVisited) {
+        sawVisited = true;
+        trace.push(snap({ cur: [r1, c1], look: [nr, nc], status: "visited",
+          msg: t(E, `(${nr},${nc}) already has a number, so I leave it alone.\nThe first number written is the shortest.`,
+                   `(${nr},${nc}) 는 이미 숫자가 적혀 있어서 그냥 둬요.\n처음 적힌 값이 가장 짧은 횟수예요.`) }));
+      }
+      continue;
+    }
+    dist[nr][nc] = 2;
+    queue = [...queue, [nr, nc]];
+    if (!sawNew) {
+      sawNew = true;
+      trace.push(snap({ cur: [r1, c1], look: [nr, nc], status: "pass",
+        msg: t(E, `(${nr},${nc}) is still empty — two jumps to get here. Write 2.`,
+                 `(${nr},${nc}) 는 아직 비어 있어요 — 두 번 만에 닿아요. 2 를 적어요.`) }));
+    }
+  }
+
+  // ── 끝까지 채운다 (화면은 결과만)
+  while (queue.length) {
+    const [r, c] = queue[0];
+    queue = queue.slice(1);
+    for (const [mr, mc] of MOVES) {
+      const nr = r + mr, nc = c + mc;
+      if (nr < 0 || nr >= KN_R || nc < 0 || nc >= KN_R) continue;
+      if (dist[nr][nc] !== -1) continue;
+      dist[nr][nc] = dist[r][c] + 1;
+      queue = [...queue, [nr, nc]];
+    }
+  }
+  trace.push(snap({ cur: null, look: null, status: "done",
+    msg: t(E, "Keep going the same way and every square gets its smallest number — nearest first.",
+             "이렇게 계속하면 가까운 곳부터 차례로 모든 칸이 가장 작은 숫자로 채워져요.") }));
+  trace.push(snap({ cur: null, look: null, status: "named",
+    msg: t(E, "Taking one square at a time and filling the nearest ones first — that method is called BFS.",
+             "이렇게 한 칸씩 꺼내면서 가까운 곳부터 채우는 방법을 BFS 라고 불러요.") }));
+  return trace;
+}
+
+export function Mcc20KnightBfsProcessStepper({ E }) {
+  const trace = useMemo(() => buildKnightBfsTrace(E), [E]);
+  const { safe, setIdx, total, step } = useTraceStep(trace, "mcc20knight-bfs");
+  const st = step || trace[0];
+  const tone = { pass: "#059669", oob: "#9ca3af", visited: "#9ca3af", named: A }[st.status] || A;
+  const bg   = { pass: "#ecfdf5", oob: "#f9fafb", visited: "#f9fafb", named: "#eff6ff" }[st.status] || "#eff6ff";
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#eff6ff", border: `1px solid ${A}55`, borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: A, marginBottom: 8 }}>
+          🐴 {t(E, "Filling the table, one square at a time", "표가 한 칸씩 채워지는 걸 봐요")}
+        </div>
+
+        {/* 말풍선 — 밝은 바탕 + 💬 (`check-bubble-not-terminal`, mexes/sims.jsx 참고) */}
+        <div style={{ maxWidth: 520, margin: "0 auto 12px" }}>
+          <div style={{ background: bg, border: `1.5px solid ${tone}`, borderRadius: 12,
+            padding: "11px 14px", fontSize: 13, color: tone, lineHeight: 1.6, fontWeight: 600,
+            textAlign: "center", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)", ...KA }}>
+            💬 {st.msg}
+          </div>
+        </div>
+
+        {/* 5×5 오프셋 격자 */}
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${KN_R}, 1fr)`, gap: 4,
+          maxWidth: 260, margin: "0 auto 12px" }}>
+          {st.dist.map((row, r) => row.map((v, c) => {
+            const isCur  = st.cur  && st.cur[0]  === r && st.cur[1]  === c;
+            const isLook = st.look && st.look[0] === r && st.look[1] === c;
+            return (
+              <div key={`${r}-${c}`} style={{
+                aspectRatio: "1", display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 6, fontSize: 13, fontWeight: 800,
+                fontFamily: "'JetBrains Mono',monospace",
+                background: isLook ? bg : v === -1 ? "#f9fafb" : "#dbeafe",
+                border: isCur ? `2.5px solid ${A}` : isLook ? `2.5px solid ${tone}` : "1px solid #e5e7eb",
+                color: v === -1 ? "#d1d5db" : "#1e3a8a",
+              }}>{v === -1 ? "·" : v}</div>
+            );
+          }))}
+        </div>
+        <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10, ...KA }}>
+          {t(E, "(0,0) is the knight's start. Each number = fewest jumps to reach that square.",
+               "(0,0) 이 나이트가 선 곳이에요. 숫자는 그 칸까지 가는 가장 적은 횟수예요.")}
+        </div>
+
+        <SimNav idx={safe} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
+      </div>
+    </div>
+  );
+}
+
 export function getMcc20KnightSections(E) {
   return [
     {
@@ -315,8 +491,8 @@ export function getMcc20KnightSections(E) {
       color: "#2563eb",
       py: PY_BFS, cpp: CPP_BFS,
       why: [
-        t(E, "BFS spreads out in rings: every square one move away, then every square two moves away, and so on. The first time a square is written is the shortest way to it, so we never overwrite it.",
-            "BFS 는 동그라미가 퍼지듯 나아가요. 한 번에 갈 수 있는 칸을 모두 적고, 그다음 두 번에 갈 수 있는 칸을 모두 적어요. 어떤 칸에 처음 적히는 값이 그 칸까지의 가장 짧은 횟수라, 한 번 적은 값은 다시 고치지 않아요."),
+        t(E, "It fills in the nearest squares first: every square one move away, then every square two moves away, and so on. The first time a square is written is the shortest way to it, so we never overwrite it.",
+            "BFS 는 가까운 칸부터 채워요. 한 번에 갈 수 있는 칸을 모두 적고, 그다음 두 번에 갈 수 있는 칸을 모두 적어요. 어떤 칸에 처음 적히는 값이 그 칸까지의 가장 짧은 횟수라, 한 번 적은 값은 다시 고치지 않아요."),
         t(E, "We run this once, before reading any query. After it finishes, every offset already knows its minimum.",
             "이 일은 질문을 읽기 전에 딱 한 번만 해요. 끝나고 나면 모든 차이가 자기 최소 횟수를 이미 알고 있어요."),
       ],
@@ -361,8 +537,8 @@ export function getMcc20KnightWalk(E) {
         "What do we need before answering any query? For every possible gap (dx, dy), the minimum number of knight moves to cross it — computed once, not per query. Reaching (A,B) from (X,Y) is exactly the same problem as reaching (dx,dy) = (|X−A|,|Y−B|) from (0,0), so one table of gaps serves every query. List the 8 L-moves, then build an empty table (best) where −1 means 'not reached yet' — a little bigger than 2000 because the shortest path to a nearby square sometimes dips below 0 first.",
         "질문에 답하기 전에 뭐가 필요할까요? 모든 차이 (dx, dy) 마다 나이트가 최소 몇 번 움직이면 되는지를요 — 질문마다가 아니라 딱 한 번만 구해 둬요.\n(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 차이 (dx,dy) = (|X−A|, |Y−B|) 만큼 가는 것과 같아서, 차이만 담은 표 하나면 모든 질문을 처리해요.\nL자 이동 8가지를 적고, 빈 표(best) 를 만들어요 — −1 은 '아직 도착 못 했다' 는 뜻이고, 표를 2000 보다 조금 크게 잡은 건 가까운 칸으로 가는 가장 짧은 길이 0 아래로 살짝 도는 경우가 있어서예요.") },
       { hi: [15, 23], bubble: t(E,
-        "Why fill it with BFS? It spreads out in rings — every square one move away first, then every square two moves away, and so on — so the first time a square is written is already its shortest distance, and it's never overwritten. Run this once, starting from (0,0), before reading any query.",
-        "왜 BFS 로 채울까요? BFS 는 동그라미가 퍼지듯 나아가요 — 한 번에 갈 수 있는 칸을 먼저 적고, 그다음 두 번에 갈 수 있는 칸을 적어요.\n그래서 어떤 칸에 처음 적히는 값이 이미 가장 짧은 거리라, 다시 고치지 않아요.\n(0,0) 에서 시작해 질문을 읽기 전에 이 일을 딱 한 번만 해요.") },
+        "Why fill it this way? It works outward from the start — every square one move away first, then every square two moves away, and so on — so the first time a square is written is already its shortest distance, and it's never overwritten. Run this once, starting from (0,0), before reading any query.",
+        "왜 BFS 로 채울까요? 가까운 칸부터 차례로 채우기 때문이에요 — 한 번에 갈 수 있는 칸을 먼저 적고, 그다음 두 번에 갈 수 있는 칸을 적어요.\n그래서 어떤 칸에 처음 적히는 값이 이미 가장 짧은 거리라, 다시 고치지 않아요.\n(0,0) 에서 시작해 질문을 읽기 전에 이 일을 딱 한 번만 해요.") },
       { hi: [24, 31], bubble: t(E,
         "Now answer each query. This contest has no fixed input format, so the values are given like this (the official sample). For every query, turn the coordinates back into a gap (dx, dy) and look up its precomputed minimum.",
         "이제 질문마다 답해요. 이 대회는 입력 형식이 따로 없어서 값을 이렇게 줘요 (공식 예제).\n질문마다 좌표를 다시 차이 (dx, dy) 로 바꾸고, 미리 구해 둔 최소값을 찾아봐요.") },
