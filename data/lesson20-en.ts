@@ -524,7 +524,10 @@ The dict version of list comprehension. Powerful once you're used to it.`
           expectedOutput: "=== freq ===\napple: 3\nkiwi: 1\npear: 2\n\ntop: apple (3x)",
           stdin: "apple pear apple kiwi pear apple",
           hint: "Use the count.get(w, 0) + 1 pattern.",
-          hint2: "count[w] = count.get(w, 0) + 1"
+          // ⚠️ 2026-09-29: 한국어판과 같은 결함 — 위 `data/lesson20.ts` 주석 참고.
+          //   빈칸은 `count.___(w, 0)` 하나인데 hint2 가 **줄 전체**라, 자동채움이
+          //   그 줄을 빈칸에 통째로 끼워 넣어 `TypeError` 로 죽었다.
+          hint2: "get"
         },
         {
           id: "complete",

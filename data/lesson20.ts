@@ -524,7 +524,15 @@ print(flipped)
           expectedOutput: "=== 빈도 ===\n감: 1\n배: 2\n사과: 3\n\n최다: 사과 (3회)",
           stdin: "사과 배 사과 감 배 사과",
           hint: "count.get(w, 0) + 1 패턴 활용. 1 등은 for + if 로.",
-          hint2: "count[w] = count.get(w, 0) + 1\n# 1 등: if n > top_n: 갱신"
+          // ⚠️ 2026-09-29 python-qa: 여기 **줄 전체**가 들어 있었다.
+          //   `hint2` 는 힌트 글자만이 아니라 **정답 소스**로도 쓰인다
+          //   (`blank-code-runner.tsx:158` — `parseAnswers(hint2)`, " / " 로 쪼갬).
+          //   빈칸은 `count.___(w, 0)` **하나**인데 hint2 도 한 덩어리라 개수가 맞아버려서,
+          //   이미 푼 학생이 다시 열면 그 줄 전체를 빈칸에 **자동으로 채워 넣었다**:
+          //     count[w] = count.count[w] = count.get(w, 0) + 1(w, 0) + 1
+          //   → `1(w, 0)` 이 「정수를 함수처럼 호출」이라 **TypeError 로 죽는다.**
+          //   CLAUDE.md 규칙 그대로 — **빈칸이 1개면 answer 는 그 조각만.**
+          hint2: "get"
         },
         {
           id: "complete",
