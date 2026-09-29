@@ -230,7 +230,7 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"lc1480",emoji:"➕",title:"Running Sum of 1d Array",sub:"LeetCode #1480 · Easy",section:"LeetCode",url:"https://leetcode.com/problems/running-sum-of-1d-array/"},
   {id:"lc303", emoji:"📏",title:"Range Sum Query - Immutable",sub:"LeetCode #303 · Easy",section:"LeetCode",url:"https://leetcode.com/problems/range-sum-query-immutable/"},
   {id:"lc560", emoji:"🎯",title:"Subarray Sum Equals K",sub:"LeetCode #560 · Medium",section:"LeetCode",url:"https://leetcode.com/problems/subarray-sum-equals-k/"},
-  {id:"lc974", emoji:"🔢",title:"Subarray Sums Divisible by K",sub:"LeetCode #974 · Medium",section:"LeetCode",url:"https://leetcode.com/problems/subarray-sums-divisible-by-k/"},
+  {id:"lc974", emoji:"🔢",title:"Subarray Sums Divisible by K",sub:"LeetCode #974 · Medium",section:"LeetCode",url:"https://leetcode.com/problems/subarray-sums-divisible-by-k/",pythonOnly:true},
   // LeetCode — Sliding Window
   {id:"lc3",   emoji:"🪟",title:"Longest Substring Without Repeating Characters",sub:"LeetCode #3 · Medium",section:"LeetCode",url:"https://leetcode.com/problems/longest-substring-without-repeating-characters/"},
 ]
