@@ -250,8 +250,8 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "So far K was 1. What changes when K is 2?",
-        "지금까지는 K = 1 이었어요. K 가 2 면 무엇이 달라질까요?"),
+        "So far K was 1. What changes when K changes?",
+        "지금까지는 K = 1 이었어요. K 가 달라지면 무엇이 달라질까요?"),
       content: <WhoCanMeetSim E={E} />,
     },
 

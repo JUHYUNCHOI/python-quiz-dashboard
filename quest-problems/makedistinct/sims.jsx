@@ -75,8 +75,12 @@ function ChainRow({ E, k, rem, vals, hot, calc, named }) {
     <div style={{
       display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 8,
       flexWrap: "wrap", padding: "5px 8px", borderRadius: 10,
-      background: hot ? c.bg : "transparent",
-      border: `1.5px solid ${hot ? c.bd : "transparent"}`,
+      /* ⛔ 바탕을 채우지 않는다. 말풍선(연파랑 카드)·타일(연파랑 칸) 위에
+           줄까지 연파랑으로 채우면 **파란 카드가 세 겹**이 되어 어디를 볼지 안 보인다
+           (선생님: *"너무 비슷한 색으로 너무많은 정보가 갑자기"*).
+         ⭐ 색은 **이름표 하나**만 갖는다 — `check-emphasis` 의 「다 굵으면 강조가 아니다」. */
+      background: "transparent",
+      border: `1.5px solid ${hot ? c.bd : "#e2e8f0"}`,
       transition: "all .25s",
     }}>
       <div style={{
@@ -89,8 +93,12 @@ function ChainRow({ E, k, rem, vals, hot, calc, named }) {
              그 전에는 그냥 «누구의 줄» 이다. */
         calc ? t(E, `÷ ${k} leaves ${rem}`, `${k} 로 나누면 ${rem} 남음`)
         : named ? t(E, `leaves ${rem}`, `${rem} 이 남는 수들`)
+        /* ⚠️ PM 이 잡았다(2026-09-29) — 「3 **가** 갈 수 있는 수」로 찍히고 있었다.
+             받침이 있으면 「이」, 없으면 「가」다. 3(삼)은 받침이 있어 「3 이」,
+             4(사)는 없어 「4 가」. 오늘 내가 이 라벨을 만들며 조사를 하드코딩했고
+             **검사기 일곱 개가 전부 0건**이었다 — 조사는 어느 그물에도 안 걸린다. */
         : t(E, `where ${rem === 1 ? 3 : 4} can go`,
-               `${rem === 1 ? 3 : 4} 가 갈 수 있는 수`)}</div>
+               `${rem === 1 ? "3 이" : "4 가"} 갈 수 있는 수`)}</div>
       <div>
         <div style={{
           fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800,
@@ -123,6 +131,12 @@ function ChainRow({ E, k, rem, vals, hot, calc, named }) {
    → 그러니 K = 1 · 2 · 3 을 **나란히 놓는다.** 「다르다」와 「무엇이 같나」가 동시에 보인다.
    ⚠️ 숫자는 타일과 같은 3, 4, 5 에서 시작한다 — 새 숫자를 들이면 「어디서 온 숫자지」가
      또 난다(`feedback_same_number_two_meanings`). */
+/* ⛔ 2026-09-29 — **되돌렸다.** 나는 이 표에서 수열(`3 → 6 → 9` …)을 지웠었다.
+     선생님: *"내가 나눈 나머지로 **어떻게 구분이 되는건지를 설명하라** 했지
+     기존에 설명 잘 되어 있던 시뮬을 제거하라했어?"*
+   ⭐ 맞다. 물으신 건 **설명**인데 나는 **설명하던 것을 뺐다.** 중복이라고 본 판단이
+     틀렸다 — 걸음 1~4 의 줄은 K=2 뿐이고, 이 표는 **다른 K 에서 어떻게 갈리는지**를
+     보여주는 유일한 자리다. 같은 그림이 아니라 **다른 K 의 그림**이다. */
 function KRows({ E, k, rows, on }) {
   const c = on ? { bd: "#2563eb", fg: "#1e3a8a", bg: "#eff6ff" }
                : { bd: "#e2e8f0", fg: "#64748b", bg: "transparent" };
@@ -304,8 +318,13 @@ export function WhoCanMeetSim({ E }) {
          그리고 「몇 번이든 더해도 된다」는 허락을 **같은 화면에** 둔다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "idle"],
       extra: ["", "", "", ""], chains: [1], hot: 1,
-      ko: "수 네 개예요 — 3, 3, 3, 4. 같은 수에 2 를 「몇 번이든」 더해도 돼요.\n첫째 3 에 더하면 5, 또 더하면 7, 또 더하면 9 … 3 은 이 수들로만 갈 수 있어요.",
-      en: "Four numbers — 3, 3, 3, 4. We may add 2 to the same number as many times as we like.\nAdd to the first 3 and it becomes 5, then 7, then 9 … those are the only numbers a 3 can reach." },
+      /* ⚠️ 2026-09-29 선생님: *"3,5,7,9로 더해지는것도 시뮬에 있었던것 같은데.
+           **너무 비슷한 색으로 너무많은 정보가 갑자기**"* — 둘 다 맞다.
+         ⭐ `3 → 5 → 7 → 9` 가 **이 시뮬 안에서만 네 번** 나오고 있었다:
+           ①이 말풍선 글 ②바로 아래 줄 ③K 비교표의 K=2 칸 ④걸음 7 타일 밑 노트.
+         → 말풍선에서 뺀다. **아래 줄이 이미 그림으로 말한다**(`feedback_shorter_not_longer`). */
+      ko: "수 네 개예요 — 3, 3, 3, 4. 같은 수에 2 를 「몇 번이든」 더해도 돼요.",
+      en: "Four numbers — 3, 3, 3, 4. We may add 2 to the same number as many times as we like." },
 
     /* 2. 관찰 둘 — 두 번째 줄. 여기서도 이름은 없다. 눈으로 「안 겹친다」만. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
@@ -364,7 +383,9 @@ export function WhoCanMeetSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "With K = 2, who can ever meet?", "K = 2 일 때, 누가 누구와 만날 수 있나")}
+        /* ⚠️ PM 이 잡았다(2026-09-29) — 제목이 「K = 2 일 때」인데 걸음 5·6 은
+             K = 1 · K = 3 을 다룬다. 걸음을 일반화로 바꾸면서 **제목을 안 따라 고쳤다.** */
+        title={t(E, "Who can ever meet?", "누가 누구와 만날 수 있나")}
  />
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
@@ -382,9 +403,13 @@ export function WhoCanMeetSim({ E }) {
             ⛔ 기각된 안 — 「말풍선을 타일 아래로 내린다」. 흩어짐은 줄지만
               `PlaceOneByOneSim`·`mexes`·`moohunt` 가 전부 **말풍선 맨 위**라
               이 파일에서만 새 모양이 생긴다(`quest_season_shape_consistency`). */}
-        {/* ⭐ 「두 줄」은 여기서 **진짜 두 줄**이 된다. 한 번 뜬 줄은 끝까지 안 사라진다 —
-            뒤 걸음이 「줄 안을 채운다」고 말하는데 정작 줄이 없으면 학생은 되돌아간다
-            (`feedback_screen_must_not_rely_on_memory`).
+        {/* ⭐ 「두 줄」은 여기서 **진짜 두 줄**이 된다.
+            ⚠️ PM 이 잡았다(2026-09-29) — 예전 주석은 *"한 번 뜬 줄은 끝까지 안 사라진다"*
+              라고 적혀 있었는데 **거짓이었다.** 실제로는 걸음 5·6 에 `chains` 가 **없고**
+              (`kcompare` 만 있다), 걸음 7 에는 `kcompare` 가 없다 — **같은 자리에서
+              두 블록이 서로 갈아끼워진다.** 주석을 사실로 고친다.
+              ⛔ 「갈아끼워도 되나」는 배치 문제라 ux-reviewer 판정 대기 중이다.
+              코드가 아니라 **주석이 먼저 사실이어야** 다음 사람이 안 속는다.
             ⚠️ 줄마다 따로 가운데 정렬하면 두 줄의 숫자가 **세로로 안 맞는다**
             (아래 줄이 «10» 때문에 더 길다). 그러면 「두 줄」이 아니라 흩어진 두 덩이로
             읽힌다 — 묶음을 `fit-content` 로 가운데 놓고 **줄은 왼쪽 끝을 맞춘다.** */}
@@ -406,9 +431,13 @@ export function WhoCanMeetSim({ E }) {
               <ChainRow key={rem} E={E} k={2} rem={rem} hot={s.hot === rem}
                 vals={rem === 1 ? "3 → 5 → 7 → 9 …" : "4 → 6 → 8 → 10 …"}
                 named={s.named}
+                /* ⭐ 선생님이 물으신 것은 **「나머지로 어떻게 구분이 되나」** 다.
+                   `3÷2 = 1` 만 보여주면 **결과**만 보이고 **왜 늘 1 인지**는 안 보인다.
+                   → 2 를 몇 개 쌓았는지로 풀어 쓴다. 더하는 건 **언제나 2 뭉치**라
+                     맨 뒤의 1 은 건드려지지 않는다 — 그게 「안 바뀐다」의 정체다. */
                 calc={s.calc?.includes(rem)
-                  ? (rem === 1 ? "3÷2 = 1 … 5÷2 = 1 … 7÷2 = 1"
-                               : "4÷2 = 0 … 6÷2 = 0 … 8÷2 = 0")
+                  ? (rem === 1 ? "3 = 2+1 · 5 = 2+2+1 · 7 = 2+2+2+1"
+                               : "4 = 2+2 · 6 = 2+2+2 · 8 = 2+2+2+2")
                   : null} />
             ))}
           </div>
