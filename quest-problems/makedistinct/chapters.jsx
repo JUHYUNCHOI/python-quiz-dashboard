@@ -264,15 +264,22 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
       question: t(E,
         "a = [3, 3, 4, 4], K = -2. Minimum ops?",
         "a = [3, 3, 4, 4], K = -2. 최소 횟수는?"),
+      /* ⚠️ 2026-09-29 — 힌트가 **두 가지를 다 물었다.** 하나(「음수면 어느 쪽으로 가나」)는
+           **화면 어디서도 안 가르친 사실**이라 물어도 답이 안 나온다. 5쪽 시뮬은
+           K = 1·2·3 만 보여주고 값은 늘 **커지는 방향**으로만 움직인다.
+         학생 둘이 같은 자리에서 멈췄다 — *"어? 마이너스는 처음 보는데? 지금까지 계속
+           더하기만 했잖아. 빼라는 건가?"* · *"그만두고 싶었던 자리가 여기다."*
+         → **방향은 알려주고**, 5쪽에서 이미 익힌 「나머지로 묶기」만 물음으로 남긴다.
+         ⛔ 걸음을 늘리지 않는다 — 대신 아래 `explain` 에서 같은 말을 한 줄 뺐다. */
       hint: t(E,
-        "K is negative — which way does a push move a value? And which of these four can ever meet?",
-        "K 가 음수면 밀 때 값이 어느 쪽으로 갈까요? 그리고 이 넷 중 어떤 수끼리 만날 수 있을까요?"),
+        "K is negative, so each push makes a value 2 smaller. Then which of these four can ever meet?",
+        "K 가 음수라 밀면 값이 2 씩 작아져요. 그럼 이 넷 중 어떤 수끼리 만날 수 있을까요?"),
       answer: 2,
       /* 2026-09-21: 맞혀도 ✅ 만 뜨고 **왜 2 인지**가 없었다 (재검증 학생 지적).
          `NumInput` 에 explain 을 새로 달아 이 자리부터 쓴다. */
       explain: t(E,
-        "2 is right.\nK = -2, so each push lowers a value by 2 — and a value keeps its remainder when divided by 2.\nSo the two 3s are one pile and the two 4s are another; the piles never meet.\nIn each pile the second one has to move down once: 3 → 1 and 4 → 2. One push each, 2 in total.",
-        "2 가 맞아요.\nK = -2 라서 밀면 값이 2 씩 작아져요. 2 로 나눈 나머지는 그대로예요.\n그래서 3 두 개가 한 묶음, 4 두 개가 다른 묶음이고 서로 만나지 않아요.\n묶음마다 두 번째 값만 한 번씩 내려가면 돼요 — 3 → 1, 4 → 2. 합해서 2 회예요."),
+        "2 is right.\nA value keeps its remainder when divided by 2.\nSo the two 3s are one pile and the two 4s are another; the piles never meet.\nIn each pile the second one has to move down once: 3 → 1 and 4 → 2. One push each, 2 in total.",
+        "2 가 맞아요.\n2 로 나눈 나머지는 그대로예요.\n그래서 3 두 개가 한 묶음, 4 두 개가 다른 묶음이고 서로 만나지 않아요.\n묶음마다 두 번째 값만 한 번씩 내려가면 돼요 — 3 → 1, 4 → 2. 합해서 2 회예요."),
     },
   ];
 }

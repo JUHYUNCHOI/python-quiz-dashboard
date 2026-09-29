@@ -255,6 +255,16 @@ export function PlaceOneByOneSim({ E }) {
           <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
             {t(E, "Moves so far: ", "지금까지 민 횟수: ")}
             <span style={{ fontSize: 18, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{s.ops}</span>
+            {/* ⚠️ ux-reviewer(2026-09-29): 식이 **따로 한 줄**로 있어서
+                「민 횟수 3」 바로 밑에 「= 2」가 떴다. 뜻이 다른 두 숫자가 나란히 서서
+                *"눈이 한 번 더 멈춘다"* (`feedback_same_number_two_meanings`).
+              ⛔ 식을 지우지는 않는다 — 3쪽이 *"K 가 1 이 아니면 곧 봐요"* 라고 약속했고
+                학생이 멈춰 선 유일한 자리다(PM 판정). **줄을 합치고 무엇의 수인지 붙인다.** */}
+            {s.formula && (
+              <span style={{ fontSize: 12.5, fontWeight: 700, color: "#92400e", marginLeft: 8 }}>
+                {t(E, `(the third one alone: ${s.formula})`, `(셋째 것만: ${s.formula} 회)`)}
+              </span>
+            )}
           </div>
         )}
       </StepFade>
@@ -352,8 +362,13 @@ export function WhoCanMeetSim({ E }) {
            (「줄 이름표」) — `feedback_no_invented_terms` 는 뜻을, 여기서는 용도를 붙인다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], calc: [1, 0], named: true, tone: "aha",
-      ko: "2 로 나눠 보면 알아요. 3 도 5 도 7 도 1 이 남고, 4 는 0 이 남아요.\n남는 수가 같으면 언젠가 같아질 수 있고, 다르면 절대 안 돼요.",
-      en: "Dividing by 2 tells us. 3, 5 and 7 all leave 1; 4 leaves 0.\nSame leftover — they can meet one day. Different leftover — never." },
+      /* ⚠️ 2026-09-29 5차 학생: *"화면이 「이 식은 나머지가 안 바뀌는 걸 보여주는
+           거예요」 라고 **직접 말해준 적은 없다. 그냥 식 세 개만 던져놓고 넘어갔다.**"*
+           *"「남는 수가 같으면 같아질 수 있다」도 **왜 그런지 설명이 없다. 결론만 줬다.**"*
+         → 아래 식(`3 = 2+1 · 5 = 2+2+1 · 7 = 2+2+2+1`)이 **무엇을 보여주는지** 말한다.
+           2 를 더하는 건 **2 뭉치만 늘리는 것**이라 맨 뒤의 1 은 안 건드려진다 — 그게 전부다. */
+      ko: "2 씩 더하는 건 2 뭉치만 늘리는 거예요 — 맨 뒤에 남는 1 은 그대로예요.\n그래서 3, 5, 7 은 남는 게 늘 1, 4 는 늘 0 이라 서로 만날 수 없어요.",
+      en: "Adding 2 only piles on more 2s — the 1 left at the end never moves.\nSo 3, 5 and 7 always leave 1 and 4 always leaves 0, and they can never meet." },
 
     /* 5. 일반화 **한 칸만.** K=1 을 옆에 놓아 「K 가 달라지면 갈리는 수가 달라진다」를
          한 번에 하나씩 본다. 표를 통째로 띄우지 않는다. */
@@ -366,8 +381,15 @@ export function WhoCanMeetSim({ E }) {
          (`5 → 8 → 11` 을 쓰면 5 가 어디서 왔는지 학생이 묻는다). */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], kcompare: [1, 2, 3],
-      ko: "K 가 3 이면 남는 수가 0, 1, 2 — 세 가지예요.\n2 를 더하든 3 을 더하든, 남는 수는 절대 안 바뀌어요.",
-      en: "With K = 3 the leftovers are 0, 1 and 2 — three of them.\nAdd 2 or add 3, the leftover never changes." },
+      /* ⛔ 2026-09-29 감사 담당이 **거짓**으로 잡았다. 옛 문장:
+           *"2 를 더하든 3 을 더하든, 남는 수는 절대 안 바뀌어요."*
+           **반례**: 3 에 2 를 더하면 5 이고 5 를 3 으로 나눈 나머지는 2 — 3 의 나머지 0 에서
+           **바뀐다.** 참인 것은 «K 를 더하면 **그 K 로** 나눈 나머지가 안 바뀐다» 인데,
+           두 K 를 한 문장에 섞어 그 조건을 지워 버렸다.
+         ⛔ 선생님이 오늘 두 번 지적하신 「한 경우로 전체를 주장한다」의 **재발**이다
+           (`feedback_one_case_cannot_claim_always`). 조건을 문장 안에 되살린다. */
+      ko: "K 가 3 이면 남는 수가 0, 1, 2 — 세 가지예요.\n3 씩 더하면 3 으로 나눈 남는 수가 그대로예요. 2 씩 더할 때와 똑같아요.",
+      en: "With K = 3 the leftovers are 0, 1 and 2 — three of them.\nAdding 3 keeps the leftover after ÷ 3, just like adding 2 kept the leftover after ÷ 2." },
 
     /* 7. PM 판정으로 **옛 걸음 5·6·7·8 을 하나로.** 3쪽 `PlaceOneByOneSim` 이 이미
          「그대로 둠 → 한 번 밀기 → 여러 번 밀기 → 공식」을 전부 가르쳤다. */
@@ -447,12 +469,6 @@ export function WhoCanMeetSim({ E }) {
           <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
             {t(E, "Moves so far: ", "지금까지 민 횟수: ")}
             <span style={{ fontSize: 18, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{s.ops}</span>
-          </div>
-        )}
-        {s.formula && (
-          <div style={{ textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#92400e",
-            fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
-            {s.formula}
           </div>
         )}
       </StepFade>
