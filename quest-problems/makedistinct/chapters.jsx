@@ -205,14 +205,20 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
                 **「어, 정렬 안 하는데 답이 맞다고?」** 하는 생각이 들었다. 왜 순서 상관없이
                 맞는지는 설명이 없었다."* → 앞 쪽이 세운 규칙과 이 코드가 어긋나 보인다.
                 **한 마디만 그 자리에 놓는다**(`feedback_sentence_must_follow`). */}
+            {/* ⚠️ 2026-09-29 선생님(화면 보시고): *"오래 걸린다는 얘기겠지? **엄청 기네**"*
+                맞다. 이 빨간 상자에 **두 가지**가 들어 있었다 —
+                ①정렬을 안 해도 답이 맞는 이유(3문장) ②느리다(2문장, 숫자 포함).
+                `feedback_why_and_how_over_slowness`: *"느린 건 금방 안다. 한계는 한 화면이면
+                충분 — **제약 숫자 + 연산량 한 줄**. 아낀 분량을 「왜·어떻게」에 써라."*
+                → ①은 한 문장으로, ②도 한 줄로. 둘 다 내용은 남기고 길이만 줄인다. */}
             <b>{t(E, "It gives the right answer — but it is too slow.", "답은 맞아요. 그런데 너무 느려요.")}</b><br />
             {t(E,
-              "Wait — page 3 said to settle the smallest value first, but this code walks the values in their original order. It still lands on the right answer: whatever order we try, each value ends up at the first free spot available to it. Sorting doesn't change the answer — it only saves work.",
-              "잠깐 — 3쪽에서는 작은 값부터 놓으라고 했는데 이 코드는 원래 순서 그대로 돌아요.\n그래도 답은 맞아요. 어떤 순서로 하든 값마다 결국 「비어 있는 자리 중 맨 앞」에 놓이거든요.\n정렬은 답을 바꾸는 게 아니라 「일을 줄여 줄 뿐」이에요.")}<br />
-            {/* "몇 분" 이었다 → 실측값으로. project-lead 가 N=200,000·K=1 을 끝까지 돌렸다: 1179초. */}
+              "Sorting does not change the answer — it only saves work.",
+              "정렬은 답을 바꾸지 않아요 — 일을 줄여 줄 뿐이에요.")}<br />
+            {/* 실측값이다 — project-lead 가 N=200,000·K=1 을 끝까지 돌렸다: 1179초. */}
             {t(E,
-              "N can be 200,000. One value may be pushed almost N times, and each push looks through everything placed so far — that is about 200,000 × 200,000 = 40,000,000,000 steps → we actually ran it, and it took about 20 minutes.",
-              "N 이 200,000 까지예요. 값 하나가 거의 N 번 밀릴 수 있고, 밀 때마다 지금까지 놓은 값을 전부 훑어요. 200,000 × 200,000 = 400억 번쯤 돼요 → 실제로 돌려보니 20분 걸려요.")}
+              "N can be 200,000, so this looks through about 40 billion things → 20 minutes for real.",
+              "N 이 200,000 이라 400억 번쯤 훑어요 → 실제로 돌려보니 20분 걸려요.")}
           </div>
 
           {/* 2026-09-22 PM 판정 — 이 쪽이 3쪽 바로 뒤(구 6쪽 자리)로 옮겨오면서
