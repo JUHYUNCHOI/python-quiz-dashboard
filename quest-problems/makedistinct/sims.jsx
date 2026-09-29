@@ -68,7 +68,7 @@ function Tile({ v, state, note }) {
      **줄 이름과 그 줄의 숫자들**로 답해진다. 3÷2·5÷2 를 눈앞에서 대조할 수 있다.
    ⛔ 「홀수 줄/짝수 줄」로 이름 붙이지 마라 — 그건 K = 2 일 때만의 모습이고,
      선생님이 이미 그걸로 한 번 막히셨다(*"이건 k=2일떄만 …"*). */
-function ChainRow({ E, k, rem, vals, hot }) {
+function ChainRow({ E, k, rem, vals, hot, calc, named }) {
   const c = rem === 1 ? { bg: "#dbeafe", bd: "#2563eb", fg: "#1e3a8a" }
                       : { bg: "#dcfce7", bd: "#16a34a", fg: "#065f46" };
   return (
@@ -83,11 +83,29 @@ function ChainRow({ E, k, rem, vals, hot }) {
         fontSize: 11.5, fontWeight: 800, color: c.fg, background: c.bg,
         border: `1.5px solid ${c.bd}`, borderRadius: 8, padding: "3px 8px",
         whiteSpace: "nowrap", wordBreak: "keep-all",
-      }}>{t(E, `remainder ${rem} after ÷ ${k}`, `${k} 로 나눈 나머지 ${rem}`)}</div>
-      <div style={{
-        fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800,
-        color: c.fg, letterSpacing: .3,
-      }}>{vals}</div>
+      }}>{/* ⛔ 이름은 **걸음 4 전에는 붙지 않는다.** 걸음 1 부터 「1 이 남는 줄」이라고
+             써 두면 선생님이 지적하신 *"갑자기 나머지가 같은 것들이라고 하는데"* 가
+             그대로 남는다 — **관찰이 끝나기 전에 답이 화면에 있는 것**이다.
+             그 전에는 그냥 «누구의 줄» 이다. */
+        calc ? t(E, `÷ ${k} leaves ${rem}`, `${k} 로 나누면 ${rem} 남음`)
+        : named ? t(E, `row of ${rem}`, `${rem} 이 남는 줄`)
+        : t(E, `${rem === 1 ? 3 : 4}'s row`, `${rem === 1 ? 3 : 4} 의 줄`)}</div>
+      <div>
+        <div style={{
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800,
+          color: c.fg, letterSpacing: .3,
+        }}>{vals}</div>
+        {/* ⭐ 나눗셈은 **묻는 걸음에만** 뜬다(`calc`). 학생(초6)이
+            *"솔직히 계산 안 하고 짐작했다 — 홀수라서 그렇겠지 하고"* 라고 했고,
+            선생님도 *"왜 k로 나눈 나머지이지?"* 를 **두 번** 물으셨다.
+            이름표만으로는 답이 안 됐다 — **나눗셈을 눈앞에 놓는다.** */}
+        {calc && (
+          <div style={{
+            fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
+            fontWeight: 700, color: c.fg, opacity: .85, marginTop: 2,
+          }}>{calc}</div>
+        )}
+      </div>
     </div>
   );
 }
@@ -118,21 +136,28 @@ function KRows({ E, k, rows, on }) {
         whiteSpace: "nowrap", wordBreak: "keep-all", paddingTop: 2,
       }}>{t(E, `K = ${k} · ${k} row${k > 1 ? "s" : ""}`, `K = ${k} · 줄 ${k} 개`)}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {rows.map((r) => (
-          <div key={r} style={{
-            fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5,
-            fontWeight: 800, color: c.fg, letterSpacing: .3,
-          }}>{r}</div>
+        {rows.map((r, i) => (
+          <div key={i} style={{
+            fontFamily: r ? "'JetBrains Mono',monospace" : "inherit",
+            fontSize: r ? 13.5 : 11.5,
+            fontWeight: 800, color: r ? c.fg : "#94a3b8", letterSpacing: .3,
+            wordBreak: "keep-all",
+          }}>{r || t(E, "(our numbers do not use this row)", "(우리 수는 이 줄을 안 써요)")}</div>
         ))}
       </div>
     </div>
   );
 }
 
+/* ⛔ PM 판정(2026-09-29): K=3 의 셋째 줄은 **비운다.**
+     옛 값 `5 → 8 → 11` 의 **5 는 바로 위 타일(3,3,3,4)에 없는 수**였다 —
+     학생이 「어디서 온 5 지?」를 묻게 된다(`feedback_same_number_two_meanings`).
+   ⭐ 비운 채로 두면 **「줄은 K 개로 갈리지만 우리 수가 쓰는 줄은 더 적다」**가
+     글이 아니라 **그림**으로 말해진다. 실측: [3,3,3,4] 를 K=3 으로 돌리면 줄은 2개다. */
 const K_COMPARE = [
   { k: 1, rows: ["3 → 4 → 5 → 6 → 7 …"] },
   { k: 2, rows: ["3 → 5 → 7 → 9 …", "4 → 6 → 8 → 10 …"] },
-  { k: 3, rows: ["3 → 6 → 9 …", "4 → 7 → 10 …", "5 → 8 → 11 …"] },
+  { k: 3, rows: ["3 → 6 → 9 …", "4 → 7 → 10 …", null] },
 ];
 
 /* ═══ 작은 수부터 놓아 보기 — 3쪽의 글 여섯 줄을 대신한다 ═══ */
@@ -242,87 +267,84 @@ export function WhoCanMeetSim({ E }) {
      값이 밀려도 홀/짝은 안 바뀌므로 index 로 정해도 항상 맞는다. */
   const ord = (i) => [t(E, "1st", "첫째"), t(E, "2nd", "둘째"), t(E, "3rd", "셋째"), t(E, "4th", "넷째")][i];
   // st(i) 로 각 칸 색을 정한다: 아직 안 본 짝수 칸만 "even"(초록), 나머지는 홀수 묶음 표시 or 실제 진행 상태.
+  /* ⭐⭐ 2026-09-29 선생님(화면 보시고, 네 번째):
+       *"좀더 세분화되게. 단계적으로. **갑자기 정보 너무 많아지지 않도록.**
+         갑자기 나머지가 같은 것들이라고 하는데 **페이지수를 유지하기 위한 시뮬인가**"*
+
+     ⭐ 마지막 물음이 제일 아프고, **맞는 지적이다.** 옛 걸음 4 는
+       ①규칙을 말하고 ②「나머지」라는 이름을 던지고 ③K=1·2·3 표(여섯 줄)를
+       **한꺼번에** 띄웠다. 결론을 먼저 주고 그림으로 장식한 것이라,
+       걸음이 **이유를 만들어 가는 게 아니라 자리만 차지**했다.
+
+     → **순서를 관찰 → 물음 → 나눗셈 → 이름 → 일반화 로 편다.**
+       한 걸음에 새로 뜨는 것은 **하나**다(`feedback_one_thing_changes_at_a_time`).
+       ⛔ 「나머지」라는 말은 **나눗셈을 두 줄 다 보여준 뒤에야** 처음 쓴다
+         (`feedback_no_invented_terms` — 용어는 처음 쓰기 전에 정의).
+       ⛔ K 비교표도 **한 칸씩** 자란다 — 여섯 줄이 한 번에 뜨지 않는다.
+
+     ⚠️ 걸음 수는 8 → **7** 이다(늘리지 않았다). PM 판정(2026-09-29)의
+       「옛 걸음 5·6·7(줄 안에서 하나씩 밀기)은 3쪽 `PlaceOneByOneSim` 과
+       기계적으로 동일하니 한 걸음으로」를 **그대로 지키고**, 거기서 번 자리를
+       **유도**에 썼다. 학생도 *"6걸음쯤부터 대충 누르기만 했다"* 고 한 곳이 거기다.
+       ⛔ `(7-3) ÷ 2 = 2` 는 살린다 — 3쪽이 *"K 가 1 이 아니면 곧 봐요"* 라고 약속했고
+         학생이 멈춰 선 유일한 자리다. */
   const steps = [
-    { tiles: [3, 3, 3, 4], st: ["idle", "idle", "idle", "idle"],
-      extra: ["", "", "", ""],
-      ko: "수 네 개예요 — 3, 3, 3, 4. 이번엔 K = 2 씩 더해요.",
-      en: "Four numbers — 3, 3, 3, 4. This time we add K = 2 each move." },
-    /* ⭐ 2026-09-29: 「두 줄」을 **타일 밑 작은 글씨**로 흘리고 있었다(`extra`).
-       그래서 선생님도 학생도 «두 줄이 어디 있나» 를 물으셨다. 이제 `chains` 로
-       **화면에 진짜 두 줄**을 그린다 — 타일은 값만 보여주고, 줄은 줄이 보여준다. */
-    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "idle"],
+    /* 1. 관찰 — 한 수의 갈 곳. 아직 「나머지」도 「줄」도 이름 붙이지 않는다. */
+    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "idle"],
       extra: ["", "", "", ""], chains: [1], hot: 1,
-      ko: "첫째 3 에 2 를 계속 더해 봐요 — 3, 5, 7, 9 …\n3 이 갈 수 있는 자리는 이 줄뿐이에요.",
-      en: "Keep adding 2 to the first 3 — 3, 5, 7, 9 …\nThis row is the only place a 3 can ever land." },
-    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
+      ko: "수 네 개예요 — 3, 3, 3, 4. K = 2 씩 더할 수 있어요.\n첫째 3 에 2 를 계속 더하면 3, 5, 7, 9 … 여기밖에 못 가요.",
+      en: "Four numbers — 3, 3, 3, 4. We may add K = 2 each move.\nKeep adding 2 to the first 3 and it can only reach 3, 5, 7, 9 …" },
+
+    /* 2. 관찰 둘 — 두 번째 줄. 여기서도 이름은 없다. 눈으로 「안 겹친다」만. */
+    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], hot: 0,
-      ko: "넷째 4 도 2 씩 더해요 — 4, 6, 8, 10 …\n두 줄에 같은 수가 하나도 없어요.",
-      en: "The fourth 4 adds 2 as well — 4, 6, 8, 10 …\nThe two rows share no number at all." },
-    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
-      /* ⚠️ 2026-09-29 (2판) 선생님: *"아직 이해가 안감"* — 짧게 줄였는데도 안 됐다.
-         ⭐ 화면을 다시 보니 **결론을 말하는 순간 근거가 사라지고 있었다.**
-           2걸음이 `→5→7→9…`, 3걸음이 `→6→8→10…` 을 보여줬는데
-           **결론 걸음인 여기서 둘 다 빈 칸**이었다(`extra: ["", "", "", ""]`).
-           학생은 「두 줄이 안 겹친다」를 **기억으로** 떠올려야 했다
-           (`feedback_screen_must_not_rely_on_memory` — 앞 쪽은 사라진다).
-         → **두 줄을 같이 띄워 놓고** 말한다. 그러면 「안 겹친다」가 글이 아니라 **그림**이 된다. */
-      /* ⚠️ 2026-09-29 (3판) 선생님: *"두 줄이 어디있으며 이 줄을 가르는 건
-           왜 k로 나눈 나머지이지?"* — **두 질문 다 화면이 답을 안 하고 있었다.**
-         ① 「두 줄」 — 타일 밑 작은 글씨였다. → `chains` 로 **진짜 두 줄**을 그린다.
-         ② 「왜 나머지냐」 — 이름만 던지고 **계산을 한 번도 안 보여줬다.**
-            → 줄 이름을 **나머지 그 자체**로 달고(`2 로 나눈 나머지 1`),
-              말풍선은 **왜 안 바뀌는지**를 말한다 — 「K 를 더해도 나머지는 그대로」.
-              이게 진짜 이유다. 홀짝은 K=2 에서 그 이유가 보이는 모습일 뿐이다. */
-      extra: ["", "", "", ""], kcompare: true, tone: "aha",
-      /* ⭐ 2026-09-28 선생님: *"k 가 2 일때는 짝수와 홀수가 겹쳐질 걱정이 없는건 맞는데
-         **1 이거나 3 일떄 다를때도?**"* — 맞는 지적이다. **홀/짝은 K = 2 일 때만의 모습**이고,
-         진짜 규칙은 **「K 로 나눈 나머지」**다(🔒 코드도 `groups[x % abs(k)]` 로 묶는다).
-         ⚠️ 학생(초6)도 같은 곳을 짚었다: *"5쪽은 **「나머지」라는 말을 한 번도 안 쓴다.**
-         코드 탭에 가서야 그게 나머지였다는 걸 알았다. 5쪽만 읽고 그친 학생은 「나머지」를
-         못 본 채로 코드에 가서 갑자기 그 말이 나오는 셈이다."*
-         → **이름을 여기서 붙인다.** 쪽을 더하지 않고 이 걸음의 문장만 바꾼다. */
-      /* ⚠️ 2026-09-29 선생님: *"설명 길어. 뭔말인지 모르겠어. 그리고 이건 k=2일떄만
-         서로 짝수 홀수 영향을 안주는거잖아."*  — **네 줄이었다.**
-         ⭐ 원인은 길이가 아니라 **순서**였다. 「홀수/짝수」(K=2 일 때만의 모습)를 **먼저**
-           가르치고, 그다음 세 줄로 *"사실 그건 K 가 2 라서"* 라고 **되돌리고** 있었다.
-           특수한 경우를 먼저 주고 일반 규칙으로 물러나면 학생은 **특수한 쪽을 규칙으로**
-           기억한다 — 선생님이 그렇게 읽으셨다.
-         ⭐ **일반 규칙을 먼저 말한다.** 홀짝은 그 규칙이 K=2 에서 보이는 모습일 뿐이다.
-         ⚠️ 선생님이 드신 반례(`2 2 5`, K=3)는 **규칙과 어긋나지 않는다** — 2 와 5 는
-           3 으로 나눈 나머지가 **둘 다 2** 라 같은 묶음이라 부딪히는 게 맞다.
-           반례가 나왔다는 것 자체가 **화면이 규칙을 그렇게 안 읽히게 썼다**는 증거다.
-         ⛔ K=1·K=3 「~이었다면」 두 줄은 **뺐다.** 바로 앞 두 걸음(위 176·180행)이 이미
-           K=1 과 K=2 를 숫자로 비교한다 — **같은 말을 세 번째로 하고 있었다**
-           (`feedback_shorter_not_longer`). */
-      ko: "K 를 더해도 K 로 나눈 나머지는 안 바뀌어요 — 그래서 자기 줄을 못 벗어나요.\n줄 개수는 K 개예요. K 가 1 이면 줄이 하나라서 모두가 서로 부딪혀요.",
-      en: "Adding K never changes the remainder after ÷ K — so a number can never leave its row.\nThere are K rows. With K = 1 there is only one row, so everything can clash." },
-    /* ⚠️ 2026-09-29 학생: *"4걸음까지는 「두 줄로 나눈다」였는데 5걸음이 갑자기
-         「묶음 안에서도 작은 값부터」로 넘어간다. 이어주는 말이 없어서 다음 이야기가
-         시작된 줄 알았다."* → 이음말로 연다. 「묶음」→「줄」로 이름도 통일한다
-       (같은 것을 두 이름으로 부르고 있었다 — `check-word-difficulty` 의 그 층). */
-    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
-      extra: [t(E, "· stays", "· 그대로"), "", "", ""], chains: [1, 0],
-      ko: "이제 줄 안을 채워요 — 작은 값부터. 첫째 3 은 맨 앞이라 그대로예요. (0 회)",
-      en: "Now we fill each row — smallest value first. The first 3 is at the front, so it stays. (0 moves)" },
-    { tiles: [3, 5, 3, 4], st: ["placed", "moving", "placed", "even"],
-      extra: ["", "· 3→5", "", ""], chains: [1, 0], ops: 1,
-      ko: "둘째 3 은 첫째와 같아요. 2 만큼 밀어서 5 로 만들어요. (1 회)",
-      en: "The second 3 matches the first. Push it by 2, to 5. (1 move)" },
-    /* ⚠️ 2026-09-29 학생이 **제일 크게 멈춘 자리**: *"6걸음까지는 「하나씩 밀기」였는데
-         7걸음에서 갑자기 `(7-3) ÷ 2 = 2` 가 툭 나온다. 왜 그렇게 하면 맞는지 설명이 없다.
-         「한 번씩 밀기」에서 「한 번에 여러 번 밀기 계산법」으로 넘어가는 다리가 없다."*
-       → **세는 것을 먼저 보여주고 식은 그 뒤에.** 식이 새 규칙이 아니라 방금 센 것과
-         같은 값이라는 게 보여야 한다. */
-    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "moving", "even"],
-      extra: ["", "", "· 3→5→7", ""], chains: [1, 0], formula: "(7-3) ÷ 2 = 2", ops: 3,
-      ko: "셋째 3 은 5 도 찼어요. 3→5, 5→7 로 두 번 밀어야 해요.\n세는 대신 (7-3) ÷ 2 로도 2 가 나와요.",
-      en: "The third 3 finds 5 taken too. It needs two pushes: 3→5, then 5→7.\nInstead of counting, (7-3) / 2 also gives 2." },
-    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "placed"],
-      extra: ["", "", "", ""], chains: [1, 0], ops: 3, tone: "aha",
-      /* 자리 순서(첫째~넷째)를 끝까지 안 바꿨으므로 화면엔 3,5,7,4 로 보인다
-         (정렬한 3,4,5,7 이 아니다) — 실제 표시값으로 말한다. */
-      ko: "3, 5, 7, 4 — 다 달라요. 민 횟수는 모두 3 회. 이 나눔은 다음 쪽에서도 그대로 쓰여요.",
-      en: "3, 5, 7, 4 — all different. Three pushes in total. This split is used on the next page too." },
+      ko: "넷째 4 도 2 씩 더해 봐요 — 4, 6, 8, 10 …\n두 줄에 같은 수가 하나도 없어요.",
+      en: "Now add 2 to the fourth number, 4 — 4, 6, 8, 10 …\nThe two rows share no number at all." },
+
+    /* 3. **물음 — 이게 빠져 있었다.**
+         ⚠️ 2026-09-29 선생님: *"k를 더하면 서로 뭔가 영향이 없다. 그 다음 나머지…
+           **에잇 모르겠네**"* — 선생님이 논리를 이어 보시다 놓으셨다.
+         ⭐ 원인: 화면에 **「나머지」가 답하는 질문이 없었다.** 줄 두 개를 보여주고
+           바로 *"이게 나머지예요"* 로 갔다. 답이 먼저 오면 이어지지 않는다
+           (`feedback_solution_framing` — *"그럼 어떻게 하면 될까?"* 로 열어라).
+         → 빠진 질문은 이것이다: **「어느 수가 어느 줄인지, 줄을 끝까지 안 써 보고 알 수 있나?」**
+           나머지는 그 질문의 답이고, 쓸모는 **줄 이름표**다. 성질이 아니라 **도구**로 준다.
+         ⛔ 이 걸음에서는 답을 주지 마라. 나눗셈은 다음 걸음이다. */
+    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+      extra: ["", "", "", ""], chains: [1, 0], tone: "stuck",
+      ko: "3 과 5 는 같은 줄이에요. 그럼 3 과 4 는 같은 줄일까요?\n줄을 끝까지 써 보지 않고 알 수는 없을까요?",
+      en: "3 and 5 sit on the same row. What about 3 and 4?\nIs there a way to tell without writing the whole row out?" },
+
+    /* 4. **답 = 이름.** 앞 걸음의 물음에 나눗셈으로 답하고, 그 답에 이름을 준다.
+         ⛔ 이 걸음 앞에서 「나머지」를 쓰지 마라 — 그게 선생님이 *"갑자기"* 라고
+           하신 자리다. 그리고 이름을 **정의**로 주지 말고 **쓸모**로 줘라
+           (「줄 이름표」) — `feedback_no_invented_terms` 는 뜻을, 여기서는 용도를 붙인다. */
+    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+      extra: ["", "", "", ""], chains: [1, 0], calc: [1, 0], named: true, tone: "aha",
+      ko: "2 로 나눠 보면 알아요. 3 도 5 도 7 도 1 이 남고, 4 는 0 이 남아요.\n이 남는 수가 곧 줄 이름표예요 — 같으면 같은 줄, 다르면 딴 줄이에요.",
+      en: "Dividing by 2 tells us. 3, 5 and 7 all leave 1; 4 leaves 0.\nThat leftover is the row's name tag — same tag, same row; different tag, different row." },
+
+    /* 5. 일반화 **한 칸만.** K=1 을 옆에 놓아 「K 가 달라지면 갈리는 수가 달라진다」를
+         한 번에 하나씩 본다. 표를 통째로 띄우지 않는다. */
+    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+      extra: ["", "", "", ""], kcompare: [1, 2],
+      ko: "K 를 바꾸면 어떻게 될까요? K 가 1 이면 줄이 하나뿐이에요.\n그래서 모두가 서로 부딪혀요.",
+      en: "What if K changes? With K = 1 there is only one row.\nSo every number can clash with every other." },
+
+    /* 6. 일반화 **한 칸 더.** K=3. 셋째 줄은 **비워 둔다** — 우리 수가 안 쓰는 줄이다
+         (`5 → 8 → 11` 을 쓰면 5 가 어디서 왔는지 학생이 묻는다). */
+    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+      extra: ["", "", "", ""], kcompare: [1, 2, 3],
+      ko: "K 가 3 이면 줄이 셋으로 갈려요.\nK 를 더해도 나머지는 안 바뀌니까, 한 번 정해진 줄은 못 벗어나요.",
+      en: "With K = 3 the numbers split into three rows.\nAdding K never changes the remainder, so a number can never leave its row." },
+
+    /* 7. PM 판정으로 **옛 걸음 5·6·7·8 을 하나로.** 3쪽 `PlaceOneByOneSim` 이 이미
+         「그대로 둠 → 한 번 밀기 → 여러 번 밀기 → 공식」을 전부 가르쳤다. */
+    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "even"],
+      extra: [t(E, "· stays", "· 그대로"), "· 3→5", "· 3→5→7", ""],
+      chains: [1, 0], named: true, formula: "(7-3) ÷ 2 = 2", ops: 3, tone: "aha",
+      ko: "이제 줄 안을 앞에서부터 채워요. 첫째 3 은 그대로, 둘째는 5, 셋째는 7 이에요.\n셋째가 밀린 횟수는 (7-3) ÷ 2 = 2 회 — 모두 합쳐 3 회예요.",
+      en: "Now fill each row from the front. The first 3 stays, the second becomes 5, the third becomes 7.\nThe third moved (7-3) / 2 = 2 times — three moves in total." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -341,6 +363,13 @@ export function WhoCanMeetSim({ E }) {
           ))}
         </div>
 
+        {/* ⭐ 블록 순서는 **ux-reviewer 판정(2026-09-29)** 이다. 잣대는 「무엇이 안 밀리나」.
+            `chains`/`kcompare` 를 **타일 바로 밑에 못박고**, 걸음마다 생겼다 사라지는
+            `ops`(걸음 6부터)·`formula`(걸음 7에만)를 **그 아래로** 내린다. 그러면
+            새로 뜨는 것이 **아래로만 더해져** 위에 있는 줄이 안 밀린다.
+            ⛔ 기각된 안 — 「말풍선을 타일 아래로 내린다」. 흩어짐은 줄지만
+              `PlaceOneByOneSim`·`mexes`·`moohunt` 가 전부 **말풍선 맨 위**라
+              이 파일에서만 새 모양이 생긴다(`quest_season_shape_consistency`). */}
         {/* ⭐ 「두 줄」은 여기서 **진짜 두 줄**이 된다. 한 번 뜬 줄은 끝까지 안 사라진다 —
             뒤 걸음이 「줄 안을 채운다」고 말하는데 정작 줄이 없으면 학생은 되돌아간다
             (`feedback_screen_must_not_rely_on_memory`).
@@ -350,7 +379,9 @@ export function WhoCanMeetSim({ E }) {
         {s.kcompare && (
           <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 10,
             width: "fit-content", maxWidth: "100%", marginLeft: "auto", marginRight: "auto" }}>
-            {K_COMPARE.map((kc) => (
+            {/* ⭐ 표가 **한 칸씩 자란다.** 선생님(2026-09-29):
+                *"갑자기 정보 너무 많아지지 않도록"* — 옛 판은 여섯 줄이 한 번에 떴다. */}
+            {K_COMPARE.filter((kc) => s.kcompare.includes(kc.k)).map((kc) => (
               <KRows key={kc.k} E={E} k={kc.k} rows={kc.rows} on={kc.k === 2} />
             ))}
           </div>
@@ -361,21 +392,26 @@ export function WhoCanMeetSim({ E }) {
             width: "fit-content", maxWidth: "100%", marginLeft: "auto", marginRight: "auto" }}>
             {s.chains.map((rem) => (
               <ChainRow key={rem} E={E} k={2} rem={rem} hot={s.hot === rem}
-                vals={rem === 1 ? "3 → 5 → 7 → 9 …" : "4 → 6 → 8 → 10 …"} />
+                vals={rem === 1 ? "3 → 5 → 7 → 9 …" : "4 → 6 → 8 → 10 …"}
+                named={s.named}
+                calc={s.calc?.includes(rem)
+                  ? (rem === 1 ? "3÷2 = 1 … 5÷2 = 1 … 7÷2 = 1"
+                               : "4÷2 = 0 … 6÷2 = 0 … 8÷2 = 0")
+                  : null} />
             ))}
           </div>
         )}
 
-        {s.formula && (
-          <div style={{ textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#92400e",
-            fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
-            {s.formula}
-          </div>
-        )}
         {s.ops !== undefined && (
           <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
             {t(E, "Moves so far: ", "지금까지 민 횟수: ")}
             <span style={{ fontSize: 18, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{s.ops}</span>
+          </div>
+        )}
+        {s.formula && (
+          <div style={{ textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#92400e",
+            fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
+            {s.formula}
           </div>
         )}
       </StepFade>
