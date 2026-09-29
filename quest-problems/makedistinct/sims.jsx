@@ -188,8 +188,21 @@ export function WhoCanMeetSim({ E }) {
          코드 탭에 가서야 그게 나머지였다는 걸 알았다. 5쪽만 읽고 그친 학생은 「나머지」를
          못 본 채로 코드에 가서 갑자기 그 말이 나오는 셈이다."*
          → **이름을 여기서 붙인다.** 쪽을 더하지 않고 이 걸음의 문장만 바꾼다. */
-      ko: "홀수 셋이 한 묶음, 짝수 하나가 다른 묶음이에요. 서로는 절대 안 부딪혀요.\n홀짝으로 갈린 건 K 가 2 라서예요 — 3 을 2 로 나눈 나머지는 1, 4 는 0 이라 갈린 거예요.\nK 가 3 이었다면? 3 을 3 으로 나눈 나머지는 0, 4 는 1 — 이번에도 갈려요. 홀짝과는 상관없어요.\nK 가 1 이었다면? 1 로 나눈 나머지는 전부 0 이라 넷이 다 한 묶음이에요.",
-      en: "The three odds are one group, the one even is another. They never clash.\nThey split by odd/even because K is 2 — 3 leaves remainder 1, 4 leaves 0.\nWhat if K were 3? 3 leaves 0, 4 leaves 1 — they still split, but nothing to do with odd/even.\nWhat if K were 1? Every remainder is 0, so all four land in one group." },
+      /* ⚠️ 2026-09-29 선생님: *"설명 길어. 뭔말인지 모르겠어. 그리고 이건 k=2일떄만
+         서로 짝수 홀수 영향을 안주는거잖아."*  — **네 줄이었다.**
+         ⭐ 원인은 길이가 아니라 **순서**였다. 「홀수/짝수」(K=2 일 때만의 모습)를 **먼저**
+           가르치고, 그다음 세 줄로 *"사실 그건 K 가 2 라서"* 라고 **되돌리고** 있었다.
+           특수한 경우를 먼저 주고 일반 규칙으로 물러나면 학생은 **특수한 쪽을 규칙으로**
+           기억한다 — 선생님이 그렇게 읽으셨다.
+         ⭐ **일반 규칙을 먼저 말한다.** 홀짝은 그 규칙이 K=2 에서 보이는 모습일 뿐이다.
+         ⚠️ 선생님이 드신 반례(`2 2 5`, K=3)는 **규칙과 어긋나지 않는다** — 2 와 5 는
+           3 으로 나눈 나머지가 **둘 다 2** 라 같은 묶음이라 부딪히는 게 맞다.
+           반례가 나왔다는 것 자체가 **화면이 규칙을 그렇게 안 읽히게 썼다**는 증거다.
+         ⛔ K=1·K=3 「~이었다면」 두 줄은 **뺐다.** 바로 앞 두 걸음(위 176·180행)이 이미
+           K=1 과 K=2 를 숫자로 비교한다 — **같은 말을 세 번째로 하고 있었다**
+           (`feedback_shorter_not_longer`). */
+      ko: "홀짝이 아니라 「나머지」가 진짜 규칙이에요.\nK 로 나눈 나머지가 같은 값끼리만 부딪혀요 — 3 은 나머지 1, 4 는 0 이라 서로 절대 안 만나요.",
+      en: "The real rule is the remainder, not odd/even.\nOnly values with the same remainder after dividing by K can ever clash — 3 leaves 1, 4 leaves 0, so they never meet." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
       extra: [t(E, "· stays", "· 그대로"), "", "", ""],
       ko: "묶음 안에서도 작은 값부터 하나씩 놓아요. 첫째 3 은 맨 앞이라 그대로예요. (0 회)",
