@@ -418,3 +418,27 @@ quest 5개에 흩어져 있고 **쪽 수 불변**, 매번 **다른 구체적 결
 
 | CodeWalk 코드 박스 뒤 **빈 공간 350~450px** 을 줄이나 | BLOCKED(줄이면 네 축 전수를 다시 돌려야 한다) | ux-reviewer: *"문구가 「고장났나」 의문은 없애지만 빈 공간 자체는 안 줄인다. 걸음 수와 무관하니 **박스 고정 높이**가 원인"*. 지금 여백은 `boxH` 전체인데 필요한 건 그보다 적다 |
 | `familytree` 코드 탭 상단 배너 겹침 | DONE(헛경보로 판정) | ux-reviewer 가 스팟체크 중 발견. **이번 수정과 무관한 기존 자리** |
+
+---
+
+## 🎯 2026-09-29 — 선생님 결정: **Bronze 와 MCC 가 먼저다**
+
+선생님: ***"아니야. 난 브론즈와 mcc에 우선 집중할거야"***
+→ `memory/decision_bronze_mcc_first.md`. **제품 방향이라 혼자 뒤집지 않는다.**
+
+큐를 그 기준으로 다시 세운다. **잣대 한 줄 — 「이게 Bronze/MCC 를 끝내는 데 닿나?」**
+
+| 항목 | 상태 | Bronze/MCC 에 닿나 |
+|---|---|---|
+| MCC **40개** concepts_required 미감사 | READY | ⭕ **정면으로 닿는다.** 채울 거면 48개 한 번에(반쯤 채우면 준비 안 된 학생에게 추천된다) |
+| 배지 검사기 남은 8건 사람이 열기 | READY | ⭕ Bronze·MCC quest 가 섞여 있다. 오탐 섞임 — 코드를 열어 가른다 |
+| `code-names-in-prose` 상위 5개 | READY | ⭕ `swaptowin`·`cowcollege`·`permutation`·`rounding`·`lc560` — 대부분 Bronze |
+| `swaptowin` CodeWalk 말풍선 중복 | READY | ⭕ Bronze quest. PM 이 내일·별도 판정으로 미뤘다 |
+| MCC 감사 잔여(`mcc_audit_and_queue_2026-08-18`) | READY | ⭕ 오답 quest 넷·숨김 정리·THIN 카드 |
+| `undefined-symbol` 394건 진짜/오탐 가르기 | READY | ⭕ 상위 7개가 🔒 Bronze quest (195건, 49%) |
+| CodeWalk 코드 박스 뒤 빈 공간 350~450px | BLOCKED(줄이면 네 축 전수 재실행) | 〜 공유 컴포넌트라 Bronze 에도 닿지만 막힘은 아니다 |
+| `makedistinct`·`mooin3` STL 단순화 | BLOCKED(선생님 승인 + USACO 재제출) | ⭕ 둘 다 Bronze |
+| narr 「합치면 55자」 144건 | BLOCKED(`/decide`) | 〜 전 범위 |
+| `slidingwindow` 등록 | **안 한다** | ❌ **닿지 않는다.** 게다가 랜딩·문제 묶음이 없어 빈 토픽이 생긴다 |
+| Silver/Gold 트랙 신설 · flood-fill | **안 한다** | ❌ 선생님이 명시적으로 뒤로 미뤘다 |
+| `tsc` 58건 · 1.4GB worktree · CI 없음 | BLOCKED/보류 | ❌ 인프라 — 학생 화면에 안 닿는다 |
