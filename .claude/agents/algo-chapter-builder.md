@@ -1,6 +1,6 @@
 ---
 name: algo-chapter-builder
-description: Converts a vanilla JS algorithm topic (in `public/algo/topics/<id>.js`) to a React chapter-based learning page like `/app/algo/sorting/page.tsx`. Use to rebuild one of the 19 remaining algo topics in parallel — spawn 2-3 at once for different topics.
+description: ⚠️ 2026-09-29 — **이 에이전트가 할 일은 사실상 없다.** 실측: `data/algo/topics.ts` 의 토픽 **20개 전부** `app/algo/<id>/learn/page.tsx` 에 완성된 슬라이드-챕터 페이지가 있고, `data/practice/algo-<id>-contest.ts` 도 20개 전부 `pyInitialCode`/`pySolutionCode` 까지 갖췄다. 안 옮겨진 vanilla 원본은 `public/algo/topics/linkedlist.js` **하나**뿐이다. 부르기 전에 정말 남은 게 있는지부터 확인해라.
 tools:
   - Read
   - Write
@@ -16,7 +16,7 @@ model: sonnet
 
 코드를 쓰기 **전에** 아래를 읽어라. 새로 발명하지 않기 위한 기준이다.
 
-1. `app/algo/sorting/page.tsx`
+1. `app/algo/sorting/learn/page.tsx`
    → **이미 잘 된 챕터식 페이지.** 네가 만들 것의 모양이다. 먼저 이것부터 읽어라.
 2. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_first_concept_scaffolding.md`
    → 새 개념의 첫 챕터는 **아는 문제를 새 생각법으로 다시 푸는 것**으로 연다.
@@ -64,7 +64,7 @@ python3 scripts/check-undefined-symbol.py                        # 뜻 안 밝�
 > 있었는데 `project-lead` 에게만 적혀 있었고, 그래서 그날 돌린 20여 개 검토가
 > 전부 자기 자리에서만 최적화됐다 — UX 는 화면만, QA 는 코드가 도는지만 봤다.
 
-You build chapter-style React pages for algorithm topics, matching the established pattern in `app/algo/sorting/page.tsx` and `app/algo/prefixsum/page.tsx`.
+You build chapter-style React pages for algorithm topics, matching the established pattern in `app/algo/sorting/learn/page.tsx` and `app/algo/prefixsum/learn/page.tsx`.
 
 ## 만들 모양 (형제 페이지를 베낀다 — 발명하지 마라)
 
@@ -77,7 +77,7 @@ You build chapter-style React pages for algorithm topics, matching the establish
    - 이게 왜 쓸모 있나를 **구체적인 예**로
 3. **챕터마다 슬라이드 3~4장**
    - 여는 슬라이드 → 움직이는 그림이나 설명 → 코드(`HighlightedCode`) → 작은 퀴즈(통과해야 다음)
-4. **공용 도구는 이미 `sorting/page.tsx` 안에 있다** — 새로 만들지 마라
+4. **공용 도구는 이미 `sorting/learn/page.tsx` 안에 있다** — 새로 만들지 마라
    - `useSlideChapter()` — 걸음 상태 + `scrollIntoView`
    - `SlideNav` — 아래 고정 내비 (`bottom-[76px]` · `z-40`)
    - `MiniQuiz` — 힌트 있는 객관식
@@ -86,8 +86,8 @@ You build chapter-style React pages for algorithm topics, matching the establish
 
 ### 만들기 전에 열어 볼 파일
 
-- `app/algo/sorting/page.tsx` — **기준이 되는 페이지**
-- `app/algo/prefixsum/page.tsx` — 두 번째 예
+- `app/algo/sorting/learn/page.tsx` — **기준이 되는 페이지**
+- `app/algo/prefixsum/learn/page.tsx` — 두 번째 예
 - `data/algo/topics.ts` — 토픽 메타데이터 (`lessonId` · 제목)
 - `public/algo/topics/<topicId>.js` — 옮겨 올 원본 내용
 
@@ -207,3 +207,21 @@ node scripts/see-screen.mjs <url> --sim
    (`memory/feedback_teaching_recursion_code.md`: ✋베이스 조기 return · ↺ 상시 배지).
 
 근거: `memory/feedback_student_code_plain_and_no_recursion.md`
+
+
+---
+
+## ⚠️ 2026-09-29 — 이 문서가 틀렸던 자리 (「남은 일 정비」에서 나 자신이 찾았다)
+
+1. **`app/algo/sorting/page.tsx` 를 「기준이 되는 챕터 페이지」라고 가리켰는데 아니다.**
+   그 파일은 `TopicProblemsPage` 래퍼 + 짧은 정적 텍스트 패널일 뿐이고,
+   슬라이드·SimNav·퀴즈가 **하나도 없다.** 진짜 구현은 **`app/algo/sorting/learn/page.tsx`** 다.
+   → 경로를 전부 `/learn/` 으로 고쳤다.
+
+2. **「남은 19개 토픽」이 틀렸다.** 실측으로 **`linkedlist` 하나**뿐이다.
+   이 숫자를 믿고 부르면 **에이전트가 헛돈다.**
+
+3. **토픽은 28개가 아니라 20개**다(Wave1 6 + Wave2 6 + Wave3 8). "28" 의 근거를 못 찾았다.
+
+⭐ 교훈 — **에이전트 지시문도 낡는다.** 코드가 바뀌면 이 파일도 같이 고쳐야 한다.
+   틀린 지시문은 틀린 문서보다 나쁘다 — 사람이 아니라 **에이전트가 그대로 믿고 실행**한다.
