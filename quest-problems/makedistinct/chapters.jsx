@@ -212,13 +212,22 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
                 충분 — **제약 숫자 + 연산량 한 줄**. 아낀 분량을 「왜·어떻게」에 써라."*
                 → ①은 한 문장으로, ②도 한 줄로. 둘 다 내용은 남기고 길이만 줄인다. */}
             <b>{t(E, "It gives the right answer — but it is too slow.", "답은 맞아요. 그런데 너무 느려요.")}</b><br />
+            {/* ⚠️ 2026-09-29 학생: *"이 줄이 뜬금없었다. 이 페이지 코드에는 `sort` 가
+                 하나도 없다(`for x in a: while x in used:` 만 있다). 갑자기 「정렬」이
+                 나와서 「어 정렬이 왜 나오지?」 하고 잠깐 멈췄다."*
+               이 문장은 **앞 학생의 질문**("3쪽은 정렬하라더니 코드는 왜 안 하나")에
+               답하려고 넣은 것인데, 질문 없이 답만 떠 있었다. → **화면의 코드를
+               가리키며** 연다. 그러면 답이 답으로 읽힌다(`feedback_sentence_must_follow`). */}
             {t(E,
-              "Sorting does not change the answer — it only saves work.",
-              "정렬은 답을 바꾸지 않아요 — 일을 줄여 줄 뿐이에요.")}<br />
-            {/* 실측값이다 — project-lead 가 N=200,000·K=1 을 끝까지 돌렸다: 1179초. */}
+              "This code does not sort — it reads a in the original order, and the answer is still right.",
+              "이 코드는 정렬을 안 해요 — 원래 순서대로 훑는데도 답은 맞아요.")}<br />
+            {/* 실측값이다 — project-lead 가 N=200,000·K=1 을 끝까지 돌렸다: 1179초.
+               ⚠️ 2026-09-29 학생: *"「400억 번쯤」 숫자가 어디서 나온 건지 화면이
+                 안 보여준다. 20만×20만인가 짐작은 했는데 그냥 믿고 넘어갔다."*
+               → **곱셈을 그 자리에 쓴다.** 줄은 안 늘린다. */}
             {t(E,
-              "N can be 200,000, so this looks through about 40 billion things → 20 minutes for real.",
-              "N 이 200,000 이라 400억 번쯤 훑어요 → 실제로 돌려보니 20분 걸려요.")}
+              "N can be 200,000, and each number may be checked against all the others: 200,000 × 200,000 ≒ 40 billion → 20 minutes for real.",
+              "N 이 200,000 이고 수마다 나머지 전부와 부딪히는지 봐요 — 200,000 × 200,000 ≒ 400억 번 → 실제로 돌려보니 20분 걸려요.")}
           </div>
 
           {/* 2026-09-22 PM 판정 — 이 쪽이 3쪽 바로 뒤(구 6쪽 자리)로 옮겨오면서

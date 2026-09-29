@@ -55,6 +55,86 @@ function Tile({ v, state, note }) {
   );
 }
 
+/* 「K 로 나눈 나머지가 같은 값들」을 **진짜 한 줄**로 그린다.
+   ⚠️ 2026-09-29 선생님(화면 보시고): *"두 줄이 어디있으며 이 줄을 가르는 건
+     왜 k로 나눈 나머지이지?"* — 같은 자리를 **학생도 먼저 짚었다**:
+     *"두 줄을 짐작해서 찾았다. 진짜 가로로 그어진 두 줄 같은 그림은 없다.
+       타일 4개가 나란히 있고 셋째 밑에 작은 글씨가 붙어 있을 뿐이다."*
+     *"「K 로 나눈 나머지」가 무슨 뜻인지 모르겠다. 왜 3,5,7,9 는 나머지가 같은지
+       화면이 계산을 안 보여준다. 3÷2=나머지1 … 을 속으로 혼자 계산해서 짐작했다."*
+   → 말풍선이 부르는 「두 줄」이 화면에 **없었다.** 글을 고칠 게 아니라 **그려야** 한다
+     (`feedback_occlusion_needs_coordinates` 의 사촌 — 학생이 «없다» 면 없는 것이다).
+   ⭐ 줄 이름을 **나머지 그 자체**로 단다 — 그러면 「왜 나머지냐」가 글이 아니라
+     **줄 이름과 그 줄의 숫자들**로 답해진다. 3÷2·5÷2 를 눈앞에서 대조할 수 있다.
+   ⛔ 「홀수 줄/짝수 줄」로 이름 붙이지 마라 — 그건 K = 2 일 때만의 모습이고,
+     선생님이 이미 그걸로 한 번 막히셨다(*"이건 k=2일떄만 …"*). */
+function ChainRow({ E, k, rem, vals, hot }) {
+  const c = rem === 1 ? { bg: "#dbeafe", bd: "#2563eb", fg: "#1e3a8a" }
+                      : { bg: "#dcfce7", bd: "#16a34a", fg: "#065f46" };
+  return (
+    <div style={{
+      display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 8,
+      flexWrap: "wrap", padding: "5px 8px", borderRadius: 10,
+      background: hot ? c.bg : "transparent",
+      border: `1.5px solid ${hot ? c.bd : "transparent"}`,
+      transition: "all .25s",
+    }}>
+      <div style={{
+        fontSize: 11.5, fontWeight: 800, color: c.fg, background: c.bg,
+        border: `1.5px solid ${c.bd}`, borderRadius: 8, padding: "3px 8px",
+        whiteSpace: "nowrap", wordBreak: "keep-all",
+      }}>{t(E, `remainder ${rem} after ÷ ${k}`, `${k} 로 나눈 나머지 ${rem}`)}</div>
+      <div style={{
+        fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800,
+        color: c.fg, letterSpacing: .3,
+      }}>{vals}</div>
+    </div>
+  );
+}
+
+/* K 를 바꾸면 **줄 개수가 바뀐다**는 것을 한 눈에 보인다.
+   ⚠️ 2026-09-29 선생님(세 번째, 같은 자리): *"아직도 k=2일때만 짝수와 홀수로 나눠지지
+     도대체 왜 서로 연관이 없다는건지. k=3일때 k=1일때는 다르잖아."*
+   ⭐ **맞는 말이고, 화면이 틀렸다.** 화면은 K = 2 **하나만** 보여주면서 말풍선으로
+     *"K 가 몇이든 똑같아요"* 라고 **주장**하고 있었다 — 선생님이 앞서 두 번 지적하신
+     「보여주지 않고 말로 때운다」와 **똑같은 결함**이다.
+   ⛔ 그리고 「똑같다」는 말 자체가 부정확했다. **K 마다 다르다** — 줄 개수가 K 개다.
+     같은 것은 그림이 아니라 **규칙** 하나다: 「K 를 더해도 K 로 나눈 나머지는 안 바뀐다」.
+     K = 1 이면 줄이 **하나**라 전부 부딪히고, K = 3 이면 줄이 **셋**이다.
+   → 그러니 K = 1 · 2 · 3 을 **나란히 놓는다.** 「다르다」와 「무엇이 같나」가 동시에 보인다.
+   ⚠️ 숫자는 타일과 같은 3, 4, 5 에서 시작한다 — 새 숫자를 들이면 「어디서 온 숫자지」가
+     또 난다(`feedback_same_number_two_meanings`). */
+function KRows({ E, k, rows, on }) {
+  const c = on ? { bd: "#2563eb", fg: "#1e3a8a", bg: "#eff6ff" }
+               : { bd: "#e2e8f0", fg: "#64748b", bg: "transparent" };
+  return (
+    <div style={{
+      display: "flex", alignItems: "flex-start", gap: 8, flexWrap: "wrap",
+      padding: "5px 8px", borderRadius: 10, background: c.bg,
+      border: `1.5px solid ${c.bd}`,
+    }}>
+      <div style={{
+        minWidth: 86, fontSize: 11.5, fontWeight: 800, color: c.fg,
+        whiteSpace: "nowrap", wordBreak: "keep-all", paddingTop: 2,
+      }}>{t(E, `K = ${k} · ${k} row${k > 1 ? "s" : ""}`, `K = ${k} · 줄 ${k} 개`)}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        {rows.map((r) => (
+          <div key={r} style={{
+            fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5,
+            fontWeight: 800, color: c.fg, letterSpacing: .3,
+          }}>{r}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const K_COMPARE = [
+  { k: 1, rows: ["3 → 4 → 5 → 6 → 7 …"] },
+  { k: 2, rows: ["3 → 5 → 7 → 9 …", "4 → 6 → 8 → 10 …"] },
+  { k: 3, rows: ["3 → 6 → 9 …", "4 → 7 → 10 …", "5 → 8 → 11 …"] },
+];
+
 /* ═══ 작은 수부터 놓아 보기 — 3쪽의 글 여섯 줄을 대신한다 ═══ */
 export function PlaceOneByOneSim({ E }) {
   /* 샘플 [4,1,4,1] 을 그대로 쓴다. 2쪽이 "답이 왜 2 인지는 다음 쪽에서" 라고
@@ -167,18 +247,17 @@ export function WhoCanMeetSim({ E }) {
       extra: ["", "", "", ""],
       ko: "수 네 개예요 — 3, 3, 3, 4. 이번엔 K = 2 씩 더해요.",
       en: "Four numbers — 3, 3, 3, 4. This time we add K = 2 each move." },
+    /* ⭐ 2026-09-29: 「두 줄」을 **타일 밑 작은 글씨**로 흘리고 있었다(`extra`).
+       그래서 선생님도 학생도 «두 줄이 어디 있나» 를 물으셨다. 이제 `chains` 로
+       **화면에 진짜 두 줄**을 그린다 — 타일은 값만 보여주고, 줄은 줄이 보여준다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "idle"],
-      extra: ["", "", t(E, "→5→7→9…", "→5→7→9…"), ""],
-      /* 2026-09-23 선생님 지적: "K=1 일 때는 홀수가 짝수 되었다가 홀수 되었다 하지
-         않나?" — 맞는 말인데 화면에 K=1 비교가 없었다(3쪽 PlaceOneByOneSim 은
-         샘플 [4,1,4,1] 이라 K=1 로 4→5→6 을 이미 보여준 적 있다). 비교 대상을
-         같은 값 3 으로 넣는다 — 새 숫자를 들이면 "어디서 온 숫자지" 가 또 난다. */
-      ko: "K 가 1 이면 3 → 4 → 5 → 6, 홀수·짝수가 번갈아요.\nK 가 2 면 3 에 2 를 더해 5, 또 더해 7 … 계속 홀수예요.\n2 는 짝수라서, 더해도 홀짝이 안 바뀌어요.",
-      en: "With K = 1, 3 → 4 → 5 → 6 — odd and even alternate.\nWith K = 2, 3 plus 2 is 5, then 7 … always odd.\n2 is even, so adding it never changes odd or even." },
+      extra: ["", "", "", ""], chains: [1], hot: 1,
+      ko: "첫째 3 에 2 를 계속 더해 봐요 — 3, 5, 7, 9 …\n3 이 갈 수 있는 자리는 이 줄뿐이에요.",
+      en: "Keep adding 2 to the first 3 — 3, 5, 7, 9 …\nThis row is the only place a 3 can ever land." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
-      extra: ["", "", "", t(E, "→6→8→10…", "→6→8→10…")],
-      ko: "4 도 마찬가지예요. 6, 8, 10 … 계속 짝수예요. 짝지을 다른 짝수가 없어요.",
-      en: "Same for 4 — 6, 8, 10 … always even. There is no other even number for it to pair with." },
+      extra: ["", "", "", ""], chains: [1, 0], hot: 0,
+      ko: "넷째 4 도 2 씩 더해요 — 4, 6, 8, 10 …\n두 줄에 같은 수가 하나도 없어요.",
+      en: "The fourth 4 adds 2 as well — 4, 6, 8, 10 …\nThe two rows share no number at all." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
       /* ⚠️ 2026-09-29 (2판) 선생님: *"아직 이해가 안감"* — 짧게 줄였는데도 안 됐다.
          ⭐ 화면을 다시 보니 **결론을 말하는 순간 근거가 사라지고 있었다.**
@@ -187,7 +266,14 @@ export function WhoCanMeetSim({ E }) {
            학생은 「두 줄이 안 겹친다」를 **기억으로** 떠올려야 했다
            (`feedback_screen_must_not_rely_on_memory` — 앞 쪽은 사라진다).
          → **두 줄을 같이 띄워 놓고** 말한다. 그러면 「안 겹친다」가 글이 아니라 **그림**이 된다. */
-      extra: ["", "", t(E, "→5→7→9…", "→5→7→9…"), t(E, "→6→8→10…", "→6→8→10…")], tone: "aha",
+      /* ⚠️ 2026-09-29 (3판) 선생님: *"두 줄이 어디있으며 이 줄을 가르는 건
+           왜 k로 나눈 나머지이지?"* — **두 질문 다 화면이 답을 안 하고 있었다.**
+         ① 「두 줄」 — 타일 밑 작은 글씨였다. → `chains` 로 **진짜 두 줄**을 그린다.
+         ② 「왜 나머지냐」 — 이름만 던지고 **계산을 한 번도 안 보여줬다.**
+            → 줄 이름을 **나머지 그 자체**로 달고(`2 로 나눈 나머지 1`),
+              말풍선은 **왜 안 바뀌는지**를 말한다 — 「K 를 더해도 나머지는 그대로」.
+              이게 진짜 이유다. 홀짝은 K=2 에서 그 이유가 보이는 모습일 뿐이다. */
+      extra: ["", "", "", ""], kcompare: true, tone: "aha",
       /* ⭐ 2026-09-28 선생님: *"k 가 2 일때는 짝수와 홀수가 겹쳐질 걱정이 없는건 맞는데
          **1 이거나 3 일떄 다를때도?**"* — 맞는 지적이다. **홀/짝은 K = 2 일 때만의 모습**이고,
          진짜 규칙은 **「K 로 나눈 나머지」**다(🔒 코드도 `groups[x % abs(k)]` 로 묶는다).
@@ -208,22 +294,31 @@ export function WhoCanMeetSim({ E }) {
          ⛔ K=1·K=3 「~이었다면」 두 줄은 **뺐다.** 바로 앞 두 걸음(위 176·180행)이 이미
            K=1 과 K=2 를 숫자로 비교한다 — **같은 말을 세 번째로 하고 있었다**
            (`feedback_shorter_not_longer`). */
-      ko: "두 줄을 보세요 — 3,5,7,9… 와 4,6,8,10… 은 절대 겹치지 않아요.\n같은 줄에 있는 값끼리만 부딪혀요. 이 줄을 가르는 건 「K 로 나눈 나머지」예요.",
-      en: "Look at the two chains — 3,5,7,9… and 4,6,8,10… never overlap.\nOnly values on the same chain can clash. What splits the chains is the remainder after dividing by K." },
+      ko: "K 를 더해도 K 로 나눈 나머지는 안 바뀌어요 — 그래서 자기 줄을 못 벗어나요.\n줄 개수는 K 개예요. K 가 1 이면 줄이 하나라서 모두가 서로 부딪혀요.",
+      en: "Adding K never changes the remainder after ÷ K — so a number can never leave its row.\nThere are K rows. With K = 1 there is only one row, so everything can clash." },
+    /* ⚠️ 2026-09-29 학생: *"4걸음까지는 「두 줄로 나눈다」였는데 5걸음이 갑자기
+         「묶음 안에서도 작은 값부터」로 넘어간다. 이어주는 말이 없어서 다음 이야기가
+         시작된 줄 알았다."* → 이음말로 연다. 「묶음」→「줄」로 이름도 통일한다
+       (같은 것을 두 이름으로 부르고 있었다 — `check-word-difficulty` 의 그 층). */
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
-      extra: [t(E, "· stays", "· 그대로"), "", "", ""],
-      ko: "묶음 안에서도 작은 값부터 하나씩 놓아요. 첫째 3 은 맨 앞이라 그대로예요. (0 회)",
-      en: "Inside a group too, we settle the smallest value first. The first 3 is at the front, so it stays. (0 moves)" },
+      extra: [t(E, "· stays", "· 그대로"), "", "", ""], chains: [1, 0],
+      ko: "이제 줄 안을 채워요 — 작은 값부터. 첫째 3 은 맨 앞이라 그대로예요. (0 회)",
+      en: "Now we fill each row — smallest value first. The first 3 is at the front, so it stays. (0 moves)" },
     { tiles: [3, 5, 3, 4], st: ["placed", "moving", "placed", "even"],
-      extra: ["", "· 3→5", "", ""], ops: 1,
+      extra: ["", "· 3→5", "", ""], chains: [1, 0], ops: 1,
       ko: "둘째 3 은 첫째와 같아요. 2 만큼 밀어서 5 로 만들어요. (1 회)",
       en: "The second 3 matches the first. Push it by 2, to 5. (1 move)" },
+    /* ⚠️ 2026-09-29 학생이 **제일 크게 멈춘 자리**: *"6걸음까지는 「하나씩 밀기」였는데
+         7걸음에서 갑자기 `(7-3) ÷ 2 = 2` 가 툭 나온다. 왜 그렇게 하면 맞는지 설명이 없다.
+         「한 번씩 밀기」에서 「한 번에 여러 번 밀기 계산법」으로 넘어가는 다리가 없다."*
+       → **세는 것을 먼저 보여주고 식은 그 뒤에.** 식이 새 규칙이 아니라 방금 센 것과
+         같은 값이라는 게 보여야 한다. */
     { tiles: [3, 5, 7, 4], st: ["placed", "placed", "moving", "even"],
-      extra: ["", "", "· 3→5→7", ""], formula: "(7-3) ÷ 2 = 2", ops: 3,
-      ko: "셋째 3 은 5 도 이미 찼어요. 그래서 7 까지 — 한 번에 2 회예요. (7-3) ÷ 2 = 2.",
-      en: "The third 3 finds 5 already taken too. So it goes to 7 — two moves at once. (7-3) / 2 = 2." },
+      extra: ["", "", "· 3→5→7", ""], chains: [1, 0], formula: "(7-3) ÷ 2 = 2", ops: 3,
+      ko: "셋째 3 은 5 도 찼어요. 3→5, 5→7 로 두 번 밀어야 해요.\n세는 대신 (7-3) ÷ 2 로도 2 가 나와요.",
+      en: "The third 3 finds 5 taken too. It needs two pushes: 3→5, then 5→7.\nInstead of counting, (7-3) / 2 also gives 2." },
     { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "placed"],
-      extra: ["", "", "", ""], ops: 3, tone: "aha",
+      extra: ["", "", "", ""], chains: [1, 0], ops: 3, tone: "aha",
       /* 자리 순서(첫째~넷째)를 끝까지 안 바꿨으므로 화면엔 3,5,7,4 로 보인다
          (정렬한 3,4,5,7 이 아니다) — 실제 표시값으로 말한다. */
       ko: "3, 5, 7, 4 — 다 달라요. 민 횟수는 모두 3 회. 이 나눔은 다음 쪽에서도 그대로 쓰여요.",
@@ -245,6 +340,31 @@ export function WhoCanMeetSim({ E }) {
             <Tile key={i} v={v} state={s.st[i]} note={`${ord(i)} ${s.extra[i]}`.trim()} />
           ))}
         </div>
+
+        {/* ⭐ 「두 줄」은 여기서 **진짜 두 줄**이 된다. 한 번 뜬 줄은 끝까지 안 사라진다 —
+            뒤 걸음이 「줄 안을 채운다」고 말하는데 정작 줄이 없으면 학생은 되돌아간다
+            (`feedback_screen_must_not_rely_on_memory`).
+            ⚠️ 줄마다 따로 가운데 정렬하면 두 줄의 숫자가 **세로로 안 맞는다**
+            (아래 줄이 «10» 때문에 더 길다). 그러면 「두 줄」이 아니라 흩어진 두 덩이로
+            읽힌다 — 묶음을 `fit-content` 로 가운데 놓고 **줄은 왼쪽 끝을 맞춘다.** */}
+        {s.kcompare && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 10,
+            width: "fit-content", maxWidth: "100%", marginLeft: "auto", marginRight: "auto" }}>
+            {K_COMPARE.map((kc) => (
+              <KRows key={kc.k} E={E} k={kc.k} rows={kc.rows} on={kc.k === 2} />
+            ))}
+          </div>
+        )}
+
+        {s.chains && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 10,
+            width: "fit-content", maxWidth: "100%", marginLeft: "auto", marginRight: "auto" }}>
+            {s.chains.map((rem) => (
+              <ChainRow key={rem} E={E} k={2} rem={rem} hot={s.hot === rem}
+                vals={rem === 1 ? "3 → 5 → 7 → 9 …" : "4 → 6 → 8 → 10 …"} />
+            ))}
+          </div>
+        )}
 
         {s.formula && (
           <div style={{ textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#92400e",
