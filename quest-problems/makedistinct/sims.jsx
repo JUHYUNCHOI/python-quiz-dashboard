@@ -428,8 +428,10 @@ export function WhoCanMeetSim({ E }) {
     /* 선생님: *"그 다음에 **밑에 정리된게** 보여야지"* — 미는 장면이 다 끝난 뒤에 정리 한 걸음. */
     { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "placed"],
       extra: ["", "", "", ""], chains: [1, 0], named: true, ops: 3, tone: "aha",
-      ko: "3, 5, 7, 4 — 다 달라졌어요. 민 횟수는 0 + 1 + 2 = 3 회.\n이 나눔은 다음 쪽에서도 그대로 써요.",
-      en: "3, 5, 7, 4 — all different now. Moves: 0 + 1 + 2 = 3.\nWe use this same split on the next page." },
+      /* ⛔ 2026-09-29 감사 판정 — 옛 문장 *"이 **나눔**은 다음 쪽에서도 그대로 써요"* 는 **거짓**이었다.
+           6쪽은 숫자도 묶음 크기도 다르다. 그대로 쓰는 건 숫자가 아니라 **나머지로 묶는 방법**이다. */
+      ko: "3, 5, 7, 4 — 다 달라졌어요. 민 횟수는 0 + 1 + 2 = 3 회.\n나머지로 묶는 이 방법을 다음 쪽에서도 그대로 써요.",
+      en: "3, 5, 7, 4 — all different now. Moves: 0 + 1 + 2 = 3.\nWe use this same way of splitting — by remainder — on the next page too." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];

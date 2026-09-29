@@ -225,9 +225,23 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
                ⚠️ 2026-09-29 학생: *"「400억 번쯤」 숫자가 어디서 나온 건지 화면이
                  안 보여준다. 20만×20만인가 짐작은 했는데 그냥 믿고 넘어갔다."*
                → **곱셈을 그 자리에 쓴다.** 줄은 안 늘린다. */}
+            {/* ⛔ 2026-09-29 토론 판정 — **옛 문장은 「자료구조가 느리다」(벽 A)를 말하고 있었다.**
+                 *"200,000 × 200,000 ≒ 400억 번 → 20분"* — 셋이 다 틀렸다:
+                 ① 이 코드는 O(N²)가 아니라 **O(N³)** 이다(`x in used` 가 매번 전체를 훑는다).
+                 ② 「20분」은 외삽하면 **38시간**, 주석의 「1179초」는 역산하면 N ≈ 41,000 — 재현 불가.
+                 ③ 여기 「나머지」는 **일상어**(그 밖의 것들)인데 5쪽은 **수학 용어**(mod)로 쓴다 —
+                    같은 낱말 두 뜻(`feedback_same_number_two_meanings` 의 낱말판).
+               ⭐ **더 큰 문제: 벽 A 는 set 하나로 668배 풀린다**(실측). 그래서 이 문장을 두면
+                 눈치 빠른 학생의 *"그럼 set 쓰면 되잖아요?"* 가 **실제로 맞는 말**이 되고,
+                 뒤에 나오는 묶기·정렬·점프가 전부 «왜 굳이?» 가 된다.
+               → **벽 B 로 통째로 갈아 끼운다.** 답 자체가 커서 **세는 것만으로** 터지는 벽이다.
+                 이건 자료구조로 못 넘는다. 검산: 전부 1, K=1, N=200,000 →
+                 `200,000 × 199,999 ÷ 2 = 19,999,900,000`. 제약(각 수 1~N)도 지킨다.
+               ⛔ 벽 A 를 한 문장이라도 남기지 않는다 — 한 화면에 큰 수 둘(400억·199억)은
+                 선생님이 오늘 지적하신 *"정보 너무 많이 갑자기"* 를 그대로 재현한다. */}
             {t(E,
-              "N can be 200,000, and each number may be checked against all the others: 200,000 × 200,000 ≒ 40 billion → 20 minutes for real.",
-              "N 이 200,000 이고 수마다 나머지 전부와 부딪히는지 봐요 — 200,000 × 200,000 ≒ 400억 번 → 실제로 돌려보니 20분 걸려요.")}
+              "If all 200,000 numbers land in one pile, the last one gets pushed almost 200,000 times — 19,999,900,000 pushes in total. Counting them one at a time never finishes.",
+              "수 200,000 개가 한 곳에 몰리면 마지막 수는 200,000 번 가까이 밀려요 — 다 합치면 199억 9,990만 번이에요.\n한 번에 하나씩 세는 방법으로는 끝나지 않아요.")}
           </div>
 
           {/* 2026-09-22 PM 판정 — 이 쪽이 3쪽 바로 뒤(구 6쪽 자리)로 옮겨오면서
@@ -235,9 +249,12 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
               아직 안 나온 내용을 과거형으로 가리키게 됐다. 결론 선언 대신
               질문을 던지고 다음 쪽이 구조로 답하게 한다 — PM 이 문장을 확정. */}
           <div style={{ marginTop: 10, background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
+            {/* ⛔ 옛 문장 *"그걸 알아내면 훨씬 빨라져요"* 는 실측과 안 맞는다 —
+                 묶기만 해도 속도는 안 는다(정렬+set 624배 vs 묶기+정렬+set 599배).
+               → 약속을 **「세지 말고 계산한다」** 로 바꾼다. 5쪽이 그것을 갚는다. */}
             👉 {t(E,
-              "This code pushes blindly, without knowing which values will collide. Once we figure that out, it gets much faster — see the next page.",
-              "이 코드는 어떤 값끼리 부딪히는지 모르고 무작정 밉니다. 그걸 알아내면 훨씬 빨라져요 — 다음 쪽에서 봐요.")}
+              "So we must not count one push at a time — we need to work it out in one go. The next page shows how.",
+              "그러니 한 번씩 세면 안 돼요 — 한 번에 계산해 내야 해요. 어떻게 하는지 다음 쪽에서 봐요.")}
           </div>
         </div>
       ),
@@ -270,9 +287,18 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
       narr: t(E,
         "Now K is negative. Work it out yourself.",
         "이번엔 K 가 음수예요. 직접 풀어봐요."),
+      /* ⛔ 2026-09-29 토론 판정 — **옛 예제 `[3,3,4,4]` 는 아무것도 증명 못 했다.**
+           묶음이 `[3,3]`·`[4,4]` 중복뿐이라 **정렬 방향을 뒤집어도 답이 똑같이 2** 였다.
+           7쪽 코드는 「K<0 이면 내림차순」이라고 가르치는데 **그 근거가 quest 전체에 없었다** —
+           마지막 학생: *"왜 그런지 증명하기보다 그냥 그렇다고 받아들였다."*
+         ⛔ 중간에 나온 `[3,3,5]` 안은 **제약 위반**이라 기각됐다(N=3 인데 수 5 — 원문은 1 ≤ 수 ≤ N).
+         ⭐ `[1,1,1,2,3]`·K=−2 는 셋을 다 만족한다(PM 이 738개 전수, 내가 재검산):
+             ①제약 통과 ②**방향이 갈린다** — 내림차순 3회 vs 오름차순 7회
+             ③**한 원소가 두 번 밀린다** — 「항상 한 번만 밀면 된다」는 과잉일반화를 막는다
+           🔒 코드로 확인: 답 **3**. (n=4 로는 셋을 다 만족하는 예제가 없다) */
       question: t(E,
-        "a = [3, 3, 4, 4], K = -2. Minimum ops?",
-        "a = [3, 3, 4, 4], K = -2. 최소 횟수는?"),
+        "a = [1, 1, 1, 2, 3], K = -2. Minimum ops?",
+        "a = [1, 1, 1, 2, 3], K = -2. 최소 횟수는?"),
       /* ⚠️ 2026-09-29 — 힌트가 **두 가지를 다 물었다.** 하나(「음수면 어느 쪽으로 가나」)는
            **화면 어디서도 안 가르친 사실**이라 물어도 답이 안 나온다. 5쪽 시뮬은
            K = 1·2·3 만 보여주고 값은 늘 **커지는 방향**으로만 움직인다.
@@ -281,14 +307,17 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
          → **방향은 알려주고**, 5쪽에서 이미 익힌 「나머지로 묶기」만 물음으로 남긴다.
          ⛔ 걸음을 늘리지 않는다 — 대신 아래 `explain` 에서 같은 말을 한 줄 뺐다. */
       hint: t(E,
-        "K is negative, so each push makes a value 2 smaller. Then which of these four can ever meet?",
-        "K 가 음수라 밀면 값이 2 씩 작아져요. 그럼 이 넷 중 어떤 수끼리 만날 수 있을까요?"),
-      answer: 2,
+        "K is negative, so each push makes a value 2 smaller. Which ones can ever meet — and which end should you settle first?",
+        "K 가 음수라 밀면 값이 2 씩 작아져요. 어떤 수끼리 만날 수 있을까요? 그리고 어느 쪽부터 자리를 잡아야 할까요?"),
+      answer: 3,
       /* 2026-09-21: 맞혀도 ✅ 만 뜨고 **왜 2 인지**가 없었다 (재검증 학생 지적).
          `NumInput` 에 explain 을 새로 달아 이 자리부터 쓴다. */
+      /* ⭐ 이 해설이 **정렬 방향의 근거**를 처음으로 숫자로 보여준다 — quest 전체에서 여기뿐이다.
+           5쪽이 가르친 「나머지로 묶기」를 그대로 쓰되 **숫자는 새로 골랐다**는 것도 여기서 말한다
+           (5쪽 마지막 걸음이 「이 방법을 다음 쪽에서도 쓴다」고 하는 것과 맞춘다). */
       explain: t(E,
-        "2 is right.\nA value keeps its remainder when divided by 2.\nSo the two 3s are one pile and the two 4s are another; the piles never meet.\nIn each pile the second one has to move down once: 3 → 1 and 4 → 2. One push each, 2 in total.",
-        "2 가 맞아요.\n2 로 나눈 나머지는 그대로예요.\n그래서 3 두 개가 한 묶음, 4 두 개가 다른 묶음이고 서로 만나지 않아요.\n묶음마다 두 번째 값만 한 번씩 내려가면 돼요 — 3 → 1, 4 → 2. 합해서 2 회예요."),
+        "3 is right.\nA value keeps its remainder when divided by 2 — the same way of splitting as the last page, with new numbers.\n1, 1, 1 and 3 all leave 1; 2 leaves 0.\nK is negative, so settle the BIGGEST first: 3 stays, then 1 → -1, then 1 → -3. Two pushes there, one more for the 2s pile — 3 in total.\nStart from the smallest instead and it costs 7. That is why the direction flips when K is negative.",
+        "3 이 맞아요.\n2 로 나눈 나머지는 그대로예요 — 앞 쪽과 같은 나누는 방법이고, 숫자만 새로 골랐어요.\n1, 1, 1 과 3 은 모두 1 이 남고, 2 는 0 이 남아요.\nK 가 음수라 「큰 값부터」 자리를 잡아요 — 3 은 그대로, 1 은 -1 로, 또 1 은 -3 으로. 여기서 2 회.\n작은 값부터 하면 7 회가 들어요. K 가 음수일 때 방향이 뒤집히는 까닭이에요."),
     },
   ];
 }
@@ -306,8 +335,8 @@ export function makeMakeDistinctCh2(E, lang = "py") {
         type: "reveal",
         label: t(E, "Code", "코드"),
         narr: t(E,
-          "Group by remainder, sort, then push forward one at a time.",
-          "나머지로 묶고, 정렬하고, 앞에서부터 하나씩 밀어요."),
+          "Group by remainder, sort, then work out the pushes with one division.",
+          "나머지로 묶고, 정렬하고, 민 횟수는 나눗셈으로 한 번에 구해요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />),
       };
     })(),
