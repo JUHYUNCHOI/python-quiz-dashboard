@@ -137,6 +137,16 @@ export function makeMcc20KnightCh1(E) {
             <div><b style={{ color: "#15803d" }}>{t(E, "Q1", "1번")}</b> {t(E, "(0,0)→(3,3) in 2: yes — e.g. (0,0)→(1,2)→(3,3). ", "(0,0)→(3,3) 를 2번: 가능 — 예: (0,0)→(1,2)→(3,3). ")}<b style={{ color: "#15803d" }}>YES</b></div>
             <div><b style={{ color: "#b91c1c" }}>{t(E, "Q2", "2번")}</b> {t(E, "(−2,−2)→(100,100): way too far for only 5 moves. ", "(−2,−2)→(100,100): 5번으론 너무 멀어요. ")}<b style={{ color: "#b91c1c" }}>NO</b></div>
             <div><b style={{ color: "#b91c1c" }}>{t(E, "Q3", "3번")}</b> {t(E, "(0,0)→(1,2) takes 1 move, yet 2 moves cannot do it. Why not? ", "(0,0)→(1,2) 는 1 번이면 가요. 그런데 2 번으로는 못 가요. 왜 그럴까요? ")}<b style={{ color: "#b91c1c" }}>NO</b></div>
+            {/* ⚠️ 2026-09-29 — **학생 둘이 같은 자리를 짚었다**(약한 신호가 아니다,
+                `feedback_student_agent_must_quit`): *"「왜 2번으로 못 가나요?」 하고 물어놓고
+                답을 안 줘서 계속 궁금한 채로 넘어가야 했다"* · *"찍을 수밖에 없었다."*
+                답은 **다음 쪽 시뮬에서 직접 눌러 보면 나온다**(K 를 2·3·4 로 바꾸면 YES·NO·YES).
+                그런데 **그 연결이 화면에 없었다** — 질문만 허공에 떠 있었다.
+                ⛔ 답을 여기서 주지 않는다(그러면 발견이 사라진다). **갈 곳만 알려준다.** */}
+            <div style={{ marginTop: 6, fontSize: 11.5, color: C.dim, ...KA }}>
+              👉 {t(E, "Next page: change K yourself and watch when it turns green.",
+                       "다음 쪽에서 K 를 직접 바꿔 보면 언제 초록이 되는지 보여요.")}
+            </div>
           </div>
         </div>),
     },

@@ -1997,10 +1997,23 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
      안 이어 놓은 것**이었다. pedagogy 판정: `graph` 토픽은 「탐색 (Silver)」로 한 단계
      차이일 뿐이고, citytour 는 **이름을 끝까지 숨기고 시뮬로 먼저 가르치는** 구조를
      이미 갖췄다 → **저위험.**
-     ⚠️ `mcc20knight` 는 **보류**다 — BFS 이름을 일찍 부르고 「링」 비유 수준이라 검토가 안 끝났다.
+     ✅ `mcc20knight` — **보류를 푼다 (2026-09-29).** 보류 사유 둘을 실제로 고쳤다:
+       · BFS 이름을 일찍 부르던 것 → **과정 스테퍼 마지막 걸음**에서만 부른다(`dd84f5ad`)
+       · 「동그라미가 퍼지듯」 비유 → **뺐다**(나이트는 ㄴ자라 실제 모양이 원이 아니다)
+       그리고 없던 **BFS 과정 스테퍼**를 만들었다 — 줄(큐)에서 칸을 꺼내는 걸 보여준다.
+       ⭐ **학생 셋이 연달아 봤다.** 1차가 *"「꺼내면서」라는데 꺼내는 동작이 없다"*,
+         2차가 *"「줄이 비었다」는데 칸이 남아 있다"*(막힘) 를 잡아 각각 고쳤고,
+         **3차는 막힘 0** 이었다 — *"줄→deque, 맨앞꺼내기→popleft() 가 잘 이어져서
+         코드가 낯설지 않았다."*  그래서 이제 채운다.
      ⚠️ `milkfactory` 에는 **절대 `bfs-grid` 를 붙이지 마라** — 격자가 아니라 **일반 그래프**다. */
   mcc20citytour: { ...DEFAULT_META, difficulty: 3, supported_languages: ["py", "cpp"],
                    concepts_required: ["bfs-grid", "grid-2d", "loop"] },
+  /* 2026-09-29 — 보류 해제 뒤 채움(위 ✅ 참고). 🔒 코드가 실제로 쓰는 것:
+     `from collections import deque` · `q.popleft()` · `best.append([-1]*SIZE)` ·
+     `for dx,dy in MOVES`. `mcc20citytour` 와 **같은 층**이다.
+     ⛔ 학생 셋을 거친 뒤에 채웠다 — 코드 커밋과 섞지 않았다(PM 지시). */
+  mcc20knight: { ...DEFAULT_META, supported_languages: ["py"],
+                 concepts_required: ["bfs-grid", "grid-2d", "deque", "loop"] },
   /* `class DSU` 로 파이썬 클래스를 직접 정의해 쓴다(`components.jsx:224-253`). MCC 감사
      난이도 **4**. ⚠️ 실제로는 **되돌리기(rollback) DSU** 까지 요구하는데 그 기법은
      **커리큘럼 어디에도 가르치는 자리가 없다** — 이름을 지어 붙이면 「우리가 가르친다」는
