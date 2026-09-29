@@ -88,8 +88,9 @@ function ChainRow({ E, k, rem, vals, hot, calc, named }) {
              그대로 남는다 — **관찰이 끝나기 전에 답이 화면에 있는 것**이다.
              그 전에는 그냥 «누구의 줄» 이다. */
         calc ? t(E, `÷ ${k} leaves ${rem}`, `${k} 로 나누면 ${rem} 남음`)
-        : named ? t(E, `row of ${rem}`, `${rem} 이 남는 줄`)
-        : t(E, `${rem === 1 ? 3 : 4}'s row`, `${rem === 1 ? 3 : 4} 의 줄`)}</div>
+        : named ? t(E, `leaves ${rem}`, `${rem} 이 남는 수들`)
+        : t(E, `where ${rem === 1 ? 3 : 4} can go`,
+               `${rem === 1 ? 3 : 4} 가 갈 수 있는 수`)}</div>
       <div>
         <div style={{
           fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800,
@@ -134,7 +135,7 @@ function KRows({ E, k, rows, on }) {
       <div style={{
         minWidth: 86, fontSize: 11.5, fontWeight: 800, color: c.fg,
         whiteSpace: "nowrap", wordBreak: "keep-all", paddingTop: 2,
-      }}>{t(E, `K = ${k} · ${k} row${k > 1 ? "s" : ""}`, `K = ${k} · 줄 ${k} 개`)}</div>
+      }}>{t(E, `K = ${k} · leftovers ${LEFTOVERS[k]}`, `K = ${k} · 남는 수 ${LEFTOVERS[k]}`)}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {rows.map((r, i) => (
           <div key={i} style={{
@@ -142,7 +143,7 @@ function KRows({ E, k, rows, on }) {
             fontSize: r ? 13.5 : 11.5,
             fontWeight: 800, color: r ? c.fg : "#94a3b8", letterSpacing: .3,
             wordBreak: "keep-all",
-          }}>{r || t(E, "(our numbers do not use this row)", "(우리 수는 이 줄을 안 써요)")}</div>
+          }}>{r || t(E, "(none of our numbers leaves 2)", "(우리 수 중엔 2 가 남는 게 없어요)")}</div>
         ))}
       </div>
     </div>
@@ -154,6 +155,8 @@ function KRows({ E, k, rows, on }) {
      학생이 「어디서 온 5 지?」를 묻게 된다(`feedback_same_number_two_meanings`).
    ⭐ 비운 채로 두면 **「줄은 K 개로 갈리지만 우리 수가 쓰는 줄은 더 적다」**가
      글이 아니라 **그림**으로 말해진다. 실측: [3,3,3,4] 를 K=3 으로 돌리면 줄은 2개다. */
+const LEFTOVERS = { 1: "0", 2: "0, 1", 3: "0, 1, 2" };
+
 const K_COMPARE = [
   { k: 1, rows: ["3 → 4 → 5 → 6 → 7 …"] },
   { k: 2, rows: ["3 → 5 → 7 → 9 …", "4 → 6 → 8 → 10 …"] },
@@ -301,14 +304,14 @@ export function WhoCanMeetSim({ E }) {
          그리고 「몇 번이든 더해도 된다」는 허락을 **같은 화면에** 둔다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "idle"],
       extra: ["", "", "", ""], chains: [1], hot: 1,
-      ko: "수 네 개예요 — 3, 3, 3, 4. 같은 수에 2 를 「몇 번이든」 더해도 돼요.\n첫째 3 에 더하면 5, 또 더하면 7, 또 더하면 9 … 3 은 여기밖에 못 가요.",
-      en: "Four numbers — 3, 3, 3, 4. We may add 2 to the same number as many times as we like.\nAdd to the first 3 and it becomes 5, then 7, then 9 … a 3 can go nowhere else." },
+      ko: "수 네 개예요 — 3, 3, 3, 4. 같은 수에 2 를 「몇 번이든」 더해도 돼요.\n첫째 3 에 더하면 5, 또 더하면 7, 또 더하면 9 … 3 은 이 수들로만 갈 수 있어요.",
+      en: "Four numbers — 3, 3, 3, 4. We may add 2 to the same number as many times as we like.\nAdd to the first 3 and it becomes 5, then 7, then 9 … those are the only numbers a 3 can reach." },
 
     /* 2. 관찰 둘 — 두 번째 줄. 여기서도 이름은 없다. 눈으로 「안 겹친다」만. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], hot: 0,
-      ko: "넷째 4 도 2 씩 더해 봐요 — 4, 6, 8, 10 …\n두 줄에 같은 수가 하나도 없어요.",
-      en: "Now add 2 to the fourth number, 4 — 4, 6, 8, 10 …\nThe two rows share no number at all." },
+      ko: "넷째 4 에도 2 씩 더해 봐요 — 4, 6, 8, 10 …\n3 이 갈 수 있는 수와 4 가 갈 수 있는 수는 하나도 안 겹쳐요.",
+      en: "Now add 2 to the fourth number, 4 — 4, 6, 8, 10 …\nWhere 3 can go and where 4 can go never overlap." },
 
     /* 3. **물음 — 이게 빠져 있었다.**
          ⚠️ 2026-09-29 선생님: *"k를 더하면 서로 뭔가 영향이 없다. 그 다음 나머지…
@@ -321,8 +324,8 @@ export function WhoCanMeetSim({ E }) {
          ⛔ 이 걸음에서는 답을 주지 마라. 나눗셈은 다음 걸음이다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], tone: "stuck",
-      ko: "3 과 5 는 같은 줄이에요. 그럼 3 과 4 는 같은 줄일까요?\n줄을 끝까지 써 보지 않고 알 수는 없을까요?",
-      en: "3 and 5 sit on the same row. What about 3 and 4?\nIs there a way to tell without writing the whole row out?" },
+      ko: "그럼 3 과 4 는 절대 같아질 수 없겠네요.\n끝까지 다 써 보지 않고도 미리 알 수 있을까요?",
+      en: "So 3 and 4 can never become the same number.\nIs there a way to know that without writing everything out?" },
 
     /* 4. **답 = 이름.** 앞 걸음의 물음에 나눗셈으로 답하고, 그 답에 이름을 준다.
          ⛔ 이 걸음 앞에서 「나머지」를 쓰지 마라 — 그게 선생님이 *"갑자기"* 라고
@@ -330,30 +333,30 @@ export function WhoCanMeetSim({ E }) {
            (「줄 이름표」) — `feedback_no_invented_terms` 는 뜻을, 여기서는 용도를 붙인다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], calc: [1, 0], named: true, tone: "aha",
-      ko: "2 로 나눠 보면 알아요. 3 도 5 도 7 도 1 이 남고, 4 는 0 이 남아요.\n이 남는 수가 곧 줄 이름표예요 — 같으면 같은 줄, 다르면 딴 줄이에요.",
-      en: "Dividing by 2 tells us. 3, 5 and 7 all leave 1; 4 leaves 0.\nThat leftover is the row's name tag — same tag, same row; different tag, different row." },
+      ko: "2 로 나눠 보면 알아요. 3 도 5 도 7 도 1 이 남고, 4 는 0 이 남아요.\n남는 수가 같으면 언젠가 같아질 수 있고, 다르면 절대 안 돼요.",
+      en: "Dividing by 2 tells us. 3, 5 and 7 all leave 1; 4 leaves 0.\nSame leftover — they can meet one day. Different leftover — never." },
 
     /* 5. 일반화 **한 칸만.** K=1 을 옆에 놓아 「K 가 달라지면 갈리는 수가 달라진다」를
          한 번에 하나씩 본다. 표를 통째로 띄우지 않는다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], kcompare: [1, 2],
-      ko: "K 를 바꾸면 어떻게 될까요? K 가 1 이면 줄이 하나뿐이에요.\n그래서 모두가 서로 부딪혀요.",
-      en: "What if K changes? With K = 1 there is only one row.\nSo every number can clash with every other." },
+      ko: "K 가 1 이면 어떨까요? 1 로 나누면 뭐든 0 이 남아요.\n남는 수가 다 같으니까 어떤 두 수든 같아질 수 있어요.",
+      en: "What if K is 1? Divide anything by 1 and 0 is left.\nEvery leftover is the same, so any two numbers can meet." },
 
     /* 6. 일반화 **한 칸 더.** K=3. 셋째 줄은 **비워 둔다** — 우리 수가 안 쓰는 줄이다
          (`5 → 8 → 11` 을 쓰면 5 가 어디서 왔는지 학생이 묻는다). */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], kcompare: [1, 2, 3],
-      ko: "K 가 3 이면 줄이 셋으로 갈려요.\nK 를 더해도 나머지는 안 바뀌니까, 한 번 정해진 줄은 못 벗어나요.",
-      en: "With K = 3 the numbers split into three rows.\nAdding K never changes the remainder, so a number can never leave its row." },
+      ko: "K 가 3 이면 남는 수가 0, 1, 2 — 세 가지예요.\n2 를 더하든 3 을 더하든, 남는 수는 절대 안 바뀌어요.",
+      en: "With K = 3 the leftovers are 0, 1 and 2 — three of them.\nAdd 2 or add 3, the leftover never changes." },
 
     /* 7. PM 판정으로 **옛 걸음 5·6·7·8 을 하나로.** 3쪽 `PlaceOneByOneSim` 이 이미
          「그대로 둠 → 한 번 밀기 → 여러 번 밀기 → 공식」을 전부 가르쳤다. */
     { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "even"],
       extra: [t(E, "· stays", "· 그대로"), "· 3→5", "· 3→5→7", ""],
       chains: [1, 0], named: true, formula: "(7-3) ÷ 2 = 2", ops: 3, tone: "aha",
-      ko: "이제 줄 안을 앞에서부터 채워요. 첫째 3 은 그대로, 둘째는 5, 셋째는 7 이에요.\n셋째가 밀린 횟수는 (7-3) ÷ 2 = 2 회 — 모두 합쳐 3 회예요.",
-      en: "Now fill each row from the front. The first 3 stays, the second becomes 5, the third becomes 7.\nThe third moved (7-3) / 2 = 2 times — three moves in total." },
+      ko: "이제 같은 수끼리 차례로 비켜 줘요. 첫째 3 은 그대로, 둘째는 5, 셋째는 7 이에요.\n셋째가 밀린 횟수는 (7-3) ÷ 2 = 2 회 — 모두 합쳐 3 회예요.",
+      en: "Now let equal numbers step aside in turn. The first 3 stays, the second becomes 5, the third becomes 7.\nThe third moved (7-3) / 2 = 2 times — three moves in total." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
