@@ -66,9 +66,11 @@ export function makeCowCollegeCh1(E) {
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#d97706" }}>{t(E, "N cows", "N마리 소")}</b>
-                  {t(E, ", each with a maximum tuition ", " 가 있고, 각자 최대 등록금 ")}
-                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>c[i]</code>
-                  {t(E, " she's willing to pay.", " 를 가져요.")}
+                  {/* ⚠️ 2026-09-29: 여기 `c[i]` 코드 칩이 있었다. **1쪽은 문제 설명이고
+                      코드가 아직 안 나왔다** — `feedback_plain_korean`: *"수식·코드 이름을
+                      코드보다 먼저 쓰지 마라."* 이름은 코드 쪽(2쪽 뒤)에서 처음 만난다. */}
+                  {t(E, ", each willing to pay up to a certain amount.",
+                        " 가 있고, 저마다 「낼 수 있는 최대 금액」이 정해져 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -76,8 +78,8 @@ export function makeCowCollegeCh1(E) {
                 <div>
                   {t(E, "FJ picks ", "FJ 가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "ONE tuition price P", "단 하나의 등록금 P")}</b>
-                  {t(E, " — every cow with c[i] ≥ P pays P, the rest pay 0.",
-                        " 를 정하면, c[i] ≥ P 인 소만 P 를 내고 나머지 소는 한 푼도 안 내요.")}
+                  {t(E, " — every cow willing to pay at least P pays P, the rest pay 0.",
+                        " 를 정하면, 낼 수 있는 금액이 P 이상인 소만 P 를 내고 나머지는 한 푼도 안 내요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>

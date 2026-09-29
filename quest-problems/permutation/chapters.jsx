@@ -55,12 +55,12 @@ export function makePermCh1(E) {
                   {t(E, "Farmer Nhoj ", "Farmer Nhoj 가 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "dismantles p step by step", "p 를 한 단계씩 분해")}</b>
                   {t(E, ". While more than 1 element remains in p, he applies this rule and records one hint:",
-                        ". p 에 원소가 2 개 이상 남아 있는 동안 아래 규칙을 쓰고 힌트를 하나씩 적어요.")}
+                        ". p 에 수가 2 개 이상 남아 있는 동안 아래 규칙을 쓰고 힌트를 하나씩 적어요.")}
                   <div style={{ marginTop: 6, marginLeft: 6, fontSize: 12, color: "#475569", lineHeight: 1.7 }}>
-                    {t(E, "↳ if first element > last element: ", "↳ 첫 원소 > 마지막 원소 이면: ")}
-                    <b style={{ color: "#dc2626" }}>{t(E, "write the 2nd element, remove the 1st", "2 번째 원소를 적고 1 번째를 빼요")}</b><br/>
+                    {t(E, "↳ if first element > last element: ", "↳ 맨 앞 수 > 맨 뒤 수 이면: ")}
+                    <b style={{ color: "#dc2626" }}>{t(E, "write the 2nd element, remove the 1st", "앞에서 2 번째 수를 적고 맨 앞 수를 빼요")}</b><br/>
                     {t(E, "↳ otherwise: ", "↳ 그 외: ")}
-                    <b style={{ color: "#7c3aed" }}>{t(E, "write the 2nd-to-last element, remove the last", "끝에서 2 번째 원소를 적고 마지막을 빼요")}</b>
+                    <b style={{ color: "#7c3aed" }}>{t(E, "write the 2nd-to-last element, remove the last", "뒤에서 2 번째 수를 적고 맨 뒤 수를 빼요")}</b>
                   </div>
                 </div>
               </div>
@@ -68,8 +68,8 @@ export function makePermCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "After N−1 steps, only 1 element is left and Nhoj has written ", "N−1 단계가 끝나면 원소가 1 개만 남고, Nhoj 는 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "N−1 hints h[0], h[1], …, h[N−2]", "N−1 개 힌트 h[0], h[1], …, h[N−2]")}</b>
+                  {t(E, "After N−1 steps, only 1 element is left and Nhoj has written ", "N−1 단계가 끝나면 수가 1 개만 남고, Nhoj 는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "N−1 hints, in the order he wrote them", "적은 순서대로 N−1 개의 힌트")}</b>
                   {t(E, " in order — that's the input.", " 를 순서대로 적었어요. 그게 바로 입력이에요.")}
                 </div>
               </div>
