@@ -240,8 +240,8 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
                ⛔ 벽 A 를 한 문장이라도 남기지 않는다 — 한 화면에 큰 수 둘(400억·199억)은
                  선생님이 오늘 지적하신 *"정보 너무 많이 갑자기"* 를 그대로 재현한다. */}
             {t(E,
-              "If all 200,000 numbers land in one pile, the last one gets pushed almost 200,000 times — 19,999,900,000 pushes in total, about 100,000 times the 200,000 numbers we started with. Counting them one at a time never finishes.",
-              "수 200,000 개가 한 곳에 몰리면 마지막 수는 200,000 번 가까이 밀려요 — 다 합치면 199억 9,990만 번, 처음 수 200,000 개의 10만 배쯤이에요.\n한 번에 하나씩 세는 방법으로는 끝나지 않아요.")}
+              "If all 200,000 numbers land in one pile, the last one gets pushed almost 200,000 times — 19,999,900,000 pushes in total. Counting them one at a time never finishes.",
+              "수 200,000 개가 한 곳에 몰리면 마지막 수는 200,000 번 가까이 밀려요 — 다 합치면 199억 9,990만 번이에요.\n한 번에 하나씩 세는 방법으로는 끝나지 않아요.")}
           </div>
 
           {/* 2026-09-22 PM 판정 — 이 쪽이 3쪽 바로 뒤(구 6쪽 자리)로 옮겨오면서
@@ -316,8 +316,8 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
            5쪽이 가르친 「나머지로 묶기」를 그대로 쓰되 **숫자는 새로 골랐다**는 것도 여기서 말한다
            (5쪽 마지막 걸음이 「이 방법을 다음 쪽에서도 쓴다」고 하는 것과 맞춘다). */
       explain: t(E,
-        "3 is right.\nA value keeps its remainder when divided by 2 — the same way of splitting as the last page, with new numbers.\n1, 1, 1 and 3 all leave 1; 2 leaves 0.\nK is negative, so settle the BIGGEST first: 3 stays, then 1 → -1, then 1 → -3. Two pushes there, one more for the 2s pile — 3 in total.\nStart from the smallest instead and it costs 7. That is why the direction flips when K is negative.",
-        "3 이 맞아요.\n2 로 나눈 나머지는 그대로예요 — 앞 쪽과 같은 나누는 방법이고, 숫자만 새로 골랐어요.\n1, 1, 1 과 3 은 모두 1 이 남고, 2 는 0 이 남아요.\nK 가 음수라 「큰 값부터」 자리를 잡아요 — 3 은 그대로, 1 은 -1 로, 또 1 은 -3 으로. 여기서 2 회.\n작은 값부터 하면 7 회가 들어요. K 가 음수일 때 방향이 뒤집히는 까닭이에요."),
+        "3 is right.\nA value keeps its remainder when divided by 2 — the same way of splitting as the last page, with new numbers.\n1, 1, 1 and 3 all leave 1; 2 leaves 0.\nK is negative, so settle the BIGGEST first: 3 stays, the first 1 stays too, the next 1 goes to -1 (1 push), the last 1 goes to -3 (2 pushes).\nThe 2 is alone and never moves. 0+0+1+2 = 3. Start from the smallest instead and it costs 7.",
+        "3 이 맞아요.\n2 로 나눈 나머지는 그대로예요 — 앞 쪽과 같은 나누는 방법이고, 숫자만 새로 골랐어요.\n1, 1, 1 과 3 은 모두 1 이 남고, 2 는 0 이 남아요.\nK 가 음수라 「큰 값부터」 자리를 잡아요 — 3 그대로, 첫 1 도 그대로, 다음 1 은 -1 로(1 회), 마지막 1 은 -3 으로(2 회).\n2 는 혼자라 안 움직여요. 0+0+1+2 = 3 회예요. 작은 값부터 하면 7 회가 들어요."),
     },
   ];
 }
