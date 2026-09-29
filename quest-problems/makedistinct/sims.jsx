@@ -391,13 +391,36 @@ export function WhoCanMeetSim({ E }) {
       ko: "K 가 3 이면 남는 수가 0, 1, 2 — 세 가지예요.\n3 씩 더하면 3 으로 나눈 남는 수가 그대로예요. 2 씩 더할 때와 똑같아요.",
       en: "With K = 3 the leftovers are 0, 1 and 2 — three of them.\nAdding 3 keeps the leftover after ÷ 3, just like adding 2 kept the leftover after ÷ 2." },
 
-    /* 7. PM 판정으로 **옛 걸음 5·6·7·8 을 하나로.** 3쪽 `PlaceOneByOneSim` 이 이미
-         「그대로 둠 → 한 번 밀기 → 여러 번 밀기 → 공식」을 전부 가르쳤다. */
-    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "even"],
-      extra: [t(E, "· stays", "· 그대로"), "· 3→5", "· 3→5→7", ""],
-      chains: [1, 0], named: true, formula: "(7-3) ÷ 2 = 2", ops: 3, tone: "aha",
-      ko: "이제 같은 수끼리 차례로 비켜 줘요. 첫째 3 은 그대로, 둘째는 5, 셋째는 7 이에요.\n셋째가 밀린 횟수는 (7-3) ÷ 2 = 2 회 — 모두 합쳐 3 회예요.",
-      en: "Now let equal numbers step aside in turn. The first 3 stays, the second becomes 5, the third becomes 7.\nThe third moved (7-3) / 2 = 2 times — three moves in total." },
+    /* ⚠️ 2026-09-29 선생님(라이브 보시고): *"예전에는 **첫째 둘째 셋째 숫자가 바뀌는것도
+         하나씩 시뮬로** 보여줬는데 **그 다음에 밑에 정리된게 보여야지.** 뭔가 시뮬이 뚝 끊겼어"*
+
+       ⭐ **맞다. 내가 합쳐서 끊었다.** PM 판정(3쪽이 이미 같은 걸 가르친다 · 3차 학생이
+         *"6걸음쯤부터 대충 누르기만"*)을 근거로 옛 걸음 5·6·7·8 을 **한 걸음**으로 만들었다.
+         그 결과 타일이 `3,3,3,4` 에서 `3,5,7,4` 로 **한 번에 튄다** — 미는 장면이 사라졌다.
+       ⛔ 3쪽이 가르친 것은 **K = 1** 일 때다. 여기는 K = 2 라 **한 번에 2 씩** 움직이고,
+         「한 번 밀기」와 「두 번 밀기」가 갈리는 자리다 — 3쪽이 대신해 주지 못한다.
+       → 하나씩 되살린다. **그리고 선생님 말씀대로 정리를 맨 뒤에 따로 둔다.** */
+    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
+      extra: [t(E, "· stays", "· 그대로"), "", "", ""], chains: [1, 0], named: true, ops: 0,
+      ko: "이제 같은 수끼리 차례로 비켜 줘요. 첫째 3 은 맨 앞이라 그대로예요.",
+      en: "Now let equal numbers step aside in turn. The first 3 is at the front, so it stays." },
+
+    { tiles: [3, 5, 3, 4], st: ["placed", "moving", "placed", "even"],
+      extra: ["", "· 3→5", "", ""], chains: [1, 0], named: true, ops: 1,
+      ko: "둘째 3 은 첫째와 같아요. 2 를 한 번 더해 5 로 비켜요.",
+      en: "The second 3 is the same as the first. Add 2 once and it steps aside to 5." },
+
+    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "moving", "even"],
+      extra: ["", "", "· 3→5→7", ""], chains: [1, 0], named: true,
+      formula: "(7-3) ÷ 2 = 2", ops: 3,
+      ko: "셋째 3 은 5 도 이미 찼어요. 5 를 지나 7 까지 — 2 를 두 번 더해요.\n세는 대신 (7-3) ÷ 2 로도 2 가 나와요.",
+      en: "The third 3 finds 5 taken too. Past 5, on to 7 — it adds 2 twice.\nInstead of counting, (7-3) / 2 also gives 2." },
+
+    /* 선생님: *"그 다음에 **밑에 정리된게** 보여야지"* — 미는 장면이 다 끝난 뒤에 정리 한 걸음. */
+    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "placed"],
+      extra: ["", "", "", ""], chains: [1, 0], named: true, ops: 3, tone: "aha",
+      ko: "3, 5, 7, 4 — 다 달라졌어요. 민 횟수는 0 + 1 + 2 = 3 회.\n이 나눔은 다음 쪽에서도 그대로 써요.",
+      en: "3, 5, 7, 4 — all different now. Moves: 0 + 1 + 2 = 3.\nWe use this same split on the next page." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
