@@ -152,9 +152,15 @@ export function KnightExactSim({ E }) {
         </div>
 
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+          {/* ⚠️ 2026-09-29 — **학생 둘이 독립적으로** *"그 전까지는 계속 찍는 기분이었다"*
+              고 했다(`feedback_student_agent_must_quit`: 같은 신호가 둘이면 약한 신호가 아니다).
+              화면은 이미 **「남는 이동 = 2」** 를 보여주는데, 묻는 말이
+              *"어떤 K 에서 초록인가요?"* 로 **막연했다** — 어디를 보라는 말이 없었다.
+              ⛔ 답(짝수)은 여전히 안 준다. **볼 곳만 좁힌다** —
+                `feedback_explain_why_certain_first` 의 「관찰 → 추론」 그대로. */}
           {t(E,
-            "Keep the same target and push K up one at a time. Which K turn green, and which stay red?",
-            "목표 칸을 그대로 두고 K 를 하나씩 올려 봐요.\n어떤 K 에서 초록이 되고, 어떤 K 에서 빨강인가요?")}
+            "Keep the same target and push K up one at a time.\nWatch the «left over» number — for which values does it turn green?",
+            "목표 칸을 그대로 두고 K 를 하나씩 올려 봐요.\n「남는 이동」 숫자를 보세요 — 그 값이 얼마일 때 초록이 되나요?")}
         </div>
       </div>
     </div>
