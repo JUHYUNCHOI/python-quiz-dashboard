@@ -30,6 +30,16 @@ export const TOPIC_KO: Record<string, string> = {
 
 // questId → 핵심 알고리즘 토픽 (특정 알고리즘이 핵심인 문제만 수록)
 export const QUEST_ALGO: Record<string, string> = {
+  // ⚠️ 2026-09-29 배지 감사 2차 — 아래 넷을 **뺐다**(코드를 열어 확인).
+  //   이 파일 머리말이 스스로 적어 둔 답 그대로다 —
+  //   «여기 없는 quest = 특정 알고리즘 없음(완전탐색/시뮬/애드혹) → 링크 안 띄움 (그게 정확)».
+  //   틀린 배지는 학생을 **엉뚱한 `/algo` 토픽으로** 보낸다.
+  //     triangles  = hashtable 이었는데 🔒 코드에 dict/set/map **0회** — 순수 O(N²) 이중 for
+  //     palindrome = dp 였는데 `dp[`·`memo` 없이 마지막 글자 하나 보는 게임이론/관찰
+  //     milkorder  = topologicalsort 였는데 in-degree·큐 없이 「다음 빈 자리」 순차 탐색
+  //     mcc19rect  = sorting 이었는데 `.sort()` **0회** (주석으로 「이미 정렬돼 있다」 가정만)
+  //   2026-09-26 1차 감사는 **graph 토픽만** 봤다 — 그래서 이 넷이 남아 있었다.
+  //   검사기 `scripts/check-algo-badge-vs-code.py` 를 만들어 전수로 돈다(볼 자리 표시).
   abcs: "sorting", acowdemia1: "binarysearch", aircond1: "prefixsum", alchemy: "recursion",
   astral: "greedy", bacteria: "prefixsum", bucketlist: "prefixsum",
   buymilk: "greedy",
@@ -43,7 +53,7 @@ export const QUEST_ALGO: Record<string, string> = {
   innovation: "greedy", interview: "priorityqueue", lc1480: "prefixsum", lc3: "hashtable",
   lc303: "prefixsum", lc560: "prefixsum", lc974: "prefixsum",
   magicorbs: "sorting", makedistinct: "sorting", mcc15bahasaf: "string", mcc15choco: "stackqueue",
-  mcc19bakery: "greedy", mcc19ditcoin: "greedy", mcc19rect: "sorting",
+  mcc19bakery: "greedy", mcc19ditcoin: "greedy", 
   // 2026-09-08 제거: mcc19rect2 → bitmanipulation.
   //   문제는 "축에 평행한 직사각형의 꼭짓점 3개로 4번째를 찾기" 다.
   //   원문 풀이(ioimalaysia.org/competition/mcc/2019-editorial, 직접 확인):
@@ -104,7 +114,7 @@ export const QUEST_ALGO: Record<string, string> = {
   //    세어 보니 맞다 — `bfs|dfs|deque|queue` 0건, `union` 15·`find` 19·`rollback` 12건이다.
   //    유니온 파인드(되돌리기)다. 배지대로 /algo/graph 로 가면 안 배워도 되는 걸 배우게 된다.
   mcc22maze: "unionfind", mco15honey: "greedy", mco15secret: "string", mco15trains: "shortestpath",
-  milkfactory: "graph", milkorder: "topologicalsort",
+  milkfactory: "graph", 
   moo: "string",
   // moohunt: 제거 (2026-09-07) — 비트 연산은 **핵심 아이디어가 아니라 표현 수단**이다.
   //   공식 풀이의 진짜 통찰은 "득점 가능한 건 M 자리 하나 + O 자리 둘 조합뿐" 이라는 세기(관찰)이고,
@@ -116,11 +126,11 @@ export const QUEST_ALGO: Record<string, string> = {
   // mooin3: 제거 — 검증된 통과 풀이는 이분탐색을 안 씀(2026-07-27 표+그리디로 교체).
   //   실제 기법 = 글자별 lookup 표 precompute + 포물선 꼭짓점. 20개 표준 토픽에 딱 맞는 게 없음 → 애드혹.
   //   greedy(가운데 고정+양끝) 만으론 O(N²) TLE 라 greedy 태그도 오해 유발 → 링크 안 띄우는 게 정확.
-  moolang: "greedy", mooloo: "greedy", palindrome: "dp", photoshoot: "greedy", photoshoot2: "greedy",
+  moolang: "greedy", mooloo: "greedy",  photoshoot: "greedy", photoshoot2: "greedy",
   printseq: "dp", productivity: "binarysearch", reach: "shortestpath", revegetation: "greedy",
   reverseeng: "greedy", sleepclass: "greedy", sleepysort: "greedy", socialdist1: "binarysearch",
   stalling: "sorting", subseqmedian: "dp", swaptowin: "greedy", tameherd: "dp",
-  triangles: "hashtable", tricks: "hashtable", walkfence: "prefixsum", walkhome: "dp",
+   tricks: "hashtable", walkfence: "prefixsum", walkhome: "dp",
   whereami: "hashtable", word: "greedy",
 };
 
@@ -144,7 +154,8 @@ export const TOPIC_EN: Record<string, string> = {
 export const ALGO_LEVEL_NOTE: Record<string, { ko: string; en: string }> = {
   familytree:     { ko: "이 문제엔 트리의 '부모 따라 올라가기' 만 써요", en: "only 'walk up to the parent' is needed here" },
   interview:      { ko: "이 문제엔 '제일 작은 것 꺼내기' 만 써요", en: "only 'take the smallest' is needed here" },
-  milkorder:      { ko: "이 문제엔 '순서 정하기' 앞부분만 써요", en: "only the first part of ordering is needed here" },
+  // ⚠️ 2026-09-29: `milkorder` 줄을 뺐다 — 위에서 배지 자체를 지웠으므로
+  //   이 설명은 **뜰 자리가 없는 죽은 코드**가 된다(배지 옆에 붙는 글이다).
 };
 
 export function questAlgo(id: string): {
