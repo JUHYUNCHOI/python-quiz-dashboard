@@ -180,7 +180,14 @@ export function WhoCanMeetSim({ E }) {
       ko: "4 도 마찬가지예요. 6, 8, 10 … 계속 짝수예요. 짝지을 다른 짝수가 없어요.",
       en: "Same for 4 — 6, 8, 10 … always even. There is no other even number for it to pair with." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
-      extra: ["", "", "", ""], tone: "aha",
+      /* ⚠️ 2026-09-29 (2판) 선생님: *"아직 이해가 안감"* — 짧게 줄였는데도 안 됐다.
+         ⭐ 화면을 다시 보니 **결론을 말하는 순간 근거가 사라지고 있었다.**
+           2걸음이 `→5→7→9…`, 3걸음이 `→6→8→10…` 을 보여줬는데
+           **결론 걸음인 여기서 둘 다 빈 칸**이었다(`extra: ["", "", "", ""]`).
+           학생은 「두 줄이 안 겹친다」를 **기억으로** 떠올려야 했다
+           (`feedback_screen_must_not_rely_on_memory` — 앞 쪽은 사라진다).
+         → **두 줄을 같이 띄워 놓고** 말한다. 그러면 「안 겹친다」가 글이 아니라 **그림**이 된다. */
+      extra: ["", "", t(E, "→5→7→9…", "→5→7→9…"), t(E, "→6→8→10…", "→6→8→10…")], tone: "aha",
       /* ⭐ 2026-09-28 선생님: *"k 가 2 일때는 짝수와 홀수가 겹쳐질 걱정이 없는건 맞는데
          **1 이거나 3 일떄 다를때도?**"* — 맞는 지적이다. **홀/짝은 K = 2 일 때만의 모습**이고,
          진짜 규칙은 **「K 로 나눈 나머지」**다(🔒 코드도 `groups[x % abs(k)]` 로 묶는다).
@@ -201,8 +208,8 @@ export function WhoCanMeetSim({ E }) {
          ⛔ K=1·K=3 「~이었다면」 두 줄은 **뺐다.** 바로 앞 두 걸음(위 176·180행)이 이미
            K=1 과 K=2 를 숫자로 비교한다 — **같은 말을 세 번째로 하고 있었다**
            (`feedback_shorter_not_longer`). */
-      ko: "홀짝이 아니라 「나머지」가 진짜 규칙이에요.\nK 로 나눈 나머지가 같은 값끼리만 부딪혀요 — 3 은 나머지 1, 4 는 0 이라 서로 절대 안 만나요.",
-      en: "The real rule is the remainder, not odd/even.\nOnly values with the same remainder after dividing by K can ever clash — 3 leaves 1, 4 leaves 0, so they never meet." },
+      ko: "두 줄을 보세요 — 3,5,7,9… 와 4,6,8,10… 은 절대 겹치지 않아요.\n같은 줄에 있는 값끼리만 부딪혀요. 이 줄을 가르는 건 「K 로 나눈 나머지」예요.",
+      en: "Look at the two chains — 3,5,7,9… and 4,6,8,10… never overlap.\nOnly values on the same chain can clash. What splits the chains is the remainder after dividing by K." },
     { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
       extra: [t(E, "· stays", "· 그대로"), "", "", ""],
       ko: "묶음 안에서도 작은 값부터 하나씩 놓아요. 첫째 3 은 맨 앞이라 그대로예요. (0 회)",
