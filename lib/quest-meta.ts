@@ -2246,6 +2246,19 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   simplegame: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["sort-basics", "tuple-basics", "math-basics"] },
   collatz: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "math-basics"] },
   mcc19rect: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["loop", "list-basics", "math-basics"] },
+
+  /* ⭐ 2026-09-30 — `rectangles` 는 MCC 48개 중 **유일하게 메타 항목이 없던** quest다.
+     항목이 없으면 DEFAULT_META 의 `concepts_required: []` 를 물려받고,
+     `app/quest/page.tsx:296` 과 `QuestCompletionCard.tsx:90` 이 빈 배열을 걸러내므로
+     **누구에게도 「지금 풀 준비됨」이 안 뜬다** — 학생 경로에서 사실상 안 보였다.
+     🔒 FULL_PY 를 읽고 실제로 쓰는 것만 적었다:
+       `dp.append([INF] * (n + 1))` 로 2차원 표를 만든다 → `2d-list-build`(레슨 53)
+       3중 for · `max`/`min` · 리스트 인덱싱 → `loop`·`list-basics`·`math-basics`
+     ⛔ `dp-on-chain` 은 **일부러 안 넣었다** — 이 quest 가 **가르치는 것**이지
+        미리 알아야 하는 것이 아니다. (`concepts_taught` 쪽이 제자리다.)
+     ⚠️ 「빠짐없이 채울 것」 규칙(CLAUDE.md) 때문에 부분만 채우는 게 제일 위험하다 —
+        위 넷이 전부인지는 코드를 눈으로 읽어 정했다. 기계 검사로 얻은 값이 아니다. */
+  rectangles: { ...DEFAULT_META, supported_languages: ["py", "cpp"], concepts_required: ["loop", "list-basics", "2d-list-build", "math-basics"] },
   tricks: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["frequency-count"] },
   explodingarrow: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["binary-search"] },
   mobilegame: { ...DEFAULT_META, supported_languages: ["py"], concepts_required: ["heapq"] },
