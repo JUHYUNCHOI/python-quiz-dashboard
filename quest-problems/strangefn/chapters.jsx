@@ -314,8 +314,8 @@ export function makeStrangeFnCh1(E) {
                   ⚠️ 이 quest 에 「십진수」가 처음 나오는 자리라 뜻을 한 번만 붙인다
                      (`feedback_no_invented_terms`: 용어는 처음 쓰기 전에 정의). */}
               <div style={{ marginTop: 6 }}>{t(E,
-                "Turn those into the numbers we use every day and you get\n1, 2, 3, 4, 5 …\nSo x = 10 is n = 2, and x = 11 is n = 3.",
-                "이걸 십진수 — 우리가 늘 쓰는 수 — 로 고치면\n1, 2, 3, 4, 5 … 예요.\nx = 10 은 n = 2, x = 11 은 n = 3 이에요.")}</div>
+                "Turn those into decimal and you get\n1, 2, 3, 4, 5 …\n10 becomes 2. 11 becomes 3.",
+                "이걸 십진수로 고치면 1, 2, 3, 4, 5 … 예요.\n10 은 2 가 되고, 11 은 3 이 돼요.")}</div>
             </div>
           </div>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
@@ -333,7 +333,7 @@ export function makeStrangeFnCh1(E) {
               </div>
             </div>
             <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 800, color: "#15803d", fontFamily: "'JetBrains Mono',monospace" }}>
-              1×2 + 0×1 = 2 → n = 2
+              1×2 + 0×1 = 2
             </div>
           </div>
         </div>),
@@ -343,16 +343,16 @@ export function makeStrangeFnCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Turn the three values you already counted into n.",
-        "직접 센 세 값을 이진수 n 으로 바꿔요."),
+        "Give the three counts you made a name.",
+        "직접 센 세 값에 이름을 붙여요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* 2026-09-23 학생 검증: g 가 이 쪽 표에서 정의 없이 처음 등장 —
               "이게 답 세는 함수구나" 를 학생이 직접 짐작했다. 쓰기 전에 한 문장으로 밝힌다. */}
-          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, wordBreak: "keep-all", textWrap: "balance" }}>
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "Let's give that count a name: g(n) is the number of f's needed, once x has been read as the binary number n.",
-              "이 횟수에 이름을 붙여요. x 를 이진수로 읽은 값이 n 일 때, f 가 필요한 횟수를 g(n) 이라고 해요.")}
+              "The number we get from reading in binary — call it n.\nThe count of steps for that n — call it g(n).\nSo 10 gives n = 2, and it took 3 steps: g(2) = 3.",
+              "이진수로 고쳐서 나온 수 — 이걸 n 이라고 해요.\n그 수에 걸린 횟수 — 이걸 g(n) 이라고 해요.\n10 은 n 이 2 이고 3 번 걸렸으니, g(2) = 3 이에요.")}
           </div>
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12, marginBottom: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#166534", lineHeight: 2 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6, fontFamily: "inherit" }}>
