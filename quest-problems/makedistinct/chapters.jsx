@@ -111,7 +111,7 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
           </div>
 
           <div style={{ marginTop: 8, fontSize: 11, color: C.dim }}>
-            {t(E, "First line is T (number of test cases).", "첫 줄 T 는 테스트케이스 개수.")}
+            {t(E, "First line is T — how many problems come in this one file.", "첫 줄 T 는 이 파일에 문제가 몇 개 들어 있나예요.")}
           </div>
 
           {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
@@ -122,6 +122,18 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
               <div>1 ≤ N ≤ 200,000</div>
               <div>−N ≤ K ≤ N,  K ≠ 0</div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "each number is between 1 and N  ·  all N added together ≤ 1,000,000", "수는 1 부터 N 사이  ·  N 을 다 더해도 1,000,000 을 안 넘어요")}</div>
+            </div>
+            {/* 2026-09-30 학생: "N 이 「개수」와 「값의 상한」 두 뜻으로 쓰이는데
+                우연인지 원래 그런지 설명이 없어 헷갈렸다." → 한 줄로 밝힌다.
+                아래 199억 줄은 삭제한 4쪽에서 옮겨 온 것 —
+                `feedback_why_and_how_over_slowness` 의 「제약 숫자 + 연산량 한 줄」. */}
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E, "The same N does two jobs here: how many numbers there are, and how big a number can get.",
+                    "여기서 N 은 두 가지를 같이 말해요 — 수가 몇 개인지, 그리고 수가 얼마까지 커질 수 있는지예요.")}
+            </div>
+            <div style={{ fontSize: 11.5, color: "#b91c1c", marginTop: 6, fontWeight: 600, lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E, "If all 200,000 numbers pile up on one spot, the last one gets pushed almost 200,000 times — 19,999,900,000 pushes in all. Counting them one at a time never finishes.",
+                    "수 200,000 개가 한 곳에 몰리면 마지막 수는 200,000 번 가까이 밀려요 — 다 합치면 199억 9,990만 번이에요.\n한 번에 하나씩 세는 방법으로는 끝나지 않아요.")}
             </div>
           </div>
         </div>
@@ -143,123 +155,13 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
       content: <PlaceOneByOneSim E={E} />,
     },
 
-    /* 1-4: 쉬운 첫 코드와 그 한계 (2026-09-21 추가, 2026-09-22 3쪽 바로 뒤로 이동)
-       왜 생겼나 — 교육 검토: **[기][승][전] 다음이 바로 최종 코드**여서
-       "쉬운 방법 → 왜 안 되나 → 그래서 이 방법" 사다리의 첫 칸이 비어 있었다.
-       project-lead 가 실측해서 판정했다 — 브루트는 **답은 맞고**(무작위 3000 케이스
-       최적해와 전부 일치) **느리다**(파이썬 N=10,000 에 2.3초, 깨끗한 O(N²)).
-       그래서 한 쪽만 넣는다. `feedback_why_and_how_over_slowness.md` 처방대로
-       느림을 체감시키는 데 쪽을 쓰지 않고 **제약 숫자 + 연산량 한 줄**로 끝낸다.
-
-       왜 여기(3쪽 바로 뒤)로 옮겼나 (2026-09-22, PM 판정) — 선생님이 예전 4쪽 결론을
-       보시고 *"그래서 뭐? 어쨋다는거지?"*, 이어서 *"브루트 포스가 느리기 때문에
-       이걸 써야한다는게 더 맞는것 같은데"*. ux 실측: 3쪽 마지막 걸음이 이미
-       "겹치면 그 자리에서 바로 밀기" 를 손으로 시연하고 있었다 — 그 다음 문장은
-       (구 4쪽의 홀짝 관찰이 아니라) 그걸 코드로 옮긴 이 브루트 쪽이다. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "What if we just push whenever two values collide?",
-        "겹칠 때마다 그 자리에서 바로 밀면 안 될까요?"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
-            🐣 {t(E, "The first idea — just push on collision", "제일 먼저 떠오르는 방법 — 겹치면 바로 밀기")}
-          </div>
-
-          <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, marginBottom: 8, wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E,
-              "Keep the values we have already placed. For each new value, push it by K until it lands somewhere free.",
-              "이미 놓은 값들을 들고 있다가, 새 값이 겹치면 빈 자리를 만날 때까지 K 씩 밀어요.")}
-          </div>
-
-          <CodeBlock lang={codeLang} isEn={E} lines={codeLang === "cpp" ? [
-            "vector<long long> used;   // 이미 놓인 값들",
-            "long long total = 0;",
-            "",
-            "for (long long x : a) {",
-            "    while (find(used.begin(), used.end(), x) != used.end()) {",
-            "        x += k;           // 한 번 밀고 다시 본다",
-            "        total++;",
-            "    }",
-            "    used.push_back(x);",
-            "}",
-            "",
-            "cout << total << \"\\n\";",
-          ] : [
-            "used = []          # 이미 놓인 값들",
-            "total = 0",
-            "",
-            "for x in a:",
-            "    while x in used:   # 겹치면",
-            "        x += k         # 한 번 밀고 다시 본다",
-            "        total += 1",
-            "    used.append(x)",
-            "",
-            "print(total)",
-          ]} />
-
-          <div style={{ marginTop: 10, background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#7f1d1d", lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
-            {/* ⭐ 2026-09-28 학생(초6): *"코드가 `for x in a:` 로 **원래 순서 그대로** 도는데,
-                3쪽에서는 내내 **「작은 값부터 정렬해야 나중에 덜 움직여요」** 라고 강조했었다.
-                **「어, 정렬 안 하는데 답이 맞다고?」** 하는 생각이 들었다. 왜 순서 상관없이
-                맞는지는 설명이 없었다."* → 앞 쪽이 세운 규칙과 이 코드가 어긋나 보인다.
-                **한 마디만 그 자리에 놓는다**(`feedback_sentence_must_follow`). */}
-            {/* ⚠️ 2026-09-29 선생님(화면 보시고): *"오래 걸린다는 얘기겠지? **엄청 기네**"*
-                맞다. 이 빨간 상자에 **두 가지**가 들어 있었다 —
-                ①정렬을 안 해도 답이 맞는 이유(3문장) ②느리다(2문장, 숫자 포함).
-                `feedback_why_and_how_over_slowness`: *"느린 건 금방 안다. 한계는 한 화면이면
-                충분 — **제약 숫자 + 연산량 한 줄**. 아낀 분량을 「왜·어떻게」에 써라."*
-                → ①은 한 문장으로, ②도 한 줄로. 둘 다 내용은 남기고 길이만 줄인다. */}
-            <b>{t(E, "It gives the right answer — but it is too slow.", "답은 맞아요. 그런데 너무 느려요.")}</b><br />
-            {/* ⚠️ 2026-09-29 학생: *"이 줄이 뜬금없었다. 이 페이지 코드에는 `sort` 가
-                 하나도 없다(`for x in a: while x in used:` 만 있다). 갑자기 「정렬」이
-                 나와서 「어 정렬이 왜 나오지?」 하고 잠깐 멈췄다."*
-               이 문장은 **앞 학생의 질문**("3쪽은 정렬하라더니 코드는 왜 안 하나")에
-               답하려고 넣은 것인데, 질문 없이 답만 떠 있었다. → **화면의 코드를
-               가리키며** 연다. 그러면 답이 답으로 읽힌다(`feedback_sentence_must_follow`). */}
-            {t(E,
-              "This code does not sort — it reads a in the original order, and the answer is still right.",
-              "이 코드는 정렬을 안 해요 — 원래 순서대로 훑는데도 답은 맞아요.")}<br />
-            {/* 실측값이다 — project-lead 가 N=200,000·K=1 을 끝까지 돌렸다: 1179초.
-               ⚠️ 2026-09-29 학생: *"「400억 번쯤」 숫자가 어디서 나온 건지 화면이
-                 안 보여준다. 20만×20만인가 짐작은 했는데 그냥 믿고 넘어갔다."*
-               → **곱셈을 그 자리에 쓴다.** 줄은 안 늘린다. */}
-            {/* ⛔ 2026-09-29 토론 판정 — **옛 문장은 「자료구조가 느리다」(벽 A)를 말하고 있었다.**
-                 *"200,000 × 200,000 ≒ 400억 번 → 20분"* — 셋이 다 틀렸다:
-                 ① 이 코드는 O(N²)가 아니라 **O(N³)** 이다(`x in used` 가 매번 전체를 훑는다).
-                 ② 「20분」은 외삽하면 **38시간**, 주석의 「1179초」는 역산하면 N ≈ 41,000 — 재현 불가.
-                 ③ 여기 「나머지」는 **일상어**(그 밖의 것들)인데 5쪽은 **수학 용어**(mod)로 쓴다 —
-                    같은 낱말 두 뜻(`feedback_same_number_two_meanings` 의 낱말판).
-               ⭐ **더 큰 문제: 벽 A 는 set 하나로 668배 풀린다**(실측). 그래서 이 문장을 두면
-                 눈치 빠른 학생의 *"그럼 set 쓰면 되잖아요?"* 가 **실제로 맞는 말**이 되고,
-                 뒤에 나오는 묶기·정렬·점프가 전부 «왜 굳이?» 가 된다.
-               → **벽 B 로 통째로 갈아 끼운다.** 답 자체가 커서 **세는 것만으로** 터지는 벽이다.
-                 이건 자료구조로 못 넘는다. 검산: 전부 1, K=1, N=200,000 →
-                 `200,000 × 199,999 ÷ 2 = 19,999,900,000`. 제약(각 수 1~N)도 지킨다.
-               ⛔ 벽 A 를 한 문장이라도 남기지 않는다 — 한 화면에 큰 수 둘(400억·199억)은
-                 선생님이 오늘 지적하신 *"정보 너무 많이 갑자기"* 를 그대로 재현한다. */}
-            {t(E,
-              "If all 200,000 numbers land in one pile, the last one gets pushed almost 200,000 times — 19,999,900,000 pushes in total. Counting them one at a time never finishes.",
-              "수 200,000 개가 한 곳에 몰리면 마지막 수는 200,000 번 가까이 밀려요 — 다 합치면 199억 9,990만 번이에요.\n한 번에 하나씩 세는 방법으로는 끝나지 않아요.")}
-          </div>
-
-          {/* 2026-09-22 PM 판정 — 이 쪽이 3쪽 바로 뒤(구 6쪽 자리)로 옮겨오면서
-              옛 문구("4쪽에서 홀수·짝수로 갈렸던 것, 5쪽에서 '나머지'로…")가
-              아직 안 나온 내용을 과거형으로 가리키게 됐다. 결론 선언 대신
-              질문을 던지고 다음 쪽이 구조로 답하게 한다 — PM 이 문장을 확정. */}
-          <div style={{ marginTop: 10, background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
-            {/* ⛔ 옛 문장 *"그걸 알아내면 훨씬 빨라져요"* 는 실측과 안 맞는다 —
-                 묶기만 해도 속도는 안 는다(정렬+set 624배 vs 묶기+정렬+set 599배).
-               → 약속을 **「세지 말고 계산한다」** 로 바꾼다. 5쪽이 그것을 갚는다. */}
-            👉 {t(E,
-              "So we must not count one push at a time — we need to work it out in one go. The next page shows how.",
-              "그러니 한 번씩 세면 안 돼요 — 한 번에 계산해 내야 해요. 어떻게 하는지 다음 쪽에서 봐요.")}
-          </div>
-        </div>
-      ),
-    },
-
+    /* 1-4(브루트 코드 쪽)는 2026-09-30 에 **통째로 뺐다** — PM 종합 판정.
+       왜: 3쪽이 방금 "정렬하고 민 횟수는 나눗셈으로 계산한다" 를 가르쳤는데
+       이 쪽 코드는 **정렬도 계산도 안 했다**(자기모순). 빨간 상자에 자인하는
+       문장을 한 줄 더 붙이는 처방이 이미 **두 번 실패**했다.
+       199억 사실은 2쪽 제약 박스로 옮겼다 — `feedback_why_and_how_over_slowness`
+       가 말하는 「제약 숫자 옆에 연산량 한 줄」이 원래 제자리다.
+       근거: pedagogy·auditor·ux 가 각각 다른 방법으로 같은 자리를 지목했다. */
     /* 1-5: K = 2 면 누가 누구와 부딪히나 — **시뮬**(전에는 객관식 퀴즈였다,
        2026-09-22 순서 개편으로 구 1-4 에서 여기로 밀림 — 내용은 그대로 옮김).
        선생님: *"굳이 필요없는 퀴즈는 없애고 … 눈에 보이게끔"*.
@@ -277,7 +179,7 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
          (`feedback_reviewers_see_pages_teacher_sees_story` — 이상한 건 쪽과 쪽 **사이**다.) */
       narr: t(E,
         "This time K = 2. Which values can ever clash?",
-        "이번엔 K = 2 예요. 어떤 값끼리 부딪힐 수 있는지 알아봐요."),
+        "이번엔 K = 2 예요. 어떤 값끼리 겹칠 수 있는지 알아봐요."),
       content: <WhoCanMeetSim E={E} />,
     },
 
@@ -308,7 +210,7 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
          ⛔ 걸음을 늘리지 않는다 — 대신 아래 `explain` 에서 같은 말을 한 줄 뺐다. */
       hint: t(E,
         "K is negative, so each push makes a value 2 smaller. Which ones can ever meet — and which end should you settle first?",
-        "K 가 음수라 밀면 값이 2 씩 작아져요. 어떤 수끼리 만날 수 있을까요? 그리고 어느 쪽부터 자리를 잡아야 할까요?"),
+        "K 가 음수라 밀면 값이 2 씩 작아져요. 어떤 수끼리 겹칠 수 있을까요? 그리고 어느 쪽부터 자리를 잡아야 할까요?"),
       answer: 3,
       /* 2026-09-21: 맞혀도 ✅ 만 뜨고 **왜 2 인지**가 없었다 (재검증 학생 지적).
          `NumInput` 에 explain 을 새로 달아 이 자리부터 쓴다. */

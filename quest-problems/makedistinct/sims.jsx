@@ -441,7 +441,7 @@ export function WhoCanMeetSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         /* ⚠️ PM 이 잡았다(2026-09-29) — 제목이 「K = 2 일 때」인데 걸음 5·6 은
              K = 1 · K = 3 을 다룬다. 걸음을 일반화로 바꾸면서 **제목을 안 따라 고쳤다.** */
-        title={t(E, "Who can ever meet?", "누가 누구와 만날 수 있나")}
+        title={t(E, "Which values can ever overlap?", "누가 누구와 겹칠 수 있나")}
  />
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
