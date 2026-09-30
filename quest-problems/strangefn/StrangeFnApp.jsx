@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { StrangeFnProgressiveCode, downloadStrangeFnPDF, getStrangeFnSections } from "./components";
 import { makeStrangeFnCh1, makeStrangeFnCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -129,6 +130,21 @@ export default function StrangeFnApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        {/* 2026-09-30 선생님: *"전체적으로 저렇게 해결방법을 생각한 그 단계 접근방법이 보이지 않네"*
+            → *"학생들은 이런 문제들을 어떻게 접근할수 있을까가 궁금할것 같아"*
+            ⛔ 새 지적이 아니었다 — 2026-07-13 에 *"뭘 어떻게 풀어갈건지 크게 보이지가 않아"* 라고
+            하셔서 이 컴포넌트를 만들었는데 **9개에만 붙이고 끝났다**(USACO·MCC 170개 중 161개가 없다).
+            이 칩은 쪽을 넘겨도 안 사라져서, 5~11쪽을 도는 내내 «지금 어느 단계인가»를 보여준다.
+            문구는 pedagogy-reviewer 가 형제 9개의 톤에 맞춰 정했다.
+            ⚠️ href 는 일부러 안 붙였다 — `app/algo/` 에 「패턴 찾기」 토픽이 **없다.**
+               없는 곳으로 링크를 걸면 그 자체가 거짓이 된다.
+            검사기: `scripts/check-missing-approach-tags.py` */}
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔍", ko: "작은 값 실험", en: "Test small cases" },
+          { icon: "🧩", ko: "패턴 찾기", en: "Pattern finding" },
+          { icon: "✅", ko: "규칙 검증", en: "Verify the pattern" },
+          { icon: "Σ", ko: "공식화", en: "Turn into a formula" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

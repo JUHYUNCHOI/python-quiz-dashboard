@@ -268,8 +268,8 @@ export function makeStrangeFnCh1(E) {
                 "이번에도 같은 두 규칙을 번갈아 적용해요. 0 이 될 때까지 몇 번 걸리는지 세어보세요.")}
               answer={4}
               explain={t(E,
-                "4 is right. 11 → 10 → 9 → 1 → 0, four f's. Let's check the three values we just found — 1, 3, 4 — in the table.",
-                "4 가 맞아요. 11 → 10 → 9 → 1 → 0, 네 번이에요. 방금 구한 세 값 1, 3, 4 를 표에서 다시 확인해요.")}
+                "4 is right. 11 → 10 → 9 → 1 → 0, four f's. We now have three values — 1, 3, 4. Let's line them up soon.",
+                "4 가 맞아요. 11 → 10 → 9 → 1 → 0, 네 번이에요. 이제 값이 세 개 — 1, 3, 4 예요. 곧 표로 정리해볼게요.")}
             />
           </div>
         </div>),
@@ -289,10 +289,13 @@ export function makeStrangeFnCh1(E) {
             🔢 {t(E, "Reading as binary", "이진수로 읽기")}
           </div>
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, wordBreak: "keep-all", textWrap: "balance" }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
               {/* 2026-09-30 선생님 *"설명 너무 길어"* — 네 문단이었다.
                   자리값 설명은 바로 아래 예 상자가 「자리값 2 · 자리값 1」로 이미 보여준다. */}
               <div>{t(E,
+                "1, 3 and 4 came from x's of different lengths — 1, 10, 11.\nTo line them up in one table we need one single number.",
+                "1, 3, 4 는 길이가 다른 x — 1, 10, 11 에서 나왔어요.\n한 표에 늘어놓으려면 하나의 수로 맞춰야 해요.")}</div>
+              <div style={{ marginTop: 6 }}>{t(E,
                 "0 and 1 are exactly what binary digits look like — so read x as binary and it becomes one number n.",
                 "0 과 1 만 남은 모양은 이진수와 똑같아요 — 그대로 읽으면 x 가 수 n 하나가 돼요.")}</div>
               <div style={{ marginTop: 6 }}>{t(E,
