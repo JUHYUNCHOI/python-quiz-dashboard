@@ -292,15 +292,30 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
               {/* 2026-09-30 선생님 *"설명 너무 길어"* — 네 문단이었다.
                   자리값 설명은 바로 아래 예 상자가 「자리값 2 · 자리값 1」로 이미 보여준다. */}
+              {/* 2026-09-30 선생님: *"뭔말이지? 한표를 늘어놓으면 하나의 수로 맞춰야해요?
+                  그대로 읽으면 X가 수 n하나가 돼요?"* — 내가 **추상적으로 말하고 숫자를
+                  안 보여줬다.** 오늘 1쪽에서 겪은 것과 같은 실수다.
+                  「하나의 수로 맞춘다」가 실제로 무슨 일인지 **그 자리에서 숫자로** 보인다:
+                    1, 10, 11 → 1, 2, 3. 그게 전부다. */}
+              {/* 2026-09-30, 선생님이 **두 번** 지적하셨다 — *"뭔말이지?"* → *"아직도 추상적이야"*.
+                  두 번 다 내가 «왜 이진수인가»를 **말로 설명하려** 했기 때문이다.
+                  진짜 답은 설명이 아니라 **늘어놓고 보면 보이는 것**이었다:
+                    0 과 1 만 쓰는 수를 작은 것부터 세면 1, 10, 11, 100, 101 …
+                    그게 이진수로 1, 2, 3, 4, 5 … 를 센 것과 **완전히 같은 차례**다.
+                  (기계로 확인함 — 오름차순이 정확히 일치한다.)
+                  ⛔ 여기에 「그러면 규칙을 찾을 수 있어요」 같은 **보람 설명을 덧붙이지 마라.**
+                     그게 두 번 다 「추상적」이라는 말을 들은 자리다. */}
               <div>{t(E,
-                "1, 3 and 4 came from x's of different lengths — 1, 10, 11.\nTo line them up in one table we need one single number.",
-                "1, 3, 4 는 길이가 다른 x — 1, 10, 11 에서 나왔어요.\n한 표에 늘어놓으려면 하나의 수로 맞춰야 해요.")}</div>
+                "Write down the numbers that use only 0 and 1, smallest first:\n1, 10, 11, 100, 101 …",
+                "0 과 1 만 쓰는 수를 작은 것부터 적어 봐요.\n1, 10, 11, 100, 101 …")}</div>
+              {/* 선생님 제안(2026-09-30): *"이걸 십진수로 고쳐면… 이라고 하면 더 쉽지 않을까?"*
+                  맞다. «바꿔 부르는 게 이진수예요» 는 **이름을 가르치는 문장**이고,
+                  «십진수로 고치면» 은 **학생이 이미 아는 곳으로 데려다주는 문장**이다.
+                  ⚠️ 이 quest 에 「십진수」가 처음 나오는 자리라 뜻을 한 번만 붙인다
+                     (`feedback_no_invented_terms`: 용어는 처음 쓰기 전에 정의). */}
               <div style={{ marginTop: 6 }}>{t(E,
-                "0 and 1 are exactly what binary digits look like — so read x as binary and it becomes one number n.",
-                "0 과 1 만 남은 모양은 이진수와 똑같아요 — 그대로 읽으면 x 가 수 n 하나가 돼요.")}</div>
-              <div style={{ marginTop: 6 }}>{t(E,
-                "Small n first — that is where the pattern shows up.",
-                "n 이 작을 때부터 보면 규칙이 보여요.")}</div>
+                "Turn those into the numbers we use every day and you get\n1, 2, 3, 4, 5 …\nSo x = 10 is n = 2, and x = 11 is n = 3.",
+                "이걸 십진수 — 우리가 늘 쓰는 수 — 로 고치면\n1, 2, 3, 4, 5 … 예요.\nx = 10 은 n = 2, x = 11 은 n = 3 이에요.")}</div>
             </div>
           </div>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
