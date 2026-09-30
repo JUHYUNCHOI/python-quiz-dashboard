@@ -29,8 +29,8 @@ export function makeStrangeFnCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "How many times must f run to turn x into 0?",
-        "이상한 함수 f 를 몇 번 써야 x 가 0 이 되는지 세는 문제예요."),
+        "How many times must the rule run to turn x into 0?",
+        "이상한 규칙을 몇 번 써야 x 가 0 이 되는지 세는 문제예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -46,8 +46,8 @@ export function makeStrangeFnCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 , wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
-                "Output how many applications of f are needed to reach 0, mod 10⁹+7.",
-                "f 를 몇 번 써야 0 이 되는지 10⁹+7 로 나눈 나머지를 출력해요.")}
+                "Output how many times we must change x to reach 0, mod 10⁹+7.",
+                "x 를 몇 번 바꿔야 0 이 되는지 10⁹+7 로 나눈 나머지를 출력해요.")}
             </div>
             {/* 2026-09-22: 10⁹+7 이 화면에 16번 나오지만 뜻은 한 번도 안 밝혀져 있었다.
                 학생이 처음 만나는 이 자리(1쪽 미션)에서 한 번만 정의한다. */}
@@ -93,10 +93,10 @@ export function makeStrangeFnCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print how many ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "such changes", "이렇게 몇 번")}</b>
-                  {t(E, " make x become 0, mod ",
-                        " 바꾸면 x 가 0 이 되는지 ")}
+                  {t(E, "We call one such change ", "이렇게 한 번 바꾸는 것을 ")}
+                  <b style={{ color: "#15803d" }}>f</b>
+                  {t(E, ". Print how many f's make x become 0, mod ",
+                        " 라고 해요. f 를 몇 번 쓰면 x 가 0 이 되는지 ")}
                   <b style={{ color: "#15803d" }}>10⁹+7</b>
                   {t(E, ".", " 로 나눈 나머지를 출력해요.")}
                 </div>
@@ -250,8 +250,8 @@ export function makeStrangeFnCh1(E) {
                 "x = 10 (only 0s and 1s). How many f's until it hits 0? Count it out.",
                 "x = 10 이에요 (0 과 1 만 있어요). 0 이 될 때까지 f 를 몇 번 써야 할까요? 직접 세어 보세요.")}
               hint={t(E,
-                "10 has only 0s and 1s, so subtract 1 → 9.\nNow 9 is not 0/1 — which rule now? Keep going to 0 and count.",
-                "10 은 0 과 1 뿐이니 1 을 빼요 → 9.\n9 는 0 도 1 도 아니죠 — 이제 어느 규칙일까요? 0 까지 가면서 세어 보세요.")}
+                "10 has only 0s and 1s → subtract 1 → 9.\n9 is not 0/1, so the rule switches. Count to 0.",
+                "10 은 0 과 1 뿐이라 1 을 빼요 → 9.\n9 는 0 도 1 도 아니니 규칙이 바뀌어요. 0 까지 세어 보세요.")}
               answer={3}
               explain={t(E,
                 "3 is right. 10 → 9 → 1 → 0, three f's.\nx = 1 took 1, x = 10 took 3 — it didn't just go up by one.",
@@ -265,11 +265,11 @@ export function makeStrangeFnCh1(E) {
                 "x = 11 이에요 (이것도 0 과 1 만 있어요). 0 이 될 때까지 f 를 몇 번 써야 할까요?")}
               hint={t(E,
                 "Same two rules as before — keep alternating until you reach 0, and count every step.",
-                "이번에도 같은 두 규칙을 번갈아 적용해요. 0 이 될 때까지 몇 번 걸리는지 세어보세요.")}
+                "같은 두 규칙을 번갈아 써요. 0 까지 몇 번인지 세어 보세요.")}
               answer={4}
               explain={t(E,
-                "4 is right. 11 → 10 → 9 → 1 → 0, four f's. We now have three values — 1, 3, 4. Let's line them up soon.",
-                "4 가 맞아요. 11 → 10 → 9 → 1 → 0, 네 번이에요. 이제 값이 세 개 — 1, 3, 4 예요. 곧 표로 정리해볼게요.")}
+                "4 is right. 11 → 10 → 9 → 1 → 0, four f's.\n1, 10, 11 — all three use only 0s and 1s.\nLet's line up numbers like these and look for a pattern.",
+                "4 가 맞아요. 11 → 10 → 9 → 1 → 0, 네 번이에요.\n1, 10, 11 — 셋 다 0 과 1 로만 된 수예요.\n이런 수만 따로 늘어놓아 규칙을 찾아볼게요.")}
             />
           </div>
         </div>),
@@ -306,8 +306,8 @@ export function makeStrangeFnCh1(E) {
                   ⛔ 여기에 「그러면 규칙을 찾을 수 있어요」 같은 **보람 설명을 덧붙이지 마라.**
                      그게 두 번 다 「추상적」이라는 말을 들은 자리다. */}
               <div>{t(E,
-                "Write down the numbers that use only 0 and 1, smallest first:\n1, 10, 11, 100, 101 …",
-                "0 과 1 만 쓰는 수를 작은 것부터 적어 봐요.\n1, 10, 11, 100, 101 …")}</div>
+                "On page 4 we counted 1, 10 and 11 — all made only of 0s and 1s.\nLine those up from the smallest:\n1, 10, 11, 100, 101 …",
+                "4쪽에서 센 1, 10, 11 은 모두 0 과 1 로만 된 수였죠.\n이런 수를 작은 것부터 늘어놓아 봐요.\n1, 10, 11, 100, 101 …")}</div>
               {/* 선생님 제안(2026-09-30): *"이걸 십진수로 고쳐면… 이라고 하면 더 쉽지 않을까?"*
                   맞다. «바꿔 부르는 게 이진수예요» 는 **이름을 가르치는 문장**이고,
                   «십진수로 고치면» 은 **학생이 이미 아는 곳으로 데려다주는 문장**이다.
@@ -318,54 +318,63 @@ export function makeStrangeFnCh1(E) {
                 "이걸 십진수로 고치면 1, 2, 3, 4, 5 … 예요.\n10 은 2 가 되고, 11 은 3 이 돼요.")}</div>
             </div>
           </div>
-          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 8, textAlign: "center" }}>
-              {t(E, "Example: reading \"10\" as binary", "예: \"10\" 을 이진수로 읽으면?")}
-            </div>
-            <div style={{ display: "flex", justifyContent: "center", gap: 20, fontFamily: "'JetBrains Mono',monospace" }}>
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 22, fontWeight: 900, color: "#5b21b6" }}>1</div>
-                <div style={{ fontSize: 10.5, color: C.dim, marginTop: 2 }}>{t(E, "place value 2", "자리값 2")}</div>
-              </div>
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 22, fontWeight: 900, color: "#5b21b6" }}>0</div>
-                <div style={{ fontSize: 10.5, color: C.dim, marginTop: 2 }}>{t(E, "place value 1", "자리값 1")}</div>
-              </div>
-            </div>
-            <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 800, color: "#15803d", fontFamily: "'JetBrains Mono',monospace" }}>
-              1×2 + 0×1 = 2
-            </div>
-          </div>
+          {/* 2026-09-30 PM 종합 판정 — 「자리값 2 / 자리값 1 · 1×2+0×1=2」 예 상자를
+              **통째로 뺐다.** 바로 다음 쪽 표의 가운데 칸이 **같은 계산을 그대로** 한다
+              (`1×2 + 0×1 = 2`). 같은 말을 두 곳에서 하고 있었다.
+              ux 판정: 이 quest 는 오늘 글자수가 2772 → 3267 로 늘었다(+17.9%) —
+              **지금은 여유가 아니라 한계선이다. 순수 추가는 안 되고 교체만 받는다.**
+              이 삭제가 4·6·8쪽에 넣는 문장들의 분량을 대준다. */}
         </div>),
     },
 
-    // 1-6 B: 이미 직접 센 세 값을 n 으로
+    /* 1-6 B: 직접 센 값을 표로 모으고 **칸에 이름을 붙인다**.
+       2026-09-30 선생님이 이 쪽을 두 번 물리셨다 —
+         *"걸린숫자?잉? 이 이진수를 십진수로 바꾸는 ??? 잉? g(n)이 머라고?"*
+       내가 **이름 둘(n·g(n))을 문장으로 한꺼번에** 설명하려 해서다.
+       ⭐ 이름은 **화면에 보이는 칸을 가리켜야** 뜻이 생긴다 —
+          표를 먼저 놓고 「가운데 칸을 n, 오른쪽 칸을 g(n)」 이라고 부른다.
+       ⛔ 「걸린 횟수」 같은 말을 쓰지 마라 — 시간이 걸린 게 아니라 **몇 번 썼나**다. */
     {
       type: "reveal",
       narr: t(E,
-        "Give the three counts you made a name.",
-        "직접 센 세 값에 이름을 붙여요."),
+        "Put the three counts you made into one table.",
+        "직접 센 세 값을 표로 모아요."),
       content: (
         <div style={{ padding: 16 }}>
-          {/* 2026-09-23 학생 검증: g 가 이 쪽 표에서 정의 없이 처음 등장 —
-              "이게 답 세는 함수구나" 를 학생이 직접 짐작했다. 쓰기 전에 한 문장으로 밝힌다. */}
-          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E,
-              "The number we get from reading in binary — call it n.\nThe count of steps for that n — call it g(n).\nSo 10 gives n = 2, and it took 3 steps: g(2) = 3.",
-              "이진수로 고쳐서 나온 수 — 이걸 n 이라고 해요.\n그 수에 걸린 횟수 — 이걸 g(n) 이라고 해요.\n10 은 n 이 2 이고 3 번 걸렸으니, g(2) = 3 이에요.")}
-          </div>
-          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12, marginBottom: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#166534", lineHeight: 2 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6, fontFamily: "inherit" }}>
-              ✅ {t(E, "Already counted", "이미 직접 셌어요")}
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 8 }}>
+              ✅ {t(E, "You counted these yourself", "직접 센 값이에요")}
             </div>
-            <div>"1" = 1×1 → n=1, g(1)=1 <span style={{ color: C.dim }}>(x = 1)</span></div>
-            <div>"10" = 1×2+0×1 → n=2, g(2)=3 <span style={{ color: C.dim }}>(x = 10)</span></div>
-            <div>"11" = 1×2+1×1 → n=3, g(3)=4 <span style={{ color: C.dim }}>(x = 11)</span></div>
+            <table style={{ width: "100%", fontSize: 12.5, fontFamily: "'JetBrains Mono', monospace", color: "#166534", borderCollapse: "collapse" }}>
+              {/* ⛔ 2026-09-30 선생님: *"뭔가 훅 사라진 느낌인데. g(n)이 어떻게 구해졌는지
+                  모를텐데."* — 처음 표로 바꿀 때 **가운데 칸의 계산 과정을 지워** 표가
+                  결과만 주장하게 만들었다. `1×2 + 0×1 = 2` 를 되살린다.
+                  오른쪽 칸도 어디서 온 값인지 머리글에 적는다(앞 쪽에서 학생이 직접 셌다). */}
+              <thead>
+                <tr style={{ color: "#15803d" }}>
+                  {/* 2026-09-30 학생이 유일하게 찾은 것 — *"10 이 4쪽에서는 그냥 십진수 10
+                      이었는데 6쪽 표에서는 이진수로 읽어서 2 로 다시 쓰인 것이 헷갈렸다.
+                      머리가 한 번 꼬였다."* → `feedback_same_number_two_meanings` 위반이다.
+                      머리글에 **이게 x 라는 것과, 0/1 만 쓰는 수라는 것**을 밝혀 두 뜻을 가른다. */}
+                  <th style={{ padding: "4px 6px", textAlign: "left", fontFamily: "inherit" }}>{t(E, "x (only 0s and 1s)", "x (0 과 1 만 써요)")}</th>
+                  <th style={{ padding: "4px 6px", textAlign: "left", fontFamily: "inherit" }}>{t(E, "in decimal", "십진수로 고치면")}</th>
+                  <th style={{ padding: "4px 6px", textAlign: "left", fontFamily: "inherit" }}>{t(E, "times (counted on page 4)", "몇 번 (4쪽에서 직접 셌죠)")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* 선생님: *"직접세었다는건 어떻게 했다는거지?"* — 답만 있고 **과정이 없었다.**
+                    「센다」는 걸음이 여러 개라는 뜻인데 화면엔 숫자 하나뿐이었다.
+                    칸 안에 걸음을 그대로 넣는다(따로 목록을 만들지 않는다 — 분량 때문). */}
+                <tr><td style={{ padding: "3px 6px" }}>1</td><td>1×1 = 1</td><td>1 &nbsp;(1→0)</td></tr>
+                <tr><td style={{ padding: "3px 6px" }}>10</td><td>1×2 + 0×1 = 2</td><td>3 &nbsp;(10→9→1→0)</td></tr>
+                <tr><td style={{ padding: "3px 6px" }}>11</td><td>1×2 + 1×1 = 3</td><td>4 &nbsp;(11→10→9→1→0)</td></tr>
+              </tbody>
+            </table>
           </div>
-          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance" }}>
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "Check: does this n match the g you counted by hand just now?",
-              "방금 직접 구한 값과 같은지 확인해보세요.")}
+              "Name the middle column n, and the right column g(n).\nSo when n is 2, the answer is 3 — we write g(2) = 3.",
+              "가운데 칸을 n, 오른쪽 칸을 g(n) 이라고 부를게요.\nn 이 2 일 때 3 이니까, g(2) = 3 이라고 적어요.")}
           </div>
         </div>),
     },
@@ -425,15 +434,25 @@ export function makeStrangeFnCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Is it really 3k for even n, 3k+1 for odd n?",
-        "정말 짝수는 3k, 홀수는 3k+1 인가요?"),
+        "Do the even rows and the odd rows really follow a rule?",
+        "짝수 줄과 홀수 줄이 정말 규칙을 따르는지 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
             ✅ {t(E, "Let's check", "확인해봐요")}
           </div>
           <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, wordBreak: "keep-all", textWrap: "balance" }}>
+            {/* ⭐ 2026-09-30 PM 종합 판정 — auditor 손을 들어준 자리.
+                pedagogy 는 「3 의 배수 근처예요」라는 **관찰의 재진술**을 냈는데,
+                auditor: *"8개 값이 부족해서가 아니라, **8개 값을 어떻게 봐야 3 이 보이는지**를
+                안 보여준 게 문제다."* 학생도 여기서 그만두고 싶어했다 —
+                *"확인해봐요 라고 하는데 나는 확인할 식 자체를 처음 본다."*
+                아래 두 줄이 **왜 1.5 배쯤인지**를 말한다. 관찰이 아니라 까닭이다.
+                근거: quest-auditor 가 n=0..20 전수 + 무작위 3,000 케이스로 검증했다. */}
             <div>{t(E,
+              "To reach 0 we must subtract at least n times.\nBut every time a digit carries over, one extra parity step slips in —\nso the answer lands around 1.5 times n.",
+              "0 까지 가려면 적어도 n 번은 빼야 해요.\n그런데 자리가 넘어갈 때마다 홀짝을 다시 맞추는 걸음이 하나 더 껴요.\n그래서 답이 n 의 1.5 배쯤 돼요.")}</div>
+            <div style={{ marginTop: 4 }}>{t(E,
               "Let k be n divided by 2 (the quotient).",
               "k 는 n 을 2 로 나눈 몫이에요.")}</div>
             <div style={{ marginTop: 4 }}>{t(E,
@@ -487,9 +506,6 @@ export function makeStrangeFnCh1(E) {
               <div style={{ marginTop: 4 }}>{t(E,
                 "If n = 2k+1, then 3n/2 is 3k+1.5. Drop the decimal and it's 3k+1.",
                 "n = 2k+1 이면 3n/2 는 3k+1.5 인데, 소수점을 버리면 3k+1 이에요.")}</div>
-              <div style={{ marginTop: 4 }}>{t(E,
-                "Both cases become one formula:",
-                "둘 다 다음 식 하나로 써요.")}</div>
             </div>
             <div style={{ fontSize: 12, color: "#15803d", fontFamily: "'JetBrains Mono', monospace", marginTop: 6, textAlign: "center", fontWeight: 800 }}>
               {t(E, "= floor(3·n / 2)", "= floor(3·n / 2)")}
@@ -524,11 +540,9 @@ export function makeStrangeFnCh1(E) {
                 "g(n) only counts steps after everything is already 0/1. If a parity-flip ran first (page 3), that flip was also a use of f — add 1 for it.",
                 "g(n) 은 이미 0/1 만 남은 뒤의 단계만 세요. 그 전에 홀짝 변환을 한 번 썼다면(3쪽), 그것도 f 를 한 번 쓴 거라 1 을 더해야 해요.")}
             </div>
-            <div style={{ marginTop: 8, fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: "#92400e", lineHeight: 1.9 }}>
-              {t(E,
-                "Check with x = 210 from page 3: parity-flip once → \"010\" → n = 2 → g(2) = 3 → 1 + 3 = 4. Matches the 4 we counted by hand.",
-                "3쪽 x = 210 으로 확인: 홀짝 변환 1번 → \"010\" → n = 2 → g(2) = 3 → 1 + 3 = 4. 손으로 센 4 번과 같아요.")}
-            </div>
+            {/* 2026-09-30: x = 210 재확인 줄을 뺐다 — ch2 「코드가 할 세 단계」 쪽의
+                「🔁 x = 210 으로 다시 세어 봐요」 가 **같은 계산을 그대로** 한다.
+                경고 본문(왜 +1 이 필요한가)은 그대로 둔다. */}
           </div>
         </div>),
     },

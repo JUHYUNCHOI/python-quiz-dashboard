@@ -179,8 +179,11 @@ export function getStrangeFnSections(E) {
       cppOnly: [
         t(E, "n and half both stay below MOD, so n*2 and n+half never come close to long long's limit.",
             "n 과 half 는 늘 MOD 보다 작아서, n*2 나 n+half 가 long long 한계에 안 닿아요."),
-        t(E, "((3*n - last) % MOD + MOD) % MOD guards against negative remainders.",
-            "((3*n - last) % MOD + MOD) % MOD 로 음수 나머지를 막아요."),
+        /* 2026-09-30: 「((3*n - last) % MOD + MOD) % MOD 로 음수 나머지를 막아요」 를 지웠다.
+           오늘 나눗셈을 걷어낸 새 코드엔 `last` 도, 음수 가드도 **없다** — 죽은 설명이었고
+           바로 위 파이썬 문장(「나눗셈이 없어서 음수 방지도 필요 없다」)과 모순이었다.
+           📄 PDF 로 학생에게 나가는 글이다. quest-auditor 가 찾았다.
+           ⚠️ `check-prose-vs-final-code.py` 는 **원리상 못 잡는다**(자료구조 이름만 본다). */
       ],
     },
   ];
