@@ -145,9 +145,15 @@ export function getXorStringWalk(E, lang = "py") {
     code: FULL_PY,
     vars,
     beats: [
+      /* ⚠️ 2026-09-30 — 이 말풍선은 원래 «inv3 을 미리 준비해요» 한 줄뿐이었다.
+         3 으로 못 나누는 **이유와 작은 예**는 `getXorStringSections` 의 `pyOnly` 에
+         2026-09-25 에 써 뒀는데, 그 함수는 **PDF 다운로드만 쓴다**(`XorStringApp.jsx:124`).
+         화면은 `getXorStringWalk` 를 쓰므로 **학생은 그 글을 한 번도 못 봤다.**
+         `feedback_new_text_must_actually_render` 의 네 번째 사례다 — 글을 쓴 게 아니라
+         **뜨는 자리에** 써야 한다. mod 5 손풀이를 여기로 옮긴다(PDF 쪽은 그대로 둔다). */
       { hi: [0, 5], bubble: t(E,
-        "What do we need to read? n, k, and the string s. We'll need modular division, so prepare MOD and 3's modular inverse (inv3) up front.",
-        "무엇을 읽어야 하나요? n, k 와 문자열 s 예요. 모듈러 나눗셈이 필요하니 MOD 와 3의 모듈러 역원(inv3) 을 미리 준비해요.") },
+        "What do we need to read? n, k, and the string s.\nWe divide by 3 later — but these are values already reduced by MOD,\nso plain division breaks.\nTiny example: under mod 5, the number 9 becomes 4. And 9 ÷ 3 = 3.\nMultiply 4 by 2 and you get 8, which is also 3 under mod 5 — same answer.\nThat 2 is 3's \"modular inverse\". inv3 is the same thing for mod 10⁹+7.\n(Name to look up: Fermat's little theorem)",
+        "무엇을 읽어야 하나요? n, k 와 문자열 s 예요.\n뒤에서 3 으로 나눠야 하는데, 이 값들은 MOD 로 줄인 값이라\n그냥 나누면 틀려요.\n작은 예 — mod 5 에서 9 는 4 가 돼요. 그리고 9 ÷ 3 = 3 이죠.\n4 에 2 를 곱하면 8 이고, 8 도 mod 5 에서 3 이에요 — 답이 같아요.\n이 2 가 3 의 «모듈러 역원»이에요. inv3 이 10⁹+7 에서 그 값이에요.\n(찾아볼 이름: 페르마의 소정리)") },
       { hi: [6, 15], bubble: t(E,
         "Each pair type (0,0 / 1,1 / 0,1) has a closed-form beauty after k transforms — it only needs 2^k and (-1)^k. Compute those once, then the three beauty values f00, f11, f01.",
         "각 쌍 종류(0,0 / 1,1 / 0,1)가 k번 변신한 뒤 갖는 beauty 는 공식으로 바로 나와요 — 2^k 와 (-1)^k 만 있으면 돼요. 그걸 구하고, 세 가지 beauty 값 f00, f11, f01 을 계산해요.") },
