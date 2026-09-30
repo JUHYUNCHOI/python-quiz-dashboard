@@ -411,8 +411,15 @@ export function WhoCanMeetSim({ E }) {
            한 번도 말하지 않는다 — 학생 눈에는 **목적 없는 여섯 걸음**이다.
          → 여기서 **그 값을 현금화한다**: 이제 3 끼리만 보면 되고 4 는 볼 필요가 없다.
            앞 쪽(4쪽) 코드는 **모든 값을 다 뒤졌다** — 그게 느렸던 이유다. */
-      ko: "그래서 이제 3 끼리만 보면 돼요 — 4 는 아예 볼 필요가 없어요.\n첫째 3 은 맨 앞이라 그대로예요.",
-      en: "So now we only look at the 3s — we never have to check 4 at all.\nThe first 3 is at the front, so it stays." },
+      /* ⛔ 2026-09-30 — 여기가 **학생이 오독한 자리**다. 원래 "4 는 아예 볼 필요가 없어요" 였는데
+         학생: *"「4 는 상관없는 애니까 빼고 봐도 된다」는 **안심시키는 말투**였어요.
+         「4 를 보면 답이 틀려진다」는 느낌은 **전혀 안 들었어요.**"*
+         선생님도 같은 이유로 **묶기를 속도 요령으로** 이해하고 계셨다.
+         ⭐ 사실은 정확했는데 **어법이 허용형**이라 「안 해도 그만」으로 읽힌 것이다.
+         필요형으로 뒤집는다 — 글자 수 ±0. 새 걸음·새 예제 없음.
+         근거: memory/feedback_show_the_failed_first_try.md */
+      ko: "이제 4 는 절대 안 겹쳐서 — 3 끼리만 봐야 해요.\n첫째 3 은 맨 앞이라 그대로예요.",
+      en: "4 can never overlap, so we must handle the 3s on their own.\nThe first 3 is at the front, so it stays." },
 
     { tiles: [3, 5, 3, 4], st: ["placed", "moving", "placed", "even"],
       extra: ["", "· 3→5", "", ""], chains: [1, 0], named: true, ops: 1,
