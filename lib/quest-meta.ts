@@ -2170,7 +2170,17 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   //   2026-09-13 에 「유추한 난이도가 매긴 값처럼 보인」 사고가 정확히 그 모양이었다.
   //   값의 출처: `scripts/check-required-vs-code.py` 가 **코드에서 실제로 검출**한 것.
   //   진짜 감사(네 필드 다)는 quest-auditor 몫으로 남아 있다.
-  strangefn:       { ...DEFAULT_META, difficulty: 4, concepts_required: ["modular-inverse"] },
+  /* ⭐ 2026-09-30 — `modular-inverse` 를 **뺐다.** 코드에서 그 개념이 실제로 사라졌기 때문이다
+     (선생님 지시로 `floor(3n/2)` 를 `n + (n 의 절반)` 으로 바꿨다 — 그 절반은 이진수를
+      한 자리씩 읽는 루프가 이미 갖고 있던 값이라 나눗셈도 역원도 필요 없다).
+     ⛔ **게이트를 「닫힘」으로 쳤던 게 틀렸다** — `concepts_required` 는 `app/quest/page.tsx:296`
+     과 `QuestCompletionCard.tsx:90` 의 **추천 목록에서만** 작동한다. 주소로 직접 열거나
+     사다리·검색으로 들어오면 그 필터를 안 거친다. 그래서 2026-09-25 에 「어렵다고 기록」해
+     놓고도 **학생이 계속 들어와 막혔다 — 오늘로 여섯 번째.**
+     ⭐ 그러니 `count-quests.py --list untaught` 에 걸린 quest 는 **라벨을 붙여서 닫지 말고**
+     ①그 개념 없는 대안 풀이가 정말 없나 찾아보고 ②`student-*` 재검증까지 받아야 닫힌다. */
+  strangefn:       { ...DEFAULT_META, difficulty: 4,
+                     concepts_required: ["loop", "string-basics", "math-basics"] },
   /* ⚠️ 2026-09-25: `concepts_required: []` 였다 — **빈 배열은 `every()` 가 항상 참**이라
      이 quest 가 **아무 학생에게나 「지금 풀 준비됨」으로 추천되고** 있었다.
      난이도도 `DEFAULT_META` 의 2 가 새어 나와 **아무도 안 매긴 값이 매긴 값처럼** 보였다.

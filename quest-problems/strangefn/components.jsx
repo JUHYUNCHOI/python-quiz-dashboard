@@ -1,7 +1,25 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 12/12 PASS
-//   C++:    12/12 PASS
-//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+// 🔒 USACO_VERIFIED (2026-05-13) — ⚠️ **2026-09-30 코드 변경. 재제출 대기.**
+//   Python: 12/12 PASS  ← **옛 코드 기준**
+//   C++:    12/12 PASS  ← **옛 코드 기준**
+//
+//   ⚠️ 2026-09-30, 선생님 지시("바꿔")로 `FULL_PY`/`FULL_CPP` 를 바꿨다.
+//      바꾼 것 — 3단계에서 `floor(3n/2)` 를 구하는 방법.
+//        옛: 곱셈 상수 하나를 미리 만들어 두고 곱한다(정수론이 필요한 방법).
+//        새: `g(n) = n + (n 의 절반)`. 그 절반은 이진수를 한 자리씩 읽는 루프가
+//            **한 자리 전 값으로 이미 갖고 있다.** 변수 `half` 하나면 끝난다.
+//      → 나눗셈·음수 방지가 통째로 사라졌다. Python 34→31줄, C++ 50→51줄.
+//      왜: 학생 **여섯**이 옛 3단계에서 막혔다. 오늘 학생 —
+//          *"「정수론이 필요하니 그냥 외워 쓰라」는 말이라 이해를 포기했다."*
+//      검증(재제출 전 근거):
+//        · python-qa **13만 7천여 건** 대조 — 제약 경계(T=71,684 · 총 자릿수 100만) 포함, 불일치 0건
+//        · 문제 정의 그대로의 브루트포스와 n=1..19,999 **전부 일치**
+//        · 옛 코드 ↔ 새 코드, 20만 자리 포함 500판 **전부 일치** (메인 세션 재확인)
+//        · C++ `long long` — `n`·`half` 가 늘 MOD 미만이라 한계에 안 닿는다
+//   ⛔ **아직 USACO 채점기에 안 냈다.** 선생님이 재제출하시면 위 PASS 줄과
+//      `USACO_VERIFICATION.md` 를 새 결과로 갱신할 것.
+//   ⛔ 옛 방법의 이름을 이 파일에 다시 적지 마라 — `count-quests.py --list untaught` 가
+//      **낱말로** 찾아서, 적으면 이 quest 가 「안 가르친 개념」 목록에 영원히 남는다.
+//      경위 전문은 커밋 메시지와 `.claude/WORK.md` 에 있다.
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { C, t } from "@/components/quest/theme";
@@ -13,7 +31,6 @@ const A = "#8b5cf6";
 const FULL_PY = [
   "",
   "MOD = 10**9 + 7",
-  "INV2 = pow(2, MOD - 2, MOD)  # modular inverse of 2",
   "",
   "T = int(input())",
   "for _ in range(T):",
@@ -32,17 +49,15 @@ const FULL_PY = [
   "        ops = 1",
   "",
   "    # Step 2: read s as a binary number n, mod MOD.",
+  "    #   half keeps the value from one digit earlier = n // 2.",
   "    n = 0",
+  "    half = 0",
   "    for c in s:",
+  "        half = n",
   "        n = (n * 2 + int(c)) % MOD",
   "",
-  "    # Step 3: g(n) = floor(3*n / 2)",
-  "    #          = (3*n - (n mod 2)) / 2",
-  "    if s:",
-  "        last = int(s[-1])  # n's parity = last bit",
-  "    else:",
-  "        last = 0",
-  "    g = (3 * n - last) % MOD * INV2 % MOD",
+  "    # Step 3: g(n) = floor(3*n / 2) = n + n // 2",
+  "    g = (n + half) % MOD",
   "",
   "    print((ops + g) % MOD)",
 ];
@@ -52,8 +67,7 @@ const FULL_CPP = [
   "#include <string>",
   "using namespace std;",
   "",
-  "const long long MOD  = 1000000007LL;",
-  "const long long INV2 = 500000004LL;  // modular inverse of 2",
+  "const long long MOD = 1000000007LL;",
   "",
   "int main() {",
   "    int T;",
@@ -85,14 +99,16 @@ const FULL_CPP = [
   "        }",
   "",
   "        // Step 2: read s as a binary number n mod MOD.",
+  "        //   half keeps the value from one digit earlier = n / 2.",
   "        long long n = 0;",
+  "        long long half = 0;",
   "        for (int i = 0; i < (int)s.size(); i++) {",
+  "            half = n;",
   "            n = (n * 2 + (s[i] - '0')) % MOD;",
   "        }",
   "",
-  "        // Step 3: g = floor(3n/2) = (3n - last_bit) * inv2 mod MOD",
-  "        long long last = s.back() - '0';",
-  "        long long g = ((3 * n - last) % MOD + MOD) % MOD * INV2 % MOD;",
+  "        // Step 3: g = floor(3n/2) = n + n/2",
+  "        long long g = (n + half) % MOD;",
   "",
   "        cout << (ops + g) % MOD << \"\\n\";",
   "    }",
@@ -109,56 +125,40 @@ const _SF_VARS = [
   { v: "s", ko: "입력 숫자(문자열)", en: "the number (string)" },
   { v: "n", ko: "이진수로 읽은 값 (mod 10⁹+7)", en: "value read as binary (mod 10⁹+7)" },
   { v: "ops", ko: "홀짝으로 바꾼 횟수(0 또는 1)", en: "times flipped by parity (0 or 1)" },
-  { v: "g", ko: "floor(3n/2) 의 값 (mod 10⁹+7)", en: "floor(3n/2) (mod 10⁹+7)" },
+  { v: "half", ko: "한 자리 전 값 = n 의 절반", en: "value one digit earlier = half of n" },
+  { v: "g", ko: "n + (n 의 절반) = floor(3n/2)", en: "n + (half of n) = floor(3n/2)" },
 ];
+/* ⭐ 2026-09-30 — 🔒 코드를 바꿨다(선생님 지시 "바꿔"). **나눗셈이 통째로 사라졌다.**
+   왜: 학생 여섯이 옛 3단계에서 막혔고, 오늘 학생은 *"「정수론이 필요하니 그냥 외워
+   쓰라」는 말이라 이해를 포기했다"* 고 했다. 그런데 `g(n) = n + (n 의 절반)` 이고
+   **그 절반은 이진수에서 마지막 자리를 뗀 값**이라, 코드가 이미 계산하고 있었다.
+   변수 하나(`half`)만 더 들면 옛 상수와 음수 방지가 통째로 없어진다.
+   ⛔ 옛 방식의 이름을 여기 다시 적지 마라 — `count-quests.py --list untaught` 가
+      **낱말로** 찾아서, 주석에 적으면 이 quest 가 영원히 그 목록에 남는다.
+      경위는 커밋 `strangefn` 과 `.claude/WORK.md` 에 있다.
+   ⛔ **말풍선 번호가 전부 밀렸다** — 코드 줄을 바꾸면 `hi` 를 다시 매기고 화면으로 확인해야 한다
+      (`feedback_code_one_statement_per_line` 의 경고).
+   ⚠️ 이 코드는 **USACO 재제출 대기** 상태다 — 헤더 참조. */
 export function getStrangeFnWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _SF_VARS, beats: [
-      { hi: [4, 12],  bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10⁹+7, since x can be astronomically large.\nSet up MOD and INV2 (what INV2 means comes in step 3), then\nread T tests, each x as a string s.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10⁹+7 로 나눈 나머지예요.\nx 가 엄청 커서 문자열로 다뤄요.\nMOD 와 INV2 를 둬요 (INV2 가 뭔지는 3단계에서 알려드려요).\n그다음 T 개 테스트와 s 를 읽어요.") },
-      { hi: [14, 33], bubble: t(E, "Step 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
-      { hi: [36, 40], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have so far and adds the new\ndigit — that's how binary is read. n can be huge, so mod\nat every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 하나 볼 때마다 지금까지 값이 두 배가 되고\n새 자리를 더해요 — 그게 이진수를 읽는 방법이에요.\nn 이 거대할 수 있어서 자리마다 mod 를 해요.") },
-      { hi: [42, 43], bubble: t(E, "Step 3 — we need floor(3n/2).\nMultiplying an even number by anything keeps it even, so if n\nis even, 3n is even too and last = 0.\nOdd times odd is always odd, so if n\nis odd, 3n is odd too, and we subtract last = 1.\nEither way, 3n − last is always even as a whole number.", "3단계 — floor(3n/2) 를 구해야 해요.\n짝수에 무엇을 곱해도 짝수라서,\nn 이 짝수면 3n 도 짝수이고 last = 0이에요.\n홀수끼리 곱하면 홀수라서,\nn 이 홀수면 3n 도 홀수이고 last = 1이에요.\n그래서 3n − last 는 항상 짝수가 돼요.") },
-      /* 2026-09-23 학생 검증: 468자짜리 말풍선 하나에 네 가지가 몰려 "숨찼다" —
-         ①짝수→mod 후 안 짝수일 수 있음 ②모듈러 역원 개념(mod5 예) ③정수론 고백
-         ④연산 순서. ①②③은 INV2 가 실제로 정의된 줄(그 줄이 '왜' 있는지)로,
-         ④와 음수 방지 설명은 그 연산이 실제로 있는 g 줄로 돌려보낸다.
-         글자는 그대로 옮겼을 뿐 하나도 새로 쓰지 않았다. */
-      /* ⛔ 2026-09-25: **이 말풍선은 `check-codewalk-bubble-length.py` 에 12생각으로
-         걸린다. 그래도 줄이지 마라.** 이유:
-         · 이 quest 는 **여덟 라운드**를 돌고도 안 닫혔고, 원인이 **문장 길이가 아니라
-           「모듈러 역원」이라는 안 가르친 개념**이었다.
-         · 학생이 남긴 말: *"「외워서 쓰는 공식이에요 — 까닭은 나중에 배워요」 라는 문장
-           때문에 **더 알아보려는 걸 포기했어요.**"*
-         · 그래서 **mod 5 로 손으로 확인시키는 문단**과 **찾아볼 이름**을 둘 다 준다.
-           고친 뒤 학생 둘이 연속으로 *"솔직하게 인정해서 완전히 포기하진 않았다"* 고 했다.
-         ⭐ **줄이면 그 포기가 돌아온다.** 검사기는 「생각 개수」만 세고 **왜 그 길이인지는
-           모른다** — 그 검사기 자신이 «C 유형: 안 가르친 개념이 숨어 있으면 손대지 마라» 고
-           적어 뒀다. 이게 바로 그 C 유형이고, **여기서는 가르치는 쪽을 택했다.** */
-      { hi: [5, 5], bubble: t(E, "Even as a whole number — but it's reduced mod 10⁹+7,\nso it may not be even now (1000000008 becomes 1).\nSo we can't just divide by 2 here.\nTry a tiny example: mod 5, value 8. 8 mod 5 = 3, which is\nodd — but 8/2 = 4, and 4 mod 5 = 4. Multiply 3 by 3 (since\n2×3 = 6 ≡ 1 mod 5) and you get 9 ≡ 4 mod 5 — same answer.\nThat 3 is the \"modular inverse\" of 2 under mod 5.\n500000004 is the same value no matter what x is (it is 2's inverse),\nso we don't recompute it per test — the INV2 line at the top does it once.\nWhy that exact number comes out needs more number theory\nthan this quest covers, so we just use it as a fixed value,\nlike a formula you'd look up.\n(Name to look up: Fermat's little theorem)", "정수로는 짝수였죠. 그런데 10⁹+7 로 줄인 값이라\n짝수가 아닐 수도 있어요 (1000000008 → 1).\n그래서 2 로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 8 이라고 해요.\n8 mod 5 = 3, 홀수죠. 그런데 8÷2 = 4 이고, 4 mod 5 = 4 예요.\n3 에 3 을 곱하면 (2×3 = 6 ≡ 1 mod 5 이니까) 9 ≡ 4 mod 5,\n똑같이 4 가 나와요. 이 3 이 mod 5 에서 2 의 '모듈러 역원'이에요.\n500000004 는 x 가 무엇이든 늘 똑같은 값이에요 — 2 의 역원이니까요.\n그래서 테스트마다 새로 구하지 않고 맨 위 INV2 줄에서 딱 한 번만 구해 둬요.\n같은 원리로, mod 10⁹+7 에서 미리 구해 둔 값이에요 —\n왜 하필 이 숫자가 나오는지는 이 quest 범위보다 더 깊은\n정수론이 필요해서, 지금은 찾아 쓰는 공식처럼 정해진\n값으로만 써요.\n(찾아볼 이름: 페르마의 소정리)") },
-      { hi: [44, 44], bubble: t(E, "The (... + MOD) guards against a negative.\n% and * have the same precedence, so this line runs left to\nright: first % MOD, then * INV2, then % MOD again.", "(... + MOD)는 음수를 막아요.\n% 와 * 는 계산 차례가 같아서 이 줄은 왼쪽부터 차례로 계산돼요 —\n먼저 % MOD, 그다음 * INV2, 그다음 다시 % MOD.") },
-      { hi: [46, 46], bubble: t(E, "Answer = ops + g, mod MOD: the parity-flip cost plus the formula's result, added together.", "답은 (ops + g) 를 MOD 로 나눈 나머지예요. 홀짝 변환 비용과 공식 결과를 더한 값이에요.") },
+      { hi: [4, 11], bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10\u2079+7, since x can be astronomically large.\nSo we read each x as a string s.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10\u2079+7 로 나눈 나머지예요.\nx 가 엄청 커서 문자열 s 로 받아요.") },
+      { hi: [13, 33], bubble: t(E, "Step 1 — why flip by parity? f only does x\u22121 while x is pure 0/1.\nAny other digit needs one parity swap first: odd\u21921, even\u21920,\nand that swap costs ops = 1.", "1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x\u22121 로 움직여요.\n다른 자리가 있으면 홀수\u21921, 짝수\u21920 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
+      { hi: [35, 42], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have and adds the new digit.\nhalf keeps the value from one digit earlier — that is n / 2.\n(Same as 137 \u2192 13 being 137 / 10 in base ten.)", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 볼 때마다 두 배 하고 새 자리를 더해요.\nhalf 에는 「한 자리 전 값」을 남겨요 — 그게 n 의 절반이에요.\n(10 진수에서 137 \u2192 13 이 137 \u00f7 10 인 것과 같아요.)") },
+      { hi: [44, 45], bubble: t(E, "Step 3 — we need floor(3n/2), and that is just n + (half of n).\nIf n is even, 3n/2 = n + n/2. If n is odd, n + (n/2 rounded down)\nlands on the same answer.\nThe half is already sitting in half — no division needed.", "3단계 — 구할 것은 floor(3n/2) 인데, 그건 「n + (n 의 절반)」 과 같아요.\nn 이 짝수면 3n/2 = n + n/2 예요.\nn 이 홀수여도 절반을 버림하면 답이 맞아요.\n그 절반은 이미 half 에 들어 있어요 — 나눗셈이 필요 없어요.") },
+      { hi: [47, 47], bubble: t(E, "Answer = ops + g, mod MOD: the parity-flip cost plus the formula's result.", "답은 (ops + g) 를 MOD 로 나눈 나머지예요. 홀짝 변환 비용에 공식 결과를 더한 값이에요.") },
     ] };
   }
   return { code: FULL_PY, vars: _SF_VARS, beats: [
-    { hi: [0, 2],   bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10⁹+7. Set up MOD and INV2 (what INV2 means comes in step 3).\nA third argument to pow() adds \"mod\": pow(x, y, z) computes\nx to the y-th power, keeping only the remainder after\ndividing by z the whole way through — a Python built-in.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10⁹+7 로 나눈 나머지예요.\nMOD 와 INV2 를 먼저 둬요 (INV2 가 뭔지는 3단계에서 알려드려요).\npow() 에 세 번째 값을 넣으면 '나머지' 까지 구해요 — x 를 y 번\n거듭제곱하는 내내 z 로 나눈 나머지만 남겨요. 파이썬에 있는 기능이에요.") },
-    { hi: [4, 6],   bubble: t(E, "T tests; read each number x as a STRING (x can be astronomically large).", "테스트를 T 개 읽어요. 각 x 는 문자열 s 로 받아요 (x 가 엄청 커서).") },
+    { hi: [1, 1], bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10\u2079+7, because the count can get huge.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10\u2079+7 로 나눈 나머지예요.\n횟수가 아주 커질 수 있어서예요.") },
+    { hi: [3, 5], bubble: t(E, "T tests; read each number x as a STRING (x can be astronomically large).", "테스트를 T 개 읽어요. 각 x 는 문자열 s 로 받아요 (x 가 엄청 커서).") },
     /* 2026-09-23 학생 검증: `any(...)` 를 **짐작**하고 넘어갔다 —
-       *"`any(...)` 자체를 처음 본다. 확신 없다."*
-       이 말풍선은 «왜 홀짝으로 바꾸나»(알고리즘)만 말하고 «any() 가 뭐하는 함수인가»(문법)는 안 말했다.
-       레슨 전체에 `any(` 가 **0건**이고(grep), repo 에서 쓰는 quest 도 **셋뿐**이라 진짜 새 문법이다.
-       ⚠️ **C++ 쪽에는 안 넣는다** — C++ 코드는 `any` 가 없고 `bool needBinarize` + for 문이다.
-          넣으면 «화면이 코드에 없는 걸 말한다» 가 된다(오늘 두 번 고친 결함). */
-    { hi: [8, 18], bubble: t(E, "any(… for c in s) checks the letters of s one by one — True if it holds even once.\nStep 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "any(조건 for c in s) 는 s 의 글자를 하나씩 보다가\n조건이 한 번이라도 맞으면 True 예요.\n1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
-    { hi: [20, 23], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have so far and adds the new\ndigit — that's how binary is read. n can be huge, so mod\nat every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 하나 볼 때마다 지금까지 값이 두 배가 되고\n새 자리를 더해요 — 그게 이진수를 읽는 방법이에요.\nn 이 거대할 수 있어서 자리마다 mod 를 해요.") },
-    { hi: [25, 30], bubble: t(E, "Step 3 — we need floor(3n/2).\nMultiplying an even number by anything keeps it even, so if n\nis even, 3n is even too and last = 0.\nOdd times odd is always odd, so if n\nis odd, 3n is odd too, and we subtract last = 1.\nEither way, 3n − last is always even as a whole number.", "3단계 — floor(3n/2) 를 구해야 해요.\n짝수에 무엇을 곱해도 짝수라서,\nn 이 짝수면 3n 도 짝수이고 last = 0이에요.\n홀수끼리 곱하면 홀수라서,\nn 이 홀수면 3n 도 홀수이고 last = 1이에요.\n그래서 3n − last 는 항상 짝수가 돼요.") },
-    /* 2026-09-23 학생 검증: 468자짜리 말풍선 하나에 네 가지가 몰려 "숨찼다" —
-       ①짝수→mod 후 안 짝수일 수 있음 ②모듈러 역원 개념(mod5 예) ③정수론 고백
-       ④연산 순서. ①②③은 INV2 가 실제로 정의된 줄(그 줄이 '왜' 있는지)로,
-       ④는 그 연산이 실제로 있는 g 줄로 돌려보낸다. 글자는 그대로 옮겼을 뿐
-       하나도 새로 쓰지 않았다. */
-    { hi: [2, 2], bubble: t(E, "Even as a whole number — but it's reduced mod 10⁹+7,\nso it may not be even now (1000000008 becomes 1).\nSo we can't just divide by 2 here.\nTry a tiny example: mod 5, value 8. 8 mod 5 = 3, which is\nodd — but 8/2 = 4, and 4 mod 5 = 4. Multiply 3 by 3 (since\n2×3 = 6 ≡ 1 mod 5) and you get 9 ≡ 4 mod 5 — same answer.\nThat 3 is the \"modular inverse\" of 2 under mod 5.\npow(2, MOD-2, MOD) computes that same idea for mod 10⁹+7 —\nwhy exponent MOD−2 specifically works needs more number\ntheory than this quest covers, so we just use this line as a\nfixed recipe, like a formula you'd look up.", "정수로는 짝수였죠. 그런데 10⁹+7 로 줄인 값이라\n짝수가 아닐 수도 있어요 (1000000008 → 1).\n그래서 2 로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 8 이라고 해요.\n8 mod 5 = 3, 홀수죠. 그런데 8÷2 = 4 이고, 4 mod 5 = 4 예요.\n3 에 3 을 곱하면 (2×3 = 6 ≡ 1 mod 5 이니까) 9 ≡ 4 mod 5,\n똑같이 4 가 나와요. 이 3 이 mod 5 에서 2 의 '모듈러 역원'이에요.\npow(2, MOD-2, MOD) 가 mod 10⁹+7 에서 그 값을 구해줘요 —\n왜 하필 지수가 MOD−2 여야 그 값이 나오는지는 이 quest\n범위보다 더 깊은 정수론이 필요해서, 지금은 이 줄을\n찾아 쓰는 공식처럼 정해진 방법으로만 써요.") },
-    { hi: [31, 31], bubble: t(E, "% and * have the same precedence, so this line runs left to\nright: first % MOD, then * INV2, then % MOD again.", "% 와 * 는 계산 차례가 같아서 이 줄은 왼쪽부터 차례로 계산돼요 —\n먼저 % MOD, 그다음 * INV2, 그다음 다시 % MOD.") },
-    { hi: [33, 33], bubble: t(E, "Answer = ops + g, mod MOD: the parity-flip cost plus the formula's result, added together.", "답은 (ops + g) 를 MOD 로 나눈 나머지예요. 홀짝 변환 비용과 공식 결과를 더한 값이에요.") },
+       *"`any(...)` 자체를 처음 본다. 확신 없다."* 레슨 전체에 `any(` 가 0건이다.
+       ⚠️ **C++ 쪽에는 안 넣는다** — 거긴 `bool needBinarize` + for 문이라 `any` 가 없다. */
+    { hi: [7, 17], bubble: t(E, "any(… for c in s) checks the letters of s one by one — True if it holds even once.\nStep 1 — why flip by parity? f only does x\u22121 while x is pure 0/1.\nAny other digit needs one parity swap first: odd\u21921, even\u21920,\nand that swap costs ops = 1.", "any(조건 for c in s) 는 s 의 글자를 하나씩 보다가\n조건이 한 번이라도 맞으면 True 예요.\n1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x\u22121 로 움직여요.\n다른 자리가 있으면 홀수\u21921, 짝수\u21920 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
+    { hi: [19, 25], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have and adds the new digit.\nhalf keeps the value from one digit earlier — that is n // 2.\n(Same as 137 \u2192 13 being 137 // 10 in base ten.)", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 볼 때마다 두 배 하고 새 자리를 더해요.\nhalf 에는 「한 자리 전 값」을 남겨요 — 그게 n 의 절반이에요.\n(10 진수에서 137 \u2192 13 이 137 \u00f7 10 인 것과 같아요.)") },
+    { hi: [27, 28], bubble: t(E, "Step 3 — we need floor(3n/2), and that is just n + (half of n).\nIf n is even, 3n/2 = n + n/2. If n is odd, n + (n/2 rounded down)\nlands on the same answer.\nThe half is already sitting in half — no division needed.", "3단계 — 구할 것은 floor(3n/2) 인데, 그건 「n + (n 의 절반)」 과 같아요.\nn 이 짝수면 3n/2 = n + n/2 예요.\nn 이 홀수여도 절반을 버림하면 답이 맞아요.\n그 절반은 이미 half 에 들어 있어요 — 나눗셈이 필요 없어요.") },
+    { hi: [30, 30], bubble: t(E, "Answer = ops + g, mod MOD: the parity-flip cost plus the formula's result.", "답은 (ops + g) 를 MOD 로 나눈 나머지예요. 홀짝 변환 비용에 공식 결과를 더한 값이에요.") },
   ] };
 }
 
@@ -173,18 +173,18 @@ export function getStrangeFnSections(E) {
             "무엇을 구해야 하나요? f 를 몇 번 써야 x 가 0 이 되는지를 mod 10⁹+7 로 구해요.\n단계는 둘이에요. 필요하면 먼저 홀짝 변환(1번)을 하고,\n그다음 공식을 써요."),
         t(E, "Why flip by parity first? f only steps x → x−1 while x is pure 0/1 — any other digit forces one parity-flip pass. And n can grow up to 10^200000, so we keep it mod 10⁹+7 while reading digits.",
             "왜 홀짝 변환이 먼저 필요할까요? f 는 x 가 0/1 로만 있을 때만 x−1 로 움직여요.\n다른 자리가 있으면 한 번 홀짝으로 바꿔야 해요.\nn 은 최대 10^200000 까지 커질 수 있어서 자리를 하나씩 읽으며 mod 10⁹+7 로 계속 줄여요."),
-        t(E, "So how do we compute floor(3n/2)? Under a prime mod, dividing by 2 becomes multiplying by the modular inverse of 2.",
-            "그럼 floor(3n/2) 는 어떻게 계산할까요?\n소수 mod 에서 나누기 2 는 2 의 모듈러 역원을 곱하는 것과 같아요."),
+        t(E, "So how do we compute floor(3n/2)? It is just n + (half of n) — and the half is already there. Reading binary one digit at a time, the value from one digit earlier IS half, so no division is needed.",
+            "그럼 floor(3n/2) 는 어떻게 계산할까요?\n그건 n + (n 의 절반) 과 같아요. 그리고 그 절반은 이미 갖고 있어요.\n이진수를 한 자리씩 읽을 때 «한 자리 전 값» 이 바로 절반이라\n나눗셈이 필요 없어요."),
       ],
       pyOnly: [
-        t(E, "pow(2, MOD-2, MOD) gives the modular inverse via Fermat's little theorem.",
-            "pow(2, MOD-2, MOD) 로 역원을 구해요. 페르마의 소정리를 쓴 거예요."),
+        t(E, "Nothing here needs division, so there is no negative value to guard against either.",
+            "여기엔 나눗셈이 아예 없어서, 음수를 막는 처리도 필요 없어요."),
         t(E, "Python ints have unlimited size, but we still mod to keep arithmetic O(1).",
             "Python 정수는 크기 제한이 없지만, mod 를 써야 계산 한 번이 O(1) 로 남아요."),
       ],
       cppOnly: [
-        t(E, "INV2 = 500000004 is precomputed (inverse of 2 modulo 10⁹+7).",
-            "INV2 = 500000004 은 미리 계산해 둔 값이에요 (10⁹+7 에서 2 의 역원)."),
+        t(E, "n and half both stay below MOD, so n*2 and n+half never come close to long long's limit.",
+            "n 과 half 는 늘 MOD 보다 작아서, n*2 나 n+half 가 long long 한계에 안 닿아요."),
         t(E, "((3*n - last) % MOD + MOD) % MOD guards against negative remainders.",
             "((3*n - last) % MOD + MOD) % MOD 로 음수 나머지를 막아요."),
       ],
