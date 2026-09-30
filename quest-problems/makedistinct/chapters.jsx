@@ -209,17 +209,24 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
          → **방향은 알려주고**, 5쪽에서 이미 익힌 「나머지로 묶기」만 물음으로 남긴다.
          ⛔ 걸음을 늘리지 않는다 — 대신 아래 `explain` 에서 같은 말을 한 줄 뺐다. */
       hint: t(E,
-        "K is negative, so each push makes a value 2 smaller. Which ones can ever meet — and which end should you settle first?",
-        "K 가 음수라 밀면 값이 2 씩 작아져요. 어떤 수끼리 겹칠 수 있을까요? 그리고 어느 쪽부터 자리를 잡아야 할까요?"),
+        "K is negative, so each push makes a value 2 smaller. Which values can ever overlap?",
+        "K 가 음수라 밀면 값이 2 씩 작아져요. 어떤 수끼리 겹칠 수 있을까요?"),
       answer: 3,
       /* 2026-09-21: 맞혀도 ✅ 만 뜨고 **왜 2 인지**가 없었다 (재검증 학생 지적).
          `NumInput` 에 explain 을 새로 달아 이 자리부터 쓴다. */
-      /* ⭐ 이 해설이 **정렬 방향의 근거**를 처음으로 숫자로 보여준다 — quest 전체에서 여기뿐이다.
-           5쪽이 가르친 「나머지로 묶기」를 그대로 쓰되 **숫자는 새로 골랐다**는 것도 여기서 말한다
-           (5쪽 마지막 걸음이 「이 방법을 다음 쪽에서도 쓴다」고 하는 것과 맞춘다). */
+      /* ⚠️ 2026-09-30 — 여기 있던 "작은 값부터 하면 7 회가 들어요" 를 **지웠다. 거짓이었다.**
+           학생이 손으로 「작은 값부터」를 해보고 **3** 을 얻어 신고했고, 재보니 학생이 맞았다:
+             순열 전수 3,000판 · 무작위 20,000판 — **순서가 답을 바꾼 판 0건.**
+           `while x in used: x += k` 는 **처리 순서와 무관하게 총 밀기 횟수가 같다.**
+           "7" 은 오름차순 목록에 K>0 용 비교식을 안 뒤집고 돌렸을 때만 나오는 값 —
+           **실제로 존재하는 전략이 아니라 구현 버그의 산출물**이었다.
+           ⛔ 그러니 **정렬 방향은 「답」을 위한 것이 아니다** — 7쪽 O(1) 공식이 `cur` 를
+           올바로 따라가게 하려는 것이다. 근거 없는 비교 주장을 다시 넣지 마라.
+           같은 이유로 위 `hint` 의 「어느 쪽부터 자리를 잡아야 할까요?」도 지웠다 —
+           손으로 푸는 학생에게는 **어느 쪽부터든 답이 같다.** */
       explain: t(E,
-        "3 is right.\nA value keeps its remainder when divided by 2 — the same way of splitting as the last page, with new numbers.\n1, 1, 1 and 3 all leave 1; 2 leaves 0.\nK is negative, so settle the BIGGEST first: 3 stays, the first 1 stays too, the next 1 goes to -1 (1 push), the last 1 goes to -3 (2 pushes).\nThe 2 is alone and never moves. 0+0+1+2 = 3. Start from the smallest instead and it costs 7.",
-        "3 이 맞아요.\n2 로 나눈 나머지는 그대로예요 — 앞 쪽과 같은 나누는 방법이고, 숫자만 새로 골랐어요.\n1, 1, 1 과 3 은 모두 1 이 남고, 2 는 0 이 남아요.\nK 가 음수라 「큰 값부터」 자리를 잡아요 — 3 그대로, 첫 1 도 그대로, 다음 1 은 -1 로(1 회), 마지막 1 은 -3 으로(2 회).\n2 는 혼자라 안 움직여요. 0+0+1+2 = 3 회예요. 작은 값부터 하면 7 회가 들어요."),
+        "3 is right.\nA value keeps its remainder when divided by 2 — the same way of splitting as the last page, with new numbers.\n1, 1, 1 and 3 all leave 1; 2 leaves 0.\nK is negative, so settle the BIGGEST first: 3 stays, the first 1 stays too, the next 1 goes to -1 (1 push), the last 1 goes to -3 (2 pushes).\nThe 2 is alone and never moves. 0+0+1+2 = 3.",
+        "3 이 맞아요.\n2 로 나눈 나머지는 그대로예요 — 앞 쪽과 같은 나누는 방법이고, 숫자만 새로 골랐어요.\n1, 1, 1 과 3 은 모두 1 이 남고, 2 는 0 이 남아요.\nK 가 음수라 「큰 값부터」 자리를 잡아요 — 3 그대로, 첫 1 도 그대로, 다음 1 은 -1 로(1 회), 마지막 1 은 -3 으로(2 회).\n2 는 혼자라 안 움직여요. 0+0+1+2 = 3 회예요."),
     },
   ];
 }
