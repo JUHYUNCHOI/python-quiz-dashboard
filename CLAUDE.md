@@ -114,6 +114,23 @@ python3 scripts/check-quest-length-regression.py <id>         # 고친 뒤 쪽 �
                                                             #   나왔다 — 하필 이 건을 못 잡는 구멍이었다. `<NumInput`·`<Quiz`
                                                             #   JSX 태그 등장 횟수도 더한다(실측: 180개 중 바뀐 건 strangefn
                                                             #   하나, `quiz_input: 0→5`, 5개 다 눈으로 대조함 — 오탐 0건).
+python3 scripts/check-missing-approach-tags.py [id ...]       # ⭐ quest 맨 위에 **「뭘로 어떻게 푸나」** 가 보이나
+                                                            #   2026-09-30 선생님: *"전체적으로 저렇게 **해결방법을 생각한
+                                                            #   그 단계 접근방법이 보이지 않네**"* → *"학생들은 이런 문제들을
+                                                            #   **어떻게 접근할수 있을까**가 궁금할것 같아"*
+                                                            #   ⛔ **새 지적이 아니었다.** 2026-07-13 에 선생님이 이미 —
+                                                            #   *"각 사용된 알고리즘이 위에 태그처럼 나왔으면 좋겠어.
+                                                            #     뭘 어떻게 풀어갈건지 크게 보이지가 않아."*
+                                                            #   그때 `components/quest/AlgorithmTags.jsx` 를 만들었고
+                                                            #   **9개에만 붙이고 끝났다.** 그 뒤 quest 가 170개가 됐는데
+                                                            #   **아무도 「이게 붙었나」를 안 봤다** → 두 달 뒤 같은 지적.
+                                                            #   실측 **161개 / USACO·MCC 170개** (MCC 48개는 **전부** 없음).
+                                                            #   ⚠️ 판정이 아니라 볼 자리 표시 — **칩 문구는 사람이 정한다**
+                                                            #     (그 quest 가 뭘로 푸는지는 코드를 읽어야 안다).
+                                                            #   ⚠️ 0건이 결백이 아니다 — **붙어 있는데 내용이 틀린 것**은 못 본다.
+                                                            #     `href` 가 **없는 `app/algo/` 토픽**을 가리켜도 통과한다.
+                                                            #   ⚠️ 붙이는 자리는 `QuestProgressBar` **바로 위**가 표준이다
+                                                            #     (9개 중 8개. `astral` 만 아래 — 형제와 다르다).
 python3 scripts/check-word-difficulty.py <id>                # 어려운 말 · 같은 것 다른 이름 · 번역 티
 python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장 여러 개
 python3 scripts/check-narr-length.py <id>                    # 파란 내레이션 바 — **줄 길이**를 잰다
