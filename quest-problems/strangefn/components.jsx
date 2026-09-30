@@ -116,7 +116,7 @@ export function getStrangeFnWalk(E, lang = "py") {
     return { code: FULL_CPP, vars: _SF_VARS, beats: [
       { hi: [4, 12],  bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10⁹+7, since x can be astronomically large.\nSet up MOD and INV2 (what INV2 means comes in step 3), then\nread T tests, each x as a string s.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10⁹+7 로 나눈 나머지예요.\nx 가 엄청 커서 문자열로 다뤄요.\nMOD 와 INV2 를 둬요 (INV2 가 뭔지는 3단계에서 알려드려요).\n그다음 T 개 테스트와 s 를 읽어요.") },
       { hi: [14, 33], bubble: t(E, "Step 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
-      { hi: [36, 40], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have so far and adds the new\ndigit — that's how binary is read. n can be huge, so mod\nat every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 하나 볼 때마다 지금까지 값이 두 배가 되고\n새 자리를 더해요 — 그게 이진수를 읽는 방법이에요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
+      { hi: [36, 40], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have so far and adds the new\ndigit — that's how binary is read. n can be huge, so mod\nat every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 하나 볼 때마다 지금까지 값이 두 배가 되고\n새 자리를 더해요 — 그게 이진수를 읽는 방법이에요.\nn 이 거대할 수 있어서 자리마다 mod 를 해요.") },
       { hi: [42, 43], bubble: t(E, "Step 3 — we need floor(3n/2).\nMultiplying an even number by anything keeps it even, so if n\nis even, 3n is even too and last = 0.\nOdd times odd is always odd, so if n\nis odd, 3n is odd too, and we subtract last = 1.\nEither way, 3n − last is always even as a whole number.", "3단계 — floor(3n/2) 를 구해야 해요.\n짝수에 무엇을 곱해도 짝수라서,\nn 이 짝수면 3n 도 짝수이고 last = 0이에요.\n홀수끼리 곱하면 홀수라서,\nn 이 홀수면 3n 도 홀수이고 last = 1이에요.\n그래서 3n − last 는 항상 짝수가 돼요.") },
       /* 2026-09-23 학생 검증: 468자짜리 말풍선 하나에 네 가지가 몰려 "숨찼다" —
          ①짝수→mod 후 안 짝수일 수 있음 ②모듈러 역원 개념(mod5 예) ③정수론 고백
@@ -149,7 +149,7 @@ export function getStrangeFnWalk(E, lang = "py") {
        ⚠️ **C++ 쪽에는 안 넣는다** — C++ 코드는 `any` 가 없고 `bool needBinarize` + for 문이다.
           넣으면 «화면이 코드에 없는 걸 말한다» 가 된다(오늘 두 번 고친 결함). */
     { hi: [8, 18], bubble: t(E, "any(… for c in s) checks the letters of s one by one — True if it holds even once.\nStep 1 — why flip by parity? f only does x−1 while x is pure 0/1.\nAny other digit needs one parity swap first: odd→1, even→0,\nand that swap costs ops = 1.", "any(조건 for c in s) 는 s 의 글자를 하나씩 보다가\n조건이 한 번이라도 맞으면 True 예요.\n1단계 — 왜 홀짝으로 바꿀까요?\nx 가 0/1 만 있어야 f 가 x−1 로 움직여요.\n다른 자리가 있으면 홀수→1, 짝수→0 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
-    { hi: [20, 23], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have so far and adds the new\ndigit — that's how binary is read. n can be huge, so mod\nat every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 하나 볼 때마다 지금까지 값이 두 배가 되고\n새 자리를 더해요 — 그게 이진수를 읽는 방법이에요.\nn 이 거대할 수 있어서 자릿수마다 mod 를 해요.") },
+    { hi: [20, 23], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have so far and adds the new\ndigit — that's how binary is read. n can be huge, so mod\nat every digit.", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 하나 볼 때마다 지금까지 값이 두 배가 되고\n새 자리를 더해요 — 그게 이진수를 읽는 방법이에요.\nn 이 거대할 수 있어서 자리마다 mod 를 해요.") },
     { hi: [25, 30], bubble: t(E, "Step 3 — we need floor(3n/2).\nMultiplying an even number by anything keeps it even, so if n\nis even, 3n is even too and last = 0.\nOdd times odd is always odd, so if n\nis odd, 3n is odd too, and we subtract last = 1.\nEither way, 3n − last is always even as a whole number.", "3단계 — floor(3n/2) 를 구해야 해요.\n짝수에 무엇을 곱해도 짝수라서,\nn 이 짝수면 3n 도 짝수이고 last = 0이에요.\n홀수끼리 곱하면 홀수라서,\nn 이 홀수면 3n 도 홀수이고 last = 1이에요.\n그래서 3n − last 는 항상 짝수가 돼요.") },
     /* 2026-09-23 학생 검증: 468자짜리 말풍선 하나에 네 가지가 몰려 "숨찼다" —
        ①짝수→mod 후 안 짝수일 수 있음 ②모듈러 역원 개념(mod5 예) ③정수론 고백
@@ -172,7 +172,7 @@ export function getStrangeFnSections(E) {
         t(E, "What are we finding? How many times f applies until x hits 0, mod 10⁹+7. There are two phases. If needed, do the parity flip first (1 op), then apply the formula g(n) = floor(3n/2).",
             "무엇을 구해야 하나요? f 를 몇 번 써야 x 가 0 이 되는지를 mod 10⁹+7 로 구해요.\n단계는 둘이에요. 필요하면 먼저 홀짝 변환(1번)을 하고,\n그다음 공식을 써요."),
         t(E, "Why flip by parity first? f only steps x → x−1 while x is pure 0/1 — any other digit forces one parity-flip pass. And n can grow up to 10^200000, so we keep it mod 10⁹+7 while reading digits.",
-            "왜 홀짝 변환이 먼저 필요할까요? f 는 x 가 0/1 로만 있을 때만 x−1 로 움직여요.\n다른 자리가 있으면 한 번 홀짝으로 바꿔야 해요.\nn 은 최대 10^200000 까지 커질 수 있어서 자릿수를 읽으며 mod 10⁹+7 로 계속 줄여요."),
+            "왜 홀짝 변환이 먼저 필요할까요? f 는 x 가 0/1 로만 있을 때만 x−1 로 움직여요.\n다른 자리가 있으면 한 번 홀짝으로 바꿔야 해요.\nn 은 최대 10^200000 까지 커질 수 있어서 자리를 하나씩 읽으며 mod 10⁹+7 로 계속 줄여요."),
         t(E, "So how do we compute floor(3n/2)? Under a prime mod, dividing by 2 becomes multiplying by the modular inverse of 2.",
             "그럼 floor(3n/2) 는 어떻게 계산할까요?\n소수 mod 에서 나누기 2 는 2 의 모듈러 역원을 곱하는 것과 같아요."),
       ],
