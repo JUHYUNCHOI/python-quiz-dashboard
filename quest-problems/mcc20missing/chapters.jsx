@@ -211,7 +211,8 @@ export function makeMcc20MissingCh1(E) {
                 <span style={{ color: A, fontWeight: 600, flexShrink: 0 }}>①</span>
                 <div>
                   {t(E, "Start from a ", "")}
-                  <b style={{ color: A }}>{t(E, "permutation of 1..N", "1..N 의 순열")}</b>
+                  <b style={{ color: A }}>{t(E, "line-up of 1..N using each number once (a permutation)",
+                                               "1 부터 N 까지를 한 번씩 늘어놓은 줄 (순열)")}</b>
                   {t(E, ", then discard one number.", " 에서 시작해, 한 숫자를 버려요.")}
                   {/* ⛔ 2026-10-01 — 「순열」이 이 quest 에서 **처음이자 유일하게** 나오는
                        자리인데 뜻이 어디에도 없었다(입출력 쪽 ":267" 에 비슷한 말이 있지만
