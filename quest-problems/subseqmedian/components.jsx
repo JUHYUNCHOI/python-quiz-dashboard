@@ -403,9 +403,21 @@ export function getSubseqMedianWalk(E, lang = "py") {
       { hi: [0, 8], bubble: t(E,
         "What do we need, over and over? For each level, the sum of 'smaller values before' or 'larger values after' — fast. So read n, A, then compress values to ranks 1..m (A can be up to 1e9).",
         "무엇이 계속 필요한가요? 레벨마다 '앞쪽 작은 값들의 합' 또는 '뒤쪽 큰 값들의 합'을 빠르게 구해야 해요. 그래서 n, A 를 읽고, 값을 1~m 등수로 눌러 담아요 (A는 1e9 까지 커요).") },
+      /* ⛔ 2026-10-01 — 학생(초6)이 **여기서 완전히 막혔다.**
+           *"말풍선은 「upd 는 값을 더해 넣고 qry 는 합을 구해요」라고 쉽게 말해주는데,
+             실제 코드 줄 `pos += pos & (-pos)` 는 **완전히 못 알아봤다.** 음수를 왜 거기다
+             AND 하는지 전혀 모르겠다. 「무슨 일을 하는지」는 알려줬지만 **「어떻게」는 통째로
+             블랙박스**였다. **제일 포기하고 싶었던 자리**다."*
+         ⚠️ 처음엔 **펜윅을 더 쉬운 집계로 갈아치우는** 안이 나왔는데(PM 판정) python-qa 가
+           재서 **뒤집혔다** — 이중 루프는 O(N³) 이라 N=8000 에서 **C++ 로도** 못 끝낸다
+           (8000³ = 5120억). 정확성은 7500건 대조로 증명됐지만 속도가 질적으로 다르다.
+           O(log N) 로 점 갱신과 구간합을 같이 하는 자료구조 중 **펜윅이 제일 쉬운 축**이고,
+           `sorted`+`bisect` 로는 점 갱신을 못 한다. **수단이 아니라 본질이었다.**
+         ⭐ 그래서 개념을 빼는 대신 **막힌 그 한 줄을 설명한다.** 학생이 막힌 건
+           「펜윅」이라는 이름이 아니라 `pos & (-pos)` **한 줄**이었다. */
       { hi: [10, 20], bubble: t(E,
-        "We'll need those sums fast, over and over, so build a Fenwick tree (BIT) over the ranks: upd adds a value in, qry sums everything up to a rank.",
-        "그 합을 빠르게 계속 구해야 하니, 등수 위에 펜윅 트리(BIT) 를 만들어요. upd 는 값을 더해 넣고, qry 는 어떤 등수까지의 합을 구해요.") },
+        "We'll need those sums fast, over and over, so build a Fenwick tree (BIT) over the ranks: upd adds a value in, qry sums everything up to a rank.\nThink of bit as shelves, where one shelf already holds the total of a block of ranks — so a query adds a few shelves instead of rescanning.\nThat is all pos & (-pos) does: it reads off how many ranks the current shelf covers. Take pos = 6 — in binary 110, whose lowest 1 is worth 2, so pos & (-pos) = 2. Shelf 6 covers 2 ranks (5 and 6).\nupd adds that size to jump to the next shelf (6 → 8); qry subtracts it to step back (6 → 4). Each jump at least doubles, so both finish in about log m steps.",
+        "그 합을 빠르게 계속 구해야 하니, 등수 위에 펜윅 트리(BIT) 를 만들어요. upd 는 값을 더해 넣고, qry 는 어떤 등수까지의 합을 구해요.\nbit 를 선반이라고 생각해요. 선반 한 칸이 등수 여러 개의 합을 미리 들고 있어서, 한 번 물으면 전부 다시 훑는 대신 선반 몇 개만 더하면 돼요.\npos & (-pos) 가 하는 일은 그것뿐이에요 — 지금 선반이 등수 몇 개를 담당하는지 읽어 줘요. pos = 6 이라고 해요. 6 을 2진수로 쓰면 110 이고 맨 오른쪽 1 은 2 자리라서 pos & (-pos) = 2 예요. 6번 선반은 등수 두 개(5와 6)를 담당해요.\nupd 는 그 크기만큼 더해 다음 선반으로 가고(6 → 8), qry 는 그만큼 빼서 앞 선반으로 가요(6 → 4). 한 번에 적어도 두 배씩 건너뛰니까 둘 다 약 log m 걸음이면 끝나요.") },
       { hi: [22, 25], bubble: t(E,
         "Level 0: every element is already an increasing chain of length 1 by itself. Start Lprev and Rprev at 1, and their product is each element's starting contribution.",
         "레벨 0: 원소 하나하나가 이미 길이 1인 증가열이에요. Lprev, Rprev 를 1로 시작하고, 그 곱을 각 원소의 시작 기여로 둬요.") },
