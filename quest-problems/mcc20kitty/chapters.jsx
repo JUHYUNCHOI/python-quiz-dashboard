@@ -391,6 +391,36 @@ export function makeMcc20KittyCh2(E) {
             <div>partial = N % 104</div>
             <div style={{ marginTop: 6 }}>answer = full × 35 + <span style={{ color: "#6ee7b7" }}>zeros_in(partial)</span></div>
           </div>
+          {/* ⛔ 2026-10-01 — 이 쪽은 **식만 보여주고 숫자를 한 번도 안 넣어 봤다.**
+                 그리고 공식 샘플 N=7 은 `full = 0` 이라 **곱셈 항이 한 번도 일을 안 한다**
+                 (사이클 길이 104). 즉 `feedback_example_must_make_the_rule_visible` 의 전형 —
+                 **규칙을 껐을 때 답이 안 달라지는 예제**다. 선생님: *"도대체 뭘 하려는건지
+                 모르겠어"* 가 나온 모양이다.
+               ⭐ 그래서 **곱셈이 실제로 10배 일하는 숫자**를 하나 넣는다.
+                 N = 1040 을 고른 까닭 — `1040 = 104 × 10` 이라 **남는 조각이 0** 이어서
+                 사이클 104칸의 어느 자리가 0인지 몰라도 **손으로 끝까지 검산된다.**
+               실측(🔒 코드와 정의-브루트 둘 다): N=7→2 · N=104→35 · N=1040→**350** · N=1000→335.
+               ⚠️ N=7 과 N=1040 이 한 화면에 있으면 **같은 자리에 두 입력**이 된다
+                 (`feedback_same_number_two_meanings`) → 바탕색·「예시」 라벨로 가르고,
+                 「공식 샘플과 다른 입력」이라고 그 자리에서 밝힌다.
+               ⚠️ **새 쪽이 아니다** — 이 쪽 안의 블록이다. 쪽 수는 3-4 삭제로 14 → 13.
+               근거: pedagogy-reviewer 판정 2026-10-01. */}
+          <div style={{ marginTop: 10, background: "#f0fdf4", border: "1px solid #86efac",
+            borderRadius: 10, padding: "9px 12px", ...KA }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 5 }}>
+              {t(E, "example — the multiply actually works here", "예시 — 곱셈이 실제로 일하는 자리")}
+            </div>
+            <div style={{ fontSize: 12.5, color: "#166534", lineHeight: 1.75,
+              fontFamily: "'JetBrains Mono',monospace" }}>
+              <div>{t(E, "if N = 1040", "N = 1040 이면")}</div>
+              <div>1040 ÷ 104 = {t(E, "exactly 10 cycles (nothing left over)", "정확히 10바퀴 (남는 조각 없음)")}</div>
+              <div style={{ fontWeight: 800 }}>{t(E, "answer", "답")} = 10 × 35 = 350</div>
+            </div>
+            <div style={{ fontSize: 11, color: "#15803d", marginTop: 5, lineHeight: 1.5, opacity: .85 }}>
+              {t(E, "This is a number for explaining — not the official sample (N = 7).",
+                   "이건 설명용 숫자예요. 공식 샘플(N = 7)과는 다른 입력이에요.")}
+            </div>
+          </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, textAlign: "center", ...KA }}>
             {t(E,
               "(Kitty's cycle starts right at term 1, so there's no leading 'tail' to add separately.)",
@@ -570,41 +600,23 @@ export function makeMcc20KittyCh3(E, lang = "py") {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center",
             lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
             {t(E,
-              "Three pieces: the tail before the cycle, one whole cycle × how many cycles fit, and the leftover.\nAdd them up and the answer comes out even for N = 10^15.",
-              "세 조각이에요. 되풀이 전의 앞꼬리, 한 바퀴 × 들어가는 바퀴 수,\n그리고 남는 조각이에요. 이 셋을 더하면 N 이 10^15 이어도 답이 나와요.")}
+              "Three pieces: the tail before the cycle, one whole cycle × how many cycles fit, and the leftover.\nAdd them up and the answer comes out even for N = 10^15 — N = 10 costs the same.",
+              "세 조각이에요. 되풀이 전의 앞꼬리, 한 바퀴 × 들어가는 바퀴 수,\n그리고 남는 조각이에요. 이 셋을 더하면 N 이 10^15 이어도 답이 나와요 —\nN 이 10 일 때와 드는 일이 같아요.")}
           </div>
         </div>),
     },
 
-    // 3-4 complexity
-    {
-      type: "reveal",
-      narr: t(E,
-        "How much work is this, really? It does not depend on N.",
-        "이 방법이 얼마나 일하는지 봐요. N 과는 무관해요."),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
-            <div style={{ background: "#dbeafe", borderRadius: 12, padding: 12 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#2563eb" }}>{t(E, "Time", "시간")}</div>
-              <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>~period</div>
-              <div style={{ fontSize: 10, color: "#2563eb" }}>{t(E, "≈ 104, not N", "≈ 104, N 아님")}</div>
-            </div>
-            <div style={{ background: "#dcfce7", borderRadius: 12, padding: 12 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#16a34a" }}>{t(E, "Space", "공간")}</div>
-              <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>~period</div>
-              <div style={{ fontSize: 10, color: "#16a34a" }}>{t(E, "one cycle of 0/1/2", "0/1/2 한 사이클")}</div>
-            </div>
-          </div>
-          {/* 2026-09-17: 파란 바에서 내린 근거를 여기 카드로 옮겼다. */}
-          <div style={{ marginTop: 12, fontSize: 11.5, color: C.dim, lineHeight: 1.6,
-            whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
-            {t(E,
-              "We walk one cycle (~104 terms) to set up, then it is just a little arithmetic.\nSo N = 10 and N = 10^15 cost about the same.",
-              "준비하느라 사이클 한 바퀴(약 104항)만 걷고,\n그다음은 곱셈과 덧셈 몇 번이 전부예요.\n그래서 N 이 10 이든 10^15 이든 드는 일이 거의 같아요.")}
-          </div>
-        </div>),
-    },
+    /* ⛔ 2026-10-01 삭제 — 「3-4 복잡도」 쪽. **바로 앞 3-3 이 이미 같은 말로 닫는다**
+         (*"이 셋을 더하면 N 이 10^15 이어도 답이 나와요"*). 3-4 는 그 한 줄을 카드 두 개로
+         다시 그린 것이고 **새 정보가 없었다** — 사이클 길이 ≈104 도 2-1·2-4 에 이미 있다.
+       ⭐ 지운 까닭은 자리를 벌기 위해서다. 이 quest 는 **14쪽**으로 형제 MCC 2020(6~8쪽)
+         대비 이상치라 `feedback_shorter_not_longer`(선생님 세 번째 지적)에 따라
+         **늘리는 길이 막혀 있다.** PM: *"순 쪽수·순 글자수가 늘면 반려."*
+         2-4 에 큰 N 예시를 넣는 대신 여기서 한 쪽을 돌려줬다 — **순 쪽수 14 → 13.**
+       ⚠️ 함께 검토한 다른 후보(1-2/1-3 병합 · 2-1/2-3 병합)는 **안 건드렸다** —
+         둘 다 승(형식)/전(자세한 예제) 분리를 지키고 서로 다른 정보를 준다
+         (1-2 는 「왜 2일까」를 미뤄 두고 1-3 이 K6·K7 계산으로 답한다).
+       근거: pedagogy-reviewer 판정 2026-10-01. */
 
     // 3-5: code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {

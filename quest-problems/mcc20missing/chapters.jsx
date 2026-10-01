@@ -213,6 +213,17 @@ export function makeMcc20MissingCh1(E) {
                   {t(E, "Start from a ", "")}
                   <b style={{ color: A }}>{t(E, "permutation of 1..N", "1..N 의 순열")}</b>
                   {t(E, ", then discard one number.", " 에서 시작해, 한 숫자를 버려요.")}
+                  {/* ⛔ 2026-10-01 — 「순열」이 이 quest 에서 **처음이자 유일하게** 나오는
+                       자리인데 뜻이 어디에도 없었다(입출력 쪽 ":267" 에 비슷한 말이 있지만
+                       **첫 사용보다 뒤**다). `feedback_no_invented_terms` 의 「처음 쓰기 전에
+                       정의」. ⚠️ `check-undefined-symbol` 은 **0건**이었다 —
+                       `ALGO_TERMS` 사전에 「순열」이 없어서다(0건이 결백이 아니다).
+                     ⭐ 정의 문장을 쓰지 않고 **예 하나**를 붙인다
+                       (`feedback_plain_korean`: *"그 화면의 숫자로 말해라"*).
+                       N=5 는 지어낸 값이 아니라 **이 quest 의 예제 1 과 같은 N** 이다. */}
+                  <div style={{ fontSize: 11.5, color: C.dim, marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
+                    {t(E, "e.g. for N=5: 5, 2, 4, 1, 3", "예: N=5 면 5, 2, 4, 1, 3")}
+                  </div>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -306,9 +317,18 @@ export function makeMcc20MissingCh1(E) {
           {/* 2026-09-17: 72 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55,
             whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
+            {/* ⛔ 2026-10-01 학생 B: *"예제1 은 **답만 던지고 과정 설명이 없는데**
+                   예제2 는 자세하다 — **순서가 거꾸로다.**"* 실측 0줄 대 3문장이었다.
+                 ⭐ 쉬운 것부터 보여주는 게 순서인데, 쉬운 쪽에 설명이 없어서
+                   학생이 어려운 쪽에서 처음 「어떻게」를 만난다.
+                 ⚠️ 깊이를 맞추는 길은 둘인데(더한다 / 뺀다) **둘 다** 썼다 —
+                   예제1 에 한 문장 더하고, 예제2 의 세 문장을 두 문장으로 합쳤다.
+                   순증가 한국어 +8자(`feedback_shorter_not_longer`).
+                 숫자는 검산했다 — 예제1 은 맞는 K 가 **2 하나뿐**이고 빠진 수가 4,
+                   예제2 는 K=10→2 · K=7→5 로 **둘**이라 합이 7 이다. */}
             {t(E,
-              "Example 2 has TWO valid K.\nK=10 makes the missing number 2, and K=7 makes it 5.\nThe answer counts both: 2 + 5 = 7.",
-              "예제 2 는 맞는 K 가 둘이에요.\nK=10 이면 빠진 수가 2, K=7 이면 5 예요.\n둘 다 세니까 2 + 5 = 7 이에요.")}
+              "Example 1 has only one valid K = 2,\nso the missing number is 4.\nExample 2 has two valid K — 10 and 7 —\nso we add their missing numbers: 2 + 5 = 7.",
+              "예제 1 은 K = 2 하나만 맞아서\n빠진 수가 4 예요.\n예제 2 는 K = 10, 7 둘 다 맞아서\n빠진 수 2 와 5 를 더해 7 이에요.")}
           </div>
         </div>),
     },

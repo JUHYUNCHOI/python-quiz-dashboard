@@ -464,7 +464,7 @@
   "makedistinct": {
     "pages": 6,
     "quiz_input": 1,
-    "korean_chars_ref": 1919,
+    "korean_chars_ref": 2024,
     "korean_screen_ref": 530
   },
   "mcc15bahasaf": {
@@ -542,8 +542,8 @@
   "mcc20cipher": {
     "pages": 6,
     "quiz_input": 1,
-    "korean_chars_ref": 967,
-    "korean_screen_ref": 627
+    "korean_chars_ref": 1134,
+    "korean_screen_ref": 642
   },
   "mcc20citytour": {
     "pages": 6,
@@ -552,10 +552,10 @@
     "korean_screen_ref": 483
   },
   "mcc20kitty": {
-    "pages": 14,
+    "pages": 13,
     "quiz_input": 3,
-    "korean_chars_ref": 2335,
-    "korean_screen_ref": 1239
+    "korean_chars_ref": 2846,
+    "korean_screen_ref": 1214
   },
   "mcc20knight": {
     "pages": 8,
@@ -566,14 +566,14 @@
   "mcc20missing": {
     "pages": 6,
     "quiz_input": 1,
-    "korean_chars_ref": 1241,
-    "korean_screen_ref": 800
+    "korean_chars_ref": 1541,
+    "korean_screen_ref": 807
   },
   "mcc20zigzag": {
     "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 1160,
-    "korean_screen_ref": 733
+    "korean_chars_ref": 1375,
+    "korean_screen_ref": 777
   },
   "mcc21carrots": {
     "pages": 5,
