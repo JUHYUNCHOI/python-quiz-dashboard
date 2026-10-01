@@ -440,16 +440,35 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                   문장 대신 작은 예 하나를 그림으로 보여준다 — 학생이 "왜 그 자리에 놓이는지"
                   를 못 봤다고 했다. 크기 1·2·3 에 부호를 붙이고 K=10 을 더해 본다. */}
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, marginBottom: 8, ...KA }}>
-                {t(E, "A tiny example: magnitudes 1, 2, 3 with K = 10.", "작은 예로 봐요. 크기 1, 2, 3 에 K = 10 을 더해요.")}
+                {/* ⛔ 2026-10-01 — 이 상자는 **축 하나만** 보여주고 있었다.
+                     바로 위 문장은 *"크기 2 가지 × 부호 2 가지 = 후보 K 4 개"* 라고
+                     **두 축을 다 말하는데**, 두 행이 **둘 다 크기 3(=N)** 이고 부호만
+                     달랐다 — **크기 축(N vs N−1)을 그림이 한 번도 안 보여줬다.**
+                   🚨 그 결과 **후보 넷 중 뒤의 둘(`min+(N−1)`·`max−(N−1)`)이 어디에서도
+                     안 쓰였다.** 실측: 공식 샘플 둘 다 그 가지를 **통째로 지워도 답이 같다**
+                     (N=5 → 4·4, N=6 → 7·7). 1-3쪽 시뮬의 예제 1·2 도 마찬가지다(확인함).
+                     **학생은 공식 네 칸 중 두 칸만 보고 끝낼 수 있었다.**
+                   ⭐ **행을 늘리지 않고** 두 행이 **두 축을 나눠 지게** 바꿨다 —
+                     행A 는 「가장 큰 크기 = N」, 행B 는 「= N−1」. 부호(+/−)도 그대로 살아 있다.
+                   검증(🔒 후보식으로 직접 계산):
+                     행A `N=4, a=[9,12,14]` → K=10 은 **`max−N`** 에서 나온다(빠진 수 3)
+                     행B `N=4, a=[11,12,7]` → K=10 은 **`min+(N−1)`** 에서 나온다(빠진 수 4)
+                   ⚠️ 행B 는 `max−N = 8` 도 우연히 유효하다(빠진 수 2). 이 문제에서
+                     **K 가 여럿 맞는 건 정상**이고(샘플 2 가 그 경우다) 이 상자는 원래도
+                     후보 전부를 검사하는 자리가 아니라 **강조된 계산 하나**만 보인다. */}
+                {t(E, "A tiny example with N = 4 and K = 10 — the biggest magnitude is N in one row, N−1 in the other.", "작은 예로 봐요. N = 4, K = 10 이에요.\n위 줄은 가장 큰 크기가 N, 아래 줄은 N−1 이에요.")}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 8 }}>
                 {[
-                  { sign: "+", row: ["−1", "+2", "+3"], out: ["9", "12", "13"], hitIdx: 2, tag: t(E, "biggest is MAX", "가장 큰 수가 MAX"), eq: "13 = 3 + K" },
-                  { sign: "−", row: ["−1", "+2", "−3"], out: ["9", "12", "7"], hitIdx: 2, tag: t(E, "biggest is MIN", "가장 큰 수가 MIN"), eq: "7 = −3 + K" },
+                  { big: "N", bigVal: "4", sign: "+", row: ["−1", "+2", "+4"], out: ["9", "12", "14"], hitIdx: 2, tag: t(E, "biggest is MAX", "가장 큰 수가 MAX"), eq: "14 = 4 + K" },
+                  { big: "N−1", bigVal: "3", sign: "−", row: ["+1", "+2", "−3"], out: ["11", "12", "7"], hitIdx: 2, tag: t(E, "biggest is MIN", "가장 큰 수가 MIN"), eq: "7 = −3 + K" },
                 ].map((r) => (
-                  <div key={r.sign} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
-                    <span style={{ color: C.dim, minWidth: 70, whiteSpace: "nowrap", fontSize: 11 }}>
-                      {t(E, "sign of 3: ", "3 의 부호: ")}<b style={{ color: "#9a3412" }}>{r.sign}</b>
+                  <div key={r.big} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                    {/* ⚠️ 라벨이 「3 의 부호」로 **하드코딩**돼 있었다 — 두 행의 강조 숫자가
+                        이제 4 와 3 으로 다르니 행별로 쓴다. 안 그러면 **화면이 거짓말한다.** */}
+                    <span style={{ color: C.dim, minWidth: 92, whiteSpace: "nowrap", fontSize: 11 }}>
+                      {t(E, `biggest = ${r.big} (${r.bigVal}), sign `, `가장 큰 크기 ${r.big} (${r.bigVal}) 의 부호 `)}
+                      <b style={{ color: "#9a3412" }}>{r.sign}</b>
                     </span>
                     <span style={{ color: C.dim }}>{r.row.join("  ")}</span>
                     <span style={{ color: "#9a3412" }}>+10 →</span>
