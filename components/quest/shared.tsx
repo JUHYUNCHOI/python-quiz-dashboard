@@ -4,6 +4,31 @@ import { Fragment, useState, useEffect } from "react"
 import type React from "react"
 import { localizeCode } from "@/components/quest/localizeCode"
 
+// ── 강조 한 곳 (형광펜) ───────────────────────────────────────────────────────
+
+/* 선생님(2026-10-01): *"강조해야 하는 곳에서는 강조가 안되어 있어.
+     다 밋밋해서 노치는 정보가 많아"*
+
+   말풍선·미션 박스는 글 전체가 같은 `fontWeight` 라 **결론 문장과 곁문장이 같은 무게**로
+   읽힌다. 한 화면에 **한 곳만** 긋는다 — 잣대는 「그 문장이 없으면 다음이 안 이어지나」
+   (`pedagogy-reviewer` 몫). 다 굵게 하면 다시 밋밋해진다(`check-emphasis.mjs`).
+
+   ⛔ **`**굵게**` 로 적지 마라** — JSX 는 해석하지 않아 **별표가 글자로 찍힌다**
+     (`check-jsx-markdown`, 2026-09-28 에 하루에 네 군데서 겪었다).
+   ⭐ 글자색을 바꾸지 않고 **바탕에 형광펜**을 긋는다. 말풍선 색이 셋(파랑·노랑·초록)이라
+     글자를 빨강으로 바꾸면 초록 말풍선에서 「오류」로 읽힌다.
+     `#fde68a` 는 형제 `checkups/sims.jsx` 가 「여기 봐라」에 쓰는 색과 같다 — 새 색이 아니다.
+
+   ⚠️ **여기 쓰는 색값을 다른 데 복붙하지 마라** — `feedback_example_code_is_contagious`.
+     강조가 필요하면 이 컴포넌트를 **불러 써라.** */
+export function Hi({ children }: { children: React.ReactNode }) {
+  return (
+    <b style={{ fontWeight: 900, background: "#fde68a", borderRadius: 4, padding: "0 3px" }}>
+      {children}
+    </b>
+  )
+}
+
 // ── Typing animation hook ─────────────────────────────────────────────────────
 
 // 2026-09-21: 학생 둘이 "새 쪽으로 넘어갈 때마다 몇 초간 문장이 중간에 잘려

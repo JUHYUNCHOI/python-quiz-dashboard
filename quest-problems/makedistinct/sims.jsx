@@ -1,6 +1,7 @@
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 import { StepFade } from "@/components/quest/StepFade";
 import { t } from "@/components/quest/theme";
+import { Hi } from "@/components/quest/shared";
 
 /* makedistinct 시뮬.
 
@@ -17,6 +18,29 @@ import { t } from "@/components/quest/theme";
 */
 
 const A = "#2563eb";
+
+/* ⭐ 2026-10-01 선생님: *"강조해야 하는 곳에서는 강조가 안되어 있어.
+     다 밋밋해서 노치는 정보가 많아"* — 말풍선이 처음부터 끝까지 `fontWeight: 700` 이라
+   **결론 문장과 곁문장이 같은 무게**로 읽혔다. 한 걸음에 **한 곳만** 굵게 한다
+   (어느 곳인지는 `pedagogy-reviewer` 판정, 잣대는 「그 문장이 없으면 다음이 안 이어지나」).
+
+   ⛔ 강조를 **글 안에 표시하지 않는다.** `**굵게**` 로 적으면 JSX 가 해석을 안 해
+     **별표가 그대로 화면에 찍힌다**(`check-jsx-markdown`, 2026-09-28 에 네 군데서 겪었다).
+   → 굵게 할 **조각 자체**를 걸음 데이터에 `em:` 으로 따로 둔다.
+     조각을 못 찾으면 **아무것도 안 굵어진다** — 글자가 새지 않는 쪽으로 넘어진다.
+   ⭐ 형광펜은 **공용 `Hi`**(`components/quest/shared.tsx`)를 쓴다 — 색값을 여기 적으면
+     다음 사람이 복붙한다(`feedback_example_code_is_contagious`). */
+function Em({ text, em }) {
+  if (!em || !text || !text.includes(em)) return text;
+  const at = text.indexOf(em);
+  return (
+    <>
+      {text.slice(0, at)}
+      <Hi>{em}</Hi>
+      {text.slice(at + em.length)}
+    </>
+  );
+}
 
 function Say({ children, tone = "go" }) {
   const c = tone === "aha" ? { bg: "#ecfdf5", bd: "#6ee7b7", fg: "#065f46" }
@@ -246,6 +270,8 @@ export function PlaceOneByOneSim({ E }) {
       en: "Four numbers. Two 4s and two 1s — they clash. We will add K = 1 to make them all different." },
     { tiles: [["1"], ["1"], ["4"], ["4"]], st: ["idle", "idle", "idle", "idle"],
       ops: null, tone: "go",
+      emKo: "작은 것부터 자리를 잡아야 나중에 덜 움직여요",
+      emEn: "Settling the small ones first means less moving later",
       ko: "먼저 작은 수부터 줄을 세워요. 작은 것부터 자리를 잡아야 나중에 덜 움직여요.",
       en: "First line them up from the smallest. Settling the small ones first means less moving later." },
     { tiles: [["1"], ["1"], ["4"], ["4"]], st: ["placed", "idle", "idle", "idle"],
@@ -289,6 +315,8 @@ export function PlaceOneByOneSim({ E }) {
        여기는 예고만 하고 넘긴다. */
     { tiles: [["1"], ["2"], ["4"], ["5"], ["6"]], st: ["placed", "placed", "placed", "placed", "placed"],
       note: ["", "", "", "", "(6-4) ÷ 1"], ops: 4, tone: "aha",
+      emKo: "(6-4) ÷ 1 = 2 회",
+      emEn: "(6-4) / 1 = 2 times",
       ko: "자리는 4 → 5 → 6 으로 한 칸씩만 밀린 것처럼 보이지만,\n4 가 실제로 밀린 횟수는 (6-4) ÷ 1 = 2 회예요.\nK 가 1 이 아니면 어떻게 되는지는 곧 봐요.",
       en: "The slot only looks like it moves one step, 4 → 5 → 6,\nbut 4 was really pushed (6-4) / 1 = 2 times.\nWhat happens when K isn't 1 — that's coming up soon." },
   ];
@@ -301,7 +329,7 @@ export function PlaceOneByOneSim({ E }) {
         title={t(E, "Place them one by one, smallest first", "작은 수부터 하나씩 놓아 보기")}
  />
       <StepFade fast k={ts.safe}>
-        <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
+        <Say tone={s.tone}><Em text={t(E, s.en, s.ko)} em={t(E, s.emEn, s.emKo)} /></Say>
 
         <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
           {s.tiles.map((v, i) => (
@@ -427,6 +455,8 @@ export function WhoCanMeetSim({ E }) {
            식은 **학교에서 배운 나눗셈 표기**(`몫 ⋯ 나머지`)로 바꿔 두 줄을 대응시킨다.
          ⚠️ 홀짝은 **K = 2 일 때만의 모습**이다 — 그래서 바로 다음 걸음 5·6 이 K 를 바꿔
            「남는 수」로 일반화한다. 여기서 홀짝을 규칙이라고 **주장하지 않는다.** */
+      emKo: "홀수는 아무리 커져도 짝수가 안 돼요",
+      emEn: "An odd number never turns even, no matter how big it grows",
       ko: "3, 5, 7, 9 는 다 홀수예요. 4, 6, 8, 10 은 다 짝수고요.\n홀수는 아무리 커져도 짝수가 안 돼요 — 그래서 절대 같아질 수 없어요.",
       en: "3, 5, 7, 9 are all odd. 4, 6, 8, 10 are all even.\nAn odd number never becomes even, however big it grows — so they can never be equal." },
 
@@ -476,6 +506,13 @@ export function WhoCanMeetSim({ E }) {
          ⭐ 사실은 정확했는데 **어법이 허용형**이라 「안 해도 그만」으로 읽힌 것이다.
          필요형으로 뒤집는다 — 글자 수 ±0. 새 걸음·새 예제 없음.
          근거: memory/feedback_show_the_failed_first_try.md */
+      /* ⭐ pedagogy 판정 2026-10-01 「5개 중 가장 먼저 고칠 것」 — 선생님이 **세 번** 물으신
+           「안 묶으면 뭐가 깨지나」의 답이 이 문장인데, 말투만 허용형 → 필수형으로 두 번
+           고쳐지고도 **화면에서 다른 문장과 구분된 적이 한 번도 없었다.**
+           바로 아래 걸음의 🚫 상자가 이 주장을 증명하는 구조라, 주장이 안 보이면
+           증명도 「뭘 증명하는지」 모른 채 지나간다. */
+      emKo: "3 끼리만 봐야 해요",
+      emEn: "we must handle the 3s on their own",
       ko: "이제 4 는 절대 안 겹쳐서 — 3 끼리만 봐야 해요.\n첫째 3 은 맨 앞이라 그대로예요.",
       en: "4 can never overlap, so we must handle the 3s on their own.\nThe first 3 is at the front, so it stays." },
 
@@ -510,7 +547,7 @@ export function WhoCanMeetSim({ E }) {
         title={t(E, "Which values can ever overlap?", "누가 누구와 겹칠 수 있나")}
  />
       <StepFade fast k={ts.safe}>
-        <Say tone={s.tone}>{t(E, s.en, s.ko)}</Say>
+        <Say tone={s.tone}><Em text={t(E, s.en, s.ko)} em={t(E, s.emEn, s.emKo)} /></Say>
 
         <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
           {s.tiles.map((v, i) => (

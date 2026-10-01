@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getMakeDistinctSections, getMakeDistinctWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { CodeBlock } from "@/components/quest/shared";
+import { Hi, CodeBlock } from "@/components/quest/shared";
 import { PlaceOneByOneSim, WhoCanMeetSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -29,9 +29,16 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
+              {/* ⭐ pedagogy 판정(2026-10-01) — 1쪽에서 **강조가 0 인 유일한 상자**였다.
+                     바로 아래 📖 문제 상자는 불릿 다섯이 색·굵기로 또렷한데, 「이게
+                     **최소화** 문제다」라는 가장 중요한 사실만 밋밋했다. 그러면 뒤의
+                     정렬·묶기·나눗셈이 전부 「왜 굳이 이렇게까지」로 읽힌다.
+                   ⛔ 한 상자에 한 곳만 — `check-emphasis` 의 「다 굵으면 강조가 아니다」. */}
               {t(E,
-                "Some numbers are given, and one number K.\nWe may pick any number and add K to it, as many times as we like.\nMake them all different — and do it in as few adds as possible. Print that count.",
-                "수가 몇 개 있고, 더할 수 K 가 하나 주어져요.\n우리는 아무 수나 골라서 K 를 더할 수 있어요. 몇 번이든요.\n모든 수가 서로 달라지게 만들되, 더한 횟수가 가장 적어야 해요. 그 횟수를 구해요.")}
+                "Some numbers are given, and one number K.\nWe may pick any number and add K to it, as many times as we like.\nMake them all different — and do it in ",
+                "수가 몇 개 있고, 더할 수 K 가 하나 주어져요.\n우리는 아무 수나 골라서 K 를 더할 수 있어요. 몇 번이든요.\n모든 수가 서로 달라지게 만들되, ")}
+              <Hi>{t(E, "as few adds as possible", "더한 횟수가 가장 적어야 해요")}</Hi>
+              {t(E, ". Print that count.", ". 그 횟수를 구해요.")}
             </div>
           </div>
 
