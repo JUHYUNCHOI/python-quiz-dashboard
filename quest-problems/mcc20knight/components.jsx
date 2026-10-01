@@ -80,10 +80,14 @@ export function KnightExactSim({ E }) {
             "칸을 눌러 목표를 골라요. 그 칸까지 최소 이동이 나와요.\n그다음 K 를 바꿔 봐요.\n초록이면 정확히 K 번에 도착할 수 있다는 뜻이에요.")}
         </div>
 
-        {/* 🐛 2026-10-01 — **K 버튼이 격자·캡션 아래에 있어 첫 화면(스크롤 0)에 안 보였다.**
+        {/* 🐛 2026-10-01 — **K 버튼이 격자·캡션 아래에 있어 하단 고정 바에 먹혔다.**
+            실측(모바일 375×812, 스크롤 0): 격자가 456~**740px**, 하단 고정 바
+            (「◀ 이전 쪽 / 다음 쪽 ▶ / 목록」)가 **745~812px**. 옛 순서에서는 K 스테퍼가
+            격자·캡션 **뒤**라 752px 이후에 놓였고 — **바 안쪽이다.**
             3쪽은 *"그다음 K 를 바꿔 봐요"* 라고 시키는데, 그 자리를 누르면 K 가 아니라
-            하단 고정 바의 「다음 쪽 ▶」이 눌려 **쪽이 넘어갔다** — 시키는 대로 했더니
-            그 쪽을 잃는다. 형제 `mcc20citytour` 와 같은 순서로 **조작을 격자 위에** 둔다. */}
+            「다음 쪽 ▶」이 눌려 **쪽이 넘어갔다** — 시키는 대로 했더니 그 쪽을 잃는다.
+            → 형제 `mcc20citytour` 와 같은 순서로 **조작을 격자 위에** 둔다.
+            고친 뒤 실측: 스테퍼 **414~444px**, 눌러서 K 2 → 3, 쪽은 3/5 그대로. */}
         {/* K stepper */}
         <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
           <span style={{ fontSize: 12.5, color: "#1e3a8a", fontWeight: 700 }}>K =</span>
@@ -460,13 +464,17 @@ export function Mcc20KnightBfsProcessStepper({ E }) {
   const trace = useMemo(() => buildKnightBfsTrace(E), [E]);
   const { safe, setIdx: rawSetIdx, total, step } = useTraceStep(trace, "mcc20knight-bfs");
   const st = step || trace[0];
-  /* 🐛 2026-10-01 — **5걸음째부터 말풍선이 화면 밖으로 밀렸다.** 걸음을 누르는 버튼이
-     시뮬 맨 아래에 있어서, 눌러 가다 보면 말풍선(시뮬 맨 위)이 상단 고정 바 둘
-     (헤더 + quest 바, 0~105px)에 먹히거나 아예 위로 사라진다. 형제 `mcc20citytour`
-     가 2026-09-27 에 **바로 이 버그**를 고친 방법을 그대로 가져온다
+  /* 🐛 2026-10-01 — **걸음을 눌러 가면 말풍선이 화면 위로 밀려 사라졌다.** 걸음 버튼이
+     시뮬 맨 아래, 말풍선이 맨 위라 누를수록 말풍선이 위로 올라간다. 형제
+     `mcc20citytour` 가 2026-09-27 에 같은 모양을 고친 방법을 그대로 가져온다
      (`mcc20citytour/components.jsx` 의 `SAFE_TOP` + `scrollBy`).
-     z 를 올려 고정 바를 덮는 건 더 나쁘다 — 걸음을 누르면 화면을 맞춰 준다.
-     ⚠️ 복원값에는 안 건다 — 학생이 **직접 누른 뒤**에만 움직인다(`touched`). */
+     🔧 **정정: citytour 주석의 「상단 고정 바 둘(0~105px)」은 이제 사실이 아니다.**
+       오늘 좌표로 다시 재니 quest 화면에 **위쪽 고정/스티키 요소가 0개**다 —
+       전역 Header 를 quest 안에서 sticky 해제한 `41c522bd`(2026-09-27) 때문이다.
+       그래서 `SAFE_TOP` 은 「바를 피하는 값」이 아니라 **「화면 위 끝에서 이만큼
+       떨어뜨린다」**는 뜻이다. 동작은 그대로 맞고, 이유만 바로잡는다.
+     ⚠️ 복원값에는 안 건다 — 학생이 **직접 누른 뒤**에만 움직인다(`touched`).
+     실측(모바일 375): 걸음 3~14 전부 말풍선 top=161 — 밀려 사라지는 걸음 0개. */
   const [touched, setTouched] = useState(false);
   const setIdx = (n) => { setTouched(true); rawSetIdx(n); };
   const simRef = useRef(null);
@@ -474,7 +482,7 @@ export function Mcc20KnightBfsProcessStepper({ E }) {
     if (!touched) return;
     const el = simRef.current;
     if (!el || typeof window === "undefined") return;
-    const SAFE_TOP = 118;            // 고정 바 105px + 숨 쉴 자리
+    const SAFE_TOP = 118;            // 화면 위 끝에서 떨어뜨릴 거리 (위 주석 참고)
     const r = el.getBoundingClientRect();
     if (r.bottom < 0 || r.top > window.innerHeight) return;   // 시뮬이 화면 밖이면 건드리지 않는다
     if (r.top >= SAFE_TOP) return;                            // 이미 잘 보인다
