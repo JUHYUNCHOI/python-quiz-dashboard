@@ -324,7 +324,10 @@ export function makeMcc20MissingCh1(E) {
                 적어 두던 자리다. 원문(public/problems/mcc20missing.pdf)은
                 N = 5 / Numbers = [-1, 7, 4, 1] 처럼 값을 변수로 준다. */}
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• <b>N</b> — {t(E, "the sizes were 1..N", "크기는 1 부터 N 까지였어요")}</div>
+              {/* ⛔ 2026-10-01 — 여기가 「크기」의 **첫 등장**인데 정의가 1-3쪽(시뮬)에 있었다.
+                     PM 이 등장 순서를 세어 잡았다 — 정의보다 먼저 쓰이는 자리는 여기 하나뿐.
+                     쪽을 넘기면 앞 쪽은 사라지니 설명을 뒤로 미루지 말고 **이 줄 안에서** 밝힌다. */}
+              <div>• <b>N</b> — {t(E, "before signs, the sizes were 1..N", "부호를 붙이기 전 크기가 1 부터 N 까지였어요")}</div>
               <div>• <b>Numbers</b> — {t(E, "the N−1 numbers that are left", "남아 있는 수 N−1 개")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
