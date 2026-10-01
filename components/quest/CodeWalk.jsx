@@ -104,20 +104,66 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
   //  바뀌어도 안 깨지게.)
   const boxRef = useRef(null);
   const inlineBubbleRef = useRef(null);
+
+  /* ⚠️ 2026-10-01 — 코드창 높이가 `min(64vh, 560px)` 고정값이었다. 이 값은 "화면에서
+     얼마나 크게 보여줄까" 만 생각했지, **이 창이 페이지에서 어디서 시작하는지**는
+     전혀 모른다. 머리말(미션 카드·진행 막대·변수 범례 등)이 긴 quest 는 창이 화면
+     아래쪽에서 시작하고, 그러면 창 **맨 위**(= 1번째 걸음 말풍선이 뜨는 그 자리)가
+     하단 고정 바 바로 앞까지 내려온다. `xorstring` 1번째 걸음 — 모듈러 역원을
+     mod 5 로 손풀이하는 7줄짜리 긴 말풍선 — 이 바로 그 경우였다(실측 모바일 375:
+     창 top=491, 말풍선 506~769, 바 745~812 → **24px 먹힘**). 말풍선은 창 **안**에
+     있어 창의 내부 스크롤로는 안 잘리는데, 창 자체가 바 자리까지 내려와 있어서
+     바깥 고정 바에 가려졌다 — `SimShell`(TraceStepper.tsx)이 "이 상자가 화면
+     어디서 시작하나 — 재야만 안다" 로 푼 것과 **같은 층의 문제**다. 같은 방식으로
+     푼다: 창의 실제 top 과 `.quest-navbar` 높이를 재서, 그 사이에 들어갈 만큼만
+     창을 키운다. 머리말이 짧은 보통 quest 는 `min(64vh,560px)` 와 큰 차이가 없고
+     (상한은 그대로 560 유지), 머리말이 긴 quest 만 창이 조금 작아지며 그 안에서
+     문제없이 스크롤된다 — 코드가 안 잘리는 건 원래도 내부 스크롤이 보장했다.
+     ⚠️ 이 state 는 **scrollTop 이펙트보다 먼저** 선언돼야 한다 — 그 이펙트가
+     `fitBoxH` 를 의존 배열에 쓴다(창 높이가 늦게 측정돼 적용되면 다시 스크롤을
+     맞춰야 하므로). 선언 순서를 바꾸면 TDZ 에러가 난다. */
+  const [fitBoxH, setFitBoxH] = useState(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const measure = () => {
+      const box = boxRef.current;
+      if (!box) return;
+      const bar = document.querySelector(".quest-navbar");
+      const navH = bar ? bar.getBoundingClientRect().height : 78;
+      const top = box.getBoundingClientRect().top;
+      const avail = window.innerHeight - top - navH - 16; // 숨 쉴 틈
+      /* ⚠️ 바닥을 220 으로 뒀더니(1차 시도) 머리말이 **극단적으로 긴** 경우(영어·
+         모바일의 xorstring 1걸음, avail=171)엔 바닥이 avail 보다 커서 **바닥 자체가
+         창을 다시 바 쪽으로 밀어 넣었다**(실측 33px 먹힘). 바닥은 "그래도 몇 줄은
+         보이게" 가 목적이지 avail 을 이겨선 안 된다 — 박스 자체에 이미 있는
+         `minHeight:140` 과 맞춘다. avail 이 그보다 크면(거의 항상) 그대로 avail 을 쓴다. */
+      setFitBoxH(Math.min(560, Math.max(140, Math.round(avail))));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
   useEffect(() => {
     const box = boxRef.current;
     const bub = inlineBubbleRef.current;
     if (!box || !bub) return;
     const lineRow = bub.nextElementSibling;               // 말풍선 바로 다음 = 밝아진 첫 줄
     const lineH = lineRow ? lineRow.offsetHeight : 27;     // 실측 줄 높이(px), 못 재면 대략값
-    const margin = lineH * 3;                              // 위로 대략 3줄 여유
+    /* ⚠️ 2026-10-01 — 창이 (위 `fitBoxH` 로) 낮아진 quest 에서, 말풍선 자체가
+       길면(7줄짜리 모듈러 역원 예시 등) "위로 3줄 여유" 를 다 쓰고 나서도
+       말풍선 아래쪽이 창 자신의 바닥에 또 잘렸다(sumk·buymilk 실측). 창이
+       넉넉할 땐 3줄 여유가 맞지만, **말풍선 키가 창 키에 육박하면** 그 여유부터
+       줄여서 말풍선 쪽에 자리를 더 준다 — 평소(짧은 말풍선)엔 그대로 3줄. */
+    const bubH = bub.offsetHeight;
+    const margin = Math.min(lineH * 3, Math.max(0, box.clientHeight - bubH - lineH));
     box.scrollTop = Math.max(0, bub.offsetTop - margin);
     // ⚠️ 2026-09-18: 학생이 코드 왼쪽이 잘려 보인다고 했다 — 줄 번호도, 말풍선 첫 낱말도.
     //    `import sys` 가 `mport sys` 로. 세로만 맞추고 **가로는 그대로 뒀기** 때문이다.
     //    긴 줄을 보려고 오른쪽으로 민 상태에서 다음 조각으로 넘어가면 그대로 밀린 채 남는다.
     //    조각이 바뀌면 줄 머리부터 보여야 한다.
     box.scrollLeft = 0;
-  }, [safeIdx, lo]);
+  }, [safeIdx, lo, fitBoxH]);
 
   /* ⚠️ 2026-09-28: **말풍선이 하단 고정 바(`.quest-navbar`)에 가려 안 보이는** 버그.
      학생 셋이 각각 보고(strangefn·makedistinct) — 재검증 학생: "7/8, 8/8 걸음의
@@ -297,7 +343,7 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
         // ⚠️ 2026-09-18 선생님: *"코드 보는 곳에 너무 좁다는 생각은 나만 하는건가?"*
         // 740px · 380px 이었다. 수업은 노트북·패드(큰 화면)에서 하는데 코드가 한가운데
         // 좁은 칸에 갇혀 세로로만 흘렀다. 넓히고 키운다. (끌어서 더 늘리는 건 그대로.)
-        height: "min(64vh, 560px)",
+        height: fitBoxH != null ? `${fitBoxH}px` : "min(64vh, 560px)",
         maxHeight: "none",
         minHeight: 140,
         resize: "vertical",

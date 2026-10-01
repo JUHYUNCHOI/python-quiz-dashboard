@@ -275,13 +275,49 @@ export function SimShell({
   maxHeightCss = "calc(100dvh - 340px)",
   pad = 16,
 }: SimShellProps) {
+  /* ⚠️ 2026-10-01 — `maxHeightCss` 고정값(기본 340px, sumk 는 360/400px 로 손으로 더 조정)은
+     quest 마다 이 상자 **위**에 있는 것(제목·탭·미션 카드·풀이 방법 칩)의 높이가 달라서
+     계속 어긋난다. ux 실측: sumk(기본값보다 더 넉넉히 튜닝한 400px 로도) 3단계부터
+     **100% 겹침**, mcc22birthday(기본 340px, 튜닝 없음) 9쪽에서 **100% 겹침** — 숫자를
+     더 키워도 "이 quest 가 얼마나 큰 머리말을 지녔나" 를 모르면 또 틀린다
+     (`feedback_*` 류가 경고하는 "고정 숫자로 막으면 내용이 자라는 순간 다시 터진다"가
+     여기서도 그대로 반복됐다 — sumk 주석에 이미 쓰여 있던 바로 그 경고였다).
+     실제로 쓸 수 있는 공간은 **이 상자가 화면 어디서 시작하나 — 재야만** 안다.
+     `CodeWalk.jsx` 가 이미 같은 문제(하단 고정 바 `.quest-navbar`)를 JS 측정(`navGap`)으로
+     풀고 있다 — 같은 값을 여기서도 그대로 읽는다(한 바를 두 벌로 재지 않는다).
+     박스의 **위쪽 시작점**은 이 SimShell 보다 앞에 있는 페이지 내용(머리말 등)에만
+     좌우되고 내부 idx 에는 좌우되지 않으므로, 마운트 1회 + resize 로 충분하다 — 그래도
+     만약을 대비해 idx·total 변화에도 다시 잰다(비용이 작다).
+     `maxHeightCss` 는 JS 측정이 아직 없는 **첫 프레임 폴백**으로만 남긴다. */
+  const boxRef = useRef<HTMLDivElement>(null);
+  const navWrapRef = useRef<HTMLDivElement>(null);
+  const [measuredMaxH, setMeasuredMaxH] = useState<number | null>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const measure = () => {
+      const box = boxRef.current;
+      if (!box) return;
+      const bar = document.querySelector(".quest-navbar");
+      const navH = bar ? bar.getBoundingClientRect().height : 78;
+      const navWrap = navWrapRef.current;
+      const navWrapH = navWrap ? navWrap.getBoundingClientRect().height : 70;
+      const top = box.getBoundingClientRect().top;
+      const avail = window.innerHeight - top - navWrapH - navH - 8; // 8px 숨 쉴 틈
+      setMeasuredMaxH(Math.max(minHeight, Math.round(avail)));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [idx, total, minHeight]);
+
   return (
     <div style={{ padding: pad, display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
       <div
+        ref={boxRef}
         style={{
           height: "auto",
           minHeight,
-          maxHeight: maxHeightCss,
+          maxHeight: measuredMaxH != null ? `${measuredMaxH}px` : maxHeightCss,
           overflowY: "auto",
           overflowX: "hidden",
           transition: "height 260ms cubic-bezier(.4,0,.2,1)",
@@ -289,7 +325,7 @@ export function SimShell({
       >
         {children}
       </div>
-      <div style={{ paddingTop: 14 }}>
+      <div ref={navWrapRef} style={{ paddingTop: 14 }}>
         <SimNav idx={idx} total={total} onIdx={onIdx} accent={accent} isEn={isEn} showLabels={showLabels} />
       </div>
     </div>

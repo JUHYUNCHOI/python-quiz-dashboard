@@ -203,8 +203,41 @@ function renderInlineCode(text: string, keyPrefix: string): React.ReactNode {
 }
 
 export function Quiz({ question, hint, options, correct, explain, answered, onAnswer }: QuizProps) {
+  /* ⚠️ 2026-10-01 — 답을 고르면 버튼에 ✅/❌ 가 붙고 `explain` 상자가 뜨는데,
+     **화면 밖으로 떨어지면 둘 다 자동으로 보여주지 않는다.** 재현: 320×568(구형·
+     보급형폰) 에서 `explain` 상자가 뷰포트 **완전히 아래**(y 583~650, innerHeight 568)
+     라 스크롤 없인 안 보인다. 375×812 이상에선 안 겹치지만, 그보다 작은 화면·
+     가로모드에서는 똑같이 날 수 있다 — "맞았는지 안 보였다" 보고와 일치하는 층이다.
+     `NarrativePanel`(TraceStepper.tsx) 이 이미 같은 문제를 "완전히 안 보일 때만
+     살짝 끌어올린다" 로 풀고 있다 — 같은 안전장치로 맞춘다: **화면에 이미 보이면
+     절대 안 움직인다**(불필요한 점프 방지), **answered 가 null→값으로 바뀐 바로
+     그 순간에만** 본다(다시 렌더될 때마다 X). quest 180개가 쓰는 공유 컴포넌트라
+     "진짜 안 보일 때만" 으로 최대한 보수적으로 짰다. */
+  const rootRef = useRef<HTMLDivElement>(null)
+  const prevAnswered = useRef<number | null>(null)
+  useEffect(() => {
+    const justAnswered = prevAnswered.current == null && answered != null
+    prevAnswered.current = answered ?? null
+    if (!justAnswered) return
+    const node = rootRef.current
+    if (!node) return
+    const id = window.requestAnimationFrame(() => {
+      const rect = node.getBoundingClientRect()
+      // 화면 맨 아래는 고정 바(`.quest-navbar`)가 차지한다 — 그 높이만큼은
+      // "보인다" 로 치지 않는다. 안 재지면(없으면) 기본 바 높이로 어림잡는다.
+      // ⚠️ `scrollIntoView({block:"end"})` 는 **뷰포트 진짜 끝**에 맞출 뿐 고정
+      // 바를 모른다 — 그래서 직접 델타를 계산해 그만큼 더 올린다.
+      const bar = document.querySelector(".quest-navbar")
+      const barH = bar ? bar.getBoundingClientRect().height : 78
+      const target = window.innerHeight - barH - 10
+      if (rect.bottom > target) {
+        window.scrollBy({ top: rect.bottom - target, behavior: "smooth" })
+      }
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [answered])
   return (
-    <div className="p-4">
+    <div className="p-4" ref={rootRef}>
       <div className="text-sm font-bold mb-3 text-gray-800">{renderInline(question)}</div>
       {hint && (
         <div className="text-xs font-semibold mb-2 text-amber-600">💡 {renderInline(hint)}</div>

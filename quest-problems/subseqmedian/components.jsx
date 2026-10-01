@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -100,6 +100,38 @@ export function SubseqMedianSim({ E }) {
     return { ...base, borderColor: C.border, background: "#fff", color: "#9ca3af" };
   };
 
+  /* ⚠️ 2026-10-01 — 이 카드(배열 + 범례 + 가운데별 설명 + 원장)가 위쪽 머리말
+     (풀이 방법 칩·진행 막대·미션 문구)과 합쳐지면, 모바일(390×844)에서 **스크롤도
+     안 한 첫 화면**에 이미 원장 박스 끝부분이 하단 고정 바(`.quest-navbar`)와
+     겹친다 — 결론을 증명하는 "모든 위치를 가운데로 삼아 더하면" 표 4행 중
+     3행이 그 자리에서 가려졌다(ux 실측, y 744~906 ↔ 바 776~844).
+     그 아래로 계속 스크롤하면 결국 다 보이긴 하지만(문서 끝까지 내리면 0%),
+     그 전까진 "증명표가 끊겼다" 로 보인다.
+     `SimShell`(components/quest/TraceStepper.tsx)이 같은 문제(하단 고정 바 앞의
+     시뮬 내용)를 "이 박스가 화면 어디서 시작하나 — JS 로 재서" 푼 것과 같은
+     방식을 여기 적용한다 — 이 카드는 SimNav 가 없는 정적 카드라 `SimShell` 을
+     그대로 쓸 수 없어, 같은 측정 아이디어만 가져와 직접 캡을 씌운다.
+     공간이 진짜로 부족하면(머리말이 큰 quest) 카드 **안에서** 스크롤되고,
+     공간이 넉넉하면(데스크탑 등) 평소처럼 자연스러운 높이 그대로 보인다. */
+  const cardRef = useRef(null);
+  const [cardMaxH, setCardMaxH] = useState(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const measure = () => {
+      const box = cardRef.current;
+      if (!box) return;
+      const bar = document.querySelector(".quest-navbar");
+      const navH = bar ? bar.getBoundingClientRect().height : 78;
+      const top = box.getBoundingClientRect().top;
+      const avail = window.innerHeight - top - navH - 10;
+      // 너무 작게 눌리면(머리말이 과하게 큰 극단치) 최소한 두어 줄은 보이게 바닥을 둔다.
+      setCardMaxH(Math.max(120, Math.round(avail)));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [pi]);
+
   return (
     <div style={{ padding: 14, ...KA }}>
       {/* preset picker */}
@@ -118,6 +150,13 @@ export function SubseqMedianSim({ E }) {
              "칸을 눌러 가운데(중앙값)로 삼아봐요. 그 다음 양옆을 살펴봐요.")}
       </div>
 
+      {/* the array + legend + per-center box + ledger — capped so it never
+          straddles the fixed bottom bar (ref measured above). */}
+      <div ref={cardRef} style={{
+        maxHeight: cardMaxH != null ? `${cardMaxH}px` : "none",
+        overflowY: cardMaxH != null ? "auto" : "visible",
+        overflowX: "hidden",
+      }}>
       {/* the array */}
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 6, flexWrap: "wrap" }}>
         {arr.map((val, j) => (
@@ -170,6 +209,7 @@ export function SubseqMedianSim({ E }) {
           <span style={{ color: "#fbbf24" }}>{t(E, "SUM", "합")}</span>
           <span style={{ color: "#34d399" }}>{grand}</span>
         </div>
+      </div>
       </div>
 
       <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", ...KA }}>
