@@ -116,22 +116,45 @@ function WrongWay({ E }) {
         <span style={{ fontSize: 19, color: "#b91c1c" }}>9</span>
       </div>
 
-      {/* 그런데 4 는 9 에 갈 수 없다 — 갈 수 있는 수를 나란히 둔다 */}
+      {/* ⛔ 2026-10-01 학생(초6) 재검증 — 이 상자가 **주장만** 하고 있었다:
+             *"「횟수가 5회가 된다」는 **계산 과정이 화면에 전혀 없었다.** 어떻게 5가 나왔는지는
+               **못 하겠다** — 나는 계산을 재현 못 했다."*
+             *"「3,5,7 다음 자리니까 7에 2를 더해서 9」라고 나는 **추측**했다."*
+           ⭐ pedagogy 판정 — **나눗셈 한 줄이 두 질문에 동시에 답한다.**
+             3쪽이 이미 가르친 **「거리 ÷ K」** 를 그대로 다시 쓰기 때문이다. 거기선 늘
+             딱 나눠졌는데 **여기서 처음 안 나눠진다** — 「4 는 9 에 못 간다」가
+             학생이 **이미 배운 산수**로 말해진다.
+           ⚠️ 그래서 옛 줄(「4 가 갈 수 있는 수 4 → 6 → 8 → 10 …」)과는 **둘 중 하나만** 둔다.
+             둘 다 두면 같은 말을 두 번 한다 — **바꿔 끼운다, 더하지 않는다.**
+           검증: python-qa 가 **독립으로** 검산해 내 손계산과 일치했다 —
+             안 묶으면 `4 → 9`, `(9−4) ÷ 2 = 2.5`, 코드는 2 로 뭉갠다, 합 5(묶으면 3).
+             무작위 3000건 중 **855건(28.5%)** 이 브루트포스와 갈렸고 그 855건이
+             **「나누어떨어지지 않는 나눗셈이 난 경우」와 정확히 1:1 일치**한다.
+             ⛔ 그 통계는 **화면에 안 올린다** — 초6 에게 검증 불가능한 숫자이고,
+               한 문장짜리 일반화는 `feedback_one_case_cannot_claim_always` 와 같은 모양이 된다.
+               상자의 말은 **이 예제에만 한정**돼 있다(일반화 주장 없음). 근거는 커밋에 남긴다. */}
       <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap",
         fontSize: 12.5, color: "#1e3a8a", marginBottom: 7 }}>
-        <span style={{ fontWeight: 700 }}>{t(E, "4 can go to", "4 가 갈 수 있는 수")}</span>
-        <span style={{ fontSize: 14.5, color: "#065f46", ...mono }}>4 → 6 → 8 → 10 …</span>
+        <span style={{ fontWeight: 700 }}>{t(E, "To reach 9", "9 로 가려면")}</span>
+        <span style={{ fontSize: 14.5, color: "#334155", ...mono }}>(9 − 4) ÷ 2 = 2.5</span>
+        <span style={{ fontSize: 11.5, color: "#7f1d1d" }}>
+          {t(E, "not a whole number — it can't get there", "정수가 아니에요 — 밀 수 없어요")}
+        </span>
       </div>
 
-      <div style={{ fontSize: 13, lineHeight: 1.7, color: "#7f1d1d", fontWeight: 600 }}>
+      <div style={{ fontSize: 13, lineHeight: 1.7, color: "#7f1d1d", fontWeight: 600,
+        whiteSpace: "pre-line" }}>
         {t(E, "So 4 ", "그래서 4 는 ")}
         <b style={{ color: "#b91c1c", fontSize: 14 }}>
           {t(E, "can never become 9", "9 에 못 가요")}
         </b>
-        {t(E, " — this plan cannot happen. And the count comes out ",
-             " — 이건 할 수 없는 계획이에요. 횟수도 ")}
-        <b style={{ color: "#b91c1c", fontSize: 14 }}>{t(E, "5, not 3", "3 회가 아니라 5 회")}</b>
-        {t(E, ".", "로 나와요.")}
+        {t(E, " — this plan cannot happen.\nAnd the count comes out to ",
+             " — 이건 할 수 없는 계획이에요.\n횟수도 ")}
+        {/* ⭐ `0 + 1 + 2 + 2` 는 **새 숫자가 아니다** — 0·1·2 는 학생이 걸음 7~9 에서
+               직접 본 값이고, 마지막 2 만 「안 묶었을 때 깨진 한 번」이다.
+               강조는 여전히 **두 곳**이다(`check-emphasis` 의 「다 굵으면 강조가 아니다」). */}
+        <b style={{ color: "#b91c1c", fontSize: 14 }}>{t(E, "0 + 1 + 2 + 2 = 5", "0 + 1 + 2 + 2 = 5")}</b>
+        {t(E, " (3, if grouped).", " (묶었으면 3) 로 나와요.")}
       </div>
     </div>
   );

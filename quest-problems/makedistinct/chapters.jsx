@@ -127,7 +127,8 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ T ≤ 10</div>
               <div>1 ≤ N ≤ 200,000</div>
-              <div>−N ≤ K ≤ N,  K ≠ 0</div>
+              <div>−N ≤ K ≤ N,  K ≠ 0 <span style={{ color: "#64748b", fontSize: 11 }}>
+                {t(E, "(K is never 0)", "(K 는 0 이 아니라는 뜻이에요)")}</span></div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "each number is between 1 and N  ·  all N added together ≤ 1,000,000", "수는 1 부터 N 사이  ·  N 을 다 더해도 1,000,000 을 안 넘어요")}</div>
             </div>
             {/* 2026-09-30 학생: "N 이 「개수」와 「값의 상한」 두 뜻으로 쓰이는데
