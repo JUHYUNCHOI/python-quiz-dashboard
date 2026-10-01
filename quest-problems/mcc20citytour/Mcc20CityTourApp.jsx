@@ -6,6 +6,7 @@ import { Mcc20CityTourProgressiveCode, downloadMcc20CityTourPDF, getMcc20CityTou
 import { makeMcc20CityTourCh1, makeMcc20CityTourCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#d97706";
 
 export default function Mcc20CityTourApp(props = {}) {
@@ -149,6 +150,12 @@ export default function Mcc20CityTourApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🗺️", ko: "방문 표와 시작점 두기", en: "Mark the start" },
+          { icon: "🔁", ko: "가까운 칸부터 퍼뜨리기", en: "Spread to nearest cells first" },
+          { icon: "📏", ko: "높이차가 작은지 확인", en: "Check the height gap" },
+          { icon: "🔢", ko: "방문한 칸 세기", en: "Count visited cells" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

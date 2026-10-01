@@ -6,6 +6,7 @@ import { Mcc21MarblesProgressiveCode, downloadMcc21MarblesPDF, getMcc21MarblesSe
 import { makeMcc21MarblesCh1, makeMcc21MarblesCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#dc2626";
 
 export default function Mcc21MarblesApp(props = {}) {
@@ -133,6 +134,11 @@ export default function Mcc21MarblesApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "➖", ko: "상자마다 차이 구하기", en: "Find the gap per box" },
+          { icon: "🔄", ko: "왼쪽부터 밀어 나가기", en: "Carry it forward" },
+          { icon: "➕", ko: "옮긴 양 다 더하기", en: "Add up everything moved" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

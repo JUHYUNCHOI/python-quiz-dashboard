@@ -7,6 +7,7 @@ import { makeGiftsCh1, makeGiftsCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#d97706";
 
 export default function GiftsApp(props = {}) {
@@ -130,6 +131,11 @@ export default function GiftsApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🏷️", ko: "등급과 도착 순서로 묶어 정렬", en: "Sort by tier, then arrival" },
+          { icon: "🎁", ko: "앞에서 m 명만 표시", en: "Mark the first m" },
+          { icon: "🖨️", ko: "손님 번호 순서로 출력", en: "Print in original order" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

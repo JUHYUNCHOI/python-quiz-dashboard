@@ -6,6 +6,7 @@ import { Mcc21DvdProgressiveCode, Mcc21DvdBounceSim, downloadMcc21DvdPDF, getMcc
 import { makeMcc21DvdCh1, makeMcc21DvdCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#d97706";
 
 export default function Mcc21DvdApp(props = {}) {
@@ -131,6 +132,11 @@ export default function Mcc21DvdApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🧭", ko: "가로와 세로를 따로 풀기", en: "Solve each axis separately" },
+          { icon: "🔁", ko: "되풀이 주기 찾기", en: "Find the repeating period" },
+          { icon: "📐", ko: "공식으로 위치 계산", en: "Compute the position by formula" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

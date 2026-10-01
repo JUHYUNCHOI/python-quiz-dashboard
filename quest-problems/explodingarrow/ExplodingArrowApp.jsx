@@ -7,6 +7,7 @@ import { ExplodingArrowProgressiveCode, downloadExplodingArrowPDF, getExplodingA
 import { makeExplodingArrowCh1, makeExplodingArrowCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#f97316";
 
 export default function ExplodingArrowApp(props = {}) {
@@ -137,6 +138,12 @@ export default function ExplodingArrowApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🎯", ko: "정답 후보를 반씩 좁히기", en: "Halve the answer range" },
+          { icon: "🧮", ko: "가능한지 검사하는 함수 만들기", en: "Write a feasibility check" },
+          { icon: "👉", ko: "왼쪽부터 모자란 만큼 쏘기", en: "Sweep and fire the deficit" },
+          { icon: "📈", ko: "한 번의 효과를 구간 전체에 반영", en: "Apply one effect to a whole range" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

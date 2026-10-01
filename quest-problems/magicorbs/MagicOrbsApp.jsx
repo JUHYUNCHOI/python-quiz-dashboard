@@ -7,6 +7,7 @@ import { makeMagicOrbsCh1, makeMagicOrbsCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#8b5cf6";
 
 export default function MagicOrbsApp(props = {}) {
@@ -134,6 +135,11 @@ export default function MagicOrbsApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔢", ko: "작은 값부터 정렬", en: "Sort ascending" },
+          { icon: "✖️", ko: "두 배씩 커지는 가중치 주기", en: "Give doubling weights" },
+          { icon: "➕", ko: "가중치 곱한 값 다 더하기", en: "Add up weight x value" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

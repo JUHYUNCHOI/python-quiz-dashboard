@@ -7,6 +7,7 @@ import { Mcc19RectProgressiveCode, downloadMcc19RectPDF, getMcc19RectSections, g
 import { makeMcc19RectCh1, makeMcc19RectCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#059669";
 
 export default function Mcc19RectApp(props = {}) {
@@ -136,6 +137,10 @@ export default function Mcc19RectApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "👀", ko: "이웃한 두 수만 비교", en: "Compare neighbors only" },
+          { icon: "📉", ko: "가장 작은 차이 추적", en: "Track the smallest gap" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

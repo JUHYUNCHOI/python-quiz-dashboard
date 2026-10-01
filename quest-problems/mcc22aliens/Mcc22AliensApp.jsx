@@ -7,6 +7,7 @@ import { makeMcc22AliensCh1, makeMcc22AliensCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#2563eb";
 
 export default function Mcc22AliensApp(props = {}) {
@@ -132,6 +133,11 @@ export default function Mcc22AliensApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔁", ko: "거짓말쟁이 말 뒤집기", en: "Flip the liar's claim" },
+          { icon: "🧮", ko: "필요한 개수 세기", en: "Count what is required" },
+          { icon: "⚖️", ko: "개수만 비교", en: "Compare counts only" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

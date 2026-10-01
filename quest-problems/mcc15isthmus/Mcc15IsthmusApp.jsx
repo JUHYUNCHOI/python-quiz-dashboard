@@ -7,6 +7,7 @@ import { Mcc15IsthmusProgressiveCode, downloadMcc15IsthmusPDF, getMcc15IsthmusSe
 import { makeMcc15IsthmusCh1, makeMcc15IsthmusCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#2563eb";
 
 export default function Mcc15IsthmusApp(props = {}) {
@@ -132,6 +133,11 @@ export default function Mcc15IsthmusApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "➡️", ko: "왼쪽에서 오는 길이 재기", en: "Run length from the left" },
+          { icon: "⬅️", ko: "오른쪽에서 오는 길이 재기", en: "Run length from the right" },
+          { icon: "➕", ko: "양쪽 다 K 만큼 길면 세기", en: "Count when both sides are long enough" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

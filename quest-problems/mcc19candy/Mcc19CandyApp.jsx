@@ -7,6 +7,7 @@ import { makeMcc19CandyCh1, makeMcc19CandyCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#dc2626";
 
 export default function Mcc19CandyApp(props = {}) {
@@ -130,6 +131,11 @@ export default function Mcc19CandyApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "⏪", ko: "마지막 자리에서 거꾸로 시작", en: "Start from the last slot" },
+          { icon: "🔁", ko: "라운드 하나씩 되짚기", en: "Undo rounds one by one" },
+          { icon: "🔢", ko: "외친 말로 자리 계산", en: "Compute the slot from the shout" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

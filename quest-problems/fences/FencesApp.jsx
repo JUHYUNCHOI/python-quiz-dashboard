@@ -5,6 +5,7 @@ import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar
 import { RowColumnFillViz, ColumnCostAuditor } from "./components";
 import { makeFencesCh1, makeFencesCh2, makeFencesCh3 } from "./chapters";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#059669";
 
 export default function FencesApp(props = {}) {
@@ -115,6 +116,11 @@ export default function FencesApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "📥", ko: "격자 한 줄씩 읽기", en: "Read the grid row by row" },
+          { icon: "📊", ko: "열마다 점 개수 세기", en: "Count dots per column" },
+          { icon: "🔎", ko: "가장 적은 열 찾기", en: "Find the smallest column" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

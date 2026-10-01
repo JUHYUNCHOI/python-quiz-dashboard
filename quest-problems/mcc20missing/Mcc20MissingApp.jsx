@@ -7,6 +7,7 @@ import { Mcc20MissingProgressiveCode, downloadMcc20MissingPDF, getMcc20MissingSe
 import { makeMcc20MissingCh1, makeMcc20MissingCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#f97316";
 
 export default function Mcc20MissingApp(props = {}) {
@@ -132,6 +133,13 @@ export default function Mcc20MissingApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔎", ko: "가장 작은 값과 큰 값 찾기", en: "Find the smallest and largest" },
+          { icon: "🧩", ko: "K 후보 네 개 추리기", en: "Narrow K to 4 candidates" },
+          { icon: "↩️", ko: "K 를 빼서 크기로 되돌리기", en: "Undo the +K to get sizes" },
+          { icon: "✅", ko: "조건에 맞는지 확인", en: "Check it is valid" },
+          { icon: "➕", ko: "빠진 수 더하기", en: "Add the missing value" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

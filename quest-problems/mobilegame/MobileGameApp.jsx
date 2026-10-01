@@ -6,6 +6,7 @@ import { MobileGameProgressiveCode, MobileGameSim, downloadMobileGamePDF, getMob
 import { makeMobileGameCh1, makeMobileGameCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#d97706";
 
 export default function MobileGameApp(props = {}) {
@@ -131,6 +132,12 @@ export default function MobileGameApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "📶", ko: "적을 힘 순서로 정렬", en: "Sort enemies by power" },
+          { icon: "➕", ko: "지금 이길 수 있는 적 모으기", en: "Collect the beatable ones" },
+          { icon: "🔺", ko: "그중 가장 센 적부터 먹기", en: "Eat the strongest of those" },
+          { icon: "🛑", ko: "막히면 멈추고 판정", en: "Stop when stuck" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

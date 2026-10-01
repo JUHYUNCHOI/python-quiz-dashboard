@@ -7,6 +7,7 @@ import { makeMcc19DitcoinCh1, makeMcc19DitcoinCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#f97316";
 
 export default function Mcc19DitcoinApp(props = {}) {
@@ -134,6 +135,11 @@ export default function Mcc19DitcoinApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "⬅️", ko: "뒤에서부터 이후 최고가 구하기", en: "Best price later, from the right" },
+          { icon: "🪙", ko: "매일 코인 모으기", en: "Earn a coin daily" },
+          { icon: "💰", ko: "최고가인 날 전부 팔기", en: "Sell everything at the peak" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

@@ -6,6 +6,7 @@ import { Mcc15RectProgressiveCode, downloadMcc15RectPDF, getMcc15RectSections } 
 import { makeMcc15RectCh1, makeMcc15RectCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#059669";
 
 export default function Mcc15RectApp(props = {}) {
@@ -129,6 +130,11 @@ export default function Mcc15RectApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔍", ko: "짝 없는 가로 좌표 찾기", en: "Find the unmatched x" },
+          { icon: "🧭", ko: "짝 없는 세로 좌표 찾기", en: "Find the unmatched y" },
+          { icon: "📍", ko: "네 번째 점 만들기", en: "Build the 4th point" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

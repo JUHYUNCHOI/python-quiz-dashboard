@@ -7,6 +7,7 @@ import { Mcc15ChocoProgressiveCode, downloadMcc15ChocoPDF, getMcc15ChocoSections
 import { makeMcc15ChocoCh1, makeMcc15ChocoCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#8b5cf6";
 
 export default function Mcc15ChocoApp(props = {}) {
@@ -136,6 +137,11 @@ export default function Mcc15ChocoApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "📚", ko: "바를 쌓아 두기", en: "Stack the bars" },
+          { icon: "🔍", ko: "맨 위와 비교하기", en: "Check the top" },
+          { icon: "🤝", ko: "같으면 짝 맞춰 치우기", en: "Match and remove" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

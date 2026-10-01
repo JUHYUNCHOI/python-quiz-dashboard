@@ -7,6 +7,7 @@ import { SubseqMedianProgressiveCode, downloadSubseqMedianPDF, getSubseqMedianSe
 import { makeSubseqMedianCh1, makeSubseqMedianCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#059669";
 
 export default function SubseqMedianApp(props = {}) {
@@ -133,6 +134,12 @@ export default function SubseqMedianApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔢", ko: "값을 등수로 눌러 담기", en: "Compress values to ranks" },
+          { icon: "📐", ko: "원소마다 몫을 적어두기", en: "Track each element's share" },
+          { icon: "🔁", ko: "한 칸씩 늘려 더 긴 줄 세기", en: "Grow the chains one step at a time" },
+          { icon: "➕", ko: "몫을 다 더해 답 만들기", en: "Add up every share" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

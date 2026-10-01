@@ -7,6 +7,7 @@ import { makeMcc15BahasaCh1, makeMcc15BahasaCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#dc2626";
 
 export default function Mcc15BahasaApp(props = {}) {
@@ -136,6 +137,12 @@ export default function Mcc15BahasaApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔪", ko: "단어와 음절 쪼개기", en: "Split into syllables" },
+          { icon: "🔍", ko: "첫 자음 찾기", en: "Find the first consonant" },
+          { icon: "🔁", ko: "자음을 f 로 바꾸기", en: "Swap it for f" },
+          { icon: "🧵", ko: "메아리 이어 붙이기", en: "Append the echo" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

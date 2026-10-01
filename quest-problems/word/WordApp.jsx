@@ -5,6 +5,7 @@ import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar
 import { DistanceCalc, WordBuilder, GreedyTrace, MarginalGainSim } from "./components";
 import { makeWordCh1, makeWordCh2, makeWordCh3 } from "./chapters";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#3b82f6";
 
 export default function WordApp(props = {}) {
@@ -130,6 +131,12 @@ export default function WordApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "📊", ko: "단어마다 글자 횟수 세기", en: "Count letters per word" },
+          { icon: "🔁", ko: "가장 득 보는 글자 고르기", en: "Pick the most useful letter" },
+          { icon: "➕", ko: "고른 글자 답에 쌓기", en: "Add the chosen letter" },
+          { icon: "🔤", ko: "횟수만큼 늘어놓아 답 만들기", en: "Lay the letters out by count" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

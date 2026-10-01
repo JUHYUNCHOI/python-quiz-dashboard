@@ -7,6 +7,7 @@ import { Mcc22GrammarProgressiveCode, Mcc22GrammarSim, downloadMcc22GrammarPDF, 
 import { makeMcc22GrammarCh1, makeMcc22GrammarCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#059669";
 
 export default function Mcc22GrammarApp(props = {}) {
@@ -138,6 +139,11 @@ export default function Mcc22GrammarApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "📖", ko: "문법표는 문제에 박힌 값", en: "The grammar table is fixed" },
+          { icon: "✅", ko: "단어 자체가 맞는지 검사", en: "Check each word is valid" },
+          { icon: "🔗", ko: "이웃한 두 단어 검사", en: "Check each adjacent pair" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

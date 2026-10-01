@@ -6,6 +6,7 @@ import { Mcc15EqProgressiveCode, downloadMcc15EqPDF, getMcc15EqSections } from "
 import { makeMcc15EqCh1, makeMcc15EqCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#d97706";
 
 export default function Mcc15EqApp(props = {}) {
@@ -129,6 +130,11 @@ export default function Mcc15EqApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🧮", ko: "연산 하나 계산해 보기", en: "Try one operator" },
+          { icon: "🔁", ko: "네 연산 다 시도하기", en: "Try +, -, x, /" },
+          { icon: "✅", ko: "맞으면 바로 출력", en: "Print on match" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

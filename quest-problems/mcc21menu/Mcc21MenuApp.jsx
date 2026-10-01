@@ -6,6 +6,7 @@ import { Mcc21MenuProgressiveCode, downloadMcc21MenuPDF, getMcc21MenuSections } 
 import { makeMcc21MenuCh1, makeMcc21MenuCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#8b5cf6";
 
 export default function Mcc21MenuApp(props = {}) {
@@ -133,6 +134,11 @@ export default function Mcc21MenuApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔼", ko: "작은 층부터 정렬", en: "Sort smallest first" },
+          { icon: "✖️", ko: "곱을 이어서 유지하기", en: "Keep a running product" },
+          { icon: "➕", ko: "곱을 계속 더하기", en: "Add up each product" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

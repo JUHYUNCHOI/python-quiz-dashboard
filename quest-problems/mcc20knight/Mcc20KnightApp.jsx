@@ -6,6 +6,7 @@ import { Mcc20KnightProgressiveCode, downloadMcc20KnightPDF, getMcc20KnightSecti
 import { makeMcc20KnightCh1, makeMcc20KnightCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#2563eb";
 
 export default function Mcc20KnightApp(props = {}) {
@@ -133,6 +134,11 @@ export default function Mcc20KnightApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🐴", ko: "나이트가 가는 여덟 가지", en: "8 knight moves" },
+          { icon: "🔁", ko: "최소 이동 표 미리 구하기", en: "Pre-compute the min moves" },
+          { icon: "✅", ko: "최소보다 크고 짝수만큼 남나", en: "Enough moves, and an even leftover" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

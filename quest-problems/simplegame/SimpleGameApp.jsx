@@ -6,6 +6,7 @@ import { SimpleGameProgressiveCode, downloadSimpleGamePDF, getSimpleGameSections
 import { makeSimpleGameCh1, makeSimpleGameCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#dc2626";
 
 export default function SimpleGameApp(props = {}) {
@@ -129,6 +130,11 @@ export default function SimpleGameApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔗", ko: "합을 앞세워 쌍 묶기", en: "Tag each pair with its sum" },
+          { icon: "📊", ko: "합이 큰 순서로 정렬", en: "Sort by sum, biggest first" },
+          { icon: "🔁", ko: "번갈아 더하고 빼며 훑기", en: "Alternate adding and subtracting" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

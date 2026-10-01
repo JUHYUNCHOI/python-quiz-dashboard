@@ -6,6 +6,7 @@ import { Mcc21SimpleMathProgressiveCode, Mcc21SimpleMathOpSim, downloadMcc21Simp
 import { makeMcc21SimpleMathCh1, makeMcc21SimpleMathCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#f97316";
 
 export default function Mcc21SimpleMathApp(props = {}) {
@@ -131,6 +132,11 @@ export default function Mcc21SimpleMathApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔀", ko: "연산 종류별로 나눠 풀기", en: "Split by operation type" },
+          { icon: "🔢", ko: "더하기는 등장 횟수로", en: "Sum: count appearances" },
+          { icon: "✖️", ko: "곱하기는 묶어서 펼치기", en: "Product: expand the brackets" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

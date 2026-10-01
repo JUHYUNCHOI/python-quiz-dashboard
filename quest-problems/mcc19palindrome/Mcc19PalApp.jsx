@@ -7,6 +7,7 @@ import { Mcc19PalProgressiveCode, Mcc19PalSim, downloadMcc19PalPDF, getMcc19PalS
 import { makeMcc19PalCh1, makeMcc19PalCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#8b5cf6";
 
 export default function Mcc19PalApp(props = {}) {
@@ -134,6 +135,12 @@ export default function Mcc19PalApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "📏", ko: "길이별 개수로 길이 찾기", en: "Count by length" },
+          { icon: "🔢", ko: "그 안에서 몇 번째인지 구하기", en: "Find the rank inside" },
+          { icon: "🔁", ko: "K 진법으로 바꾸기", en: "Convert to base K" },
+          { icon: "🪞", ko: "거울처럼 뒤집어 붙이기", en: "Mirror to finish" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

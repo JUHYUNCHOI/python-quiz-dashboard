@@ -6,6 +6,7 @@ import { SumKProgressiveCode, downloadSumKPDF, getSumKSections } from "./compone
 import { makeSumKCh1, makeSumKCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#8b5cf6";
 
 export default function SumKApp(props = {}) {
@@ -129,6 +130,12 @@ export default function SumKApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔺", ko: "계수표 미리 만들기", en: "Precompute the coefficients" },
+          { icon: "🎒", ko: "지금까지의 합을 적어두기", en: "Track the sums so far" },
+          { icon: "➕", ko: "원소 넣을 때마다 표 갱신", en: "Update the table per element" },
+          { icon: "🏁", ko: "다 넣은 뒤 마지막 칸 읽기", en: "Read off the last entry" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

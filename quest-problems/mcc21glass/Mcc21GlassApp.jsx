@@ -6,6 +6,7 @@ import { Mcc21GlassProgressiveCode, downloadMcc21GlassPDF, getMcc21GlassSections
 import { makeMcc21GlassCh1, makeMcc21GlassCh2, makeMcc21GlassCh3 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#2563eb";
 
 export default function Mcc21GlassApp(props = {}) {
@@ -129,6 +130,13 @@ export default function Mcc21GlassApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔽", ko: "큰 것부터 정렬", en: "Sort largest first" },
+          { icon: "➕", ko: "제곱을 번갈아 더하고 빼기", en: "Alternate plus and minus of squares" },
+          { icon: "🎯", ko: "빠질 자리 하나씩 시도", en: "Try each missing slot" },
+          { icon: "📦", ko: "딱 떨어지는 수인지 확인", en: "Check it is a whole square" },
+          { icon: "📏", ko: "이웃 사이에 들어맞나 확인", en: "Check it fits between neighbors" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

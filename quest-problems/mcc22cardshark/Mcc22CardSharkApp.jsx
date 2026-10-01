@@ -7,6 +7,7 @@ import { Mcc22CardSharkProgressiveCode, downloadMcc22CardSharkPDF, getMcc22CardS
 import { makeMcc22CardSharkCh1, makeMcc22CardSharkCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#d97706";
 
 export default function Mcc22CardSharkApp(props = {}) {
@@ -138,6 +139,12 @@ export default function Mcc22CardSharkApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "➕", ko: "번갈아 더하고 빼서 압축", en: "Collapse to an alternating sum" },
+          { icon: "🔀", ko: "짝수 묶음과 홀수 묶음 가르기", en: "Split even and odd stacks" },
+          { icon: "🔢", ko: "짝수 묶음은 부호 떼고 더하기", en: "Even stacks: drop the sign" },
+          { icon: "↕️", ko: "홀수 묶음은 정렬해 절반씩", en: "Odd stacks: sort, then halve" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

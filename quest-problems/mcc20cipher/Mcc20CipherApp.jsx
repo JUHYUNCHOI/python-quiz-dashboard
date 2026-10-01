@@ -7,6 +7,7 @@ import { Mcc20CipherProgressiveCode, downloadMcc20CipherPDF, getMcc20CipherSecti
 import { makeMcc20CipherCh1, makeMcc20CipherCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#059669";
 
 export default function Mcc20CipherApp(props = {}) {
@@ -140,6 +141,11 @@ export default function Mcc20CipherApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔤", ko: "한 번 바꾸는 규칙표 만들기", en: "Map one substitution" },
+          { icon: "🔁", ko: "26 글자만 미리 K 번 돌리기", en: "Pre-apply K times for 26 letters" },
+          { icon: "✉️", ko: "메시지는 한 번만 훑기", en: "Rewrite in one pass" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

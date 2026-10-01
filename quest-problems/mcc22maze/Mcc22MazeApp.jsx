@@ -7,6 +7,7 @@ import { makeMcc22MazeCh1, makeMcc22MazeCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#dc2626";
 
 export default function Mcc22MazeApp(props = {}) {
@@ -136,6 +137,11 @@ export default function Mcc22MazeApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔗", ko: "이어진 통로끼리 묶기", en: "Group connected paths" },
+          { icon: "🔎", ko: "이미 이어져 있는지 검사", en: "Check if already connected" },
+          { icon: "🧪", ko: "한 줄씩 뚫어 보고 되돌리기", en: "Try breaking one line, then undo" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

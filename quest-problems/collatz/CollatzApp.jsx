@@ -6,6 +6,7 @@ import { CollatzProgressiveCode, downloadCollatzPDF, getCollatzSections } from "
 import { makeCollatzCh1, makeCollatzCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#059669";
 
 export default function CollatzApp(props = {}) {
@@ -129,6 +130,11 @@ export default function CollatzApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔁", ko: "시키는 대로 그대로 돌리기", en: "Just simulate it" },
+          { icon: "➗", ko: "짝수면 반, 홀수면 세 배 더 하나", en: "Even: halve, odd: 3x+1" },
+          { icon: "➕", ko: "마지막에 합 구하기", en: "Sum at the end" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

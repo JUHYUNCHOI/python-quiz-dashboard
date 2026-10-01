@@ -5,6 +5,7 @@ import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar
 import { PackTypeClassifier, PackPickerSim, ColorPairCounter, TricksFormulaTrace, DeepAuditSim } from "./components";
 import { makeTricksCh1, makeTricksCh2, makeTricksCh3 } from "./chapters";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#f97316";
 
 export default function TricksApp(props = {}) {
@@ -119,6 +120,11 @@ export default function TricksApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔢", ko: "쌍을 정리해 종류별로 세기", en: "Normalize pairs, count the types" },
+          { icon: "🧮", ko: "짝이 되는 쌍둥이 팩 곱하기", en: "Multiply the matching singles" },
+          { icon: "➗", ko: "같은 섞인 팩 셋 고르기", en: "Choose three of the same pair" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

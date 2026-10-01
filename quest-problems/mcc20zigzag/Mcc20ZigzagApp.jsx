@@ -7,6 +7,7 @@ import { makeMcc20ZigzagCh1, makeMcc20ZigzagCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#8b5cf6";
 
 export default function Mcc20ZigzagApp(props = {}) {
@@ -136,6 +137,12 @@ export default function Mcc20ZigzagApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔚", ko: "자리마다 끝나는 개수 세기", en: "Count ways ending here" },
+          { icon: "🗃️", ko: "글자별 칸에 모아두기", en: "Bucket the sums by letter" },
+          { icon: "↕️", ko: "작은 쪽과 큰 쪽만 더하기", en: "Add only smaller or larger letters" },
+          { icon: "📏", ko: "길이를 한 칸씩 늘리기", en: "Grow the length by one" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

@@ -7,6 +7,7 @@ import { XorStringProgressiveCode, downloadXorStringPDF, getXorStringSections, g
 import { makeXorStringCh1, makeXorStringCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#2563eb";
 
 export default function XorStringApp(props = {}) {
@@ -132,6 +133,12 @@ export default function XorStringApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔢", ko: "나머지로 큰 수 다루기", en: "Work with remainders" },
+          { icon: "🧩", ko: "쌍을 세 종류로 압축", en: "Reduce the pairs to 3 types" },
+          { icon: "📐", ko: "그 쌍이 든 토막 개수 세기", en: "Count the pieces containing it" },
+          { icon: "➕", ko: "개수를 곱해 다 더하기", en: "Weight each one and sum" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

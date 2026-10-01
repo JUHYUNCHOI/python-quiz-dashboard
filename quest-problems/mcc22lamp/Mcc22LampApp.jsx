@@ -6,6 +6,7 @@ import { Mcc22LampProgressiveCode, Mcc22LampDeepAuditSim, downloadMcc22LampPDF, 
 import { makeMcc22LampCh1, makeMcc22LampCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#8b5cf6";
 
 export default function Mcc22LampApp(props = {}) {
@@ -135,6 +136,11 @@ export default function Mcc22LampApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "⛰️", ko: "삼각형을 기울기 변화로 쪼개기", en: "Turn the tent into slope changes" },
+          { icon: "📍", ko: "꺾이는 점만 훑기", en: "Sweep the breakpoints" },
+          { icon: "🧮", ko: "구간 안 정수 개수 식으로 세기", en: "Count integers in a segment" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

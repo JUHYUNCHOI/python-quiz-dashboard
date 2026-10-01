@@ -5,6 +5,7 @@ import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar
 import { FanSimulator, SeparatorBuildViz, TryYourselfViz } from "./components";
 import { makeFansCh1, makeFansCh2, makeFansCh3 } from "./chapters";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#d97706";
 
 export default function FansApp(props = {}) {
@@ -122,6 +123,11 @@ export default function FansApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔢", ko: "색깔별 개수 세기", en: "Count each color" },
+          { icon: "⚖️", ko: "가장 흔한 색 대 나머지 비교", en: "Biggest group vs the rest" },
+          { icon: "🧮", ko: "공식으로 한 번에 계산", en: "Plug into one formula" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

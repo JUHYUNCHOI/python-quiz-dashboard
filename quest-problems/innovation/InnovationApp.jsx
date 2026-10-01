@@ -6,6 +6,7 @@ import { InnovationProgressiveCode, InnovationSim, downloadInnovationPDF, getInn
 import { makeInnovationCh1, makeInnovationCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#2563eb";
 
 export default function InnovationApp(props = {}) {
@@ -136,6 +137,12 @@ export default function InnovationApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔗", ko: "카드마다 두 값으로 묶기", en: "Pair up the two sums" },
+          { icon: "📶", ko: "작은 쪽부터 정렬", en: "Sort by the smaller sum" },
+          { icon: "🏆", ko: "앞쪽 중 큰 것만 몇 개 들고 있기", en: "Keep only the top few so far" },
+          { icon: "➕", ko: "합 더해서 최댓값 갱신", en: "Sum and update the best" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

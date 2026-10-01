@@ -6,6 +6,7 @@ import Link from "next/link";
 import { GraphViz, GraphBuildSim, ReachSim, ReachSpreadSim, DijkstraTrace, DijkstraKAudit, FastestWayViz } from "./components";
 import { makeReachCh1, makeReachCh2, makeReachCh3 } from "./chapters";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#8b5cf6";
 
 export default function ReachApp(props = {}) {
@@ -149,6 +150,12 @@ export default function ReachApp(props = {}) {
           <span>→ {t(E, "③ this problem", "③ 이 문제")}</span>
         </div>
 
+        <AlgorithmTags E={E} tags={[
+          { icon: "🚀", ko: "망가짐 무시하고 최단 시간부터", en: "Shortest time, ignoring damage" },
+          { icon: "🔗", ko: "멀쩡한 다리로 묶기", en: "Group by the safe bridges" },
+          { icon: "🌉", ko: "약한 다리마다 필요한 값 계산", en: "Compute what each weak bridge needs" },
+          { icon: "📊", ko: "묶음별 최솟값으로 질문 답하기", en: "Answer from each group's minimum" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

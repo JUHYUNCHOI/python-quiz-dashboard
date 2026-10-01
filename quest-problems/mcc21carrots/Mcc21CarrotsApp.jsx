@@ -6,6 +6,7 @@ import { Mcc21CarrotsProgressiveCode, downloadMcc21CarrotsPDF, getMcc21CarrotsSe
 import { makeMcc21CarrotsCh1, makeMcc21CarrotsCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#059669";
 
 export default function Mcc21CarrotsApp(props = {}) {
@@ -129,6 +130,10 @@ export default function Mcc21CarrotsApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔢", ko: "홀짝만 세기", en: "Count odd vs even" },
+          { icon: "🧮", ko: "홀수 개수로 판정하기", en: "Decide from the odd count" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

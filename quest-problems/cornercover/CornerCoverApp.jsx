@@ -7,6 +7,7 @@ import { CornerCoverProgressiveCode, downloadCornerCoverPDF, getCornerCoverSecti
 import { makeCornerCoverCh1, makeCornerCoverCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#059669";
 
 export default function CornerCoverApp(props = {}) {
@@ -132,6 +133,11 @@ export default function CornerCoverApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔄", ko: "두 방향 다 시도하기", en: "Try both orientations" },
+          { icon: "📐", ko: "격자 안에 들어가나 확인", en: "Check it fits" },
+          { icon: "📏", ko: "한쪽 끝까지 꽉 채우나 확인", en: "Check it spans a side" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

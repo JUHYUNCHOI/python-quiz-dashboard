@@ -6,6 +6,7 @@ import { Mcc22BirthdayProgressiveCode, downloadMcc22BirthdayPDF, getMcc22Birthda
 import { makeMcc22BirthdayCh1, makeMcc22BirthdayCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#f97316";
 
 export default function Mcc22BirthdayApp(props = {}) {
@@ -129,6 +130,12 @@ export default function Mcc22BirthdayApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "📐", ko: "격자 크기 키우기", en: "Grow the grid size" },
+          { icon: "↩️", ko: "번호를 거꾸로 따라가기", en: "Walk the number backward" },
+          { icon: "🔄", ko: "뒤집힌 횟수 쌓기", en: "Accumulate the flips" },
+          { icon: "🔍", ko: "모양표에서 찾기", en: "Look up the final shape" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

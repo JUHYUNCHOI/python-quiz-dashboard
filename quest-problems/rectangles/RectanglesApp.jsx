@@ -6,6 +6,7 @@ import { RectanglesProgressiveCode, downloadRectanglesPDF, getRectanglesSections
 import { makeRectanglesCh1, makeRectanglesCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#f97316";
 
 export default function RectanglesApp(props = {}) {
@@ -129,6 +130,12 @@ export default function RectanglesApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🧩", ko: "연속 구간으로 나누기", en: "Split into runs" },
+          { icon: "📏", ko: "구간 넓히며 비용 재기", en: "Grow the window, track the cost" },
+          { icon: "🧮", ko: "작은 답으로 큰 답 만들기", en: "Build up from smaller answers" },
+          { icon: "✅", ko: "그중 최솟값 고르기", en: "Pick the best one" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

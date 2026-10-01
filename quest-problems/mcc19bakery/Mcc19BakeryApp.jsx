@@ -7,6 +7,7 @@ import { makeMcc19BakeryCh1, makeMcc19BakeryCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 const A = "#d97706";
 
 export default function Mcc19BakeryApp(props = {}) {
@@ -134,6 +135,11 @@ export default function Mcc19BakeryApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔢", ko: "가격 정렬하기", en: "Sort the prices" },
+          { icon: "4️⃣", ko: "넷씩 묶어서 보기", en: "Group by fours" },
+          { icon: "🎁", ko: "셋째로 비싼 것은 공짜", en: "3rd-priciest is free" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}
