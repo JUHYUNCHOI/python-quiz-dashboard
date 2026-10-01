@@ -340,6 +340,18 @@ const CPP_QUERY = FULL_CPP.slice(35, 52);
    ═══════════════════════════════════════════════════════════════════════ */
 
 const KN_R = 5;   // 5×5 오프셋 격자 — 「칸이 없어요」가 나오도록 일부러 작게
+/* 격자 칸을 고정 px 로 둔다 — 유령 칸(격자 밖)을 절대배치하려면 칸 크기를 알아야 한다.
+   `KN_OOB_PAD_*` 는 **지금 코드가 실제로 내는 좌표 하나**(`(-2,-1)`)에 맞춘 값이다.
+     위  2칸 = 2 × (40+4) = 88   ·   왼쪽 1칸 = 1 × (40+4) = 44
+   ⛔ 일반 공식이 아니다. `MOVES` 순서나 `shownOob` 가드가 바뀌면 다시 계산해라. */
+/* 🐛 2026-10-01 실측 — 처음엔 48 로 뒀다가 **격자 5번째 열이 잘렸다.**
+   유령 칸 자리까지 더하면 가로로 `6*CELL + 5*GAP` 이 필요한데, 이 시뮬을 감싼
+   파란 상자의 **안쪽 폭이 262px**(모바일 375 실측)이다. 48 이면 308px 로 넘친다.
+     6*CELL + 5*4 ≤ 262  →  CELL ≤ 40.3  →  **40**
+   (격자 5*40+4*4 = 216 · 유령 자리 44 · 합 260 ≤ 262) */
+const KN_CELL = 40, KN_GAP = 4;
+const KN_OOB_PAD_T = 2 * (KN_CELL + KN_GAP);
+const KN_OOB_PAD_L = 1 * (KN_CELL + KN_GAP);
 
 /* 숫자 뒤 조사 — **한국어로 읽었을 때** 받침이 있나로 고른다.
    1(일)·3(삼)·6(육)·7(칠)·8(팔)·0(영) 은 받침이 있고, 2(이)·4(사)·5(오)·9(구) 는 없다.
@@ -530,8 +542,39 @@ export function Mcc20KnightBfsProcessStepper({ E }) {
         </div>
 
         {/* 5×5 오프셋 격자 */}
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${KN_R}, 1fr)`, gap: 4,
-          maxWidth: 260, margin: "0 auto 12px" }}>
+        {/* ⛔ 2026-10-01 학생(초6): *"말풍선이 「**(-2,-1)는 격자 밖이에요**」라고 말하는데
+               화면의 칸들은 그냥 숫자만 있지 **어느 칸이 그건지 세어볼 방법이 없었다.**
+               「격자 밖이라는 게 무슨 뜻이지?」 하고 **멈칫했다.**"*
+             → 말풍선이 부르는 것이 **화면에 없다**(`feedback_sentence_must_follow`).
+               `look` 좌표가 격자 **밖**이라 아래 `isLook` 이 칠할 칸이 애초에 없다.
+
+           ⛔ **칸 안에 좌표 라벨을 넣는 길은 막혔다** — ux 실측 여백 **15~16px** 로
+             두 자리·음수가 안 들어간다.
+           ⭐ 형제 `mcc20citytour` 가 같은 일을 한다(`components.jsx:794` `oob` 톤 ·
+             `:854` `–` 마크) — **그 기법을 그대로 가져온다.** 발명하지 않는다.
+
+           ⚠️ **좁은 해다.** `buildKnightBfsTrace` 에서 `status:"oob"` 가 찍히는 자리는
+             **단 한 곳**(`shownOob < 1` 가드)이고, 그때 `cur` 는 항상 `[0,0]`,
+             `look` 은 `MOVES[0] = [-2,-1]` 뿐이다(소스로 확인). 그래서 위·왼쪽만
+             자리를 비운다. **`MOVES` 순서나 그 가드가 바뀌면 이 값들도 다시 계산해야 한다.**
+           ⚠️ 칸을 `1fr` → **고정 48px** 로 바꾼다. 유령 칸을 절대배치하려면 칸 크기를
+             알아야 한다. 격자 폭은 `5*48 + 4*4 = 256px` 로 **옛 260px 보다 작아진다.** */}
+        <div style={{ position: "relative", width: "fit-content", margin: "0 auto 12px",
+          paddingTop: KN_OOB_PAD_T, paddingLeft: KN_OOB_PAD_L }}>
+        {st.status === "oob" && st.look && (
+          <div style={{
+            position: "absolute",
+            top: KN_OOB_PAD_T + st.look[0] * (KN_CELL + KN_GAP),
+            left: KN_OOB_PAD_L + st.look[1] * (KN_CELL + KN_GAP),
+            width: KN_CELL, height: KN_CELL, borderRadius: 6,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            // 「점선 = 칸이 없다 / 실선 = 칸이 있다」 — citytour 와 같은 가름
+            background: "#f9fafb", border: "2px dashed #9ca3af",
+            color: "#9ca3af", fontSize: 15, fontWeight: 800,
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>–</div>
+        )}
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${KN_R}, ${KN_CELL}px)`, gap: KN_GAP }}>
           {st.dist.map((row, r) => row.map((v, c) => {
             const isCur  = st.cur  && st.cur[0]  === r && st.cur[1]  === c;
             const isLook = st.look && st.look[0] === r && st.look[1] === c;
@@ -546,6 +589,7 @@ export function Mcc20KnightBfsProcessStepper({ E }) {
               }}>{v === -1 ? "·" : v}</div>
             );
           }))}
+        </div>
         </div>
         <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10, ...KA }}>
           {t(E, "(0,0) is the knight's start. Each number = fewest jumps to reach that square.",
