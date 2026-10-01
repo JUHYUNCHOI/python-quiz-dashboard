@@ -281,12 +281,18 @@ export function makeStrangeFnCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "How do leftover 0/1 digits become one number?",
+        "How do the leftover 0s and 1s become one number?",
         "남은 0과 1을 어떻게 하나의 수로 읽을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
-            🔢 {t(E, "Reading as binary", "이진수로 읽기")}
+            {/* ⛔ 2026-10-01 — 여기가 「답을 먼저 통보하던」 자리다.
+                본문은 「이진수」라는 말을 **일부러 피해서** 「십진수로 고치면」으로 돌아갔는데,
+                **헤더 한 줄이 그 노력을 무효화**하고 있었다 — 학생은 쪽을 열자마자
+                **아직 뜻을 모르는 말**부터 읽었다. 실측: 「이진수」의 뜻을 밝히는 문장이
+                화면에 **0개**였다(헤더 1곳 + 아는 말처럼 쓰는 곳 4곳).
+                이름은 **표를 본 뒤**에 붙인다 — 아래 ④ 자리. */}
+            🔢 {t(E, "Line them up and read", "늘어놓고 읽기")}
           </div>
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
@@ -318,29 +324,14 @@ export function makeStrangeFnCh1(E) {
                 "이걸 십진수로 고치면 1, 2, 3, 4, 5 … 예요.\n10 은 2 가 되고, 11 은 3 이 돼요.")}</div>
             </div>
           </div>
-          {/* 2026-09-30 PM 종합 판정 — 「자리값 2 / 자리값 1 · 1×2+0×1=2」 예 상자를
-              **통째로 뺐다.** 바로 다음 쪽 표의 가운데 칸이 **같은 계산을 그대로** 한다
-              (`1×2 + 0×1 = 2`). 같은 말을 두 곳에서 하고 있었다.
-              ux 판정: 이 quest 는 오늘 글자수가 2772 → 3267 로 늘었다(+17.9%) —
-              **지금은 여유가 아니라 한계선이다. 순수 추가는 안 되고 교체만 받는다.**
-              이 삭제가 4·6·8쪽에 넣는 문장들의 분량을 대준다. */}
-        </div>),
-    },
-
-    /* 1-6 B: 직접 센 값을 표로 모으고 **칸에 이름을 붙인다**.
-       2026-09-30 선생님이 이 쪽을 두 번 물리셨다 —
-         *"걸린숫자?잉? 이 이진수를 십진수로 바꾸는 ??? 잉? g(n)이 머라고?"*
-       내가 **이름 둘(n·g(n))을 문장으로 한꺼번에** 설명하려 해서다.
-       ⭐ 이름은 **화면에 보이는 칸을 가리켜야** 뜻이 생긴다 —
-          표를 먼저 놓고 「가운데 칸을 n, 오른쪽 칸을 g(n)」 이라고 부른다.
-       ⛔ 「걸린 횟수」 같은 말을 쓰지 마라 — 시간이 걸린 게 아니라 **몇 번 썼나**다. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Put the three counts you made into one table.",
-        "직접 센 세 값을 표로 모아요."),
-      content: (
-        <div style={{ padding: 16 }}>
+          {/* ⭐ 2026-10-01 — 옛 6쪽(표 + 이름 붙이기)을 **이 쪽으로 끌어왔다.** 쪽 11 → 10.
+              학생: *"같은 줄에서 「10」이 「2」로 바뀌는 걸 보면 **5쪽을 기억하고 있어야만**
+              넘어간다. 깜빡하고 왔다면 「10이 왜 갑자기 2야?」 하고 **멈추게 된다.**"*
+              처방은 둘인데(①앞 내용을 요약해 다시 보여준다 ②애초에 같은 화면에 둔다)
+              **②가 공짜다** — 문장을 안 늘리고 기억 의존이 구조적으로 사라진다.
+              ux 실측: 241px + 332px = 573~650px → **1.5~1.6 화면**.
+              이미 라이브인 3·4쪽이 1.62 화면이라 **전례가 이 크기를 통과시키고 있다.**
+              (옛 「자리값 2 / 1×2+0×1=2」 예 상자는 어제 뺐다 — 아래 표가 같은 계산을 한다.) */}
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12, marginBottom: 10 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 8 }}>
               ✅ {t(E, "You counted these yourself", "직접 센 값이에요")}
@@ -371,7 +362,15 @@ export function makeStrangeFnCh1(E) {
               </tbody>
             </table>
           </div>
+          {/* ⭐ 2026-10-01 — **이름은 여기서 처음 붙인다.** 표를 본 뒤라
+              「방금 x 칸에서 본」이 가리키는 대상이 **화면에 같이 있다.**
+              ⛔ 이 문장을 위로 올리지 마라 — 그게 「답을 먼저 통보한다」는 결함이었다. */}
           <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              "This way of writing with only 0s and 1s is called binary — the 1, 10, 11 you just saw in the x column are all binary.",
+              "0 과 1 만 쓰는 이 방법을 이진수라고 해요 — 방금 x 칸에서 본 1, 10, 11 이 전부 이진수예요.")}
+          </div>
+          <div style={{ marginTop: 8, fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
               "Name the middle column n, and the right column g(n).\nSo when n is 2, the answer is 3 — we write g(2) = 3.",
               "가운데 칸을 n, 오른쪽 칸을 g(n) 이라고 부를게요.\nn 이 2 일 때 3 이니까, g(2) = 3 이라고 적어요.")}
@@ -395,6 +394,16 @@ export function makeStrangeFnCh1(E) {
               "Look at the even-n rows and the odd-n rows separately. How does g(n) differ?",
               "짝수 n 줄과 홀수 n 줄을 나눠서 봐요. g(n) 이 어떻게 다른가요?")}
           </div>
+          {/* ⚠️ 2026-10-01 재검증 학생: *"「형태」 칸에 `2k`, `2k+1` 이 갑자기 나오는데
+              **`k` 가 뭔지 설명이 없었다.** 「k가 뭐지?」 하고 **잠깐 멈췄다.**
+              6쪽에서 짐작하고 **7쪽 끝에 가서야 확인했다.**"*
+              원인: 옛 8쪽 표를 이 쪽으로 흡수하면서 **표만 옮기고 정의는 두고 왔다.**
+              이름은 **처음 쓰는 자리**에서 밝힌다. 7쪽 끝의 중복 정의는 지웠다. */}
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 8, wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              "Let's call n divided by 2 (the quotient) k — that's what the «form» column uses.",
+              "n 을 2 로 나눈 몫을 k 라고 부를게요 — 아래 「형태」 칸에서 써요.")}
+          </div>
           {/* 2026-09-23 교육 담당 지적: ✅ 가 붙은 n=1,2,3 만 학생이 직접 센 값인데
               n=0,4,5,6,7 의 g(n) 이 **출처 없이** 같이 올라와 있었다.
               다음 쪽이 그 값들로 "3k / 3k+1 과 맞나" 를 확인시키는데,
@@ -412,73 +421,72 @@ export function makeStrangeFnCh1(E) {
                 <tr style={{ background: "#ede9fe", color: "#5b21b6" }}>
                   <th style={{ padding: "4px 8px", textAlign: "left" }}>n</th>
                   <th style={{ padding: "4px 8px", textAlign: "left" }}>g(n)</th>
-                  <th style={{ padding: "4px 8px", textAlign: "left" }}>{t(E, "n is…", "n 은…")}</th>
+                  {/* ⭐ 2026-10-01 — 옛 8쪽 표를 **여기로 흡수했다.** 두 표가 `n`·`g(n)` 두 칸을
+                      **토씨 하나 안 틀리고 두 번** 보여주고 있었다(ux 실측). 학생이 같은 숫자를 두 번 읽었다.
+                      「짝수/홀수」 칸을 「형태」로 바꾸면 그 칸이 하던 일(짝·홀 가르기)을 2k·2k+1 이 그대로 한다.
+                      ⚠️ 형태는 **짧게** — `2k+1` 까지만. `k=3 → 3k+1=10` 은 g(n) 칸이 이미 10 을 보여줘서 재계산이다.
+                      그래야 375px 에서 안 뭉갠다. */}
+                  <th style={{ padding: "4px 8px", textAlign: "left" }}>{t(E, "form", "형태")}</th>
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>{t(E, "even", "짝수")}</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>{t(E, "odd", "홀수")}</td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>{t(E, "even", "짝수")}</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>{t(E, "odd", "홀수")}</td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>{t(E, "even", "짝수")}</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>{t(E, "odd", "홀수")}</td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>{t(E, "even", "짝수")}</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>{t(E, "odd", "홀수")}</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>2k</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>2k+1</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>2k</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>2k+1</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>2k</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>2k+1</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>2k</td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>2k+1</td></tr>
               </tbody>
             </table>
           </div>
         </div>),
     },
 
-    // 1-6 D: 짝수=3k, 홀수=3k+1 확인 (형태 칸 등장 — 이제 "찾기"가 아니라 "확인")
+    /* 1-6 D: **왜 1.5 배인가** — 2026-10-01 재설계(담당자 둘 2라운드 수렴, PM 종합).
+       ⛔ 여기 있던 것 둘을 뺐다:
+         · 추상 문장 *"자리가 넘어갈 때마다 걸음이 하나 더 껴요"* — **숫자가 0개**인 주장이었다.
+           학생이 **여기서 그만두고 싶어했다**: *"「자리가 넘어간다」가 어느 순간인지 전혀
+           그림이 안 그려졌다. 화면은 **검산만 보여줄 뿐 유도 과정을 안 보여준다.**"*
+         · n=0~7 8행 표 — 앞 쪽 표와 **같은 9행을 토씨 하나 안 틀리고 두 번** 보여줬다.
+       ⭐ 대신 **앞 쪽에서 이미 본** `11 → 10 → 9 → 1 → 0` 에 **라벨 둘만** 붙인다.
+          새 숫자도 새 시뮬도 안 만든다 — 학생이 스스로 찾아낸 바로 그 구조다:
+          *"`10→9` 는 자리 빌림, `9→1` 이 그 뒤에 끼는 한 걸음."*
+          이 트레이스 **하나 안에 두 경우가 다 들어 있어서**(`11→10` 은 안 넘어감)
+          「한 경우로 항상을 주장」도 피한다(`feedback_one_case_cannot_claim_always`).
+       ⚠️ **「홀짝」 단독으로 쓰지 마라** — 바로 앞 쪽이 「짝수/홀수」를 **n 의 성질**로 쓴다.
+          규칙을 가리킬 땐 quest 가 이미 쓰는 고정 이름 **「홀짝 변환」**으로. 새 용어 금지.
+       검증: 「마지막 자리가 0 이면 보정 1번」 → n=1..300 전수 어긋남 0건(메인 세션). */
     {
       type: "reveal",
       narr: t(E,
-        "Do the even rows and the odd rows really follow a rule?",
-        "짝수 줄과 홀수 줄이 정말 규칙을 따르는지 확인해요."),
+        "That trace again — one step at a time.",
+        "아까 그 줄, 한 걸음씩 다시 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
-            ✅ {t(E, "Let's check", "확인해봐요")}
+            🔍 {t(E, "n = 3, step by step", "n = 3 을 한 걸음씩")}
           </div>
-          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, wordBreak: "keep-all", textWrap: "balance" }}>
-            {/* ⭐ 2026-09-30 PM 종합 판정 — auditor 손을 들어준 자리.
-                pedagogy 는 「3 의 배수 근처예요」라는 **관찰의 재진술**을 냈는데,
-                auditor: *"8개 값이 부족해서가 아니라, **8개 값을 어떻게 봐야 3 이 보이는지**를
-                안 보여준 게 문제다."* 학생도 여기서 그만두고 싶어했다 —
-                *"확인해봐요 라고 하는데 나는 확인할 식 자체를 처음 본다."*
-                아래 두 줄이 **왜 1.5 배쯤인지**를 말한다. 관찰이 아니라 까닭이다.
-                근거: quest-auditor 가 n=0..20 전수 + 무작위 3,000 케이스로 검증했다. */}
-            <div>{t(E,
-              "To reach 0 we must subtract at least n times.\nBut every time a digit carries over, one extra parity step slips in —\nso the answer lands around 1.5 times n.",
-              "0 까지 가려면 적어도 n 번은 빼야 해요.\n그런데 자리가 넘어갈 때마다 홀짝을 다시 맞추는 걸음이 하나 더 껴요.\n그래서 답이 n 의 1.5 배쯤 돼요.")}</div>
-            <div style={{ marginTop: 4 }}>{t(E,
-              "Let k be n divided by 2 (the quotient).",
-              "k 는 n 을 2 로 나눈 몫이에요.")}</div>
-            <div style={{ marginTop: 4 }}>{t(E,
-              "Let's check whether the even/odd rows you just split really follow this form.",
-              "방금 짝수 줄, 홀수 줄로 나눠 본 것이 정말 이런 식을 따르는지 확인해요.")}</div>
+          <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+              {[
+                ["11 → 10", "끝자리가 1 이라 그냥 1 을 빼면 끝", "last digit is 1 — just subtract 1"],
+                ["10 → 9", "끝자리가 0 이라 자리가 넘어가요 → 홀짝 변환이 한 번 더 껴요", "last digit is 0 — a digit carries over → one parity swap is added"],
+                ["9 → 1", "그 홀짝 변환이에요", "that is the parity swap"],
+                ["1 → 0", "다시 그냥 1 을 빼요", "just subtract 1 again"],
+              ].map(([mv, ko, en], i) => (
+                <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
+                  <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#5b21b6", minWidth: 68 }}>{mv}</span>
+                  <span style={{ fontSize: 11.5, color: C.dim, wordBreak: "keep-all" }}>{t(E, en, ko)}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
-            <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: C.text, borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ background: "#ede9fe", color: "#5b21b6" }}>
-                  <th style={{ padding: "4px 8px", textAlign: "left" }}>n</th>
-                  <th style={{ padding: "4px 8px", textAlign: "left" }}>g(n)</th>
-                  <th style={{ padding: "4px 8px", textAlign: "left" }}>{t(E, "form", "형태")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>—</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>2k+1, k=0 → 3k+1=1</td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>2k, k=1 → 3k=3</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>2k+1, k=1 → 3k+1=4</td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>2k, k=2 → 3k=6</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>2k+1, k=2 → 3k+1=7</td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>2k, k=3 → 3k=9</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>2k+1, k=3 → 3k+1=10</td></tr>
-              </tbody>
-            </table>
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              "So a carry adds one extra step — which is why n alone is not the answer, only close to it.\nThe next page pins down the exact formula.",
+              "자리가 넘어갈 때마다 이렇게 한 걸음이 더 껴요 — 그래서 n 만으론 정확하지 않고 비슷하게만 맞아요.\n다음 쪽에서 정확한 식으로 확인해요.")}
           </div>
         </div>),
     },
