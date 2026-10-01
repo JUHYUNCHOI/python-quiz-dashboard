@@ -1,8 +1,84 @@
 "use client"
 
-import { Fragment, useState, useEffect } from "react"
+import { Fragment, useState, useEffect, useRef } from "react"
 import type React from "react"
 import { localizeCode } from "@/components/quest/localizeCode"
+
+// ── 가로로 더 있다는 신호 (가장자리 fade) ────────────────────────────────────
+
+/* ⛔ 2026-10-01 — **코드가 가로로 밀리는데 「밀린다」는 신호가 없었다.**
+   ux 실측(모바일 375 · `?lang=ko`): 밀 거리 203px 이 있고 끝까지 밀면 마지막 글자가
+   실제로 보인다 — **기능은 정상**이다. 그런데 스크롤 전·중·후 **어느 시점에도
+   스크롤바가 안 보인다**(`app/globals.css` 의 `.qcode-scroll` 커스텀 스크롤바를
+   **모바일 오버레이 스크롤바가 거의 안 받는다** — 플랫폼 제약이지 버그가 아니다).
+   학생(초6): *"줄 끝이 화면 오른쪽 밖으로 **잘려서 안 보였다.** 가로로 스크롤해야
+   하는지는 **안 눌러봐서 모르겠다.**"*
+
+   ⛔ 옛 처방(`inset -14px 0 14px -10px` 그림자)은 **정적이라 끝까지 밀어도 안 사라졌다** —
+     「아직 더 있다」고 거짓말한다. 그리고 어두운 배경에서 식별이 안 됐다.
+   ⭐ 색은 상자 배경과 **같은 값**을 받아 쓴다(`bg`) — 글자가 배경으로 녹아드는 모양.
+     임의 색을 들이지 않는다.
+   ⚠️ **CSS 만으로는 못 한다** — 「끝까지 밀면 사라진다」는 `scrollLeft` 를 재야 안다.
+   ⚠️ **안 넘치면 아무것도 안 그린다**(opacity 0 이 아니라 미렌더). quest 168개가 쓴다.
+   🐛 **마운트 때 한 번만 재면 틀린다** — 실측에서 「밀 거리 94px 인데 fade 0장」이 났다.
+     `ResizeObserver(box)` 로도 못 잡는다(**안쪽 글이 넓어져도 상자 크기는 안 바뀐다**).
+     그래서 ①다음 프레임 ②웹폰트 로드 완료 ③**첫 자식**(내용)까지 같이 본다.
+   판정·스펙: PM + ux-reviewer 2026-10-01. */
+export function useScrollEdgeFades(
+  ref: React.RefObject<HTMLElement | null>,
+  deps: React.DependencyList = []
+) {
+  const [fade, setFade] = useState({ on: false, l: false, r: false })
+  useEffect(() => {
+    const box = ref.current
+    if (!box) return
+    const measure = () => {
+      const over = box.scrollWidth - box.clientWidth
+      // 2px 는 고해상도 모바일의 subpixel 스크롤 보정값이다
+      setFade({ on: over > 1, l: box.scrollLeft > 2, r: over - box.scrollLeft > 2 })
+    }
+    measure()
+    const raf = typeof requestAnimationFrame !== "undefined" ? requestAnimationFrame(measure) : null
+    try { document.fonts?.ready?.then(measure) } catch { /* 지원 안 하면 넘어간다 */ }
+    box.addEventListener("scroll", measure, { passive: true })
+    window.addEventListener("resize", measure)
+    let ro: ResizeObserver | undefined
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(measure)
+      ro.observe(box)
+      if (box.firstElementChild) ro.observe(box.firstElementChild)
+    }
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      box.removeEventListener("scroll", measure)
+      window.removeEventListener("resize", measure)
+      ro?.disconnect()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps)
+  return fade
+}
+
+/** 가장자리 fade 두 장. `bg` 는 **감싼 상자의 배경색과 같은 값**을 넘겨라. */
+export function ScrollEdgeFades({ fade, bg, radius = 12 }:
+  { fade: { on: boolean; l: boolean; r: boolean }; bg: string; radius?: number }) {
+  if (!fade.on) return null
+  const clear = bg.replace(/^#/, "")
+  const rgba = `rgba(${parseInt(clear.slice(0, 2), 16)},${parseInt(clear.slice(2, 4), 16)},${parseInt(clear.slice(4, 6), 16)},0)`
+  return (
+    <>
+      {(["l", "r"] as const).map((side) => (
+        <div key={side} aria-hidden style={{
+          position: "absolute", top: 0, bottom: 0, width: 28, pointerEvents: "none", zIndex: 2,
+          [side === "l" ? "left" : "right"]: 0,
+          borderRadius: side === "l" ? `${radius}px 0 0 ${radius}px` : `0 ${radius}px ${radius}px 0`,
+          background: `linear-gradient(to ${side === "l" ? "right" : "left"}, ${bg} 0%, ${rgba} 100%)`,
+          opacity: fade[side] ? 1 : 0, transition: "opacity 120ms ease-out",
+        }} />
+      ))}
+    </>
+  )
+}
 
 // ── 강조 한 곳 (형광펜) ───────────────────────────────────────────────────────
 
@@ -478,6 +554,9 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock({ lines: rawLines, lang = "py", dimUntil = 0, isEn = false }: CodeBlockProps) {
+  // 가로로 더 있다는 신호 — 위 `useScrollEdgeFades` 주석 참고 (2026-10-01)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const codeFade = useScrollEdgeFades(scrollRef, [rawLines, lang, isEn])
   /* 코드 안 한국어 주석을 영어 화면에서도 읽히게 한다 (2026-09-11).
      ⚠️ isEn 을 안 넘기는 옛 호출부는 지금과 똑같이 원본을 그린다 — 깨지지 않는다.
      원본 배열은 안 건드리고 **그리는 자리에서만** 바꾼다. 줄 수는 유지된다.
@@ -508,9 +587,11 @@ export function CodeBlock({ lines: rawLines, lang = "py", dimUntil = 0, isEn = f
      `.split())` 의 뒷부분이 버튼 밑에 숨었다. 공용 컴포넌트라 quest 전체에 걸린다.
      좁은 화면에서는 버튼 높이만큼 위를 비워 첫 줄이 절대 안 가리게 한다. */
   return (
-    <div className="qcode-scroll relative bg-gray-900 rounded-xl px-3 pb-3 pt-9 sm:pt-3 overflow-x-auto text-[13px] leading-relaxed font-mono" style={{ fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0',
-      /* 오른쪽에 더 있다는 힌트 (2026-09-11) — pre 로 바꾼 뒤 긴 줄이 표시 없이 잘렸다 */
-      boxShadow: "inset -14px 0 14px -10px rgba(0,0,0,.55)" }}>
+    /* ⛔ 2026-10-01 — 옛 `boxShadow: inset -14px …` 를 **뺐다.** 정적이라 끝까지 밀어도
+       안 사라져 「아직 더 있다」고 거짓말했다. 위 `useScrollEdgeFades` 참고.
+       `bg-gray-900` = `#111827` 이라 fade 색도 그 값을 넘긴다. */
+    <div ref={scrollRef} className="qcode-scroll relative bg-gray-900 rounded-xl px-3 pb-3 pt-9 sm:pt-3 overflow-x-auto text-[13px] leading-relaxed font-mono" style={{ fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0' }}>
+      <ScrollEdgeFades fade={codeFade} bg="#111827" />
       <button
         onClick={handleCopy}
         className={`absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-bold transition-colors ${

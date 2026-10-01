@@ -13,7 +13,7 @@
 
 import { useRef, useEffect, useState, Fragment } from "react";
 import { t, C } from "@/components/quest/theme";
-import { highlight } from "@/components/quest/shared";
+import { useScrollEdgeFades, ScrollEdgeFades, highlight } from "@/components/quest/shared";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 // vars(선택): [{ v:"seq", ko:"수열", en:"the sequence" }, ...] — 코드창 위에 '변수 뜻' 범례로 항상 표시.
@@ -134,6 +134,11 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
      고침: 코드 줄 뒤에 **창 높이만큼 빈 여백**을 붙여 `scrollHeight` 를 넉넉히
      키운다 — 그러면 마지막 걸음이어도 `scrollTop` 이 캡되지 않고, 다른 걸음과
      똑같이 말풍선이 창 위쪽에 뜬다(고정 바와 겹칠 일이 없는 자리). */
+  // 가로로 더 있다는 신호 — 공용 훅을 쓴다(`components/quest/shared.tsx`).
+  // ⛔ 같은 로직을 여기 또 두지 않는다 — `CodeBlock` 도 같은 문제를 갖고 있었고,
+  //   두 벌로 두면 한쪽만 고치는 날이 온다(`feedback_example_code_is_contagious`).
+  const fade = useScrollEdgeFades(boxRef, [safeIdx, lo, lang, code]);
+
   const [boxH, setBoxH] = useState(560); // 못 재면 이 컴포넌트의 기본 높이(min(64vh,560px)) 상한
   useEffect(() => {
     const box = boxRef.current;
@@ -282,6 +287,7 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
       {/* 코드 — 고정 높이 창, 밝아진 줄로 자동 스크롤.
           배경/글자색은 다른 레슨(CodeBlock)과 동일한 gray-900. 흐림 없이 전부 또렷,
           강조는 '밝은 왼쪽 막대 + 살짝 밝은 배경'만 (선생님 2026-07-13: 어둡지 않게). */}
+      <div style={{ position: "relative" }}>
       <div ref={boxRef} className="qcode-scroll qcode-wide" style={{
         background: "#111827", borderRadius: 12, padding: "12px 10px",
         overflowY: "auto", overflowX: "auto",
@@ -300,9 +306,11 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
         fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0',
         fontSize: 14.5, lineHeight: 1.8, maxWidth: "100%", margin: "0 auto",
         position: "relative",
-        // 아래에 더 있다 / **오른쪽에 더 있다** 는 힌트. 오른쪽은 2026-09-11 추가 —
-        // pre 로 바꾼 뒤 긴 줄이 표시 없이 잘리고 있었다(ux 가 checkups 에서 잡음).
-        boxShadow: "inset 0 -10px 12px -10px rgba(0,0,0,.4), inset -14px 0 14px -10px rgba(0,0,0,.55)",
+        // 아래에 더 있다 는 힌트(세로). ⛔ **오른쪽 inset 그림자는 뺐다** (2026-10-01) —
+        // 2026-09-11 에 「오른쪽에 더 있다」로 넣은 것인데 **정적이라 끝까지 밀어도
+        // 안 사라졌고**, 어두운 배경(#111827) 위에서 ux 가 *"식별이 안 된다"* 고 실측했다.
+        // 대신 아래쪽에 **스크롤 위치를 따라가는 fade 두 장**을 붙인다.
+        boxShadow: "inset 0 -10px 12px -10px rgba(0,0,0,.4)",
       }}>
         {code.map((line, i) => {
           const isHot = i >= lo && i <= hi;
@@ -399,6 +407,8 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
                   "— 코드 끝 · 다음 설명은 ▶ 를 눌러요 —")}
           </div>
         </div>
+      </div>
+      <ScrollEdgeFades fade={fade} bg="#111827" />
       </div>
 
       {/* 복사 줄 + SimNav 줄을 한 덩어리로 — 위 주석 참고.
