@@ -98,8 +98,8 @@
   "bovshuffle": {
     "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 473,
-    "korean_screen_ref": 456
+    "korean_chars_ref": 625,
+    "korean_screen_ref": 497
   },
   "bucketbrigade": {
     "pages": 5,
@@ -464,13 +464,13 @@
   "makedistinct": {
     "pages": 6,
     "quiz_input": 1,
-    "korean_chars_ref": 2024,
-    "korean_screen_ref": 530
+    "korean_chars_ref": 2035,
+    "korean_screen_ref": 541
   },
   "mcc15bahasaf": {
     "pages": 6,
     "quiz_input": 1,
-    "korean_chars_ref": 1173,
+    "korean_chars_ref": 1425,
     "korean_screen_ref": 690
   },
   "mcc15choco": {
@@ -488,8 +488,8 @@
   "mcc15isthmus": {
     "pages": 6,
     "quiz_input": 1,
-    "korean_chars_ref": 1224,
-    "korean_screen_ref": 887
+    "korean_chars_ref": 1390,
+    "korean_screen_ref": 924
   },
   "mcc15rect": {
     "pages": 6,
@@ -554,8 +554,8 @@
   "mcc20kitty": {
     "pages": 13,
     "quiz_input": 3,
-    "korean_chars_ref": 2846,
-    "korean_screen_ref": 1214
+    "korean_chars_ref": 3132,
+    "korean_screen_ref": 1289
   },
   "mcc20knight": {
     "pages": 8,
@@ -566,20 +566,20 @@
   "mcc20missing": {
     "pages": 6,
     "quiz_input": 1,
-    "korean_chars_ref": 1541,
-    "korean_screen_ref": 807
+    "korean_chars_ref": 2490,
+    "korean_screen_ref": 789
   },
   "mcc20zigzag": {
     "pages": 6,
     "quiz_input": 2,
-    "korean_chars_ref": 1375,
-    "korean_screen_ref": 777
+    "korean_chars_ref": 1535,
+    "korean_screen_ref": 820
   },
   "mcc21carrots": {
     "pages": 5,
     "quiz_input": 0,
-    "korean_chars_ref": 1157,
-    "korean_screen_ref": 687
+    "korean_chars_ref": 1263,
+    "korean_screen_ref": 683
   },
   "mcc21dvd": {
     "pages": 6,
@@ -590,8 +590,8 @@
   "mcc21glass": {
     "pages": 10,
     "quiz_input": 3,
-    "korean_chars_ref": 1856,
-    "korean_screen_ref": 1357
+    "korean_chars_ref": 2023,
+    "korean_screen_ref": 1367
   },
   "mcc21marbles": {
     "pages": 7,
@@ -620,8 +620,8 @@
   "mcc22birthday": {
     "pages": 7,
     "quiz_input": 1,
-    "korean_chars_ref": 945,
-    "korean_screen_ref": 790
+    "korean_chars_ref": 1109,
+    "korean_screen_ref": 796
   },
   "mcc22cardshark": {
     "pages": 7,
@@ -963,8 +963,8 @@
   "strangefn": {
     "pages": 12,
     "quiz_input": 5,
-    "korean_chars_ref": 4146,
-    "korean_screen_ref": 1354
+    "korean_chars_ref": 4443,
+    "korean_screen_ref": 1373
   },
   "stuckinrut": {
     "pages": 6,
