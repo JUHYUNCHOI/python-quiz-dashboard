@@ -152,7 +152,10 @@ export function makeSubseqMedianCh1(E) {
       correct: 0,
       explain: t(E,
         "Right! k increasing values < v before it, and k increasing values > v after it, makes a strictly increasing subsequence of length 2k+1 with v exactly in the middle.",
-        "맞아요! v 앞에 v 보다 작은 증가값이 k 개, v 뒤에 v 보다 큰 증가값이 k 개 있으면 길이 2k+1 의 순증가 부분수열이 되고 가운데가 정확히 v 예요."),
+        /* ⛔ 2026-10-01 — 1쪽은 「엄격히 증가」인데 이 퀴즈 해설만 「순증가」였다.
+             학생(초6): *"같은 뜻인데 다른 말을 쓴다. 처음엔 다른 개념인가 헷갈렸다."*
+             1쪽에서 정의한 말로 맞춘다 (`feedback_no_invented_terms` — 한 값에 이름 하나). */
+        "맞아요! v 앞에 v 보다 작은 값이 k 개, v 뒤에 v 보다 큰 값이 k 개 있으면 길이 2k+1 의 엄격히 증가하는 부분수열이 되고 가운데가 정확히 v 예요."),
     },
   ];
 }

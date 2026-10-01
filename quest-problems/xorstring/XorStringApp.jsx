@@ -135,8 +135,8 @@ export default function XorStringApp(props = {}) {
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
           { icon: "🔢", ko: "나머지로 큰 수 다루기", en: "Work with remainders" },
-          { icon: "🧩", ko: "쌍을 세 종류로 압축", en: "Reduce the pairs to 3 types" },
-          { icon: "📐", ko: "그 쌍이 든 토막 개수 세기", en: "Count the pieces containing it" },
+          { icon: "🧩", ko: "쌍은 세 종류뿐", en: "Only 3 kinds of pair" },
+          { icon: "📐", ko: "그 쌍이 든 부분문자열 세기", en: "Count the substrings containing it" },
           { icon: "➕", ko: "개수를 곱해 다 더하기", en: "Weight each one and sum" },
         ]} />
         <QuestProgressBar

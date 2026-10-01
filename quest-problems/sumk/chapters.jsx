@@ -328,7 +328,13 @@ export function makeSumKCh1(E) {
                 <div>
                   {t(E, "Look at ", "")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "every non-empty subset", "모든 비어있지 않은 부분집합")}</b>
-                  {t(E, " — there are 2ᴺ − 1 of them.", " 을 봐요. 모두 2ᴺ − 1 개예요.")}
+                  {/* ⛔ 2026-10-01 — 여기가 `2ᴺ` 의 **첫 등장**인데 이 quest 는 그 표기의 뜻을
+                         **한 번도 풀어 주지 않았다**(전수 grep 0건). 형제 셋은 첫 등장 자리에서
+                         바로 풀어 준다 — `mcc21simplemath`·`mcc22birthday`·`xorstring` 모두
+                         「2 를 N 번 곱한 수」. 학생이 *"무서운 기호 묶음으로만 느껼졌다"* 고 한 층이다.
+                       ⚠️ 비슷한 설명이 **6쪽 맨 끝**에 있었는데 K=2 한정이고 너무 늦었다. */}
+                  {t(E, " — there are 2ᴺ − 1 of them (2 multiplied by itself N times, minus 1).",
+                       " 을 봐요. 모두 2ᴺ − 1 개예요 (2 를 N 번 곱한 수에서 1 을 뺀 것).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>

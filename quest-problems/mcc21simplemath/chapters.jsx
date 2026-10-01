@@ -58,9 +58,14 @@ export function makeMcc21SimpleMathCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {/* ⛔ 2026-10-01 — 이 미션 박스가 **가장 먼저 읽히는 카드**인데 `10^9+7` 이
+                     여기 처음 나오고, `^` 표기의 뜻은 **세 쪽 뒤**에서야 풀렸다(pedagogy 3순위).
+                     학생: *"왜 하필 이 숫자로 나누는지 설명이 없었다. 그냥 「그런가보다」 하고 넘어갔다."*
+                   ⭐ 「큰 수를 그 수로 나눈 나머지로 바꿔 둔다」만 알면 되는 관용 상수라,
+                     이름을 가르치지 말고 **그 자리에서 쓰임만** 한 마디로 밝힌다. */}
               {t(E,
-                "Sum the operator-combined value of every nonempty subset, mod 10^9+7.",
-                "비어 있지 않은 부분집합마다 연산자로 합친 값을 구해요.\n그 값을 전부 더한 뒤 10^9+7 로 나눈 나머지를 출력해요.")}
+                "Sum the operator-combined value of every nonempty subset. The total gets huge, so print its remainder after dividing by 1000000007.",
+                "비어 있지 않은 부분집합마다 연산자로 합친 값을 구해요.\n그 값을 전부 더해요. 합이 아주 커지니까\n1000000007 로 나눈 나머지만 출력해요.")}
             </div>
           </div>
 

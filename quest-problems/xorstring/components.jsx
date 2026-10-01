@@ -152,8 +152,8 @@ export function getXorStringWalk(E, lang = "py") {
          `feedback_new_text_must_actually_render` 의 네 번째 사례다 — 글을 쓴 게 아니라
          **뜨는 자리에** 써야 한다. mod 5 손풀이를 여기로 옮긴다(PDF 쪽은 그대로 둔다). */
       { hi: [0, 5], bubble: t(E,
-        "What do we need to read? n, k, and the string s.\nWe divide by 3 later — but these are values already reduced by MOD,\nso plain division breaks.\nTiny example: under mod 5, the number 9 becomes 4. And 9 ÷ 3 = 3.\nMultiply 4 by 2 and you get 8, which is also 3 under mod 5 — same answer.\nThat 2 is 3's \"modular inverse\". inv3 is the same thing for mod 10⁹+7.\n(Name to look up: Fermat's little theorem)",
-        "무엇을 읽어야 하나요? n, k 와 문자열 s 예요.\n뒤에서 3 으로 나눠야 하는데, 이 값들은 MOD 로 줄인 값이라\n그냥 나누면 틀려요.\n작은 예 — mod 5 에서 9 는 4 가 돼요. 그리고 9 ÷ 3 = 3 이죠.\n4 에 2 를 곱하면 8 이고, 8 도 mod 5 에서 3 이에요 — 답이 같아요.\n이 2 가 3 의 «모듈러 역원»이에요. inv3 이 10⁹+7 에서 그 값이에요.\n(찾아볼 이름: 페르마의 소정리)") },
+        "What do we need to read? n, k, and the string s.\nWe divide by 3 later — but these are values already reduced by MOD,\nso plain division breaks.\nTiny example: under mod 5, the number 9 becomes 4. And 9 ÷ 3 = 3.\nMultiply 4 by 2 and you get 8, which is also 3 under mod 5 — same answer.\nThat 2 is 3's \"modular inverse\". inv3 is the same thing for mod 998244353 — the MOD this problem uses.\n(Name to look up: Fermat's little theorem)",
+        "무엇을 읽어야 하나요? n, k 와 문자열 s 예요.\n뒤에서 3 으로 나눠야 하는데, 이 값들은 MOD 로 줄인 값이라\n그냥 나누면 틀려요.\n작은 예 — mod 5 에서 9 는 4 가 돼요. 그리고 9 ÷ 3 = 3 이죠.\n4 에 2 를 곱하면 8 이고, 8 도 mod 5 에서 3 이에요 — 답이 같아요.\n이 2 가 3 의 «모듈러 역원»이에요. inv3 이 998244353 — 이 문제의 MOD — 에서 그 값이에요.\n(찾아볼 이름: 페르마의 소정리)") },
       { hi: [6, 15], bubble: t(E,
         "Each pair type (0,0 / 1,1 / 0,1) has a closed-form beauty after k transforms — it only needs 2^k and (-1)^k. Compute those once, then the three beauty values f00, f11, f01.",
         "각 쌍 종류(0,0 / 1,1 / 0,1)가 k번 변신한 뒤 갖는 beauty 는 공식으로 바로 나와요 — 2^k 와 (-1)^k 만 있으면 돼요. 그걸 구하고, 세 가지 beauty 값 f00, f11, f01 을 계산해요.") },
@@ -202,8 +202,8 @@ export function getXorStringSections(E) {
            `strangefn` 은 **찾아볼 이름**이 없었다. 양쪽을 채운다.
            `memory/quest_season_shape_consistency.md`: *"문장 하나를 고칠 때도 형제를 먼저 열어라."* */
         t(E,
-          "As a whole number it was a multiple of 3 — but reduced mod 10⁹+7 it may not be,\nso we can't just divide by 3.\nTry a tiny example: mod 5, value 9. 9 mod 5 = 4. But 9/3 = 3, and 3 mod 5 = 3.\nMultiply 4 by 2 (since 3×2 = 6 ≡ 1 mod 5) and you get 8 ≡ 3 mod 5 — same answer.\nThat 2 is the \"modular inverse\" of 3 under mod 5.\npow(3, MOD-2, MOD) finds that same value for mod 10⁹+7.\n(Name to look up: Fermat's little theorem)",
-          "정수로는 3 의 배수였죠. 그런데 10⁹+7 로 줄인 값이라\n3 의 배수가 아닐 수도 있어요. 그래서 3 으로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 9 라고 해요.\n9 mod 5 = 4 예요. 그런데 9÷3 = 3 이고, 3 mod 5 = 3 이에요.\n4 에 2 를 곱하면 (3×2 = 6 ≡ 1 mod 5 이니까) 8 ≡ 3 mod 5,\n똑같이 3 이 나와요. 이 2 가 mod 5 에서 3 의 '모듈러 역원'이에요.\npow(3, MOD-2, MOD) 가 mod 10⁹+7 에서 그 값을 구해줘요.\n(찾아볼 이름: 페르마의 소정리)"),
+          "As a whole number it was a multiple of 3 — but reduced mod 998244353 it may not be,\nso we can't just divide by 3.\nTry a tiny example: mod 5, value 9. 9 mod 5 = 4. But 9/3 = 3, and 3 mod 5 = 3.\nMultiply 4 by 2 (since 3×2 = 6 ≡ 1 mod 5) and you get 8 ≡ 3 mod 5 — same answer.\nThat 2 is the \"modular inverse\" of 3 under mod 5.\npow(3, MOD-2, MOD) finds that same value for mod 998244353.\n(Name to look up: Fermat's little theorem)",
+          "정수로는 3 의 배수였죠. 그런데 998244353 으로 줄인 값이라\n3 의 배수가 아닐 수도 있어요. 그래서 3 으로 그냥 못 나눠요.\n작은 예로 확인해봐요. mod 5, 값 9 라고 해요.\n9 mod 5 = 4 예요. 그런데 9÷3 = 3 이고, 3 mod 5 = 3 이에요.\n4 에 2 를 곱하면 (3×2 = 6 ≡ 1 mod 5 이니까) 8 ≡ 3 mod 5,\n똑같이 3 이 나와요. 이 2 가 mod 5 에서 3 의 '모듈러 역원'이에요.\npow(3, MOD-2, MOD) 가 mod 998244353 에서 그 값을 구해줘요.\n(찾아볼 이름: 페르마의 소정리)"),
         t(E,
           "pow(2, k, MOD) computes 2^k (2 multiplied by itself k times) mod p fast even when k is 10^18.",
           "pow(2, k, MOD) 는 k 가 10^18 이어도 2^k(2를 k번 곱한 수) mod p 를 빠르게 계산해요."),

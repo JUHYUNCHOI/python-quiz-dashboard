@@ -133,8 +133,8 @@ export default function Mcc21SimpleMathApp(props = {}) {
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
-          { icon: "🔀", ko: "연산 종류별로 나눠 풀기", en: "Split by operation type" },
-          { icon: "🔢", ko: "더하기는 등장 횟수로", en: "Sum: count appearances" },
+          { icon: "🔀", ko: "연산자마다 다른 식", en: "A different formula per operator" },
+          { icon: "🔢", ko: "더하기는 몇 번 쓰이는지 세기", en: "Sum: count how often each is used" },
           { icon: "✖️", ko: "곱하기는 묶어서 펼치기", en: "Product: expand the brackets" },
         ]} />
         <QuestProgressBar
