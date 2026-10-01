@@ -375,7 +375,12 @@ export function makeMcc20KittyCh2(E) {
       type: "reveal",
       narr: t(E,
         "Count the zeros in one cycle, then use full cycles plus the leftover partial cycle.",
-        "세 번째 열쇠예요. 한 바퀴의 0만 세면 나머지는 곱셈과\n덧셈으로 끝나요. 큰 반복이 필요 없어요."),
+        /* ⛔ 2026-10-01 — 원래 "**세 번째** 열쇠예요" 였다. 그런데 「첫째·둘째 열쇠」가
+           **이 quest 어디에도 없다**(「열쇠」가 전체에서 이 한 번만 나온다 — grep 확인).
+           주석상 옛 「insight 1·2」 쪽이 **중복이라 삭제됐는데 번호만 남았다.**
+           학생은 1·2번을 한 번도 못 봤는데 「3번째」를 만난다
+           (`feedback_sentence_must_follow` — 가리키는 말이 화면에 있나). 번호를 뺀다. */
+        "한 바퀴의 0만 세면 나머지는 곱셈과\n덧셈으로 끝나요. 큰 반복이 필요 없어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 12, padding: "14px 16px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.9, ...KA }}>

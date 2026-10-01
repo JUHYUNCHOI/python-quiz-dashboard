@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
@@ -80,6 +80,18 @@ export function KnightExactSim({ E }) {
             "칸을 눌러 목표를 골라요. 그 칸까지 최소 이동이 나와요.\n그다음 K 를 바꿔 봐요.\n초록이면 정확히 K 번에 도착할 수 있다는 뜻이에요.")}
         </div>
 
+        {/* 🐛 2026-10-01 — **K 버튼이 격자·캡션 아래에 있어 첫 화면(스크롤 0)에 안 보였다.**
+            3쪽은 *"그다음 K 를 바꿔 봐요"* 라고 시키는데, 그 자리를 누르면 K 가 아니라
+            하단 고정 바의 「다음 쪽 ▶」이 눌려 **쪽이 넘어갔다** — 시키는 대로 했더니
+            그 쪽을 잃는다. 형제 `mcc20citytour` 와 같은 순서로 **조작을 격자 위에** 둔다. */}
+        {/* K stepper */}
+        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+          <span style={{ fontSize: 12.5, color: "#1e3a8a", fontWeight: 700 }}>K =</span>
+          <button onClick={() => setK(Math.max(0, k - 1))} style={kBtn}>−</button>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 800, color: A, minWidth: 26, textAlign: "center" }}>{k}</span>
+          <button onClick={() => setK(k + 1)} style={kBtn}>+</button>
+        </div>
+
         {/* board */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
           <div style={{
@@ -127,14 +139,6 @@ export function KnightExactSim({ E }) {
           <b style={{ color: A, fontFamily: "'JetBrains Mono',monospace" }}>({dx}, {dy})</b>
           {t(E, "  ·  minimum moves = ", "  ·  최소 이동 = ")}
           <b style={{ color: A }}>{need}</b>
-        </div>
-
-        {/* K stepper */}
-        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-          <span style={{ fontSize: 12.5, color: "#1e3a8a", fontWeight: 700 }}>K =</span>
-          <button onClick={() => setK(Math.max(0, k - 1))} style={kBtn}>−</button>
-          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 800, color: A, minWidth: 26, textAlign: "center" }}>{k}</span>
-          <button onClick={() => setK(k + 1)} style={kBtn}>+</button>
         </div>
 
         {/* verdict */}
@@ -454,14 +458,34 @@ function buildKnightBfsTrace(E) {
 
 export function Mcc20KnightBfsProcessStepper({ E }) {
   const trace = useMemo(() => buildKnightBfsTrace(E), [E]);
-  const { safe, setIdx, total, step } = useTraceStep(trace, "mcc20knight-bfs");
+  const { safe, setIdx: rawSetIdx, total, step } = useTraceStep(trace, "mcc20knight-bfs");
   const st = step || trace[0];
+  /* 🐛 2026-10-01 — **5걸음째부터 말풍선이 화면 밖으로 밀렸다.** 걸음을 누르는 버튼이
+     시뮬 맨 아래에 있어서, 눌러 가다 보면 말풍선(시뮬 맨 위)이 상단 고정 바 둘
+     (헤더 + quest 바, 0~105px)에 먹히거나 아예 위로 사라진다. 형제 `mcc20citytour`
+     가 2026-09-27 에 **바로 이 버그**를 고친 방법을 그대로 가져온다
+     (`mcc20citytour/components.jsx` 의 `SAFE_TOP` + `scrollBy`).
+     z 를 올려 고정 바를 덮는 건 더 나쁘다 — 걸음을 누르면 화면을 맞춰 준다.
+     ⚠️ 복원값에는 안 건다 — 학생이 **직접 누른 뒤**에만 움직인다(`touched`). */
+  const [touched, setTouched] = useState(false);
+  const setIdx = (n) => { setTouched(true); rawSetIdx(n); };
+  const simRef = useRef(null);
+  useEffect(() => {
+    if (!touched) return;
+    const el = simRef.current;
+    if (!el || typeof window === "undefined") return;
+    const SAFE_TOP = 118;            // 고정 바 105px + 숨 쉴 자리
+    const r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) return;   // 시뮬이 화면 밖이면 건드리지 않는다
+    if (r.top >= SAFE_TOP) return;                            // 이미 잘 보인다
+    window.scrollBy(0, r.top - SAFE_TOP);
+  }, [safe, touched]);
   const tone = { pass: "#059669", oob: "#9ca3af", visited: "#9ca3af", named: A }[st.status] || A;
   const bg   = { pass: "#ecfdf5", oob: "#f9fafb", visited: "#f9fafb", named: "#eff6ff" }[st.status] || "#eff6ff";
 
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ background: "#eff6ff", border: `1px solid ${A}55`, borderRadius: 12, padding: 14, ...KA }}>
+      <div ref={simRef} style={{ background: "#eff6ff", border: `1px solid ${A}55`, borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: A, marginBottom: 8 }}>
           🐴 {t(E, "Filling the table, one square at a time", "표가 한 칸씩 채워지는 걸 봐요")}
         </div>
