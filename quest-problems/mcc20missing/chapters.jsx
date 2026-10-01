@@ -4,9 +4,18 @@ import { C, t } from "@/components/quest/theme";
 const KA = { wordBreak: "keep-all" };
 const A = "#f97316";
 
-// Concept sim uses the official sample 1: N=5, a = [-1, 7, 4, 1]  → answer 4.
-const SIM_N = 5;
-const SIM_A = [-1, 7, 4, 1];
+/* ⛔ 2026-10-01 — 시뮬이 **예제 1 에만 하드코딩**돼 있었다. 학생(초6) 첫 검증:
+     *"예제 2(여러 K 가 동시에 맞는 경우)는 **한 번도 시뮬로 안 보여준다.** 2쪽에 결론만
+       있다 … **「여러 K가 동시에 답이 될 수 있다」는 말로만 알지 눈으로 확인한 적은 없다.**"*
+   ⭐ **그게 이 문제의 핵심이다** — 답이 「합」인 이유가 거기 있다.
+   시뮬은 이미 「후보 K 를 눌러 보는」 인터랙티브라 **입력만 바꾸면 된다** —
+   새 쪽이 필요 없다(`feedback_shorter_not_longer`). 공식 샘플 둘을 그대로 쓴다.
+   검산: 예제1 `N=5,[-1,7,4,1]` → 맞는 K **하나(2)**, 빠진 수 4 ·
+         예제2 `N=6,[4,5,13,6,11]` → **둘(10→2 · 7→5)**, 합 7. */
+const SIM_EXAMPLES = [
+  { n: 5, a: [-1, 7, 4, 1] },      // 공식 샘플 1 — 맞는 K 가 하나
+  { n: 6, a: [4, 5, 13, 6, 11] },  // 공식 샘플 2 — 맞는 K 가 둘
+];
 
 /* ─────────────────────────────────────────────────────────────
    Concept sim: pick a candidate K, subtract it back with |x−K|,
@@ -15,7 +24,8 @@ const SIM_A = [-1, 7, 4, 1];
    must be N (or N−1) sitting at an extreme of the list.
    ───────────────────────────────────────────────────────────── */
 function Mcc20MissingAnchorSim({ E }) {
-  const N = SIM_N, a = SIM_A;
+  const [exIdx, setExIdx] = useState(0);
+  const { n: N, a } = SIM_EXAMPLES[exIdx];
   const total = (N * (N + 1)) / 2;
   const mn = Math.min(...a), mx = Math.max(...a);
   // the 4 candidate K values (deduplicated, ascending)
@@ -33,6 +43,16 @@ function Mcc20MissingAnchorSim({ E }) {
     setK(c);
     setTried((prev) => (prev.includes(c) ? prev : [...prev, c]));
   };
+  // 예제를 바꾸면 고른 K 와 「다 눌러 봤나」를 **반드시 비운다** —
+  // 안 비우면 예제 2 에서 예제 1 의 후보가 눌린 것처럼 보인다.
+  const chooseEx = (i) => { setExIdx(i); setK(null); setTried([]); };
+  // 이 예제에서 **맞는 K 가 몇 개인가** — 마무리 문장이 이 수로 갈린다
+  const validCount = candidates.filter((c) => {
+    const m = a.map((x) => Math.abs(x - c));
+    const cnt = {};
+    m.forEach((v) => { cnt[v] = (cnt[v] || 0) + 1; });
+    return m.every((v) => v >= 1 && v <= N && cnt[v] === 1) && new Set(m).size === N - 1;
+  }).length;
   const triedAll = tried.length >= candidates.length;
 
   const mags = K == null ? [] : a.map((x) => Math.abs(x - K));
@@ -57,6 +77,18 @@ function Mcc20MissingAnchorSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, ...KA }}>
+        {/* ⛔ 라벨은 **N 으로만** 가른다 — 「맞는 K 가 하나/둘」이라고 쓰면 **누르기 전에
+               답을 흘린다**(`check-quiz-spoiler` 가 보는 층). 학생이 눌러서 알아내야 한다.
+             1-2쪽 샘플 상자가 쓰는 말(「예제 1 입력」·「예제 2 입력」)과 맞췄다. */}
+        <div style={{ display: "flex", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
+          {SIM_EXAMPLES.map((ex, i) => (
+            <button key={i} onClick={() => chooseEx(i)} style={{
+              padding: "4px 10px", borderRadius: 999, fontSize: 11.5, fontWeight: 800,
+              cursor: "pointer", border: `1.5px solid ${i === exIdx ? A : "#fdba74"}`,
+              background: i === exIdx ? A : "#fff", color: i === exIdx ? "#fff" : "#9a3412",
+            }}>{t(E, `Example ${i + 1} (N=${ex.n})`, `예제 ${i + 1} (N=${ex.n})`)}</button>
+          ))}
+        </div>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 8 }}>
           ⚓ {t(E, "Undo a candidate K and see what comes back", "후보 K 를 되돌려서 무엇이 나오는지 봐요")}
         </div>
@@ -151,10 +183,18 @@ function Mcc20MissingAnchorSim({ E }) {
         )}
 
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+          {/* ⛔ 옛 문장은 *"**두 번째 예제가** 바로 그런 경우예요"* 라는 **교차 참조**였다 —
+                 이제 그 예제를 **여기서 직접 누를 수 있으니** 말이 안 된다.
+               ⭐ 「맞는 K 가 몇 개인가」로 갈리는 **한 틀**로 합친다. 예제가 늘어도 안 고쳐도 된다.
+                 「초록」은 학생이 방금 화면에서 본 색 그대로다(지어낸 말 아님).
+               ⛔ 누르기 **전에는** 「여러 개가 맞을 수도 있어요」를 말하지 않는다 —
+                 말해 버리면 발견이 아니다. 다 눌러 본 뒤에만 뜬다. */}
           {triedAll
-            ? t(E,
-                "Only one K survived here, so the answer is its missing number. When more than one K survives we add every one of their missing numbers together — that is what the second example does.",
-                "여기서는 K 하나만 살아남았으니 그 K 의 빠진 수가 답이에요.\n살아남는 K 가 여럿이면 각각의 빠진 수를 모두 더해요.\n두 번째 예제가 바로 그런 경우예요.")
+            ? (validCount >= 2
+                ? t(E, `${validCount} values of K turned green,\nso we add all their missing numbers together.`,
+                       `K 가 ${validCount}개 초록이었어요.\n그래서 빠진 수를 모두 더해요.`)
+                : t(E, "Only one K turned green,\nso its missing number is the answer.",
+                       "K 하나만 초록이었어요.\n그 K 의 빠진 수가 답이에요."))
             : t(E,
                 "Try every candidate. How many of them survive?",
                 "후보를 하나씩 다 눌러 봐요. 몇 개가 살아남나요?")}

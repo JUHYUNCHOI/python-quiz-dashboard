@@ -112,8 +112,8 @@ export function getMcc20MissingWalk(E) {
     ],
     beats: [
       { hi: [0, 3], bubble: t(E,
-        "What should we output? The number erased before shuffling. This contest has no fixed input format — N and the shuffled array a are given as fixed values.",
-        "무엇을 출력해야 하나요? 뒤섞이기 전 지워진 수예요.\n이 대회는 입력 형식이 따로 없어요 — N 과 뒤섞인 배열 a 가 값으로 주어져요.") },
+        "What should we output? The number erased before shuffling. This contest has no fixed input format — N and the shuffled array a (the same list the input page calls Numbers) are given as fixed values.",
+        "무엇을 출력해야 하나요? 뒤섞이기 전 지워진 수예요.\n이 대회는 입력 형식이 따로 없어요 — N 과 뒤섞인 배열 a (입력 쪽의 Numbers 와 같아요) 가 값으로 주어져요.") },
       { hi: [4, 9], bubble: t(E,
         "If N is 1 there's nothing to compare — the missing number must be 1. Otherwise get ready: total is the sum of 1..N, mn/mx are the array's smallest/largest values, and lim is the range K can fall in.",
         "N 이 1 이면 비교할 것도 없이 빠진 수는 1 이에요.\n아니면 준비해요 — total 은 1..N 의 합, mn/mx 는 배열의 최소·최대값, lim 은 K 가 가질 수 있는 범위예요.") },
