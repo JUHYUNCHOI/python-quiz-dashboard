@@ -301,7 +301,25 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
                     무엇인지 안 밝혔다. 기호를 풀어 쓰고 k 를 문장 안에서 정의한다. */}
                 <div>• <b>P=1</b> {t(E, "each number lands in 2^(N-1) subsets → ", "수 하나는 2^(N-1) 개의 부분집합에 들어가요 → ")}<span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412" }}>2^(N-1) × (A₁+A₂+…+Aₙ)</span></div>
                 <div>• <b>P=2</b> {t(E, "sum of all subset products → ", "부분집합마다 곱한 값을 다 더하면 → ")}<span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412" }}>(1+A₁)(1+A₂)…(1+Aₙ) − 1</span></div>
+                {/* ⛔ 2026-10-01 — 학생(초6)이 이 쪽을 *"공식이 갑자기 **하늘에서 떨어지는** 느낌"* 이라 했다.
+                       *"이 쪽 제목이 「계획」인데 **계획이 아니라 결과만** 있었다."*
+                     「괄호를 펼친다」도 *"말 자체를 처음 들어봤다"* 고 했다.
+                   ⭐ 새 쪽을 만들지 않고(`feedback_shorter_not_longer`) **그 줄 아래에
+                     작은 셈 한 줄**을 붙인다 — 학생이 2쪽에서 손으로 맞혀 본 그 답(23)과 잇는다. */}
+                <div style={{ fontSize: 11.5, color: "#7c6f64", paddingLeft: 10, marginTop: 2 }}>
+                  {t(E, "check it: A = 1, 2, 3 → (1+1)(1+2)(1+3) − 1 = 2·3·4 − 1 = 23, the answer on page 2.",
+                       "직접 확인 — A = 1, 2, 3 이면 (1+1)(1+2)(1+3) − 1 = 2·3·4 − 1 = 23, 2쪽의 답과 같아요.")}
+                </div>
                 <div>• <b>P=3</b> {t(E, "if k numbers have that bit, count the odd picks → ", "그 비트를 가진 수가 k 개일 때, 홀수 개 뽑은 경우만 세면 → ")}<span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412" }}>2^(k-1) × 2^(N-k)</span></div>
+                {/* 🚨 학생이 **제일 크게 막힌 자리**(난이도 5): *"k 개 중에서 홀수 개를 고르는 방법이
+                       왜 정확히 2를 (k−1)번 곱한 수가 되는지 전혀 모르겠다. 그냥 외워야 하는 것처럼 느껴졌다."*
+                     그리고 스스로 처방까지 말했다 — *"**k=2나 k=3처럼 작은 수로 직접 홀수 개 고르는
+                     경우를 손으로 세어 보여줬으면** 「아 그래서 절반이구나」 하고 알았을 것 같다."*
+                   ✅ k=3 으로 검산함: 전체 8가지 중 홀수 개 고르기는 {a}{b}{c}{abc} **딱 4가지** = 2^(3−1). */}
+                <div style={{ fontSize: 11.5, color: "#7c6f64", paddingLeft: 10, marginTop: 2 }}>
+                  {t(E, "why half? count k = 3 by hand — of the 8 ways to pick, the odd ones are {a} {b} {c} {a,b,c}: exactly 4 = 2^(3-1).",
+                       "왜 반일까요? k = 3 을 손으로 세어 봐요 — 고르는 방법 8가지 중 홀수 개인 것은 {a} {b} {c} {a,b,c} 로 딱 4가지, 2^(3-1) 이에요.")}
+                </div>
               </div>
             </div>
           </div>
