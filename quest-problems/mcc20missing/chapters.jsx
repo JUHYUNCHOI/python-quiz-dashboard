@@ -514,19 +514,25 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                    어느 후보가 MAX 쪽이고 어느 쪽이 MIN 쪽인지는 **코드 쪽에 가서야** 나왔다.
                    위 두 행이 보여준 짝(+→MAX · −→MIN)을 **크기 두 가지에 그대로 적용**해
                    넷을 여기서 끝낸다. MAX/MIN 은 위 두 행의 꼬리표와 같은 말이다
-                   (코드 쓰면 mx/mn 이 된다 — 그건 다음 쪽 CodeWalk 범례가 맞는다). */}
+                   (코드 쓰면 mx/mn 이 된다 — 그건 다음 쪽 CodeWalk 범례가 맞는다).
+                 ⛔ 처음엔 가운데에 말을 뒀다(「가 MAX」/「is the MAX」). 화면 담당 실측 —
+                   **영어 375px 에서 3·4번째 줄이 두 쪽으로 쪼개졌다**(조건과 결론 공식이
+                   갈라졌다). 한국어는 0건이라 **같은 코드가 언어에 따라 다르게 깨진** 것이다.
+                 ⭐ 가운데 말을 **등호**로 바꿨다 — 언어별 길이 차이가 **0** 이 되고,
+                   그게 실제로 우리가 K 에 대해 푸는 **그 식**이다(선생님 질문에 바로 답한다).
+                 ⚠️ `minWidth` 는 가장 긴 라벨(`−(N−1) + K = MIN`)에 맞춘다 — 64 였을 때
+                   `+(N−1)…` 두 줄만 칸이 넓어져 둘째 칸 시작이 5~6px 어긋났다(실측). */}
               <div style={{ display: "flex", flexDirection: "column", gap: 3,
                             fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5,
                             color: "#7c6f64", marginTop: 8, marginBottom: 8 }}>
                 {[
-                  { num: "+N", end: "MAX", k: "K = MAX − N" },
-                  { num: "−N", end: "MIN", k: "K = MIN + N" },
-                  { num: "+(N−1)", end: "MAX", k: "K = MAX − (N−1)" },
-                  { num: "−(N−1)", end: "MIN", k: "K = MIN + (N−1)" },
+                  { lhs: "+N + K = MAX", k: "K = MAX − N" },
+                  { lhs: "−N + K = MIN", k: "K = MIN + N" },
+                  { lhs: "+(N−1) + K = MAX", k: "K = MAX − (N−1)" },
+                  { lhs: "−(N−1) + K = MIN", k: "K = MIN + (N−1)" },
                 ].map((c) => (
                   <div key={c.k} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
-                    <span style={{ color: "#9a3412", fontWeight: 700, minWidth: 64 }}>{c.num} + K</span>
-                    <span>{t(E, `is the ${c.end}`, `가 ${c.end}`)}</span>
+                    <span style={{ color: "#7c6f64", minWidth: 118 }}>{c.lhs}</span>
                     <span style={{ color: "#9a3412", fontWeight: 700 }}>→ {c.k}</span>
                   </div>
                 ))}
