@@ -425,20 +425,28 @@ export function makeMcc21GlassCh2(E) {
       narr: t(E,
         "For a chosen position the formula might give x×x = 20. Since 20 is not a perfect square, no integer radius fits there — we move to the next position.",
         "20 은 완전제곱수가 아니라서 그 자리엔 정수 반지름이 없어요."),
+      /* ⛔ 2026-10-01 — 옛 퀴즈는 **완전제곱이면 받아들이는 길**만 물었다.
+           그런데 이 풀이의 핵심은 *"완전제곱이어도 **순서를 어기면 버린다**"* 인데,
+           공식 샘플 둘 다 그 경계 검사를 **꺼도 똑같은 답**이 나온다 — 규칙이
+           한 번도 안 켜진다(`feedback_example_must_make_the_rule_visible`).
+         ⭐ 그래서 **버리는 쪽**을 묻는 구체적 입력으로 바꾼다. 실측(🔒 로직 그대로 실행):
+             `N=3, A=73, R=[13,10]` → 경계검사 **켬 (x=2, p=3)** · **끔 (x=14, p=2)** → 갈린다
+           (지금 공식 예제 `N=4, A=10, R=[1,4,2]` 는 켜나 끄나 `(3,2)` 로 같다.)
+         ⚠️ 공식 샘플 상자는 **안 건드렸다** — 이 **퀴즈 슬롯 하나**만 갈아 끼웠다. */
       question: t(E,
-        "A position gives x×x = 49. What do we do?",
-        "어떤 자리에서 x×x = 49 가 나왔어요. 어떻게 할까요?"),
+        "R = [13, 10], A = 73. At p = 2 we get x×x = 196, so x = 14. Now what?",
+        "R = [13, 10], A = 73 이에요. p = 2 에서 x×x = 196 이라 x = 14 가 나왔어요.\n어떻게 할까요?"),
       /* 2026-09-17: 정답 보기만 2 배 넘게 길었다 — 읽지 않고 길이로 찍을 수 있다.
          셋 다 비슷한 길이로 맞췄다. 정답 자리(0)는 그대로. */
       options: [
-        t(E, "x = 7, then check it fits between its neighbours", "x = 7 로 두고 양옆 사이인지 확인해요"),
-        t(E, "Reject it: 49 is bigger than the other radii", "49 는 다른 반지름보다 크니까 버려요"),
-        t(E, "x = 49, the formula already gave the radius", "x = 49, 식이 이미 반지름을 준 거예요"),
+        t(E, "Reject it — 14 is bigger than the 13 above it", "버려요 — 위 반지름 13 보다 14 가 더 커요"),
+        t(E, "Accept x = 14, since 196 is a perfect square", "196 이 완전제곱수니까 x = 14 를 받아들여요"),
+        t(E, "x = 196, use that straight as the radius", "x = 196, 이 값을 그대로 반지름으로 써요"),
       ],
       correct: 0,
       explain: t(E,
-        "√49 = 7 is an integer, so x = 7 is a candidate. If it also lies between its neighbors in the sorted order, it's a valid answer.",
-        "√49 = 7 은 정수라서 x = 7 이 후보가 돼요.\n줄 세운 순서에서 양옆 사이에도 들어가면 진짜 답이에요."),
+        "√196 = 14 really is an integer — but it has to sit below 13. 14 > 13 breaks the order, so we move on. The true answer here is x = 2 at p = 3.",
+        "√196 = 14 는 정말 정수예요 — 그런데 13 보다 작아야 해요.\n14 > 13 이라 순서가 깨져서 다음 자리로 넘어가요.\n진짜 답은 p = 3 에서 x = 2 예요."),
     },
 
     // 2-4 practice input (sample 2)

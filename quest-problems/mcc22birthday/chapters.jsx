@@ -160,21 +160,30 @@ export function makeMcc22BirthdayCh1(E) {
     // 1-4: understanding quiz
     {
       type: "quiz",
+      /* ⛔ 2026-10-01 — 쿠키 모양은 **넷**(p·q·b·d)인데 **화면엔 셋만** 나왔다.
+           공식 샘플 8쿼리의 `(좌우뒤집힘, 상하뒤집힘)` 조합이 `(0,0)·(1,0)·(1,1)` 뿐이라
+           **`b`(상하만 뒤집힌 것)가 0회**였고, 이 퀴즈도 `q` 를 물어 겹쳤다.
+           → 학생이 **네 번째 모양을 한 번도 못 보고** 넘어간다
+             (`feedback_example_must_make_the_rule_visible`).
+         ⭐ 그래서 이 퀴즈만 **`C`(아래로 복사하며 상하 뒤집기)** 를 묻는 것으로 간다.
+           실측(🔒 `FULL_PY` 직접 실행): 입력 `1 1 2 / C / 1 2` → 출력 **`pb`** —
+           2번 쿠키가 **b** 다. 이걸로 화면 전체에 **p·q·b·d 넷이 다 나온다.**
+         ⚠️ 공식 샘플은 **안 건드렸다** — 이 **퀴즈 슬롯 하나**만 갈아 끼웠다. */
       narr: t(E,
-        "Your turn — grow the grid in your head, then read cookie #3.",
-        "이번엔 직접 격자를 키워 보고 3번 쿠키를 읽어봐요."),
+        "Your turn — grow the grid in your head, then read cookie #2.",
+        "이번엔 직접 격자를 키워 보고 2번 쿠키를 읽어봐요."),
       question: t(E,
-        "Grid [p]. Apply A, then B. What shape is cookie #3?",
-        "격자 [p] 에 A 를 적용하고 B 를 적용해요. 3번 쿠키는 어떤 모양일까요?"),
+        "Grid [p]. Apply C. What shape is cookie #2?",
+        "격자 [p] 에 C 를 적용해요. 2번 쿠키는 어떤 모양일까요?"),
       options: [
-        t(E, "q", "q"),
-        t(E, "p", "p"),
         t(E, "b", "b"),
+        t(E, "p", "p"),
+        t(E, "d", "d"),
       ],
       correct: 0,
       explain: t(E,
-        "A gives [p p]; B appends a left↔right-flipped copy [q q], so the row is p p q q. Cookie #3 = q.",
-        "A 가 [p p] 를 만들어요.\nB 는 좌우로 뒤집은 복사본 [q q] 를 붙여 p p q q 가 돼요.\n그래서 3번 쿠키는 q 예요."),
+        "C copies the grid below with a top↔bottom flip, so p becomes b. The grid is [p] then [b] — cookie #2 = b.",
+        "C 는 아래로 복사하면서 위아래로 뒤집어요.\n그래서 p 가 뒤집히면 b 가 돼요.\n격자는 [p] 다음 [b] 가 되고, 2번 쿠키는 b 예요."),
     },
   ];
 }

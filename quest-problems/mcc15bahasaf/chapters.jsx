@@ -15,8 +15,21 @@ const VOWELS = "aeiou";
    그대로 옮겨 "cu 는 cufu 가 되고 a 는 afa 가 된다" 고 말한다(:289 근처).
    그러면 시뮬 5단계 중 **첫 두 단계는 답을 알고 누르는 것**이 된다.
    원문 문장은 원문이니 지우지 않고, 데모를 공식 샘플의 겹치지 않는 부분으로 옮겼다.
-   "ha/ri i/ni" 도 공식 샘플(cu/a/ca ha/ri i/ni san/gat pa/nas)의 일부라 연결은 그대로다. */
-const DEMO_SENTENCE = "ha/ri i/ni";
+   ⛔ 2026-10-01 — "ha/ri i/ni" 는 **공식 샘플의 일부**였지만 결함이 하나 있었다:
+   규칙은 *"첫 자음은 음절 **어디에 있든** 찾는다"* 인데 **데모의 음절이 전부
+   첫 글자가 자음**(ha·ri·ni)이라, 「첫 글자만 보는」 틀린 규칙으로 돌려도
+   **글자 그대로 똑같이 나온다.** 규칙이 한 번도 안 켜졌다
+   (`feedback_example_must_make_the_rule_visible`).
+   ⚠️ 공식 샘플(cu/a/ca ha/ri i/ni san/gat pa/nas) **안에는 이걸 보여줄 음절이 없다** —
+   자음이 있는 음절이 cu·ca·ha·ri·ni·san·gat·pa·nas 로 **전부 첫 글자가 자음**이다.
+   그래서 **공식 샘플은 그대로 두고 데모만** "ri" → "an" 으로 바꾼다(음절 수 그대로).
+   실측(🔒 `firstConsonantPos`/`echoOf` 로 직접 확인):
+     an → 올바른 규칙 **anaf**(n 이 1번 자리의 첫 자음) · 첫 글자만 보는 판 **anfan** → **갈린다**
+   ⚠️ 그래서 이제 데모는 **공식 샘플의 부분집합이 아니다** — "ha" 만 겹친다.
+   공식 샘플엔 이 경우를 보여줄 단어가 없어서 어쩔 수 없다.
+   ⚠️ MCC 2015 는 **PDF 원문이 저장소에 없다**(`public/problems/` 전수 확인) —
+   「원문에 있는 말인가」는 **확인 못 했다.** A조도 같은 결론이었다. */
+const DEMO_SENTENCE = "ha/an i/ni";
 const DEMO_WORDS = DEMO_SENTENCE.split(" ").map((w) => w.split("/"));
 const DEMO_FLAT = [];
 DEMO_WORDS.forEach((w, wi) => w.forEach((syl, si) => DEMO_FLAT.push({ syl, wi, first: si === 0 })));

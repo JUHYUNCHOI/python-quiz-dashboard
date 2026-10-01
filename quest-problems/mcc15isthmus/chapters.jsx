@@ -372,9 +372,18 @@ export function makeMcc15IsthmusCh1(E) {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
+            {/* ⛔ 2026-10-01 — **샘플이 K=1 뿐**이라 「order-K 는 K칸 **연속**」 규칙이
+                   한 번도 안 켜졌다. K=1 에서는 「옆 칸 하나만 보기」와 **결과가 같다** —
+                   틀린 코드로도 3 이 나온다(`feedback_example_must_make_the_rule_visible`).
+                 ⭐ 같은 높이에서 **K 만 바꾸면 답이 갈린다** — 새 입력 0개.
+                 실측(🔒 코드 직접 실행, `N=6 · H=[7,4,0,5,1,3]`):
+                   **K=1 → 3 · K=2 → 0 · K=3 → 0**
+                 ⚠️ 처음엔 「K=2 → 2」로 적었다가 **틀렸다** — 그 값은 **다른 입력**
+                   (`N=8, [0,1,5,2,1,3,4,0]`)의 것이었다. 공식 샘플에서는 **0** 이다.
+                   A조가 잡았다. 숫자를 옮길 땐 **어느 입력의 값인지** 같이 적어라. */}
             {t(E,
-              "With K = 1 there is one order-1 peak (height 5) and two order-1 valleys (heights 0 and 1), so 3 settlements.",
-              "K = 1 일 때 order-1 봉우리가 1개(높이 5) 있어요.\norder-1 골짜기는 2개(높이 0, 높이 1) 있어요.\n그래서 마을은 3개예요.")}
+              "With K = 1 there is one order-1 peak (height 5) and two order-1 valleys (heights 0 and 1), so 3 settlements.\nIf K were 2, the answer would be 0 — from height 0, going right is 0→5→1, which turns back down after just one step, so no 2-step climb survives.",
+              "K = 1 일 때 order-1 봉우리가 1개(높이 5) 있어요.\norder-1 골짜기는 2개(높이 0, 높이 1) 있어요.\n그래서 마을은 3개예요.\nK 가 2 였다면 0 개예요 — 높이 0 에서 오른쪽은 0→5→1 인데,\n한 칸 만에 다시 내려가서 2칸 연속 오르막이 끊겨요.")}
           </div>
         </div>),
     },

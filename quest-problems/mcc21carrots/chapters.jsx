@@ -17,7 +17,14 @@ const KA = { wordBreak: "keep-all" };
 const PRESETS = [
   { label: "① 3 5 2", vals: [3, 5, 2] },
   { label: "② 4 6 2 3", vals: [4, 6, 2, 3] },
-  { label: "③ 4 8 10 5 2", vals: [4, 8, 10, 5, 2] },
+  /* ⛔ 2026-10-01 — 공식 샘플 셋은 **전부 「홀수1 + 짝수2」 경로로만** YES 가 난다.
+     실측: `odd >= 3` 가지를 **통째로 지워도** 세 답이 `NO/YES/YES` **그대로**다 —
+     「홀수 3개」 레시피가 화면 어디에서도 **한 번도 안 쓰인다**
+     (`feedback_example_must_make_the_rule_visible`).
+     ⭐ 그래서 **시뮬 프리셋 하나만** 바꾼다 — 공식 샘플 상자는 **안 건드린다**
+       (`feedback_original_problem_is_the_source`). `[1,3,5]` 는 규칙 전부면 YES,
+       「홀수 3개」를 지우면 NO 로 **갈린다**(메인 세션이 직접 확인). */
+  { label: "③ 1 3 5", vals: [1, 3, 5] },
 ];
 
 function OddEvenPileSim({ E }) {
@@ -286,8 +293,8 @@ export function makeMcc21CarrotsCh1(E) {
                  형식 카드는 "각 줄이 무엇인지" 까지가 몫이고, "왜 그 답인지" 는
                  바로 다음 쪽 시뮬이 같은 세 샘플을 프리셋으로 갖고 있어서 거기서 답한다.
                  원문 설명을 지운 게 아니라 자리를 옮긴 것이다. */
-              "Same three tests wait in the sim on the next page — try them there and see which sums come out odd.",
-              "다음 쪽 시뮬에 이 세 테스트가 그대로 들어 있어요.\n거기서 직접 눌러보며 어느 합이 홀수가 되는지 봐요.")}
+              "Try the first two tests in the sim on the next page, plus one more to explore — see which sums come out odd.",
+              "앞의 두 테스트를 다음 쪽 시뮬에서 눌러보고, 하나 더 살펴봐요.\n어느 합이 홀수가 되는지 봐요.")}
           </div>
         </div>),
     },
