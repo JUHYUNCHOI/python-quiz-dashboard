@@ -586,3 +586,208 @@ PM: *"내일 범위는 내가 혼자 긋지 않는다."*
 3. **기준 없는 「0건」은 0건이 아니다.**
 4. **「모여서」는 2라운드다.** 오늘 2라운드가 **둘의 안을 뒤집었다** — 1라운드만 했으면 못 잡았다.
 5. **새 글을 넣으면 그 글이 화면에 「뜨는지」 봐라.** 오늘 `why`·`pyOnly`(📄 PDF 전용)에 쓴 실수가 **두 번** 났다.
+
+# ═══════════════════════════════════════════════════════════
+# 2026-10-01 — MCC 2020 여섯 개 재검토 (선생님: "다 붙어서 다시 검토")
+# ═══════════════════════════════════════════════════════════
+
+PM 판정 전문은 `.claude/WORK.md` 맨 끝("PM 판정 — MCC 2020 여섯 개 재검토 설계").
+**정정: 브리핑과 달리 4/6 은 이미 AlgorithmTags 가 있다.** `kitty`·`missing` 공백은 의도적 — 건드리지 마라.
+
+| 항목 | 상태 | 비고 |
+|---|---|---|
+| MCC20 리뷰 — pedagogy-reviewer | READY | 프롬프트 ①, 여섯 개 전부 |
+| MCC20 리뷰 — quest-auditor | READY | 프롬프트 ②, 여섯 개 전부 |
+| MCC20 리뷰 — python-qa | READY | 프롬프트 ③, 여섯 개 전부 |
+| MCC20 리뷰 — ux-reviewer | READY | 프롬프트 ④, 여섯 개 전부(citytour·knight 우선) |
+| MCC20 리뷰 — student-python A | READY | 프롬프트 ⑤, cipher·citytour·kitty |
+| MCC20 리뷰 — student-python B | READY | 프롬프트 ⑥, knight·missing·zigzag |
+| MCC20 종합 판정 (PM 2차 호출) | BLOCKED(위 6개 보고 도착 전) | 6개 다 모이면 project-lead 재호출 |
+
+⚠️ 6개는 **동시에** 띄워라, 서로 결과 안 보이게. 끝나는 대로 보고를 그대로(요약하지 말고)
+모아서 PM 에게 넘겨라 — PM 이 겹침/갈림을 직접 봐야 한다(`feedback_pm_assigns_and_collects`).
+
+### 프롬프트 ① pedagogy-reviewer
+```
+대상: quest-problems/mcc20cipher, mcc20citytour, mcc20kitty, mcc20knight, mcc20missing,
+mcc20zigzag 여섯 개 전부 (http://localhost:3000/quest/<id>, ?lang=ko).
+MCC 는 Python 전용이다 — C++ 탭/코드는 보지 마라.
+
+각 quest 마다:
+1. see-flow.mjs 로 전체 흐름을 먼저 읽고 "이 쪽이 앞 쪽의 어떤 질문에 답하나"를
+   채워라. 못 채우는 자리 = 흐름이 끊긴 자리.
+2. 예제를 전부 찾아 "이 quest 가 가르치는 핵심 규칙을 끄면 이 예제의 답이 달라지나"를
+   손으로 계산해 답하라. 안 달라지면 그 예제는 규칙을 안 보여주는 것이다.
+3. "~해도 돼요" · "~볼 필요 없어요" · "can" 같은 허용형 어법이 실은 정확성 요구(안 하면
+   틀림)인 자리를 찾아라.
+4. 한 경우(숫자 하나)만 보여주고 "항상", "언제나", "K가 몇이든"이라 주장하는 자리를 찾아라.
+5. mcc20kitty 는 형제(6~8쪽)보다 훨씬 긴 14쪽이다 — 뺄 수 있는 쪽이 있는지
+   "더 줄이려면 어디서 빼나"를 먼저 묻고 답하라. 늘리는 제안은 하지 마라.
+
+보고 형식: quest 별로 ①흐름 끊긴 자리 ②규칙 안 보여주는 예제 ③허용형 어법 자리
+④한 경우로 항상 주장하는 자리 ⑤(kitty만) 뺄 수 있는 쪽. 근거 없는 지적은 빼라.
+```
+
+### 프롬프트 ② quest-auditor
+```
+대상: mcc20cipher, mcc20citytour, mcc20kitty, mcc20knight, mcc20missing, mcc20zigzag
+여섯 개 전부. public/problems/mcc20*.pdf 를 pdftotext -layout 으로 먼저 열어
+원문과 대조해라. Python 코드만 본다 — C++ 은 안 본다.
+
+1. 🔒 코드가 실제로 쓰는 알고리즘과 화면 설명문이 말하는 알고리즘이 일치하는가.
+2. 입출력 형식·제약·예제가 PDF 원문과 일치하는가. 원문에 없는 걸 지어내지 마라 —
+   없으면 "없다"고 적어라.
+3. mcc20missing 의 "가장 큰 크기(극단)가 항상 양 끝에 온다"는 주장이 문제 제약 안에서
+   실제로 항상 성립하는지 반례를 찾아봐라(안 되면 "반례 없음, 확인함"이라고 적어라).
+4. AlgorithmTags 배지 자체는 이미 결정됐다(cipher=hashtable, citytour=graph,
+   knight=graph, zigzag=dp, kitty·missing=의도적 공백 — lib/quest-algo.ts 주석 참고).
+   배지를 채우라는 제안은 하지 마라. 대신 화면 설명문이 그 판정과 어긋나게(예: missing을
+   표준 알고리즘인 것처럼) 과장하는 자리가 있는지만 봐라.
+5. check-frozen.py 로 이 여섯 개가 USACO_VERIFIED 로 보호되는지 확인하고 보고에 적어라.
+
+보고: quest 별 ①원문-화면 불일치 ②알고리즘 서술-코드 불일치 ③missing 반례 유무
+④AlgorithmTags 서술 과장 여부 ⑤frozen 여부.
+```
+
+### 프롬프트 ③ python-qa
+```
+대상: mcc20cipher, mcc20citytour, mcc20kitty, mcc20knight, mcc20missing, mcc20zigzag.
+Python 코드만 실행해라 — C++ 은 필요 없다.
+
+1. 각 quest 의 🔒 최종 코드를 꺼내 공식 예제로 실제로 돌려서 맞는 답이 나오는지 확인해라.
+   (printf '<입력>' | python3 scripts/run-quest-code.py <id> 사용 가능)
+2. 핵심: 각 quest 가 가르치는 규칙 하나를 코드에서 **꺼서**(주석 처리하거나 조건을
+   반대로 바꿔서) 공식 예제를 다시 돌려라. 답이 달라지면 그 규칙이 진짜 필요하다는
+   증거고, 달라지지 않으면 그 예제가 규칙을 증명 못 한다는 증거다. 결과를 숫자로 적어라.
+3. 느려서 못 쓰는 방법(브루트포스)이 화면에 나오면, 그 코드도 실제로 돌려 몇 초/몇 번
+   연산인지 실측해라. 추측해서 쓰지 마라.
+
+보고: quest 별 ①공식 예제 통과 여부 ②규칙 On/Off 결과 비교표 ③브루트 실측치(있으면).
+```
+
+### 프롬프트 ④ ux-reviewer
+```
+대상: mcc20cipher, mcc20citytour, mcc20kitty, mcc20knight, mcc20missing, mcc20zigzag.
+node scripts/see-screen.mjs "http://localhost:3000/quest/<id>?lang=ko" --mobile 로
+모바일 375px·한국어 조건에서 쪽마다 확인해라(--click 으로 쪽을 넘겨라, 쪽 수는
+see-flow.mjs 로 먼저 세라). 시뮬이 있는 쪽은 반드시 --sim 도 같이 돌려라.
+
+mcc20citytour(클릭 21회)·mcc20knight(클릭 24회) 는 최근에 집중적으로 고친 quest다 —
+이 둘은 우선 깊게(모든 쪽, --sim 포함), 나머지 넷은 가려짐·55자 초과만 기본으로 봐라.
+
+확인할 것: ①고정 바에 가려진 글자/버튼(좌표로, innerText 만 믿지 마라) ②55자 넘는
+문장 ③시뮬 걸음마다 바뀌는 자리가 200px 넘게 흩어지는지(--sim 결과) ④떠 있는
+요소(말풍선·유령 칸)가 엉뚱한 데 붙었는지.
+
+보고: quest 별로 발견한 것 + "0건"이면 어떤 조건(몇 px·어느 언어·몇 쪽)에서 쟀는지 같이 적어라.
+```
+
+### 프롬프트 ⑤ student-python A
+```
+너는 초등학교 6학년이다. DP·그리디·이분탐색 같은 말을 들어본 적 없다. 코드는 한 줄씩
+천천히 읽고, 모르는 기호나 말이 나오면 그 자리에서 막혀라.
+
+http://localhost:3000/quest/mcc20cipher 를 처음부터 끝까지 풀어봐라. 끝나면
+mcc20citytour, 그다음 mcc20kitty 도 같은 방식으로.
+
+⛔ 어떤 검사기(check-*.py, see-screen.mjs 등)도 네가 직접 돌리지 마라. 돌렸더라도
+그 출력을 그대로 옮겨 적지 마라 — 네가 "읽다가 느낀 것"만 적어라.
+막히면 멈추고 그 자리를 적어라. 지루하면 그만둬도 된다 — 끝까지 다 읽었다고
+"이해됐다"고 쓰지 마라. 어디서 그만두고 싶었는지, 어디를 대충 넘겼는지 꼭 적어라.
+
+보고: quest 별로 ①막힌 자리와 왜 막혔는지(그 화면에 없는 걸 알아야 했는지)
+②그만두고 싶었던 자리 ③대충 넘긴 자리.
+```
+
+### 프롬프트 ⑥ student-python B
+```
+(프롬프트 ⑤와 동일한 페르소나·규칙) 대상만 다르다:
+http://localhost:3000/quest/mcc20knight → mcc20missing → mcc20zigzag 순서로.
+```
+
+## ⭐ 정정 + 추가 지시 — ①과 ② 구분 (2026-10-01, 브라우저로 직접 재확인함)
+
+**숫자 확정(그냥 소스 grep 아니라 playwright 로 실제 클릭해서 확인함):**
+- ① 토픽 띠(`questAlgo`) — `cipher`·`citytour`·`knight`·`zigzag` **4개 다 있고 실제로 뜬다**
+  (citytour 는 코드탭 **마지막 쪽에서만** — 스포일러 방지로 의도적으로 좁힘, 5번 클릭해 확인).
+  `kitty`·`missing` 공백은 **의도적, 이미 닫힌 판정** — 되돌리지 마라.
+- ② 접근 칩(`AlgorithmTags` 컴포넌트, "🔍 작은 값 실험 · 🧩 패턴 찾기 · ✅ 검증 · Σ 공식화") —
+  **여섯 개 전부 없고, MCC 48개 전부 없다.** `strangefn` 등 10개 quest 만 쓴다.
+  **①에 대한 "배지 공백 결함 재처리 금지"는 ①에만 걸린다. ②는 이번 판에 새로 넣는다.**
+
+**프롬프트 ③(python-qa)에 추가:** 각 quest 의 🔒 코드를 "규칙 끄기" 실험 때문에 어차피
+읽으니, 그 김에 `AlgorithmTags` 초안(3~5단계, `strangefn` 모양 — 아이콘+한영 라벨)을
+**코드가 실제로 거친 순서 그대로** 뽑아 보고에 넣어라. 지어내지 마라 — 코드에 없는
+단계를 넣으면 틀린 토픽 배지와 같은 잘못이다.
+
+**프롬프트 ①(pedagogy-reviewer)에 추가:** python-qa 가 뽑은 ② 초안이 "학생이 실제로
+그 순서로 생각이 흘러갈 수 있는 순서"인지, 아니면 코드 구조를 그냥 읊은 것인지 검증해라.
+갈리면 PM 이 종합한다.
+
+**닫는 조건에 추가:** ②는 6개 전부 python-qa 초안 + pedagogy 검증이 일치해야 삽입.
+갈리면 그 quest만 2라운드. 삽입은 `<AlgorithmTags>` JSX 한 줄 추가 — 기계적으로 쉽다,
+비용은 전적으로 "맞는 내용"에 있다.
+
+## ⭐ PM 판정 반영 — MCC 2020 1라운드 결과, 착수 지시 (2026-10-01, 선생님: "다시 제대로 점검. 프로젝트 매니저가 결정")
+
+전문은 `.claude/WORK.md` 맨 끝("PM 판정 — MCC 2020 1라운드 회신 셋"). 핵심만:
+
+| 항목 | 상태 | 비고 |
+|---|---|---|
+| `mcc20zigzag` 🔒 코드 O(K·N²)→O(N·K·26) 교체 | READY | python-qa 검증 먼저(아래 프롬프트), 통과 후 frontend-engineer 구현. **오늘 안에 재검증까지 못 닫을 수 있음, 괜찮다** |
+| `mcc20kitty` 2-4쪽 예제 교체(N=7→N=1000 병기) | READY | pedagogy 가 압축할 쪽 먼저 확정 → frontend-engineer. **순 쪽수 증가 금지** |
+| `mcc20kitty` "세 번째 열쇠" 문구 삭제 | READY | 즉시, 재검토 불필요. `chapters.jsx:378` 첫 문장만 삭제 |
+| `mcc20missing` N-경계 케이스 화면 확인 | READY | quest-auditor 이어서, 새 라운드 아님 |
+| 접근 칩(②) 두 초안 병합 | BLOCKED(초안 전문 미도착 — 다음 PM 호출 때 가져올 것) | 병합 규칙은 정해짐: 순서=python-qa, 말투=pedagogy, 순서 자체가 갈리면 PM 재검토 |
+| ux-reviewer·student A/B 보고 | BLOCKED(검토자 작업 중) | 기다리는 동안 위 READY 넷을 돈다 |
+| 여섯 quest 최종 "닫음" 선언 | BLOCKED(위 넷 보고 + zigzag/kitty 수정 후 재확인 필요) | 수정 전/후 어느 화면을 봤는지 보고에 명시 요구 |
+
+### 프롬프트 — python-qa (zigzag 검증, 기존 세션 이어서)
+```
+mcc20zigzag 의 🔒 코드를 O(N·K·26) 으로 교체한다 — public/problems/mcc20zigzag.pdf
+에디토리얼의 zig[k][c]/zag[k][c] 26글자 prefix-sum 갱신 방식 그대로(지어내지 마라).
+검증: ①N≤12 모든 경우 브루트포스(직접 부분수열 나열)와 전수 대조 ②N≤1000·K≤50
+랜덤 2000건을 현재 O(K·N²) 코드와 교차 대조 ③경계(K=1, K=N, 전부 같은 글자, 완전
+오름차순/내림차순) ④공식 샘플 bcade,K=3→5 ⑤N=20000,K=100 실행 시간. 전부 숫자로 보고.
+```
+
+### 프롬프트 — frontend-engineer (zigzag 구현 + kitty 둘)
+```
+1) python-qa 검증 통과 후 mcc20zigzag/components.jsx 의 FULL_PY/FULL_CPP 를 새
+   알고리즘으로 교체. 한 줄에 한 문장, 변수명 평이하게. chapters.jsx 의 "46분 vs 빠름"
+   모순 서술을 실제 복잡도에 맞게 다시 쓰고, CodeWalk 말풍선도 새 코드 줄 순서(생각
+   순서)로 다시. check-codewalk-thinking-order.py mcc20zigzag 로 확인.
+2) mcc20kitty/chapters.jsx:378 "세 번째 열쇠예요. " 문구만 삭제(뒤 문장은 유지). 지금 바로.
+3) pedagogy 가 지목한 압축 대상 쪽을 줄이고, 그 안에서 N=1000(사이클반복 9회) 예시를
+   N=7(0회) 샘플과 병기. check-quest-length-regression.py mcc20kitty 가 0건이어야 한다.
+```
+
+### 프롬프트 — quest-auditor (missing 이어서)
+```
+mcc20missing 의 "극단 anchor" 증명은 이미 끝났다. 화면에 보이는 입출력 예시가 "빠진
+수 = N"(구간 끝 경계) 케이스까지 보여주는지만 확인해서 보고해라. 안 보여주면 예시표에
+한 줄 추가를 제안해라(길이 영향 최소).
+```
+
+## ⭐ PM 재판정 — `makedistinct` 어제 판정 뒤집기 (선생님 직접 피드백, 2026-10-01)
+
+전문은 WORK.md. 핵심: **어제 "어법만 뒤집기"로 닫았던 걸 되돌린다. ❌/✅ 비교 장면을
+걸음 7 안에 추가한다(새 걸음 아님, 숫자 재사용 0개 신규).** 강조는 늘리지 않고 고른다.
+
+| 항목 | 상태 | 비고 |
+|---|---|---|
+| `knight` P0 둘 + 용어 + 반복 제거 | READY(진행 중) | 1순위 그대로 |
+| `makedistinct` 걸음7 ❌/✅ 장면 추가 | READY | pedagogy 문구 확정→frontend 구현. 2순위로 승격 |
+| `makedistinct` 강조 고르기 | READY | pedagogy, 숫자 목표 없음 — "핵심 한 문장"만 |
+| `mcc20zigzag` 코드+계획쪽+용어 | READY | 어제 판정 유지, 3순위 |
+| `mcc20kitty` ②③+input()설명+표기통일+용어 | READY | 4순위, 한 커밋으로 묶음 |
+| `mcc20missing` 예제순서+N경계+용어 | READY | 5순위 |
+| `mcc20cipher` 용어 전용 패스(순열·해시맵집합·\|x\|·tuple·_) | READY | 6순위, 새로 추가 |
+| `check-emphasis.mjs` "강조 없음" 탐지 구멍 | BLOCKED(오늘 비용 안 씀) | 백로그만 |
+| `citytour`/`knight` "그래프(BFS/DFS)" 라벨이 DFS 안 쓰는데도 뜸 | BLOCKED(확신 낮음, 공유 상수) | 백로그만 |
+| student-python A | DONE | cipher·citytour·kitty, 막힘 없음+용어 다수 |
+| student-python B | DONE | knight·missing·zigzag |
+| ux-reviewer | DONE | citytour 깊게 포함 0건(시뮬 오탐 확정) |
+
+⚠️ **`makedistinct` 닫는 조건에 선생님 재확인을 포함시켰다** — 코디네이터가 다음에
+선생님이 다시 보셨을 때 "밋밋하다"가 재발하는지 꼭 보고할 것.
