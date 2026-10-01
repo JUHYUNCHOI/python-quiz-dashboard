@@ -462,10 +462,10 @@
     "korean_screen_ref": 587
   },
   "makedistinct": {
-    "pages": 7,
+    "pages": 6,
     "quiz_input": 1,
-    "korean_chars_ref": 1583,
-    "korean_screen_ref": 682
+    "korean_chars_ref": 1919,
+    "korean_screen_ref": 530
   },
   "mcc15bahasaf": {
     "pages": 6,
@@ -961,10 +961,10 @@
     "korean_screen_ref": 543
   },
   "strangefn": {
-    "pages": 13,
+    "pages": 12,
     "quiz_input": 5,
-    "korean_chars_ref": 2772,
-    "korean_screen_ref": 1603
+    "korean_chars_ref": 4146,
+    "korean_screen_ref": 1354
   },
   "stuckinrut": {
     "pages": 6,

@@ -55,6 +55,64 @@ function Tile({ v, state, note }) {
   );
 }
 
+/* ⛔⛔ 2026-10-01 선생님(**세 번째 같은 질문**): *"나머지를 사용한걸 하지 않았을 경우
+     문제점이 뭔지 아직도 모르겠는데?"*
+
+   ⭐ 앞선 두 번은 **말을 고쳐서** 답했다 — 「봐도 돼요」 → 「봐야 해요」, why 에 한 줄 추가.
+     세 번 다 안 통한 이유는 분명하다: 화면이 **안 묶은 결과를 한 번도 안 보여줬다.**
+     「필수예요」라고 **주장**만 했다(`feedback_one_case_cannot_claim_always` 와 같은 모양).
+   ⭐ 안 묶으면 무엇이 깨지나 — 실측(K = 2, 3 3 3 4):
+       묶으면    3 · 5 · 7 · 4   →  3 회
+       안 묶으면 3 · 5 · 7 · 9   →  5 회
+     그런데 **4 에 2 를 더하면 6, 8, 10 … 이고 9 는 아예 안 나온다.**
+     즉 안 묶은 답은 느린 게 아니라 **있을 수 없는 계획**이다. 그게 「필수」의 정체다.
+   ⛔ 새 걸음을 만들지 않는다 — 마지막 걸음 **안에** 넣는다
+     (`feedback_shorter_not_longer`, PM 판정 2026-10-01).
+   ⭐ 강조는 **두 곳만**이다 — 「9 는 못 가요」와 「5 회」. 선생님: *"다 밋밋해서
+     노치는 정보가 많아"* → 다 굵게 하면 다시 밋밋해진다(`check-emphasis`). */
+function WrongWay({ E }) {
+  const mono = { fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 };
+  return (
+    <div style={{
+      maxWidth: 470, margin: "0 auto 10px", padding: "10px 13px", borderRadius: 12,
+      background: "#fef2f2", border: "1.5px solid #fca5a5",
+      wordBreak: "keep-all", textWrap: "balance",
+    }}>
+      <div style={{ fontSize: 12, fontWeight: 800, color: "#991b1b", marginBottom: 7 }}>
+        🚫 {t(E, "If we had NOT split by remainder", "나머지로 안 묶었다면")}
+      </div>
+
+      {/* 한 줄로 쭉 밀면 4 까지 밀린다 — 그 결과를 숫자로 보여준다 */}
+      <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap",
+        fontSize: 15, color: "#7f1d1d", marginBottom: 6, ...mono }}>
+        <span>3</span><span>5</span><span>7</span>
+        <span style={{ color: "#64748b", fontWeight: 700, fontSize: 12.5 }}>
+          {t(E, "then 4 must pass 7 →", "그다음 4 도 7 보다 뒤로 →")}
+        </span>
+        <span style={{ fontSize: 19, color: "#b91c1c" }}>9</span>
+      </div>
+
+      {/* 그런데 4 는 9 에 갈 수 없다 — 갈 수 있는 수를 나란히 둔다 */}
+      <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap",
+        fontSize: 12.5, color: "#1e3a8a", marginBottom: 7 }}>
+        <span style={{ fontWeight: 700 }}>{t(E, "4 can go to", "4 가 갈 수 있는 수")}</span>
+        <span style={{ fontSize: 14.5, color: "#065f46", ...mono }}>4 → 6 → 8 → 10 …</span>
+      </div>
+
+      <div style={{ fontSize: 13, lineHeight: 1.7, color: "#7f1d1d", fontWeight: 600 }}>
+        {t(E, "So 4 ", "그래서 4 는 ")}
+        <b style={{ color: "#b91c1c", fontSize: 14 }}>
+          {t(E, "can never become 9", "9 에 못 가요")}
+        </b>
+        {t(E, " — this plan cannot happen. And the count comes out ",
+             " — 이건 할 수 없는 계획이에요. 횟수도 ")}
+        <b style={{ color: "#b91c1c", fontSize: 14 }}>{t(E, "5, not 3", "3 회가 아니라 5 회")}</b>
+        {t(E, ".", "로 나와요.")}
+      </div>
+    </div>
+  );
+}
+
 /* 「K 로 나눈 나머지가 같은 값들」을 **진짜 한 줄**로 그린다.
    ⚠️ 2026-09-29 선생님(화면 보시고): *"두 줄이 어디있으며 이 줄을 가르는 건
      왜 k로 나눈 나머지이지?"* — 같은 자리를 **학생도 먼저 짚었다**:
@@ -437,8 +495,9 @@ export function WhoCanMeetSim({ E }) {
       extra: ["", "", "", ""], chains: [1, 0], named: true, ops: 3, tone: "aha",
       /* ⛔ 2026-09-29 감사 판정 — 옛 문장 *"이 **나눔**은 다음 쪽에서도 그대로 써요"* 는 **거짓**이었다.
            6쪽은 숫자도 묶음 크기도 다르다. 그대로 쓰는 건 숫자가 아니라 **나머지로 묶는 방법**이다. */
-      ko: "3, 5, 7, 4 — 다 달라졌어요. 민 횟수는 0 + 1 + 2 = 3 회.\n나머지로 묶는 이 방법을 다음 쪽에서도 그대로 써요.",
-      en: "3, 5, 7, 4 — all different now. Moves: 0 + 1 + 2 = 3.\nWe use this same way of splitting — by remainder — on the next page too." },
+      wrong: true,
+      ko: "3, 5, 7, 4 — 다 달라졌어요. 민 횟수는 0 + 1 + 2 = 3 회.\n나머지로 안 묶었으면 어땠을까요? 바로 아래에 있어요.",
+      en: "3, 5, 7, 4 — all different now. Moves: 0 + 1 + 2 = 3.\nWhat if we had not split by remainder? See just below." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -458,6 +517,11 @@ export function WhoCanMeetSim({ E }) {
             <Tile key={i} v={v} state={s.st[i]} note={`${ord(i)} ${s.extra[i]}`.trim()} />
           ))}
         </div>
+
+        {/* ⭐ 자리는 **타일 바로 아래**다 — 「묶어서 푼 결과(타일)」와 「안 묶은 결과」가
+            나란히 보여야 대조가 된다. 마지막 걸음에만 뜨므로 그 위의 줄은 안 밀린다
+            (ux 판정 2026-09-29 의 「새로 뜨는 것은 아래로만」). */}
+        {s.wrong && <WrongWay E={E} />}
 
         {/* ⭐ 블록 순서는 **ux-reviewer 판정(2026-09-29)** 이다. 잣대는 「무엇이 안 밀리나」.
             `chains`/`kcompare` 를 **타일 바로 밑에 못박고**, 걸음마다 생겼다 사라지는
