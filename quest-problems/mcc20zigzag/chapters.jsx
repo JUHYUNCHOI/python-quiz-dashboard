@@ -400,9 +400,17 @@ export function makeMcc20ZigzagCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: count without making them", "빠름: 만들지 않고 개수만 세기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line" }}>
+                {/* ⛔ 2026-10-01 — 이 상자는 **원래 거짓이었다.** 바로 위 🐢 상자가
+                       「20000 글자·K 100 에서는 끝낼 수 없다」고 한 뒤, 🔒 코드는 그 제약에서
+                       **47분** 걸리는 O(K·N²) 였는데 이 상자가 그걸 「🚀 빠름」이라 불렀다.
+                       코드를 공식 에디토리얼(O(N·K·26))로 갈았고, **실측 1.76초**다.
+                     ⭐ 학생 B: *"계획 쪽은 「숫자 두 개」인데 코드는 「표 두 개」다"* —
+                       새 코드는 길이 축을 표로 안 들고 한 층씩 굴리므로 **이제 말이 맞다.**
+                     ⭐ 빠져 있던 조각을 한 줄 넣는다 — **무엇 때문에 빨라지나**(a~z 칸 26 개).
+                       그게 없으면 「숫자 두 개만 기억한다」만으로는 왜 빠른지가 안 보인다. */}
                 {t(E,
-                  "We never write a zig-zag down. For each letter we only remember two numbers: how many zig-zags of each length end here going up, and how many end here going down. A longer one is then made by gluing one letter onto a number we already have.",
-                  "지그재그를 하나도 적지 않아요.\n글자마다 숫자 두 개만 기억해요.\n여기서 끝나면서 마지막이 오름인 것이 몇 개인지,\n여기서 끝나면서 마지막이 내림인 것이 몇 개인지예요.\n더 긴 것은 이미 가진 그 숫자에 글자 하나를 붙여서 만들어요.")}
+                  "We never write a zig-zag down. For each letter we only remember two numbers: how many zig-zags end here going up, and how many end here going down. A longer one is made by gluing one letter onto a number we already have.\nAnd we never look back over the earlier letters: we keep 26 running totals, one per letter a..z, and read only the smaller side or the bigger side.",
+                  "지그재그를 하나도 적지 않아요.\n글자마다 숫자 두 개만 기억해요.\n여기서 끝나면서 마지막이 오름인 것이 몇 개인지,\n여기서 끝나면서 마지막이 내림인 것이 몇 개인지예요.\n더 긴 것은 이미 가진 그 숫자에 글자 하나를 붙여서 만들어요.\n그리고 앞 글자를 다시 훑지 않아요 — a 부터 z 까지 칸 26 개에\n지나온 합을 모아 두고, 나보다 작은 쪽이나 큰 쪽만 읽어요.")}
               </div>
             </div>
           </div>
