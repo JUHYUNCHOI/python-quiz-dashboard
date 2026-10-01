@@ -558,10 +558,10 @@
     "korean_screen_ref": 1239
   },
   "mcc20knight": {
-    "pages": 7,
+    "pages": 8,
     "quiz_input": 2,
-    "korean_chars_ref": 991,
-    "korean_screen_ref": 762
+    "korean_chars_ref": 1375,
+    "korean_screen_ref": 810
   },
   "mcc20missing": {
     "pages": 6,
