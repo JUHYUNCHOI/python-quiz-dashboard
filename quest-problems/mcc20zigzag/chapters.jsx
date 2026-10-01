@@ -244,6 +244,17 @@ export function makeMcc20ZigzagCh1(E) {
                   {t(E, "A ", "")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "sequence of characters and an integer K", "글자 수열과 정수 K")}</b>
                   {t(E, " are given.", " 가 주어져요.")}
+                  {/* ⛔ 2026-10-01 학생(초6) 재검증: *"**「부분수열」** — 1쪽에 설명 없이 바로
+                       나온다 … 정작 뜻은 **3쪽 퀴즈**에 와서야 문맥으로 **짐작**했다."*
+                     ⚠️ `check-undefined-symbol` 은 이 자리를 **0건**으로 통과시킨다 —
+                       `DEFINE_GLUE` 가 옆의 괄호를 「정의」로 읽기 때문이다.
+                       **학생이 「모르겠다」면 학생이 맞다**(`feedback_occlusion_needs_coordinates`).
+                     ⭐ 정의 문장을 따로 쓰지 않고 **그 자리에서 숫자로** 보인다
+                       (`feedback_plain_korean`). `abc` 는 3쪽 퀴즈가 쓰는 것과 같은 글자다. */}
+                  <div style={{ fontSize: 11.5, color: C.dim, marginTop: 3, lineHeight: 1.55, wordBreak: "keep-all" }}>
+                    {t(E, "A subsequence = pick some letters, keeping their order. From abc you can pick ac, but not ca.",
+                         "부분수열은 순서를 그대로 둔 채 몇 글자만 고른 것이에요.\nabc 에서 ac 는 고를 수 있지만 ca 는 안 돼요.")}
+                  </div>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -296,7 +307,8 @@ export function makeMcc20ZigzagCh1(E) {
               📐 {t(E, "Limits & sample", "제약 & 예시")}
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• 1 ≤ |S| ≤ 20000, {t(E, "lowercase letters", "소문자")}</div>
+              <div>• 1 ≤ |S| ≤ 20000 {t(E, "(|S| means how many letters S has), lowercase letters",
+                                            "(|S| 는 S 의 글자 수예요), 소문자")}</div>
               <div>• 1 ≤ K ≤ 100</div>
               <div>• {t(E, "answer printed modulo 1000", "정답은 1000 으로 나눈 나머지로 출력해요")}</div>
             </div>

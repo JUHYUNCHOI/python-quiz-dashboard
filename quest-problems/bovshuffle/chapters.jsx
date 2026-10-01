@@ -173,9 +173,19 @@ export function makeShuffleCh1(E) {
                 <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "shuffle permutation", "셔플 순열")}</b>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "moving rule", "옮기는 규칙")}</b>
                   {t(E, " is given — it moves the cow at position i to position shuffle[i].",
-                        " 가 주어져요 — 위치 i 의 소를 shuffle[i] 위치로 옮겨요.")}
+                        " 이 주어져요 — 위치 i 의 소를 shuffle[i] 위치로 옮겨요.")}
+                  {/* ⛔ 2026-10-01 — 원래 「**셔플 순열**」이었다. 이 quest 에서 **한 번만**
+                       나오는데 뜻이 어디에도 없었다(grep 전수 1건). 음차어(「셔플」)와
+                       수학 용어(「순열」)가 **동시에** 미정의다
+                       — `feedback_no_invented_terms`: 음차어는 뜻 한 줄 필수, 없으면 버려라.
+                     ⭐ 「1 부터 N 까지가 한 번씩」은 장식이 아니다 — 그래서 **고리가 생긴다.**
+                       이 문제의 핵심 성질이라 이름보다 이 사실이 먼저다. */}
+                  <div style={{ fontSize: 11.5, color: C.dim, marginTop: 3, lineHeight: 1.55, wordBreak: "keep-all" }}>
+                    {t(E, "shuffle holds 1..N, each exactly once — so every cow has exactly one place to go (that is called a permutation).",
+                         "shuffle 에는 1 부터 N 까지가 한 번씩 들어 있어요.\n그래서 소마다 갈 곳이 꼭 하나예요 (이런 걸 순열이라고 불러요).")}
+                  </div>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
