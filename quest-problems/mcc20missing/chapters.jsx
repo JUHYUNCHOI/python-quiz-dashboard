@@ -324,10 +324,13 @@ export function makeMcc20MissingCh1(E) {
                 적어 두던 자리다. 원문(public/problems/mcc20missing.pdf)은
                 N = 5 / Numbers = [-1, 7, 4, 1] 처럼 값을 변수로 준다. */}
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              {/* ⛔ 2026-10-01 — 여기가 「크기」의 **첫 등장**인데 정의가 1-3쪽(시뮬)에 있었다.
-                     PM 이 등장 순서를 세어 잡았다 — 정의보다 먼저 쓰이는 자리는 여기 하나뿐.
-                     쪽을 넘기면 앞 쪽은 사라지니 설명을 뒤로 미루지 말고 **이 줄 안에서** 밝힌다. */}
-              <div>• <b>N</b> — {t(E, "before signs, the sizes were 1..N", "부호를 붙이기 전 크기가 1 부터 N 까지였어요")}</div>
+              {/* ⛔ 2026-10-01 — 여기가 「크기」의 **첫 등장**이었는데 정의는 1-3쪽에 있었다.
+                     PM 이 등장 순서를 세어 잡아 「이 줄 안에서 정의」로 고쳤는데, **학생이
+                     고친 뒤 화면에서 또 멈췄다** — *"각 숫자의 절댓값인지 목록 길이인지
+                     바로 안 왔다."* 범례 한 줄에 정의를 끼우는 건 무리다.
+                   ⭐ 그래서 **첫 등장 자체를 없앤다** — 3쪽에 제대로 된 정의가 있다.
+                     뜻이 흔들리는 말은 **안 쓰는 게 제일 짧다**(`feedback_shorter_not_longer`). */}
+              <div>• <b>N</b> — {t(E, "made from the numbers 1..N with signs attached", "1 부터 N 까지의 수에 부호를 붙여 만들었어요")}</div>
               <div>• <b>Numbers</b> — {t(E, "the N−1 numbers that are left", "남아 있는 수 N−1 개")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
@@ -453,6 +456,9 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                      **학생은 공식 네 칸 중 두 칸만 보고 끝낼 수 있었다.**
                    ⭐ **행을 늘리지 않고** 두 행이 **두 축을 나눠 지게** 바꿨다 —
                      행A 는 「가장 큰 크기 = N」, 행B 는 「= N−1」. 부호(+/−)도 그대로 살아 있다.
+                   ⛔ 2026-10-01 — 꼬리표가 「가장 큰 수가 MIN」이라 **스스로 모순**이었다
+                     (행B 의 7 은 제일 작다). 학생이 여기서 제일 오래 멈췄다 —
+                     왼쪽 라벨이 이미 그 수를 지목하니 **「그 수가 MIN」** 으로 가리킨다.
                    검증(🔒 후보식으로 직접 계산):
                      행A `N=4, a=[9,12,14]` → K=10 은 **`max−N`** 에서 나온다(빠진 수 3)
                      행B `N=4, a=[11,12,7]` → K=10 은 **`min+(N−1)`** 에서 나온다(빠진 수 4)
@@ -463,8 +469,8 @@ export function makeMcc20MissingCh2(E, lang = "py") {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 8 }}>
                 {[
-                  { big: "N", bigVal: "4", sign: "+", row: ["−1", "+2", "+4"], out: ["9", "12", "14"], hitIdx: 2, tag: t(E, "biggest is MAX", "가장 큰 수가 MAX"), eq: "14 = 4 + K" },
-                  { big: "N−1", bigVal: "3", sign: "−", row: ["+1", "+2", "−3"], out: ["11", "12", "7"], hitIdx: 2, tag: t(E, "biggest is MIN", "가장 큰 수가 MIN"), eq: "7 = −3 + K" },
+                  { big: "N", bigVal: "4", sign: "+", row: ["−1", "+2", "+4"], out: ["9", "12", "14"], hitIdx: 2, tag: t(E, "that one is the MAX", "그 수가 MAX"), eq: "14 = 4 + K" },
+                  { big: "N−1", bigVal: "3", sign: "−", row: ["+1", "+2", "−3"], out: ["11", "12", "7"], hitIdx: 2, tag: t(E, "that one is the MIN", "그 수가 MIN"), eq: "7 = −3 + K" },
                 ].map((r) => (
                   <div key={r.big} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
                     {/* ⛔ 2026-10-01 — **선생님이 막히신 바로 그 줄이다.**
