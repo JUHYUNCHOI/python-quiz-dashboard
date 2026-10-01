@@ -169,7 +169,15 @@ export function makeMcc20CipherCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Two alphabet permutations ", "알파벳 순열 두 개 ")}
+                  {/* ⛔ 2026-10-01 — 「알파벳 **순열** 두 개」였다. **1쪽 첫 불릿**인데
+                       「순열」의 뜻은 **2쪽**에 가서야 나온다("a–z 를 한 번씩 섞어 놓은…").
+                       `feedback_problem_statement_readable` 원인 ① — 미션이 아직 정의 안 된
+                       말에 기댄다. 초6 이 첫 줄에서 막힌다.
+                     → 1쪽에서는 **뜻으로 말하고**, 「순열」이라는 이름은 뜻이 실제로 적혀 있는
+                       2쪽에서 붙인다(`feedback_no_invented_terms` 의 「처음 쓰기 전에 정의」).
+                     ⚠️ 「순열」은 지어낸 말이 아니다 — 원문이 쓴다("A, B is a permutation of
+                       lowercase English letters"). 버리지 않고 **자리만 옮긴다.** */}
+                  {t(E, "Two strings that use each of a–z exactly once, ", "a~z 를 한 번씩 섞어 놓은 줄 두 개 ")}
                   <b style={{ color: "#059669" }}>A</b>{t(E, " and ", " 와 ")}<b style={{ color: "#7c3aed" }}>B</b>
                   {t(E, " give the rule: the letter ", " 가 규칙을 줘요: 글자 ")}
                   <b style={{ color: "#059669" }}>A[i]</b>{t(E, " becomes ", " 는 ")}<b style={{ color: "#7c3aed" }}>B[i]</b>
@@ -212,7 +220,8 @@ export function makeMcc20CipherCh1(E) {
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               <div>• <b>S</b> — {t(E, "the message (lowercase)", "메시지 (소문자)")}</div>
               <div>• <b>K</b> — {t(E, "how many times to apply the rule", "규칙을 적용할 횟수")}</div>
-              <div>• <b>A</b>, <b>B</b> — {t(E, "two strings that use each of a–z exactly once; A[i] → B[i]", "a–z 를 한 번씩 섞어 놓은 문자열 두 개예요. A[i] 가 B[i] 로 바뀌어요.")}</div>
+              <div>• <b>A</b>, <b>B</b> — {/* ⭐ 2026-10-01 — 뜻이 **여기** 있으니 이름도 여기서 준다(1쪽에서 옮겨 왔다). */}
+              {t(E, "two strings that use each of a–z exactly once (that is called a permutation); A[i] → B[i]", "a–z 를 한 번씩 섞어 놓은 문자열 두 개예요 (이런 걸 순열이라고 불러요). A[i] 가 B[i] 로 바뀌어요.")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: |S| (the length of S) ≤ 100000, 1 ≤ K ≤ 100000.", "제약: |S| (S 의 길이) ≤ 100000, 1 ≤ K ≤ 100000.")}
