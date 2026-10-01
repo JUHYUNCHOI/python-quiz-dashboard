@@ -242,9 +242,17 @@ export function makeMcc20MissingCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: A, fontWeight: 600, flexShrink: 0 }}>④</span>
                 <div>
+                  {/* ⛔ 2026-10-01 학생(초6)이 화면에서 직접 찾았다 — *"1쪽 ④번 불릿에
+                       **「모든 수에 상수 K K 를 더해요」** — K가 두 번 나온다. 처음 읽을 때
+                       「어? K가 왜 두 번이지?」 하고 **멈칫했다.**"* (스크린샷으로 확인했다고 밝혔다)
+                     ⭐ **진짜였다.** 한국어 조각이 `<b>K</b>` 뒤에서 「K 를」로 시작해
+                       굵은 K 와 **겹쳤다.** 영어 쪽은 멀쩡하다.
+                     ⚠️ **어느 검사기도 못 잡는 층이다** — 글이 JSX 조각 셋으로 쪼개져 있어
+                       한 조각만 보면 멀쩡하다. `check-bilingual-drift` 도 숫자만 센다.
+                       **화면을 읽어야** 보인다(`feedback_new_text_needs_a_reader`). */}
                   {t(E, "Add a constant ", "모든 수에 상수 ")}
                   <b style={{ color: "#dc2626" }}>K</b>
-                  {t(E, " to EVERY number (−3N ≤ K ≤ 3N).", " K 를 더해요 (−3N ≤ K ≤ 3N).")}
+                  {t(E, " to EVERY number (−3N ≤ K ≤ 3N).", " 를 더해요 (−3N ≤ K ≤ 3N).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
