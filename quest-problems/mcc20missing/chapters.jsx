@@ -94,8 +94,8 @@ function Mcc20MissingAnchorSim({ E }) {
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12, whiteSpace: "pre-line", ...KA }}>
           {t(E,
-            "Pick a candidate K below and we subtract it back with |x−K|. The original numbers were all different and all in 1..N — so if any result repeats or falls outside 1..N, that K is impossible.",
-            "아래 후보 K 를 하나 고르면 |x−K| 로 되돌려 볼게요.\n원래 수들은 모두 달랐고 전부 1..N 안에 있었어요.\n그러니 되돌린 값이 겹치거나 1..N 을 벗어나면\n그 K 로는 이 목록을 만들 수 없어요.")}
+            "Pick a candidate K below and we subtract it back with |x−K|. What comes back is the number before its sign — call it the size. The sizes were all different and all in 1..N, so if a size repeats or falls outside 1..N, that K is impossible.",
+            "아래 후보 K 를 하나 고르면 |x−K| 로 되돌려 볼게요.\n되돌아 나오는 건 부호를 붙이기 전의 값 — 이걸 크기라고 불러요.\n크기는 모두 달랐고 전부 1..N 안에 있었어요.\n그러니 크기가 겹치거나 1..N 을 벗어나면\n그 K 로는 이 목록을 만들 수 없어요.")}
         </div>
 
         {/* given array */}
@@ -161,11 +161,11 @@ function Mcc20MissingAnchorSim({ E }) {
                 <span>
                   ✅ {t(E, "valid — ", "맞아요 — ")}
                   <span style={{ color: "#6ee7b7" }}>
-                    {N - 1} {t(E, "distinct magnitudes in [1,", "개 크기가 모두 다르고 [1,")}{N}]
+                    {N - 1} {t(E, "distinct sizes in [1,", "개 크기가 모두 다르고 [1,")}{N}]
                   </span><br />
                   {/* 2026-09-17: "total − 합" 에서 total 이 무엇인지 화면에 없었다 (⑤).
                       위 칸에 이미 "1..N 의 합" 이라고 적어 두었으니 같은 이름을 쓴다. */}
-                  {t(E, "missing = (sum of 1..N) − (sum of the undone values) = ", "빠진 수 = (1..N 의 합) − (되돌린 값들의 합) = ")}
+                  {t(E, "missing = (sum of 1..N) − (sum of the sizes) = ", "빠진 수 = (1..N 의 합) − (크기들의 합) = ")}
                   <b style={{ color: "#fbbf24" }}>{total}</b> − <b style={{ color: "#fbbf24" }}>{mags.reduce((s, m) => s + m, 0)}</b> = <b style={{ color: "#34d399" }}>{missing}</b>
                 </span>
               ) : (
@@ -173,7 +173,7 @@ function Mcc20MissingAnchorSim({ E }) {
                   ❌ {t(E, "not valid — ", "안 맞아요 — ")}
                   <span style={{ color: "#fca5a5" }}>
                     {t(E,
-                      "some magnitude is out of [1,N] or repeats (red). This K can't have produced the list.",
+                      "some size is out of [1,N] or repeats (red). This K can't have produced the list.",
                       "빨간 크기가 [1,N] 밖이거나 중복돼요. 이 K 로는 목록을 만들 수 없어요.")}
                   </span>
                 </span>
@@ -324,7 +324,7 @@ export function makeMcc20MissingCh1(E) {
                 적어 두던 자리다. 원문(public/problems/mcc20missing.pdf)은
                 N = 5 / Numbers = [-1, 7, 4, 1] 처럼 값을 변수로 준다. */}
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• <b>N</b> — {t(E, "the permutation was 1..N", "원래 수는 1 부터 N 까지였어요")}</div>
+              <div>• <b>N</b> — {t(E, "the sizes were 1..N", "크기는 1 부터 N 까지였어요")}</div>
               <div>• <b>Numbers</b> — {t(E, "the N−1 numbers that are left", "남아 있는 수 N−1 개")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
@@ -398,8 +398,8 @@ export function makeMcc20MissingCh1(E) {
         "Now find out why those few candidates are enough.",
         "후보가 왜 몇 개뿐인지 이제 직접 찾아봐요."),
       question: t(E,
-        "Before signs and +K, what is the largest magnitude still in the list?",
-        "부호와 +K 를 붙이기 전, 목록에 남은 가장 큰 크기는 얼마일까요?"),
+        "The value before a sign and +K is its size.\nWhat is the largest size still in the list?",
+        "부호와 +K 를 붙이기 전의 값이 크기예요.\n목록에 남은 가장 큰 크기는 얼마일까요?"),
       options: [
         t(E, "N or N−1", "N 또는 N−1"),
         t(E, "always N", "언제나 N"),
@@ -408,7 +408,7 @@ export function makeMcc20MissingCh1(E) {
       correct: 0,
       explain: t(E,
         "If N wasn't discarded the largest is N; if N was discarded it's N−1. Adding the same K to everyone keeps the order, so that biggest one ends up at the MAX of the list when its sign was + and at the MIN when it was −. Two sizes × two signs = 4 candidate K.",
-        "N 을 안 버렸으면 N, N 을 버렸으면 N−1 이에요. 모두에게 같은 K 를 더하면 순서가 그대로라, 가장 큰 그 수는 부호가 + 였으면 목록의 MAX 자리에, − 였으면 MIN 자리에 놓여요. 크기 2 가지 × 부호 2 가지 = 후보 K 4 개예요."),
+        "N 을 안 버렸으면 N, N 을 버렸으면 N−1 이에요. 모두에게 같은 K 를 더하면 순서가 그대로라, 크기가 가장 큰 그 수는 부호가 + 였으면 목록의 MAX 자리에, − 였으면 MIN 자리에 놓여요. 크기 2 가지 × 부호 2 가지 = 후보 K 4 개예요."),
     },
   ];
 }
@@ -434,7 +434,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
             </div>
             <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#9a3412", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: anchor the biggest magnitude → only 4 K", "빠름: 가장 큰 크기를 붙잡아 → K 는 4개뿐")}
+                🚀 {t(E, "Fast: anchor the biggest size → only 4 K", "빠름: 크기가 가장 큰 수를 붙잡아 → K 는 4개뿐")}
               </div>
               {/* 2026-09-17: 여기는 같은 결론이 세 번째로 되풀이되던 자리였다.
                   문장 대신 작은 예 하나를 그림으로 보여준다 — 학생이 "왜 그 자리에 놓이는지"
@@ -456,7 +456,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                    ⚠️ 행B 는 `max−N = 8` 도 우연히 유효하다(빠진 수 2). 이 문제에서
                      **K 가 여럿 맞는 건 정상**이고(샘플 2 가 그 경우다) 이 상자는 원래도
                      후보 전부를 검사하는 자리가 아니라 **강조된 계산 하나**만 보인다. */}
-                {t(E, "A tiny example with N = 4 and K = 10 — the biggest magnitude is N in one row, N−1 in the other.", "작은 예로 봐요. N = 4, K = 10 이에요.\n위 줄은 가장 큰 크기가 N, 아래 줄은 N−1 이에요.")}
+                {t(E, "A tiny example with N = 4 and K = 10.", "작은 예로 봐요. N = 4, K = 10 이에요.")}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 8 }}>
                 {[
@@ -464,10 +464,18 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                   { big: "N−1", bigVal: "3", sign: "−", row: ["+1", "+2", "−3"], out: ["11", "12", "7"], hitIdx: 2, tag: t(E, "biggest is MIN", "가장 큰 수가 MIN"), eq: "7 = −3 + K" },
                 ].map((r) => (
                   <div key={r.big} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
-                    {/* ⚠️ 라벨이 「3 의 부호」로 **하드코딩**돼 있었다 — 두 행의 강조 숫자가
-                        이제 4 와 3 으로 다르니 행별로 쓴다. 안 그러면 **화면이 거짓말한다.** */}
-                    <span style={{ color: C.dim, minWidth: 92, whiteSpace: "nowrap", fontSize: 11 }}>
-                      {t(E, `biggest = ${r.big} (${r.bigVal}), sign `, `가장 큰 크기 ${r.big} (${r.bigVal}) 의 부호 `)}
+                    {/* ⛔ 2026-10-01 — **선생님이 막히신 바로 그 줄이다.**
+                         *"3의 부호? … 가장 큰 크기? **가장 큰 크기가 뭔데?**"*
+                       ① 「… (3) **의** 부호」는 조사 「의」가 **바로 앞 숫자에 붙어**
+                         **「3의 부호」로 읽힌다.** 쉼표로 끊고 「는/는」으로 바꿔 그 결합을 끊는다.
+                       ② 글자색이 `C.dim`(#8891aa) 이었다 — 이 상자 바탕(#fff7ed) 위에서
+                         **대비 2.96:1** 로 **기준(4.5:1) 미달**이다(화면 담당 실측).
+                         바로 옆 숫자 칩은 6.88:1 이라 **숫자는 선명한데 그 숫자가 무엇인지
+                         말해 주는 라벨만 흐렸다** — *"눈에 하나도 안보여"* 의 정체다.
+                         `#7c6f64` 로 올린다(**4.58:1**, 같은 따뜻한 계열이라 숫자 칩과 안 싸운다).
+                       ③ `minWidth: 92` + `nowrap` 으로 좁은 칸에 구겨 넣고 있었다 — 풀어 준다. */}
+                    <span style={{ color: "#7c6f64", fontSize: 11.5 }}>
+                      {t(E, `biggest size = ${r.big} (=${r.bigVal}), sign `, `가장 큰 크기는 ${r.big}(=${r.bigVal}), 부호는 `)}
                       <b style={{ color: "#9a3412" }}>{r.sign}</b>
                     </span>
                     <span style={{ color: C.dim }}>{r.row.join("  ")}</span>
@@ -482,14 +490,41 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                       }}>{v}</span>
                     ))}
                     <span style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, whiteSpace: "nowrap" }}>{r.tag}</span>
-                    <span style={{ fontSize: 11, color: C.dim, whiteSpace: "nowrap" }}>{r.eq}</span>
+                    {/* 등식 줄도 같은 대비 문제였다(2.96:1) — 라벨과 같은 색으로 올린다. */}
+                    <span style={{ fontSize: 11.5, color: "#7c6f64", whiteSpace: "nowrap" }}>{r.eq}</span>
                   </div>
                 ))}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
                 {t(E,
-                  "Adding the same K to everyone keeps the order, so the biggest magnitude always ends up at one end. Solve each equation for K: 4 candidates, each checked with one pass through the array — about 4N steps in total.",
-                  "모두에게 같은 K 를 더하면 순서가 바뀌지 않아요.\n그래서 가장 큰 크기는 늘 양 끝 중 한 곳에 놓여요.\n이 식을 K 에 대해 풀면 후보가 4 개 나와요.\n각각 배열을 한 번씩 훑어 확인하니 다 합쳐 약 4N 이에요.")}
+                  "Adding the same K to everyone keeps the order, so the biggest size always ends up at one end — the MAX end when its sign was +, the MIN end when it was −.",
+                  "모두에게 같은 K 를 더하면 순서가 바뀌지 않아요.\n그래서 크기가 가장 큰 수는 늘 양 끝 중 한 곳에 놓여요 —\n부호가 + 였으면 MAX 쪽, − 였으면 MIN 쪽이에요.")}
+              </div>
+              {/* ⛔ 2026-10-01 — 선생님: *"−6+k 는 뭐가 되어야해?"*
+                   이 상자는 「후보가 4 개 나온다」고만 말하고 **그 넷을 안 보여줬다.**
+                   어느 후보가 MAX 쪽이고 어느 쪽이 MIN 쪽인지는 **코드 쪽에 가서야** 나왔다.
+                   위 두 행이 보여준 짝(+→MAX · −→MIN)을 **크기 두 가지에 그대로 적용**해
+                   넷을 여기서 끝낸다. MAX/MIN 은 위 두 행의 꼬리표와 같은 말이다
+                   (코드 쓰면 mx/mn 이 된다 — 그건 다음 쪽 CodeWalk 범례가 맞는다). */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 3,
+                            fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5,
+                            color: "#7c6f64", marginTop: 8, marginBottom: 8 }}>
+                {[
+                  { num: "+N", end: "MAX", k: "K = MAX − N" },
+                  { num: "−N", end: "MIN", k: "K = MIN + N" },
+                  { num: "+(N−1)", end: "MAX", k: "K = MAX − (N−1)" },
+                  { num: "−(N−1)", end: "MIN", k: "K = MIN + (N−1)" },
+                ].map((c) => (
+                  <div key={c.k} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
+                    <span style={{ color: "#9a3412", fontWeight: 700, minWidth: 64 }}>{c.num} + K</span>
+                    <span>{t(E, `is the ${c.end}`, `가 ${c.end}`)}</span>
+                    <span style={{ color: "#9a3412", fontWeight: 700 }}>→ {c.k}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, ...KA }}>
+                {t(E, "Each of the four is checked with one pass through the array — about 4N steps in total.",
+                     "넷을 각각 배열을 한 번씩 훑어 확인하니 다 합치면 약 4N 이에요.")}
               </div>
             </div>
           </div>
