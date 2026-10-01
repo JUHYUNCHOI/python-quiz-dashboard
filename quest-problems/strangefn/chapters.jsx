@@ -460,13 +460,22 @@ export function makeStrangeFnCh1(E) {
        검증: 「마지막 자리가 0 이면 보정 1번」 → n=1..300 전수 어긋남 0건(메인 세션). */
     {
       type: "reveal",
+      /* ⛔ 백로그에서 꺼냈다 (2026-10-01) — 학생: *"「아까 그 줄」이 **그게 뭔지 몰라서
+           5쪽까지 두 번 뒤로 갔다 왔어요.** n=3 이라는 **숫자만 툭** 나와요."*
+         ⚠️ PM 이 *"narr 을 바꾸면 자연히 풀린다"* 고 봤는데 **안 풀렸다**(그 기록도 WORK.md 에 있다).
+         ⭐ 「몇 쪽을 보라」고 되돌려 보내는 게 답이 아니다 — **그 줄을 이 쪽에 데려온다**
+           (`feedback_screen_must_not_rely_on_memory`: 「앞에서처럼」이라고 썼으면
+            그게 무엇인지 **옆에 같이 있어야** 한다).
+         그래서 ①narr 에서 「아까」를 없애고 ②제목에 **줄 전체와 n↔이진수 연결**을 박는다.
+         5쪽 표가 이미 `11 | 1×2 + 1×1 = 3 | 4 (11→10→9→1→0)` 로 같은 값을 쓴다 — 숫자가 어긋나지 않는다. */
       narr: t(E,
-        "That trace again — one step at a time.",
-        "아까 그 줄, 한 걸음씩 다시 봐요."),
+        "n = 3 takes four steps — let's walk them.",
+        "n = 3 은 네 걸음이에요. 한 걸음씩 다시 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
-            🔍 {t(E, "n = 3, step by step", "n = 3 을 한 걸음씩")}
+            🔍 {t(E, "n = 3 (binary 11) — 11 → 10 → 9 → 1 → 0, four steps",
+                     "n = 3 (이진수로 11) — 11 → 10 → 9 → 1 → 0, 네 걸음")}
           </div>
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>

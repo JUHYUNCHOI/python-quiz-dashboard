@@ -96,7 +96,7 @@ function KittyRemainderSim({ E }) {
             touched
               ? t(E,
                   "A window of 5 remainders (the red-outlined chips) has only 3⁵ (3 multiplied by itself 5 times) = 243 possible patterns.\nSo as we go on, some window MUST come back — and from there everything repeats forever.\nWhy exactly, and how many times — the next chapter figures that out.",
-                  "나머지 5칸짜리 창(빨간 테두리 칩)은 경우의 수가 3⁵(3 을 다섯 번 곱한 수) = 243개뿐이에요.\n그러니 계속 가다 보면 어떤 창이 반드시 다시 나와요.\n왜 그런지·정확히 몇 번인지는 다음 장에서 알아봐요.")
+                  "나머지 5칸짜리 창(빨간 테두리 칩)은 만들 수 있는 모양이 3⁵(3 을 다섯 번 곱한 수) = 243가지뿐이에요.\n그러니 계속 가다 보면 어떤 창이 반드시 다시 나와요.\n왜 그런지·정확히 몇 번인지는 다음 장에서 알아봐요.")
               : t(E,
                   "Press + and watch the red-outlined window of 5.\nHow many different patterns can that window ever take?",
                   "+ 를 눌러 빨간 테두리 5칸이 어떻게 바뀌는지 봐요.\n그 5칸이 될 수 있는 모양은 모두 몇 가지일까요?")}
@@ -326,7 +326,14 @@ export function makeMcc20KittyCh2(E) {
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center",
             whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
-            {t(E, "↓ so we need a shortcut that doesn't touch every term.\nSo we keep only the remainders — and they come back around every 104 steps.", "↓ 그래서 모든 항을 건드리지 않는 지름길이 필요해요.\n그래서 나머지만 들고 다니기로 했죠.\nKitty 의 나머지는 104 번마다 처음 자리로 돌아와요.")}
+            {/* ⛔ 2026-10-01 학생(초6): *"「104번마다 처음 자리로 돌아와요」라고 **갑자기 선언**만
+                   되고 **어떻게 104를 구했는지는 안 나온다.** … **코드 탭까지 가서야**
+                   「코드를 실제로 돌려서 찾아낸 값」이라는 게 보였다 — **순서가 거꾸로였다.**"*
+                 → *"계획 단계만 보고 끝냈으면 104가 왜 104인지 영영 몰랐을 것 같다."*
+               ⭐ 결론을 과정으로 바꾼다 — **새 개념이 아니라 1장 4쪽에서 이미 조작해 본 것**을
+                 더 돌린 것뿐이라고 잇는다(`feedback_why_and_how_over_slowness`).
+               검증: 🔒 `FULL_PY` 와 같은 로직으로 직접 돌려 `start=1 · period=104` 확인. */}
+            {t(E, "↓ so we need a shortcut that doesn't touch every term.\nWe only need the remainders — and if we keep making them like in the earlier sim, the same 5-window comes back around. That happens at step 104.", "↓ 그래서 모든 항을 건드리지 않는 지름길이 필요해요.\n나머지만 들고 다니면 되는데, 앞 장에서처럼 나머지를 계속 만들다 보면\n똑같은 5칸 창이 다시 나오는 자리가 있어요 — 그게 104 번째예요.")}
           </div>
         </div>),
     },
@@ -367,7 +374,7 @@ export function makeMcc20KittyCh2(E) {
       correct: 0,
       explain: t(E,
         "The next remainder depends only on the current 5-window. With just 243 windows, one repeats within 243 steps, and the same window always produces the same future — a cycle.",
-        "다음 나머지는 현재 5칸 창에만 달려 있어요. 창이 243개뿐이니 243단계 안에 하나가 반복되고, 같은 창은 항상 같은 미래를 만들어요 — 사이클."),
+        "다음 나머지는 현재 5칸 창에만 달려 있어요. 창이 243개뿐이니 243단계 안에 하나가 반복되고, 같은 창은 항상 같은 미래를 만들어요 — 이렇게 돌아오는 한 바퀴를 말해요."),
     },
 
     // 2-4 insight 3: count via cycle
@@ -390,6 +397,14 @@ export function makeMcc20KittyCh2(E) {
             <div>full    = N // 104</div>
             <div>partial = N % 104</div>
             <div style={{ marginTop: 6 }}>answer = full × 35 + <span style={{ color: "#6ee7b7" }}>zeros_in(partial)</span></div>
+          </div>
+          {/* ⭐ 2026-10-01 — 학생이 *"35도 마찬가지"* 라고 했다. 104 와 같은 결함이다.
+                 ⚠️ 이건 꾸밈말이 아니라 **사실**이다 — 🔒 `FULL_PY` 가 `r.append(sum(r[-5:]) % 3)`
+                   으로 **실제로 만들어 보고 센다.** 하드코딩이 아니다(코드로 확인함). */}
+          <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, lineHeight: 1.6,
+            textAlign: "center", whiteSpace: "pre-line", ...KA }}>
+            {t(E, "Neither 104 nor 35 comes from a formula —\nthey are counted by actually making the remainders (exactly what the code does).",
+                 "104 도 35 도 공식으로 구한 게 아니에요 —\n나머지를 끝까지 만들어 보고 직접 센 값이에요 (코드가 하는 일 그대로예요).")}
           </div>
           {/* ⛔ 2026-10-01 — 이 쪽은 **식만 보여주고 숫자를 한 번도 안 넣어 봤다.**
                  그리고 공식 샘플 N=7 은 `full = 0` 이라 **곱셈 항이 한 번도 일을 안 한다**
@@ -424,7 +439,7 @@ export function makeMcc20KittyCh2(E) {
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, textAlign: "center", ...KA }}>
             {t(E,
               "(Kitty's cycle starts right at term 1, so there's no leading 'tail' to add separately.)",
-              "(Kitty의 사이클은 1번 항부터 바로 시작해서, 따로 더할 앞쪽 '꼬리'가 없어요.)")}
+              "(Kitty 는 이 바퀴가 1번 항부터 바로 시작해서, 따로 더할 앞쪽 조각이 없어요.)")}
           </div>
         </div>),
     },
@@ -437,7 +452,7 @@ export function makeMcc20KittyCh2(E) {
         "이번엔 세는 식을 직접 써볼 차례예요."),
       question: t(E,
         "Cycle length 10 with 4 zeros; N = 25; the first 5 terms of the cycle contain 2 zeros. Total count?",
-        "사이클 길이는 10이고 그 안에 0이 4개예요.\nN = 25이고 사이클 앞 5항에는 0이 2개예요. 총 개수는?"),
+        "한 바퀴 길이는 10이고 그 안에 0이 4개예요.\nN = 25이고 바퀴 앞 5항에는 0이 2개예요. 총 개수는?"),
       options: [
         t(E, "2 × 4 + 2 = 10", "2 × 4 + 2 = 10"),
         t(E, "25", "25"),
@@ -448,7 +463,7 @@ export function makeMcc20KittyCh2(E) {
         /* ⚠️ 2026-09-21: `25 // 10` 이라고 적혀 있었다. 이 quest 는 C++ 도 보여주는데
            **C++ 에서 `//` 는 주석**이라 그쪽 학생에겐 식이 안 읽힌다. 말로 적는다. */
         "25 ÷ 10 = 2 full cycles, with 5 left over. answer = 2 × 4 (from the full cycles) + 2 (zeros in the leftover 5) = 10.",
-        "25 ÷ 10 = 2, 온전한 사이클이 2번이고 5항이 남아요.\n답은 2 × 4 (온전한 사이클) + 2 (남는 5항의 0) = 10 이에요."),
+        "25 ÷ 10 = 2, 온전한 바퀴가 2번이고 5항이 남아요.\n답은 2 × 4 (온전한 바퀴) + 2 (남는 5항의 0) = 10 이에요."),
     },
   ];
 }
@@ -593,7 +608,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
          이 화면을 보고 그대로 치면 답이 틀리게 되어 있었다. FULL_PY 마지막 줄과 맞췄다. */
       narr: t(E,
         "We know where the cycle starts and how long it is — so how do we count without looping to N? Add three pieces.",
-        "사이클이 어디서 시작하고 얼마나 긴지 알아요.\nN까지 반복하지 않고 어떻게 셀까요? 세 조각을 더해요."),
+        "바퀴가 어디서 시작하고 얼마나 긴지 알아요.\nN까지 반복하지 않고 어떻게 셀까요? 세 조각을 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <CodeBlock lines={lang === "cpp" ? P3_CPP : P3_PY} lang={lang} isEn={E} />
@@ -601,7 +616,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
             lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
             {t(E,
               "Three pieces: the tail before the cycle, one whole cycle × how many cycles fit, and the leftover.\nAdd them up and the answer comes out even for N = 10^15 — N = 10 costs the same.",
-              "세 조각이에요. 되풀이 전의 앞꼬리, 한 바퀴 × 들어가는 바퀴 수,\n그리고 남는 조각이에요. 이 셋을 더하면 N 이 10^15 이어도 답이 나와요 —\nN 이 10 일 때와 드는 일이 같아요.")}
+              "세 조각이에요. 되풀이 전의 앞쪽 조각, 한 바퀴 × 들어가는 바퀴 수,\n그리고 남는 조각이에요. 이 셋을 더하면 N 이 10^15 이어도 답이 나와요 —\nN 이 10 일 때와 드는 일이 같아요.")}
           </div>
         </div>),
     },

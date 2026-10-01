@@ -109,7 +109,17 @@ export function KnightExactSim({ E }) {
               const r = Math.floor(idx / N), c = idx % N;
               const isStart = r === SR && c === SC;
               const isTarget = r === pick.r && c === pick.c && !isStart;
-              const checker = (r + c) % 2 === 0 ? "#f1f5f9" : "#dbe3ee";
+              /* ⛔ 2026-10-01 — 여기 이미 체스판 두 색이 있었는데 `#f1f5f9` vs `#dbe3ee`,
+                   **둘 다 연한 회청색이라 두 색으로 안 보였다.** 그래서 글이 세 번
+                   *"판을 체스판처럼 두 색으로 칠해 봐요"* 라고 불러도 **가리킬 대상이
+                   화면에 없었다**(`feedback_sentence_must_follow`).
+                   학생(초6)이 *"끝까지 「왜 짝수지?」를 못 풀었다"* 고 한 원인이다.
+                 ⭐ 이 분기 `(r+c)%2===0` 은 **출발 칸과 같은 색 집단과 정확히 일치한다** —
+                   출발이 (3,3) 이라 `(3+3)%2 = 0`. L자 이동은 1+2 = 3 칸(홀수)이라
+                   한 걸음마다 색이 바뀐다 → **같은 색 ⇔ 최소 이동이 짝수.**
+                   7×7 **49칸 전수 검증 어긋남 0건**(메인 세션, minKnight 로 직접 대조).
+                 ⚠️ 값만 바꿨다 — 분기도 구조도 그대로다. 판정: pedagogy-reviewer 2026-10-01. */
+              const checker = (r + c) % 2 === 0 ? "#fef3c7" : "#c7d2fe";
               let bg = checker;
               if (isTarget) bg = reachable ? "#bbf7d0" : "#fecaca";
               return (
@@ -133,6 +143,18 @@ export function KnightExactSim({ E }) {
               );
             })}
           </div>
+        </div>
+
+        {/* ⭐ 2026-10-01 — 색을 또렷하게 해도 **무슨 뜻인지 아무 캡션이 없었다.**
+            범례를 격자 바로 아래 둔다 — 「두 색」이 글이 아니라 **화면에서** 답해진다. */}
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap",
+          fontSize: 11.5, color: C.text, marginBottom: 10, ...KA }}>
+          <span><span style={{ display: "inline-block", width: 10, height: 10, borderRadius: 3,
+            background: "#fef3c7", border: "1px solid #94a3b8", marginRight: 4 }} />
+            {t(E, "lands here after an EVEN number of moves", "짝수 번 움직이면 여기 칸")}</span>
+          <span><span style={{ display: "inline-block", width: 10, height: 10, borderRadius: 3,
+            background: "#c7d2fe", border: "1px solid #94a3b8", marginRight: 4 }} />
+            {t(E, "after an ODD number", "홀수 번 움직이면 여기 칸")}</span>
         </div>
 
         {/* offset + min readout */}
@@ -646,9 +668,14 @@ export function getMcc20KnightWalk(E) {
       { hi: [24, 31], bubble: t(E,
         "Now answer each query. This contest has no fixed input format, so the values are given like this (the official sample). For every query, turn the coordinates back into a gap (dx, dy) and look up its precomputed minimum.",
         "이제 질문마다 답해요. 이 대회는 입력 형식이 따로 없어서 값을 이렇게 줘요 (공식 예제).\n질문마다 좌표를 다시 차이 (dx, dy) 로 바꾸고, 미리 구해 둔 최소값을 찾아봐요.") },
+      /* ⭐ 2026-10-01 — 여기서 체스판 유도를 **세 번째로** 하고 있었다. 글을 한 번 더
+         쓰는 게 답이 아니다(학생이 세 번 읽고도 못 풀었다) — **3쪽 판을 가리키고**
+         코드 줄에만 새로 잇는다. 3문장 → 2문장으로 줄여 범례 추가분을 상쇄한다.
+         ⚠️ 1-5 퀴즈의 **첫** 유도(`chapters.jsx:195` 부근)는 그대로 둔다 —
+           「왜 그럴까요?」 직후 처음 답하는 자리라 거기서 깎으면 안 된다. */
       { hi: [32, 36], bubble: t(E,
-        "Why must the leftover (K − need) be even? Color the board like a chessboard — an L-move is 1 in one direction and 2 in the other, so 1+2 = 3 squares, and an odd step always lands on the opposite color. So after an even number of moves the knight is back on its starting color, after an odd number it's on the other one. The target's color never changes, so the move count can only shift by 2 at a time — and any extra pair can always be burned by stepping out and straight back.",
-        "남는 이동 (K − need) 이 왜 짝수여야 할까요? 판을 체스판처럼 두 색으로 칠해 봐요.\nL자 이동은 한 쪽으로 1, 다른 쪽으로 2 라서 합쳐서 3 칸 — 홀수 칸을 움직이면 색이 반드시 반대가 돼요.\n그래서 짝수 번 움직이면 출발한 색으로 돌아오고, 홀수 번 움직이면 반대 색에 있어요.\n목표 칸의 색은 정해져 있으니 이동 횟수는 2 씩만 달라질 수 있고, 남는 이동은 아무 칸으로나 나갔다 바로 돌아오면 항상 쓸 수 있어요.") },
+        "You already saw why the leftover must be even, back on the board in step 3 — the color flips every move, so the knight returns to its own color every 2 moves.\nThat is exactly what (k - need) % 2 == 0 checks. And any extra pair can always be burned by stepping out and straight back.",
+        "남는 이동이 왜 짝수여야 하는지는 3쪽 판에서 이미 봤어요 — 두 색이 한 걸음마다 바뀌니까 2 번마다 제 색으로 돌아와요.\n그게 바로 (k - need) % 2 == 0 이 확인하는 거예요. 남는 이동은 아무 칸으로나 나갔다 바로 돌아오면 언제나 쓸 수 있고요.") },
       { hi: [37, 37], bubble: t(E,
         "Collect every answer and print them all at once, one per line.",
         "답을 다 모아서 한 번에, 한 줄씩 출력해요.") },
