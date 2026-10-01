@@ -156,6 +156,21 @@ export function KnightExactSim({ E }) {
             background: "#c7d2fe", border: "1px solid #94a3b8", marginRight: 4 }} />
             {t(E, "after an ODD number", "홀수 번 움직이면 여기 칸")}</span>
         </div>
+        {/* ⛔ 2026-10-01 재검증 학생(초6): *"**못 하겠다, 3쪽까지만 보면.** 패턴만 눈으로
+               관찰했다. **왜 그런지는 전혀 안 알려줬다.** 설명은 한참 뒤 **코드 스텝 4/5**
+               에 가서야 나왔다 … **순서가 거꾸로.**"*
+             → 색을 또렷하게 하고 범례를 붙인 것만으로는 **반만 고친 것**이었다.
+               범례가 「짝수 번 움직이면 여기 칸」이라고 **사실만** 말하고 **까닭**을 안 말한다.
+               게다가 나는 CodeWalk 말풍선을 *"3쪽 판에서 이미 봤어요"* 로 바꿔 뒀는데 —
+               **학생은 3쪽에서 그걸 본 적이 없다.** 가리키는 곳에 그게 없었다
+               (`feedback_sentence_must_follow`).
+             ⭐ 학생이 *"끝까지 안 알려줬다"* 고 한 **그 한 마디**를 여기 둔다 —
+               L자가 왜 늘 색을 바꾸는지. 한 줄, 새 쪽·새 걸음 0. */}
+        <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim, marginBottom: 10,
+          lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
+          {t(E, "An L-move is 2 one way and 1 across — 3 squares in all,\nso every single move lands on the other colour.",
+               "L자 이동은 한 쪽으로 2칸, 옆으로 1칸 — 모두 3칸이에요.\n홀수라서 한 걸음마다 반드시 반대 색으로 가요.")}
+        </div>
 
         {/* offset + min readout */}
         <div style={{ textAlign: "center", fontSize: 12.5, color: C.text, marginBottom: 10, ...KA }}>

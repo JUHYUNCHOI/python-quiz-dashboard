@@ -23,7 +23,7 @@ const FULL_PY = [
   "        seen[st] = k",
   "        k += 1",
   "",
-  "    # 앞꼬리 + 되풀이 한 바퀴만큼은 꼭 있게 해요",
+  "    # 앞쪽 조각 + 되풀이 한 바퀴만큼은 꼭 있게 해요",
   "    needed = start - 1 + period",
   "    while len(r) < needed:",
   "        r.append(sum(r[-5:]) % 3)",
