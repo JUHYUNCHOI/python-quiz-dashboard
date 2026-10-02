@@ -474,63 +474,8 @@ export function makeMcc20KittyCh2(E) {
 /* 3장 코드 조각 — 🔒 components.jsx 의 FULL_PY / FULL_CPP 에서 그대로 떼 온 줄들이다.
    ⚠️ 저기를 고치면 여기도 같이 고쳐라. 화면과 코드가 어긋나면 학생이 먼저 알아챈다.
    ⚠️ <span> 을 손으로 쌓지 마라 — JSX 가 앞 공백을 먹어서 들여쓰기가 사라진다. */
-const P1_PY = [
-  "r = [11 % 3, 9 % 3, 20 % 3, 20 % 3, 25 % 3]",
-  "# r = [2, 0, 2, 2, 1]",
-  "",
-  "nxt = sum(r[-5:]) % 3",
-];
-const P1_CPP = [
-  "vector<int> r = {11 % 3, 9 % 3, 20 % 3, 20 % 3, 25 % 3};",
-  "// r = {2, 0, 2, 2, 1}",
-  "",
-  "int s = 0;",
-  "for (int j = 1; j <= 5; j++) {",
-  "    s += r[r.size() - j];",
-  "}",
-  "r.push_back(s % 3);",
-];
-
-const P2_PY = [
-  "seen = {}",
-  "while True:",
-  "    st = tuple(r[k-1:k+4])",
-  "    if st in seen:",
-  "        start = seen[st]",
-  "        period = k - start",
-  "        break",
-  "    seen[st] = k",
-  "    k += 1",
-];
-const P2_CPP = [
-  "map<vector<int>, long long> seen;",
-  "while (true) {",
-  "    vector<int> st(r.begin() + (k - 1), r.begin() + (k + 4));",
-  "    if (seen.count(st)) {",
-  "        start = seen[st];",
-  "        period = k - start;",
-  "        break;",
-  "    }",
-  "    seen[st] = k;",
-  "    k++;",
-  "}",
-];
-
-const P3_PY = [
-  "tail  = r[:start-1]",
-  "cycle = r[start-1:start-1+period]",
-  "",
-  "tail_zeros = sum(1 for x in tail if x == 0)",
-  "cycle_zeros = sum(1 for x in cycle if x == 0)",
-  "",
-  "remaining = N - (start - 1)",
-  "full = remaining // period",
-  "partial = remaining % period",
-  "partial_zeros = sum(1 for x in cycle[:partial] if x == 0)",
-  "",
-  "ans = tail_zeros + full * cycle_zeros + partial_zeros",
-  "print(ans)",
-];
+/* 2026-10-02: `P1_PY`·`P2_PY`·`P3_PY` 를 지웠다 — 이 셋을 쓰던 3-1·3-2·3-3 쪽이 없어졌다.
+   `FULL_PY` 의 부분집합이 아니라 **단순화한 스케치**였어서, 학생이 두 가지 다른 코드를 보고 있었다. */
 const P3_CPP = [
   "long long tail_zeros = 0;",
   "for (long long i = 0; i < start - 1; i++) {",
@@ -561,77 +506,30 @@ const P3_CPP = [
 
 export function makeMcc20KittyCh3(E, lang = "py") {
   return [
-    // 3-1 phase 1: work in remainders
-    {
-      type: "reveal",
-      narr: t(E,
-        "Time to code it — first, what do we need? A list we can keep growing with remainders.",
-        "코드로 옮겨볼게요. 먼저 뭐가 필요할까요?\n나머지를 늘려가는 리스트부터 만들어요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <CodeBlock lines={lang === "cpp" ? P1_CPP : P1_PY} lang={lang} isEn={E} />
-        </div>),
-    },
+    /* ⛔ 2026-10-02 `/decide` 판정 — 여기 있던 **3-1·3-2·3-3 세 쪽을 지웠다.**
+       선생님: *"눈으로 보는게 아니라 읽어야 하는 설명이 너무 많아.
+                그래서 우리가 시뮬레이션이라는것을 나둔거잖아"* → *"담당자 토론 후 결정"*
 
-    // 3-2 phase 2: find the cycle
-    {
-      type: "reveal",
-      /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
-         narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
-         상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
-      /* 2026-09-17: 80자였고, 학생용 글에 "dict" 라는 코드 용어가 그대로 있었다.
-         파란 바는 짧게, 표(dict) 설명은 아래 코드 밑에 우리말로 붙인다. */
-      narr: t(E,
-        "The list can grow forever — so when do we stop? Spot the window that comes back.",
-        "리스트는 끝없이 늘어나요. 언제 멈출까요?\n다시 나오는 창을 찾아서 멈춰요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <CodeBlock lines={lang === "cpp" ? P2_CPP : P2_PY} lang={lang} isEn={E} />
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center",
-            lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
-            {t(E,
-              "seen is a lookup table: each 5-window we have met, and the step it appeared at.\nThis table is exactly the 243-window idea from chapter 2 — for Kitty it stops fast, at start = 1, period = 104.\nThe real code first stretches r up to k+4 terms each round — otherwise r[k-1:k+4] would point past what has been built.",
-              "seen 은 찾아보기 표예요. 만난 5칸 창과 그게 몇 번째였는지를 적어 둬요.\n이 표가 찾는 게 바로 2장에서 배운 그 창(243가지)이에요 — Kitty 에서는 금방 멈춰요, start = 1, period = 104 예요.\n실제 코드는 매번 r 을 k+4 칸까지 먼저 늘려요. 안 그러면 r[k-1:k+4] 가 아직 없는 칸을 가리켜요.")}
-          </div>
-        </div>),
-    },
+       세 쪽 다 **누를 것 0개**였고(기계 실측 406·352·484자), 그 내용이 바로 아래
+       `opt-codewalk` 의 말풍선과 **같은 논증을 되풀이**하고 있었다(pedagogy).
+       ⚠️ 게다가 그 쪽들의 코드(`P1_PY`·`P2_PY`·`P3_PY`)는 `FULL_PY` 의 부분집합이 아니라
+         **단순화한 스케치**였다(ux 실측) — 학생은 **두 가지 다른 코드**를 보고 있었다.
+       ⚠️ 같은 CodeWalk 방식을 쓰는 형제 둘(`mcc20cipher`·`mcc20missing`)은
+         **이 중간 조각 쪽이 아예 없다**(실측 0개 vs 여기 3개). kitty 만 안 치워진 것이다.
 
-    /* 2026-09-23: 여기 있던 "3-3 quiz" (창이 몇 가지인지)를 삭제했다 —
-       2장 2-3 퀴즈(:371-395)가 같은 세 보기(243/10^15/104)로 이미 같은 사실을 물었다.
-       코드 2단계(창 찾기)와 3단계(세는 식) 사이에 끼어 코드 읽는 흐름만 끊었다.
-       다리는 위 3-2 쪽 끝에 한 줄로 옮겼다. */
+       ⭐ **지우기 전에 두 가지를 먼저 옮겼다**(ux 가 짚었다 — 그냥 지우면 정보가 준다):
+         ① `components.jsx` 의 `vars` 에 **`k` 정의 추가** — 학생(초6)이
+            *"`st = tuple(r[k-1:k+4])` 에서 **k 가 어디에도 안 보여서 막혔다**"* 고 한 자리다.
+            ⚠️ 이 구멍은 **CodeWalk 에도 그대로 있었다** — 전환만 했으면 안 없어졌다.
+         ② beats[1] 에 **`start = 1, period = 104`** 와
+            「매번 r 을 k+4 칸까지 먼저 늘린다」 다리 문장 이식.
+            학생이 *"104를 그냥 「믿어라」고만 한다"* 며 원한 바로 그 숫자다.
 
-    // 3-3 phase 3: count with arithmetic
-    {
-      type: "reveal",
-      /* 2026-09-23: 이 조각의 식이 진짜 코드와 달랐다 — 앞꼬리(tail_zeros)가 빠져 있어서,
-         이 화면을 보고 그대로 치면 답이 틀리게 되어 있었다. FULL_PY 마지막 줄과 맞췄다. */
-      narr: t(E,
-        "We know where the cycle starts and how long it is — so how do we count without looping to N? Add three pieces.",
-        "바퀴가 어디서 시작하고 얼마나 긴지 알아요.\nN까지 반복하지 않고 어떻게 셀까요? 세 조각을 더해요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <CodeBlock lines={lang === "cpp" ? P3_CPP : P3_PY} lang={lang} isEn={E} />
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center",
-            lineHeight: 1.6, whiteSpace: "pre-line", ...KA }}>
-            {t(E,
-              "Three pieces: the tail before the cycle, one whole cycle × how many cycles fit, and the leftover.\nAdd them up and the answer comes out even for N = 10^15 — N = 10 costs the same.",
-              "세 조각이에요. 되풀이 전의 앞쪽 조각, 한 바퀴 × 들어가는 바퀴 수,\n그리고 남는 조각이에요. 이 셋을 더하면 N 이 10^15 이어도 답이 나와요 —\nN 이 10 일 때와 드는 일이 같아요.")}
-          </div>
-        </div>),
-    },
+       ⛔ 학생이 더 원한 것(*"104개를 늘어놓고 **내가 직접 35개를 세어봤으면**"*)은
+         **새 인터랙션이라 안 열었다** — `feedback_shorter_not_longer` 세 번째 지적이고
+         선생님 말씀도 **줄이라는 방향**이다. 옮긴 숫자가 절반을 채우되
+         **완전한 대체는 아니다**(PM 이 「확인 못 했다」로 남겼다). */
 
-    /* ⛔ 2026-10-01 삭제 — 「3-4 복잡도」 쪽. **바로 앞 3-3 이 이미 같은 말로 닫는다**
-         (*"이 셋을 더하면 N 이 10^15 이어도 답이 나와요"*). 3-4 는 그 한 줄을 카드 두 개로
-         다시 그린 것이고 **새 정보가 없었다** — 사이클 길이 ≈104 도 2-1·2-4 에 이미 있다.
-       ⭐ 지운 까닭은 자리를 벌기 위해서다. 이 quest 는 **14쪽**으로 형제 MCC 2020(6~8쪽)
-         대비 이상치라 `feedback_shorter_not_longer`(선생님 세 번째 지적)에 따라
-         **늘리는 길이 막혀 있다.** PM: *"순 쪽수·순 글자수가 늘면 반려."*
-         2-4 에 큰 N 예시를 넣는 대신 여기서 한 쪽을 돌려줬다 — **순 쪽수 14 → 13.**
-       ⚠️ 함께 검토한 다른 후보(1-2/1-3 병합 · 2-1/2-3 병합)는 **안 건드렸다** —
-         둘 다 승(형식)/전(자세한 예제) 분리를 지키고 서로 다른 정보를 준다
-         (1-2 는 「왜 2일까」를 미뤄 두고 1-3 이 K6·K7 계산으로 답한다).
-       근거: pedagogy-reviewer 판정 2026-10-01. */
 
     // 3-5: code — CodeWalk (선생님 2026-07-14: 모든 quest 코드 이 방식)
     {

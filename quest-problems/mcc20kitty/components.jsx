@@ -134,6 +134,11 @@ export function getMcc20KittyWalk(E) {
     code: FULL_PY,
     vars: [
       { v: "r", ko: "나머지만 남긴 수열", en: "the sequence, kept as remainders" },
+      /* ⛔ 2026-10-02 — 학생(초6)이 **여기서 막혔다**: *"`st = tuple(r[k-1:k+4])` 에서
+           **`k` 가 이 코드 조각 어디에도 안 보여서 「k가 뭐지?」 하고 막혔다.**"*
+         `k` 는 `FULL_PY` 5번째 줄(`k = 1`)에 있는데 **범례에 없었다.**
+         `/decide` 에서 ux 가 짚었다 — *"ⓐ(CodeWalk 전환)로 바꿔도 이 자리는 그대로 남는다."* */
+      { v: "k", ko: "지금 보고 있는 5칸 창의 자리", en: "which 5-window we are looking at" },
       { v: "start, period", ko: "되풀이가 시작되는 자리 · 길이", en: "where the repeat starts · its length" },
       { v: "tail, cycle", ko: "앞쪽 조각 · 되풀이되는 한 바퀴", en: "the lead-in piece · one full repeating cycle" },
     ],
@@ -141,9 +146,15 @@ export function getMcc20KittyWalk(E) {
       { hi: [0, 2], bubble: t(E,
         "What should we output? How many of the first N Kitty numbers divide by 3. We only care about that, so keep just each term's remainder (0, 1, or 2) instead of the huge numbers themselves.",
         "무엇을 출력해야 하나요? Kitty 수열 앞 N 개 중 3 의 배수 개수예요.\n그것만 궁금하니 거대한 수 대신 각 항의 나머지(0, 1, 2)만 들고 다녀요.") },
+      /* ⛔ 2026-10-02 `/decide` — `chapters.jsx` 의 중복 세 쪽을 지우기 **전에**,
+           거기에만 있고 여기 없던 둘을 **먼저 옮긴다**(ux 가 짚었다. 그냥 지우면 정보가 준다):
+           ① 구체 숫자 **`start = 1, period = 104`** — 학생이 *"104를 그냥 「믿어라」고만 한다"* 며
+             정확히 원한 그 숫자다
+           ② *"실제 코드는 매번 r 을 k+4칸까지 먼저 늘려요"* — `while len(r) < k + 4` 줄이
+             왜 있는지 밝히는 다리 문장 */
       { hi: [3, 16], bubble: t(E,
-        "A new remainder is just the previous five remainders added up, mod 3. A 5-window of remainders has only 3×3×3×3×3 = 243 possible patterns, so it has to start repeating — keep growing the sequence and remember every 5-window you've seen until one repeats.",
-        "새 나머지는 바로 앞 다섯 나머지를 더해서 3 으로 나눈 값이에요.\n나머지 5 칸 창은 모양이 3×3×3×3×3 = 243 가지뿐이라 반드시 되풀이돼요 — 수열을 늘려가며 5 칸 창을 전부 기억해두다가 겹치는 순간을 찾아요.") },
+        "A new remainder is just the previous five remainders added up, mod 3. A 5-window of remainders has only 3×3×3×3×3 = 243 possible patterns, so it has to start repeating — keep growing the sequence and remember every 5-window you've seen until one repeats.\nseen is that lookup table: each 5-window met, and the step k it appeared at. Each round the code first stretches r up to k+4 terms — otherwise r[k-1:k+4] would point past what has been built.\nFor Kitty it stops fast: start = 1, period = 104.",
+        "새 나머지는 바로 앞 다섯 나머지를 더해서 3 으로 나눈 값이에요.\n나머지 5 칸 창은 모양이 3×3×3×3×3 = 243 가지뿐이라 반드시 되풀이돼요 — 수열을 늘려가며 5 칸 창을 전부 기억해두다가 겹치는 순간을 찾아요.\nseen 이 그 찾아보기 표예요. 만난 5칸 창과 그게 몇 번째(k)였는지를 적어 둬요.\n매번 r 을 k+4 칸까지 먼저 늘려요 — 안 그러면 r[k-1:k+4] 가 아직 없는 칸을 가리켜요.\nKitty 에서는 금방 멈춰요. start = 1, period = 104 예요.") },
       { hi: [18, 23], bubble: t(E,
         "Once we know where the repeat starts (start) and how long it is (period), grow the sequence just enough to hold one lead-in piece plus one full cycle, then split it into those two pieces.",
         "되풀이가 시작되는 자리(start)와 길이(period)를 알았으면, 앞쪽 조각 + 한 바퀴만큼만 더 채운 뒤 그 둘로 나눠요.") },

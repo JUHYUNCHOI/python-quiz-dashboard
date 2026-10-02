@@ -552,10 +552,10 @@
     "korean_screen_ref": 483
   },
   "mcc20kitty": {
-    "pages": 13,
+    "pages": 10,
     "quiz_input": 3,
-    "korean_chars_ref": 3132,
-    "korean_screen_ref": 1289
+    "korean_chars_ref": 2877,
+    "korean_screen_ref": 1038
   },
   "mcc20knight": {
     "pages": 8,
