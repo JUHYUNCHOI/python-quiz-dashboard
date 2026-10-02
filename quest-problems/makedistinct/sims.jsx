@@ -276,6 +276,20 @@ function KRows({ E, k, rows, on }) {
      글이 아니라 **그림**으로 말해진다. 실측: [3,3,3,4] 를 K=3 으로 돌리면 줄은 2개다. */
 const LEFTOVERS = { 1: "0", 2: "0, 1", 3: "0, 1, 2" };
 
+/* ⭐ 2026-10-02 — 사슬을 **걸음마다 자라게** 한다. 선생님:
+     *"한꺼번에 많은 정보를 보여주지 말고 **단계별로**."*
+   전에는 `"3 → 5 → 7 → 9 …"` 가 **박힌 글자**라, pedagogy 실측대로
+   *"「민다」가 이 시뮬 전체에서 한 번도 실제 동작이 아니었다."*
+   ⚠️ 새 버튼을 만들지 않는다 — ux 판정: *"버튼을 따로 두면 다음으로 가는 법이 둘이 된다."*
+     **◀▶ 를 누르는 것이 곧 미는 것**이다. 조작부는 하나로 둔다. */
+const CHAIN = { 1: [3, 5, 7, 9], 0: [4, 6, 8, 10] };
+function chainText(rem, push) {
+  const all = CHAIN[rem];
+  const n = push == null ? all.length : Math.max(1, Math.min(push, all.length));
+  const shown = all.slice(0, n).join(" → ");
+  return n < all.length ? shown : shown + " …";
+}
+
 const K_COMPARE = [
   { k: 1, rows: ["3 → 4 → 5 → 6 → 7 …"] },
   { k: 2, rows: ["3 → 5 → 7 → 9 …", "4 → 6 → 8 → 10 …"] },
@@ -426,7 +440,7 @@ export function WhoCanMeetSim({ E }) {
        → 체인을 **선언하지 말고 그 자리에서 만든다**(더하면 5, 또 더하면 7),
          그리고 「몇 번이든 더해도 된다」는 허락을 **같은 화면에** 둔다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "idle"],
-      extra: ["", "", "", ""], chains: [1], hot: 1,
+      extra: ["", "", "", ""], chains: [1], hot: 1, push: 2,
       /* ⚠️ 2026-09-29 선생님: *"3,5,7,9로 더해지는것도 시뮬에 있었던것 같은데.
            **너무 비슷한 색으로 너무많은 정보가 갑자기**"* — 둘 다 맞다.
          ⭐ `3 → 5 → 7 → 9` 가 **이 시뮬 안에서만 네 번** 나오고 있었다:
@@ -437,7 +451,7 @@ export function WhoCanMeetSim({ E }) {
 
     /* 2. 관찰 둘 — 두 번째 줄. 여기서도 이름은 없다. 눈으로 「안 겹친다」만. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
-      extra: ["", "", "", ""], chains: [1, 0], hot: 0,
+      extra: ["", "", "", ""], chains: [1, 0], hot: 0, push: 3,
       ko: "넷째 4 에도 2 씩 더해 봐요 — 4, 6, 8, 10 …\n3 이 갈 수 있는 수와 4 가 갈 수 있는 수는 하나도 안 겹쳐요.",
       en: "Now add 2 to the fourth number, 4 — 4, 6, 8, 10 …\nWhere 3 can go and where 4 can go never overlap." },
 
@@ -451,7 +465,7 @@ export function WhoCanMeetSim({ E }) {
            나머지는 그 질문의 답이고, 쓸모는 **줄 이름표**다. 성질이 아니라 **도구**로 준다.
          ⛔ 이 걸음에서는 답을 주지 마라. 나눗셈은 다음 걸음이다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
-      extra: ["", "", "", ""], chains: [1, 0], tone: "stuck",
+      extra: ["", "", "", ""], chains: [1, 0], tone: "stuck", push: 4,
       ko: "그럼 3 과 4 는 절대 같아질 수 없겠네요.\n끝까지 다 써 보지 않고도 미리 알 수 있을까요?",
       en: "So 3 and 4 can never become the same number.\nIs there a way to know that without writing everything out?" },
 
@@ -624,7 +638,7 @@ export function WhoCanMeetSim({ E }) {
             width: "fit-content", maxWidth: "100%", marginLeft: "auto", marginRight: "auto" }}>
             {s.chains.map((rem) => (
               <ChainRow key={rem} E={E} k={2} rem={rem} hot={s.hot === rem}
-                vals={rem === 1 ? "3 → 5 → 7 → 9 …" : "4 → 6 → 8 → 10 …"}
+                vals={chainText(rem, s.push)}
                 named={s.named}
                 /* ⭐ 선생님이 물으신 것은 **「나머지로 어떻게 구분이 되나」** 다.
                    `3÷2 = 1` 만 보여주면 **결과**만 보이고 **왜 늘 1 인지**는 안 보인다.
