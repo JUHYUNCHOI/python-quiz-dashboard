@@ -565,14 +565,14 @@ export function WhoCanMeetSim({ E }) {
     /* 5. 일반화 **한 칸만.** K=1 을 옆에 놓아 「K 가 달라지면 갈리는 수가 달라진다」를
          한 번에 하나씩 본다. 표를 통째로 띄우지 않는다. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
-      extra: ["", "", "", ""], kcompare: [1, 2],
+      extra: ["", "", "", ""], kcompare: [1, 2], khot: 1,
       ko: "K 가 1 이면 어떨까요? 1 로 나누면 뭐든 0 이 남아요.\n남는 수가 다 같으니까 어떤 두 수든 같아질 수 있어요.",
       en: "What if K is 1? Divide anything by 1 and 0 is left.\nEvery leftover is the same, so any two numbers can meet." },
 
     /* 6. 일반화 **한 칸 더.** K=3. 셋째 줄은 **비워 둔다** — 우리 수가 안 쓰는 줄이다
          (`5 → 8 → 11` 을 쓰면 5 가 어디서 왔는지 학생이 묻는다). */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
-      extra: ["", "", "", ""], kcompare: [1, 2, 3],
+      extra: ["", "", "", ""], kcompare: [1, 2, 3], khot: 3,
       /* ⛔ 2026-09-29 감사 담당이 **거짓**으로 잡았다. 옛 문장:
            *"2 를 더하든 3 을 더하든, 남는 수는 절대 안 바뀌어요."*
            **반례**: 3 에 2 를 더하면 5 이고 5 를 3 으로 나눈 나머지는 2 — 3 의 나머지 0 에서
@@ -717,7 +717,9 @@ export function WhoCanMeetSim({ E }) {
             {/* ⭐ 표가 **한 칸씩 자란다.** 선생님(2026-09-29):
                 *"갑자기 정보 너무 많아지지 않도록"* — 옛 판은 여섯 줄이 한 번에 떴다. */}
             {K_COMPARE.filter((kc) => s.kcompare.includes(kc.k)).map((kc) => (
-              <KRows key={kc.k} E={E} k={kc.k} rows={kc.rows} on={kc.k === 2} />
+              /* ⛔ 2026-10-02 학생(초6): *"「K가 3이면」이라는데 켜진 박스는 K=2 쪽이었다"*
+                 — `on={kc.k === 2}` 가 **못 박혀** 있었다. 말풍선이 말하는 K 를 켠다. */
+              <KRows key={kc.k} E={E} k={kc.k} rows={kc.rows} on={kc.k === s.khot} />
             ))}
           </div>
         )}
