@@ -1980,14 +1980,21 @@ export function HpsFormulaGridSim({ E }) {
     { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.\nWe call that count dom (short for 'dominates').", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.\n이 개수를 dom 이라고 불러요 ('dominate 제압' 의 앞 세 글자).") },
     { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
-    { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)² = 4)", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)² = 4)") },
+    { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.") },
     /* ⛔ 2026-10-02 4차 학생: *"그만두고 싶었던 걸음: 6/7. 넷이 동시에 떠 있었다."*
        ⭐ 숨은 중복을 PM 이 찾았다 — **말풍선과 아래 상자가 같은 문자 공식을 두 번** 말했다.
          말풍선에선 지우고(숫자만), 문자 공식은 **아래 상자 하나만** 맡는다.
          그리고 그 상자를 **따로 걸음으로** 뗀다 — 문자(N·dom)가 처음 들어가는 순간을 격리한다.
          내용은 안 늘고 겹침만 없어진다. */
     { phase: "count", bubble: t(E, "Wins = whole grid − losers = 9 − 4 = 5!", "이기는 패 = 전체 − 지는 것 = 9 − 4 = 5!") },
-    { phase: "formula", bubble: t(E, "Now the same thing in letters.", "이제 같은 걸 글자로 써 봐요.") },
+    /* ⛔ 2026-10-02 (세 번째 쪼개기 — PM 「마지막 한 번」) 5차 학생:
+         *"**숫자 상자 셋이 동시에** 떠서 **뭐부터 봐야 할지 몰랐다.** 여기가 제일 그만두고
+           싶었던 자리다."* → 앞선 세 번은 **블록을 통째로 옮기기만** 해서 과부하가 따라다녔다.
+       ⭐ 이번엔 층이 다르다 — **한 식을 통째로 보이나, 항마다 나눠 보이나.**
+         ①전체 패만 ②안 이기는 패를 더해서 ③빼서 답 + 「왜 빼요」. 숫자 하나씩. */
+    { phase: "f1", bubble: t(E, "First — how many hands are there in all?", "먼저 — 패는 모두 몇 가지일까요?") },
+    { phase: "f2", bubble: t(E, "Next — how many of them do NOT win?", "다음 — 그중 안 이기는 건 몇 가지일까요?") },
+    { phase: "formula", bubble: t(E, "Subtract, and what is left is the wins.", "빼면 남는 게 이기는 패예요.") },
     /* ⛔ 2026-10-02 3차 학생: *"한 쪽 안에 ①dom ②그리드 ③빼기 공식 ④「여사건」
          ⑤포함배제식까지 몰아서 나와서 **여기서 제일 지쳤다. 사실상 그만두고 싶었던 자리.**"*
        ⭐ 내용을 빼지 않고 **걸음을 하나 더 쪼갠다** — 「직접 세기」를 다음 걸음으로.
@@ -1997,8 +2004,8 @@ export function HpsFormulaGridSim({ E }) {
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const showTest = s.phase === "test" || s.phase === "testans";
-  const lit = ["green", "red", "count", "formula", "directcount"].includes(s.phase);
-  const litRed = ["red", "count", "formula", "directcount"].includes(s.phase);
+  const lit = ["green", "red", "count", "f1", "f2", "formula", "directcount"].includes(s.phase);
+  const litRed = ["red", "count", "f1", "f2", "formula", "directcount"].includes(s.phase);
 
   const cell = (rowWin, colWin, key) => {
     const win = rowWin || colWin;
@@ -2132,40 +2139,48 @@ export function HpsFormulaGridSim({ E }) {
 
           {/* 공식 조립 — 각 기호를 격자 그림 조각에 대응 + 왜 '빼는지'(여사건) 동기.
               (선생님 2026-07-22: "dom 약자·공식이 어떻게 만들어지는지 전혀 이해 안 돼") */}
-          {s.phase === "formula" && (
+          {["f1", "f2", "formula"].includes(s.phase) && (
             <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "12px 14px" }}>
-              <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
+              {s.phase === "formula" && <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
                 🧩 {t(E,
                   <>Why subtract? Winning hands are scattered (⚡ could be in slot 1, slot 2, or both) — messy to count.  <b>The NON-winning hands are just those four corner cells</b>, so count those and subtract.</>,
                   <>왜 빼요? 이기는 패는 흩어져 있어요 (⚡ 가 첫 자리·둘째 자리·둘 다 — 섞임) → 바로 세기 번거로움.  <b>‘안 이기는 패’ 는 그 네 귀퉁이 칸뿐</b> → 그걸 세서 빼는 게 쉬워요.</>)}
                 <div style={{ fontSize: 10, color: "#a16207", marginTop: 3 }}>({t(E, "this way of counting = count by subtracting", "이 방법 이름: 전체에서 빼서 세기")})</div>
-              </div>
+              </div>}
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
                 <span style={{ color: "#475569", fontFamily: "inherit", fontSize: 11.5 }}>{t(E, "all hands", "전체 패")}</span>
                 <span style={{ color: "#334155", fontWeight: 800 }}>N² = 3×3</span>
                 <span style={{ color: "#15803d", fontWeight: 800 }}>= 9</span>
 
+                {s.phase !== "f1" && <>
                 <span style={{ color: "#991b1b", fontFamily: "inherit", fontSize: 11.5 }}>− {t(E, "non-winning", "안 이기는 패")}</span>
                 <span style={{ color: "#991b1b", fontWeight: 800 }}>(N−dom)² = 2×2</span>
                 <span style={{ color: "#991b1b", fontWeight: 800 }}>= 4</span>
+                </>}
 
+                {s.phase === "formula" && <>
                 <span style={{ gridColumn: "1 / -1", borderTop: "1px solid #fcd34d", margin: "2px 0" }} />
 
                 <span style={{ color: "#c2410c", fontFamily: "inherit", fontSize: 11.5, fontWeight: 800 }}>{t(E, "winning", "이기는 패")}</span>
                 <span style={{ color: "#c2410c", fontWeight: 800 }}>N²−(N−dom)²</span>
                 <span style={{ color: "#15803d", fontWeight: 900, fontSize: 16 }}>= 5</span>
+                </>}
               </div>
             </div>
           )}
           {/* ⭐ 2026-10-02 — 전엔 '보너스' 구간에만 있던 설명(BitmaskColSim)을 필수 쪽으로
               옮겼는데, count 걸음에 **같이** 뜨니 한 화면에 넷이 몰렸다(3차 학생이 지침).
               **걸음을 쪼개** 여기서만 띄운다. */}
+          {/* ⛔ 2026-10-02 5차 학생: *"「직접 세어 봐도 돼요」 하면서 **완전히 다른 계산법**이
+              새로 나왔다. 방금 이해한 식이랑 **왜 같은 답이 되는지 바로는 안 이어졌다.**"*
+            ⭐ 4쪽에선 통했다(거긴 공식이 없어서 그게 「답이 어디서 왔나」 자체였다).
+              8쪽은 **방금 공식을 다 유도한 직후**라 같은 계산을 또 보이면 부딪힌다.
+              → 계산은 빼고 **한 줄만** 남긴다. 「다른 방법도 있다」는 사실은 지킨다. */}
           {s.phase === "directcount" && (
-            <div style={{ maxWidth: 480, margin: "10px auto 0", background: "#fffbeb",
-              border: "1.5px solid #fcd34d", borderRadius: 10, padding: "8px 12px" }}>
-              <DirectCountNote E={E} dom={cards.filter(c => c.win).length} N={cards.length}
-                ans={cards.length * cards.length - (cards.length - cards.filter(c => c.win).length) ** 2}
-                borderColor="#fcd34d" />
+            <div style={{ maxWidth: 460, margin: "12px auto 0", fontSize: 11.5, color: "#64748b",
+              textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
+              {t(E, "(You can also add them up directly, like on the sample page — same 5.)",
+                   "(앞 샘플 쪽에서처럼 직접 더해서 세어도 같은 5 가 나와요.)")}
             </div>
           )}
         </>
