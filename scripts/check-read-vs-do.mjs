@@ -54,8 +54,16 @@ async function pageStats(page) {
         .filter((s) => s && !NAV.test(s));
       // 입력칸도 「하는 것」이다
       const inputs = document.querySelectorAll("input, select, textarea").length;
-      const marker = lines.find((l) => /\d \/ \d/.test(l)) || "";
-      return { chars, acts: btns.length + inputs, sample: btns.slice(0, 4), marker };
+      /* ⛔ `lines` 는 위에서 **쪽 번호 줄을 이미 걸러냈다**(`/^\d+( \/ \d+)?( 쪽)?$/`).
+           거기서 marker 를 찾으니 **늘 빈 문자열**이었고, 「같은 쪽이 또 나왔다」로 읽혀
+           **두 번째 쪽에서 멈췄다**(실측: 「쪽 1개」). 원문에서 찾아야 한다. */
+      const marker = (document.body.innerText.match(/\d+ \/ \d+ 쪽|\d+ \/ \d+/) || [""])[0];
+      // 탭 이름도 **화면이 말하는 것**을 읽는다 — 쪽 번호를 들고 있는 탭이 지금 탭이다
+      const tabBtn = [...document.querySelectorAll("button")]
+        .map((b) => b.innerText.trim())
+        .find((s2) => /^(📋|⚡)/.test(s2) && /\d+ \/ \d+/.test(s2));
+      const tab = tabBtn ? tabBtn.slice(0, 2) : "?";
+      return { chars, acts: btns.length + inputs, sample: btns.slice(0, 4), marker, tab };
     },
     [CHROME.source, NAVLIKE.source]
   );
@@ -66,7 +74,9 @@ async function nextPage(page) {
     const e = [...document.querySelectorAll("button")].find((b) =>
       /다음 쪽|Next page/.test(b.innerText.trim())
     );
-    if (!e) return false;
+    // ⛔ 마지막 쪽에서도 버튼은 **DOM 에 남아 있고 `disabled` 만 걸린다.**
+    //    `!e` 만 보면 true 가 계속 나와 **같은 쪽을 일곱 번** 센다(실측).
+    if (!e || e.disabled || e.getAttribute("aria-disabled") === "true") return false;
     e.scrollIntoView({ block: "center" });
     e.click();
     return true;
@@ -79,22 +89,19 @@ async function scanQuest(browser, id, lang) {
   try {
     await page.goto(`${BASE}/${id}?lang=${lang}`, { waitUntil: "networkidle" });
     await page.waitForTimeout(1400);
-    for (const tab of ["📋", "⚡"]) {
-      await page.evaluate((x) => {
-        const e = [...document.querySelectorAll("button")].find((b) =>
-          b.innerText.trim().startsWith(x)
-        );
-        if (e) {
-          e.scrollIntoView({ block: "center" });
-          e.click();
-        }
-      }, tab);
-      await page.waitForTimeout(700);
-      for (let i = 0; i < 12; i++) {
-        rows.push({ tab, i: i + 1, ...(await pageStats(page)) });
-        if (!(await nextPage(page))) break;
-        await page.waitForTimeout(430);
-      }
+    /* ⛔ **탭마다 따로 걷지 않는다.** 📋 끝(4/4)에서 다음을 누르면 ⚡ 1/2 로
+         **자동으로 넘어간다** — 탭마다 돌면 같은 쪽을 두 번 센다(실측:
+         `mcc20missing` 의 「📋5 401자」와 「⚡1 401자」가 같은 쪽이었다).
+       ⭐ 처음부터 끝까지 **한 번만** 걷고, 탭·쪽 번호는 **화면이 말하는 것**을 읽는다. */
+    const seen = new Set();
+    for (let i = 0; i < 40; i++) {
+      const st = await pageStats(page);
+      const key = `${st.tab}|${st.marker}`;
+      if (seen.has(key)) break;          // 같은 쪽이 또 나오면 끝이다
+      seen.add(key);
+      rows.push(st);
+      if (!(await nextPage(page))) break;
+      await page.waitForTimeout(430);
     }
   } finally {
     await page.close();
@@ -137,7 +144,7 @@ async function main() {
     const worst = Math.max(0, ...rows.map((r) => r.chars));
     console.log(`  ${bad.length ? "⚠️" : "✅"} ${id.padEnd(18)} 쪽 ${rows.length}개 · 가장 긴 쪽 ${worst}자 · **읽기만 하는 쪽 ${bad.length}개**`);
     for (const r of bad) {
-      console.log(`       [${r.tab}] ${r.i}쪽 ${r.marker}  ${r.chars}자 · 누를 것 0개`);
+      console.log(`       [${r.tab}] ${r.marker}  ${r.chars}자 · 누를 것 0개`);
     }
   }
   await browser.close();
