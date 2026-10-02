@@ -312,8 +312,8 @@ export function makeStrangeFnCh1(E) {
                   ⛔ 여기에 「그러면 규칙을 찾을 수 있어요」 같은 **보람 설명을 덧붙이지 마라.**
                      그게 두 번 다 「추상적」이라는 말을 들은 자리다. */}
               <div>{t(E,
-                "On page 4 we counted 1, 10 and 11 — all made only of 0s and 1s.\nLine those up from the smallest:\n1, 10, 11, 100, 101 …",
-                "4쪽에서 센 1, 10, 11 은 모두 0 과 1 로만 된 수였죠.\n이런 수를 작은 것부터 늘어놓아 봐요.\n1, 10, 11, 100, 101 …")}</div>
+                "One rule turns every digit into 0 or 1 — so its result is always made only of 0s and 1s (page 1: 35 → 11).\nThe numbers we count are 0s and 1s not by choice but because the rule makes them so. Line them up from the smallest:\n1, 10, 11, 100, 101 …",
+                "규칙 하나가 숫자를 전부 0 아니면 1 로 바꾸죠 — 그래서 그 규칙을 쓰면 결과는 늘 0 과 1 로만 된 수예요 (1쪽 35 → 11 처럼).\n우리가 세는 수가 0 과 1 뿐인 건 고른 게 아니라 규칙이 그렇게 만든 거예요. 작은 것부터 늘어놓아 봐요.\n1, 10, 11, 100, 101 …")}</div>
               {/* 선생님 제안(2026-09-30): *"이걸 십진수로 고쳐면… 이라고 하면 더 쉽지 않을까?"*
                   맞다. «바꿔 부르는 게 이진수예요» 는 **이름을 가르치는 문장**이고,
                   «십진수로 고치면» 은 **학생이 이미 아는 곳으로 데려다주는 문장**이다.
