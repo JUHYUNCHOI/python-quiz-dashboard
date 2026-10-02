@@ -94,7 +94,10 @@ function Tile({ v, state, note }) {
      (`feedback_shorter_not_longer`, PM 판정 2026-10-01).
    ⭐ 강조는 **두 곳만**이다 — 「9 는 못 가요」와 「5 회」. 선생님: *"다 밋밋해서
      노치는 정보가 많아"* → 다 굵게 하면 다시 밋밋해진다(`check-emphasis`). */
-function WrongWay({ E }) {
+function WrongWay({ E, show = 3 }) {
+  /* ⭐ 2026-10-02 — `show` 는 **몇 토막까지 열까**다. 선생님: *"갑자기 너무 많은 정보가 들어와"*
+     1 = 「4 도 9 까지 밀어야 한다」 · 2 = 나눗셈 · 3 = 결론과 횟수.
+     한 걸음에 새로 뜨는 것은 **한 줄**이다(`feedback_one_thing_changes_at_a_time`). */
   const mono = { fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 };
   return (
     <div style={{
@@ -133,15 +136,18 @@ function WrongWay({ E }) {
              ⛔ 그 통계는 **화면에 안 올린다** — 초6 에게 검증 불가능한 숫자이고,
                한 문장짜리 일반화는 `feedback_one_case_cannot_claim_always` 와 같은 모양이 된다.
                상자의 말은 **이 예제에만 한정**돼 있다(일반화 주장 없음). 근거는 커밋에 남긴다. */}
+      {show >= 2 && (
       <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap",
         fontSize: 12.5, color: "#1e3a8a", marginBottom: 7 }}>
         <span style={{ fontWeight: 700 }}>{t(E, "To reach 9", "9 로 가려면")}</span>
         <span style={{ fontSize: 14.5, color: "#334155", ...mono }}>(9 − 4) ÷ 2 = 2.5</span>
         <span style={{ fontSize: 11.5, color: "#7f1d1d" }}>
-          {t(E, "not a whole number — it can't get there", "정수가 아니에요 — 밀 수 없어요")}
+          {t(E, "not a whole number — it can't get there", "정수가 아니에요 — 딱 안 떨어져요")}
         </span>
       </div>
+      )}
 
+      {show >= 3 && (
       <div style={{ fontSize: 13, lineHeight: 1.7, color: "#7f1d1d", fontWeight: 600,
         whiteSpace: "pre-line" }}>
         {t(E, "So 4 ", "그래서 4 는 ")}
@@ -156,6 +162,7 @@ function WrongWay({ E }) {
         <b style={{ color: "#b91c1c", fontSize: 14 }}>{t(E, "0 + 1 + 2 + 2 = 5", "0 + 1 + 2 + 2 = 5")}</b>
         {t(E, " (3, if grouped).", " (묶었으면 3) 로 나와요.")}
       </div>
+      )}
     </div>
   );
 }
@@ -623,13 +630,45 @@ export function WhoCanMeetSim({ E }) {
       en: "The third 3 finds 5 taken too. Past 5, on to 7 — it adds 2 twice.\nInstead of counting, (7-3) / 2 also gives 2." },
 
     /* 선생님: *"그 다음에 **밑에 정리된게** 보여야지"* — 미는 장면이 다 끝난 뒤에 정리 한 걸음. */
+    /* ⛔ 2026-10-02 — 선생님이 16/16 화면을 보시고: *"갑자기 너무 많은 정보가 들어와"*
+       ⭐ 한 걸음에 **말풍선 두 줄 + 🚫 상자 네 줄 + 줄 둘 + 민 횟수**가 동시에 떴다.
+         상자 혼자 네 가지를 말한다 — ①4 도 9 까지 ②(9−4)÷2 = 2.5 ③못 간다 ④횟수 5.
+       → **결과 → 상자 한 토막씩** 으로 가른다. 상자가 열리는 동안은 아래 줄 둘을
+         내린다 — 지금 볼 곳이 상자 하나가 되게. */
     { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "placed"],
       extra: ["", "", "", ""], chains: [1, 0], named: true, ops: 3, tone: "aha",
+      emKo: "다 달라졌어요",
+      emEn: "all different now",
+      ko: "3, 5, 7, 4 — 다 달라졌어요. 민 횟수는 0 + 1 + 2 = 3 회.",
+      en: "3, 5, 7, 4 — all different now. Moves: 0 + 1 + 2 = 3." },
+
+    /* 토막 ①— 「안 묶으면 4 도 뒤로 밀어야 한다」 그 한 가지만. */
+    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "moving"],
+      extra: ["", "", "", ""], ops: 3, tone: "stuck", wrong: 1,
+      ko: "나머지로 안 묶었다면 어땠을까요?\n4 도 7 보다 뒤로 밀어야 해요 — 9 까지요.",
+      en: "What if we had not split by remainder?\n4 would have to pass 7 too — all the way to 9." },
+
+    /* 토막 ②— 나눗셈 한 줄. **묻기만 한다**, 답은 다음 걸음. */
+    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "moving"],
+      extra: ["", "", "", ""], ops: 3, tone: "stuck", wrong: 2,
+      emKo: "2.5 번",
+      emEn: "2.5 times",
+      ko: "4 에서 9 까지 2 씩 몇 번 밀어야 할까요?\n(9 − 4) ÷ 2 — 2.5 번이 나와요.",
+      en: "How many pushes of 2 take 4 to 9?\n(9 − 4) ÷ 2 — it comes out 2.5." },
+
+    /* 토막 ③— 결론. 여기서 처음 「횟수 5」가 나온다. */
+    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "placed"],
+      /* ⚠️ 줄 둘(`chains`)을 여기서는 안 띄운다 — 상자가 네 줄로 자란 뒤라
+           같이 두면 다시 「갑자기 너무 많은 정보」가 된다. 줄은 이미 다섯 걸음 봤다. */
+      extra: ["", "", "", ""], ops: 3, tone: "aha", wrong: 3,
       /* ⛔ 2026-09-29 감사 판정 — 옛 문장 *"이 **나눔**은 다음 쪽에서도 그대로 써요"* 는 **거짓**이었다.
            6쪽은 숫자도 묶음 크기도 다르다. 그대로 쓰는 건 숫자가 아니라 **나머지로 묶는 방법**이다. */
-      wrong: true,
-      ko: "3, 5, 7, 4 — 다 달라졌어요. 민 횟수는 0 + 1 + 2 = 3 회.\n나머지로 안 묶었으면 어땠을까요? 바로 아래에 있어요.",
-      en: "3, 5, 7, 4 — all different now. Moves: 0 + 1 + 2 = 3.\nWhat if we had not split by remainder? See just below." },
+      /* ⛔ 말풍선이 상자와 **같은 말을 또 하면 안 된다** — 「9 에 못 간다」와 「5 회」는
+           바로 아래 상자가 숫자로 말한다. 말풍선은 **여기서 가져갈 것 한 줄**만 맡는다. */
+      emKo: "꼭 해야 하는 일",
+      emEn: "something we must do",
+      ko: "그래서 나머지로 묶는 건 빨리 푸는 요령이 아니라 꼭 해야 하는 일이에요.",
+      en: "So splitting by remainder is not a shortcut — it is something we must do." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -653,7 +692,7 @@ export function WhoCanMeetSim({ E }) {
         {/* ⭐ 자리는 **타일 바로 아래**다 — 「묶어서 푼 결과(타일)」와 「안 묶은 결과」가
             나란히 보여야 대조가 된다. 마지막 걸음에만 뜨므로 그 위의 줄은 안 밀린다
             (ux 판정 2026-09-29 의 「새로 뜨는 것은 아래로만」). */}
-        {s.wrong && <WrongWay E={E} />}
+        {s.wrong && <WrongWay E={E} show={s.wrong} />}
 
         {/* ⭐ 블록 순서는 **ux-reviewer 판정(2026-09-29)** 이다. 잣대는 「무엇이 안 밀리나」.
             `chains`/`kcompare` 를 **타일 바로 밑에 못박고**, 걸음마다 생겼다 사라지는
