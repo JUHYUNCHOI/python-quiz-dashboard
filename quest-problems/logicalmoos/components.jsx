@@ -627,7 +627,10 @@ export function getLogicalMoosSections(E) {
       color: "#16a34a",
       py: LM_QUERY_PY, cpp: LM_QUERY_CPP,
       why: [
-        t(E, "l and r sit inside one AND-chain. preAnd[l] AND the replacement AND sufAnd[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever closed before (preOr[l]) and after (sufOr[r]) to get the whole expression.\nTwo passes precompute everything, so each query answers 「right away」.",
+        /* ⛔ 2026-10-02 — 말풍선을 줄이며 **한국어만** 줄였다. 영어 why[0] 에 다음 항목
+             why[1] 의 내용(OR 문단)이 **그대로 남아** 같은 말을 두 번 하고 있었다.
+           `check-bilingual-drift.py` 가 잡았다. 한국어 쪽에 맞춰 영어도 한 문단으로. */
+        t(E, "l and r sit inside one AND-chain. preAnd[l] AND the replacement AND sufAnd[r] gives that chain's new value — no rebuilding needed.",
             "l 과 r 은 같은 AND 묶음 안에 있어요. pre_and[l] 과 교체값과 suf_and[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요."),
         t(E, "OR that with whatever already closed before (pre_or[l]) and after (suf_or[r]) to get the whole expression's value.",
             "그 값을 앞에서 끝난 묶음(pre_or[l]), 뒤에서 끝난 묶음(suf_or[r]) 과 OR 하면 전체 식의 값이에요."),
