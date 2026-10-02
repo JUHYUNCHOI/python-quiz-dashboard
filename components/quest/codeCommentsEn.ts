@@ -22,6 +22,43 @@ export const CODE_COMMENT_EN: Record<string, string> = {
   // ── 압도적으로 많이 쓰이는 것 (97줄)
   "USACO 이전 contest는 파일 입출력 사용": "older USACO contests use file I/O",
 
+  // ── 2026-10-02 선생님 "영어버전도 검토해줘" — 번역이 없어 영어 화면에서 **빈 줄**이던 것들
+  // astral
+  "N = 격자 한 변 크기 (N × N), right·down = 별 이동":
+    "N = grid side length (N x N); right, down = how the star moves",
+  "right = 별이 오른쪽으로 몇 칸, down = 별이 아래로 몇 칸":
+    "right = steps the star moves right; down = steps it moves down",
+  // mcc20kitty
+  "앞쪽 조각 + 되풀이 한 바퀴만큼은 꼭 있게 해요":
+    "keep at least the head piece plus one full repeat",
+  // mcc20missing
+  "K 는 [-3N, 3N] 안에 있어야 해요": "K has to stay inside [-3N, 3N]",
+  "+K 를 되돌려 크기를 꺼내요": "undo the +K to get each size back",
+  "크기가 전부 1 부터 N 사이인가요?": "are all the sizes between 1 and N?",
+  "크기가 서로 다른가요?": "are the sizes all different?",
+  // mcc20zigzag
+  "up[i] · dn[i] = i 에서 끝나는 「지금 길이」 지그재그 개수":
+    "up[i], dn[i] = zigzags of the CURRENT length that end at i",
+  "up 은 마지막 걸음이 오름, dn 은 마지막 걸음이 내림":
+    "up = last step went up; dn = last step went down",
+  "길이 1 일 때는 어느 자리든 자기 혼자로 1 가지예요.":
+    "At length 1 every position counts as one, all by itself.",
+  "길이를 2 부터 K 까지 한 칸씩 늘려 가요.":
+    "Grow the length one at a time, from 2 up to K.",
+  "a~z 칸 26 개 — 지나온 글자들의 합을 글자별로 모아 둬요.":
+    "26 slots for a-z: add up what we have passed, letter by letter.",
+  "나보다 작은 글자에서 왔으면 마지막 걸음이 오름이에요.":
+    "Coming from a smaller letter means the last step went up.",
+  "나보다 큰 글자에서 왔으면 마지막 걸음이 내림이에요.":
+    "Coming from a bigger letter means the last step went down.",
+  "이제 이 자리도 뒤에서 볼 「지나온 글자」가 돼요.":
+    "Now this position joins the letters we have passed.",
+  "up[i] · dn[i] — i 에서 끝나는 「지금 길이」 개수, 마지막 걸음이 위 · 아래":
+    "up[i], dn[i] = how many of the CURRENT length end at i, last step up / down",
+  // mcc21marbles
+  "경계마다 넘겨야 하는 구슬 = D 의 누적, 곧 carry. 답 = 그 |carry| 의 합.":
+    "Marbles crossing each boundary = the running sum of D, i.e. carry. Answer = sum of |carry|.",
+
   // ── 헤더 안내 (quest 여러 개가 같은 문장을 쓴다)
   "include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어.":
     "list the headers you have learned one by one (iostream, vector, string)",

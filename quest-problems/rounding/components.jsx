@@ -141,7 +141,7 @@ export function CodeCompare3({ E }) {
               }}>{tb.label}</button>
             ))}
           </div>
-          <CodeBlock lines={tabs[tab].lines} />
+          <CodeBlock isEn={E} lines={tabs[tab].lines} />
           <div style={{
             marginTop: 8, padding: "8px 12px", borderRadius: 8, fontSize: 12, fontWeight: 600, lineHeight: 1.7,
             background: tab === 0 ? C.accentBg : tab === 1 ? C.carryBg : C.okBg,
@@ -1246,7 +1246,7 @@ export function ProgressiveCode({ E, lang = "py", sections }) {
               )}
             </div>
             <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-              <CodeBlock lines={code} />
+              <CodeBlock isEn={E} lines={code} />
             </div>
           </div>
         );

@@ -1152,7 +1152,7 @@ export function makeBruteSteps(E, lang = "py") {
             {t(E, "The input holds T test cases, and each one gives a single N.",
                   "문제가 T 개 오고, 하나마다 N 이 하나씩 들어와요.")}
           </div>
-          <CodeBlock lines={pick(BF_INPUT, BF_INPUT_CPP)} />
+          <CodeBlock isEn={E} lines={pick(BF_INPUT, BF_INPUT_CPP)} />
         </div>
       ),
     },
@@ -1163,7 +1163,7 @@ export function makeBruteSteps(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 2: Compare and count", "2단계 — 두 값을 견주고 세기")} />
-          <CodeBlock lines={pick(MAIN_SNIPPET_PY, MAIN_SNIPPET_CPP)} />
+          <CodeBlock isEn={E} lines={pick(MAIN_SNIPPET_PY, MAIN_SNIPPET_CPP)} />
           <div style={{ marginTop: 10, padding: "8px 10px", background: C.carryBg, border: `1.5px solid ${C.carryBd}`, borderRadius: 8, fontSize: 12, color: C.carry, fontWeight: 700, lineHeight: 1.6 }}>
             🤔 {t(E, "But Bessie() and Elsie() don't exist yet. Time to build them — though first…",
                   "근데 Bessie() 랑 Elsie() 가 아직 없어요. 만들기 전에 — 잠깐!")}
@@ -1195,7 +1195,7 @@ export function makeBruteSteps(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 3: Compute P", "3단계: P 구하기")} />
-          <CodeBlock lines={pick(BF_P, BF_P_CPP)} />
+          <CodeBlock isEn={E} lines={pick(BF_P, BF_P_CPP)} />
         </div>
       ),
     },
@@ -1207,7 +1207,7 @@ export function makeBruteSteps(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 4: Bessie 🐄", "4단계: Bessie 구하기 🐄")} />
-          <CodeBlock lines={pick(BF_BESSIE, BF_BESSIE_CPP)} />
+          <CodeBlock isEn={E} lines={pick(BF_BESSIE, BF_BESSIE_CPP)} />
           {lang !== "py" && <Pw10Explainer E={E} />}
         </div>
       ),
@@ -1219,7 +1219,7 @@ export function makeBruteSteps(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 5: Elsie 🐮 — Trick 1: extract digit", "5단계 — Elsie 🐮 ① 자리 숫자 뽑기")} />
-          <CodeBlock lines={pick(BF_ELSIE_DIGIT, BF_ELSIE_DIGIT_CPP)} />
+          <CodeBlock isEn={E} lines={pick(BF_ELSIE_DIGIT, BF_ELSIE_DIGIT_CPP)} />
         </div>
       ),
     },
@@ -1230,7 +1230,7 @@ export function makeBruteSteps(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 5: Elsie 🐮 — Trick 2: carry + clear", "5단계 — Elsie 🐮 ② 올리고 아랫자리 0 으로")} />
-          <CodeBlock lines={pick(BF_ELSIE_CARRY, BF_ELSIE_CARRY_CPP)} />
+          <CodeBlock isEn={E} lines={pick(BF_ELSIE_CARRY, BF_ELSIE_CARRY_CPP)} />
         </div>
       ),
     },
@@ -1241,7 +1241,7 @@ export function makeBruteSteps(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 5: Elsie 🐮 — full function", "5단계 — Elsie 🐮 ③ 함수 완성")} />
-          <CodeBlock lines={pick(BF_ELSIE, BF_ELSIE_CPP)} />
+          <CodeBlock isEn={E} lines={pick(BF_ELSIE, BF_ELSIE_CPP)} />
           {lang !== "py" && <Pw10Explainer E={E} />}
         </div>
       ),
@@ -1253,7 +1253,7 @@ export function makeBruteSteps(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 6: Full code", "6단계: 전체 코드")} />
-          <CodeBlock lines={pick(BF_FULL, BF_FULL_CPP)} />
+          <CodeBlock isEn={E} lines={pick(BF_FULL, BF_FULL_CPP)} />
           {lang !== "py" && <Pw10Explainer E={E} />}
           <div style={{ marginTop: 10, padding: "8px 10px", background: C.okBg, border: `1.5px solid ${C.okBd}`, borderRadius: 8, fontSize: 12, color: C.ok, fontWeight: 700, lineHeight: 1.6 }}>
             ✅ {t(E, "Works! Next: run it.", "작동해요! 다음 페이지에서 직접 돌려봐요.")}
@@ -1318,7 +1318,7 @@ export function makeBruteSteps(E, lang = "py") {
           </div>
 
           <Label text={t(E, "Code (prefix sum)", "코드 (누적합)")} />
-          <CodeBlock lines={pick(BF_DP, BF_DP_CPP)} />
+          <CodeBlock isEn={E} lines={pick(BF_DP, BF_DP_CPP)} />
           {lang !== "py" && <Pw10Explainer E={E} />}
         </div>
       ),

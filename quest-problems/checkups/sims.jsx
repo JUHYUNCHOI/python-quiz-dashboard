@@ -1311,7 +1311,7 @@ export function CheckupsKeyCodeSim({ E, lang = "py" }) {
 
       {/* 코드 — 그림과 같은 의미 (학생 언어 하나만) */}
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
-        <CodeBlock lines={cpp ? cc : py} lang={cpp ? "cpp" : "py"} />
+        <CodeBlock isEn={E} lines={cpp ? cc : py} lang={cpp ? "cpp" : "py"} />
       </div>
 
       <div style={{ marginTop: 12 }}>

@@ -146,7 +146,7 @@ export default function CheeseApp(props = {}) {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
-    if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
+    if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock isEn={E} lines={step.code} /></div>;
     if (step.type === "cheeseSim2") return <CheeseSim2 E={E} />;
     if (step.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
     if (step.type === "rodFitSim") return <RodFitSim E={E} />;
@@ -162,7 +162,7 @@ export default function CheeseApp(props = {}) {
     if (s.type === "quiz") return <Quiz {...s} onAnswer={() => {}} />;
     if (s.type === "input") return <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />;
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
-    if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
+    if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock isEn={E} lines={s.code} /></div>;
     if (s.type === "cheeseSim2") return <CheeseSim2 E={E} />;
     if (s.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
     if (s.type === "rodFitSim") return <RodFitSim E={E} />;

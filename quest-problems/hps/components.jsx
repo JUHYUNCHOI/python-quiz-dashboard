@@ -2204,7 +2204,7 @@ export function CodeSectionView({ section: s, lang = "py", E }) {
             >
               {copied ? `✓ ${t(E, "copied", "복사됨")}` : `📋 ${t(E, "copy", "복사")}`}
             </button>
-            <CodeBlock lines={code} lang={lang} />
+            <CodeBlock isEn={E} lines={code} lang={lang} />
           </div>
         </div>
         {s.aside && showAside && <div>{s.aside}</div>}
