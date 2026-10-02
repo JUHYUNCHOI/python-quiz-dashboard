@@ -469,13 +469,13 @@ export function makeStrangeFnCh1(E) {
          그래서 ①narr 에서 「아까」를 없애고 ②제목에 **줄 전체와 n↔이진수 연결**을 박는다.
          5쪽 표가 이미 `11 | 1×2 + 1×1 = 3 | 4 (11→10→9→1→0)` 로 같은 값을 쓴다 — 숫자가 어긋나지 않는다. */
       narr: t(E,
-        "n = 3 takes four steps — let's walk them.",
-        "n = 3 은 네 걸음이에요. 한 걸음씩 다시 봐요."),
+        "n = 3 takes four f's — let's go through them.",
+        "n = 3 은 f 를 네 번 써요. 한 번씩 다시 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
-            🔍 {t(E, "n = 3 (binary 11) — 11 → 10 → 9 → 1 → 0, four steps",
-                     "n = 3 (이진수로 11) — 11 → 10 → 9 → 1 → 0, 네 걸음")}
+            🔍 {t(E, "n = 3 (binary 11) — 11 → 10 → 9 → 1 → 0, four f's",
+                     "n = 3 (이진수로 11) — 11 → 10 → 9 → 1 → 0, 네 번")}
           </div>
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
@@ -499,8 +499,8 @@ export function makeStrangeFnCh1(E) {
           </div>
           <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "Ending in 0 is what cost the extra step: 10 - 1 = 9, and 9 needs one more change.\nThat is why n alone does not give the answer. The next page has the exact formula.",
-              "0 으로 끝나는 수에서 1 을 빼서 걸음이 하나 늘었어요 — 10 − 1 = 9 라서 9 를 또 바꿔야 했죠.\n그래서 n 만 보고는 못 맞춰요. 다음 쪽에 정확한 식이 있어요.")}
+              "Ending in 0 is what cost the extra f: 10 - 1 = 9, and 9 needs one more change.\nThat is why n alone does not give the answer. The next page has the exact formula.",
+              "0 으로 끝나는 수에서 1 을 빼서 한 번이 더 늘었어요 — 10 − 1 = 9 라서 9 를 또 바꿔야 했죠.\n그래서 n 만 보고는 못 맞춰요. 다음 쪽에 정확한 식이 있어요.")}
           </div>
         </div>),
     },
