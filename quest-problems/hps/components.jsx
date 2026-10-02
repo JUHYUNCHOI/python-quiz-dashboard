@@ -1974,7 +1974,10 @@ export function HpsFormulaGridSim({ E }) {
   const cards = [{ id: 1, win: false }, { id: 2, win: true }, { id: 3, win: false }];
   const steps = [
     { phase: "test",    bubble: t(E, "Game 3 — Elsie played card 1 twice (same card is fine).\nSo: how many cards beat card 1?  Let's check each one 👇", "게임 3 — Elsie 가 카드 1 을 두 장 냈어요 (같은 카드도 OK).\n그럼 '카드 1 을 이기는 카드' 는 몇 개? 하나씩 봐요 👇") },
-    { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.") },
+    /* ⛔ 2026-10-02 — 아래 격자 밑에 **같은 말을 또 하는 맨몸 div** 가 있었고, 그게
+       하단 고정 바에 **59~84% 가려졌다**(ux 가 좌표+스크린샷으로 확인). 감싸서 끌어오는
+       대신 **지웠다** — 다른 건 괄호 안 `dom` 이름뿐이라 그것만 여기로 옮긴다. */
+    { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.\nWe call that count dom (short for 'dominates').", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.\n이 개수를 dom 이라고 불러요 ('dominate 제압' 의 앞 세 글자).") },
     { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
     { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)² = 4)", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)² = 4)") },
@@ -2095,11 +2098,11 @@ export function HpsFormulaGridSim({ E }) {
               );
             })}
           </div>
-          {/* dom 을 '외울 약자' 가 아니라 ⚡ 개수로 — 그 자리에서 정의 */}
-          <div style={{ textAlign: "center", fontSize: 12.5, fontWeight: 700, color: "#c2410c", marginTop: 12, wordBreak: "keep-all", lineHeight: 1.6 }}>
-            {t(E, <>→ only <b>card 2 (⚡)</b> beats card 1.  So <b>“cards that beat Elsie” = 1</b>.<br/><span style={{ color: C.dim, fontSize: 11 }}>(we’ll call this count <b style={{ color: "#c2410c" }}>dom</b> — the ⚡ count)</span></>,
-                  <>→ 카드 1 을 이기는 건 <b>카드 2 (⚡)</b> 하나.  그래서 <b>‘Elsie 를 이기는 카드’ = 1 개</b>.<br/><span style={{ color: C.dim, fontSize: 11 }}>(이 개수를 <b style={{ color: "#c2410c" }}>dom</b> 이라 부를게요 — ‘dominate(제압)’ 약자, ⚡ 개수)</span></>)}
-          </div>
+          {/* ⛔ 2026-10-02 — 여기 있던 「→ 카드 1 을 이기는 건 …」 줄을 **지웠다.**
+              ux 실측: 하단 고정 바에 **59~84% 가려졌고 스크린샷으로도 글자가 잘렸다**
+              (불투명 바라 「좌표는 겹쳐도 읽히는」 오탐 패턴이 아니다).
+            ⭐ 그런데 읽어 보니 **바로 위 말풍선과 같은 말**이었다 — 다른 건 괄호 안 `dom`
+              이름뿐이라 그것만 말풍선으로 옮겼다. **감싸서 끌어오는 대신 뺐다.** */}
         </div>
       ) : (
         <>
