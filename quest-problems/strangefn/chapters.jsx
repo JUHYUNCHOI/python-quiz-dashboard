@@ -426,20 +426,31 @@ export function makeStrangeFnCh1(E) {
                       「짝수/홀수」 칸을 「형태」로 바꾸면 그 칸이 하던 일(짝·홀 가르기)을 2k·2k+1 이 그대로 한다.
                       ⚠️ 형태는 **짧게** — `2k+1` 까지만. `k=3 → 3k+1=10` 은 g(n) 칸이 이미 10 을 보여줘서 재계산이다.
                       그래야 375px 에서 안 뭉갠다. */}
-                  <th style={{ padding: "4px 8px", textAlign: "left" }}>{t(E, "n written with k", "n 을 k 로 쓰면")}</th>
+                  <th style={{ padding: "4px 8px", textAlign: "left" }}>k</th>
+                  <th style={{ padding: "4px 8px", textAlign: "left" }}>{t(E, "n written with k", "n 을 k 로")}</th>
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>0</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>0</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>1</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>1</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>2</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>2</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>3</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>3</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
               </tbody>
             </table>
+          </div>
+          {/* ⭐ 2026-10-02 학생: *"「어떻게 되나요?」라고 물어보긴 하는데 **내가 맞게 했는지
+              확인할 방법이 없는** 읽기 쪽에 가까웠다."* → 표 **아래**에 확인 한 줄.
+              먼저 보고 그다음 확인 — 순서를 지킨다. ⛔ 입력칸은 안 만든다(퀴즈 수·래칫). */}
+          <div style={{ marginTop: 10, fontSize: 12, color: "#166534", background: "#ecfdf5",
+            border: "1px solid #6ee7b7", borderRadius: 10, padding: "9px 12px",
+            lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all" }}>
+            {t(E,
+              "Did you get it? Even n: 0, 3, 6, 9 — up by 3.\nOdd n: 1, 4, 7, 10 — up by 3 as well.",
+              "찾았나요? 짝수 n 쪽은 0, 3, 6, 9 — 3 씩이에요.\n홀수 n 쪽은 1, 4, 7, 10 — 이쪽도 3 씩이에요.")}
           </div>
         </div>),
     },
