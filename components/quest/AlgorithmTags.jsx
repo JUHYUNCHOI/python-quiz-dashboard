@@ -26,14 +26,29 @@ const COLORS = [
 export function AlgorithmTags({ E, tags }) {
   if (!tags || tags.length === 0) return null;
   return (
+    /* ⛔ 2026-10-02 — **이 줄이 모바일에서 세 줄로 접혀 113px 를 먹고 있었다.**
+         2026-10-01 에 MCC 48개에 칩을 붙이면서 머리말이 그만큼 길어졌고,
+         그 탓에 `CodeWalk` 코드창이 `minHeight` 까지 눌려 **말풍선이 잘렸다.**
+         학생 둘이 각각 *"코드 설명 5개 중 4개를 못 읽었다"*(`mcc20knight`) ·
+         *"말풍선 마지막 줄이 코드 박스 바닥에 걸려 안 보였다"*(`mcc20kitty`) 고 했다.
+         실측(375px, `mcc20knight`): 칩 줄 `top=194 h=113` — 칩 셋이 **각각 28px 로 세 줄**.
+         수리 담당이 잰 부족분은 **66px** 였다 → **이 줄만 한 줄로 만들면 넘고도 남는다.**
+       ⭐ **지우지 않는다** — 선생님이 **두 번**(2026-07-13 · 09-30) 요청하신 장치다.
+         **접히지 않게**(`nowrap`) 하고 넘치면 **옆으로 밀어** 보게 한다.
+         ⚠️ 가로 스크롤은 **이 줄 안에서만** 일어난다 — 쪽 전체는 안 밀린다.
+       ⚠️ 칩이 많은 quest(5개)는 끝이 잘려 보일 수 있다. 그게 **말풍선이 잘리는 것보다 낫다** —
+         칩은 「무엇으로 푸나」를 알려주는 보조고, 말풍선은 **코드를 설명하는 본문**이다. */
     <div style={{
-      display: "flex", alignItems: "center", flexWrap: "wrap", gap: 6,
-      padding: "8px 12px", marginBottom: 8,
+      display: "flex", alignItems: "center", flexWrap: "nowrap", gap: 6,
+      padding: "6px 12px", marginBottom: 8,
+      overflowX: "auto", overflowY: "hidden",
+      scrollbarWidth: "none", WebkitOverflowScrolling: "touch",
       background: "#faf9fb", border: "1px solid #e5e7eb", borderRadius: 10,
     }}>
       <span style={{
         fontSize: 10.5, fontWeight: 800, letterSpacing: 0.5,
         color: "#6b7280", textTransform: "uppercase", marginRight: 2,
+        flexShrink: 0, whiteSpace: "nowrap",
       }}>
         {t(E, "Approach", "풀이 방법")}
       </span>
@@ -45,7 +60,8 @@ export function AlgorithmTags({ E, tags }) {
           fontSize: 12, fontWeight: 700,
           padding: "3px 10px", borderRadius: 999,
           background: c.bg, border: `1.5px solid ${c.border}`, color: c.text,
-          wordBreak: "keep-all",
+          // 한 줄로 두니 칩 안에서 글이 접히면 안 된다 — 접히면 줄 높이가 다시 커진다
+          whiteSpace: "nowrap", flexShrink: 0,
           textDecoration: "none",
           ...(tag.href ? { cursor: "pointer" } : {}),
         };
