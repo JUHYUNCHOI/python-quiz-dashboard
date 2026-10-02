@@ -35,7 +35,16 @@ export function useScrollEdgeFades(
     const measure = () => {
       const over = box.scrollWidth - box.clientWidth
       // 2px 는 고해상도 모바일의 subpixel 스크롤 보정값이다
-      setFade({ on: over > 1, l: box.scrollLeft > 2, r: over - box.scrollLeft > 2 })
+      const next = { on: over > 1, l: box.scrollLeft > 2, r: over - box.scrollLeft > 2 }
+      /* 🐛 2026-10-02 — **값이 같아도 매번 새 객체로 setState 하면 무한 루프가 난다.**
+           `Maximum update depth exceeded` — 선생님이 `mcc20missing` 을 여셨을 때 빨간 화면이
+           떴고, 그전에 담당 셋이 각각 「MCC 12개 이상에서 난다」고 보고한 바로 그 에러다.
+           ⛔ `ResizeObserver` 가 리렌더를 보고 다시 measure → setState → 리렌더 … 로 돈다.
+             상태가 안 바뀌면 React 는 멈추는데, **새 객체는 늘 «바뀜»으로 읽힌다.**
+           ⭐ 그래서 **세 값이 다 같으면 setState 를 아예 안 한다.** */
+      setFade((prev) =>
+        prev.on === next.on && prev.l === next.l && prev.r === next.r ? prev : next
+      )
     }
     measure()
     const raf = typeof requestAnimationFrame !== "undefined" ? requestAnimationFrame(measure) : null
