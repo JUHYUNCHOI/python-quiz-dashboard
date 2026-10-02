@@ -480,12 +480,17 @@ export function makeStrangeFnCh1(E) {
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
               {[
-                ["11 → 10", "끝자리가 1 이라 그냥 1 을 빼면 끝", "last digit is 1 — just subtract 1"],
-                ["10 → 9", "끝자리가 0 이라 자리가 넘어가요 → 홀짝 변환이 한 번 더 껴요", "last digit is 0 — a digit carries over → one parity swap is added"],
-                ["9 → 1", "그 홀짝 변환이에요", "that is the parity swap"],
-                ["1 → 0", "다시 그냥 1 을 빼요", "just subtract 1 again"],
+                ["11 → 10", "끝자리가 1 이라 1 만 빼요", "last digit is 1 — just subtract 1"],
+                ["10 → 9", "끝자리가 0 이라 자리를 빌려요 → 0 과 1 이 아닌 9 가 나와요", "last digit is 0 — it borrows, and 9 is not made of 0s and 1s"],
+                ["9 → 1", "그래서 홀짝 변환을 한 번 써요 — 덤으로 끼는 걸음이에요", "so one parity swap is needed — this is the extra step"],
+                ["1 → 0", "다시 1 만 빼면 0 이에요", "subtract 1 again and it is 0"],
               ].map(([mv, ko, en], i) => (
                 <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
+                  {/* ⭐ 2026-10-02 선생님 *"네 걸음?"* — 걸음 수를 **주장만** 하고 세어 보이지
+                      않았다. 번호를 달면 세는 일이 화면에서 끝난다. */}
+                  <span style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 999,
+                    background: "#5b21b6", color: "#fff", fontSize: 10.5, fontWeight: 800,
+                    display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
                   <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#5b21b6", minWidth: 68 }}>{mv}</span>
                   <span style={{ fontSize: 11.5, color: C.dim, wordBreak: "keep-all" }}>{t(E, en, ko)}</span>
                 </div>
