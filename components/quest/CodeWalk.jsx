@@ -104,6 +104,29 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
   //  바뀌어도 안 깨지게.)
   const boxRef = useRef(null);
   const inlineBubbleRef = useRef(null);
+  const sentinelRef = useRef(null);
+  const pinWrapRef = useRef(null);
+
+  /* 📏 2026-10-02 — `pinWrapRef`(복사줄+SimNav줄)를 **여기로 끌어올렸다.** 아래
+     `fitBoxH` 계산이 "박스 top 부터 고정 바 바로 위까지 전부" 를 박스에 줘 버리면,
+     pinWrap(복사줄+SimNav줄)은 박스 **아래**에 설 자리가 없어서 `translateY` 로
+     박스 **안쪽**까지 끌어올려지고, 그 자리가 마침 떠 있는 말풍선과 겹치면
+     흰 배경이 글자를 덮는다(아래 pinY 효과의 2026-10-02 주석 참고).
+     학생 둘(mcc20knight·mcc20kitty) 이 "말풍선이 검은 코드 박스 바닥 경계에서
+     잘린다" 고 각각 보고 — 원인은 `.quest-navbar`(바깥 고정 바)가 아니라
+     **이 컴포넌트 자신의 pinWrap** 이었다. 그러니 박스 높이를 정할 때
+     **pinWrap 이 필요로 하는 높이만큼 미리 빼 둔다** — 그러면 pinWrap 이
+     끌어올려질 일 자체가 거의 없어진다. */
+  const [pinNaturalH, setPinNaturalH] = useState(100); // 못 재면 대략값(복사줄+SimNav줄)
+  useEffect(() => {
+    const wrap = pinWrapRef.current;
+    if (!wrap || typeof ResizeObserver === "undefined") return;
+    const measure = () => setPinNaturalH(wrap.offsetHeight || 100);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(wrap);
+    return () => ro.disconnect();
+  }, []);
 
   /* ⚠️ 2026-10-01 — 코드창 높이가 `min(64vh, 560px)` 고정값이었다. 이 값은 "화면에서
      얼마나 크게 보여줄까" 만 생각했지, **이 창이 페이지에서 어디서 시작하는지**는
@@ -131,7 +154,12 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
       const bar = document.querySelector(".quest-navbar");
       const navH = bar ? bar.getBoundingClientRect().height : 78;
       const top = box.getBoundingClientRect().top;
-      const avail = window.innerHeight - top - navH - 16; // 숨 쉴 틈
+      /* 📏 2026-10-02 — `pinNaturalH + 8`(복사줄+SimNav줄 + 여백) 을 **박스 높이에서
+         미리 뺀다.** 안 빼면 박스가 그 공간까지 통째로 차지해서, pinWrap 이 박스
+         아래에 설 자리가 없어지고 `translateY` 로 박스 **안쪽**까지 끌어올려진다
+         (위 `pinNaturalH` 선언부 주석 참고 — 학생 둘이 그 자리에서 말풍선이
+         "코드 박스 바닥 경계에서 잘린다" 고 보고한 바로 그 원인이다). */
+      const avail = window.innerHeight - top - navH - 16 - pinNaturalH - 8; // 숨 쉴 틈 + pinWrap 자리
       /* ⚠️ 바닥을 220 으로 뒀더니(1차 시도) 머리말이 **극단적으로 긴** 경우(영어·
          모바일의 xorstring 1걸음, avail=171)엔 바닥이 avail 보다 커서 **바닥 자체가
          창을 다시 바 쪽으로 밀어 넣었다**(실측 33px 먹힘). 바닥은 "그래도 몇 줄은
@@ -142,7 +170,7 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
     measure();
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
-  }, []);
+  }, [pinNaturalH]);
 
   useEffect(() => {
     const box = boxRef.current;
@@ -244,8 +272,8 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
     return () => { ro && ro.disconnect(); window.removeEventListener("resize", measure); };
   }, []);
 
-  const sentinelRef = useRef(null);
-  const pinWrapRef = useRef(null);
+  // ⚠️ `sentinelRef` · `pinWrapRef` 는 이제 파일 위쪽(`pinNaturalH` 옆)에서 선언한다 —
+  // `fitBoxH` 계산이 `pinWrapRef` 의 실측 높이를 미리 빼 써야 해서다. 여기선 그대로 쓴다.
   const [pinY, setPinY] = useState(0);
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -271,6 +299,38 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
       if (naturalTop >= vh) { setPinY(0); return; }
       const naturalBottom = naturalTop + wrap.offsetHeight;
       const maxBottom = vh - navGap;
+      /* 🛡️ 2026-10-02 — 학생 둘(mcc20knight·mcc20kitty) 이 "말풍선이 코드 박스
+         바닥 경계에서 잘린다" 고 보고 — 실측해 보니 `.quest-navbar`(바깥 고정 바)가
+         아니라 **이 pinWrap 자신**이 범인이었다(위 `pinNaturalH` 선언부 주석).
+         위 `pinNaturalH` 로 박스 높이에서 pinWrap 자리를 미리 빼 두면 **보통
+         quest 는 이 지점에서 ty 가 이미 0** 이 되어 더 손댈 게 없다
+         (naturalBottom 이 이미 maxBottom 보다 작다).
+
+         ⚠️ **여기서 "pin 이 박스 안으로 못 들어가게" 막는 보정을 추가했다가
+         되돌렸다 — 둘 다 실제로 만들어서 좌표+스크린샷+클릭 실측까지 했다.**
+         머리말이 *극단적으로* 긴 소수의 quest(mcc20knight 모바일 375 — 머리말이
+         565px 를 먹어 박스가 `minHeight:140` 바닥까지 눌리는 경우)에선 그래도
+         room 이 모자라 ty 가 크게 음수로 나온다. 이때 두 선택지가 서로 배타적이다:
+           A) ty 그대로 둔다 → pin 이 `.quest-navbar`(바깥 고정 바) 바로 위,
+              제자리에 깨끗이 선다. **말풍선 아래쪽 줄 일부가 박스 꼬리에 가려
+              남는다**(mcc20knight 최악의 경우 70px, 실측).
+           B) pin 이 박스를 침범 못 하게 ty 를 되돌린다 → pin 이 `.quest-navbar`
+              영역 **안**으로 내려간다(실측 pin [701,797] vs 바 [745,812]).
+              `elementFromPoint` 로는 그 구간 **클릭은** 안쪽 SimNav 로 통과했지만,
+              **화면 스크린샷으로 확대해 보니** 바깥 바의 불투명한 "이전 쪽/다음
+              쪽 ▶" 알약이 안쪽 SimNav 버튼 대부분을 **시각적으로 덮어**, 학생
+              눈엔 "다음 쪽 ▶"(페이지 넘김) 하나만 또렷이 보인다. 그 알약 **가운데를
+              누르면 실제로 바깥(페이지 넘김)이 눌린다**(실측 y=790, x=320 →
+              `elementFromPoint` 가 `.quest-navbar` 를 반환) — 안쪽 SimNav 가
+              살아있는 좁은 띠(y≈745~775)는 글자가 거의 안 보여 학생이 거길
+              노려 누르지 않는다. 즉 **B 는 "말풍선 한 줄이 가려짐" 을
+              "엉뚱한 페이지로 튕겨나감" 으로 바꾼다** — 더 나쁘다
+              (오늘 보고서 뒷부분의 "같은 모양 네비 둘" 사고와 같은 종류).
+         그래서 **A 를 택한다** — 아래 식 하나로 끝낸다. 이 잔여 결함(머리말이
+         극단적으로 긴 소수 quest 에서 말풍선 꼬리가 박스에 가려 보임)은 CodeWalk
+         하나로 못 고친다 — 근본 해법은 pinWrap(복사줄+SimNav줄) 을 한 줄로
+         압축하거나, 그 quest 의 머리말(접근 태그+변수 범례)을 줄이는 쪽이다.
+         둘 다 후속 과제로 남긴다. */
       const ty = Math.min(0, maxBottom - naturalBottom);
       setPinY(ty);
     };

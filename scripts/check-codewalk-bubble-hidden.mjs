@@ -27,10 +27,17 @@
  *     신고해 **진짜 신고가 그 밑에 묻힌다.**
  *
  * ⭐ **잣대를 좁게 잡는 것이 이 검사기의 핵심이다.**
- *   「무엇과 무엇이 겹치나」를 일반적으로 찾지 않는다. **딱 하나의 관계**만 본다 —
- *   **말풍선 아래끝이 `.quest-navbar` 위끝보다 아래로 내려갔나.**
- *   조작 바가 코드를 덮는 건 **설계된 정상 동작**이라 절대 신고하지 않는다.
- *   그래서 오탐 위험이 위 둘보다 훨씬 낮다.
+ *   「무엇과 무엇이 겹치나」를 일반적으로 찾지 않는다. **두 관계만** 본다 —
+ *   **① 말풍선 아래끝이 `.quest-navbar`(바깥 고정 바) 위끝보다 아래로 내려갔나**
+ *   **② 말풍선의 보이는 부분이 `pinWrap`(복사줄+SimNav줄, CodeWalk 자기 자신의
+ *     조작 바) 에 먹혔나** — 2026-10-02 추가. 학생 둘(mcc20knight·mcc20kitty)
+ *     이 보고한 "코드 박스 바닥 경계에서 잘린다" 는 **①이 아니라 ②**였다.
+ *     `pinWrap` 은 `.quest-navbar` 를 피하려고 스스로를 끌어올리는데(`CodeWalk.jsx`
+ *     의 `pinY`/`navGap` 로직), 그 끌어올림이 코드 박스 **안으로** 들어가
+ *     떠 있는 말풍선을 덮을 수 있다 — 바가 아니라 **같은 컴포넌트 자신**이 범인.
+ *   조작 바가 코드 꼬리(이미 설명된/흐린 줄)를 덮는 건 **설계된 정상 동작**이라
+ *   절대 신고하지 않는다 — ②도 "보이는 말풍선 구간" 과만 겹치는지 본다.
+ *   그래서 오탐 위험이 일반적인 겹침 검사보다 훨씬 낮다.
  *
  * ⛔ **병렬로 돌리지 마라 — 조용히 «0곳» 이 나온다.**
  *   `check-fixed-bar-overlap.mjs` 가 8병렬에서 180개 중 **169개를 거짓 0** 으로 만든
@@ -109,6 +116,17 @@ const url = (q) => `http://localhost:3000/quest/${q}` + (EN ? "" : "?lang=ko");
      상자 밖으로 완전히 밀려 **아예 안 보이는** 경우도 따로 신고한다 — 학생이 겪은 게
      그것이다(*"뭐라고 써 있는지 안 보여서 그냥 넘어갔다"*).
    `see-screen.mjs` 의 `visRect()` 와 같은 생각이다. */
+/* 🆕 2026-10-02 — **두 번째 범인이 있었다.** 학생 둘(mcc20knight·mcc20kitty) 이
+   "말풍선이 코드 박스 바닥 경계에서 잘린다" 고 보고했는데, 실측해 보니 둘 다
+   범인이 `.quest-navbar`(바깥 고정 바) 가 아니라 **CodeWalk 자기 자신의
+   pinWrap**(복사줄+SimNav줄, `position:relative`+`transform:translateY` 로
+   필요할 때 끌어올려지는 그 덩어리)이었다. 이 검사기는 원래 "바와 겹치나"
+   **한 관계만** 보도록 일부러 좁혔는데(위 2026-09-28 주석), 그래서 이 층을
+   원리상 못 봤다 — `check-fixed-bar-overlap.mjs`·`see-screen.mjs` 가 못 보는
+   이유와 똑같은 모양으로 **이 검사기도 또 다른 사각지대를 갖고 있었다.**
+   `pinWrap` 은 `sentinelRef`(`height:0, aria-hidden="true"`) 바로 다음
+   형제이고 `position:relative` 다 — 그걸로 짚는다(태그·클래스 이름에 안 기댄다,
+   CSS 모듈 해시로 클래스명이 안 잡혀서다). */
 const MEASURE = `(() => {
   const bub = document.querySelector('[data-codewalk-bubble]');
   const bar = document.querySelector('.quest-navbar');
@@ -123,12 +141,27 @@ const MEASURE = `(() => {
   }
   const 보이는높이 = Math.max(0, bottom - top);
   const 전체높이 = Math.max(1, b.bottom - b.top);
+  // pinWrap 찾기 — sentinel(height:0, aria-hidden) 바로 다음, position:relative 인 형제.
+  const sentinel = Array.from(document.querySelectorAll('div[aria-hidden="true"]')).find((s) => {
+    const cs = getComputedStyle(s);
+    return cs.height === '0px' && s.nextElementSibling && getComputedStyle(s.nextElementSibling).position === 'relative';
+  });
+  const pin = sentinel ? sentinel.nextElementSibling : null;
+  let 핀먹힌높이 = 0, 핀 = null;
+  if (pin) {
+    const p = pin.getBoundingClientRect();
+    핀 = [Math.round(p.top), Math.round(p.bottom)];
+    // "보이는"(= 박스 안에서 실제로 보이는 말풍선 구간) 과 pin 의 겹침만 센다.
+    핀먹힌높이 = Math.round(Math.max(0, Math.min(bottom, p.bottom) - Math.max(top, p.top)));
+  }
   return {
     말풍선: [Math.round(b.top), Math.round(b.bottom)],
     보이는: [Math.round(top), Math.round(bottom)],
     고정바: [Math.round(n.top), Math.round(n.bottom)],
+    핀: 핀,
     잘린비율: Math.round((1 - 보이는높이 / 전체높이) * 100),   // 상자에 얼마나 잘렸나
     먹힌높이: Math.round(Math.max(0, bottom - n.top)),        // 보이는 부분이 바에 먹힌 높이
+    핀먹힌높이,                                                // 보이는 부분이 pinWrap 에 먹힌 높이
     글: (bub.textContent || '').trim().slice(0, 40),
   };
 })()`;
@@ -187,7 +220,7 @@ try {
         const more = (await nx.count()) && !(await nx.isDisabled());
         if (EVERY || !more) {
           const m = await page.evaluate(MEASURE);
-          if (!m.없음 && (m.먹힌높이 > 2 || m.잘린비율 > 15)) worst.push({ ...m, 걸음: step + 1 });
+          if (!m.없음 && (m.먹힌높이 > 2 || m.잘린비율 > 15 || m.핀먹힌높이 > 2)) worst.push({ ...m, 걸음: step + 1 });
         }
         if (!more) break;
         await nx.click(); await page.waitForTimeout(220);
@@ -202,7 +235,9 @@ try {
           console.log(`       걸음 ${w.걸음} · ` +
             (w.잘린비율 > 15 ? `**코드창에 ${w.잘린비율}% 잘림** ` : "") +
             (w.먹힌높이 > 2 ? `**고정 바에 ${w.먹힌높이}px 먹힘** ` : "") +
-            `(말풍선 ${w.말풍선.join("~")} · 보이는 ${w.보이는.join("~")} · 바 ${w.고정바.join("~")})`);
+            (w.핀먹힌높이 > 2 ? `**pinWrap(복사줄+SimNav줄) 에 ${w.핀먹힌높이}px 먹힘** ` : "") +
+            `(말풍선 ${w.말풍선.join("~")} · 보이는 ${w.보이는.join("~")} · 바 ${w.고정바.join("~")}` +
+            (w.핀 ? ` · pin ${w.핀.join("~")}` : "") + `)`);
           console.log(`          «${w.글}»`);
         }
       }
