@@ -382,8 +382,8 @@ export function makeStrangeFnCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "What about n = 4 through 7?",
-        "n = 4 부터 7 까지는 g(n) 이 얼마일까요?"),
+        "How fast does g(n) grow as n goes up?",
+        "n 이 커질 때 g(n) 은 얼마씩 늘어날까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
@@ -391,8 +391,8 @@ export function makeStrangeFnCh1(E) {
           </div>
           <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 10, wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "Look at the even-n rows and the odd-n rows separately. How does g(n) differ?",
-              "짝수 n 줄과 홀수 n 줄을 나눠서 봐요. g(n) 이 어떻게 다른가요?")}
+              "Row to row, g(n) goes up by 1, 2, 1, 2 … — uneven.\nSo try skipping a row: even n with even n, odd n with odd n. What happens?",
+              "옆줄끼리 보면 g(n) 이 1, 2, 1, 2 … 로 들쭉날쭉해요.\n그럼 한 줄 건너뛰어 봐요 — 짝수 n 끼리, 홀수 n 끼리. 어떻게 되나요?")}
           </div>
           {/* ⚠️ 2026-10-01 재검증 학생: *"「형태」 칸에 `2k`, `2k+1` 이 갑자기 나오는데
               **`k` 가 뭔지 설명이 없었다.** 「k가 뭐지?」 하고 **잠깐 멈췄다.**
@@ -401,8 +401,8 @@ export function makeStrangeFnCh1(E) {
               이름은 **처음 쓰는 자리**에서 밝힌다. 7쪽 끝의 중복 정의는 지웠다. */}
           <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 8, wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "Let's call n divided by 2 (the quotient) k — that's what the «form» column uses.",
-              "n 을 2 로 나눈 몫을 k 라고 부를게요 — 아래 「형태」 칸에서 써요.")}
+              "Let's call n divided by 2 (the quotient) k. Then every n is either 2k or 2k+1.",
+              "n 을 2 로 나눈 몫을 k 라고 부를게요. 그러면 n 은 2k 아니면 2k+1 이에요.")}
           </div>
           {/* 2026-09-23 교육 담당 지적: ✅ 가 붙은 n=1,2,3 만 학생이 직접 센 값인데
               n=0,4,5,6,7 의 g(n) 이 **출처 없이** 같이 올라와 있었다.
@@ -426,18 +426,18 @@ export function makeStrangeFnCh1(E) {
                       「짝수/홀수」 칸을 「형태」로 바꾸면 그 칸이 하던 일(짝·홀 가르기)을 2k·2k+1 이 그대로 한다.
                       ⚠️ 형태는 **짧게** — `2k+1` 까지만. `k=3 → 3k+1=10` 은 g(n) 칸이 이미 10 을 보여줘서 재계산이다.
                       그래야 375px 에서 안 뭉갠다. */}
-                  <th style={{ padding: "4px 8px", textAlign: "left" }}>{t(E, "form", "형태")}</th>
+                  <th style={{ padding: "4px 8px", textAlign: "left" }}>{t(E, "n written with k", "n 을 k 로 쓰면")}</th>
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>2k</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>2k+1</td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>2k</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>2k+1</td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>2k</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>2k+1</td></tr>
-                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>2k</td></tr>
-                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>2k+1</td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>0</td><td>0</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>1 ✅</td><td>1</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>2 ✅</td><td>3</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>3 ✅</td><td>4</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>4</td><td>6</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>5</td><td>7</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
+                <tr style={{ background: "#eef2ff" }}><td style={{ padding: "3px 8px" }}>6</td><td>9</td><td>2k <span style={{ color: "#64748b" }}>({t(E, "even", "짝수")})</span></td></tr>
+                <tr style={{ background: "#fffbeb" }}><td style={{ padding: "3px 8px" }}>7</td><td>10</td><td>2k+1 <span style={{ color: "#64748b" }}>({t(E, "odd", "홀수")})</span></td></tr>
               </tbody>
             </table>
           </div>
