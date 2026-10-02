@@ -21,7 +21,9 @@ interface Section {
   color: string;
   py: string[];
   cpp: string[];
-  why?: string[];
+  /** 2026-10-02: 문자열이든 JSX 든 받는다 — 「왜」 안에서 핵심 한 조각만
+   *  굵게 강조할 수 있게 넓혔다 (`check-emphasis` "다 굵으면 강조가 아니다"). */
+  why?: (string | React.ReactNode)[];
   pyOnly?: string[];
   cppOnly?: string[];
   aside?: React.ReactNode;

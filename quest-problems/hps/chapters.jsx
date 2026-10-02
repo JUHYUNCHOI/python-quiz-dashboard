@@ -27,12 +27,17 @@ function NSpeedSim({ E }) {
     if (n < 1e9) return (n / 1e6).toFixed(1) + " M";
     return (n / 1e9).toFixed(1) + " B";
   };
+  /* ⭐ 2026-10-02 PM 3순위 — 학생: "Py 1.7m초 가 무슨 단위인지 몰랐다."
+     실제 버그: 60~3600초 구간은 (s/60)+"m" (분, minute) 인데, 호출부가 뒤에
+     항상 t(E,"s","초") 를 또 붙여서 "1.7m" + "초" = "1.7m초" 가 됐다 —
+     밀리초처럼 보이지만 실은 '분' 이었다. 단위를 그 자리에서 완결된 문자열로
+     만들어 더는 덧붙이지 않는다. */
   const fmtSec = (s) => {
-    if (s < 0.01) return "<0.01";
-    if (s < 1) return s.toFixed(2);
-    if (s < 60) return s.toFixed(1);
-    if (s < 3600) return (s / 60).toFixed(1) + "m";
-    return (s / 3600).toFixed(1) + "h";
+    if (s < 0.01) return t(E, "<0.01s", "<0.01초");
+    if (s < 1) return t(E, `${s.toFixed(2)}s`, `${s.toFixed(2)}초`);
+    if (s < 60) return t(E, `${s.toFixed(1)}s`, `${s.toFixed(1)}초`);
+    if (s < 3600) return t(E, `${(s / 60).toFixed(1)}min`, `${(s / 60).toFixed(1)}분`);
+    return t(E, `${(s / 3600).toFixed(1)}h`, `${(s / 3600).toFixed(1)}시간`);
   };
   // Bar = how much of the time limit this run uses.  Capped at 110%
   // visually but the label still says the real number so kids see
@@ -65,7 +70,7 @@ function NSpeedSim({ E }) {
           fontFamily: "'JetBrains Mono',monospace",
           color: tle ? "#dc2626" : "#15803d",
         }}>
-          {fmtSec(sec)}{t(E, "s", "초")} {tle ? "❌" : "✅"}
+          {fmtSec(sec)} {tle ? "❌" : "✅"}
         </div>
       </div>
     );
@@ -301,10 +306,12 @@ LWD
                     ↑ {t(E, "the 3rd row read left→right IS ", "3 행(카드 3) 을 왼→오로 읽으면 = ")}
                     <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>LWD</code>
                   </div>
-                  {/* 왜 대각선=D, 왜 삼각형인지 — 학생이 '두 번째 줄은 왜 다르지?' 물음 (선생님 2026-07-14) */}
-                  <div style={{ marginTop: 7, paddingTop: 6, borderTop: "1px dashed #e2e8f0", fontSize: 10.5, color: C.dim, lineHeight: 1.65, wordBreak: "keep-all" }}>
+                  {/* 왜 대각선=D, 왜 삼각형인지 — 학생이 '두 번째 줄은 왜 다르지?' 물음 (선생님 2026-07-14)
+                      ⭐ 2026-10-02 PM 3순위 — 전엔 각주(10.5px·C.dim)라 중요한 이유가 흐렸다.
+                      글자는 그대로, 무게만 본문 수준으로 올린다. */}
+                  <div style={{ marginTop: 8, paddingTop: 7, borderTop: "1px dashed #c4b5fd", fontSize: 11.5, color: "#5b21b6", lineHeight: 1.7, wordBreak: "keep-all" }}>
                     <div>• {t(E, "The diagonal (card vs itself) is always ", "대각선(카드 vs 자기 자신)은 항상 ")}<b style={{ color: "#6b7280" }}>D</b>{t(E, " — you can't beat yourself. So each row ends in D.", " — 자기랑은 못 이겨요. 그래서 줄 끝은 항상 D.")}</div>
-                    <div style={{ marginTop: 3 }}>• {t(E, "Triangle only: card 2 vs card 3 is just card 3 vs card 2 flipped — so each pair is listed once (the lower half).", "왜 삼각형일까요?\n카드 2 대 카드 3 은 카드 3 대 카드 2 를 뒤집은 것과 같아요.\n그래서 짝마다 한 번씩만 적어요 — 아래쪽 절반이에요.")}</div>
+                    <div style={{ marginTop: 4 }}>• {t(E, "Triangle only: card 2 vs card 3 is just card 3 vs card 2 flipped — so each pair is listed once (the lower half).", "왜 삼각형일까요?\n카드 2 대 카드 3 은 카드 3 대 카드 2 를 뒤집은 것과 같아요.\n그래서 짝마다 한 번씩만 적어요 — 아래쪽 절반이에요.")}</div>
                   </div>
                 </div>
                 <span style={{ color: "#5b21b6", fontSize: 12 }}>
@@ -324,9 +331,11 @@ LWD
 
             {/* '뭘 내야 이기나' 는 다음 페이지 시뮬(HpsSampleIOSim)에서 표 위 탐색으로 보여줌
                 (선생님 2026-07-21: "설명보다 표에서 열이 깜박이며 둘 다 이기는 카드 찾는 과정을 시뮬로"). */}
+            {/* ⭐ 2026-10-02 PM 판정 3순위 — 이 박스가 다음 쪽(ChartReadingTour)의
+                narr 를 거의 그대로 미리 다 말해 겹쳤다. 지우지 않고 축약만 한다. */}
             <div style={{ marginTop: 12, background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12, color: "#155e75", wordBreak: "keep-all", lineHeight: 1.6 }}>
-              🎯 {t(E, "But first — how do you even read this chart?  Next page walks the letters cell by cell and builds the 'who beats whom' map.",
-                       "그런데 먼저 — 이 차트를 어떻게 읽지?  다음 페이지에서 글자를 한 칸씩 읽어 '누가 누굴 이기나' 지도를 만들어요.")}
+              🎯 {t(E, "Next page: walk it cell by cell yourself.",
+                       "다음 쪽에서 직접 걸어보며 확인해요.")}
             </div>
 
             <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd", fontSize: 12, color: "#5b21b6" }}>

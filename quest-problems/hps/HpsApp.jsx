@@ -146,7 +146,10 @@ export default function HpsApp(props = {}) {
         {/* 태그 = 이 문제 풀려면 알아야 할 '공부 가능한 알고리즘' (선생님 2026-07-15:
             구현 단계·복잡도 말고 학습할 개념 이름만). 여기선 여사건(complementary counting). */}
         <AlgorithmTags E={E} tags={[
-          { icon: "🎯", ko: "여사건 (complementary counting)", en: "Complementary counting" },
+          /* ⭐ 2026-10-02 학생: *"「여사건」 — 끝까지 봐도 짐작만 했지 정확히는 모르겠다."*
+             `href` 를 못 붙인다 — `app/algo/` 23개 토픽에 해당하는 게 **없다**.
+             토픽 신설은 제품 방향이라 범위 밖 → **라벨 자체를 쉬운 말로.** */
+          { icon: "🎯", ko: "전체에서 빼서 세기", en: "Count by subtracting" },
         ]} />
         <QuestProgressBar
           tabs={TABS}

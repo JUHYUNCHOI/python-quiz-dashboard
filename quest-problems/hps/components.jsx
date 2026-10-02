@@ -1285,6 +1285,38 @@ export function BitsLab({ E }) {
   );
 }
 
+/* DirectCountNote — "직접 세도 돼요" 보조 설명. 2026-10-02 PM 판정:
+   같은 설명을 필수 구간(HpsFormulaGridSim 의 '🧩 왜 빼요?' 박스)과
+   보너스 구간(BitmaskColSim) 둘 다에서 쓴다 — 새로 쓰지 않고 하나로 공유. */
+function DirectCountNote({ E, dom, N, ans, borderColor = "#cbd5e1" }) {
+  return (
+    <div style={{ marginTop: 6, fontSize: 11, color: "#64748b", lineHeight: 1.65,
+                  borderTop: `1px dashed ${borderColor}`, paddingTop: 6, wordBreak: "keep-all" }}>
+      {/* ⭐ 2026-10-02 학생: *"굵은 건 **숫자뿐**. 정작 왜 빼는지 설명하는 문장은
+          굵게도 색깔도 안 달랐다. **제일 중요한 「왜」는 안 튀어서 지나칠 뻔했다.**"*
+          → 핵심 구절만 굵게. 숫자는 초록이라 **색을 달리**해 둘이 안 겹치게 한다.
+          ⛔ 문장 전체를 굵게 하지 마라 — 그러면 다시 밋밋해진다. */}
+      {t(E, "Why subtract instead of counting the wins directly? ", "왜 빼서 구할까요? ")}
+      <b style={{ color: "#334155" }}>{t(E, "You can count them directly", "직접 세도 돼요")}</b>
+      {t(E, " — it is the same number.", " — 같은 수가 나와요.")}
+      <br />
+      <span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#0f766e" }}>
+        {t(E, "first card wins", "첫 장이 이기는 카드")} {dom}×{N} = {dom * N}
+        {" + "}
+        {t(E, "second", "둘째 장")} {N}×{dom} = {N * dom}
+        {" − "}
+        {t(E, "both (counted twice)", "둘 다 (두 번 셈)")} {dom}×{dom} = {dom * dom}
+        {" = "}<b style={{ color: "#15803d" }}>{ans}</b>
+      </span>
+      <br />
+      {t(E, "The square form just ", "제곱 쪽은 ")}
+      <b style={{ color: "#334155" }}>{t(E, "skips that \"counted twice\" step", "그 \"두 번 셈\"을 안 따져도 되게 한 거예요")}</b>
+      {t(E, ": at least one wins = everything − neither wins.",
+           " — 한 장이라도 있으면 이긴다 = 전체 − 하나도 없는 경우.")}
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════
    BitmaskColSim — uses the sample chart (D / WD / LWD) to show how
    col[c] is built and how a query (s1, s2) reduces to AND + popcount.
@@ -1425,23 +1457,7 @@ export function BitmaskColSim({ E }) {
              제곱 쪽을 쓰는 이유는 **「두 번 센 것을 빼는 걸 안 따져도 되기」** 때문이지
              그게 더 옳아서가 아니다. 화면이 그 말을 안 하고 **식만 보여줘서** 막히신 것이다.
            ⚠️ 🔒 USACO_VERIFIED 라 **풀이 코드는 안 건드린다.** 화면 설명만 더한다. */}
-        <div style={{ marginTop: 4, fontSize: 11, color: "#64748b", lineHeight: 1.65,
-                      borderTop: "1px dashed #cbd5e1", paddingTop: 5, wordBreak: "keep-all" }}>
-          {t(E, "Why subtract instead of counting the wins directly? You can count them directly — it is the same number.",
-               "왜 빼서 구할까요? 직접 세도 돼요 — 같은 수가 나와요.")}
-          <br />
-          <span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#0f766e" }}>
-            {t(E, "first card wins", "첫 장이 이기는 카드")} {dom}×3 = {dom * 3}
-            {" + "}
-            {t(E, "second", "둘째 장")} 3×{dom} = {3 * dom}
-            {" − "}
-            {t(E, "both (counted twice)", "둘 다 (두 번 셈)")} {dom}×{dom} = {dom * dom}
-            {" = "}<b style={{ color: "#15803d" }}>{ans}</b>
-          </span>
-          <br />
-          {t(E, "The square form just skips that \"counted twice\" step: at least one wins = everything − neither wins.",
-               "제곱 쪽은 그 \"두 번 셈\"을 안 따져도 되게 한 거예요 — 한 장이라도 있으면 이긴다 = 전체 − 하나도 없는 경우.")}
-        </div>
+        <DirectCountNote E={E} dom={dom} N={N} ans={ans} />
       </div>
     </div>
   );
@@ -1909,9 +1925,17 @@ export function HpsSampleIOSim({ E }) {
               </div>
             )}
             <div style={{ textAlign: "center", marginTop: 12, fontSize: 12.5, color: "#334155", lineHeight: 1.95, wordBreak: "keep-all" }}>
-              <div><b style={{ color: "#c2410c" }}>{t(E, "cards that beat BOTH = dom", "둘 다 이기는 카드 = dom")} = {dom}</b></div>
+              {/* ⭐ 2026-10-02 PM 3순위 — dom 이 여기(4쪽, 첫 등장)선 평문이고
+                  한참 뒤(HpsFormulaGridSim)에서야 주황+⚡ 모양이 붙었다. 처음부터 같은 모양으로. */}
+              <div><b style={{ color: "#c2410c" }}>⚡ {t(E, "cards that beat BOTH = dom", "둘 다 이기는 카드 = dom")} = {dom}</b></div>
+              {/* ⛔ 2026-10-02 — 여기 있던 `답 = N² − (N − dom)²` 한 줄을 뺐다.
+                  학생(초6): *"문제 탭 4쪽에서 **그냥 뚝 나왔다.** 왜 「전체 − 뭔가」로 구하는지는
+                  그 자리엔 설명이 없었다. **「그냥 9개를 하나씩 세면 되는 거 아닌가?」** 싶었다.
+                  같은 공식을 **세 번** 써먹는 동안 계속 「왜 이렇게 하지」 상태였다."*
+                  이 컴포넌트가 샘플 셋을 **한 틀로 돌려** 쓰므로 한 줄이 곧 세 번이었다.
+                ⭐ 이 쪽은 「샘플 확인」만 한다 — 공식은 코드 탭에서 **「왜」와 함께** 처음 나온다. */}
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
-                {t(E, "answer", "답")} = N² − (N − dom)² = {N * N} − {N - dom}² = <b style={{ color: "#15803d", fontSize: 16 }}>{answer}</b>
+                {t(E, "answer", "답")} = <b style={{ color: "#15803d", fontSize: 16 }}>{answer}</b>
               </div>
               <div style={{ fontSize: 11, color: C.dim }}>{t(E, `→ output line ${s.qi + 1} = ${answer}`, `→ 출력 ${s.qi + 1} 번째 줄 = ${answer}`)}</div>
             </div>
@@ -1963,18 +1987,15 @@ export function HpsFormulaGridSim({ E }) {
 
   return (
     <div style={{ padding: 12 }}>
-      {/* 말풍선 — 격자 바로 위에 붙어 눈이 따라가게 */}
-      <div style={{ maxWidth: 480, margin: "0 auto 2px" }}>
-        <div style={{
-          background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12,
-          padding: "11px 14px", fontSize: 13, color: "#92400e", fontWeight: 600,
-          lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all", whiteSpace: "pre-line",
-          boxShadow: "0 4px 14px rgba(0,0,0,.07)",
-        }}>💬 {s.bubble}</div>
-        <div style={{ width: 0, height: 0, margin: "0 auto",
-          borderLeft: "9px solid transparent", borderRight: "9px solid transparent",
-          borderTop: "10px solid #fbbf24" }} />
-      </div>
+      {/* ⭐ 2026-10-02 PM 4순위 — 전엔 맨몸 <div> 말풍선이라 짧은 화면에서
+          「다음 ▶」을 눌러도 스크롤이 그대로라 새 말풍선이 화면 밖으로 밀렸다
+          (375×667·320×568 에서 재현됨). 같은 파일 ChartReadingTour 가 쓰는
+          NarrativePanel(stepKey={ts.safe})로 바꾼다 — 발명하지 않고 그대로 따라간다. */}
+      <NarrativePanel stepKey={ts.safe} minHeight={70}>
+        <div style={{ fontSize: 14, lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", whiteSpace: "pre-line" }}>
+          💬 {s.bubble}
+        </div>
+      </NarrativePanel>
 
       {/* N·dom 정의 — 격자/공식 단계에서만 (test/testans 는 타일이 dom 을 그 자리서
           정의하니 forward-ref 박스는 정보 과부하, 선생님 2026-07-22 "한 화면에 정보 너무 많아").
@@ -2082,8 +2103,9 @@ export function HpsFormulaGridSim({ E }) {
           {s.phase === "count" && (
             <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "12px 14px" }}>
               <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
-                🧩 {t(E, "Why subtract? Winning hands are scattered (⚡ could be in slot 1, slot 2, or both) — messy to count. The NON-winning hands are one clean square, so count those and subtract.",
-                       "왜 빼요? 이기는 패는 흩어져 있어요 (⚡ 가 첫 자리·둘째 자리·둘 다 — 섞임) → 바로 세기 번거로움.  ‘안 이기는 패’ 는 네모 한 덩이 → 그걸 세서 빼는 게 쉬워요.")}
+                🧩 {t(E,
+                  <>Why subtract? Winning hands are scattered (⚡ could be in slot 1, slot 2, or both) — messy to count.  <b>The NON-winning hands are one clean square</b>, so count those and subtract.</>,
+                  <>왜 빼요? 이기는 패는 흩어져 있어요 (⚡ 가 첫 자리·둘째 자리·둘 다 — 섞임) → 바로 세기 번거로움.  <b>‘안 이기는 패’ 는 네모 한 덩이</b> → 그걸 세서 빼는 게 쉬워요.</>)}
                 <div style={{ fontSize: 10, color: "#a16207", marginTop: 3 }}>({t(E, "this trick = complementary counting", "이 방법 = 여사건")})</div>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
@@ -2101,6 +2123,12 @@ export function HpsFormulaGridSim({ E }) {
                 <span style={{ color: "#c2410c", fontWeight: 800 }}>N²−(N−dom)²</span>
                 <span style={{ color: "#15803d", fontWeight: 900, fontSize: 16 }}>= 5</span>
               </div>
+              {/* ⭐ 2026-10-02 PM 판정 1순위 — 이 설명이 전엔 '보너스' 구간에만
+                  있었다(components.jsx BitmaskColSim). 필수 쪽인 여기로도 옮긴다 —
+                  보너스를 건너뛰는 학생이 '직접 세도 된다' 는 답을 영영 못 보기 때문. */}
+              <DirectCountNote E={E} dom={cards.filter(c => c.win).length} N={cards.length}
+                ans={cards.length * cards.length - (cards.length - cards.filter(c => c.win).length) ** 2}
+                borderColor="#fcd34d" />
             </div>
           )}
         </>
