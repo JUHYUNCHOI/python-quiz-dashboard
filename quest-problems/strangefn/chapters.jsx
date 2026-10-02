@@ -78,7 +78,7 @@ export function makeStrangeFnCh1(E) {
                   {t(E, "If x has a digit that is not 0 and not 1 — change ",
                         "x 를 이루는 숫자 중에 0 도 1 도 아닌 게 하나라도 있으면 — ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "every digit", "숫자 하나하나")}</b>
-                  {t(E, ": odd becomes 1, even becomes 0.", "를 홀수면 1 로, 짝수면 0 으로 바꿔요.")}
+                  {t(E, ": odd becomes 1, even becomes 0. We call this the 0-and-1 change.", "를 홀수면 1 로, 짝수면 0 으로 바꿔요. 이걸 「0 과 1 로 바꾸기」라고 부를게요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -202,7 +202,7 @@ export function makeStrangeFnCh1(E) {
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" , wordBreak: "keep-all", textWrap: "balance" }}>
               <div>24680 → {t(E, "has digits other than 0/1", "0 도 1 도 아닌 숫자가 있음")}</div>
-              <div>{t(E, "each digit by parity:", "자리별 홀짝:")} 2→0, 4→0, 6→0, 8→0, 0→0</div>
+              <div>{t(E, "each digit, odd→1 even→0:", "숫자마다 홀수면 1, 짝수면 0:")} 2→0, 4→0, 6→0, 8→0, 0→0</div>
               <div>= 00000 = 0 ✅ <b style={{ color: "#15803d" }}>{t(E, "1 op (f used once)", "1번 (f 를 한 번 씀)")}</b></div>
             </div>
           </div>
@@ -480,10 +480,10 @@ export function makeStrangeFnCh1(E) {
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
               {[
-                ["11 → 10", "끝자리가 1 이라 1 만 빼요", "last digit is 1 — just subtract 1"],
-                ["10 → 9", "끝자리가 0 이라 자리를 빌려요 → 0 과 1 이 아닌 9 가 나와요", "last digit is 0 — it borrows, and 9 is not made of 0s and 1s"],
-                ["9 → 1", "그래서 홀짝 변환을 한 번 써요 — 덤으로 끼는 걸음이에요", "so one parity swap is needed — this is the extra step"],
-                ["1 → 0", "다시 1 만 빼면 0 이에요", "subtract 1 again and it is 0"],
+                ["11 → 10", "11 은 0 과 1 뿐이라 1 을 빼요. 10 도 0 과 1 뿐이에요.", "11 uses only 0s and 1s, so subtract 1. 10 is still only 0s and 1s."],
+                ["10 → 9", "10 에서 1 을 빼면 9. 9 는 0 도 1 도 아니에요.", "10 minus 1 is 9. And 9 is neither 0 nor 1."],
+                ["9 → 1", "그래서 홀수면 1, 짝수면 0 으로 바꿔요. 9 는 홀수라 1.", "So: odd becomes 1, even becomes 0. 9 is odd, so it becomes 1."],
+                ["1 → 0", "1 에서 1 을 빼면 0. 다 끝났어요.", "1 minus 1 is 0. All done."],
               ].map(([mv, ko, en], i) => (
                 <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
                   {/* ⭐ 2026-10-02 선생님 *"네 걸음?"* — 걸음 수를 **주장만** 하고 세어 보이지
@@ -499,8 +499,8 @@ export function makeStrangeFnCh1(E) {
           </div>
           <div style={{ fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "So a carry adds one extra step — which is why n alone is not the answer, only close to it.\nThe next page pins down the exact formula.",
-              "자리가 넘어갈 때마다 이렇게 한 걸음이 더 껴요 — 그래서 n 만으론 정확하지 않고 비슷하게만 맞아요.\n다음 쪽에서 정확한 식으로 확인해요.")}
+              "Ending in 0 is what cost the extra step: 10 - 1 = 9, and 9 needs one more change.\nThat is why n alone does not give the answer. The next page has the exact formula.",
+              "0 으로 끝나는 수에서 1 을 빼서 걸음이 하나 늘었어요 — 10 − 1 = 9 라서 9 를 또 바꿔야 했죠.\n그래서 n 만 보고는 못 맞춰요. 다음 쪽에 정확한 식이 있어요.")}
           </div>
         </div>),
     },
@@ -559,8 +559,8 @@ export function makeStrangeFnCh1(E) {
             </div>
             <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
-                "g(n) only counts steps after everything is already 0/1. If a parity-flip ran first (page 3), that flip was also a use of f — add 1 for it.",
-                "g(n) 은 이미 0/1 만 남은 뒤의 단계만 세요. 그 전에 홀짝 변환을 한 번 썼다면(3쪽), 그것도 f 를 한 번 쓴 거라 1 을 더해야 해요.")}
+                "g(n) only counts steps after everything is already 0/1. If the 0-and-1 change ran first (page 3), that was also a use of f — add 1 for it.",
+                "g(n) 은 이미 0/1 만 남은 뒤의 단계만 세요. 그 전에 0 과 1 로 바꾸기를 한 번 썼다면(3쪽), 그것도 f 를 한 번 쓴 거라 1 을 더해야 해요.")}
             </div>
             {/* 2026-09-30: x = 210 재확인 줄을 뺐다 — ch2 「코드가 할 세 단계」 쪽의
                 「🔁 x = 210 으로 다시 세어 봐요」 가 **같은 계산을 그대로** 한다.
@@ -585,8 +585,8 @@ export function makeStrangeFnCh1(E) {
                 "How many f's for x = 37? (has a digit other than 0/1)",
                 "x = 37 은 몇 번 만에 0 이 될까요? (0/1 이 아닌 자리가 있어요)")}
               hint={t(E,
-                "① Flip 3 and 7 by parity — what do you get? (that flip counts as 1)\n② Read that as binary — what's n?\n③ Put n into floor(3n/2), then add the 1 from ①.",
-                "① 3 과 7 을 홀짝으로 바꾸면? (이 변환도 1 번)\n② 그걸 이진수로 읽으면 n 은?\n③ floor(3n/2) 에 넣고, ①의 1 번을 더해요.")}
+                "① Change 3 and 7 into 0s and 1s — what do you get? (that counts as 1)\n② Read that as binary — what's n?\n③ Put n into floor(3n/2), then add the 1 from ①.",
+                "① 3 과 7 을 0 과 1 로 바꾸면? (이것도 1 번)\n② 그걸 이진수로 읽으면 n 은?\n③ floor(3n/2) 에 넣고, ①의 1 번을 더해요.")}
               answer={5}
               explain={t(E,
                 "5 is right. 37 → 11 (1) → 10 (2) → 9 (3) → 1 (4) → 0 (5).\nSame as 1 + g(3) = 1 + 4 = 5.",
@@ -599,8 +599,8 @@ export function makeStrangeFnCh1(E) {
                 "How many f's for x = 1010? (already only 0/1)",
                 "x = 1010 은 몇 번 만에 0 이 될까요? (이미 0 과 1 만 있어요)")}
               hint={t(E,
-                "① Already only 0s and 1s, so skip the parity flip — no 1 to add.\n② Read it as binary — what's n?\n③ floor(3n/2) is the answer as it stands.",
-                "① 이미 0 과 1 뿐이라 홀짝 변환을 건너뛰어요 — 더할 1 이 없어요.\n② 이진수로 읽으면 n 은?\n③ floor(3n/2) 가 그대로 답이에요.")}
+                "① Already only 0s and 1s, so skip the change — no 1 to add.\n② Read it as binary — what's n?\n③ floor(3n/2) is the answer as it stands.",
+                "① 이미 0 과 1 뿐이라 바꾸기를 건너뛰어요 — 더할 1 이 없어요.\n② 이진수로 읽으면 n 은?\n③ floor(3n/2) 가 그대로 답이에요.")}
               answer={15}
               explain={t(E,
                 "15 is right. g(10) = 3 × 5 = 15 — counting by hand would take 15 steps, but the formula gives it in one shot.",
@@ -648,8 +648,8 @@ function StrangeFnPlan({ E }) {
         </div>
         <Step n={1}>
           {t(E,
-            "If any digit isn't 0/1: flip every digit to 0/1 by parity, all at once (1 op).",
-            "0/1 이 아닌 자리가 있으면, 한 번에 다 홀짝으로 0/1 로 바꿔요 (1번).")}
+            "If any digit isn't 0 or 1: change every digit to 0 or 1 at once (1 op).",
+            "0 과 1 이 아닌 숫자가 있으면, 한 번에 다 0 과 1 로 바꿔요 (1번).")}
         </Step>
         <Step n={2}>
           {t(E,
@@ -671,7 +671,7 @@ function StrangeFnPlan({ E }) {
         <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.9, fontFamily: "'JetBrains Mono',monospace",
           wordBreak: "keep-all", textWrap: "balance" }}>
           <div>{t(E, "One by one (page 3): 210 → 10 → 9 → 1 → 0 = 4", "하나씩 세면 (3쪽): 210 → 10 → 9 → 1 → 0 = 4번")}</div>
-          <div style={{ marginTop: 6 }}>{t(E, "① parity-flip once → \"010\"", "① 홀짝 변환 1번 → \"010\"")}</div>
+          <div style={{ marginTop: 6 }}>{t(E, "① the 0-and-1 change once → \"010\"", "① 0 과 1 로 바꾸기 1번 → \"010\"")}</div>
           <div>{t(E, "② read as binary → n = 2 (same n we already confirmed)", "② 이진수로 읽으면 → n = 2 (앞에서 확인한 값과 같아요)")}</div>
           <div>{t(E, "③ g(2) = 3", "③ g(2) = 3")}</div>
           <div style={{ marginTop: 4, fontWeight: 800 }}>1 + 3 = 4</div>
