@@ -43,6 +43,24 @@ export const CODE_COMMENT_KO: Record<string, string> = {
     "다음 값이 이미 앞서 있으면 그대로, 아니면 cur + K 로 밀어요",
   "distance from vals[i] to cur, divided by K = pushes":
     "vals[i] 에서 cur 까지 거리를 K 로 나누면 민 횟수예요",
+  // ── strangefn (USACO 2026 Third Contest, Bronze #2) ──────────────────────
+  //    2026-10-02: 「Step 2」 하나만 번역돼 있어 나머지가 영어로 샜다(화면 확인).
+  "Step 1: is any digit not 0 and not 1?":
+    "1단계: 0 도 1 도 아닌 숫자가 있나요?",
+  "If so, change every digit: odd -> 1, even -> 0 (costs 1 op).":
+    "있으면 숫자마다 바꿔요: 홀수는 1, 짝수는 0 (f 를 한 번 쓴 거예요).",
+  "Step 1: if any digit is not 0/1, binarize (1 op).":
+    "1단계: 0 도 1 도 아닌 숫자가 있으면 전부 0 과 1 로 바꿔요 (f 한 번).",
+  "Step 2: read s as a binary number n mod MOD.":
+    "2단계: s 를 이진수 n 으로 읽어요, MOD 로 나눈 나머지로요.",
+  "half keeps the value from one digit earlier = n // 2.":
+    "half 에는 한 자리 전 값을 남겨요 = n 의 절반이에요.",
+  "half keeps the value from one digit earlier = n / 2.":
+    "half 에는 한 자리 전 값을 남겨요 = n 의 절반이에요.",
+  "Step 3: g(n) = floor(3*n / 2) = n + n // 2":
+    "3단계: g(n) = floor(3n/2) = n + (n 의 절반)",
+  "Step 3: g = floor(3n/2) = n + n/2":
+    "3단계: g = floor(3n/2) = n + (n 의 절반)",
   ...PART1,
   ...PART2,
   ...PART3,

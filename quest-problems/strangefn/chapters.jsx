@@ -520,17 +520,34 @@ export function makeStrangeFnCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Combine both into one formula.",
-        "이 둘을 식 하나로 합쳐요."),
+        "Two formulas — let's make them one.",
+        "짝수 n 과 홀수 n, 식이 둘이에요. 하나로 합쳐 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
               {t(E, "✅ Formula", "✅ 공식")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" , wordBreak: "keep-all", textWrap: "balance" }}>
-              <div>g(2k)   = 3k</div>
-              <div>g(2k+1) = 3k + 1</div>
+            {/* ⭐ 2026-10-02 선생님: *"이 둘?"* + *"이미 이때는 전 꺼가 기억이 안 나지"*
+                식만 두면 「이 둘」이 가리키는 게 화면에 없다 — 6쪽이 두 쪽 전이다.
+                **가리키지 말고 데려온다**: 식 옆에 그 식이 나온 숫자를 같이 둔다.
+                줄 수는 그대로(두 줄)다. `feedback_screen_must_not_rely_on_memory` */}
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.9, wordBreak: "keep-all" }}>
+              {[
+                [t(E, "even n", "짝수 n"), "0,3,6,9", "g(2k)=3k"],
+                [t(E, "odd n", "홀수 n"), "1,4,7,10", "g(2k+1)=3k+1"],
+              ].map(([lab, nums, f], i) => (
+                <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 6, flexWrap: "nowrap", whiteSpace: "nowrap" }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#15803d", minWidth: 40, flexShrink: 0 }}>{lab}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11.5, color: "#64748b" }}>{nums}</span>
+                  <span style={{ color: "#94a3b8", fontSize: 11 }}>→</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 800, color: C.text }}>{f}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: 11, color: "#166534", marginTop: 6, wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E, "Those are the two rows from page 6 that each went up by 3.",
+                   "6쪽에서 3 씩 늘던 그 두 줄이에요.")}
             </div>
             <div style={{ fontSize: 11, color: "#166534", marginTop: 8, fontFamily: "inherit", wordBreak: "keep-all", textWrap: "balance" }}>
               <div>{t(E,
