@@ -2139,9 +2139,9 @@ export function HpsFormulaGridSim({ E }) {
 
           {/* 공식 조립 — 각 기호를 격자 그림 조각에 대응 + 왜 '빼는지'(여사건) 동기.
               (선생님 2026-07-22: "dom 약자·공식이 어떻게 만들어지는지 전혀 이해 안 돼") */}
-          {["f1", "f2", "formula"].includes(s.phase) && (
+          {["f1", "f2", "formula", "directcount"].includes(s.phase) && (
             <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "12px 14px" }}>
-              {s.phase === "formula" && <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
+              {["formula", "directcount"].includes(s.phase) && <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
                 🧩 {t(E,
                   <>Why subtract? Winning hands are scattered (⚡ could be in slot 1, slot 2, or both) — messy to count.  <b>The NON-winning hands are just those four corner cells</b>, so count those and subtract.</>,
                   <>왜 빼요? 이기는 패는 흩어져 있어요 (⚡ 가 첫 자리·둘째 자리·둘 다 — 섞임) → 바로 세기 번거로움.  <b>‘안 이기는 패’ 는 그 네 귀퉁이 칸뿐</b> → 그걸 세서 빼는 게 쉬워요.</>)}
@@ -2158,7 +2158,7 @@ export function HpsFormulaGridSim({ E }) {
                 <span style={{ color: "#991b1b", fontWeight: 800 }}>= 4</span>
                 </>}
 
-                {s.phase === "formula" && <>
+                {["formula", "directcount"].includes(s.phase) && <>
                 <span style={{ gridColumn: "1 / -1", borderTop: "1px solid #fcd34d", margin: "2px 0" }} />
 
                 <span style={{ color: "#c2410c", fontFamily: "inherit", fontSize: 11.5, fontWeight: 800 }}>{t(E, "winning", "이기는 패")}</span>
@@ -2179,8 +2179,8 @@ export function HpsFormulaGridSim({ E }) {
           {s.phase === "directcount" && (
             <div style={{ maxWidth: 460, margin: "12px auto 0", fontSize: 11.5, color: "#64748b",
               textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-              {t(E, "(You can also add them up directly, like on the sample page — same 5.)",
-                   "(앞 샘플 쪽에서처럼 직접 더해서 세어도 같은 5 가 나와요.)")}
+              {t(E, "(Adding the winning hands up one by one gives the same 5.)",
+                   "(이기는 패를 하나씩 직접 더해서 세어도 같은 5 가 나와요.)")}
             </div>
           )}
         </>
