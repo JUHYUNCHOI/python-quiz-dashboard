@@ -558,8 +558,8 @@ export function getLogicalMoosWalk(E, lang = "py") {
           "Walk left-to-right. 'result' = OR of chains already closed; 'group' = AND-so-far of the open chain. Save both BEFORE each token — that's the state we'd need if this token started a replacement.\n\nThen mirror the same idea scanning right-to-left, so we also know the state right AFTER each token.\n\nvector<bool> works the same way, just with true/false and &&/||.",
           "왼쪽에서 오른쪽으로 가요. result 는 이미 끝난 묶음들의 OR 값, group 은 지금 묶음의 AND 값이에요. 이 값을 각 낱말을 보기 '전'에 저장해 둬요 — 그 낱말부터 바꾼다면 필요한 상태거든요.\n\n같은 방식을 오른쪽에서 왼쪽으로도 반복해서, 각 낱말 '다음'의 상태도 구해 둬요.\n\nvector<bool> 로 똑같이 담고, true/false 와 &&/|| 를 써요.") },
         { hi: [51, 80], bubble: t(E,
-          "l and r sit inside one AND-chain. preAnd[l] AND the replacement AND sufAnd[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever already closed before (preOr[l]) and after (sufOr[r]) to get the whole expression's value.\n\nTwo passes (O(N)) precompute everything once. Every query then costs O(1) — no per-query rebuilding at all. Total time: O(N + Q), fast enough even at N, Q up to 200,000.",
-          "l 과 r 은 같은 AND 묶음 안에 있어요. preAnd[l] 과 교체값과 sufAnd[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n\n그 값을 앞에서 끝난 묶음(preOr[l]), 뒤에서 끝난 묶음(sufOr[r]) 과 OR 하면 전체 식의 값이에요.\n\n두 번의 훑기(O(N))로 모든 걸 미리 구해요. 그 다음 물음은 하나하나 O(1) 이에요 — 다시 만드는 과정이 없어요.\n전체 계산량은 O(N + Q) 예요. N, Q 가 20만이어도 충분히 빨라요.") },
+          "l and r sit inside one AND-chain. preAnd[l] AND the replacement AND sufAnd[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever closed before (preOr[l]) and after (sufOr[r]) to get the whole expression.\nTwo passes precompute everything, so each query answers 「right away」.",
+          "l 과 r 은 같은 AND 묶음 안에 있어요. preAnd[l] 과 교체값과 sufAnd[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n\n그 값을 앞에서 끝난 묶음(preOr[l]), 뒤에서 끝난 묶음(sufOr[r]) 과 OR 하면 전체 식의 값이에요.\n두 번 훑어 미리 구해 두면, 물음 하나하나는 「바로」 답해요.") },
       ],
     };
   }
@@ -578,8 +578,8 @@ export function getLogicalMoosWalk(E, lang = "py") {
         "Walk left-to-right. 'result' = OR of chains already closed; 'group' = AND-so-far of the open chain. Save both BEFORE each token — that's the state we'd need if this token started a replacement.\n\nThen mirror the same idea scanning right-to-left, so we also know the state right AFTER each token.\n\nFour plain lists (pre_and, pre_or, suf_and, suf_or) hold all the state.",
         "왼쪽에서 오른쪽으로 가요. result 는 이미 끝난 묶음들의 OR 값, group 은 지금 묶음의 AND 값이에요. 이 값을 각 낱말을 보기 '전'에 저장해 둬요 — 그 낱말부터 바꾼다면 필요한 상태거든요.\n\n같은 방식을 오른쪽에서 왼쪽으로도 반복해서, 각 낱말 '다음'의 상태도 구해 둬요.\n\n리스트 네 개(pre_and, pre_or, suf_and, suf_or)에 상태를 담아요.") },
       { hi: [41, 58], bubble: t(E,
-        "l and r sit inside one AND-chain. pre_and[l] AND the replacement AND suf_and[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever already closed before (pre_or[l]) and after (suf_or[r]) to get the whole expression's value.\n\nTwo passes (O(N)) precompute everything once. Every query then costs O(1) — no per-query rebuilding at all. Total time: O(N + Q), fast enough even at N, Q up to 200,000.",
-        "l 과 r 은 같은 AND 묶음 안에 있어요. pre_and[l] 과 교체값과 suf_and[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n\n그 값을 앞에서 끝난 묶음(pre_or[l]), 뒤에서 끝난 묶음(suf_or[r]) 과 OR 하면 전체 식의 값이에요.\n\n두 번의 훑기(O(N))로 모든 걸 미리 구해요. 그 다음 물음은 하나하나 O(1) 이에요 — 다시 만드는 과정이 없어요.\n전체 계산량은 O(N + Q) 예요. N, Q 가 20만이어도 충분히 빨라요.") },
+        "l and r sit inside one AND-chain. preAnd[l] AND the replacement AND sufAnd[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever closed before (preOr[l]) and after (sufOr[r]) to get the whole expression.\nTwo passes precompute everything, so each query answers 「right away」.",
+        "l 과 r 은 같은 AND 묶음 안에 있어요. pre_and[l] 과 교체값과 suf_and[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n\n그 값을 앞에서 끝난 묶음(pre_or[l]), 뒤에서 끝난 묶음(suf_or[r]) 과 OR 하면 전체 식의 값이에요.\n두 번 훑어 미리 구해 두면, 물음 하나하나는 「바로」 답해요.") },
     ],
   };
 }
@@ -627,7 +627,7 @@ export function getLogicalMoosSections(E) {
       color: "#16a34a",
       py: LM_QUERY_PY, cpp: LM_QUERY_CPP,
       why: [
-        t(E, "l and r sit inside one AND-chain. pre_and[l] AND the replacement AND suf_and[r] gives that chain's new value — no rebuilding needed.",
+        t(E, "l and r sit inside one AND-chain. preAnd[l] AND the replacement AND sufAnd[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever closed before (preOr[l]) and after (sufOr[r]) to get the whole expression.\nTwo passes precompute everything, so each query answers 「right away」.",
             "l 과 r 은 같은 AND 묶음 안에 있어요. pre_and[l] 과 교체값과 suf_and[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요."),
         t(E, "OR that with whatever already closed before (pre_or[l]) and after (suf_or[r]) to get the whole expression's value.",
             "그 값을 앞에서 끝난 묶음(pre_or[l]), 뒤에서 끝난 묶음(suf_or[r]) 과 OR 하면 전체 식의 값이에요."),

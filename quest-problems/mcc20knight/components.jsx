@@ -156,9 +156,9 @@ export function KnightExactSim({ E }) {
             background: "#c7d2fe", border: "1px solid #94a3b8", marginRight: 4 }} />
             {t(E, "after an ODD number", "홀수 번 움직이면 여기 칸")}</span>
         </div>
-        {/* ⛔ 2026-10-01 재검증 학생(초6): *"**못 하겠다, 3쪽까지만 보면.** 패턴만 눈으로
-               관찰했다. **왜 그런지는 전혀 안 알려줬다.** 설명은 한참 뒤 **코드 스텝 4/5**
-               에 가서야 나왔다 … **순서가 거꾸로.**"*
+        {/* ⛔ 2026-10-01 재검증 학생(초6): *"「못 하겠다, 3쪽까지만 보면.」 패턴만 눈으로
+               관찰했다. 「왜 그런지는 전혀 안 알려줬다.」 설명은 한참 뒤 「코드 스텝 4/5」
+               에 가서야 나왔다 … 「순서가 거꾸로.」"*
              → 색을 또렷하게 하고 범례를 붙인 것만으로는 **반만 고친 것**이었다.
                범례가 「짝수 번 움직이면 여기 칸」이라고 **사실만** 말하고 **까닭**을 안 말한다.
                게다가 나는 CodeWalk 말풍선을 *"3쪽 판에서 이미 봤어요"* 로 바꿔 뒀는데 —
@@ -340,8 +340,8 @@ const CPP_QUERY = FULL_CPP.slice(35, 52);
    BFS 과정 스테퍼 — 표가 **어떻게** 채워지는지 한 걸음씩 (2026-09-29)
 
    왜 생겼나 — `pedagogy-reviewer` 판정:
-     *"`KnightExactSim` 은 **이미 계산된 결과**만 보여준다. 큐에서 칸을 꺼내고
-       이웃을 확인하는 **과정 자체는 한 번도 안 보여준다.** 2-1 쪽은 산문 박스
+     *"`KnightExactSim` 은 「이미 계산된 결과」만 보여준다. 큐에서 칸을 꺼내고
+       이웃을 확인하는 「과정 자체는 한 번도 안 보여준다.」 2-1 쪽은 산문 박스
        둘에서 곧바로 코드로 건너뛴다 — `mcc20citytour` 가 정확히 이 모양을
        걷어내고 과정 스테퍼로 바꾼 바로 그 결함이 그대로 남아 있다."*
 
@@ -378,7 +378,7 @@ const numJosa = (n, withJong, without) => `${n}${NUM_JONG[n % 10] ? withJong : w
 function buildKnightBfsTrace(E) {
   /* ⚠️ 2026-09-29 — **첫 판을 학생이 무너뜨렸다.** 고친 것 넷, 전부 학생 말이 근거다.
 
-     ① *"11번째에 「한 칸씩 **꺼내면서**」라는데, 1~10걸음 어디에도 뭔가를 **꺼내는
+     ① *"11번째에 「한 칸씩 「꺼내면서」」라는데, 1~10걸음 어디에도 뭔가를 **꺼내는
         동작이 없었다**(그냥 격자에 숫자만 채워졌다). 그래서 「꺼낸다」가 뭘 말하는지 몰랐다."*
         → **줄(큐)을 화면에 그린다.** 형제 `citytour` 가 칩으로 그리는 것과 같은 모양.
           꺼내는 걸 **보여준 뒤에** 그 이름을 붙인다.
@@ -557,9 +557,9 @@ export function Mcc20KnightBfsProcessStepper({ E }) {
         </div>
 
         {/* 5×5 오프셋 격자 */}
-        {/* ⛔ 2026-10-01 학생(초6): *"말풍선이 「**(-2,-1)는 격자 밖이에요**」라고 말하는데
-               화면의 칸들은 그냥 숫자만 있지 **어느 칸이 그건지 세어볼 방법이 없었다.**
-               「격자 밖이라는 게 무슨 뜻이지?」 하고 **멈칫했다.**"*
+        {/* ⛔ 2026-10-01 학생(초6): *"말풍선이 「「(-2,-1)는 격자 밖이에요」」라고 말하는데
+               화면의 칸들은 그냥 숫자만 있지 「어느 칸이 그건지 세어볼 방법이 없었다.」
+               「격자 밖이라는 게 무슨 뜻이지?」 하고 「멈칫했다.」"*
              → 말풍선이 부르는 것이 **화면에 없다**(`feedback_sentence_must_follow`).
                `look` 좌표가 격자 **밖**이라 아래 `isLook` 이 칠할 칸이 애초에 없다.
 
@@ -719,8 +719,8 @@ export function getMcc20KnightWalk(E) {
     ],
     beats: [
       { hi: [0, 14], bubble: t(E,
-        "What do we need before answering any query? For every possible gap (dx, dy), the minimum number of knight moves to cross it — computed once, not per query. Reaching (A,B) from (X,Y) is exactly the same problem as reaching (dx,dy) = (|X−A|,|Y−B|) from (0,0), so one table of gaps serves every query. List the 8 L-moves, then build an empty table (best) where −1 means 'not reached yet' — a little bigger than 2000 because the shortest path to a nearby square sometimes dips below 0 first.",
-        "질문에 답하기 전에 뭐가 필요할까요? 모든 차이 (dx, dy) 마다 나이트가 최소 몇 번 움직이면 되는지를요 — 질문마다가 아니라 딱 한 번만 구해 둬요.\n(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 차이 (dx,dy) = (|X−A|, |Y−B|) 만큼 가는 것과 같아서, 차이만 담은 표 하나면 모든 질문을 처리해요.\nL자 이동 8가지를 적고, 빈 표(best) 를 만들어요 — −1 은 '아직 도착 못 했다' 는 뜻이고, 표를 2000 보다 조금 크게 잡은 건 가까운 칸으로 가는 가장 짧은 길이 0 아래로 살짝 도는 경우가 있어서예요.") },
+        "Compute it 「once」, not per query. Reaching (A,B) from (X,Y) is the same as reaching (dx,dy) = (|X−A|,|Y−B|) from (0,0) — so 「one table of gaps」 serves every query.\nList the 8 L-moves and build an empty table (best); −1 means 'not reached yet'.",
+        "질문마다 풀지 말고 「딱 한 번만」 구해 둬요.\n(X,Y) → (A,B) 는 (0,0) 에서 차이 (dx,dy) = (|X−A|, |Y−B|) 만큼 가는 것과 같아요. 그래서 「차이 표 하나면」 모든 질문이 끝나요.\nL자 8가지를 적고 빈 표(best) 를 만들어요 — −1 은 '아직 못 갔다' 예요.") },
       { hi: [15, 23], bubble: t(E,
         "Why fill it this way? It works outward from the start — every square one move away first, then every square two moves away, and so on — so the first time a square is written is already its shortest distance, and it's never overwritten. Run this once, starting from (0,0), before reading any query.",
         "왜 BFS 로 채울까요? 가까운 칸부터 차례로 채우기 때문이에요 — 한 번에 갈 수 있는 칸을 먼저 적고, 그다음 두 번에 갈 수 있는 칸을 적어요.\n그래서 어떤 칸에 처음 적히는 값이 이미 가장 짧은 거리라, 다시 고치지 않아요.\n(0,0) 에서 시작해 질문을 읽기 전에 이 일을 딱 한 번만 해요.") },

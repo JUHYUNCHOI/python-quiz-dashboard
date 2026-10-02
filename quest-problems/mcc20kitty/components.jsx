@@ -153,8 +153,8 @@ export function getMcc20KittyWalk(E) {
            ② *"실제 코드는 매번 r 을 k+4칸까지 먼저 늘려요"* — `while len(r) < k + 4` 줄이
              왜 있는지 밝히는 다리 문장 */
       { hi: [3, 16], bubble: t(E,
-        "A new remainder is just the previous five remainders added up, mod 3. A 5-window of remainders has only 3×3×3×3×3 = 243 possible patterns, so it has to start repeating — keep growing the sequence and remember every 5-window you've seen until one repeats.\nseen is that lookup table: each 5-window met, and the step k it appeared at. Each round the code first stretches r up to k+4 terms — otherwise r[k-1:k+4] would point past what has been built.\nFor Kitty it stops fast: start = 1, period = 104.",
-        "새 나머지는 바로 앞 다섯 나머지를 더해서 3 으로 나눈 값이에요.\n나머지 5 칸 창은 모양이 3×3×3×3×3 = 243 가지뿐이라 반드시 되풀이돼요 — 수열을 늘려가며 5 칸 창을 전부 기억해두다가 겹치는 순간을 찾아요.\nseen 이 그 찾아보기 표예요. 만난 5칸 창과 그게 몇 번째(k)였는지를 적어 둬요.\n매번 r 을 k+4 칸까지 먼저 늘려요 — 안 그러면 r[k-1:k+4] 가 아직 없는 칸을 가리켜요.\nKitty 에서는 금방 멈춰요. start = 1, period = 104 예요.") },
+        "A new remainder is the previous five added up, mod 3. A 5-window has only 3×3×3×3×3 = 「243」 possible patterns, so it must repeat. seen records each window met and the step k it appeared at; stop when one repeats.\nEach round r is stretched to k+4 terms first.\nFor Kitty it stops fast — 「start = 1, period = 104」.",
+        "새 나머지는 앞 다섯 나머지를 더해 3 으로 나눈 값이에요.\n5칸 창은 모양이 3×3×3×3×3 = 「243 가지뿐」이라 반드시 되풀이돼요. seen 에 만난 창과 몇 번째(k)였는지를 적어 두다가 겹치면 멈춰요.\n매번 r 을 k+4 칸까지 먼저 늘려 둬요.\nKitty 는 금방 멈춰요 — 「start = 1, period = 104」.") },
       { hi: [18, 23], bubble: t(E,
         "Once we know where the repeat starts (start) and how long it is (period), grow the sequence just enough to hold one lead-in piece plus one full cycle, then split it into those two pieces.",
         "되풀이가 시작되는 자리(start)와 길이(period)를 알았으면, 앞쪽 조각 + 한 바퀴만큼만 더 채운 뒤 그 둘로 나눠요.") },

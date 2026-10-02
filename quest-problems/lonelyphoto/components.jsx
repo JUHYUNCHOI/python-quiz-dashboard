@@ -433,7 +433,7 @@ export function getLonelyPhotoWalk(E, lang = "py") {
           "소 i 를 외로운 한 마리로 보고, i 에 바로 붙어 있는 반대 품종 소가 왼쪽·오른쪽에 몇 마리인지 세요.\n\n품종이 바뀌는 자리에서 멈춰요. i 에 바로 붙은 구간까지만 'i 만 자기 품종' 이 유지되거든요.\n\n범위를 벗어났는지와 품종이 같은지를 for 조건에 같이 적어요.") },
         { hi: [27, 33], bubble: t(E,
           "left = opposite cows touching i on the left, right = opposite cows touching i on the right.\n\nWe need length ≥ 3 with exactly one cow of i's breed. Three cases: ≥1 on each side, ≥2 on one side only. Sum is left·right + max(0, left-1) + max(0, right-1).\n\nUse 0LL to keep max() in long long territory and avoid narrowing. Worst-case time per i is O(N), so overall O(N²) — fine for Bronze.",
-          "left 는 i 왼쪽에 붙은 반대 품종 수, right 는 i 오른쪽에 붙은 반대 품종 수예요.\n\n묶음은 3 마리 이상이고 i 품종이 딱 한 마리여야 해요. 그래서 경우가 셋이에요.\n양쪽에서 1 마리씩 가져오거나, 왼쪽에서만 2 마리, 오른쪽에서만 2 마리예요.\n그래서 합은 left·right + max(0, left-1) + max(0, right-1) 이에요.\n\nmax() 결과를 long long 으로 두려고 0 대신 0LL 을 써요.\n소 하나마다 길게는 N 칸까지 보니 모두 O(N²) 번 일해요. Bronze 문제에는 넉넉해요.") },
+          "left 는 i 왼쪽에 붙은 반대 품종 수, right 는 i 오른쪽에 붙은 반대 품종 수예요.\n\n묶음은 3 마리 이상이고 i 품종이 딱 한 마리여야 해요. 그래서 경우가 셋이에요.\n양쪽에서 1 마리씩 가져오거나, 왼쪽에서만 2 마리, 오른쪽에서만 2 마리예요.\n그래서 합은 left·right + max(0, left-1) + max(0, right-1) 이에요.") },
       ],
     };
   }
@@ -452,7 +452,7 @@ export function getLonelyPhotoWalk(E, lang = "py") {
         "소 i 를 외로운 한 마리로 보고, i 에 바로 붙어 있는 반대 품종 소가 왼쪽·오른쪽에 몇 마리인지 세요.\n\n품종이 바뀌는 자리에서 멈춰요. i 에 바로 붙은 구간까지만 'i 만 자기 품종' 이 유지되거든요.\n\n먼저 s[i-1] != s[i] 인지 봐요. 맞으면 같은 품종이 이어지는 동안만 더 왼쪽으로 가요.") },
       { hi: [23, 27], bubble: t(E,
         "left = opposite cows touching i on the left, right = opposite cows touching i on the right.\n\nWe need length ≥ 3 with exactly one cow of i's breed. Three cases: ≥1 on each side, ≥2 on one side only. Sum is left·right + max(0, left-1) + max(0, right-1).\n\nmax(0, x - 1) handles the case where there are < 2 cows available. Worst-case time per i is O(N), so overall O(N²) — fine for Bronze.",
-        "left 는 i 왼쪽에 붙은 반대 품종 수, right 는 i 오른쪽에 붙은 반대 품종 수예요.\n\n묶음은 3 마리 이상이고 i 품종이 딱 한 마리여야 해요. 그래서 경우가 셋이에요.\n양쪽에서 1 마리씩 가져오거나, 왼쪽에서만 2 마리, 오른쪽에서만 2 마리예요.\n그래서 합은 left·right + max(0, left-1) + max(0, right-1) 이에요.\n\n한쪽이 2 마리도 안 될 때는 max(0, x - 1) 이 0 이 되어 걸러 줘요.\n소 하나마다 길게는 N 칸까지 보니 모두 O(N²) 번 일해요. Bronze 문제에는 넉넉해요.") },
+        "left 는 i 왼쪽에 붙은 반대 품종 수, right 는 i 오른쪽에 붙은 반대 품종 수예요.\n\n묶음은 3 마리 이상이고 i 품종이 딱 한 마리여야 해요. 그래서 경우가 셋이에요.\n양쪽에서 1 마리씩 가져오거나, 왼쪽에서만 2 마리, 오른쪽에서만 2 마리예요.\n그래서 합은 left·right + max(0, left-1) + max(0, right-1) 이에요.\n한쪽이 2 마리도 안 되면 max(0, x−1) 이 0 이라 저절로 걸러져요.") },
     ],
   };
 }
