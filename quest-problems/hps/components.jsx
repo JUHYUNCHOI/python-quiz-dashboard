@@ -1416,6 +1416,32 @@ export function BitmaskColSim({ E }) {
           {" → "}
           {t(E, "answer = N² − (N−dom)² = ", "답 = N² − (N−dom)² = ")}9 − {(3 - dom) * (3 - dom)} = <b style={{ color: "#15803d" }}>{ans}</b>
         </div>
+        {/* ⛔ 2026-10-02 — 선생님이 **학생에게 설명하려다** 막히셨다:
+               *"그냥 이기는것만 구하면 되는거 아니야? 왜 이겼을때를 뺀 제곱이지? **와닿지가 않아.**"*
+               *"예전에 이해했던것 같은데 … 다시 설명하려니 **왜? 굳이?** 라는 생각이"*
+             ⭐ **선생님 직관이 맞다.** 직접 세도 된다 — 두 식은 **대수적으로 같다**:
+               N² − (N−dom)² = 2·N·dom − dom² = dom·N + N·dom − dom·dom
+               (직접 셈과 전수 대조함: N=3·4·5·6, dom 여러 값에서 **전부 일치**)
+             제곱 쪽을 쓰는 이유는 **「두 번 센 것을 빼는 걸 안 따져도 되기」** 때문이지
+             그게 더 옳아서가 아니다. 화면이 그 말을 안 하고 **식만 보여줘서** 막히신 것이다.
+           ⚠️ 🔒 USACO_VERIFIED 라 **풀이 코드는 안 건드린다.** 화면 설명만 더한다. */}
+        <div style={{ marginTop: 4, fontSize: 11, color: "#64748b", lineHeight: 1.65,
+                      borderTop: "1px dashed #cbd5e1", paddingTop: 5, wordBreak: "keep-all" }}>
+          {t(E, "Why subtract instead of counting the wins directly? You can count them directly — it is the same number.",
+               "왜 빼서 구할까요? 직접 세도 돼요 — 같은 수가 나와요.")}
+          <br />
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#0f766e" }}>
+            {t(E, "first card wins", "첫 장이 이기는 카드")} {dom}×3 = {dom * 3}
+            {" + "}
+            {t(E, "second", "둘째 장")} 3×{dom} = {3 * dom}
+            {" − "}
+            {t(E, "both (counted twice)", "둘 다 (두 번 셈)")} {dom}×{dom} = {dom * dom}
+            {" = "}<b style={{ color: "#15803d" }}>{ans}</b>
+          </span>
+          <br />
+          {t(E, "The square form just skips that \"counted twice\" step: at least one wins = everything − neither wins.",
+               "제곱 쪽은 그 \"두 번 셈\"을 안 따져도 되게 한 거예요 — 한 장이라도 있으면 이긴다 = 전체 − 하나도 없는 경우.")}
+        </div>
       </div>
     </div>
   );
