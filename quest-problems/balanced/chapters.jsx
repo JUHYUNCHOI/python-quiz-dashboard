@@ -393,8 +393,8 @@ export function makeBalancedCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The whole solution is short — each part lights up with a note right above it.",
-        "풀이가 짧아요. 줄마다 설명 말풍선이 붙어 있어요."),
+        "Pairs are capped by the smaller side — the answer is 2 x min(N, M).",
+        "짝은 적은 쪽 수만큼만 생겨요 — min(N,M) 의 두 배가 답이에요."),
       content: (() => {
         const w = getBalancedWalk(E, lang);
         return <CodeWalk E={E} lang={lang} code={w.code} beats={w.beats} accent="#f97316" />;

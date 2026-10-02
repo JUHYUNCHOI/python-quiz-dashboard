@@ -510,8 +510,8 @@ export function makeMcc21GlassCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Sort big-first, prebuild alternating sums, then try every broken slot.",
+        "큰 것부터 줄 세워 번갈아 합을 쌓아 둬요. 깨진 자리는 다 넣어 봐요."),
       content: (
         <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
       ),

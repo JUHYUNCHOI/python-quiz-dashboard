@@ -97,8 +97,8 @@ export function makeMexesCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "The whole solution, read line by line — count frequencies, prefix-count the missing, then max per target mex.",
-        "풀이 코드를 한 줄씩 읽어 봐요."),
+        "Filling a missing value also removes an extra i — only the larger counts.",
+        "빠진 값을 채우면 남는 i 도 같이 지워져요. 그래서 큰 쪽만 세면 돼요."),
       content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#7c3aed" />),
     },
   ];

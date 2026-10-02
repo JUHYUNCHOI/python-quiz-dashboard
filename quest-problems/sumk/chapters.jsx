@@ -427,7 +427,9 @@ export function makeSumKCh2(E, lang = "py") {
       label: t(E, "Code", "코드"),
       /* 2026-09-10 ux 실측 89자였다 — 55자 규칙의 최대 위반이고,
          나열한 5단계를 바로 아래 CodeWalk 말풍선 5개가 **또 한 번씩** 설명한다. */
-      narr: t(E, "Read the code top to bottom.", "코드를 위에서 아래로 읽어봐요."),
+      narr: t(E,
+        "Add one number at a time, rolling (sum)^K forward with the binomial theorem.",
+        "숫자를 하나씩 담으며, 이항정리로 (합)^K 를 굴려서 키워요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
       ),

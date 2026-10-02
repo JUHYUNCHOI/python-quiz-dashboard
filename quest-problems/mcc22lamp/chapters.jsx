@@ -212,8 +212,8 @@ export function makeMcc22LampCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Brightness bends at only a few points — count each straight run at once.",
+        "밝기는 몇 군데서만 꺾여요. 그 사이 곧은 구간을 통째로 세요."),
       content: (
         <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
       ),

@@ -348,8 +348,8 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Just count odds and evens — an odd sum happens in only two ways.",
+        "홀수와 짝수가 몇 개인지만 세요. 합이 홀수인 경우는 두 가지예요."),
       content: (
         <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#059669" />
       ),

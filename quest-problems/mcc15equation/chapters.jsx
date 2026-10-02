@@ -424,8 +424,8 @@ export function makeMcc15EqCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "There are only eight candidates — try them all, stop at the first match.",
+        "후보가 여덟 가지뿐이에요. 다 넣어 보고 맞는 데서 멈춰요."),
       content: (
         <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent={A} />
       ),

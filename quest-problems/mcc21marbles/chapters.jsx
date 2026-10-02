@@ -218,8 +218,8 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Carry the difference left to right — each boundary moves that many.",
+        "왼쪽부터 차이를 쌓아 가요. 경계마다 쌓인 만큼이 건너는 구슬이에요."),
       content: (
         <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#dc2626" />
       ),

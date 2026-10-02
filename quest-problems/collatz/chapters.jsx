@@ -274,8 +274,8 @@ export function makeCollatzCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains: read the input, repeat the pass k times transforming each number, then print the sum.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Just run k rounds — halve if even, 3x+1 if odd — then add them up.",
+        "k 번만 그대로 돌려요. 짝수면 반, 홀수면 3배+1, 끝나면 다 더해요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#059669" />
       ),

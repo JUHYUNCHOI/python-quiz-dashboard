@@ -216,8 +216,8 @@ export function makeMcc21DvdCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Row and column move independently — one remainder gives each position.",
+        "행과 열은 따로 움직여요. 한 바퀴로 나눈 나머지면 자리가 나와요."),
       content: (
         <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#d97706" />
       ),

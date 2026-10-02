@@ -321,8 +321,8 @@ export function makePresentsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each query: find target's position, print it, then remove — each line lights up with a note above it.",
-        "요청마다 위치 찾기 → 출력 → 치우기.\n밝아진 줄 위에 설명 말풍선이 떠요."),
+        "The depth from the top down to the present IS how many sat on it.",
+        "맨 위부터 그 선물까지의 자리 수가 곧 위에 있던 개수예요."),
       content: (() => {
         const w = getPresentsWalk(E, lang);
         return <CodeWalk E={E} lang={lang} code={w.code} beats={w.beats} accent="#f97316" />;

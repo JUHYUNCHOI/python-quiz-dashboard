@@ -226,8 +226,8 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Visit each cell once — spread out with a queue of reachable cells.",
+        "칸마다 딱 한 번만 봐요. 갈 수 있는 칸을 줄에 넣어 가며 퍼뜨려요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#d97706" />
       ),

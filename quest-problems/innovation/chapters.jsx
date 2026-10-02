@@ -213,8 +213,8 @@ export function makeInnovationCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains: store (c+d, a+b) and sort, keep the top m−1 of a+b, and try each card as the special last one.",
-        "말풍선을 따라 코드를 위에서 아래로 읽어 봐요."),
+        "Sort by c+d, then sweep while a heap keeps only the best m-1 so far.",
+        "c+d 로 줄 세우고, 앞에서 좋은 m−1 장만 힙에 남겨 가며 훑어요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
       ),

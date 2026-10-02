@@ -420,8 +420,8 @@ export function makeMcc15RectCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Each bubble sits on the line it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "One x and one y have no partner — those are the fourth corner.",
+        "x 도 y 도 짝이 없는 값 하나가 남아요. 그게 네 번째 꼭짓점이에요."),
       content: (() => {
         const w = getMcc15RectWalk(E, lang);
         return <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent={A} />;

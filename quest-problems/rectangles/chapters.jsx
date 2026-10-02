@@ -504,8 +504,8 @@ export function makeRectanglesCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "The code. Each bubble sits on the line it explains.",
-        "코드예요. 말풍선이 설명하는 줄에 붙어 있어요."),
+        "Fill a table deciding how many reds each blue covers, left to right.",
+        "앞에서부터 몇 개를 한 파랑으로 묶을지 표에 채워 가며 정해요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#f97316" />
       ),

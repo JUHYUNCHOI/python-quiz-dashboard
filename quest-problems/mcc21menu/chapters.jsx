@@ -370,8 +370,8 @@ export function makeMcc21MenuCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Stack the smallest layers first — a small product keeps the total small.",
+        "작은 층부터 쌓아요. 곱을 오래 작게 두는 게 줄 수를 줄여요."),
       content: (
         <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
       ),

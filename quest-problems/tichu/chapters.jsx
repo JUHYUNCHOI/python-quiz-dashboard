@@ -261,8 +261,8 @@ export function makeTichuCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains: read + dedupe + sort, then two-pointer for the widest window with gap ≤ K, then answer = window + K.",
-        "코드를 위에서 아래로 읽어 봐요. 말풍선이 그 줄에 붙어 있어요."),
+        "Drop duplicates, then slide a window to find the widest gap K can fill.",
+        "같은 값은 지우고, 창을 밀며 K 로 메울 수 있는 가장 넓은 구간을 찾아요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#dc2626" />
       ),

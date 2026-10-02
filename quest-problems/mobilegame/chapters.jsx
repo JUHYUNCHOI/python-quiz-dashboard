@@ -215,8 +215,8 @@ export function makeMobileGameCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Now the code — you just saw the heap in action. Each bubble sits on the lines it explains.",
-        "말풍선을 따라 코드를 한 줄씩 읽어 봐요."),
+        "Always eat the strongest reachable enemy — a max-heap hands you that one.",
+        "먹을 수 있는 적 중 제일 센 걸 먹어요. 최대힙이 그 하나를 꺼내 줘요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#d97706" />
       ),

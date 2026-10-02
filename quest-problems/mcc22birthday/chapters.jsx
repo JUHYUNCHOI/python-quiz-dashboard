@@ -243,8 +243,8 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Never build the grid — keep only the sizes and walk the number backwards.",
+        "격자는 만들지 않아요. 크기만 기억해 두고 번호를 거꾸로 따라가요."),
       content: (
         <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#f97316" />
       ),

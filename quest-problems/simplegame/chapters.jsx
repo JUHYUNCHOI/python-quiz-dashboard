@@ -1006,8 +1006,8 @@ export function makeSimpleGameCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Each bubble sits on the line it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Sort pairs by a+b, biggest first, then take turns.",
+        "a+b 가 큰 쌍부터 줄 세우고 번갈아 가져가요."),
       content: (() => {
         const w = getSimpleGameWalk(E, lang);
         return (

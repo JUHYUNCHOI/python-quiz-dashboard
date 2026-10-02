@@ -263,8 +263,8 @@ export function makeMcc20KnightCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains.",
-        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+        "Don't solve per query — build one table of distances and look it up.",
+        "질문마다 풀지 않아요. 차이 표를 한 번 만들어 두고 꺼내 써요."),
       content: (
         <CodeWalk E={E} lang="py" code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
       ),

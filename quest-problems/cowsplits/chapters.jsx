@@ -426,8 +426,8 @@ export function makeCowSplitsCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Now the code. Each piece lights up in build order — click ▶ to move along.",
-        "이제 코드예요. 구현 순서대로 조각이 밝아져요 — ▶ 눌러 따라가요."),
+        "If 3N is odd it can never empty — only even counts can be erased.",
+        "3N 이 홀수면 못 비워요. 짝수 개씩만 지울 수 있다는 게 열쇠예요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#059669" />
       ),
