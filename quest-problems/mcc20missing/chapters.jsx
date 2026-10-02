@@ -12,6 +12,15 @@ const A = "#f97316";
    새 쪽이 필요 없다(`feedback_shorter_not_longer`). 공식 샘플 둘을 그대로 쓴다.
    검산: 예제1 `N=5,[-1,7,4,1]` → 맞는 K **하나(2)**, 빠진 수 4 ·
          예제2 `N=6,[4,5,13,6,11]` → **둘(10→2 · 7→5)**, 합 7. */
+/* 후보 K 를 만드는 네 식 — 버튼 라벨과 🔒 `FULL_PY` 의 `candidates` 가 **같은 넷**이다.
+   값이 겹치면 한 버튼에 두 식이 같이 붙는다(그래서 버튼이 4개가 아닐 수 있다). */
+const CAND_FORMULAS = [
+  { label: "max − N",     of: (mn, mx, N) => mx - N },
+  { label: "min + N",     of: (mn, mx, N) => mn + N },
+  { label: "max − (N−1)", of: (mn, mx, N) => mx - (N - 1) },
+  { label: "min + (N−1)", of: (mn, mx, N) => mn + (N - 1) },
+];
+
 const SIM_EXAMPLES = [
   { n: 5, a: [-1, 7, 4, 1] },      // 공식 샘플 1 — 맞는 K 가 하나
   { n: 6, a: [4, 5, 13, 6, 11] },  // 공식 샘플 2 — 맞는 K 가 둘
@@ -118,21 +127,27 @@ function Mcc20MissingAnchorSim({ E }) {
         <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 4 }}>
           {t(E, "candidate K — pick one", "후보 K — 하나 골라요")}
         </div>
-        {/* 2026-09-17: 98 자가 한 줄로 이어져 있었다. 절 단위로 끊는다. */}
-        <div style={{ fontSize: 11, color: C.dim, marginBottom: 6,
-          whiteSpace: "pre-line", textWrap: "balance", ...KA }}>
-          {t(E,
-            `Four formulas — min+N, max−N, min+(N−1), max−(N−1).\nTwo of them land on the same number here, so there are ${candidates.length} buttons.\nWhy only these? That is the next page.`,
-            `식은 min+N, max−N, min+(N−1), max−(N−1) 네 개예요.\n여기서는 그중 둘이 같은 값이라 버튼이 ${candidates.length} 개예요.\n왜 이 식들만 보면 되는지는 다음 쪽에서 찾아봐요.`)}
-        </div>
+        {/* ⛔ 2026-10-02 — 선생님: *"**눈으로 보는게 아니라 읽어야 하는 설명이 너무 많아.**
+               그래서 우리가 시뮬레이션이라는것을 나둔거잖아"*
+             여기 세 줄짜리 글이 「식 네 개가 min+N, max−N, …」라고 **말로** 알려주고 있었다.
+             그런데 그 식이 만든 값이 **바로 아래 버튼**이다 — 버튼이 자기가 어느 식에서
+             나왔는지 말하면 **읽을 글이 사라지고 눌러서 보게 된다.**
+           ⭐ 글 세 줄을 지우고 **라벨을 버튼에 붙인다.** 값이 겹치면 두 식을 같이 적는다
+             (그게 *"버튼이 왜 4개가 아니라 3개지?"* 에 대한 답이기도 하다). */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
           {candidates.map((c) => (
             <button key={c} onClick={() => pickK(c)} style={{
-              padding: "6px 12px", borderRadius: 8, cursor: "pointer",
-              fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800,
+              padding: "5px 10px", borderRadius: 8, cursor: "pointer",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 1,
+              fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
               border: K === c ? "2px solid #ea580c" : "1px solid #fdba74",
               background: K === c ? "#ea580c" : "#fff", color: K === c ? "#fff" : "#9a3412",
-            }}>K = {c}</button>
+            }}>
+              <span style={{ fontSize: 13 }}>K = {c}</span>
+              <span style={{ fontSize: 9.5, fontWeight: 600, opacity: K === c ? 0.9 : 0.75 }}>
+                {CAND_FORMULAS.filter((f) => f.of(mn, mx, N) === c).map((f) => f.label).join(" = ")}
+              </span>
+            </button>
           ))}
         </div>
 
@@ -522,21 +537,14 @@ export function makeMcc20MissingCh2(E, lang = "py") {
                    그게 실제로 우리가 K 에 대해 푸는 **그 식**이다(선생님 질문에 바로 답한다).
                  ⚠️ `minWidth` 는 가장 긴 라벨(`−(N−1) + K = MIN`)에 맞춘다 — 64 였을 때
                    `+(N−1)…` 두 줄만 칸이 넓어져 둘째 칸 시작이 5~6px 어긋났다(실측). */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 3,
-                            fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5,
-                            color: "#7c6f64", marginTop: 8, marginBottom: 8 }}>
-                {[
-                  { lhs: "+N + K = MAX", k: "K = MAX − N" },
-                  { lhs: "−N + K = MIN", k: "K = MIN + N" },
-                  { lhs: "+(N−1) + K = MAX", k: "K = MAX − (N−1)" },
-                  { lhs: "−(N−1) + K = MIN", k: "K = MIN + (N−1)" },
-                ].map((c) => (
-                  <div key={c.k} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
-                    <span style={{ color: "#7c6f64", minWidth: 118 }}>{c.lhs}</span>
-                    <span style={{ color: "#9a3412", fontWeight: 700 }}>→ {c.k}</span>
-                  </div>
-                ))}
-              </div>
+              {/* ⛔ 2026-10-02 — 선생님: *"**눈으로 보는게 아니라 읽어야 하는 설명이
+                     너무 많아.** 그래서 우리가 **시뮬레이션이라는것을 나둔거잖아**"*
+                   실측: 이 쪽은 **읽을 글자 484자 · 누를 것 0개** — 순수 읽기였다.
+                   어제 선생님 질문(*"−6+k 는 뭐가 되어야해?"*)에 내가 **글 네 줄**로 답한 자리다.
+                 ⭐ 그 네 식이 만드는 K 후보는 **1-3쪽 시뮬에 이미 버튼으로 있다.**
+                   이제 그 버튼이 「`min + N`」처럼 **자기가 어느 식에서 나왔는지** 말한다 —
+                   그러면 여기 네 줄은 **같은 말을 두 번** 하는 것이라 지운다.
+                   학생은 읽는 대신 **눌러서 본다.** */}
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, ...KA }}>
                 {t(E, "Each of the four is checked with one pass through the array — about 4N steps in total.",
                      "넷을 각각 배열을 한 번씩 훑어 확인하니 다 합치면 약 4N 이에요.")}
