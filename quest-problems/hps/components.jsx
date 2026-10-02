@@ -1937,6 +1937,13 @@ export function HpsSampleIOSim({ E }) {
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
                 {t(E, "answer", "답")} = <b style={{ color: "#15803d", fontSize: 16 }}>{answer}</b>
               </div>
+              {/* ⛔ 2026-10-02 — 공식 한 줄을 빼고 나니 `dom = 1` 다음이 바로 `답 = 5` 가 됐다.
+                  3차 학생: *"그 「5」가 **어떻게 나온 건지 계산이 하나도 안 보였다.
+                  「그냥 답이 뚝 나온」 느낌**이었다."* → 거기서 막혔다고 적었다.
+                ⭐ 이미 있는 `DirectCountNote` 를 꽂는다 — 이건 **알파벳 공식을 안 찍고**
+                  `dom×N + N×dom − dom×dom = 답` 산수만 보여준다. 그래서 「공식이 이유보다
+                  먼저 나온다」가 **재발하지 않으면서** 다리가 생긴다. 새 글은 0줄이다. */}
+              <DirectCountNote E={E} dom={dom} N={N} ans={answer} />
               <div style={{ fontSize: 11, color: C.dim }}>{t(E, `→ output line ${s.qi + 1} = ${answer}`, `→ 출력 ${s.qi + 1} 번째 줄 = ${answer}`)}</div>
             </div>
           </div>
@@ -1961,12 +1968,17 @@ export function HpsFormulaGridSim({ E }) {
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
     { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)² = 4)", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)² = 4)") },
     { phase: "count", bubble: t(E, "Wins = whole grid − losers = 9 − 4 = 5!\nIn letters: N² − (N − dom)² = 3² − 2² = 5 ✓", "이기는 패 = 전체 − 지는 것 = 9 − 4 = 5!\n글자로: N² − (N − dom)² = 3² − 2² = 5 ✓") },
+    /* ⛔ 2026-10-02 3차 학생: *"한 쪽 안에 ①dom ②그리드 ③빼기 공식 ④「여사건」
+         ⑤포함배제식까지 몰아서 나와서 **여기서 제일 지쳤다. 사실상 그만두고 싶었던 자리.**"*
+       ⭐ 내용을 빼지 않고 **걸음을 하나 더 쪼갠다** — 「직접 세기」를 다음 걸음으로.
+         둘은 서로 다른 설명이라 중복 제거로는 못 푼다. 늦추는 쪽을 고른다. */
+    { phase: "directcount", bubble: t(E, "One more way to see it — count the wins directly.", "한 가지 더 — 이기는 패를 직접 세어 봐도 돼요.") },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const showTest = s.phase === "test" || s.phase === "testans";
-  const lit = s.phase === "green" || s.phase === "red" || s.phase === "count";
-  const litRed = s.phase === "red" || s.phase === "count";
+  const lit = s.phase === "green" || s.phase === "red" || s.phase === "count" || s.phase === "directcount";
+  const litRed = s.phase === "red" || s.phase === "count" || s.phase === "directcount";
 
   const cell = (rowWin, colWin, key) => {
     const win = rowWin || colWin;
@@ -2104,9 +2116,9 @@ export function HpsFormulaGridSim({ E }) {
             <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "12px 14px" }}>
               <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
                 🧩 {t(E,
-                  <>Why subtract? Winning hands are scattered (⚡ could be in slot 1, slot 2, or both) — messy to count.  <b>The NON-winning hands are one clean square</b>, so count those and subtract.</>,
-                  <>왜 빼요? 이기는 패는 흩어져 있어요 (⚡ 가 첫 자리·둘째 자리·둘 다 — 섞임) → 바로 세기 번거로움.  <b>‘안 이기는 패’ 는 네모 한 덩이</b> → 그걸 세서 빼는 게 쉬워요.</>)}
-                <div style={{ fontSize: 10, color: "#a16207", marginTop: 3 }}>({t(E, "this trick = complementary counting", "이 방법 = 여사건")})</div>
+                  <>Why subtract? Winning hands are scattered (⚡ could be in slot 1, slot 2, or both) — messy to count.  <b>The NON-winning hands are just those four corner cells</b>, so count those and subtract.</>,
+                  <>왜 빼요? 이기는 패는 흩어져 있어요 (⚡ 가 첫 자리·둘째 자리·둘 다 — 섞임) → 바로 세기 번거로움.  <b>‘안 이기는 패’ 는 그 네 귀퉁이 칸뿐</b> → 그걸 세서 빼는 게 쉬워요.</>)}
+                <div style={{ fontSize: 10, color: "#a16207", marginTop: 3 }}>({t(E, "this way of counting = count by subtracting", "이 방법 이름: 전체에서 빼서 세기")})</div>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
                 <span style={{ color: "#475569", fontFamily: "inherit", fontSize: 11.5 }}>{t(E, "all hands", "전체 패")}</span>
@@ -2123,9 +2135,14 @@ export function HpsFormulaGridSim({ E }) {
                 <span style={{ color: "#c2410c", fontWeight: 800 }}>N²−(N−dom)²</span>
                 <span style={{ color: "#15803d", fontWeight: 900, fontSize: 16 }}>= 5</span>
               </div>
-              {/* ⭐ 2026-10-02 PM 판정 1순위 — 이 설명이 전엔 '보너스' 구간에만
-                  있었다(components.jsx BitmaskColSim). 필수 쪽인 여기로도 옮긴다 —
-                  보너스를 건너뛰는 학생이 '직접 세도 된다' 는 답을 영영 못 보기 때문. */}
+            </div>
+          )}
+          {/* ⭐ 2026-10-02 — 전엔 '보너스' 구간에만 있던 설명(BitmaskColSim)을 필수 쪽으로
+              옮겼는데, count 걸음에 **같이** 뜨니 한 화면에 넷이 몰렸다(3차 학생이 지침).
+              **걸음을 쪼개** 여기서만 띄운다. */}
+          {s.phase === "directcount" && (
+            <div style={{ maxWidth: 480, margin: "10px auto 0", background: "#fffbeb",
+              border: "1.5px solid #fcd34d", borderRadius: 10, padding: "8px 12px" }}>
               <DirectCountNote E={E} dom={cards.filter(c => c.win).length} N={cards.length}
                 ans={cards.length * cards.length - (cards.length - cards.filter(c => c.win).length) ** 2}
                 borderColor="#fcd34d" />
