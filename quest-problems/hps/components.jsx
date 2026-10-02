@@ -1288,7 +1288,10 @@ export function BitsLab({ E }) {
 /* DirectCountNote — "직접 세도 돼요" 보조 설명. 2026-10-02 PM 판정:
    같은 설명을 필수 구간(HpsFormulaGridSim 의 '🧩 왜 빼요?' 박스)과
    보너스 구간(BitmaskColSim) 둘 다에서 쓴다 — 새로 쓰지 않고 하나로 공유. */
-function DirectCountNote({ E, dom, N, ans, borderColor = "#cbd5e1" }) {
+function DirectCountNote({ E, dom, N, ans, borderColor = "#cbd5e1", mentionSquare = true }) {
+  /* ⛔ 2026-10-02 4차 학생: *"**「제곱 쪽」이 뭘 가리키는지 이 페이지 안에는 안 보였다.**"*
+     맞다 — 아래 마지막 문장은 **공식이 이미 보인 화면**을 전제하는데,
+     4쪽은 공식을 일부러 안 보여준다(그걸 뺀 게 나다). 그 쪽에서만 안 찍는다. */
   return (
     <div style={{ marginTop: 6, fontSize: 11, color: "#64748b", lineHeight: 1.65,
                   borderTop: `1px dashed ${borderColor}`, paddingTop: 6, wordBreak: "keep-all" }}>
@@ -1309,10 +1312,12 @@ function DirectCountNote({ E, dom, N, ans, borderColor = "#cbd5e1" }) {
         {" = "}<b style={{ color: "#15803d" }}>{ans}</b>
       </span>
       <br />
+      {mentionSquare && <>
       {t(E, "The square form just ", "제곱 쪽은 ")}
       <b style={{ color: "#334155" }}>{t(E, "skips that \"counted twice\" step", "그 \"두 번 셈\"을 안 따져도 되게 한 거예요")}</b>
       {t(E, ": at least one wins = everything − neither wins.",
            " — 한 장이라도 있으면 이긴다 = 전체 − 하나도 없는 경우.")}
+      </>}
     </div>
   );
 }
@@ -1928,6 +1933,12 @@ export function HpsSampleIOSim({ E }) {
               {/* ⭐ 2026-10-02 PM 3순위 — dom 이 여기(4쪽, 첫 등장)선 평문이고
                   한참 뒤(HpsFormulaGridSim)에서야 주황+⚡ 모양이 붙었다. 처음부터 같은 모양으로. */}
               <div><b style={{ color: "#c2410c" }}>⚡ {t(E, "cards that beat BOTH = dom", "둘 다 이기는 카드 = dom")} = {dom}</b></div>
+              {/* ⛔ 2026-10-02 — `dom` 이 **처음 나오는 자리가 여기**인데 뜻이 없었다.
+                  정의는 한참 뒤 코드 탭(2025줄)에 있었다 — **문제 탭이 먼저인데 말은 거꾸로**였다.
+                  3차·4차 학생이 **연달아** 짚었다. 그 두 줄을 여기에도 둔다. */}
+              <div style={{ fontSize: 10.5, color: C.dim }}>
+                {t(E, "(“dom” = short for “dominates”)", "(‘dom’ = ‘dominate 제압’ 의 앞 세 글자)")}
+              </div>
               {/* ⛔ 2026-10-02 — 여기 있던 `답 = N² − (N − dom)²` 한 줄을 뺐다.
                   학생(초6): *"문제 탭 4쪽에서 **그냥 뚝 나왔다.** 왜 「전체 − 뭔가」로 구하는지는
                   그 자리엔 설명이 없었다. **「그냥 9개를 하나씩 세면 되는 거 아닌가?」** 싶었다.
@@ -1943,7 +1954,7 @@ export function HpsSampleIOSim({ E }) {
                 ⭐ 이미 있는 `DirectCountNote` 를 꽂는다 — 이건 **알파벳 공식을 안 찍고**
                   `dom×N + N×dom − dom×dom = 답` 산수만 보여준다. 그래서 「공식이 이유보다
                   먼저 나온다」가 **재발하지 않으면서** 다리가 생긴다. 새 글은 0줄이다. */}
-              <DirectCountNote E={E} dom={dom} N={N} ans={answer} />
+              <DirectCountNote E={E} dom={dom} N={N} ans={answer} mentionSquare={false} />
               <div style={{ fontSize: 11, color: C.dim }}>{t(E, `→ output line ${s.qi + 1} = ${answer}`, `→ 출력 ${s.qi + 1} 번째 줄 = ${answer}`)}</div>
             </div>
           </div>
@@ -1967,7 +1978,13 @@ export function HpsFormulaGridSim({ E }) {
     { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
     { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)² = 4)", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)² = 4)") },
-    { phase: "count", bubble: t(E, "Wins = whole grid − losers = 9 − 4 = 5!\nIn letters: N² − (N − dom)² = 3² − 2² = 5 ✓", "이기는 패 = 전체 − 지는 것 = 9 − 4 = 5!\n글자로: N² − (N − dom)² = 3² − 2² = 5 ✓") },
+    /* ⛔ 2026-10-02 4차 학생: *"그만두고 싶었던 걸음: 6/7. 넷이 동시에 떠 있었다."*
+       ⭐ 숨은 중복을 PM 이 찾았다 — **말풍선과 아래 상자가 같은 문자 공식을 두 번** 말했다.
+         말풍선에선 지우고(숫자만), 문자 공식은 **아래 상자 하나만** 맡는다.
+         그리고 그 상자를 **따로 걸음으로** 뗀다 — 문자(N·dom)가 처음 들어가는 순간을 격리한다.
+         내용은 안 늘고 겹침만 없어진다. */
+    { phase: "count", bubble: t(E, "Wins = whole grid − losers = 9 − 4 = 5!", "이기는 패 = 전체 − 지는 것 = 9 − 4 = 5!") },
+    { phase: "formula", bubble: t(E, "Now the same thing in letters.", "이제 같은 걸 글자로 써 봐요.") },
     /* ⛔ 2026-10-02 3차 학생: *"한 쪽 안에 ①dom ②그리드 ③빼기 공식 ④「여사건」
          ⑤포함배제식까지 몰아서 나와서 **여기서 제일 지쳤다. 사실상 그만두고 싶었던 자리.**"*
        ⭐ 내용을 빼지 않고 **걸음을 하나 더 쪼갠다** — 「직접 세기」를 다음 걸음으로.
@@ -1977,8 +1994,8 @@ export function HpsFormulaGridSim({ E }) {
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const showTest = s.phase === "test" || s.phase === "testans";
-  const lit = s.phase === "green" || s.phase === "red" || s.phase === "count" || s.phase === "directcount";
-  const litRed = s.phase === "red" || s.phase === "count" || s.phase === "directcount";
+  const lit = ["green", "red", "count", "formula", "directcount"].includes(s.phase);
+  const litRed = ["red", "count", "formula", "directcount"].includes(s.phase);
 
   const cell = (rowWin, colWin, key) => {
     const win = rowWin || colWin;
@@ -2112,7 +2129,7 @@ export function HpsFormulaGridSim({ E }) {
 
           {/* 공식 조립 — 각 기호를 격자 그림 조각에 대응 + 왜 '빼는지'(여사건) 동기.
               (선생님 2026-07-22: "dom 약자·공식이 어떻게 만들어지는지 전혀 이해 안 돼") */}
-          {s.phase === "count" && (
+          {s.phase === "formula" && (
             <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "12px 14px" }}>
               <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
                 🧩 {t(E,
