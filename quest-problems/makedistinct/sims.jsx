@@ -446,8 +446,21 @@ export function WhoCanMeetSim({ E }) {
          ⭐ `3 → 5 → 7 → 9` 가 **이 시뮬 안에서만 네 번** 나오고 있었다:
            ①이 말풍선 글 ②바로 아래 줄 ③K 비교표의 K=2 칸 ④걸음 7 타일 밑 노트.
          → 말풍선에서 뺀다. **아래 줄이 이미 그림으로 말한다**(`feedback_shorter_not_longer`). */
-      ko: "수 네 개예요 — 3, 3, 3, 4. 같은 수에 2 를 「몇 번이든」 더해도 돼요.",
-      en: "Four numbers — 3, 3, 3, 4. We may add 2 to the same number as many times as we like." },
+      ko: "첫째 3 은 그대로 둬요.\n둘째 3 은 첫째와 겹치니까 2 를 더해요 — 5 가 돼요.",
+      en: "Leave the first 3 as it is.\nThe second 3 clashes with it, so add 2 — it becomes 5." },
+
+    /* ⛔ 2026-10-02 — 선생님이 이 화면을 보시고:
+         *"3은 그대로 그 다음 3은 3 + 2 = 5, 그 다음 3에 2를 더하면 **또 5가 되니까 또 2를 더해서 7.**
+           이렇게 **더 세부적으로** 보여달라니까"*
+       ⭐ 그 「**또 겹쳐서 또 민다**」가 이 시뮬에 **걸음으로 없었다.** `3 → 5 → 7` 이
+         한 줄로 떠서 **한 수의 궤도**처럼 보였지, 셋째 3 이 5 에서 **다시 막혀** 한 번 더
+         밀린 과정이 안 보였다. 그게 이 문제의 핵심(「몇 번이든 더해도 된다」)인데 말이다.
+       ⚠️ 걸음을 하나 늘린다. `feedback_shorter_not_longer` 는 **읽을 분량**을 재는 원칙이고,
+         여기서 느는 건 **누르는 걸음**이다 — 글은 오히려 줄었다(아래 말풍선 2줄). */
+    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "idle"],
+      extra: ["", "", "", ""], chains: [1], hot: 1, push: 3,
+      ko: "셋째 3 도 2 를 더해 봐요 — 5 예요. 그런데 방금 둘째가 5 로 갔어요.\n또 겹쳤으니 2 를 「한 번 더」 더해요 — 7 이 돼요.",
+      en: "Add 2 to the third 3 as well — that is 5. But the second one just moved to 5.\nIt clashes again, so add 2 once more — it becomes 7." },
 
     /* 2. 관찰 둘 — 두 번째 줄. 여기서도 이름은 없다. 눈으로 「안 겹친다」만. */
     { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
