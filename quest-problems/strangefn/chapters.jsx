@@ -78,7 +78,7 @@ export function makeStrangeFnCh1(E) {
                   {t(E, "If x has a digit that is not 0 and not 1 — change ",
                         "x 를 이루는 숫자 중에 0 도 1 도 아닌 게 하나라도 있으면 — ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "every digit", "숫자 하나하나")}</b>
-                  {t(E, ": odd becomes 1, even becomes 0. We call this the 0-and-1 change.", "를 홀수면 1 로, 짝수면 0 으로 바꿔요. 이걸 「0 과 1 로 바꾸기」라고 부를게요.")}
+                  {t(E, ": odd becomes 1, even becomes 0. We call this a digit change.", "를 홀수면 1 로, 짝수면 0 으로 바꿔요. 이걸 「숫자 바꾸기」라고 부를게요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -312,8 +312,8 @@ export function makeStrangeFnCh1(E) {
                   ⛔ 여기에 「그러면 규칙을 찾을 수 있어요」 같은 **보람 설명을 덧붙이지 마라.**
                      그게 두 번 다 「추상적」이라는 말을 들은 자리다. */}
               <div>{t(E,
-                "One rule turns every digit into 0 or 1 — so its result is always made only of 0s and 1s (page 1: 35 → 11).\nThe numbers we count are 0s and 1s not by choice but because the rule makes them so. Line them up from the smallest:\n1, 10, 11, 100, 101 …",
-                "규칙 하나가 숫자를 전부 0 아니면 1 로 바꾸죠 — 그래서 그 규칙을 쓰면 결과는 늘 0 과 1 로만 된 수예요 (1쪽 35 → 11 처럼).\n우리가 세는 수가 0 과 1 뿐인 건 고른 게 아니라 규칙이 그렇게 만든 거예요. 작은 것부터 늘어놓아 봐요.\n1, 10, 11, 100, 101 …")}</div>
+                "Why were 1, 10 and 11 on page 4 all made of just 0s and 1s?\nBecause a digit change can only produce 0s and 1s — 35 becomes 11 after one.\nSo line such numbers up from the smallest: 1, 10, 11, 100, 101 …",
+                "4쪽에서 센 1, 10, 11 은 왜 다 0 과 1 뿐이었을까요?\n숫자 바꾸기가 숫자를 0 아니면 1 로만 만드니까요 — 35 도 한 번 바꾸면 11 이에요.\n그러니 그런 수를 작은 것부터 늘어놓아 봐요. 1, 10, 11, 100, 101 …")}</div>
               {/* 선생님 제안(2026-09-30): *"이걸 십진수로 고쳐면… 이라고 하면 더 쉽지 않을까?"*
                   맞다. «바꿔 부르는 게 이진수예요» 는 **이름을 가르치는 문장**이고,
                   «십진수로 고치면» 은 **학생이 이미 아는 곳으로 데려다주는 문장**이다.
@@ -559,8 +559,8 @@ export function makeStrangeFnCh1(E) {
             </div>
             <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
-                "g(n) only counts steps after everything is already 0/1. If the 0-and-1 change ran first (page 3), that was also a use of f — add 1 for it.",
-                "g(n) 은 이미 0/1 만 남은 뒤의 단계만 세요. 그 전에 0 과 1 로 바꾸기를 한 번 썼다면(3쪽), 그것도 f 를 한 번 쓴 거라 1 을 더해야 해요.")}
+                "g(n) only counts steps after everything is already 0/1. If a digit change ran first (page 3), that was also a use of f — add 1 for it.",
+                "g(n) 은 이미 0/1 만 남은 뒤의 단계만 세요. 그 전에 숫자 바꾸기를 한 번 썼다면(3쪽), 그것도 f 를 한 번 쓴 거라 1 을 더해야 해요.")}
             </div>
             {/* 2026-09-30: x = 210 재확인 줄을 뺐다 — ch2 「코드가 할 세 단계」 쪽의
                 「🔁 x = 210 으로 다시 세어 봐요」 가 **같은 계산을 그대로** 한다.
@@ -586,7 +586,7 @@ export function makeStrangeFnCh1(E) {
                 "x = 37 은 몇 번 만에 0 이 될까요? (0/1 이 아닌 자리가 있어요)")}
               hint={t(E,
                 "① Change 3 and 7 into 0s and 1s — what do you get? (that counts as 1)\n② Read that as binary — what's n?\n③ Put n into floor(3n/2), then add the 1 from ①.",
-                "① 3 과 7 을 0 과 1 로 바꾸면? (이것도 1 번)\n② 그걸 이진수로 읽으면 n 은?\n③ floor(3n/2) 에 넣고, ①의 1 번을 더해요.")}
+                "① 3 과 7 에 숫자 바꾸기를 하면? (이것도 1 번)\n② 그걸 이진수로 읽으면 n 은?\n③ floor(3n/2) 에 넣고, ①의 1 번을 더해요.")}
               answer={5}
               explain={t(E,
                 "5 is right. 37 → 11 (1) → 10 (2) → 9 (3) → 1 (4) → 0 (5).\nSame as 1 + g(3) = 1 + 4 = 5.",
@@ -600,7 +600,7 @@ export function makeStrangeFnCh1(E) {
                 "x = 1010 은 몇 번 만에 0 이 될까요? (이미 0 과 1 만 있어요)")}
               hint={t(E,
                 "① Already only 0s and 1s, so skip the change — no 1 to add.\n② Read it as binary — what's n?\n③ floor(3n/2) is the answer as it stands.",
-                "① 이미 0 과 1 뿐이라 바꾸기를 건너뛰어요 — 더할 1 이 없어요.\n② 이진수로 읽으면 n 은?\n③ floor(3n/2) 가 그대로 답이에요.")}
+                "① 이미 0 과 1 뿐이라 숫자 바꾸기를 건너뛰어요 — 더할 1 이 없어요.\n② 이진수로 읽으면 n 은?\n③ floor(3n/2) 가 그대로 답이에요.")}
               answer={15}
               explain={t(E,
                 "15 is right. g(10) = 3 × 5 = 15 — counting by hand would take 15 steps, but the formula gives it in one shot.",
@@ -671,7 +671,7 @@ function StrangeFnPlan({ E }) {
         <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.9, fontFamily: "'JetBrains Mono',monospace",
           wordBreak: "keep-all", textWrap: "balance" }}>
           <div>{t(E, "One by one (page 3): 210 → 10 → 9 → 1 → 0 = 4", "하나씩 세면 (3쪽): 210 → 10 → 9 → 1 → 0 = 4번")}</div>
-          <div style={{ marginTop: 6 }}>{t(E, "① the 0-and-1 change once → \"010\"", "① 0 과 1 로 바꾸기 1번 → \"010\"")}</div>
+          <div style={{ marginTop: 6 }}>{t(E, "① a digit change once → \"010\"", "① 숫자 바꾸기 1번 → \"010\"")}</div>
           <div>{t(E, "② read as binary → n = 2 (same n we already confirmed)", "② 이진수로 읽으면 → n = 2 (앞에서 확인한 값과 같아요)")}</div>
           <div>{t(E, "③ g(2) = 3", "③ g(2) = 3")}</div>
           <div style={{ marginTop: 4, fontWeight: 800 }}>1 + 3 = 4</div>
