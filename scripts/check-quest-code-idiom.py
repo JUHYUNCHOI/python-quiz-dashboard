@@ -41,6 +41,20 @@ IDIOMS = [
      re.compile(r"\.decode\(\)"),
      re.compile(r"decode\(|바이트를 문자열로"),
      "bytes → str 변환이 왜 필요한지 설명된 적이 없다"),
+    # ⛔ 2026-10-02 선생님: "안배운것 넣지 말고 **하나로 짧게 퉁치는 코드 말고**"
+    #    `strangefn` 이 `if any(c not in '01' for c in s):` 를 쓰고 있었다.
+    #    2026-09-23 학생: "any(...) 자체를 처음 본다. 확신 없다."
+    #    ⚠️ 이건 `check-code-one-statement.py` 가 **원리상 못 잡는다** — 한 문장이다.
+    #    실측(2026-10-02): `any(`=레슨 0개 · `all(`=3개 · `sum(`=22개 · `max(`=11개.
+    #    그래서 **따로** 둔다 — 가르친 것까지 싸잡으면 오탐이 된다.
+    ("any(… for …) 로 퉁치기",
+     re.compile(r"\bany\s*\([^)]*\bfor\b"),
+     re.compile(r"\bany\s*\([^)]*\bfor\b"),
+     "조건 검사와 반복을 한 줄에 겹쳤다 — 깃발 + for + break 로 펴면 C++ 쪽과도 같아진다"),
+    ("all(… for …) 로 퉁치기",
+     re.compile(r"\ball\s*\([^)]*\bfor\b"),
+     re.compile(r"\ball\s*\([^)]*\bfor\b"),
+     "조건 검사와 반복을 한 줄에 겹쳤다 — 깃발 + for 문으로 펴라"),
     ("재귀 한도 올리기",
      re.compile(r"setrecursionlimit"),
      re.compile(r"setrecursionlimit|재귀 한도"),

@@ -823,3 +823,26 @@ pdftotext -layout public/problems/mcc20knight.pdf - | head -60
   ③**내 문장이 옆의 숫자와 같은 말을 하나.**
 
 근거: `memory/feedback_plain_korean.md`
+
+## ⛔ 「한 줄로 퉁치는 코드」 — **한 문장이라 기존 검사기가 못 본다** (2026-10-02)
+
+선생님: *"안배운것 넣지 말고 **하나로 짧게 퉁치는 코드 말고**"* → *"**이거 누가 기억하는거지?**"*
+2026-09-22 에 같은 지적을 받고 기억까지 남겼는데 **또 났다.** 원인은 **검사기 사이의 틈**이다 —
+`if any(c not in '01' for c in s):` 는 `check-code-one-statement.py` 기준 **한 문장**이라
+원리상 안 걸리고, `check-quest-code-idiom.py` 의 IDIOMS 는 **입출력 기교만** 담고 있었다.
+
+→ 2026-10-02 에 `check-quest-code-idiom.py` 에 「any(… for …)」·「all(… for …)」를 넣었다.
+  **코드를 쓰거나 고쳤으면 이 검사기를 돌려라.** `check-code-one-statement` 0건은 결백이 아니다.
+
+⭐ **싸잡아 금지하지 마라** — 실측(2026-10-02): `any(` 는 레슨 **0개 파일**이지만
+  **리스트 컴프리헨션은 가르친다**(7개 파일·예제까지) · `sum(` 22개 · `max(` 11개.
+  **안 가르친 것만** 지적해라.
+
+⚠️ **C++ 은 대체로 깨끗하다**(전수 확인) — 한 줄에 문장 둘 **0줄**, `auto`·람다는 레슨이 가르친다.
+  남은 건 `mcc22lamp` 한 quest(삼항 2줄·중괄호 없는 한 줄 for/if 7줄)다.
+
+⚠️ **주석도 코드다.** 새 주석을 쓰면 `codeCommentsKo.ts`·`codeCommentsEn.ts` **양쪽**을 채워라 —
+  안 채우면 한쪽 화면은 **영어가 그대로 뜨거나 그 줄이 비어 버린다.**
+  실측: 영어 번역 없는 한국어 주석 **20줄·quest 5개**, `isEn` 안 넘기는 CodeBlock **25곳**.
+
+근거: `memory/feedback_student_code_plain_and_no_recursion.md`
