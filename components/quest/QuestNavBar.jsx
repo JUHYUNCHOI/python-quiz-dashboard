@@ -105,6 +105,28 @@ export function QuestProgressBar({
     if (curFlag === null) return null;
     return curFlag ? t(E, "💻 Code", "💻 코드") : t(E, "🧭 Plan", "🧭 계획");
   };
+  /* ⭐ 2026-10-03 — **이름을 갈라 놓고 번호는 안 갈랐다.**
+     재검증 학생(초6): *"「코드 1/2」 다음 쪽을 눌렀더니 「코드 2/2」가 아니라
+       바로 「**계획 2/2**」로 넘어갔다. **「계획 1/2」는 못 봤다** — 쪽 번호가
+       안 맞는 것 같았다."* **학생이 맞다.**
+     위 `stepSplitLabel` 은 쪽마다 이름을 「💻 코드」/「🧭 계획」으로 바꾸는데,
+     옆의 숫자는 **탭 전체**(cur+1 / steps.length)를 그대로 세고 있었다.
+     그래서 「계획 1/…」 은 **영영 안 나온다** — 이름과 숫자가 **서로 다른 것을 센다**
+     (`feedback_same_number_two_meanings` 와 같은 층).
+     ⭐ 이름을 갈랐으면 **번호도 그 안에서** 센다. 갈린 라벨이 없으면 `null` 을
+       돌려주고 호출부가 **지금까지와 똑같이** 탭 전체를 센다 — 하위호환. */
+  const splitCount = () => {
+    if (!isCodeTabName(tabs[tab])) return null;
+    const tSteps = states[tab] || [];
+    const flags = tSteps.map((s) => (stepHasCode(s) ? true : stepIsPlanLike(s) ? false : null));
+    if (!flags.some((f) => f === true) || !flags.some((f) => f === false)) return null;
+    const curFlag = flags[cur];
+    if (curFlag === null) return null;
+    const same = flags.map((f, i) => (f === curFlag ? i : -1)).filter((i) => i >= 0);
+    const pos = same.indexOf(cur);
+    if (pos < 0) return null;
+    return { i: pos + 1, n: same.length };
+  };
   // Each tab gets its own hue so the bar (and locator labels) make the
   // 문제 / 코드 regions instantly distinguishable. Tab 0 = quest accent.
   const TAB_HUES = [accent, "#0d9488", "#d97706", "#0891b2"];
@@ -333,9 +355,11 @@ export function QuestProgressBar({
              한 화면에 두 개의 「N / M」이 있는데 **한쪽만 이름이 없었다**
              (`feedback_same_number_two_meanings`). 세는 대상을 글자로 박는다.
              CodeWalk 쪽은 이미 「8 조각 중 1 번째」라고 자기 이름을 달고 있다. */
+          /* 라벨이 「💻 코드」/「🧭 계획」으로 갈렸으면 **그 안에서** 센다 (위 `splitCount`). */
+          const sc = splitCount();
           const count = (
             <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 800 }}>
-              {t(E, "p.", "")}{cur + 1} / {steps.length}{t(E, "", " 쪽")}
+              {t(E, "p.", "")}{sc ? sc.i : cur + 1} / {sc ? sc.n : steps.length}{t(E, "", " 쪽")}
             </span>
           );
           return (
