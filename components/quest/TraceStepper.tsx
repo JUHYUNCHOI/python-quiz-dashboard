@@ -144,6 +144,16 @@ export interface SimNavProps {
   showLabels?: boolean;
   /** Pass `lang === "en"` (the same flag passed to t()). */
   isEn?: boolean;
+  /**
+   * ⏮·◀ 만 아이콘 전용으로 — `다음 ▶` 라벨은 그대로 남긴다. **opt-in, 기본 false**라
+   * 안 넘기면 기존과 완전히 같다(다른 호출부의 회귀 위험 0). CodeWalk 이 모바일
+   * 375px 폭 예산 때문에 쓴다(project-lead 판정 2026-10-03) — ⏮·◀ 는 모양으로도
+   * "이전으로" 라는 뜻이 충분히 전달되지만, ▶ 는 "다음 걸음" 과 "다음 쪽"(바깥
+   * `다음 쪽 ▶`)이 **같은 화살표**라 라벨을 떼면 `feedback_one_nav_shape_per_screen`
+   * 이 이미 두 번 재발한 그 혼동이 세 번째로 재발할 위험이 있다 — 그래서 ▶ 라벨은
+   * 항상 남긴다. 아이콘만 남는 버튼엔 `aria-label` 을 단다.
+   */
+  compactPrev?: boolean;
 }
 
 /**
@@ -157,33 +167,39 @@ export function SimNav({
   accent = DEFAULT_ACCENT,
   showLabels = false,
   isEn = false,
+  compactPrev = false,
 }: SimNavProps) {
   const safe = Math.max(0, Math.min(idx, total - 1));
   const atStart = safe === 0;
   const atEnd = safe === total - 1;
+  const restartLabel = t(isEn, "Restart", "처음부터");
+  const prevLabel = t(isEn, "Prev", "이전");
+  const showPrevText = showLabels && !compactPrev;
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16 }}>
       <button
         onClick={() => onIdx(0)}
         disabled={atStart}
+        aria-label={restartLabel}
         style={{
           padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 800,
           background: "#fff", border: `2px solid ${atStart ? "#e5e7eb" : accent}`,
           color: atStart ? "#b0b5c3" : accent, cursor: atStart ? "default" : "pointer",
         }}
       >
-        ⏮{showLabels ? ` ${t(isEn, "Restart", "처음부터")}` : ""}
+        ⏮{showPrevText ? ` ${restartLabel}` : ""}
       </button>
       <button
         onClick={() => onIdx(Math.max(0, safe - 1))}
         disabled={atStart}
+        aria-label={prevLabel}
         style={{
           padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 800,
           background: "#fff", border: `2px solid ${atStart ? "#e5e7eb" : accent}`,
           color: atStart ? "#b0b5c3" : accent, cursor: atStart ? "default" : "pointer",
         }}
       >
-        ◀{showLabels ? ` ${t(isEn, "Prev", "이전")}` : ""}
+        ◀{showPrevText ? ` ${prevLabel}` : ""}
       </button>
       {/* 걸음 카운터 — ◀▶ 사이, 학생이 다음을 누르려는 바로 그 순간 시선이
           있는 자리. mooin3·checkups 학생 이탈 원인이 "몇 단계짜리인지 몰라서"
@@ -210,6 +226,7 @@ export function SimNav({
       <button
         onClick={() => onIdx(Math.min(total - 1, safe + 1))}
         disabled={atEnd}
+        aria-label={t(isEn, "Next", "다음")}
         style={{
           padding: "6px 18px", borderRadius: 8, fontSize: 13, fontWeight: 800,
           background: atEnd ? "#e5e7eb" : accent,

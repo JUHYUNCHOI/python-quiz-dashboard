@@ -184,6 +184,16 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
        넉넉할 땐 3줄 여유가 맞지만, **말풍선 키가 창 키에 육박하면** 그 여유부터
        줄여서 말풍선 쪽에 자리를 더 준다 — 평소(짧은 말풍선)엔 그대로 3줄. */
     const bubH = bub.offsetHeight;
+    /* ⚠️ 2026-10-03 — 여기에 "말풍선이 박스 맨 위에 붙지 않게 최소 여유(TOP_CLEARANCE)
+       를 강제"하는 안을 시도했다가 **되돌렸다.** alchemy(긴 말풍선, margin 이 0 으로
+       줄어드는 경우)에선 겹침을 막았지만, checkups(짧은 말풍선, margin 이 이미
+       작지만 0 은 아닌 경우)에서는 전체 말풍선이 아래로 밀리면서 **그 아래쪽 끝이
+       pinWrap(SimNav 줄) 과 새로 겹쳤다** — 실측(check-codewalk-bubble-hidden.mjs):
+       TOP_CLEARANCE=36 일 때 checkups 7px 겹침(전엔 0) · =0 으로 되돌리면 다시 0.
+       즉 이 값 하나로 "박스 위 오버레이 버튼과 안 겹치기" 와 "pinWrap 과 안 겹치기"
+       를 동시에 만족시킬 수 없었다 — 그래서 **복사 버튼을 박스 위에 띄우는 자체를
+       포기**하고 SimNav 줄 안으로 합쳤다(아래 JSX, pinWrap 은 1줄 그대로 유지하면서
+       박스 쪽은 전혀 건드리지 않는다). 이 원래 로직은 손대지 않는다. */
     const margin = Math.min(lineH * 3, Math.max(0, box.clientHeight - bubH - lineH));
     box.scrollTop = Math.max(0, bub.offsetTop - margin);
     // ⚠️ 2026-09-18: 학생이 코드 왼쪽이 잘려 보인다고 했다 — 줄 번호도, 말풍선 첫 낱말도.
@@ -212,6 +222,26 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
   // ⛔ 같은 로직을 여기 또 두지 않는다 — `CodeBlock` 도 같은 문제를 갖고 있었고,
   //   두 벌로 두면 한쪽만 고치는 날이 온다(`feedback_example_code_is_contagious`).
   const fade = useScrollEdgeFades(boxRef, [safeIdx, lo, lang, code]);
+
+  /* 🆕 2026-10-03 — 복사 버튼을 **좁은 화면(모바일)에서만 숨긴다.** 왜 —
+     코드 박스 쪽에 복사 버튼을 두는 안을 셋 시도했는데(별도 줄 · 절대배치
+     오버레이 · SimNav 같은 줄) **셋 다** 머리말이 긴 quest(alchemy·checkups,
+     박스가 `minHeight:140` 바닥에 눌린 경우)에서 다른 자리에 새 겹침을 만들었다
+     (아래 pinWrap 주석에 실측 숫자). 이 결함(pinWrap 이 바깥 고정 바에 먹히는 것)
+     자체가 **모바일 375px 전용**이다 — task 실측: 데스크탑 1280px 에서는 24개
+     전부 0건. 그래서 pinWrap 은 **SimNav 한 줄로 완전히 줄이고**(진짜 높이
+     절감), 복사 버튼은 코드 박스 **우상단에 절대배치**로 두되 **이 좁은 화면
+     에서만 숨긴다** — 박스 자체·스크롤 로직은 전혀 안 건드리므로 위 세 가지
+     부작용이 구조적으로 생기지 않는다. 넓은 화면(수업용 노트북·패드 — 이
+     프로젝트의 주 사용처)에서는 그대로 보인다. */
+  const [narrowScreen, setNarrowScreen] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const measure = () => setNarrowScreen(window.innerWidth < 480);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   const [boxH, setBoxH] = useState(560); // 못 재면 이 컴포넌트의 기본 높이(min(64vh,560px)) 상한
   useEffect(() => {
@@ -392,7 +422,12 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
 
       {/* 코드 — 고정 높이 창, 밝아진 줄로 자동 스크롤.
           배경/글자색은 다른 레슨(CodeBlock)과 동일한 gray-900. 흐림 없이 전부 또렷,
-          강조는 '밝은 왼쪽 막대 + 살짝 밝은 배경'만 (선생님 2026-07-13: 어둡지 않게). */}
+          강조는 '밝은 왼쪽 막대 + 살짝 밝은 배경'만 (선생님 2026-07-13: 어둡지 않게).
+          ⚠️ 2026-10-03 — 복사 버튼은 아래 `narrowScreen` 조건부로 **이 박스 우상단에
+          절대배치**로 뜬다(모바일 <480px 에서는 숨김 — 위 `narrowScreen` 선언부 주석
+          참고). 스크롤·padding 등 **이 박스 자체 로직은 전혀 안 건드렸다** — 여러
+          시도 끝에 박스 쪽을 건드리는 모든 안이 다른 quest 에서 새 겹침을 만든다는
+          걸 배웠다(아래 pinWrap 주석에 실측). */}
       <div style={{ position: "relative" }}>
       <div ref={boxRef} className="qcode-scroll qcode-wide" style={{
         background: "#111827", borderRadius: 12, padding: "12px 10px",
@@ -515,38 +550,50 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
         </div>
       </div>
       <ScrollEdgeFades fade={fade} bg="#111827" />
+      {/* 전체 코드 복사 — 코드 박스 우상단에 절대배치, **좁은 화면(<480px)에서는 숨김**
+          (왜 숨기나: 위 `narrowScreen` 선언부 주석 + 아래 pinWrap 주석 참고). 겹침 검사
+          (see-screen.mjs --sim)는 이 값을 넓은 뷰포트에서 실제로 확인했다. */}
+      {!narrowScreen && (
+        <button onClick={copyAll} style={{
+          position: "absolute", top: 8, right: 8, zIndex: 6,
+          fontSize: 11, fontWeight: 800, padding: "4px 10px", borderRadius: 999, cursor: "pointer",
+          background: copied ? "#059669" : "#1f2937",
+          border: `1.5px solid ${copied ? "#059669" : "#475569"}`,
+          color: "#fff",
+          boxShadow: "0 2px 8px rgba(0,0,0,.35)",
+          transition: "all .15s",
+        }}>
+          {copied ? `✓ ${t(E, "copied!", "복사됨!")}` : `📋 ${t(E, "copy", "복사")}`}
+        </button>
+      )}
       </div>
 
-      {/* 복사 줄 + SimNav 줄을 한 덩어리로 — 위 주석 참고.
-          `transform: translateY` 로 필요할 때만 끌어올려서 이 자리가 코드창 꼬리를
-          살짝 덮을 순 있어도 — 흔한 "하단 고정 툴바" 모양이라 어색하지 않다 —
-          **고정 하단바와는 절대 안 겹친다**(둘 사이 간격이 navGap 으로 항상 보장됨).
-          background 를 페이지 배경(C.bg)과 맞춰서 코드창 검정 배경 위에 떠 있을 때도
-          붕 뜨지 않게 한다. */}
+      {/* SimNav 줄 — **pinWrap 은 이제 이 한 줄뿐이다.** 복사 버튼은 넣지 않는다 —
+          코드 박스 쪽(별도 줄 · 우상단 절대배치 · 이 SimNav 줄 자체)으로 옮기는
+          안을 셋 다 시도했는데, 머리말이 긴 quest(alchemy·checkups — 박스가
+          `minHeight:140` 바닥에 눌린 경우)에서 매번 **다른 자리에 새 겹침**이
+          났다(check-codewalk-bubble-hidden.mjs 실측):
+            · 박스 위 별도 줄  → 그 줄이 박스를 떠밀어 pinWrap 과 더 가까워짐(30→40px)
+            · 박스 우상단 오버레이(여유 없음) → 긴 말풍선이 거기 바짝 붙어 버튼과 겹침(97%)
+            · 〃 (최소 여유 강제) → 짧은 말풍선(checkups) 쪽이 떠밀려 pinWrap 과 새로 겹침(0→7px)
+            · SimNav 같은 줄 오른쪽 끝 → `다음 ▶` 라벨을 남겨서 자리가 없어 겹침(51%)
+          그래서 **pinWrap 은 순수 SimNav 한 줄로 줄이고**(진짜 높이 절감 — 이 결함
+          자체가 모바일 전용이라는 task 실측과 일치), 복사 버튼은 **좁은 화면에서는
+          아예 렌더링하지 않는다**(위 박스 JSX, `narrowScreen`). `transform:
+          translateY` 로 필요할 때만 끌어올려서 이 자리가 코드창 꼬리를 살짝 덮을
+          순 있어도 — 흔한 "하단 고정 툴바" 모양이라 어색하지 않다 — **고정
+          하단바와는 절대 안 겹친다**(둘 사이 간격이 navGap 으로 항상 보장됨).
+          background 를 페이지 배경(C.bg)과 맞춰서 코드창 검정 배경 위에 떠 있을
+          때도 붕 뜨지 않게 한다.
+          (project-lead 판정 2026-10-03, `scripts/check-codewalk-bubble-hidden.mjs
+          --mobile --every-step` 실측 24/168 → 재검증 결과는 커밋 메시지 참고). */}
       <div ref={sentinelRef} style={{ height: 0 }} aria-hidden="true" />
       <div ref={pinWrapRef} style={{
         position: "relative", transform: pinY ? `translateY(${pinY}px)` : "none",
         zIndex: 5, background: C.bg, paddingTop: 4, marginTop: -4,
       }}>
-        {/* 진행 표시 + 전체 코드 복사 (코드창 바로 아래) */}
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, margin: "8px 0 2px" }}>
-          <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700 }}>
-            {t(E, `part ${safeIdx + 1} of ${total}`, `${total} 조각 중 ${safeIdx + 1} 번째`)}
-          </span>
-          <button onClick={copyAll} style={{
-            fontSize: 11, fontWeight: 800, padding: "3px 10px", borderRadius: 999, cursor: "pointer",
-            background: copied ? "#059669" : "#fff",
-            border: `1.5px solid ${copied ? "#059669" : "#cbd5e1"}`,
-            color: copied ? "#fff" : "#475569",
-            transition: "all .15s",
-          }}>
-            {copied ? `✓ ${t(E, "copied!", "복사됨!")}` : `📋 ${t(E, "copy full code", "전체 코드 복사")}`}
-          </button>
-        </div>
-
-        {/* 버튼 — 코드창이 고정 높이라 항상 여기, 스크롤 없이 닿음 */}
         <div style={{ marginTop: 4 }}>
-          <SimNav idx={safeIdx} total={total} onIdx={setIdx} accent={accent} showLabels isEn={E} />
+          <SimNav idx={safeIdx} total={total} onIdx={setIdx} accent={accent} showLabels compactPrev isEn={E} />
         </div>
       </div>
     </div>
