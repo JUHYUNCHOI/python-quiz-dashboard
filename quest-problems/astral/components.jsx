@@ -391,7 +391,15 @@ export function AstralChainDiscovery({ E }) {
         </button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, alignItems: "start" }}>
+      {/* ⭐ 2026-10-03 — 사진 세 장을 **접을 수 있게** 한다. `repeat(3, 1fr)` 이었다.
+          왜: 한 장이 44px 칸 셋 + 틈 = **136px 고정**인데, 모바일 375 에서 이 상자가
+          296px 뿐이라 `1fr` 이 90.7px 로 눌린다. 안쪽 격자는 안 눌려서
+          **세 번째 장이 426px 까지 삐져나가 상자(350) 밖에서 잘렸다** —
+          학생이 그림을 셋 다 못 봤다(실측 `check-sim-row-cut.mjs`).
+          ⭐ 발명하지 않았다 — **이 quest 자신의 `chapters.jsx:830·872`** 가 이미
+            같은 `auto-fit, minmax` 를 쓴다(`quest_season_shape_consistency`).
+          136px = 칸 44×3 + 틈 2×2. 좁으면 두 장씩 접히고 **아무것도 안 잘린다.** */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(136px, 1fr))", gap: 12, alignItems: "start" }}>
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6 }}>{t(E, "Photo 1", "사진 1")}</div>
           <div style={{ display: "flex", justifyContent: "center" }}>{makeGrid(ph1)}</div>
