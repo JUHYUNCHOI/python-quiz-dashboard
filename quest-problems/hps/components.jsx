@@ -2036,6 +2036,28 @@ export function HpsFormulaGridSim({ E }) {
         </div>
       </NarrativePanel>
 
+      {/* ⭐ 2026-10-03 선생님: *"자꾸 **글을 읽게** 만드네. 그럼 **그림은 왜 있는 거야.**
+            그림만 보고도 뭐 하려는 건지 알 수가 없을까?"*
+          ⛔ 맞다 — 이 시뮬은 격자를 그려 놓고 **Elsie 가 낸 두 장은 안 그렸다.**
+            그래서 전제를 **말로** 설명할 수밖에 없었고, 선생님이 그 자리에서 막히셨다.
+          ⭐ 글로 때우지 않고 **그림으로** 그린다. 격자 칸과 **같은 생김새**를 써서
+            새 모양을 발명하지 않는다(48×40 · 둥근 모서리 · 고정폭).
+          ⚠️ ⚡ 는 안 붙인다 — 그건 걸음 1~2 가 **찾아내는 것**이라 미리 보이면 스포일러다. */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center",
+        gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
+        <span style={{ fontSize: 11.5, fontWeight: 700, color: "#2563eb", wordBreak: "keep-all" }}>
+          Elsie {t(E, "played", "가 낸 패")}
+        </span>
+        {[1, 1].map((v, i) => (
+          <div key={i} style={{
+            width: 40, height: 36, borderRadius: 6,
+            background: "#eff6ff", border: "1.5px solid #93c5fd", color: "#1e3a8a",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 15, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+          }}>{v}</div>
+        ))}
+      </div>
+
       {/* N·dom 정의 — 격자/공식 단계에서만 (test/testans 는 타일이 dom 을 그 자리서
           정의하니 forward-ref 박스는 정보 과부하, 선생님 2026-07-22 "한 화면에 정보 너무 많아").
           BeatsMatrix 도 제거 — 아래 '맞대결 타일' 이 같은 사실(카드2 가 카드1 이김)을
@@ -2044,13 +2066,6 @@ export function HpsFormulaGridSim({ E }) {
         <div style={{ maxWidth: 480, margin: "0 auto", padding: "8px 12px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.65 }}>
           <div>
             <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}
-          </div>
-          {/* ⛔ 2026-10-03 선생님: *"**레시가 뭘 냈는데?**"* — 걸음 1~2 가 세운 전제가
-              **격자가 뜨는 순간 사라졌다.** 「dom = Elsie 두 카드를 모두 이기는 카드」만 남고
-              **그 두 카드가 뭔지 화면에 없었다.** 걸음을 넘겨도 앞은 사라진다
-              (`feedback_screen_must_not_rely_on_memory`). 그 자리에 데려온다. */}
-          <div style={{ marginTop: 3 }}>
-            {t(E, "Elsie played", "Elsie 가 낸 패")} = <b style={{ color: "#2563eb" }}>{t(E, "card 1, card 1", "카드 1, 카드 1")}</b>
           </div>
           <div style={{ marginTop: 3 }}>
             <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "⚡ count — cards that beat BOTH of Elsie's", "⚡ 카드 수 — Elsie 두 카드를 모두 이기는 카드")}
