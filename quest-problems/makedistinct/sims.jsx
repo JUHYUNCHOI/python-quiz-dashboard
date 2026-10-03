@@ -79,94 +79,6 @@ function Tile({ v, state, note }) {
   );
 }
 
-/* ⛔⛔ 2026-10-01 선생님(**세 번째 같은 질문**): *"나머지를 사용한걸 하지 않았을 경우
-     문제점이 뭔지 아직도 모르겠는데?"*
-
-   ⭐ 앞선 두 번은 **말을 고쳐서** 답했다 — 「봐도 돼요」 → 「봐야 해요」, why 에 한 줄 추가.
-     세 번 다 안 통한 이유는 분명하다: 화면이 **안 묶은 결과를 한 번도 안 보여줬다.**
-     「필수예요」라고 **주장**만 했다(`feedback_one_case_cannot_claim_always` 와 같은 모양).
-   ⭐ 안 묶으면 무엇이 깨지나 — 실측(K = 2, 3 3 3 4):
-       묶으면    3 · 5 · 7 · 4   →  3 회
-       안 묶으면 3 · 5 · 7 · 9   →  5 회
-     그런데 **4 에 2 를 더하면 6, 8, 10 … 이고 9 는 아예 안 나온다.**
-     즉 안 묶은 답은 느린 게 아니라 **있을 수 없는 계획**이다. 그게 「필수」의 정체다.
-   ⛔ 새 걸음을 만들지 않는다 — 마지막 걸음 **안에** 넣는다
-     (`feedback_shorter_not_longer`, PM 판정 2026-10-01).
-   ⭐ 강조는 **두 곳만**이다 — 「9 는 못 가요」와 「5 회」. 선생님: *"다 밋밋해서
-     노치는 정보가 많아"* → 다 굵게 하면 다시 밋밋해진다(`check-emphasis`). */
-function WrongWay({ E, show = 3 }) {
-  /* ⭐ 2026-10-02 — `show` 는 **몇 토막까지 열까**다. 선생님: *"갑자기 너무 많은 정보가 들어와"*
-     1 = 「4 도 9 까지 밀어야 한다」 · 2 = 나눗셈 · 3 = 결론과 횟수.
-     한 걸음에 새로 뜨는 것은 **한 줄**이다(`feedback_one_thing_changes_at_a_time`). */
-  const mono = { fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 };
-  return (
-    <div style={{
-      maxWidth: 470, margin: "0 auto 10px", padding: "10px 13px", borderRadius: 12,
-      background: "#fef2f2", border: "1.5px solid #fca5a5",
-      wordBreak: "keep-all", textWrap: "balance",
-    }}>
-      <div style={{ fontSize: 12, fontWeight: 800, color: "#991b1b", marginBottom: 7 }}>
-        🚫 {t(E, "If we had NOT split by remainder", "나머지로 안 묶었다면")}
-      </div>
-
-      {/* 한 줄로 쭉 밀면 4 까지 밀린다 — 그 결과를 숫자로 보여준다 */}
-      <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap",
-        fontSize: 15, color: "#7f1d1d", marginBottom: 6, ...mono }}>
-        <span>3</span><span>5</span><span>7</span>
-        <span style={{ color: "#64748b", fontWeight: 700, fontSize: 12.5 }}>
-          {t(E, "then 4 is sent past 7 (no clash check) →", "그다음 4 도 7 보다 뒤로 (겹침은 안 보고) →")}
-        </span>
-        <span style={{ fontSize: 19, color: "#b91c1c" }}>9</span>
-      </div>
-
-      {/* ⛔ 2026-10-01 학생(초6) 재검증 — 이 상자가 **주장만** 하고 있었다:
-             *"「횟수가 5회가 된다」는 **계산 과정이 화면에 전혀 없었다.** 어떻게 5가 나왔는지는
-               **못 하겠다** — 나는 계산을 재현 못 했다."*
-             *"「3,5,7 다음 자리니까 7에 2를 더해서 9」라고 나는 **추측**했다."*
-           ⭐ pedagogy 판정 — **나눗셈 한 줄이 두 질문에 동시에 답한다.**
-             3쪽이 이미 가르친 **「거리 ÷ K」** 를 그대로 다시 쓰기 때문이다. 거기선 늘
-             딱 나눠졌는데 **여기서 처음 안 나눠진다** — 「4 는 9 에 못 간다」가
-             학생이 **이미 배운 산수**로 말해진다.
-           ⚠️ 그래서 옛 줄(「4 가 갈 수 있는 수 4 → 6 → 8 → 10 …」)과는 **둘 중 하나만** 둔다.
-             둘 다 두면 같은 말을 두 번 한다 — **바꿔 끼운다, 더하지 않는다.**
-           검증: python-qa 가 **독립으로** 검산해 내 손계산과 일치했다 —
-             안 묶으면 `4 → 9`, `(9−4) ÷ 2 = 2.5`, 코드는 2 로 뭉갠다, 합 5(묶으면 3).
-             무작위 3000건 중 **855건(28.5%)** 이 브루트포스와 갈렸고 그 855건이
-             **「나누어떨어지지 않는 나눗셈이 난 경우」와 정확히 1:1 일치**한다.
-             ⛔ 그 통계는 **화면에 안 올린다** — 초6 에게 검증 불가능한 숫자이고,
-               한 문장짜리 일반화는 `feedback_one_case_cannot_claim_always` 와 같은 모양이 된다.
-               상자의 말은 **이 예제에만 한정**돼 있다(일반화 주장 없음). 근거는 커밋에 남긴다. */}
-      {show >= 2 && (
-      <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap",
-        fontSize: 12.5, color: "#1e3a8a", marginBottom: 7 }}>
-        <span style={{ fontWeight: 700 }}>{t(E, "To reach 9", "9 로 가려면")}</span>
-        <span style={{ fontSize: 14.5, color: "#334155", ...mono }}>(9 − 4) ÷ 2 = 2.5</span>
-        <span style={{ fontSize: 11.5, color: "#7f1d1d" }}>
-          {t(E, "not a whole number — it can't get there", "정수가 아니에요 — 딱 안 떨어져요")}
-        </span>
-      </div>
-      )}
-
-      {show >= 3 && (
-      <div style={{ fontSize: 13, lineHeight: 1.7, color: "#7f1d1d", fontWeight: 600,
-        whiteSpace: "pre-line" }}>
-        {t(E, "So 4 ", "그래서 4 는 ")}
-        <b style={{ color: "#b91c1c", fontSize: 14 }}>
-          {t(E, "can never become 9", "9 에 못 가요")}
-        </b>
-        {t(E, " — this plan cannot happen.\nAnd the count comes out to ",
-             " — 이건 할 수 없는 계획이에요.\n횟수도 ")}
-        {/* ⭐ `0 + 1 + 2 + 2` 는 **새 숫자가 아니다** — 0·1·2 는 학생이 걸음 7~9 에서
-               직접 본 값이고, 마지막 2 만 「안 묶었을 때 깨진 한 번」이다.
-               강조는 여전히 **두 곳**이다(`check-emphasis` 의 「다 굵으면 강조가 아니다」). */}
-        <b style={{ color: "#b91c1c", fontSize: 14 }}>{t(E, "0 + 1 + 2 + 2 = 5", "0 + 1 + 2 + 2 = 5")}</b>
-        {t(E, " (3, if grouped).", " (묶었으면 3) 로 나와요.")}
-      </div>
-      )}
-    </div>
-  );
-}
-
 /* 「K 로 나눈 나머지가 같은 값들」을 **진짜 한 줄**로 그린다.
    ⚠️ 2026-09-29 선생님(화면 보시고): *"두 줄이 어디있으며 이 줄을 가르는 건
      왜 k로 나눈 나머지이지?"* — 같은 자리를 **학생도 먼저 짚었다**:
@@ -613,10 +525,12 @@ export function WhoCanMeetSim({ E }) {
            고쳐지고도 **화면에서 다른 문장과 구분된 적이 한 번도 없었다.**
            바로 아래 걸음의 🚫 상자가 이 주장을 증명하는 구조라, 주장이 안 보이면
            증명도 「뭘 증명하는지」 모른 채 지나간다. */
-      emKo: "3 끼리만 봐야 해요",
-      emEn: "we must handle the 3s on their own",
-      ko: "이제 4 는 절대 안 겹쳐서 — 3 끼리만 봐야 해요.\n첫째 3 은 맨 앞이라 그대로예요.",
-      en: "4 can never overlap, so we must handle the 3s on their own.\nThe first 3 is at the front, so it stays." },
+      /* ⛔ 2026-10-03 — 「봐야 해요」는 **필수**로 읽힌다. 그런데 묶기는 필수가 아니다
+           (정확성이 아니라 속도다 — 선생님이 반증하셨다). **계획 선언**으로 바꾼다. */
+      emKo: "3 끼리만 보면 돼요",
+      emEn: "we only need to look at the 3s",
+      ko: "4 는 3 들과 절대 안 겹쳐요 — 그러니 3 끼리만 보면 돼요.\n첫째 3 은 맨 앞이라 그대로예요.",
+      en: "4 can never overlap with the 3s — so we only need to look at the 3s.\nThe first 3 is at the front, so it stays." },
 
     { tiles: [3, 5, 3, 4], st: ["placed", "moving", "placed", "even"],
       extra: ["", "· 3→5", "", ""], chains: [1, 0], named: true, ops: 1,
@@ -642,39 +556,22 @@ export function WhoCanMeetSim({ E }) {
       ko: "3, 5, 7, 4 — 다 달라졌어요. 민 횟수는 0 + 1 + 2 = 3 회.",
       en: "3, 5, 7, 4 — all different now. Moves: 0 + 1 + 2 = 3." },
 
-    /* 토막 ①— 「안 묶으면 4 도 뒤로 밀어야 한다」 그 한 가지만. */
-    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "moving"],
-      extra: ["", "", "", ""], ops: 3, tone: "stuck", wrong: 1,
-      /* ⛔ 2026-10-03 선생님: *"이것 4는 바뀐 숫자에 없으니까 **그냥 냅두는거 아니야?**"*
-         맞는 말씀이다(완전탐색 확인: 최소 답 3·4·5·7, **4 는 0번**).
-         전에는 *"4 도 7 보다 뒤로 밀어야 해요"* 라고 **이유 없이 주장**했다 —
-         그건 문제의 요구가 아니라 **「안 묶는 방법」이 멋대로 요구하는 것**이다.
-         그 방법은 넷을 한 줄로 세우고 **겹치는지 보지도 않고** 「앞보다 뒤」만 시킨다.
-         화면이 그 말을 안 하니 읽는 사람은 당연히 「4 는 안 겹치는데?」가 된다. */
-      ko: "나머지로 안 묶으면 넷을 한 줄로 세워요.\n그러면 겹치는지 보지도 않고 4 도 앞의 7 보다 뒤로 보내요 — 9 까지요.",
-      en: "Without splitting, all four go in one line.\nThen 4 is pushed past 7 without even checking if it clashes — all the way to 9." },
-
-    /* 토막 ②— 나눗셈 한 줄. **묻기만 한다**, 답은 다음 걸음. */
-    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "moving"],
-      extra: ["", "", "", ""], ops: 3, tone: "stuck", wrong: 2,
-      emKo: "2.5 번",
-      emEn: "2.5 times",
-      ko: "4 에서 9 까지 2 씩 몇 번 밀어야 할까요?\n(9 − 4) ÷ 2 — 2.5 번이 나와요.",
-      en: "How many pushes of 2 take 4 to 9?\n(9 − 4) ÷ 2 — it comes out 2.5." },
-
-    /* 토막 ③— 결론. 여기서 처음 「횟수 5」가 나온다. */
+    /* ⛔⛔ 2026-10-03 — 여기 있던 🚫 상자 세 걸음을 **통째로 걷어냈다. 거짓이었다.**
+       선생님이 직접 반증하셨다: *"k가 0보다 클 때와 작을 때를 나누어서, **전에 숫자랑
+       같거나 이미 있는 숫자일 때** 하는 방법은 없나?"* — 그 방법은
+       **나머지로 안 묶고도 언제나 최소다**(세 번 독립 검증, 반례 0건).
+       우리가 「안 묶으면」이라고 보여 준 건 **「앞 수보다 뒤로만 미는」 허수아비**였다.
+       ⛔ 사흘 만에 **같은 실수를 두 번** 했다 — chapters.jsx:225 주석이 2026-09-30 에
+         *"그 7은 **구현 버그의 산출물**이었다"* 고 똑같은 함정을 잡아 놨었다.
+       ⭐ 진짜 이유는 **속도**이고, 그 증거는 **2쪽에 이미 있다**(199억 9,990만 번).
+         여기서 또 증명하지 않고 **가리킨다**(`feedback_why_and_how_over_slowness`).
+       ⭐ 색도 `stuck`(빨강) → `aha`(초록) — 그 방법은 **틀린 게 아니라 느릴 뿐**이다. */
     { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "placed"],
-      /* ⚠️ 줄 둘(`chains`)을 여기서는 안 띄운다 — 상자가 네 줄로 자란 뒤라
-           같이 두면 다시 「갑자기 너무 많은 정보」가 된다. 줄은 이미 다섯 걸음 봤다. */
-      extra: ["", "", "", ""], ops: 3, tone: "aha", wrong: 3,
-      /* ⛔ 2026-09-29 감사 판정 — 옛 문장 *"이 **나눔**은 다음 쪽에서도 그대로 써요"* 는 **거짓**이었다.
-           6쪽은 숫자도 묶음 크기도 다르다. 그대로 쓰는 건 숫자가 아니라 **나머지로 묶는 방법**이다. */
-      /* ⛔ 말풍선이 상자와 **같은 말을 또 하면 안 된다** — 「9 에 못 간다」와 「5 회」는
-           바로 아래 상자가 숫자로 말한다. 말풍선은 **여기서 가져갈 것 한 줄**만 맡는다. */
-      emKo: "4 는 그냥 둬도 됐어요",
-      emEn: "4 could have just stayed",
-      ko: "사실 4 는 3, 5, 7 과 안 겹쳐요 — 4 는 그냥 둬도 됐어요.\n한 줄로 세우면 그걸 못 봐요. 그래서 나머지로 묶는 건 요령이 아니라 꼭 해야 하는 일이에요.",
-      en: "In fact 4 never clashes with 3, 5, 7 — 4 could have just stayed.\nOne single line cannot see that. So splitting by remainder is not a shortcut; it is a must." },
+      extra: ["", "", "", ""], chains: [1, 0], named: true, ops: 3, tone: "aha",
+      emKo: "답은 똑같아요",
+      emEn: "the answer comes out the same",
+      ko: "사실 나누지 않고 「이미 있는 수인가」만 하나씩 확인해도 답은 똑같아요 — 3 회예요.\n다만 수가 많아지면 2쪽에서 본 199억 번처럼 느려져요.\n나머지로 나누면 한 번에 건너뛸 수 있어서 그 시간이 사라져요.",
+      en: "Actually, without splitting at all — just checking \"is this number taken?\" — the answer comes out the same: 3.\nBut with many numbers it gets slow, like the 19,999,900,000 on page 2.\nSplitting by remainder lets us jump in one go, and that time disappears." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -698,7 +595,6 @@ export function WhoCanMeetSim({ E }) {
         {/* ⭐ 자리는 **타일 바로 아래**다 — 「묶어서 푼 결과(타일)」와 「안 묶은 결과」가
             나란히 보여야 대조가 된다. 마지막 걸음에만 뜨므로 그 위의 줄은 안 밀린다
             (ux 판정 2026-09-29 의 「새로 뜨는 것은 아래로만」). */}
-        {s.wrong && <WrongWay E={E} show={s.wrong} />}
 
         {/* ⭐ 블록 순서는 **ux-reviewer 판정(2026-09-29)** 이다. 잣대는 「무엇이 안 밀리나」.
             `chains`/`kcompare` 를 **타일 바로 밑에 못박고**, 걸음마다 생겼다 사라지는
