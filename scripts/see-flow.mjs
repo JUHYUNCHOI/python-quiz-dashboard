@@ -50,7 +50,7 @@ const MAX = args.includes('--max') ? +args[args.indexOf('--max') + 1] : 40
    **quest 셋이 연달아 「쪽이 1개로 잡혔다」로 실패**했다(strangefn·makedistinct·swaptowin).
    학생 셋이 각각 손으로 세어 우회했다 — **도구가 조용히 틀린 것**이다.
    이제 **정규식으로 둘 다** 받는다. 라벨이 또 바뀌면 여기부터 봐라. */
-const NEXT_RE = lang === 'en' ? /^(Next page ▶|Next →)$/ : /^(다음 쪽 ▶|다음 →)$/
+const NEXT_RE = lang === 'en' ? /^(Next page( ▶)?|Next →)$/ : /^(다음 쪽( ▶)?|다음 →)$/
 const SUBNEXT_RE = lang === 'en' ? /^(Next ▶|Next)$/ : /^(다음 ▶|다음)$/
 const NEXT = lang === 'en' ? 'Next →' : '다음 →'
 const SUBNEXT = lang === 'en' ? 'Next ▶' : '다음 ▶'

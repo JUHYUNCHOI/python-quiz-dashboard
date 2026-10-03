@@ -399,6 +399,23 @@ export function QuestProgressBar({
   );
 }
 
+/* ⭐⭐ 2026-10-03 — **쪽 넘김 버튼에서 화살표(▶◀)를 뺐다.** 이게 **여섯 번째 처방**이다.
+   학생이 다섯 번 헷갈렸고 다섯 번 다 고쳤는데 다섯 번 다 남았다:
+     09-09 라벨을 처음 붙임 / 09-21 모양 / 09-24 모서리 반지름(8px vs 9px) /
+     09-27 라벨에 「쪽」을 덧붙임 / 10-03 색을 고정 중립색으로 분리
+   ⭐ **오늘 색은 통했다** — 학생이 안쪽을 「파란색」, 바깥을 「검은 띠」로 **구별해 적었다.**
+     그런데도 헷갈렸다: *"둘 다 **「다음」이라는 글자에 똑같은 ▶ 화살표**가 붙어 있다.
+     모양이 똑같아서 **아무거나 눌러도 같은 일이 일어날 것처럼 보였다.**"*
+   ⛔ **다섯 번 다 「다음」+「▶」는 그대로 두고 주변만 바꿨다.**
+   ⭐ ux 판정: *"안 건드린 유일한 축이 **기호의 존재 여부**다. 다른 화살표(`››`·`→`)로
+     바꾸는 건 여전히 **삼각형류 전진 기호**라 모양 축의 실패를 되풀이한다.
+     **아예 없애면 SimNav(⏮◀▶)와 공유하는 글자가 0개가 된다.**"*
+   ⚠️ ux 가 스스로 적었다 — *"「이번엔 확실히 된다」는 보장이 아니다. 과거 다섯 번도
+     매번 「이번엔 다를 이유」가 있었다."* **새 학생 재검증이 유일한 잣대다.**
+   ⛔ **이 라벨을 또 바꾸면 `scripts/see-flow.mjs` 와
+     `scripts/check-codewalk-bubble-hidden.mjs` 의 정규식을 같이 고쳐라** —
+     둘 다 라벨을 **정확히 일치**로 찾는다. 2026-09 에 라벨을 바꿨다가
+     **quest 셋이 「쪽이 1개」로 잡히는** 사고가 이미 한 번 났다. */
 /* 「다음 쪽 ▶」(사이트 전역 쪽 넘김) 과 SimNav 의 「다음 ▶」(그 문제 안 시뮬 조작) 이
    둘 다 quest `accent` 를 그대로 써서 **같은 색 · 같은 글자 · 같은 모서리**가 되는
    사고가 네 번째로 지적됐다 (`feedback_one_nav_shape_per_screen.md`).
@@ -498,7 +515,7 @@ export function QuestBottomNav({
               cursor: prevDisabled ? "default" : "pointer",
               color: prevDisabled ? "#b0b5c3" : NAV_NEUTRAL,
               pointerEvents: "auto", whiteSpace: "nowrap", minWidth: 0,
-            }}>{t(E, "◀ Prev page", "◀ 이전 쪽")}</button>
+            }}>{t(E, "Prev page", "이전 쪽")}</button>
             <button onClick={onNext} disabled={!canNext} style={{
               background: !canNext ? "#e5e7eb" : NAV_NEUTRAL,
               border: `2px solid ${!canNext ? "#e5e7eb" : NAV_NEUTRAL}`,
@@ -507,7 +524,7 @@ export function QuestBottomNav({
               cursor: !canNext ? "default" : "pointer",
               color: !canNext ? "#b0b5c3" : "#fff",
               pointerEvents: "auto", whiteSpace: "nowrap", minWidth: 0,
-            }}>{t(E, "Next page ▶", "다음 쪽 ▶")}</button>
+            }}>{t(E, "Next page", "다음 쪽")}</button>
           </div>
           {/* 「목록으로」 — quest 목록으로 나가는 탈출로. (2026-09-27)
               왜 여기 붙였나 — 오늘 상단 sticky 바 둘을 걷어내며(41c522bd·704b6b7f)

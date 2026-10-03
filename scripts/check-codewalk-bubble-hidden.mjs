@@ -88,7 +88,7 @@ const CODE_TAB = /^(⚡|💻)\s*(코드|Code\b)/;
    토글 둘(🐍 Py · 💻 C++)을 명시적으로 뺀다. */
 const LANG_TOGGLE = /^(🐍\s*Py|💻\s*C\+\+)$/;
 const CODE_TAB_LOOSE = /^(⚡|💻)\s*\S/;
-const NEXT_PAGE = /^(다음 쪽 ▶|Next page ▶|다음 →|Next →)$/;
+const NEXT_PAGE = /^(다음 쪽( ▶)?|Next page( ▶)?|다음 →|Next →)$/;   /* ( ▶)? — 2026-10-03 에 화살표를 뺐다 */
 const NEXT_STEP = /^(다음 ▶|Next ▶|▶)$/;           // SimNav — 쪽 넘김과 안 겹치게
 
 function codewalkQuests() {
