@@ -132,6 +132,15 @@ export function makeCheckupsCh1(E) {
       question: t(E,
         "After reversing a[2..4] of a=[5, 1, 2, 3, 4], what is a[3]?",
         "a=[5, 1, 2, 3, 4] 의 a[2..4] 를 뒤집은 후, a[3] 의 값은?"),
+      visual: (
+        <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10, padding: "10px 12px" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#991b1b", marginBottom: 6, wordBreak: "keep-all" }}>
+            🔁 {t(E, "red = the part that flips", "빨간 칸 = 뒤집히는 구간")}
+          </div>
+          <_QRow label="a" vals={[5, 1, 2, 3, 4]} box={[2, 4]} />
+          {_QNums(5)}
+        </div>
+      ),
       options: ["1", "2", "3", "4"],
       correct: 1,
       explain: t(E,
@@ -148,6 +157,16 @@ export function makeCheckupsCh1(E) {
       question: t(E,
         "Checkups after reversing a[1..2] of a=[1, 2] vs b=[2, 1]?",
         "a=[1, 2] 의 a[1..2] 를 뒤집은 뒤 b=[2, 1] 와 비교하면 검진 수는 몇일까요?"),
+      visual: (
+        <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10, padding: "10px 12px" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#991b1b", marginBottom: 6, wordBreak: "keep-all" }}>
+            🔁 {t(E, "red = the part that flips", "빨간 칸 = 뒤집히는 구간")}
+          </div>
+          <_QRow label="a" vals={[1, 2]} box={[1, 2]} />
+          <_QRow label="b" vals={[2, 1]} />
+          {_QNums(2)}
+        </div>
+      ),
       hint: t(E,
         "Reverse a[1..2] in your head, then compare each spot to b position by position.",
         "머릿속으로 a[1..2] 를 뒤집어 본 뒤, b 와 자리마다 하나씩 비교해 봐요."),
@@ -161,6 +180,46 @@ export function makeCheckupsCh1(E) {
    The obvious O(N³): try every (l, r), reverse, count. Build it section by
    section, RUN it live (feel it crawl), then see why N = 7500 times out.
    ════════════════════════════════════════════════════════════════════ */
+/* ⭐ 2026-10-03 — 퀴즈 쪽에 **그림이 하나도 없었다.**
+   pedagogy 가 문제 4/5·5/5 를 **❌(글 의존)** 으로 판정: *"배열이 어떻게 뒤집히는지를
+     보여줄 그림이 **아예 없음**(1쪽엔 있었는데 여기선 사라짐)."*
+   학생도 같은 두 쪽을 독립적으로 짚었다.
+   선생님(2026-10-03): *"그럼 **그림은 왜있는거야.**"*
+   ⭐ **1쪽 시뮬의 칸 모양을 그대로** 쓴다 — 학생이 이미 본 모양이라야 설명이 필요 없다
+     (`quest_season_shape_consistency`). 뒤집을 구간은 **빨간 점선 네모**로, 1쪽과 같다. */
+function _QCell({ v, inBox }) {
+  return (
+    <div style={{
+      width: 30, height: 30, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 14,
+      background: inBox ? "#fef2f2" : "#fff", color: inBox ? "#991b1b" : C.text,
+      border: `1.5px solid ${inBox ? "#fca5a5" : C.border}`,
+    }}>{v}</div>
+  );
+}
+function _QRow({ label, vals, box }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+      <div style={{ width: 34, textAlign: "right", fontSize: 11, fontWeight: 700, color: C.dim }}>{label}</div>
+      <div style={{ display: "flex", gap: 5 }}>
+        {vals.map((v, i) => <_QCell key={i} v={v} inBox={!!box && i + 1 >= box[0] && i + 1 <= box[1]} />)}
+      </div>
+    </div>
+  );
+}
+function _QNums(n) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 1 }}>
+      <div style={{ width: 34 }} />
+      <div style={{ display: "flex", gap: 5 }}>
+        {Array.from({ length: n }, (_, i) => (
+          <div key={i} style={{ width: 30, textAlign: "center", fontSize: 10, color: C.dim }}>{i + 1}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function makeCheckupsCh2(E, lang = "py") {
   return [
     /* 2-1 — Light, narrative intro. */
@@ -169,11 +228,34 @@ export function makeCheckupsCh2(E, lang = "py") {
       narr: t(E,
         "Just write the obvious thing first. Try every (l, r), reverse, count matches.",
         "일단 눈에 보이는 대로 짜요. (l, r) 다 돌리고, 뒤집고, 세요."),
+      /* ⭐ 2026-10-03 — **문단 하나뿐이고 그림이 0개였다.** 선생님 승인(동결 해제).
+         pedagogy: *"**순수 문단 하나, 그림 0개.** 선생님이 **가리킬 게 아무것도 없다.**"*
+         선생님: *"내가 이걸 보면서 **설명을 해야하는데** 언제 글을 다 읽고 있어."*
+         ⭐ 이 쪽이 하는 말은 사실 **세 걸음**이다 — 다 돌리고 / 뒤집고 / 센다.
+           글로 늘어놓지 않고 **세 칸으로 세운다.** 아래 섹션들이 짤 코드의 뼈대가
+           이 세 칸이라, 선생님은 칸을 짚으며 「이게 1️⃣, 이게 2️⃣」 하면 된다.
+         ⛔ 쪽을 늘리지 않았다 — 같은 한 쪽 안이다(`feedback_shorter_not_longer`). */
       content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "We have a small N. The straight-forward solution is fine for partial credit and reads as a 1:1 translation of the problem statement. Sections below build it line by line — read the code as you'd read a story.",
-            "N 이 크지 않아요. 가장 직접적인 풀이로 부분점수 받기에 충분하고, 코드도 문제 설명을 그대로 옮긴 모양이에요. 아래 섹션들이 한 단락씩 코드 쌓아가요 — 그냥 코드를 이야기 읽듯 읽어보세요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))", gap: 8, marginBottom: 10 }}>
+            {[
+              { ico: "⟲", ko: "구간을 다 돌린다", en: "try every range", tone: "#2563eb", bg: "#eff6ff", bd: "#bfdbfe" },
+              { ico: "🔁", ko: "그 구간을 뒤집는다", en: "reverse it",      tone: "#991b1b", bg: "#fef2f2", bd: "#fca5a5" },
+              { ico: "✓", ko: "맞는 자리를 센다",  en: "count matches",   tone: "#15803d", bg: "#dcfce7", bd: "#86efac" },
+            ].map((c, i) => (
+              <div key={i} style={{ background: c.bg, border: `1.5px solid ${c.bd}`, borderRadius: 10, padding: "10px 8px", textAlign: "center" }}>
+                <div style={{ fontSize: 20, lineHeight: 1.1 }}>{c.ico}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: c.tone, marginTop: 2 }}>{i + 1}</div>
+                <div style={{ fontSize: 11.5, fontWeight: 700, color: c.tone, marginTop: 3, wordBreak: "keep-all", lineHeight: 1.4 }}>
+                  {t(E, c.en, c.ko)}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: 12.5, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
+            {t(E, "N is small — this is enough for partial credit.",
+                  "N 이 크지 않아서 이것만으로 부분점수가 나와요.")}
+          </div>
         </div>),
     },
 
@@ -368,31 +450,27 @@ export function makeCheckupsCh3(E, lang = "py") {
         </div>),
     },
 
-    /* 3-4 — '가운데서 넓히기' 한눈에 정리 (선생님 2026-07-03: 학술 카드 → 학생 말투·구체로 재작성) */
+    /* ⭐ 2026-10-03 — **글 네 장을 두 줄로 줄였다.** 선생님 승인(동결 해제).
+       pedagogy 판정: *"바로 앞 두 쪽이 **그림으로 완성한** payoff 를 다시 **4장의 글**로
+         반복한다. 선생님이 「가운데서 넓히기」를 그림으로 막 이해시킨 그 순간
+         **글로 되돌아간다.**"*
+       선생님(2026-10-03): *"그럼 **그림은 왜있는거야.**"*
+
+       ⛔ **통째로 지우지는 않았다.** 네 장 중 둘만 되풀이였다 —
+         💡「한 줄로」 = ExpandSim 이 **양 끝 두 칸만 바뀌는 걸 그림으로** 보여줬다.
+         ✅「왜 빨라」 = 바로 앞 쪽(3-3)이 **브루트 vs 넓히기 2색 박스로** 보여줬다.
+         → 이 둘은 지운다.
+       ⭐ 남은 둘은 **그림이 한 번도 말한 적 없는 것**이라 남긴다 —
+         ⚠️「언제 통하나」(한계) · 🎯「어디서 또 만나나」(팰린드롬으로 옮겨가기).
+         `feedback_show_how_to_approach` — 선생님이 **세 번** 말씀하신
+         *"이 문제를 보고 **어떻게 접근할수 있는지**"* 가 바로 이 자리다.
+         이걸 지우면 다음 문제에 가져갈 것이 없어진다. */
     {
       type: "reveal",
-      narr: t(E, "Wrap-up — 'widen from the center', in one look.",
-                 "정리 — '가운데서 넓히기' 한눈에."),
+      narr: t(E, "One more thing — when does this trick work?",
+                 "하나만 더 — 이 방법은 언제 통할까?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "#0e7490", textAlign: "center", marginBottom: 12, wordBreak: "keep-all" }}>
-            📌 {t(E, "'Widen from the center' — in one look", "'가운데서 넓히기' — 한눈에")}
-          </div>
-
-          <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 13px", marginBottom: 9, fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.75, wordBreak: "keep-all" }}>
-            <div style={{ fontWeight: 800, marginBottom: 4 }}>💡 {t(E, "In one line", "한 줄로")}</div>
-            {t(E,
-              "Don't recount each interval from scratch. Start at its center and widen one step at a time — the only cells that change are the two outer ends. The middle stays the same even after flipping.",
-              "구간마다 처음부터 다시 세지 말자. 가운데에서 한 칸씩 넓히면, 새로 바뀌는 건 양쪽 끝 두 칸뿐이에요. 가운데는 뒤집어도 그대로거든요.")}
-          </div>
-
-          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 13px", marginBottom: 9, fontSize: 12.5, color: "#065f46", lineHeight: 1.75, wordBreak: "keep-all" }}>
-            <div style={{ fontWeight: 800, marginBottom: 4 }}>✅ {t(E, "Why it's fast", "왜 빨라")}</div>
-            {t(E,
-              "It never actually reverses, and never recounts the middle. Each widen fixes just two cells — so it's about N times faster than brute force. Fast enough to pass.",
-              "실제로 뒤집지도, 가운데를 다시 세지도 않아요. 한 번 넓힐 때 딱 두 칸만 고치니까 — 브루트포스보다 N배쯤 빨라져서 통과해요.")}
-          </div>
-
           <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 13px", marginBottom: 9, fontSize: 12.5, color: "#92400e", lineHeight: 1.75, wordBreak: "keep-all" }}>
             <div style={{ fontWeight: 800, marginBottom: 4 }}>⚠️ {t(E, "When does this work?", "언제 이게 통해?")}</div>
             {t(E,
@@ -640,31 +718,52 @@ export function makeCheckupsCh4(E, lang = "py") {
       type: "reveal",
       narr: t(E, "One honest note — which language passes here?",
                  "솔직한 한마디 — 이 문제, 어떤 언어로 통과할까?"),
+      /* ⭐ 2026-10-03 — **글 세 장을 그림 두 칸으로.** 선생님 승인(동결 해제).
+         pedagogy 판정: *"3개 카드, 전부 문단. N=7500 · O(N²)=2800만 · 0.05초 · 40초가
+           **전부 글자로만** 있다."* 숫자 넷이 다 글 속에 숨어 있었다.
+         선생님(2026-10-03): *"**딱 봐도 뭔지, 강조할건 강조하고** 그래야지."*
+         ⭐ **양식을 발명하지 않았다** — 같은 quest 2-8 쪽(브루트 한계)의
+           **초록 ✓ / 빨강 ✗ 박스를 그대로** 가져왔다. 학생이 이미 본 모양이다
+           (`quest_season_shape_consistency` · `feedback_example_code_is_contagious`).
+         ⛔ ✅「center-expansion 한 줄 정리」 카드는 **지웠다** — 바로 앞 CodeWalk 이
+           그 코드를 줄마다 짚으며 막 끝낸 참이다(`feedback_shorter_not_longer`). */
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "#0e7490", textAlign: "center", marginBottom: 12, wordBreak: "keep-all" }}>
-            🏁 {t(E, "Wrap-up & language choice", "정리 & 언어 선택")}
+          <div style={{ fontSize: 14, fontWeight: 800, color: "#0e7490", textAlign: "center", marginBottom: 4, wordBreak: "keep-all" }}>
+            🏁 {t(E, "Same code, two languages", "같은 코드, 두 언어")}
+          </div>
+          <div style={{ textAlign: "center", fontSize: 12, color: C.dim, marginBottom: 12, wordBreak: "keep-all" }}>
+            N = 7,500 → {t(E, "inner loop", "안쪽 반복")}{" "}
+            <b style={{ fontSize: 17, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace" }}>2,800만</b>{t(E, " steps", " 번")}
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 13px", marginBottom: 10, fontSize: 12, color: "#065f46", lineHeight: 1.7, wordBreak: "keep-all" }}>
-            <div style={{ fontWeight: 800, marginBottom: 4 }}>✅ {t(E, "center-expansion, in one line", "center-expansion 한 줄 정리")}</div>
-            {t(E,
-              "Start from baseMatches, widen from each center, fix only the two ends (−1/+1), tally answer[checkups]. O(N²).",
-              "baseMatches에서 출발 → 중심마다 넓히며 두 끝만 (−1/+1) → answer[검진수] 집계. O(N²).")}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10, marginBottom: 10 }}>
+            {[
+              { lang: "C++",    ms: "0.05초", msEn: "0.05 s", ok: true,  label: t(E, "passes", "통과") },
+              { lang: "Python", ms: "40초",   msEn: "~40 s",  ok: false, label: t(E, "TLE", "시간 초과") },
+            ].map((row) => (
+              <div key={row.lang} style={{
+                background: row.ok ? "#dcfce7" : "#fee2e2",
+                border: `1.5px solid ${row.ok ? "#86efac" : "#fca5a5"}`,
+                borderRadius: 8, padding: 10, textAlign: "center",
+              }}>
+                <div style={{ fontSize: 12, color: row.ok ? "#15803d" : "#991b1b", fontWeight: 700, marginBottom: 3 }}>
+                  {row.lang}
+                </div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 20, fontWeight: 800, color: row.ok ? "#166534" : "#7f1d1d" }}>
+                  {t(E, row.msEn, row.ms)}
+                </div>
+                <div style={{ fontSize: 11, color: row.ok ? "#15803d" : "#991b1b", marginTop: 3, fontWeight: 700 }}>
+                  {row.ok ? "✓" : "✗"} {row.label}
+                </div>
+              </div>
+            ))}
           </div>
 
-          <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 13px", marginBottom: 10, fontSize: 12, color: "#7f1d1d", lineHeight: 1.7, wordBreak: "keep-all" }}>
-            <div style={{ fontWeight: 800, marginBottom: 4 }}>⚠️ {t(E, "Python has a real limit here", "이 문제, Python은 한계가 있어요")}</div>
-            {t(E,
-              "N = 7500 means O(N²) ≈ 28 million inner-loop steps. In C++ that's ~0.05 s → passes. In Python (CPython) the same loop is ~40 s → TLE on the big cases. It's not an algorithm problem — it's language speed, and there is NO faster algorithm (O(N²) is the intended complexity).",
-              "N = 7500 이면 O(N²), 안쪽 반복이 2,800만 번이에요. C++ 은 0.05초쯤이라 통과해요. 그런데 Python(CPython)은 같은 반복이 40초쯤 걸려서 큰 입력에서 시간 초과(TLE)가 나요. 알고리즘이 문제가 아니라 언어 속도가 문제예요. 게다가 더 빠른 알고리즘도 없어요 (O(N²) 가 원래 의도된 복잡도예요).")}
-          </div>
-
-          <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 13px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all" }}>
-            <div style={{ fontWeight: 800, marginBottom: 4 }}>🎯 {t(E, "So", "그래서")}</div>
-            {t(E,
-              "For big N with an O(N²) solution, the language matters. Here: submit in C++ (passes). Pure Python can't hit the limit; only heavy numpy vectorization (letting numpy compute a whole row at once) has a chance. A good lesson: sometimes the right move is choosing C++.",
-              "N 이 크고 풀이가 O(N²) 면 어떤 언어로 쓰느냐가 중요해요. 이 문제는 C++ 로 제출하면 통과해요. 순수 Python 은 시간 안에 못 들어오고, numpy 로 한꺼번에 계산(벡터화)해야 겨우 가능해요. 좋은 교훈이에요 — 때로는 'C++ 로 가는 것' 이 정답이에요.")}
+          <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 8, padding: "10px 12px", fontSize: 12.5, color: "#7c2d12", lineHeight: 1.6, wordBreak: "keep-all" }}>
+            💡 {t(E,
+              "The algorithm is not the problem — there is no faster one. So here, the right move is to submit in C++.",
+              "알고리즘이 느린 게 아니에요 — 더 빠른 방법이 아예 없어요. 그래서 이 문제는 C++ 로 내는 게 맞아요.")}
           </div>
         </div>),
     },

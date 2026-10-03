@@ -176,6 +176,15 @@ interface QuizProps {
   explain?: string
   answered: number | null
   onAnswer: (i: number) => void
+  /* ⭐ 2026-10-03 — **퀴즈 쪽에 그림이 하나도 없다**는 지적에서 왔다.
+     선생님: *"자꾸 **글을 읽게** 만드네. 그럼 **그림은 왜있는거야.**"*
+     학생(초6)이 `mcc15choco` 4·5쪽에서: *"그림이 하나도 없어서 「이게 뭘 묻는
+       건지」 **전혀 모르겠다.** 그냥 글자 카드일 뿐."*
+     `pedagogy-reviewer` 가 `checkups` 문제 4/5·5/5 를 **❌(글 의존)** 으로 판정하며
+       *"배열이 어떻게 뒤집히는지 보여줄 그림이 **아예 없다**. 1쪽엔 있었는데 여기선 사라졌다."*
+     ⚠️ **선택 항목이다** — 안 넘기면 지금까지와 똑같이 그려진다.
+        quest 180개가 쓰는 공유 컴포넌트라 기존 화면을 한 픽셀도 안 바꾼다. */
+  visual?: React.ReactNode
 }
 
 // 인라인 마크다운 — backtick 코드 + **bold** 처리. Quiz / NumInput
@@ -211,7 +220,7 @@ function renderInlineCode(text: string, keyPrefix: string): React.ReactNode {
   })
 }
 
-export function Quiz({ question, hint, options, correct, explain, answered, onAnswer }: QuizProps) {
+export function Quiz({ question, hint, options, correct, explain, answered, onAnswer, visual }: QuizProps) {
   /* ⚠️ 2026-10-01 — 답을 고르면 버튼에 ✅/❌ 가 붙고 `explain` 상자가 뜨는데,
      **화면 밖으로 떨어지면 둘 다 자동으로 보여주지 않는다.** 재현: 320×568(구형·
      보급형폰) 에서 `explain` 상자가 뷰포트 **완전히 아래**(y 583~650, innerHeight 568)
@@ -247,6 +256,8 @@ export function Quiz({ question, hint, options, correct, explain, answered, onAn
   }, [answered])
   return (
     <div className="p-4" ref={rootRef}>
+      {/* 그림이 있으면 **묻기 전에** 보여준다 — 묻고 나서 보여주면 이미 글을 읽은 뒤다. */}
+      {visual && <div className="mb-3">{visual}</div>}
       <div className="text-sm font-bold mb-3 text-gray-800">{renderInline(question)}</div>
       {hint && (
         <div className="text-xs font-semibold mb-2 text-amber-600">💡 {renderInline(hint)}</div>
@@ -303,9 +314,11 @@ interface NumInputProps {
      ⚠️ **선택 prop 이다.** 안 넘기면 지금과 똑같이 아무것도 안 뜬다
      (`type: "input"` 을 쓰는 quest 130개는 영향 없음). */
   explain?: string
+  /* `Quiz` 와 같은 선택 그림 자리 (2026-10-03) — 안 넘기면 아무것도 안 바뀐다. */
+  visual?: React.ReactNode
 }
 
-export function NumInput({ question, hint, answer, E, onSolve, explain }: NumInputProps) {
+export function NumInput({ question, hint, answer, E, onSolve, explain, visual }: NumInputProps) {
   const [val, setVal] = useState("")
   const [wrong, setWrong] = useState(false)
   const [correct, setCorrect] = useState(false)
@@ -361,6 +374,8 @@ export function NumInput({ question, hint, answer, E, onSolve, explain }: NumInp
 
   return (
     <div className="p-4">
+      {/* 묻기 **전에** 그림 (2026-10-03) — Quiz 와 같은 자리다. */}
+      {visual && <div className="mb-3">{visual}</div>}
       <div className="text-sm font-bold mb-2.5 text-gray-800">{question}</div>
       {/* whitespace-pre-line: hint 안의 \n 이 공백으로 뭉개지고 있었다 (2026-09-04).
           같은 파일 Quiz 의 explain 은 오늘 고쳤는데 여기만 빠져 있었다. */}
