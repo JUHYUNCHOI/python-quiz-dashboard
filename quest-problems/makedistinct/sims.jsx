@@ -570,8 +570,8 @@ export function WhoCanMeetSim({ E }) {
       extra: ["", "", "", ""], chains: [1, 0], named: true, ops: 3, tone: "aha",
       emKo: "답은 똑같아요",
       emEn: "the answer comes out the same",
-      ko: "사실 나누지 않고 「이미 있는 수인가」만 하나씩 확인해도 답은 똑같아요 — 3 회예요.\n다만 수가 많아지면 2쪽에서 본 199억 번처럼 느려져요.\n나머지로 나누면 한 번에 건너뛸 수 있어서 그 시간이 사라져요.",
-      en: "Actually, without splitting at all — just checking \"is this number taken?\" — the answer comes out the same: 3.\nBut with many numbers it gets slow, like the 19,999,900,000 on page 2.\nSplitting by remainder lets us jump in one go, and that time disappears." },
+      ko: "사실 나누지 않고 「이미 있는 수인가」만 하나씩 확인해도 답은 똑같아요 — 3 회예요.\n다만 수가 20만 개면 하나씩 확인하는 횟수가 199억 번이에요 — 끝나지 않아요.\n나머지로 나누면 한 번에 건너뛸 수 있어서 그 시간이 사라져요.",
+      en: "Actually, without splitting at all — just checking \"is this number taken?\" — the answer comes out the same: 3.\nBut with 200,000 numbers that one-by-one checking runs 19,999,900,000 times — it never finishes.\nSplitting by remainder lets us jump in one go, and that time disappears." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
