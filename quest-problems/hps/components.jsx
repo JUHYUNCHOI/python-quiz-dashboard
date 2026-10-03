@@ -1978,7 +1978,12 @@ export function HpsFormulaGridSim({ E }) {
        하단 고정 바에 **59~84% 가려졌다**(ux 가 좌표+스크린샷으로 확인). 감싸서 끌어오는
        대신 **지웠다** — 다른 건 괄호 안 `dom` 이름뿐이라 그것만 여기로 옮긴다. */
     { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.\nWe call that count dom (short for 'dominates').", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.\n이 개수를 dom 이라고 불러요 ('dominate 제압' 의 앞 세 글자).") },
-    { phase: "grid",  bubble: t(E, "Now it is Bessie's turn — she picks 2 cards.\nThe grid lays out every choice: row = her 1st card, column = her 2nd. 3 × 3 = 9 hands.", "이제 Bessie 차례예요 — 카드 2 장을 골라요.\n고를 수 있는 「모든」 경우를 격자에 폈어요: 행이 첫 장, 열이 둘째 장. 3 × 3 = 9 패예요.") },
+    /* ⛔ 2026-10-03 선생님: *"**언제 글을 다 읽고 있어. 딱 봐도 뭔지, 강조할 건 강조하고.**"*
+       전엔 두 줄짜리 산문이었고 그중 「행=첫 장, 열=둘째 장」은 **격자 아래 축 설명이
+       이미 하고 있었다** — 같은 말을 두 번, 그것도 글로. 한 줄로 줄이고 **수를 크게** 한다. */
+    { phase: "grid",  bubble: (<>{t(E, "Bessie picks 2 cards — ", "Bessie 는 2 장을 골라요 — ")}
+      <b style={{ fontSize: 19, color: "#5b21b6" }}>3 × 3 = 9</b>
+      {t(E, " hands in all.", " 가지예요.")}</>) },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
     { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.") },
     /* ⛔ 2026-10-02 4차 학생: *"그만두고 싶었던 걸음: 6/7. 넷이 동시에 떠 있었다."*
@@ -2068,10 +2073,12 @@ export function HpsFormulaGridSim({ E }) {
             <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}
           </div>
           <div style={{ marginTop: 3 }}>
-            <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "⚡ count — cards that beat BOTH of Elsie's", "⚡ 카드 수 — Elsie 두 카드를 모두 이기는 카드")}
-          </div>
-          <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>
-            {t(E, "(“dom” = short for “dominates”)", "(‘dom’ = ‘dominate 제압’ 의 앞 세 글자)")}
+            {/* ⛔ 2026-10-03 — 세 줄짜리 글이었다. ⚡ 가 이미 격자에 찍혀 있으니
+                **기호로** 잇고 글을 줄인다(선생님: "언제 글을 다 읽고 있어"). */}
+            <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b>
+            {t(E, " = how many ⚡ (", " = ⚡ 가 몇 개인가 (")}
+            <b style={{ color: "#c2410c" }}>{t(E, "beats both", "둘 다 이기는 카드")}</b>
+            {t(E, ")", ")")}
           </div>
         </div>
       )}
