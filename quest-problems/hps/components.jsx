@@ -1978,7 +1978,7 @@ export function HpsFormulaGridSim({ E }) {
        하단 고정 바에 **59~84% 가려졌다**(ux 가 좌표+스크린샷으로 확인). 감싸서 끌어오는
        대신 **지웠다** — 다른 건 괄호 안 `dom` 이름뿐이라 그것만 여기로 옮긴다. */
     { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.\nWe call that count dom (short for 'dominates').", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.\n이 개수를 dom 이라고 불러요 ('dominate 제압' 의 앞 세 글자).") },
-    { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
+    { phase: "grid",  bubble: t(E, "Now it is Bessie's turn — she picks 2 cards.\nThe grid lays out every choice: row = her 1st card, column = her 2nd. 3 × 3 = 9 hands.", "이제 Bessie 차례예요 — 카드 2 장을 골라요.\n고를 수 있는 「모든」 경우를 격자에 폈어요: 행이 첫 장, 열이 둘째 장. 3 × 3 = 9 패예요.") },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
     { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.") },
     /* ⛔ 2026-10-02 4차 학생: *"그만두고 싶었던 걸음: 6/7. 넷이 동시에 떠 있었다."*
@@ -2044,6 +2044,13 @@ export function HpsFormulaGridSim({ E }) {
         <div style={{ maxWidth: 480, margin: "0 auto", padding: "8px 12px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.65 }}>
           <div>
             <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}
+          </div>
+          {/* ⛔ 2026-10-03 선생님: *"**레시가 뭘 냈는데?**"* — 걸음 1~2 가 세운 전제가
+              **격자가 뜨는 순간 사라졌다.** 「dom = Elsie 두 카드를 모두 이기는 카드」만 남고
+              **그 두 카드가 뭔지 화면에 없었다.** 걸음을 넘겨도 앞은 사라진다
+              (`feedback_screen_must_not_rely_on_memory`). 그 자리에 데려온다. */}
+          <div style={{ marginTop: 3 }}>
+            {t(E, "Elsie played", "Elsie 가 낸 패")} = <b style={{ color: "#2563eb" }}>{t(E, "card 1, card 1", "카드 1, 카드 1")}</b>
           </div>
           <div style={{ marginTop: 3 }}>
             <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "⚡ count — cards that beat BOTH of Elsie's", "⚡ 카드 수 — Elsie 두 카드를 모두 이기는 카드")}
