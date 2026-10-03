@@ -85,14 +85,21 @@ const PROBE = () => {
     for (let p = sorted[0].parentElement; p && p !== document.body; p = p.parentElement) {
       const ox = getComputedStyle(p).overflowX
       if (!/auto|scroll|hidden|clip/.test(ox)) continue
-      if (/auto|scroll/.test(ox)) { scrollable = true; break }  // ⛔ 옆으로 밀면 정상
+      if (/auto|scroll/.test(ox)) { scrollable = true; break }  // ⛔ 옆으로 밀 수 있으면 정상
       clipRight = Math.min(clipRight, p.getBoundingClientRect().right)
       break
     }
+    /* ⛔ 2026-10-03 — **여기서 조용히 틀렸다.** 처음엔 「가로 스크롤 상자인데 내용이
+       창을 넘으면」 신고했다. 그러면 **코드 상자 안의 코드 토막이 전부 걸린다** —
+       실측 30개 중 15개가 걸렸고 그 태반이 `for in len arr` 같은 코드였다.
+       코드 상자는 **일부러** 옆으로 밀게 만든 것이다(커밋 `c820592b` — 「코드가
+       가로로 밀린다는 신호를 준다」). 옆으로 밀 수 있으면 학생은 볼 수 있다.
+       → **스크롤되면 무조건 건너뛴다.** 진짜 잘림은 `hidden`·`clip` 이라
+         **어떻게 해도 볼 수 없는** 경우뿐이다. */
+    if (scrollable) continue
     const limit = Math.min(clipRight, W)
     const cut = sorted.filter((e) => e.getBoundingClientRect().right > limit + 1)
     if (!cut.length) continue
-    if (scrollable && sorted[sorted.length - 1].getBoundingClientRect().right <= W + 1) continue
     hits.push({
       y, n: sorted.length, text: sorted.map((e) => e.textContent.trim()).join(' '),
       cutText: cut.map((e) => e.textContent.trim()).join(' '), cutN: cut.length,
