@@ -478,11 +478,44 @@ export function makeCheckupsCh3(E, lang = "py") {
               "'넓혀도 양 끝만 바뀌는' 문제일 때만 써요. 뒤집기처럼 가운데가 거울처럼 그대로인 구조. 아무 문제에나 되는 만능은 아니에요.")}
           </div>
 
+          {/* ⭐ 2026-10-03 (2차) — **여기만 아직 글이었다.** 재검증 학생(초6):
+                *"그림이 하나도 없음. **이 즈음 제일 그만두고 싶었음**(계속 글만 나와서)."*
+              ⭐ 그런데 이 칸이 말하는 「거꾸로 읽어도 같다」는 **그림이 제일 잘 하는 말**이다 —
+                가운데에서 양쪽으로 뻗어 나가며 글자가 짝지어지는 모습, 즉 **방금 소에게
+                한 것과 똑같은 동작**이다. 글로 「팰린드롬이란…」 하는 대신 **그걸 보인다.**
+              ⛔ 쪽을 늘리지 않았다 — 같은 칸 안에서 글을 그림으로 바꿨다. */}
           <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "10px 13px", fontSize: 12.5, color: "#5b21b6", lineHeight: 1.75, wordBreak: "keep-all" }}>
-            <div style={{ fontWeight: 800, marginBottom: 4 }}>🎯 {t(E, "You'll meet it again", "딴 데서도 만나")}</div>
-            {t(E,
-              "This same 'expand from the center' shows up when finding palindromes — words that read the same backward, like 'level' or 'noon'. Learn it once, meet it again.",
-              "이 '가운데서 넓히기'는 팰린드롬(거꾸로 읽어도 같은 낱말 — '기러기', 'level') 찾을 때도 똑같이 써요. 한 번 익혀두면 여러 문제에서 다시 만나요.")}
+            <div style={{ fontWeight: 800, marginBottom: 8 }}>🎯 {t(E, "You'll meet it again", "딴 데서도 만나")}</div>
+
+            <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 4 }}>
+              {(E ? ["l", "e", "v", "e", "l"] : ["기", "러", "기"]).map((ch, i, arr) => {
+                const mid = (arr.length - 1) / 2;
+                const isMid = i === mid;
+                const paired = !isMid;
+                return (
+                  <div key={i} style={{
+                    width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 15, fontWeight: 800,
+                    background: isMid ? "#ede9fe" : (paired ? "#ddd6fe" : "#fff"),
+                    border: `1.5px solid ${isMid ? "#a78bfa" : "#c4b5fd"}`,
+                    color: "#5b21b6",
+                  }}>{ch}</div>
+                );
+              })}
+            </div>
+
+            {/* 가운데에서 양쪽으로 — 소에게 한 것과 **똑같은 화살표** */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 800, color: "#7c3aed", marginBottom: 8 }}>
+              <span>←</span>
+              <span style={{ fontSize: 11, fontWeight: 700 }}>{t(E, "from the center", "가운데에서")}</span>
+              <span>→</span>
+            </div>
+
+            <div style={{ fontSize: 12, lineHeight: 1.7 }}>
+              {t(E,
+                "Reads the same backward. Finding these uses the very same move you just did.",
+                "거꾸로 읽어도 같은 낱말이에요. 이걸 찾을 때도 방금 한 것과 똑같이 해요.")}
+            </div>
           </div>
         </div>),
     },
