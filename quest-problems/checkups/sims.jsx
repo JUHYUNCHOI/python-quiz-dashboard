@@ -345,7 +345,49 @@ const _SP = {
   6: { bg: "#ffedd5", tx: "#9a3412", bd: "#fdba74" },  // orange
 };
 
-const _CW = 36, _GAP = 7, _STEP = _CW + _GAP, _LAB = 84;
+/* ⭐ 2026-10-03 — **격자가 모바일에서 잘려 있었다.** 선생님 승인(동결 해제) 뒤 고친다.
+   학생(초6): *"**6번째 칸이 화면 오른쪽에서 계속 잘려서 안 보임.** 말풍선은
+     「6번 자리: 위6, 아래6」이라는데 표의 6번 칸 자체가 화면 밖."*
+   pedagogy 가 **독립적으로 같은 것**을 봤다: *"하필 이 시뮬의 핵심이 「양 끝 두 칸」인데
+     그 끝이 화면에 없다."*
+   실측(375×812·한국어): 1쪽 격자 오른끝 **385** · 담은 상자 **318** → 5·6 이 밖.
+     14쪽은 더 나쁘다(**466** > 368) — 필요한 폭이 92+6×56−12 = **416px** 인데 296px 뿐.
+
+   ⭐ **칸을 빼지 않는다** — 6마리가 6마리로 보여야 한다. **칸 크기를 줄인다.**
+   ⚠️ 고정값으로 더 작게 박지 않는다 — 데스크탑이 같이 작아진다. **재서 정한다**
+     (`47992c5b` 「시뮬·코드창 높이를 고정값이 아니라 재서 정한다」와 같은 생각).
+   ⚠️ 바깥 여백 세 겹(쪽 7.5 + quest 16 + 시뮬 16, 좌우 합 79)은 **모든 quest 가
+     공유하는 공통 레이아웃**이다(frontend-engineer 실측). */
+function _useFit(ref, n, TW0, STEP0, LAB0 = 0, extra = 0) {
+  /* ⚠️ **창 너비에서 빼는 식으로 짰다가 틀렸다** — `innerWidth − 79` 로 구하니
+     1쪽이 아직 **33px 넘쳤다**(칸 31px, 오른끝 351 vs 상자 318). 바깥 여백이
+     quest·쪽마다 다르고 `rowL` 의 `gap: 8` 같은 **안쪽 틈**도 식에 없었다.
+     → **빼서 구하지 말고 그 상자를 직접 재라.** */
+  const [avail, setAvail] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => {
+      const cs = getComputedStyle(el);
+      /* −6 은 **반올림 여유**다 — `Math.floor` 로 칸을 깎아도 테두리(1.5px×2)와
+         소수점 때문에 실측에서 3px 이 남았다. 딱 맞추지 말고 조금 접어 둔다. */
+      setAvail(el.clientWidth - parseFloat(cs.paddingLeft || 0) - parseFloat(cs.paddingRight || 0) - 6);
+    };
+    measure();
+    let ro;
+    if (typeof ResizeObserver !== "undefined") { ro = new ResizeObserver(measure); ro.observe(el); }
+    window.addEventListener("resize", measure);
+    return () => { ro && ro.disconnect(); window.removeEventListener("resize", measure); };
+  }, []);
+  const need = LAB0 + extra + n * STEP0 - (STEP0 - TW0);
+  const k = avail > 0 ? Math.min(1, avail / need) : 1;   // 넉넉하면 1 — 데스크탑은 그대로다
+  const TW = Math.max(22, Math.floor(TW0 * k));
+  const STEP = Math.max(TW + 3, Math.floor(STEP0 * k));
+  return { TW, STEP, GAP: STEP - TW, LAB: Math.floor(LAB0 * k) };
+}
+
+const _CW0 = 36, _GAP0 = 7, _LAB0 = 84;
+const _CW = _CW0, _GAP = _GAP0, _STEP = _CW0 + _GAP0, _LAB = _LAB0;
 
 function _IntroCell({ v, focus, moving, size = _CW }) {
   const sp = _SP[v] || _SP[1];
@@ -417,6 +459,11 @@ function _buildIntroSteps(E) {
 }
 
 export function CheckupsIntroSim({ E }) {
+  /* ⭐ 모듈 상수 `_CW/_GAP/_STEP/_LAB` 를 **같은 이름의 지역값으로 가린다** —
+     이 함수 안의 참조 열 몇 곳이 손 안 대고 따라온다. 데스크탑에선 k=1 이라 그대로다. */
+  const fitRef = useRef(null);
+  const _fit = _useFit(fitRef, _N6, _CW0, _CW0 + _GAP0, _LAB0, 8 /* rowL 의 라벨↔격자 틈 */);
+  const _CW = _fit.TW, _GAP = _fit.GAP, _STEP = _fit.STEP, _LAB = _fit.LAB;
   const steps = _buildIntroSteps(E);
   const { idx, safe, setIdx, total } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
@@ -434,7 +481,7 @@ export function CheckupsIntroSim({ E }) {
   );
 
   return (
-    <div style={{ padding: 16 }}>
+    <div ref={fitRef} style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10 }}>
         🔍 {t(E, "Walk through it — step by step", "한 단계씩 따라가 보기")}
       </div>
@@ -473,7 +520,7 @@ export function CheckupsIntroSim({ E }) {
               const slot = st.perm[id];
               return (
                 <div key={id} style={{ position: "absolute", top: 0, left: slot * _STEP, transition: "left .6s cubic-bezier(.4,0,.2,1)", zIndex: 1 }}>
-                  <_IntroCell v={v} focus={st.focus === slot} moving={!!st.swap && st.swap.includes(slot)} />
+                  <_IntroCell v={v} size={_CW} focus={st.focus === slot} moving={!!st.swap && st.swap.includes(slot)} />
                 </div>
               );
             })}
@@ -483,7 +530,7 @@ export function CheckupsIntroSim({ E }) {
         {/* 아랫줄 b — 고정 */}
         {rowL(
           <div style={{ display: "flex", gap: _GAP }}>
-            {_B6.map((v, s) => <_IntroCell key={s} v={v} focus={st.focus === s} />)}
+            {_B6.map((v, s) => <_IntroCell key={s} v={v} size={_CW} focus={st.focus === s} />)}
           </div>,
           "#1e40af", t(E, "📋 wants", "📋 원하는 종"), "b"
         )}
@@ -573,6 +620,10 @@ function _buildFastSteps(E) {
 }
 
 export function CheckupsFastSim({ E }) {
+  /* 1쪽과 같은 이유로 가린다 — 아래 `GAP`/`STEP` 은 이 함수 자신의 것이라 그대로 둔다. */
+  const fitRef = useRef(null);
+  const _fit = _useFit(fitRef, _MN, _CW0, _CW0 + 8, 0);
+  const _CW = _fit.TW;
   const steps = _buildFastSteps(E);
   const { idx, safe, setIdx, total } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
@@ -604,7 +655,7 @@ export function CheckupsFastSim({ E }) {
   );
 
   return (
-    <div style={{ padding: 16 }}>
+    <div ref={fitRef} style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10 }}>
         🎯 {t(E, "Count ONE window — all in one place", "창 하나를 한자리에서 세보기")}
       </div>
@@ -1443,7 +1494,10 @@ export function CheckupsExpandSim({ E }) {
   const { idx, safe, setIdx, total } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
   const N = _EX_COW.length, IDX = _EX_COW.map((_, i) => i);   // 6칸 (선생님 2026-07-03)
-  const TW = 44, STEP = 56, GAP = STEP - TW, LAB = 92;
+  /* ⭐ 여기가 제일 심했다 — 필요한 폭 92+6×56−12 = **416px**, 쓸 수 있는 폭 296px.
+     「양 끝 두 칸」이 이 시뮬의 요점인데 그 끝이 화면 밖이었다. */
+  const fitRef = useRef(null);
+  const { TW, STEP, GAP, LAB } = _useFit(fitRef, 6, 44, 56, 92, 8);
   const [L, R] = st.win || [-1, -1];
   const hasWin = !!st.win;
   const isGreen = p => st.rev[p] === _EX_WANT[p];   // 뒤집힌 소가 want 와 같음 = 검진
@@ -1503,7 +1557,7 @@ export function CheckupsExpandSim({ E }) {
   );
 
   return (
-    <div style={{ padding: 16 }}>
+    <div ref={fitRef} style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 3 }}>
         📊 {t(E, "Widen from the center — the middle stays, only the two ends change", "가운데에서 넓히며 — 가운데는 그대로, 두 끝만 바뀜")}
       </div>
