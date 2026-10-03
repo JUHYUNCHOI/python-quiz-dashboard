@@ -32,12 +32,21 @@
  *   ② 칸은 **작고 네모나야** 한다 (12~70px) — 문장 상자는 격자가 아니다
  *   ③ 칸 안 글자는 **3자 이하** — 숫자·기호 칸만 본다
  *   ④ 그중 **오른쪽 끝이 창 또는 담은 상자 밖으로 나간** 칸만 신고한다
+ *   ⑤ 칸 **크기가 고르지 않으면** 격자가 아니다 (폭이 25% 넘게 흔들리면 뺀다) —
+ *     같은 줄에 우연히 나란히 선 남남을 격자로 묶는 오탐을 막는다.
  *   ⛔ **가로 스크롤이 되는 상자(`overflow-x: auto|scroll`)는 신고하지 않는다** —
  *     표를 옆으로 미는 건 설계된 정상 동작이다(CLAUDE.md 의 반응형 규칙).
  *     `hidden`·`clip` 이거나 **창 자체를 넘은** 것만 진짜 잘림이다.
  *
  * ⛔ **병렬로 돌리지 마라** — 같은 dev 서버·Chromium 경쟁 조건에서 조용히 «0곳»
  *   이 나온 전례가 둘 있다(`check-fixed-bar-overlap` 8병렬 → 180개 중 169개 거짓 0).
+ *
+ * ⛔⛔ **quest 를 고친 **직후**에 돌리지 마라 — dev 서버가 아직 다시 컴파일 중이다.**
+ *   2026-10-03 실측: `abcs` 를 고치고 **5초** 뒤에 돌리니 **✅(0건)**, 같은 상태에서
+ *   **18초** 뒤에 돌리니 **🚨** 가 떴다. **검사기가 틀린 게 아니라 내가 옛 화면을 읽혔다.**
+ *   `--selftest` 로도 이건 못 잡는다(그건 `setContent` 라 서버를 안 탄다).
+ *   ⭐ 고친 뒤에는 **15초 이상 기다리고** 돌려라. 그리고 **눈으로도 한 번 봐라** —
+ *     이 저장소에서 「검사기 ✅ 인데 화면은 잘려 있던」 날이 같은 날 또 있었다.
  *
  * ⭐ `--selftest` 로 **잣대가 사는지 먼저 봐라** — 격자를 일부러 좁은 상자에
  *   넣어 잘리게 만든다. 거기서 🚨 가 안 나오면 잣대가 죽은 것이다.
@@ -80,6 +89,14 @@ const PROBE = () => {
   for (const [y, els] of rows) {
     if (els.length < 4) continue                              // ① 4개 이상
     const sorted = els.sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left)
+    /* ⑤ 2026-10-03 — **칸 크기가 고르지 않으면 격자가 아니다.**
+       처음엔 이 조건이 없어서 `lifeguards` 에서 「🏊 대회 'r' as」 가 걸렸다 —
+       같은 줄에 **우연히 나란히 있을 뿐인 남남**을 한 격자로 묶은 것이다(2px 초과).
+       진짜 시뮬 격자는 칸이 **한 치수**다(실측: checkups 36·31·27 / astral 44 /
+       abcs — 전부 줄 안에서 같은 폭). 폭이 25% 넘게 흔들리면 격자로 안 본다. */
+    const ws = sorted.map((e) => e.getBoundingClientRect().width)
+    const wMin = Math.min(...ws), wMax = Math.max(...ws)
+    if (wMax > wMin * 1.25) continue
     /* 담은 «클립» 상자를 찾는다. 가로 스크롤이 되면 정상이라 기록만 해 둔다. */
     let clipRight = W, scrollable = false
     for (let p = sorted[0].parentElement; p && p !== document.body; p = p.parentElement) {
