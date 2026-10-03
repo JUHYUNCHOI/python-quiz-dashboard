@@ -102,7 +102,8 @@ export function PrintseqIntroSim({ E }) {
             <div style={{ display: "flex", gap: 6, padding: foc("target") ? 6 : 0, borderRadius: 10, background: foc("target") ? "#dcfce7" : "transparent", border: foc("target") ? "2px solid #16a34a" : "2px solid transparent", boxShadow: foc("target") ? "0 0 0 4px rgba(34,197,94,.15)" : "none", transition: "all .25s" }}>
               {TARGET.map((v, i) => (
                 <div key={i} style={{
-                  width: 42, height: 42, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                  /* 2026-10-03 — 7쪽에서 8칸 중 1칸이 화면 밖이었다. `min()` 이라 데스크탑은 42px 그대로. */
+                  width: "min(42px, 7.4vw)", height: 42, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
                   fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 17,
                   background: "#f5f3ff", color: "#5b21b6", border: "1.5px solid #c4b5fd",
                 }}>{v}</div>
@@ -302,7 +303,8 @@ export function PrintseqShapesSim({ E }) {
 
   const cell = (v, i, color, bg, bd, dim) => (
     <div key={i} style={{
-      width: 42, height: 42, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+      /* 2026-10-03 — 위와 같은 이유. `min()` 이라 데스크탑은 42px 그대로. */
+      width: "min(42px, 7.4vw)", height: 42, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
       fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 17,
       background: dim ? "#f8fafc" : bg, color: dim ? "#cbd5e1" : color,
       border: `1.5px solid ${dim ? "#e2e8f0" : bd}`, transition: "all .25s",
@@ -455,7 +457,8 @@ export function PrintseqMixSim({ E }) {
 
   const cell = (v, i, tone) => (
     <div key={i} style={{
-      width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+      /* 2026-10-03 — 7쪽에서 8칸 중 1칸이 화면 밖이었다(362 > 334). `min()` 이라 데스크탑은 40px 그대로. */
+      width: "min(40px, 7.2vw)", height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
       fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 16,
       background: tone.bg, color: tone.color, border: `1.5px solid ${tone.bd}`, transition: "all .25s",
     }}>{v}</div>
@@ -609,7 +612,8 @@ export function PrintseqTodoPlanSim({ E }) {
             const on = inBracket(i);
             return (
               <div key={i} style={{
-                width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                /* 2026-10-03 — 7쪽에서 8칸 중 1칸이 화면 밖이었다(362 > 334). `min()` 이라 데스크탑은 40px 그대로. */
+      width: "min(40px, 7.2vw)", height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
                 fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 16,
                 background: on ? "#fffbeb" : "#f1f5f9", color: on ? "#92400e" : "#94a3b8",
                 border: on ? "2.5px solid #f59e0b" : "1.5px solid #e2e8f0",
@@ -827,7 +831,13 @@ export function PrintseqBlockSim({ E }) {
   const { idx, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(idx, steps.length - 1)];
   const n = _BLK_SEQ.length;
-  const CELL = 46, GAP = 6;
+  /* ⭐ 2026-10-03 — **13쪽에서 6칸 중 2칸이 모바일 화면 밖이었다**
+     (실측 375px: 오른끝 418 > 담은 상자 334). 칸 6×46 + 틈 = **306px** 인데
+     라벨까지 더하면 376px 이고 쓸 수 있는 폭은 334px 뿐이다. 7쪽도 같은 모양(8칸).
+     ⭐ 칸을 빼지 않는다 — **칸 크기를 화면에 맞춘다.** `min()` 이라
+       **데스크탑에선 46px 그대로**다. 7.6vw × 375 ≈ 28.5px. */
+  const CELL_MAX = 46, GAP = 6;
+  const CELL = `min(${CELL_MAX}px, 7.6vw)`;
   const info = st.copies ? _blockRepeat(_BLK_SEQ, st.copies) : null;
   const showLay = st.phase === "lay" || st.phase === "cmp" || st.phase === "done";
   const showCmp = st.phase === "cmp" || st.phase === "done";
@@ -894,7 +904,7 @@ export function PrintseqBlockSim({ E }) {
         )}
         {/* 블록 표시 (아직 안 늘어놓은 첫 스텝) */}
         {!showLay && (
-          <div style={{ height: CELL + 8 }} />
+          <div style={{ height: CELL_MAX + 8 }} />
         )}
       </div>
 

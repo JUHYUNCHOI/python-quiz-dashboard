@@ -2229,7 +2229,12 @@ export function Mooin3TableSim({ E, lang = "py" }) {
   /* 표 한 줄 — 아직 안 채운 칸은 비워 둔다. readIdx = 지금 '읽는' 칸(use 스텝) 하이라이트. */
   const TableRow = ({ label, vals, color, fresh, readIdx, readColor }) => (
     <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-      <div style={{ width: 132, textAlign: "right", fontSize: 10, fontWeight: 700,
+      {/* ⭐ 2026-10-03 — **8쪽 표에서 7칸 중 3칸이 모바일 화면 밖이었다**
+          (실측 375px: 오른끝 456 > 담은 상자 368). 라벨 132 + 칸 7×36 + 틈 = **414px**
+          인데 쓸 수 있는 폭은 **324px** 뿐이다.
+          ⭐ 칸을 빼지 않는다 — 7칸이 7칸으로 보여야 한다. **라벨과 칸을 같이 줄인다.**
+          `min()` 이라 **데스크탑에선 원래 값(132/36)이 그대로** 쓰인다. */}
+      <div style={{ width: "min(132px, 26vw)", textAlign: "right", fontSize: 10, fontWeight: 700,
                     color, fontFamily: "'JetBrains Mono',monospace" }}>{label}</div>
       <div style={{ display: "flex", gap: SIM_CELL_GAP }}>
         {Array.from({ length: N }).map((_, i) => {
@@ -2238,7 +2243,7 @@ export function Mooin3TableSim({ E, lang = "py" }) {
           const isRead = readIdx != null && readIdx === i;
           return (
             <div key={i} style={{
-              width: SIM_CELL_W, height: 22, display: "flex", alignItems: "center",
+              width: `min(${SIM_CELL_W}px, 7.5vw)`, height: 22, display: "flex", alignItems: "center",
               justifyContent: "center", borderRadius: 5, fontSize: 11, fontWeight: 700,
               fontFamily: "'JetBrains Mono',monospace",
               background: isRead ? `${readColor}22` : v === null ? "#f8fafc" : isNew ? "#cffafe" : "#fff",
