@@ -399,11 +399,20 @@ export function QuestProgressBar({
   );
 }
 
+/* 「다음 쪽 ▶」(사이트 전역 쪽 넘김) 과 SimNav 의 「다음 ▶」(그 문제 안 시뮬 조작) 이
+   둘 다 quest `accent` 를 그대로 써서 **같은 색 · 같은 글자 · 같은 모서리**가 되는
+   사고가 네 번째로 지적됐다 (`feedback_one_nav_shape_per_screen.md`).
+   project-lead 판정(2026-10-03): 라벨·모서리 반지름으로 가르는 건 이미 둘 다 실패했다 —
+   **바깥 쪽 넘김은 quest accent 를 받지 말고, 모든 quest 공통의 고정 중립색을 쓴다.**
+   그러면 구조적으로 두 버튼이 같은 색이 될 수 없다. accent 는 다른 곳(진도바 구간 색
+   등)에서 계속 쓰이므로 prop 자체는 지우지 않고, 이 버튼 두 개의 색만 떼어낸다. */
+const NAV_NEUTRAL = "#1e293b"; // slate-800 — quest accent 와 절대 안 겹치는 고정 중립색
+
 export function QuestBottomNav({
   cur,
   canPrev,        // optional — if undefined, falls back to legacy `cur === 0` check
   canNext,
-  accent,
+  accent, // eslint-disable-line no-unused-vars -- 더 이상 버튼 색에 안 쓴다 (위 주석). 호출부 180개가 넘기는 prop 이라 시그니처는 유지.
   E,
   onPrev,
   onNext,
@@ -483,16 +492,16 @@ export function QuestBottomNav({
                 원래 크기(14px/24px)로 돌아오게 했다. 실측 0건(320/375, ko/en 모두). */}
             <button onClick={onPrev} disabled={prevDisabled} style={{
               background: prevDisabled ? "#e5e7eb" : C.card,
-              border: `2px solid ${prevDisabled ? "#e5e7eb" : accent}`,
+              border: `2px solid ${prevDisabled ? "#e5e7eb" : NAV_NEUTRAL}`,
               borderRadius: 9, padding: "10px clamp(6px, 3vw, 24px)",
               fontSize: "clamp(12px, 3.6vw, 14px)", fontWeight: 800,
               cursor: prevDisabled ? "default" : "pointer",
-              color: prevDisabled ? "#b0b5c3" : accent,
+              color: prevDisabled ? "#b0b5c3" : NAV_NEUTRAL,
               pointerEvents: "auto", whiteSpace: "nowrap", minWidth: 0,
             }}>{t(E, "◀ Prev page", "◀ 이전 쪽")}</button>
             <button onClick={onNext} disabled={!canNext} style={{
-              background: !canNext ? "#e5e7eb" : accent,
-              border: `2px solid ${!canNext ? "#e5e7eb" : accent}`,
+              background: !canNext ? "#e5e7eb" : NAV_NEUTRAL,
+              border: `2px solid ${!canNext ? "#e5e7eb" : NAV_NEUTRAL}`,
               borderRadius: 9, padding: "10px clamp(6px, 3vw, 24px)",
               fontSize: "clamp(12px, 3.6vw, 14px)", fontWeight: 800,
               cursor: !canNext ? "default" : "pointer",
