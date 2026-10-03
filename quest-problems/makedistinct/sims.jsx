@@ -114,7 +114,7 @@ function WrongWay({ E, show = 3 }) {
         fontSize: 15, color: "#7f1d1d", marginBottom: 6, ...mono }}>
         <span>3</span><span>5</span><span>7</span>
         <span style={{ color: "#64748b", fontWeight: 700, fontSize: 12.5 }}>
-          {t(E, "then 4 must pass 7 →", "그다음 4 도 7 보다 뒤로 →")}
+          {t(E, "then 4 is sent past 7 (no clash check) →", "그다음 4 도 7 보다 뒤로 (겹침은 안 보고) →")}
         </span>
         <span style={{ fontSize: 19, color: "#b91c1c" }}>9</span>
       </div>
@@ -645,8 +645,14 @@ export function WhoCanMeetSim({ E }) {
     /* 토막 ①— 「안 묶으면 4 도 뒤로 밀어야 한다」 그 한 가지만. */
     { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "moving"],
       extra: ["", "", "", ""], ops: 3, tone: "stuck", wrong: 1,
-      ko: "나머지로 안 묶었다면 어땠을까요?\n4 도 7 보다 뒤로 밀어야 해요 — 9 까지요.",
-      en: "What if we had not split by remainder?\n4 would have to pass 7 too — all the way to 9." },
+      /* ⛔ 2026-10-03 선생님: *"이것 4는 바뀐 숫자에 없으니까 **그냥 냅두는거 아니야?**"*
+         맞는 말씀이다(완전탐색 확인: 최소 답 3·4·5·7, **4 는 0번**).
+         전에는 *"4 도 7 보다 뒤로 밀어야 해요"* 라고 **이유 없이 주장**했다 —
+         그건 문제의 요구가 아니라 **「안 묶는 방법」이 멋대로 요구하는 것**이다.
+         그 방법은 넷을 한 줄로 세우고 **겹치는지 보지도 않고** 「앞보다 뒤」만 시킨다.
+         화면이 그 말을 안 하니 읽는 사람은 당연히 「4 는 안 겹치는데?」가 된다. */
+      ko: "나머지로 안 묶으면 넷을 한 줄로 세워요.\n그러면 겹치는지 보지도 않고 4 도 앞의 7 보다 뒤로 보내요 — 9 까지요.",
+      en: "Without splitting, all four go in one line.\nThen 4 is pushed past 7 without even checking if it clashes — all the way to 9." },
 
     /* 토막 ②— 나눗셈 한 줄. **묻기만 한다**, 답은 다음 걸음. */
     { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "moving"],
@@ -665,10 +671,10 @@ export function WhoCanMeetSim({ E }) {
            6쪽은 숫자도 묶음 크기도 다르다. 그대로 쓰는 건 숫자가 아니라 **나머지로 묶는 방법**이다. */
       /* ⛔ 말풍선이 상자와 **같은 말을 또 하면 안 된다** — 「9 에 못 간다」와 「5 회」는
            바로 아래 상자가 숫자로 말한다. 말풍선은 **여기서 가져갈 것 한 줄**만 맡는다. */
-      emKo: "꼭 해야 하는 일",
-      emEn: "something we must do",
-      ko: "그래서 나머지로 묶는 건 빨리 푸는 요령이 아니라 꼭 해야 하는 일이에요.",
-      en: "So splitting by remainder is not a shortcut — it is something we must do." },
+      emKo: "4 는 그냥 둬도 됐어요",
+      emEn: "4 could have just stayed",
+      ko: "사실 4 는 3, 5, 7 과 안 겹쳐요 — 4 는 그냥 둬도 됐어요.\n한 줄로 세우면 그걸 못 봐요. 그래서 나머지로 묶는 건 요령이 아니라 꼭 해야 하는 일이에요.",
+      en: "In fact 4 never clashes with 3, 5, 7 — 4 could have just stayed.\nOne single line cannot see that. So splitting by remainder is not a shortcut; it is a must." },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
