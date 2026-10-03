@@ -97,8 +97,12 @@ export function AbcsSumExplorer({ E }) {
       <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, marginBottom: 6 }}>
         {t(E, "2. After sort() — index → value (label)", "2. sort() 뒤 — 자리 → 값 (이름표)")}
       </div>
+      {/* ⭐ 2026-10-03 — 모바일에서 **맨 오른쪽 칸(값 10)이 화면 밖으로 밀려** 있었다
+          (실측 375px: 오른끝 375 > 상자 368). `1fr` 은 최소값이 **내용 폭**이라
+          칸이 안 눌린다 — `minmax(0, 1fr)` 이라야 줄어든다.
+          ⭐ 발명하지 않았다 — `hps/components.jsx:2259` 가 이미 같은 걸 쓴다. */}
       <div style={{
-        display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4,
+        display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: 4,
         background: "#0f172a", borderRadius: 8, padding: 8,
       }}>
         {sortedSums.map((s, i) => {
