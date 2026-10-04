@@ -727,7 +727,7 @@ export function makeMixMilkCh3(E, lang = "py") {
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
             {t(E,
               "Two arrays: cap[] stores max capacity, milk[] stores current amount.",
-              "배열을 2개 써요. cap[] 은 최대 용량을, milk[] 는 현재 양을 담아요.")}
+              "양동이 정보를 두 줄로 적어 둬요 — 한 줄은 담을 수 있는 양, 한 줄은 지금 든 양이에요.")}
           </div>
         </div>),
     },

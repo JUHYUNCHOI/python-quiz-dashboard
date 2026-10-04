@@ -179,7 +179,7 @@ export function makeMooLangCh1(E) {
       type: "reveal",
       narr: t(E,
         "Let's run the strategy on a real sample. Step through every candidate n_tverb and watch the word count swing — the green row at the end is the answer.",
-        "n_tverb 를 하나씩 밟으면 단어 수가 어떻게 달라지는지 보여요."),
+        "타동사 문장 수를 하나씩 바꿔가며 단어 수가 어떻게 달라지는지 보여요."),
       content: (<MooLangDeepAudit E={E} />),
     },
   ];

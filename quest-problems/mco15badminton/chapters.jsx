@@ -361,7 +361,7 @@ A`}
             <div style={{ fontSize: 11, color: C.dim, marginTop: 8, lineHeight: 1.5, wordBreak: "keep-all" }}>
               💡 {t(E,
                 "What just happened: at 21 both game scores went back to 0, but wins_a/wins_b stayed. So the match-end check only has to run right after a game ends — not on every letter.",
-                "방금 본 것 — 21 점이 되자 두 게임 점수가 0 으로 돌아갔어요. 그런데 wins_a/wins_b 는 그대로 남았어요. 그래서 매치가 끝났는지는 글자마다 볼 필요가 없어요. 게임이 끝난 직후에만 보면 돼요.")}
+                "방금 본 것 — 21 점이 되자 두 게임 점수가 0 으로 돌아갔어요. 그런데 A 가 이긴 수 / B 가 이긴 수는 그대로 남았어요. 그래서 매치가 끝났는지는 글자마다 볼 필요가 없어요. 게임이 끝난 직후에만 보면 돼요.")}
             </div>
           } />
         </div>

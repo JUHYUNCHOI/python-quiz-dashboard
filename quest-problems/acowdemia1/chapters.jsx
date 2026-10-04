@@ -238,7 +238,7 @@ export function makeAcow1Ch1(E) {
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 8 }}>
               <div>{t(E, "Line 1: N and L (1 ≤ N ≤ 10^5, 0 ≤ L ≤ 10^5)", "첫 줄 — N 과 L (1 ≤ N ≤ 10^5, 0 ≤ L ≤ 10^5)")}</div>
-              <div>{t(E, "Line 2: N citation counts c[1..N] (0 ≤ c[i] ≤ 10^5)", "둘째 줄 — N 개의 인용수 c[1..N] (0 ≤ c[i] ≤ 10^5)")}</div>
+              <div>{t(E, "Line 2: N citation counts c[1..N] (0 ≤ c[i] ≤ 10^5)", "둘째 줄 — N 개의 인용수 (각 값은 0 이상 10^5 이하)")}</div>
               <div>{t(E, "Output: the maximum achievable h-index", "출력 — 만들 수 있는 h-index 의 최댓값")}</div>
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>

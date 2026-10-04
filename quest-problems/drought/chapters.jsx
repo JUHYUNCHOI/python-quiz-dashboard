@@ -124,7 +124,7 @@ export function makeDroughtCh1(E) {
           <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
             {t(E,
               "First line: T, the number of test cases.\nFor each test case: one line with N, then one line with N hunger values h[0..N-1].\nPrint one line of output per test case, in the same order.",
-              "첫 줄은 T — 테스트 케이스 개수예요.\n케이스마다 N 이 한 줄, 그다음 줄에 배고픔 값 N개(h[0..N-1])가 나와요.\n테스트 케이스 순서대로, 한 줄에 하나씩 출력해요.")}
+              "첫 줄은 T — 테스트 케이스 개수예요.\n케이스마다 N 이 한 줄, 그다음 줄에 배고픔 값 N개가 나와요.\n테스트 케이스 순서대로, 한 줄에 하나씩 출력해요.")}
           </div>
         </div>),
     },

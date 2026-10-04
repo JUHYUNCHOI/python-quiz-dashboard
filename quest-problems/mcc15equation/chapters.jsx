@@ -411,7 +411,7 @@ export function makeMcc15EqCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "'/' is real division, so a / b comes out as a decimal like 6.5 and comparing decimals can go wrong by a tiny amount. Flip it instead: a / b == c is the same as a == b * c, and that is a comparison between whole numbers.",
-                  "'/' 는 소수까지 그대로 계산해서 a / b 가 6.5 같은 소수로 나와요. 소수끼리 비교하면 아주 작은 오차가 생길 수 있어요. 그래서 식을 뒤집어요. a / b == c 는 a == b * c 와 같은 말이고, 이건 정수끼리 비교하는 거예요.")}
+                  "'/' 는 소수까지 그대로 계산해서 a / b 가 6.5 같은 소수로 나와요. 소수끼리 비교하면 아주 작은 오차가 생길 수 있어요. 그래서 비교를 뒤집어요. a / b 가 c 와 같은지 보는 대신, a 가 b * c 와 같은지를 봐요 — 이건 정수끼리 비교하는 거예요.")}
               </div>
             </div>
           </div>

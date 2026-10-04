@@ -125,7 +125,7 @@ export function makeSwapityCh1(E) {
          상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "Reverse 1-3, then 3-5, repeatedly, until the array returns to [1,2,3,4,5].",
-        "배열이 [1,2,3,4,5] 로 돌아올 때까지 눌러 봐요. 그 횟수가 순환 길이예요."),
+        "줄이 [1,2,3,4,5] 로 돌아올 때까지 눌러 봐요. 그 횟수가 순환 길이예요."),
       content: <SwapityRoundSim E={E} />,
     },
     // 1-3: Quiz
@@ -156,7 +156,7 @@ export function makeSwapityCh1(E) {
         "[1,2,3] 에서 라운드마다 (1-2) 뒤에 (2-3) 을 뒤집어요. 순환 길이는 얼마일까요?"),
       hint: t(E,
         "Apply the round step by step until the array returns to start.",
-        "한 라운드씩 해 보면서 배열이 처음으로 돌아올 때까지 세어 봐요."),
+        "한 라운드씩 해 보면서 줄이 처음으로 돌아올 때까지 세어 봐요."),
       answer: 3,
     },
   ];

@@ -168,7 +168,7 @@ export function makeMooOpsCh2(E, lang = "py") {
       type: "mooops-walk",
       narr: t(E,
         "The middle can't be flipped, so only check positions where s[i+1]='O'.",
-        "가운데는 못 뒤집으니 s[i+1]='O' 인 자리만 살펴봐요."),
+        "가운데는 못 뒤집으니 바로 뒤가 O 인 자리만 살펴봐요."),
     },
   ];
 }

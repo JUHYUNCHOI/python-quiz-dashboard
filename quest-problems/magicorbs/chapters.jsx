@@ -111,7 +111,7 @@ export function makeMagicOrbsCh1(E) {
               </div>
             </div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: sum of n ≤ 2·10^5, 0 ≤ a[i] ≤ 10^18.", "제약: n 의 합 ≤ 2·10^5, 0 ≤ a[i] ≤ 10^18.")}
+              {t(E, "Limits: sum of n ≤ 2·10^5, 0 ≤ a[i] ≤ 10^18.", "제약: n 의 합은 2·10^5 이하, 구슬 파워는 각각 0 이상 10^18 이하예요.")}
             </div>
           </div>
 

@@ -47,8 +47,8 @@ export function makeMcc15ChocoCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A row of ", "")}
-                  <b style={{ color: "#8b5cf6" }}>{t(E, "N chocolate bars with sizes a[1..N]", "N 개 초콜릿 바, 크기는 각각 a[i]")}</b>
-                  {t(E, ".", " 가 한 줄에 있어요.")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N chocolate bars with sizes a[1..N]", "N 개 초콜릿 바")}</b>
+                  {t(E, ".", " 가 한 줄에 있고, 바마다 크기가 달라요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>

@@ -171,7 +171,7 @@ export function makeMajorityCh1(E) {
         "[1, 1, 1, 2, 2, 2] 에서 전체로 퍼질 수 있는 종류는 몇 가지일까요?"),
       hint: t(E,
         "Walk down the array — for each value, is there another nearby cow (distance 1 or 2) of the same value?",
-        "배열을 하나씩 보면서 물어봐요.\n이 값은 거리 1 이나 2 안에 같은 값을 가진 이웃이 있나요?"),
+        "줄을 하나씩 보면서 물어봐요.\n이 값은 거리 1 이나 2 안에 같은 값을 가진 이웃이 있나요?"),
       answer: 2,
     },
     {

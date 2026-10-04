@@ -40,8 +40,8 @@ export function makeSleepCh1(E) {
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie has ", "Bessie가 ")}
-                  <b style={{ color: "#059669" }}>{t(E, "N class periods of lengths a[1..N]", "길이 a[1..N] 의 N 개 수업")}</b>
-                  {t(E, ".", "을 들어야 해요.")}
+                  <b style={{ color: "#059669" }}>{t(E, "N class periods of lengths a[1..N]", "N 개 수업")}</b>
+                  {t(E, ".", "을 들어야 해요. 수업 N 개의 길이는 서로 달라요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>

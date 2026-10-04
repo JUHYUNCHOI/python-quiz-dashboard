@@ -176,7 +176,7 @@ export function makePhotoshoot25Ch1(E) {
       type: "reveal",
       narr: t(E,
         "One more link: we only compare the changed photos against cur_max. Why is that safe?",
-        "바뀐 사진만 cur_max 와 견줘도 괜찮은 이유를 볼게요."),
+        "바뀐 사진만 지금까지 가장 큰 값과 견줘도 괜찮은 이유를 볼게요."),
       content: (<PhotoMonotoneSim E={E} />),
     },
   ];

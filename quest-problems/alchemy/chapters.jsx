@@ -94,7 +94,7 @@ export function makeAlchemyCh1(E) {
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10, fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 700, color: "#92400e", marginBottom: 6 }}>📥 {t(E, "Input", "입력")}</div>
             <div>{t(E, "Line 1: N (number of metals, 1 ≤ N ≤ 100).", "1번째 줄: 금속 개수 N (1 ≤ N ≤ 100).")}</div>
-            <div>{t(E, "Line 2: N integers a[1..N] — starting units (0 ≤ a[i] ≤ 10000).", "2번째 줄: 정수 N 개 a[1..N] — 처음에 가진 개수예요 (0 ≤ a[i] ≤ 10000).")}</div>
+            <div>{t(E, "Line 2: N integers a[1..N] — starting units (0 ≤ a[i] ≤ 10000).", "2번째 줄: 금속마다 처음에 가진 개수 N 개 (각 값은 0 이상 10000 이하).")}</div>
             <div>{t(E, "Line 3: K (number of recipes, 1 ≤ K < N).", "3번째 줄: 레시피 개수 K (1 ≤ K < N).")}</div>
             <div>{t(E, "Next K lines: L M ing_1 … ing_M — make 1 of metal L from M ingredients.", "다음 K줄: L M 재료_1 … 재료_M — 재료 M개로 금속 L 1개를 만들어요.")}</div>
             <div style={{ fontWeight: 700, color: "#92400e", margin: "8px 0 6px" }}>📤 {t(E, "Output", "출력")}</div>

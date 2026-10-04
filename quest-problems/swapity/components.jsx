@@ -134,7 +134,7 @@ export function SwapityRoundSim({ E }) {
         <div style={{ fontSize: 12, color: "#5b21b6", lineHeight: 1.5 }}>
           {t(E,
             "Array [1..5]. Each round = reverse positions 1–3, then reverse 3–5. Step or play to see the cycle close.",
-            "배열은 [1..5] 예요. 한 라운드는 위치 1–3 을 뒤집고 이어서 3–5 를 뒤집는 거예요.\n단계로 넘기거나 재생을 눌러 순환이 닫히는 걸 봐요.")}
+            "줄은 [1..5] 예요. 한 라운드는 위치 1–3 을 뒤집고 이어서 3–5 를 뒤집는 거예요.\n단계로 넘기거나 재생을 눌러 순환이 닫히는 걸 봐요.")}
         </div>
       </div>
 
@@ -201,7 +201,7 @@ export function SwapityRoundSim({ E }) {
         <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 14px", marginBottom: 12, fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
           💡 {t(E,
             `The array returned to [1..5] after ${cycleLen} rounds. So K rounds is the same as K mod ${cycleLen} rounds — that's how 10^9 becomes manageable.`,
-            `${cycleLen} 라운드 만에 배열이 [1..5] 로 돌아왔어요. 여기서부터는 똑같은 게 되풀이되니 K 라운드는 K mod ${cycleLen} 라운드와 같아요. 그래서 K 가 10^9 여도 몇 번만 하면 돼요.`)}
+            `${cycleLen} 라운드 만에 줄이 [1..5] 로 돌아왔어요. 여기서부터는 똑같은 게 되풀이되니 K 라운드는 K mod ${cycleLen} 라운드와 같아요. 그래서 K 가 10^9 여도 몇 번만 하면 돼요.`)}
         </div>
       )}
 

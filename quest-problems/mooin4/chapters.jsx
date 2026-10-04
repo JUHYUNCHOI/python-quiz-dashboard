@@ -138,7 +138,7 @@ MOOMO`}
       type: "input",
       narr: t(E,
         "Suppose we want S = OOMOO and we already know t[2..4] = MMO. How many O's are in t[2..4]? (That's the parity that flips position 1.)",
-        "t[2..4] = MMO 안에 O 가 몇 개일까요?"),
+        "3번째~5번째 자리에 친 키가 MMO 였다고 해봐요. 그 안에 O 가 몇 개일까요?"),
       question: t(E,
         "How many O's are in 'MMO'?",
         "'MMO' 안에 O 는 몇 개일까요?"),
