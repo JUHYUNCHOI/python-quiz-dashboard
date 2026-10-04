@@ -53,7 +53,7 @@ function _buildIntroSteps(E) {
 
 export function PrintseqIntroSim({ E }) {
   const steps = _buildIntroSteps(E);
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-printseq-printseqintrosim");
   const st = steps[Math.min(idx, steps.length - 1)];
   const foc = (name) => st.focus === name;
 
@@ -292,7 +292,7 @@ function _buildShapeSteps(E) {
 
 export function PrintseqShapesSim({ E }) {
   const steps = _buildShapeSteps(E);
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-printseq-printseqshapessim");
   const st = steps[Math.min(idx, steps.length - 1)];
   const isRecap = st.show === "recap";
   const sh = st.si >= 0 ? SHAPES[st.si] : null;
@@ -450,7 +450,7 @@ const MIX_TONES = {
 
 export function PrintseqMixSim({ E }) {
   const steps = _buildMixSteps(E);
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-printseq-printseqmixsim");
   const st = steps[Math.min(idx, steps.length - 1)];
   const isRecap = st.recap === true;
   const bColor = isRecap ? "#6ee7b7" : "#fbbf24";
@@ -574,7 +574,7 @@ function _buildTodoPlanSteps(E) {
 
 export function PrintseqTodoPlanSim({ E }) {
   const steps = _buildTodoPlanSteps(E);
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-printseq-printseqtodoplansim");
   const st = steps[Math.min(idx, steps.length - 1)];
   const bColor = st.done ? "#6ee7b7" : "#fbbf24";
   const inBracket = (i) => st.bracket && i >= st.bracket[0] && i < st.bracket[1];
@@ -687,7 +687,7 @@ function _buildPlanSteps(E) {
 
 export function PrintseqPlanSim({ E }) {
   const steps = _buildPlanSteps(E);
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-printseq-printseqplansim");
   const st = steps[Math.min(idx, steps.length - 1)];
   const isFinal = st.root === "yes";
   const bColor = isFinal ? "#6ee7b7" : "#fbbf24";
@@ -828,7 +828,7 @@ function _buildBlockSteps(E) {
 
 export function PrintseqBlockSim({ E }) {
   const steps = _buildBlockSteps(E);
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-printseq-printseqblocksim");
   const st = steps[Math.min(idx, steps.length - 1)];
   const n = _BLK_SEQ.length;
   /* ⭐ 2026-10-03 — **13쪽에서 6칸 중 2칸이 모바일 화면 밖이었다**

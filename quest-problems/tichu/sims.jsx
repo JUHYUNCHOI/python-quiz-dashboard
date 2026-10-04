@@ -58,7 +58,7 @@ export function TichuSim({ E }) {
     { kind: "extend", lo: 2, hi: 9, wild: [6, 9] },         // 남은 와일드로 9까지
     { kind: "done",   lo: 2, hi: 9, wild: [6, 9] },         // 정리: run = 8
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-tichu-tichusim");
   const s = steps[ts.safe];
 
   const lo = s.lo ?? null, hi = s.hi ?? null;
@@ -177,7 +177,7 @@ export function GapFormulaSim({ E }) {
     { k: "gap", w: 1 },      // 빈칸 3 > K → 못 씀
     { k: "prefix", w: 0 },   // 덤: right − left + 1 이 사실 누적 개수(prefix count)
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-tichu-gapformulasim");
   const s = steps[ts.safe];
   const [i, j] = WINDOWS[s.w ?? 0];
   const lo = C[i], hi = C[j];

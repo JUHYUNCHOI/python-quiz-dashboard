@@ -129,7 +129,7 @@ export function BruteLimitSim({ E }) {
   /* 2026-09-07: "다 해보자" 선언은 앞 페이지(1-3b)로 옮겼다. 여기 남기면 같은 말을 두 번 한다.
      이 시뮬은 이제 **재보는 일**만 한다: 곱하기 → 제한과 비교. */
   const steps = [{ k: "mult" }, { k: "limit" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-moohunt-brutelimitsim");
   const s = steps[ts.safe];
 
   const BOARDS = 1 << 20;             // 1,048,576
@@ -196,7 +196,7 @@ export function BruteLimitSim({ E }) {
 export function EveryBoardSim({ E }) {
   const N = 3;
   const steps = [{ k: "why" }, { k: "first" }, { k: "add" }, { k: "all" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-moohunt-everyboardsim");
   const s = steps[ts.safe];
   const sayRef = useKeepInView(ts.safe);
 
@@ -362,7 +362,7 @@ export function WholeRunSim({ E }) {
                    return [{ k: "board", b, i, p: "recap" }];
                  }),
                  { k: "done" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-moohunt-wholerunsim");
   const s = steps[ts.safe];
   const sayRef = useKeepInView(ts.safe);
 
@@ -605,7 +605,7 @@ export function IsAtTableSim({ E, lang = "py" }) {
        다음 쪽이 쓰는 것과 **같은 모양·같은 순서**로 그린다 — 모양이 같아야 "저번에 본 그거다" 가
        기억이 아니라 눈으로 인식된다 (feedback_screen_must_not_rely_on_memory). */
   const steps = [{ k: "ask" }, { k: "plan" }, { k: "fill" }, { k: "order" }, { k: "all" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-moohunt-isattablesim");
   const s = steps[ts.safe];
   const sayRef = useKeepInView(ts.safe);
 
@@ -769,7 +769,7 @@ export function IsAtTableSim({ E, lang = "py" }) {
    숫자는 전부 그 자리에서 계산 — 글과 어긋날 수 없다. */
 export function FasterIdeaSim({ E }) {
   const steps = [{ k: "board" }, { k: "waste" }, { k: "order" }, { k: "only" }, { k: "gain" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-moohunt-fasterideasim");
   const s = steps[ts.safe];
 
   // 작은 보드 하나를 놓고 본다 — M O O O M (1번·5번이 M)

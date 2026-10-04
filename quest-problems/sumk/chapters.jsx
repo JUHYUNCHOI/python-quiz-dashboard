@@ -148,7 +148,7 @@ function SumKLimit({ E }) {
    시뮬과 같은 ◀▶ 문법을 쓴다 — 학생이 새 조작을 배우지 않아도 된다. */
 function SumKRecap({ E }) {
   const cards = [{ k: "formula" }, { k: "names" }, { k: "coef" }];
-  const ts = useTraceStep(cards);
+  const ts = useTraceStep(cards, "quest-step-sumk-sumkrecap");
   const c = cards[ts.safe];
   const M = ({ children }) => (
     <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>{children}</span>

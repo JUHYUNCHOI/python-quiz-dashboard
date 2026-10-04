@@ -53,7 +53,7 @@ export function RotShiftSim({ E }) {
     for (let i = 0; i < SIM_T; i++) states.push(_simStep(states[states.length - 1]));
     return states;
   }, []);
-  const { idx: step, setIdx: setStep } = useTraceStep(trace.length);
+  const { idx: step, setIdx: setStep } = useTraceStep(trace.length, "quest-step-rotshift-rotshiftsim");
   const state = trace[step];
 
   const atPos = Array(state.N).fill(-1);

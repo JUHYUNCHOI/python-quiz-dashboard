@@ -26,7 +26,7 @@ export function GiftQueueSim({ E }) {
   }
   steps.push({ kind: "final" });
 
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-gifts-giftqueuesim");
   const s = steps[ts.safe];
 
   // 지금까지 선물 받은 사람

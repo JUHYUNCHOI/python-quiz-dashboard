@@ -73,7 +73,7 @@ function _buildRuleSteps(E) {
 
 export function ReflectionRuleSim({ E }) {
   const steps = _buildRuleSteps(E);
-  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-reflection-reflectionrulesim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const CELL = 46, GAP = 5;
   const isLit = (r, c) => st.lit.some(([a, b]) => a === r && b === c);
@@ -151,7 +151,7 @@ export function ReflectionRuleSim({ E }) {
 
 export function ReflectionGroupSim({ E }) {
   const steps = _buildReflSteps(E);
-  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-reflection-reflectiongroupsim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const inGrp = (r, c) => st.grp && st.grp.some(([a, b]) => a === r && b === c);
   const isFlip = (r, c) => st.flip && st.flip.some(([a, b]) => a === r && b === c);  // 바뀌는(적은 쪽) 칸
@@ -293,7 +293,7 @@ function _buildUpdateSteps(E) {
 
 export function ReflectionUpdateSim({ E }) {
   const steps = _buildUpdateSteps(E);
-  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-reflection-reflectionupdatesim");
   const st = steps[Math.min(safe, steps.length - 1)];
   // 답(최소 변경) 시퀀스: 처음 + 플립마다 = 4→3→2→1→0→1
   const ansSeq = [steps[0].total, ...steps.filter(s => s.phase === "post").map(s => s.total)];
@@ -451,7 +451,7 @@ function _buildBruteSteps(E) {
 
 export function ReflectionBruteSim({ E }) {
   const steps = _buildBruteSteps(E);
-  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-reflection-reflectionbrutesim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const CELL = 46, GAP = 5;
   const W = RN * CELL + (RN - 1) * GAP;

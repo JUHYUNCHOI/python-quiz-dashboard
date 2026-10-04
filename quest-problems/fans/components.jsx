@@ -84,7 +84,7 @@ export function FanSimulator({ E }) {
   const allFit = maxC <= rest + 1;
 
   const allSteps = buildSimSteps(counts, E);
-  const { safe: cur, setIdx, total: maxSteps } = useTraceStep(allSteps.length);
+  const { safe: cur, setIdx, total: maxSteps } = useTraceStep(allSteps.length, "quest-step-fans-fansimulator");
   const s = allSteps[cur];
 
   const resetSim = () => { setIdx(0); };

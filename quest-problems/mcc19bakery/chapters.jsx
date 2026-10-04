@@ -38,7 +38,7 @@ const ROUNDS = buildRounds(SORTED); // 2 rounds for the sample
 
 function BakeryGreedySim({ E }) {
   // step 0 = nothing revealed, step k = first k rounds revealed
-  const { safe: step, setIdx: setStep, total: stepTotal } = useTraceStep(ROUNDS.length + 1);
+  const { safe: step, setIdx: setStep, total: stepTotal } = useTraceStep(ROUNDS.length + 1, "quest-step-mcc19bakery-bakerygreedysim");
   const shown = ROUNDS.slice(0, step);
 
   // running total after the shown rounds

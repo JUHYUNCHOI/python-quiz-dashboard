@@ -126,7 +126,7 @@ export function PeelSim({ E }) {
       ko: "이렇게 지금 당장 되는 것을 그때그때 바로 고르는 방법을 탐욕적(그리디) 방법이라고 불러요. 코드에서도 이 이름을 만나요.",
       en: "Always picking whatever works right now, without planning ahead, is called a greedy method — you'll meet that name in the code too." },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-reverseeng-peelsim");
   const s = steps[ts.safe];
   return (
     <div style={{ padding: 16 }}>
@@ -195,7 +195,7 @@ export function StuckSim({ E }) {
       ko: "어느 '글자=값' 으로 걸어도 한 줄도 못 떼요. 그래서 LIE 예요. 입력이 다 달라도 이럴 수 있어요.",
       en: "Whatever letter=value we try, not one row peels off. So it is a LIE — even with all inputs different." },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-reverseeng-stucksim");
   const s = steps[ts.safe];
   return (
     <div style={{ padding: 16 }}>

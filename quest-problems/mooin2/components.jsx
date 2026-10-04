@@ -281,7 +281,7 @@ function tableRow(plainLabel, codeLabel, dict, tableKey, focus, cellRef, keys, m
 }
 
 export function MooinDeepAudit({ E }) {
-  const { idx, safe, setIdx, total } = useTraceStep(M2_AUDIT_TRACE.length);
+  const { idx, safe, setIdx, total } = useTraceStep(M2_AUDIT_TRACE.length, "quest-step-mooin2-mooindeepaudit");
   const step = M2_AUDIT_TRACE[safe];
   const note = E ? step.note_en : step.note_ko;
   const focus = step.focus;                       // { table, col } | { strip:"D", k } | null

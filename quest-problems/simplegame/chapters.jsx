@@ -240,7 +240,7 @@ function BuildSim({ E }) {
 }
 
 function LineUpSim({ E }) {
-  const { safe, setIdx, total } = useTraceStep(LINEUP.length);
+  const { safe, setIdx, total } = useTraceStep(LINEUP.length, "quest-step-simplegame-lineupsim");
   const st = LINEUP[safe];
   const done = safe === LINEUP.length - 1;
   const shown = st.order.map((i) => DEMO[i]);
@@ -467,7 +467,7 @@ function PairPickSim({ E }) {
 const TWO = [{ a: 5, b: 1 }, { a: 2, b: 6 }];
 
 function SwapSim({ E }) {
-  const { safe, setIdx, total } = useTraceStep(5);
+  const { safe, setIdx, total } = useTraceStep(5, "quest-step-simplegame-swapsim");
 
   const orderRow = (firstIdx, on) => {
     const f = TWO[firstIdx], r = TWO[1 - firstIdx];

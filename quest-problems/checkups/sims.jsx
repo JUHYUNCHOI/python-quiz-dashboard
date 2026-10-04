@@ -85,7 +85,7 @@ function _EnCell({ v, ok, dim }) {
 }
 export function CheckupsEnumSim({ E }) {
   const steps = _buildEnumSteps(E);
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-checkups-checkupsenumsim");
   const st = steps[idx];
   const [l, r] = st.flip || [0, 0];
   return (
@@ -465,7 +465,7 @@ export function CheckupsIntroSim({ E }) {
   const _fit = _useFit(fitRef, _N6, _CW0, _CW0 + _GAP0, _LAB0, 8 /* rowL 의 라벨↔격자 틈 */);
   const _CW = _fit.TW, _GAP = _fit.GAP, _STEP = _fit.STEP, _LAB = _fit.LAB;
   const steps = _buildIntroSteps(E);
-  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length, "quest-step-checkups-checkupsintrosim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const treated = [];
   for (let s = 0; s <= st.revealed; s++) if (st.arr[s] === _B6[s]) treated.push(s);
@@ -625,7 +625,7 @@ export function CheckupsFastSim({ E }) {
   const _fit = _useFit(fitRef, _MN, _CW0, _CW0 + 8, 0);
   const _CW = _fit.TW;
   const steps = _buildFastSteps(E);
-  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length, "quest-step-checkups-checkupsfastsim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const N = _A6.length;
   const GAP = 8, STEP = _CW + GAP;
@@ -797,7 +797,7 @@ function _buildMirrorSteps(E) {
 
 export function CheckupsMirrorSim({ E }) {
   const steps = _buildMirrorSteps(E);
-  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length, "quest-step-checkups-checkupsmirrorsim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const [wl, wr] = st.win;
   const TW = 44, STEP = 52, GAP = STEP - TW, LAB = 56;
@@ -940,7 +940,7 @@ function _buildGrowSteps(E) {
 
 export function CheckupsGrowSim({ E }) {
   const steps = _buildGrowSteps(E);
-  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-checkups-checkupsgrowsim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const [wl, wr] = st.win;
   const TW = 44, STEP = 52, GAP = STEP - TW, LAB = 56;
@@ -1087,7 +1087,7 @@ export function CheckupsTrySim({ E }) {
       `This window's checkups = OUTSIDE ${outside} + INSIDE ${ins} = ${total}.  But must we recount the inside for every window?`,
       `이 창의 검진 = 창 밖 ${outside} + 창 안 ${ins} = ${total}.  근데 창 안, 창마다 매번 다시 세야 할까?`) });
 
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-checkups-checkupstrysim");
   const st = steps[Math.min(idx, steps.length - 1)];
   const isInside = st.kind === "inside";
 
@@ -1204,7 +1204,7 @@ export function CheckupsReuseSim({ E }) {
       `Count the ✓ pattern ONCE per s, every same-s window reuses it — no recounting! In code, this 'write once' IS the prefix (coming up).`,
       `✓ 자리는 s마다 한 번만 세두면 같은 s 창이 다 재사용 — 매번 다시 안 셈! 이 '한 번 적어두기'가 곧 코드의 prefix예요 (조금 뒤에).`) });
 
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-checkups-checkupsreusesim");
   const st = steps[Math.min(idx, steps.length - 1)];
   const isWin = st.kind === "win";
 
@@ -1305,7 +1305,7 @@ function _KcCell({ letter, hl, kind }) {
 export function CheckupsKeyCodeSim({ E, lang = "py" }) {
   const cpp = lang === "cpp";
   const steps = _buildKeySteps(E);
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-checkups-checkupskeycodesim");
   const st = steps[idx];
   const py = [
     "for i in range(l, r + 1):   # 창 안 자리 l..r",
@@ -1491,7 +1491,7 @@ function _buildExpandSteps(E) {
 
 export function CheckupsExpandSim({ E }) {
   const steps = _buildExpandSteps(E);
-  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length, "quest-step-checkups-checkupsexpandsim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const N = _EX_COW.length, IDX = _EX_COW.map((_, i) => i);   // 6칸 (선생님 2026-07-03)
   /* ⭐ 여기가 제일 심했다 — 필요한 폭 92+6×56−12 = **416px**, 쓸 수 있는 폭 296px.
@@ -1663,7 +1663,7 @@ export function CheckupsWindowSplitSim({ E }) {
       bubble: t(E, "So split the count — checkups = outside (1·6, unchanged) + inside (2~5, flipped).",
                    "그래서 검진을 두 조각으로 — 창 밖(1·6, 안 변함) + 창 안(2~5, 뒤집힘).") },
   ];
-  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length, "quest-step-checkups-checkupswindowsplitsim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const wl = st.l, wr = st.r;
   const TW = 44, STEP = 52, GAP = STEP - TW;
@@ -1745,7 +1745,7 @@ export function CheckupsWindowRecapSim({ E }) {
       bubble: t(E, "Outside the window (spots 1·6) nothing moves. That's why we count ✓ as 'outside + inside'.",
                    "창 밖(자리 1·6)은 그대로예요. 그래서 검진을 '창 밖 + 창 안'으로 나눠 세는 거예요.") },
   ];
-  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length, "quest-step-checkups-checkupswindowrecapsim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const TW = 44, STEP = 52, GAP = STEP - TW;
   const wl = 2, wr = 5;
@@ -1843,7 +1843,7 @@ function _buildOutPrefixSteps(E) {
 
 export function CheckupsOutPrefixSim({ E }) {
   const steps = _buildOutPrefixSteps(E);
-  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length, "quest-step-checkups-checkupsoutprefixsim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const TW = 44, STEP = 52, GAP = STEP - TW, LAB = 66;
   const L = st.l, R = st.r, hasWin = st.l > 0;
@@ -1981,7 +1981,7 @@ function _buildInPrefixSteps(E) {
 
 export function CheckupsInPrefixSim({ E }) {
   const steps = _buildInPrefixSteps(E);
-  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length, "quest-step-checkups-checkupsinprefixsim");
   const st = steps[Math.min(safe, steps.length - 1)];
   const TW = 42, STEP = 50, GAP = STEP - TW, LAB = 100;
   const COLS = [0, 1, 2, 3, 4];   // 코드의 1-indexed + 더미 0
@@ -2256,7 +2256,7 @@ function _FcRow({ label, arr, marks, hue }) {
 
 export function CheckupsFinalCodeSim({ E }) {
   const steps = _buildFinalSteps(E);
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-checkups-checkupsfinalcodesim");
   const st = steps[idx];
   // 각 변수표에서 "지금 이 줄이 실제로 읽거나 쓰는 칸"만 칠하고, 그 칸에 어떤 변수(k, j, i-1 …)인지 배지를 붙인다.
   const NF = _FC_COW.length - 1; // = N

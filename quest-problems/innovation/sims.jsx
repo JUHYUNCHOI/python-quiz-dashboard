@@ -105,7 +105,7 @@ export function InnovationSim({ E }) {
   ];
 
   const steps = [{ kind: "overlap" }, { kind: "formula" }, { kind: "compute" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-innovation-innovationsim");
   const s = steps[ts.safe];
 
   const say =

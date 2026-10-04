@@ -136,7 +136,7 @@ export function EraseRuleSim({ E }) {
     { kind: "one" },      // S 가 COWCOW 였다면 — 그 자체가 '똑같은 게 두 번'
     { kind: "poof1" },    // 1번에 싹 → "그럼 3번이 필요한 S 는?" 이 다음 페이지로
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-cowsplits-eraserulesim");
   const s = steps[ts.safe];
   /* 뒤 두 단계는 다른 S 로 — M=1 인 경우를 학생이 한 번은 봐야 함 */
   const isOneCase = s.kind === "one" || s.kind === "poof1";
@@ -244,7 +244,7 @@ export function InsightSim({ E }) {
     { kind: "whypair" },     // 왜 하필 i ↔ i+N/2 냐 — 뒤집어 짝지으면 순서가 어긋남
     { kind: "uneven" },      // N=6 · 같은 쌍이 섞임 → 조각 길이가 2,2,3 으로 달라짐
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-cowsplits-insightsim");
   const s = steps[ts.safe];
 
   // 샘플 N=2: 앞 블록 COW + 뒤 블록 OWC
@@ -637,7 +637,7 @@ export function InsightSim({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function OddImpossibleSim({ E }) {
   const steps = [{ kind: "count" }, { kind: "even" }, { kind: "concl" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-cowsplits-oddimpossiblesim");
   const s = steps[ts.safe];
 
   const say =
@@ -698,7 +698,7 @@ export function CowSplitsTraceSim({ E }) {
     { kind: "init" }, { kind: "pair" }, { kind: "check" },
     { kind: "overlap" }, { kind: "leftover" }, { kind: "done" },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-cowsplits-cowsplitstracesim");
   const s = steps[ts.safe];
 
   const filled = s.kind === "leftover" || s.kind === "done";

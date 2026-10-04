@@ -200,7 +200,7 @@ export function SumkSim({ E }) {
   const grand = run; // 100
 
   const steps = [{ kind: "intro" }, ...subs.map((_, i) => ({ kind: "sub", i })), { kind: "done" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-sumk-sumksim");
   const s = steps[ts.safe];
 
   const setStr = (idxs) => "{" + idxs.map((i) => arr[i]).join(", ") + "}";
@@ -461,7 +461,7 @@ export function SumkBuildSim({ E }) {
     { k: "same" },
     { k: "double" },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-sumk-sumkbuildsim");
   const s = steps[ts.safe];
 
   /* 넓이 그림에 쓸 값. pedagogy 판정: **되돌아가지 않는다.**
@@ -699,7 +699,7 @@ export function SumkAreaSim({ E }) {
   }
 
   const steps = [{ k: "area" }, { k: "color" }, { k: "rows" }, { k: "fast" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-sumk-sumkareasim");
   const s = steps[ts.safe];
   const threeRows = ["rows", "fast"].includes(s.k);
 

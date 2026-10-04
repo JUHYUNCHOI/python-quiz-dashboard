@@ -150,7 +150,7 @@ function PositionCell({ pos, E, step }) {
     7쌍씩 훑으며 ans/flip 이 어떻게 바뀌는지 보여주는 7걸음 시뮬. */
 export function PhotoshootRightToLeftScanSim({ E }) {
   const steps = buildSteps(E);
-  const { safe, setIdx, total } = useTraceStep(steps.length);
+  const { safe, setIdx, total } = useTraceStep(steps.length, "quest-step-photoshoot-photoshootrighttoleftscansim");
   const cur = steps[safe];
 
   /* 버튼 줄이 고정 바에 묻히면 그만큼만 스크롤을 내려 준다 (walkhome/feedcows/sims.jsx 와 동일 처방). */

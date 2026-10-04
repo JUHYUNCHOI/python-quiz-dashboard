@@ -90,7 +90,7 @@ function Carry({ E, children }) {
 /* ═══ ① 정규화 — 딜 값을 '블록 최저가' 로 ═══ */
 export function NormalizeSim({ E }) {
   const steps = [{ k: "why" }, ...DEALS.map((_, i) => ({ k: "row", i })), { k: "unit" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-buymilk-normalizesim");
   const s = steps[ts.safe];
   const upto = s.k === "row" ? s.i + 1 : s.k === "unit" ? N : 0;
 
@@ -246,7 +246,7 @@ export function GreedySim({ E, x = 5 }) {
   best = Math.min(best, exact);
 
   const steps = [{ k: "why" }, ...trace.map((_, n) => ({ k: "row", n })), { k: "done" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-buymilk-greedysim");
   const s = steps[ts.safe];
   const cur = s.k === "row" ? trace[s.n] : null;
   // 'why' 단계에선 아직 아무 줄도 안 봤으니 답을 보여주면 안 됨 (미리 새던 것 수정)

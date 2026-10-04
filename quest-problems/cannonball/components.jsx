@@ -284,7 +284,7 @@ const TRAJECTORY = [
 const PADX = (i) => 60 + (i - 1) * 80; // x-coord on SVG number line
 
 export function CannonballTrajectorySim({ E }) {
-  const ts = useTraceStep(TRAJECTORY);
+  const ts = useTraceStep(TRAJECTORY, "quest-step-cannonball-cannonballtrajectorysim");
   const s = TRAJECTORY[ts.safe];
   const note = E ? s.note.en : s.note.ko;
 

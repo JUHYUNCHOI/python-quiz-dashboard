@@ -103,7 +103,7 @@ export function StrangeFnDigitSim({ E }) {
       ko: "0 과 1 만 남았으니 1 을 빼요. 0 이 됐어요. 모두 4 번이에요.",
       en: "Only 0 and 1 left, so subtract 1. It's 0 now — 4 times total." },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-strangefn-strangefndigitsim");
   const s = steps[ts.safe];
 
   return (

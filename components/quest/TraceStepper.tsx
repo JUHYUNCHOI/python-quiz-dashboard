@@ -56,17 +56,34 @@ export interface UseTraceStep<T> {
 }
 
 /**
- * `localStorage` 에서 걸음 번호 하나를 읽는다 — 실패하면(사생활 모드·저장소 차단·
+ * `sessionStorage` 에서 걸음 번호 하나를 읽는다 — 실패하면(사생활 모드·저장소 차단·
  * 손상된 값 등) **조용히 0** 을 돌려준다. 화면이 깨지면 안 되기 때문이다.
  *
  * ⚠️ 이건 학생 진도가 아니라 **UI 위치 캐시**다 — 지워져도 학습 데이터 손실이
  * 아니라 그냥 그 시뮬이 1 걸음으로 돌아갈 뿐이다. CLAUDE.md 의 보호 localStorage
  * 키 34개(`completedLessons` 등)와는 다른 층이니 착각하지 말 것.
  */
+/* ⭐⭐ 2026-10-04 — **`localStorage` → `sessionStorage`.** 이 훅을 117곳에 거는 작업을
+   시작하기 전에 바꾼다. 안 바꾸면 **이미 내린 판정을 117배로 되돌리는 것**이 된다.
+
+   2026-09-27 에 `mcc20citytour` 가 이 훅을 안 쓰고 **자기 `sessionStorage` 구현**을
+   따로 만든 이유가 바로 이것이었다 — **독립 검토 셋이 같은 곳에 모였다**:
+   · frontend: *"`localStorage` 는 **탭을 새로 열어도** 값이 공유돼 **답이 또 샌다.**
+     `sessionStorage` 는 탭마다 따로라 그 위험이 없고, **새로고침 생존은 그대로**다."*
+   · ux: *"**오늘 처음이면 1번부터, 오늘 안에서는 기억**이 맞다. 며칠 뒤 다시 열면
+     「이어서 하면 되는 화면」이 아니라 **「이미 끝난 그림」**으로 읽힌다."*
+   · pedagogy: *"시뮬이 **앞 쪽 질문의 답을 밝히는 자리**다. 영구 저장이면
+     **질문을 다시 읽자마자 답이 떠 있다.**"*
+   🚨 **공유 기기** — 학원·가정 컴퓨터에서 학생 A 가 결론까지 본 뒤
+     학생 B 가 **처음** 열면 시뮬이 **결론에서 시작**한다. `sessionStorage` 는
+     탭을 닫으면 사라져 이것도 같이 막는다.
+   ⚠️ 이건 **학생 진도가 아니라 UI 위치 캐시**다 — 옮겨도 **잃을 데이터가 없다**
+     (`CLAUDE.md` 의 보호 키 34개와 무관하다).
+   ⚠️ 이 훅을 쓰던 `mcc20knight` 하나의 저장 위치도 같이 바뀐다 — 같은 이유로 괜찮다. */
 function readPersistedStep(key: string): number {
   try {
     if (typeof window === "undefined") return 0;
-    const raw = window.localStorage.getItem(key);
+    const raw = window.sessionStorage.getItem(key);
     if (raw == null) return 0;
     const n = Number(raw);
     return Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
@@ -78,7 +95,7 @@ function readPersistedStep(key: string): number {
 function writePersistedStep(key: string, value: number): void {
   try {
     if (typeof window === "undefined") return;
-    window.localStorage.setItem(key, String(value));
+    window.sessionStorage.setItem(key, String(value));
   } catch {
     // 사생활 모드·저장소 가득 참 등 — 조용히 무시. 위치 기억이 안 될 뿐,
     // 화면 동작에는 영향 없다.
@@ -92,8 +109,12 @@ function writePersistedStep(key: string, value: number): void {
  * `trace` array — in which case `step` is populated for convenience.
  *
  * `persistKey` 는 **opt-in** 이다 — 안 주면 기존과 완전히 같다(회귀 위험 0).
- * 주면 그 키로 `localStorage` 에 현재 걸음을 저장·복원한다(탭을 옮겼다 와도,
- * 새로고침해도 보던 걸음 그대로). ⚠️ 이건 학생 진도 저장 키(`completedLessons`
+ * 주면 그 키로 **`sessionStorage`** 에 현재 걸음을 저장·복원한다 —
+ * **새로고침해도, 쪽을 넘겼다 돌아와도 보던 걸음 그대로**.
+ * ⛔ **탭을 닫으면 사라진다. 그게 설계다** — 「오늘 처음이면 1번부터, 오늘 안에서는
+ * 기억」(ux 2026-09-27). 영구 저장이면 **앞 쪽 질문의 답이 미리 떠 있고**,
+ * 공유 기기에서 **다음 학생이 결론부터** 보게 된다. 자세한 이유는
+ * `readPersistedStep` 위 주석에. ⚠️ 이건 학생 진도 저장 키(`completedLessons`
  * 등, CLAUDE.md 보호 목록)가 **아니다** — 지워지면 그냥 1걸음으로 돌아갈 뿐인
  * UI 캐시다. 키 이름은 `quest-step-` 네임스페이스를 쓰고, 기존 `quest-pos-`
  * (챕터/섹션 위치, `*App.jsx` 168개가 씀)와는 다른 용도이니 겹치지 않게 한다.

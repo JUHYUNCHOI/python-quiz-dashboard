@@ -255,7 +255,7 @@ export function WalkHomeDpFillSim({ E }) {
   const [presetKey, setPresetKey] = useState("a");
   const isB = presetKey === "b";
   const steps = isB ? buildStepsB(E) : buildSteps(E);
-  const { safe, setIdx, total } = useTraceStep(steps.length);
+  const { safe, setIdx, total } = useTraceStep(steps.length, "quest-step-walkhome-walkhomedpfillsim");
   /* 프리셋을 바꾸면 항상 그 프리셋의 1걸음부터 — 이전 프리셋의 인덱스를 들고 가면
      걸음 번호는 남아 있는데 내용은 딴판이 되어 혼란을 준다 (mcc20citytour 와 동일 관례). */
   const choosePreset = (k) => { setPresetKey(k); setIdx(0); };

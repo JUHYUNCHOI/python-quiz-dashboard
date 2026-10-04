@@ -76,7 +76,7 @@ export function PhotoWindowSim({ E }) {
   }
   steps.push({ kind: "final", best, bestAt });
 
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-photoshoot25-photowindowsim");
   const s = steps[ts.safe];
   const ROW_W = gridW(N);
 
@@ -176,7 +176,7 @@ export function PhotoUpdateSim({ E }) {
     { kind: "c4" },      // 소가 (7,7) — 후보 6·7 은 들판 밖 → min(r, W−1)
     { kind: "done" },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-photoshoot25-photoupdatesim");
   const s = steps[ts.safe];
 
   /* 소 위치 — edge·clamp 스텝만 모서리로 옮겨서 "K×K 장" 이 안 되는 걸 보게 함
@@ -531,7 +531,7 @@ export function PhotoMonotoneSim({ E }) {
     { scores: [8, 9, 5, 6], changed: 3 },
   ];
   const steps = [{ kind: "ask" }, { kind: "u1" }, { kind: "u2" }, { kind: "u3" }, { kind: "why" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-photoshoot25-photomonotonesim");
   const s = steps[ts.safe];
   const fi = s.kind === "ask" ? 0 : s.kind === "why" ? 3 : ["u1", "u2", "u3"].indexOf(s.kind) + 1;
   const f = FRAMES[fi];
@@ -664,7 +664,7 @@ export function PhotoTraceSim({ E }) {
     steps.push(snap({ kind: "done", wr: [], rd: [], hasDelta: false, hasMax: false }));
   }
 
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-photoshoot25-phototracesim");
   const s = steps[ts.safe];
   const q = s.q;
   const curMax = s.curMax ?? 0;

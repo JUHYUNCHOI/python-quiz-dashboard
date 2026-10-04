@@ -81,7 +81,7 @@ export function SlidingWindowSim({ E }) {
   const [caseId, setCaseId] = useState("basic");
   const cur = CASES.find(c => c.id === caseId);
   const trace = buildTrace(cur.s);
-  const { safe: si, setIdx: setSi, total: siTotal } = useTraceStep(trace.length);
+  const { safe: si, setIdx: setSi, total: siTotal } = useTraceStep(trace.length, "quest-step-lc3-slidingwindowsim");
   const step = trace[Math.min(si, trace.length - 1)];
   const last = si >= trace.length - 1;
   const final = trace[trace.length - 1].best;

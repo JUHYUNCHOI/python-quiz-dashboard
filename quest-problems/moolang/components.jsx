@@ -71,7 +71,7 @@ function buildMooLangAuditTrace() {
 const ML_TRACE = buildMooLangAuditTrace();
 
 export function MooLangDeepAudit({ E }) {
-  const { idx, safe, setIdx, total } = useTraceStep(ML_TRACE.length);
+  const { idx, safe, setIdx, total } = useTraceStep(ML_TRACE.length, "quest-step-moolang-moolangdeepaudit");
   const step = ML_TRACE[safe];
   const note = E ? step.note_en : step.note_ko;
   const showBest = step.cur === -2;

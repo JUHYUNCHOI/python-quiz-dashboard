@@ -63,7 +63,7 @@ export function HandDrawSimulator({ E }) {
                                                             "두 가지가 걸려요.\n(a) 입력에 키 3 인 소가 한 마리뿐이라 두 마리를 못 써요.\n(b) 된다 해도 3 > 1 < 3 은 내려갔다 올라오는 V 모양이라 산이 아니에요.") },
     { kind: "observation" },
   ];
-  const ts = useTraceStep(trace);
+  const ts = useTraceStep(trace, "quest-step-cowphotos-handdrawsimulator");
   const safe = ts.safe;
   const s = trace[safe];
 
@@ -189,7 +189,7 @@ export function TrickySimulator({ E }) {
     { kind: "verdict" },
     { kind: "diagnosis" },
   ];
-  const ts = useTraceStep(trace);
+  const ts = useTraceStep(trace, "quest-step-cowphotos-trickysimulator");
   const safe = ts.safe;
   const s = trace[safe];
 

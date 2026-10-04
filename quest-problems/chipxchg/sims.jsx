@@ -51,7 +51,7 @@ export function ChipCountSim({ E }) {
   const groups = Math.floor(Bnow / cB), left = Bnow % cB;
   const gain = groups * cA, total = Anow + gain;
   const steps = [{ kind: "have" }, { kind: "group" }, { kind: "convert" }, { kind: "total" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-chipcountsim"); const s = steps[ts.safe];
 
   const say =
     s.kind === "have" ? t(E, <>I'm holding <b style={{color:RED,...NW}}>2 A</b> and <b style={{color:BLU,...NW}}>7 B</b>. Exchange: <b style={NW}>3 B → 2 A</b>. How many A can I end with?</>,
@@ -123,7 +123,7 @@ export function AllBlueWorstSim({ E }) {
   const cB = 3, cA = 2, X = 8;
   const groups = Math.floor(X / cB), left = X % cB, redFromSwap = groups * cA;
   const steps = [{ k: "give" }, { k: "allblue" }, { k: "group" }, { k: "waste" }, { k: "worst" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-allblueworstsim"); const s = steps[ts.safe];
   const showGroups = s.k === "group" || s.k === "waste" || s.k === "worst";
   const wasted = s.k === "waste" || s.k === "worst";
 
@@ -192,7 +192,7 @@ export function AllBlueWorstSim({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function AllRedWorstSim({ E }) {
   const steps = [{ k: "rule" }, { k: "bluegood" }, { k: "givered" }, { k: "concl" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-allredworstsim"); const s = steps[ts.safe];
 
   const say =
     s.k === "rule"    ? t(E, <>A different swap this time — <span style={NW}><b style={{color:BLU}}>2 B</b> → <b style={{color:RED}}>3 A</b></span>. Here converting <b>gains</b> A!</>,
@@ -254,7 +254,7 @@ export function AdversarySim({ E }) {
   });
   // 브루트: b = 0…X 를 다 따져 최악(최소) 찾기. (공식 유도는 다음 단계로 분리)
   const steps = [{ kind: "intro" }, ...rows.map((r) => ({ kind: "b", b: r.b }))];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-adversarysim"); const s = steps[ts.safe];
 
   const curB = s.kind === "b" ? s.b : -1;
   const cur = curB >= 0 ? rows[curB] : null;
@@ -355,7 +355,7 @@ export function FormulaDeriveSim({ E }) {
   });
   const worstB = rows.reduce((mi, r) => (r.val < rows[mi].val ? r.b : mi), 0);
   const steps = [{ kind: "why" }, { kind: "obs" }, { kind: "infer" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-formuladerivesim"); const s = steps[ts.safe];
 
   const worst = rows[worstB];
   const say =
@@ -464,7 +464,7 @@ export function FormulaBuildSim({ E }) {
     { kind: "anchor" }, { kind: "formula" }, { kind: "whyB" },
     { kind: "wrap" }, { kind: "largest" }, { kind: "codemap" },
   ];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-formulabuildsim"); const s = steps[ts.safe];
 
   // 트레이 상태: whyB 만 시작 B 4개 예시, 나머지는 샘플(시작 0)
   const B = s.kind === "whyB" ? 4 : 0;
@@ -597,7 +597,7 @@ export function CandidateSim({ E }) {
   const candBs = [0, 2, 6, 8];
   const worstB = 8;
   const steps = [{ kind: "brute" }, { kind: "fast" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-candidatesim"); const s = steps[ts.safe];
 
   const say =
     s.kind === "brute"
@@ -656,7 +656,7 @@ export function SearchSim({ E }) {
   let _lo = 0, _hi = HI0; while (_lo < _hi) { const mid = Math.floor((_lo + _hi) / 2); if (worst(mid) >= fA) _hi = mid; else _lo = mid + 1; } const ANS = _lo;
 
   const steps = [{ kind: "obs" }, { kind: "why" }, ...trace.map((_, i) => ({ kind: "probe", i })), { kind: "done" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-searchsim"); const s = steps[ts.safe];
 
   const pr = s.kind === "probe" ? trace[s.i] : null;
   const lo = pr ? pr.lo : (s.kind === "done" ? ANS : 0);
@@ -746,7 +746,7 @@ export function SearchSim({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function GameBoardSim({ E }) {
   const steps = [{ kind: "setup" }, { kind: "swap" }, { kind: "goal" }, { kind: "want" }, { kind: "block" }, { kind: "ask" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-gameboardsim"); const s = steps[ts.safe];
   // B를 교환에 다 써버린 이후 상태 (A =4, B 흐림)
   const spent = s.kind === "goal" || s.kind === "want" || s.kind === "block" || s.kind === "ask";
 
@@ -870,7 +870,7 @@ function Slab({ n, color, bg, title, children }) {
 /* ═══ ② 이해 확인 — '우리가 뭘 구하는가'를 스스로 확인 (predict→reveal) ═══ */
 export function CheckSim({ E }) {
   const steps = [{ kind: "ask" }, { kind: "reveal" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-checksim"); const s = steps[ts.safe];
   const opts = [
     t(E, "A. the final number of A chips", "A. 최종 A 칩 개수"),
     t(E, "B. the fewest extra chips that guarantee the goal", "B. 목표를 보장하는 가장 적은 추가 칩 개수"),
@@ -937,7 +937,7 @@ export function WorstCaseWhySim({ E }) {
   const steps = [{ k: "now" }];
   [1, 2, 3].forEach((x) => rows(x).forEach((_, i) => steps.push({ k: "row", x, i })));
   steps.push({ k: "rule" });
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-worstcasewhysim"); const s = steps[ts.safe];
   const cur = s.k === "row" ? mk(s.x, s.i) : null;
   const firstOfX = cur && cur.i === 0;
   const lastOfX = cur && cur.i === cur.x;
@@ -1127,7 +1127,7 @@ export function StrategySlide({ E }) {
      → 전략 페이지에서 풀이의 '모양'을 미리 심는다: 답 = 아직 목표에 못 닿을 수 있는 마지막 칩 + 1.
        그래야 도구④ 의 −1/+1 이 허공에서 튀어나오지 않음. */
   const steps = [{ kind: "two" }, { kind: "shape" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-strategyslide"); const s = steps[ts.safe];
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
@@ -1228,7 +1228,7 @@ export function LastOneWhySlide({ E }) {
   const steps = [{ k: "now" }, { k: "fail" }, { k: "waste" }, { k: "build" },
                  { k: "total" }, { k: "nextA" }, { k: "nextB" },
                  { k: "sym1" }, { k: "sym2" }, { k: "math" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-lastonewhyslide"); const s = steps[ts.safe];
   const res = (b, r) => A0 + r + Math.floor((B0 + b) / CB) * CA;
 
   const say =
@@ -1404,7 +1404,7 @@ export function LastOneWhySlide({ E }) {
    숫자는 전부 완전탐색 확인 (목표 5→3번·조합 9 / 50→70번·2,555 / 1000→1,495번·1,119,755). */
 export function CountUpSim({ E }) {
   const steps = [{ k: "recap" }, { k: "g50" }, { k: "g1000" }, { k: "limit" }, { k: "need" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-countupsim"); const s = steps[ts.safe];
 
   /* 목표 | 세어 본 칩 수 | 따져 본 조합 — 완전탐색으로 확인한 값 */
   const rows = [
@@ -1498,7 +1498,7 @@ export function WhyNotGoalSim({ E }) {
   const CA = 2, CB = 3;
   const steps = [{ k: "ask" }, { k: "small" }, { k: "direct" }, { k: "real" },
                  { k: "safe" }, { k: "why" }, { k: "table" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const ts = useTraceStep(steps, "quest-step-chipxchg-whynotgoalsim"); const s = steps[ts.safe];
 
   /* 완전탐색으로 확인한 값 — 목표 | 진짜 답 | 목표 그대로 | 목표−1 후 +1 */
   const rows = [

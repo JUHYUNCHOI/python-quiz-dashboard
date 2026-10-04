@@ -76,7 +76,7 @@ export function TripletEnumSimulator({ E }) {
   // k 가 오른쪽으로 갈수록 큼).  나머지 i·j 조합(총 35)은 verdict 가 요약(최대 8⭐).
   const walk = allTrips.slice(0, 5);
   const trace = [{ kind: "intro" }, ...walk.map((t, idx) => ({ kind: "step", t, idx })), { kind: "verdict" }, { kind: "scale" }];
-  const ts = useTraceStep(trace);
+  const ts = useTraceStep(trace, "quest-step-mooin3-tripletenumsimulator");
   const safe = ts.safe;
   const s = trace[safe];
 
@@ -452,7 +452,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
   });
   trace.push({ kind: "final", revealed: perJ.length, best });
 
-  const ts = useTraceStep(trace);
+  const ts = useTraceStep(trace, "quest-step-mooin3-mootracesimulator");
   const safe = ts.safe;
   const s = trace[safe];
   const hasRow = s.kind === "scan" || s.kind === "score" || s.kind === "jmove" || s.kind === "rreset";
@@ -1059,7 +1059,7 @@ export function Mooin3FastSim({ E }) {
   });
   trace.push({ kind: "final", revealed: perC.length });
 
-  const ts = useTraceStep(trace);
+  const ts = useTraceStep(trace, "quest-step-mooin3-mooin3fastsim");
   const s = trace[ts.safe];
   const cur = s.kind === "letter" ? perC[s.ci] : null;
 
@@ -2170,7 +2170,7 @@ export function Mooin3TableSim({ E, lang = "py" }) {
     steps.push({ kind: "use", phase: "done", showK: true, showI: true, showJ: true, ...uBase });
   }
 
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-mooin3-mooin3tablesim");
   const s = steps[ts.safe];
   const cur = (s.kind === "L" || s.kind === "R") ? s.i : null;
 
@@ -2447,7 +2447,7 @@ export function Mooin3MapSim({ E }) {
     steps.push({ kind: "use", phase: "done", showK: true, showI: true, showJ: true, ...base });
   }
 
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-mooin3-mooin3mapsim");
   const s = steps[ts.safe];
 
   const cellBox = (i) => {

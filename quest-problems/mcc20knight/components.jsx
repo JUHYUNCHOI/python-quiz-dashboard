@@ -511,7 +511,7 @@ function buildKnightBfsTrace(E) {
 
 export function Mcc20KnightBfsProcessStepper({ E }) {
   const trace = useMemo(() => buildKnightBfsTrace(E), [E]);
-  const { safe, setIdx: rawSetIdx, total, step } = useTraceStep(trace, "mcc20knight-bfs");
+  const { safe, setIdx: rawSetIdx, total, step } = useTraceStep(trace, "quest-step-mcc20knight-mcc20knightbfsprocessstepper");
   const st = step || trace[0];
   /* 🐛 2026-10-01 — **걸음을 눌러 가면 말풍선이 화면 위로 밀려 사라졌다.** 걸음 버튼이
      시뮬 맨 아래, 말풍선이 맨 위라 누를수록 말풍선이 위로 올라간다. 형제

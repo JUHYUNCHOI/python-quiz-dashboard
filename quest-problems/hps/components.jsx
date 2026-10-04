@@ -68,7 +68,7 @@ export function AlgorithmReasoningTour({ E }) {
     { kind: "beats" },
     { kind: "query" },
   ];
-  const ts = useTraceStep(tour);
+  const ts = useTraceStep(tour, "quest-step-hps-algorithmreasoningtour");
   const cur = tour[ts.safe];
 
   // Soft Q-A panel: bold question on top, body below.
@@ -347,7 +347,7 @@ export function ChartReadingTour({ E }) {
     },
   ];
 
-  const ts = useTraceStep(tour);
+  const ts = useTraceStep(tour, "quest-step-hps-chartreadingtour");
   const cur = tour[ts.safe];
   // Highlight BOTH the input cell AND its mirror (the same matchup viewed
   // from the other card's perspective).
@@ -585,7 +585,7 @@ export function HpsCaseSimulator({ E }) {
     { kind: "summary" },
   ];
 
-  const ts = useTraceStep(trace);
+  const ts = useTraceStep(trace, "quest-step-hps-hpscasesimulator");
   const s = trace[ts.safe];
   const curQuery = s.qIdx != null ? queries[s.qIdx] : null;
   const curEval = curQuery ? evalQuery(curQuery.elsie) : null;
@@ -1790,7 +1790,7 @@ export function HpsSampleIOSim({ E }) {
     { e: [1, 1], out: 5 },
   ];
   const steps = [{ kind: "intro" }, { kind: "q", qi: 0 }, { kind: "q", qi: 1 }, { kind: "q", qi: 2 }, { kind: "summary" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-hps-hpssampleiosim");
   const s = steps[ts.safe];
 
   const Glyph = ({ n, size = 20 }) => (
@@ -2006,7 +2006,7 @@ export function HpsFormulaGridSim({ E }) {
          둘은 서로 다른 설명이라 중복 제거로는 못 푼다. 늦추는 쪽을 고른다. */
     { phase: "directcount", bubble: t(E, "One more way to see it — count the wins directly.", "한 가지 더 — 이기는 패를 직접 세어 봐도 돼요.") },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-hps-hpsformulagridsim");
   const s = steps[ts.safe];
   const showTest = s.phase === "test" || s.phase === "testans";
   const lit = ["green", "red", "count", "f1", "f2", "formula", "directcount"].includes(s.phase);

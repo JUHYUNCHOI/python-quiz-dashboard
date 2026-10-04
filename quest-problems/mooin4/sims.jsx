@@ -62,7 +62,7 @@ function Label({ children, color = "#94a3b8" }) {
 export function TypeTraceSim({ E }) {
   const KEYS = "MOOMO".split("");
   const steps = KEYS.map((_, i) => ({ i }));
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-mooin4-typetracesim");
   const cur = steps[ts.safe].i;
 
   /* 그 자리에서 계산 — 하드코딩한 표가 아니라 규칙을 그대로 돌린 결과 */
@@ -152,7 +152,7 @@ export function BackwardSim({ E }) {
   });
   steps.push({ k: "check" });
 
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-mooin4-backwardsim");
   const s = steps[ts.safe];
   // 'take' 부터 그 자리의 키가 채워진다
   const filled = s.n == null ? 0 : s.k === "look" ? s.n : s.n + 1;

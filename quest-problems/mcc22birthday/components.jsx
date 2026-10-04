@@ -258,7 +258,7 @@ function buildWalkTrace(scroll, friend) {
 
 export function Mcc22BirthdayBackwardWalkSim({ E }) {
   const steps = buildWalkTrace(WALK_SCROLL, WALK_FRIEND);
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-mcc22birthday-mcc22birthdaybackwardwalksim");
   const s = steps[ts.safe];
 
   const grid = buildGrid(WALK_SCROLL.slice(0, s.stage));

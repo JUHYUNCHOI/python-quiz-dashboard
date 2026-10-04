@@ -87,7 +87,7 @@ export function SwapityRoundSim({ E }) {
     return states;
   }, []);
 
-  const { idx, setIdx } = useTraceStep(trace.length);
+  const { idx, setIdx } = useTraceStep(trace.length, "quest-step-swapity-swapityroundsim");
   const { arr, phase, round } = trace[idx];
   const [playing, setPlaying] = useState(false);
   const timerRef = useRef(null);

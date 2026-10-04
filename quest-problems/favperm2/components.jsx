@@ -123,7 +123,7 @@ export function DeepAuditSim({ E }) {
   const [candKey, setCandKey] = useState("win");
   const cand = CANDIDATES.find(c => c.key === candKey) || CANDIDATES[0];
   const { trace } = buildAuditTrace(cand.p, targetH);
-  const ts = useTraceStep(trace);
+  const ts = useTraceStep(trace, "quest-step-favperm2-deepauditsim");
   const safe = ts.safe;
   const s = trace[safe];
 

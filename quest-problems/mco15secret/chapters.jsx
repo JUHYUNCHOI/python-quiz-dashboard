@@ -21,7 +21,7 @@ const PRESETS = [
 function SecretDeepAuditSim({ E }) {
   const [presetIdx, setPresetIdx] = useState(0);
   const N = SIM_A.length;
-  const { idx: offset, setIdx: setOffset } = useTraceStep(N + 1);
+  const { idx: offset, setIdx: setOffset } = useTraceStep(N + 1, "quest-step-mco15secret-secretdeepauditsim");
   const b = PRESETS[presetIdx].b;
   const window = SIM_DOUBLED.slice(offset, offset + N);
   const isMatch = window.every((v, i) => v === b[i]);

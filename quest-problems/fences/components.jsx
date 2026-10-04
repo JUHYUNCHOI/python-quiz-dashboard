@@ -60,7 +60,7 @@ const VIZ_CODE = [
 ];
 
 export function RowColumnFillViz({ E }) {
-  const { safe: step, setIdx, total: stepsTotal } = useTraceStep(ALL_STEPS.length);
+  const { safe: step, setIdx, total: stepsTotal } = useTraceStep(ALL_STEPS.length, "quest-step-fences-rowcolumnfillviz");
   const [flashCol, setFlashCol] = useState(-1);
 
   const cur = ALL_STEPS[step];

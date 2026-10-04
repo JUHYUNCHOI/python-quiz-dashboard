@@ -80,7 +80,7 @@ function fmt(v) {
 
 function EqTrySim({ E }) {
   const [exIdx, setExIdx] = useState(0);
-  const { safe: i, setIdx: setI, total: iTotal } = useTraceStep(CANDS.length);
+  const { safe: i, setIdx: setI, total: iTotal } = useTraceStep(CANDS.length, "quest-step-mcc15equation-eqtrysim");
   const [a, b, c] = EXAMPLES[exIdx];
 
   const cur = CANDS[i];

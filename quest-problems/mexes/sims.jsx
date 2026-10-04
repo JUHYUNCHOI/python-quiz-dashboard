@@ -43,7 +43,7 @@ export function MexesIntroSim({ E }) {
         "Example — say we want mex = 2.\nThat means: 0 must be present, 1 must be present, 2 must be ABSENT.\nHow do we do it? Next screen shows step by step.",
         "예를 들어 mex = 2 를 만들고 싶다고 해요.\n0 도 있어야 하고 1 도 있어야 하고, 2 는 없어야 해요.\n어떻게 만드는지 다음 화면에서 한 단계씩 봐요.") },
   ];
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-mexes-mexesintrosim");
   const st = steps[Math.min(idx, steps.length - 1)];
 
   const TW = 44, GAP = 8;
@@ -162,7 +162,7 @@ export function MexesSampleSim({ E }) {
         : t(E, `Line ${k + 1} → target mex ${m}: 0…${m - 1} present, ${m} absent. Fill ${info.missing}, remove ${info.copies} → max = ${info.ops}.`,
               `${k + 1}번째 줄은 목표 mex ${m} 이에요.\n0…${m - 1} 이 다 있어야 하고 ${m} 은 없어야 해요.\n채울 값이 ${info.missing} 개, 없앨 ${m} 이 ${info.copies} 개예요. 더 큰 쪽인 ${info.ops} 번이면 돼요.`) });
   });
-  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-mexes-mexessamplesim");
   const st = steps[Math.min(safe, steps.length - 1)];
 
   // 말풍선 이동 (선생님 2026-07-13):
@@ -297,7 +297,7 @@ export function MexesMaxSim({ E }) {
     bubble: t(E, `Min operations for mex=${m} = max(fill ${info.missing}, remove ${info.copies}) = ${info.ops}.`,
                  `mex 를 ${m} 로 만드는 가장 적은 바꾸기는 max(채우기 ${info.missing}, 없애기 ${info.copies}) = ${info.ops} 예요.`) });
 
-  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length, "quest-step-mexes-mexesmaxsim");
   const st = steps[Math.min(idx, steps.length - 1)];
   const rv = st.reveal;
 

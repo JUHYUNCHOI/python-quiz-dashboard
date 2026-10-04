@@ -276,7 +276,7 @@ export function PlaceOneByOneSim({ E }) {
       ko: "자리는 4 → 5 → 6 으로 한 칸씩만 밀린 것처럼 보이지만,\n4 가 실제로 밀린 횟수는 (6-4) ÷ 1 = 2 회예요.\nK 가 1 이 아니면 어떻게 되는지는 곧 봐요.",
       en: "The slot only looks like it moves one step, 4 → 5 → 6,\nbut 4 was really pushed (6-4) / 1 = 2 times.\nWhat happens when K isn't 1 — that's coming up soon." },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-makedistinct-placeonebyonesim");
   const s = steps[ts.safe];
 
   return (
@@ -573,7 +573,7 @@ export function WhoCanMeetSim({ E }) {
       ko: "사실 나누지 않고 「이미 있는 수인가」만 하나씩 확인해도 답은 똑같아요 — 3 회예요.\n다만 수가 20만 개면 하나씩 확인하는 횟수가 199억 번이에요 — 끝나지 않아요.\n나머지로 나누면 한 번에 건너뛸 수 있어서 그 시간이 사라져요.",
       en: "Actually, without splitting at all — just checking \"is this number taken?\" — the answer comes out the same: 3.\nBut with 200,000 numbers that one-by-one checking runs 19,999,900,000 times — it never finishes.\nSplitting by remainder lets us jump in one go, and that time disappears." },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-makedistinct-whocanmeetsim");
   const s = steps[ts.safe];
 
   return (

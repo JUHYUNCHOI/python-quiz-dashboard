@@ -184,7 +184,7 @@ function CoverBand({ breed, cover, patches, newPos }) {
 /** FeedCowsGreedyFillSim — N=6,K=1,s="GHHGGH" 를 왼쪽부터 훑으며 패치를 놓는 8걸음 시뮬. */
 export function FeedCowsGreedyFillSim({ E }) {
   const steps = buildSteps(E);
-  const { safe, setIdx, total } = useTraceStep(steps.length);
+  const { safe, setIdx, total } = useTraceStep(steps.length, "quest-step-feedcows-feedcowsgreedyfillsim");
 
   /* 버튼 줄이 고정 바에 묻히면 그만큼만 스크롤을 내려 준다 (walkhome/sims.jsx 와 동일 처방). */
   const navRef = useRef(null);

@@ -90,7 +90,7 @@ export function SubarraySumSim({ E }) {
 
   const cur = CASES.find(c => c.id === caseId);
   const trace = mode === "prefix" ? buildPrefixTrace(cur.nums) : buildCountTrace(cur.nums, cur.k);
-  const { safe: si, setIdx: setSi, total: siTotal } = useTraceStep(trace.length);
+  const { safe: si, setIdx: setSi, total: siTotal } = useTraceStep(trace.length, "quest-step-lc560-subarraysumsim");
   const step = trace[Math.min(si, trace.length - 1)];
   const last = si >= trace.length - 1;
   const final = mode === "count" ? trace[trace.length - 1].count : null;

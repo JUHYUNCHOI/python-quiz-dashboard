@@ -66,7 +66,7 @@ export function CollatzStepSim({ E }) {
     ...orig.map((_, i) => ({ kind: "elem", i })),
     { kind: "sum" },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-collatz-collatzstepsim");
   const s = steps[ts.safe];
 
   // 현재 화면에 그릴 값 배열 + 각 칸 상태

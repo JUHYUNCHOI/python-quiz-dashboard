@@ -67,7 +67,7 @@ function partialOutput(n) {
    no consonant at all → stick an 'f' in front.
    ───────────────────────────────────────────────────────────── */
 function SyllableEchoSim({ E }) {
-  const { safe: i, setIdx: setI, total: iTotal } = useTraceStep(DEMO_FLAT.length);
+  const { safe: i, setIdx: setI, total: iTotal } = useTraceStep(DEMO_FLAT.length, "quest-step-mcc15bahasaf-syllableechosim");
   const cur = DEMO_FLAT[i];
   const pos = firstConsonantPos(cur.syl);
   const hasConsonant = pos !== -1;

@@ -43,7 +43,7 @@ export default function MilkCircleSim({ E }) {
     return states;
   }, [cap, dirs, N]);
 
-  const { idx, setIdx } = useTraceStep(trace.length);
+  const { idx, setIdx } = useTraceStep(trace.length, "quest-step-milkexchange-milkcirclesim");
   const { minute, cur, overflowSet } = trace[Math.min(idx, trace.length - 1)];
 
   // Layout cows on a circle

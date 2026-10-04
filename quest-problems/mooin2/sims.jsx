@@ -257,7 +257,7 @@ export function MooinCountTrace({ E }) {
   const [pi, setPi] = useState(0);
   const a = COUNT_PRESETS[pi].a;
   const built = buildCountTrace(a);
-  const { idx, safe, setIdx, total } = useTraceStep(built.steps.length);
+  const { idx, safe, setIdx, total } = useTraceStep(built.steps.length, "quest-step-mooin2-mooincounttrace");
   const step = built.steps[Math.min(safe, built.steps.length - 1)];
 
   let note;

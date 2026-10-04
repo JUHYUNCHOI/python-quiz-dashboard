@@ -103,7 +103,7 @@ export function MobileSim({ E }) {
     { k: "done",  ds: "main", cur: 13, killed: [1, 3, 4], active: null, kills: 3 },
     { k: "imp",   ds: "imp",  cur: 39, killed: [0],       active: 0, from: 20, ate: 19 },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-mobilegame-mobilesim");
   const s = steps[ts.safe];
   const enemies = s.ds === "main" ? MAIN : IMP;
   const goal = s.ds === "main" ? B_MAIN : B_IMP;
@@ -205,7 +205,7 @@ export function HeapTraceSim({ E }) {
     { k: "pop",   cur: 13, ptr: 5, heap: [3, 1],      kills: 3, pushed: [],  popped: 4, prevCur: 9, ate: 4, reached: true,
       title: { en: "Round 3 · pop & eat → done", ko: "3 라운드 · pop & eat → 끝" } },
   ];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-mobilegame-heaptracesim");
   const s = steps[ts.safe];
 
   // 이미 힙에 넣은 enemy index 는 회색으로. 힙 안에서 아직 안 pop 된 값이 어떤 것인지 색으로 매치.

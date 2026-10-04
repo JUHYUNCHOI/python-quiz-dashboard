@@ -217,7 +217,7 @@ function Partition({ title, groups, total, best = false, small = 1, big = 1 }) {
    ═══════════════════════════════════════════════════════════════ */
 export function RectanglesSim({ E }) {
   const steps = [{ kind: "reds" }, { kind: "rule" }, { kind: "compare" }, { kind: "min" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-rectangles-rectanglessim");
   const s = steps[ts.safe];
 
   /* 자를 자리가 세 군데 → 파랑 2개짜리 후보도 셋이다. 숫자는 전부 groupCost 가 낸다. */
@@ -303,7 +303,7 @@ export function RectanglesSim({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function WhyContiguousSim({ E }) {
   const steps = [{ kind: "want" }, { kind: "draw" }, { kind: "rule" }, { kind: "so" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-rectangles-whycontiguoussim");
   const s = steps[ts.safe];
 
   const say =
@@ -349,7 +349,7 @@ export function WhyContiguousSim({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function WhyCostSim({ E }) {
   const steps = [{ kind: "w" }, { kind: "h" }, { kind: "area" }, { kind: "waste" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-rectangles-whycostsim");
   const s = steps[ts.safe];
   const G = [[0, 1]];        // [①②] — 1×1 과 2×2
 
@@ -474,7 +474,7 @@ export function DPTableFillSim({ E }) {
   const COLS = Array.from({ length: N + 1 }, (_, z) => z);
   const ROWS = Array.from({ length: K + 1 }, (_, z) => z);
 
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-rectangles-dptablefillsim");
   const s = steps[ts.safe];
 
   // 지금까지 확정된 칸
@@ -752,7 +752,7 @@ export function DPTableFillSim({ E }) {
    숫자는 전부 이 자리에서 계산한다 — 글과 어긋날 수 없다. */
 export function WhyTableSim({ E }) {
   const steps = [{ k: "two" }, { k: "again" }, { k: "write" }];
-  const ts = useTraceStep(steps);
+  const ts = useTraceStep(steps, "quest-step-rectangles-whytablesim");
   const s = steps[ts.safe];
 
   /* 자르는 방법 두 가지. 둘 다 "① 를 혼자 덮는다" 로 시작한다.

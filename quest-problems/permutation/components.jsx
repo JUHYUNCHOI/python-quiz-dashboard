@@ -107,7 +107,7 @@ function buildDismantleTrace(initial) {
 export function DismantleSimulator({ E }) {
   const initial = [3, 1, 2, 4];
   const trace = buildDismantleTrace(initial);
-  const ts = useTraceStep(trace);
+  const ts = useTraceStep(trace, "quest-step-permutation-dismantlesimulator");
   const safe = ts.safe;
   const s = trace[safe];
 

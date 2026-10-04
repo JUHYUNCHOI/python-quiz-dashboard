@@ -29,7 +29,7 @@ const NUMS = [1, 5, 7, 10, 12];
 const GAPS = [4, 2, 3, 2];          // 이웃 간격 — 검산: 1+4=5, 5+2=7, 7+3=10, 10+2=12 ✅
 
 function WhyAdjacentSim({ E }) {
-  const { safe, setIdx, total } = useTraceStep(4);
+  const { safe, setIdx, total } = useTraceStep(4, "quest-step-mcc19rect-whyadjacentsim");
   const far = [0, 3];               // 1 과 10
 
   const SAY = [
