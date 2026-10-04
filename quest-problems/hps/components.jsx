@@ -2012,7 +2012,18 @@ export function HpsFormulaGridSim({ E }) {
   const lit = ["green", "red", "count", "f1", "f2", "formula", "directcount"].includes(s.phase);
   const litRed = ["red", "count", "f1", "f2", "formula", "directcount"].includes(s.phase);
 
-  const cell = (rowWin, colWin, key) => {
+  /* ⭐⭐ 2026-10-04 — **칸 안에 「그 패가 무엇인지」를 넣는다.**
+     선생님(수업 중): *"**여직까지는 행은 엘시꺼 열은 베씨거** 하다가 갑자기 저렇게 하면
+       **뭐가 뭔지 헷갈리지 않을까?** 다른 방법으로 더 눈에 띄게 설명 가능?"*
+     ✅ 확인했다 — **맞는 지적이다.** 이 quest 엔 **같은 3×3 ✓/✗ 격자**가 둘인데 뜻이 다르다:
+       · 앞(236·1877줄): **열 = Elsie 카드 · 행 = 내 카드** — 「Elsie 를 이기는 카드 찾기」
+       · 여기:          **행·열 둘 다 Bessie** — 「Bessie 가 낼 수 있는 패 9가지」
+     `feedback_same_number_two_meanings` 와 같은 층인데, 숫자가 아니라 **격자 모양**이다.
+     ⛔ **축에 이름만 붙이는 걸로는 모자라다** — 생김새가 같으면 앞 격자의 읽는 법이 따라온다.
+     ⭐ 그래서 **칸이 스스로 말하게** 한다 — ✓/✗ 대신 **그 칸이 뜻하는 두 장(`1·2`)** 을 쓴다.
+       한 칸 = 패 하나가 저절로 보이고, 앞의 ✓/✗ 격자와 **생김새부터 갈린다.**
+       이기는 칸은 ⚡ 를 같이 띄워 「왜 이기나」까지 한 칸에 담는다. */
+  const cell = (rowWin, colWin, key, rowId, colId) => {
     const win = rowWin || colWin;
     const showGreen = lit && win;
     const showRed = litRed && !win;
@@ -2021,11 +2032,18 @@ export function HpsFormulaGridSim({ E }) {
         width: 48, height: 40, borderRadius: 6,
         background: showGreen ? "#dcfce7" : showRed ? "#fee2e2" : "#f8fafc",
         border: `1.5px solid ${showGreen ? "#86efac" : showRed ? "#fca5a5" : "#e5e7eb"}`,
-        color: showGreen ? "#15803d" : showRed ? "#991b1b" : "#cbd5e1",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 15, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+        color: showGreen ? "#15803d" : showRed ? "#991b1b" : "#94a3b8",
+        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+        fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.1,
         transition: "background .2s, color .2s, border-color .2s",
-      }}>{lit ? (win ? "✓" : "✗") : "·"}</div>
+      }}>
+        <span style={{ fontSize: 13, fontWeight: 800 }}>
+          {rowId}<span style={{ opacity: 0.5 }}>·</span>{colId}
+        </span>
+        <span style={{ fontSize: 9, fontWeight: 700, minHeight: 11 }}>
+          {lit ? (win ? `⚡ ${t(E, "win", "이김")}` : t(E, "lose", "짐")) : ""}
+        </span>
+      </div>
     );
   };
 
@@ -2143,8 +2161,21 @@ export function HpsFormulaGridSim({ E }) {
       ) : (
         <>
           {/* 격자 */}
-          <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: "#2563eb", textAlign: "center", marginTop: 10, wordBreak: "keep-all" }}>
+            🃏 {t(E, "Every hand Bessie could play — 3 × 3 = 9", "Bessie 가 낼 수 있는 패 — 3 × 3 = 9 가지")}
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 6 }}>
             <div style={{ position: "relative" }}>
+              {/* ⭐ 2026-10-04 — **축이 누구 것인지가 격자 아래 작은 글씨에만 있었다.**
+                  선생님이 수업 중에 물으셨다: *"근데 **열이 낸시야? 행이 낸시야?**"*
+                  행도 열도 **둘 다 Bessie 것**인데(한 칸 = Bessie 의 패 하나),
+                  Elsie 가 바로 위에 카드로 그려져 있어 **한 축이 Elsie 로 읽힌다.**
+                  → 축 이름을 **격자 자신에** 붙인다. 아래 작은 글씨는 그대로 둔다. */}
+              <div style={{ display: "flex", gap: 4, marginLeft: 56, marginBottom: 2 }}>
+                <div style={{ width: 48 * 3 + 8, textAlign: "center", fontSize: 10, fontWeight: 800, color: "#2563eb", wordBreak: "keep-all" }}>
+                  {t(E, "Bessie's 2nd card →", "Bessie 둘째 장 →")}
+                </div>
+              </div>
               <div style={{ display: "flex", gap: 4, marginLeft: 56 }}>
                 {cards.map(c => (
                   <div key={`h-${c.id}`} style={{ width: 48, textAlign: "center", fontSize: 11, fontWeight: 600, color: c.win ? "#15803d" : "#9ca3af" }}>
@@ -2155,16 +2186,21 @@ export function HpsFormulaGridSim({ E }) {
               {cards.map(rowCard => (
                 <div key={`r-${rowCard.id}`} style={{ display: "flex", gap: 4, marginTop: 4, alignItems: "center" }}>
                   <div style={{ width: 52, fontSize: 11, fontWeight: 600, textAlign: "right", paddingRight: 4, color: rowCard.win ? "#15803d" : "#9ca3af" }}>
+                    {rowCard.id === cards[0].id && (
+                      <div style={{ fontSize: 9, fontWeight: 800, color: "#2563eb", lineHeight: 1.2, marginBottom: 1, wordBreak: "keep-all" }}>
+                        {t(E, "Bessie's 1st ↓", "Bessie 첫 장 ↓")}
+                      </div>
+                    )}
                     {t(E, `card ${rowCard.id}`, `카드 ${rowCard.id}`)}{rowCard.win ? " ⚡" : ""}
                   </div>
-                  {cards.map(colCard => cell(rowCard.win, colCard.win, `${rowCard.id}-${colCard.id}`))}
+                  {cards.map(colCard => cell(rowCard.win, colCard.win, `${rowCard.id}-${colCard.id}`, rowCard.id, colCard.id))}
                 </div>
               ))}
             </div>
           </div>
-          <div style={{ fontSize: 10.5, color: C.dim, textAlign: "center", marginTop: 8, wordBreak: "keep-all" }}>
-            {t(E, "↓ rows = Bessie's 1st card   ·   → cols = 2nd card", "↓ 행 = Bessie 첫 카드   ·   → 열 = 둘째 카드")}
-          </div>
+          {/* ⛔ 2026-10-04 — 여기 있던 「↓ 행 = Bessie 첫 카드 · → 열 = 둘째 카드」를 **지웠다.**
+              축 이름이 이제 **격자 자신에** 붙어 있어 **같은 말을 또 하는 글**이 됐다
+              (`feedback_picture_must_carry_the_idea`: 그림이 이미 하는 말을 글로 또 하지 마라). */
 
           {/* 공식 조립 — 각 기호를 격자 그림 조각에 대응 + 왜 '빼는지'(여사건) 동기.
               (선생님 2026-07-22: "dom 약자·공식이 어떻게 만들어지는지 전혀 이해 안 돼") */}
@@ -2172,8 +2208,8 @@ export function HpsFormulaGridSim({ E }) {
             <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "12px 14px" }}>
               {["formula", "directcount"].includes(s.phase) && <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
                 🧩 {t(E,
-                  <>Why subtract? Winning hands are scattered (⚡ could be in slot 1, slot 2, or both) — messy to count.  <b>The NON-winning hands are just those four corner cells</b>, so count those and subtract.</>,
-                  <>왜 빼요? 이기는 패는 흩어져 있어요 (⚡ 가 첫 자리·둘째 자리·둘 다 — 섞임) → 바로 세기 번거로움.  <b>‘안 이기는 패’ 는 그 네 귀퉁이 칸뿐</b> → 그걸 세서 빼는 게 쉬워요.</>)}
+                  <>Why subtract? Count the greens directly: ⚡ row 3 + ⚡ column 3 = 6 — but only <b>5</b> are green. <b>The middle cell got counted twice.</b> So counting winners needs another subtraction. The ✗ cells are one clean 2×2 block — nothing overlaps.</>,
+                  <>왜 빼요? 초록을 바로 세 보면 — ⚡ 행 3 칸 + ⚡ 열 3 칸 = 6 인데 초록은 <b>5 칸</b>이에요. <b>가운데 한 칸을 두 번 셌어요.</b> 그래서 이기는 패를 바로 세도 빼기가 또 필요해요. ✗ 는 2×2 네모 하나라 겹칠 일이 없어요.</>)}
                 <div style={{ fontSize: 10, color: "#a16207", marginTop: 3 }}>({t(E, "this way of counting = count by subtracting", "이 방법 이름: 전체에서 빼서 세기")})</div>
               </div>}
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
