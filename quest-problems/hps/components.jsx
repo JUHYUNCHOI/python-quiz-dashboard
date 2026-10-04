@@ -1978,23 +1978,35 @@ export function HpsFormulaGridSim({ E }) {
        학생도 같은 걸 피로로 겪었다: *"`dom` 표를 📋4쪽에서 보고 ⚡8쪽에서
          **처음부터 다시** 본다. 「또 이거야?」 싶었다."*
        ⛔ **그림(맞대결 타일)은 그대로 둔다** — 그게 근거다. **말만 잇는다.** */
+    /* ⛔⛔ 2026-10-04 — **내가 뜻을 잘못 알고 있었다.** 선생님이 바로잡아 주셨다:
+         *"아니야. 이 문제는 **엘시가 카드 2장이 모두 1만 있는거잖아.**
+           그래서 **낼수 있는게 1밖에 없는거고**, 그럼 베씨는 **1을 이길수 있는 카드 2만
+           가지고 있으면 된다**는 얘기잖아."*
+       ⭐ Elsie 는 두 장을 **가지고** 있다 — 「냈다」가 아니다. 코드도 그렇다:
+         `s1, s2` 는 Elsie 의 **손패**이고, Bessie 는 **그 둘을 다 이기는** 카드가 있어야 한다
+         (`beats[c][s1] and beats[c][s2]`). 내가 앞서 「냈어요」로 쓴 것이 **틀렸다.**
+       ⚠️ 그리고 「카드 1 만 냈어요」는 **「한 장만 냈다」로 읽힌다** — 선생님이 그래서 막히셨다.
+       ⭐ **선생님이 말씀하신 생각의 순서 그대로** 세 줄로 쓴다:
+         ①두 장 다 1 이다 → ②그러니 낼 수 있는 건 1 뿐이다 → ③그럼 1 을 이기는 2 만 있으면 된다.
+       ⚠️ 앞 판에서 이 주석 안에 「닫는 기호」를 글자로 적었다가 **거기서 주석이 닫혀**
+         빌드가 깨졌다. 주석 안에는 그 기호를 쓰지 마라. */
     { phase: "testans", bubble: t(E,
-        <>Same hand as before — Elsie played card 1. <b>Only ⚡ card 2 beats it</b>, so that count is <b>1</b>. That count has a name: <b>dom</b>.</>,
-        <>아까 그 패예요 — Elsie 가 카드 1 을 냈죠. <b>⚡ 카드 2 하나만 이겨요</b>, 그래서 <b>1 개</b>. 이 개수의 이름이 <b>dom</b> 이에요.</>) },
+        <>Elsie holds two cards — <b>both are card 1</b>.<br />So the only card she can play is 1.<br />Then Bessie just needs <b>⚡ card 2</b>, which beats 1.</>,
+        <>Elsie 는 카드 두 장이 <b>모두 1</b> 이에요.<br />그래서 낼 수 있는 게 <b>1 뿐</b>이죠.<br />그럼 Bessie 는 1 을 이기는 <b>⚡ 카드 2</b> 만 있으면 돼요.</>) },
     /* ⛔ 2026-10-03 선생님: *"**언제 글을 다 읽고 있어. 딱 봐도 뭔지, 강조할 건 강조하고.**"*
        전엔 두 줄짜리 산문이었고 그중 「행=첫 장, 열=둘째 장」은 **격자 아래 축 설명이
        이미 하고 있었다** — 같은 말을 두 번, 그것도 글로. 한 줄로 줄이고 **수를 크게** 한다. */
     { phase: "grid",  bubble: (<>{t(E, "Bessie picks 2 cards — ", "Bessie 는 2 장을 골라요 — ")}
       <b style={{ fontSize: 19, color: "#5b21b6" }}>3 × 3 = 9</b>
       {t(E, " hands in all.", " 가지예요.")}</>) },
-    { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
-    { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.") },
+    { phase: "green", bubble: t(E, "If a hand holds ⚡ card 2,\nBessie plays it and wins — whatever Elsie shows.\nGreen means a winning hand.", "패에 ⚡ 카드 2 가 한 장이라도 있으면\n그걸 내서 이겨요 — Elsie 가 뭘 내든요.\n초록이 이기는 패예요.") },
+    { phase: "red",   bubble: t(E, "A hand loses only when BOTH cards are not ⚡.\nThose are the four red corner cells.", "두 장이 「둘 다」 ⚡ 가 아닐 때만 져요.\n그런 패가 빨간 네 모서리 칸이에요.") },
     /* ⛔ 2026-10-02 4차 학생: *"그만두고 싶었던 걸음: 6/7. 넷이 동시에 떠 있었다."*
        ⭐ 숨은 중복을 PM 이 찾았다 — **말풍선과 아래 상자가 같은 문자 공식을 두 번** 말했다.
          말풍선에선 지우고(숫자만), 문자 공식은 **아래 상자 하나만** 맡는다.
          그리고 그 상자를 **따로 걸음으로** 뗀다 — 문자(N·dom)가 처음 들어가는 순간을 격리한다.
          내용은 안 늘고 겹침만 없어진다. */
-    { phase: "count", bubble: t(E, "Wins = whole grid − losers = 9 − 4 = 5!", "이기는 패 = 전체 − 지는 것 = 9 − 4 = 5!") },
+    { phase: "count", bubble: t(E, "So the winning hands are\nall 9 minus the 4 losing ones — that's 5.", "그러면 이기는 패는\n전체 9 에서 지는 4 를 빼서 5 예요.") },
     /* ⛔ 2026-10-02 (세 번째 쪼개기 — PM 「마지막 한 번」) 5차 학생:
          *"**숫자 상자 셋이 동시에** 떠서 **뭐부터 봐야 할지 몰랐다.** 여기가 제일 그만두고
            싶었던 자리다."* → 앞선 세 번은 **블록을 통째로 옮기기만** 해서 과부하가 따라다녔다.
@@ -2108,7 +2120,11 @@ export function HpsFormulaGridSim({ E }) {
           빈 상자가 70px 을 먹어 **아래 조작부를 화면 밖으로** 밀고 있었다.
           (선생님: *"정보가 너무 많아"* — 빈 공간도 길이다.) */}
       <NarrativePanel stepKey={ts.safe} minHeight={48}>
-        <div style={{ fontSize: 14, lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", whiteSpace: "pre-line" }}>
+        {/* ⭐ 2026-10-04 선생님: *"말이 아직 어색해. 그리고 **가독성 있는 줄바꿈**"*
+            한글 줄바꿈 네 벌(`feedback_korean_linebreak`) 중 **`textWrap: balance` 가 빠져** 있었다 —
+            없으면 **마지막 줄만 짧게 남아** 「똑같은/게」 처럼 갈린다.
+            줄은 **뜻 단위로 직접** 끊는다(`\n`, 이 상자는 `pre-line` 이라 그대로 먹는다). */}
+        <div style={{ fontSize: 14, lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", whiteSpace: "pre-line", textWrap: "balance" }}>
           💬 {s.bubble}
         </div>
       </NarrativePanel>
@@ -2129,7 +2145,7 @@ export function HpsFormulaGridSim({ E }) {
           ⭐ 라벨은 **길잡이**지 요점이 아니다 → **회색조 · 가는 글씨**로 물린다.
             색과 굵기는 **그 걸음이 가르치는 것**에만 쓴다. */}
         <span style={{ fontSize: 11.5, fontWeight: 600, color: C.dim, wordBreak: "keep-all" }}>
-          Elsie {t(E, "played", "가 낸 패")}
+          Elsie {t(E, "holds", "가 가진 패")}
         </span>
         {[1, 1].map((v, i) => (
           <div key={i} style={{
@@ -2165,7 +2181,7 @@ export function HpsFormulaGridSim({ E }) {
         <div style={{ marginTop: 12 }}>
           <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", marginBottom: 10, wordBreak: "keep-all" }}>
             {t(E, "Line up each card against Elsie's card 1 and see who wins:",
-                  "각 카드를 Elsie 의 카드 1 과 맞대결시켜 누가 이기나 봐요:")}
+                  "Bessie 의 카드를 하나씩 Elsie 의 카드 1 과 겨뤄 봐요:")}
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
             {[
@@ -2178,10 +2194,10 @@ export function HpsFormulaGridSim({ E }) {
               // 결과는 '내 카드' 관점(✓이김/비김/✗짐). 누가 이기는지는 위 대결 글리프
               // 하이라이트(그림자)가 보여줌 — winner 로 어느 글리프를 빛낼지만 지정.
               const verdict = win
-                ? { txt: t(E, "✓ I win", "✓ 내가 이김"), color: "#15803d", winner: mine }
+                ? { txt: t(E, "✓ Bessie wins", "✓ 이겨요"), color: "#15803d", winner: mine }
                 : c.kind === "draw"
-                  ? { txt: t(E, "draw (same card)", "비김 (같은 카드)"), color: "#6b7280", winner: null }
-                  : { txt: t(E, "✗ I lose", "✗ 내가 짐"), color: "#b91c1c", winner: foe };
+                  ? { txt: t(E, "draw (same card)", "비겨요 (같은 카드)"), color: "#6b7280", winner: null }
+                  : { txt: t(E, "✗ Bessie loses", "✗ 져요"), color: "#b91c1c", winner: foe };
               return (
                 <div key={c.id} style={{
                   width: 132, textAlign: "center",
@@ -2191,7 +2207,7 @@ export function HpsFormulaGridSim({ E }) {
                   boxShadow: win ? "0 3px 12px rgba(22,163,74,.18)" : "none",
                 }}>
                   <div style={{ fontSize: 11.5, fontWeight: 800, color: win ? "#15803d" : "#6b7280" }}>
-                    {t(E, `my card ${c.id}`, `내 카드 ${c.id}`)} {win ? "⚡" : ""}
+                    {t(E, `Bessie card ${c.id}`, `Bessie 카드 ${c.id}`)} {win ? "⚡" : ""}
                   </div>
                   {/* 직접 맞대결: 내 카드  vs  ●1 */}
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, margin: "6px 0" }}>
