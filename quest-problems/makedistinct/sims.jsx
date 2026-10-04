@@ -471,7 +471,7 @@ export function WhoCanMeetSim({ E }) {
            안 바뀐다.** 그 말은 K 가 몇이든 맞다(다음 두 걸음이 K=1·K=3 으로 확인한다). */
       emKo: "서로 영향을 못 줘요",
       emEn: "they can never affect each other",
-      ko: "한쪽은 늘 1 이 남고 한쪽은 늘 0 이 남아요.\n남는 수가 다른 수끼리는 서로 영향을 못 줘요 — 아무리 밀어도 안 만나요.",
+      ko: "한쪽은 늘 1 이 남고 한쪽은 늘 0 이 남아요.\n남는 수가 다른 수끼리는 서로 영향을 못 줘요 — 아무리 밀어도 안 겹쳐요.",
       en: "One row always leaves 1, the other always leaves 0.\nRows with different leftovers can never affect each other, however far you push." },
 
     /* 5. 일반화 **한 칸만.** K=1 을 옆에 놓아 「K 가 달라지면 갈리는 수가 달라진다」를
