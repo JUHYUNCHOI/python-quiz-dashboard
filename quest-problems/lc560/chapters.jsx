@@ -165,7 +165,7 @@ export function makeChapters(E) {
             {/* 구체 예시: 토막 합 = 두 누적합의 차이 (슬라이드 1 과 같은 [1,1,1]) */}
             <div style={{ background: "#fff", border: "1px dashed #7dd3fc", borderRadius: 8, padding: "8px 10px", marginBottom: 12 }}>
               <div style={{ fontSize: 10.5, color: "#64748b", marginBottom: 7, textAlign: "center" }}>
-                {t(E, "Why a difference? The prefix-sum list of [1,1,1] is [0,1,2,3]:", "왜 '차이'? — [1,1,1] 의 누적합 리스트는 [0,1,2,3]:")}
+                {t(E, "Why a difference? The prefix-sum list of [1,1,1] is [0,1,2,3]:", "왜 '차이'? — [1,1,1] 의 누적합 목록은 [0,1,2,3]:")}
               </div>
               <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", marginBottom: 7, flexWrap: "wrap" }}>
                 {[
@@ -208,7 +208,7 @@ export function makeChapters(E) {
             <div style={{ fontSize: 12.5, color: "#065f46", lineHeight: 1.6 }}>
               {t(E,
                 "Build the prefix-sum list once, then sweep it left to right. At each value, just check whether (value − k) showed up earlier — a dictionary answers that instantly, so the inner loop disappears.",
-                "누적합 리스트를 한 번 만들어 두고 왼→오로 훑어요. 각 값에서 (그 값 − k) 가 앞에 나왔는지만 보면 되고, 그건 딕셔너리가 바로 답해줘요 — 안쪽 반복이 사라져요.")}
+                "누적합 목록을 한 번 만들어 두고 왼→오로 훑어요. 각 값에서 (그 값 − k) 가 앞에 나왔는지만 보면 되고, 그건 딕셔너리가 바로 답해줘요 — 안쪽 반복이 사라져요.")}
             </div>
           </div>
         </div>
@@ -220,7 +220,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Build the prefix list, then count pairs that differ by k.",
-        "누적합 리스트를 만들고, 차이가 k 인 쌍을 세어 답을 구해요."),
+        "누적합 목록을 만들고, 차이가 k 인 쌍을 세어 답을 구해요."),
       content: <SubarraySumSim E={E} />,
     },
 
@@ -229,25 +229,25 @@ export function makeChapters(E) {
       type: "quiz",
       narr: t(E,
         "We built the prefix list starting at prefix = [0]. Why put a 0 at the very front?",
-        "누적합 리스트를 prefix = [0] 으로 시작했어요. 왜 맨 앞에 0 을 넣을까요?"),
+        "누적합 목록을 prefix = [0] 으로 시작했어요. 왜 맨 앞에 0 을 넣을까요?"),
       question: t(E,
         "Why start the prefix-sum list with [0]?",
-        "왜 누적합 리스트를 [0] 으로 시작할까요?"),
+        "왜 누적합 목록을 [0] 으로 시작할까요?"),
       options: [
         t(E,
           "0 is the empty prefix — the sum before any number. A subarray starting at index 0 has sum prefix[r] − prefix[0], so this 0 must be in the list to count those.",
-          "0 은 '아무것도 안 더한' 빈 누적합이에요. 맨 앞(0번)부터 시작하는 토막의 합은 prefix[r] − prefix[0] 인데, 이 0 이 리스트에 있어야 그런 토막을 셀 수 있어요."),
+          "0 은 '아무것도 안 더한' 빈 누적합이에요. 맨 앞(0번)부터 시작하는 토막의 합은 prefix[r] − prefix[0] 인데, 이 0 이 목록에 있어야 그런 토막을 셀 수 있어요."),
         t(E,
           "It's just a placeholder — remove it and the code works the same.",
           "그냥 자리 채우기 — 빼도 똑같이 작동해요."),
         t(E,
           "To make the list length an even number.",
-          "리스트 길이를 짝수로 맞추려고요."),
+          "목록 길이를 짝수로 맞추려고요."),
       ],
       correct: 0,
       explain: t(E,
         "A subarray nums[l..r] sums to prefix[r+1] − prefix[l]. A slice starting at the very beginning (l = 0) is prefix[r+1] − prefix[0], so prefix[0] = 0 has to be in the list — otherwise every subarray starting at index 0 would be missed.",
-        "토막 nums[l..r] 의 합 = prefix[r+1] − prefix[l] 이에요. 맨 앞부터 시작하는 토막(l=0)은 prefix[r+1] − prefix[0] 인데, prefix[0] = 0 이 리스트에 없으면 맨 앞부터 시작하는 토막을 전부 놓쳐요. 그래서 [0] 으로 시작해요."),
+        "토막 nums[l..r] 의 합 = prefix[r+1] − prefix[l] 이에요. 맨 앞부터 시작하는 토막(l=0)은 prefix[r+1] − prefix[0] 인데, prefix[0] = 0 이 목록에 없으면 맨 앞부터 시작하는 토막을 전부 놓쳐요. 그래서 [0] 으로 시작해요."),
     },
 
     /* ── 7. Final code (progressive) ─────────────────────────── */
@@ -255,13 +255,13 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Build the prefix-sum list, then one sweep with a dictionary — O(n) time and space. No nested loop.",
-        "누적합 리스트를 만들고 딕셔너리로 한 번만 훑으면 끝나요.\n안쪽 반복이 없어서 시간도 공간도 O(n) 이에요."),
+        "누적합 목록을 만들고 딕셔너리로 한 번만 훑으면 끝나요.\n안쪽 반복이 없어서 시간도 공간도 O(n) 이에요."),
       content: (
         <CodeJourney
           E={E}
           sections={[
             {
-              label: t(E, "1. Build the prefix-sum list", "1. 누적합 리스트 만들기"),
+              label: t(E, "1. Build the prefix-sum list", "1. 누적합 목록 만들기"),
               color: TEAL,
               why: [
                 t(E, "prefix[0] = 0: the empty prefix — the sum before adding anything.", "prefix[0] = 0 은 빈 누적합이에요. 아무것도 더하기 전의 합이죠."),
@@ -289,7 +289,7 @@ export function makeChapters(E) {
               color: TEAL,
               why: [
                 t(E, "A subarray sum = prefix[r] − prefix[l]. We want that difference to be k.", "토막 합 = prefix[r] − prefix[l]. 이 차이가 k 인 쌍을 찾는 거예요."),
-                t(E, "Sweep the list. For value p, the partner is p − k: how many earlier values equal it = how many valid slices end here.", "리스트를 훑어요. 값 p 의 짝은 p − k 예요.\n앞에서 이 값이 나온 횟수가 곧 여기서 끝나는 토막의 개수예요."),
+                t(E, "Sweep the list. For value p, the partner is p − k: how many earlier values equal it = how many valid slices end here.", "목록을 훑어요. 값 p 의 짝은 p − k 예요.\n앞에서 이 값이 나온 횟수가 곧 여기서 끝나는 토막의 개수예요."),
                 t(E, "Look up first, then record p — so a value never pairs with itself.", "먼저 찾아보고 그다음에 p 를 적어요. 그래야 p 가 자기 자신과 짝지어지지 않아요."),
               ],
               pyOnly: [t(E, "seen = defaultdict(int): a missing key reads as 0 automatically — no if-check needed before adding.", "seen = defaultdict(int) 은 없는 키를 읽으면 0 을 돌려줘요. 그래서 if 검사 없이 바로 더할 수 있어요.")],

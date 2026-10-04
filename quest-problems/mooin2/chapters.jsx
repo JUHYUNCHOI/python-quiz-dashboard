@@ -88,7 +88,7 @@ export function makeMooin2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "A moo 'occurs' in the array if we can find the 3 numbers in ORDER — left to right — even with gaps in between.",
-        "배열에서 moo 가 '발생'한다는 건, 순서대로 골라낼 수 있다는 뜻이에요."),
+        "숫자들 중에서 moo 가 '발생'한다는 건, 순서대로 골라낼 수 있다는 뜻이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#1e3a8a", lineHeight: 1.7, marginBottom: 12 }}>
@@ -102,7 +102,7 @@ export function makeMooin2Ch1(E) {
                 "이렇게 순서는 지키되 사이를 건너뛰며 고르는 걸 ")}
               <b>{t(E, "subsequence", "부분수열")}</b>
               {t(E, ". In position form: i < j < k with a[i]=x, a[j]=y, a[k]=y.",
-                    " 이라고 불러요. 자리로 쓰면 i < j < k 에서 a[i]=x, a[j]=y, a[k]=y.")}
+                    " 이라고 불러요. 자리로 쓰면 i < j < k 자리의 값이 각각 x, y, y 예요.")}
             </div>
           </div>
           <div style={{ textAlign: "center", marginBottom: 8, fontSize: 12, color: "#9a3412", fontWeight: 700 }}>
@@ -145,7 +145,7 @@ export function makeMooin2Ch1(E) {
               <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12" }}>
                 <div>6 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← N", "← N")}</span></div>
-                <div>1 2 3 4 4 4 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← array a", "← 배열 a")}</span></div>
+                <div>1 2 3 4 4 4 <span style={{ color: "#94a3b8", fontSize: 10.5 }}>{t(E, "← array a", "← 입력 숫자들")}</span></div>
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
@@ -438,7 +438,7 @@ export function makeMooin2Ch3(E) {
             ))}
           </div>
           <div style={{ textAlign: "center", fontSize: 12.5, color: "#7c5cfc", fontWeight: 700, marginTop: 12, wordBreak: "keep-all" }}>
-            👉 {t(E, "Hit Next — watch these notes fill in as we scan.", "「다음」을 누르면 이 메모들이 배열을 훑으며 채워지는 걸 볼 수 있어요.")}
+            👉 {t(E, "Hit Next — watch these notes fill in as we scan.", "「다음」을 누르면 이 메모들이 숫자들을 훑으며 채워지는 걸 볼 수 있어요.")}
           </div>
         </div>),
     },
@@ -450,7 +450,7 @@ export function makeMooin2Ch3(E) {
       type: "deepAudit",
       narr: t(E,
         "Scan the array once and the notes fill in. The ⚡ Code tab simply writes down exactly this.",
-        "배열을 한 번 훑으면 이 메모들이 채워져요. ⚡코드 탭은 바로 이걸 그대로 적는 거예요."),
+        "숫자들을 한 번 훑으면 이 메모들이 채워져요. ⚡코드 탭은 바로 이걸 그대로 적는 거예요."),
     },
   ];
 }

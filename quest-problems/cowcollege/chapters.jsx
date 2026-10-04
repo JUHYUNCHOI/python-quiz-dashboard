@@ -208,7 +208,7 @@ export function makeCowCollegeCh1(E) {
               padding: 10, fontSize: 12, color: C.text, lineHeight: 1.8,
             }}>
               <div style={{ fontWeight: 600, color: C.ok, marginBottom: 4 }}>
-                {t(E, "Tuition = c[1] = $4", "등록금 = c[1] = $4")}
+                {t(E, "Tuition = c[1] = $4", "등록금 = 1번 자리 값 = $4")}
               </div>
               {t(E,
                 "Sorted, so everything from index 1 onward is at least 4 — the green bars can all pay!\nCount = N - i = 4 - 1 = 3. Revenue = 4 x 3 = 12", "정렬했으니 1 번 자리부터 뒤는 모두 4 이상이에요.\n그래서 초록 막대 소들은 다 낼 수 있어요.\n소 수 = N - i = 4 - 1 = 3. 수입 = 4 x 3 = 12")}
@@ -224,7 +224,7 @@ export function makeCowCollegeCh1(E) {
         "Sorted c = [1, 4, 6, 6].\nIf tuition = 6 (index 2), how many cows pay and what's the revenue?", "등록금을 2 번 자리의 6 으로 정하면 수입은 얼마일까요?"),
       question: t(E,
         "c = [1, 4, 6, 6]. Tuition = c[2] = 6. Revenue = ?",
-        "c = [1, 4, 6, 6]. 등록금 = c[2] = 6. 수입 = ?"),
+        "c = [1, 4, 6, 6]. 등록금 = 2번 자리 값 = 6. 수입 = ?"),
       options: [
         t(E, "6 x 2 = 12", "6 x 2 = 12"),
         t(E, "6 x 4 = 24", "6 x 4 = 24"),
@@ -250,7 +250,7 @@ export function makeCowCollegeCh1(E) {
         return (
           <div style={{ padding: 16 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
-              {t(E, "Try each c[i] as tuition", "각 c[i]를 등록금으로 시도")}
+              {t(E, "Try each c[i] as tuition", "각 자리 값을 등록금으로 시도")}
             </div>
             <div style={{
               borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
@@ -328,7 +328,7 @@ export function makeCowCollegeCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The algorithm: Sort the array.\nThen sweep through, trying each c[i] as the tuition.\nCount = N-i.\nTrack maximum revenue.", "정렬한 뒤 c[i] 를 하나씩 등록금으로 넣어 보며 비교해요."),
+        "The algorithm: Sort the array.\nThen sweep through, trying each c[i] as the tuition.\nCount = N-i.\nTrack maximum revenue.", "정렬한 뒤 자리마다 값을 등록금으로 넣어 보며 비교해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
@@ -336,10 +336,10 @@ export function makeCowCollegeCh2(E) {
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { step: "1", desc: t(E, "Sort array c in ascending order", "배열 c 를 오름차순으로 정렬해요"), icon: "↑" },
+              { step: "1", desc: t(E, "Sort array c in ascending order", "등록금 목록을 오름차순으로 정렬해요"), icon: "↑" },
               { step: "2", desc: t(E, "For each index i from 0 to N-1", "자리 i 를 0부터 N-1까지 돌아요"), icon: "→" },
-              { step: "3", desc: t(E, "tuition = c[i], cows = N - i", "등록금 = c[i], 소 수 = N - i"), icon: "=" },
-              { step: "4", desc: t(E, "revenue = c[i] x (N - i)", "수입 = c[i] x (N - i)"), icon: "x" },
+              { step: "3", desc: t(E, "tuition = c[i], cows = N - i", "등록금 = 그 자리 값, 소 수 = N - i"), icon: "=" },
+              { step: "4", desc: t(E, "revenue = c[i] x (N - i)", "수입 = 그 자리 값 x (N - i)"), icon: "x" },
               { step: "5", desc: t(E, "Track maximum revenue", "가장 큰 수입을 기억해요"), icon: "★" },
             ].map((s, i) => (
               <div key={i} style={{

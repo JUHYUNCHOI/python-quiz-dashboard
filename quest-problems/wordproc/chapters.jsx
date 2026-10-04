@@ -417,11 +417,11 @@ export function makeWordProcCh2(E) {
             <div style={{ fontSize: 12, lineHeight: 2.2, color: C.text }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>1</span>
-                {t(E, "Start with empty line (cur_len = 0)", "빈 줄로 시작 (cur_len = 0)")}
+                {t(E, "Start with empty line (cur_len = 0)", "빈 줄로 시작 (지금 줄 글자 수 = 0)")}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>2</span>
-                {t(E, "For each word: check if cur_len + len(word) > K", "단어마다 cur_len + len(word) > K 인지 확인해요")}
+                {t(E, "For each word: check if cur_len + len(word) > K", "단어마다 지금 줄 글자 수 + len(word) > K 인지 확인해요")}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>3</span>
@@ -429,7 +429,7 @@ export function makeWordProcCh2(E) {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>4</span>
-                {t(E, "Add word to current line, cur_len += len(word)", "현재 줄에 단어 추가, cur_len += len(word)")}
+                {t(E, "Add word to current line, cur_len += len(word)", "현재 줄에 단어 추가, 지금 줄 글자 수에 len(word) 를 더해요")}
               </div>
             </div>
           </div>
@@ -511,7 +511,7 @@ export function makeWordProcCh3(E, lang = "py") {
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5, whiteSpace: "pre-line", wordBreak: "keep-all" }}>
             {t(E,
               "readlines() reads the file's lines into a list — that's lines.\nAll N words are on a single line, separated by spaces. split() breaks them apart.",
-              "readlines() 는 파일의 줄들을 리스트로 읽어와요 — 그게 lines 예요.\nN 개 단어가 한 줄에 공백으로 붙어 와요. split() 으로 나눠요.")}
+              "readlines() 는 파일의 줄들을 목록으로 읽어와요 — 그게 lines 예요.\nN 개 단어가 한 줄에 공백으로 붙어 와요. split() 으로 나눠요.")}
           </div>
         </div>),
     },
@@ -539,7 +539,7 @@ export function makeWordProcCh3(E, lang = "py") {
             highlight={[5, 6, 7]}
           />
           <div style={{ marginTop: 8, background: "#fef2f2", borderRadius: 8, padding: 8, border: "1.5px solid #fca5a5", fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>result</span> = {t(E, "list of finished lines", "완성된 줄들의 리스트")}</div>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>result</span> = {t(E, "list of finished lines", "완성된 줄들의 목록")}</div>
             <div><span style={{ fontWeight: 600, color: "#dc2626" }}>cur_line</span> = {t(E, "words on the current line", "현재 줄의 단어들")}</div>
             <div><span style={{ fontWeight: 600, color: "#dc2626" }}>cur_len</span> = {t(E, "total chars on current line", "현재 줄의 총 글자 수")}</div>
           </div>
@@ -614,7 +614,7 @@ export function makeWordProcCh3(E, lang = "py") {
         + "In Python, an empty list `[]` is false in an `if`.\n"
         + "So we skip flushing, and always add the word.",
         "cur_line 이 비어 있으면 아직 아무 단어도 안 넣은 거예요.\n"
-        + "파이썬에서는 빈 리스트 `[]` 는 `if` 안에서 거짓이에요.\n"
+        + "파이썬에서는 빈 목록 `[]` 는 `if` 안에서 거짓이에요.\n"
         + "그래서 줄을 내보내지 않고, 지금 단어를 꼭 넣어요."),
     },
     // 3-5: Code — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
