@@ -112,36 +112,36 @@ export function AlgorithmReasoningTour({ E }) {
           <QA q={t(E, "Next — how do we figure out who beats who?",
                      "다음 — 누가 누구 이기는지 어떻게 알지?")}>
             {t(E, "The chart is in W/L/D form. Translate it once into a 'who beats who' table you can ask quickly.",
-                  "차트가 W/L/D 로 적혀 있음. 이걸 한 번만 '누가 누구 이김' 표로 옮겨두면 그 다음부턴 빠르게 답 가능.")}
+                  "차트가 W/L/D 로 적혀 있어요. 한 번만 '누가 누구 이김' 표로 옮겨두면 그 다음부턴 빠르게 답할 수 있어요.")}
             <div style={{ marginTop: 8, fontSize: 12.5, lineHeight: 1.85, paddingLeft: 6 }}>
               <div>• {t(E, "If the chart says ", "차트에 ")}<Hi>W</Hi>{t(E, " at row a, col b → write 'a beats b'.",
                                                                             " 이 (a 행, b 열) 에 있으면 '카드 a 가 카드 b 를 이김' 으로 적어요.")}</div>
               <div>• {t(E, "If ", "")}<Hi color="#dc2626">L</Hi>{t(E, " → flip it: 'b beats a'.",
                                                                           " 이면 거꾸로 '카드 b 가 카드 a 를 이김' 으로 적어요.")}</div>
-              <div>• <Hi color="#9ca3af">D</Hi>{t(E, " → nobody wins (skip).", " 면 아무도 안 이김 (그냥 넘김).")}</div>
+              <div>• <Hi color="#9ca3af">D</Hi>{t(E, " → nobody wins (skip).", " 면 아무도 안 이겨요 (그냥 넘어가요).")}</div>
             </div>
             <div style={{ marginTop: 6, fontSize: 12, color: "#5b21b6" }}>
               {t(E, "Now any 'does card X beat card Y?' is a one-step lookup.",
-                    "이제 '카드 X 가 카드 Y 이기는가?' 는 표만 한 번 보면 답 나옴.")}
+                    "이제 '카드 X 가 카드 Y 를 이기나요?' 는 표만 한 번 보면 답이 나와요.")}
             </div>
           </QA>
         )}
         {cur.kind === "query" && (
           <QA q={t(E, "Last — for each Elsie hand, how do we count winning Bessie hands?",
-                     "마지막 — Elsie 패 마다 이기는 Bessie 패 어떻게 세지?")}>
+                     "마지막 — Elsie 패마다 이기는 Bessie 패를 어떻게 세죠?")}>
             {t(E, "Read Elsie's two cards. Then try every possible Bessie hand (a, b) and check if it always wins.",
-                  "Elsie 두 카드 읽음. 그 다음 가능한 Bessie 패 (a, b) 를 다 시도하면서 무조건 이기는지 확인.")}
+                  "Elsie 의 두 카드를 읽어요. 그 다음 가능한 Bessie 패 (a, b) 를 다 시도하면서 무조건 이기는지 확인해요.")}
             <div style={{ marginTop: 8, fontSize: 12.5, lineHeight: 1.85, paddingLeft: 6 }}>
               <div>• {t(E, "Loop over every (a, b) — Bessie's first card and second card.",
                           "(a, b) 모든 짝 반복 — Bessie 첫째 카드, 둘째 카드.")}</div>
               <div>• {t(E, "Check the table: does a beat both of Elsie's cards? Does b? If either one does → this hand always wins.",
                           "표를 봐요. a 가 Elsie 의 두 카드를 다 이기나요? b 는요?\n둘 중 하나라도 그러면 무조건 이겨요.")}</div>
               <div>• {t(E, "Count those hands. Print the count for that Elsie hand. Move to the next.",
-                          "그런 패 의 개수 세기. 출력. 다음 Elsie 패 로.")}</div>
+                          "그런 패의 개수를 세서 출력해요. 그리고 다음 Elsie 패로 넘어가요.")}</div>
             </div>
             <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #c4b5fd", fontSize: 12, color: "#0891b2", fontWeight: 700, textAlign: "center" }}>
               {t(E, "→ That's the whole plan. Now write the code.",
-                    "→ 계획 끝. 이제 코드로 옮기면 됨.")}
+                    "계획은 끝났어요. 이제 코드로 옮겨요.")}
             </div>
           </QA>
         )}
@@ -773,7 +773,7 @@ export function HpsCaseSimulator({ E }) {
               </div>
               <div style={{ fontSize: 12.5, textAlign: "center" }}>
                 {t(E, `Elsie holds card ${e1} and card ${e2}. She'll play ONE of them, but we don't know which.`,
-                      `Elsie 가 카드 ${e1} 과 카드 ${e2} 를 들고 있음. 둘 중 1 장을 내는데, 어느 쪽일지 모름.`)}
+                      `Elsie 가 카드 ${e1} 과 카드 ${e2} 를 들고 있어요. 둘 중 1 장을 내는데, 어느 쪽인지는 몰라요.`)}
               </div>
               <div style={{ marginTop: 6, fontSize: 12, textAlign: "center", color: "#5b21b6", fontWeight: 700 }}>
                 {t(E, "Question: which of Bessie's cards (1, 2, or 3) can beat BOTH?",
@@ -799,9 +799,9 @@ export function HpsCaseSimulator({ E }) {
               <div style={{ marginTop: 8, fontSize: 12, fontWeight: 700, color: winningCards.length > 0 ? "#15803d" : "#7f1d1d" }}>
                 → {winningCards.length === 0
                     ? t(E, "No card beats both → Bessie can't always win.",
-                          "둘 다 이기는 카드 없음 → Bessie 가 무조건 이기는 건 불가능.")
+                          "둘 다 이기는 카드가 없어요. 그래서 Bessie 가 무조건 이기지는 못해요.")
                     : t(E, `Card${winningCards.length > 1 ? "s" : ""} ${winningCards.join(", ")} beat${winningCards.length > 1 ? "" : "s"} both. Bessie wins if her hand has at least one of these.`,
-                          `카드 ${winningCards.join(", ")} 가 두 카드 다 이김. Bessie 패 에 이 카드가 한 장이라도 있으면 이김.`)}
+                          `카드 ${winningCards.join(", ")} 가 두 카드를 다 이겨요. Bessie 패에 이 카드가 한 장이라도 있으면 이겨요.`)}
               </div>
             </>
           );
@@ -816,7 +816,7 @@ export function HpsCaseSimulator({ E }) {
                 </div>
                 <div style={{ marginBottom: 8 }}>
                   {t(E, "There's no card that beats both Elsie cards. So no Bessie hand can guarantee a win — whatever 2 cards she holds, Elsie can always pick one Bessie can't beat.",
-                        "Elsie 두 카드 다 이기는 카드가 없어요. 그래서 Bessie 가 어떤 2 장을 들어도 Elsie 가 못 이기는 쪽으로 골라 낼 수 있음.")}
+                        "Elsie 두 카드 다 이기는 카드가 없어요. 그래서 Bessie 가 어떤 2 장을 들어도 Elsie 가 못 이기는 쪽으로 골라 낼 수 있어요.")}
                 </div>
                 <div style={{ textAlign: "center", fontSize: 18, fontWeight: 700, color: "#dc2626" }}>
                   {t(E, "answer = 0", "답 = 0")}
@@ -977,9 +977,9 @@ export function HpsSim({ E }) {
         <div style={{ marginTop: 8, fontWeight: 700, color: guarantees ? "#16a34a" : "#dc2626", fontSize: 14 }}>
           {guarantees
             ? t(E, "✅ Bessie always wins — at least one card beats both.",
-                  "✅ Bessie 무조건 이김 — 한 카드가 Elsie 두 카드 다 이김.")
+                  "✅ Bessie 가 무조건 이겨요 — 한 카드가 Elsie 의 두 카드를 다 이겨요.")
             : t(E, "❌ Elsie can find a card Bessie can't beat.",
-                  "❌ Elsie 가 Bessie 못 이기는 쪽으로 낼 수 있음.")}
+                  "❌ Elsie 가 Bessie 가 못 이기는 카드를 낼 수 있어요.")}
         </div>
       </div>
     </div>
@@ -1766,7 +1766,7 @@ export function HpsSampleIOSim({ E }) {
 
   const bubble =
     s.kind === "intro"
-      ? t(E, "The input gives Elsie 3 hands → the output has 3 lines.\nLet's watch each hand turn into its number 👇", "입력엔 Elsie 패가 3 개 → 출력도 3 줄.\n각 패가 어떻게 그 숫자가 되는지 봐요 👇")
+      ? t(E, "The input gives Elsie 3 hands → the output has 3 lines.\nLet's watch each hand turn into its number 👇", "입력엔 Elsie 패가 3 개 있어서 출력도 3 줄이 나와요.\n각 패가 어떻게 그 숫자가 되는지 봐요 👇")
       : s.kind === "summary"
         ? t(E, "That's the whole input → output: 0, 0, 5.\nTwo DIFFERENT cards → no card beats both → 0.  SAME card → the interesting case.", "이게 입력부터 출력까지 전부예요 — 0, 0, 5.\n서로 다른 두 카드는 둘 다 이기는 카드가 없어서 0 이에요.\n같은 카드일 때가 재미있는 경우예요.")
         : t(E, `Hand ${s.qi + 1}: Elsie plays (${queries[s.qi].e[0]}, ${queries[s.qi].e[1]}).  Which Bessie cards beat BOTH of them?`,
@@ -1893,7 +1893,7 @@ export function HpsSampleIOSim({ E }) {
             {dom === 0 && (
               <div style={{ textAlign: "center", marginTop: 8, fontSize: 12, fontWeight: 700, color: "#b91c1c", wordBreak: "keep-all" }}>
                 {t(E, "No row is ✓ in every lit column → no card beats both → can't force a win.",
-                      "켜진 열이 모두 ✓ 인 행이 없음 → 둘 다 이기는 카드 없음 → 확실히 못 이김.")}
+                      "켜진 열이 모두 ✓ 인 행이 없어요. 그래서 둘 다 이기는 카드가 없고, 확실히 이길 수는 없어요.")}
               </div>
             )}
             <div style={{ textAlign: "center", marginTop: 12, fontSize: 12.5, color: "#334155", lineHeight: 1.95, wordBreak: "keep-all" }}>

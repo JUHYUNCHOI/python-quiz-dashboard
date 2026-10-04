@@ -201,18 +201,18 @@ export function makeHpsCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Elsie's hand is given M times. For each one, count Bessie's hands (ordered pairs) where ",
-                        "Elsie 의 패 가 M 번 주어져요. 각 패 마다, ")}
+                        "Elsie 의 패가 M 번 주어져요. 각 패마다, ")}
                   <b style={{ color: "#15803d" }}>{t(E, "Elsie can play whatever card she wants and Bessie still wins",
                                                           "Elsie 가 무슨 카드를 내도 Bessie 가 이기는")}</b>
                   {t(E, ". (Bessie just needs ONE card in her hand that beats BOTH of Elsie's cards — she plays that one and is safe either way.) Output the count.",
-                        " Bessie 패 의 개수를 출력. (Bessie 한테 Elsie 의 두 카드를 모두 이기는 카드 하나만 있으면 됨 — 그 카드를 내면 Elsie 가 뭘 내든 이김.)")}
+                        " Bessie 패의 개수를 출력해요. (Bessie 한테 Elsie 의 두 카드를 모두 이기는 카드가 하나만 있으면 돼요 — 그 카드를 내면 Elsie 가 뭘 내든 이겨요.)")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 6, fontSize: 11.5, color: C.dim, lineHeight: 1.5 }}>
                 <span style={{ flexShrink: 0 }}>📌</span>
                 <div>
                   {t(E, "A 'hand' is an ORDERED pair (a, b) — slot 1 and slot 2 are different positions, and the two cards CAN be the same. For N = 3 there are 3² = 9 possible hands.",
-                        "'패' 는 순서쌍 (a, b) — 자리 1 과 자리 2 는 서로 다른 자리이고, 같은 카드 두 장도 OK. N = 3 이면 패 는 3² = 9 가지.")}
+                        "'패' 는 순서쌍 (a, b) 예요 — 자리 1 과 자리 2 는 서로 다른 자리이고, 같은 카드 두 장이어도 돼요. N = 3 이면 패는 3² = 9 가지예요.")}
                 </div>
               </div>
             </div>
@@ -340,7 +340,7 @@ LWD
 
             <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd", fontSize: 12, color: "#5b21b6" }}>
               💡 {t(E, "For each of the 3 Elsie hands, output how many Bessie hands let her win no matter what Elsie plays.",
-                       "Elsie 의 3 개 패 각각에 대해, Elsie 가 무엇을 내도 이기는 Bessie 패 개수를 출력.")}
+                       "Elsie 의 패 3 개마다, Elsie 가 무엇을 내도 이기는 Bessie 패가 몇 가지인지 출력해요.")}
             </div>
             <div style={{ marginTop: 6, fontSize: 10.5, color: C.dim, fontStyle: "italic" }}>
               {t(E, "📌 Cards are numbered 1..N (1-indexed).", "📌 카드 번호는 1..N (1-indexed).")}
@@ -596,7 +596,7 @@ export function makeHpsCh2(E, lang = "py") {
             <div style={{ fontSize: 12, color: "#15803d", lineHeight: 1.55 }}>
               {t(E,
                 "The smart code passes all 12 tests in both Python and C++.  You've solved this problem.",
-                "Smart 코드로 Python·C++ 둘 다 12 개 테스트 통과. 문제 푸는 건 여기서 끝.")}
+                "Smart 코드는 Python·C++ 둘 다 12 개 테스트를 통과해요.\n문제 푸는 건 여기서 끝이에요.")}
             </div>
           </div>
 
@@ -717,7 +717,7 @@ export function makeHpsCh2(E, lang = "py") {
             <div style={{ marginTop: 6, fontSize: 12, color: "#7c2d12" }}>
               {t(E, "Use ", "")}
               <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>x |= 1 &lt;&lt; i</code>
-              {t(E, " to TURN ON bit i in x.", " 로 x 의 i 번째 비트를 켤 수 있음.")}
+              {t(E, " to TURN ON bit i in x.", " 로 x 의 i 번째 비트를 켤 수 있어요.")}
             </div>
           </div>
 
@@ -757,7 +757,7 @@ export function makeHpsCh2(E, lang = "py") {
               {t(E, "For each card c, store ", "카드 c 마다 ")}
               <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>col[c]</code>
               {t(E, " — bit i is 1 iff card i beats card c. Build it once.",
-                    " 저장 — i 번째 비트가 1 이면 카드 i 가 카드 c 이김. 한 번만 만듦.")}
+                    " 저장 — i 번째 비트가 1 이면 카드 i 가 카드 c 를 이겨요. 한 번만 만들어 두면 돼요.")}
             </div>
           </div>
 
@@ -789,7 +789,7 @@ export function makeHpsCh2(E, lang = "py") {
 
           <div style={{ marginTop: 10, marginBottom: 12, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.55 }}>
             💡 {t(E, "Why is this fast? Python's int handles 64 bits at a time, so AND on N-bit masks does ~N/64 chunks instead of N steps.",
-                       "왜 빠른가? Python 정수가 한 번에 64 비트씩 처리 → N 비트 AND 는 N/64 chunk 만에 끝. N 단계가 N/64 가 됨.")}
+                       "왜 빠를까요? Python 정수는 한 번에 64 비트씩 처리해요.\n그래서 N 비트 AND 는 N/64 번만에 끝나고, N 단계가 N/64 가 돼요.")}
           </div>
 
           {/* Hands-on col[s1] & col[s2] simulator */}
