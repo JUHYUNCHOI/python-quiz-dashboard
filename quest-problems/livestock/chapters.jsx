@@ -28,7 +28,7 @@ export function makeLivestockCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "Output the lexicographically smallest valid lineup, or 'IMPOSSIBLE'.",
-                "사전순으로 가장 앞선 배열을 출력해요. 못 만들면 'IMPOSSIBLE' 을 써요.")}
+                "사전순으로 가장 앞선 순서를 출력해요. 못 만들면 'IMPOSSIBLE' 을 써요.")}
             </div>
           </div>
 
@@ -59,7 +59,7 @@ export function makeLivestockCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest valid lineup", "사전순으로 가장 작은 유효 배열")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest valid lineup", "사전순으로 가장 작은 유효한 순서")}</b>
                   {t(E, ", or 'IMPOSSIBLE' if none exists.", " 을 출력해요. 불가능하면 'IMPOSSIBLE'.")}
                 </div>
               </div>
@@ -91,7 +91,7 @@ export function makeLivestockCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "The 8 cow names, one per line — the lexicographically smallest valid order.",
-                  "소 이름을 한 줄에 하나씩, 8줄로 출력해요 (사전순으로 가장 앞선 배열).")}
+                  "소 이름을 한 줄에 하나씩, 8줄로 출력해요 (사전순으로 가장 앞선 순서).")}
             </div>
           </div>
           {/* 제약 */}
@@ -99,7 +99,7 @@ export function makeLivestockCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
               <div>1 ≤ N ≤ 7</div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "a valid ordering is always guaranteed to exist", "가능한 배열이 항상 하나는 존재해요")}</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "a valid ordering is always guaranteed to exist", "가능한 순서가 항상 하나는 존재해요")}</div>
             </div>
           </div>
         </div>),

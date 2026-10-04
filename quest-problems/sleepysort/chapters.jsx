@@ -104,7 +104,7 @@ function SuffixSortSim({ E }) {
     if (k === 0) {
       status = t(E,
         "Reached k = 0 — the entire array is already a sorted suffix. Answer = 0.",
-        "k = 0 까지 왔어요. 배열 전체가 이미 정렬된 접미사라서 답은 0 이에요.");
+        "k = 0 까지 왔어요. 줄 전체가 이미 정렬된 접미사라서 답은 0 이에요.");
     } else {
       status = t(E,
         `Stopped: a[${k - 1}] = ${compareLeft} ≥ a[${k}] = ${compareRight}. Suffix length = ${N - k}, answer K = ${N} − ${N - k} = ${k}.`,
@@ -310,7 +310,7 @@ export function makeSleepySortCh1(E) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
               {t(E,
                 "Pick an array, then press \"extend left\" to walk the boundary one cow at a time. The green block is the already-sorted suffix. The red boundary marks where the order finally breaks.",
-                "배열을 하나 골라서 \"왼쪽으로 확장\" 을 눌러 봐요. 경계를 한 칸씩 옮기면 이미 정렬된 뒷부분(접미사)이 초록색으로 자라나요. 순서가 깨지는 자리는 빨간 경계로 표시돼요.")}
+                "줄을 하나 골라서 \"왼쪽으로 확장\" 을 눌러 봐요. 경계를 한 칸씩 옮기면 이미 정렬된 뒷부분(접미사)이 초록색으로 자라나요. 순서가 깨지는 자리는 빨간 경계로 표시돼요.")}
             </div>
           </div>
           <SuffixSortSim E={E} />
@@ -338,7 +338,7 @@ export function makeSleepySortCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If the array is already sorted [1, 2, 3, 4], the entire array is a sorted suffix.\nHow many moves?", "[1, 2, 3, 4] 는 배열 전체가 이미 정렬된 접미사예요."),
+        "If the array is already sorted [1, 2, 3, 4], the entire array is a sorted suffix.\nHow many moves?", "[1, 2, 3, 4] 는 줄 전체가 이미 정렬된 접미사예요."),
       question: t(E,
         "[1, 2, 3, 4] already sorted. How many moves needed?",
         "[1, 2, 3, 4] 는 이미 정렬돼 있어요. 몇 번 옮겨야 할까요?"),

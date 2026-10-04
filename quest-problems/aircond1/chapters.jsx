@@ -160,9 +160,9 @@ export function makeAirCond1Ch1(E) {
                   {t(E, "FJ has ", "FJ 에게 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "N stalls in a row", "한 줄로 늘어선 N 개 축사")}</b>
                   {t(E, " — each with current temperature ", " 가 있고, 각자 현재 온도 ")}
-                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>p[i]</code>
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>t[i]</code>
                   {t(E, " and target ", " 와 목표 온도 ")}
-                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>q[i]</code>
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>p[i]</code>
                   {t(E, ".", " 를 가져요.")}
                 </div>
               </div>
@@ -178,7 +178,7 @@ export function makeAirCond1Ch1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of AC commands to make every p[i] = q[i]", "모든 p[i] = q[i] 가 되도록 만드는 최소 AC 명령 횟수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of AC commands to make every t[i] = p[i]", "모든 t[i] 를 p[i] 로 만드는 최소 AC 명령 횟수")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
@@ -226,7 +226,7 @@ export function makeAirCond1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Think of the diff array like a histogram.\nEach horizontal stroke covers a range.\nHow many strokes do we need?", "차이 배열을 히스토그램처럼 생각해요. 각 수평 선은 구간을 커버해요. 몇 개의 선이 필요할까?"),
+        "Think of the diff array like a histogram.\nEach horizontal stroke covers a range.\nHow many strokes do we need?", "diff 값들을 히스토그램처럼 생각해요. 각 수평 선은 구간을 커버해요. 몇 개의 선이 필요할까?"),
       question: t(E,
         "diff = [3, 3, 3]. How many commands needed? (One command covers all 3, repeated 3 times)",
         "diff = [3, 3, 3]. 필요한 명령 수? (하나의 명령이 3칸 모두 커버, 3번 반복)"),
@@ -245,7 +245,7 @@ export function makeAirCond1Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Play with the diff array and watch positive jumps light up. The total of those jumps is the minimum number of AC commands.",
-        "diff 배열을 직접 바꿔봐. 양의 점프가 켜져요. 그 합이 최소 AC 명령 횟수예요."),
+        "diff 값들을 직접 바꿔봐. 양의 점프가 켜져요. 그 합이 최소 AC 명령 횟수예요."),
       content: <StrokeCounterSim E={E} />,
     },
     // 1-4: Input

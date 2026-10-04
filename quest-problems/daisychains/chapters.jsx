@@ -229,7 +229,7 @@ export function getDaisyChainsWalk(E) {
     beats: [
       { hi: [0, 1], bubble: t(E,
         "What should we print? How many contiguous windows have a flower matching their own average. Read the flower count N and the petal counts p.",
-        "무엇을 출력해야 하나요? 평균 꽃잎 수와 같은 꽃이 있는 구간(부분 배열)의 개수예요.\n먼저 꽃 수 N과 꽃잎 수 목록 p를 읽어요.") },
+        "무엇을 출력해야 하나요? 평균 꽃잎 수와 같은 꽃이 있는 구간(부분 배열)의 개수예요.\n먼저 꽃 수 N과 꽃잎 수 배열 p를 읽어요.") },
       { hi: [3, 7], bubble: t(E,
         "Recomputing the sum from scratch every time is slow. So fix a start i, and as the end j grows, keep a running sum s instead of re-adding everything.",
         "합을 매번 처음부터 다시 더하면 느려요.\n그래서 시작점 i를 고정하고, 끝점 j를 늘려가며 s에 합을 쌓아요.") },
