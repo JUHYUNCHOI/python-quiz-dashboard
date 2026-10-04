@@ -59,7 +59,7 @@ function PermShuffleSim({ E }) {
           shuffle = [{SHUFFLE_1.join(", ")}]
         </span>
         <span>·</span>
-        <span>{t(E, "1-indexed", "1-인덱스")}</span>
+        <span>{t(E, "1-indexed", "1 부터 세요")}</span>
       </div>
 
       <table style={{ borderCollapse: "separate", borderSpacing: 6, margin: "0 auto" }}>
@@ -221,7 +221,7 @@ export function makeShuffleCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
             <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
               <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of cows", "— 소의 수")}</span></div>
-              <div><span style={{ color: "#92400e", fontWeight: 800 }}>a[1] a[2] ... a[N]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— shuffle rule: cow at position i moves to position a[i]", "— 셔플 규칙: 위치 i 의 소가 a[i] 위치로")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>a[1] a[2] ... a[N]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— shuffle rule: cow at position i moves to position a[i]", "— 셔플 규칙: i 번째 수가 위치 i 의 소가 이동할 자리예요")}</span></div>
               <div><span style={{ color: "#92400e", fontWeight: 800 }}>id[1] id[2] ... id[N]</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— cow IDs AFTER 3 shuffles", "— 셔플 3번 후의 소 ID 줄")}</span></div>
             </div>
           </div>

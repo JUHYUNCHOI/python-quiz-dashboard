@@ -56,9 +56,9 @@ export function makeMcc19DitcoinCh1(E) {
                 <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "You know each day's ", "각 날의 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "selling price p[i]", "판매 가격 p[i]")}</b>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "selling price p[i]", "판매 가격 pᵢ")}</b>
                   {t(E, "; on day i you may sell any number of your accumulated coins at price p[i].",
-                        " 를 알고, i 일에는 보유 코인을 원하는 만큼 p[i] 로 팔 수 있어요.")}
+                        " 를 알고, i 일에는 보유 코인을 원하는 만큼 pᵢ 로 팔 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>

@@ -152,9 +152,9 @@ export function makeChipXchgCh1(E) {
     // [전] 도구: 환전 세기 = init (지금 가진 걸로 만드는 A)
     {
       type: "reveal",
-      label: t(E, "Tool: A I can make now (red_now)", "도구: 지금 만드는 A (red_now)"),
+      label: t(E, "Tool: A I can make now (red_now)", "도구: 지금 만드는 A"),
       narr: t(E, "How many A can I make right now? Group my B by cB; leftovers waste. That's red_now.",
-                 "지금 가진 걸로 A를 몇 개 만들 수 있을까요? 그 결과가 red_now 예요."),
+                 "지금 가진 걸로 A를 몇 개 만들 수 있을까요? 그 결과가 바로 그 수예요."),
       content: (<ChipCountSim E={E} />),
     },
 
