@@ -1973,11 +1973,19 @@ export function HpsFormulaGridSim({ E }) {
   // ⚡ 카드(2)가 가운데 → 지는 칸은 네 모서리(⚡ 없는 카드끼리)로 남음.
   const cards = [{ id: 1, win: false }, { id: 2, win: true }, { id: 3, win: false }];
   const steps = [
-    { phase: "test",    bubble: t(E, "Game 3 — Elsie played card 1 twice (same card is fine).\nSo: how many cards beat card 1?  Let's check each one 👇", "게임 3 — Elsie 가 카드 1 을 두 장 냈어요 (같은 카드도 OK).\n그럼 '카드 1 을 이기는 카드' 는 몇 개? 하나씩 봐요 👇") },
+    /* ⭐ 2026-10-04 — 선생님: *"이거 **이렇게 어렵게 해야해?** 엘시가 카드 1만 있을 경우
+         표에 의하면 베씨가 이기려면 카드 2가 있어야해. 라고 **쉽게해도 되잖아.**"*
+       ✅ 맞다 — 1걸음에 이미 「비김 / 내가 이김 / 내가 짐」이 **다 떠 있는데**,
+         2걸음이 그걸 **글로 다시** 말하며 `dom` 이름만 붙이고 있었다. 한 걸음을
+         통째로 **같은 말에 쓰고 있었다**(`feedback_shorter_not_longer`).
+       → **둘을 하나로 합쳤다.** 맞대결 그림은 그대로 두고(그게 근거다),
+         결론과 `dom` 이름을 **그 자리에서** 말한다. 10걸음 → 9걸음. */
     /* ⛔ 2026-10-02 — 아래 격자 밑에 **같은 말을 또 하는 맨몸 div** 가 있었고, 그게
        하단 고정 바에 **59~84% 가려졌다**(ux 가 좌표+스크린샷으로 확인). 감싸서 끌어오는
        대신 **지웠다** — 다른 건 괄호 안 `dom` 이름뿐이라 그것만 여기로 옮긴다. */
-    { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.\nWe call that count dom (short for 'dominates').", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.\n이 개수를 dom 이라고 불러요 ('dominate 제압' 의 앞 세 글자).") },
+    { phase: "testans", bubble: t(E,
+        <>Elsie played only card 1. Of Bessie's three cards, <b>only ⚡ card 2 beats it</b> — so <b>1</b> card. We call that count <b>dom</b>.</>,
+        <>Elsie 는 카드 1 만 냈어요. 셋 중 <b>⚡ 카드 2 하나만 이겨요</b> — 그래서 <b>1 개</b>. 이 개수를 <b>dom</b> 이라고 불러요.</>) },
     /* ⛔ 2026-10-03 선생님: *"**언제 글을 다 읽고 있어. 딱 봐도 뭔지, 강조할 건 강조하고.**"*
        전엔 두 줄짜리 산문이었고 그중 「행=첫 장, 열=둘째 장」은 **격자 아래 축 설명이
        이미 하고 있었다** — 같은 말을 두 번, 그것도 글로. 한 줄로 줄이고 **수를 크게** 한다. */
@@ -2029,18 +2037,18 @@ export function HpsFormulaGridSim({ E }) {
     const showRed = litRed && !win;
     return (
       <div key={key} style={{
-        width: 48, height: 40, borderRadius: 6,
+        width: 56, height: 46, borderRadius: 8,
         background: showGreen ? "#dcfce7" : showRed ? "#fee2e2" : "#f8fafc",
-        border: `1.5px solid ${showGreen ? "#86efac" : showRed ? "#fca5a5" : "#e5e7eb"}`,
-        color: showGreen ? "#15803d" : showRed ? "#991b1b" : "#94a3b8",
+        border: `1.5px solid ${showGreen ? "#4ade80" : showRed ? "#f87171" : "#cbd5e1"}`,
+        color: showGreen ? "#15803d" : showRed ? "#991b1b" : "#64748b",
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.1,
         transition: "background .2s, color .2s, border-color .2s",
       }}>
-        <span style={{ fontSize: 13, fontWeight: 800 }}>
-          {rowId}<span style={{ opacity: 0.5 }}>·</span>{colId}
+        <span style={{ fontSize: 15, fontWeight: 800 }}>
+          {rowId}<span style={{ opacity: 0.45 }}>·</span>{colId}
         </span>
-        <span style={{ fontSize: 9, fontWeight: 700, minHeight: 11 }}>
+        <span style={{ fontSize: 9.5, fontWeight: 700, minHeight: 12 }}>
           {lit ? (win ? `⚡ ${t(E, "win", "이김")}` : t(E, "lose", "짐")) : ""}
         </span>
       </div>
@@ -2085,7 +2093,12 @@ export function HpsFormulaGridSim({ E }) {
           정의하니 forward-ref 박스는 정보 과부하, 선생님 2026-07-22 "한 화면에 정보 너무 많아").
           BeatsMatrix 도 제거 — 아래 '맞대결 타일' 이 같은 사실(카드2 가 카드1 이김)을
           더 구체적으로 보여줘 중복이었음. */}
-      {!showTest && (
+      {/* ⭐ 2026-10-04 — 선생님: *"**너무 길어.** 디자이너 너가 전체적으로 아이들이
+          쉽게 보고 이해할수 있도록 **디자인 고민**해야할것 같아"*
+          한 화면에 블록이 **여덟** 이었다(파란 띠·말풍선·Elsie 패·N·dom 상자·격자 제목·
+          축 글씨·격자·긴 노란 상자). ⭐ 이 상자는 **공식에 쓰일 때만** 필요하다 —
+          격자만 보는 걸음에서는 `N`·`dom` 을 **아직 안 쓴다.** 그때까지 숨긴다. */}
+      {["f1", "f2", "formula", "directcount"].includes(s.phase) && (
         <div style={{ maxWidth: 480, margin: "0 auto", padding: "8px 12px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.65 }}>
           <div>
             <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}
@@ -2171,26 +2184,30 @@ export function HpsFormulaGridSim({ E }) {
                   행도 열도 **둘 다 Bessie 것**인데(한 칸 = Bessie 의 패 하나),
                   Elsie 가 바로 위에 카드로 그려져 있어 **한 축이 Elsie 로 읽힌다.**
                   → 축 이름을 **격자 자신에** 붙인다. 아래 작은 글씨는 그대로 둔다. */}
-              <div style={{ display: "flex", gap: 4, marginLeft: 56, marginBottom: 2 }}>
-                <div style={{ width: 48 * 3 + 8, textAlign: "center", fontSize: 10, fontWeight: 800, color: "#2563eb", wordBreak: "keep-all" }}>
+              {/* ⭐ 2026-10-04 (2차) — 선생님: *"이거 **안이뻐. 더 잘 보이도록**"*
+                  1차에서 축 이름을 **첫 행 라벨 칸 안**에 끼워 넣었더니 52px 안에서
+                  두 줄로 접혀 「카드 1」을 밀어냈다. → **모서리 칸**을 제대로 만들어
+                  거기에 넣는다. 칸도 48×40 → 56×46 으로 키우고, 아직 안 밝힌 칸의
+                  글씨를 `#94a3b8` → `#64748b` 로 올려 **패 번호가 읽히게** 한다. */}
+              <div style={{ display: "flex", gap: 5, marginBottom: 3 }}>
+                <div style={{ width: 62 }} />
+                <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 11, fontWeight: 800, color: "#2563eb", wordBreak: "keep-all" }}>
                   {t(E, "Bessie's 2nd card →", "Bessie 둘째 장 →")}
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 4, marginLeft: 56 }}>
+              <div style={{ display: "flex", gap: 5 }}>
+                <div style={{ width: 62, fontSize: 11, fontWeight: 800, color: "#2563eb", textAlign: "right", paddingRight: 4, wordBreak: "keep-all", lineHeight: 1.25 }}>
+                  {t(E, "Bessie's 1st ↓", "Bessie 첫 장 ↓")}
+                </div>
                 {cards.map(c => (
-                  <div key={`h-${c.id}`} style={{ width: 48, textAlign: "center", fontSize: 11, fontWeight: 600, color: c.win ? "#15803d" : "#9ca3af" }}>
+                  <div key={`h-${c.id}`} style={{ width: 56, textAlign: "center", fontSize: 11.5, fontWeight: c.win ? 800 : 600, color: c.win ? "#15803d" : "#64748b" }}>
                     {t(E, `card ${c.id}`, `카드 ${c.id}`)}{c.win ? " ⚡" : ""}
                   </div>
                 ))}
               </div>
               {cards.map(rowCard => (
-                <div key={`r-${rowCard.id}`} style={{ display: "flex", gap: 4, marginTop: 4, alignItems: "center" }}>
-                  <div style={{ width: 52, fontSize: 11, fontWeight: 600, textAlign: "right", paddingRight: 4, color: rowCard.win ? "#15803d" : "#9ca3af" }}>
-                    {rowCard.id === cards[0].id && (
-                      <div style={{ fontSize: 9, fontWeight: 800, color: "#2563eb", lineHeight: 1.2, marginBottom: 1, wordBreak: "keep-all" }}>
-                        {t(E, "Bessie's 1st ↓", "Bessie 첫 장 ↓")}
-                      </div>
-                    )}
+                <div key={`r-${rowCard.id}`} style={{ display: "flex", gap: 5, marginTop: 5, alignItems: "center" }}>
+                  <div style={{ width: 62, fontSize: 11.5, fontWeight: rowCard.win ? 800 : 600, textAlign: "right", paddingRight: 4, color: rowCard.win ? "#15803d" : "#64748b" }}>
                     {t(E, `card ${rowCard.id}`, `카드 ${rowCard.id}`)}{rowCard.win ? " ⚡" : ""}
                   </div>
                   {cards.map(colCard => cell(rowCard.win, colCard.win, `${rowCard.id}-${colCard.id}`, rowCard.id, colCard.id))}
@@ -2206,11 +2223,19 @@ export function HpsFormulaGridSim({ E }) {
               (선생님 2026-07-22: "dom 약자·공식이 어떻게 만들어지는지 전혀 이해 안 돼") */}
           {["f1", "f2", "formula", "directcount"].includes(s.phase) && (
             <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "12px 14px" }}>
-              {["formula", "directcount"].includes(s.phase) && <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
-                🧩 {t(E,
-                  <>Why subtract? Count the greens directly: ⚡ row 3 + ⚡ column 3 = 6 — but only <b>5</b> are green. <b>The middle cell got counted twice.</b> So counting winners needs another subtraction. The ✗ cells are one clean 2×2 block — nothing overlaps.</>,
-                  <>왜 빼요? 초록을 바로 세 보면 — ⚡ 행 3 칸 + ⚡ 열 3 칸 = 6 인데 초록은 <b>5 칸</b>이에요. <b>가운데 한 칸을 두 번 셌어요.</b> 그래서 이기는 패를 바로 세도 빼기가 또 필요해요. ✗ 는 2×2 네모 하나라 겹칠 일이 없어요.</>)}
-                <div style={{ fontSize: 10, color: "#a16207", marginTop: 3 }}>({t(E, "this way of counting = count by subtracting", "이 방법 이름: 전체에서 빼서 세기")})</div>
+              {/* ⭐ 2026-10-04 — **세 줄짜리 문단을 식 두 줄로.** 선생님: *"너무 길어."*
+                  셈이 글 속에 묻혀 있었다. **숫자를 줄 세워** 한눈에 보이게 한다 —
+                  6 과 5 를 나란히 놓으면 「한 칸을 두 번 셌다」가 **읽지 않아도** 보인다. */}
+              {["formula", "directcount"].includes(s.phase) && <div style={{ fontSize: 12, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.7 }}>
+                <div style={{ fontSize: 11.5, marginBottom: 4 }}>🧩 {t(E, "Why subtract? Try counting the greens directly:", "왜 빼요? 초록을 바로 세 보면:")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+                  ⚡{t(E, "row", "행")} 3 + ⚡{t(E, "col", "열")} 3 = <b style={{ fontSize: 16 }}>6</b>
+                  <span style={{ margin: "0 6px", color: "#a16207" }}>↔</span>
+                  {t(E, "greens", "초록")} <b style={{ fontSize: 16, color: "#15803d" }}>5</b>
+                </div>
+                <div style={{ fontSize: 11.5, marginTop: 3 }}>
+                  → <b>{t(E, "the middle cell was counted twice", "가운데 한 칸을 두 번 셌어요")}</b>
+                </div>
               </div>}
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
                 <span style={{ color: "#475569", fontFamily: "inherit", fontSize: 11.5 }}>{t(E, "all hands", "전체 패")}</span>
