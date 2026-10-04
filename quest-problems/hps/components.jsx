@@ -2021,6 +2021,17 @@ export function HpsFormulaGridSim({ E }) {
      → 이 걸음에서 **⚡ 행과 ⚡ 열에 띠를 두르고, 겹치는 칸에 `×2` 를 찍는다.**
        「두 번 셌다」를 **읽지 않고 보게** 된다. 그 두 줄 글은 지운다. */
   const showDup = ["formula", "directcount"].includes(s.phase);
+  /* ⭐⭐ 2026-10-04 — 선생님(수업 중, 7/9 걸음): *"N이 3이고 이길수 있는 패가 1개라서
+       2이고 2*2인건가? **왜 저렇게 계산해야하지?**"*
+     ✅ 선생님 계산은 맞다(`N−dom = 3−1 = 2`). 막히신 건 **왜 「제곱」인가**다.
+     ⭐ 답: **패는 두 장**이고 **둘 다** 안 이기는 카드일 때만 진다 —
+       **첫 장 2가지 × 둘째 장 2가지 = 2×2.**
+       그리고 그게 **화면의 빨간 네 칸**이다(1·3 행 × 1·3 열이 만나는 **정사각형 한 덩이**).
+     ⛔ **식에는 `2×2` 가 있고 격자엔 빨간 네 칸이 있는데, 둘이 같은 것이라고
+       아무도 말해 주지 않았다.** → 이 걸음에서 **이기는 칸을 흐리게** 해서
+       빨간 2×2 덩어리가 **모양으로** 드러나게 하고, 안 이기는 카드 머리글에
+       **「2개」**를 붙여 식의 2 와 격자의 2 를 **같은 자리에서** 보이게 한다. */
+  const showLose = s.phase === "f2";
 
   /* ⭐⭐ 2026-10-04 — **칸 안에 「그 패가 무엇인지」를 넣는다.**
      선생님(수업 중): *"**여직까지는 행은 엘시꺼 열은 베씨거** 하다가 갑자기 저렇게 하면
@@ -2046,8 +2057,8 @@ export function HpsFormulaGridSim({ E }) {
         background: showGreen ? "#dcfce7" : showRed ? "#fee2e2" : "#f8fafc",
         /* 겹침 걸음에선 **지는 칸을 흐리게** 해 ⚡ 십자(행 3 + 열 3)가 모양으로 드러나게 한다.
            「3 + 3 = 6 인데 초록은 5」를 **세지 않고 보게** 하는 것이 요점이다. */
-        opacity: showDup && !win ? 0.3 : 1,
-        border: `${dup ? 2.5 : band ? 2 : 1.5}px ${dup ? "dashed" : "solid"} ${dup ? "#c2410c" : band ? "#15803d" : showGreen ? "#4ade80" : showRed ? "#f87171" : "#cbd5e1"}`,
+        opacity: (showDup && !win) || (showLose && win) ? 0.28 : 1,
+        border: `${dup ? 2.5 : (band || (showLose && !win)) ? 2 : 1.5}px ${dup ? "dashed" : "solid"} ${dup ? "#c2410c" : band ? "#15803d" : showLose && !win ? "#dc2626" : showGreen ? "#4ade80" : showRed ? "#f87171" : "#cbd5e1"}`,
         boxShadow: dup ? "0 0 0 3px rgba(194,65,12,.18)" : "none",
         color: showGreen ? "#15803d" : showRed ? "#991b1b" : "#64748b",
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -2227,19 +2238,41 @@ export function HpsFormulaGridSim({ E }) {
                   {t(E, "Bessie's 1st ↓", "Bessie 첫 장 ↓")}
                 </div>
                 {cards.map(c => (
-                  <div key={`h-${c.id}`} style={{ width: 56, textAlign: "center", fontSize: 11.5, fontWeight: c.win ? 800 : 600, color: c.win ? "#15803d" : "#64748b" }}>
+                  <div key={`h-${c.id}`} style={{ width: 56, textAlign: "center", fontSize: 11.5,
+                    fontWeight: (showLose ? !c.win : c.win) ? 800 : 600,
+                    color: showLose ? (c.win ? "#cbd5e1" : "#dc2626") : (c.win ? "#15803d" : "#64748b") }}>
                     {t(E, `card ${c.id}`, `카드 ${c.id}`)}{c.win ? " ⚡" : ""}
                   </div>
                 ))}
+                {/* 「안 이기는 카드가 2개」를 **격자 바로 옆에서** 센다 — 식의 2 와 같은 2 다. */}
+                {showLose && (
+                  <div style={{ width: 54, fontSize: 10.5, fontWeight: 800, color: "#dc2626", alignSelf: "center", wordBreak: "keep-all", lineHeight: 1.3 }}>
+                    ← {t(E, "2 cards", "2 개")}
+                  </div>
+                )}
               </div>
+              {/* 행 쪽 「2 개」는 격자 **아래**에 둔다(아래 `showLose` 블록). 곱셈이라 **둘 다** 보여야
+                  `2 × 2` 가 읽힌다 — 하나만 있으면 「왜 제곱인지」가 다시 안 보인다. */}
               {cards.map(rowCard => (
                 <div key={`r-${rowCard.id}`} style={{ display: "flex", gap: 5, marginTop: 5, alignItems: "center" }}>
-                  <div style={{ width: 62, fontSize: 11.5, fontWeight: rowCard.win ? 800 : 600, textAlign: "right", paddingRight: 4, color: rowCard.win ? "#15803d" : "#64748b" }}>
+                  <div style={{ width: 62, fontSize: 11.5,
+                    fontWeight: (showLose ? !rowCard.win : rowCard.win) ? 800 : 600, textAlign: "right", paddingRight: 4,
+                    color: showLose ? (rowCard.win ? "#cbd5e1" : "#dc2626") : (rowCard.win ? "#15803d" : "#64748b") }}>
                     {t(E, `card ${rowCard.id}`, `카드 ${rowCard.id}`)}{rowCard.win ? " ⚡" : ""}
                   </div>
                   {cards.map(colCard => cell(rowCard.win, colCard.win, `${rowCard.id}-${colCard.id}`, rowCard.id, colCard.id))}
                 </div>
               ))}
+              {showLose && (
+                <div style={{ display: "flex", gap: 5, marginTop: 3 }}>
+                  <div style={{ width: 62, fontSize: 10.5, fontWeight: 800, color: "#dc2626", textAlign: "right", paddingRight: 4, wordBreak: "keep-all" }}>
+                    ↑ 2 {t(E, "cards", "개")}
+                  </div>
+                  <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 11, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>
+                    {t(E, "2 × 2 = 4 losing hands", "2 × 2 = 4 가지가 지는 패")}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           {/* ⛔ 2026-10-04 — 여기 있던 「↓ 행 = Bessie 첫 카드 · → 열 = 둘째 카드」를 **지웠다.**
