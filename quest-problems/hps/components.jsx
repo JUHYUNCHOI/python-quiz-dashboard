@@ -2200,7 +2200,7 @@ export function HpsFormulaGridSim({ E }) {
           </div>
           {/* ⛔ 2026-10-04 — 여기 있던 「↓ 행 = Bessie 첫 카드 · → 열 = 둘째 카드」를 **지웠다.**
               축 이름이 이제 **격자 자신에** 붙어 있어 **같은 말을 또 하는 글**이 됐다
-              (`feedback_picture_must_carry_the_idea`: 그림이 이미 하는 말을 글로 또 하지 마라). */
+              (`feedback_picture_must_carry_the_idea`: 그림이 이미 하는 말을 글로 또 하지 마라). */}
 
           {/* 공식 조립 — 각 기호를 격자 그림 조각에 대응 + 왜 '빼는지'(여사건) 동기.
               (선생님 2026-07-22: "dom 약자·공식이 어떻게 만들어지는지 전혀 이해 안 돼") */}
