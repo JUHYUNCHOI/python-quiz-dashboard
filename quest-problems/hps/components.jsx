@@ -2237,7 +2237,16 @@ export function HpsFormulaGridSim({ E }) {
           <div style={{ fontSize: 11.5, fontWeight: 700, color: C.dim, textAlign: "center", marginTop: 10, wordBreak: "keep-all" }}>
             🃏 {t(E, "Every hand Bessie could play — 3 × 3 = 9", "Bessie 가 낼 수 있는 패 — 3 × 3 = 9 가지")}
           </div>
-          <div style={{ display: "flex", justifyContent: "center", marginTop: 6 }}>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            {/* ⭐ 2026-10-04 (3차) — 선생님: *"bessie 첫장, bessie 둘째장이랑 … 머리글이랑
+                **너무 비슷한 색깔로 딱 붙어있어서 눈에 안띄는것** 같아."*
+                ux-reviewer 가 **좌표와 대비로 재서** 원인을 둘로 갈랐다 —
+                  ① 머리글 `#8891aa` ↔ 축 이름 `#94a3b8` 의 대비가 **1.23:1**(사실상 같은 회색)
+                  ② 머리글 바닥과 축 이름 사이가 **6px** — 두 줄이 한 문단으로 읽힌다
+                → ①은 **새 색을 만들지 않고** 이 격자가 이미 쓰는 머리글 색(`#64748b`)으로 올린다
+                  (축 이름이 「자기가 설명하는 머리글」과 한 묶음이 된다. 흰 바탕 대비 2.56 → 4.76:1).
+                  ②는 6 → 16px.
+                ⛔ 굵게·파랑은 **안 더한다** — 이틀 전 선생님이 *"너무 굵은 글씨가 많은데"* 라 하셨다. */}
             <div style={{ position: "relative" }}>
               {/* ⭐ 2026-10-04 — **축이 누구 것인지가 격자 아래 작은 글씨에만 있었다.**
                   선생님이 수업 중에 물으셨다: *"근데 **열이 낸시야? 행이 낸시야?**"*
@@ -2251,12 +2260,12 @@ export function HpsFormulaGridSim({ E }) {
                   글씨를 `#94a3b8` → `#64748b` 로 올려 **패 번호가 읽히게** 한다. */}
               <div style={{ display: "flex", gap: 5, marginBottom: 3 }}>
                 <div style={{ width: 62 }} />
-                <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 10.5, fontWeight: 600, color: "#94a3b8", wordBreak: "keep-all" }}>
+                <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 10.5, fontWeight: 600, color: "#64748b", wordBreak: "keep-all" }}>
                   {t(E, "Bessie's 2nd card →", "Bessie 둘째 장 →")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 5 }}>
-                <div style={{ width: 62, fontSize: 10.5, fontWeight: 600, color: "#94a3b8", textAlign: "right", paddingRight: 4, wordBreak: "keep-all", lineHeight: 1.25 }}>
+                <div style={{ width: 62, fontSize: 10.5, fontWeight: 600, color: "#64748b", textAlign: "right", paddingRight: 4, wordBreak: "keep-all", lineHeight: 1.25 }}>
                   {t(E, "Bessie's 1st ↓", "Bessie 첫 장 ↓")}
                 </div>
                 {cards.map(c => (
@@ -2322,14 +2331,23 @@ export function HpsFormulaGridSim({ E }) {
                   → <b>{t(E, "subtracting skips that double-count entirely", "빼는 쪽은 그 「두 번」이 아예 없어요")}</b>
                 </div>
               </div>}
+              {/* ⛔ 2026-10-04 — 학생 둘이 **각각** 짚었다: 이 쪽에 `(N−dom)²` 가 뜨는데
+                  `dom` 뜻풀이는 **다음 쪽**에 있었다. *"짐작한 것도 아니고 그냥 못 알았다."*
+                  📋4쪽(`:1902`)에 있는 **같은 문장을 그대로** 여기에도 둔다 —
+                  쪽을 넘기면 앞 쪽은 사라진다(`feedback_screen_must_not_rely_on_memory`). */}
+              {s.phase !== "f1" && (
+                <div style={{ textAlign: "center", fontSize: 11.5, fontWeight: 700, color: "#c2410c", marginBottom: 8, wordBreak: "keep-all" }}>
+                  ⚡ {t(E, "cards that beat BOTH = dom", "둘 다 이기는 카드 = dom")} = {cards.filter(c => c.win).length}
+                </div>
+              )}
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
                 <span style={{ color: "#475569", fontFamily: "inherit", fontSize: 11.5 }}>{t(E, "all hands", "전체 패")}</span>
-                <span style={{ color: "#334155", fontWeight: 800 }}>N² = 3×3</span>
+                <span style={{ color: "#334155", fontWeight: 800 }}>N² = {t(E, "3 rows × 3 cols", "3줄 × 3칸")}</span>
                 <span style={{ color: "#15803d", fontWeight: 800 }}>= 9</span>
 
                 {s.phase !== "f1" && <>
                 <span style={{ color: "#991b1b", fontFamily: "inherit", fontSize: 11.5 }}>− {t(E, "non-winning", "안 이기는 패")}</span>
-                <span style={{ color: "#991b1b", fontWeight: 800 }}>(N−dom)² = 2×2</span>
+                <span style={{ color: "#991b1b", fontWeight: 800 }}>(N−dom)² = {t(E, "2 rows × 2 cols", "2줄 × 2칸")}</span>
                 <span style={{ color: "#991b1b", fontWeight: 800 }}>= 4</span>
                 </>}
 
