@@ -2030,6 +2030,13 @@ export function HpsFormulaGridSim({ E }) {
   const showTest = s.phase === "test" || s.phase === "testans";
   const lit = ["green", "red", "count", "f1", "f2", "formula", "directcount"].includes(s.phase);
   const litRed = ["red", "count", "f1", "f2", "formula", "directcount"].includes(s.phase);
+  /* ⭐⭐ 2026-10-04 (3차) — 선생님: *"**아직 가시적이지 않고 정보가 너무 많아.**"*
+     9걸음째에 설명이 **전부 쌓여** 노란 상자가 여섯 줄이 됐고 그게 **전부 글**이었다.
+     ⭐ `ux-reviewer` 2순위 안을 쓴다: *"겹치는 칸(2·2) 자체에 「×2」 배지를 붙이는 식으로
+       **그림 안으로 옮긴다**"*(글을 지우고 그림에 조각을 더하는 (가)번 방식).
+     → 이 걸음에서 **⚡ 행과 ⚡ 열에 띠를 두르고, 겹치는 칸에 `×2` 를 찍는다.**
+       「두 번 셌다」를 **읽지 않고 보게** 된다. 그 두 줄 글은 지운다. */
+  const showDup = ["formula", "directcount"].includes(s.phase);
 
   /* ⭐⭐ 2026-10-04 — **칸 안에 「그 패가 무엇인지」를 넣는다.**
      선생님(수업 중): *"**여직까지는 행은 엘시꺼 열은 베씨거** 하다가 갑자기 저렇게 하면
@@ -2046,11 +2053,18 @@ export function HpsFormulaGridSim({ E }) {
     const win = rowWin || colWin;
     const showGreen = lit && win;
     const showRed = litRed && !win;
+    const band = showDup && win;            // ⚡ 행·열에 두르는 띠
+    const dup  = showDup && rowWin && colWin;  // 둘 다 ⚡ = 두 번 세어지는 칸
     return (
       <div key={key} style={{
+        position: "relative",
         width: 56, height: 46, borderRadius: 8,
         background: showGreen ? "#dcfce7" : showRed ? "#fee2e2" : "#f8fafc",
-        border: `1.5px solid ${showGreen ? "#4ade80" : showRed ? "#f87171" : "#cbd5e1"}`,
+        /* 겹침 걸음에선 **지는 칸을 흐리게** 해 ⚡ 십자(행 3 + 열 3)가 모양으로 드러나게 한다.
+           「3 + 3 = 6 인데 초록은 5」를 **세지 않고 보게** 하는 것이 요점이다. */
+        opacity: showDup && !win ? 0.3 : 1,
+        border: `${dup ? 2.5 : band ? 2 : 1.5}px ${dup ? "dashed" : "solid"} ${dup ? "#c2410c" : band ? "#15803d" : showGreen ? "#4ade80" : showRed ? "#f87171" : "#cbd5e1"}`,
+        boxShadow: dup ? "0 0 0 3px rgba(194,65,12,.18)" : "none",
         color: showGreen ? "#15803d" : showRed ? "#991b1b" : "#64748b",
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.1,
@@ -2062,6 +2076,12 @@ export function HpsFormulaGridSim({ E }) {
         <span style={{ fontSize: 9.5, fontWeight: 700, minHeight: 12 }}>
           {lit ? (win ? `⚡ ${t(E, "win", "이김")}` : t(E, "lose", "짐")) : ""}
         </span>
+        {/* 「두 번 세어진 칸」을 글이 아니라 **배지**로 — 읽지 않고 보게 한다. */}
+        {dup && (
+          <span style={{ position: "absolute", top: -7, right: -7, background: "#c2410c", color: "#fff",
+            fontSize: 9.5, fontWeight: 900, borderRadius: 999, padding: "1px 5px",
+            fontFamily: "'JetBrains Mono',monospace", boxShadow: "0 1px 3px rgba(0,0,0,.25)" }}>×2</span>
+        )}
       </div>
     );
   };
@@ -2082,7 +2102,10 @@ export function HpsFormulaGridSim({ E }) {
           「다음 ▶」을 눌러도 스크롤이 그대로라 새 말풍선이 화면 밖으로 밀렸다
           (375×667·320×568 에서 재현됨). 같은 파일 ChartReadingTour 가 쓰는
           NarrativePanel(stepKey={ts.safe})로 바꾼다 — 발명하지 않고 그대로 따라간다. */}
-      <NarrativePanel stepKey={ts.safe} minHeight={70}>
+      {/* ⭐ 2026-10-04 — `minHeight` 70 → 48. 말풍선이 한 줄인 걸음이 많은데
+          빈 상자가 70px 을 먹어 **아래 조작부를 화면 밖으로** 밀고 있었다.
+          (선생님: *"정보가 너무 많아"* — 빈 공간도 길이다.) */}
+      <NarrativePanel stepKey={ts.safe} minHeight={48}>
         <div style={{ fontSize: 14, lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", whiteSpace: "pre-line" }}>
           💬 {s.bubble}
         </div>
@@ -2246,13 +2269,11 @@ export function HpsFormulaGridSim({ E }) {
                   <span style={{ margin: "0 6px", color: "#a16207" }}>↔</span>
                   {t(E, "greens", "초록")} <b style={{ fontSize: 16, color: "#15803d" }}>5</b>
                 </div>
-                <div style={{ fontSize: 11.5, marginTop: 3 }}>
-                  → <b>{t(E, "the middle cell was counted twice", "가운데 한 칸을 두 번 셌어요")}</b>
-                </div>
-                {/* ⭐ 2026-10-04 — **선생님 질문에 가장 정확히 답하는 문장을 여기로 옮겼다.**
-                    원래 「안 봐도 돼요」 보너스 칸(`DirectCountNote`)에만 있었다. */}
-                <div style={{ fontSize: 11.5, marginTop: 2, color: "#15803d" }}>
-                  → <b>{t(E, "subtracting skips that step entirely", "빼는 쪽은 그 「두 번 셈」이 아예 없어요")}</b>
+                {/* ⛔ 2026-10-04 (3차) — 여기 있던 **「가운데 한 칸을 두 번 셌어요」를 지웠다.**
+                    이제 격자의 그 칸에 **`×2` 배지**가 붙어 그림이 직접 말한다
+                    (`feedback_picture_must_carry_the_idea`: 그림이 하는 말을 글로 또 하지 마라). */}
+                <div style={{ fontSize: 11.5, marginTop: 3, color: "#15803d" }}>
+                  → <b>{t(E, "subtracting skips that ×2 entirely", "빼는 쪽은 그 ×2 가 아예 없어요")}</b>
                 </div>
               </div>}
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
