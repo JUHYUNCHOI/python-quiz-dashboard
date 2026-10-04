@@ -176,7 +176,17 @@ try {
   for (let i = 0; i < MAX; i++) {
     const r = await p.evaluate(() => {
       const lines = document.body.innerText.split('\n').map((x) => x.trim()).filter(Boolean)
-      const k = lines.findIndex((x) => /^\d+ \/ \d+$/.test(x))
+      /* ⛔ 2026-10-04 — **이 정규식이 조용히 틀렸다.** `frontend-engineer` 가 찾았다.
+         전에는 `/^\d+ \/ \d+$/` — **줄 전체가 정확히 「N / M」** 인 줄만 찾았다.
+         그런데 화면은 라벨과 숫자를 **한 줄에 붙여** 그린다:
+           `<button>📋 문제<span>1 / 5 쪽</span></button>` → innerText `"📋 문제1 / 5 쪽"`
+         → **원리상 매치 불가.** `pos`·`narr` 가 헤더("Coderin")로 새고,
+           쪽 수가 **1개로 잡히는** 사고가 난다.
+         ⚠️ `hps` 만의 버그가 아니다 — **라벨과 숫자를 같은 줄에 붙이는 모든 quest**가 같다.
+         ⭐ 이제 **줄 어딘가에 「N / M」이 있으면** 잡는다. 「쪽」·「p.」 접미사도 통과한다.
+         ⚠️ 시뮬 안의 `(n / m)` 과 헷갈리지 않게 **괄호로 싸인 것은 뺀다**(아래 `sub` 가 그걸 본다). */
+      const PAGE_RE = /(^|[^(\d])\d+\s*\/\s*\d+(?![)\d])/
+      const k = lines.findIndex((x) => PAGE_RE.test(x) && !/^\(/.test(x))
       // 시뮬 안의 (n / m) 은 서브 단계 수
       const si = lines.findIndex((x) => /^\(\d+ \/ \d+\)$/.test(x))
       let sub = si >= 0 ? lines[si] : undefined
