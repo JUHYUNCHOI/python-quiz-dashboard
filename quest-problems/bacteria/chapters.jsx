@@ -28,7 +28,7 @@ export function makeBacteriaCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Output the smallest number of walks (any mix of type-1 and type-2) that zero out every a[i].",
-                "\ubaa8\ub4e0 a[i] \ub97c 0 \uc73c\ub85c \ub9cc\ub4e4 \uc218 \uc788\ub294 \ucd5c\uc18c \uc6cc\ud06c \ud69f\uc218 (\ud0c0\uc785 1 / 2 \uc11e\uc5b4\uc11c) \ucd9c\ub825.")}
+                "모든 위치의 값을 0 으로 만들 수 있는 최소 워크 횟수 (타입 1 / 2 섞어서) 출력.")}
             </div>
           </div>
 
@@ -57,7 +57,7 @@ export function makeBacteriaCh1(E) {
             </div>
             <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6, textAlign: "center" }}>
               {t(E, "Linear ramp 1, 2, 3, 4 added to a[2..5].  Position 1 unchanged.",
-                    "1, 2, 3, 4 가 차례로 a[2..5] 에 더해져요. 위치 1 은 그대로예요.")}
+                    "1, 2, 3, 4 가 차례로 2 번부터 5 번 위치까지 더해져요. 1 번 위치는 그대로예요.")}
               <br/>
               <b style={{ color: "#059669" }}>{t(E, "Type-2 walk = same ramp, but subtracted.",
                                                        "타입 2 워크는 같은 ramp 를 빼요.")}</b>
@@ -105,7 +105,7 @@ export function makeBacteriaCh1(E) {
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of walks", "필요한 워크의 최소 횟수")}</b>
-                  {t(E, " to make every a[i] equal 0.", ", 곧 모든 a[i] 를 0 으로 만드는 횟수를 출력해요.")}
+                  {t(E, " to make every a[i] equal 0.", ", 곧 모든 위치의 값을 0 으로 만드는 횟수를 출력해요.")}
                 </div>
               </div>
             </div>
@@ -144,10 +144,10 @@ export function makeBacteriaCh1(E) {
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
               {t(E, "a = [-1, 3]. To zero out a[1]=-1, do 1 type-1 walk starting at h=1: it adds (1, 2) → a = [0, 5].",
-                    "a = [-1, 3] 이에요. a[1]=-1 을 없애려면 h=1 에서 타입 1 워크를 한 번 해요.\n(1, 2) 가 더해져서 a = [0, 5] 가 돼요.")}
+                    "a = [-1, 3] 이에요. 1 번 위치의 값 -1 을 없애려면 h=1 에서 타입 1 워크를 한 번 해요.\n(1, 2) 가 더해져서 a = [0, 5] 가 돼요.")}
               <br/>
               {t(E, "Now a[2]=5. A type-2 walk at h=2 subtracts (1) from a[2] only.  Need 5 such walks.",
-                    "이제 a[2]=5 예요. h=2 의 타입 2 워크는 a[2] 에서 1 만 빼니까 5 번이 필요해요.")}
+                    "이제 2 번 위치의 값이 5 예요. h=2 의 타입 2 워크는 2 번 위치에서 1 만 빼니까 5 번이 필요해요.")}
             </div>
             <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
               {t(E, "Total walks: 1 + 5 = 6.", "총 워크 수는 1 + 5 = 6 이에요.")}
@@ -168,10 +168,10 @@ export function makeBacteriaCh1(E) {
       type: "quiz",
       narr: t(E,
         "A walk starting at h=N only touches a[N] (it's a 1-element ramp).",
-        "h=N 에서 시작하는 워크는 a[N] 한 칸만 건드려요 (길이 1 ramp)."),
+        "h=N 에서 시작하는 워크는 N 번 위치 한 칸만 건드려요 (길이 1 ramp)."),
       question: t(E,
         "If a = [0, 5] (N=2), how many type-2 walks at h=2 do we need to make a[2] = 0?",
-        "a = [0, 5] (N=2) 일 때 h=2 타입 2 워크를 몇 번 해야 a[2] 가 0 이 될까요?"),
+        "a = [0, 5] (N=2) 일 때 h=2 타입 2 워크를 몇 번 해야 2 번 위치가 0 이 될까요?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -180,7 +180,7 @@ export function makeBacteriaCh1(E) {
       correct: 2,
       explain: t(E,
         "A type-2 walk at h=2 subtracts a 1-length ramp (just 1) from a[2].  Need 5 walks to drop a[2] from 5 → 0.",
-        "h=2 의 타입 2 워크는 a[2] 에서 1 만 빼요.\n5 를 0 으로 만들려면 5 번 해야 해요."),
+        "h=2 의 타입 2 워크는 2 번 위치에서 1 만 빼요.\n5 를 0 으로 만들려면 5 번 해야 해요."),
     },
     // 1-5: Input — second-difference intuition (now backed by sim above)
     {

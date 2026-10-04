@@ -953,7 +953,7 @@ export function getPermSections(E) {
       py: PERM_HELPER_PY, cpp: PERM_HELPER_CPP,
       why: [
         t(E, "Given a permutation p, run Nhoj's rule until 1 element remains. Return the list of hints written.",
-              "순열 p 를 받아서 원소가 1 개 남을 때까지 Nhoj 규칙을 써요. 그동안 적은 힌트 리스트를 돌려줘요."),
+              "순열 p 를 받아서 원소가 1 개 남을 때까지 Nhoj 규칙을 써요. 그동안 적은 힌트 목록을 돌려줘요."),
         t(E, "permutations(range(1, N+1)) hands us every arrangement of 1..N in lex order — we'll use it in the next step.",
               "permutations(range(1, N+1)) 이 1..N 의 모든 순서를 사전순으로 하나씩 줘요. 다음 단계에서 이걸 써요."),
       ],
@@ -999,7 +999,7 @@ export function getPermWalk(E, lang = "py") {
       code: FULL_CPP,
       vars: [
         { v: "p", ko: "지금 시도하는 순열", en: "the permutation being tried" },
-        { v: "h", ko: "목표 힌트 리스트", en: "the target hint list" },
+        { v: "h", ko: "목표 힌트 목록", en: "the target hint list" },
         { v: "answer", ko: "찾아낸 순열(있다면)", en: "the permutation found, if any" },
       ],
       beats: [
@@ -1028,7 +1028,7 @@ export function getPermWalk(E, lang = "py") {
     code: FULL_PY,
     vars: [
       { v: "p", ko: "지금 시도하는 순열", en: "the permutation being tried" },
-      { v: "h", ko: "목표 힌트 리스트", en: "the target hint list" },
+      { v: "h", ko: "목표 힌트 목록", en: "the target hint list" },
     ],
     beats: [
       { hi: [0], bubble: t(E,

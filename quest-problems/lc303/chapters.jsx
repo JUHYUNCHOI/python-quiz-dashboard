@@ -12,7 +12,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Answer up to 10^4 sumRange(left, right) queries fast on an array that never changes.",
-        "안 바뀌는 배열에서 구간 합을 1만 번 빠르게 답해야 해요."),
+        "안 바뀌는 숫자 목록에서 구간 합을 1만 번 빠르게 답해야 해요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: TEAL_L, border: `2px solid ${TEAL}`, borderRadius: 10, padding: "12px 16px", marginBottom: 14 }}>
@@ -29,7 +29,7 @@ export function makeChapters(E) {
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#991b1b" }}>
             {t(E,
               "Constraints: array size up to 10^4, up to 10^4 queries. A naive O(n) loop per query = 10^8 ops → too slow.",
-              "배열 크기는 최대 10^4 이고, 물음도 최대 10^4 번이에요. 물음마다 처음부터 하나씩 더하면 10^8 번 계산이라 너무 느려요.")}
+              "숫자는 최대 10^4 개이고, 물음도 최대 10^4 번이에요. 물음마다 처음부터 하나씩 더하면 10^8 번 계산이라 너무 느려요.")}
           </div>
         </div>
       ),
@@ -81,7 +81,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Key idea: build a prefix array ONCE in __init__. prefix[i] = sum of nums[0..i-1]. Then any range sum is just two lookups.",
-        "__init__ 에서 누적합 배열을 딱 한 번만 만들어 둬요."),
+        "__init__ 에서 누적합 목록을 딱 한 번만 만들어 둬요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#374151", marginBottom: 10 }}>
@@ -119,7 +119,7 @@ export function makeChapters(E) {
               prefix[i] = prefix[i-1] + nums[i-1]
             </div>
             <div style={{ fontSize: 11.5, color: TEAL_D }}>
-              {t(E, "prefix[i] holds the sum of nums[0..i-1]", "prefix[i] 는 nums[0..i-1] 의 합을 담고 있어요")}
+              {t(E, "prefix[i] holds the sum of nums[0..i-1]", "prefix[i] 는 nums 의 처음부터 i-1 번째까지의 합을 담고 있어요")}
             </div>
           </div>
         </div>

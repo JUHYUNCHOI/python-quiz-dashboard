@@ -24,7 +24,7 @@ export function makeChapters(E) {
             <div style={{ fontSize: 11.5, color: "#374151", lineHeight: 1.6 }}>
               {t(E,
                 "7 subarrays have sum divisible by 5. Examples: [4,5,0,−2,−3,1] sum=5, [5] sum=5, [5,0,−2,−3] sum=0, [0] sum=0, ...",
-                "합이 5 의 배수인 부분 배열이 7개예요. 예를 들어 [4,5,0,−2,−3,1] 합=5, [5] 합=5, [5,0,−2,−3] 합=0, [0] 합=0, ...")}
+                "\"부분 배열\"은 이어진 토막이에요. 합이 5 의 배수인 토막이 7개예요. 예를 들어 [4,5,0,−2,−3,1] 합=5, [5] 합=5, [5,0,−2,−3] 합=0, [0] 합=0, ...")}
             </div>
           </div>
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#1d4ed8" }}>
@@ -78,7 +78,7 @@ export function makeChapters(E) {
           <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.6 }}>
             {t(E,
               "So instead of tracking prefix sums directly, we track prefix sums MOD k. Two positions with the same mod = valid subarray.",
-              "그러니까 누계 자체 대신 누계 mod k 를 따라가요. 나머지가 같은 두 위치가 바로 우리가 찾는 부분 배열이에요.")}
+              "그러니까 누계 자체 대신 누계 mod k 를 따라가요. 나머지가 같은 두 위치가 바로 우리가 찾는 토막이에요.")}
           </div>
         </div>
       ),
@@ -137,14 +137,14 @@ export function makeChapters(E) {
       type: "quiz",
       narr: t(E,
         "nums=[2,3,4], k=3. At index 2 (nums[2]=4), prefix=9, prefix%3=0. How many valid subarrays END at index 2?",
-        "2번 자리에서 끝나면서 3 으로 나누어떨어지는 부분 배열은 몇 개일까요?"),
+        "2번 자리에서 끝나면서 3 으로 나누어떨어지는 토막은 몇 개일까요?"),
       question: t(E,
         "nums=[2,3,4], k=3\nprefix at i=2 is 9, mod 3 = 0\nseen = {0:1, 2:2}  (init + i=0 mod=2 + i=1 mod=2)\nHow many subarrays ending at i=2 are divisible by 3?",
-        "nums=[2,3,4], k=3\ni=2 에서 prefix=9, mod 3=0\nseen = {0:1, 2:2}  (처음 + i=0 mod=2 + i=1 mod=2)\n2번 자리에서 끝나면서 3 으로 나누어떨어지는 부분 배열은 몇 개일까요?"),
+        "nums=[2,3,4], k=3\ni=2 에서 prefix=9, mod 3=0\nseen = {0:1, 2:2}  (처음 + i=0 mod=2 + i=1 mod=2)\n2번 자리에서 끝나면서 3 으로 나누어떨어지는 토막은 몇 개일까요?"),
       options: [
-        t(E, "1  (only the full array [2,3,4])", "1  (전체 배열 [2,3,4] 만)"),
+        t(E, "1  (only the full array [2,3,4])", "1  ([2,3,4] 전체 하나만)"),
         t(E, "2  (seen[0]=1 + seen[2]=2 somehow)", "2  (seen[0]=1 에다 뭔가 더)"),
-        t(E, "3  (all subarrays ending here)", "3  (여기서 끝나는 모든 부분 배열)"),
+        t(E, "3  (all subarrays ending here)", "3  (여기서 끝나는 모든 토막)"),
       ],
       correct: 0,
       explain: t(E,
@@ -173,7 +173,7 @@ export function makeChapters(E) {
           <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#78350f" }}>
             {t(E,
               "In C++ or Java, % can return negative for negative dividends. In those languages you'd write: (prefix_mod + k) % k to normalize. Python doesn't need this.",
-              "C++ 나 Java 에서는 음수를 나눌 때 % 가 음수를 돌려줄 수 있어요. 그럴 때는 (prefix_mod + k) % k 로 0 이상으로 맞춰 줘요. Python 은 그럴 필요가 없어요.")}
+              "C++ 나 Java 에서는 음수를 나눌 때 % 가 음수를 돌려줄 수 있어요. 그럴 때는 나머지에 k 를 더한 다음 다시 k 로 나누어 0 이상으로 맞춰 줘요. Python 은 그럴 필요가 없어요.")}
           </div>
         </div>
       ),

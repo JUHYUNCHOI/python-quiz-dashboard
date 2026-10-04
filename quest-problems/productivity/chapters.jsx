@@ -78,7 +78,7 @@ export function makeProdCh1(E) {
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
               {t(E, "Reachable iff S + t[i] < c[i]:",
-                    "S + t[i] < c[i] 면 갈 수 있어요.")}
+                    "S + t_i < c_i 면 갈 수 있어요.")}
               <br/>
               {t(E, "farm 0: 5 + 4 = 9 < 3? NO.  farm 1: 5 + 2 = 7 < 5? NO.",
                     "농장 0: 5+4=9 < 3? NO.  농장 1: 5+2=7 < 5? NO.")}
@@ -122,7 +122,7 @@ export function makeProdCh1(E) {
       type: "sim",
       narr: t(E,
         "Deep audit time! Slide S left and right and watch which farms turn green (d[i] > S).",
-        "S 를 좌우로 밀어 보면 d[i] > S 인 농장이 초록이 돼요."),
+        "S 를 좌우로 밀어 보면 d_i > S 인 농장이 초록이 돼요."),
     },
     // 1-3: Quiz
     {

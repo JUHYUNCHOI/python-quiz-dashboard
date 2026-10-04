@@ -10,7 +10,7 @@
 // (풀이 코드 자체는 이날 랜덤 5,000건 + 언어 간 300건 대조로 정확성을 확인했다.)
 //
 // 원칙: 학생 목소리(해요체), 관찰→추론, 시뮬로 개념.
-//   · CollatzStepSim — 리스트 [1,2,3,4,5] 에 한 바퀴(k=1) 적용.
+//   · CollatzStepSim — 목록 [1,2,3,4,5] 에 한 바퀴(k=1) 적용.
 //     각 원소를 하나씩: 짝수면 ÷2, 홀수면 ×3+1 → 제자리에서 바뀜 → 마지막에 합.
 
 import { t } from "@/components/quest/theme";
@@ -55,7 +55,7 @@ function Row({ children }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CollatzStepSim — [한 번 적용해보기] 리스트에 한 바퀴(k=1).
+   CollatzStepSim — [한 번 적용해보기] 목록에 한 바퀴(k=1).
    [1,2,3,4,5] → 각 원소 짝/홀 판단해 제자리 변환 → [4,1,10,2,16] → 합 33.
    ═══════════════════════════════════════════════════════════════ */
 export function CollatzStepSim({ E }) {
@@ -85,7 +85,7 @@ export function CollatzStepSim({ E }) {
 
   const say =
     s.kind === "intro" ? t(E, <>Here's the list <b>[1, 2, 3, 4, 5]</b>. Let's run <b>one pass</b> (k = 1): each number, if even <b>÷2</b>, if odd <b>×3+1</b>.</>,
-                            <>리스트 <b>[1, 2, 3, 4, 5]</b> 가 있어요. <b>한 바퀴</b>(k = 1) 돌려봐요. 숫자마다 짝수면 <b>÷2</b>, 홀수면 <b>×3+1</b> 이에요.</>)
+                            <>목록 <b>[1, 2, 3, 4, 5]</b> 가 있어요. <b>한 바퀴</b>(k = 1) 돌려봐요. 숫자마다 짝수면 <b>÷2</b>, 홀수면 <b>×3+1</b> 이에요.</>)
     : s.kind === "elem"
       ? (isEven
           ? t(E, <><b>{cur}</b> is <b>even</b> → {cur} ÷ 2 = <b>{after[s.i]}</b>.</>,
@@ -93,7 +93,7 @@ export function CollatzStepSim({ E }) {
           : t(E, <><b>{cur}</b> is <b>odd</b> → 3 × {cur} + 1 = <b>{after[s.i]}</b>.</>,
                  <><b>{cur}</b> 은 <b>홀수</b> → 3 × {cur} + 1 = <b>{after[s.i]}</b>.</>))
     : t(E, <>After one pass the list is <b>[4, 1, 10, 2, 16]</b>. The answer is the <b>sum</b>: 4+1+10+2+16 = <b>33</b>. ✓</>,
-           <>한 바퀴 돌면 리스트는 <b>[4, 1, 10, 2, 16]</b> 이 돼요. 답은 전체 <b>합</b> 이니까 4+1+10+2+16 = <b>33</b> 이에요. ✓</>);
+           <>한 바퀴 돌면 목록은 <b>[4, 1, 10, 2, 16]</b> 이 돼요. 답은 전체 <b>합</b> 이니까 4+1+10+2+16 = <b>33</b> 이에요. ✓</>);
 
   return (
     <div style={{ padding: 16 }}>

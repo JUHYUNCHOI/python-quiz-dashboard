@@ -91,14 +91,14 @@ export function makePermCh1(E) {
             <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #fdba74", borderRadius: 8, padding: "8px 10px", fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
               <b style={{ color: "#9a3412" }}>{t(E, "💬 What's a permutation?", "💬 순열이란?")}</b>{" "}
               {t(E, "A list using each number 1..N exactly once. e.g. for N=4: [3,1,4,2] is a permutation, [3,1,1,2] is not (1 used twice, 4 missing).",
-                    "1 부터 N 까지 각 숫자를 딱 한 번씩 쓰는 리스트예요. N=4 일 때 [3,1,4,2] 는 순열이에요. [3,1,1,2] 는 1 을 두 번 쓰고 4 가 빠져서 순열이 아니에요.")}
+                    "1 부터 N 까지 각 숫자를 딱 한 번씩 쓰는 목록이에요. N=4 일 때 [3,1,4,2] 는 순열이에요. [3,1,1,2] 는 1 을 두 번 쓰고 4 가 빠져서 순열이 아니에요.")}
             </div>
 
             {/* Lex order definition box */}
             <div style={{ marginTop: 6, background: "#fff", border: "1px dashed #fdba74", borderRadius: 8, padding: "8px 10px", fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
               <b style={{ color: "#9a3412" }}>{t(E, "💬 What's lexicographic (lex) order?", "💬 사전순(lex)이란?")}</b>{" "}
               {t(E, "Compare two lists position by position from left to right. The first position where they differ decides which is 'smaller'. e.g. [1,3,2] < [2,1,3] because position 0: 1 < 2.",
-                    "두 리스트를 왼쪽부터 한 자리씩 비교해요. 처음으로 달라지는 자리가 어느 쪽이 더 '작은지' 정해요. [1,3,2] 와 [2,1,3] 은 0 번 자리가 1 과 2 라서 [1,3,2] 가 더 작아요.")}
+                    "두 목록을 왼쪽부터 한 자리씩 비교해요. 처음으로 달라지는 자리가 어느 쪽이 더 '작은지' 정해요. [1,3,2] 와 [2,1,3] 은 0 번 자리가 1 과 2 라서 [1,3,2] 가 더 작아요.")}
             </div>
           </div>
 
@@ -173,7 +173,7 @@ export function makePermCh1(E) {
       type: "reveal",
       narr: t(E,
         "Hand-simulate Nhoj's process on p = [3, 1, 2, 4] — press ▶ to step through it.",
-        "이제 Nhoj 가 한 일을 p = [3, 1, 2, 4] 에서 손으로 따라가요.\n▶ 를 눌러 한 단계씩 비교하고, 빼고, 적어 봐요.\n리스트가 줄어들면서 힌트가 늘어나는 걸 볼 수 있어요."),
+        "이제 Nhoj 가 한 일을 p = [3, 1, 2, 4] 에서 손으로 따라가요.\n▶ 를 눌러 한 단계씩 비교하고, 빼고, 적어 봐요.\n목록이 줄어들면서 힌트가 늘어나는 걸 볼 수 있어요."),
       content: (<DismantleSimulator E={E} />),
     },
     // 1-1.5: Input / Output format
@@ -254,7 +254,7 @@ export function makePermCh1(E) {
       type: "quiz",
       narr: t(E,
         "The rule: compare the FIRST and LAST element. Bigger end loses (gets removed). The element NEXT to the loser is what we WRITE down.",
-        "첫 원소와 마지막 원소를 비교해요.\n큰 쪽이 빠지고, 빠지는 원소 옆에 있는 값을 적어요."),
+        "첫 번째 수와 마지막 수를 비교해요.\n큰 쪽이 빠지고, 빠지는 수 옆에 있는 값을 적어요."),
       question: t(E,
         "Suppose the current state is p = [2, 4, 5, 3]. What gets WRITTEN down in this step?",
         "지금 상태가 p = [2, 4, 5, 3] 이에요. 이 단계에서 적히는 값은?"),
@@ -262,7 +262,7 @@ export function makePermCh1(E) {
       correct: 2,
       explain: t(E,
         "first=2, last=3. 2 < 3, so we remove the LAST (3). The element next to 3 is 5 (2nd-to-last). So we write 5.",
-        "first=2, last=3 이에요. 2 < 3 이니까 마지막 3 을 빼요.\n3 옆에 있는 원소는 5 (끝에서 둘째) 예요. 그래서 5 를 적어요."),
+        "first=2, last=3 이에요. 2 < 3 이니까 마지막 3 을 빼요.\n3 옆에 있는 수는 5 (끝에서 둘째) 예요. 그래서 5 를 적어요."),
     },
     // 1-4: Input — predict what happens next
     {
@@ -275,7 +275,7 @@ export function makePermCh1(E) {
         "[2, 4, 5] 에서 다음에 적히는 값은?"),
       hint: t(E,
         "Compare first=2 and last=5. Bigger end loses → remove last (5). The element next to 5 is 4 (2nd-to-last).",
-        "first=2 와 last=5 를 비교해요. 큰 쪽인 마지막 5 를 빼요.\n5 옆에 있는 원소는 4 (끝에서 둘째) 예요."),
+        "first=2 와 last=5 를 비교해요. 큰 쪽인 마지막 5 를 빼요.\n5 옆에 있는 수는 4 (끝에서 둘째) 예요."),
       answer: 4,
     },
     // 1-5: First natural attempt — brute force
@@ -484,7 +484,7 @@ export function makePermCh3(E, lang = "py") {
       correct: 0,
       explain: t(E,
         "Some hint lists are 'unreachable' — no permutation produces them under Nhoj's dismantle rule. We can only know after trying all N! permutations.",
-        "어떤 힌트 리스트는 dismantle 규칙으로는 만들 수 없어요.\nN! 개를 다 돌려본 뒤에야 알 수 있어요."),
+        "어떤 힌트 목록은 dismantle 규칙으로는 만들 수 없어요.\nN! 개를 다 돌려본 뒤에야 알 수 있어요."),
     },
     // 3-3: Code — CodeWalk 말풍선 하나로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
     {

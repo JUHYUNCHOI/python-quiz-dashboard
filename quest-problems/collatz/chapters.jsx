@@ -17,7 +17,7 @@ function CollatzSample({ E }) {
           <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12" }}>
             <div>5 1 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "n, k", "n, k")}</span></div>
-            <div>1 2 3 4 5 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "the list", "리스트")}</span></div>
+            <div>1 2 3 4 5 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "the list", "목록")}</span></div>
           </div>
         </div>
         <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
@@ -31,14 +31,14 @@ function CollatzSample({ E }) {
       <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
         <div style={{ fontWeight: 700, color: "#065f46", marginBottom: 6 }}>🔍 {t(E, "Line by line", "한 줄씩")}</div>
         <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>5 1</code> — {t(E, "n = 5 numbers, k = 1 repeat", "n = 5 (개수), k = 1 (반복 횟수)")}</div>
-        <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2 3 4 5</code> — {t(E, "the list of numbers", "숫자 리스트")}</div>
+        <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2 3 4 5</code> — {t(E, "the list of numbers", "숫자 목록")}</div>
         <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #6ee7b7" }}>
-          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>33</code>{t(E, " = the sum of the list after k passes.", " = 한 바퀴를 k번 돈 뒤 리스트의 합이에요.")}
+          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>33</code>{t(E, " = the sum of the list after k passes.", " = 한 바퀴를 k번 돈 뒤 목록의 합이에요.")}
         </div>
       </div>
 
       {/* 2026-09-09: 여기에 [1 2 3 4 5] → [4 1 10 2 16] → 합 33 전개가 통째로 있었다.
-          그런데 **바로 다음 쪽**의 시뮬이 정확히 같은 리스트를 같은 결과로,
+          그런데 **바로 다음 쪽**의 시뮬이 정확히 같은 목록을 같은 결과로,
           원소 하나씩 7단계에 걸쳐 다시 보여준다. 학생은 답을 이미 본 뒤라
           ◀▶ 를 여섯 번 누르는 게 발견이 아니라 아는 걸 다시 읽는 일이 된다.
           전개는 3쪽 몫으로 미루고 여기는 질문으로 닫는다.
@@ -77,7 +77,7 @@ function CollatzSample({ E }) {
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
         {t(E, "📌 Constraints: n, k ≤ 1000 · each number in the list ≤ 10,000.",
-             "📌 제약: n, k ≤ 1000 · 리스트의 각 수는 10000 이하예요.")}
+             "📌 제약: n, k ≤ 1000 · 목록의 각 수는 10000 이하예요.")}
       </div>
     </div>
   );
@@ -112,7 +112,7 @@ function CollatzRecap({ E }) {
             학생이 "왜 커지는지, 얼마나 커지는지 숫자가 없어서 그냥 넘어갔다" 고 했다.
             게다가 MCC 는 codeLang="py" 고정이라 학생은 C++ 을 볼 수도 없다.
             그래서 실제 최댓값을 계산해서 넣었다 — 시작값 1~10000 전부를 1000단계까지
-            돌려보면 9663 이 48번째에 27,114,424 로 최고점을 찍는다. 리스트 1000칸이
+            돌려보면 9663 이 48번째에 27,114,424 로 최고점을 찍는다. 목록 1000칸이
             전부 9663 이면 그 순간 합은 271억이다. */}
         {t(E, "n and k are each at most 1000, so at most 1,000,000 steps total — a plain simulation is fast enough. But the numbers get big: 9663 becomes 27,114,424 after 48 rounds, and 1000 of those add up to 27 billion.",
              "n, k 가 각각 최대 1000이라 전체 계산은 최대 100만 번, 시키는 대로 해도 충분히 빨라요.\n단 값이 꽤 커져요 — 9663 은 48번 만에 27,114,424 가 되고, 그런 수가 1000개면 합이 271억이에요.")}
@@ -136,7 +136,7 @@ export function makeCollatzCh1(E) {
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
         "Apply the halve-or-triple-plus-one rule to every number, k times, then print the sum.",
-        "리스트에 한 바퀴를 k번 돌리고, 마지막에 합을 출력해요."),
+        "목록에 한 바퀴를 k번 돌리고, 마지막에 합을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -152,7 +152,7 @@ export function makeCollatzCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Apply the even/odd rule to every number, repeat the whole thing k times, then print the sum of the list.",
-                "모든 숫자에 짝/홀 규칙을 적용하고, 그 한 바퀴를 k번 반복한 뒤 리스트의 합을 출력해요.")}
+                "모든 숫자에 짝/홀 규칙을 적용하고, 그 한 바퀴를 k번 반복한 뒤 목록의 합을 출력해요.")}
             </div>
           </div>
 
@@ -166,7 +166,7 @@ export function makeCollatzCh1(E) {
                 <div>
                   {t(E, "You're given a list of ", "숫자 ")}
                   <b style={{ color: "#059669" }}>n</b>
-                  {t(E, " numbers a₁, a₂, …, aₙ.", " 개짜리 리스트 a₁, a₂, …, aₙ 이 주어져요.")}
+                  {t(E, " numbers a₁, a₂, …, aₙ.", " 개짜리 목록 a₁, a₂, …, aₙ 이 주어져요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -192,7 +192,7 @@ export function makeCollatzCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the ", "마지막 리스트의 ")}
+                  {t(E, "Print the ", "마지막 목록의 ")}
                   <b style={{ color: "#059669" }}>{t(E, "sum", "합")}</b>
                   {t(E, " of the final list.", " 을 출력해요.")}
                 </div>
@@ -236,7 +236,7 @@ export function makeCollatzCh1(E) {
         "넘어가기 전에 하나만 물어볼게요."),
       question: t(E,
         "n=1, k=3 and the list is [1]. What do we print?",
-        "n=1, k=3 이고 리스트가 [1] 이에요. 무엇을 출력할까요?"),
+        "n=1, k=3 이고 목록이 [1] 이에요. 무엇을 출력할까요?"),
       hint: t(E,
         "1 is odd. Apply the rule three times — do not stop early.",
         "1 은 홀수예요. 규칙을 세 번 적용해봐요 — 중간에 멈추지 말고요."),
