@@ -1285,43 +1285,6 @@ export function BitsLab({ E }) {
   );
 }
 
-/* DirectCountNote — "직접 세도 돼요" 보조 설명. 2026-10-02 PM 판정:
-   같은 설명을 필수 구간(HpsFormulaGridSim 의 '🧩 왜 빼요?' 박스)과
-   보너스 구간(BitmaskColSim) 둘 다에서 쓴다 — 새로 쓰지 않고 하나로 공유. */
-function DirectCountNote({ E, dom, N, ans, borderColor = "#cbd5e1", mentionSquare = true }) {
-  /* ⛔ 2026-10-02 4차 학생: *"**「제곱 쪽」이 뭘 가리키는지 이 페이지 안에는 안 보였다.**"*
-     맞다 — 아래 마지막 문장은 **공식이 이미 보인 화면**을 전제하는데,
-     4쪽은 공식을 일부러 안 보여준다(그걸 뺀 게 나다). 그 쪽에서만 안 찍는다. */
-  return (
-    <div style={{ marginTop: 6, fontSize: 11, color: "#64748b", lineHeight: 1.65,
-                  borderTop: `1px dashed ${borderColor}`, paddingTop: 6, wordBreak: "keep-all" }}>
-      {/* ⭐ 2026-10-02 학생: *"굵은 건 **숫자뿐**. 정작 왜 빼는지 설명하는 문장은
-          굵게도 색깔도 안 달랐다. **제일 중요한 「왜」는 안 튀어서 지나칠 뻔했다.**"*
-          → 핵심 구절만 굵게. 숫자는 초록이라 **색을 달리**해 둘이 안 겹치게 한다.
-          ⛔ 문장 전체를 굵게 하지 마라 — 그러면 다시 밋밋해진다. */}
-      {t(E, "Why subtract instead of counting the wins directly? ", "왜 빼서 구할까요? ")}
-      <b style={{ color: "#334155" }}>{t(E, "You can count them directly", "직접 세도 돼요")}</b>
-      {t(E, " — it is the same number.", " — 같은 수가 나와요.")}
-      <br />
-      <span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#0f766e" }}>
-        {t(E, "first card wins", "첫 장이 이기는 카드")} {dom}×{N} = {dom * N}
-        {" + "}
-        {t(E, "second", "둘째 장")} {N}×{dom} = {N * dom}
-        {" − "}
-        {t(E, "both (counted twice)", "둘 다 (두 번 셈)")} {dom}×{dom} = {dom * dom}
-        {" = "}<b style={{ color: "#15803d" }}>{ans}</b>
-      </span>
-      <br />
-      {mentionSquare && <>
-      {t(E, "The square form just ", "제곱 쪽은 ")}
-      <b style={{ color: "#334155" }}>{t(E, "skips that \"counted twice\" step", "그 \"두 번 셈\"을 안 따져도 되게 한 거예요")}</b>
-      {t(E, ": at least one wins = everything − neither wins.",
-           " — 한 장이라도 있으면 이긴다 = 전체 − 하나도 없는 경우.")}
-      </>}
-    </div>
-  );
-}
-
 /* ═══════════════════════════════════════════════════════════════
    BitmaskColSim — uses the sample chart (D / WD / LWD) to show how
    col[c] is built and how a query (s1, s2) reduces to AND + popcount.
@@ -1952,6 +1915,20 @@ export function HpsSampleIOSim({ E }) {
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
                 {t(E, "answer", "답")} = <b style={{ color: "#15803d", fontSize: 16 }}>{answer}</b>
               </div>
+              {/* ⭐⭐ 2026-10-04 — **다리 문장 한 줄.** `pedagogy-reviewer` 2라운드 판정:
+                  *"질문이 생기는 자리(📋4쪽)와 답이 있는 자리(⚡코드)가 **24클릭** 떨어져 있다.
+                    **그 간격 자체는 정당한 구조**다 — 브루트를 먼저 겪고 한계를 느낀 뒤
+                    공식을 보는 기승전결이라 **줄이면 안 된다.**
+                    문제는 **이 쪽이 「왜 5?」를 던져 놓고 아무 데도 안 가리키는 것**이다.
+                    개발자 주석엔 「공식은 코드 탭에서 왜와 함께 나온다」고 적혀 있는데
+                    **화면엔 없다.** **한 줄 다리 문장**이면 닫힌다."*
+                  학생(초6): *"`dom=1` 인데 **왜 갑자기 5**가 되는지 그 자리엔 전혀 설명이 없었다.
+                    **뜬금없다**고 느꼈다. 중간에 포기했으면 끝까지 몰랐을 것."*
+                  ⛔ **공식을 앞당기지 않는다** — 그건 2026-10-02 에 이미 뺀 것이다. 가리키기만 한다. */}
+              <div style={{ fontSize: 10.5, color: "#2563eb", marginTop: 3, wordBreak: "keep-all", lineHeight: 1.5 }}>
+                {t(E, "👉 How this 5 comes out — you'll count it yourself in the ⚡ Code tab.",
+                      "👉 이 5 가 어떻게 나오는지는 ⚡ 코드 탭에서 직접 세어 봐요.")}
+              </div>
               {/* ⛔ 2026-10-02 — 공식 한 줄을 빼고 나니 `dom = 1` 다음이 바로 `답 = 5` 가 됐다.
                   3차 학생: *"그 「5」가 **어떻게 나온 건지 계산이 하나도 안 보였다.
                   「그냥 답이 뚝 나온」 느낌**이었다."* → 거기서 막혔다고 적었다.
@@ -1994,9 +1971,16 @@ export function HpsFormulaGridSim({ E }) {
     /* ⛔ 2026-10-02 — 아래 격자 밑에 **같은 말을 또 하는 맨몸 div** 가 있었고, 그게
        하단 고정 바에 **59~84% 가려졌다**(ux 가 좌표+스크린샷으로 확인). 감싸서 끌어오는
        대신 **지웠다** — 다른 건 괄호 안 `dom` 이름뿐이라 그것만 여기로 옮긴다. */
+    /* ⭐ 2026-10-04 (2라운드) — **「앞에서 찾았던 그 값」이라고 이어 준다.**
+       `pedagogy-reviewer`: *"`testans` 가 📋4쪽에서 **이미 찾은 `dom=1`** 을
+         「방금 전에 찾았던 그 값」이라는 **다리 없이 처음 찾는 것처럼** 다시 연기한다.
+         이게 「옷만 갈아입힌 자리」다."*
+       학생도 같은 걸 피로로 겪었다: *"`dom` 표를 📋4쪽에서 보고 ⚡8쪽에서
+         **처음부터 다시** 본다. 「또 이거야?」 싶었다."*
+       ⛔ **그림(맞대결 타일)은 그대로 둔다** — 그게 근거다. **말만 잇는다.** */
     { phase: "testans", bubble: t(E,
-        <>Elsie played only card 1. Of Bessie's three cards, <b>only ⚡ card 2 beats it</b> — so <b>1</b> card. We call that count <b>dom</b>.</>,
-        <>Elsie 는 카드 1 만 냈어요. 셋 중 <b>⚡ 카드 2 하나만 이겨요</b> — 그래서 <b>1 개</b>. 이 개수를 <b>dom</b> 이라고 불러요.</>) },
+        <>Same hand as before — Elsie played card 1. <b>Only ⚡ card 2 beats it</b>, so that count is <b>1</b>. That count has a name: <b>dom</b>.</>,
+        <>아까 그 패예요 — Elsie 가 카드 1 을 냈죠. <b>⚡ 카드 2 하나만 이겨요</b>, 그래서 <b>1 개</b>. 이 개수의 이름이 <b>dom</b> 이에요.</>) },
     /* ⛔ 2026-10-03 선생님: *"**언제 글을 다 읽고 있어. 딱 봐도 뭔지, 강조할 건 강조하고.**"*
        전엔 두 줄짜리 산문이었고 그중 「행=첫 장, 열=둘째 장」은 **격자 아래 축 설명이
        이미 하고 있었다** — 같은 말을 두 번, 그것도 글로. 한 줄로 줄이고 **수를 크게** 한다. */
@@ -2076,11 +2060,18 @@ export function HpsFormulaGridSim({ E }) {
         <span style={{ fontSize: 9.5, fontWeight: 700, minHeight: 12 }}>
           {lit ? (win ? `⚡ ${t(E, "win", "이김")}` : t(E, "lose", "짐")) : ""}
         </span>
-        {/* 「두 번 세어진 칸」을 글이 아니라 **배지**로 — 읽지 않고 보게 한다. */}
+        {/* ⛔ 2026-10-04 (2라운드) — **배지가 `×2` 였는데 학생이 못 알아봤다.**
+            학생(독립): *"**배지 자체만 보고는 무슨 뜻인지 몰랐다.** 아래 설명을 읽고 나서야
+              이어 맞췄다. **배지만 보면 모르고, 글까지 읽어야 알겠다.**"*
+            `ux-reviewer` 도 같은 걸 짚었다 — 배지 `×2` 와 **세 줄 아래 식 `2×2 = 4`** 가
+              **같은 기호를 쓰면서 뜻이 전혀 다르다.**
+            ⚠️ 내 커밋 메시지(*"읽지 않고 보게 된다"*)가 **틀렸다.**
+            ⭐ **기호를 버리고 뜻을 쓴다** — `×2` → **「두 번」**. 해독할 게 없다. */}
         {dup && (
           <span style={{ position: "absolute", top: -7, right: -7, background: "#c2410c", color: "#fff",
             fontSize: 9.5, fontWeight: 900, borderRadius: 999, padding: "1px 5px",
-            fontFamily: "'JetBrains Mono',monospace", boxShadow: "0 1px 3px rgba(0,0,0,.25)" }}>×2</span>
+            boxShadow: "0 1px 3px rgba(0,0,0,.25)", wordBreak: "keep-all" }}>
+            {t(E, "twice", "두 번")}</span>
         )}
       </div>
     );
@@ -2273,7 +2264,7 @@ export function HpsFormulaGridSim({ E }) {
                     이제 격자의 그 칸에 **`×2` 배지**가 붙어 그림이 직접 말한다
                     (`feedback_picture_must_carry_the_idea`: 그림이 하는 말을 글로 또 하지 마라). */}
                 <div style={{ fontSize: 11.5, marginTop: 3, color: "#15803d" }}>
-                  → <b>{t(E, "subtracting skips that ×2 entirely", "빼는 쪽은 그 ×2 가 아예 없어요")}</b>
+                  → <b>{t(E, "subtracting skips that double-count entirely", "빼는 쪽은 그 「두 번」이 아예 없어요")}</b>
                 </div>
               </div>}
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
