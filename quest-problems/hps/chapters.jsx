@@ -408,7 +408,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: i === 0
         ? t(E, "Plan: build a beats table, then per hand just count cards that beat both. No heavy algorithm — a table + counting. Let's write it 👇",
-              "작전은 간단해요 — 이김 표 만들고, 패마다 '둘 다 이기는 카드' 개수만 세기. 무거운 알고리즘 없이 표 + 세기. 한 줄씩 짜볼게요 👇")
+              "작전은 간단해요 — 이김 표를 만들고, 패마다 '둘 다 이기는 카드' 개수만 세면 돼요.\n무거운 알고리즘은 없어요. 한 줄씩 짜 볼게요 👇")
         : "",
       // beats 규칙 상시 표시 — 코드가 beats[a][b] 를 다뤄도 '어떤 카드가 어떤 카드
       // 이기는지' 를 눈으로 (선생님 2026-07-21: 머리로 기억 안 하게).
@@ -560,7 +560,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: i === 0
         ? t(E, "Picture and formula make sense — now translate them to code.  Single loop for dom, one line for the formula.",
-              "그림과 공식 이해 됐으니까 이제 코드로. dom 세는 for 한 개, 공식 대입 한 줄.")
+              "그림과 공식을 이해했으니 이제 코드로 옮겨요.\ndom 을 세는 for 하나, 공식을 대입하는 한 줄이에요.")
         : "",
       content: (<><WinningRulesBanner E={E} /><CodeSectionView section={sec} lang={lang} E={E} /></>),
     })),
@@ -804,7 +804,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Now the bitmask code. Same algorithm, but with the bit tricks above.",
-        "위 비트 트릭 적용한 코드. 알고리즘은 동일."),
+        "위 비트 트릭을 적용한 코드예요. 알고리즘은 똑같아요."),
       content: (<><WinningRulesBanner E={E} /><CodeSectionView section={sec} lang={lang} E={E} /></>),
     })),
   ];
