@@ -1925,7 +1925,7 @@ export function HpsSampleIOSim({ E }) {
                   학생(초6): *"`dom=1` 인데 **왜 갑자기 5**가 되는지 그 자리엔 전혀 설명이 없었다.
                     **뜬금없다**고 느꼈다. 중간에 포기했으면 끝까지 몰랐을 것."*
                   ⛔ **공식을 앞당기지 않는다** — 그건 2026-10-02 에 이미 뺀 것이다. 가리키기만 한다. */}
-              <div style={{ fontSize: 10.5, color: "#2563eb", marginTop: 3, wordBreak: "keep-all", lineHeight: 1.5 }}>
+              <div style={{ fontSize: 10.5, color: C.dim, marginTop: 3, wordBreak: "keep-all", lineHeight: 1.5 }}>
                 {t(E, "👉 How this 5 comes out — you'll count it yourself in the ⚡ Code tab.",
                       "👉 이 5 가 어떻게 나오는지는 ⚡ 코드 탭에서 직접 세어 봐요.")}
               </div>
@@ -2122,7 +2122,13 @@ export function HpsFormulaGridSim({ E }) {
           ⚠️ ⚡ 는 안 붙인다 — 그건 걸음 1~2 가 **찾아내는 것**이라 미리 보이면 스포일러다. */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center",
         gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 11.5, fontWeight: 700, color: "#2563eb", wordBreak: "keep-all" }}>
+      {/* ⭐ 2026-10-04 — 선생님: *"**너무 파랑이 많고 너무 굵은 글씨가 많은데?**"*
+          맞다. 이 걸음에서 **강조할 것은 빨간 2×2 하나**인데 파란 글씨 넷이
+          **전부 굵게 같이 외치고** 있었다 — Elsie 라벨 · 격자 제목 · 축 이름 둘.
+          ⛔ **다 굵게 하면 강조가 아니다.**
+          ⭐ 라벨은 **길잡이**지 요점이 아니다 → **회색조 · 가는 글씨**로 물린다.
+            색과 굵기는 **그 걸음이 가르치는 것**에만 쓴다. */}
+        <span style={{ fontSize: 11.5, fontWeight: 600, color: C.dim, wordBreak: "keep-all" }}>
           Elsie {t(E, "played", "가 낸 패")}
         </span>
         {[1, 1].map((v, i) => (
@@ -2212,7 +2218,7 @@ export function HpsFormulaGridSim({ E }) {
       ) : (
         <>
           {/* 격자 */}
-          <div style={{ fontSize: 12, fontWeight: 800, color: "#2563eb", textAlign: "center", marginTop: 10, wordBreak: "keep-all" }}>
+          <div style={{ fontSize: 11.5, fontWeight: 700, color: C.dim, textAlign: "center", marginTop: 10, wordBreak: "keep-all" }}>
             🃏 {t(E, "Every hand Bessie could play — 3 × 3 = 9", "Bessie 가 낼 수 있는 패 — 3 × 3 = 9 가지")}
           </div>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 6 }}>
@@ -2229,12 +2235,12 @@ export function HpsFormulaGridSim({ E }) {
                   글씨를 `#94a3b8` → `#64748b` 로 올려 **패 번호가 읽히게** 한다. */}
               <div style={{ display: "flex", gap: 5, marginBottom: 3 }}>
                 <div style={{ width: 62 }} />
-                <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 11, fontWeight: 800, color: "#2563eb", wordBreak: "keep-all" }}>
+                <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 10.5, fontWeight: 600, color: "#94a3b8", wordBreak: "keep-all" }}>
                   {t(E, "Bessie's 2nd card →", "Bessie 둘째 장 →")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 5 }}>
-                <div style={{ width: 62, fontSize: 11, fontWeight: 800, color: "#2563eb", textAlign: "right", paddingRight: 4, wordBreak: "keep-all", lineHeight: 1.25 }}>
+                <div style={{ width: 62, fontSize: 10.5, fontWeight: 600, color: "#94a3b8", textAlign: "right", paddingRight: 4, wordBreak: "keep-all", lineHeight: 1.25 }}>
                   {t(E, "Bessie's 1st ↓", "Bessie 첫 장 ↓")}
                 </div>
                 {cards.map(c => (
