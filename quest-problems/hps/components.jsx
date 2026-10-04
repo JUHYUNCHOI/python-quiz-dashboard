@@ -1462,7 +1462,11 @@ export function BitmaskColSim({ E }) {
              제곱 쪽을 쓰는 이유는 **「두 번 센 것을 빼는 걸 안 따져도 되기」** 때문이지
              그게 더 옳아서가 아니다. 화면이 그 말을 안 하고 **식만 보여줘서** 막히신 것이다.
            ⚠️ 🔒 USACO_VERIFIED 라 **풀이 코드는 안 건드린다.** 화면 설명만 더한다. */}
-        <DirectCountNote E={E} dom={dom} N={N} ans={ans} />
+        {/* ⛔ 2026-10-04 — 같은 셈의 **세 번째** 자리였다. 본 줄기로 모으며 뺀다.
+            ⚠️ 여기 있던 **「제곱 쪽은 그 "두 번 셈"을 안 따져도 되게 한 거예요」** 한 문장이
+              선생님 질문(*"그냥 이기는패를 구하면 되지?"*)에 **가장 정확히 답하는 문장**인데
+              **「안 봐도 돼요」 보너스 칸에 숨어 있었다.** 학생도 이 구간을 그냥 훑고 넘겼다.
+              → 그 문장을 **본 줄기 「왜 빼요?」 상자로 옮겼다.** */}
       </div>
     </div>
   );
@@ -1954,7 +1958,14 @@ export function HpsSampleIOSim({ E }) {
                 ⭐ 이미 있는 `DirectCountNote` 를 꽂는다 — 이건 **알파벳 공식을 안 찍고**
                   `dom×N + N×dom − dom×dom = 답` 산수만 보여준다. 그래서 「공식이 이유보다
                   먼저 나온다」가 **재발하지 않으면서** 다리가 생긴다. 새 글은 0줄이다. */}
-              <DirectCountNote E={E} dom={dom} N={N} ans={answer} mentionSquare={false} />
+              {/* ⛔ 2026-10-04 — **여기 있던 `DirectCountNote` 를 뺐다.**
+                  `pedagogy-reviewer`: *"최종 공식이 **유도보다 훨씬 앞선 이 「예제 확인」
+                    쪽**에서 이미 완성된 채로 나온다 → 뒤의 브루트·한계·유도 전체가
+                    학생에겐 **발견이 아니라 복습**이 된다."*
+                  학생도 같은 걸 겪었다: *"**두 가지 「빼기」 식**을 봤는데 왜 두 개인지,
+                    왜 나중 식이 나은지는 **아무도 말해주지 않았다.**"*
+                  ⭐ 같은 셈이 **세 군데**(여기 · 공식 유도 · 보너스)에 흩어져 있었다.
+                    **본 줄기 한 곳으로 모은다.** 여기선 답만 보이고 **「왜」는 유도 쪽으로 미룬다.** */}
               <div style={{ fontSize: 11, color: C.dim }}>{t(E, `→ output line ${s.qi + 1} = ${answer}`, `→ 출력 ${s.qi + 1} 번째 줄 = ${answer}`)}</div>
             </div>
           </div>
@@ -2056,7 +2067,17 @@ export function HpsFormulaGridSim({ E }) {
   };
 
   return (
-    <div style={{ padding: 12 }}>
+    /* ⭐⭐ 2026-10-04 — **조작부가 하단 고정 바에 가려져 오조작이 났다.**
+       `ux-reviewer` 가 `elementFromPoint` 로 확인: 걸음 1~4 에서 SimNav 의
+       **`◀ 이전` 가운데를 누르면 「걸음」이 아니라 「문제 쪽」이 넘어간다.**
+       원인 — 그 걸음들은 내용이 짧아 **쪽 전체가 화면에 다 들어오고**,
+       그래서 SimNav 가 바 대역에 앉은 채 **밀어낼 스크롤이 없다.**
+       → 아래쪽에 **바 높이만큼 여백**을 둔다. 스크롤 여지가 생겨 조작부를
+         바 위로 올릴 수 있다. ⚠️ 고정 바는 화면에 붙어 있으므로 「여백을 두면
+         저절로 안 겹친다」가 아니다 — **스크롤할 수 있게 만드는 것**이 요점이다.
+       ⚠️ 근본 해법(CodeWalk 의 `pinY` 처럼 바 높이를 재서 끌어올리기)은
+         이 시뮬 하나에 쓰기엔 무겁다 — PM 판정대로 **고장만 먼저** 뗀다. */
+    <div style={{ padding: 12, paddingBottom: 108 }}>
       {/* ⭐ 2026-10-02 PM 4순위 — 전엔 맨몸 <div> 말풍선이라 짧은 화면에서
           「다음 ▶」을 눌러도 스크롤이 그대로라 새 말풍선이 화면 밖으로 밀렸다
           (375×667·320×568 에서 재현됨). 같은 파일 ChartReadingTour 가 쓰는
@@ -2098,22 +2119,14 @@ export function HpsFormulaGridSim({ E }) {
           한 화면에 블록이 **여덟** 이었다(파란 띠·말풍선·Elsie 패·N·dom 상자·격자 제목·
           축 글씨·격자·긴 노란 상자). ⭐ 이 상자는 **공식에 쓰일 때만** 필요하다 —
           격자만 보는 걸음에서는 `N`·`dom` 을 **아직 안 쓴다.** 그때까지 숨긴다. */}
-      {["f1", "f2", "formula", "directcount"].includes(s.phase) && (
-        <div style={{ maxWidth: 480, margin: "0 auto", padding: "8px 12px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.65 }}>
-          <div>
-            <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}
-          </div>
-          <div style={{ marginTop: 3 }}>
-            {/* ⛔ 2026-10-03 — 세 줄짜리 글이었다. ⚡ 가 이미 격자에 찍혀 있으니
-                **기호로** 잇고 글을 줄인다(선생님: "언제 글을 다 읽고 있어"). */}
-            <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b>
-            {t(E, " = how many ⚡ (", " = ⚡ 가 몇 개인가 (")}
-            <b style={{ color: "#c2410c" }}>{t(E, "beats both", "둘 다 이기는 카드")}</b>
-            {t(E, ")", ")")}
-          </div>
-        </div>
-      )}
-
+      {/* ⛔ 2026-10-04 (2차) — **내가 틀린 자리에 넣었다.** 1차에서 이 상자를
+          격자 걸음에서 빼고 **공식 걸음에만** 띄웠는데, `ux-reviewer` 실측으로는
+          **그 공식 걸음(f1~directcount)이 바로 블록 9~10개로 터지는 구간**이고
+          거기서 **`다음 ▶` 이 화면 밖으로 밀려난다**(데스크탑 949·1032px / 화면 900).
+          ⭐ ux 1순위 처방: *"이 상자를 빼는 것이 블록 수와 세로 길이를 동시에 줄이는
+            가장 싼 손"* — **N=3 은 격자가 3×3 으로, dom 은 ⚡ 가 이미 보여준다.**
+          → **아예 안 띄운다.** 공식 상자 안에 `N`·`dom` 이 기호로 나오고,
+            그 뜻은 격자가 그 자리에서 보여준다. */}
       {showTest ? (
         /* 카드 시험 — 각 카드를 Elsie 의 카드 1(●) 과 '직접 맞대결' 시켜 결과를 눈으로.
            (선생님 2026-07-21: "왜 2가 이겨? 기억할 필요 없이 시뮬 안에 다 넣어" —
@@ -2235,6 +2248,11 @@ export function HpsFormulaGridSim({ E }) {
                 </div>
                 <div style={{ fontSize: 11.5, marginTop: 3 }}>
                   → <b>{t(E, "the middle cell was counted twice", "가운데 한 칸을 두 번 셌어요")}</b>
+                </div>
+                {/* ⭐ 2026-10-04 — **선생님 질문에 가장 정확히 답하는 문장을 여기로 옮겼다.**
+                    원래 「안 봐도 돼요」 보너스 칸(`DirectCountNote`)에만 있었다. */}
+                <div style={{ fontSize: 11.5, marginTop: 2, color: "#15803d" }}>
+                  → <b>{t(E, "subtracting skips that step entirely", "빼는 쪽은 그 「두 번 셈」이 아예 없어요")}</b>
                 </div>
               </div>}
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
