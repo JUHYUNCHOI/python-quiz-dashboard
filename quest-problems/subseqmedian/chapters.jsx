@@ -64,7 +64,7 @@ export function makeSubseqMedianCh1(E) {
                 <div>
                   {t(E, "Its ", "그 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "median", "중앙값")}</b>
-                  {t(E, " is the middle element (odd length → exactly one middle).", " 은 가운데 원소예요 (홀수 길이 → 가운데가 정확히 하나).")}
+                  {t(E, " is the middle element (odd length → exactly one middle).", " 은 가운데 값이에요 (홀수 길이 → 가운데가 정확히 하나).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
@@ -108,7 +108,7 @@ export function makeSubseqMedianCh1(E) {
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
               <div>4 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← N", "← N")}</span></div>
-              <div>1 2 4 3 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← array A", "← 배열 A")}</span></div>
+              <div>1 2 4 3 <span style={{ color: "#8b949e", fontSize: 10.5 }}>{t(E, "← array A", "← 목록 A")}</span></div>
             </div>
             <div style={{ background: "#0f172a", color: "#6ee7b7", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
@@ -128,7 +128,7 @@ export function makeSubseqMedianCh1(E) {
       type: "reveal",
       narr: t(E,
         "Instead of listing every subsequence, count how each element can be the median.",
-        "부분수열을 나열하지 말고 각 원소를 가운데로 놓고 세어 봐요."),
+        "부분수열을 나열하지 말고 각 값을 가운데로 놓고 세어 봐요."),
       content: <SubseqMedianSim E={E} />,
     },
 
@@ -145,9 +145,9 @@ export function makeSubseqMedianCh1(E) {
         t(E, "Equal numbers of increasing picks on each side: k smaller-before, k larger-after.",
              "양쪽에서 증가값을 같은 수로 골라요 — 왼쪽(작은 값) k 개, 오른쪽(큰 값) k 개."),
         t(E, "All the other elements must be larger than v.",
-             "나머지 원소가 모두 v 보다 커야 해요."),
+             "나머지 값이 모두 v 보다 커야 해요."),
         t(E, "v must appear at an even index in the array.",
-             "v 가 배열에서 짝수 위치에 있어야 해요."),
+             "v 가 목록에서 짝수 위치에 있어야 해요."),
       ],
       correct: 0,
       explain: t(E,

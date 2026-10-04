@@ -18,7 +18,7 @@ function SumKSample({ E }) {
           <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12" }}>
             <div>3 2 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "N, K", "N, K")}</span></div>
-            <div>1 2 3 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "array A", "배열 A")}</span></div>
+            <div>1 2 3 <span style={{ fontSize: 10, color: "#b45309" }}>← {t(E, "array A", "목록 A")}</span></div>
           </div>
         </div>
         <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
@@ -32,7 +32,7 @@ function SumKSample({ E }) {
       <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
         <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>🔍 {t(E, "Line by line", "한 줄씩")}</div>
         <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>3 2</code> — {t(E, "N = 3 numbers, K = 2 (the exponent)", "N = 3 (숫자 3개), K = 2 (거듭제곱 지수)")}</div>
-        <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2 3</code> — {t(E, "the array A", "다음 줄 = 배열 A")}</div>
+        <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2 3</code> — {t(E, "the array A", "다음 줄 = 목록 A")}</div>
         <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #c4b5fd" }}>
           {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>100</code>
           {/* 2026-09-10 학생: "998244353 로 나눈 나머지 라고 잘 쓰다가 갑자기 mod 998244353 이 나온다.
@@ -58,7 +58,7 @@ function SumKSample({ E }) {
           <code style={{ background: "#f5f3ff", padding: "1px 5px", borderRadius: 3 }}>2 1</code>
           {t(E, "  ← N = 2, K = 1", "  ← N = 2, K = 1")}<br />
           <code style={{ background: "#f5f3ff", padding: "1px 5px", borderRadius: 3 }}>3 3</code>
-          {t(E, "  ← the array: first 3, second 3", "  ← 배열이에요. 첫 번째 3, 두 번째 3")}
+          {t(E, "  ← the array: first 3, second 3", "  ← 목록이에요. 첫 번째 3, 두 번째 3")}
         </span><br />
         {t(E, "Subsets: {first}, {second}, {both} → 3 + 3 + 6 = ", "부분집합은 {첫 번째}, {두 번째}, {둘 다} 예요 → 3 + 3 + 6 = ")}<b style={{ color: "#15803d" }}>12</b>
       </div>
@@ -70,7 +70,7 @@ function SumKSample({ E }) {
               N=10 K=1 / 10,2 / 18,2 / 1000,2 / 100000,2 / 100000,3 / 200,200 / 777,150,  1 ≤ aᵢ ≤ 10⁹
             즉 두 갈래다 — 큰 N·작은 K, 그리고 작은 N·큰 K. aᵢ 상한은 아예 빠져 있었다. */}
         {t(E, "📌 Constraints — two families: N up to 100,000 with K ≤ 3, or N up to 777 with K up to 200. Each aᵢ ≤ 10⁹ (one billion). The answer is taken mod 998244353.",
-             "📌 제약은 두 갈래예요. N 이 최대 10만이면 K 는 3 까지고, N 이 777 까지면 K 는 200 까지예요. 각 원소 aᵢ 는 10억보다 작거나 같아요. 답은 998244353 로 나눈 나머지로 내요.")}
+             "📌 제약은 두 갈래예요. N 이 최대 10만이면 K 는 3 까지고, N 이 777 까지면 K 는 200 까지예요. 각 값 aᵢ 는 10억보다 작거나 같아요. 답은 998244353 로 나눈 나머지로 내요.")}
       </div>
     </div>
   );
@@ -307,7 +307,7 @@ export function makeSumKCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "You're given an ", "주어지는 것: ")}
-                  <b style={{ color: "#8b5cf6" }}>{t(E, "array A of N integers", "정수 N 개짜리 배열 A")}</b>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "array A of N integers", "정수 N 개짜리 목록 A")}</b>
                   {t(E, " and a number ", " 와 숫자 ")}
                   <b style={{ color: "#7c3aed" }}>K</b>.
                 </div>
@@ -317,9 +317,9 @@ export function makeSumKCh1(E) {
                 <div>
                   {t(E, "A ", "한 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "subset", "부분집합")}</b>
-                  {t(E, " picks any of the elements. Its ", " 은 원소를 골라 담은 것. 그 ")}
+                  {t(E, " picks any of the elements. Its ", " 은 값을 골라 담은 것. 그 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "score", "점수")}</b>
-                  {t(E, " = (sum of chosen elements)", " = (고른 원소들의 합)")}
+                  {t(E, " = (sum of chosen elements)", " = (고른 값들의 합)")}
                   <sup>K</sup>.
                 </div>
               </div>
@@ -355,7 +355,7 @@ export function makeSumKCh1(E) {
       type: "reveal",
       label: t(E, "Sample I/O", "샘플 입출력"),
       narr: t(E, "A concrete example — one array, and the answer we must print.",
-                 "배열 하나와, 우리가 출력할 답을 같이 봐요."),
+                 "목록 하나와, 우리가 출력할 답을 같이 봐요."),
       content: (<SumKSample E={E} />),
     },
 

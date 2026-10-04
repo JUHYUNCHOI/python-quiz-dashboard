@@ -11,7 +11,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Given nums, build an array where output[i] is the sum of nums[0] through nums[i].",
-        "output[i] 가 nums[0] 부터 nums[i] 까지의 합인 배열을 만들어요."),
+        "output[i] 가 nums[0] 부터 nums[i] 까지의 합인 목록을 만들어요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: TEAL_L, border: `2px solid ${TEAL}`, borderRadius: 10, padding: "12px 16px", marginBottom: 14 }}>
@@ -96,10 +96,10 @@ export function makeChapters(E) {
       type: "quiz",
       narr: t(E,
         "nums = [3, 1, 4, 1, 5]. What is running_sum[3]?",
-        "nums = [3, 1, 4, 1, 5] 일 때 running_sum[3] 은 얼마일까요?"),
+        "nums = [3, 1, 4, 1, 5] 일 때, 0 번 자리부터 3 번 자리까지 더한 값은 얼마일까요?"),
       question: t(E,
         "nums = [3, 1, 4, 1, 5]\nrunning_sum[3] = ?",
-        "nums = [3, 1, 4, 1, 5]\nrunning_sum[3] = ?"),
+        "nums = [3, 1, 4, 1, 5]\n0 번 자리부터 3 번 자리까지 더한 값 = ?"),
       options: [
         "1  (just nums[3])",
         "9  (3+1+4+1)",
@@ -109,7 +109,7 @@ export function makeChapters(E) {
       correct: 1,
       explain: t(E,
         "running_sum[3] = nums[0]+nums[1]+nums[2]+nums[3] = 3+1+4+1 = 9. Always sum from index 0 through i.",
-        "running_sum[3] = nums[0]+nums[1]+nums[2]+nums[3] = 3+1+4+1 = 9 예요. 언제나 0 번 자리부터 i 번 자리까지 더해요."),
+        "0 번 자리부터 3 번 자리까지 더한 값은 nums[0]+nums[1]+nums[2]+nums[3] = 3+1+4+1 = 9 예요. 언제나 0 번 자리부터 i 번 자리까지 더해요."),
     },
 
     /* ── 4. Why it matters ───────────────────────────────────── */
@@ -117,7 +117,7 @@ export function makeChapters(E) {
       type: "reveal",
       narr: t(E,
         "Once you have the prefix array, a range sum becomes a single subtraction.",
-        "누적합 배열이 있으면 구간 합을 뺄셈 한 번으로 구할 수 있어요."),
+        "누적합 목록이 있으면 구간 합을 뺄셈 한 번으로 구할 수 있어요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: "#eff6ff", border: "2px solid #3b82f6", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
@@ -125,7 +125,7 @@ export function makeChapters(E) {
               🔗 {t(E, "Prefix Sum Series: #1480 → #303 → #560 → #974", "누적합 시리즈: #1480 → #303 → #560 → #974")}
             </div>
             {[
-              { id: "#1480", desc: t(E, "Build the prefix array (this problem)", "누적합 배열 만들기 (지금 문제)"), active: true },
+              { id: "#1480", desc: t(E, "Build the prefix array (this problem)", "누적합 목록 만들기 (지금 문제)"), active: true },
               { id: "#303",  desc: t(E, "Use prefix to answer range sum in O(1)", "누적합으로 구간 합을 O(1) 에 구하기"), active: false },
               { id: "#560",  desc: t(E, "Prefix + hashmap → count subarrays", "누적합 + 해시맵 → 부분 배열 세기"), active: false },
               { id: "#974",  desc: t(E, "Same idea + modulo", "같은 아이디어 + 나머지"), active: false },

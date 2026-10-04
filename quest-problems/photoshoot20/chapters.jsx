@@ -71,7 +71,7 @@ export function makePhoto20Ch1(E) {
       type: "reveal",
       narr: t(E,
         "How does the data arrive?  N, then the b array of pair sums.",
-        "입력은 N 다음에 b 배열로 들어와요."),
+        "입력은 N 다음에 b 목록으로 들어와요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           {/* INPUT */}
@@ -105,13 +105,13 @@ export function makePhoto20Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Pick a[0] = 1, chain a[i+1] = b[i] − a[i], then check: are all values 1..N with no duplicates? If not, bump a[0] and retry.",
-        "a[0] 을 1 부터 넣어 보며 사슬이 이어지는지 봐요."),
+        "맨 앞 수를 1 부터 넣어 보며 사슬이 이어지는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, marginBottom: 10, textAlign: "center" }}>
             {t(E,
               "Example: N = 4, b = [3, 4, 7]. Press NEXT to audit each a[0] candidate one at a time.",
-              "N = 4, b = [3, 4, 7] 이에요. 다음 버튼으로 a[0] 후보를 하나씩 봐요.")}
+              "N = 4, b = [3, 4, 7] 이에요. 다음 버튼으로 맨 앞 수 후보를 하나씩 봐요.")}
           </div>
           <Photo20AuditSim E={E} />
         </div>),
@@ -120,10 +120,10 @@ export function makePhoto20Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Example: b = [3], N = 2.\nWe need a[0] + a[1] = 3.\nIf a[0] = 1, then a[1] = 2.\nIs [1, 2] a valid permutation of {1, 2}?", "a[0] = 1 이면 a[1] = 2 예요. 이게 쓸 수 있는 순열일까요?"),
+        "Example: b = [3], N = 2.\nWe need a[0] + a[1] = 3.\nIf a[0] = 1, then a[1] = 2.\nIs [1, 2] a valid permutation of {1, 2}?", "맨 앞 수가 1 이면 다음 수는 2 예요. 이게 쓸 수 있는 순열일까요?"),
       question: t(E,
         "b = [3], N = 2. If a[0] = 1, a[1] = 2. Is [1, 2] valid?",
-        "b = [3], N = 2 예요. a[0] = 1 이면 [1, 2] 를 쓸 수 있을까요?"),
+        "b = [3], N = 2 예요. 맨 앞 수가 1 이면 [1, 2] 를 쓸 수 있을까요?"),
       options: [
         t(E, "Yes, it's a valid permutation", "네, 쓸 수 있는 순열이에요"),
         t(E, "No, it's not valid", "아니요, 쓸 수 없어요"),
@@ -131,19 +131,19 @@ export function makePhoto20Ch1(E) {
       correct: 0,
       explain: t(E,
         "Correct! [1, 2] is a permutation of {1, 2} and a[0]+a[1] = 1+2 = 3 = b[0]. Valid!",
-        "맞아요! [1, 2] 는 1 과 2 를 한 번씩 쓴 순열이에요.\n게다가 1+2 = 3 이라 b[0] 과도 딱 맞아요."),
+        "맞아요! [1, 2] 는 1 과 2 를 한 번씩 쓴 순열이에요.\n게다가 1+2 = 3 이라 b 의 값과도 딱 맞아요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "For b = [3], N = 2, what is a[0] in the lexicographically smallest permutation?", "사전순으로 가장 작은 순열의 a[0] 은 얼마일까요?"),
+        "For b = [3], N = 2, what is a[0] in the lexicographically smallest permutation?", "사전순으로 가장 작은 순열의 맨 앞 수는 얼마일까요?"),
       question: t(E,
         "b = [3], N = 2. a[0] for lex-smallest permutation?",
-        "b = [3], N = 2 예요. 사전순 최소 순열의 a[0] 은 얼마일까요?"),
+        "b = [3], N = 2 예요. 사전순 최소 순열의 맨 앞 수는 얼마일까요?"),
       hint: t(E,
         "For lex-smallest, try the tiniest a[0] first and check if it works.",
-        "사전순 최소를 노리니, 가장 작은 a[0] 부터 시도해서 되는지 확인해 봐요."),
+        "사전순 최소를 노리니, 가장 작은 맨 앞 수부터 시도해서 되는지 확인해 봐요."),
       answer: 1,
     },
   ];
