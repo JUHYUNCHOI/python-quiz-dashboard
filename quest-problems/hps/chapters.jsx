@@ -559,8 +559,11 @@ export function makeHpsCh2(E, lang = "py") {
       preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       type: "reveal",
       narr: i === 0
-        ? t(E, "Picture and formula make sense — now translate them to code.  Single loop for dom, one line for the formula.",
-              "그림과 공식을 이해했으니 이제 코드로 옮겨요.\ndom 을 세는 for 하나, 공식을 대입하는 한 줄이에요.")
+        /* ⛔ 2026-10-05 학생: *"파란 줄의 **`dom` 이 설명보다 먼저** 나왔다가, 그 아래
+             노란 글상자에서 **뒤늦게** 설명됐다. 처음 봤을 땐 「dom이 뭐지?」 하고 멈칫했다."*
+           → 파란 줄에서 **이름을 뺀다.** 이름은 **아래 상자가 붙인다.** */
+        ? t(E, "Picture and formula make sense — now translate them to code.  One loop to count, one line for the formula.",
+              "그림과 공식을 이해했으니 이제 코드로 옮겨요.\n세는 for 하나, 공식을 대입하는 한 줄이에요.")
         : "",
       content: (<><WinningRulesBanner E={E} /><CodeSectionView section={sec} lang={lang} E={E} /></>),
     })),

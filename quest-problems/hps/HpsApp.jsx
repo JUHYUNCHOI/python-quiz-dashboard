@@ -149,7 +149,10 @@ export default function HpsApp(props = {}) {
           /* ⭐ 2026-10-02 학생: *"「여사건」 — 끝까지 봐도 짐작만 했지 정확히는 모르겠다."*
              `href` 를 못 붙인다 — `app/algo/` 23개 토픽에 해당하는 게 **없다**.
              토픽 신설은 제품 방향이라 범위 밖 → **라벨 자체를 쉬운 말로.** */
-          { icon: "🎯", ko: "전체에서 빼서 세기", en: "Count by subtracting" },
+          /* ⭐ 2026-10-05 — 선생님(네 번째): *"**그냥 이기는 패 5개를 구하기는 힘들어?**"*
+             → 된다. 식을 `dom·N + (N−dom)·dom` 으로 갈아끼웠다(뺄셈 없음).
+               그러니 이 칩도 「빼서 세기」가 아니라 **「겹치지 않게 갈라 세기」**다. */
+          { icon: "🎯", ko: "겹치지 않게 갈라 세기", en: "Split into non-overlapping groups" },
         ]} />
         <QuestProgressBar
           tabs={TABS}

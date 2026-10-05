@@ -1,4 +1,14 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
+// ⚠️🔒 **2026-10-05 수정됨 · 재제출 대기** (선생님 지시 — "바꿔줘")
+//   선생님이 **네 번** 물으셨다: "그냥 이기는 패 5개를 구하기는 힘들어?"
+//   바꾼 것 — 답 한 줄만:  N*N - (N-dom)*(N-dom)  →  dom*N + (N-dom)*dom
+//     (뺄셈·제곱이 없어진다. 「첫 장이 ⚡」 + 「첫 장은 ⚡ 아닌데 둘째가 ⚡」 두 묶음의 합이다.)
+//   증명 — 두 식은 **항등식**이다: 둘 다 2·N·dom − dom².
+//     N=1..3000 · dom=0..N **전수 대조 차이 0건.**
+//     HP_FULL_PY 를 뽑아 옛 판과 diff 하니 **바뀐 줄이 이 한 줄뿐**이고,
+//     공식 샘플(3 3 / D / WD / LWD / 1 1 / 1 2 / 2 3) 출력이 옛·새 모두 `5 0 0` 로 같다.
+//   ⛔ 아직 채점기에 다시 안 냈다. 아래 기록은 **옛 코드 기준**이다.
+//
+// 🔒 USACO_VERIFIED (2026-05-13)   (← 아래는 옛 코드 기준)
 //   Python: 12/12 PASS
 //   C++:    12/12 PASS
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
@@ -1124,7 +1134,7 @@ const HP_FULL_PY = [
   "        if beats[c][s1] and beats[c][s2]:",
   "            dom += 1",
   "",
-  "    print(N * N - (N - dom) * (N - dom))",
+  "    print(dom * N + (N - dom) * dom)",
 ];
 const HP_FULL_CPP = [
   "#include <iostream>",
@@ -1162,7 +1172,7 @@ const HP_FULL_CPP = [
   "            }",
   "        }",
   "",
-  "        int answer = N * N - (N - dom) * (N - dom);",
+  "        int answer = dom * N + (N - dom) * dom;",
   "        cout << answer << '\\n';",
   "    }",
   "    return 0;",
@@ -1303,7 +1313,7 @@ export function BitmaskColSim({ E }) {
   const andRes = c1 & c2;
   const dom = intToBits(andRes).filter(x => x === 1).length;
   const N = 3;
-  const ans = N * N - (N - dom) * (N - dom);
+  const ans = dom * N + (N - dom) * dom;
   const ToBits3 = ({ x, color }) => {
     const bits = intToBits(x).slice(WIDTH - 3);
     return (
@@ -1414,7 +1424,7 @@ export function BitmaskColSim({ E }) {
         <div style={{ marginTop: 6, fontSize: 11.5, color: "#475569" }}>
           dom = popcount = <b style={{ color: "#dc2626" }}>{dom}</b>
           {" → "}
-          {t(E, "answer = N² − (N−dom)² = ", "답 = N² − (N−dom)² = ")}9 − {(3 - dom) * (3 - dom)} = <b style={{ color: "#15803d" }}>{ans}</b>
+          {t(E, "answer = dom×N + (N−dom)×dom = ", "답 = dom×N + (N−dom)×dom = ")}{dom * 3} + {(3 - dom) * dom} = <b style={{ color: "#15803d" }}>{ans}</b>
         </div>
         {/* ⛔ 2026-10-02 — 선생님이 **학생에게 설명하려다** 막히셨다:
                *"그냥 이기는것만 구하면 되는거 아니야? 왜 이겼을때를 뺀 제곱이지? **와닿지가 않아.**"*
@@ -1575,14 +1585,14 @@ const STEP_SMART_PY = [
   "    s1 -= 1",
   "    s2 -= 1",
   "",
-  "    # Elsie 두 카드 다 이기는 카드 (dom) 개수 — 단일 for, O(N)",
+  "    # Elsie 두 카드 다 이기는 카드 (dom) 개수 — 카드를 한 번만 훑어요",
   "    dom = 0",
   "    for c in range(N):",
   "        if beats[c][s1] and beats[c][s2]:",
   "            dom += 1",
   "",
-  "    # 답 = 전체 N² - dom 없는 (N-dom)²",
-  "    print(N * N - (N - dom) * (N - dom))",
+  "    # 답 = 첫 장이 dom (dom*N) + 첫 장이 아니고 둘째가 dom ((N-dom)*dom)",
+  "    print(dom * N + (N - dom) * dom)",
 ];
 const STEP_SMART_CPP = [
   "// (Elsie 패 루프 안)",
@@ -1593,7 +1603,7 @@ const STEP_SMART_CPP = [
   "                dom++;",
   "            }",
   "        }",
-  "        int answer = N * N - (N - dom) * (N - dom);",
+  "        int answer = dom * N + (N - dom) * dom;",
   "        cout << answer << '\\n';",
 ];
 
@@ -1622,7 +1632,7 @@ const STEP_BITMASK_PY = [
   "    s2 -= 1",
   "    # 두 컬럼 AND → 둘 다 이기는 카드 비트만 남음 → popcount",
   "    dom = bin(col[s1] & col[s2]).count('1')",
-  "    out.append(N * N - (N - dom) * (N - dom))",
+  "    out.append(dom * N + (N - dom) * dom)",
   "print('\\n'.join(map(str, out)))",
 ];
 
@@ -1703,12 +1713,19 @@ export function getHpsSections(E) {
       why: [
         t(E, "Trying every (a, b) pair is wasteful. We don't actually need to look at pairs.",
             "(a, b) 모든 짝 다 시도하는 건 낭비. 사실 짝을 안 봐도 돼요."),
-        t(E, "All we need is: how many cards beat BOTH Elsie cards? Call that count 'dom' (short for 'dominates'). Then we can compute the answer with a formula.",
-            "필요한 건 딱 하나예요.\nElsie 의 두 카드를 다 이기는 카드가 몇 개인가요?\n이 개수를 'dom' 이라고 부를게요. 이것만 알면 답이 식으로 나와요."),
-        t(E, "If dom cards each work on their own, then any Bessie hand with at least one of them wins. Total hands = N², hands with NONE of those cards = (N − dom)². So winning hands = N² − (N − dom)².",
-            "이런 카드를 한 장이라도 들면 Bessie 가 이김. 전체 패 = N², 그런 카드가 하나도 없는 패 = (N − dom)². 이기는 패 = N² − (N − dom)²."),
-        t(E, "Per query: nested for (N²) → single for over cards (N). Big speedup.",
-            "물음 하나에 두 겹 for (N²) 를 돌던 걸\n카드만 한 번 도는 for (N) 로 바꿨어요. 훨씬 빨라요."),
+        /* ⛔ 2026-10-05 학생: *"앞 격자의 ⚡ 가 여기서 `dom` 으로 바뀌는데,
+             **「이게 그거예요」라는 말이 어디에도 없었다.**"* → 다리를 놓는다. */
+        t(E, "All we need is: how many cards beat BOTH Elsie cards? That's the ⚡ card from the grid — the code calls that count 'dom' (short for 'dominates').",
+            "필요한 건 딱 하나예요.\nElsie 의 두 카드를 다 이기는 카드가 몇 개인가요?\n앞 격자에서 ⚡ 로 칠한 그 카드예요 — 코드에서는 이 개수를 'dom' 이라고 불러요."),
+        t(E, "If the FIRST card is one of those, the second can be anything — dom × N hands.\nIf it is not, the second one has to be — (N − dom) × dom hands.\nAdd them and you have every winning hand. No overlap, no subtracting.",
+            "첫 장이 그런 카드면 둘째는 아무거나 돼요 — dom × N 가지.\n첫 장이 아니면 둘째가 그런 카드여야 해요 — (N − dom) × dom 가지.\n둘을 더하면 이기는 패가 다 나와요. 겹치지도 않고, 뺄 것도 없어요."),
+        /* ⛔ 2026-10-05 — **네 번째 자리였다.** `O(...)` 를 걷어낸다며 10쪽·16쪽만 고치고
+           여기를 빠뜨렸다. `pedagogy-reviewer` 가 찾았다 —
+           *"10/16쪽은 「N × N 번」으로 고쳤는데 **9/16쪽의 「for (N²)」는 똑같은 종류의
+             기호 표기를 그대로** 두고 있다. 「두 군데 걷어냈다」는 **세 군데 중 두 군데**였다."*
+           학생이 바로 다음 쪽에서 *"끝까지 이해 못 했다"* 고 멈춘 그 기호의 **한 쪽 전 버전**이다. */
+        t(E, "Per query: a nested for (N × N) becomes one pass over the cards (N). Big speedup.",
+            "물음 하나에 두 겹 for 로 N × N 번 하던 걸\n카드만 한 번 도는 for 로 N 번만에 끝내요. 훨씬 빨라요."),
       ],
     },
     {
@@ -1716,8 +1733,12 @@ export function getHpsSections(E) {
       color: "#16a34a",
       py: HP_FULL_PY, cpp: HP_FULL_CPP,
       why: [
-        t(E, "Same input + table code as before; only the per-query inner loop changed (nested → single). Total work: O(M · N) instead of O(M · N²).",
-            "입력 받기와 표 만들기는 그대로예요.\n물음 하나의 안쪽 반복만 두 겹에서 한 겹으로 바뀌어요.\n다 합치면 O(M · N²) 에서 O(M · N) 이 돼요."),
+        /* ⛔ 2026-10-05 학생이 **여기서 그만두고 싶었다**: *"`O(M · N²)` 라는 괄호 기호가
+             이 quest 어디에서도 **설명 없이 갑자기** 나왔다. 그 앞 7쪽에서는 「N×N=N²」·「10¹⁰ 번」
+             처럼 **그냥 숫자로** 말해 줬는데 여기서만 튀어나와서 멈칫했다. **끝까지 이해 못 했다.**"*
+           → 앞쪽과 **같은 말씨(횟수)** 로 바꾼다. 기호를 안 쓰면 설명할 것도 없다. */
+        t(E, "Same input + table code as before; only the per-query inner loop changed (nested → single). Each question now costs N steps instead of N × N.",
+            "입력 받기와 표 만들기는 그대로예요.\n물음 하나의 안쪽 반복만 두 겹에서 한 겹으로 바뀌어요.\n물음 하나에 N × N 번 하던 걸 N 번만에 끝내요."),
       ],
     },
     {
@@ -1727,8 +1748,10 @@ export function getHpsSections(E) {
       why: [
         t(E, "Each card column becomes one Python integer (bit i = 'card i beats this column'). dom = popcount(col[s1] AND col[s2]).",
             "각 카드 column 을 Python 정수 1 개로 (i 번째 비트 = 카드 i 가 이 column 의 카드 이김). dom = popcount(col[s1] AND col[s2])."),
-        t(E, "Python's built-in bigint AND processes 64 bits at once → per-query work becomes O(N/64) ≈ instant. ~60× faster than the plain O(N) Python.",
-            "Python 의 큰 정수 AND 는 64 비트를 한 번에 처리해요.\n그래서 물음 하나가 O(N/64) 이라 거의 바로 끝나요.\n그냥 O(N) 으로 짠 Python 보다 60 배쯤 빨라요."),
+        /* ⛔ 2026-10-05 — `O(...)` 를 이 quest 는 **한 번도 설명한 적이 없다.**
+           학생이 10쪽에서 *"끝까지 이해 못 했다"* 고 했다 → 횟수로 말한다. */
+        t(E, "Python's built-in bigint AND processes 64 bits at once, so one question takes about N ÷ 64 steps — nearly instant, ~60× faster than N steps.",
+            "Python 의 큰 정수 AND 는 64 비트를 한 번에 처리해요.\n그래서 물음 하나가 N ÷ 64 번쯤이라 거의 바로 끝나요.\nN 번씩 하던 것보다 60 배쯤 빨라요."),
       ],
     },
   ];
@@ -1821,7 +1844,7 @@ export function HpsSampleIOSim({ E }) {
           return { c, b1, b2, both: b1 && b2 };
         });
         const dom = rows.filter((r) => r.both).length;
-        const answer = N * N - (N - dom) * (N - dom);
+        const answer = dom * N + (N - dom) * dom;
         const Chk = ({ ok }) => ok
           ? <span style={{ color: "#16a34a", fontWeight: 800 }}>✓</span>
           : <span style={{ color: "#dc2626", fontWeight: 800 }}>✗</span>;
@@ -2000,39 +2023,43 @@ export function HpsFormulaGridSim({ E }) {
       <b style={{ fontSize: 19, color: "#5b21b6" }}>3 × 3 = 9</b>
       {t(E, " hands in all.", " 가지예요.")}</>) },
     { phase: "green", bubble: t(E, "If a hand holds ⚡ card 2,\nBessie plays it and wins — whatever Elsie shows.\nGreen means a winning hand.", "패에 ⚡ 카드 2 가 한 장이라도 있으면\n그걸 내서 이겨요 — Elsie 가 뭘 내든요.\n초록이 이기는 패예요.") },
-    { phase: "red",   bubble: t(E, "A hand loses only when BOTH cards are not ⚡.\nThose are the four red corner cells.", "두 장이 「둘 다」 ⚡ 가 아닐 때만 져요.\n그런 패가 빨간 네 모서리 칸이에요.") },
-    /* ⛔ 2026-10-02 4차 학생: *"그만두고 싶었던 걸음: 6/7. 넷이 동시에 떠 있었다."*
-       ⭐ 숨은 중복을 PM 이 찾았다 — **말풍선과 아래 상자가 같은 문자 공식을 두 번** 말했다.
-         말풍선에선 지우고(숫자만), 문자 공식은 **아래 상자 하나만** 맡는다.
-         그리고 그 상자를 **따로 걸음으로** 뗀다 — 문자(N·dom)가 처음 들어가는 순간을 격리한다.
-         내용은 안 늘고 겹침만 없어진다. */
-    { phase: "count", bubble: t(E, "So the winning hands are\nall 9 minus the 4 that can't win — that's 5.", "그러면 이기는 패는\n전체 9 에서 못 이기는 4 를 빼서 5 예요.") },
-    /* ⛔ 2026-10-02 (세 번째 쪼개기 — PM 「마지막 한 번」) 5차 학생:
-         *"**숫자 상자 셋이 동시에** 떠서 **뭐부터 봐야 할지 몰랐다.** 여기가 제일 그만두고
-           싶었던 자리다."* → 앞선 세 번은 **블록을 통째로 옮기기만** 해서 과부하가 따라다녔다.
-       ⭐ 이번엔 층이 다르다 — **한 식을 통째로 보이나, 항마다 나눠 보이나.**
-         ①전체 패만 ②안 이기는 패를 더해서 ③빼서 답 + 「왜 빼요」. 숫자 하나씩. */
-    { phase: "f1", bubble: t(E, "First — how many hands are there in all?", "먼저 — 패는 모두 몇 가지일까요?") },
-    { phase: "f2", bubble: t(E, "Next — how many of them can NOT win?", "다음 — 그중 못 이기는 건 몇 가지일까요?") },
-    { phase: "formula", bubble: t(E, "Subtract, and what is left is the wins.", "빼면 남는 게 이기는 패예요.") },
-    /* ⛔ 2026-10-02 3차 학생: *"한 쪽 안에 ①dom ②그리드 ③빼기 공식 ④「여사건」
-         ⑤포함배제식까지 몰아서 나와서 **여기서 제일 지쳤다. 사실상 그만두고 싶었던 자리.**"*
-       ⭐ 내용을 빼지 않고 **걸음을 하나 더 쪼갠다** — 「직접 세기」를 다음 걸음으로.
-         둘은 서로 다른 설명이라 중복 제거로는 못 푼다. 늦추는 쪽을 고른다. */
-    { phase: "directcount", bubble: t(E, "One more way to see it — count the wins directly.", "한 가지 더 — 이기는 패를 직접 세어 봐도 돼요.") },
+    /* ⭐⭐ 2026-10-05 — **빼기를 버리고 더하기로 간다.** 선생님이 **네 번** 물으셨다:
+         *"그냥 이기는패를 구하면 되지 전체에서 지는것 빼는거야?"* → *"왜 저렇게 계산해야하지?"*
+         → *"이것만 보고 이해가 될수 있는거야?"* → *"**그냥 이기는 패 5개를 구하기는 힘들어?**"*
+       ✅ **된다.** `project-lead` 가 찾았고 전수로 확인했다(N=1..3000 · dom=0..N, 차이 0건):
+             N² − (N−dom)²  =  dom·N + (N−dom)·dom       ← 둘 다 2N·dom − dom²
+       ⭐ 더하기 쪽은 **겹치지 않게 저절로 갈린다** — 그래서
+         「왜 빼요?」 상자도 「두 번」 배지도 **통째로 필요 없어진다.**
+         빨간 4칸 · f1 · f2 · directcount 네 걸음이 사라져 **9걸음 → 7걸음**이 됐다.
+       ⛔ 세 번째 식으로 **덧붙이지 않았다** — 2026-10-02 학생이 정확히 그 실패를 겪었다
+         (*"다른 계산법이 나왔는데 왜 같은 답인지 안 이어졌다"*). **메인 식을 갈아끼웠다.** */
+    { phase: "rowfirst", bubble: t(E,
+      "With N = 3000 you can't eye 9 cells like this — so count in groups.\nIf the FIRST card is ⚡, the second is free: the whole ⚡ row, 3 hands.",
+      "N 이 3000 이면 이렇게 눈으로 못 세요 — 그래서 묶어서 세요.\n첫 장이 ⚡ 면 둘째는 아무거나, ⚡ 줄 통째 3 가지예요.") },
+    { phase: "colrest", bubble: t(E,
+      "If the first card is NOT ⚡, then the second one has to be ⚡.\nThat's 2 more — and they can't overlap with the row above.",
+      "첫 장이 ⚡ 가 아니면, 둘째가 ⚡ 여야 해요.\n그게 2 가지 더예요 — 위 줄과 겹칠 일이 없어요.") },
+    { phase: "count", bubble: t(E, "Add them: 3 + 2 = 5 winning hands.", "더하면 3 + 2 = 5 가지가 이기는 패예요.") },
+    /* ⛔ 2026-10-05 — 「이제 문자로」였는데 **문자를 다 걷어내서 거짓이 됐다**(dom·N 제거). */
+    /* ⛔ 2026-10-05 학생: *"「두 묶음」이 뭘 말하는 건지 화면이 **직접 짚어주지 않아서 짐작했다.**"*
+       → 두 묶음을 **이름으로 부른다.** 앞 두 걸음이 바로 그 둘이다. */
+    { phase: "formula", bubble: t(E,
+      "The two groups you just counted — 「1st is ⚡」 and 「1st is not ⚡」 — written side by side.",
+      "방금 센 두 묶음 —「첫 장이 ⚡」와「첫 장이 ⚡ 아님」— 을 나란히 적으면 이래요.") },
   ];
   const ts = useTraceStep(steps, "quest-step-hps-hpsformulagridsim");
   const s = steps[ts.safe];
   const showTest = s.phase === "test" || s.phase === "testans";
-  const lit = ["green", "red", "count", "f1", "f2", "formula", "directcount"].includes(s.phase);
-  const litRed = ["red", "count", "f1", "f2", "formula", "directcount"].includes(s.phase);
+  const lit = ["green", "rowfirst", "colrest", "count", "formula"].includes(s.phase);
+  /* 2026-10-05 — 더하기로 바꾸며 **빨강(지는 칸)은 쓰지 않는다.** 두 묶음을 차례로 띄운다. */
+  const showRow  = s.phase === "rowfirst";   // ⚡ 행 통째 — 3 가지
+  const showCol  = s.phase === "colrest";    // ⚡ 열에서 위 행과 안 겹치는 것 — 2 가지
   /* ⭐⭐ 2026-10-04 (3차) — 선생님: *"**아직 가시적이지 않고 정보가 너무 많아.**"*
      9걸음째에 설명이 **전부 쌓여** 노란 상자가 여섯 줄이 됐고 그게 **전부 글**이었다.
      ⭐ `ux-reviewer` 2순위 안을 쓴다: *"겹치는 칸(2·2) 자체에 「×2」 배지를 붙이는 식으로
        **그림 안으로 옮긴다**"*(글을 지우고 그림에 조각을 더하는 (가)번 방식).
      → 이 걸음에서 **⚡ 행과 ⚡ 열에 띠를 두르고, 겹치는 칸에 `×2` 를 찍는다.**
        「두 번 셌다」를 **읽지 않고 보게** 된다. 그 두 줄 글은 지운다. */
-  const showDup = ["formula", "directcount"].includes(s.phase);
   /* ⭐⭐ 2026-10-04 — 선생님(수업 중, 7/9 걸음): *"N이 3이고 이길수 있는 패가 1개라서
        2이고 2*2인건가? **왜 저렇게 계산해야하지?**"*
      ✅ 선생님 계산은 맞다(`N−dom = 3−1 = 2`). 막히신 건 **왜 「제곱」인가**다.
@@ -2043,7 +2070,6 @@ export function HpsFormulaGridSim({ E }) {
        아무도 말해 주지 않았다.** → 이 걸음에서 **이기는 칸을 흐리게** 해서
        빨간 2×2 덩어리가 **모양으로** 드러나게 하고, 안 이기는 카드 머리글에
        **「2개」**를 붙여 식의 2 와 격자의 2 를 **같은 자리에서** 보이게 한다. */
-  const showLose = s.phase === "f2";
 
   /* ⭐⭐ 2026-10-04 — **칸 안에 「그 패가 무엇인지」를 넣는다.**
      선생님(수업 중): *"**여직까지는 행은 엘시꺼 열은 베씨거** 하다가 갑자기 저렇게 하면
@@ -2059,20 +2085,25 @@ export function HpsFormulaGridSim({ E }) {
   const cell = (rowWin, colWin, key, rowId, colId) => {
     const win = rowWin || colWin;
     const showGreen = lit && win;
-    const showRed = litRed && !win;
-    const band = showDup && win;            // ⚡ 행·열에 두르는 띠
-    const dup  = showDup && rowWin && colWin;  // 둘 다 ⚡ = 두 번 세어지는 칸
+    /* ⭐ 2026-10-05 — **두 묶음으로 갈라 센다**(겹침이 원리상 안 생긴다):
+         ⒜ 첫 장이 ⚡       → ⚡ 행 통째         3 가지
+         ⒝ 첫 장은 ⚡ 아닌데 둘째가 ⚡ → 2 가지 더
+       ⒜ 와 ⒝ 는 **첫 장이 ⚡ 냐 아니냐**로 갈려 **절대 안 겹친다** —
+       그래서 옛 「두 번」 배지도 「왜 빼요?」 상자도 필요 없다. */
+    const inRow = rowWin;                 // ⒜
+    const inCol = !rowWin && colWin;      // ⒝
+    const hiNow = (showRow && inRow) || (showCol && inCol);   // 지금 세는 묶음
+    const done  = showCol && inRow;                            // 이미 센 묶음
+    const dim   = (showRow && !inRow) || (showCol && !(inRow || inCol));
     return (
       <div key={key} style={{
         position: "relative",
         width: 56, height: 46, borderRadius: 8,
-        background: showGreen ? "#dcfce7" : showRed ? "#fee2e2" : "#f8fafc",
-        /* 겹침 걸음에선 **지는 칸을 흐리게** 해 ⚡ 십자(행 3 + 열 3)가 모양으로 드러나게 한다.
-           「3 + 3 = 6 인데 초록은 5」를 **세지 않고 보게** 하는 것이 요점이다. */
-        opacity: (showDup && !win) || (showLose && win) ? 0.28 : 1,
-        border: `${dup ? 2.5 : (band || (showLose && !win)) ? 2 : 1.5}px ${dup ? "dashed" : "solid"} ${dup ? "#c2410c" : band ? "#15803d" : showLose && !win ? "#dc2626" : showGreen ? "#4ade80" : showRed ? "#f87171" : "#cbd5e1"}`,
-        boxShadow: dup ? "0 0 0 3px rgba(194,65,12,.18)" : "none",
-        color: showGreen ? "#15803d" : showRed ? "#991b1b" : "#64748b",
+        background: showGreen ? "#dcfce7" : "#f8fafc",
+        opacity: dim ? 0.28 : 1,
+        border: `${hiNow ? 2.5 : 1.5}px solid ${hiNow ? "#15803d" : done ? "#86efac" : showGreen ? "#4ade80" : "#cbd5e1"}`,
+        boxShadow: hiNow ? "0 0 0 3px rgba(21,128,61,.14)" : "none",
+        color: showGreen ? "#15803d" : "#64748b",
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.1,
         transition: "background .2s, color .2s, border-color .2s",
@@ -2083,19 +2114,12 @@ export function HpsFormulaGridSim({ E }) {
         <span style={{ fontSize: 9.5, fontWeight: 700, minHeight: 12 }}>
           {lit ? (win ? `⚡ ${t(E, "win", "이김")}` : t(E, "no win", "못 이김")) : ""}
         </span>
-        {/* ⛔ 2026-10-04 (2라운드) — **배지가 `×2` 였는데 학생이 못 알아봤다.**
-            학생(독립): *"**배지 자체만 보고는 무슨 뜻인지 몰랐다.** 아래 설명을 읽고 나서야
-              이어 맞췄다. **배지만 보면 모르고, 글까지 읽어야 알겠다.**"*
-            `ux-reviewer` 도 같은 걸 짚었다 — 배지 `×2` 와 **세 줄 아래 식 `2×2 = 4`** 가
-              **같은 기호를 쓰면서 뜻이 전혀 다르다.**
-            ⚠️ 내 커밋 메시지(*"읽지 않고 보게 된다"*)가 **틀렸다.**
-            ⭐ **기호를 버리고 뜻을 쓴다** — `×2` → **「두 번」**. 해독할 게 없다. */}
-        {dup && (
-          <span style={{ position: "absolute", top: -7, right: -7, background: "#c2410c", color: "#fff",
-            fontSize: 9.5, fontWeight: 900, borderRadius: 999, padding: "1px 5px",
-            boxShadow: "0 1px 3px rgba(0,0,0,.25)", wordBreak: "keep-all" }}>
-            {t(E, "twice", "두 번")}</span>
-        )}
+        {/* ⛔ 2026-10-05 — 여기 있던 **「두 번」 배지를 지웠다.**
+            뺄셈 식에서는 ⚡ 행과 ⚡ 열이 **가운데 한 칸에서 겹쳐서** 두 번 세어졌고,
+            그 칸에 「두 번」을 붙여 **왜 빼야 하는지**를 보였다.
+            ⭐ 더하기 식에는 **그 겹침이 아예 없다** — ⒜ 첫 장이 ⚡ / ⒝ 첫 장이 ⚡ 아님 으로
+              갈려서 **한 칸이 두 묶음에 동시에 들어갈 수가 없다.**
+            설명할 겹침이 없으니 배지도 없앤다. */}
       </div>
     );
   };
@@ -2287,37 +2311,43 @@ export function HpsFormulaGridSim({ E }) {
                 </div>
                 {cards.map(c => (
                   <div key={`h-${c.id}`} style={{ width: 56, textAlign: "center", fontSize: 11.5,
-                    fontWeight: (showLose ? !c.win : c.win) ? 800 : 600,
-                    color: showLose ? (c.win ? "#cbd5e1" : "#dc2626") : (c.win ? "#15803d" : "#64748b") }}>
+                    fontWeight: c.win ? 800 : 600,
+                    color: c.win ? "#15803d" : "#64748b" }}>
                     {t(E, `card ${c.id}`, `카드 ${c.id}`)}{c.win ? " ⚡" : ""}
                   </div>
                 ))}
-                {/* 「안 이기는 카드가 2개」를 **격자 바로 옆에서** 센다 — 식의 2 와 같은 2 다. */}
-                {showLose && (
-                  <div style={{ width: 54, fontSize: 10.5, fontWeight: 800, color: "#dc2626", alignSelf: "center", wordBreak: "keep-all", lineHeight: 1.3 }}>
-                    ← {t(E, "2 cards", "2 개")}
+                {/* ⒝ 를 셀 때 — 「둘째가 ⚡ 인 줄」을 격자 바로 옆에서 짚는다 */}
+                {showCol && (
+                  <div style={{ width: 56, fontSize: 10.5, fontWeight: 800, color: "#15803d", alignSelf: "center", wordBreak: "keep-all", lineHeight: 1.3 }}>
+                    ← {t(E, "2 more", "2 가지 더")}
                   </div>
                 )}
               </div>
-              {/* 행 쪽 「2 개」는 격자 **아래**에 둔다(아래 `showLose` 블록). 곱셈이라 **둘 다** 보여야
-                  `2 × 2` 가 읽힌다 — 하나만 있으면 「왜 제곱인지」가 다시 안 보인다. */}
+              {/* (2026-10-05 — 여기 있던 주석은 **지운 `showLose` 블록**을 가리키고 있었다.
+                  빼기 식 시절 「2 × 2 가 왜 제곱인지」를 설명하던 것인데, 이제 제곱이 없다.) */}
               {cards.map(rowCard => (
                 <div key={`r-${rowCard.id}`} style={{ display: "flex", gap: 5, marginTop: 5, alignItems: "center" }}>
                   <div style={{ width: 62, fontSize: 11.5,
-                    fontWeight: (showLose ? !rowCard.win : rowCard.win) ? 800 : 600, textAlign: "right", paddingRight: 4,
-                    color: showLose ? (rowCard.win ? "#cbd5e1" : "#dc2626") : (rowCard.win ? "#15803d" : "#64748b") }}>
+                    fontWeight: rowCard.win ? 800 : 600, textAlign: "right", paddingRight: 4,
+                    color: rowCard.win ? "#15803d" : "#64748b" }}>
                     {t(E, `card ${rowCard.id}`, `카드 ${rowCard.id}`)}{rowCard.win ? " ⚡" : ""}
                   </div>
                   {cards.map(colCard => cell(rowCard.win, colCard.win, `${rowCard.id}-${colCard.id}`, rowCard.id, colCard.id))}
+                  {/* ⒜ 를 셀 때 — 「⚡ 줄 통째 3 가지」를 그 줄 바로 옆에서 */}
+                  {showRow && rowCard.win && (
+                    <div style={{ width: 56, fontSize: 10.5, fontWeight: 800, color: "#15803d", wordBreak: "keep-all", lineHeight: 1.3 }}>
+                      → {t(E, "3 hands", "3 가지")}
+                    </div>
+                  )}
                 </div>
               ))}
-              {showLose && (
-                <div style={{ display: "flex", gap: 5, marginTop: 3 }}>
-                  <div style={{ width: 62, fontSize: 10.5, fontWeight: 800, color: "#dc2626", textAlign: "right", paddingRight: 4, wordBreak: "keep-all" }}>
-                    ↑ 2 {t(E, "cards", "개")}
-                  </div>
-                  <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 11, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>
-                    {t(E, "2 × 2 = 4 hands that can't win", "2 × 2 = 4 가지가 못 이기는 패")}
+              {/* ⛔ 2026-10-05 `pedagogy-reviewer` — 마지막 걸음(formula)에서 이 배너가 사라져
+                  **숫자 흐름이 끊겼다.** 식만 남고 「3 + 2 = 5」가 없어진다. `formula` 를 더한다. */}
+              {(showCol || ["count", "formula"].includes(s.phase)) && (
+                <div style={{ display: "flex", gap: 5, marginTop: 5 }}>
+                  <div style={{ width: 62 }} />
+                  <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 11.5, fontWeight: 800, color: "#15803d", wordBreak: "keep-all" }}>
+                    {t(E, "3 + 2 = 5 winning hands", "3 + 2 = 5 가지가 이기는 패")}
                   </div>
                 </div>
               )}
@@ -2330,7 +2360,7 @@ export function HpsFormulaGridSim({ E }) {
 
           {/* 공식 조립 — 각 기호를 격자 그림 조각에 대응 + 왜 '빼는지'(여사건) 동기.
               (선생님 2026-07-22: "dom 약자·공식이 어떻게 만들어지는지 전혀 이해 안 돼") */}
-          {["f1", "f2", "formula", "directcount"].includes(s.phase) && (
+          {["count", "formula"].includes(s.phase) && (
             <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "12px 14px" }}>
               {/* ⭐ 2026-10-04 — **세 줄짜리 문단을 식 두 줄로.** 선생님: *"너무 길어."*
                   셈이 글 속에 묻혀 있었다. **숫자를 줄 세워** 한눈에 보이게 한다 —
@@ -2339,66 +2369,59 @@ export function HpsFormulaGridSim({ E }) {
                   **그럼 dom은 지는 카드의 갯수였나?**"* — 한 화면에 여섯 가지가 떠서
                   **두 생각이 섞였다.** 「겹침(두 번)」은 **답이 5인 이유가 아니라**
                   「직접 세면 왜 틀리나」다. → **마지막 걸음으로만** 뗀다. */}
-              {s.phase === "directcount" && <div style={{ fontSize: 12, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.7 }}>
-                <div style={{ fontSize: 11.5, marginBottom: 4 }}>🧩 {t(E, "Why subtract? Try counting the greens directly:", "왜 빼요? 초록을 바로 세 보면:")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
-                  ⚡{t(E, "row", "행")} 3 + ⚡{t(E, "col", "열")} 3 = <b style={{ fontSize: 16 }}>6</b>
-                  <span style={{ margin: "0 6px", color: "#a16207" }}>↔</span>
-                  {t(E, "greens", "초록")} <b style={{ fontSize: 16, color: "#15803d" }}>5</b>
-                </div>
-                {/* ⛔ 2026-10-04 (3차) — 여기 있던 **「가운데 한 칸을 두 번 셌어요」를 지웠다.**
-                    이제 격자의 그 칸에 **`×2` 배지**가 붙어 그림이 직접 말한다
-                    (`feedback_picture_must_carry_the_idea`: 그림이 하는 말을 글로 또 하지 마라). */}
-                <div style={{ fontSize: 11.5, marginTop: 3, color: "#15803d" }}>
-                  → <b>{t(E, "subtracting skips that double-count entirely", "빼는 쪽은 그 「두 번」이 아예 없어요")}</b>
-                </div>
-              </div>}
+              {/* ⛔ 2026-10-05 — 여기 있던 「왜 빼요? ⚡행 3 + ⚡열 3 = 6 ↔ 초록 5 → 빼는 쪽은
+                  「두 번」이 아예 없어요」 상자를 **통째로 지웠다.** 더하기 식은
+                  **첫 장이 ⚡ 냐 아니냐**로 갈려 **겹칠 수가 없다** — 변명할 겹침이 없다. */}
               {/* ⛔ 2026-10-04 — 학생 둘이 **각각** 짚었다: 이 쪽에 `(N−dom)²` 가 뜨는데
                   `dom` 뜻풀이는 **다음 쪽**에 있었다. *"짐작한 것도 아니고 그냥 못 알았다."*
                   📋4쪽(`:1902`)에 있는 **같은 문장을 그대로** 여기에도 둔다 —
                   쪽을 넘기면 앞 쪽은 사라진다(`feedback_screen_must_not_rely_on_memory`). */}
-              {s.phase !== "f1" && (
+              {(
                 <div style={{ textAlign: "center", fontSize: 11.5, fontWeight: 700, color: "#c2410c", marginBottom: 8, wordBreak: "keep-all" }}>
-                  ⚡ {t(E, "cards that beat BOTH = dom", "둘 다 이기는 카드 = dom")} = {cards.filter(c => c.win).length}
-                  <span style={{ color: "#64748b", fontWeight: 600 }}>{"  ·  "}{t(E, "rest N−dom", "나머지 N−dom")} = {cards.length - cards.filter(c => c.win).length}</span>
+                  {/* ⛔ 2026-10-05 (학생 둘 + 선생님, 서로 안 보고 **같은 자리**) —
+                      여기서 `dom` 이라는 **처음 보는 글자**가 튀어나와 막혔다:
+                        학생A *"`dom` 이 무슨 뜻인지 화면 어디에도 안 적혀 있었다. **짐작했을 뿐이다.**"*
+                        학생B *"`=` 하나로만 이어 놔서 **확신은 없었다.** 왜 「dom」 이라는 글자인지도 안 나온다."*
+                        선생님 *"**그럼 dom은 지는 카드의 갯수였나?**"*
+                      ⭐ 학생B 가 원인까지 말했다 — *"그 전까지 「카드 2가 ⚡」라고 **쉬운 말로 하다가
+                        마지막에만** `dom` 이라는 수학 기호로 바뀌어서 **거리감이 생겼다.**"*
+                      ⛔ 그리고 **코드는 다음 쪽(9/16)에 나온다** — 코드 이름이 **코드보다 먼저** 나온 것이다
+                        (`feedback_plain_korean`). → **그림에서는 `dom` 을 쓰지 않는다.**
+                        이름은 **코드 쪽이 붙인다.** */}
+                  {/* ⛔ 2026-10-05 (3라운드 학생) — 「전체」만 **숫자가 안 붙어 있었다**:
+                      *"⚡카드=1·나머지=2 는 숫자를 붙여줬는데 「전체」는 말로만 나온다.
+                        **「전체 = 3」은 내가 미뤄 짐작한 것**이다."* → 셋 다 숫자를 붙인다. */}
+                  {t(E, "⚡ cards", "⚡ 카드")} = {cards.filter(c => c.win).length}
+                  <span style={{ color: "#64748b", fontWeight: 600 }}>{"  ·  "}{t(E, "the rest", "나머지")} = {cards.length - cards.filter(c => c.win).length}{"  ·  "}{t(E, "card kinds", "카드 종류")} = {cards.length}</span>
                 </div>
               )}
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
-                <span style={{ color: "#475569", fontFamily: "inherit", fontSize: 11.5 }}>{t(E, "all hands", "전체 패")}</span>
-                <span style={{ color: "#334155", fontWeight: 800 }}>N² = {t(E, "3 rows × 3 cols", "3줄 × 3칸")}</span>
-                <span style={{ color: "#15803d", fontWeight: 800 }}>= 9</span>
+                <span style={{ color: "#475569", fontFamily: "inherit", fontSize: 11.5 }}>{t(E, "1st is ⚡", "첫 장이 ⚡")}</span>
+                <span style={{ color: "#334155", fontWeight: 800 }}>1 × 3</span>
+                <span style={{ color: "#15803d", fontWeight: 800 }}>= 3</span>
 
-                {s.phase !== "f1" && <>
-                <span style={{ color: "#991b1b", fontFamily: "inherit", fontSize: 11.5 }}>− {t(E, "can't win", "못 이기는 패")}</span>
-                <span style={{ color: "#991b1b", fontWeight: 800 }}>(N−dom)² = {t(E, "2 rows × 2 cols", "2줄 × 2칸")}</span>
-                <span style={{ color: "#991b1b", fontWeight: 800 }}>= 4</span>
-                </>}
+                <span style={{ color: "#475569", fontFamily: "inherit", fontSize: 11.5 }}>+ {t(E, "1st is not ⚡", "첫 장이 ⚡ 아님")}</span>
+                <span style={{ color: "#334155", fontWeight: 800 }}>2 × 1</span>
+                <span style={{ color: "#15803d", fontWeight: 800 }}>= 2</span>
 
-                {["formula", "directcount"].includes(s.phase) && <>
+                {s.phase === "formula" && <>
                 <span style={{ gridColumn: "1 / -1", borderTop: "1px solid #fcd34d", margin: "2px 0" }} />
 
                 <span style={{ color: "#c2410c", fontFamily: "inherit", fontSize: 11.5, fontWeight: 800 }}>{t(E, "winning", "이기는 패")}</span>
-                <span style={{ color: "#c2410c", fontWeight: 800 }}>N²−(N−dom)²</span>
+                {/* ⛔ 2026-10-05 학생 둘 — *"번개 기호가 **숫자처럼** 곱셈 식 안에 들어가 있어서
+                    (`⚡1×전체3`) 한 번에 안 읽혔다."* → 윗줄 둘은 **숫자만**, 이 줄만 **이름으로**. */}
+                <span style={{ color: "#c2410c", fontWeight: 800 }}>{t(E, "⚡ × kinds + rest × ⚡", "⚡ 카드 × 카드 종류 + 나머지 × ⚡ 카드")}</span>
                 <span style={{ color: "#15803d", fontWeight: 900, fontSize: 16 }}>= 5</span>
                 </>}
               </div>
             </div>
           )}
-          {/* ⭐ 2026-10-02 — 전엔 '보너스' 구간에만 있던 설명(BitmaskColSim)을 필수 쪽으로
-              옮겼는데, count 걸음에 **같이** 뜨니 한 화면에 넷이 몰렸다(3차 학생이 지침).
-              **걸음을 쪼개** 여기서만 띄운다. */}
-          {/* ⛔ 2026-10-02 5차 학생: *"「직접 세어 봐도 돼요」 하면서 **완전히 다른 계산법**이
-              새로 나왔다. 방금 이해한 식이랑 **왜 같은 답이 되는지 바로는 안 이어졌다.**"*
-            ⭐ 4쪽에선 통했다(거긴 공식이 없어서 그게 「답이 어디서 왔나」 자체였다).
-              8쪽은 **방금 공식을 다 유도한 직후**라 같은 계산을 또 보이면 부딪힌다.
-              → 계산은 빼고 **한 줄만** 남긴다. 「다른 방법도 있다」는 사실은 지킨다. */}
-          {s.phase === "directcount" && (
-            <div style={{ maxWidth: 460, margin: "12px auto 0", fontSize: 11.5, color: "#64748b",
-              textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-              {t(E, "(Adding the winning hands up one by one gives the same 5.)",
-                   "(이기는 패를 하나씩 직접 더해서 세어도 같은 5 가 나와요.)")}
-            </div>
-          )}
+          {/* ⛔ 2026-10-05 — 여기 있던 `s.phase === "directcount"` 블록을 **지웠다. 죽은 코드였다.**
+              더하기 식으로 바꾸며 `directcount` 걸음 자체를 없앴는데(걸음은 이제 일곱 —
+              testans·grid·green·rowfirst·colrest·count·formula) **분기만 남아 영영 안 그려졌다.**
+              `quest-auditor` 가 찾았다.
+              ⭐ 내용도 이제 필요 없다 — 그 한 줄은 *"직접 더해서 세어도 같은 5"* 였는데,
+                지금 식 자체가 **직접 더해서 세는 것**이다. 같은 말을 두 번 하는 셈이었다. */}
         </>
       )}
 
@@ -2417,17 +2440,8 @@ export function CodeSectionView({ section: s, lang = "py", E }) {
   const code = lang === "py" ? s.py : s.cpp;
   const langSpecific = lang === "py" ? s.pyOnly ?? [] : s.cppOnly ?? [];
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
-  const [copied, setCopied] = useState(false);
+  /* 2026-10-05 — `copied` state 와 `handleCopy` 도 같이 지웠다. 쓰는 곳이 0 이 됐다. */
   const [showAside, setShowAside] = useState(false);
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(code.join("\n"));
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // clipboard may be blocked in some embeds — silently ignore
-    }
-  };
   return (
     <div style={{ padding: 14 }}>
       <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 8, marginBottom: 8 }}>
@@ -2483,23 +2497,16 @@ export function CodeSectionView({ section: s, lang = "py", E }) {
               </div>
             )}
           </div>
+          {/* ⛔ 2026-10-05 — 여기 있던 **복사 버튼을 지웠다.** `CodeBlock` 이 **이미 자기 복사
+              버튼을 그린다.** 둘이 **98% 겹쳐** 있었고(실측 375px: 복사 269.6 / Copy 264.5,
+              같은 y=734.3), 이쪽이 `zIndex: 2` 라 **아래 `📋 Copy` 는 어디를 눌러도 안 눌렸다**
+              (`elementFromPoint` 로 둘의 중심을 찍으니 **둘 다** 이 버튼을 돌려줬다).
+              하는 일도 같다 — 둘 다 `code.join("\n")` 을 복사한다. **같은 걸 두 번 만든 것.**
+              ⭐ **이건 이미 한 번 고쳐진 버그다** — 공용 `components/quest/CodeSectionView.tsx:191`
+                이 2026-09-11 에 **똑같은 이유로** 지웠다(그때 quest 11개). 그런데 `hps` 는
+                `6cb17468` 때 **자기 사본을 떠 가서** 그 수정이 전파되지 않았다.
+                **포크는 고친 것을 안 받는다** — 전수 grep 결과 이 결함이 남은 quest 는 **hps 하나뿐.** */}
           <div style={{ position: "relative", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-            <button
-              onClick={handleCopy}
-              style={{
-                position: "absolute", top: 8, right: 8, zIndex: 2,
-                fontSize: 11, fontWeight: 700,
-                padding: "4px 10px", borderRadius: 6,
-                border: `1px solid ${copied ? "#16a34a" : "rgba(255,255,255,0.3)"}`,
-                background: copied ? "rgba(22,163,74,0.85)" : "rgba(255,255,255,0.1)",
-                color: copied ? "#fff" : "#cbd5e1",
-                cursor: "pointer",
-                backdropFilter: "blur(4px)",
-              }}
-              title={t(E, "Copy code", "코드 복사")}
-            >
-              {copied ? `✓ ${t(E, "copied", "복사됨")}` : `📋 ${t(E, "copy", "복사")}`}
-            </button>
             <CodeBlock isEn={E} lines={code} lang={lang} />
           </div>
         </div>
