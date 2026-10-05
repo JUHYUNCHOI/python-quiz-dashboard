@@ -1,4 +1,13 @@
-// 🔒 USACO_VERIFIED (2026-09-30) — **새 코드로 재제출 완료**
+// ⚠️🔒 **2026-10-02 수정됨 · 아직 커밋 못 함 · 재제출 대기** (선생님 결정 필요)
+//   선생님 지시: "코드 더 이해가 잘되도록 수정해줘. 안배운것 넣지 말고
+//     하나로 짧게 퉁치는 코드 말고"
+//   바꾼 것 — 파이썬 `any(c not in '01' for c in s)` 를 깃발 + for + break 로 폈다
+//     (레슨에 `any(` 0건 · C++ 쪽은 원래 그 모양). `% 2:` → `% 2 == 1` (두 언어).
+//   증명 — 0..300,000 전수 0건 차이 · 무작위 40,000개 0건 차이 ·
+//     최악 입력(20만 자리) 85ms(옛 86ms) 답 동일. **알고리즘은 한 글자도 안 바꿨다.**
+//   ⛔ 아직 채점기에 다시 안 냈다. 아래 기록은 **옛 코드 기준**이다.
+//
+// 🔒 USACO_VERIFIED (2026-09-30) — **새 코드로 재제출 완료** (← 아래는 옛 코드 기준)
 //   Python-3.6.9: 12/12 PASS  (최대 907ms)
 //   C++17:        12/12 PASS  (최대 112ms — 옛 코드보다 빠르다)
 //   cpid=1588 · USACO 2026 Third Contest, Bronze, Problem 2
@@ -30,12 +39,19 @@ const FULL_PY = [
   "for _ in range(T):",
   "    s = input().strip()",
   "",
-  "    # Step 1: if any digit is not 0/1, binarize (costs 1 op).",
+  "    # Step 1: is any digit not 0 and not 1?",
   "    ops = 0",
-  "    if any(c not in '01' for c in s):",
+  "    need_change = False",
+  "    for c in s:",
+  "        if c != '0' and c != '1':",
+  "            need_change = True",
+  "            break",
+  "",
+  "    # If so, change every digit: odd -> 1, even -> 0 (costs 1 op).",
+  "    if need_change:",
   "        new_s = []",
   "        for c in s:",
-  "            if int(c) % 2:",
+  "            if int(c) % 2 == 1:",
   "                new_s.append('1')",
   "            else:",
   "                new_s.append('0')",
@@ -83,7 +99,7 @@ const FULL_CPP = [
   "        if (needBinarize) {",
   "            for (int i = 0; i < (int)s.size(); i++) {",
   "                int d = s[i] - '0';",
-  "                if (d % 2) {",
+  "                if (d % 2 == 1) {",
   "                    s[i] = '1';",
   "                } else {",
   "                    s[i] = '0';",
@@ -144,15 +160,36 @@ export function getStrangeFnWalk(E, lang = "py") {
     ] };
   }
   return { code: FULL_PY, vars: _SF_VARS, beats: [
-    { hi: [1, 1], bubble: t(E, "What do we need? For each x, how many times f applies until\nit hits 0 — mod 10\u2079+7, because the count can get huge.", "무엇을 구해야 하나요?\nf 를 몇 번 써야 x 가 0 이 되는지, 10\u2079+7 로 나눈 나머지예요.\n횟수가 아주 커질 수 있어서예요.") },
-    { hi: [3, 5], bubble: t(E, "T tests; read each number x as a STRING (x can be astronomically large).", "테스트를 T 개 읽어요. 각 x 는 문자열 s 로 받아요 (x 가 엄청 커서).") },
-    /* 2026-09-23 학생 검증: `any(...)` 를 **짐작**하고 넘어갔다 —
-       *"`any(...)` 자체를 처음 본다. 확신 없다."* 레슨 전체에 `any(` 가 0건이다.
-       ⚠️ **C++ 쪽에는 안 넣는다** — 거긴 `bool needBinarize` + for 문이라 `any` 가 없다. */
-    { hi: [7, 17], bubble: t(E, "any(… for c in s) checks the letters of s one by one — True if it holds even once.\nStep 1 — why do a digit change first? f only does x\u22121 while x is pure 0/1.\nAny other digit needs one such change first: odd\u21921, even\u21920,\nand that change costs ops = 1.", "any(조건 for c in s) 는 s 의 글자를 하나씩 보다가\n조건이 한 번이라도 맞으면 True 예요.\n1단계 — 왜 숫자 바꾸기부터 할까요?\nx 가 0/1 만 있어야 f 가 x\u22121 로 움직여요.\n다른 숫자가 있으면 홀수\u21921, 짝수\u21920 으로 한 번 바꾸고\nops = 1 을 지불해요.") },
-    { hi: [19, 25], bubble: t(E, "Step 2: s is now 0/1 only — read it as a binary number n.\nEach digit doubles what we have and adds the new digit.\nhalf keeps the value from one digit earlier — that is n // 2.\n(Same as 137 \u2192 13 being 137 // 10 in base ten.)", "2단계 — 이제 s 는 0/1 만 있으니 이진수 n 으로 읽어요.\n자리를 볼 때마다 두 배 하고 새 자리를 더해요.\nhalf 에는 「한 자리 전 값」을 남겨요 — 그게 n 의 절반이에요.\n(10 진수에서 137 \u2192 13 이 137 \u00f7 10 인 것과 같아요.)") },
-    { hi: [27, 28], bubble: t(E, "Step 3 — we need floor(3n/2), and that is just n + (half of n).\nIf n is even, 3n/2 = n + n/2. If n is odd, n + (n/2 rounded down)\nlands on the same answer.\nThe half is already sitting in half — no division needed.", "3단계 — 구할 것은 floor(3n/2) 인데, 그건 「n + (n 의 절반)」 과 같아요.\nn 이 짝수면 3n/2 = n + n/2 예요.\nn 이 홀수여도 절반을 버림하면 답이 맞아요.\n그 절반은 이미 half 에 들어 있어요 — 나눗셈이 필요 없어요.") },
-    { hi: [30, 30], bubble: t(E, "Answer = ops + g, mod MOD: the cost of the digit change plus the formula's result.", "답은 (ops + g) 를 MOD 로 나눈 나머지예요. 숫자 바꾸기 횟수에 공식 결과를 더한 값이에요.") },
+    /* ⭐ 2026-10-02 선생님: *"또 설명 엄청 긴 말풍선"* — 한 말풍선이 **여섯 줄**로
+       네 가지를 말했다. 걸음을 쪼갠다: **한 걸음에 한 가지, 두 줄 이내.**
+       줄 번호는 `any(...)` 를 풀면서 밀렸다(아래 번호는 새 코드 기준). */
+    { hi: [1, 1], bubble: t(E,
+      "What do we need? For each x, how many f's until it hits 0.\nThe count gets huge, so we keep it mod 10\u2079+7.",
+      "무엇을 구해야 하나요? f 를 몇 번 써야 x 가 0 이 되는지예요.\n횟수가 아주 커서 10\u2079+7 로 나눈 나머지로 답해요.") },
+    { hi: [3, 5], bubble: t(E,
+      "T tests. Read each x as a STRING — x can be astronomically large.",
+      "테스트를 T 개 읽어요. x 가 엄청 커서 문자열 s 로 받아요.") },
+    /* 2026-09-23 학생: *"`any(...)` 자체를 처음 본다. 확신 없다."* (레슨에 `any(` 0건)
+       2026-10-02 선생님: *"안 배운것 넣지 말고 하나로 짧게 퉁치는 코드 말고"*
+       → `any(제너레이터)` 를 **for 문 + 깃발**로 풀었다. C++ 쪽이 원래 그 모양이다. */
+    { hi: [7, 13], bubble: t(E,
+      "f only does x\u22121 while x is made of 0s and 1s.\nSo first check: is there a digit that is neither?",
+      "f 는 x 가 0 과 1 뿐일 때만 1 을 빼요.\n그래서 0 도 1 도 아닌 숫자가 있는지부터 봐요.") },
+    { hi: [15, 24], bubble: t(E,
+      "If there is, change every digit: odd \u2192 1, even \u2192 0.\nThat change is one use of f, so ops = 1.",
+      "있으면 숫자마다 바꿔요 — 홀수는 1, 짝수는 0.\n이 바꾸기가 f 를 한 번 쓴 거라 ops = 1 이에요.") },
+    { hi: [26, 29], bubble: t(E,
+      "Now s is only 0s and 1s. Read it as a binary number n.\nhalf will hold the value from one digit earlier.",
+      "이제 s 는 0 과 1 뿐이에요. 이진수로 읽어 n 을 만들어요.\nhalf 에는 한 자리 전 값을 남겨요.") },
+    { hi: [30, 32], bubble: t(E,
+      "Each digit doubles what we have and adds the new digit.\nThe value just before is n // 2 \u2014 like 137 \u2192 13 in base ten.",
+      "자리를 볼 때마다 두 배 하고 새 자리를 더해요.\n그 직전 값이 n 의 절반이에요 — 137 \u2192 13 과 같아요.") },
+    { hi: [34, 35], bubble: t(E,
+      "We need floor(3n/2), and that is n + (half of n).\nThe half is already in half \u2014 no division needed.",
+      "구할 건 floor(3n/2) 인데, 그건 n + (n 의 절반) 이에요.\n절반은 이미 half 에 있어요 — 나눗셈이 필요 없어요.") },
+    { hi: [37, 37], bubble: t(E,
+      "Answer = ops + g, mod MOD.",
+      "답은 (ops + g) 를 MOD 로 나눈 나머지예요.") },
   ] };
 }
 
