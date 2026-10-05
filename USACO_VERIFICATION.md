@@ -38,7 +38,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `chipxchg` | Chip Exchange | Dec 2025 Bronze #1 | ✅ 12/12 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1539) | 5/12 (overflow bug) |
 | `mooin3` | Mooin' Time III | Open 2025 Bronze #3 | ✅ PASS (선생님 통과 버전 = 표 O(26)/query, `docs/mooin3-passing-solution.py`; quest 코드는 bisect 변형 로컬~0.9s. 구 brute 3/11) | ✅ PASS — 부록 map 풀이(M3_MAP_PY/CPP) 선생님 USACO 제출 통과(2026-08-10). 표 방식과 동치, 로컬 브루트 3400+/3400+ 일치, C++ 0.16s/Py 0.64s |
 | `cowphotos` | More Cow Photos | Open 2025 Bronze #2 | ✅ PASS (Counter O(N), 재제출 통과 2026-07-23; 구 brute 6/8 TLE) | ✅ 11/11 PASS |
-| `hps` | HPS Minus One | Open 2025 Bronze #1 | ⏳ **재제출 대기** — 2026-10-05 답 한 줄을 `N²−(N−dom)²` → `dom·N+(N−dom)·dom` 으로 **교체**(선생님 지시). 수학적 **항등식**이고 전수·브루트 이중 확인했지만 **채점기엔 아직 안 냈다.** 아래 PASS 는 **옛 코드 기준** → ✅ 12/12 PASS | ⏳ **재제출 대기**(같은 교체) → ✅ 12/12 PASS |
+| `hps` | HPS Minus One | Open 2025 Bronze #1 | ✅ **PASS — 재제출 2026-10-05 통과 확인** (cpid=1515). 답 한 줄을 `N²−(N−dom)²` → `dom·N+(N−dom)·dom` 으로 교체(선생님 지시, **항등식**). 교체 전 기록도 12/12 PASS | ✅ **PASS — 재제출 2026-10-05 통과 확인** (같은 교체). 교체 전 기록도 12/12 PASS |
 | `printseq` | Printing Sequences | Feb 2025 Bronze #3 | ✅ 13/13 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1493) | ✅ 13/13 PASS (after dev fix) |
 | `mexes` | Making Mexes | Feb 2025 Bronze #2 | ✅ 11/11 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1492) | ✅ 11/11 PASS |
 | `reflection` | Reflection | Feb 2025 Bronze #1 | ✅ 14/14 PASS (재제출 2026-09-24 Python-3.6.9, cpid=1491) | ✅ **PASS — 2026-09-17 통과 확인.** 같은 교체 (구 버전은 15/15 PASS). 공식 답안과 일치 확인. |
