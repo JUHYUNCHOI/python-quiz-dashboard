@@ -146,7 +146,14 @@ const MEASURE = `(() => {
     const cs = getComputedStyle(s);
     return cs.height === '0px' && s.nextElementSibling && getComputedStyle(s.nextElementSibling).position === 'relative';
   });
-  const pin = sentinel ? sentinel.nextElementSibling : null;
+  const pinWrap = sentinel ? sentinel.nextElementSibling : null;
+  /* 2026-10-05 — 「4px 먹힘」 열한 건은 전부 가짜였다. ux-reviewer 가 DOM 을 뜯어 찾았다.
+     CodeWalk.jsx:591-596 의 pinWrap 은 배경 이음매를 없애려고 paddingTop:4 / marginTop:-4 이고,
+     그 안쪽 div 가 marginTop:4 로 되돌린다. 즉 바깥 4px 는 글자도 버튼도 없는 순수 배경이다.
+     그런데 여기서 바깥 bbox 를 쟀다 — 걸린 것들이 전부 정확히 4px 이었던 게
+     우연이 아니라 이 트릭 자신의 숫자였다. 스크린샷으로 2/2 확인(말풍선이 온전히 보인다).
+     → 진짜 내용(firstElementChild)을 잰다. 없으면 옛 방식으로 떨어진다. */
+  const pin = pinWrap ? (pinWrap.firstElementChild || pinWrap) : null;
   let 핀먹힌높이 = 0, 핀 = null;
   if (pin) {
     const p = pin.getBoundingClientRect();
