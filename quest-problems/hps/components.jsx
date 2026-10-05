@@ -2006,14 +2006,14 @@ export function HpsFormulaGridSim({ E }) {
          말풍선에선 지우고(숫자만), 문자 공식은 **아래 상자 하나만** 맡는다.
          그리고 그 상자를 **따로 걸음으로** 뗀다 — 문자(N·dom)가 처음 들어가는 순간을 격리한다.
          내용은 안 늘고 겹침만 없어진다. */
-    { phase: "count", bubble: t(E, "So the winning hands are\nall 9 minus the 4 losing ones — that's 5.", "그러면 이기는 패는\n전체 9 에서 지는 4 를 빼서 5 예요.") },
+    { phase: "count", bubble: t(E, "So the winning hands are\nall 9 minus the 4 that can't win — that's 5.", "그러면 이기는 패는\n전체 9 에서 못 이기는 4 를 빼서 5 예요.") },
     /* ⛔ 2026-10-02 (세 번째 쪼개기 — PM 「마지막 한 번」) 5차 학생:
          *"**숫자 상자 셋이 동시에** 떠서 **뭐부터 봐야 할지 몰랐다.** 여기가 제일 그만두고
            싶었던 자리다."* → 앞선 세 번은 **블록을 통째로 옮기기만** 해서 과부하가 따라다녔다.
        ⭐ 이번엔 층이 다르다 — **한 식을 통째로 보이나, 항마다 나눠 보이나.**
          ①전체 패만 ②안 이기는 패를 더해서 ③빼서 답 + 「왜 빼요」. 숫자 하나씩. */
     { phase: "f1", bubble: t(E, "First — how many hands are there in all?", "먼저 — 패는 모두 몇 가지일까요?") },
-    { phase: "f2", bubble: t(E, "Next — how many of them do NOT win?", "다음 — 그중 안 이기는 건 몇 가지일까요?") },
+    { phase: "f2", bubble: t(E, "Next — how many of them can NOT win?", "다음 — 그중 못 이기는 건 몇 가지일까요?") },
     { phase: "formula", bubble: t(E, "Subtract, and what is left is the wins.", "빼면 남는 게 이기는 패예요.") },
     /* ⛔ 2026-10-02 3차 학생: *"한 쪽 안에 ①dom ②그리드 ③빼기 공식 ④「여사건」
          ⑤포함배제식까지 몰아서 나와서 **여기서 제일 지쳤다. 사실상 그만두고 싶었던 자리.**"*
@@ -2081,7 +2081,7 @@ export function HpsFormulaGridSim({ E }) {
           {rowId}<span style={{ opacity: 0.45 }}>·</span>{colId}
         </span>
         <span style={{ fontSize: 9.5, fontWeight: 700, minHeight: 12 }}>
-          {lit ? (win ? `⚡ ${t(E, "win", "이김")}` : t(E, "lose", "짐")) : ""}
+          {lit ? (win ? `⚡ ${t(E, "win", "이김")}` : t(E, "no win", "못 이김")) : ""}
         </span>
         {/* ⛔ 2026-10-04 (2라운드) — **배지가 `×2` 였는데 학생이 못 알아봤다.**
             학생(독립): *"**배지 자체만 보고는 무슨 뜻인지 몰랐다.** 아래 설명을 읽고 나서야
@@ -2300,7 +2300,7 @@ export function HpsFormulaGridSim({ E }) {
                     ↑ 2 {t(E, "cards", "개")}
                   </div>
                   <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 11, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>
-                    {t(E, "2 × 2 = 4 losing hands", "2 × 2 = 4 가지가 지는 패")}
+                    {t(E, "2 × 2 = 4 hands that can't win", "2 × 2 = 4 가지가 못 이기는 패")}
                   </div>
                 </div>
               )}
@@ -2346,7 +2346,7 @@ export function HpsFormulaGridSim({ E }) {
                 <span style={{ color: "#15803d", fontWeight: 800 }}>= 9</span>
 
                 {s.phase !== "f1" && <>
-                <span style={{ color: "#991b1b", fontFamily: "inherit", fontSize: 11.5 }}>− {t(E, "non-winning", "안 이기는 패")}</span>
+                <span style={{ color: "#991b1b", fontFamily: "inherit", fontSize: 11.5 }}>− {t(E, "can't win", "못 이기는 패")}</span>
                 <span style={{ color: "#991b1b", fontWeight: 800 }}>(N−dom)² = {t(E, "2 rows × 2 cols", "2줄 × 2칸")}</span>
                 <span style={{ color: "#991b1b", fontWeight: 800 }}>= 4</span>
                 </>}
