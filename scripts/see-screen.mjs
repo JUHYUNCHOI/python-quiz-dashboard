@@ -221,12 +221,31 @@ async function settleTyping(page, maxMs = 6000) {
 
 // --click: 보고 싶은 자리까지 눌러서 간다 (탭·다음 버튼 등). 순서대로 실행.
 // 못 누르면 넘어간다 — 30초씩 멈춰서 죽어버리면 에이전트가 아무것도 못 본다.
+//
+// ⛔⛔ 2026-10-05 — **`text=` 는 버튼이 아니라 본문 글자를 집는다.** 하루에 **셋**이 당했다:
+//   · `ux-reviewer`  — *"`--click "다음 쪽 ▶"` 이 매칭 실패했고, 페이지 안쪽 문장
+//                        「🎯 다음 쪽에서 직접 걸어보며」 때문에 둘째 클릭부터 엉뚱한 텍스트
+//                        노드를 집었다"*
+//   · `pedagogy-reviewer` — 같은 자리에서 `--ls` 로 우회
+//   · `student-algorithm` — ***"「다음 쪽」을 눌러도 안 넘어간다. 진짜 6학년이었으면
+//                        여기서 포기했다"*** 라고 보고했다. **quest 결함이 아니었다.**
+//     ⚠️ 이게 제일 비싸다 — **도구 결함이 「학생이 막혔다」는 거짓 보고로 올라온다.**
+//     `hps` 7쪽 본문에 「다음 쪽에서 안쪽 N² 반복을…」 이라는 **정당한 문장**이 있을 뿐이다.
+//
+// ⭐ 그래서 **버튼부터 찾는다.** 순서: ①글자가 똑같은 버튼 ②글자를 품은 버튼 ③옛 `text=`.
+//   ③은 남겨 둔다 — 탭처럼 `<button>` 이 아닌 걸 누르던 기존 호출을 깨지 않으려고.
 const clicks = args.reduce((acc, a, i) => (a === '--click' ? [...acc, args[i + 1]] : acc), [])
 for (const label of clicks) {
+  let how = null
   try {
-    await p.click(`text=${label}`, { timeout: 2500 })
+    const exact = p.getByRole('button', { name: label, exact: true }).first()
+    const loose = p.getByRole('button', { name: label }).first()
+    if (await exact.count()) { await exact.click({ timeout: 2500 }); how = '버튼(정확히 일치)' }
+    else if (await loose.count()) { await loose.click({ timeout: 2500 }); how = '버튼(품고 있음)' }
+    else { await p.click(`text=${label}`, { timeout: 2500 }); how = '⚠️ 글자(버튼을 못 찾아 본문을 눌렀다)' }
     await p.waitForTimeout(700)
     await settleTyping(p)
+    if (how.startsWith('⚠️')) console.log(`   ⚠️ --click "${label}" — ${how}`)
   } catch { console.log(`   ⚠️ --click "${label}" — 못 눌렀다 (안 보이거나 없음). 건너뜀`) }
 }
 
