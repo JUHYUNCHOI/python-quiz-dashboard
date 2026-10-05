@@ -2233,8 +2233,25 @@ export function HpsFormulaGridSim({ E }) {
         </div>
       ) : (
         <>
+          {/* ⭐ 2026-10-05 선생님: *"**bessie 둘째장부터 밑에 이미지는 뭔가 상자안에 있으면
+              더 잘 보일까?**"* · *"**위아래 다른것들과 너무 섞여있어서 구분이 안돼**"*
+              → `ux-reviewer` 찬성. 머리글·축 이름·격자가 **경계 없이 다섯 문장처럼** 떠 있었다.
+              참고 구현 `checkups/sims.jsx:505`(옅은 테두리 + 배경 + radius) — **발명이 아니다.**
+              ⭐ 덤 — 이 quest 엔 **뜻이 다른 3×3 격자가 또 하나** 있다(`:236`·`:1877`).
+                이쪽만 상자를 두르면 **「둘이 같은 격자가 아니다」가 생김새로도** 갈린다.
+              ⛔ 새 글자 0 · 새 굵게 0 · 새 파랑 0(2026-10-02 *"너무 굵은 글씨가 많은데"*). */}
+          {/* ⭐ 2026-10-05 선생님: *"**bessie 첫장 깜박이고 bessie 둘째창 깜박이면 더 잘보일것 같은데**"*
+              `ux-reviewer` 조건부 찬성 — ⛔ 「자동재생 금지」(`feedback_sim_style_consistency`)는
+              **시뮬이 입력 없이 넘어가는 것**을 막는 규칙이고, 이건 **처음 나타날 때 한 번**이라 다른 범주다.
+              스펙: 마운트 때 **딱 한 번** · 유한 **2회**(걸음마다 다시 뛰면 그건 금지 대상이 된다) ·
+              **행 먼저 → 열 나중**(선생님이 말씀하신 순서) · 끝나면 정적 상태로 영구 복귀 ·
+              `prefers-reduced-motion` 이면 **아예 안 뛴다**.
+              `hpsBlink` 키프레임은 이 파일 `:1830` 에 **이미 있다** — 새로 만들지 않는다. */}
+          <style>{`@keyframes hpsAxisBlink{0%,100%{background:transparent}50%{background:#fde047}}
+            @media (prefers-reduced-motion: reduce){.hps-axis-blink{animation:none !important}}`}</style>
+          <div style={{ background: "#f8fafc", border: "1.5px solid #e2e8f0", borderRadius: 12, padding: "10px 8px 12px", marginTop: 10 }}>
           {/* 격자 */}
-          <div style={{ fontSize: 11.5, fontWeight: 700, color: C.dim, textAlign: "center", marginTop: 10, wordBreak: "keep-all" }}>
+          <div style={{ fontSize: 11.5, fontWeight: 700, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
             🃏 {t(E, "Every hand Bessie could play — 3 × 3 = 9", "Bessie 가 낼 수 있는 패 — 3 × 3 = 9 가지")}
           </div>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
@@ -2260,12 +2277,12 @@ export function HpsFormulaGridSim({ E }) {
                   글씨를 `#94a3b8` → `#64748b` 로 올려 **패 번호가 읽히게** 한다. */}
               <div style={{ display: "flex", gap: 5, marginBottom: 3 }}>
                 <div style={{ width: 62 }} />
-                <div style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 10.5, fontWeight: 600, color: "#64748b", wordBreak: "keep-all" }}>
+                <div className="hps-axis-blink" style={{ width: 56 * 3 + 10, textAlign: "center", fontSize: 10.5, fontWeight: 600, color: "#64748b", wordBreak: "keep-all", borderRadius: 4, animation: "hpsAxisBlink .6s ease-in-out 1.2s 2" }}>
                   {t(E, "Bessie's 2nd card →", "Bessie 둘째 장 →")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 5 }}>
-                <div style={{ width: 62, fontSize: 10.5, fontWeight: 600, color: "#64748b", textAlign: "right", paddingRight: 4, wordBreak: "keep-all", lineHeight: 1.25 }}>
+                <div className="hps-axis-blink" style={{ width: 62, fontSize: 10.5, fontWeight: 600, color: "#64748b", textAlign: "right", paddingRight: 4, wordBreak: "keep-all", lineHeight: 1.25, borderRadius: 4, animation: "hpsAxisBlink .6s ease-in-out 2" }}>
                   {t(E, "Bessie's 1st ↓", "Bessie 첫 장 ↓")}
                 </div>
                 {cards.map(c => (
@@ -2306,6 +2323,7 @@ export function HpsFormulaGridSim({ E }) {
               )}
             </div>
           </div>
+          </div>{/* ⬆ 격자 상자 끝 (2026-10-05) */}
           {/* ⛔ 2026-10-04 — 여기 있던 「↓ 행 = Bessie 첫 카드 · → 열 = 둘째 카드」를 **지웠다.**
               축 이름이 이제 **격자 자신에** 붙어 있어 **같은 말을 또 하는 글**이 됐다
               (`feedback_picture_must_carry_the_idea`: 그림이 이미 하는 말을 글로 또 하지 마라). */}
@@ -2317,7 +2335,11 @@ export function HpsFormulaGridSim({ E }) {
               {/* ⭐ 2026-10-04 — **세 줄짜리 문단을 식 두 줄로.** 선생님: *"너무 길어."*
                   셈이 글 속에 묻혀 있었다. **숫자를 줄 세워** 한눈에 보이게 한다 —
                   6 과 5 를 나란히 놓으면 「한 칸을 두 번 셌다」가 **읽지 않아도** 보인다. */}
-              {["formula", "directcount"].includes(s.phase) && <div style={{ fontSize: 12, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.7 }}>
+              {/* ⛔ 2026-10-05 선생님: *"**한번에 너무 많은 정보.** 이기는 패는 겹치기 때문이라는건가?
+                  **그럼 dom은 지는 카드의 갯수였나?**"* — 한 화면에 여섯 가지가 떠서
+                  **두 생각이 섞였다.** 「겹침(두 번)」은 **답이 5인 이유가 아니라**
+                  「직접 세면 왜 틀리나」다. → **마지막 걸음으로만** 뗀다. */}
+              {s.phase === "directcount" && <div style={{ fontSize: 12, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.7 }}>
                 <div style={{ fontSize: 11.5, marginBottom: 4 }}>🧩 {t(E, "Why subtract? Try counting the greens directly:", "왜 빼요? 초록을 바로 세 보면:")}</div>
                 <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
                   ⚡{t(E, "row", "행")} 3 + ⚡{t(E, "col", "열")} 3 = <b style={{ fontSize: 16 }}>6</b>
@@ -2338,6 +2360,7 @@ export function HpsFormulaGridSim({ E }) {
               {s.phase !== "f1" && (
                 <div style={{ textAlign: "center", fontSize: 11.5, fontWeight: 700, color: "#c2410c", marginBottom: 8, wordBreak: "keep-all" }}>
                   ⚡ {t(E, "cards that beat BOTH = dom", "둘 다 이기는 카드 = dom")} = {cards.filter(c => c.win).length}
+                  <span style={{ color: "#64748b", fontWeight: 600 }}>{"  ·  "}{t(E, "rest N−dom", "나머지 N−dom")} = {cards.length - cards.filter(c => c.win).length}</span>
                 </div>
               )}
               <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
