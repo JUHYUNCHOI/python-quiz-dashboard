@@ -565,7 +565,15 @@ if (args.includes('--sim')) {
       const say = cands[0]
       if (!say) return { none: true }
       const q = say.getBoundingClientRect()
-      return { visible: q.bottom > 0 && q.top < innerHeight, top: Math.round(q.top),
+      /* ⛔⛔ 2026-10-06 — 여기가 **`bottom > 0` 이면 「보임」**이었다.
+         그래서 말풍선 **윗부분이 화면 위로 잘려 나가도** ✅ 를 찍었다 —
+         `makedistinct` 5쪽 마지막 걸음(결론)이 *"4 쪽도 똑같아요 — 넷째는 그대로,"*
+         **첫 문장을 통째로 잃은 채** ✅ 로 통과했다. `ux-reviewer` 가 스크린샷으로 잡았다.
+       ⚠️ **이 도구는 그 증거를 이미 찍고 있었다** — `(top=-38)` 이라고.
+         숫자를 출력하면서 판정은 「보임」이었으니 읽는 사람이 그냥 지나간다.
+       ⭐ **윗부분이 잘리면(top < 0) 따로 떠든다.** 아래로 밀린 것과 다른 층이다 —
+         위로 잘리면 **문장의 앞**이 사라져서 주어가 없어진다. */
+      return { visible: q.bottom > 0 && q.top < innerHeight, cutTop: q.top < -2, top: Math.round(q.top),
                text: (say.textContent || '').trim().slice(0, 46) }
     })
     /* 이번 걸음에서 **무엇이 어디서** 바뀌었나.
@@ -620,7 +628,11 @@ if (args.includes('--sim')) {
     const btn = await p.$('text=/다음 ▶|Next ▶|^▶$|▶\\s*$/')
     const done = !btn || await btn.isDisabled().catch(() => true)
     if (r.none) { console.log(`   ${k + 1}단계: 말풍선을 못 찾음`) }
-    else console.log(`   ${k + 1}단계: ${r.visible ? '✅ 보임' : '🚨 화면 밖'} (top=${r.top})  ${r.text}…`)
+    else {
+      const mark = !r.visible ? '🚨 화면 밖' : r.cutTop ? '🚨 윗부분 잘림' : '✅ 보임'
+      console.log(`   ${k + 1}단계: ${mark} (top=${r.top})  ${r.text}…`)
+      if (r.cutTop) console.log(`      → **문장의 앞이 사라진다.** 걸음마다 콘텐츠 높이가 달라지는데 스크롤은 그대로라서 생긴다.`)
+    }
     if (done) { 끝까지갔나 = true; break }
     await btn.click(); await p.waitForTimeout(300); await settleTyping(p)
   }
