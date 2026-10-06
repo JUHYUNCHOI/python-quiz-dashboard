@@ -474,28 +474,27 @@ export function WhoCanMeetSim({ E }) {
          걸음 셋으로 잘게 썰었더니 **더 안 읽혔다.** 한 걸음으로 되돌린다.
        ⭐ 이제 이 걸음은 **답이 아니라 물음**으로 끝난다. 뒤 걸음들(누가 누구와 겹치나 →
          나머지)이 **그 물음에 답하는 과정**이 된다. */
+    /* ⛔⛔ 2026-10-06 선생님: *"설명 어색해. 우선 **한줄로 세우는건 앞에서 설명이 되어
+         있지 않나?** 숫자 3이라고 써져 있는것을 모두 끝내고 숫자 4를 시작하려고 해요.
+         첫번째 4는 예전에 없던 숫자라 그대로 나두고 두번째 4… 뭐 이렇게 가야하지 않을까?"*
+       ⭐ **맞다.** 「줄을 세운다」도 「거리 ÷ 2」도 **그때까지 화면에 나온 적이 없다.**
+         나오지도 않은 방법을 전제로 문제를 만들었으니 어색할 수밖에 없다.
+       ⛔ 두 걸음(「문제가 있어요」 + 「한 줄로 세우면」)을 **버린다.**
+         앞 다섯 걸음은 **3 을 하나씩 끝낸 것**이다 — 그 다음은 **4 를 시작하는 것**이
+         자연스럽다. 걸음은 그냥 이어지고, 「상관이 있을까?」라는 **물음 하나**만 둔다.
+       ⭐ 「간 거리 ÷ 2」는 **버리지 않았다** — 마지막 되짚기 걸음에 이미 있다
+         (「하나씩 세는 대신 (7−3) ÷ 2 로 한 번에 — 아까 그 199억 번도 이렇게 사라져요」).
+         거기가 제자리다. 쓰기도 전에 미리 말할 필요가 없다. */
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "idle", "idle", "idle"],
-      extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
-      emKo: "그런데 문제가 있어요",
-      emEn: "but there is a problem",
-      ko: "하나씩 세지 않아도 돼요.\n작은 것부터 줄을 세우면, 옮긴 자리는 「간 거리 ÷ 2」로 바로 나와요.\n그런데 문제가 있어요.",
-      en: "We do not have to count one at a time.\nLine them up smallest first and each move comes straight out of \u300cdistance / 2\u300d.\nBut there is a problem." },
-
-    /* ⛔ 선생님: *"마지막 줄은… **그런데 문제가 있어요.** 한 다음에 **그 다음에 설명**하는게 어떨까?"*
-       ⭐ 그리고 그 문제를 **허수아비 없이** 쓴다. 앞서 선생님이 반발하신 자리다 —
-         *"**왜 4를 9로 보내게 하는거냐고.**"* 아무도 4 를 9 로 보내지 않는다.
-       ⭐ 진짜 문제는 이것이다 — **한 줄로 세우면 3 이 간 자리가 4 를 막는 것처럼 보인다.**
-         그런데 4 는 비어 있다. 막을 리가 없다. 그게 「섞으면 안 된다」의 정체다. */
-    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "idle", "idle", "idle"],
-      extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
-      emKo: "4 는 비어 있어요",
-      emEn: "4 is free",
-      ko: "모두 한 줄로 세우면 — 3 이 7 까지 갔으니 4 도 그 뒤로 밀어야 할 것 같아요.\n하지만 4 는 비어 있어요. 3 쪽이 쓴 자리가 4 를 막을 리가 없거든요.",
-      en: "Line everyone up together and it looks as if 4 must move past 7, since the 3s went that far.\nBut 4 is free. The spots the 3s used cannot block it." },
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3,
+      emKo: "4 는 3 쪽과 상관이 있을까요?",
+      emEn: "do the 4s have anything to do with the 3s?",
+      ko: "3 이라고 써 있던 건 다 끝냈어요. 이제 4 를 시작해요.\n그런데 4 는 3 쪽과 상관이 있을까요?",
+      en: "The 3s are all done. Now we start on the 4s.\nBut do the 4s have anything to do with the 3s?" },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3,
-      ko: "넷째 4 는 그대로 둬요 — 앞에 4 가 없어요.",
+      ko: "넷째는 4 예요 — 전에 없던 수라 그대로 둬요.",
       en: "The fourth is 4, and nothing before it is 4 — so it stays." },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "idle"],
