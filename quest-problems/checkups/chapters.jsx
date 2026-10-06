@@ -545,9 +545,19 @@ function getCheckupsExpandWalk(E, lang, secFull) {
         { hi: [0, 7], bubble: t(E,
           "expand widens a window outward from (left, right), one step at a time, starting from matches = baseMatches.",
           "expand 는 (left, right) 에서 바깥으로 한 칸씩 창을 넓혀요. matches 는 baseMatches 에서 시작해요.") },
-        { hi: [8, 11], bubble: t(E,
-          "Each widen touches only 2 new spots — the two ends. Before the flip, left and right matched in place, so subtract those (−). After the flip, left lines up with the far want, and right with the near want — add those if they now match (+).",
-          "왜 딱 이 두 자리만 고치면 될까요? 이전 구간과 다른 건 새로 들어온 양 끝뿐이거든요. 뒤집기 전엔 left, right 가 제자리로 맞았으니 그걸 빼요(−).\n뒤집은 뒤엔 left 가 반대쪽 want 와, right 가 반대쪽 want 와 비교돼요 — 맞으면 더해요(+).") },
+/* ⛔ 2026-10-06 — 이 말풍선이 **153자**로 코드 상자(179px)를 **통째로 덮어
+           코드가 0줄** 보였다. 학생(초6): *"코드 상자가 통째로 안 보였다 — 「어, 코드가
+           없어졌네?」 싶어서 당황스러웠다."*
+       ⭐ 한 말풍선이 **빼기(−)와 더하기(+) 둘**을 말하고 있었다 — 걸음을 둘로 가른다.
+           코드도 정확히 둘로 갈린다(− 두 줄 · + 두 줄). PM 판정 4번 항목.
+       ⚠️ 🔒 동결 quest 지만 **말풍선 글자만** 건드린다 — `SOLUTION_CODE` 류가 아니라
+           USACO 재제출이 필요 없다(PM 이 `frozen-quests.json` 과 대조해 확인). */
+      { hi: [8, 9], bubble: t(E,
+          "Each widen touches only 2 new spots — the two ends. Before the flip they matched in place, so subtract those (−).",
+          "넓힐 때 새로 들어오는 건 양 끝 두 자리뿐이에요.\n뒤집기 전엔 그 둘이 제자리로 맞았으니, 그만큼 빼요(−).") },
+        { hi: [10, 11], bubble: t(E,
+          "After the flip, left lines up with the far want and right with the near one — each match adds back (+).",
+          "뒤집은 뒤엔 left 가 반대쪽 want 와, right 가 반대쪽 want 와 비교돼요.\n맞으면 다시 더해요(+).") },
         { hi: [12, 16], bubble: t(E,
           "Record this interval's checkup count, then step outward for the next-bigger interval around the same center.",
           "이 구간의 검진 수를 기록하고, 같은 중심을 기준으로 한 칸씩 더 넓은 구간으로 넘어가요.") },
@@ -570,9 +580,19 @@ function getCheckupsExpandWalk(E, lang, secFull) {
       { hi: [0, 5], bubble: t(E,
         "expand widens a window outward from (left, right), one step at a time, starting from matches = baseMatches.",
         "expand 는 (left, right) 에서 바깥으로 한 칸씩 창을 넓혀요. matches 는 baseMatches 에서 시작해요.") },
-      { hi: [6, 9], bubble: t(E,
-        "Each widen touches only 2 new spots — the two ends. Before the flip, left and right matched in place, so subtract those (−). After the flip, left lines up with the far want, and right with the near want — add those if they now match (+).",
-        "왜 딱 이 두 자리만 고치면 될까요? 이전 구간과 다른 건 새로 들어온 양 끝뿐이거든요. 뒤집기 전엔 left, right 가 제자리로 맞았으니 그걸 빼요(−).\n뒤집은 뒤엔 left 가 반대쪽 want 와, right 가 반대쪽 want 와 비교돼요 — 맞으면 더해요(+).") },
+/* ⛔ 2026-10-06 — 이 말풍선이 **153자**로 코드 상자(179px)를 **통째로 덮어
+         코드가 0줄** 보였다. 학생(초6): *"코드 상자가 통째로 안 보였다 — 「어, 코드가
+         없어졌네?」 싶어서 당황스러웠다."*
+       ⭐ 한 말풍선이 **빼기(−)와 더하기(+) 둘**을 말하고 있었다 — 걸음을 둘로 가른다.
+         코드도 정확히 둘로 갈린다(− 두 줄 · + 두 줄). PM 판정 4번 항목.
+       ⚠️ 🔒 동결 quest 지만 **말풍선 글자만** 건드린다 — `SOLUTION_CODE` 류가 아니라
+         USACO 재제출이 필요 없다(PM 이 `frozen-quests.json` 과 대조해 확인). */
+      { hi: [6, 7], bubble: t(E,
+        "Each widen touches only 2 new spots — the two ends. Before the flip they matched in place, so subtract those (−).",
+        "넓힐 때 새로 들어오는 건 양 끝 두 자리뿐이에요.\n뒤집기 전엔 그 둘이 제자리로 맞았으니, 그만큼 빼요(−).") },
+      { hi: [8, 9], bubble: t(E,
+        "After the flip, left lines up with the far want and right with the near one — each match adds back (+).",
+        "뒤집은 뒤엔 left 가 반대쪽 want 와, right 가 반대쪽 want 와 비교돼요.\n맞으면 다시 더해요(+).") },
       { hi: [10, 12], bubble: t(E,
         "Record this interval's checkup count, then step outward for the next-bigger interval around the same center.",
         "이 구간의 검진 수를 기록하고, 같은 중심을 기준으로 한 칸씩 더 넓은 구간으로 넘어가요.") },
