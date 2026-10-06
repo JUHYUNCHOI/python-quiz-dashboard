@@ -465,29 +465,21 @@ export function WhoCanMeetSim({ E }) {
          (전부 정렬해 한 번에 훑기)을 보여준 적이 없다.** 이유 없는 동작이었다.
        → 여기에 **목적 한 줄**을 박는다. 이 줄이 시뮬 제목(「누가 누구와 겹칠 수 있나」)에
          비로소 이유를 준다. 실측: 하나씩=6 회(맞음) · 전부 정렬해 훑기=12 회(틀림). */
-    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "idle", "idle", "idle"],
+    /* ⛔⛔ 2026-10-06 선생님: *"근데 **4를 9로 보낼 일이 있긴 있어?**"*
+       ⭐ **없다. 그게 바로 섞으면 안 되는 이유다.** 4 는 비어 있다 — 아무도 4 를 9 로
+         보내지 않는다. **섞어서 한 줄로 세울 때만 「보내야 하는 것처럼 보인다.»**
+       ⛔ 그래서 직전 판(「섞어 세우면 4 를 9 로」)은 **허수아비**였다 —
+         아무도 안 쓸 방법을 만들어 놓고 그게 깨지는 걸 보여줬다.
+       ⛔ 그리고 선생님: *"설명이 **너무 짧게 짤려서 뭔말인지 모르는것** 같은데"* —
+         걸음 셋으로 잘게 썰었더니 **더 안 읽혔다.** 한 걸음으로 되돌린다.
+       ⭐ 이제 이 걸음은 **답이 아니라 물음**으로 끝난다. 뒤 걸음들(누가 누구와 겹치나 →
+         나머지)이 **그 물음에 답하는 과정**이 된다. */
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "idle", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
-      emKo: "간 거리 ÷ 2",
-      emEn: "distance / 2",
-      ko: "하나씩 세지 않는 방법이 있어요.\n작은 것부터 줄 세우고, 옮긴 자리는 간 거리 ÷ 2 로 한 번에 구하면 돼요.",
-      en: "There is a way that does not count one at a time.\nLine them up smallest first, then get each move with distance / 2 in one go." },
-
-    /* ⛔ 선생님이 내 옛 설명에 반발하신 그 자리 — *"**왜 4를 9로 보내게 하는거냐고.**"*
-       ⭐ 이제 **화면이 그 방법을 먼저 보여준다.** 「4 를 9 로」는 내가 시킨 게 아니라
-         **줄 세워 훑는 방법이 그렇게 한다.** 실측: 그 방법은 12 회를 내놓는다(정답 6). */
-    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "moving", "idle", "idle"],
-      extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
-      emKo: "4 는 9 에 갈 수가 없어요",
-      emEn: "4 can never reach 9",
-      ko: "그런데 섞어서 줄을 세우면 — 3, 5, 7 다음 빈 자리가 9 예요.\n4 는 9 에 갈 수가 없어요. 2 씩 더하면 4, 6, 8 … 9 를 건너뛰거든요.",
-      en: "But lining them all up together, the next free spot after 3, 5, 7 is 9.\n4 can never reach 9 — adding 2 gives 4, 6, 8 … it skips right over 9." },
-
-    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "idle", "idle", "idle"],
-      extra: ["", "", "", "", "", ""], chains: [1], push: 3,
-      emKo: "갈 수 있는 것끼리만",
-      emEn: "only among those that can reach each other",
-      ko: "그러니 아무나 한 줄로 세우면 안 돼요 — 갈 수 있는 것끼리만 세워야 해요.\n그래서 먼저 알아볼 게 있어요. 누가 누구와 겹칠 수 있나?",
-      en: "So we cannot line everyone up together — only those that can reach each other.\nWhich means we need to know first: who can ever collide with whom?" },
+      emKo: "누구끼리 한 줄로 세워야 할까요?",
+      emEn: "who should share a line?",
+      ko: "하나씩 세지 않는 방법이 있어요.\n작은 것부터 줄을 세우고, 옮긴 자리는 「간 거리 ÷ 2」로 한 번에 구하면 돼요.\n그런데 누구끼리 한 줄로 세워야 할까요? 3 과 4 를 섞어도 될까요?",
+      en: "There is a way that does not count one at a time.\nLine them up smallest first, and get each move with \u300cdistance / 2\u300d in one go.\nBut who should share a line? Can the 3s and the 4s go together?" },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3,
