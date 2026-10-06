@@ -90,7 +90,7 @@ export function getChipXchgWalk(E, lang = "py") {
       "}",
     ];
     return { code, vars: _CX_VARS, beats: [
-      { hi: [0, 2], bubble: t(E, "What are we solving for?\nThe fewest extra chips needed to reach fA.\nThis time, an O(1) formula does it — no search.\nRead main first, then solve.", "무엇을 구해야 하나요?\n목표 fA 에 닿으려면 칩을 최소 몇 개 더 뽑아야 하는지예요.\n이번엔 탐색 없이 공식으로 바로 구해요.\nmain 을 먼저 보고 solve 를 봐요.") },
+      { hi: [0, 2], bubble: t(E, "What are we solving for?\nThe fewest extra chips needed to reach fA.", "무엇을 구해야 하나요?\n목표 fA 에 닿으려면 칩을 최소 몇 개 더 뽑아야 하는지예요.") },
       { hi: [22, 23], bubble: t(E, "main — read T tests.", "main 이에요. 테스트 T 개를 읽어요.") },
       { hi: [24, 28], bubble: t(E, "Each test: read the 5 numbers → call solve → print.", "테스트마다 숫자 5 개를 읽고 solve 를 불러서 출력해요.") },
       { hi: [5, 7], bubble: t(E, "red_now = A I can make right now by swapping my own B. If that already reaches fA → 0 extra.", "red_now 는 지금 내 B 를 환전해서 만드는 A 예요.\n이미 목표에 닿으면 더 받을 칩은 0 개예요.") },
@@ -127,7 +127,7 @@ export function getChipXchgWalk(E, lang = "py") {
     "main()",
   ];
   return { code, vars: _CX_VARS, beats: [
-    { hi: [0, 4], bubble: t(E, "What are we solving for?\nThe fewest extra chips needed to reach fA.\nThis time, an O(1) formula does it — no search.\nRead it: main → solve.\nmain — each test: read the 5 numbers → call solve → print.", "무엇을 구해야 하나요?\n목표 fA 에 닿으려면 칩을 최소 몇 개 더 뽑아야 하는지예요.\n이번엔 탐색 없이 공식으로 바로 구해요.\n순서는 main → solve 예요.\nmain 이에요. 테스트마다 숫자 5 개를 읽고 solve 를 불러서 출력해요.") },
+    { hi: [0, 4], bubble: t(E, "What are we solving for?\nThe fewest extra chips needed to reach fA.\nmain reads each test and calls solve.", "무엇을 구해야 하나요?\n목표 fA 에 닿으려면 칩을 최소 몇 개 더 뽑아야 하는지예요.\nmain 이 테스트를 읽어 solve 를 불러요.") },
     { hi: [8, 11], bubble: t(E, "red_now = A I can make right now by swapping my own B. If that already reaches fA → 0 extra.", "red_now 는 지금 내 B 를 환전해서 만드는 A 예요.\n이미 목표에 닿으면 더 받을 칩은 0 개예요.") },
     { hi: [13, 13], bubble: t(E, "Step 1 — the worst case throws B away first (Tool ②). It tops the leftover up to cB−1, and those chips give me 0 A.", "1단계예요. 제일 나쁜 경우엔 먼저 B 를 버려요 (도구 ②).\n자투리를 cB−1 까지 채우면 그 칩들은 나한테 A 를 하나도 못 줘요.") },
     { hi: [14, 14], bubble: t(E, "Step 2 — I only need to build up to one below the goal: short_red = fA − 1 − red_now. ← this is the −1.", "2단계예요. 목표보다 하나 적은 A 까지만 만들면 돼요.\nshort_red = fA − 1 − red_now\n← 이게 −1 이에요.") },
