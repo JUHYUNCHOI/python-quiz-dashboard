@@ -232,10 +232,10 @@ export function PlaceOneByOneSim({ E }) {
       en: "Four numbers. Two 4s and two 1s — they clash. We will add K = 1 to make them all different." },
     { tiles: [["1"], ["1"], ["4"], ["4"]], st: ["idle", "idle", "idle", "idle"],
       ops: null, tone: "go",
-      emKo: "작은 것부터 자리를 잡아야 나중에 덜 움직여요",
-      emEn: "Settling the small ones first means less moving later",
-      ko: "먼저 작은 수부터 줄을 세워요. 작은 것부터 자리를 잡아야 나중에 덜 움직여요.",
-      en: "First line them up from the smallest. Settling the small ones first means less moving later." },
+      emKo: "앞의 하나만 보면 돼요",
+      emEn: "we only ever look at the one before",
+      ko: "먼저 작은 수부터 줄을 세워요.\n그러면 찬 자리를 다 기억할 필요 없이 앞의 하나만 보면 돼요.",
+      en: "First line them up from the smallest.\nThen we never have to remember every taken spot — just the one before." },
     { tiles: [["1"], ["1"], ["4"], ["4"]], st: ["placed", "idle", "idle", "idle"],
       note: [t(E, "stays", "그대로"), "", "", ""], ops: 0,
       ko: "맨 앞 1 은 그대로 둬요. 앞에 아무도 없으니 옮길 까닭이 없어요. (0 회)",
@@ -487,10 +487,10 @@ export function WhoCanMeetSim({ E }) {
          거기가 제자리다. 쓰기도 전에 미리 말할 필요가 없다. */
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "idle", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3,
-      emKo: "4 는 3 쪽과 상관이 있을까요?",
-      emEn: "do the 4s have anything to do with the 3s?",
-      ko: "3 이라고 써 있던 건 다 끝냈어요. 이제 4 를 시작해요.\n그런데 4 는 3 쪽과 상관이 있을까요?",
-      en: "The 3s are all done. Now we start on the 4s.\nBut do the 4s have anything to do with the 3s?" },
+      emKo: "나누어떨어져야 공식이 서요",
+      emEn: "the formula needs it to divide evenly",
+      ko: "3 이라고 써 있던 건 다 끝냈어요. 이제 4 를 시작해요.\n그런데 횟수를 「간 거리 ÷ 2」로 구하려면 거리가 2 로 나누어떨어져야 해요.\n넷을 3 쪽 뒤에 붙이면 4 → 9 — (9−4) ÷ 2 = 2.5 가 나와요.",
+      en: "The 3s are all done. Now we start on the 4s.\nBut to get the count as \u300cdistance / 2\u300d, the distance has to divide evenly by 2.\nPut a 4 behind the 3 side and it goes 4 \u2192 9 — (9\u22124) / 2 = 2.5." },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3,
@@ -579,8 +579,8 @@ export function WhoCanMeetSim({ E }) {
            안 바뀐다.** 그 말은 K 가 몇이든 맞다(다음 두 걸음이 K=1·K=3 으로 확인한다). */
       emKo: "나머지는 그대로예요",
       emEn: "the remainder never changes",
-      ko: "2 를 더해도 나머지는 그대로예요 — 한쪽은 늘 1, 한쪽은 늘 0.\n같은 수라면 나머지도 같아야 하니까, 나머지가 다르면 절대 같아질 수 없어요.",
-      en: "Adding 2 never changes the remainder — one row always 1, the other always 0.\nEqual numbers must leave the same remainder, so different remainders can never meet." },
+      ko: "2 를 더해도 나머지는 그대로예요 — 한쪽은 늘 1, 한쪽은 늘 0.\n두 수가 같아지려면 나머지도 같아야 해요. 그러니 나머지가 다르면 절대 같아질 수 없어요.",
+      en: "Adding 2 never changes the remainder — one row always 1, the other always 0.\nFor two numbers to become equal their remainders must match — so different remainders never can." },
 
     /* 5. 일반화 **한 칸만.** K=1 을 옆에 놓아 「K 가 달라지면 갈리는 수가 달라진다」를
          한 번에 하나씩 본다. 표를 통째로 띄우지 않는다. */
@@ -640,18 +640,18 @@ export function WhoCanMeetSim({ E }) {
            (정확성이 아니라 속도다 — 선생님이 반증하셨다). **계획 선언**으로 바꾼다. */
       emKo: "3 끼리, 4 끼리 따로",
       emEn: "3s with 3s, 4s with 4s",
-      ko: "3 과 4 는 절대 안 겹쳐요 — 그러니 3 끼리, 4 끼리 따로 봐요.\n먼저 3 쪽. 첫째는 안 움직였어요 — 0 번.",
+      ko: "3 과 4 는 절대 안 겹쳐요 — 그러니 3 끼리, 4 끼리 따로 봐요.\n먼저 3 쪽. 첫째는 그대로였어요 — 0 회.",
       en: "4 can never overlap with the 3s — so we only need to look at the 3s.\nNow count the pushes. The first one never moved — 0." },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "moving", "placed", "even", "even", "even"],
       extra: ["", "· 3→5", "", "", "", ""], chains: [1, 0], named: true, ops: 1,
-      ko: "둘째는 첫째와 같은 3 이라 비켜야 했어요. 3 에서 5 로 — 한 번.",
+      ko: "둘째는 첫째와 같은 3 이라 2 를 더했어요. 3 에서 5 로 — 1 회.",
       en: "The second was also a 3, so it had to step aside. 3 to 5 — one push." },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "moving", "even", "even", "even"],
       extra: ["", "", "· 3→5→7", "", "", ""], chains: [1, 0], named: true,
       formula: "(7-3) ÷ 2 = 2", ops: 3,
-      ko: "셋째는 5 도 차 있어서 7 까지 갔어요 — 두 번.\n하나씩 세는 대신 (7−3) ÷ 2 로 한 번에 — 아까 그 199억 번도 이렇게 사라져요.",
+      ko: "셋째는 5 도 차 있어서 2 를 두 번 더했어요. 7 까지 — 2 회.\n하나씩 세는 대신 (7−3) ÷ 2 로 한 번에 — 아까 그 199억 번도 이렇게 사라져요.",
       en: "The third found 5 taken too and went on to 7 — two pushes.\nInstead of counting one by one, (7−3) / 2 in one go — that is how the 19,999,900,000 goes away." },
 
     /* 선생님: *"그 다음에 **밑에 정리된게** 보여야지"* — 미는 장면이 다 끝난 뒤에 정리 한 걸음. */
