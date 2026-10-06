@@ -74,16 +74,38 @@ export function ScrollEdgeFades({ fade, bg, radius = 12 }:
   if (!fade.on) return null
   const clear = bg.replace(/^#/, "")
   const rgba = `rgba(${parseInt(clear.slice(0, 2), 16)},${parseInt(clear.slice(2, 4), 16)},${parseInt(clear.slice(4, 6), 16)},0)`
+  /* ⭐⭐ 2026-10-06 — **그라디언트만으로는 학생이 못 본다.**
+     학생(초6)이 quest 네 개를 보고: *"`todo.extend(re` 까지만 보이고 오른쪽이 잘렸다"* ·
+     *"`want = list(map(int, input(` 처럼 잘려 뭘 하는 줄인지 끝까지 못 읽었다"* —
+     그리고 **네 quest 전부에서** *"**「이게 전부인가 보다」 하고 넘어갔다.** 스크롤바도
+     안 보였고, 잘렸다는 표시도 없었다."*
+     ⚠️ **신호가 죽은 게 아니었다** — PM 이 재 보니 `logicalmoos` 에서 `scrollWidth 517 /
+       clientWidth 324`, fade `opacity:1` 로 **정상 작동 중**이었다.
+     ⛔ 문제는 **같은 색 그라디언트라 「어두워진다」는 신호밖에 없다**는 것이다 —
+       「여기를 밀 수 있다」는 **방향**을 아무것도 말해 주지 않는다.
+     → 그라디언트는 그대로 두고 **방향 표시(›)** 를 얹는다. 바탕 밝기를 보고
+       글자색을 고르므로 어두운 코드 상자·밝은 카드 **둘 다에서 읽힌다.**
+     ⚠️ `pointerEvents: none` 이라 **밀거나 누르는 걸 가로채지 않는다**(기존과 같다). */
+  const n = (i: number) => parseInt(clear.slice(i, i + 2), 16)
+  const 밝기 = (n(0) * 299 + n(2) * 587 + n(4) * 114) / 1000      // 0(검정)~255(흰색)
+  const 표시색 = 밝기 < 128 ? "rgba(255,255,255,.72)" : "rgba(17,24,39,.55)"
   return (
     <>
       {(["l", "r"] as const).map((side) => (
         <div key={side} aria-hidden style={{
-          position: "absolute", top: 0, bottom: 0, width: 28, pointerEvents: "none", zIndex: 2,
+          position: "absolute", top: 0, bottom: 0, width: 34, pointerEvents: "none", zIndex: 2,
           [side === "l" ? "left" : "right"]: 0,
+          display: "flex", alignItems: "center",
+          justifyContent: side === "l" ? "flex-start" : "flex-end",
           borderRadius: side === "l" ? `${radius}px 0 0 ${radius}px` : `0 ${radius}px ${radius}px 0`,
           background: `linear-gradient(to ${side === "l" ? "right" : "left"}, ${bg} 0%, ${rgba} 100%)`,
           opacity: fade[side] ? 1 : 0, transition: "opacity 120ms ease-out",
-        }} />
+        }}>
+          <span style={{ color: 표시색, fontSize: 17, fontWeight: 800, lineHeight: 1,
+            padding: side === "l" ? "0 0 0 3px" : "0 3px 0 0" }}>
+            {side === "l" ? "\u2039" : "\u203A"}
+          </span>
+        </div>
       ))}
     </>
   )
