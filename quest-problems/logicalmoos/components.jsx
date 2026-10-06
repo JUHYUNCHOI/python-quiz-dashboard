@@ -549,6 +549,7 @@ export function getLogicalMoosWalk(E, lang = "py") {
       vars: [
         { v: "preAnd / preOr", ko: "토큰 앞의 AND묶음값 / 이미 끝난 묶음들의 OR", en: "AND-chain-so-far / OR of chains already closed, before this token" },
         { v: "sufAnd / sufOr", ko: "토큰 뒤도 같은 방식으로", en: "the same, but looking after this token" },
+        { v: "result / group", ko: "끝난 묶음들의 OR / 지금 만드는 묶음의 AND", en: "OR of finished chains / AND of the chain being built" },
       ],
       beats: [
         { hi: [0, 11], bubble: t(E,
@@ -569,6 +570,7 @@ export function getLogicalMoosWalk(E, lang = "py") {
     vars: [
       { v: "pre_and / pre_or", ko: "토큰 앞의 AND묶음값 / 이미 끝난 묶음들의 OR", en: "AND-chain-so-far / OR of chains already closed, before this token" },
       { v: "suf_and / suf_or", ko: "토큰 뒤도 같은 방식으로", en: "the same, but looking after this token" },
+      { v: "result / group", ko: "끝난 묶음들의 OR / 지금 만드는 묶음의 AND", en: "OR of finished chains / AND of the chain being built" },
     ],
     beats: [
       { hi: [0, 1], bubble: t(E,
