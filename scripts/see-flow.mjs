@@ -255,6 +255,36 @@ try {
     }
     rows[rows.length - 1].inPage = inPage
 
+    /* ⭐⭐ 2026-10-06 — **시뮬의 마지막 걸음도 찍는다.**
+       왜: 선생님(2026-10-06) *"**3쪽 4쪽 시뮬의 연속은?**"* → 끊겨 있었다.
+         3쪽 시뮬 마지막 걸음이 *"K 가 1 이 아니면 어떻게 되는지는 곧 봐요"* 라고
+         **약속**하는데 4쪽 첫 걸음이 그걸 **안 받고** 새로 시작하고 있었다.
+         학생(초6)이 그 때문에 막혔다 — *"그 전 5걸음 어디서도 말 안 해줬는데 갑자기 썼다."*
+       ⛔ 이 도구는 **시뮬 1단계만** 찍어서 그 결함을 **원리상 못 봤다.**
+         쪽 **사이**를 보라고 만든 도구인데 정작 쪽의 **끝**을 안 보고 있었다.
+       ⭐ 이제 「N쪽 끝걸음 / N+1쪽 1단계」가 **나란히** 떠서 눈으로 바로 이어지는지 본다.
+       ⚠️ 판정이 아니라 **볼 자리**다 — 이어지나는 사람이 읽어야 안다(project-lead 제안). */
+    if (inPage > 0) {
+      const subLast = await p.evaluate(() => {
+        const lines = document.body.innerText.split('\n').map((x) => x.trim()).filter(Boolean)
+        const si = lines.findIndex((x) => /^\(?\d+\s*\/\s*\d+\)?$/.test(x))
+        if (si < 0) return ''
+        const NAV = /^(⏮|◀|다음 ▶|Next ▶|Prev|처음부터|이전|Restart|목록|완료)/
+        const txt = lines.slice(si + 1, si + 5).filter((x) => !NAV.test(x)).slice(0, 2).join(' ')
+        return { at: lines[si], txt }
+      }).catch(() => ({ at: '', txt: '' }))
+      /* ⚠️ 2026-10-06 — **「끝걸음」이 끝이 아닐 수 있다.** 위 걸음 걷기는
+         `before === after`(화면 글자 **길이**가 안 바뀌면)에서 멈춘다 — 두 걸음의
+         글자 수가 우연히 같으면 **중간에서 선다.** 실제로 `makedistinct` 3쪽에서
+         10걸음 중 **4걸음에서 멈춘 채** 「끝걸음」이라고 찍었다.
+       ⭐ 그래서 **몇 번째인지를 같이 찍는다** — `(4 / 10)` 이 보이면 끝이 아니다.
+         도구가 거짓으로 「다 봤다」고 말하지 않게 하는 쪽을 골랐다. */
+      if (subLast.txt) {
+        const 끝인가 = (() => { const m = (subLast.at || '').match(/(\d+)\s*\/\s*(\d+)/); return m && m[1] === m[2] })()
+        console.log(`              └ 시뮬 ${끝인가 ? '끝걸음' : `걸음 ${subLast.at} ⚠️ 끝까지 못 감`}: ${subLast.txt.slice(0, 60)}`)
+      }
+    }
+
     let moved = false
     try {
       /* ⚠️ 왜 `.quest-navbar` 안에서만 찾나 (2026-09-23, permutation 버그):

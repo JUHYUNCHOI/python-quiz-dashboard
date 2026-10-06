@@ -279,8 +279,8 @@ export function PlaceOneByOneSim({ E }) {
       note: ["", "", "", "", "(6-4) ÷ 1"], ops: 4, tone: "aha",
       emKo: "(6-4) ÷ 1 = 2 회",
       emEn: "(6-4) / 1 = 2 times",
-      ko: "자리는 4 → 5 → 6 으로 한 칸씩만 커진 것처럼 보이지만,\n4 에 실제로 더한 횟수는 (6-4) ÷ 1 = 2 회예요.\nK 가 1 이 아니면 어떻게 되는지는 곧 봐요.",
-      en: "The slot only looks like it moves one step, 4 → 5 → 6,\nbut 4 was really pushed (6-4) / 1 = 2 times.\nWhat happens when K isn't 1 — that's coming up soon." },
+      ko: "4 에 1 을 두 번 더해서 6 이 됐어요.\n세어 보지 않아도 (6 − 4) ÷ 1 = 2 로 바로 나와요.\nK 가 2 라면 어떻게 될까요? 다음 쪽에서 해 봐요.",
+      en: "We added 1 to the 4 twice, and it became 6.\nWithout counting, (6 − 4) / 1 = 2 gives it straight away.\nWhat if K were 2? We try that on the next page." },
   ];
   const ts = useTraceStep(steps, "quest-step-makedistinct-placeonebyonesim");
   const s = steps[ts.safe];
@@ -380,8 +380,8 @@ export function WhoCanMeetSim({ E }) {
            ⓑ 값이 5 로 바뀜 + `extra` 에 `· 3→5` — 「밀었다」를 본다 */
     { tiles: [3, 3, 3, 4, 4, 4], st: ["placed", "idle", "idle", "idle", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], hot: 1, push: 1,
-      ko: "3쪽에서는 K 가 1 이라 1 을 두 번 더해야 했죠. 이번엔 K = 2 예요 — 같은 방법이 통할까요?\n첫째 3 은 그대로 둬요.",
-      en: "Last page K was 1, and one number needed two adds. Now K = 2 — does the same way still work?\nLeave the first 3 as it is." },
+      ko: "첫째 3 은 그대로 둬요.",
+      en: "Leave the first 3 as it is." },
 
     /* ⓐ 둘째를 켠다. **값은 아직 3 이다** — 지금 보는 것은 「겹쳤다」 하나뿐. */
     { tiles: [3, 3, 3, 4, 4, 4], st: ["placed", "moving", "idle", "idle", "idle", "idle"],
