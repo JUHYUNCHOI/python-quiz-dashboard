@@ -555,12 +555,34 @@ export function getLogicalMoosWalk(E, lang = "py") {
         { hi: [0, 11], bubble: t(E,
           "Read N tokens — they alternate value, op, value, op, ... (so length N is odd). vector<string> reads each token with cin >> word.",
           "낱말 N 개를 읽어요. 값, and/or, 값, ... 이 번갈아 나와요 (그래서 N 은 홀수예요).\nvector<string> 에 cin >> word 로 낱말을 하나씩 읽어요.") },
-        { hi: [13, 49], bubble: t(E,
-          "Walk left-to-right. 'result' = OR of chains already closed; 'group' = AND-so-far of the open chain. Save both BEFORE each token — that's the state we'd need if this token started a replacement.\n\nThen mirror the same idea scanning right-to-left, so we also know the state right AFTER each token.\n\nvector<bool> works the same way, just with true/false and &&/||.",
-          "왼쪽에서 오른쪽으로 가요. result 는 이미 끝난 묶음들의 OR 값, group 은 지금 묶음의 AND 값이에요. 이 값을 각 낱말을 보기 '전'에 저장해 둬요 — 그 낱말부터 바꾼다면 필요한 상태거든요.\n\n같은 방식을 오른쪽에서 왼쪽으로도 반복해서, 각 낱말 '다음'의 상태도 구해 둬요.\n\nvector<bool> 로 똑같이 담고, true/false 와 &&/|| 를 써요.") },
-        { hi: [51, 80], bubble: t(E,
-          "l and r sit inside one AND-chain. preAnd[l] AND the replacement AND sufAnd[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever closed before (preOr[l]) and after (sufOr[r]) to get the whole expression.\nTwo passes precompute everything, so each query answers 「right away」.",
-          "l 과 r 은 같은 AND 묶음 안에 있어요. preAnd[l] 과 교체값과 sufAnd[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n\n그 값을 앞에서 끝난 묶음(preOr[l]), 뒤에서 끝난 묶음(sufOr[r]) 과 OR 하면 전체 식의 값이에요.\n두 번 훑어 미리 구해 두면, 물음 하나하나는 「바로」 답해요.") },
+/* ⛔ 2026-10-06 — 이 걸음이 **한 번에 37줄**(≈1,036px)을 강조했다. 코드 상자의
+           **최대 높이는 560px** 이라 머리말을 하나도 안 두고 뷰포트를 통째로 줘도 안 들어간다
+           (`scripts/check-codewalk-beat-height.py` 가 잡는 층).
+           학생(초6): *"**증거가 안 보이고 주장만** 들었어요."*
+         ⭐ 레이아웃으로 못 고친다 — **걸음을 넷으로 쪼갰다.** 한 걸음에 한 가지씩:
+           ①앞쪽 표 준비 ②왼쪽→오른쪽 훑기 ③뒤쪽 표 준비 ④오른쪽→왼쪽 훑기.
+           PM 판정(`/decide` 3라운드) 3번 항목. */
+        { hi: [13, 16], bubble: t(E,
+          "Set up for the left-to-right pass: two vectors (preAnd, preOr) to remember state, and the starting values of result and group.",
+          "왼쪽부터 훑을 준비예요.\n표 두 개(preAnd, preOr)를 만들고, result 와 group 의 시작값을 둬요.") },
+        { hi: [17, 30], bubble: t(E,
+          "Walk left to right. Before looking at each token, save result and group into the vectors — that is exactly the state we would need if a replacement started right there.",
+          "왼쪽에서 오른쪽으로 가요.\n낱말을 보기 「전」의 result 와 group 을 표에 저장해 둬요 — 그 낱말부터 바꾼다면 바로 그 상태가 필요하거든요.") },
+        { hi: [32, 35], bubble: t(E,
+          "Now the same preparation for the other direction: sufAnd, sufOr, and starting values taken from the last token.",
+          "이번엔 반대쪽 준비예요.\n표 두 개(sufAnd, sufOr)를 더 만들고, 시작값은 맨 뒤 낱말에서 가져와요.") },
+        { hi: [36, 49], bubble: t(E,
+          "Walk right to left the same way. Now we also know the state right AFTER each token — so any replacement can be answered from both sides.",
+          "오른쪽에서 왼쪽으로 똑같이 훑어요.\n이러면 각 낱말 「다음」의 상태도 알게 돼요 — 어디를 바꾸든 양쪽에서 답할 수 있어요.") },
+{ hi: [51, 58], bubble: t(E,
+          "Read one query: the range l..r and the target value we want the whole sentence to end up as.",
+          "물음 하나를 읽어요 — 구간 l..r 과, 문장 전체가 되었으면 하는 목표 값이에요.") },
+        { hi: [59, 69], bubble: t(E,
+          "Try both replacements, true and false. preAnd[l] AND the replacement AND sufAnd[r] is that chain's new value — no rebuilding. OR it with what closed before (preOr[l]) and after (sufOr[r]).",
+          "넣을 수 있는 값은 둘뿐이에요 — true 와 false. 둘 다 넣어 봐요.\npreAnd[l] 과 넣은 값과 sufAnd[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n거기에 앞서 끝난 것(preOr[l])과 뒤에 끝날 것(sufOr[r])을 OR 해요.") },
+        { hi: [70, 80], bubble: t(E,
+          "If either replacement hits the target, answer Y; otherwise N. Print all answers as one string.",
+          "둘 중 하나라도 목표와 같으면 Y, 아니면 N 이에요.\n답을 모아서 한 줄로 출력해요.") },
       ],
     };
   }
@@ -576,12 +598,34 @@ export function getLogicalMoosWalk(E, lang = "py") {
       { hi: [0, 1], bubble: t(E,
         "Read N tokens — they alternate value, op, value, op, ... (so length N is odd). input().split() splits on whitespace into a list of strings.",
         "낱말 N 개를 읽어요. 값, and/or, 값, ... 이 번갈아 나와요 (그래서 N 은 홀수예요).\ninput().split() 이 띄어쓰기로 잘라서 낱말 목록을 만들어요.") },
-      { hi: [3, 39], bubble: t(E,
-        "Walk left-to-right. 'result' = OR of chains already closed; 'group' = AND-so-far of the open chain. Save both BEFORE each token — that's the state we'd need if this token started a replacement.\n\nThen mirror the same idea scanning right-to-left, so we also know the state right AFTER each token.\n\nFour plain lists (pre_and, pre_or, suf_and, suf_or) hold all the state.",
-        "왼쪽에서 오른쪽으로 가요. result 는 이미 끝난 묶음들의 OR 값, group 은 지금 묶음의 AND 값이에요. 이 값을 각 낱말을 보기 '전'에 저장해 둬요 — 그 낱말부터 바꾼다면 필요한 상태거든요.\n\n같은 방식을 오른쪽에서 왼쪽으로도 반복해서, 각 낱말 '다음'의 상태도 구해 둬요.\n\n리스트 네 개(pre_and, pre_or, suf_and, suf_or)에 상태를 담아요.") },
-      { hi: [41, 58], bubble: t(E,
-        "l and r sit inside one AND-chain. preAnd[l] AND the replacement AND sufAnd[r] gives that chain's new value — no rebuilding needed.\n\nOR that with whatever closed before (preOr[l]) and after (sufOr[r]) to get the whole expression.\nTwo passes precompute everything, so each query answers 「right away」.",
-        "l 과 r 은 같은 AND 묶음 안에 있어요. pre_and[l] 과 교체값과 suf_and[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n\n그 값을 앞에서 끝난 묶음(pre_or[l]), 뒤에서 끝난 묶음(suf_or[r]) 과 OR 하면 전체 식의 값이에요.\n두 번 훑어 미리 구해 두면, 물음 하나하나는 「바로」 답해요.") },
+/* ⛔ 2026-10-06 — 이 걸음이 **한 번에 37줄**(≈1,036px)을 강조했다. 코드 상자의
+         **최대 높이는 560px** 이라 머리말을 하나도 안 두고 뷰포트를 통째로 줘도 안 들어간다
+         (`scripts/check-codewalk-beat-height.py` 가 잡는 층).
+         학생(초6): *"**증거가 안 보이고 주장만** 들었어요."*
+         ⭐ 레이아웃으로 못 고친다 — **걸음을 넷으로 쪼갰다.** 한 걸음에 한 가지씩:
+         ①앞쪽 표 준비 ②왼쪽→오른쪽 훑기 ③뒤쪽 표 준비 ④오른쪽→왼쪽 훑기.
+         PM 판정(`/decide` 3라운드) 3번 항목. */
+        { hi: [3, 6], bubble: t(E,
+        "Set up for the left-to-right pass: two lists (pre_and, pre_or) to remember state, and the starting values of result and group.",
+        "왼쪽부터 훑을 준비예요.\n표 두 개(pre_and, pre_or)를 만들고, result 와 group 의 시작값을 둬요.") },
+      { hi: [7, 20], bubble: t(E,
+        "Walk left to right. Before looking at each token, save result and group into the lists — that is exactly the state we would need if a replacement started right there.",
+        "왼쪽에서 오른쪽으로 가요.\n낱말을 보기 「전」의 result 와 group 을 표에 저장해 둬요 — 그 낱말부터 바꾼다면 바로 그 상태가 필요하거든요.") },
+      { hi: [22, 25], bubble: t(E,
+        "Now the same preparation for the other direction: suf_and, suf_or, and starting values taken from the last token.",
+        "이번엔 반대쪽 준비예요.\n표 두 개(suf_and, suf_or)를 더 만들고, 시작값은 맨 뒤 낱말에서 가져와요.") },
+      { hi: [26, 39], bubble: t(E,
+        "Walk right to left the same way. Now we also know the state right AFTER each token — so any replacement can be answered from both sides.",
+        "오른쪽에서 왼쪽으로 똑같이 훑어요.\n이러면 각 낱말 「다음」의 상태도 알게 돼요 — 어디를 바꾸든 양쪽에서 답할 수 있어요.") },
+{ hi: [41, 46], bubble: t(E,
+        "Read one query: the range l..r and the target value we want the whole sentence to end up as.",
+        "물음 하나를 읽어요 — 구간 l..r 과, 문장 전체가 되었으면 하는 목표 값이에요.") },
+      { hi: [47, 53], bubble: t(E,
+        "Try both replacements, true and false. preAnd[l] AND the replacement AND sufAnd[r] is that chain's new value — no rebuilding. OR it with what closed before (preOr[l]) and after (sufOr[r]).",
+        "넣을 수 있는 값은 둘뿐이에요 — true 와 false. 둘 다 넣어 봐요.\npre_and[l] 과 넣은 값과 suf_and[r] 을 AND 하면 그 묶음의 새 값이 바로 나와요 — 다시 만들 필요가 없어요.\n거기에 앞서 끝난 것(pre_or[l])과 뒤에 끝날 것(suf_or[r])을 OR 해요.") },
+      { hi: [54, 58], bubble: t(E,
+        "If either replacement hits the target, answer Y; otherwise N. Print all answers as one string.",
+        "둘 중 하나라도 목표와 같으면 Y, 아니면 N 이에요.\n답을 모아서 한 줄로 출력해요.") },
     ],
   };
 }
