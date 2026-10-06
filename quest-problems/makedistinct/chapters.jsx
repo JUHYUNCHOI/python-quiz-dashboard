@@ -186,8 +186,8 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
          → narr 이 **4쪽의 약속을 받는다.** K 가 2 로 바뀌는 것도 같은 줄에 담는다.
          (`feedback_reviewers_see_pages_teacher_sees_story` — 이상한 건 쪽과 쪽 **사이**다.) */
       narr: t(E,
-        "Does the way we used on page 3 still work when K = 2?",
-        "3쪽에서 쓴 방법이 K = 2 에서도 그대로 통할까요?"),
+        "Now let us try K = 2.",
+        "K = 2 도 알아볼까요?"),
       content: <WhoCanMeetSim E={E} />,
     },
 
