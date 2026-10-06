@@ -33,6 +33,22 @@ PM 실측(375×812·한국어) — 코드 상자 **254px**, 말풍선이 **~97px
 최대 `explodingarrow` 40줄 · `backforth` 38 · `logicalmoos` 37 · `milkorder` 36 · `interview` 35.
 **`swaptowin`(11·19줄)은 이 분포에서 중간보다 아래다** — 그래서 혼자 고치면 안 된다.
 
+### ⭐ 전수 실측 (2026-10-06, `check-codewalk-hi-fits-box.mjs`, 375×812·한국어·파이썬)
+
+**밟은 quest 109개 중 101개(93%)에서 잘린다 — 걸음 309개.**
+- **걸음이 전부 잘린 quest 14개**: `chipxchg`(7걸음) · `alchemy`(6) · `cowntrace`(6) ·
+  `walkfence`(6) · `swaptowin`(5) · `bucketbrigade`(4) · `cowevolution`(4) · `drought`(4) ·
+  `innovation`(4) · `mco15badminton`(4) · `revegetation`(4) · `stuckinrut`(4) …
+- **보이는 강조줄이 0 인 걸음** — 말풍선이 코드 상자를 **통째로 덮는다**: 표시된 275개 중 **38개**.
+  최악 `logicalmoos` 2걸음 — 강조 37줄 중 **보이는 게 0줄**, 1013px 밖.
+  그 말풍선은 `result`·`group` 이 무슨 값인지를 설명한다. **눈으로 확인했다.**
+- ⚠️ **54개는 못 봤다**(코드 탭을 못 찾음) — **결백이 아니다.** 실제 수는 더 클 수 있다.
+- ⚠️ 파이썬·한국어만 봤다. `--cpp` · `--en` 은 아직.
+
+⛔ **93% 는 「quest 들이 잘못 썼다」가 아니라 「컴포넌트가 그렇게 생겼다」는 뜻이다.**
+개별 quest 의 `hi` 를 줄이는 처방은 101개를 손대야 하고 걸음 수를 늘린다
+(`feedback_shorter_not_longer`). **컴포넌트를 고치는 쪽이 맞다.**
+
 ⚠️ **학생이 이걸 네 번 만에 말로 꺼냈다** — *"증거가 안 보이고 주장만 들었다."*
 기계는 못 봤다. `innerText.includes()` 로는 **DOM 에 늘 있어서 영영 통과한다.**
 
