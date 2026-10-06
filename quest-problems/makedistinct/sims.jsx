@@ -585,8 +585,8 @@ export function WhoCanMeetSim({ E }) {
     { tiles: [3, 5, 7, 4, 4], st: ["placed", "placed", "moving", "even", "even"],
       extra: ["", "", "· 3→5→7", "", ""], chains: [1, 0], named: true,
       formula: "(7-3) ÷ 2 = 2", ops: 3,
-      ko: "셋째는 5 도 차 있어서 7 까지 갔어요 — 두 번.\n세는 대신 (7−3) ÷ 2 로도 2 가 나와요.",
-      en: "The third found 5 taken too and went on to 7 — two pushes.\nInstead of counting, (7−3) / 2 also gives 2." },
+      ko: "셋째는 5 도 차 있어서 7 까지 갔어요 — 두 번.\n하나씩 세는 대신 (7−3) ÷ 2 로 한 번에 — 아까 그 199억 번도 이렇게 사라져요.",
+      en: "The third found 5 taken too and went on to 7 — two pushes.\nInstead of counting one by one, (7−3) / 2 in one go — that is how the 19,999,900,000 goes away." },
 
     /* 선생님: *"그 다음에 **밑에 정리된게** 보여야지"* — 미는 장면이 다 끝난 뒤에 정리 한 걸음. */
     /* ⛔ 2026-10-02 — 선생님이 16/16 화면을 보시고: *"갑자기 너무 많은 정보가 들어와"*
