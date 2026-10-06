@@ -485,13 +485,58 @@ export function WhoCanMeetSim({ E }) {
        ⭐ 「간 거리 ÷ 2」는 **버리지 않았다** — 마지막 되짚기 걸음에 이미 있다
          (「하나씩 세는 대신 (7−3) ÷ 2 로 한 번에 — 아까 그 199억 번도 이렇게 사라져요」).
          거기가 제자리다. 쓰기도 전에 미리 말할 필요가 없다. */
+    /* ⛔⛔ 2026-10-06 선생님: *"**학생은 이걸 어떻게 생각해냈는지가 궁금하지 않을까?**"*
+         + *"이걸 **어떻게 풀었는지 알아야 비슷한 다른 문제도 풀지.**"*
+       ⭐ `feedback_show_how_to_approach` — 선생님이 이 축을 지적하신 게 **세 번째**다.
+         앞 두 번은 **도구로 닫았다**(접근법 칩·검사기). 칩은 「무엇을 쓰나」이지
+         「어떻게 도달하나」가 아니다.
+       ⛔ 직전 판은 **「나누어떨어져야 한다」를 결론만** 꺼냈고, 학생(초6)이 바로 막혔다:
+         *"「횟수를 거리÷2로 구한다」는 규칙을 **그 전 5걸음 어디서도 말 안 해줬는데**
+           갑자기 썼다. **9라는 숫자가 어디서 나왔는지도 안 보여준다.**"*
+       ⭐ 그래서 **생각의 순서 그대로** 다섯 걸음으로 편다 —
+         묻고 → 해 보고 → 깨지고 → 왜 깨졌나 → 그래서 이렇게.
+         이 다섯이 **다음 문제에 가져갈 수 있는 유일한 부분**이다. */
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "idle", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3,
-      emKo: "나누어떨어져야 공식이 서요",
-      emEn: "the formula needs it to divide evenly",
-      ko: "3 이라고 써 있던 건 다 끝냈어요. 이제 4 를 시작해요.\n그런데 횟수를 「간 거리 ÷ 2」로 구하려면 거리가 2 로 나누어떨어져야 해요.\n넷을 3 쪽 뒤에 붙이면 4 → 9 — (9−4) ÷ 2 = 2.5 가 나와요.",
-      en: "The 3s are all done. Now we start on the 4s.\nBut to get the count as \u300cdistance / 2\u300d, the distance has to divide evenly by 2.\nPut a 4 behind the 3 side and it goes 4 \u2192 9 — (9\u22124) / 2 = 2.5." },
+      emKo: "세지 말고 계산할 수 없을까요?",
+      emEn: "could we compute instead of counting?",
+      ko: "20만 개를 하나씩 셀 수는 없어요.\n세지 말고 계산할 수 없을까요?",
+      en: "We cannot count 200,000 of them one at a time.\nCould we compute the number instead of counting it?" },
 
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "moving", "idle", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3,
+      emKo: "(7−3) ÷ 2 = 2",
+      emEn: "(7−3) / 2 = 2",
+      ko: "셋째를 보세요. 3 에서 7 까지 2 씩 갔어요.\n그러면 몇 번 더했는지는 (7−3) ÷ 2 = 2 로 바로 나와요.",
+      en: "Look at the third one. It went from 3 to 7, two at a time.\nSo the number of adds comes straight out: (7−3) / 2 = 2." },
+
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "moving", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3,
+      emKo: "줄을 세우고 이 식을 쓰면 되겠다",
+      emEn: "line them up and use this formula",
+      ko: "그럼 작은 것부터 줄을 세우고 이 식을 쓰면 되겠어요.\n3, 5, 7 까지는 잘 돼요. 다음은 4 차례예요 — 7 다음 빈 자리는 9 네요.",
+      en: "So line them up smallest first and use that formula.\n3, 5, 7 works fine. Next is a 4 — and the first free spot after 7 is 9." },
+
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "moving", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
+      emKo: "2.5 — 식이 깨져요",
+      emEn: "2.5 — the formula breaks",
+      ko: "그런데 (9 − 4) ÷ 2 를 하면 2.5 가 나와요.\n더한 횟수가 2.5 번일 수는 없어요. 식이 깨졌어요.",
+      en: "But (9 − 4) / 2 gives 2.5.\nYou cannot add something two and a half times. The formula broke." },
+
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1, 0], hot: 0, push: 3,
+      emKo: "4 는 9 에 닿을 수가 없어요",
+      emEn: "4 can never land on 9",
+      ko: "왜 깨졌을까요? 4 에 2 를 더하면 4, 6, 8 … 이에요.\n9 를 건너뛰어요 — 4 는 9 에 닿을 수가 없어요.",
+      en: "Why did it break? Adding 2 to 4 gives 4, 6, 8 ….\nIt steps right over 9 — 4 can never land on 9." },
+
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "even", "even", "even"],
+      extra: ["", "", "", "", "", ""], chains: [1, 0], push: 3,
+      emKo: "닿을 수 있는 것끼리만",
+      emEn: "only among those that can reach each other",
+      ko: "그럼 아무나 한 줄로 세우면 안 되겠네요.\n닿을 수 있는 것끼리만 줄을 세워야 해요 — 3 쪽은 3 쪽끼리, 4 쪽은 4 쪽끼리.",
+      en: "So we cannot line everyone up together.\nOnly those that can reach each other belong in the same line — 3s with 3s, 4s with 4s." },
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3,
       ko: "넷째는 4 예요 — 전에 없던 수라 그대로 둬요.",
