@@ -446,14 +446,35 @@ export function WhoCanMeetSim({ E }) {
       en: "Adding one at a time does give the answer — 3.\nBut if 200,000 of them are the same, it is 19,999,900,000." },
 
     /* 2. 관찰 둘 — 두 번째 줄. 여기서도 이름은 없다. 눈으로 「안 겹친다」만. */
+    /* ⛔⛔ 2026-10-06 선생님: *"넷째와 다섯째 설명을 **다른 시뮬화면으로 나눠줘**"*
+         + *"**한번에 한가지 정보만**"*
+       ⭐ 한 걸음이 **셋**을 말하고 있었다 — ①넷째는 그대로 ②다섯째가 겹친다
+         ③4 에 2 를 더하면 3 쪽과 안 겹친다. 셋으로 가른다.
+       ⭐ **3 쪽이 이미 그 모양이다** — 「첫째 3 은 그대로」 → 「둘째도 3 이에요」 →
+         「그래서 2 를 더해요」. 4 쪽만 셋을 한 번에 쏟고 있었다(`quest_season_shape_consistency`).
+       ⚠️ **화면도 한 곳씩만 바뀌게** 맞췄다(`feedback_one_thing_changes_at_a_time`) —
+         넷째만 켜짐 → 다섯째가 켜짐 → 「4 가 갈 수 있는 수」 줄이 뜸.
+       ⛔ 걸음이 17 → 19 로 늘었다. 평소라면 `feedback_shorter_not_longer` 가 막는 쪽인데
+         **선생님이 직접 「나눠줘」라고 지시하셨다.** */
+    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "idle"],
+      extra: ["", "", "", "", ""], chains: [1], push: 3,
+      ko: "넷째 4 는 그대로 둬요 — 앞에 4 가 없어요.",
+      en: "The fourth is 4, and nothing before it is 4 — so it stays." },
+
+    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
+      extra: ["", "", "", "", ""], chains: [1], push: 3,
+      emKo: "넷째와 겹쳤어요", emEn: "collides with the fourth",
+      ko: "다섯째도 4 예요 — 넷째와 겹쳤어요.",
+      en: "The fifth is 4 as well — it collides with the fourth." },
+
     { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
       extra: ["", "", "", "", ""], chains: [1, 0], hot: 0, push: 3,
       /* ⛔ 2026-10-06 선생님: *"**왜 4에 2를 더하지?** … **이건 4를 바꿀 필요가 없는 문제**잖아."*
          ⭐ **맞다.** 옛 예제 `3,3,3,4` 는 **4 가 영영 안 움직인다** — 그러니 「4 가 갈 수 있는 수」가
            **일어나지 않을 일**이었다. 「따로 봐도 된다」가 **아무것도 벌어 주지 않았다.**
          → 예제를 **`3,3,3,4,4`** 로 바꿨다. 이제 **4 쪽도 실제로 밀어야 한다.** */
-      ko: "넷째 4 는 그대로 둬요 — 앞에 4 가 없어요.\n다섯째도 4 라서 넷째와 겹쳤어요.\n4 에 2 를 더하면 4, 6, 8 … 3 쪽과는 하나도 안 겹쳐요.",
-      en: "The fourth is 4 and nothing before it is 4, so it stays.\nThe fifth is 4 too, so it collides with the fourth.\nAdding 2 to 4 gives 4, 6, 8 … which never meets the 3 side." },
+      ko: "4 에 2 를 더하면 4, 6, 8 … 3 쪽과는 하나도 안 겹쳐요.",
+      en: "Adding 2 to 4 gives 4, 6, 8 … which never meets the 3 side." },
 
     /* 3. **물음 — 이게 빠져 있었다.**
          ⚠️ 2026-09-29 선생님: *"k를 더하면 서로 뭔가 영향이 없다. 그 다음 나머지…
