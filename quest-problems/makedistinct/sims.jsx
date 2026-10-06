@@ -330,7 +330,7 @@ export function WhoCanMeetSim({ E }) {
      (첫째~넷째)를 1걸음부터 계속 단다. Tile 의 note 슬롯만 쓰고 새 위젯은
      만들지 않는다. 묶음 색(홀수=파랑, 짝수=초록)은 자리(index) 로 고정 —
      값이 밀려도 홀/짝은 안 바뀌므로 index 로 정해도 항상 맞는다. */
-  const ord = (i) => [t(E, "1st", "첫째"), t(E, "2nd", "둘째"), t(E, "3rd", "셋째"), t(E, "4th", "넷째"), t(E, "5th", "다섯째")][i];
+  const ord = (i) => [t(E, "1st", "첫째"), t(E, "2nd", "둘째"), t(E, "3rd", "셋째"), t(E, "4th", "넷째"), t(E, "5th", "다섯째"), t(E, "6th", "여섯째")][i];
   // st(i) 로 각 칸 색을 정한다: 아직 안 본 짝수 칸만 "even"(초록), 나머지는 홀수 묶음 표시 or 실제 진행 상태.
   /* ⭐⭐ 2026-09-29 선생님(화면 보시고, 네 번째):
        *"좀더 세분화되게. 단계적으로. **갑자기 정보 너무 많아지지 않도록.**
@@ -378,22 +378,22 @@ export function WhoCanMeetSim({ E }) {
        → 타일 하나를 **두 걸음**으로 가른다:
            ⓐ 값은 그대로 3, 칸만 켜짐 + 노란 말풍선 — 「겹쳤다」를 본다
            ⓑ 값이 5 로 바뀜 + `extra` 에 `· 3→5` — 「밀었다」를 본다 */
-    { tiles: [3, 3, 3, 4, 4], st: ["placed", "idle", "idle", "idle", "idle"],
-      extra: ["", "", "", "", ""], chains: [1], hot: 1, push: 1,
+    { tiles: [3, 3, 3, 4, 4, 4], st: ["placed", "idle", "idle", "idle", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], hot: 1, push: 1,
       ko: "첫째 3 은 그대로 둬요.",
       en: "Leave the first 3 as it is." },
 
     /* ⓐ 둘째를 켠다. **값은 아직 3 이다** — 지금 보는 것은 「겹쳤다」 하나뿐. */
-    { tiles: [3, 3, 3, 4, 4], st: ["placed", "moving", "idle", "idle", "idle"],
-      extra: ["", "", "", "", ""], chains: [1], hot: 1, push: 1, tone: "stuck",
+    { tiles: [3, 3, 3, 4, 4, 4], st: ["placed", "moving", "idle", "idle", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], hot: 1, push: 1, tone: "stuck",
       emKo: "첫째와 똑같아요",
       emEn: "the same as the first",
       ko: "둘째도 3 이에요 — 첫째와 똑같아요.",
       en: "The second one is 3 too — the same as the first." },
 
     /* ⓑ 같은 칸이 5 로 바뀐다. 바뀌는 자리는 **이 칸 하나뿐**이다. */
-    { tiles: [3, 5, 3, 4, 4], st: ["placed", "moving", "idle", "idle", "idle"],
-      extra: ["", t(E, "· 3→5", "· 3→5"), "", "", ""], chains: [1], hot: 1, push: 2,
+    { tiles: [3, 5, 3, 4, 4, 4], st: ["placed", "moving", "idle", "idle", "idle", "idle"],
+      extra: ["", t(E, "· 3→5", "· 3→5"), "", "", "", ""], chains: [1], hot: 1, push: 2,
       ko: "그래서 2 를 더해요. 3 + 2 = 5.",
       en: "So add 2. 3 + 2 = 5." },
 
@@ -402,15 +402,15 @@ export function WhoCanMeetSim({ E }) {
            이렇게 **더 세부적으로** 보여달라니까"*
        ⭐ 그 「**또 겹쳐서 또 민다**」가 셋째에서도 두 걸음이어야 한다 —
          ⓐ 2 를 더하면 5 인데 **거기 둘째가 이미 있다**(막힘) ⓑ 그래서 한 번 더 민다. */
-    { tiles: [3, 5, 3, 4, 4], st: ["placed", "placed", "moving", "idle", "idle"],
-      extra: ["", "", "", "", ""], chains: [1], hot: 1, push: 2, tone: "stuck",
+    { tiles: [3, 5, 3, 4, 4, 4], st: ["placed", "placed", "moving", "idle", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], hot: 1, push: 2, tone: "stuck",
       emKo: "둘째가 벌써 5 예요",
       emEn: "the second one is already there",
       ko: "셋째도 3 이에요. 2 를 더하면 5 인데 — 둘째가 벌써 5 예요.",
       en: "The third is 3 as well. Add 2 and it is 5 — but the second one is already there." },
 
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "placed", "moving", "idle", "idle"],
-      extra: ["", "", t(E, "· 3→5→7", "· 3→5→7"), "", ""], chains: [1], hot: 1, push: 3,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "moving", "idle", "idle", "idle"],
+      extra: ["", "", t(E, "· 3→5→7", "· 3→5→7"), "", "", ""], chains: [1], hot: 1, push: 3,
       emKo: "한 번 더",
       emEn: "once more",
       ko: "그래서 2 를 한 번 더 더해요. 5 + 2 = 7.",
@@ -424,8 +424,8 @@ export function WhoCanMeetSim({ E }) {
        → 걸음 1~5 가 이미 **하나씩 해 보는 방법**이다. 그 **직후**가 제자리다.
        ⛔ 걸음 수는 안 늘렸다 — 끝에 있던 걸 **옮겼다.** 그리고 네 줄을 **두 줄로** 줄였다
          (선생님: *"무슨 말인지 이해가 안되고 **글이 많아**"*). */
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "placed", "placed", "idle", "idle"],
-      extra: ["", "", "", "", ""], chains: [1], hot: 1, push: 3, tone: "stuck",
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "idle", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], hot: 1, push: 3, tone: "stuck",
       /* ⛔ 2026-10-06 선생님: *"**199억번이라는건 뭘?** 그냥 쭉나열하면 나랑 같은게 있는지
            찾는게 199억번이라는건가?"* → **아니다. 「한 칸씩 미는」 횟수**다.
          20만 개가 한 곳에 몰리면 0+1+2+…+199,999 = **199억 9,990만 번**이다.
@@ -456,25 +456,34 @@ export function WhoCanMeetSim({ E }) {
          넷째만 켜짐 → 다섯째가 켜짐 → 「4 가 갈 수 있는 수」 줄이 뜸.
        ⛔ 걸음이 17 → 19 로 늘었다. 평소라면 `feedback_shorter_not_longer` 가 막는 쪽인데
          **선생님이 직접 「나눠줘」라고 지시하셨다.** */
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "idle"],
-      extra: ["", "", "", "", ""], chains: [1], push: 3,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3,
       ko: "넷째 4 는 그대로 둬요 — 앞에 4 가 없어요.",
       en: "The fourth is 4, and nothing before it is 4 — so it stays." },
 
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
-      extra: ["", "", "", "", ""], chains: [1], push: 3,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3,
       emKo: "넷째와 겹쳤어요", emEn: "collides with the fourth",
       ko: "다섯째도 4 예요 — 넷째와 겹쳤어요.",
       en: "The fifth is 4 as well — it collides with the fourth." },
 
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
-      extra: ["", "", "", "", ""], chains: [1, 0], hot: 0, push: 3,
+    /* ⛔ 2026-10-06 선생님: *"그냥 예를 **3 3 3 4 4 4** 로 하자"*
+       ⭐ 이러면 **양쪽이 똑같은 모양**이 된다 — 3 쪽도 0+1+2 = 3 회, 4 쪽도 3 회, 합 6 회.
+         6걸음의 상자(「같은 수가 세 개면 더하는 횟수는 0 + 1 + 2 = 3 회」)가
+         **화면에서 두 번 실제로 일어난다.** 코드로 확인했다: 3 3 3 4 4 4, K=2 → **6**. */
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "even"],
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3,
+      ko: "여섯째도 4 예요 — 또 겹쳤어요.",
+      en: "The sixth is 4 too — another collision." },
+
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "even"],
+      extra: ["", "", "", "", "", ""], chains: [1, 0], hot: 0, push: 3,
       /* ⛔ 2026-10-06 선생님: *"**왜 4에 2를 더하지?** … **이건 4를 바꿀 필요가 없는 문제**잖아."*
          ⭐ **맞다.** 옛 예제 `3,3,3,4` 는 **4 가 영영 안 움직인다** — 그러니 「4 가 갈 수 있는 수」가
            **일어나지 않을 일**이었다. 「따로 봐도 된다」가 **아무것도 벌어 주지 않았다.**
          → 예제를 **`3,3,3,4,4`** 로 바꿨다. 이제 **4 쪽도 실제로 밀어야 한다.** */
-      ko: "4 에 2 를 더하면 4, 6, 8 … 3 쪽과는 하나도 안 겹쳐요.",
-      en: "Adding 2 to 4 gives 4, 6, 8 … which never meets the 3 side." },
+      ko: "4 에 2 를 더하면 4, 6, 8 … 이에요.\n3 쪽은 홀수만, 4 쪽은 짝수만이라 겹칠 수가 없어요.",
+      en: "Adding 2 to 4 gives 4, 6, 8 ….\nThe 3 side is all odd and the 4 side is all even, so they can never meet." },
 
     /* 3. **물음 — 이게 빠져 있었다.**
          ⚠️ 2026-09-29 선생님: *"k를 더하면 서로 뭔가 영향이 없다. 그 다음 나머지…
@@ -485,8 +494,8 @@ export function WhoCanMeetSim({ E }) {
          → 빠진 질문은 이것이다: **「어느 수가 어느 줄인지, 줄을 끝까지 안 써 보고 알 수 있나?」**
            나머지는 그 질문의 답이고, 쓸모는 **줄 이름표**다. 성질이 아니라 **도구**로 준다.
          ⛔ 이 걸음에서는 답을 주지 마라. 나눗셈은 다음 걸음이다. */
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
-      extra: ["", "", "", "", ""], chains: [1, 0], tone: "stuck", push: 4,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "even"],
+      extra: ["", "", "", "", "", ""], chains: [1, 0], tone: "stuck", push: 4,
       ko: "그럼 3 과 4 는 절대 같아질 수 없겠네요.\n끝까지 다 써 보지 않고도 미리 알 수 있을까요?",
       en: "So 3 and 4 can never become the same number.\nIs there a way to know that without writing everything out?" },
 
@@ -505,8 +514,8 @@ export function WhoCanMeetSim({ E }) {
            ⓒ 그래서 **서로 영향을 못 준다**(= 절대 못 만난다)
        ⚠️ 줄은 이미 둘 다 떠 있다 — 새로 뜨는 건 **그 줄의 나눗셈 한 벌**뿐이다
          (`feedback_one_thing_changes_at_a_time`). `hot` 으로 지금 보는 줄만 켠다. */
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
-      extra: ["", "", "", "", ""], chains: [1, 0], calc: [1], hot: 1,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "even"],
+      extra: ["", "", "", "", "", ""], chains: [1, 0], calc: [1], hot: 1,
       emKo: "나머지가 다 1",
       emEn: "all three leave 1",
       /* ⛔ 2026-10-06 선생님: *"이 이미지에서 **3줄이 뭐지?** 이건 한국말에서 어색한 표현인데"*
@@ -515,15 +524,15 @@ export function WhoCanMeetSim({ E }) {
       ko: "3 에 2 를 계속 더하면 3, 5, 7, 9 … 예요.\n이 수들은 2 로 나눈 나머지가 다 1 이에요.",
       en: "Keep adding 2 to 3 and you get 3, 5, 7, 9 …\nDivided by 2, all of them leave a remainder of 1." },
 
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
-      extra: ["", "", "", "", ""], chains: [1, 0], calc: [1, 0], hot: 0,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "even"],
+      extra: ["", "", "", "", "", ""], chains: [1, 0], calc: [1, 0], hot: 0,
       emKo: "나머지가 다 0",
       emEn: "all three leave 0",
       ko: "4 에 2 를 계속 더하면 4, 6, 8, 10 … 이에요.\n이 수들은 2 로 나눈 나머지가 다 0 이에요.",
       en: "Keep adding 2 to 4 and you get 4, 6, 8, 10 …\nDivided by 2, all of them leave a remainder of 0." },
 
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
-      extra: ["", "", "", "", ""], chains: [1, 0], calc: [1, 0], named: true, tone: "aha",
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "even"],
+      extra: ["", "", "", "", "", ""], chains: [1, 0], calc: [1, 0], named: true, tone: "aha",
       /* ⚠️ 2026-09-29 5차 학생: *"화면이 「이 식은 나머지가 안 바뀌는 걸 보여주는
            거예요」 라고 **직접 말해준 적은 없다. 그냥 식 세 개만 던져놓고 넘어갔다.**"*
          ⛔ **2026-10-02 — 홀짝으로 설명하던 것이 틀린 길이었다.** 선생님:
@@ -532,15 +541,15 @@ export function WhoCanMeetSim({ E }) {
             (`feedback_one_case_cannot_claim_always` — 이 quest 에서 **세 번째**였다).
          ⭐ 진짜 이유는 선생님 말씀 그대로다 — **한 번에 K 씩 커지니 K 로 나눈 나머지가
            안 바뀐다.** 그 말은 K 가 몇이든 맞다(다음 두 걸음이 K=1·K=3 으로 확인한다). */
-      emKo: "서로 영향을 못 줘요",
-      emEn: "they can never affect each other",
-      ko: "한쪽은 나머지가 늘 1, 한쪽은 늘 0 이에요.\n나머지가 다른 수끼리는 서로 영향을 못 줘요 — 아무리 더해도 안 겹쳐요.",
-      en: "One row always leaves 1, the other always leaves 0.\nRows with different leftovers can never affect each other, however far you push." },
+      emKo: "나머지는 그대로예요",
+      emEn: "the remainder never changes",
+      ko: "2 를 더해도 나머지는 그대로예요 — 한쪽은 늘 1, 한쪽은 늘 0.\n같은 수라면 나머지도 같아야 하니까, 나머지가 다르면 절대 같아질 수 없어요.",
+      en: "Adding 2 never changes the remainder — one row always 1, the other always 0.\nEqual numbers must leave the same remainder, so different remainders can never meet." },
 
     /* 5. 일반화 **한 칸만.** K=1 을 옆에 놓아 「K 가 달라지면 갈리는 수가 달라진다」를
          한 번에 하나씩 본다. 표를 통째로 띄우지 않는다. */
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
-      extra: ["", "", "", "", ""], kcompare: [1, 2], khot: 1,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "even"],
+      extra: ["", "", "", "", "", ""], kcompare: [1, 2], khot: 1,
       /* ⛔ 2026-10-06 선생님: *"그럼 **k=1일때는 소용이 없겠네?**"* → **맞다.**
            K=1 이면 묶음이 **하나**라 가르는 일이 아무것도 안 한다. 화면이 그 말을 해야 한다 —
            **「언제 소용없나」를 말해야 「언제 소용있나」가 믿을 만해진다.** */
@@ -549,8 +558,8 @@ export function WhoCanMeetSim({ E }) {
 
     /* 6. 일반화 **한 칸 더.** K=3. 셋째 줄은 **비워 둔다** — 우리 수가 안 쓰는 줄이다
          (`5 → 8 → 11` 을 쓰면 5 가 어디서 왔는지 학생이 묻는다). */
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
-      extra: ["", "", "", "", ""], kcompare: [1, 2, 3], khot: 3,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "even", "even"],
+      extra: ["", "", "", "", "", ""], kcompare: [1, 2, 3], khot: 3,
       /* ⛔ 2026-09-29 감사 담당이 **거짓**으로 잡았다. 옛 문장:
            *"2 를 더하든 3 을 더하든, 남는 수는 절대 안 바뀌어요."*
            **반례**: 3 에 2 를 더하면 5 이고 5 를 3 으로 나눈 나머지는 2 — 3 의 나머지 0 에서
@@ -570,8 +579,8 @@ export function WhoCanMeetSim({ E }) {
        ⛔ 3쪽이 가르친 것은 **K = 1** 일 때다. 여기는 K = 2 라 **한 번에 2 씩** 움직이고,
          「한 번 밀기」와 「두 번 밀기」가 갈리는 자리다 — 3쪽이 대신해 주지 못한다.
        → 하나씩 되살린다. **그리고 선생님 말씀대로 정리를 맨 뒤에 따로 둔다.** */
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "placed", "placed", "even", "even"],
-      extra: [t(E, "· stays", "· 그대로"), "", "", "", ""], chains: [1, 0], named: true, ops: 0,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "even", "even", "even"],
+      extra: [t(E, "· stays", "· 그대로"), "", "", "", "", ""], chains: [1, 0], named: true, ops: 0,
       /* ⚠️ 2026-09-29 선생님: *"난 저 시뮬레이션 하나씩 가봤는데 **도대체 뭘 하려는건지
            모르겠어**"* — 문장이 아니라 **설계** 문제였다.
          ⭐ 걸음 1~6 이 세운 사실(「3 과 4 는 절대 안 만난다」)이 **걸음 7~10 에서
@@ -598,13 +607,13 @@ export function WhoCanMeetSim({ E }) {
       ko: "3 과 4 는 절대 안 겹쳐요 — 그러니 3 끼리, 4 끼리 따로 봐요.\n먼저 3 쪽. 첫째는 안 움직였어요 — 0 번.",
       en: "4 can never overlap with the 3s — so we only need to look at the 3s.\nNow count the pushes. The first one never moved — 0." },
 
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "moving", "placed", "even", "even"],
-      extra: ["", "· 3→5", "", "", ""], chains: [1, 0], named: true, ops: 1,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "moving", "placed", "even", "even", "even"],
+      extra: ["", "· 3→5", "", "", "", ""], chains: [1, 0], named: true, ops: 1,
       ko: "둘째는 첫째와 같은 3 이라 비켜야 했어요. 3 에서 5 로 — 한 번.",
       en: "The second was also a 3, so it had to step aside. 3 to 5 — one push." },
 
-    { tiles: [3, 5, 7, 4, 4], st: ["placed", "placed", "moving", "even", "even"],
-      extra: ["", "", "· 3→5→7", "", ""], chains: [1, 0], named: true,
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "moving", "even", "even", "even"],
+      extra: ["", "", "· 3→5→7", "", "", ""], chains: [1, 0], named: true,
       formula: "(7-3) ÷ 2 = 2", ops: 3,
       ko: "셋째는 5 도 차 있어서 7 까지 갔어요 — 두 번.\n하나씩 세는 대신 (7−3) ÷ 2 로 한 번에 — 아까 그 199억 번도 이렇게 사라져요.",
       en: "The third found 5 taken too and went on to 7 — two pushes.\nInstead of counting one by one, (7−3) / 2 in one go — that is how the 19,999,900,000 goes away." },
@@ -615,12 +624,12 @@ export function WhoCanMeetSim({ E }) {
          상자 혼자 네 가지를 말한다 — ①4 도 9 까지 ②(9−4)÷2 = 2.5 ③못 간다 ④횟수 5.
        → **결과 → 상자 한 토막씩** 으로 가른다. 상자가 열리는 동안은 아래 줄 둘을
          내린다 — 지금 볼 곳이 상자 하나가 되게. */
-    { tiles: [3, 5, 7, 4, 6], st: ["placed", "placed", "placed", "placed", "moving"],
-      extra: ["", "", "", "", ""], chains: [1, 0], named: true, ops: 4, tone: "aha",
-      emKo: "3 + 1 = 4 회",
-      emEn: "3 + 1 = 4",
-      ko: "4 쪽도 똑같이 — 넷째는 그대로, 다섯째는 6 으로. 1 회예요.\n3, 5, 7, 4, 6 — 다 달라졌어요. 3 + 1 = 4 회.",
-      en: "The 4 side the same — the fourth stays, the fifth goes to 6. That is 1.\n3, 5, 7, 4, 6 — all different now. 3 + 1 = 4." },
+    { tiles: [3, 5, 7, 4, 6, 8], st: ["placed", "placed", "placed", "placed", "moving", "moving"],
+      extra: ["", "", "", "", "", ""], chains: [1, 0], named: true, ops: 6, tone: "aha",
+      emKo: "3 + 3 = 6 회",
+      emEn: "3 + 3 = 6",
+      ko: "4 쪽도 똑같아요 — 넷째는 그대로, 다섯째는 6, 여섯째는 8. 0 + 1 + 2 = 3 회.\n3, 5, 7, 4, 6, 8 — 다 달라졌어요. 3 + 3 = 6 회.",
+      en: "The 4 side is the same — fourth stays, fifth to 6, sixth to 8. 0 + 1 + 2 = 3.\n3, 5, 7, 4, 6, 8 — all different now. 3 + 3 = 6." },
 
     
   ];
