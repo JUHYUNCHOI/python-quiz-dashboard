@@ -687,9 +687,9 @@ export function WhoCanMeetSim({ E }) {
             width: "fit-content", maxWidth: "100%", marginLeft: "auto", marginRight: "auto",
             background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: "8px 12px" }}>
             {[
-              { ko: "같은 수가 세 개면", en: "three of the same",
+              { ko: "같은 수가 세 개면 더하는 횟수는", en: "Three of the same — moves:",
                 vKo: "0 + 1 + 2 = 3 회", vEn: "0 + 1 + 2 = 3" },
-              { ko: "같은 수가 20만 개면", en: "200,000 of the same",
+              { ko: "같은 수가 20만 개면 더하는 횟수는", en: "200,000 of the same — moves:",
                 vKo: "0 + 1 + 2 + ⋯ + 199,999 = 199억 9,990만 회",
                 vEn: "0 + 1 + 2 + ⋯ + 199,999 = 19,999,900,000" },
             ].map((r, i) => (
