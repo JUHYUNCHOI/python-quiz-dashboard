@@ -537,7 +537,18 @@ r.longText.filter(t => !r.narrLong.includes(t)).forEach(t => console.log(`   · 
 if (args.includes('--sim')) {
   console.log('\n── 시뮬을 끝까지 눌러본다 (설명이 보이나 · 바뀐 자리가 모여 있나)')
   let prevSnap = null
-  for (let k = 0; k < 20; k++) {
+  /* ⛔⛔ 2026-10-06 — 여기가 **20 이었고, 20 에서 조용히 멈췄다.**
+     `makedistinct` 4쪽 시뮬이 그날 26걸음이 됐는데 **21~26(전체의 23%)은 이 도구가
+     한 번도 밟지 않았다.** 그런데 출력에는 아무 말도 없어서 **「다 봤다」로 읽혔다** —
+     장치가 없는 것보다 나쁘다. **있는데 범위 밖에서 「이상 없음」을 준다.**
+     project-lead 가 직접 돌려서 잡았다(`/decide` 판정, 2026-10-06).
+   ⭐ 두 가지를 고친다 — ①한도를 60 으로 올리고 ②**끝까지 못 갔으면 크게 떠든다.**
+     한도 자체는 남겨 둔다(안 끝나는 시뮬에서 영원히 도는 걸 막는다).
+   ⚠️ 이건 **길이 정책과 무관한 검사기 자신의 정확성 결함**이다 — 걸음이 몇 개여야
+     하나는 다른 문제고, 여기서는 **본 만큼만 봤다고 말하는 것**이 전부다. */
+  const STEP_CAP = 60
+  let 끝까지갔나 = false
+  for (let k = 0; k < STEP_CAP; k++) {
     const r = await p.evaluate(() => {
       // 말풍선 = 이 단계의 설명. 화면(뷰포트) 안에 실제로 보이나?
       const cands = [...document.querySelectorAll('div')].filter(e => {
@@ -610,8 +621,13 @@ if (args.includes('--sim')) {
     const done = !btn || await btn.isDisabled().catch(() => true)
     if (r.none) { console.log(`   ${k + 1}단계: 말풍선을 못 찾음`) }
     else console.log(`   ${k + 1}단계: ${r.visible ? '✅ 보임' : '🚨 화면 밖'} (top=${r.top})  ${r.text}…`)
-    if (done) break
+    if (done) { 끝까지갔나 = true; break }
     await btn.click(); await p.waitForTimeout(300); await settleTyping(p)
+  }
+  if (!끝까지갔나) {
+    console.log(`\n   🚨 **${STEP_CAP}걸음에서 멈췄다 — 끝까지 못 가봤다.**`)
+    console.log(`      그 뒤 걸음은 **한 번도 안 봤다.** 이 보고의 「0건」은 ${STEP_CAP}걸음까지만이다.`)
+    console.log(`      시뮬이 정말 ${STEP_CAP}걸음을 넘으면 쪽을 가르는 게 맞다 — 학생도 그만큼 누른다.`)
   }
 }
 

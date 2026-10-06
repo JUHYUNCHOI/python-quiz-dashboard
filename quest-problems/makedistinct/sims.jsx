@@ -228,14 +228,14 @@ export function PlaceOneByOneSim({ E }) {
   const steps = [
     { tiles: [["4"], ["1"], ["4"], ["1"]], st: ["idle", "idle", "idle", "idle"],
       ops: null,
-      ko: "수 네 개예요. 4 가 둘, 1 이 둘 — 겹쳐요. K = 1 씩 더해서 전부 다르게 만들 거예요.",
-      en: "Four numbers. Two 4s and two 1s — they clash. We will add K = 1 to make them all different." },
+      ko: "수 네 개인데 4 가 둘, 1 도 둘이에요.\n그러니 4 하나와 1 하나는 다른 수가 되어야 해요.\n할 수 있는 건 1 을 더하는 것뿐이에요.",
+      en: "Four numbers: two 4s and two 1s.\nSo one of the 4s and one of the 1s has to become a different number.\nThe only thing we can do is add 1." },
     { tiles: [["1"], ["1"], ["4"], ["4"]], st: ["idle", "idle", "idle", "idle"],
       ops: null, tone: "go",
       emKo: "앞의 하나만 보면 돼요",
       emEn: "we only ever look at the one before",
-      ko: "먼저 작은 수부터 줄을 세워요.\n그러면 찬 자리를 다 기억할 필요 없이 앞의 하나만 보면 돼요.",
-      en: "First line them up from the smallest.\nThen we never have to remember every taken spot — just the one before." },
+      ko: "먼저 작은 수부터 줄을 세워요.\n그러면 앞에 놓은 수 하나만 보면 돼요 — 나머지는 기억 안 해도 돼요.",
+      en: "First line them up from the smallest.\nThen we only ever look at the number placed just before — the rest we can forget." },
     { tiles: [["1"], ["1"], ["4"], ["4"]], st: ["placed", "idle", "idle", "idle"],
       note: [t(E, "stays", "그대로"), "", "", ""], ops: 0,
       ko: "맨 앞 1 은 그대로 둬요. 앞에 아무도 없으니 옮길 까닭이 없어요. (0 회)",
@@ -265,8 +265,8 @@ export function PlaceOneByOneSim({ E }) {
       en: "Suppose there were one more 4 here.\n(This is a what-if — the original problem still has 4 numbers.)\n1, 2, 4, 5 are already taken." },
     { tiles: [["1"], ["2"], ["4"], ["5"], ["6"]], st: ["placed", "placed", "placed", "placed", "moving"],
       note: ["", "", "", "", "4 → 5 → 6"], ops: 4, tone: "aha",
-      ko: "한 번 더하면 5 라 아직 겹쳐요. 그래서 6 까지 — 한 번에 2 회예요. 이렇게 여러 번 미는 경우가 생겨요.",
-      en: "One push only reaches 5, still taken. So it goes to 6 — two moves at once. Sometimes one number needs several pushes." },
+      ko: "한 번 더하면 5 인데 5 도 이미 있어요.\n그래서 6 까지 가야 해요 — 한 번에 2 회예요.\n이렇게 여러 번 더해야 하는 경우가 생겨요.",
+      en: "Adding once only reaches 5, and 5 is taken too.\nSo it has to go all the way to 6 — two moves at once.\nSometimes one number needs several." },
     /* 2026-09-22 학생 지적(3차 재검증): 코드에서 (cur - vals[i]) // k 를 처음 볼 때 막혔다.
        "그렇다니까" 로 결론만 되짚는 말풍선(components.jsx hi:[22,24])은 두 번째 실패였다.
        처방은 말이 아니라 숫자 — 이 장면의 실제 값(4 에서 6 까지, K=1)으로 나눗셈을
