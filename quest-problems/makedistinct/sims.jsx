@@ -467,10 +467,27 @@ export function WhoCanMeetSim({ E }) {
          비로소 이유를 준다. 실측: 하나씩=6 회(맞음) · 전부 정렬해 훑기=12 회(틀림). */
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "idle", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
-      emKo: "누가 누구와 겹칠 수 있는지",
-      emEn: "which values can ever collide",
-      ko: "빨리 하려면 하나씩 세지 말고 계산해야 해요.\n그러려면 먼저 — 누가 누구와 겹칠 수 있는지부터 알아야 해요.",
-      en: "To go fast we must compute instead of counting one at a time.\nFirst, then — which values can ever collide?" },
+      emKo: "간 거리 ÷ 2",
+      emEn: "distance / 2",
+      ko: "하나씩 세지 않는 방법이 있어요.\n작은 것부터 줄 세우고, 옮긴 자리는 간 거리 ÷ 2 로 한 번에 구하면 돼요.",
+      en: "There is a way that does not count one at a time.\nLine them up smallest first, then get each move with distance / 2 in one go." },
+
+    /* ⛔ 선생님이 내 옛 설명에 반발하신 그 자리 — *"**왜 4를 9로 보내게 하는거냐고.**"*
+       ⭐ 이제 **화면이 그 방법을 먼저 보여준다.** 「4 를 9 로」는 내가 시킨 게 아니라
+         **줄 세워 훑는 방법이 그렇게 한다.** 실측: 그 방법은 12 회를 내놓는다(정답 6). */
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "moving", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
+      emKo: "4 는 9 에 갈 수가 없어요",
+      emEn: "4 can never reach 9",
+      ko: "그런데 섞어서 줄을 세우면 — 3, 5, 7 다음 빈 자리가 9 예요.\n4 는 9 에 갈 수가 없어요. 2 씩 더하면 4, 6, 8 … 9 를 건너뛰거든요.",
+      en: "But lining them all up together, the next free spot after 3, 5, 7 is 9.\n4 can never reach 9 — adding 2 gives 4, 6, 8 … it skips right over 9." },
+
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "idle", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3,
+      emKo: "갈 수 있는 것끼리만",
+      emEn: "only among those that can reach each other",
+      ko: "그러니 아무나 한 줄로 세우면 안 돼요 — 갈 수 있는 것끼리만 세워야 해요.\n그래서 먼저 알아볼 게 있어요. 누가 누구와 겹칠 수 있나?",
+      en: "So we cannot line everyone up together — only those that can reach each other.\nWhich means we need to know first: who can ever collide with whom?" },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3,
