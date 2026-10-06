@@ -411,7 +411,7 @@ export function WhoCanMeetSim({ E }) {
       en: "So add 2 once more. 5 + 2 = 7." },
 
     /* 2. 관찰 둘 — 두 번째 줄. 여기서도 이름은 없다. 눈으로 「안 겹친다」만. */
-    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+    { tiles: [3, 5, 7, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], hot: 0, push: 3,
       ko: "넷째 4 에도 2 씩 더해 봐요 — 4, 6, 8, 10 …\n3 이 갈 수 있는 수와 4 가 갈 수 있는 수는 하나도 안 겹쳐요.",
       en: "Now add 2 to the fourth number, 4 — 4, 6, 8, 10 …\nWhere 3 can go and where 4 can go never overlap." },
@@ -425,7 +425,7 @@ export function WhoCanMeetSim({ E }) {
          → 빠진 질문은 이것이다: **「어느 수가 어느 줄인지, 줄을 끝까지 안 써 보고 알 수 있나?」**
            나머지는 그 질문의 답이고, 쓸모는 **줄 이름표**다. 성질이 아니라 **도구**로 준다.
          ⛔ 이 걸음에서는 답을 주지 마라. 나눗셈은 다음 걸음이다. */
-    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+    { tiles: [3, 5, 7, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], tone: "stuck", push: 4,
       ko: "그럼 3 과 4 는 절대 같아질 수 없겠네요.\n끝까지 다 써 보지 않고도 미리 알 수 있을까요?",
       en: "So 3 and 4 can never become the same number.\nIs there a way to know that without writing everything out?" },
@@ -445,21 +445,24 @@ export function WhoCanMeetSim({ E }) {
            ⓒ 그래서 **서로 영향을 못 준다**(= 절대 못 만난다)
        ⚠️ 줄은 이미 둘 다 떠 있다 — 새로 뜨는 건 **그 줄의 나눗셈 한 벌**뿐이다
          (`feedback_one_thing_changes_at_a_time`). `hot` 으로 지금 보는 줄만 켠다. */
-    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+    { tiles: [3, 5, 7, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], calc: [1], hot: 1,
       emKo: "셋 다 1 이 남아요",
       emEn: "all three leave 1",
-      ko: "3 줄부터 봐요. 한 번 밀 때마다 2 씩 커져요.\n2 로 나눠 보면 — 셋 다 1 이 남아요.",
+      /* ⛔ 2026-10-06 선생님: *"이 이미지에서 **3줄이 뭐지?** 이건 한국말에서 어색한 표현인데"*
+         맞다 — 「3 줄」은 **「석 줄」로 읽힌다.** 게다가 **아래 줄의 이름과도 안 맞았다**
+         (그 줄 이름은 `3 이 갈 수 있는 수`, `:125`). **화면에 적힌 이름 그대로** 부른다. */
+      ko: "「3 이 갈 수 있는 수」부터 봐요. 한 번 밀 때마다 2 씩 커져요.\n2 로 나눠 보면 — 셋 다 1 이 남아요.",
       en: "Start with the 3 row. Each push adds 2.\nDivide by 2 — all three leave 1." },
 
-    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+    { tiles: [3, 5, 7, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], calc: [1, 0], hot: 0,
       emKo: "셋 다 0 이 남아요",
       emEn: "all three leave 0",
-      ko: "4 줄도 2 씩 커져요.\n2 로 나눠 보면 — 셋 다 0 이 남아요.",
+      ko: "「4 가 갈 수 있는 수」도 2 씩 커져요.\n2 로 나눠 보면 — 셋 다 0 이 남아요.",
       en: "The 4 row also goes up by 2.\nDivide by 2 — all three leave 0." },
 
-    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+    { tiles: [3, 5, 7, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], chains: [1, 0], calc: [1, 0], named: true, tone: "aha",
       /* ⚠️ 2026-09-29 5차 학생: *"화면이 「이 식은 나머지가 안 바뀌는 걸 보여주는
            거예요」 라고 **직접 말해준 적은 없다. 그냥 식 세 개만 던져놓고 넘어갔다.**"*
@@ -476,14 +479,14 @@ export function WhoCanMeetSim({ E }) {
 
     /* 5. 일반화 **한 칸만.** K=1 을 옆에 놓아 「K 가 달라지면 갈리는 수가 달라진다」를
          한 번에 하나씩 본다. 표를 통째로 띄우지 않는다. */
-    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+    { tiles: [3, 5, 7, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], kcompare: [1, 2], khot: 1,
       ko: "K 가 1 이면 어떨까요? 1 로 나누면 뭐든 0 이 남아요.\n남는 수가 다 같으니까 어떤 두 수든 같아질 수 있어요.",
       en: "What if K is 1? Divide anything by 1 and 0 is left.\nEvery leftover is the same, so any two numbers can meet." },
 
     /* 6. 일반화 **한 칸 더.** K=3. 셋째 줄은 **비워 둔다** — 우리 수가 안 쓰는 줄이다
          (`5 → 8 → 11` 을 쓰면 5 가 어디서 왔는지 학생이 묻는다). */
-    { tiles: [3, 3, 3, 4], st: ["placed", "idle", "idle", "even"],
+    { tiles: [3, 5, 7, 4], st: ["placed", "idle", "idle", "even"],
       extra: ["", "", "", ""], kcompare: [1, 2, 3], khot: 3,
       /* ⛔ 2026-09-29 감사 담당이 **거짓**으로 잡았다. 옛 문장:
            *"2 를 더하든 3 을 더하든, 남는 수는 절대 안 바뀌어요."*
@@ -504,7 +507,7 @@ export function WhoCanMeetSim({ E }) {
        ⛔ 3쪽이 가르친 것은 **K = 1** 일 때다. 여기는 K = 2 라 **한 번에 2 씩** 움직이고,
          「한 번 밀기」와 「두 번 밀기」가 갈리는 자리다 — 3쪽이 대신해 주지 못한다.
        → 하나씩 되살린다. **그리고 선생님 말씀대로 정리를 맨 뒤에 따로 둔다.** */
-    { tiles: [3, 3, 3, 4], st: ["placed", "placed", "placed", "even"],
+    { tiles: [3, 5, 7, 4], st: ["placed", "placed", "placed", "even"],
       extra: [t(E, "· stays", "· 그대로"), "", "", ""], chains: [1, 0], named: true, ops: 0,
       /* ⚠️ 2026-09-29 선생님: *"난 저 시뮬레이션 하나씩 가봤는데 **도대체 뭘 하려는건지
            모르겠어**"* — 문장이 아니라 **설계** 문제였다.
@@ -529,19 +532,19 @@ export function WhoCanMeetSim({ E }) {
            (정확성이 아니라 속도다 — 선생님이 반증하셨다). **계획 선언**으로 바꾼다. */
       emKo: "3 끼리만 보면 돼요",
       emEn: "we only need to look at the 3s",
-      ko: "4 는 3 들과 절대 안 겹쳐요 — 그러니 3 끼리만 보면 돼요.\n첫째 3 은 맨 앞이라 그대로예요.",
-      en: "4 can never overlap with the 3s — so we only need to look at the 3s.\nThe first 3 is at the front, so it stays." },
+      ko: "4 는 3 들과 절대 안 겹쳐요 — 그러니 3 끼리만 보면 돼요.\n이제 몇 번 밀었는지 세어 봐요. 첫째는 안 움직였어요 — 0 번.",
+      en: "4 can never overlap with the 3s — so we only need to look at the 3s.\nNow count the pushes. The first one never moved — 0." },
 
-    { tiles: [3, 5, 3, 4], st: ["placed", "moving", "placed", "even"],
+    { tiles: [3, 5, 7, 4], st: ["placed", "moving", "placed", "even"],
       extra: ["", "· 3→5", "", ""], chains: [1, 0], named: true, ops: 1,
-      ko: "둘째 3 은 첫째와 같아요. 2 를 한 번 더해 5 로 비켜요.",
-      en: "The second 3 is the same as the first. Add 2 once and it steps aside to 5." },
+      ko: "둘째는 첫째와 같은 3 이라 비켜야 했어요. 3 에서 5 로 — 한 번.",
+      en: "The second was also a 3, so it had to step aside. 3 to 5 — one push." },
 
     { tiles: [3, 5, 7, 4], st: ["placed", "placed", "moving", "even"],
       extra: ["", "", "· 3→5→7", ""], chains: [1, 0], named: true,
       formula: "(7-3) ÷ 2 = 2", ops: 3,
-      ko: "셋째 3 은 5 도 이미 찼어요. 5 를 지나 7 까지 — 2 를 두 번 더해요.\n세는 대신 (7-3) ÷ 2 로도 2 가 나와요.",
-      en: "The third 3 finds 5 taken too. Past 5, on to 7 — it adds 2 twice.\nInstead of counting, (7-3) / 2 also gives 2." },
+      ko: "셋째는 5 도 차 있어서 7 까지 갔어요 — 두 번.\n세는 대신 (7−3) ÷ 2 로도 2 가 나와요.",
+      en: "The third found 5 taken too and went on to 7 — two pushes.\nInstead of counting, (7−3) / 2 also gives 2." },
 
     /* 선생님: *"그 다음에 **밑에 정리된게** 보여야지"* — 미는 장면이 다 끝난 뒤에 정리 한 걸음. */
     /* ⛔ 2026-10-02 — 선생님이 16/16 화면을 보시고: *"갑자기 너무 많은 정보가 들어와"*
