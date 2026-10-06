@@ -265,8 +265,8 @@ export function PlaceOneByOneSim({ E }) {
       en: "Suppose there were one more 4 here.\n(This is a what-if — the original problem still has 4 numbers.)\n1, 2, 4, 5 are already taken." },
     { tiles: [["1"], ["2"], ["4"], ["5"], ["6"]], st: ["placed", "placed", "placed", "placed", "moving"],
       note: ["", "", "", "", "4 → 5 → 6"], ops: 4, tone: "aha",
-      ko: "한 번 더하면 5 인데 5 도 이미 있어요.\n그래서 6 까지 가야 해요 — 한 번에 2 회예요.\n이렇게 여러 번 더해야 하는 경우가 생겨요.",
-      en: "Adding once only reaches 5, and 5 is taken too.\nSo it has to go all the way to 6 — two moves at once.\nSometimes one number needs several." },
+      ko: "한 번 더하면 5 인데 5 도 이미 있어요.\n그래서 1 을 한 번 더 더해요 — 6 이 돼요. 1 을 두 번 더한 거죠.\n이렇게 여러 번 더해야 할 때도 있어요.",
+      en: "Adding once only reaches 5, and 5 is taken too.\nSo we add 1 one more time — it becomes 6. We added 1 twice.\nSometimes one number needs more than one add." },
     /* 2026-09-22 학생 지적(3차 재검증): 코드에서 (cur - vals[i]) // k 를 처음 볼 때 막혔다.
        "그렇다니까" 로 결론만 되짚는 말풍선(components.jsx hi:[22,24])은 두 번째 실패였다.
        처방은 말이 아니라 숫자 — 이 장면의 실제 값(4 에서 6 까지, K=1)으로 나눗셈을
