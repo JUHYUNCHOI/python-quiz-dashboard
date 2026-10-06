@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSwapToWinSections, getSwapToWinWalk } from "./components";
+import { getSwapToWinWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* 샘플 입출력 상자의 «← 설명» 라벨 (형제 quest strangefn/checkups 와 같은 모양) */
@@ -243,7 +243,7 @@ export function makeSwapToWinCh1(E) {
       type: "quiz",
       narr: t(E,
         "Tiny case to lock the idea: target = ab, single string s_1 = ba. How many operations?",
-        "작은 예제로 감을 잡아요. target 은 ab 이고 s_1 은 ba 하나예요.\n몇 번 바꿔야 할까요?"),
+        "target 은 ab, s_1 은 ba 하나예요. 몇 번 바꿔야 할까요?"),
       question: t(E,
         "target = \"ab\", s_1 = \"ba\". Minimum operations?",
         "target = \"ab\", s_1 = \"ba\". 가장 적은 바꾸기 횟수는?"),
