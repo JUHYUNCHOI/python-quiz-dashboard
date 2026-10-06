@@ -161,7 +161,7 @@ async function selftest(browser) {
   console.log(`   quest ${list.length}개 · **직렬로** 돈다 (병렬은 거짓 0 을 만든다)\n`);
 
   const page = await browser.newPage({ viewport: VP });
-  let hitQ = 0, hitS = 0, seen = 0, missed = 0;
+  let hitQ = 0, hitS = 0, seen = 0, missed = 0, cutLines = 0, cutPx = 0;
   for (const id of list) {
     let r;
     try { r = await walkQuest(page, id); }
@@ -171,6 +171,7 @@ async function selftest(browser) {
     const bad = r.steps.map((s, i) => ({ ...s, i: i + 1 })).filter((s) => s.cut > 0);
     if (!bad.length) { if (ids.length) console.log(`  ✅ ${id.padEnd(20)} — 걸음 ${r.steps.length}개 전부 상자 안`); continue; }
     hitQ++; hitS += bad.length;
+    for (const s2 of bad) { cutLines += s2.cut; cutPx += s2.worst; }
     console.log(`  🚨 ${id.padEnd(20)} — 걸음 ${r.steps.length}개 중 ${bad.length}개에서 잘림`);
     for (const s of bad.slice(0, 4))
       console.log(`       걸음 ${s.i}: 강조 ${s.total}줄 중 **${s.cut}줄이 밖** (최대 ${s.worst}px · 상자 ${s.boxH}px · 줄 ${s.lineH}px)`);
@@ -178,7 +179,14 @@ async function selftest(browser) {
   }
   await browser.close();
 
+  /* ⚠️ 2026-10-06 — 처음엔 **걸음 단위로 「잘렸나/안 잘렸나」만** 셌다. 그래서
+     `CodeWalk.jsx` 의 margin 식을 고쳐 **밖으로 나간 줄이 1588 → 1079 로 줄었는데도**
+     걸음 수(309)가 **한 자리도 안 변해** 「아무 효과 없다」고 읽혔다.
+     한 걸음에 5줄이 밖이든 2줄이 밖이든 둘 다 「잘림 1건」이었기 때문이다.
+     ⭐ **나아진 것을 볼 수 있는 잣대라야 고칠 수 있다** — 줄 수와 px 도 같이 센다. */
   console.log(`\nquest ${seen}개를 실제로 밟았고, **${hitQ}개에서 찾았다** (걸음 ${hitS}개).`);
+  console.log(`   화면 밖으로 나간 **줄 ${cutLines}개** · 밖으로 나간 px 합 ${cutPx}`);
+  console.log(`   ⭐ 고치기 전후를 견줄 땐 **걸음 수가 아니라 이 두 수**를 봐라.`);
   if (missed) console.log(`⚠️ ${missed}개는 **못 봤다** — 결백이 아니다.`);
   console.log(`
 ⛔ **quest 하나를 고쳐서 닫지 마라** — 168개가 \`CodeWalk.jsx\` 를 공유한다.

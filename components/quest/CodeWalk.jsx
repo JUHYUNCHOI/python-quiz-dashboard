@@ -194,14 +194,39 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
        를 동시에 만족시킬 수 없었다 — 그래서 **복사 버튼을 박스 위에 띄우는 자체를
        포기**하고 SimNav 줄 안으로 합쳤다(아래 JSX, pinWrap 은 1줄 그대로 유지하면서
        박스 쪽은 전혀 건드리지 않는다). 이 원래 로직은 손대지 않는다. */
-    const margin = Math.min(lineH * 3, Math.max(0, box.clientHeight - bubH - lineH));
+    /* ⭐⭐ 2026-10-06 — **이 식에 「hi 가 몇 줄인지」가 아예 안 들어갔다.** 그게 버그였다.
+       `lineH` 는 **한 줄**이라, 강조가 열아홉 줄이든 서른일곱 줄이든 식은 똑같이
+       「말풍선 + 한 줄」만 들어갈 자리를 비웠다. 그래서 **말풍선이 설명하는 코드 줄이
+       상자 밖에 남았다.**
+       전수 실측(`scripts/check-codewalk-hi-fits-box.mjs`, 375×812·한국어·파이썬):
+       **밟은 109개 중 101개(93%)** · 걸음 309개. 말풍선이 상자를 통째로 덮어
+       **보이는 강조줄이 0** 인 걸음이 38개(최악 `logicalmoos` 2걸음 — 37줄 중 0줄).
+       학생(초6)이 말로 꺼냈다: *"**증거가 안 보이고 주장만** 들었어요."*
+       ⛔ 기계는 못 봤다 — 코드 줄은 **전부 DOM 에 있고** 상자만 스크롤된다.
+       ⭐ 고치는 방향이 **2026-10-03 에 되돌려진 TOP_CLEARANCE 와 정반대**다:
+         그건 여백을 **강제로 만드는**(floor) 안이라 자리가 없으면 남을 밀어냈고,
+         `alchemy` 를 고치고 `checkups` 에 7px 새 겹침을 만들었다.
+         이건 **있는 만큼만 쓰는**(ceiling) 안이다 — 자리가 모자라면 0 까지 줄어들 뿐
+         상자 밖으로 **아무것도 밀어내지 않는다.** 그래서 같은 사고가 날 길이 없다.
+       ⚠️ `hi` 가 한 줄이면 `hiH === lineH` 라 **옛 식과 완전히 같다**(퇴행 없음).
+         `hi` 가 상자보다 길면 margin 이 0 이 되어 역시 **옛 동작 그대로**다. */
+    let hiH = lineH;
+    {
+      /* 줄 높이를 곱하지 않고 **실측해서 더한다** — 긴 줄은 접혀서 더 높다. */
+      let row = bub.nextElementSibling;
+      let left = Math.max(1, hi - lo + 1);
+      let sum = 0;
+      while (row && left > 0) { sum += row.offsetHeight; row = row.nextElementSibling; left--; }
+      if (sum > 0) hiH = sum;
+    }
+    const margin = Math.min(lineH * 3, Math.max(0, box.clientHeight - bubH - hiH));
     box.scrollTop = Math.max(0, bub.offsetTop - margin);
     // ⚠️ 2026-09-18: 학생이 코드 왼쪽이 잘려 보인다고 했다 — 줄 번호도, 말풍선 첫 낱말도.
     //    `import sys` 가 `mport sys` 로. 세로만 맞추고 **가로는 그대로 뒀기** 때문이다.
     //    긴 줄을 보려고 오른쪽으로 민 상태에서 다음 조각으로 넘어가면 그대로 밀린 채 남는다.
     //    조각이 바뀌면 줄 머리부터 보여야 한다.
     box.scrollLeft = 0;
-  }, [safeIdx, lo, fitBoxH]);
+  }, [safeIdx, lo, hi, fitBoxH]);
 
   /* ⚠️ 2026-09-28: **말풍선이 하단 고정 바(`.quest-navbar`)에 가려 안 보이는** 버그.
      학생 셋이 각각 보고(strangefn·makedistinct) — 재검증 학생: "7/8, 8/8 걸음의
