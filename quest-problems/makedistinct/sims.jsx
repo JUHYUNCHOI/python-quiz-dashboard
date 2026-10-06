@@ -476,10 +476,22 @@ export function WhoCanMeetSim({ E }) {
          나머지)이 **그 물음에 답하는 과정**이 된다. */
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "idle", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
-      emKo: "누구끼리 한 줄로 세워야 할까요?",
-      emEn: "who should share a line?",
-      ko: "하나씩 세지 않는 방법이 있어요.\n작은 것부터 줄을 세우고, 옮긴 자리는 「간 거리 ÷ 2」로 한 번에 구하면 돼요.\n그런데 누구끼리 한 줄로 세워야 할까요? 3 과 4 를 섞어도 될까요?",
-      en: "There is a way that does not count one at a time.\nLine them up smallest first, and get each move with \u300cdistance / 2\u300d in one go.\nBut who should share a line? Can the 3s and the 4s go together?" },
+      emKo: "그런데 문제가 있어요",
+      emEn: "but there is a problem",
+      ko: "하나씩 세지 않아도 돼요.\n작은 것부터 줄을 세우면, 옮긴 자리는 「간 거리 ÷ 2」로 바로 나와요.\n그런데 문제가 있어요.",
+      en: "We do not have to count one at a time.\nLine them up smallest first and each move comes straight out of \u300cdistance / 2\u300d.\nBut there is a problem." },
+
+    /* ⛔ 선생님: *"마지막 줄은… **그런데 문제가 있어요.** 한 다음에 **그 다음에 설명**하는게 어떨까?"*
+       ⭐ 그리고 그 문제를 **허수아비 없이** 쓴다. 앞서 선생님이 반발하신 자리다 —
+         *"**왜 4를 9로 보내게 하는거냐고.**"* 아무도 4 를 9 로 보내지 않는다.
+       ⭐ 진짜 문제는 이것이다 — **한 줄로 세우면 3 이 간 자리가 4 를 막는 것처럼 보인다.**
+         그런데 4 는 비어 있다. 막을 리가 없다. 그게 「섞으면 안 된다」의 정체다. */
+    { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "idle", "idle", "idle"],
+      extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
+      emKo: "4 는 비어 있어요",
+      emEn: "4 is free",
+      ko: "모두 한 줄로 세우면 — 3 이 7 까지 갔으니 4 도 그 뒤로 밀어야 할 것 같아요.\n하지만 4 는 비어 있어요. 3 쪽이 쓴 자리가 4 를 막을 리가 없거든요.",
+      en: "Line everyone up together and it looks as if 4 must move past 7, since the 3s went that far.\nBut 4 is free. The spots the 3s used cannot block it." },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3,
