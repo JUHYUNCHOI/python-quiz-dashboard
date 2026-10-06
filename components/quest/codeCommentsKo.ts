@@ -40,9 +40,9 @@ export const CODE_COMMENT_KO: Record<string, string> = {
     "K 가 양수면 오름차순, 음수면 내림차순으로 정렬해요",
   "first slot stays put": "첫 값은 그 자리에 그대로 둬요",
   "If next value already past cur, keep it; else push cur + K":
-    "다음 값이 이미 앞서 있으면 그대로, 아니면 cur + K 로 밀어요",
+    "다음 값이 이미 앞서 있으면 그대로, 아니면 cur + K 로 만들어요",
   "distance from vals[i] to cur, divided by K = pushes":
-    "vals[i] 에서 cur 까지 거리를 K 로 나누면 민 횟수예요",
+    "vals[i] 에서 cur 까지 거리를 K 로 나누면 더한 횟수예요",
   // ── strangefn (USACO 2026 Third Contest, Bronze #2) ──────────────────────
   //    2026-10-02: 「Step 2」 하나만 번역돼 있어 나머지가 영어로 샜다(화면 확인).
   "Step 1: is any digit not 0 and not 1?":
