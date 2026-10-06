@@ -342,12 +342,25 @@ export function getStallingWalk(E, lang = "py") {
       { hi: [0, 2], bubble: t(E,
         "What do we need to output? How many ways to match every cow to a stall. So first read N, then the cows' heights, then the stalls' limits.",
         "무엇을 출력해야 하나요? 소를 축사에 한 마리씩 넣는 방법의 가짓수예요.\n그러니 먼저 N, 소들의 키, 축사들의 제한을 읽어요.") },
-      { hi: [4, 7], bubble: t(E,
-        "If we place the shortest cow first, we don't know how many stalls will be left for the tall cows later. So place the TALLEST cow first — sort cows tallest-first and stalls smallest-first.",
-        "작은 소부터 넣으면 큰 소한테 축사가 몇 개 남을지 알 수 없어요.\n그래서 키가 큰 소부터 넣을 수 있게 소는 큰 순서로, 축사는 작은 순서로 정렬해요.") },
-      { hi: [9, 18], bubble: t(E,
-        "Start the answer at 1. For each cow (tallest first), count stalls tall enough for her, subtract the i stalls already taken by taller cows, and multiply that into the answer — or stop at 0 if none remain.",
-        "답을 1로 시작해요.\n소마다(큰 것부터) 자기 키 이상인 축사 수를 세고, 앞선 i마리가 이미 쓴 만큼을 빼면 지금 고를 수 있는 축사 수예요.\n그 수를 답에 곱하는데, 고를 곳이 0 이거나 더 적으면 답은 0이 되고 그대로 멈춰요.") },
+      /* ⛔ 2026-10-05 — 이 두 걸음의 말풍선이 **버튼 줄에 먹혀 마지막 줄이 안 읽혔다**(36px).
+         학생: *"「…그래서 키가 큰 소부터 넣을 수 있게 소는 큰 순서로」까지만 보이고 거기서 끊겼다.
+           그 뒤 「축사는 작은 순서로 정렬해요」는 **버튼 줄 밑에 깔려서 안 보였다.**"*
+         `pedagogy-reviewer`: *"한 말풍선에 **두 동작**(소 정렬 + 축사 정렬)을 묶어 놨다 —
+           `alchemy` 와 **똑같은 모양**이다."*
+         ⭐ **공용 컴포넌트는 안 고친다**(168개가 공유, 어제 고쳤다 `checkups` 를 깨뜨려 되돌렸다).
+           **말풍선을 쪼갠다 — 글자는 안 늘린다.** 같은 말을 나눠 담을 뿐이다. */
+      { hi: [4, 6], bubble: t(E,
+        "If we place the shortest cow first, we don't know how many stalls will be left for the tall cows later.\nSo sort the cows tallest-first.",
+        "작은 소부터 넣으면 큰 소한테 축사가 몇 개 남을지 알 수 없어요.\n그래서 소를 큰 순서로 정렬해요.") },
+      { hi: [7, 7], bubble: t(E,
+        "And sort the stalls smallest-first.",
+        "축사는 작은 순서로 정렬해요.") },
+      { hi: [9, 14], bubble: t(E,
+        "Start the answer at 1. For each cow (tallest first), count the stalls tall enough for her — then subtract the i stalls the taller cows already took.",
+        "답을 1로 시작해요.\n소마다(큰 것부터) 자기 키 이상인 축사 수를 세고,\n앞선 i마리가 이미 쓴 만큼을 빼요.") },
+      { hi: [15, 18], bubble: t(E,
+        "That's how many she can choose from — multiply it into the answer.\nIf nothing is left, the answer is 0 and we stop.",
+        "그게 이 소가 고를 수 있는 축사 수예요 — 답에 곱해요.\n고를 곳이 없으면 답은 0 이 되고 그대로 멈춰요.") },
       { hi: [20, 20], bubble: t(E,
         "Once every cow is placed, print the multiplied answer.",
         "모든 소를 다 배정했으면, 곱해 둔 답을 출력해요.") },
