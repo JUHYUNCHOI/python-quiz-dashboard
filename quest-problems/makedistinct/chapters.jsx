@@ -188,7 +188,25 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
       narr: t(E,
         "Now let us try K = 2.",
         "K = 2 도 알아볼까요?"),
-      content: <WhoCanMeetSim E={E} />,
+      content: <WhoCanMeetSim key="who-1" E={E} half={1} />,
+    },
+
+    /* ⭐⭐ PM 판정(2026-10-06) — 4쪽 시뮬이 **26걸음**이 되어 둘로 갈랐다.
+         앞쪽: 공식을 세우고 **깨뜨리는** 데까지(11걸음)
+         뒤쪽: **왜 깨졌고 그래서 어떻게 하나**(15걸음)
+       ⭐ 경계가 맞는 이유 — 앞쪽 마지막이 「왜 깨졌나」로 끝나고 이 쪽이
+         「그럼 닿는 것끼리만」으로 연다. **쪽 전환 자체가 「그래서?」가 된다.**
+       ⚠️ narr 은 **앞 쪽이 끝낸 자리를 받는다** — 앞 쪽은 「4 는 9 에 닿을 수가 없다」로
+         끝난다. 그러니 여기 첫 줄은 **그 다음 물음**이어야 한다
+         (`feedback_reviewers_see_pages_teacher_sees_story` — 이상한 건 쪽과 쪽 **사이**다).
+       ⛔ 쪽이 하나 늘었다 — 글자는 **0 추가**다(걸음을 옮겼을 뿐). */
+    {
+      type: "reveal",
+      label: t(E, "Who can overlap", "누가 누구와 겹치나"),
+      narr: t(E,
+        "So which numbers can land on each other?",
+        "그럼 어떤 수끼리 같아질 수 있을까요?"),
+      content: <WhoCanMeetSim key="who-2" E={E} half={2} />,
     },
 
     // 1-6: Input — direction-only hint (2026-09-22 순서 개편으로 구 1-5 에서 여기로 밀림)

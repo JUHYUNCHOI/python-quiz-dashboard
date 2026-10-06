@@ -313,7 +313,18 @@ export function PlaceOneByOneSim({ E }) {
 
 /* ═══ K 가 2 면 누가 누구와 부딪히나 — 옛 퀴즈 자리를 대신한다
    (2026-09-22 순서 개편으로 3쪽·브루트 코드 다음, 5번째 쪽에 온다) ═══ */
-export function WhoCanMeetSim({ E }) {
+/* ⭐⭐ PM 판정(2026-10-06) — 26걸음을 **걸음 11↔12 경계로 두 쪽**으로 가른다.
+   근거가 「26은 많다」가 아니라 **결함 둘**이다:
+     ① `see-screen.mjs --sim` 이 20걸음 캡에서 **조용히 멈춰** 21~26 을 한 번도 안 봤다
+     ② 쪽수 래칫이 못 본다 — 17→26걸음이 되는 동안 `pages` 가 6 그대로였다
+   11/15 로 가르면 **둘 다 20 밑**이라 두 결함이 동시에 풀린다.
+   ⭐ 경계가 맞는 이유 — **11 은 「왜 깨졌는지 알았다」로 끝나고 12 는 「그럼 닿는
+     것끼리만」으로 연다.** 쪽 전환 자체가 「그래서?」가 된다.
+   ⚠️ 걸음 데이터는 **하나로 두고 보여주는 구간만** 가른다 — 두 벌로 복사하면
+     한쪽만 고치는 사고가 난다(이 quest 가 오늘 그걸 세 번 했다). */
+const WHO_SPLIT = 11;   // 「왜 깨졌나」 / 「그래서 이렇게」 경계
+
+export function WhoCanMeetSim({ E, half = 1 }) {
   /* 원래 객관식 퀴즈였다. 선생님: "굳이 필요없는 퀴즈는 없애고 … 눈에 보이게끔".
      같은 것을 보여주되 답을 고르는 게 아니라 눈으로 보게 한다.
 
@@ -714,15 +725,18 @@ export function WhoCanMeetSim({ E }) {
 
     
   ];
-  const ts = useTraceStep(steps, "quest-step-makedistinct-whocanmeetsim");
-  const s = steps[ts.safe];
+  const shown = half === 2 ? steps.slice(WHO_SPLIT) : steps.slice(0, WHO_SPLIT);
+  const ts = useTraceStep(shown, `quest-step-makedistinct-whocanmeet-${half}`);
+  const s = shown[ts.safe];
 
   return (
     <div style={{ padding: 16 }}>
-      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+      <StepHeader accent={A} idx={ts.safe} total={shown.length} isEn={E}
         /* ⚠️ PM 이 잡았다(2026-09-29) — 제목이 「K = 2 일 때」인데 걸음 5·6 은
              K = 1 · K = 3 을 다룬다. 걸음을 일반화로 바꾸면서 **제목을 안 따라 고쳤다.** */
-        title={t(E, "Which values can ever overlap?", "누가 누구와 겹칠 수 있나")}
+        title={half === 2
+          ? t(E, "So who can ever overlap?", "그럼 누가 누구와 겹칠 수 있나")
+          : t(E, "Does the same way still work?", "같은 방법이 K = 2 에서도 통할까")}
  />
       <StepFade fast k={ts.safe}>
         <Say tone={s.tone}><Em text={t(E, s.en, s.ko)} em={t(E, s.emEn, s.emKo)} /></Say>
