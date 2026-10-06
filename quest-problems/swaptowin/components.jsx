@@ -261,19 +261,19 @@ const _SW_VARS = [
 export function getSwapToWinWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _SW_VARS, beats: [
-      { hi: [5, 16],  bubble: t(E, "What must we hand back? The swaps that turn s_1 into target.\nops will collect every swap we make, in order.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요.\nops 에 우리가 쓴 바꾸기를 순서대로 모아 둘 거예요.") },
-      { hi: [18, 22], bubble: t(E, "Why left to right? Every fix only ever touches column k or later —\nso a position we already matched stays matched.", "왜 왼쪽부터일까요?\n고칠 때 「k 번째나 그 뒤」 칸만 건드려요 — 그래서 한 번 맞춘 자리는 계속 맞아 있어요.") },
-      { hi: [24, 36], bubble: t(E, "Why does the record say k+1 and p+1?\nThe code counts columns from 0, but the answer sheet counts from 1 —\nso it adds one on the way out.\nThat is where the last two numbers of 1 1 1 3 come from.", "왜 적을 때 k+1, p+1 일까요?\n코드는 칸을 0 부터 세는데 답은 1 부터 세요 — 그래서 적을 때 1 을 더해요.\n샘플 「1 1 1 3」에서 뒤 두 숫자가 그렇게 나온 거예요.") },
-      { hi: [38, 57], bubble: t(E, "Why does this stay within 2M?\nOne position costs at most two — line the letter up at column k (1),\nthen swap that column with s_1 (1). Over M positions that is 2M.", "왜 2M 을 안 넘을까요?\n한 자리에 많아야 두 번이에요 — k 칸으로 옮기고(1), s_1 과 맞바꾸고(1).\nM 자리를 다 더해도 2M 이에요.") },
-      { hi: [60, 63], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.") },
+      { hi: [5, 16],  bubble: t(E, "What must we hand back? The swaps that turn s_1 into target.\nFirst read everything in.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요. 먼저 입력을 다 읽어요.") },
+      { hi: [18, 22], bubble: t(E, "Why left to right? Every fix only ever touches column k or later —\nso a position we already matched stays matched.\nops stacks each swap in order.", "왜 왼쪽부터일까요?\n고칠 때 「k 번째나 그 뒤」 칸만 건드려요 — 그래서 한 번 맞춘 자리는 계속 맞아 있어요.\n바꾼 기록은 ops 에 순서대로 쌓아 둬요.") },
+      { hi: [24, 36], bubble: t(E, "Why does p start at -1?\nColumn numbers start at 0, so -1 can never be one —\nit is the mark for not-found-yet.", "왜 p 를 -1 로 시작할까요?\n칸 번호는 0 부터라 -1 은 칸 번호가 될 수 없어요.\n「아직 못 찾았다」는 표시로 써요.") },
+      { hi: [38, 57], bubble: t(E, "Why does y start at 1?\nRow 0 is s_1 itself — we cannot borrow from the string we are fixing,\nso the search starts at row 1.", "왜 y 가 1 부터일까요?\n0 번 줄은 s_1 자신이에요 — 고치는 중인 줄에서 빌릴 수는 없어요.\n그래서 1 번 줄부터 찾아요.") },
+      { hi: [60, 63], bubble: t(E, "Can this count go past 2M?\nOne position costs at most two — move the letter to column k, then swap it in.\nOver M positions that is 2M. Then print the count and the swaps.", "이 횟수가 2M 을 넘을 수 있을까요?\n한 자리에 많아야 두 번이에요 — 글자를 k 칸으로 옮기고, s_1 과 맞바꾸고.\nM 자리를 다 더해도 2M 이에요. 그 횟수와 기록을 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _SW_VARS, beats: [
-    { hi: [0, 7],   bubble: t(E, "What must we hand back? The swaps that turn s_1 into target.\nops will collect every swap we make, in order.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요.\nops 에 우리가 쓴 바꾸기를 순서대로 모아 둘 거예요.") },
+    { hi: [0, 7],   bubble: t(E, "What do we have to collect? Two things — how many swaps, and which ones.\nops stacks every swap we make, in order.", "무엇을 모아 둬야 할까요?\n답은 「바꾼 횟수」와 「바꾼 기록」 둘이에요.\nops 에 순서대로 쌓아 둬요.") },
     { hi: [8, 11], bubble: t(E, "Why left to right? Every fix only ever touches column k or later —\nso a position we already matched stays matched.", "왜 왼쪽부터일까요?\n고칠 때 「k 번째나 그 뒤」 칸만 건드려요 — 그래서 한 번 맞춘 자리는 계속 맞아 있어요.") },
-    { hi: [13, 23], bubble: t(E, "Why does the record say k+1 and p+1?\nThe code counts columns from 0, but the answer sheet counts from 1 —\nso it adds one on the way out.\nThat is where the last two numbers of 1 1 1 3 come from.", "왜 적을 때 k+1, p+1 일까요?\n코드는 칸을 0 부터 세는데 답은 1 부터 세요 — 그래서 적을 때 1 을 더해요.\n샘플 「1 1 1 3」에서 뒤 두 숫자가 그렇게 나온 거예요.") },
-    { hi: [25, 43], bubble: t(E, "Why does this stay within 2M?\nOne position costs at most two — line the letter up at column k (1),\nthen swap that column with s_1 (1). Over M positions that is 2M.", "왜 2M 을 안 넘을까요?\n한 자리에 많아야 두 번이에요 — k 칸으로 옮기고(1), s_1 과 맞바꾸고(1).\nM 자리를 다 더해도 2M 이에요.") },
-    { hi: [45, 47], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.\nSkip the second line if there were no swaps.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.\n바꾼 게 없으면 둘째 줄은 건너뛰어요.") },
+    { hi: [13, 23], bubble: t(E, "Why write down that we found it?\nThis loop can end two ways — it stopped because it found one,\nor it ran out. found tells those two apart.", "왜 「찾았다」를 따로 적어 둘까요?\n이 반복은 끝나는 길이 둘이에요 — 찾아서 멈춘 길, 끝까지 못 찾은 길.\nfound 가 그 둘을 갈라 줘요.") },
+    { hi: [25, 43], bubble: t(E, "Why does y start at 1?\nRow 0 is s_1 itself — we cannot borrow from the string we are fixing,\nso the search starts at row 1.", "왜 y 가 1 부터일까요?\n0 번 줄은 s_1 자신이에요 — 고치는 중인 줄에서 빌릴 수는 없어요.\n그래서 1 번 줄부터 찾아요.") },
+    { hi: [45, 47], bubble: t(E, "Can this count go past 2M?\nOne position costs at most two — move the letter to column k, then swap it in.\nOver M positions that is 2M. Then print the count and the swaps.", "이 횟수가 2M 을 넘을 수 있을까요?\n한 자리에 많아야 두 번이에요 — 글자를 k 칸으로 옮기고, s_1 과 맞바꾸고.\nM 자리를 다 더해도 2M 이에요. 그 횟수와 기록을 출력해요.") },
   ] };
 }
 
