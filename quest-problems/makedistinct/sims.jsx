@@ -452,8 +452,8 @@ export function WhoCanMeetSim({ E }) {
          ⭐ **맞다.** 옛 예제 `3,3,3,4` 는 **4 가 영영 안 움직인다** — 그러니 「4 가 갈 수 있는 수」가
            **일어나지 않을 일**이었다. 「따로 봐도 된다」가 **아무것도 벌어 주지 않았다.**
          → 예제를 **`3,3,3,4,4`** 로 바꿨다. 이제 **4 쪽도 실제로 밀어야 한다.** */
-      ko: "이제 넷째를 봐요 — 4 예요. 그런데 다섯째도 4 라서 겹쳤어요.\n4 에 2 를 더하면 4, 6, 8 … 3 쪽과는 하나도 안 겹쳐요.",
-      en: "Now the fourth — it is 4. And the fifth is 4 as well, so they collide.\nAdding 2 to 4 gives 4, 6, 8 … which never meets the 3 side." },
+      ko: "넷째 4 는 그대로 둬요 — 앞에 4 가 없어요.\n다섯째도 4 라서 넷째와 겹쳤어요.\n4 에 2 를 더하면 4, 6, 8 … 3 쪽과는 하나도 안 겹쳐요.",
+      en: "The fourth is 4 and nothing before it is 4, so it stays.\nThe fifth is 4 too, so it collides with the fourth.\nAdding 2 to 4 gives 4, 6, 8 … which never meets the 3 side." },
 
     /* 3. **물음 — 이게 빠져 있었다.**
          ⚠️ 2026-09-29 선생님: *"k를 더하면 서로 뭔가 영향이 없다. 그 다음 나머지…
