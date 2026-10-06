@@ -380,8 +380,8 @@ export function WhoCanMeetSim({ E }) {
            ⓑ 값이 5 로 바뀜 + `extra` 에 `· 3→5` — 「밀었다」를 본다 */
     { tiles: [3, 3, 3, 4, 4, 4], st: ["placed", "idle", "idle", "idle", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], hot: 1, push: 1,
-      ko: "첫째 3 은 그대로 둬요.",
-      en: "Leave the first 3 as it is." },
+      ko: "3쪽에서는 K 가 1 이라 1 을 두 번 더해야 했죠. 이번엔 K = 2 예요 — 같은 방법이 통할까요?\n첫째 3 은 그대로 둬요.",
+      en: "Last page K was 1, and one number needed two adds. Now K = 2 — does the same way still work?\nLeave the first 3 as it is." },
 
     /* ⓐ 둘째를 켠다. **값은 아직 3 이다** — 지금 보는 것은 「겹쳤다」 하나뿐. */
     { tiles: [3, 3, 3, 4, 4, 4], st: ["placed", "moving", "idle", "idle", "idle", "idle"],
