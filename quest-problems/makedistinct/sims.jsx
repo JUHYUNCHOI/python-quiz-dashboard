@@ -442,8 +442,8 @@ export function WhoCanMeetSim({ E }) {
       emKo: "199억 9,990만 번",
       emEn: "19,999,900,000",
       sum: true,
-      ko: "하나씩 더해도 답은 나와요 — 3 회.\n그런데 20만 개가 한 곳에 몰리면 199억 9,990만 번이에요.",
-      en: "Adding one at a time does give the answer — 3.\nBut if 200,000 numbers pile on one spot, it is 19,999,900,000." },
+      ko: "하나씩 더해도 답은 나와요 — 3 회.\n그런데 같은 수가 20만 개 있으면 199억 9,990만 번이에요.",
+      en: "Adding one at a time does give the answer — 3.\nBut if 200,000 of them are the same, it is 19,999,900,000." },
 
     /* 2. 관찰 둘 — 두 번째 줄. 여기서도 이름은 없다. 눈으로 「안 겹친다」만. */
     { tiles: [3, 5, 7, 4, 4], st: ["placed", "idle", "idle", "even", "even"],
@@ -687,9 +687,9 @@ export function WhoCanMeetSim({ E }) {
             width: "fit-content", maxWidth: "100%", marginLeft: "auto", marginRight: "auto",
             background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: "8px 12px" }}>
             {[
-              { ko: "3 개가 몰리면", en: "3 on one spot",
+              { ko: "같은 수가 세 개면", en: "three of the same",
                 vKo: "0 + 1 + 2 = 3 회", vEn: "0 + 1 + 2 = 3" },
-              { ko: "20만 개가 몰리면", en: "200,000 on one spot",
+              { ko: "같은 수가 20만 개면", en: "200,000 of the same",
                 vKo: "0 + 1 + 2 + ⋯ + 199,999 = 199억 9,990만 회",
                 vEn: "0 + 1 + 2 + ⋯ + 199,999 = 19,999,900,000" },
             ].map((r, i) => (

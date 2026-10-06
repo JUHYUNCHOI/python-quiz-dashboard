@@ -141,7 +141,7 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
             </div>
             <div style={{ fontSize: 11.5, color: "#b91c1c", marginTop: 6, fontWeight: 600, lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E, "If all 200,000 numbers pile up on one spot, the last one gets pushed almost 200,000 times — 19,999,900,000 pushes in all. Counting them one at a time never finishes.",
-                    "수 200,000 개가 한 곳에 몰리면 마지막 수는 200,000 번 가까이 더해져요 — 다 합치면 199억 9,990만 번이에요.\n한 번에 하나씩 세는 방법으로는 끝나지 않아요.")}
+                    "같은 수가 200,000 개 있으면 마지막 수는 200,000 번 가까이 더해져요 — 다 합치면 199억 9,990만 번이에요.\n한 번에 하나씩 세는 방법으로는 끝나지 않아요.")}
             </div>
           </div>
         </div>

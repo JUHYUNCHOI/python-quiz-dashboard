@@ -180,7 +180,7 @@ export function getMakeDistinctSections(E) {
       ],
       cppOnly: [
         t(E, "N can be up to 200,000 (page 2) — if many numbers pile up, the answer can pass 2 billion, which int cannot hold, so long long is required.",
-            "N 이 최대 200,000 이에요(2쪽 제약). 같은 수가 몰리면 답이 20억을 넘을 수 있어요. int 에는 안 들어가니 long long 을 꼭 써야 해요."),
+            "N 이 최대 200,000 이에요(2쪽 제약). 같은 수가 많으면 답이 20억을 넘을 수 있어요. int 에는 안 들어가니 long long 을 꼭 써야 해요."),
         t(E, "((x % m) + m) % m gives a non-negative residue even for negative inputs (defensive).",
             "((x % m) + m) % m 으로 구하면 음수가 들어와도 나머지가 0 이상으로 나와요."),
       ],
