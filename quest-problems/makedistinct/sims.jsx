@@ -442,8 +442,8 @@ export function WhoCanMeetSim({ E }) {
       emKo: "199억 9,990만 번",
       emEn: "19,999,900,000",
       sum: true,
-      ko: "하나씩 더해도 답은 나와요 — 3 회.\n그런데 같은 수가 20만 개 있으면 199억 9,990만 번이에요.",
-      en: "Adding one at a time does give the answer — 3.\nBut if 200,000 of them are the same, it is 19,999,900,000." },
+      ko: "하나씩 해보면 답이 나와요 — 3 회.\n그런데 같은 수가 20만 개 있으면 199억 9,990만 번이에요.",
+      en: "Doing it one at a time gives the answer — 3.\nBut if 200,000 of them are the same, it is 19,999,900,000." },
 
     /* 2. 관찰 둘 — 두 번째 줄. 여기서도 이름은 없다. 눈으로 「안 겹친다」만. */
     /* ⛔⛔ 2026-10-06 선생님: *"넷째와 다섯째 설명을 **다른 시뮬화면으로 나눠줘**"*
