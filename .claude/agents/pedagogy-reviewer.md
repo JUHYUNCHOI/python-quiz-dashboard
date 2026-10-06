@@ -123,6 +123,11 @@ node scripts/see-screen.mjs <url> --shot /tmp/x.png     # 스크린샷
 `[3,3,3,4]` 에서는 4 가 영영 안 움직여서 「따로 봐도 된다」가 **아무것도 벌어 주지 않았다**
 ([[example-must-make-the-rule-visible]] 과 같은 층인데 **그 메모리가 있는데도 또 났다**).
 
+⭐ **볼 자리는 기계가 줄 수 있다 — `python3 scripts/check-causal-claim.py <id>`** (2026-10-06 신설).
+한 문장 안에 「주장 낱말 + 장치 이름」이 같이 있는 자리를 띄운다(전수 31건 · quest 19개).
+⛔ **판정이 아니다** — 참인지는 네가 끄고 돌려 봐야 안다(실측 `strangefn` 4건은 전부 참).
+⛔ **0건이 결백이 아니다** — 장치 이름 없이 주장만 하는 문장은 못 본다.
+
 근거: `memory/feedback_turn_the_claim_off.md`
 
 
