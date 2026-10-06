@@ -141,7 +141,7 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
             </div>
             <div style={{ fontSize: 11.5, color: "#b91c1c", marginTop: 6, fontWeight: 600, lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E, "If all 200,000 numbers pile up on one spot, the last one gets pushed almost 200,000 times — 19,999,900,000 pushes in all. Counting them one at a time never finishes.",
-                    "수 200,000 개가 한 곳에 몰리면 마지막 수는 200,000 번 가까이 밀려요 — 다 합치면 199억 9,990만 번이에요.\n한 번에 하나씩 세는 방법으로는 끝나지 않아요.")}
+                    "수 200,000 개가 한 곳에 몰리면 마지막 수는 200,000 번 가까이 더해져요 — 다 합치면 199억 9,990만 번이에요.\n한 번에 하나씩 세는 방법으로는 끝나지 않아요.")}
             </div>
           </div>
         </div>
@@ -218,7 +218,7 @@ export function makeMakeDistinctCh1(E, codeLang = "py") {
          ⛔ 걸음을 늘리지 않는다 — 대신 아래 `explain` 에서 같은 말을 한 줄 뺐다. */
       hint: t(E,
         "K is negative, so each push makes a value 2 smaller. Which values can ever overlap?",
-        "K 가 음수라 밀면 값이 2 씩 작아져요. 어떤 수끼리 겹칠 수 있을까요?"),
+        "K 가 음수라 더하면 값이 2 씩 작아져요. 어떤 수끼리 겹칠 수 있을까요?"),
       answer: 3,
       /* 2026-09-21: 맞혀도 ✅ 만 뜨고 **왜 2 인지**가 없었다 (재검증 학생 지적).
          `NumInput` 에 explain 을 새로 달아 이 자리부터 쓴다. */
@@ -253,7 +253,7 @@ export function makeMakeDistinctCh2(E, lang = "py") {
         label: t(E, "Code", "코드"),
         narr: t(E,
           "Group by remainder, sort, then work out the pushes with one division.",
-          "나머지로 묶고, 정렬하고, 민 횟수는 나눗셈으로 한 번에 구해요."),
+          "나머지로 묶고, 정렬하고, 더한 횟수는 나눗셈으로 한 번에 구해요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />),
       };
     })(),
