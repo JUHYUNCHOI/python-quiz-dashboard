@@ -84,7 +84,13 @@ async function nextPage(page) {
 }
 
 async function scanQuest(browser, id, lang) {
-  const page = await browser.newPage({ viewport: { width: 390, height: 900 } });
+  /* ⚠️ 2026-10-06 — 여기만 **390×900** 이었다. 저장소 표준은 `see-screen.mjs:56` 의
+       **375×812**(학생이 쓰는 화면)다. 크기가 다르면 **같은 화면이 다르게 보인다** —
+       그날 내가 390×900 으로 「코드 창에 1~8줄이 보인다」고 쟀는데 학생이 375×812 에서
+       보니 **1~5줄**이었다. 「말풍선이 가리키는 줄이 화면에 있나」 판정이 통째로 뒤집혔다.
+     ⭐ 새 화면 스크립트를 쓸 땐 이 숫자를 **베끼지 말고** 표준을 따라라
+       (`feedback_check_as_the_student_sees_it` · `feedback_example_code_is_contagious`). */
+  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   const rows = [];
   try {
     await page.goto(`${BASE}/${id}?lang=${lang}`, { waitUntil: "networkidle" });
