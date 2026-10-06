@@ -261,17 +261,17 @@ const _SW_VARS = [
 export function getSwapToWinWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _SW_VARS, beats: [
-      { hi: [5, 16],  bubble: t(E, "What must we hand back? The swaps that turn s_1 into target.\nFor each test, read N, M, target, and the N strings.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요.\n테스트마다 N, M, target, 문자열 N 개를 읽어요.") },
+      { hi: [5, 16],  bubble: t(E, "What must we hand back? The swaps that turn s_1 into target.\nops will collect every swap we make, in order.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요.\nops 에 우리가 쓴 바꾸기를 순서대로 모아 둘 거예요.") },
       { hi: [18, 22], bubble: t(E, "Why left to right? Every fix only ever touches column k or later —\nso a position we already matched stays matched.", "왜 왼쪽부터일까요?\n고칠 때 「k 번째나 그 뒤」 칸만 건드려요 — 그래서 한 번 맞춘 자리는 계속 맞아 있어요.") },
-      { hi: [24, 36], bubble: t(E, "Why does the search start at k+1?\nEverything before k is already matched — taking a letter from there\nwould break a column we had finished.", "왜 k+1 부터 찾을까요?\nk 보다 앞은 이미 맞춰 둔 자리예요 — 거기서 가져오면 그 자리가 다시 깨져요.") },
+      { hi: [24, 36], bubble: t(E, "Why does the record say k+1 and p+1?\nThe code counts columns from 0, but the answer sheet counts from 1 —\nso it adds one on the way out.\nThat is where the last two numbers of 1 1 1 3 come from.", "왜 적을 때 k+1, p+1 일까요?\n코드는 칸을 0 부터 세는데 답은 1 부터 세요 — 그래서 적을 때 1 을 더해요.\n샘플 「1 1 1 3」에서 뒤 두 숫자가 그렇게 나온 거예요.") },
       { hi: [38, 57], bubble: t(E, "Why does this stay within 2M?\nOne position costs at most two — line the letter up at column k (1),\nthen swap that column with s_1 (1). Over M positions that is 2M.", "왜 2M 을 안 넘을까요?\n한 자리에 많아야 두 번이에요 — k 칸으로 옮기고(1), s_1 과 맞바꾸고(1).\nM 자리를 다 더해도 2M 이에요.") },
       { hi: [60, 63], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _SW_VARS, beats: [
-    { hi: [0, 7],   bubble: t(E, "What must we hand back? The swaps that turn s_1 into target.\nFor each test, read N, M, target, and the N strings.\nops will collect every swap we make, in order.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요.\n테스트마다 N, M, target, 문자열 N 개를 읽어요.\nops 에 우리가 쓴 바꾸기를 순서대로 모아 둘 거예요.") },
+    { hi: [0, 7],   bubble: t(E, "What must we hand back? The swaps that turn s_1 into target.\nops will collect every swap we make, in order.", "무엇을 내놓아야 하나요?\ns_1 을 target 으로 만드는 바꾸기들이에요.\nops 에 우리가 쓴 바꾸기를 순서대로 모아 둘 거예요.") },
     { hi: [8, 11], bubble: t(E, "Why left to right? Every fix only ever touches column k or later —\nso a position we already matched stays matched.", "왜 왼쪽부터일까요?\n고칠 때 「k 번째나 그 뒤」 칸만 건드려요 — 그래서 한 번 맞춘 자리는 계속 맞아 있어요.") },
-    { hi: [13, 23], bubble: t(E, "Why does the search start at k+1?\nEverything before k is already matched — taking a letter from there\nwould break a column we had finished.", "왜 k+1 부터 찾을까요?\nk 보다 앞은 이미 맞춰 둔 자리예요 — 거기서 가져오면 그 자리가 다시 깨져요.") },
+    { hi: [13, 23], bubble: t(E, "Why does the record say k+1 and p+1?\nThe code counts columns from 0, but the answer sheet counts from 1 —\nso it adds one on the way out.\nThat is where the last two numbers of 1 1 1 3 come from.", "왜 적을 때 k+1, p+1 일까요?\n코드는 칸을 0 부터 세는데 답은 1 부터 세요 — 그래서 적을 때 1 을 더해요.\n샘플 「1 1 1 3」에서 뒤 두 숫자가 그렇게 나온 거예요.") },
     { hi: [25, 43], bubble: t(E, "Why does this stay within 2M?\nOne position costs at most two — line the letter up at column k (1),\nthen swap that column with s_1 (1). Over M positions that is 2M.", "왜 2M 을 안 넘을까요?\n한 자리에 많아야 두 번이에요 — k 칸으로 옮기고(1), s_1 과 맞바꾸고(1).\nM 자리를 다 더해도 2M 이에요.") },
     { hi: [45, 47], bubble: t(E, "Every column is fixed now.\nPrint how many swaps we used, then the swaps themselves, in order.\nSkip the second line if there were no swaps.", "이제 모든 칸이 맞춰졌어요.\n바꾼 횟수를 먼저 출력하고, 그다음 바꾼 기록을 순서대로 출력해요.\n바꾼 게 없으면 둘째 줄은 건너뛰어요.") },
   ] };
