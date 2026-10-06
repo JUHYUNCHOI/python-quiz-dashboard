@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 import { StepFade } from "@/components/quest/StepFade";
 import { t } from "@/components/quest/theme";
@@ -391,8 +392,8 @@ export function WhoCanMeetSim({ E, half = 1 }) {
            ⓑ 값이 5 로 바뀜 + `extra` 에 `· 3→5` — 「밀었다」를 본다 */
     { tiles: [3, 3, 3, 4, 4, 4], st: ["placed", "idle", "idle", "idle", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], hot: 1, push: 1,
-      ko: "첫째 3 은 그대로 둬요.",
-      en: "Leave the first 3 as it is." },
+      ko: "이번엔 겹치는 수를 더 많이 놓고 볼게요 — 3 이 셋, 4 가 셋.\n첫째 3 은 그대로 둬요.",
+      en: "This time we line up more clashes — three 3s and three 4s.\nLeave the first 3 as it is." },
 
     /* ⓐ 둘째를 켠다. **값은 아직 3 이다** — 지금 보는 것은 「겹쳤다」 하나뿐. */
     { tiles: [3, 3, 3, 4, 4, 4], st: ["placed", "moving", "idle", "idle", "idle", "idle"],
@@ -645,8 +646,8 @@ export function WhoCanMeetSim({ E, half = 1 }) {
       /* ⛔ 2026-10-06 선생님: *"그럼 **k=1일때는 소용이 없겠네?**"* → **맞다.**
            K=1 이면 묶음이 **하나**라 가르는 일이 아무것도 안 한다. 화면이 그 말을 해야 한다 —
            **「언제 소용없나」를 말해야 「언제 소용있나」가 믿을 만해진다.** */
-      ko: "K 가 1 이면 어떨까요? 1 로 나누면 나머지가 늘 0 이에요.\n묶음이 하나뿐이라 가르는 게 아무 소용이 없어요 — 어떤 두 수든 같아질 수 있어요.",
-      en: "What if K is 1? Divide anything by 1 and 0 is left.\nEvery leftover is the same, so any two numbers can meet." },
+      ko: "지금까지는 K = 2 로만 봤어요. 다른 K 에서도 그럴까요?\n3쪽처럼 K 가 1 이면 — 1 로 나눈 나머지는 늘 0 이라 모두 한 줄이에요.\n그래서 3쪽에서는 가를 일이 없었던 거예요.",
+      en: "So far we only tried K = 2. What about other values of K?\nWith K = 1, as on page 3, every remainder is 0 — so everything sits in one line.\nThat is why page 3 never had to split anything." },
 
     /* 6. 일반화 **한 칸 더.** K=3. 셋째 줄은 **비워 둔다** — 우리 수가 안 쓰는 줄이다
          (`5 → 8 → 11` 을 쓰면 5 가 어디서 왔는지 학생이 묻는다). */
@@ -716,12 +717,26 @@ export function WhoCanMeetSim({ E, half = 1 }) {
          상자 혼자 네 가지를 말한다 — ①4 도 9 까지 ②(9−4)÷2 = 2.5 ③못 간다 ④횟수 5.
        → **결과 → 상자 한 토막씩** 으로 가른다. 상자가 열리는 동안은 아래 줄 둘을
          내린다 — 지금 볼 곳이 상자 하나가 되게. */
+    /* ⛔ 2026-10-06 `quest-auditor`: **이 시뮬 자신의 규칙을 어기고 있었다.**
+         3 쪽 체인은 `3→5`·`5→7` 을 **따로따로** 걸음으로 보여줬는데, 4 쪽 체인은
+         `넷째 그대로 · 4→6 · 4→8` 셋에 **`ops` 3→6 점프까지 한 걸음에** 몰아넣었다.
+         선생님이 오늘 *"한 번에 한 가지"* 라고 하신 그 규칙을 **같은 시뮬 안에서
+         앞뒤가 다르게** 쓰고 있었다.
+       ⭐ 둘로 가른다 — **①4 쪽이 풀린다(3 쪽과 똑같이) ②그래서 합이 6.**
+         섞여 있던 「대칭이다」와 「총합이다」가 갈린다. */
     { tiles: [3, 5, 7, 4, 6, 8], st: ["placed", "placed", "placed", "placed", "moving", "moving"],
+      extra: ["", "", "", "", "", ""], chains: [1, 0], named: true, ops: 3,
+      emKo: "3 쪽과 똑같아요",
+      emEn: "same as the 3 side",
+      ko: "4 쪽도 3 쪽과 똑같아요 — 넷째는 그대로, 다섯째는 6, 여섯째는 8.\n여기도 0 + 1 + 2 = 3 회예요.",
+      en: "The 4 side goes exactly like the 3 side — fourth stays, fifth to 6, sixth to 8.\nHere too it is 0 + 1 + 2 = 3." },
+
+    { tiles: [3, 5, 7, 4, 6, 8], st: ["placed", "placed", "placed", "placed", "placed", "placed"],
       extra: ["", "", "", "", "", ""], chains: [1, 0], named: true, ops: 6, tone: "aha",
       emKo: "3 + 3 = 6 회",
       emEn: "3 + 3 = 6",
-      ko: "4 쪽도 똑같아요 — 넷째는 그대로, 다섯째는 6, 여섯째는 8. 0 + 1 + 2 = 3 회.\n3, 5, 7, 4, 6, 8 — 다 달라졌어요. 3 + 3 = 6 회.",
-      en: "The 4 side is the same — fourth stays, fifth to 6, sixth to 8. 0 + 1 + 2 = 3.\n3, 5, 7, 4, 6, 8 — all different now. 3 + 3 = 6." },
+      ko: "3, 5, 7, 4, 6, 8 — 다 달라졌어요.\n두 줄을 합치면 3 + 3 = 6 회예요.",
+      en: "3, 5, 7, 4, 6, 8 — all different now.\nAdding the two lines together: 3 + 3 = 6." },
 
     
   ];
@@ -729,8 +744,28 @@ export function WhoCanMeetSim({ E, half = 1 }) {
   const ts = useTraceStep(shown, `quest-step-makedistinct-whocanmeet-${half}`);
   const s = shown[ts.safe];
 
+  /* ⛔⛔ 2026-10-06 — **결론 문장이 화면 밖으로 잘려 사라지고 있었다.**
+     `ux-reviewer` 가 스크린샷으로 잡고 `project-lead` 가 직접 재현했다 —
+     5쪽 걸음 12·14·15 의 말풍선 `top` 이 **−15 · −38 · −38**.
+     걸음 15(**이 문제의 결론**)는 첫 구절 *"4 쪽도 똑같아요 — 넷째는 그대로,"* 를
+     **통째로 잃고 숫자만** 보인다. 학생은 왜 4 쪽도 같은 논리인지 못 본다.
+   ⭐ 원인은 **걸음마다 콘텐츠 높이가 달라지는 것**이다 — 나머지 상자·체인 줄이
+     붙었다 사라지면서 아래 내용이 줄고, 스크롤은 그대로라 **말풍선이 위로 밀려 나간다.**
+   ⚠️ 고치는 자리가 공용 `StepFade`(**11개 파일 공유**)지만 **거긴 안 건드린다** —
+     이 증상이 이 quest 하나에서만 확인됐고, 이 저장소엔 **공용 하나 고쳤다가 다른 데를
+     깨뜨린 전례가 둘** 있다(PM 판정). 여기서만 막는다.
+   ⭐ **위로 잘렸을 때만, 잘린 만큼만** 되돌린다 — 평소에는 아무 일도 안 한다.
+     학생이 일부러 내려 본 자리를 함부로 끌어올리지 않는다. */
+  const boxRef = useRef(null);
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top;
+    if (top < 0) window.scrollBy({ top: top - 12, behavior: "auto" });
+  }, [ts.safe]);
+
   return (
-    <div style={{ padding: 16 }}>
+    <div ref={boxRef} style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={shown.length} isEn={E}
         /* ⚠️ PM 이 잡았다(2026-09-29) — 제목이 「K = 2 일 때」인데 걸음 5·6 은
              K = 1 · K = 3 을 다룬다. 걸음을 일반화로 바꾸면서 **제목을 안 따라 고쳤다.** */
