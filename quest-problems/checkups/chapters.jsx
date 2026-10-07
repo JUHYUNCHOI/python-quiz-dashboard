@@ -577,7 +577,16 @@ function getCheckupsExpandWalk(E, lang, secFull) {
     code: secFull.py,
     vars,
     beats: [
-      { hi: [0, 5], bubble: t(E,
+      /* ⛔ 2026-10-07 — 이 걸음이 `hi: [0, 5]` 라 **`import sys` 와 빈 줄까지** 노랗게 칠했다.
+           말풍선은 `expand` 얘기만 하는데 **강조된 첫 줄이 `import sys`** 였다.
+           학생(초6)이 코드 탭을 밟고 보고했다: *"말풍선은 expand 를 말하는데
+           노랗게 칠해진 줄은 `import sys` / `input = sys.stdin.readline` 두 줄이었어요."*
+         ⭐ `[3, 5]` 로 좁힌다 — `def expand` 부터다. **지금 마주한 질문**으로 열어야 한다
+           (`check-codewalk-thinking-order.py` — 「헤더를 적고」로 여는 건 생각이 0 이다).
+         ⚠️ 0~1줄(import)은 **어느 걸음도 안 덮는다. 일부러 그렇다** — 상용구라
+           설명할 생각이 없고, 덮으려고 걸음을 만들면 그게 파일 순서 읊기다.
+         ⚠️ 덤으로 강조가 6줄 → **3줄**이 되어 상자(179px)에 들어갈 여지가 생긴다. */
+      { hi: [3, 5], bubble: t(E,
         "expand widens a window outward from (left, right), one step at a time, starting from matches = baseMatches.",
         "expand 는 (left, right) 에서 바깥으로 한 칸씩 창을 넓혀요. matches 는 baseMatches 에서 시작해요.") },
 /* ⛔ 2026-10-06 — 이 말풍선이 **153자**로 코드 상자(179px)를 **통째로 덮어
