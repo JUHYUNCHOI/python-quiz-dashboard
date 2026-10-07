@@ -29,7 +29,38 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
      pedagogy-reviewer 가 mission 승격 검토 중에 찾았다.
      "처음부터 쓰기" 를 mission 으로 올려도 답이 두 클릭 거리면 의미가 없다. */
   const [attempts, setAttempts] = useState(0)
-  const hasBlanks = !!(step.initialCode && step.initialCode.includes('___'))
+/* 파이썬 `#` 주석을 지운 코드만 돌려준다 — **따옴표 안의 `#` 은 주석이 아니다.**
+   (`print(f"#{x}")` · `'#' * n` 을 주석으로 오판하면 멀쩡한 빈칸을 놓친다.)
+   ⚠️ `scripts/check-step-solvable.py` 의 `code_only()` 와 **같은 규칙**이다. 같이 고쳐라. */
+function codeWithoutComments(code: string): string {
+  return code.split("\n").map(ln => {
+    let q: string | null = null
+    for (let i = 0; i < ln.length; i++) {
+      const c = ln[i]
+      if (q) {
+        if (c === "\\") { i++; continue }
+        if (c === q) q = null
+      } else if (c === '"' || c === "'") {
+        q = c
+      } else if (c === "#") {
+        return ln.slice(0, i)
+      }
+    }
+    return ln
+  }).join("\n")
+}
+
+/* ⛔ 2026-10-07 — 전에는 `initialCode.includes('___')` 하나였다. **주석인지 코드인지
+     안 가려서**, 함수를 통째로 짜는 **자유 작성 미션이 빈칸 모드로 잘못 들어갔다.**
+     학생이 채운 글자는 주석이라 **실행에 아무 영향이 없고**, 무엇을 써도 틀렸다고 나온다.
+   실측(`python-qa`, 실행 채점 스텝 942개 전수):
+     `lessons/lesson39/ch5.ts` 🏆 최종 미션 — 부르는 `회복()` 이 정의되지 않아 `NameError`
+     `lesson19.ts` 실습 — 실제 `print()` 가 없어 **항상 빈 출력**
+   둘 다 **영영 못 푸는** 상태였다. 그날 데이터는 고쳤지만, 여기를 안 고치면
+   **다음에 누가 주석에 `___` 를 쓰면 또 난다.**
+   ⚠️ 쓰는 곳은 `app/learn/[lessonId]` 뿐이다(복습은 `ReviewStepRenderer` 로 따로 간다 —
+     이름이 비슷해 공용으로 오해하기 쉽다). */
+  const hasBlanks = !!(step.initialCode && codeWithoutComments(step.initialCode).includes('___'))
   const { t } = useLanguage()
 
   return (
