@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 import { StepFade } from "@/components/quest/StepFade";
 import { t } from "@/components/quest/theme";
@@ -43,63 +43,20 @@ function Em({ text, em }) {
   );
 }
 
-const SAY_TONE = {
-  aha:   { bg: "#ecfdf5", bd: "#6ee7b7", fg: "#065f46" },
-  stuck: { bg: "#fffbeb", bd: "#fbbf24", fg: "#92400e" },
-  go:    { bg: "#eff6ff", bd: "#93c5fd", fg: "#1e3a8a" },
-};
-
-const sayBox = (tone, minHeight) => {
-  const c = SAY_TONE[tone] || SAY_TONE.go;
-  return {
-    maxWidth: 470, margin: "6px auto 12px", padding: "10px 15px", borderRadius: 12,
-    background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg,
-    fontSize: 13.5, fontWeight: 700, textAlign: "center",
-    wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.7,
-    whiteSpace: "pre-line",
-    boxShadow: "0 2px 10px rgba(0,0,0,.06)",
-    /* ⭐⭐ 2026-10-07 — **말풍선 높이를 미리 잡아 둔다.** 아래 `useSayReserve` 참고. */
-    ...(minHeight ? { minHeight, display: "flex", alignItems: "center",
-                      justifyContent: "center", boxSizing: "border-box" } : null),
-  };
-};
-
-/* ⭐⭐ 2026-10-07 — **이 시뮬에서 제일 많이 흩어지던 원인.**
-   실측(375×812·한국어, 걸음 11개): 말풍선 높이가 걸음마다 **45 / 68 / 91 / 114px** 로
-   요동쳤다. 타일 줄도 체인 줄도 「윗 요소 bottom + 고정 간격」에 놓이므로
-   **말풍선이 한 줄 늘면 그 아래 전부가 그대로 밀린다.**
-   11걸음 중 앞 걸음과 말풍선 높이가 같은 건 **단 한 번**이라, 나머지 9번의 전환이
-   전부 이 밀림을 겪었다 — `see-screen --sim` 의 「흩어짐 9/11」과 정확히 같은 수다.
-   ⛔ 제일 나쁜 걸음 6→7 은 **타일도 체인도 내용이 완전히 같은데** 말풍선 줄 수만
-     바뀌어 365px 이 흩어졌다. **바뀐 게 없는데 화면이 들썩인 것**이다.
-   ⭐ 그래서 **그 시뮬에서 가장 긴 말풍선 높이만큼 자리를 미리 잡아 둔다.**
-     고정 px 을 박지 않는 이유 — 시뮬마다·언어마다(영어가 더 짧다) 최대 높이가 다르다.
-     숨긴 사본을 **같은 폭으로** 깔아 실제로 재서 정한다.
-   ⚠️ 비용: 짧은 말풍선 걸음에 빈 자리가 생긴다. 그 대신 **아래 그림이 안 움직인다** —
-     `feedback_one_thing_changes_at_a_time` 이 요구하는 쪽이 이것이다. */
-function useSayReserve(texts) {
-  const ref = useRef(null);
-  const [h, setH] = useState(0);
-  const key = texts.join("\u0000");
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let m = 0;
-    for (const ch of el.children) m = Math.max(m, ch.offsetHeight);
-    setH((prev) => (m > 0 && m !== prev ? m : prev));
-  }, [key]);
-  /* 높이 0 + overflow hidden — **폭은 진짜 말풍선과 같고** 자리는 안 먹는다.
-     (화면 밖으로 빼면 폭이 달라져 줄 수가 달라진다 — 그러면 재는 의미가 없다.) */
-  const probe = (
-    <div ref={ref} aria-hidden style={{ height: 0, overflow: "hidden", visibility: "hidden" }}>
-      {texts.map((tx, i) => <div key={i} style={sayBox("go")}>💬 {tx}</div>)}
-    </div>
+function Say({ children, tone = "go" }) {
+  const c = tone === "aha" ? { bg: "#ecfdf5", bd: "#6ee7b7", fg: "#065f46" }
+          : tone === "stuck" ? { bg: "#fffbeb", bd: "#fbbf24", fg: "#92400e" }
+          : { bg: "#eff6ff", bd: "#93c5fd", fg: "#1e3a8a" };
+  return (
+    <div style={{
+      maxWidth: 470, margin: "6px auto 12px", padding: "10px 15px", borderRadius: 12,
+      background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg,
+      fontSize: 13.5, fontWeight: 700, textAlign: "center",
+      wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.7,
+      whiteSpace: "pre-line",
+      boxShadow: "0 2px 10px rgba(0,0,0,.06)",
+    }}>💬 {children}</div>
   );
-  return [h, probe];
-}
-
-function Say({ children, tone = "go", minH = 0 }) {
-  return <div style={sayBox(tone, minH)}>💬 {children}</div>;
 }
 
 /* 수 하나를 칸으로. 놓인 자리는 파랑, 아직 안 본 것은 회색, 지금 움직이는 것은 노랑,
@@ -328,8 +285,6 @@ export function PlaceOneByOneSim({ E }) {
   ];
   const ts = useTraceStep(steps, "quest-step-makedistinct-placeonebyonesim");
   const s = steps[ts.safe];
-  /* 말풍선 높이를 **이 시뮬에서 제일 긴 걸음**에 맞춰 잡아 둔다 (위 `useSayReserve` 주석) */
-  const [sayH, sayProbe] = useSayReserve(steps.map((x) => t(E, x.en, x.ko)));
 
   return (
     <div style={{ padding: 16 }}>
@@ -337,8 +292,7 @@ export function PlaceOneByOneSim({ E }) {
         title={t(E, "Place them one by one, smallest first", "작은 수부터 하나씩 놓아 보기")}
  />
       <StepFade fast k={ts.safe}>
-        {sayProbe}
-        <Say tone={s.tone} minH={sayH}><Em text={t(E, s.en, s.ko)} em={t(E, s.emEn, s.emKo)} /></Say>
+        <Say tone={s.tone}><Em text={t(E, s.en, s.ko)} em={t(E, s.emEn, s.emKo)} /></Say>
 
         <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
           {s.tiles.map((v, i) => (
@@ -807,9 +761,6 @@ export function WhoCanMeetSim({ E, half = 1 }) {
   const shown = half === 2 ? steps.slice(WHO_SPLIT) : steps.slice(0, WHO_SPLIT);
   const ts = useTraceStep(shown, `quest-step-makedistinct-whocanmeet-${half}`);
   const s = shown[ts.safe];
-  /* ⚠️ **`shown` 으로 잰다, `steps` 가 아니다** — 4쪽과 5쪽은 걸음이 다르므로
-     각 쪽에서 제일 긴 말풍선에만 맞춘다. 전체로 재면 안 쓰는 걸음 때문에 자리가 더 빈다. */
-  const [sayH, sayProbe] = useSayReserve(shown.map((x) => t(E, x.en, x.ko)));
 
   /* ⛔⛔ 2026-10-06 — **결론 문장이 화면 밖으로 잘려 사라지고 있었다.**
      `ux-reviewer` 가 스크린샷으로 잡고 `project-lead` 가 직접 재현했다 —
@@ -841,8 +792,7 @@ export function WhoCanMeetSim({ E, half = 1 }) {
           : t(E, "Does the same way still work?", "같은 방법이 K = 2 에서도 통할까")}
  />
       <StepFade fast k={ts.safe}>
-        {sayProbe}
-        <Say tone={s.tone} minH={sayH}><Em text={t(E, s.en, s.ko)} em={t(E, s.emEn, s.emKo)} /></Say>
+        <Say tone={s.tone}><Em text={t(E, s.en, s.ko)} em={t(E, s.emEn, s.emKo)} /></Say>
 
         <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
           {s.tiles.map((v, i) => (
