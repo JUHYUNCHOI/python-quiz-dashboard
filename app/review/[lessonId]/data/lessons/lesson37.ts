@@ -422,7 +422,18 @@ except ZeroDivisionError:
         alternateAnswers: [
           "while True:\n    print('1.새게임 2.저장 3.종료')\n    try:\n        선택 = int(input('선택: '))\n        if 선택 == 1:\n            print('새 게임!')\n        elif 선택 == 2:\n            print('저장!')\n        elif 선택 == 3:\n            break\n        else:\n            print('1-3 사이로!')\n    except:\n        print('숫자만!')"
         ],
-        expect: "새 게임!"
+        /* ⛔ 2026-10-07 — **이 자리는 stdin 만으로는 안 고쳐졌다.**
+             옛 `expect` 는 「새 게임!」 한 줄이었는데, 이 코드는 `while` 이라
+             **메뉴 줄을 반복마다 먼저 찍는다.** 어떤 입력을 줘도 그 한 줄과 안 맞았다.
+           ⭐ 입력을 `x → 1 → 3` 으로 골랐다 — **세 빈칸을 전부 쓰게** 하려고다:
+             `x` 가 `except ValueError`, `1` 이 `try` 안쪽, `3` 이 `break` 를 밟는다.
+             빈칸 하나만 틀려도 출력이 달라져 **채점이 실제로 가른다.**
+           ⚠️ `expect` 는 **앱 워커로 직접 돌려 받은 출력 그대로**다.
+             `python3` 로 재면 `선택: ` 프롬프트가 같이 찍혀 **다르다** —
+             워커는 프롬프트를 안 찍게 `input` 을 감싼다(`public/pyodide.worker.js`).
+           ⚠️ 대체 정답(`except:` 맨몸)도 출력이 **같다**(확인함) — 같이 통과한다. */
+        stdin: "x\n1\n3",
+        expect: "1.새게임 2.저장 3.종료\n숫자만!\n1.새게임 2.저장 3.종료\n새 게임!\n1.새게임 2.저장 3.종료"
       }
     },
 
