@@ -394,8 +394,8 @@ while True:               # while + try-except
           id: "ch5-mission",
           type: "mission",
           title: "🏆 Final Mission — Build a Healing Item",
-          task: "Write a heal() function. It adds 30 to HP, but caps at 100 (use min())! Then print 'HP recovered! Current HP: ___' after healing.",
-          initialCode: "character = {'name': 'Hero', 'HP': 80}\n\n# Build the heal() function:\n# - add 30 to HP, but cap at 100 using min()\n# - print 'HP recovered! Current HP: ___'\n\n\nheal()",
+          task: "Write a heal() function. It adds 30 to HP, but caps at 100 (use min())! Then print like 'HP recovered! Current HP: 100' after healing.",
+          initialCode: "character = {'name': 'Hero', 'HP': 80}\n\n# Write the heal() function here:\n# - add 30 to HP, but cap at 100 using min()\n# - print like 'HP recovered! Current HP: 100'\n\n\nheal()",
           expectedOutput: "HP recovered! Current HP: 100",
           hint: "min(100, x) returns the smaller of x and 100. If HP is 80, 80+30=110, but min caps it at 100.",
           hint2: "def heal():\n    character['HP'] = min(100, character['HP'] + 30)\n    print(f'HP recovered! Current HP: {character[\"HP\"]}')"

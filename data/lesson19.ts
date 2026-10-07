@@ -175,10 +175,10 @@ else:
           type: "tryit",
           title: "🖥️ count / index — 90 점 몇 번? 80 점 위치?",
           task: "점수 튜플에서 90점이 몇 번 나오는지, 처음 80점이 어느 위치인지 출력하세요!",
-          initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) 90 점이 몇 번 나오는지 → print('count:', ___)\n\n\n# 2) 처음 80 점이 나오는 위치 → print('index:', ___)\n",
+          initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) 90 점이 몇 번 나오는지\nprint('count:', scores.___(90))\n\n# 2) 처음 80 점이 나오는 위치\nprint('index:', scores.___(80))\n",
           expectedOutput: "count: 3\nindex: 1",
           hint: "*몇 번* 나오는지 세는 메서드 / *어디* 있는지 알려주는 메서드, 둘이 짝!",
-          hint2: "print(f\"count: {scores.count(90)}\")\nprint(f\"index: {scores.index(80)}\")"
+          hint2: "count / index"
         },
         {
           id: "quiz1",

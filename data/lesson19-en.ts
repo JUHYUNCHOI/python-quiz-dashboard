@@ -182,7 +182,7 @@ else:
           type: "tryit",
           title: "🖥️ count / index — How many 90s? Where's 80?",
           task: "From a tuple of scores, print how many times 90 appears and the position of the first 80!",
-          initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) Count of 90 → print('count:', ___)\n\n\n# 2) Position of first 80 → print('index:', ___)\n",
+          initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) Count of 90\nprint('count:', scores.___(90))\n\n# 2) Position of first 80\nprint('index:', scores.___(80))\n",
           expectedOutput: "count: 3\nindex: 1",
           hint: "One method tells you *how many times* something appears, another tells you *where* — a matched pair!",
           hint2: "print(f\"count: {scores.count(90)}\")\nprint(f\"index: {scores.index(80)}\")"
