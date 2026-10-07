@@ -231,7 +231,7 @@ words = input().split()
           type: "tryit",
           title: "🖥️ Try It — Average of input numbers",
           task: "Read space-separated integers on one line and print their average. (input is in stdin below)",
-          initialCode: "nums = list(map(int, input().split()))\n\n# Compute average and print 'avg: ___'\navg = ___\nprint(f\"avg: {avg}\")",
+          initialCode: "nums = list(map(int, input().split()))\n\n# Compute average and print like 'avg: 83.3'\navg = ___\nprint(f\"avg: {avg}\")",
           expectedOutput: "avg: 6.0",
           stdin: "3 5 7 8 9 4",
           hint: "sum(nums) / len(nums)",

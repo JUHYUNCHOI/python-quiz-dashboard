@@ -180,7 +180,7 @@ print(stack)        # ['A', 'B', 'C']  ← 그대로!
           type: "tryit",
           title: "🖥️ 직접 — peek vs pop",
           task: "A, B, C 를 차례로 push 한 다음, peek 한 번 / pop 두 번 해 보세요.",
-          initialCode: "stack = []\n\nstack.append(\"A\")\nstack.append(\"B\")\nstack.append(\"C\")\n\n# peek — 맨 위를 보기만 (인덱스 ___)\nprint(\"peek:\", stack[___])\n\n# pop 두 번\nprint(\"pop:\", stack.___())\nprint(\"pop:\", stack.___())",
+          initialCode: "stack = []\n\nstack.append(\"A\")\nstack.append(\"B\")\nstack.append(\"C\")\n\n# peek — 맨 위를 보기만 (인덱스는?)\nprint(\"peek:\", stack[___])\n\n# pop 두 번\nprint(\"pop:\", stack.___())\nprint(\"pop:\", stack.___())",
           expectedOutput: "peek: C\npop: C\npop: B",
           hint: "맨 위 보기 = 인덱스 -1, 빼기 = .pop()",
           hint2: "-1 / pop / pop"

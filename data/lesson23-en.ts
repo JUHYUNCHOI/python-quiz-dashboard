@@ -183,7 +183,7 @@ For example, in the parentheses checker (next chapter), when you hit a closing \
           type: "tryit",
           title: "🖥️ Try it — peek vs pop",
           task: "Push A, B, C in order, then peek once and pop twice.",
-          initialCode: "stack = []\n\nstack.append(\"A\")\nstack.append(\"B\")\nstack.append(\"C\")\n\n# peek — look at the top (use index ___)\nprint(\"peek:\", stack[___])\n\n# pop twice\nprint(\"pop:\", stack.___())\nprint(\"pop:\", stack.___())",
+          initialCode: "stack = []\n\nstack.append(\"A\")\nstack.append(\"B\")\nstack.append(\"C\")\n\n# peek — look at the top (which index?)\nprint(\"peek:\", stack[___])\n\n# pop twice\nprint(\"pop:\", stack.___())\nprint(\"pop:\", stack.___())",
           expectedOutput: "peek: C\npop: C\npop: B",
           hint: "Peek with index -1, remove with .pop().",
           hint2: "-1 / pop / pop"

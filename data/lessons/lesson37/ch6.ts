@@ -60,6 +60,10 @@ print(f'결과: {결과}')
 # 💡 힌트: 두 가지 에러를 잡아야 해요
 # - ValueError (문자 입력)
 # - ZeroDivisionError (0 입력)`,
+      /* ⛔ 2026-10-07 — `input()` 을 쓰는데 `stdin` 이 없었다.
+           자유 편집이라 막히진 않았지만, 학생이 `input()` 을 **지워야** 통과해서
+           가르치려는 try-except 를 **검증하지 못했다.** 100 ÷ 2 = 50.0 이라 입력은 2. */
+      stdin: "2",
       expectedOutput: "결과: 50.0",
       hint: "try: 안에 세 줄을 넣어요",
       hint2: "except ValueError: 와 except ZeroDivisionError: 두 개!"

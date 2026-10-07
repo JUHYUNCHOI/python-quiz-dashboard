@@ -549,6 +549,10 @@ print(f'Result: {result}')
 # Hint: You need to catch two types of errors
 # - ValueError (text input)
 # - ZeroDivisionError (zero input)`,
+          /* ⛔ 2026-10-07 — `input()` 을 쓰는데 `stdin` 이 없었다.
+               자유 편집이라 막히진 않았지만, 학생이 `input()` 을 **지워야** 통과해서
+               가르치려는 try-except 를 **검증하지 못했다.** 100 ÷ 2 = 50.0 이라 입력은 2. */
+          stdin: "2",
           expectedOutput: "Result: 50.0",
           hint: "Put all three lines inside try:",
           hint2: "Use except ValueError: and except ZeroDivisionError: -- two of them!"

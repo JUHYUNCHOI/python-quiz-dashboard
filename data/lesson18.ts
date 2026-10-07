@@ -232,7 +232,7 @@ words = input().split()
           type: "tryit",
           title: "🖥️ 직접 해보기 — 여러 수의 평균",
           task: "한 줄에 공백으로 구분된 정수들의 평균을 구하세요. (입력: 아래 stdin)",
-          initialCode: "nums = list(map(int, input().split()))\n\n# 평균을 구해서 'avg: ___' 형식으로 출력 (소수점 포함 OK)\navg = ___\nprint(f\"avg: {avg}\")",
+          initialCode: "nums = list(map(int, input().split()))\n\n# 평균을 구해서 'avg: 83.3' 처럼 출력 (소수점 포함 OK)\navg = ___\nprint(f\"avg: {avg}\")",
           expectedOutput: "avg: 6.0",
           stdin: "3 5 7 8 9 4",
           hint: "평균 = 다 더한 값 ÷ 개수예요. 둘 다 내장함수가 하나씩 있어요.",

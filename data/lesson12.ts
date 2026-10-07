@@ -254,7 +254,7 @@ if (age >= 13 and age <= 19) or is_student:
           type: "tryit",
           title: "🖥️ 직접 해보기 — and + or 같이",
           task: "13~19살(나이 범위) **이거나** 학생이면 '할인 적용!'. 빈칸 2개에 and / or 를 알맞게 넣어봐요. (괄호 안 = 나이 범위, 괄호 밖 = 또는 학생)",
-          initialCode: "age = 20\nis_student = True\n\n# 청소년(13~19살) 이거나 학생이면 할인!\n# 괄호 안 빈칸: 13살 이상 ___ 19살 이하   → '둘 다' 만족해야 (그리고)\n# 괄호 밖 빈칸: (나이 조건) ___ 학생        → '둘 중 하나'면 OK (또는)\nif (age >= 13 ___ age <= 19) ___ is_student:\n    print(\"할인 적용!\")\nelse:\n    print(\"정가\")",
+          initialCode: "age = 20\nis_student = True\n\n# 청소년(13~19살) 이거나 학생이면 할인!\n# 괄호 안 빈칸: 13살 이상 ▢ 19살 이하   → '둘 다' 만족해야 (그리고)\n# 괄호 밖 빈칸: (나이 조건) ▢ 학생        → '둘 중 하나'면 OK (또는)\nif (age >= 13 ___ age <= 19) ___ is_student:\n    print(\"할인 적용!\")\nelse:\n    print(\"정가\")",
           expectedOutput: "할인 적용!",
           hint: "괄호 안 = 13 이상 '그리고' 19 이하 (둘 다). 괄호 밖 = '또는' 학생 (둘 중 하나).",
           hint2: "and / or"
