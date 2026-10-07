@@ -96,6 +96,10 @@ export const lesson10: LessonData = {
         guide: "input()으로 입력받고, f-string으로 출력해요",
         hint: "input()으로 변수에 저장하고, f-string으로 출력해봐요",
         template: null,
+        /* ⛔ 2026-10-07 — stdin 이 없어 `EOFError` 로 죽던 자리다.
+             학생: *"인풋이 안 들어와서 모든 문제가 푸는 게 불가능해요."*
+             값은 python-qa 가 실제로 돌려 기대 출력이 나오는 걸 확인한 것이다. */
+        stdin: "피자",
         answer: "food = input('좋아하는 음식: ')\nprint(f'좋아하는 음식: {food}')",
         expect: "좋아하는 음식: 피자",
         en: {
@@ -203,6 +207,10 @@ export const lesson10: LessonData = {
         guide: "input()은 항상 str을 반환하니까 숫자 계산 전에 int()로 변환해야 해요",
         hint: "int(input(...))로 감싸서 정수로 입력받아요",
         template: null,
+        /* ⛔ 2026-10-07 — stdin 이 없어 `EOFError` 로 죽던 자리다.
+             학생: *"인풋이 안 들어와서 모든 문제가 푸는 게 불가능해요."*
+             값은 python-qa 가 실제로 돌려 기대 출력이 나오는 걸 확인한 것이다. */
+        stdin: "15",
         answer: "age = int(input('나이: '))\nprint(age + 10)",
         expect: "25",
         en: {
@@ -220,6 +228,10 @@ export const lesson10: LessonData = {
         guide: "각각 int()로 변환해서 입력받아야 더할 수 있어요",
         hint: "두 번 입력받을 때 각각 int()로 감싸봐요",
         template: null,
+        /* ⛔ 2026-10-07 — stdin 이 없어 `EOFError` 로 죽던 자리다.
+             학생: *"인풋이 안 들어와서 모든 문제가 푸는 게 불가능해요."*
+             값은 python-qa 가 실제로 돌려 기대 출력이 나오는 걸 확인한 것이다. */
+        stdin: "30\n70",
         answer: "a = int(input('첫 번째 수: '))\nb = int(input('두 번째 수: '))\nprint(a + b)",
         expect: "100",
         en: {
@@ -552,6 +564,10 @@ export const lesson10: LessonData = {
         guide: "소수로 입력받을 땐 float()로 변환해요",
         hint: "float(input(...))으로 입력받고, 0.9를 곱하면 10% 할인이에요",
         template: null,
+        /* ⛔ 2026-10-07 — stdin 이 없어 `EOFError` 로 죽던 자리다.
+             학생: *"인풋이 안 들어와서 모든 문제가 푸는 게 불가능해요."*
+             값은 python-qa 가 실제로 돌려 기대 출력이 나오는 걸 확인한 것이다. */
+        stdin: "50.0",
         answer: "price = float(input('가격: '))\nprint(price * 0.9)",
         expect: "45.0",
         en: {
@@ -571,6 +587,10 @@ export const lesson10: LessonData = {
         guide: "input()은 str을 반환하니까 문자열 이어붙이기가 바로 돼요",
         hint: "각각 input()으로 받아서 + 로 이어붙여봐요",
         template: null,
+        /* ⛔ 2026-10-07 — stdin 이 없어 `EOFError` 로 죽던 자리다.
+             학생: *"인풋이 안 들어와서 모든 문제가 푸는 게 불가능해요."*
+             값은 python-qa 가 실제로 돌려 기대 출력이 나오는 걸 확인한 것이다. */
+        stdin: "김\n민준",
         answer: "last = input('성: ')\nfirst = input('이름: ')\nprint(last + first)",
         expect: "김민준",
         en: {
@@ -590,6 +610,10 @@ export const lesson10: LessonData = {
         guide: "int()로 입력받고, 100으로 나누면 m 단위로 변환돼요",
         hint: "int(input(...))으로 정수로 받고, 100으로 나눠봐요",
         template: null,
+        /* ⛔ 2026-10-07 — stdin 이 없어 `EOFError` 로 죽던 자리다.
+             학생: *"인풋이 안 들어와서 모든 문제가 푸는 게 불가능해요."*
+             값은 python-qa 가 실제로 돌려 기대 출력이 나오는 걸 확인한 것이다. */
+        stdin: "170",
         answer: "height_cm = int(input('키(cm): '))\nprint(height_cm / 100)",
         expect: "1.7",
         en: {
@@ -609,6 +633,10 @@ export const lesson10: LessonData = {
         guide: "세 번 int()로 입력받고, 합을 3으로 나눠요",
         hint: "세 변수를 각각 int(input(...))으로 받고 합 ÷ 3을 계산해봐요",
         template: null,
+        /* ⛔ 2026-10-07 — stdin 이 없어 `EOFError` 로 죽던 자리다.
+             학생: *"인풋이 안 들어와서 모든 문제가 푸는 게 불가능해요."*
+             값은 python-qa 가 실제로 돌려 기대 출력이 나오는 걸 확인한 것이다. */
+        stdin: "80\n90\n100",
         answer: "a = int(input('국어: '))\nb = int(input('영어: '))\nc = int(input('수학: '))\nprint((a + b + c) / 3)",
         expect: "90.0",
         en: {

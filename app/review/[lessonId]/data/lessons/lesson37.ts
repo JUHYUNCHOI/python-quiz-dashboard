@@ -494,6 +494,9 @@ except ZeroDivisionError:
         alternateAnswers: [
           "while True:\n    try:\n        x = int(input('숫자: '))\n        print(f'입력: {x}')\n        break\n    except:\n        print('숫자를 입력하세요!')"
         ],
+        /* ⛔ 2026-10-07 — stdin 이 없어 `EOFError` 로 죽던 자리다(python-qa 실측).
+             `echo 5 | python3 …` 로 돌리면 기대 출력 「입력: 5」 가 정확히 나온다. */
+        stdin: "5",
         expect: "입력: 5"
       }
     },

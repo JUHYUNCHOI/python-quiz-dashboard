@@ -512,6 +512,14 @@ function PracticeStep({
       : inputs[0]
     if (!combined.trim() || isRunning) return
 
+    /* 복습 스텝이 준 입력. 영어 모드면 `en.stdin` 을 먼저 쓴다 — C++ 경로(:581)와 같은 규칙이다.
+         ⛔ 2026-10-07 전까지 **파이썬 실행은 이걸 아예 안 읽었다.** 데이터에 넣어도 안 닿는
+             죽은 필드였고, 그래서 복습 10 의 연습 7개가 전부 `EOFError` 였다. */
+    const stepStdin = (() => {
+        const en = (content?.en as { stdin?: string } | undefined)?.stdin
+        return (isEn && en) ? en : (content as { stdin?: string } | undefined)?.stdin
+    })()
+
     // ── 출력 기반 채점: template=null + expect 있을 때 ──────────────
     if (isFullCode && content.expect) {
       const expectedOut = String(displayExpect).trim()
@@ -521,7 +529,13 @@ function PracticeStep({
       //  틀렸다고 했음 — 선생님 2026-06-21 라이브. 텍스트 비교는 안전망으로 유지.)
       if (language === "python") {
         setIsRunning(true)                       // Pyodide 로드·실행 동안 '확인 중' 표시
-        const runResult = await runPythonReal(combined)
+        /* ⛔ 2026-10-07 — **여기에 stdin 을 안 넘겨서 라이브가 막혔다.**
+           학생이 보호자를 통해: *"인풋이 안 들어와서 **모든 문제가 푸는 게 불가능**해요."*
+           복습 10(= `input()` 레슨)의 연습 **7개 전부**가 `EOFError` 로 죽었다(python-qa 실측).
+           ⚠️ 더 나쁜 건 **조용히 안 끝난다**는 것이다 — 실행이 깨지면 아래 `isAnswerCorrect()`
+             **글자 완전일치**로 폴백해서, 논리가 맞아도 변수명·프롬프트 문구가 다르면 오답이다.
+           ⚠️ 받을 자리는 `pyodideRun.ts:59` 에 **원래 있었다** — 아무도 안 넘겼을 뿐이다. */
+        const runResult = await runPythonReal(combined, stepStdin)
         setIsRunning(false)
         if (!runResult.error) {
           const actualOut = (runResult.result ?? "").trim()
@@ -652,7 +666,7 @@ function PracticeStep({
         fullCode += (inputs[i] ?? "").trim() + (parts[i + 1] ?? "")
       }
       setIsRunning(true)
-      const runResult = await runPythonReal(fullCode)
+      const runResult = await runPythonReal(fullCode, stepStdin)   // ⛔ 위 :524 주석 참고 — stdin 을 꼭 넘긴다
       setIsRunning(false)
       if (!runResult.error && (runResult.result ?? "").trim() === expectedOut) {
         clearStorage()
