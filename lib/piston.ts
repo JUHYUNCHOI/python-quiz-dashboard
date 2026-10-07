@@ -58,6 +58,29 @@ type PistonRawResponse = {
  * @param stdin     - 표준 입력 (옵션)
  * @param timeoutMs - 요청 타임아웃 (기본 15초)
  */
+/* ⛔⛔ 2026-10-07 — **두 실행기가 `input()` 을 다르게 다뤄 학생이 막혔다.**
+
+   학생(보호자 경유): *"인풋이 안 들어와서 **모든 문제가 푸는 게 불가능해요.**"*
+   자리는 커리큘럼의 **「졸업 미션」**(= `/practice?cluster=py-io`, 처음부터 코드 쓰기)이었다.
+
+   수업 10 은 **프롬프트를 넣으라고 가르친다** — `name = input("이름이 뭐야? ")`.
+     수업·복습(Pyodide)은 `public/pyodide.worker.js:60-71` 이 `input` 을 감싸
+     **프롬프트를 안 찍는다.** 그래서 거기선 잘 된다.
+     연습(여기, Piston = 진짜 python3)은 **프롬프트가 출력에 그대로 찍힌다.**
+
+   라이브 서버 실측:
+     `name = input('이름: ')` + stdin `Alice` → **`'이름: Hello, Alice!'`**  (기대 `'Hello, Alice!'`)
+   **코드는 맞는데 19문제가 전부 틀린다.** 학생 눈엔 「입력이 잘못 들어갔다」로 보인다.
+
+   ⭐ 그래서 **수업 쪽이 이미 쓰는 방식을 여기에도 맞춘다** — 새 발명이 아니다.
+   ⚠️ **반드시 한 줄이어야 한다.** 줄이 늘면 런타임 에러 줄 번호가 그만큼 밀린다.
+     지금은 오프셋이 **정확히 +1** 이고, `practice-runner.tsx` 가 그만큼 빼서 보정한다.
+     **여기를 여러 줄로 바꾸면 거기 숫자도 같이 고쳐라.**
+   ⚠️ 이 함수를 쓰는 곳은 `components/practice/practice-runner.tsx` **하나뿐**이다
+     (코딩뱅크·Algo Lab 은 안 쓴다 — PM 확인). C++ 은 안 건드린다. */
+const PY_NO_PROMPT =
+  "import builtins as _cb; _cb._cr_oi=_cb.input; _cb.input=lambda *a,**k:_cb._cr_oi()\n"
+
 export async function callPiston(
   lang: "cpp" | "python",
   code: string,
@@ -82,7 +105,7 @@ export async function callPiston(
         files: [
           {
             name: lang === "python" ? "main.py" : "main.cpp",
-            content: code,
+            content: lang === "python" ? PY_NO_PROMPT + code : code,
           },
         ],
         ...(stdin ? { stdin } : {}),

@@ -172,7 +172,11 @@ export function CodeEditorWithGutter({
  *  - clang fatal: "file:line:col: fatal error: ..."
  *  - Python: "File \"...\", line N" or just "line N, in ..."
  */
-export function parseErrorLine(errorMessage: string | undefined | null): number | undefined {
+/* `offset` — 실행기가 학생 코드 **앞에 줄을 덧붙였을 때** 그만큼 빼 준다.
+   2026-10-07: 파이썬 연습은 `lib/piston.ts` 가 프롬프트 제거용 **한 줄**을 앞에 붙인다
+   (그 주석 참고). 그래서 Piston 이 말하는 줄 번호가 학생이 보는 것보다 **1 크다.**
+   ⚠️ 기본값 0 이라 **C++ 호출부는 안 건드려도 그대로**다. */
+export function parseErrorLine(errorMessage: string | undefined | null, offset = 0): number | undefined {
   if (!errorMessage) return undefined
 
   // 1) 메인 file:line[:col]: keyword 모두 매칭, 시스템 헤더는 스킵
@@ -190,26 +194,26 @@ export function parseErrorLine(errorMessage: string | undefined | null): number 
     if (file.includes("/usr/") || file.includes("/piston/") || file.includes("include/")) continue
     // .h / .hpp 도 보통 헤더 — 학생 코드는 .cpp / .py
     if (file.endsWith(".h") || file.endsWith(".hpp")) continue
-    return line
+    return Math.max(1, line - offset)
   }
   // 그래도 못 찾았으면 그냥 첫 매칭 사용
   if (allMatches.length > 0) {
     const line = parseInt(allMatches[0][2], 10)
-    if (Number.isFinite(line) && line > 0) return line
+    if (Number.isFinite(line) && line > 0) return Math.max(1, line - offset)
   }
 
   // 2) Python traceback: 'File "...", line N' 또는 그냥 'line N'
   const py = errorMessage.match(/(?:File\s+"[^"]*",\s+)?line\s+(\d+)/i)
   if (py) {
     const n = parseInt(py[1], 10)
-    if (Number.isFinite(n) && n > 0) return n
+    if (Number.isFinite(n) && n > 0) return Math.max(1, n - offset)   // ← 파이썬 traceback 은 여기로 온다
   }
 
   // 3) "at line N" / "라인 N" 같은 변형
   const alt = errorMessage.match(/(?:at\s+line|라인|\\bline)\s*:?\s*(\d+)/i)
   if (alt) {
     const n = parseInt(alt[1], 10)
-    if (Number.isFinite(n) && n > 0) return n
+    if (Number.isFinite(n) && n > 0) return Math.max(1, n - offset)
   }
 
   return undefined

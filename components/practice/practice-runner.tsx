@@ -422,7 +422,9 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
           value={code}
           onValueChange={c => setCode(c)}
           highlight={c => highlightCode(c, lang)}
-          errorLine={parseErrorLine(error)}
+          /* 파이썬은 `lib/piston.ts` 가 프롬프트 제거용 **한 줄**을 앞에 붙인다 —
+             Piston 이 말하는 줄이 학생이 보는 것보다 1 크다. 그만큼 뺀다. */
+          errorLine={parseErrorLine(error, lang === "python" ? 1 : 0)}
           padding={16}
           tabSize={4}
           insertSpaces={true}
@@ -463,7 +465,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
         <div className="rounded-xl bg-red-50 border border-red-200 p-4 space-y-2">
           {(() => {
             const hint = getErrorHint(error, isEn ? "en" : "ko")
-            const errLn = parseErrorLine(error)
+            const errLn = parseErrorLine(error, lang === "python" ? 1 : 0)   // ↑ 같은 이유
             const showAmber = hint || errLn
             return (
               <>
