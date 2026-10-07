@@ -57,7 +57,15 @@ SIGNS = {
     "bitmanipulation": [r"<<", r">>", r"\&\s*1\b", r"\bxor\b", r"\^"],
     "shortestpath":    [r"dijkstra", r"heapq", r"\bdist\s*\[", r"bellman"],
     "tree":            [r"\bleft\b.*\bright\b", r"\broot\b", r"\bchild"],
-    "recursion":       [r"def\s+(\w+)\([^)]*\):(?:.|\n)*?\1\("],
+    # ⛔ "recursion" 은 **정규식으로 못 본다** — 아래 `calls_itself()` 가 AST 로 본다.
+    #   옛 규칙은 `def\s+(\w+)...\1\(` 였는데, 함수 정의 **뒤 어디서든** 그 이름이 다시
+    #   나오면 통과했다 — **바깥에서 한 번 부르기만 해도** 재귀로 셌다.
+    #   그래서 `alchemy` 가 **조용히 통과했다**: 2026-09-24 에 `make()` 를 재귀 →
+    #   `todo` 스택 반복문으로 바꿨는데(선생님 *"되도록이면 재귀 사용하지 말기"*)
+    #   `lib/quest-algo.ts` 의 `alchemy: "recursion"` 만 안 따라갔고, 화면 맨 위는
+    #   지금도 **「이 문제 핵심: 재귀 — 막히면 배우기 →」**로 재귀 학습 페이지로 보낸다.
+    #   **학생(초6)이 화면에서 먼저 찾았다.** 이 검사기는 0건을 찍고 있었다.
+    "recursion":       ["<AST>"],
     "backtracking":    [r"backtrack", r"\.pop\(\)\s*$", r"permutations", r"itertools"],
 }
 
@@ -81,6 +89,43 @@ def final_code(qid):
         return ""
     # 코드 줄의 주석은 떼어낸다 — 「# BFS 로 푼다」 가 신호로 잡히면 안 된다
     return "\n".join(re.sub(r"(#|//).*$", "", ln) for ln in code.split("\n"))
+
+
+def calls_itself(code: str) -> bool:
+    """**자기 자신을 부르는 함수**가 하나라도 있나 — 파이썬은 AST 로 확실히 본다.
+
+    ⚠️ 정규식으로는 「정의 + 바깥 호출」과 「정의 + 자기 호출」을 못 가른다.
+       C++ 은 AST 가 없어 몸통을 떼고 그 안에서 자기 이름이 나오나만 본다(관대한 쪽).
+    ⚠️ 못 보는 것 — 상호 재귀(a→b→a) · 클래스 메서드(`self.f()`) · 문자열로 부르는 것.
+    """
+    import ast
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        tree = None
+    if tree is not None:
+        for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
+            for n in ast.walk(fn):
+                if isinstance(n, ast.Call) and getattr(n.func, "id", None) == fn.name:
+                    return True
+        return False
+    # 파이썬이 아니면(C++ 등) 몸통을 거칠게 떼어 그 안만 본다.
+    for m in re.finditer(r"\b(\w+)\s*\([^)]*\)\s*\{", code):
+        name, start = m.group(1), m.end()
+        depth, i = 1, start
+        while i < len(code) and depth:
+            if code[i] == "{": depth += 1
+            elif code[i] == "}": depth -= 1
+            i += 1
+        if re.search(rf"\b{re.escape(name)}\s*\(", code[start:i]):
+            return True
+    return False
+
+
+SELFTEST_RECURSION = {
+    "진짜 재귀":   "def f(n):\n    if n == 0:\n        return 1\n    return n * f(n - 1)\n",
+    "바깥 호출만": "def f(n):\n    s = 0\n    while n:\n        s += n\n        n -= 1\n    return s\n\nprint(f(5))\n",
+}
 
 def main():
     ts = io.open(os.path.join(ROOT, "lib", "quest-algo.ts"), encoding="utf-8").read()
@@ -111,7 +156,9 @@ def main():
         if len([l for l in code.split("\n") if l.strip()]) < 5:
             skipped += 1; continue
         seen += 1
-        if not any(re.search(p, code, re.I | re.M) for p in SIGNS[topic]):
+        ok = calls_itself(code) if topic == "recursion" else \
+             any(re.search(p, code, re.I | re.M) for p in SIGNS[topic])
+        if not ok:
             hits.append((qid, topic, len(code.split("\n"))))
     print(f"배지가 가리키는 알고리즘의 **흔적이 코드에 없는** quest — {len(hits)}개 "
           f"(신호가 뚜렷한 토픽으로 {seen}개를 봤다 · {skipped}개는 못 봄)\n")

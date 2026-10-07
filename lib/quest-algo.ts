@@ -40,7 +40,17 @@ export const QUEST_ALGO: Record<string, string> = {
   //     mcc19rect  = sorting 이었는데 `.sort()` **0회** (주석으로 「이미 정렬돼 있다」 가정만)
   //   2026-09-26 1차 감사는 **graph 토픽만** 봤다 — 그래서 이 넷이 남아 있었다.
   //   검사기 `scripts/check-algo-badge-vs-code.py` 를 만들어 전수로 돈다(볼 자리 표시).
-  abcs: "sorting", acowdemia1: "binarysearch", aircond1: "prefixsum", alchemy: "recursion",
+  abcs: "sorting", acowdemia1: "binarysearch", aircond1: "prefixsum", alchemy: "stackqueue",
+  //   🔧 2026-10-07 — **`recursion` → `stackqueue`.** 화면 맨 위가
+  //   「이 문제 핵심: **재귀** — 막히면 배우기 →」로 재귀 학습 페이지를 가리켰는데,
+  //   🔒 정답 코드에 **자기 자신을 부르는 함수가 없다**(AST 확인).
+  //   2026-09-24 에 선생님 지시(*"되도록이면 재귀 사용하지 말기"*)로 `make()` 를
+  //   재귀 → `todo` 스택 반복문으로 바꿨는데 **이 표만 안 따라왔다.**
+  //   지금 코드가 실제로 쓰는 장치는 `todo = [m]` · `todo.pop()` · `todo.extend(...)`
+  //   — **스택**이다. 막힌 학생이 가야 할 곳도 거기다.
+  //   ⚠️ **학생(초6)이 화면에서 먼저 찾았다.** 검사기는 0건을 찍고 있었다 —
+  //     `check-algo-badge-vs-code.py` 의 옛 `recursion` 규칙이 정규식이라
+  //     「정의 + 바깥 호출」을 재귀로 셌다. 같은 날 AST 로 고쳤다.
   astral: "greedy", bacteria: "prefixsum", bucketlist: "prefixsum",
   buymilk: "greedy",
   // chipxchg: 제거 — USACO 공식 풀이는 이분탐색이 아니라 O(1) 닫힌 공식(애드혹 수학+경우나눔).
