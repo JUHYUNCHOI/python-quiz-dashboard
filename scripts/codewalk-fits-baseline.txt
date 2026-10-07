@@ -1,0 +1,160 @@
+# CodeWalk 「강조 줄이 상자 안에 들어오나」 기준선
+# 재는 법: node scripts/check-codewalk-hi-fits-box.mjs   (인자 없이 전수 · ⛔ 병렬 금지)
+# 조건: 375×812 · 한국어 · 파이썬 · 마지막 걸음 아님(모든 걸음)
+#
+# 2026-10-07 — vars 범례를 한 줄로 압축한 **뒤**의 값이다.
+#   직전(압축 전): 걸린 quest 101 · 걸음 314 · 줄 1,182 · 28,104px  (합계만 남아 있었다)
+#   지금:          걸린 quest  95 · 걸음 226 · 줄   790 · 18,569px
+# ⚠️ 그때는 **quest별 목록이 없어서** 「새로 걸린 것 0개」를 대조할 수 없었다.
+#   그래서 이 파일을 만든다. 다음부터는 이 목록과 줄 단위로 대조해라.
+# ⚪ 54개는 스크립트가 CodeWalk 탭을 못 찾은 것 — **결백이 아니다.**
+
+  🚨 abcs                 — 걸음 5개 중 1개에서 잘림
+  🚨 acowdemia1           — 걸음 4개 중 2개에서 잘림
+  🚨 acowdemia2           — 걸음 3개 중 2개에서 잘림
+  🚨 acowdemia3           — 걸음 5개 중 2개에서 잘림
+  🚨 aircond              — 걸음 4개 중 3개에서 잘림
+  🚨 alchemy              — 걸음 6개 중 3개에서 잘림
+  ⚪ astral               — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 backforth            — 걸음 3개 중 2개에서 잘림
+  ⚪ billboard            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 billboard2           — 걸음 6개 중 2개에서 잘림
+  🚨 blockgame            — 걸음 4개 중 2개에서 잘림
+  🚨 blocks               — 걸음 3개 중 2개에서 잘림
+  🚨 bovgenomics          — 걸음 4개 중 3개에서 잘림
+  🚨 bovshuffle           — 걸음 3개 중 2개에서 잘림
+  🚨 bucketbrigade        — 걸음 4개 중 2개에서 잘림
+  🚨 bucketlist           — 걸음 5개 중 2개에서 잘림
+  ⚪ buymilk              — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 candycane            — 걸음 3개 중 1개에서 잘림
+  🚨 cannonball           — 걸음 3개 중 2개에서 잘림
+  ⚪ cheese               — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 clockfence           — 걸음 5개 중 1개에서 잘림
+  🚨 collatz              — 걸음 3개 중 1개에서 잘림
+  🚨 comfycows            — 걸음 5개 중 2개에서 잘림
+  🚨 cornercover          — 걸음 3개 중 1개에서 잘림
+  🚨 countliars           — 걸음 4개 중 2개에서 잘림
+  🚨 cowcollege           — 걸음 5개 중 1개에서 잘림
+  🚨 cowevolution         — 걸음 4개 중 2개에서 잘림
+  ⚪ cowgym               — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 cowntact             — 걸음 6개 중 4개에서 잘림
+  🚨 cowntrace            — 걸음 6개 중 4개에서 잘림
+  🚨 cowphotos            — 걸음 5개 중 2개에서 잘림
+  ⚪ cowsplits            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 cowtipping           — 걸음 3개 중 2개에서 잘림
+  🚨 crossroad1           — 걸음 3개 중 2개에서 잘림
+  🚨 crossroad2           — 걸음 4개 중 2개에서 잘림
+  🚨 crossroad3           — 걸음 4개 중 2개에서 잘림
+  🚨 dontbelast           — 걸음 4개 중 3개에서 잘림
+  🚨 drought              — 걸음 4개 중 4개에서 잘림
+  ⚪ exchange             — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ explodingarrow       — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 familytree           — 걸음 10개 중 9개에서 잘림
+  🚨 feb23                — 걸음 5개 중 1개에서 잘림
+  🚨 fjfarms              — 걸음 6개 중 4개에서 잘림
+  🚨 guessanimal          — 걸음 6개 중 1개에서 잘림
+  🚨 herdle               — 걸음 5개 중 1개에서 잘림
+  🚨 hoofball             — 걸음 6개 중 1개에서 잘림
+  🚨 hps17                — 걸음 6개 중 3개에서 잘림
+  🚨 hungrycow            — 걸음 6개 중 1개에서 잘림
+  🚨 innovation           — 걸음 4개 중 2개에서 잘림
+  ⚪ interview            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 leaders              — 걸음 6개 중 3개에서 잘림
+  🚨 lifeguards           — 걸음 6개 중 3개에서 잘림
+  🚨 livestock            — 걸음 5개 중 4개에서 잘림
+  🚨 logicalmoos          — 걸음 8개 중 3개에서 잘림
+  🚨 lonelyphoto          — 걸음 3개 중 2개에서 잘림
+  🚨 lostcow              — 걸음 6개 중 2개에서 잘림
+  🚨 madscientist         — 걸음 3개 중 1개에서 잘림
+  ⚪ magicorbs            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 majority             — 걸음 4개 중 1개에서 잘림
+  🚨 makedistinct         — 걸음 12개 중 3개에서 잘림
+  ⚪ mcc15bahasaf         — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc15choco           — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc15equation        — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc15isthmus         — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc15rect            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc19bakery          — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc19candy           — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc19ditcoin         — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc19elim            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc19palindrome      — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 mcc19rect            — 걸음 3개 중 1개에서 잘림
+  ⚪ mcc19rect2           — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc20cipher          — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc20citytour        — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 mcc20kitty           — 걸음 5개 중 3개에서 잘림
+  ⚪ mcc20knight          — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc20missing         — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc20zigzag          — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc21carrots         — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc21dvd             — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc21glass           — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc21marbles         — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc21menu            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 mcc21simplemath      — 걸음 4개 중 3개에서 잘림
+  ⚪ mcc22aliens          — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc22birthday        — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc22cardshark       — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc22grammar         — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc22lamp            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mcc22maze            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 mco15badminton       — 걸음 4개 중 2개에서 잘림
+  🚨 mco15honey           — 걸음 3개 중 1개에서 잘림
+  🚨 mco15secret          — 걸음 6개 중 1개에서 잘림
+  ⚪ mco15trains          — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 meastraffic          — 걸음 5개 중 3개에서 잘림
+  🚨 mexes                — 걸음 4개 중 2개에서 잘림
+  🚨 milkexchange         — 걸음 4개 중 2개에서 잘림
+  🚨 milkfactory          — 걸음 6개 중 3개에서 잘림
+  🚨 milkmeas             — 걸음 5개 중 3개에서 잘림
+  🚨 milkorder            — 걸음 7개 중 3개에서 잘림
+  ⚪ mixmilk              — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ mobilegame           — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 modernart            — 걸음 4개 중 3개에서 잘림
+  ⚪ moo                  — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 moohunt              — 걸음 6개 중 4개에서 잘림
+  ⚪ mooin3               — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 mooin4               — 걸음 5개 중 1개에서 잘림
+  🚨 moolang              — 걸음 7개 중 4개에서 잘림
+  🚨 mooloo               — 걸음 5개 중 1개에서 잘림
+  🚨 mooops               — 걸음 5개 중 1개에서 잘림
+  🚨 nontrans             — 걸음 6개 중 3개에서 잘림
+  🚨 oddphotos            — 걸음 7개 중 1개에서 잘림
+  ⚪ permutation          — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 photoshoot2          — 걸음 5개 중 2개에서 잘림
+  ⚪ photoshoot25         — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ printseq             — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 race                 — 걸음 5개 중 3개에서 잘림
+  ⚪ rectangles           — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 reflection           — 걸음 4개 중 3개에서 잘림
+  🚨 revegetation         — 걸음 4개 중 2개에서 잘림
+  🚨 reverseeng           — 걸음 2개 중 2개에서 잘림
+  ⚪ rotshift             — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ shellgame            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ simplegame           — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 sleepclass           — 걸음 6개 중 2개에서 잘림
+  🚨 sleepyherd           — 걸음 5개 중 2개에서 잘림
+  🚨 sleepysort           — 걸음 3개 중 1개에서 잘림
+  🚨 socialdist1          — 걸음 8개 중 5개에서 잘림
+  🚨 socialdist2          — 걸음 5개 중 4개에서 잘림
+  ⚪ sqpasture            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 stalling             — 걸음 6개 중 1개에서 잘림
+  🚨 stampgrid            — 걸음 7개 중 4개에서 잘림
+  ⚪ strangefn            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 stuckinrut           — 걸음 4개 중 2개에서 잘림
+  ⚪ subseqmedian         — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 sumk                 — 걸음 5개 중 3개에서 잘림
+  🚨 swapity              — 걸음 4개 중 2개에서 잘림
+  🚨 swaptowin            — 걸음 5개 중 5개에서 잘림
+  🚨 tameherd             — 걸음 6개 중 4개에서 잘림
+  🚨 teamttt              — 걸음 6개 중 3개에서 잘림
+  🚨 teleport             — 걸음 4개 중 1개에서 잘림
+  🚨 tichu                — 걸음 4개 중 2개에서 잘림
+  🚨 triangles            — 걸음 3개 중 2개에서 잘림
+  🚨 walkfence            — 걸음 6개 중 5개에서 잘림
+  🚨 walkhome             — 걸음 6개 중 4개에서 잘림
+  🚨 whereami             — 걸음 5개 중 2개에서 잘림
+  ⚪ wordproc             — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  ⚪ xorstring            — CodeWalk 을 못 찾았다. **못 본 것으로 친다.**
+  🚨 yearcow              — 걸음 6개 중 2개에서 잘림

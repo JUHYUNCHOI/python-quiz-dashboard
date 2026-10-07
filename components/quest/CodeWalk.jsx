@@ -247,6 +247,10 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
   // ⛔ 같은 로직을 여기 또 두지 않는다 — `CodeBlock` 도 같은 문제를 갖고 있었고,
   //   두 벌로 두면 한쪽만 고치는 날이 온다(`feedback_example_code_is_contagious`).
   const fade = useScrollEdgeFades(boxRef, [safeIdx, lo, lang, code]);
+  /* 변수 뜻 범례도 **가로로 밀린다** — 코드 상자와 **같은 신호 장치**를 쓴다.
+     (2026-10-07, `/decide` 판정. 아래 범례 JSX 주석 참고.) */
+  const varsRef = useRef(null);
+  const varsFade = useScrollEdgeFades(varsRef, [vars, E]);
 
   /* 🆕 2026-10-03 — 복사 버튼을 **좁은 화면(모바일)에서만 숨긴다.** 왜 —
      코드 박스 쪽에 복사 버튼을 두는 안을 셋 시도했는데(별도 줄 · 절대배치
@@ -428,13 +432,35 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
 
       {/* 말풍선은 이제 코드창 안, '지금 밝아진 줄 바로 위'에 뜬다 (아래 code.map 참고). */}
 
-      {/* 변수 뜻 범례 — 늘 보이게 (코드 깊이 들어가도 "n이 뭐였지?" 안 하게) */}
+      {/* 변수 뜻 범례 — 늘 보이게 (코드 깊이 들어가도 "n이 뭐였지?" 안 하게)
+          ⭐⭐ 2026-10-07 — **한 줄로 압축한다.** (`/decide` 3라운드 판정 — `.claude/WORK.md`)
+          전엔 `flexWrap: "wrap"` 이라 모바일 375px 에서 알약이 **하나당 한 줄씩** 쌓였다.
+          한국어 뜻이 길어서 두 개가 한 줄에 못 들어간다 — `alchemy` 6개·`chipxchg` 7개가
+          **169.5px** 을 먹었고, 그 높이가 **그대로 코드 상자에서 빠졌다**
+          (`fitBoxH` 는 상자 **위쪽 y** 로 정해진다 — 위 `avail` 식 참고).
+          실측(375×812·한국어): `alchemy` 범례 **169.5 → 23.25px** · 코드 상자 **140 → 282px**.
+          ⛔ **「범례를 맨 끝으로 옮기는」 안은 기각됐다.** 겹침은 0 이 되지만(실측) 이 범례의
+            존재 이유(위 19행 — 코드창 **위**에서 「n이 뭐였지?」를 막는 것)가 무력화된다.
+            조작 바 뒤로 내리면 학생은 코드·복사줄·◀▶ 를 다 지나 스크롤해야 뜻을 본다.
+            그래서 **자리는 그대로 두고 높이만** 줄인다.
+          ⛔ **상자 바로 아래로 옮기는 안은 새 결함을 만든다** — `sentinel` 이 밀려
+            `pinWrap` 이 `translateY` 로 범례를 덮는다(실측 43.5px, 스크롤 60~141px 구간).
+            되돌려진 `TOP_CLEARANCE` 와 **같은 가족**이다.
+          ⚠️ 가로로 밀리면 **밀린다는 신호가 있어야** 한다 — 신호 없는 가로 스크롤은 학생이
+            *"「이게 전부인가 보다」 하고 넘어갔다"* 고 한 바로 그 결함이다(아래 `ScrollEdgeFades`
+            주석). 그래서 코드 상자와 **같은 장치**를 붙인다.
+          ⚠️ `justifyContent: "center"` 는 쓰지 마라 — 넘칠 때 **왼쪽이 잘려 영영 못 본다.**
+            가운데 맞춤은 `width: "fit-content"` + `margin: "auto"` 로 한다. */}
       {vars && vars.length > 0 && (
-        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, maxWidth: "100%", margin: "0 auto 8px" }}>
+        <div style={{ position: "relative", width: "fit-content", maxWidth: "100%", margin: "0 auto 8px" }}>
+        <div ref={varsRef} style={{
+          display: "flex", flexWrap: "nowrap", gap: 6,
+          overflowX: "auto", overflowY: "hidden", scrollbarWidth: "thin",
+        }}>
           {vars.map((vr, i) => (
             <span key={i} style={{
-              display: "inline-flex", alignItems: "center", gap: 5,
-              fontSize: 11.5, padding: "2px 9px", borderRadius: 999,
+              display: "inline-flex", alignItems: "center", gap: 5, flex: "0 0 auto",
+              fontSize: 11.5, padding: "2px 9px", borderRadius: 999, whiteSpace: "nowrap",
               background: "#f1f5f9", border: "1px solid #e2e8f0", color: "#475569", wordBreak: "keep-all",
             }}>
               <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#0f172a" }}>{vr.v}</code>
@@ -442,6 +468,8 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
               <span style={{ fontWeight: 600 }}>{t(E, vr.en, vr.ko)}</span>
             </span>
           ))}
+        </div>
+        <ScrollEdgeFades fade={varsFade} bg="#ffffff" radius={999} />
         </div>
       )}
 
