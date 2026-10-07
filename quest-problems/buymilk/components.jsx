@@ -182,8 +182,8 @@ export function getBuyMilkWalk(E, lang = "py") {
     return { code: FULL_CPP, vars: _BM_VARS, beats: [
       { hi: [7, 13], bubble: t(E, "First, just take in what we are given — nothing is worked out yet.\nDeal 1 in the problem is dealPrice[0] in the code.",
                                  "먼저 주어진 것을 받아만 둬요. 아직 아무것도 계산하지 않아요.\n문제의 1번 거래가 코드에서는 dealPrice[0] 이에요.") },
-      { hi: [15, 21], bubble: t(E, "Before answering anything: is the price on a pack its real price?\nNo — two half-size packs can be cheaper. So fix that first.\nAfter this a bigger pack is never worse per bucket,\nwhich is why one big-to-small sweep is enough — no recursion.",
-                                 "질문에 답하기 전에 물어요. 묶음에 붙은 값이 진짜 값일까요?\n아니에요. 절반짜리를 두 번 사는 게 쌀 수 있어요. 그것부터 정해요.\n이렇게 해 두면 큰 묶음일수록 한 통 값이 싸요.\n그래서 큰 것부터 한 번만 훑으면 돼요 — 재귀가 필요 없어요.") },
+      { hi: [15, 21], bubble: t(E, "Before answering anything: is the price on a pack its real price?\nNo — two half-size packs can be cheaper. So fix that first.\nAfter this a bigger pack is never worse per bucket.\nOnly then does one big-to-small sweep give the right answer.\nSkip this step and that sweep returns a wrong answer.",
+                                 "질문에 답하기 전에 물어요. 묶음에 붙은 값이 진짜 값일까요?\n아니에요. 절반짜리를 두 번 사는 게 쌀 수 있어요. 그것부터 정해요.\n이렇게 해 두면 큰 묶음일수록 한 통 값이 싸요.\n그래야 큰 것부터 한 번만 훑어도 답이 맞아요.\n이걸 안 하면 한 번 훑기는 틀린 답을 내요.") },
       { hi: [23, 28], bubble: t(E, "We will need 'how many buckets is this pack?' over and over.\nC++ has no ** operator, so write the sizes down once.\n30 doublings already pass a billion, so 0 through 30 is enough.",
                                  "'이 묶음이 몇 통이지?' 를 계속 묻게 돼요.\nC++ 에는 ** 가 없으니 미리 한 번 적어 둬요.\n30번만 두 배 하면 벌써 10억을 넘어서, 0번부터 30번까지면 충분해요.") },
       { hi: [30, 37], bubble: t(E, "A question arrives: buy want buckets.\nTo walk the packs we need three things —\nhow much is still missing, how much we have paid, and the cheapest so far.",
@@ -197,8 +197,8 @@ export function getBuyMilkWalk(E, lang = "py") {
   return { code: FULL_PY, vars: _BM_VARS, beats: [
     { hi: [1, 2], bubble: t(E, "First, just take in what we are given — nothing is worked out yet.\nDeal 1 in the problem is deal_price[0] in the code.",
                                  "먼저 주어진 것을 받아만 둬요. 아직 아무것도 계산하지 않아요.\n문제의 1번 거래가 코드에서는 deal_price[0] 이에요.") },
-    { hi: [4, 9], bubble: t(E, "Before answering anything: is the price on a pack its real price?\nNo — two half-size packs can be cheaper. So fix that first.\nAfter this a bigger pack is never worse per bucket,\nwhich is why one big-to-small sweep is enough — no recursion.",
-                                 "질문에 답하기 전에 물어요. 묶음에 붙은 값이 진짜 값일까요?\n아니에요. 절반짜리를 두 번 사는 게 쌀 수 있어요. 그것부터 정해요.\n이렇게 해 두면 큰 묶음일수록 한 통 값이 싸요.\n그래서 큰 것부터 한 번만 훑으면 돼요 — 재귀가 필요 없어요.") },
+    { hi: [4, 9], bubble: t(E, "Before answering anything: is the price on a pack its real price?\nNo — two half-size packs can be cheaper. So fix that first.\nAfter this a bigger pack is never worse per bucket.\nOnly then does one big-to-small sweep give the right answer.\nSkip this step and that sweep returns a wrong answer.",
+                                 "질문에 답하기 전에 물어요. 묶음에 붙은 값이 진짜 값일까요?\n아니에요. 절반짜리를 두 번 사는 게 쌀 수 있어요. 그것부터 정해요.\n이렇게 해 두면 큰 묶음일수록 한 통 값이 싸요.\n그래야 큰 것부터 한 번만 훑어도 답이 맞아요.\n이걸 안 하면 한 번 훑기는 틀린 답을 내요.") },
     { hi: [11, 16], bubble: t(E, "A question arrives: buy want buckets.\nTo walk the packs we need three things —\nhow much is still missing, how much we have paid, and the cheapest so far.",
                                  "질문이 왔어요. want 통을 사야 해요.\n묶음을 훑으려면 세 가지가 필요해요 —\n아직 못 채운 통, 여기까지 낸 값, 지금까지 제일 싼 값.") },
     { hi: [18, 29], bubble: t(E, "Now the real work. At each pack there are only two things to do —\n(A) buy_up: how many packs it takes to cover what is left.\n// rounds down, so we add (pack size − 1) first — that rounds up.\n(B) buy_down: how many fit without going over, so plain // works. The rest carries down.",
