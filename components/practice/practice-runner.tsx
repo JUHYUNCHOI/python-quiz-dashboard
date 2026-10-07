@@ -499,6 +499,46 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
         </div>
       )}
 
+      {/* ⛔ 2026-10-07 — **무엇이 입력되는지 풀기 전엔 볼 수가 없었다.**
+           「입력」 상자가 아래 결과 블록의 `!r.passed` 안에만 있어서 **틀린 뒤에야** 보였다.
+           학생(보호자 경유): *"**인풋이 안 들어와서** 모든 문제가 푸는 게 불가능해요."*
+           ⭐ 여기는 **처음부터 코드를 쓰는** 곳이라 `input()` 을 손으로 친다. 그런데
+             입력을 **어디에 넣는지** 화면이 말해 주지 않으니 「안 들어온다」로 읽힌다.
+           그래서 **풀기 전에** 「자동으로 들어간다 + 무엇이 들어가는지」를 보여준다.
+           ⚠️ 답을 미리 주지 않으려고 **첫 한 개만** 보여준다(나머지는 숨은 테스트).
+             `feedback_students_copy_the_answer` — 보여주는 건 **입력**이지 푸는 법이 아니다. */}
+      {results.length === 0 && (problem.testCases ?? []).length > 0 && (
+        <div className="rounded-xl border border-sky-200 bg-sky-50/70 p-3 text-sm">
+          <div className="font-bold text-sky-900 mb-1.5">
+            📥 {t("입력은 자동으로 들어가요", "Input is fed in automatically")}
+          </div>
+          <div className="text-xs text-sky-800 mb-2">
+            {t("input() 으로 받기만 하면 돼요. 아래가 첫 번째 테스트예요.",
+               "Just read it with input(). Here is the first test.")}
+          </div>
+          <div className="flex gap-2 text-xs font-mono">
+            <div className="flex-1 bg-white rounded-lg px-3 py-2 border border-sky-100">
+              <div className="text-gray-400 mb-1">{t("들어가는 값", "Input")}</div>
+              <div className="text-gray-700 whitespace-pre-wrap">
+                {(problem.testCases ?? [])[0]?.stdin || t("(없음)", "(none)")}
+              </div>
+            </div>
+            <div className="flex-1 bg-white rounded-lg px-3 py-2 border border-sky-100">
+              <div className="text-gray-400 mb-1">{t("나와야 하는 것", "Expected")}</div>
+              <div className="text-gray-700 whitespace-pre-wrap">
+                {(problem.testCases ?? [])[0]?.expectedOutput}
+              </div>
+            </div>
+          </div>
+          {(problem.testCases ?? []).length > 1 && (
+            <div className="text-[11px] text-sky-700 mt-1.5">
+              {t(`숨은 테스트가 ${(problem.testCases ?? []).length - 1}개 더 있어요.`,
+                 `${(problem.testCases ?? []).length - 1} more hidden tests.`)}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* 테스트 결과 */}
       {results.length > 0 && (
         <div className="flex flex-col gap-2">
