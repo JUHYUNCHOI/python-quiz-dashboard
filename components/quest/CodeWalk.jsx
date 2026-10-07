@@ -456,6 +456,14 @@ export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a3
         <div ref={varsRef} style={{
           display: "flex", flexWrap: "nowrap", gap: 6,
           overflowX: "auto", overflowY: "hidden", scrollbarWidth: "thin",
+          /* ⛔ 2026-10-07 — **밀림 표시(`›`)가 마지막 알약 글자를 덮었다.**
+               `see-screen`(375px·한국어) 실측: `swaptowin` 에서 「바꾼 기록」 ↔ `›` **겹침 100%**.
+               내가 범례를 한 줄로 압축하면서 붙인 신호가 **글자 위에 앉은 것**이다 —
+               고치려다 만든 퇴행이고, 데스크탑에선 안 난다(모바일 전용).
+             ⭐ 신호를 없애지 않는다 — 신호 없는 가로 스크롤이 **원래 결함**이었다.
+               대신 **끝까지 밀면 알약이 신호 밖으로 나가도록** 오른쪽 자리를 비워 둔다.
+               36 = `ScrollEdgeFades` 폭(34) + 여유 2. 거기를 바꾸면 여기도 같이 고쳐라. */
+          paddingRight: 36,
         }}>
           {vars.map((vr, i) => (
             <span key={i} style={{
