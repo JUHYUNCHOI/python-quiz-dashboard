@@ -526,22 +526,22 @@ export function WhoCanMeetSim({ E, half = 1 }) {
       extra: ["", "", "", "", "", ""], chains: [1], push: 3,
       emKo: "줄을 세우고 이 식을 쓰면 되겠다",
       emEn: "line them up and use this formula",
-      ko: "그럼 작은 것부터 줄을 세우고 이 식을 쓰면 되겠어요.\n3, 5, 7 까지는 잘 돼요. 다음은 4 차례예요 — 7 다음 빈 자리는 9 네요.",
-      en: "So line them up smallest first and use that formula.\n3, 5, 7 works fine. Next is a 4 — and the first free spot after 7 is 9." },
+      ko: "그럼 작은 것부터 줄을 세우고 이 식을 쓰면 되겠어요.\n3, 5, 7 까지는 잘 돼요. 다음은 4 차례예요 — 7 다음이니까 9 로 보내면 될까요?",
+      en: "So line them up smallest first and use that formula.\n3, 5, 7 works fine. Next is a 4 — it comes after 7, so do we send it to 9?" },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "moving", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1], push: 3, tone: "stuck",
-      emKo: "2.5 — 식이 깨져요",
-      emEn: "2.5 — the formula breaks",
-      ko: "그런데 (9 − 4) ÷ 2 를 하면 2.5 가 나와요.\n더한 횟수가 2.5 번일 수는 없어요. 식이 깨졌어요.",
-      en: "But (9 − 4) / 2 gives 2.5.\nYou cannot add something two and a half times. The formula broke." },
+      emKo: "4 는 9 로 갈 수가 없어요",
+      emEn: "4 cannot get to 9",
+      ko: "그런데 4 를 9 로 보낼 수가 없어요.\n4 에 2 를 아무리 더해도 9 는 안 나오거든요.",
+      en: "But we cannot send that 4 to 9.\nNo matter how many 2s you add to 4, you never get 9." },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "idle", "idle", "even", "idle", "idle"],
       extra: ["", "", "", "", "", ""], chains: [1, 0], hot: 0, push: 3,
-      emKo: "4 는 9 에 닿을 수가 없어요",
-      emEn: "4 can never land on 9",
-      ko: "왜 깨졌을까요? 4 에 2 를 더하면 4, 6, 8 … 이에요.\n9 를 건너뛰어요 — 4 는 9 에 닿을 수가 없어요.",
-      en: "Why did it break? Adding 2 to 4 gives 4, 6, 8 ….\nIt steps right over 9 — 4 can never land on 9." },
+      emKo: "가는 자리가 아예 달라요",
+      emEn: "they travel on different spots",
+      ko: "4 는 4, 6, 8 … 로만 가고 3 은 3, 5, 7 … 로만 가요.\n둘이 가는 자리가 아예 달라요. 그런데 한 줄에 세웠어요.",
+      en: "A 4 only goes to 4, 6, 8 …, and a 3 only goes to 3, 5, 7 ….\nThey travel on completely different spots — yet we put them in one line." },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "placed", "even", "even", "even"],
       extra: ["", "", "", "", "", ""], chains: [1, 0], push: 3,
@@ -693,12 +693,21 @@ export function WhoCanMeetSim({ E, half = 1 }) {
            고쳐지고도 **화면에서 다른 문장과 구분된 적이 한 번도 없었다.**
            바로 아래 걸음의 🚫 상자가 이 주장을 증명하는 구조라, 주장이 안 보이면
            증명도 「뭘 증명하는지」 모른 채 지나간다. */
-      /* ⛔ 2026-10-03 — 「봐야 해요」는 **필수**로 읽힌다. 그런데 묶기는 필수가 아니다
-           (정확성이 아니라 속도다 — 선생님이 반증하셨다). **계획 선언**으로 바꾼다. */
+      /* 🔧 2026-10-07 **정정** — 아래 옛 주석은 **틀렸다. 묶기는 필수다.**
+           옛 주석: *"묶기는 필수가 아니다 — 정확성이 아니라 속도다."*
+           ⛔ 반증됐다. 선생님이 두 코드를 **USACO 에 직접 제출**하셨다:
+             「전부 한 줄로 세우기」 → 공식 샘플 3번(`4 1 4 1`, K=4)에서 **4**(정답 2) **오답**
+             「나머지로 줄 나누기」  → **통과**
+           안 묶으면 느려지는 게 아니라 **틀린다.** `a += K` 는 나머지를 안 바꾸므로
+           나머지가 다른 둘은 **영영 같아질 수 없다** — 문제가 나머지별로 쪼개진다.
+           ⚠️ 이 quest 는 「허용 ↔ 필수」를 **세 번** 왕복했다. 다시 뒤집지 마라.
+           ⚠️ 깨지는 이유를 **「2.5 가 나와서 식이 깨진다」로 쓰지 마라** — 코드에서는
+             `(9−4)//2` 가 **조용히 2 로 내려앉고** 답만 틀린다. 진짜 이유는
+             **못 가는 자리로 보낸다**는 것이다(4 는 4·8·12 … 9 에 닿을 수 없다). */
       emKo: "3 끼리, 4 끼리 따로",
       emEn: "3s with 3s, 4s with 4s",
       ko: "3 과 4 는 절대 안 겹쳐요 — 그러니 3 끼리, 4 끼리 따로 봐요.\n먼저 3 쪽. 첫째는 그대로였어요 — 0 회.",
-      en: "4 can never overlap with the 3s — so we only need to look at the 3s.\nNow count the pushes. The first one never moved — 0." },
+      en: "4 can never overlap with the 3s — so we line up 3s with 3s and 4s with 4s.\nStart with the 3s. The first one never moved — 0." },
 
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "moving", "placed", "even", "even", "even"],
       extra: ["", "· 3→5", "", "", "", ""], chains: [1, 0], named: true, ops: 1,
@@ -708,7 +717,7 @@ export function WhoCanMeetSim({ E, half = 1 }) {
     { tiles: [3, 5, 7, 4, 4, 4], st: ["placed", "placed", "moving", "even", "even", "even"],
       extra: ["", "", "· 3→5→7", "", "", ""], chains: [1, 0], named: true,
       formula: "(7-3) ÷ 2 = 2", ops: 3,
-      ko: "셋째는 5 도 차 있어서 2 를 두 번 더했어요. 7 까지 — 2 회.\n하나씩 세는 대신 (7−3) ÷ 2 로 한 번에 — 아까 그 199억 번도 이렇게 사라져요.",
+      ko: "셋째는 5 도 차 있어서 2 를 두 번 더했어요. 7 까지 — 2 회.\n하나씩 세는 대신 (7−3) ÷ 2 로 한 번에 — 아까 그 199억 9,990만 번도 이렇게 사라져요.",
       en: "The third found 5 taken too and went on to 7 — two pushes.\nInstead of counting one by one, (7−3) / 2 in one go — that is how the 19,999,900,000 goes away." },
 
     /* 선생님: *"그 다음에 **밑에 정리된게** 보여야지"* — 미는 장면이 다 끝난 뒤에 정리 한 걸음. */
