@@ -84,8 +84,20 @@ const MEASURE = `() => {
     const under = ob.top - q.top;
     if (over > 2 || under > 2) { cut++; worst = Math.max(worst, over, under); }
   }
+  /* 말풍선 키도 같이 잰다 — 보이는 강조줄 0 은 bubH >= clientHeight 일 때만 난다.
+     같은 조건에서 말풍선 글자 아래쪽도 잘린다(학생이 질문도 다 못 읽는다).
+     자세한 근거는 이 파일 맨 위 설명 참고. */
+  const bub = box.querySelector('[data-cw-bubble]')
+    || [...box.querySelectorAll('div')].find(e => e.textContent.trim().startsWith('💬'));
+  let bubH = 0, bubCut = 0;
+  if (bub) {
+    const br = bub.getBoundingClientRect();
+    bubH = Math.round(br.height);
+    bubCut = Math.max(0, Math.round(br.bottom - ob.bottom));   // 말풍선이 상자 밖으로 넘친 px
+  }
   return { total: rows.length, cut, worst: Math.round(worst),
-           boxH: Math.round(ob.height), lineH: Math.round(lineH) };
+           boxH: Math.round(ob.height), lineH: Math.round(lineH),
+           bubH, bubCut, bubOverBox: bubH >= Math.round(ob.height) };
 }`;
 
 async function walkQuest(page, id) {
@@ -174,7 +186,7 @@ async function selftest(browser) {
     for (const s2 of bad) { cutLines += s2.cut; cutPx += s2.worst; }
     console.log(`  🚨 ${id.padEnd(20)} — 걸음 ${r.steps.length}개 중 ${bad.length}개에서 잘림`);
     for (const s of bad.slice(0, 4))
-      console.log(`       걸음 ${s.i}: 강조 ${s.total}줄 중 **${s.cut}줄이 밖** (최대 ${s.worst}px · 상자 ${s.boxH}px · 줄 ${s.lineH}px)`);
+      console.log(`       걸음 ${s.i}: 강조 ${s.total}줄 중 **${s.cut}줄이 밖** (최대 ${s.worst}px · 상자 ${s.boxH}px · 줄 ${s.lineH}px · 말풍선 ${s.bubH}px${s.bubOverBox ? ' 🚨말풍선이 상자보다 큼' : ''}${s.bubCut > 2 ? ` · 말풍선도 ${s.bubCut}px 잘림` : ''})`);
     if (bad.length > 4) console.log(`       … ${bad.length - 4}개 더`);
   }
   await browser.close();
