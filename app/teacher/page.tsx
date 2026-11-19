@@ -272,7 +272,7 @@ export default function TeacherDashboardPage() {
 
       <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-[1200px] mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-800">{t("내 반 관리", "Manage My Classes")}</h1>
+          <h1 className="text-xl font-bold text-gray-800">{t("내 반 관리", "Manage My Classes!")}</h1>
           <button
             onClick={() => setIsCreating(true)}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all"
