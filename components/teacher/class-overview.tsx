@@ -63,12 +63,16 @@ function classifyPattern(s: StudentRow): StudentPattern {
   return "new" // default: 데이터 부족 시 아직 시작 전으로 간주
 }
 
-const PATTERN_META: Record<StudentPattern, { emoji: string; label: string; color: string; bg: string; advice: string }> = {
-  star:       { emoji: "✅", label: "잘 따라가는 중",    color: "text-green-700",  bg: "bg-green-50",  advice: "꾸준히 접속 + 퀴즈 정답률 높음" },
-  hardworker: { emoji: "⚡", label: "개념 보충 필요",    color: "text-amber-700",  bg: "bg-amber-50",  advice: "열심히 하는데 퀴즈 정답률 낮음 — 개념 설명 필요" },
-  coaster:    { emoji: "💤", label: "접속이 줄어드는 중", color: "text-blue-700",  bg: "bg-blue-50",   advice: "퀴즈는 잘 맞는데 최근 접속 없음 — 독려 필요" },
-  atrisk:     { emoji: "🚨", label: "집중 관리 필요",    color: "text-red-700",    bg: "bg-red-50",    advice: "접속도 줄고 퀴즈 정답률도 낮음 — 적극 개입 필요" },
-  new:        { emoji: "🌱", label: "아직 시작 전",      color: "text-gray-500",   bg: "bg-gray-50",   advice: "시작을 독려해 주세요" },
+type TFn = (ko: string, en: string) => string
+
+function patternMeta(t: TFn): Record<StudentPattern, { emoji: string; label: string; color: string; bg: string; advice: string }> {
+  return {
+    star:       { emoji: "✅", label: t("잘 따라가는 중", "Keeping up"),             color: "text-green-700",  bg: "bg-green-50",  advice: t("꾸준히 접속 + 퀴즈 정답률 높음", "Logs in regularly + high quiz accuracy") },
+    hardworker: { emoji: "⚡", label: t("개념 보충 필요", "Needs concept support"),  color: "text-amber-700",  bg: "bg-amber-50",  advice: t("열심히 하는데 퀴즈 정답률 낮음 — 개념 설명 필요", "Works hard but low quiz accuracy — needs concept explanation") },
+    coaster:    { emoji: "💤", label: t("접속이 줄어드는 중", "Logging in less"),    color: "text-blue-700",   bg: "bg-blue-50",   advice: t("퀴즈는 잘 맞는데 최근 접속 없음 — 독려 필요", "Good quiz scores but no recent activity — needs encouragement") },
+    atrisk:     { emoji: "🚨", label: t("집중 관리 필요", "Needs close attention"),  color: "text-red-700",    bg: "bg-red-50",    advice: t("접속도 줄고 퀴즈 정답률도 낮음 — 적극 개입 필요", "Fewer logins and low quiz accuracy — needs active intervention") },
+    new:        { emoji: "🌱", label: t("아직 시작 전", "Not started yet"),          color: "text-gray-500",   bg: "bg-gray-50",   advice: t("시작을 독려해 주세요", "Encourage them to get started") },
+  }
 }
 
 // 위험 알림 생성
@@ -83,7 +87,7 @@ interface RiskAlert {
   weakTopics?: string[] // 약한 레슨/개념 목록 (최대 3개)
 }
 
-function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
+function buildRiskAlerts(students: StudentRow[], t: TFn, lang: "ko" | "en"): RiskAlert[] {
   const alerts: RiskAlert[] = []
   const avgCompleted = students.length > 0
     ? students.reduce((s, st) => s + st.completedLessons, 0) / students.length
@@ -108,35 +112,40 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
       r.progress_type === "learn" && r.completed && !reviewedIds.has(r.lesson_id) && daysSince(r.updated_at) >= 7
     )
     if (overdueUnreviewed.length >= 2 && days <= 7) {
-      const lessonNames = overdueUnreviewed.slice(0, 2).map(r => getLessonName(r.lesson_id, "ko")).join(" · ")
+      const lessonNames = overdueUnreviewed.slice(0, 2).map(r => getLessonName(r.lesson_id, lang)).join(" · ")
       alerts.push({
         studentId: s.id,
         studentName: s.displayName,
-        detail: `복습 미시작 ${overdueUnreviewed.length}개 — ${lessonNames}`,
+        detail: t(
+          `복습 미시작 ${overdueUnreviewed.length}개 — ${lessonNames}`,
+          `${overdueUnreviewed.length} lessons not reviewed — ${lessonNames}`
+        ),
         severity: "warning",
         emoji: "🔄",
-        action: "복습 독려",
+        action: t("복습 독려", "Encourage review"),
       })
     }
 
     // 장기 미접속
     if (days >= 7) {
-      alerts.push({ studentId: s.id, studentName: s.displayName, detail: `${days}일째 접속 없음`, severity: "danger", emoji: "🚨", action: "연락 필요" })
+      alerts.push({ studentId: s.id, studentName: s.displayName, detail: t(`${days}일째 접속 없음`, `No activity for ${days} days`), severity: "danger", emoji: "🚨", action: t("연락 필요", "Reach out") })
     } else if (days >= 3 && days < 7) {
-      alerts.push({ studentId: s.id, studentName: s.displayName, detail: `${days}일째 미접속`, severity: "warning", emoji: "⚠️", action: "확인 필요" })
+      alerts.push({ studentId: s.id, studentName: s.displayName, detail: t(`${days}일째 미접속`, `Inactive for ${days} days`), severity: "warning", emoji: "⚠️", action: t("확인 필요", "Check in") })
     }
 
     // 낮은 정답률 (최근 3세션 이상, 55% 미만, 3일 이내 접속)
     if (avgAcc !== null && avgAcc < 55 && recentQuizzes.length >= 3 && days <= 3) {
       // 복습 점수 기준 하위 레슨
       const bottomLessons = [...reviewRows].sort((a, b) => a.score - b.score).slice(0, 3)
-      const weakTopics: string[] = bottomLessons.map(r => `${getLessonName(r.lesson_id, "ko")} ${r.score}%`)
+      const weakTopics: string[] = bottomLessons.map(r => `${getLessonName(r.lesson_id, lang)} ${r.score}%`)
 
       const topTwo = weakTopics.slice(0, 2).join("  ·  ")
       const sessionCount = recentQuizzes.length
-      const detail = topTwo
-        ? `최근 ${sessionCount}회 퀴즈 평균 ${Math.round(avgAcc)}%  ·  ${topTwo}`
-        : `최근 ${sessionCount}회 퀴즈 평균 ${Math.round(avgAcc)}%`
+      const avgText = t(
+        `최근 ${sessionCount}회 퀴즈 평균 ${Math.round(avgAcc)}%`,
+        `${Math.round(avgAcc)}% avg over last ${sessionCount} quizzes`
+      )
+      const detail = topTwo ? `${avgText}  ·  ${topTwo}` : avgText
 
       alerts.push({
         studentId: s.id,
@@ -144,7 +153,7 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
         detail,
         severity: "warning",
         emoji: "📉",
-        action: "퀴즈 확인",
+        action: t("퀴즈 확인", "Review quizzes"),
         weakTopics: weakTopics.length > 2 ? weakTopics.slice(2) : undefined,
       })
     }
@@ -152,7 +161,17 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
     // 진도 크게 뒤처짐
     if (avgCompleted > 4 && s.completedLessons < avgCompleted * 0.4 && s.completedLessons >= 0) {
       if (!alerts.some(a => a.studentId === s.id && a.emoji === "🚨")) {
-        alerts.push({ studentId: s.id, studentName: s.displayName, detail: `완료 ${s.completedLessons}개 (반 평균 ${Math.round(avgCompleted)}개)`, severity: "warning", emoji: "📊", action: "진도 확인" })
+        alerts.push({
+          studentId: s.id,
+          studentName: s.displayName,
+          detail: t(
+            `완료 ${s.completedLessons}개 (반 평균 ${Math.round(avgCompleted)}개)`,
+            `${s.completedLessons} done (class avg ${Math.round(avgCompleted)})`
+          ),
+          severity: "warning",
+          emoji: "📊",
+          action: t("진도 확인", "Check progress"),
+        })
       }
     }
   }
@@ -168,20 +187,22 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
 }
 
 export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
-  const { lang: _lang } = useLanguage()
+  const { lang, t } = useLanguage()
   const [expandedPattern, setExpandedPattern] = useState<StudentPattern | null>(null)
   const [showPatternDist, setShowPatternDist] = useState(false)
 
   if (students.length === 0) return (
     <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-8 text-center mb-6">
       <div className="text-4xl mb-3">👥</div>
-      <p className="text-sm font-bold text-gray-600 mb-1">아직 참가한 학생이 없어요</p>
+      <p className="text-sm font-bold text-gray-600 mb-1">{t("아직 참가한 학생이 없어요", "No students have joined yet")}</p>
       {joinCode ? (
         <p className="text-sm text-gray-400">
-          참가 코드 <span className="font-mono font-black text-orange-500 bg-orange-50 px-2 py-0.5 rounded">{joinCode}</span>를 학생들에게 공유해보세요
+          {t("참가 코드 ", "Share the join code ")}
+          <span className="font-mono font-black text-orange-500 bg-orange-50 px-2 py-0.5 rounded">{joinCode}</span>
+          {t("를 학생들에게 공유해보세요", " with your students")}
         </p>
       ) : (
-        <p className="text-sm text-gray-400">반 참가 코드를 학생들에게 공유해보세요</p>
+        <p className="text-sm text-gray-400">{t("반 참가 코드를 학생들에게 공유해보세요", "Share your class join code with your students")}</p>
       )}
     </div>
   )
@@ -247,7 +268,8 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
     Object.entries(patternStudents).map(([k, v]) => [k, v.length])
   ) as Record<StudentPattern, number>
 
-  const risks = buildRiskAlerts(students)
+  const META = patternMeta(t)
+  const risks = buildRiskAlerts(students, t, lang)
   const dangerCount = risks.filter(r => r.severity === "danger").length
 
   // 반 전체 레슨별 약점 집계 (복습 완료 기준)
@@ -276,34 +298,39 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
 
       {/* ① 이번 주 반 요약 — 선생님이 매일 제일 먼저 보는 숫자 */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
-        <h3 className="text-sm font-black text-gray-700">📊 이번 주 반 현황</h3>
+        <h3 className="text-sm font-black text-gray-700">📊 {t("이번 주 반 현황", "This week at a glance")}</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <StatCard
             icon={<Users className="w-4 h-4" />}
-            value={`${activeThisWeek}/${total}명`}
-            label="이번 주 활동"
-            sub={activeToday > 0 ? `오늘 ${activeToday}명` : "오늘 없음"}
+            value={t(`${activeThisWeek}/${total}명`, `${activeThisWeek}/${total}`)}
+            label={t("이번 주 활동", "Active this week")}
+            sub={activeToday > 0 ? t(`오늘 ${activeToday}명`, `${activeToday} today`) : t("오늘 없음", "None today")}
             color={activeThisWeek >= total * 0.7 ? "green" : activeThisWeek > 0 ? "amber" : "red"}
           />
           <StatCard
             icon={<BookOpen className="w-4 h-4" />}
-            value={`${avgLessons}개`}
-            label="평균 완료 레슨"
-            sub="반 평균"
+            value={t(`${avgLessons}개`, `${avgLessons}`)}
+            label={t("평균 완료 레슨", "Avg lessons done")}
+            sub={t("반 평균", "Class average")}
             color="purple"
           />
           <StatCard
             icon={<Target className="w-4 h-4" />}
             value={classAvgAccuracy !== null ? `${classAvgAccuracy}%` : "—"}
-            label="평균 퀴즈 정답률"
-            sub={classAvgAccuracy !== null ? `참여 ${studentsWithQuiz.length}/${total}명 (${quizParticipationRate}%)` : "퀴즈 기록 없음"}
+            label={t("평균 퀴즈 정답률", "Avg quiz accuracy")}
+            sub={classAvgAccuracy !== null
+              ? t(`참여 ${studentsWithQuiz.length}/${total}명 (${quizParticipationRate}%)`, `${studentsWithQuiz.length}/${total} took quizzes (${quizParticipationRate}%)`)
+              : t("퀴즈 기록 없음", "No quiz records")}
             color={classAvgAccuracy === null ? "gray" : classAvgAccuracy >= 75 ? "green" : classAvgAccuracy >= 55 ? "amber" : "red"}
           />
           <StatCard
             icon={<Flame className="w-4 h-4" />}
-            value={`${(students.reduce((s, st) => s + st.dailyStreak, 0) / total).toFixed(1)}일`}
-            label="평균 연속일"
-            sub="스트릭"
+            value={t(
+              `${(students.reduce((s, st) => s + st.dailyStreak, 0) / total).toFixed(1)}일`,
+              `${(students.reduce((s, st) => s + st.dailyStreak, 0) / total).toFixed(1)}d`
+            )}
+            label={t("평균 연속일", "Avg streak")}
+            sub={t("스트릭", "Streak")}
             color="orange"
           />
         </div>
@@ -318,7 +345,7 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
           <div className="flex items-center gap-2">
             <AlertTriangle className={cn("w-4 h-4", dangerCount > 0 ? "text-red-500" : "text-amber-500")} />
             <h3 className={cn("text-sm font-black", dangerCount > 0 ? "text-red-800" : "text-amber-800")}>
-              지금 신경써야 할 학생 {risks.length}명
+              {t(`지금 신경써야 할 학생 ${risks.length}명`, `${risks.length} student${risks.length === 1 ? "" : "s"} need attention now`)}
             </h3>
           </div>
           <div className="space-y-2">
@@ -345,11 +372,13 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
                     </div>
                   )}
                 </div>
-                <span className="text-[10px] text-gray-300 font-normal flex-shrink-0 mt-0.5">→ 상세보기</span>
+                <span className="text-[10px] text-gray-300 font-normal flex-shrink-0 mt-0.5">{t("→ 상세보기", "→ Details")}</span>
               </button>
             ))}
             {risks.length > 5 && (
-              <p className="text-xs text-center text-gray-400">+{risks.length - 5}명 더 있어요 (아래 목록 확인)</p>
+              <p className="text-xs text-center text-gray-400">
+                {t(`+${risks.length - 5}명 더 있어요 (아래 목록 확인)`, `+${risks.length - 5} more (see list below)`)}
+              </p>
             )}
           </div>
         </div>
@@ -358,7 +387,7 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
       {risks.length === 0 && (
         <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 flex items-center gap-2">
           <span className="text-lg">🎉</span>
-          <p className="text-sm font-bold text-green-700">이번 주 모든 학생이 잘 따라가고 있어요!</p>
+          <p className="text-sm font-bold text-green-700">{t("이번 주 모든 학생이 잘 따라가고 있어요!", "Every student is keeping up this week!")}</p>
         </div>
       )}
 
@@ -366,25 +395,25 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
       {classWeakLessons.length > 0 && (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
           <div>
-            <h3 className="text-sm font-black text-gray-700">📚 다음 수업에 다시 짚어야 할 레슨</h3>
-            <p className="text-[11px] text-gray-400 mt-0.5">복습 점수 기준 · 2명 이상 완료한 레슨만 표시</p>
+            <h3 className="text-sm font-black text-gray-700">📚 {t("다음 수업에 다시 짚어야 할 레슨", "Lessons to revisit next class")}</h3>
+            <p className="text-[11px] text-gray-400 mt-0.5">{t("복습 점수 기준 · 2명 이상 완료한 레슨만 표시", "Based on review scores · only lessons completed by 2+ students")}</p>
           </div>
           <div className="space-y-2.5">
             {classWeakLessons.map(({ lessonId, avgScore, total, struggling }) => {
-              const name = getLessonName(lessonId, "ko")
+              const name = getLessonName(lessonId, lang)
               const barColor = avgScore < 50 ? "bg-red-400" : avgScore < 65 ? "bg-amber-400" : "bg-green-400"
               const textColor = avgScore < 50 ? "text-red-600" : avgScore < 65 ? "text-amber-600" : "text-green-600"
               const urgency = struggling >= total * 0.6
-                ? { label: "재수업 권장", bg: "bg-red-100 text-red-700" }
+                ? { label: t("재수업 권장", "Reteach"), bg: "bg-red-100 text-red-700" }
                 : struggling > 0
-                ? { label: "복습 권장", bg: "bg-amber-100 text-amber-700" }
-                : { label: "양호", bg: "bg-green-100 text-green-700" }
+                ? { label: t("복습 권장", "Review"), bg: "bg-amber-100 text-amber-700" }
+                : { label: t("양호", "On track"), bg: "bg-green-100 text-green-700" }
               return (
                 <div key={lessonId}>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold text-gray-700 truncate flex-1 mr-2">{name}</span>
                     <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <span className="text-[10px] text-gray-400">{struggling}/{total}명 어려움</span>
+                      <span className="text-[10px] text-gray-400">{t(`${struggling}/${total}명 어려움`, `${struggling}/${total} struggling`)}</span>
                       <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded-full", urgency.bg)}>{urgency.label}</span>
                     </div>
                   </div>
@@ -411,8 +440,8 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
           className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors"
         >
           <div>
-            <p className="text-sm font-black text-gray-700 text-left">🗂️ 학생 유형 분포</p>
-            <p className="text-xs text-gray-400 text-left">접속 빈도 × 퀴즈 정답률 기준</p>
+            <p className="text-sm font-black text-gray-700 text-left">🗂️ {t("학생 유형 분포", "Student type breakdown")}</p>
+            <p className="text-xs text-gray-400 text-left">{t("접속 빈도 × 퀴즈 정답률 기준", "Based on login frequency × quiz accuracy")}</p>
           </div>
           {showPatternDist
             ? <ChevronUp className="w-4 h-4 text-gray-400 flex-shrink-0" />
@@ -422,7 +451,7 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
         {showPatternDist && <div className="px-4 pb-4 pt-1 space-y-3">
         <div className="grid grid-cols-2 gap-2">
           {(["star", "hardworker", "coaster", "atrisk"] as StudentPattern[]).map(pattern => {
-            const meta = PATTERN_META[pattern]
+            const meta = META[pattern]
             const list = patternStudents[pattern] || []
             const count = list.length
             if (count === 0) return null
@@ -444,7 +473,7 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">{meta.emoji}</span>
-                      <span className={cn("text-xs font-black", meta.color)}>{count}명</span>
+                      <span className={cn("text-xs font-black", meta.color)}>{t(`${count}명`, `${count}`)}</span>
                     </div>
                     {count > 1 && (
                       <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", meta.color, isExpanded && "rotate-180")} />
@@ -456,16 +485,16 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
                     <div className="mt-1 space-y-0.5">
                       <p className="text-[10px] text-gray-500">
                         {list[0].name}
-                        {list[0].avgAcc !== null && <span className={cn("ml-1 font-bold", list[0].avgAcc < 55 ? "text-red-500" : "text-amber-500")}>퀴즈 {list[0].avgAcc}%</span>}
+                        {list[0].avgAcc !== null && <span className={cn("ml-1 font-bold", list[0].avgAcc < 55 ? "text-red-500" : "text-amber-500")}>{t(`퀴즈 ${list[0].avgAcc}%`, `Quiz ${list[0].avgAcc}%`)}</span>}
                       </p>
                       {list[0].worstLesson && (
                         <p className="text-[10px] text-red-500 font-bold">
-                          📉 {getLessonName(list[0].worstLesson.id, "ko")} {list[0].worstLesson.score}%
+                          📉 {getLessonName(list[0].worstLesson.id, lang)} {list[0].worstLesson.score}%
                         </p>
                       )}
                       {!list[0].worstLesson && list[0].overdueLesson && (
                         <p className="text-[10px] text-amber-500 font-bold">
-                          ⏰ {getLessonName(list[0].overdueLesson.id, "ko")} 복습 안 함
+                          ⏰ {t(`${getLessonName(list[0].overdueLesson.id, lang)} 복습 안 함`, `${getLessonName(list[0].overdueLesson.id, lang)} not reviewed`)}
                         </p>
                       )}
                     </div>
@@ -485,12 +514,12 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
                           <span className={cn("text-[11px] font-bold block", meta.color)}>{s.name}</span>
                           {s.worstLesson && (
                             <span className="text-[10px] text-red-500 font-bold">
-                              📉 {getLessonName(s.worstLesson.id, "ko")} {s.worstLesson.score}%
+                              📉 {getLessonName(s.worstLesson.id, lang)} {s.worstLesson.score}%
                             </span>
                           )}
                           {!s.worstLesson && s.overdueLesson && (
                             <span className="text-[10px] text-amber-500 font-bold">
-                              ⏰ {getLessonName(s.overdueLesson.id, "ko")} 복습 안 함
+                              ⏰ {t(`${getLessonName(s.overdueLesson.id, lang)} 복습 안 함`, `${getLessonName(s.overdueLesson.id, lang)} not reviewed`)}
                             </span>
                           )}
                         </div>
@@ -511,7 +540,7 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
           })}
         </div>
         {(patternCounts["new"] || 0) > 0 && (
-          <p className="text-xs text-gray-400 text-center">🌱 아직 시작 안 한 학생 {patternCounts["new"] || 0}명</p>
+          <p className="text-xs text-gray-400 text-center">🌱 {t(`아직 시작 안 한 학생 ${patternCounts["new"] || 0}명`, `${patternCounts["new"] || 0} student${(patternCounts["new"] || 0) === 1 ? "" : "s"} haven't started yet`)}</p>
         )}
         </div>}
       </div>

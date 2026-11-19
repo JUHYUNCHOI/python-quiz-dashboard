@@ -29,15 +29,17 @@ interface Props {
   stepVisits?: StepVisitSummary[]
 }
 
-function formatDate(dateStr: string): string {
+type TFn = (ko: string, en: string) => string
+
+function formatDate(dateStr: string, t: TFn): string {
   if (!dateStr) return ""
   try {
     const d = new Date(dateStr)
     const today = new Date()
-    if (d.toDateString() === today.toDateString()) return "오늘"
+    if (d.toDateString() === today.toDateString()) return t("오늘", "Today")
     const yesterday = new Date(today)
     yesterday.setDate(yesterday.getDate() - 1)
-    if (d.toDateString() === yesterday.toDateString()) return "어제"
+    if (d.toDateString() === yesterday.toDateString()) return t("어제", "Yesterday")
     return `${d.getMonth() + 1}/${d.getDate()}`
   } catch {
     return ""
@@ -98,6 +100,7 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
   isHomework?: boolean
   stepVisit?: StepVisitSummary
 }) {
+  const { t } = useLanguage()
   const [showAnswers, setShowAnswers] = useState<"learn" | "review" | null>(null)
   const learn = summary?.learn ?? null
   const review = summary?.review ?? null
@@ -135,15 +138,15 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
         )}>
           {name}
         </span>
-        {isHomework && <span className="text-[9px] flex-shrink-0" title="선생님 지정 과제">📋</span>}
+        {isHomework && <span className="text-[9px] flex-shrink-0" title={t("선생님 지정 과제", "Teacher-assigned homework")}>📋</span>}
       </div>
 
       {/* 학습 칸 */}
       <div className="flex flex-col items-end gap-0.5 w-20 flex-shrink-0">
         {learnDone ? (
           <>
-            <span className="text-[10px] font-bold text-green-600">학습 완료</span>
-            <span className="text-[9px] text-gray-400">{formatDate(learn!.updated_at)}</span>
+            <span className="text-[10px] font-bold text-green-600">{t("학습 완료", "Learned")}</span>
+            <span className="text-[9px] text-gray-400">{formatDate(learn!.updated_at, t)}</span>
           </>
         ) : inProgress ? (
           <>
@@ -155,10 +158,10 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
                 />
               </div>
               <span className="text-[9px] text-amber-600 font-bold">
-                {learn!.score > 0 ? `${learn!.score}%` : "시작"}
+                {learn!.score > 0 ? `${learn!.score}%` : t("시작", "Started")}
               </span>
             </div>
-            <span className="text-[9px] text-gray-400">{formatDate(learn!.updated_at)}</span>
+            <span className="text-[9px] text-gray-400">{formatDate(learn!.updated_at, t)}</span>
           </>
         ) : hasStepVisits ? (
           <>
@@ -173,10 +176,10 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
                 {stepVisit!.visited_steps}/{stepVisit!.total_steps}
               </span>
             </div>
-            <span className="text-[9px] text-purple-400">열어봄</span>
+            <span className="text-[9px] text-purple-400">{t("열어봄", "Opened")}</span>
           </>
         ) : (
-          <span className="text-[10px] text-gray-300">미시작</span>
+          <span className="text-[10px] text-gray-300">{t("미시작", "Not started")}</span>
         )}
       </div>
 
@@ -198,25 +201,25 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
                 </span>
               )
             })()}
-            <span className="text-[9px] text-gray-400">{formatDate(review.updated_at)}</span>
+            <span className="text-[9px] text-gray-400">{formatDate(review.updated_at, t)}</span>
           </>
         ) : review ? (
           <>
-            <span className="text-[10px] text-amber-500 font-medium">복습 중</span>
-            <span className="text-[9px] text-gray-400">{formatDate(review.updated_at)}</span>
+            <span className="text-[10px] text-amber-500 font-medium">{t("복습 중", "Reviewing")}</span>
+            <span className="text-[9px] text-gray-400">{formatDate(review.updated_at, t)}</span>
           </>
         ) : reviewUrgency === "overdue" ? (
           <>
-            <span className="text-[10px] font-black text-red-500 bg-red-50 px-1.5 py-0.5 rounded">D+{learnDays}일</span>
-            <span className="text-[9px] text-red-400">복습 필요</span>
+            <span className="text-[10px] font-black text-red-500 bg-red-50 px-1.5 py-0.5 rounded">{t(`D+${learnDays}일`, `D+${learnDays}`)}</span>
+            <span className="text-[9px] text-red-400">{t("복습 필요", "Review needed")}</span>
           </>
         ) : reviewUrgency === "recommended" ? (
           <>
-            <span className="text-[10px] font-bold text-amber-500">D+{learnDays}일</span>
-            <span className="text-[9px] text-amber-400">복습 권장</span>
+            <span className="text-[10px] font-bold text-amber-500">{t(`D+${learnDays}일`, `D+${learnDays}`)}</span>
+            <span className="text-[9px] text-amber-400">{t("복습 권장", "Review soon")}</span>
           </>
         ) : (
-          <span className="text-[10px] text-gray-400">복습 전</span>
+          <span className="text-[10px] text-gray-400">{t("복습 전", "Not reviewed")}</span>
         )}
       </div>
     </div>
@@ -235,7 +238,7 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
             )}
           >
             {showAnswers === "learn" ? <ChevronUp className="w-2.5 h-2.5" /> : <ChevronDown className="w-2.5 h-2.5" />}
-            학습 답 보기
+            {t("학습 답 보기", "View lesson answers")}
           </button>
         )}
         {review?.completed && (
@@ -249,7 +252,7 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
             )}
           >
             {showAnswers === "review" ? <ChevronUp className="w-2.5 h-2.5" /> : <ChevronDown className="w-2.5 h-2.5" />}
-            복습 답 보기
+            {t("복습 답 보기", "View review answers")}
           </button>
         )}
       </div>
@@ -270,6 +273,7 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
 }
 
 function PartSection({ part, lessonMap, lang, studentId, homeworkLessonIds, stepVisitMap }: { part: PartMeta; lessonMap: Map<string, LessonSummary>; lang: "ko" | "en"; studentId?: string; homeworkLessonIds?: Set<string>; stepVisitMap: Map<string, StepVisitSummary> }) {
+  const { t } = useLanguage()
   const ids = part.lessonIds.map(String)
   const learnDoneCount = ids.filter(id => lessonMap.get(id)?.learn?.completed).length
   const inProgressCount = ids.filter(id => {
@@ -303,7 +307,7 @@ function PartSection({ part, lessonMap, lang, studentId, homeworkLessonIds, step
         </span>
         {inProgressCount > 0 && (
           <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-600 font-bold">
-            진행 중 {inProgressCount}
+            {t(`진행 중 ${inProgressCount}`, `${inProgressCount} in progress`)}
           </span>
         )}
         {/* 진도 바 */}
@@ -318,8 +322,8 @@ function PartSection({ part, lessonMap, lang, studentId, homeworkLessonIds, step
       {/* 컬럼 헤더 */}
       <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 px-2 mb-0.5">
         <div />
-        <div className="text-[9px] text-gray-400 w-20 text-right">학습</div>
-        <div className="text-[9px] text-gray-400 w-16 text-right">복습</div>
+        <div className="text-[9px] text-gray-400 w-20 text-right">{t("학습", "Learn")}</div>
+        <div className="text-[9px] text-gray-400 w-16 text-right">{t("복습", "Review")}</div>
       </div>
 
       {/* 레슨 목록 */}
@@ -333,7 +337,7 @@ function PartSection({ part, lessonMap, lang, studentId, homeworkLessonIds, step
       {learnDoneCount > 0 && (
         <div className="flex items-center gap-1 px-2 pt-0.5">
           <span className="text-[9px] text-gray-400">
-            복습 완료 {reviewDoneCount}/{learnDoneCount}
+            {t(`복습 완료 ${reviewDoneCount}/${learnDoneCount}`, `${reviewDoneCount}/${learnDoneCount} reviewed`)}
           </span>
           <span className={cn(
             "text-[9px] font-black",
@@ -363,6 +367,7 @@ function LanguageSection({ title, emoji, parts, lessonMap, lang, studentId, home
   homeworkLessonIds?: Set<string>
   stepVisitMap: Map<string, StepVisitSummary>
 }) {
+  const { t } = useLanguage()
   const allIds = parts.flatMap(p => p.lessonIds.map(String))
   const learnDone = allIds.filter(id => lessonMap.get(id)?.learn?.completed).length
   const reviewDone = allIds.filter(id => lessonMap.get(id)?.review?.completed).length
@@ -374,14 +379,14 @@ function LanguageSection({ title, emoji, parts, lessonMap, lang, studentId, home
       <div className="flex items-center gap-2 pb-1 border-b border-gray-100">
         <span className="text-sm">{emoji}</span>
         <span className="font-bold text-sm text-gray-700">{title}</span>
-        <span className="text-xs text-gray-400">{learnDone}/{allIds.length} 학습</span>
+        <span className="text-xs text-gray-400">{t(`${learnDone}/${allIds.length} 학습`, `${learnDone}/${allIds.length} learned`)}</span>
         <span className={cn("text-xs font-bold", learnDone === allIds.length ? "text-green-600" : "text-blue-500")}>
           {Math.round((learnDone / allIds.length) * 100)}%
         </span>
         {learnDone > 0 && (
           <>
             <span className="text-xs text-gray-300">·</span>
-            <span className="text-xs text-blue-400">복습 {reviewDone}/{learnDone}</span>
+            <span className="text-xs text-blue-400">{t(`복습 ${reviewDone}/${learnDone}`, `Review ${reviewDone}/${learnDone}`)}</span>
             <span className="text-xs text-blue-500 font-bold">
               {Math.round((reviewDone / learnDone) * 100)}%
             </span>
@@ -396,11 +401,11 @@ function LanguageSection({ title, emoji, parts, lessonMap, lang, studentId, home
 }
 
 export function StudentProgress({ lessonProgress, studentId, homeworkLessonIds, stepVisits }: Props) {
-  const { lang } = useLanguage()
+  const { lang, t } = useLanguage()
 
   if (lessonProgress.length === 0) {
     return (
-      <p className="text-sm text-gray-400 py-3 text-center">아직 학습 기록이 없어요</p>
+      <p className="text-sm text-gray-400 py-3 text-center">{t("아직 학습 기록이 없어요", "No learning activity yet")}</p>
     )
   }
 
@@ -437,21 +442,21 @@ export function StudentProgress({ lessonProgress, studentId, homeworkLessonIds, 
       <div className="grid grid-cols-3 gap-2">
         <div className="text-center py-2 px-1 bg-green-50 rounded-lg">
           <div className="text-lg font-black text-green-600">{totalLearnDone}</div>
-          <div className="text-[10px] text-gray-500">학습 완료</div>
+          <div className="text-[10px] text-gray-500">{t("학습 완료", "Learned")}</div>
         </div>
         <div className="text-center py-2 px-1 bg-amber-50 rounded-lg">
           <div className="text-lg font-black text-amber-500">{totalInProgress}</div>
-          <div className="text-[10px] text-gray-500">진행 중</div>
+          <div className="text-[10px] text-gray-500">{t("진행 중", "In progress")}</div>
         </div>
         <div className="text-center py-2 px-1 bg-blue-50 rounded-lg">
           <div className="text-lg font-black text-blue-500">{totalReviewDone}</div>
-          <div className="text-[10px] text-gray-500">복습 완료</div>
+          <div className="text-[10px] text-gray-500">{t("복습 완료", "Reviewed")}</div>
           {avgReviewScore !== null && (
             <div className={cn(
               "text-[9px] font-bold mt-0.5",
               avgReviewScore >= 80 ? "text-blue-600" : avgReviewScore >= 60 ? "text-amber-500" : "text-red-500"
             )}>
-              평균 {avgReviewScore}%
+              {t(`평균 ${avgReviewScore}%`, `Avg ${avgReviewScore}%`)}
             </div>
           )}
         </div>
@@ -463,12 +468,16 @@ export function StudentProgress({ lessonProgress, studentId, homeworkLessonIds, 
           <span className="text-xs">{lastRow.progress_type === "review" ? "🔄" : "📖"}</span>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
-              <span className="text-xs font-bold text-purple-700">최근 활동:</span>
+              <span className="text-xs font-bold text-purple-700">{t("최근 활동:", "Latest activity:")}</span>
               <span className="text-xs text-purple-600 truncate">{getLessonName(lastRow.lesson_id, lang)}</span>
             </div>
             <div className="text-[10px] text-purple-400">
-              {lastRow.progress_type === "learn" ? "학습" : "복습"} · {formatDate(lastRow.updated_at)}
-              {lastRow.completed ? " · 완료" : lastRow.score ? ` · ${lastRow.score}% 진행` : " · 진행 중"}
+              {lastRow.progress_type === "learn" ? t("학습", "Learn") : t("복습", "Review")} · {formatDate(lastRow.updated_at, t)}
+              {lastRow.completed
+                ? t(" · 완료", " · Done")
+                : lastRow.score
+                ? t(` · ${lastRow.score}% 진행`, ` · ${lastRow.score}% done`)
+                : t(" · 진행 중", " · In progress")}
             </div>
           </div>
         </div>

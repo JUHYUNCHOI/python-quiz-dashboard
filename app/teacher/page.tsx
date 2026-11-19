@@ -34,7 +34,7 @@ function daysSinceStr(dateStr: string): number {
 
 export default function TeacherDashboardPage() {
   const { user, profile, isLoading: authLoading } = useAuth()
-  const { t } = useLanguage()
+  const { lang, t } = useLanguage()
   const [classes, setClasses] = useState<(Class & { memberCount: number })[]>([])
   const [isCreating, setIsCreating] = useState(false)
   const [newClassName, setNewClassName] = useState("")
@@ -111,7 +111,7 @@ export default function TeacherDashboardPage() {
         .limit(studentIds.length * 120),  // learn + review 모두 포함
     ])
 
-    const profileMap = new Map((profiles || []).map(p => [p.id, p.display_name || "학생"]))
+    const profileMap = new Map((profiles || []).map(p => [p.id, p.display_name || t("학생", "Student")]))
     const gamMap = new Map((gamification || []).map(g => [g.user_id, g.last_active_date || "-"]))
     const classMap = new Map(classList.map(c => [c.id, c.name]))
 
@@ -154,7 +154,7 @@ export default function TeacherDashboardPage() {
 
     const result: StudentRisk[] = []
     for (const sid of studentIds) {
-      const name = profileMap.get(sid) || "학생"
+      const name = profileMap.get(sid) || t("학생", "Student")
       const classId = studentClassMap.get(sid) || ""
       const className = classMap.get(classId) || ""
       // gamification, 퀴즈, 복습 중 가장 최근 활동을 lastActive로 사용
@@ -173,13 +173,31 @@ export default function TeacherDashboardPage() {
         : null
 
       if (days >= 7) {
-        result.push({ studentId: sid, studentName: name, classId, className, detail: `${days}일째 접속 없음`, emoji: "🚨", action: "연락 필요", severity: "danger" })
+        result.push({
+          studentId: sid,
+          studentName: name,
+          classId,
+          className,
+          detail: t(`${days}일째 접속 없음`, `No login for ${days} days`),
+          emoji: "🚨",
+          action: t("연락 필요", "Reach out"),
+          severity: "danger",
+        })
       } else if (avgAcc !== null && avgAcc < 55 && sessions.length >= 3 && days <= 3) {
         const reviews = (progressMap.get(sid) || []).sort((a, b) => a.score - b.score).slice(0, 2)
         const weakStr = reviews.length > 0
-          ? reviews.map(r => `${getLessonName(r.lesson_id, "ko")} ${r.score}%`).join(" · ")
-          : `퀴즈 ${Math.round(avgAcc)}%`
-        result.push({ studentId: sid, studentName: name, classId, className, detail: weakStr, emoji: "📉", action: "1:1 설명 권장", severity: "warning" })
+          ? reviews.map(r => `${getLessonName(r.lesson_id, lang)} ${r.score}%`).join(" · ")
+          : t(`퀴즈 ${Math.round(avgAcc)}%`, `Quiz ${Math.round(avgAcc)}%`)
+        result.push({
+          studentId: sid,
+          studentName: name,
+          classId,
+          className,
+          detail: weakStr,
+          emoji: "📉",
+          action: t("1:1 설명 권장", "Suggest 1:1 help"),
+          severity: "warning",
+        })
       }
     }
 
@@ -290,7 +308,7 @@ export default function TeacherDashboardPage() {
           </div>
           {hwCount !== null && hwCount > 0 && (
             <span className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0">
-              확인 필요 {hwCount}건
+              {t(`확인 필요 ${hwCount}건`, `${hwCount} to review`)}
             </span>
           )}
         </Link>
@@ -440,10 +458,10 @@ export default function TeacherDashboardPage() {
                           <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">{t("비활성", "Inactive")}</span>
                         )}
                         {dangerCount > 0 && (
-                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">🚨 {dangerCount}명</span>
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">🚨 {t(`${dangerCount}명`, `${dangerCount}`)}</span>
                         )}
                         {warnCount > 0 && (
-                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">📉 {warnCount}명</span>
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">📉 {t(`${warnCount}명`, `${warnCount}`)}</span>
                         )}
                       </div>
                       <div className="flex items-center gap-3 text-sm text-gray-500">

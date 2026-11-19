@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client"
 import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
 import { Check, X, Loader2, HelpCircle, PenLine, Terminal } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 interface StepAnswerRow {
   step_id: string
@@ -25,7 +26,6 @@ interface Props {
   studentId: string
   lessonId: string
   progressType: "learn" | "review"
-  lang?: "ko" | "en"
 }
 
 function formatDate(iso: string) {
@@ -43,12 +43,14 @@ function StepTypeIcon({ type }: { type: string }) {
 }
 
 function StepTypeLabel({ type }: { type: string }) {
-  if (type === "fillblank") return <span className="text-[9px] text-violet-500 font-bold">빈칸</span>
-  if (type === "predict") return <span className="text-[9px] text-emerald-500 font-bold">예측</span>
-  return <span className="text-[9px] text-amber-500 font-bold">퀴즈</span>
+  const { t } = useLanguage()
+  if (type === "fillblank") return <span className="text-[9px] text-violet-500 font-bold">{t("빈칸", "Fill-in")}</span>
+  if (type === "predict") return <span className="text-[9px] text-emerald-500 font-bold">{t("예측", "Predict")}</span>
+  return <span className="text-[9px] text-amber-500 font-bold">{t("퀴즈", "Quiz")}</span>
 }
 
-export function LessonStepAnswersView({ studentId, lessonId, progressType, lang = "ko" }: Props) {
+export function LessonStepAnswersView({ studentId, lessonId, progressType }: Props) {
+  const { lang, t } = useLanguage()
   const [answers, setAnswers] = useState<StepAnswerRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -95,7 +97,7 @@ export function LessonStepAnswersView({ studentId, lessonId, progressType, lang 
     return (
       <div className="flex items-center justify-center py-5 gap-2">
         <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-400" />
-        <span className="text-xs text-gray-400">불러오는 중...</span>
+        <span className="text-xs text-gray-400">{t("불러오는 중...", "Loading...")}</span>
       </div>
     )
   }
@@ -103,9 +105,9 @@ export function LessonStepAnswersView({ studentId, lessonId, progressType, lang 
   if (answers.length === 0) {
     return (
       <div className="py-4 px-3 text-center space-y-1.5 bg-gray-50 rounded-lg">
-        <p className="text-xs font-medium text-gray-500">저장된 답변이 없어요</p>
+        <p className="text-xs font-medium text-gray-500">{t("저장된 답변이 없어요", "No saved answers")}</p>
         <p className="text-[11px] text-gray-400 leading-snug">
-          이 레슨은 답변 저장 기능 추가 전에<br/>완료되어 기록이 없습니다
+          {t("이 레슨은 답변 저장 기능 추가 전에", "This lesson was completed before answer saving")}<br/>{t("완료되어 기록이 없습니다", "was added, so there is no record.")}
         </p>
       </div>
     )
@@ -117,13 +119,13 @@ export function LessonStepAnswersView({ studentId, lessonId, progressType, lang 
     <div className="space-y-2 mt-2">
       {/* 요약 */}
       <div className="flex items-center gap-3 px-2 py-2 bg-gray-50 rounded-lg">
-        <span className="text-xs font-bold text-gray-600">{answers.length}개 스텝 기록</span>
-        <span className="text-xs text-green-600 font-bold">✓ {correctCount}개 정답</span>
+        <span className="text-xs font-bold text-gray-600">{t(`${answers.length}개 스텝 기록`, `${answers.length} steps recorded`)}</span>
+        <span className="text-xs text-green-600 font-bold">✓ {t(`${correctCount}개 정답`, `${correctCount} correct`)}</span>
         {answers.length - correctCount > 0 && (
-          <span className="text-xs text-red-500 font-bold">✗ {answers.length - correctCount}개 오답</span>
+          <span className="text-xs text-red-500 font-bold">✗ {t(`${answers.length - correctCount}개 오답`, `${answers.length - correctCount} wrong`)}</span>
         )}
         <span className="ml-auto text-[10px] text-gray-400">
-          {Math.round((correctCount / answers.length) * 100)}% 정확도
+          {t(`${Math.round((correctCount / answers.length) * 100)}% 정확도`, `${Math.round((correctCount / answers.length) * 100)}% accuracy`)}
         </span>
       </div>
 
@@ -178,8 +180,8 @@ export function LessonStepAnswersView({ studentId, lessonId, progressType, lang 
                       {isCorrectOption && <Check className="w-3 h-3 flex-shrink-0" />}
                       <span className="truncate">{option}</span>
                       <span className="ml-auto text-[9px] flex-shrink-0 font-bold">
-                        {isUserSelected && isCorrectOption ? "✓ 정답" :
-                         isUserSelected ? "학생 선택" : "정답"}
+                        {isUserSelected && isCorrectOption ? t("✓ 정답", "✓ Correct") :
+                         isUserSelected ? t("학생 선택", "Student's pick") : t("정답", "Correct")}
                       </span>
                     </div>
                   )

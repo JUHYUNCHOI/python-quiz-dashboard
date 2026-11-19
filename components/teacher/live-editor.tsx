@@ -6,6 +6,9 @@ import { X, Play, Loader2, RotateCcw, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { callPiston } from "@/lib/piston"
 import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
+import { useLanguage } from "@/contexts/language-context"
+
+type TFn = (ko: string, en: string) => string
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 
@@ -113,16 +116,16 @@ async function getPyodide() {
 
 
 // ── Default snippets ──────────────────────────────────────────────────────────
-const DEFAULT_CPP = `#include <iostream>
+const defaultCpp = (t: TFn) => `#include <iostream>
 using namespace std;
 
 int main() {
-    // 여기에 코드를 작성하세요
+    // ${t("여기에 코드를 작성하세요", "Write your code here")}
 
     return 0;
 }`
 
-const DEFAULT_PYTHON = `# 여기에 코드를 작성하세요
+const defaultPython = (t: TFn) => `# ${t("여기에 코드를 작성하세요", "Write your code here")}
 `
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -132,6 +135,9 @@ interface TeacherLiveEditorProps {
 }
 
 export function TeacherLiveEditor({ defaultLang = "cpp", onClose }: TeacherLiveEditorProps) {
+  const { t } = useLanguage()
+  const DEFAULT_CPP = defaultCpp(t)
+  const DEFAULT_PYTHON = defaultPython(t)
   const [lang, setLang] = useState<"cpp" | "python">(defaultLang)
   const [code, setCode] = useState(defaultLang === "cpp" ? DEFAULT_CPP : DEFAULT_PYTHON)
   const [stdin, setStdin] = useState("")
@@ -170,14 +176,14 @@ export function TeacherLiveEditor({ defaultLang = "cpp", onClose }: TeacherLiveE
     try {
       if (lang === "cpp") {
         const result = await callPiston("cpp", code, stdin.trim() || undefined)
-        if (result.networkError) throw new Error("Piston API 오류")
+        if (result.networkError) throw new Error(t("Piston API 오류", "Piston API error"))
         if (result.compileError) {
           const firstErr = result.compileError.split("\n").find(l => l.includes("error:"))
           setError("❌ " + (firstErr?.split("error:")[1]?.trim() || result.compileError.split("\n")[0]))
         } else if (result.runtimeError) {
-          setError("❌ 런타임 오류: " + result.runtimeError.split("\n")[0])
+          setError(t("❌ 런타임 오류: ", "❌ Runtime error: ") + result.runtimeError.split("\n")[0])
         } else {
-          setOutput(result.output || "(출력 없음)")
+          setOutput(result.output || t("(출력 없음)", "(no output)"))
         }
       } else {
         // Python: Pyodide
@@ -206,14 +212,14 @@ builtins.input = _patched_input
         }
 
         await py.runPythonAsync(code)
-        setOutput(lines.join("\n") || "(출력 없음)")
+        setOutput(lines.join("\n") || t("(출력 없음)", "(no output)"))
       }
     } catch (e: any) {
       setError("❌ " + (e?.message || String(e)))
     } finally {
       setIsRunning(false)
     }
-  }, [code, lang, stdin, isRunning])
+  }, [code, lang, stdin, isRunning, t])
 
   // Cmd+Enter / Ctrl+Enter 단축키
   useEffect(() => {
@@ -233,7 +239,7 @@ builtins.input = _patched_input
     <div className="fixed right-0 top-0 bottom-0 z-40 flex flex-col w-[480px] max-w-[95vw] bg-[#0d1117] shadow-2xl border-l border-gray-700">
       {/* 헤더 */}
       <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-700 shrink-0">
-        <span className="text-sm font-bold text-gray-200">👨‍🏫 라이브 에디터</span>
+        <span className="text-sm font-bold text-gray-200">👨‍🏫 {t("라이브 에디터", "Live Editor")}</span>
 
         {/* 언어 토글 */}
         <div className="flex items-center gap-1 ml-2 bg-gray-800 rounded-lg p-1">
@@ -270,8 +276,8 @@ builtins.input = _patched_input
             )}
           >
             {isRunning || (lang === "python" && pyLoading)
-              ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />{pyLoading ? "로딩..." : "실행 중..."}</>
-              : <><Play className="w-3.5 h-3.5" />실행 <span className="opacity-60 font-normal">⌘↵</span></>
+              ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />{pyLoading ? t("로딩...", "Loading...") : t("실행 중...", "Running...")}</>
+              : <><Play className="w-3.5 h-3.5" />{t("실행", "Run")} <span className="opacity-60 font-normal">⌘↵</span></>
             }
           </button>
 
@@ -279,7 +285,7 @@ builtins.input = _patched_input
           <button
             onClick={() => { setCode(lang === "cpp" ? DEFAULT_CPP : DEFAULT_PYTHON); setOutput(null); setError(null) }}
             className="p-1.5 rounded-lg text-gray-500 hover:text-gray-300 hover:bg-gray-800 transition-colors"
-            title="초기화"
+            title={t("초기화", "Reset")}
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
@@ -288,7 +294,7 @@ builtins.input = _patched_input
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-gray-800 transition-colors"
-            title="닫기"
+            title={t("닫기", "Close")}
           >
             <X className="w-4 h-4" />
           </button>
@@ -324,14 +330,14 @@ builtins.input = _patched_input
           className="flex items-center gap-1.5 w-full px-4 py-2 text-xs text-gray-500 hover:text-gray-300 transition-colors"
         >
           <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", showStdin && "rotate-180")} />
-          입력값 (stdin)
-          {stdin.trim() && <span className="ml-1 px-1.5 py-0.5 rounded bg-blue-900 text-blue-300 text-[10px]">있음</span>}
+          {t("입력값 (stdin)", "Input (stdin)")}
+          {stdin.trim() && <span className="ml-1 px-1.5 py-0.5 rounded bg-blue-900 text-blue-300 text-[10px]">{t("있음", "set")}</span>}
         </button>
         {showStdin && (
           <textarea
             value={stdin}
             onChange={e => setStdin(e.target.value)}
-            placeholder={"프로그램에 입력할 값을 줄 단위로 입력하세요\n예) 3\n10 20 30"}
+            placeholder={t("프로그램에 입력할 값을 줄 단위로 입력하세요\n예) 3\n10 20 30", "Enter the values your program reads, one per line\ne.g.) 3\n10 20 30")}
             className="w-full bg-gray-900 text-gray-300 text-xs font-mono px-4 py-2 outline-none resize-none border-t border-gray-700"
             rows={3}
           />
@@ -342,12 +348,12 @@ builtins.input = _patched_input
       {(output !== null || error !== null) && (
         <div className="border-t border-gray-700 shrink-0 max-h-[220px] overflow-auto">
           <div className="px-3 py-1.5 border-b border-gray-700 flex items-center gap-2">
-            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">출력</span>
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{t("출력", "Output")}</span>
             <button
               onClick={() => { setOutput(null); setError(null) }}
               className="ml-auto text-gray-600 hover:text-gray-400 text-[10px]"
             >
-              지우기
+              {t("지우기", "Clear")}
             </button>
           </div>
           <pre className={cn(

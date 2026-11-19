@@ -88,7 +88,7 @@ interface DiagnosisResult {
   overdueReviews: { lessonId: string; days: number }[]
 }
 
-function buildDiagnosis(student: StudentRow, detailedSessions: QuizSession[]): DiagnosisResult {
+function buildDiagnosis(student: StudentRow, detailedSessions: QuizSession[], lang: "ko" | "en"): DiagnosisResult {
   const cutoff60 = Date.now() - 60 * 24 * 60 * 60 * 1000
   const sessions = (detailedSessions.length > 0 ? detailedSessions : student.quizSessions)
     .filter(s => new Date(s.completed_at).getTime() >= cutoff60)
@@ -162,18 +162,24 @@ function buildDiagnosis(student: StudentRow, detailedSessions: QuizSession[]): D
     severity = "good"
   }
 
-  // 한국어 요약 문장
-  let summary = "전반적으로 잘 따라가고 있어요"
+  // 요약 문장
+  let summary = lang === "en" ? "Keeping up well overall" : "전반적으로 잘 따라가고 있어요"
   if (severity !== "good") {
     const parts: string[] = []
     if (weakConcepts.length > 0) {
-      parts.push(`'${weakConcepts[0]}' 등 반복 오답 발생`)
+      parts.push(lang === "en"
+        ? `Repeated misses on '${weakConcepts[0]}' and more`
+        : `'${weakConcepts[0]}' 등 반복 오답 발생`)
     }
     if (overdueReviews.length > 0) {
-      parts.push(`${overdueReviews.length}개 레슨 복습 지연`)
+      parts.push(lang === "en"
+        ? `${overdueReviews.length} lesson${overdueReviews.length === 1 ? "" : "s"} overdue for review`
+        : `${overdueReviews.length}개 레슨 복습 지연`)
     }
     if (lastActiveDays >= 7) {
-      parts.push(`${lastActiveDays}일째 미접속`)
+      parts.push(lang === "en"
+        ? `Inactive for ${lastActiveDays} days`
+        : `${lastActiveDays}일째 미접속`)
     }
     summary = parts.join(" · ")
   }
@@ -281,7 +287,7 @@ export function StudentDetailPanel({
 
   if (!student) return null
 
-  const diagnosis = buildDiagnosis(student, detailedSessions)
+  const diagnosis = buildDiagnosis(student, detailedSessions, lang)
   const lastActiveDays = daysSince(student.lastActive)
   const hasIssues = diagnosis.weakQuestions.length > 0 || diagnosis.overdueReviews.length > 0
 

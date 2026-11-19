@@ -2,16 +2,20 @@
 
 import type { QuizSession } from "@/lib/supabase/types"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 interface Props {
   quizSessions: QuizSession[]
 }
 
-function getDayLabel(day: number): string {
-  return ["일", "월", "화", "수", "목", "금", "토"][day]
+function getDayLabel(day: number, lang: "ko" | "en"): string {
+  return lang === "ko"
+    ? ["일", "월", "화", "수", "목", "금", "토"][day]
+    : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][day]
 }
 
 export function StudentConsistency({ quizSessions }: Props) {
+  const { lang, t } = useLanguage()
   // Build activity map: date string → session count
   const activityMap = new Map<string, number>()
   for (const session of quizSessions) {
@@ -69,7 +73,7 @@ export function StudentConsistency({ quizSessions }: Props) {
 
   if (quizSessions.length === 0) {
     return (
-      <p className="text-sm text-gray-400 py-3 text-center">아직 퀴즈 기록이 없어요</p>
+      <p className="text-sm text-gray-400 py-3 text-center">{t("아직 퀴즈 기록이 없어요", "No quiz activity yet")}</p>
     )
   }
 
@@ -84,23 +88,23 @@ export function StudentConsistency({ quizSessions }: Props) {
             daysSinceLastActivity <= 2 ? "text-orange-600" :
             "text-red-600"
           )}>
-            {daysSinceLastActivity === 0 ? "오늘" :
+            {daysSinceLastActivity === 0 ? t("오늘", "Today") :
              daysSinceLastActivity === -1 ? "-" :
-             `${daysSinceLastActivity}일 전`}
+             t(`${daysSinceLastActivity}일 전`, `${daysSinceLastActivity}d ago`)}
           </div>
-          <div className="text-[10px] text-gray-400">마지막 활동</div>
+          <div className="text-[10px] text-gray-400">{t("마지막 활동", "Last active")}</div>
         </div>
         <div className="flex-1 text-center py-2 px-3 bg-gray-50 rounded-lg">
           <div className="text-lg font-bold text-blue-600">{thisWeekSessions}</div>
-          <div className="text-[10px] text-gray-400">이번 주</div>
+          <div className="text-[10px] text-gray-400">{t("이번 주", "This week")}</div>
         </div>
         <div className="flex-1 text-center py-2 px-3 bg-gray-50 rounded-lg">
           <div className="text-lg font-bold text-purple-600">{weeklyAvg}</div>
-          <div className="text-[10px] text-gray-400">주 평균</div>
+          <div className="text-[10px] text-gray-400">{t("주 평균", "Weekly avg")}</div>
         </div>
         <div className="flex-1 text-center py-2 px-3 bg-gray-50 rounded-lg">
           <div className="text-lg font-bold text-gray-700">{uniqueDays}</div>
-          <div className="text-[10px] text-gray-400">활동일</div>
+          <div className="text-[10px] text-gray-400">{t("활동일", "Active days")}</div>
         </div>
       </div>
 
@@ -111,7 +115,7 @@ export function StudentConsistency({ quizSessions }: Props) {
           <div className="flex flex-col gap-0.5 mr-1">
             {[0, 1, 2, 3, 4, 5, 6].map(d => (
               <div key={d} className="w-6 h-4 flex items-center justify-end text-[9px] text-gray-400 pr-1">
-                {d % 2 === 1 ? getDayLabel(d) : ""}
+                {d % 2 === 1 ? getDayLabel(d, lang) : ""}
               </div>
             ))}
           </div>
@@ -130,7 +134,7 @@ export function StudentConsistency({ quizSessions }: Props) {
                     day.count === 2 ? "bg-green-400" :
                     "bg-green-600"
                   )}
-                  title={day.count >= 0 ? `${day.dateStr}: ${day.count}회` : ""}
+                  title={day.count >= 0 ? t(`${day.dateStr}: ${day.count}회`, `${day.dateStr}: ${day.count}x`) : ""}
                 />
               ))}
             </div>
@@ -139,12 +143,12 @@ export function StudentConsistency({ quizSessions }: Props) {
 
         {/* Legend */}
         <div className="flex items-center gap-1 mt-2 justify-end text-[9px] text-gray-400">
-          <span>적음</span>
+          <span>{t("적음", "Less")}</span>
           <div className="w-3 h-3 rounded-sm bg-gray-100" />
           <div className="w-3 h-3 rounded-sm bg-green-200" />
           <div className="w-3 h-3 rounded-sm bg-green-400" />
           <div className="w-3 h-3 rounded-sm bg-green-600" />
-          <span>많음</span>
+          <span>{t("많음", "More")}</span>
         </div>
       </div>
     </div>

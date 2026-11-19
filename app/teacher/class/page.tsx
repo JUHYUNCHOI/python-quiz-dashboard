@@ -595,8 +595,12 @@ export default function ClassDetailPage() {
       // Web Share API 지원 기기 (모바일)면 공유 시트 열기
       if (navigator.share) {
         await navigator.share({
-          title: `${student.displayName} 학습 리포트`,
-          text: `코드린에서 ${student.displayName}의 학습 현황을 확인하세요.`,
+          title: lang === "en"
+            ? `${student.displayName} learning report`
+            : `${student.displayName} 학습 리포트`,
+          text: lang === "en"
+            ? `Check ${student.displayName}'s learning progress on Coderin.`
+            : `코드린에서 ${student.displayName}의 학습 현황을 확인하세요.`,
           url,
         }).catch(() => {
           // 공유 취소 시 클립보드로 폴백
@@ -791,16 +795,16 @@ export default function ClassDetailPage() {
 
                       {/* 통계 */}
                       <div className="flex items-center gap-3 text-sm flex-shrink-0">
-                        <span className="flex items-center gap-1 text-purple-600" title="완료 레슨">
+                        <span className="flex items-center gap-1 text-purple-600" title={lang === "en" ? "Completed lessons" : "완료 레슨"}>
                           <BookOpen className="w-3.5 h-3.5" /> {student.completedLessons}
                         </span>
-                        <span className="flex items-center gap-1 text-orange-600" title="총 XP">
+                        <span className="flex items-center gap-1 text-orange-600" title={lang === "en" ? "Total XP" : "총 XP"}>
                           <Trophy className="w-3.5 h-3.5" /> {student.totalXp}
                         </span>
-                        <span className="flex items-center gap-1 text-blue-600" title="퀴즈 세션">
+                        <span className="flex items-center gap-1 text-blue-600" title={lang === "en" ? "Quiz sessions" : "퀴즈 세션"}>
                           <ClipboardCheck className="w-3.5 h-3.5" /> {student.quizSessions.length}
                         </span>
-                        <span className="flex items-center gap-1 text-red-500" title="연속일">
+                        <span className="flex items-center gap-1 text-red-500" title={lang === "en" ? "Day streak" : "연속일"}>
                           <Flame className="w-3.5 h-3.5" /> {student.dailyStreak}
                         </span>
                       </div>
@@ -815,7 +819,7 @@ export default function ClassDetailPage() {
                             ? "bg-green-100 text-green-700"
                             : "bg-purple-100 text-purple-600 hover:bg-purple-200"
                         )}
-                        title="학부모 리포트 링크 복사"
+                        title={lang === "en" ? "Copy parent report link" : "학부모 리포트 링크 복사"}
                       >
                         {parentLinkCopied === student.id ? (
                           <><Check className="w-3 h-3" /> {lang === "en" ? "Copied" : "복사됨"}</>

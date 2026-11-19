@@ -4,6 +4,9 @@ import { useState } from "react"
 import type { QuizSession } from "@/lib/supabase/types"
 import { ChevronDown, AlertTriangle, Clock, Zap, TrendingDown } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
+
+type TFn = (ko: string, en: string) => string
 
 interface Props {
   quizSessions: QuizSession[]
@@ -43,14 +46,15 @@ function buildWeakPoints(sessions: QuizSession[]): WeakPoint[] {
 }
 
 function WeaknessSummary({ sessions }: { sessions: QuizSession[] }) {
+  const { t } = useLanguage()
   const weakPoints = buildWeakPoints(sessions)
   if (weakPoints.length === 0) return null
   return (
     <div className="rounded-xl border border-red-100 bg-red-50 p-3 space-y-2 mb-3">
       <div className="flex items-center gap-1.5">
         <TrendingDown className="w-3.5 h-3.5 text-red-500" />
-        <span className="text-xs font-black text-red-700">자주 틀리는 개념</span>
-        <span className="text-[10px] text-red-400 ml-auto">최근 퀴즈 기준</span>
+        <span className="text-xs font-black text-red-700">{t("자주 틀리는 개념", "Frequently missed concepts")}</span>
+        <span className="text-[10px] text-red-400 ml-auto">{t("최근 퀴즈 기준", "Based on recent quizzes")}</span>
       </div>
       <div className="space-y-1.5">
         {weakPoints.map(w => {
@@ -64,7 +68,7 @@ function WeaknessSummary({ sessions }: { sessions: QuizSession[] }) {
                   "text-[10px] font-bold flex-shrink-0 w-10 text-right",
                   pct === 0 ? "text-red-600" : pct < 50 ? "text-orange-600" : "text-amber-600"
                 )}>{w.correct}/{w.total} {pct}%</span>
-                {isSlow && <span className="text-[9px] bg-amber-100 text-amber-600 px-1 rounded flex-shrink-0">느림</span>}
+                {isSlow && <span className="text-[9px] bg-amber-100 text-amber-600 px-1 rounded flex-shrink-0">{t("느림", "Slow")}</span>}
               </div>
               <div className="h-1 bg-red-100 rounded-full overflow-hidden">
                 <div
@@ -89,11 +93,11 @@ function formatDate(dateStr: string): string {
   }
 }
 
-function formatTime(ms: number): string {
+function formatTime(ms: number, t: TFn): string {
   const totalSec = Math.floor(ms / 1000)
   const min = Math.floor(totalSec / 60)
   const sec = totalSec % 60
-  return min > 0 ? `${min}분 ${sec}초` : `${sec}초`
+  return min > 0 ? t(`${min}분 ${sec}초`, `${min}m ${sec}s`) : t(`${sec}초`, `${sec}s`)
 }
 
 function getTimeColor(ms: number): string {
@@ -103,12 +107,13 @@ function getTimeColor(ms: number): string {
 }
 
 export function StudentQuizReport({ quizSessions }: Props) {
+  const { t } = useLanguage()
   const [expandedSession, setExpandedSession] = useState<string | null>(null)
   const [showAllSessions, setShowAllSessions] = useState(false)
 
   if (quizSessions.length === 0) {
     return (
-      <p className="text-sm text-gray-400 py-3 text-center">아직 퀴즈 기록이 없어요</p>
+      <p className="text-sm text-gray-400 py-3 text-center">{t("아직 퀴즈 기록이 없어요", "No quiz activity yet")}</p>
     )
   }
 
@@ -150,7 +155,7 @@ export function StudentQuizReport({ quizSessions }: Props) {
               {/* Time */}
               <span className="text-xs text-gray-400 flex items-center gap-0.5">
                 <Clock className="w-3 h-3" />
-                {formatTime(session.time_elapsed_ms)}
+                {formatTime(session.time_elapsed_ms, t)}
               </span>
 
               {/* Flags */}
@@ -158,18 +163,18 @@ export function StudentQuizReport({ quizSessions }: Props) {
                 {session.quick_answer_count > 0 && (
                   <span className="flex items-center gap-0.5 text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded-full font-medium">
                     <Zap className="w-2.5 h-2.5" />
-                    찍기 의심 {session.quick_answer_count}
+                    {t(`찍기 의심 ${session.quick_answer_count}`, `Guessing ${session.quick_answer_count}`)}
                   </span>
                 )}
                 {session.slow_answer_count > 0 && (
                   <span className="flex items-center gap-0.5 text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-medium">
                     <AlertTriangle className="w-2.5 h-2.5" />
-                    오래 걸림 {session.slow_answer_count}
+                    {t(`오래 걸림 ${session.slow_answer_count}`, `Slow ${session.slow_answer_count}`)}
                   </span>
                 )}
                 {session.end_reason === "hearts" && (
                   <span className="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded-full font-medium">
-                    하트 소진
+                    {t("하트 소진", "Out of hearts")}
                   </span>
                 )}
               </div>
@@ -232,8 +237,8 @@ export function StudentQuizReport({ quizSessions }: Props) {
           className="w-full mt-2 py-1.5 text-[11px] text-gray-400 hover:text-gray-600 font-medium text-center border border-dashed border-gray-200 rounded-lg hover:border-gray-300 transition-colors"
         >
           {showAllSessions
-            ? "▲ 접기"
-            : `▼ 이전 기록 더 보기 (+${quizSessions.length - 10}회)`}
+            ? t("▲ 접기", "▲ Collapse")
+            : t(`▼ 이전 기록 더 보기 (+${quizSessions.length - 10}회)`, `▼ Show earlier records (+${quizSessions.length - 10})`)}
         </button>
       )}
     </div>

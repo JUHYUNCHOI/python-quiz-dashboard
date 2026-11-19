@@ -6,8 +6,10 @@ import { usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { OWNER_EMAIL } from "@/components/owner-only-guard"
 import { TeacherLiveEditor } from "./live-editor"
+import { useLanguage } from "@/contexts/language-context"
 
 export function GlobalTeacherEditorButton() {
+  const { t } = useLanguage()
   const { user, profile, isLoading } = useAuth()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
@@ -42,10 +44,10 @@ export function GlobalTeacherEditorButton() {
       <button
         onClick={() => setOpen(o => !o)}
         className="fixed bottom-20 right-4 z-50 flex items-center gap-2 rounded-full bg-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xl hover:bg-purple-500 active:scale-95 transition-all"
-        title="코딩 에디터 열기"
+        title={t("코딩 에디터 열기", "Open code editor")}
       >
         {open ? <X size={16} /> : <Code2 size={16} />}
-        {open ? "닫기" : "에디터"}
+        {open ? t("닫기", "Close") : t("에디터", "Editor")}
       </button>
 
       {open && (
