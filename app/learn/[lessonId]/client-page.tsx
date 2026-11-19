@@ -1244,7 +1244,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             </div>
             {/* 1줄: 나가기 | 프로그레스바 | 스텝 카운터 */}
             <div className="flex items-center gap-3 md:gap-4">
-              <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="나가기">
+              <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label={t("나가기", "Exit")}>
                 <X className="w-5 h-5 md:w-6 md:h-6" />
               </button>
               <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3 overflow-visible">
@@ -1337,10 +1337,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                         ? "bg-purple-600 text-white border-purple-500"
                         : "bg-gray-100 hover:bg-purple-50 text-gray-600 hover:text-purple-600 border-gray-200"
                     )}
-                    title="라이브 에디터 열기"
+                    title={t("라이브 에디터 열기", "Open live editor")}
                   >
                     <Code2 className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">에디터</span>
+                    <span className="hidden sm:inline">{t("에디터", "Editor")}</span>
                   </button>
                 )}
               </div>
@@ -1384,7 +1384,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <button
                 onClick={() => setEditingStep(mergedStep)}
                 className="absolute top-4 right-4 p-2 rounded-lg text-gray-300 hover:text-orange-500 hover:bg-orange-50 transition-colors"
-                title="스텝 내용 수정"
+                title={t("스텝 내용 수정", "Edit step content")}
               >
                 <Pencil className="h-4 w-4" />
               </button>

@@ -9,8 +9,10 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function KlRedirect() {
+  const { t } = useLanguage()
   const router = useRouter()
   useEffect(() => {
     // 옛 KL 진도(kl-prep-done) → 허브 진도(ladder-done) 이관
@@ -27,7 +29,9 @@ export default function KlRedirect() {
 
   return (
     <div style={{ padding: "60px 20px", textAlign: "center", color: "#64748b", fontSize: 14 }}>
-      KL 연습이 <b style={{ color: "#0f172a" }}>연습 · 도전</b>으로 합쳐졌어요 — 이동 중…
+      {t("KL 연습이 ", "KL practice has moved into ")}
+      <b style={{ color: "#0f172a" }}>{t("연습 · 도전", "Practice · Challenge")}</b>
+      {t("으로 합쳐졌어요 — 이동 중…", " — redirecting…")}
     </div>
   )
 }

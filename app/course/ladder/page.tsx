@@ -7,6 +7,7 @@ import { useState, useMemo, useEffect } from "react";
 import { Header } from "@/components/header";
 import { BottomNav } from "@/components/bottom-nav";
 import { LADDER } from "./ladder-data";
+import { useLanguage } from "@/contexts/language-context";
 
 const TOPIC_KO: Record<string, string> = {
   sorting: "정렬", array: "배열", hashtable: "해시", prefixsum: "누적합",
@@ -15,6 +16,14 @@ const TOPIC_KO: Record<string, string> = {
   graph: "그래프", priorityqueue: "우선순위큐", recursion: "재귀", shortestpath: "최단경로",
   topologicalsort: "위상정렬", tree: "트리", trie: "트라이", unionfind: "유니온파인드",
   simulation: "시뮬레이션", grid: "그리드", math: "수학", syntax: "문법",
+};
+const TOPIC_EN: Record<string, string> = {
+  sorting: "Sorting", array: "Array", hashtable: "Hash", prefixsum: "Prefix Sum",
+  string: "String", stackqueue: "Stack/Queue", greedy: "Greedy", backtracking: "Brute Force",
+  binarysearch: "Binary Search", bitmanipulation: "Bitmask", divideconquer: "Divide & Conquer", dp: "DP",
+  graph: "Graph", priorityqueue: "Priority Queue", recursion: "Recursion", shortestpath: "Shortest Path",
+  topologicalsort: "Topological Sort", tree: "Tree", trie: "Trie", unionfind: "Union-Find",
+  simulation: "Simulation", grid: "Grid", math: "Math", syntax: "Syntax",
 };
 const TOPIC_COLOR: Record<string, string> = {
   sorting: "#0284c7", array: "#7c3aed", hashtable: "#db2777", prefixsum: "#0e7490",
@@ -35,19 +44,20 @@ function textOn(bg: string): string {
   return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? "#1e293b" : "#fff";
 }
 // level → 난이도 띠 (P4: 5단계 균형 재배치 — 도전 절벽·입문 과밀 완화. 371/416/287/224/132)
+// key 는 상태값·URL 파라미터로 쓰이는 식별자라 한국어를 유지한다. en 은 표시용.
 const BANDS = [
-  { key: "입문", color: "#15803d", max: 16 },
-  { key: "기초", color: "#0e7490", max: 26 },
-  { key: "중급", color: "#b45309", max: 38 },
-  { key: "고급", color: "#c2410c", max: 52 },
-  { key: "도전", color: "#b91c1c", max: 99 },
+  { key: "입문", en: "Intro", color: "#15803d", max: 16 },
+  { key: "기초", en: "Basic", color: "#0e7490", max: 26 },
+  { key: "중급", en: "Intermediate", color: "#b45309", max: 38 },
+  { key: "고급", en: "Advanced", color: "#c2410c", max: 52 },
+  { key: "도전", en: "Challenge", color: "#b91c1c", max: 99 },
 ];
 function bandOf(level: number) {
   return BANDS.find(b => level <= b.max) || BANDS[BANDS.length - 1];
 }
 // 선수지식 부족 → "알고리즘 배운 뒤" 안내(막진 않음, 표시만).
-const DEFER: Record<string, string> = {
-  "cses-1091": "⏳ 이분탐색 배운 뒤",
+const DEFER: Record<string, [string, string]> = {
+  "cses-1091": ["⏳ 이분탐색 배운 뒤", "⏳ After binary search"],
 };
 const ALGO_TOPICS = ["sorting", "array", "hashtable", "prefixsum", "string", "stackqueue", "greedy", "backtracking", "binarysearch", "bitmanipulation", "divideconquer", "dp", "graph", "priorityqueue", "recursion", "shortestpath", "topologicalsort", "tree", "trie", "unionfind"];
 function loadSolved(): Set<string> {
@@ -80,6 +90,7 @@ function Chip({ on, color, onClick, children, label }: { on: boolean; color: str
 }
 
 export default function LadderPage() {
+  const { t } = useLanguage();
   const [topic, setTopic] = useState("전체");
   const [band, setBand] = useState("전체");
   const [klOnly, setKlOnly] = useState(false);
@@ -123,6 +134,16 @@ export default function LadderPage() {
   const remember = (id: string) => { try { localStorage.setItem("ladder-last", id); } catch { } };
   const lastProblem = lastId ? LADDER.find(p => p.id === lastId) : null;
 
+  // 상태값은 한국어 식별자(URL `?kind=`, localStorage 호환)라 그대로 두고 라벨만 번역한다.
+  const topicLabel = (k: string) => (k === "전체" ? t("전체", "All") : t(TOPIC_KO[k] ?? k, TOPIC_EN[k] ?? k));
+  const bandLabel = (k: string) => {
+    if (k === "전체") return t("전체", "All");
+    const b = BANDS.find(x => x.key === k);
+    return b ? t(b.key, b.en) : k;
+  };
+  const kindLabel = (k: string) =>
+    k === "전체" ? t("전체", "All") : k === "외부" ? t("외부", "External") : t("자체채점", "In-app");
+
   const topics = ["전체", ...Object.keys(TOPIC_KO)];
   const filtered = useMemo(
     () => LADDER.filter(p =>
@@ -131,7 +152,8 @@ export default function LadderPage() {
       (!klOnly || p.kl) &&
       (kind === "전체" || (kind === "외부" ? p.external : !p.external)) &&
       (lang === "전체" || !p.lang || (lang === "C++" && p.lang === "cpp") || (lang === "Python" && p.lang === "py")) &&
-      (query.trim() === "" || (p.title + " " + (p.source || "") + " " + (TOPIC_KO[p.topic] || "")).toLowerCase().includes(query.trim().toLowerCase())) &&
+      // 토픽은 한·영 둘 다 검색어로 받는다 (영어 모드에선 칩에 영어만 보이므로)
+      (query.trim() === "" || (p.title + " " + (p.source || "") + " " + (TOPIC_KO[p.topic] || "") + " " + (TOPIC_EN[p.topic] || "")).toLowerCase().includes(query.trim().toLowerCase())) &&
       (!starOnly || starred.has(p.id))
     ),
     [topic, band, klOnly, kind, lang, query, starOnly, starred]
@@ -151,9 +173,9 @@ export default function LadderPage() {
 
   // 현재 켜진 필터 요약 (접힌 토글에 표시)
   const active = [
-    topic !== "전체" && TOPIC_KO[topic],
-    band !== "전체" && band,
-    kind !== "전체" && kind,
+    topic !== "전체" && topicLabel(topic),
+    band !== "전체" && bandLabel(band),
+    kind !== "전체" && kindLabel(kind),
     lang !== "전체" && lang,
     klOnly && "🎯KL",
     starOnly && "★",
@@ -163,9 +185,11 @@ export default function LadderPage() {
     <>
       <Header />
       <main style={{ maxWidth: 760, margin: "0 auto", padding: "28px 16px 100px" }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: 0 }}>🧗 연습 · 도전</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: 0 }}>🧗 {t("연습 · 도전", "Practice · Challenge")}</h1>
         <p style={{ fontSize: 13.5, color: LABEL, marginTop: 6, lineHeight: 1.6, wordBreak: "keep-all" }}>
-          풀 문제를 <b>난이도순 한 줄</b>로 모았어요 — 점프 없이 다음 1개씩. 헷갈리면 아래 <b>⭐ 오늘 할 것</b>부터.
+          {t("풀 문제를 ", "Every problem lined up ")}<b>{t("난이도순 한 줄", "in one difficulty-ordered row")}</b>
+          {t("로 모았어요 — 점프 없이 다음 1개씩. 헷갈리면 아래 ", " — one at a time, no jumps. Not sure where to start? Try ")}
+          <b>{t("⭐ 오늘 할 것", "⭐ Today's pick")}</b>{t("부터.", " below.")}
         </p>
 
         {/* ⭐ 오늘 할 것 1개 */}
@@ -175,21 +199,24 @@ export default function LadderPage() {
           const linkProps = next.external ? { href, target: "_blank", rel: "noopener noreferrer" } : { href };
           return (
             <a {...(linkProps as any)} onClick={() => remember(next.id)}
-              aria-label={`오늘 할 것: ${next.title}, 난이도 ${bandOf(next.level).key}${next.external ? ", 외부 링크 새 탭" : ""}`}
+              aria-label={t(
+                `오늘 할 것: ${next.title}, 난이도 ${bandLabel(bandOf(next.level).key)}${next.external ? ", 외부 링크 새 탭" : ""}`,
+                `Today's pick: ${next.title}, difficulty ${bandLabel(bandOf(next.level).key)}${next.external ? ", external link opens in a new tab" : ""}`
+              )}
               style={{ textDecoration: "none", display: "block" }}>
               <div style={{ marginTop: 16, padding: "14px 16px", background: "linear-gradient(135deg,#fffbeb,#fef3c7)", border: "1.5px solid #fcd34d", borderRadius: 14, display: "flex", alignItems: "center", gap: 13 }}>
                 <div aria-hidden="true" style={{ flexShrink: 0, width: 46, height: 46, borderRadius: "50%", background: "#fff", border: `2.5px solid ${tc}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14, color: tc }}>{next.level}</div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 11.5, fontWeight: 800, color: "#b45309", letterSpacing: ".02em" }}>⭐ 오늘 할 것{active.length ? ` (${active.join("·")})` : ""}</div>
+                  <div style={{ fontSize: 11.5, fontWeight: 800, color: "#b45309", letterSpacing: ".02em" }}>⭐ {t("오늘 할 것", "Today's pick")}{active.length ? ` (${active.join("·")})` : ""}</div>
                   <div style={{ fontSize: 15.5, fontWeight: 800, color: "#1e293b", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{next.title} {next.external && <span aria-hidden="true" style={{ fontSize: 12 }}>🔗</span>}</div>
-                  <div style={{ fontSize: 11.5, color: "#92400e", marginTop: 1 }}>{next.external ? next.source : TOPIC_KO[next.topic] || next.topic} · {bandOf(next.level).key}{next.lang ? ` · ${next.lang === "cpp" ? "C++" : "Python"}` : ""}</div>
+                  <div style={{ fontSize: 11.5, color: "#92400e", marginTop: 1 }}>{next.external ? next.source : topicLabel(next.topic)} · {bandLabel(bandOf(next.level).key)}{next.lang ? ` · ${next.lang === "cpp" ? "C++" : "Python"}` : ""}</div>
                 </div>
-                <div aria-hidden="true" style={{ flexShrink: 0, fontSize: 14, fontWeight: 800, color: "#fff", background: "#d97706", borderRadius: 10, padding: "9px 15px" }}>시작 →</div>
+                <div aria-hidden="true" style={{ flexShrink: 0, fontSize: 14, fontWeight: 800, color: "#fff", background: "#d97706", borderRadius: 10, padding: "9px 15px" }}>{t("시작", "Start")} →</div>
               </div>
             </a>
           );
         })() : (
-          <div role="status" style={{ marginTop: 16, padding: "16px", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 14, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#15803d", wordBreak: "keep-all" }}>🎉 이 조건의 문제를 다 풀었어요! 필터를 바꿔 더 풀어보세요.</div>
+          <div role="status" style={{ marginTop: 16, padding: "16px", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 14, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#15803d", wordBreak: "keep-all" }}>🎉 {t("이 조건의 문제를 다 풀었어요! 필터를 바꿔 더 풀어보세요.", "You've cleared every problem matching these filters! Change the filters to keep going.")}</div>
         )}
 
         {/* ⏪ 마지막 문제로 이어서 */}
@@ -198,10 +225,10 @@ export default function LadderPage() {
           const lp = lastProblem.external ? { href, target: "_blank", rel: "noopener noreferrer" } : { href };
           return (
             <a {...(lp as any)} onClick={() => remember(lastProblem.id)}
-              aria-label={`이어서 풀기: ${lastProblem.title}`}
+              aria-label={t(`이어서 풀기: ${lastProblem.title}`, `Continue: ${lastProblem.title}`)}
               style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8, marginTop: 8, padding: "9px 12px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10 }}>
               <span aria-hidden="true" style={{ fontSize: 13 }}>⏪</span>
-              <span style={{ fontSize: 12, fontWeight: 700, color: LABEL }}>이어서:</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: LABEL }}>{t("이어서:", "Continue:")}</span>
               <span style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#1e293b", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lastProblem.title}{done.has(lastProblem.id) ? " ✓" : ""}</span>
               <span aria-hidden="true" style={{ fontSize: 12, color: "#94a3b8" }}>→</span>
             </a>
@@ -209,7 +236,10 @@ export default function LadderPage() {
         })()}
 
         <div style={{ fontSize: 12, color: LABEL, marginTop: 8, textAlign: "right" }}>
-          {LADDER.length}문제 (자체채점 {LADDER.filter(p => !p.external).length} + 외부 {LADDER.filter(p => p.external).length}) · 푼 것 {doneCount}/{filtered.length}
+          {t(
+            `${LADDER.length}문제 (자체채점 ${LADDER.filter(p => !p.external).length} + 외부 ${LADDER.filter(p => p.external).length}) · 푼 것 ${doneCount}/${filtered.length}`,
+            `${LADDER.length} problems (in-app ${LADDER.filter(p => !p.external).length} + external ${LADDER.filter(p => p.external).length}) · solved ${doneCount}/${filtered.length}`
+          )}
         </div>
 
         {/* 검색 + 필터(기본 접힘) */}
@@ -220,11 +250,11 @@ export default function LadderPage() {
             <input
               value={query}
               onChange={e => setQuery(e.target.value)}
-              aria-label="문제 검색 (이름·출처·토픽)"
-              placeholder="문제 이름·출처·토픽으로 찾기 (예: two sum, 정렬, CSES)"
+              aria-label={t("문제 검색 (이름·출처·토픽)", "Search problems (title, source, topic)")}
+              placeholder={t("문제 이름·출처·토픽으로 찾기 (예: two sum, 정렬, CSES)", "Search by title, source, or topic (e.g. two sum, sorting, CSES)")}
               style={{ width: "100%", boxSizing: "border-box", padding: "9px 32px 9px 32px", fontSize: 13, borderRadius: 9, border: "1.5px solid #cbd5e1", background: "#fff", color: "#1e293b" }}
             />
-            {query && <button onClick={() => setQuery("")} aria-label="검색어 지우기" style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", width: 24, height: 24, borderRadius: "50%", border: "none", background: "#e2e8f0", color: "#475569", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0 }}>✕</button>}
+            {query && <button onClick={() => setQuery("")} aria-label={t("검색어 지우기", "Clear search")} style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", width: 24, height: 24, borderRadius: "50%", border: "none", background: "#e2e8f0", color: "#475569", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0 }}>✕</button>}
           </div>
 
           {/* 필터 토글 */}
@@ -234,47 +264,47 @@ export default function LadderPage() {
               border: `1.5px solid ${active.length ? "#334155" : "#cbd5e1"}`, background: active.length ? "#334155" : "#fff",
               color: active.length ? "#fff" : "#475569", fontSize: 12.5, fontWeight: 700,
             }}>
-              🔎 필터{active.length ? ` · ${active.join(" · ")}` : ""}
+              🔎 {t("필터", "Filters")}{active.length ? ` · ${active.join(" · ")}` : ""}
               <span aria-hidden="true">{filtersOpen ? "▴" : "▾"}</span>
             </button>
             {active.length > 0 && (
               <button onClick={() => { setTopic("전체"); setBand("전체"); setKind("전체"); setLang("전체"); setKlOnly(false); setStarOnly(false); }}
-                style={{ fontSize: 12, fontWeight: 700, color: LABEL, background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>초기화</button>
+                style={{ fontSize: 12, fontWeight: 700, color: LABEL, background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>{t("초기화", "Reset")}</button>
             )}
-            <span style={{ marginLeft: "auto", fontSize: 12.5, fontWeight: 700, color: "#334155" }}>{filtered.length}문제</span>
+            <span style={{ marginLeft: "auto", fontSize: 12.5, fontWeight: 700, color: "#334155" }}>{t(`${filtered.length}문제`, `${filtered.length} problems`)}</span>
           </div>
 
           {/* 칩 영역 (접힘) */}
           {filtersOpen && (
             <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px dashed #e2e8f0" }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
-                <span style={{ fontSize: 11.5, fontWeight: 700, color: LABEL, width: 44, paddingTop: 7 }}>토픽</span>
+                <span style={{ fontSize: 11.5, fontWeight: 700, color: LABEL, width: 44, paddingTop: 7 }}>{t("토픽", "Topic")}</span>
                 {topics.map(tk => (
                   <Chip key={tk} on={topic === tk} color={tk === "전체" ? "#334155" : (TOPIC_COLOR[tk] || "#334155")} onClick={() => setTopic(tk)}>
-                    {tk === "전체" ? "전체" : TOPIC_KO[tk]}
+                    {topicLabel(tk)}
                   </Chip>
                 ))}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
-                <span style={{ fontSize: 11.5, fontWeight: 700, color: LABEL, width: 44 }}>난이도</span>
+                <span style={{ fontSize: 11.5, fontWeight: 700, color: LABEL, width: 44 }}>{t("난이도", "Level")}</span>
                 {["전체", ...BANDS.map(b => b.key)].map(d => (
-                  <Chip key={d} on={band === d} color={d === "전체" ? "#334155" : (bandOf(BANDS.find(b => b.key === d)!.max).color)} onClick={() => setBand(d)}>{d}</Chip>
+                  <Chip key={d} on={band === d} color={d === "전체" ? "#334155" : (bandOf(BANDS.find(b => b.key === d)!.max).color)} onClick={() => setBand(d)}>{bandLabel(d)}</Chip>
                 ))}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
-                <span style={{ fontSize: 11.5, fontWeight: 700, color: LABEL, width: 44 }}>유형</span>
+                <span style={{ fontSize: 11.5, fontWeight: 700, color: LABEL, width: 44 }}>{t("유형", "Type")}</span>
                 {["전체", "자체채점", "외부"].map(k => (
-                  <Chip key={k} on={kind === k} color={k === "외부" ? "#0369a1" : "#334155"} onClick={() => setKind(k)}>{k === "외부" ? "🔗 외부" : k}</Chip>
+                  <Chip key={k} on={kind === k} color={k === "외부" ? "#0369a1" : "#334155"} onClick={() => setKind(k)}>{k === "외부" ? `🔗 ${kindLabel(k)}` : kindLabel(k)}</Chip>
                 ))}
-                <Chip on={klOnly} color="#7c3aed" onClick={() => setKlOnly(v => !v)} label="KL 연습만 보기">🎯 KL 연습만</Chip>
-                <Chip on={starOnly} color="#ca8a04" onClick={() => setStarOnly(v => !v)} label="즐겨찾기만 보기">★ 즐겨찾기</Chip>
+                <Chip on={klOnly} color="#7c3aed" onClick={() => setKlOnly(v => !v)} label={t("KL 연습만 보기", "Show KL practice only")}>🎯 {t("KL 연습만", "KL only")}</Chip>
+                <Chip on={starOnly} color="#ca8a04" onClick={() => setStarOnly(v => !v)} label={t("즐겨찾기만 보기", "Show favorites only")}>★ {t("즐겨찾기", "Favorites")}</Chip>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                <span style={{ fontSize: 11.5, fontWeight: 700, color: LABEL, width: 44 }}>언어</span>
+                <span style={{ fontSize: 11.5, fontWeight: 700, color: LABEL, width: 44 }}>{t("언어", "Language")}</span>
                 {["전체", "C++", "Python"].map(l => (
-                  <Chip key={l} on={lang === l} color={l === "C++" ? "#0d9488" : l === "Python" ? "#2563eb" : "#334155"} onClick={() => setLang(l)}>{l}</Chip>
+                  <Chip key={l} on={lang === l} color={l === "C++" ? "#0d9488" : l === "Python" ? "#2563eb" : "#334155"} onClick={() => setLang(l)}>{l === "전체" ? t("전체", "All") : l}</Chip>
                 ))}
-                <span style={{ fontSize: 11.5, color: LABEL, wordBreak: "keep-all" }}>알고리즘·외부는 공통(언어 무관)</span>
+                <span style={{ fontSize: 11.5, color: LABEL, wordBreak: "keep-all" }}>{t("알고리즘·외부는 공통(언어 무관)", "Algorithm & external problems are language-agnostic")}</span>
               </div>
             </div>
           )}
@@ -305,22 +335,25 @@ export default function LadderPage() {
                     opacity: isDone ? 0.75 : 1,
                   }}>
                     <a {...(linkProps as any)} onClick={() => remember(p.id)}
-                      aria-label={`${p.title}${p.external ? ", 외부 링크 새 탭" : ""}`}
+                      aria-label={t(
+                        `${p.title}${p.external ? ", 외부 링크 새 탭" : ""}`,
+                        `${p.title}${p.external ? ", external link opens in a new tab" : ""}`
+                      )}
                       style={{ flex: 1, textDecoration: "none", display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
                       <span style={{ fontSize: 13.5, fontWeight: 700, color: "#1e293b", textDecoration: isDone ? "line-through" : "none", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.title}</span>
-                      {p.external && <span role="img" aria-label="외부 링크" style={{ flexShrink: 0, fontSize: 11 }}>🔗</span>}
+                      {p.external && <span role="img" aria-label={t("외부 링크", "External link")} style={{ flexShrink: 0, fontSize: 11 }}>🔗</span>}
                     </a>
                     {p.external
                       ? <span style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: textOn(SOURCE_COLOR[p.source!] || "#64748b"), background: SOURCE_COLOR[p.source!] || "#64748b", borderRadius: 6, padding: "2px 7px" }}>{p.source}</span>
-                      : <span style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: tc, background: "#f1f5f9", borderRadius: 6, padding: "2px 7px" }}>{TOPIC_KO[p.topic] || p.topic}</span>}
+                      : <span style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: tc, background: "#f1f5f9", borderRadius: 6, padding: "2px 7px" }}>{topicLabel(p.topic)}</span>}
                     {/* 난이도 = 탭하면 같은 수준만 (알약 모양으로 '누를 수 있음' 표시) */}
-                    <button onClick={() => { setBand(bd.key); setFiltersOpen(true); }} aria-label={`${bd.key} 수준 문제만 모아 보기`} title="탭하면 이 수준 문제만 모여요" style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: bd.color, border: `1.5px solid ${bd.color}`, borderRadius: 999, padding: "3px 10px", background: "#fff", cursor: "pointer", minHeight: 26 }}>{bd.key}</button>
-                    {DEFER[p.id] && <span style={{ flexShrink: 0, fontSize: 10.5, fontWeight: 700, color: "#475569", background: "#e2e8f0", borderRadius: 5, padding: "2px 6px" }} title="선수지식 배운 뒤에 풀면 좋아요">{DEFER[p.id]}</span>}
-                    <button onClick={() => toggleStar(p.id)} aria-label="즐겨찾기" aria-pressed={isStar} title="마음에 든 문제 — 나중에 이 수준 더 풀기" style={{
+                    <button onClick={() => { setBand(bd.key); setFiltersOpen(true); }} aria-label={t(`${bandLabel(bd.key)} 수준 문제만 모아 보기`, `Show only ${bandLabel(bd.key)} level problems`)} title={t("탭하면 이 수준 문제만 모여요", "Tap to filter to this level")} style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: bd.color, border: `1.5px solid ${bd.color}`, borderRadius: 999, padding: "3px 10px", background: "#fff", cursor: "pointer", minHeight: 26 }}>{bandLabel(bd.key)}</button>
+                    {DEFER[p.id] && <span style={{ flexShrink: 0, fontSize: 10.5, fontWeight: 700, color: "#475569", background: "#e2e8f0", borderRadius: 5, padding: "2px 6px" }} title={t("선수지식 배운 뒤에 풀면 좋아요", "Best solved after you learn the prerequisite")}>{t(DEFER[p.id][0], DEFER[p.id][1])}</span>}
+                    <button onClick={() => toggleStar(p.id)} aria-label={t("즐겨찾기", "Favorite")} aria-pressed={isStar} title={t("마음에 든 문제 — 나중에 이 수준 더 풀기", "Liked it — come back for more at this level")} style={{
                       flexShrink: 0, width: 32, height: 32, borderRadius: "50%", cursor: "pointer", border: "none", background: "none",
                       color: isStar ? "#ca8a04" : "#cbd5e1", fontSize: 16, lineHeight: 1, padding: 0,
                     }}>{isStar ? "★" : "☆"}</button>
-                    <button onClick={() => toggleDone(p.id)} aria-label="했음 표시" aria-pressed={isDone} title="했음 표시" style={{
+                    <button onClick={() => toggleDone(p.id)} aria-label={t("했음 표시", "Mark as done")} aria-pressed={isDone} title={t("했음 표시", "Mark as done")} style={{
                       flexShrink: 0, width: 32, height: 32, borderRadius: "50%", cursor: "pointer",
                       border: `1.5px solid ${isDone ? "#15803d" : "#cbd5e1"}`, background: isDone ? "#15803d" : "#fff",
                       color: isDone ? "#fff" : "#94a3b8", fontSize: 14, fontWeight: 800, lineHeight: 1, padding: 0,
@@ -330,7 +363,7 @@ export default function LadderPage() {
               );
             })}
           </ul>
-          {filtered.length === 0 && <div role="status" style={{ padding: 24, textAlign: "center", color: LABEL, fontSize: 13 }}>해당 문제가 없어요.</div>}
+          {filtered.length === 0 && <div role="status" style={{ padding: 24, textAlign: "center", color: LABEL, fontSize: 13 }}>{t("해당 문제가 없어요.", "No problems match these filters.")}</div>}
         </div>
       </main>
       <BottomNav />

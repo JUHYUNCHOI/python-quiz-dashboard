@@ -12,6 +12,8 @@ import { LADDER } from "../ladder/ladder-data";
 import { getCompletedIds, setManualDone } from "@/lib/path-completion";
 import { questPathForUrl } from "@/lib/cpid-quests";
 import { PATH_LESSONS, type PathCourse } from "@/data/path-lessons";
+import { getLessonName } from "@/lib/curriculum-data";
+import { useLanguage } from "@/contexts/language-context";
 
 type PathItem = { id: string; topic: string; title: string; level: number; source?: string; url?: string; external?: boolean; isLesson?: boolean };
 
@@ -37,16 +39,26 @@ const TOPIC_KO: Record<string, string> = {
   tree: "트리", trie: "트라이", unionfind: "유니온파인드", simulation: "시뮬레이션",
   grid: "그리드", math: "수학", syntax: "문법",
 };
+const TOPIC_EN: Record<string, string> = {
+  sorting: "Sorting", array: "Array", hashtable: "Hash", prefixsum: "Prefix Sum", string: "String",
+  stackqueue: "Stack/Queue", greedy: "Greedy", backtracking: "Brute Force", binarysearch: "Binary Search",
+  bitmanipulation: "Bitmask", divideconquer: "Divide & Conquer", dp: "DP", graph: "Graph",
+  priorityqueue: "Priority Queue", recursion: "Recursion", shortestpath: "Shortest Path", topologicalsort: "Topological Sort",
+  tree: "Tree", trie: "Trie", unionfind: "Union-Find", simulation: "Simulation",
+  grid: "Grid", math: "Math", syntax: "Syntax",
+};
+// k 는 난이도 식별자(다른 페이지·localStorage 와 공유)라 한국어 유지. en 은 표시용.
 const BAND_DEFS = [
-  { k: "입문", c: "#15803d", lo: 0, hi: 16 },
-  { k: "기초", c: "#0e7490", lo: 17, hi: 26 },
-  { k: "중급", c: "#b45309", lo: 27, hi: 38 },
-  { k: "고급", c: "#c2410c", lo: 39, hi: 52 },
-  { k: "도전", c: "#b91c1c", lo: 53, hi: 999 },
+  { k: "입문", en: "Intro", c: "#15803d", lo: 0, hi: 16 },
+  { k: "기초", en: "Basic", c: "#0e7490", lo: 17, hi: 26 },
+  { k: "중급", en: "Intermediate", c: "#b45309", lo: 27, hi: 38 },
+  { k: "고급", en: "Advanced", c: "#c2410c", lo: 39, hi: 52 },
+  { k: "도전", en: "Challenge", c: "#b91c1c", lo: 53, hi: 999 },
 ];
 const bandOf = (lv: number) => BAND_DEFS.find((b) => lv >= b.lo && lv <= b.hi) || BAND_DEFS[0];
 
 export default function NextPath() {
+  const { t, lang } = useLanguage();
   // done = 실제 완료 신호 union(레슨·연습·algo·수동). 읽기 전용 합산.
   const [done, setDone] = useState<Set<string>>(new Set());
   const [ready, setReady] = useState(false);
@@ -64,10 +76,12 @@ export default function NextPath() {
   // 경로 = [현재 코스 수업(언어 단계)] → [LADDER 문제(난이도순)]. 한 줄로 통합.
   const PATH: PathItem[] = useMemo(() => {
     const lessons: PathItem[] = (PATH_LESSONS[course] || []).map((l) => ({
-      id: String(l.id), topic: "syntax", title: l.title, level: 0, source: "수업", url: `/learn/${l.id}`, external: false, isLesson: true,
+      // 영어 모드에선 제목도 영어로 — 번호 접두사("12. ")만 남기고 이름은 curriculum-data 의 en 표를 쓴다.
+      id: String(l.id), topic: "syntax", level: 0, source: "수업", url: `/learn/${l.id}`, external: false, isLesson: true,
+      title: lang === "en" ? (l.title.match(/^\d+\.\s*/)?.[0] ?? "") + getLessonName(l.id, "en") : l.title,
     }));
     return [...lessons, ...(LADDER as PathItem[])];
-  }, [course]);
+  }, [course, lang]);
 
   // 현재 = 아직 안 끝낸 첫 항목.
   const curIdx = useMemo(() => {
@@ -93,9 +107,9 @@ export default function NextPath() {
     return (
       <span style={{ display: "inline-flex", gap: 6, alignItems: "center", fontSize: 12 }}>
         <span style={{ background: "#eef2ff", color: "#3730a3", borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>
-          {TOPIC_KO[topic] || topic}
+          {t(TOPIC_KO[topic] || topic, TOPIC_EN[topic] || topic)}
         </span>
-        <span style={{ color: b.c, fontWeight: 700 }}>● {b.k}</span>
+        <span style={{ color: b.c, fontWeight: 700 }}>● {t(b.k, b.en)}</span>
       </span>
     );
   };
@@ -106,10 +120,11 @@ export default function NextPath() {
     <div style={{ minHeight: "100vh", background: "#f8fafc", paddingBottom: 80 }}>
       <Header />
       <main style={{ maxWidth: 560, margin: "0 auto", padding: "16px 16px 0" }}>
-        <div style={{ fontSize: 12, color: "#94a3b8", fontWeight: 600 }}>나의 학습 · 이어서</div>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: "2px 0 4px" }}>다음 할 것</h1>
+        <div style={{ fontSize: 12, color: "#94a3b8", fontWeight: 600 }}>{t("나의 학습 · 이어서", "My learning · Continue")}</div>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: "2px 0 4px" }}>{t("다음 할 것", "Up next")}</h1>
         <div style={{ fontSize: 12.5, color: "#64748b", marginBottom: 18 }}>
-          {done.size > 0 ? `${done.size}개 완료` : "여기서 시작해요"} · 아래 1개만 하면 돼요
+          {done.size > 0 ? t(`${done.size}개 완료`, `${done.size} done`) : t("여기서 시작해요", "Start here")}
+          {t(" · 아래 1개만 하면 돼요", " · just do the one below")}
         </div>
 
         {/* 지난 것 (지나온 칸) */}
@@ -128,30 +143,30 @@ export default function NextPath() {
         {cur && (
           <div style={{ background: "#fff", border: "2px solid #6366f1", borderRadius: 16, padding: 18, boxShadow: "0 4px 16px rgba(99,102,241,.12)", marginBottom: 18 }}>
             <div style={{ display: "inline-block", fontSize: 11, fontWeight: 800, color: "#4338ca", background: "#e0e7ff", borderRadius: 8, padding: "3px 12px", marginBottom: 10 }}>
-              ▶ 지금 할 것
+              ▶ {t("지금 할 것", "Do this now")}
             </div>
             <div style={{ fontSize: 18, fontWeight: 800, color: "#0f172a", marginBottom: 8, lineHeight: 1.4, wordBreak: "keep-all" }}>{cur.title}</div>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
               {chip(cur.topic, cur.level)}
-              {cur.source && <span style={{ fontSize: 11, color: "#64748b", border: "1px solid #e2e8f0", borderRadius: 6, padding: "2px 8px" }}>{cur.source}</span>}
-              {cur.isLesson && <span style={{ fontSize: 11, color: "#0e7490", background: "#cffafe", borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>수업 듣기</span>}
-              {!cur.isLesson && curLink?.inSite && <span style={{ fontSize: 11, color: "#16a34a", background: "#dcfce7", borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>{curLink.isQuest ? "우리 풀이 (단계별)" : "사이트 안에서 풀기"}</span>}
+              {cur.source && <span style={{ fontSize: 11, color: "#64748b", border: "1px solid #e2e8f0", borderRadius: 6, padding: "2px 8px" }}>{cur.source === "수업" ? t("수업", "Lesson") : cur.source}</span>}
+              {cur.isLesson && <span style={{ fontSize: 11, color: "#0e7490", background: "#cffafe", borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>{t("수업 듣기", "Watch lesson")}</span>}
+              {!cur.isLesson && curLink?.inSite && <span style={{ fontSize: 11, color: "#16a34a", background: "#dcfce7", borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>{curLink.isQuest ? t("우리 풀이 (단계별)", "Our walkthrough (step by step)") : t("사이트 안에서 풀기", "Solve in-app")}</span>}
             </div>
             {cur && conceptRoute(cur.topic) && (
               <a href={conceptRoute(cur.topic)!} style={{ display: "inline-block", marginBottom: 12, fontSize: 12.5, color: "#7c3aed", textDecoration: "none", fontWeight: 600 }}>
-                📘 막히면 — 이 토픽 개념 먼저 보기 →
+                📘 {t("막히면 — 이 토픽 개념 먼저 보기", "Stuck? Learn this topic's concept first")} →
               </a>
             )}
             <div style={{ display: "flex", gap: 10 }}>
               {curLink?.href && (
                 <a href={curLink.href} target={curLink.inSite ? undefined : "_blank"} rel={curLink.inSite ? undefined : "noopener noreferrer"}
                    style={{ flex: 1, textAlign: "center", background: "#6366f1", color: "#fff", fontWeight: 800, fontSize: 15, padding: "12px 0", borderRadius: 12, textDecoration: "none" }}>
-                  시작하기 →
+                  {t("시작하기", "Start")} →
                 </a>
               )}
               <button onClick={() => markDone(cur.id)}
                       style={{ background: "#f1f5f9", color: "#334155", fontWeight: 700, fontSize: 14, padding: "12px 18px", borderRadius: 12, border: "1px solid #e2e8f0", cursor: "pointer", whiteSpace: "nowrap" }}>
-                완료 ✓
+                {t("완료", "Done")} ✓
               </button>
             </div>
           </div>
@@ -166,9 +181,9 @@ export default function NextPath() {
           display: "block", marginBottom: 18, padding: "13px 15px", borderRadius: 14,
           border: "2px solid #a78bfa", background: "#f5f3ff", textDecoration: "none",
         }}>
-          <div style={{ fontSize: 11.5, fontWeight: 800, color: "#7c3aed", marginBottom: 3 }}>🧭 알고리즘 학습 지도</div>
+          <div style={{ fontSize: 11.5, fontWeight: 800, color: "#7c3aed", marginBottom: 3 }}>🧭 {t("알고리즘 학습 지도", "Algorithm learning map")}</div>
           <div style={{ fontSize: 13, color: "#5b21b6", wordBreak: "keep-all", lineHeight: 1.45 }}>
-            본길 8개 순서대로 · 어려운 건 옆길로 빼뒀어요 →
+            {t("본길 8개 순서대로 · 어려운 건 옆길로 빼뒀어요", "8 main-path topics in order · the hard ones are set aside on side paths")} →
           </div>
         </a>
 
@@ -176,7 +191,7 @@ export default function NextPath() {
         {upcoming.length > 0 && (
           <>
             <div style={{ fontSize: 12, color: "#94a3b8", fontWeight: 700, marginBottom: 8 }}>
-              다음에 올 것 <span style={{ fontWeight: 400 }}>· 잘하면 눌러서 바로 풀거나 건너뛰어요</span>
+              {t("다음에 올 것", "Coming up")} <span style={{ fontWeight: 400 }}>{t("· 잘하면 눌러서 바로 풀거나 건너뛰어요", "· already know it? tap to jump in or skip")}</span>
             </div>
             {upcoming.map((p, i) => (
               <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", marginBottom: 6, background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, opacity: 1 - i * 0.08 }}>
@@ -184,27 +199,27 @@ export default function NextPath() {
                 {(() => { const e = effLink(p); return e.href ? (
                   <a href={e.href} target={e.inSite ? undefined : "_blank"} rel={e.inSite ? undefined : "noopener noreferrer"}
                      style={{ fontSize: 13.5, color: "#334155", flex: 1, wordBreak: "keep-all", textDecoration: "none", fontWeight: 600 }}>
-                    {p.title}{e.isQuest && <span style={{ fontSize: 10, color: "#16a34a", marginLeft: 6 }}>· 우리 풀이</span>}
+                    {p.title}{e.isQuest && <span style={{ fontSize: 10, color: "#16a34a", marginLeft: 6 }}>{t("· 우리 풀이", "· our walkthrough")}</span>}
                   </a>
                 ) : (
                   <span style={{ fontSize: 13.5, color: "#475569", flex: 1, wordBreak: "keep-all" }}>{p.title}</span>
                 ); })()}
                 {chip(p.topic, p.level)}
-                <button onClick={() => markDone(p.id)} title="이미 할 줄 알아요 (건너뛰기)"
+                <button onClick={() => markDone(p.id)} title={t("이미 할 줄 알아요 (건너뛰기)", "I already know this (skip)")}
                         style={{ fontSize: 11, color: "#94a3b8", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "3px 8px", cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 }}>
-                  건너뛰기
+                  {t("건너뛰기", "Skip")}
                 </button>
               </div>
             ))}
             <button onClick={() => setShowMore(v => !v)} style={{ display: "block", margin: "4px auto 0", fontSize: 12, color: "#6366f1", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}>
-              {showMore ? "접기 ▲" : "더 보기 ▼ (멀리 점프)"}
+              {showMore ? t("접기 ▲", "Collapse ▲") : t("더 보기 ▼ (멀리 점프)", "Show more ▼ (jump ahead)")}
             </button>
           </>
         )}
 
         {/* 선생님용 점프 안내 */}
         <a href="/course/ladder" style={{ display: "block", textAlign: "center", marginTop: 14, fontSize: 12.5, color: "#6366f1", textDecoration: "none" }}>
-          전체 보기 · 토픽/난이도로 골라 풀기 (선생님) →
+          {t("전체 보기 · 토픽/난이도로 골라 풀기 (선생님)", "See all · pick by topic/difficulty (teacher)")} →
         </a>
       </main>
       <BottomNav />
