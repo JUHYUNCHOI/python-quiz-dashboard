@@ -584,7 +584,7 @@ function PracticeStep({
           onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
           onCorrect()
         } else {
-          setActualOutput(`오류: ${runResult.error}`)
+          setActualOutput(`${t("오류", "Error")}: ${runResult.error}`)
           clearStorage()
           setResult("wrong")
           onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
@@ -615,7 +615,7 @@ function PracticeStep({
             const firstErr =
               pistonRes.compileError.split("\n").find((l: string) => l.includes("error:")) ||
               pistonRes.compileError.split("\n")[0]
-            setActualOutput(`컴파일 에러: ${firstErr}`)
+            setActualOutput(`${t("컴파일 에러", "Compile error")}: ${firstErr}`)
             clearStorage()
             setResult("wrong")
             onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
@@ -641,7 +641,7 @@ function PracticeStep({
               onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
               onCorrect()
             } else {
-              setActualOutput(actualOut || (pistonRes.runtimeError ? `런타임 에러: ${pistonRes.runtimeError.split("\n")[0]}` : ""))
+              setActualOutput(actualOut || (pistonRes.runtimeError ? `${t("런타임 에러", "Runtime error")}: ${pistonRes.runtimeError.split("\n")[0]}` : ""))
               clearStorage()
               setResult("wrong")
               onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
@@ -946,7 +946,8 @@ function PracticeStep({
               <pre className="font-mono text-xs text-red-700 bg-red-100 rounded px-2 py-1.5 whitespace-pre-wrap">
                 {actualOutput || t("(출력 없음)", "(no output)")}
               </pre>
-              {displayExpect && !actualOutput.startsWith("컴파일 에러") && !actualOutput.startsWith("오류") && (
+              {/* 실행 자체가 실패한 경우엔 '예상 출력'을 숨긴다. 메시지가 번역되므로 한·영 접두사 둘 다 본다. */}
+              {displayExpect && !/^(컴파일 에러|오류|Compile error|Error)/.test(actualOutput) && (
                 <div className="mt-1">
                   <p className="text-xs text-red-500 font-semibold mb-0.5">{t("예상 출력:", "Expected:")}</p>
                   <pre className="font-mono text-xs text-red-700 bg-red-100 rounded px-2 py-1.5 whitespace-pre-wrap">{String(displayExpect)}</pre>

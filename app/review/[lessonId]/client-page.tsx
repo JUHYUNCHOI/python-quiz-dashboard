@@ -18,6 +18,9 @@ import { ReviewStepRenderer } from "./ReviewStepRenderer"
 import { lessonsData } from "./data/lessons"
 import type { StepContent, LessonData } from "./data/types"
 import { LanguageToggle } from "@/components/language-toggle"
+import { localizeContent } from "@/lib/ko-en-glossary"
+import { REVIEW_CHAPTER_TITLE_EN } from "@/lib/review-chapter-titles-en"
+import { getLessonName } from "@/lib/curriculum-data"
 
 // ============================================================
 // 유틸 함수들
@@ -54,6 +57,26 @@ function extractReviewSteps(lesson: LessonData): ReviewStep[] {
   return result
 }
 
+// chapter 스텝 235개 중 198개가 en.title 이 없었다 — 영어 모드에서 챕터명이 그대로
+// 한국어로 남던 원인 (복습 23 의 "스택이 뭐야?"). 중앙 표 → 용어집 순으로 떨어뜨린다.
+function chapterLabel(rs: { chapterTitle?: string; chapterTitleEn?: string }, isEn: boolean): string | undefined {
+  if (!rs.chapterTitle) return undefined
+  if (!isEn) return rs.chapterTitle
+  return rs.chapterTitleEn || REVIEW_CHAPTER_TITLE_EN[rs.chapterTitle] || localizeContent(rs.chapterTitle, true)
+}
+
+// 복습 데이터 80개 중 78개가 titleEn 이 없다. 커리큘럼 쪽에는 레슨 영어명 표가
+// 이미 있으니 그걸 재사용한다 — 78개 파일에 titleEn 을 박아 넣는 것보다 단일 출처.
+const HAS_HANGUL = /[\uAC00-\uD7A3]/
+function lessonTitle(lesson: LessonData, lessonId: string, isEn: boolean): string {
+  if (!isEn) return lesson.title
+  if (lesson.titleEn) return lesson.titleEn
+  const name = getLessonName(lessonId, "en")
+  // getLessonName 은 영어명이 없으면 한국어명 → 그것도 없으면 id 를 돌려준다. 둘 다 거른다.
+  if (name !== lessonId && !HAS_HANGUL.test(name)) return name
+  return localizeContent(lesson.title, true)
+}
+
 // 힌트용: 직전에 나오는 explain 스텝들의 핵심 내용
 function getNearbyExplains(lesson: LessonData, beforeIndex: number, isEn = false): string[][] {
   const hints: string[][] = []
@@ -63,7 +86,7 @@ function getNearbyExplains(lesson: LessonData, beforeIndex: number, isEn = false
     if (s.type === "explain" && s.content.lines?.length > 0) {
       const lines = (isEn && (s.content.en as any)?.lines?.length)
         ? (s.content.en as any).lines as string[]
-        : s.content.lines
+        : s.content.lines.map((l: string) => localizeContent(l, isEn))
       hints.unshift(lines)
     }
   }
@@ -75,14 +98,14 @@ function getStepPreview(step: StepContent, isEn: boolean = false): string {
   switch (step.type) {
     case "quiz":
     case "errorQuiz":
-      return (isEn && step.content.en?.question) ? step.content.en.question : step.content.question
+      return (isEn && step.content.en?.question) ? step.content.en.question : localizeContent(step.content.question, isEn)
     case "practice":
     case "interleaving":
-      return (isEn && step.content.en?.task) ? step.content.en.task : step.content.task
+      return (isEn && step.content.en?.task) ? step.content.en.task : localizeContent(step.content.task, isEn)
     case "explain":
       return (isEn && step.content.en?.predict?.question)
         ? step.content.en.predict.question
-        : (step.content.predict?.question ?? (isEn ? "Predict Quiz" : "예측 퀴즈"))
+        : (localizeContent(step.content.predict?.question, isEn) || (isEn ? "Predict Quiz" : "예측 퀴즈"))
     default:
       return ""
   }
@@ -425,7 +448,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               <X className="h-5 w-5 text-gray-600" />
             </button>
             <h1 className="text-lg font-bold text-gray-900 flex-1">
-              {isEn && lesson.titleEn ? lesson.titleEn : lesson.title} — {t("복습 결과", "Review Results")}
+              {lessonTitle(lesson, lessonId, isEn)} — {t("복습 결과", "Review Results")}
             </h1>
           </div>
         </div>
@@ -491,7 +514,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                       const preview = getStepPreview(r.step, isEn)
                       return (
                         <p key={i} className="truncate">
-                          {i + 1}. {r.chapterTitle ? `[${isEn && r.chapterTitleEn ? r.chapterTitleEn : r.chapterTitle}] ` : ""}{preview}
+                          {i + 1}. {r.chapterTitle ? `[${chapterLabel(r, isEn)}] ` : ""}{preview}
                         </p>
                       )
                     })}
@@ -549,7 +572,11 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               const isCompleted = completedSteps.has(idx)
               const isWrong = wrongSteps.includes(idx)
               const isClickable = true  // 복습은 자유 탐색 — 어떤 문제든 바로 이동 가능
-              const typeLabel = rs.step.type === "quiz" ? "객관식" : rs.step.type === "practice" ? "빈칸" : rs.step.type === "interleaving" ? "복습" : rs.step.type === "errorQuiz" ? "오류찾기" : rs.step.type
+              const typeLabel = rs.step.type === "quiz" ? t("객관식", "Multiple choice")
+                : rs.step.type === "practice" ? t("빈칸", "Fill in")
+                : rs.step.type === "interleaving" ? t("복습", "Review")
+                : rs.step.type === "errorQuiz" ? t("오류찾기", "Find the bug")
+                : rs.step.type
               return (
                 <div key={idx} className="relative group h-full flex-1 min-w-[3px]">
                   <button
@@ -570,8 +597,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   {/* 툴팁 */}
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center pointer-events-none z-50">
                     <div className="bg-gray-800 text-white text-[11px] rounded-lg px-2.5 py-1.5 whitespace-nowrap shadow-lg">
-                      <p className="font-semibold">{idx + 1}번 · {typeLabel}</p>
-                      {rs.chapterTitle && <p className="text-gray-300 mt-0.5">{isEn && rs.chapterTitleEn ? rs.chapterTitleEn : rs.chapterTitle}</p>}
+                      <p className="font-semibold">{t(`${idx + 1}번`, `#${idx + 1}`)} · {typeLabel}</p>
+                      {rs.chapterTitle && <p className="text-gray-300 mt-0.5">{chapterLabel(rs, isEn)}</p>}
                     </div>
                     <div className="w-2 h-2 bg-gray-800 rotate-45 -mt-1" />
                   </div>
@@ -590,11 +617,11 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
 
         {/* 레슨명 + 챕터명 */}
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pb-2 flex items-center gap-1.5">
-          <span className="text-xs font-semibold text-orange-500">{lang === "en" && lesson.titleEn ? lesson.titleEn : lesson.title}</span>
+          <span className="text-xs font-semibold text-orange-500">{lessonTitle(lesson, lessonId, isEn)}</span>
           {currentReview?.chapterTitle && (
             <>
               <span className="text-xs text-gray-300">›</span>
-              <span className="text-xs text-gray-400">{lang === "en" && currentReview.chapterTitleEn ? currentReview.chapterTitleEn : currentReview.chapterTitle}</span>
+              <span className="text-xs text-gray-400">{chapterLabel(currentReview, isEn)}</span>
             </>
           )}
         </div>
