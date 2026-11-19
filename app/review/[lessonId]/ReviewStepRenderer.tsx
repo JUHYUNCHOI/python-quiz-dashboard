@@ -32,6 +32,7 @@ import { Check, X, Lightbulb, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
+import { localizeContent, translateKoContent } from "@/lib/ko-en-glossary"
 import { highlightCpp, highlightCppInline, highlightPython, highlightPythonInline } from "@/components/ui/code-block"
 import type {
   StepContent,
@@ -280,6 +281,15 @@ function isAnswerCorrect(
     if (en.answer && compare(en.answer)) return true
     if (en.alternateAnswers?.some(a => compare(a))) return true
   }
+  // EN 모드: 화면에는 용어집으로 번역된 코드가 보이므로 그 형태도 정답으로 인정해야 한다.
+  // (en.* 가 없는 대부분의 문제가 여기 해당 — 이게 없으면 보이는 대로 입력해도 오답 처리됨)
+  if (isEn) {
+    if (compare(translateKoContent(content.answer))) return true
+    if (content.alternateAnswers?.some(a => compare(translateKoContent(a)))) return true
+    if (content.blanksAnswer && content.blanksAnswer.length > 1) {
+      if (compare(translateKoContent(content.blanksAnswer.join(", ")))) return true
+    }
+  }
   return false
 }
 
@@ -308,13 +318,14 @@ function McqStep({
   const answered = selected !== null
   const isRight = selected === content.answer
 
-  // EN 필드 우선 사용 (없으면 Korean fallback)
-  const question = (E && content.en?.question) ? content.en.question : content.question
-  const options = (E && content.en?.options?.length) ? content.en.options : content.options
-  const explanation = (E && content.en?.explanation) ? content.en.explanation : content.explanation
+  // EN 필드 우선 사용 (없으면 Korean fallback) → 어느 쪽이든 용어집으로 잔여 한국어 제거
+  const question = localizeContent((E && content.en?.question) ? content.en.question : content.question, E)
+  const options = ((E && content.en?.options?.length) ? content.en.options : content.options)
+    .map(o => localizeContent(o, E))
+  const explanation = localizeContent((E && content.en?.explanation) ? content.en.explanation : content.explanation, E)
   // errorQuiz 의 code 도 en 우선
   const code = "code" in content
-    ? ((E && (content.en as { code?: string } | undefined)?.code) ? (content.en as { code: string }).code : content.code)
+    ? localizeContent((E && (content.en as { code?: string } | undefined)?.code) ? (content.en as { code: string }).code : content.code, E)
     : undefined
 
   const select = (i: number) => {
@@ -452,12 +463,12 @@ function PracticeStep({
     ? enContent.template
     : content.template
   // EN 모드면 en.expect 우선 — 채점/표시 모두에 사용
-  const displayExpect = (isEn && enContent?.expect) ? enContent.expect : content.expect
+  const displayExpect = localizeContent((isEn && enContent?.expect) ? enContent.expect : content.expect, isEn)
   // { before, after } 객체 형식을 인라인 빈칸 문자열로 정규화
   const rawTemplate = (typeof rawTemplateBase === "object" && rawTemplateBase !== null && "before" in rawTemplateBase)
     ? `${(rawTemplateBase as { before: string; after: string }).before}___${(rawTemplateBase as { before: string; after: string }).after}`
     : rawTemplateBase
-  const template = typeof rawTemplate === "string" ? rawTemplate : ""
+  const template = typeof rawTemplate === "string" ? localizeContent(rawTemplate, isEn) : ""
   // 빈칸 개수 카운트
   const blankCount = isFullCode ? 0 : (template.match(/___/g) || []).length
   const isMultiBlank = blankCount > 1
@@ -517,7 +528,9 @@ function PracticeStep({
              죽은 필드였고, 그래서 복습 10 의 연습 7개가 전부 `EOFError` 였다. */
     const stepStdin = (() => {
         const en = (content?.en as { stdin?: string } | undefined)?.stdin
-        return (isEn && en) ? en : (content as { stdin?: string } | undefined)?.stdin
+        const raw = (isEn && en) ? en : (content as { stdin?: string } | undefined)?.stdin
+        // expect 와 같은 규칙으로 번역해야 입력값 기반 출력이 기대값과 맞는다
+        return raw === undefined ? undefined : localizeContent(raw, isEn)
     })()
 
     // ── 출력 기반 채점: template=null + expect 있을 때 ──────────────
@@ -586,7 +599,8 @@ function PracticeStep({
         try {
           // EN 모드면 en.stdin 우선 사용 (영문 입력 데이터로 바꿔 둔 경우)
           const enStdin = (content.en as { stdin?: string } | undefined)?.stdin
-          const stdinVal = (isEn && enStdin) ? enStdin : (content as { stdin?: string }).stdin
+          const stdinRaw = (isEn && enStdin) ? enStdin : (content as { stdin?: string }).stdin
+          const stdinVal = stdinRaw === undefined ? undefined : localizeContent(stdinRaw, isEn)
 
           // 학생이 #include / int main() 안 써도 자동으로 감싸서 컴파일
           const codeForPiston = isFullCode ? wrapCppCode(combined) : combined
@@ -718,14 +732,16 @@ function PracticeStep({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoCheckRef, result, inputs, isMultiBlank])
 
-  // EN 필드 우선 (없으면 KO fallback)
-  const task = (isEn && content.en?.task) ? content.en.task : content.task
-  const guide = isEn && content.en?.guide
+  // EN 필드 우선 (없으면 KO fallback).
+  // task/guide/hint 는 en.* 이 있어도 용어집을 한 번 더 통과시킨다 —
+  // 손으로 쓴 en.task 안에 `코딩` 같은 한국어 출력값이 그대로 박혀 있는 경우가 많다.
+  const task = localizeContent((isEn && content.en?.task) ? content.en.task : content.task, isEn)
+  const guide = localizeContent(isEn && content.en?.guide
     ? content.en.guide
-    : "guide" in content ? (content as { guide?: string }).guide : undefined
-  const hint = isEn && content.en?.hint
+    : "guide" in content ? (content as { guide?: string }).guide : undefined, isEn) || undefined
+  const hint = localizeContent(isEn && content.en?.hint
     ? content.en.hint
-    : "hint" in content ? (content as { hint?: string }).hint : undefined
+    : "hint" in content ? (content as { hint?: string }).hint : undefined, isEn) || undefined
 
   // 템플릿을 ___ 기준으로 분할해 인라인 input 렌더링
   const templateParts = template.split("___")
@@ -734,9 +750,9 @@ function PracticeStep({
     <div className="flex flex-col gap-3">
       {"message" in content && (
         (() => {
-          const msg = (isEn && content.en && "message" in content.en && content.en.message)
+          const msg = localizeContent((isEn && content.en && "message" in content.en && content.en.message)
             ? (content.en as { message?: string }).message
-            : (content as any).message
+            : (content as any).message, isEn) || undefined
           return msg ? <p className="text-xs text-purple-500 font-semibold bg-purple-50 rounded-lg px-3 py-2">{msg}</p> : null
         })()
       )}
@@ -756,7 +772,9 @@ function PracticeStep({
         const enC = content.en as { answer?: string; blanksAnswer?: string[] } | undefined
         const blanks = (isEn && enC?.blanksAnswer) ? enC.blanksAnswer : (content as { blanksAnswer?: string[] }).blanksAnswer
         const ans = (isEn && enC?.answer) ? enC.answer : (content as { answer?: string }).answer
-        const text = (Array.isArray(blanks) && blanks.length > 1) ? blanks.join("   ·   ") : ans
+        const raw = (Array.isArray(blanks) && blanks.length > 1) ? blanks.join("   ·   ") : ans
+        // 화면의 코드와 같은 규칙으로 번역해야 선생님이 읽어주는 정답이 실제 정답과 일치한다
+        const text = localizeContent(raw, isEn) || undefined
         if (!text) return null
         return (
           <div className="rounded-xl border-2 border-green-300 bg-green-50 px-3 py-2">
@@ -769,9 +787,10 @@ function PracticeStep({
       {/* 예시 입력 — 전체 코드 작성 시, sampleInput 또는 stdin 이 있으면 보여줌 */}
       {isFullCode && result === "idle" && (() => {
         const enSample = (content.en as { sampleInput?: string; stdin?: string } | undefined)
-        const sample = (isEn && enSample?.sampleInput) ? enSample.sampleInput
+        const sampleRaw = (isEn && enSample?.sampleInput) ? enSample.sampleInput
           : (content as { sampleInput?: string }).sampleInput
             ?? ((isEn && enSample?.stdin) ? enSample.stdin : (content as { stdin?: string }).stdin)
+        const sample = localizeContent(sampleRaw, isEn) || undefined
         return sample && (
           <div className="rounded-xl overflow-hidden border-2 border-sky-400 shadow-sm">
             <div className="bg-sky-500 px-3 py-1.5 flex items-center gap-1.5">
@@ -858,7 +877,7 @@ function PracticeStep({
             {((isEn ? (content as any).en?.context : undefined) || (content as any).context) && (
               <div className="bg-[#1a1b2e] px-4 pt-3 pb-1 font-mono text-sm text-[#6b7280] leading-7 whitespace-pre-wrap border-b border-gray-700/50">
                 {renderTemplatePart(
-                  (isEn ? (content as any).en?.context : undefined) || (content as any).context,
+                  localizeContent((isEn ? (content as any).en?.context : undefined) || (content as any).context, isEn),
                   language
                 )}
               </div>
@@ -1001,14 +1020,16 @@ function PredictStep({
   const isRight = selected === content.predict.answer
 
   // EN overrides (with auto-translate fallback for common Korean strings)
-  const lines = (isEn && content.en?.lines) ? content.en.lines : content.lines
+  const lines = ((isEn && content.en?.lines) ? content.en.lines : content.lines)
+    .map(l => localizeContent(l, isEn))
   const predictQuestion = isEn
-    ? (content.en?.predict?.question ?? autoTranslateQuestion(content.predict.question))
+    ? localizeContent(content.en?.predict?.question ?? autoTranslateQuestion(content.predict.question), isEn)
     : content.predict.question
   const predictOptions = isEn
     ? (content.en?.predict?.options ?? content.predict.options.map(autoTranslateOption))
+        .map(o => localizeContent(o, isEn))
     : content.predict.options
-  const predictFeedback = (isEn && content.en?.predict?.feedback) ? content.en.predict.feedback : content.predict.feedback
+  const predictFeedback = localizeContent((isEn && content.en?.predict?.feedback) ? content.en.predict.feedback : content.predict.feedback, isEn)
 
   const select = (i: number) => {
     if (answered) return
@@ -1032,7 +1053,7 @@ function PredictStep({
 
       {/* Code — EN 번역본이 있으면 우선 사용 */}
       {(() => {
-        const displayCode = (isEn && content.en?.code) ? content.en.code : content.code
+        const displayCode = localizeContent((isEn && content.en?.code) ? content.en.code : content.code, isEn)
         return displayCode && (
           <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
             {language === "cpp"
@@ -1099,7 +1120,7 @@ function PredictStep({
             <p className="text-gray-600">{renderBold(predictFeedback)}</p>
           )}
           {(() => {
-            const displayResult = (isEn && content.en?.result) ? content.en.result : content.result
+            const displayResult = localizeContent((isEn && content.en?.result) ? content.en.result : content.result, isEn)
             return displayResult && (
               <p className="mt-1 text-xs text-gray-500">
                 {t("실제 결과:", "Actual output:")} <code className="font-mono bg-white px-1 rounded">{displayResult}</code>
