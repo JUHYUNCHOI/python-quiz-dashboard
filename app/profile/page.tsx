@@ -6,7 +6,7 @@ import { useGamification } from "@/hooks/use-gamification"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { Card } from "@/components/ui/card"
-import { LogOut, Trophy, Flame, Zap, ShieldCheck, Users, LogIn, Globe } from "lucide-react"
+import { LogOut, Flame, Zap, ShieldCheck, Users, LogIn, Globe } from "lucide-react"
 import Link from "next/link"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
@@ -15,6 +15,8 @@ import { createClient } from "@/lib/supabase/client"
 import { getQuizScores, getWrongBank } from "@/lib/mark-lesson-complete"
 import { getLessonName } from "@/lib/curriculum-data"
 import { cn } from "@/lib/utils"
+import { tierInfo, tierLabel, type TierId } from "@/lib/tier-system"
+import { loadTierState, syncTierFromServer } from "@/lib/tier-store"
 
 // 선생님 모드 토글 — localStorage `teacher-as-student` 플래그 제어
 // "true" = 학생 뷰 강제, "false" = 선생님 뷰 강제, 없음 = default
@@ -53,9 +55,84 @@ function TeacherModeToggle({ t }: { t: (kr: string, en: string) => string }) {
   )
 }
 
+/**
+ * 통계 카드의 첫 칸 — 예전 `Lv.3` 자리.
+ *
+ * 숫자 레벨 대신 티어 하나만 보여준다. 배치고사를 안 본 학생에게는 빈칸이나
+ * `Lv.0` 대신 **언랭(Unranked)** 을 띄우고, 누르면 배치고사로 보낸다 —
+ * 빈칸은 "아직 안 한 일" 이라는 신호를 못 준다.
+ */
+
+/**
+ * 타일은 3칸 그리드의 1/3 칸이라 "그랜드마스터"/"Grandmaster"/"Unranked" 가
+ * 그대로는 안 들어간다. 잘라내면(truncate) "그랜드…" 가 되어 티어를 못 읽으므로,
+ * 긴 이름은 글자 크기를 줄여서 **통째로** 보여준다.
+ */
+function fitSize(label: string): number {
+  return label.length <= 6 ? 18 : label.length <= 9 ? 14 : 11
+}
+function TierTile({ t, lang }: { t: (kr: string, en: string) => string; lang: string }) {
+  const [tier, setTier] = useState<TierId | null>(null)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    setTier(loadTierState()?.tier ?? null)
+    setLoaded(true)
+    let alive = true
+    syncTierFromServer().then(m => {
+      if (alive) setTier(m.state?.tier ?? null)
+    })
+    return () => { alive = false }
+  }, [])
+
+  // 로딩 중에 "언랭" 을 먼저 그리면 이미 배치고사를 본 학생에게 한 번 번쩍인다.
+  if (!loaded) return <div className="rounded-xl bg-orange-50 p-3" />
+
+  if (!tier) {
+    const unranked = t("언랭", "Unranked")
+    return (
+      <Link
+        href="/tier/placement"
+        className="block rounded-xl bg-gray-100 p-3 text-center hover:bg-gray-200"
+      >
+        <div className="mx-auto mb-1 text-xl leading-5">❔</div>
+        <p className="font-bold leading-tight text-gray-500" style={{ fontSize: fitSize(unranked) }}>
+          {unranked}
+        </p>
+        {/* break-keep: 안 주면 "배치고사 보" / "기" 로 단어 한가운데가 끊긴다. */}
+        <p className="mt-0.5 break-keep text-xs leading-tight text-gray-500">
+          {t("배치고사 보기", "Take placement")}
+        </p>
+      </Link>
+    )
+  }
+
+  const info = tierInfo(tier)
+  const label = tierLabel(tier, lang)
+  return (
+    <Link
+      href="/tier"
+      className="block rounded-xl p-3 text-center hover:brightness-95"
+      style={{ background: info.tint }}
+    >
+      <div className="mx-auto mb-1 text-xl leading-5">{info.emoji}</div>
+      <p
+        className="font-bold leading-tight"
+        style={{ color: info.color, fontSize: fitSize(label) }}
+      >
+        {label}
+      </p>
+      <p className="mt-0.5 text-xs text-gray-500">{t("티어", "Tier")}</p>
+    </Link>
+  )
+}
+
 export default function ProfilePage() {
   const { user, profile, isAuthenticated, isLoading, refreshProfile } = useAuth()
-  const { level, totalXp, dailyStreak, xpInCurrentLevel, isStreakAtRisk } = useGamification()
+  // level / xpInCurrentLevel 은 일부러 꺼내지 않는다 — 학생 화면에서 숫자 레벨을
+  // 없애고 티어 하나만 보여주기로 했다(`lib/tier-system.ts` 참고). 적립·계산은
+  // 그대로 돌아가고 표시만 빠진다.
+  const { totalXp, dailyStreak, isStreakAtRisk } = useGamification()
   const { t, lang } = useLanguage()
   const isEn = lang === "en"
   const sz = (kr: string, en: string) => isEn ? en : kr
@@ -169,11 +246,7 @@ export default function ProfilePage() {
             <Card className="p-4 border-2 border-gray-100">
               <h3 className="font-bold text-gray-700 mb-3 text-sm">{t("내 학습 기록", "My Progress")}</h3>
               <div className="grid grid-cols-3 gap-3">
-                <div className="text-center p-3 rounded-xl bg-orange-50">
-                  <Trophy className="w-5 h-5 text-orange-500 mx-auto mb-1" />
-                  <p className="text-lg font-bold text-orange-600">Lv.{level}</p>
-                  <p className="text-xs text-gray-500">{t("레벨", "Level")}</p>
-                </div>
+                <TierTile t={t} lang={lang} />
                 <div className="text-center p-3 rounded-xl bg-purple-50">
                   <Zap className="w-5 h-5 text-purple-500 mx-auto mb-1" />
                   <p className="text-lg font-bold text-purple-600">{totalXp}</p>
@@ -269,11 +342,7 @@ export default function ProfilePage() {
         <Card className="p-4 border-2 border-gray-100">
           <h3 className="font-bold text-gray-700 mb-3">{t("학습 통계", "Stats")}</h3>
           <div className="grid grid-cols-3 gap-3">
-            <div className="text-center p-3 rounded-xl bg-orange-50">
-              <Trophy className="w-5 h-5 text-orange-500 mx-auto mb-1" />
-              <p className="text-lg font-bold text-orange-600">Lv.{level}</p>
-              <p className="text-xs text-gray-500">{xpInCurrentLevel}/100 XP</p>
-            </div>
+            <TierTile t={t} lang={lang} />
             <div className="text-center p-3 rounded-xl bg-purple-50">
               <Zap className="w-5 h-5 text-purple-500 mx-auto mb-1" />
               <p className="text-lg font-bold text-purple-600">{totalXp}</p>
