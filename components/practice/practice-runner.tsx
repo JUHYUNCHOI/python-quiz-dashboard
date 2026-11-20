@@ -10,6 +10,7 @@ import { localizeProblem } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { useIsOwner } from "@/components/owner-only-guard"
+import { recordVerifiedSolve } from "@/lib/tier-store"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
@@ -352,6 +353,10 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
       const passed = newResults.every(r => r.passed)
       setAllPassed(passed)
       if (passed) {
+        // 티어 승급 카운트의 **유일한** 기록 지점. 수동 체크박스가 쓰는
+        // practice-solved / algo-*-contest-solved 와 달리 여기는 전체
+        // 테스트케이스 통과만 통과로 적는다.
+        recordVerifiedSolve(problem.id)
         const starred = hintsShown === 0 && !showSolution && !scaffoldShown
         onSuccess?.(starred)
       } else {
