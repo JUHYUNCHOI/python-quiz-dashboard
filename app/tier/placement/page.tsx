@@ -110,10 +110,14 @@ export default function PlacementPage() {
           >
             {tierLabel(tier, lang)}
           </div>
+          {/* 분모는 PLACEMENT_LENGTH(12)가 아니라 **실제로 낸 문항 수**다.
+              이분 탐색이 3번에 끝나면 9문항만 나가는데, 그때 "0 / 12" 라고
+              쓰면 안 낸 3문항을 틀린 것처럼 보여 준다. (실측: 전부 오답인
+              학생은 9문항에서 끝났는데 화면은 0/12 라고 했다.) */}
           <div className="mt-4 text-sm text-gray-700">
             {t(
-              `${PLACEMENT_LENGTH}문항 중 ${correctCount(state)}문항 정답`,
-              `${correctCount(state)} of ${PLACEMENT_LENGTH} correct`,
+              `${state.answers.length}문항 중 ${correctCount(state)}문항 정답`,
+              `${correctCount(state)} of ${state.answers.length} correct`,
             )}
           </div>
         </div>
