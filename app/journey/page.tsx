@@ -26,6 +26,8 @@ import {
 import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
 import { useGamification } from "@/hooks/use-gamification"
 import { PythonDiagnosticQuiz } from "@/components/python-diagnostic-quiz"
+import { loadTierState, type TierState } from "@/lib/tier-store"
+import { tierInfo, tierLabel } from "@/lib/tier-system"
 
 // ── 6 스테이지 좌표 (viewBox 100×180) ────────────────────────────
 interface MapPlacement {
@@ -363,6 +365,16 @@ export default function JourneyPage() {
     return () => { cancelled = true }
   }, [isAuthenticated, user])
 
+  // 티어는 localStorage 에서만 읽는다. 서버 왕복을 기다리면 이미 배치고사를 본
+  // 학생에게도 "배치고사 보세요" 카드가 한 번 번쩍인다. 기기 간 동기화는 /tier 가 한다.
+  // tierLoaded 전에는 아무것도 그리지 않는다 — 둘 중 어느 카드를 띄울지 모르는 상태.
+  const [tierState, setTierState] = useState<TierState | null>(null)
+  const [tierLoaded, setTierLoaded] = useState(false)
+  useEffect(() => {
+    setTierState(loadTierState())
+    setTierLoaded(true)
+  }, [])
+
   const hasCpp = hasCppTrackProgress(completedIds)
   const isFresh = completedIds.size === 0
 
@@ -647,6 +659,66 @@ export default function JourneyPage() {
             </div>
           </div>
         )}
+
+        {/* 🏅 배치고사 / 내 티어 — 로그인한 학생이 처음 보는 화면의 맨 위.
+            티어가 없으면 배치고사가 이 화면에서 가장 큰 블록이다. 배치고사를
+            안 본 학생에게 문제 목록을 먼저 보여 주면 자기 수준이 어디인지
+            모르는 채로 아무 문제나 열게 된다. 보고 나면 티어 요약으로 줄어든다. */}
+        {tierLoaded && !tierState && (
+          <Link
+            href="/tier/placement"
+            className="block mb-4 p-5 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-xl shadow-indigo-200/60 hover:shadow-2xl active:scale-[0.99] transition-all"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/25 rounded-xl flex items-center justify-center text-2xl sm:text-3xl shrink-0">
+                🏅
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold opacity-90 mb-0.5">
+                  {t("가장 먼저 할 일", "Do this first")}
+                </p>
+                <p className="text-lg sm:text-xl font-black leading-tight break-keep">
+                  {t("배치고사로 내 티어 정하기", "Take the placement test")}
+                </p>
+                <p className="text-[11px] sm:text-xs opacity-90 mt-1 break-keep">
+                  {t(
+                    "12문항이면 끝 — 내 수준에 맞는 문제부터 바로 풀 수 있어요.",
+                    "Just 12 questions — then start at problems that match your level.",
+                  )}
+                </p>
+              </div>
+              <span className="text-2xl sm:text-3xl shrink-0">→</span>
+            </div>
+          </Link>
+        )}
+
+        {tierLoaded && tierState && (() => {
+          const info = tierInfo(tierState.tier)
+          return (
+            <Link
+              href="/tier"
+              className="block mb-3 rounded-2xl border-2 border-amber-200 bg-white/70 backdrop-blur-sm px-4 py-3 hover:border-amber-400 hover:shadow-md transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl shrink-0">{info.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <p className={cn(
+                    "font-bold text-amber-700 uppercase tracking-wider",
+                    lang === "en" ? "text-[11px]" : "text-[9px]",
+                  )}>
+                    {t("나의 티어", "My Tier")}
+                  </p>
+                  <p className="font-black text-amber-900 truncate text-sm sm:text-base">
+                    {tierLabel(tierState.tier, lang)}
+                  </p>
+                </div>
+                <span className="shrink-0 text-[11px] font-bold text-amber-700 underline decoration-dotted">
+                  {t("내 티어 문제", "My problems")}
+                </span>
+              </div>
+            </Link>
+          )
+        })()}
 
         {/* 🧗 문제 풀기 진입 — 통합 경로(/course/next)로. 레슨 여정과 구분(문제/도전). 정적 링크만(추가 전용). */}
         <a href="/course/next" className="block mb-3 rounded-2xl border-2 border-indigo-300 bg-indigo-50 px-4 py-3 hover:border-indigo-500 hover:shadow-md transition-all">
