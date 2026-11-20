@@ -4,6 +4,7 @@
 // P1(2026-06-23): 접근성(aria·focus·대비·시맨틱) + 필터 기본 접기.
 
 import { useState, useMemo, useEffect } from "react";
+import Link from "next/link";
 import { Header } from "@/components/header";
 import { BottomNav } from "@/components/bottom-nav";
 import { LADDER } from "./ladder-data";
@@ -191,6 +192,31 @@ export default function LadderPage() {
           {t("로 모았어요 — 점프 없이 다음 1개씩. 헷갈리면 아래 ", " — one at a time, no jumps. Not sure where to start? Try ")}
           <b>{t("⭐ 오늘 할 것", "⭐ Today's pick")}</b>{t("부터.", " below.")}
         </p>
+
+        {/* 🏅 티어 입구 — 모바일 탭바는 5개로 고정이라(components/use-nav.ts)
+            여기서 들어간다. 문제를 찾으러 온 학생이 지나가는 화면이라 자연스럽다. */}
+        <Link
+          href="/tier"
+          style={{
+            display: "flex", alignItems: "center", gap: 12, marginTop: 16,
+            padding: "14px 16px", borderRadius: 14, textDecoration: "none",
+            border: "1px solid #fed7aa", background: "#fff7ed",
+          }}
+        >
+          <span style={{ fontSize: 26 }} aria-hidden>🏅</span>
+          <span style={{ flex: 1, minWidth: 0 }}>
+            <span style={{ display: "block", fontSize: 14, fontWeight: 800, color: "#9a3412" }}>
+              {t("내 티어 · 배치고사", "My tier · Placement test")}
+            </span>
+            <span style={{ display: "block", fontSize: 12, color: "#b45309", marginTop: 2, wordBreak: "keep-all" }}>
+              {t(
+                "12문항으로 티어를 정하고, 내 티어 문제 10개를 맞히면 승급해요.",
+                "12 questions set your tier. Solve 10 at your tier to rank up.",
+              )}
+            </span>
+          </span>
+          <span style={{ fontSize: 16, color: "#ea580c" }} aria-hidden>→</span>
+        </Link>
 
         {/* ⭐ 오늘 할 것 1개 */}
         {next ? (() => {
