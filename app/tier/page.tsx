@@ -16,7 +16,7 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
 import {
-  TIER_IDS, PROMOTION_TARGET, tierInfo, tierLabel, tierRank,
+  TIER_IDS, PROMOTION_TARGET, tierInfo, tierLabel, tierRank, tierProblemTitle,
   problemsInTier, promotionPool, type TierId, type TierProblem,
 } from "@/lib/tier-system"
 import {
@@ -248,7 +248,7 @@ function ProblemList({
   role: "promotion" | "practice"
   solved?: boolean
 }) {
-  const { t } = useLanguage()
+  const { lang, t } = useLanguage()
 
   if (items.length === 0) {
     return (
@@ -269,7 +269,7 @@ function ProblemList({
             }`}
           >
             <span className="flex-1 truncate text-sm font-semibold text-gray-800">
-              {p.title}
+              {tierProblemTitle(p, lang)}
             </span>
             {role === "practice" && (
               <span className="flex-shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-bold text-gray-600">

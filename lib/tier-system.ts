@@ -98,6 +98,17 @@ export interface TierProblem extends LadderItem {
   tier: TierId
   /** 앱 안에서 테스트케이스로 채점되는 문제인가. 승급 카운트는 이것만 센다. */
   graded: boolean
+  /**
+   * 영어 제목. `LadderItem.title` 은 한국어뿐이라 영어로 보면 목록 전체가
+   * 한국어로 남는다 (실측: 영어 모드에서 40개 전부 한국어). 문제 은행 쪽
+   * `PracticeProblem.en.title` 에는 채점 가능한 716개 전부 영어 제목이 있다.
+   */
+  titleEn?: string
+}
+
+/** 화면에 쓸 제목. 영어 제목이 없으면 한국어로 떨어진다. */
+export function tierProblemTitle(p: TierProblem, lang: string): string {
+  return lang === "en" ? (p.titleEn ?? p.title) : p.title
 }
 
 /**
@@ -111,22 +122,26 @@ export interface TierProblem extends LadderItem {
  * 그래서 "우리 문제 은행에 테스트케이스를 가진 코드 문제로 실재하는가"만 본다.
  * (측정 2026-11-19: 티어당 55~86개 — 10개 승급 조건에 막다른 티어가 없다.)
  */
-const GRADABLE_IDS: Set<string> = (() => {
-  const s = new Set<string>()
-  for (const c of ALL_CLUSTERS) {
-    for (const p of c.problems) {
-      if (p.type === "mcq") continue
-      if (p.testCases && p.testCases.length > 0) s.add(p.id)
-    }
+const GRADABLE_IDS: Set<string> = new Set()
+const EN_TITLES = new Map<string, string>()
+for (const c of ALL_CLUSTERS) {
+  for (const p of c.problems) {
+    if (p.en?.title) EN_TITLES.set(p.id, p.en.title)
+    if (p.type === "mcq") continue
+    if (p.testCases && p.testCases.length > 0) GRADABLE_IDS.add(p.id)
   }
-  return s
-})()
+}
 
 function isGraded(p: LadderItem): boolean {
   return !p.external && GRADABLE_IDS.has(p.id)
 }
 
-const ALL: TierProblem[] = LADDER.map(p => ({ ...p, tier: tierOfLevel(p.level), graded: isGraded(p) }))
+const ALL: TierProblem[] = LADDER.map(p => ({
+  ...p,
+  tier: tierOfLevel(p.level),
+  graded: isGraded(p),
+  titleEn: EN_TITLES.get(p.id),
+}))
 
 const BY_TIER = new Map<TierId, TierProblem[]>(TIER_IDS.map(id => [id, []]))
 for (const p of ALL) BY_TIER.get(p.tier)!.push(p)
