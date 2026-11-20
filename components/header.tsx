@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { LanguageToggle } from "@/components/language-toggle"
-import { Trophy, Flame, LogIn } from "lucide-react"
+import { Flame, LogIn } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
+import { TierBadge } from "@/components/tier-badge"
 import { useLanguage } from "@/contexts/language-context"
 import { getWrongBank, syncWrongBankFromSupabase } from "@/lib/mark-lesson-complete"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
@@ -14,7 +15,8 @@ import { usePathname } from "next/navigation"
 
 export function Header() {
   const { profile, isAuthenticated, isLoading } = useAuth()
-  const { level, dailyStreak } = useGamification()
+  // level 은 일부러 꺼내지 않는다 — 학생 화면에 숫자 레벨을 띄우지 않는다(TierBadge 참고).
+  const { dailyStreak } = useGamification()
   const { lang, t } = useLanguage()
   const pathname = usePathname()
   const isTeacher = useEffectiveIsTeacher()
@@ -61,9 +63,11 @@ export function Header() {
       isInQuestProblem ? "relative" : "sticky top-0 z-40"
     )}>
       <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-4">
+        {/* 375px 에서 오른쪽 칩들이 자리를 먹으면 이 블록이 줄어드는데, 한글은 글자
+            단위로 끊겨 「코/드/린」이 된다. `break-keep` 으로 낱자 분리만 막는다. */}
         <Link href="/" className="flex items-center gap-2">
           <div className="text-2xl md:text-3xl">🦒</div>
-          <div>
+          <div className="break-keep">
             <h1 className="text-base md:text-lg font-bold text-gray-800">{t("코드린", "Coderin")}</h1>
             {isAuthenticated && <p className="text-xs md:text-sm text-gray-600">{displayName}{t("님", "")}</p>}
           </div>
@@ -93,16 +97,13 @@ export function Header() {
                   <span className="text-sm font-bold text-amber-800">{t("선생님", "Teacher")}</span>
                 </div>
               )}
-              {/* 레벨/불꽃/창고 — 데스크탑에서는 헤더 자체가 숨겨지고 사이드바 하단에 표시됨(아래 모바일용) */}
+              {/* 티어/불꽃/창고 — 데스크탑에서는 헤더 자체가 숨겨지고 사이드바 하단에 표시됨(아래 모바일용) */}
               <div className="flex items-center gap-1.5">
-                <div className="flex items-center gap-1.5 rounded-full bg-orange-100 px-3 py-2 min-h-[44px]">
-                  <Trophy className="h-4 w-4 text-orange-600" />
-                  <span className="text-sm font-semibold text-orange-700">Lv.{level}</span>
-                </div>
+                <TierBadge compact className="min-h-[44px]" />
 
                 <div className="flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-2 min-h-[44px]">
                   <Flame className="h-4 w-4 text-red-600" />
-                  <span className="text-sm font-semibold text-red-700">{dailyStreak}{t("일", "d")}</span>
+                  <span className="whitespace-nowrap text-sm font-semibold text-red-700">{dailyStreak}{t("일", "d")}</span>
                 </div>
 
                 {/* 창고 — 0 이면 회색 (발견용), 있으면 빨강 + 카운트 */}

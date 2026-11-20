@@ -2,22 +2,24 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Trophy, Flame, LogIn } from "lucide-react"
+import { Flame, LogIn } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useNavItems, isNavActive } from "./use-nav"
 import { LanguageToggle } from "@/components/language-toggle"
+import { TierBadge } from "@/components/tier-badge"
 import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
 
 // 데스크탑(md+) 전용 좌측 사이드바. 모바일에서는 숨기고 BottomNav(하단 탭바)가 대신 보임.
 // 루트 레이아웃에서 한 번 렌더 → 모든 페이지에 적용 (페이지별 수정 없음).
-// 데스크탑에서는 글로벌 헤더를 숨기므로(빈 바 겹침 방지) 언어/로그인/레벨을 모두 여기서 담는다.
+// 데스크탑에서는 글로벌 헤더를 숨기므로(빈 바 겹침 방지) 언어/로그인/티어를 모두 여기서 담는다.
 export function DesktopSidebar() {
   const pathname = usePathname()
   const navItems = useNavItems()
   const { isAuthenticated, isLoading } = useAuth()
-  const { level, dailyStreak } = useGamification()
+  // level 은 일부러 꺼내지 않는다 — 학생 화면에 숫자 레벨을 띄우지 않는다(TierBadge 참고).
+  const { dailyStreak } = useGamification()
   const { t } = useLanguage()
 
   // /quest/[problemId] 안에서는 글로벌 언어 토글 숨김 (App 리셋 방지 — 헤더와 동일 규칙)
@@ -52,7 +54,7 @@ export function DesktopSidebar() {
         })}
       </nav>
 
-      {/* 하단: 언어 · (로그인 / 레벨·불꽃·창고) — 글로벌 헤더에서 옮겨옴 */}
+      {/* 하단: 언어 · (로그인 / 티어·불꽃·창고) — 글로벌 헤더에서 옮겨옴 */}
       <div className="shrink-0 border-t border-gray-100 px-3 py-3 space-y-2.5">
         {!isInQuestProblem && (
           <div className="flex justify-start">
@@ -71,10 +73,8 @@ export function DesktopSidebar() {
 
         {isAuthenticated && (
           <>
-            <div className="flex items-center gap-2">
-              <span className="flex items-center gap-1.5 rounded-full bg-orange-100 px-2.5 py-1.5 text-xs font-semibold text-orange-700">
-                <Trophy className="h-3.5 w-3.5" /> Lv.{level}
-              </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <TierBadge className="px-2.5 py-1.5 text-xs" />
               {dailyStreak > 0 && (
                 <span className="flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1.5 text-xs font-semibold text-red-700">
                   <Flame className="h-3.5 w-3.5" /> {dailyStreak}{t("일", "d")}
