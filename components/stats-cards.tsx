@@ -1,16 +1,36 @@
 "use client"
 
-import { Flame, Star, BookOpen, Target } from "lucide-react"
+import { Flame, BookOpen, Target, type LucideIcon } from "lucide-react"
+import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
 import { useEffect, useState } from "react"
 import { getCompletedLessons, pythonParts, cppParts } from "@/lib/curriculum-data"
 import { getQuizHistory } from "@/lib/quiz-history"
+import { useTier } from "@/hooks/use-tier"
+import { tierInfo, tierLabel } from "@/lib/tier-system"
+
+type Stat = {
+  label: string
+  value: string
+  sub: string
+  gradient: string
+  iconBg: string
+  iconColor: string
+  /** 아이콘 자리 — 아이콘 대신 이모지를 쓰는 칸(티어)도 있다. */
+  icon?: LucideIcon
+  emoji?: string
+  /** 누를 수 있는 칸이면 지정. 없으면 그냥 숫자 카드. */
+  href?: string
+  valueColor?: string
+}
 
 export function StatsCards() {
-  const { level, xpInCurrentLevel, totalXp, dailyStreak } = useGamification()
-  const { t } = useLanguage()
+  // level / xpInCurrentLevel 은 일부러 쓰지 않는다 — 학생이 보는 실력 지표는 티어 하나다.
+  const { totalXp, dailyStreak } = useGamification()
+  const { t, lang } = useLanguage()
+  const { tier, loaded: tierLoaded } = useTier()
   const [completedCount, setCompletedCount] = useState(0)
   const [recentAccuracy, setRecentAccuracy] = useState<number | null>(null)
 
@@ -28,15 +48,35 @@ export function StatsCards() {
     }
   }, [])
 
-  const stats = [
+  /**
+   * 첫 칸은 예전 `레벨 / Lv.125` 자리다. 학생에게 보이는 실력 지표는 티어 하나이므로
+   * 티어 이름을 그 자리에 넣고, 아직 배치고사를 안 봤으면 거기로 보낸다.
+   * 로딩 중에는 "언랭" 이 번쩍이지 않도록 값을 비워 둔다.
+   */
+  const tierCard = tier
+    ? {
+        label: t("티어", "Tier"),
+        value: tierLabel(tier, lang),
+        valueColor: tierInfo(tier).color,
+        sub: t("자기 티어 문제 10개 맞히면 승급", "Solve 10 at your tier to rank up"),
+        emoji: tierInfo(tier).emoji,
+        href: "/tier",
+      }
+    : {
+        label: t("티어", "Tier"),
+        value: tierLoaded ? t("언랭", "Unranked") : "",
+        valueColor: "#9ca3af",
+        sub: t("배치고사를 보면 티어가 정해져요", "Take the placement test to get ranked"),
+        emoji: "🎯",
+        href: "/tier/placement",
+      }
+
+  const stats: Stat[] = [
     {
-      label: t("레벨", "Level"),
-      value: `Lv.${level}`,
-      sub: t(`다음 레벨까지 ${100 - xpInCurrentLevel} XP`, `${100 - xpInCurrentLevel} XP to next level`),
-      icon: Star,
-      gradient: "from-lavender-400 to-lavender-500",
-      iconBg: "bg-lavender-100",
-      iconColor: "text-lavender-500",
+      ...tierCard,
+      gradient: "from-gray-300 to-gray-400",
+      iconBg: "bg-gray-100",
+      iconColor: "text-gray-500",
     },
     {
       label: t("총 XP", "Total XP"),
@@ -71,10 +111,9 @@ export function StatsCards() {
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat, index) => {
         const Icon = stat.icon
-        return (
+        const card = (
           <Card
-            key={index}
-            className="group relative overflow-hidden border-0 bg-white p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="group relative h-full overflow-hidden border-0 bg-white p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <div
               className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-10`}
@@ -82,15 +121,25 @@ export function StatsCards() {
             <div className="relative flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">{stat.label}</p>
-                <p className="mt-2 text-3xl font-bold">{stat.value}</p>
+                <p
+                  className="mt-2 text-3xl font-bold"
+                  style={stat.valueColor ? { color: stat.valueColor } : undefined}
+                >
+                  {stat.value}
+                </p>
                 <p className="mt-1 text-xs text-muted-foreground">{stat.sub}</p>
               </div>
-              <div className={`rounded-full ${stat.iconBg} p-3`}>
-                <Icon className={`h-6 w-6 ${stat.iconColor}`} />
+              <div className={`flex h-12 w-12 items-center justify-center rounded-full ${stat.iconBg}`}>
+                {Icon
+                  ? <Icon className={`h-6 w-6 ${stat.iconColor}`} />
+                  : <span className="text-xl leading-none">{stat.emoji}</span>}
               </div>
             </div>
           </Card>
         )
+        return stat.href
+          ? <Link key={index} href={stat.href}>{card}</Link>
+          : <div key={index}>{card}</div>
       })}
     </div>
   )
