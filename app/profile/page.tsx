@@ -5,8 +5,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
-import { Card } from "@/components/ui/card"
-import { LogOut, Flame, Zap, ShieldCheck, Users, LogIn, Globe } from "lucide-react"
+import { LogOut, LogIn } from "lucide-react"
 import Link from "next/link"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
@@ -55,22 +54,72 @@ function TeacherModeToggle({ t }: { t: (kr: string, en: string) => string }) {
   )
 }
 
+/* ── 화면 언어 ──────────────────────────────────────────────────────────────
+ *
+ * 이 화면은 "성적표" 다. 대시보드 템플릿처럼 색 타일을 깔면 7가지 색이 동시에
+ * 소리를 질러서 **무엇이 중요한지가 사라진다**. 그래서 여기서는
+ *
+ *   - 상자(Card)를 겹치지 않는다. 구역은 작은 라벨 + 실선 한 줄로 나눈다.
+ *   - 색은 두 가지만 쓴다: 먹색(stone) = 내용, 주황 = 누를 수 있는 것.
+ *     예외는 **티어 색** 하나 — 실버/골드/플래티넘은 색 자체가 정보다.
+ *   - 위계는 색이 아니라 **활자 크기**로 만든다. 숫자는 크고, 라벨은 작다.
+ */
+
+/** 구역 머리말. 테두리 상자 대신 라벨 + 밑줄 한 줄. */
+function SectionLabel({ children, right }: { children: React.ReactNode; right?: React.ReactNode }) {
+  return (
+    <div className="flex items-baseline justify-between gap-3 border-b border-stone-900/10 pb-2">
+      <h3 className="text-[11px] font-semibold tracking-[0.12em] text-stone-500">{children}</h3>
+      {right && <span className="shrink-0 text-[11px] tabular-nums text-stone-400">{right}</span>}
+    </div>
+  )
+}
+
 /**
- * 통계 카드의 첫 칸 — 예전 `Lv.3` 자리.
+ * 한 줄에 선 값들의 공통 높이.
+ *
+ * 티어 이름은 길이에 따라 글자 크기가 줄어든다(아래 `TierTile`). 그래도 그 아래
+ * 라벨("티어" / "총 XP" / "연속 학습")은 한 줄로 서야 하므로 값 칸의 높이를
+ * 고정하고 **바닥을 맞춘다**. 안 그러면 그랜드마스터인 학생만 라벨 줄이 혼자 뜬다.
+ */
+const VALUE_ROW = "flex h-[26px] items-end"
+
+/** 숫자 하나. 값은 크게, 라벨은 작게 — 상자도 아이콘도 없다. */
+function Stat({ value, label, color }: { value: React.ReactNode; label: string; color?: string }) {
+  return (
+    <div className="min-w-0">
+      <div className={VALUE_ROW}>
+        <div
+          className="text-[26px] font-semibold leading-none tracking-tight tabular-nums text-stone-900"
+          style={color ? { color } : undefined}
+        >
+          {value}
+        </div>
+      </div>
+      <div className="mt-2 break-keep text-[11px] leading-tight text-stone-500">{label}</div>
+    </div>
+  )
+}
+
+/**
+ * 칸(모바일 기준 ~100px)에 한 줄로 들어가는 글자 크기.
+ *
+ * 글자 '수'로 정하면 "Gold I"(6자) 와 "그랜드마스터"(6자) 가 같은 26px 가 되는데,
+ * 한글은 글자당 폭이 두 배라 "그랜드마 / 스터" 로 쪼개진다. 그래서 **한글을 2칸으로
+ * 세어** 실제 폭으로 정한다. 잘라내면(truncate) 티어를 못 읽으므로 자르지 않는다.
+ */
+function fitSize(label: string): number {
+  const w = [...label].reduce((n, c) => n + (/[\u3000-\u303f\uac00-\ud7af\u4e00-\u9fff]/.test(c) ? 2 : 1), 0)
+  return w <= 7 ? 26 : w <= 9 ? 20 : w <= 11 ? 16 : 15
+}
+
+/**
+ * 통계 줄의 첫 칸 — 예전 `Lv.3` 자리.
  *
  * 숫자 레벨 대신 티어 하나만 보여준다. 배치고사를 안 본 학생에게는 빈칸이나
  * `Lv.0` 대신 **언랭(Unranked)** 을 띄우고, 누르면 배치고사로 보낸다 —
  * 빈칸은 "아직 안 한 일" 이라는 신호를 못 준다.
  */
-
-/**
- * 타일은 3칸 그리드의 1/3 칸이라 "그랜드마스터"/"Grandmaster"/"Unranked" 가
- * 그대로는 안 들어간다. 잘라내면(truncate) "그랜드…" 가 되어 티어를 못 읽으므로,
- * 긴 이름은 글자 크기를 줄여서 **통째로** 보여준다.
- */
-function fitSize(label: string): number {
-  return label.length <= 6 ? 18 : label.length <= 9 ? 14 : 11
-}
 function TierTile({ t, lang }: { t: (kr: string, en: string) => string; lang: string }) {
   const [tier, setTier] = useState<TierId | null>(null)
   const [loaded, setLoaded] = useState(false)
@@ -86,23 +135,23 @@ function TierTile({ t, lang }: { t: (kr: string, en: string) => string; lang: st
   }, [])
 
   // 로딩 중에 "언랭" 을 먼저 그리면 이미 배치고사를 본 학생에게 한 번 번쩍인다.
-  if (!loaded) return <div className="rounded-xl bg-orange-50 p-3" />
+  if (!loaded) return <div className="h-[47px]" />
 
   if (!tier) {
     const unranked = t("언랭", "Unranked")
     return (
-      <Link
-        href="/tier/placement"
-        className="block rounded-xl bg-gray-100 p-3 text-center hover:bg-gray-200"
-      >
-        <div className="mx-auto mb-1 text-xl leading-5">❔</div>
-        <p className="font-bold leading-tight text-gray-500" style={{ fontSize: fitSize(unranked) }}>
-          {unranked}
-        </p>
-        {/* break-keep: 안 주면 "배치고사 보" / "기" 로 단어 한가운데가 끊긴다. */}
-        <p className="mt-0.5 break-keep text-xs leading-tight text-gray-500">
+      <Link href="/tier/placement" className="group block min-w-0">
+        <div className={VALUE_ROW}>
+          <div
+            className="whitespace-nowrap font-semibold leading-none tracking-tight text-stone-400"
+            style={{ fontSize: fitSize(unranked) }}
+          >
+            {unranked}
+          </div>
+        </div>
+        <div className="mt-2 break-keep text-[11px] leading-tight text-orange-600 underline decoration-orange-300 underline-offset-2 group-hover:decoration-orange-600">
           {t("배치고사 보기", "Take placement")}
-        </p>
+        </div>
       </Link>
     )
   }
@@ -110,19 +159,18 @@ function TierTile({ t, lang }: { t: (kr: string, en: string) => string; lang: st
   const info = tierInfo(tier)
   const label = tierLabel(tier, lang)
   return (
-    <Link
-      href="/tier"
-      className="block rounded-xl p-3 text-center hover:brightness-95"
-      style={{ background: info.tint }}
-    >
-      <div className="mx-auto mb-1 text-xl leading-5">{info.emoji}</div>
-      <p
-        className="font-bold leading-tight"
-        style={{ color: info.color, fontSize: fitSize(label) }}
-      >
-        {label}
-      </p>
-      <p className="mt-0.5 text-xs text-gray-500">{t("티어", "Tier")}</p>
+    <Link href="/tier" className="group block min-w-0">
+      <div className={VALUE_ROW}>
+        <div
+          className="whitespace-nowrap font-semibold leading-none tracking-tight"
+          style={{ color: info.color, fontSize: fitSize(label) }}
+        >
+          {label}
+        </div>
+      </div>
+      <div className="mt-2 text-[11px] leading-tight text-stone-500 group-hover:text-orange-600">
+        {t("티어", "Tier")}
+      </div>
     </Link>
   )
 }
@@ -226,7 +274,7 @@ export default function ProfilePage() {
   }
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="flex items-center justify-center pt-20">
           <div className="text-[60px] animate-bounce">🦒</div>
@@ -238,56 +286,46 @@ export default function ProfilePage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
+      <div className="min-h-screen bg-background">
         <Header />
-        <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-md mx-auto space-y-4">
+        <main className="mx-auto w-full max-w-[560px] px-5 pb-24 pt-8 sm:px-6">
           {/* 게스트 통계 (localStorage 기반) */}
           {totalXp > 0 && (
-            <Card className="p-4 border-2 border-gray-100">
-              <h3 className="font-bold text-gray-700 mb-3 text-sm">{t("내 학습 기록", "My Progress")}</h3>
-              <div className="grid grid-cols-3 gap-3">
+            <section className="mb-10">
+              <SectionLabel>{t("내 학습 기록", "My Progress")}</SectionLabel>
+              <div className="grid grid-cols-3 gap-4 pt-5">
                 <TierTile t={t} lang={lang} />
-                <div className="text-center p-3 rounded-xl bg-purple-50">
-                  <Zap className="w-5 h-5 text-purple-500 mx-auto mb-1" />
-                  <p className="text-lg font-bold text-purple-600">{totalXp}</p>
-                  <p className="text-xs text-gray-500">{t("총 XP", "Total XP")}</p>
-                </div>
-                <div className="text-center p-3 rounded-xl bg-red-50">
-                  <Flame className="w-5 h-5 text-red-500 mx-auto mb-1" />
-                  <p className="text-lg font-bold text-red-600">{t(`${dailyStreak}일`, `${dailyStreak}d`)}</p>
-                  <p className="text-xs text-gray-500">{t("연속 학습", "Streak")}</p>
-                </div>
+                <Stat value={totalXp.toLocaleString()} label={t("총 XP", "Total XP")} />
+                <Stat value={t(`${dailyStreak}일`, `${dailyStreak}d`)} label={t("연속 학습", "Streak")} />
               </div>
-            </Card>
+            </section>
           )}
 
-          {/* 언어 설정 */}
-          <Card className="p-4 border-2 border-gray-100">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Globe className="w-5 h-5 text-gray-500" />
-                <span className="font-medium text-gray-700">{t("언어", "Language")}</span>
-              </div>
-              <LanguageToggle className="bg-gray-50" />
-            </div>
-          </Card>
-
-          {/* 로그인 안내 */}
-          <Card className="p-6 text-center">
-            <div className="text-[48px] mb-2">🦒</div>
-            <h2 className="text-base font-bold text-gray-800 mb-1">{t("로그인하면 기록이 동기화돼요", "Login to sync your progress")}</h2>
-            <p className="text-sm text-gray-500 mb-4">
-              {t("다른 기기에서도 이어하고,", "Continue on other devices,")}<br />
-              {t("선생님 반에 참가할 수 있어요", "and join your teacher's class")}
+          {/* 로그인 안내 — 이 화면에서 할 수 있는 단 하나의 행동이라 가장 크게 둔다. */}
+          <section className="mb-10">
+            <h2 className="break-keep text-[22px] font-semibold leading-snug tracking-tight text-stone-900">
+              {t("로그인하면 기록이 동기화돼요", "Log in to sync your progress")}
+            </h2>
+            <p className="mt-2 break-keep text-sm leading-relaxed text-stone-500">
+              {t("다른 기기에서도 이어하고, 선생님 반에 참가할 수 있어요.", "Continue on another device and join your teacher's class.")}
             </p>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all"
+              className="mt-5 inline-flex items-center gap-2 border-b-2 border-orange-500 pb-1 text-sm font-semibold text-orange-600 hover:border-orange-700 hover:text-orange-700"
             >
-              <LogIn className="w-4 h-4" />
-              {t("로그인하기", "Login")}
+              <LogIn className="h-4 w-4" />
+              {t("로그인하기", "Log in")}
             </Link>
-          </Card>
+          </section>
+
+          {/* 언어 설정 */}
+          <section>
+            <SectionLabel>{t("설정", "Settings")}</SectionLabel>
+            <div className="flex items-center justify-between pt-4">
+              <span className="text-sm text-stone-600">{t("언어", "Language")}</span>
+              <LanguageToggle className="bg-white" />
+            </div>
+          </section>
         </main>
         <BottomNav />
       </div>
@@ -295,68 +333,89 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
+    <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-[1000px] mx-auto">
-        {/* 🔥 Streak 끊김 알림 — 어제 안 들어왔으면 격려 */}
-        {isStreakAtRisk && dailyStreak > 0 && (
-          <div className="mb-4 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 px-3 py-2.5 flex items-center gap-2">
-            <span className="text-2xl shrink-0">🔥</span>
-            <div className="flex-1 min-w-0">
-              <p className={cn("font-black text-red-700", sz("text-xs", "text-sm"))}>
-                {t(`${dailyStreak}일 연속 학습 — 어제 끊겼어요!`, `${dailyStreak}-day streak — broken yesterday!`)}
-              </p>
-              <p className={cn("text-red-600/80 mt-0.5 leading-snug break-keep", sz("text-[11px]", "text-xs"))}>
-                {t("오늘 한 강만 들어도 다시 1일 시작 — 천천히 다시 쌓아봐요.", "1 lesson today restarts your streak — take it slow!")}
-              </p>
-            </div>
-          </div>
-        )}
-        <div className="lg:flex lg:gap-8 lg:items-start">
-        {/* ── 왼쪽: 프로필 + 통계 ── */}
-        <div className="lg:w-72 lg:flex-shrink-0 space-y-4 mb-4 lg:mb-0">
-        {/* 프로필 카드 */}
-        <Card className="p-6 text-center border-2 border-orange-200">
+      <main className="mx-auto w-full max-w-[680px] px-5 pb-24 pt-8 sm:px-6">
+        {/* ── 신원 ── 이름이 이 화면의 제목이다. 아바타는 제목 옆 작은 표식. */}
+        <header className="flex items-center gap-4">
           {profile?.avatar_url ? (
             <img
               src={profile.avatar_url}
               alt={t("프로필", "Profile")}
-              className="w-20 h-20 rounded-full mx-auto mb-3 border-4 border-orange-200"
+              className="h-14 w-14 shrink-0 rounded-full object-cover"
             />
           ) : (
-            <div className="w-20 h-20 rounded-full mx-auto mb-3 bg-orange-100 flex items-center justify-center text-3xl">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-stone-900/5 text-2xl">
               🦒
             </div>
           )}
-          <h2 className="text-xl font-bold text-gray-800">{profile?.display_name || t("학습자", "Learner")}</h2>
-          <p className="text-sm text-gray-500 mt-1">{user?.email || ""}</p>
-          {/* 선생님 모드 토글 — DB role=teacher, 또는 owner(email). profile 조회가
-              느려도(timeout) owner 는 유지 (선생님 2026-07-17). */}
-          {(profile?.role === "teacher" || user?.email === OWNER_EMAIL) && (
-            <TeacherModeToggle t={t} />
-          )}
-        </Card>
-
-        {/* 통계 카드 */}
-        <Card className="p-4 border-2 border-gray-100">
-          <h3 className="font-bold text-gray-700 mb-3">{t("학습 통계", "Stats")}</h3>
-          <div className="grid grid-cols-3 gap-3">
-            <TierTile t={t} lang={lang} />
-            <div className="text-center p-3 rounded-xl bg-purple-50">
-              <Zap className="w-5 h-5 text-purple-500 mx-auto mb-1" />
-              <p className="text-lg font-bold text-purple-600">{totalXp}</p>
-              <p className="text-xs text-gray-500">{t("총 XP", "Total XP")}</p>
-            </div>
-            <div className="text-center p-3 rounded-xl bg-red-50">
-              <Flame className="w-5 h-5 text-red-500 mx-auto mb-1" />
-              <p className="text-lg font-bold text-red-600">{t(`${dailyStreak}일`, `${dailyStreak}d`)}</p>
-              <p className="text-xs text-gray-500">{t("연속 학습", "Streak")}</p>
-            </div>
+          <div className="min-w-0">
+            <h1 className="truncate text-[26px] font-semibold leading-tight tracking-tight text-stone-900">
+              {profile?.display_name || t("학습자", "Learner")}
+            </h1>
+            <p className="mt-0.5 truncate text-[13px] text-stone-500">{user?.email || ""}</p>
           </div>
-        </Card>
+        </header>
+        {/* 선생님 모드 토글 — DB role=teacher, 또는 owner(email). profile 조회가
+            느려도(timeout) owner 는 유지 (선생님 2026-07-17). */}
+        {(profile?.role === "teacher" || user?.email === OWNER_EMAIL) && (
+          <TeacherModeToggle t={t} />
+        )}
 
-        {/* 🏆 뱃지 카드 — 달성한 마일스톤 */}
+        {/* 🔥 Streak 끊김 — 상자를 치지 않는다. 왼쪽 굵은 선 하나로 충분하다. */}
+        {isStreakAtRisk && dailyStreak > 0 && (
+          <div className="mt-6 border-l-2 border-orange-500 pl-4">
+            <p className={cn("font-semibold text-stone-900", sz("text-sm", "text-sm"))}>
+              {t(`${dailyStreak}일 연속 학습 — 어제 끊겼어요`, `${dailyStreak}-day streak — broken yesterday`)}
+            </p>
+            <p className={cn("mt-1 break-keep leading-relaxed text-stone-500", sz("text-xs", "text-xs"))}>
+              {t("오늘 한 강만 들어도 다시 1일 시작 — 천천히 다시 쌓아봐요.", "1 lesson today restarts your streak — take it slow.")}
+            </p>
+          </div>
+        )}
+
+        {/* ── 현황 ── */}
+        <section className="mt-10">
+          <SectionLabel>{t("현황", "Standing")}</SectionLabel>
+          <div className="grid grid-cols-3 gap-4 pt-5">
+            <TierTile t={t} lang={lang} />
+            <Stat value={totalXp.toLocaleString()} label={t("총 XP", "Total XP")} />
+            <Stat value={t(`${dailyStreak}일`, `${dailyStreak}d`)} label={t("연속 학습", "Streak")} />
+          </div>
+        </section>
+
+        {/* ── 학습 요약 ── */}
+        <section className="mt-10">
+          <SectionLabel>{t("학습 요약", "Learning Summary")}</SectionLabel>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-7 pt-5 sm:grid-cols-4">
+            <Stat value={studySummary.completedLessons} label={t("수업 완료", "Lessons done")} />
+            <Stat
+              value={
+                studySummary.avgQuizScore !== null
+                  ? <>{studySummary.avgQuizScore}<span className="text-base font-medium text-stone-400">{t("점", "pt")}</span></>
+                  : <span className="text-stone-300">—</span>
+              }
+              label={t(`복습 평균 · ${studySummary.completedQuizzes}개`, `Quiz avg · ${studySummary.completedQuizzes}`)}
+            />
+            <Stat value={studySummary.practiceSolved} label={t("도전 푼 수", "Challenges solved")} />
+            <Link href="/missed" className="group min-w-0">
+              <div className="text-[26px] font-semibold leading-none tracking-tight tabular-nums text-stone-900">
+                {studySummary.bankRemaining}
+                {studySummary.bankMastered > 0 && (
+                  <span className="ml-1.5 text-base font-medium text-stone-400">
+                    +{studySummary.bankMastered}
+                  </span>
+                )}
+              </div>
+              <div className="mt-2 break-keep text-[11px] leading-tight text-orange-600 underline decoration-orange-300 underline-offset-2 group-hover:decoration-orange-600">
+                {t("문제 창고 · 남은+마스터", "Bank · left + mastered")}
+              </div>
+            </Link>
+          </div>
+        </section>
+
+        {/* 🏆 뱃지 — 달성한 마일스톤 */}
         {(() => {
           const badges = [
             { id: "first-lesson", emoji: "🎯", title: t("첫 수업 완료", "First lesson"), unlocked: studySummary.completedLessons >= 1 },
@@ -368,87 +427,42 @@ export default function ProfilePage() {
             { id: "streak-7", emoji: "🔥", title: t("7일 연속", "7-day streak"), unlocked: dailyStreak >= 7 },
             { id: "streak-30", emoji: "🌋", title: t("30일 연속", "30-day streak"), unlocked: dailyStreak >= 30 },
           ]
-          const unlockedCount = badges.filter(b => b.unlocked).length
+          const unlocked = badges.filter(b => b.unlocked)
           return (
-            <Card className="p-4 border-2 border-gray-100">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-700">🏆 {t("뱃지", "Badges")}</h3>
-                <span className="text-xs font-bold text-gray-500">{unlockedCount} / {badges.length}</span>
-              </div>
-              <div className="grid grid-cols-4 gap-2">
-                {badges.map(b => (
-                  <div
-                    key={b.id}
-                    title={b.title}
-                    className={cn(
-                      "aspect-square flex flex-col items-center justify-center rounded-xl text-center p-1 transition-all",
-                      b.unlocked
-                        ? "bg-gradient-to-br from-amber-50 to-orange-100 border-2 border-amber-300 shadow-sm"
-                        : "bg-gray-50 border-2 border-dashed border-gray-200 opacity-50"
-                    )}
-                  >
-                    <span className={cn("text-2xl", !b.unlocked && "grayscale")}>{b.emoji}</span>
-                    <span className={cn("text-[9px] font-bold leading-tight mt-0.5 line-clamp-1", b.unlocked ? "text-amber-700" : "text-gray-400")}>
+            <section className="mt-10">
+              <SectionLabel right={`${unlocked.length} / ${badges.length}`}>
+                {t("뱃지", "Badges")}
+              </SectionLabel>
+              {/* 못 받은 뱃지를 점선 상자로 깔면 화면의 절반이 "없음" 이 된다.
+                  받은 것만 적고, 남은 개수는 위에 숫자로 이미 있다. */}
+              {unlocked.length === 0 ? (
+                <p className="break-keep pt-4 text-sm text-stone-400">
+                  {t("첫 수업을 마치면 첫 뱃지가 열려요.", "Finish your first lesson to earn a badge.")}
+                </p>
+              ) : (
+                <ul className="flex flex-wrap gap-x-5 gap-y-2.5 pt-4">
+                  {unlocked.map(b => (
+                    <li key={b.id} className="flex items-center gap-1.5 text-[13px] text-stone-700">
+                      <span className="text-base leading-none">{b.emoji}</span>
                       {b.title}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </Card>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
           )
         })()}
 
-        {/* 📚 학습 요약 카드 — 수업/복습/도전/창고 한 눈에 */}
-        <Card className="p-4 border-2 border-gray-100">
-          <h3 className="font-bold text-gray-700 mb-3">📚 {t("학습 요약", "Learning Summary")}</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {/* 수업 완료 */}
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100">
-              <p className="text-2xl font-black text-emerald-600 tabular-nums">{studySummary.completedLessons}</p>
-              <p className={cn("font-bold text-emerald-700 mt-0.5", sz("text-xs", "text-sm"))}>📖 {t("수업 완료", "Lessons done")}</p>
-            </div>
-            {/* 복습 평균 점수 */}
-            <div className="p-3 rounded-xl bg-purple-50 border border-purple-100">
-              <p className="text-2xl font-black text-purple-600 tabular-nums">
-                {studySummary.avgQuizScore !== null ? studySummary.avgQuizScore : "—"}
-                {studySummary.avgQuizScore !== null && <span className="text-sm font-bold">{t("점", "pt")}</span>}
-              </p>
-              <p className={cn("font-bold text-purple-700 mt-0.5", sz("text-xs", "text-sm"))}>📝 {t(`복습 평균 (${studySummary.completedQuizzes}개)`, `Quiz avg (${studySummary.completedQuizzes})`)}</p>
-            </div>
-            {/* 도전 풀이 */}
-            <div className="p-3 rounded-xl bg-amber-50 border border-amber-100">
-              <p className="text-2xl font-black text-amber-600 tabular-nums">{studySummary.practiceSolved}</p>
-              <p className={cn("font-bold text-amber-700 mt-0.5", sz("text-xs", "text-sm"))}>🎯 {t("도전 푼 수", "Challenges solved")}</p>
-            </div>
-            {/* 문제 창고 — 클릭 가능 */}
-            <Link
-              href="/missed"
-              className="block p-3 rounded-xl bg-rose-50 border border-rose-100 hover:bg-rose-100 hover:border-rose-200 active:scale-[0.98] transition-all"
-            >
-              <p className="text-2xl font-black text-rose-600 tabular-nums">
-                {studySummary.bankRemaining}
-                {studySummary.bankMastered > 0 && (
-                  <span className="text-sm font-bold text-emerald-600 ml-1">+{studySummary.bankMastered}🌟</span>
-                )}
-              </p>
-              <p className={cn("font-bold text-rose-700 mt-0.5", sz("text-xs", "text-sm"))}>📚 {t("창고 (남은+마스터)", "Bank (left+mastered)")}</p>
-            </Link>
-          </div>
-        </Card>
-
-        {/* 📊 점수 차트 + 최근 복습 — 로딩 스켈레톤 */}
+        {/* 📊 점수 차트 — 로딩 스켈레톤 */}
         {recentReviewsLoading && (
-          <Card className="p-4 border-2 border-gray-100">
-            <div className="flex items-center justify-between mb-3">
-              <div className="h-5 bg-gray-100 rounded w-24 animate-pulse" />
-              <div className="h-4 bg-gray-100 rounded w-16 animate-pulse" />
-            </div>
-            <div className="flex items-end gap-1 h-24">
+          <section className="mt-10">
+            <SectionLabel>{t("점수 추이", "Score Trend")}</SectionLabel>
+            <div className="flex h-24 items-end gap-1.5 pt-5">
               {[...Array(10)].map((_, i) => (
-                <div key={i} className="flex-1 bg-gray-100 rounded-t animate-pulse" style={{ height: `${30 + Math.random() * 60}%` }} />
+                <div key={i} className="flex-1 animate-pulse bg-stone-900/5" style={{ height: `${30 + ((i * 17) % 60)}%` }} />
               ))}
             </div>
-          </Card>
+          </section>
         )}
 
         {/* 📊 점수 차트 — 최근 복습 막대 그래프 (시간 ←→ 오른쪽이 최신) */}
@@ -466,65 +480,61 @@ export default function ProfilePage() {
             : 0
           const trendDelta = lateAvg - earlyAvg
           return (
-            <Card className="p-4 border-2 border-gray-100">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-700">📊 {t("점수 차트", "Score Trend")}</h3>
-                <div className="flex items-baseline gap-2 text-xs">
-                  <span className="text-gray-500">{t("평균", "Avg")} <span className="font-black text-purple-600">{avg}{t("점", "pt")}</span></span>
-                  {chartData.length >= 4 && trendDelta !== 0 && (
-                    <span className={cn(
-                      "font-black",
-                      trendDelta > 0 ? "text-emerald-600" : "text-amber-600"
-                    )}>
-                      {trendDelta > 0 ? "↑" : "↓"} {Math.abs(trendDelta)}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-end gap-1 h-24 mb-1.5 relative">
-                {/* 70 점 가이드 라인 (passing 기준) */}
+            <section className="mt-10">
+              <SectionLabel
+                right={
+                  <>
+                    {t("평균", "Avg")} <span className="font-semibold text-stone-700">{avg}</span>
+                    {chartData.length >= 4 && trendDelta !== 0 && (
+                      <span className="ml-2 text-stone-500">
+                        {trendDelta > 0 ? "▲" : "▼"} {Math.abs(trendDelta)}
+                      </span>
+                    )}
+                  </>
+                }
+              >
+                {t("점수 추이", "Score Trend")}
+              </SectionLabel>
+              <div className="relative mt-5 flex h-24 items-end gap-1.5">
+                {/* 70점 기준선 — 막대에 색을 더 쓰는 대신 선 하나로 합격선을 보여준다. */}
                 <div
-                  className="absolute left-0 right-0 border-t-2 border-dashed border-gray-200 pointer-events-none"
+                  className="pointer-events-none absolute left-0 right-0 border-t border-stone-900/15"
                   style={{ bottom: "70%" }}
-                  title="70점"
                 />
-                {chartData.map((r, i) => {
-                  const barColor = r.score === 100 ? "bg-emerald-400 hover:bg-emerald-500"
-                    : r.score >= 70 ? "bg-purple-400 hover:bg-purple-500"
-                    : "bg-amber-400 hover:bg-amber-500"
-                  return (
-                    <div key={i} className="flex-1 flex flex-col items-center justify-end gap-0.5 group" title={`${r.score}${t("점", "pt")} · ${getLessonName(r.lesson_id, lang === "en" ? "en" : "ko")}`}>
-                      <div className="flex-1 w-full flex items-end relative">
-                        <div
-                          className={cn("w-full rounded-t transition-colors", barColor)}
-                          style={{ height: `${r.score}%` }}
-                        />
-                        {/* hover 시 점수 popup */}
-                        <span className="absolute left-1/2 -translate-x-1/2 -top-5 hidden group-hover:block text-[10px] font-black text-gray-700 bg-white border border-gray-200 rounded px-1 shadow whitespace-nowrap">
-                          {r.score}{t("점", "pt")}
-                        </span>
-                      </div>
-                    </div>
-                  )
-                })}
+                {chartData.map((r, i) => (
+                  <div
+                    key={i}
+                    className="group relative flex-1"
+                    style={{ height: `${r.score}%` }}
+                    title={`${r.score}${t("점", "pt")} · ${getLessonName(r.lesson_id, lang === "en" ? "en" : "ko")}`}
+                  >
+                    <div
+                      className={cn(
+                        "h-full w-full transition-colors",
+                        r.score >= 70 ? "bg-stone-800 group-hover:bg-stone-950" : "bg-stone-300 group-hover:bg-stone-400"
+                      )}
+                    />
+                    <span className="absolute -top-5 left-1/2 hidden -translate-x-1/2 whitespace-nowrap text-[10px] font-semibold tabular-nums text-stone-700 group-hover:block">
+                      {r.score}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <p className="text-[10px] text-gray-400 text-center">
-                {t("← 오래된 ~ 최신 →", "← older ~ newest →")} · {t("점선 = 70점", "dashed = 70pt")}
+              {/* 기준선에 숫자 칩을 띄우면 마지막 막대 위에 흰 상자가 얹힌다.
+                  선이 무엇인지는 글로 한 번만 말하면 된다. */}
+              <p className="mt-2 break-keep text-[10px] text-stone-400">
+                {t("오래된 순 → 최신 · 가로선 70점", "oldest → newest · line = 70")}
               </p>
-            </Card>
+            </section>
           )
         })()}
 
         {/* 📝 최근 복습 점수 5 개 — 시간 순 */}
         {recentReviews.length > 0 && (
-          <Card className="p-4 border-2 border-gray-100">
-            <h3 className="font-bold text-gray-700 mb-3">📝 {t("최근 복습", "Recent Reviews")}</h3>
-            <div className="space-y-1.5">
+          <section className="mt-10">
+            <SectionLabel>{t("최근 복습", "Recent Reviews")}</SectionLabel>
+            <ul className="divide-y divide-stone-900/5">
               {recentReviews.slice(0, 5).map((r, i) => {
-                const scoreColor = r.score === 100 ? "text-emerald-600"
-                  : r.score >= 70 ? "text-purple-600"
-                  : "text-amber-600"
-                const emoji = r.score === 100 ? "🎉" : r.score >= 70 ? "👍" : "💪"
                 const daysAgo = (() => {
                   const d = new Date(r.updated_at)
                   const now = new Date()
@@ -534,90 +544,75 @@ export default function ProfilePage() {
                   return t(`${diff}일 전`, `${diff}d ago`)
                 })()
                 return (
-                  <Link
-                    key={i}
-                    href={`/review/${r.lesson_id}`}
-                    className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <span className="text-base shrink-0">{emoji}</span>
-                    <span className={cn("font-bold text-gray-700 text-sm flex-1 truncate")}>
-                      {getLessonName(r.lesson_id, lang === "en" ? "en" : "ko")}
-                    </span>
-                    <span className={cn("text-base font-black tabular-nums shrink-0", scoreColor)}>
-                      {r.score}<span className="text-xs">{t("점", "pt")}</span>
-                    </span>
-                    <span className="text-[10px] text-gray-400 w-12 text-right shrink-0">{daysAgo}</span>
-                  </Link>
+                  <li key={i}>
+                    <Link href={`/review/${r.lesson_id}`} className="group flex items-baseline gap-3 py-3">
+                      <span className="min-w-0 flex-1 truncate text-sm text-stone-700 group-hover:text-orange-700">
+                        {getLessonName(r.lesson_id, lang === "en" ? "en" : "ko")}
+                      </span>
+                      <span className="w-10 shrink-0 text-right text-[11px] text-stone-400">{daysAgo}</span>
+                      <span
+                        className={cn(
+                          "w-8 shrink-0 text-right text-[15px] font-semibold tabular-nums",
+                          r.score >= 70 ? "text-stone-900" : "text-stone-400"
+                        )}
+                      >
+                        {r.score}
+                      </span>
+                    </Link>
+                  </li>
                 )
               })}
-            </div>
-          </Card>
+            </ul>
+          </section>
         )}
 
-        {/* 언어 설정 */}
-        <Card className="p-4 border-2 border-gray-100">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Globe className="w-5 h-5 text-gray-500" />
-              <span className="font-medium text-gray-700">{t("언어", "Language")}</span>
-            </div>
-            <LanguageToggle className="bg-gray-50" />
-          </div>
-        </Card>
-
-        </div>
-
-        {/* ── 오른쪽: 메뉴 ── */}
-        <div className="lg:flex-1 space-y-4">
-        {/* 메뉴 */}
-        <div className="space-y-2">
-          {/* 현재 반 표시 / 반 참가 — 반 기능만 유지 (2026-05 단순화) */}
+        {/* ── 반 ── 반 기능만 유지 (2026-05 단순화) */}
+        <section className="mt-10">
+          <SectionLabel>{t("반", "Class")}</SectionLabel>
           {myClass ? (
-            <Card className="p-4 border border-orange-200 bg-orange-50/40">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-orange-500" />
-                  <div>
-                    <p className="text-xs text-gray-400">{t("현재 반", "Current Class")}</p>
-                    <p className="font-bold text-gray-800">{myClass.name}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleLeaveClass}
-                  disabled={leavingClass}
-                  className="text-xs font-bold text-red-400 hover:text-red-600 transition-colors disabled:opacity-50"
-                >
-                  {leavingClass ? t("처리 중...", "Leaving...") : t("탈퇴", "Leave")}
-                </button>
-              </div>
-            </Card>
+            <div className="flex items-baseline justify-between gap-3 pt-4">
+              <span className="min-w-0 truncate text-[17px] font-semibold tracking-tight text-stone-900">
+                {myClass.name}
+              </span>
+              <button
+                onClick={handleLeaveClass}
+                disabled={leavingClass}
+                className="shrink-0 text-[11px] text-stone-400 underline underline-offset-2 hover:text-stone-700 disabled:opacity-50"
+              >
+                {leavingClass ? t("처리 중...", "Leaving...") : t("탈퇴", "Leave")}
+              </button>
+            </div>
           ) : (
-            <Link href="/join">
-              <Card className="p-4 border border-gray-100 hover:border-orange-200 transition-all cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-orange-500" />
-                  <span className="font-medium text-gray-700">{t("반 참가하기", "Join Class")}</span>
-                </div>
-              </Card>
-            </Link>
+            <div className="pt-4">
+              <Link
+                href="/join"
+                className="border-b-2 border-orange-500 pb-0.5 text-sm font-semibold text-orange-600 hover:border-orange-700 hover:text-orange-700"
+              >
+                {t("반 참가하기", "Join a class")}
+              </Link>
+            </div>
           )}
+        </section>
 
-        </div>
-        </div>
-        </div>
-
-        {/* 로그아웃 */}
-        <button
-          onClick={async () => {
-            const supabase = createClient()
-            await supabase.auth.signOut()
-            window.location.href = "/login"
-          }}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-red-500 bg-red-50 hover:bg-red-100 font-medium transition-all"
-        >
-          <LogOut className="w-4 h-4" />
-          {t("로그아웃", "Logout")}
-        </button>
+        {/* ── 설정 ── */}
+        <section className="mt-10">
+          <SectionLabel>{t("설정", "Settings")}</SectionLabel>
+          <div className="flex items-center justify-between py-4">
+            <span className="text-sm text-stone-600">{t("언어", "Language")}</span>
+            <LanguageToggle className="bg-white" />
+          </div>
+          <button
+            onClick={async () => {
+              const supabase = createClient()
+              await supabase.auth.signOut()
+              window.location.href = "/login"
+            }}
+            className="flex items-center gap-2 border-t border-stone-900/5 pt-4 text-sm text-stone-500 hover:text-stone-900"
+          >
+            <LogOut className="h-4 w-4" />
+            {t("로그아웃", "Logout")}
+          </button>
+        </section>
       </main>
 
       <BottomNav />
