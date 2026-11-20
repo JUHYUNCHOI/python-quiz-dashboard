@@ -9,7 +9,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
-import { useGamification, DAILY_XP_GOAL, getLevelTitle } from "@/hooks/use-gamification"
+import { useGamification, DAILY_XP_GOAL } from "@/hooks/use-gamification"
 import { useState, useEffect } from "react"
 import { OnboardingModal } from "@/components/onboarding-modal"
 import { DailyChallenges } from "@/components/daily-challenges"
@@ -489,8 +489,9 @@ export default function DashboardPage() {
   const { t, lang } = useLanguage()
   const { isAuthenticated, isLoading: authLoading, profile, user, refreshProfile } = useAuth()
   const router = useRouter()
-  const { level, totalXp, xpInCurrentLevel, dailyStreak, xpToday } = useGamification()
-  const levelInfo = getLevelTitle(level)
+  // 오늘 목표 진행률(xpToday)만 쓴다. level 로 만들던 레벨 칭호(levelInfo)는 어디에도
+  // 그려지지 않던 죽은 코드였고, 학생 화면에 숫자 레벨을 띄우지 않기로 했으므로 지웠다.
+  const { xpToday } = useGamification()
   const [nextLesson, setNextLesson] = useState<NextLesson | null>(null)
   const [selectedCourse, setSelectedCourse] = useState<"python" | "cpp">("python")
   // lessonLoaded: localStorage 읽기 전에 "모든 레슨 완료" 카드가 잠깐 뜨는 깜빡임 방지

@@ -67,49 +67,27 @@ function XpRow({ emoji, label, xp, visible, delay }: {
   )
 }
 
-// -------- Level Progress Bar --------
-function LevelBar({ level, xpInLevel, xpPerLevel, visible, isLevelUp, t }: {
-  level: number; xpInLevel: number; xpPerLevel: number; visible: boolean; isLevelUp: boolean; t: (ko: string, en: string) => string
+/**
+ * 누적 XP 한 줄.
+ *
+ * 예전엔 `Lv.N` + 레벨 진행바 + "레벨 업! 🎉" 연출이었다. 학생에게 숫자 레벨을
+ * 보여주지 않기로 했으니 **채울 눈금이 없는 진행바**가 남는다 — 그래서 바를 지우고
+ * 쌓인 XP 만 말한다. 승급 축하는 티어가 오를 때 `/tier` 에서 한다.
+ */
+function XpTotal({ totalXp, gained, visible, t }: {
+  totalXp: number; gained: number; visible: boolean; t: (ko: string, en: string) => string
 }) {
-  const [barWidth, setBarWidth] = useState(0)
-
-  useEffect(() => {
-    if (visible) {
-      const timer = setTimeout(() => {
-        setBarWidth((xpInLevel / xpPerLevel) * 100)
-      }, 200)
-      return () => clearTimeout(timer)
-    }
-  }, [visible, xpInLevel, xpPerLevel])
-
   if (!visible) return null
 
   return (
-    <div className={cn("space-y-2 animate-fly-in-right", isLevelUp && "animate-level-up")}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className={cn("text-2xl font-black", isLevelUp ? "text-yellow-500" : "text-orange-500")}>
-            Lv.{level}
-          </span>
-          {isLevelUp && (
-            <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full animate-number-pop">
-              {t("레벨 업! 🎉", "Level Up! 🎉")}
-            </span>
-          )}
-        </div>
-        <span className="text-sm text-gray-500">{xpInLevel}/{xpPerLevel} XP</span>
-      </div>
-      <div className="h-4 w-full bg-gray-200 rounded-full overflow-hidden">
-        <div
-          className={cn(
-            "h-full rounded-full transition-all duration-1000 ease-out",
-            isLevelUp
-              ? "bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400"
-              : "bg-orange-500",
-          )}
-          style={{ width: `${barWidth}%` }}
-        />
-      </div>
+    <div className="flex items-baseline justify-between gap-3 animate-fly-in-right border-t border-gray-200 pt-4">
+      <span className="text-sm font-semibold text-gray-500">{t("누적 XP", "Total XP")}</span>
+      <span className="flex items-baseline gap-2">
+        <span className="text-2xl font-black tabular-nums text-orange-500">{totalXp}</span>
+        {gained > 0 && (
+          <span className="text-sm font-bold text-orange-400 animate-number-pop">+{gained}</span>
+        )}
+      </span>
     </div>
   )
 }
@@ -176,14 +154,10 @@ function SessionCompletePage() {
     ? gamification.calculateXpBreakdown(sessionData.correctAnswers, sessionData.totalQuestions, sessionData.maxCombo)
     : null
 
-  // Previous level (before commit)
-  const [prevLevel, setPrevLevel] = useState(gamification.level)
-
   // Commit XP once + save quiz session to Supabase + save quiz history to localStorage
   useEffect(() => {
     if (breakdown && !xpCommittedRef.current && sessionData) {
       xpCommittedRef.current = true // 동기적 가드 — re-render 전에 즉시 차단
-      setPrevLevel(gamification.level)
       gamification.commitSessionXp(breakdown)
       saveQuizSession(sessionData, breakdown.totalXp)
 
@@ -276,14 +250,8 @@ function SessionCompletePage() {
     return () => timers.forEach(clearTimeout)
   }, [sessionData]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Level up sound
-  const isLevelUp = xpCommitted && gamification.level > prevLevel
-  useEffect(() => {
-    if (isLevelUp) {
-      const timer = setTimeout(() => play("levelup"), 200 + 6 * 300 + 300)
-      return () => clearTimeout(timer)
-    }
-  }, [isLevelUp]) // eslint-disable-line react-hooks/exhaustive-deps
+  // 레벨 업 효과음은 지웠다 — 학생에게 숫자 레벨을 보여주지 않으므로 "레벨이 올랐다"는
+  // 사건 자체가 화면에 없다. 승급 축하는 티어가 오를 때 `/tier` 에서 한다.
 
   const handleRetryWrong = useCallback(() => {
     if (!sessionData) return
@@ -484,14 +452,12 @@ function SessionCompletePage() {
           </div>
         )}
 
-        {/* === Phase 6: Level progress === */}
+        {/* === Phase 6: 누적 XP === */}
         <div className="mb-8">
-          <LevelBar
-            level={gamification.level}
-            xpInLevel={gamification.xpInCurrentLevel}
-            xpPerLevel={100}
+          <XpTotal
+            totalXp={gamification.totalXp}
+            gained={breakdown.totalXp}
             visible={phase >= 6}
-            isLevelUp={isLevelUp}
             t={t}
           />
         </div>

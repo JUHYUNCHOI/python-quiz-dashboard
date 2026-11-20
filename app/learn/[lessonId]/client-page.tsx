@@ -860,7 +860,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 </div>
                 <div className="bg-orange-50 rounded-2xl p-3 mb-3">
                   <p className="text-orange-600 font-bold">+30 XP {t("획득!", "earned!")}</p>
-                  <p className="text-orange-500 text-xs mt-1">Lv.{gamification.level} ({gamification.xpInCurrentLevel}/100)</p>
+                  {/* 예전엔 여기 `Lv.N (xx/100)` 이 있었다. 학생에게 숫자 레벨을 보여주지
+                      않기로 했으므로 누적 XP 만 말한다 — 레벨 없이도 쌓이는 건 보인다. */}
+                  <p className="text-orange-500 text-xs mt-1">
+                    {t(`총 ${gamification.totalXp} XP`, `${gamification.totalXp} XP total`)}
+                  </p>
                 </div>
               </>
             )}
