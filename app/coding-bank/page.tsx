@@ -6,16 +6,21 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function CodingBankRedirect() {
   const router = useRouter()
+  const { t } = useLanguage()
   useEffect(() => {
-    router.replace("/course/ladder?kind=자체채점")
+    // `?kind=` 필터는 외부 문제를 뺀 뒤 사라졌다 — 그냥 허브로 보낸다.
+    router.replace("/course/ladder")
   }, [router])
 
   return (
     <div style={{ padding: "60px 20px", textAlign: "center", color: "#64748b", fontSize: 14 }}>
-      코딩뱅크가 <b style={{ color: "#0f172a" }}>연습 · 도전</b>으로 합쳐졌어요 — 이동 중…
+      {t("코딩뱅크가 ", "The Coding Bank is now part of ")}
+      <b style={{ color: "#0f172a" }}>{t("연습 · 도전", "Practice · Challenge")}</b>
+      {t("으로 합쳐졌어요 — 이동 중…", " — taking you there…")}
     </div>
   )
 }
