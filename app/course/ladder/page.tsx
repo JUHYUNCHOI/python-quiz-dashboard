@@ -11,6 +11,7 @@ import { LADDER } from "./ladder-data";
 import { useLanguage } from "@/contexts/language-context";
 import { usePracticeGate } from "@/lib/tier-gate";
 import { TOPIC_KO, TOPIC_EN, TOPIC_COLOR, textOn } from "@/lib/problem-tags";
+import { problemTitle } from "@/lib/problem-title";
 
 const SOURCE_COLOR: Record<string, string> = {
   LeetCode: "var(--color-amber-500)", CSES: "var(--color-blue-600)", Codeforces: "var(--color-red-600)", AtCoder: "var(--color-slate-700)",
@@ -63,8 +64,11 @@ function Chip({ on, color, onClick, children, label }: { on: boolean; color: str
 }
 
 export default function LadderPage() {
-  const { t } = useLanguage();
+  // `lang` 은 아래에서 C++/Python 필터가 쓰고 있다. 화면 언어는 uiLang 으로 받는다.
+  const { t, lang: uiLang } = useLanguage();
   const gate = usePracticeGate();
+  // 사다리 데이터엔 한국어 제목만 있다 — 영어판은 문제 은행에서 id 로 끌어온다.
+  const title = (p: { id: string; title: string }) => problemTitle(p, uiLang);
   const [topic, setTopic] = useState("전체");
   const [band, setBand] = useState("전체");
   const [klOnly, setKlOnly] = useState(false);
@@ -127,7 +131,7 @@ export default function LadderPage() {
       (kind === "전체" || (kind === "외부" ? p.external : !p.external)) &&
       (lang === "전체" || !p.lang || (lang === "C++" && p.lang === "cpp") || (lang === "Python" && p.lang === "py")) &&
       // 토픽은 한·영 둘 다 검색어로 받는다 (영어 모드에선 칩에 영어만 보이므로)
-      (query.trim() === "" || (p.title + " " + (p.source || "") + " " + (TOPIC_KO[p.topic] || "") + " " + (TOPIC_EN[p.topic] || "")).toLowerCase().includes(query.trim().toLowerCase())) &&
+      (query.trim() === "" || (p.title + " " + (problemTitle(p, "en")) + " " + (p.source || "") + " " + (TOPIC_KO[p.topic] || "") + " " + (TOPIC_EN[p.topic] || "")).toLowerCase().includes(query.trim().toLowerCase())) &&
       (!starOnly || starred.has(p.id))
     ),
     [topic, band, klOnly, kind, lang, query, starOnly, starred]
@@ -230,15 +234,15 @@ export default function LadderPage() {
           return (
             <a {...(linkProps as any)} onClick={() => remember(next.id)}
               aria-label={t(
-                `오늘 할 것: ${next.title}, 난이도 ${bandLabel(bandOf(next.level).key)}${next.external ? ", 외부 링크 새 탭" : ""}`,
-                `Today's pick: ${next.title}, difficulty ${bandLabel(bandOf(next.level).key)}${next.external ? ", external link opens in a new tab" : ""}`
+                `오늘 할 것: ${title(next)}, 난이도 ${bandLabel(bandOf(next.level).key)}${next.external ? ", 외부 링크 새 탭" : ""}`,
+                `Today's pick: ${title(next)}, difficulty ${bandLabel(bandOf(next.level).key)}${next.external ? ", external link opens in a new tab" : ""}`
               )}
               style={{ textDecoration: "none", display: "block" }}>
               <div style={{ marginTop: 16, padding: "14px 16px", background: "linear-gradient(135deg,var(--color-amber-50),var(--color-amber-100))", border: "1.5px solid var(--color-amber-300)", borderRadius: 14, display: "flex", alignItems: "center", gap: 13 }}>
                 <div aria-hidden="true" style={{ flexShrink: 0, width: 46, height: 46, borderRadius: "50%", background: "var(--color-white)", border: `2.5px solid ${tc}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14, color: tc }}>{next.level}</div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 11.5, fontWeight: 800, color: "var(--color-amber-700)", letterSpacing: ".02em" }}>⭐ {t("오늘 할 것", "Today's pick")}{active.length ? ` (${active.join("·")})` : ""}</div>
-                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--color-slate-800)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{next.title} {next.external && <span aria-hidden="true" style={{ fontSize: 12 }}>🔗</span>}</div>
+                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--color-slate-800)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title(next)} {next.external && <span aria-hidden="true" style={{ fontSize: 12 }}>🔗</span>}</div>
                   <div style={{ fontSize: 11.5, color: "var(--color-amber-800)", marginTop: 1 }}>{next.external ? next.source : topicLabel(next.topic)} · {bandLabel(bandOf(next.level).key)}{next.lang ? ` · ${next.lang === "cpp" ? "C++" : "Python"}` : ""}</div>
                 </div>
                 <div aria-hidden="true" style={{ flexShrink: 0, fontSize: 14, fontWeight: 800, color: "var(--ink-on-accent)", background: "var(--color-amber-600)", borderRadius: 10, padding: "9px 15px" }}>{t("시작", "Start")} →</div>
@@ -255,11 +259,11 @@ export default function LadderPage() {
           const lp = lastProblem.external ? { href, target: "_blank", rel: "noopener noreferrer" } : { href };
           return (
             <a {...(lp as any)} onClick={() => remember(lastProblem.id)}
-              aria-label={t(`이어서 풀기: ${lastProblem.title}`, `Continue: ${lastProblem.title}`)}
+              aria-label={t(`이어서 풀기: ${title(lastProblem)}`, `Continue: ${title(lastProblem)}`)}
               style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8, marginTop: 8, padding: "9px 12px", background: "var(--color-white)", border: "1px solid var(--color-slate-200)", borderRadius: 10 }}>
               <span aria-hidden="true" style={{ fontSize: 13 }}>⏪</span>
               <span style={{ fontSize: 12, fontWeight: 700, color: LABEL }}>{t("이어서:", "Continue:")}</span>
-              <span style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "var(--color-slate-800)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lastProblem.title}{done.has(lastProblem.id) ? " ✓" : ""}</span>
+              <span style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "var(--color-slate-800)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title(lastProblem)}{done.has(lastProblem.id) ? " ✓" : ""}</span>
               <span aria-hidden="true" style={{ fontSize: 12, color: "var(--color-slate-400)" }}>→</span>
             </a>
           );
@@ -366,11 +370,11 @@ export default function LadderPage() {
                   }}>
                     <a {...(linkProps as any)} onClick={() => remember(p.id)}
                       aria-label={t(
-                        `${p.title}${p.external ? ", 외부 링크 새 탭" : ""}`,
-                        `${p.title}${p.external ? ", external link opens in a new tab" : ""}`
+                        `${title(p)}${p.external ? ", 외부 링크 새 탭" : ""}`,
+                        `${title(p)}${p.external ? ", external link opens in a new tab" : ""}`
                       )}
                       style={{ flex: 1, textDecoration: "none", display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
-                      <span style={{ fontSize: 13.5, fontWeight: 700, color: "var(--color-slate-800)", textDecoration: isDone ? "line-through" : "none", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.title}</span>
+                      <span style={{ fontSize: 13.5, fontWeight: 700, color: "var(--color-slate-800)", textDecoration: isDone ? "line-through" : "none", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title(p)}</span>
                       {p.external && <span role="img" aria-label={t("외부 링크", "External link")} style={{ flexShrink: 0, fontSize: 11 }}>🔗</span>}
                     </a>
                     {p.external

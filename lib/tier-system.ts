@@ -14,6 +14,7 @@
 
 import { LADDER, type LadderItem } from "@/app/course/ladder/ladder-data"
 import { ALL_CLUSTERS } from "@/data/practice"
+import { englishTitle } from "@/lib/problem-title"
 
 export type TierId =
   | "bronze2" | "bronze1"
@@ -125,10 +126,8 @@ export function tierProblemTitle(p: TierProblem, lang: string): string {
  * (측정 2026-11-19: 티어당 55~86개 — 10개 승급 조건에 막다른 티어가 없다.)
  */
 const GRADABLE_IDS: Set<string> = new Set()
-const EN_TITLES = new Map<string, string>()
 for (const c of ALL_CLUSTERS) {
   for (const p of c.problems) {
-    if (p.en?.title) EN_TITLES.set(p.id, p.en.title)
     if (p.type === "mcq") continue
     if (p.testCases && p.testCases.length > 0) GRADABLE_IDS.add(p.id)
   }
@@ -142,7 +141,7 @@ const ALL: TierProblem[] = LADDER.map(p => ({
   ...p,
   tier: tierOfLevel(p.level),
   graded: isGraded(p),
-  titleEn: EN_TITLES.get(p.id),
+  titleEn: englishTitle(p.id),
 }))
 
 const BY_TIER = new Map<TierId, TierProblem[]>(TIER_IDS.map(id => [id, []]))
