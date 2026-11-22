@@ -61,8 +61,13 @@ export default function RootLayout({
         {/* 밝은/어두운 테마. `class` 전략이라 <html> 에 `.dark` 가 붙고,
             globals.css 의 색 토큰 치환표가 그때 발동한다.
             `disableTransitionOnChange` — 전환 순간 수백 개 면이 각자 애니메이션하면
-            화면이 출렁인다. 바뀌는 동안만 transition 을 끈다. */}
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+            화면이 출렁인다. 바뀌는 동안만 transition 을 끈다.
+
+            ⚠️ 2026-11-22: 기본값을 `light` + `enableSystem={false}` 로 두고 토글만
+            사이드바 구석에 박아뒀더니, 다크 테마가 **있는지조차 모르는** 상태가 됐다.
+            찾을 수 없는 기능은 없는 기능이다. 그래서 OS 설정을 따라가게 하고,
+            토글은 그걸 덮어쓰는 수단으로만 남긴다. */}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AuthProvider>
             <LanguageProvider>
               <GlobalEditorProvider>
