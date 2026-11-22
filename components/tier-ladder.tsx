@@ -16,14 +16,25 @@
  *      내 칸이 화면 밖에 있을 수 있으므로 마운트 때 가운데로 스크롤한다.
  *
  * 그라데이션·글로우·그림자 없음. 등급 차이는 **모양과 채움**이 말한다.
+ *
+ * ── 두 가지 밀도 ──────────────────────────────────────────────────────────
+ *   `strip` — 이미 티어가 있는 학생용. 아래에 문제 목록이 길게 따라오므로
+ *             사다리는 머리띠처럼 얇아야 한다.
+ *   `board` — 배치고사 전 학생용. 이 화면에는 사다리 말고 들어갈 게 없다.
+ *             좁은 칼럼에 60px 짜리 칸 열 개를 넣어 두면 1900px 짜리 화면의
+ *             90%가 빈 회색 바닥이 된다. 그래서 가로로 꽉 채우고 마크를
+ *             크게 키우고, 칸마다 문제 수를 적어 **빈 상자가 아니게** 한다.
  */
 
 import { useEffect, useRef } from "react"
 import { TierMark } from "@/components/tier-mark"
 import { useLanguage } from "@/contexts/language-context"
-import { TIERS, tierRank, type TierId } from "@/lib/tier-system"
+import { TIERS, problemsInTier, tierRank, type TierId } from "@/lib/tier-system"
 
-export function TierLadder({ current }: { current: TierId | null }) {
+export function TierLadder({ current, variant = "strip" }: {
+  current: TierId | null
+  variant?: "strip" | "board"
+}) {
   const { t, lang } = useLanguage()
   const scroller = useRef<HTMLDivElement>(null)
   const here = useRef<HTMLDivElement>(null)
@@ -42,6 +53,54 @@ export function TierLadder({ current }: { current: TierId | null }) {
   // 되어 "무슨 티어가 있는지" 는 보여도 **그게 어떤 색인지** 는 안 보인다 —
   // 받게 될 상품을 흑백 카탈로그로 보여 주는 꼴이다. 언랭일 때는 전부 제 색으로.
   const unranked = current === null
+
+  if (variant === "board") {
+    return (
+      <section aria-label={t("티어 사다리", "Tier ladder")}>
+        <div className="mb-3 flex items-baseline justify-between gap-2">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400">
+            {t("티어 사다리", "Tier ladder")}
+          </h2>
+          <p className="text-xs text-gray-500 break-keep">
+            {t("배치고사가 이 중 한 칸을 정해 줍니다", "The placement test picks your starting rung")}
+          </p>
+        </div>
+
+        {/* 칸을 세로로 **끝까지** 늘리면 100px 짜리 마크 하나가 떠 있는 500px
+            높이의 빈 상자 열 개가 된다. 높이는 정해 두되(`min-h`) 마크를 그
+            높이에 맞게 같이 키워서 "작은 아이콘 줄" 이 아니라 진열장이 되게 한다.
+            이름·문제 수는 아래에 붙여 칸이 빈 상자가 아니게 만든다. */}
+        <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-5 lg:grid-cols-10">
+          {TIERS.map(ti => {
+            const count = problemsInTier(ti.id).length
+            return (
+              <div
+                key={ti.id}
+                className="flex min-h-[220px] flex-col items-center justify-between gap-4 rounded-xl border border-gray-200 bg-white px-2 py-7 lg:min-h-[300px] lg:py-9"
+              >
+                {/* size 는 속성값이라 CSS 로 덮인다 — 화면 폭에 따라 키운다.
+                    폭은 칸 안쪽(약 118px)을 넘기면 안 된다 — 넘기는 순간 마크가
+                    테두리를 뚫고 옆 칸까지 걸친다. */}
+                <TierMark
+                  tier={ti.id}
+                  size={112}
+                  className="my-auto h-20 w-20 lg:h-28 lg:w-28"
+                />
+                <div className="text-center">
+                  <div className="text-sm font-bold leading-tight break-keep lg:text-base">
+                    {lang === "en" ? ti.labelEn : ti.label}
+                  </div>
+                  <div className="mt-1 text-[11px] tabular-nums text-gray-400 lg:text-xs">
+                    {t(`문제 ${count}개`, `${count} problems`)}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section aria-label={t("티어 사다리", "Tier ladder")}>
