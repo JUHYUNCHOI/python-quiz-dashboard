@@ -6,6 +6,7 @@ import { Flame, LogIn } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useNavItems, isNavActive } from "./use-nav"
 import { LanguageToggle } from "@/components/language-toggle"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { TierBadge } from "@/components/tier-badge"
 import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
@@ -54,13 +55,12 @@ export function DesktopSidebar() {
         })}
       </nav>
 
-      {/* 하단: 언어 · (로그인 / 티어·불꽃·창고) — 글로벌 헤더에서 옮겨옴 */}
+      {/* 하단: 언어·테마 · (로그인 / 티어·불꽃·창고) — 글로벌 헤더에서 옮겨옴 */}
       <div className="shrink-0 border-t border-gray-100 px-3 py-3 space-y-2.5">
-        {!isInQuestProblem && (
-          <div className="flex justify-start">
-            <LanguageToggle />
-          </div>
-        )}
+        <div className="flex items-center justify-between gap-1">
+          {!isInQuestProblem && <LanguageToggle />}
+          <ThemeToggle className="ml-auto" />
+        </div>
 
         {!isLoading && !isAuthenticated && (
           <Link

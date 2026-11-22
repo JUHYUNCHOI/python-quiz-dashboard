@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/contexts/language-context"
 import { TeacherMirror } from "@/components/teacher-mirror"
 import { GlobalEditorProvider } from "@/components/teacher/global-editor-provider"
 import { SiteFooter } from "@/components/site-footer"
+import { ThemeProvider } from "@/components/theme-provider"
 import { DesktopSidebar } from "@/components/desktop-sidebar"
 import { ADSENSE_ENABLED, ADSENSE_PUBLISHER_ID } from "@/lib/adsense-config"
 import "./globals.css"
@@ -57,19 +58,25 @@ export default function RootLayout({
         )}
       </head>
       <body className="font-sans antialiased notranslate" suppressHydrationWarning>
-        <AuthProvider>
-          <LanguageProvider>
-            <GlobalEditorProvider>
-              <DesktopSidebar />
-              {/* 데스크탑·패드(md+)에서는 좌측 사이드바 폭만큼 본문을 밀어줌 */}
-              <div className="md:pl-60">
-                {children}
-                <SiteFooter />
-              </div>
-              <TeacherMirror />
-            </GlobalEditorProvider>
-          </LanguageProvider>
-        </AuthProvider>
+        {/* 밝은/어두운 테마. `class` 전략이라 <html> 에 `.dark` 가 붙고,
+            globals.css 의 색 토큰 치환표가 그때 발동한다.
+            `disableTransitionOnChange` — 전환 순간 수백 개 면이 각자 애니메이션하면
+            화면이 출렁인다. 바뀌는 동안만 transition 을 끈다. */}
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+          <AuthProvider>
+            <LanguageProvider>
+              <GlobalEditorProvider>
+                <DesktopSidebar />
+                {/* 데스크탑·패드(md+)에서는 좌측 사이드바 폭만큼 본문을 밀어줌 */}
+                <div className="md:pl-60">
+                  {children}
+                  <SiteFooter />
+                </div>
+                <TeacherMirror />
+              </GlobalEditorProvider>
+            </LanguageProvider>
+          </AuthProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

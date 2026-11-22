@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { LanguageToggle } from "@/components/language-toggle"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Flame, LogIn } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
@@ -76,6 +77,8 @@ export function Header() {
         <div className="flex items-center gap-2 md:gap-4">
           {/* 언어 선택 탭 — 공용 컴포넌트로 통일. /quest/[problemId] 에서는 숨김 (App 리셋 방지) */}
           {!isInQuestProblem && <LanguageToggle />}
+
+          <ThemeToggle />
 
           {!isLoading && !isAuthenticated ? (
             <Link
