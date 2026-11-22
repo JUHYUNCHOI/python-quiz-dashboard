@@ -272,12 +272,13 @@ export default function TierPage() {
                 key={id}
                 onClick={() => setPracticeTier(id)}
                 aria-pressed={on}
-                className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold"
-                style={{
-                  borderColor: on ? ti.color : "#cbd5e1",
-                  background: on ? ti.color : "#fff",
-                  color: on ? ti.ink : "#475569",
-                }}
+                // 꺼진 칩까지 인라인 hex(#fff/#cbd5e1/#475569)로 칠하면 다크
+                // 모드에서 새하얀 알약 여덟 개가 검은 바닥에 박힌다. 꺼진 칩은
+                // 테마를 따라가는 유틸리티로, 켜진 칩만 티어 색을 직접 쓴다.
+                className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold ${
+                  on ? "" : "border-gray-300 bg-white text-gray-600"
+                }`}
+                style={on ? { borderColor: ti.color, background: ti.color, color: ti.ink } : undefined}
               >
                 <TierMark tier={id} size={13} color={on ? ti.ink : ti.color} />
                 {tierLabel(id, lang)}
