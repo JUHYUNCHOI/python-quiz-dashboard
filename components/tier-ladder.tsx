@@ -80,7 +80,7 @@ export function TierLadder({ current }: { current: TierId | null }) {
               >
                 <TierMark
                   tier={ti.id}
-                  size={26}
+                  size={30}
                   color={isHere ? ti.ink : passed ? ti.color : "#d1d5db"}
                 />
                 <span
