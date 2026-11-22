@@ -9,6 +9,7 @@ import { Header } from "@/components/header";
 import { BottomNav } from "@/components/bottom-nav";
 import { LADDER } from "./ladder-data";
 import { useLanguage } from "@/contexts/language-context";
+import { usePracticeGate } from "@/lib/tier-gate";
 import { TOPIC_KO, TOPIC_EN, TOPIC_COLOR, textOn } from "@/lib/problem-tags";
 
 const SOURCE_COLOR: Record<string, string> = {
@@ -63,6 +64,7 @@ function Chip({ on, color, onClick, children, label }: { on: boolean; color: str
 
 export default function LadderPage() {
   const { t } = useLanguage();
+  const gate = usePracticeGate();
   const [topic, setTopic] = useState("전체");
   const [band, setBand] = useState("전체");
   const [klOnly, setKlOnly] = useState(false);
@@ -152,6 +154,37 @@ export default function LadderPage() {
     klOnly && "🎯KL",
     starOnly && "★",
   ].filter(Boolean) as string[];
+
+  // 티어가 없으면 문제 목록 대신 배치고사 안내만 보여 준다. 조용히 /tier 로
+  // 돌려보내면 학생은 자기가 왜 튕겼는지 모른다 — 막은 이유를 같은 자리에서
+  // 말해 준다. 훅을 전부 호출한 뒤에 분기해야 하므로 여기서 가른다.
+  if (gate === "locked") {
+    return (
+      <>
+        <Header />
+        {/* 내용이 세 줄뿐이라 높이를 안 주면 뒤에 오는 것들이 화면 가운데까지
+            올라붙는다. 짧은 안내 화면도 한 화면은 차지해야 한다. */}
+        <main className="mx-auto min-h-[70vh] max-w-xl px-4 pb-28 pt-16">
+          <h1 className="text-2xl font-bold text-gray-900">
+            {t("먼저 배치고사를 보세요", "Take the placement test first")}
+          </h1>
+          <p className="mt-3 leading-relaxed text-gray-600 break-keep">
+            {t(
+              "연습은 1430문제를 난이도순으로 늘어놓은 화면입니다. 어디부터 풀지는 배치고사가 정해 줍니다. 12문항이면 끝나요.",
+              "Practice lines up 1,430 problems by difficulty. The placement test decides where you start — 12 questions is all it takes.",
+            )}
+          </p>
+          <Link
+            href="/tier"
+            className="mt-7 inline-block rounded-xl bg-orange-600 px-7 py-3.5 text-base font-bold text-white hover:bg-orange-700"
+          >
+            {t("배치고사 보러 가기", "Go to the placement test")}
+          </Link>
+        </main>
+        <BottomNav />
+      </>
+    );
+  }
 
   return (
     <>
