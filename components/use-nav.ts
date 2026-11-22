@@ -3,6 +3,7 @@
 import type React from "react"
 import { BookOpen, User, Brain, Trophy, Target } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import { usePracticeGate } from "@/lib/tier-gate"
 
 export type NavItem = {
   icon: React.ComponentType<{ className?: string }>
@@ -18,11 +19,16 @@ export type NavItem = {
 //  (제거 페이지는 URL·'할 것' 경로로 여전히 접근 가능 — 라우트는 그대로)
 export function useNavItems(): NavItem[] {
   const { t } = useLanguage()
+  // 티어가 없는 학생에게 '연습' 은 시작점 없는 1430문제 목록이다. 배치고사를
+  // 보기 전까지는 탭 자체를 숨긴다 (선생님 계정은 예외 — lib/tier-gate.ts).
+  const practice = usePracticeGate()
 
   return [
     { icon: Target,   label: t("할 것", "Next"),     href: "/course/next" },
     { icon: BookOpen, label: t("수업", "Lessons"),   href: "/curriculum"  },
-    { icon: Brain,    label: t("연습", "Practice"),  href: "/course/ladder" },
+    ...(practice === "locked"
+      ? []
+      : [{ icon: Brain, label: t("연습", "Practice"), href: "/course/ladder" }]),
     { icon: Trophy,   label: t("대회", "Contest"),   href: "/quest"       },
     { icon: User,     label: t("내정보", "Profile"), href: "/profile"     },
   ]
