@@ -1,19 +1,36 @@
 "use client"
 
 /**
- * Journey 학습 여정 — 6 스테이지 보물지도.
+ * 홈 (학생이 로그인하면 처음 보는 화면) — 네 구역으로 고정.
  *
- * 메인 spine: 🐍 Python → 💪 Python 연습 → 🧠 알고리즘 → 🏆 USACO
- * C++ 가지: 💪 Python 연습 에서 분기 → ⚡ C++ → 💪 C++ 연습 → 🧠 알고리즘 합류
+ *   ┌───────────────────────────────────────┐
+ *   │ 방패 언랭크 │ 불꽃 3일 │ 체크 12강   │  ← ① 상태 띠 (읽기만)
+ *   ├──────┬─────────────────────┬──────────┤
+ *   │ 레슨 │   ●──○──○──○        │ 대회     │  ← ② 가운데 여정 + ③ 양옆 타일
+ *   │ 연습 │      ▲ 너 여기       │ 내정보   │
+ *   ├──────┴─────────────────────┴──────────┤
+ *   │     ┃ 배치고사 보기  12문항 ▸ ┃       │  ← ④ 큰 버튼 **하나**
+ *   └───────────────────────────────────────┘
  *
- * C++ 진도 있는 학생 (Path 3) → Python + Py연습 자동 ✅ 표시
+ * ⚠️ 2026-11-22: 이전 홈은 세로로 쌓인 카드 8장이었다. 그중 **큰 CTA 가 둘**이었다
+ *    (보라색 "배치고사로 내 티어 정하기" + 주황색 "여기서 시작"). 둘이 같은 크기로
+ *    나란히 있으니 학생은 뭘 먼저 눌러야 하는지 알 수 없었다. 거기에 모양이 똑같은
+ *    카드(티어·문제풀기·연속학습·트랙·연습도전)가 더 붙어 "전부 중요해 보여서
+ *    아무것도 중요하지 않은" 화면이 됐다.
+ *
+ *    그래서 규칙을 셋으로 못 박았다:
+ *      1. **큰 버튼은 화면에 하나뿐이다.** 배치고사를 안 봤으면 배치고사,
+ *         봤으면 "지금 할 일". 둘이 동시에 크게 나오는 경우는 없다.
+ *      2. 숫자(티어·연속·완료)는 **버튼이 아니라 띠**다. 위에 얇게 깔고 끝.
+ *      3. 이동 수단은 **네 타일**로 고정하고 아이콘 실루엣을 전부 다르게 그린다.
+ *         (components/journey-icons.tsx — 이모지 금지)
  */
 
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
-import { TierMark } from "@/components/tier-mark"
+import { TierMark, UnrankedMark } from "@/components/tier-mark"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
@@ -24,141 +41,99 @@ import {
   hasCppTrackProgress,
   type JourneyStage,
 } from "@/lib/journey-stages"
-import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
+import { getSmartNext } from "@/lib/smart-next"
 import { useGamification } from "@/hooks/use-gamification"
 import { PythonDiagnosticQuiz } from "@/components/python-diagnostic-quiz"
 import { loadTierState, type TierState } from "@/lib/tier-store"
-import { tierInfo, tierLabel } from "@/lib/tier-system"
+import { tierLabel } from "@/lib/tier-system"
+import {
+  STAGE_ICON,
+  IconBook,
+  IconDumbbell,
+  IconTrophy,
+  IconUser,
+  IconFlame,
+  IconCheckCircle,
+  IconArrowRight,
+  IconClipboard,
+  IconFork,
+} from "@/components/journey-icons"
 
-// ── 6 스테이지 좌표 (viewBox 100×180) ────────────────────────────
-interface MapPlacement {
-  x: number   // 0-100
-  y: number   // 0-180
-  landmark: string
-}
-
-// 그래프 노드 위치 — 깨끗한 vertical flow + C++ 가지 오른쪽
-// 일러스트 의존 X. 좌표 자유롭게 조정 가능.
-const PLACEMENTS: Record<string, MapPlacement> = {
-  "python":          { x: 28, y: 12, landmark: "🌱" },
-  "python-practice": { x: 28, y: 35, landmark: "💪" },
-  "cpp":             { x: 72, y: 35, landmark: "⚡" },
-  "cpp-practice":    { x: 72, y: 55, landmark: "💪" },
-  "algo":            { x: 28, y: 65, landmark: "🧩" },
-  "usaco":           { x: 28, y: 88, landmark: "🏆" },
-}
-
-// (이전 graph edges 는 트랙별 세로 한 줄 구조로 대체됨 — STAGES_BY_TRACK 참고)
-
-// ── 노드 — 세로 흐름 안 단일 항목 (모달 카드 스타일) ─────────────
-function LandmarkNode({
-  stage,
-  placement,
-  progress,
-  isActive,
-}: {
-  stage: JourneyStage
-  placement: MapPlacement
-  progress: { done: number; total: number; pct: number; status: string }
-  isActive: boolean
-}) {
-  const { t, lang } = useLanguage()
-  const isDone = progress.status === "completed"
-  const isInProgress = progress.status === "in-progress"
-  const isUntraveled = !isDone && !isInProgress && !isActive
-
-  // 박스 배경 — *반드시 불투명* (뒤에 SVG 라인 가리기 위해 — 사용자 지적)
-  const boxColor = isDone
-    ? "border-emerald-500 bg-emerald-50"
-    : isActive
-      ? "border-orange-500 bg-orange-50"
-      : isInProgress
-        ? "border-amber-400 bg-amber-50"
-        : "border-gray-300 bg-white"
-
-  const labelColor = isDone ? "text-emerald-700"
-    : isActive ? "text-orange-700"
-    : isInProgress ? "text-amber-700"
-    : isUntraveled ? "text-gray-400"
-    : "text-gray-500"
-
-  return (
-    <Link
-      href={stage.href}
-      aria-label={stage.title}
-      title={t(stage.title, stage.titleEn)}
-      className="group relative flex flex-col items-center transition-transform hover:scale-105 active:scale-95"
-    >
-      <div
-        className={cn(
-          "relative flex items-center justify-center rounded-xl border-2 shadow-md w-16 h-16 sm:w-20 sm:h-20 transition-all group-hover:shadow-lg",
-          boxColor
-        )}
-      >
-        {isActive && (
-          <span className="absolute inset-0 rounded-xl ring-4 ring-orange-400 ring-offset-2 animate-pulse pointer-events-none" />
-        )}
-        <span className={cn("text-3xl sm:text-4xl drop-shadow-sm", isUntraveled && "grayscale opacity-50")}>
-          {placement.landmark}
-        </span>
-      </div>
-      <span className={cn(
-        "mt-2 font-black whitespace-nowrap leading-tight",
-        labelColor,
-        // 영어는 시각적으로 작아 보임 → 한 단계 ↑
-        lang === "en" ? "text-sm sm:text-base" : "text-xs sm:text-sm"
-      )}>
-        {lang === "en" ? stage.titleEn : stage.title}
-      </span>
-    </Link>
-  )
-}
-
-// ── 트랙별 스테이지 순서 — 자기 길만 보여줌 ─────────────────
+// ── 트랙별 스테이지 순서 — 자기 길만 보여 준다 ──────────────────
+// 가지(Y자)로 그리던 걸 한 줄로 펴 놨다. 갈림길은 트랙을 고르는 순간 이미
+// 결정되므로, 지도에 남겨 두면 "내가 안 가는 길" 까지 읽어야 한다.
 const STAGES_BY_TRACK: Record<"A" | "B" | "C", string[]> = {
   A: ["python", "python-practice", "cpp", "cpp-practice", "algo", "usaco"],
   B: ["python", "python-practice", "algo", "usaco"],
   C: ["cpp", "cpp-practice", "algo", "usaco"],
 }
 
-// ── 노드별 좌표 (Track A Y-자 layout) ─────────
-// Track A: 위 = Python 가로 한 줄, 아래 = C++ 가로 한 줄, 오른쪽 = 알고+USACO 합류
-// viewBox 100 × 60
-const POS_TRACK_A: Record<string, { x: number; y: number }> = {
-  "python":          { x: 9,  y: 15 },
-  "python-practice": { x: 28, y: 15 },
-  "cpp":             { x: 9,  y: 45 },
-  "cpp-practice":    { x: 28, y: 45 },
-  "algo":            { x: 60, y: 30 },
-  "usaco":           { x: 87, y: 30 },
-}
-// Track A 연결선 path (둥근 각, 통과여부는 양 끝 노드 둘 다 완료 시 컬러)
-// 각 path: [from-id, to-id, "M..L..L.."]
-const CONNECTIONS_TRACK_A: Array<[string, string, string]> = [
-  ["python",          "python-practice", "M 9 15 L 28 15"],
-  ["cpp",             "cpp-practice",    "M 9 45 L 28 45"],
-  ["python-practice", "algo",            "M 28 15 L 50 15 L 50 30 L 60 30"],
-  ["cpp-practice",    "algo",            "M 28 45 L 50 45 L 50 30 L 60 30"],
-  ["algo",            "usaco",           "M 60 30 L 87 30"],
-]
+// ── ② 여정 지도 ────────────────────────────────────────────────
 
-// Track B / C: 가로 한 줄 (viewBox 100 × 25)
-const POS_HORIZONTAL: Record<"B" | "C", Record<string, { x: number; y: number }>> = {
-  B: {
-    "python":          { x: 8,  y: 12 },
-    "python-practice": { x: 35, y: 12 },
-    "algo":            { x: 62, y: 12 },
-    "usaco":           { x: 88, y: 12 },
-  },
-  C: {
-    "cpp":             { x: 8,  y: 12 },
-    "cpp-practice":    { x: 35, y: 12 },
-    "algo":            { x: 62, y: 12 },
-    "usaco":           { x: 88, y: 12 },
-  },
+function StageNode({
+  stage,
+  progress,
+  isActive,
+}: {
+  stage: JourneyStage
+  progress: { done: number; total: number; status: string }
+  isActive: boolean
+}) {
+  const { t, lang } = useLanguage()
+  const Icon = STAGE_ICON[stage.id] ?? IconBook
+  const isDone = progress.status === "completed"
+  const isInProgress = progress.status === "in-progress"
+
+  // 네 상태를 **테두리 색**으로만 구분한다. 배경까지 같이 칠하면 노드 네 개가
+  // 서로 다른 카드처럼 보여서 '한 줄로 이어진 길' 이라는 느낌이 사라진다.
+  const box = isDone
+    ? "border-emerald-500 bg-emerald-50 text-emerald-600"
+    : isActive
+      ? "border-orange-500 bg-orange-50 text-orange-600"
+      : isInProgress
+        ? "border-amber-400 bg-amber-50 text-amber-600"
+        : "border-gray-200 bg-white text-gray-300"
+
+  return (
+    <Link
+      href={stage.href}
+      title={t(stage.title, stage.titleEn)}
+      className="group flex w-[68px] shrink-0 flex-col items-center gap-1.5 px-1 sm:w-[76px]"
+    >
+      <span
+        className={cn(
+          "flex h-12 w-12 items-center justify-center rounded-xl border-2 transition-transform group-hover:-translate-y-0.5 sm:h-14 sm:w-14",
+          box,
+        )}
+      >
+        <Icon size={24} />
+      </span>
+      <span
+        className={cn(
+          "text-center font-bold leading-tight break-keep",
+          lang === "en" ? "text-[11px]" : "text-xs",
+          isDone ? "text-emerald-700" : isActive ? "text-orange-700" : "text-gray-500",
+        )}
+      >
+        {lang === "en" ? stage.titleEn : stage.title}
+      </span>
+      {progress.total > 0 && (
+        <span className="font-mono text-[10px] tabular-nums text-gray-400">
+          {progress.done}/{progress.total}
+        </span>
+      )}
+      {/* "너 여기" — 지도에서 단 한 번만 나타난다. 이게 없으면 노드 여섯 개 중
+          어디에 서 있는지 색만 보고 추측해야 한다. */}
+      {isActive && (
+        <span className="rounded bg-orange-500 px-1.5 py-0.5 text-[10px] font-black text-white">
+          {t("너 여기", "You")}
+        </span>
+      )}
+    </Link>
+  )
 }
 
-function GameMap({
+function JourneyMap({
   completedIds,
   hasCpp,
   trackId,
@@ -167,167 +142,66 @@ function GameMap({
   hasCpp: boolean
   trackId: "A" | "B" | "C"
 }) {
-  const { t } = useLanguage()
-
-  // 트랙별 자기 경로만
-  const stageIds = STAGES_BY_TRACK[trackId] ?? STAGES_BY_TRACK["A"]
-  const stages = stageIds
+  const stages = (STAGES_BY_TRACK[trackId] ?? STAGES_BY_TRACK.A)
     .map(id => JOURNEY_STAGES.find(s => s.id === id))
     .filter((s): s is JourneyStage => !!s)
 
-  // 활성 = 트랙 안 첫 미완료
-  let activeStageId: string | null = null
-  for (const s of stages) {
-    const p = getStageProgress(s, completedIds, hasCpp)
-    if (p.status !== "completed") { activeStageId = s.id; break }
-  }
-
-  // 상태 헬퍼
-  const isStageDone = (id: string) => {
-    const s = JOURNEY_STAGES.find(x => x.id === id)
-    if (!s) return false
-    return getStageProgress(s, completedIds, hasCpp).status === "completed"
-  }
-
-  // Track A: Y-자, B/C: 가로 한 줄
-  const layout = trackId === "A"
-    ? { positions: POS_TRACK_A, connections: CONNECTIONS_TRACK_A, viewH: 60, aspect: "5 / 3" }
-    : (() => {
-        const pos = POS_HORIZONTAL[trackId]
-        const orderedIds = STAGES_BY_TRACK[trackId]
-        // 가로 연결: 인접 노드 두 개 잇는 직선
-        const conns: Array<[string, string, string]> = []
-        for (let i = 0; i < orderedIds.length - 1; i++) {
-          const a = orderedIds[i], b = orderedIds[i + 1]
-          const pa = pos[a], pb = pos[b]
-          if (pa && pb) conns.push([a, b, `M ${pa.x} ${pa.y} L ${pb.x} ${pb.y}`])
-        }
-        return { positions: pos, connections: conns, viewH: 25, aspect: "4 / 1" }
-      })()
-
-  const activePos = activeStageId ? layout.positions[activeStageId] : null
+  const progressOf = (s: JourneyStage) => getStageProgress(s, completedIds, hasCpp)
+  const activeId = stages.find(s => progressOf(s).status !== "completed")?.id ?? null
 
   return (
-    <div className="w-full mx-auto rounded-3xl shadow-md border-2 border-amber-200/70 bg-gradient-to-br from-amber-50 via-white to-amber-50/40 p-4 sm:p-6">
-      <p className="text-center text-[11px] sm:text-xs font-black text-amber-700 uppercase tracking-widest mb-4">
-        🗺️ {t("나의 학습 여정", "My Journey")}
-      </p>
-
-      {/* ── 모바일 (sm 미만) — 세로 스택 ────────────────────────── */}
-      <div className="sm:hidden flex flex-col items-center gap-1">
-        {stages.map((stage, idx) => {
-          const placement = PLACEMENTS[stage.id]
-          if (!placement) return null
-          const progress = getStageProgress(stage, completedIds, hasCpp)
-          const isActive = stage.id === activeStageId
-          const isLast = idx === stages.length - 1
-          const arrowTraveled = !isLast && isStageDone(stage.id) && isStageDone(stages[idx + 1].id)
-          return (
-            <div key={stage.id} className="flex flex-col items-center">
-              <div className="relative">
-                {isActive && (
-                  <div className="absolute left-1/2 -translate-x-1/2 -top-12 pointer-events-none z-10 flex flex-col items-center gap-0.5 animate-bounce whitespace-nowrap">
-                    <div className="bg-orange-500 rounded-full px-2 py-0.5 shadow-md border-2 border-white text-[10px] font-black text-white">
-                      ▶ {t("여기!", "You!")}
-                    </div>
-                    <span className="text-lg drop-shadow">🦒</span>
-                  </div>
-                )}
-                <LandmarkNode
-                  stage={stage}
-                  placement={placement}
-                  progress={progress}
-                  isActive={isActive}
-                />
-              </div>
-              {!isLast && (
-                <span className={cn(
-                  "text-2xl my-0.5 leading-none",
-                  arrowTraveled ? "text-amber-500" : "text-gray-300"
-                )}>↓</span>
-              )}
-            </div>
-          )
-        })}
-      </div>
-
-      {/* ── 데스크탑 (sm 이상) — Y-자 (A) / 가로 한 줄 (B,C) ──── */}
-      <div className="hidden sm:block relative w-full" style={{ aspectRatio: layout.aspect }}>
-        {/* SVG 연결선 — 각이 둥근 직선 */}
-        <svg
-          viewBox={`0 0 100 ${layout.viewH}`}
-          preserveAspectRatio="none"
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          aria-hidden="true"
-        >
-          {layout.connections.map(([a, b, d], i) => {
-            const traveled = isStageDone(a) && isStageDone(b)
-            return (
-              <path
-                key={i}
-                d={d}
-                stroke={traveled ? "#f59e0b" : "#d1d5db"}
-                strokeWidth={traveled ? 1.6 : 1.1}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="none"
-                strokeDasharray={traveled ? undefined : "1.8 1.6"}
-                opacity={traveled ? 0.95 : 0.7}
-              />
-            )
-          })}
-        </svg>
-
-        {/* 노드들 — 절대 위치 */}
-        {stages.map(stage => {
-          const pos = layout.positions[stage.id]
-          if (!pos) return null
-          const placement = PLACEMENTS[stage.id]
-          if (!placement) return null
-          const progress = getStageProgress(stage, completedIds, hasCpp)
-          const isActive = stage.id === activeStageId
-          return (
-            <div
-              key={stage.id}
-              className="absolute"
-              style={{
-                left: `${pos.x}%`,
-                top: `${pos.y / layout.viewH * 100}%`,
-                transform: "translate(-50%, -50%)",
-              }}
-            >
-              <LandmarkNode
-                stage={stage}
-                placement={placement}
-                progress={progress}
-                isActive={isActive}
-              />
-            </div>
-          )
-        })}
-
-        {/* 🦒 아바타 — 활성 노드 위 */}
-        {activePos && (
-          <div
-            className="absolute pointer-events-none z-20"
-            style={{
-              left: `${activePos.x}%`,
-              top: `${activePos.y / layout.viewH * 100}%`,
-              transform: "translate(-50%, -180%)",
-            }}
-          >
-            <div className="flex flex-col items-center gap-0.5 animate-bounce">
-              <div className="bg-orange-500 rounded-full px-2 py-0.5 shadow-md border-2 border-white text-[11px] font-black text-white whitespace-nowrap">
-                ▶ {t("여기!", "You!")}
-              </div>
-              <span className="text-xl drop-shadow">🦒</span>
-            </div>
-          </div>
-        )}
-      </div>
+    // 좁은 화면에서는 가로로 밀어 본다. 세로로 쌓으면 '길' 이 아니라 목록이 된다.
+    //
+    // ⚠️ 연결선 폭은 **고정**이어야 한다. `w-full shrink-0` 로 뒀더니 연결선 다섯 개가
+    //    각자 줄 전체 폭을 요구하면서 노드 여섯 개를 전부 오른쪽 바깥으로 밀어냈다
+    //    (화면엔 회색 가로줄 하나만 남고 지도가 통째로 사라진 것처럼 보였다).
+    <div className="flex min-w-max items-start justify-center">
+      {stages.map((stage, i) => {
+        const prev = stages[i - 1]
+        const traveled = !!prev && progressOf(prev).status === "completed" && progressOf(stage).status === "completed"
+        return (
+          <Fragment key={stage.id}>
+            {i > 0 && (
+              <span className="mt-6 h-0.5 w-4 shrink-0 self-start sm:mt-7 sm:w-5">
+                <span className={cn("block h-full w-full rounded", traveled ? "bg-orange-400" : "bg-gray-200")} />
+              </span>
+            )}
+            <StageNode stage={stage} progress={progressOf(stage)} isActive={stage.id === activeId} />
+          </Fragment>
+        )
+      })}
     </div>
   )
 }
+
+// ── ③ 양옆 타일 ────────────────────────────────────────────────
+
+function RailTile({
+  href,
+  icon: Icon,
+  label,
+  className,
+}: {
+  href: string
+  icon: (p: { size?: number; className?: string }) => React.ReactElement
+  label: string
+  className?: string
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-gray-200 bg-white py-3.5 text-gray-600 transition-colors hover:border-orange-400 hover:text-orange-600",
+        className,
+      )}
+    >
+      <Icon size={24} />
+      <span className="text-xs font-bold break-keep">{label}</span>
+    </Link>
+  )
+}
+
+// ── 페이지 ─────────────────────────────────────────────────────
 
 export default function JourneyPage() {
   const { t, lang } = useLanguage()
@@ -367,8 +241,8 @@ export default function JourneyPage() {
   }, [isAuthenticated, user])
 
   // 티어는 localStorage 에서만 읽는다. 서버 왕복을 기다리면 이미 배치고사를 본
-  // 학생에게도 "배치고사 보세요" 카드가 한 번 번쩍인다. 기기 간 동기화는 /tier 가 한다.
-  // tierLoaded 전에는 아무것도 그리지 않는다 — 둘 중 어느 카드를 띄울지 모르는 상태.
+  // 학생에게도 "배치고사 보세요" 버튼이 한 번 번쩍인다. 기기 간 동기화는 /tier 가 한다.
+  // tierLoaded 전에는 큰 버튼을 그리지 않는다 — 둘 중 어느 쪽인지 모르는 상태.
   const [tierState, setTierState] = useState<TierState | null>(null)
   const [tierLoaded, setTierLoaded] = useState(false)
   useEffect(() => {
@@ -386,99 +260,160 @@ export default function JourneyPage() {
   useEffect(() => {
     try {
       const saved = typeof window !== "undefined" ? localStorage.getItem("coderin-track") : null
-      if (saved === "A" || saved === "B" || saved === "C") {
-        setExplicitTrack(saved)
-      } else if (isFresh) {
-        // 첫 진입 (진도 0) — 트랙 선택 모달
-        setShowTrackModal(true)
-      }
+      if (saved === "A" || saved === "B" || saved === "C") setExplicitTrack(saved)
+      else if (isFresh) setShowTrackModal(true)
     } catch {}
   }, [isFresh])
 
-  const autoTrackId: "A" | "B" | "C" = hasCpp
-    ? (completedIds.size > 30 ? "A" : "C")
-    : "B"
+  const autoTrackId: "A" | "B" | "C" = hasCpp ? (completedIds.size > 30 ? "A" : "C") : "B"
   const trackId: "A" | "B" | "C" = explicitTrack ?? autoTrackId
 
-  // Smart-next 의 preferredTrack 을 user track 에 맞춰 결정:
-  // - Track A (신입): Python 진도 < 50 → python, 그 이후 → cpp
-  // - Track B (Python only): 항상 python
-  // - Track C (C++ only): 항상 cpp
-  const PY_DONE_LOCAL = Array.from({ length: 52 }, (_, i) => String(i + 1)).filter(id => completedIds.has(id)).length
+  // Smart-next 의 preferredTrack 을 user track 에 맞춰 결정
+  const PY_DONE = Array.from({ length: 52 }, (_, i) => String(i + 1)).filter(id => completedIds.has(id)).length
   const preferredTrack: "python" | "cpp" | "pseudo" =
     trackId === "B" ? "python"
     : trackId === "C" ? "cpp"
-    : (PY_DONE_LOCAL < 50 ? "python" : "cpp")  // Track A — Python 거의 끝났을 때 cpp 전환
+    : (PY_DONE < 50 ? "python" : "cpp")
   const nextAction = getSmartNext(completedIds, preferredTrack)
 
-  const saveTrack = (t: "A" | "B" | "C") => {
-    setExplicitTrack(t)
-    try { localStorage.setItem("coderin-track", t) } catch {}
+  const saveTrack = (track: "A" | "B" | "C") => {
+    setExplicitTrack(track)
+    try { localStorage.setItem("coderin-track", track) } catch {}
     setShowTrackModal(false)
   }
-  const trackLabels: Record<"A" | "B" | "C", { title: string; titleEn: string; emoji: string }> = {
-    A: { title: "신입 (Python → C++ → 대회)", titleEn: "Beginner (Python → C++ → Contest)", emoji: "🌱" },
-    B: { title: "Python 끝까지", titleEn: "Python all the way", emoji: "🐍" },
-    C: { title: "Python 사전지식 (바로 C++)", titleEn: "Has Python (straight to C++)", emoji: "⚡" },
+
+  const trackLabels: Record<"A" | "B" | "C", { title: string; titleEn: string }> = {
+    A: { title: "Python → C++ → 대회", titleEn: "Python → C++ → Contest" },
+    B: { title: "Python 끝까지", titleEn: "Python all the way" },
+    C: { title: "바로 C++", titleEn: "Straight to C++" },
   }
 
-  // 4-5 단계 진도 (트랙별) — PY_DONE 은 위에서 이미 계산 (PY_DONE_LOCAL)
-  const PY_DONE = PY_DONE_LOCAL
-  const CPP_LIST = ["cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8","cpp-p1","cpp-9","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-21","cpp-22","cpp-p2","cpp-15","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20","cpp-23","cpp-p3"]
-  const CPP_DONE = CPP_LIST.filter(id => completedIds.has(id)).length
-  // 20 알고리즘 토픽 — Wave 1 (Bronze 6) + Wave 2 (Silver 6) + Wave 3 (Gold+ 8)
-  const ALL_ALGO_TOPICS = [
-    "sorting","prefixsum","array","stackqueue","hashtable","string",      // Wave 1
-    "recursion","binarysearch","greedy","graph","unionfind","dp",          // Wave 2
-    "backtracking","tree","priorityqueue","topologicalsort","shortestpath","divideconquer","bitmanipulation","trie",  // Wave 3
-  ]
-  const ALGO_MASTERED = ALL_ALGO_TOPICS.filter(t => {
-    try {
-      const raw = typeof window !== "undefined" ? localStorage.getItem(`algo-${t}-chapter`) : null
-      if (!raw) return false
-      const d = JSON.parse(raw)
-      return d.mastered && Array.isArray(d.completed) && d.completed.length >= 5
-    } catch { return false }
-  }).length
-
-  // 코딩 뱅크 = 연습의 '종합 도전'(별도 단계 아님) — 연습에 흡수. 요약은 4단계로 단순.
-  const stages = trackId === "B"
-    ? [
-        { emoji: "🐍", label: "Python 수업+연습", done: PY_DONE, total: 52 },
-        { emoji: "🧩", label: "알고리즘 (Py)", done: ALGO_MASTERED, total: 20 },
-        { emoji: "🏆", label: "대회", done: 0, total: 1 },
-      ]
-    : trackId === "C"
-    ? [
-        { emoji: "⚡", label: "C++ 수업+연습", done: CPP_DONE, total: CPP_LIST.length },
-        { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 20 },
-        { emoji: "🏆", label: "대회", done: 0, total: 1 },
-      ]
-    : [
-        { emoji: "🐍", label: "Python 수업+연습", done: PY_DONE, total: 52 },
-        { emoji: "⚡", label: "C++ 수업+연습", done: CPP_DONE, total: CPP_LIST.length },
-        { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 20 },
-        { emoji: "🏆", label: "대회", done: 0, total: 1 },
-      ]
-
-  // 현재 단계 idx (첫 미완료 stage)
-  const currentStageIdx = stages.findIndex(s => s.done < s.total)
-  const trackInfo = trackLabels[trackId]
+  // 배치고사 전이면 그게 유일한 큰 버튼이다.
+  const needsPlacement = tierLoaded && !tierState
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-100 via-amber-50 to-amber-100 pb-32">
+    // 네 구역이 화면을 **채워야** 한다. 위에 몰아 놓으면 아래가 통째로 빈 회색 바닥이
+    // 되는데, 그러면 "여기서 끝인가?" 싶어 스크롤을 내려 보게 된다(내려도 아무것도 없다).
+    // 내용이 길어지면 flex 가 알아서 위로 붙으므로 작은 화면에서도 잘리지 않는다.
+    <div className="flex min-h-screen flex-col bg-gray-50 pb-28">
       <Header />
 
-      <main className="max-w-3xl mx-auto px-3 sm:px-6 pt-6">
-        {/* 트랙 선택 모달 — 4 정사각형 박스 가로 배치 */}
+      <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col justify-center gap-3 px-3 py-4 sm:px-5">
+
+        {/* ───────── ① 상태 띠 — 숫자만 읽는 자리. 버튼처럼 키우지 않는다. */}
+        <div className="grid grid-cols-3 divide-x divide-gray-200 overflow-hidden rounded-xl border border-gray-200 bg-white">
+          <Link href="/tier" className="flex items-center justify-center gap-2 px-2 py-2.5 hover:bg-gray-50">
+            {tierState ? <TierMark tier={tierState.tier} size={20} /> : <UnrankedMark size={20} />}
+            <div className="min-w-0">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">{t("티어", "Tier")}</p>
+              <p className="truncate text-xs font-black text-gray-800 sm:text-sm">
+                {tierState ? tierLabel(tierState.tier, lang) : t("언랭크", "Unranked")}
+              </p>
+            </div>
+          </Link>
+
+          <div className="flex items-center justify-center gap-2 px-2 py-2.5">
+            <IconFlame size={20} className={dailyStreak > 0 ? "text-orange-500" : "text-gray-300"} />
+            <div className="min-w-0">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">{t("연속", "Streak")}</p>
+              <p className="text-xs font-black text-gray-800 sm:text-sm">
+                <span className="tabular-nums">{dailyStreak}</span>{t("일", "d")}
+              </p>
+            </div>
+          </div>
+
+          <Link href="/progress" className="flex items-center justify-center gap-2 px-2 py-2.5 hover:bg-gray-50">
+            <IconCheckCircle size={20} className={completedIds.size > 0 ? "text-emerald-500" : "text-gray-300"} />
+            <div className="min-w-0">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">{t("완료", "Done")}</p>
+              <p className="text-xs font-black text-gray-800 sm:text-sm">
+                <span className="tabular-nums">{completedIds.size}</span>{t("강", "")}
+              </p>
+            </div>
+          </Link>
+        </div>
+
+        {/* 연속 끊김 — 카드로 키우지 않는다. 한 줄이면 전달된다. */}
+        {isStreakAtRisk && dailyStreak > 0 && (
+          <p className="px-1 text-xs font-bold text-orange-600 break-keep">
+            {t(
+              `${dailyStreak}일 연속이 어제 끊겼어요 — 오늘 한 강만 들으면 다시 1일부터.`,
+              `Your ${dailyStreak}-day streak broke yesterday — one lesson today restarts it.`,
+            )}
+          </p>
+        )}
+
+        {/* ───────── ② 여정 + ③ 양옆 타일
+            모바일: 지도 한 줄 → 타일 2×2. 데스크탑: 왼쪽 2 · 지도 · 오른쪽 2.
+            DOM 순서는 모바일 기준이고, md 이상에서 grid 좌표로 자리를 바꾼다. */}
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-[104px_minmax(0,1fr)_104px] md:gap-3">
+          <section className="col-span-2 rounded-xl border border-gray-200 bg-white p-3 sm:p-4 md:col-span-1 md:col-start-2 md:row-span-2 md:row-start-1">
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                  {t("나의 여정", "My journey")}
+                </p>
+                <p className="truncate text-sm font-black text-gray-800">
+                  {t(trackLabels[trackId].title, trackLabels[trackId].titleEn)}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowTrackModal(true)}
+                className="shrink-0 text-[11px] font-bold text-gray-400 underline decoration-dotted hover:text-orange-600"
+              >
+                {t("변경", "Change")}
+              </button>
+            </div>
+            <div className="-mx-1 overflow-x-auto pb-1">
+              <JourneyMap completedIds={completedIds} hasCpp={hasCpp} trackId={trackId} />
+            </div>
+          </section>
+
+          <RailTile href="/curriculum" icon={IconBook} label={t("레슨", "Lessons")} className="md:col-start-1 md:row-start-1" />
+          <RailTile href="/course/ladder" icon={IconDumbbell} label={t("연습", "Practice")} className="md:col-start-1 md:row-start-2" />
+          <RailTile href="/quest" icon={IconTrophy} label={t("대회", "Contest")} className="md:col-start-3 md:row-start-1" />
+          <RailTile href="/profile" icon={IconUser} label={t("내 정보", "Profile")} className="md:col-start-3 md:row-start-2" />
+        </div>
+
+        {/* ───────── ④ 큰 버튼 — 화면에 하나뿐. 아래 두꺼운 테두리로 '눌리는 물건'
+            이라는 걸 그림자나 글로우 없이 표현한다(누르면 그만큼 내려간다). */}
+        {tierLoaded && (
+          <Link
+            href={needsPlacement ? "/tier/placement" : nextAction.href}
+            className="flex items-center gap-3 rounded-xl border-b-4 border-orange-700 bg-orange-500 px-4 py-4 text-white transition-all hover:bg-orange-600 active:mt-1 active:border-b-0 sm:gap-4 sm:px-5 sm:py-5"
+          >
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-white/20 sm:h-12 sm:w-12">
+              {needsPlacement ? <IconClipboard size={26} /> : <IconArrowRight size={26} />}
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[11px] font-bold uppercase tracking-wider opacity-80">
+                {needsPlacement
+                  ? t("가장 먼저 할 일", "Do this first")
+                  : isFresh ? t("여기서 시작", "Start here") : t("지금 할 일", "Up next")}
+              </span>
+              <span className="block truncate text-lg font-black leading-tight sm:text-xl">
+                {needsPlacement
+                  ? t("배치고사 보기", "Take the placement test")
+                  : t(nextAction.title, nextAction.titleEn)}
+              </span>
+              <span className="block truncate text-[11px] opacity-80 sm:text-xs">
+                {needsPlacement
+                  ? t("12문항 · 내 수준에 맞는 문제부터 바로", "12 questions · then start at your level")
+                  : nextAction.subtitle}
+              </span>
+            </span>
+            <IconArrowRight size={24} className="shrink-0 opacity-90" />
+          </Link>
+        )}
+
+        {/* 트랙 선택 — 첫 방문이거나 "변경" 을 눌렀을 때만 */}
         {showTrackModal && (
-          <div className="fixed inset-0 z-50 bg-black/70 overflow-y-auto p-3 sm:p-4">
-            <div className="relative bg-white rounded-3xl max-w-5xl w-full mx-auto my-4 p-5 sm:p-8 shadow-2xl">
-              {/* X 닫기 — 항상 위, 스크롤 무관 */}
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 p-3 sm:p-6">
+            <div className="relative mx-auto my-4 w-full max-w-3xl rounded-2xl bg-white p-5 shadow-2xl sm:p-7">
               <button
                 onClick={() => setShowTrackModal(false)}
                 aria-label={t("닫기", "Close")}
-                className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 flex items-center justify-center text-lg font-black shadow-sm active:scale-90 transition-all"
+                className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-lg font-black text-gray-500 hover:bg-gray-200 hover:text-gray-900"
               >
                 ✕
               </button>
@@ -490,168 +425,58 @@ export default function JourneyPage() {
                 />
               ) : (
                 <>
-                  <div className="text-center mb-5 sm:mb-8 pr-8">
-                    <h2 className="text-2xl sm:text-4xl font-black text-amber-900 mb-2 sm:mb-3">
-                      {t("어떤 길로 갈래요?", "How do you want to learn?")}
+                  <div className="mb-5 pr-10">
+                    <h2 className="text-xl font-black text-gray-900 sm:text-2xl break-keep">
+                      {t("어떤 길로 갈래요?", "Which path?")}
                     </h2>
-                    <p className="text-sm sm:text-base text-gray-600">
-                      {t("나에게 맞는 거 하나 고르면 끝. 나중에 바꿔도 OK.", "Pick what fits. Changeable later.")}
+                    <p className="mt-1 text-sm text-gray-500 break-keep">
+                      {t("하나 고르면 끝. 나중에 바꿔도 돼요.", "Pick one. Changeable later.")}
                     </p>
                   </div>
 
-                  {/* 4 박스 — 학습 흐름 시각이 메인 (세로 흐름, 큰 아이콘) */}
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                    {/* Track A — 처음 */}
-                    <button
-                      onClick={() => saveTrack("A")}
-                      className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-center"
-                    >
-                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1 break-keep">
-                        {t("코딩이 처음이에요", "New to coding")}
-                      </p>
-                      <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
-                        {t("Python 부터 모두 배워요", "Start from Python — full course")}
-                      </p>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {(["A", "B", "C"] as const).map(key => {
+                      const ids = STAGES_BY_TRACK[key]
+                      const sub = key === "A"
+                        ? t("코딩이 처음이에요", "New to coding")
+                        : key === "B"
+                          ? t("C++ 없이 Python 으로만", "Python only, no C++")
+                          : t("Python 은 이미 알아요", "I already know Python")
+                      return (
+                        <button
+                          key={key}
+                          onClick={() => saveTrack(key)}
+                          className="rounded-xl border-2 border-gray-200 p-4 text-left transition-colors hover:border-orange-500 hover:bg-orange-50"
+                        >
+                          <p className="text-base font-black text-gray-900 break-keep">
+                            {t(trackLabels[key].title, trackLabels[key].titleEn)}
+                          </p>
+                          <p className="mt-0.5 text-xs text-gray-500 break-keep">{sub}</p>
+                          <span className="mt-3 flex items-center gap-1.5 text-gray-400">
+                            {ids.map((id, i) => {
+                              const Icon = STAGE_ICON[id] ?? IconBook
+                              return (
+                                <Fragment key={id}>
+                                  {i > 0 && <span className="h-px w-2 bg-gray-200" />}
+                                  <Icon size={20} />
+                                </Fragment>
+                              )
+                            })}
+                          </span>
+                        </button>
+                      )
+                    })}
 
-                      <p className="text-[10px] sm:text-xs font-black text-amber-700 uppercase tracking-wider mb-2">
-                        {t("학습 순서", "Order")}
-                      </p>
-                      {/* 학습 흐름 — 세로 큰 아이콘 */}
-                      <div className="flex flex-col items-center gap-1 flex-1 justify-center">
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">🐍</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">Python 54강</span>
-                        </div>
-                        <span className="text-amber-400 text-lg">↓</span>
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">⚡</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">C++ 23강</span>
-                        </div>
-                        <span className="text-amber-400 text-lg">↓</span>
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">🧩</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("알고리즘", "Algos")}</span>
-                        </div>
-                        <span className="text-amber-400 text-lg">↓</span>
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">🏆</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("대회 도전", "Contest")}</span>
-                        </div>
-                      </div>
-
-                      <p className="text-sm sm:text-base text-orange-600 font-black mt-4">
-                        {t("Track A 선택", "Choose A")} →
-                      </p>
-                    </button>
-
-                    {/* Track B — Python 만 */}
-                    <button
-                      onClick={() => saveTrack("B")}
-                      className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-center"
-                    >
-                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1 break-keep">
-                        {t("Python 만 할래요", "Python only")}
-                      </p>
-                      <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
-                        {t("C++ 없이 Python 으로만", "No C++ — Python only")}
-                      </p>
-
-                      <p className="text-[10px] sm:text-xs font-black text-amber-700 uppercase tracking-wider mb-2">
-                        {t("학습 순서", "Order")}
-                      </p>
-                      <div className="flex flex-col items-center gap-1 flex-1 justify-center">
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">🐍</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">Python 54강</span>
-                        </div>
-                        <span className="text-amber-400 text-lg">↓</span>
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">🧩</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("알고리즘 (Py)", "Algos (Py)")}</span>
-                        </div>
-                        <span className="text-amber-400 text-lg">↓</span>
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">🏆</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("대회 (Py)", "Contest (Py)")}</span>
-                        </div>
-                      </div>
-
-                      <p className="text-sm sm:text-base text-orange-600 font-black mt-4">
-                        {t("Track B 선택", "Choose B")} →
-                      </p>
-                    </button>
-
-                    {/* Track C — Python 알고 있음 */}
-                    <button
-                      onClick={() => saveTrack("C")}
-                      className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-center"
-                    >
-                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1 break-keep">
-                        {t("C++ 부터", "Start with C++")}
-                      </p>
-                      <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
-                        {t("Python 알아야 해요", "Must know Python")}
-                      </p>
-
-                      <p className="text-[10px] sm:text-xs font-black text-amber-700 uppercase tracking-wider mb-2">
-                        {t("학습 순서", "Order")}
-                      </p>
-                      <div className="flex flex-col items-center gap-1 flex-1 justify-center">
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">⚡</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">C++ 23강</span>
-                        </div>
-                        <span className="text-amber-400 text-lg">↓</span>
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">🧩</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("알고리즘", "Algos")}</span>
-                        </div>
-                        <span className="text-amber-400 text-lg">↓</span>
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">🏆</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("대회 도전", "Contest")}</span>
-                        </div>
-                      </div>
-
-                      <p className="text-sm sm:text-base text-orange-600 font-black mt-4">
-                        {t("Track C 선택", "Choose C")} →
-                      </p>
-                    </button>
-
-                    {/* 진단 퀴즈 */}
                     <button
                       onClick={() => setShowDiagnostic(true)}
-                      className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-dashed border-blue-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-lg active:scale-95 transition-all text-center"
+                      className="rounded-xl border-2 border-dashed border-gray-300 p-4 text-left transition-colors hover:border-gray-500 hover:bg-gray-50"
                     >
-                      <p className="font-black text-xl sm:text-2xl text-blue-900 leading-snug mb-1 break-keep">
-                        {t("잘 모르겠어요", "Not sure?")}
+                      <p className="flex items-center gap-2 text-base font-black text-gray-900 break-keep">
+                        <IconFork size={20} className="shrink-0 text-gray-400" />
+                        {t("잘 모르겠어요", "Not sure")}
                       </p>
-                      <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
-                        {t("5 문제 풀어보고 — 내 트랙 자동 추천", "Take 5 Qs — auto-recommend my track")}
-                      </p>
-
-                      <p className="text-[10px] sm:text-xs font-black text-blue-700 uppercase tracking-wider mb-2">
-                        {t("진행", "Steps")}
-                      </p>
-                      <div className="flex flex-col items-center gap-1 flex-1 justify-center">
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">📝</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("5 문제", "5 Qs")}</span>
-                        </div>
-                        <span className="text-blue-400 text-lg">↓</span>
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">🎯</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("자동 추천", "Auto-pick")}</span>
-                        </div>
-                        <span className="text-blue-400 text-lg">↓</span>
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl sm:text-4xl">✅</span>
-                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("내 트랙", "Your track")}</span>
-                        </div>
-                      </div>
-
-                      <p className="text-sm sm:text-base text-blue-600 font-black mt-4">
-                        {t("퀴즈 시작", "Take quiz")} →
+                      <p className="mt-0.5 text-xs text-gray-500 break-keep">
+                        {t("5문제 풀어 보고 자동으로 정해 줘요", "Answer 5 questions and we'll pick")}
                       </p>
                     </button>
                   </div>
@@ -660,213 +485,6 @@ export default function JourneyPage() {
             </div>
           </div>
         )}
-
-        {/* 🏅 배치고사 / 내 티어 — 로그인한 학생이 처음 보는 화면의 맨 위.
-            티어가 없으면 배치고사가 이 화면에서 가장 큰 블록이다. 배치고사를
-            안 본 학생에게 문제 목록을 먼저 보여 주면 자기 수준이 어디인지
-            모르는 채로 아무 문제나 열게 된다. 보고 나면 티어 요약으로 줄어든다. */}
-        {tierLoaded && !tierState && (
-          <Link
-            href="/tier/placement"
-            className="block mb-4 p-5 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-xl shadow-indigo-200/60 hover:shadow-2xl active:scale-[0.99] transition-all"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/25 rounded-xl flex items-center justify-center text-2xl sm:text-3xl shrink-0">
-                🏅
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold opacity-90 mb-0.5">
-                  {t("가장 먼저 할 일", "Do this first")}
-                </p>
-                <p className="text-lg sm:text-xl font-black leading-tight break-keep">
-                  {t("배치고사로 내 티어 정하기", "Take the placement test")}
-                </p>
-                <p className="text-[11px] sm:text-xs opacity-90 mt-1 break-keep">
-                  {t(
-                    "12문항이면 끝 — 내 수준에 맞는 문제부터 바로 풀 수 있어요.",
-                    "Just 12 questions — then start at problems that match your level.",
-                  )}
-                </p>
-              </div>
-              <span className="text-2xl sm:text-3xl shrink-0">→</span>
-            </div>
-          </Link>
-        )}
-
-        {tierLoaded && tierState && (() => {
-          const info = tierInfo(tierState.tier)
-          return (
-            <Link
-              href="/tier"
-              className="block mb-3 rounded-2xl border-2 border-amber-200 bg-white/70 backdrop-blur-sm px-4 py-3 hover:border-amber-400 hover:shadow-md transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <TierMark tier={tierState.tier} size={26} className="shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className={cn(
-                    "font-bold text-amber-700 uppercase tracking-wider",
-                    lang === "en" ? "text-[11px]" : "text-[9px]",
-                  )}>
-                    {t("나의 티어", "My Tier")}
-                  </p>
-                  <p className="font-black text-amber-900 truncate text-sm sm:text-base">
-                    {tierLabel(tierState.tier, lang)}
-                  </p>
-                </div>
-                <span className="shrink-0 text-[11px] font-bold text-amber-700 underline decoration-dotted">
-                  {t("내 티어 문제", "My problems")}
-                </span>
-              </div>
-            </Link>
-          )
-        })()}
-
-        {/* 🧗 문제 풀기 진입 — 통합 경로(/course/next)로. 레슨 여정과 구분(문제/도전). 정적 링크만(추가 전용). */}
-        <a href="/course/next" className="block mb-3 rounded-2xl border-2 border-indigo-300 bg-indigo-50 px-4 py-3 hover:border-indigo-500 hover:shadow-md transition-all">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl shrink-0">🧗</span>
-            <div className="flex-1 min-w-0">
-              <p className="font-black text-indigo-900 text-sm break-keep">{t("문제 풀기 — 이어서", "Practice — continue")}</p>
-              <p className="text-indigo-600/80 text-[11px] mt-0.5 break-keep">{t("난이도 순 한 줄로 · 다음 1개부터", "One ordered path · start at your next")}</p>
-            </div>
-            <span className="text-indigo-500 font-black shrink-0">→</span>
-          </div>
-        </a>
-
-        {/* 🔥 Streak 끊김 알림 — 어제 안 들어왔으면 부드러운 격려 */}
-        {isStreakAtRisk && dailyStreak > 0 && (
-          <div className="mb-3 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 px-3 py-2.5 flex items-center gap-2">
-            <span className="text-2xl shrink-0">🔥</span>
-            <div className="flex-1 min-w-0">
-              <p className={cn("font-black text-red-700", lang === "en" ? "text-sm" : "text-xs")}>
-                {t(`${dailyStreak}일 연속 학습 — 어제 끊겼어요!`, `${dailyStreak}-day streak — broken yesterday!`)}
-              </p>
-              <p className={cn("text-red-600/80 mt-0.5 leading-snug break-keep", lang === "en" ? "text-xs" : "text-[11px]")}>
-                {t("오늘 한 강만 들어도 다시 1일 시작 — 천천히 다시 쌓아봐요.", "1 lesson today restarts your streak — take it slow!")}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* 🔥 Streak 유지 — 양수일 때 + 끊김 X */}
-        {!isStreakAtRisk && dailyStreak > 0 && (() => {
-          const milestones = [7, 30, 100, 365]
-          const isMilestone = milestones.includes(dailyStreak)
-          const nextMilestone = milestones.find(m => m > dailyStreak)
-          const daysToNext = nextMilestone ? nextMilestone - dailyStreak : null
-          return (
-            <div className={cn(
-              "mb-3 rounded-xl px-3 py-2 flex items-center gap-2",
-              isMilestone
-                ? "bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-400 shadow-md"
-                : "bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200"
-            )}>
-              <span className={cn("shrink-0", isMilestone ? "text-2xl animate-bounce" : "text-lg")}>🔥</span>
-              <div className="flex-1 min-w-0">
-                {isMilestone ? (
-                  <p className={cn("font-black text-orange-700 break-keep", lang === "en" ? "text-sm" : "text-xs")}>
-                    🎉 {t(`${dailyStreak}일 연속 달성! 대단해요!`, `${dailyStreak}-day streak! Amazing!`)}
-                  </p>
-                ) : (
-                  <p className={cn("font-black text-orange-700", lang === "en" ? "text-sm" : "text-xs")}>
-                    {t(`${dailyStreak}일 연속 학습 중`, `${dailyStreak}-day streak`)}
-                    {daysToNext !== null && (
-                      <span className="ml-1 font-normal text-orange-500/80 text-[11px]">
-                        · {t(`${nextMilestone}일까지 ${daysToNext}일`, `${daysToNext}d to ${nextMilestone}`)}
-                      </span>
-                    )}
-                  </p>
-                )}
-              </div>
-            </div>
-          )
-        })()}
-
-        {/* 트랙 표시 — "어디 있는지" 항상 명확 */}
-        <div className="mb-3 flex items-center justify-between gap-2 bg-white/70 backdrop-blur-sm rounded-xl border border-amber-200 px-3 py-2">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="text-xl shrink-0">{trackInfo.emoji}</span>
-            <div className="min-w-0">
-              <p className={cn(
-                "font-bold text-amber-700 uppercase tracking-wider",
-                lang === "en" ? "text-[11px]" : "text-[9px]"
-              )}>
-                {t("나의 학습 트랙", "My Track")}
-              </p>
-              <p className={cn(
-                "font-black text-amber-900 truncate",
-                lang === "en" ? "text-base" : "text-sm"
-              )}>
-                {t(trackInfo.title, trackInfo.titleEn)}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setShowTrackModal(true)}
-            className="shrink-0 text-[11px] font-bold text-amber-700 hover:text-amber-900 underline decoration-dotted"
-          >
-            {t("변경", "Change")}
-          </button>
-        </div>
-
-        {/* 🗺️ 보물지도 — 학생이 한눈에 "내 여정" 본다 */}
-        <div className="mb-5">
-          <GameMap completedIds={completedIds} hasCpp={hasCpp} trackId={trackId} />
-        </div>
-
-        {/* 📍 지금 할 일 — 결정 피로 0 */}
-        <Link
-          href={nextAction.href}
-          className="block mb-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-200/50 hover:shadow-2xl active:scale-[0.99] transition-all"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/25 rounded-xl flex items-center justify-center text-2xl sm:text-3xl shrink-0">
-              {nextAction.emoji ?? "📍"}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold opacity-90 mb-0.5">
-                {isFresh ? t("🚀 여기서 시작", "🚀 Start here") : t("📍 지금 할 일", "📍 Up next")}
-              </p>
-              <p className="text-lg sm:text-xl font-black leading-tight">
-                {t(nextAction.title, nextAction.titleEn)}
-              </p>
-              {nextAction.subtitle && (
-                <p className="text-[11px] sm:text-xs opacity-90 mt-0.5 truncate">{nextAction.subtitle}</p>
-              )}
-            </div>
-            <span className="text-2xl sm:text-3xl shrink-0">→</span>
-          </div>
-        </Link>
-
-        {/* 🧗 연습 · 도전 — 풀 문제 단일 허브 (난이도순 한 줄 + 오늘 할 것 1개). 메인 CTA 보다 작게. */}
-        <Link
-          href="/course/ladder"
-          className="block mb-4 p-4 rounded-2xl bg-white border-2 border-rose-200 hover:border-rose-400 hover:shadow-lg active:scale-[0.99] transition-all"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 sm:w-12 sm:h-12 bg-rose-100 rounded-xl flex items-center justify-center text-2xl shrink-0">
-              🧗
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-base sm:text-lg font-black text-rose-700 leading-tight">
-                {t("연습 · 도전", "Practice · Challenge")}
-              </p>
-              <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 break-keep">
-                {t("풀 문제를 난이도순 한 줄로 — 오늘 할 것 1개부터 (연습·코딩뱅크·대회 다 여기)", "All problems in one difficulty line — start with today's one (practice·bank·contest, all here)")}
-              </p>
-            </div>
-            <span className="text-xl sm:text-2xl text-rose-300 shrink-0">→</span>
-          </div>
-        </Link>
-
-        {hasCpp && (
-          <div className="mb-4 text-center">
-            <p className="text-xs sm:text-sm text-emerald-700 font-bold inline-block px-3 py-1 bg-emerald-100 rounded-full border border-emerald-400 break-keep">
-              🐍 {t("Python 이미 안다고 선택했어요 — Python 수업은 건너뛰기 OK", "You said you know Python — Python lessons skipped")}
-            </p>
-          </div>
-        )}
-
       </main>
 
       <BottomNav />
