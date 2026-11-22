@@ -10,6 +10,7 @@ import { getCompletedLessons, pythonParts, cppParts } from "@/lib/curriculum-dat
 import { getQuizHistory } from "@/lib/quiz-history"
 import { useTier } from "@/hooks/use-tier"
 import { tierInfo, tierLabel } from "@/lib/tier-system"
+import { TierMark, UnrankedMark } from "@/components/tier-mark"
 
 type Stat = {
   label: string
@@ -18,9 +19,9 @@ type Stat = {
   gradient: string
   iconBg: string
   iconColor: string
-  /** 아이콘 자리 — 아이콘 대신 이모지를 쓰는 칸(티어)도 있다. */
+  /** 아이콘 자리 — 티어 칸만 lucide 대신 티어 마크를 쓴다. */
   icon?: LucideIcon
-  emoji?: string
+  mark?: React.ReactNode
   /** 누를 수 있는 칸이면 지정. 없으면 그냥 숫자 카드. */
   href?: string
   valueColor?: string
@@ -59,7 +60,7 @@ export function StatsCards() {
         value: tierLabel(tier, lang),
         valueColor: tierInfo(tier).color,
         sub: t("자기 티어 문제 10개 맞히면 승급", "Solve 10 at your tier to rank up"),
-        emoji: tierInfo(tier).emoji,
+        mark: <TierMark tier={tier} size={24} />,
         href: "/tier",
       }
     : {
@@ -67,7 +68,7 @@ export function StatsCards() {
         value: tierLoaded ? t("언랭", "Unranked") : "",
         valueColor: "#9ca3af",
         sub: t("배치고사를 보면 티어가 정해져요", "Take the placement test to get ranked"),
-        emoji: "🎯",
+        mark: <UnrankedMark size={24} />,
         href: "/tier/placement",
       }
 
@@ -130,9 +131,7 @@ export function StatsCards() {
                 <p className="mt-1 text-xs text-muted-foreground">{stat.sub}</p>
               </div>
               <div className={`flex h-12 w-12 items-center justify-center rounded-full ${stat.iconBg}`}>
-                {Icon
-                  ? <Icon className={`h-6 w-6 ${stat.iconColor}`} />
-                  : <span className="text-xl leading-none">{stat.emoji}</span>}
+                {Icon ? <Icon className={`h-6 w-6 ${stat.iconColor}`} /> : stat.mark}
               </div>
             </div>
           </Card>

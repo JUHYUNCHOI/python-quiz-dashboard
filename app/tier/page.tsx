@@ -25,6 +25,7 @@ import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { TierMark } from "@/components/tier-mark"
 import { useLanguage } from "@/contexts/language-context"
 import {
   TIER_IDS, PROMOTION_TARGET, tierInfo, tierLabel, tierRank, tierProblemTitle,
@@ -151,7 +152,7 @@ export default function TierPage() {
       {/* ── 내 티어 ── */}
       <div className="rounded-2xl p-5" style={{ background: info.tint }}>
         <div className="flex items-center gap-3">
-          <span className="text-4xl">{info.emoji}</span>
+          <TierMark tier={state.tier} size={40} />
           <div>
             <div className="text-xs font-semibold text-gray-600">
               {t("내 티어", "My tier")}
@@ -252,14 +253,15 @@ export default function TierPage() {
                 key={id}
                 onClick={() => setPracticeTier(id)}
                 aria-pressed={on}
-                className="rounded-full border px-3 py-1.5 text-xs font-bold"
+                className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold"
                 style={{
                   borderColor: on ? ti.color : "#cbd5e1",
                   background: on ? ti.color : "#fff",
                   color: on ? ti.ink : "#475569",
                 }}
               >
-                {ti.emoji} {tierLabel(id, lang)}
+                <TierMark tier={id} size={13} color={on ? ti.ink : ti.color} />
+                {tierLabel(id, lang)}
               </button>
             )
           })}

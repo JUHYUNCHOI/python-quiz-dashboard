@@ -13,6 +13,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { TierMark } from "@/components/tier-mark"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
@@ -700,7 +701,7 @@ export default function JourneyPage() {
               className="block mb-3 rounded-2xl border-2 border-amber-200 bg-white/70 backdrop-blur-sm px-4 py-3 hover:border-amber-400 hover:shadow-md transition-all"
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl shrink-0">{info.emoji}</span>
+                <TierMark tier={tierState.tier} size={26} className="shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className={cn(
                     "font-bold text-amber-700 uppercase tracking-wider",

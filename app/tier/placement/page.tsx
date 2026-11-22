@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { TierMark } from "@/components/tier-mark"
 import { useLanguage } from "@/contexts/language-context"
 import {
   startPlacement, currentItem, submitAnswer, resultTier,
@@ -103,7 +104,7 @@ export default function PlacementPage() {
           <div className="text-sm font-semibold text-gray-600">
             {t("배치 결과", "Your placement")}
           </div>
-          <div className="mt-3 text-5xl">{info.emoji}</div>
+          <div className="mt-3 flex justify-center"><TierMark tier={tier} size={56} /></div>
           <div
             className="mt-2 inline-block rounded-full px-4 py-1.5 text-lg font-extrabold"
             style={{ background: info.color, color: info.ink }}

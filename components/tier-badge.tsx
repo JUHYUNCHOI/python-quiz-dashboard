@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { useTier } from "@/hooks/use-tier"
 import { tierInfo, tierLabel } from "@/lib/tier-system"
+import { TierMark, UnrankedMark } from "@/components/tier-mark"
 
 /**
  * 헤더·사이드바에 서는 티어 칩 — 예전 `Lv.N` 배지 자리.
@@ -37,7 +38,7 @@ export function TierBadge({ className, compact = false }: { className?: string; 
         title={t("배치고사를 보면 티어가 정해져요", "Take the placement test to get your tier")}
         className={cn(base, "bg-gray-100 text-gray-500 hover:bg-gray-200", className)}
       >
-        <span className="leading-none">🎯</span>
+        <UnrankedMark size={16} />
         <span className={label}>{t("언랭", "Unranked")}</span>
       </Link>
     )
@@ -51,7 +52,7 @@ export function TierBadge({ className, compact = false }: { className?: string; 
       className={cn(base, "hover:opacity-90", className)}
       style={{ backgroundColor: info.color, color: info.ink }}
     >
-      <span className="leading-none">{info.emoji}</span>
+      <TierMark tier={tier} size={16} color={info.ink} />
       <span className={label}>{tierLabel(tier, lang)}</span>
     </Link>
   )

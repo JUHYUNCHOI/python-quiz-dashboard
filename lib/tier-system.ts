@@ -26,8 +26,10 @@ export interface TierInfo {
   id: TierId
   label: string      // 한국어 표시명
   labelEn: string
-  emoji: string
-  color: string      // 배지 배경
+  /* 티어 그림은 여기 두지 않는다 — `components/tier-mark.tsx` 의 `TierMark` 가
+     방패 하나를 아래 `color` 로 칠한다. 등급마다 다른 이모지를 쓰면 OS 마다
+     생김새가 달라지고 제품 팔레트 밖의 색이 화면에 섞인다. */
+  color: string      // 배지 배경 / 티어 마크 색
   ink: string        // 배지 글자색
   tint: string       // 카드 배경(연한)
   /** 내부 전용 — 이 티어가 담는 LadderItem.level 범위 (양끝 포함) */
@@ -41,16 +43,16 @@ export interface TierInfo {
  * 문제 수가 비슷해야 "10개 풀기"가 티어마다 같은 난이도의 숙제가 된다.
  */
 export const TIERS: TierInfo[] = [
-  { id: "bronze2",     label: "브론즈 II",     labelEn: "Bronze II",     emoji: "🥉", color: "#9a6b3f", ink: "#fff", tint: "#fdf6ee", minLevel:  8, maxLevel: 12 },
-  { id: "bronze1",     label: "브론즈 I",      labelEn: "Bronze I",      emoji: "🥉", color: "#b07a44", ink: "#fff", tint: "#fdf6ee", minLevel: 13, maxLevel: 15 },
-  { id: "silver2",     label: "실버 II",       labelEn: "Silver II",     emoji: "🥈", color: "#6b7480", ink: "#fff", tint: "#f4f6f8", minLevel: 16, maxLevel: 18 },
-  { id: "silver1",     label: "실버 I",        labelEn: "Silver I",      emoji: "🥈", color: "#808a96", ink: "#fff", tint: "#f4f6f8", minLevel: 19, maxLevel: 22 },
-  { id: "gold2",       label: "골드 II",       labelEn: "Gold II",       emoji: "🥇", color: "#b4860b", ink: "#fff", tint: "#fffaeb", minLevel: 23, maxLevel: 26 },
-  { id: "gold1",       label: "골드 I",        labelEn: "Gold I",        emoji: "🥇", color: "#c99700", ink: "#fff", tint: "#fffaeb", minLevel: 27, maxLevel: 30 },
-  { id: "plat2",       label: "플래티넘 II",   labelEn: "Platinum II",   emoji: "💎", color: "#0e8f8f", ink: "#fff", tint: "#effbfa", minLevel: 31, maxLevel: 36 },
-  { id: "plat1",       label: "플래티넘 I",    labelEn: "Platinum I",    emoji: "💎", color: "#10a3a3", ink: "#fff", tint: "#effbfa", minLevel: 37, maxLevel: 44 },
-  { id: "master",      label: "마스터",        labelEn: "Master",        emoji: "🔮", color: "#7c3aed", ink: "#fff", tint: "#f7f2ff", minLevel: 45, maxLevel: 54 },
-  { id: "grandmaster", label: "그랜드마스터",  labelEn: "Grandmaster",   emoji: "👑", color: "#b91c1c", ink: "#fff", tint: "#fef4f3", minLevel: 55, maxLevel: 999 },
+  { id: "bronze2",     label: "브론즈 II",     labelEn: "Bronze II",     color: "#9a6b3f", ink: "#fff", tint: "#fdf6ee", minLevel:  8, maxLevel: 12 },
+  { id: "bronze1",     label: "브론즈 I",      labelEn: "Bronze I",      color: "#b07a44", ink: "#fff", tint: "#fdf6ee", minLevel: 13, maxLevel: 15 },
+  { id: "silver2",     label: "실버 II",       labelEn: "Silver II",     color: "#6b7480", ink: "#fff", tint: "#f4f6f8", minLevel: 16, maxLevel: 18 },
+  { id: "silver1",     label: "실버 I",        labelEn: "Silver I",      color: "#808a96", ink: "#fff", tint: "#f4f6f8", minLevel: 19, maxLevel: 22 },
+  { id: "gold2",       label: "골드 II",       labelEn: "Gold II",       color: "#b4860b", ink: "#fff", tint: "#fffaeb", minLevel: 23, maxLevel: 26 },
+  { id: "gold1",       label: "골드 I",        labelEn: "Gold I",        color: "#c99700", ink: "#fff", tint: "#fffaeb", minLevel: 27, maxLevel: 30 },
+  { id: "plat2",       label: "플래티넘 II",   labelEn: "Platinum II",   color: "#0e8f8f", ink: "#fff", tint: "#effbfa", minLevel: 31, maxLevel: 36 },
+  { id: "plat1",       label: "플래티넘 I",    labelEn: "Platinum I",    color: "#10a3a3", ink: "#fff", tint: "#effbfa", minLevel: 37, maxLevel: 44 },
+  { id: "master",      label: "마스터",        labelEn: "Master",        color: "#7c3aed", ink: "#fff", tint: "#f7f2ff", minLevel: 45, maxLevel: 54 },
+  { id: "grandmaster", label: "그랜드마스터",  labelEn: "Grandmaster",   color: "#b91c1c", ink: "#fff", tint: "#fef4f3", minLevel: 55, maxLevel: 999 },
 ]
 
 export const TIER_IDS: TierId[] = TIERS.map(t => t.id)

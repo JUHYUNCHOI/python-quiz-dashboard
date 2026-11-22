@@ -16,6 +16,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { TierMark } from "@/components/tier-mark"
 import { useLanguage } from "@/contexts/language-context"
 import { tierInfo, tierLabel, type TierId } from "@/lib/tier-system"
 
@@ -145,7 +146,7 @@ export default function TierLeaderboardPage() {
                     <span className="w-6 flex-shrink-0 text-center text-sm font-extrabold text-gray-400">
                       {i + 1}
                     </span>
-                    <span className="flex-shrink-0 text-2xl">{info.emoji}</span>
+                    <TierMark tier={e.tier} size={22} className="flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <div className="truncate text-sm font-bold text-gray-900">
                         {e.name || t("이름 없음", "No name")}
