@@ -13,13 +13,13 @@ import { motion, AnimatePresence } from "framer-motion"
 // ============================================
 
 const TYPE_COLORS: Record<string, string> = {
-  str: "#f59e0b",
-  int: "#3b82f6",
-  float: "#a855f7",
-  bool: "#ec4899",
-  error: "#ef4444",
+  str: "var(--color-amber-500)",
+  int: "var(--color-blue-500)",
+  float: "var(--color-purple-500)",
+  bool: "var(--color-pink-500)",
+  error: "var(--color-red-500)",
 }
-const RED = "#ef4444"
+const RED = "var(--color-red-500)"
 
 type PyType = "str" | "int" | "float" | "bool" | "error"
 type FuncName = "int" | "float" | "str" | "bool"
@@ -253,12 +253,12 @@ function MiniChip({ v, error, dim }: { v: Val | null; error?: boolean; dim?: boo
       <span
         className="px-2 py-1 rounded-lg font-mono text-sm font-bold border-2"
         style={dim
-          ? { borderColor: "#e2e8f0", color: "#94a3b8", background: "#fff" }
+          ? { borderColor: "var(--color-slate-200)", color: "var(--color-slate-400)", background: "var(--color-white)" }
           : { borderColor: c, color: c, background: c + "11" }}
       >
         {text}
       </span>
-      <span className="text-[9px] font-bold uppercase" style={{ color: dim ? "#94a3b8" : c }}>{v.type}</span>
+      <span className="text-[9px] font-bold uppercase" style={{ color: dim ? "var(--color-slate-400)" : c }}>{v.type}</span>
     </span>
   )
 }
@@ -375,7 +375,7 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   }
 
   const curType: PyType = animMode === "error" ? "error" : display?.type ?? "int"
-  const accent = TYPE_COLORS[curType] || "#3b82f6"
+  const accent = TYPE_COLORS[curType] || "var(--color-blue-500)"
   const errorNow = conv?.error && phase !== "idle" && phase !== "highlight"
   const showResultLabel = phase !== "idle" && conv !== null
   const isHi = phase === "highlight"
@@ -486,7 +486,7 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                     exit={{ opacity: 0, scale: 0.5, y: -8 }}
                     transition={isHi && willError ? { duration: 0.55, repeat: Infinity } : { type: "spring", stiffness: 360, damping: 22 }}
                     className="font-mono text-2xl font-bold"
-                    style={{ color: (errorNow || (isHi && willError)) ? RED : "#374151" }}
+                    style={{ color: (errorNow || (isHi && willError)) ? RED : "var(--color-gray-700)" }}
                   >
                     {display.head}
                   </motion.span>
@@ -501,7 +501,7 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={isHi && leaving.frac
                         ? { opacity: 1, scale: [1, 1.4, 1], color: RED }
-                        : { opacity: 1, scale: 1, color: "#9ca3af" }}
+                        : { opacity: 1, scale: 1, color: "var(--color-gray-400)" }}
                       exit={animMode === "truncate"
                         ? { opacity: 0, y: 56, rotate: 24, scale: 0.6 }
                         : { opacity: 0, scale: 0.5 }}
@@ -584,7 +584,7 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               key={conv.label.ko}
               initial={{ opacity: 0, y: -3 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="text-xs font-medium text-center px-3"
-              style={{ color: errorNow ? RED : "#475569" }}
+              style={{ color: errorNow ? RED : "var(--color-slate-600)" }}
             >
               {isEn ? conv.label.en : conv.label.ko}
             </motion.div>
@@ -613,7 +613,7 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           <motion.div
             initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
             className="rounded-xl px-3 py-2.5 text-xs leading-relaxed"
-            style={{ background: (errorNow ? RED : accent) + "12", color: "#374151" }}
+            style={{ background: (errorNow ? RED : accent) + "12", color: "var(--color-gray-700)" }}
           >
             💡 {isEn ? conv.caption.en : conv.caption.ko}
             {trapOffered && (
@@ -669,7 +669,7 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               className="px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition-all font-mono disabled:opacity-40 active:scale-95"
               style={func === f
                 ? { background: TYPE_COLORS[f], color: "white", borderColor: TYPE_COLORS[f] }
-                : { background: "white", color: "#94a3b8", borderColor: "#e2e8f0" }}
+                : { background: "white", color: "var(--color-slate-400)", borderColor: "var(--color-slate-200)" }}
             >
               {f}()
             </button>

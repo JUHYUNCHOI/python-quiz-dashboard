@@ -24,8 +24,8 @@ const CONFIGS: Record<Mode, ModeConfig> = {
     bindingsCode: 'auto [name, score] = s;',
     bundleVarName: "s",
     parts: [
-      { label: ".name",  value: '"Kim"', varName: "name",  color: "#7c3aed" },
-      { label: ".score", value: "95",     varName: "score", color: "#0891b2" },
+      { label: ".name",  value: '"Kim"', varName: "name",  color: "var(--color-violet-600)" },
+      { label: ".score", value: "95",     varName: "score", color: "var(--color-cyan-600)" },
     ],
   },
   pair: {
@@ -33,8 +33,8 @@ const CONFIGS: Record<Mode, ModeConfig> = {
     bindingsCode: 'auto [name, score] = p;',
     bundleVarName: "p",
     parts: [
-      { label: ".first",  value: '"Kim"', varName: "name",  color: "#7c3aed" },
-      { label: ".second", value: "95",     varName: "score", color: "#0891b2" },
+      { label: ".first",  value: '"Kim"', varName: "name",  color: "var(--color-violet-600)" },
+      { label: ".second", value: "95",     varName: "score", color: "var(--color-cyan-600)" },
     ],
   },
   tuple: {
@@ -42,9 +42,9 @@ const CONFIGS: Record<Mode, ModeConfig> = {
     bindingsCode: 'auto [name, age, gpa] = t;',
     bundleVarName: "t",
     parts: [
-      { label: "<0>", value: '"Kim"', varName: "name", color: "#7c3aed" },
-      { label: "<1>", value: "15",     varName: "age",  color: "#0891b2" },
-      { label: "<2>", value: "3.8",    varName: "gpa",  color: "#059669" },
+      { label: "<0>", value: '"Kim"', varName: "name", color: "var(--color-violet-600)" },
+      { label: "<1>", value: "15",     varName: "age",  color: "var(--color-cyan-600)" },
+      { label: "<2>", value: "3.8",    varName: "gpa",  color: "var(--color-emerald-600)" },
     ],
   },
 }
@@ -112,8 +112,8 @@ export function StructuredBindingsVisualizer({ lang = "ko" }: { lang?: "ko" | "e
             onClick={() => { setMode(m); setStep(0) }}
             className="px-3 py-1.5 text-xs font-mono font-bold rounded-lg transition-all"
             style={{
-              background: mode === m ? "#7c3aed" : "#f1f5f9",
-              color: mode === m ? "white" : "#475569",
+              background: mode === m ? "var(--color-violet-600)" : "var(--color-slate-100)",
+              color: mode === m ? "white" : "var(--color-slate-600)",
             }}
           >
             {m}
@@ -135,7 +135,7 @@ export function StructuredBindingsVisualizer({ lang = "ko" }: { lang?: "ko" | "e
               style={{
                 width: i === step ? 18 : 7,
                 height: 7,
-                background: i === step ? "#7c3aed" : i < step ? "#7c3aed55" : "#e2e8f0",
+                background: i === step ? "var(--color-violet-600)" : i < step ? "#7c3aed55" : "var(--color-slate-200)",
               }}
             />
           ))}
@@ -261,15 +261,15 @@ export function StructuredBindingsVisualizer({ lang = "ko" }: { lang?: "ko" | "e
                     transition={{ duration: 0.6, repeat: isActive ? Infinity : 0 }}
                     className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-colors"
                     style={{
-                      borderColor: isFilled || isActive ? part.color : "#cbd5e1",
-                      background: isFilled ? `${part.color}25` : isActive ? `${part.color}40` : "#f8fafc",
+                      borderColor: isFilled || isActive ? part.color : "var(--color-slate-300)",
+                      background: isFilled ? `${part.color}25` : isActive ? `${part.color}40` : "var(--color-slate-50)",
                       opacity: isVisible ? 1 : 0.4,
                     }}
                   >
-                    <span className="text-[11px] font-mono font-bold" style={{ color: isFilled || isActive ? part.color : "#64748b" }}>
+                    <span className="text-[11px] font-mono font-bold" style={{ color: isFilled || isActive ? part.color : "var(--color-slate-500)" }}>
                       {part.varName}
                     </span>
-                    <span className="font-mono font-bold ml-auto" style={{ color: isFilled ? part.color : "#94a3b8" }}>
+                    <span className="font-mono font-bold ml-auto" style={{ color: isFilled ? part.color : "var(--color-slate-400)" }}>
                       <AnimatePresence mode="wait">
                         {isFilled ? (
                           <motion.span

@@ -52,7 +52,7 @@ export function FunctionBuilder({ onComplete, lang = "ko" }: FunctionBuilderProp
       parts: ['def', 'name', 'paren1', 'param', 'paren2', 'colon'],
       emoji: '✨',
       title: isEn ? 'Colon = declaration ends!' : '콜론 = 선언 끝!',
-      text: isEn ? 'The <strong>:</strong> (colon) means "the function declaration ends here!" Forget it and you get a <span style="color:#dc2626;">SyntaxError</span>!' : '<strong>:</strong> (콜론)은 "함수 선언이 여기서 끝났어!"를 의미해요. 콜론을 빼먹으면 <span style="color:#dc2626;">SyntaxError</span> 발생!',
+      text: isEn ? 'The <strong>:</strong> (colon) means "the function declaration ends here!" Forget it and you get a <span style="color:var(--color-red-600);">SyntaxError</span>!' : '<strong>:</strong> (콜론)은 "함수 선언이 여기서 끝났어!"를 의미해요. 콜론을 빼먹으면 <span style="color:var(--color-red-600);">SyntaxError</span> 발생!',
       buttonText: isEn ? 'Next 👉' : '다음 👉',
       hint: isEn ? 'Forgetting the colon = most common mistake!' : '콜론 빼먹기 = 가장 흔한 실수!'
     },
@@ -60,7 +60,7 @@ export function FunctionBuilder({ onComplete, lang = "ko" }: FunctionBuilderProp
       parts: ['def', 'name', 'paren1', 'param', 'paren2', 'colon', 'indent'],
       emoji: '➡️',
       title: isEn ? 'Indentation = inside the function!' : '들여쓰기 = 함수 안이에요!',
-      text: isEn ? '<strong>Indentation</strong> (4 spaces) marks "this code is inside the function!" Without it: <span style="color:#dc2626;">IndentationError</span>!' : '<strong>들여쓰기</strong> (스페이스 4칸)는 "이 코드는 함수 안에 있어요!"를 표시해요. 들여쓰기 안 하면 <span style="color:#dc2626;">IndentationError</span>!',
+      text: isEn ? '<strong>Indentation</strong> (4 spaces) marks "this code is inside the function!" Without it: <span style="color:var(--color-red-600);">IndentationError</span>!' : '<strong>들여쓰기</strong> (스페이스 4칸)는 "이 코드는 함수 안에 있어요!"를 표시해요. 들여쓰기 안 하면 <span style="color:var(--color-red-600);">IndentationError</span>!',
       buttonText: isEn ? 'Next 👉' : '다음 👉',
       hint: isEn ? '4 spaces is the standard!' : '스페이스 4칸이 표준이에요!'
     },

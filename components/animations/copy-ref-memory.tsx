@@ -57,8 +57,8 @@ export function CopyRefMemory({ lang = "ko" }: { lang?: "ko" | "en" }) {
       {/* 모드 선택 */}
       <div className="grid grid-cols-2 gap-2">
         {([
-          { id: "copy" as Mode, label: "for (int x : v)", sub: isEn ? "copy" : "복사본 생성", color: "#ef4444", bg: "#fef2f2" },
-          { id: "ref" as Mode, label: "for (int& x : v)", sub: isEn ? "reference" : "직접 참조", color: "#10b981", bg: "#f0fdf4" },
+          { id: "copy" as Mode, label: "for (int x : v)", sub: isEn ? "copy" : "복사본 생성", color: "var(--color-red-500)", bg: "var(--color-red-50)" },
+          { id: "ref" as Mode, label: "for (int& x : v)", sub: isEn ? "reference" : "직접 참조", color: "var(--color-emerald-500)", bg: "var(--color-green-50)" },
         ]).map(m => (
           <button
             key={m.id}
@@ -66,13 +66,13 @@ export function CopyRefMemory({ lang = "ko" }: { lang?: "ko" | "en" }) {
             className="px-3 py-2.5 rounded-xl border-2 text-left transition-all"
             style={mode === m.id
               ? { background: m.bg, borderColor: m.color }
-              : { background: "white", borderColor: "#e2e8f0" }
+              : { background: "white", borderColor: "var(--color-slate-200)" }
             }
           >
-            <div className="font-mono text-xs font-bold" style={{ color: mode === m.id ? m.color : "#94a3b8" }}>
+            <div className="font-mono text-xs font-bold" style={{ color: mode === m.id ? m.color : "var(--color-slate-400)" }}>
               {m.label}
             </div>
-            <div className="text-[10px] mt-0.5" style={{ color: mode === m.id ? m.color + "cc" : "#cbd5e1" }}>
+            <div className="text-[10px] mt-0.5" style={{ color: mode === m.id ? m.color + "cc" : "var(--color-slate-300)" }}>
               {m.sub}
             </div>
           </button>
@@ -113,9 +113,9 @@ export function CopyRefMemory({ lang = "ko" }: { lang?: "ko" | "en" }) {
                     <div
                       className="w-14 h-12 rounded-lg flex items-center justify-center font-mono text-sm font-bold border-2 transition-all duration-300"
                       style={{
-                        background: isActive ? "#1e293b" : "#f8fafc",
-                        color: isActive ? "#f1f5f9" : "#475569",
-                        borderColor: isActive ? "#475569" : "#e2e8f0",
+                        background: isActive ? "var(--color-slate-800)" : "var(--color-slate-50)",
+                        color: isActive ? "var(--color-slate-100)" : "var(--color-slate-600)",
+                        borderColor: isActive ? "var(--color-slate-600)" : "var(--color-slate-200)",
                       }}
                     >
                       {val}
@@ -251,8 +251,8 @@ export function CopyRefMemory({ lang = "ko" }: { lang?: "ko" | "en" }) {
             animate={{ opacity: 1, scale: 1 }}
             className="rounded-xl px-4 py-3 text-sm font-bold text-center"
             style={mode === "copy"
-              ? { background: "#fef2f2", color: "#ef4444" }
-              : { background: "#f0fdf4", color: "#10b981" }
+              ? { background: "var(--color-red-50)", color: "var(--color-red-500)" }
+              : { background: "var(--color-green-50)", color: "var(--color-emerald-500)" }
             }
           >
             {mode === "copy"
@@ -267,7 +267,7 @@ export function CopyRefMemory({ lang = "ko" }: { lang?: "ko" | "en" }) {
             onClick={start}
             disabled={running}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white disabled:opacity-50 transition-all"
-            style={{ background: mode === "copy" ? "#ef4444" : "#10b981" }}
+            style={{ background: mode === "copy" ? "var(--color-red-500)" : "var(--color-emerald-500)" }}
           >
             <Play className="w-3.5 h-3.5" />
             {isEn ? "Run" : "실행"}

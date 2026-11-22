@@ -85,9 +85,9 @@ const QUESTIONS: Question[] = [
 ]
 
 const OP_META: Record<Op, { label: string; color: string; bg: string; ring: string; icon: string }> = {
-  and: { label: "and", color: "#1d4ed8", bg: "#dbeafe", ring: "#3b82f6", icon: "🔗" },
-  or: { label: "or", color: "#15803d", bg: "#dcfce7", ring: "#22c55e", icon: "🔀" },
-  not: { label: "not", color: "#b91c1c", bg: "#fee2e2", ring: "#ef4444", icon: "🔄" },
+  and: { label: "and", color: "var(--color-blue-700)", bg: "var(--color-blue-100)", ring: "var(--color-blue-500)", icon: "🔗" },
+  or: { label: "or", color: "var(--color-green-700)", bg: "var(--color-green-100)", ring: "var(--color-green-500)", icon: "🔀" },
+  not: { label: "not", color: "var(--color-red-700)", bg: "var(--color-red-100)", ring: "var(--color-red-500)", icon: "🔄" },
 }
 
 // 문장 안의 *...* 부분을 강조로 렌더링
@@ -129,7 +129,7 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
   const total = QUESTIONS.length
   const q = QUESTIONS[order[idx]]
   const correct = picked === q?.answer
-  const accentColor = picked ? OP_META[picked].color : "#0f172a"
+  const accentColor = picked ? OP_META[picked].color : "var(--color-slate-900)"
 
   function pick(op: Op) {
     if (picked || done) return
@@ -164,21 +164,21 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
         style={{
           padding: 24,
           textAlign: "center",
-          background: "#f8fafc",
+          background: "var(--color-slate-50)",
           borderRadius: 12,
-          border: "1px solid #e2e8f0",
+          border: "1px solid var(--color-slate-200)",
         }}
       >
         <div style={{ fontSize: 48, marginBottom: 8 }}>{perfect ? "🏆" : good ? "✨" : "💪"}</div>
-        <div style={{ fontSize: 32, fontWeight: 800, color: "#0f172a", marginBottom: 6 }}>
+        <div style={{ fontSize: 32, fontWeight: 800, color: "var(--color-slate-900)", marginBottom: 6 }}>
           {score} / {total}
         </div>
-        <div style={{ fontSize: 18, color: "#475569", marginBottom: 18 }}>{isEn ? msgEn : msgKo}</div>
+        <div style={{ fontSize: 18, color: "var(--color-slate-600)", marginBottom: 18 }}>{isEn ? msgEn : msgKo}</div>
         <button
           onClick={reset}
           style={{
             padding: "10px 22px",
-            background: "#0f172a",
+            background: "var(--color-slate-900)",
             color: "white",
             border: "none",
             borderRadius: 8,
@@ -197,9 +197,9 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
     <div
       style={{
         padding: "18px 18px 20px",
-        background: "#f8fafc",
+        background: "var(--color-slate-50)",
         borderRadius: 12,
-        border: "1px solid #e2e8f0",
+        border: "1px solid var(--color-slate-200)",
       }}
     >
       {/* 진행 상태 */}
@@ -210,7 +210,7 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
           alignItems: "center",
           marginBottom: 14,
           fontSize: 13,
-          color: "#64748b",
+          color: "var(--color-slate-500)",
           fontWeight: 600,
         }}
       >
@@ -218,7 +218,7 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
           {idx + 1} / {total}
         </span>
         <span>
-          {isEn ? "Score" : "점수"}: <span style={{ color: "#0f172a", fontWeight: 800 }}>{score}</span>
+          {isEn ? "Score" : "점수"}: <span style={{ color: "var(--color-slate-900)", fontWeight: 800 }}>{score}</span>
         </span>
       </div>
 
@@ -226,7 +226,7 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
       <div
         style={{
           height: 6,
-          background: "#e2e8f0",
+          background: "var(--color-slate-200)",
           borderRadius: 99,
           overflow: "hidden",
           marginBottom: 18,
@@ -236,7 +236,7 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
           initial={false}
           animate={{ width: `${((idx + (picked ? 1 : 0)) / total) * 100}%` }}
           transition={{ duration: 0.35 }}
-          style={{ height: "100%", background: "#0f172a" }}
+          style={{ height: "100%", background: "var(--color-slate-900)" }}
         />
       </div>
 
@@ -250,13 +250,13 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
           transition={{ duration: 0.25 }}
           style={{
             background: "white",
-            border: `2px solid ${picked ? OP_META[picked].ring : "#cbd5e1"}`,
+            border: `2px solid ${picked ? OP_META[picked].ring : "var(--color-slate-300)"}`,
             borderRadius: 12,
             padding: "22px 18px",
             textAlign: "center",
             fontSize: 19,
             fontWeight: 600,
-            color: "#0f172a",
+            color: "var(--color-slate-900)",
             lineHeight: 1.5,
             minHeight: 78,
             display: "flex",
@@ -303,7 +303,7 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
                 padding: "14px 8px",
                 background: isPicked ? meta.bg : "white",
                 border: `2px solid ${
-                  isCorrectChoice ? "#16a34a" : showWrong ? "#dc2626" : meta.ring
+                  isCorrectChoice ? "var(--color-green-600)" : showWrong ? "var(--color-red-600)" : meta.ring
                 }`,
                 borderRadius: 10,
                 fontSize: 18,
@@ -338,9 +338,9 @@ export function AndOrNotMatcher({ lang = "ko" }: AndOrNotMatcherProps) {
                 textAlign: "center",
                 fontSize: 14,
                 fontWeight: 600,
-                color: correct ? "#15803d" : "#b91c1c",
+                color: correct ? "var(--color-green-700)" : "var(--color-red-700)",
                 padding: "8px 12px",
-                background: correct ? "#dcfce7" : "#fee2e2",
+                background: correct ? "var(--color-green-100)" : "var(--color-red-100)",
                 borderRadius: 8,
               }}
             >

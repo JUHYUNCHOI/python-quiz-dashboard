@@ -38,8 +38,8 @@ function getPresets(isEn: boolean): Preset[] {
       id: "basic",
       label: isEn ? "Basic — name + age" : "기본 — 이름 + 나이",
       vars: [
-        { name: "name", value: '"철수"', color: "#3b82f6" },
-        { name: "age", value: "15", color: "#10b981" },
+        { name: "name", value: '"철수"', color: "var(--color-blue-500)" },
+        { name: "age", value: "15", color: "var(--color-emerald-500)" },
       ],
       template: 'f"안녕 {name}, {age}살!"',
       pieces: [
@@ -53,14 +53,14 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "{var} slots get replaced by the variable's value, in order. Surrounding text stays as is."
         : "{변수} 슬롯이 변수의 값으로 차례차례 바뀌어요. 슬롯 바깥 글자는 그대로.",
-      color: "#3b82f6",
+      color: "var(--color-blue-500)",
     },
     {
       id: "expr",
       label: isEn ? "Expression — {a+b}" : "표현식 — {a+b}",
       vars: [
-        { name: "a", value: "7", color: "#a855f7" },
-        { name: "b", value: "3", color: "#a855f7" },
+        { name: "a", value: "7", color: "var(--color-purple-500)" },
+        { name: "b", value: "3", color: "var(--color-purple-500)" },
       ],
       template: 'f"{a} + {b} = {a + b}"',
       pieces: [
@@ -76,13 +76,13 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "Slots can hold expressions, not just variable names. {a+b} computes 7+3 first, then drops 10 in."
         : "슬롯 안에 변수뿐 아니라 식도 들어가요. {a+b} 는 먼저 7+3 을 계산하고 결과 10 을 넣어요.",
-      color: "#a855f7",
+      color: "var(--color-purple-500)",
     },
     {
       id: "round",
       label: 'Format :.2f',
       vars: [
-        { name: "pi", value: "3.14159", color: "#f59e0b" },
+        { name: "pi", value: "3.14159", color: "var(--color-amber-500)" },
       ],
       template: 'f"π ≈ {pi:.2f}"',
       pieces: [
@@ -94,13 +94,13 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? ":.2f rounds the float to 2 decimal places — handy for prices, scores."
         : ":.2f 는 소수 둘째 자리까지 반올림 — 가격, 점수 표기에 유용.",
-      color: "#f59e0b",
+      color: "var(--color-amber-500)",
     },
     {
       id: "comma",
       label: 'Format :,',
       vars: [
-        { name: "price", value: "1234567", color: "#10b981" },
+        { name: "price", value: "1234567", color: "var(--color-emerald-500)" },
       ],
       template: 'f"가격: {price:,}원"',
       pieces: [
@@ -112,13 +112,13 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? ":, drops thousands separators in. Big numbers become readable."
         : ":, 는 천 단위마다 콤마. 큰 숫자가 읽기 쉬워져요.",
-      color: "#10b981",
+      color: "var(--color-emerald-500)",
     },
     {
       id: "align",
       label: 'Format :>8',
       vars: [
-        { name: "name", value: '"Alice"', color: "#ec4899" },
+        { name: "name", value: '"Alice"', color: "var(--color-pink-500)" },
       ],
       template: 'f"|{name:>8}|"',
       pieces: [
@@ -130,7 +130,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? ":>8 reserves a width of 8 characters and right-aligns. Spaces fill the gap."
         : ":>8 은 칸 너비 8 을 잡고 오른쪽 정렬. 빈 자리는 공백으로 채워요.",
-      color: "#ec4899",
+      color: "var(--color-pink-500)",
     },
   ]
 }
@@ -216,7 +216,7 @@ function FStringVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
             className="px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition-all font-mono"
             style={selectedId === p.id
               ? { background: p.color, color: "white", borderColor: p.color }
-              : { background: "white", color: "#94a3b8", borderColor: "#e2e8f0" }
+              : { background: "white", color: "var(--color-slate-400)", borderColor: "var(--color-slate-200)" }
             }
           >
             {p.label}
@@ -353,7 +353,7 @@ function FStringVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               className="rounded-xl px-3 py-2 text-xs"
-              style={{ background: preset.color + "15", color: "#374151" }}
+              style={{ background: preset.color + "15", color: "var(--color-gray-700)" }}
             >
               💡 {preset.caption}
             </motion.div>

@@ -78,8 +78,8 @@ export function CallByRefVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           <span
             className="inline-block px-3 py-1.5 rounded-full text-xs font-bold leading-relaxed"
             style={{
-              background: step === 2 ? "#ede9fe" : "#f1f5f9",
-              color: step === 2 ? "#5b21b6" : "#475569",
+              background: step === 2 ? "var(--color-violet-100)" : "var(--color-slate-100)",
+              color: step === 2 ? "var(--color-violet-800)" : "var(--color-slate-600)",
             }}
           >
             {step === 2 && "⚡ "}
@@ -104,7 +104,7 @@ export function CallByRefVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                     exit={{ opacity: 0, y: -8, scale: 0.7 }}
                     transition={{ type: "spring", stiffness: 380, damping: 22 }}
                     className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white shadow-md"
-                    style={{ background: "#7c3aed" }}
+                    style={{ background: "var(--color-violet-600)" }}
                   >
                     x
                     <span className="ml-1 text-[9px] opacity-80">
@@ -131,9 +131,9 @@ export function CallByRefVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               style={{
                 borderWidth: 3,
                 borderStyle: "solid",
-                borderColor: step >= 2 ? "#7c3aed" : "#10b981",
-                background: step >= 2 ? "#ede9fe" : "#ecfdf5",
-                color: step >= 2 ? "#5b21b6" : "#065f46",
+                borderColor: step >= 2 ? "var(--color-violet-600)" : "var(--color-emerald-500)",
+                background: step >= 2 ? "var(--color-violet-100)" : "var(--color-emerald-50)",
+                color: step >= 2 ? "var(--color-violet-800)" : "var(--color-emerald-800)",
                 boxShadow:
                   step === 2 ? "0 0 0 5px #7c3aed25" : undefined,
               }}
@@ -172,7 +172,7 @@ export function CallByRefVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               className="mt-4 rounded-xl px-3 py-2 text-sm text-center font-bold"
-              style={{ background: "#ede9fe", color: "#5b21b6" }}
+              style={{ background: "var(--color-violet-100)", color: "var(--color-violet-800)" }}
             >
               {isEn
                 ? "✅ num is 99 — the function changed the original through the alias"
@@ -202,7 +202,7 @@ export function CallByRefVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 width: i === step ? 18 : 7,
                 height: 7,
                 background:
-                  i === step ? "#7c3aed" : i < step ? "#7c3aed55" : "#d1d5db",
+                  i === step ? "var(--color-violet-600)" : i < step ? "#7c3aed55" : "var(--color-gray-300)",
               }}
             />
           ))}
@@ -211,7 +211,7 @@ export function CallByRefVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           onClick={() => setStep((s) => Math.min(TOTAL - 1, s + 1) as Step)}
           disabled={step === TOTAL - 1}
           className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-bold text-white disabled:opacity-30 transition-all"
-          style={{ background: "#7c3aed" }}
+          style={{ background: "var(--color-violet-600)" }}
         >
           {isEn ? "Next" : "다음"}
           <ChevronRight className="w-4 h-4" />

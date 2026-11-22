@@ -23,7 +23,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { t } from "./theme";
 
-const DEFAULT_ACCENT = "#059669";
+const DEFAULT_ACCENT = "var(--color-emerald-600)";
 
 /**
  * 인쇄(PDF) 전용 — 시뮬을 '모든 단계' 로 한 번씩 펼쳐 그리기 위한 통로.
@@ -204,7 +204,7 @@ export function SimNav({
         aria-label={restartLabel}
         style={{
           padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 800,
-          background: "#fff", border: `2px solid ${atStart ? "#e5e7eb" : accent}`,
+          background: "var(--color-white)", border: `2px solid ${atStart ? "var(--color-gray-200)" : accent}`,
           color: atStart ? "#b0b5c3" : accent, cursor: atStart ? "default" : "pointer",
         }}
       >
@@ -216,7 +216,7 @@ export function SimNav({
         aria-label={prevLabel}
         style={{
           padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 800,
-          background: "#fff", border: `2px solid ${atStart ? "#e5e7eb" : accent}`,
+          background: "var(--color-white)", border: `2px solid ${atStart ? "var(--color-gray-200)" : accent}`,
           color: atStart ? "#b0b5c3" : accent, cursor: atStart ? "default" : "pointer",
         }}
       >
@@ -250,9 +250,9 @@ export function SimNav({
         aria-label={t(isEn, "Next", "다음")}
         style={{
           padding: "6px 18px", borderRadius: 8, fontSize: 13, fontWeight: 800,
-          background: atEnd ? "#e5e7eb" : accent,
-          border: `2px solid ${atEnd ? "#e5e7eb" : accent}`,
-          color: atEnd ? "#b0b5c3" : "#fff",
+          background: atEnd ? "var(--color-gray-200)" : accent,
+          border: `2px solid ${atEnd ? "var(--color-gray-200)" : accent}`,
+          color: atEnd ? "var(--color-slate-400)" : "var(--ink-on-accent)",
           cursor: atEnd ? "default" : "pointer",
         }}
       >
@@ -442,15 +442,15 @@ export function NarrativePanel({
     <div
       ref={ref}
       style={{
-        background: "#faf5ff",
-        border: "2px solid #c4b5fd",
+        background: "var(--color-purple-50)",
+        border: "2px solid var(--color-violet-300)",
         borderRadius: 10,
         padding,
         marginBottom,
         minHeight,
         ...(maxHeight ? { maxHeight, overflowY: "auto" as const } : {}),
         fontSize: 13,
-        color: "#1f2937",
+        color: "var(--color-gray-800)",
         lineHeight,
         // Smooth height changes — avoids the abrupt "everything below
         // jumps" effect when a tall step replaces a short one.
@@ -503,7 +503,7 @@ export function StepHeader({
       <div style={{ fontSize: 13, fontWeight: 800, color: accent, textAlign: "center", marginBottom: 4 }}>
         {icon} {title}
       </div>
-      <div style={{ fontSize: 11, color: "#6b7280", textAlign: "center", marginBottom: 14 }}>
+      <div style={{ fontSize: 11, color: "var(--color-gray-500)", textAlign: "center", marginBottom: 14 }}>
         {subtitle ?? fallbackSub}
       </div>
     </>

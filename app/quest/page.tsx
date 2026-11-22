@@ -56,7 +56,7 @@ const SECTIONS: Section[] = [
   {
     label: "USACO",
     icon: "🐄",
-    color: "#d97706",
+    color: "var(--color-amber-600)",
     problems: [
       // 2025-26 season
       { id: "makedistinct", emoji: "🎯", title: "Make All Distinct", sub: "Feb 2026 Bronze #1" },
@@ -192,7 +192,7 @@ const SECTIONS: Section[] = [
   {
     label: "MCC",
     icon: "🌏",
-    color: "#059669",
+    color: "var(--color-emerald-600)",
     problems: [
       { id: "fences", emoji: "🏗️", title: "Building Fences", sub: "MCC 2025 P1" },
       { id: "fans", emoji: "🪭", title: "Fans", sub: "MCC 2025 P2" },
@@ -247,7 +247,7 @@ const SECTIONS: Section[] = [
   {
     label: "MCO",
     icon: "🏆",
-    color: "#d97706",
+    color: "var(--color-amber-600)",
     problems: [
       { id: "mco15badminton", emoji: "🏸", title: "Badminton", sub: "MCO 2015 P1" },
       { id: "mco15honey", emoji: "🍯", title: "Honey", sub: "MCO 2015 P2" },
@@ -770,7 +770,7 @@ export default function QuestPage() {
                         {([null, 1, 2, 3, 4, 5] as (number | null)[]).map(lv => {
                           const on = (diffBySection[section.label] ?? null) === lv
                           const label = lv === null ? "전체" : `Lv${lv}`
-                          const color = lv === null ? "#334155" : DIFF_COLOR[lv as 1 | 2 | 3 | 4 | 5]
+                          const color = lv === null ? "var(--color-slate-700)" : DIFF_COLOR[lv as 1 | 2 | 3 | 4 | 5]
                           const pool = lv === null
                             ? section.problems
                             : section.problems.filter(p => questDifficulty(p.id, p.sub)?.value === lv)
@@ -783,8 +783,8 @@ export default function QuestPage() {
                               onClick={() => setDiffBySection(prev => ({ ...prev, [section.label]: lv }))}
                               className="text-[11px] font-black px-2 py-0.5 rounded-full border-2 transition-colors"
                               style={on
-                                ? { background: color, color: "#fff", borderColor: color }
-                                : { background: "#fff", color, borderColor: color }}
+                                ? { background: color, color: "var(--ink-on-accent)", borderColor: color }
+                                : { background: "var(--color-white)", color, borderColor: color }}
                             >
                               {label} <span className="font-bold opacity-80">{done}/{cnt}</span>
                             </button>

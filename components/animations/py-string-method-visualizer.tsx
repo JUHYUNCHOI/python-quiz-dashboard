@@ -37,14 +37,14 @@ const TAB_META: Record<
   MethodTab,
   { label: string; emoji: string; color: string; bg: string }
 > = {
-  upper: { label: "upper()", emoji: "🔼", color: "#2563eb", bg: "#eff6ff" },
-  lower: { label: "lower()", emoji: "🔽", color: "#0891b2", bg: "#ecfeff" },
-  strip: { label: "strip()", emoji: "✂️", color: "#0d9488", bg: "#f0fdfa" },
-  lstrip: { label: "lstrip()", emoji: "◀️", color: "#059669", bg: "#ecfdf5" },
-  rstrip: { label: "rstrip()", emoji: "▶️", color: "#16a34a", bg: "#f0fdf4" },
-  replace: { label: "replace()", emoji: "🔁", color: "#d97706", bg: "#fffbeb" },
-  find: { label: "find()", emoji: "🔍", color: "#7c3aed", bg: "#f5f3ff" },
-  count: { label: "count()", emoji: "🔢", color: "#db2777", bg: "#fdf2f8" },
+  upper: { label: "upper()", emoji: "🔼", color: "var(--color-blue-600)", bg: "var(--color-blue-50)" },
+  lower: { label: "lower()", emoji: "🔽", color: "var(--color-cyan-600)", bg: "var(--color-cyan-50)" },
+  strip: { label: "strip()", emoji: "✂️", color: "var(--color-teal-600)", bg: "var(--color-teal-50)" },
+  lstrip: { label: "lstrip()", emoji: "◀️", color: "var(--color-emerald-600)", bg: "var(--color-emerald-50)" },
+  rstrip: { label: "rstrip()", emoji: "▶️", color: "var(--color-green-600)", bg: "var(--color-green-50)" },
+  replace: { label: "replace()", emoji: "🔁", color: "var(--color-amber-600)", bg: "var(--color-amber-50)" },
+  find: { label: "find()", emoji: "🔍", color: "var(--color-violet-600)", bg: "var(--color-violet-50)" },
+  count: { label: "count()", emoji: "🔢", color: "var(--color-pink-600)", bg: "var(--color-pink-50)" },
 }
 
 const TABS: MethodTab[] = [
@@ -99,9 +99,9 @@ function StringRow({
               if (cell.removed) return null
 
               const baseStyle: React.CSSProperties = {
-                borderColor: "#e2e8f0",
+                borderColor: "var(--color-slate-200)",
                 background: "white",
-                color: "#475569",
+                color: "var(--color-slate-600)",
               }
               const hlStyle: React.CSSProperties = {
                 borderColor: accent,
@@ -116,9 +116,9 @@ function StringRow({
                 boxShadow: `0 0 0 2px ${accent}40`,
               }
               const fadingStyle: React.CSSProperties = {
-                borderColor: "#fca5a5",
-                background: "#fef2f2",
-                color: "#dc2626",
+                borderColor: "var(--color-red-300)",
+                background: "var(--color-red-50)",
+                color: "var(--color-red-600)",
               }
 
               return (
@@ -365,9 +365,9 @@ export function PythonStringMethodVisualizer({
                 animate={{ opacity: 1, x: 0 }}
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border-2 font-mono text-sm font-black"
                 style={{
-                  borderColor: "#dc2626",
-                  background: "#fef2f2",
-                  color: "#dc2626",
+                  borderColor: "var(--color-red-600)",
+                  background: "var(--color-red-50)",
+                  color: "var(--color-red-600)",
                 }}
               >
                 <span>⚠ {labels.notFound}</span>
@@ -456,9 +456,9 @@ export function PythonStringMethodVisualizer({
                         color: "white",
                       }
                     : {
-                        borderColor: "#e2e8f0",
+                        borderColor: "var(--color-slate-200)",
                         background: "white",
-                        color: "#64748b",
+                        color: "var(--color-slate-500)",
                       }
                 }
                 type="button"
@@ -498,9 +498,9 @@ export function PythonStringMethodVisualizer({
                 onChange={(e) => setOldStr(e.target.value)}
                 maxLength={8}
                 className="w-full px-3 py-2 rounded-xl border-2 border-slate-200 font-mono text-sm focus:outline-none transition-all"
-                style={{ borderColor: "#e2e8f0" }}
+                style={{ borderColor: "var(--color-slate-200)" }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = accent)}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--color-slate-200)")}
                 placeholder="l"
               />
             </div>
@@ -514,9 +514,9 @@ export function PythonStringMethodVisualizer({
                 onChange={(e) => setNewStr(e.target.value)}
                 maxLength={8}
                 className="w-full px-3 py-2 rounded-xl border-2 border-slate-200 font-mono text-sm focus:outline-none transition-all"
-                style={{ borderColor: "#e2e8f0" }}
+                style={{ borderColor: "var(--color-slate-200)" }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = accent)}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--color-slate-200)")}
                 placeholder="L"
               />
             </div>
@@ -534,9 +534,9 @@ export function PythonStringMethodVisualizer({
               onChange={(e) => setSubStr(e.target.value)}
               maxLength={8}
               className="w-full px-3 py-2 rounded-xl border-2 border-slate-200 font-mono text-sm focus:outline-none transition-all"
-              style={{ borderColor: "#e2e8f0" }}
+              style={{ borderColor: "var(--color-slate-200)" }}
               onFocus={(e) => (e.currentTarget.style.borderColor = accent)}
-              onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "var(--color-slate-200)")}
               placeholder="l"
             />
           </div>
@@ -591,7 +591,7 @@ export function PythonStringMethodVisualizer({
         {/* 불변성 안내 */}
         <div
           className="rounded-xl border-2 px-3 py-2 text-xs flex items-start gap-2"
-          style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
+          style={{ borderColor: "var(--color-slate-200)", background: "var(--color-slate-50)" }}
         >
           <span className="text-base leading-none">💡</span>
           <span className="text-slate-600 leading-relaxed">{labels.immutable}</span>

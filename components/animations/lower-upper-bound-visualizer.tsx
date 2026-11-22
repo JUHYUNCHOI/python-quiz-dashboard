@@ -44,8 +44,8 @@ export function LowerUpperBoundVisualizer({
             onClick={() => setTarget(t)}
             className="px-3 py-1.5 text-xs font-mono font-bold rounded-lg transition-all"
             style={{
-              background: target === t ? "#7c3aed" : "#f1f5f9",
-              color: target === t ? "white" : "#475569",
+              background: target === t ? "var(--color-violet-600)" : "var(--color-slate-100)",
+              color: target === t ? "white" : "var(--color-slate-600)",
               boxShadow: target === t ? "0 0 0 3px #7c3aed25" : undefined,
             }}
           >
@@ -104,9 +104,9 @@ export function LowerUpperBoundVisualizer({
                 style={{
                   width: cellW,
                   height: cellW,
-                  borderColor: inRange ? "#7c3aed" : isEqual ? "#a78bfa" : "#cbd5e1",
-                  background: inRange ? "#ede9fe" : "#f8fafc",
-                  color: inRange ? "#5b21b6" : "#64748b",
+                  borderColor: inRange ? "var(--color-violet-600)" : isEqual ? "var(--color-violet-400)" : "var(--color-slate-300)",
+                  background: inRange ? "var(--color-violet-100)" : "var(--color-slate-50)",
+                  color: inRange ? "var(--color-violet-800)" : "var(--color-slate-500)",
                   boxShadow: inRange ? "0 0 0 3px #7c3aed20" : undefined,
                 }}
               >
@@ -121,8 +121,8 @@ export function LowerUpperBoundVisualizer({
             style={{
               width: cellW,
               height: cellW,
-              borderColor: lb === VECTOR.length || ub === VECTOR.length ? "#94a3b8" : "#e2e8f0",
-              color: "#94a3b8",
+              borderColor: lb === VECTOR.length || ub === VECTOR.length ? "var(--color-slate-400)" : "var(--color-slate-200)",
+              color: "var(--color-slate-400)",
             }}
           >
             end

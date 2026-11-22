@@ -77,10 +77,10 @@ const TXT = {
   },
 }
 
-const ACCENT = "#6366f1" // indigo-500
-const ACCENT_BG = "#eef2ff"
-const POS = "#10b981" // emerald-500
-const NEG = "#ef4444" // red-500
+const ACCENT = "var(--color-indigo-500)" // indigo-500
+const ACCENT_BG = "var(--color-indigo-50)"
+const POS = "var(--color-emerald-500)" // emerald-500
+const NEG = "var(--color-red-500)" // red-500
 
 // ───────────────────────── helpers ─────────────────────────
 
@@ -197,7 +197,7 @@ function ClockMode({
             cy={cy}
             r={R + 12}
             fill="white"
-            stroke="#e5e7eb"
+            stroke="var(--color-gray-200)"
             strokeWidth={2}
           />
           <circle
@@ -231,7 +231,7 @@ function ClockMode({
                   y1={y1}
                   x2={x2}
                   y2={y2}
-                  stroke={isMajor ? "#475569" : "#94a3b8"}
+                  stroke={isMajor ? "var(--color-slate-600)" : "var(--color-slate-400)"}
                   strokeWidth={isMajor ? 2 : 1}
                 />
                 {showNumber && (
@@ -244,10 +244,10 @@ function ClockMode({
                     fontWeight={isResult || isStart ? 700 : 500}
                     fill={
                       isResult
-                        ? "#dc2626"
+                        ? "var(--color-red-600)"
                         : isStart
-                        ? "#0891b2"
-                        : "#475569"
+                        ? "var(--color-cyan-600)"
+                        : "var(--color-slate-600)"
                     }
                   >
                     {i}
@@ -259,7 +259,7 @@ function ClockMode({
                     cy={cy + Math.sin(rad) * (R - 22)}
                     r={13}
                     fill="none"
-                    stroke="#dc2626"
+                    stroke="var(--color-red-600)"
                     strokeWidth={2}
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -275,7 +275,7 @@ function ClockMode({
             cx={cx + Math.cos(((angleStart - 90) * Math.PI) / 180) * (R - 40)}
             cy={cy + Math.sin(((angleStart - 90) * Math.PI) / 180) * (R - 40)}
             r={4}
-            fill="#0891b2"
+            fill="var(--color-cyan-600)"
           />
 
           {/* 회전하는 바늘 */}
@@ -284,7 +284,7 @@ function ClockMode({
             y1={cy}
             x2={cx}
             y2={cy - (R - 18)}
-            stroke="#dc2626"
+            stroke="var(--color-red-600)"
             strokeWidth={3}
             strokeLinecap="round"
             style={{ originX: `${cx}px`, originY: `${cy}px` }}
@@ -292,7 +292,7 @@ function ClockMode({
             animate={{ rotate: animatingAngle }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
           />
-          <circle cx={cx} cy={cy} r={6} fill="#dc2626" />
+          <circle cx={cx} cy={cy} r={6} fill="var(--color-red-600)" />
         </svg>
       </div>
     </div>
@@ -361,7 +361,7 @@ function EvenOddMode({
                 cy={cy}
                 r={DOT_R}
                 fill={d.isLeftover ? NEG : ACCENT}
-                stroke={d.isLeftover ? "#991b1b" : "#3730a3"}
+                stroke={d.isLeftover ? "var(--color-red-800)" : "var(--color-indigo-800)"}
                 strokeWidth={2}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}

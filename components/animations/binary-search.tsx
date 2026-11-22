@@ -70,15 +70,15 @@ export function BinarySearchAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
   }
 
   const getColor = (i: number) => {
-    if (!current) return "#fff"
+    if (!current) return "var(--color-white)"
     const inRange = i >= current.left && i <= current.right
 
     if (phase === "mid" && i === current.mid) {
-      return current.result === "found" ? "#22c55e" : "#f97316"
+      return current.result === "found" ? "var(--color-green-500)" : "var(--color-orange-500)"
     }
-    if (!inRange) return "#e5e7eb"
-    if (phase === "range") return "#dbeafe" // 범위 표시 (연파랑)
-    return "#fff"
+    if (!inRange) return "var(--color-gray-200)"
+    if (phase === "range") return "var(--color-blue-100)" // 범위 표시 (연파랑)
+    return "var(--color-white)"
   }
 
   const isEliminated = (i: number) => {
@@ -113,7 +113,7 @@ export function BinarySearchAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
             }}
             transition={{ duration: 0.3 }}
             className="flex flex-col items-center justify-center w-10 h-12 rounded-lg border border-gray-200 font-black text-sm shadow-sm"
-            style={{ color: isEliminated(i) ? "#9ca3af" : "#111" }}
+            style={{ color: isEliminated(i) ? "var(--color-gray-400)" : "#111" }}
           >
             <span>{val}</span>
             <span className="text-[10px] font-normal text-gray-400">[{i}]</span>

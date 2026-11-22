@@ -276,8 +276,8 @@ function PairCard({
         <motion.div
           animate={{
             backgroundColor: highlightFirst
-              ? firstMatch ? "#dbeafe" : "#fed7aa"
-              : "#f9fafb",
+              ? firstMatch ? "var(--color-blue-100)" : "var(--color-orange-200)"
+              : "var(--color-gray-50)",
           }}
           className="px-3 py-2 border-b border-gray-200"
         >
@@ -294,7 +294,7 @@ function PairCard({
         {/* second */}
         <motion.div
           animate={{
-            backgroundColor: highlightSecond ? "#f3e8ff" : "#f9fafb",
+            backgroundColor: highlightSecond ? "var(--color-purple-100)" : "var(--color-gray-50)",
           }}
           className="px-3 py-2"
         >

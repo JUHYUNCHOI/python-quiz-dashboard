@@ -124,13 +124,13 @@ export function ScrollEdgeFades({ fade, bg, radius = 12 }:
      (`check-jsx-markdown`, 2026-09-28 에 하루에 네 군데서 겪었다).
    ⭐ 글자색을 바꾸지 않고 **바탕에 형광펜**을 긋는다. 말풍선 색이 셋(파랑·노랑·초록)이라
      글자를 빨강으로 바꾸면 초록 말풍선에서 「오류」로 읽힌다.
-     `#fde68a` 는 형제 `checkups/sims.jsx` 가 「여기 봐라」에 쓰는 색과 같다 — 새 색이 아니다.
+     `var(--color-amber-200)` 는 형제 `checkups/sims.jsx` 가 「여기 봐라」에 쓰는 색과 같다 — 새 색이 아니다.
 
    ⚠️ **여기 쓰는 색값을 다른 데 복붙하지 마라** — `feedback_example_code_is_contagious`.
      강조가 필요하면 이 컴포넌트를 **불러 써라.** */
 export function Hi({ children }: { children: React.ReactNode }) {
   return (
-    <b style={{ fontWeight: 900, background: "#fde68a", borderRadius: 4, padding: "0 3px" }}>
+    <b style={{ fontWeight: 900, background: "var(--color-amber-200)", borderRadius: 4, padding: "0 3px" }}>
       {children}
     </b>
   )
@@ -613,7 +613,7 @@ export function highlight(line: string, lang: "py" | "cpp" = "py"): React.ReactN
     else if ("=<>!+-*/%&|^~".includes(tok[0]) && tok.length <= 3)
       parts.push(<span key={`${m.index}o`} style={{ color: "#89ddff" }}>{tok}</span>)
     else
-      parts.push(<span key={`${m.index}t`} style={{ color: "#e2e8f0" }}>{tok}</span>)
+      parts.push(<span key={`${m.index}t`} style={{ color: "var(--color-slate-200)" }}>{tok}</span>)
   }
   if (comment)
     // 주석(특히 한글 설명)을 더 밝게 + 이탤릭 제거 — 이탤릭 한글은 잘 안 읽힘 (선생님 2026-07-13).
@@ -668,9 +668,9 @@ export function CodeBlock({ lines: rawLines, lang = "py", dimUntil = 0, isEn = f
   return (
     /* ⛔ 2026-10-01 — 옛 `boxShadow: inset -14px …` 를 **뺐다.** 정적이라 끝까지 밀어도
        안 사라져 「아직 더 있다」고 거짓말했다. 위 `useScrollEdgeFades` 참고.
-       `bg-gray-900` = `#111827` 이라 fade 색도 그 값을 넘긴다. */
+       `bg-gray-900` = `var(--color-gray-900)` 이라 fade 색도 그 값을 넘긴다. */
     <div ref={scrollRef} className="qcode-scroll relative bg-gray-900 rounded-xl px-3 pb-3 pt-9 sm:pt-3 overflow-x-auto text-[13px] leading-relaxed font-mono" style={{ fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0' }}>
-      <ScrollEdgeFades fade={codeFade} bg="#111827" />
+      <ScrollEdgeFades fade={codeFade} bg="var(--color-gray-900)" />
       <button
         onClick={handleCopy}
         className={`absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-bold transition-colors ${

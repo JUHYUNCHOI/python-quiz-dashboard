@@ -40,9 +40,9 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const { cellIdx, action } = getStepInfo(step)
   const vec = isCopy ? INIT : getRefV(step)
 
-  const accent = isCopy ? "#f97316" : "#6366f1"
-  const accentBg = isCopy ? "#fff7ed" : "#eef2ff"
-  const accentBorder = isCopy ? "#fed7aa" : "#c7d2fe"
+  const accent = isCopy ? "var(--color-orange-500)" : "var(--color-indigo-500)"
+  const accentBg = isCopy ? "var(--color-orange-50)" : "var(--color-indigo-50)"
+  const accentBorder = isCopy ? "var(--color-orange-200)" : "var(--color-indigo-200)"
 
   // copy 모드 i 박스 값
   const iValue = cellIdx < 0
@@ -84,7 +84,7 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               key={`lbl-${i}-${step}`}
               initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
               className="text-[10px] font-black text-white px-1.5 py-0.5 rounded-full shadow"
-              style={{ background: "#6366f1" }}>
+              style={{ background: "var(--color-indigo-500)" }}>
               i
             </motion.span>
           )}
@@ -96,9 +96,9 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           style={{
             borderWidth: 3,
             borderStyle: "solid",
-            background: isFocus ? accent + "20" : isChangedRef ? "#ede9fe" : "#f8fafc",
-            borderColor: isFocus ? accent : isChangedRef ? "#a78bfa" : "#e2e8f0",
-            color: isFocus ? accent : isChangedRef ? "#7c3aed" : "#94a3b8",
+            background: isFocus ? accent + "20" : isChangedRef ? "var(--color-violet-100)" : "var(--color-slate-50)",
+            borderColor: isFocus ? accent : isChangedRef ? "var(--color-violet-400)" : "var(--color-slate-200)",
+            color: isFocus ? accent : isChangedRef ? "var(--color-violet-600)" : "var(--color-slate-400)",
             opacity: isDimmed ? 0.35 : 1,
             boxShadow: isFocus ? `0 0 0 4px ${accent}25` : undefined,
           }}>
@@ -111,7 +111,7 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           </AnimatePresence>
         </motion.div>
         <span className="text-[10px] font-mono"
-          style={{ color: isFocus ? accent : isDimmed ? "#cbd5e1" : "#94a3b8" }}>
+          style={{ color: isFocus ? accent : isDimmed ? "var(--color-slate-300)" : "var(--color-slate-400)" }}>
           v[{i}]
         </span>
       </div>
@@ -124,26 +124,26 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
       {/* 탭 — 차이점 한 줄도 안에 */}
       <div className="grid grid-cols-2 gap-2">
         {([
-          { id: "copy" as Mode, syntax: "for (int i : v)", badge: isEn ? "copy" : "복사", sub: isEn ? "i = new box" : "i = 새 상자", color: "#f97316", bg: "#fff7ed" },
-          { id: "ref" as Mode, syntax: "for (int& i : v)", badge: isEn ? "reference" : "참조", sub: isEn ? "i = the cell itself" : "i = 그 칸 자체", color: "#6366f1", bg: "#eef2ff" },
+          { id: "copy" as Mode, syntax: "for (int i : v)", badge: isEn ? "copy" : "복사", sub: isEn ? "i = new box" : "i = 새 상자", color: "var(--color-orange-500)", bg: "var(--color-orange-50)" },
+          { id: "ref" as Mode, syntax: "for (int& i : v)", badge: isEn ? "reference" : "참조", sub: isEn ? "i = the cell itself" : "i = 그 칸 자체", color: "var(--color-indigo-500)", bg: "var(--color-indigo-50)" },
         ]).map(m => (
           <button key={m.id} onClick={() => handleMode(m.id)}
             className="rounded-2xl border-2 px-3 py-2 text-left transition-all"
             style={mode === m.id
               ? { borderColor: m.color, background: m.bg }
-              : { borderColor: "#e2e8f0", background: "white" }}>
+              : { borderColor: "var(--color-slate-200)", background: "white" }}>
             <div className="font-mono text-xs font-bold mb-1"
-              style={{ color: mode === m.id ? m.color : "#94a3b8" }}>
+              style={{ color: mode === m.id ? m.color : "var(--color-slate-400)" }}>
               {m.syntax}
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full inline-block"
               style={mode === m.id
                 ? { background: m.color, color: "white" }
-                : { background: "#f1f5f9", color: "#94a3b8" }}>
+                : { background: "var(--color-slate-100)", color: "var(--color-slate-400)" }}>
               {m.badge}
             </span>
             <p className="text-[10px] mt-1.5"
-              style={{ color: mode === m.id ? m.color : "#94a3b8" }}>
+              style={{ color: mode === m.id ? m.color : "var(--color-slate-400)" }}>
               {m.sub}
             </p>
           </button>
@@ -172,7 +172,7 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
             className="px-4 py-3 text-center text-sm font-medium leading-snug"
             style={{
               background: action === "modify" ? accentBg : "#fafbfc",
-              color: action === "modify" ? accent : "#475569",
+              color: action === "modify" ? accent : "var(--color-slate-600)",
               borderBottom: `1px solid ${accentBorder}`,
             }}>
             {action === "modify" && "⚡ "}
@@ -185,7 +185,7 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           {/* 벡터 v */}
           <div>
             <p className="text-[10px] font-bold uppercase tracking-wider mb-2 text-center"
-              style={{ color: cellIdx < 0 ? "#94a3b8" : accent }}>
+              style={{ color: cellIdx < 0 ? "var(--color-slate-400)" : accent }}>
               {isEn ? "vector v" : "벡터 v"}
             </p>
             <div className="flex gap-2.5 justify-center">
@@ -210,9 +210,9 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                     style={{
                       borderWidth: 3,
                       borderStyle: "solid",
-                      background: action === "modify" ? "#fff7ed" : "#fffbeb",
-                      borderColor: action === "modify" ? "#f97316" : "#fdba74",
-                      color: "#f97316",
+                      background: action === "modify" ? "var(--color-orange-50)" : "var(--color-amber-50)",
+                      borderColor: action === "modify" ? "var(--color-orange-500)" : "var(--color-orange-300)",
+                      color: "var(--color-orange-500)",
                       boxShadow: action === "modify" ? "0 0 0 5px #f9731625" : undefined,
                     }}>
                     {iValue}
@@ -234,8 +234,8 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                   <div key={i} className="w-12 h-12 rounded-xl flex items-center justify-center font-mono text-lg font-black border-2"
                     style={{
                       background: isCopy ? "white" : accent + "15",
-                      borderColor: isCopy ? "#e2e8f0" : accent + "60",
-                      color: isCopy ? "#94a3b8" : accent,
+                      borderColor: isCopy ? "var(--color-slate-200)" : accent + "60",
+                      color: isCopy ? "var(--color-slate-400)" : accent,
                     }}>
                     {val}
                   </div>
@@ -258,7 +258,7 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 className="rounded-full transition-all duration-200"
                 style={{
                   width: i === step ? 18 : 7, height: 7,
-                  background: i === step ? accent : i < step ? accent + "55" : "#d1d5db",
+                  background: i === step ? accent : i < step ? accent + "55" : "var(--color-gray-300)",
                 }} />
             ))}
           </div>

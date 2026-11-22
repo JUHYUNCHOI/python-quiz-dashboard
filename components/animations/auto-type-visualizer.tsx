@@ -14,8 +14,8 @@ function getEXAMPLES(isEn: boolean) {
       code: "auto x = 42;",
       value: "42",
       inferred: "int",
-      color: "#3b82f6",
-      bg: "#eff6ff",
+      color: "var(--color-blue-500)",
+      bg: "var(--color-blue-50)",
       reason: isEn ? "integer → int" : "정수 → int",
       full: "int x = 42;",
     },
@@ -23,8 +23,8 @@ function getEXAMPLES(isEn: boolean) {
       code: "auto x = 3.14;",
       value: "3.14",
       inferred: "double",
-      color: "#8b5cf6",
-      bg: "#f5f3ff",
+      color: "var(--color-violet-500)",
+      bg: "var(--color-violet-50)",
       reason: isEn ? "decimal → double" : "소수 → double",
       full: "double x = 3.14;",
     },
@@ -32,8 +32,8 @@ function getEXAMPLES(isEn: boolean) {
       code: 'auto x = true;',
       value: "true",
       inferred: "bool",
-      color: "#ec4899",
-      bg: "#fdf2f8",
+      color: "var(--color-pink-500)",
+      bg: "var(--color-pink-50)",
       reason: "true/false → bool",
       full: "bool x = true;",
     },
@@ -41,8 +41,8 @@ function getEXAMPLES(isEn: boolean) {
       code: 'auto x = "hi";',
       value: '"hi"',
       inferred: "string",
-      color: "#f59e0b",
-      bg: "#fffbeb",
+      color: "var(--color-amber-500)",
+      bg: "var(--color-amber-50)",
       reason: isEn ? "string literal → string" : "문자열 → string",
       full: 'string x = "hi";',
     },
@@ -50,8 +50,8 @@ function getEXAMPLES(isEn: boolean) {
       code: "// vector<int> v = {1,2,3};\nauto x = v[0];",
       value: "v[0]",
       inferred: "int",
-      color: "#10b981",
-      bg: "#f0fdf4",
+      color: "var(--color-emerald-500)",
+      bg: "var(--color-green-50)",
       reason: isEn ? "vector<int> element → int" : "vector<int>의 원소 → int",
       full: "int x = v[0];",
     },
@@ -59,8 +59,8 @@ function getEXAMPLES(isEn: boolean) {
       code: "// vector<int> v = {1,2,3};\nfor (auto x : v)",
       value: isEn ? "element of v" : "v의 원소",
       inferred: "int",
-      color: "#06b6d4",
-      bg: "#ecfeff",
+      color: "var(--color-cyan-500)",
+      bg: "var(--color-cyan-50)",
       reason: isEn ? "vector<int> element type → int" : "vector<int>의 원소 타입 → int",
       full: "for (int x : v)",
     },
@@ -101,7 +101,7 @@ export function AutoTypeVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
             className="px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition-all font-mono"
             style={selected === i
               ? { background: e.color, color: "white", borderColor: e.color }
-              : { background: "white", color: "#94a3b8", borderColor: "#e2e8f0" }
+              : { background: "white", color: "var(--color-slate-400)", borderColor: "var(--color-slate-200)" }
             }
           >
             {e.reason}
@@ -158,7 +158,7 @@ export function AutoTypeVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               }
               transition={{ repeat: phase === "scanning" ? 2 : 0, duration: 0.4 }}
               className="px-4 py-2 rounded-xl font-mono text-sm font-bold border-2 bg-white"
-              style={{ borderColor: ex.color, color: "#374151" }}
+              style={{ borderColor: ex.color, color: "var(--color-gray-700)" }}
             >
               {ex.value}
             </motion.div>

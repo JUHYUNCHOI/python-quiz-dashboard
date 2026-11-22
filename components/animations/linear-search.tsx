@@ -57,17 +57,17 @@ export function LinearSearchAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
             key={i}
             animate={{
               backgroundColor: found && i === currentIdx
-                ? "#22c55e"
+                ? "var(--color-green-500)"
                 : isCurrent(i)
-                ? "#f97316"
+                ? "var(--color-orange-500)"
                 : isChecked(i)
-                ? "#e5e7eb"
-                : "#fff",
+                ? "var(--color-gray-200)"
+                : "var(--color-white)",
               scale: isCurrent(i) ? 1.15 : 1,
             }}
             transition={{ duration: 0.2 }}
             className="flex flex-col items-center justify-center w-10 h-12 rounded-lg border border-gray-200 font-black text-sm shadow-sm"
-            style={{ color: isChecked(i) ? "#9ca3af" : "#111" }}
+            style={{ color: isChecked(i) ? "var(--color-gray-400)" : "#111" }}
           >
             <span>{val}</span>
             <span className="text-[10px] font-normal text-gray-400">[{i}]</span>

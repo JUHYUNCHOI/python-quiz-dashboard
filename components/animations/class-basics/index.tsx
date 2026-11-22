@@ -12,10 +12,10 @@ export function ClassBoonguhAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const [step, setStep] = useState(0)
 
   const fillings = [
-    { name: "용사", nameEn: "Warrior", filling: "팥", fillingEn: "red bean", color: "#dc2626" },
-    { name: "마법사", nameEn: "Mage", filling: "슈크림", fillingEn: "cream", color: "#2563eb" },
-    { name: "궁수", nameEn: "Archer", filling: "피자", fillingEn: "pizza", color: "#16a34a" },
-    { name: "힐러", nameEn: "Healer", filling: "초코", fillingEn: "choco", color: "#9333ea" },
+    { name: "용사", nameEn: "Warrior", filling: "팥", fillingEn: "red bean", color: "var(--color-red-600)" },
+    { name: "마법사", nameEn: "Mage", filling: "슈크림", fillingEn: "cream", color: "var(--color-blue-600)" },
+    { name: "궁수", nameEn: "Archer", filling: "피자", fillingEn: "pizza", color: "var(--color-green-600)" },
+    { name: "힐러", nameEn: "Healer", filling: "초코", fillingEn: "choco", color: "var(--color-purple-600)" },
   ]
 
   const handleCreate = () => {

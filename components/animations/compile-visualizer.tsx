@@ -146,7 +146,7 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
           <div className="flex-1 rounded-xl border-2 border-emerald-500/40 bg-gray-800/50 p-4">
             <div className="flex items-center gap-2 mb-3">
               <span className="w-7 h-7 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald-500)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="16 18 22 12 16 6" />
                   <polyline points="8 6 2 12 8 18" />
                 </svg>
@@ -200,7 +200,7 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
                 phase === "done" ? "bg-amber-500/20" : "bg-gray-700"
               }`}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke={phase === "done" ? "#f59e0b" : "#9ca3af"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  stroke={phase === "done" ? "var(--color-amber-500)" : "var(--color-gray-400)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="4" y="4" width="16" height="16" rx="2" />
                   <rect x="9" y="9" width="6" height="6" />
                   <line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" />

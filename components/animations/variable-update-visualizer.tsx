@@ -28,8 +28,8 @@ const PHASES: Phase[] = [
     showFlow: "none",
     captionKo: "x 라는 상자를 만들고 4를 넣었어요!",
     captionEn: "We created a box called x and put 4 inside!",
-    color: "#10b981",
-    bg: "#f0fdf4",
+    color: "var(--color-emerald-500)",
+    bg: "var(--color-green-50)",
   },
   {
     codeHighlight: 1,
@@ -37,8 +37,8 @@ const PHASES: Phase[] = [
     showFlow: "lost",
     captionKo: "4 + 2 = 6 이 계산됐지만... 결과가 어디에도 저장되지 않았어요.\nx 상자는 여전히 4예요!",
     captionEn: "4 + 2 = 6 was calculated, but the result was never saved.\nx is still 4!",
-    color: "#f59e0b",
-    bg: "#fffbeb",
+    color: "var(--color-amber-500)",
+    bg: "var(--color-amber-50)",
   },
   {
     codeHighlight: 2,
@@ -46,8 +46,8 @@ const PHASES: Phase[] = [
     showFlow: "saved",
     captionKo: "x 에서 4를 꺼내 2를 더한 결과 6을 다시 x 에 저장했어요!\n= 이 있어야 상자의 값이 바뀌어요.",
     captionEn: "Read 4 from x, add 2, get 6 — then store 6 back into x!\nYou need = to update the box.",
-    color: "#6366f1",
-    bg: "#eef2ff",
+    color: "var(--color-indigo-500)",
+    bg: "var(--color-indigo-50)",
   },
 ]
 
@@ -79,7 +79,7 @@ export function VariableUpdateVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }
             className="flex-1 py-2 rounded-xl text-[11px] font-bold transition-all border-2"
             style={i === idx
               ? { borderColor: p.color, background: p.bg, color: p.color }
-              : { borderColor: "#e2e8f0", background: "white", color: "#94a3b8" }
+              : { borderColor: "var(--color-slate-200)", background: "white", color: "var(--color-slate-400)" }
             }
           >
             {i === 0 ? (isEn ? "① Store" : "① 저장")
@@ -107,7 +107,7 @@ export function VariableUpdateVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }
               <span
                 className="transition-all duration-300"
                 style={{
-                  color: i === phase.codeHighlight ? PHASES[i].color : "#475569",
+                  color: i === phase.codeHighlight ? PHASES[i].color : "var(--color-slate-600)",
                   fontWeight: i === phase.codeHighlight ? 700 : 400,
                 }}
               >
@@ -115,13 +115,13 @@ export function VariableUpdateVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }
               </span>
               <span
                 className="transition-all duration-300"
-                style={{ color: i === phase.codeHighlight ? "white" : "#475569" }}
+                style={{ color: i === phase.codeHighlight ? "white" : "var(--color-slate-600)" }}
               >
                 {line}
               </span>
               <span
                 className="text-[10px] transition-all duration-300"
-                style={{ color: i === phase.codeHighlight ? PHASES[i].color + "cc" : "#1e293b" }}
+                style={{ color: i === phase.codeHighlight ? PHASES[i].color + "cc" : "var(--color-slate-800)" }}
               >
                 {isEn ? CODE_COMMENTS_EN[i] : CODE_COMMENTS_KO[i]}
               </span>
@@ -205,7 +205,7 @@ export function VariableUpdateVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }
                 {/* 계산 버블 */}
                 <div
                   className="px-2.5 py-1.5 rounded-xl text-xs font-bold border-2"
-                  style={{ borderColor: "#f59e0b", background: "#fffbeb", color: "#b45309" }}
+                  style={{ borderColor: "var(--color-amber-500)", background: "var(--color-amber-50)", color: "var(--color-amber-700)" }}
                 >
                   4 + 2 = 6
                 </div>
@@ -239,7 +239,7 @@ export function VariableUpdateVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }
                 {/* 계산 버블 */}
                 <div
                   className="px-2.5 py-1.5 rounded-xl text-xs font-bold border-2"
-                  style={{ borderColor: "#6366f1", background: "#eef2ff", color: "#4338ca" }}
+                  style={{ borderColor: "var(--color-indigo-500)", background: "var(--color-indigo-50)", color: "var(--color-indigo-700)" }}
                 >
                   4 + 2 = 6
                 </div>
@@ -249,7 +249,7 @@ export function VariableUpdateVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }
                   animate={{ x: [0, -3, 0] }}
                   transition={{ duration: 0.8, repeat: Infinity }}
                   className="flex items-center gap-1 text-xs font-bold"
-                  style={{ color: "#6366f1" }}
+                  style={{ color: "var(--color-indigo-500)" }}
                 >
                   <span>←</span>
                   <span>6</span>

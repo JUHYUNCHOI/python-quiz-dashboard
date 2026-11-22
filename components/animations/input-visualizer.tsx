@@ -26,10 +26,10 @@ type Preset = {
 }
 
 const TYPE_COLORS: Record<string, string> = {
-  str: "#f59e0b",
-  int: "#3b82f6",
-  float: "#a855f7",
-  list: "#10b981",
+  str: "var(--color-amber-500)",
+  int: "var(--color-blue-500)",
+  float: "var(--color-purple-500)",
+  list: "var(--color-emerald-500)",
 }
 
 function getPresets(isEn: boolean): Preset[] {
@@ -63,7 +63,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "Even when the user types digits, input() keeps it as the string \"15\". Adding a number to a string errors!"
         : "사용자가 숫자만 쳐도 input() 은 \"15\" (문자열) 로 받아요. 문자열에 숫자 더하면 에러!",
-      color: "#ef4444",
+      color: "var(--color-red-500)",
     },
     {
       id: "int-input",
@@ -260,7 +260,7 @@ function InputVisualizer({
             className="px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition-all font-mono"
             style={selectedId === p.id
               ? { background: p.color, color: "white", borderColor: p.color }
-              : { background: "white", color: "#94a3b8", borderColor: "#e2e8f0" }
+              : { background: "white", color: "var(--color-slate-400)", borderColor: "var(--color-slate-200)" }
             }
           >
             {p.label}
@@ -292,10 +292,10 @@ function InputVisualizer({
                     }
                     transition={{ duration: 1.0 }}
                     style={{
-                      background: "#7c2d12",
-                      color: "#fed7aa",
+                      background: "var(--color-orange-900)",
+                      color: "var(--color-orange-200)",
                       padding: "0 3px",
-                      boxShadow: phase === "prompt-flying" ? "0 0 0 2px #fb923c" : "0 0 0 1px #fb923c80",
+                      boxShadow: phase === "prompt-flying" ? "0 0 0 2px var(--color-orange-400)" : "0 0 0 1px #fb923c80",
                       display: "inline-block",
                     }}
                     title={isEn ? "This text shows in the terminal" : "이 글자가 터미널에 보여요"}
@@ -314,7 +314,7 @@ function InputVisualizer({
                 : "1 단계 누르면 input(\"...\") 안의 강조된 글자가 아래 터미널로 질문처럼 옮겨가요."}
             </div>
           ) : (
-            <div className="text-[10px] text-amber-700 mt-1 px-2 py-1 rounded" style={{ background: "#fef3c7" }}>
+            <div className="text-[10px] text-amber-700 mt-1 px-2 py-1 rounded" style={{ background: "var(--color-amber-100)" }}>
               ⚠️ {isEn
                 ? <>The <code className="font-mono font-bold">input()</code> here is <strong>empty (no \"...\")</strong> — so <strong>no prompt shows in the terminal</strong>. The user just types right away, with no hint about what to enter.</>
                 : <>여기 <code className="font-mono font-bold">input()</code> 안이 <strong>비어있어요 (\"...\" 없음)</strong> — 그래서 <strong>터미널에 질문이 안 떠요</strong>. 사용자는 뭘 입력해야 할지 모른 채 바로 타이핑해요.</>
@@ -344,10 +344,10 @@ function InputVisualizer({
                 }
                 transition={{ duration: 1.0 }}
                 style={{
-                  background: "#7c2d12",
-                  color: "#fed7aa",
+                  background: "var(--color-orange-900)",
+                  color: "var(--color-orange-200)",
                   padding: "0 3px",
-                  boxShadow: phase === "prompt-flying" ? "0 0 0 2px #fb923c" : "0 0 0 1px #fb923c80",
+                  boxShadow: phase === "prompt-flying" ? "0 0 0 2px var(--color-orange-400)" : "0 0 0 1px #fb923c80",
                   display: "inline-block",
                 }}
                 title={isEn ? "This came from input(\"...\") in the code" : "코드의 input(\"...\") 에서 온 글자"}
@@ -371,7 +371,7 @@ function InputVisualizer({
                 animate={{ opacity: [1, 0.2, 1] }}
                 transition={{ repeat: Infinity, duration: 0.7 }}
                 className="inline-block w-2 h-4 ml-0.5 align-middle"
-                style={{ background: "#fbbf24" }}
+                style={{ background: "var(--color-amber-400)" }}
               />
             )}
             {step === enterStep && (
@@ -379,7 +379,7 @@ function InputVisualizer({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="ml-3 px-2 py-0.5 rounded text-[10px] font-bold"
-                style={{ background: "#1e3a8a", color: "#bfdbfe" }}
+                style={{ background: "var(--color-blue-900)", color: "var(--color-blue-200)" }}
               >
                 ⏎ Enter
               </motion.span>
@@ -396,7 +396,7 @@ function InputVisualizer({
             <div className="bg-white rounded-xl px-4 py-3 space-y-2 border">
               {convertSteps.map((cs, i) => {
                 const visible = valueStored && convertStage >= i
-                const c = TYPE_COLORS[cs.toType] || "#94a3b8"
+                const c = TYPE_COLORS[cs.toType] || "var(--color-slate-400)"
                 return (
                   <AnimatePresence key={i}>
                     {visible && (
@@ -412,7 +412,7 @@ function InputVisualizer({
                           {cs.func}
                         </span>
                         <span className="text-gray-300">→</span>
-                        <span className="font-bold" style={{ color: cs.to.includes("Error") ? "#ef4444" : c }}>
+                        <span className="font-bold" style={{ color: cs.to.includes("Error") ? "var(--color-red-500)" : c }}>
                           {cs.to}
                         </span>
                       </motion.div>
@@ -436,15 +436,15 @@ function InputVisualizer({
             animate={(phase === "stored" || phase === "converting") ? {
               scale: [1, 1.08, 1],
               boxShadow: [
-                `0 0 0 0px ${TYPE_COLORS[varType] || "#94a3b8"}00`,
-                `0 0 0 8px ${TYPE_COLORS[varType] || "#94a3b8"}55`,
-                `0 0 0 0px ${TYPE_COLORS[varType] || "#94a3b8"}00`,
+                `0 0 0 0px ${TYPE_COLORS[varType] || "var(--color-slate-400)"}00`,
+                `0 0 0 8px ${TYPE_COLORS[varType] || "var(--color-slate-400)"}55`,
+                `0 0 0 0px ${TYPE_COLORS[varType] || "var(--color-slate-400)"}00`,
               ]
             } : { scale: 1 }}
             transition={{ duration: 0.7 }}
             className="relative bg-white rounded-2xl border-4 px-5 py-4 min-w-[160px]"
             style={{
-              borderColor: valueStored ? TYPE_COLORS[varType] || "#94a3b8" : "#cbd5e1",
+              borderColor: valueStored ? TYPE_COLORS[varType] || "var(--color-slate-400)" : "var(--color-slate-300)",
               borderStyle: valueStored ? "solid" : "dashed",
             }}
           >
@@ -452,8 +452,8 @@ function InputVisualizer({
             <div
               className="absolute -top-3 left-3 px-2 py-0.5 rounded text-xs font-mono font-bold bg-white"
               style={{
-                color: valueStored ? TYPE_COLORS[varType] : "#94a3b8",
-                border: `2px solid ${valueStored ? TYPE_COLORS[varType] || "#94a3b8" : "#cbd5e1"}`,
+                color: valueStored ? TYPE_COLORS[varType] : "var(--color-slate-400)",
+                border: `2px solid ${valueStored ? TYPE_COLORS[varType] || "var(--color-slate-400)" : "var(--color-slate-300)"}`,
               }}
             >
               {preset.varName}
@@ -478,7 +478,7 @@ function InputVisualizer({
                     animate={{ scale: 1, opacity: 1, y: 0 }}
                     transition={{ type: "spring", stiffness: 350, damping: 18 }}
                     className="font-mono text-base font-bold text-center"
-                    style={{ color: varValue.includes("Error") ? "#ef4444" : "#374151" }}
+                    style={{ color: varValue.includes("Error") ? "var(--color-red-500)" : "var(--color-gray-700)" }}
                   >
                     {varValue}
                   </motion.div>
@@ -497,7 +497,7 @@ function InputVisualizer({
               >
                 <span
                   className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
-                  style={{ background: (TYPE_COLORS[varType] || "#94a3b8") + "22", color: TYPE_COLORS[varType] || "#94a3b8" }}
+                  style={{ background: (TYPE_COLORS[varType] || "var(--color-slate-400)") + "22", color: TYPE_COLORS[varType] || "var(--color-slate-400)" }}
                 >
                   {varType}
                 </span>
@@ -539,7 +539,7 @@ function InputVisualizer({
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               className="rounded-xl px-3 py-2 text-xs"
-              style={{ background: preset.color + "15", color: "#374151" }}
+              style={{ background: preset.color + "15", color: "var(--color-gray-700)" }}
             >
               💡 {preset.caption}
             </motion.div>

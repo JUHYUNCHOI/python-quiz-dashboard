@@ -66,8 +66,8 @@ export function CallByValueVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           <span
             className="inline-block px-3 py-1.5 rounded-full text-xs font-bold"
             style={{
-              background: step === 2 ? "#fef3c7" : "#f1f5f9",
-              color: step === 2 ? "#92400e" : "#475569",
+              background: step === 2 ? "var(--color-amber-100)" : "var(--color-slate-100)",
+              color: step === 2 ? "var(--color-amber-800)" : "var(--color-slate-600)",
             }}
           >
             {step === 2 && "⚡ "}
@@ -89,9 +89,9 @@ export function CallByValueVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               style={{
                 borderWidth: 3,
                 borderStyle: "solid",
-                borderColor: "#10b981",
-                background: "#ecfdf5",
-                color: "#065f46",
+                borderColor: "var(--color-emerald-500)",
+                background: "var(--color-emerald-50)",
+                color: "var(--color-emerald-800)",
               }}
             >
               <span className="text-[10px] font-bold opacity-70">num</span>
@@ -144,9 +144,9 @@ export function CallByValueVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                   style={{
                     borderWidth: 3,
                     borderStyle: "dashed",
-                    borderColor: step === 2 ? "#f97316" : "#fdba74",
-                    background: step === 2 ? "#fff7ed" : "#fffbeb",
-                    color: "#f97316",
+                    borderColor: step === 2 ? "var(--color-orange-500)" : "var(--color-orange-300)",
+                    background: step === 2 ? "var(--color-orange-50)" : "var(--color-amber-50)",
+                    color: "var(--color-orange-500)",
                     boxShadow: step === 2 ? "0 0 0 5px #f9731625" : undefined,
                   }}
                 >
@@ -165,7 +165,7 @@ export function CallByValueVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 </motion.div>
               ) : (
                 <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-[10px] text-slate-300"
-                  style={{ borderWidth: 2, borderStyle: "dashed", borderColor: "#e2e8f0" }}>
+                  style={{ borderWidth: 2, borderStyle: "dashed", borderColor: "var(--color-slate-200)" }}>
                   {step === 0 ? (isEn ? "not yet" : "아직 없음") : (isEn ? "destroyed" : "사라짐")}
                 </div>
               )}
@@ -181,7 +181,7 @@ export function CallByValueVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               className="mt-4 rounded-xl px-3 py-2 text-sm text-center font-bold"
-              style={{ background: "#ecfdf5", color: "#065f46" }}
+              style={{ background: "var(--color-emerald-50)", color: "var(--color-emerald-800)" }}
             >
               {isEn
                 ? "✅ num is still 10 — function only changed its own copy"
@@ -210,7 +210,7 @@ export function CallByValueVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               style={{
                 width: i === step ? 18 : 7,
                 height: 7,
-                background: i === step ? "#10b981" : i < step ? "#10b98155" : "#d1d5db",
+                background: i === step ? "var(--color-emerald-500)" : i < step ? "#10b98155" : "var(--color-gray-300)",
               }}
             />
           ))}
@@ -219,7 +219,7 @@ export function CallByValueVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           onClick={() => setStep((s) => Math.min(TOTAL - 1, s + 1) as Step)}
           disabled={step === TOTAL - 1}
           className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-bold text-white disabled:opacity-30 transition-all"
-          style={{ background: "#10b981" }}
+          style={{ background: "var(--color-emerald-500)" }}
         >
           {isEn ? "Next" : "다음"}
           <ChevronRight className="w-4 h-4" />

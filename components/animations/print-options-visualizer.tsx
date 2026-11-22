@@ -33,7 +33,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "Defaults: a space between values, newline at the end. So the next print starts on a new line."
         : "기본값: 값 사이는 공백, 끝은 줄바꿈. 그래서 다음 print 는 새 줄에서 시작.",
-      color: "#3b82f6",
+      color: "var(--color-blue-500)",
     },
     {
       id: "sep-dash",
@@ -44,7 +44,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "sep replaces the gap between values — perfect for dates."
         : "sep 은 값 사이의 공간을 대신해요 — 날짜 표기에 딱.",
-      color: "#f59e0b",
+      color: "var(--color-amber-500)",
     },
     {
       id: "sep-slash",
@@ -55,7 +55,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "sep=\"/\" — slashes between, classic for dates."
         : "sep=\"/\" — 사이에 슬래시. 날짜 표기에 자주 써요.",
-      color: "#06b6d4",
+      color: "var(--color-cyan-500)",
     },
     {
       id: "sep-empty",
@@ -66,7 +66,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "sep=\"\" glues values together — no gap at all."
         : "sep=\"\" 는 값을 딱 붙여요 — 빈틈 없음.",
-      color: "#a855f7",
+      color: "var(--color-purple-500)",
     },
     {
       id: "default-end",
@@ -78,7 +78,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "end=\"\\n\" → cursor jumps to the next line. The next print starts there."
         : "end=\"\\n\" → 커서가 다음 줄로. 다음 print 는 거기서 시작.",
-      color: "#3b82f6",
+      color: "var(--color-blue-500)",
     },
     {
       id: "end-space",
@@ -90,7 +90,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "end=\" \" → cursor stays on the same line with a space. The next print continues right there."
         : "end=\" \" → 줄바꿈 대신 공백. 커서가 같은 줄에 있어서 다음 print 가 이어 붙어요.",
-      color: "#10b981",
+      color: "var(--color-emerald-500)",
     },
     {
       id: "end-empty",
@@ -102,7 +102,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "end=\"\" → no newline, no space. The next print is glued to the previous output."
         : "end=\"\" → 아무것도 없음. 다음 print 가 그대로 붙어요. 로딩 효과 단골 패턴.",
-      color: "#ec4899",
+      color: "var(--color-pink-500)",
     },
     {
       id: "end-asterisk",
@@ -114,7 +114,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "end=\"*\" → an asterisk after the print, then the next print sticks on right after."
         : "end=\"*\" → 끝에 * 가 붙고, 다음 print 가 바로 이어 붙어요. (어떤 글자든 가능!)",
-      color: "#f97316",
+      color: "var(--color-orange-500)",
     },
     {
       id: "mixed",
@@ -126,7 +126,7 @@ function getPresets(isEn: boolean): Preset[] {
       caption: isEn
         ? "Both at once: dash between, ! at the end, then the next print sticks right after."
         : "둘 다 동시에: 사이는 -, 끝은 ! 그리고 다음 print 가 바로 이어 붙음.",
-      color: "#06b6d4",
+      color: "var(--color-cyan-500)",
     },
   ]
 }
@@ -238,7 +238,7 @@ function PrintOptionsVisualizer({
   // 활성 강조 스타일
   const activeStyle = {
     background: "#fbbf2440",                // amber-400/25
-    boxShadow: "0 0 0 2px #fbbf24",
+    boxShadow: "0 0 0 2px var(--color-amber-400)",
     borderRadius: 4,
     padding: "0 2px",
   }
@@ -290,7 +290,7 @@ function PrintOptionsVisualizer({
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             className="inline-flex items-center px-1.5 py-0.5 mx-0.5 rounded text-[10px] font-bold align-middle"
-            style={{ background: "#0e7490", color: "#cffafe" }}
+            style={{ background: "var(--color-cyan-700)", color: "var(--color-cyan-100)" }}
             title='end="\n"'
           >
             ↵
@@ -304,7 +304,7 @@ function PrintOptionsVisualizer({
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             className="inline-block w-2 h-4 mx-0.5 align-middle border border-dashed rounded-sm"
-            style={{ borderColor: "#22d3ee", background: "#0e749022" }}
+            style={{ borderColor: "var(--color-cyan-400)", background: "#0e749022" }}
             title='end=""'
           />
         )
@@ -315,7 +315,7 @@ function PrintOptionsVisualizer({
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
           className="inline-block px-1 py-0.5 mx-0.5 rounded font-mono text-sm font-bold align-middle"
-          style={{ background: "#0e7490", color: "#cffafe" }}
+          style={{ background: "var(--color-cyan-700)", color: "var(--color-cyan-100)" }}
           title={`end=${JSON.stringify(t.text)}`}
         >
           {t.text === " " ? "·" : t.text}
@@ -330,7 +330,7 @@ function PrintOptionsVisualizer({
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             className="inline-block w-1.5 h-4 mx-0 align-middle border border-dashed rounded-sm"
-            style={{ borderColor: "#fbbf24", background: "#92400e22" }}
+            style={{ borderColor: "var(--color-amber-400)", background: "#92400e22" }}
             title='sep=""'
           />
         )
@@ -341,7 +341,7 @@ function PrintOptionsVisualizer({
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
           className="inline-block px-1 py-0.5 mx-0.5 rounded font-mono text-sm font-bold align-middle"
-          style={{ background: "#92400e", color: "#fde68a" }}
+          style={{ background: "var(--color-amber-800)", color: "var(--color-amber-200)" }}
           title={`sep=${JSON.stringify(t.text)}`}
         >
           {t.text === " " ? "·" : t.text}
@@ -355,7 +355,7 @@ function PrintOptionsVisualizer({
         initial={{ opacity: 0, y: 4 }}
         animate={{ opacity: 1, y: 0 }}
         className="font-mono text-base align-middle"
-        style={{ color: "#f9fafb", background: t.src === 2 ? "#1e3a8a40" : "transparent", padding: t.src === 2 ? "0 2px" : 0, borderRadius: t.src === 2 ? 2 : 0 }}
+        style={{ color: "var(--color-gray-50)", background: t.src === 2 ? "#1e3a8a40" : "transparent", padding: t.src === 2 ? "0 2px" : 0, borderRadius: t.src === 2 ? 2 : 0 }}
       >
         {t.text}
       </motion.span>
@@ -374,7 +374,7 @@ function PrintOptionsVisualizer({
             className="px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition-all font-mono"
             style={selectedId === p.id
               ? { background: p.color, color: "white", borderColor: p.color }
-              : { background: "white", color: "#94a3b8", borderColor: "#e2e8f0" }
+              : { background: "white", color: "var(--color-slate-400)", borderColor: "var(--color-slate-200)" }
             }
           >
             {hideEnd && p.labelSepOnly ? p.labelSepOnly : p.label}
@@ -388,7 +388,7 @@ function PrintOptionsVisualizer({
         initial={{ opacity: 0, y: -4 }}
         animate={{ opacity: 1, y: 0 }}
         className="rounded-xl px-3 py-2 text-xs"
-        style={{ background: preset.color + "15", color: "#374151", borderLeft: `3px solid ${preset.color}` }}
+        style={{ background: preset.color + "15", color: "var(--color-gray-700)", borderLeft: `3px solid ${preset.color}` }}
       >
         💡 {preset.caption}
       </motion.div>
@@ -481,13 +481,13 @@ function PrintOptionsVisualizer({
             <span className="font-normal normal-case tracking-normal text-[10px] text-gray-400 flex items-center gap-2">
               {!hideSep && (
                 <span className="inline-flex items-center gap-1">
-                  <span className="inline-block w-3 h-3 rounded" style={{ background: "#92400e" }} />
+                  <span className="inline-block w-3 h-3 rounded" style={{ background: "var(--color-amber-800)" }} />
                   sep
                 </span>
               )}
               {!hideEnd && (
                 <span className="inline-flex items-center gap-1">
-                  <span className="inline-block w-3 h-3 rounded" style={{ background: "#0e7490" }} />
+                  <span className="inline-block w-3 h-3 rounded" style={{ background: "var(--color-cyan-700)" }} />
                   end
                 </span>
               )}
@@ -506,7 +506,7 @@ function PrintOptionsVisualizer({
                       animate={{ opacity: [1, 0.2, 1] }}
                       transition={{ repeat: Infinity, duration: 0.8 }}
                       className={`inline-block w-2 h-4 align-middle ${line.length > 0 ? "ml-0.5" : ""}`}
-                      style={{ background: "#fbbf24" }}
+                      style={{ background: "var(--color-amber-400)" }}
                     />
                   )}
                 </div>
@@ -539,7 +539,7 @@ function PrintOptionsVisualizer({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               className="rounded-xl px-3 py-2 text-[11px] text-gray-600"
-              style={{ background: "#fef3c7" }}
+              style={{ background: "var(--color-amber-100)" }}
             >
               {isEn
                 ? "→ Watch the blinking cursor — that's where the second print starts. Click Step to continue."

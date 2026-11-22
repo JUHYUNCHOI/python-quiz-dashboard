@@ -55,8 +55,8 @@ export function IteratorVsPointer() {
   return (
     <div
       style={{
-        background: "#fafafa",
-        border: "1px solid #e5e7eb",
+        background: "var(--color-zinc-50)",
+        border: "1px solid var(--color-gray-200)",
         borderRadius: 12,
         padding: 20,
         fontFamily: "ui-monospace, monospace",
@@ -72,9 +72,9 @@ export function IteratorVsPointer() {
               padding: "8px 16px",
               borderRadius: 8,
               border: "2px solid",
-              borderColor: mode === m ? "#2563eb" : "#cbd5e1",
-              background: mode === m ? "#2563eb" : "#fff",
-              color: mode === m ? "#fff" : "#475569",
+              borderColor: mode === m ? "var(--color-blue-600)" : "var(--color-slate-300)",
+              background: mode === m ? "var(--color-blue-600)" : "var(--color-white)",
+              color: mode === m ? "var(--ink-on-accent)" : "var(--color-slate-600)",
               fontWeight: 700,
               cursor: "pointer",
               fontSize: 14,
@@ -115,8 +115,8 @@ export function IteratorVsPointer() {
                   style={{
                     width: 70,
                     minHeight: 56,
-                    background: isPointed ? "#dbeafe" : "#fff",
-                    border: `2px solid ${isPointed ? "#2563eb" : "#cbd5e1"}`,
+                    background: isPointed ? "var(--color-blue-100)" : "var(--color-white)",
+                    border: `2px solid ${isPointed ? "var(--color-blue-600)" : "var(--color-slate-300)"}`,
                     borderRadius: 8,
                     display: "flex",
                     flexDirection: "column",
@@ -124,13 +124,13 @@ export function IteratorVsPointer() {
                     justifyContent: "center",
                     fontWeight: 700,
                     fontSize: 18,
-                    color: "#1e293b",
+                    color: "var(--color-slate-800)",
                     boxShadow: isPointed ? "0 4px 12px rgba(37,99,235,0.25)" : "none",
                     transition: "all 0.25s",
                   }}
                 >
                   <div>{node.value}</div>
-                  <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 500 }}>
+                  <div style={{ fontSize: 10, color: "var(--color-slate-400)", fontWeight: 500 }}>
                     @{node.addr}
                   </div>
                 </div>
@@ -142,7 +142,7 @@ export function IteratorVsPointer() {
                       right: -22,
                       top: "50%",
                       transform: "translateY(-50%)",
-                      color: "#94a3b8",
+                      color: "var(--color-slate-400)",
                       fontSize: 16,
                       fontWeight: 700,
                     }}
@@ -163,7 +163,7 @@ export function IteratorVsPointer() {
                       left: "50%",
                       transform: "translateX(-50%)",
                       fontSize: 18,
-                      color: "#16a34a",
+                      color: "var(--color-green-600)",
                       fontWeight: 700,
                       fontFamily: "sans-serif",
                       whiteSpace: "nowrap",
@@ -187,7 +187,7 @@ export function IteratorVsPointer() {
               left: `calc(50% - ${data.length * 35}px + ${step * 70}px + 35px)`,
               transform: "translateX(-50%)",
               fontSize: 16,
-              color: "#dc2626",
+              color: "var(--color-red-600)",
               fontWeight: 700,
               fontFamily: "sans-serif",
             }}
@@ -202,12 +202,12 @@ export function IteratorVsPointer() {
               top: -4,
               left: "50%",
               transform: "translateX(-50%)",
-              background: "#fef2f2",
-              border: "1.5px dashed #dc2626",
+              background: "var(--color-red-50)",
+              border: "1.5px dashed var(--color-red-600)",
               borderRadius: 6,
               padding: "4px 10px",
               fontSize: 12,
-              color: "#991b1b",
+              color: "var(--color-red-800)",
               fontWeight: 700,
               fontFamily: "sans-serif",
             }}
@@ -223,7 +223,7 @@ export function IteratorVsPointer() {
               left: `calc(50% - ${data.length * 35}px + 35px - 12px)`,
               transform: "translateX(-50%)",
               fontSize: 16,
-              color: "#dc2626",
+              color: "var(--color-red-600)",
               fontWeight: 700,
               fontFamily: "sans-serif",
             }}
@@ -237,15 +237,15 @@ export function IteratorVsPointer() {
       {step > 0 && (
         <div
           style={{
-            background: "#fff",
-            border: `2px solid ${mode === "vector" ? "#86efac" : "#fca5a5"}`,
+            background: "var(--color-white)",
+            border: `2px solid ${mode === "vector" ? "var(--color-green-300)" : "var(--color-red-300)"}`,
             borderRadius: 10,
             padding: "12px 14px",
             marginBottom: 12,
             fontFamily: "sans-serif",
           }}
         >
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#475569", marginBottom: 8, letterSpacing: 0.3, textAlign: "center" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "var(--color-slate-600)", marginBottom: 8, letterSpacing: 0.3, textAlign: "center" }}>
             {step}{step === 1 ? "ST" : step === 2 ? "ND" : step === 3 ? "RD" : "TH"} ++ 후, 두 친구가 간 곳:
           </div>
           <div style={{
@@ -257,41 +257,41 @@ export function IteratorVsPointer() {
           }}>
             {/* Pointer's destination */}
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", marginBottom: 4, fontFamily: "sans-serif" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "var(--color-red-600)", marginBottom: 4, fontFamily: "sans-serif" }}>
                 🔻 포인터 도착지
               </div>
               <div style={{
-                background: mode === "vector" ? "#fef2f2" : "#fee2e2",
-                border: `2px solid ${mode === "vector" ? "#fca5a5" : "#dc2626"}`,
+                background: mode === "vector" ? "var(--color-red-50)" : "var(--color-red-100)",
+                border: `2px solid ${mode === "vector" ? "var(--color-red-300)" : "var(--color-red-600)"}`,
                 borderRadius: 8,
                 padding: "8px 6px",
                 fontWeight: 900,
                 fontSize: 18,
-                color: "#991b1b",
+                color: "var(--color-red-800)",
               }}>
                 @{ptrAddr}
               </div>
-              <div style={{ fontSize: 11, marginTop: 4, fontFamily: "sans-serif", color: mode === "vector" ? "#16a34a" : "#dc2626", fontWeight: 700 }}>
+              <div style={{ fontSize: 11, marginTop: 4, fontFamily: "sans-serif", color: mode === "vector" ? "var(--color-green-600)" : "var(--color-red-600)", fontWeight: 700 }}>
                 {mode === "vector" ? "✓ 실제 다음 노드" : "💥 빈 메모리 (노드 없음)"}
               </div>
             </div>
             {/* Iterator's destination */}
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#16a34a", marginBottom: 4, fontFamily: "sans-serif" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "var(--color-green-600)", marginBottom: 4, fontFamily: "sans-serif" }}>
                 🟢 이터레이터 도착지
               </div>
               <div style={{
-                background: "#dcfce7",
-                border: "2px solid #16a34a",
+                background: "var(--color-green-100)",
+                border: "2px solid var(--color-green-600)",
                 borderRadius: 8,
                 padding: "8px 6px",
                 fontWeight: 900,
                 fontSize: 18,
-                color: "#166534",
+                color: "var(--color-green-800)",
               }}>
                 @{itAddr}
               </div>
-              <div style={{ fontSize: 11, marginTop: 4, fontFamily: "sans-serif", color: "#16a34a", fontWeight: 700 }}>
+              <div style={{ fontSize: 11, marginTop: 4, fontFamily: "sans-serif", color: "var(--color-green-600)", fontWeight: 700 }}>
                 ✓ 실제 다음 노드 (값 {data[step].value})
               </div>
             </div>
@@ -300,11 +300,11 @@ export function IteratorVsPointer() {
           <div style={{
             marginTop: 10,
             padding: "8px 10px",
-            background: mode === "vector" ? "#f0fdf4" : "#fef2f2",
-            border: `1px solid ${mode === "vector" ? "#86efac" : "#fca5a5"}`,
+            background: mode === "vector" ? "var(--color-green-50)" : "var(--color-red-50)",
+            border: `1px solid ${mode === "vector" ? "var(--color-green-300)" : "var(--color-red-300)"}`,
             borderRadius: 6,
             fontSize: 12,
-            color: mode === "vector" ? "#15803d" : "#991b1b",
+            color: mode === "vector" ? "var(--color-green-700)" : "var(--color-red-800)",
             fontWeight: 700,
             textAlign: "center",
             fontFamily: "sans-serif",
@@ -330,40 +330,40 @@ export function IteratorVsPointer() {
       >
         <div
           style={{
-            background: ptrPointsToValidSlot ? "#fef2f2" : "#fef2f2",
-            border: `1.5px solid ${ptrPointsToValidSlot ? "#fca5a5" : "#dc2626"}`,
+            background: ptrPointsToValidSlot ? "var(--color-red-50)" : "var(--color-red-50)",
+            border: `1.5px solid ${ptrPointsToValidSlot ? "var(--color-red-300)" : "var(--color-red-600)"}`,
             borderRadius: 8,
             padding: 10,
           }}
         >
-          <div style={{ fontWeight: 800, color: "#991b1b", marginBottom: 4 }}>
-            🔻 Pointer <span style={{ fontFamily: "ui-monospace, monospace", background: "#fee2e2", padding: "1px 6px", borderRadius: 4, fontSize: 11 }}>p</span>
+          <div style={{ fontWeight: 800, color: "var(--color-red-800)", marginBottom: 4 }}>
+            🔻 Pointer <span style={{ fontFamily: "ui-monospace, monospace", background: "var(--color-red-100)", padding: "1px 6px", borderRadius: 4, fontSize: 11 }}>p</span>
           </div>
-          <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
+          <div style={{ fontSize: 12, color: "var(--color-red-900)", lineHeight: 1.5 }}>
             현재 주소: <b>@{ptrAddr}</b>
             <br />
             값: <b>{ptrValue === null ? "??? (의미 없음)" : ptrValue}</b>
             <br />
-            <span style={{ color: "#64748b" }}>++ = 항상 주소 + 4</span>
+            <span style={{ color: "var(--color-slate-500)" }}>++ = 항상 주소 + 4</span>
           </div>
         </div>
         <div
           style={{
-            background: "#dcfce7",
-            border: "1.5px solid #16a34a",
+            background: "var(--color-green-100)",
+            border: "1.5px solid var(--color-green-600)",
             borderRadius: 8,
             padding: 10,
           }}
         >
-          <div style={{ fontWeight: 800, color: "#166534", marginBottom: 4 }}>
-            🟢 Iterator <span style={{ fontFamily: "ui-monospace, monospace", background: "#dcfce7", padding: "1px 6px", borderRadius: 4, fontSize: 11 }}>it</span>
+          <div style={{ fontWeight: 800, color: "var(--color-green-800)", marginBottom: 4 }}>
+            🟢 Iterator <span style={{ fontFamily: "ui-monospace, monospace", background: "var(--color-green-100)", padding: "1px 6px", borderRadius: 4, fontSize: 11 }}>it</span>
           </div>
-          <div style={{ fontSize: 12, color: "#14532d", lineHeight: 1.5 }}>
+          <div style={{ fontSize: 12, color: "var(--color-green-900)", lineHeight: 1.5 }}>
             현재 주소: <b>@{itAddr}</b>
             <br />
             값: <b>{data[step].value}</b>
             <br />
-            <span style={{ color: "#64748b" }}>
+            <span style={{ color: "var(--color-slate-500)" }}>
               ++ = {mode === "vector" ? "주소 + 4" : "node->next 따라가기"}
             </span>
           </div>
@@ -373,21 +373,21 @@ export function IteratorVsPointer() {
       {/* Context note — 두 박스 의미 안내 */}
       <div
         style={{
-          background: mode === "vector" ? "#fffbeb" : "#fef2f2",
-          border: `1.5px solid ${mode === "vector" ? "#fde68a" : "#fecaca"}`,
+          background: mode === "vector" ? "var(--color-amber-50)" : "var(--color-red-50)",
+          border: `1.5px solid ${mode === "vector" ? "var(--color-amber-200)" : "var(--color-red-200)"}`,
           borderRadius: 8,
           padding: "10px 14px",
           marginBottom: 14,
           fontFamily: "sans-serif",
           fontSize: 13,
-          color: mode === "vector" ? "#92400e" : "#991b1b",
+          color: mode === "vector" ? "var(--color-amber-800)" : "var(--color-red-800)",
           lineHeight: 1.7,
           fontWeight: 600,
         }}
       >
         {mode === "vector" ? (
           <>
-            👀 <b>지금은 같아 보여요</b> — <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>vector</code> 나 <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>int a[N]</code> 같은 *배열* 은 메모리가 *연속* 이라서 포인터·이터레이터 동작 동일.
+            👀 <b>지금은 같아 보여요</b> — <code style={{ background: "var(--color-white)", padding: "1px 4px", borderRadius: 3 }}>vector</code> 나 <code style={{ background: "var(--color-white)", padding: "1px 4px", borderRadius: 3 }}>int a[N]</code> 같은 *배열* 은 메모리가 *연속* 이라서 포인터·이터레이터 동작 동일.
             <br />
             <b>🕸 std::list 모드로 바꿔보세요</b> — 그게 진짜 차이가 나는 자료구조예요.
           </>
@@ -395,11 +395,11 @@ export function IteratorVsPointer() {
           <>
             ⚠️ <b>이제 차이가 보이죠!</b>
             <br />
-            <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>std::list</code> = <b>linked list</b> 라는 자료구조. 노드 (값 1 개씩) 들이 메모리 여기저기 *흩어져* 있고, 각 노드가 다음 노드의 주소를 따로 들고 있어요. <i>int a[N] 같은 배열이랑 *다름*</i>.
+            <code style={{ background: "var(--color-white)", padding: "1px 4px", borderRadius: 3 }}>std::list</code> = <b>linked list</b> 라는 자료구조. 노드 (값 1 개씩) 들이 메모리 여기저기 *흩어져* 있고, 각 노드가 다음 노드의 주소를 따로 들고 있어요. <i>int a[N] 같은 배열이랑 *다름*</i>.
             <br />
             • 포인터는 *주소 + 4* 만 알아 → 엉뚱한 자리 (메모리 망가짐).
             <br />
-            • 이터레이터는 <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>node-&gt;next</code> 따라가서 *진짜* 다음 자리로 감.
+            • 이터레이터는 <code style={{ background: "var(--color-white)", padding: "1px 4px", borderRadius: 3 }}>node-&gt;next</code> 따라가서 *진짜* 다음 자리로 감.
           </>
         )}
       </div>
@@ -411,8 +411,8 @@ export function IteratorVsPointer() {
           disabled={step >= maxStep}
           style={{
             padding: "10px 20px",
-            background: step >= maxStep ? "#cbd5e1" : "#2563eb",
-            color: "#fff",
+            background: step >= maxStep ? "var(--color-slate-300)" : "var(--color-blue-600)",
+            color: "var(--ink-on-accent)",
             border: "none",
             borderRadius: 8,
             fontWeight: 700,
@@ -426,9 +426,9 @@ export function IteratorVsPointer() {
           onClick={reset}
           style={{
             padding: "10px 20px",
-            background: "#fff",
-            color: "#475569",
-            border: "1.5px solid #cbd5e1",
+            background: "var(--color-white)",
+            color: "var(--color-slate-600)",
+            border: "1.5px solid var(--color-slate-300)",
             borderRadius: 8,
             fontWeight: 700,
             cursor: "pointer",
@@ -454,9 +454,9 @@ export function IteratorVsPointer() {
               fontFamily: "sans-serif",
               fontSize: 13,
               lineHeight: 1.6,
-              background: mode === "vector" ? "#eff6ff" : "#fef2f2",
-              color: mode === "vector" ? "#1e3a8a" : "#7f1d1d",
-              border: `1.5px solid ${mode === "vector" ? "#93c5fd" : "#fca5a5"}`,
+              background: mode === "vector" ? "var(--color-blue-50)" : "var(--color-red-50)",
+              color: mode === "vector" ? "var(--color-blue-900)" : "var(--color-red-900)",
+              border: `1.5px solid ${mode === "vector" ? "var(--color-blue-300)" : "var(--color-red-300)"}`,
             }}
           >
             {mode === "vector" ? (

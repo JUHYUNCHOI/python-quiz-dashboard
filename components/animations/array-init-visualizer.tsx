@@ -23,9 +23,9 @@ interface TypeInfo {
 const TYPES: TypeInfo[] = [
   {
     name: "int",
-    color: "#3b82f6",
-    bg: "#eff6ff",
-    border: "#bfdbfe",
+    color: "var(--color-blue-500)",
+    bg: "var(--color-blue-50)",
+    border: "var(--color-blue-200)",
     defaultValue: "0",
     defaultLabel: { ko: "정수 기본값", en: "integer default" },
     declaration: "int a[5] = {1, 2, 3};",
@@ -34,9 +34,9 @@ const TYPES: TypeInfo[] = [
   },
   {
     name: "double",
-    color: "#8b5cf6",
-    bg: "#f5f3ff",
-    border: "#ddd6fe",
+    color: "var(--color-violet-500)",
+    bg: "var(--color-violet-50)",
+    border: "var(--color-violet-200)",
     defaultValue: "0.0",
     defaultLabel: { ko: "실수 기본값", en: "decimal default" },
     declaration: "double a[5] = {1.5, 2.7};",
@@ -45,9 +45,9 @@ const TYPES: TypeInfo[] = [
   },
   {
     name: "bool",
-    color: "#ec4899",
-    bg: "#fdf2f8",
-    border: "#fbcfe8",
+    color: "var(--color-pink-500)",
+    bg: "var(--color-pink-50)",
+    border: "var(--color-pink-200)",
     defaultValue: "false",
     defaultLabel: { ko: "bool 기본값", en: "bool default" },
     declaration: "bool a[4] = {true, true};",
@@ -56,9 +56,9 @@ const TYPES: TypeInfo[] = [
   },
   {
     name: "string",
-    color: "#f59e0b",
-    bg: "#fffbeb",
-    border: "#fde68a",
+    color: "var(--color-amber-500)",
+    bg: "var(--color-amber-50)",
+    border: "var(--color-amber-200)",
     defaultValue: '""',
     defaultLabel: { ko: "빈 문자열", en: "empty string" },
     declaration: 'string a[4] = {"hi", "bye"};',
@@ -82,8 +82,8 @@ export function ArrayInitVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
             onClick={() => setSelected(i)}
             className="px-4 py-1.5 rounded-full text-sm font-bold transition-all"
             style={{
-              background: selected === i ? type.color : "#f1f5f9",
-              color: selected === i ? "white" : "#94a3b8",
+              background: selected === i ? type.color : "var(--color-slate-100)",
+              color: selected === i ? "white" : "var(--color-slate-400)",
             }}
           >
             {type.name}

@@ -80,9 +80,9 @@ export function ProgressiveCodeStepper({
                   width: 28,
                   height: 28,
                   borderRadius: "50%",
-                  background: i === safeIdx ? accentColor : "#fff",
+                  background: i === safeIdx ? accentColor : "var(--color-white)",
                   border: `1.5px solid ${i === safeIdx ? accentColor : C.border}`,
-                  color: i === safeIdx ? "#fff" : C.dim,
+                  color: i === safeIdx ? "var(--ink-on-accent)" : C.dim,
                   fontSize: 12,
                   fontWeight: 800,
                   cursor: "pointer",
@@ -104,8 +104,8 @@ export function ProgressiveCodeStepper({
                 borderRadius: 7,
                 border: `1.5px solid ${accentColor}`,
                 cursor: "pointer",
-                background: showAside ? accentColor : "#fff",
-                color: showAside ? "#fff" : accentColor,
+                background: showAside ? accentColor : "var(--color-white)",
+                color: showAside ? "var(--ink-on-accent)" : accentColor,
               }}
             >
               📥 {t(E, "Sample input", "샘플 입력")}
@@ -131,7 +131,7 @@ export function ProgressiveCodeStepper({
         <div
           style={{
             background: s.color,
-            color: "#fff",
+            color: "var(--ink-on-accent)",
             padding: "8px 14px",
             borderRadius: "10px 10px 0 0",
             fontSize: 14,
@@ -142,7 +142,7 @@ export function ProgressiveCodeStepper({
         </div>
         <div
           style={{
-            background: "#fff",
+            background: "var(--color-white)",
             border: `1.5px solid ${C.border}`,
             borderTop: "none",
             padding: "10px 12px",
@@ -223,7 +223,7 @@ export function ProgressiveCodeStepper({
                 >
                   <span
                     style={{
-                      color: lang === "py" ? "#16a34a" : "#0891b2",
+                      color: lang === "py" ? "var(--color-green-600)" : "var(--color-cyan-600)",
                       fontWeight: 800,
                       flexShrink: 0,
                     }}

@@ -93,7 +93,7 @@ export function PairVsTwoVectorsAnimation({ lang = "ko" }: { lang?: "ko" | "en" 
               style={{
                 width: i === step ? 18 : 7,
                 height: 7,
-                background: i === step ? "#6366f1" : i < step ? "#6366f155" : "#e2e8f0",
+                background: i === step ? "var(--color-indigo-500)" : i < step ? "#6366f155" : "var(--color-slate-200)",
               }}
             />
           ))}

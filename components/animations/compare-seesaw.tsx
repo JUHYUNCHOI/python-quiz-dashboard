@@ -26,12 +26,12 @@ interface CompareSeesawProps {
   max?: number
 }
 
-const LEFT_COLOR = "#3b82f6"   // blue-500
-const LEFT_BG = "#eff6ff"      // blue-50
-const RIGHT_COLOR = "#f59e0b"  // amber-500
-const RIGHT_BG = "#fffbeb"     // amber-50
-const TRUE_COLOR = "#10b981"   // emerald-500
-const FALSE_COLOR = "#ef4444"  // red-500
+const LEFT_COLOR = "var(--color-blue-500)"   // blue-500
+const LEFT_BG = "var(--color-blue-50)"      // blue-50
+const RIGHT_COLOR = "var(--color-amber-500)"  // amber-500
+const RIGHT_BG = "var(--color-amber-50)"     // amber-50
+const TRUE_COLOR = "var(--color-emerald-500)"   // emerald-500
+const FALSE_COLOR = "var(--color-red-500)"  // red-500
 
 const OPS: CompareOp[] = [">", "<", ">=", "<=", "==", "!="]
 
@@ -142,7 +142,7 @@ export function CompareSeesaw({
               style={{
                 borderLeft: "22px solid transparent",
                 borderRight: "22px solid transparent",
-                borderBottom: "32px solid #64748b", // slate-500
+                borderBottom: "32px solid var(--color-slate-500)", // slate-500
               }}
             />
             <div className="w-16 h-1.5 bg-slate-700 rounded-b" />
@@ -213,7 +213,7 @@ export function CompareSeesaw({
                 className="px-2.5 py-1 rounded-lg text-xs font-mono font-black border-2"
                 style={{
                   borderColor: result ? TRUE_COLOR : FALSE_COLOR,
-                  background: result ? "#ecfdf5" : "#fef2f2",
+                  background: result ? "var(--color-emerald-50)" : "var(--color-red-50)",
                   color: result ? TRUE_COLOR : FALSE_COLOR,
                 }}
               >
@@ -305,14 +305,14 @@ export function CompareSeesaw({
                   style={
                     active
                       ? {
-                          borderColor: "#0f172a",
-                          background: "#0f172a",
+                          borderColor: "var(--color-slate-900)",
+                          background: "var(--color-slate-900)",
                           color: "white",
                         }
                       : {
-                          borderColor: "#e2e8f0",
+                          borderColor: "var(--color-slate-200)",
                           background: "white",
-                          color: "#475569",
+                          color: "var(--color-slate-600)",
                         }
                   }
                 >
@@ -334,7 +334,7 @@ export function CompareSeesaw({
           className="rounded-xl border-2 px-3 py-3 flex items-center justify-between gap-3"
           style={{
             borderColor: result ? TRUE_COLOR : FALSE_COLOR,
-            background: result ? "#ecfdf5" : "#fef2f2",
+            background: result ? "var(--color-emerald-50)" : "var(--color-red-50)",
           }}
         >
           <div className="flex items-center gap-2">
@@ -377,8 +377,8 @@ export function CompareSeesaw({
               className="flex-1 py-2 rounded-lg text-xs font-mono font-bold border-2 transition-all"
               style={
                 op === ">"
-                  ? { borderColor: FALSE_COLOR, background: "#fef2f2", color: FALSE_COLOR }
-                  : { borderColor: "#e2e8f0", background: "white", color: "#475569" }
+                  ? { borderColor: FALSE_COLOR, background: "var(--color-red-50)", color: FALSE_COLOR }
+                  : { borderColor: "var(--color-slate-200)", background: "white", color: "var(--color-slate-600)" }
               }
             >
               {`${left} > ${right} → False`}
@@ -389,8 +389,8 @@ export function CompareSeesaw({
               className="flex-1 py-2 rounded-lg text-xs font-mono font-bold border-2 transition-all"
               style={
                 op === ">="
-                  ? { borderColor: TRUE_COLOR, background: "#ecfdf5", color: TRUE_COLOR }
-                  : { borderColor: "#e2e8f0", background: "white", color: "#475569" }
+                  ? { borderColor: TRUE_COLOR, background: "var(--color-emerald-50)", color: TRUE_COLOR }
+                  : { borderColor: "var(--color-slate-200)", background: "white", color: "var(--color-slate-600)" }
               }
             >
               {`${left} >= ${right} → True`}

@@ -33,26 +33,26 @@ export function SampleInputAside({ E, sample, highlight = [], note, title }: Pro
   const hi = new Set(highlight);
   return (
     <div style={{
-      background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10,
+      background: "var(--color-amber-100)", border: "1.5px solid var(--color-amber-400)", borderRadius: 10,
       padding: "8px 10px", fontSize: 11.5,
     }}>
-      <div style={{ fontSize: 10.5, fontWeight: 800, color: "#92400e", marginBottom: 6, letterSpacing: 0.3 }}>
+      <div style={{ fontSize: 10.5, fontWeight: 800, color: "var(--color-amber-800)", marginBottom: 6, letterSpacing: 0.3 }}>
         📥 {title ?? t(E, "Sample input", "샘플 입력")}
       </div>
       <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55 }}>
         {sample.map((line, i) => (
           <div key={i} style={{
-            background: hi.has(i) ? "#fde68a" : "transparent",
-            border: hi.has(i) ? "1.5px solid #f59e0b" : "1.5px solid transparent",
+            background: hi.has(i) ? "var(--color-amber-200)" : "transparent",
+            border: hi.has(i) ? "1.5px solid var(--color-amber-500)" : "1.5px solid transparent",
             borderRadius: 4, padding: "1px 5px",
-            color: hi.has(i) ? "#7c2d12" : "#9ca3af",
+            color: hi.has(i) ? "var(--color-orange-900)" : "var(--color-gray-400)",
             fontWeight: hi.has(i) ? 800 : 500,
             opacity: hi.has(i) ? 1 : 0.7,
           }}>{line || " "}</div>
         ))}
       </div>
       {note && (
-        <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fcd34d", fontSize: 11, color: "#7c2d12", lineHeight: 1.5 }}>
+        <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed var(--color-amber-300)", fontSize: 11, color: "var(--color-orange-900)", lineHeight: 1.5 }}>
           {note}
         </div>
       )}

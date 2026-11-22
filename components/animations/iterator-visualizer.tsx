@@ -55,7 +55,7 @@ export function IteratorVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           animate={{ x: pos * (CELL_W + GAP) + CELL_W / 2 - 12 }}
           transition={{ type: "spring", stiffness: 320, damping: 26 }}
           className="absolute top-0 text-2xl leading-none"
-          style={{ color: isAtEnd ? "#e11d48" : "#10b981" }}
+          style={{ color: isAtEnd ? "var(--color-rose-600)" : "var(--color-emerald-500)" }}
         >
           ▼
         </motion.div>
@@ -68,9 +68,9 @@ export function IteratorVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
             key={i}
             className="w-14 h-14 rounded-xl border-[3px] flex items-center justify-center font-mono font-bold text-lg transition-all duration-200"
             style={{
-              borderColor: pos === i ? "#10b981" : "#cbd5e1",
-              background: pos === i ? "#ecfdf5" : "#f8fafc",
-              color: pos === i ? "#065f46" : "#64748b",
+              borderColor: pos === i ? "var(--color-emerald-500)" : "var(--color-slate-300)",
+              background: pos === i ? "var(--color-emerald-50)" : "var(--color-slate-50)",
+              color: pos === i ? "var(--color-emerald-800)" : "var(--color-slate-500)",
               boxShadow: pos === i ? "0 0 0 4px #10b98125" : undefined,
             }}
           >
@@ -81,9 +81,9 @@ export function IteratorVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
         <div
           className="w-14 h-14 rounded-xl border-[3px] border-dashed flex items-center justify-center font-mono text-[11px] font-bold transition-all duration-200"
           style={{
-            borderColor: isAtEnd ? "#e11d48" : "#cbd5e1",
-            background: isAtEnd ? "#fff1f2" : "transparent",
-            color: isAtEnd ? "#be123c" : "#94a3b8",
+            borderColor: isAtEnd ? "var(--color-rose-600)" : "var(--color-slate-300)",
+            background: isAtEnd ? "var(--color-rose-50)" : "transparent",
+            color: isAtEnd ? "var(--color-rose-700)" : "var(--color-slate-400)",
             boxShadow: isAtEnd ? "0 0 0 4px #e11d4825" : undefined,
           }}
         >

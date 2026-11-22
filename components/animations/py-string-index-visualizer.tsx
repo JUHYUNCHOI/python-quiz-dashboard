@@ -18,10 +18,10 @@ interface PyStringIndexVisualizerProps {
   maxLength?: number
 }
 
-const POS_COLOR = "#3b82f6" // blue-500
-const POS_BG = "#eff6ff"    // blue-50
-const NEG_COLOR = "#8b5cf6" // violet-500
-const NEG_BG = "#f5f3ff"    // violet-50
+const POS_COLOR = "var(--color-blue-500)" // blue-500
+const POS_BG = "var(--color-blue-50)"    // blue-50
+const NEG_COLOR = "var(--color-violet-500)" // violet-500
+const NEG_BG = "var(--color-violet-50)"    // violet-50
 
 type ExampleKind = "pos" | "neg"
 interface Example {
@@ -172,14 +172,14 @@ export function PyStringIndexVisualizer({
                       isHl
                         ? {
                             borderColor: POS_COLOR,
-                            background: "linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%)",
-                            color: "#1e293b",
+                            background: "linear-gradient(135deg, var(--color-blue-50) 0%, var(--color-violet-50) 100%)",
+                            color: "var(--color-slate-800)",
                             boxShadow: `0 0 0 3px ${POS_COLOR}30`,
                           }
                         : {
-                            borderColor: "#e2e8f0",
+                            borderColor: "var(--color-slate-200)",
                             background: "white",
-                            color: "#475569",
+                            color: "var(--color-slate-600)",
                           }
                     }
                   >

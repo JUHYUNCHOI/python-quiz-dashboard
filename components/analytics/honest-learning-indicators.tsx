@@ -23,10 +23,10 @@ export function HonestLearningIndicators() {
   ]
 
   const timeDistribution = [
-    { range: "<10s", count: 12, color: "#ef4444", label: t("너무 빠름", "Too fast") },
-    { range: "10-20s", count: 45, color: "#f97316", label: t("빠름", "Fast") },
-    { range: "20s-2m", count: 180, color: "#22c55e", label: t("적정", "Optimal") },
-    { range: ">2m", count: 23, color: "#3b82f6", label: t("신중함", "Careful") },
+    { range: "<10s", count: 12, color: "var(--color-red-500)", label: t("너무 빠름", "Too fast") },
+    { range: "10-20s", count: 45, color: "var(--color-orange-500)", label: t("빠름", "Fast") },
+    { range: "20s-2m", count: 180, color: "var(--color-green-500)", label: t("적정", "Optimal") },
+    { range: ">2m", count: 23, color: "var(--color-blue-500)", label: t("신중함", "Careful") },
   ]
 
   const activityPattern = [
@@ -35,7 +35,7 @@ export function HonestLearningIndicators() {
     { time: t("저녁", "Evening"), value: 20 },
   ]
 
-  const COLORS = ["#f97316", "#3b82f6", "#8b5cf6"]
+  const COLORS = ["var(--color-orange-500)", "var(--color-blue-500)", "var(--color-violet-500)"]
 
   return (
     <Card className="p-6 bg-white shadow-lg">
@@ -47,18 +47,18 @@ export function HonestLearningIndicators() {
           <h3 className="text-sm font-semibold text-slate-700 mb-4">{t("집중도 품질", "Focus Quality")}</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={focusData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-              <XAxis dataKey="day" stroke="#64748b" />
-              <YAxis stroke="#64748b" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-200)" />
+              <XAxis dataKey="day" stroke="var(--color-slate-500)" />
+              <YAxis stroke="var(--color-slate-500)" />
               <Tooltip
                 contentStyle={{
                   backgroundColor: "white",
-                  border: "1px solid #e2e8f0",
+                  border: "1px solid var(--color-slate-200)",
                   borderRadius: "8px",
                 }}
               />
-              <Bar dataKey="focused" stackId="a" fill="#22c55e" name={t("집중 시간", "Focused")} radius={[0, 0, 0, 0]} />
-              <Bar dataKey="distracted" stackId="a" fill="#ef4444" name={t("산만한 시간", "Distracted")} radius={[8, 8, 0, 0]} />
+              <Bar dataKey="focused" stackId="a" fill="var(--color-green-500)" name={t("집중 시간", "Focused")} radius={[0, 0, 0, 0]} />
+              <Bar dataKey="distracted" stackId="a" fill="var(--color-red-500)" name={t("산만한 시간", "Distracted")} radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
           <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
@@ -72,13 +72,13 @@ export function HonestLearningIndicators() {
           <h3 className="text-sm font-semibold text-slate-700 mb-4">{t("문제당 시간 분포", "Time per Question")}</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={timeDistribution} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-              <XAxis type="number" stroke="#64748b" />
-              <YAxis dataKey="range" type="category" stroke="#64748b" width={80} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-200)" />
+              <XAxis type="number" stroke="var(--color-slate-500)" />
+              <YAxis dataKey="range" type="category" stroke="var(--color-slate-500)" width={80} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: "white",
-                  border: "1px solid #e2e8f0",
+                  border: "1px solid var(--color-slate-200)",
                   borderRadius: "8px",
                 }}
               />

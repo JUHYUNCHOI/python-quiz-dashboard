@@ -22,10 +22,10 @@ interface AndOrCircuitProps {
   initialMode?: Mode
 }
 
-const ON_COLOR = "#facc15" // yellow-400 (전기 흐름)
-const OFF_COLOR = "#cbd5e1" // slate-300 (꺼진 전선)
-const BULB_ON = "#fde047" // yellow-300
-const BULB_OFF = "#e2e8f0" // slate-200
+const ON_COLOR = "var(--color-yellow-400)" // yellow-400 (전기 흐름)
+const OFF_COLOR = "var(--color-slate-300)" // slate-300 (꺼진 전선)
+const BULB_ON = "var(--color-yellow-300)" // yellow-300
+const BULB_OFF = "var(--color-slate-200)" // slate-200
 
 function compute(mode: Mode, a: boolean, b: boolean): boolean {
   if (mode === "and") return a && b
@@ -399,7 +399,7 @@ function Wire({
           y1={y1}
           x2={x2}
           y2={y2}
-          stroke="#fef08a"
+          stroke="var(--color-yellow-200)"
           strokeWidth={2}
           strokeLinecap="round"
           strokeDasharray="6 6"
@@ -418,15 +418,15 @@ function SwitchSymbol({ x, y, on }: { x: number; y: number; on: boolean }) {
   return (
     <g>
       {/* 단자 */}
-      <circle cx={x} cy={y} r={3.5} fill="#475569" />
-      <circle cx={x + 30} cy={y} r={3.5} fill="#475569" />
+      <circle cx={x} cy={y} r={3.5} fill="var(--color-slate-600)" />
+      <circle cx={x + 30} cy={y} r={3.5} fill="var(--color-slate-600)" />
       {/* 스위치 막대기 */}
       <motion.line
         x1={x}
         y1={y}
         x2={on ? x + 30 : x + 24}
         y2={on ? y : y - 14}
-        stroke={on ? ON_COLOR : "#94a3b8"}
+        stroke={on ? ON_COLOR : "var(--color-slate-400)"}
         strokeWidth={3.5}
         strokeLinecap="round"
         initial={false}
@@ -444,10 +444,10 @@ function BatterySymbol({ x, y }: { x: number; y: number }) {
   return (
     <g>
       {/* + 단자 (긴 막대) */}
-      <line x1={x} y1={y - 10} x2={x} y2={y + 10} stroke="#475569" strokeWidth={3} />
+      <line x1={x} y1={y - 10} x2={x} y2={y + 10} stroke="var(--color-slate-600)" strokeWidth={3} />
       {/* - 단자 (짧은 막대) */}
-      <line x1={x + 8} y1={y - 6} x2={x + 8} y2={y + 6} stroke="#475569" strokeWidth={3} />
-      <text x={x - 2} y={y - 14} fontSize={10} fill="#475569" fontFamily="sans-serif">
+      <line x1={x + 8} y1={y - 6} x2={x + 8} y2={y + 6} stroke="var(--color-slate-600)" strokeWidth={3} />
+      <text x={x - 2} y={y - 14} fontSize={10} fill="var(--color-slate-600)" fontFamily="sans-serif">
         +
       </text>
     </g>
@@ -456,13 +456,13 @@ function BatterySymbol({ x, y }: { x: number; y: number }) {
 
 function BulbConnector({ x, y, on }: { x: number; y: number; on: boolean }) {
   // 전구 그림은 상단에 별도로 표시되므로 여기는 작은 단자 표시만
-  return <circle cx={x} cy={y} r={4} fill={on ? ON_COLOR : "#94a3b8"} />
+  return <circle cx={x} cy={y} r={4} fill={on ? ON_COLOR : "var(--color-slate-400)"} />
 }
 
 function NotGate({ x, y, active }: { x: number; y: number; active: boolean }) {
   // 삼각형 + 원 (NOT gate 표준 기호). x는 왼쪽 끝 (입력단).
-  const fill = active ? "#fde047" : "#f1f5f9"
-  const stroke = active ? "#ca8a04" : "#94a3b8"
+  const fill = active ? "var(--color-yellow-300)" : "var(--color-slate-100)"
+  const stroke = active ? "var(--color-yellow-600)" : "var(--color-slate-400)"
   return (
     <g>
       <polygon
@@ -505,25 +505,25 @@ function Bulb({ on }: { on: boolean }) {
             rx={22}
             ry={26}
             fill={on ? BULB_ON : BULB_OFF}
-            stroke={on ? "#ca8a04" : "#94a3b8"}
+            stroke={on ? "var(--color-yellow-600)" : "var(--color-slate-400)"}
             strokeWidth={2}
-            animate={on ? { fill: [BULB_ON, "#fef08a", BULB_ON] } : { fill: BULB_OFF }}
+            animate={on ? { fill: [BULB_ON, "var(--color-yellow-200)", BULB_ON] } : { fill: BULB_OFF }}
             transition={on ? { repeat: Infinity, duration: 1.2 } : { duration: 0.2 }}
           />
           {/* 필라멘트 */}
           <path
             d="M24 32 Q28 24 32 32 Q36 40 40 32"
-            stroke={on ? "#a16207" : "#cbd5e1"}
+            stroke={on ? "var(--color-yellow-700)" : "var(--color-slate-300)"}
             strokeWidth={1.5}
             fill="none"
           />
           {/* 소켓 */}
-          <rect x={24} y={56} width={16} height={6} fill="#64748b" />
-          <rect x={26} y={62} width={12} height={4} fill="#475569" />
-          <rect x={28} y={66} width={8} height={4} fill="#334155" />
+          <rect x={24} y={56} width={16} height={6} fill="var(--color-slate-500)" />
+          <rect x={26} y={62} width={12} height={4} fill="var(--color-slate-600)" />
+          <rect x={28} y={66} width={8} height={4} fill="var(--color-slate-700)" />
         </svg>
       </motion.div>
-      <div className="text-xs font-bold mt-1" style={{ color: on ? "#ca8a04" : "#94a3b8" }}>
+      <div className="text-xs font-bold mt-1" style={{ color: on ? "var(--color-yellow-600)" : "var(--color-slate-400)" }}>
         {on ? "켜짐 💡" : "꺼짐 🌑"}
       </div>
     </div>

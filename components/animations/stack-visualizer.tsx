@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion"
 type Item = { id: number; val: string }
 type Flash = { kind: "push" | "pop" | "peek" | "empty"; val?: string } | null
 
-const COL = "#8b5cf6" // 보라 (스택 테마)
+const COL = "var(--color-violet-500)" // 보라 (스택 테마)
 
 function StackVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const isEn = lang === "en"
@@ -139,7 +139,7 @@ function StackVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 key={flashText}
                 initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                 className="text-xs font-bold text-center px-2"
-                style={{ color: flash?.kind === "empty" ? "#ef4444" : COL }}
+                style={{ color: flash?.kind === "empty" ? "var(--color-red-500)" : COL }}
               >
                 {flashText}
               </motion.div>
@@ -171,7 +171,7 @@ function StackVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
       </div>
 
       {/* 캡션 */}
-      <div className="rounded-xl px-3 py-2.5 text-xs leading-relaxed" style={{ background: COL + "12", color: "#374151" }}>
+      <div className="rounded-xl px-3 py-2.5 text-xs leading-relaxed" style={{ background: COL + "12", color: "var(--color-gray-700)" }}>
         💡 {tt(
           "스택 = 마지막에 넣은 게 먼저 나와요 (LIFO). 넣고 빼는 곳이 '맨 위' 한 곳뿐이라 — 책 쌓기, 되돌리기(Ctrl+Z), 웹 뒤로가기처럼 \"가장 최근 것\"부터 처리할 때 써요.",
           "A stack is Last-In-First-Out (LIFO). You add and remove only at the TOP — like a pile of books, Undo (Ctrl+Z), or the browser Back button, where you handle the \"most recent\" thing first.",

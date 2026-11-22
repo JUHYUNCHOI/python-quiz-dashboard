@@ -38,10 +38,10 @@ const TYPES: TypeMeta[] = [
     enName: "Integer",
     abbr: "int",
     icon: "🔢",
-    color: "#2563eb",       // blue-600
-    bg: "#eff6ff",          // blue-50
-    bgActive: "#dbeafe",    // blue-100
-    ring: "#3b82f6",        // blue-500
+    color: "var(--color-blue-600)",       // blue-600
+    bg: "var(--color-blue-50)",          // blue-50
+    bgActive: "var(--color-blue-100)",    // blue-100
+    ring: "var(--color-blue-500)",        // blue-500
     examples: ["10", "-5", "0", "100"],
   },
   {
@@ -50,10 +50,10 @@ const TYPES: TypeMeta[] = [
     enName: "Float",
     abbr: "float",
     icon: "📏",
-    color: "#059669",       // emerald-600
-    bg: "#ecfdf5",          // emerald-50
-    bgActive: "#d1fae5",    // emerald-100
-    ring: "#10b981",        // emerald-500
+    color: "var(--color-emerald-600)",       // emerald-600
+    bg: "var(--color-emerald-50)",          // emerald-50
+    bgActive: "var(--color-emerald-100)",    // emerald-100
+    ring: "var(--color-emerald-500)",        // emerald-500
     examples: ["3.14", "0.5", "-1.5", "2.0"],
   },
   {
@@ -62,10 +62,10 @@ const TYPES: TypeMeta[] = [
     enName: "String",
     abbr: "str",
     icon: "💬",
-    color: "#ea580c",       // orange-600
-    bg: "#fff7ed",          // orange-50
-    bgActive: "#ffedd5",    // orange-100
-    ring: "#f97316",        // orange-500
+    color: "var(--color-orange-600)",       // orange-600
+    bg: "var(--color-orange-50)",          // orange-50
+    bgActive: "var(--color-orange-100)",    // orange-100
+    ring: "var(--color-orange-500)",        // orange-500
     examples: ['"hello"', '"파이썬"', '"123"', '"😊"'],
   },
   {
@@ -74,10 +74,10 @@ const TYPES: TypeMeta[] = [
     enName: "Boolean",
     abbr: "bool",
     icon: "💡",
-    color: "#7c3aed",       // violet-600
-    bg: "#f5f3ff",          // violet-50
-    bgActive: "#ede9fe",    // violet-100
-    ring: "#8b5cf6",        // violet-500
+    color: "var(--color-violet-600)",       // violet-600
+    bg: "var(--color-violet-50)",          // violet-50
+    bgActive: "var(--color-violet-100)",    // violet-100
+    ring: "var(--color-violet-500)",        // violet-500
     examples: ["True", "False"],
   },
 ]

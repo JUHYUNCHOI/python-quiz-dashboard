@@ -102,21 +102,21 @@ export function QuestCompletionCard({ questId, solved, isEn = false }: Props) {
   return (
     <div
       style={{
-        background: "linear-gradient(135deg,#f0fdf4 0%,#ecfdf5 100%)",
-        border: "2px solid #86efac",
+        background: "linear-gradient(135deg,var(--color-green-50) 0%,var(--color-emerald-50) 100%)",
+        border: "2px solid var(--color-green-300)",
         borderRadius: 14,
         padding: "16px 18px",
         margin: "16px auto",
         maxWidth: "min(880px, 100%)",
       }}
     >
-      <div style={{ fontSize: 16, fontWeight: 800, color: "#15803d", marginBottom: 10 }}>
+      <div style={{ fontSize: 16, fontWeight: 800, color: "var(--color-green-700)", marginBottom: 10 }}>
         🎉 {t(isEn, "Quest complete!", "Quest 완료!")}
       </div>
 
       {taught.length > 0 && (
         <div style={{ marginBottom: top.length > 0 ? 14 : 0 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#166534", marginBottom: 6 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-green-800)", marginBottom: 6 }}>
             {t(isEn, "What you practiced", "이번에 연습한 개념")}
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
@@ -129,9 +129,9 @@ export function QuestCompletionCard({ questId, solved, isEn = false }: Props) {
                   fontWeight: 700,
                   padding: "3px 8px",
                   borderRadius: 999,
-                  background: "#fff",
-                  border: "1px solid #86efac",
-                  color: "#15803d",
+                  background: "var(--color-white)",
+                  border: "1px solid var(--color-green-300)",
+                  color: "var(--color-green-700)",
                 }}
               >
                 ✓ {c}
@@ -143,7 +143,7 @@ export function QuestCompletionCard({ questId, solved, isEn = false }: Props) {
 
       {top.length > 0 && (
         <div>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#166534", marginBottom: 6 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-green-800)", marginBottom: 6 }}>
             {t(isEn, "Try next — ready for you", "다음 도전 — 지금 풀 수 있어요")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8 }}>
@@ -157,16 +157,16 @@ export function QuestCompletionCard({ questId, solved, isEn = false }: Props) {
                   gap: 4,
                   padding: "10px 12px",
                   borderRadius: 10,
-                  background: "#fff",
-                  border: "2px solid #bbf7d0",
-                  color: "#1f2937",
+                  background: "var(--color-white)",
+                  border: "2px solid var(--color-green-200)",
+                  color: "var(--color-gray-800)",
                   textDecoration: "none",
                 }}
               >
-                <div style={{ fontSize: 13, fontWeight: 800, color: "#166534" }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: "var(--color-green-800)" }}>
                   🎯 {r.title}
                 </div>
-                <div style={{ fontSize: 10, color: "#16a34a" }}>
+                <div style={{ fontSize: 10, color: "var(--color-green-600)" }}>
                   {t(isEn, "uses ", "사용 개념: ")}
                   {r.sharedConcepts.join(", ")}
                 </div>

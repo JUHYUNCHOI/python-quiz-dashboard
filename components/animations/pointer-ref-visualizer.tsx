@@ -27,14 +27,14 @@ export default function PointerRefVisualizer({ lang = "ko" }: { lang?: "ko" | "e
   }
 
   const isEn = lang === "en"
-  const color = tab === "ref" ? "#6366f1" : "#10b981"
+  const color = tab === "ref" ? "var(--color-indigo-500)" : "var(--color-emerald-500)"
 
   return (
     <div className="w-full max-w-md mx-auto space-y-3 select-none">
       {/* 탭 */}
       <div className="flex gap-2">
-        <TabBtn active={tab === "ref"} onClick={() => handleTab("ref")} label={isEn ? "Reference (int& ref)" : "참조 (int& ref)"} color="#6366f1" />
-        <TabBtn active={tab === "ptr"} onClick={() => handleTab("ptr")} label={isEn ? "Pointer (int* ptr)" : "포인터 (int* ptr)"} color="#10b981" />
+        <TabBtn active={tab === "ref"} onClick={() => handleTab("ref")} label={isEn ? "Reference (int& ref)" : "참조 (int& ref)"} color="var(--color-indigo-500)" />
+        <TabBtn active={tab === "ptr"} onClick={() => handleTab("ptr")} label={isEn ? "Pointer (int* ptr)" : "포인터 (int* ptr)"} color="var(--color-emerald-500)" />
       </div>
 
       {/* 코드 */}
@@ -85,7 +85,7 @@ export default function PointerRefVisualizer({ lang = "ko" }: { lang?: "ko" | "e
       <button
         onClick={handleModify}
         className="w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all"
-        style={{ background: modified ? "#94a3b8" : color }}
+        style={{ background: modified ? "var(--color-slate-400)" : color }}
       >
         {modified
           ? (isEn ? "↺ Reset" : "↺ 초기화")
@@ -122,7 +122,7 @@ function TabBtn({
       style={
         active
           ? { borderColor: color, background: color + "15", color }
-          : { borderColor: "#e2e8f0", background: "white", color: "#94a3b8" }
+          : { borderColor: "var(--color-slate-200)", background: "white", color: "var(--color-slate-400)" }
       }
     >
       {label}
@@ -146,9 +146,9 @@ function MemoryBox({
         style={{
           borderWidth: 3,
           fontSize: small ? "9px" : "22px",
-          background: highlight ? color + "20" : "#f8fafc",
-          borderColor: highlight ? color : "#e2e8f0",
-          color: highlight ? color : "#94a3b8",
+          background: highlight ? color + "20" : "var(--color-slate-50)",
+          borderColor: highlight ? color : "var(--color-slate-200)",
+          color: highlight ? color : "var(--color-slate-400)",
           boxShadow: highlight ? `0 0 0 4px ${color}25` : undefined,
         }}
       >
@@ -164,7 +164,7 @@ function MemoryBox({
           </motion.span>
         </AnimatePresence>
       </motion.div>
-      <span className="text-xs font-bold" style={{ color: highlight ? color : "#94a3b8" }}>
+      <span className="text-xs font-bold" style={{ color: highlight ? color : "var(--color-slate-400)" }}>
         {label}
       </span>
     </div>
@@ -183,9 +183,9 @@ function RefViz({ xVal, modified, isEn }: { xVal: number; modified: boolean; isE
             className="w-16 h-16 rounded-2xl flex items-center justify-center font-mono text-[22px] font-black border-3 transition-all duration-300"
             style={{
               borderWidth: 3,
-              background: modified ? "#6366f120" : "#f8fafc",
-              borderColor: modified ? "#6366f1" : "#e2e8f0",
-              color: modified ? "#6366f1" : "#94a3b8",
+              background: modified ? "#6366f120" : "var(--color-slate-50)",
+              borderColor: modified ? "var(--color-indigo-500)" : "var(--color-slate-200)",
+              color: modified ? "var(--color-indigo-500)" : "var(--color-slate-400)",
               boxShadow: modified ? "0 0 0 4px #6366f125" : undefined,
             }}
           >
@@ -208,7 +208,7 @@ function RefViz({ xVal, modified, isEn }: { xVal: number; modified: boolean; isE
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-[9px] font-bold text-white px-1.5 py-0.5 rounded-full"
-              style={{ background: "#6366f1" }}
+              style={{ background: "var(--color-indigo-500)" }}
             >
               ref
             </motion.span>
@@ -234,7 +234,7 @@ function PtrViz({ xVal, modified, isEn }: { xVal: number; modified: boolean; isE
         {/* ptr 박스 — 주소값을 담는 별도 메모리 */}
         <MemoryBox
           value="0x1000"
-          color="#10b981"
+          color="var(--color-emerald-500)"
           label="ptr"
           address="0x2000"
           small
@@ -242,7 +242,7 @@ function PtrViz({ xVal, modified, isEn }: { xVal: number; modified: boolean; isE
 
         {/* 화살표 */}
         <motion.div
-          animate={modified ? { scale: [1, 1.4, 1], color: ["#10b981", "#f59e0b", "#10b981"] } : {}}
+          animate={modified ? { scale: [1, 1.4, 1], color: ["var(--color-emerald-500)", "var(--color-amber-500)", "var(--color-emerald-500)"] } : {}}
           transition={{ duration: 0.4 }}
           className="text-2xl font-bold text-emerald-400"
         >
@@ -252,7 +252,7 @@ function PtrViz({ xVal, modified, isEn }: { xVal: number; modified: boolean; isE
         {/* x 박스 */}
         <MemoryBox
           value={xVal}
-          color="#10b981"
+          color="var(--color-emerald-500)"
           label="x"
           address="0x1000"
           highlight={modified}

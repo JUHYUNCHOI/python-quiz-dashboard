@@ -95,8 +95,8 @@ export function MemoryTypeVisualizer({ lang = "ko" }: MemoryTypeVisualizerProps)
             onClick={() => setSelected(i)}
             className="px-3 py-1.5 rounded-full text-xs font-extrabold transition-all"
             style={{
-              background: selected === i ? dt.color : "#f1f5f9",
-              color: selected === i ? "white" : "#94a3b8",
+              background: selected === i ? dt.color : "var(--color-slate-100)",
+              color: selected === i ? "white" : "var(--color-slate-400)",
               boxShadow: selected === i ? `0 3px 10px ${dt.color}35` : "none",
             }}
           >
@@ -169,7 +169,7 @@ export function MemoryTypeVisualizer({ lang = "ko" }: MemoryTypeVisualizerProps)
                     }}
                     className="h-12 md:h-14 rounded-xl flex items-center justify-center relative overflow-hidden"
                     style={{
-                      background: filled ? type.color : "#e2e8f0",
+                      background: filled ? type.color : "var(--color-slate-200)",
                       boxShadow: filled
                         ? `0 2px 8px ${type.color}30, inset 0 1px 0 rgba(255,255,255,0.2)`
                         : "inset 0 1px 2px rgba(0,0,0,0.05)",
@@ -226,7 +226,7 @@ export function MemoryTypeVisualizer({ lang = "ko" }: MemoryTypeVisualizerProps)
                   {dt.name}
                 </span>
                 <div className="flex-1 h-6 rounded-lg overflow-hidden relative"
-                  style={{ background: isActive ? dt.lightBar : "#f1f5f9" }}>
+                  style={{ background: isActive ? dt.lightBar : "var(--color-slate-100)" }}>
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${pct}%` }}
@@ -240,7 +240,7 @@ export function MemoryTypeVisualizer({ lang = "ko" }: MemoryTypeVisualizerProps)
                     <div className="absolute inset-0 bg-gradient-to-b from-white/15 to-transparent rounded-lg" />
                   </motion.div>
                   <span className="absolute inset-0 flex items-center px-2 text-[10px] font-extrabold"
-                    style={{ color: isActive ? "white" : "#94a3b8" }}>
+                    style={{ color: isActive ? "white" : "var(--color-slate-400)" }}>
                     {dt.bytes}B
                   </span>
                 </div>
