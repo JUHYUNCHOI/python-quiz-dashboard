@@ -26,6 +26,7 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { TierMark } from "@/components/tier-mark"
+import { TierLadder } from "@/components/tier-ladder"
 import { useLanguage } from "@/contexts/language-context"
 import {
   TIER_IDS, PROMOTION_TARGET, tierInfo, tierLabel, tierRank, tierProblemTitle,
@@ -107,6 +108,13 @@ export default function TierPage() {
             "Take the placement test first. 12 questions set the tier that matches your level.",
           )}
         </p>
+
+        {/* 시험을 보기 **전에** 무슨 티어가 있는지 먼저 보여 준다 — 받게 될 게
+            뭔지 모르는 채로 12문항을 푸는 건 설명 없는 시험이다. */}
+        <div className="mt-6">
+          <TierLadder current={null} />
+        </div>
+
         <Link
           href="/tier/placement"
           className="mt-6 block rounded-xl bg-orange-600 px-6 py-4 text-center text-base font-bold text-white hover:bg-orange-700"
@@ -150,7 +158,13 @@ export default function TierPage() {
   return (
     <Shell>
       {/* ── 내 티어 ── */}
-      <div className="rounded-2xl p-5" style={{ background: info.tint }}>
+      {/* 배경색을 `info.tint`(밝은 고정 hex)로 칠하면 다크 모드에서 이 카드만
+          하얗게 남아 화면에 구멍이 뚫린다. 티어 색을 **투명 위에** 10% 섞어
+          바탕(라이트=흰색 / 다크=검정)과 합성되게 한다. */}
+      <div
+        className="rounded-2xl p-5"
+        style={{ background: `color-mix(in srgb, ${info.color} 10%, transparent)` }}
+      >
         <div className="flex items-center gap-3">
           <TierMark tier={state.tier} size={40} />
           <div>
@@ -210,7 +224,12 @@ export default function TierPage() {
         )}
       </div>
 
-      <div className="mt-3 flex gap-2">
+      {/* 내 칸만 보여 주면 사다리의 끝이 안 보인다 — 위아래를 전부 깔아 둔다. */}
+      <div className="mt-4">
+        <TierLadder current={state.tier} />
+      </div>
+
+      <div className="mt-4 flex gap-2">
         <Link
           href="/tier/leaderboard"
           className="flex-1 rounded-xl border border-gray-300 bg-white px-4 py-3 text-center text-sm font-bold text-gray-800 hover:border-orange-400"
