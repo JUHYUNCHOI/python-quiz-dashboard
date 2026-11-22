@@ -100,27 +100,74 @@ export default function TierPage() {
   // ── 배치고사 미응시 ──────────────────────────────────────────────────────
   if (!state) {
     return (
-      <Shell>
-        <h1 className="text-2xl font-bold text-gray-900">{t("티어", "Tier")}</h1>
-        <p className="mt-2 text-gray-600">
-          {t(
-            "먼저 배치고사를 보세요. 12문항으로 내 수준에 맞는 티어를 정합니다.",
-            "Take the placement test first. 12 questions set the tier that matches your level.",
-          )}
-        </p>
+      <Shell wide>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">{t("티어", "Tier")}</h1>
+            <p className="mt-2 max-w-xl text-base text-gray-600 break-keep">
+              {t(
+                "먼저 배치고사를 보세요. 12문항으로 내 수준에 맞는 티어를 정합니다.",
+                "Take the placement test first. 12 questions set the tier that matches your level.",
+              )}
+            </p>
+          </div>
+          {/* 버튼을 사다리 **아래**에 두면 화면 끝으로 밀려난다. 할 일이 하나뿐인
+              화면에서 그 하나를 스크롤 끝에 숨길 이유가 없다. */}
+          <Link
+            href="/tier/placement"
+            className="rounded-xl bg-orange-600 px-8 py-4 text-base font-bold text-white hover:bg-orange-700"
+          >
+            {t("배치고사 시작", "Start placement test")}
+          </Link>
+        </div>
 
         {/* 시험을 보기 **전에** 무슨 티어가 있는지 먼저 보여 준다 — 받게 될 게
             뭔지 모르는 채로 12문항을 푸는 건 설명 없는 시험이다. */}
-        <div className="mt-6">
-          <TierLadder current={null} />
+        <div className="mt-8">
+          <TierLadder current={null} variant="board" />
         </div>
 
-        <Link
-          href="/tier/placement"
-          className="mt-6 block rounded-xl bg-orange-600 px-6 py-4 text-center text-base font-bold text-white hover:bg-orange-700"
-        >
-          {t("배치고사 시작", "Start placement test")}
-        </Link>
+        {/* 티어를 보여 줬으면 **어떻게 올라가는지**도 같은 화면에서 끝내야 한다.
+            지금까지 승급 규칙은 티어를 받고 나서야 처음 나왔다 — 규칙을 모르는
+            채로 시험부터 보는 꼴이었다. 숫자는 전부 실제 상수에서 읽는다. */}
+        <div className="mt-6 grid gap-2.5 sm:grid-cols-3">
+          {[
+            {
+              head: t("배치고사 12문항", "12-question placement"),
+              body: t(
+                "맞히면 어려워지고 틀리면 쉬워집니다. 끝나면 사다리의 한 칸을 받습니다.",
+                "It gets harder when you are right, easier when you are wrong. You land on one rung.",
+              ),
+            },
+            {
+              head: t("내 티어 문제 풀기", "Solve problems at your tier"),
+              body: t(
+                "테스트 케이스를 전부 통과해야 한 문제로 셉니다. 일부만 맞으면 0개입니다.",
+                "Every test case must pass. A partial pass counts as zero.",
+              ),
+            },
+            {
+              head: t(`${PROMOTION_TARGET}문제 통과하면 승급`, `${PROMOTION_TARGET} passes rank you up`),
+              body: t(
+                "아래 티어 문제도 풀 수 있지만 연습용이라 승급 카운트에는 안 들어갑니다.",
+                "Lower tiers stay open for practice, but they do not count toward promotion.",
+              ),
+            },
+          ].map((s, i) => (
+            <div key={s.head} className="flex gap-4 rounded-xl border border-gray-200 bg-white p-5">
+              {/* 숫자를 `bg-gray-900` 사각형에 넣었더니 다크 모드에서 칸 배경과
+                  같은 검정이 되어 네모가 통째로 사라졌다. 상자를 빼고 숫자만
+                  크게 둔다 — 어차피 번호는 상자가 아니라 숫자가 말한다. */}
+              <span className="shrink-0 text-2xl font-bold leading-none text-gray-300 tabular-nums">
+                {i + 1}
+              </span>
+              <div>
+                <div className="text-base font-bold text-gray-900 break-keep">{s.head}</div>
+                <p className="mt-1.5 text-sm leading-relaxed text-gray-500 break-keep">{s.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </Shell>
     )
   }
@@ -524,11 +571,20 @@ function Select({
   )
 }
 
-function Shell({ children }: { children: React.ReactNode }) {
+/**
+ * `wide` 는 배치고사 전 화면용. 문제 목록은 한 줄이 길어지면 못 읽으니 672px
+ * 에 묶어야 하지만, 목록이 없는 화면까지 같이 묶으면 1900px 짜리 모니터에서
+ * 화면의 90%가 빈 회색 바닥이 된다.
+ */
+function Shell({ children, wide = false }: { children: React.ReactNode; wide?: boolean }) {
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="flex min-h-screen flex-col bg-gray-50 pb-24">
       <Header />
-      <main className="mx-auto max-w-2xl px-4 pt-6">{children}</main>
+      <main
+        className={`mx-auto flex w-full flex-1 flex-col px-4 pt-6 ${wide ? "max-w-7xl" : "max-w-2xl"}`}
+      >
+        {children}
+      </main>
       <BottomNav />
     </div>
   )
