@@ -195,7 +195,9 @@ export default function TeacherDashboardPage() {
           className,
           detail: weakStr,
           emoji: "📉",
-          action: t("1:1 설명 권장", "Suggest 1:1 help"),
+          // 이 칩은 flex-shrink-0 이라 줄어들지 않는다 — 영어가 길어지면
+          // 옆의 학생 이름을 먹는다. 한국어 길이에 맞춰 짧게 유지할 것.
+          action: t("1:1 설명 권장", "1:1 help"),
           severity: "warning",
         })
       }
@@ -290,7 +292,7 @@ export default function TeacherDashboardPage() {
 
       <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-[1200px] mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-800">{t("내 반 관리", "Manage My Classes!")}</h1>
+          <h1 className="text-xl font-bold text-gray-800">{t("내 반 관리", "Manage My Classes")}</h1>
           <button
             onClick={() => setIsCreating(true)}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all"
@@ -424,7 +426,10 @@ export default function TeacherDashboardPage() {
                     step: "1",
                     color: "bg-orange-500",
                     title: t("반 만들기", "Create a Class"),
-                    desc: t("위의 '새 반 만들기' 버튼을 눌러 반을 생성하면 참여 코드가 생성돼요.", "Tap '+ New Class' above to create a class and get a join code."),
+                    // 버튼 이름은 화면에 있는 그대로 적어야 한다 — 영어판은
+                    // '+ New Class' 를 찾으라고 했지만 실제 버튼은
+                    // "Create New Class" 다. 처음 들어온 선생님이 없는 버튼을 찾는다.
+                    desc: t("위의 '새 반 만들기' 버튼을 눌러 반을 생성하면 참여 코드가 생성돼요.", "Tap 'Create New Class' above to create a class and get a join code."),
                   },
                   {
                     step: "2",
@@ -467,11 +472,13 @@ export default function TeacherDashboardPage() {
                         {!cls.is_active && (
                           <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">{t("비활성", "Inactive")}</span>
                         )}
+                        {/* 영어판이 숫자만 찍고 있었다 — 한국어는 "3명"인데 영어는
+                            "3" 뿐이라 그 숫자가 학생 수인지 과제 수인지 알 수 없었다. */}
                         {dangerCount > 0 && (
-                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">🚨 {t(`${dangerCount}명`, `${dangerCount}`)}</span>
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">🚨 {t(`${dangerCount}명`, `${dangerCount} at risk`)}</span>
                         )}
                         {warnCount > 0 && (
-                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">📉 {t(`${warnCount}명`, `${warnCount}`)}</span>
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">📉 {t(`${warnCount}명`, `${warnCount} behind`)}</span>
                         )}
                       </div>
                       <div className="flex items-center gap-3 text-sm text-gray-500">

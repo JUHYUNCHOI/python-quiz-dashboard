@@ -233,9 +233,14 @@ export default function TeacherExamPage() {
                                 : "text-red-600"
                               }`}
                             >
-                              {!r.finished ? t("응시 중", "In progress")
+                              {/* 이 줄의 이름 말고는 전부 shrink-0 이다. 영어가 길어지면
+                                  네 칸이 동시에 넓어져서 휴대폰에서는 학생 이름이
+                                  거의 안 남는다 — 선생님이 교실을 돌면서 보는
+                                  화면이라 이름이 제일 중요하다. 한국어 3글자에
+                                  맞춰 짧게 유지할 것. */}
+                              {!r.finished ? t("응시 중", "In exam")
                                 : r.passed ? t("합격", "Passed")
-                                : t("불합격", "Not passed")}
+                                : t("불합격", "Failed")}
                             </span>
                           </li>
                         ))}

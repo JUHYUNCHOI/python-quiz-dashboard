@@ -540,7 +540,9 @@ export default function ProfilePage() {
                   const now = new Date()
                   const diff = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
                   if (diff === 0) return t("오늘", "Today")
-                  if (diff === 1) return t("어제", "Yesterday")
+                  // 아래 w-10(40px) 고정칸에 들어가는 값이다 — "Yesterday" 는 11px
+                  // 로도 50px 가까이 되어 옆의 수업 이름 칸을 밀고 나간다.
+                  if (diff === 1) return t("어제", "1d ago")
                   return t(`${diff}일 전`, `${diff}d ago`)
                 })()
                 return (
