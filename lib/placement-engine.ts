@@ -11,16 +11,22 @@
  * 맞히면 통과로 본다. 10단계를 이분 탐색하면 probe 가 3~4번이므로
  * 3 × 4 = 12 — 요구된 12문항과 정확히 맞는다.
  *
- * ── 남는 예산의 처리 ──────────────────────────────────────────────────────
- * 탐색이 3번에 끝나면 9문항만 쓴다. 남은 3문항은 **확정된 단계를 한 번 더
- * 확인**하는 데 쓴다. 여기서 떨어지면 한 칸 내린다 — 운으로 올라간 티어를
- * 되돌리는 안전장치다.
+ * ── 마지막은 직접 짜게 한다 ───────────────────────────────────────────────
+ * 출력 예측은 **읽기 능력**만 잰다. "읽을 줄 아는데 못 짜는" 학생이 실재하고,
+ * 그런 학생이 골드로 배치되면 승급 문제를 한 개도 못 푼다. 그래서 탐색이
+ * 끝나면 확정된 단계에서 **코드 1문항을 실제로 작성**하게 하고, 떨어지면
+ * 한 칸 내린다 (`data/placement-code.ts`).
+ *
+ * 예전엔 이 자리에 "확인 probe"(출력 예측 3문항)가 있었다. 같은 능력을 세 번
+ * 더 재는 것이라 "읽기만 잘하는" 학생을 전혀 걸러내지 못했다 — 코드 작성
+ * 1문항이 그 일을 대신한다.
  */
 
 import {
   PLACEMENT_ITEMS, PLACEMENT_MIN_STEP, PLACEMENT_MAX_STEP,
   itemsAtStep, isPlacementCorrect, type PlacementItem,
 } from "@/data/placement-test"
+import { codeTaskForStep, type PlacementCodeTask } from "@/data/placement-code"
 import { TIER_IDS, LOWEST_TIER, type TierId } from "@/lib/tier-system"
 
 export const PROBE_SIZE = 3
@@ -53,7 +59,16 @@ export interface PlacementState {
   hi: number
   /** 지금까지 "통과"가 확인된 가장 높은 단계. 0 = 1단계도 통과 못 함 */
   best: number
-  phase: "bracket" | "confirm" | "done"
+  /**
+   * "code" = 출력 예측은 끝났고 코드 작성 1문항이 남았다.
+   * 이 단계에서는 `currentItem()` 이 null 이지만 **시험이 끝난 게 아니다** —
+   * 화면은 `phase === "done"` 으로만 결과를 띄워야 한다.
+   */
+  phase: "bracket" | "code" | "done"
+  /** phase === "code" 일 때 낼 코드 문항 */
+  codeTask: PlacementCodeTask | null
+  /** 코드 문항을 통과했는가. 아직 안 냈으면 null. */
+  codePassed: boolean | null
   probeStep: number
   probeCorrect: number
   /** 현재 probe 의 전체 문항 수. 통과 기준을 이 값에 맞춰 계산한다. */
@@ -103,6 +118,8 @@ export function startPlacement(seed: number = Date.now()): PlacementState {
     hi: PLACEMENT_MAX_STEP,
     best: 0,
     phase: "bracket",
+    codeTask: null,
+    codePassed: null,
     probeStep: START_STEP,
     probeCorrect: 0,
     probeSize: queue.length,
@@ -117,15 +134,22 @@ export function currentItem(s: PlacementState): PlacementItem | null {
   return s.queue[0] ?? null
 }
 
-/** 다음 probe 로 넘어간다 (또는 확인 단계 / 종료). */
+/**
+ * 탐색이 끝났다 — 코드 작성 문항으로 넘기거나, 낼 문항이 없으면 끝낸다.
+ *
+ * 1단계조차 통과 못 한 학생(best = 0)에게는 코드 문항을 내지 않는다.
+ * 최하위 티어에서 더 내릴 곳이 없으니 결과가 바뀌지 않고, 못 푸는 걸
+ * 이미 아는 학생에게 5분을 더 쓰게 할 뿐이다.
+ */
+function toCodePhase(s: PlacementState, lo: number, hi: number, best: number): PlacementState {
+  const codeTask = best >= PLACEMENT_MIN_STEP ? codeTaskForStep(best) : null
+  if (!codeTask) return { ...s, lo, hi, best, phase: "done", queue: [] }
+  return { ...s, lo, hi, best, phase: "code", codeTask, queue: [] }
+}
+
+/** 다음 probe 로 넘어간다 (또는 코드 작성 단계 / 종료). */
 function advance(s: PlacementState): PlacementState {
   const passed = s.probeCorrect >= probePass(s.probeSize)
-
-  if (s.phase === "confirm") {
-    // 확인 probe 에서 떨어지면 한 칸 내린다. 0 아래로는 안 내려간다.
-    const best = passed ? s.best : Math.max(0, s.best - 1)
-    return { ...s, best, phase: "done", queue: [] }
-  }
 
   let { lo, hi, best } = s
   if (passed) { best = s.probeStep; lo = s.probeStep + 1 }
@@ -138,21 +162,29 @@ function advance(s: PlacementState): PlacementState {
     const mid = Math.floor((lo + hi) / 2)
     const queue = buildQueue(mid, s.usedIds, s.seed)
     // 문항이 바닥나면 더 쪼개도 의미가 없다 — 지금까지의 best 로 끝낸다.
-    if (queue.length === 0) return { ...s, lo, hi, best, phase: "done", queue: [] }
+    if (queue.length === 0) return toCodePhase(s, lo, hi, best)
     return { ...s, lo, hi, best, probeStep: mid, probeCorrect: 0, probeSize: queue.length, queue }
   }
 
-  // 탐색은 끝났다. 예산이 남고 확인할 단계가 있으면 한 번 더 확인한다.
-  // 확인 probe 는 **온전한 3문항일 때만** 돌린다. 1~2문항으로 티어를 깎는 것은
-  // 운에 가까워서, 안전장치가 오히려 오판의 원인이 된다.
-  if (best >= PLACEMENT_MIN_STEP && asked + PROBE_SIZE <= PLACEMENT_LENGTH) {
-    const queue = buildQueue(best, s.usedIds, s.seed + 1)
-    if (queue.length === PROBE_SIZE) {
-      return { ...s, lo, hi, best, phase: "confirm", probeStep: best, probeCorrect: 0, probeSize: queue.length, queue }
-    }
-  }
+  return toCodePhase(s, lo, hi, best)
+}
 
-  return { ...s, lo, hi, best, phase: "done", queue: [] }
+/**
+ * 코드 작성 문항 채점 결과를 반영하고 시험을 끝낸다.
+ *
+ * 떨어지면 한 칸 내린다 — 읽기만으로 올라간 티어를 되돌리는 안전장치다.
+ * 통과 판정(`passed`)은 화면이 Piston 으로 **모든 테스트케이스를 돌려서**
+ * 넘긴다. 여기서 코드를 보지 않는 이유는 채점기가 앱에 하나뿐이어야 하기
+ * 때문이다 — 연습·승급 시험과 같은 "stdout 바이트 비교"를 그대로 쓴다.
+ */
+export function submitCodeResult(s: PlacementState, passed: boolean): PlacementState {
+  if (s.phase !== "code") return s
+  return {
+    ...s,
+    codePassed: passed,
+    best: passed ? s.best : Math.max(0, s.best - 1),
+    phase: "done",
+  }
 }
 
 export function submitAnswer(s: PlacementState, input: string): PlacementState {
@@ -187,10 +219,15 @@ export function correctCount(s: PlacementState): number {
   return s.answers.filter(a => a.correct).length
 }
 
-/** 진행률 — 실제 길이는 9 또는 12라서 끝나면 100% 로 고정한다. */
+/**
+ * 진행률 — 출력 예측 길이는 6~12로 들쭉날쭉하다. 그래서 끝나면 100% 로 고정하고,
+ * 코드 작성 단계는 "거의 다 왔다"는 뜻으로 95% 에 세운다. 마지막 한 문항이
+ * 제일 오래 걸리므로 여기서 0% 로 보이면 학생이 시험이 다시 시작된 줄 안다.
+ */
 export function placementProgress(s: PlacementState): number {
   if (s.phase === "done") return 1
-  return Math.min(0.95, s.usedIds.length / PLACEMENT_LENGTH)
+  if (s.phase === "code") return 0.95
+  return Math.min(0.9, s.usedIds.length / PLACEMENT_LENGTH)
 }
 
 /** 은행 무결성 — 모든 단계에 probe 를 채울 문항이 있는지. 테스트용. */

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
-  startPlacement, currentItem, submitAnswer, resultTier,
+  startPlacement, currentItem, submitAnswer, submitCodeResult, resultTier,
   placementBankGaps, PLACEMENT_LENGTH, PROBE_SIZE,
 } from "@/lib/placement-engine"
 import { PLACEMENT_ITEMS, isPlacementCorrect, normalizeOutput } from "@/data/placement-test"
@@ -10,14 +10,21 @@ import { TIER_IDS, tierOfLevel, promotionPool, problemRole, tierRank, TIERS, typ
  * 가짜 응시자. `ability` 단계까지는 전부 맞히고 그 위는 전부 틀린다.
  * 실력이 계단처럼 깔끔한 이상적인 학생 — 엔진이 이 학생을 못 맞히면
  * 실제 학생은 더 못 맞힌다.
+ *
+ * `codePass` 는 마지막 코드 작성 문항의 결과다. **기본값이 true 여야 한다** —
+ * 출력 예측만 보는 테스트들이 "읽기는 되지만 못 짠다"는 별개 사유로
+ * 티어가 깎여서 실패하면 안 된다.
  */
-function simulate(ability: number, seed = 42) {
+function simulate(ability: number, seed = 42, codePass = true) {
   let s = startPlacement(seed)
   let guard = 0
   while (currentItem(s) && guard++ < 50) {
     const item = currentItem(s)!
     s = submitAnswer(s, item.step <= ability ? item.answer : "WRONG_ON_PURPOSE")
   }
+  // 탐색이 끝나면 코드 작성 문항이 남는다. `currentItem()` 은 여기서 null 이므로
+  // 위 루프만 돌리면 phase 가 "code" 에 멈춘 채로 끝난다.
+  if (s.phase === "code") s = submitCodeResult(s, codePass)
   return s
 }
 
@@ -110,12 +117,36 @@ describe("적응형 엔진", () => {
     expect(a.filter(id => b.includes(id)).length).toBeLessThan(a.length)
   })
 
-  it("12문항을 다 쓴다 — 예산이 남으면 확인 probe 를 돌린다", () => {
-    // 9문항에서 끝나면 요구된 12문항이 아니고, 운으로 올라간 티어를
-    // 되돌릴 기회도 없어진다.
+  it("탐색이 끝나면 코드 작성 문항이 꼭 한 개 나온다", () => {
+    // 출력 예측만으로 끝내면 "읽을 줄 아는데 못 짜는" 학생이 그대로 올라간다.
     for (let ability = 1; ability <= 10; ability++) {
-      expect(simulate(ability).answers.length, `ability=${ability}`).toBe(PLACEMENT_LENGTH)
+      let s = startPlacement(42)
+      let guard = 0
+      while (currentItem(s) && guard++ < 50) {
+        const item = currentItem(s)!
+        s = submitAnswer(s, item.step <= ability ? item.answer : "nope")
+      }
+      expect(s.phase, `ability=${ability}`).toBe("code")
+      expect(s.codeTask?.step, `ability=${ability}`).toBe(ability)
     }
+  })
+
+  it("코드 작성 문항을 못 풀면 한 단계 내려간다", () => {
+    // 읽기만으로 올라간 티어를 되돌리는 안전장치. 없으면 골드로 배치된 학생이
+    // 승급 문제를 한 개도 못 푼다.
+    for (let ability = 2; ability <= 10; ability++) {
+      expect(resultTier(simulate(ability, 42, false)), `ability=${ability}`)
+        .toBe(TIER_IDS[ability - 2])
+    }
+  })
+
+  it("1단계도 통과 못 하면 코드 문항을 내지 않는다", () => {
+    // 최하위 티어에서 더 내릴 곳이 없다 — 못 푸는 걸 아는 학생에게
+    // 5분을 더 쓰게 할 뿐이다.
+    const s = simulate(0)
+    expect(s.phase).toBe("done")
+    expect(s.codeTask).toBeNull()
+    expect(s.codePassed).toBeNull()
   })
 
   it("전부 찍어서 틀리면 최하위 티어다", () => {
