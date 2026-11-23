@@ -27,7 +27,11 @@ import { createClient } from "@/lib/supabase/client"
 import { promotionPool, type TierId } from "@/lib/tier-system"
 import { loadVerifiedSolves } from "@/lib/tier-store"
 
-/** 시험 문제 수 — 요구사항 "랜덤 문제 2~3개". */
+/**
+ * 시험 문제 수. 요구사항은 "랜덤 2~3개" 였지만 3으로 고정했다 —
+ * 2개면 합격선(2개)이 만점이 돼서 한 문제만 틀려도 끝난다.
+ * ⚠️ 이 값을 바꾸면 `EXAM_PASS_COUNT` 와 화면에 박힌 "3문제" 문구도 같이 고쳐야 한다.
+ */
 export const EXAM_PROBLEM_COUNT = 3
 /** 제한 시간(분) — 요구사항 "30~45분". 선생님이 이 중에서 고른다. */
 export const EXAM_MINUTE_CHOICES = [30, 40, 45]

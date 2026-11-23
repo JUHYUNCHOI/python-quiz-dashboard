@@ -1,15 +1,18 @@
 "use client"
 
 /**
- * 배치고사 — 출력 예측 여러 문항 + **코드 작성 1문항**으로 시작 티어를 정한다.
+ * 배치고사 — 출력 예측 여러 문항 + **코드 작성 2문항**으로 시작 티어를 정한다.
  *
  * 앞부분은 "이 코드의 출력은?"이다. 전부 코드를 짜게 하면 한 문항에 5~10분이
  * 걸려 12문항이 한 시간짜리 시험이 된다. 출력 예측은 1분이면 되므로 그걸로
  * 단계를 빠르게 좁힌다.
  *
- * 마지막 한 문항은 **직접 짠다**. 출력 예측만으로는 읽기 능력만 재서,
+ * 뒷부분 2문항은 **직접 짠다**. 출력 예측만으로는 읽기 능력만 재서,
  * "읽을 줄 아는데 못 짜는" 학생이 높은 티어로 배치되면 승급 문제를 한 개도
- * 못 푼다. 이 문항에서 떨어지면 티어가 한 칸 내려간다.
+ * 못 푼다. 첫 문항에서 떨어지면 한 칸 내려가고, 둘째(한 단계 위) 문항을
+ * 통과하면 한 칸 올라간다.
+ *
+ * 배치 상한은 플래티넘 I 이다 — 마스터·그랜드마스터는 승급으로만 올라간다.
  *
  * 진행 중에는 정답을 알려주지 않는다. 다음 문항의 난이도가 바로 직전 결과로
  * 정해지므로, 맞았는지 알려주면 학생이 "일부러 틀려 쉬운 티어로 가는" 선택을
@@ -26,13 +29,14 @@ import { TierMark } from "@/components/tier-mark"
 import { useLanguage } from "@/contexts/language-context"
 import {
   startPlacement, currentItem, submitAnswer, submitCodeResult, resultTier,
-  correctCount, placementProgress, PLACEMENT_LENGTH,
+  correctCount, placementProgress, codeTaskIndex,
+  PLACEMENT_LENGTH, CODE_TASK_COUNT, PLACEMENT_CAP_STEP,
   type PlacementState,
 } from "@/lib/placement-engine"
 import { PLACEMENT_ITEMS } from "@/data/placement-test"
 import { codeTaskTitle, codeTaskPrompt } from "@/data/placement-code"
 import { callPistonWithRetry } from "@/lib/piston"
-import { tierInfo, tierLabel } from "@/lib/tier-system"
+import { tierInfo, tierLabel, TIER_IDS } from "@/lib/tier-system"
 import { placeTier } from "@/lib/tier-store"
 
 /** 코드 문항 기본 언어. 학생이 바꿀 수 있다 — 채점기는 언어를 모른다. */
@@ -130,18 +134,31 @@ export default function PlacementPage() {
         })
       }
       setVerdict(results)
-      // 전부 통과해야만 끝낸다. 하나라도 틀리면 고쳐서 다시 낼 수 있다 —
+      // 전부 통과해야만 넘어간다. 하나라도 틀리면 고쳐서 다시 낼 수 있다 —
       // 제한 시간이 없는 배치고사에서 1회 제출로 티어를 깎을 이유가 없다.
-      if (results.every(r => r.pass)) setState(submitCodeResult(state, true))
+      if (results.every(r => r.pass)) advanceCode(submitCodeResult(state, true))
     } finally {
       setJudging(false)
     }
   }
 
-  /** 포기 — 코드 문항을 못 풀었다고 보고 한 칸 내려 끝낸다. */
+  /**
+   * 코드 문항 하나를 끝내고 다음으로 넘긴다.
+   *
+   * 에디터를 **반드시 비워야 한다**. 안 비우면 1번 문항 코드가 2번 문항
+   * 화면에 그대로 남아, 학생이 그걸 고쳐 내다가 문제를 잘못 읽는다.
+   */
+  function advanceCode(next: PlacementState) {
+    setState(next)
+    setVerdict(null)
+    setNetError(null)
+    setCode(STARTER[codeLang])
+  }
+
+  /** 포기 — 못 풀었다고 보고 넘긴다. 첫 문항이면 한 칸 내려간다. */
   function giveUpCode() {
     if (!state) return
-    setState(submitCodeResult(state, false))
+    advanceCode(submitCodeResult(state, false))
   }
 
   function finish() {
@@ -160,16 +177,20 @@ export default function PlacementPage() {
         </h1>
         <p className="mt-2 text-gray-600">
           {t(
-            `출력 예측 최대 ${PLACEMENT_LENGTH}문항과 코드 작성 1문항으로 시작 티어를 정합니다. 맞히면 더 어려운 문항이, 틀리면 더 쉬운 문항이 나옵니다.`,
-            `Up to ${PLACEMENT_LENGTH} output-prediction questions plus one coding problem decide your starting tier. Answer correctly and the questions get harder; miss and they get easier.`,
+            `출력 예측 최대 ${PLACEMENT_LENGTH}문항과 코드 작성 ${CODE_TASK_COUNT}문항으로 시작 티어를 정합니다. 맞히면 더 어려운 문항이, 틀리면 더 쉬운 문항이 나옵니다.`,
+            `Up to ${PLACEMENT_LENGTH} output-prediction questions plus ${CODE_TASK_COUNT} coding problems decide your starting tier. Answer correctly and the questions get harder; miss and they get easier.`,
           )}
         </p>
 
         <ul className="mt-6 space-y-2 text-sm text-gray-700">
           <Bullet>{t("앞부분은 코드를 읽고 출력을 적습니다. 실행해 볼 수 없으니 머릿속으로 따라가세요.", "In the first part you read code and type its output. You cannot run it — trace it in your head.")}</Bullet>
-          <Bullet>{t("마지막 한 문항은 직접 코드를 짭니다. Python 과 C++ 중 하나를 고르세요.", "The last question has you write code. Choose either Python or C++.")}</Bullet>
-          <Bullet>{t("코드 문항은 테스트를 모두 통과해야 하고, 통과할 때까지 다시 낼 수 있습니다.", "The coding problem must pass every test, and you can resubmit until it does.")}</Bullet>
+          <Bullet>{t(`뒷부분 ${CODE_TASK_COUNT}문항은 직접 코드를 짜서 제출합니다. Python 과 C++ 중 하나를 고르세요.`, `In the last ${CODE_TASK_COUNT} questions you write and submit real code. Choose either Python or C++.`)}</Bullet>
+          <Bullet>{t("둘째 코드 문항은 한 단계 위 난이도입니다. 통과하면 티어가 한 칸 올라갑니다.", "The second coding problem is one step harder. Passing it moves you up one tier.")}</Bullet>
+          <Bullet>{t("코드 문항은 테스트를 모두 통과해야 하고, 통과할 때까지 다시 낼 수 있습니다.", "Each coding problem must pass every test, and you can resubmit until it does.")}</Bullet>
           <Bullet>{t("출력 예측은 진행 중 정답을 알려주지 않습니다. 끝나면 전체 해설이 나옵니다.", "No feedback on the prediction questions until the end, when you get a full review.")}</Bullet>
+          {/* 상한을 시작 화면에 못 박는다. 플래티넘 I 을 받은 학생이 "이게 최고인가"를
+              물으러 오는 일을 막고, 마스터가 시험으로 안 나오는 걸 기대에 미리 넣는다. */}
+          <Bullet>{t(`배치로 받을 수 있는 가장 높은 티어는 ${tierLabel(TIER_IDS[PLACEMENT_CAP_STEP - 1], "ko")} 입니다. 마스터 이상은 승급으로만 올라갑니다.`, `The highest tier placement can award is ${tierLabel(TIER_IDS[PLACEMENT_CAP_STEP - 1], "en")}. Master and above are reached only by ranking up.`)}</Bullet>
           <Bullet>{t("대소문자는 구분합니다. True 와 true 는 다릅니다.", "Case matters. True and true are different.")}</Bullet>
         </ul>
 
@@ -215,13 +236,22 @@ export default function PlacementPage() {
           </div>
           {/* 코드 문항은 결과에 반드시 적는다 — 여기서 떨어져 한 칸 내려갔는데
               화면에 아무 말이 없으면 학생은 배치가 고장 난 줄 안다. */}
-          {state.codePassed !== null && (
-            <div className={`mt-1 text-sm font-semibold ${state.codePassed ? "text-emerald-700" : "text-rose-700"}`}>
-              {state.codePassed
-                ? t("코드 작성 문항 통과", "Coding problem passed")
-                : t("코드 작성 문항 미통과 — 한 단계 아래로 배치했습니다", "Coding problem not passed — placed one tier lower")}
-            </div>
-          )}
+          {state.codeResults.length > 0 && (() => {
+            // ⚠️ 엔진은 코드 문항 결과를 `codeResults` 배열로 들고 있다(단일 불리언이 아니다).
+            //    통과하면 한 칸 위 문항을 더 내주고, 떨어지면 `best` 를 1 내린다.
+            const passed = state.codeResults.filter(r => r.passed).length
+            const failed = state.codeResults.length - passed
+            return (
+              <div className={`mt-1 text-sm font-semibold ${failed === 0 ? "text-emerald-700" : "text-rose-700"}`}>
+                {failed === 0
+                  ? t(`코드 작성 ${passed}문항 전부 통과`, `All ${passed} coding problems passed`)
+                  : t(
+                      `코드 작성 ${state.codeResults.length}문항 중 ${passed}문항 통과 — 한 단계 아래로 배치했습니다`,
+                      `${passed} of ${state.codeResults.length} coding problems passed — placed one tier lower`,
+                    )}
+              </div>
+            )
+          })()}
         </div>
 
         <p className="mt-5 text-sm text-gray-600">

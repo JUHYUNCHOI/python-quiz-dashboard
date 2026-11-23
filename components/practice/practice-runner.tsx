@@ -336,7 +336,15 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
     for (let i = 0; i < testCases.length; i++) {
       const result = responses[i]
       if (result.networkError) {
-        compileError = t("네트워크 오류. 잠시 후 다시 시도해주세요.", "Network error. Please try again.")
+        /* 「네트워크 오류」라고만 쓰면 학생은 자기 와이파이를 의심하며 새로고침만
+           반복한다 (실제 신고: 2026-11-23, 채점 서버가 죽어 있던 동안).
+           파이썬은 브라우저 실행기로 자동 우회되므로 여기까지 오면 거의 항상
+           C++ 이다 — 그때는 학생이 할 수 있는 일이 없다는 걸 분명히 말한다. */
+        compileError = lang === "cpp"
+          ? t("C++ 채점 서버가 응답하지 않습니다. Python 으로 바꾸면 바로 채점할 수 있어요. (선생님께 알려 주세요)",
+              "The C++ judge server is not responding. Switch to Python to run right away. (Please tell your teacher.)")
+          : t("코드 실행기를 띄우지 못했습니다. 페이지를 새로고침해 주세요.",
+              "Could not start the code runner. Please refresh the page.")
         break
       }
       if (result.compileError) {

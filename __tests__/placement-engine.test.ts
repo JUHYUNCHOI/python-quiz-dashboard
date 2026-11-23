@@ -1,30 +1,43 @@
 import { describe, it, expect } from "vitest"
 import {
   startPlacement, currentItem, submitAnswer, submitCodeResult, resultTier,
-  placementBankGaps, PLACEMENT_LENGTH, PROBE_SIZE,
+  placementBankGaps, PLACEMENT_LENGTH, PROBE_SIZE, PLACEMENT_CAP_STEP,
 } from "@/lib/placement-engine"
 import { PLACEMENT_ITEMS, isPlacementCorrect, normalizeOutput } from "@/data/placement-test"
 import { TIER_IDS, tierOfLevel, promotionPool, problemRole, tierRank, TIERS, type TierId } from "@/lib/tier-system"
+
+/**
+ * 배치로 받을 수 있는 가장 높은 단계. 마스터 이상은 승급 전용이라
+ * ability 9·10 학생도 여기서 멈춘다 — 기대값을 `ability` 로 쓰면 안 된다.
+ */
+const cap = (ability: number) => Math.min(ability, PLACEMENT_CAP_STEP)
 
 /**
  * 가짜 응시자. `ability` 단계까지는 전부 맞히고 그 위는 전부 틀린다.
  * 실력이 계단처럼 깔끔한 이상적인 학생 — 엔진이 이 학생을 못 맞히면
  * 실제 학생은 더 못 맞힌다.
  *
- * `codePass` 는 마지막 코드 작성 문항의 결과다. **기본값이 true 여야 한다** —
- * 출력 예측만 보는 테스트들이 "읽기는 되지만 못 짠다"는 별개 사유로
- * 티어가 깎여서 실패하면 안 된다.
+ * 코드 문항도 **같은 기준으로 판정한다** (`task.step <= ability`).
+ * 고정 불리언을 쓰면 안 된다 — 코드 단계는 2문항이고 ②는 한 단계 위를
+ * 물어본다. 둘 다 통과시키면 ability N 학생이 N+1 로 올라가 버려서,
+ * 테스트가 "실력대로 배치한다"는 성질을 더 이상 검사하지 못한다.
+ *
+ * `codePass` 를 넘기면 그 값으로 덮어쓴다 — "읽기는 되지만 못 짠다"를
+ * 재현하는 테스트 전용이다.
  */
-function simulate(ability: number, seed = 42, codePass = true) {
+function simulate(ability: number, seed = 42, codePass?: boolean) {
   let s = startPlacement(seed)
   let guard = 0
   while (currentItem(s) && guard++ < 50) {
     const item = currentItem(s)!
     s = submitAnswer(s, item.step <= ability ? item.answer : "WRONG_ON_PURPOSE")
   }
-  // 탐색이 끝나면 코드 작성 문항이 남는다. `currentItem()` 은 여기서 null 이므로
-  // 위 루프만 돌리면 phase 가 "code" 에 멈춘 채로 끝난다.
-  if (s.phase === "code") s = submitCodeResult(s, codePass)
+  // 탐색이 끝나면 코드 작성 문항이 최대 2개 남는다. `currentItem()` 은 여기서
+  // null 이므로 위 루프만 돌리면 phase 가 "code" 에 멈춘 채로 끝난다.
+  guard = 0
+  while (s.phase === "code" && guard++ < 4) {
+    s = submitCodeResult(s, codePass ?? s.codeTask!.step <= ability)
+  }
   return s
 }
 
@@ -94,9 +107,9 @@ describe("적응형 엔진", () => {
   })
 
   it("실력 단계와 같은 티어에 배치한다", () => {
-    // ability N → N번째 티어. ability 0 은 더 내릴 곳이 없어 최하위.
+    // ability N → N번째 티어 (상한까지). ability 0 은 더 내릴 곳이 없어 최하위.
     for (let ability = 1; ability <= 10; ability++) {
-      expect(resultTier(simulate(ability)), `ability=${ability}`).toBe(TIER_IDS[ability - 1])
+      expect(resultTier(simulate(ability)), `ability=${ability}`).toBe(TIER_IDS[cap(ability) - 1])
     }
     expect(resultTier(simulate(0))).toBe(TIER_IDS[0])
   })
@@ -105,7 +118,7 @@ describe("적응형 엔진", () => {
     for (const seed of [1, 7, 12345, 999999]) {
       for (let ability = 1; ability <= 10; ability++) {
         expect(resultTier(simulate(ability, seed)), `seed=${seed} ability=${ability}`)
-          .toBe(TIER_IDS[ability - 1])
+          .toBe(TIER_IDS[cap(ability) - 1])
       }
     }
   })
@@ -117,7 +130,7 @@ describe("적응형 엔진", () => {
     expect(a.filter(id => b.includes(id)).length).toBeLessThan(a.length)
   })
 
-  it("탐색이 끝나면 코드 작성 문항이 꼭 한 개 나온다", () => {
+  it("탐색이 끝나면 코드 작성 문항이 꼭 나온다", () => {
     // 출력 예측만으로 끝내면 "읽을 줄 아는데 못 짜는" 학생이 그대로 올라간다.
     for (let ability = 1; ability <= 10; ability++) {
       let s = startPlacement(42)
@@ -127,7 +140,8 @@ describe("적응형 엔진", () => {
         s = submitAnswer(s, item.step <= ability ? item.answer : "nope")
       }
       expect(s.phase, `ability=${ability}`).toBe("code")
-      expect(s.codeTask?.step, `ability=${ability}`).toBe(ability)
+      // ① 확인 문항은 **배치된 단계** 를 물어본다 — 상한에 걸린 학생은 상한 단계.
+      expect(s.codeTask?.step, `ability=${ability}`).toBe(cap(ability))
     }
   })
 
@@ -136,7 +150,7 @@ describe("적응형 엔진", () => {
     // 승급 문제를 한 개도 못 푼다.
     for (let ability = 2; ability <= 10; ability++) {
       expect(resultTier(simulate(ability, 42, false)), `ability=${ability}`)
-        .toBe(TIER_IDS[ability - 2])
+        .toBe(TIER_IDS[cap(ability) - 2])
     }
   })
 
@@ -146,7 +160,7 @@ describe("적응형 엔진", () => {
     const s = simulate(0)
     expect(s.phase).toBe("done")
     expect(s.codeTask).toBeNull()
-    expect(s.codePassed).toBeNull()
+    expect(s.codeResults).toEqual([])
   })
 
   it("전부 찍어서 틀리면 최하위 티어다", () => {

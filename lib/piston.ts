@@ -32,6 +32,11 @@ export type PistonResult = {
   runtimeError?: string
   /** 네트워크/서버 다운 등 통신 실패 (호출 측에서 재시도 판단용) */
   networkError?: boolean
+  /**
+   * 채점 서버가 죽어서 **브라우저(Pyodide)로 대신 돌렸다.**
+   * 호출 측이 "느릴 수 있다"고 안내할 때만 쓴다 — 채점 기준은 똑같다.
+   */
+  viaBrowser?: boolean
 }
 
 /** Piston 실행 단계 결과 (compile/run 공통 형태) */
@@ -81,6 +86,49 @@ type PistonRawResponse = {
 const PY_NO_PROMPT =
   "import builtins as _cb; _cb._cr_oi=_cb.input; _cb.input=lambda *a,**k:_cb._cr_oi()\n"
 
+/**
+ * 채점 서버가 죽었을 때의 **파이썬 비상 경로** — 브라우저에서 Pyodide 로 돌린다.
+ *
+ * ── 왜 필요했나 (2026-11-23) ──────────────────────────────────────────────
+ * 드롭릿(168.144.96.207)이 통째로 응답을 멈췄다. ping 100% 손실, 80/443/2000
+ * 전부 닫힘. 그 결과 **앱의 모든 제출이 「네트워크 오류」로 떨어졌다** — 연습,
+ * 승급 시험, 배치고사의 코드 문항까지 전부. 서버 하나에 제품 전체가 매달려
+ * 있었다는 뜻이다.
+ *
+ * Piston 공개 인스턴스(emkc.org)는 2026-02-15 부터 화이트리스트 전용이라
+ * 대체 서버로 쓸 수 없다 (401). 그래서 **이미 앱에 있는 실행기**를 쓴다 —
+ * 수업·복습이 쓰는 `public/pyodide.worker.js` 다. 새로 들이는 의존성이 없다.
+ *
+ * ── 한계 (반드시 알고 쓸 것) ──────────────────────────────────────────────
+ * - **C++ 은 못 한다.** 브라우저에 C++ 컴파일러가 없다. C++ 제출은 서버가
+ *   살아나야 한다 — 그래서 `networkError` 를 그대로 올려보낸다.
+ * - 첫 실행은 Pyodide 를 CDN 에서 받아야 해서 몇 초 걸린다.
+ * - 채점 기준은 바꾸지 않는다. stdin 을 먹이고 stdout 을 바이트 비교하는
+ *   같은 규칙이다 — 그래야 서버가 돌아왔을 때 결과가 뒤집히지 않는다.
+ *
+ * ⚠️ 이건 **임시 우회로**다. 근본 해결은 드롭릿 복구다 (`infra/README.md`).
+ */
+async function runPythonInBrowser(code: string, stdin?: string): Promise<PistonResult> {
+  if (typeof window === "undefined") return { ok: false, output: "", networkError: true }
+  try {
+    const { runPython } = await import("@/utils/pyodideWorker")
+    /* PY_NO_PROMPT 를 여기서도 붙인다. 워커가 이미 `input` 을 감싸지만,
+       **줄 번호 오프셋을 서버 경로와 같게 유지해야 한다** — 호출 측
+       (`practice-runner.tsx`)이 런타임 에러 줄 번호에서 정확히 1을 뺀다. */
+    const r = await runPython(PY_NO_PROMPT + code, { stdin, timeoutMs: 10000 })
+    if (r.error === "__CR_TIMEOUT__" || r.timedOut) {
+      return { ok: false, output: r.stdout.trim(), runtimeError: "Time limit exceeded", viaBrowser: true }
+    }
+    if (!r.ok) {
+      return { ok: false, output: r.stdout.trim(), runtimeError: r.error || "runtime error", viaBrowser: true }
+    }
+    return { ok: true, output: r.stdout.trim(), viaBrowser: true }
+  } catch {
+    // Pyodide 로딩 자체가 실패 — 원래의 네트워크 오류로 되돌린다.
+    return { ok: false, output: "", networkError: true }
+  }
+}
+
 export async function callPiston(
   lang: "cpp" | "python",
   code: string,
@@ -88,6 +136,14 @@ export async function callPiston(
   timeoutMs = 15000,
 ): Promise<PistonResult> {
   const langConf = PISTON_LANG_VERSION[lang] ?? PISTON_LANG_VERSION.cpp
+
+  /* URL 이 비어 있으면 fetch("") 가 현재 페이지로 POST 를 쏴서 405 가 돌아온다 —
+     학생 화면에는 그게 「네트워크 오류」로 보인다. 아예 가지 않는다. */
+  if (!PISTON_URL) {
+    return lang === "python"
+      ? runPythonInBrowser(code, stdin)
+      : { ok: false, output: "", networkError: true }
+  }
 
   const ctl = new AbortController()
   const timeoutId = setTimeout(() => ctl.abort(), timeoutMs)
@@ -145,6 +201,10 @@ export async function callPiston(
 /**
  * 네트워크 에러에만 1회 재시도하는 편의 래퍼.
  * 컴파일/런타임 에러는 재시도하지 않음 (학생 코드 문제이므로).
+ *
+ * 두 번 다 실패하면 **파이썬은 브라우저에서 돌린다**(`runPythonInBrowser`).
+ * 재시도를 먼저 하는 이유는 일시적인 5xx 한 번에 학생을 느린 경로로
+ * 보내지 않으려는 것이다 — 서버가 살아 있으면 서버가 더 빠르다.
  */
 export async function callPistonWithRetry(
   lang: "cpp" | "python",
@@ -156,6 +216,9 @@ export async function callPistonWithRetry(
   if (result.networkError) {
     await new Promise(r => setTimeout(r, retryDelayMs))
     result = await callPiston(lang, code, stdin)
+  }
+  if (result.networkError && lang === "python") {
+    result = await runPythonInBrowser(code, stdin)
   }
   return result
 }
