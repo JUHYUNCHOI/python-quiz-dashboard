@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
-import { Play, Loader2, RotateCcw, ChevronDown, Check, X, Lightbulb, Eye } from "lucide-react"
+import { Play, Loader2, RotateCcw, ChevronDown, Check, X, Lightbulb, Eye, ArrowDownToLine, Star, CheckCircle2, LifeBuoy, SkipForward } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { callPistonWithRetry } from "@/lib/piston"
 import type { PracticeProblem } from "@/data/practice/types"
@@ -234,9 +234,20 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
    * 힌트와 코드 구조(scaffoldCode)는 그대로 둔다 — 그게 학생용 단계다.
    */
   const canSeeSolution = isTeacher || isOwner
+  /** `initialCode`/`solutionCode` 필드가 **어느 언어로 쓰여 있는지** (데이터 사실).
+      선택 탭의 기본값과는 다른 얘기다 — 아래 `initialTab` 과 섞지 말 것. */
   const defaultLang = problem.language ?? "cpp"
+  /**
+   * 처음 열렸을 때 고를 언어. **파이썬이 기본이다.**
+   *
+   * 왜: 대부분의 문제는 `language` 를 안 적어서 예전엔 전부 C++ 로 열렸다.
+   * 그런데 C++ 채점은 Piston 서버가 있어야 되고, 파이썬은 브라우저에서 돈다.
+   * 서버가 내려가 있으면 학생이 처음 보는 탭이 **아예 실행 안 되는 탭**이었다.
+   * 문제가 `language: "cpp"` 라고 **명시**한 경우(포인터 수업 등)만 C++ 로 연다.
+   */
+  const initialTab: "cpp" | "python" = problem.language ?? "python"
   const [runtimeLang, setRuntimeLang] = useState<"cpp" | "python">(() => {
-    if (typeof window === "undefined") return defaultLang
+    if (typeof window === "undefined") return initialTab
     try {
       const saved = localStorage.getItem(`practice-lang-${problem.id}`)
       if (saved === "python" || saved === "cpp") return saved
@@ -247,7 +258,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
       if (algoLang === "py") return "python"
       if (algoLang === "cpp") return "cpp"
     } catch {}
-    return defaultLang
+    return initialTab
   })
   const lang = runtimeLang
   // 언어별 분리 → KO/EN 캐시가 서로 안 섞이도록 + cpp/py 캐시도 분리
@@ -545,8 +556,9 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
              `feedback_students_copy_the_answer` — 보여주는 건 **입력**이지 푸는 법이 아니다. */}
       {results.length === 0 && (problem.testCases ?? []).length > 0 && (
         <div className="rounded-xl border border-sky-200 bg-sky-50/70 p-3 text-sm">
-          <div className="font-bold text-sky-900 mb-1.5">
-            📥 {t("입력은 자동으로 들어가요", "Input is fed in automatically")}
+          <div className="flex items-center gap-1.5 font-bold text-sky-900 mb-1.5">
+            <ArrowDownToLine className="w-4 h-4 shrink-0" />
+            {t("입력은 자동으로 들어가요", "Input is fed in automatically")}
           </div>
           <div className="text-xs text-sky-800 mb-2">
             {/* 언어를 고를 수 있게 됐으니 읽는 방법도 고른 언어에 맞춰 말한다. */}
@@ -625,13 +637,21 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
             )}>
               {hintsShown === 0 && !showSolution ? (
                 <>
-                  <p className="text-amber-700 font-bold text-lg">{t("⭐ 힌트 없이 통과!", "⭐ Solved without hints!")}</p>
+                  <p className="flex items-center justify-center gap-1.5 text-amber-700 font-bold text-lg">
+                    <Star className="w-5 h-5 shrink-0 fill-current" />
+                    {t("힌트 없이 통과!", "Solved without hints!")}
+                  </p>
                   <p className="text-amber-500 text-xs mt-1">{t("스스로 풀었어요", "You figured it out!")}</p>
                 </>
               ) : (
                 <>
-                  <p className="text-emerald-700 font-bold">{t("🎉 모든 테스트 통과!", "🎉 All tests passed!")}</p>
-                  <p className="text-emerald-500 text-xs mt-1">{t("힌트 없이 다시 도전하면 ⭐를 획득할 수 있어요", "Try again without hints to earn ⭐")}</p>
+                  <p className="flex items-center justify-center gap-1.5 text-emerald-700 font-bold">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    {t("모든 테스트 통과!", "All tests passed!")}
+                  </p>
+                  <p className="text-emerald-500 text-xs mt-1">
+                    {t("힌트 없이 다시 도전하면 별을 받을 수 있어요", "Try again without hints to earn a star")}
+                  </p>
                 </>
               )}
             </div>
@@ -646,12 +666,12 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
           className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-600 transition-colors py-1"
         >
           <Lightbulb className="w-4 h-4" />
-          {t("💡 코드 구조 보기 (힌트)", "💡 Show code structure (hint)")}
+          {t("코드 구조 보기 (힌트)", "Show code structure (hint)")}
         </button>
       )}
       {scaffoldShown && (
         <div className="rounded-xl bg-blue-50 border border-blue-200 px-3 py-2 text-xs text-blue-600">
-          {t("코드 구조 힌트가 적용됐어요. 완료해도 ⭐는 획득할 수 없어요.", "Code structure hint applied. Solving now won't earn ⭐.")}
+          {t("코드 구조 힌트가 적용됐어요. 완료해도 별은 받을 수 없어요.", "Code structure hint applied. Solving now won't earn a star.")}
         </div>
       )}
 
@@ -692,9 +712,10 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
           {!stuckOpen ? (
             <button
               onClick={() => setStuckOpen(true)}
-              className="text-sm font-bold text-amber-800 hover:text-amber-900 transition-colors"
+              className="flex items-center gap-1.5 text-sm font-bold text-amber-800 hover:text-amber-900 transition-colors"
             >
-              🤔 {t("막혔어요", "I'm stuck")}
+              <LifeBuoy className="w-4 h-4 shrink-0" />
+              {t("막혔어요", "I'm stuck")}
             </button>
           ) : (
             <div className="space-y-2">
@@ -708,7 +729,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
                   onClick={() => setShowSolution(true)}
                   className="w-full text-left rounded-lg border border-amber-300 bg-white px-3 py-2 hover:border-amber-400 transition-colors"
                 >
-                  <span className="text-sm font-bold text-amber-900">1️⃣ {t("따라 쓰기", "Copy it out")}</span>
+                  <span className="text-sm font-bold text-amber-900">1. {t("따라 쓰기", "Copy it out")}</span>
                   <span className="block text-[11px] text-gray-500 mt-0.5" style={{ wordBreak: "keep-all" }}>
                     {t("풀이를 보면서 직접 타이핑해요. 손으로 쓰면 머리에 남아요.",
                        "Read the solution and type it yourself — typing makes it stick.")}
@@ -719,7 +740,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
                 onClick={() => { setShowSolution(false); setStuckOpen(false); reset() }}
                 className="w-full text-left rounded-lg border border-amber-300 bg-white px-3 py-2 hover:border-amber-400 transition-colors"
               >
-                <span className="text-sm font-bold text-amber-900">{canSeeSolution ? "2️⃣ " : ""}{t("처음부터 혼자", "Try again alone")}</span>
+                <span className="text-sm font-bold text-amber-900">{canSeeSolution ? "2. " : ""}{t("처음부터 혼자", "Try again alone")}</span>
                 <span className="block text-[11px] text-gray-500 mt-0.5" style={{ wordBreak: "keep-all" }}>
                   {t("이제 보지 않고 다시. 이게 진짜 익힌 거예요.",
                      "Now without looking. That's when it's really yours.")}
@@ -730,7 +751,10 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
                   onClick={onSkip}
                   className="w-full text-left rounded-lg border border-gray-200 bg-white px-3 py-2 hover:border-gray-300 transition-colors"
                 >
-                  <span className="text-sm font-bold text-gray-600">⏭ {t("건너뛰기", "Skip")}</span>
+                  <span className="flex items-center gap-1.5 text-sm font-bold text-gray-600">
+                    <SkipForward className="w-3.5 h-3.5 shrink-0" />
+                    {t("건너뛰기", "Skip")}
+                  </span>
                   <span className="block text-[11px] text-gray-400 mt-0.5" style={{ wordBreak: "keep-all" }}>
                     {t("나중에 와도 돼요. 여기서 멈추지 말고 계속 가요.",
                        "You can come back later. Don't stall here.")}
