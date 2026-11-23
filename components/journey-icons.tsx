@@ -127,6 +127,19 @@ export function IconCheckCircle({ size = 24, className }: IconProps) {
   )
 }
 
+/**
+ * 완료 — 체크만. 이미 동그란 배경(배지·칩) 안에 들어갈 때 쓴다.
+ * `IconCheckCircle` 을 배지 안에 넣으면 동그라미가 두 겹으로 보인다.
+ * `✓` 글자를 쓰면 안 된다 — 폰트마다 굵기·베이스라인이 달라서 배지 안에서 안 맞는다.
+ */
+export function IconCheck({ size = 24, className }: IconProps) {
+  return (
+    <svg {...base(size, className)} strokeWidth={3}>
+      <path d="m5 12.5 4.5 4.5L19 7" />
+    </svg>
+  )
+}
+
 /** 다음으로 — 화살표. 큰 버튼 오른쪽 끝에만 쓴다. */
 export function IconArrowRight({ size = 24, className }: IconProps) {
   return (

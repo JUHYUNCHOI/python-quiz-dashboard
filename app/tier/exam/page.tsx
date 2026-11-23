@@ -26,6 +26,7 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { TierMark } from "@/components/tier-mark"
 import { TierStages, type StageStatus } from "@/components/tier-stages"
+import { IconCheck } from "@/components/journey-icons"
 import { useLanguage } from "@/contexts/language-context"
 import {
   PROMOTION_TARGET, tierLabel, findTierProblem, tierProblemTitle, type TierId,
@@ -334,11 +335,11 @@ function ExamList({ attempt, lang }: { attempt: ExamAttempt; lang: string }) {
           <span className="flex items-start gap-3 px-3 py-2.5">
             <span
               aria-label={ok ? t("통과", "Passed") : t("안 푼 문제", "Todo")}
-              className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
+              className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
                 ok ? "bg-emerald-600 text-white" : "border border-dashed border-gray-300 text-transparent"
               }`}
             >
-              ✓
+              <IconCheck size={11} />
             </span>
             <span className="w-4 shrink-0 pt-0.5 text-right text-xs font-semibold tabular-nums text-gray-400">
               {i + 1}

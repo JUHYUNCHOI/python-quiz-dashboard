@@ -27,6 +27,7 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { TierMark } from "@/components/tier-mark"
 import { TierLadder } from "@/components/tier-ladder"
+import { IconCheck } from "@/components/journey-icons"
 import { useLanguage } from "@/contexts/language-context"
 import {
   TIER_IDS, PROMOTION_TARGET, tierInfo, tierLabel, tierRank, tierProblemTitle,
@@ -380,7 +381,7 @@ export default function TierPage() {
       {/* ── 표 ── */}
       <div className="mt-2 overflow-hidden rounded-xl border border-gray-200 bg-white">
         <div className="flex items-center gap-3 border-b border-gray-200 bg-gray-50 px-3 py-2 text-[11px] font-bold uppercase tracking-wide text-gray-500">
-          <span className="w-5 text-center" aria-hidden>✓</span>
+          <span className="flex w-5 justify-center" aria-hidden><IconCheck size={12} /></span>
           <span className="w-7 text-right">#</span>
           <span className="flex-1">{t("문제", "Problem")}</span>
           <span>{t("난이도", "Difficulty")}</span>
@@ -456,13 +457,13 @@ function StatusIcon({ st, lang }: { st: SolveStatus; lang: string }) {
     <span
       title={label}
       aria-label={label}
-      className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
+      className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
         st === "counted" ? "bg-emerald-600 text-white"
         : st === "solved" ? "bg-gray-300 text-white"
         : "border border-dashed border-gray-300 text-transparent"
       }`}
     >
-      ✓
+      <IconCheck size={11} />
     </span>
   )
 }
