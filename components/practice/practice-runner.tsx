@@ -225,6 +225,15 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
   // 토글은 항상 띄우고, 없는 쪽 시작 코드는 빈 틀로 채운다.
   const isTeacher = useEffectiveIsTeacher()
   const isOwner = useIsOwner() // owner(julia)는 학생 뷰여도 디버깅 위해 정답 항상 접근
+  /**
+   * **정답 코드는 선생님 전용이다. 학생에게는 어떤 조건에서도 열리지 않는다.**
+   *
+   * 예전에는 `failCount >= 2`, 힌트를 다 봤을 때, 알고리즘 연습(stuckLadder)에서
+   * 학생도 열 수 있었다. 실제로는 두 번 아무렇게나 제출하면 바로 열려서,
+   * 사실상 「두 번 틀리면 정답 베끼기」가 되었다.
+   * 힌트와 코드 구조(scaffoldCode)는 그대로 둔다 — 그게 학생용 단계다.
+   */
+  const canSeeSolution = isTeacher || isOwner
   const defaultLang = problem.language ?? "cpp"
   const [runtimeLang, setRuntimeLang] = useState<"cpp" | "python">(() => {
     if (typeof window === "undefined") return defaultLang
@@ -692,21 +701,25 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
               <p className="text-xs font-bold text-amber-800">
                 {t("괜찮아요. 순서대로 해볼까요?", "That's fine. Let's go step by step.")}
               </p>
-              <button
-                onClick={() => setShowSolution(true)}
-                className="w-full text-left rounded-lg border border-amber-300 bg-white px-3 py-2 hover:border-amber-400 transition-colors"
-              >
-                <span className="text-sm font-bold text-amber-900">1️⃣ {t("따라 쓰기", "Copy it out")}</span>
-                <span className="block text-[11px] text-gray-500 mt-0.5" style={{ wordBreak: "keep-all" }}>
-                  {t("풀이를 보면서 직접 타이핑해요. 손으로 쓰면 머리에 남아요.",
-                     "Read the solution and type it yourself — typing makes it stick.")}
-                </span>
-              </button>
+              {/* 1단 「따라 쓰기」는 정답 코드를 펼치는 버튼이라 선생님 화면에서만.
+                  학생에게 띄우면 눌러도 아무 일이 안 생기는 죽은 버튼이 된다. */}
+              {canSeeSolution && (
+                <button
+                  onClick={() => setShowSolution(true)}
+                  className="w-full text-left rounded-lg border border-amber-300 bg-white px-3 py-2 hover:border-amber-400 transition-colors"
+                >
+                  <span className="text-sm font-bold text-amber-900">1️⃣ {t("따라 쓰기", "Copy it out")}</span>
+                  <span className="block text-[11px] text-gray-500 mt-0.5" style={{ wordBreak: "keep-all" }}>
+                    {t("풀이를 보면서 직접 타이핑해요. 손으로 쓰면 머리에 남아요.",
+                       "Read the solution and type it yourself — typing makes it stick.")}
+                  </span>
+                </button>
+              )}
               <button
                 onClick={() => { setShowSolution(false); setStuckOpen(false); reset() }}
                 className="w-full text-left rounded-lg border border-amber-300 bg-white px-3 py-2 hover:border-amber-400 transition-colors"
               >
-                <span className="text-sm font-bold text-amber-900">2️⃣ {t("처음부터 혼자", "Try again alone")}</span>
+                <span className="text-sm font-bold text-amber-900">{canSeeSolution ? "2️⃣ " : ""}{t("처음부터 혼자", "Try again alone")}</span>
                 <span className="block text-[11px] text-gray-500 mt-0.5" style={{ wordBreak: "keep-all" }}>
                   {t("이제 보지 않고 다시. 이게 진짜 익힌 거예요.",
                      "Now without looking. That's when it's really yours.")}
@@ -729,24 +742,14 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
         </div>
       )}
 
-      {/* 정답 코드 — 베끼기 방지: 학생은 2회 시도 또는 힌트 다 본 뒤에만. 선생님은 항상.
-          stuckLadder 화면에선 "막혔어요 → 따라 쓰기" 로 학생이 스스로 열 수 있다. */}
-      {(() => {
-        const allHints = (problem.hints ?? []).length
+      {/* 정답 코드 — 선생님/owner 전용. 학생 화면에는 흔적도 남기지 않는다
+          (「잠겨 있다」는 안내조차 띄우지 않는다 — 열 방법을 찾게 만들 뿐이다). */}
+      {canSeeSolution && (() => {
         // 고른 언어의 모범답안이 없으면 다른 언어 것을 보여 주되, 어느 언어
         // 코드인지 명시한다. 둘 다 없으면 정답 칸 자체를 띄우지 않는다.
         const solLang: RunLang = currentSolutionCode ? lang : (lang === "python" ? "cpp" : "python")
         const solCode = currentSolutionCode || otherSolutionCode
         if (!solCode) return null
-        const canSeeSolution = isTeacher || isOwner || stuckLadder || failCount >= 2 || (allHints > 0 && hintsShown >= allHints)
-        if (!canSeeSolution) {
-          return (
-            <p className="text-xs text-gray-400 py-1 flex items-center gap-1.5">
-              <Eye className="w-3.5 h-3.5" />
-              {t("정답은 두 번 풀어보거나 힌트를 다 본 뒤에 열려요", "Solution unlocks after 2 tries or viewing all hints")}
-            </p>
-          )
-        }
         return (
           <>
             <button
