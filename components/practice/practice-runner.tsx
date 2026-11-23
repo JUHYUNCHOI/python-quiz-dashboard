@@ -11,6 +11,7 @@ import { useLanguage } from "@/contexts/language-context"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { useIsOwner } from "@/components/owner-only-guard"
 import { recordVerifiedSolve } from "@/lib/tier-store"
+import { blankStarter, type RunLang } from "@/lib/starter-code"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
@@ -217,15 +218,15 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
   const isEn = locale === "en"
   const problem = localizeProblem(rawProblem, locale)
 
-  // 이중 언어 지원: pyInitialCode + pySolutionCode 가 둘 다 있으면 토글 가능.
-  // 기본값: 문제의 language (없으면 cpp).
+  // 이중 언어: 채점이 stdin→stdout 바이트 비교뿐이라 **모든 문제를 두 언어로
+  // 풀 수 있다**. 예전엔 pyInitialCode+pySolutionCode 가 둘 다 있어야 토글이
+  // 보였는데, 그 조건 때문에 885문제 중 585개가 한 언어에 묶여 있었다. 이제
+  // 토글은 항상 띄우고, 없는 쪽 시작 코드는 빈 틀로 채운다.
   const isTeacher = useEffectiveIsTeacher()
   const isOwner = useIsOwner() // owner(julia)는 학생 뷰여도 디버깅 위해 정답 항상 접근
-  const hasPython = !!(rawProblem.pyInitialCode && rawProblem.pySolutionCode)
   const defaultLang = problem.language ?? "cpp"
   const [runtimeLang, setRuntimeLang] = useState<"cpp" | "python">(() => {
     if (typeof window === "undefined") return defaultLang
-    if (!hasPython) return defaultLang
     try {
       const saved = localStorage.getItem(`practice-lang-${problem.id}`)
       if (saved === "python" || saved === "cpp") return saved
@@ -242,13 +243,20 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
   // 언어별 분리 → KO/EN 캐시가 서로 안 섞이도록 + cpp/py 캐시도 분리
   const storageKey = `practice-code-${problem.id}-${isEn ? "en" : "ko"}-${lang}`
 
-  // 현재 lang 에 맞는 initialCode + solutionCode 선택
-  const currentInitialCode = lang === "python"
-    ? (rawProblem.pyInitialCode ?? problem.initialCode ?? "")
-    : (problem.initialCode ?? "")
-  const currentSolutionCode = lang === "python"
-    ? (rawProblem.pySolutionCode ?? problem.solutionCode ?? "")
-    : (problem.solutionCode ?? "")
+  // `initialCode`/`solutionCode` 는 문제의 기본 언어(`language`, 없으면 cpp)로
+  // 쓰여 있다. Python 전용 필드는 따로 있다. 둘을 언어별로 갈라 놓는다.
+  const pyInitial = rawProblem.pyInitialCode ?? (defaultLang === "python" ? problem.initialCode : undefined)
+  const cppInitial = defaultLang === "cpp" ? problem.initialCode : undefined
+  const pySolution = rawProblem.pySolutionCode ?? (defaultLang === "python" ? problem.solutionCode : undefined)
+  const cppSolution = defaultLang === "cpp" ? problem.solutionCode : undefined
+
+  // 현재 lang 에 맞는 시작 코드. 없으면 빈 틀 — 한쪽 언어를 아예 못 고르게
+  // 막는 것보다 낫다. (채점은 언어와 무관하므로 빈 틀로도 정답을 낼 수 있다.)
+  const currentInitialCode = (lang === "python" ? pyInitial : cppInitial) || blankStarter(lang, isEn)
+  // 모범답안은 **있는 언어 것만** 보여 준다. 없는 언어를 다른 언어 코드로
+  // 채우면 학생이 Python 탭에서 C++ 정답을 보게 된다 — 차라리 안 보여 준다.
+  const currentSolutionCode = (lang === "python" ? pySolution : cppSolution) ?? ""
+  const otherSolutionCode = (lang === "python" ? cppSolution : pySolution) ?? ""
 
   const [code, setCode] = useState(() => {
     const initial = localizeInitialCode(currentInitialCode, isEn)
@@ -270,9 +278,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
     setError("")
     setAllPassed(false)
     // lang 저장
-    if (hasPython) {
-      try { localStorage.setItem(`practice-lang-${problem.id}`, lang) } catch {}
-    }
+    try { localStorage.setItem(`practice-lang-${problem.id}`, lang) } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang])
   const [results, setResults] = useState<TestResult[]>([])
@@ -398,26 +404,25 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
         <div className="flex items-center justify-between px-4 py-2 bg-[#181825] border-b border-white/10">
           <span className="text-xs text-white/40 font-mono">{lang === "python" ? "main.py" : "main.cpp"}</span>
           <div className="flex items-center gap-2">
-            {hasPython && (
-              <div className="flex bg-white/5 rounded-md p-0.5 gap-0.5">
-                <button
-                  onClick={() => setRuntimeLang("cpp")}
-                  className={cn(
-                    "px-2 py-0.5 rounded text-[10px] font-bold transition-all",
-                    lang === "cpp" ? "bg-blue-500 text-white" : "text-white/40 hover:text-white/70"
-                  )}
-                  title="C++"
-                >⚡ C++</button>
-                <button
-                  onClick={() => setRuntimeLang("python")}
-                  className={cn(
-                    "px-2 py-0.5 rounded text-[10px] font-bold transition-all",
-                    lang === "python" ? "bg-emerald-500 text-white" : "text-white/40 hover:text-white/70"
-                  )}
-                  title="Python"
-                >🐍 Py</button>
-              </div>
-            )}
+            {/* 언어 선택 — 모든 문제에서 고를 수 있다 (채점이 언어 무관). */}
+            <div className="flex bg-white/5 rounded-md p-0.5 gap-0.5" role="group" aria-label={t("풀이 언어", "Solution language")}>
+              <button
+                onClick={() => setRuntimeLang("cpp")}
+                aria-pressed={lang === "cpp"}
+                className={cn(
+                  "px-2.5 py-0.5 rounded text-[10px] font-bold transition-all",
+                  lang === "cpp" ? "bg-blue-500 text-white" : "text-white/40 hover:text-white/70"
+                )}
+              >C++</button>
+              <button
+                onClick={() => setRuntimeLang("python")}
+                aria-pressed={lang === "python"}
+                className={cn(
+                  "px-2.5 py-0.5 rounded text-[10px] font-bold transition-all",
+                  lang === "python" ? "bg-emerald-500 text-white" : "text-white/40 hover:text-white/70"
+                )}
+              >Python</button>
+            </div>
             <button onClick={reset} className="flex items-center gap-1 text-xs text-white/40 hover:text-white/70 transition-colors">
               <RotateCcw className="w-3 h-3" /> {t("초기화", "Reset")}
             </button>
@@ -518,8 +523,12 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
             📥 {t("입력은 자동으로 들어가요", "Input is fed in automatically")}
           </div>
           <div className="text-xs text-sky-800 mb-2">
-            {t("input() 으로 받기만 하면 돼요. 아래가 첫 번째 테스트예요.",
-               "Just read it with input(). Here is the first test.")}
+            {/* 언어를 고를 수 있게 됐으니 읽는 방법도 고른 언어에 맞춰 말한다. */}
+            {lang === "python"
+              ? t("input() 으로 받기만 하면 돼요. 아래가 첫 번째 테스트예요.",
+                  "Just read it with input(). Here is the first test.")
+              : t("cin 으로 받기만 하면 돼요. 아래가 첫 번째 테스트예요.",
+                  "Just read it with cin. Here is the first test.")}
           </div>
           <div className="flex gap-2 text-xs font-mono">
             <div className="flex-1 bg-white rounded-lg px-3 py-2 border border-sky-100">
@@ -707,6 +716,11 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
           stuckLadder 화면에선 "막혔어요 → 따라 쓰기" 로 학생이 스스로 열 수 있다. */}
       {(() => {
         const allHints = (problem.hints ?? []).length
+        // 고른 언어의 모범답안이 없으면 다른 언어 것을 보여 주되, 어느 언어
+        // 코드인지 명시한다. 둘 다 없으면 정답 칸 자체를 띄우지 않는다.
+        const solLang: RunLang = currentSolutionCode ? lang : (lang === "python" ? "cpp" : "python")
+        const solCode = currentSolutionCode || otherSolutionCode
+        if (!solCode) return null
         const canSeeSolution = isTeacher || isOwner || stuckLadder || failCount >= 2 || (allHints > 0 && hintsShown >= allHints)
         if (!canSeeSolution) {
           return (
@@ -731,10 +745,17 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
             </button>
             {showSolution && (
               <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
+                {solLang !== lang && (
+                  <p className="mb-2 text-xs text-gray-500">
+                    {solLang === "cpp"
+                      ? t("이 문제의 모범답안은 C++ 로만 있어요. 풀이 방법은 같습니다.", "Only a C++ reference solution exists for this problem. The approach is the same.")
+                      : t("이 문제의 모범답안은 Python 으로만 있어요. 풀이 방법은 같습니다.", "Only a Python reference solution exists for this problem. The approach is the same.")}
+                  </p>
+                )}
                 <pre
                   className="font-mono text-sm whitespace-pre-wrap overflow-x-auto rounded-lg p-3"
                   style={{ background: "#1e1e2e", color: "#e6edf3" }}
-                  dangerouslySetInnerHTML={{ __html: highlightCode(currentSolutionCode, lang) }}
+                  dangerouslySetInnerHTML={{ __html: highlightCode(solCode, solLang) }}
                 />
                 <p className="mt-3 text-sm text-gray-500">{problem.solutionExplanation}</p>
               </div>
