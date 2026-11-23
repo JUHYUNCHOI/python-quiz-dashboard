@@ -76,6 +76,11 @@ export const lessonNames: Record<string, string> = {
   "cpp-15": "pair & tuple", "cpp-23": "sort 마스터", "cpp-ck4": "🏋️ 정렬 연습", "cpp-16": "map & set", "cpp-ck5": "🏋️ map/set 연습", "cpp-17": "STL 알고리즘", "cpp-18": "stack/queue/deque",
   "cpp-ck7": "🏋️ 함수 연습", "cpp-ck8": "🏋️ stack/queue 연습", "cpp-ck10": "🏋️ STL 탐색 연습",
   "cpp-19": "파일 & Fast I/O", "cpp-20": "CP 실전 팁", "cpp-p3": "🏆 USACO 모의전",
+  /* ⚠️ cpp-24/25/26 은 `data/index.ts` 레지스트리에만 있고 여기에 빠져 있었다.
+     이름이 없으면 `getLessonName` 이 id 를 그대로 돌려줘서, 숙제 목록에
+     "cpp-25 · cpp-25" 처럼 찍혔다 — 한국어에서도 영어에서도 똑같이 깨졌다.
+     ⛔ `cppParts` 에도 빠져 있다. 그건 커리큘럼 구조 문제라 따로 다룬다. */
+  "cpp-24": "알고리즘 셋업", "cpp-25": "이진 탐색", "cpp-26": "sort 응용",
   // Pseudocode
   "pseudo-1": "기초", "pseudo-2": "변수", "pseudo-3": "입출력", "pseudo-4": "조건문",
   "pseudo-28": "Boolean", "pseudo-5": "반복문", "pseudo-6": "배열", "pseudo-7": "함수",
@@ -120,6 +125,7 @@ export const lessonNamesEn: Record<string, string> = {
   "cpp-15": "pair & tuple", "cpp-23": "sort Master", "cpp-ck4": "🏋️ Sort Practice", "cpp-16": "map & set", "cpp-ck5": "🏋️ map/set Practice", "cpp-17": "STL Algorithms", "cpp-18": "stack/queue/deque",
   "cpp-ck7": "🏋️ Functions Practice", "cpp-ck8": "🏋️ stack/queue Practice", "cpp-ck10": "🏋️ STL Search Practice",
   "cpp-19": "Files & Fast I/O", "cpp-20": "CP Tips", "cpp-p3": "🏆 USACO Mock",
+  "cpp-24": "Algorithm Setup", "cpp-25": "Binary Search", "cpp-26": "Sort Patterns",
   // Pseudocode
   "pseudo-1": "Basics", "pseudo-2": "Variables", "pseudo-3": "I/O", "pseudo-4": "Conditionals",
   "pseudo-28": "Boolean", "pseudo-5": "Loops", "pseudo-6": "Arrays", "pseudo-7": "Functions",

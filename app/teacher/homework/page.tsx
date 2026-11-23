@@ -7,6 +7,7 @@ import { CodeBlock } from "@/components/ui/code-block"
 import { Loader2, ChevronDown, ChevronUp, Check, X, ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getLessonName } from "@/lib/curriculum-data"
+import { loadEnglishStepTitles, stepTitleKey } from "@/lib/step-title"
 import { BottomNav } from "@/components/bottom-nav"
 import { useAuth } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
@@ -78,6 +79,8 @@ export default function HomeworkPage() {
   const [saving, setSaving] = useState<string | null>(null)
   const [error, setError] = useState("")
   const [comments, setComments] = useState<Record<string, string>>({})
+  /** step 제목의 영어판 — DB 의 `step_title` 은 한국어가 박제돼 있다. */
+  const [enTitles, setEnTitles] = useState<Record<string, string>>({})
 
   // 펼친 그룹의 코드 (lazy load)
   const [expandedKey, setExpandedKey] = useState<string | null>(null)
@@ -162,6 +165,16 @@ export default function HomeworkPage() {
     }
     init()
   }, [fetchPage])
+
+  // 화면에 뜬 레슨의 영어 step 제목만 불러온다. 교재 전체를 당기면 번들이 터진다.
+  useEffect(() => {
+    if (lang !== "en" || groups.length === 0) return
+    let alive = true
+    loadEnglishStepTitles(groups.map(g => g.lesson_id)).then(map => {
+      if (alive) setEnTitles(prev => ({ ...prev, ...map }))
+    })
+    return () => { alive = false }
+  }, [lang, groups])
 
   const loadMore = async () => {
     setLoadingMore(true)
@@ -327,7 +340,8 @@ export default function HomeworkPage() {
         {filtered.map(grp => {
           const grade = grades[grp.key] ?? null
           const isOpen = expandedKey === grp.key
-          const title = stripEmoji(grp.step_title) || grp.step_title
+          const rawTitle = enTitles[stepTitleKey(grp.lesson_id, grp.step_id)] ?? grp.step_title
+          const title = stripEmoji(rawTitle) || rawTitle
           const isAutoPass = grade === "auto"
           const isSaving = saving === grp.key
           const code = loadedCode[grp.latestId]
