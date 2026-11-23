@@ -188,12 +188,13 @@ function Notice({ children }: { children: React.ReactNode }) {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
+  const { t } = useLanguage()
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
       <Header />
       <main className="mx-auto max-w-2xl px-4 pt-6">
         <Link href="/tier" className="text-sm text-gray-500 hover:text-orange-600">
-          ← Tier
+          {t("← 티어", "← Tier")}
         </Link>
         <div className="mt-3">{children}</div>
       </main>

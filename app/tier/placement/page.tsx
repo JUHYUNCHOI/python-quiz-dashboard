@@ -444,12 +444,15 @@ export default function PlacementPage() {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
+  const { t } = useLanguage()
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
       <Header />
       <main className="mx-auto max-w-2xl px-4 pt-6">
         <Link href="/tier" className="text-sm text-gray-500 hover:text-orange-600">
-          ← Tier
+          {/* 돌아가기 링크가 한국어 화면에서도 "Tier" 였다 — 뒤로 가는 버튼은
+              학생이 가장 자주 누르는 것이고, 거기서 언어가 어긋나면 눈에 띈다. */}
+          {t("← 티어", "← Tier")}
         </Link>
         <div className="mt-3">{children}</div>
       </main>
