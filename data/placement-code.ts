@@ -31,6 +31,18 @@
  * 최고 티어가 "은행에 있는 가장 높은 티어"로 자동 결정된다 — 엔진에 상한
  * 숫자를 따로 박아 두면 은행과 어긋날 수 있다.
  *
+ * ── 난이도의 기준은 사다리(`ladder-data`)의 level 이다 ─────────────────────
+ * 배치가 끝나면 학생은 그 티어의 **연습 문제 10개**를 풀어 승급한다. 배치
+ * 문제가 연습 문제보다 어려우면 "배치는 통과했는데 승급 문제는 쉬운" 또는 그
+ * 반대의 어긋남이 생긴다. 그래서 티어는 감으로 매기지 않고, 사다리에 있는
+ * **같은 문제의 level** 을 찾아 그 티어를 그대로 쓴다.
+ *
+ * 실제로 대조해서 4개를 고쳤다 (2026-11-24):
+ *   양수/음수 개수(lv13=브론즈 I)가 실버 II에, 가장 많이 나온 단어(lv22=
+ *   실버 I)가 골드 II에 있었다. 특히 연결 요소의 개수는 사다리에서 **lv48 =
+ *   마스터**다 — 그걸 플래티넘 II 자리에 두고 있었다. 사다리의 DFS·BFS 는
+ *   전부 lv45 이상이므로 **그래프 탐색 문제는 배치고사에 넣을 수 없다.**
+ *
  * ── 제한은 실제로 지키는 값만 적는다 ──────────────────────────────────────
  * 백준은 N ≤ 100,000 같은 큰 제한으로 시간복잡도를 강제하지만, 우리 채점은
  * 작은 테스트만 돌린다. 지키지도 않는 큰 제한을 적으면 "제한을 읽고 누적합을
@@ -138,30 +150,30 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
   },
   {
     id: "pc03", step: 3, tier: "silver2",
-    skill: "반복문과 세기", skillEn: "Loops and counting",
-    title: "양수와 음수", titleEn: "Positives and Negatives",
+    skill: "중복 제거와 정렬", skillEn: "Deduplication and sorting",
+    title: "중복 빼고 정렬", titleEn: "Sort Without Duplicates",
     desc:
-      "N개의 정수가 주어진다. 이 중 양수가 몇 개이고 음수가 몇 개인지 구하는 " +
-      "프로그램을 작성하시오. 0은 양수도 음수도 아니다.",
+      "N개의 정수가 주어진다. 이 중 중복을 없애고, 남은 수들을 작은 것부터 " +
+      "차례로 출력하는 프로그램을 작성하시오.",
     descEn:
-      "N integers are given. Write a program that counts how many are positive and " +
-      "how many are negative. Zero is neither positive nor negative.",
+      "N integers are given. Write a program that removes duplicates and prints the " +
+      "remaining numbers in increasing order.",
     input:
       "첫째 줄에 정수의 개수 N이 주어진다.\n둘째 줄에 N개의 정수가 공백으로 구분되어 주어진다.",
     inputEn:
       "The first line contains the count N.\nThe second line contains N integers separated by spaces.",
     output:
-      "첫째 줄에 양수의 개수를, 둘째 줄에 음수의 개수를 출력한다.",
+      "중복을 없앤 수들을 오름차순으로 한 줄에 출력한다. 수 사이는 공백 한 칸으로 구분한다.",
     outputEn:
-      "Print the number of positives on the first line and the number of negatives on the second.",
+      "Print the deduplicated numbers in increasing order on one line, separated by single spaces.",
     limits: "1 ≤ N ≤ 100, 각 정수의 절댓값은 1,000 이하",
     limitsEn: "1 ≤ N ≤ 100, and each integer has absolute value at most 1,000",
     sampleCount: 1,
     tests: [
-      { stdin: "5\n1 -2 0 3 -4\n", expected: "2\n2" },
-      { stdin: "3\n0 0 0\n", expected: "0\n0" },
-      { stdin: "1\n-7\n", expected: "0\n1" },
-      { stdin: "6\n1 2 3 4 5 6\n", expected: "6\n0" },
+      { stdin: "5\n3 1 3 2 1\n", expected: "1 2 3" },
+      { stdin: "1\n7\n", expected: "7" },
+      { stdin: "4\n5 5 5 5\n", expected: "5" },
+      { stdin: "6\n-1 0 -1 2 0 3\n", expected: "-1 0 2 3" },
     ],
   },
   {
@@ -223,32 +235,6 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
   },
   {
     id: "pc06", step: 6, tier: "gold2",
-    skill: "딕셔너리와 동점 처리", skillEn: "Dictionaries and tie-breaking",
-    title: "가장 많이 나온 단어", titleEn: "Most Frequent Word",
-    desc:
-      "N개의 단어가 주어진다. 가장 많이 나온 단어를 구하는 프로그램을 작성하시오.\n" +
-      "가장 많이 나온 단어가 둘 이상이면 그중 사전순으로 가장 앞선 단어를 출력한다.",
-    descEn:
-      "N words are given. Write a program that finds the word that appears most often.\n" +
-      "If several words tie for the most appearances, print the one that comes first alphabetically.",
-    input:
-      "첫째 줄에 단어의 개수 N이 주어진다.\n다음 N개의 줄에 단어가 한 줄에 하나씩 주어진다.",
-    inputEn:
-      "The first line contains the number of words N.\nEach of the next N lines contains one word.",
-    output: "가장 많이 나온 단어를 한 줄에 출력한다.",
-    outputEn: "Print the most frequent word on a single line.",
-    limits: "1 ≤ N ≤ 100. 각 단어는 영어 소문자로만 이루어지고 길이는 20 이하다.",
-    limitsEn: "1 ≤ N ≤ 100. Each word is made of lowercase English letters and is at most 20 characters long.",
-    sampleCount: 1,
-    tests: [
-      { stdin: "5\napple\nbanana\napple\ncherry\nbanana\n", expected: "apple" },
-      { stdin: "3\nz\nz\na\n", expected: "z" },
-      { stdin: "1\nhello\n", expected: "hello" },
-      { stdin: "4\nb\na\nb\na\n", expected: "a" },
-    ],
-  },
-  {
-    id: "pc07", step: 7, tier: "gold2",
     skill: "함수와 수학", skillEn: "Functions and math",
     title: "소수 찾기", titleEn: "Counting Primes",
     desc:
@@ -273,6 +259,39 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
       { stdin: "5\n2 4 6 8 9\n", expected: "1" },
       { stdin: "1\n1\n", expected: "0" },
       { stdin: "3\n997 999 1000\n", expected: "1" },
+    ],
+  },
+  {
+    id: "pc07", step: 7, tier: "gold2",
+    skill: "딕셔너리와 다중 기준 정렬", skillEn: "Dictionaries and multi-key sorting",
+    title: "많이 나온 단어 K개", titleEn: "Top K Frequent Words",
+    desc:
+      "N개의 단어가 주어진다. 많이 나온 순서대로 K개의 단어를 출력하는 프로그램을 " +
+      "작성하시오.\n" +
+      "나온 횟수가 같은 단어끼리는 사전순으로 앞선 것을 먼저 출력한다.",
+    descEn:
+      "N words are given. Write a program that prints K words, most frequent first.\n" +
+      "Words that appear the same number of times are printed in alphabetical order.",
+    input:
+      "첫째 줄에 단어의 개수 N과 출력할 개수 K가 공백으로 구분되어 주어진다.\n" +
+      "다음 N개의 줄에 단어가 한 줄에 하나씩 주어진다.",
+    inputEn:
+      "The first line contains the number of words N and the count to print K, separated by a space.\n" +
+      "Each of the next N lines contains one word.",
+    output: "조건에 맞는 단어 K개를 한 줄에 하나씩 순서대로 출력한다.",
+    outputEn: "Print the K words in order, one per line.",
+    limits:
+      "1 ≤ N ≤ 100. K는 1 이상이고 서로 다른 단어의 개수 이하다. " +
+      "각 단어는 영어 소문자로만 이루어지고 길이는 20 이하다.",
+    limitsEn:
+      "1 ≤ N ≤ 100. K is at least 1 and at most the number of distinct words. " +
+      "Each word is made of lowercase English letters and is at most 20 characters long.",
+    sampleCount: 1,
+    tests: [
+      { stdin: "6 2\napple\nbanana\napple\ncherry\nbanana\napple\n", expected: "apple\nbanana" },
+      { stdin: "4 2\nb\na\nb\na\n", expected: "a\nb" },
+      { stdin: "1 1\nhello\n", expected: "hello" },
+      { stdin: "7 3\nz\ny\nz\nx\ny\nz\nw\n", expected: "z\ny\nw" },
     ],
   },
   {
@@ -310,37 +329,41 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
   },
   {
     id: "pc09", step: 9, tier: "plat2",
-    skill: "그래프 탐색", skillEn: "Graph traversal",
-    title: "연결 요소의 개수", titleEn: "Connected Components",
+    skill: "정렬 후 훑기", skillEn: "Sort and sweep",
+    title: "구간 병합", titleEn: "Merging Intervals",
     desc:
-      "방향 없는 그래프가 주어졌을 때, 연결 요소의 개수를 구하는 프로그램을 작성하시오.\n" +
-      "연결 요소란 서로 이어진 정점들의 묶음이다. 간선이 하나도 없는 정점도 그 자체로 " +
-      "연결 요소 하나다.",
+      "수직선 위의 구간 N개가 주어진다. 겹치는 구간들을 하나로 합쳤을 때 남는 " +
+      "구간들을 구하는 프로그램을 작성하시오.\n" +
+      "두 구간은 한 점이라도 공유하면 겹친 것으로 본다. 예를 들어 [1, 4]와 [4, 5]는 " +
+      "합쳐서 [1, 5]가 된다.",
     descEn:
-      "Given an undirected graph, write a program that counts its connected components.\n" +
-      "A connected component is a group of vertices reachable from one another. A vertex " +
-      "with no edges is a component by itself.",
+      "N intervals on a number line are given. Write a program that merges overlapping " +
+      "intervals and reports the ones that remain.\n" +
+      "Two intervals overlap if they share even a single point. For example, [1, 4] and " +
+      "[4, 5] merge into [1, 5].",
     input:
-      "첫째 줄에 정점의 개수 N과 간선의 개수 M이 공백으로 구분되어 주어진다.\n" +
-      "다음 M개의 줄에 간선의 양 끝 정점 u와 v가 공백으로 구분되어 주어진다.\n" +
-      "정점은 1번부터 N번까지 번호가 붙어 있다.",
+      "첫째 줄에 구간의 개수 N이 주어진다.\n" +
+      "다음 N개의 줄에 구간의 왼쪽 끝 L과 오른쪽 끝 R이 공백으로 구분되어 주어진다.\n" +
+      "구간은 양 끝을 모두 포함하며, 아무 순서로나 주어진다.",
     inputEn:
-      "The first line contains the number of vertices N and the number of edges M, separated by a space.\n" +
-      "Each of the next M lines contains the two endpoints u and v of an edge, separated by a space.\n" +
-      "Vertices are numbered from 1 to N.",
-    output: "연결 요소의 개수를 출력한다.",
-    outputEn: "Print the number of connected components.",
-    limits:
-      "1 ≤ N ≤ 1,000, 0 ≤ M ≤ 2,000. 같은 간선이 두 번 주어질 수 있고, " +
-      "u와 v는 서로 다르다.",
-    limitsEn:
-      "1 ≤ N ≤ 1,000 and 0 ≤ M ≤ 2,000. The same edge may appear twice, and u and v are always different.",
+      "The first line contains the number of intervals N.\n" +
+      "Each of the next N lines contains an interval's left end L and right end R, separated by a space.\n" +
+      "Intervals include both ends and are given in no particular order.",
+    output:
+      "첫째 줄에 합친 뒤 남은 구간의 개수를 출력한다.\n" +
+      "다음 줄부터 남은 구간을 왼쪽 끝이 작은 것부터 한 줄에 하나씩 \"L R\" 형태로 출력한다.",
+    outputEn:
+      "On the first line, print how many intervals remain after merging.\n" +
+      "Then print each remaining interval as \"L R\" on its own line, ordered by left end.",
+    limits: "1 ≤ N ≤ 1,000, 0 ≤ L ≤ R ≤ 10,000",
+    limitsEn: "1 ≤ N ≤ 1,000 and 0 ≤ L ≤ R ≤ 10,000",
     sampleCount: 1,
     tests: [
-      { stdin: "6 5\n1 2\n2 5\n5 1\n3 4\n4 6\n", expected: "2" },
-      { stdin: "6 8\n1 2\n2 5\n5 1\n3 4\n4 6\n5 4\n2 4\n2 3\n", expected: "1" },
-      { stdin: "3 0\n", expected: "3" },
-      { stdin: "1 0\n", expected: "1" },
+      { stdin: "4\n1 3\n2 6\n8 10\n15 18\n", expected: "3\n1 6\n8 10\n15 18" },
+      { stdin: "2\n1 4\n4 5\n", expected: "1\n1 5" },
+      { stdin: "1\n5 7\n", expected: "1\n5 7" },
+      { stdin: "3\n5 6\n1 2\n3 4\n", expected: "3\n1 2\n3 4\n5 6" },
+      { stdin: "3\n1 10\n2 3\n4 5\n", expected: "1\n1 10" },
     ],
   },
   {
