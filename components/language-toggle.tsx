@@ -17,7 +17,7 @@ export function LanguageToggle({ className }: { className?: string }) {
             : "text-gray-500 hover:text-gray-700"
         )}
       >
-        🇰🇷 <span className="hidden sm:inline">한국어</span><span className="sm:hidden">KO</span>
+        <span className="hidden sm:inline">한국어</span><span className="sm:hidden">KO</span>
       </button>
       <button
         onClick={() => setLang('en')}
@@ -28,7 +28,7 @@ export function LanguageToggle({ className }: { className?: string }) {
             : "text-gray-500 hover:text-gray-700"
         )}
       >
-        🇺🇸 <span className="hidden sm:inline">English</span><span className="sm:hidden">EN</span>
+        <span className="hidden sm:inline">English</span><span className="sm:hidden">EN</span>
       </button>
     </div>
   )

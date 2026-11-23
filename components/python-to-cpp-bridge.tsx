@@ -7,7 +7,12 @@ import { ChevronDown, ChevronUp, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // ---- 핵심 문법 비교 데이터 ----
-const SYNTAX_MAP = [
+// pyEn/cppEn 은 코드 샘플 **안에 한글이 들어간 경우에만** 채운다 (주석 등).
+// 없으면 py/cpp 를 그대로 쓴다 — 코드는 번역 대상이 아니다.
+const SYNTAX_MAP: {
+  label: string; labelEn: string; py: string; cpp: string
+  pyEn?: string; cppEn?: string
+}[] = [
   {
     label: "출력",
     labelEn: "Print",
@@ -55,6 +60,8 @@ const SYNTAX_MAP = [
     labelEn: "Comment",
     py: "# 이게 주석이에요",
     cpp: "// 이게 주석이에요",
+    pyEn: "# this is a comment",
+    cppEn: "// this is a comment",
   },
 ]
 
@@ -208,8 +215,8 @@ export function PythonToCppBridge({ onDismiss }: Props) {
                 {t(item.label, item.labelEn)}
               </p>
               <div className="grid grid-cols-2 gap-2">
-                <CodeBox lang="python" code={item.py} />
-                <CodeBox lang="cpp" code={item.cpp} />
+                <CodeBox lang="python" code={t(item.py, item.pyEn ?? item.py)} />
+                <CodeBox lang="cpp" code={t(item.cpp, item.cppEn ?? item.cpp)} />
               </div>
             </div>
           ))}

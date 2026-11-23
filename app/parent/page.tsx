@@ -337,7 +337,7 @@ function ParentReportPage() {
         const { data: result, error: rpcError } = await supabase.rpc("get_parent_report", { p_token: token })
         if (rpcError) {
           console.error("get_parent_report error:", rpcError)
-          setError(`오류: ${rpcError.message}`); setLoading(false); return
+          setError(t(`오류: ${rpcError.message}`, `Error: ${rpcError.message}`)); setLoading(false); return
         }
         if (result?.error === "invalid_token") {
           setError(t("유효하지 않은 링크입니다", "Invalid link")); setLoading(false); return
@@ -845,7 +845,7 @@ function ParentReportPage() {
               })}
             </div>
             <div className="flex-1">
-              <p className="text-xl font-black text-gray-800">{weeklyDays}일</p>
+              <p className="text-xl font-black text-gray-800">{weeklyDays}{t("일", "d")}</p>
               <p className="text-xs text-gray-500">{t("이번 주 활동", "This week's activity")}</p>
               {data.daily_streak > 0 && (
                 <p className="text-xs text-orange-600 font-semibold mt-0.5">🔥 {t(`${data.daily_streak}일 연속 중`, `${data.daily_streak}-day streak`)}</p>
