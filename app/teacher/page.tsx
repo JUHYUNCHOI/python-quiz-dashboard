@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client"
 import { createClass } from "./actions"
 import type { Class } from "@/lib/supabase/types"
 import { Card } from "@/components/ui/card"
-import { Plus, Users, Copy, Check, ChevronRight, AlertTriangle, Flag } from "lucide-react"
+import { Plus, Users, Copy, Check, ChevronRight, AlertTriangle, Flag, Timer } from "lucide-react"
 import { FlaggedQuestions } from "@/components/teacher/flagged-questions"
 import Link from "next/link"
 import { Header } from "@/components/header"
@@ -311,6 +311,16 @@ export default function TeacherDashboardPage() {
               {t(`확인 필요 ${hwCount}건`, `${hwCount} to review`)}
             </span>
           )}
+        </Link>
+
+        {/* 승급 시험 링크 — 학생은 선생님이 창을 열어 준 동안에만 응시할 수 있다.
+            이 링크가 없으면 승급 3단계의 ②가 학생 쪽에서 영원히 "시험 대기"다. */}
+        <Link href="/teacher/exam" className="flex items-center gap-3 p-4 rounded-xl border-2 border-sky-100 bg-sky-50 hover:bg-sky-100 transition-colors mb-2">
+          <Timer className="w-5 h-5 text-sky-600 flex-shrink-0" />
+          <div className="flex-1">
+            <p className="font-bold text-sky-800">{t("승급 시험 열기", "Open Promotion Exam")}</p>
+            <p className="text-xs text-sky-600">{t("교실에서 시험을 열면 자격을 갖춘 학생이 응시합니다", "Open it in class and eligible students can take it")}</p>
+          </div>
         </Link>
 
         {/* 신고된 문제 링크 */}
