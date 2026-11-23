@@ -82,9 +82,18 @@ type PistonRawResponse = {
      지금은 오프셋이 **정확히 +1** 이고, `practice-runner.tsx` 가 그만큼 빼서 보정한다.
      **여기를 여러 줄로 바꾸면 거기 숫자도 같이 고쳐라.**
    ⚠️ 이 함수를 쓰는 곳은 `components/practice/practice-runner.tsx` **하나뿐**이다
-     (코딩뱅크·Algo Lab 은 안 쓴다 — PM 확인). C++ 은 안 건드린다. */
+     (코딩뱅크·Algo Lab 은 안 쓴다 — PM 확인). C++ 은 안 건드린다.
+
+   ⛔⛔ 2026-11-23 — **반드시 멱등(idempotent)이어야 한다.**
+     Piston 은 매 실행이 새 프로세스라 몇 번 덮어써도 괜찮지만,
+     `runPythonInBrowser` 는 **같은 Pyodide 워커를 재사용한다**.
+     가드 없이 `_cb._cr_oi=_cb.input` 을 하면 2회차에 `_cr_oi` 가
+     1회차 람다를 가리켜 **람다가 자기를 호출한다** →
+     `RecursionError: maximum recursion depth exceeded`.
+     증상: 서버가 죽어 브라우저 경로로 넘어간 뒤 **첫 실행만 되고 그 다음부터 전부 실패.**
+     그래서 `_cr_oi` 는 **아직 없을 때만** 심는다. */
 const PY_NO_PROMPT =
-  "import builtins as _cb; _cb._cr_oi=_cb.input; _cb.input=lambda *a,**k:_cb._cr_oi()\n"
+  "import builtins as _cb; _cb._cr_oi=getattr(_cb,'_cr_oi',None) or _cb.input; _cb.input=lambda *a,**k:_cb._cr_oi()\n"
 
 /**
  * 채점 서버가 죽었을 때의 **파이썬 비상 경로** — 브라우저에서 Pyodide 로 돌린다.

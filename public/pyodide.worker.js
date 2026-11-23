@@ -59,15 +59,19 @@ async function handleRun({ id, code, stdin }) {
 
   try {
     // input("프롬프트") 의 프롬프트가 stdout 에 echo 되어 expectedOutput 비교를 깨는 것 방지.
-    // builtins.input 을 프롬프트 출력 없이 stdin 만 읽도록 1회 래핑(중첩 가드).
+    // builtins.input 을 프롬프트 출력 없이 stdin 만 읽도록 1회 래핑.
+    //
+    // ⛔ 2026-11-23 — 가드와 원본 보관을 **둘 다 builtins 모듈 위에** 둔다.
+    //   예전 버전은 가드를 래퍼 **함수 속성**(`_cr_wrapped`)에, 원본을 **pyodide 전역**
+    //   (`_cr_oi`)에 뒀다. 그래서 다른 코드가 `builtins.input` 을 또 감싸면
+    //   (실제로 `lib/piston.ts` 의 PY_NO_PROMPT 가 그랬다) 가드가 자기 마커를 못 찾아
+    //   재래핑하고, 두 래퍼가 서로를 호출해 **RecursionError** 가 났다.
+    //   워커는 재사용되므로 증상은 "첫 실행만 되고 그 다음부터 전부 실패" 였다.
     await py.runPythonAsync(
       "import builtins as _cb\n" +
-      "if not getattr(_cb.input, '_cr_wrapped', False):\n" +
-      "    _cr_oi = _cb.input\n" +
-      "    def _cr_input(*a, **k):\n" +
-      "        return _cr_oi()\n" +
-      "    _cr_input._cr_wrapped = True\n" +
-      "    _cb.input = _cr_input\n"
+      "if not hasattr(_cb, '_cr_orig_input'):\n" +
+      "    _cb._cr_orig_input = _cb.input\n" +
+      "    _cb.input = lambda *a, **k: _cb._cr_orig_input()\n"
     )
 
     // 학생 코드 실행
