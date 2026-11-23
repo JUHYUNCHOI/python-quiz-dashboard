@@ -318,7 +318,7 @@ export default function TeacherDashboardPage() {
         <Link href="/teacher/exam" className="flex items-center gap-3 p-4 rounded-xl border-2 border-sky-100 bg-sky-50 hover:bg-sky-100 transition-colors mb-2">
           <Timer className="w-5 h-5 text-sky-600 flex-shrink-0" />
           <div className="flex-1">
-            <p className="font-bold text-sky-800">{t("승급 시험 열기", "Open Promotion Exam")}</p>
+            <p className="font-bold text-sky-800">{t("승급 시험 열기", "Open the promotion exam")}</p>
             <p className="text-xs text-sky-600">{t("교실에서 시험을 열면 자격을 갖춘 학생이 응시합니다", "Open it in class and eligible students can take it")}</p>
           </div>
         </Link>

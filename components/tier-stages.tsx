@@ -82,7 +82,9 @@ export function TierStages({
             )}
             {s.st === "active" && (
               <span className="ml-auto text-[11px] font-bold text-orange-700">
-                {t("지금 단계", "You are here")}
+                {/* 영어는 짧게 — 1/3 폭 카드에서 머리말과 한 줄을 다투므로
+                    "You are here"(12자) 는 머리말까지 같이 줄바꿈시킨다. */}
+                {t("지금 단계", "Now")}
               </span>
             )}
           </div>
