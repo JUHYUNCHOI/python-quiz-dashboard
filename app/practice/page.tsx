@@ -17,6 +17,7 @@ import { getNextLessonId, getLessonName, getCompletedLessons, pythonParts, cppPa
 import { getSmartNext } from "@/lib/smart-next"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
 import { localizeCluster, localizeProblem } from "@/data/practice/types"
+import { diffLabel } from "@/lib/problem-tags"
 import { getContestLinks, codeQuestUrl, type ContestProblem } from "@/data/practice/contest-links"
 import { usePracticeProgress } from "@/hooks/use-practice-progress"
 import { useAuth } from "@/contexts/auth-context"
@@ -150,10 +151,21 @@ const _MASTERY_LABEL: Record<string, [string, string, string]> = {
   proficient: ["능숙", "Proficient", "bg-sky-100 text-sky-700"],
   mastered: ["마스터", "Mastered", "bg-emerald-100 text-emerald-700"],
 }
-function clusterName(id: string): string {
+/**
+ * 주제 태그에 쓰는 짧은 클러스터 이름.
+ *
+ * 영어 화면에서 `c.title`(한국어)을 그대로 쓰면 주제 태그·주제 드롭다운·추천
+ * 카드가 전부 한국어로 나온다. 번역은 이미 `c.en.title` 에 있으므로 없는 게
+ * 아니라 **화면이 안 쓰고 있었던** 쪽이다. 꼬리말 제거는 한국어("… 문제 풀이")와
+ * 영어("… Practice") 양쪽에 적용한다.
+ */
+function clusterName(id: string, lang: string): string {
   const c = ALL_CLUSTERS.find(x => x.id === id)
   if (!c) return id
-  return c.title.replace(/ ?문제 ?풀이$/, "").replace(/ ?문제$/, "")
+  return localizeCluster(c, lang).title
+    .replace(/ ?문제 ?풀이$/, "")
+    .replace(/ ?문제$/, "")
+    .replace(/ (Practice|Problems)$/i, "")
 }
 
 // ⭐ 적응형 패널 — 수업별(해금) + KL 합친 풀에서 "다음 1개" + 📊 내 실력. 탭 고르기 없음.
@@ -173,14 +185,16 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const { t, lang: locale } = useLanguage()
   const [lastId, setLastId] = useState<string | null>(null)
   useEffect(() => { try { setLastId(localStorage.getItem("practice-last-problem")) } catch {} }, [])
-  const [topicFilter, setTopicFilter] = useState("all") // "all" | 토픽명
+  // 필터 값은 **클러스터 id**다 — 보이는 이름으로 잡으면 수업 중에 언어를 바꾼
+  // 순간 필터가 아무 주제와도 안 맞아서 목록이 통째로 빈다.
+  const [topicFilter, setTopicFilter] = useState("all") // "all" | 클러스터 id
   const [diffFilter, setDiffFilter] = useState<"all" | "쉬움" | "보통" | "어려움">("all")
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
   // 연습 = 수업 병행 클러스터만 (배운 개념 굳히기). 대회대비/알고리즘 문제는 알고리즘 단계 소속.
-  const all = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
-  const topics = Array.from(new Set(all.map(x => x.topic)))
+  const all = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id, locale), kl: false })))
+  const topics = clusters.map(c => ({ id: c.id, label: clusterName(c.id, locale) }))
   const filtered = topicFilter === "all" ? all
-    : all.filter(x => x.topic === topicFilter)
+    : all.filter(x => x.cluster === topicFilter)
 
   // 추천 다음 1개 — 적응형(내 수준에 맞는 난이도, 토픽 무관)
   const pool = all.map(x => ({ id: x.p.id, cluster: x.cluster, difficulty: x.p.difficulty }))
@@ -188,7 +202,9 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const recX = rec ? all.find(x => x.p.id === rec.problemId) : null
   const lastX = lastId ? all.find(x => x.p.id === lastId) : null
   const solvedInView = filtered.filter(x => solvedSet.has(x.p.id)).length // 현재 보기(주제 필터) 기준 진행
-  const viewLabel = topicFilter === "all" ? t("전체 진행", "Overall") : topicFilter
+  const viewLabel = topicFilter === "all"
+    ? t("전체 진행", "Overall")
+    : (topics.find(tp => tp.id === topicFilter)?.label ?? topicFilter)
   const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : 0)
 
   return (
@@ -201,7 +217,9 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         >
           <p className="text-[11px] font-bold text-violet-500 mb-0.5">👉 {t(`지금 추천 — ${rec.reason}`, `Recommended — ${rec.reasonEn}`)}</p>
           <p className="text-lg font-black text-gray-900 leading-tight">{localizeProblem(recX.p, locale).title}</p>
-          <p className="text-xs text-gray-500 mt-0.5">{recX.kl ? "🎯 " : ""}{recX.topic} · {recX.p.difficulty} <span className="ml-1 text-violet-400 font-bold">→</span></p>
+          {/* `p.difficulty` 는 데이터에 한국어("쉬움"/"보통"/"어려움")로 들어 있다 —
+              그대로 찍으면 영어 학생이 연습 화면에서 가장 먼저 보는 줄이 한국어다. */}
+          <p className="text-xs text-gray-500 mt-0.5">{recX.kl ? "🎯 " : ""}{recX.topic} · {diffLabel(recX.p.difficulty, locale)} <span className="ml-1 text-violet-400 font-bold">→</span></p>
         </Link>
       ) : (
         <Link href="/algo" className="block rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700 hover:bg-emerald-100 transition-colors">
@@ -231,10 +249,10 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
           className="font-bold border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-700"
         >
           <option value="all">📚 {t("주제: 전체", "Topic: All")}</option>
-          {topics.map(tp => <option key={tp} value={tp}>{tp}</option>)}
+          {topics.map(tp => <option key={tp.id} value={tp.id}>{tp.label}</option>)}
         </select>
         <span className="text-gray-200">|</span>
-        {([["all", t("전체", "All")], ["쉬움", "🟢 " + t("쉬움", "Easy")], ["보통", "🟡 " + t("보통", "Med")], ["어려움", "🔴 " + t("어려움", "Hard")]] as const).map(([k, label]) => (
+        {([["all", t("전체", "All")], ["쉬움", "🟢 " + t("쉬움", "Easy")], ["보통", "🟡 " + t("보통", "Medium")], ["어려움", "🔴 " + t("어려움", "Hard")]] as const).map(([k, label]) => (
           <button
             key={k}
             onClick={() => setDiffFilter(k as typeof diffFilter)}
