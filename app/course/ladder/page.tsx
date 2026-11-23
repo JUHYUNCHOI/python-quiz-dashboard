@@ -172,8 +172,8 @@ export default function LadderPage() {
           </h1>
           <p className="mt-3 leading-relaxed text-gray-600 break-keep">
             {t(
-              `연습은 ${RUNGS.length}문제를 난이도순으로 늘어놓은 화면입니다. 어디부터 풀지는 배치고사가 정해 줍니다. 12문항이면 끝나요.`,
-              `Practice lines up ${RUNGS.length.toLocaleString("en-US")} problems by difficulty. The placement test decides where you start — 12 questions is all it takes.`,
+              `연습은 ${RUNGS.length}문제를 난이도순으로 늘어놓은 화면입니다. 어디부터 풀지는 배치고사가 정해 줍니다. 13문항이면 끝나요.`,
+              `Practice lines up ${RUNGS.length.toLocaleString("en-US")} problems by difficulty. The placement test decides where you start — 13 questions is all it takes.`,
             )}
           </p>
           <Link
@@ -216,8 +216,12 @@ export default function LadderPage() {
             </span>
             <span style={{ display: "block", fontSize: 12, color: "var(--color-amber-700)", marginTop: 2, wordBreak: "keep-all" }}>
               {t(
-                "12문항으로 티어를 정하고, 내 티어 문제 10개를 맞히면 승급해요.",
-                "12 questions set your tier. Solve 10 at your tier to rank up.",
+                /* ⚠️ 「10개 맞히면 승급」은 더 이상 사실이 아니다 — 10개는 승급
+                   **자격**까지고, 실제 승급은 학교에서 보는 시험이 정한다
+                   (`components/tier-stages.tsx` 의 3단계). 옛 문장을 그대로 두면
+                   학생이 10개를 풀고 나서 "왜 안 올라가지" 로 교실에서 막힌다. */
+                "13문항으로 티어를 정하고, 내 티어 문제 10개를 풀면 승급 시험을 볼 수 있어요.",
+                "13 questions set your tier. Solve 10 at your tier to unlock the promotion exam.",
               )}
             </span>
           </span>

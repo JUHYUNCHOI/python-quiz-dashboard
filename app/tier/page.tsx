@@ -101,8 +101,8 @@ export default function TierPage() {
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">{t("티어", "Tier")}</h1>
             <p className="mt-2 max-w-xl text-base text-gray-600 break-keep">
               {t(
-                "먼저 배치고사를 보세요. 12문항으로 내 수준에 맞는 티어를 정합니다.",
-                "Take the placement test first. 12 questions set the tier that matches your level.",
+                "먼저 배치고사를 보세요. 출력 예측 12문항과 코드 작성 1문항으로 내 티어를 정합니다.",
+                "Take the placement test first. 12 prediction questions plus one coding problem set your tier.",
               )}
             </p>
           </div>
@@ -117,7 +117,7 @@ export default function TierPage() {
         </div>
 
         {/* 시험을 보기 **전에** 무슨 티어가 있는지 먼저 보여 준다 — 받게 될 게
-            뭔지 모르는 채로 12문항을 푸는 건 설명 없는 시험이다. */}
+            뭔지 모르는 채로 배치고사를 푸는 건 설명 없는 시험이다. */}
         <div className="mt-8">
           <TierLadder current={null} variant="board" />
         </div>
