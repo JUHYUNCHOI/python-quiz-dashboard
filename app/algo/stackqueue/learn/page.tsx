@@ -1136,8 +1136,8 @@ export default function StackQueuePage() {
       <main className="max-w-2xl mx-auto px-4 pt-4">
         <div className="mb-4">
           <JourneyBreadcrumb items={[
-              { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
-              { label: "스택/큐", labelEn: "Stack/Queue", emoji: "📊" },
+              { label: "알고리즘", labelEn: "Algorithms", href: "/algo" },
+              { label: "스택/큐", labelEn: "Stack/Queue" },
             ]} />
           <div className="flex items-center gap-2 mb-3 flex-wrap">
             <span className="text-3xl">📚</span>

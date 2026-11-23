@@ -638,8 +638,8 @@ export default function SlidingWindowPage() {
         {/* 왼쪽 rail */}
         <div className="mb-4 md:mb-0 md:sticky md:top-4">
           <JourneyBreadcrumb items={[
-              { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
-              { label: "슬라이딩 윈도우", labelEn: "Sliding Window", emoji: "🪟" },
+              { label: "알고리즘", labelEn: "Algorithms", href: "/algo" },
+              { label: "슬라이딩 윈도우", labelEn: "Sliding Window" },
             ]} />
           <div className="flex items-center gap-2 mb-3 flex-wrap">
             <span className="text-3xl">🪟</span>

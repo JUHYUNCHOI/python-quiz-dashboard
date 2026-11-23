@@ -23,6 +23,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, BookOpen } from "lucide-react"
 import { PracticeRunner } from "@/components/practice/practice-runner"
 import { LessonPanel } from "@/components/algo/lesson-panel"
 import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
+import { DifficultyMark, DIFFICULTY_MARKS } from "@/components/algo/difficulty-mark"
 import { ALGO_TOPIC_MAP } from "@/data/algo/topics"
 import type { PracticeCluster } from "@/data/practice/types"
 import React from "react"
@@ -39,6 +40,14 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   쉬움: "bg-emerald-100 text-emerald-700 border-emerald-200",
   보통: "bg-amber-100 text-amber-700 border-amber-200",
   어려움: "bg-red-100 text-red-700 border-red-200",
+}
+
+/* 난이도는 데이터에 한국어로만 들어 있다. 영어 화면에서 그대로 찍으면
+   「쉬움」이 그냥 섞여 나온다 (실제로 그랬다). 여기서 번역한다. */
+const DIFFICULTY_EN: Record<string, string> = {
+  쉬움: "Easy",
+  보통: "Medium",
+  어려움: "Hard",
 }
 
 // 인라인 마크다운: **bold**, `code` 파싱
@@ -146,7 +155,7 @@ export function TopicPracticePage({ topicId, cluster, lesson }: TopicPracticePag
               "text-xs px-2 py-0.5 rounded-full font-medium border",
               DIFFICULTY_COLORS[problem.difficulty] ?? DIFFICULTY_COLORS["보통"]
             )}>
-              {problem.difficulty}
+              {t(problem.difficulty, DIFFICULTY_EN[problem.difficulty] ?? problem.difficulty)}
             </span>
             <h2 className="text-base font-bold text-gray-900">
               {t(problem.title, problem.en?.title ?? problem.title)}
@@ -218,12 +227,12 @@ export function TopicPracticePage({ topicId, cluster, lesson }: TopicPracticePag
       <main className="max-w-2xl mx-auto px-4 pt-4">
         <div className="mb-4">
           <JourneyBreadcrumb items={[
-            { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
+            { label: "알고리즘", labelEn: "Algorithms", href: "/algo" },
             // 토픽 이름은 반드시 topicId 에서 유도 — 하드코딩하면 20 개 토픽이 전부
             // 같은 이름으로 보인다. (2026-07-30: 20 개 중복 파일을 이 컴포넌트로 합칠 때
             // recursion 버전을 원본으로 써서 "재귀 📊" 가 그대로 남아 있었다.)
             { label: meta?.title ?? cluster.title, labelEn: meta?.titleEn ?? cluster.en?.title ?? cluster.title,
-              href: `/algo/${topicId}`, emoji: meta?.icon ?? cluster.emoji },
+              href: `/algo/${topicId}` },
             { label: "문제 풀이", labelEn: "Practice" },
           ]} />
           <div className="flex items-center gap-2 mb-2">
@@ -288,7 +297,7 @@ export function TopicPracticePage({ topicId, cluster, lesson }: TopicPracticePag
                         "text-[10px] px-1.5 py-0.5 rounded font-bold border",
                         DIFFICULTY_COLORS[p.difficulty] ?? DIFFICULTY_COLORS["보통"]
                       )}>
-                        {p.difficulty}
+                        {t(p.difficulty, DIFFICULTY_EN[p.difficulty] ?? p.difficulty)}
                       </span>
                     </div>
                   </div>
@@ -312,7 +321,10 @@ export function TopicPracticePage({ topicId, cluster, lesson }: TopicPracticePag
               {warmup.length > 0 && (
                 <div className="mb-5">
                   <div className="flex items-center gap-2 mb-2 px-1">
-                    <span className="text-sm font-black text-green-700">🟢 {t("워밍업", "Warm-up")}</span>
+                    <span className="flex items-center gap-1.5 text-sm font-black text-green-700">
+                      <DifficultyMark {...DIFFICULTY_MARKS["쉬움"]} />
+                      {t("워밍업", "Warm-up")}
+                    </span>
                     <span className="text-[11px] text-gray-500">{t("— 가볍게 시작 (쉬움)", "— gentle start (easy)")}</span>
                   </div>
                   <div className="space-y-2">
@@ -323,7 +335,10 @@ export function TopicPracticePage({ topicId, cluster, lesson }: TopicPracticePag
               {easy.length > 0 && (
                 <div className="mb-5">
                   <div className="flex items-center gap-2 mb-2 px-1">
-                    <span className="text-sm font-black text-emerald-700">🌱 {t("패턴 적용", "Pattern Application")}</span>
+                    <span className="flex items-center gap-1.5 text-sm font-black text-emerald-700">
+                      <DifficultyMark {...DIFFICULTY_MARKS["보통"]} />
+                      {t("패턴 적용", "Pattern Application")}
+                    </span>
                     <span className="text-[11px] text-gray-500">{t("— 방금 배운 거 따라 한 번 더 (보통)", "— apply what you learned (medium)")}</span>
                   </div>
                   <div className="space-y-2">
@@ -334,7 +349,10 @@ export function TopicPracticePage({ topicId, cluster, lesson }: TopicPracticePag
               {hard.length > 0 && (
                 <div className="mb-3">
                   <div className="flex items-center gap-2 mb-2 px-1">
-                    <span className="text-sm font-black text-amber-700">🏆 {t("응용 도전", "Challenge")}</span>
+                    <span className="flex items-center gap-1.5 text-sm font-black text-amber-700">
+                      <DifficultyMark {...DIFFICULTY_MARKS["어려움"]} />
+                      {t("응용 도전", "Challenge")}
+                    </span>
                     <span className="text-[11px] text-gray-500">{t("— Bronze/Silver 급 응용 (어려움)", "— Bronze/Silver level (hard)")}</span>
                   </div>
                   <div className="space-y-2">

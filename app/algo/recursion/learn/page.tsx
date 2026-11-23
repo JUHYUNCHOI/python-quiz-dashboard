@@ -1147,8 +1147,8 @@ export default function RecursionPage() {
       <main className="max-w-2xl mx-auto px-4 pt-4">
         <div className="mb-4">
           <JourneyBreadcrumb items={[
-              { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
-              { label: "재귀", labelEn: "Recursion", emoji: "🔁" },
+              { label: "알고리즘", labelEn: "Algorithms", href: "/algo" },
+              { label: "재귀", labelEn: "Recursion" },
             ]} />
           <div className="flex items-center gap-2 mb-3">
             <span className="text-3xl">🔁</span>

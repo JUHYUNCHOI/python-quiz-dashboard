@@ -15,7 +15,6 @@ export interface CrumbItem {
   label: string
   labelEn: string
   href?: string  // 마지막 항목 = 현재 페이지 = href 없음
-  emoji?: string
 }
 
 export function JourneyBreadcrumb({ items }: { items: CrumbItem[] }) {
@@ -30,15 +29,11 @@ export function JourneyBreadcrumb({ items }: { items: CrumbItem[] }) {
         <span key={i} className="flex items-center gap-1">
           <ChevronRight className="w-3 h-3 text-gray-300" />
           {item.href ? (
-            <Link href={item.href} className="hover:text-orange-600 transition-colors flex items-center gap-0.5">
-              {item.emoji && <span>{item.emoji}</span>}
-              <span className="font-medium">{t(item.label, item.labelEn)}</span>
+            <Link href={item.href} className="hover:text-orange-600 transition-colors font-medium">
+              {t(item.label, item.labelEn)}
             </Link>
           ) : (
-            <span className="text-gray-700 font-bold flex items-center gap-0.5">
-              {item.emoji && <span>{item.emoji}</span>}
-              <span>{t(item.label, item.labelEn)}</span>
-            </span>
+            <span className="text-gray-700 font-bold">{t(item.label, item.labelEn)}</span>
           )}
         </span>
       ))}

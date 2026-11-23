@@ -77,7 +77,7 @@ export default function AlgoPage() {
             className="block rounded-2xl border-2 border-violet-400 bg-violet-50 px-5 py-4 hover:shadow-md transition-all"
           >
             <p className="text-[11px] font-extrabold text-violet-500 tracking-wide mb-1">
-              ⭐ {isFresh ? t("여기서 시작", "START HERE") : t("지금 할 것", "DO THIS NOW")}
+              {isFresh ? t("여기서 시작", "START HERE") : t("지금 할 것", "DO THIS NOW")}
             </p>
             <div className="flex items-center gap-3">
               <span className="text-3xl shrink-0">{path.current.icon}</span>

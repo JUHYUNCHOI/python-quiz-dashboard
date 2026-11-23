@@ -922,7 +922,7 @@ function PracticeContent() {
   return (
     <main className="max-w-2xl mx-auto px-4 pt-4">
       <JourneyBreadcrumb items={[
-        { label: "연습 (수업별 클러스터)", labelEn: "Practice (per-lesson clusters)", emoji: "💪" },
+        { label: "연습 (수업별 클러스터)", labelEn: "Practice (per-lesson clusters)" },
       ]} />
       <ClusterList
         onSelect={c => {

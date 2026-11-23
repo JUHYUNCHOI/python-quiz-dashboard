@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { ArrowLeft, BookOpen, CheckCircle2 } from "lucide-react"
 import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { LessonPanel } from "@/components/algo/lesson-panel"
+import { DifficultyMark, DIFFICULTY_MARKS } from "@/components/algo/difficulty-mark"
 import { AlgoContestSection } from "@/components/algo/contest-section"
 
 interface TopicProblem { id: string; difficulty: string; title: string; en?: { title?: string } }
@@ -53,9 +54,9 @@ export function TopicProblemsPage({
   const isFresh = solvedCount === 0
 
   const groups = [
-    { key: "쉬움", ko: "🟢 쉬움", en: "🟢 Easy" },
-    { key: "보통", ko: "🟡 보통", en: "🟡 Medium" },
-    { key: "어려움", ko: "🔴 어려움", en: "🔴 Hard" },
+    { key: "쉬움", ko: "쉬움", en: "Easy" },
+    { key: "보통", ko: "보통", en: "Medium" },
+    { key: "어려움", ko: "어려움", en: "Hard" },
   ] as const
 
   return (
@@ -63,7 +64,7 @@ export function TopicProblemsPage({
       <Header />
       <main className="max-w-2xl mx-auto px-4 pt-4">
         <JourneyBreadcrumb items={[
-          { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
+          { label: "알고리즘", labelEn: "Algorithms", href: "/algo" },
           { label: titleKo, labelEn: titleEn },
         ]} />
 
@@ -98,8 +99,9 @@ export function TopicProblemsPage({
 
         {/* 처음이면 수업 권유 */}
         {isFresh && (
-          <button onClick={() => setShowLesson(true)} className="block w-full text-left mb-4 rounded-xl border-2 border-dashed border-violet-200 bg-violet-50/50 px-4 py-3 text-sm text-violet-700 font-bold hover:bg-violet-50 transition-colors">
-            👋 {t(`${titleKo}이(가) 처음이면 — 먼저 📖 수업을 펼쳐보세요`, `New here? Open the 📖 lesson first`)}
+          <button onClick={() => setShowLesson(true)} className="flex w-full items-center gap-2 text-left mb-4 rounded-xl border-2 border-dashed border-violet-200 bg-violet-50/50 px-4 py-3 text-sm text-violet-700 font-bold hover:bg-violet-50 transition-colors">
+            <BookOpen className="w-4 h-4 shrink-0" />
+            {t(`${titleKo}이(가) 처음이면 — 먼저 수업을 펼쳐보세요`, `New here? Open the lesson first`)}
           </button>
         )}
 
@@ -112,6 +114,7 @@ export function TopicProblemsPage({
             return (
               <section key={g.key}>
                 <div className="flex items-center gap-2 mb-2 text-sm font-bold text-gray-700">
+                  <DifficultyMark {...DIFFICULTY_MARKS[g.key]} />
                   {t(g.ko, g.en)}
                   <span className={cn("text-xs", gSolved > 0 ? "text-green-600 font-bold" : "text-gray-400")}>{gSolved}/{items.length}</span>
                 </div>

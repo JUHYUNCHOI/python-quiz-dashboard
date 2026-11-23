@@ -619,7 +619,7 @@ export default function QuestPage() {
       <Header />
       <main className="max-w-6xl mx-auto px-4 pt-4 pb-28">
         <JourneyBreadcrumb items={[
-          { label: "대회 문제", labelEn: "Contest Problems", emoji: "🏆" },
+          { label: "대회 문제", labelEn: "Contest Problems" },
         ]} />
 
         {/* Page header */}

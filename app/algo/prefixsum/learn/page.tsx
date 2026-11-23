@@ -862,8 +862,8 @@ export default function PrefixSumPage() {
         {/* 왼쪽 rail: 제목 · 챕터 목록 · 진도 (데스크탑 고정) */}
         <div className="mb-4 md:mb-0 md:sticky md:top-4">
           <JourneyBreadcrumb items={[
-              { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
-              { label: "누적합", labelEn: "Prefix Sum", emoji: "📊" },
+              { label: "알고리즘", labelEn: "Algorithms", href: "/algo" },
+              { label: "누적합", labelEn: "Prefix Sum" },
             ]} />
           <div className="flex items-center gap-2 mb-3 flex-wrap">
             <span className="text-3xl">➕</span>
