@@ -138,20 +138,34 @@ async function runPythonInBrowser(code: string, stdin?: string): Promise<PistonR
   }
 }
 
+/**
+ * **이 세션에서 파이썬 채점 서버가 이미 죽은 걸 확인했다.**
+ *
+ * 왜: 드롭릿이 내려가 있으면 제출마다 타임아웃을 다시 기다린다. 테스트
+ * 케이스가 5개면 5번 전부 기다린 뒤에야 브라우저로 넘어간다 — 학생 눈에는
+ * 그냥 「느리다」로 보인다. 한 번 확인했으면 그 뒤로는 바로 브라우저로 간다.
+ * 탭을 새로고침하면 초기화되므로 서버가 복구되면 자연히 서버를 다시 쓴다.
+ */
+let pythonServerDown = false
+
 export async function callPiston(
   lang: "cpp" | "python",
   code: string,
   stdin?: string,
-  timeoutMs = 15000,
+  /* 파이썬은 컴파일 단계가 없어 15초가 필요 없다. 서버가 죽었을 때
+     학생을 덜 기다리게 하려고 더 짧게 끊는다. C++ 은 컴파일이 있어 그대로 15초. */
+  timeoutMs = lang === "python" ? 6000 : 15000,
 ): Promise<PistonResult> {
   const langConf = PISTON_LANG_VERSION[lang] ?? PISTON_LANG_VERSION.cpp
 
   /* URL 이 비어 있으면 fetch("") 가 현재 페이지로 POST 를 쏴서 405 가 돌아온다 —
-     학생 화면에는 그게 「네트워크 오류」로 보인다. 아예 가지 않는다. */
+     학생 화면에는 그게 「네트워크 오류」로 보인다. 아예 가지 않는다.
+     서버가 이미 죽은 걸 확인했다면 역시 가지 않는다. */
+  if (lang === "python" && (!PISTON_URL || pythonServerDown)) {
+    return runPythonInBrowser(code, stdin)
+  }
   if (!PISTON_URL) {
-    return lang === "python"
-      ? runPythonInBrowser(code, stdin)
-      : { ok: false, output: "", networkError: true }
+    return { ok: false, output: "", networkError: true }
   }
 
   const ctl = new AbortController()
@@ -211,9 +225,10 @@ export async function callPiston(
  * 네트워크 에러에만 1회 재시도하는 편의 래퍼.
  * 컴파일/런타임 에러는 재시도하지 않음 (학생 코드 문제이므로).
  *
- * 두 번 다 실패하면 **파이썬은 브라우저에서 돌린다**(`runPythonInBrowser`).
- * 재시도를 먼저 하는 이유는 일시적인 5xx 한 번에 학생을 느린 경로로
- * 보내지 않으려는 것이다 — 서버가 살아 있으면 서버가 더 빠르다.
+ * **파이썬은 재시도하지 않고 바로 브라우저로 넘긴다.** 브라우저 실행기는
+ * 같은 규칙으로 채점하고, 워커를 미리 띄워 뒀으면 서버보다 오히려 빠르다.
+ * 여기서 한 번 더 기다리면 학생은 그만큼 더 멍하니 기다린다.
+ * C++ 은 브라우저 대안이 없으니 그대로 1회 재시도한다.
  */
 export async function callPistonWithRetry(
   lang: "cpp" | "python",
@@ -222,12 +237,15 @@ export async function callPistonWithRetry(
   retryDelayMs = 400,
 ): Promise<PistonResult> {
   let result = await callPiston(lang, code, stdin)
+
+  if (result.networkError && lang === "python") {
+    pythonServerDown = true
+    return runPythonInBrowser(code, stdin)
+  }
+
   if (result.networkError) {
     await new Promise(r => setTimeout(r, retryDelayMs))
     result = await callPiston(lang, code, stdin)
-  }
-  if (result.networkError && lang === "python") {
-    result = await runPythonInBrowser(code, stdin)
   }
   return result
 }

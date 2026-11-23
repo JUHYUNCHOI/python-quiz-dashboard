@@ -12,6 +12,7 @@ import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { useIsOwner } from "@/components/owner-only-guard"
 import { recordVerifiedSolve } from "@/lib/tier-store"
 import { blankStarter, type RunLang } from "@/lib/starter-code"
+import { preloadPython } from "@/utils/pyodideWorker"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
@@ -292,6 +293,14 @@ export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = f
   const [stuckOpen, setStuckOpen] = useState(false)   // 🤔 막혔어요 패널 열림 (stuckLadder 전용)
   const [failCount, setFailCount] = useState(0)
   const [scaffoldShown, setScaffoldShown] = useState(false)
+
+  /* 파이썬이면 Pyodide 를 미리 백그라운드 로딩.
+     채점 서버가 죽으면 브라우저 실행기로 넘어가는데, 그때 CDN 에서 Pyodide 를
+     처음 받으면 몇 초가 더 걸린다. 학생이 코드를 쓰는 동안 미리 받아 둔다.
+     (서버가 살아 있으면 쓰이지 않고 끝난다 — 워커 하나 값이다.) */
+  useEffect(() => {
+    if (lang === "python") preloadPython()
+  }, [lang])
 
   // 코드가 바뀔 때마다 localStorage에 자동저장 (debounce 400ms).
   // 브라우저 새로고침이나 예기치 않은 리로드에도 학생 작업 보존.

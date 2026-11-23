@@ -20,7 +20,7 @@
  * (코드 문항만 예외다 — 어느 테스트에서 틀렸는지 안 보여주면 고칠 수가 없다.)
  */
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
@@ -36,6 +36,7 @@ import {
 import { PLACEMENT_ITEMS } from "@/data/placement-test"
 import { codeTaskTitle, codeTaskPrompt } from "@/data/placement-code"
 import { callPistonWithRetry } from "@/lib/piston"
+import { preloadPython } from "@/utils/pyodideWorker"
 import { tierInfo, tierLabel, TIER_IDS } from "@/lib/tier-system"
 import { placeTier } from "@/lib/tier-store"
 
@@ -59,6 +60,11 @@ export default function PlacementPage() {
   // ── 코드 작성 단계 전용 상태 ──────────────────────────────────────────────
   const [codeLang, setCodeLang] = useState<CodeLang>("python")
   const [code, setCode] = useState(STARTER.python)
+  /* 채점 서버가 죽었을 때 쓰는 브라우저 실행기를 미리 받아 둔다.
+     배치고사는 한 번에 끝나는 시험이라 제출 때 몇 초 더 기다리게 하면 안 된다. */
+  useEffect(() => {
+    if (codeLang === "python") preloadPython()
+  }, [codeLang])
   const [judging, setJudging] = useState(false)
   /** 테스트별 통과 여부. 아직 안 돌렸으면 null. */
   const [verdict, setVerdict] = useState<
