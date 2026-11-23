@@ -111,26 +111,38 @@ function normalize(s: string) {
   return s.trim().replace(/\s+/g, " ").toLowerCase()
 }
 
-function friendlyError(stderr: string): string {
+function friendlyError(stderr: string, isEn = false): string {
   // 한글/특수 유니코드 문자가 코드에 섞여 들어간 경우 (한영 키 실수)
   // 예: '\U00003131' (= ㄱ), '\U00003134' (= ㄴ), '\U0000314e' (= ㅎ) ...
   const unicodeMatch = stderr.match(/'\\U([0-9a-fA-F]{8})'/)
   if (unicodeMatch) {
     const codePoint = parseInt(unicodeMatch[1], 16)
     const ch = String.fromCodePoint(codePoint)
-    return `❌ 한글/특수문자가 코드에 섞여 들어갔어요! ('${ch}' 문자 발견)\n` +
-           `💡 한영 키가 잘못 눌렸을 수 있어요. 코드 끝부분을 확인해 보세요.`
+    return isEn
+      ? `❌ A non-ASCII character slipped into your code! (found '${ch}')\n` +
+        `💡 Your keyboard may have switched layouts. Check the end of your code.`
+      : `❌ 한글/특수문자가 코드에 섞여 들어갔어요! ('${ch}' 문자 발견)\n` +
+        `💡 한영 키가 잘못 눌렸을 수 있어요. 코드 끝부분을 확인해 보세요.`
   }
-  if (stderr.includes("error: expected ';'")) return "❌ 세미콜론(;)이 빠진 곳이 있어요!"
-  if (stderr.includes("error: expected '}'")) return "❌ 닫는 중괄호 }가 빠진 곳이 있어요!"
-  if (stderr.includes("error: expected '{'")) return "❌ 여는 중괄호 {가 빠진 곳이 있어요!"
+  if (stderr.includes("error: expected ';'"))
+    return isEn ? "❌ A semicolon (;) is missing somewhere!" : "❌ 세미콜론(;)이 빠진 곳이 있어요!"
+  if (stderr.includes("error: expected '}'"))
+    return isEn ? "❌ A closing brace } is missing somewhere!" : "❌ 닫는 중괄호 }가 빠진 곳이 있어요!"
+  if (stderr.includes("error: expected '{'"))
+    return isEn ? "❌ An opening brace { is missing somewhere!" : "❌ 여는 중괄호 {가 빠진 곳이 있어요!"
   if (stderr.includes("was not declared")) {
     const m = stderr.match(/'([^']+)' was not declared/)
+    if (isEn) {
+      return m
+        ? `❌ '${m[1]}' was never declared. Check for a typo or a missing #include.`
+        : "❌ Something is used but never declared."
+    }
     return m ? `❌ '${m[1]}'이 선언되지 않았어요. 오타나 #include를 확인해보세요.` : "❌ 선언되지 않은 변수/함수가 있어요."
   }
   if (stderr.includes("error:")) {
     const firstError = stderr.split("\n").find(l => l.includes("error:"))
-    return "❌ 컴파일 오류: " + (firstError?.split("error:")[1]?.trim() || stderr.split("\n")[0])
+    const detail = firstError?.split("error:")[1]?.trim() || stderr.split("\n")[0]
+    return (isEn ? "❌ Compile error: " : "❌ 컴파일 오류: ") + detail
   }
   return "❌ " + stderr.split("\n")[0]
 }
@@ -333,7 +345,7 @@ export function CppRunner({
       const runStdout = result.output.trimEnd()
 
       if (result.compileError) {
-        setError(friendlyError(result.compileError))
+        setError(friendlyError(result.compileError, isEn))
         if (!submissionMode) {
           const next = failCount + 1
           setFailCount(next)
@@ -341,7 +353,7 @@ export function CppRunner({
           onError?.()
         }
       } else if (result.runtimeError) {
-        setError("❌ 런타임 오류: " + result.runtimeError.split("\n")[0])
+        setError((isEn ? "❌ Runtime error: " : "❌ 런타임 오류: ") + result.runtimeError.split("\n")[0])
         if (!submissionMode) {
           const next = failCount + 1
           setFailCount(next)

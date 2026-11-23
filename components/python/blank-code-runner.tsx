@@ -192,6 +192,9 @@ export function BlankCodeRunner({
 
   const { values: savedValues, correct: savedCorrect } = loadSaved()
 
+  // detectInitialWarnings 가 useState 초기화에서 t() 를 쓰므로 여기서 먼저 꺼낸다.
+  const { t, lang } = useLanguage()
+
   const [filledValues, setFilledValues] = useState<Record<number, string>>(savedValues)
 
   // 저장된 값에서도 중복 함수 호출 초기 감지
@@ -206,7 +209,7 @@ export function BlankCodeRunner({
         const before = ln.slice(0, m2.index)
         const funcMatch = before.match(/(\w+)\s*\($/)
         if (funcMatch && val.startsWith(funcMatch[1] + "(")) {
-          warnings[bIdx] = `💡 "${funcMatch[1]}(" 는 이미 있어요! 괄호 안에 들어갈 값만 입력하세요.`
+          warnings[bIdx] = t(`💡 "${funcMatch[1]}(" 는 이미 있어요! 괄호 안에 들어갈 값만 입력하세요.`, `💡 "${funcMatch[1]}(" is already there! Just type what goes inside the parentheses.`)
         }
         bIdx++
       }
@@ -234,14 +237,13 @@ export function BlankCodeRunner({
       .then(() => setIsPyodideReady(true))
       .catch((err) => {
         console.error("Pyodide 로드 에러:", err)
-        setError("Python 환경을 불러오는 중...")
+        setError(t("Python 환경을 불러오는 중...", "Loading the Python environment..."))
       })
   }, [])
 
   // DB 연동 context (localStorage 저장에도 lessonId 필요하므로 먼저 선언)
   const { getSubmission, saveSubmission, loaded: dbLoaded, lessonId: dbLessonId } = useCodeSubmission()
   const { user } = useAuth()
-  const { t, lang } = useLanguage()
   // 선생님 뷰: 친근 메시지는 그대로 띄우되 원본 영어 에러를 펼친 상태로 (디버깅용).
   const isTeacher = useEffectiveIsTeacher()
 
@@ -303,7 +305,7 @@ export function BlankCodeRunner({
 
   const runCode = useCallback(async () => {
     if (!isPyodideReady) {
-      setError("Python 로딩 중...")
+      setError(t("Python 로딩 중...", "Loading Python..."))
       return
     }
 
@@ -333,7 +335,7 @@ export function BlankCodeRunner({
       }
 
       if (!res.ok) {
-        setError(res.error || "에러!")
+        setError(res.error || t("에러!", "Error!"))
         setIsCorrect(false)
         setAttempts(prev => prev + 1)
         if (attempts >= 1 && hint) setShowHint(true)
@@ -376,7 +378,7 @@ export function BlankCodeRunner({
       }
     } catch (err: any) {
       // 안전망 — runPython 은 보통 throw 하지 않지만(결과로 에러 반환), 예기치 못한 경우 대비.
-      setError(err?.message || "에러!")
+      setError(err?.message || t("에러!", "Error!"))
       setIsCorrect(false)
       setAttempts(prev => prev + 1)
       if (attempts >= 1 && hint) setShowHint(true)
@@ -495,7 +497,7 @@ export function BlankCodeRunner({
                       const before = ln.slice(0, m2.index)
                       const funcMatch = before.match(/(\w+)\s*\($/)
                       if (funcMatch && newVal.trim().startsWith(funcMatch[1] + "(")) {
-                        warning = `💡 "${funcMatch[1]}(" 는 이미 있어요! 괄호 안에 들어갈 값만 입력하세요.`
+                        warning = t(`💡 "${funcMatch[1]}(" 는 이미 있어요! 괄호 안에 들어갈 값만 입력하세요.`, `💡 "${funcMatch[1]}(" is already there! Just type what goes inside the parentheses.`)
                       }
                     }
                     bIdx++
