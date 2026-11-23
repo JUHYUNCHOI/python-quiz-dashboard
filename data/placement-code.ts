@@ -1,41 +1,61 @@
 /**
- * 배치고사 — 코드 작성 문항.
+ * 배치고사 문제 은행 — **백준식 코딩 문제 10개** (단계 1..10에 각 1개).
  *
- * ── 왜 출력 예측 12문항만으로는 부족한가 ──────────────────────────────────
- * 출력 예측은 빠르지만 **읽기 능력**만 잰다. "읽을 줄 아는데 못 짜는" 학생이
- * 실재하고, 그런 학생이 골드로 배치되면 승급 문제를 한 개도 못 푼다.
- * 그래서 이분 탐색으로 단계를 좁힌 뒤, **마지막 한 문항은 직접 짜게 한다.**
+ * ── 왜 출력 예측을 걷어냈나 ───────────────────────────────────────────────
+ * 예전 배치고사는 "이 코드의 출력은?" 12문항 + 코드 작성 2문항이었다.
+ * 출력 예측은 빠르다는 장점이 있지만 **읽기 능력만 잰다.** 우리가 배치하려는
+ * 자리(티어)에서 학생이 할 일은 처음부터 끝까지 "문제를 읽고 코드를 짜는 것"
+ * 하나다. 재는 것과 쓸 것이 다르면 배치가 틀린다.
  *
- * ── 왜 2문항인가 ──────────────────────────────────────────────────────────
- * 코드 작성은 한 문항에 5~10분이다. 전부 코드로 채우면 배치고사가 한 시간짜리
- * 시험이 돼서 아무도 안 본다. 2문항이면 10분대 시험에 7~12분이 붙는다.
+ * 그래서 배치고사는 **전부 코딩 문제**다. 이분 탐색이 단계를 한 번씩만
+ * 방문하므로 3~4문항으로 끝난다 (`lib/placement-engine.ts`).
  *
- * 두 문항은 역할이 다르다 (`lib/placement-engine.ts`):
- *   ① 확정된 단계의 문항 — **올라간 티어를 확인한다.** 떨어지면 한 칸 내린다.
- *   ② 한 단계 위의 문항 — **읽기로 못 넘은 천장을 뚫게 한다.** 통과하면 한 칸 올린다.
+ * ── 문제문은 백준 형식을 따른다 ───────────────────────────────────────────
+ * 제목 / 문제 / 입력 / 출력 / 제한 / 예제 입력·출력.
+ * 학생이 대회·백준에서 실제로 만나는 모양 그대로다. "입력 형식을 몰라서
+ * 틀리는" 일을 줄이려고 **예제는 반드시 공개**한다 (`sampleCount`).
  *
- * 1문항이던 때는 ②가 없어서, 짤 줄 아는 학생이 출력 예측에서 한 번 실수하면
- * 되찾을 길이 없었다.
+ * ⚠️ 문제문은 `whitespace-pre-wrap` 으로 생짜 렌더된다 — 마크다운이 아니다.
+ *    `**강조**` 를 쓰면 학생 화면에 별표가 그대로 보인다.
  *
- * ── 채점 ──────────────────────────────────────────────────────────────────
- * 실제 테스트케이스로 Piston 에서 돌린다. 연습 문제와 **같은 채점기**다:
- * stdin 을 넣고 stdout 을 바이트 비교한다. 그래서 Python 과 C++ 중
- * 아무거나 써도 된다 — 채점기는 언어를 모른다.
+ * ── 제한은 실제로 지키는 값만 적는다 ──────────────────────────────────────
+ * 백준은 N ≤ 100,000 같은 큰 제한으로 시간복잡도를 강제하지만, 우리 채점은
+ * 작은 테스트만 돌린다. 지키지도 않는 큰 제한을 적으면 "제한을 읽고 누적합을
+ * 짠 학생"과 "이중 루프를 짠 학생"이 똑같이 통과해 제한이 거짓말이 된다.
+ * 그래서 테스트가 실제로 담보하는 범위만 적는다.
  *
  * ── 정답 키의 출처 ────────────────────────────────────────────────────────
- * 각 문항의 기대 출력은 문제문에서 기계적으로 유도되는 값만 썼다
- * (합·최댓값·개수 등). 손으로 "이쯤 나오겠지" 한 값은 없다.
+ * 전 문제를 `scripts/gen-placement-keys.py` 의 레퍼런스 해답으로 **실제
+ * 실행해서** 받은 stdout 이다. 손으로 예측한 값은 한 개도 없다.
+ * 테스트케이스를 고치려면 그 스크립트를 고치고 다시 돌려 붙여넣는다.
  */
 
 export interface PlacementCodeTask {
   id: string
-  /** 1..10 — PlacementItem.step 과 같은 계단 */
+  /** 1..10 — TIERS 인덱스+1. 난이도 계단. 학생에게 숫자는 보여주지 않는다. */
   step: number
+  /** 어떤 능력을 보는지 한 줄. 결과 화면의 해설에 쓴다. */
+  skill: string
+  skillEn: string
   title: string
   titleEn: string
-  /** 문제문. 입력 형식과 출력 형식을 반드시 명시한다 (바이트 비교 채점이므로) */
-  prompt: string
-  promptEn: string
+  /** 문제 — 무엇을 구하는가 */
+  desc: string
+  descEn: string
+  /** 입력 형식. 바이트 비교 채점이므로 빠짐없이 적는다. */
+  input: string
+  inputEn: string
+  /** 출력 형식 */
+  output: string
+  outputEn: string
+  /** 제한. 테스트가 실제로 담보하는 범위만 적는다. */
+  limits: string
+  limitsEn: string
+  /**
+   * `tests` 중 **앞에서 몇 개를 예제로 공개**하는가.
+   * 예제와 테스트를 따로 적으면 둘이 어긋난다 — 한 배열에서 잘라 쓴다.
+   */
+  sampleCount: number
   /** stdin → 기대 stdout. 전부 통과해야 합격. */
   tests: { stdin: string; expected: string }[]
 }
@@ -43,138 +63,299 @@ export interface PlacementCodeTask {
 export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
   {
     id: "pc01", step: 1,
-    title: "두 수 더하기", titleEn: "Add two numbers",
-    prompt:
-      "정수 두 개가 공백으로 한 줄에 주어집니다. 두 수의 합을 한 줄로 출력하세요.",
-    promptEn:
-      "Two integers are given on one line, separated by a space. Print their sum on one line.",
+    skill: "입출력과 사칙연산", skillEn: "I/O and arithmetic",
+    title: "합과 차", titleEn: "Sum and Difference",
+    desc:
+      "두 정수 A와 B가 주어진다. A+B와 A-B를 구하는 프로그램을 작성하시오.",
+    descEn:
+      "Two integers A and B are given. Write a program that computes A+B and A-B.",
+    input:
+      "첫째 줄에 A와 B가 공백 한 칸으로 구분되어 주어진다.",
+    inputEn:
+      "The first line contains A and B, separated by a single space.",
+    output:
+      "첫째 줄에 A+B를, 둘째 줄에 A-B를 출력한다.",
+    outputEn:
+      "Print A+B on the first line and A-B on the second line.",
+    limits: "-1,000 ≤ A, B ≤ 1,000",
+    limitsEn: "-1,000 ≤ A, B ≤ 1,000",
+    sampleCount: 1,
     tests: [
-      { stdin: "3 4\n", expected: "7" },
-      { stdin: "-10 25\n", expected: "15" },
-      { stdin: "0 0\n", expected: "0" },
+      { stdin: "3 4\n", expected: "7\n-1" },
+      { stdin: "-10 25\n", expected: "15\n-35" },
+      { stdin: "0 0\n", expected: "0\n0" },
+      { stdin: "1000 -1000\n", expected: "0\n2000" },
     ],
   },
   {
     id: "pc02", step: 2,
-    title: "짝수 홀수", titleEn: "Even or odd",
-    prompt:
-      "정수 하나가 주어집니다. 짝수면 even, 홀수면 odd 를 한 줄로 출력하세요. (소문자)",
-    promptEn:
-      "One integer is given. Print even if it is even, odd if it is odd. (lowercase)",
+    skill: "조건문", skillEn: "Conditionals",
+    title: "성적 등급", titleEn: "Letter Grade",
+    desc:
+      "시험 점수를 등급으로 바꾼다. 90점 이상은 A, 80점 이상은 B, 70점 이상은 C, " +
+      "60점 이상은 D, 그보다 낮으면 F이다.\n" +
+      "점수가 주어졌을 때 등급을 출력하는 프로그램을 작성하시오.",
+    descEn:
+      "A test score maps to a letter grade. 90 or above is A, 80 or above is B, " +
+      "70 or above is C, 60 or above is D, and anything lower is F.\n" +
+      "Given a score, write a program that prints its grade.",
+    input: "첫째 줄에 점수 S가 주어진다.",
+    inputEn: "The first line contains the score S.",
+    output: "등급을 나타내는 대문자 한 글자를 출력한다.",
+    outputEn: "Print the grade as a single uppercase letter.",
+    limits: "0 ≤ S ≤ 100 (S는 정수)",
+    limitsEn: "0 ≤ S ≤ 100 (S is an integer)",
+    sampleCount: 2,
     tests: [
-      { stdin: "4\n", expected: "even" },
-      { stdin: "7\n", expected: "odd" },
-      { stdin: "0\n", expected: "even" },
-      { stdin: "-3\n", expected: "odd" },
+      { stdin: "95\n", expected: "A" },
+      { stdin: "72\n", expected: "C" },
+      { stdin: "80\n", expected: "B" },
+      { stdin: "60\n", expected: "D" },
+      { stdin: "59\n", expected: "F" },
+      { stdin: "100\n", expected: "A" },
+      { stdin: "0\n", expected: "F" },
     ],
   },
   {
     id: "pc03", step: 3,
-    title: "1부터 N까지의 합", titleEn: "Sum from 1 to N",
-    prompt:
-      "정수 N 이 주어집니다. 1부터 N까지 모두 더한 값을 한 줄로 출력하세요.",
-    promptEn:
-      "An integer N is given. Print the sum of all integers from 1 to N on one line.",
+    skill: "반복문과 세기", skillEn: "Loops and counting",
+    title: "양수와 음수", titleEn: "Positives and Negatives",
+    desc:
+      "N개의 정수가 주어진다. 이 중 양수가 몇 개이고 음수가 몇 개인지 구하는 " +
+      "프로그램을 작성하시오. 0은 양수도 음수도 아니다.",
+    descEn:
+      "N integers are given. Write a program that counts how many are positive and " +
+      "how many are negative. Zero is neither positive nor negative.",
+    input:
+      "첫째 줄에 정수의 개수 N이 주어진다.\n둘째 줄에 N개의 정수가 공백으로 구분되어 주어진다.",
+    inputEn:
+      "The first line contains the count N.\nThe second line contains N integers separated by spaces.",
+    output:
+      "첫째 줄에 양수의 개수를, 둘째 줄에 음수의 개수를 출력한다.",
+    outputEn:
+      "Print the number of positives on the first line and the number of negatives on the second.",
+    limits: "1 ≤ N ≤ 100, 각 정수의 절댓값은 1,000 이하",
+    limitsEn: "1 ≤ N ≤ 100, and each integer has absolute value at most 1,000",
+    sampleCount: 1,
     tests: [
-      { stdin: "5\n", expected: "15" },
-      { stdin: "1\n", expected: "1" },
-      { stdin: "100\n", expected: "5050" },
+      { stdin: "5\n1 -2 0 3 -4\n", expected: "2\n2" },
+      { stdin: "3\n0 0 0\n", expected: "0\n0" },
+      { stdin: "1\n-7\n", expected: "0\n1" },
+      { stdin: "6\n1 2 3 4 5 6\n", expected: "6\n0" },
     ],
   },
   {
     id: "pc04", step: 4,
-    title: "최댓값 찾기", titleEn: "Find the maximum",
-    prompt:
-      "첫 줄에 개수 N, 둘째 줄에 정수 N개가 공백으로 주어집니다. 가장 큰 수를 한 줄로 출력하세요.",
-    promptEn:
-      "The first line has a count N. The second line has N integers separated by spaces. Print the largest one on a single line.",
+    skill: "리스트와 인덱스", skillEn: "Lists and indices",
+    title: "최댓값은 몇 번째", titleEn: "Where Is the Maximum",
+    desc:
+      "서로 다른 N개의 정수가 주어진다. 이 중 최댓값을 찾고, 그 최댓값이 몇 번째 " +
+      "수인지 구하는 프로그램을 작성하시오.",
+    descEn:
+      "N distinct integers are given. Write a program that finds the maximum and " +
+      "reports its position in the input.",
+    input:
+      "첫째 줄에 정수의 개수 N이 주어진다.\n둘째 줄에 서로 다른 N개의 정수가 공백으로 구분되어 주어진다.",
+    inputEn:
+      "The first line contains the count N.\nThe second line contains N distinct integers separated by spaces.",
+    output:
+      "첫째 줄에 최댓값을, 둘째 줄에 그 최댓값이 몇 번째 수인지 출력한다. " +
+      "첫 번째 수를 1번째로 센다.",
+    outputEn:
+      "Print the maximum on the first line, then its position on the second line. " +
+      "The first number counts as position 1.",
+    limits: "1 ≤ N ≤ 100, 각 정수의 절댓값은 1,000 이하",
+    limitsEn: "1 ≤ N ≤ 100, and each integer has absolute value at most 1,000",
+    sampleCount: 1,
     tests: [
-      { stdin: "5\n3 9 1 7 2\n", expected: "9" },
-      { stdin: "1\n-4\n", expected: "-4" },
-      { stdin: "4\n-5 -2 -9 -7\n", expected: "-2" },
+      { stdin: "5\n3 29 38 12 57\n", expected: "57\n5" },
+      { stdin: "3\n-5 -2 -9\n", expected: "-2\n2" },
+      { stdin: "1\n7\n", expected: "7\n1" },
+      { stdin: "4\n10 40 20 30\n", expected: "40\n2" },
     ],
   },
   {
     id: "pc05", step: 5,
-    title: "문자 세기", titleEn: "Count a character",
-    prompt:
-      "첫 줄에 문자열 S(공백 없음), 둘째 줄에 문자 하나 C 가 주어집니다. S 안에 C 가 몇 번 나오는지 한 줄로 출력하세요.",
-    promptEn:
-      "The first line has a string S (no spaces). The second line has a single character C. Print how many times C appears in S, on one line.",
+    skill: "문자열 다루기", skillEn: "String manipulation",
+    title: "회문 판별", titleEn: "Palindrome Check",
+    desc:
+      "앞에서 읽어도 뒤에서 읽어도 똑같은 문자열을 회문이라고 한다. " +
+      "예를 들어 level은 회문이고, python은 회문이 아니다.\n" +
+      "문자열이 주어졌을 때 회문인지 판별하는 프로그램을 작성하시오.",
+    descEn:
+      "A string that reads the same forwards and backwards is a palindrome. " +
+      "For example, level is a palindrome but python is not.\n" +
+      "Given a string, write a program that decides whether it is a palindrome.",
+    input: "첫째 줄에 영어 소문자로만 이루어진 문자열 S가 주어진다.",
+    inputEn: "The first line contains a string S made only of lowercase English letters.",
+    output: "S가 회문이면 1, 아니면 0을 출력한다.",
+    outputEn: "Print 1 if S is a palindrome, otherwise print 0.",
+    limits: "S의 길이는 1 이상 100 이하이고, 공백은 없다.",
+    limitsEn: "The length of S is between 1 and 100, and it contains no spaces.",
+    sampleCount: 2,
     tests: [
-      { stdin: "banana\na\n", expected: "3" },
-      { stdin: "hello\nz\n", expected: "0" },
-      { stdin: "aaaa\na\n", expected: "4" },
+      { stdin: "level\n", expected: "1" },
+      { stdin: "python\n", expected: "0" },
+      { stdin: "a\n", expected: "1" },
+      { stdin: "abba\n", expected: "1" },
+      { stdin: "abca\n", expected: "0" },
     ],
   },
   {
     id: "pc06", step: 6,
-    title: "거꾸로 출력", titleEn: "Reverse the words",
-    prompt:
-      "한 줄에 단어들이 공백으로 주어집니다. 단어 순서를 뒤집어 공백으로 이어 한 줄로 출력하세요.",
-    promptEn:
-      "A line of words separated by spaces is given. Print the words in reverse order, joined by single spaces, on one line.",
+    skill: "딕셔너리와 동점 처리", skillEn: "Dictionaries and tie-breaking",
+    title: "가장 많이 나온 단어", titleEn: "Most Frequent Word",
+    desc:
+      "N개의 단어가 주어진다. 가장 많이 나온 단어를 구하는 프로그램을 작성하시오.\n" +
+      "가장 많이 나온 단어가 둘 이상이면 그중 사전순으로 가장 앞선 단어를 출력한다.",
+    descEn:
+      "N words are given. Write a program that finds the word that appears most often.\n" +
+      "If several words tie for the most appearances, print the one that comes first alphabetically.",
+    input:
+      "첫째 줄에 단어의 개수 N이 주어진다.\n다음 N개의 줄에 단어가 한 줄에 하나씩 주어진다.",
+    inputEn:
+      "The first line contains the number of words N.\nEach of the next N lines contains one word.",
+    output: "가장 많이 나온 단어를 한 줄에 출력한다.",
+    outputEn: "Print the most frequent word on a single line.",
+    limits: "1 ≤ N ≤ 100. 각 단어는 영어 소문자로만 이루어지고 길이는 20 이하다.",
+    limitsEn: "1 ≤ N ≤ 100. Each word is made of lowercase English letters and is at most 20 characters long.",
+    sampleCount: 1,
     tests: [
-      { stdin: "a b c\n", expected: "c b a" },
-      { stdin: "hello world\n", expected: "world hello" },
-      { stdin: "one\n", expected: "one" },
+      { stdin: "5\napple\nbanana\napple\ncherry\nbanana\n", expected: "apple" },
+      { stdin: "3\nz\nz\na\n", expected: "z" },
+      { stdin: "1\nhello\n", expected: "hello" },
+      { stdin: "4\nb\na\nb\na\n", expected: "a" },
     ],
   },
   {
     id: "pc07", step: 7,
-    title: "소수 판정", titleEn: "Prime check",
-    prompt:
-      "정수 N (2 이상) 이 주어집니다. N 이 소수면 YES, 아니면 NO 를 한 줄로 출력하세요. (대문자)",
-    promptEn:
-      "An integer N (2 or greater) is given. Print YES if N is prime, otherwise NO, on one line. (uppercase)",
+    skill: "함수와 수학", skillEn: "Functions and math",
+    title: "소수 찾기", titleEn: "Counting Primes",
+    desc:
+      "1보다 큰 자연수 중에서 1과 자기 자신만을 약수로 가지는 수를 소수라고 한다. " +
+      "1은 소수가 아니다.\n" +
+      "주어진 수들 중 소수가 몇 개인지 구하는 프로그램을 작성하시오.",
+    descEn:
+      "A prime is a natural number greater than 1 whose only divisors are 1 and itself. " +
+      "1 is not prime.\n" +
+      "Write a program that counts how many of the given numbers are prime.",
+    input:
+      "첫째 줄에 수의 개수 N이 주어진다.\n둘째 줄에 N개의 수가 공백으로 구분되어 주어진다.",
+    inputEn:
+      "The first line contains the count N.\nThe second line contains N numbers separated by spaces.",
+    output: "주어진 수들 중 소수의 개수를 출력한다.",
+    outputEn: "Print how many of the given numbers are prime.",
+    limits: "1 ≤ N ≤ 100. 각 수는 1 이상 1,000 이하의 자연수다.",
+    limitsEn: "1 ≤ N ≤ 100. Each number is a natural number between 1 and 1,000.",
+    sampleCount: 1,
     tests: [
-      { stdin: "7\n", expected: "YES" },
-      { stdin: "9\n", expected: "NO" },
-      { stdin: "2\n", expected: "YES" },
-      { stdin: "97\n", expected: "YES" },
-      { stdin: "100\n", expected: "NO" },
+      { stdin: "4\n1 3 5 7\n", expected: "3" },
+      { stdin: "5\n2 4 6 8 9\n", expected: "1" },
+      { stdin: "1\n1\n", expected: "0" },
+      { stdin: "3\n997 999 1000\n", expected: "1" },
     ],
   },
   {
     id: "pc08", step: 8,
-    title: "가장 많이 나온 수", titleEn: "Most frequent number",
-    prompt:
-      "첫 줄에 개수 N, 둘째 줄에 정수 N개가 공백으로 주어집니다. 가장 많이 나온 수를 출력하세요. 횟수가 같으면 그중 가장 작은 수를 출력합니다.",
-    promptEn:
-      "The first line has a count N. The second line has N integers separated by spaces. Print the most frequent value. On a tie, print the smallest such value.",
+    skill: "누적 합", skillEn: "Prefix sums",
+    title: "구간 합 구하기", titleEn: "Range Sum Queries",
+    desc:
+      "N개의 수가 순서대로 주어진다. 이때 i번째 수부터 j번째 수까지의 합을 " +
+      "묻는 질의가 M번 들어온다. 각 질의의 답을 구하는 프로그램을 작성하시오.",
+    descEn:
+      "N numbers are given in order. Then M queries arrive, each asking for the sum " +
+      "of the i-th through j-th numbers. Write a program that answers every query.",
+    input:
+      "첫째 줄에 수의 개수 N과 질의의 개수 M이 공백으로 구분되어 주어진다.\n" +
+      "둘째 줄에 N개의 수가 공백으로 구분되어 주어진다.\n" +
+      "다음 M개의 줄에 질의마다 i와 j가 공백으로 구분되어 주어진다. 양 끝을 모두 포함한다.",
+    inputEn:
+      "The first line contains N and M, separated by a space.\n" +
+      "The second line contains N numbers separated by spaces.\n" +
+      "Each of the next M lines contains i and j, separated by a space. Both ends are inclusive.",
+    output: "M개의 줄에 각 질의의 답을 순서대로 한 줄씩 출력한다.",
+    outputEn: "Print the answer to each query on its own line, in order.",
+    limits:
+      "1 ≤ N, M ≤ 1,000. 첫 번째 수를 1번째로 센다 (1 ≤ i ≤ j ≤ N). " +
+      "각 수의 절댓값은 1,000 이하다.",
+    limitsEn:
+      "1 ≤ N, M ≤ 1,000. The first number counts as position 1 (1 ≤ i ≤ j ≤ N). " +
+      "Each number has absolute value at most 1,000.",
+    sampleCount: 1,
     tests: [
-      { stdin: "6\n1 2 2 3 3 3\n", expected: "3" },
-      { stdin: "4\n5 5 2 2\n", expected: "2" },
-      { stdin: "3\n-1 -1 4\n", expected: "-1" },
-    ],
-  },
-  {
-    id: "pc09", step: 9,
-    title: "구간 합", titleEn: "Range sum",
-    prompt:
-      "첫 줄에 N 과 질의 수 Q, 둘째 줄에 정수 N개. 이어서 Q개 줄에 각각 L R (1-based, 양끝 포함) 이 주어집니다. 각 질의마다 L번째부터 R번째까지의 합을 한 줄씩 출력하세요.",
-    promptEn:
-      "The first line has N and the number of queries Q. The second line has N integers. Then Q lines each have L R (1-based, inclusive). For each query, print the sum of elements L through R on its own line.",
-    tests: [
-      { stdin: "5 2\n1 2 3 4 5\n1 3\n2 5\n", expected: "6\n14" },
-      { stdin: "3 1\n10 -10 5\n1 3\n", expected: "5" },
+      { stdin: "5 3\n5 4 3 2 1\n1 3\n2 4\n5 5\n", expected: "12\n9\n1" },
+      { stdin: "3 1\n1 2 3\n1 3\n", expected: "6" },
       { stdin: "4 2\n1 1 1 1\n2 2\n1 4\n", expected: "1\n4" },
     ],
   },
   {
-    id: "pc10", step: 10,
-    title: "가장 긴 증가 구간", titleEn: "Longest increasing run",
-    prompt:
-      // ⚠️ 문제문은 `whitespace-pre-wrap` 으로 생짜 렌더된다 — 마크다운이 아니다.
-      //    `**강조**` 를 쓰면 학생 화면에 별표가 그대로 보인다.
-      "첫 줄에 개수 N, 둘째 줄에 정수 N개가 공백으로 주어집니다. 연속해서 엄격히 증가하는 가장 긴 구간의 길이를 한 줄로 출력하세요.",
-    promptEn:
-      "The first line has a count N. The second line has N integers separated by spaces. Print the length of the longest strictly increasing contiguous run, on one line.",
+    id: "pc09", step: 9,
+    skill: "그래프 탐색", skillEn: "Graph traversal",
+    title: "연결 요소의 개수", titleEn: "Connected Components",
+    desc:
+      "방향 없는 그래프가 주어졌을 때, 연결 요소의 개수를 구하는 프로그램을 작성하시오.\n" +
+      "연결 요소란 서로 이어진 정점들의 묶음이다. 간선이 하나도 없는 정점도 그 자체로 " +
+      "연결 요소 하나다.",
+    descEn:
+      "Given an undirected graph, write a program that counts its connected components.\n" +
+      "A connected component is a group of vertices reachable from one another. A vertex " +
+      "with no edges is a component by itself.",
+    input:
+      "첫째 줄에 정점의 개수 N과 간선의 개수 M이 공백으로 구분되어 주어진다.\n" +
+      "다음 M개의 줄에 간선의 양 끝 정점 u와 v가 공백으로 구분되어 주어진다.\n" +
+      "정점은 1번부터 N번까지 번호가 붙어 있다.",
+    inputEn:
+      "The first line contains the number of vertices N and the number of edges M, separated by a space.\n" +
+      "Each of the next M lines contains the two endpoints u and v of an edge, separated by a space.\n" +
+      "Vertices are numbered from 1 to N.",
+    output: "연결 요소의 개수를 출력한다.",
+    outputEn: "Print the number of connected components.",
+    limits:
+      "1 ≤ N ≤ 1,000, 0 ≤ M ≤ 2,000. 같은 간선이 두 번 주어질 수 있고, " +
+      "u와 v는 서로 다르다.",
+    limitsEn:
+      "1 ≤ N ≤ 1,000 and 0 ≤ M ≤ 2,000. The same edge may appear twice, and u and v are always different.",
+    sampleCount: 1,
     tests: [
-      { stdin: "6\n1 2 1 2 3 4\n", expected: "4" },
-      { stdin: "5\n5 4 3 2 1\n", expected: "1" },
-      { stdin: "1\n7\n", expected: "1" },
-      { stdin: "7\n1 2 3 3 4 5 6\n", expected: "4" },
+      { stdin: "6 5\n1 2\n2 5\n5 1\n3 4\n4 6\n", expected: "2" },
+      { stdin: "6 8\n1 2\n2 5\n5 1\n3 4\n4 6\n5 4\n2 4\n2 3\n", expected: "1" },
+      { stdin: "3 0\n", expected: "3" },
+      { stdin: "1 0\n", expected: "1" },
+    ],
+  },
+  {
+    id: "pc10", step: 10,
+    skill: "동적 계획법", skillEn: "Dynamic programming",
+    title: "동전 최소 개수", titleEn: "Fewest Coins",
+    desc:
+      "N가지 종류의 동전이 있다. 이 동전들을 적절히 써서 가치의 합이 K원이 되게 하고 싶다.\n" +
+      "이때 쓰는 동전 개수를 최소로 하는 프로그램을 작성하시오. " +
+      "같은 종류의 동전을 여러 번 써도 된다.",
+    descEn:
+      "There are N kinds of coins. You want to combine them so that their values sum to K.\n" +
+      "Write a program that uses as few coins as possible. You may use the same kind of coin " +
+      "more than once.",
+    input:
+      "첫째 줄에 동전의 종류 수 N과 목표 금액 K가 공백으로 구분되어 주어진다.\n" +
+      "다음 N개의 줄에 각 동전의 가치가 한 줄에 하나씩 주어진다.",
+    inputEn:
+      "The first line contains the number of coin kinds N and the target amount K, separated by a space.\n" +
+      "Each of the next N lines contains the value of one coin.",
+    output:
+      "K원을 만드는 데 필요한 동전 개수의 최솟값을 출력한다. " +
+      "K원을 만들 수 없으면 -1을 출력한다.",
+    outputEn:
+      "Print the minimum number of coins needed to make K. " +
+      "If K cannot be made, print -1.",
+    limits: "1 ≤ N ≤ 100, 1 ≤ K ≤ 10,000. 각 동전의 가치는 1 이상 10,000 이하다.",
+    limitsEn: "1 ≤ N ≤ 100 and 1 ≤ K ≤ 10,000. Each coin value is between 1 and 10,000.",
+    sampleCount: 2,
+    tests: [
+      { stdin: "3 15\n1\n5\n12\n", expected: "3" },
+      { stdin: "2 7\n3\n5\n", expected: "-1" },
+      { stdin: "1 10\n3\n", expected: "-1" },
+      { stdin: "3 6\n1\n3\n4\n", expected: "2" },
+      { stdin: "2 10\n2\n5\n", expected: "2" },
     ],
   },
 ]
@@ -183,9 +364,14 @@ const BY_STEP = new Map<number, PlacementCodeTask>(
   PLACEMENT_CODE_TASKS.map(t => [t.step, t]),
 )
 
+/** **정확히** 그 단계의 문제. 없으면 null — 아래로 내려가지 않는다. */
+export function codeTaskAtStep(step: number): PlacementCodeTask | null {
+  return BY_STEP.get(step) ?? null
+}
+
 /**
- * 그 단계의 코드 문항. 단계가 비어 있으면 **바로 아래 단계**로 내려간다 —
- * 문항이 없다고 확인을 건너뛰면 "읽기만 잘하는" 학생이 그대로 통과한다.
+ * 그 단계의 문제. 단계가 비어 있으면 **바로 아래 단계**로 내려간다.
+ * 이분 탐색이 빈 단계를 짚었을 때 시험이 거기서 끝나지 않게 하는 보험이다.
  */
 export function codeTaskForStep(step: number): PlacementCodeTask | null {
   for (let s = step; s >= 1; s--) {
@@ -195,24 +381,30 @@ export function codeTaskForStep(step: number): PlacementCodeTask | null {
   return null
 }
 
-/**
- * **정확히** 그 단계의 문항. 없으면 null — 아래로 내려가지 않는다.
- *
- * 도전 문항(한 단계 위)에 쓴다. 여기서 `codeTaskForStep` 처럼 아래로 떨어지면
- * 학생이 **이미 통과한 단계의 문항을 다시 받고** 그걸 통과해 한 칸 올라간다.
- */
-export function codeTaskAtStep(step: number): PlacementCodeTask | null {
-  return BY_STEP.get(step) ?? null
-}
-
 export function findCodeTask(id: string): PlacementCodeTask | undefined {
   return PLACEMENT_CODE_TASKS.find(t => t.id === id)
 }
 
-export function codeTaskTitle(t: PlacementCodeTask, lang: string): string {
-  return lang === "ko" ? t.title : t.titleEn
+/** 학생에게 공개하는 예제 입출력. `tests` 의 앞에서 `sampleCount` 개를 잘라 쓴다. */
+export function codeTaskSamples(t: PlacementCodeTask) {
+  return t.tests.slice(0, t.sampleCount)
 }
 
-export function codeTaskPrompt(t: PlacementCodeTask, lang: string): string {
-  return lang === "ko" ? t.prompt : t.promptEn
+/**
+ * 화면에 쓸 한 언어짜리 문제문.
+ *
+ * 필드를 화면에서 하나하나 `lang === "ko" ? x : xEn` 로 고르면 한 군데를
+ * 빠뜨렸을 때 한국어가 영어 화면에 섞여 나온다 (이 앱에서 실제로 반복된
+ * 사고다). 고르는 자리를 여기 한 곳으로 모은다.
+ */
+export function codeTaskText(t: PlacementCodeTask, lang: string) {
+  const ko = lang === "ko"
+  return {
+    title: ko ? t.title : t.titleEn,
+    skill: ko ? t.skill : t.skillEn,
+    desc: ko ? t.desc : t.descEn,
+    input: ko ? t.input : t.inputEn,
+    output: ko ? t.output : t.outputEn,
+    limits: ko ? t.limits : t.limitsEn,
+  }
 }

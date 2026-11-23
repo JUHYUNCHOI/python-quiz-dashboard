@@ -1,10 +1,11 @@
 import { describe, it, expect } from "vitest"
 import {
-  startPlacement, currentItem, submitAnswer, submitCodeResult, resultTier,
-  placementBankGaps, PLACEMENT_LENGTH, PROBE_SIZE, PLACEMENT_CAP_STEP,
+  startPlacement, currentTask, submitResult, resultTier, placementBankGaps,
+  problemIndex, passedCount, placementProgress,
+  PLACEMENT_MAX_PROBLEMS, PLACEMENT_CAP_STEP, START_STEP,
 } from "@/lib/placement-engine"
-import { PLACEMENT_ITEMS, isPlacementCorrect, normalizeOutput } from "@/data/placement-test"
-import { TIER_IDS, tierOfLevel, promotionPool, problemRole, tierRank, TIERS, type TierId } from "@/lib/tier-system"
+import { PLACEMENT_CODE_TASKS, codeTaskAtStep, codeTaskSamples } from "@/data/placement-code"
+import { TIER_IDS, tierOfLevel, promotionPool, problemRole, TIERS, type TierId } from "@/lib/tier-system"
 
 /**
  * 배치로 받을 수 있는 가장 높은 단계. 마스터 이상은 승급 전용이라
@@ -13,103 +14,99 @@ import { TIER_IDS, tierOfLevel, promotionPool, problemRole, tierRank, TIERS, typ
 const cap = (ability: number) => Math.min(ability, PLACEMENT_CAP_STEP)
 
 /**
- * 가짜 응시자. `ability` 단계까지는 전부 맞히고 그 위는 전부 틀린다.
+ * 가짜 응시자. `ability` 단계까지의 문제는 풀고 그 위는 못 푼다.
  * 실력이 계단처럼 깔끔한 이상적인 학생 — 엔진이 이 학생을 못 맞히면
  * 실제 학생은 더 못 맞힌다.
- *
- * 코드 문항도 **같은 기준으로 판정한다** (`task.step <= ability`).
- * 고정 불리언을 쓰면 안 된다 — 코드 단계는 2문항이고 ②는 한 단계 위를
- * 물어본다. 둘 다 통과시키면 ability N 학생이 N+1 로 올라가 버려서,
- * 테스트가 "실력대로 배치한다"는 성질을 더 이상 검사하지 못한다.
- *
- * `codePass` 를 넘기면 그 값으로 덮어쓴다 — "읽기는 되지만 못 짠다"를
- * 재현하는 테스트 전용이다.
  */
-/** 출력 예측 단계만 끝낸 상태 — 코드 문항은 아직 안 낸 채로 돌려준다. */
-function bracketOnly(ability: number, seed = 42) {
-  let s = startPlacement(seed)
+function simulate(ability: number) {
+  let s = startPlacement()
   let guard = 0
-  while (currentItem(s) && guard++ < 50) {
-    const item = currentItem(s)!
-    s = submitAnswer(s, item.step <= ability ? item.answer : "WRONG_ON_PURPOSE")
+  while (currentTask(s) && guard++ < 20) {
+    s = submitResult(s, currentTask(s)!.step <= ability)
   }
   return s
 }
 
-function simulate(ability: number, seed = 42, codePass?: boolean) {
-  let s = bracketOnly(ability, seed)
-  let guard = 0
-  // 탐색이 끝나면 코드 작성 문항이 최대 2개 남는다. `currentItem()` 은 여기서
-  // null 이므로 위 루프만 돌리면 phase 가 "code" 에 멈춘 채로 끝난다.
-  guard = 0
-  while (s.phase === "code" && guard++ < 4) {
-    s = submitCodeResult(s, codePass ?? s.codeTask!.step <= ability)
-  }
-  return s
-}
-
-describe("배치고사 문항 은행", () => {
-  it("모든 단계에 probe 를 채울 문항이 있다", () => {
-    // 한 단계라도 3문항 미만이면 그 단계에서 탐색이 끊겨 티어가 잘못 나온다.
+describe("배치고사 문제 은행", () => {
+  it("단계 1..10 에 문제가 하나씩 다 있다", () => {
+    // 한 단계라도 비면 그 단계에서 탐색이 끊겨 티어가 잘못 나온다.
     expect(placementBankGaps()).toEqual([])
   })
 
-  it("문항 id 가 중복되지 않는다", () => {
-    const ids = PLACEMENT_ITEMS.map(i => i.id)
+  it("문제 id 가 중복되지 않는다", () => {
+    const ids = PLACEMENT_CODE_TASKS.map(t => t.id)
     expect(new Set(ids).size).toBe(ids.length)
   })
 
-  it("각 단계에 최소 2개 probe 분량이 있다", () => {
-    // 3개뿐이면 재시험 때 토씨 하나 안 틀리고 같은 시험이 나오고,
-    // 확인 probe 를 돌릴 문항도 남지 않는다.
-    for (let st = 1; st <= 10; st++) {
-      expect(PLACEMENT_ITEMS.filter(i => i.step === st).length, `step=${st}`)
-        .toBeGreaterThanOrEqual(PROBE_SIZE * 2)
+  it("한 단계에 문제가 둘 이상 있지 않다", () => {
+    // 이분 탐색은 단계를 한 번만 방문한다 — 둘째 문제는 영원히 안 나온다.
+    // 은행에 넣어 두면 "낸 적 없는 문제"가 쌓여서 난이도 보정이 안 보인다.
+    const steps = PLACEMENT_CODE_TASKS.map(t => t.step)
+    expect(new Set(steps).size).toBe(steps.length)
+  })
+
+  it("문제문의 모든 칸이 한국어·영어 둘 다 채워져 있다", () => {
+    // 한 칸이라도 비면 영어 화면에 한국어가 섞여 나오거나 빈 섹션이 뜬다.
+    for (const q of PLACEMENT_CODE_TASKS) {
+      for (const k of ["title", "titleEn", "skill", "skillEn", "desc", "descEn",
+                       "input", "inputEn", "output", "outputEn",
+                       "limits", "limitsEn"] as const) {
+        expect(q[k].trim().length, `${q.id}.${k}`).toBeGreaterThan(0)
+      }
     }
   })
 
-  it("정답이 비어 있지 않다", () => {
-    for (const it of PLACEMENT_ITEMS) {
-      expect(it.answer.trim().length, it.id).toBeGreaterThan(0)
-      expect(it.code.trim().length, it.id).toBeGreaterThan(0)
+  it("영어 문제문에 한글이 섞여 있지 않다", () => {
+    const hangul = /[\uAC00-\uD7A3]/
+    for (const q of PLACEMENT_CODE_TASKS) {
+      for (const k of ["titleEn", "skillEn", "descEn", "inputEn", "outputEn", "limitsEn"] as const) {
+        expect(hangul.test(q[k]), `${q.id}.${k}`).toBe(false)
+      }
     }
   })
-})
 
-describe("출력 채점", () => {
-  it("공백·따옴표 차이는 흘려준다", () => {
-    expect(isPlacementCorrect(" 11 ", "11")).toBe(true)
-    expect(isPlacementCorrect("[1,2,3]", "[1, 2, 3]")).toBe(true)
-    expect(isPlacementCorrect(`{"b": 1}`, "{'b': 1}")).toBe(true)
-    expect(isPlacementCorrect("0\n1\n4\n", "0\n1\n4")).toBe(true)
+  it("테스트케이스가 있고 기대 출력이 비어 있지 않다", () => {
+    for (const q of PLACEMENT_CODE_TASKS) {
+      expect(q.tests.length, q.id).toBeGreaterThanOrEqual(3)
+      for (const tc of q.tests) {
+        // stdin 은 줄바꿈으로 끝나야 한다 — 마지막 줄에 \n 이 없으면
+        // `input()` 이 EOF 로 터지는 제출이 "정답인데 실패"로 찍힌다.
+        expect(tc.stdin.endsWith("\n"), `${q.id} stdin`).toBe(true)
+        expect(tc.expected.trim().length, `${q.id} expected`).toBeGreaterThan(0)
+        // 기대 출력에 끝 줄바꿈을 넣으면 trim 비교와 어긋나 혼란만 생긴다.
+        expect(tc.expected, `${q.id} expected`).toBe(tc.expected.trim())
+      }
+    }
   })
 
-  it("값이 다르면 틀린 것이다", () => {
-    // `3 1` 을 `31` 로 받아주면 시험이 무너진다 — 공백 제거를 과하게 하면 생기는 일.
-    expect(isPlacementCorrect("31", "3 1")).toBe(false)
-    expect(isPlacementCorrect("12", "11")).toBe(false)
-    expect(isPlacementCorrect("true false", "True False")).toBe(false)
-    expect(isPlacementCorrect("", "11")).toBe(false)
-  })
-
-  it("정규화는 줄 끝 공백과 CRLF 를 없앤다", () => {
-    expect(normalizeOutput("a \r\nb  c\n\n")).toBe("a\nb c")
+  it("공개 예제가 1개 이상이고 테스트 수를 넘지 않는다", () => {
+    // 예제가 0개면 출력 형식을 추측해야 한다. 전부 공개하면 숨은 검증이 없어진다.
+    for (const q of PLACEMENT_CODE_TASKS) {
+      expect(q.sampleCount, q.id).toBeGreaterThanOrEqual(1)
+      expect(q.sampleCount, q.id).toBeLessThan(q.tests.length)
+      expect(codeTaskSamples(q).length, q.id).toBe(q.sampleCount)
+    }
   })
 })
 
 describe("적응형 엔진", () => {
-  it("12문항을 넘기지 않는다", () => {
+  it("첫 문제는 탐색 구간의 중앙이다", () => {
+    expect(currentTask(startPlacement())?.step).toBe(START_STEP)
+  })
+
+  it("최악의 경우에도 문제 수가 상한을 넘지 않는다", () => {
     for (let ability = 0; ability <= 10; ability++) {
       const s = simulate(ability)
-      expect(s.answers.length, `ability=${ability}`).toBeLessThanOrEqual(PLACEMENT_LENGTH)
-      expect(s.phase).toBe("done")
+      expect(s.phase, `ability=${ability}`).toBe("done")
+      expect(s.attempts.length, `ability=${ability}`).toBeLessThanOrEqual(PLACEMENT_MAX_PROBLEMS)
+      expect(s.attempts.length, `ability=${ability}`).toBeGreaterThanOrEqual(3)
     }
   })
 
-  it("같은 문항을 두 번 내지 않는다", () => {
+  it("같은 문제를 두 번 내지 않는다", () => {
     for (let ability = 0; ability <= 10; ability++) {
-      const s = simulate(ability)
-      expect(new Set(s.usedIds).size, `ability=${ability}`).toBe(s.usedIds.length)
+      const ids = simulate(ability).attempts.map(a => a.taskId)
+      expect(new Set(ids).size, `ability=${ability}`).toBe(ids.length)
     }
   })
 
@@ -121,113 +118,77 @@ describe("적응형 엔진", () => {
     expect(resultTier(simulate(0))).toBe(TIER_IDS[0])
   })
 
-  it("시드가 달라도 같은 실력은 같은 티어로 간다", () => {
-    for (const seed of [1, 7, 12345, 999999]) {
-      for (let ability = 1; ability <= 10; ability++) {
-        expect(resultTier(simulate(ability, seed)), `seed=${seed} ability=${ability}`)
-          .toBe(TIER_IDS[cap(ability) - 1])
+  it("마스터 이상은 배치고사로 받을 수 없다", () => {
+    // 9·10단계 문제를 다 풀 수 있는 학생도 상한에서 멈춘다.
+    for (const ability of [9, 10]) {
+      expect(resultTier(simulate(ability))).toBe(TIER_IDS[PLACEMENT_CAP_STEP - 1])
+    }
+    // 탐색이 상한 위 단계를 애초에 방문하지 않는다.
+    for (let ability = 0; ability <= 10; ability++) {
+      for (const a of simulate(ability).attempts) {
+        expect(a.step, `ability=${ability}`).toBeLessThanOrEqual(PLACEMENT_CAP_STEP)
       }
     }
   })
 
-  it("재시험이면 다른 문항이 나온다", () => {
-    // 같은 시험이 또 나오면 답을 외워서 티어를 올릴 수 있다.
-    const a = simulate(7, 1).usedIds
-    const b = simulate(7, 2).usedIds
-    expect(a.filter(id => b.includes(id)).length).toBeLessThan(a.length)
-  })
-
-  it("탐색이 끝나면 코드 작성 문항이 꼭 나온다", () => {
-    // 출력 예측만으로 끝내면 "읽을 줄 아는데 못 짜는" 학생이 그대로 올라간다.
-    for (let ability = 1; ability <= 10; ability++) {
-      let s = startPlacement(42)
-      let guard = 0
-      while (currentItem(s) && guard++ < 50) {
-        const item = currentItem(s)!
-        s = submitAnswer(s, item.step <= ability ? item.answer : "nope")
-      }
-      expect(s.phase, `ability=${ability}`).toBe("code")
-      // ① 확인 문항은 **배치된 단계** 를 물어본다 — 상한에 걸린 학생은 상한 단계.
-      expect(s.codeTask?.step, `ability=${ability}`).toBe(cap(ability))
-    }
-  })
-
-  it("코드 작성 문항을 못 풀면 한 단계 내려간다", () => {
-    // 읽기만으로 올라간 티어를 되돌리는 안전장치. 없으면 골드로 배치된 학생이
-    // 승급 문제를 한 개도 못 푼다.
-    for (let ability = 2; ability <= 10; ability++) {
-      expect(resultTier(simulate(ability, 42, false)), `ability=${ability}`)
-        .toBe(TIER_IDS[cap(ability) - 2])
-    }
-  })
-
-  it("1단계도 통과 못 해도 코드 문항은 낸다", () => {
-    // 예전엔 best = 0 이면 코드 단계를 통째로 건너뛰어 9문항 만에 결과가 떴다.
-    // 화면에는 "뒷부분 2문항은 직접 코드를 짜서 제출합니다" 라고 적혀 있으니
-    // 학생 눈에는 「실제 풀이로 안 바뀐다」로 보인다.
-    // 읽기와 쓰기는 다른 능력이다 — 출력 예측을 못 해도 1단계는 짜는 학생이 있다.
-    const s = bracketOnly(0)
-    expect(s.phase).toBe("code")
-    expect(s.codeTask?.step).toBe(1)
-  })
-
-  it("best = 0 에서 1단계 코드를 통과하면 ②는 2단계다 — 같은 문항을 또 내지 않는다", () => {
-    // `s.best`(0) + 1 로 ② 를 고르면 ① 과 **같은 1단계 문항**이 다시 나왔다.
-    let s = bracketOnly(0)
-    const first = s.codeTask!.id
-    s = submitCodeResult(s, true)
-    expect(s.best).toBe(1)                    // 짜서 증명한 단계는 확보한다
-    expect(s.codeTask?.id).not.toBe(first)
-    expect(s.codeTask?.step).toBe(2)
-    s = submitCodeResult(s, true)
-    expect(s.phase).toBe("done")
-    expect(s.best).toBe(2)
-  })
-
-  it("best = 0 에서 1단계 코드도 못 풀면 최하위에 남는다", () => {
-    let s = bracketOnly(0)
-    s = submitCodeResult(s, false)
-    expect(s.phase).toBe("done")
+  it("전부 포기하면 최하위 티어다", () => {
+    let s = startPlacement()
+    let guard = 0
+    while (currentTask(s) && guard++ < 20) s = submitResult(s, false)
     expect(s.best).toBe(0)
     expect(resultTier(s)).toBe(TIER_IDS[0])
   })
 
-  it("전부 찍어서 틀리면 최하위 티어다", () => {
-    let s = startPlacement(5)
-    let guard = 0
-    while (currentItem(s) && guard++ < 50) s = submitAnswer(s, "zzz")
-    expect(resultTier(s)).toBe(TIER_IDS[0])
-    expect(s.best).toBe(0)
+  it("문제를 풀면 더 어려운 문제가, 못 풀면 더 쉬운 문제가 나온다", () => {
+    const up = submitResult(startPlacement(), true)
+    expect(currentTask(up)!.step).toBeGreaterThan(START_STEP)
+
+    const down = submitResult(startPlacement(), false)
+    expect(currentTask(down)!.step).toBeLessThan(START_STEP)
   })
 
-  it("probe 단위로 판정한다 — 3문항 중 1개만 맞히면 통과가 아니다", () => {
-    // 첫 probe(5단계) 에서 1개만 맞히고 나머지는 전부 틀리면 5단계는 통과 못 한다.
-    let s = startPlacement(42)
-    let answered = 0
+  it("1단계도 못 풀면 더 내리지 않고 끝낸다", () => {
+    // 아래로 더 갈 곳이 없는데 계속 문제를 내면 시험이 끝나지 않는다.
+    let s = startPlacement()
     let guard = 0
-    while (currentItem(s) && guard++ < 50) {
-      const item = currentItem(s)!
-      const firstProbe = answered < PROBE_SIZE
-      s = submitAnswer(s, firstProbe && answered === 0 ? item.answer : "nope")
-      answered++
-    }
-    expect(tierRank(resultTier(s))).toBeLessThan(5)
+    while (currentTask(s) && guard++ < 20) s = submitResult(s, false)
+    expect(s.phase).toBe("done")
+    expect(s.attempts.map(a => a.step)).toContain(1)
   })
 
-  it("한 문항 실수로 티어가 무너지지 않는다", () => {
-    // 7단계 학생이 자기 수준 probe 에서 1개를 실수해도 2/3 이면 통과한다.
-    let s = startPlacement(42)
-    const slipped = new Set<number>()
+  it("진행률은 뒤로 가지 않고 끝나면 100% 다", () => {
+    let s = startPlacement()
+    let prev = placementProgress(s)
     let guard = 0
-    while (currentItem(s) && guard++ < 50) {
-      const item = currentItem(s)!
-      const ok = item.step <= 7
-      // 각 단계에서 첫 문항만 일부러 틀린다
-      const slip = ok && !slipped.has(item.step)
-      if (slip) slipped.add(item.step)
-      s = submitAnswer(s, ok && !slip ? item.answer : "nope")
+    while (currentTask(s) && guard++ < 20) {
+      s = submitResult(s, true)
+      const now = placementProgress(s)
+      expect(now).toBeGreaterThanOrEqual(prev)
+      prev = now
     }
-    expect(resultTier(s)).toBe(TIER_IDS[6])
+    expect(placementProgress(s)).toBe(1)
+  })
+
+  it("진행 표시와 통과 수가 실제 기록과 맞는다", () => {
+    let s = startPlacement()
+    expect(problemIndex(s)).toBe(1)
+    s = submitResult(s, true)
+    expect(problemIndex(s)).toBe(2)
+    expect(passedCount(s)).toBe(1)
+    s = submitResult(s, false)
+    expect(passedCount(s)).toBe(1)
+    expect(s.attempts.length).toBe(2)
+  })
+
+  it("끝난 뒤에 또 제출해도 상태가 바뀌지 않는다", () => {
+    // 화면이 두 번 제출하는 경우(더블 클릭, 느린 채점)에 티어가 움직이면 안 된다.
+    const s = simulate(5)
+    expect(submitResult(s, true)).toBe(s)
+  })
+
+  it("상한 단계의 문제가 은행에 있다", () => {
+    // 없으면 탐색의 마지막 칸이 영원히 확인되지 않아 최고 배치가 불가능해진다.
+    expect(codeTaskAtStep(PLACEMENT_CAP_STEP)).not.toBeNull()
   })
 })
 
