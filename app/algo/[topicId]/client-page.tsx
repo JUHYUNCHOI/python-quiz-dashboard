@@ -161,7 +161,7 @@ function NextTopicCTA({
           <div className="flex flex-col items-center">
             <span className="text-base">{label}</span>
             {smart.subtitle && (
-              <span className="text-[11px] font-medium text-purple-100/90">{smart.subtitle}</span>
+              <span className="text-[11px] font-medium text-purple-100/90">{lang === "en" ? (smart.subtitleEn ?? smart.subtitle) : smart.subtitle}</span>
             )}
           </div>
           <ArrowRight className="w-4 h-4" />

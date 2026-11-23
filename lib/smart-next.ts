@@ -27,8 +27,11 @@ export interface SmartNextResult {
   titleEn: string         // 영어 제목
   href: string            // 클릭 시 갈 곳
   subtitle?: string       // 부제 (예: "+50 XP", "Part 2 마무리")
+  /** 부제 영어판. ⚠️ `subtitle` 을 새로 추가할 때 이것도 같이 채워야 한다 —
+   *  화면 5곳이 `t(subtitle, subtitleEn)` 로 읽으므로 빼먹으면 영어 모드에 한국어가 뜬다. */
+  subtitleEn?: string
   emoji?: string          // 시각 표시
-  reason?: string         // 왜 이걸 추천하는지 (디버그/툴팁용)
+  reason?: string         // 왜 이걸 추천하는지 (디버그/툴팁용 — 화면에 안 뜬다)
 }
 
 interface Track {
@@ -103,6 +106,7 @@ export function getSmartNext(
           titleEn: `Lesson ${id}${isProject ? " Project" : ""}`,
           href: `/learn/${id}`,
           subtitle: `${track.trackName} · ${part.title}`,
+          subtitleEn: `${track.trackNameEn} · ${part.titleEn}`,
           emoji: isProject ? "🏆" : "📚",
           reason: `${part.title} 의 다음 레슨`,
         }
@@ -126,6 +130,7 @@ export function getSmartNext(
         titleEn: `${nextAlgo.titleEn}`,
         href: `/algo/${nextAlgo.id}`,
         subtitle: `알고리즘 본길 ${step}/${path.total}`,
+        subtitleEn: `Algorithm trunk ${step}/${path.total}`,
         emoji: nextAlgo.icon,
         reason: `알고리즘 본길 ${step}번째`,
       }
@@ -139,6 +144,7 @@ export function getSmartNext(
       titleEn: qSolved > 0 ? `Contest Problems (${qSolved} solved)` : "Contest Problems — the real thing!",
       href: "/quest",
       subtitle: "USACO Bronze · MCC — 배운 걸로 실전",
+      subtitleEn: "USACO Bronze · MCC — put it to work",
       emoji: "🏆",
       reason: `알고리즘 기초 완료 → 대회 단계`,
     }
@@ -152,6 +158,7 @@ export function getSmartNext(
       titleEn: "🎓 Pseudocode track complete!",
       href: "/curriculum?course=pseudo",
       subtitle: "IGCSE 의사코드 — 복습하거나 시험 대비를 이어가요",
+      subtitleEn: "IGCSE pseudocode — review or keep prepping for the exam",
       emoji: "🎓",
       reason: "pseudo 트랙 모든 레슨 완료 (USACO 대상 아님)",
     }
@@ -166,6 +173,7 @@ export function getSmartNext(
       titleEn: qSolved > 0 ? `Contest Problems (${qSolved} solved)` : "Contest Problems 🏆",
       href: "/quest",
       subtitle: "USACO Bronze · MCC — 실전 대회",
+      subtitleEn: "USACO Bronze · MCC — real contests",
       emoji: "🏆",
       reason: "모든 학습 단계 완료 → 대회",
     }

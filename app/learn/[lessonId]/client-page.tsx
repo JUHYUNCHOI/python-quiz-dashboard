@@ -980,7 +980,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                   const label = isLessonRec
                     ? `${smart.emoji ?? "▶"} ${lang === "en" ? smart.titleEn : smart.title}`
                     : t("다음 레슨으로 →", "Next Lesson →")
-                  const subtitle = isLessonRec && smart.subtitle
+                  const subtitle = isLessonRec && (lang === "en" ? (smart.subtitleEn ?? smart.subtitle) : smart.subtitle)
                   return (
                     <button
                       onClick={() => { localStorage.removeItem(progressKey); router.push(isLessonRec ? smart.href : `/learn/${nextId}`) }}

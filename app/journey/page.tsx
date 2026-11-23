@@ -399,7 +399,7 @@ export default function JourneyPage() {
               <span className="block truncate text-[11px] opacity-80 sm:text-xs">
                 {needsPlacement
                   ? t("13문항 이내 · 내 수준에 맞는 문제부터 바로", "13 questions or fewer · then start at your level")
-                  : nextAction.subtitle}
+                  : t(nextAction.subtitle ?? "", nextAction.subtitleEn ?? nextAction.subtitle ?? "")}
               </span>
             </span>
             <IconArrowRight size={24} className="shrink-0 opacity-90" />

@@ -42,109 +42,6 @@ const DIFFICULTY_COLOR: Record<string, string> = {
   "어려움": "text-red-700 bg-red-100",
 }
 
-// ── 🎯 KL 필터 데이터 — kl:true 태그 문제 (별도 페이지 X, /practice 안 한 모드) ──
-const _KL_DIFF_ORDER = ["쉬움", "보통", "어려움"]
-// 토픽 그룹 X — 쉬움→어려움 한 줄(사다리). "어느 토픽 풀까" 고르는 단계 제거. 토픽은 작은 태그로만.
-const KL_FLAT = ALL_CLUSTERS
-  .flatMap(c => c.problems
-    .filter(p => p.kl)
-    .map(p => ({ ...p, _clusterId: c.id, _topic: c.title.replace(/ ?문제 ?풀이$/, "").replace(/ ?문제$/, "") })))
-  .sort((a, b) => _KL_DIFF_ORDER.indexOf(a.difficulty) - _KL_DIFF_ORDER.indexOf(b.difficulty))
-const KL_TOTAL = KL_FLAT.length
-
-// KL 필터 뷰 — 연습 안에서 KL 태그 문제만. 각 문제는 /practice 딥링크(페이지 이동 없이 runner).
-function KLView({ solvedSet, starredSet, compact = false }: { solvedSet: Set<string>; starredSet: Set<string>; compact?: boolean }) {
-  const { t } = useLanguage()
-  // 적응형: 학생 진행으로 "지금 추천" 1개. 실패/없음 → null → 카드 숨김(=목록 그대로, 폴백)
-  const rec = getAdaptiveNext({
-    pool: KL_FLAT.map(p => ({ id: p.id, cluster: p._clusterId, difficulty: p.difficulty })),
-    solvedSet,
-    starredSet,
-  })
-  const recProb = rec ? KL_FLAT.find(p => p.id === rec.problemId) : null
-  return (
-    <div className="flex flex-col gap-1.5">
-      {!compact && recProb && rec && (
-        <Link
-          href={`/practice?cluster=${recProb._clusterId}&problem=${recProb.id}&from=kl`}
-          className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-4 flex items-center gap-3 hover:shadow-md transition-all mb-1"
-        >
-          <span className="text-2xl shrink-0">⭐</span>
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-bold text-amber-600">{t(`지금 추천 — ${rec.reason}`, `Recommended — ${rec.reasonEn}`)}</p>
-            <p className="font-bold text-gray-900 truncate">{recProb.title}</p>
-          </div>
-          <span className="text-amber-500 shrink-0" aria-hidden>→</span>
-        </Link>
-      )}
-
-      {/* 📊 내 실력 (개념별) — 풀수록 채워짐. 학생이 자기 실력을 봄 */}
-      {!compact && (() => {
-        const summary = summarizeConcepts(
-          KL_FLAT.map(p => ({ id: p.id, cluster: p._clusterId, difficulty: p.difficulty })),
-          solvedSet,
-          starredSet,
-        )
-        const topicName = new Map(KL_FLAT.map(p => [p._clusterId, p._topic]))
-        const LABEL: Record<string, [string, string, string]> = {
-          struggling: ["막힘", "Stuck", "bg-rose-100 text-rose-600"],
-          learning: ["배우는 중", "Learning", "bg-amber-100 text-amber-700"],
-          proficient: ["능숙", "Proficient", "bg-sky-100 text-sky-700"],
-          mastered: ["마스터", "Mastered", "bg-emerald-100 text-emerald-700"],
-        }
-        return (
-          <details className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 mb-1">
-            <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별) — 풀수록 채워져요", "My skill (by concept) — fills as you solve")}</summary>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {summary.map(c => {
-                const [ko, en, cls] = c.started ? LABEL[c.level] : ["아직", "—", "bg-gray-100 text-gray-400"]
-                return (
-                  <span key={c.concept} className="text-[11px] inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1">
-                    <span className="font-semibold text-gray-700">{topicName.get(c.concept)}</span>
-                    <span className={"px-1.5 py-0.5 rounded font-bold " + cls}>{t(ko, en)}</span>
-                    <span className="text-gray-400">{c.solved}/{c.total}</span>
-                  </span>
-                )
-              })}
-            </div>
-          </details>
-        )
-      })()}
-
-      {!compact && (
-        <p className="text-xs text-gray-500 mb-1">
-          {t("또는 위에서부터 한 문제씩 — 쉬움→어려움 순서. 누르면 바로 풀고 자동 채점돼요.", "Or top to bottom, easy→hard. Tap to solve in place, auto-graded.")}
-        </p>
-      )}
-      {KL_FLAT.map((p, i) => {
-        const solved = solvedSet.has(p.id)
-        const prev = KL_FLAT[i - 1]
-        const showDivider = !prev || prev.difficulty !== p.difficulty
-        return (
-          <div key={p.id}>
-            {showDivider && (
-              <p className="mt-3 mb-1 text-[11px] font-bold text-gray-400">
-                {p.difficulty === "쉬움" ? t("쉬움부터 — 손풀기", "Easy — warm-up")
-                  : p.difficulty === "보통" ? t("보통 — 한 번 생각", "Medium — think once")
-                  : t("어려움 — 기법 입문", "Hard — techniques")}
-              </p>
-            )}
-            <Link
-              href={`/practice?cluster=${p._clusterId}&problem=${p.id}&from=kl`}
-              className={"flex items-center gap-2.5 rounded-lg border px-3 py-2 transition-all hover:border-amber-400 hover:shadow-sm " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}
-            >
-              <span className="w-6 h-6 shrink-0 rounded-full bg-gray-900 text-white text-xs font-black flex items-center justify-center">{i + 1}</span>
-              <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{p.title}</span>
-              <span className="text-[10px] text-gray-400 shrink-0">{p._topic}</span>
-              {solved ? <span className="text-green-500 shrink-0 text-xs">✓</span> : <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
-            </Link>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
 const _MASTERY_LABEL: Record<string, [string, string, string]> = {
   struggling: ["막힘", "Stuck", "bg-rose-100 text-rose-600"],
   learning: ["배우는 중", "Learning", "bg-amber-100 text-amber-700"],
@@ -978,7 +875,9 @@ function PracticeContent() {
     const nextLessonLabel = isLessonRec
       ? `${smart.emoji ?? "▶"} ${uiLang === "en" ? smart.titleEn : smart.title}`
       : undefined
-    const nextLessonSubtitle = isLessonRec ? smart.subtitle : undefined
+    const nextLessonSubtitle = isLessonRec
+      ? (uiLang === "en" ? (smart.subtitleEn ?? smart.subtitle) : smart.subtitle)
+      : undefined
 
     return (
       <PracticeSession

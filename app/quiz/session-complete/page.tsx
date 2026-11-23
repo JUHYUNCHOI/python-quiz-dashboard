@@ -557,7 +557,7 @@ function SessionCompletePage() {
               >
                 <span>{smart.emoji ?? "▶"} {lang === "en" ? smart.titleEn : smart.title}</span>
                 {smart.subtitle && (
-                  <span className="text-xs font-medium text-orange-50/95">{smart.subtitle}</span>
+                  <span className="text-xs font-medium text-orange-50/95">{lang === "en" ? (smart.subtitleEn ?? smart.subtitle) : smart.subtitle}</span>
                 )}
               </button>
 
