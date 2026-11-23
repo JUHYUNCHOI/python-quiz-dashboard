@@ -42,13 +42,18 @@ else:
       solutionExplanation: "if/elif/else로 세 가지 경우를 처리합니다. n > 0과 n < 0이 모두 해당하지 않으면 n은 0이므로 else에서 '영'을 출력합니다.",
       en: {
         title: "Positive / Negative / Zero",
-        description: `Read an integer and print "positive" if it's positive, "negative" if it's negative, or "zero" if it's 0.`,
+        description: `Read an integer and print \`양수\` if it's positive, \`음수\` if it's negative, or \`영\` if it's 0.
+
+Note: the output words are Korean (양수 = positive, 음수 = negative, 영 = zero) and must be printed exactly as shown to match the test cases.`,
         constraints: "-1000 ≤ N ≤ 1000",
         hints: [
           "Use if/elif/else to handle all three cases.",
-          "n > 0 is positive, n < 0 is negative, and anything else is zero.",
+          "n > 0 prints 양수, n < 0 prints 음수, and anything else prints 영.",
         ],
-        solutionExplanation: "if/elif/else handles all three cases. If neither n > 0 nor n < 0 applies, n must be 0, so the else branch prints 'zero'.",
+        initialCode: `# Read an integer and classify it as 양수 / 음수 / 영
+n = int(input())
+# TODO: Write your code here`,
+        solutionExplanation: "if/elif/else handles all three cases. If neither n > 0 nor n < 0 applies, n must be 0, so the else branch prints '영'.",
       },
       language: "python",
     },
@@ -81,12 +86,17 @@ else:
       solutionExplanation: "% 2의 결과가 0이면 짝수, 1이면 홀수입니다. if/else 두 경우로 충분합니다.",
       en: {
         title: "Even or Odd",
-        description: `Read an integer and print "even" if it's even, or "odd" if it's odd.`,
+        description: `Read an integer and print \`짝수\` if it's even, or \`홀수\` if it's odd.
+
+Note: the output words are Korean (짝수 = even, 홀수 = odd) and must be printed exactly as shown to match the test cases.`,
         constraints: "1 ≤ N ≤ 10000",
         hints: [
           "Use the % operator (remainder).",
-          "If n % 2 == 0, it's even; if n % 2 == 1, it's odd.",
+          "If n % 2 == 0 print 짝수; otherwise print 홀수.",
         ],
+        initialCode: `# Read an integer and classify it as 홀수 / 짝수
+n = int(input())
+# TODO: Write your code here`,
         solutionExplanation: "If the remainder when dividing by 2 is 0, the number is even; otherwise it's odd. Two cases are enough — use if/else.",
       },
       language: "python",
@@ -252,13 +262,16 @@ else:
       solutionExplanation: "400의 배수는 항상 윤년이고, 4의 배수이면서 100의 배수가 아닌 경우도 윤년입니다. 두 조건을 or로 연결합니다.",
       en: {
         title: "Leap Year",
-        description: `Given a year, print "leap year" if it's a leap year, or "common year" otherwise.\n\nLeap year conditions:\n- Divisible by 4 but not by 100\n- Or divisible by 400`,
+        description: `Given a year, print \`윤년\` if it's a leap year, or \`평년\` otherwise.\n\nLeap year conditions:\n- Divisible by 4 but not by 100\n- Or divisible by 400\n\nNote: the output words are Korean (윤년 = leap year, 평년 = common year) and must be printed exactly as shown to match the test cases.`,
         constraints: "1 ≤ year ≤ 9999",
         hints: [
           "A year is a leap year if divisible by 400, or divisible by 4 but not by 100.",
           "Combine the conditions with and, or, not operators.",
           "year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)",
         ],
+        initialCode: `# Read a year and decide whether it is 윤년 (leap) or 평년 (common)
+year = int(input())
+# TODO: Write your code here`,
         solutionExplanation: "Multiples of 400 are always leap years. Multiples of 4 that are not multiples of 100 are also leap years. Connect both conditions with or.",
       },
       language: "python",
@@ -302,12 +315,15 @@ else:
       solutionExplanation: "in 연산자로 값이 리스트 안에 있는지 확인합니다. 12, 1, 2월이 모두 겨울이므로 나머지를 else로 처리합니다.",
       en: {
         title: "Season Identifier",
-        description: `Given a month (1–12), print the corresponding season.\n\n- Spring: March, April, May\n- Summer: June, July, August\n- Fall: September, October, November\n- Winter: December, January, February`,
+        description: `Given a month (1–12), print the corresponding season.\n\n- \`봄\` (spring): March, April, May\n- \`여름\` (summer): June, July, August\n- \`가을\` (fall): September, October, November\n- \`겨울\` (winter): December, January, February\n\nNote: the season names must be printed in Korean exactly as shown to match the test cases.`,
         constraints: "1 ≤ month ≤ 12",
         hints: [
           "Use the in operator to check membership: month in [3, 4, 5]",
-          "Winter spans December and January–February, so it splits across two ranges.",
+          "Winter (겨울) spans December and January–February, so it splits across two ranges.",
         ],
+        initialCode: `# Read a month and print its season (봄 / 여름 / 가을 / 겨울)
+month = int(input())
+# TODO: Write your code here`,
         solutionExplanation: "The in operator checks if a value belongs to a list. Since December, January, and February are all winter, the else branch handles them all.",
       },
       language: "python",
@@ -363,13 +379,16 @@ else:
       solutionExplanation: "if/elif로 가장 긴 변을 c에 두고, 삼각형 성립 여부 확인(a+b > c) 후 피타고라스 정리로 종류를 판별합니다.",
       en: {
         title: "Triangle Classification",
-        description: `Given three side lengths a, b, c, print the type of triangle.\n\n- Not a triangle: longest side ≥ sum of the other two\n- Right triangle: longest side² = sum of squares of the other two\n- Obtuse triangle: longest side² > sum of squares of the other two\n- Acute triangle: longest side² < sum of squares of the other two`,
+        description: `Given three side lengths a, b, c, print the type of triangle.\n\n- \`삼각형아님\` (not a triangle): longest side ≥ sum of the other two\n- \`직각삼각형\` (right): longest side² = sum of squares of the other two\n- \`둔각삼각형\` (obtuse): longest side² > sum of squares of the other two\n- \`예각삼각형\` (acute): longest side² < sum of squares of the other two\n\nNote: the type names must be printed in Korean exactly as shown — \`삼각형아님\` has no space.`,
         constraints: "1 ≤ a, b, c ≤ 1000 (integers)",
         hints: [
           "Use if/elif to find the longest side (assign to c) and assign the other two to a and b.",
           "Check if a triangle is valid first: a + b > c",
           "Right: c² == a² + b², Obtuse: c² > a² + b², Acute: c² < a² + b²",
         ],
+        initialCode: `# Read three side lengths and print the triangle type in Korean
+a, b, c = map(int, input().split())
+# TODO: Write your code here`,
         solutionExplanation: "Use if/elif to assign the longest side to c, then check the triangle inequality (a+b > c) and use the Pythagorean theorem to classify the triangle type.",
       },
       language: "python",
@@ -413,12 +432,16 @@ else:
       solutionExplanation: "아이디를 먼저 확인합니다. 아이디가 맞으면(elif로 이어서) 비밀번호를 확인합니다. 두 조건이 모두 맞으면 로그인 성공입니다.",
       en: {
         title: "Login Simulation",
-        description: `Read a username and password, then print the login result.\n\n- Correct username: admin\n- Correct password: 1234\n- Success: "login success"\n- Wrong username: "username error"\n- Wrong password: "password error"`,
+        description: `Read a username and password, then print the login result.\n\n- Correct username: admin\n- Correct password: 1234\n- Success: \`로그인 성공\`\n- Wrong username: \`아이디 오류\`\n- Wrong password: \`비밀번호 오류\`\n\nNote: the result messages must be printed in Korean exactly as shown, including the space.`,
         constraints: "Username/password is a string of 1–20 characters",
         hints: [
           "Check the username first; only check the password if the username is correct.",
           "Use nested if or elif to handle the cases in order.",
         ],
+        initialCode: `# Read a username and password and print the login result in Korean
+user_id = input()
+password = input()
+# TODO: Write your code here`,
         solutionExplanation: "Check the username first. If it's correct (handled by elif), check the password. If both are correct, login succeeds.",
       },
       language: "python",
@@ -514,13 +537,17 @@ else:
       solutionExplanation: "키를 100으로 나눠 미터 단위로 변환합니다. BMI = 체중 / 키²를 계산한 뒤, 기준값과 비교하여 체중 상태를 출력합니다.",
       en: {
         title: "BMI Calculator",
-        description: `Given height (cm) and weight (kg), calculate BMI and print the weight status.\n\nBMI = weight(kg) / (height(m))²\n\n- Underweight: BMI < 18.5\n- Normal: BMI < 25.0\n- Overweight: BMI < 30.0\n- Obese: BMI ≥ 30.0`,
+        description: `Given height (cm) and weight (kg), calculate BMI and print the weight status.\n\nBMI = weight(kg) / (height(m))²\n\n- \`저체중\` (underweight): BMI < 18.5\n- \`정상\` (normal): BMI < 25.0\n- \`과체중\` (overweight): BMI < 30.0\n- \`비만\` (obese): BMI ≥ 30.0\n\nNote: the status must be printed in Korean exactly as shown to match the test cases.`,
         constraints: "100 ≤ height ≤ 250 (cm), 30 ≤ weight ≤ 300 (kg)",
         hints: [
           "Convert height from cm to m: height = height_cm / 100",
           "Compute BMI = weight / (height ** 2).",
           "Use if/elif/else with thresholds 18.5, 25.0, and 30.0.",
         ],
+        initialCode: `# Read height (cm) and weight (kg), compute BMI, print the status in Korean
+height_cm = int(input())
+weight = int(input())
+# TODO: Write your code here`,
         solutionExplanation: "Divide height by 100 to convert to meters, then compute BMI = weight / height². Compare against the thresholds to determine the weight status.",
       },
       language: "python",
@@ -562,13 +589,17 @@ else:
       solutionExplanation: "Python의 튜플 비교는 첫 번째 원소부터 순서대로 비교합니다. (y1, m1, d1) < (y2, m2, d2)는 연도→월→일 순서로 자동으로 비교해 줍니다.",
       en: {
         title: "Date Comparison",
-        description: `Read two dates each in "YYYY MM DD" format and print the earlier one.\nIf both dates are the same, print "same day".\n\nOutput format: "YYYY-MM-DD"`,
+        description: `Read two dates each in "YYYY MM DD" format and print the earlier one.\nIf both dates are the same, print \`같은 날\`.\n\nOutput format: "YYYY-MM-DD"\n\nNote: the tie message is Korean (같은 날 = same day) and must be printed exactly as shown, including the space.`,
         constraints: "1900 ≤ year ≤ 2100, valid dates are guaranteed",
         hints: [
           "Compare year → month → day in order.",
           "If the year is the same, compare the month; if the month is the same, compare the day.",
           "Use f'{y:04d}-{m:02d}-{d:02d}' to format the output.",
         ],
+        initialCode: `# Read two dates and print the earlier one (or 같은 날 if they are equal)
+y1, m1, d1 = map(int, input().split())
+y2, m2, d2 = map(int, input().split())
+# TODO: Write your code here`,
         solutionExplanation: "Python compares tuples element by element from left to right. (y1, m1, d1) < (y2, m2, d2) automatically compares year → month → day in order.",
       },
       language: "python",
@@ -635,13 +666,20 @@ else:
       solutionExplanation: "8개의 라인(행 3 + 열 3 + 대각 2)을 리스트에 담아 반복문으로 검사합니다. 세 값이 모두 같은 문자면 해당 플레이어의 승리입니다.",
       en: {
         title: "Tic-Tac-Toe Winner",
-        description: `Given the state of a 3×3 tic-tac-toe board, determine the winner.\n\nInput: 9 values, one per line ('X', 'O', or '.')\n(. = empty, from top-left to bottom-right)\n\nOutput:\n- "X wins", "O wins", or "draw"`,
+        description: `Given the state of a 3×3 tic-tac-toe board, determine the winner.\n\nInput: 9 values, one per line ('X', 'O', or '.')\n(. = empty, from top-left to bottom-right)\n\nOutput:\n- \`X 승리\`, \`O 승리\`, or \`무승부\`\n\nNote: 승리 means "wins" and 무승부 means "draw". Print them in Korean exactly as shown — there is a space between the letter and 승리.`,
         constraints: "Input contains only X, O, and . — a valid tic-tac-toe state is guaranteed",
         hints: [
           "Check all 8 lines: 3 rows, 3 columns, and 2 diagonals.",
-          "If all three values in a line are 'X', X wins; if all are 'O', O wins.",
+          "If all three values in a line are 'X', print 'X 승리'; if all are 'O', print 'O 승리'.",
           "Collect all lines into a list and loop through them for cleaner code.",
         ],
+        initialCode: `# Read 9 cells and decide the tic-tac-toe winner (X 승리 / O 승리 / 무승부)
+board = []
+for _ in range(9):
+    board.append(input())
+# Reshape into a 3x3 grid
+grid = [board[i*3:(i+1)*3] for i in range(3)]
+# TODO: Write your code here`,
         solutionExplanation: "Store all 8 lines (3 rows + 3 columns + 2 diagonals) in a list and check each one. If all three values match, that player wins.",
       },
       language: "python",
@@ -693,13 +731,17 @@ else:
       solutionExplanation: "거스름돈에서 큰 단위부터 몫을 계산하고 나머지를 다음 단위 계산에 사용합니다. 이를 탐욕 알고리즘(greedy)이라고 합니다.",
       en: {
         title: "Vending Machine Change",
-        description: `Given the amount inserted and the item price, print the change in 500, 100, and 10 coin denominations.\n\nOutput format:\n500: N coins\n100: N coins\n10: N coins\n\nIf the amount inserted is less than the price, print "insufficient funds".`,
+        description: `Given the amount inserted and the item price, print the change in 500, 100, and 10 coin denominations.\n\nOutput format (원 = won, 개 = count):\n\`500원: N개\`\n\`100원: N개\`\n\`10원: N개\`\n\nIf the amount inserted is less than the price, print \`금액 부족\` (insufficient funds).\n\nNote: the Korean characters 원, 개 and the message 금액 부족 must be printed exactly as shown to match the test cases.`,
         constraints: "10 ≤ price ≤ 10000 (multiple of 10), 10 ≤ inserted ≤ 10000 (multiple of 10)",
         hints: [
           "First compute change = inserted - price.",
           "Count of 500 coins = change // 500; use the remainder for 100 and 10 coins.",
-          "After each denomination, use // and % to find the next denomination's count.",
+          "Format each line with an f-string: f'500원: {c500}개'",
         ],
+        initialCode: `# Read the inserted amount and the price, then print the change in Korean format
+inserted = int(input())
+price = int(input())
+# TODO: Write your code here`,
         solutionExplanation: "Compute the quotient for each denomination from largest to smallest, using the remainder for the next one. This approach is called a greedy algorithm.",
       },
       language: "python",
