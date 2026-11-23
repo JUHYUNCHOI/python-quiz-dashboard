@@ -160,14 +160,21 @@ export function currentItem(s: PlacementState): PlacementItem | null {
 }
 
 /**
- * 탐색이 끝났다 — 코드 작성 문항으로 넘기거나, 낼 문항이 없으면 끝낸다.
+ * 탐색이 끝났다 — 코드 작성 문항으로 넘긴다.
  *
- * 1단계조차 통과 못 한 학생(best = 0)에게는 코드 문항을 내지 않는다.
- * 최하위 티어에서 더 내릴 곳이 없으니 결과가 바뀌지 않고, 못 푸는 걸
- * 이미 아는 학생에게 5분을 더 쓰게 할 뿐이다.
+ * ⛔ 2026-11-24 — **코드 문항은 누구에게나 낸다.**
+ *   예전에는 `best >= PLACEMENT_MIN_STEP` 일 때만 냈다. 출력 예측을 다 틀리면
+ *   `best = 0` 이라 **코드 작성 단계가 통째로 건너뛰어지고** 9문항 만에 결과
+ *   화면이 떴다 (실측: seed 42, 전부 오답 → asked 9 / phase "done").
+ *   화면에는 "뒷부분 2문항은 직접 코드를 짜서 제출합니다" 라고 적혀 있으니
+ *   학생 눈에는 그냥 「안 바뀐다」로 보인다.
+ *
+ *   읽기와 쓰기는 다른 능력이다. 출력 예측을 못 해도 1단계 코드는 짜는 학생이
+ *   실재하고, 그 학생을 최하위에 묶으면 배치가 틀린다. 그래서 1단계 문항을
+ *   최소한 한 번은 준다.
  */
 function toCodePhase(s: PlacementState, lo: number, hi: number, best: number): PlacementState {
-  const codeTask = best >= PLACEMENT_MIN_STEP ? codeTaskForStep(best) : null
+  const codeTask = codeTaskForStep(Math.max(best, PLACEMENT_MIN_STEP))
   if (!codeTask) return { ...s, lo, hi, best, phase: "done", queue: [] }
   return { ...s, lo, hi, best, phase: "code", codeTask, codeResults: [], queue: [] }
 }
@@ -215,21 +222,27 @@ export function submitCodeResult(s: PlacementState, passed: boolean): PlacementS
 
   const codeResults = [...s.codeResults, { step: s.codeTask.step, passed }]
 
+  /** ①이 실제로 물어본 단계. `best` 가 0 이어도 1단계는 내므로 둘이 다를 수 있다.
+      여기서 `s.best` 를 쓰면 ②가 ①과 **같은 문항**이 되고 칸 계산도 틀린다. */
+  const confirmStep = codeResults[0].step
+
   // ① 확인 문항
   if (codeResults.length === 1) {
     if (!passed) {
-      return { ...s, codeResults, best: Math.max(0, s.best - 1), phase: "done", codeTask: null }
+      return { ...s, codeResults, best: Math.max(0, confirmStep - 1), phase: "done", codeTask: null }
     }
-    const up = s.best + 1 <= PLACEMENT_CAP_STEP ? codeTaskAtStep(s.best + 1) : null
-    if (!up) return { ...s, codeResults, phase: "done", codeTask: null }
-    return { ...s, codeResults, codeTask: up }
+    // 짜서 증명한 단계는 최소한 확보한다 (읽기로 못 올라간 학생의 구제 통로).
+    const best = Math.min(PLACEMENT_CAP_STEP, Math.max(s.best, confirmStep))
+    const up = confirmStep + 1 <= PLACEMENT_CAP_STEP ? codeTaskAtStep(confirmStep + 1) : null
+    if (!up) return { ...s, codeResults, best, phase: "done", codeTask: null }
+    return { ...s, codeResults, best, codeTask: up }
   }
 
   // ② 도전 문항
   return {
     ...s,
     codeResults,
-    best: passed ? Math.min(PLACEMENT_CAP_STEP, s.best + 1) : s.best,
+    best: passed ? Math.min(PLACEMENT_CAP_STEP, confirmStep + 1) : s.best,
     phase: "done",
     codeTask: null,
   }

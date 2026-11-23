@@ -318,7 +318,10 @@ export default function PlacementPage() {
         {/* 오른쪽에 제목을 또 쓰면 바로 아래 h1 과 같은 글자가 두 번 보인다
             (실측: "소수 판정 / 소수 판정"). 여기는 단계만 적는다. */}
         <div className="flex items-center justify-between text-sm font-semibold text-gray-600">
-          <span>{t("마지막 문항 — 코드 작성", "Last question — write code")}</span>
+          {/* 코드 문항은 2개다. 「마지막 문항」이라고 적어 놓으면 ①을 통과한
+              학생이 ②를 보고 시험이 안 끝났다고 느낀다. 몇 번째인지 적는다. */}
+          <span>{t(`코드 작성 ${codeTaskIndex(state)} / ${CODE_TASK_COUNT}`,
+                   `Write code ${codeTaskIndex(state)} of ${CODE_TASK_COUNT}`)}</span>
           <span>{t(`${codeTask.step}단계`, `Step ${codeTask.step}`)}</span>
         </div>
         <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-200">

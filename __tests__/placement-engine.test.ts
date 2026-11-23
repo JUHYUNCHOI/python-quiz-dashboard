@@ -25,13 +25,20 @@ const cap = (ability: number) => Math.min(ability, PLACEMENT_CAP_STEP)
  * `codePass` 를 넘기면 그 값으로 덮어쓴다 — "읽기는 되지만 못 짠다"를
  * 재현하는 테스트 전용이다.
  */
-function simulate(ability: number, seed = 42, codePass?: boolean) {
+/** 출력 예측 단계만 끝낸 상태 — 코드 문항은 아직 안 낸 채로 돌려준다. */
+function bracketOnly(ability: number, seed = 42) {
   let s = startPlacement(seed)
   let guard = 0
   while (currentItem(s) && guard++ < 50) {
     const item = currentItem(s)!
     s = submitAnswer(s, item.step <= ability ? item.answer : "WRONG_ON_PURPOSE")
   }
+  return s
+}
+
+function simulate(ability: number, seed = 42, codePass?: boolean) {
+  let s = bracketOnly(ability, seed)
+  let guard = 0
   // 탐색이 끝나면 코드 작성 문항이 최대 2개 남는다. `currentItem()` 은 여기서
   // null 이므로 위 루프만 돌리면 phase 가 "code" 에 멈춘 채로 끝난다.
   guard = 0
@@ -154,13 +161,35 @@ describe("적응형 엔진", () => {
     }
   })
 
-  it("1단계도 통과 못 하면 코드 문항을 내지 않는다", () => {
-    // 최하위 티어에서 더 내릴 곳이 없다 — 못 푸는 걸 아는 학생에게
-    // 5분을 더 쓰게 할 뿐이다.
-    const s = simulate(0)
+  it("1단계도 통과 못 해도 코드 문항은 낸다", () => {
+    // 예전엔 best = 0 이면 코드 단계를 통째로 건너뛰어 9문항 만에 결과가 떴다.
+    // 화면에는 "뒷부분 2문항은 직접 코드를 짜서 제출합니다" 라고 적혀 있으니
+    // 학생 눈에는 「실제 풀이로 안 바뀐다」로 보인다.
+    // 읽기와 쓰기는 다른 능력이다 — 출력 예측을 못 해도 1단계는 짜는 학생이 있다.
+    const s = bracketOnly(0)
+    expect(s.phase).toBe("code")
+    expect(s.codeTask?.step).toBe(1)
+  })
+
+  it("best = 0 에서 1단계 코드를 통과하면 ②는 2단계다 — 같은 문항을 또 내지 않는다", () => {
+    // `s.best`(0) + 1 로 ② 를 고르면 ① 과 **같은 1단계 문항**이 다시 나왔다.
+    let s = bracketOnly(0)
+    const first = s.codeTask!.id
+    s = submitCodeResult(s, true)
+    expect(s.best).toBe(1)                    // 짜서 증명한 단계는 확보한다
+    expect(s.codeTask?.id).not.toBe(first)
+    expect(s.codeTask?.step).toBe(2)
+    s = submitCodeResult(s, true)
     expect(s.phase).toBe("done")
-    expect(s.codeTask).toBeNull()
-    expect(s.codeResults).toEqual([])
+    expect(s.best).toBe(2)
+  })
+
+  it("best = 0 에서 1단계 코드도 못 풀면 최하위에 남는다", () => {
+    let s = bracketOnly(0)
+    s = submitCodeResult(s, false)
+    expect(s.phase).toBe("done")
+    expect(s.best).toBe(0)
+    expect(resultTier(s)).toBe(TIER_IDS[0])
   })
 
   it("전부 찍어서 틀리면 최하위 티어다", () => {
