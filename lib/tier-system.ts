@@ -39,9 +39,11 @@ export interface TierInfo {
 }
 
 /**
- * 구간은 전체 1430문제를 티어당 117~168개로 균등 분할해 뽑았다.
+ * 구간은 사다리 전체를 티어당 117~168개로 균등 분할해 뽑았다.
  * (측정: level 8~99 분포, 2026-11-19)
  * 문제 수가 비슷해야 "10개 풀기"가 티어마다 같은 난이도의 숙제가 된다.
+ * 외부 사이트 문제를 뺀 뒤 자체채점 문제는 티어당 55~86개 — 승급 조건
+ * 10개를 못 채우는 막다른 티어는 없다.
  */
 export const TIERS: TierInfo[] = [
   { id: "bronze2",     label: "브론즈 II",     labelEn: "Bronze II",     color: "#9a6b3f", ink: "#fff", tint: "#fdf6ee", minLevel:  8, maxLevel: 12 },
@@ -162,38 +164,12 @@ export function findTierProblem(problemId: string): TierProblem | undefined {
 
 // ── 승급 판정 ──────────────────────────────────────────────────────────────
 
-export interface PromotionState {
-  tier: TierId
-  /** 자기 티어에서 채점으로 맞힌 개수 (상한 없이 실제 개수) */
-  solved: number
-  target: number
-  canPromote: boolean
-  next: TierId | null
-  /** 자기 티어 자체채점 문제가 몇 개 남았는지 — 10개를 채울 수 있는지 확인용 */
-  remaining: number
-}
-
-/**
- * 승급 진행도.
- *
- * `solvedIds` 는 "자체채점으로 통과한 문제 id" 집합이어야 한다. 체크박스로
- * 수동 완료 처리한 id(`ladder-done`)를 섞으면 승급이 무의미해진다 —
- * 호출하는 쪽에서 걸러서 넘긴다.
+/*
+ * 승급 진행도는 `lib/tier-store.ts` 의 `tierProgress()` 하나만 쓴다.
+ * 여기에도 같은 계산을 하는 `promotionState()` 가 있었지만 쓰는 곳이
+ * 없었고, 승급 규칙이 "10문제 → 자격 / 시험 합격 → 승급" 2단으로 바뀐
+ * 뒤에는 **틀린 규칙을 말하는 복사본**이 됐다. 규칙은 한 곳에만 둔다.
  */
-export function promotionState(tier: TierId, solvedIds: Set<string>): PromotionState {
-  const pool = promotionPool(tier)
-  let solved = 0
-  for (const p of pool) if (solvedIds.has(p.id)) solved++
-  const next = nextTier(tier)
-  return {
-    tier,
-    solved,
-    target: PROMOTION_TARGET,
-    canPromote: solved >= PROMOTION_TARGET && next !== null,
-    next,
-    remaining: pool.length - solved,
-  }
-}
 
 /**
  * 한 문제가 지금 티어 기준으로 어떤 의미인가.

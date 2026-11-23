@@ -184,7 +184,14 @@ export interface TierProgress {
   tier: TierId
   solved: number
   target: number
-  canPromote: boolean
+  /**
+   * 승급 **자격**. 10문제를 통과했다는 뜻이고, 티어가 오른다는 뜻이 아니다.
+   * 실제 승급은 선생님이 교실에서 열어 주는 승급 시험을 통과해야 한다
+   * (`lib/tier-exam.ts`). 예전엔 이 값이 곧 "승급 버튼 활성"이었다 —
+   * 집에서 혼자 10문제를 맞히면 그 자리에서 티어가 올라갔고, 검색·AI 를
+   * 쓴 10문제와 안 쓴 10문제를 구분할 수가 없었다.
+   */
+  eligible: boolean
   next: TierId | null
   /** 이 티어에서 아직 안 푼 승급용 문제 수 */
   remaining: number
@@ -203,19 +210,25 @@ export function tierProgress(state: TierState, solves: VerifiedSolves): TierProg
     tier: state.tier,
     solved,
     target: PROMOTION_TARGET,
-    canPromote: solved >= PROMOTION_TARGET && next !== null,
+    eligible: solved >= PROMOTION_TARGET && next !== null,
     next,
     remaining: Math.max(0, pool.length - solved),
   }
 }
 
 /**
- * 승급. 조건을 못 채웠거나 최상위면 `null` — 호출하는 쪽에서 버튼을 숨기더라도
- * 여기서 한 번 더 막는다. 버튼만 숨기면 콘솔에서 부를 수 있다.
+ * 승급 — 3단계 중 ③. **승급 시험을 통과한 뒤에만** 부른다.
+ *
+ * `examPassed` 를 인자로 받는 이유: 이 함수만 보고도 "시험 없이는 못 오른다"
+ * 가 읽혀야 한다. 호출하는 쪽에서 화면을 숨기는 것만으로는 콘솔에서
+ * 부를 수 있으니, ① 자격(10문제)과 ② 시험 합격을 여기서 둘 다 다시 본다.
  */
-export function promoteTier(state: TierState, solves: VerifiedSolves): TierState | null {
+export function promoteTier(
+  state: TierState, solves: VerifiedSolves, examPassed: boolean,
+): TierState | null {
+  if (!examPassed) return null
   const prog = tierProgress(state, solves)
-  if (!prog.canPromote || !prog.next) return null
+  if (!prog.eligible || !prog.next) return null
   const at = new Date().toISOString()
   return writeState({
     tier: prog.next,
