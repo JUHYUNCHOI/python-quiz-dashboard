@@ -33,9 +33,10 @@ import {
   problemsInTier, promotionPool, type TierId, type TierProblem,
 } from "@/lib/tier-system"
 import {
-  loadTierState, loadVerifiedSolves, syncTierFromServer, tierProgress, promoteTier,
+  loadTierState, loadVerifiedSolves, syncTierFromServer, tierProgress,
   type TierState, type VerifiedSolves,
 } from "@/lib/tier-store"
+import { TierStages } from "@/components/tier-stages"
 import {
   TOPIC_COLOR, textOn, topicLabel, diffLabel, diffColor, langLabel, langColor,
 } from "@/lib/problem-tags"
@@ -89,12 +90,6 @@ export default function TierPage() {
     [state, solves],
   )
 
-  function doPromote() {
-    if (!state) return
-    const next = promoteTier(state, solves)
-    if (next) setState(next)
-  }
-
   if (!loaded) return <Shell><div className="h-40" /></Shell>
 
   // ── 배치고사 미응시 ──────────────────────────────────────────────────────
@@ -130,43 +125,8 @@ export default function TierPage() {
         {/* 티어를 보여 줬으면 **어떻게 올라가는지**도 같은 화면에서 끝내야 한다.
             지금까지 승급 규칙은 티어를 받고 나서야 처음 나왔다 — 규칙을 모르는
             채로 시험부터 보는 꼴이었다. 숫자는 전부 실제 상수에서 읽는다. */}
-        <div className="mt-6 grid gap-2.5 sm:grid-cols-3">
-          {[
-            {
-              head: t("배치고사 12문항", "12-question placement"),
-              body: t(
-                "맞히면 어려워지고 틀리면 쉬워집니다. 끝나면 사다리의 한 칸을 받습니다.",
-                "It gets harder when you are right, easier when you are wrong. You land on one rung.",
-              ),
-            },
-            {
-              head: t("내 티어 문제 풀기", "Solve problems at your tier"),
-              body: t(
-                "테스트 케이스를 전부 통과해야 한 문제로 셉니다. 일부만 맞으면 0개입니다.",
-                "Every test case must pass. A partial pass counts as zero.",
-              ),
-            },
-            {
-              head: t(`${PROMOTION_TARGET}문제 통과하면 승급`, `${PROMOTION_TARGET} passes rank you up`),
-              body: t(
-                "아래 티어 문제도 풀 수 있지만 연습용이라 승급 카운트에는 안 들어갑니다.",
-                "Lower tiers stay open for practice, but they do not count toward promotion.",
-              ),
-            },
-          ].map((s, i) => (
-            <div key={s.head} className="flex gap-4 rounded-xl border border-gray-200 bg-white p-5">
-              {/* 숫자를 `bg-gray-900` 사각형에 넣었더니 다크 모드에서 칸 배경과
-                  같은 검정이 되어 네모가 통째로 사라졌다. 상자를 빼고 숫자만
-                  크게 둔다 — 어차피 번호는 상자가 아니라 숫자가 말한다. */}
-              <span className="shrink-0 text-2xl font-bold leading-none text-gray-300 tabular-nums">
-                {i + 1}
-              </span>
-              <div>
-                <div className="text-base font-bold text-gray-900 break-keep">{s.head}</div>
-                <p className="mt-1.5 text-sm leading-relaxed text-gray-500 break-keep">{s.body}</p>
-              </div>
-            </div>
-          ))}
+        <div className="mt-6">
+          <TierStages stage1="wait" stage2="wait" stage3="wait" />
         </div>
       </Shell>
     )
@@ -245,21 +205,21 @@ export default function TierPage() {
               />
             </div>
 
-            {progress.canPromote && progress.next ? (
-              <button
-                onClick={doPromote}
-                className="mt-3 w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-bold text-white hover:bg-gray-800"
+            {/* 10문제를 채우면 **승급이 아니라 승급 자격**이다. 여기서 바로
+                티어를 올리면 집에서 검색·AI 를 쓰고도 오를 수 있다 — 실제
+                승급은 선생님이 교실에서 열어 주는 시험을 통과해야 한다. */}
+            {progress.eligible && progress.next ? (
+              <Link
+                href="/tier/exam"
+                className="mt-3 block w-full rounded-xl bg-gray-900 px-4 py-3 text-center text-sm font-bold text-white hover:bg-gray-800"
               >
-                {t(
-                  `${tierLabel(progress.next, "ko")}(으)로 승급하기`,
-                  `Rank up to ${tierLabel(progress.next, "en")}`,
-                )}
-              </button>
+                {t("승급 자격 획득 — 승급 시험 보기", "Promotion eligible — take the exam")}
+              </Link>
             ) : progress.next ? (
               <p className="mt-2 text-xs text-gray-600">
                 {t(
-                  `이 티어 문제를 ${PROMOTION_TARGET - progress.solved}개 더 맞히면 승급합니다.`,
-                  `Solve ${PROMOTION_TARGET - progress.solved} more problems at this tier to rank up.`,
+                  `이 티어 문제를 ${PROMOTION_TARGET - progress.solved}개 더 맞히면 승급 시험을 볼 수 있습니다.`,
+                  `Solve ${PROMOTION_TARGET - progress.solved} more problems at this tier to unlock the exam.`,
                 )}
               </p>
             ) : (
@@ -269,6 +229,16 @@ export default function TierPage() {
             )}
           </div>
         )}
+      </div>
+
+      {/* 승급 규칙 3단계. 진행도 바 바로 아래 둔다 — "10 / 10" 을 본 학생이
+          그다음에 뭘 해야 하는지가 같은 화면에 있어야 한다. */}
+      <div className="mt-4">
+        <TierStages
+          stage1={progress?.eligible ? "done" : "active"}
+          stage2={progress?.eligible ? "active" : "wait"}
+          stage3="wait"
+        />
       </div>
 
       {/* 내 칸만 보여 주면 사다리의 끝이 안 보인다 — 위아래를 전부 깔아 둔다. */}
