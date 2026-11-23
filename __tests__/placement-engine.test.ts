@@ -2,16 +2,12 @@ import { describe, it, expect } from "vitest"
 import {
   startPlacement, currentTask, submitResult, resultTier, placementBankGaps,
   problemIndex, passedCount, placementProgress,
-  PLACEMENT_MAX_PROBLEMS, PLACEMENT_CAP_STEP, START_STEP,
+  PLACEMENT_MAX_PROBLEMS, PLACEMENT_MAX_STEP, PLACEMENT_CAP_TIER, START_STEP,
 } from "@/lib/placement-engine"
 import { PLACEMENT_CODE_TASKS, codeTaskAtStep, codeTaskSamples } from "@/data/placement-code"
-import { TIER_IDS, tierOfLevel, promotionPool, problemRole, TIERS, type TierId } from "@/lib/tier-system"
-
-/**
- * 배치로 받을 수 있는 가장 높은 단계. 마스터 이상은 승급 전용이라
- * ability 9·10 학생도 여기서 멈춘다 — 기대값을 `ability` 로 쓰면 안 된다.
- */
-const cap = (ability: number) => Math.min(ability, PLACEMENT_CAP_STEP)
+import {
+  TIER_IDS, tierOfLevel, promotionPool, problemRole, tierRank, TIERS, type TierId,
+} from "@/lib/tier-system"
 
 /**
  * 가짜 응시자. `ability` 단계까지의 문제는 풀고 그 위는 못 푼다.
@@ -31,6 +27,36 @@ describe("배치고사 문제 은행", () => {
   it("단계 1..10 에 문제가 하나씩 다 있다", () => {
     // 한 단계라도 비면 그 단계에서 탐색이 끊겨 티어가 잘못 나온다.
     expect(placementBankGaps()).toEqual([])
+  })
+
+  it("난이도가 브론즈 2 · 실버 3 · 골드 3 · 플래티넘 2 로 배분돼 있다", () => {
+    // 가운데(실버·골드)를 두껍게 두는 게 이 배분의 요점이다. 한 칸이라도
+    // 어긋나면 학생이 가장 많이 몰리는 구간의 판정이 문제 하나에 매달린다.
+    const count = (prefix: string) =>
+      PLACEMENT_CODE_TASKS.filter(t => t.tier.startsWith(prefix)).length
+    expect(count("bronze")).toBe(2)
+    expect(count("silver")).toBe(3)
+    expect(count("gold")).toBe(3)
+    expect(count("plat")).toBe(2)
+    expect(PLACEMENT_CODE_TASKS.length).toBe(10)
+  })
+
+  it("마스터 이상 문제는 은행에 없다", () => {
+    // 은행에 없는 것이 곧 배치 상한이다 — 엔진에 상한 숫자가 따로 없다.
+    for (const q of PLACEMENT_CODE_TASKS) {
+      expect(tierRank(q.tier), q.id).toBeLessThanOrEqual(tierRank("plat1"))
+    }
+    expect(PLACEMENT_CAP_TIER).toBe("plat1")
+  })
+
+  it("단계가 올라가면 티어도 내려가지 않는다", () => {
+    // 단계는 난이도 순서다. 더 어려운 문제가 더 낮은 티어를 주면 이분 탐색의
+    // 전제("위로 갈수록 좋다")가 깨져 배치가 뒤집힌다.
+    const sorted = [...PLACEMENT_CODE_TASKS].sort((a, b) => a.step - b.step)
+    for (let i = 1; i < sorted.length; i++) {
+      expect(tierRank(sorted[i].tier), sorted[i].id)
+        .toBeGreaterThanOrEqual(tierRank(sorted[i - 1].tier))
+    }
   })
 
   it("문제 id 가 중복되지 않는다", () => {
@@ -110,23 +136,40 @@ describe("적응형 엔진", () => {
     }
   })
 
-  it("실력 단계와 같은 티어에 배치한다", () => {
-    // ability N → N번째 티어 (상한까지). ability 0 은 더 내릴 곳이 없어 최하위.
+  it("풀 수 있는 가장 높은 문제의 티어에 배치한다", () => {
+    // 단계 숫자가 아니라 그 단계 문제가 들고 있는 `tier` 가 답이다 —
+    // 배분이 2·3·3·2 라서 단계와 티어는 1:1이 아니다.
     for (let ability = 1; ability <= 10; ability++) {
-      expect(resultTier(simulate(ability)), `ability=${ability}`).toBe(TIER_IDS[cap(ability) - 1])
+      expect(resultTier(simulate(ability)), `ability=${ability}`)
+        .toBe(codeTaskAtStep(ability)!.tier)
     }
+    // 1단계도 못 풀면 더 내릴 곳이 없어 최하위.
     expect(resultTier(simulate(0))).toBe(TIER_IDS[0])
   })
 
+  it("배분대로 실버 3단계·골드 3단계가 같은 두 티어로 모인다", () => {
+    // 2·3·3·2 배분의 실제 결과를 못 박는다. 가운데 티어가 두 단계를 받는다.
+    expect(resultTier(simulate(1))).toBe("bronze2")
+    expect(resultTier(simulate(2))).toBe("bronze1")
+    expect(resultTier(simulate(3))).toBe("silver2")
+    expect(resultTier(simulate(4))).toBe("silver2")
+    expect(resultTier(simulate(5))).toBe("silver1")
+    expect(resultTier(simulate(6))).toBe("gold2")
+    expect(resultTier(simulate(7))).toBe("gold2")
+    expect(resultTier(simulate(8))).toBe("gold1")
+    expect(resultTier(simulate(9))).toBe("plat2")
+    expect(resultTier(simulate(10))).toBe("plat1")
+  })
+
   it("마스터 이상은 배치고사로 받을 수 없다", () => {
-    // 9·10단계 문제를 다 풀 수 있는 학생도 상한에서 멈춘다.
-    for (const ability of [9, 10]) {
-      expect(resultTier(simulate(ability))).toBe(TIER_IDS[PLACEMENT_CAP_STEP - 1])
+    for (let ability = 0; ability <= 10; ability++) {
+      expect(tierRank(resultTier(simulate(ability))), `ability=${ability}`)
+        .toBeLessThanOrEqual(tierRank(PLACEMENT_CAP_TIER))
     }
-    // 탐색이 상한 위 단계를 애초에 방문하지 않는다.
+    // 탐색이 은행 위쪽 끝을 넘어가지 않는다.
     for (let ability = 0; ability <= 10; ability++) {
       for (const a of simulate(ability).attempts) {
-        expect(a.step, `ability=${ability}`).toBeLessThanOrEqual(PLACEMENT_CAP_STEP)
+        expect(a.step, `ability=${ability}`).toBeLessThanOrEqual(PLACEMENT_MAX_STEP)
       }
     }
   })
@@ -186,9 +229,9 @@ describe("적응형 엔진", () => {
     expect(submitResult(s, true)).toBe(s)
   })
 
-  it("상한 단계의 문제가 은행에 있다", () => {
+  it("가장 높은 단계의 문제가 은행에 있다", () => {
     // 없으면 탐색의 마지막 칸이 영원히 확인되지 않아 최고 배치가 불가능해진다.
-    expect(codeTaskAtStep(PLACEMENT_CAP_STEP)).not.toBeNull()
+    expect(codeTaskAtStep(PLACEMENT_MAX_STEP)).not.toBeNull()
   })
 })
 

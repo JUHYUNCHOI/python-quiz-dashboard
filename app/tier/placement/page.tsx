@@ -26,13 +26,13 @@ import { useLanguage } from "@/contexts/language-context"
 import {
   startPlacement, currentTask, submitResult, resultTier,
   passedCount, placementProgress, problemIndex,
-  PLACEMENT_MAX_PROBLEMS, PLACEMENT_CAP_STEP,
+  PLACEMENT_MAX_PROBLEMS, PLACEMENT_CAP_TIER,
   type PlacementState,
 } from "@/lib/placement-engine"
 import { codeTaskText, codeTaskSamples, findCodeTask } from "@/data/placement-code"
 import { callPistonWithRetry } from "@/lib/piston"
 import { preloadPython } from "@/utils/pyodideWorker"
-import { tierInfo, tierLabel, TIER_IDS } from "@/lib/tier-system"
+import { tierInfo, tierLabel } from "@/lib/tier-system"
 import { placeTier } from "@/lib/tier-store"
 
 /** 학생이 고르는 언어. 채점기는 언어를 모른다 — stdout 만 본다. */
@@ -178,7 +178,7 @@ export default function PlacementPage() {
           <Bullet>{t("풀면 더 어려운 문제가, 못 풀면 더 쉬운 문제가 나옵니다. 막히면 「못 풀겠습니다」를 누르세요.", "Solve it and the next problem gets harder; miss it and the next gets easier. Press \u201cI'm stuck\u201d if you cannot proceed.")}</Bullet>
           {/* 상한을 시작 화면에 못 박는다. 플래티넘 I 을 받은 학생이 "이게 최고인가"를
               물으러 오는 일을 막고, 마스터가 시험으로 안 나오는 걸 기대에 미리 넣는다. */}
-          <Bullet>{t(`배치로 받을 수 있는 가장 높은 티어는 ${tierLabel(TIER_IDS[PLACEMENT_CAP_STEP - 1], "ko")} 입니다. 마스터 이상은 승급으로만 올라갑니다.`, `The highest tier placement can award is ${tierLabel(TIER_IDS[PLACEMENT_CAP_STEP - 1], "en")}. Master and above are reached only by ranking up.`)}</Bullet>
+          <Bullet>{t(`배치로 받을 수 있는 가장 높은 티어는 ${tierLabel(PLACEMENT_CAP_TIER, "ko")} 입니다. 마스터 이상은 승급으로만 올라갑니다.`, `The highest tier placement can award is ${tierLabel(PLACEMENT_CAP_TIER, "en")}. Master and above are reached only by ranking up.`)}</Bullet>
         </ul>
 
         <button

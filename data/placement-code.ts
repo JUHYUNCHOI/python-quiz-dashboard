@@ -18,6 +18,19 @@
  * ⚠️ 문제문은 `whitespace-pre-wrap` 으로 생짜 렌더된다 — 마크다운이 아니다.
  *    `**강조**` 를 쓰면 학생 화면에 별표가 그대로 보인다.
  *
+ * ── 난이도 배분: 브론즈 2 · 실버 3 · 골드 3 · 플래티넘 2 ──────────────────
+ * `step` 은 난이도 순서(1이 제일 쉬움)이고, `tier` 는 그 문제를 풀었을 때
+ * 받는 티어다. 둘은 **1:1이 아니다** — 실버와 골드에 문제를 하나씩 더 둔다.
+ *
+ * 왜 가운데가 두꺼운가: 학교에서 코딩을 배운 학생 대부분이 실버~골드에
+ * 몰린다. 1:1로 두면 그 구간의 판정이 문제 하나에 달려 있어서, 한 문제의
+ * 난이도를 잘못 매긴 순간 학생 다수가 한 칸씩 밀린다. 사람이 적은 브론즈·
+ * 플래티넘은 한 칸 오차가 영향을 덜 준다.
+ *
+ * 마스터·그랜드마스터 문제는 **은행에 아예 없다.** 배치고사로 받을 수 있는
+ * 최고 티어가 "은행에 있는 가장 높은 티어"로 자동 결정된다 — 엔진에 상한
+ * 숫자를 따로 박아 두면 은행과 어긋날 수 있다.
+ *
  * ── 제한은 실제로 지키는 값만 적는다 ──────────────────────────────────────
  * 백준은 N ≤ 100,000 같은 큰 제한으로 시간복잡도를 강제하지만, 우리 채점은
  * 작은 테스트만 돌린다. 지키지도 않는 큰 제한을 적으면 "제한을 읽고 누적합을
@@ -30,10 +43,17 @@
  * 테스트케이스를 고치려면 그 스크립트를 고치고 다시 돌려 붙여넣는다.
  */
 
+import type { TierId } from "@/lib/tier-system"
+
 export interface PlacementCodeTask {
   id: string
-  /** 1..10 — TIERS 인덱스+1. 난이도 계단. 학생에게 숫자는 보여주지 않는다. */
+  /**
+   * 난이도 순서 1..10 (1이 제일 쉬움). 이분 탐색이 이 값으로 구간을 좁힌다.
+   * 학생에게 숫자는 보여주지 않는다 — 보여주면 일부러 틀리는 선택이 생긴다.
+   */
   step: number
+  /** 이 문제를 풀었을 때 받는 티어. 아래 `step` 과 1:1이 아니다 (머리말 참고). */
+  tier: TierId
   /** 어떤 능력을 보는지 한 줄. 결과 화면의 해설에 쓴다. */
   skill: string
   skillEn: string
@@ -62,7 +82,7 @@ export interface PlacementCodeTask {
 
 export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
   {
-    id: "pc01", step: 1,
+    id: "pc01", step: 1, tier: "bronze2",
     skill: "입출력과 사칙연산", skillEn: "I/O and arithmetic",
     title: "합과 차", titleEn: "Sum and Difference",
     desc:
@@ -88,7 +108,7 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
     ],
   },
   {
-    id: "pc02", step: 2,
+    id: "pc02", step: 2, tier: "bronze1",
     skill: "조건문", skillEn: "Conditionals",
     title: "성적 등급", titleEn: "Letter Grade",
     desc:
@@ -117,7 +137,7 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
     ],
   },
   {
-    id: "pc03", step: 3,
+    id: "pc03", step: 3, tier: "silver2",
     skill: "반복문과 세기", skillEn: "Loops and counting",
     title: "양수와 음수", titleEn: "Positives and Negatives",
     desc:
@@ -145,7 +165,7 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
     ],
   },
   {
-    id: "pc04", step: 4,
+    id: "pc04", step: 4, tier: "silver2",
     skill: "리스트와 인덱스", skillEn: "Lists and indices",
     title: "최댓값은 몇 번째", titleEn: "Where Is the Maximum",
     desc:
@@ -175,7 +195,7 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
     ],
   },
   {
-    id: "pc05", step: 5,
+    id: "pc05", step: 5, tier: "silver1",
     skill: "문자열 다루기", skillEn: "String manipulation",
     title: "회문 판별", titleEn: "Palindrome Check",
     desc:
@@ -202,7 +222,7 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
     ],
   },
   {
-    id: "pc06", step: 6,
+    id: "pc06", step: 6, tier: "gold2",
     skill: "딕셔너리와 동점 처리", skillEn: "Dictionaries and tie-breaking",
     title: "가장 많이 나온 단어", titleEn: "Most Frequent Word",
     desc:
@@ -228,7 +248,7 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
     ],
   },
   {
-    id: "pc07", step: 7,
+    id: "pc07", step: 7, tier: "gold2",
     skill: "함수와 수학", skillEn: "Functions and math",
     title: "소수 찾기", titleEn: "Counting Primes",
     desc:
@@ -256,7 +276,7 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
     ],
   },
   {
-    id: "pc08", step: 8,
+    id: "pc08", step: 8, tier: "gold1",
     skill: "누적 합", skillEn: "Prefix sums",
     title: "구간 합 구하기", titleEn: "Range Sum Queries",
     desc:
@@ -289,7 +309,7 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
     ],
   },
   {
-    id: "pc09", step: 9,
+    id: "pc09", step: 9, tier: "plat2",
     skill: "그래프 탐색", skillEn: "Graph traversal",
     title: "연결 요소의 개수", titleEn: "Connected Components",
     desc:
@@ -324,7 +344,7 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
     ],
   },
   {
-    id: "pc10", step: 10,
+    id: "pc10", step: 10, tier: "plat1",
     skill: "동적 계획법", skillEn: "Dynamic programming",
     title: "동전 최소 개수", titleEn: "Fewest Coins",
     desc:
@@ -363,6 +383,9 @@ export const PLACEMENT_CODE_TASKS: PlacementCodeTask[] = [
 const BY_STEP = new Map<number, PlacementCodeTask>(
   PLACEMENT_CODE_TASKS.map(t => [t.step, t]),
 )
+
+/** 은행에 있는 가장 높은 단계 = 이분 탐색 구간의 위쪽 끝. */
+export const CODE_TASK_MAX_STEP = Math.max(...PLACEMENT_CODE_TASKS.map(t => t.step))
 
 /** **정확히** 그 단계의 문제. 없으면 null — 아래로 내려가지 않는다. */
 export function codeTaskAtStep(step: number): PlacementCodeTask | null {

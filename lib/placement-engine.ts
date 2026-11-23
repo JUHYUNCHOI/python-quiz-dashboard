@@ -21,43 +21,50 @@
  * 코딩 문제는 **통과할 때까지 다시 제출할 수 있다.** 찍어서 맞을 수 없고,
  * 한 번 실수했다고 떨어지지도 않는다. 그래서 1문제 판정으로도 충분하다.
  *
- * ── 배치 상한은 플래티넘 I ────────────────────────────────────────────────
+ * ── 배치 상한은 은행이 정한다 ─────────────────────────────────────────────
  * 마스터·그랜드마스터는 **배치고사로 못 받는다**. 승급(자기 티어 문제 10개 +
  * 교실 시험)으로만 올라간다 — 시험 한 번으로 최상위 두 칸을 주면 그 위에
- * 남는 목표가 없다. `hi` 를 상한에서 시작하므로 탐색이 9·10단계를 애초에
- * 방문하지 않는다. 9·10단계 문제는 은행에 남겨 둔다 (승급 시험에서 쓴다).
+ * 남는 목표가 없다.
+ *
+ * 그 상한을 여기에 숫자로 박지 않는다. 은행에 마스터 이상 문제를 **넣지 않는
+ * 것**이 곧 상한이다 (`data/placement-code.ts`). 숫자를 따로 두면 은행과
+ * 어긋날 수 있고, 어긋나면 "풀었는데 티어를 안 주는" 문제가 생긴다.
  * 요구 기준: "학교에서 좀 잘하는 학생 → 플래티넘 I, 못하는 학생 → 브론즈 II".
  */
 
 import {
-  PLACEMENT_CODE_TASKS, codeTaskAtStep, codeTaskForStep,
+  PLACEMENT_CODE_TASKS, CODE_TASK_MAX_STEP, codeTaskAtStep, codeTaskForStep,
   type PlacementCodeTask,
 } from "@/data/placement-code"
-import { TIER_IDS, LOWEST_TIER, type TierId, tierRank } from "@/lib/tier-system"
+import { LOWEST_TIER, type TierId } from "@/lib/tier-system"
 
 export const PLACEMENT_MIN_STEP = 1
-export const PLACEMENT_MAX_STEP = 10
+export const PLACEMENT_MAX_STEP = CODE_TASK_MAX_STEP
 
-/** 배치고사로 받을 수 있는 가장 높은 단계 = 플래티넘 I. */
-export const PLACEMENT_CAP_STEP = tierRank("plat1") + 1
+/**
+ * 배치고사로 받을 수 있는 가장 높은 티어 = 은행의 가장 높은 단계의 티어.
+ * 안내 문구("마스터 이상은 승급으로만")가 이 값을 읽는다.
+ */
+export const PLACEMENT_CAP_TIER: TierId =
+  codeTaskAtStep(CODE_TASK_MAX_STEP)!.tier
 
 /**
  * 첫 문제의 단계 = 탐색 구간의 중앙.
  *
- * 상수로 박아 두면 상한이 바뀔 때 첫 문제가 구간 중앙에서 벗어나고,
+ * 상수로 박아 두면 은행이 늘거나 줄 때 첫 문제가 구간 중앙에서 벗어나고,
  * 그러면 최악의 문제 수가 아래 `PLACEMENT_MAX_PROBLEMS` 보다 많아진다.
  */
-export const START_STEP = Math.floor((PLACEMENT_MIN_STEP + PLACEMENT_CAP_STEP) / 2)
+export const START_STEP = Math.floor((PLACEMENT_MIN_STEP + PLACEMENT_MAX_STEP) / 2)
 
 /**
  * 최악의 경우 나오는 문제 수.
  *
- * 구간의 후보는 `best` 가 될 수 있는 값 — 0(1단계도 못 풂)부터 상한까지
- * 총 `CAP - MIN + 2` 개다. 이분 탐색은 그걸 매번 반으로 줄이므로
+ * 구간의 후보는 `best` 가 될 수 있는 값 — 0(1단계도 못 풂)부터 최고 단계까지
+ * 총 `MAX - MIN + 2` 개다. 이분 탐색은 그걸 매번 반으로 줄이므로
  * log2 의 천장이 곧 probe 횟수다. 화면의 "2 / 4" 표기에 쓴다.
  */
 export const PLACEMENT_MAX_PROBLEMS =
-  Math.ceil(Math.log2(PLACEMENT_CAP_STEP - PLACEMENT_MIN_STEP + 2))
+  Math.ceil(Math.log2(PLACEMENT_MAX_STEP - PLACEMENT_MIN_STEP + 2))
 
 export interface PlacementAttempt {
   taskId: string
@@ -80,7 +87,7 @@ export interface PlacementState {
 export function startPlacement(): PlacementState {
   return {
     lo: PLACEMENT_MIN_STEP,
-    hi: PLACEMENT_CAP_STEP,
+    hi: PLACEMENT_MAX_STEP,
     best: 0,
     phase: "solving",
     task: codeTaskForStep(START_STEP),
@@ -132,17 +139,17 @@ export function passedCount(s: PlacementState): number {
 }
 
 /**
- * 최종 티어.
+ * 최종 티어 = **통과한 가장 높은 문제가 들고 있는 티어**.
  *
- * best = N → N번째 티어. best = 0 (1단계조차 못 풂) → 최하위 티어.
- * 더 내릴 곳이 없으므로 최하위에 배치하고 연습을 시작하게 한다.
+ * 단계 숫자로 티어를 계산하지 않는다. 난이도 배분이 브론즈 2 · 실버 3 ·
+ * 골드 3 · 플래티넘 2 라서 단계와 티어가 1:1이 아니다 — 계산식을 쓰면
+ * 배분을 바꿀 때마다 식도 같이 고쳐야 하고, 한 쪽만 고치면 엉킨다.
  *
- * 상한을 **여기서 한 번 더** 막는다. 탐색이 이미 막고 있지만, 티어 규칙
- * ("마스터 이상은 승급으로만")이 깨지면 피해가 크다.
+ * best = 0 (1단계조차 못 풂) → 최하위 티어. 더 내릴 곳이 없으므로 최하위에
+ * 배치하고 연습을 시작하게 한다.
  */
 export function resultTier(s: PlacementState): TierId {
-  if (s.best < PLACEMENT_MIN_STEP) return LOWEST_TIER
-  return TIER_IDS[Math.min(s.best, PLACEMENT_CAP_STEP) - 1]
+  return codeTaskAtStep(s.best)?.tier ?? LOWEST_TIER
 }
 
 /**
