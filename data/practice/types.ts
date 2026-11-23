@@ -1,3 +1,5 @@
+import { CODE_COMMENT_EN } from "./code-comment-en"
+
 export interface PracticeTestCase {
   stdin: string
   expectedOutput: string
@@ -84,7 +86,8 @@ export interface PracticeCluster {
  */
 function translateCodeComments(code: string | undefined): string | undefined {
   if (!code) return code
-  return code
+  // 1단계: 반복되는 틀을 정규식으로. 2단계: 남은 고유 문장을 사전으로.
+  const byPattern = code
     // ── struct declarations ──────────────────────────────────────────
     .replace(/\/\/ struct (\S+)를 선언하세요 \(([^)]+)\)/g, "// TODO: Declare struct $1 ($2)")
     .replace(/\/\/ struct (\S+)를 선언하세요/g, "// TODO: Declare struct $1")
@@ -166,6 +169,35 @@ function translateCodeComments(code: string | undefined): string | undefined {
     // ── Python __setattr__ / count patterns ─────────────────────────
     .replace(/# __init__에서는 object\.__setattr__을 사용하세요/g, "# TODO: Use object.__setattr__ in __init__")
     .replace(/# count를 (\S+) 증가시키고 반환하세요/g, "# TODO: Increment count by $1 and return")
+
+  return translateByDict(byPattern)
+}
+
+const HANGUL = /[가-힣]/
+
+/**
+ * 위 정규식 체인이 못 잡은 주석을 사전(`CODE_COMMENT_EN`)으로 한 줄씩 바꾼다.
+ *
+ * 스타터 코드 주석은 대부분 문제마다 고유한 문장이라(343개 중 겹치는 건 3개뿐)
+ * 정규식으로는 못 잡는다. 그래서 원문 그대로를 키로 쓰는 사전을 둔다.
+ *
+ * - `#`/`//` **앞의 코드와 들여쓰기는 그대로 둔다** — 주석만 갈아 끼운다.
+ *   파이썬은 들여쓰기가 문법이라 이걸 어기면 스타터 코드가 실행조차 안 된다.
+ * - 사전에 없으면 **원문을 그대로 남긴다.** 출력 문자열 자체가 한국어인 문제는
+ *   영어 설명에도 한국어 리터럴이 그대로 있어야 하므로(채점이 바이트 일치),
+ *   그런 주석을 멋대로 번역하면 오히려 학생이 못 푼다.
+ */
+function translateByDict(code: string): string {
+  if (!HANGUL.test(code)) return code
+  return code
+    .split("\n")
+    .map(line => {
+      const m = line.match(/^(.*?)(#|\/\/)(.*)$/)
+      if (!m || !HANGUL.test(m[3])) return line
+      const en = CODE_COMMENT_EN[m[3].trim()]
+      return en === undefined ? line : `${m[1]}${m[2]} ${en}`
+    })
+    .join("\n")
 }
 
 /**
