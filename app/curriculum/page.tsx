@@ -848,7 +848,7 @@ export default function CurriculumPage() {
             >
               🐍 Python
               <span className={cn("text-[10px] font-normal", selectedCourse === "python" ? "text-white/70" : "text-gray-400")}>
-                {pythonLessonsDone}/{pythonLessonsTotal}강
+                {pythonLessonsDone}/{pythonLessonsTotal}{t("강", "")}
               </span>
             </button>
 
@@ -883,7 +883,7 @@ export default function CurriculumPage() {
                     selectedCourse === "cpp" ? "text-white/70" : !hasPythonProgress ? "text-gray-400" : "text-blue-500"
                   )}>
                     {selectedCourse === "cpp"
-                      ? "20강"
+                      ? t("20강", "20")
                       : !hasPythonProgress
                         ? `🔒 ${t("Python 먼저", "Python first")}`
                         : pythonLessonsDone >= pythonLessonsTotal
@@ -1909,7 +1909,7 @@ export default function CurriculumPage() {
                                                             ⚠️ {t(`미학습 ${skippedIds.length}개 레슨이 완료 처리됩니다`, `${skippedIds.length} lessons will be marked done`)}
                                                           </p>
                                                           <p className="text-[10px] text-amber-500 leading-tight">
-                                                            {skippedNames.join(", ")}{skippedIds.length > 3 ? ` 외 ${skippedIds.length - 3}개` : ""}
+                                                            {skippedNames.join(", ")}{skippedIds.length > 3 ? t(` 외 ${skippedIds.length - 3}개`, ` and ${skippedIds.length - 3} more`) : ""}
                                                           </p>
                                                           <p className="text-[10px] text-amber-600 font-medium pt-0.5">
                                                             {t("이미 아는 내용이면 아래 버튼으로 확인하세요.", "Confirm below if you already know these.")}
@@ -1930,7 +1930,7 @@ export default function CurriculumPage() {
                                                     const skipCount = allIds.slice(0, targetIdx + 1).filter(id => !completedLessons.has(String(id))).length
                                                     return (
                                                       <button onClick={() => setSkipConfirmId(lesson.id)} className="px-3 py-2 rounded-lg border-2 border-gray-300 text-gray-500 text-sm font-bold hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50 transition-colors" title={t("이미 아는 내용이라면 건너뛰기", "Skip if you already know this")}>
-                                                        🔓 {t("건너뛰기", "Skip")}{skipCount > 1 ? <span className="ml-1 text-[10px] opacity-70">(이전 {skipCount}개 포함)</span> : ""}
+                                                        🔓 {t("건너뛰기", "Skip")}{skipCount > 1 ? <span className="ml-1 text-[10px] opacity-70">{t(`(이전 ${skipCount}개 포함)`, `(incl. ${skipCount} earlier)`)}</span> : ""}
                                                       </button>
                                                     )
                                                   })()

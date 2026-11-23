@@ -88,10 +88,11 @@ function useQuestSolved(problemId: string) {
 }
 
 function ProblemLoadingSpinner() {
+  const { t } = useLanguage()
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-24">
       <Loader2 size={36} className="animate-spin text-purple-500" />
-      <div className="text-sm font-semibold text-gray-500">튜토리얼 로딩 중...</div>
+      <div className="text-sm font-semibold text-gray-500">{t("튜토리얼 로딩 중...", "Loading tutorial...")}</div>
     </div>
   )
 }
