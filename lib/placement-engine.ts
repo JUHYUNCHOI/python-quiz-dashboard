@@ -1,5 +1,5 @@
 /**
- * 배치고사 적응형 엔진 — **코딩 문제 3~4개로** 10개 티어 중 하나를 고른다.
+ * 배치고사 적응형 엔진 — **코딩 문제 2~4개로** 10개 티어 중 하나를 고른다.
  *
  * ── 왜 전부 코딩 문제인가 ─────────────────────────────────────────────────
  * 예전엔 "이 코드의 출력은?" 12문항으로 단계를 좁히고 마지막에 코드를 2개
@@ -10,7 +10,7 @@
  *
  * 그래서 배치고사는 백준식 코딩 문제만 낸다 (`data/placement-code.ts`).
  *
- * ── 왜 이분 탐색인가 (그리고 왜 문제 수가 3~4개인가) ──────────────────────
+ * ── 왜 이분 탐색인가 (그리고 왜 문제 수가 2~4개인가) ──────────────────────
  * 계단(up-down)식은 한 단계를 여러 번 방문하므로 단계당 문제가 여럿 필요하다.
  * 이분 탐색은 **각 단계를 최대 한 번만** 방문하므로 단계당 1개로 충분하고,
  * 1..8 구간을 좁히는 데 probe 가 최대 4번이다.
@@ -20,6 +20,10 @@
  * 되어 아무도 끝까지 안 본다. 운을 없애는 일은 다른 방식으로 한다:
  * 코딩 문제는 **통과할 때까지 다시 제출할 수 있다.** 찍어서 맞을 수 없고,
  * 한 번 실수했다고 떨어지지도 않는다. 그래서 1문제 판정으로도 충분하다.
+ *
+ * 같은 이유로 **결과를 못 바꾸는 문제는 내지 않는다** (`tierIsDecided`).
+ * 남은 후보 단계가 전부 한 티어를 가리키면 그 자리에서 끝낸다 — 15분을 더
+ * 쓰게 하고 같은 티어를 주는 건 시험이 아니라 벌이다.
  *
  * ── 배치 상한은 은행이 정한다 ─────────────────────────────────────────────
  * 마스터·그랜드마스터는 **배치고사로 못 받는다**. 승급(자기 티어 문제 10개 +
@@ -57,11 +61,14 @@ export const PLACEMENT_CAP_TIER: TierId =
 export const START_STEP = Math.floor((PLACEMENT_MIN_STEP + PLACEMENT_MAX_STEP) / 2)
 
 /**
- * 최악의 경우 나오는 문제 수.
+ * 최악의 경우 나오는 문제 수. 화면의 "2 / 4" 표기와 진행률 분모에 쓴다.
  *
  * 구간의 후보는 `best` 가 될 수 있는 값 — 0(1단계도 못 풂)부터 최고 단계까지
  * 총 `MAX - MIN + 2` 개다. 이분 탐색은 그걸 매번 반으로 줄이므로
- * log2 의 천장이 곧 probe 횟수다. 화면의 "2 / 4" 표기에 쓴다.
+ * log2 의 천장이 곧 probe 횟수다.
+ *
+ * **상한이다.** 같은 티어로 좁혀지면 2~3문제에 끝난다 (`tierIsDecided`).
+ * 그래서 화면은 "4문제"가 아니라 "최대 4문제"로 써야 한다.
  */
 export const PLACEMENT_MAX_PROBLEMS =
   Math.ceil(Math.log2(PLACEMENT_MAX_STEP - PLACEMENT_MIN_STEP + 2))
@@ -100,6 +107,25 @@ export function currentTask(s: PlacementState): PlacementCodeTask | null {
 }
 
 /**
+ * 남은 후보가 **모두 같은 티어**인가 = 더 물어도 결과가 안 바뀌는가.
+ *
+ * 난이도 배분이 브론즈 2 · 실버 3 · 골드 3 · 플래티넘 2 라서 단계 두 개가 같은
+ * 티어를 가리키는 구간이 있다 (3·4 = 실버 II, 6·7 = 골드 II). 구간이 그 둘로
+ * 좁혀지면 이분 탐색은 둘을 가르려고 한 문제를 더 내는데, 어느 쪽이 나와도
+ * 티어가 같다. 코딩 문제 하나는 5~15분이다 — 결과를 못 바꾸는 문제는 안 낸다.
+ *
+ * 최종 `best` 가 될 수 있는 값은 지금의 `best`(이 뒤를 다 틀리는 경우) 와
+ * 남은 구간 `lo..hi` 뿐이다. 그 전부가 한 티어를 가리키면 결과는 이미 정해졌다.
+ */
+function tierIsDecided(lo: number, hi: number, best: number): boolean {
+  const decided = tierOfBest(best)
+  for (let st = lo; st <= hi; st++) {
+    if (codeTaskAtStep(st)?.tier !== decided) return false
+  }
+  return true
+}
+
+/**
  * 한 문제의 채점 결과를 반영하고 다음 문제를 고른다.
  *
  * 통과 판정(`passed`)은 화면이 **모든 테스트케이스를 실제로 돌려서** 넘긴다.
@@ -119,6 +145,7 @@ export function submitResult(s: PlacementState, passed: boolean): PlacementState
   const finish = (): PlacementState => ({ ...s, lo, hi, best, phase: "done", task: null, attempts })
 
   if (lo > hi) return finish()
+  if (tierIsDecided(lo, hi, best)) return finish()
 
   const mid = Math.floor((lo + hi) / 2)
   const next = codeTaskAtStep(mid) ?? codeTaskForStep(mid)
@@ -149,7 +176,11 @@ export function passedCount(s: PlacementState): number {
  * 배치하고 연습을 시작하게 한다.
  */
 export function resultTier(s: PlacementState): TierId {
-  return codeTaskAtStep(s.best)?.tier ?? LOWEST_TIER
+  return tierOfBest(s.best)
+}
+
+function tierOfBest(best: number): TierId {
+  return codeTaskAtStep(best)?.tier ?? LOWEST_TIER
 }
 
 /**

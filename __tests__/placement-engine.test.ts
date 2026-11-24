@@ -125,7 +125,8 @@ describe("적응형 엔진", () => {
       const s = simulate(ability)
       expect(s.phase, `ability=${ability}`).toBe("done")
       expect(s.attempts.length, `ability=${ability}`).toBeLessThanOrEqual(PLACEMENT_MAX_PROBLEMS)
-      expect(s.attempts.length, `ability=${ability}`).toBeGreaterThanOrEqual(3)
+      // 2 = 브론즈 II 구간. 5X 2X 로 좁혀지면 1단계를 물어도 티어가 같다.
+      expect(s.attempts.length, `ability=${ability}`).toBeGreaterThanOrEqual(2)
     }
   })
 
@@ -161,6 +162,32 @@ describe("적응형 엔진", () => {
     expect(resultTier(simulate(10))).toBe("plat1")
   })
 
+  it("결과를 못 바꾸는 문제는 내지 않는다", () => {
+    // 남은 후보 단계가 전부 한 티어면 그 자리에서 끝낸다.
+    // 3·4 → 실버 II, 6·7 → 골드 II 라서 그 둘을 가르는 probe 는 무의미하다.
+    for (let ability = 0; ability <= 10; ability++) {
+      const s = simulate(ability)
+      const last = s.attempts[s.attempts.length - 1]
+      // 마지막 문제를 빼고 끝냈다면 티어가 달라져야 한다 = 그 문제가 일을 했다.
+      const without = s.attempts.slice(0, -1)
+      const bestWithout = Math.max(0, ...without.filter(a => a.passed).map(a => a.step))
+      if (codeTaskAtStep(bestWithout)?.tier === resultTier(s)) {
+        // 티어가 같다면, 그건 그 문제를 **틀렸을 때만** 허용된다
+        // (틀릴 걸 미리 알 수는 없으므로 물어볼 가치가 있었다).
+        expect(last.passed, `ability=${ability} 의 마지막 문제가 티어를 안 바꿨다`)
+          .toBe(false)
+      }
+    }
+  })
+
+  it("한 티어로 좁혀지면 상한보다 적게 낸다", () => {
+    // 실버 II(3·4)·골드 II(6·7) 구간은 3문제에 끝난다.
+    for (const ability of [3, 4, 6, 7]) {
+      expect(simulate(ability).attempts.length, `ability=${ability}`)
+        .toBeLessThan(PLACEMENT_MAX_PROBLEMS)
+    }
+  })
+
   it("마스터 이상은 배치고사로 받을 수 없다", () => {
     for (let ability = 0; ability <= 10; ability++) {
       expect(tierRank(resultTier(simulate(ability))), `ability=${ability}`)
@@ -190,13 +217,16 @@ describe("적응형 엔진", () => {
     expect(currentTask(down)!.step).toBeLessThan(START_STEP)
   })
 
-  it("1단계도 못 풀면 더 내리지 않고 끝낸다", () => {
+  it("계속 틀리면 더 내리지 않고 최하위로 끝낸다", () => {
     // 아래로 더 갈 곳이 없는데 계속 문제를 내면 시험이 끝나지 않는다.
+    // 1단계까지 내려가지는 않는다 — 브론즈 II 문제가 2개(1·2단계)라서
+    // 2단계를 틀린 순간 남은 후보가 전부 브론즈 II 로 확정된다.
     let s = startPlacement()
     let guard = 0
     while (currentTask(s) && guard++ < 20) s = submitResult(s, false)
     expect(s.phase).toBe("done")
-    expect(s.attempts.map(a => a.step)).toContain(1)
+    expect(resultTier(s)).toBe(TIER_IDS[0])
+    expect(s.attempts.length).toBe(2)
   })
 
   it("진행률은 뒤로 가지 않고 끝나면 100% 다", () => {
