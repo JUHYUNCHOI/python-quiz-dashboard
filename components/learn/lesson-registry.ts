@@ -19,6 +19,8 @@ import {
   lesson53Data,
   // Korean lesson 54 (3차원 리스트 — 53 바로 다음)
   lesson54Data,
+  // Korean lessons 55-58 (Part 9: 알고리즘 입문 — 텍스트 RPG 49-52 를 대체)
+  lesson55Data, lesson56Data, lesson57Data, lesson58Data,
   // Korean project lessons
   lessonP1Data, lessonP2Data, lessonP3Data,
   lessonP4Data, lessonP4PygameData,
@@ -44,6 +46,8 @@ import {
   lesson53EnData,
   // English lesson 54
   lesson54EnData,
+  // English lessons 55-58 (Part 9: Intro to Algorithms)
+  lesson55EnData, lesson56EnData, lesson57EnData, lesson58EnData,
   // English project lessons
   lessonP1EnData, lessonP2EnData, lessonP3EnData,
   lessonP4EnData, lessonP4PygameEnData,
@@ -126,6 +130,7 @@ export const lessonsData: Record<string, LessonData> = {
   "49": lesson49 as any, "50": lesson50 as any, "51": lesson51 as any, "52": lesson52 as any,
   "53": lesson53Data,
   "54": lesson54Data,
+  "55": lesson55Data, "56": lesson56Data, "57": lesson57Data, "58": lesson58Data,
   "p1": lessonP1Data, "p2": lessonP2Data, "p3": lessonP3Data, "p4": lessonP4Data,
   // C++ Part 1
   "cpp-1": cppLesson1Data, "cpp-2": cppLesson2Data, "cpp-3": cppLesson3Data, "cpp-4": cppLesson4Data,
@@ -239,6 +244,11 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "53": { ko: lesson53Data, en: lesson53EnData },
   // Part 3+ 심화: 3차원 리스트 (54)
   "54": { ko: lesson54Data, en: lesson54EnData },
+  // Part 9: 알고리즘 입문 (55-58) — 텍스트 RPG 49-52 를 대체
+  "55": { ko: lesson55Data, en: lesson55EnData },
+  "56": { ko: lesson56Data, en: lesson56EnData },
+  "57": { ko: lesson57Data, en: lesson57EnData },
+  "58": { ko: lesson58Data, en: lesson58EnData },
   // 프로젝트 레슨
   "p1": { ko: lessonP1Data, en: lessonP1EnData },
   "p2": { ko: lessonP2Data, en: lessonP2EnData },

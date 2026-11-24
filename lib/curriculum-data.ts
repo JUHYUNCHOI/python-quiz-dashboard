@@ -20,7 +20,11 @@ export const pythonParts: PartMeta[] = [
   { id: "part6", title: "Part 6: 에러와 파일", titleEn: "Part 6: Errors & Files", lessonIds: [37, 38, 39, 40] },
   { id: "part7", title: "Part 7: 클래스", titleEn: "Part 7: Classes", lessonIds: [41, 42, 43, 44] },
   { id: "part8", title: "Part 8: 모듈", titleEn: "Part 8: Modules", lessonIds: [45, 46, 47, 48] },
-  { id: "part9", title: "Part 9: 종합 프로젝트", titleEn: "Part 9: Final Projects", lessonIds: [49, 50, 51, 52, "p4"] },
+  // Part 9 는 원래 "텍스트 RPG 만들기" 49-52 였다. 재미는 있었지만 배치고사·사다리·
+  // 승급 시험이 재는 것과 겹치는 게 하나도 없었다 — 누적 합·정렬·이진 탐색·DP 를
+  // 묻는데 그걸 가르치는 과가 레슨 탭에 없었다. 49-52 는 레지스트리에 남아 URL 로는
+  // 열리지만 목록에서는 빠진다 (학생 진도 기록을 덮어쓰지 않으려고 새 id 를 쓴다).
+  { id: "part9", title: "Part 9: 알고리즘 입문", titleEn: "Part 9: Intro to Algorithms", lessonIds: [55, 56, 57, 58, "p4"] },
 ]
 
 export const cppParts: PartMeta[] = [
@@ -66,7 +70,9 @@ export const lessonNames: Record<string, string> = {
   "37": "에러 처리", "38": "파일 읽기", "39": "파일 쓰기", "40": "CSV",
   "41": "클래스 기초", "42": "메서드", "43": "상속", "44": "다형성",
   "45": "모듈 만들기", "46": "표준 라이브러리", "47": "pip", "48": "API",
-  "49": "프로젝트1", "50": "프로젝트2", "51": "프로젝트3", "52": "프로젝트4", "p4": "🎮 최종",
+  "49": "프로젝트1", "50": "프로젝트2", "51": "프로젝트3", "52": "프로젝트4",
+  "55": "누적 합", "56": "정렬로 푸는 문제", "57": "이진 탐색", "58": "동적 계획법",
+  "p4": "🎮 최종",
   // C++
   "cpp-1": "파이썬 vs C++", "cpp-2": "cout & namespace", "cpp-3": "변수와 타입", "cpp-4": "cin 입력",
   "cpp-5": "연산자", "cpp-6": "조건문 (if/else)", "cpp-7": "반복문 (for/while)", "cpp-ck1": "🏋️ 반복문 연습", "cpp-8": "함수", "cpp-p1": "🎮 숫자 맞추기",
@@ -115,7 +121,9 @@ export const lessonNamesEn: Record<string, string> = {
   "37": "Error Handling", "38": "File Reading", "39": "File Writing", "40": "CSV",
   "41": "Classes Basics", "42": "Methods", "43": "Inheritance", "44": "Polymorphism",
   "45": "Creating Modules", "46": "Standard Library", "47": "pip", "48": "API",
-  "49": "Project 1", "50": "Project 2", "51": "Project 3", "52": "Project 4", "p4": "🎮 Final",
+  "49": "Project 1", "50": "Project 2", "51": "Project 3", "52": "Project 4",
+  "55": "Prefix Sums", "56": "Solving by Sorting", "57": "Binary Search", "58": "First Steps in DP",
+  "p4": "🎮 Final",
   // C++
   "cpp-1": "Python vs C++", "cpp-2": "cout & namespace", "cpp-3": "Variables & Types", "cpp-4": "cin Input",
   "cpp-5": "Operators", "cpp-6": "Conditionals (if/else)", "cpp-7": "Loops (for/while)", "cpp-ck1": "🏋️ Loop Practice", "cpp-8": "Functions", "cpp-p1": "🎮 Number Guessing",

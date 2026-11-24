@@ -256,6 +256,30 @@ const registry: Record<string, LessonEntry> = {
     enLoad: () => import('./lesson54-en'), enExportName: 'lesson54EnData',
   },
 
+  /* Part 9: 알고리즘 입문 (55-58)
+     원래 Part 9 는 "텍스트 RPG 만들기" 49-52 였다. 게임을 만드는 재미는
+     있었지만 배치고사·사다리·승급 시험이 재는 것과 **겹치는 게 하나도
+     없었다** — 누적 합·정렬·이진 탐색·DP 를 묻는데 그걸 가르치는 과가
+     레슨 탭에 없었다. 49-52 는 레지스트리에 남아 URL 로는 열리지만
+     커리큘럼 목록에서는 빠졌다 (학생 진도 기록을 덮어쓰지 않으려고
+     새 id 를 쓴다). */
+  "55": {
+    load: () => import('./lesson55'), exportName: 'lesson55Data',
+    enLoad: () => import('./lesson55-en'), enExportName: 'lesson55EnData',
+  },
+  "56": {
+    load: () => import('./lesson56'), exportName: 'lesson56Data',
+    enLoad: () => import('./lesson56-en'), enExportName: 'lesson56EnData',
+  },
+  "57": {
+    load: () => import('./lesson57'), exportName: 'lesson57Data',
+    enLoad: () => import('./lesson57-en'), enExportName: 'lesson57EnData',
+  },
+  "58": {
+    load: () => import('./lesson58'), exportName: 'lesson58Data',
+    enLoad: () => import('./lesson58-en'), enExportName: 'lesson58EnData',
+  },
+
   // 프로젝트 레슨
   "p1": {
     load: () => import('./lessonP1'), exportName: 'lessonP1Data',
@@ -679,6 +703,10 @@ export { lesson51 } from './lessons/lesson51'
 export { lesson52 } from './lessons/lesson52'
 export { lesson53Data } from './lesson53'
 export { lesson54Data } from './lesson54'
+export { lesson55Data } from './lesson55'
+export { lesson56Data } from './lesson56'
+export { lesson57Data } from './lesson57'
+export { lesson58Data } from './lesson58'
 export { lessonP1Data } from './lessonP1'
 export { lessonP2Data } from './lessonP2'
 export { lessonP3Data } from './lessonP3'
@@ -740,6 +768,10 @@ export { lesson51EnData } from './lesson51-en'
 export { lesson52EnData } from './lesson52-en'
 export { lesson53EnData } from './lesson53-en'
 export { lesson54EnData } from './lesson54-en'
+export { lesson55EnData } from './lesson55-en'
+export { lesson56EnData } from './lesson56-en'
+export { lesson57EnData } from './lesson57-en'
+export { lesson58EnData } from './lesson58-en'
 export { lessonP1EnData } from './lessonP1-en'
 export { lessonP2EnData } from './lessonP2-en'
 export { lessonP3EnData } from './lessonP3-en'
